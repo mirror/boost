@@ -64,8 +64,8 @@ public:
 
   adaptor_type& adaptor() { return _rng.adaptor(); }
   base_type& base() const { return _rng.base(); }
-  RealType& mean() const { return _mean; }
-  RealType& sigma() const { return _sigma; }
+  RealType mean() const { return _mean; }
+  RealType sigma() const { return _sigma; }
   void reset() { _rng.reset(); }
 
   result_type operator()()
