@@ -71,7 +71,7 @@ namespace range
         template< typename T, std::size_t sz >
         inline const T* end( const T (&array)[sz] )
         {
-            return range_detail::array_end<const T,sz>( array ); 
+            return range_detail::array_end<T,sz>( array ); 
         }
         
         template< typename T, std::size_t sz >
