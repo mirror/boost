@@ -611,8 +611,18 @@ public: // static functions
 //
 // Wraps with reference_content if specified type is reference.
 //
+// No-op (identity) if BOOST_VARIANT_NO_REFERENCE_SUPPORT is defined.
+//
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if defined(BOOST_VARIANT_NO_REFERENCE_SUPPORT)
+
+template <typename T>
+struct handle_reference
+{
+    typedef T type;
+};
+
+#elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename T>
 struct handle_reference
@@ -789,8 +799,8 @@ private: // static precondition assertions
 
     // Workaround rationale:
     //
-    // If we tranform the bounded types so as to support recursive_variant and
-    // references, MSVC versions 6 and 7.0 incorrectly complain that the
+    // If we transform the bounded types so as to support recursive_variant
+    // and references, MSVC versions 6 and 7.0 incorrectly complain that the
     // 'initialize' methods of preprocessor_list_initializer (see below) are
     // multiply defined.
     //
