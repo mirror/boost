@@ -6,7 +6,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 //  Revision History
-//   23 Jun 2003  Initial version (Daryle Walker)
+//   12 Sep 2003  Initial version (Daryle Walker)
 
 #include <boost/io/ios_state.hpp>    // for boost::io::ios_flags_saver, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK, etc.
@@ -14,7 +14,7 @@
 #include <cstddef>   // for NULL
 #include <iomanip>   // for std::setiosflags, etc.
 #include <ios>       // for std::ios_base
-#include <iostream>  // for std::wcout, std::wcin, etc.
+#include <iostream>  // for std::cout, std::cerr, etc.
 #include <istream>   // for std::iostream
 #include <locale>    // for std::locale, std::numpunct
 #include <sstream>   // for std::stringstream, etc.
@@ -260,29 +260,29 @@ ios_tie_saver_unit_test
 {
     using namespace std;
 
-    BOOST_CHECK_EQUAL( &wcout, wcin.tie() );
+    BOOST_CHECK( NULL == cout.tie() );
 
     {
-        boost::io::wios_tie_saver  its( wcin );
+        boost::io::ios_tie_saver  its( cout );
 
-        BOOST_CHECK_EQUAL( &wcout, wcin.tie() );
+        BOOST_CHECK( NULL == cout.tie() );
 
-        wcin.tie( &wclog );
-        BOOST_CHECK_EQUAL( &wclog, wcin.tie() );
+        cout.tie( &clog );
+        BOOST_CHECK_EQUAL( &clog, cout.tie() );
     }
 
-    BOOST_CHECK_EQUAL( &wcout, wcin.tie() );
+    BOOST_CHECK( NULL == cout.tie() );
 
     {
-        boost::io::wios_tie_saver  its( wcin, &wcerr );
+        boost::io::ios_tie_saver  its( cout, &clog );
 
-        BOOST_CHECK_EQUAL( &wcerr, wcin.tie() );
+        BOOST_CHECK_EQUAL( &clog, cout.tie() );
 
-        wcin.tie( NULL );
-        BOOST_CHECK( NULL == wcin.tie() );
+        cout.tie( &cerr );
+        BOOST_CHECK_EQUAL( &cerr, cout.tie() );
     }
 
-    BOOST_CHECK_EQUAL( &wcout, wcin.tie() );
+    BOOST_CHECK( NULL == cout.tie() );
 }
 
 // Unit test for connected-streambuf saving
@@ -293,33 +293,33 @@ ios_rdbuf_saver_unit_test
 {
     using namespace std;
 
-    wiostream  ws( NULL );
+    iostream  s( NULL );
 
-    BOOST_CHECK( NULL == ws.rdbuf() );
-
-    {
-        wstringbuf                   wsb;
-        boost::io::wios_rdbuf_saver  irs( ws );
-
-        BOOST_CHECK( NULL == ws.rdbuf() );
-
-        ws.rdbuf( &wsb );
-        BOOST_CHECK_EQUAL( &wsb, ws.rdbuf() );
-    }
-
-    BOOST_CHECK( NULL == ws.rdbuf() );
+    BOOST_CHECK( NULL == s.rdbuf() );
 
     {
-        wstringbuf                   wsb1, wsb2( L"Hi there" );
-        boost::io::wios_rdbuf_saver  irs( ws, &wsb1 );
+        stringbuf                   sb;
+        boost::io::ios_rdbuf_saver  irs( s );
 
-        BOOST_CHECK_EQUAL( &wsb1, ws.rdbuf() );
+        BOOST_CHECK( NULL == s.rdbuf() );
 
-        ws.rdbuf( &wsb2 );
-        BOOST_CHECK_EQUAL( &wsb2, ws.rdbuf() );
+        s.rdbuf( &sb );
+        BOOST_CHECK_EQUAL( &sb, s.rdbuf() );
     }
 
-    BOOST_CHECK( NULL == ws.rdbuf() );
+    BOOST_CHECK( NULL == s.rdbuf() );
+
+    {
+        stringbuf                   sb1, sb2( "Hi there" );
+        boost::io::ios_rdbuf_saver  irs( s, &sb1 );
+
+        BOOST_CHECK_EQUAL( &sb1, s.rdbuf() );
+
+        s.rdbuf( &sb2 );
+        BOOST_CHECK_EQUAL( &sb2, s.rdbuf() );
+    }
+
+    BOOST_CHECK( NULL == s.rdbuf() );
 }
 
 // Unit test for fill-character saving
