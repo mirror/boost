@@ -24,6 +24,7 @@
 #include <boost/mpl/aux_/config/nttp.hpp>
 #include <boost/mpl/aux_/config/dtp.hpp>
 #include <boost/mpl/aux_/config/gcc.hpp>
+#include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
 #include <boost/preprocessor/cat.hpp>
@@ -45,9 +46,16 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 struct failed {};
 
 // agurt, 24/aug/04: MSVC 7.1 workaround here and below: return/accept 
-// 'assert<false>' by reference
+// 'assert<false>' by reference; can't apply it unconditionally -- apparently it
+// degrades quality of GCC diagnostics
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+#   define AUX778076_ASSERT_ARG(x) x&
+#else
+#   define AUX778076_ASSERT_ARG(x) x
+#endif
+
 template< bool C >  struct assert        { typedef void* type; };
-template<>          struct assert<false> { typedef assert& type; };
+template<>          struct assert<false> { typedef AUX778076_ASSERT_ARG(assert) type; };
 
 template< bool C >
 int assertion_failed( typename assert<C>::type );
@@ -122,11 +130,11 @@ failed ************ (boost::mpl::not_<Pred>::************
     );
 
 template< typename Pred >
-assert<false>&
+AUX778076_ASSERT_ARG(assert<false>)
 assert_arg( void (*)(Pred), typename assert_arg_pred_not<Pred>::type );
 
 template< typename Pred >
-assert<false>&
+AUX778076_ASSERT_ARG(assert<false>)
 assert_not_arg( void (*)(Pred), typename assert_arg_pred<Pred>::type );
 
 
@@ -140,7 +148,7 @@ template< bool c, typename Pred > struct assert_arg_type_impl
 
 template< typename Pred > struct assert_arg_type_impl<true,Pred>
 {
-    typedef assert<false>& type;
+    typedef AUX778076_ASSERT_ARG(assert<false>) type;
 };
 
 template< typename Pred > struct assert_arg_type
@@ -166,7 +174,9 @@ typename assert_arg_type_impl< false,assert_relation<r,x,y> >::type
 assert_rel_arg( assert_relation<r,x,y> );
 #   endif
 
-#endif 
+#endif // BOOST_MPL_CFG_ASSERT_BROKEN_POINTER_TO_POINTER_TO_MEMBER
+
+#undef AUX778076_ASSERT_ARG
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 
