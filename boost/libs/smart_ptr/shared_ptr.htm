@@ -192,7 +192,31 @@ stored pointer.</p>
 <p><code>void swap( shared_ptr&lt;T&gt;&amp; other ) throw()</code></p>
 <p>Swaps the two smart pointers, as if by std::swap.</p>
 <h2>Class <a name="shared_ptr_example">shared_ptr example</a></h2>
-<p>[To be supplied. In the meantime, see <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>.]</p>
+<pre>//  The application will produce a series of
+//  objects of type Foo which later must be
+//  accessed both by occurrence (std::vector)
+//  and by ordering relationship (std::set).
+
+class Foo { ... };
+
+typedef boost::shared_ptr&lt;Foo&gt; FooPtr;
+
+std::vector&lt;FooPtr&gt; foo_vector;
+std::set&lt;FooPtr&gt;    foo_set; // NOT multiset!
+
+...
+{ // creation loop
+  FooPtr foo_ptr ( new Foo( ... ) );
+  foo_vector.push_back( foo_ptr );
+  foo_set.insert( foo_ptr );
+}</pre>
+<p>Note that at the termination of the creation loop, some of the FooPtr objects
+may have use_count()==1 rather than use_count()==2, since foo_set is a std::set
+rather than a std::multiset.&nbsp; Furthermore, use_count() will be even higher
+at various times inside the loop, as container operations are performed.&nbsp;
+More complicated yet, the container operations may throw exceptions under a
+variety of circumstances.&nbsp; Without using a smart pointer, memory and
+exception management would be a nightmare.</p>
 <hr>
 <p>Revised December 8, 1999</p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
