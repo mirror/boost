@@ -40,5 +40,5 @@ BOOST_PP_REPEAT() and BOOST_PP_REPEAT_FROM_TO()).</p>
 #define BOOST_PP_LIMIT_MAG 128
 
 /** <p>Expands to the maximum tuple size supported by the library.</p> */
-#define BOOST_PP_LIMIT_TUPLE 16
+#define BOOST_PP_LIMIT_TUPLE 32
 #endif
