@@ -3,11 +3,18 @@
                 version="1.0">
   <xsl:template match="testsuite">
     <section>
-      <xsl:if test="@id">
-        <xsl:attribute name="id">
-          <xsl:value-of select="@id"/>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="@id">
+          <xsl:attribute name="id">
+            <xsl:value-of select="@id"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="../@id">
+          <xsl:attribute name="id">
+            <xsl:value-of select="concat(../@id, '.tests')"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
 
       <title>Testsuite</title>
 
