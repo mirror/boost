@@ -133,7 +133,7 @@ namespace boost
          template <class T>
          struct limits : std::numeric_limits<T>
          {
-    	   static inline T min()
+         static inline T min()
 # ifndef __GNUC__ // bug workaround courtesy Jens Maurer
              {
                  return std::numeric_limits<T>::min() >= 0
@@ -144,7 +144,7 @@ namespace boost
 # else
                  ;
 # endif
-	       };
+         };
        };
 
 # ifdef __GNUC__ // bug workaround courtesy Jens Maurer
