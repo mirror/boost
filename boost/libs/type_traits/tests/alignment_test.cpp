@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
    align_test(VB);
    align_test(VD);
    value_test(0, ::boost::alignment_of<void>::value);
-   
+
    return check_result(argc, argv);
 }
 

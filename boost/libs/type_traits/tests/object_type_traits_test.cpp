@@ -44,6 +44,10 @@ int main(int argc, char* argv[])
    value_test(false, boost::is_class<enum_UDT>::value)
    value_test(true, boost::is_class<UDT>::value)
    value_test(true, boost::is_class<UDT const>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(true, boost::is_class<test_abc1>::value)
+   value_test(true, boost::is_class<test_abc1 const>::value)
+#endif
    value_test(true, boost::is_class<UDT volatile>::value)
    value_test(true, boost::is_class<empty_UDT>::value)
    value_test(true, boost::is_class<std::iostream>::value)
@@ -54,6 +58,9 @@ int main(int argc, char* argv[])
 
    value_test(true, boost::is_object<int>::value)
    value_test(true, boost::is_object<UDT>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(true, boost::is_object<test_abc1>::value)
+#endif
    value_test(false, boost::is_object<int&>::value)
    value_test(false, boost::is_object<void>::value)
 
@@ -61,12 +68,18 @@ int main(int argc, char* argv[])
    value_test(true, boost::is_scalar<void*>::value)
    value_test(false, boost::is_scalar<void>::value)
    value_test(false, boost::is_scalar<UDT>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::is_scalar<test_abc1>::value)
+#endif
    value_test(false, boost::is_scalar<int&>::value)
 
    value_test(true, boost::is_compound<UDT>::value)
    value_test(true, boost::is_compound<void*>::value)
    value_test(false, boost::is_compound<void>::value)
    value_test(false, boost::is_compound<int>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(true, boost::is_compound<test_abc1>::value)
+#endif
 
    value_test(true, boost::is_POD<int>::value)
    value_test(true, boost::is_POD<int*>::value)
@@ -84,6 +97,9 @@ int main(int argc, char* argv[])
    value_test(false, boost::is_POD<empty_UDT>::value)
    value_test(true, boost::is_POD<enum_UDT>::value)
    value_test(true, boost::is_POD<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::is_POD<test_abc1>::value)
+#endif
 
    value_test(true, boost::has_trivial_constructor<int>::value)
    value_test(true, boost::has_trivial_constructor<int*>::value)
@@ -99,6 +115,9 @@ int main(int argc, char* argv[])
    value_test(true, boost::has_trivial_constructor<empty_UDT>::value)
    value_test(true, boost::has_trivial_constructor<enum_UDT>::value)
    value_test(true, boost::has_trivial_constructor<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_trivial_constructor<test_abc1>::value)
+#endif
 
    value_test(true, boost::has_trivial_copy<int>::value)
    value_test(true, boost::has_trivial_copy<int*>::value)
@@ -115,6 +134,9 @@ int main(int argc, char* argv[])
    value_test(true, boost::has_trivial_copy<empty_UDT>::value)
    value_test(true, boost::has_trivial_copy<enum_UDT>::value)
    value_test(true, boost::has_trivial_copy<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_trivial_copy<test_abc1>::value)
+#endif
 
    value_test(true, boost::has_trivial_assign<int>::value)
    value_test(true, boost::has_trivial_assign<int*>::value)
@@ -131,6 +153,9 @@ int main(int argc, char* argv[])
    value_test(true, boost::has_trivial_assign<empty_UDT>::value)
    value_test(true, boost::has_trivial_assign<enum_UDT>::value)
    value_test(true, boost::has_trivial_assign<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_trivial_assign<test_abc1>::value)
+#endif
 
    value_test(true, boost::has_trivial_destructor<int>::value)
    value_test(true, boost::has_trivial_destructor<int*>::value)
@@ -146,6 +171,9 @@ int main(int argc, char* argv[])
    value_test(false, boost::has_trivial_destructor<empty_UDT>::value)
    value_test(true, boost::has_trivial_destructor<enum_UDT>::value)
    value_test(true, boost::has_trivial_destructor<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_trivial_destructor<test_abc1>::value)
+#endif
 
    soft_value_test(false, boost::is_empty<int>::value)
    soft_value_test(false, boost::is_empty<int*>::value)

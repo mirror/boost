@@ -27,6 +27,10 @@ int main(int argc, char* argv[])
    value_test(false, (::boost::is_same<void, int>::value))
    value_test(true, (::boost::is_same<void, void>::value))
    value_test(false, (::boost::is_same<void, const void>::value))
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_MSVC)
+   value_test(true, (::boost::is_same<test_abc1, test_abc1>::value))
+   value_test(false, (::boost::is_same<test_abc1, const test_abc1>::value))
+#endif
 
    return check_result(argc, argv);
 }

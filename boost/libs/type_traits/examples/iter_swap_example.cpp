@@ -103,8 +103,7 @@ int main()
    opt::iter_swap(v1.begin(), v1.begin()+1);
    opt::iter_swap(v2.begin(), v2.begin()+1);
 
-   cout << "Press any key to exit...";
-   cin.get();
+   return 0;
 }
 
 

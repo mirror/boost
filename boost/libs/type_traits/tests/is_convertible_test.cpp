@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
    value_test(true, (boost::is_convertible<non_int_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, void*>::value));
    value_test(true, (boost::is_convertible<int, int_constructible>::value));
+   value_test(false, (boost::is_convertible<test_abc1&, test_abc2&>::value));
 
    return check_result(argc, argv);
 }

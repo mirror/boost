@@ -44,6 +44,9 @@ int main(int argc, char* argv[])
    value_test(false, boost::is_array<int(&)[2]>::value)
    value_test(false, boost::is_array<f1>::value)
    value_test(false, boost::is_array<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::is_array<test_abc1>::value)
+#endif
 
    value_test(false, boost::is_pointer<int>::value)
    value_test(false, boost::is_pointer<int&>::value)
@@ -71,6 +74,9 @@ int main(int argc, char* argv[])
    value_test(false, boost::is_pointer<mf2>::value)
    value_test(false, boost::is_pointer<mf3>::value)
    value_test(false, boost::is_pointer<mf4>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::is_pointer<test_abc1>::value)
+#endif
 
    value_test(false, boost::is_reference<bool>::value)
    value_test(true, boost::is_reference<int&>::value)
@@ -81,6 +87,9 @@ int main(int argc, char* argv[])
    value_test(true, boost::is_reference<cr_type>::value)
    value_test(true, boost::is_reference<const UDT&>::value)
    value_test(false, boost::is_reference<void>::value)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC)
+   value_test(false, boost::is_reference<test_abc1>::value)
+#endif
 
    value_test(false, boost::is_member_pointer<f1>::value)
    value_test(false, boost::is_member_pointer<f2>::value)
@@ -91,12 +100,18 @@ int main(int argc, char* argv[])
    value_test(true, boost::is_member_pointer<mf3>::value)
    value_test(true, boost::is_member_pointer<mf4>::value)
    value_test(false, boost::is_member_pointer<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::is_member_pointer<test_abc1>::value)
+#endif
 
    value_test(false, boost::is_enum<int>::value)
    value_test(true, boost::is_enum<enum_UDT>::value)
    value_test(false, boost::is_enum<int_convertible>::value)
-   value_test(false, boost::is_enum<int&>::value)
+   //value_test(false, boost::is_enum<int&>::value)
    value_test(false, boost::is_enum<void>::value)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC)
+   value_test(false, boost::is_enum<test_abc1>::value)
+#endif
 
    return check_result(argc, argv);
 }

@@ -196,6 +196,20 @@ template instead.</p>
         that is_enum is currently broken under Borland C++).</td>
         <td valign="top" width="5%">&nbsp;</td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::is_function&lt;T&gt;::value</code></td>
+        <td valign="top" bgcolor="#C0C0C0">Evaluates to true only
+        if T is a function type (note not a reference or pointer
+        to function).</td>
+        <td valign="top" bgcolor="#C0C0C0"><p align="center">3.9.2p1</p>
+        <p align="center">8.3.5</p>
+        </td>
+        <td valign="top" bgcolor="#C0C0C0">Without partial
+        specialisation support, this template does not compile
+        for reference types.</td>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 
 <p>&nbsp;</p>
@@ -604,6 +618,24 @@ transformation to the template argument T:</p>
         </td>
         <td valign="top" width="5%">&nbsp;</td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::add_const&lt;T&gt;::type</code></td>
+        <td valign="top" bgcolor="#C0C0C0">The same as &quot;T
+        const&quot; for all T.</td>
+        <td valign="top" bgcolor="#C0C0C0">3.9.3</td>
+        <td valign="top" bgcolor="#C0C0C0">&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::add_volatile&lt;T&gt;::type</code></td>
+        <td valign="top" bgcolor="#C0C0C0">The same as &quot;T
+        volatile&quot; for all T.</td>
+        <td valign="top" bgcolor="#C0C0C0">3.9.3</td>
+        <td valign="top" bgcolor="#C0C0C0">&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 
 <p>As the table above indicates, support for partial
@@ -745,6 +777,12 @@ template.</p>
         <td valign="top" width="9%">&nbsp;</td>
     </tr>
     <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>add_const</code></td>
+        <td valign="top" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/transform_traits.hpp&gt;</code></td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
         <td valign="top" width="7%">&nbsp;</td>
         <td valign="top" width="43%" bgcolor="#C0C0C0"><code>add_pointer</code></td>
         <td valign="top" width="41%" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/transform_traits.hpp&gt;</code></td>
@@ -755,6 +793,12 @@ template.</p>
         <td valign="top" width="43%" bgcolor="#C0C0C0"><code>add_reference</code></td>
         <td valign="top" width="41%" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/transform_traits.hpp&gt;</code></td>
         <td valign="top" width="9%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>add_volatile</code></td>
+        <td valign="top" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/transform_traits.hpp&gt;</code></td>
+        <td>&nbsp;</td>
     </tr>
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
@@ -840,6 +884,12 @@ template.</p>
         <td valign="top" width="43%" bgcolor="#C0C0C0"><code>is_float</code></td>
         <td valign="top" width="41%" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/arithmetic_traits.hpp&gt;</code></td>
         <td valign="top" width="9%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>is_function</code></td>
+        <td valign="top" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/function_traits.hpp&gt;</code></td>
+        <td>&nbsp;</td>
     </tr>
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
