@@ -146,6 +146,10 @@ void bcp_implementation::add_file(const fs::path& p)
          std::pair<fs::path, fs::path>("boost/mpl/vector.hpp", "boost/mpl/vector"),
          std::pair<fs::path, fs::path>("boost/mpl/vector_c.hpp", "boost/mpl/vector"),
          std::pair<fs::path, fs::path>("boost/mpl/aux_/include_preprocessed.hpp", "boost/mpl/aux_/preprocessed"),
+         std::pair<fs::path, fs::path>("boost/mpl/vector/aux_/include_preprocessed.hpp", "boost/mpl/vector/aux_/preprocessed"),
+         std::pair<fs::path, fs::path>("boost/mpl/set/aux_/include_preprocessed.hpp", "boost/mpl/set/aux_/preprocessed"),
+         std::pair<fs::path, fs::path>("boost/mpl/map/aux_/include_preprocessed.hpp", "boost/mpl/map/aux_/preprocessed"),
+         std::pair<fs::path, fs::path>("boost/mpl/list/aux_/include_preprocessed.hpp", "boost/mpl/list/aux_/preprocessed"),
       };
    for(unsigned int n = 0; n < (sizeof(specials)/sizeof(specials[0])); ++n)
    {
