@@ -49,7 +49,7 @@ int main()
         cout << "\";.,\" are all punctuation characters" << endl;  
     }
 
-    // Classification predicated can be combined 
+    // Classification predicates can be combined 
     if ( all("abcxxx", is_any_of("xabc") && !is_space() ) )
     {
         cout << "true" << endl;
