@@ -24,7 +24,7 @@ using namespace boost;
 using std::string;
 using std::negate;
 
-static int global_int;
+int global_int;
 
 struct write_five_obj { void operator()() const { global_int = 5; } };
 struct write_three_obj { int operator()() const { global_int = 3; return 7; }};
