@@ -69,7 +69,7 @@ inline bool neq(const T1& lhs, const T2& rhs) {
          neq(lhs.get_tail(), rhs.get_tail());
 }
 template<>
-inline bool neq<null_type,null_type>(const null_type&, const null_type&) { return true; }
+inline bool neq<null_type,null_type>(const null_type&, const null_type&) { return false; }
 
 template<class T1, class T2>
 inline bool lt(const T1& lhs, const T2& rhs) {
