@@ -42,7 +42,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<mf3>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<mf4>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<test_abc1>::value, false);
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<incomplete_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<foo1_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<foo2_t>::value, false);

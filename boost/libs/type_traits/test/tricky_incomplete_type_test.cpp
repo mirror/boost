@@ -26,6 +26,11 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<volatile int[]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<volatile int[][3]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<const volatile int[]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<const volatile int[][3]>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<incomplete_type>::value, false);
 
 TT_TEST_END
 

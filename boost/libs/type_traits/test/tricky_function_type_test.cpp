@@ -83,6 +83,16 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<foo4_t>::value, false);
 
+typedef void foo5_t(int, bool, int*, int[], int, int, int, int, int ...);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<foo5_t>::value, true);
+
+typedef void (test_abc1::*vproc1)(...);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<vproc1>::value, true);
+typedef void (test_abc1::*vproc2)(int, char, long, ...);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<vproc2>::value, true);
+typedef void (test_abc1::*vproc3)(int, char, long, long, ...)const;
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<vproc3>::value, true);
+
 TT_TEST_END
 
 

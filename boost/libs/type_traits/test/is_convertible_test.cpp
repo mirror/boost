@@ -63,6 +63,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<non_int_pointer, void*>::val
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc1&, test_abc2&>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc1&, int_constructible>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int_constructible, test_abc1&>::value), false);
+#ifndef BOOST_NO_SFINAE
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc1&, test_abc2>::value), false);
+#endif
 
 //
 // the following tests all involve user defined conversions which do
@@ -96,6 +99,15 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<double,int>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<double,float>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long,int>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int,char>::value), true);
+#ifdef BOOST_HAS_LONG_LONG
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long long,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long long,char>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long long,float>::value), true);
+#elif defined(BOOST_HAS_MS_INT64)
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,char>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,float>::value), true);
+#endif
 
 
 TT_TEST_END

@@ -29,7 +29,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<mp>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<mp2>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<test_abc1>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<incomplete_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<foo0_t>::value, false);
 
 TT_TEST_END

@@ -17,6 +17,10 @@
 #include "boost/type_traits/is_array.hpp"
 #include "boost/type_traits/add_reference.hpp"
 #include "boost/type_traits/ice.hpp"
+#include "boost/type_traits/is_arithmetic.hpp"
+#ifndef BOOST_NO_SFINAE
+#include "boost/type_traits/is_abstract.hpp"
+#endif
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
 #   include "boost/type_traits/is_void.hpp"
@@ -232,6 +236,67 @@ struct is_convertible_impl
 };
 #endif
 
+template <bool trivial1, bool trivial2, bool abstract_target>
+struct is_convertible_impl_select
+{
+   template <class From, class To>
+   struct rebind
+   {
+      typedef is_convertible_impl<From, To> type;
+   };
+};
+
+template <>
+struct is_convertible_impl_select<true, true, false>
+{
+   template <class From, class To>
+   struct rebind
+   {
+      typedef true_type type;
+   };
+};
+
+template <>
+struct is_convertible_impl_select<false, false, true>
+{
+   template <class From, class To>
+   struct rebind
+   {
+      typedef false_type type;
+   };
+};
+
+template <>
+struct is_convertible_impl_select<true, false, true>
+{
+   template <class From, class To>
+   struct rebind
+   {
+      typedef false_type type;
+   };
+};
+
+template <typename From, typename To>
+struct is_convertible_impl_dispatch_base
+{
+   typedef is_convertible_impl_select< 
+      ::boost::is_arithmetic<From>::value, 
+      ::boost::is_arithmetic<To>::value,
+#ifndef BOOST_NO_SFINAE
+      ::boost::is_abstract<To>::value
+#else
+      false
+#endif
+   > selector;
+   typedef typename selector::template rebind<From, To> binder;
+   typedef typename binder::type type;
+};
+
+template <typename From, typename To>
+struct is_convertible_impl_dispatch 
+   : public is_convertible_impl_dispatch_base<From, To>::type
+{};
+
 //
 // Now add the full and partial specialisations
 // for void types, these are common to all the
@@ -276,51 +341,7 @@ BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,v
 
 } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_impl<From,To>::value))
-
-
-#if defined(__GNUC__)
-
-// Declare specializations of is_convertible for all of the floating
-// types to all of the integral types. This suppresses some nasty
-// warnings
-
-#   define TT_AUX_IS_CONVERTIBLE_SPEC(T1,T2) \
-    BOOST_TT_AUX_BOOL_TRAIT_SPEC2(is_convertible,T1,T2,true) \
-    /**/
-
-#   define TT_AUX_IS_CONVERTIBLE_SPEC_2(T1,T2) \
-    TT_AUX_IS_CONVERTIBLE_SPEC(T1,signed T2) \
-    TT_AUX_IS_CONVERTIBLE_SPEC(T1,unsigned T2) \
-    /**/
-
-#   define TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F) \
-    TT_AUX_IS_CONVERTIBLE_SPEC(F,char) \
-    TT_AUX_IS_CONVERTIBLE_SPEC_2(F,char) \
-    TT_AUX_IS_CONVERTIBLE_SPEC_2(F,short) \
-    TT_AUX_IS_CONVERTIBLE_SPEC_2(F,int) \
-    TT_AUX_IS_CONVERTIBLE_SPEC_2(F,long) \
-    TT_AUX_IS_CONVERTIBLE_SPEC(F,::boost::long_long_type)  \
-    TT_AUX_IS_CONVERTIBLE_SPEC(F,::boost::ulong_long_type) \
-    /**/
-
-#   define TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(F) \
-    TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F) \
-    TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F const) \
-    TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F volatile) \
-    TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F const volatile) \
-    /**/
-
-TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(float)
-TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(double)
-TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(long double)
-
-#   undef TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC
-#   undef TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC
-#   undef TT_AUX_IS_CONVERTIBLE_SPEC_2
-#   undef TT_AUX_IS_CONVERTIBLE_SPEC
-
-#endif // __GNUC__
+BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_impl_dispatch<From,To>::value))
 
 } // namespace boost
 
