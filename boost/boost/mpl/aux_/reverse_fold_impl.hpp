@@ -16,6 +16,7 @@
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include <boost/mpl/next_prior.hpp>
+#   include <boost/mpl/deref.hpp>
 #   include <boost/mpl/apply.hpp>
 #   include <boost/mpl/aux_/config/ctps.hpp>
 #   if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
@@ -35,7 +36,7 @@
 
 #else
 
-#   define AUX778076_FOLD_IMPL_OP(iter) typename iter::type
+#   define AUX778076_FOLD_IMPL_OP(iter) typename deref<iter>::type
 #   define AUX778076_FOLD_IMPL_NAME_PREFIX reverse_fold
 #   include <boost/mpl/aux_/reverse_fold_impl_body.hpp>
 

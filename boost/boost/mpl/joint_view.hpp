@@ -54,8 +54,8 @@ struct joint_view
 
     typedef joint_view type;
     typedef aux::joint_view_tag tag;
-    typedef typename aux::joint_iter<first1_,last1_,first2_> begin;
-    typedef typename aux::joint_iter<last1_,last1_,last2_> end;
+    typedef joint_iter<first1_,last1_,first2_> begin;
+    typedef joint_iter<last1_,last1_,last2_> end;
 };
 
 BOOST_MPL_AUX_NA_SPEC(2, joint_view)

@@ -20,6 +20,7 @@
 #include <boost/mpl/advance.hpp>
 #include <boost/mpl/distance.hpp>
 #include <boost/mpl/next_prior.hpp>
+#include <boost/mpl/deref.hpp>
 #include <boost/mpl/min_max.hpp>
 #include <boost/mpl/pair.hpp>
 #include <boost/mpl/iterator_tags.hpp>
@@ -44,6 +45,7 @@ struct pair_iter_ops
         typedef typename mpl::next<I1>::type i1_;
         typedef typename mpl::next<I2>::type i2_;
         typedef pair_iter<i1_,i2_,Category> next;
+        typedef pair< typename deref<I1>::type, typename deref<I2>::type > type;
     };
 };
 
@@ -104,11 +106,17 @@ struct pair_iter
 #endif
 {
     typedef Category category;
-    typedef pair<typename I1::type, typename I2::type> type;
 };
 
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+template< typename I1, typename I2, typename C >
+struct deref< pair_iter<I1,I2,C> >
+{
+    typedef pair< typename deref<I1>::type, typename deref<I2>::type > type;
+};
+
 template< typename I1, typename I2, typename C >
 struct next< pair_iter<I1,I2,C> >
 {

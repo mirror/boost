@@ -50,12 +50,12 @@ struct reverse_fold_impl< 1,First,Last,State,BackwardOp,ForwardOp >
 {
     typedef First iter0;
     typedef State fwd_state0;
-    typedef typename apply2< ForwardOp, fwd_state0, typename iter0::type >::type fwd_state1;
+    typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
     typedef typename next<iter0>::type iter1;
     
 
     typedef fwd_state1 bkwd_state1;
-    typedef typename apply2< BackwardOp, bkwd_state1, typename iter0::type >::type bkwd_state0;
+    typedef typename apply2< BackwardOp, bkwd_state1, typename deref<iter0>::type >::type bkwd_state0;
     typedef bkwd_state0 state;
     typedef iter1 iterator;
 };
@@ -71,15 +71,15 @@ struct reverse_fold_impl< 2,First,Last,State,BackwardOp,ForwardOp >
 {
     typedef First iter0;
     typedef State fwd_state0;
-    typedef typename apply2< ForwardOp, fwd_state0, typename iter0::type >::type fwd_state1;
+    typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
     typedef typename next<iter0>::type iter1;
-    typedef typename apply2< ForwardOp, fwd_state1, typename iter1::type >::type fwd_state2;
+    typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
     typedef typename next<iter1>::type iter2;
     
 
     typedef fwd_state2 bkwd_state2;
-    typedef typename apply2< BackwardOp, bkwd_state2, typename iter1::type >::type bkwd_state1;
-    typedef typename apply2< BackwardOp, bkwd_state1, typename iter0::type >::type bkwd_state0;
+    typedef typename apply2< BackwardOp, bkwd_state2, typename deref<iter1>::type >::type bkwd_state1;
+    typedef typename apply2< BackwardOp, bkwd_state1, typename deref<iter0>::type >::type bkwd_state0;
     
 
     typedef bkwd_state0 state;
@@ -97,18 +97,18 @@ struct reverse_fold_impl< 3,First,Last,State,BackwardOp,ForwardOp >
 {
     typedef First iter0;
     typedef State fwd_state0;
-    typedef typename apply2< ForwardOp, fwd_state0, typename iter0::type >::type fwd_state1;
+    typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
     typedef typename next<iter0>::type iter1;
-    typedef typename apply2< ForwardOp, fwd_state1, typename iter1::type >::type fwd_state2;
+    typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
     typedef typename next<iter1>::type iter2;
-    typedef typename apply2< ForwardOp, fwd_state2, typename iter2::type >::type fwd_state3;
+    typedef typename apply2< ForwardOp, fwd_state2, typename deref<iter2>::type >::type fwd_state3;
     typedef typename next<iter2>::type iter3;
     
 
     typedef fwd_state3 bkwd_state3;
-    typedef typename apply2< BackwardOp, bkwd_state3, typename iter2::type >::type bkwd_state2;
-    typedef typename apply2< BackwardOp, bkwd_state2, typename iter1::type >::type bkwd_state1;
-    typedef typename apply2< BackwardOp, bkwd_state1, typename iter0::type >::type bkwd_state0;
+    typedef typename apply2< BackwardOp, bkwd_state3, typename deref<iter2>::type >::type bkwd_state2;
+    typedef typename apply2< BackwardOp, bkwd_state2, typename deref<iter1>::type >::type bkwd_state1;
+    typedef typename apply2< BackwardOp, bkwd_state1, typename deref<iter0>::type >::type bkwd_state0;
     
 
     typedef bkwd_state0 state;
@@ -126,21 +126,21 @@ struct reverse_fold_impl< 4,First,Last,State,BackwardOp,ForwardOp >
 {
     typedef First iter0;
     typedef State fwd_state0;
-    typedef typename apply2< ForwardOp, fwd_state0, typename iter0::type >::type fwd_state1;
+    typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
     typedef typename next<iter0>::type iter1;
-    typedef typename apply2< ForwardOp, fwd_state1, typename iter1::type >::type fwd_state2;
+    typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
     typedef typename next<iter1>::type iter2;
-    typedef typename apply2< ForwardOp, fwd_state2, typename iter2::type >::type fwd_state3;
+    typedef typename apply2< ForwardOp, fwd_state2, typename deref<iter2>::type >::type fwd_state3;
     typedef typename next<iter2>::type iter3;
-    typedef typename apply2< ForwardOp, fwd_state3, typename iter3::type >::type fwd_state4;
+    typedef typename apply2< ForwardOp, fwd_state3, typename deref<iter3>::type >::type fwd_state4;
     typedef typename next<iter3>::type iter4;
     
 
     typedef fwd_state4 bkwd_state4;
-    typedef typename apply2< BackwardOp, bkwd_state4, typename iter3::type >::type bkwd_state3;
-    typedef typename apply2< BackwardOp, bkwd_state3, typename iter2::type >::type bkwd_state2;
-    typedef typename apply2< BackwardOp, bkwd_state2, typename iter1::type >::type bkwd_state1;
-    typedef typename apply2< BackwardOp, bkwd_state1, typename iter0::type >::type bkwd_state0;
+    typedef typename apply2< BackwardOp, bkwd_state4, typename deref<iter3>::type >::type bkwd_state3;
+    typedef typename apply2< BackwardOp, bkwd_state3, typename deref<iter2>::type >::type bkwd_state2;
+    typedef typename apply2< BackwardOp, bkwd_state2, typename deref<iter1>::type >::type bkwd_state1;
+    typedef typename apply2< BackwardOp, bkwd_state1, typename deref<iter0>::type >::type bkwd_state0;
     
 
     typedef bkwd_state0 state;
@@ -159,13 +159,13 @@ struct reverse_fold_impl
 {
     typedef First iter0;
     typedef State fwd_state0;
-    typedef typename apply2< ForwardOp, fwd_state0, typename iter0::type >::type fwd_state1;
+    typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
     typedef typename next<iter0>::type iter1;
-    typedef typename apply2< ForwardOp, fwd_state1, typename iter1::type >::type fwd_state2;
+    typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
     typedef typename next<iter1>::type iter2;
-    typedef typename apply2< ForwardOp, fwd_state2, typename iter2::type >::type fwd_state3;
+    typedef typename apply2< ForwardOp, fwd_state2, typename deref<iter2>::type >::type fwd_state3;
     typedef typename next<iter2>::type iter3;
-    typedef typename apply2< ForwardOp, fwd_state3, typename iter3::type >::type fwd_state4;
+    typedef typename apply2< ForwardOp, fwd_state3, typename deref<iter3>::type >::type fwd_state4;
     typedef typename next<iter3>::type iter4;
     
 
@@ -179,10 +179,10 @@ struct reverse_fold_impl
         > nested_chunk;
 
     typedef typename nested_chunk::state bkwd_state4;
-    typedef typename apply2< BackwardOp, bkwd_state4, typename iter3::type >::type bkwd_state3;
-    typedef typename apply2< BackwardOp, bkwd_state3, typename iter2::type >::type bkwd_state2;
-    typedef typename apply2< BackwardOp, bkwd_state2, typename iter1::type >::type bkwd_state1;
-    typedef typename apply2< BackwardOp, bkwd_state1, typename iter0::type >::type bkwd_state0;
+    typedef typename apply2< BackwardOp, bkwd_state4, typename deref<iter3>::type >::type bkwd_state3;
+    typedef typename apply2< BackwardOp, bkwd_state3, typename deref<iter2>::type >::type bkwd_state2;
+    typedef typename apply2< BackwardOp, bkwd_state2, typename deref<iter1>::type >::type bkwd_state1;
+    typedef typename apply2< BackwardOp, bkwd_state1, typename deref<iter0>::type >::type bkwd_state0;
     
 
     typedef bkwd_state0 state;
@@ -202,7 +202,7 @@ struct reverse_fold_impl< -1,First,Last,State,BackwardOp,ForwardOp >
           -1
         , typename next<First>::type
         , Last
-        , typename apply2<ForwardOp,State, typename First::type>::type
+        , typename apply2<ForwardOp,State, typename deref<First>::type>::type
         , BackwardOp
         , ForwardOp
         > nested_step;
@@ -210,7 +210,7 @@ struct reverse_fold_impl< -1,First,Last,State,BackwardOp,ForwardOp >
     typedef typename apply2<
           BackwardOp
         , typename nested_step::state
-        , typename First::type
+        , typename deref<First>::type
         >::type state;
 
     typedef typename nested_step::iterator iterator;

@@ -19,11 +19,12 @@
 #include <boost/mpl/iterator_tags.hpp>
 #include <boost/mpl/aux_/lambda_spec.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
-#include <boost/type_traits/is_same.hpp>
+
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#   include <boost/type_traits/is_same.hpp>
+#endif
 
 namespace boost { namespace mpl {
-
-namespace aux {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
@@ -36,13 +37,6 @@ struct joint_iter
 {
     typedef Iterator1 base;
     typedef forward_iterator_tag category;
-    typedef joint_iter<
-          typename mpl::next<base>::type
-        , LastIterator1
-        , Iterator2
-        > next;
-
-    typedef typename deref<base>::type type;
 };
 
 template<
@@ -53,19 +47,30 @@ struct joint_iter<LastIterator1,LastIterator1,Iterator2>
 {
     typedef Iterator2 base;
     typedef forward_iterator_tag category;
-    typedef joint_iter<
-          LastIterator1
-        , LastIterator1
-        , typename mpl::next<base>::type
-        > next;
-
-    typedef typename deref<base>::type type;
 };
 
 
-#else
+template< typename I1, typename L1, typename I2 >
+struct deref< joint_iter<I1,L1,I2> >
+{
+    typedef typename joint_iter<I1,L1,I2>::base base_;
+    typedef typename deref<base_>::type type;
+};
 
-// forward decl. for 'joint_iter_impl'
+template< typename I1, typename L1, typename I2 >
+struct next< joint_iter<I1,L1,I2> >
+{
+    typedef joint_iter< typename mpl::next<I1>::type,L1,I2 > type;
+};
+
+template< typename L1, typename I2 >
+struct next< joint_iter<L1,L1,I2> >
+{
+    typedef joint_iter< L1,L1,typename mpl::next<I2>::type > type;
+};
+
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 template<
       typename Iterator1
     , typename LastIterator1
@@ -75,46 +80,25 @@ struct joint_iter;
 
 template< bool > struct joint_iter_impl
 {
-    template< 
-          typename Iterator1
-        , typename LastIterator1
-        , typename Iterator2
-        >
-    struct result_
+    template< typename I1, typename L1, typename I2 > struct result_
     {
-        typedef Iterator1 base;
+        typedef I1 base;
         typedef forward_iterator_tag category;
-        typedef joint_iter<
-              typename mpl::next<Iterator1>::type
-            , LastIterator1
-            , Iterator2
-            > next;
-
-        typedef typename deref<Iterator1>::type type;
+        typedef joint_iter< typename mpl::next<I1>::type,L1,I2 > next;
+        typedef typename deref<I1>::type type;
     };
 };
 
 template<> struct joint_iter_impl<true>
 {
-    template< 
-          typename Iterator1
-        , typename LastIterator1
-        , typename Iterator2
-        >
-    struct result_
+    template< typename I1, typename L1, typename I2 > struct result_
     {
-        typedef Iterator2 base;
+        typedef I2 base;
         typedef forward_iterator_tag category;
-        typedef joint_iter<
-              LastIterator1
-            , LastIterator1
-            , typename mpl::next<Iterator2>::type
-            > next;
-
-        typedef typename deref<Iterator2>::type type;
+        typedef joint_iter< L1,L1,typename mpl::next<I2>::type > next;
+        typedef typename deref<I2>::type type;
     };
 };
-
 
 template<
       typename Iterator1
@@ -129,9 +113,7 @@ struct joint_iter
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-} // namespace aux
-
-BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(3, aux::joint_iter)
+BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(3, joint_iter)
 
 }}
 

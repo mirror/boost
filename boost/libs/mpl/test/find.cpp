@@ -27,8 +27,8 @@ MPL_TEST_CASE()
     typedef find<types, short>::type types_iter;
     typedef find< values, integral_c<int,7> >::type values_iter;
    
-    MPL_ASSERT(( is_same<types_iter::type, short> ));
-    MPL_ASSERT_RELATION( values_iter::type::value, ==, 7 );
+    MPL_ASSERT(( is_same< deref<types_iter>::type, short> ));
+    MPL_ASSERT_RELATION( deref<values_iter>::type::value, ==, 7 );
 
     typedef begin<types>::type types_first;
     typedef begin<values>::type values_first;
