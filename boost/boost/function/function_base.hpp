@@ -25,7 +25,7 @@
 #include <boost/type_traits.hpp>
 #include <boost/ref.hpp>
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__MWERKS__) && __MWERKS__ < 0x2406
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 && !defined(__ICL) || defined(__MWERKS__) && __MWERKS__ < 0x2406
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
 #else
 #  define BOOST_FUNCTION_TARGET_FIX(x)
