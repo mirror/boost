@@ -14,15 +14,10 @@
 #include <cassert>
 
 #include <boost/compressed_pair.hpp>
-#include "type_traits_test.hpp"
+#include <boost/type_traits/type_traits_test.hpp>
 
 using namespace boost;
 
-struct empty_POD_UDT{};
-struct empty_UDT
-{
-  ~empty_UDT(){};
-};
 namespace boost {
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 template <> struct is_empty<empty_UDT>
@@ -59,7 +54,7 @@ struct non_empty2
    { return a.i == b.i; }
 };
 
-int main()
+int main(int argc, char *argv[ ])
 {
    compressed_pair<int, double> cp1(1, 1.3);
    assert(cp1.first() == 1);
@@ -107,9 +102,7 @@ int main()
    value_test(true, (sizeof(compressed_pair<empty_UDT, empty_POD_UDT>) < sizeof(std::pair<empty_UDT, empty_POD_UDT>)))
    value_test(true, (sizeof(compressed_pair<empty_UDT, compressed_pair<empty_POD_UDT, int> >) < sizeof(std::pair<empty_UDT, std::pair<empty_POD_UDT, int> >)))
 
-   std::cout << std::endl << test_count << " tests completed (" << failures << " failures)... press any key to exit";
-   std::cin.get();
-   return failures;
+   return check_result(argc, argv);
 }
 
 //
@@ -154,6 +147,15 @@ template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+#ifdef __BORLANDC__
+// can't handle both types empty:
+unsigned int expected_failures = 1;
+#elif defined(__GNUC__)
+// no zero sized base classes:
+unsigned int expected_failures = 4;
+#else
+unsigned int expected_failures = 0;
+#endif
 
 
 

@@ -16,7 +16,7 @@
 #include <typeinfo>
 #include <boost/call_traits.hpp>
 
-#include "type_traits_test.hpp"
+#include <boost/type_traits/type_traits_test.hpp>
 //
 // struct contained models a type that contains a type (for example std::pair)
 // arrays are contained by value, and have to be treated as a special case:
@@ -98,18 +98,18 @@ std::pair<
 using namespace std;
 
 //
-// struct checker:
+// struct call_traits_checker:
 // verifies behaviour of contained example:
 //
 template <class T>
-struct checker
+struct call_traits_checker
 {
    typedef typename boost::call_traits<T>::param_type param_type;
    void operator()(param_type);
 };
 
 template <class T>
-void checker<T>::operator()(param_type p)
+void call_traits_checker<T>::operator()(param_type p)
 {
    T t(p);
    contained<T> c(t);
@@ -128,7 +128,7 @@ void checker<T>::operator()(param_type p)
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T, std::size_t N>
-struct checker<T[N]>
+struct call_traits_checker<T[N]>
 {
    typedef typename boost::call_traits<T[N]>::param_type param_type;
    void operator()(param_type t)
@@ -176,32 +176,32 @@ void check_make_pair(T c, U u, V v)
 }
 
 
-struct UDT
+struct comparible_UDT
 {
    int i_;
-   UDT() : i_(2){}
-   bool operator == (const UDT& v){ return v.i_ == i_; }
+   comparible_UDT() : i_(2){}
+   bool operator == (const comparible_UDT& v){ return v.i_ == i_; }
 };
 
-int main()
+int main(int argc, char *argv[ ])
 {
-   checker<UDT> c1;
-   UDT u;
+   call_traits_checker<comparible_UDT> c1;
+   comparible_UDT u;
    c1(u);
-   checker<int> c2;
+   call_traits_checker<int> c2;
    int i = 2;
    c2(i);
    int* pi = &i;
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
-   checker<int*> c3;
+   call_traits_checker<int*> c3;
    c3(pi);
-   checker<int&> c4;
+   call_traits_checker<int&> c4;
    c4(i);
-   checker<const int&> c5;
+   call_traits_checker<const int&> c5;
    c5(i);
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    int a[2] = {1,2};
-   checker<int[2]> c6;
+   call_traits_checker<int[2]> c6;
    c6(a);
 #endif
 #endif
@@ -220,10 +220,10 @@ int main()
    typedef int& r_type;
    typedef const r_type cr_type;
 
-   type_test(UDT, boost::call_traits<UDT>::value_type)
-   type_test(UDT&, boost::call_traits<UDT>::reference)
-   type_test(const UDT&, boost::call_traits<UDT>::const_reference)
-   type_test(const UDT&, boost::call_traits<UDT>::param_type)
+   type_test(comparible_UDT, boost::call_traits<comparible_UDT>::value_type)
+   type_test(comparible_UDT&, boost::call_traits<comparible_UDT>::reference)
+   type_test(const comparible_UDT&, boost::call_traits<comparible_UDT>::const_reference)
+   type_test(const comparible_UDT&, boost::call_traits<comparible_UDT>::param_type)
    type_test(int, boost::call_traits<int>::value_type)
    type_test(int&, boost::call_traits<int>::reference)
    type_test(const int&, boost::call_traits<int>::const_reference)
@@ -271,9 +271,7 @@ int main()
    test_count += 20;
 #endif
 
-   std::cout << std::endl << test_count << " tests completed (" << failures << " failures)... press any key to exit";
-   std::cin.get();
-   return failures;
+   return check_result(argc, argv);
 }
 
 //
@@ -362,5 +360,13 @@ template struct call_traits_test<const int&>;
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template struct call_traits_test<int[2], true>;
 #endif
+#endif
+
+#ifdef BOOST_MSVC
+unsigned int expected_failures = 10;
+#elif defined(__BORLANDC__)
+unsigned int expected_failures = 2;
+#else
+unsigned int expected_failures = 0;
 #endif
 

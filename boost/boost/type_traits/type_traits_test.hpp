@@ -11,6 +11,7 @@
 #define BOOST_TYPE_TRAITS_TEST_HPP
 #include <iostream>
 #include <typeinfo>
+#include <boost/utility.hpp>
 //
 // define tests here
 unsigned failures = 0;
