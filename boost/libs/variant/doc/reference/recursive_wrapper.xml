@@ -6,6 +6,11 @@
 
     <class name="recursive_wrapper">
       <purpose>Solves circular dependencies, enabling recursive types.</purpose>
+
+      <template>
+        <template-type-parameter name="T"/>
+      </template>
+
       <description>
         <simpara>The <code>recursive_wrapper</code> class template has an
           interface similar to a simple value container, but its content is
@@ -16,7 +21,7 @@
 
         <simpara>The application of <code>recursive_wrapper</code> is easiest
           understood in context. See
-          <xref linkend="variant.tutorial.recursive-wrapper"/> for a
+          <xref linkend="variant.tutorial.recursive.recursive-wrapper"/> for a
           demonstration of a common use of the class template.</simpara>
 
         <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
@@ -28,9 +33,9 @@
         </itemizedlist>
       </description>
 
-      <template>
-        <template-type-parameter name="T"/>
-      </template>
+      <typedef name="type">
+        <type>T</type>
+      </typedef>
 
       <destructor>
         <purpose>Destructor.</purpose>
@@ -202,6 +207,56 @@
 
       </method-group>
 
+    </class>
+    
+    <class name="is_recursive_wrapper">
+      <purpose>
+        <simpara>Determines whether the specified type is a specialization of
+          <code>recursive_wrapper</code>.</simpara>
+      </purpose>
+
+      <template>
+        <template-type-parameter name="T"/>
+      </template>
+
+      <description>
+        <simpara>Value is true iff <code>T</code> is a specialization of
+          <code><classname>recursive_wrapper</classname></code>.</simpara>
+        <simpara><emphasis role="bold">Note</emphasis>:
+          <code>is_recursive_wrapper</code> is a model of the
+          <libraryname>MPL</libraryname> IntegralConstant concept.</simpara>
+      </description>
+
+      <typedef name="type">
+        <type><emphasis>unspecified</emphasis></type>
+      </typedef>
+
+      <static-constant name="value">
+        <type>bool</type>
+        <default><emphasis>unspecified</emphasis></default>
+      </static-constant>
+    </class>
+
+    <class name="unwrap_recursive_wrapper">
+      <purpose>
+        <simpara>Unwraps the specified argument if given a specialization of
+          <code><classname>recursive_wrapper</classname></code>.</simpara>
+      </purpose>
+
+      <template>
+        <template-type-parameter name="T"/>
+      </template>
+
+      <description>
+        <simpara><code>type</code> is equivalent to <code>T::type</code> if
+          <code>T</code> is a specialization of
+          <code><classname>recursive_wrapper</classname></code>. Otherwise,
+          <code>type</code> is equivalent to <code>T</code>.</simpara>
+      </description>
+
+      <typedef name="type">
+        <type><emphasis>unspecified</emphasis></type>
+      </typedef>
     </class>
 
   </namespace>
