@@ -24,8 +24,6 @@
 namespace boost
 {
 
-template<class T> shared_ptr<T> get_shared_ptr(weak_ptr<T> const & r); // never throws
-
 template<class T> class weak_ptr
 {
 private:
@@ -64,7 +62,7 @@ public:
     template<class Y>
     weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
     {
-        px = boost::get_shared_ptr(r).get();
+        px = r.lock().get();
     }
 
     template<class Y>
@@ -77,7 +75,7 @@ public:
     template<class Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
     {
-        px = boost::get_shared_ptr(r).get();
+        px = r.lock().get();
         pn = r.pn;
         return *this;
     }
@@ -92,9 +90,33 @@ public:
 
 #endif
 
-    void reset() // never throws in 1.30+
+    shared_ptr<T> lock() const // never throws
     {
-        this_type().swap(*this);
+#if defined(BOOST_HAS_THREADS)
+
+        // optimization: avoid throw overhead
+        if(expired())
+        {
+            return shared_ptr<element_type>();
+        }
+
+        try
+        {
+            return shared_ptr<element_type>(*this);
+        }
+        catch(bad_weak_ptr const &)
+        {
+            // Q: how can we get here?
+            // A: another thread may have invalidated r after the use_count test above.
+            return shared_ptr<element_type>();
+        }
+
+#else
+
+        // optimization: avoid try/catch overhead when single threaded
+        return expired()? shared_ptr<element_type>(): shared_ptr<element_type>(*this);
+
+#endif
     }
 
     long use_count() const // never throws
@@ -105,6 +127,11 @@ public:
     bool expired() const // never throws
     {
         return pn.use_count() == 0;
+    }
+
+    void reset() // never throws in 1.30+
+    {
+        this_type().swap(*this);
     }
 
     void swap(this_type & other) // never throws
@@ -151,39 +178,10 @@ template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
     a.swap(b);
 }
 
-template<class T> shared_ptr<T> get_shared_ptr(weak_ptr<T> const & r) // never throws
-{
-#if defined(BOOST_HAS_THREADS)
-
-    // optimization: avoid throw overhead
-    if(r.use_count() == 0)
-    {
-        return shared_ptr<T>();
-    }
-
-    try
-    {
-        return shared_ptr<T>(r);
-    }
-    catch(bad_weak_ptr const &)
-    {
-        // Q: how can we get here?
-        // A: another thread may have invalidated r after the use_count test above.
-        return shared_ptr<T>();
-    }
-
-#else
-
-    // optimization: avoid try/catch overhead when single threaded
-    return r.use_count() == 0? shared_ptr<T>(): shared_ptr<T>(r);
-
-#endif
-}
-
 // deprecated, provided for backward compatibility
 template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r)
 {
-    return boost::get_shared_ptr(r);
+    return r.lock();
 }
 
 } // namespace boost

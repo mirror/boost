@@ -1183,14 +1183,14 @@ void test()
 
 } // namespace n_comparison
 
-namespace n_get_shared_ptr
+namespace n_lock
 {
 
 void test()
 {
 }
 
-} // namespace n_get_shared_ptr
+} // namespace n_lock
 
 namespace n_map
 {
@@ -1272,7 +1272,7 @@ int main()
     n_use_count::test();
     n_swap::test();
     n_comparison::test();
-    n_get_shared_ptr::test();
+    n_lock::test();
 
     n_map::test();
 

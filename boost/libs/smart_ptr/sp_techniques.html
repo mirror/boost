@@ -413,7 +413,7 @@ public:
 
     virtual shared_ptr&lt;X&gt; getX()
     {
-        shared_ptr&lt;X&gt; px = get_shared_ptr(weak_this);
+        shared_ptr&lt;X&gt; px = weak_this.lock();
         return px;
     }
 };
