@@ -17,11 +17,11 @@
 #include <cassert>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       signal_base_impl::signal_base_impl(const compare_type& comp) : 
 	call_depth(0),
-	slots(comp)
+	slots_(comp)
       {
         flags.delayed_disconnect = false;
         flags.clearing = false;
@@ -43,7 +43,7 @@ namespace boost {
 	if (call_depth == 0) {
           // Clearing the slot list will disconnect all slots automatically
 	  temporarily_set_clearing set_clearing(this);
-	  slots.clear();
+	  slots_.clear();
 	}
 	else {
           // We can't actually remove elements from the slot list because there
@@ -53,7 +53,7 @@ namespace boost {
           // reach zero, the call list will be cleared.
           flags.delayed_disconnect = true;
           temporarily_set_clearing set_clearing(this);
-	  for (slot_iterator i = slots.begin(); i != slots.end(); ++i) {
+	  for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
 	    i->second.first.disconnect();
 	  }
 	}
@@ -83,7 +83,7 @@ namespace boost {
         // Add the slot to the list. 
 
         slot_iterator pos = 
-          slots.insert(stored_slot_type(name,
+          slots_.insert(stored_slot_type(name,
                                         connection_slot_pair(slot_connection,
                                                              slot)));
 
@@ -145,7 +145,7 @@ namespace boost {
         // Disconnected slots may still be in the list of slots if
         //   a) this is called while slots are being invoked (call_depth > 0)
         //   b) an exception was thrown in remove_disconnected_slots
-        for (slot_iterator i = slots.begin(); i != slots.end(); ++i) {
+        for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
           if (i->second.first.connected())
             return false;
         }
@@ -156,7 +156,7 @@ namespace boost {
       void signal_base_impl::disconnect(const any& group)
       {
         std::pair<slot_iterator, slot_iterator> group_slots = 
-          slots.equal_range(group);
+          slots_.equal_range(group);
         while (group_slots.first != group_slots.second) {
           slot_iterator next = group_slots.first;
           ++next;
@@ -183,7 +183,7 @@ namespace boost {
           }
           else {
             // Just remove the slot now, it's safe
-            self->slots.erase(*slot);
+            self->slots_.erase(*slot);
           }
         }
       }
@@ -191,9 +191,9 @@ namespace boost {
       void signal_base_impl::remove_disconnected_slots() const
       {
         // Remove any disconnected slots
-        for (slot_iterator i = slots.begin(); i != slots.end(); /* none */) {
+        for (slot_iterator i = slots_.begin(); i != slots_.end(); /* none */) {
           if (!i->second.first.connected())
-            slots.erase(i++);
+            slots_.erase(i++);
           else
             ++i;
         }
@@ -224,13 +224,13 @@ namespace boost {
       {
       }
     } // namespace detail
-  } // namespace signals
+  } // namespace BOOST_SIGNALS_NAMESPACE
 } // namespace boost
 
 #ifndef BOOST_MSVC
 // Explicit instantiations to keep in the library
 template class boost::function2<bool, boost::any, boost::any>;
 template class std::multimap<boost::any, 
-                             boost::signals::detail::connection_slot_pair, 
+                             boost::BOOST_SIGNALS_NAMESPACE::detail::connection_slot_pair, 
                              boost::function2<bool, boost::any, boost::any> >;
 #endif

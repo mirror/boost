@@ -17,7 +17,7 @@
 #include <algorithm>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     void trackable::signal_disconnected(void* obj, void* data)
     {
       trackable* self = reinterpret_cast<trackable*>(obj);
@@ -36,7 +36,7 @@ namespace boost {
 
     void 
     trackable::signal_connected(connection c, 
-                                signals::detail::bound_object& binding) const
+                                BOOST_SIGNALS_NAMESPACE::detail::bound_object& binding) const
     {
       // Insert the connection
       connection_iterator pos = 
@@ -54,10 +54,10 @@ namespace boost {
     {
       dying = true;
     }
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 }
 
 #ifndef BOOST_MSVC
 // Explicit instantiations to keep in the library
-template class std::list<boost::signals::connection>;
+template class std::list<boost::BOOST_SIGNALS_NAMESPACE::connection>;
 #endif

@@ -16,7 +16,7 @@
 #include <boost/signals/slot.hpp>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       void slot_base::create_connection()
       {
@@ -45,13 +45,13 @@ namespace boost {
         for(std::vector<const trackable*>::iterator i = bound_objects.begin();
             i != bound_objects.end(); ++i) {
           // Notify the object that the slot is connecting to it
-          signals::detail::bound_object binding;
+          BOOST_SIGNALS_NAMESPACE::detail::bound_object binding;
           (*i)->signal_connected(watch_bound_objects, binding);
         
           // This will notify the bound object that the connection just made
           // should be disconnected if an exception is thrown before the
           // end of this iteration
-          signals::detail::auto_disconnect_bound_object disconnector(binding);
+          BOOST_SIGNALS_NAMESPACE::detail::auto_disconnect_bound_object disconnector(binding);
 
           // Add the binding to the list of bindings for the connection
           con->bound_objects.push_back(binding);
@@ -66,5 +66,5 @@ namespace boost {
         safe_connection.release();
       }
     } // end namespace detail
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
