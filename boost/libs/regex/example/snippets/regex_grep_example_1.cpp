@@ -31,7 +31,29 @@
 
 typedef std::map<std::string, int, std::less<std::string> > map_type;
 
-boost::regex expression("^(template[[:space:]]*<[^;:{]+>[[:space:]]*)?(class|struct)[[:space:]]*(\\<\\w+\\>([[:blank:]]*\\([^)]*\\))?[[:space:]]*)*(\\<\\w*\\>)[[:space:]]*(<[^;:{]+>)?[[:space:]]*(\\{|:[^;\\{()]*\\{)");
+const char* re = 
+   // possibly leading whitespace:   
+   "^[[:space:]]*" 
+   // possible template declaration:
+   "(template[[:space:]]*<[^;:{]+>[[:space:]]*)?"
+   // class or struct:
+   "(class|struct)[[:space:]]*" 
+   // leading declspec macros etc:
+   "("
+      "\\<\\w+\\>"
+      "("
+         "[[:blank:]]*\\([^)]*\\)"
+      ")?"
+      "[[:space:]]*"
+   ")*" 
+   // the class name
+   "(\\<\\w*\\>)[[:space:]]*" 
+   // template specialisation parameters
+   "(<[^;:{]+>)?[[:space:]]*"
+   // terminate in { or :
+   "(\\{|:[^;\\{()]*\\{)";
+
+boost::regex expression(re);
 
 class IndexClassesPred
 {

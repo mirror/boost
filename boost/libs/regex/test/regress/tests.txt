@@ -503,8 +503,10 @@ a(b+|((c)*))+d abcd 0 4 2 3 2 3 2 3
 '([^\\']|\\.)*' '\\n' 0 4 1 3
 
 ; now try and test some unicode specific characters:
-- match_default normal REG_EXTENDED REG_UNICODE_ONLY
+- match_default normal REG_PERL REG_UNICODE_ONLY
 [[:unicode:]]+  a\0300\0400z 1 3
+[\x10-\xff] \39135\12409 -1 -1
+[\01-\05]{5} \36865\36865\36865\36865\36865 -1 -1
 
 ; finally try some case insensitive matches:
 - match_default normal REG_EXTENDED REG_ICASE
@@ -866,6 +868,7 @@ a+(?#b+)b+ xaaabbba 1 7
 (xyz)(.*)abc xyzaaab -1 -1 0 3 3 7
 (xyz)(.*)abc xyz -1 -1 0 3 3 3
 (xyz)(.*)abc xy -1 -1 -1 -1 -1 -1
+
 
 
 

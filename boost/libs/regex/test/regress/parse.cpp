@@ -37,11 +37,16 @@ using namespace boost;
 flag_info flag_data[] = {
                           { BOOST_RE_STR("REG_BASIC"), 9, REG_BASIC, 0 },
                           { BOOST_RE_STR("REG_EXTENDED"), 12, REG_EXTENDED, 0 },
+                          { BOOST_RE_STR("REG_ESCAPE_IN_LISTS"), 19, REG_ESCAPE_IN_LISTS, 0 },
                           { BOOST_RE_STR("REG_ICASE"), 9, REG_ICASE, 0 },
                           { BOOST_RE_STR("REG_NOSUB"), 9, REG_NOSUB, 0 },
                           { BOOST_RE_STR("REG_NEWLINE"), 11, REG_NEWLINE, 0 },
-                          { BOOST_RE_STR("REG_NEWLINE"), 11, REG_NEWLINE, 0 },
+                          { BOOST_RE_STR("REG_NOCOLLATE"), 13, REG_NOCOLLATE, 0 },
                           { BOOST_RE_STR("REG_NOSPEC"), 10, REG_NOSPEC, 0 },
+                          { BOOST_RE_STR("REG_NEWLINE_ALT"), 15, REG_NEWLINE_ALT , 0 },
+                          { BOOST_RE_STR("REG_PERL"), 8, REG_PERL, 0 },
+                          { BOOST_RE_STR("REG_AWK"), 7, REG_AWK, 0 },
+                          { BOOST_RE_STR("REG_EGREP"), 9, REG_EGREP, 0 },
 
                           { BOOST_RE_STR("REG_NOTBOL"), 10, REG_NOTBOL, 1 },
                           { BOOST_RE_STR("REG_NOTEOL"), 10, REG_NOTEOL, 1 },
