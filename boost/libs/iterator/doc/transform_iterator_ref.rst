@@ -38,9 +38,24 @@
 The ``reference`` type of ``transform_iterator`` is
 ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
 The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
-The ``iterator_category`` member is a type convertible to the tags
-corresponding to each standard concept modeled by
-``transform_iterator``, as described in the models section.
+
+The ``iterator_category`` member is a type convertible to the iterator
+tag given by the following algorithm. Let ``C`` be
+``traveral_category<Iterator>::type``.
+
+::
+
+    if (reference is a reference to value_type) then
+        if (C is convertible to random_access_traversal_tag) then
+            random_access_iterator_tag
+        else if (C is convertible to bidirectional_traversal_tag) then
+            bidirectional_iterator_tag
+        else
+            forward_iterator_tag
+    else
+        input_iterator_tag
+
+
 
 
 ``transform_iterator`` requirements

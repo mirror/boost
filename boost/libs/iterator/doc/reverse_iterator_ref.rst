@@ -27,9 +27,22 @@
   };
 
 
-The ``iterator_category`` member is a type convertible to the tags
-corresponding to each standard concept modeled by
-``reverse_iterator``, as described in the models section.
+The ``iterator_category`` member is a type convertible to the iterator
+tag given by the following algorithm.  Let ``T`` be
+``iterator_traits<Iterator>::value_type``, ``R`` be
+``iterator_traits<Iterator>::reference``, and ``C`` be
+``traveral_category<Iterator>::type``.
+
+::
+
+    if (R is a reference to T) then
+        if (C is convertible to random_access_traversal_tag) then
+            random_access_iterator_tag
+        else
+            bidirectional_iterator_tag
+    else
+        input_iterator_tag
+
 
 
 ``reverse_iterator`` requirements

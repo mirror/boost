@@ -57,7 +57,7 @@ following pseudo-code.  We use the abbreviation
       typedef Reference reference;
 
   if (Value is use_default) then
-      typedef ?? pointer;
+      typedef iterator_traits<V>::value_type* pointer;
   else
       typedef Value* pointer;
 
@@ -67,9 +67,24 @@ following pseudo-code.  We use the abbreviation
       typedef Difference difference_type;
 
 
-The member ``iterator_category`` is a type that satisfies the
-requirements of the concepts modeled by the ``indirect_iterator`` as
-specified in the models section.
+If ``CategoryOrTraversal`` is not ``use_default`` then
+``iterator_category`` is ``CategoryOrTraversal``.  Otherwise
+``iterator_category`` is a type convertible to the tag determined by
+the following algorithm. Let ``C`` be ``traveral_category<Iterator>::type``.
+
+::
+
+    if (reference is a reference to value_type) then
+        if (C is convertible to random_access_traversal_tag) then
+            random_access_iterator_tag
+        else if (C is convertible to bidirectional_traversal_tag) then
+            bidirectional_iterator_tag
+        else
+            forward_iterator_tag
+    else
+        input_iterator_tag
+
+
 
 
 ``indirect_iterator`` requirements
@@ -79,7 +94,7 @@ The ``Iterator`` argument shall meet the requirements of Readable
 Iterator. The ``CategoryOrTraversal`` argument shall be one of the
 standard iterator tags or ``use_default``. If ``CategoryOrTraversal``
 is an iterator tag, the template parameter ``Iterator`` argument shall
-meet the traversal requirements corresponding to the iterator tag.
+meet the requirements corresponding to the iterator tag.
 
 The expression ``*v``, where ``v`` is an object of type
 ``iterator_traits<Iterator>::value_type``, must be a valid expression

@@ -33,9 +33,8 @@ integral type. Otherwise ``difference_type`` is ``Difference``.
 If ``CategoryOrTraversal`` is not ``use_default`` then the member
 ``iterator_category`` is ``CategoryOrTraversal``.  Otherwise, if
 ``Incrementable`` is a numeric type then ``iterator_category`` is a
-type convertible to ``random_access_traversal_tag`` and
-``random_access_iterator_tag``. If ``Incrementable`` is not a numeric
-type then ``iterator_category`` is
+type convertible to ``random_access_iterator_tag``. If
+``Incrementable`` is not a numeric type then ``iterator_category`` is
 ``iterator_traversal<Incrementable>::type``.
 
 
