@@ -1383,7 +1383,7 @@ done
 ac_all_o=""
 ac_rules=""
 ac_all_cpp=""
-cat ./lib/makefile.org > ./lib/makefile.in
+cat ./build/makefile.org > ./build/makefile.in
 for file in src/*.cpp src/*.c
 do
 	if test "$file" != 'src/*.cpp' && test "$file" != 'src/*.c'; then
@@ -1393,15 +1393,15 @@ do
 		root=`echo "$file" | sed 's/src\/\(.*\)\..*/\1/g'`
 		dnl echo root file name is "$root"
 		ac_all_o="$ac_all_o $root$ac_obj_ext"
-		echo >> ./lib/makefile.in
-		echo >> ./lib/makefile.in
-		echo "$root$ac_obj_ext"': $(ALL_H) '"../$file" >> ./lib/makefile.in
-		echo '	$(CPP) $(CPP_PROJ)'" ../$file" >> ./lib/makefile.in
-		echo '	$(AR) -rc lib$(LIBNAME).a'" $root$ac_obj_ext" >> ./lib/makefile.in
+		echo >> ./build/makefile.in
+		echo >> ./build/makefile.in
+		echo "$root$ac_obj_ext"': $(ALL_H) '"../$file" >> ./build/makefile.in
+		echo '	$(CPP) $(CPP_PROJ)'" ../$file" >> ./build/makefile.in
+		echo '	$(AR) -rc lib$(LIBNAME).a'" $root$ac_obj_ext" >> ./build/makefile.in
 	fi
 done
 
-echo "$ac_rules" >> ./lib/makefile.in
+echo "$ac_rules" >> ./build/makefile.in
 
 AC_SUBST(ac_all_o)
 AC_SUBST(ac_all_h)
@@ -1657,7 +1657,7 @@ AC_DEFINE(BOOST_RE_AUTO_CONF)
 AC_MSG_RESULT(***)
 AC_MSG_RESULT($0: setting up headers...)
 AC_MSG_RESULT(***)
-AC_OUTPUT(lib/makefile demo/jgrep/makefile demo/timer/makefile demo/regress/makefile makefile)
+AC_OUTPUT(lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile)
 AC_MSG_RESULT(***)
 AC_MSG_RESULT($0: regex++ package tuned for use with \"${CXX}\" compiler.)
 AC_MSG_RESULT($0: To restore original settings - copy jm_opt.in to ../../boost/re_detail/regex_options.hpp)

@@ -1,23 +1,23 @@
 
 ALL_DEP=@ac_all_dep@
 
-base: ./lib/libboost_regex.a
+base: ./build/libboost_regex.a
 
-./lib/libboost_regex.a: $(ALL_DEP)
+./build/libboost_regex.a: $(ALL_DEP)
 	sh dmi.sh lib
 
 
 jgrep : base
-	sh dmi.sh demo/jgrep
+	sh dmi.sh example/jgrep
 
 
 test : base
-	sh dmi.sh demo/regress
+	sh dmi.sh test/regress
 
 regress : test
 
 timer : base
-	sh dmi.sh demo/timer
+	sh dmi.sh example/timer
 
 install : base
 	echo no install option available

@@ -302,7 +302,7 @@ EOF
 
 function gcc_gen()
 {
-	out="lib/gcc.mak"
+	out="build/gcc.mak"
 	tout="temp"
 	iout="temp_install"
 	subdir="gcc"
@@ -371,7 +371,7 @@ EOF
 
 function gcc_gen_shared()
 {
-	out="lib/gcc-shared.mak"
+	out="build/gcc-shared.mak"
 	tout="temp"
 	iout="temp_install"
 	subdir="gcc"
@@ -696,7 +696,7 @@ EOF
 
 function gen_gen()
 {
-	out="lib/generic.mak"
+	out="build/generic.mak"
 	tout="temp"
 	iout="temp_install"
 	subdir="\$(DIRNAME)"
@@ -969,13 +969,13 @@ done
 
 #
 # generate vc6 makefile:
-out="lib/vc6.mak"
+out="build/vc6.mak"
 subdir="vc6"
 vc6_gen
 #
 # generate vc6-stlport makefile:
 is_stlport="yes"
-out="lib/vc6-stlport.mak"
+out="build/vc6-stlport.mak"
 no_single="yes"
 subdir="vc6-stlport"
 vc6_gen
@@ -986,18 +986,18 @@ gcc_shared="yes"
 gcc_gen_shared
 #
 # generate C++ Builder 4 files:
-out="lib/bcb4.mak"
+out="build/bcb4.mak"
 subdir="bcb4"
 bcb_gen
 #
 # generate C++ Builder 5 files:
-out="lib/bcb5.mak"
+out="build/bcb5.mak"
 subdir="bcb5"
 bcb_gen
 #
 # generate C++ Builder 5 command line tools files:
 use_vcl="no"
-out="lib/bc55.mak"
+out="build/bc55.mak"
 subdir="bcb5"
 bcb_gen
 #
@@ -1005,7 +1005,7 @@ bcb_gen
 gen_gen
 #
 # generate Sun 6.1 makefile:
-out="lib/sunpro.mak"
+out="build/sunpro.mak"
 subdir="sunpro"
 sun_gen
 

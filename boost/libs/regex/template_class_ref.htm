@@ -1064,7 +1064,7 @@ template &lt;class charT&gt; class regex_traits : public base_type { /*detailts*
 </TR>
 </TABLE>
 
-<FONT SIZE=2><P>regex_match returns false if no match occurs or true if it does. A match only occurs if it starts at <B>first</B> and finishes at <B>last</B>. Example: the following </FONT><A HREF="demo/snippets/snip1.cpp"><FONT SIZE=2>example</FONT></A><FONT SIZE=2> processes an ftp response: </P>
+<FONT SIZE=2><P>regex_match returns false if no match occurs or true if it does. A match only occurs if it starts at <B>first</B> and finishes at <B>last</B>. Example: the following </FONT><A HREF="example/snippets/regex_match_example.cpp"><FONT SIZE=2>example</FONT></A><FONT SIZE=2> processes an ftp response: </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;stdlib.h&gt; 
 #include &lt;boost/regex.hpp&gt; 
 #include &lt;string&gt; 
@@ -1299,7 +1299,7 @@ regex expression(<FONT COLOR="#000080">"([0-9]+)(\\-| |$)(.*)"</FONT>);
 
 <FONT SIZE=2><P><BR>
 &nbsp; </P>
-<P>Example: the following </FONT><A HREF="demo/snippets/snip2.cpp"><FONT SIZE=2>example</FONT></A><FONT SIZE=2>, takes the contents of a file in the form of a string, and searches for all the C++ class declarations in the file. The code will work regardless of the way that std::string is implemented, for example it could easily be modified to work with the SGI rope class, which uses a non-contiguous storage strategy. </P>
+<P>Example: the following </FONT><A HREF="example/snippets/regex_search_example.cpp"><FONT SIZE=2>example</FONT></A><FONT SIZE=2>, takes the contents of a file in the form of a string, and searches for all the C++ class declarations in the file. The code will work regardless of the way that std::string is implemented, for example it could easily be modified to work with the SGI rope class, which uses a non-contiguous storage strategy. </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;string&gt; 
 #include &lt;map&gt; 
 #include &lt;boost/regex.hpp&gt; 
@@ -1415,7 +1415,7 @@ void</B> IndexClasses(map_type&amp; m, <B>const</B> std::string&amp; file)
 };</PRE>
 <FONT SIZE=2><P>For example the regular expression "a*b" would find one match in the string "aaaaab" and two in the string "aaabb". </P>
 <P>Remember this algorithm can be used for a lot more than implementing a version of grep, the predicate can be and do anything that you want, grep utilities would output the results to the screen, another program could index a file based on a regular expression and store a set of bookmarks in a list, or a text file conversion utility would output to file. The results of one regex_grep can even be chained into another regex_grep to create recursive parsers. </P>
-</FONT><P><A HREF="demo/snippets/snip3.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: convert the example from <I>regex_search</I> to use <I>regex_grep</I> instead: </P>
+</FONT><P><A HREF="example/snippets/regex_grep_example_1.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: convert the example from <I>regex_search</I> to use <I>regex_grep</I> instead: </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;string&gt; 
 #include &lt;map&gt; 
 #include &lt;boost/regex.hpp&gt; 
@@ -1456,7 +1456,7 @@ void</B> IndexClasses(map_type&amp; m, <B>const</B> std::string&amp; file)
 &nbsp;&nbsp; end = file.end(); 
 &nbsp;&nbsp; regex_grep(IndexClassesPred(m, start), start, end, expression); 
 } </PRE>
-<P><A HREF="demo/snippets/snip5.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: Use regex_grep to call a global callback function: </P>
+<P><A HREF="example/snippets/regex_grep_example_2.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: Use regex_grep to call a global callback function: </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;string&gt; 
 #include &lt;map&gt; 
 #include &lt;boost/regex.hpp&gt; 
@@ -1493,7 +1493,7 @@ void</B> IndexClasses(<B>const</B> std::string&amp; file)
 &nbsp;&nbsp; regex_grep(grep_callback, start, end, expression, match_default); 
 }
 &nbsp; </PRE>
-<P><A HREF="demo/snippets/snip6.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: use regex_grep to call a class member function, use the standard library adapters <I>std::mem_fun</I> and <I>std::bind1st</I> to convert the member function into a predicate: </P>
+<P><A HREF="example/snippets/regex_grep_example_3.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: use regex_grep to call a class member function, use the standard library adapters <I>std::mem_fun</I> and <I>std::bind1st</I> to convert the member function into a predicate: </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;string&gt; 
 #include &lt;map&gt; 
 #include &lt;boost/regex.hpp&gt; 
@@ -1546,7 +1546,7 @@ bool</B> class_index::grep_callback(boost::match_results&lt;std::string::const_i
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   expression); 
 } 
 &nbsp; </PRE>
-<P><A HREF="demo/snippets/snip7.cpp"><FONT SIZE=2>Finally</FONT></A><FONT SIZE=2>, C++ Builder users can use C++ Builder's closure type as a callback argument: </P>
+<P><A HREF="example/snippets/regex_grep_example_4.cpp"><FONT SIZE=2>Finally</FONT></A><FONT SIZE=2>, C++ Builder users can use C++ Builder's closure type as a callback argument: </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;string&gt; 
 #include &lt;map&gt; 
 #include &lt;boost/regex.hpp&gt; 
@@ -1802,7 +1802,7 @@ std::basic_string&lt;charT&gt; regex_merge(<B>const</B> std::basic_string&lt;cha
 </TR>
 </TABLE>
 
-<FONT SIZE=2><P>Example: the following </FONT><A HREF="demo/snippets/snip4.cpp"><FONT SIZE=2>example</FONT></A><FONT SIZE=2> takes C/C++ source code as input, and outputs syntax highlighted HTML code. </P>
+<FONT SIZE=2><P>Example: the following </FONT><A HREF="example/snippets/regex_merge_example.cpp"><FONT SIZE=2>example</FONT></A><FONT SIZE=2> takes C/C++ source code as input, and outputs syntax highlighted HTML code. </P>
 </FONT><PRE>
 <FONT COLOR="#008080">#include &lt;fstream&gt;
 #include &lt;sstream&gt;
@@ -1924,12 +1924,12 @@ std::size_t regex_split(OutputIterator out,&nbsp;
 std::size_t regex_split(OutputIterator out, 
                         std::basic_string&lt;charT, Traits1, Alloc1&gt;&amp; s);</PRE>
 <FONT SIZE=2><P>Each version takes an output-iterator for output, and a string for input. If the expression contains no marked sub-expressions, then the algorithm writes one string onto the output-iterator for each section of input that does not match the expression. If the expression does contain marked sub-expressions, then each time a match is found, one string for each marked sub-expression will be written to the output-iterator. No more than <I>max_split </I>strings will be written to the output-iterator. Before returning, all the input processed will be deleted from the string <I>s</I> (if <I>max_split </I>is not reached then all of <I>s</I> will be deleted). Returns the number of strings written to the output-iterator. If the parameter <I>max_split</I> is not specified then it defaults to UINT_MAX. If no expression is specified, then it defaults to "\s+", and splitting occurs on whitespace. </P>
-</FONT><P><A HREF="demo/snippets/snip8.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: the following function will split the input string into a series of tokens, and remove each token from the string <I>s</I>: </P>
+</FONT><P><A HREF="example/snippets/regex_split_example_1.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: the following function will split the input string into a series of tokens, and remove each token from the string <I>s</I>: </P>
 </FONT><B><PRE>unsigned</B> tokenise(std::list&lt;std::string&gt;&amp; l, std::string&amp; s)
 {
 <B>&nbsp;&nbsp; return</B> boost::regex_split(std::back_inserter(l), s);
 }</PRE>
-<P><A HREF="demo/snippets/snip9.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: the following short program will extract all of the URL's from a html file, and print them out to <I>cout</I>: </P>
+<P><A HREF="example/snippets/regex_split_example_2.cpp"><FONT SIZE=2>Example</FONT></A><FONT SIZE=2>: the following short program will extract all of the URL's from a html file, and print them out to <I>cout</I>: </P>
 </FONT><FONT COLOR="#008000"><PRE>#include &lt;list&gt;
 #include &lt;fstream&gt;
 #include &lt;iostream&gt;
@@ -2028,7 +2028,7 @@ boost::regex e(<FONT COLOR="#000080">"&lt;\\s*A\\s+[^&gt;]*href\\s*=\\s*\"([^\"]
 </TR>
 </TABLE>
 
-<P>The following <A HREF="demo/snippets/partial_regex_match.cpp">example</A> tests to see whether the text could be a valid credit card number, as the user presses a key, the character entered would be added to the string being built up, and passed to <CODE>is_possible_card_number</CODE>.  If this returns true then the text could be a valid card number, so the user interface's OK button would be enabled.  If it returns false, then this is not yet a valid card number, but could be with more input, so the user interface would disable the OK button.  Finally, if the procedure throws an exception the input could never become a valid number, and the inputted character must be discarded, and a suitable error indication displayed to the user.</P>
+<P>The following <A HREF="example/snippets/partial_regex_match.cpp">example</A> tests to see whether the text could be a valid credit card number, as the user presses a key, the character entered would be added to the string being built up, and passed to <CODE>is_possible_card_number</CODE>.  If this returns true then the text could be a valid card number, so the user interface's OK button would be enabled.  If it returns false, then this is not yet a valid card number, but could be with more input, so the user interface would disable the OK button.  Finally, if the procedure throws an exception the input could never become a valid number, and the inputted character must be discarded, and a suitable error indication displayed to the user.</P>
 <PRE>#include &lt;string&gt;
 #include &lt;iostream&gt;
 #include &lt;boost/regex.hpp&gt;
@@ -2055,7 +2055,7 @@ bool is_possible_card_number(const std::string&amp; input)
    // what we have so far is only a partial match...
    return false;
 }</PRE>
-<P>In the following <A HREF="demo/snippets/partial_regex_match.cpp">example</A>, text input is taken from a stream containing an unknown amount of text; this example simply counts the number of html tags encountered in the stream.  The text is loaded into a buffer and searched a part at a time, if a partial match was encountered, then the partial match gets searched a second time as the start of the next batch of text:</P>
+<P>In the following <A HREF="example/snippets/partial_regex_match.cpp">example</A>, text input is taken from a stream containing an unknown amount of text; this example simply counts the number of html tags encountered in the stream.  The text is loaded into a buffer and searched a part at a time, if a partial match was encountered, then the partial match gets searched a second time as the start of the next batch of text:</P>
 <PRE>#include &lt;iostream&gt;
 #include &lt;fstream&gt;
 #include &lt;sstream&gt;

@@ -370,7 +370,7 @@ single-thread static builds). <br>
 <p><b>GCC(2.95)</b> </p>
 
 <p>There is a conservative makefile for the g++ compiler. From
-the command prompt change to the &lt;boost&gt;/libs/regex/lib
+the command prompt change to the &lt;boost&gt;/libs/regex/build
 directory and type: </p>
 
 <p>make -fgcc.mak </p>
@@ -379,7 +379,7 @@ directory and type: </p>
 containing release and debug versions of the library (libboost_regex.a
 and libboost_regex_debug.a). When you build projects that use
 regex++, you will need to add the boost install directory to your
-list of include paths and add &lt;boost&gt;/libs/gcc/libboost_regex.a
+list of include paths and add &lt;boost&gt;/libs/regex/build/gcc/libboost_regex.a
 to your list of library files. </p>
 
 <p>There is also a makefile to build the library as a shared
@@ -426,7 +426,7 @@ make</tt></pre>
 
 <p>Note that the configure generated makefiles produce only a
 static library, if you would prefer to build a shared library,
-then there is a generic.mak makefile in the &lt;boost&gt;/libs/regex/lib
+then there is a generic.mak makefile in the &lt;boost&gt;/libs/regex/build
 directory. To use this you will need to set up a number of
 environment variables first (see the makefile for more details).
 Finally if you use one of the following compilers: Kai C++, SGI
