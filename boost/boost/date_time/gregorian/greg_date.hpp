@@ -45,7 +45,7 @@ namespace gregorian {
       : date_time::date<date, gregorian_calendar, date_duration>(year, month, day)
     {
       if (gregorian_calendar::end_of_month_day(year, month) < day) {
-        throw bad_day_of_month();
+        throw bad_day_of_month(std::string("Day of month is not valid for year"));
       }
     }
     //! Constructor from a ymd_type structure

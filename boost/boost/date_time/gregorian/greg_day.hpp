@@ -18,6 +18,10 @@ namespace gregorian {
     bad_day_of_month() : 
       std::out_of_range(std::string("Day of month value is out of range 1..31")) 
     {}
+    //! Allow other classes to throw with unique string for bad day like Feb 29
+    bad_day_of_month(const std::string& s) : 
+      std::out_of_range(s) 
+    {}
   };
   //! Policy class that declares error handling and day of month ranges
   typedef CV::simple_exception_policy<unsigned short, 1, 31, bad_day_of_month> greg_day_policies;
