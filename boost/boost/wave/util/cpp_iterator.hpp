@@ -988,7 +988,7 @@ fs::path native_path(file_path, fs::native);
 #endif 
     {
     // the new include file determines the actual current directory
-        ctx.set_current_directory(file_path.c_str());
+        ctx.set_current_directory(native_path.native_file_string().c_str());
         
     // preprocess the opened file
     boost::shared_ptr<base_iteration_context_type> new_iter_ctx (
