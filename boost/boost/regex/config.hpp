@@ -232,8 +232,12 @@ using std::distance;
  *
  ****************************************************************************/
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
+#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1200) && defined(_MSC_EXTENSIONS)
+#if defined(_DEBUG) || defined(__MSVC_RUNTIME_CHECKS)
+#  define BOOST_REGEX_CALL __cdecl
+#else
 #  define BOOST_REGEX_CALL __fastcall
+#endif
 #  define BOOST_REGEX_CCALL __cdecl
 #endif
 
