@@ -305,7 +305,7 @@ struct indexable : B
 //  More operator classes (contributed by Daryle Walker) --------------------//
 //  (NRVO-friendly implementation contributed by Daniel Frey) ---------------//
 
-#if defined(BOOST_HAS_NRVO)
+#if defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
 
 #define BOOST_BINARY_OPERATOR( NAME, OP )                                     \
 template <class T, class U, class B = ::boost::detail::empty_base>            \
@@ -322,7 +322,7 @@ struct NAME##1 : B                                                            \
     { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
 };
 
-#else // defined(BOOST_HAS_NRVO)
+#else // defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
 
 #define BOOST_BINARY_OPERATOR( NAME, OP )                                     \
 template <class T, class U, class B = ::boost::detail::empty_base>            \
@@ -337,7 +337,7 @@ struct NAME##1 : B                                                            \
   friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; }       \
 };
 
-#endif // defined(BOOST_HAS_NRVO)
+#endif // defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
 
 BOOST_BINARY_OPERATOR( left_shiftable, << )
 BOOST_BINARY_OPERATOR( right_shiftable, >> )
