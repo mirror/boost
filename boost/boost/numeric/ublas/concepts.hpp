@@ -456,12 +456,15 @@ namespace boost { namespace numeric { namespace ublas {
     struct StorageContainerConcept {
         typedef C container_type;
         typedef typename C::size_type size_type;
+        typedef typename C::value_type value_type;
 
         static void constraints () {
             RandomAccessContainerConcept<container_type>::constraints ();
             size_type n (0);
             // Sizing constructor
             container_type c = container_type (n);
+            // Initialised sizing constructor
+            container_type (n, value_type (5));
             ignore_unused_variable_warning (c);
         }
     };
@@ -478,20 +481,12 @@ namespace boost { namespace numeric { namespace ublas {
             size_type n (0);
             // Sizing constructor
             container_type c = container_type (n);
-            value_type t = value_type ();
-            iterator_type it = iterator_type (), it1 = iterator_type (), it2 = iterator_type ();
-            // Insert
-            c.insert (it, t);
-            // Range insert
-            c.insert (it, it1, it2);
-            // Erase
-            c.erase (it);
-            // Range erase
-            c.erase (it1, it2);
-            // Clear
-            c.clear ();
+            // Initialised sizing constructor
+            c = container_type (n, value_type (3));
             // Resize
-            c.resize (n);
+            c.resize (n, value_type (5));
+            // Resize - none preserving
+            detail::resize (c, n, false);
         }
     };
 

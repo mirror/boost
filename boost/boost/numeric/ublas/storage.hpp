@@ -93,12 +93,13 @@ namespace boost { namespace numeric { namespace ublas {
             alloc_(a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
+                // ISSUE some compilers zero POD here
                 new (data_) value_type[size_];
             }
         }
         // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
-        unbounded_array (size_type size, const T& init, const ALLOC &a = ALLOC()):
+        unbounded_array (size_type size, const value_type &init, const ALLOC &a = ALLOC()):
             alloc_ (a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
@@ -127,8 +128,9 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Resizing
+    private:
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize_internal (size_type size, value_type init, bool preserve) {
             if (size != size_) {
                 pointer data;
                 if  (size) {
@@ -147,12 +149,15 @@ namespace boost { namespace numeric { namespace ublas {
                                 alloc_.construct (di, *si);
                                 ++di;
                             }
-                            const value_type zero (0);
                             for (; di != data + size; ++di) {
-                                alloc_.construct (di, zero);
+                                alloc_.construct (di, init);
                             }
                         }
-                    }            
+                    }
+                    else {
+                        // ISSUE some compilers zero POD here
+                        new (data) value_type[size];
+                    }                    
                 }
                 else
                     data = 0;
@@ -167,7 +172,16 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = data;
             }
         }
-
+    public:
+        BOOST_UBLAS_INLINE
+        void resize_new (size_type size) {
+            resize_internal (size, value_type (), false);
+        }
+        BOOST_UBLAS_INLINE
+        void resize (size_type size, value_type init) {
+            resize_internal (size, init, true);
+        }
+                    
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
@@ -189,7 +203,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         unbounded_array &operator = (const unbounded_array &a) {
             if (this != &a) {
-                resize (a.size_, false);
+                resize_new (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -214,41 +228,6 @@ namespace boost { namespace numeric { namespace ublas {
             a1.swap (a2);
         }
 #endif
-
-        // Element insertion and deletion
-        BOOST_UBLAS_INLINE
-        iterator insert (iterator it, const value_type &t) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-            *it = t;
-            return it;
-        }
-        BOOST_UBLAS_INLINE
-        void insert (iterator it, iterator it1, iterator it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-                BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-                *it = *it1;
-                ++ it, ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void erase (pointer it) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            *it = value_type (0);
-        }
-        BOOST_UBLAS_INLINE
-        void erase (pointer it1, pointer it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-                *it1 = value_type (0);
-                ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void clear () {
-            erase (begin (), end ());
-        }
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
@@ -301,10 +280,10 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        // Handle explict destroy on a (possibily indexed) iterator
+        // Handle explict destroy on a (possibly indexed) iterator
         BOOST_UBLAS_INLINE
         static void iterator_destroy (iterator &i) {
-            (&(*i)) -> ~value_type();
+            (&(*i)) -> ~value_type ();
         }
         ALLOC alloc_;
         size_type size_;
@@ -338,9 +317,8 @@ namespace boost { namespace numeric { namespace ublas {
                 bad_size ().raise ();
             // data_ (an array) elements are already default constructed
         }
-        // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
-        bounded_array (size_type size, const T& init):
+        bounded_array (size_type size, const value_type &init):
             size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
@@ -350,17 +328,23 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_array (const bounded_array &c):
             size_ (c.size_)  {
-            // ISSUE elements should be copy constructed here, but we must copy instead as already constructed
+            // ISSUE elements should be copy constructed here, but we must copy instead as already default constructed
             std::copy (c.data_, c.data_ + c.size_, data_);
         }
         
         // Resizing
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize_new (size_type size) {
             if (size > N)
                 bad_size ().raise ();
-            if (preserve && size > size_)
-                std::fill (data_ + size_, data_ + size, value_type (0));
+            size_ = size;
+        }
+        BOOST_UBLAS_INLINE
+        void resize (size_type size, value_type init) {
+            if (size > N)
+                bad_size ().raise ();
+            if (size > size_)
+                std::fill (data_ + size_, data_ + size, init);
             size_ = size;
         }
 
@@ -385,7 +369,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_array &operator = (const bounded_array &a) {
             if (this != &a) {
-                resize (a.size_, false);
+                resize_new (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -410,41 +394,6 @@ namespace boost { namespace numeric { namespace ublas {
             a1.swap (a2);
         }
 #endif
-
-        // Element insertion and deletion
-        BOOST_UBLAS_INLINE
-        iterator insert (iterator it, const value_type &t) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-            *it = t;
-            return it;
-        }
-        BOOST_UBLAS_INLINE
-        void insert (iterator it, iterator it1, iterator it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-                BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-                *it = *it1;
-                ++ it, ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void erase (iterator it) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            *it = value_type (0);
-        }
-        BOOST_UBLAS_INLINE
-        void erase (iterator it1, iterator it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-                *it1 = value_type (0);
-                ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void clear () {
-            erase (begin (), end ());
-        }
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
@@ -502,9 +451,6 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
 
-    // No initialise - tag parameter specified to disable construction of array value_types's
-    struct no_init {};
-
     // Array adaptor with normal deep copy semantics of elements
     template<class T>
     class array_adaptor {
@@ -523,16 +469,13 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (0), own_ (true), data_ (new value_type [0]) {
         }
         explicit BOOST_UBLAS_INLINE
-        array_adaptor (no_init):
-            size_ (0), own_ (true), data_ (new value_type [0]) {}
-        explicit BOOST_UBLAS_INLINE
         array_adaptor (size_type size):
             size_ (size), own_ (true), data_ (new value_type [size]) {
-            std::fill (data_, data_ + size_, value_type (0));
         }
         BOOST_UBLAS_INLINE
-        array_adaptor (size_type size, no_init):
+        array_adaptor (size_type size, const value_type &init):
             size_ (size), own_ (true), data_ (new value_type [size]) {
+            std::fill (data_, data_ + size_, init);
         }
         BOOST_UBLAS_INLINE
         array_adaptor (size_type size, pointer data):
@@ -550,13 +493,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Resizing
+    private:
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize_internal (size_type size, value_type init, bool preserve = true) {
            if (size != size_) {
                 pointer data = new value_type [size];
                 if (preserve) {
                     std::copy (data_, data_ + (std::min) (size, size_), data);
-                    std::fill (data + (std::min) (size, size_), data + size, value_type (0));
+                    std::fill (data + (std::min) (size, size_), data + size, init);
                 }
                 if (own_)
                     delete [] data_;
@@ -566,16 +510,38 @@ namespace boost { namespace numeric { namespace ublas {
             }
         }
         BOOST_UBLAS_INLINE
-        void resize (size_type size, pointer data, bool preserve = true) {
-            if (preserve) {
-                std::copy (data_, data_ + (std::min) (size, size_), data);
+        void resize_internal (size_type size, pointer data, value_type init, bool preserve = true) {
+            if (data != data_) {
+                if (preserve) {
+                    std::copy (data_, data_ + (std::min) (size, size_), data);
+                    std::fill (data + (std::min) (size, size_), data + size, value_type (0));
+                }
+                if (own_)
+                    delete [] data_;
+                own_ = false;
+                data_ = data;
+            }
+            else {
                 std::fill (data + (std::min) (size, size_), data + size, value_type (0));
             }
-            if (own_)
-                delete [] data_;
             size_ = size;
-            own_ = false;
-            data_ = data;
+        }
+    public:
+        BOOST_UBLAS_INLINE
+        void resize_new (size_type size) {
+            resize_internal (size, value_type (), false);
+        }
+        BOOST_UBLAS_INLINE
+        void resize (size_type size, value_type init) {
+            resize_internal (size, init, true);
+        }
+        BOOST_UBLAS_INLINE
+        void resize_new (size_type size, pointer data) {
+            resize_internal (size, data, value_type (), false);
+        }
+        BOOST_UBLAS_INLINE
+        void resize (size_type size, pointer data, value_type init) {
+            resize_internal (size, data, init, true);
         }
 
         BOOST_UBLAS_INLINE
@@ -599,7 +565,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         array_adaptor &operator = (const array_adaptor &a) {
             if (this != &a) {
-                resize (a.size_, false);
+                resize_new (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -628,41 +594,6 @@ namespace boost { namespace numeric { namespace ublas {
             a1.swap (a2);
         }
 #endif
-
-        // Element insertion and deletion
-        BOOST_UBLAS_INLINE
-        pointer insert (pointer it, const value_type &t) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-            *it = t;
-            return it;
-        }
-        BOOST_UBLAS_INLINE
-        void insert (pointer it, pointer it1, pointer it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-                BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-                *it = *it1;
-                ++ it, ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void erase (pointer it) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            *it = value_type (0);
-        }
-        BOOST_UBLAS_INLINE
-        void erase (pointer it1, pointer it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-                *it1 = value_type (0);
-                ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void clear () {
-            erase (begin (), end ());
-        }
 
         // Iterators simply are pointers.
 
@@ -757,16 +688,13 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (0), own_ (true), data_ (new value_type [0]) {
         }
         explicit BOOST_UBLAS_INLINE
-        shallow_array_adaptor (no_init):
-            size_ (0), own_ (true), data_ (new value_type [0]) {}
-        explicit BOOST_UBLAS_INLINE
         shallow_array_adaptor (size_type size):
             size_ (size), own_ (true), data_ (new value_type [size]) {
-            std::fill (data_.get (), data_.get () + size_, value_type (0));
         }
         BOOST_UBLAS_INLINE
-        shallow_array_adaptor (size_type size, no_init):
+        shallow_array_adaptor (size_type size, const value_type &init):
             size_ (size), own_ (true), data_ (new value_type [size]) {
+            std::fill (data_.get (), data_.get () + size_, init);
         }
         BOOST_UBLAS_INLINE
         shallow_array_adaptor (size_type size, pointer data):
@@ -781,26 +709,44 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Resizing
+    private:
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize_internal (size_type size, value_type init, bool preserve = true) {
             if (size != size_) {
                 shared_array<value_type> data (new value_type [size]);
                 if (preserve) {
                     std::copy (data_.get (), data_.get () + (std::min) (size, size_), data.get ());
-                    std::fill (data.get () + (std::min) (size, size_), data.get () + size, value_type (0));
+                    std::fill (data.get () + (std::min) (size, size_), data.get () + size, init);
                 }
                 size_ = size;
                 data_ = data;
             }
         }
         BOOST_UBLAS_INLINE
-        void resize (size_type size, pointer data, bool preserve = true) {
+        void resize_internal (size_type size, pointer data, value_type init, bool preserve = true) {
             if (preserve) {
                 std::copy (data_.get (), data_.get () + (std::min) (size, size_), data);
-                std::fill (data + (std::min) (size, size_), data + size, value_type (0));
+                std::fill (data + (std::min) (size, size_), data + size, init);
             }
             size_ = size;
             data_ = data;
+        }
+    public:
+        BOOST_UBLAS_INLINE
+        void resize_new (size_type size) {
+            resize_internal (size, value_type (), false);
+        }
+        BOOST_UBLAS_INLINE
+        void resize (size_type size, value_type init) {
+            resize_internal (size, init, true);
+        }
+        BOOST_UBLAS_INLINE
+        void resize_new (size_type size, pointer data) {
+            resize_internal (size, data, value_type (), false);
+        }
+        BOOST_UBLAS_INLINE
+        void resize (size_type size, pointer data, value_type init) {
+            resize_internal (size, data, init, true);
         }
 
         BOOST_UBLAS_INLINE
@@ -824,7 +770,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         shallow_array_adaptor &operator = (const shallow_array_adaptor &a) {
             if (this != &a) {
-                resize (a.size_, false);
+                resize_new (a.size_);
                 std::copy (a.data_.get (), a.data_.get () + a.size_, data_.get ());
             }
             return *this;
@@ -853,41 +799,6 @@ namespace boost { namespace numeric { namespace ublas {
             a1.swap (a2);
         }
 #endif
-
-        // Element insertion and deletion
-        BOOST_UBLAS_INLINE
-        pointer insert (pointer it, const value_type &t) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-            *it = t;
-            return it;
-        }
-        BOOST_UBLAS_INLINE
-        void insert (pointer it, pointer it1, pointer it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-                BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
-                *it = *it1;
-                ++ it, ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void erase (pointer it) {
-            BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            *it = value_type (0);
-        }
-        BOOST_UBLAS_INLINE
-        void erase (pointer it1, pointer it2) {
-            while (it1 != it2) {
-                BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-                *it1 = value_type (0);
-                ++ it1;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void clear () {
-            erase (begin (), end ());
-        }
 
         // Iterators simply are pointers.
 

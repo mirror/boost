@@ -323,13 +323,24 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
-            size_ = BOOST_UBLAS_SAME (size, size);
-            detail::resize (data (), functor1_type::packed_size (size, size), preserve);
+            size_ = size;
+            if (preserve) {
+                self_type temporary (size_, size_);
+                // FIXME use matrix_resize_preserve on conformant compilers
+                // detail::matrix_resize_reserve<functor_type> (*this, temporary, size_, size_);
+                assign_temporary (temporary);
+            }
+            else
+                detail::resize (data (), functor1_type::packed_size (size_, size_), preserve);
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool preserve = true) {
-            size_ = BOOST_UBLAS_SAME (size1, size2);
-            detail::resize (data (), functor1_type::packed_size (size1, size2), preserve);
+            resize (BOOST_UBLAS_SAME (size1, size2), preserve);
+        }
+        BOOST_UBLAS_INLINE
+        void resize_packed_preserve (size_type size) {
+            size_ = BOOST_UBLAS_SAME (size, size);
+            detail::resize (data (), functor1_type::packed_size (size_, size_), false);
         }
 
         // Element access

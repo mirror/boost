@@ -119,7 +119,24 @@ namespace boost { namespace numeric { namespace ublas {
             size2_ = size2;
             lower_ = lower;
             upper_ = upper;
+            if (preserve) {
+                self_type temporary (size1, size2, lower, upper);
+                // FIXME use matrix_resize_preserve on conformant compilers
+                // detail::matrix_resize_reserve<functor_type> (*this, temporary, size_, size_);
+                assign_temporary (temporary);
+            }
+            else
+                detail::resize (data (), (std::max) (size1, size2) * (lower + 1 + upper), preserve);
             detail::resize (data (), (std::max) (size1, size2) * (lower + 1 + upper), preserve);
+        }
+
+        BOOST_UBLAS_INLINE
+        void resize_packed_preserve (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0) {
+            size1_ = size1;
+            size2_ = size2;
+            lower_ = lower;
+            upper_ = upper;
+            detail::resize (data (), (std::max) (size1, size2) * (lower + 1 + upper), true);
         }
 
         // Element access

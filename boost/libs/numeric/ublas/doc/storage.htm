@@ -96,11 +96,18 @@ holds at most <code>size</code> elements, using a specified allocator.
 <td>Deallocates the <code>unbounded_array</code> itself.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size, bool preserve =
-true)</code></td>
-<td>Reallocates an <code>unbounded_array</code> to hold at most
-<code>size</code> elements. When <code>preserve == false</code> the
-elements values after resize are undefined.</td>
+<td><code>void resize (size_type size, value_type init)</code></td>
+<td>Resizes an <code>unbounded_array</code> to hold at most
+<code>size</code> elements.<br />
+The <code>unbounded_array</code> is reallocated only if the size changes.
+Element values are preserved, additional elements are assigned the value of init.</td>
+</tr>
+<tr>
+<td><code>void resize_new (size_type size)</code></td>
+<td>Resizes an <code>unbounded_array</code> to hold at most
+<code>size</code> elements.<br />
+The <code>unbounded_array</code> is reallocated only if the size changes.
+The elements values are undefined.</td>
 </tr>
 <tr>
 <td><code>size_type size () const</code></td>
@@ -129,19 +136,6 @@ const</code></td>
 <tr>
 <td><code>void swap (unbounded_array &amp;a)</code></td>
 <td>Swaps the contents of the arrays.</td>
-</tr>
-<tr>
-<td><code>pointer insert (pointer it, const value_type
-&amp;t)</code></td>
-<td>Inserts the value <code>t</code> at <code>it</code>.</td>
-</tr>
-<tr>
-<td><code>void erase (pointer it)</code></td>
-<td>Erases the value at <code>it</code>.</td>
-</tr>
-<tr>
-<td><code>void clear ()</code></td>
-<td>Clears the array.</td>
 </tr>
 <tr>
 <td><code>const_iterator begin () const</code></td>
@@ -269,10 +263,17 @@ holds at most <code>size</code> elements.</td>
 <td>Deallocates the <code>bounded_array</code> itself.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size)</code></td>
-<td>Reallocates a <code>bounded_array</code> to hold at most
-<code>size</code> elements. When <code>preserve == false</code> the
-elements values after resize are undefined.</td>
+<td><code>void resize (size_type size, value_type init)</code></td>
+<td>Resizes a <code>bounded_array</code> to hold at most
+<code>size</code> elements. Element values are preserved, additional
+elements are assigned the value of init. Throws a <code>bad_size</code> exception
+if the size exeeds the bound.</td>
+</tr>
+<tr>
+<td><code>void resize_new (size_type size)</code></td>
+<td>Resizes a <code>bounded_array</code> to hold at most
+<code>size</code> elements. The elements values are undefined. Throws a <code>bad_size</code> exception
+if the size exeeds the bound.</td>
 </tr>
 <tr>
 <td><code>size_type size () const</code></td>
@@ -297,23 +298,6 @@ const</code></td>
 <td><code>bounded_array &amp;assign_temporary (bounded_array
 &amp;a)</code></td>
 <td>Assigns a temporary. May change the array <code>a</code>.</td>
-</tr>
-<tr>
-<td><code>void swap (bounded_array &amp;a)</code></td>
-<td>Swaps the contents of the arrays.</td>
-</tr>
-<tr>
-<td><code>pointer insert (pointer it, const value_type
-&amp;t)</code></td>
-<td>Inserts the value <code>t</code> at <code>it</code>.</td>
-</tr>
-<tr>
-<td><code>void erase (pointer it)</code></td>
-<td>Erases the value at <code>it</code>.</td>
-</tr>
-<tr>
-<td><code>void clear ()</code></td>
-<td>Clears the array.</td>
 </tr>
 <tr>
 <td><code>const_iterator begin () const</code></td>
