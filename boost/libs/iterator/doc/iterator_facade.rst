@@ -20,14 +20,14 @@
 
 .. contents:: Table of Contents
 
-A Facade for Iterator Implementation
-====================================
+Overview
+========
 
 .. include:: iterator_facade_body.rst
 
 
 Reference
----------
+=========
 
 .. include:: iterator_facade_ref.rst
 
