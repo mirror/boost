@@ -34,13 +34,6 @@ namespace archive {
 
 namespace serialization {
 
-#if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-template<class Archive, class T> 
-void save(Archive &ar, const T & t, const unsigned int);
-template<class Archive, class T> 
-void load(Archive &ar, T & t, const unsigned int);
-#endif
-
 //namespace detail {
 template<class Archive, class T>
 struct free_saver {
