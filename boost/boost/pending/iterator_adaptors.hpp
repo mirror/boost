@@ -20,8 +20,8 @@
 
 // I was having some problems with VC6. I couldn't tell whether our hack for
 // stock GCC was causing problems so I needed an easy way to turn it on and
-// off. Now we can test the hack with various compilers and still have an "out"
-// if it doesn't work. -dwa 7/31/00
+// off. Now we can test the hack with various compilers and still have an 
+// "out" if it doesn't work. -dwa 7/31/00
 #if __GNUC__ == 2 && __GNUC_MINOR__ <= 96 && !defined(__STL_USE_NAMESPACES)
 # define BOOST_RELOPS_AMBIGUITY_BUG 1
 #endif
@@ -32,7 +32,7 @@ namespace boost {
 template <class T>
 struct type {};
 
-//=============================================================================
+//============================================================================
 // Default policies for iterator adaptors. You can use this as a base
 // class if you want to customize particular policies.
 struct default_iterator_policies
@@ -57,7 +57,8 @@ struct default_iterator_policies
         { x += n; }
 
     template <class Difference, class Iterator1, class Iterator2>
-    Difference distance(type<Difference>, const Iterator1& x, const Iterator2& y) const
+    Difference distance(type<Difference>, const Iterator1& x,
+                        const Iterator2& y) const
         { return y - x; }
 
     template <class Iterator1, class Iterator2>
@@ -131,7 +132,7 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 }
 #endif
 
-//=============================================================================
+//============================================================================
 // iterator_adaptor - A generalized adaptor around an existing
 //   iterator, which is itself an iterator
 //
@@ -167,7 +168,7 @@ struct iterator_adaptor :
 >
 #endif
 {
-    typedef iterator_adaptor<Iterator, Policies, Traits,NonconstIterator> Self;
+    typedef iterator_adaptor<Iterator, Policies,Traits,NonconstIterator> Self;
 public:
     typedef typename Traits::difference_type difference_type;
     typedef typename Traits::value_type value_type;
@@ -178,7 +179,7 @@ public:
 
     iterator_adaptor() { }
 
-    iterator_adaptor(const iterator_type& iter, const Policies& p = Policies())
+    iterator_adaptor(const iterator_type& iter, const Policies& p =Policies())
         : m_iter_p(iter, p) {}
 
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
@@ -240,19 +241,31 @@ public:
     Self operator++(int) { Self tmp(*this); ++*this; return tmp; }
     
     Self& operator--() {
+#ifdef __MWERKS__
+        policies().decrement<Iterator>(iter());
+#else
         policies().decrement(iter());
+#endif
         return *this;
     }
     
     Self operator--(int) { Self tmp(*this); --*this; return tmp; }
 
     Self& operator+=(difference_type n) {
+#ifdef __MWERKS__
+        policies().advance<Iterator>(iter(), n);
+#else
         policies().advance(iter(), n);
+#endif
         return *this;
     }
   
     Self& operator-=(difference_type n) {
+#ifdef __MWERKS__
+        policies().advance<Iterator>(iter(), -n);
+#else
         policies().advance(iter(), -n);
+#endif
         return *this;
     }
 
