@@ -850,9 +850,17 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    typename unit_vector<T>::const_value_type unit_vector<T>::zero_ (0);
+    typename unit_vector<T>::const_value_type unit_vector<T>::zero_ 
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME unit_vector<T>::const_value_type
+#endif
+        (0);
     template<class T>
-    typename unit_vector<T>::const_value_type unit_vector<T>::one_ (1);
+    typename unit_vector<T>::const_value_type unit_vector<T>::one_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME unit_vector<T>::const_value_type
+#endif
+        (1);
 
     // Zero vector class
     template<class T>
@@ -1061,7 +1069,11 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    typename zero_vector<T>::const_value_type zero_vector<T>::zero_ (0);
+    typename zero_vector<T>::const_value_type zero_vector<T>::zero_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME zero_vector<T>::const_value_type
+#endif
+        (0);
 
     // Scalar vector class
     template<class T>

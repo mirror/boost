@@ -33,15 +33,7 @@ namespace boost { namespace numeric { namespace ublas {
         private nonassignable {
         typedef const T const_value_type;
     public:
-        // Linear algebra identities
-        static const_value_type zero;
-        static const_value_type one;
     };
-
-    template<class V>
-    typename expression_base<V>::const_value_type expression_base<V>::zero (0);
-    template<class V>
-    typename expression_base<V>::const_value_type expression_base<V>::one (1);
 
 
     template<class T>

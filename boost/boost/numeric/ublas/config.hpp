@@ -38,6 +38,8 @@
 #if BOOST_MSVC < 1300
 // Cannot access private members from member class
 #define BOOST_UBLAS_NESTED_CLASS_DR45
+// static member data initialisers require = syntax
+#define BOOST_UBLAS_STATIC_OLD_INIT
 #endif
 
 // Version 6.0 & 7.0

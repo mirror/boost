@@ -1217,11 +1217,15 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size2_;
         size_type non_zeros_;
         array_type data_;
-        static value_type zero_;
+        static const value_type zero_;
     };
 
     template<class T, class F, class A>
-    typename generalized_vector_of_vector<T, F, A>::value_type generalized_vector_of_vector<T, F, A>::zero_ (0);
+    const typename generalized_vector_of_vector<T, F, A>::value_type generalized_vector_of_vector<T, F, A>::zero_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME generalized_vector_of_vector<T, F, A>::value_type
+#endif
+        (0);
 
 }}}
 
