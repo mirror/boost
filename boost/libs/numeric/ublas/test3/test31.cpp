@@ -153,23 +153,23 @@ void test_vector () {
 #ifdef USE_MAP_ARRAY
 #ifdef USE_FLOAT
     std::cout << "float, map_array" << std::endl;
-    test_my_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, map_array" << std::endl;
-    test_my_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
     std::cout << "std::complex<float>, map_array" << std::endl;
-    test_my_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, map_array" << std::endl;
-    test_my_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -177,23 +177,23 @@ void test_vector () {
 #ifdef USE_STD_MAP
 #ifdef USE_FLOAT
     std::cout << "float, std::map" << std::endl;
-    test_my_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<float, std::map<std::size_t, float> >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, std::map" << std::endl;
-    test_my_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<double, std::map<std::size_t, double> >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
     std::cout << "std::complex<float>, std::map" << std::endl;
-    test_my_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >, 3 > () ();
+    test_my_vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, std::map" << std::endl;
-    test_my_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > , 3 > () ();
+    test_my_vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > , 3 > () ();
 #endif
 #endif
 #endif

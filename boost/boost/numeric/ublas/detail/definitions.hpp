@@ -91,7 +91,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Dimension accessors
     namespace dimension {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         // Generic accessors
         template<unsigned dimension>
         struct dimension_properties {};
@@ -167,7 +167,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename I::container_type container_type;
             return dimension_properties<dimension>::template index<container_type> (i);
         }
-#endif
+
 
         // Named accessors - just syntactic sugar
         template<class V>
@@ -187,6 +187,7 @@ namespace boost { namespace numeric { namespace ublas {
             return mv.non_zeros ();
         }
     }
+
 
 }}}
 

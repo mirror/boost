@@ -84,27 +84,27 @@ void test_matrix_vector () {
 #ifdef USE_MAP_ARRAY
 #ifdef USE_FLOAT
     std::cout << "float, map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
-                          ublas::sparse_matrix<float, ublas::row_major, ublas::map_array<std::size_t, float> >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> >,
+                          ublas::mapped_matrix<float, ublas::row_major, ublas::map_array<std::size_t, float> >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
-                          ublas::sparse_matrix<double, ublas::row_major, ublas::map_array<std::size_t, double> >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> >,
+                          ublas::mapped_matrix<double, ublas::row_major, ublas::map_array<std::size_t, double> >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
     std::cout << "std::complex<float>, map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
-                          ublas::sparse_matrix<std::complex<float>, ublas::row_major, ublas::map_array<std::size_t, std::complex<float> > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
+                          ublas::mapped_matrix<std::complex<float>, ublas::row_major, ublas::map_array<std::size_t, std::complex<float> > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
-                          ublas::sparse_matrix<std::complex<double>, ublas::row_major, ublas::map_array<std::size_t, std::complex<double> > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
+                          ublas::mapped_matrix<std::complex<double>, ublas::row_major, ublas::map_array<std::size_t, std::complex<double> > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -112,27 +112,27 @@ void test_matrix_vector () {
 #ifdef USE_STD_MAP
 #ifdef USE_FLOAT
     std::cout << "float, std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
-                          ublas::sparse_matrix<float, ublas::row_major, std::map<std::size_t, float> >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<float, std::map<std::size_t, float> >,
+                          ublas::mapped_matrix<float, ublas::row_major, std::map<std::size_t, float> >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
-                          ublas::sparse_matrix<double, ublas::row_major, std::map<std::size_t, double> >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<double, std::map<std::size_t, double> >,
+                          ublas::mapped_matrix<double, ublas::row_major, std::map<std::size_t, double> >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
     std::cout << "std::complex<float>, std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
-                          ublas::sparse_matrix<std::complex<float>, ublas::row_major, std::map<std::size_t, std::complex<float> > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
+                          ublas::mapped_matrix<std::complex<float>, ublas::row_major, std::map<std::size_t, std::complex<float> > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
-                          ublas::sparse_matrix<std::complex<double>, ublas::row_major, std::map<std::size_t, std::complex<double> > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
+                          ublas::mapped_matrix<std::complex<double>, ublas::row_major, std::map<std::size_t, std::complex<double> > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -141,56 +141,56 @@ void test_matrix_vector () {
 #ifdef USE_SPARSE_VECTOR_OF_SPARSE_VECTOR
 #ifdef USE_MAP_ARRAY
 #ifdef USE_FLOAT
-    std::cout << "float, sparse_vector_of_sparse_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
-                          ublas::sparse_vector_of_sparse_vector<float, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, float> > >, 3 > () ();
+    std::cout << "float, mapped_vector map_array" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> >,
+                          ublas::mapped_vector<float, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, float> > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "double, sparse_vector_of_sparse_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
-                          ublas::sparse_vector_of_sparse_vector<double, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, double> > >, 3 > () ();
+    std::cout << "double, mapped_vector map_array" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> >,
+                          ublas::mapped_vector<double, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, double> > >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    std::cout << "std::complex<float>, sparse_vector_of_sparse_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
-                          ublas::sparse_vector_of_sparse_vector<std::complex<float>, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, std::complex<float> > > >, 3 > () ();
+    std::cout << "std::complex<float>, mapped_vector map_array" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
+                          ublas::mapped_vector<std::complex<float>, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, std::complex<float> > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "std::complex<double>,sparse_vector_of_sparse_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
-                          ublas::sparse_vector_of_sparse_vector<std::complex<double>, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, std::complex<double> > > >, 3 > () ();
+    std::cout << "std::complex<double>,mapped_vector map_array" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
+                          ublas::mapped_vector<std::complex<double>, ublas::row_major, ublas::map_array<std::size_t, ublas::map_array<std::size_t, std::complex<double> > > >, 3 > () ();
 #endif
 #endif
 #endif
 
 #ifdef USE_STD_MAP
 #ifdef USE_FLOAT
-    std::cout << "float, sparse_vector_of_sparse_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
-                          ublas::sparse_vector_of_sparse_vector<float, ublas::row_major, std::map<std::size_t, std::map<std::size_t, float> > >, 3 > () ();
+    std::cout << "float, mapped_vector std::map" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<float, std::map<std::size_t, float> >,
+                          ublas::mapped_vector<float, ublas::row_major, std::map<std::size_t, std::map<std::size_t, float> > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "double, sparse_vector_of_sparse_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
-                          ublas::sparse_vector_of_sparse_vector<double, ublas::row_major, std::map<std::size_t, std::map<std::size_t, double> > >, 3 > () ();
+    std::cout << "double, mapped_vector std::map" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<double, std::map<std::size_t, double> >,
+                          ublas::mapped_vector<double, ublas::row_major, std::map<std::size_t, std::map<std::size_t, double> > >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    std::cout << "std::complex<float>, sparse_vector_of_sparse_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
-                          ublas::sparse_vector_of_sparse_vector<std::complex<float>, ublas::row_major, std::map<std::size_t, std::map<std::size_t, std::complex<float> > > >, 3 > () ();
+    std::cout << "std::complex<float>, mapped_vector std::map" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
+                          ublas::mapped_vector<std::complex<float>, ublas::row_major, std::map<std::size_t, std::map<std::size_t, std::complex<float> > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "std::complex<double>, sparse_vector_of_sparse_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
-                          ublas::sparse_vector_of_sparse_vector<std::complex<double>, ublas::row_major, std::map<std::size_t, std::map<std::size_t, std::complex<double> > > >, 3 > () ();
+    std::cout << "std::complex<double>, mapped_vector std::map" << std::endl;
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
+                          ublas::mapped_vector<std::complex<double>, ublas::row_major, std::map<std::size_t, std::map<std::size_t, std::complex<double> > > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -200,35 +200,35 @@ void test_matrix_vector () {
 #ifdef USE_MAP_ARRAY
 #ifdef USE_FLOAT
     std::cout << "float, generalized_vector_of_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
-                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
-                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >, ublas::map_array<std::size_t, ublas::sparse_vector<float, ublas::map_array<std::size_t, float> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> >,
+                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> >,
+                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<float, ublas::map_array<std::size_t, float> >, ublas::map_array<std::size_t, ublas::mapped_vector<float, ublas::map_array<std::size_t, float> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, generalized_vector_of_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
-                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
-                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >, ublas::map_array<std::size_t, ublas::sparse_vector<double, ublas::map_array<std::size_t, double> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> >,
+                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> >,
+                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<double, ublas::map_array<std::size_t, double> >, ublas::map_array<std::size_t, ublas::mapped_vector<double, ublas::map_array<std::size_t, double> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
     std::cout << "std::complex<float>, generalized_vector_of_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
-                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
-                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >, ublas::map_array<std::size_t, ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
+                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
+                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >, ublas::map_array<std::size_t, ublas::mapped_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, generalized_vector_of_vector map_array" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
-                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
-                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >, ublas::map_array<std::size_t, ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
+                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
+                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >, ublas::map_array<std::size_t, ublas::mapped_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -236,35 +236,35 @@ void test_matrix_vector () {
 #ifdef USE_STD_MAP
 #ifdef USE_FLOAT
     std::cout << "float, generalized_vector_of_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
-                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::vector<ublas::sparse_vector<float, std::map<std::size_t, float> > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
-                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >, std::map<std::size_t, ublas::sparse_vector<float, std::map<std::size_t, float> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<float, std::map<std::size_t, float> >,
+                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::vector<ublas::mapped_vector<float, std::map<std::size_t, float> > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<float, std::map<std::size_t, float> >,
+                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<float, std::map<std::size_t, float> >, std::map<std::size_t, ublas::mapped_vector<float, std::map<std::size_t, float> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, generalized_vector_of_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
-                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::vector<ublas::sparse_vector<double, std::map<std::size_t, double> > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
-                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >, std::map<std::size_t, ublas::sparse_vector<double, std::map<std::size_t, double> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<double, std::map<std::size_t, double> >,
+                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::vector<ublas::mapped_vector<double, std::map<std::size_t, double> > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<double, std::map<std::size_t, double> >,
+                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<double, std::map<std::size_t, double> >, std::map<std::size_t, ublas::mapped_vector<double, std::map<std::size_t, double> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
     std::cout << "std::complex<float>, generalized_vector_of_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
-                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
-                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >, std::map<std::size_t, ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
+                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
+                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >, std::map<std::size_t, ublas::mapped_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, generalized_vector_of_vector std::map" << std::endl;
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
-                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > >, 3 > () ();
-    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
-                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >, std::map<std::size_t, ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
+                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
+                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::mapped_vector<ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >, std::map<std::size_t, ublas::mapped_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > > >, 3 > () ();
 #endif
 #endif
 #endif

@@ -17,8 +17,8 @@
 #ifndef BOOST_UBLAS_VECTOR_ASSIGN_H
 #define BOOST_UBLAS_VECTOR_ASSIGN_H
 
-#include <boost/numeric/ublas/config.hpp>
-#include <boost/numeric/ublas/vector_expression.hpp>
+// Required for make_conformant storage
+#include <vector>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -27,8 +27,8 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
     bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
-                                                                                     BOOST_UBLAS_TYPENAME E2::value_type>::promote_type>::real_type real_type;
+        typedef typename type_traits<typename promote_traits<typename E1::value_type,
+                                                                                     typename E2::value_type>::promote_type>::real_type real_type;
 #ifndef __GNUC__
         return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                std::max<real_type> (std::max<real_type> (norm_inf (e1),
@@ -45,8 +45,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Make sparse proxies conformant
     template<class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void make_conformant (V &v, const vector_expression<E> &e) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef typename V::size_type size_type;
@@ -96,12 +95,11 @@ namespace boost { namespace numeric { namespace ublas {
             v (index [k]) = value_type (0);
     }
 
-    // Iterating case
-    template<class F, class V, class T>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void iterating_vector_assign_scalar (F, V &v, const T &t) {
-        typedef F functor_type;
+    // Explicitly iterating
+    template<template <class T1, class T2> class F, class V, class T>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void iterating_vector_assign_scalar (V &v, const T &t) {
+        typedef F<typename V::iterator::reference, T> functor_type;
         typedef typename V::difference_type difference_type;
         difference_type size (v.size ());
         typename V::iterator it (v.begin ());
@@ -113,12 +111,11 @@ namespace boost { namespace numeric { namespace ublas {
         DD (size, 4, r, (functor_type::apply (*it, t), ++ it));
 #endif
     }
-    // Indexing case
-    template<class F, class V, class T>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void indexing_vector_assign_scalar (F, V &v, const T &t) {
-        typedef F functor_type;
+    // Explicitly case
+    template<template <class T1, class T2> class F, class V, class T>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void indexing_vector_assign_scalar (V &v, const T &t) {
+        typedef F<typename V::reference, T> functor_type;
         typedef typename V::size_type size_type;
         size_type size (v.size ());
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
@@ -131,30 +128,27 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dense (proxy) case
-    template<class F, class V, class T>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign_scalar (F, V &v, const T &t, dense_proxy_tag) {
-        typedef F functor_type;
+    template<template <class T1, class T2> class F, class V, class T>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign_scalar (V &v, const T &t, dense_proxy_tag) {
 #ifdef BOOST_UBLAS_USE_INDEXING
-        indexing_vector_assign_scalar (functor_type (), v, t);
+        indexing_vector_assign_scalar<F> (v, t);
 #elif BOOST_UBLAS_USE_ITERATING
-        iterating_vector_assign_scalar (functor_type (), v, t);
+        iterating_vector_assign_scalar<F> (v, t);
 #else
         typedef typename V::size_type size_type;
         size_type size (v.size ());
         if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
-            iterating_vector_assign_scalar (functor_type (), v, t);
+            iterating_vector_assign_scalar<F> (v, t);
         else
-            indexing_vector_assign_scalar (functor_type (), v, t);
+            indexing_vector_assign_scalar<F> (v, t);
 #endif
     }
     // Packed (proxy) case
-    template<class F, class V, class T>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign_scalar (F, V &v, const T &t, packed_proxy_tag) {
-        typedef F functor_type;
+    template<template <class T1, class T2> class F, class V, class T>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign_scalar (V &v, const T &t, packed_proxy_tag) {
+        typedef F<typename V::iterator::reference, T> functor_type;
         typedef typename V::difference_type difference_type;
         typename V::iterator it (v.begin ());
         difference_type size (v.end () - it);
@@ -162,11 +156,10 @@ namespace boost { namespace numeric { namespace ublas {
             functor_type::apply (*it, t), ++ it;
     }
     // Sparse (proxy) case
-    template<class F, class V, class T>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign_scalar (F, V &v, const T &t, sparse_proxy_tag) {
-        typedef F functor_type;
+    template<template <class T1, class T2> class F, class V, class T>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign_scalar (V &v, const T &t, sparse_proxy_tag) {
+        typedef F<typename V::iterator::reference, T> functor_type;
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
         while (it != it_end)
@@ -174,90 +167,76 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class F, class V, class T>
+    template<template <class T1, class T2> class F, class V, class T>
     BOOST_UBLAS_INLINE
-    void vector_assign_scalar (F, V &v, const T &t) {
-        typedef F functor_type;
+    void vector_assign_scalar (V &v, const T &t) {
         typedef typename V::storage_category storage_category;
-        vector_assign_scalar (functor_type (), v, t, storage_category ());
+        vector_assign_scalar<F> (v, t, storage_category ());
     }
 
-    template<class LS, class A, class RI>
+    template<class SC, bool COMPUTED, class RI>
     struct vector_assign_traits {
-        typedef LS storage_category;
+        typedef SC storage_category;
     };
 
-    template<>
-    struct vector_assign_traits<dense_tag, assign_tag, packed_random_access_iterator_tag> {
+    template<bool COMPUTED>
+    struct vector_assign_traits<dense_tag, COMPUTED, packed_random_access_iterator_tag> {
         typedef packed_tag storage_category;
     };
     template<>
-    struct vector_assign_traits<dense_tag, computed_assign_tag, packed_random_access_iterator_tag> {
-        typedef packed_tag storage_category;
-    };
-    template<>
-    struct vector_assign_traits<dense_tag, assign_tag, sparse_bidirectional_iterator_tag> {
+    struct vector_assign_traits<dense_tag, false, sparse_bidirectional_iterator_tag> {
         typedef sparse_tag storage_category;
     };
     template<>
-    struct vector_assign_traits<dense_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
+    struct vector_assign_traits<dense_tag, true, sparse_bidirectional_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+
+    template<bool COMPUTED>
+    struct vector_assign_traits<dense_proxy_tag, COMPUTED, packed_random_access_iterator_tag> {
+        typedef packed_proxy_tag storage_category;
+    };
+    template<>
+    struct vector_assign_traits<dense_proxy_tag, false, sparse_bidirectional_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+    template<>
+    struct vector_assign_traits<dense_proxy_tag, true, sparse_bidirectional_iterator_tag> {
         typedef sparse_proxy_tag storage_category;
     };
 
     template<>
-    struct vector_assign_traits<dense_proxy_tag, assign_tag, packed_random_access_iterator_tag> {
-        typedef packed_proxy_tag storage_category;
-    };
-    template<>
-    struct vector_assign_traits<dense_proxy_tag, computed_assign_tag, packed_random_access_iterator_tag> {
-        typedef packed_proxy_tag storage_category;
-    };
-    template<>
-    struct vector_assign_traits<dense_proxy_tag, assign_tag, sparse_bidirectional_iterator_tag> {
-        typedef sparse_proxy_tag storage_category;
-    };
-    template<>
-    struct vector_assign_traits<dense_proxy_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
-        typedef sparse_proxy_tag storage_category;
-    };
-
-    template<>
-    struct vector_assign_traits<packed_tag, assign_tag, sparse_bidirectional_iterator_tag> {
+    struct vector_assign_traits<packed_tag, false, sparse_bidirectional_iterator_tag> {
         typedef sparse_tag storage_category;
     };
     template<>
-    struct vector_assign_traits<packed_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
+    struct vector_assign_traits<packed_tag, true, sparse_bidirectional_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+
+    template<bool COMPUTED>
+    struct vector_assign_traits<packed_proxy_tag, COMPUTED, sparse_bidirectional_iterator_tag> {
         typedef sparse_proxy_tag storage_category;
     };
 
     template<>
-    struct vector_assign_traits<packed_proxy_tag, assign_tag, sparse_bidirectional_iterator_tag> {
+    struct vector_assign_traits<sparse_tag, true, dense_random_access_iterator_tag> {
         typedef sparse_proxy_tag storage_category;
     };
     template<>
-    struct vector_assign_traits<packed_proxy_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
+    struct vector_assign_traits<sparse_tag, true, packed_random_access_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+    template<>
+    struct vector_assign_traits<sparse_tag, true, sparse_bidirectional_iterator_tag> {
         typedef sparse_proxy_tag storage_category;
     };
 
-    template<>
-    struct vector_assign_traits<sparse_tag, computed_assign_tag, dense_random_access_iterator_tag> {
-        typedef sparse_proxy_tag storage_category;
-    };
-    template<>
-    struct vector_assign_traits<sparse_tag, computed_assign_tag, packed_random_access_iterator_tag> {
-        typedef sparse_proxy_tag storage_category;
-    };
-    template<>
-    struct vector_assign_traits<sparse_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
-        typedef sparse_proxy_tag storage_category;
-    };
-
-    // Iterating case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void iterating_vector_assign (F, V &v, const vector_expression<E> &e) {
-        typedef F functor_type;
+    // Explicitly iterating
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void iterating_vector_assign (V &v, const vector_expression<E> &e) {
+        typedef F<typename V::iterator::reference, typename E::value_type> functor_type;
         typedef typename V::difference_type difference_type;
         difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
         typename V::iterator it (v.begin ());
@@ -271,12 +250,11 @@ namespace boost { namespace numeric { namespace ublas {
         DD (size, 2, r, (functor_type::apply (*it, *ite), ++ it, ++ ite));
 #endif
     }
-    // Indexing case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void indexing_vector_assign (F, V &v, const vector_expression<E> &e) {
-        typedef F functor_type;
+    // Explicitly indexing
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void indexing_vector_assign (V &v, const vector_expression<E> &e) {
+        typedef F<typename V::reference, typename E::value_type> functor_type;
         typedef typename V::size_type size_type;
         size_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
@@ -289,41 +267,38 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dense (proxy) case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign (F, V &v, const vector_expression<E> &e, dense_proxy_tag) {
-        typedef F functor_type;
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign (V &v, const vector_expression<E> &e, dense_proxy_tag) {
 #ifdef BOOST_UBLAS_USE_INDEXING
-        indexing_vector_assign (functor_type (), v, e);
+        indexing_vector_assign<F> (v, e);
 #elif BOOST_UBLAS_USE_ITERATING
-        iterating_vector_assign (functor_type (), v, e);
+        iterating_vector_assign<F> (v, e);
 #else
         typedef typename V::size_type size_type;
         size_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
         if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
-            iterating_vector_assign (functor_type (), v, e);
+            iterating_vector_assign<F> (v, e);
         else
-            indexing_vector_assign (functor_type (), v, e);
+            indexing_vector_assign<F> (v, e);
 #endif
     }
     // Packed (proxy) case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign (F, V &v, const vector_expression<E> &e, packed_proxy_tag) {
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign (V &v, const vector_expression<E> &e, packed_proxy_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
-        typedef F functor_type;
+        typedef F<typename V::iterator::reference, typename E::value_type> functor_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-        indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
-        indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+        indexing_vector_assign<scalar_assign> (cv, v);
+        indexing_vector_assign<F> (cv, e);
 #else
-        indexing_vector_assign (scalar_assign<value_type&, value_type> (), cv, v);
-        indexing_vector_assign (functor_type (), cv, e);
+        indexing_vector_assign<scalar_assign> (cv, v);
+        indexing_vector_assign<F> (cv, e);
 #endif
 #endif
         typename V::iterator it (v.begin ());
@@ -343,8 +318,8 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type size ((std::min) (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0) {
                 it_size -= size;
-                if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
-                    while (-- size >= 0)
+                if (!functor_type::computed) {
+                    while (-- size >= 0)    // zeroing
                         functor_type::apply (*it, value_type (0)), ++ it;
                 } else {
                     it += size;
@@ -357,8 +332,8 @@ namespace boost { namespace numeric { namespace ublas {
         while (-- size >= 0)
             functor_type::apply (*it, *ite), ++ it, ++ ite;
         size = it_size;
-        if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
-            while (-- size >= 0)
+        if (!functor_type::computed) {
+            while (-- size >= 0)    // zeroing
                 functor_type::apply (*it, value_type (0)), ++ it;
         } else {
             it += size;
@@ -369,21 +344,21 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     }
     // Sparse case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign (F, V &v, const vector_expression<E> &e, sparse_tag) {
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign (V &v, const vector_expression<E> &e, sparse_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
-        typedef F functor_type;
+        typedef F<typename V::iterator::reference, typename E::value_type> functor_type;
+        BOOST_STATIC_ASSERT ((!functor_type::computed));
         typedef typename V::value_type value_type;
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-        indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
-        indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+        indexing_vector_assign<scalar_assign> (cv, v);
+        indexing_vector_assign<F> (cv, e);
 #else
-        indexing_vector_assign (scalar_assign<value_type&, value_type> (), cv, v);
-        indexing_vector_assign (functor_type (), cv, e);
+        indexing_vector_assign<scalar_assign> (cv, v);
+        indexing_vector_assign<F> (cv, e);
 #endif
 #endif
         v.clear ();
@@ -392,7 +367,7 @@ namespace boost { namespace numeric { namespace ublas {
         while (ite != ite_end) {
             value_type t (*ite);
             if (t != value_type (0))
-                v.insert (ite.index (), t);
+                v.insert_element (ite.index (), t);
             ++ ite;
         }
 #if BOOST_UBLAS_TYPE_CHECK
@@ -400,13 +375,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
-    // Sparse proxy case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_assign (F, V &v, const vector_expression<E> &e, sparse_proxy_tag) {
+    // Sparse proxy or functional case
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_assign (V &v, const vector_expression<E> &e, sparse_proxy_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
-        typedef F functor_type;
+        typedef F<typename V::iterator::reference, typename E::value_type> functor_type;
         typedef typename V::size_type size_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
@@ -414,16 +388,15 @@ namespace boost { namespace numeric { namespace ublas {
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-        indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
-        indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+        indexing_vector_assign<scalar_assign> (cv, v);
+        indexing_vector_assign<F> (cv, e);
 #else
-        indexing_vector_assign (scalar_assign<value_type&, value_type> (), cv, v);
-        indexing_vector_assign (functor_type (), cv, e);
+        indexing_vector_assign<scalar_assign> (cv, v);
+        indexing_vector_assign<F> (cv, e);
 #endif
 #endif
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         make_conformant (v, e);
-#endif
+
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
         typename E::const_iterator ite (e ().begin ());
@@ -441,7 +414,7 @@ namespace boost { namespace numeric { namespace ublas {
                     } else
                         break;
                 } else if (compare < 0) {
-                    if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
+                    if (!functor_type::computed) {
                         functor_type::apply (*it, value_type (0));
                         ++ it;
                     } else
@@ -460,8 +433,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
         }
 
-        if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
-            while (it != it_end) {
+        if (!functor_type::computed) {
+            while (it != it_end) {  // zeroing
                 functor_type::apply (*it, value_type (0));
                 ++ it;
             }
@@ -475,19 +448,18 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class F, class V, class E>
+    template<template <class T1, class T2> class F, class V, class E>
     BOOST_UBLAS_INLINE
-    void vector_assign (F, V &v, const vector_expression<E> &e) {
-        typedef F functor_type;
-        typedef typename vector_assign_traits<BOOST_UBLAS_TYPENAME V::storage_category,
-                                              BOOST_UBLAS_TYPENAME F::assign_category,
-                                              BOOST_UBLAS_TYPENAME E::const_iterator::iterator_category>::storage_category storage_category;
-        vector_assign (functor_type (), v, e, storage_category ());
+    void vector_assign (V &v, const vector_expression<E> &e) {
+        typedef typename vector_assign_traits<typename V::storage_category,
+                                              F<typename V::reference, typename E::value_type>::computed,
+                                              typename E::const_iterator::iterator_category>::storage_category storage_category;
+        vector_assign<F> (v, e, storage_category ());
     }
 
-    template<class LS, class RI>
+    template<class SC, class RI>
     struct vector_swap_traits {
-        typedef LS storage_category;
+        typedef SC storage_category;
     };
 
     template<>
@@ -501,11 +473,10 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Dense (proxy) case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_swap (F, V &v, vector_expression<E> &e, dense_proxy_tag) {
-        typedef F functor_type;
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_swap (V &v, vector_expression<E> &e, dense_proxy_tag) {
+        typedef F<typename V::iterator::reference, typename E::iterator::reference> functor_type;
         typedef typename V::difference_type difference_type;
         difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
         typename V::iterator it (v.begin ());
@@ -514,11 +485,10 @@ namespace boost { namespace numeric { namespace ublas {
             functor_type::apply (*it, *ite), ++ it, ++ ite;
     }
     // Packed (proxy) case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_swap (F, V &v, vector_expression<E> &e, packed_proxy_tag) {
-        typedef F functor_type;
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_swap (V &v, vector_expression<E> &e, packed_proxy_tag) {
+        typedef F<typename V::iterator::reference, typename E::iterator::reference> functor_type;
         typedef typename V::difference_type difference_type;
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
@@ -545,19 +515,18 @@ namespace boost { namespace numeric { namespace ublas {
             functor_type::apply (*it, *ite), ++ it, ++ ite;
     }
     // Sparse proxy case
-    template<class F, class V, class E>
-    // This function seems to be big. So we do not let the compiler inline it.
-    // BOOST_UBLAS_INLINE
-    void vector_swap (F, V &v, vector_expression<E> &e, sparse_proxy_tag) {
+    template<template <class T1, class T2> class F, class V, class E>
+    // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+    void vector_swap (V &v, vector_expression<E> &e, sparse_proxy_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
-        typedef F functor_type;
+        typedef F<typename V::iterator::reference, typename E::iterator::reference> functor_type;
         typedef typename V::size_type size_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+
         make_conformant (v, e);
         make_conformant (e (), v);
-#endif
+
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
         typename E::iterator ite (e ().begin ());
@@ -597,13 +566,12 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class F, class V, class E>
+    template<template <class T1, class T2> class F, class V, class E>
     BOOST_UBLAS_INLINE
-    void vector_swap (F, V &v, vector_expression<E> &e) {
-        typedef F functor_type;
-        typedef typename vector_swap_traits<BOOST_UBLAS_TYPENAME V::storage_category,
-                                            BOOST_UBLAS_TYPENAME E::const_iterator::iterator_category>::storage_category storage_category;
-        vector_swap (functor_type (), v, e, storage_category ());
+    void vector_swap (V &v, vector_expression<E> &e) {
+        typedef typename vector_swap_traits<typename V::storage_category,
+                                            typename E::const_iterator::iterator_category>::storage_category storage_category;
+        vector_swap<F> (v, e, storage_category ());
     }
 
 }}}

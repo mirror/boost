@@ -17,7 +17,6 @@
 #ifndef BOOST_UBLAS_CONFIG_H
 #define BOOST_UBLAS_CONFIG_H
 
-#include <memory>
 #include <cassert>
 #include <cstddef>
 
@@ -28,6 +27,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
@@ -35,55 +35,9 @@
 // Microsoft Visual C++
 #if defined (BOOST_MSVC) && ! defined (BOOST_STRICT_CONFIG)
 
-// Version 6.0
-#if BOOST_MSVC < 1300
-// Cannot access private members from member class
-#define BOOST_UBLAS_NESTED_CLASS_DR45
-#endif
-
 // Version 6.0 & 7.0
 #if BOOST_MSVC <= 1300
-
-// Disable some MSVC specific warnings.
-#pragma warning (disable: 4355)
-#pragma warning (disable: 4503)
-#pragma warning (disable: 4786)
-
-// static member data initialisers require = syntax
-#define BOOST_UBLAS_STATIC_OLD_INIT
-// Member friend syntax works but lookup sometime fails on VC7
-#define BOOST_UBLAS_NO_MEMBER_FRIENDS
-// Base traits templates syntax not supported
-#define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
-// MSVC doesn't always accept the 'typename' keyword
-#define BOOST_UBLAS_TYPENAME
-// MSVC doesn't accept the 'using' keyword (at least for importing base members)
-#define BOOST_UBLAS_USING
-// MSVC doesn't support long double
-#define BOOST_UBLAS_NO_LONG_DOUBLE
-
-#ifdef NDEBUG
-// MSVC has special inlining options
-#pragma inline_recursion (on)
-#pragma inline_depth (255)
-#pragma auto_inline (on)
-// #define BOOST_UBLAS_INLINE __forceinline
-#define BOOST_UBLAS_INLINE __inline
-#endif
-
-// MSVC extensions seem to disable abs () overloads in <cmath>.
-#ifdef _MSC_EXTENSIONS
-#define BOOST_UBLAS_CMATH_BAD_STD
-#endif
-
-// We must disable element proxies as they require template partial specialisation
-#define BOOST_UBLAS_NO_ELEMENT_PROXIES
-
-// This seems to be a problem in boost.config, but won't be fixed.
-#ifdef __SGI_STL_PORT
-#define BOOST_MSVC_STD_ITERATOR
-#endif
-
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
 
 // Version 7.1
@@ -93,7 +47,6 @@
 #define BOOST_UBLAS_MSVC71_FUNCTION_TEMPLATE_ORDERING
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
-// The second workaround looks like BOOST_UBLAS_QUALIFIED_TYPENAME.
 #if !(defined(BOOST_UBLAS_NO_NESTED_CLASS_RELATION) || defined(BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION))
 #define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
 #endif
@@ -106,18 +59,13 @@
 // GNU Compiler Collection
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
-#if (__GNUC__ >= 4) || (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
+#if __GNUC__ >= 3 && __GNUC_MINOR__ >= 4
 // By ABI definition see GCC bug id 9982
 #define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
 
-#if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
-#define BOOST_UBLAS_NO_PROXY_SHORTCUTS
-#define BOOST_UBLAS_NO_MEMBER_FRIENDS
-// Cannot overload basic_stream
-#define BOOST_UBLAS_USE_STREAM
-// Cannot access private members from member class
-#define BOOST_UBLAS_NESTED_CLASS_DR45
+#if __GNUC__ < 3
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
 
 #endif
@@ -126,14 +74,13 @@
 // Intel Compiler
 #if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
 
-#if (BOOST_INTEL_LINUX >= 700)
+#if (BOOST_INTEL >= 800)
 // By inspection of compiler results
 #define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
 
-#if (BOOST_INTEL < 800)
-// Base traits templates syntax untested
-#define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
+#if (BOOST_INTEL < 700)
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
 
 // Define swap for index_pair and triple.
@@ -210,26 +157,25 @@ namespace std {
 
 // 8.x
 #if __MWERKS__ <= 0x3003
-#define BOOST_UBLAS_NO_MEMBER_FRIENDS
-// Problems with basic_stream imbue
-#define BOOST_UBLAS_USE_STREAM
-// Base traits templates syntax untested
-#define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
-// Problems type check debug functor syntax
-#define BOOST_UBLAS_TYPE_CHECK 0
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
 
 #endif
 
 
+// Detect other compilers with serious defects
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+ || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+ || defined(BOOST_NO_SFINAE)
+ || defined(BOOST_NO_STDC_NAMESPACE)
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER
+#endif
 
-// Default configuration without compiler problems
-#ifndef BOOST_UBLAS_TYPENAME
-#define BOOST_UBLAS_TYPENAME typename
+// Cannot continue with an unsupported compiler
+#ifdef BOOST_UBLAS_UNSUPPORTED_COMPILER
+#error Your compiler is unsupported by this verions of uBLAS. Try using Boost 1.31.0 which support many old compilers.
 #endif
-#ifndef BOOST_UBLAS_USING
-#define BOOST_UBLAS_USING using
-#endif
+
 
 
 // Enable performance options in RELEASE mode
@@ -306,11 +252,6 @@ bool disable_type_check<Dummy>::value = false;
 // so they are restricted to a single operation
 // #define BOOST_UBLAS_SIMPLE_ET_DEBUG
 
-// Select stream types defined for IO
-#if !defined(BOOST_UBLAS_USE_STREAM) && !defined(BOOST_UBLAS_USE_BASIC_STREAM)
-#define BOOST_UBLAS_USE_BASIC_STREAM
-#endif
-
 // Use invariant hoisting.
 // #define BOOST_UBLAS_USE_INVARIANT_HOISTING
 
@@ -321,20 +262,15 @@ bool disable_type_check<Dummy>::value = false;
 #if !(defined(BOOST_UBLAS_USE_INDEXING) || defined(BOOST_UBLAS_USE_ITERATING))
 #define BOOST_UBLAS_USE_INDEXING
 #endif
-// #define BOOST_UBLAS_USE_ITERATING
 // #define BOOST_UBLAS_ITERATOR_THRESHOLD 0
-// #define BOOST_UBLAS_ITERATOR_THRESHOLD ((std::numeric_limits<std::ptrdiff_t>::max) ())
 
-// Use indexed iterators.
+// Use indexed iterators - unsupported implementation experiment
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR
 
-// Alignment of bounded arrays. align(16) possibly useful for ICC
+// Alignment of bounded_array type
 #ifndef BOOST_UBLAS_BOUNDED_ARRAY_ALIGN
 #define BOOST_UBLAS_BOUNDED_ARRAY_ALIGN
 #endif
-
-// Enable assignment of non conformant proxies
-#define BOOST_UBLAS_NON_CONFORMANT_PROXIES
 
 // Enable different sparse element proxies
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
@@ -347,21 +283,14 @@ bool disable_type_check<Dummy>::value = false;
 #define BOOST_UBLAS_STRICT_HERMITIAN
 #endif
 
-
-
-// Define to enable compile time const propagation for reference, proxy and closure types
-#define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-#define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-#define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
-
 // Define to configure special settings for reference returning members
 // #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
 // #define BOOST_UBLAS_PROXY_CONST_MEMBER
 
 
-// Include declerations and functions
+// Include type declerations and functions
 #include <boost/numeric/ublas/fwd.hpp>
-#include <boost/numeric/ublas/definitions.hpp>
+#include <boost/numeric/ublas/detail/definitions.hpp>
 
 
 #endif

@@ -21,6 +21,8 @@
 #ifndef BOOST_UBLAS_OPERATION_H
 #define BOOST_UBLAS_OPERATION_H
 
+#include <boost/numeric/ublas/traits.hpp>
+
 // axpy-based products
 // Alexei Novakov had a lot of ideas to improve these. Thanks.
 // Hendrik Kueck proposed some new kernel. Thanks again.
@@ -65,14 +67,14 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class V, class T1, class F1, class IA1, class TA1, class E2>
+    template<class V, class T1, class L1, class IA1, class TA1, class E2>
     BOOST_UBLAS_INLINE
     V &
-    axpy_prod (const compressed_matrix<T1, F1, 0, IA1, TA1> &e1,
+    axpy_prod (const compressed_matrix<T1, L1, 0, IA1, TA1> &e1,
                const vector_expression<E2> &e2,
                V &v, bool init = true) {
         typedef typename V::value_type value_type;
-        typedef typename F1::orientation_category orientation_category;
+        typedef typename L1::orientation_category orientation_category;
 
         if (init)
             v.assign (zero_vector<value_type> (e1.size1 ()));
@@ -80,7 +82,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
-        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign<scalar_plus_assign> (cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -88,15 +90,15 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         return v;
     }
-    template<class V, class T1, class F, class IA1, class TA1, class E2>
+    template<class V, class T1, class L1, class IA1, class TA1, class E2>
     BOOST_UBLAS_INLINE
     V
-    axpy_prod (const compressed_matrix<T1, F, 0, IA1, TA1> &e1,
+    axpy_prod (const compressed_matrix<T1, L1, 0, IA1, TA1> &e1,
                const vector_expression<E2> &e2) {
         typedef V vector_type;
 
         vector_type v (e1.size1 ());
-        // FIXME: needed for c_matrix?!
+        // FIXME needed for c_matrix?!
         // return axpy_prod (e1, e2, v, false);
         return axpy_prod (e1, e2, v, true);
     }
@@ -232,7 +234,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
-        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign<scalar_plus_assign> (cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -248,7 +250,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef V vector_type;
 
         vector_type v (e1 ().size1 ());
-        // FIXME: needed for c_matrix?!
+        // FIXME needed for c_matrix?!
         // return axpy_prod (e1, e2, v, false);
         return axpy_prod (e1, e2, v, true);
     }
@@ -291,14 +293,14 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class V, class E1, class T2, class F2, class IA2, class TA2>
+    template<class V, class E1, class T2, class L2, class IA2, class TA2>
     BOOST_UBLAS_INLINE
     V &
     axpy_prod (const vector_expression<E1> &e1,
-               const compressed_matrix<T2, F2, 0, IA2, TA2> &e2,
+               const compressed_matrix<T2, L2, 0, IA2, TA2> &e2,
                V &v, bool init = true) {
         typedef typename V::value_type value_type;
-        typedef typename F2::orientation_category orientation_category;
+        typedef typename L2::orientation_category orientation_category;
 
         if (init)
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
@@ -306,7 +308,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
-        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign<scalar_plus_assign> (cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -314,15 +316,15 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         return v;
     }
-    template<class V, class E1, class T2, class F2, class IA2, class TA2>
+    template<class V, class E1, class T2, class L2, class IA2, class TA2>
     BOOST_UBLAS_INLINE
     V
     axpy_prod (const vector_expression<E1> &e1,
-               const compressed_matrix<T2, F2, 0, IA2, TA2> &e2) {
+               const compressed_matrix<T2, L2, 0, IA2, TA2> &e2) {
         typedef V vector_type;
 
         vector_type v (e2 ().size2 ());
-        // FIXME: needed for c_matrix?!
+        // FIXME needed for c_matrix?!
         // return axpy_prod (e1, e2, v, false);
         return axpy_prod (e1, e2, v, true);
     }
@@ -458,7 +460,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
-        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign<scalar_plus_assign> (cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -474,17 +476,17 @@ namespace boost { namespace numeric { namespace ublas {
         typedef V vector_type;
 
         vector_type v (e2 ().size2 ());
-        // FIXME: needed for c_matrix?!
+        // FIXME needed for c_matrix?!
         // return axpy_prod (e1, e2, v, false);
         return axpy_prod (e1, e2, v, true);
     }
 
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2, class TRI>
     BOOST_UBLAS_INLINE
     M &
     axpy_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               M &m, F,
+               M &m, TRI,
                dense_proxy_tag, row_major_tag) {
         typedef M matrix_type;
         typedef const E1 expression1_type;
@@ -496,7 +498,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix<value_type, row_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign<scalar_plus_assign> (cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size1 (e1 ().size1 ());
         size_type size2 (e1 ().size2 ());
@@ -508,25 +510,25 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         return m;
     }
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2, class TRI>
     BOOST_UBLAS_INLINE
     M &
     axpy_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               M &m, F,
+               M &m, TRI,
                sparse_proxy_tag, row_major_tag) {
         typedef M matrix_type;
+        typedef TRI triangular_restriction;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
-        typedef F functor_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign<scalar_plus_assign> (cm, prod (e1, e2), row_major_tag ());
 #endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
         typename expression1_type::const_iterator1 it1_end (e1 ().end1 ());
@@ -544,7 +546,7 @@ namespace boost { namespace numeric { namespace ublas {
                 typename matrix_row<expression2_type>::const_iterator itr (mr.begin ());
                 typename matrix_row<expression2_type>::const_iterator itr_end (mr.end ());
                 while (itr != itr_end) {
-                    if (functor_type ().other (it1.index1 (), itr.index ()))
+                    if (triangular_restriction::other (it1.index1 (), itr.index ()))
                         m (it1.index1 (), itr.index ()) += *it2 * *itr;
                     ++ itr;
                 }
@@ -558,12 +560,12 @@ namespace boost { namespace numeric { namespace ublas {
         return m;
     }
 
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2, class TRI>
     BOOST_UBLAS_INLINE
     M &
     axpy_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               M &m, F,
+               M &m, TRI,
                dense_proxy_tag, column_major_tag) {
         typedef M matrix_type;
         typedef const E1 expression1_type;
@@ -575,7 +577,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix<value_type, column_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        indexing_matrix_assign<scalar_plus_assign> (cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size1 (e2 ().size1 ());
         size_type size2 (e2 ().size2 ());
@@ -587,25 +589,25 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         return m;
     }
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2, class TRI>
     BOOST_UBLAS_INLINE
     M &
     axpy_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               M &m, F,
+               M &m, TRI,
                sparse_proxy_tag, column_major_tag) {
         typedef M matrix_type;
+        typedef TRI triangular_restriction;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
-        typedef F functor_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        indexing_matrix_assign<scalar_plus_assign> (cm, prod (e1, e2), column_major_tag ());
 #endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
         typename expression2_type::const_iterator2 it2_end (e2 ().end2 ());
@@ -623,7 +625,7 @@ namespace boost { namespace numeric { namespace ublas {
                 typename matrix_column<expression1_type>::const_iterator itc (mc.begin ());
                 typename matrix_column<expression1_type>::const_iterator itc_end (mc.end ());
                 while (itc != itc_end) {
-                    if (functor_type ().other (itc.index (), it2.index2 ()))
+                    if (triangular_restriction::functor_type ().other (itc.index (), it2.index2 ()))
                         m (itc.index (), it2.index2 ()) += *it1 * *itc;
                     ++ itc;
                 }
@@ -638,34 +640,34 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2, class TRI>
     BOOST_UBLAS_INLINE
     M &
     axpy_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               M &m, F, bool init = true) {
+               M &m, TRI, bool init = true) {
         typedef typename M::value_type value_type;
         typedef typename M::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
-        typedef F functor_type;
+        typedef TRI triangular_restriction;
 
         if (init)
             m.assign (zero_matrix<value_type> (e1 ().size1 (), e2 ().size2 ()));
-        return axpy_prod (e1, e2, m, functor_type (), storage_category (), orientation_category ());
+        return axpy_prod (e1, e2, m, triangular_restriction (), storage_category (), orientation_category ());
     }
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2, class TRI>
     BOOST_UBLAS_INLINE
     M
     axpy_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               F) {
+               TRI) {
         typedef M matrix_type;
-        typedef F functor_type;
+        typedef TRI triangular_restriction;
 
         matrix_type m (e1 ().size1 (), e2 ().size2 ());
-        // FIXME: needed for c_matrix?!
-        // return axpy_prod (e1, e2, m, functor_type (), false);
-        return axpy_prod (e1, e2, m, functor_type (), true);
+        // FIXME needed for c_matrix?!
+        // return axpy_prod (e1, e2, m, triangular_restriction (), false);
+        return axpy_prod (e1, e2, m, triangular_restriction (), true);
     }
 
   /** \brief computes <tt>M += A X</tt> or <tt>M = A X</tt> in an
@@ -714,17 +716,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef M matrix_type;
 
         matrix_type m (e1 ().size1 (), e2 ().size2 ());
-        // FIXME: needed for c_matrix?!
+        // FIXME needed for c_matrix?!
         // return axpy_prod (e1, e2, m, full (), false);
         return axpy_prod (e1, e2, m, full (), true);
     }
 
-    template<class M, class E1, class E2, class F>
+
+    template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
     M &
     opb_prod (const matrix_expression<E1> &e1,
               const matrix_expression<E2> &e2,
-              M &m, F,
+              M &m,
               dense_proxy_tag, row_major_tag) {
         typedef M matrix_type;
         typedef const E1 expression1_type;
@@ -736,7 +739,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix<value_type, row_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign<scalar_plus_assign> (cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
         for (size_type k = 0; k < size; ++ k) {
@@ -750,12 +753,12 @@ namespace boost { namespace numeric { namespace ublas {
         return m;
     }
 
-    template<class M, class E1, class E2, class F>
+    template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
     M &
     opb_prod (const matrix_expression<E1> &e1,
               const matrix_expression<E2> &e2,
-              M &m, F,
+              M &m,
               dense_proxy_tag, column_major_tag) {
         typedef M matrix_type;
         typedef const E1 expression1_type;
@@ -767,7 +770,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix<value_type, column_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        indexing_matrix_assign<scalar_plus_assign> (cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
         for (size_type k = 0; k < size; ++ k) {
@@ -782,35 +785,6 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class M, class E1, class E2, class F>
-    BOOST_UBLAS_INLINE
-    M &
-    opb_prod (const matrix_expression<E1> &e1,
-              const matrix_expression<E2> &e2,
-              M &m, F, bool init = true) {
-        typedef typename M::value_type value_type;
-        typedef typename M::storage_category storage_category;
-        typedef typename M::orientation_category orientation_category;
-        typedef F functor_type;
-
-        if (init)
-            m.assign (zero_matrix<value_type> (e1 ().size1 (), e2 ().size2 ()));
-        return opb_prod (e1, e2, m, functor_type (), storage_category (), orientation_category ());
-    }
-    template<class M, class E1, class E2, class F>
-    BOOST_UBLAS_INLINE
-    M
-    opb_prod (const matrix_expression<E1> &e1,
-              const matrix_expression<E2> &e2,
-              F) {
-        typedef M matrix_type;
-        typedef F functor_type;
-
-        matrix_type m (e1 ().size1 (), e2 ().size2 ());
-        // FIXME: needed for c_matrix?!
-        // return opb_prod (e1, e2, m, functor_type (), false);
-        return opb_prod (e1, e2, m, functor_type (), true);
-    }
 
   /** \brief computes <tt>M += A X</tt> or <tt>M = A X</tt> in an
           optimized fashion.
@@ -850,7 +824,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (init)
             m.assign (zero_matrix<value_type> (e1 ().size1 (), e2 ().size2 ()));
-        return opb_prod (e1, e2, m, full (), storage_category (), orientation_category ());
+        return opb_prod (e1, e2, m, storage_category (), orientation_category ());
     }
     template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
@@ -860,9 +834,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef M matrix_type;
 
         matrix_type m (e1 ().size1 (), e2 ().size2 ());
-        // FIXME: needed for c_matrix?!
-        // return opb_prod (e1, e2, m, full (), false);
-        return opb_prod (e1, e2, m, full (), true);
+        // FIXME needed for c_matrix?!
+        // return opb_prod (e1, e2, m, false);
+        return opb_prod (e1, e2, m, true);
     }
 
 }}}

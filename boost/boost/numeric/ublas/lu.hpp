@@ -19,6 +19,11 @@
 #ifndef BOOST_UBLAS_LU_H
 #define BOOST_UBLAS_LU_H
 
+#include <boost/numeric/ublas/operation.hpp>
+#include <boost/numeric/ublas/matrix_expression.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+
+
 namespace boost { namespace numeric { namespace ublas {
 
     template<class T = std::size_t, class A = unbounded_array<T> >
@@ -74,15 +79,15 @@ namespace boost { namespace numeric { namespace ublas {
     template<class PM, class MV>
     BOOST_UBLAS_INLINE
     void swap_rows (const PM &pm, MV &mv) {
-        swap_rows (pm, mv, BOOST_UBLAS_TYPENAME MV::type_category ());
+        swap_rows (pm, mv, typename MV::type_category ());
     }
 
     // LU factorization without pivoting
     template<class M>
     typename M::size_type lu_factorize (M &m) {
         typedef M matrix_type;
-        typedef BOOST_UBLAS_TYPENAME M::size_type size_type;
-        typedef BOOST_UBLAS_TYPENAME M::value_type value_type;
+        typedef typename M::size_type size_type;
+        typedef typename M::value_type value_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix_type cm (m);
@@ -115,8 +120,8 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class PM>
     typename M::size_type lu_factorize (M &m, PM &pm) {
         typedef M matrix_type;
-        typedef BOOST_UBLAS_TYPENAME M::size_type size_type;
-        typedef BOOST_UBLAS_TYPENAME M::value_type value_type;
+        typedef typename M::size_type size_type;
+        typedef typename M::value_type value_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix_type cm (m);
@@ -157,8 +162,8 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class PM>
     typename M::size_type axpy_lu_factorize (M &m, PM &pm) {
         typedef M matrix_type;
-        typedef BOOST_UBLAS_TYPENAME M::size_type size_type;
-        typedef BOOST_UBLAS_TYPENAME M::value_type value_type;
+        typedef typename M::size_type size_type;
+        typedef typename M::value_type value_type;
         typedef vector<value_type> vector_type;
 
 #if BOOST_UBLAS_TYPE_CHECK

@@ -19,23 +19,6 @@
 
 #include <boost/concept_check.hpp>
 
-// #define INTERNAL_STORAGE
-// #define INTERNAL_STORAGE_SPARSE
-// #define INTERNAL_VECTOR
-// #define INTERNAL_VECTOR_PROXY
-// #define INTERNAL_VECTOR_SPARSE
-// #define INTERNAL_MATRIX
-// #define INTERNAL_MATRIX_PROXY
-// #define INTERNAL_BANDED
-// #define INTERNAL_TRIANGULAR
-// #define INTERNAL_SYMMETRIC
-// #define INTERNAL_HERMITIAN
-// #define INTERNAL_MATRIX_SPARSE
-// #define INTERNAL_VECTOR_EXPRESSION
-// #define INTERNAL_MATRIX_EXPRESSION
-
-// #define EXTERNAL
-
 // Concept checks based on ideas of Jeremy Siek
 
 namespace boost { namespace numeric { namespace ublas {
@@ -285,53 +268,53 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class I1, class I2>
     struct IndexedBidirectional2DIteratorConcept {
-        typedef I1 iterator1_type;
-        typedef I2 iterator2_type;
+        typedef I1 subiterator1_type;
+        typedef I2 subiterator2_type;
 
         static void constraints () {
-            BidirectionalIteratorConcept<iterator1_type>::constraints ();
-            BidirectionalIteratorConcept<iterator2_type>::constraints ();
-            Indexed2DIteratorConcept<iterator1_type>::constraints ();
-            Indexed2DIteratorConcept<iterator2_type>::constraints ();
+            BidirectionalIteratorConcept<subiterator1_type>::constraints ();
+            BidirectionalIteratorConcept<subiterator2_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator1_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator2_type>::constraints ();
         }
     };
 
     template<class I1, class I2>
     struct MutableIndexedBidirectional2DIteratorConcept {
-        typedef I1 iterator1_type;
-        typedef I2 iterator2_type;
+        typedef I1 subiterator1_type;
+        typedef I2 subiterator2_type;
 
         static void constraints () {
-            MutableBidirectionalIteratorConcept<iterator1_type>::constraints ();
-            MutableBidirectionalIteratorConcept<iterator2_type>::constraints ();
-            Indexed2DIteratorConcept<iterator1_type>::constraints ();
-            Indexed2DIteratorConcept<iterator2_type>::constraints ();
+            MutableBidirectionalIteratorConcept<subiterator1_type>::constraints ();
+            MutableBidirectionalIteratorConcept<subiterator2_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator1_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator2_type>::constraints ();
         }
     };
 
     template<class I1, class I2>
     struct IndexedRandomAccess2DIteratorConcept {
-        typedef I1 iterator1_type;
-        typedef I2 iterator2_type;
+        typedef I1 subiterator1_type;
+        typedef I2 subiterator2_type;
 
         static void constraints () {
-            RandomAccessIteratorConcept<iterator1_type>::constraints ();
-            RandomAccessIteratorConcept<iterator2_type>::constraints ();
-            Indexed2DIteratorConcept<iterator1_type>::constraints ();
-            Indexed2DIteratorConcept<iterator2_type>::constraints ();
+            RandomAccessIteratorConcept<subiterator1_type>::constraints ();
+            RandomAccessIteratorConcept<subiterator2_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator1_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator2_type>::constraints ();
         }
     };
 
     template<class I1, class I2>
     struct MutableIndexedRandomAccess2DIteratorConcept {
-        typedef I1 iterator1_type;
-        typedef I2 iterator2_type;
+        typedef I1 subiterator1_type;
+        typedef I2 subiterator2_type;
 
         static void constraints () {
-            MutableRandomAccessIteratorConcept<iterator1_type>::constraints ();
-            MutableRandomAccessIteratorConcept<iterator2_type>::constraints ();
-            Indexed2DIteratorConcept<iterator1_type>::constraints ();
-            Indexed2DIteratorConcept<iterator2_type>::constraints ();
+            MutableRandomAccessIteratorConcept<subiterator1_type>::constraints ();
+            MutableRandomAccessIteratorConcept<subiterator2_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator1_type>::constraints ();
+            Indexed2DIteratorConcept<subiterator2_type>::constraints ();
         }
     };
 
@@ -524,7 +507,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename G::value_type value_type;
 
         static void constraints () {
-            DefaultConstructibleConcept<generator_type>::constraints ();
+            AssignableConcept<generator_type>::constraints (generator_type ());
             ReversibleContainerConcept<generator_type>::constraints ();
             generator_type g = generator_type ();
             size_type n (0);
@@ -637,10 +620,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::type_category type_category;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
-        typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename M::const_reverse_iterator1 const_reverse_iterator1_type;
-        typedef typename M::const_reverse_iterator2 const_reverse_iterator2_type;
+        typedef typename M::const_iterator1 const_subiterator1_type;
+        typedef typename M::const_iterator2 const_subiterator2_type;
+        typedef typename M::const_reverse_iterator1 const_reverse_subiterator1_type;
+        typedef typename M::const_reverse_iterator2 const_reverse_subiterator2_type;
 
         static void constraints () {
             DefaultConstructibleConcept<matrix_type>::constraints ();
@@ -648,24 +631,24 @@ namespace boost { namespace numeric { namespace ublas {
             size_type n (0), i (0), j (0);
             value_type t;
             // Find (internal?)
-            const_iterator1_type cit1 (m.find1 (0, i, j));
-            const_iterator2_type cit2 (m.find2 (0, i, j));
+            const_subiterator1_type cit1 (m.find1 (0, i, j));
+            const_subiterator2_type cit2 (m.find2 (0, i, j));
             // Beginning of range
-            const_iterator1_type cit1_begin (m.begin1 ());
-            const_iterator2_type cit2_begin (m.begin2 ());
+            const_subiterator1_type cit1_begin (m.begin1 ());
+            const_subiterator2_type cit2_begin (m.begin2 ());
             // End of range
-            const_iterator1_type cit1_end (m.end1 ());
-            const_iterator2_type cit2_end (m.end2 ());
+            const_subiterator1_type cit1_end (m.end1 ());
+            const_subiterator2_type cit2_end (m.end2 ());
             // Size
             n = m.size1 ();
             n = m.size2 ();
             // Beginning of reverse range
             const matrix_type cm = matrix_type ();
-            const_reverse_iterator1_type crit1_begin (cm.rbegin1 ());
-            const_reverse_iterator2_type crit2_begin (cm.rbegin2 ());
+            const_reverse_subiterator1_type crit1_begin (cm.rbegin1 ());
+            const_reverse_subiterator2_type crit2_begin (cm.rbegin2 ());
             // End of reverse range
-            const_reverse_iterator1_type crit1_end (cm.rend1 ());
-            const_reverse_iterator2_type crit2_end (cm.rend2 ());
+            const_reverse_subiterator1_type crit1_end (cm.rend1 ());
+            const_reverse_subiterator2_type crit2_end (cm.rend2 ());
             // Element access
             t = m (i, j);
             ignore_unused_variable_warning (n);
@@ -688,10 +671,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
-        typedef typename M::iterator1 iterator1_type;
-        typedef typename M::iterator2 iterator2_type;
-        typedef typename M::reverse_iterator1 reverse_iterator1_type;
-        typedef typename M::reverse_iterator2 reverse_iterator2_type;
+        typedef typename M::iterator1 subiterator1_type;
+        typedef typename M::iterator2 subiterator2_type;
+        typedef typename M::reverse_iterator1 reverse_subiterator1_type;
+        typedef typename M::reverse_iterator2 reverse_subiterator2_type;
 
         static void constraints () {
             AssignableConcept<matrix_type>::constraints (matrix_type ());
@@ -700,22 +683,22 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i (0), j (0);
             value_type t = value_type ();
             // Find (internal?)
-            iterator1_type it1 (m.find1 (0, i, j));
-            iterator2_type it2 (m.find2 (0, i, j));
+            subiterator1_type it1 (m.find1 (0, i, j));
+            subiterator2_type it2 (m.find2 (0, i, j));
             // Beginning of range
-            iterator1_type it1_begin (m.begin1 ());
-            iterator2_type it2_begin (m.begin2 ());
+            subiterator1_type it1_begin (m.begin1 ());
+            subiterator2_type it2_begin (m.begin2 ());
             // End of range
-            iterator1_type it1_end (m.end1 ());
-            iterator2_type it2_end (m.end2 ());
+            subiterator1_type it1_end (m.end1 ());
+            subiterator2_type it2_end (m.end2 ());
             // Swap
             m1.swap (m2);
             // Beginning of reverse range
-            reverse_iterator1_type rit1_begin (m.rbegin1 ());
-            reverse_iterator2_type rit2_begin (m.rbegin2 ());
+            reverse_subiterator1_type rit1_begin (m.rbegin1 ());
+            reverse_subiterator2_type rit2_begin (m.rbegin2 ());
             // End of reverse range
-            reverse_iterator1_type rit1_end (m.rend1 ());
-            reverse_iterator2_type rit2_end (m.rend2 ());
+            reverse_subiterator1_type rit1_end (m.rend1 ());
+            reverse_subiterator2_type rit2_end (m.rend2 ());
             // Assignments
             m2 = m1;
             m2.assign (m1);
@@ -741,12 +724,19 @@ namespace boost { namespace numeric { namespace ublas {
     struct VectorConcept {
         typedef V vector_type;
         typedef typename V::size_type size_type;
+        typedef typename V::value_type value_type;
+        typedef const value_type *const_pointer;
 
         static void constraints () {
             VectorExpressionConcept<vector_type>::constraints ();
             size_type n (0);
+            size_type i (0);
             // Sizing constructor
             vector_type v (n);
+            // Element support
+            const_pointer p = v.find_element (i);
+
+            ignore_unused_variable_warning (p);
         }
     };
 
@@ -755,6 +745,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef V vector_type;
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
+        typedef value_type *pointer;
 
         static void constraints () {
             VectorConcept<vector_type>::constraints ();
@@ -764,14 +755,46 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i (0);
             // Sizing constructor
             vector_type v (n);
-            // Insert
-            v.insert (i, t);
-            // Erase
-            v.erase (i);
-            // Clear
+            // Element support
+            pointer p = v.find_element (i);
+            // Element assignment
+            value_type r = v.insert_element (i, t);
+            v.insert_element (i, t) = r;
+            // Zeroing
             v.clear ();
             // Resize
             v.resize (n);
+
+            ignore_unused_variable_warning (p);
+            ignore_unused_variable_warning (r);
+        }
+    };
+
+    template<class V>
+    struct SparseVectorConcept {
+        typedef V vector_type;
+        typedef typename V::size_type size_type;
+
+        static void constraints () {
+            VectorConcept<vector_type>::constraints ();
+        }
+    };
+
+    template<class V>
+    struct MutableSparseVectorConcept {
+        typedef V vector_type;
+        typedef typename V::size_type size_type;
+        typedef typename V::value_type value_type;
+
+        static void constraints () {
+            SparseVectorConcept<vector_type>::constraints ();
+            MutableVectorConcept<vector_type>::constraints ();
+            size_type n (0);
+            size_type i (0);
+            // Sizing constructor
+            vector_type v (n);
+            // Element erasure
+            v.erase_element (i);
         }
     };
 
@@ -779,12 +802,24 @@ namespace boost { namespace numeric { namespace ublas {
     struct MatrixConcept {
         typedef M matrix_type;
         typedef typename M::size_type size_type;
+        typedef typename M::value_type value_type;
+        typedef const value_type *const_pointer;
 
         static void constraints () {
             MatrixExpressionConcept<matrix_type>::constraints ();
             size_type n (0);
+            size_type i (0), j (0);
             // Sizing constructor
             matrix_type m (n, n);
+            // Element support
+#ifndef SKIP_BAD
+            const_pointer p = m.find_element (i, j);
+#else
+            const_pointer p;
+            ignore_unused_variable_warning (i);
+            ignore_unused_variable_warning (j);
+#endif
+            ignore_unused_variable_warning (p);
         }
     };
 
@@ -793,6 +828,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
+        typedef value_type *pointer;
 
         static void constraints () {
             MatrixConcept<matrix_type>::constraints ();
@@ -802,15 +838,53 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i (0), j (0);
             // Sizing constructor
             matrix_type m (n, n);
-            // Insert
-            m.insert (i, j, t);
-            // Erase
-            m.erase (i, j);
-            // Clear
+            // Element support
+#ifndef SKIP_BAD
+            pointer p = m.find_element (i, j);
+            ignore_unused_variable_warning (i);
+            ignore_unused_variable_warning (j);
+#else
+            pointer p;
+#endif
+            // Element assigment
+            value_type r = m.insert_element (i, j, t);
+            m.insert_element (i, j, t) = r;
+            // Zeroing
             m.clear ();
             // Resize
             m.resize (n, n);
             m.resize (n, n, false);
+
+            ignore_unused_variable_warning (p);
+            ignore_unused_variable_warning (r);
+        }
+    };
+
+    template<class M>
+    struct SparseMatrixConcept {
+        typedef M matrix_type;
+        typedef typename M::size_type size_type;
+
+        static void constraints () {
+            MatrixConcept<matrix_type>::constraints ();
+        }
+    };
+
+    template<class M>
+    struct MutableSparseMatrixConcept {
+        typedef M matrix_type;
+        typedef typename M::size_type size_type;
+        typedef typename M::value_type value_type;
+
+        static void constraints () {
+            SparseMatrixConcept<matrix_type>::constraints ();
+            MutableMatrixConcept<matrix_type>::constraints ();
+            size_type n (0);
+            size_type i (0), j (0);
+            // Sizing constructor
+            matrix_type m (n, n);
+            // Elemnent erasure
+            m.erase_element (i, j);
         }
     };
 
@@ -847,7 +921,6 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (matrix<double>) {
         return zero_matrix<double> ();
     }
-#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     std::complex<float>
     ZeroElement (std::complex<float>) {
@@ -878,7 +951,6 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (matrix<std::complex<double> >) {
         return zero_matrix<std::complex<double> > ();
     }
-#endif
 
     template<class T>
     T
@@ -903,7 +975,6 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (matrix<double>) {
         return identity_matrix<double> ();
     }
-#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     std::complex<float>
     OneElement (std::complex<float>) {
@@ -924,22 +995,21 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (matrix<std::complex<double> >) {
         return identity_matrix<std::complex<double> > ();
     }
-#endif
 
     template<class E1, class E2>
     bool
     operator == (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
-                                                    BOOST_UBLAS_TYPENAME E2::value_type>::promote_type value_type;
-        typedef BOOST_UBLAS_TYPENAME type_traits<value_type>::real_type real_type;
+        typedef typename promote_traits<typename E1::value_type,
+                                                    typename E2::value_type>::promote_type value_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         return norm_inf (e1 - e2) == real_type (0);
     }
     template<class E1, class E2>
     bool
     operator == (const matrix_expression<E1> &e1, const matrix_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
-                                                    BOOST_UBLAS_TYPENAME E2::value_type>::promote_type value_type;
-        typedef BOOST_UBLAS_TYPENAME type_traits<value_type>::real_type real_type;
+        typedef typename promote_traits<typename E1::value_type,
+                                                    typename E2::value_type>::promote_type value_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         return norm_inf (e1 - e2) == real_type (0);
     }
 
@@ -1112,19 +1182,6 @@ namespace boost { namespace numeric { namespace ublas {
         BidirectionalIteratorConcept<std::map<std::size_t, double>::const_iterator>::constraints ();
                 // Not value_type mutable
         BidirectionalIteratorConcept<std::map<std::size_t, double>::iterator>::constraints ();
-
-#ifdef BOOST_UBLAS_DEPRACATED
-        StorageSparseConcept<const set_array<std::size_t> >::constraints ();
-        MutableStorageSparseConcept<set_array<std::size_t> >::constraints ();
-        RandomAccessIteratorConcept<set_array<std::size_t>::const_iterator>::constraints ();
-        MutableRandomAccessIteratorConcept<set_array<std::size_t>::iterator>::constraints ();
-
-        StorageSparseConcept<const std::set<std::size_t> >::constraints ();
-        MutableStorageSparseConcept<std::set<std::size_t> >::constraints ();
-        BidirectionalIteratorConcept<std::set<std::size_t>::const_iterator>::constraints ();
-        MutableBidirectionalIteratorConcept<std::set<std::size_t>::iterator>::constraints ();
-#endif
-
 #endif
 
         // Vector
@@ -1136,13 +1193,13 @@ namespace boost { namespace numeric { namespace ublas {
         IndexedRandomAccess1DIteratorConcept<vector<double>::const_reverse_iterator>::constraints ();
         MutableIndexedRandomAccess1DIteratorConcept<vector<double>::reverse_iterator>::constraints ();
 
-        VectorConcept<unit_vector<double> >::constraints ();
-        IndexedRandomAccess1DIteratorConcept<unit_vector<double>::const_iterator>::constraints ();
-        IndexedRandomAccess1DIteratorConcept<unit_vector<double>::const_reverse_iterator>::constraints ();
-
         VectorConcept<zero_vector<double> >::constraints ();
         IndexedBidirectional1DIteratorConcept<zero_vector<double>::const_iterator>::constraints ();
         IndexedBidirectional1DIteratorConcept<zero_vector<double>::const_reverse_iterator>::constraints ();
+
+        VectorConcept<unit_vector<double> >::constraints ();
+        IndexedBidirectional1DIteratorConcept<unit_vector<double>::const_iterator>::constraints ();
+        IndexedBidirectional1DIteratorConcept<unit_vector<double>::const_reverse_iterator>::constraints ();
 
         VectorConcept<scalar_vector<double> >::constraints ();
         IndexedRandomAccess1DIteratorConcept<scalar_vector<double>::const_iterator>::constraints ();
@@ -1182,22 +1239,22 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Sparse Vector
 #if defined (INTERNAL) || defined (INTERNAL_VECTOR_SPARSE)
-        VectorConcept<const sparse_vector<double> >::constraints ();
-        MutableVectorConcept<sparse_vector<double> >::constraints ();
-        IndexedBidirectional1DIteratorConcept<sparse_vector<double>::const_iterator>::constraints ();
-        MutableIndexedBidirectional1DIteratorConcept<sparse_vector<double>::iterator>::constraints ();
-        IndexedBidirectional1DIteratorConcept<sparse_vector<double>::const_reverse_iterator>::constraints ();
-        MutableIndexedBidirectional1DIteratorConcept<sparse_vector<double>::reverse_iterator>::constraints ();
+        SparseVectorConcept<const mapped_vector<double> >::constraints ();
+        MutableSparseVectorConcept<mapped_vector<double> >::constraints ();
+        IndexedBidirectional1DIteratorConcept<mapped_vector<double>::const_iterator>::constraints ();
+        MutableIndexedBidirectional1DIteratorConcept<mapped_vector<double>::iterator>::constraints ();
+        IndexedBidirectional1DIteratorConcept<mapped_vector<double>::const_reverse_iterator>::constraints ();
+        MutableIndexedBidirectional1DIteratorConcept<mapped_vector<double>::reverse_iterator>::constraints ();
 
-        VectorConcept<const compressed_vector<double> >::constraints ();
-        MutableVectorConcept<compressed_vector<double> >::constraints ();
+        SparseVectorConcept<const compressed_vector<double> >::constraints ();
+        MutableSparseVectorConcept<compressed_vector<double> >::constraints ();
         IndexedBidirectional1DIteratorConcept<compressed_vector<double>::const_iterator>::constraints ();
         MutableIndexedBidirectional1DIteratorConcept<compressed_vector<double>::iterator>::constraints ();
         IndexedBidirectional1DIteratorConcept<compressed_vector<double>::const_reverse_iterator>::constraints ();
         MutableIndexedBidirectional1DIteratorConcept<compressed_vector<double>::reverse_iterator>::constraints ();
 
-        VectorConcept<const coordinate_vector<double> >::constraints ();
-        MutableVectorConcept<coordinate_vector<double> >::constraints ();
+        SparseVectorConcept<const coordinate_vector<double> >::constraints ();
+        MutableSparseVectorConcept<coordinate_vector<double> >::constraints ();
         IndexedBidirectional1DIteratorConcept<coordinate_vector<double>::const_iterator>::constraints ();
         MutableIndexedBidirectional1DIteratorConcept<coordinate_vector<double>::iterator>::constraints ();
         IndexedBidirectional1DIteratorConcept<coordinate_vector<double>::const_reverse_iterator>::constraints ();
@@ -1228,17 +1285,17 @@ namespace boost { namespace numeric { namespace ublas {
         MutableIndexedRandomAccess2DIteratorConcept<vector_of_vector<double>::reverse_iterator1,
                                                     vector_of_vector<double>::reverse_iterator2>::constraints ();
 
-        MatrixConcept<identity_matrix<double> >::constraints ();
-        IndexedRandomAccess2DIteratorConcept<identity_matrix<double>::const_iterator1,
-                                             identity_matrix<double>::const_iterator2>::constraints ();
-        IndexedRandomAccess2DIteratorConcept<identity_matrix<double>::const_reverse_iterator1,
-                                             identity_matrix<double>::const_reverse_iterator2>::constraints ();
-
         MatrixConcept<zero_matrix<double> >::constraints ();
         IndexedBidirectional2DIteratorConcept<zero_matrix<double>::const_iterator1,
                                               zero_matrix<double>::const_iterator2>::constraints ();
         IndexedBidirectional2DIteratorConcept<zero_matrix<double>::const_reverse_iterator1,
                                               zero_matrix<double>::const_reverse_iterator2>::constraints ();
+
+        MatrixConcept<identity_matrix<double> >::constraints ();
+        IndexedBidirectional2DIteratorConcept<identity_matrix<double>::const_iterator1,
+                                             identity_matrix<double>::const_iterator2>::constraints ();
+        IndexedBidirectional2DIteratorConcept<identity_matrix<double>::const_reverse_iterator1,
+                                             identity_matrix<double>::const_reverse_iterator2>::constraints ();
 
         MatrixConcept<scalar_matrix<double> >::constraints ();
         IndexedRandomAccess2DIteratorConcept<scalar_matrix<double>::const_iterator1,
@@ -1437,49 +1494,52 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Sparse Matrix
 #if defined (INTERNAL) || defined (INTERNAL_MATRIX_SPARSE)
-        MatrixConcept<const sparse_matrix<double> >::constraints ();
-        MutableMatrixConcept<sparse_matrix<double> >::constraints ();
-        IndexedBidirectional2DIteratorConcept<sparse_matrix<double>::const_iterator1,
-                                              sparse_matrix<double>::const_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<sparse_matrix<double>::iterator1,
-                                                     sparse_matrix<double>::iterator2>::constraints ();
-        IndexedBidirectional2DIteratorConcept<sparse_matrix<double>::const_reverse_iterator1,
-                                              sparse_matrix<double>::const_reverse_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<sparse_matrix<double>::reverse_iterator1,
-                                                     sparse_matrix<double>::reverse_iterator2>::constraints ();
+        {
+            typedef mapped_matrix<double> container_model;
+            SparseMatrixConcept<const container_model>::constraints ();
+            MutableSparseMatrixConcept<container_model>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_iterator1, container_model::const_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::iterator1, container_model::iterator2>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_reverse_iterator1, container_model::const_reverse_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::reverse_iterator1, container_model::reverse_iterator2>::constraints ();
+        }
+        {
+            typedef mapped_vector_of_mapped_vector<double> container_model;
+            SparseMatrixConcept<const container_model>::constraints ();
+            MutableSparseMatrixConcept<container_model>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_iterator1, container_model::const_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::iterator1, container_model::iterator2>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_reverse_iterator1, container_model::const_reverse_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::reverse_iterator1, container_model::reverse_iterator2>::constraints ();
+        }
+        {
+            typedef compressed_matrix<double> container_model;
+            SparseMatrixConcept<const container_model>::constraints ();
+            MutableSparseMatrixConcept<container_model>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_iterator1, container_model::const_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::iterator1, container_model::iterator2>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_reverse_iterator1, container_model::const_reverse_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::reverse_iterator1, container_model::reverse_iterator2>::constraints ();
+        }
+        {
+            typedef coordinate_matrix<double> container_model;
+            SparseMatrixConcept<const container_model>::constraints ();
+            MutableSparseMatrixConcept<container_model>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_iterator1, container_model::const_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::iterator1, container_model::iterator2>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_reverse_iterator1, container_model::const_reverse_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::reverse_iterator1, container_model::reverse_iterator2>::constraints ();
+        }
+        {
+            typedef generalized_vector_of_vector<double, row_major, vector< coordinate_vector<double> > > container_model;
+            SparseMatrixConcept<const container_model>::constraints ();
+            MutableSparseMatrixConcept<container_model>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_iterator1, container_model::const_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::iterator1, container_model::iterator2>::constraints ();
+            IndexedBidirectional2DIteratorConcept<container_model::const_reverse_iterator1, container_model::const_reverse_iterator2>::constraints ();
+            MutableIndexedBidirectional2DIteratorConcept<container_model::reverse_iterator1, container_model::reverse_iterator2>::constraints ();
+        }
 
-        MatrixConcept<const sparse_vector_of_sparse_vector<double> >::constraints ();
-        MutableMatrixConcept<sparse_vector_of_sparse_vector<double> >::constraints ();
-        IndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::const_iterator1,
-                                              sparse_vector_of_sparse_vector<double>::const_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::iterator1,
-                                                     sparse_vector_of_sparse_vector<double>::iterator2>::constraints ();
-        IndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::const_reverse_iterator1,
-                                              sparse_vector_of_sparse_vector<double>::const_reverse_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::reverse_iterator1,
-                                                     sparse_vector_of_sparse_vector<double>::reverse_iterator2>::constraints ();
-
-        MatrixConcept<const compressed_matrix<double> >::constraints ();
-        MutableMatrixConcept<compressed_matrix<double> >::constraints ();
-        IndexedBidirectional2DIteratorConcept<compressed_matrix<double>::const_iterator1,
-                                              compressed_matrix<double>::const_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<compressed_matrix<double>::iterator1,
-                                                     compressed_matrix<double>::iterator2>::constraints ();
-        IndexedBidirectional2DIteratorConcept<compressed_matrix<double>::const_reverse_iterator1,
-                                              compressed_matrix<double>::const_reverse_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<compressed_matrix<double>::reverse_iterator1,
-                                                     compressed_matrix<double>::reverse_iterator2>::constraints ();
-
-        MatrixConcept<const coordinate_matrix<double> >::constraints ();
-        MutableMatrixConcept<coordinate_matrix<double> >::constraints ();
-        IndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::const_iterator1,
-                                              coordinate_matrix<double>::const_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::iterator1,
-                                                     coordinate_matrix<double>::iterator2>::constraints ();
-        IndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::const_reverse_iterator1,
-                                              coordinate_matrix<double>::const_reverse_iterator2>::constraints ();
-        MutableIndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::reverse_iterator1,
-                                                     coordinate_matrix<double>::reverse_iterator2>::constraints ();
 #endif
 
         // Scalar Expressions
@@ -1488,12 +1548,6 @@ namespace boost { namespace numeric { namespace ublas {
         ScalarExpressionConcept<scalar_reference<double > >::constraints ();
 
         // Vector Expressions
-#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        VectorExpressionConcept<vector_const_reference<vector<double> > >::constraints ();
-        IndexedRandomAccess1DIteratorConcept<vector_const_reference<vector<double> >::const_iterator>::constraints ();
-        IndexedRandomAccess1DIteratorConcept<vector_const_reference<vector<double> >::const_reverse_iterator>::constraints ();
-#endif
-
         VectorExpressionConcept<vector_reference<vector<double> > >::constraints ();
         MutableVectorExpressionConcept<vector_reference<vector<double> > >::constraints ();
         IndexedRandomAccess1DIteratorConcept<vector_reference<vector<double> >::const_iterator>::constraints ();
@@ -1630,7 +1684,6 @@ namespace boost { namespace numeric { namespace ublas {
         VectorSpaceConcept<double, matrix<double> >::constraints ();
         LinearOperatorConcept<double, vector<double>, matrix<double> >::constraints ();
 
-#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
         AdditiveAbelianGroupConcept<std::complex<float> >::constraints ();
         CommutativeRingWithIdentityConcept<std::complex<float> >::constraints ();
         FieldConcept<std::complex<float> >::constraints ();
@@ -1646,7 +1699,6 @@ namespace boost { namespace numeric { namespace ublas {
         RingWithIdentityConcept<matrix<std::complex<double> > >::constraints (0);
         VectorSpaceConcept<std::complex<double>, matrix<std::complex<double> > >::constraints ();
         LinearOperatorConcept<std::complex<double>, vector<std::complex<double> >, matrix<std::complex<double> > >::constraints ();
-#endif
 #endif
     }
 
