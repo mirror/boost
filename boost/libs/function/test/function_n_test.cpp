@@ -105,7 +105,7 @@ test_zero_args()
   BOOST_TEST(v1.empty());
 
   // Assignment to an empty function from a free function
-  v1 = write_five;
+  v1 = &write_five;
   BOOST_TEST(!v1.empty());
 
   // Invocation
