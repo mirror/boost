@@ -56,7 +56,7 @@ namespace gdtl {
     static int_type frac_sec_per_day()
     {
       int_type seconds_per_day = 60*60*24;
-      int_type fractional_sec_per_sec(resolution_traits::ticks_per_second);
+      int_type fractional_sec_per_sec(resolution_traits::res_adjust());
       return seconds_per_day*fractional_sec_per_sec;
     }
   private:
