@@ -66,7 +66,6 @@ namespace boost
     template< typename T, std::size_t sz >
     struct iterator_of< const T[sz] >
     {
-        // remark: is this correct? I think T* should be it!
         typedef const T* type;
     };
 
