@@ -11,7 +11,7 @@
 # /* See http://www.boost.org for most recent version. */
 #
 # include <boost/preprocessor/tuple.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 # define TUPLE (0, 1, 2, 3, 4, 5)
 

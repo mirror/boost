@@ -11,7 +11,7 @@
 # /* See http://www.boost.org for most recent version. */
 #
 # include <boost/preprocessor/debug.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 BEGIN sizeof(BOOST_PP_ASSERT_MSG(0, "text") "") / sizeof(char) != 1 END
 BEGIN sizeof(BOOST_PP_ASSERT_MSG(1, "text") "") / sizeof(char) == 1 END

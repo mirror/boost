@@ -11,7 +11,7 @@
 # /* See http://www.boost.org for most recent version. */
 #
 # include <boost/preprocessor/comparison.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 // equality
 

@@ -11,7 +11,7 @@
 # /* See http://www.boost.org for most recent version. */
 #
 # include <boost/preprocessor/logical.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 BEGIN BOOST_PP_NOT(0) == 1 END
 BEGIN BOOST_PP_NOT(2) == 0 END

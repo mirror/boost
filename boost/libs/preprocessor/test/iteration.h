@@ -14,7 +14,7 @@
 #
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/iteration.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 #
 # define NO_FLAGS
 #

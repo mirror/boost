@@ -15,7 +15,7 @@
 # include <boost/preprocessor/comparison/less.hpp>
 # include <boost/preprocessor/list.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 # define LIST (4, (1, (5, (2, BOOST_PP_NIL))))
 

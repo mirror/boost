@@ -11,7 +11,7 @@
 # /* See http://www.boost.org for most recent version. */
 #
 # include <boost/preprocessor/array.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 # define ARRAY (3, (0, 1, 2))
 

@@ -12,7 +12,7 @@
 #
 # if !BOOST_PP_IS_SELFISH
 #
-# include <libs/preprocessor/regression/iteration.h>
+# include <libs/preprocessor/test/iteration.h>
 #
 # define TEST(n) BEGIN n == n END
 #

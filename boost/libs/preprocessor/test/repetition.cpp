@@ -16,7 +16,7 @@
 # include <boost/preprocessor/comparison/not_equal.hpp>
 # include <boost/preprocessor/facilities/intercept.hpp>
 # include <boost/preprocessor/repetition.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 # define MAX 10
 

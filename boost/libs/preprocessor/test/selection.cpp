@@ -11,7 +11,7 @@
 # /* See http://www.boost.org for most recent version. */
 #
 # include <boost/preprocessor/selection.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 BEGIN BOOST_PP_MAX(2, 2) == 2 END
 BEGIN BOOST_PP_MAX(2, 1) == 2 END

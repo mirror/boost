@@ -12,7 +12,7 @@
 #
 # include <boost/preprocessor/arithmetic.hpp>
 # include <boost/preprocessor/config/limits.hpp>
-# include <libs/preprocessor/regression/test.h>
+# include <libs/preprocessor/test/test.h>
 
 // addition
 
