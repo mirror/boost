@@ -14,7 +14,7 @@
 #include <typeinfo>
 
 #include "boost/config.hpp"
-#include "boost/throw_exception.hpp"
+#include <boost/throw_exception.hpp>
 
 namespace boost
 {
