@@ -232,7 +232,7 @@ full list of macros and their usage.
       #define BOOST_RE_NO_PARTIAL_FUNC_SPEC
    #endif
 
-   #ifdef _WIN32
+   #if defined(_WIN32) || defined(__CYGWIN__)
       /* there seems to be a problem with <windows.h> in gcc */
       #define BOOST_RE_LOCALE_C
       #define BOOST_RE_NO_W32
