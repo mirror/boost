@@ -268,16 +268,26 @@ int main(int argc, char *argv[ ])
    type_test(const int(&)[3], boost::call_traits<const int[3]>::reference)
    type_test(const int(&)[3], boost::call_traits<const int[3]>::const_reference)
    type_test(const int*const, boost::call_traits<const int[3]>::param_type)
+   // test with abstract base class:
+   type_test(test_abc1, boost::call_traits<test_abc1>::value_type)
+   type_test(test_abc1&, boost::call_traits<test_abc1>::reference)
+   type_test(const test_abc1&, boost::call_traits<test_abc1>::const_reference)
+   type_test(const test_abc1&, boost::call_traits<test_abc1>::param_type)
 #else
-   std::cout << "You're compiler does not support partial template instantiation, skipping 8 tests (8 errors)" << std::endl;
-   failures += 8;
-   test_count += 8;
+   std::cout << "You're compiler does not support partial template specialiation, skipping 8 tests (8 errors)" << std::endl;
+   failures += 12;
+   test_count += 12;
 #endif
 #else
-   std::cout << "You're compiler does not support partial template instantiation, skipping 20 tests (20 errors)" << std::endl;
-   failures += 20;
-   test_count += 20;
+   std::cout << "You're compiler does not support partial template specialiation, skipping 20 tests (20 errors)" << std::endl;
+   failures += 24;
+   test_count += 24;
 #endif
+   // test with an incomplete type:
+   type_test(incomplete_type, boost::call_traits<incomplete_type>::value_type)
+   type_test(incomplete_type&, boost::call_traits<incomplete_type>::reference)
+   type_test(const incomplete_type&, boost::call_traits<incomplete_type>::const_reference)
+   type_test(const incomplete_type&, boost::call_traits<incomplete_type>::param_type)
 
    return check_result(argc, argv);
 }
@@ -397,12 +407,12 @@ template struct call_traits_test<int[2], true>;
 #endif
 
 #ifdef BOOST_MSVC
-unsigned int expected_failures = 10;
+unsigned int expected_failures = 14;
 #elif defined(__SUNPRO_CC)
 #if(__SUNPRO_CC <= 0x520)
-unsigned int expected_failures = 14;
+unsigned int expected_failures = 18;
 #elif(__SUNPRO_CC <= 0x530)
-unsigned int expected_failures = 13;
+unsigned int expected_failures = 17;
 #else
 unsigned int expected_failures = 6;
 #endif
@@ -411,7 +421,7 @@ unsigned int expected_failures = 2;
 #elif defined(__GNUC__)
 unsigned int expected_failures = 4;
 #elif defined(__HP_aCC)
-unsigned int expected_failures = 20;
+unsigned int expected_failures = 24;
 #else
 unsigned int expected_failures = 0;
 #endif
