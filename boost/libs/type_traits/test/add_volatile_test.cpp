@@ -1,4 +1,9 @@
 
+//  (C) Copyright John Maddock 2000. Permission to copy, use, modify, sell and   
+//  distribute this software is granted provided this copyright notice appears
+//  in all copies. This software is provided "as is" without express or implied
+//  warranty, and with no claim as to its suitability for any purpose.
+
 #include "test.hpp"
 #include "check_type.hpp"
 #include TYPE_TRANSFORM(add_volatile)
@@ -34,6 +39,7 @@ TT_TEST_BEGIN(add_volatile)
    add_volatile_test_13();
 
 TT_TEST_END
+
 
 
 
