@@ -39,7 +39,7 @@ using std::endl;
 #pragma hrdstop
 #endif
 
-#include <boost/test/cpp_main.cpp>
+#include <boost/test/execution_monitor.hpp>
 
 #include "regress.h"
 
