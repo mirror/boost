@@ -35,7 +35,9 @@ namespace detail {
 template<class Archive>
 class archive_pointer_iserializer : public basic_pointer_iserializer {
 protected:
-    explicit archive_pointer_iserializer(const boost::serialization::extended_type_info & type_);
+    explicit archive_pointer_iserializer(
+        const boost::serialization::extended_type_info & type_
+    );
 public:
     virtual const basic_iserializer & get_basic_serializer() const 
     // mscvc 6.0 requires template functions to be implemented. For this

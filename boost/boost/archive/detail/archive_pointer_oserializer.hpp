@@ -33,7 +33,7 @@ template<class Archive>
 class archive_pointer_oserializer : public basic_pointer_oserializer {
 protected:
     explicit archive_pointer_oserializer(
-        const boost::serialization::extended_type_info & type
+        const boost::serialization::extended_type_info & type_
     );
 public:
     // return the type_extended save pointer corresponding to a give
@@ -41,7 +41,7 @@ public:
     // would indicate that the no object of the specified type was saved
     // any where in the code.
     static const basic_pointer_oserializer * find(
-        const boost::serialization::extended_type_info & type
+        const boost::serialization::extended_type_info & type_
     );
     virtual ~archive_pointer_oserializer(){}
 };
