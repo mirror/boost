@@ -12,8 +12,8 @@
 
 // The C++ standard requires that the C float functions are overloarded
 // for float, double and long double in the std namespace, but some of the older
-// library implementations don't support this. Some that don't supply the C99
-// float functions (frexpf, frexpl, etc.) so those are used instead.
+// library implementations don't support this. On some that don't, the C99
+// float functions (frexpf, frexpl, etc.) are available.
 
 // This is just based on the compilers I've got access to, but it should
 // do something sensible on most compilers.
@@ -24,7 +24,7 @@
 #  else
 #    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
 #  endif
-#elif defined(_RWSTD_VER)
+#elif defined(_RWSTD_VER) && defined(__BORLANDC__)
 #  define BOOST_HASH_USE_C99_FLOAT_FUNCS
 #  define BOOST_HASH_C99_NO_FLOAT_FUNCS
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
