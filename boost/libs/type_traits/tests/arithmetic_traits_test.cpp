@@ -55,7 +55,7 @@ int cpp_main(int argc, char* argv[])
    value_test(false, boost::is_integral<float>::value)
    value_test(false, boost::is_integral<double>::value)
    value_test(false, boost::is_integral<long double>::value)
-   #ifdef ULLONG_MAX
+   #ifdef BOOST_HAS_LONG_LONG
    value_test(true, boost::is_integral<long long>::value)
    value_test(true, boost::is_integral<unsigned long long>::value)
    #endif
@@ -75,7 +75,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_integral<const unsigned int>::value)
    value_test(true, boost::is_integral<const long>::value)
    value_test(true, boost::is_integral<const unsigned long>::value)
-   #ifdef ULLONG_MAX
+   #ifdef BOOST_HAS_LONG_LONG
    value_test(true, boost::is_integral<const long long>::value)
    value_test(true, boost::is_integral<const unsigned long long>::value)
    #endif
@@ -95,7 +95,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_integral<volatile unsigned int>::value)
    value_test(true, boost::is_integral<volatile long>::value)
    value_test(true, boost::is_integral<volatile unsigned long>::value)
-   #ifdef ULLONG_MAX
+   #ifdef BOOST_HAS_LONG_LONG
    value_test(true, boost::is_integral<volatile long long>::value)
    value_test(true, boost::is_integral<volatile unsigned long long>::value)
    #endif
@@ -115,7 +115,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_integral<const volatile unsigned int>::value)
    value_test(true, boost::is_integral<const volatile long>::value)
    value_test(true, boost::is_integral<const volatile unsigned long>::value)
-   #ifdef ULLONG_MAX
+   #ifdef BOOST_HAS_LONG_LONG
    value_test(true, boost::is_integral<const volatile long long>::value)
    value_test(true, boost::is_integral<const volatile unsigned long long>::value)
    #endif
@@ -158,7 +158,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_arithmetic<float>::value)
    value_test(true, boost::is_arithmetic<double>::value)
    value_test(true, boost::is_arithmetic<long double>::value)
-   #ifdef ULLONG_MAX
+   #ifdef BOOST_HAS_LONG_LONG
    value_test(true, boost::is_arithmetic<long long>::value)
    value_test(true, boost::is_arithmetic<unsigned long long>::value)
    #endif
@@ -185,7 +185,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_fundamental<float>::value)
    value_test(true, boost::is_fundamental<double>::value)
    value_test(true, boost::is_fundamental<long double>::value)
-   #ifdef ULLONG_MAX
+   #ifdef BOOST_HAS_LONG_LONG
    value_test(true, boost::is_fundamental<long long>::value)
    value_test(true, boost::is_fundamental<unsigned long long>::value)
    #endif
