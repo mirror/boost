@@ -15,13 +15,13 @@
   <tr>
     <td valign="top" width="300">
     <h3><a href="../../../index.htm">
-    <img alt="C++ Boost" src="../../../c++boost.gif" border="0" width="277" height="86"></a></h3>
+    <img alt="C++ Boost" src="../../../boost.png" border="0" width="277" height="86"></a></h3>
     </td>
     <td valign="top">
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/10/19<!--webbot bot="Timestamp" endspan i-checksum="12325" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/11/25<!--webbot bot="Timestamp" endspan i-checksum="12382" --></font></td>
   </tr>
 </table>
 <hr>
@@ -50,10 +50,12 @@ include:</p>
   <li>Generic design allowing for the customization of memory management, 
   error handling and threading</li>
 </ul>
+<h3>Supported platforms</h3>
 <p>All code has been tested on the following platforms using boost 
-distribution 1.31.0:</p>
+distribution 1.32.0:</p>
 <ul>
   <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
+  <li>Intel 8.1 (Win32, MS Visual Studio 2003 std library)</li>
   <li>GCC 3.3.1 (MinGW)</li>
 </ul>
 <p>In addition, the previous version of the library has also been tested on 
@@ -66,22 +68,22 @@ been tested yet):</p>
   Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
   <li>Intel 8.0 (Win32, MS Visual Studio 2003 std library)</li>
 </ul>
+<h3>Future directions</h3>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
 <ol>
   <li>Implement regression tests</li>
-	<li>Improve performance for state machines that use <code>
-	null_exception_translator</code></li>
-  <li>Design a facility allowing to specially handle events that did not 
+	<li>Improve performance for state machines that use <code>null_exception_translator</code></li>
+	<li>Design a facility allowing to specially handle events that did not 
   trigger a reaction</li>
-  <li>Implement <code>priority_scheduler&lt;&gt;</code></li>
-  <li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
-  <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
+	<li>Implement <code>priority_scheduler&lt;&gt;</code></li>
+	<li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
+  	<code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
   no longer make (indirect) calls to global <code>operator new()</code> and
-  <code>operator delete()</code></li>
-  <li>Investigate whether <code>fifo_worker&lt;&gt;</code> should accept a policy 
+  	<code>operator delete()</code></li>
+	<li>Investigate whether <code>fifo_worker&lt;&gt;</code> should accept a policy 
   parameter defining how to lock and wait</li>
-  <li>Refactor the <code>state_machine</code> class template to reduce code 
+	<li>Refactor the <code>state_machine</code> class template to reduce code 
   size in applications with many different state machines</li>
 </ol>
 <p>boost::fsm has been submitted for formal review. <b>All feedback is highly 
@@ -105,6 +107,16 @@ welcome!</b></p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>25 November, 2004</p>
+<ul>
+	<li>Adapted to the changes in the 1.32.0 distribution (mainly MPL 
+	changes). The library no longer works with 1.31.0</li>
+	<li>Fixed a bug that led to a failing runtime assert during state machine 
+	destruction</li>
+	<li>Fixed a bug that led to events deferred in a composite state not being 
+	released when that state was left</li>
+	<li>Added TransitionTest and DeferralTest</li>
+</ul>
 <p>19 October, 2004</p>
 <ul>
 	<li><b>Breaking change</b>: Out of the box, a state machine no longer uses
@@ -265,7 +277,7 @@ welcome!</b></p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38692" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39364" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
