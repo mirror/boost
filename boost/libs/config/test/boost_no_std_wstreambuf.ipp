@@ -49,8 +49,8 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
    typedef typename parser_buf<charT, traits>::pos_type pos_type;
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   std::ptrdiff_t size = this->egptr() - this->eback();
-   std::ptrdiff_t pos = this->gptr() - this->eback();
+   int size = this->egptr() - this->eback();
+   int pos = this->gptr() - this->eback();
    charT* g = this->eback();
    switch(way)
    {
@@ -66,7 +66,7 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
          this->setg(g, g + size - off, g + size);
    case ::std::ios_base::cur:
    {
-      std::ptrdiff_t newpos = pos + off;
+      int newpos = pos + off;
       if((newpos < 0) || (newpos > size))
          return pos_type(off_type(-1));
       else
@@ -82,7 +82,7 @@ parser_buf<charT, traits>::seekpos(pos_type sp, ::std::ios_base::openmode which)
 {
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   std::ptrdiff_t size = this->egptr() - this->eback();
+   int size = this->egptr() - this->eback();
    charT* g = this->eback();
    if(sp <= size)
    {
