@@ -96,6 +96,7 @@ vc6-re300_clean :
 	del vc6\vc6-re300\*.obj
 	del vc6\vc6-re300\*.idb
 	del vc6\vc6-re300\*.exp
+	del vc6\vc6-re300\*.pch
 
 ./vc6/vc6-re300.lib : vc6/vc6-re300/c_regex_traits.obj vc6/vc6-re300/c_regex_traits_common.obj vc6/vc6-re300/cpp_regex_traits.obj vc6/vc6-re300/cregex.obj vc6/vc6-re300/fileiter.obj vc6/vc6-re300/posix_api.obj vc6/vc6-re300/regex.obj vc6/vc6-re300/regex_debug.obj vc6/vc6-re300/regex_synch.obj vc6/vc6-re300/w32_regex_traits.obj vc6/vc6-re300/wide_posix_api.obj
 	link -lib /nologo /out:vc6/vc6-re300.lib $(XSFLAGS)  vc6/vc6-re300/c_regex_traits.obj vc6/vc6-re300/c_regex_traits_common.obj vc6/vc6-re300/cpp_regex_traits.obj vc6/vc6-re300/cregex.obj vc6/vc6-re300/fileiter.obj vc6/vc6-re300/posix_api.obj vc6/vc6-re300/regex.obj vc6/vc6-re300/regex_debug.obj vc6/vc6-re300/regex_synch.obj vc6/vc6-re300/w32_regex_traits.obj vc6/vc6-re300/wide_posix_api.obj
@@ -145,6 +146,7 @@ vc6-re300m_clean :
 	del vc6\vc6-re300m\*.obj
 	del vc6\vc6-re300m\*.idb
 	del vc6\vc6-re300m\*.exp
+	del vc6\vc6-re300m\*.pch
 
 ./vc6/vc6-re300m.lib : vc6/vc6-re300m/c_regex_traits.obj vc6/vc6-re300m/c_regex_traits_common.obj vc6/vc6-re300m/cpp_regex_traits.obj vc6/vc6-re300m/cregex.obj vc6/vc6-re300m/fileiter.obj vc6/vc6-re300m/posix_api.obj vc6/vc6-re300m/regex.obj vc6/vc6-re300m/regex_debug.obj vc6/vc6-re300m/regex_synch.obj vc6/vc6-re300m/w32_regex_traits.obj vc6/vc6-re300m/wide_posix_api.obj
 	link -lib /nologo /out:vc6/vc6-re300m.lib $(XSFLAGS)  vc6/vc6-re300m/c_regex_traits.obj vc6/vc6-re300m/c_regex_traits_common.obj vc6/vc6-re300m/cpp_regex_traits.obj vc6/vc6-re300m/cregex.obj vc6/vc6-re300m/fileiter.obj vc6/vc6-re300m/posix_api.obj vc6/vc6-re300m/regex.obj vc6/vc6-re300m/regex_debug.obj vc6/vc6-re300m/regex_synch.obj vc6/vc6-re300m/w32_regex_traits.obj vc6/vc6-re300m/wide_posix_api.obj
@@ -194,6 +196,7 @@ vc6-re300d_clean :
 	del vc6\vc6-re300d\*.obj
 	del vc6\vc6-re300d\*.idb
 	del vc6\vc6-re300d\*.exp
+	del vc6\vc6-re300d\*.pch
 
 ./vc6/vc6-re300d.lib : vc6/vc6-re300d/c_regex_traits.obj vc6/vc6-re300d/c_regex_traits_common.obj vc6/vc6-re300d/cpp_regex_traits.obj vc6/vc6-re300d/cregex.obj vc6/vc6-re300d/fileiter.obj vc6/vc6-re300d/posix_api.obj vc6/vc6-re300d/regex.obj vc6/vc6-re300d/regex_debug.obj vc6/vc6-re300d/regex_synch.obj vc6/vc6-re300d/w32_regex_traits.obj vc6/vc6-re300d/wide_posix_api.obj
 	link -lib /nologo /out:vc6/vc6-re300d.lib $(XSFLAGS)  vc6/vc6-re300d/c_regex_traits.obj vc6/vc6-re300d/c_regex_traits_common.obj vc6/vc6-re300d/cpp_regex_traits.obj vc6/vc6-re300d/cregex.obj vc6/vc6-re300d/fileiter.obj vc6/vc6-re300d/posix_api.obj vc6/vc6-re300d/regex.obj vc6/vc6-re300d/regex_debug.obj vc6/vc6-re300d/regex_synch.obj vc6/vc6-re300d/w32_regex_traits.obj vc6/vc6-re300d/wide_posix_api.obj
@@ -243,6 +246,7 @@ vc6-re300dm_clean :
 	del vc6\vc6-re300dm\*.obj
 	del vc6\vc6-re300dm\*.idb
 	del vc6\vc6-re300dm\*.exp
+	del vc6\vc6-re300dm\*.pch
 
 ./vc6/vc6-re300dm.lib : vc6/vc6-re300dm/c_regex_traits.obj vc6/vc6-re300dm/c_regex_traits_common.obj vc6/vc6-re300dm/cpp_regex_traits.obj vc6/vc6-re300dm/cregex.obj vc6/vc6-re300dm/fileiter.obj vc6/vc6-re300dm/posix_api.obj vc6/vc6-re300dm/regex.obj vc6/vc6-re300dm/regex_debug.obj vc6/vc6-re300dm/regex_synch.obj vc6/vc6-re300dm/w32_regex_traits.obj vc6/vc6-re300dm/wide_posix_api.obj
 	link -lib /nologo /out:vc6/vc6-re300dm.lib $(XSFLAGS)  vc6/vc6-re300dm/c_regex_traits.obj vc6/vc6-re300dm/c_regex_traits_common.obj vc6/vc6-re300dm/cpp_regex_traits.obj vc6/vc6-re300dm/cregex.obj vc6/vc6-re300dm/fileiter.obj vc6/vc6-re300dm/posix_api.obj vc6/vc6-re300dm/regex.obj vc6/vc6-re300dm/regex_debug.obj vc6/vc6-re300dm/regex_synch.obj vc6/vc6-re300dm/w32_regex_traits.obj vc6/vc6-re300dm/wide_posix_api.obj
@@ -292,6 +296,7 @@ vc6-re300dl_clean :
 	del vc6\vc6-re300dl\*.obj
 	del vc6\vc6-re300dl\*.idb
 	del vc6\vc6-re300dl\*.exp
+	del vc6\vc6-re300dl\*.pch
 
 ./vc6/vc6-re300dl.lib : vc6/vc6-re300dl/c_regex_traits.obj vc6/vc6-re300dl/c_regex_traits_common.obj vc6/vc6-re300dl/cpp_regex_traits.obj vc6/vc6-re300dl/cregex.obj vc6/vc6-re300dl/fileiter.obj vc6/vc6-re300dl/posix_api.obj vc6/vc6-re300dl/regex.obj vc6/vc6-re300dl/regex_debug.obj vc6/vc6-re300dl/regex_synch.obj vc6/vc6-re300dl/w32_regex_traits.obj vc6/vc6-re300dl/wide_posix_api.obj
 	link @<<
@@ -343,9 +348,11 @@ vc6-re300l_clean :
 	del vc6\vc6-re300l\*.obj
 	del vc6\vc6-re300l\*.idb
 	del vc6\vc6-re300l\*.exp
+	del vc6\vc6-re300l\*.pch
 
 ./vc6/vc6-re300l.lib : vc6/vc6-re300l/c_regex_traits.obj vc6/vc6-re300l/c_regex_traits_common.obj vc6/vc6-re300l/cpp_regex_traits.obj vc6/vc6-re300l/cregex.obj vc6/vc6-re300l/fileiter.obj vc6/vc6-re300l/posix_api.obj vc6/vc6-re300l/regex.obj vc6/vc6-re300l/regex_debug.obj vc6/vc6-re300l/regex_synch.obj vc6/vc6-re300l/w32_regex_traits.obj vc6/vc6-re300l/wide_posix_api.obj
 	link @<<
 	kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"vc6/vc6-re300l.pdb" /debug /machine:I386 /out:"vc6/vc6-re300l.dll" /implib:"vc6/vc6-re300l.lib" /pdbtype:sept $(XLFLAGS)  vc6/vc6-re300l/c_regex_traits.obj vc6/vc6-re300l/c_regex_traits_common.obj vc6/vc6-re300l/cpp_regex_traits.obj vc6/vc6-re300l/cregex.obj vc6/vc6-re300l/fileiter.obj vc6/vc6-re300l/posix_api.obj vc6/vc6-re300l/regex.obj vc6/vc6-re300l/regex_debug.obj vc6/vc6-re300l/regex_synch.obj vc6/vc6-re300l/w32_regex_traits.obj vc6/vc6-re300l/wide_posix_api.obj
 <<
+
 

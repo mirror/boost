@@ -61,6 +61,7 @@ EOF
 	echo "	del $subdir\\$libname\\"'*.obj' >> $tout
 	echo "	del $subdir\\$libname\\"'*.idb' >> $tout
 	echo "	del $subdir\\$libname\\"'*.exp' >> $tout
+	echo "	del $subdir\\$libname\\"'*.pch' >> $tout
 	echo "" >> $tout
 #
 #	 now for the main target for this library:
@@ -110,6 +111,7 @@ EOF
 	echo "	del $subdir\\$libname\\"'*.obj' >> $tout
 	echo "	del $subdir\\$libname\\"'*.idb' >> $tout
 	echo "	del $subdir\\$libname\\"'*.exp' >> $tout
+	echo "	del $subdir\\$libname\\"'*.pch' >> $tout
 	echo "" >> $tout
 #
 #	 now for the main target for this library:
@@ -674,6 +676,7 @@ bcb_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 
