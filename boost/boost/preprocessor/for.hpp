@@ -48,7 +48,20 @@ BOOST_PP_FOR##R() directly. For each macro implemented using BOOST_PP_FOR(),
 there is a version of the macro, distinguished by the _R suffix, that accepts
 an additional recursion depth as the first parameter. This technique is
 necessary to avoid recursively expanding the same macro again, which is not
-permitted by the C/C++ preprocessor.
+permitted by the C++ preprocessor.
+
+<H3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</H3>
+
+BOOST_PP_FOR() is a generalization of BOOST_PP_REPEAT(). This means that
+BOOST_PP_REPEAT() can be implemented using BOOST_PP_FOR(). Unfortunately,
+BOOST_PP_FOR() is slower than BOOST_PP_REPEAT(). In addition,
+BOOST_PP_REPEAT() was introduced earlier, is generally easier to use, and is
+still quite useful on its own.
+
+<H3>2D and 3D repetition</H3>
+
+BOOST_PP_FOR() can be used for multidimensional repetition simply by invoking
+BOOST_PP_FOR##R() directly.
 */
 #define BOOST_PP_FOR(X,C,F,I) BOOST_PP_FOR0(X,C,F,I)
 
