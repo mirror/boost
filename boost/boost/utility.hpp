@@ -63,6 +63,32 @@ namespace boost
         const noncopyable& operator=( const noncopyable& );
     }; // noncopyable
 
+//  class tied  -------------------------------------------------------//
+
+    // A helper for conveniently assigning the two values from a pair
+    // into separate variables. The idea for this comes from Jaakko J„rvi's
+    // Binder/Lambda Library.
+
+    // Constributed by Jeremy Siek
+
+    template <class A, class B>
+    class tied {
+    public:
+      inline tied(A& a, B& b) : _a(a), _b(b) { }
+      template <class U, class V>
+      inline tied& operator=(const std::pair<U,V>& p) {
+	_a = p.first;
+	_b = p.second;
+	return *this;
+      }
+    protected:
+      A& _a;
+      B& _b;
+    };
+
+    template <class A, class B>
+    inline tied<A,B> tie(A& a, B& b) { return tied<A,B>(a, b); }
+
 } // namespace boost
 
 #endif  // BOOST_UTILITY_HPP
