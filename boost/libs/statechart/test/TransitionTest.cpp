@@ -22,8 +22,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <sstream>
 #include <algorithm>
+#include <stdexcept>
 
 
 
@@ -32,34 +32,70 @@ namespace mpl = boost::mpl;
 
 
 
-typedef std::vector< std::string > ActionDescriptionSequence;
+typedef std::string ActionDescription();
+typedef ActionDescription * ActionDescriptionPtr;
+typedef std::vector< ActionDescriptionPtr > ActionDescriptionSequence;
+typedef ActionDescriptionSequence::const_iterator SequenceIterator;
 typedef void Action( ActionDescriptionSequence & );
 typedef Action * ActionPtr;
-const int maxSequenceLength = 30;
-typedef ActionPtr ActionSequence[ maxSequenceLength ];
 
-const std::string entry = "Entry: ";
+template< class State >
+std::string EntryDescription()
+{
+  static const std::string entry = "Entry: ";
+  return entry + typeid( State ).name() + "\n";
+}
+
+template< class State >
+std::string ExitFnDescription()
+{
+  static const std::string exitFunction = "exit(): ";
+  return exitFunction + typeid( State ).name() + "\n";
+}
+
+template< class State >
+std::string DtorDescription()
+{
+  static const std::string destructor = "Destructor: ";
+  return destructor + typeid( State ).name() + "\n";
+}
+
+template< class Context, class Event >
+std::string TransDescription()
+{
+  static const std::string transition = "Transition: ";
+  static const std::string event = " with Event: ";
+  return transition + typeid( Context ).name() +
+    event + typeid( Event ).name() + "\n";
+}
+
+template< ActionPtr pAction >
+std::string ThrowDescription()
+{
+  static const std::string throwing = "Throwing exception in ";
+  static ActionDescriptionSequence dummy;
+  dummy.clear();
+  pAction( dummy );
+  return throwing + dummy.front()();
+}
+
 
 template< class State >
 void Entry( ActionDescriptionSequence & sequence )
 {
-  sequence.push_back( entry + typeid( State ).name() );
+  sequence.push_back( EntryDescription< State > );
 }
-
-const std::string exitFunction = "exit(): ";
 
 template< class State >
 void ExitFn( ActionDescriptionSequence & sequence )
 {
-  sequence.push_back( exitFunction + typeid( State ).name() );
+  sequence.push_back( ExitFnDescription< State > );
 }
-
-const std::string destructor = "Destructor: ";
 
 template< class State >
 void Dtor( ActionDescriptionSequence & sequence )
 {
-  sequence.push_back( destructor + typeid( State ).name() );
+  sequence.push_back( DtorDescription< State > );
 }
 
 template< class State >
@@ -69,15 +105,27 @@ void Exit( ActionDescriptionSequence & sequence )
   Dtor< State >( sequence );
 }
 
-const std::string transition = "Transition: ";
-const std::string event = " with Event: ";
-
 template< class Context, class Event >
 void Trans( ActionDescriptionSequence & sequence )
 {
-  return sequence.push_back( 
-    transition + typeid( Context ).name() + event + typeid( Event ).name() );
+  sequence.push_back( TransDescription< Context, Event > );
 }
+
+template< ActionPtr pAction >
+void Throw( ActionDescriptionSequence & sequence )
+{
+  sequence.push_back( ThrowDescription< pAction > );
+}
+
+const int arrayLength = 30;
+typedef ActionPtr ActionArray[ arrayLength ];
+
+
+class TransitionTestException : public std::runtime_error
+{
+  public:
+    TransitionTestException() : std::runtime_error( "Oh la la!" ) {}
+};
 
 
 // This test state machine is a beefed-up version of the one presented in
@@ -95,7 +143,10 @@ struct H : fsm::event< H > {};
 struct S0;
 struct TransitionTest : fsm::state_machine< TransitionTest, S0 >
 {
+  public:
     //////////////////////////////////////////////////////////////////////////
+    TransitionTest() : pThrowAction_( 0 ) {}
+
     ~TransitionTest()
     {
       // Since state destructors access the state machine object, we need to
@@ -104,12 +155,13 @@ struct TransitionTest : fsm::state_machine< TransitionTest, S0 >
       terminate();
     }
 
-    void CompareToExpectedActionSequence( ActionSequence & actions )
+    void CompareToExpectedActionSequence( ActionArray & actions )
     {
       expectedSequence_.clear();
 
+      // Copy all non-null pointers in actions into expectedSequence_
       for ( ActionPtr * pCurrent = &actions[ 0 ];
-        ( pCurrent != &actions[ maxSequenceLength ] ) && ( *pCurrent != 0 );
+        ( pCurrent != &actions[ arrayLength ] ) && ( *pCurrent != 0 );
         ++pCurrent )
       {
         ( *pCurrent )( expectedSequence_ );
@@ -119,53 +171,79 @@ struct TransitionTest : fsm::state_machine< TransitionTest, S0 >
         !std::equal( expectedSequence_.begin(),
           expectedSequence_.end(), actualSequence_.begin() ) )
       {
-        std::stringstream stream;
-        stream << "\nExpected action sequence:\n";
-        std::copy(
-          expectedSequence_.begin(), expectedSequence_.end(),
-          std::ostream_iterator< std::string >( stream, "\n" ) );
-        stream << "\nActual action sequence:\n";
-        std::copy(
-          actualSequence_.begin(), actualSequence_.end(),
-          std::ostream_iterator< std::string >( stream, "\n" ) );
+        std::string message = "\nExpected action sequence:\n";
 
-        BOOST_FAIL( stream.str().c_str() );
+        for ( SequenceIterator pExpected = expectedSequence_.begin();
+          pExpected != expectedSequence_.end(); ++pExpected )
+        {
+          message += ( *pExpected )();
+        }
+
+        message += "\nActual action sequence:\n";
+
+        for ( SequenceIterator pActual = actualSequence_.begin();
+          pActual != actualSequence_.end(); ++pActual )
+        {
+          message += ( *pActual )();
+        }
+
+        BOOST_FAIL( message.c_str() );
       }
 
       actualSequence_.clear();
     }
 
+    void ClearActualSequence()
+    {
+      actualSequence_.clear();
+    }
+
+    void ThrowAction( ActionPtr pThrowAction )
+    {
+      pThrowAction_ = pThrowAction;
+    }
+
     template< class State >
     void ActualEntry()
     {
-      StoreActualAction( &::Entry< State > );
+      StoreActualAction< &::Entry< State > >();
     }
 
     template< class State >
     void ActualExitFunction()
     {
-      StoreActualAction( &::ExitFn< State > );
+      StoreActualAction< &::ExitFn< State > >();
     }
     
     template< class State >
     void ActualDestructor()
     {
-      StoreActualAction( &::Dtor< State > );
+      StoreActualAction< &::Dtor< State > >();
     }
     
     template< class Context, class Event >
     void ActualTransition()
     {
-      StoreActualAction( &::Trans< Context, Event > );
+      StoreActualAction< &::Trans< Context, Event > >();
     }
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    void StoreActualAction( ActionPtr pAction )
+    template< ActionPtr pAction >
+    void StoreActualAction()
     {
-      pAction( actualSequence_ );
+      if ( pAction == pThrowAction_ )
+      {
+        Throw< pAction >( actualSequence_ );
+        throw TransitionTestException();
+      }
+      else
+      {
+        pAction( actualSequence_ );
+      }
     }
 
+    ActionPtr pThrowAction_;
     ActionDescriptionSequence actualSequence_;
     ActionDescriptionSequence expectedSequence_;
 };
@@ -235,8 +313,7 @@ int test_main( int, char* [] )
   TransitionTest machine;
 
   machine.initiate();
-
-  ActionSequence init = 
+  ActionArray init = 
   {
     Entry< S0 >,
     Entry< S1 >,
@@ -246,11 +323,10 @@ int test_main( int, char* [] )
     Entry< Default1< S0 > >,
     Entry< Default2< S0 > >
   };
-
   machine.CompareToExpectedActionSequence( init );
-  machine.process_event( A() );
 
-  ActionSequence a1 =
+  machine.process_event( A() );
+  ActionArray a1 =
   {
     Exit< Default2< S1 > >,
     Exit< S11 >,
@@ -262,11 +338,10 @@ int test_main( int, char* [] )
     Entry< S11 >,
     Entry< Default2< S1 > >
   };
-
   machine.CompareToExpectedActionSequence( a1 );
-  machine.process_event( B() );
 
-  ActionSequence b1 =
+  machine.process_event( B() );
+  ActionArray b1 =
   {
     Exit< Default2< S1 > >,
     Exit< S11 >,
@@ -278,11 +353,10 @@ int test_main( int, char* [] )
     Entry< S11 >,
     Entry< Default2< S1 > >
   };
-
   machine.CompareToExpectedActionSequence( b1 );
-  machine.process_event( C() );
 
-  ActionSequence c1 =
+  machine.process_event( C() );
+  ActionArray c1 =
   {
     Exit< Default2< S1 > >,
     Exit< S11 >,
@@ -297,11 +371,10 @@ int test_main( int, char* [] )
     Entry< S211 >,
     Entry< Default2< S21 > >
   };
-
   machine.CompareToExpectedActionSequence( c1 );
-  machine.process_event( D() );
 
-  ActionSequence d2 =
+  machine.process_event( D() );
+  ActionArray d2 =
   {
     Exit< Default2< S21 > >,
     Exit< S211 >,
@@ -313,11 +386,10 @@ int test_main( int, char* [] )
     Entry< S211 >,
     Entry< Default2< S21 > >
   };
-
   machine.CompareToExpectedActionSequence( d2 );
-  machine.process_event( E() );
 
-  ActionSequence e2 =
+  machine.process_event( E() );
+  ActionArray e2 =
   {
     Exit< Default2< S0 > >,
     Exit< Default1< S0 > >,
@@ -340,11 +412,10 @@ int test_main( int, char* [] )
     Entry< Default1< S0 > >,
     Entry< Default2< S0 > >
   };
-
   machine.CompareToExpectedActionSequence( e2 );
-  machine.process_event( F() );
 
-  ActionSequence f2 =
+  machine.process_event( F() );
+  ActionArray f2 =
   {
     Exit< Default2< S21 > >,
     Exit< S211 >,
@@ -359,11 +430,10 @@ int test_main( int, char* [] )
     Entry< S11 >,
     Entry< Default2< S1 > >
   };
-
   machine.CompareToExpectedActionSequence( f2 );
-  machine.process_event( G() );
 
-  ActionSequence g1 =
+  machine.process_event( G() );
+  ActionArray g1 =
   {
     Exit< Default2< S1 > >,
     Exit< S11 >,
@@ -378,11 +448,10 @@ int test_main( int, char* [] )
     Entry< S211 >,
     Entry< Default2< S21 > >
   };
-
   machine.CompareToExpectedActionSequence( g1 );
-  machine.process_event( H() );
 
-  ActionSequence h2 =
+  machine.process_event( H() );
+  ActionArray h2 =
   {
     Exit< Default2< S21 > >,
     Exit< S211 >,
@@ -394,18 +463,16 @@ int test_main( int, char* [] )
     Entry< S211 >,
     Entry< Default2< S21 > >
   };
-
   machine.CompareToExpectedActionSequence( h2 );
-  machine.process_event( A() );
 
-  ActionSequence a2 =
+  machine.process_event( A() );
+  ActionArray a2 =
   {
   };
-
   machine.CompareToExpectedActionSequence( a2 );
-  machine.process_event( B() );
 
-  ActionSequence b2 =
+  machine.process_event( B() );
+  ActionArray b2 =
   {
     Exit< Default2< S21 > >,
     Exit< S211 >,
@@ -417,11 +484,10 @@ int test_main( int, char* [] )
     Entry< S211 >,
     Entry< Default2< S21 > >
   };
-
   machine.CompareToExpectedActionSequence( b2 );
-  machine.process_event( C() );
 
-  ActionSequence c2 =
+  machine.process_event( C() );
+  ActionArray c2 =
   {
     Exit< Default2< S21 > >,
     Exit< S211 >,
@@ -436,11 +502,10 @@ int test_main( int, char* [] )
     Entry< S11 >,
     Entry< Default2< S1 > >
   };
-
   machine.CompareToExpectedActionSequence( c2 );
-  machine.process_event( D() );
 
-  ActionSequence d1 = 
+  machine.process_event( D() );
+  ActionArray d1 = 
   {
     Exit< Default2< S0 > >,
     Exit< Default1< S0 > >,
@@ -457,11 +522,10 @@ int test_main( int, char* [] )
     Entry< Default1< S0 > >,
     Entry< Default2< S0 > >
   };
-
   machine.CompareToExpectedActionSequence( d1 );
-  machine.process_event( F() );
 
-  ActionSequence f1 =
+  machine.process_event( F() );
+  ActionArray f1 =
   {
     Exit< Default2< S1 > >,
     Exit< S11 >,
@@ -476,11 +540,10 @@ int test_main( int, char* [] )
     Entry< S211 >,
     Entry< Default2< S21 > >
   };
-
   machine.CompareToExpectedActionSequence( f1 );
-  machine.process_event( G() );
 
-  ActionSequence g2 =
+  machine.process_event( G() );
+  ActionArray g2 =
   {
     Exit< Default2< S0 > >,
     Exit< Default1< S0 > >,
@@ -500,19 +563,17 @@ int test_main( int, char* [] )
     Entry< Default1< S0 > >,
     Entry< Default2< S0 > >
   };
-
   machine.CompareToExpectedActionSequence( g2 );
-  machine.process_event( H() );
 
-  ActionSequence h1 =
+  machine.process_event( H() );
+  ActionArray h1 =
   {
     Trans< S11, H >
   };
-
   machine.CompareToExpectedActionSequence( h1 );
-  machine.process_event( E() );
 
-  ActionSequence e1 =
+  machine.process_event( E() );
+  ActionArray e1 =
   {
     Exit< Default2< S0 > >,
     Exit< Default1< S0 > >,
@@ -532,11 +593,10 @@ int test_main( int, char* [] )
     Entry< Default1< S0 > >,
     Entry< Default2< S0 > >
   };
-
   machine.CompareToExpectedActionSequence( e1 );
-  machine.terminate();
 
-  ActionSequence term =
+  machine.terminate();
+  ActionArray term =
   {
     Exit< Default2< S0 > >,
     Exit< Default1< S0 > >,
@@ -549,7 +609,96 @@ int test_main( int, char* [] )
     Exit< S2 >,
     Exit< S0 >
   };
-
   machine.CompareToExpectedActionSequence( term );
+
+  machine.ThrowAction( Entry< Default0< S1 > > );
+  // TODO: Replace with BOOST_REQUIRE_THROW, as soon as available
+  BOOST_CHECK_THROW( machine.initiate(), TransitionTestException );
+  ActionArray initThrow1 = 
+  {
+    Entry< S0 >,
+    Entry< S1 >,
+    Throw< Entry< Default0< S1 > > >,
+    Dtor< S1 >,
+    Dtor< S0 >
+  };
+  machine.CompareToExpectedActionSequence( initThrow1 );
+  BOOST_REQUIRE( machine.terminated() );
+
+  machine.ThrowAction( Entry< S11 > );
+  // TODO: Replace with BOOST_REQUIRE_THROW, as soon as available
+  BOOST_CHECK_THROW( machine.initiate(), TransitionTestException );
+  ActionArray initThrow2 = 
+  {
+    Entry< S0 >,
+    Entry< S1 >,
+    Entry< Default0< S1 > >,
+    Throw< Entry< S11 > >,
+    Dtor< Default0< S1 > >,
+    Dtor< S1 >,
+    Dtor< S0 >
+  };
+  machine.CompareToExpectedActionSequence( initThrow2 );
+  BOOST_REQUIRE( machine.terminated() );
+
+  machine.ThrowAction( Trans< S0, A > );
+  machine.initiate();
+  BOOST_CHECK_THROW( machine.process_event( A() ), TransitionTestException );
+  ActionArray a1Throw1 =
+  {
+    Entry< S0 >,
+    Entry< S1 >,
+    Entry< Default0< S1 > >,
+    Entry< S11 >,
+    Entry< Default2< S1 > >,
+    Entry< Default1< S0 > >,
+    Entry< Default2< S0 > >,
+    Exit< Default2< S1 > >,
+    Exit< S11 >,
+    Exit< Default0< S1 > >,
+    Exit< S1 >,
+    Throw< Trans< S0, A > >,
+    Dtor< Default2< S0 > >,
+    Dtor< Default1< S0 > >,
+    Dtor< S0 >
+  };
+  machine.CompareToExpectedActionSequence( a1Throw1 );
+  BOOST_REQUIRE( machine.terminated() );
+
+  machine.ThrowAction( Entry< S211 > );
+  machine.initiate();
+  BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
+  ActionArray c1Throw =
+  {
+    Entry< S0 >,
+    Entry< S1 >,
+    Entry< Default0< S1 > >,
+    Entry< S11 >,
+    Entry< Default2< S1 > >,
+    Entry< Default1< S0 > >,
+    Entry< Default2< S0 > >,
+    Exit< Default2< S1 > >,
+    Exit< S11 >,
+    Exit< Default0< S1 > >,
+    Exit< S1 >,
+    Trans< S0, C >,
+    Entry< S2 >,
+    Entry< Default0< S2 > >,
+    Entry< Default1< S2 > >,
+    Entry< S21 >,
+    Entry< Default0< S21 > >,
+    Throw< Entry< S211 > >,
+    Dtor< Default2< S0 > >,
+    Dtor< Default1< S0 > >,
+    Dtor< Default0< S21 > >,
+    Dtor< S21 >,
+    Dtor< Default1< S2 > >,
+    Dtor< Default0< S2 > >,
+    Dtor< S2 >,
+    Dtor< S0 >
+  };
+  machine.CompareToExpectedActionSequence( c1Throw );
+  BOOST_REQUIRE( machine.terminated() );
+
   return 0;
 }
