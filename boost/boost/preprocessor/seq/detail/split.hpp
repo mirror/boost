@@ -13,6 +13,8 @@
 # ifndef BOOST_PREPROCESSOR_SEQ_DETAIL_SPLIT_HPP
 # define BOOST_PREPROCESSOR_SEQ_DETAIL_SPLIT_HPP
 #
+# include <boost/preprocessor/config/config.hpp>
+#
 # /* BOOST_PP_SEQ_SPLIT */
 #
 # define BOOST_PP_SEQ_SPLIT(n, seq) BOOST_PP_SEQ_SPLIT_D(n, seq)
