@@ -18,7 +18,7 @@ RandonAccessIterator foo(RandonAccessIterator from, RandonAccessIterator to)
    // this template can only be used with
    // random access iterators...
    typedef typename std::iterator_traits< RandonAccessIterator >::iterator_category cat;
-   BOOST_STATIC_ASSERT((boost::is_convertible<cat, const std::random_access_iterator_tag&>::value));
+   BOOST_STATIC_ASSERT((boost::is_convertible<cat*, std::random_access_iterator_tag*>::value));
    //
    // detail goes here...
    return from;
@@ -35,3 +35,4 @@ int main()
 
 
  
+
