@@ -10,6 +10,7 @@
 
 #include <boost/config.hpp>
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <boost/iterator_adaptors.hpp>
 
@@ -22,7 +23,7 @@ int main()
   int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
   const int N = sizeof(numbers)/sizeof(int);
 
-  // Example using make_filter_iterator
+  // Example using make_filter_iterator()
   std::copy(boost::make_filter_iterator<is_positive_number>(numbers, numbers + N),
 	    boost::make_filter_iterator<is_positive_number>(numbers + N, numbers + N),
 	    std::ostream_iterator<int>(std::cout, " "));
@@ -36,6 +37,14 @@ int main()
   Gen::type filter_iter_last(numbers + N, policies);
 
   std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator<int>(std::cout, " "));
+  std::cout << std::endl;
+
+  // Another example using make_filter_iterator()
+  std::copy(boost::make_filter_iterator(numbers, numbers + N, 
+					std::bind2nd(std::greater<int>(), -2)),
+	    boost::make_filter_iterator(numbers + N, numbers + N, 
+					std::bind2nd(std::greater<int>(), -2)),
+	    std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
   
   
