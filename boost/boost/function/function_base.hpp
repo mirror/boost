@@ -58,8 +58,8 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
-// Borland C++ 5.5.1 doesn't support enable_if
-#if defined(__BORLANDC__) && __BORLANDC__ <= 0x551 && !defined(BOOST_NO_CONFIG)
+// Borland C++ 5.6.0 doesn't support enable_if
+#if defined(__BORLANDC__) && __BORLANDC__ <= 0x560 && !defined(BOOST_NO_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
