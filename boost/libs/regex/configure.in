@@ -540,85 +540,6 @@ AC_MSG_RESULT(no)])
 fi
 
 
-AC_ARG_ENABLE(int64, [--disable-int64 turns off support for 64-bit integer types])
-if test "$enable_int64" = "no"; then
-AC_DEFINE(BOOST_RE_INT64_T_0)
-else
-
-AC_MSG_CHECKING(for 64-bit integral type)
-
-if test "$ac_cv_sizeof_short" -eq 8; then
-AC_DEFINE(BOOST_RE_INT64_T_1)
-AC_MSG_RESULT(yes - short)
-have_int64="true"
-fi
-if test "$ac_cv_sizeof_int" -eq 8 && test "$have_int64" != "true"; then
-AC_DEFINE(BOOST_RE_INT64_T_2)
-AC_MSG_RESULT(yes - int)
-have_int64="true"
-fi
-if test "$ac_cv_sizeof_long" -eq 8 && test "$have_int64" != "true"; then
-AC_DEFINE(BOOST_RE_INT64_T_3)
-AC_MSG_RESULT(yes - long)
-have_int64="true"
-fi
-if test "$have_int64" != "true"; then
-AC_TRY_COMPILE(
-[ 
-#include <inttypes.h>
-
-int64_t i = INT64_C(0x100000000);
-],
-[
-],
-[AC_MSG_RESULT(yes - int64_t)
-have_int64="true"
-AC_DEFINE(BOOST_RE_INT64_T_4)
-],
-[])
-fi
-
-if test "$have_int64" != "true"; then
-
-AC_TRY_COMPILE(
-[ 
-#include <stdlib.h>
-
-long long i = 0x100000000LL;
-],
-[
-],
-[AC_MSG_RESULT(yes - long long)
-have_int64="true"
-AC_DEFINE(BOOST_RE_INT64_T_5)
-],
-[])
-
-fi
-
-if test "$have_int64" != "true"; then
-
-AC_TRY_COMPILE(
-[ 
-#include <stdlib.h>
-
-__int64 i = 0x100000000i64;
-],
-[
-],
-[AC_MSG_RESULT(yes - __int64)
-have_int64="true"
-AC_DEFINE(BOOST_RE_INT64_T_6)
-],
-[])
-fi
-if test "$have_int64" != "true"; then
-AC_DEFINE(BOOST_RE_INT64_T,0)
-AC_MSG_RESULT(no)
-fi
-fi
-
-
 AC_ARG_ENABLE(messages, [--disable-messages turns off support for POSIX message categories, when available.])
 if test "$enable_messages" = "no" || test "$enable_ms_windows" != "no"; then
 AC_DEFINE(BOOST_RE_NO_CAT, [])
@@ -827,6 +748,10 @@ std::locale l;
 std::map<std::string, std::string> m;
 ],
 [
+if(std::has_facet<std::ctype<char> >(l))
+{
+	const std::ctype<char>& ct = std::use_facet<std::ctype<char> >(l);
+}
 ],
 [AC_MSG_RESULT(yes)
 ac_have_locale='yes'
@@ -1230,6 +1155,8 @@ cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 rm -f jm_opt.out
+
+
 
 
 

@@ -1,3 +1,12 @@
+Version 311:
+FIXED:    Support for STLPort 4.1b6.
+FIXED:    Library calling convention for VC6 debug builds.
+CHANGED:  Reorganised and simplified config setup.
+
+Version 310:
+ADDED:    Support for static linking with VC6 + dynamic runtime.
+CHANGED:  Library directory structure.
+
 Version 305:
 FIXED:    VC6.sp5 fix.
 ADDED:    Support for mixed static/dynamic linking with vc6.
@@ -213,6 +222,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 

@@ -306,11 +306,14 @@ struct debug_iterator
   }
 };
 
-#if defined(__SGI_STL_PORT)
+#if defined(__SGI_STL_PORT) 
 namespace std{
 template <class T>
-inline random_access_iterator_tag __STL_CALL
-__ITERATOR_CATEGORY(const debug_iterator<T>&) {
+#if __SGI_STL_PORT <= 0x400
+inline random_access_iterator_tag __STL_CALL __ITERATOR_CATEGORY(const debug_iterator<T>&) {
+#else
+inline random_access_iterator_tag __iterator_category(const debug_iterator<T>&) {
+#endif
   return random_access_iterator_tag();
 }
 }

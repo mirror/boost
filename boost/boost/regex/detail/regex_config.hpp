@@ -50,9 +50,6 @@ full list of macros and their usage.
 #include <clocale>
 #include <string>
 #include <boost/smart_ptr.hpp>
-#ifdef __CYGWIN__
-#include <sys/types.h>
-#endif
 #include <boost/cstdint.hpp>
 #else
 //
@@ -163,7 +160,11 @@ full list of macros and their usage.
 //
 // only want "real" Visual C++ here:
 #if defined(BOOST_MSVC) && !defined(__WATCOMC__) && !defined(__BORLANDC__) && !defined(__GNUC__) && !defined(__MWERKS__) && !defined (__ICL)
-   #define BOOST_RE_CALL __fastcall
+   #ifdef _DEBUG
+      #define BOOST_RE_CALL __cdecl
+   #else
+      #define BOOST_RE_CALL __fastcall
+#endif
    #define BOOST_RE_CCALL __stdcall
 
    #if BOOST_MSVC < 1100
@@ -362,33 +363,34 @@ full list of macros and their usage.
 #ifndef BOOST_RE_NO_ITERATOR_H
    #include <iterator>
 
-   #if defined(__SGI_STL_INTERNAL_ITERATOR_H) || defined(__SGI_STL_ITERATOR_H)
-
+   #if defined(__SGI_STL_INTERNAL_ITERATOR_H) || defined(_STLP_INTERNAL_ITERATOR_H) || defined(__SGI_STL_ITERATOR_H) || defined(__SGI_STL_PORT)
+               
       /* we are using SGI's STL
        some of these (std)
        may be guesswork: */
 
-      # if (!defined (__SGI_STL_OWN_IOSTREAMS) && !defined(__GLIBCPP__) && !defined(__STL_USE_NEW_IOSTREAMS)) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T)
+      # if (!defined (__SGI_STL_OWN_IOSTREAMS) && !defined(_STLP_OWN_IOSTREAMS) && !defined(__GLIBCPP__) && !defined(__STL_USE_NEW_IOSTREAMS)) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined(_STLP_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STLP_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T) || defined(__STLP_NO_MBSTATE_T)
          // Old IO streams:
          #define BOOST_RE_NO_LOCALE_H
          #define BOOST_RE_OLD_IOSTREAM
       #else
-         #ifdef __STL_NO_EXPLICIT_FUNCTION_TMPL_ARGS
+         #include <locale>
+         #if defined( __STL_NO_EXPLICIT_FUNCTION_TMPL_ARGS) || defined(_STLP_NO_EXPLICIT_FUNCTION_TMPL_ARGS)
             #define BOOST_RE_USE_FACET(l, m) (*std::_Use_facet<m >(l))
          #endif
       #endif
       #ifdef __BASTRING__
       	#define BOOST_RE_NO_WCSTRING
       #endif
-      #if !defined(__STL_MEMBER_TEMPLATE_CLASSES) ||  !defined(__STL_MEMBER_TEMPLATES)
+      #if !(defined(__STL_MEMBER_TEMPLATE_CLASSES) || defined(__STLP_MEMBER_TEMPLATE_CLASSES)) || !(defined(__STL_MEMBER_TEMPLATES) || defined(__STLP_MEMBER_TEMPLATES))
          #define BOOST_NO_MEMBER_TEMPLATES
       #endif
       #define BOOST_RE_NO_TYPEINFO
 
-      #ifdef __STL_NO_BOOL
+      #if defined(__STL_NO_BOOL) || defined(__STLP_NO_BOOL)
          #define BOOST_RE_NO_BOOL
       #endif
-      #ifdef __STL_LIMITED_DEFAULT_TEMPLATES
+      #if defined(__STL_LIMITED_DEFAULT_TEMPLATES) || defined(__STLP_LIMITED_DEFAULT_TEMPLATES)
          #define BOOST_RE_NO_TRICKY_DEFAULT_PARAM
          #define BOOST_RE_NO_STRING_DEF_ARGS  
       #endif
@@ -398,20 +400,17 @@ full list of macros and their usage.
 
       #define BOOST_RE_ALGO_INCLUDED
 
-      #if !defined( __STL_CLASS_PARTIAL_SPECIALIZATION) || !defined(__SGI_STL_PORT)
+      #if !(defined( __STL_CLASS_PARTIAL_SPECIALIZATION) || defined(__STLP_CLASS_PARTIAL_SPECIALIZATION)) || !defined(__SGI_STL_PORT)
          #define BOOST_NO_STD_DISTANCE
       #endif
 
-      #if defined(__STL_USE_STD_ALLOCATORS) || (defined(__SGI_STL_PORT ) && !defined(__STL_MEMBER_TEMPLATE_CLASSES) && !defined(__STL_MEMBER_TEMPLATES))
+      #if defined(__STL_USE_STD_ALLOCATORS) || (defined(__SGI_STL_PORT ) && !defined(__STL_MEMBER_TEMPLATE_CLASSES) && !defined(__STLP_MEMBER_TEMPLATE_CLASSES) && !defined(__STL_MEMBER_TEMPLATES) && !defined(__STLP_MEMBER_TEMPLATES))
          /* new style allocator's with nested template classes */
       #else  /* __STL_USE_STD_ALLOCATORS */
             #define BOOST_NO_STD_ALLOCATOR
       #endif /* __STL_USE_STD_ALLOCATORS */
 
       #define BOOST_RE_STL_DONE
-      #ifndef __SGI_STL_PORT
-         //#define BOOST_RE_NO_NOT_EQUAL
-      #endif
 
    #elif defined(_RWSTD_VER) || defined(__STD_ITERATOR__)
 
