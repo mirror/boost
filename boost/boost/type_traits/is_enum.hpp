@@ -111,7 +111,7 @@ BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,void const volatile,false)
 //
 // buggy is_convertible prevents working 
 // implementation of is_enum:
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_enum,T,BOOST_IS_ENUM(T))
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_enum,T,false)
 
 #endif
 
