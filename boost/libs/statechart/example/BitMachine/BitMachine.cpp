@@ -7,33 +7,35 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 5;
-#define CUSTOMIZE_MEMORY_MANAGEMENT
+#ifndef NO_OF_BITS
+#  define NO_OF_BITS 4
+#endif
+// #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
 // This program demonstrates the fact that measures must be taken to hide some
 // of the complexity (e.g. in separate .cpp file) of a boost::fsm state
 // machine once a certain size is reached.
-// For this purpose, a state machine with exactly 2^noOfBits states (i.e.
-// BitState< 0 > .. BitState< 2^noOfBits - 1 >) is generated. For the events
-// EvFlipBit< 0 > .. EvFlipBit< noOfBits - 1 > there is a transition from each
-// state to the state with the corresponding bit toggled. That is, there is a
-// total of 2^noOfBits * noOfBits transitions.
+// For this purpose, a state machine with exactly 2^NO_OF_BITS states (i.e.
+// BitState< 0 > .. BitState< 2^NO_OF_BITS - 1 >) is generated. For the events
+// EvFlipBit< 0 > .. EvFlipBit< NO_OF_BITS - 1 > there is a transition from
+// each state to the state with the corresponding bit toggled. That is, there
+// is a total of 2^NO_OF_BITS * NO_OF_BITS transitions.
 // E.g. if the state machine is currently in state BitState< 5 > and receives
 // EvFlipBit< 2 >, it transitions to state BitState< 1 >. If it is in
 // BitState< 15 > and receives EvFlipBit< 4 > it transitions to BitState< 31 >
 // etc.
 // The maximum size of such a state machine depends on your compiler. The
-// following table gives upper limits for noOfBits. From this, rough
+// following table gives upper limits for NO_OF_BITS. From this, rough
 // estimates for the maximum size of any "naively" implemented boost::fsm
 // machine (i.e. no attempt is made to hide inner state implementation in a
 // .cpp file) can be deduced.
 //
 // NOTE: Due to the fact that the amount of generated code more than
-// *doubles* each time noOfBits is *incremented*, build times on most
-// compilers soar when noOfBits > 6.
+// *doubles* each time NO_OF_BITS is *incremented*, build times on most
+// compilers soar when NO_OF_BITS > 6.
 //
-// Compiler      | max. noOfBits b | max. states s  |
+// Compiler      | max. NO_OF_BITS b | max. states s  |
 // --------------|-----------------|----------------|
 // MSVC 7.1      |      b < 7      |  64 < s < 128  |
 // GCC 3.2 (1)   |      b < 8      | 128 < s < 256  |
@@ -125,8 +127,8 @@ struct IDisplay
 
 namespace
 {
-  const unsigned int noOfStates = 1 << noOfBits;
-  const unsigned int noOfTransitions = noOfStates * noOfBits;
+  const unsigned int noOfStates = 1 << NO_OF_BITS;
+  const unsigned int noOfTransitions = noOfStates * NO_OF_BITS;
 
   // common prime factors of 2^n-1 for n in [1,8]
   const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
@@ -137,12 +139,12 @@ namespace
   ////////////////////////////////////////////////////////////////////////////
   void DisplayBits( unsigned int number )
   {
-    char buffer[ noOfBits + 1 ];
-    buffer[ noOfBits ] = 0;
+    char buffer[ NO_OF_BITS + 1 ];
+    buffer[ NO_OF_BITS ] = 0;
 
-    for ( unsigned int bit = 0; bit < noOfBits; ++bit )
+    for ( unsigned int bit = 0; bit < NO_OF_BITS; ++bit )
     {
-      buffer[ bit ] = number & ( 1 << ( noOfBits - bit - 1 ) ) ? '1' : '0';
+      buffer[ bit ] = number & ( 1 << ( NO_OF_BITS - bit - 1 ) ) ? '1' : '0';
     }
 
     std::cout << "Current state: " << std::setw( 4 ) <<
@@ -156,7 +158,7 @@ namespace
   }
 
   ////////////////////////////////////////////////////////////////////////////
-  boost::intrusive_ptr< const fsm::event_base > pFlipBitEvents[ noOfBits ];
+  boost::intrusive_ptr< const fsm::event_base > pFlipBitEvents[ NO_OF_BITS ];
 
   ////////////////////////////////////////////////////////////////////////////
   template< unsigned int arraySize >
@@ -239,7 +241,7 @@ struct FlipTransitionList
   private:
     //////////////////////////////////////////////////////////////////////////
     typedef mpl::fold<
-      mpl::range_c< unsigned int, 0, noOfBits >,
+      mpl::range_c< unsigned int, 0, NO_OF_BITS >,
       mpl::list<>, mpl::push_front< _, _ > >::type
       BitNumbers;
 
@@ -271,13 +273,13 @@ struct BitState :
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-  FillEventArray< noOfBits >();
+  FillEventArray< NO_OF_BITS >();
 
   std::cout << "boost::fsm BitMachine example\n";
   std::cout << "Machine configuration: " << noOfStates <<
     " states interconnected with " << noOfTransitions << " transitions.\n\n";
 
-  for ( unsigned int bit = 0; bit < noOfBits; ++bit )
+  for ( unsigned int bit = 0; bit < NO_OF_BITS; ++bit )
   {
     std::cout << bit - 0 << "<CR>: Flips bit " << bit - 0 << "\n";
   }
@@ -295,7 +297,7 @@ int main()
 
   while ( key != 'e' )
   {
-    if ( ( key >= '0' ) && ( key < static_cast< char >( '0' + noOfBits ) ) )
+    if ( ( key >= '0' ) && ( key < static_cast< char >( '0' + NO_OF_BITS ) ) )
     {
       bitMachine.process_event( *pFlipBitEvents[ key - '0' ] );
       ++eventsSentTotal;
@@ -307,7 +309,7 @@ int main()
       {
         case 'a':
         {
-          VisitAllStates< noOfBits - 1, true >( bitMachine );
+          VisitAllStates< NO_OF_BITS - 1, true >( bitMachine );
         }
         break;
 
@@ -325,7 +327,7 @@ int main()
 
           for ( unsigned int lap = 0; lap < noOfLaps; ++lap )
           {
-            VisitAllStates< noOfBits - 1, false >( bitMachine );
+            VisitAllStates< NO_OF_BITS - 1, false >( bitMachine );
           }
 
           #ifdef BOOST_NO_STDC_NAMESPACE

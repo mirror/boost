@@ -7,7 +7,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-#define USE_TWO_THREADS // ignored for single-threaded builds
+// #define USE_TWO_THREADS // ignored for single-threaded builds
 // #define CUSTOMIZE_MEMORY_MANAGEMENT
 //////////////////////////////////////////////////////////////////////////////
 // The following example program demonstrates the use of asynchronous state
