@@ -1,11 +1,14 @@
 
 subproject libs/program_options/test ;
 
+import testing ;
+
 rule program-options-test ( name )
 {
-    unit-test $(name) : $(name).cpp <lib>../build/boost_program_options
-	<lib>../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT) 
+    return [ 
+	run $(name).cpp <lib>../build/boost_program_options
+	<lib>../../test/build/boost_test_exec_monitor : :
+    : <include>$(BOOST_ROOT) ]
     ;
 }
 
