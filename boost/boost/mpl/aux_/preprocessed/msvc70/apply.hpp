@@ -49,10 +49,11 @@ template<
       typename F, typename T1
     >
 struct apply1
-    : F::template apply<
-          T1
-        >
 {
+    typedef typename F::template apply<
+        T1
+    >::type type;
+    
     enum { arity = 2 }; typedef F arg1;
  typedef T1 arg2;
  friend class apply1_rebind;
@@ -92,10 +93,10 @@ template<
       typename F, typename T1, typename T2
     >
 struct apply2
-    : F::template apply<
-          T1, T2
-        >
 {
+   typedef typename F::template apply<
+       T1, T2
+   >::type type;
     enum { arity = 3 }; typedef F arg1;
  typedef T1 arg2;
  typedef T2 arg3;
@@ -136,10 +137,11 @@ template<
       typename F, typename T1, typename T2, typename T3
     >
 struct apply3
-    : F::template apply<
-          T1, T2, T3
-        >
 {
+    typedef typename F::template apply<
+        T1, T2, T3
+    >::type type;
+    
     enum { arity = 4 }; typedef F arg1;
  typedef T1 arg2;
  typedef T2 arg3;
@@ -181,10 +183,10 @@ template<
       typename F, typename T1, typename T2, typename T3, typename T4
     >
 struct apply4
-    : F::template apply<
-          T1, T2, T3, T4
-        >
 {
+    typedef typename F::template apply<
+        T1, T2, T3, T4
+    >::type type;
     enum { arity = 5 }; typedef F arg1;
  typedef T1 arg2;
  typedef T2 arg3;
@@ -228,10 +230,10 @@ template<
     , typename T5
     >
 struct apply5
-    : F::template apply<
-          T1, T2, T3, T4, T5
-        >
 {
+    typedef typename F::template apply<
+        T1, T2, T3, T4, T5
+    >::type type;
     enum { arity = 6 }; typedef F arg1;
  typedef T1 arg2;
  typedef T2 arg3;

@@ -242,16 +242,18 @@ struct BOOST_PP_CAT(apply,i)
 };
 
 #   else
-// ISO98 C++
+// ISO98 C++, with minor concession to vc7
 
 template<
       typename F, AUX_APPLY_N_PARAMS(i, typename T)
     >
 struct BOOST_PP_CAT(apply,i)
-    : F::template apply<
-          AUX_APPLY_N_PARAMS(i, T)
-        >
 {
+    // Metafunction forwarding confuses vc7
+    typedef typename F::template apply<
+       AUX_APPLY_N_PARAMS(i, T)
+    >::type
+        
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           BOOST_PP_INC(i)
         , BOOST_PP_CAT(apply,i)
