@@ -7,7 +7,15 @@
    </head>
    <body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080">
       <h1><img src="../../boost.png" width="276" height="86">Header &lt;<a href="../../boost/static_assert.hpp">boost/static_assert.hpp</a>&gt;</h1>
-      <p>The header &lt;boost/static_assert.hpp&gt; supplies a single macro 
+      <H3>Contents</H3>
+      <dl class="index">
+         <dt><a href="#overview">Overview</a> <dt><a href="#namespace">Use at namespace scope</a>
+               <dt><a href="#function">Use at function scope</a> <dt><a href="#class">Use at class 
+                        scope</a> <dt><a href="#templates">Use in templates</a> <dt><a href="#how">How it 
+                              works</a> <dt><a href="#test">Test programs</a></dt>
+      </dl>
+      <H3><A name="overview"></A>Overview</H3>
+      <P>The header &lt;boost/static_assert.hpp&gt; supplies a single macro 
          BOOST_STATIC_ASSERT(x), which generates a compile time error message if the <a href="../../more/int_const_guidelines.htm">
             integral-constant-expression</a> <i>x</i> is not true. In other words it is 
          the compile time equivalent of the assert macro; this is sometimes known as a 
@@ -17,7 +25,7 @@
          class or function scope. When used in a template, the static assertion will be 
          evaluated at the time the template is instantiated; this is particularly useful 
          for validating template parameters.
-      </p>
+      </P>
       <p>One of the aims of BOOST_STATIC_ASSERT is to generate readable error messages. 
          These immediately tell the user that a library is being used in a manner that 
          is not supported. While error messages obviously differ from compiler to 
@@ -28,7 +36,7 @@
       <p>You can use BOOST_STATIC_ASSERT at any place where you can place a declaration, 
          that is at <a href="#class">class</a>, <a href="#function">function</a> or <a href="#namespace">
             namespace</a> scope, this is illustrated by the following examples:</p>
-      <h3><a name="namespace"></a>Use at namespace scope.</h3>
+      <h3><a name="namespace"></a><A name="namespace"></A>Use at namespace scope.</h3>
       <p>The macro can be used at namespace scope, if there is some requirement must 
          always be true; generally this means some platform specific requirement. 
          Suppose we require that <b>int</b> be at least a 32-bit integral type, and that <b>
@@ -59,7 +67,7 @@ BOOST_STATIC_ASSERT(WCHAR_MIN &gt;= 0);
          entitled to emit warnings in such cases). To avoid potential problems, if you 
          use BOOST_STATIC_ASSERT in a header and at namespace scope, then enclose them 
          in a namespace unique to that header.</p>
-      <h3><a name="function"></a>Use at function scope</h3>
+      <h3><a name="function"></a><A name="function"></A>Use at function scope</h3>
       <p>The macro is typically used at function scope inside template functions, when 
          the template arguments need checking. Imagine that we have an iterator-based 
          algorithm that requires random access iterators. If the algorithm is 
@@ -91,7 +99,7 @@ RandomAccessIterator foo(RandomAccessIterator from, RandomAccessIterator to)
          is_convertible when the conversion is via a user defined constructor (in any 
          case there is no guarantee that the iterator tag classes are 
          copy-constructible).</p>
-      <h3><a name="class"></a>Use at class scope</h3>
+      <h3><a name="class"></a><A name="class"></A>Use at class scope</h3>
       <p>The macro is typically used inside classes that are templates. Suppose we have 
          a template-class that requires an unsigned integral type with at least 16-bits 
          of precision as a template argument, we can achieve this using something like 
@@ -111,7 +119,21 @@ public:
    /* details here */
 };
 </pre>
-      <h3>How it works</h3>
+      <h3><A name="templates"></A>Use in templates</h3>
+      <P>Normally static assertions when used inside a class or function template, will 
+         not be instantiated until the template in which it is used is 
+         instantiated.&nbsp; However, there is one potential problem to watch out for: 
+         if the static assertion is <EM>not</EM> dependent upon&nbsp;one or 
+         more&nbsp;template parameters, then the compiler is permitted to evaluate the 
+         static assertion at the point it is first seen, irrespective of whether the 
+         template is ever instantiated, for example:</P>
+      <PRE>template &lt;class T&gt;<BR>struct must_not_be_instantiated<BR>{<BR>   BOOST_STATIC_ASSERT(false);<BR><BR><BR><BR>};</PRE>
+      <P>Will produce a compiler error with some compilers (for example Intel 8.1 or gcc 
+         3.4), regardless of whether the template is ever instantiated.&nbsp; A 
+         workaround in cases like this is to force the assertion to be dependent upon a 
+         template parameter:</P>
+      <PRE>template &lt;class T&gt;<BR>struct must_not_be_instantiated<BR>{<BR>   BOOST_STATIC_ASSERT(sizeof(T) == 0); // will be triggered if this type is instantiated<BR><BR><BR><BR>};</PRE>
+      <H3><A name="how"></A>How it works</H3>
       <p>BOOST_STATIC_ASSERT works as follows. There is class STATIC_ASSERTION_FAILURE 
          which is defined as:</p>
       <pre>namespace boost{
@@ -129,7 +151,7 @@ template &lt;&gt; struct STATIC_ASSERTION_FAILURE&lt;true&gt;{};
          invent a static assert that avoided macros, all to no avail. The general 
          conclusion was that the good of a static assert working at namespace, function, 
          and class scope outweighed the ugliness of a macro.</p>
-      <h3>Test Programs</h3>
+      <h3><A name="test"></A>Test Programs</h3>
       <p>The following test programs are provided with this library:</p>
       <table border="0" width="100%">
          <tr>
