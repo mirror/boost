@@ -24,7 +24,7 @@
 #  define BOOST_STDLIB_CONFIG "boost/config/stdlib/stlport.hpp"
 
 #elif defined(__LIBCOMO__)
-// Commeau STL:
+// Comeau STL:
 #define BOOST_STDLIB_CONFIG "boost/config/stdlib/libcomo.hpp"
 
 #elif defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
