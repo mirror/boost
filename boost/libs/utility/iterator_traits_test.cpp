@@ -7,6 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  11 Feb 2001 Final fixes for Borland (David Abrahams)
 //  11 Feb 2001 Some fixes for Borland get it closer on that compiler
 //              (David Abrahams)
 //  07 Feb 2001 More comprehensive testing; factored out static tests for
@@ -26,7 +27,7 @@
 #include <iostream>
 
 struct my_iterator
-    : public boost::forward_iterator_helper<my_iterator, const char, long>
+    : boost::forward_iterator_helper<my_iterator, char, long, const char*, const char&>
 {
     my_iterator(const char* p) : m_p(p) {}
     
@@ -38,7 +39,6 @@ struct my_iterator
  private:
     const char* m_p;
 };
-
 
 template <class Iterator,
     class value_type, class difference_type, class pointer, class reference, class category>
@@ -141,7 +141,7 @@ maybe_pointer_test<std::vector<int>::iterator, int, std::ptrdiff_t, int*, int&, 
 maybe_pointer_test<int*, int, std::ptrdiff_t, int*, int&, std::random_access_iterator_tag>
         int_pointer_test;
 
-non_pointer_test<my_iterator, const char, long, const char*, const char&, std::forward_iterator_tag>
+non_pointer_test<my_iterator, char, long, const char*, const char&, std::forward_iterator_tag>
        my_iterator_test;
                     
 int main()
