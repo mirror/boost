@@ -542,22 +542,29 @@ int main(int, char*[])
 
     <h4>Example</h4>
     
-    <p>The <a href="projection_iterator.htm">Projection Iterator</a> portion of this
-    library lets you create iterators which, when dereferenced, apply a function to the result of
-    dereferencing their base iterator. The <a
+    <p>The <a href="projection_iterator.htm">Projection Iterator</a> adaptor is similar to the <a
+href="./transform_iterator.htm">transform iterator adaptor</a> in that
+its <tt>operator*()</tt> applies some function to the result of
+dereferencing the base iterator and then returns the result. The
+difference is that the function must return a reference to some
+existing object (for example, a data member within the
+<tt>value_type</tt> of the base iterator). 
+
+    <p>
+The <a
     href="projection_iterator.htm#projection_iterator_pair_generator">projection_iterator_pair_generator</a> template
     is a special two-<a href="../../more/generic_programming.html#type_generator">type generator</a> for mutable and constant versions of a
     projection iterator. It is defined as follows:
 <blockquote>
 <pre>
-template &lt;class Function, class Iterator, class ConstIterator&gt;
+template &lt;class AdaptableUnaryFunction, class Iterator, class ConstIterator&gt;
 struct projection_iterator_pair_generator {
     typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef projection_iterator_policies&lt;Function&gt; policies;
+    typedef projection_iterator_policies&lt;AdaptableUnaryFunction&gt; policies;
 public:
     typedef iterator_adaptor&lt;Iterator,policies,value_type&gt; iterator;
     typedef iterator_adaptor&lt;ConstIterator,policies,value_type,
-        const value_type&amp;,const value_type*&gt; type;
+        const value_type&amp;,const value_type*&gt; const_iterator;
 };
 </pre>
 </blockquote>
