@@ -1,11 +1,33 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include <iostream>
+
+
+void test_month_decrement_iterator(const boost::gregorian::date *Answers, int array_len){
+  using namespace boost::gregorian;
+  typedef boost::date_time::month_functor<date> mfg;
+    
+  boost::date_time::date_itr<mfg, date> ditr(Answers[array_len-1]);
+  int i = array_len-1;
+  std::cout << "month iter decrement test..." << std::endl;
+  try { 
+    for (; ditr > Answers[0] - date_duration(1); --ditr) {
+      check("month iterator: " + to_iso_string(*ditr), Answers[i] == *ditr);
+      i--;
+    }
+    check("month iterator iteration count", i == -1);
+  }
+  catch(std::exception& e) 
+  {
+    check("month iterator: exception failure", false);      
+    std::cout << e.what() << std::endl;
+  }
+}
 
 void test_base_iterator(boost::gregorian::date end,
                         boost::gregorian::date_iterator& di,
@@ -16,7 +38,6 @@ void test_base_iterator(boost::gregorian::date end,
     data += to_iso_string(*di) + " ";
   }
 }
- 
 
 int
 main() 
@@ -45,6 +66,15 @@ main()
       i++;
     }
     check("day iterator -- 2 days", i == 3); // check the number of iterations
+    // decrement
+    i = 2;
+    --ditr;
+    for (; ditr > date(2000,Jan,19); --ditr) {
+      //std::cout << *ditr << " ";
+      check("day iterator decrement -- 2 days", DayAnswers[i] == *ditr);
+      i--;
+    }
+    check("day iterator decrement -- 2 days", i == -1); // check the number of iterations
   }
 
   typedef boost::date_time::week_functor<date> wfg;
@@ -58,6 +88,15 @@ main()
       i++;
     }
     check("week iterator", i == 3);
+    // decrement
+    i=2;
+    --ditr;
+    for (; ditr > date(2000,Jan,19); --ditr) {
+      //std::cout << *ditr << " ";
+      check("week iterator", WeekAnswers[i] == *ditr);
+      i--;
+    }
+    check("week iterator", i == -1);
   }
 
   {
@@ -70,6 +109,15 @@ main()
       i++;
     }
     check("week iterator", i == 2);
+    // decrement
+    i=1;
+    --ditr;
+    for (; ditr > date(2000,Jan,19); --ditr) {
+      //std::cout << *ditr << " ";
+      check("week iterator", WeekAnswers[i] == *ditr);
+      i--;
+    }
+    check("week iterator", i == -1);
   }
 
   {
@@ -82,8 +130,17 @@ main()
       i++;
     }
     check("week iterator -- 2 weeks", i == 3);
+    // decrement
+    i=2;
+    --ditr;
+    for (; ditr > date(2000,Jan,19); --ditr) {
+      //std::cout << *ditr << " ";
+      check("week iterator -- 2 weeks", WeekAnswers[i] == *ditr);
+      i--;
+    }
+    check("week iterator -- 2 weeks", i == -1);
   }
-  
+
   typedef boost::date_time::month_functor<date> mfg;
   {
     const date MonthAnswers[] = {
@@ -92,6 +149,7 @@ main()
       date(2000,Sep,1),date(2000,Oct,1),date(2000,Nov,1),date(2000,Dec,1),
       date(2001,Jan,1)
     };
+    test_month_decrement_iterator(MonthAnswers, 13);
     
     boost::date_time::date_itr<mfg, date> ditr(date(2000,Jan,1));
     int i = 0;
@@ -116,6 +174,7 @@ main()
       date(2000,Sep,30),date(2000,Oct,31),date(2000,Nov,30),date(2000,Dec,31),
       date(2001,Jan,31)
     };
+    test_month_decrement_iterator(MonthAnswers, 13);
     
     boost::date_time::date_itr<mfg, date> ditr(date(2000,Jan,31));
     int i = 0;
@@ -141,20 +200,21 @@ main()
       date(2000,Feb,29),date(2000,Mar,31),date(2000,Apr,30),
       date(2000,May,31),date(2000,Jun,30),date(2000,Jul,31),date(2000,Aug,31),
       date(2000,Sep,30),date(2000,Oct,31),date(2000,Nov,30),date(2000,Dec,31),
-      date(2001,Jan,31)
+      date(2001,Jan,31),date(2001,Feb,28)
     };
+    test_month_decrement_iterator(MonthAnswers, 13);
     
     boost::date_time::date_itr<mfg, date> ditr(date(2000,Feb,29));
     int i = 0;
     try { 
-      for (; ditr < date(2001,Feb,1); ++ditr) {
+      for (; ditr < date(2001,Mar,1); ++ditr) {
         //      std::cout << *ditr << " ";
         check("last day of month iterator2: " + to_iso_string(*ditr), 
               MonthAnswers[i] == *ditr);
         //check("last day of month iterator", MonthAnswers[i] == *ditr);
         i++;
       }
-      check("last day of month iterator2", i == 12);
+      check("last day of month iterator2", i == 13);
     }
     catch(std::exception& e) 
     {
@@ -170,6 +230,7 @@ main()
       date(2000,Sep,28),date(2000,Oct,28),date(2000,Nov,28),date(2000,Dec,28),
       date(2001,Jan,28)
     };
+    test_month_decrement_iterator(MonthAnswers, 12);
     
     boost::date_time::date_itr<mfg, date> ditr(date(2000,Feb,28));
     int i = 0;
@@ -202,12 +263,21 @@ main()
     int i = 0;
     for (; d3 < date(2010,Jan,2); ++d3) {
       //std::cout << *d3 << " ";
-      check("year iterator", YearAnswers[i] == *d3);
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
       i++;
+    }
+    std::cout << "Decrementing...." << std::endl;
+    i = 10;
+    --d3;
+    for (; d3 > date(1999,Dec,31); --d3) {
+      //std::cout << *d3 << " ";
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
+      i--;
     }
  }
 
   {
+    std::cout << "Increment by 2 years...." << std::endl;
     const date YearAnswers[] = {
       date(2000,Jan,1),date(2002,Jan,1),
       date(2004,Jan,1),date(2006,Jan,1),
@@ -218,10 +288,20 @@ main()
     int i = 0;
     for (; d3 < date(2010,Jan,2); ++d3) {
       //std::cout << *d3 << " ";
-      check("year iterator", YearAnswers[i] == *d3);
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
       i++;
     }
-}
+    // decrement
+    std::cout << "Decrementing...." << std::endl;
+    i = 5;
+    --d3;
+    for (; d3 > date(1999,Dec,31); --d3) {
+      //std::cout << *d3 << " ";
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
+      i--;
+    }
+  }
+
 
   return printTestStats();
 }
