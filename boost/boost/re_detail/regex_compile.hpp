@@ -1959,12 +1959,12 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_leadi
          leading_lit = false;
          break;
       case re_detail::syntax_element_rep:
-         if(1 == fixup_leading_rep(dat->next.p, ((re_detail::re_repeat*)dat)->alt.p) )
+         if((len == 0) && (1 == fixup_leading_rep(dat->next.p, ((re_detail::re_repeat*)dat)->alt.p) ))
          {
             ((re_detail::re_repeat*)dat)->leading = true;
             return len;
          }
-         return 0;
+         return len;
       default:
          break;
       }

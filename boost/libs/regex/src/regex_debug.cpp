@@ -24,13 +24,13 @@
 #include <boost/re_detail/regex_config.hpp>
 #include <boost/re_detail/regex_raw_buffer.hpp>
 #include <boost/regex.hpp>
-#include <ostream>
 
 #ifdef BOOST_MSVC
 #include <crtdbg.h>
 #endif
 
 #ifdef BOOST_RE_DEBUG
+#include <ostream>
 
 namespace boost { namespace re_detail {
 std::ostream& operator<<(std::ostream& s, syntax_element_type x)
@@ -205,4 +205,5 @@ debug_guard::~debug_guard()
 
 
 #endif
+
 
