@@ -485,21 +485,12 @@ void test_throwing_assign_to_initialized( T const* )
 
   BOOST_CHECK(!passed);
 
-
-#ifdef BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
-  // opt0 was left unmodified
-  check_is_pending_dtor( ARG(T) );
-  check_is_not_pending_copy( ARG(T) );
-  check_instance_count(count, ARG(T) );
-  check_initialized(opt0);
-#else
   // opt0 was left uninitialized
   -- count ;
   check_is_not_pending_dtor( ARG(T) );
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
   check_uninitialized(opt0);
-#endif
 }
 
 //
