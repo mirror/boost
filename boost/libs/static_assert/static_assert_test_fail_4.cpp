@@ -23,7 +23,7 @@ struct Bob
   char c;
   int f()
   {
-#ifndef BOOST_MSVC // broken sizeof in VC6
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 // broken sizeof in VC6
     BOOST_STATIC_ASSERT(sizeof(x) == 4);
     BOOST_STATIC_ASSERT(sizeof(c) == 1);
     BOOST_STATIC_ASSERT((sizeof(x) == sizeof(c))); // should not compile

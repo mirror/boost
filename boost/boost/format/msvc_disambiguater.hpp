@@ -22,7 +22,7 @@
 #ifndef BOOST_MSVC_DISAMBIGUATER_HPP
 #define BOOST_MSVC_DISAMBIGUATER_HPP
 
-#ifdef BOOST_MSVC // this whole header is specifically for msvc
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 // this whole header is specifically for msvc
 
 #include "boost/format/group.hpp"
 #include <ostream>

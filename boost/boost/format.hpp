@@ -28,7 +28,7 @@
 #include "boost/config.hpp"
 #include "boost/format/format_config.hpp"
 
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
 #define BOOST_OVERLOAD_FOR_NON_CONST
 #endif
 

@@ -690,7 +690,7 @@ namespace detail {
 
 
 // This macro definition is only temporary in this file
-# if !defined(BOOST_MSVC)
+# if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
 #  define BOOST_ARG_DEPENDENT_TYPENAME typename
 # else
 #  define BOOST_ARG_DEPENDENT_TYPENAME
@@ -779,7 +779,7 @@ struct iterator_adaptor :
         policies().initialize(base());
     }
 
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__BORLANDC__)
     // This is required to prevent a bug in how VC++ generates
     // the assignment operator for compressed_pairv
     iterator_adaptor& operator= (const iterator_adaptor& x) {

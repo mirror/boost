@@ -86,7 +86,7 @@ public:
   }
 
   // see generate_array_view in base.hpp
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <int NDims>
 #else
   template <int NumDims, int NDims> // else ICE
@@ -265,7 +265,7 @@ public:
   }
 
   // see generate_array_view in base.hpp
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <int NDims>
 #else
   template <int NumDims, int NDims> // else ICE
@@ -325,7 +325,7 @@ public:
   }
 
   // see generate_array_view in base.hpp
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <int NDims>
 #else
   template <int NumDims, int NDims> // else ICE

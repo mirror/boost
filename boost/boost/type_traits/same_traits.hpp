@@ -52,7 +52,7 @@ const bool is_same<T, T>::value;
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 //
 // the following VC6 specific implementation is *NOT* legal
 // C++, but has the advantage that it works for incomplete

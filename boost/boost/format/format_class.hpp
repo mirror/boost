@@ -90,7 +90,7 @@ public:
   // final output
   string_t str() const;
   friend BOOST_IO_STD basic_ostream<Ch, Tr>& 
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   operator<< <Ch, Tr> ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
 #else
   operator<< ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 

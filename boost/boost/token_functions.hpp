@@ -70,7 +70,7 @@ namespace boost{
 
 // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
 // MSVC does not like the following typename
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <class Char, 
     class Traits = typename std::basic_string<Char>::traits_type >
 #else
@@ -259,7 +259,7 @@ namespace boost{
   enum empty_token_policy { drop_empty_tokens, keep_empty_tokens };
 
   // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <typename Char, 
     typename Traits = typename std::basic_string<Char>::traits_type >
 #else
@@ -390,7 +390,7 @@ namespace boost{
   // cannot be returned as tokens. These are often whitespace
 
   // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template <class Char, 
     class Traits = typename std::basic_string<Char>::traits_type >
 #else

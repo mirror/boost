@@ -22,7 +22,7 @@
 #include <boost/type.hpp>
 
 
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__BORLANDC__)
 #define BOOST_FPTR
 #else
 #define BOOST_FPTR &

@@ -28,7 +28,7 @@
 #include <boost/config.hpp>
 
 
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 namespace std
 {
   inline double pow(double a, double b) { return ::pow(a,b); }

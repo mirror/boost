@@ -20,7 +20,7 @@
 // template test code.  To prevent "Internal Compiler Error"
 // type messages, we have to split these up into lots of
 // separate functions:
-#if defined(BOOST_MSVC) || (defined(__BORLANDC__) && (__BORLANDC__ < 0x550))
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || (defined(__BORLANDC__) && (__BORLANDC__ < 0x550))
 #define SHORT_TRANSFORM_TEST
 #endif
 #include "boost/type_traits/type_traits_test.hpp"

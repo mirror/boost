@@ -68,7 +68,7 @@ namespace  {
   } // -do_fill(..) 
 
 
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   template< class Ch, class Tr, class T> inline
   void put_head(BOOST_IO_STD basic_ostream<Ch, Tr>& , const T& ) {
   }

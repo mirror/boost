@@ -81,7 +81,7 @@ namespace boost { namespace detail {
   template <class Number>
   struct is_signed
   {
-#if defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_MSVC)
+#if defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300
     BOOST_STATIC_CONSTANT(bool, value = (Number(-1) < Number(0)));
 #else
     BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<Number>::is_signed);
@@ -135,7 +135,7 @@ namespace boost { namespace detail {
    private:
       typedef Integer integer_type;
       typedef std::numeric_limits<integer_type> x;
-#   ifdef BOOST_MSVC
+#   if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
       // for some reason, MSVC asserts when it shouldn't unless we make these
       // local definitions
       BOOST_STATIC_CONSTANT(bool, is_integer = x::is_integer);
