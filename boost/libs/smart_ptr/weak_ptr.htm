@@ -18,6 +18,40 @@
 		<p>The class template is parameterized on <b>T</b>, the type of the object pointed 
 			to. <b>T</b> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">
 				common requirements</a>.</p>
+		<P>Compared to&nbsp;<STRONG>shared_ptr</STRONG>, <STRONG>weak_ptr</STRONG> provides 
+			a very limited subset of operations since accessing its stored pointer is 
+			unsafe in multithreaded&nbsp;programs (that is, it may invoke undefined 
+			behavior.) Consider, for example, this innocent piece of code:</P>
+		<pre>
+shared_ptr&lt;int&gt; p(new int(5));
+weak_ptr&lt;int&gt; q(p);
+
+// some time later
+
+if(int * r = q.get())
+{
+	// use *r
+}
+</pre>
+		<P>Imagine that after the <STRONG>if</STRONG>, but immediately before <STRONG>r</STRONG>
+			is used, another thread executes the statement <code>p.reset()</code>. Now <STRONG>r</STRONG>
+			is a dangling pointer.</P>
+		<P>The solution to this problem is to create a temporary <STRONG>shared_ptr</STRONG>
+			from <STRONG>q</STRONG>:</P>
+		<pre>
+shared_ptr&lt;int&gt; p(new int(5));
+weak_ptr&lt;int&gt; q(p);
+
+// some time later
+
+if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
+{
+	// use *r
+}
+</pre>
+		<p>Now <STRONG>r</STRONG> holds a reference to the object that was pointed by <STRONG>q</STRONG>. 
+			Even if <code>p.reset()</code> is executed in another thread, the object will 
+			stay alive until <STRONG>r</STRONG> goes out of scope (or is reset.)</p>
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
@@ -57,15 +91,6 @@
 
   template&lt;typename T&gt;
     shared_ptr&lt;T&gt; <a href="#make_shared">make_shared</a>(weak_ptr&lt;T&gt; const &amp; r); // never throws
-
-  template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt; <a href="#shared_static_cast">shared_static_cast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
-  template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt; <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
-  template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt; <a href="#shared_polymorphic_cast">shared_polymorphic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
-  template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt; <a href="#shared_polymorphic_downcast">shared_polymorphic_downcast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
 
 }
 </pre>
@@ -206,62 +231,8 @@ template&lt;typename T, typename U&gt;
 			<P><B>Returns:</B> <code>r.expired()? shared_ptr&lt;T&gt;(): shared_ptr&lt;T&gt;(r)</code>.</P>
 			<P><B>Throws:</B> nothing.</P>
 		</BLOCKQUOTE>
-		<h3><a name="shared_static_cast">shared_static_cast</a></h3>
-		<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt; shared_static_cast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
-		<BLOCKQUOTE>
-			<P><STRONG>Requires:</STRONG> The expression <code>static_cast&lt;T*&gt;(r.get())</code>
-				must be well-formed.</P>
-			<P><B>Returns:</B> A <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy 
-				of <code>static_cast&lt;T*&gt;(r.get())</code> and shares ownership with <b>r</b>.</P>
-			<P><B>Throws:</B> nothing.</P>
-		</BLOCKQUOTE>
-		<h3><a name="shared_dynamic_cast">shared_dynamic_cast</a></h3>
-		<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt; shared_dynamic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
-		<BLOCKQUOTE>
-			<P><STRONG>Requires:</STRONG> The expression <CODE>dynamic_cast&lt;T*&gt;(r.get())</CODE>
-				must be well-formed and its behavior defined.</P>
-			<P><B>Returns:</B></P>
-			<UL>
-				<LI>
-					When <CODE>dynamic_cast&lt;T*&gt;(r.get())</CODE> returns a nonzero 
-					value,&nbsp;a <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy of 
-					it and shares ownership with <STRONG>r</STRONG>;
-				<LI>
-					Otherwise, a default-constructed <STRONG>weak_ptr&lt;T&gt;</STRONG> object.</LI></UL>
-			<P><B>Throws:</B> <STRONG>std::bad_alloc</STRONG>.</P>
-			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
-		</BLOCKQUOTE>
-		<h3><a name="shared_polymorphic_cast">shared_polymorphic_cast</a></h3>
-		<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt; shared_polymorphic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
-		<BLOCKQUOTE>
-			<p><STRONG>Requires:</STRONG> The expression <CODE><A href="../conversion/cast.htm#Polymorphic_cast">
-						polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed and 
-				its behavior defined.</p>
-			<P><B>Returns:</B> A <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy 
-				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE>
-				and shares ownership with <B>r</B>.</P>
-			<P><B>Throws:</B> <STRONG>std::bad_cast</STRONG> when the pointer cannot be 
-				converted.</P>
-			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
-		</BLOCKQUOTE>
-		<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>
-		<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt; shared_polymorphic_downcast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
-		<BLOCKQUOTE>
-			<p><STRONG>Requires:</STRONG> The expression <CODE><A href="../conversion/cast.htm#Polymorphic_cast">
-						polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed 
-				and its behavior defined.</p>
-			<P><B>Returns:</B> A <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy 
-				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE>
-				and shares ownership with <B>r</B>.</P>
-			<P><B>Throws:</B> nothing.</P>
-		</BLOCKQUOTE>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->
-			8 March 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+		<p>Revised 12 March 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
