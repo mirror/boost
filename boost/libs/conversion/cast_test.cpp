@@ -9,13 +9,13 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   20 Jan 01  removed use of <limits> for portability to raw GCC (David Abrahams)
 //   28 Jun 00  implicit_cast removed (Beman Dawes)
 //   30 Aug 99  value_cast replaced by numeric_cast
 //    3 Aug 99  Initial Version
 
 #include <iostream>
 #include <climits>
-#include <limits>
 #include <boost/cast.hpp>
 
 #  if SCHAR_MAX == LONG_MAX
@@ -95,8 +95,8 @@ int main( int argc, char * argv[] )
     //  tests which should succeed
     long small_value = 1;
     long small_negative_value = -1;
-    long large_value = std::numeric_limits<long>::max();
-    long large_negative_value = std::numeric_limits<long>::min();
+    long large_value = LONG_MAX;
+    long large_negative_value = LONG_MIN;
     signed char c = 0;
 
     c = large_value;  // see if compiler generates warning
@@ -142,7 +142,7 @@ int main( int argc, char * argv[] )
     if ( !caught_exception ) ++err_count;
 
     caught_exception = false;
-    try { numeric_cast<int>( std::numeric_limits<double>::max() ); }
+    try { numeric_cast<int>( DBL_MAX ); }
     catch (bad_numeric_cast)
         { cout<<"caught bad_numeric_cast #5\n"; caught_exception = true; }
     if ( !caught_exception ) ++err_count;
