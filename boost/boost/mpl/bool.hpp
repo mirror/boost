@@ -15,6 +15,7 @@
 // $Revision$
 
 #include <boost/mpl/bool_fwd.hpp>
+#include <boost/mpl/integral_c_tag.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
@@ -22,6 +23,7 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 template< bool C_ > struct bool_
 {
     BOOST_STATIC_CONSTANT(bool, value = C_);
+    typedef integral_c_tag tag;
     typedef bool_ type;
     typedef bool value_type;
     operator bool() const { return this->value; }
