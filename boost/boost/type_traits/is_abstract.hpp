@@ -83,7 +83,7 @@ struct is_abstract_imp2
    // GCC2 won't even parse this template if we embed the computation
    // of s1 in the computation of value.
 #ifdef __GNUC__
-   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(is_abstract_imp<T>::template check_sig<T>(0)));
+   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(is_abstract_imp2<T>::template check_sig<T>(0)));
 #else
    BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(check_sig<T>(0)));
 #endif
