@@ -40,6 +40,13 @@ namespace test // failure exception used to indicate checked test failures
         {
         }
 
+        // std::~string has no exception-specification (could throw anything),
+	// but we need to be compatible with std::~exception's empty one
+        // see std::15.4p13 and std::15.4p3
+        ~failure() throw()
+        {
+        }
+
     public: // usage
 
         virtual const char * what() const throw()
