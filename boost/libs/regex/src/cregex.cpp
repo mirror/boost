@@ -588,12 +588,14 @@ std::string RegEx::What(int i)const
    return result;
 }
 
+#ifndef __MINGW32__
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 const std::size_t RegEx::npos = ::boost::integer_traits<std::size_t>::const_max;
 #elif defined(BOOST_HAS_LONG_LONG)
 const std::size_t RegEx::npos = ~0ULL;
 #else
 const std::size_t RegEx::npos = ~0UL;
+#endif
 #endif
 
 } // namespace boost

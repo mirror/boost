@@ -48,6 +48,8 @@ template test-dll
    : <template>../build/regex-dll-options 
      <dll>../build/boost_regex            # sources
    : <threading>multi
+     <mingw><*><linkflags>"-Wl,--allow-multiple-definition"
+     <mingw-3.4.1><*><linkflags>"-Wl,--allow-multiple-definition"
    ;
  
 #
