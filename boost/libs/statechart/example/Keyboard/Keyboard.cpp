@@ -53,21 +53,7 @@ struct Active: fsm::simple_state<
   Active, Keyboard, fsm::custom_reaction< EvRequestShutdown >,
   mpl::list< NumLockOff, CapsLockOff, ScrollLockOff > >
 {
-  fsm::result react( const EvRequestShutdown & )
-  {
-    if ( ( state_downcast< const NumLockOff * >() != 0 ) &&
-         ( state_downcast< const CapsLockOff * >() != 0 ) &&
-         ( state_downcast< const ScrollLockOff * >() != 0 ) )
-    {
-      std::cout << "Shutdown request accepted\n";
-      return terminate();
-    }
-    else
-    {
-      std::cout << "Ignoring shutdown request\n\n";
-      return discard_event();
-    }
-  }
+  fsm::result react( const EvRequestShutdown & );
 };
 
 struct NumLockOn : fsm::simple_state<
@@ -93,6 +79,24 @@ struct ScrollLockOn : fsm::simple_state<
 struct ScrollLockOff : fsm::simple_state<
   ScrollLockOff, Active::orthogonal< 2 >,
   fsm::transition< EvScrollLockPressed, ScrollLockOn > > {};
+
+
+fsm::result Active::react( const EvRequestShutdown & )
+{
+  if ( ( state_downcast< const NumLockOff * >() != 0 ) &&
+        ( state_downcast< const CapsLockOff * >() != 0 ) &&
+        ( state_downcast< const ScrollLockOff * >() != 0 ) )
+  {
+    std::cout << "Shutdown request accepted\n";
+    return terminate();
+  }
+  else
+  {
+    std::cout << "Ignoring shutdown request\n\n";
+    return discard_event();
+  }
+}
+
 
 namespace
 {
