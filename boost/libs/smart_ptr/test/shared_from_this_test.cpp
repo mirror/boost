@@ -67,18 +67,20 @@ void test()
 }
 
 void test2();
+void test3();
 
 int main()
 {
     test();
     test2();
+    test3();
     return boost::report_errors();
 }
 
-// virtual inheritance from Y to stress the implementation
-// (prevents Y* -> impl* casts)
+// virtual inheritance to stress the implementation
+// (prevents Y* -> impl*, enable_shared_from_this<impl>* -> impl* casts)
 
-class impl: public X, public virtual Y, public boost::enable_shared_from_this<impl>
+class impl: public X, public virtual Y, public virtual boost::enable_shared_from_this<impl>
 {
 public:
 
@@ -109,4 +111,42 @@ boost::shared_ptr<Y> createY()
 void test2()
 {
     boost::shared_ptr<Y> pi(static_cast<impl2*>(0));
+}
+
+//
+
+struct V: public boost::enable_shared_from_this<V>
+{
+};
+
+void test3()
+{
+    boost::shared_ptr<V> p(new V);
+
+    boost::shared_ptr<V> q = p->shared_from_this();
+    BOOST_TEST(p == q);
+    BOOST_TEST(!(p < q) && !(q < p));
+
+    V v2(*p);
+
+    try
+    {
+        boost::shared_ptr<V> r = v2.shared_from_this();
+        BOOST_ERROR("v2.shared_from_this() failed to throw");
+    }
+    catch(boost::bad_weak_ptr const &)
+    {
+    }
+
+    try
+    {
+        *p = V();
+        boost::shared_ptr<V> r = p->shared_from_this();
+        BOOST_TEST(p == r);
+        BOOST_TEST(!(p < r) && !(r < p));
+    }
+    catch(boost::bad_weak_ptr const &)
+    {
+        BOOST_ERROR("p->shared_from_this() threw bad_weak_ptr after *p = V()");
+    }
 }

@@ -24,6 +24,25 @@ namespace boost
 
 template<class T> class enable_shared_from_this
 {
+protected:
+
+    enable_shared_from_this()
+    {
+    }
+
+    enable_shared_from_this(enable_shared_from_this const &)
+    {
+    }
+
+    enable_shared_from_this & operator=(enable_shared_from_this const &)
+    {
+        return *this;
+    }
+
+    ~enable_shared_from_this()
+    {
+    }
+
 public:
 
     shared_ptr<T> shared_from_this()
