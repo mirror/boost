@@ -72,54 +72,54 @@
   struct <a href="../utility/Assignable.html">Assignable</a>Concept; // Standard ref 23.1
 
   template &lt;class T&gt;
-  struct SGI<a href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</a>Concept;
+  struct SGI<a href="http://www.sgi.com/tech/stl/Assignable.html">Assignable</a>Concept;
 
   template &lt;class T&gt;
   struct <a
-  href="http://www.sgi.com/Technology/STL/DefaultConstructible.html">DefaultConstructible</a>Concept;
+  href="http://www.sgi.com/tech/stl/DefaultConstructible.html">DefaultConstructible</a>Concept;
 
   template &lt;class T&gt; 
   struct <a href="../utility/CopyConstructible.html">CopyConstructible</a>Concept; // Standard ref 20.1.3
 
   template &lt;class T&gt; 
-  struct <a href="http://www.sgi.com/Technology/STL/EqualityComparable.html">EqualityComparable</a>Concept; // Standard ref 20.1.1
+  struct <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a>Concept; // Standard ref 20.1.1
 
   template &lt;class T&gt;
   struct <a href="../utility/LessThanComparable.html">LessThanComparable</a>Concept; // Standard ref 20.1.2
 
   template &lt;class T&gt;
-  struct ComparableConcept; // The SGI STL <a href="http://www.sgi.com/Technology/STL/LessThanComparable.html">LessThanComparable</a> concept
+  struct ComparableConcept; // The SGI STL <a href="http://www.sgi.com/tech/stl/LessThanComparable.html">LessThanComparable</a> concept
 </pre>
 
 <h3><a name="iterator-concepts">Iterator Concept Checking Classes</a></h3>
 
 <pre>
   template &lt;class Iter&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/trivial.html">TrivialIterator</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/trivial.html">TrivialIterator</a>Concept;
 
   template &lt;class Iter&gt;
   struct Mutable_TrivialIteratorConcept;
 
   template &lt;class Iter&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</a>Concept; // Standard ref 24.1.1 Table 72
+  struct <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>Concept; // Standard ref 24.1.1 Table 72
 
   template &lt;class Iter, class T&gt; 
-  struct <a href="http://www.sgi.com/Technology/STL/OutputIterator.html">OutputIterator</a>Concept; // Standard ref 24.1.2 Table 73
+  struct <a href="http://www.sgi.com/tech/stl/OutputIterator.html">OutputIterator</a>Concept; // Standard ref 24.1.2 Table 73
 
   template &lt;class Iter&gt; 
-  struct <a href="http://www.sgi.com/Technology/STL/ForwardIterator.html">ForwardIterator</a>Concept; // Standard ref 24.1.3 Table 74
+  struct <a href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>Concept; // Standard ref 24.1.3 Table 74
 
   template &lt;class Iter&gt; 
   struct Mutable_ForwardIteratorConcept;
 
   template &lt;class Iter&gt; 
-  struct <a href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>Concept; // Standard ref 24.1.4 Table 75
+  struct <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>Concept; // Standard ref 24.1.4 Table 75
 
   template &lt;class Iter&gt; 
   struct Mutable_BidirectionalIteratorConcept;
 
   template &lt;class Iter&gt; 
-  struct <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>Concept; // Standard ref 24.1.5 Table 76
+  struct <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>Concept; // Standard ref 24.1.5 Table 76
 
   template &lt;class Iter&gt; 
   struct Mutable_RandomAccessIteratorConcept;
@@ -129,77 +129,93 @@
 
 <pre>
   template &lt;class Func, class Return&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/Generator.html">Generator</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/Generator.html">Generator</a>Concept;
 
   template &lt;class Func, class Return, class Arg&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/UnaryFunction.html">UnaryFunction</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">UnaryFunction</a>Concept;
 
   template &lt;class Func, class Return, class First, class Second&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/BinaryFunction.html">BinaryFunction</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">BinaryFunction</a>Concept;
 
   template &lt;class Func, class Arg&gt;
-  struct Unary<a href="http://www.sgi.com/Technology/STL/Predicate.html">Predicate</a>Concept;
+  struct Unary<a href="http://www.sgi.com/tech/stl/Predicate.html">Predicate</a>Concept;
 
   template &lt;class Func, class First, class Second&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/BinaryPredicate.html">BinaryPredicate</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">BinaryPredicate</a>Concept;
 
   template &lt;class Func, class First, class Second&gt;
   struct Const_BinaryPredicateConcept;
+
+  template &lt;class Func, class Return&gt;
+  struct <a href="http://www.sgi.com/tech/stl/AdaptableGenerator.html">AdaptableGenerator</a>Concept;
+
+  template &lt;class Func, class Return, class Arg&gt;
+  struct <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>Concept;
+
+  template &lt;class Func, class First, class Second&gt;
+  struct <a href="http://www.sgi.com/tech/stl/AdaptableBinaryFunction.html">AdaptableBinaryFunction</a>Concept;
+
+  template &lt;class Func, class Arg&gt;
+  struct <a href="http://www.sgi.com/tech/stl/AdaptablePredicate.html">AdaptablePredicate</a>Concept;
+
+  template &lt;class Func, class First, class Second&gt;
+  struct <a href="http://www.sgi.com/tech/stl/AdaptableBinaryPredicate.html">AdaptableBinaryPredicate</a>Concept;
+  
 </pre>
 
 <h3><a name="container-concepts">Container Concept Checking Classes</a></h3>
 
 <pre>
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/Container.html">Container</a>Concept; // Standard ref 23.1 Table 65
+  struct <a href="http://www.sgi.com/tech/stl/Container.html">Container</a>Concept; // Standard ref 23.1 Table 65
 
   template &lt;class C&gt;
   struct Mutable_ContainerConcept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/ForwardContainer.html">ForwardContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/ForwardContainer.html">ForwardContainer</a>Concept;
 
   template &lt;class C&gt;
   struct Mutable_ForwardContainerConcept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/ReversibleContainer.html">ReversibleContainer</a>Concept; // Standard ref 23.1 Table 66
+  struct <a href="http://www.sgi.com/tech/stl/ReversibleContainer.html">ReversibleContainer</a>Concept; // Standard ref 23.1 Table 66
 
   template &lt;class C&gt;
   struct Mutable_ReversibleContainerConcept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/RandomAccessContainer.html">RandomAccessContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">RandomAccessContainer</a>Concept;
 
   template &lt;class C&gt;
   struct Mutable_RandomAccessContainerConcept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/SequenceContainer.html">Sequence</a>Concept; // Standard ref 23.1.1
+  struct <a href="http://www.sgi.com/tech/stl/SequenceContainer.html">Sequence</a>Concept; // Standard ref 23.1.1
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/FrontInsertionSequence.html">FrontInsertionSequence</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/FrontInsertionSequence.html">FrontInsertionSequence</a>Concept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/BackInsertionSequence.html">BackInsertionSequence</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/BackInsertionSequence.html">BackInsertionSequence</a>Concept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/Associative.html">AssociativeContainer</a>Concept; // Standard ref 23.1.2 Table 69
+  struct <a href="http://www.sgi.com/tech/stl/Associative.html">AssociativeContainer</a>Concept; // Standard ref 23.1.2 Table 69
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/UniqueAssociativeContainer.html">UniqueAssociativeContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/UniqueAssociativeContainer.html">UniqueAssociativeContainer</a>Concept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/MultipleAssociativeContainer.html">MultipleAssociativeContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/MultipleAssociativeContainer.html">MultipleAssociativeContainer</a>Concept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/SimpleAssociativeContainer.html">SimpleAssociativeContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/SimpleAssociativeContainer.html">SimpleAssociativeContainer</a>Concept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/PairAssociativeContainer.html">PairAssociativeContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/PairAssociativeContainer.html">PairAssociativeContainer</a>Concept;
 
   template &lt;class C&gt;
-  struct <a href="http://www.sgi.com/Technology/STL/SortedAssociativeContainer.html">SortedAssociativeContainer</a>Concept;
+  struct <a href="http://www.sgi.com/tech/stl/SortedAssociativeContainer.html">SortedAssociativeContainer</a>Concept;
 </pre>
 
 

@@ -205,7 +205,7 @@ stl_algo.h:1377: no match for `_List_iterator&lt;int,int &amp;,int *&gt; &amp; -
 
 In this case, the fundamental error is that
 <tt>std:list::iterator</tt> does not model the concept of <a
-href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
 RandomAccessIterator</a>. The list iterator is only bidirectional, not
 fully random access (as would be a vector iterator).  Unfortunately,
 there is nothing in the error message to indicate this to the user.
@@ -222,7 +222,7 @@ reasons why this message would be hard to understand.
   <LI> There is no textual correlation between the error message and the
     documented requirements for <tt>std::stable_sort()</tt> and for 
     <a
-href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
 RandomAccessIterator</a>.
   <LI> The error message is overly long, listing functions internal
     to the STL that the user does not (and should not!) know or care
@@ -256,7 +256,7 @@ error messages.
   specified in the error message.
 <LI> The message refers explicitly to concepts that the user can look
   up in the STL documentation (<a
-href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
 RandomAccessIterator</a>).
 <LI> The error message is now much shorter and does not reveal
   internal STL functions.
