@@ -16,13 +16,7 @@
 #include <boost/preprocessor/list/fold_left_2nd.hpp>
 #include <boost/preprocessor/list/reverse.hpp>
 
-/** <p>Same as BOOST_PP_LIST_FOLD_RIGHT(), but implemented independently.</p>
-
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_LIST_FOLD_LEFT_2ND()</li>
-</ul>
-*/
+/** <p>Same as BOOST_PP_LIST_FOLD_RIGHT(), but implemented independently.</p> */
 #define BOOST_PP_LIST_FOLD_RIGHT_2ND(F,L,P) BOOST_PP_LIST_FOLD_RIGHT_2ND_D(0,F,L,P)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */

@@ -16,13 +16,7 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** <p>Same as BOOST_PP_LIST_FOLD_LEFT(), but implemented independently.</p>
-
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_WHILE()</li>
-</ul>
-*/
+/** <p>Same as BOOST_PP_LIST_FOLD_LEFT(), but implemented independently.</p> */
 #define BOOST_PP_LIST_FOLD_LEFT_2ND(F,P,L) BOOST_PP_LIST_FOLD_LEFT_2ND_D(0,F,P,L)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */

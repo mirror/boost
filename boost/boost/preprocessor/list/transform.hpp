@@ -42,6 +42,7 @@ of the list producing a new list.</p>
 
 <h3>Uses</h3>
 <ul>
+  <li>BOOST_PP_WHILE() (see for explanation of the D parameter)</li>
   <li>BOOST_PP_LIST_FOLD_RIGHT()</li>
 </ul>
 

@@ -42,7 +42,7 @@ list <code>L</code> (from the left or the start of the list).</p>
 
 <h3>Uses</h3>
 <ul>
-  <li>BOOST_PP_WHILE()</li>
+  <li>BOOST_PP_WHILE() (see for explanation of the D parameter)</li>
 </ul>
 
 <h3>Test</h3>

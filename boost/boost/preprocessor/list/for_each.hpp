@@ -34,7 +34,8 @@ BOOST_PP_LIST_SIZE(L)[.</p>
 
 <h3>Uses</h3>
 <ul>
-  <li>BOOST_PP_LIST_FOR_EACH_I()</li>
+  <li>BOOST_PP_FOR() (see for explanation of the R parameter)</li>
+  <li>BOOST_PP_LIST_FOR_EACH_I() </li>
 </ul>
 
 <h3>Test</h3>

@@ -38,6 +38,7 @@ list <code>L</code> (from the right or the end of the list).</p>
 
 <h3>Uses</h3>
 <ul>
+  <li>BOOST_PP_WHILE() (see for explanation of the D parameter)</li>
   <li>BOOST_PP_LIST_FOLD_LEFT()</li>
 </ul>
 

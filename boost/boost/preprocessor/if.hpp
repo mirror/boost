@@ -19,8 +19,7 @@
 /** <p>Expands to <code>T</code> if <code>C != 0</code> and <code>E</code> if
 <code>C == 0</code>.</p>
 
-<p>BOOST_PP_IF() enables convenient generation of lists using
-BOOST_PP_REPEAT().</p>
+<p>For example, <code>BOOST_PP_IF(0,1,2)</code> expands to <code>2</code>.</p>
 
 <h3>Test</h3>
 <ul>
