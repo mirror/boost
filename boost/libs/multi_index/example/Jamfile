@@ -48,4 +48,5 @@ exe serialization
     : serialization.cpp
 	  <lib>../../serialization/build/boost_serialization
     : <include>$(BOOST_ROOT)
+	  std::locale-support
     ;

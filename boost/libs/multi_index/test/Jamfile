@@ -35,7 +35,10 @@ DEPENDS all : test ;
         : [ run test_range.cpp            test_range_main.cpp            ]
         : [ run test_safe_mode.cpp        test_safe_mode_main.cpp        ]
         : [ run test_serialization.cpp    test_serialization_main.cpp
-            <lib>../../serialization/build/boost_serialization           ]
+                <lib>../../serialization/build/boost_serialization           
+            : # args
+            : # input files
+            : std::locale-support                                        ]
         : [ run test_set_ops.cpp          test_set_ops_main.cpp          ]
         : [ run test_special_list_ops.cpp test_special_list_ops_main.cpp ]
         : [ run test_special_set_ops.cpp  test_special_set_ops_main.cpp  ]
