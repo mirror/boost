@@ -39,12 +39,6 @@ bool check_base_derived(Base& b, Derived& d, int)
 }
 
 template <typename T>
-T* wknd_get(boost::variant<T*>& var, long)
-{
-    return boost::get<T*>(var);
-}
-
-template <typename T>
 T& wknd_get(boost::variant<T&>& var, long)
 {
     return boost::get<T>(var);
