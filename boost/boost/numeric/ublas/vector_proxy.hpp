@@ -501,10 +501,11 @@ namespace boost { namespace numeric { namespace ublas {
         return data.project (r);
     }
 
-    /// Specialization of temporary_traits
+    // Specialization of temporary_traits
     template <class V>
     struct vector_temporary_traits< vector_range<V> >
     : vector_temporary_traits< V > {} ;
+
 
     // Vector based slice class
     template<class V>
@@ -1002,10 +1003,11 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 
-    /// Specialization of temporary_traits
+    // Specialization of temporary_traits
     template <class V>
     struct vector_temporary_traits< vector_slice<V> >
     : vector_temporary_traits< V > {} ;
+
 
     // Vector based indirection class
     // Contributed by Toon Knapen.
@@ -1514,7 +1516,7 @@ return true;
         return data.project (ia);
     }
 
-    /// Specialization of temporary_traits
+    // Specialization of temporary_traits
     template <class V>
     struct vector_temporary_traits< vector_indirect<V> >
     : vector_temporary_traits< V > {} ;
