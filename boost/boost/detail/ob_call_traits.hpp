@@ -33,7 +33,7 @@
 
 namespace boost{
 
-#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
 //
 // use member templates to emulate
 // partial specialisation:

@@ -18,7 +18,7 @@ namespace boost
 
 //  scoped_ptr mimics a built-in pointer except that it guarantees deletion
 //  of the object pointed to, either on destruction of the scoped_ptr or via
-//  an explicit reset().  scoped_ptr is a simple solution for simple needs;
+//  an explicit reset(). scoped_ptr is a simple solution for simple needs;
 //  use shared_ptr or std::auto_ptr if your needs are more complex.
 
 template<typename T> class scoped_ptr // noncopyable
@@ -34,57 +34,57 @@ public:
 
     typedef T element_type;
 
-    explicit scoped_ptr( T* p = 0 ): ptr(p)  // never throws
+    explicit scoped_ptr(T * p = 0): ptr(p) // never throws
     {
     }
 
-    ~scoped_ptr()
+    ~scoped_ptr() // never throws
     {
         typedef char type_must_be_complete[sizeof(T)];
         delete ptr;
     }
 
-    void reset( T* p = 0 )
+    void reset(T * p = 0) // never throws
     {
         typedef char type_must_be_complete[sizeof(T)];
 
-        if ( ptr != p )
+        if (ptr != p)
         {
             delete ptr;
             ptr = p;
         }
     }
 
-    T& operator*() const  // never throws
+    T & operator*() const // never throws
     {
         BOOST_ASSERT(ptr != 0);
         return *ptr;
     }
 
-    T* operator->() const  // never throws
+    T * operator->() const // never throws
     {
         BOOST_ASSERT(ptr != 0);
         return ptr;
     }
 
-    T* get() const  // never throws
+    T * get() const // never throws
     {
         return ptr;
     }
 
-    void swap(scoped_ptr & rhs)
+    void swap(scoped_ptr & b) // never throws
     {
-        T * tmp = rhs.ptr;
-        rhs.ptr = ptr;
+        T * tmp = b.ptr;
+        b.ptr = ptr;
         ptr = tmp;
     }
 };
 
-template<class T> inline void swap(scoped_ptr<T> & a, scoped_ptr<T> & b)
+template<typename T> inline void swap(scoped_ptr<T> & a, scoped_ptr<T> & b) // never throws
 {
     a.swap(b);
 }
 
 } // namespace boost
 
-#endif  // #ifndef BOOST_SCOPED_PTR_HPP_INCLUDED
+#endif // #ifndef BOOST_SCOPED_PTR_HPP_INCLUDED

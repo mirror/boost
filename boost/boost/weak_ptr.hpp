@@ -67,14 +67,20 @@ public:
     template<typename Y>
     weak_ptr(weak_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
-        if(px == 0) // need to allocate new counter -- the cast failed
-        {
+        if (px == 0) // need to allocate new counter -- the cast failed
             pn = detail::weak_count();
-        }
     }
 
     template<typename Y>
-    weak_ptr & operator=(weak_ptr<Y> const & r) // nothrow?
+    weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
+    {
+        px = r.px;
+        pn = r.pn;
+        return *this;
+    }
+
+    template<typename Y>
+    weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
         px = r.px;
         pn = r.pn;
@@ -86,11 +92,6 @@ public:
         this_type().swap(*this);
     }
 
-    long use_count() const // never throws
-    {
-        return pn.use_count();
-    }
-
     T * get() const // never throws
     {
         return use_count() == 0? 0: px;
@@ -99,7 +100,6 @@ public:
     typename detail::shared_ptr_traits<T>::reference operator* () const // never throws
     {
         T * p = get();
-
         BOOST_ASSERT(p != 0);
         return *p;
     }
@@ -107,11 +107,15 @@ public:
     T * operator-> () const // never throws
     {
         T * p = get();
-
         BOOST_ASSERT(p != 0);
         return p;
     }
     
+    long use_count() const // never throws
+    {
+        return pn.use_count();
+    }
+
     void swap(weak_ptr<T> & other) // never throws
     {
         std::swap(px, other.px);
@@ -149,6 +153,11 @@ template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const
     return std::less<T*>()(a.get(), b.get());
 }
 
+template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
+{
+    a.swap(b);
+}
+
 template<class T, class U> weak_ptr<T> shared_static_cast(weak_ptr<U> const & r)
 {
     return weak_ptr<T>(r, detail::static_cast_tag());
@@ -157,11 +166,6 @@ template<class T, class U> weak_ptr<T> shared_static_cast(weak_ptr<U> const & r)
 template<class T, class U> weak_ptr<T> shared_dynamic_cast(weak_ptr<U> const & r)
 {
     return weak_ptr<T>(r, detail::dynamic_cast_tag());
-}
-
-template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
-{
-    a.swap(b);
 }
 
 // get_pointer() enables boost::mem_fn to recognize weak_ptr

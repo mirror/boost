@@ -17,5 +17,3 @@ example & example::operator=( const example & s )
 
 void example::do_something()
   { std::cout << "use_count() is " << _imp.use_count() << "\n"; }
-
-example::~example() {}

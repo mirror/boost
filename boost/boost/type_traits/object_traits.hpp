@@ -300,7 +300,7 @@ public:
 };
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
 
 namespace detail{
 
@@ -377,7 +377,7 @@ public:
 #else
 template <typename T> struct is_empty
 { enum{ value = BOOST_IS_EMPTY(T) }; };
-#endif  // defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
+#endif  // BOOST_MSVC6_MEMBER_TEMPLATES
 
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

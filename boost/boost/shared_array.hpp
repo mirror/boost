@@ -17,7 +17,7 @@
 
 #include <boost/config.hpp>   // for broken compiler workarounds
 
-#if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_MSVC6_MEMBER_TEMPLATES
 #include <boost/detail/shared_array_nmt.hpp>
 #else
 
@@ -75,6 +75,11 @@ public:
         this_type(p).swap(*this);
     }
 
+    template <typename D> void reset(T * p = 0, D d)
+    {
+        this_type(p, d).swap(*this);
+    }
+
     T & operator[] (std::ptrdiff_t i) const // never throws
     {
         BOOST_ASSERT(px != 0);
@@ -87,14 +92,14 @@ public:
         return px;
     }
 
-    long use_count() const // never throws
-    {
-        return pn.use_count();
-    }
-
     bool unique() const // never throws
     {
         return pn.unique();
+    }
+
+    long use_count() const // never throws
+    {
+        return pn.use_count();
     }
 
     void swap(shared_array<T> & other) // never throws
@@ -110,28 +115,28 @@ private:
 
 };  // shared_array
 
-template<class T, class U> inline bool operator==(shared_array<T> const & a, shared_array<U> const & b)
+template<typename T> inline bool operator==(shared_array<T> const & a, shared_array<T> const & b) // never throws
 {
     return a.get() == b.get();
 }
 
-template<class T, class U> inline bool operator!=(shared_array<T> const & a, shared_array<U> const & b)
+template<typename T> inline bool operator!=(shared_array<T> const & a, shared_array<T> const & b) // never throws
 {
     return a.get() != b.get();
 }
 
-template<class T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b)
+template<typename T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b) // never throws
 {
     return std::less<T*>()(a.get(), b.get());
 }
 
-template<class T> void swap(shared_array<T> & a, shared_array<T> & b)
+template<typename T> void swap(shared_array<T> & a, shared_array<T> & b) // never throws
 {
     a.swap(b);
 }
 
 } // namespace boost
 
-#endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC_MEMBER_TEMPLATES)
+#endif  // #ifndef BOOST_MSVC6_MEMBER_TEMPLATES
 
 #endif  // #ifndef BOOST_SHARED_ARRAY_HPP_INCLUDED

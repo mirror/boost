@@ -35,7 +35,7 @@ using std::streambuf;
 #include <boost/config.hpp>
 #include <boost/regex.hpp>
 #include <boost/timer.hpp> 
-#include <boost/smart_ptr.hpp>
+#include <boost/scoped_array.hpp>
 
 #ifdef BOOST_MSVC
 // no Koenig lookup, use using declaration instead:

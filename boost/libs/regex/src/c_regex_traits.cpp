@@ -31,6 +31,7 @@
 #include <boost/regex/regex_traits.hpp>
 #include <boost/regex/detail/regex_synch.hpp>
 #include <boost/regex/detail/regex_cstring.hpp>
+#include <boost/scoped_array.hpp>
 
 #include "primary_transform.hpp"
 

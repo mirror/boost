@@ -1,101 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
 <html>
 
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>scoped_array</title>
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
-<meta name="ProgId" content="FrontPage.Editor.Document">
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000">
 
-<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Class
-<a name="scoped_array">scoped_array</a></h1>
-<p>Class <strong>scoped_array</strong> stores a pointer to a dynamically
-allocated array. (Dynamically allocated arrays are allocated with the C++ <tt>new[]</tt>
-expression.)&nbsp;&nbsp; The array pointed to is guaranteed to be deleted,
-either on destruction of the <strong>scoped_array</strong>, or via an explicit <strong>scoped_array::reset()</strong>.</p>
-<p>Class<strong> scoped_array</strong> is a simple solution for simple
-needs.&nbsp;It supplies a basic &quot;resource acquisition is
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86"><a name="scoped_array">scoped_array</a> class template</h1>
+
+<p>The <b>scoped_array</b> class template stores a pointer to a dynamically allocated
+array. (Dynamically allocated arrays are allocated with the C++ <b>new[]</b>
+expression.) The array pointed to is guaranteed to be deleted,
+either on destruction of the <b>scoped_array</b>, or via an explicit <b>reset</b>.</p>
+
+<p>The <b>scoped_array</b> template is a simple solution for simple
+needs. It supplies a basic &quot;resource acquisition is
 initialization&quot; facility, without shared-ownership or transfer-of-ownership
-semantics.&nbsp; Both its name and enforcement of semantics (by being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>)
-signal its intent to retain ownership solely within the current scope.&nbsp; By
-being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>, it is
+semantics. Both its name and enforcement of semantics (by being
+<a href="../utility/utility.htm#class noncopyable">noncopyable</a>)
+signal its intent to retain ownership solely within the current scope.
+Because it is  <a href="../utility/utility.htm#class noncopyable">noncopyable</a>, it is
 safer than <b>shared_array</b> for pointers which should not be copied.</p>
-<p>Because <strong>scoped_array</strong> is so simple, in its usual
-implementation every operation is as fast as a built-in array pointer and it has no
+
+<p>Because <b>scoped_array</b> is so simple, in its usual implementation
+every operation is as fast as a built-in array pointer and it has no
 more space overhead that a built-in array pointer.</p>
-<p>It cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_array.htm"><strong>shared_array</strong></a>
-if <strong>scoped_array</strong> does not meet your needs.</p>
-<p>Class<strong> scoped_array</strong> cannot correctly hold a pointer to a
-single object.&nbsp; See <a href="scoped_ptr.htm"><strong>scoped_ptr</strong></a>
+
+<p>It cannot be used in C++ standard library containers.
+See <a href="shared_array.htm"><b>shared_array</b></a>
+if <b>scoped_array</b> does not meet your needs.</p>
+
+<p>It cannot correctly hold a pointer to a single object.
+See <a href="scoped_ptr.htm"><b>scoped_ptr</b></a>
 for that usage.</p>
-<p>A C++ Standard Library <strong>vector</strong> is a <strong> </strong>heavier duty alternative to a <strong>scoped_array</strong>.</p>
-<p>The class is a template parameterized on <tt>T</tt>, the type of the object
-pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">common
-requirements</a>.</p>
-<h2>Class scoped_array Synopsis</h2>
-<pre>#include &lt;<a href="../../boost/smart_ptr.hpp">boost/smart_ptr.hpp</a>&gt;
-namespace boost {
 
-template&lt;typename T&gt; class scoped_array : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
+<p>A <b>std::vector</b> is an alternative to a <b>scoped_array</b> that is
+a bit heavier duty but far more flexible.
+A <b>boost::array</b> is an alternative that does not use dynamic allocation.</p>
 
- public:
-   typedef T <a href="#scoped_array_element_type">element_type</a>;
+<p>The class template is parameterized on <b>T</b>, the type of the object
+pointed to. <b>T</b> must meet the smart pointer
+<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
 
-   explicit <a href="#scoped_array_ctor">scoped_array</a>( T* p=0 );  // never throws
-  <strong> </strong><a href="#scoped_array_~scoped_array">~scoped_array</a>();
+<h2>Synopsis</h2>
 
-   void <a href="#scoped_array_reset">reset</a>( T* p=0 );
+<pre>namespace boost {
 
-   T&amp; <a href="#scoped_array_operator[]">operator[]</a>(std::size_t i) const;  // never throws
-   T* <a href="#scoped_array_get">get</a>() const;  // never throws
-   };
+  template&lt;typename T&gt; class scoped_array : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
+
+    public:
+      typedef T <a href="#element_type">element_type</a>;
+
+      explicit <a href="#ctor">scoped_array</a>(T * p = 0); // never throws
+      <a href="#~scoped_array">~scoped_array</a>(); // never throws
+
+      void <a href="#reset">reset</a>(T * p = 0); // never throws
+
+      T &amp; <a href="#operator[]">operator[]</a>(std::size_t i) const; // never throws
+      T * <a href="#get">get</a>() const; // never throws
+     
+      void <a href="#swap">swap</a>(scoped_array &amp; b); // never throws
+  };
+
+  template&lt;typename T&gt; void <a href="#free-swap">swap</a>(scoped_array&lt;T&gt; &amp; a, scoped_array&lt;T&gt; &amp; b); // never throws
+
 }</pre>
-<h2>Class scoped_array Members</h2>
-<h3>scoped_array <a name="scoped_array_element_type">element_type</a></h3>
+
+<h2>Members</h2>
+
+<h3>
+<a name="element_type">element_type</a></h3>
 <pre>typedef T element_type;</pre>
 <p>Provides the type of the stored pointer.</p>
-<h3><a name="scoped_array_ctor">scoped_array constructors</a></h3>
-<pre>explicit scoped_array( T* p=0 );  // never throws</pre>
-<p>Constructs a <tt>scoped_array</tt>, storing a copy of <tt>p</tt>, which must
-have been allocated via a C++ <tt>new</tt>[] expression or be 0.</p>
-<p><b>T</b> is not required be a complete type.&nbsp;
-See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
-<h3><a name="scoped_array_~scoped_array">scoped_array destructor</a></h3>
-<pre>~scoped_array();</pre>
-<p>Deletes the array pointed to by the stored pointer.&nbsp; Note that in C++ <tt>delete</tt>[]
-on a pointer with a value of 0 is harmless.</p>
-<p>Does not throw exceptions.</p>
-<h3>scoped_array <a name="scoped_array_reset">reset</a></h3>
-<pre>void reset( T* p=0 )();</pre>
+
+<h3><a name="ctor">constructors</a></h3>
+<pre>explicit scoped_array(T * p = 0); // never throws</pre>
+<p>Constructs a <b>scoped_array</b>, storing a copy of <b>p</b>, which must
+have been allocated via a C++ <b>new</b>[] expression or be 0.
+<b>T</b> is not required be a complete type.
+See the smart pointer
+<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+
+<h3><a name="~scoped_array">destructor</a></h3>
+<pre>~scoped_array(); // never throws</pre>
+<p>Deletes the array pointed to by the stored pointer.
+Note that <b>delete[]</b> on a pointer with a value of 0 is harmless.
+The guarantee that this does not throw exceptions depends on the requirement that the
+deleted array's objects' destructors do not throw exceptions.
+See the smart pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+
+<h3><a name="reset">reset</a></h3>
+<pre>void reset(T * p = 0); // never throws</pre>
 <p>If p is not equal to the stored pointer, deletes the array pointed to by the
 stored pointer and then stores a copy of p, which must have been allocated via a
-C++ <tt>new[]</tt> expression or be 0.</p>
-<p>Does not throw exceptions.</p>
-<h3>scoped_array <a name="scoped_array_operator[]">operator[]</a></h3>
-<p><tt>T&amp; operator[](std::size_t i) const; // never throws</tt></p>
-<p>Returns a reference to element <tt>i</tt> of the array pointed to by the
-stored pointer.</p>
-<p>Behavior is undefined (and almost certainly undesirable) if <tt>get()==0</tt>,
-or if <tt>i</tt> is less than 0 or is greater or equal to the number of elements
+C++ <b>new[]</b> expression or be 0.
+The guarantee that this does not throw exceptions depends on the requirement that the
+deleted array's objects' destructors do not throw exceptions.
+See the smart pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+
+<h3><a name="operator[]">subscripting</a></h3>
+<pre>T &amp; operator[](std::size_t i) const; // never throws</pre>
+<p>Returns a reference to element <b>i</b> of the array pointed to by the
+stored pointer.
+Behavior is undefined and almost certainly undesirable if the stored pointer is 0,
+or if <b>i</b> is less than 0 or is greater than or equal to the number of elements
 in the array.</p>
-<h3>scoped_array <a name="scoped_array_get">get</a></h3>
-<pre>T* get() const;  // never throws</pre>
-<p><b>T</b> is not required be a complete type.&nbsp;
-See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
-<p>Returns the stored pointer.</p>
-<h2>Class <a name="shared_array_example">scoped_array example</a></h2>
-<p>[To be supplied. In the meantime, see <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>.]</p>
+
+<h3><a name="get">get</a></h3>
+<pre>T * get() const; // never throws</pre>
+<p>Returns the stored pointer.
+<b>T</b> need not be a complete type.
+See the smart pointer
+<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+
+<h3><a name="swap">swap</a></h3>
+<pre>void swap(scoped_array &amp; b); // never throws</pre>
+<p>Exchanges the contents of the two smart pointers.
+<b>T</b> need not be a complete type.
+See the smart pointer
+<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+
+<h2><a name="functions">Free Functions</a></h2>
+
+<h3><a name="free-swap">swap</a></h3>
+<pre>template&lt;typename T&gt; void swap(scoped_array&lt;T&gt; &amp; a, scoped_array&lt;T&gt; &amp; b); // never throws</pre>
+<p>Equivalent to <b>a.swap(b)</b>. Matches the interface of <b>std::swap</b>.
+Provided as an aid to generic programming.</p>
+
 <hr>
-<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan
--->24 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13964"
--->
-</p>
-<p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
-modify, sell and distribute this document is granted provided this copyright
-notice appears in all copies. This document is provided &quot;as is&quot;
-without express or implied warranty, and with no claim as to its suitability for
-any purpose.</p>
+
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan-->1 February 2002<!--webbot bot="Timestamp" endspan i-checksum="13964"--></p>
+
+<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler.
+Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies.
+This document is provided &quot;as is&quot; without express or implied warranty,
+and with no claim as to its suitability for any purpose.</p>
 
 </body>
 

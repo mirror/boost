@@ -36,6 +36,7 @@
 #include <map>
 #include <boost/regex/regex_traits.hpp>
 #include <boost/cregex.hpp>
+#include <boost/scoped_array.hpp>
 #include "primary_transform.hpp"
 
 

@@ -48,7 +48,6 @@
 #  include <stdexcept>
 #  include <iterator>
 #  include <boost/config.hpp>
-#  include <boost/smart_ptr.hpp>
 #  include <boost/cstdint.hpp>
 #  include <boost/detail/allocator.hpp>
 #else

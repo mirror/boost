@@ -20,7 +20,7 @@
 #include <set>
 #include <iostream>
 #include <algorithm>
-#include <boost/smart_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 //  The application will produce a series of
 //  objects of type Foo which later must be

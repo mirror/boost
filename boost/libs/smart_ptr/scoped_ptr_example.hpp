@@ -1,6 +1,6 @@
 //  Boost scoped_ptr_example header file  ------------------------------------//
 
-#include <boost/smart_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //  The point of this example is to prove that even though
 //  example::implementation is an incomplete type in translation units using

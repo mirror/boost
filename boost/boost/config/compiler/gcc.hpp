@@ -8,7 +8,7 @@
 //  GNU C++ compiler setup:
 
 #   if __GNUC__ == 2 && __GNUC_MINOR__ == 91
-       // egcs 1.1 won't parse smart_ptr.hpp without this:
+       // egcs 1.1 won't parse shared_ptr.hpp without this:
 #      define BOOST_NO_AUTO_PTR
 #   endif
 #   if __GNUC__ == 2 && __GNUC_MINOR__ < 95

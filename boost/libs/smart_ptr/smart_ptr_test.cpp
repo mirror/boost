@@ -13,12 +13,22 @@
 //  20 Jul 99  header name changed to .hpp
 //  20 Apr 99  additional error tests added.
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/scoped_array.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
+
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
-#include <boost/smart_ptr.hpp>
+
 #include <cstring>
 #include <iostream>
 #include <set>
+
+bool boost_error(char const *, char const *, char const *, long)
+{
+	return true; // fail with assert()
+}
 
 class Incomplete;
 
@@ -48,7 +58,7 @@ class UDT {
   explicit UDT( long value=0 ) : value_(value) { ++UDT_use_count; }
   ~UDT() {
     --UDT_use_count;
-    cout << "UDT with value " << value_ << " being destroyed" << endl;
+    cout << "UDT with value " << value_ << " being destroyed\n";
     }
   long value() const { return value_; }
   void value( long v ) { value_ = v;; }
@@ -71,7 +81,7 @@ Incomplete * check_incomplete( shared_ptr<Incomplete>& incomplete,
                                shared_ptr<Incomplete>& i2 )
 {
   incomplete.swap(i2);
-  cout << incomplete.use_count() << " " << incomplete.unique() << endl;
+  cout << incomplete.use_count() << ' ' << incomplete.unique() << '\n';
   return incomplete.get();
 }
 //  main  --------------------------------------------------------------------//
@@ -186,12 +196,10 @@ int test_main( int, char ** ) {
   BOOST_TEST( *cp4 == 87654 );
   BOOST_TEST( cp2.get() == 0 );
   
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   set< shared_ptr<int> > scp;
   scp.insert(cp4);
   BOOST_TEST( scp.find(cp4) != scp.end() );
   BOOST_TEST( scp.find(cp4) == scp.find( shared_ptr<int>(cp4) ) );
-#endif
 
   //  test shared_array with a built-in type
   char * cap = new char [ 100 ];
@@ -232,12 +240,10 @@ int test_main( int, char ** ) {
   BOOST_TEST( strcmp( ca4.get(), "Not dog with mustard and relish" ) == 0 );
   BOOST_TEST( ca3.get() == 0 );
   
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   set< shared_array<char> > sca;
   sca.insert(ca4);
   BOOST_TEST( sca.find(ca4) != sca.end() );
   BOOST_TEST( sca.find(ca4) == sca.find( shared_array<char>(ca4) ) );
-#endif
 
   //  test shared_array with user defined type
   shared_array<UDT> udta ( new UDT[3] );
@@ -280,7 +286,7 @@ int test_main( int, char ** ) {
   BOOST_TEST( sup.use_count() == 2 );
   BOOST_TEST( sup2.use_count() == 2 );
 
-  cout << "OK" << endl;
+  cout << "OK\n";
 
   new char[12345]; // deliberate memory leak to verify leaks detected
 

@@ -35,49 +35,49 @@ public:
 
     typedef T element_type;
 
-    explicit scoped_array( T* p = 0 ): ptr(p)  // never throws
+    explicit scoped_array(T * p = 0) : ptr(p) // never throws
     {
     }
 
-    ~scoped_array()
+    ~scoped_array() // never throws
     {
         typedef char type_must_be_complete[sizeof(T)];
         delete [] ptr;
     }
 
-    void reset( T* p = 0 )
+    void reset(T * p = 0) // never throws
     {
         typedef char type_must_be_complete[sizeof(T)];
 
-        if ( ptr != p )
+        if (ptr != p)
         {
             delete [] ptr;
             ptr = p;
         }
     }
 
-    T& operator[](std::ptrdiff_t i) const  // never throws
+    T& operator[](std::ptrdiff_t i) const // never throws
     {
         BOOST_ASSERT(ptr != 0);
         BOOST_ASSERT(i >= 0);
         return ptr[i];
     }
 
-    T* get() const  // never throws
+    T* get() const // never throws
     {
         return ptr;
     }
 
-    void swap(scoped_array & rhs)
+    void swap(scoped_array & b) // never throws
     {
-        T * tmp = rhs.ptr;
-        rhs.ptr = ptr;
+        T * tmp = b.ptr;
+        b.ptr = ptr;
         ptr = tmp;
     }
 
 };
 
-template<class T> inline void swap(scoped_array<T> & a, scoped_array<T> & b)
+template<class T> inline void swap(scoped_array<T> & a, scoped_array<T> & b) // never throws
 {
     a.swap(b);
 }

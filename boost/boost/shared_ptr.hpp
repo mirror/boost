@@ -17,7 +17,7 @@
 
 #include <boost/config.hpp>   // for broken compiler workarounds
 
-#if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_MSVC6_MEMBER_TEMPLATES
 #include <boost/detail/shared_ptr_nmt.hpp>
 #else
 
@@ -44,7 +44,7 @@ namespace detail
 struct static_cast_tag {};
 struct dynamic_cast_tag {};
 
-template<class T> struct shared_ptr_traits
+template<typename T> struct shared_ptr_traits
 {
     typedef T & reference;
 };
@@ -108,10 +108,8 @@ public:
     template<typename Y>
     shared_ptr(shared_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
-        if(px == 0) // need to allocate new counter -- the cast failed
-        {
+        if (px == 0) // need to allocate new counter -- the cast failed
             pn = detail::shared_count(static_cast<element_type *>(0), deleter());
-        }
     }
 
 #ifndef BOOST_NO_AUTO_PTR
@@ -124,7 +122,7 @@ public:
 #endif 
 
     template<typename Y>
-    shared_ptr & operator=(shared_ptr<Y> const & r) // nothrow?
+    shared_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
         px = r.px;
         pn = r.pn; // shared_count::op= doesn't throw
@@ -170,14 +168,14 @@ public:
         return px;
     }
 
-    long use_count() const // never throws
-    {
-        return pn.use_count();
-    }
-
     bool unique() const // never throws
     {
         return pn.unique();
+    }
+
+    long use_count() const // never throws
+    {
+        return pn.use_count();
     }
 
     void swap(shared_ptr<T> & other) // never throws
@@ -204,39 +202,39 @@ private:
 
 };  // shared_ptr
 
-template<class T, class U> inline bool operator==(shared_ptr<T> const & a, shared_ptr<U> const & b)
+template<typename T, typename U> inline bool operator==(shared_ptr<T> const & a, shared_ptr<U> const & b)
 {
     return a.get() == b.get();
 }
 
-template<class T, class U> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<U> const & b)
+template<typename T, typename U> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<U> const & b)
 {
     return a.get() != b.get();
 }
 
-template<class T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
+template<typename T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
 {
     return std::less<T*>()(a.get(), b.get());
 }
 
-template<class T, class U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
-{
-    return shared_ptr<T>(r, detail::static_cast_tag());
-}
-
-template<class T, class U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
-{
-    return shared_ptr<T>(r, detail::dynamic_cast_tag());
-}
-
-template<class T> void swap(shared_ptr<T> & a, shared_ptr<T> & b)
+template<typename T> void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 {
     a.swap(b);
 }
 
+template<typename T, typename U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
+{
+    return shared_ptr<T>(r, detail::static_cast_tag());
+}
+
+template<typename T, typename U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
+{
+    return shared_ptr<T>(r, detail::dynamic_cast_tag());
+}
+
 // get_pointer() enables boost::mem_fn to recognize shared_ptr
 
-template<class T> inline T * get_pointer(shared_ptr<T> const & p)
+template<typename T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
 }
@@ -247,6 +245,6 @@ template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 # pragma warning(pop)
 #endif    
 
-#endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC_MEMBER_TEMPLATES)
+#endif  // #ifndef BOOST_MSVC6_MEMBER_TEMPLATES
 
 #endif  // #ifndef BOOST_SHARED_PTR_HPP_INCLUDED

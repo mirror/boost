@@ -47,6 +47,7 @@
 #include <boost/regex/pattern_except.hpp>
 #include <boost/regex/regex_traits.hpp>
 #include <boost/type_traits/cv_traits.hpp>
+#include <boost/scoped_array.hpp>
 
 
 namespace boost{

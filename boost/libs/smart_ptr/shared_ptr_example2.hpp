@@ -1,6 +1,6 @@
 //  Boost shared_ptr_example2 header file  -----------------------------------//
 
-#include <boost/smart_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 //  This example demonstrates the handle/body idiom (also called pimpl and
 //  several other names).  It separates the interface (in this header file)
@@ -16,7 +16,6 @@ class example
 {
  public:
   example();
-  ~example();
   example( const example & );
   example & operator=( const example & );
   void do_something();

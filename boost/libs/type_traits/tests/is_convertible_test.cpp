@@ -44,7 +44,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, (boost::is_convertible<float const&,convertible_from<float const&> >::value));
    value_test(true, (boost::is_convertible<float&,convertible_from<float const&> >::value));
 
-#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
    value_test(false, (boost::is_convertible<float,void>::value));
    value_test(false, (boost::is_convertible<void,float>::value));
    value_test(true, (boost::is_convertible<void,void>::value));
