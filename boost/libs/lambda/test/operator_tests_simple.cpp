@@ -12,8 +12,9 @@
 
 #include <iostream>
 
-
+#ifndef BOOST_NO_STRINGSTREAM
 #include <sstream>
+#endif
 
 using namespace std;
 using namespace boost;
@@ -26,6 +27,7 @@ unary_plus_tester operator+(const unary_plus_tester& a) { return a; }
 
 void cout_tests()
 {
+#ifndef BOOST_NO_STRINGSTREAM
   using std::cout;
   ostringstream os;
   int i = 10; 
@@ -58,6 +60,7 @@ void cout_tests()
   constant_ref_type<int>::type cr(constant_ref(i));
   (++vi, var(a) = cr)();
   BOOST_TEST(i == 101);
+#endif
 }
 
 void arithmetic_operators() {
