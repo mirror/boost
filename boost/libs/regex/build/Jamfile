@@ -158,11 +158,6 @@ stage bin-stage : <lib>boost_regex <dll>boost_regex
         debug release
     ;
 
-
-
-
-
-
-
-
-
+install regex lib
+    : <dll>boost_regex <lib>boost_regex
+    ;

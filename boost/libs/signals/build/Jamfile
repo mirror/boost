@@ -30,3 +30,6 @@ stage ../../../lib
     : debug release
     ;
 
+install signals lib
+    : <dll>boost_signals <lib>boost_signals
+    ;
