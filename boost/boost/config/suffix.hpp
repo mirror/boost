@@ -240,7 +240,7 @@ namespace std {
 
 #if defined(BOOST_NO_STD_USE_FACET)
 #  ifdef BOOST_HAS_TWO_ARG_USE_FACET
-#     define BOOST_USE_FACET(Type, loc) std::use_facet(loc, static_cast<Type const*>(0))
+#     define BOOST_USE_FACET(Type, loc) std::use_facet(loc, static_cast<Type*>(0))
 #  elif defined(BOOST_HAS_MACRO_USE_FACET)
 #     define BOOST_USE_FACET(Type, loc) std::_USE(loc, Type)
 #  elif defined(BOOST_HAS_STLP_USE_FACET)
