@@ -90,9 +90,7 @@ namespace boost {
             iterator_range( Range& r ) : 
             m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
 
-            //! Copy constructor
-            iterator_range( const iterator_range& Other ) :
-                m_Begin(Other.begin()), m_End(Other.end()) {}
+            //! Copy constructor -- default OK
 
             //! Templated copy constructor
             /*!
@@ -103,12 +101,7 @@ namespace boost {
             iterator_range( const iterator_range<OtherItT>& Other ) :
                 m_Begin(Other.begin()), m_End(Other.end()) {}
 
-            //! Assignment operator
-            iterator_range& operator=( const iterator_range& Other )
-            {
-                m_Begin=Other.begin(); m_End=Other.end();
-                return *this;
-            }
+            //! Assignment operator -- defefault OK
 
             //! Assignment operator ( templated version )
             template< typename OtherItT >
