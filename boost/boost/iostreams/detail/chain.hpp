@@ -139,7 +139,7 @@ public:
     streambuf_type* operator->() { return list().front(); }
 public:
     typedef typename list_type::size_type size_type;
-    BOOST_IOSTREAMS_DEFINE_PUSH(mode, char_type, push, push_impl)
+    BOOST_IOSTREAMS_DEFINE_PUSH(push, mode, char_type, push_impl)
     void pop();
     bool empty() const { return list().empty(); }
     size_type size() const { return list().size(); }
@@ -318,7 +318,7 @@ public:
     void set_filter_buffer_size(std::streamsize n)
         { chain_->set_filter_buffer_size(n); }
     void set_pback_size(std::streamsize n) { chain_->set_pback_size(n); }
-    BOOST_IOSTREAMS_DEFINE_PUSH(mode, char_type, push, push_impl)
+    BOOST_IOSTREAMS_DEFINE_PUSH(push, mode, char_type, push_impl)
     void pop() { chain_->pop(); }
     bool empty() const { return chain_->empty(); }
     size_type size() { return chain_->size(); }
