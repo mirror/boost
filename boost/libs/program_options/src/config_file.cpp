@@ -137,6 +137,7 @@ namespace boost { namespace program_options { namespace detail {
         return false;
     }
 
+#ifndef BOOST_NO_STD_WSTRING
     template<>
     bool
     basic_config_file_iterator<wchar_t>::getline(std::string& s)
@@ -149,6 +150,7 @@ namespace boost { namespace program_options { namespace detail {
             return false;
         }            
     }
+#endif    
 
 }}}
 
