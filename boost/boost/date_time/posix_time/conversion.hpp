@@ -27,6 +27,26 @@ namespace posix_time {
     return start + seconds(t);
   }
 
+  //! Convert a time to a tm structure truncating any fractional seconds 
+  inline
+  tm to_tm(const boost::posix_time::ptime& t) {
+    tm timetm = boost::gregorian::to_tm(t.date());
+    boost::posix_time::time_duration td = t.time_of_day();
+    timetm.tm_hour = td.hours(); 
+    timetm.tm_min = td.minutes(); 
+    timetm.tm_sec = td.seconds();
+    timetm.tm_isdst = -1; //?
+    return timetm;
+  }
+
+  //! Convert a tm struct to a ptime ignoring is_dst flag
+  inline
+  ptime ptime_from_tm(const tm& timetm) {
+    boost::gregorian::date d = boost::gregorian::date_from_tm(timetm);
+    return ptime(d, time_duration(timetm.tm_hour, timetm.tm_min, timetm.tm_sec));
+  }
+
+
 #if defined(BOOST_HAS_FTIME)
   
   //! Function to create a time object from an initialized FILETIME struct.
