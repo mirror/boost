@@ -374,6 +374,49 @@ readability seems to introduce needless complexity.
           else
               return null_category_tag;
 
+
+  In [lib.iterator.special.adaptors]:
+
+  Change::
+
+    template <
+        class Iterator
+      , class Value = use_default
+      , unsigned Access  = use_default_access
+      , class Traversal  = use_default
+      , class Reference = use_default
+      , class Difference = use_default
+    >
+    class indirect_iterator
+
+  to::
+
+    template <
+        class Iterator
+      , class Value = use_default
+      , class CategoryOrTraversal = use_default
+      , class Reference = use_default
+      , class Difference = use_default
+    >
+    class indirect_iterator
+
+  Change::
+
+    template <
+        class Iterator2, class Value2, unsigned Access2, class Traversal2
+      , class Reference2, class Difference2
+    >
+    indirect_iterator(
+
+  to::
+
+    template <
+        class Iterator2, class Value2, class Category2
+      , class Reference2, class Difference2
+    >
+    indirect_iterator(
+
+
 :Rationale: 
 
 1. There are two reasons for removing ``is_writable``
@@ -705,29 +748,20 @@ Is that what's meant here?
 constructor like this: the constructor returns "a copy" of the argument without saying what a 
 copy is.) 
 
-:Proposed resolution: Change the specification to
+:Proposed resolution: 
 
-::
+  Change:
 
-  template <
-      class Iterator2, class Value2, unsigned Access, class Traversal
-    , class Reference2, class Difference2
-  >
-  indirect_iterator(
-      indirect_iterator<
-           Iterator2, Value2, Access, Traversal, Reference2, Difference2
-      > const& y
-    , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
-  );
+    :Returns: An instance of ``indirect_iterator`` that is a copy of ``y``.
 
-:Requires: ``Iterator2`` is implicitly convertible to ``Iterator``.
-:Returns: An instance of ``indirect_iterator`` whose 
-    ``m_iterator`` subobject is constructed from ``y.base()``.
+  to:
+
+    :Returns: An instance of ``indirect_iterator`` whose 
+      ``m_iterator`` subobject is constructed from ``y.base()``.
 
 
 :Rationale: Inheritance from iterator_adaptor has been removed, so we
-  instead give the semantics in terms of the (exposition only) member
-  ``m_iterator``.
+  instead give the semantics in terms of the member ``m_iterator``.
 
 
 9.30 transform_iterator argument irregularity 
@@ -934,6 +968,84 @@ provide rather than how they're implemented.
 
   In [lib.iterator.special.adaptors]
 
+  Change::
+
+    class indirect_iterator
+      : public iterator_adaptor</* see discussion */>
+    {
+        friend class iterator_core_access;
+
+  to::
+
+    class indirect_iterator
+    {
+     public:
+        typedef /* see below */ value_type;
+        typedef /* see below */ reference;
+        typedef /* see below */ pointer;
+        typedef /* see below */ difference_type;
+        typedef /* see below */ iterator_category;
+
+  Change::
+
+    private: // as-if specification
+        typename indirect_iterator::reference dereference() const
+        {
+            return **this->base();
+        }
+
+  to::
+
+        Iterator base() const;
+        reference operator*() const;
+        indirect_iterator& operator++();
+        indirect_iterator& operator--();
+    private:
+       Iterator m_iterator; // exposition
+
+
+  After the synopsis add:
+
+    The member types of ``indirect_iterator`` are defined according to
+    the following pseudo-code, where ``V`` is
+    ``iterator_traits<Iterator>::value_type``
+    
+    .. parsed-literal::
+    
+      if (Value is use_default) then
+          typedef remove_const<pointee<V>::type>::type value_type;
+      else
+          typedef remove_const<Value>::type value_type;
+    
+      if (Reference is use_default) then
+          if (Value is use_default) then
+              typedef indirect_reference<V>::type reference;
+          else
+              typedef Value& reference;
+      else
+          typedef Reference reference;
+    
+      if (Value is use_default) then 
+          typedef pointee<V>::type\* pointer;
+      else 
+          typedef Value\* pointer;
+    
+      if (Difference is use_default)
+          typedef iterator_traits<Iterator>::difference_type difference_type;
+      else
+          typedef Difference difference_type;
+    
+      if (CategoryOrTraversal is use_default)
+          typedef |iterator-category|_\ (
+              iterator_traversal<Iterator>::type,``reference``,``value_type``
+          ) iterator_category;
+      else
+          typedef |iterator-category|_\ (
+              CategoryOrTraversal,``reference``,``value_type``
+          ) iterator_category;
+
+
+
 
   Change::
 
@@ -954,7 +1066,7 @@ provide rather than how they're implemented.
       typedef /* see below */ iterator_category;
 
 
-  Add::
+  After ``UnaryFunction functor() const;`` add::
 
      Iterator base() const;
      reference operator*() const;
@@ -976,7 +1088,7 @@ provide rather than how they're implemented.
      };
 
 
-  Add:
+  After the synopsis, add:
 
     If ``Iterator`` models Readable Lvalue Iterator and if ``Iterator``
     models Random Access Traversal Iterator, then ``iterator_category`` is
@@ -993,7 +1105,7 @@ provide rather than how they're implemented.
 
     The type ``Iterator`` must at least model Readable Iterator.  The
     resulting ``transform_iterator`` models the most refined of the
-    following options that is also modeled by ``Iterator``.
+    following that is also modeled by ``Iterator``.
 
       * Writable Lvalue Iterator if ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type`` is a non-const reference. 
 
@@ -1015,7 +1127,7 @@ provide rather than how they're implemented.
     The argument ``Iterator`` shall model Readable Iterator.
 
 
-  Add a new models section:
+  Add a models section after the requirements section with the following contents:
 
     The resulting ``transform_iterator`` models the most refined of the
     following options that is also modeled by ``Iterator``.
@@ -1059,7 +1171,7 @@ provide rather than how they're implemented.
 
     :Returns: ``m_f(transform_iterator::dereference());``
 
-  Add::
+  After the entry for ``functor()``, add::
 
     ``Iterator base() const;``
     
