@@ -85,6 +85,7 @@ public:
    node* BOOST_REGEX_CALL get_node()
    {
       node* new_stack = reinterpret_cast<node*>(alloc_inst.allocate(sizeof(node) + sizeof(T) * block_size));
+      BOOST_REGEX_NOEH_ASSERT(new_stack)
       new_stack->last = reinterpret_cast<T*>(new_stack+1);
       new_stack->start = new_stack->end = new_stack->last + block_size;
       new_stack->next = 0;

@@ -1075,6 +1075,7 @@ template <class iterator, class Allocator>
 match_results_base<iterator, Allocator>::match_results_base(const Allocator& a)
 {
    ref = (c_reference*)c_alloc(a).allocate(sizeof(sub_match<iterator>) + sizeof(c_reference));
+   BOOST_REGEX_NOEH_ASSERT(ref)
 #ifndef BOOST_NO_EXCEPTIONS
    try
    {
@@ -1166,6 +1167,7 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
    if(ref->cmatches != n)
    {
       c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * n + sizeof(c_reference));
+      BOOST_REGEX_NOEH_ASSERT(newref)
 #ifndef BOOST_NO_EXCEPTIONS
       try
       {
@@ -1217,7 +1219,8 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
 {
    if(ref->cmatches != n)
    {
-      c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * n + sizeof(c_reference));;
+      c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * n + sizeof(c_reference));
+      BOOST_REGEX_NOEH_ASSERT(newref)
 #ifndef BOOST_NO_EXCEPTIONS
       try{
 #endif
@@ -1332,6 +1335,7 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow()
    if(ref->count > 1)
    {
       c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * ref->cmatches + sizeof(c_reference));
+      BOOST_REGEX_NOEH_ASSERT(newref)
 #ifndef BOOST_NO_EXCEPTIONS
       try{
 #endif
@@ -1460,6 +1464,7 @@ match_results<iterator, Allocator>::match_results(const match_results<iterator, 
       reinterpret_cast<typename re_detail::match_results_base<iterator, Allocator>::c_reference *>
          (m.ref->allocate(sizeof(sub_match<iterator>) * m.ref->cmatches +
                           sizeof(typename re_detail::match_results_base<iterator, Allocator>::c_reference)));
+   BOOST_REGEX_NOEH_ASSERT(this->ref)                       
 #ifndef BOOST_NO_EXCEPTIONS
    try{
 #endif

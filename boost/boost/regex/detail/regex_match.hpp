@@ -215,7 +215,9 @@ void _priv_match_data<iterator, Allocator>::set_accumulator_size(unsigned int si
       m_free();
       caccumulators = size;
       accumulators = i_alloc(temp_match.allocator()).allocate(caccumulators);
+      BOOST_REGEX_NOEH_ASSERT(accumulators)
       loop_starts = it_alloc(temp_match.allocator()).allocate(caccumulators);
+      BOOST_REGEX_NOEH_ASSERT(loop_starts)
       for(unsigned i = 0; i < caccumulators; ++i)
          new (loop_starts + i) iterator();
    }

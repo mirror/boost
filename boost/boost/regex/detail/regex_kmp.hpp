@@ -67,6 +67,7 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
    // allocate struct and fill it in:
    //
    kmp_info<charT>* pinfo = reinterpret_cast<kmp_info<charT>*>(atype(a).allocate(size));
+   BOOST_REGEX_NOEH_ASSERT(pinfo)
    pinfo->size = size;
    pinfo->len = m;
    charT* p = reinterpret_cast<charT*>(reinterpret_cast<char*>(pinfo) + sizeof(kmp_info<charT>) + sizeof(int)*(m+1));

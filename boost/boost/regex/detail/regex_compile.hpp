@@ -1172,6 +1172,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
    {
 #endif
       pb = a.allocate(cbraces);
+      BOOST_REGEX_NOEH_ASSERT(pb)
       for(unsigned i = 0; i < cbraces; ++i)
          pb[i] = false;
 
