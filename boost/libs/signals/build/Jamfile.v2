@@ -16,6 +16,6 @@ SOURCES = trackable connection signal_base slot ;
 
 lib boost_signals : $(SOURCES).cpp 
     :         
-        <link>static:<define>BOOST_SIGNALS_NO_LIB=1
+        <define>BOOST_SIGNALS_NO_LIB=1
         <link>shared:<define>BOOST_SIGNALS_DYN_LINK=1
     ;
