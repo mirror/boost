@@ -43,6 +43,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef A array_type;
     private:
+        typedef T *pointer;
         typedef F functor_type;
         typedef const matrix<T, F, A> const_self_type;
         typedef matrix<T, F, A> self_type;
@@ -148,6 +149,7 @@ namespace boost { namespace numeric { namespace ublas {
             data () = m.data ();
             return *this;
         }
+#ifndef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
         template<class A2, class F2>          // Generic matrix assignment without temporary
         BOOST_UBLAS_INLINE
         matrix &operator = (const matrix<T, A2, F2> &m) {
@@ -155,6 +157,7 @@ namespace boost { namespace numeric { namespace ublas {
             assign (m);
             return *this;
         }
+#endif
         BOOST_UBLAS_INLINE
         matrix &assign_temporary (matrix &m) {
             swap (m);
@@ -338,7 +341,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename matrix::value_type value_type;
             typedef typename matrix::difference_type difference_type;
             typedef typename matrix::const_reference reference;
-            typedef const typename matrix::value_type *pointer;
+            typedef const typename matrix::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -481,7 +484,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename matrix::value_type value_type;
             typedef typename matrix::difference_type difference_type;
             typedef typename matrix::reference reference;
-            typedef typename matrix::value_type *pointer;
+            typedef typename matrix::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -623,7 +626,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename matrix::value_type value_type;
             typedef typename matrix::difference_type difference_type;
             typedef typename matrix::const_reference reference;
-            typedef const typename matrix::value_type *pointer;
+            typedef const typename matrix::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -766,7 +769,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename matrix::value_type value_type;
             typedef typename matrix::difference_type difference_type;
             typedef typename matrix::reference reference;
-            typedef typename matrix::value_type *pointer;
+            typedef typename matrix::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
@@ -975,12 +978,14 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_type::operator = (m);
             return *this;
         }
+#ifdef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
         template<class A2, class F2>        // Generic matrix assignment
         BOOST_UBLAS_INLINE
         bounded_matrix &operator = (const matrix<T, A2, F2> &m) {
             matrix_type::operator = (m);
             return *this;
         }
+#endif
         template<class AE>
         BOOST_UBLAS_INLINE
         bounded_matrix &operator = (const matrix_expression<AE> &ae) {
@@ -1004,6 +1009,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef A array_type;
     private:
+        typedef T *pointer;
         typedef F functor_type;
         typedef const vector_of_vector<T, F, A> const_self_type;
         typedef vector_of_vector<T, F, A> self_type;
@@ -1275,7 +1281,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename vector_of_vector::value_type value_type;
             typedef typename vector_of_vector::difference_type difference_type;
             typedef typename vector_of_vector::const_reference reference;
-            typedef const typename vector_of_vector::value_type *pointer;
+            typedef const typename vector_of_vector::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -1435,7 +1441,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename vector_of_vector::value_type value_type;
             typedef typename vector_of_vector::difference_type difference_type;
             typedef typename vector_of_vector::reference reference;
-            typedef typename vector_of_vector::value_type *pointer;
+            typedef typename vector_of_vector::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -1594,7 +1600,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename vector_of_vector::value_type value_type;
             typedef typename vector_of_vector::difference_type difference_type;
             typedef typename vector_of_vector::const_reference reference;
-            typedef const typename vector_of_vector::value_type *pointer;
+            typedef const typename vector_of_vector::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -1754,7 +1760,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename vector_of_vector::value_type value_type;
             typedef typename vector_of_vector::difference_type difference_type;
             typedef typename vector_of_vector::reference reference;
-            typedef typename vector_of_vector::value_type *pointer;
+            typedef typename vector_of_vector::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
@@ -1958,6 +1964,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T &const_reference;
         typedef T &reference;
     private:
+        typedef const T *const_pointer;
         typedef const identity_matrix<T> const_self_type;
         typedef identity_matrix<T> self_type;
     public:
@@ -2102,7 +2109,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename identity_matrix::value_type value_type;
             typedef typename identity_matrix::difference_type difference_type;
             typedef typename identity_matrix::const_reference reference;
-            typedef const typename identity_matrix::value_type *pointer;
+            typedef typename identity_matrix::const_pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -2247,7 +2254,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename identity_matrix::value_type value_type;
             typedef typename identity_matrix::difference_type difference_type;
             typedef typename identity_matrix::const_reference reference;
-            typedef const typename identity_matrix::value_type *pointer;
+            typedef typename identity_matrix::const_pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -2433,6 +2440,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T &const_reference;
         typedef T &reference;
     private:
+        typedef const T *const_pointer;
         typedef const zero_matrix<T> const_self_type;
         typedef zero_matrix<T> self_type;
     public:
@@ -2569,7 +2577,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename zero_matrix::value_type value_type;
             typedef typename zero_matrix::difference_type difference_type;
             typedef typename zero_matrix::const_reference reference;
-            typedef const typename zero_matrix::value_type *pointer;
+            typedef typename zero_matrix::const_pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -2708,7 +2716,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename zero_matrix::value_type value_type;
             typedef typename zero_matrix::difference_type difference_type;
             typedef typename zero_matrix::const_reference reference;
-            typedef const typename zero_matrix::value_type *pointer;
+            typedef typename zero_matrix::const_pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -2887,6 +2895,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T &const_reference;
         typedef T &reference;
     private:
+        typedef const T *const_pointer;
         typedef const scalar_matrix<T> const_self_type;
         typedef scalar_matrix<T> self_type;
     public:
@@ -3012,7 +3021,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename scalar_matrix::value_type value_type;
             typedef typename scalar_matrix::difference_type difference_type;
             typedef typename scalar_matrix::const_reference reference;
-            typedef const typename scalar_matrix::value_type *pointer;
+            typedef typename scalar_matrix::const_pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -3157,7 +3166,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename scalar_matrix::value_type value_type;
             typedef typename scalar_matrix::difference_type difference_type;
             typedef typename scalar_matrix::const_reference reference;
-            typedef const typename scalar_matrix::value_type *pointer;
+            typedef typename scalar_matrix::const_pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -3553,8 +3562,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Iterator types
     private:
         // Use pointers for iterator
-        typedef const T *const_iterator_type;
-        typedef T *iterator_type;
+        typedef const_pointer const_iterator_type;
+        typedef pointer iterator_type;
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR

@@ -90,7 +90,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef A array_type;
     private:
-        typedef const T *const_pointer;
         typedef T *pointer;
         typedef const vector<T, A> const_self_type;
         typedef vector<T, A> self_type;
@@ -175,6 +174,7 @@ namespace boost { namespace numeric { namespace ublas {
             data () = v.data ();
             return *this;
         }
+#ifndef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
         template<class A2>          // Generic vector assignment without temporary
         BOOST_UBLAS_INLINE
         vector &operator = (const vector<T, A2> &v) {
@@ -182,6 +182,7 @@ namespace boost { namespace numeric { namespace ublas {
             assign (v);
             return *this;
         }
+#endif
         BOOST_UBLAS_INLINE
         vector &assign_temporary (vector &v) {
             swap (v);
@@ -333,7 +334,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename vector::difference_type difference_type;
             typedef typename vector::value_type value_type;
             typedef typename vector::const_reference reference;
-            typedef typename vector::const_pointer pointer;
+            typedef const typename vector::pointer pointer;
 #endif
 
             // Construction and destruction
@@ -581,10 +582,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_vector (const bounded_vector &v):
             vector_type (v) {}
+#ifndef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
         template<class A2>              // Allow vector<T,bounded_array<N> construction
         BOOST_UBLAS_INLINE
         bounded_vector (const vector<T, A2> &v):
             vector_type (v) {}
+#endif
         template<class AE>
         BOOST_UBLAS_INLINE
         bounded_vector (const vector_expression<AE> &ae):
@@ -627,7 +630,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
     private:
         typedef const T *const_pointer;
-        typedef T *pointer;
         typedef const unit_vector<T> const_self_type;
         typedef unit_vector<T> self_type;
     public:
@@ -885,7 +887,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
     private:
         typedef const T *const_pointer;
-        typedef T *pointer;
         typedef const zero_vector<T> const_self_type;
         typedef zero_vector<T> self_type;
     public:
@@ -1098,7 +1099,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
     private:
         typedef const T *const_pointer;
-        typedef T *pointer;
         typedef const scalar_vector<T> const_self_type;
         typedef scalar_vector<T> self_type;
     public:
@@ -1529,8 +1529,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Iterator types
     private:
         // Use pointers for iterator
-        typedef const T *const_iterator_type;
-        typedef T *iterator_type;
+        typedef const_pointer const_iterator_type;
+        typedef pointer iterator_type;
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
