@@ -128,6 +128,7 @@ public:
 #endif
 
     assert(min < max);
+    set(min, max);
   }
 
   void set(result_type min, result_type max)
