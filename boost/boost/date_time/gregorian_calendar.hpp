@@ -55,7 +55,7 @@ namespace date_time {
 
 } } //namespace
   
-#ifdef DATE_TIME_INLINE
+#ifndef NO_BOOST_DATE_TIME_INLINE
 #include "gregorian_calendar.ipp"
 #endif
 
