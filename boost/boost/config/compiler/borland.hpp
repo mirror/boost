@@ -32,6 +32,7 @@
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_SWPRINTF
 #  define BOOST_NO_USING_TEMPLATE
+#  define BOOST_NO_VOID_RETURNS
 #endif
 
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
@@ -51,5 +52,6 @@
 #     pragma message( "Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
