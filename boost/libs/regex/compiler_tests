@@ -1,0 +1,124 @@
+#!bash
+
+#
+# set up compilers here:
+root_path="$PATH"
+root_include="$INCLUDE"
+root_lib="$LIB"
+
+function bcb4()
+{
+	PATH="//e/cbuilder4/bin:$root_path"
+	INCLUDE="$root_include"
+	LIB="$root_lib"
+}
+
+function bcb5()
+{
+	PATH="//e/cbuilder5/bin:$root_path"
+	INCLUDE="$root_include"
+	LIB="$root_lib"
+}
+
+function bc55()
+{
+	PATH="//e/bcb550/bin:$root_path"
+	INCLUDE="$root_include"
+	LIB="$root_lib"
+}
+
+function cygwin()
+{
+	PATH="/cygnus/cygwin-b20/H-i586-cygwin32/bin:$root_path"
+	INCLUDE="$root_include"
+	LIB="$root_lib"
+}
+
+function mwin()
+{
+	PATH="//e/gcc2.95.2/bin:$root_path"
+	INCLUDE="$root_include"
+	LIB="$root_lib"
+}
+
+function vc6()
+{
+	PATH="$root_path"
+	INCLUDE="$root_include"
+	LIB="$root_lib"
+}
+
+function vc6p4()
+{
+	PATH="$root_path"
+	INCLUDE="e:\\stlport\\stlport;$root_include"
+	LIB="e:\\stlport\\lib;$root_lib"
+}
+
+function vc6p3()
+{
+	PATH="$root_path"
+	INCLUDE="e:\stlport321\stlport;$root_include"
+	LIB="$root_lib"
+}
+
+#
+# function run performs and logs each command
+function run()
+{
+	eval "$1" >> $out 2>&1
+}
+
+#
+# set output file:
+out=compiler_log.txt
+echo > $out
+#
+# and set up tail to follow output
+tail -f "$out" &
+
+#
+# start with Borland C++ command line tools v5.5:
+bc55
+cd lib
+out=../compiler_log.txt
+run 'make -fbc55.mak'
+
+cd ../demo/jgrep
+out=../../compiler_log.txt
+rm -f *.o *.obj *.exe
+run 'make -fbc55.mak'
+
+cd ../timer
+out=../../compiler_log.txt
+rm -f *.o *.obj *.exe
+run 'make -fbc55.mak'
+
+cd ../regress
+out=../../compiler_log.txt
+rm -f *.o *.obj *.exe
+run 'make -fbc55.mak'
+
+cd ../snippets
+out=../../compiler_log.txt
+rm -f *.o *.obj *.exe
+run 'bcc32 -O2 -I../../../../ snip1.cpp'
+run 'bcc32 -O2 -I../../../../ snip2.cpp'
+run 'bcc32 -O2 -I../../../../ snip3.cpp'
+run 'bcc32 -O2 -I../../../../ snip4.cpp'
+run 'bcc32 -O2 -I../../../../ snip5.cpp'
+run 'bcc32 -O2 -I../../../../ snip6.cpp'
+run 'bcc32 -O2 -I../../../../ snip7.cpp'
+run 'bcc32 -O2 -I../../../../ snip8.cpp'
+run 'bcc32 -O2 -I../../../../ snip9.cpp'
+
+
+kill $!
+
+
+
+
+
+
+
+

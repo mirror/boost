@@ -1,0 +1,28 @@
+
+ALL_DEP=@ac_all_dep@
+
+base: ./lib/libregex++.a
+
+./lib/libregex++.a: $(ALL_DEP)
+	sh dmi.sh lib
+
+
+jgrep : base
+	sh dmi.sh demo/jgrep
+
+
+test : base
+	sh dmi.sh demo/regress
+
+regress : test
+
+timer : base
+	sh dmi.sh demo/timer
+
+install : base
+	echo no install option available
+	
+all : base jgrep test timer
+
+
+

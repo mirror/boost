@@ -1,0 +1,342 @@
+
+Microsoft (R) Program Maintenance Utility   Version 6.00.8168.0
+Copyright (C) Microsoft Corp 1988-1998. All rights reserved.
+
+	cl /MT /D_MT -o r1m.exe -O2 -GX -GR -I..\..\..\.. r1.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r1.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r1.exe 
+/out:r1m.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r1.obj 
+	cl /MT /D_MT -O2 -GX -GR -I..\..\..\.. -o r2m.exe r2.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r2.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r2.exe 
+/out:r2m.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r2.obj 
+	cl /MT /D_MT -O2 -GX -GR -I..\..\..\.. -o r3m.exe r3.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r3.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r3.exe 
+/out:r3m.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r3.obj 
+	cl /MT /D_MT -O2 -GX -GR -I..\..\..\.. -o r4m.exe r4.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r4.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r4.exe 
+/out:r4m.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r4.obj 
+	cl /MT /D_MT -O2 -GX -GR -I..\..\..\.. -o r5m.exe r5.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r5.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r5.exe 
+/out:r5m.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r5.obj 
+	cl /MT /D_MT -O2 -GX -GR -I..\..\..\.. -o r6m.exe r6.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r6.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r6.exe 
+/out:r6m.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r6.obj 
+	cl /MD /D_MT /D_DLL -O2 -GX -GR -I..\..\..\.. -o r1l.exe r1.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r1.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r1.exe 
+/out:r1l.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r1.obj 
+	cl /MD /D_MT /D_DLL -O2 -GX -GR -I..\..\..\.. -o r2l.exe r2.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r2.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r2.exe 
+/out:r2l.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r2.obj 
+	cl /MD /D_MT /D_DLL -O2 -GX -GR -I..\..\..\.. -o r3l.exe r3.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r3.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r3.exe 
+/out:r3l.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r3.obj 
+	cl /MD /D_MT /D_DLL -O2 -GX -GR -I..\..\..\.. -o r4l.exe r4.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r4.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r4.exe 
+/out:r4l.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r4.obj 
+	cl /MD /D_MT /D_DLL -O2 -GX -GR -I..\..\..\.. -o r5l.exe r5.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r5.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r5.exe 
+/out:r5l.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r5.obj 
+	cl /MD /D_MT /D_DLL -O2 -GX -GR -I..\..\..\.. -o r6l.exe r6.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r6.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r6.exe 
+/out:r6l.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r6.obj 
+	cl /MTd /D_MT /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r1md.exe r1.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r1.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r1.exe 
+/out:r1md.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r1.obj 
+LINK : warning LNK4098: defaultlib "LIBCMT" conflicts with use of other libs; use /NODEFAULTLIB:library
+	cl /MTd /D_MT /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r2md.exe r2.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r2.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r2.exe 
+/out:r2md.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r2.obj 
+LINK : warning LNK4098: defaultlib "LIBCMT" conflicts with use of other libs; use /NODEFAULTLIB:library
+	cl /MTd /D_MT /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r3md.exe r3.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r3.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r3.exe 
+/out:r3md.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r3.obj 
+LINK : warning LNK4098: defaultlib "LIBCMT" conflicts with use of other libs; use /NODEFAULTLIB:library
+	cl /MTd /D_MT /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r4md.exe r4.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r4.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r4.exe 
+/out:r4md.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r4.obj 
+LINK : warning LNK4098: defaultlib "LIBCMT" conflicts with use of other libs; use /NODEFAULTLIB:library
+	cl /MTd /D_MT /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r5md.exe r5.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r5.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r5.exe 
+/out:r5md.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r5.obj 
+LINK : warning LNK4098: defaultlib "LIBCMT" conflicts with use of other libs; use /NODEFAULTLIB:library
+	cl /MTd /D_MT /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r6md.exe r6.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r6.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r6.exe 
+/out:r6md.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r6.obj 
+LINK : warning LNK4098: defaultlib "LIBCMT" conflicts with use of other libs; use /NODEFAULTLIB:library
+	cl /MDd /D_MT /D_DLL /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r1lmd.exe r1.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r1.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r1.exe 
+/out:r1lmd.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r1.obj 
+	cl /MDd /D_MT /D_DLL /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r2lmd.exe r2.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r2.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r2.exe 
+/out:r2lmd.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r2.obj 
+	cl /MDd /D_MT /D_DLL /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r3lmd.exe r3.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r3.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r3.exe 
+/out:r3lmd.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r3.obj 
+	cl /MDd /D_MT /D_DLL /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r4lmd.exe r4.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r4.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r4.exe 
+/out:r4lmd.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r4.obj 
+	cl /MDd /D_MT /D_DLL /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r5lmd.exe r5.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r5.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r5.exe 
+/out:r5lmd.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r5.obj 
+	cl /MDd /D_MT /D_DLL /D_DEBUG -O2 -GX -GR -I..\..\..\.. -o r6lmd.exe r6.cpp -link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+Microsoft (R) 32-bit C/C++ Standard Compiler Version 12.00.8168 for 80x86
+Copyright (C) Microsoft Corp 1984-1998. All rights reserved.
+
+r6.cpp
+Microsoft (R) Incremental Linker Version 6.00.8447
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/out:r6.exe 
+/out:r6lmd.exe 
+/LIBPATH:..\..\lib\vc6-stlport 
+user32.lib 
+r6.obj 
+	echo testing static multi-threaded version....
+testing static multi-threaded version....
+	r1m tests.txt test1252.txt
+858 lines, 625 tests completed in file tests.txt
+33 lines, 10 tests completed in file test1252.txt
+	r2m tests.txt
+858 lines, 625 tests completed in file tests.txt
+	r3m tests.txt
+Error in line 259 of file tests.txt
+Expression: [[:print:]]+
+Search text: 
+a b
+
+Flags: REG_EXTENDED | basic | escape_in_lists | char_classes | intervals | bk_refs | normal | basic | extended
+regex++ API result mismatch in sub-expression 0, found (0,5) expected (1,4)
+regex++ API result mismatch in sub-expression 0, found (0,5) expected (1,4)
+regex++ API result mismatch in sub-expression 0, found (0,5) expected (1,4)
+858 lines, 625 tests completed in file tests.txt
+NMAKE : fatal error U1077: 'd:\boost\regexpp\libs\regex\demo\regress\r3m.exe' : return code '0x1'
+Stop.

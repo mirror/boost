@@ -1,0 +1,41 @@
+
+# very basic makefile for jgrep
+#
+
+CXX=@CXX@
+CXXFLAGS=@CXXFLAGS@
+LIBS=@LIBS@
+EXE=@ac_exe_ext@
+OBJ=@ac_obj_ext@
+
+LIBDEP=../../lib/libregex++.a ../../../../boost/re_detail/regex_options.hpp ../../../../boost/re_detail/regex_config.hpp
+
+jgrep$(EXE) : jgrep$(OBJ) main$(OBJ)
+	$(CXX) -o jgrep$(EXE) jgrep$(OBJ) main$(OBJ) -L../../lib -lregex++ $(LIBS)
+
+jgrep$(OBJ) : jgrep.cpp jgrep.h $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -I../../../../ -I./ jgrep.cpp
+
+main$(OBJ) : main.cpp jgrep.h $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -I../../../../ -I./ main.cpp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

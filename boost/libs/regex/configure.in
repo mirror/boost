@@ -1,0 +1,1747 @@
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(../../boost/regex.hpp)
+AC_CONFIG_HEADER(../../boost/re_detail/regex_options.hpp:jm_opt.in)
+AC_DEFINE(BOOST_RE_AUTO_CONFIGURE, [])
+dnl Disable any caching here 
+define([AC_CACHE_LOAD], )dnl
+define([AC_CACHE_SAVE], )dnl
+
+AC_MSG_RESULT(*** $0: regex++ configuration utility ***)
+if test "${CXXFLAGS}" = ""; then 
+AC_MSG_RESULT(* Note: for best reliability - try \"CXXFLAGS=-treat_warnings_as_errors\" $0 )
+AC_MSG_RESULT(* Please don't forget specifying typical CXXFLAGS you'll be using - ) 
+AC_MSG_RESULT(* such as that enabling exceptions handling, etc. )
+AC_MSG_RESULT(* Add option forcing instantiation of all templates to CXXFLAGS if possible. )
+AC_MSG_RESULT(* Add option enabling merging of template instances between translation units)
+AC_MSG_RESULT(* to CXXFLAGS if possible. )
+fi
+AC_MSG_RESULT(Please stand by while exploring compiler capabilities...)
+AC_MSG_RESULT(Be patient - this could take some time...)
+AC_MSG_RESULT(***)
+
+AC_ARG_ENABLE(extension,[--enable-extension=<ext>],
+[
+case "$enableval" in
+	no) AC_MSG_RESULT(Info :.cpp used as extension for tests) 
+	    ac_ext=cpp 
+      	;;
+	 *) AC_MSG_RESULT(Argument : .$enableval used as extension) 
+	ac_ext=$enableval
+esac
+],
+[AC_MSG_RESULT(Info : .cpp used as extension for tests) 
+	ac_ext=cpp
+]
+)
+
+AC_ARG_ENABLE(sizeof-short, [--enable-sizeof-short=<short size>], [], [enable_sizeof_short=2])
+AC_ARG_ENABLE(sizeof-int, [--enable-sizeof-int=<int size>], [], [enable_sizeof_int=4])
+AC_ARG_ENABLE(sizeof-long, [--enable-sizeof-long=<long size>], [], [enable_sizeof_long=4])
+AC_ARG_ENABLE(force-cross, [--enable-force-cross forces cross compile mode])
+
+
+# Save that, as it is being redefined several times 
+use_ac_ext=$ac_ext
+
+AC_PROG_CXX
+ac_ext=$use_ac_ext
+
+AC_LANG_CPLUSPLUS
+ac_ext=$use_ac_ext
+
+AC_MSG_CHECKING(for object file extention)
+cat > "xyqtcz.$ac_ext" << EOF
+
+int main()
+{
+}
+
+EOF
+
+if eval "$CXX $CXXFLAGS -c xyqtcz.$ac_ext"; then
+rm -f "xyqtcz.$ac_ext"
+ac_obj_ext=`find xyqtcz.* | sed 's/xyqtcz\(.*\)/\1/g'`
+AC_MSG_RESULT(yes - $ac_obj_ext)
+rm  -f "xyqtcz$ac_obj_ext"
+
+else
+
+AC_MSG_RESULT(no - could not create or find object file, defaulting to .o)
+rm -f "xyqtcz.$ac_ext"
+ac_obj_ext='.o'
+
+fi
+
+AC_MSG_CHECKING(for executable file extention)
+ac_exe_ext=""
+for file in /bin/sh.*
+do
+
+if test -x "$file"; then
+ac_exe_ext=`echo "$file" | sed 's/\/bin\/sh\(.*\)/\1/g'`
+fi
+
+done
+
+AC_MSG_RESULT(yes - $ac_exe_ext)
+AC_SUBST(ac_exe_ext)
+AC_SUBST(ac_obj_ext)
+
+
+#
+# determine machine word sizes
+# and set BOOST_RE_INT32 to be the
+# equivalent of intfast32_t in <inttypes.h>
+#
+if test "$enable_force_cross" = "yes"; then
+cross_compiling="yes"
+echo forced cross compilation mode turned on
+fi
+
+AC_CHECK_SIZEOF(short,"$enable_sizeof_short")
+ac_ext=$use_ac_ext
+AC_CHECK_SIZEOF(int,"$enable_sizeof_int")
+ac_ext=$use_ac_ext
+AC_CHECK_SIZEOF(long,"$enable_sizeof_long")
+ac_ext=$use_ac_ext
+
+AC_DEFINE_UNQUOTED(BOOST_RE_SIZEOF_SHORT, [$ac_cv_sizeof_short])
+AC_DEFINE_UNQUOTED(BOOST_RE_SIZEOF_INT, [$ac_cv_sizeof_int])
+AC_DEFINE_UNQUOTED(BOOST_RE_SIZEOF_LONG, [$ac_cv_sizeof_long])
+
+
+if test "$ac_cv_sizeof_int" -lt 4; then
+    if test "$ac_cv_sizeof_long" -ge 4; then
+      AC_DEFINE(BOOST_RE_INT32_LONG)
+    else
+      AC_MSG_ERROR(Cannot find any 32-bit integer type for your compiler)
+    fi
+  ac_ext=$use_ac_ext
+fi
+ac_ext=$use_ac_ext
+
+
+ac_ext=$use_ac_ext
+
+dnl checking for compiler capabilities
+AC_MSG_CHECKING(for basic template compatibility)
+AC_TRY_LINK( [
+template <class Arg1, class Arg2, class Result>
+struct binary_function {
+    typedef Arg1 first_argument_type;
+    typedef Arg2 second_argument_type;
+    typedef Result result_type;
+};      
+template <class T>
+struct plus : public binary_function<T, T, T> {
+    T operator()(const T& x, const T& y) const;
+};
+
+//
+// non-inline
+// link will fail if template is not instantiated
+//
+template <class T>
+T plus<T>::operator()(const T& x, const T& y) const 
+{ return x + y; }
+
+plus<int> p;
+],
+[
+// check member function is actually instantiated
+int i, j, k;
+i = p(k, j);
+], 
+[ac_cv_compat="yes"],
+[AC_MSG_ERROR(Your compiler won't be able to compile this implementation. Sorry.) 
+ ac_cv_compat="no"]
+)
+AC_MSG_RESULT($ac_cv_compat)
+
+AC_MSG_CHECKING(for exception support)
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+int f1()throw()
+{
+ return 23;
+}
+
+void do_throw()
+{
+ throw (int)25;
+}
+],
+[
+ try
+ {
+  f1();
+  do_throw();
+ }
+ catch(int i)
+ {
+ }
+ catch(...)
+ {
+ }
+],
+[AC_MSG_RESULT(yes)],
+[AC_MSG_RESULT(no)
+AC_MSG_ERROR(Sorry, without exception handling you can't compile this library)])
+
+
+AC_ARG_ENABLE(mutable, [--disable-mutable turns off mutable support])
+if test "$enable_mutable" = "no"; then
+AC_DEFINE(BOOST_RE_NO_MUTABLE, [])
+else
+
+AC_MSG_CHECKING(for mutable keyword)
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+class foo
+{
+ mutable int val;
+ public:
+ foo(int i) : val(i) {}
+ void set(int i)const;
+};
+
+void foo::set(int i)const
+{
+ val = i;
+}
+],
+[
+ const foo f(4);
+ f.set(3);
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_MUTABLE, []) AC_MSG_RESULT(no)])
+fi
+
+AC_MSG_CHECKING(for default template parameter support)
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+template <class T, class U = int>
+struct foo
+{
+ T val;
+ U alt;
+};
+],
+[
+ foo<int, double> f1;
+ foo<int, int> f2;
+ foo<double> f3;
+ foo<int> f4;
+],
+[AC_MSG_RESULT(yes)],
+[AC_MSG_ERROR(Sorry: you can't compile this library)])
+
+AC_MSG_CHECKING(for derived default template parameter support)
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+template <class T>
+class inner
+{
+public:
+ typedef T inner_type;
+};
+
+template <class T, class U = inner<T> >
+struct foo
+{
+ T val;
+ U alt;
+};
+],
+[
+ foo<int, inner<double> > f1;
+ foo<int, inner<int> > f2;
+ foo<double> f3;
+ foo<int> f4;
+],
+[AC_MSG_RESULT(yes)],
+[AC_MSG_ERROR(Sorry, you can't compile this library)])
+
+
+AC_MSG_CHECKING([for function template partial ordering])
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+template <class T>
+struct dummy{};
+
+struct dummy2
+{
+ int result()const { return 1; }
+};
+
+template <class T>
+int foo(const T& t)
+{ return t.result(); }
+
+template <class T>
+int foo(const dummy<T>& )
+{ return 0; }
+
+],
+[
+ dummy<double> d;
+ dummy2 d2;
+ int i = foo(d);
+ i = foo(d2);
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_PARTIAL_FUNC_SPEC, []) AC_MSG_RESULT(no)])
+
+AC_MSG_CHECKING([for template friend functions])
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+template <class T2>
+void foo(T2 t);
+
+template <class T>
+struct dummy
+{
+	template <class T2> friend void foo(T2);
+private:
+	void foo2();
+	void foo3()const;
+};
+
+template <class T2>
+void foo(T2 t)
+{
+	dummy<T2> d1;
+	d1.foo2();
+	d1.foo3();
+	dummy<int> d2;
+	d2.foo2();
+	d2.foo3();
+}
+
+
+],
+[
+	foo(3);
+	foo(2.345);
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_TEMPLATE_FRIEND, []) AC_MSG_RESULT(no)])
+
+
+
+AC_ARG_ENABLE(ms-windows, [--disable-ms-windows turns off native MS Windows support (when available)])
+AC_ARG_ENABLE(threads, [--disable-threads turns off multi-threading support (when available)])
+if test "$enable_ms_windows" != "no"; then
+
+AC_MSG_CHECKING(for MS Windows)
+AC_TRY_COMPILE(
+[ 
+#include <windows.h>
+
+#if defined(__GNUC__) && (__GNUC_MINOR__ == 95) && (__GNUC__ == 2)
+#error can't mix STL code with <windows.h> due to bug in gcc2.95.x
+#endif
+
+
+],
+[
+ int i = GetVersion();
+],
+[iswin="true"
+AC_DEFINE(BOOST_RE_PLATFORM_WINDOWS, []) 
+AC_MSG_RESULT(yes)],
+[AC_MSG_RESULT(no)
+enable_ms_windows="no"]
+)
+fi
+
+if test "$enable_ms_windows" != "no"; then
+dnl Ok check for Win32, then linkage:
+AC_MSG_CHECKING(for MS Win32)
+AC_TRY_COMPILE(
+[ 
+#include <windows.h>
+
+CRITICAL_SECTION cs;
+],
+[
+ InitializeCriticalSection(&cs);
+ EnterCriticalSection(&cs);
+ LeaveCriticalSection(&cs);
+ DeleteCriticalSection(&cs);
+],
+[AC_MSG_RESULT(yes)],
+[AC_MSG_RESULT(no)
+enable_ms_windows="no"]
+)
+fi
+
+if test "$enable_ms_windows" != "no"; then
+
+if test "$CXX" != "cl"; then
+AC_CHECK_LIB(user32, main, [LIBS="$LIBS -luser32"], [])
+AC_CHECK_LIB(kernel32, main, [LIBS="$LIBS -lkernel32"], [])
+fi
+
+AC_TRY_LINK(
+[ 
+#include <windows.h>
+
+CRITICAL_SECTION cs;
+],
+[
+ InitializeCriticalSection(&cs);
+ EnterCriticalSection(&cs);
+ LeaveCriticalSection(&cs);
+ DeleteCriticalSection(&cs);
+ HeapAlloc(0, 0, 20);
+ CharLower((LPTSTR)0);
+ LoadString(0, 0, 0, 0);
+],
+[
+if test "enable_threads" != "no"; then
+# turn on threading support:
+AC_MSG_CHECKING(for mult-thread support)
+AC_MSG_RESULT("yes")
+AC_DEFINE(BOOST_RE_THREADS, [])
+AC_DEFINE(BOOST_RE_PLATFORM_W32, [])
+fi
+],
+[
+# bu**er, windows is present but we can't link
+AC_MSG_WARN([
+         MS Win32 seems to be present, but we can't link, 
+         or find the default library names for kernal32.dll
+         and user32.dll.
+         $0 is disabling MS Windows support, re-run $0 with
+         the environment variable "LIBS" set to the library 
+         files required to re-enable Win32 support.])
+enable_ms_windows="no"
+]
+)
+
+
+fi
+
+
+if test "$iswin" != "true"; then
+
+AC_MSG_CHECKING(for MS DOS)
+AC_TRY_COMPILE(
+[ 
+#include <dos.h>
+],
+[
+ int i = _doserrno;
+],
+[AC_DEFINE(BOOST_RE_PLATFORM_DOS, []) AC_MSG_RESULT(yes)],
+[AC_MSG_RESULT(no)])
+
+fi
+
+
+AC_MSG_CHECKING(for bool support)
+AC_TRY_COMPILE(
+[ 
+],
+[
+ bool i = true;
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_BOOL,[])
+AC_MSG_RESULT(no)])
+
+
+AC_ARG_ENABLE(wstring, [--disable-wstring turns off wide character string support])
+
+if test "$enable_wstring" = "no"; then
+AC_DEFINE(BOOST_RE_NO_WCHAR_H, [])
+else
+
+AC_MSG_CHECKING(for <cwchar>)
+AC_TRY_LINK(
+[ 
+#include <cwchar>
+],
+[
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_WCHAR_H,[])
+AC_MSG_RESULT(no)]
+)
+fi
+
+if test "$enable_wstring" = "no"; then
+AC_DEFINE(BOOST_RE_NO_WCTYPE_H, [])
+else
+
+AC_MSG_CHECKING(for <cwctype>)
+AC_TRY_LINK(
+[ 
+#include <cwctype>
+],
+[
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_WCTYPE_H,[])
+AC_MSG_RESULT(no)]
+)
+fi
+
+
+if test "$enable_wstring" = "no"; then
+AC_DEFINE(BOOST_RE_NO_WCSTRING, [])
+else
+
+AC_MSG_CHECKING(for wide string functions)
+AC_TRY_LINK(
+[
+#include "confdefs.h"
+#ifndef BOOST_RE_NO_WCHAR_H
+#include <cwchar>
+#endif
+#ifndef BOOST_RE_NO_WCTYPE_H
+#include <cwctype>
+#endif 
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cctype>
+#include <string>
+template class std::basic_string<wchar_t>;
+],
+[
+ using namespace std;
+ wchar_t c[50];
+ char d[50];
+ wcscpy(c, L"abcd");
+ wcscmp(L"", L"");
+ wcslen(L"");
+ wcsxfrm(0, L"", 0);
+ wcstombs(d, L"", 0);
+ mbstowcs(c, "", 0);
+ iswlower(L'c');
+],
+[AC_MSG_RESULT(yes)]
+enable_wstring="yes",
+[AC_DEFINE(BOOST_RE_NO_WCSTRING,[])
+AC_MSG_RESULT(no)]
+enable_wstring="no")
+fi
+
+if test "$enable_wstring" != "no"; then
+AC_MSG_CHECKING(for swprintf support)
+AC_TRY_LINK(
+[ 
+#include "confdefs.h"
+#ifndef BOOST_RE_NO_WCHAR_H
+#include <wchar.h>
+#endif
+#ifndef BOOST_RE_NO_WCTYPE_H
+#include <wctype.h>
+#endif
+#include <string.h>
+#include <stdio.h>
+],
+[
+ wchar_t c[50];
+ swprintf(c, L"abcd");
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_SWPRINTF,[])
+AC_MSG_RESULT(no)]
+enable_swprintf="no")
+fi
+
+if test "$enable_wstring" != "no" && test "$enable_swprintf" = "no"; then
+AC_MSG_CHECKING(for wsprintf support)
+AC_TRY_LINK(
+[ 
+#include "confdefs.h"
+#ifndef BOOST_RE_NO_WCHAR_H
+#include <wchar.h>
+#endif
+#ifndef BOOST_RE_NO_WCTYPE_H
+#include <wctype.h>
+#endif
+#include <string.h>
+#include <stdio.h>
+#include <widec.h>
+],
+[
+ wchar_t c[50];
+ wsprintf(c, "abcd");
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_WSPRINTF,[])
+AC_MSG_RESULT(no)])
+fi
+
+
+
+AC_ARG_ENABLE(member-templates, [--disable-member-templates turns off member template class and function support])
+if test "$enable_member_templates" = "no"; then
+AC_DEFINE(BOOST_RE_NO_MEMBER_TEMPLATES, [])
+else
+
+AC_MSG_CHECKING(for member template classes and functions)
+AC_TRY_COMPILE(
+[ 
+
+template <class T>
+class alloc
+{
+public:
+ void* allocate(int);
+ void deallocate(void*);
+ alloc();
+ alloc(const alloc&);
+ template <class U>
+ alloc(const alloc<U>&) {}
+ alloc& operator=(const alloc&);
+ template <class U>
+ alloc& operator=(const alloc<U>&)
+ { return *this; }
+ 
+ template <class U>
+ struct rebind
+ {
+  typedef alloc<U> other;
+ };
+};
+
+],
+[
+ alloc<int> ia;
+ alloc<double> da(ia);
+ alloc<float> fa;
+ fa.allocate(5);
+ fa = ia;
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_MEMBER_TEMPLATES,[])
+AC_MSG_RESULT(no)])
+fi
+
+
+AC_ARG_ENABLE(template-returns, [--disable-template-returns turns off support for templates specialised by return type])
+if test "$enable_template_returns" = "no"; then
+AC_DEFINE(BOOST_RE_NO_TEMPLATE_RETURNS, [])
+else
+
+AC_MSG_CHECKING(for parameterised function returns)
+AC_TRY_COMPILE(
+[ 
+template <class T>
+T coerse(int i)
+{ return T(i); }
+],
+[
+ double d = coerse<double>(5);
+ int i = coerse<int>(3);
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_TEMPLATE_RETURNS,[])
+AC_MSG_RESULT(no)])
+fi
+
+
+AC_ARG_ENABLE(int64, [--disable-int64 turns off support for 64-bit integer types])
+if test "$enable_int64" = "no"; then
+AC_DEFINE(BOOST_RE_INT64_T_0)
+else
+
+AC_MSG_CHECKING(for 64-bit integral type)
+
+if test "$ac_cv_sizeof_short" -eq 8; then
+AC_DEFINE(BOOST_RE_INT64_T_1)
+AC_MSG_RESULT(yes - short)
+have_int64="true"
+fi
+if test "$ac_cv_sizeof_int" -eq 8 && test "$have_int64" != "true"; then
+AC_DEFINE(BOOST_RE_INT64_T_2)
+AC_MSG_RESULT(yes - int)
+have_int64="true"
+fi
+if test "$ac_cv_sizeof_long" -eq 8 && test "$have_int64" != "true"; then
+AC_DEFINE(BOOST_RE_INT64_T_3)
+AC_MSG_RESULT(yes - long)
+have_int64="true"
+fi
+if test "$have_int64" != "true"; then
+AC_TRY_COMPILE(
+[ 
+#include <inttypes.h>
+
+int64_t i = INT64_C(0x100000000);
+],
+[
+],
+[AC_MSG_RESULT(yes - int64_t)
+have_int64="true"
+AC_DEFINE(BOOST_RE_INT64_T_4)
+],
+[])
+fi
+
+if test "$have_int64" != "true"; then
+
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+long long i = 0x100000000LL;
+],
+[
+],
+[AC_MSG_RESULT(yes - long long)
+have_int64="true"
+AC_DEFINE(BOOST_RE_INT64_T_5)
+],
+[])
+
+fi
+
+if test "$have_int64" != "true"; then
+
+AC_TRY_COMPILE(
+[ 
+#include <stdlib.h>
+
+__int64 i = 0x100000000i64;
+],
+[
+],
+[AC_MSG_RESULT(yes - __int64)
+have_int64="true"
+AC_DEFINE(BOOST_RE_INT64_T_6)
+],
+[])
+fi
+if test "$have_int64" != "true"; then
+AC_DEFINE(BOOST_RE_INT64_T,0)
+AC_MSG_RESULT(no)
+fi
+fi
+
+
+AC_ARG_ENABLE(messages, [--disable-messages turns off support for POSIX message categories, when available.])
+if test "$enable_messages" = "no" || test "$enable_ms_windows" != "no"; then
+AC_DEFINE(BOOST_RE_NO_CAT, [])
+else
+
+AC_CHECK_LIB(nl_types, catopen)
+AC_CHECK_LIB(posix, catopen)
+
+AC_MSG_CHECKING(for POSIX message categories)
+AC_TRY_LINK(
+[ 
+#include <nl_types.h>
+
+nl_catd message_cat = (nl_catd)-1;
+],
+[
+ message_cat = catopen("some_name", 0);
+ catclose(message_cat);
+],
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_CAT,[])
+AC_MSG_RESULT(no)])
+
+fi
+
+if test "$enable_threads" != "no" && test "$enable_ms_windows" = "no"; then
+
+AC_CHECK_LIB(pthread, pthread_mutex_init)
+AC_CHECK_LIB(posix, pthread_mutex_init)
+
+AC_MSG_CHECKING(for POSIX threads)
+AC_TRY_LINK(
+[ 
+#include <pthread.h>
+
+pthread_mutex_t m;
+
+],
+[
+ pthread_mutex_init(&m, NULL);
+ pthread_mutex_lock(&m);
+ pthread_mutex_unlock(&m);
+ pthread_mutex_destroy(&m);
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_THREADS, [])],
+[AC_MSG_RESULT(no)])
+
+fi
+
+
+AC_ARG_ENABLE(nested-template-prefix, [--disable-nested-template-prefix turns off use of \"template\" as the nested template class access specifier.])
+if test "$enable_nested_template_prefix" = "no" || test "$enable_member_templates" = "no"; then
+AC_DEFINE(BOOST_RE_NESTED_TEMPLATE_DECL, [])
+else
+
+AC_MSG_CHECKING(for template nested class access)
+AC_TRY_COMPILE(
+[ 
+template <class T>
+class alloc
+{
+public:
+ void* allocate(int);
+ void deallocate(void*);
+ alloc();
+ alloc(const alloc&);
+ template <class U>
+ alloc(const alloc<U>&) {}
+ alloc& operator=(const alloc&);
+ template <class U>
+ alloc& operator=(const alloc<U>&)
+ { return *this; }
+ 
+ template <class U>
+ struct rebind
+ {
+  typedef alloc<U> other;
+ };
+};
+
+],
+[
+ alloc<int> ia;
+ alloc<double> da(ia);
+ alloc<float> fa;
+ fa.allocate(5);
+ fa = ia;
+ alloc<int>::template rebind<double>::other da2(ia);
+],
+[
+AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_NESTED_TEMPLATE_DECL,template)
+],
+[
+AC_DEFINE(BOOST_RE_NESTED_TEMPLATE_DECL,[])
+AC_MSG_RESULT(no)
+])
+
+fi
+
+AC_MSG_CHECKING(for explicit template instantiation)
+AC_TRY_COMPILE(
+[ 
+#include "confdefs.h"
+#include <stdlib.h>
+
+template <class T>
+class factorial
+{
+public:
+	factorial();
+	T operator()(T);
+};
+
+template <class T>
+factorial<T>::factorial()
+{
+}
+
+template <class T>
+T factorial<T>::operator()(T t)
+{
+	T result = 1;
+	for(T i = 1; i <= t; ++i)
+	{
+		result *= i;
+	}
+	return result;
+}
+
+template class factorial<int>;
+template class factorial<short>;
+],
+[
+],
+[
+AC_MSG_RESULT(yes)
+],
+[
+AC_DEFINE(BOOST_RE_NO_TEMPLATE_INST,[])
+AC_MSG_RESULT(no)
+])
+
+
+AC_ARG_ENABLE(fastcall, [--disable-fastcall turns off use __fastcall and __stdcall.])
+if test "$enable_fastcall" = "no" || test "$enable_ms_windows" != "no"; then
+AC_DEFINE(BOOST_RE_CALL, [])
+AC_DEFINE(BOOST_RE_CCALL, [])
+else
+
+AC_MSG_CHECKING(for __fastcall and __stdcall)
+AC_TRY_COMPILE(
+[ 
+void __fastcall f1(int)
+{
+}
+
+void __stdcall f2(int)
+{
+}
+
+],
+[
+ f1(2);
+ f2(3);
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_CALL, [__fastcall])
+AC_DEFINE(BOOST_RE_CCALL, [__stdcall])
+],
+[AC_DEFINE(BOOST_RE_CALL, [])
+AC_DEFINE(BOOST_RE_CCALL, [])
+AC_MSG_RESULT(no)])
+
+fi
+
+# move on to STL options:
+
+
+AC_MSG_CHECKING(for standard library namespace)
+AC_TRY_COMPILE(
+[ 
+#include <stddef.h>
+#include <stdlib.h>
+#include <list>
+#include "confdefs.h"
+
+namespace jm{
+
+struct dummy{};
+
+}; // namespace
+
+jm::dummy d;
+
+std::list<int> v;
+
+],
+[
+],
+[AC_MSG_RESULT(yes - std)
+have_std_namespace="yes"
+],
+[AC_MSG_RESULT(no - either STL is not present or in a non-standard namespace.)
+AC_MSG_ERROR([Sorry, you can't compile this library unless the standard library is in namespace std.])])
+
+AC_MSG_CHECKING(for <exception>)
+AC_TRY_COMPILE(
+[ 
+#include <exception>
+#include "confdefs.h"
+
+class bad_expression : public std::exception
+{
+   unsigned int code;
+public:
+   bad_expression(unsigned int err) : code(err) {}
+   bad_expression(const bad_expression& e) : std::exception(e), code(e.code) {}
+   bad_expression& operator=(const bad_expression& e)
+   {
+      std::exception::operator=(e);
+      code = e.code;
+      return *this;
+   }
+   virtual const char* what()const throw();
+};
+
+
+std::exception e;
+std::bad_exception e3;
+],
+[
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_NO_EXCEPTION_H, [])
+])
+
+AC_MSG_CHECKING(for <iterator>)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+
+],
+[
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_NO_ITERATOR_H, [])
+])
+
+AC_MSG_CHECKING(for <algorithm>)
+AC_TRY_COMPILE(
+[ 
+#include <algorithm>
+#include "confdefs.h"
+
+],
+[
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+need_algo="yes"
+])
+
+if test "$enable_stl" != "no" && test "$need_algo" = "yes"; then
+AC_MSG_CHECKING(for <algo>)
+AC_TRY_COMPILE(
+[ 
+#include <algo>
+
+],
+[
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_USE_ALGO, [])
+],
+[AC_MSG_RESULT(no - disabling STL support)
+AC_DEFINE(BOOST_RE_NO_STL, [])
+AC_DEFINE(BOOST_RE_NO_EXCEPTION_H, [])
+AC_DEFINE(BOOST_RE_NO_ITERATOR_H, [])
+AC_DEFINE(BOOST_RE_NO_MEMORY_H, [])
+AC_DEFINE(BOOST_RE_NO_LOCALE_H, [])
+AC_DEFINE(BOOST_RE_NO_STRING_H, [])
+enable_stl="no"
+])
+
+fi
+
+AC_MSG_CHECKING(for <memory>)
+AC_TRY_COMPILE(
+[ 
+#include <memory>
+#include "confdefs.h"
+
+std::allocator<char> a;
+std::allocator<double> d(a);
+
+typedef std::allocator<char> alloc_type;
+
+alloc_type::BOOST_RE_NESTED_TEMPLATE_DECL rebind<int>::other o(a);
+],
+[
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_NO_MEMORY_H, [])
+])
+
+
+if test "$enable_stl" != "no"; then
+AC_MSG_CHECKING(for <string>)
+AC_TRY_COMPILE(
+[ 
+#include <string>
+#include "confdefs.h"
+
+std::string a;
+//std::wstring ws;
+
+],
+[
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_MSG_ERROR(Sorry: you can't compile this library without <string>)
+])
+
+fi
+
+if test "$enable_stl" != "no"; then
+AC_MSG_CHECKING(for std::basic_string default arguments)
+AC_TRY_COMPILE(
+[ 
+#include <string>
+#include "confdefs.h"
+
+std::basic_string<char> s1;
+std::basic_string<wchar_t> s2;
+
+],
+[
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_NO_STRING_DEF_ARGS, [])
+])
+
+fi
+
+ac_have_locale='no'
+if test "$enable_stl" != "no"; then
+AC_MSG_CHECKING(for <locale>)
+AC_TRY_COMPILE(
+[ 
+#include <locale>
+#include "confdefs.h"
+
+std::locale l;
+],
+[
+],
+[AC_MSG_RESULT(yes)
+ac_have_locale='yes'
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_NO_LOCALE_H, [])
+])
+
+fi
+
+if test "$enable_stl" != "no"; then
+AC_MSG_CHECKING(for <iostream>)
+AC_TRY_COMPILE(
+[ 
+#include <iostream>
+#include <locale>
+#include "confdefs.h"
+
+],
+[
+ std::locale l;
+ std::cout.imbue(l);
+ std::cout << "some text" << std::endl;
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_OLD_IOSTREAM, [])
+])
+
+fi
+
+AC_MSG_CHECKING(for std::distance)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ int i, *j, *k;
+ i = std::distance(j, k);
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_DISTANCE_T_1)
+have_dist="yes"
+],
+[])
+
+if test "$enable_stl" != "no" && test "$have_dist" != "yes"; then
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ int i, *j, *k;
+ std::distance(j, k, i);
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_DISTANCE_T_2)
+have_dist="yes"
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_DISTANCE_T_0)
+have_dist="yes"])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_si" != "yes"; then
+AC_MSG_CHECKING(for standard iterator syntax)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::iterator<std::output_iterator_tag, char, std::ptrdiff_t, char*, char&> oi;
+ std::iterator<std::input_iterator_tag, char, std::ptrdiff_t, char*, char&> ii;
+ std::iterator<std::forward_iterator_tag, char, std::ptrdiff_t, char*, char&> fi;
+ std::iterator<std::bidirectional_iterator_tag, char, std::ptrdiff_t, char*, char&> bi;
+ std::iterator<std::random_access_iterator_tag, char, std::ptrdiff_t, char*, char&> ri;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_ITERATOR_T_1)
+have_si="yes"
+have_oi="yes"
+have_ii="yes"
+have_fi="yes"
+have_bi="yes"
+have_ri="yes"
+],
+[])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_si" != "yes"; then
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::iterator<std::output_iterator_tag, char, std::ptrdiff_t> oi;
+ std::iterator<std::input_iterator_tag, char, std::ptrdiff_t> ii;
+ std::iterator<std::forward_iterator_tag, char, std::ptrdiff_t> fi;
+ std::iterator<std::bidirectional_iterator_tag, char, std::ptrdiff_t> bi;
+ std::iterator<std::random_access_iterator_tag, char, std::ptrdiff_t> ri;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_ITERATOR_T_2)
+have_si="yes"
+have_oi="yes"
+have_ii="yes"
+have_fi="yes"
+have_bi="yes"
+have_ri="yes"
+],
+[AC_MSG_RESULT(no)])
+AC_DEFINE(BOOST_RE_ITERATOR_T_0)
+
+fi
+
+
+if test "$have_oi" != "yes"; then
+AC_MSG_CHECKING(for output iterator syntax)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::output_iterator oi;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_OI_T_3)
+have_oi="yes"
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_OI_T_0)
+have_oi="yes"])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_ii" != "yes"; then
+AC_MSG_CHECKING(for input iterator syntax)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::input_iterator<char, std::ptrdiff_t> oi;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_II_T_3)
+have_ii="yes"
+],
+[])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_ii" != "yes"; then
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::input_iterator<char> oi;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_II_T_4)
+have_ii="yes"
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_II_T_0)
+have_ii="yes"])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_fi" != "yes"; then
+AC_MSG_CHECKING(for forward iterator syntax)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::forward_iterator<int, std::ptrdiff_t> oi;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_FI_T_3)
+have_fi="yes"
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_FI_T_0)
+have_fi="yes"])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_bi" != "yes"; then
+AC_MSG_CHECKING(for bidirectional iterator syntax)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::bidirectional_iterator<int, std::ptrdiff_t> oi;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_BI_T_)
+have_bi="yes"
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_BI_T_0)
+have_bi="yes"])
+
+fi
+
+if test "$enable_stl" != "no" && test "$have_ri" != "yes"; then
+AC_MSG_CHECKING(for random access iterator syntax)
+AC_TRY_COMPILE(
+[ 
+#include <iterator>
+#include "confdefs.h"
+
+],
+[
+ std::random_access_iterator<int, std::ptrdiff_t> oi;
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(BOOST_RE_RI_T_3)
+have_ri="yes"
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_RI_T_0)
+have_ri="yes"])
+
+fi
+
+if test "$enable_stl" != "no"; then
+AC_MSG_CHECKING(for output iterator assignment)
+AC_TRY_COMPILE(
+[ 
+#include "confdefs.h"
+#include <iterator>
+#ifdef BOOST_RE_OLD_IOSTREAM
+#include <iostream.h>
+std::ostream_iterator<char> a(cout);
+std::ostream_iterator<char> b(cout);
+#else
+#include <iostream>
+std::ostream_iterator<char> a(std::cout);
+std::ostream_iterator<char> b(std::cout);
+#endif
+
+#include <list>
+#if !defined(BOOST_RE_NO_TRICKY_DEFAULT_PARAM) && !defined(BOOST_RE_NO_DEFAULT_PARAM)
+typedef std::list<int> list_type;
+#else
+typedef std::list<int, jm_def_alloc> list_type;
+#endif
+
+list_type v;
+
+std:: back_insert_iterator<list_type> c(v);
+std:: back_insert_iterator<list_type> d(v);
+
+],
+[
+	a = b;
+	c = d;
+],
+[AC_MSG_RESULT(yes)
+],
+[AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_RE_NO_OI_ASSIGN, [])
+])
+
+fi
+
+
+
+
+
+#
+# generate include dependencies
+#
+ac_all_h=""
+ac_all_dep=""
+for file in ../../boost/re_detail/*.hpp
+do
+	if test "$file" != '../../boost/re_detail/*.hpp'; then
+		ac_all_h="$ac_all_h ../$file"
+		ac_all_dep="$ac_all_dep $file"
+	fi
+done
+#echo "$ac_all_h"
+
+#
+# generate source dependencies
+#
+ac_all_o=""
+ac_rules=""
+ac_all_cpp=""
+cat ./lib/makefile.org > ./lib/makefile.in
+for file in src/*.cpp src/*.c
+do
+	if test "$file" != 'src/*.cpp' && test "$file" != 'src/*.c'; then
+		dnl echo source dependency found "$file"
+		ac_all_dep="$ac_all_dep $file"
+		ac_all_cpp="$ac_all_cpp $file"
+		root=`echo "$file" | sed 's/src\/\(.*\)\..*/\1/g'`
+		dnl echo root file name is "$root"
+		ac_all_o="$ac_all_o $root$ac_obj_ext"
+		echo >> ./lib/makefile.in
+		echo >> ./lib/makefile.in
+		echo "$root$ac_obj_ext"': $(ALL_H) '"../$file" >> ./lib/makefile.in
+		echo '	$(CPP) $(CPP_PROJ)'" ../$file" >> ./lib/makefile.in
+		echo '	$(AR) -rc lib$(LIBNAME).a'" $root$ac_obj_ext" >> ./lib/makefile.in
+	fi
+done
+
+echo "$ac_rules" >> ./lib/makefile.in
+
+AC_SUBST(ac_all_o)
+AC_SUBST(ac_all_h)
+AC_SUBST(ac_all_cpp)
+AC_SUBST(ac_all_dep)
+
+if test "$enable_ms_windows" != "no"; then
+ac_regress="r1$ac_exe_ext"
+fi
+ac_regress="$ac_regress r2$ac_exe_ext"
+if test "$ac_have_locale" != "no"; then
+ac_regress="$ac_regress r3$ac_exe_ext"
+fi
+
+if test "$enable_wstring" != "no"; then
+if test "$enable_ms_windows" != "no"; then
+ac_regress="$ac_regress r4$ac_exe_ext"
+fi
+ac_regress="$ac_regress r5$ac_exe_ext"
+if test "$ac_have_locale" != "no"; then
+ac_regress="$ac_regress r6$ac_exe_ext"
+fi
+fi
+
+AC_SUBST(ac_regress)
+
+if test "$enable_ms_windows" = "no"; then
+AC_DEFINE(BOOST_RE_NO_W32, [])
+fi
+
+
+#
+# OK final test for possible link time problems:
+#
+cat > conf2.h << EOF
+
+#include "confdefs.h"
+#include <stdlib.h>
+
+template <class T>
+class factorial
+{
+public:
+	factorial();
+	T operator()(T);
+};
+
+template <class T>
+factorial<T>::factorial()
+{
+}
+
+template <class T>
+T factorial<T>::operator()(T t)
+{
+	T result = 1;
+	for(T i = 1; i <= t; ++i)
+	{
+		result *= i;
+	}
+	return result;
+}
+
+int conf2_test();
+
+
+EOF
+
+cat > conf2.cpp << EOF
+
+#include "conf2.h"
+
+int conf2_test()
+{
+	factorial<int> f;
+	return f(8);
+}
+
+EOF
+
+old_libs="$LIBS"
+
+LIBS="conf2.cpp $old_libs"
+
+AC_MSG_CHECKING(for link time template merging)
+AC_TRY_LINK( 
+[
+#include "conf2.h"
+],
+[
+	factorial<int> g;
+	g(5);
+	conf2_test();
+], 
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_TEMPLATE_MERGE, [])
+AC_MSG_RESULT(no)
+AC_MSG_RESULT([    Warning - $0 has determined that your compiler can not merge]) 
+AC_MSG_RESULT([    template instances, you may have problems linking to libregex++.a - ])
+AC_MSG_RESULT([    see the FAQ for further details.])
+]
+)
+
+if eval "$CXX $CXXFLAGS -c conf2.cpp" && eval "ar -rc libconf2.a conf2$ac_obj_ext"; then
+LIBS="-L./ -lconf2 $old_libs"
+
+AC_MSG_CHECKING(for link time template merging from archive files)
+AC_TRY_LINK( 
+[
+#include "conf2.h"
+],
+[
+	factorial<int> g;
+	g(5);
+	conf2_test();
+], 
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_TEMPLATE_MERGE_A, [])
+AC_MSG_RESULT(no)
+AC_MSG_RESULT([    Warning - $0 has determined that your compiler can not merge ])
+AC_MSG_RESULT([    template instances, if these are located inside an archive file,])
+AC_MSG_RESULT([    you may have problems linking to libregex++.a - see the FAQ for])
+AC_MSG_RESULT([    further details.])
+]
+)
+
+else
+
+AC_MSG_RESULT(Unable to create library archive, library may not be fully configured.)
+
+fi
+
+
+#
+# cleanup
+#
+rm -f conf2.h
+rm -f conf2.cpp
+rm -f "conf2$ac_obj_ext"
+rm -f libconf2.a
+LIBS="$old_libs"
+
+cat > conf2.h << EOF
+
+#include "confdefs.h"
+#include <stdlib.h>
+
+template <class T>
+class factorial
+{
+public:
+	factorial();
+	T operator()(T);
+};
+
+template <class T>
+factorial<T>::factorial()
+{
+}
+
+template <class T>
+T factorial<T>::operator()(T t)
+{
+	T result = 1;
+	switch(t)
+	{
+	case 2:
+		for(T i = 1; i <= 2; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	case 3:
+		for(T i = 1; i <= 3; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	case 4:
+		for(T i = 1; i <= 4; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	case 5:
+		for(T i = 1; i <= 5; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	case 6:
+		for(T i = 1; i <= 6; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	case 7:
+		for(T i = 1; i <= 7; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	default:
+		for(T i = 1; i <= t; ++i)
+		{
+			result *= i;
+		}
+		return result;
+	}
+	return 0;
+}
+
+int conf2_test();
+
+
+EOF
+
+cat > conf2.cpp << EOF
+
+#include "conf2.h"
+
+int conf2_test()
+{
+	factorial<int> f;
+	return f(8);
+}
+
+EOF
+
+old_libs="$LIBS"
+
+LIBS="conf2.cpp $old_libs"
+
+AC_MSG_CHECKING(for link time template merging of switch statements)
+AC_TRY_LINK( 
+[
+#include "conf2.h"
+],
+[
+	factorial<int> g;
+	g(5);
+	conf2_test();
+], 
+[AC_MSG_RESULT(yes)],
+[AC_DEFINE(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE, [])
+AC_MSG_RESULT(no)
+AC_MSG_RESULT([    Warning - $0 has determined that your compiler can not merge]) 
+AC_MSG_RESULT([    template instances, if those instances contain switch statements, ])
+AC_MSG_RESULT([    you may have problems linking to libregex++.a - ])
+AC_MSG_RESULT([    see the FAQ for further details.])
+]
+)
+
+#
+# cleanup
+#
+rm -f conf2.h
+rm -f conf2.cpp
+LIBS="$old_libs"
+
+
+
+AC_DEFINE(BOOST_RE_AUTO_CONF)
+
+AC_MSG_RESULT(***)
+AC_MSG_RESULT($0: setting up headers...)
+AC_MSG_RESULT(***)
+AC_OUTPUT(lib/makefile demo/jgrep/makefile demo/timer/makefile demo/regress/makefile makefile)
+AC_MSG_RESULT(***)
+AC_MSG_RESULT($0: regex++ package tuned for use with \"${CXX}\" compiler.)
+AC_MSG_RESULT($0: To restore original settings - copy jm_opt.in to ../../boost/re_detail/regex_options.hpp)
+AC_MSG_RESULT(***)
+
+#post processing cleanup:
+sed 's%^[ 	]*#[ 	]*undef[ 	][ 	]*\(.*\)[ 	]*$%/* #define \1 */%' ../../boost/re_detail/regex_options.hpp > jm_opt.out
+cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
+sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
+cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
+rm -f jm_opt.out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

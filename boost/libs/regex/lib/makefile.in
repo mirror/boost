@@ -1,0 +1,74 @@
+
+LIBNAME=regex++
+
+CPP=@CXX@
+AR=ar
+
+CPP_PROJ=@CXXFLAGS@ -I../../../ -c 
+	
+ALL_O=@ac_all_o@
+ALL_H=@ac_all_h@
+
+lib$(LIBNAME).a : $(ALL_O)
+
+
+
+
+
+
+
+
+c_regex_traits.o: $(ALL_H) ../src/c_regex_traits.cpp
+	$(CPP) $(CPP_PROJ) ../src/c_regex_traits.cpp
+	$(AR) -rc lib$(LIBNAME).a c_regex_traits.o
+
+
+c_regex_traits_common.o: $(ALL_H) ../src/c_regex_traits_common.cpp
+	$(CPP) $(CPP_PROJ) ../src/c_regex_traits_common.cpp
+	$(AR) -rc lib$(LIBNAME).a c_regex_traits_common.o
+
+
+cpp_regex_traits.o: $(ALL_H) ../src/cpp_regex_traits.cpp
+	$(CPP) $(CPP_PROJ) ../src/cpp_regex_traits.cpp
+	$(AR) -rc lib$(LIBNAME).a cpp_regex_traits.o
+
+
+cregex.o: $(ALL_H) ../src/cregex.cpp
+	$(CPP) $(CPP_PROJ) ../src/cregex.cpp
+	$(AR) -rc lib$(LIBNAME).a cregex.o
+
+
+fileiter.o: $(ALL_H) ../src/fileiter.cpp
+	$(CPP) $(CPP_PROJ) ../src/fileiter.cpp
+	$(AR) -rc lib$(LIBNAME).a fileiter.o
+
+
+posix_api.o: $(ALL_H) ../src/posix_api.cpp
+	$(CPP) $(CPP_PROJ) ../src/posix_api.cpp
+	$(AR) -rc lib$(LIBNAME).a posix_api.o
+
+
+regex.o: $(ALL_H) ../src/regex.cpp
+	$(CPP) $(CPP_PROJ) ../src/regex.cpp
+	$(AR) -rc lib$(LIBNAME).a regex.o
+
+
+regex_debug.o: $(ALL_H) ../src/regex_debug.cpp
+	$(CPP) $(CPP_PROJ) ../src/regex_debug.cpp
+	$(AR) -rc lib$(LIBNAME).a regex_debug.o
+
+
+regex_synch.o: $(ALL_H) ../src/regex_synch.cpp
+	$(CPP) $(CPP_PROJ) ../src/regex_synch.cpp
+	$(AR) -rc lib$(LIBNAME).a regex_synch.o
+
+
+w32_regex_traits.o: $(ALL_H) ../src/w32_regex_traits.cpp
+	$(CPP) $(CPP_PROJ) ../src/w32_regex_traits.cpp
+	$(AR) -rc lib$(LIBNAME).a w32_regex_traits.o
+
+
+wide_posix_api.o: $(ALL_H) ../src/wide_posix_api.cpp
+	$(CPP) $(CPP_PROJ) ../src/wide_posix_api.cpp
+	$(AR) -rc lib$(LIBNAME).a wide_posix_api.o
+

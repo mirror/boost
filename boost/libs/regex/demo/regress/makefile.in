@@ -1,0 +1,78 @@
+
+# very basic makefile for regression tests
+#
+CXX=@CXX@
+CXXFLAGS=@CXXFLAGS@
+LIBS=@LIBS@ -L../../lib -lregex++
+EXE=@ac_exe_ext@
+OBJ=@ac_obj_ext@
+
+total : @ac_regress@
+
+LIBDEP=../../lib/libregex++.a ../../../../boost/re_detail/regex_options.hpp ../../../../boost/re_detail/regex_config.hpp
+
+r1$(EXE) :: r1$(OBJ)
+	$(CXX) -o r1$(EXE) r1$(OBJ) $(LIBS)
+	./r1 tests.txt test1252.txt
+
+r2$(EXE) ::  r2$(OBJ)
+	$(CXX) -o r2$(EXE) r2$(OBJ) $(LIBS)
+	./r2 tests.txt
+
+r3$(EXE) ::  r3$(OBJ) 
+	$(CXX) -o r3$(EXE) r3$(OBJ) $(LIBS)
+	./r3 tests.txt
+
+r4$(EXE) :: r4$(OBJ)
+	$(CXX) -o r4$(EXE) r4$(OBJ) $(LIBS)
+	./r4 tests.txt test1252.txt
+
+r5$(EXE) :: r5$(OBJ)
+	$(CXX) -o r5$(EXE) r5$(OBJ) $(LIBS)
+	./r5 tests.txt
+
+r6$(EXE) :: r6$(OBJ)
+	$(CXX) -o r6$(EXE) r6$(OBJ) $(LIBS)
+	./r6 tests.txt
+
+r1$(OBJ) : parse.cpp regress.cpp tests.cpp r1.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -DSTRICT -I../../../../ -I./ r1.cpp
+
+r2$(OBJ) :  parse.cpp regress.cpp tests.cpp r2.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -I../../../../ -I./ r2.cpp
+
+r3$(OBJ) :  parse.cpp regress.cpp tests.cpp r3.cpp $(LIBDEP) 
+	$(CXX) -c $(CXXFLAGS) -I../../../../ -I./ r3.cpp
+
+r4$(OBJ) : parse.cpp regress.cpp tests.cpp r4.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -DSTRICT -I../../../../ -I./ r4.cpp
+
+r5$(OBJ) : parse.cpp regress.cpp tests.cpp r5.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -I../../../../ -I./ r5.cpp
+
+r6$(OBJ) : parse.cpp regress.cpp tests.cpp r6.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -I../../../../ -I./ r6.cpp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+
+# very basic makefile for timer
+#
+CXX=@CXX@
+CXXFLAGS=@CXXFLAGS@
+LIBS=@LIBS@
+EXE=@ac_exe_ext@
+OBJ=@ac_obj_ext@
+
+LIBDEP=../../lib/libregex++.a ../../../../boost/re_detail/regex_options.hpp ../../../../boost/re_detail/regex_config.hpp
+
+regex_timer$(EXE) : regex_timer$(OBJ) timer$(OBJ)
+	$(CXX) -o timer$(EXE) timer$(OBJ) regex_timer$(OBJ) -L../../lib -lregex++ $(LIBS)
+
+regex_timer$(OBJ) : regex_timer.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -DSTRICT -I../../../../ -I./ regex_timer.cpp
+
+timer$(OBJ) : ../../../timer/timer.cpp $(LIBDEP)
+	$(CXX) -c $(CXXFLAGS) -DSTRICT -I../../../../ -I./ ../../../timer/timer.cpp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

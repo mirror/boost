@@ -1,0 +1,610 @@
+#! /bin/bash
+
+libname=""
+src=""
+header=""
+all_dep=""
+
+# current makefile:
+out=""
+# temporary file:
+tout=""
+# install target temp file:
+iout=""
+# debug flag:
+debug="no"
+# compile options:
+opts=""
+# main output sub-directory:
+subdir=""
+# vcl flag:
+use_vcl="yes"
+
+
+function vc6_gen_lib()
+{
+	all_dep="$all_dep $libname""_dir ./$subdir/$libname.lib"
+	echo "	copy $subdir\\$libname.lib "'"$'"(MSVCDIR)\\lib"'"' >> $iout
+	if test $debug == "yes"; then
+		echo "	copy $subdir\\$libname.pdb "'"$'"(MSVCDIR)\\lib"'"' >> $iout
+	fi
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for $libname.lib
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1obj/g'`
+		obj="$subdir/$libname/$obj"
+		all_obj="$all_obj $obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	cl $opts \$(XCFLAGS) -Fp$subdir/$libname/$libname.pch -Fo./$subdir/$libname/ -Fd$subdir/$libname.pdb $file" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$libname"_dir : >> $tout
+	echo "	if not exist \"$subdir\\$libname\\\$(NULL)\" mkdir $subdir\\$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean"
+	echo "$libname"_clean : >> $tout
+	echo "	del $subdir\\$libname\\"'*.obj' >> $tout
+	echo "	del $subdir\\$libname\\"'*.idb' >> $tout
+	echo "	del $subdir\\$libname\\"'*.exp' >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo ./$subdir/$libname.lib : $all_obj >> $tout
+	echo "	link -lib /nologo /out:$subdir/$libname.lib \$(XSFLAGS) $all_obj" >> $tout
+	echo "" >> $tout
+}
+
+function vc6_gen_dll()
+{
+	all_dep="$all_dep $libname""_dir ./$subdir/$libname.lib"
+	echo "	copy $subdir\\$libname.lib "'"$'"(MSVCDIR)\\lib"'"' >> $iout
+	echo "	copy $subdir\\$libname.dll "'"$'"(MSVCDIR)\\bin"'"' >> $iout
+	if test $debug == "yes"; then
+		echo "	copy $subdir\\$libname.pdb "'"$'"(MSVCDIR)\\lib"'"' >> $iout
+	fi
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for $libname.lib
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1obj/g'`
+		obj="$subdir/$libname/$obj"
+		all_obj="$all_obj $obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	cl $opts \$(XCFLAGS) -Fp$subdir/$libname/$libname.pch -Fo./$subdir/$libname/ -Fd$subdir/$libname.pdb $file" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$libname"_dir : >> $tout
+	echo "	if not exist \"$subdir\\$libname\\\$(NULL)\" mkdir $subdir\\$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean"
+	echo "$libname"_clean : >> $tout
+	echo "	del $subdir\\$libname\\"'*.obj' >> $tout
+	echo "	del $subdir\\$libname\\"'*.idb' >> $tout
+	echo "	del $subdir\\$libname\\"'*.exp' >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo ./$subdir/$libname.lib : $all_obj >> $tout
+	echo "	link @<<" >> $tout
+	echo "	kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:\"$subdir/$libname.pdb\" /debug /machine:I386 /out:\"$subdir/$libname.dll\" /implib:\"$subdir/$libname.lib\" /pdbtype:sept \$(XLFLAGS) $all_obj" >> $tout
+	echo "<<" >> $tout
+	echo "" >> $tout
+}
+
+is_stlport="no"
+
+function vc6_gen()
+{
+	tout="temp"
+	iout="temp_install"
+	all_dep="main_dir"
+	all_clean=""
+	echo > $out
+	echo > $tout
+	rm -f $iout
+	
+	if test "$is_stlport" == yes; then
+	prefix='vc6-stlport-'
+	else
+	prefix='vc6-'
+	fi
+
+	if test "$no_single" != "yes"; then
+	libname="$prefix""re300"
+	opts="/c /nologo /ML /W3 /GX /O2 /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD"
+	vc6_gen_lib
+	fi
+	
+	libname="$prefix""re300m"
+	opts="/nologo /MT /W3 /GX /O2 /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c"
+	vc6_gen_lib
+	
+	if test "$no_single" != "yes"; then
+	debug="yes"
+	libname="$prefix""re300d"
+	opts="/nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c "
+	vc6_gen_lib
+	fi
+	
+	libname="$prefix""re300dm"
+	opts="/nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c"
+	vc6_gen_lib
+	
+	libname="$prefix""re300dl"
+	opts="/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c"
+	vc6_gen_dll
+	
+	debug="no"
+	opts="/nologo /MD /W3 /GX /O2 /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c"
+	libname="$prefix""re300l"
+	vc6_gen_dll
+	
+	cat > $out << EOF
+#
+# auto generated makefile for VC6 compiler
+#
+# usage:
+# make
+#   brings libraries up to date
+# make install
+#   brings libraries up to date and copies binaries to your VC6 /lib and /bin directories (recomended)
+#
+
+#
+# Add additional compiler options here:
+#
+XCFLAGS=
+#
+# add additional linker flags here:
+#
+XLFLAGS=
+#
+# add additional static-library creation flags here:
+#
+XSFLAGS=
+
+!IF "\$(OS)" == "Windows_NT"
+NULL=
+!ELSE 
+NULL=nul
+!ENDIF 
+
+EOF
+	echo "" >> $out
+	echo "ALL_HEADER=$header" >> $out
+	echo "" >> $out
+	echo "all : $all_dep" >> $out
+	echo >> $out
+	echo "clean : $all_clean" >> $out
+	echo >> $out
+	echo "install : all" >> $out
+	cat $iout >> $out
+	echo >> $out
+	echo main_dir : >> $out
+	echo "	if not exist \"$subdir\\\$(NULL)\" mkdir $subdir" >> $out
+	echo "" >> $out
+
+	cat $tout >> $out
+}
+
+
+###############################################################
+#
+# gcc generator section:
+#
+###############################################################
+
+function gcc_gen_lib()
+{
+	all_dep="$all_dep $subdir $subdir/$libname ./$subdir/lib$libname.a"
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for lib$libname.a
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1o/g'`
+		obj="$subdir/$libname/$obj"
+		all_obj="$all_obj $obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	g++ -o $obj $opts \$(XCFLAGS) $file" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$subdir/$libname : " >> $tout
+	echo "	mkdir -p $subdir/$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean"
+	echo "$libname"_clean : >> $tout
+	echo "	rm -f $subdir/$libname/*.o" >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo ./$subdir/lib$libname.a : $all_obj >> $tout
+	echo "	ar -r \$(XSFLAGS) $subdir/lib$libname.a $all_obj" >> $tout
+	echo "" >> $tout
+}
+
+function gcc_gen()
+{
+	out="lib/gcc.mak"
+	tout="temp"
+	iout="temp_install"
+	subdir="gcc"
+	all_dep=""
+	all_clean=""
+	echo > $out
+	echo > $tout
+	echo > $iout
+
+	libname="regex++"
+	opts="-c -O2 -I../../../"
+	gcc_gen_lib
+	libname="regex++debug"
+	opts="-c -I../../../ -g"
+	gcc_gen_lib
+	
+	
+	cat > $out << EOF
+#
+# auto generated makefile for gcc compiler
+#
+# usage:
+# make
+#   brings libraries up to date
+# make clean
+#   deletes temporary object files (but not archives).
+#
+
+#
+# Add additional compiler options here:
+#
+XCFLAGS=
+#
+# add additional linker flags here:
+#
+XLFLAGS=
+#
+# add additional static-library creation flags here:
+#
+XSFLAGS=
+
+
+EOF
+	echo "" >> $out
+	echo "ALL_HEADER=$header" >> $out
+	echo "" >> $out
+	echo "all : $subdir $all_dep" >> $out
+	echo >> $out
+	echo "$subdir :" >> $out
+	echo "	mkdir -p $subdir" >> $out
+	echo >> $out
+	echo "clean : $all_clean" >> $out
+	echo >> $out
+	echo "install : all" >> $out
+	cat $iout >> $out
+	echo >> $out
+	cat $tout >> $out
+}
+
+#######################################################################
+#
+# section for C++ Builder
+#
+#######################################################################
+
+function bcb_gen_lib()
+{
+	all_dep="$all_dep $subdir\\$libname $subdir\\$libname.lib"
+	echo "	copy $subdir\\$libname.lib \$(BCROOT)\\lib" >> $iout
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for $libname.lib
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	all_lib_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1obj/g'`
+		obj="$subdir\\$libname\\$obj"
+		all_obj="$all_obj $obj"
+		all_lib_obj="$all_lib_obj +$obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	bcc32 @&&|" >> $tout
+		echo "-c $opts \$(XCFLAGS) -o$obj $file" >> $tout
+		echo "|" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$subdir\\$libname : " >> $tout
+	echo "	-mkdir $subdir\\$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean"
+	echo "$libname"_clean : >> $tout
+	echo "	del $subdir\\$libname\\"'*.obj' >> $tout
+	echo "	del $subdir\\$libname\\"'*.il?' >> $tout
+	echo "	del $subdir\\$libname\\"'*.csm' >> $tout
+	echo "	del $subdir\\$libname\\"'*.tds' >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo $subdir\\$libname.lib : $all_obj >> $tout
+	echo "	tlib @&&|" >> $tout
+	echo "/P32 /u /a \$(XSFLAGS) $subdir\\$libname.lib $all_lib_obj" >> $tout
+	echo "|" >> $tout
+	echo "" >> $tout
+}
+
+function bcb_gen_dll()
+{
+	all_dep="$all_dep $subdir\\$libname $subdir\\$libname.lib"
+	echo "	copy $subdir\\$libname.lib \$(BCROOT)\\lib" >> $iout
+	echo "	copy $subdir\\$libname.dll \$(BCROOT)\\bin" >> $iout
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for $libname.lib
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1obj/g'`
+		obj="$subdir\\$libname\\$obj"
+		all_obj="$all_obj $obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	bcc32 @&&|" >> $tout
+		echo "-c $opts \$(XCFLAGS) -o$obj $file" >> $tout
+		echo "|" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$subdir\\$libname :" >> $tout
+	echo "	-mkdir $subdir\\$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean"
+	echo "$libname"_clean : >> $tout
+	echo "	del $subdir\\$libname\\"'*.obj' >> $tout
+	echo "	del $subdir\\$libname\\"'*.il?' >> $tout
+	echo "	del $subdir\\$libname\\"'*.csm' >> $tout
+	echo "	del $subdir\\$libname\\"'*.tds' >> $tout
+	echo "	del $subdir\\"'*.tds' >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo $subdir\\$libname.lib : $all_obj >> $tout
+	echo "	bcc32 @&&|" >> $tout
+	echo "$opts -e$subdir\\$libname.dll $all_obj \$(XLFLAGS)" >> $tout
+	echo "|" >> $tout
+	echo "	implib $subdir\\$libname.lib -c $subdir\\$libname.dll" >> $tout
+	echo "" >> $tout
+}
+
+
+
+function bcb_gen()
+{
+	tout="temp"
+	iout="temp_install"
+	all_dep="$subdir"
+	all_clean=""
+	echo > $out
+	echo > $tout
+	rm -f $iout
+
+	libname="$subdir""re300"
+	opts="-tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../;"
+	bcb_gen_lib
+
+	libname="$subdir""re300m"
+	opts="-tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../;"
+	bcb_gen_lib
+	
+	if test $use_vcl == "yes"; then
+
+	libname="$subdir""re300v"
+	opts="-tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../;"
+	bcb_gen_lib
+
+	libname="$subdir""re300lv"
+	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../; -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_dll
+	
+	fi
+
+	libname="$subdir""re300lm"
+	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../; -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_dll
+
+	libname="$subdir""re300l"
+	opts="-DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../; -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_dll
+	
+	
+	cat > $out << EOF
+#
+# auto generated makefile for C++ Builder
+#
+# usage:
+# make
+#   brings libraries up to date
+# make install
+#   brings libraries up to date and copies binaries to your C++ Builder /lib and /bin directories (recomended)
+# make clean
+#   removes all temporary files.
+
+#
+# Add additional compiler options here:
+#
+XCFLAGS=
+#
+# add additional linker flags here:
+#
+XLFLAGS=
+#
+# add additional static-library creation flags here:
+#
+XSFLAGS=
+
+!ifndef BCROOT
+BCROOT=\$(MAKEDIR)\\..
+!endif
+
+EOF
+	echo "" >> $out
+	echo "ALL_HEADER=$header" >> $out
+	echo "" >> $out
+	echo "all : $all_dep" >> $out
+	echo >> $out
+	echo "clean : $all_clean" >> $out
+	echo >> $out
+	echo "install : all" >> $out
+	cat $iout >> $out
+	echo >> $out
+	echo $subdir : >> $out
+	echo "	-mkdir $subdir" >> $out
+	echo "" >> $out
+
+	cat $tout >> $out
+}
+
+
+
+
+#
+# locate all the header dependencies:
+header="../../../boost/cregex.hpp ../../../boost/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex_traits.hpp"
+
+for file in ../../boost/re_detail/*.hpp
+do
+
+if test $file != '../../boost/re_detail/*.hpp'; then
+	header="$header ../$file"
+fi
+
+done
+
+for file in ../../boost/re_detail/*.hxx
+do
+
+if test $file != '../../boost/re_detail/*.hxx'; then
+	header="$header $file"
+fi
+
+done
+
+#
+# locate all the source files:
+for file in src/*.cpp
+do
+
+if test $file != 'src/*.cpp'; then
+	src="$src ../$file"
+fi
+
+done
+
+#
+# generate vc6 makefile:
+out="lib/vc6.mak"
+subdir="vc6"
+vc6_gen
+#
+# generate vc6-stlport makefile:
+is_stlport="yes"
+out="lib/vc6-stlport.mak"
+no_single="yes"
+subdir="vc6-stlport"
+vc6_gen
+#
+# generate gcc makefile:
+gcc_gen
+#
+# generate C++ Builder 4 files:
+out="lib/bcb4.mak"
+subdir="bcb4"
+bcb_gen
+#
+# generate C++ Builder 5 files:
+out="lib/bcb5.mak"
+subdir="bcb5"
+bcb_gen
+#
+# generate C++ Builder 5 command line tools files:
+use_vcl="no"
+out="lib/bc55.mak"
+subdir="bcb5"
+bcb_gen
+
+
+#
+# remove tmep files;
+rm -f $tout $iout
+
+
+
+
+
+
+
+
+
+

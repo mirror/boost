@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+ 
+<HTML>
+ 
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> 
+<META NAME="Template"
+ CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot"> 
+<META NAME="GENERATOR" CONTENT="Mozilla/4.5 [en] (Win98; I) [Netscape]"> 
+<TITLE>Regex++, Format String Reference</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#800080">
+&nbsp; <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="50%"> <H3>
+<IMG SRC="c++boost.gif" HEIGHT="86" WIDTH="276" ALT="C++ Boost"></H3>
+</TD>
+<TD VALIGN="TOP" WIDTH="50%"> <CENTER>
+<H3> Regex++, Format String Reference.</H3>
+</CENTER>
+<CENTER>
+<I>(version 3.01, 18 April 2000)</I>
+</CENTER>
+<PRE><I>Copyright (c) 1998-2000
+Dr John Maddock
+
+Permission to use, copy, modify, distribute and sell this software
+and its documentation for any purpose is hereby granted without fee,
+provided that the above copyright notice appear in all copies and
+that both that copyright notice and this permission notice appear
+in supporting documentation.&nbsp; Dr John Maddock makes no representations
+about the suitability of this software for any purpose.&nbsp;&nbsp;
+It is provided &quot;as is&quot; without express or implied warranty.</I></PRE>
+
+</TD>
+</TR>
+</TABLE>
+<HR>
+<H3> <A NAME="format_string"></A>Format String Syntax</H3>
+Format strings are used by the algorithms
+<A HREF="template_class_ref.htm#reg_format">regex_format</A> and
+<A HREF="template_class_ref.htm#reg_merge">regex_merge</A>, and are used to
+transform one string into another. <P>There are three kind of format string:
+sed, perl and extended, the extended syntax is the default so this is covered
+first. </P>
+<P><B><I>Extended format syntax</I></B> </P>
+<P>In format strings, all characters are treated as literals except: ()$\?: 
+</P>
+<P>To use any of these as literals you must prefix them with the escape
+character \ </P>
+<P>The following special sequences are recognized: <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Grouping:</I> </P>
+<P>Use the parenthesis characters ( and ) to group sub-expressions within the
+format string, use \( and \) to represent literal '(' and ')'. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Sub-expression expansions:</I> </P>
+<P>The following perl like expressions expand to a particular matched
+sub-expression: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">$`</TD>
+<TD VALIGN="TOP" WIDTH="43%">Expands to all the text from the end of the
+previous match to the start of the current match, if there was no previous
+match in the current operation, then everything from the start of the input
+string to the start of the match.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">$'</TD>
+<TD VALIGN="TOP" WIDTH="43%">Expands to all the text from the end of the match
+to the end of the input string.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">$&amp;</TD>
+<TD VALIGN="TOP" WIDTH="43%">Expands to all of the current match.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">$0</TD>
+<TD VALIGN="TOP" WIDTH="43%">Expands to all of the current match.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">$N</TD>
+<TD VALIGN="TOP" WIDTH="43%">Expands to the text that matched sub-expression
+<I>N</I>.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P><I>Conditional expressions:</I> </P>
+<P>Conditional expressions allow two different format strings to be selected
+dependent upon whether a sub-expression participated in the match or not: </P>
+<P>?Ntrue_expression:false_expression </P>
+<P>Executes true_expression if sub-expression <I>N</I> participated in the
+match, otherwise executes false_expression. </P>
+<P>Example: suppose we search for &quot;(while)|(for)&quot; then the format
+string &quot;?1WHILE:FOR&quot; would output what matched, but in upper case. 
+<BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Escape sequences:</I> </P>
+<P>The following escape sequences are also allowed: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\a</TD>
+<TD VALIGN="TOP" WIDTH="43%">The bell character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\f</TD>
+<TD VALIGN="TOP" WIDTH="43%">The form feed character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\n</TD>
+<TD VALIGN="TOP" WIDTH="43%">The newline character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\r</TD>
+<TD VALIGN="TOP" WIDTH="43%">The carriage return character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\t</TD>
+<TD VALIGN="TOP" WIDTH="43%">The tab character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\v</TD>
+<TD VALIGN="TOP" WIDTH="43%">A vertical tab character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\x</TD>
+<TD VALIGN="TOP" WIDTH="43%">A hexadecimal character - for example \x0D.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\x{}</TD>
+<TD VALIGN="TOP" WIDTH="43%">A possible unicode hexadecimal character - for
+example \x{1A0}</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\cx</TD>
+<TD VALIGN="TOP" WIDTH="43%">The ASCII escape character x, for example \c@ is
+equivalent to escape-@.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\e</TD>
+<TD VALIGN="TOP" WIDTH="43%">The ASCII escape character.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="40%">\dd</TD>
+<TD VALIGN="TOP" WIDTH="43%">An octal character constant, for example \10.</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P><B><I>Perl format strings</I></B> </P>
+<P>Perl format strings are the same as the default syntax except that the
+characters ()?: have no special meaning. </P>
+<P><B><I>Sed format strings</I></B> </P>
+<P>Sed format strings use only the characters \ and &amp; as special
+characters. </P>
+<P>\n where n is a digit, is expanded to the nth sub-expression. </P>
+<P>&amp; is expanded to the whole of the match (equivalent to \0). </P>
+<P>Other escape sequences are expanded as per the default syntax. <BR>
+</P>
+<HR>
+<P><I>Copyright <A HREF="mailto:John_Maddock@compuserve.com">Dr John
+Maddock</A> 1998-2000 all rights reserved.</I> </P>
+</BODY>
+</HTML>
+

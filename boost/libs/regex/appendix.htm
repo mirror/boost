@@ -1,0 +1,1937 @@
+<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+ 
+<HTML>
+ 
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> 
+<META NAME="Template"
+ CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot"> 
+<META NAME="GENERATOR" CONTENT="Mozilla/4.5 [en] (Win98; I) [Netscape]"> 
+<TITLE>Regex++, Appendices</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#800080">
+&nbsp; <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="50%"> <H3>
+<IMG SRC="c++boost.gif" HEIGHT="86" WIDTH="276" ALT="C++ Boost"></H3>
+</TD>
+<TD VALIGN="TOP" WIDTH="50%"> <CENTER>
+<H3> Regex++, Appendices.</H3>
+</CENTER>
+<CENTER>
+<I>(version 3.01, 18 April 2000)</I> 
+</CENTER>
+<PRE><I>Copyright (c) 1998-2000
+Dr John Maddock
+
+Permission to use, copy, modify, distribute and sell this software
+and its documentation for any purpose is hereby granted without fee,
+provided that the above copyright notice appear in all copies and
+that both that copyright notice and this permission notice appear
+in supporting documentation.&nbsp; Dr John Maddock makes no representations
+about the suitability of this software for any purpose.&nbsp;&nbsp;
+It is provided &quot;as is&quot; without express or implied warranty.</I></PRE>
+
+</TD>
+</TR>
+</TABLE>
+<HR>
+<H3> <A NAME="implementation"></A>Appendix 1: Implementation notes</H3>
+This is the first port of regex++ to the boost library, and is based on regex++
+2.x, see changes.txt for a full list of changes from the previous version.
+There are no known functionality bugs except that POSIX style equivalence
+classes are only guaranteed correct if the Win32 localization model is used
+(the default for Win32 builds of the library). <P>There are some aspects of the
+code that C++ puritans will consider to be poor style, in particular the use of
+goto in some of the algorithms. The code could be cleaned up, by changing to a
+recursive implementation, although it is likely to be slower in that case. </P>
+<P>The performance of the algorithms should be satisfactory in most cases. For
+example the times taken to match the ftp response expression
+&quot;^([0-9]+)(\-| |$)(.*)$&quot; against the string &quot;100- this is a line
+of ftp response which contains a message string&quot; are: BSD implementation
+450 micro seconds, GNU implementation 271 micro seconds, regex++ 127 micro
+seconds (Pentium P90, Win32 console app under MS Windows 95). </P>
+<P>However it should be noted that there are some &quot;pathological&quot;
+expressions which may require exponential time for matching; these all involve
+nested repetition operators, for example attempting to match the expression
+&quot;(a*a)*b&quot; against <I>N</I> letter a's requires time proportional to
+<I>2<SUP>N</SUP></I>. These expressions can (almost) always be rewritten in
+such a way as to avoid the problem, for example &quot;(a*a)*b&quot; could be
+rewritten as &quot;a*b&quot; which requires only time linearly proportional to
+<I>N</I> to solve. In the general case, non-nested repeat expressions require
+time proportional to <I>N<SUP>2</SUP></I>, however if the clauses are mutually
+exclusive then they can be matched in linear time - this is the case with
+&quot;a*b&quot;, for each character the matcher will either match an
+&quot;a&quot; or a &quot;b&quot; or fail, where as with &quot;a*a&quot; the
+matcher can't tell which branch to take (the first &quot;a&quot; or the second)
+and so has to try both. <I>Be careful how you write your regular expressions
+and avoid nested repeats if you can! New to this version, some previously
+pathological cases have been fixed - in particular searching for expressions
+which contain leading repeats and/or leading literal strings should be much
+faster than before. Literal strings are now searched for using the
+Knuth/Morris/Pratt algorithm (this is used in preference to the Boyer/More
+algorithm because it allows the tracking of newline characters).</I> </P>
+<P><I>Some aspects of the POSIX regular expression syntax are implementation
+defined:</I> </P>
+<UL>
+<LI> The &quot;leftmost-longest&quot; rule for determining what matches is
+ambiguous, this library takes the &quot;obvious&quot; interpretation: find the
+leftmost match, then maximize the length of each sub-expression in turn with
+lower indexed sub-expressions taking priority over higher indexed
+sub-expression.</LI>
+<LI> The behavior of multi-character collating elements is ambiguous in the
+standard, in particular expressions such as [a[.ae.]] may have subtle
+inconsistencies lurking in them. This implementation matches bracket
+expressions as follows: all bracket expressions match a single character only,
+unless the expression contains a multi-character collating element, either on
+its own, or as the endpoint to a range, in which case the expression may match
+more than one character.</LI>
+<LI> Repeated null expressions are repeated only once, they are treated
+&quot;as if&quot; they were matched the maximum number of times allowed by the
+expression.</LI>
+<LI> The behavior of back references is ambiguous in the standard, in
+particular it is unclear whether expressions of the form &quot;((ab*)\2)+&quot;
+should be allowed. This implementation allows such expressions and the back
+reference matches whatever the last sub-expression match was. This means that
+at the end of the match, the back references may have matched strings different
+from the final value of the sub-expression to which they refer.</LI>
+</UL>
+<HR>
+<H3> <A NAME="threads"></A>Appendix 2: Thread safety</H3>
+Class reg_expression&lt;&gt; and its typedefs regex and wregex are thread safe,
+in that compiled regular expressions can safely be shared between threads. The
+matching algorithms regex_match, regex_search, regex_grep, regex_format and
+regex_merge are all re-entrant and thread safe. Class match_results is now
+thread safe, in that the results of a match can be safely copied from one
+thread to another (for example one thread may find matches and push
+match_results instances onto a queue, while another thread pops them off the
+other end), otherwise use a separate instance of match_results per thread. 
+<P>The POSIX API functions are all re-entrant and thread safe, regular
+expressions compiled with <I>regcomp</I> can also be shared between threads. 
+</P>
+<P>The class RegEx is only thread safe if each thread gets its own RegEx
+instance (apartment threading) - this is a consequence of RegEx handling both
+compiling and matching regular expressions. </P>
+<P>Finally note that changing the global locale invalidates all compiled
+regular expressions, therefore calling <I>set_locale</I> from one thread while
+another uses regular expressions <I>will</I> produce unpredictable results. 
+</P>
+<P>There is also a requirement that there is only one thread executing prior to
+the start of main(). <BR>
+</P>
+<HR>
+<H3> <A NAME="localisation"></A>Appendix 3: Localization</H3>
+&nbsp;Regex++ provides extensive support for run-time localization, the
+localization model used can be split into two parts: front-end and back-end. 
+<P>Front-end localization deals with everything which the user sees - error
+messages, and the regular expression syntax itself. For example a French
+application could change [[:word:]] to [[:mot:]] and \w to \m. Modifying the
+front end locale requires active support from the developer, by providing the
+library with a message catalogue to load, containing the localized strings.
+Front-end locale is affected by the LC_MESSAGES category only. </P>
+<P>Back-end localization deals with everything that occurs after the expression
+has been parsed - in other words everything that the user does not see or
+interact with directly. It deals with case conversion, collation, and character
+class membership. The back-end locale does not require any intervention from
+the developer - the library will acquire all the information it requires for
+the current locale from the underlying operating system / run time library.
+This means that if the program user does not interact with regular expressions
+directly - for example if the expressions are embedded in your C++ code - then
+no explicit localization is required, as the library will take care of
+everything for you. For example embedding the expression [[:word:]]+ in your
+code will always match a whole word, if the program is run on a machine with,
+for example, a Greek locale, then it will still match a whole word, but in
+Greek characters rather than Latin ones. The back-end locale is affected by the
+LC_TYPE and LC_COLLATE categories. </P>
+<P>There are three separate localization mechanisms supported by regex++: </P>
+<P><I>Win32 localization model.</I> </P>
+<P>This is the default model when the library is compiled under Win32, and is
+encapsulated by the traits class
+<A HREF="template_class_ref.htm#regex_char_traits">w32_regex_traits</A>. When
+this model is in effect there is a single global locale as defined by the
+user's control panel settings, and returned by GetUserDefaultLCID. All the
+settings used by regex++ are acquired directly from the operating system
+bypassing the C run time library. Front-end localization requires a resource
+dll, containing a string table with the user-defined strings. The traits class
+exports the function: </P>
+<P>static std::string set_message_catalogue(const std::string&amp; s); </P>
+<P>which needs to be called with a string identifying the name of the resource
+dll, <I>before</I> your code compiles any regular expressions (but not
+necessarily before you construct any <I>reg_expression</I> instances): </P>
+<P>boost::w32_regex_traits&lt;char&gt;::set_message_calalogue(&quot;mydll.dll&quot;);
+</P>
+<P>Note that this API sets the dll name for <I>both</I> the narrow and wide
+character specializations of w32_regex_traits. </P>
+<P>This model does not currently support thread specific locales (via
+SetThreadLocale under Windows NT), the library provides full Unicode support
+under NT, under Windows 9x the library degrades gracefully - characters 0 to
+255 are supported, the remainder are treated as &quot;unknown&quot; graphic
+characters. </P>
+<P><I>C localization model.</I> </P>
+<P>This is the default model when the library is compiled under an operating
+system other than Win32, and is encapsulated by the traits class <I><A
+HREF="template_class_ref.htm#regex_char_traits">c_regex_traits</A></I>, Win32
+users can force this model to take effect by defining the pre-processor symbol
+BOOST_RE_LOCALE_C. When this model is in effect there is a single global
+locale, as set by <I>setlocale</I>. All settings are acquired from your run
+time library, consequently Unicode support is dependent upon your run time
+library implementation. Front end localization requires a POSIX message
+catalogue. The traits class exports the function: </P>
+<P>static std::string set_message_catalogue(const std::string&amp; s); </P>
+<P>which needs to be called with a string identifying the name of the message
+catalogue, <I>before</I> your code compiles any regular expressions (but not
+necessarily before you construct any <I>reg_expression</I> instances): </P>
+<P>boost::c_regex_traits&lt;char&gt;::set_message_calalogue(&quot;mycatalogue&quot;);
+</P>
+<P>Note that this API sets the dll name for <I>both</I> the narrow and wide
+character specializations of c_regex_traits. If your run time library does not
+support POSIX message catalogues, then you can either provide your own
+implementation of &lt;nl_types.h&gt; or define BOOST_RE_NO_CAT to disable
+front-end localization via message catalogues. </P>
+<P>Note that calling <I>setlocale</I> invalidates all compiled regular
+expressions, calling <TT>setlocale(LC_ALL, &quot;C&quot;)</TT> will make this
+library behave equivalent to most traditional regular expression libraries
+including version 1 of this library. </P>
+<P><I><TT>C++ </TT>localization<TT> </TT>model<TT>.</TT></I> </P>
+<P>This model is only in effect if the library is built with the pre-processor
+symbol BOOST_RE_LOCALE_CPP defined. When this model is in effect each instance
+of reg_expression&lt;&gt; has its own instance of std::locale, class
+reg_expression&lt;&gt; also has a member function <I>imbue</I> which allows the
+locale for the expression to be set on a per-instance basis. Front end
+localization requires a POSIX message catalogue, which will be loaded via the
+std::messages facet of the expression's locale, the traits class exports the
+symbol: </P>
+<P>static std::string set_message_catalogue(const std::string&amp; s); </P>
+<P>which needs to be called with a string identifying the name of the message
+catalogue, <I>before</I> your code compiles any regular expressions (but not
+necessarily before you construct any <I>reg_expression</I> instances): </P>
+<P>boost::cpp_regex_traits&lt;char&gt;::set_message_calalogue(&quot;mycatalogue&quot;);
+</P>
+<P>Note that calling reg_expression&lt;&gt;::imbue will invalidate any
+expression currently compiled in that instance of reg_expression&lt;&gt;. This
+model is the one which closest fits the ethos of the C++ standard library,
+however it is the model which will produce the slowest code, and which is the
+least well supported by current standard library implementations, for example I
+have yet to find an implementation of std::locale which supports either message
+catalogues, or locales other than &quot;C&quot; or &quot;POSIX&quot;. </P>
+<P>Finally note that if you build the library with a non-default localization
+model, then the appropriate pre-processor symbol (BOOST_RE_LOCALE_C or
+BOOST_RE_LOCALE_CPP) must be defined both when you build the support library,
+and when you include &lt;boost/regex.hpp&gt; or &lt;boost/cregex.hpp&gt; in
+your code. The best way to ensure this is to add the #define to
+&lt;boost/re_detail/jm_opt.h&gt;. </P>
+<P><I>Providing a message catalogue:</I> </P>
+<P>In order to localize the front end of the library, you need to provide the
+library with the appropriate message strings contained either in a resource
+dll's string table (Win32 model), or a POSIX message catalogue (C or C++
+models). In the latter case the messages must appear in message set zero of the
+catalogue. The messages and their id's are as follows: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="6" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+Message id 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+Meaning 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+Default value 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+101 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character used to start a sub-expression. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;(&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+102 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character used to end a sub-expression declaration. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;)&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+103 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character used to denote an end of line assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;$&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+104 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character used to denote the start of line assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;^&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+105 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character used to denote the &quot;match any character expression&quot;. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;.&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+106 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The match zero or more times repetition operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;*&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+107 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The match one or more repetition operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;+&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+108 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The match zero or one repetition operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;?&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+109 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character set opening character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;[&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+110 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character set closing character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;]&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+111 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The alternation operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;|&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+112 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The escape character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;\\&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+113 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The hash character (not currently used). 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;#&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+114 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The range operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;-&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+115 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The repetition operator opening character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;{&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+116 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The repetition operator closing character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;}&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+117 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The digit characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;0123456789&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+118 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the word
+boundary assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;b&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+119 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the
+non-word boundary assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;B&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+120 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the
+word-start boundary assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;&lt;&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+121 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the
+word-end boundary assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;&gt;&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+122 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any word
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;w&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+123 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents a non-word
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;W&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+124 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents a start of
+buffer assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;`A&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+125 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents an end of
+buffer assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;'z&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+126 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The newline character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;\n&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+127 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The comma separator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;,&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+128 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the bell
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;a&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+129 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the form
+feed character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;f&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+130 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the newline
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;n&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+131 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the
+carriage return character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;r&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+132 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the tab
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;t&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+133 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the
+vertical tab character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;v&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+134 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the start
+of a hexadecimal character constant. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;x&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+135 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the start
+of an ASCII escape character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;c&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+136 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The colon character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;:&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+137 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The equals character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;=&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+138 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the ASCII
+escape character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;e&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+139 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any lower
+case character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;l&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+140 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any
+non-lower case character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;L&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+141 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any upper
+case character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;u&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+142 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any
+non-upper case character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;U&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+143 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any space
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;s&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+144 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any
+non-space character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;S&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+145 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any digit
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;d&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+146 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any
+non-digit character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;D&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+147 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the end
+quote operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;E&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+148 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the start
+quote operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;Q&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+149 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents a Unicode
+combining character sequence. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;X&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+150 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents any single
+character. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;C&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+151 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents end of
+buffer operator. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;Z&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="21%"> <CENTER>
+152 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character which when preceded by an escape character represents the
+continuation assertion. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="29%"> <CENTER>
+&quot;G&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="9%">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P>Custom error messages are loaded as follows: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+Message ID 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+Error message ID 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+Default string 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+201 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_NOMATCH 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;No match&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+202 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_BADPAT 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid regular expression&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+203 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ECOLLATE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid collation character&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+204 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ECTYPE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid character class name&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+205 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_EESCAPE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Trailing backslash&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+206 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ESUBREG 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid back reference&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+207 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_EBRACK 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Unmatched [ or [^&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+208 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_EPAREN 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Unmatched ( or \\(&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+209 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_EBRACE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Unmatched \\{&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+210 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_BADBR 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid content of \\{\\}&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+211 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ERANGE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid range end&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+212 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ESPACE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Memory exhausted&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+213 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_BADRPT 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Invalid preceding regular expression&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+214 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_EEND 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Premature end of regular expression&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+215 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ESIZE 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Regular expression too big&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+216 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_ERPAREN 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Unmatched ) or \\)&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+217 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_EMPTY 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Empty expression&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+218 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+REG_E_UNKNOWN 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;Unknown error&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P>Custom character class names are loaded as followed: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+Message ID 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+Description 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+Equivalent default class name 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+300 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for alphanumeric characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;alnum&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+301 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for alphabetic characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;alpha&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+302 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for control characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;cntrl&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+303 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for digit characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;digit&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+304 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for graphics characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;graph&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+305 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for lower case characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;lower&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+306 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for printable characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;print&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+307 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for punctuation characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;punct&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+308 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for space characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;space&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+309 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for upper case characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;upper&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+310 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for hexadecimal characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;xdigit&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+311 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for blank characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;blank&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+312 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for word characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;word&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="8%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="22%"> <CENTER>
+313 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="32%"> <CENTER>
+The character class name for Unicode characters. 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="31%"> <CENTER>
+&quot;unicode&quot; 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P>Finally, custom collating element names are loaded starting from
+message id 400, and terminating when the first load thereafter fails. Each
+message looks something like: &quot;tagname string&quot; where <I>tagname</I>
+is the name used inside [[.tagname.]] and <I>string</I> is the actual text of
+the collating element. Note that the value of collating element [[.zero.]] is
+used for the conversion of strings to numbers - if you replace this with
+another value then that will be used for string parsing - for example use the
+Unicode character 0x0660 for [[.zero.]] if you want to use Unicode Arabic-Indic
+digits in your regular expressions in place of Latin digits. </P>
+<P>Note that the POSIX defined names for character classes and collating
+elements are always available - even if custom names are defined, in contrast,
+custom error messages, and custom syntax messages replace the default ones. 
+<BR>
+</P>
+<HR>
+<H3> <A NAME="demos"></A>Appendix 4: Demo Applications</H3>
+There are three demo applications that ship with this library, they all come
+with makefiles for Borland, Microsoft and gcc compilers, otherwise you will
+have to create your own makefiles. <H5>regress.exe: </H5>
+<P>A regression test application that gives the matching/searching algorithms a
+full workout. The presence of this program is your guarantee that the library
+will behave as claimed - at least as far as those items tested are concerned -
+if anyone spots anything that isn't being tested I'd be glad to hear about it. 
+</P>
+<P>Files: <A HREF="demo/regress/parse.cpp">parse.cpp</A>,
+<A HREF="demo/regress/regress.cpp">regress.cpp</A>,
+<A HREF="demo/regress/tests.cpp">tests.cpp</A>. </P>
+<H5> jgrep.exe </H5>
+<P>A simple grep implementation, run with no command line options to find out
+its usage. Look at <A HREF="src/fileiter.cpp">fileiter.cpp</A>/fileiter.hpp and
+the mapfile class to see an example of a &quot;smart&quot; bidirectional
+iterator that can be used with regex++ or any other STL algorithm. </P>
+<P>Files: <A HREF="demo/jgrep/jgrep.cpp">jgrep.cpp</A>,
+<A HREF="demo/jgrep/main.cpp">main.cpp</A>. </P>
+<H5>timer.exe </H5>
+<P>A simple interactive expression matching application, the results of all
+matches are timed, allowing the programmer to optimize their regular
+expressions where performance is critical. </P>
+<P>Files: <A HREF="demo/timer/regex_timer.cpp">regex_timer.cpp</A>. <BR>
+</P>
+<P>The snippets demos contain the code examples used in the documentation:</P>
+<P><A HREF="demo/snippets/snip1.cpp">snip1.cpp</A>: ftp based regex_match
+example.</P>
+<P><A HREF="demo/snippets/snip2.cpp">snip2.cpp</A>: regex_search example:
+searches a cpp file for class definitions.</P>
+<P><A HREF="demo/snippets/snip3.cpp">snip3.cpp</A>: regex_grep example 1:
+searches a cpp file for class definitions.</P>
+<P><A HREF="demo/snippets/snip4.cpp">snip4.cpp</A>: regex_merge example:
+converts a C++ file to syntax highlighted HTML.</P>
+<P><A HREF="demo/snippets/snip5.cpp">snip5.cpp</A>: regex_grep example 2:
+searches a cpp file for class definitions, using a global callback function. 
+</P>
+<P><A HREF="demo/snippets/snip6.cpp">snip6.cpp</A>: regex_grep example 2:
+searches a cpp file for class definitions, using a bound member function
+callback.</P>
+<P><A HREF="demo/snippets/snip7.cpp">snip7.cpp</A>: regex_grep example 2:
+searches a cpp file for class definitions, using a C++ Builder closure as a
+callback.</P>
+<P><A HREF="demo/snippets/snip8.cpp">snip8.cpp</A>: regex_split example: split
+a string into tokens.</P>
+<P><A HREF="demo/snippets/snip9.cpp">snip9.cpp</A>: regex_split example: spit
+out linked URL's.</P>
+<HR>
+<H3> <A NAME="headers"></A>Appendix 5: Header Files</H3>
+There are two main headers used by this library: &lt;boost/regex.hpp&gt;
+provides full access to the entire library, while &lt;boost/cregex.hpp&gt;
+provides access to just the high level class RegEx, and the POSIX API
+functions. <BR>
+<HR>
+<H3> <A NAME="redist"></A>Appendix 6: Redistributables</H3>
+&nbsp;If you are using Microsoft or Borland C++ and link to a dll version of
+the run time library, then you will also link to one of the dll versions of
+regex++. While these dll's are redistributable, there are no
+&quot;standard&quot; versions, so when installing on the users PC, you should
+place these in a directory private to your application, and not in the PC's
+directory path. Note that if you link to a static version of your run time
+library, then you will also link to a static version of regex++ and no dll's
+will need to be distributed. The possible regex++ dll's are as follows: <BR>
+&nbsp; <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%"> <CENTER>
+<B>Development Tool</B> 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+<B>Run Time Library</B> 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+<B>Regex++ Dll</B> 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%"> <CENTER>
+Microsoft Visual C++ 6 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Msvcp60.dll and msvcrt.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Mre200l.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%"> <CENTER>
+Microsoft Visual C++ 6 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Msvcp60d.dll and msvcrtd.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Mre300dl.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%"> <CENTER>
+Borland C++ Builder 4 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Cw3245.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+bcb4re300l.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%"> <CENTER>
+Borland C++ Builder 4 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Cw3245mt.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+bcb4re300lm.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%"> <CENTER>
+Borland C++ Builder 4 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+Cp3245mt.dll and vcl40.bpl 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="30%"> <CENTER>
+bcb4re300lv.dll 
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%" ALIGN="CENTER">Borland C++ Builder 5</TD>
+<TD VALIGN="TOP" WIDTH="30%" ALIGN="CENTER">cp3250.dll</TD>
+<TD VALIGN="TOP" WIDTH="30%">bcb5re300l.dll</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%" ALIGN="CENTER">Borland C++ Builder 5</TD>
+<TD VALIGN="TOP" WIDTH="30%" ALIGN="CENTER">cp3250mt.dll</TD>
+<TD VALIGN="TOP" WIDTH="30%">bcb5re300lm.dll</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+<TR>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="27%" ALIGN="CENTER">Borland C++ Builder 5</TD>
+<TD VALIGN="TOP" WIDTH="30%" ALIGN="CENTER">cw3250mt.dll</TD>
+<TD VALIGN="TOP" WIDTH="30%">bcb5re300lv.dll</TD>
+<TD VALIGN="TOP" WIDTH="7%">&nbsp;</TD>
+</TR>
+</TABLE>
+<P>Note: you can disable automatic library selection by defining the symbol
+BOOST_RE_NO_LIB when compiling, this is useful if you want to statically link
+even though you're using the dll version of your run time library, or if you
+need to debug regex++. <BR>
+</P>
+<HR>
+<H3> <A NAME="upgrade"></A>Notes for upgraders</H3>
+This version of regex++ is the first to be ported to the
+<A HREF="http://www.boost.org">boost</A> project, and as a result has a number
+of changes to comply with the boost coding guidelines. <P>Headers have been
+changed from &lt;header&gt; or &lt;header.h&gt; to &lt;boost/header.hpp&gt; 
+</P>
+<P>The library namespace has changed from &quot;jm&quot;, to &quot;boost&quot;.
+</P>
+<P>The reg_xxx algorithms have been renamed regex_xxx (to improve naming
+consistency). </P>
+<P>Algorithm query_match has been renamed regex_match, and only returns true if
+the expression matches the whole of the input string (think input data
+validation). </P>
+<P><I>Compiling existing code:</I> </P>
+<P>The directory, libs/regex/old_include contains a set of headers that make
+this version of regex++ compatible with previous ones, either add this
+directory to your include path, or copy these headers to the root directory of
+your boost installation. The contents of these headers are deprecated and
+undocumented - really these are just here for existing code - for new projects
+use the new header forms. <BR>
+</P>
+<HR>
+<H3> <A NAME="furtherInfo"></A>Further Information</H3>
+The author can be contacted at <A
+HREF="mailto:John_Maddock@compuserve.com">John_Maddock@compuserve.com</A>, the
+home page for this library is at
+<A
+ HREF="http://ourworld.compuserve.com/homepages/John_Maddock/regexpp.htm">http://ourworld.compuserve.com/homepages/John_Maddock/regexpp.htm</A>,
+and the official boost version can be obtained from
+<A HREF="http://www.boost.org/libraries">www.boost.org/libraries</A>. <P>I am
+indebted to Robert Sedgewick's &quot;Algorithms in C++&quot; for forcing me to
+think about algorithms and their performance, and to the folks at boost for
+forcing me to <I>think</I>, period. The following people have all contributed
+useful comments or fixes: Mike Allison, Edan Ayal, Jayashree Balasubramanian,
+Beman Dawes, Paul Baxter, Edward Diener, Robert Dunn, Fabio Forno, Rob Gillen,
+Chris Hecker, Jesse Jones, Jan Hermelink, Max Leung, Wei-hao Lin, Jens Maurer,
+Scobie Smith, Herv&eacute; Poirier, Marc Recht, Alexey Voinov, Jerry Waldorf,
+Rob Ward, Lealon Watts and Yuval Yosef. I am also grateful to the manuals
+supplied with the Henry Spencer, Perl and GNU regular expression libraries -
+wherever possible I have tried to maintain compatibility with these libraries
+and with the POSIX standard - the code however is entirely my own, including
+any bugs! I can absolutely guarantee that I will not fix any bugs I don't know
+about, so if you have any comments or spot any bugs, please get in touch. </P>
+<P>Useful further information can be found at: </P>
+<P>The <A HREF="http://www.opengroup.org/onlinepubs/7908799/toc.htm">Open Unix
+Specification</A> contains a wealth of useful material, including the regular
+expression syntax, and specifications for
+<A
+ HREF="http://www.opengroup.org/onlinepubs/7908799/xsh/regex.h.html">&lt;regex.h&gt;</A>
+and <A
+HREF="http://www.opengroup.org/onlinepubs/7908799/xsh/nl_types.h.html">&lt;nl_types.h&gt;</A>.
+</P>
+<P>The <A HREF="http://www.cs.purdue.edu/homes/stelo/pattern.html">Pattern
+Matching Pointers</A> site is a &quot;must visit&quot; resource for anyone
+interested in pattern matching. </P>
+<P><A HREF="http://glimpse.cs.arizona.edu/">Glimpse and Agrep</A>, use a
+simplified regular expression syntax to achieve faster search times. </P>
+<P><A HREF="http://glimpse.cs.arizona.edu/udi.html">Udi Manber</A> and
+<A HREF="http://www.dcc.uchile.cl/~rbaeza/">Ricardo Baeza-Yates</A> both have a
+selection of useful pattern matching papers available from their respective web
+sites. <BR>
+</P>
+<HR>
+<P><I>Copyright <A HREF="mailto:John_Maddock@compuserve.com">Dr John
+Maddock</A> 1998-2000 all rights reserved.</I> </P>
+</BODY>
+</HTML>
+

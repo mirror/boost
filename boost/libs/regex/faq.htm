@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+ 
+<HTML>
+ 
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> 
+<META NAME="Template"
+ CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot"> 
+<META NAME="GENERATOR" CONTENT="Mozilla/4.5 [en] (Win98; I) [Netscape]"> 
+<TITLE>Regex++ - FAQ</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#800080">
+&nbsp; <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="50%"> <H3>
+<IMG SRC="c++boost.gif" HEIGHT="86" WIDTH="276" ALT="C++ Boost"></H3>
+</TD>
+<TD VALIGN="TOP" WIDTH="50%"> <CENTER>
+<H3> Regex++, FAQ.</H3>
+</CENTER>
+<CENTER>
+<I>(version 3.01, 18 April 2000)</I>
+</CENTER>
+<PRE><I>Copyright (c) 1998-2000
+Dr John Maddock
+
+Permission to use, copy, modify, distribute and sell this software
+and its documentation for any purpose is hereby granted without fee,
+provided that the above copyright notice appear in all copies and
+that both that copyright notice and this permission notice appear
+in supporting documentation.&nbsp; Dr John Maddock makes no representations
+about the suitability of this software for any purpose.&nbsp;&nbsp;
+It is provided &quot;as is&quot; without express or implied warranty.</I></PRE>
+
+</TD>
+</TR>
+</TABLE>
+<P><FONT COLOR="#FF0000">Q. Configure says that my compiler is unable to merge
+template instances, what does this mean?</FONT> </P>
+<P>A. When you compile template code, you can end up with the same template
+instances in multiple translation units - this will lead to link time errors
+unless your compiler/linker is smart enough to merge these template instances
+into a single record in the executable file. If you see this warning after
+running configure, then you can still link to libregex++.a if: </P>
+<OL>
+<LI> You use only the low-level template classes (reg_expression&lt;&gt;
+match_results&lt;&gt; etc), from a single translation unit, and use no other part
+of regex++.</LI>
+<LI> You use only the POSIX API functions (regcomp regexec etc), and no other
+part of regex++.</LI>
+<LI> You use only the high level class RegEx, and no other part of regex++.
+</LI>
+</OL>
+Another option is to create a master include file, which #include's all the
+regex++ source files, and all the source files in which you use regex++. You
+then compile and link this master file as a single translation unit. <P><FONT
+COLOR="#FF0000">Q. Configure says that my compiler is unable to merge template
+instances from archive files, what does this mean?</FONT> </P>
+<P>A. When you compile template code, you can end up with the same template
+instances in multiple translation units - this will lead to link time errors
+unless your compiler/linker is smart enough to merge these template instances
+into a single record in the executable file. Some compilers are able to do this
+for normal .cpp or .o files, but fail if the object file has been placed in a
+library archive. If you see this warning after running configure, then you can
+still link to libregex++.a if: </P>
+<OL>
+<LI> You use only the low-level template classes (reg_expression&lt;&gt;
+match_results&lt;&gt; etc), and use no other part of regex++.</LI>
+<LI> You use only the POSIX API functions (regcomp regexec etc), and no other
+part of regex++.</LI>
+<LI> You use only the high level class RegEx, and no other part of regex++.
+</LI>
+</OL>
+Another option is to add the regex++ source files directly to your project
+instead of linking to libregex++.a, generally you should do this only if you
+are getting link time errors with libregex++.a. <P><FONT COLOR="#FF0000">Q.
+Configure says that my compiler can't merge templates containing switch
+statements, what does this mean?</FONT> </P>
+<P>A. Some compilers can't merge templates that contain static data - this
+includes switch statements which implicitly generate static data as well as
+code. Principally this affects the egcs compiler - but note gcc 2.81 also
+suffers from this problem - the compiler will compile and link the code - but
+the code will not run because the code and the static data it uses have become
+separated. The default behaviour of regex++ is to try and fix this problem by
+declaring &quot;problem&quot; templates inside unnamed namespaces, so that the
+templates have internal linkage. Note that this can result in a great deal of
+code bloat. If the compiler doesn't support namespaces, or if code bloat
+becomes a problem, then follow the guidelines above for placing all the
+templates used in a single translation unit, and edit jm_opt.h so that
+BOOST_RE_NO_TEMPLATE_SWITCH_MERGE is no longer defined. </P>
+<P><FONT COLOR="#FF0000">Q. I can't get regex++ to work with escape characters,
+what's going on?</FONT> </P>
+<P>A. If you embed regular expressions in C++ code, then remember that escape
+characters are processed twice: once by the C++ compiler, and once by the
+regex++ expression compiler, so to pass the regular expression \d+ to regex++,
+you need to embed &quot;\\d+&quot; in your code. Likewise to match a literal
+backslash you will need to embed &quot;\\\\&quot; in your code. </P>
+<P><FONT COLOR="#FF0000">Q. Why don't character ranges work properly?</FONT> 
+<BR>
+A. The POSIX standard specifies that character range expressions are locale
+sensitive - so for example the expression [A-Z] will match any collating
+element that collates between 'A' and 'Z'. That means that for most locales
+other than &quot;C&quot; or &quot;POSIX&quot;, [A-Z] would match the single
+character 't' for example, which is not what most people expect - or at least
+not what most people have come to expect from regular expression engines. For
+this reason, the default behaviour of regex++ is to turn locale sensitive
+collation off by setting the regbase::nocollate compile time flag (this is set
+by regbase::normal). However if you set a non-default compile time flag - for
+example regbase::extended or regbase::basic, then locale dependent collation
+will be enabled, this also applies to the POSIX API functions which use either
+regbase::extended or regbase::basic internally, in the latter case use
+REG_NOCOLLATE in combination with either REG_BASIC or REG_EXTENDED when
+invoking regcomp if you don't want locale sensitive collation. <I>[Note - when
+regbase::nocollate in effect, the library behaves &quot;as if&quot; the
+LC_COLLATE locale category were always &quot;C&quot;, regardless of what its
+actually set to - end note</I>]. </P>
+<P><FONT COLOR="#FF0000">&nbsp;Q. Why can't I use the &quot;convenience&quot;
+versions of query_match/reg_search/reg_grep/reg_format/reg_merge?</FONT> </P>
+<P>A. These versions may or may not be available depending upon the
+capabilities of your compiler, the rules determining the format of these
+functions are quite complex - and only the versions visible to a standard
+compliant compiler are given in the help. To find out what your compiler
+supports, run &lt;boost/regex.hpp&gt; through your C++ pre-processor, and
+search the output file for the function that you are interested in. </P>
+<P><FONT COLOR="#FF0000">Q. Why are there no throw specifications on any of the
+functions? What exceptions can the library throw?</FONT> </P>
+<P>A. Not all compilers support (or honor) throw specifications, others support
+them but with reduced efficiency. Throw specifications may be added at a later
+date as compilers begin to handle this better. The library should throw only
+three types of exception: boost::bad_expression can be thrown by reg_expression
+when compiling a regular expression; boost::bad_pattern can be thrown by the
+class sub_match's conversion operators; finally std::bad_alloc can be thrown by
+just about any of the functions in this library. <BR>
+</P>
+<HR>
+<P><I>Copyright <A HREF="mailto:John_Maddock@compuserve.com">Dr John
+Maddock</A> 1998-2000 all rights reserved.</I> </P>
+</BODY>
+</HTML>
+

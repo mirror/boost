@@ -1,0 +1,18 @@
+
+LIBNAME=regex++
+
+CPP=@CXX@
+AR=ar
+
+CPP_PROJ=@CXXFLAGS@ -I../../../ -c 
+	
+ALL_O=@ac_all_o@
+ALL_H=@ac_all_h@
+
+lib$(LIBNAME).a : $(ALL_O)
+
+
+
+
+
+

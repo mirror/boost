@@ -1,0 +1,55 @@
+
+do_erase()
+{
+	args="$1""$2"
+	rm -f $args
+}
+
+do_clean()
+{
+	echo cleaning directory "$1"
+	do_erase $1 '*.bak'
+	do_erase $1 '*.~*'
+	do_erase $1 '*.il?' 
+	do_erase $1 '*.obj' 
+	do_erase $1 '*.csm' 
+	do_erase $1 '*.exe' 
+	do_erase $1 '*.tds' 
+	do_erase $1 '*.pch' 
+	do_erase $1 '*.id?' 
+	do_erase $1 '*.s' 
+	do_erase $1 '*.o'
+	do_erase $1 'makefile'
+	do_erase $1 '*.ZIP' 
+	do_erase $1 '*.zip' 
+	do_erase $1 '*.tar' 
+	do_erase $1 '*.gz' 
+	do_erase $1 'config.cache' 
+	do_erase $1 'config.log' 
+	do_erase $1 'config.status'
+	do_erase $1 '*.pdb'
+	do_erase $1 '*.tr2'
+	do_erase $1 '*.exe'
+	do_erase $1 '*.a'
+	do_erase $1 '*.lib'
+	do_erase $1 '*.exp'
+	do_erase $1 '*.ii'
+	do_erase $1 '*.s'
+	do_erase $1 '*.tds'
+	
+	path="$1"'*'
+	for file in $path 
+	do
+		if test -d "$file"; then
+			file=$file'/'
+			do_clean $file
+		fi
+	done
+}
+
+do_clean './'
+cat jm_opt.in > ../../boost/re_detail/regex_options.hpp
+rm -f ./lib/out.txt
+
+
+

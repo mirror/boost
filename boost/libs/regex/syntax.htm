@@ -1,0 +1,787 @@
+<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+ 
+<HTML>
+ 
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> 
+<META NAME="Template"
+ CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot"> 
+<META NAME="GENERATOR" CONTENT="Mozilla/4.5 [en] (Win98; I) [Netscape]"> 
+<TITLE>Regex++, Regular Expression Syntax</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#800080">
+&nbsp; <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD VALIGN="TOP" WIDTH="50%"> <H3>
+<IMG SRC="c++boost.gif" HEIGHT="86" WIDTH="276" ALT="C++ Boost"></H3>
+</TD>
+<TD VALIGN="TOP" WIDTH="50%"> <CENTER>
+<H3> Regex++, Regular Expression Syntax.</H3>
+</CENTER>
+<CENTER>
+<I>(version 3.01, 18 April 2000)</I>
+</CENTER>
+<PRE><I>Copyright (c) 1998-2000
+Dr John Maddock
+
+Permission to use, copy, modify, distribute and sell this software
+and its documentation for any purpose is hereby granted without fee,
+provided that the above copyright notice appear in all copies and
+that both that copyright notice and this permission notice appear
+in supporting documentation.&nbsp; Dr John Maddock makes no representations
+about the suitability of this software for any purpose.&nbsp;&nbsp;
+It is provided &quot;as is&quot; without express or implied warranty.</I></PRE>
+
+</TD>
+</TR>
+</TABLE>
+<HR>
+<H3> <A NAME="syntax"></A><I>Regular expression syntax</I></H3>
+This section covers the regular expression syntax used by this library, this is
+a programmers guide, the actual syntax presented to your program's users will
+depend upon the flags used during expression compilation. <P><I>Literals</I> 
+</P>
+<P>All characters are literals except: &quot;.&quot;, &quot;*&quot;,
+&quot;?&quot;, &quot;+&quot;, &quot;(&quot;, &quot;)&quot;, &quot;{&quot;,
+&quot;}&quot;, &quot;[&quot;, &quot;]&quot;, &quot;^&quot; and &quot;$&quot;.
+These characters are literals when preceded by a &quot;\&quot;. A literal is a
+character that matches itself, or matches the result of
+traits_type::translate(), where traits_type is the traits template parameter to
+class reg_expression. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Wildcard</I> </P>
+<P>The dot character &quot;.&quot; matches any single character except : when
+<I>match_not_dot_null</I> is passed to the matching algorithms, the dot does
+not match a null character; when <I>match_not_dot_newline</I> is passed to the
+matching algorithms, then the dot does not match a newline character. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Repeats</I> </P>
+<P>A repeat is an expression that is repeated an arbitrary number of times. An
+expression followed by &quot;*&quot; can be repeated any number of times
+including zero. An expression followed by &quot;+&quot; can be repeated any
+number of times, but at least once, if the expression is compiled with the flag
+regbase::bk_plus_qm then &quot;+&quot; is an ordinary character and
+&quot;\+&quot; represents a repeat of once or more. An expression followed by
+&quot;?&quot; may be repeated zero or one times only, if the expression is
+compiled with the flag regbase::bk_plus_qm then &quot;?&quot; is an ordinary
+character and &quot;\?&quot; represents the repeat zero or once operator. When
+it is necessary to specify the minimum and maximum number of repeats
+explicitly, the bounds operator &quot;{}&quot; may be used, thus
+&quot;a{2}&quot; is the letter &quot;a&quot; repeated exactly twice,
+&quot;a{2,4}&quot; represents the letter &quot;a&quot; repeated between 2 and 4
+times, and &quot;a{2,}&quot; represents the letter &quot;a&quot; repeated at
+least twice with no upper limit. Note that there must be no white-space inside
+the {}, and there is no upper limit on the values of the lower and upper
+bounds. When the expression is compiled with the flag regbase::bk_braces then
+&quot;{&quot; and &quot;}&quot; are ordinary characters and &quot;\{&quot; and
+&quot;\}&quot; are used to delimit bounds instead. All repeat expressions refer
+to the shortest possible previous sub-expression: a single character; a
+character set, or a sub-expression grouped with &quot;()&quot; for example. 
+</P>
+<P>Examples: </P>
+<P>&quot;ba*&quot; will match all of &quot;b&quot;, &quot;ba&quot;,
+&quot;baaa&quot; etc. </P>
+<P>&quot;ba+&quot; will match &quot;ba&quot; or &quot;baaaa&quot; for example
+but not &quot;b&quot;. </P>
+<P>&quot;ba?&quot; will match &quot;b&quot; or &quot;ba&quot;. </P>
+<P>&quot;ba{2,4}&quot; will match &quot;baa&quot;, &quot;baaa&quot; and
+&quot;baaaa&quot;. </P>
+<P><I>Non-greedy repeats</I> </P>
+<P>Whenever the &quot;extended&quot; regular expression syntax is in use (the
+default) then non-greedy repeats are possible by appending a '?' after the
+repeat; a non-greedy repeat is one which will match the <I>shortest</I>
+possible string. </P>
+<P>For example to match html tag pairs one could use something like: </P>
+<P>&quot;&lt;\s*tagname[^&gt;]*&gt;(.*?)&lt;\s*/tagname\s*&gt;&quot; </P>
+<P>In this case $1 will contain the text between the tag pairs, and will be the
+shortest possible matching string. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Parenthesis</I> </P>
+<P>Parentheses serve two purposes, to group items together into a
+sub-expression, and to mark what generated the match. For example the
+expression &quot;(ab)*&quot; would match all of the string &quot;ababab&quot;.
+The matching algorithms <A
+HREF="template_class_ref.htm#query_match">regex_match</A> and
+<A HREF="template_class_ref.htm#reg_search">regex_search</A> each take an
+instance of <A HREF="template_class_ref.htm#match_results">match_results</A> that
+reports what caused the match, on exit from these functions the
+<A HREF="template_class_ref.htm#match_results">match_results</A> contains information
+both on what the whole expression matched and on what each sub-expression
+matched. In the example above match_results[1] would contain a pair of iterators
+denoting the final &quot;ab&quot; of the matching string. It is permissible for
+sub-expressions to match null strings. If a sub-expression takes no part in a
+match - for example if it is part of an alternative that is not taken - then
+both of the iterators that are returned for that sub-expression point to the
+end of the input string, and the <I>matched</I> parameter for that
+sub-expression is <I>false</I>. Sub-expressions are indexed from left to right
+starting from 1, sub-expression 0 is the whole expression. </P>
+<P><I>Non-Marking Parenthesis</I> </P>
+<P>Sometimes you need to group sub-expressions with parenthesis, but don't want
+the parenthesis to spit out another marked sub-expression, in this case a
+non-marking parenthesis (?:expression) can be used. For example the following
+expression creates no sub-expressions: </P>
+<P>&quot;(?:abc)*&quot; <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Alternatives</I> </P>
+<P>Alternatives occur when the expression can match either one sub-expression
+or another, each alternative is separated by a &quot;|&quot;, or a
+&quot;\|&quot; if the flag regbase::bk_vbar is set, or by a newline character
+if the flag regbase::newline_alt is set. Each alternative is the largest
+possible previous sub-expression; this is the opposite behaviour from
+repetition operators. </P>
+<P>Examples: </P>
+<P>&quot;a(b|c)&quot; could match &quot;ab&quot; or &quot;ac&quot;. </P>
+<P>&quot;abc|def&quot; could match &quot;abc&quot; or &quot;def&quot;. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Sets</I> </P>
+<P>A set is a set of characters that can match any single character that is a
+member of the set. Sets are delimited by &quot;[&quot; and &quot;]&quot; and
+can contain literals, character ranges, character classes, collating elements
+and equivalence classes. Set declarations that start with &quot;^&quot; contain
+the compliment of the elements that follow. </P>
+<P>Examples: </P>
+<P>Character literals: </P>
+<P>&quot;[abc]&quot; will match either of &quot;a&quot;, &quot;b&quot;, or
+&quot;c&quot;. </P>
+<P>&quot;[^abc] will match any character other than &quot;a&quot;,
+&quot;b&quot;, or &quot;c&quot;. </P>
+<P>Character ranges: </P>
+<P>&quot;[a-z]&quot; will match any character in the range &quot;a&quot; to
+&quot;z&quot;. </P>
+<P>&quot;[^A-Z]&quot; will match any character other than those in the range
+&quot;A&quot; to &quot;Z&quot;. </P>
+<P>Note that character ranges are highly locale dependent: they match any
+character that collates between the endpoints of the range, ranges will only
+behave according to ASCII rules when the default &quot;C&quot; locale is in
+effect. For example if the library is compiled with the Win32 localization
+model, then [a-z] will match the ASCII characters a-z, and also 'A', 'B' etc,
+but not 'Z' which collates just after 'z'. This locale specific behaviour can
+be disabled by specifying regbase::nocollate when compiling, this is the
+default behaviour when using regbase::normal, and forces ranges to collate
+according to ASCII character code. Likewise, if you use the POSIX C API
+functions then setting REG_NOCOLLATE turns off locale dependent collation. </P>
+<P>Character classes are denoted using the syntax &quot;[:classname:]&quot;
+within a set declaration, for example &quot;[[:space:]]&quot; is the set of all
+whitespace characters. Character classes are only available if the flag
+regbase::char_classes is set. The available character classes are: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">alnum</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any alpha numeric character.</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">alpha</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any alphabetical character a-z and A-Z. Other
+characters may also be included depending upon the locale.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">blank</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any blank character, either a space or a tab.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">cntrl</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any control character.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">digit</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any digit 0-9.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">graph</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any graphical character.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">lower</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any lower case character a-z. Other characters may
+also be included depending upon the locale.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">print</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any printable character.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">punct</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any punctuation character.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">space</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any whitespace character.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">upper</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any upper case character A-Z. Other characters may
+also be included depending upon the locale.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">xdigit</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any hexadecimal digit character, 0-9, a-f and
+A-F.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">word</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any word character - all alphanumeric characters
+plus the underscore.</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="50%">unicode</TD>
+<TD VALIGN="TOP" WIDTH="50%">Any character whose code is greater than 255, this
+applies to the wide character traits classes only.</TD>
+<TD>&nbsp;</TD>
+</TR>
+</TABLE>
+<P>There are some shortcuts that can be used in place of the character classes,
+provided the flag regbase::escape_in_lists is set then you can use: </P>
+<P>\w in place of [:word:] </P>
+<P>\s in place of [:space:] </P>
+<P>\d in place of [:digit:] </P>
+<P>\l in place of [:lower:] </P>
+<P>\u in place of [:upper:] <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P>Collating elements take the general form [.tagname.] inside a set
+declaration, where <I>tagname</I> is either a single character, or a name of a
+collating element, for example [[.a.]] is equivalent to [a], and [[.comma.]] is
+equivalent to [,]. The library supports all the standard POSIX collating
+element names, and in addition the following digraphs: &quot;ae&quot;,
+&quot;ch&quot;, &quot;ll&quot;, &quot;ss&quot;, &quot;nj&quot;, &quot;dz&quot;,
+&quot;lj&quot;, each in lower, upper and title case variations. Multi-character
+collating elements can result in the set matching more than one character, for
+example [[.ae.]] would match two characters, but note that [^[.ae.]] would only
+match one character. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P>Equivalence classes take the general form [=tagname=] inside a set
+declaration, where <I>tagname</I> is either a single character, or a name of a
+collating element, and matches any character that is a member of the same
+primary equivalence class as the collating element [.tagname.]. An equivalence
+class is a set of characters that collate the same, a primary equivalence class
+is a set of characters whose primary sort key are all the same (for example
+strings are typically collated by character, then by accent, and then by case;
+the primary sort key then relates to the character, the secondary to the
+accentation, and the tertiary to the case). If there is no equivalence class
+corresponding to <I>tagname</I>, then [=tagname=] is exactly the same as
+[.tagname.]. Unfortunately there is no locale independent method of obtaining
+the primary sort key for a character, except under Win32. For other operating
+systems the library will &quot;guess&quot; the primary sort key from the full
+sort key (obtained from <I>strxfrm</I>), so equivalence classes are probably
+best considered broken under any operating system other than Win32. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P>To include a literal &quot;-&quot; in a set declaration then: make it the
+first character after the opening &quot;[&quot; or &quot;[^&quot;, the endpoint
+of a range, a collating element, or if the flag regbase::escape_in_lists is set
+then precede with an escape character as in &quot;[\-]&quot;. To include a
+literal &quot;[&quot; or &quot;]&quot; or &quot;^&quot; in a set then make them
+the endpoint of a range, a collating element, or precede with an escape
+character if the flag regbase::escape_in_lists is set. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Line anchors</I> </P>
+<P>An anchor is something that matches the null string at the start or end of a
+line: &quot;^&quot; matches the null string at the start of a line,
+&quot;$&quot; matches the null string at the end of a line. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Back references</I> </P>
+<P>A back reference is a reference to a previous sub-expression that has
+already been matched, the reference is to what the sub-expression matched, not
+to the expression itself. A back reference consists of the escape character
+&quot;\&quot; followed by a digit &quot;1&quot; to &quot;9&quot;,
+&quot;\1&quot; refers to the first sub-expression, &quot;\2&quot; to the second
+etc. For example the expression &quot;(.*)\1&quot; matches any string that is
+repeated about its mid-point for example &quot;abcabc&quot; or
+&quot;xyzxyz&quot;. A back reference to a sub-expression that did not
+participate in any match, matches the null string: NB this is different to some
+other regular expression matchers. Back references are only available if the
+expression is compiled with the flag regbase::bk_refs set. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Characters by code</I> </P>
+<P>This is an extension to the algorithm that is not available in other
+libraries, it consists of the escape character followed by the digit
+&quot;0&quot; followed by the octal character code. For example
+&quot;\023&quot; represents the character whose octal code is 23. Where
+ambiguity could occur use parentheses to break the expression up:
+&quot;\0103&quot; represents the character whose code is 103, &quot;(\010)3
+represents the character 10 followed by &quot;3&quot;. To match characters by
+their hexadecimal code, use \x followed by a string of hexadecimal digits,
+optionally enclosed inside {}, for example \xf0 or \x{aff}, notice the latter
+example is a Unicode character. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Word operators</I> </P>
+<P>The following operators are provided for compatibility with the GNU regular
+expression library. </P>
+<P>&quot;\w&quot; matches any single character that is a member of the
+&quot;word&quot; character class, this is identical to the expression
+&quot;[[:word:]]&quot;. </P>
+<P>&quot;\W&quot; matches any single character that is not a member of the
+&quot;word&quot; character class, this is identical to the expression
+&quot;[^[:word:]]&quot;. </P>
+<P>&quot;\&lt;&quot; matches the null string at the start of a word. </P>
+<P>&quot;\&gt;&quot; matches the null string at the end of the word. </P>
+<P>&quot;\b&quot; matches the null string at either the start or the end of a
+word. </P>
+<P>&quot;\B&quot; matches a null string within a word. </P>
+<P>The start of the sequence passed to the matching algorithms is considered to
+be a potential start of a word unless the flag match_not_bow is set. The end of
+the sequence passed to the matching algorithms is considered to be a potential
+end of a word unless the flag match_not_eow is set. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Buffer operators</I> </P>
+<P>The following operators are provide for compatibility with the GNU regular
+expression library, and Perl regular expressions: </P>
+<P>&quot;\`&quot; matches the start of a buffer. </P>
+<P>&quot;\A&quot; matches the start of the buffer. </P>
+<P>&quot;\'&quot; matches the end of a buffer. </P>
+<P>&quot;\z&quot; matches the end of a buffer. </P>
+<P>&quot;\Z&quot; matches the end of a buffer, or possibly one or more new line
+characters followed by the end of the buffer. </P>
+<P>A buffer is considered to consist of the whole sequence passed to the
+matching algorithms, unless the flags match_not_bob or match_not_eob are set. 
+<BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Escape operator</I> </P>
+<P>The escape character &quot;\&quot; has several meanings. </P>
+<P>Inside a set declaration the escape character is a normal character unless
+the flag regbase::escape_in_lists is set in which case whatever follows the
+escape is a literal character regardless of its normal meaning. </P>
+<P>The escape operator may introduce an operator for example: back references,
+or a word operator. </P>
+<P>The escape operator may make the following character normal, for example
+&quot;\*&quot; represents a literal &quot;*&quot; rather than the repeat
+operator. <BR>
+&nbsp; <BR>
+&nbsp; </P>
+<P><I>Single character escape sequences</I> </P>
+<P>The following escape sequences are aliases for single characters: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Escape sequence
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Character code
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Meaning
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\a
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x07
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Bell character.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\f
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x08
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Form feed.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\n
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x0A
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Newline character.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\r
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x0D
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Carriage return.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\t
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x09
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Tab character.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\v
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x0B
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+Vertical tab.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\e
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0x1B
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+ASCII Escape character.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\0dd
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0dd
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+An octal character code, where <I>dd</I> is one or more octal digits.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\xXX
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0xXX
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+A hexadecimal character code, where XX is one or more hexadecimal digits.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\x{XX}
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+0xXX
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+A hexadecimal character code, where XX is one or more hexadecimal digits,
+optionally a unicode character.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR>
+<TD>&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+\cZ
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+z-@
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="33%"> <CENTER>
+An ASCII escape sequence control-Z, where Z is any ASCII character greater than
+or equal to the character code for '@'.
+</CENTER>
+</TD>
+<TD>&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P><I>Miscellaneous escape sequences:</I> </P>
+<P>The following are provided mostly for perl compatibility, but note that
+there are some differences in the meanings of \l \L \u and \U: <BR>
+&nbsp; </P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="6" WIDTH="100%">
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\w
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [[:word:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\W
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [^[:word:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\s
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [[:space:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\S
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [^[:space:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\d
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [[:digit:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\D
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [^[:digit:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\l
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [[:lower:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\L
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [^[:lower:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\u
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [[:upper:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\U
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Equivalent to [^[:upper:]].
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\C
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Any single character, equivalent to '.'.
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\X
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+Match any Unicode combining character sequence, for example &quot;a\x
+0301&quot; (a letter a with an acute).
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\Q
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+The begin quote operator, everything that follows is treated as a literal
+character until a \E end quote operator is found.
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+<TR>
+<TD WIDTH="5%">&nbsp;</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+\E
+</CENTER>
+</TD>
+<TD VALIGN="TOP" WIDTH="45%"> <CENTER>
+The end quote operator, terminates a sequence begun with \Q.
+</CENTER>
+</TD>
+<TD WIDTH="5%">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR>
+&nbsp; <P><I>What gets matched?</I> </P>
+<P>The regular expression library will match the first possible matching
+string, if more than one string starting at a given location can match then it
+matches the longest possible string, unless the flag match_any is set, in which
+case the first match encountered is returned. Use of the match_any option can
+reduce the time taken to find the match - but is only useful if the user is
+less concerned about what matched - for example it would not be suitable for
+search and replace operations. In cases where their are multiple possible
+matches all starting at the same location, and all of the same length, then the
+match chosen is the one with the longest first sub-expression, if that is the
+same for two or more matches, then the second sub-expression will be examined
+and so on. <BR>
+</P>
+<HR>
+<P><I>Copyright <A HREF="mailto:John_Maddock@compuserve.com">Dr John
+Maddock</A> 1998-2000 all rights reserved.</I> </P>
+</BODY>
+</HTML>
+
