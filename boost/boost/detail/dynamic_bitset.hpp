@@ -64,13 +64,8 @@ namespace boost {
 
       dynamic_bitset_base(size_type num_bits, const Allocator& alloc)
         : dynamic_bitset_alloc_base<Allocator>(alloc),
-#if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306) // Dinkumware for VC6/7
           m_bits(dynamic_bitset_alloc_base<Allocator>::
-                 m_alloc.allocate(calc_num_blocks(num_bits), 0)),
-#else
-          m_bits(dynamic_bitset_alloc_base<Allocator>::
-                 m_alloc.allocate(calc_num_blocks(num_bits))),
-#endif
+                 m_alloc.allocate(calc_num_blocks(num_bits), static_cast<void const *>(0))),
           m_num_bits(num_bits),
           m_num_blocks(calc_num_blocks(num_bits))
       {
@@ -147,26 +142,26 @@ namespace boost {
 
     template <typename BlockInputIterator>
     std::size_t initial_num_blocks(BlockInputIterator first,
-                                   BlockInputIterator last,
-                                   std::input_iterator_tag)
+				   BlockInputIterator last,
+				   std::input_iterator_tag)
     {
       return 0;
     }
 
     template <typename BlockForwardIterator>
     std::size_t initial_num_blocks(BlockForwardIterator first,
-                                   BlockForwardIterator last,
-                                   std::forward_iterator_tag)
+				   BlockForwardIterator last,
+				   std::forward_iterator_tag)
     {
       std::size_t n = 0;
       while (first != last)
-        ++first, ++n;
+	++first, ++n;
       return n;
     }
 
     template <typename BlockInputIterator>
     std::size_t initial_num_blocks(BlockInputIterator first,
-                                   BlockInputIterator last)
+				   BlockInputIterator last)
     {
       typename detail::iterator_traits<BlockInputIterator>::iterator_category cat;
       return initial_num_blocks(first, last, cat);
