@@ -37,14 +37,14 @@ main()
     //loop thru the days and print each one
     for (; ditr <= endOfMonth; ++ditr) {
       std::cout << to_simple_string(*ditr) << " ["
-		<< ditr->day_of_week().as_short_string() << "]"
-		<< std::endl; 
+                << ditr->day_of_week().as_short_string() << "]"
+                << std::endl; 
     }
   }
   catch(std::exception& e) {
 
     std::cout << "Error bad date, check your entry: \n"
-	      << "  Details: " << e.what() << std::endl;
+              << "  Details: " << e.what() << std::endl;
   }
   return 0;
 }

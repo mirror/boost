@@ -22,7 +22,7 @@ main()
     }
     else if (days_alive < date_duration(0)) {
       std::cout << "Not born yet, hmm: " << days_alive.days() 
-		<< " days" <<std::endl;
+                << " days" <<std::endl;
     }
     else {
       std::cout << "Days alive: " << days_alive.days() << std::endl;

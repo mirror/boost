@@ -68,25 +68,25 @@ main() {
   
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
   std::cout << "Sorry, this example temporarily disabled on VC 6.\n"
-	    << "The std::transform isn't accepted by the compiler\n"
-	    << "So if you hack up the example without std::transform\n"
-	    << "it should work\n"
-	    << std::endl; 
+            << "The std::transform isn't accepted by the compiler\n"
+            << "So if you hack up the example without std::transform\n"
+            << "it should work\n"
+            << std::endl; 
   
 #else
 
   //generate a set of concrete dates from the 'partial_date' holidays
   //by calling the get_date functions
   std::transform(holidays.begin(), holidays.end(),
-		 std::insert_iterator<date_set>(all_holidays, all_holidays.begin()),
-		 std::bind2nd(std::mem_fun_ref(&partial_date::get_date),
-			      year));
+                 std::insert_iterator<date_set>(all_holidays, all_holidays.begin()),
+                 std::bind2nd(std::mem_fun_ref(&partial_date::get_date),
+                              year));
 
   //Now add in the 'floating' holidays 
   std::transform(more_holidays.begin(), more_holidays.end(),
-		 std::insert_iterator<date_set>(all_holidays, all_holidays.begin()),
-		 std::bind2nd(std::mem_fun_ref(&nkday::get_date),
-			      year));
+                 std::insert_iterator<date_set>(all_holidays, all_holidays.begin()),
+                 std::bind2nd(std::mem_fun_ref(&nkday::get_date),
+                              year));
 
 
 

@@ -11,9 +11,9 @@ namespace boost {
 namespace gregorian {
 
   const char* const short_weekday_names[]={"Sun", "Mon", "Tue", 
-					   "Wed", "Thu", "Fri", "Sat"};
+                                           "Wed", "Thu", "Fri", "Sat"};
   const char* const long_weekday_names[]= {"Sunday","Monday","Tuesday",
-					   "Wednesday", "Thursday",
+                                           "Wednesday", "Thursday",
                                            "Friday", "Saturday"};
 
 

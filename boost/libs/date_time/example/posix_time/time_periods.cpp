@@ -17,7 +17,7 @@ class day_period : public time_period
 {
 public:
   day_period(date d) : time_period(ptime(d),//midnight
-				   ptime(d,hours(24)))
+                                   ptime(d,hours(24)))
   {}
 
 };
@@ -32,7 +32,7 @@ main()
   ptime t(d, hours(3)+seconds(5)); //an arbitray time on that day
   if (dp.contains(t)) {
     std::cout << to_simple_string(dp) << " contains "
-	      << to_simple_string(t)  << std::endl;
+              << to_simple_string(t)  << std::endl;
   }
   //a period that represents part of the day
   time_period part_of_day(ptime(d, hours(0)), t);
@@ -40,8 +40,8 @@ main()
   if (part_of_day.intersects(dp)) {
     time_period result = part_of_day.intersection(dp);
     std::cout << to_simple_string(dp) << " intersected with\n"
-      	      << to_simple_string(part_of_day) << " is \n"
-	      << to_simple_string(result) << std::endl;
+              << to_simple_string(part_of_day) << " is \n"
+              << to_simple_string(result) << std::endl;
   }
     
   

@@ -20,8 +20,8 @@ main()
   time_duration td = t2 - t1;
     
   std::cout << to_simple_string(t2) << " - " 
-	    << to_simple_string(t1) << " = "
-	    << to_simple_string(td) << std::endl;
+            << to_simple_string(t1) << " = "
+            << to_simple_string(td) << std::endl;
   
   return 0;
 }

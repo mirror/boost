@@ -12,6 +12,6 @@ main()
   //Subtract two dates to get a duration
   date_duration days_since_year_start = today - date(today.year(),Jan,1);
   std::cout << "Days since Jan 1: " << days_since_year_start.days() 
-	    << std::endl;
+            << std::endl;
   return 0;
 };

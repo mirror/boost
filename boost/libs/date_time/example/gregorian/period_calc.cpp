@@ -65,8 +65,8 @@ int main()
     //if date is in exclusion period then print it
     if (i->contains(d)) {
       std::cout << "In Exclusion Period: "
-		<< to_iso_string(d) << " --> " << to_iso_string(*i)
-		<< std::endl;
+                << to_iso_string(d) << " --> " << to_iso_string(*i)
+                << std::endl;
     }
   }
 

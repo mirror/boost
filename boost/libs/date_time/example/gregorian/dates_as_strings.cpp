@@ -39,9 +39,9 @@ main()
     date::ymd_type ymd = d1.year_month_day();
     greg_weekday wd = d1.day_of_week();
     std::cout << wd.as_long_string() << " "
-	      << ymd.month.as_long_string() << " "
-	      << ymd.day << ", " << ymd.year
-	      << std::endl;
+              << ymd.month.as_long_string() << " "
+              << ymd.day << ", " << ymd.year
+              << std::endl;
 
 
     //Let's send in month 25 by accident and create an exception
@@ -50,7 +50,7 @@ main()
     date wont_construct(from_undelimited_string(bad_date));
     //use wont_construct so compiler doesn't complain, but you wont get here!
     std::cout << "oh oh, you should reach this line: " 
-	      << to_iso_string(wont_construct) << std::endl;
+              << to_iso_string(wont_construct) << std::endl;
   }
   catch(std::exception& e) {
     std::cout << "  Exception: " <<  e.what() << std::endl;

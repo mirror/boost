@@ -42,6 +42,6 @@ main()
   
   time_duration remaining = tommorrow_start - now;
   std::cout << "Time left till midnight: " 
-	    << to_simple_string(remaining) << std::endl;
+            << to_simple_string(remaining) << std::endl;
   return 0;
 }
