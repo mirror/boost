@@ -884,6 +884,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class TRI, class L, class A>
     const typename triangular_matrix<T, TRI, L, A>::value_type triangular_matrix<T, TRI, L, A>::one_ (1);
 
+	// TODO These traits overloads seem to do no more then generic defition
     template <class T, class TRI, class L, class A>
     struct vector_temporary_traits< triangular_matrix<T, TRI, L, A> > {
        typedef typename triangular_matrix<T, TRI, L, A>::vector_temporary_type type ;
@@ -921,6 +922,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        // Replaced by _temporary_traits to avoid type requirements on M
         //typedef typename M::vector_temporary_type vector_temporary_type;
         //typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
@@ -1754,12 +1756,6 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class TRI>
     const typename triangular_adaptor<M, TRI>::value_type triangular_adaptor<M, TRI>::one_ (1);
 
-    template<class E1, class E2>
-    struct matrix_vector_solve_traits {
-        typedef typename promote_traits<typename E1::value_type, typename E2::value_type>::promote_type promote_type;
-        typedef vector<promote_type> result_type;
-    };
-
     template <class M, class TRI>
     struct vector_temporary_traits< triangular_adaptor<M, TRI> >
     : vector_temporary_traits< typename boost::remove_const<M>::type > {} ;
@@ -1767,6 +1763,13 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M, class TRI>
     struct matrix_temporary_traits< triangular_adaptor<M, TRI> >
     : matrix_temporary_traits< typename boost::remove_const<M>::type > {};
+
+
+    template<class E1, class E2>
+    struct matrix_vector_solve_traits {
+        typedef typename promote_traits<typename E1::value_type, typename E2::value_type>::promote_type promote_type;
+        typedef vector<promote_type> result_type;
+    };
 
     // Operations:
     //  n * (n - 1) / 2 + n = n * (n + 1) / 2 multiplications,
