@@ -40,6 +40,8 @@
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
+  class use_count_is_zero: public std::exception;
+
   template&lt;typename T&gt; class <A href="weak_ptr.htm" >weak_ptr</A>;
 
   template&lt;typename T&gt; class shared_ptr {
@@ -47,20 +49,22 @@
     public:
       typedef T <A href="#element_type" >element_type</A>;
 
-      explicit <A href="#constructors" >shared_ptr</A>(T * p = 0);
+      <A href="#constructors" >shared_ptr</A> ();
+      explicit <A href="#constructors" >shared_ptr</A> (T * p); // requires complete type
       template&lt;typename D&gt; <A href="#constructors" >shared_ptr</A>(T * p, D d);
       <A href="#destructor" >~shared_ptr</A>(); // never throws
 
       <A href="#constructors" >shared_ptr</A>(shared_ptr const &amp; r); // never throws
       template&lt;typename Y&gt; <A href="#constructors" >shared_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
-      <A href="#constructors" >shared_ptr</A>(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);
+      explicit <A href="#constructors" >shared_ptr</A>(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);
       template&lt;typename Y&gt; <A href="#constructors" >shared_ptr</A>(std::auto_ptr&lt;Y&gt; &amp; r);
 
       shared_ptr &amp; <A href="#assignment" >operator=</A>(shared_ptr const &amp; r); // never throws  
       template&lt;typename Y&gt; shared_ptr &amp; <A href="#assignment" >operator=</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
       template&lt;typename Y&gt; shared_ptr &amp; <A href="#assignment" >operator=</A>(std::auto_ptr&lt;Y&gt; &amp; r);
 
-      void <A href="#reset" >reset</A>(T * p = 0);
+      void <A href="#reset" >reset</A> ();
+      void <A href="#reset" >reset</A> (T * p); // requires complete type
       template&lt;typename D&gt; void <A href="#reset" >reset</A>(T * p, D d);
 
       T &amp; <A href="#indirection" >operator*</A>() const; // never throws
@@ -99,7 +103,18 @@
 			<p>Provides the type of the template parameter T.</p>
 		</blockquote>
 		<h3><a name="constructors">constructors</a></h3>
-		<pre>explicit shared_ptr(T * p = 0);</pre>
+		<pre>shared_ptr();</pre>
+		<blockquote>
+			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>.</p>
+			<p><b>Postconditions:</b> <A href="#use_count">use count</A> is 1; the stored 
+				pointer is 0.</p>
+			<p><b>Throws:</b> <b>std::bad_alloc</b>.</p>
+			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
+				effect.</p>
+			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</blockquote>
+		<pre>explicit shared_ptr(T * p);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> The expression <code>delete p</code> must be well-formed 
 				and must not invoke undefined behavior.
@@ -136,7 +151,7 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 				increased by one.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
-		<pre>shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);</pre>
+		<pre>explicit shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, as if by storing a copy of the 
 				pointer stored in <STRONG>r</STRONG>.</p>
@@ -174,11 +189,26 @@ template&lt;typename Y&gt; shared_ptr &amp; operator=(shared_ptr&lt;Y&gt; const 
 template&lt;typename Y&gt; shared_ptr &amp; operator=(std::auto_ptr&lt;Y&gt; &amp; r);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(r).swap(*this)</code>.</P>
+			<P><B>Notes:</B> The implementation is free to meet the effects (and the implied 
+				guarantees) via different means, without creating a temporary. In particular, 
+				in the example:</P>
+			<pre>
+shared_ptr&lt;int&gt; p(new int);
+shared_ptr&lt;void&gt; q(p);
+p = p;
+q = p;
+</pre>
+			<p>both assignments may be no-ops.</p>
 		</BLOCKQUOTE>
 		<h3><a name="reset">reset</a></h3>
-		<pre>void reset(T * p = 0);</pre>
+		<pre>void reset();</pre>
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>shared_ptr().swap(*this)</code>.</P>
+		</BLOCKQUOTE>
+		<pre>void reset(T * p);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p).swap(*this)</code>.</P>
+			<P><B>Notes:</B> Note the implied requirement that <b>T</b> is a complete type.</P>
 		</BLOCKQUOTE>
 		<pre>template&lt;typename D&gt; void reset(T * p, D d);</pre>
 		<BLOCKQUOTE>
@@ -312,8 +342,8 @@ template&lt;typename Y&gt; shared_ptr &amp; operator=(std::auto_ptr&lt;Y&gt; &am
   shared_ptr&lt;T&gt; shared_polymorphic_cast(shared_ptr&lt;U&gt; const &amp; r);</pre>
 		<BLOCKQUOTE>
 			<p><STRONG>Requires:</STRONG> The expression <CODE><A href="../conversion/cast.htm#Polymorphic_cast">
-					polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed and 
-					its behavior defined.</p>
+						polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed and 
+				its behavior defined.</p>
 			<P><B>Returns:</B> A <STRONG>shared_ptr&lt;T&gt;</STRONG> object that stores a copy 
 				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE>
 				and shares ownership with <B>r</B>.</P>
@@ -325,8 +355,8 @@ template&lt;typename Y&gt; shared_ptr &amp; operator=(std::auto_ptr&lt;Y&gt; &am
   shared_ptr&lt;T&gt; shared_polymorphic_downcast(shared_ptr&lt;U&gt; const &amp; r); // never throws</pre>
 		<BLOCKQUOTE>
 			<p><STRONG>Requires:</STRONG> The expression <CODE><A href="../conversion/cast.htm#Polymorphic_cast">
-					polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed 
-					and its behavior defined.</p>
+						polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed 
+				and its behavior defined.</p>
 			<P><B>Returns:</B> A <STRONG>shared_ptr&lt;T&gt;</STRONG> object that stores a copy 
 				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE>
 				and shares ownership with <B>r</B>.</P>

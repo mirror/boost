@@ -186,6 +186,10 @@ private:
 
 public:
 
+    shared_count(): pi_(new counted_base(1, 1))
+    {
+    }
+
     template<class P, class D> shared_count(P p, D d): pi_(0)
     {
         try
@@ -221,7 +225,7 @@ public:
         pi_->add_ref();
     }
 
-    explicit shared_count(weak_count const & r); // throws bad_weak_to_shared_cast when r.use_count() == 0
+    explicit shared_count(weak_count const & r); // throws use_count_is_zero when r.use_count() == 0
 
     shared_count & operator= (shared_count const & r) // nothrow
     {

@@ -81,7 +81,11 @@ public:
 
     typedef T element_type;
 
-    explicit shared_ptr(T * p = 0): px(p), pn(p, deleter())
+    shared_ptr(): px(0), pn()
+    {
+    }
+
+    explicit shared_ptr(T * p): px(p), pn(p, deleter()) // requires complete type
     {
     }
 
@@ -157,9 +161,14 @@ public:
 
 #endif
 
-    void reset(T * p = 0)
+    void reset()
     {
-        BOOST_ASSERT(p == 0 || p != px);
+        this_type().swap(*this);
+    }
+
+    void reset(T * p) // requires complete type
+    {
+        BOOST_ASSERT(p == 0 || p != px); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
