@@ -101,6 +101,14 @@ The category of the property: a type convertible to
 
 <a href="./property_map.html">Property map concepts</a>
 
+<h3>Design Notes</h3>
+
+At various times the name &quot;read-only&quot; was considered for
+this concept. However, that name is inappropriate because concepts are
+inherently positive, not negative. This becomes obvious when we define
+the ReadWritePropertyMap, which refines both the ReadablePropertyMap
+and the WritablePropertyMap concept. It would not make much sense to
+combine &quot;read-only&quot; and &quot;write-only&quot; concepts!
 
 <br>
 <HR>

@@ -52,7 +52,7 @@ namespace boost {
 #else
     typedef typename detail::build_plugin_tag_value_alist<Plugin>::type AList;
     typedef typename detail::ev_selector<AList>::type Extractor;
-    typedef typename Extractor::BOOST_TEMPLATE bind<AList,Tag>::type type;
+    typedef typename Extractor::template bind<AList,Tag>::type type;
 #endif  
   };
 

@@ -52,14 +52,20 @@ namespace boost {
   template <>
   struct property_traits<int*> {
     typedef int value_type;
-    typedef ptrdiff_t key_type;
-    typedef random_access_iterator_pa_tag   category;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
   };
   template <>
   struct property_traits<std::size_t*> {
     typedef std::size_t value_type;
-    typedef ptrdiff_t key_type;
-    typedef random_access_iterator_pa_tag   category;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+  template <>
+  struct property_traits<short*> {
+    typedef std::size_t value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
   };
 #else
   template <class T>
@@ -89,6 +95,10 @@ namespace boost {
   inline const T& at(const T* pa, std::ptrdiff_t k) { return pa[k]; }
 
 namespace boost {
+
+  using ::put;
+  using ::get;
+  using ::at;
 
   //=========================================================================
   // concept checks for property maps
@@ -241,13 +251,10 @@ namespace boost {
   {
     typedef void key_type;
     typedef std::size_t value_type; // ? -JGS
-    typedef boost::lvalue_property_map_tag category;
+    typedef boost::readable_property_map_tag category;
 
     template <class Vertex>
-    inline const Vertex& operator[](const Vertex& v) const { return v; }
-
-    template <class Vertex>
-    inline Vertex& operator[](Vertex& v) const { return v; }
+    inline Vertex operator[](const Vertex& v) const { return v; }
   };
 
   //=========================================================================

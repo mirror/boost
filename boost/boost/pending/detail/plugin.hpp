@@ -98,7 +98,7 @@ namespace boost {
 	typedef typename TagValueAList::second_type Next;
 	typedef typename ev_selector<Next>::type Extractor;
 	typedef typename boost::ct_if< tag1==tag2, Value, 
-	  typename Extractor::BOOST_TEMPLATE bind<Next,Tag1>::type
+	  typename Extractor::template bind<Next,Tag1>::type
 	>::type type;
       };
     };

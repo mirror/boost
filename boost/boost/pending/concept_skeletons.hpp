@@ -31,7 +31,7 @@ namespace boost {
   };
 }
 
-#ifndef BOOST_O_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace std {
   template <class T>
   struct iterator_traits< boost::trivial_iterator_skeleton<T> >
