@@ -37,6 +37,15 @@
 
 namespace boost {
 
+namespace detail {
+namespace multi_array {
+  // This structure is used to specially overload const_multi_array_ref's
+  // constructor for cases where a multi_array is constructed from a
+  // const_multi_array_ref. 
+  struct deep_copy_marker { };
+} 
+} 
+    
 template <typename T, std::size_t NumDims,
   typename TPtr = const T*
 >
@@ -71,9 +80,6 @@ public:
   // make const_multi_array_ref a friend of itself
   template <typename,std::size_t,typename>
   friend class const_multi_array_ref;
-
-//  template <typename From, typename To>  // needed for enable_if_convertible tests
-//  friend class boost::detail::is_convertible_basic_impl;
 #endif
 
   template <typename OPtr>
@@ -324,6 +330,22 @@ public:
   // This is used by multi_array, which is a subclass of this
   void set_base_ptr(TPtr new_base) { base_ = new_base; }
 
+  // Special constructor for building a multi_array from a const_multi_array
+  template <typename OPtr>
+  const_multi_array_ref(
+      const const_multi_array_ref<T,NumDims,OPtr>& rhs,
+      /* indicator parameter */ detail::multi_array::deep_copy_marker const&)
+    : base_(0), 
+      storage_(c_storage_order()),
+      origin_offset_(0), directional_offset_(0),
+      num_elements_(rhs.num_elements())
+  {
+    using boost::copy_n;
+    copy_n(rhs.index_bases(),rhs.num_dimensions(),index_base_list_.begin());
+    init_multi_array_ref(rhs.shape());
+  }
+
+
   template <typename OPtr>
   const_multi_array_ref(
       const detail::multi_array::const_sub_array<T,NumDims,OPtr>& rhs
@@ -334,9 +356,22 @@ public:
       num_elements_(rhs.num_elements())
   {
     using boost::copy_n;
-    copy_n(rhs.shape(),rhs.num_dimensions(),extent_list_.begin());
-    copy_n(rhs.strides(),rhs.num_dimensions(),stride_list_.begin());
     copy_n(rhs.index_bases(),rhs.num_dimensions(),index_base_list_.begin());
+    init_multi_array_ref(rhs.shape());
+  }
+
+  template <typename OPtr>
+  const_multi_array_ref(
+      const detail::multi_array::const_multi_array_view<T,NumDims,OPtr>& rhs
+  )
+    : base_(0), 
+      storage_(c_storage_order()),
+      origin_offset_(0), directional_offset_(0),
+      num_elements_(rhs.num_elements())
+  {
+    using boost::copy_n;
+    copy_n(rhs.index_bases(),rhs.num_dimensions(),index_base_list_.begin());
+    init_multi_array_ref(rhs.shape());
   }
 
   typedef boost::array<size_type,NumDims> size_list;
@@ -385,9 +420,7 @@ private:
     // Calculate the array size
     num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
                             1,std::multiplies<index>());
-#if 0
-    assert(num_elements_ != 0);
-#endif
+
     this->compute_strides(stride_list_,extent_list_,storage_);
 
     origin_offset_ =
@@ -460,8 +493,19 @@ public:
     super_type(base,ranges,so) { }
 
   template <typename OPtr>
+  multi_array_ref(const 
+                  const_multi_array_ref<T,NumDims,OPtr>& rhs)
+    : super_type(rhs, detail::multi_array::deep_copy_marker()) {} 
+
+
+  template <typename OPtr>
   multi_array_ref(const detail::multi_array::
                   const_sub_array<T,NumDims,OPtr>& rhs)
+    : super_type(rhs) {} 
+
+  template <typename OPtr>
+  multi_array_ref(const detail::multi_array::
+                  const_multi_array_view<T,NumDims,OPtr>& rhs)
     : super_type(rhs) {} 
 
   // Assignment from other ConstMultiArray types.
@@ -546,7 +590,7 @@ public:
                     this->index_bases());
   }
 
-  // RG - rbegin() and rend() written naively to thwart MSVC ICE.
+  // rbegin() and rend() written naively to thwart MSVC ICE.
   reverse_iterator rbegin() {
     reverse_iterator ri(end());
     return ri;
@@ -611,7 +655,6 @@ protected:
   explicit multi_array_ref(T* base) :
     super_type(base) {
   }
-
 
 };
 

@@ -149,6 +149,33 @@ public:
     boost::copy_n(rhs.base_,rhs.num_elements(),base_);
   }
 
+
+  //
+  // A multi_array is constructible from any multi_array_ref, subarray, or
+  // array_view object.  The following constructors ensure that.
+  // (Q: Should these be 'explicit'?)
+  //
+
+  template <typename OPtr>
+  multi_array(const 
+              const_multi_array_ref<T,NumDims,OPtr>& rhs) :
+    super_type(rhs) {
+    allocate_space();
+    // RG: This can be done more efficiently using data,num_elements
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+  // See note for the constructor from sub_array<T,NumDims>&.
+  // I am assuming that the following constructor is required as well
+  multi_array(const 
+              multi_array_ref<T,NumDims>& rhs) :
+    super_type(rhs) {
+    allocate_space();
+    // RG: This can be done more efficiently using data,num_elements
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+
   template <typename OPtr>
   multi_array(const detail::multi_array::
               const_sub_array<T,NumDims,OPtr>& rhs) :
@@ -166,6 +193,27 @@ public:
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
+
+
+  // Support construction of a multi_array from an array_view as is done above
+  // for subarrays.
+  template <typename OPtr>
+  multi_array(const detail::multi_array::
+              const_multi_array_view<T,NumDims,OPtr>& rhs) :
+    super_type(rhs) {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+  // I'm guessing that gcc 2.95.2 would share the same problem with array_view
+  // as it does for subarray, hence the following constructor:
+  multi_array(const detail::multi_array::
+              multi_array_view<T,NumDims>& rhs) :
+    super_type(rhs) {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
     
   // Since assignment is a deep copy, multi_array_ref
   // contains all the necessary code.
