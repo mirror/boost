@@ -24,11 +24,12 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    // Base class for the Barton Nackman trick
+    // Base class Matrix Expressions - see the Barton Nackman trick
     template<class E>
-    struct matrix_expression:
+    class matrix_expression:
         private nonassignable {
         //FIXME        public expression_base<typename E::value_type> {
+    public:
         BOOST_STATIC_CONSTANT (unsigned, complexity = 0);
         typedef E expression_type;
         typedef matrix_tag type_category;
