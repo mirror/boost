@@ -117,8 +117,8 @@ bool _fi_FindClose(_fi_find_handle hFindFile);
  #undef FindClose
 #endif
 
-#define FindFirstFile _fi_FindFirstFile
-#define FindNextFile _fi_FindNextFile
+#define FindFirstFileA _fi_FindFirstFile
+#define FindNextFileA _fi_FindNextFile
 #define FindClose _fi_FindClose
 
 #endif
