@@ -82,6 +82,14 @@ int main()
         cout << "__EDG_VERSION__ defined as " << __EDG_VERSION__ << "\n";
 #   endif
 
+#   ifdef __ICC
+        cout << "__ICC defined as " << __ICC << "\n";
+#   endif
+
+#   ifdef __INTEL_COMPILER
+        cout << "__INTEL_COMPILER defined as " << __INTEL_COMPILER << "\n";
+#   endif
+
 #   ifdef __BORLANDC__
         cout << "__BORLANDC__ defined as " << __BORLANDC__ << "\n";
 #   endif
