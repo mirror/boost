@@ -82,6 +82,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+        typedef const_pointer const_iterator;
+        typedef pointer iterator;
+
 
         // Construction and destruction
         explicit BOOST_UBLAS_INLINE
@@ -93,22 +96,21 @@ namespace boost { namespace numeric { namespace ublas {
             alloc_(a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
-                const value_type zero (0);
                 const iterator i_end = end ();
                 for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_construct (i, zero); 
+                    iterator_default_construct (i) ;
                 }
             }
         }
         // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
-        unbounded_array (size_type size, no_init, const ALLOC &a = ALLOC()):
+        unbounded_array (size_type size, const T& init, const ALLOC &a = ALLOC()):
             alloc_ (a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
                 const iterator i_end = end ();
                 for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_default_construct (i); 
+                    iterator_construct (i, init); 
                 }
             }
         }
@@ -229,14 +231,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element insertion and deletion
         BOOST_UBLAS_INLINE
-        pointer insert (pointer it, const value_type &t) {
+        iterator insert (iterator it, const value_type &t) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
             *it = t;
             return it;
         }
         BOOST_UBLAS_INLINE
-        void insert (pointer it, pointer it1, pointer it2) {
+        void insert (iterator it, iterator it1, iterator it2) {
             while (it1 != it2) {
                 BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
                 BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
@@ -262,10 +264,6 @@ namespace boost { namespace numeric { namespace ublas {
             erase (begin (), end ());
         }
 
-        // Iterators simply are pointers.
-
-        typedef const_pointer const_iterator;
-
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
             return data_;
@@ -274,8 +272,6 @@ namespace boost { namespace numeric { namespace ublas {
         const_iterator end () const {
             return data_ + size_;
         }
-
-        typedef pointer iterator;
 
         BOOST_UBLAS_INLINE
         iterator begin () {
@@ -348,6 +344,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+        typedef const_pointer const_iterator;
+        typedef pointer iterator;
+
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -359,14 +358,15 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
-            std::fill (begin(), end(), value_type (0));
+            std::fill (begin(), end(), value_type ());
         }
         // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
-        bounded_array (size_type size, no_init):
+        bounded_array (size_type size, const T& init):
             size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
+            std::fill (begin(), end(), init ) ;
         }
         BOOST_UBLAS_INLINE
         bounded_array (const bounded_array &c):
@@ -433,14 +433,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element insertion and deletion
         BOOST_UBLAS_INLINE
-        pointer insert (pointer it, const value_type &t) {
+        iterator insert (iterator it, const value_type &t) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
             *it = t;
             return it;
         }
         BOOST_UBLAS_INLINE
-        void insert (pointer it, pointer it1, pointer it2) {
+        void insert (iterator it, iterator it1, iterator it2) {
             while (it1 != it2) {
                 BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
                 BOOST_UBLAS_CHECK (*it == value_type (0), external_logic ());
@@ -449,12 +449,12 @@ namespace boost { namespace numeric { namespace ublas {
             }
         }
         BOOST_UBLAS_INLINE
-        void erase (pointer it) {
+        void erase (iterator it) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             *it = value_type (0);
         }
         BOOST_UBLAS_INLINE
-        void erase (pointer it1, pointer it2) {
+        void erase (iterator it1, iterator it2) {
             while (it1 != it2) {
                 BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
                 *it1 = value_type (0);
@@ -466,10 +466,6 @@ namespace boost { namespace numeric { namespace ublas {
             erase (begin (), end ());
         }
 
-        // Iterators simply are pointers.
-
-        typedef const_pointer const_iterator;
-
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
             return data_;
@@ -478,8 +474,6 @@ namespace boost { namespace numeric { namespace ublas {
         const_iterator end () const {
             return data_ + size_;
         }
-
-        typedef pointer iterator;
 
         BOOST_UBLAS_INLINE
         iterator begin () {
