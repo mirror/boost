@@ -22,11 +22,9 @@
 #include <boost/config.hpp>
 
 namespace std{ 
-    #if defined(__COMO__)
+    #if defined(__LIBCOMO__)
         using ::mbstate_t;
-    #elif defined(BOOST_MSVC)
-        using ::mbstate_t;
-    #elif defined(BOOST_INTEL)
+    #elif defined(BOOST_DINKUMWARE_STDLIB)
         using ::mbstate_t;
     #elif defined(BOOST_NO_STDC_NAMESPACE)
         using ::codecvt;
