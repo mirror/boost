@@ -6,6 +6,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 // Revision History
+// 11 Feb 2001  #if 0'd out use of counting_iterator on non-numeric types in
+//              MSVC without STLport, so that the other tests may proceed
+//              (David Abrahams)
 // 04 Feb 2001  Added use of iterator_tests.hpp (David Abrahams)
 // 28 Jan 2001  Removed not_an_iterator detritus (David Abrahams)
 // 24 Jan 2001  Initial revision (David Abrahams)
@@ -176,14 +179,21 @@ int main()
     test_integer<long long>();
     test_integer<unsigned long long>();
 #endif
+
+   // wrapping an iterator causes an INTERNAL COMPILER ERROR in MSVC without
+   // STLport. I'm clueless as to why. 
+#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+    
    // Some tests on container iterators, to prove we handle a few different categories
     test_container<std::vector<int> >();
     test_container<std::list<int> >();
-#ifndef BOOST_NO_SLIST
+# ifndef BOOST_NO_SLIST
     test_container<BOOST_STD_EXTENSION_NAMESPACE::slist<int> >();
-#endif
+# endif
+    
     // Also prove that we can handle raw pointers.
     int array[2000];
     test(boost::make_counting_iterator(array), boost::make_counting_iterator(array+2000-1));
+#endif
     return 0;
 }
