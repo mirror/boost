@@ -218,7 +218,7 @@ private:
   // ranlux_4: 370 nsec, ranlux_7: 688 nsec, ranlux_14: 1343 nsec
   IntType x[long_lag];
   unsigned int k;
-  unsigned int carry;
+  int carry;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
