@@ -15,7 +15,6 @@
  */
 
 #include <boost/numeric/interval.hpp>
-#include <boost/numeric/interval/io.hpp>
 #include <iostream>
 
 // I is an interval class, the polynom is a simple array
@@ -36,6 +35,13 @@ I horner(const I& x, const I p[], int n) {
   return y;
 
   // restore the rounding mode with the destruction of rnd
+}
+
+template<class T, class Policies>
+std::ostream &operator<<(std::ostream &os,
+                         const boost::numeric::interval<T, Policies> &x) {
+  os << "[" << x.lower() << ", " << x.upper() << "]";
+  return os;
 }
 
 int main() {

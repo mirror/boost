@@ -15,7 +15,6 @@
  */
 
 #include <boost/numeric/interval.hpp>
-#include <boost/numeric/interval/io.hpp>
 #include <vector>
 #include <algorithm>
 #include <utility>
@@ -119,6 +118,13 @@ std::vector<I2> newton_raphson(const I2& xs) {
       else l.push_back(x2);
   }
   return res;
+}
+
+template<class T, class Policies>
+std::ostream &operator<<(std::ostream &os,
+                         const boost::numeric::interval<T, Policies> &x) {
+  os << "[" << x.lower() << ", " << x.upper() << "]";
+  return os;
 }
 
 int main() {

@@ -15,7 +15,6 @@
  */
 
 #include <boost/numeric/interval.hpp>
-#include <boost/numeric/interval/io.hpp>
 #include <boost/test/minimal.hpp>
 #include "bugs.hpp"
 
