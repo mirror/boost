@@ -212,7 +212,7 @@ struct test_type_with_align
     if (new_align % align != 0) {
       ++failures;
       std::cerr << "checking for an object with same alignment as " 
-		<< typeid(T).name() << "...failed" << std::endl;
+      << typeid(T).name() << "...failed" << std::endl;
       std::cerr << "\tfound: " << typeid(align_t).name() << std::endl;
     }
   }
