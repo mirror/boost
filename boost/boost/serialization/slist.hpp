@@ -69,6 +69,7 @@ inline void load(
         boost::serialization::stl::stack_construct<Archive, U> u(ar);
         ar >> boost::serialization::make_nvp("item", u.reference());
         last = t.insert_after(last, u.reference());
+        ar.reset_object_address(& (*last), & u)
     }
 }
 

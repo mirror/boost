@@ -61,7 +61,7 @@ inline void load(
     boost::serialization::stl::load_collection<
         Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator>,
-        boost::serialization::stl::archive_input_assoc<
+        boost::serialization::stl::archive_input_set<
             Archive, 
             STD::hash_set<Key, Compare, Allocator> 
         >,
@@ -104,7 +104,7 @@ inline void load(
     boost::serialization::stl::load_collection<
         Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator>,
-        boost::serialization::stl::archive_input_assoc<
+        boost::serialization::stl::archive_input_multiset<
             Archive, STD::hash_multiset<
                 Key, 
                 Compare, 

@@ -100,7 +100,7 @@ inline void load(
     boost::serialization::stl::load_collection<
         Archive,
         STD::multimap<Key, Type, Compare, Allocator>,
-        boost::serialization::stl::archive_input_map<
+        boost::serialization::stl::archive_input_multimap<
             Archive, STD::multimap<Key, Type, Compare, Allocator> 
         >,
         boost::serialization::stl::no_reserve_imp<
