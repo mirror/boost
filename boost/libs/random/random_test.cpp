@@ -477,16 +477,16 @@ INSTANT(boost::mt11213b)
 #undef INSTANT
 #endif
 
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 // testcase by Mario Rütti
 class ruetti_gen
 {
 public:
-  typedef uint64_t result_type;
+  typedef boost::uint64_t result_type;
   result_type min() const { return 0; }
   result_type max() const { return std::numeric_limits<result_type>::max(); }
   result_type operator()() { return max()-1; }
 };
-
 
 void test_overflow_range()
 {
@@ -496,6 +496,10 @@ void test_overflow_range()
   for (int i=0;i<10;i++)
     (void) rng();
 }
+#else
+void test_overflow_range()
+{ }
+#endif
 
 int test_main(int, char*[])
 {
