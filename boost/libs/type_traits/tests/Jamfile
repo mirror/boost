@@ -1,4 +1,4 @@
-subproject libs/type_traits/test ;
+subproject libs/type_traits/tests ;
 
 
 unit-test alignment_test : alignment_test.cpp
@@ -27,6 +27,7 @@ unit-test object_traits_test : object_traits_test.cpp
 
 unit-test transform_traits_test : transform_traits_test.cpp
 	: <include>$(BOOST_ROOT) : ;
+
 
 
 
