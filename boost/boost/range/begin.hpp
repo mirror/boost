@@ -84,22 +84,22 @@ namespace range_detail
     // string
     //////////////////////////////////////////////////////////////////////
     
-    inline const char* begin( const char* s )
+    inline const char* begin( const char*& s )
     {
         return s;
     }
     
-    inline char* begin( char* s )
+    inline char* begin( char*& s )
     {
         return s;
     }
     
-    inline const wchar_t* begin( const wchar_t* s )
+    inline const wchar_t* begin( const wchar_t*& s )
     {
         return s;
     }
     
-    inline wchar_t* begin( wchar_t* s )
+    inline wchar_t* begin( wchar_t*& s )
     {
         return s;
     }

@@ -52,7 +52,7 @@ namespace boost
 #endif         
 
         template< typename Char >
-        inline Char* str_end( Char* s )
+        inline Char* str_end( Char* const& s )
         {
             return (Char*)str_end( s, s );
         }
@@ -106,7 +106,7 @@ namespace boost
         /////////////////////////////////////////////////////////////////////
         
         template< typename Char >
-        inline std::size_t str_size( const Char* s )
+        inline std::size_t str_size( const Char* const& s )
         {
             return str_end( s ) - s;
         }
@@ -138,7 +138,8 @@ namespace boost
         template< typename T, std::size_t sz >
         inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz] )
         {
-            typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
+            typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<const char,T>::value || is_same<const wchar_t,T>::value ||
+                                                                   is_same<char,T>::value       || is_same<wchar_t,T>::value,
                                                                 char_or_wchar_t_array_tag,
                                                                 int >::type tag;
             return array_size<T,sz>( array, tag() );

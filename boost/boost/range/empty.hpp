@@ -42,12 +42,12 @@ namespace range_detail
         // string
         //////////////////////////////////////////////////////////////////////
 
-        inline bool empty( const char* s )
+        inline bool empty( const char* const& s )
         {
             return s == 0 || s[0] == 0;
         }
 
-        inline bool empty( const wchar_t* s )
+        inline bool empty( const wchar_t* const& s )
         {
             return s == 0 || s[0] == 0;
         }

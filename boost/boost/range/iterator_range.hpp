@@ -225,10 +225,10 @@ namespace boost {
                 return !operator==(r);
             }
 
-			bool operator<( const iterator_range& r ) const
-			{
-				return range_detail::less_than( *this, r );
-			}
+           bool operator<( const iterator_range& r ) const
+           {
+                return range_detail::less_than( *this, r );
+           }
 
 #endif            
             

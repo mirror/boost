@@ -28,8 +28,8 @@ namespace boost
         // string
         //////////////////////////////////////////////////////////////////////
         
-        yes_type is_string_impl( const char* );
-        yes_type is_string_impl( const wchar_t* );
+        yes_type is_string_impl( const char* const );
+        yes_type is_string_impl( const wchar_t* const );
         no_type  is_string_impl( ... );
         
         template< std::size_t sz >
@@ -44,16 +44,16 @@ namespace boost
         yes_type is_wchar_t_array_impl( const wchar_t BOOST_RANGE_ARRAY_REF()[sz] );
         no_type  is_wchar_t_array_impl( ... );
                                      
-        yes_type is_char_ptr_impl( char* );
+        yes_type is_char_ptr_impl( char* const );
         no_type  is_char_ptr_impl( ... );
         
-        yes_type is_const_char_ptr_impl( const char* );
+        yes_type is_const_char_ptr_impl( const char* const );
         no_type  is_const_char_ptr_impl( ... );
 
-        yes_type is_wchar_t_ptr_impl( wchar_t* );
+        yes_type is_wchar_t_ptr_impl( wchar_t* const );
         no_type  is_wchar_t_ptr_impl( ... );
         
-        yes_type is_const_wchar_t_ptr_impl( const wchar_t* );
+        yes_type is_const_wchar_t_ptr_impl( const wchar_t* const );
         no_type  is_const_wchar_t_ptr_impl( ... );
         
         //////////////////////////////////////////////////////////////////////
