@@ -17,6 +17,8 @@
 #ifndef BOOST_LAMBDA_RETURN_TYPE_TRAITS_HPP
 #define BOOST_LAMBDA_RETURN_TYPE_TRAITS_HPP
 
+#include "boost/mpl/aux_/has_xxx.hpp"
+
 #include <cstddef> // needed for the ptrdiff_t
 
 namespace boost { 
@@ -239,6 +241,25 @@ struct return_type_N<function_action<I, Ret>, Args> {
   typedef Ret type;
 };
 
+// ::result_type support
+
+namespace detail
+{
+
+BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
+
+template<class F> struct get_result_type
+{
+  typedef typename F::result_type type;
+};
+
+template<class F, class A> struct get_sig
+{
+  typedef typename function_adaptor<F>::template sig<A>::type type;
+};
+
+} // namespace detail
+
   // Ret is detail::unspecified, so try to deduce return type
 template<int I, class Args> 
 struct return_type_N<function_action<I, detail::unspecified>, Args > { 
@@ -251,7 +272,11 @@ struct return_type_N<function_action<I, detail::unspecified>, Args > {
 public: 
   // pass the function to function_adaptor, and get the return type from 
   // that
-  typedef typename function_adaptor<plain_Func>::template sig<Args>::type type;
+  typedef typename detail::IF<
+    detail::has_result_type<plain_Func>::value,
+	detail::get_result_type<plain_Func>,
+	detail::get_sig<plain_Func, Args>
+  >::RET::type type;
 };
 
 
