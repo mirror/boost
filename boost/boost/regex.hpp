@@ -656,12 +656,12 @@ private:
    unsigned marks;
    int repeats;
    unsigned char* startmap;
-   charT* _expression;
    unsigned _expression_len;
    unsigned int _leading_len;
    const charT* _leading_string;
    unsigned int _leading_string_len;
    re_detail::kmp_info<charT>* pkmp;
+   charT* _expression;
    traits_type traits_inst;
    unsigned error_code_;
 
