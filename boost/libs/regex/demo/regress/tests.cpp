@@ -202,7 +202,7 @@ bool grep_test_predicate<iterator, Alloc>::operator()(const boost::match_results
 template <class C, class T, class A>
 void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
 {
-   typedef A allocator_type;
+   typedef typename reg_expression<C, T, A>::allocator_type allocator_type;
    if(flags[4] & REG_MERGE)
    {
       //
@@ -250,9 +250,9 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
       if(!recurse)
       {
          std::basic_string<char_t> s(search_text.begin(), search_text.end());
-         grep_test_predicate<std::basic_string<char_t>::const_iterator, reg_expression<C, T, A>::allocator_type> oi2(s.begin(), s.end());
+         grep_test_predicate<std::basic_string<char_t>::const_iterator, allocator_type> oi2(s.begin(), s.end());
          regex_grep(oi2, s, e, flags[3]);
-         grep_test_predicate<const char_t*, reg_expression<C, T, A>::allocator_type> oi3(s.c_str(), s.c_str()+s.size());
+         grep_test_predicate<const char_t*, allocator_type> oi3(s.c_str(), s.c_str()+s.size());
          regex_grep(oi3, s.c_str(), e, flags[3]);
       }
 #endif
@@ -260,7 +260,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
    else
    {
       // try to find match
-      match_results< debug_iterator<string_type::iterator>, reg_expression<C, T, A>::allocator_type> m;
+      match_results< debug_iterator<string_type::iterator>, allocator_type> m;
       debug_iterator<string_type::iterator> x(search_text.begin(), search_text.begin(), search_text.end());
       debug_iterator<string_type::iterator> y(search_text.end(), search_text.begin(), search_text.end());
       if(regex_search(x, y, m, e, flags[3]))
@@ -371,7 +371,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
             // match expected on whole string, so all versions
             // of regex_match should also succeed:
             //
-            match_results< debug_iterator<string_type::iterator>, reg_expression<C, T, A>::allocator_type> m1;
+            match_results< debug_iterator<string_type::iterator>, allocator_type> m1;
             debug_iterator<string_type::iterator> x1(search_text.begin(), search_text.begin(), search_text.end());
             debug_iterator<string_type::iterator> y1(search_text.end(), search_text.begin(), search_text.end());
             if(regex_match(x1, y1, m1, e, flags[3]))
@@ -741,6 +741,7 @@ void reset_error()
 {
    last_line = 0;
 }
+
 
 
 

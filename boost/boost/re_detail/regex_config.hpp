@@ -828,7 +828,7 @@ public:
 
    pointer BOOST_RE_CALL address(reference x) const { return &x; }
    const_pointer BOOST_RE_CALL address(const_reference x) const { return &x; }
-   static size_type BOOST_RE_CALL max_size() { return -1; }
+   static size_type BOOST_RE_CALL max_size() { return (size_type)-1; }
    static void BOOST_RE_CALL construct(pointer p, const T& val) { jm_construct(p, val); }
    void BOOST_RE_CALL destroy(pointer p) { jm_destroy(p); }
 
@@ -1231,6 +1231,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

@@ -524,8 +524,8 @@ public:
     : data(a), pkmp(0) { set_expression(p, f); }
 
    template <class I>
-   reg_expression(I first, I last, flag_type f = regbase::normal, const Allocator& a = Allocator())
-    : data(a), pkmp(0)
+   reg_expression(I first, I last, flag_type f = regbase::normal, const Allocator& al = Allocator())
+    : data(al), pkmp(0)
    {
       size_type len = last-first;
       scoped_array<charT> a(new charT[len]);
@@ -545,7 +545,7 @@ public:
        const std::basic_string<charT, string_traits, A>& s,
        flag_type f = regbase::normal)
    {
-      set_expression(p.c_str(), p.c_str() + p.size(), f | regbase::use_except);
+      set_expression(s.c_str(), s.c_str() + s.size(), f | regbase::use_except);
       return *this;
    }
 
@@ -1395,7 +1395,7 @@ match_results<iterator, Allocator>::match_results(const match_results<iterator, 
             re_detail::jm_destroy(p2);
             ++p2;
          }
-         re_detail::jm_destroy(ref);
+         re_detail::jm_destroy(this->ref);
          throw; 
       }
    }
@@ -1454,6 +1454,8 @@ typedef match_results<const wchar_t*> wcmatch;
 #endif  // __cplusplus
 
 #endif  // include
+
+
 
 
 
