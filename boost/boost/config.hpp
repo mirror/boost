@@ -308,6 +308,9 @@
 #       define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #       define BOOST_NO_STD_ALLOCATOR
 #       define BOOST_NO_STD_MIN_MAX
+#       undef min
+#       undef max
+#       define NOMINMAX
 #     endif
 #     define BOOST_NO_STD_ITERATOR_TRAITS
 

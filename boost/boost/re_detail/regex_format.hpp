@@ -471,7 +471,7 @@ public:
 } // namespace re_detail
 
 template <class OutputIterator, class iterator, class Allocator, class charT>
-OutputIterator BOOST_RE_CALL regex_format(OutputIterator out,
+OutputIterator regex_format(OutputIterator out,
                           const match_results<iterator, Allocator>& m,
                           const charT* fmt,
                           unsigned flags = 0
@@ -482,18 +482,19 @@ OutputIterator BOOST_RE_CALL regex_format(OutputIterator out,
 }
 
 template <class OutputIterator, class iterator, class Allocator, class charT>
-OutputIterator BOOST_RE_CALL regex_format(OutputIterator out,
+OutputIterator regex_format(OutputIterator out,
                           const match_results<iterator, Allocator>& m,
                           const std::basic_string<charT>& fmt,
                           unsigned flags = 0
                          )
 {
    regex_traits<charT> t;
-   return re_detail::_reg_format_aux(out, m, fmt.c_str(), flags, t);
+   const charT* start = fmt.c_str();
+   return re_detail::_reg_format_aux(out, m, start, flags, t);
 }  
 
 template <class iterator, class Allocator, class charT>
-std::basic_string<charT> BOOST_RE_CALL regex_format(const match_results<iterator, Allocator>& m, const charT* fmt, unsigned flags = 0)
+std::basic_string<charT> regex_format(const match_results<iterator, Allocator>& m, const charT* fmt, unsigned flags = 0)
 {
    std::basic_string<charT> result;
    re_detail::string_out_iterator<std::basic_string<charT> > i(result);
@@ -502,7 +503,7 @@ std::basic_string<charT> BOOST_RE_CALL regex_format(const match_results<iterator
 }
 
 template <class iterator, class Allocator, class charT>
-std::basic_string<charT> BOOST_RE_CALL regex_format(const match_results<iterator, Allocator>& m, const std::basic_string<charT>& fmt, unsigned flags = 0)
+std::basic_string<charT> regex_format(const match_results<iterator, Allocator>& m, const std::basic_string<charT>& fmt, unsigned flags = 0)
 {
    std::basic_string<charT> result;
    re_detail::string_out_iterator<std::basic_string<charT> > i(result);
@@ -511,7 +512,7 @@ std::basic_string<charT> BOOST_RE_CALL regex_format(const match_results<iterator
 }
 
 template <class OutputIterator, class iterator, class traits, class Allocator, class charT>
-OutputIterator BOOST_RE_CALL regex_merge(OutputIterator out,
+OutputIterator regex_merge(OutputIterator out,
                          iterator first,
                          iterator last,
                          const reg_expression<charT, traits, Allocator>& e, 
@@ -525,7 +526,7 @@ OutputIterator BOOST_RE_CALL regex_merge(OutputIterator out,
 }
 
 template <class OutputIterator, class iterator, class traits, class Allocator, class charT>
-inline OutputIterator BOOST_RE_CALL regex_merge(OutputIterator out,
+inline OutputIterator regex_merge(OutputIterator out,
                          iterator first,
                          iterator last,
                          const reg_expression<charT, traits, Allocator>& e, 
@@ -536,7 +537,7 @@ inline OutputIterator BOOST_RE_CALL regex_merge(OutputIterator out,
 }
 
 template <class traits, class Allocator, class charT>
-std::basic_string<charT> BOOST_RE_CALL regex_merge(const std::basic_string<charT>& s,
+std::basic_string<charT> regex_merge(const std::basic_string<charT>& s,
                          const reg_expression<charT, traits, Allocator>& e, 
                          const charT* fmt,
                          unsigned int flags = match_default)
@@ -548,7 +549,7 @@ std::basic_string<charT> BOOST_RE_CALL regex_merge(const std::basic_string<charT
 }
 
 template <class traits, class Allocator, class charT>
-std::basic_string<charT> BOOST_RE_CALL regex_merge(const std::basic_string<charT>& s,
+std::basic_string<charT> regex_merge(const std::basic_string<charT>& s,
                          const reg_expression<charT, traits, Allocator>& e, 
                          const std::basic_string<charT>& fmt,
                          unsigned int flags = match_default)

@@ -71,7 +71,7 @@ bool split_pred<OutputIterator, charT, Traits1, Alloc1, Alloc2>::operator()
       // output sub-expressions only:
       for(unsigned i = 1; i < what.size(); ++i)
       {
-         (*p_out) = static_cast<string_type>(what[i]);
+         *(*p_out) = static_cast<string_type>(what[i]);
          ++(*p_out);
          return --*p_max;
       }
@@ -82,7 +82,7 @@ bool split_pred<OutputIterator, charT, Traits1, Alloc1, Alloc2>::operator()
       const sub_match<iterator_type>& sub = what[-1];
       if((sub.first != sub.second) || (*p_max != initial_max))
       {
-         (*p_out) = static_cast<string_type>(sub);
+         *(*p_out) = static_cast<string_type>(sub);
          ++(*p_out);
          return --*p_max;
       }
@@ -115,7 +115,7 @@ std::size_t regex_split(OutputIterator out,
    // than whitespace:
    if(max_split && (last != s.end()) && (e.mark_count() == 1))
    {
-      out = std::basic_string<charT, Traits1, Alloc1>((ci_t)last, (ci_t)s.end());
+      *out = std::basic_string<charT, Traits1, Alloc1>((ci_t)last, (ci_t)s.end());
       ++out;
       last = s.end();
    }
