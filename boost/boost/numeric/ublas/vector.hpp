@@ -32,8 +32,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Resizing helper. Allow 'preserve' parameter to be used where possible.
 
-#ifdef REMOVED
-//#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         // ISSUE Overloaded free function templates fail on some compilers!
         // Thanks to Karl Meerbergen for the functor workaround which we use by default
         template <class T>
