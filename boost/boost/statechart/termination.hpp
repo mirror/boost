@@ -13,8 +13,6 @@
 #include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
 
-#include <typeinfo> // std::type_info
-
 
 
 namespace boost
@@ -28,11 +26,11 @@ namespace fsm
 template< class Event >
 struct termination
 {
-  template< class State >
+  template< class State, class EventBase, class IdType >
   static result react(
-    State & stt, const event &, const std::type_info & eventType )
+    State & stt, const EventBase &, const IdType & eventType )
   {
-    if ( eventType == typeid( const Event ) )
+    if ( eventType == Event::static_type() )
     {
       return stt.terminate();
     }

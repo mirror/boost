@@ -12,11 +12,20 @@
 
 #include <boost/fsm/detail/counted_base.hpp>
 
+#include <boost/fsm/rtti_policy.hpp>
+
 #include <boost/assert.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/intrusive_ptr.hpp>
 
-#include <typeinfo>
+
+
+#ifdef BOOST_MSVC
+// We permanently turn off the following level 4 warnings because users will
+// have to do so themselves anyway if we turn them back on
+#pragma warning( disable: 4511 ) // copy constructor could not be generated
+#pragma warning( disable: 4512 ) // assignment operator could not be generated
+#endif
 
 
 
@@ -28,16 +37,31 @@ namespace fsm
 
 
 //////////////////////////////////////////////////////////////////////////////
-class event : private noncopyable, public detail::counted_base< unsigned int >
+template< class RttiPolicy >
+class event_base : private noncopyable,
+  public RttiPolicy::base_type< detail::counted_base< unsigned int > >
 {
+  typedef typename RttiPolicy::base_type<
+    detail::counted_base< unsigned int > > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
-    intrusive_ptr< const event > clone() const
+    intrusive_ptr< const event_base > clone() const
     {
-      BOOST_ASSERT( ref_counted() );
-      return intrusive_ptr< const event >( this );
+      BOOST_ASSERT( base_type::ref_counted() );
+      return intrusive_ptr< const event_base >( this );
     }
 
+  protected:
+    //////////////////////////////////////////////////////////////////////////
+    event_base( typename RttiPolicy::id_type id ) : base_type( id ) {}
+};
+
+
+//////////////////////////////////////////////////////////////////////////////
+template< class MostDerived, class RttiPolicy = rtti_policy >
+class event : public RttiPolicy::derived_type<
+  MostDerived, event_base< RttiPolicy > >
+{
   protected:
     //////////////////////////////////////////////////////////////////////////
     event() {}

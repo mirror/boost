@@ -19,10 +19,10 @@ namespace fsm = boost::fsm;
 
 
 
-class EvShutterHalf : public fsm::event {};
-class EvShutterFull : public fsm::event {};
-class EvShutterRelease : public fsm::event {};
-class EvConfig : public fsm::event {};
+class EvShutterHalf : public fsm::event< EvShutterHalf > {};
+class EvShutterFull : public fsm::event< EvShutterFull > {};
+class EvShutterRelease : public fsm::event< EvShutterRelease > {};
+class EvConfig : public fsm::event< EvConfig > {};
 
 
 struct NotShooting;

@@ -26,29 +26,29 @@ namespace detail
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< orthogonal_position_type noOfOrthogonalRegions, class StateList >
-class node_state : public universal_state< StateList >
+template< orthogonal_position_type noOfOrthogonalRegions,
+  class StateList, class RttiPolicy >
+class node_state : public universal_state< StateList, RttiPolicy >
 {
-    typedef universal_state< StateList > base_type;
+  typedef universal_state< StateList, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    node_state()
+    node_state( typename RttiPolicy::id_type id ) : base_type( id )
     {
-      for ( orthogonal_position_type pos = 0; pos < noOfOrthogonalRegions; ++pos )
+      for ( orthogonal_position_type pos = 0; 
+            pos < noOfOrthogonalRegions; ++pos )
       {
         pInnerStates[ pos ] = 0;
       }
     }
 
-    using base_type::set_context;
-
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     void add_inner_state( orthogonal_position_type position,
-                          universal_state< StateList > * pInnerState )
+                          base_type * pInnerState )
     {
       BOOST_ASSERT( ( position < noOfOrthogonalRegions ) &&
                     ( pInnerStates[ position ] == 0 ) );
@@ -67,7 +67,7 @@ class node_state : public universal_state< StateList >
       if ( ( pUnstableState != states.end() ) &&
            ( get_pointer( *pUnstableState ) == this ) )
       {
-        for ( universal_state< StateList > ** pState = &pInnerStates[ 0 ]; 
+        for ( base_type ** pState = &pInnerStates[ 0 ]; 
               pState != &pInnerStates[ noOfOrthogonalRegions ]; ++pState )
         {
           BOOST_ASSERT( *pState == 0 );
@@ -79,16 +79,15 @@ class node_state : public universal_state< StateList >
       else
       {
         // Destroy inner states in the reverse order of construction
-        for ( universal_state< StateList > ** pState =
-                &pInnerStates[ noOfOrthogonalRegions ]; 
-              pState != &pInnerStates[ 0 ]; --pState )
+        for ( base_type ** pState = &pInnerStates[ noOfOrthogonalRegions ]; 
+              pState != &pInnerStates[ 0 ]; )
         {
+          --pState;
           // An inner orthogonal state might have been terminated long before,
           // that's why we have to check for 0 pointers
-          if ( *( pState - 1 ) != 0 )
+          if ( *pState != 0 )
           {
-            ( *( pState - 1 ) )->remove_from_state_list(
-              states, pUnstableState );
+            ( *pState )->remove_from_state_list( states, pUnstableState );
           }
         }
       }
@@ -96,7 +95,7 @@ class node_state : public universal_state< StateList >
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    universal_state< StateList > * pInnerStates[ noOfOrthogonalRegions ];
+    base_type * pInnerStates[ noOfOrthogonalRegions ];
 };
 
 

@@ -42,7 +42,6 @@
 #include <boost/cast.hpp>   // boost::polymorphic_downcast
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT
 
-#include <typeinfo> // std::type_info
 
 
 namespace boost
@@ -66,10 +65,12 @@ struct make_list : public mpl::apply_if<
 using namespace mpl::placeholders;
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Context, class InnerInitial >
-struct state_base_type
+template< class Derived, class Context, class InnerInitial >
+struct simple_state_base_type
 {
   private:
+    typedef typename Context::state_list_type state_list_type;
+    typedef typename Context::rtti_policy_type rtti_policy_type;
     // TODO: Check that position in inner initial list corresponds to
     // orthogonal_position
     typedef typename detail::make_list< InnerInitial >::type
@@ -78,10 +79,15 @@ struct state_base_type
   public:
     typedef typename mpl::apply_if<
       mpl::empty< inner_initial_list >,
-      mpl::identity< leaf_state< typename Context::state_list_type > >,
-      mpl::identity< node_state<
-        mpl::size< inner_initial_list >::type::value,
-        typename Context::state_list_type > > >::type type;
+      mpl::identity< typename rtti_policy_type::
+        template derived_type< Derived, leaf_state<
+          state_list_type,
+          rtti_policy_type > > >,
+      mpl::identity< typename rtti_policy_type::
+        template derived_type< Derived, node_state<
+          mpl::size< inner_initial_list >::type::value,
+          state_list_type,
+          rtti_policy_type > > > >::type type;
 };
 
 
@@ -237,11 +243,11 @@ template< class Derived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
-class simple_state : public detail::state_base_type<
+class simple_state : public detail::simple_state_base_type< Derived,
   typename Context::inner_context_type, InnerInitial >::type
 {
-  typedef typename detail::state_base_type<
-    typename Context::inner_context_type,
+  typedef typename detail::simple_state_base_type<
+    Derived, typename Context::inner_context_type,
     InnerInitial >::type base_type;
 
   public:
@@ -250,7 +256,7 @@ class simple_state : public detail::state_base_type<
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
       orthogonal_position = Context::inner_orthogonal_position );
-    typedef typename context_type::event_ptr_type event_ptr_type;
+    typedef typename context_type::event_base_ptr_type event_base_ptr_type;
 
 
     typedef simple_state my_base;
@@ -281,7 +287,7 @@ class simple_state : public detail::state_base_type<
       return context_impl( static_cast< OtherContext * >( 0 ) );
     }
 
-    void post_event( const event_ptr_type & pEvent )
+    void post_event( const event_base_ptr_type & pEvent )
     {
       top_context().post_event( pEvent );
     }
@@ -303,20 +309,20 @@ class simple_state : public detail::state_base_type<
     
     result discard_event()
     {
-      state_base::reaction_initiated();
+      state_base_type::reaction_initiated();
       return do_discard_event;
     }
     
     result forward_event()
     {
-      state_base::reaction_initiated();
+      state_base_type::reaction_initiated();
       return do_forward_event;
     }
     
     result defer_event()
     {
-      state_base::reaction_initiated();
-      state_base::defer_event();
+      state_base_type::reaction_initiated();
+      state_base_type::defer_event();
       return do_defer_event;
     }
     
@@ -346,7 +352,7 @@ class simple_state : public detail::state_base_type<
     // terminated.
     result terminate()
     {
-      state_base::reaction_initiated();
+      state_base_type::reaction_initiated();
       top_context().terminate( *this );
       return do_discard_event;
     }
@@ -361,7 +367,7 @@ class simple_state : public detail::state_base_type<
       // can be called before the context is set.
       if ( get_pointer( pContext_ ) != 0 )
       {
-        if ( deferred_events() )
+        if ( state_base_type::deferred_events() )
         {
           top_context().release_events( this );
         }
@@ -372,7 +378,7 @@ class simple_state : public detail::state_base_type<
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     // TODO: check that this state really has such an inner orthogonal state
@@ -380,6 +386,10 @@ class simple_state : public detail::state_base_type<
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
       inner_orthogonal_position = 0 );
+
+    typedef typename context_type::state_base_type state_base_type;
+    typedef typename context_type::event_base_type event_base_type;
+    typedef typename context_type::rtti_policy_type rtti_policy_type;
 
     typedef typename context_type::top_context_type top_context_type;
     typedef typename context_type::inner_context_ptr_type context_ptr_type;
@@ -393,9 +403,10 @@ class simple_state : public detail::state_base_type<
 
 
     virtual result react_impl(
-      const event & evt, const std::type_info & eventType )
+      const event_base_type & evt,
+      typename rtti_policy_type::id_type eventType )
     {
-      enable_reaction();
+      state_base_type::enable_reaction();
       typedef detail::make_list< Reactions >::type reaction_list;
       result reactionResult =
         local_react_impl< reaction_list >( evt, eventType );
@@ -410,7 +421,7 @@ class simple_state : public detail::state_base_type<
       return reactionResult;
     }
 
-    virtual detail::state_base * outer_state_ptr() const
+    virtual state_base_type * outer_state_ptr() const
     {
       return outer_state_ptr_impl<
         is_same< top_context_type, Context >::value >();
@@ -588,7 +599,8 @@ class simple_state : public detail::state_base_type<
 
     template< class ReactionList >
     result local_react_impl(
-      const event & evt, const std::type_info & eventType )
+      const event_base_type & evt,
+      typename rtti_policy_type::id_type eventType )
     {
       result reactionResult = mpl::front< ReactionList >::type::react(
         *polymorphic_downcast< Derived * >( this ), evt, eventType );
@@ -605,19 +617,19 @@ class simple_state : public detail::state_base_type<
 
     template<>
     result local_react_impl< no_reactions >(
-      const event &, const std::type_info & )
+      const event_base_type &, typename rtti_policy_type::id_type )
     {
       return do_forward_event;
     }
 
     template< bool isOutermost >
-    detail::state_base * outer_state_ptr_impl() const
+    state_base_type * outer_state_ptr_impl() const
     {
       return get_pointer( pContext_ );
     }
 
     template<>
-    detail::state_base * outer_state_ptr_impl< true >() const
+    state_base_type * outer_state_ptr_impl< true >() const
     {
       return 0;
     }

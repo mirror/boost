@@ -24,19 +24,17 @@ namespace detail
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class StateList >
-class leaf_state : public universal_state< StateList >
+template< class StateList, class RttiPolicy >
+class leaf_state : public universal_state< StateList, RttiPolicy >
 {
-    typedef universal_state< StateList > base_type;
+  typedef universal_state< StateList, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    leaf_state() {}
-
-    using base_type::set_context;
+    leaf_state( typename RttiPolicy::id_type id ) : base_type( id ) {}
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     void set_list_position( typename StateList::iterator listPosition )

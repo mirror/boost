@@ -24,13 +24,16 @@ namespace detail
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class StateList >
-class universal_state : public state_base
+template< class StateList, class RttiPolicy >
+class universal_state : public state_base< RttiPolicy >
 {
-    typedef state_base base_type;
+  typedef state_base< RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    universal_state() {}
+    // The following declarations should be private.
+    // They are only protected because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    universal_state( typename RttiPolicy::id_type id ) : base_type( id ) {}
 
     template< class Context >
     void set_context( orthogonal_position_type position, Context * pContext )
@@ -40,7 +43,7 @@ class universal_state : public state_base
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     virtual void remove_from_state_list(

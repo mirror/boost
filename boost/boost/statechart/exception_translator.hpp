@@ -23,11 +23,12 @@ namespace fsm
 
 
 //////////////////////////////////////////////////////////////////////////////
-class exception_thrown : public event {};
+class exception_thrown : public event< exception_thrown > {};
 
 
 
 //////////////////////////////////////////////////////////////////////////////
+template< class ExceptionEvent = exception_thrown >
 struct exception_translator
 {
   template< class Action, class ExceptionEventHandler >
@@ -42,7 +43,7 @@ struct exception_translator
     }
     catch ( ... )
     {
-      if ( !eventHandler( exception_thrown() ) )
+      if ( !eventHandler( ExceptionEvent() ) )
       {
         throw;
       }

@@ -77,6 +77,8 @@ const unsigned int noOfBits = 6;
 #include <ctime>
 
 #include "UniqueObject.hpp"
+#include "IntegerRttiPolicy.hpp"
+
 
 
 namespace fsm = boost::fsm;
@@ -88,7 +90,8 @@ using namespace mpl::placeholders;
 const unsigned int noOfStates = 1 << noOfBits;
 const unsigned int noOfTransitions = noOfStates * noOfBits;
 
-const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 31 * 127;
+// common prime factors of 2^n-1 for n in [1,8]
+const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
 const unsigned int noOfLaps = noOfEvents / ( noOfStates - 1 );
 
 unsigned long eventsSentTotal = 0;
@@ -113,26 +116,20 @@ void DisplayBits( unsigned int number )
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int bitNo >
-class EvFlipBit : public fsm::event {};
-const EvFlipBit< 0 > flip0;
-const EvFlipBit< 1 > flip1;
-const EvFlipBit< 2 > flip2;
-const EvFlipBit< 3 > flip3;
-const EvFlipBit< 4 > flip4;
-const EvFlipBit< 5 > flip5;
-const EvFlipBit< 6 > flip6;
-const EvFlipBit< 7 > flip7;
-const EvFlipBit< 8 > flip8;
-const EvFlipBit< 9 > flip9;
-const fsm::event * const pFlipBitEvents[] =
-  { &flip0, &flip1, &flip2, &flip3, &flip4, &flip5, &flip6, &flip7, &flip8, &flip9 };
+class EvFlipBit :
+  public fsm::event< EvFlipBit< bitNo >, IntegerRttiPolicy<> > {};
 
+const fsm::event_base< IntegerRttiPolicy<> > * pFlipBitEvents[ 10 ] = { 0 };
+
+class ExceptionThrown :
+  public fsm::event< ExceptionThrown, IntegerRttiPolicy<> > {};
 
 template< unsigned int stateNo >
 class BitState;
 //////////////////////////////////////////////////////////////////////////////
 class BitMachine : public fsm::state_machine< BitMachine, BitState< 0 >,
-  fsm::exception_translator, boost::fast_pool_allocator< int > > {};
+  boost::fast_pool_allocator< int >,
+  fsm::exception_translator< ExceptionThrown >, IntegerRttiPolicy<> > {};
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -180,7 +177,8 @@ class IDisplay
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int stateNo >
 class BitState : public fsm::simple_state<
-  BitState< stateNo >, BitMachine, typename FlipTransitionList< stateNo >::type >, 
+  BitState< stateNo >, BitMachine,
+  typename FlipTransitionList< stateNo >::type >, 
   public IDisplay, public UniqueObject< BitState< stateNo > >
 {
   public:
@@ -246,6 +244,28 @@ int main( int argc, char * argv[] )
   argv;
 
   BOOST_ASSERT( noOfBits <= 10 );
+
+  const EvFlipBit< 0 > flip0;
+  const EvFlipBit< 1 > flip1;
+  const EvFlipBit< 2 > flip2;
+  const EvFlipBit< 3 > flip3;
+  const EvFlipBit< 4 > flip4;
+  const EvFlipBit< 5 > flip5;
+  const EvFlipBit< 6 > flip6;
+  const EvFlipBit< 7 > flip7;
+  const EvFlipBit< 8 > flip8;
+  const EvFlipBit< 9 > flip9;
+
+  pFlipBitEvents[ 0 ] = &flip0;
+  pFlipBitEvents[ 1 ] = &flip1;
+  pFlipBitEvents[ 2 ] = &flip2;
+  pFlipBitEvents[ 3 ] = &flip3;
+  pFlipBitEvents[ 4 ] = &flip4;
+  pFlipBitEvents[ 5 ] = &flip5;
+  pFlipBitEvents[ 6 ] = &flip6;
+  pFlipBitEvents[ 7 ] = &flip7;
+  pFlipBitEvents[ 8 ] = &flip8;
+  pFlipBitEvents[ 9 ] = &flip9;
 
   std::cout << "boost::fsm BitMachine example\n";
   std::cout << "Machine configuration: " << noOfStates <<

@@ -24,7 +24,7 @@ namespace mpl = boost::mpl;
 
 
 
-struct EvInFocus : public fsm::event {};
+struct EvInFocus : public fsm::event< EvInFocus > {};
 
 struct Focusing;
 struct Shooting : public fsm::simple_state< Shooting, Camera,

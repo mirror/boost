@@ -24,12 +24,14 @@
   <dt><a href="#why">Why yet another state machine framework?</a></dt>
   <dt><a href="#statelocalstorage">State-local storage</a></dt>
   <dt><a href="#dynamicconfigurability">Dynamic configurability</a></dt>
-  <dt><a href="#resourceusage">Resource usage</a></dt>
-  <dt><a href="#determinism">Determinism</a></dt>
   <dt><a href="#exceptionhandling">Error handling</a></dt>
   <dt><a href="#useractions">User actions: Member functions vs. function objects</a></dt>
-  <dt><a href="#memorymanagement">Memory management</a></dt>
+  <dt><a href="#speedversusscalabilitytradeoffs">Speed versus scalability tradeoffs</a></dt>
+  <dt><a href="#memorymanagement">Memory management customization</a></dt>
+  <dt><a href="#rtticustomization">RTTI customization</a></dt>
   <dt><a href="#doubledispatch">Double dispatch</a></dt>
+  <dt><a href="#resourceusage">Resource usage</a></dt>
+  <dt><a href="#limitations">Limitations</a></dt>
 </dl>
 <h2><a name="introduction"></a>Introduction</h2>
 <p>Most of the design decisions made during the development of this library are the result of the following requirements.</p>
@@ -52,12 +54,14 @@
   </li>
   <li>produce a customizable reaction when a C++ exception is propagated from user code.</li>
   <li>support sequential and concurrent state machines and leave it to the 
-  end-user which thread a concurrent state machine will run in.</li>
-  <li>support the development of arbitrarily large and complex state machines. This means that multiple developers should be able to work on
+   
+  user which thread a concurrent state machine will run in.</li>
+  <li>support the development of arbitrarily large and complex state machines. Multiple developers should be able to work on
     the same state machine simultaneously.</li>
   <li>allow the user to customize all resource management so that the library could be used for applications with hard real-time
     requirements.</li>
   <li>enforce as much as possible at compile time. Specifically, invalid state machines should not compile.</li>
+  <li>offer reasonable performance for a wide range of applications.</li>
 </ol>
 <h2><a name="why"></a>Why yet another state machine framework?</h2>
 <p>Before I started to develop this library I had a look at the following frameworks:</p>
@@ -76,11 +80,13 @@
 <p>boost::fsm currently satisfies all requirements except for 3 (history not yet implemented) and 5 (support for threading not yet
 implemented).</p>
 <h2><a name="statelocalstorage"></a>State-local storage</h2>
-<p>This not yet widely known state machine feature is enabled by the fact that every state in boost::fsm is represented by a class. Upon
-state-entry, an object of the class is constructed and the object is later destructed when the state machine exits the state. Any data that
-is useful only as long as the machine resides in the state can (and should) thus be a member of the state. This feature paired with the
-ability to spread a state machine over several translation units makes it possible to have multiple developers simultaneously working on the
-same state machine. Moreover, local changes to the machine layout no longer lead to recompilation of the whole machine.&nbsp;</p>
+<p>This not yet widely known state machine feature is enabled by the fact that every state in boost::fsm 
+is represented by a class. Upon state-entry, an object of the class is 
+constructed and the object is later destructed when the state machine exits the 
+state. Any data that is useful only as long as the machine resides in the state 
+can (and should) thus be a member of the state. This feature paired with the 
+ability to spread a state machine over several translation units makes possible 
+the virtually unlimited scalability of boost::fsm.&nbsp;</p>
 <p>In most existing FSM frameworks the whole state machine runs in one  environment (context). That is, all resource handles and
 variables local to the state machine are stored in one place (normally as members of the class that also derives from some state machine
 base class). For large state machines this often leads to the class having a huge number of data members most of which are needed only
@@ -89,17 +95,18 @@ recompilations of the whole state machine.&nbsp;</p>
 <h2><a name="dynamicconfigurability"></a>Dynamic configurability</h2>
 <h3>Two types of state machines</h3>
 <ul>
-  <li>A state machine framework supports dynamic configurability if and only if the whole layout (only states and transitions, actions are
-    still specified with normal C++ code) of a state machine can be defined at runtime. That is, data only available at runtime can be used
-    to build arbitrarily large and arbitrarily complex machines. See &quot;A Multiple Substring Search Algorithm&quot; by Moishe Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example (unfortunately not available online). Such machines almost
+  <li>A state machine framework supports dynamic configurability if  the whole layout of a state machine can be defined at runtime 
+  (&quot;layout&quot; refers to states and transitions only, actions are still specified 
+  with normal C++ code). That is, data only available at runtime can be used
+    to build  arbitrarily complex machines. See &quot;A Multiple Substring Search Algorithm&quot; by Moishe Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example (unfortunately not available online). Such machines almost
     always get away with a simple state model (no hierarchical states, no orthogonal states, no entry and exit actions, no history) because
-    the state machine layout is <b>computed by an algorithm</b> rather than designed by a human.</li>
+    the  machine layout is <b>computed by an algorithm</b> rather than designed by a human.</li>
   <li>On the other side are human-designed state machines, exploiting the standard features as necessary.
     Naturally, the layout of such machines is known at compile time.</li>
 </ul>
 <h3>Why not use a dynamically configurable FSM library for all state machines?</h3>
 <p>One might argue that a dynamically configurable FSM framework is all one ever needs because <b>any</b> state machine can be implemented
-with it. However, due to its nature such a framework has a number of disadvantages when used to implement static state machines:</p>
+with it. However, due to its nature such a framework has a number of disadvantages when used to implement static  machines:</p>
 <ul>
   <li>No compile-time optimizations and validations can be made. For example, boost::fsm determines the innermost common outer state (aka
     LCA, least common ancestor) of the transition-source and destination state at compile time. Moreover, compile time checks ensure that the
@@ -116,144 +123,6 @@ It is for these reasons, that boost::fsm was built from ground up to <b>not</b> 
 that it's impossible to dynamically shape a machine implemented with this library. For example, guards can be used to make different
 transitions depending on input only available at runtime. However, such layout changes will always be limited to what can be foreseen before
 compilation. A somewhat related library, the boost::spirit parser framework, allows for roughly the same runtime configurability.
-<h2><a name="resourceusage"></a>Resource usage</h2>
-<p>Even a complex state machine should typically not use more than a few hundred 
-bytes of memory (assuming empty event queues). Benchmarks with the BitMachine 
-example compiled with MSVC7.1 (single threaded), running on a mobile AMD Athlon XP 1800, 
-produced the 
-following results:</p>
-<table border="2" cellspacing="1" width="100%" id="AutoNumber1">
-  <tr>
-    <td width="34%">Machine configuration</td>
-    <td width="33%">2. Event dispatch &amp; transition time [µs], customized memory 
-    management</td>
-    <td width="33%">3. Event dispatch &amp; transition time [µs], normal memory 
-    management</td>
-  </tr>
-  <tr>
-    <td width="34%">2 states, 2 transitions (1 bit)</td>
-    <td width="33%">1.0</td>
-    <td width="33%">1.8</td>
-  </tr>
-  <tr>
-    <td width="34%">4 states, 8 transitions (2 bits)</td>
-    <td width="33%">1.3</td>
-    <td width="33%">2.1</td>
-  </tr>
-  <tr>
-    <td width="34%">8 states, 24 transitions (3 bits)</td>
-    <td width="33%">1.5</td>
-    <td width="33%">2.3</td>
-  </tr>
-  <tr>
-    <td width="34%">16 states, 64 transitions (4 bits)</td>
-    <td width="33%">1.8</td>
-    <td width="33%">2.5</td>
-  </tr>
-  <tr>
-    <td width="34%">32 states, 160 transitions (5 bits)</td>
-    <td width="33%">2.0</td>
-    <td width="33%">2.8</td>
-  </tr>
-</table>
-<p>BitMachine is not a particularly typical state machine so these 
-numbers give only rough guidance.
-Interestingly, customization of memory management improved the times by only 
-30~45%. This might be different 
-on other platforms.</p>
-<h3>You don't pay for what you don't use</h3>
-<p>Almost:</p>
-<ul>
-  <li>The current <b>interface</b> inevitably (I believe) causes the following slight overheads for supporting some features <b>even if they are not used</b>:<ul>
-    <li>State-local storage: A few more function calls are made (most of which will probably be optimized away).</li>
-    <li>Orthogonal states: All non-leaf states (not only the orthogonal ones) need to store one more pointer and there is a very small increase in code size (one additional virtual function <b>per executable</b>). Bookkeeping is also slightly more complex.</li>
-  </ul>I think this will have a negligible effects on 
-runtime performance (memory acquisition speed is largely independent of the size 
-of the requested blocks as long as the blocks are so small) and memory footprint 
-(the size of the executable will grow much faster with increasing state machine 
-complexity than the memory allocated at runtime).
-  </li>
-  <li>Moreover, the current <b>implementation</b> has potential for optimization:<ul>
-    <li>To exit any state (no matter whether 
-  leaf or non-leaf) one virtual function call is  needed. A better 
-  implementation could make all of the non-leaf ones non-virtual. This overhead 
-  may become significant for highly hierarchical machines.</li>
-    <li>Several functions in the <code>state_machine</code> 
-    class template could be factored out into non-template base classes, 
-    reducing code size.</li>
-  </ul>
-  </li>
-</ul>
-<h3>Feature costs</h3>
-<ul>
-  <li>State-local storage: Obviously state size will be increased by whatever state-local members the user 
-  adds.</li>
-  <li>Hierarchical states: During event dispatch, the framework first tries to send the event to the innermost current state, if the
-    innermost state cannot consume it (because of a guard or because there is no 
-  reaction for the event), the framework tries to send it to the
-    innermost states' immediate outer state. If the outer state cannot consume it either, it is sent to the immediate outer states’ outer
-    state and so on until an outermost state is reached. A chain of responsibility originating at the current innermost state is thus
-    formed.<br>
-    The cost C (taking into account dynamic casts and virtual calls only) to dispatch one event can be formalized as follows:<br>
-    <br>
-    C = (d + 1) <code>dynamic_cast</code>s + (g + 2) <code>virtual</code> calls<br>
-    <br>
-    where<br>
-    <br>
-    d = the “level” of the state where the transition originates seen from the leaf state. d=0 for the leaf state.<br>
-    g = the number of “failed” guards, g &lt;= d<br>
-    <br>
-    Examples:
-    <ul>
-      <li>The leaf state consumes the event (always true for &quot;flat&quot; machines) -&gt; d = 0, g = 0&nbsp;</li>
-      <li>The immediate outer state of the leaf state consumes -&gt; d = 1, g = 0 or 1</li>
-      <li>Consider the following state configuration:<br>
-        <br>
-        <img border="0" src="DispatchCost.gif" width="332" height="305"><br>
-        <br>
-        E is the current state and an event EvX is currently being processed. The guard y() prevents the transition originating at D -&gt;
-        d=3, g=1</li>
-    </ul>
-  </li>
-  <li>Orthogonal states:<ul>
-      <li>Each orthogonal state object needs to store one additional pointer per 
-      orthogonal region. Code size is increased slightly (a few additional 
-      virtual functions <b>per executable</b>).</li>
-      <li>As a state can now have an arbitrary number of orthogonal inner states, any number of innermost states can be current at a given
-        time. A tree rather than a chain of responsibility is thus formed. Event processing always starts with some leaf and works its way
-        up to the root, before it continues with the next leaf. Each visited leaf and node increases d and maybe g. The total 
-      dispatch cost can be
-        calculated as outlined above.</li>
-      <li>If there is more than one current leaf state before a transition, one additional virtual call for each exited state is made.</li>
-    </ul>
-  </li>
-  <li>Deferring and posting events: For performance reasons and because sequential state machines often 
-  do not need to queue events, it is possible to operate such machines entirely 
-  with stack-allocated events. However, as soon as events need to be 
-  deferred and/or posted there is no way around queuing and  allocation with <code>new</code>. The 
-  interface of <code>simple_state::post_event</code> enforces the use of 
-  <code>boost::intrusive_ptr</code> at compile time. There is no way to do the same for 
-  deferred events because allocation and deferral happen in completely unrelated 
-  places. Of course, a &quot;wrongly&quot; allocated event could easily be transformed 
-  into one allocated with <code>new</code> and pointed to by <code>boost::intrusive_ptr</code> with a virtual clone() function. However, in my experience, 
-  event deferral is needed only very rarely in sequential state machines. 
-  Moreover, <code>fsm::concurrent_state_machine</code> enforces the use of 
-  <code>boost::intrusive_ptr</code> at compile time so most users won't run into this 
-  limitation. I 
-  therefore rejected the idea because of the attached code size overhead.</li>
-</ul>
-<h2><a name="determinism"></a>Determinism</h2>
-<p>For applications with hard real-time requirements it is crucial that no operation will take an indeterminable amount of time. The
-following operations are potentially non-deterministic:</p>
-<ul>
-  <li>Memory management. All heap memory operations (<code>operator new</code>, <code>operator delete</code>, <code>malloc</code>, <code>free</code>,
-    etc.) are notoriously non-deterministic. As outlined <a href="#memorymanagement">below</a>, boost::fsm allows for the customization of
-    all memory management.</li>
-  <li><code>dynamic_cast</code>: Whether this operation is deterministic or not depends on your platform. On some it is, on others it is
-    not. However, I very much expect that compilers will use a deterministic implementation for real-time platforms.<br>
-    <b><font color="#FF0000">If your compiler does not use a deterministic <code>dynamic_cast</code> implementation and you have hard
-    real-time requirements then boost::fsm is definitely not for you.</font></b></li>
-</ul>
 <h2><a name="exceptionhandling"></a>Error handling</h2>
 <p>There is not a single word about error handling in the UML state machine semantics specifications. Moreover, most existing 
 FSM solutions
@@ -278,7 +147,7 @@ action would have to post an appropriate error event and set a global error vari
 have to check the
 error variable before doing anything. After all actions have completed (by doing nothing!), the previously posted error event would 
 have to be
-processed what would lead to the remedy action begin executed. Please note that it is not sufficient to simply push the error event into the
+processed what would lead to the remedy action being executed. Please note that it is not sufficient to simply push the error event into the
 end of the queue as other events could still be pending. Instead, the error event has absolute priority and would have to be dealt with
 immediately.</p>
 <p>So, to be safe, programmers would have to encapsulate the code of <b>every</b> action in <code>if ( !error ) { /* action */ }</code>
@@ -289,7 +158,8 @@ Writing all this
 boiler-plate code is simply boring and quite unnecessary.</p>
 <h3>Error handling support in boost::fsm</h3>
 <ul>
-  <li>C++ exceptions are used for all error handling. Except from exit-actions (mapped to state-destructors and exceptions should never be
+  <li>C++ exceptions are used for all error handling. Except from exit-actions (mapped to state-destructors and exceptions should 
+  almost never be
     propagated from destructors), exceptions can be propagated from all user functions.</li>
   <li>A customizable per state machine policy specifies how to convert all exceptions propagated from user code. Out of the box, a <code>
   exception_thrown</code> event
@@ -312,21 +182,118 @@ boiler-plate code is simply boring and quite unnecessary.</p>
   </li>
 </ul>
 <h2><a name="useractions"></a>User actions: Member functions vs. function objects</h2>
-With boost::fsm, all user-supplied functions (<code>react</code> functions, entry-, exit- and transition-actions) must be class members. The reasons for
+With boost::fsm, all user-supplied functions (<code>react</code> member functions, entry-, exit- and transition-actions) must be class members. The reasons for
 this are as follows:
 <ul>
   <li>The concept of state-local storage mandates that state-entry and state-exit actions (mapped to constructors and destructors) are
     implemented as members.</li>
-  <li><code>react</code> functions and transition actions often access state-local data. So, it is most natural to implement these functions as members of
+  <li><code>react</code> member functions and transition actions often access state-local data. So, it is most natural to implement these functions as members of
     the class the data of which the functions will operate on anyway.</li>
 </ul>
-<h2><a name="memorymanagement"></a>Memory management</h2>
+<h2><a name="speedversusscalabilitytradeoffs"></a>Speed versus scalability tradeoffs</h2>
+<p>Quite a bit of effort has gone into making boost::fsm scaleable <b>and</b> 
+keeping it fast for small simple machines. While I believe it should perform 
+reasonably in most applications, the scalability does not come for free. Small, carefully handcrafted state machines will thus easily outperform equivalent boost::fsm machines. To get a picture of how big the gap 
+is I implemented a simple benchmark in the BitMachine example. The 
+Handcrafted example is a handcrafted variant of the 1-bit-BitMachine.</p>
+<p>I tried 
+to create a fair but somewhat unrealistic <b> worst-case</b> scenario:</p>
+<ul>
+  <li>For both machines exactly one object of the only event is allocated before 
+  starting the test. This same object is then sent to the machines over and 
+  over.</li>
+  <li>The Handcrafted machine employs GOF-visitor double dispatch. The states 
+  are preallocated so that event dispatch &amp; transition amounts to nothing more 
+  than two virtual calls and one pointer assignment.</li>
+</ul>
+<p>The Benchmarks - compiled with MSVC7.1 (single threaded), running on a mobile AMD Athlon XP 1800 
+- 
+produced the 
+following results:</p>
+<ul>
+  <li>Handcrafted: 20 nanoseconds to dispatch one event and make the resulting 
+  transition.</li>
+  <li>Fully customized 1-bit-BitMachine: 250 nanoseconds to dispatch one event 
+  and make the resulting transition.</li>
+</ul>
+<p>So the boost::fsm machine is just over one order of magnitude slower than the 
+handcrafted machine. Although this is a big difference I still think it will
+not be noticeable in most&nbsp;real-world applications. No matter whether an
+application uses handcrafted or boost::fsm machines it will...</p>
+
+<ul>
+  <li>almost never run into a situation where a state machine is
+    swamped with as many events as in the benchmarks. Unless a
+    state machine is abused for parsing, it will typically spend a
+    good deal of time waiting for events.</li>
+  <li>almost always allocate events with <code>new</code> and destroy them after consumption.
+    This will add quite a few cycles, even if event memory management is
+    customized.</li>
+  <li>often run state machines in their own threads. This adds event queuing and locking overhead.</li>
+  <li>often use state machines that employ orthogonal states and other advanced
+    features. This forces the handcrafted machines to use a more adequate and
+    more time-consuming book-keeping.&nbsp;</li>
+</ul>
+<p>So, in real-world applications event dispatch and transition not normally constitutes a bottleneck and the gap between handcrafted and boost::fsm machines
+also becomes much smaller than in the worst-case scenario.</p>
+<p>BitMachine measurements with more states and with different 
+levels of optimization:</p>
+
+<table border="3" cellspacing="1" style="border-collapse: collapse" width="100%" id="AutoNumber2">
+  <tr>
+    <td width="25%" rowspan="2">Machine configuration<br>
+    # states / # outgoing transitions per state</td>
+    <td width="75%" colspan="3">Event dispatch &amp; transition time [nanoseconds]</td>
+  </tr>
+  <tr>
+    <td width="25%">Out of the box</td>
+    <td width="25%">Customized memory management</td>
+    <td width="25%">Customized memory management &amp; RTTI</td>
+  </tr>
+  <tr>
+    <td width="25%">2 / 1</td>
+    <td width="25%">1130</td>
+    <td width="25%">330</td>
+    <td width="25%">250</td>
+  </tr>
+  <tr>
+    <td width="25%">4 / 2</td>
+    <td width="25%">1350 (reproducible anomaly!)</td>
+    <td width="25%">390</td>
+    <td width="25%">260</td>
+  </tr>
+  <tr>
+    <td width="25%">8 / 3</td>
+    <td width="25%">1240</td>
+    <td width="25%">460</td>
+    <td width="25%">270</td>
+  </tr>
+  <tr>
+    <td width="25%">16 / 4</td>
+    <td width="25%">1300</td>
+    <td width="25%">530</td>
+    <td width="25%">290</td>
+  </tr>
+  <tr>
+    <td width="25%">32 / 5</td>
+    <td width="25%">1490</td>
+    <td width="25%">650</td>
+    <td width="25%">350</td>
+  </tr>
+  <tr>
+    <td width="25%">64 / 6</td>
+    <td width="25%">1630</td>
+    <td width="25%">830</td>
+    <td width="25%">440</td>
+  </tr>
+</table>
+<h2><a name="memorymanagement"></a>Memory management customization</h2>
 <p>Out of the box, boost::fsm allocates all internal data on the normal 
 heap. This should be satisfactory for applications where all the following prerequisites are met:</p>
 <ul>
   <li>There are no deterministic reaction time (hard real-time) requirements.</li>
-  <li>The machine will typically not process more than a few events per second. Of course, this figure depends on your platform. A typical
-    desktop PC could easily cope with thousands of events per second.</li>
+  <li>The application will typically not process more than a few events per second. Of course, this figure depends on your platform. A typical
+    desktop PC could easily cope with more than 50000 events per second.</li>
   <li>The application will never run long enough for heap fragmentation to become a problem. This is of course an issue for all long running
     programs not only the ones employing boost::fsm. However, it should be noted that with this library fragmentation problems could show up
     earlier than with traditional FSM frameworks.</li>
@@ -334,7 +301,8 @@ heap. This should be satisfactory for applications where all the following prere
 <p>Should a system not meet any of these prerequisites customization of all memory management (not just boost::fsm's) should be
 considered. This library supports this as follows:</p>
 <ul>
-  <li>By passing a class offering a <code>std::allocator</code> interface as the last <code>state_machine</code> class template parameter. The <code>rebind</code> 
+  <li>By passing a class offering a <code>std::allocator</code> interface for 
+  the <code>Allocator</code> <code>state_machine</code> class template parameter. The <code>rebind</code> 
   allocator member template is used 
   to customize memory allocation of the internal containers.</li>
   <li>By replacing the <code>simple_state</code>, <code>state</code> and <code>event</code> class templates with ones that have a customized
@@ -350,17 +318,38 @@ that a) there is at most one object of a particular state and b) this object is
 always constructed, accessed and destructed by one and the same thread. We can 
 exploit these facts in a much simpler (and faster) <code>new</code>/<code>delete</code> 
 implementation (for example, see UniqueObject.hpp in the BitMachine example). 
-However, this is only possible as long as we have the freedom to overload memory management for 
-every single state class.</p>
+However, this is only possible as long as we have the freedom to customize memory management for 
+ 
+state classes separately.</p>
+<h2><a name="rtticustomization"></a>RTTI customization</h2>
+<p>boost::fsm uses RTTI for event dispatch and <code>state_downcast&lt;&gt;()</code>. 
+By default, native <code>typeid</code> is used but this can be changed by passing a 
+different class as the <code>RttiPolicy</code> parameter to the <code>state_machine</code> and <code>event</code> class 
+templates (see the BitMachine example, where RTTI is implemented with integers). 
+This makes event dispatch slightly faster and allows users to turn off C++ RTTI 
+to cut down on executable size (turning off C++ RTTI precludes usage of 
+<code>state_cast&lt;&gt;()</code>). By the way, I'm not particularly happy with the 
+interface of <code>rtti_policy</code> so suggestions for improvements are <b>very</b> welcome.</p>
 <h2><a name="doubledispatch"></a>Double dispatch</h2>
 <p>At the heart of every state machine lies an implementation of double dispatch. This is due to the fact that the incoming event <b>and</b>
-the current state define exactly which reaction the state machine will produce. <a
-href="http://www.objectmentor.com/resources/articles/acv.pdf">Acyclic visitor</a> was chosen for boost::fsm. The following alternatives were
-considered but rejected for their bad scalability:</p>
+the current state define exactly which reaction the state machine will produce. 
+For each event dispatch, boost::fsm uses one virtual call followed by a linear 
+search for the appropriate reaction, using one RTTI comparison per reaction. The following alternatives were
+considered but rejected:</p>
 <ul>
+  <li> <a
+href="http://www.objectmentor.com/resources/articles/acv.pdf">Acyclic visitor</a>:
+    This double-dispatch variant satisfies all scalability requirements but
+    performs badly due to costly inheritance tree cross-casts. Moreover, a state
+    must store one v-pointer for <b>each</b> reaction what slows down
+    construction and makes memory management customization inefficient. In
+    addition, C++ RTTI must inevitably be turned on, with negative effects on
+    executable size. boost::fsm originally employed acyclic visitor and was
+    about 4 times slower than it is now. The speed might be better on
+    other platforms but the other negative effects will remain.</li>
   <li><a href="http://www.isbiel.ch/~due/courses/c355/slides/patterns/visitor.pdf">GOF Visitor</a>: The GOF Visitor pattern inevitably makes
     the whole machine depend upon all events. That is, whenever a new event is added there is no way around recompiling the whole state
-    machine.</li>
+    machine. This is contrary to the scalability requirements.</li>
   <li>Two-dimensional array of function pointers: To satisfy requirement 6, it should be possible to spread a single boost::fsm state
     machine over several translation units. This however means, that the dispatch table must be filled at runtime and the different
     translation units must somehow make themselves &quot;known&quot;, so that their part of the state machine can be added to the table.
@@ -368,9 +357,64 @@ considered but rejected for their bad scalability:</p>
     several translation units could employ table-based double dispatch lies with the user. The programmer(s) would somehow have to <b>manually</b>
     tie together the various pieces of the state machine. Not only does this scale badly but is also quite error-prone.</li>
 </ul>
+<h2><a name="resourceusage"></a>Resource usage</h2>
+<h3>Memory</h3>
+<p>On a 32-bit box, one empty state typically needs less than 50 bytes of
+memory. Even <b>very</b> complex machines will usually have less than 20
+simultaneously current states so just about every machine should run with less
+than one kilobyte of memory (not counting event queues). Obviously, the
+per-machine memory footprint will be offset by whatever state-local members the
+user adds.</p>
+<h3>Processor cycles</h3>
+<p>The following ranking should give a rough picture of which boost::fsm 
+function will consume how many cycles:</p>
+<ol>
+  <li><code>state_cast&lt;&gt;</code>: By far the most cycle-consuming feature.
+    Searches linearly for a 
+  suitable state, using one <code>dynamic_cast</code> per visited state.</li>
+  <li>State entry and exit: Profiling of the fully optimized 
+  1-bit-BitMachine suggested that about 100ns of the 250ns total are spent 
+  destructing the exited state and constructing the entered state. Obviously, 
+  transitions where the innermost common outer state is &quot;far&quot; from the leaf states 
+  and/or with lots of orthogonal states can easily cause the destruction and 
+  construction of quite a few states leading to significant amounts of time 
+  spent for a transition.</li>
+  <li><code>state_downcast&lt;&gt;</code>: Searches linearly for the requested
+    state, using one virtual call 
+  and one RTTI comparison per visited state.</li>
+  <li>Event dispatch: One virtual call followed by a linear search for a 
+  suitable reaction, using one RTTI comparison per visited reaction.</li>
+  <li>Orthogonal states: One additional virtual call for each exited state <b>if</b> 
+  there is more than one current leaf state before a transition. It should also 
+  be noted that the worst-case
+    event dispatch&nbsp; time is
+    multiplied in the presence of orthogonal states. For example, if two
+    orthogonal leaf states are added to a given current state configuration, the
+    worst-case time  is tripled.</li>
+</ol>
+<h2><a name="limitations"></a>Limitations</h2>
+<ul>
+  <li>Deferring and posting events: For performance reasons and because sequential state machines often 
+  do not need to queue events, it is possible to operate such machines entirely 
+  with stack-allocated events. However, as soon as events need to be 
+  deferred and/or posted there is no way around queuing and  allocation with <code>new</code>. The 
+  interface of <code>simple_state::post_event</code> enforces the use of 
+  <code>boost::intrusive_ptr</code> at compile time. But there is no way to do the same for 
+  deferred events because allocation and deferral happen in completely unrelated 
+  places. Of course, a &quot;wrongly&quot; allocated event could easily be transformed 
+  into one allocated with <code>new</code> and pointed to by <code>boost::intrusive_ptr</code> with a virtual <code>clone()</code> 
+  function. However, in my experience, event deferral is needed only very rarely 
+  in sequential state machines and the concurrent  variant will enforce the use of 
+  <code>boost::intrusive_ptr</code> anyway. So, most users won't run into this 
+  limitation  and I 
+   
+  rejected the <code>clone()</code> idea because it could cause inefficiencies 
+  casual users wouldn't be aware of. In addition, users not needing event deferral 
+  would nevertheless pay with increased code size.</li>
+</ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13989" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->30 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13973" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. All Rights Reserved.</i></p>
 </body>
 </html>

@@ -27,7 +27,8 @@
   <dd><a href="#definingstatesandevents">Defining states and events</a></dd>
   <dd><a href="#addingreactions">Adding reactions</a></dd>
   <dd><a href="#statelocalstorage">State-local storage</a></dd>
-  <dd><a href="#statequeries">State queries</a></dd>
+  <dd><a href="#gettingstateinformationoutofthemachine">Getting state 
+  information out of the machine</a></dd>
   <dt><a href="#adigitalcamera">A digital camera</a></dt>
   <dd><a href="#spreadingastatemachineovermultipletranslationunits">Spreading a state machine over multiple translation units</a></dd>
   <dd><a href="#guardsjunctionsandchoicepoints">Guards, junctions and choice points</a></dd>
@@ -80,7 +81,8 @@ calling <code>initiate()</code>, which leads to the <code>Greeting</code> state 
 object is destroyed what automatically exits the <code>Greeting</code> state.</p>
 <p>A few remarks:</p>
 <ul>
-  <li>boost::fsm makes heavy use of the curiously recurring template pattern. The deriving class must always be passed as the first
+  <li>boost::fsm makes heavy use of the curiously recurring template pattern. 
+  The deriving class must always be passed as the first
     parameter to the base class template.</li>
   <li>The machine is not yet running after construction. We start it by calling <code>initiate()</code>.</li>
   <li>All states reside in a context. For the moment, this context is the state machine. That's why <code>Machine</code> is passed as the
@@ -148,8 +150,7 @@ int main()
 <ul>
   <li>The <code>simple_state</code> class template accepts up to four parameters.
     <ul>
-      <li>The third parameter specifies reactions (explained in due course). Because there aren't any yet, we pass <code>fsm::no_reactions</code>
-        (which is also the default).</li>
+      <li>The third parameter specifies reactions (explained in due course). Because there aren't any yet, we pass <code>fsm::no_reactions</code>, which is also the default.</li>
       <li>The fourth parameter specifies the inner initial state, if there is one.</li>
     </ul>
   </li>
@@ -182,11 +183,11 @@ int main()
 </b>  <b>myWatch.process_event( EvReset() );
 </b>  return 0;
 }</pre>
-<p>Of course, a state can define an arbitrary number of reactions. That's why we have to put them into an <code>mpl::list&lt;&gt;</code>
+<p>A state can define an arbitrary number of reactions. That's why we have to put them into an <code>mpl::list&lt;&gt;</code>
 as soon as there is more than one of them (see 
 <a href="#specifyingmultiplereactionsforastate">later</a>).<br>
 Now we have all the states and all the transitions in place and a number of events
-are also sent to the stop watch. The machine will dutifully make the transitions we would expect, but no actions are executed yet.</p>
+are also sent to the stop watch. The machine dutifully makes the transitions we would expect, but no actions are executed yet.</p>
 <h3><a name="statelocalstorage"></a>State-local storage</h3>
 <p>Next we'll make the stop watch actually measure time. Depending on the state the stop watch is in, we need different variables:</p>
 <ul>
@@ -231,10 +232,13 @@ struct Running : public fsm::simple_state&lt; Running, Active,
 <p>Similar to when a derived class object accesses its base class portion, <code>context&lt;&gt;()</code> is used to gain access to a direct
 or indirect outer state object. The same function could be used to access the state machine (here <code>context&lt; StopWatch &gt;()</code>).
 The rest should be mostly self-explanatory. The machine now measures the time, but we cannot yet retrieve it from the main program.</p>
-<h3><a name="statequeries"></a>State queries</h3>
-<p>Sometimes we need to be able to test whether a machine is in a particular state. That's why the <code>state_machine</code> class template
-offers the <code>current_state&lt;&gt;()</code> function. The semantics are very similar to the ones of <code>dynamic_cast</code>. That is, when we call <code>myWatch.current_state&lt; Stopped &gt;()</code> <b>and</b>
-the machine is currently in this state, we get a reference to the <code>Stopped</code> state. Otherwise <code>std::bad_cast</code> is
+<h3><a name="gettingstateinformationoutofthemachine"></a>Getting state 
+information out of the machine</h3>
+<p>To retrieve the measured time, we need a mechanism to get state information 
+out of the machine. With our current machine design there are two ways to do 
+that. For the sake of simplicity we use the less efficient one: <code>state_cast&lt;&gt;()</code>. As the name suggests, the semantics are very similar to the ones of <code>dynamic_cast</code>. 
+For example, when we call <code>myWatch.state_cast&lt; const Stopped &amp; &gt;()</code> <b>and</b>
+the machine is currently in the Stopped state, we get a reference to the <code>Stopped</code> state. Otherwise <code>std::bad_cast</code> is
 thrown. We can use this functionality to implement a <code>StopWatch</code> member function that returns the elapsed time. However, rather
 than ask the machine in which state it is and then switch to different calculations for the elapsed time, we put the calculation into the
 Stopped and Running states and use an interface to retrieve the elapsed time:</p>
@@ -253,7 +257,7 @@ struct StopWatch :
 {
   <b>std::clock_t ElapsedTime() const
 </b>  <b>{
-</b>    <b>return current_state&lt; IElapsedTime &gt;().ElapsedTime();
+</b>    <b>return state_cast&lt; const IElapsedTime &amp; &gt;().ElapsedTime();
 </b>  <b>}
 </b>};
 <b>
@@ -308,13 +312,16 @@ extends this program to an interactive console application.</p>
 <p>So far so good. However, the approach presented above has a few limitations:</p>
 <ul>
   <li>Bad scalability: As soon as the compiler reaches the point where <code>state_machine::initiate()</code> is called, a number of
-    template instantiations take place which can only succeed if the full declaration of each and every state of the machine is known. That
+    template instantiations take place, which can only succeed if the full declaration of each and every state of the machine is known. That
     is, the whole layout of a state machine must be implemented in one single translation unit (actions can be compiled separately, but this
     is  of no importance here). For bigger (and more real-world) state machines, this leads to the following limitations:
     <ul>
       <li>At some point compilers reach their internal template instantiation limits and give up. This can happen even for moderately-sized
-        machines. For example, in debug mode one popular compiler refuses to compile the BitMachine example for anything above 3 bits. This
-        means that the compiler reaches its limits somewhere between 8 states, 24 transitions and 16 states, 64 transitions.</li>
+        machines. For example, in debug mode one popular compiler refused to 
+      compile earlier versions of the BitMachine example for anything above 
+      3 bits. This
+        means that the compiler reached its limits somewhere between 8 states, 
+      24 transitions and 16 states, 64 transitions.</li>
       <li>Multiple programmers can hardly work on the same state machine 
       simultaneously because every layout change will inevitably lead to a
         recompilation of the whole state machine.</li>
@@ -334,9 +341,9 @@ them!</b></p>
 <h3><a name="spreadingastatemachineovermultipletranslationunits"></a>Spreading a state machine over multiple translation units</h3>
 <p>Let's say your company would like to develop a digital camera. The camera has the following controls:</p>
 <ul>
-  <li>Shutter button, which can be half-pressed and fully-pressed. The associated events are EvShutterHalf, EvShutterFull and
-    EvShutterReleased</li>
-  <li>Config button, represented by the EvConfig event</li>
+  <li>Shutter button, which can be half-pressed and fully-pressed. The associated events are <code>EvShutterHalf</code>, <code>EvShutterFull</code> and
+    <code>EvShutterReleased</code></li>
+  <li>Config button, represented by the <code>EvConfig</code> event</li>
   <li>A number of other buttons that are not of interest here</li>
 </ul>
 <p>One use case for the camera says that the photographer can half-press the shutter <b>anywhere</b> in the configuration mode and the
@@ -345,7 +352,8 @@ camera will immediately go into shooting mode. The following state chart is one 
 <p>The Configuring and Shooting states will contain numerous nested states while the Idle state is relatively simple. It was therefore
 decided to build two teams. One will implement the shooting mode while the other will implement the configuration mode. The two teams have
 already agreed on the interface that the shooting team will use to retrieve the configuration settings. We would like to ensure that the two
-teams can work with the least possible interference. So, we put the two states in their own translation units to ensure that machine layout
+teams can work with the least possible interference. So, we put the two states in their own translation units 
+so that machine layout
 changes within the Configuring state will never lead to a recompilation of the inner workings of the Shooting state and vice versa.</p>
 <p><b>Unlike in the previous example, the excerpts presented here often outline different options to achieve the same effect. That's why the
 
@@ -381,19 +389,19 @@ struct NotShooting :
     <b>fsm::custom_reaction&lt; EvShutterHalf &gt;</b>, Idle &gt;
 {
   // ...
-  <b>virtual fsm::result react( const EvShutterHalf &amp; );</b>
+  <b>fsm::result react( const EvShutterHalf &amp; );</b>
 };
 
 struct Idle : public fsm::simple_state&lt; Idle, NotShooting,
   <b>fsm::custom_reaction&lt; EvConfig &gt;</b> &gt;
 {
   // ...
-  <b>virtual fsm::result react( const EvConfig &amp; );</b>
+  <b>fsm::result react( const EvConfig &amp; );</b>
 };
 
 #endif</pre>
 <p>Please note the bold parts in the code. With a custom reaction we only specify that we <b>might</b> do something with a particular
-event, but the actual reaction is defined in the <code>react()</code> member function, which can be implemented in the .cpp file.</p>
+event, but the actual reaction is defined in the <code>react</code> member function, which can be implemented in the .cpp file.</p>
 <p>Camera.cpp:</p>
 <pre>#include &quot;Camera.hpp&quot;
 #include &quot;Configuring.hpp&quot;
@@ -413,7 +421,8 @@ fsm::result Idle::react( const EvConfig &amp; )
 }</pre>
 <p><b><font color="#FF0000">Caution: Any call to the <code>simple_state::transit&lt;&gt;()</code> or <code>simple_state::terminate()</code>
 (see later) member functions will inevitably destruct the current state object (similar to <code>delete this;</code>)! That is, 
-reaction code
+ 
+code
 executed after any of these calls may invoke undefined behavior!</font></b> That's why  these functions 
 should only be called as part of a
 return statement.</p>
@@ -448,8 +457,8 @@ fsm::result NotShooting::react( const EvShutterHalf &amp; )
   if ( context&lt; Camera &gt;().IsBatteryLow() )
   {
     // We cannot react to the event ourselves, so we forward it
-    // to our outer state (this is also the default if there
-    // is no reaction for a given event).
+    // to our outer state (this is also the default if a state
+    // defines no reaction for a given event).
     <b>return forward_event();</b>
   }
   else
@@ -520,7 +529,7 @@ struct Camera :
 struct Focusing : public fsm::simple_state&lt; Focusing, Shooting,
   fsm::transition&lt; EvInFocus, Focused<b>,</b>
     <b>Camera, &amp;Camera::DisplayFocused</b> &gt; &gt; {};</pre>
-<p>Of course, transition actions can also be invoked from custom reactions:</p>
+<p>Naturally, transition actions can also be invoked from custom reactions:</p>
 <p>Shooting.cpp:</p>
 <pre>// ...
 fsm::result Focusing::react( const EvInFocus &amp; evt )
@@ -529,15 +538,16 @@ fsm::result Focusing::react( const EvInFocus &amp; evt )
 }</pre>
 <p>Please note that we have to manually forward the event.</p>
 <h2><a name="advancedtopics"></a>Advanced topics</h2>
-<h3><a name="reactionfunctions"></a>Reaction functions</h3>
-<p>The following functions can only be called from within <code>react</code> overrides. The override must 
+<h3><a name="reactionfunctions"></a>Reaction function reference</h3>
+<p>The following functions can only be called from within <code>react</code> 
+member functions, which must 
 return by calling <b>exactly one</b> function (e.g. <code>return terminate();</code>):</p>
 <ul>
   <li><code>simple_state::forward_event()</code>: The dispatch algorithm keeps 
   searching for a reaction for the current event. The search always continues with the immediate outer 
   state. If there is none it continues with the next orthogonal leaf state. This process is repeated until one of the visited 
   states returns by calling any of the other 5 reaction functions. The event is 
-  silently discarded if no reaction was found.<br>
+  silently discarded if no reaction can be found.<br>
   <code>forward_event()</code> is also 
   the default for all states that do not define a reaction for the event.</li>
   <li><code>simple_state::discard_event()</code>: The dispatch algorithm stops searching for 
@@ -557,30 +567,26 @@ return by calling <b>exactly one</b> function (e.g. <code>return terminate();</c
   <li><code>simple_state::terminate()</code>: Terminates the state and returns by calling 
   <code>simple_state::discard_event()</code>.</li>
 </ul>
-<h3><a name="reactions"></a>Reactions</h3>
+<h3><a name="reactions"></a>Reaction reference</h3>
 <p>Reactions other than <code>custom_reaction</code> are nothing but syntactic sugar so that users don't have to write 
-<code>react</code> overrides for common cases. Here's a list of the currently 
+<code>react</code> member functions for common cases. Here's a list of the currently 
 supplied reactions:</p>
 <ul>
-  <li><code>transition&lt; Event, DestinationState &gt;</code>: defines a 
-  <code>custom_reaction</code> with a <code>react</code> override that returns 
-  <code>transit&lt; DestinationState &gt;();</code></li>
-  <li><code>transition&lt; Event, DestinationState, TransitionContext, void ( TransitionContext::*pTransitionAction )( const Event & ) &gt;</code>: 
-  defines a <code>custom_reaction</code> with a <code>react</code> override that returns 
-  <code>transit&lt; DestinationState &gt;( pTransitionAction, evt );</code></li>
-  <li><code>termination&lt; Event &gt;</code>: defines a <code>custom_reaction</code> 
-  with a 
-  <code>react</code> override that returns <code>terminate();</code></li>
-  <li><code>deferal&lt; Event &gt;</code>: defines a <code>custom_reaction</code> 
-  with a <code>react</code> 
-  override that returns <code>defer_event();</code>. Please see 
+  <li><code>transition&lt; Event, DestinationState &gt;</code>: returns <code>
+  simple_state::transit&lt; DestinationState &gt;();</code></li>
+  <li><code>transition&lt; Event, DestinationState, TransitionContext, void ( TransitionContext::*pTransitionAction )( const Event & ) &gt;</code>: returns <code>
+  simple_state::transit&lt; DestinationState &gt;( pTransitionAction, evt );</code></li>
+  <li><code>termination&lt; Event &gt;</code>: returns <code>simple_state::terminate();</code></li>
+  <li><code>deferral&lt; Event &gt;</code>: returns <code>simple_state::defer_event();</code>. Please see 
   <a href="#deferringevents">Deferring 
   events</a>!</li>
   <li><code>custom_reaction&lt; Event &gt;</code>: returns <code>react( evt 
-  );</code> (the user-supplied override of the pure virtual function). The <code>react</code> override must return 
+  );</code> (the user-supplied member function). The <code>react</code> member 
+  function must return 
   by calling one of the reaction functions.</li>
 </ul>
-<p>Should a user find herself implementing similar <code>react</code> overrides very often, 
+<p>Should a user find herself implementing similar <code>react</code> member 
+functions very often, 
 she can easily define her own reaction  and use it just like the ones 
 that come with boost::fsm.</p>
 <h3><a name="specifyingmultiplereactionsforastate"></a>Specifying multiple reactions 
@@ -618,30 +624,29 @@ for a state</h3>
   to contact the &quot;outside world&quot; (here: the event queue in the state machine), 
   the state must derive from <code>fsm::state</code> rather than from <code>fsm::simple_state</code> and 
   must implement a forwarding constructor as outlined above (apart from the 
-constructor, <code>fsm::state</code> offers the same interface as <code>fsm::simple_state</code>). The reason for this 
-admittedly ugly workaround lies in the fact that there's no way to inherit the 
-base class' constructor in C++, although this would sometimes make perfect 
-sense.<br>
+constructor, <code>fsm::state</code> offers the same interface as <code>fsm::simple_state</code>). 
 Hence, this must be done 
    
   whenever an entry action makes one or more calls to the following functions:</p>
 <ul>
   <li><code>simple_state::context&lt;&gt;()</code></li>
   <li><code>simple_state::post_event()</code></li>
+  <li><code>simple_state::state_cast&lt;&gt;()</code></li>
+  <li><code>simple_state::state_downcast&lt;&gt;()</code></li>
 </ul>
 <p>In my experience, these functions are needed only rarely in entry actions 
 so this workaround should not uglify user code too much.</p>
 <h3><a name="deferringevents"></a>Deferring events</h3>
 <p>To avoid a number of overheads, event deferral with boost::fsm has one 
 limitation: Only events allocated with <code>new</code> <b>and</b> pointed to by a 
-  <code>boost::intrusive_ptr</code> can be deferred. Any attempt to defer a 
+  <code>boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
 differently allocated event will result in a failing runtime assert. Example:</p>
 <pre>class Event : public fsm::event&lt; Event &gt; {};
 struct Initial;
 struct Machine : public fsm::state_machine&lt;
   Machine, Initial &gt; {};
 struct Initial : public fsm::simple_state&lt; Initial, Machine,
-  fsm::deferal&lt; Event &gt; &gt; {};
+  fsm::deferral&lt; Event &gt; &gt; {};
 
 int main()
 {
@@ -724,8 +729,8 @@ actions (mapped to destructors and destructors should virtually never throw in C
 of the box, <code>state_machine</code> does the following:</p>
 <ol>
   <li>The exception is caught.</li>
-  <li>In the catch block, an <code>exception_thrown</code> event is allocated on the stack.</li>
-  <li>Also in the catch block, an <b>immediate</b> dispatch of the <code>exception_thrown</code> 
+  <li>In the catch block, an <code>fsm::exception_thrown</code> event is allocated on the stack.</li>
+  <li>Also in the catch block, an <b>immediate</b> dispatch of the <code>fsm::exception_thrown</code> 
   event is attempted. That is, possibly remaining events in the queue are 
   dispatched only after the exception has been handled successfully.</li>
   <li>If the exception was handled successfully, the state machine returns to 
@@ -733,14 +738,14 @@ of the box, <code>state_machine</code> does the following:</p>
   so that the client of the state machine can handle the exception.</li>
 </ol>
 <p>This behavior is implemented in the <code>exception_translator</code> class, 
-which is the default for the 3rd <code>state_machine</code> template parameter. 
+which is the default for the <code>ExceptionTranslator</code> <code>state_machine</code> template parameter. 
 It was introduced only because users would want to change this on some platforms to 
 work around  buggy exception handling implementations (see 
 <a href="#discriminatingexceptions">later</a>).</p>
-<h4>Which states can react to an <code>exception_thrown</code> event?</h4>
+<h4>Which states can react to an <code>fsm::exception_thrown</code> event?</h4>
 <p>This depends on where the exception occurred. There are three scenarios:</p>
 <ol>
-  <li>The <code>react</code> override of a custom reaction propagates an 
+  <li>A <code>react</code> member function propagates an 
   exception <b>before</b> calling any of the reaction functions. The state that caused the exception 
   is first tried for a reaction, so the following machine will transit to 
   Defective after receiving an EvStart event:<br>
@@ -760,7 +765,8 @@ work around  buggy exception handling implementations (see
   <img border="0" src="ThrowingTransitionAction.gif" width="422" height="362"></li>
 </ol>
 <p>As with a normal event, the dispatch algorithm will move outward to find a 
-reaction if the first tried state does not provide one. However, <b>in contrast 
+reaction if the first tried state does not provide one (or if the reaction 
+explicitly returned <code>forward_event();</code>). However, <b>in contrast 
 to normal events, it will give up once it has unsuccessfully tried an 
 outermost state</b>, so the following machine will <b>not</b> transit to 
 Defective after receiving an EvNumLockPressed event:</p>
@@ -770,7 +776,7 @@ Defective after receiving an EvNumLockPressed event:</p>
 Instead, the machine is terminated and the original exception rethrown.</p>
 <h4>Successful exception handling</h4>
 An exception is considered handled successfully, if:<ul>
-    <li>an appropriate reaction to the <code>exception_thrown</code> event <b>not</b> returning by calling <code>forward_event()</code> has 
+    <li>an appropriate reaction to the <code>fsm::exception_thrown</code> event <b>not</b> returning by calling <code>forward_event()</code> has 
     been found.</li>
     <li>the state machine is in a stable 
     state, after the reaction has completed.</li>
@@ -781,9 +787,9 @@ exception is handled. The machine would be left in an invalid state, should the
 reaction simply discard the event without doing anything else.</p>
 <p>The out of the box behavior for unsuccessful exception handling is to rethrow 
 the original exception. The state machine is terminated before the exception is 
-propagated to the user.</p>
+propagated to the machine client.</p>
 <h4><a name="discriminatingexceptions"></a>Discriminating exceptions</h4>
-<p>Because the <code>exception_event</code> object is dispatched from within the catch block, 
+<p>Because the <code>fsm::exception_thrown</code> object is dispatched from within the catch block, 
 we can rethrow and catch the exception in a custom reaction:</p>
 <pre>struct Defective : public fsm::simple_state&lt;
   Defective, Purifier &gt; {};
@@ -791,14 +797,14 @@ we can rethrow and catch the exception in a custom reaction:</p>
 struct Idle : public fsm::simple_state&lt; Idle, Purifier,
   mpl::list&lt;
     fsm::custom_reaction&lt; EvStart &gt;,
-    fsm::custom_reaction&lt; exception_thrown &gt; &gt; &gt;
+    fsm::custom_reaction&lt; fsm::exception_thrown &gt; &gt; &gt;
 {
-  virtual fsm::result react( const EvStart &amp; )
+  fsm::result react( const EvStart &amp; )
   {
-    throw std::runtime_error();
+    throw std::runtime_error( &quot;&quot; );
   }
 
-  virtual fsm::result react( const exception_thrown &amp; )
+  fsm::result react( const fsm::exception_thrown &amp; )
   {
     try
     {
@@ -807,8 +813,8 @@ struct Idle : public fsm::simple_state&lt; Idle, Purifier,
     catch ( const std::runtime_error &amp; )
     {
       // only std::runtime_errors will lead to a transition
-      // Defective, all other exceptions are propagated to
-      // the state machine client 
+      // to Defective, all other exceptions are propagated
+      // to the state machine client 
       return transit&lt; Defective &gt;();
     }
   }
@@ -851,10 +857,10 @@ template< LockType lockType >
 struct Off : public fsm::simple_state<
   Off< lockType >, Active::orthogonal< lockType >,
   fsm::transition< Pressed< lockType >, On< lockType > > > {};</pre>
-<p>Of course, the <code>On</code> and <code>Off</code> templates could be given additional parameters to make them truly reusable.</p>
+<p>The <code>On</code> and <code>Off</code> templates could be given additional parameters to make them truly reusable.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13989" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->30 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13973" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. All Rights Reserved.</i></p>
 </body>
 </html>

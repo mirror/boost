@@ -11,12 +11,12 @@
 
 
 #include <boost/fsm/result.hpp>
+#include <boost/fsm/event.hpp>
+
 #include <boost/fsm/detail/counted_base.hpp>
 
-#include <boost/utility.hpp> // boost::noncopyable
-#include <boost/assert.hpp>  // BOOST_ASSERT
-
-#include <typeinfo> // std::type_info
+#include <boost/noncopyable.hpp>
+#include <boost/assert.hpp>
 
 
 
@@ -36,10 +36,6 @@ namespace fsm
 
 
 
-class event;
-
-
-
 namespace detail
 {
 
@@ -50,23 +46,21 @@ typedef unsigned char orthogonal_position_type;
 
 
 //////////////////////////////////////////////////////////////////////////////
+template< class RttiPolicy >
 class state_base : private noncopyable,
   // Derived class objects will be created, handled and destroyed by one and
   // the same thread --> locking is not necessary
-  public counted_base< orthogonal_position_type, false >
+  public RttiPolicy::base_type< counted_base< orthogonal_position_type, false > >
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    virtual result react_impl(
-      const event & evt, const std::type_info & eventType ) = 0;
-
-    // returns a pointer to the immediate outer state _if_ there is one,
-    // returns 0 otherwise (this is the outermost state then)
-    virtual state_base * outer_state_ptr() const = 0;
-
+  typedef typename RttiPolicy::base_type<
+    counted_base< orthogonal_position_type, false > > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    state_base() :
+    // The following declarations should be private.
+    // They are only protected because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    state_base( typename RttiPolicy::id_type id ) :
+      base_type( id ),
       reactionEnabled_( false ),
       deferredEvents_( false )
     {
@@ -98,6 +92,19 @@ class state_base : private noncopyable,
     {
       return deferredEvents_;
     }
+
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    // The following declarations should be private.
+    // They are only public because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    virtual result react_impl(
+      const event_base< RttiPolicy > & evt,
+      typename RttiPolicy::id_type eventType ) = 0;
+
+    // returns a pointer to the immediate outer state _if_ there is one,
+    // returns 0 otherwise (this is the outermost state then)
+    virtual state_base * outer_state_ptr() const = 0;
 
   private:
     //////////////////////////////////////////////////////////////////////////

@@ -9,6 +9,7 @@
 
 
 #include <boost/fsm/event.hpp>
+#include <boost/fsm/rtti_policy.hpp>
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/state_machine.hpp>
 
@@ -27,10 +28,10 @@ namespace mpl = boost::mpl;
 //////////////////////////////////////////////////////////////////////////////
 // Displays the runtime sizes of states
 //////////////////////////////////////////////////////////////////////////////
-class DummyEvent1 : public fsm::event {};
-class DummyEvent2 : public fsm::event {};
-class DummyEvent3 : public fsm::event {};
-class DummyEvent4 : public fsm::event {};
+class DummyEvent1 : public fsm::event< DummyEvent1 > {};
+class DummyEvent2 : public fsm::event< DummyEvent2 > {};
+class DummyEvent3 : public fsm::event< DummyEvent3 > {};
+class DummyEvent4 : public fsm::event< DummyEvent4 > {};
 
 
 class UnconnectedOuterState;
@@ -83,23 +84,23 @@ int main( int argc, char * argv[] )
     "boost::fsm::state sizes\n\n" <<
     std::setw( 50 ) << "detail::counted_base< unsigned char, false >: " <<
       sizeof( fsm::detail::counted_base< unsigned char, false > ) << "\n" <<
-    std::setw( 50 ) << "detail::state_base: " <<
-      sizeof( fsm::detail::state_base ) << "\n" <<
-    std::setw( 50 ) << "detail::universal_state< std::list< _ > >: " <<
+    std::setw( 50 ) << "detail::state_base< ... >: " <<
+      sizeof( fsm::detail::state_base< fsm::rtti_policy > ) << "\n" <<
+    std::setw( 50 ) << "detail::universal_state< ... >: " <<
       sizeof( fsm::detail::universal_state< 
-        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
-    std::setw( 50 ) << "detail::leaf_state< std::list< _ > >: " <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base< fsm::rtti_policy > > >, fsm::rtti_policy > ) << "\n" <<
+    std::setw( 50 ) << "detail::leaf_state< ... >: " <<
       sizeof( fsm::detail::leaf_state< 
-        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
-    std::setw( 50 ) << "detail::node_state< 1, std::list< _ > >: " <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base< fsm::rtti_policy > > >, fsm::rtti_policy > ) << "\n" <<
+    std::setw( 50 ) << "detail::node_state< 1, ... >: " <<
       sizeof( fsm::detail::node_state< 1,
-        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
-    std::setw( 50 ) << "detail::node_state< 2, std::list< _ > >: " <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base< fsm::rtti_policy > > >, fsm::rtti_policy > ) << "\n" <<
+    std::setw( 50 ) << "detail::node_state< 2, ... >: " <<
       sizeof( fsm::detail::node_state< 2,
-        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
-    std::setw( 50 ) << "detail::node_state< 3, std::list< _ > >: " <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base< fsm::rtti_policy > > >, fsm::rtti_policy > ) << "\n" <<
+    std::setw( 50 ) << "detail::node_state< 3, ... >: " <<
       sizeof( fsm::detail::node_state< 3,
-        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n\n" <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base< fsm::rtti_policy > > >, fsm::rtti_policy > ) << "\n\n" <<
 
     std::setw( 50 ) << "simple_state< _, _, no_transitions, _ >: " <<
       sizeof( UnconnectedOuterState ) << "\n" <<

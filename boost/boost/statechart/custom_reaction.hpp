@@ -10,12 +10,9 @@
 
 
 
-#include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
 
 #include <boost/cast.hpp> // boost::polymorphic_downcast
-
-#include <typeinfo> // std::type_info
 
 
 
@@ -30,11 +27,11 @@ namespace fsm
 template< class Event >
 struct custom_reaction
 {
-  template< class State >
+  template< class State, class EventBase, class IdType >
   static result react(
-    State & stt, const event & evt, const std::type_info & eventType )
+    State & stt, const EventBase & evt, const IdType & eventType )
   {
-    if ( eventType == typeid( const Event ) )
+    if ( eventType == Event::static_type() )
     {
       return stt.react( *polymorphic_downcast< const Event * >( &evt ) );
     }

@@ -48,8 +48,8 @@ namespace mpl = boost::mpl;
 
 
 
-class EvStartStop : public fsm::event {};
-class EvReset : public fsm::event {};
+class EvStartStop : public fsm::event< EvStartStop > {};
+class EvReset : public fsm::event< EvReset > {};
 
 struct IElapsedTime
 {

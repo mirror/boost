@@ -36,12 +36,19 @@
   <li>State-local storage</li>
   <li>Customizable resource acquisition</li>
 </ul>
-<p>The library is not yet complete. The following is still lacking:</p>
-<ul>
-  <li>Support for state machines running in their own threads</li>
-  <li>Shallow/deep history</li>
-  <li>Full documentation (currently there is only a tutorial, a rationale and a FAQ page)</li>
-</ul>
+<p>The library is not yet complete. Here is the current to-do list:</p>
+<ol>
+  <li>The library does not yet check for invalid transitions between different 
+  orthogonal regions, although the documentation claims otherwise.</li>
+  <li>Factor out several functions in the <code>state_machine</code> class 
+  template into base classes to reduce code size in projects with many different state machines.</li>
+  <li>Add a <code>concurrent_state_machine</code> class template to model a state machine 
+  running in its own thread.</li>
+  <li>Add regression tests.</li>
+  <li>Port to gcc.</li>
+  <li>Add reference documentation.</li>
+  <li>Add support for shallow/deep history.</li>
+</ol>
 <p><b>This is a preliminary submission to encourage feedback. All comments are most welcome!</b></p>
 <hr>
 <h2>Contents</h2>
@@ -53,7 +60,7 @@
 </dl>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13989" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->30 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13973" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 2003. All Rights Reserved.</i></p>
 </body>
 </html>

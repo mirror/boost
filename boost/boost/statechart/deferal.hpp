@@ -10,10 +10,7 @@
 
 
 
-#include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
-
-#include <typeinfo> // std::type_info
 
 
 
@@ -28,11 +25,11 @@ namespace fsm
 template< class Event >
 struct deferal
 {
-  template< class State >
+  template< class State, class EventBase, class IdType >
   static result react(
-    State & stt, const event &, const std::type_info & eventType )
+    State & stt, const EventBase &, const IdType & eventType )
   {
-    if ( eventType == typeid( const Event ) )
+    if ( eventType == Event::static_type() )
     {
       return stt.defer_event();
     }

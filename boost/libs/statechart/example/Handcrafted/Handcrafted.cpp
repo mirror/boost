@@ -25,7 +25,8 @@
 const unsigned int noOfStates = 2;
 const unsigned int noOfTransitions = 2;
 
-const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 31 * 127;
+// common prime factors of 2^n-1 for n in [1,8]
+const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
 
 unsigned long eventsSentTotal = 0;
 

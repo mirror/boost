@@ -56,7 +56,7 @@ class state : public simple_state< Derived, Context, Reactions, InnerInitial >
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     // See base class for documentation

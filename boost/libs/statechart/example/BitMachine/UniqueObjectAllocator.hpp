@@ -56,7 +56,8 @@ class UniqueObjectAllocator
 template< class T >
 bool UniqueObjectAllocator< T >::constructed_ = false;
 template< class T >
-typename UniqueObjectAllocator< T >::storage UniqueObjectAllocator< T >::storage_;
+typename UniqueObjectAllocator< T >::storage
+  UniqueObjectAllocator< T >::storage_;
 
 
 

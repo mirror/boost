@@ -13,6 +13,7 @@
 #include <boost/fsm/detail/state_base.hpp>
 
 #include <boost/fsm/event.hpp>
+#include <boost/fsm/rtti_policy.hpp>
 #include <boost/fsm/exception_translator.hpp>
 #include <boost/fsm/result.hpp>
 
@@ -39,7 +40,7 @@
 #endif
 
 #include <memory>   // std::allocator
-#include <typeinfo> // std::type_info, std::bad_cast
+#include <typeinfo> // std::bad_cast
 
 
 
@@ -61,23 +62,25 @@ namespace detail
 
   
   
-template< class StateList >
+template< class StateList, class RttiPolicy >
 class universal_state;
-template< orthogonal_position_type noOfOrthogonalRegions, class StateList >
+template< orthogonal_position_type noOfOrthogonalRegions,
+  class StateList, class RttiPolicy >
 class node_state;
-template< class StateList >
+template< class StateList, class RttiPolicy >
 class leaf_state;
 
 
 //////////////////////////////////////////////////////////////////////////////
+template< class StateBaseType, class EventBaseType, class IdType >
 class send_function
 {
   public:
     //////////////////////////////////////////////////////////////////////////
     send_function(
-      state_base & toState,
-      const event & evt,
-      const std::type_info & eventType
+      StateBaseType & toState,
+      const EventBaseType & evt,
+      IdType eventType
     ) :
       toState_( toState ), evt_( evt ), eventType_( eventType )
     {
@@ -90,74 +93,82 @@ class send_function
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    state_base & toState_;
-    const event & evt_;
-    const std::type_info & eventType_;
+    StateBaseType & toState_;
+    const EventBaseType & evt_;
+    IdType eventType_;
 };
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< bool pointerTarget >
+template< class IdType >
 struct state_cast_impl
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    static const state_base * deref_if_necessary( const state_base * pState )
+  template< bool pointerTarget >
+  struct impl
+  {
+    public:
+      //////////////////////////////////////////////////////////////////////////
+      template< class StateBaseType >
+      static const StateBaseType * deref_if_necessary(
+        const StateBaseType * pState )
+      {
+        return pState;
+      }
+
+      template< class Target >
+      static IdType type()
+      {
+        Target p = 0;
+        return type_impl( p );
+      }
+
+      static bool found( const void * pFound )
+      {
+        return pFound != 0;
+      }
+
+      template< class Target >
+      static Target not_found()
+      {
+        return 0;
+      }
+
+    private:
+      //////////////////////////////////////////////////////////////////////////
+      template< class Type >
+      static IdType type_impl( const Type * )
+      {
+        return Type::static_type();
+      }
+  };
+
+  template<>
+  struct impl< false >
+  {
+    template< class StateBaseType >
+    static const StateBaseType & deref_if_necessary(
+      const StateBaseType * pState )
     {
-      return pState;
+      return *pState;
     }
 
     template< class Target >
-    static const type_info & type()
+    static IdType type()
     {
-      Target p = 0;
-      return type_impl( p );
+      return Target::static_type();
     }
 
-    static bool found( const void * pFound )
+    static bool found( ... )
     {
-      return pFound != 0;
+      return true;
     }
 
     template< class Target >
     static Target not_found()
     {
-      return 0;
+      throw std::bad_cast();
     }
-
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    template< class Type >
-    static const type_info & type_impl( const Type * )
-    {
-      return typeid( const Type );
-    }
-};
-
-template<>
-struct state_cast_impl< false >
-{
-  static const state_base & deref_if_necessary( const state_base * pState )
-  {
-    return *pState;
-  }
-
-  template< class Target >
-  static const type_info & type()
-  {
-    return typeid( Target );
-  }
-
-  static bool found( ... )
-  {
-    return true;
-  }
-
-  template< class Target >
-  static Target not_found()
-  {
-    throw std::bad_cast();
-  }
+  };
 };
 
 
@@ -170,14 +181,17 @@ struct state_cast_impl< false >
 // Base class for all state machines
 // Some function names were derived from a state machine by Aleksey Gurtovoy.
 template< class Derived,
-          class InitialState,
-          class ExceptionTranslator = exception_translator, 
-          class Allocator = std::allocator< void > >
+          class InitialState, 
+          class Allocator = std::allocator< void >,
+          class ExceptionTranslator = exception_translator<>,
+          class RttiPolicy = rtti_policy >
 class state_machine : private noncopyable
 {
   public:
     //////////////////////////////////////////////////////////////////////////
-    typedef intrusive_ptr< const event > event_ptr_type;
+    typedef RttiPolicy rtti_policy_type;
+    typedef event_base< rtti_policy_type > event_base_type;
+    typedef intrusive_ptr< const event_base_type > event_base_ptr_type;
 
     void initiate()
     {
@@ -195,7 +209,7 @@ class state_machine : private noncopyable
     }
 
 
-    void process_event( const event & evt )
+    void process_event( const event_base_type & evt )
     {
       send_event( evt );
       process_queued_events();
@@ -214,14 +228,15 @@ class state_machine : private noncopyable
     template< class Target >
     Target state_cast() const
     {
-      typedef detail::state_cast_impl< is_pointer< Target >::value > impl;
+      typedef detail::state_cast_impl< rtti_policy_type::id_type >::
+        impl< is_pointer< Target >::value > impl;
 
       for ( state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
             pCurrentLeafState != currentStates_.end();
             ++pCurrentLeafState )
       {
-        const detail::state_base * pCurrentState(
+        const state_base_type * pCurrentState(
           get_pointer( *pCurrentLeafState ) );
 
         while ( pCurrentState != 0 )
@@ -264,20 +279,22 @@ class state_machine : private noncopyable
     template< class Target >
     Target state_downcast() const
     {
-      typedef detail::state_cast_impl< is_pointer< Target >::value > impl;
-      const type_info & targetType = impl::type< Target >();
+      typedef detail::state_cast_impl< rtti_policy_type::id_type >::
+        impl< is_pointer< Target >::value > impl;
+
+      rtti_policy_type::id_type targetType = impl::type< Target >();
 
       for ( state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
             pCurrentLeafState != currentStates_.end();
             ++pCurrentLeafState )
       {
-        const detail::state_base * pCurrentState(
+        const state_base_type * pCurrentState(
           get_pointer( *pCurrentLeafState ) );
 
         while ( pCurrentState != 0 )
         {
-          if ( typeid( *pCurrentState ) == targetType )
+          if ( pCurrentState->dynamic_type() == targetType )
           {
             return static_cast< Target >(
               impl::deref_if_necessary( pCurrentState ) );
@@ -303,9 +320,11 @@ class state_machine : private noncopyable
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
+    typedef detail::state_base< rtti_policy_type > state_base_type;
+
     typedef Derived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
@@ -313,17 +332,20 @@ class state_machine : private noncopyable
 
     typedef Derived top_context_type;
     typedef Derived * inner_context_ptr_type;
-    typedef intrusive_ptr< detail::state_base > state_ptr_type;
+    typedef intrusive_ptr< state_base_type > state_base_ptr_type;
     typedef std::list<
-      state_ptr_type,
-      typename Allocator::rebind< state_ptr_type >::other > state_list_type;
+      state_base_ptr_type,
+      typename Allocator::rebind< state_base_ptr_type >::other
+    > state_list_type;
 
     typedef mpl::clear< mpl::list<> >::type context_type_list;
 
 
-    result react_impl( const event &, const std::type_info & )
+    result react_impl(
+      const event_base_type &,
+      typename rtti_policy_type::id_type )
     {
-      return do_discard_event;
+      return do_forward_event;
     }
 
 
@@ -363,7 +385,8 @@ class state_machine : private noncopyable
       eventQueue_.clear();
     }
 
-    void terminate( detail::universal_state< state_list_type > & theState )
+    void terminate(
+      detail::universal_state< state_list_type, rtti_policy_type > & theState )
     {
 		  if ( currentStates_.size() == 1 )
 		  {
@@ -379,7 +402,7 @@ class state_machine : private noncopyable
 		  }
     }
 
-    void post_event( const event_ptr_type & pEvent )
+    void post_event( const event_base_ptr_type & pEvent )
     {
       BOOST_ASSERT( get_pointer( pEvent ) != 0 );
       eventQueue_.push_back( pEvent );
@@ -407,8 +430,9 @@ class state_machine : private noncopyable
     }
 
 
-    void add_inner_state( detail::orthogonal_position_type position,
-                          detail::universal_state< state_list_type > * )
+    void add_inner_state(
+      detail::orthogonal_position_type position,
+      detail::universal_state< state_list_type, rtti_policy_type > * )
     {
       BOOST_ASSERT( position == 0 );
       position;
@@ -420,7 +444,7 @@ class state_machine : private noncopyable
       position;
     }
 
-    void release_events( const detail::state_base * pForState )
+    void release_events( const state_base_type * pForState )
     {
       const deferred_map_type::iterator pFound =
         deferredMap_.find( pForState );
@@ -470,7 +494,7 @@ class state_machine : private noncopyable
     template< class ExceptionEvent >
     bool handle_exception_event(
       const ExceptionEvent & exceptionEvent,
-      detail::state_base * pCurrentState )
+      state_base_type * pCurrentState )
     {
       const machine_status_enum status = machine_status();
 
@@ -487,16 +511,13 @@ class state_machine : private noncopyable
       // function by orderly transiting to another state or terminating.
       // As a result of this, the machine must not be unstable when this
       // function is left.
-      detail::state_base * const pHandlingState =
+      state_base_type * const pHandlingState =
         status == stable ? pCurrentState : &unstable_state();
 
       BOOST_ASSERT( pHandlingState != 0 );
 
-      const result reactionResult = translator_( 
-        detail::send_function(
-          *pHandlingState, exceptionEvent, typeid( exceptionEvent ) ),
-        exception_event_handler( *this, pCurrentState ),
-        do_discard_event );
+      const result reactionResult = pHandlingState->react_impl(
+        exceptionEvent, exceptionEvent.dynamic_type() );
 
       if ( reactionResult == do_defer_event )
       {
@@ -518,7 +539,7 @@ class state_machine : private noncopyable
         //////////////////////////////////////////////////////////////////////
         exception_event_handler(
           state_machine & machine,
-          detail::state_base * pCurrentState = 0
+          state_base_type * pCurrentState = 0
         ) :
           machine_( machine ),
           pCurrentState_( pCurrentState )
@@ -528,13 +549,14 @@ class state_machine : private noncopyable
         template< class ExceptionEvent >
         bool operator()( const ExceptionEvent & exceptionEvent )
         {
-          return machine_.handle_exception_event( exceptionEvent, pCurrentState_ );
+          return machine_.handle_exception_event(
+            exceptionEvent, pCurrentState_ );
         }
 
       private:
         //////////////////////////////////////////////////////////////////////
         state_machine & machine_;
-        detail::state_base * pCurrentState_;
+        state_base_type * pCurrentState_;
     };
 
     friend exception_event_handler;
@@ -552,12 +574,12 @@ class state_machine : private noncopyable
         bool dismissed_;
     };
 
-    void send_event( const event & evt )
+    void send_event( const event_base_type & evt )
     {
       terminator guard( *this );
       BOOST_ASSERT( machine_status() != unstable );
 
-      const std::type_info & eventType = typeid( evt );
+      rtti_policy_type::id_type eventType = evt.dynamic_type();
 
       result reactionResult = do_forward_event;
       state_list_type::iterator pState = currentStates_.begin();
@@ -567,8 +589,9 @@ class state_machine : private noncopyable
       {
         // CAUTION: The following statement could modify our state list!
         // We must not continue iterating, if the event was consumed
-        reactionResult = translator_(
-          detail::send_function( **pState, evt, eventType ),
+        reactionResult = translator_( detail::send_function<
+          state_base_type, event_base_type, rtti_policy_type::id_type >(
+            **pState, evt, eventType ),
           exception_event_handler( *this, get_pointer( *pState ) ),
           do_discard_event );
 
@@ -587,8 +610,8 @@ class state_machine : private noncopyable
 
 
     void defer_event(
-      const event & evt,
-      const detail::state_base * pForState )
+      const event_base_type & evt,
+      const state_base_type * pForState )
     {
       deferredMap_[ pForState ].push_back( evt.clone() );
     }
@@ -598,7 +621,7 @@ class state_machine : private noncopyable
     {
       while ( !eventQueue_.empty() )
       {
-        const event_ptr_type pCurrentEvent( eventQueue_.front() );
+        const event_base_ptr_type pCurrentEvent( eventQueue_.front() );
         eventQueue_.pop_front();
         send_event( *pCurrentEvent );
       }
@@ -628,32 +651,32 @@ class state_machine : private noncopyable
       }
     }
 
-    detail::state_base & unstable_state()
+    state_base_type & unstable_state()
     {
       BOOST_ASSERT( machine_status() == unstable );
       return **pUnstableState_;
     }
 
-    template< detail::orthogonal_position_type noOfOrthogonalRegions,
-      class StateList >
-    void add_impl(
-      const detail::node_state< noOfOrthogonalRegions, StateList > & ) {}
+    template< detail::orthogonal_position_type noOfOrthogonalRegions >
+    void add_impl( const detail::node_state<
+      noOfOrthogonalRegions, state_list_type, rtti_policy_type > & ) {}
 
-    template< class StateList >
-    void add_impl( detail::leaf_state< StateList > & theState )
+    void add_impl(
+      detail::leaf_state< state_list_type, rtti_policy_type > & theState )
     {
       theState.set_list_position( pUnstableState_ );
       pUnstableState_ = currentStates_.end();
     }
 
     typedef std::list<
-      event_ptr_type,
-      typename Allocator::rebind< event_ptr_type >::other > event_queue_type;
+      event_base_ptr_type,
+      typename Allocator::rebind< event_base_ptr_type >::other
+    > event_queue_type;
 
     typedef std::map<
-      const detail::state_base *, event_queue_type,
-      std::less< const detail::state_base * >,
-      typename Allocator::rebind< std::pair< const detail::state_base * const,
+      const state_base_type *, event_queue_type,
+      std::less< const state_base_type * >,
+      typename Allocator::rebind< std::pair< const state_base_type * const,
         event_queue_type > >::other > deferred_map_type;
 
     event_queue_type eventQueue_;

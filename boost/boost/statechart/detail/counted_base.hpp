@@ -64,7 +64,7 @@ class counted_base : private locked_base< NeedsLocking >
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
+    // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     void add_ref() const

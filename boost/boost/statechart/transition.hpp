@@ -10,12 +10,9 @@
 
 
 
-#include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
 
 #include <boost/cast.hpp> // boost::polymorphic_downcast
-
-#include <typeinfo> // std::type_info
 
 
 
@@ -50,11 +47,11 @@ struct transition
 {
   private:
     //////////////////////////////////////////////////////////////////////////
-    template< class State >
+    template< class State, class EventBase >
     struct impl
     {
       template< class TransitionContext2 >
-      static result react( State & stt, const event & toEvent )
+      static result react( State & stt, const EventBase & toEvent )
       {
         return stt.transit< Destination >( pTransitionAction,
           *polymorphic_downcast< const Event * >( &toEvent ) );
@@ -62,7 +59,7 @@ struct transition
 
       template<>
       static result react< detail::no_context >(
-        State & stt, const event & )
+        State & stt, const EventBase & )
       {
         return stt.transit< Destination >();
       }
@@ -70,13 +67,14 @@ struct transition
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    template< class State >
+    template< class State, class EventBase, class IdType >
     static result react(
-      State & stt, const event & evt, const std::type_info & eventType )
+      State & stt, const EventBase & evt, const IdType & eventType )
     {
-      if ( eventType == typeid( const Event ) )
+      if ( eventType == Event::static_type() )
       {
-        return impl< State >::react< TransitionContext >( stt, evt );
+        return impl< State, EventBase >::react< TransitionContext >(
+          stt, evt );
       }
       else
       {
