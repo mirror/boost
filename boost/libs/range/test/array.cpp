@@ -8,6 +8,14 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
+
+#include <boost/config.hpp>
+
+#if BOOST_WORAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#  pragma warn -8091 // supress warning in Boost.Test
+#  pragma warn -8057 // unused argument argc/argv in Boost.Test
+#endif
+
 #include <boost/range.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
@@ -30,7 +38,9 @@ void check_array()
     int           my_array[sz]  = { 1,2,3,4,5,6,7,8,9 };
     const array_t ca           = { 1,2,3,4,5,6,7,8,10 };
 
-#ifndef BOOST_CT_NO_STATIC_ASSERT 
+ 
+// BOOST_RANGE_NO_STATIC_ASSERT 
+#if !defined( __BORLANDC__ ) || !( _MSC_VER <= 1300 )
     BOOST_STATIC_ASSERT(( is_same< value_type_of<array_t>::type, int >::value ));
     BOOST_STATIC_ASSERT(( is_same< iterator_of<array_t>::type, int* >::value ));
     BOOST_STATIC_ASSERT(( is_same< const_iterator_of<array_t>::type, const int* >::value ));
@@ -47,18 +57,14 @@ void check_array()
     BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const array_t>::type, const int* >::value ));
     BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const array_t>::type, const int* >::value ));
 #endif
-    //typedef container<const array_t>::result_iterator iter;
-    //cout << typeid( iter() ).name() << endl;
     
     BOOST_CHECK_EQUAL( begin( my_array ), my_array );
     BOOST_CHECK_EQUAL( end( my_array ), my_array + size( my_array ) );
     BOOST_CHECK_EQUAL( empty( my_array ), false );
-    //BOOST_CHECK( size( my_array ) == sizeof( sizer( my_array ) ) );
 
     BOOST_CHECK_EQUAL( begin( ca ), ca );
     BOOST_CHECK_EQUAL( end( ca ), ca + size( ca ) );
     BOOST_CHECK_EQUAL( empty( ca ),false );
-    //BOOST_CHECK( size( ca ) == sizeof( sizer( ca ) ) );
 
 }
 

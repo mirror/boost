@@ -8,6 +8,14 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
+
+#include <boost/config.hpp>
+
+#if BOOST_WORAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#  pragma warn -8091 // supress warning in Boost.Test
+#  pragma warn -8057 // unused argument argc/argv in Boost.Test
+#endif
+
 #include <boost/range/functions.hpp>
 #include <boost/range/types.hpp>
 #include <boost/static_assert.hpp>
@@ -83,7 +91,7 @@ void check_char()
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
     const char* end2 = begin( my_string ) + size( my_string );
-   const char* end3 = end( my_string );
+    const char* end3 = end( my_string );
     BOOST_CHECK_EQUAL( end3, end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );

@@ -8,6 +8,14 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
+
+#include <boost/config.hpp>
+
+#if BOOST_WORAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#  pragma warn -8091 // supress warning in Boost.Test
+#  pragma warn -8057 // unused argument argc/argv in Boost.Test
+#endif
+
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/sub_range.hpp>
 #include <boost/test/unit_test.hpp>
@@ -80,6 +88,11 @@ void check_iterator_range()
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
    
+    r.empty();
+    s.empty();
+    r.size();
+    s.size();
+    
 }
 
 
