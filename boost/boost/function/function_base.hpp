@@ -63,11 +63,19 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 #endif
 
-#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
-  typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
-                        (::boost::is_integral<Functor>::value)>::value), \
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+#  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
+      typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
+                            (::boost::is_integral<Functor>::value)>::value), \
+                           Type>::type
+#else
+// BCC doesn't recognize this depends on a template argument and complains
+// about the use of 'typename'
+#  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)     \
+      ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
+                   (::boost::is_integral<Functor>::value)>::value), \
                        Type>::type
-
+#endif
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 namespace boost {
