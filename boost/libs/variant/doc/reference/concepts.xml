@@ -14,9 +14,11 @@
       <listitem><emphasis>CopyConstructible</emphasis> [20.1.3].</listitem>
       <listitem>Destructor upholds the no-throw exception-safety
         guarantee.</listitem>
-      <listitem>Complete at the point of variant template instantiation. (See
-        <code><classname>boost::incomplete</classname>&lt;T&gt;</code> wrapper for
-        a solution to handling incomplete types.)</listitem>
+      <listitem>Complete at the point of <code>variant</code> template
+        instantiation. (See
+        <code><classname>boost::recursive_wrapper</classname>&lt;T&gt;</code>
+        for a type wrapper that accepts incomplete types to enables recursive
+        <code>variant</code> types.)</listitem>
     </itemizedlist>
 
     <para>Every type specified as a template argument to
@@ -29,8 +31,9 @@
       <listitem><link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>:
         <code>variant</code> is itself <emphasis>Assignable</emphasis> if and
         only if every one of its bounded types meets the requirements of the
-        concept. (Note that top-level <code>const</code>-qualified types do
-        <emphasis>not</emphasis> meet these requirements.)</listitem>
+        concept. (Note that top-level <code>const</code>-qualified types and
+        reference types do <emphasis>not</emphasis> meet these
+        requirements.)</listitem>
       <listitem><link linkend="variant.concepts.default-constructible"><emphasis>DefaultConstructible</emphasis></link>:
         <code>variant</code> is itself
         <emphasis>DefaultConstructible</emphasis> if and only if its first
