@@ -19,23 +19,22 @@
 subproject libs/date_time/build ;
 
 local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ;
+
+#uncomment the line below and comment out the line above to change to 64 bit counted time implementation
 #local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE ;
 
-local DATE_TIME_INCLUDES = <include>$(BOOST_ROOT)
-                      <sysinclude>$(BOOST_ROOT)
-                      <include>../../..
-                      <include>../../../boost ;
+local DATE_TIME_INCLUDES = <include>$(BOOST_ROOT) ;
 
 #######################
 rule date_time-test ( test-name : sources + )
 {
-    unit-test $(test-name) : $(sources) <lib>libboost_date_time
+    unit-test $(test-name) : $(sources) <lib>boost_date_time
                            : $(DATE_TIME_INCLUDES) $(DATE_TIME_PROPERTIES) ;
 }
 
 rule date_time-example ( example-name : sources + )
 {
-    exe $(example-name) : $(sources) <lib>libboost_date_time
+    exe $(example-name) : $(sources) <lib>boost_date_time
                         : $(DATE_TIME_INCLUDES) $(DATE_TIME_PROPERTIES) ;
 }
 
@@ -48,7 +47,7 @@ rule date_time-example ( example-name : sources + )
 # Base names of the source files for libboost_date_time
 local GREGORIAN_CPP_SOURCES = gregorian_types greg_month greg_weekday ;
 
-lib libboost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp
+lib boost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp
     # requirements
     : $(DATE_TIME_INCLUDES)
       $(DATE_TIME_PROPERTIES) ;
@@ -94,6 +93,7 @@ date_time-test testtimeformat   : ../test/posix_time/testformatters.cpp ;
 date_time-test testlocal_adjustor : ../test/posix_time/testlocal_adjustor.cpp ;
 date_time-test testdst_rules      : ../test/posix_time/testdst_rules.cpp ;
 date_time-test testiterator      : ../test/posix_time/testiterator.cpp ;
+date_time-test testtime_clock    : ../test/posix_time/testclock.cpp ;
 date_time-test testparse_time    : ../test/posix_time/testparse_time.cpp ;
 
 
@@ -108,6 +108,7 @@ date_time-example print_holidays : ../example/gregorian/print_holidays.cpp ;
 date_time-example days_since_year_start : ../example/gregorian/days_since_year_start.cpp ;
 date_time-example print_month : ../example/gregorian/print_month.cpp ;
 date_time-example days_till_new_year : ../example/gregorian/days_till_new_year.cpp ;
+date_time-example date_localization : ../example/gregorian/localization.cpp ;
 
 #time examples
 date_time-example time_math : ../example/posix_time/time_math.cpp ;
