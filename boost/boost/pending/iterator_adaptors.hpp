@@ -199,7 +199,7 @@ public:
 # pragma warning(pop)
 #endif
 
-    reference operator[](difference_type n)
+    reference operator[](difference_type n) const
         { return *(*this + n); }
     
     Self& operator++() {
