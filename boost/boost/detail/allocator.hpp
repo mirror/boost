@@ -22,6 +22,22 @@ using ::size_t;
 }
 #endif
 
+// see if we have SGI alloc class:
+#if defined(BOOST_NO_STD_ALLOCATOR) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION) || defined(__GLIBCPP__) || defined(__STL_CONFIG_H))
+#  define BOOST_HAVE_SGI_ALLOCATOR
+#  include <memory>
+#  if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace boost{ namespace detail{
+   typedef std::__sgi_alloc alloc_type;
+}}
+#  else
+namespace boost{ namespace detail{
+   typedef std::alloc alloc_type;
+}}
+#  endif
+#endif
+
+
 namespace boost{ namespace detail{
 
 template <class T>
@@ -99,16 +115,28 @@ public:
 
    pointer allocate(size_type n, const void* = 0) 
    {
+      #ifdef BOOST_HAVE_SGI_ALLOCATOR
+      return n != 0 ?
+         reinterpret_cast<pointer>(alloc_type::allocate(n * sizeof(value_type)))
+         : 0;
+      #else
       return n != 0 ?
          reinterpret_cast<pointer>(::operator new(n * sizeof(value_type)))
          : 0;
+      #endif
    }
 
    void deallocate(pointer p, size_type n) 
    {
+      #ifdef BOOST_HAVE_SGI_ALLOCATOR
+      assert( (p == 0) == (n == 0) );
+      if (p != 0)
+         alloc_type::deallocate((void*)p, n);
+      #else
       assert( (p == 0) == (n == 0) );
       if (p != 0)
          ::operator delete((void*)p);
+      #endif
    }
 
    size_type max_size() const
@@ -158,16 +186,28 @@ public:
 
    pointer allocate(size_type n, const void* = 0) 
    {
+      #ifdef BOOST_HAVE_SGI_ALLOCATOR
+      return n != 0 ?
+         reinterpret_cast<pointer>(alloc_type::allocate(n))
+         : 0;
+      #else
       return n != 0 ?
          reinterpret_cast<pointer>(::operator new(n))
          : 0;
+      #endif
    }
 
    void deallocate(pointer p, size_type n) 
    {
+      #ifdef BOOST_HAVE_SGI_ALLOCATOR
+      assert( (p == 0) == (n == 0) );
+      if (p != 0)
+         alloc_type::deallocate((void*)p, n);
+      #else
       assert( (p == 0) == (n == 0) );
       if (p != 0)
          ::operator delete((void*)p);
+      #endif
    }
 };
 

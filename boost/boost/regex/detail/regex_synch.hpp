@@ -189,13 +189,13 @@ typedef lock_guard<critical_section> cs_guard;
 BOOST_REGEX_DECL extern critical_section* p_re_lock;
 BOOST_REGEX_DECL extern unsigned int re_lock_count;
 
-#define BOOST_RE_GUARD(inst) boost::re_detail::critical_section::rw_guard g(inst);
+#define BOOST_REGEX_GUARD(inst) boost::re_detail::critical_section::rw_guard g(inst);
 
-#else  // BOOST_RE_THREADS
+#else  // BOOST_HAS_THREADS
 
-#define BOOST_RE_GUARD(inst)
+#define BOOST_REGEX_GUARD(inst)
 
-#endif // BOOST_RE_THREADS
+#endif // BOOST_HAS_THREADS
 
 #ifdef __BORLANDC__
   #pragma option pop
