@@ -3,20 +3,19 @@
 #define BOOST_MPL_AUX_YES_NO_HPP_INCLUDED
 
 // + file: boost/mpl/aux_/yes_no.hpp
-// + last modified: 05/may/03
+// + last modified: 05/nov/03
 
-// Copyright (c) 2000-03
-// Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2000-03
 //
-// Permission to use, copy, modify, distribute and sell this software
-// and its documentation for any purpose is hereby granted without fee, 
-// provided that the above copyright notice appears in all copies and 
-// that both the copyright notice and this permission notice appear in 
-// supporting documentation. No representations are made about the 
-// suitability of this software for any purpose. It is provided "as is" 
-// without express or implied warranty.
+// Use, modification and distribution are subject to the Boost Software 
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy 
+// at http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
+
+
+#include "boost/mpl/aux_/config/workaround.hpp"
+#include "boost/mpl/aux_/config/msvc.hpp"
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -33,6 +32,25 @@ template<> struct yes_no_tag<true>
     typedef yes_tag type;
 };
 
-}}}
+
+template< long n > struct weighted_tag
+{
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+    typedef char (&type)[n];
+#else
+    char buf[n];
+    typedef weighted_tag type;
+#endif
+};
+
+#if    BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+    || BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+template<> struct weighted_tag<0>
+{
+    typedef char (&type)[1];
+};
+#endif
+
+}}} // namespace boost::mpl::aux 
 
 #endif // BOOST_MPL_AUX_YES_NO_HPP_INCLUDED

@@ -35,7 +35,7 @@ struct value_wknd
 #if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<>
 struct value_wknd<int>
-    : int_<0>
+    : int_<1>
 {
 };
 #endif
