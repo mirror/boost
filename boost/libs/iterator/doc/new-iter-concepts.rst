@@ -468,7 +468,8 @@ stated semantics.
 +--------------------------------+----------------------------------+---------------------------------------+
 |``r++``                         |if ``X`` is a *Writable Iterator* |if ``X`` is a *Writable Iterator* then |
 |                                |then convertible to ``const X&``  |``X a(r++);`` is equivalent to         |
-|                                |                                  |``X a(r); ++r;``                       |
+|                                |                                  |``X a(r); ++r;`` otherwise ``r++``     |
+|                                |                                  |is equivalent to ``++r``               |
 +--------------------------------+----------------------------------+---------------------------------------+
 |``*r++``                        |if ``X`` is a *Readable Iterator* |if ``X`` is a *Readable Iterator* then |
 |                                |then ``T``                        |``T z(*r++);`` is equivalent to        |
