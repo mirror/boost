@@ -65,11 +65,11 @@ namespace boost { namespace numeric { namespace ublas {
     struct no_init {};
 
     // Unbounded array - with allocator
-    template<class T, class A>
+    template<class T, class ALLOC>
     class unbounded_array {
     public:
-        typedef typename A::size_type size_type;
-        typedef typename A::difference_type difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -78,42 +78,49 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         explicit BOOST_UBLAS_INLINE
-        unbounded_array (const A&a = A()):
-            size_ (0), data_ (0) {
+        unbounded_array (const ALLOC& a = ALLOC()):
+            alloc (a), size_ (0), data_ (0) {
         }
         explicit BOOST_UBLAS_INLINE
-        unbounded_array (size_type size, const A&a = A()):
-            size_ (size) {
+        unbounded_array (size_type size, const ALLOC &a = ALLOC()):
+            alloc(a), size_ (size) {
             if (size_) {
                 data_ = alloc.allocate (size_);
                 const value_type v = value_type();
                 for (iterator i = begin(); i != end(); ++i) {
-                alloc.construct (&(*i), v); 
+                    alloc.construct (&(*i), v); 
+                }
+            }
+        }
+        // No value initialised, but still be default constructed
+        BOOST_UBLAS_INLINE
+        unbounded_array (size_type size, no_init, const ALLOC &a = ALLOC()):
+            alloc (a), size_ (size) {
+            if (size_) {
+                data_ = alloc.allocate (size_);
+                for (iterator i = begin(); i != end(); ++i) {
+                    new (&(*i)) value_type; 
                 }
             }
         }
         BOOST_UBLAS_INLINE
-        unbounded_array (size_type size, no_init):
-            size_ (size) {
-            if (size_)
-                data_ = alloc.allocate (size_);
-        }
-        BOOST_UBLAS_INLINE
-        unbounded_array (const unbounded_array &a):
-            size_ (a.size_) {
-            data_ = alloc.allocate (a.size_);
-            if (size_) {
-                const_iterator ai = a.begin();
-                for (iterator i = begin(); i != end(); ++i) {
-                    alloc.construct (&(*i), *ai);
-                    ++ai;
-                }
+        unbounded_array (const unbounded_array &c):
+            alloc (c.alloc), size_ (c.size_) {
+            data_ = alloc.allocate (c.size_);
+            const_iterator ci = c.begin();
+            for (iterator i = begin(); i != end(); ++i) {
+                alloc.construct (&(*i), *ci);
+                ++ci;
             }
         }
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
-            if (size_)
+            if (size_) {
+                for (iterator i = begin(); i != end(); ++i) {
+                    alloc.destroy (&(*i)); 
+                }
                 alloc.deallocate (data_, size_);
+            }
         }
 
         // Resizing
@@ -146,7 +153,12 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 else
                     data = 0;
-                alloc.deallocate (data_, size_);
+                if (size_) {
+                    for (iterator i = begin(); i != end(); ++i) {
+                        alloc.destroy (&(*i)); 
+                    }
+                    alloc.deallocate (data_, size_);
+                }
                 size_ = size;
                 data_ = data;
             }
@@ -291,17 +303,17 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        A alloc;
+        ALLOC alloc;
         size_type size_;
         pointer data_;
     };
 
     // Bounded array - with allocator for size_type and difference_type
-    template<class T, std::size_t N, class A>
+    template<class T, std::size_t N, class ALLOC>
     class bounded_array {
     public:
-        typedef typename A::size_type size_type;
-        typedef typename A::difference_type difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -312,43 +324,36 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_array ():
             // Kresimir Fresl suggested to change the default back to the template argument.
-            size_ (N) /* , data_ () */ {
+            size_ (N), data_ () {
             const value_type v = value_type();
-            for (iterator i = begin(); i != end(); ++i) {
-                new (&(*i)) value_type(v);
-            }
+            std::fill (begin(), end(), v);
         }
         explicit BOOST_UBLAS_INLINE
         bounded_array (size_type size):
-            size_ (size) /* , data_ () */ {
+            size_ (size), data_ () {
             if (size_ > N)
                 bad_size ().raise ();
             const value_type v = value_type();
-            for (iterator i = begin(); i != end(); ++i) {
-                new (&(*i)) value_type(v);
-            }
+            std::fill (begin(), end(), v);
         }
         BOOST_UBLAS_INLINE
         bounded_array (size_type size, no_init):
-            size_ (size) /* , data_ () */ {
+            size_ (size), data_ () {
             if (size_ > N)
                 bad_size ().raise ();
         }
         BOOST_UBLAS_INLINE
-        bounded_array (const bounded_array &a):
-            size_ (a.size_) /* , data_ () */ {
-            if (size_ > N)
-                bad_size ().raise ();
-            *this = a;
+        bounded_array (const bounded_array &c):
+            size_ (c.size_), data_ (c.data_) {
         }
-
+        
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (size > N)
                 bad_size ().raise ();
-            if (preserve)
-                std::fill (data_ + (std::min) (size, size_), data_ + size, value_type ());
+            if (preserve && size > size_)
+                std::fill (data_ + size_, data_ + size, value_type ());
             size_ = size;
         }
 
