@@ -24,10 +24,30 @@ void test_date_duration()
   check("Greater equal ",        threeDays >= threeDays);
   check("Greater equal - false", !(twoDays >= threeDays));
   check("add", twoDays + threeDays == date_duration(5));
+  date_duration fiveDays = threeDays;
+  fiveDays += twoDays;
+  check("add", fiveDays == date_duration(5));
+  date_duration tenDays = fiveDays;
+  tenDays += date_duration(5);
+  check("add", tenDays.days() == 10);
+  
   date_duration derivedOneDay = threeDays - twoDays;
   check("Subtraction - neg result", twoDays - threeDays == date_duration(-1));
   date_duration oneDay(1);
   check("Subtraction",           oneDay == derivedOneDay);
+  date_duration fiveDaysDerived = tenDays;
+  fiveDaysDerived -= fiveDays;
+  check("Subtraction",           fiveDaysDerived == fiveDays);
+
+  oneDay = twoDays / 2;
+  check("Division",           oneDay.days() == 1);
+  date_duration oneDayDivide = threeDays / 2;
+  check("Division",           oneDayDivide.days() == 1);
+  date_duration hundred(100);
+  hundred /= -10;
+  check("Division",           hundred.days() == -10 && hundred.is_negative());
+  
+
 
 //   date_duration dd(1);
 //   dd++;
