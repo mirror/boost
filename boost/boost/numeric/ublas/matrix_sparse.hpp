@@ -2479,7 +2479,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename IA::value_type size_type;
         // size_type for the data arrays.
         typedef typename IA::size_type  array_size_type;
-		// FIXME difference type for sprase storage iterators should it be in the container?
+        // FIXME difference type for sparse storage iterators should it be in the container?
         typedef typename IA::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
@@ -2598,6 +2598,13 @@ namespace boost { namespace numeric { namespace ublas {
         value_array_type &value_data () {
             return value_data_;
         }
+        BOOST_UBLAS_INLINE
+        void complete_index1_data () {
+            while (filled1_ <= layout_type::size1 (size1_, size2_)) {
+                this->index1_data_ [filled1_] = k_based (filled2_);
+                ++ this->filled1_;
+            }
+        }
 
         // Resizing
     private:

@@ -125,6 +125,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type col_index = layout_type::element2( e1.index1_data () [i], size1, e1.index2_data () [i], size2 );
             v( row_index ) += e1.value_data () [i] * e2 () (col_index);
         }
+        return v;
     }
 
     template<class V, class E1, class E2>
@@ -288,7 +289,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
 
-        for (size_type j = 0; j < e2.size2 (); ++ j) {
+        for (size_type j = 0; j < e2.filled1 () -1; ++ j) {
             size_type begin = e2.index1_data () [j];
             size_type end = e2.index1_data () [j + 1];
             value_type t (v (j));
@@ -307,7 +308,7 @@ namespace boost { namespace numeric { namespace ublas {
                V &v, row_major_tag) {
         typedef typename V::size_type size_type;
 
-        for (size_type i = 0; i < e2.size1 (); ++ i) {
+        for (size_type i = 0; i < e2.filled1 () -1; ++ i) {
             size_type begin = e2.index1_data () [i];
             size_type end = e2.index1_data () [i + 1];
             for (size_type j = begin; j < end; ++ j)
