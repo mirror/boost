@@ -80,5 +80,12 @@ test-suite range
         :
         : compat3_test
        ] 
+       
+     [ run
+             adl_conformance.cpp    
+            : :
+        :
+        : adl_conformance
+       ] 
     ;
 }
