@@ -45,8 +45,7 @@
                   BOOST_IOSTREAMS_PUSH_ARGS() ); \
     /**/
 
-#ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //-------------------------//
-# define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
+#define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     template<typename CharType, typename TraitsType> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(::std::basic_streambuf<CharType, TraitsType>& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
@@ -84,45 +83,5 @@
     { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
                     BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     /**/
-#else // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //----------------//
-# define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
-    template<typename CharType, typename TraitsType> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(::std::basic_streambuf<CharType, TraitsType>& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, sb, helper, has_return); } \
-    template<typename CharType, typename TraitsType> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(::std::basic_istream<CharType, TraitsType>& is BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { BOOST_STATIC_ASSERT((!is_convertible<mode, output>::value)); \
-      BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, is, helper, has_return); } \
-    template<typename CharType, typename TraitsType> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(::std::basic_ostream<CharType, TraitsType>& os BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { BOOST_STATIC_ASSERT((!is_convertible<mode, input>::value)); \
-      BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, os, helper, has_return); } \
-    template<typename CharType, typename TraitsType> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(::std::basic_iostream<CharType, TraitsType>& io BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, io, helper, has_return); } \
-    template<typename Iter> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(const iterator_range<Iter>& rng BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { BOOST_PP_EXPR_IF(has_return, return) \
-    this->helper( ::boost::iostreams::detail::range_adapter< \
-                      mode, iterator_range<Iter> \
-                  >(rng) \
-                  BOOST_IOSTREAMS_PUSH_ARGS() ); } \
-    template<typename Piper, typename Concept> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name( const ::boost::iostreams::detail::piper<Piper, Concept>& p \
-          BOOST_IOSTREAMS_PUSH_PARAMS() ) \
-    { p.push(*this); } \
-    template<typename T> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS() BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) \
-    { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
-                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
-    /**/
-#endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_PUSH_HPP_INCLUDED
