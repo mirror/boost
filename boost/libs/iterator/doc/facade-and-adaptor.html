@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
 <title>Iterator Facade and Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -326,7 +326,7 @@ of the derived iterator type.  These member functions are described
 briefly below and in more detail in the iterator facade
 requirements.</p>
 <blockquote>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -725,7 +725,7 @@ is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
 <a class="target" id="core-operations" name="core-operations"></a><div class="topic">
 <p class="topic-title"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="19%" />
 <col width="21%" />
@@ -1497,51 +1497,11 @@ Iterator and Readable Iterator.</p>
 </div>
 <div class="section" id="reverse-iterator-models">
 <h4><a class="toc-backref" href="#id49" name="reverse-iterator-models"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></h4>
-<p>The concepts that <tt class="literal"><span class="pre">reverse_iterator</span></tt> models are dependent on what
-concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
-following tables.</p>
-<table border class="table">
-<colgroup>
-<col width="48%" />
-<col width="52%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
-<th>then <tt class="literal"><span class="pre">reverse_iterator</span></tt> models</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>Bidirectional Traversal Iterator</td>
-<td>Bidirectional Traversal Iterator</td>
-</tr>
-<tr><td>Random Access Traversal Iterator</td>
-<td>Random Access Traversal Iterator</td>
-</tr>
-</tbody>
-</table>
-<table border class="table">
-<colgroup>
-<col width="41%" />
-<col width="59%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
-<th>then <tt class="literal"><span class="pre">reverse_iterator</span></tt> models</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>Readable Iterator</td>
-<td>Readable Iterator</td>
-</tr>
-<tr><td>Writable Iterator</td>
-<td>Writable Iterator</td>
-</tr>
-<tr><td>Lvalue Iterator</td>
-<td>Lvalue Iterator</td>
-</tr>
-</tbody>
-</table>
-<table border class="table">
+<p><tt class="literal"><span class="pre">reverse_iterator</span></tt> models the same standard traversal and access
+iterator concepts that the <tt class="literal"><span class="pre">Iterator</span></tt> argument models.  In addition,
+<tt class="literal"><span class="pre">reverse_iterator</span></tt> models the old iterator concepts specified in the
+following table, depnding on what the <tt class="literal"><span class="pre">Iterator</span></tt> argument models.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="62%" />
 <col width="38%" />
@@ -1734,7 +1694,7 @@ concept that is modeled by the <tt class="literal"><span class="pre">Iterator</s
 <p>If <tt class="literal"><span class="pre">transform_iterator</span></tt> is a model of Readable Lvalue Iterator then
 it models the following original iterator concepts depending on what
 the <tt class="literal"><span class="pre">Iterator</span></tt> argument models.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="51%" />
 <col width="49%" />
@@ -1858,15 +1818,15 @@ transform_iterator(
 <div class="section" id="filter-iterator">
 <h3><a class="toc-backref" href="#id56" name="filter-iterator">Filter iterator</a></h3>
 <p>The filter iterator adaptor creates a view of an iterator range in
-which some elements of the range are skipped over. A predicate
-function object controls which elements are skipped. When the
-predicate is applied to an element, if it returns <tt class="literal"><span class="pre">true</span></tt> then the
-element is retained and if it returns <tt class="literal"><span class="pre">false</span></tt> then the element is
-skipped over. When skipping over elements, it is necessary for the
-filter adaptor to know when to stop so as to avoid going past the end
-of the underlying range. Therefore the constructor of the filter
-iterator takes two iterator parameters: the position for the filtered
-iterator and the end of the range.</p>
+which some elements of the range are skipped. A predicate function
+object controls which elements are skipped. When the predicate is
+applied to an element, if it returns <tt class="literal"><span class="pre">true</span></tt> then the element is
+retained and if it returns <tt class="literal"><span class="pre">false</span></tt> then the element is skipped
+over. When skipping over elements, it is necessary for the filter
+adaptor to know when to stop so as to avoid going past the end of the
+underlying range. A filter iterator is therefore constructed with pair
+of iterators indicating the range of elements in the unfiltered
+sequence to be traversed.</p>
 <div class="section" id="class-template-filter-iterator">
 <h4><a class="toc-backref" href="#id57" name="class-template-filter-iterator">Class template <tt class="literal"><span class="pre">filter_iterator</span></tt></a></h4>
 <pre class="literal-block">
@@ -1916,10 +1876,10 @@ Input Iterator.</p>
 </div>
 <div class="section" id="filter-iterator-models">
 <h4><a class="toc-backref" href="#id59" name="filter-iterator-models"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></h4>
-<p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on what
+<p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on which
 concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
 following tables.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="33%" />
 <col width="67%" />
@@ -1938,7 +1898,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="41%" />
 <col width="59%" />
@@ -1960,7 +1920,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="63%" />
 <col width="38%" />
@@ -2095,9 +2055,9 @@ or <tt class="literal"><span class="pre">m_pred(*m_iter)</span> <span class="pre
 </div>
 <div class="section" id="counting-iterator">
 <h3><a class="toc-backref" href="#id61" name="counting-iterator">Counting iterator</a></h3>
-<p><tt class="literal"><span class="pre">counting_iterator</span></tt> adapts an incrementable type such as <tt class="literal"><span class="pre">int</span></tt>
-or <tt class="literal"><span class="pre">std::list&lt;std::string&gt;::iterator</span></tt>, by adding an <tt class="literal"><span class="pre">operator*</span></tt>
-that returns the current value of the object.</p>
+<p><tt class="literal"><span class="pre">counting_iterator</span></tt> adapts an object by adding an <tt class="literal"><span class="pre">operator*</span></tt> that
+returns the current value of the object. All other iterator operations
+are forwarded to the adapted object.</p>
 <div class="section" id="class-template-counting-iterator">
 <h4><a class="toc-backref" href="#id62" name="class-template-counting-iterator">Class template <tt class="literal"><span class="pre">counting_iterator</span></tt></a></h4>
 <pre class="literal-block">
@@ -2126,15 +2086,19 @@ class counting_iterator
     Incrementable m_inc; // exposition
   };
 </pre>
-<p>If the <tt class="literal"><span class="pre">Diference</span></tt> argument is <tt class="literal"><span class="pre">use_default</span></tt> then the
+<p>If the <tt class="literal"><span class="pre">Difference</span></tt> argument is <tt class="literal"><span class="pre">use_default</span></tt> then the
 <tt class="literal"><span class="pre">difference_type</span></tt> member is an implementation defined signed
-integral type.</p>
-<p>The member <tt class="literal"><span class="pre">iterator_category</span></tt> is a type that satisfies the
-requirements of the concepts modeled by the <tt class="literal"><span class="pre">counting_iterator</span></tt> as
-specified in the models section.</p>
+integral type. Otherwise <tt class="literal"><span class="pre">difference_type</span></tt> is <tt class="literal"><span class="pre">Difference</span></tt>.</p>
+<p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is not <tt class="literal"><span class="pre">use_default</span></tt> then the member
+<tt class="literal"><span class="pre">iterator_category</span></tt> is <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>.  Otherwise, if
+<tt class="literal"><span class="pre">Incrementable</span></tt> is a numeric type then <tt class="literal"><span class="pre">iterator_category</span></tt> is a
+type convertible to <tt class="literal"><span class="pre">random_access_traversal_tag</span></tt> and
+<tt class="literal"><span class="pre">random_access_iterator_tag</span></tt>. If <tt class="literal"><span class="pre">Incrementable</span></tt> is not a numeric
+type then <tt class="literal"><span class="pre">iterator_category</span></tt> is
+<tt class="literal"><span class="pre">iterator_traversal&lt;Incrementable&gt;::type</span></tt>.</p>
 <dl>
 <dt>[<em>Note:</em> implementers are encouraged to provide an implementation of</dt>
-<dd><tt class="literal"><span class="pre">distance_to</span></tt> and a <tt class="literal"><span class="pre">difference_type</span></tt> that avoids overflows in
+<dd><tt class="literal"><span class="pre">operator-</span></tt> and a <tt class="literal"><span class="pre">difference_type</span></tt> that avoids overflows in
 the cases when the <tt class="literal"><span class="pre">Incrementable</span></tt> type is a numeric type.]</dd>
 </dl>
 </div>
@@ -2142,33 +2106,35 @@ the cases when the <tt class="literal"><span class="pre">Incrementable</span></t
 <h4><a class="toc-backref" href="#id63" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h4>
 <p>The <tt class="literal"><span class="pre">Incrementable</span></tt> type must be Default Constructible, Copy
 Constructible, and Assignable.</p>
-</div>
-<div class="section" id="counting-iterator-models">
-<h4><a class="toc-backref" href="#id64" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h4>
-<p><tt class="literal"><span class="pre">counting_iterator</span></tt> models Readable Lvalue Iterator.</p>
-<p>Furthermore, if you wish to create a counting iterator that is a
-Forward Traversal Iterator and also Forward Iterator, then the
-following expressions must be valid:</p>
+<p>If <tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to <tt class="literal"><span class="pre">forward_iterator_tag</span></tt> or
+<tt class="literal"><span class="pre">forward_traversal_tag</span></tt> then the following expressions must be valid:</p>
 <pre class="literal-block">
 Incrementable i, j;
 ++i         // pre-increment
 i == j      // operator equal
 </pre>
-<p>If you wish to create a counting iterator that is a Bidirectional
-Traversal Iterator and also Bidirectional Iterator, then pre-decrement
-is also required:</p>
+<p>If <tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to
+<tt class="literal"><span class="pre">bidirectional_iterator_tag</span></tt> or <tt class="literal"><span class="pre">bidirectional_traversal_tag</span></tt> then
+pre-decrement is required:</p>
 <pre class="literal-block">
 --i
 </pre>
-<p>If you wish to create a counting iterator that is a Random Access
-Traversal Iterator and also Random Access Iterator, then these
-additional expressions are also required:</p>
+<p>If <tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to
+<tt class="literal"><span class="pre">random_access_iterator_tag</span></tt> or <tt class="literal"><span class="pre">random_access_traversal_tag</span></tt> then
+these additional expressions are also required:</p>
 <pre class="literal-block">
 counting_iterator::difference_type n;
 i += n
 n = i - j
 i &lt; j
 </pre>
+</div>
+<div class="section" id="counting-iterator-models">
+<h4><a class="toc-backref" href="#id64" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h4>
+<p><tt class="literal"><span class="pre">counting_iterator</span></tt> models Readable Lvalue Iterator. In addition,
+<tt class="literal"><span class="pre">counting_iterator</span></tt> models the concepts corresponding to the
+iterator tags that <tt class="literal"><span class="pre">counting_iterator::iterator_category</span></tt> is
+convertible to.</p>
 </div>
 <div class="section" id="counting-iterator-operations">
 <h4><a class="toc-backref" href="#id65" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h4>
@@ -2180,7 +2146,7 @@ operations.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A default constructed instance of <tt class="literal"><span class="pre">counting_iterator</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Default construct the member <tt class="literal"><span class="pre">m_inc</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -2189,7 +2155,7 @@ operations.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">counting_iterator</span></tt> that is a copy of <tt class="literal"><span class="pre">rhs</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Construct member <tt class="literal"><span class="pre">m_inc</span></tt> from <tt class="literal"><span class="pre">rhs.m_inc</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -2198,8 +2164,7 @@ operations.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">counting_iterator</span></tt> with <tt class="literal"><span class="pre">m_inc</span></tt>
-constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Construct member <tt class="literal"><span class="pre">m_inc</span></tt> from <tt class="literal"><span class="pre">x</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -2338,10 +2303,10 @@ LocalWords:  OtherIncrementable Coplien -->
 </div>
 </div>
 </div>
-<hr class="footer" />
+<hr class="footer"/>
 <div class="footer">
 <a class="reference" href="facade-and-adaptor.rst">View document source</a>.
-Generated on: 2004-01-12 20:48 UTC.
+Generated on: 2004-01-13 02:53 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

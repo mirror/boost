@@ -9,6 +9,7 @@
     where ``m_iter`` is either the first position in the range ``[x,end)`` such that
     ``f(*this->base()) == true`` or else ``m_iter == end``.
     The member ``m_pred`` is constructed from ``f`` and ``m_end`` from ``end``.
+
 ::
 
     template <class Predicate, class Iterator>
