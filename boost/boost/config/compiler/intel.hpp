@@ -62,10 +62,6 @@
 #  define BOOST_DISABLE_WIN32
 #endif
 
-#ifndef _CPPUNWIND
-#  define BOOST_NO_EXCEPTIONS
-#endif
-
 // I checked version 6.0 build 020312Z, it implements the NRVO.
 // Correct this as you find out which version of the compiler
 // implemented the NRVO first.  (Daniel Frey)
