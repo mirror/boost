@@ -242,7 +242,7 @@ namespace assign
         }
 
         
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
         template< class T >
         list_inserter& operator()( const T& t )
