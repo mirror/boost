@@ -27,7 +27,8 @@ namespace boost
     {
         typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
-        
+
+        typedef BOOST_DEDUCED_TYPENAME base::impl impl;
     public:
         typedef BOOST_DEDUCED_TYPENAME range_value<ForwardRange>::type            value_type;
         typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type  iterator;
@@ -43,7 +44,7 @@ namespace boost
         sub_range( ForwardRange2& r ) : 
             
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( this->adl_begin( r ), this->adl_end( r ) )
+            base( impl::adl_begin( r ), impl::adl_end( r ) )
 #else
             base( r )
 #endif        
@@ -53,7 +54,7 @@ namespace boost
         sub_range( const ForwardRange2& r ) : 
 
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( this->adl_begin( r ), this->adl_end( r ) )
+            base( impl::adl_begin( r ), impl::adl_end( r ) )
 #else
             base( r )
 #endif                
