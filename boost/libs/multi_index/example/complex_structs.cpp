@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example: complex searches and foreign keys.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -88,7 +88,7 @@ struct car_model
   }
 };
 
-/* see Advanced topics: Use of member_offset for info on
+/* see Compiler specifics: Use of member_offset for info on
  * BOOST_MULTI_INDEX_MEMBER
  */
 

@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of member functions used as key extractors.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -46,7 +46,10 @@ private:
   std::string family_name;
 };
 
-/* multi_index_container with only one index based on name_record::name() */
+/* multi_index_container with only one index based on name_record::name().
+ * See Compiler specifics: Use of const_mem_fun_explicit and
+ * mem_fun_explicit for info on BOOST_MULTI_INDEX_CONST_MEM_FUN.
+ */
 
 typedef multi_index_container<
   name_record,

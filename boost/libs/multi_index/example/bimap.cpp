@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of a bidirectional map.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -42,7 +42,7 @@ struct bidirectional_map
     defined(BOOST_INTEL_CXX_VERSION)&&defined(_MSC_VER)&&\
            (BOOST_INTEL_CXX_VERSION<=700)
 
-/* see Advanced topics: Use of member_offset for info on member<> and
+/* see Compiler specifics: Use of member_offset for info on member<> and
  * member_offset<>
  */
 
