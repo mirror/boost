@@ -20,7 +20,7 @@
 
 #include <algorithm>
 #include <iterator>  // for iterator_traits
-#include <utilities> // for std::pair
+#include <utility> // for std::pair
 
 namespace boost {
   namespace lambda {
@@ -154,11 +154,11 @@ struct count {
 
   template <class Args>
   struct sig { 
-    typename ::std::iterator_traits<
-     typedef typename boost::remove_const<
+    typedef typename ::std::iterator_traits<
+      typename boost::remove_const<
            typename boost::tuples::element<1, Args>::type
       >::type 
-     >::difference_type type
+    >::difference_type type;
   };
 
   template <class A, class B >
@@ -173,11 +173,11 @@ struct count_if {
 
   template <class Args>
   struct sig { 
-    typename ::std::iterator_traits<
-     typedef typename boost::remove_const<
+    typedef typename ::std::iterator_traits<
+     typename boost::remove_const<
            typename boost::tuples::element<1, Args>::type
        >::type
-     >::difference_type type
+    >::difference_type type;
   };
 
   template <class A, class B, class C >
@@ -610,7 +610,7 @@ struct unique_copy {
 
   template <class A, class B, class C, class D>
   C
-  operator()(A a, B b, C c, D c) const
+  operator()(A a, B b, C c, D d) const
   { return ::std::unique_copy(a, b, c, d); }
 
 };
@@ -678,7 +678,7 @@ struct rotate_copy {
 
   template <class A, class B, class C, class D>
   C
-  operator()(A a, B b, C c, D c) const
+  operator()(A a, B b, C c, D d) const
   { return ::std::rotate_copy(a, b, c, d); }
 
 };
