@@ -922,14 +922,168 @@ provide rather than how they're implemented.
 
 :Proposed resolution:
 
-  Remove the specfication of inheritance, and explicit specification of
-  all the functionality that was inherited from the specialized
-  iterators. 
+  Remove the specfication of inheritance, and add explicit
+  specification of all the functionality that was inherited from the
+  specialized iterators. 
 
   In iterator_adaptor, inheritance is retained, sorry NAD.  Also,
   the Interoperable Iterators concept is added to the new iterator
   concepts, and this concept is used in the specification of the
   iterator adaptors.
+
+
+  In [lib.iterator.special.adaptors]
+
+
+  Change::
+
+    class transform_iterator
+      : public iterator_adaptor</* see discussion */>
+    {
+      friend class iterator_core_access;
+
+  to::
+
+    class transform_iterator
+    {
+    public:
+      typedef /* see below */ value_type;
+      typedef /* see below */ reference;
+      typedef /* see below */ pointer;
+      typedef iterator_traits<Iterator>::difference_type difference_type;
+      typedef /* see below */ iterator_category;
+
+
+  Add::
+
+     Iterator base() const;
+     reference operator*() const;
+     transform_iterator& operator++();
+     transform_iterator& operator--();
+
+  Change::
+
+     private:
+       typename transform_iterator::value_type dereference() const;
+       UnaryFunction m_f;
+     };
+
+  to::
+
+     private:
+       Iterator m_iterator; // exposition only
+       UnaryFunction m_f;   // exposition only
+     };
+
+
+  Add:
+
+    If ``Iterator`` models Readable Lvalue Iterator and if ``Iterator``
+    models Random Access Traversal Iterator, then ``iterator_category`` is
+    convertible to ``random_access_iterator_tag``. Otherwise, if
+    ``Iterator`` models Bidirectional Traversal Iterator, then
+    ``iterator_category`` is convertible to
+    ``bidirectional_iterator_tag``.  Otherwise ``iterator_category`` is
+    convertible to ``forward_iterator_tag``. If ``Iterator`` does not
+    model Readable Lvalue Iterator then ``iterator_category`` is
+    convertible to ``input_iterator_tag``.
+
+
+  In the requirements section, change:
+
+    The type ``Iterator`` must at least model Readable Iterator.  The
+    resulting ``transform_iterator`` models the most refined of the
+    following options that is also modeled by ``Iterator``.
+
+      * Writable Lvalue Iterator if ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type`` is a non-const reference. 
+
+      * Readable Lvalue Iterator if ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type`` is a const
+        reference.
+
+      * Readable Iterator otherwise. 
+
+
+    The ``transform_iterator`` models the most refined standard traversal
+    concept that is modeled by ``Iterator``.
+
+    The ``reference`` type of ``transform_iterator`` is
+    ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
+    The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+
+  to:
+
+    The argument ``Iterator`` shall model Readable Iterator.
+
+
+  Add a new models section:
+
+    The resulting ``transform_iterator`` models the most refined of the
+    following options that is also modeled by ``Iterator``.
+
+      * Writable Lvalue Iterator if ``transform_iterator::reference`` is a non-const reference. 
+
+      * Readable Lvalue Iterator if ``transform_iterator::reference`` is a const reference.
+
+      * Readable Iterator otherwise. 
+
+    The ``transform_iterator`` models the most refined standard traversal
+    concept that is modeled by the ``Iterator`` argument.
+
+    If ``transform_iterator`` is a model of Readable Lvalue Iterator then
+    it models the following original iterator concepts depending on what
+    the ``Iterator`` argument models.
+
+    +-----------------------------------+---------------------------------+
+    | If ``Iterator`` models            | then ``filter_iterator`` models |
+    +===================================+=================================+
+    | Single Pass Iterator              | Input Iterator                  |
+    +-----------------------------------+---------------------------------+
+    | Forward Traversal Iterator        | Forward Iterator                |
+    +-----------------------------------+---------------------------------+
+    | Bidirectional Traversal Iterator  | Bidirectional Iterator          |
+    +-----------------------------------+---------------------------------+
+    | Random Access Traversal Iterator  | Random Access Iterator          |
+    +-----------------------------------+---------------------------------+
+
+    If ``transform_iterator`` models Writable Lvalue Iterator then it is a
+    mutable iterator (as defined in the old iterator requirements).
+
+    ``transform_iterator<F1, X, R1, V1>`` is interoperable with
+    ``transform_iterator<F2, Y, R2, V2>`` if and only if ``X`` is
+    interoperable with ``Y``.
+
+
+  Remove the private operations section heading and remove::
+
+    ``typename transform_iterator::value_type dereference() const;``
+
+    :Returns: ``m_f(transform_iterator::dereference());``
+
+  Add::
+
+    ``Iterator base() const;``
+    
+    :Returns: ``m_iterator``
+    
+
+    ``reference operator*() const;``
+ 
+    :Returns: ``m_f(*m_iterator)``
+
+    
+    ``transform_iterator& operator++();``
+    
+    :Effects: ``++m_iterator``
+    :Returns: ``*this``
+    
+    
+    ``transform_iterator& operator--();``
+    
+    :Effects: ``--m_iterator``
+    :Returns: ``*this``
+  
+
+
 
 
 9.38x Problem with specification of a->m in Readable Iterator
