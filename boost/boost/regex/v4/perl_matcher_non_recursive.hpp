@@ -38,7 +38,13 @@ inline void inplace_destroy(T* p)
 
 struct saved_state
 {
-   unsigned int id;
+   union{
+      unsigned int id;
+      // these ensure that this struct gets the same alignment as derived structs:
+      void* padding1;
+      std::size_t padding2;
+      std::ptrdiff_t padding3;
+   };
    saved_state(unsigned i) : id(i) {}
 };
 
