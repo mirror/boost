@@ -18,7 +18,7 @@ DEPENDS all : test ;
 
 test-suite "io"
    :    [  run ios_state_unit_test.cpp 
-                <lib>../../../libs/test/build/boost_test_exec_monitor
+                <lib>../../../libs/test/build/boost_unit_test_framework
               : # args
               : # input files
               : std::locale-support
