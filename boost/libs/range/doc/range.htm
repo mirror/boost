@@ -11,7 +11,7 @@
   -- purpose.  It is provided "as is" without express or implied warranty.
   -->
 <Head>
-<Title>Collection</Title>
+<Title>Range Concepts</Title>
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
 	ALINK="#ff0000"> 
@@ -20,147 +20,32 @@
 <IMG SRC="/Images/stat.gif" ALT="" BORDER=0   WIDTH = "6"  HEIGHT = "6" >
 
 <BR Clear>
-<H1>Collection</H1>
-
+<H1>Range</H1>
 
 <h3>Description</h3>
 
-A Collection is a <i>concept</i> similar to the STL <a
+A Range is a <i>concept</i> similar to the STL <a
 href="http://www.sgi.com/Technology/STL/Container.html">Container</a>
-concept.  A Collection provides iterators for accessing a range of
+concept.  A Range provides iterators for accessing a range of
 elements and provides information about the number of elements in the
-Collection.  However, a Collection has fewer requirements than a
-Container. The motivation for the Collection concept is that there are
+Range.  However, a Range has fewer requirements than a
+Container. The motivation for the Range concept is that there are
 many useful Container-like types that do not meet the full
 requirements of Container, and many algorithms that can be written
-with this reduced set of requirements. To summarize the reduction
-in requirements:
+with this reduced set of requirements. In particular, a Range does
+not necessarily
 
-<UL>
-<LI>It is not required to &quot;own&quot; its elements: the lifetime
-of an element in a Collection does not have to match the lifetime of
-the Collection object, though the lifetime of the element should cover
-the lifetime of the Collection object.
-<LI>The semantics of copying a Collection object is not defined (it
-could be a deep or shallow copy or not even support copying). 
-<LI>The associated reference type of a Collection does
-not have to be a real C++ reference.
-</UL>
+<ul>
+    <li> own the elements that can be accessed through it,
+    <li> have copy semantics,    
+    <li> require that the associated reference type is a real C++ reference.
+</ul>
 
-
-Because of the reduced requirements, some care must be taken when
-writing code that is meant to be generic for all Collection types.
-In particular, a Collection object should be passed by-reference
-since assumptions can not be made about the behaviour of the
-copy constructor.
+Because of the second requirement, a Range object must
+be passed by reference in generic code.
 
 <p>
 
-<h3>Associated types</h3>
-
-<Table border>
-<TR>
-<TD VAlign=top>
-Value type
-</TD>
-<TD VAlign=top>
-<tt>X::value_type</tt>
-</TD>
-<TD VAlign=top>
-The type of the object stored in a Collection.  
-If the Collection is <i>mutable</i> then
-the value type must be <A
-href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</A>.
-Otherwise the value type must be <a href="./CopyConstructible.html">CopyConstructible</a>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Iterator type
-</TD>
-<TD VAlign=top>
-<tt>X::iterator</tt>
-</TD>
-<TD VAlign=top>
-The type of iterator used to iterate through a Collection's
-   elements.  The iterator's value type is expected to be the
-   Collection's value type.  A conversion
-   from the iterator type to the const iterator type must exist.
-   The iterator type must be an <A href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</A>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Const iterator type
-</TD>
-<TD VAlign=top>
-<tt>X::const_iterator</tt>
-</TD>
-<TD VAlign=top>
-A type of iterator that may be used to examine, but not to modify,
-   a Collection's elements.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Reference type
-</TD>
-<TD VAlign=top>
-<tt>X::reference</tt>
-</TD>
-<TD VAlign=top>
-A type that behaves like a reference to the Collection's value type.
-<a href="#1">[1]</a>
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Const reference type
-</TD>
-<TD VAlign=top>
-<tt>X::const_reference</tt>
-</TD>
-<TD VAlign=top>
-A type that behaves like a const reference to the Collection's value type.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Pointer type
-</TD>
-<TD VAlign=top>
-<tt>X::pointer</tt>
-</TD>
-<TD VAlign=top>
-A type that behaves as a pointer to the Collection's value type.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Distance type
-</TD>
-<TD VAlign=top>
-<tt>X::difference_type</tt>
-</TD>
-<TD VAlign=top>
-A signed integral type used to represent the distance between two
-   of the Collection's iterators.  This type must be the same as 
-   the iterator's distance type.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Size type
-</TD>
-<TD VAlign=top>
-<tt>X::size_type</tt>
-</TD>
-<TD VAlign=top>
-An unsigned integral type that can represent any nonnegative value
-   of the Collection's distance type.
-</TD>
-</tr>
-</table>
 <h3>Notation</h3>
 <Table>
 <TR>
@@ -168,7 +53,7 @@ An unsigned integral type that can represent any nonnegative value
 <tt>X</tt>
 </TD>
 <TD VAlign=top>
-A type that is a model of Collection.
+A type that is a model of Range.
 </TD>
 </TR>
 <TR>
@@ -188,6 +73,120 @@ The value type of <tt>X</tt>.
 </TD>
 </tr>
 </table>
+
+<h3>Associated types</h3>
+
+<Table border>
+<TR>
+<TD VAlign=top>
+Value type
+</TD>
+<TD VAlign=top>
+<tt>X::value_type</tt>
+</TD>
+<TD VAlign=top>
+The type of the object stored in a Range.  
+    <!--
+If the Collection is <i>mutable</i> then
+the value type must be <A
+href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</A>.
+Otherwise the value type must be <a href="./CopyConstructible.html">CopyConstructible</a>.
+    -->
+</TD>
+</TR>
+<TR>
+<TD VAlign=top>
+Iterator type
+</TD>
+<TD VAlign=top>
+<tt>X::iterator</tt>
+</TD>
+<TD VAlign=top>
+The type of iterator used to iterate through a Range's
+   elements.  The iterator's value type is expected to be the
+   Range's value type.  A conversion
+   from the iterator type to the const iterator type must exist.
+   The iterator type must at least be an <A 
+href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</A>.
+</TD>
+</TR>
+<TR>
+<TD VAlign=top>
+Const iterator type
+</TD>
+<TD VAlign=top>
+<tt>X::const_iterator</tt>
+</TD>
+<TD VAlign=top>
+A type of iterator that may be used to examine, but not to modify,
+   a Range's elements.
+</TD>
+</TR>
+<TR>
+<TD VAlign=top>
+Reference type
+</TD>
+<TD VAlign=top>
+<tt>X::reference</tt>
+</TD>
+<TD VAlign=top>
+A type that behaves like a reference to the Range's value type.
+<a href="#1">[1]</a>
+</TD>
+</TR>
+        <!--
+<TR>
+<TD VAlign=top>
+Const reference type
+</TD>
+<TD VAlign=top>
+<tt>X::const_reference</tt>
+</TD>
+
+    <TD VAlign=top>
+A type that behaves like a const reference to the Collection's value type.
+</TD>
+</TR>
+<TR>
+<TD VAlign=top>
+Pointer type
+</TD>
+<TD VAlign=top>
+<tt>X::pointer</tt>
+</TD>
+<TD VAlign=top>
+A type that behaves as a pointer to the Collection's value type.
+</TD>
+</TR>
+        -->
+        
+<TR>
+<TD VAlign=top>
+Distance type
+</TD>
+<TD VAlign=top>
+<tt>X::difference_type</tt>
+</TD>
+<TD VAlign=top>
+A signed integral type used to represent the distance between two
+   of the Range's iterators.  This type must be the same as 
+   the iterator's distance type.
+</TD>
+</TR>
+<TR>
+<TD VAlign=top>
+Size type
+</TD>
+<TD VAlign=top>
+<tt>X::size_type</tt>
+</TD>
+<TD VAlign=top>
+An unsigned integral type that can represent any nonnegative value
+   of the Range's distance type.
+</TD>
+</tr>
+</table>
+
 
 <h3>Valid expressions</h3>
 
@@ -254,7 +253,7 @@ Maximum size
 <TR>
 -->
 <TD VAlign=top>
-Empty Collection
+Empty range
 </TD>
 <TD VAlign=top>
 <tt>a.empty()</tt>
@@ -302,7 +301,7 @@ Beginning of range
 <tt>a.begin()</tt>
 </TD>
 <TD VAlign=top>
-Returns an iterator pointing to the first element in the Collection.
+Returns an iterator pointing to the first element in the Range.
 </TD>
 <TD VAlign=top>
 <tt>a.begin()</tt> is either dereferenceable or past-the-end.  It is
@@ -318,7 +317,7 @@ End of range
 </TD>
 <TD VAlign=top>
 Returns an iterator pointing one past the last element in the
-   Collection.
+   Range.
 </TD>
 <TD VAlign=top>
 <tt>a.end()</tt> is past-the-end.
@@ -391,12 +390,11 @@ Equivalent to <tt>swap(a,b)</tt>
 </table>
 <h3>Complexity guarantees</h3>
 
-<tt>begin()</tt> and <tt>end()</tt> are amortized constant time.
-<P>
-<tt>size()</tt> is at most linear in the Collection's
-size. <tt>empty()</tt> is amortized constant time.
-<!-- <P>
-<tt>swap()</tt> is at most linear in the size of the two collections. -->
+All four functions are at most amortized linear time. For
+most practical purposes, one can expect
+<tt>begin()</tt>, <tt>end()</tt> and <tt>empty()</tt> to be amortized constant 
+time. 
+
 <h3>Invariants</h3>
 <Table border>
 <TR>
@@ -404,7 +402,7 @@ size. <tt>empty()</tt> is amortized constant time.
 Valid range
 </TD>
 <TD VAlign=top>
-For any Collection <tt>a</tt>, <tt>[a.begin(), a.end())</tt> is a valid
+For any Range <tt>a</tt>, <tt>[a.begin(), a.end())</tt> is a valid
    range.
 </TD>
 </TR>
@@ -430,81 +428,66 @@ An algorithm that iterates through the range <tt>[a.begin(), a.end())</tt>
 
 <h3>Models</h3>
 <UL>
-<!-- <LI> <tt>array</tt> -->
-<!--<LI> <tt>array_ptr</tt> -->
-<LI> <tt>vector&lt;bool&gt;</tt>
+<LI> <tt>boost::array&lt;T,sz></tt> 
+<LI> <tt>std::vector&lt;bool&gt;</tt>
 </UL>
 
-<!--
-<h3>Collection Refinements</h3>
+<h3>See also</h3>
+<A href="http://www.sgi.com/Technology/STL/Container.html">Container</A>
 
-There are quite a few concepts that refine the Collection concept,
-similar to the concepts that refine the Container concept. Here
-is a brief overview of the refining concepts.
+<br><br>
+<hr>
+<br>
 
-<h4>ForwardCollection</h4>
-The elements are arranged in some order that
-does not change spontaneously from one iteration to the next. As
-a result, a ForwardCollection is 
-<A
-href="http://www.sgi.com/Technology/STL/EqualityComparable.html">EqualityComparable</A>
-and 
-<A
-href="http://www.sgi.com/Technology/STL/LessThanComparable.html">LessThanComparable</A>.
-In addition, the iterator type of a ForwardCollection is a
-MultiPassInputIterator which is just an InputIterator with the added
-requirements that the iterator can be used to make multiple passes
-through a range, and that if <tt>it1 == it2</tt> and <tt>it1</tt> is
-dereferenceable then <tt>++it1 == ++it2</tt>. The ForwardCollection
-also has a <tt>front()</tt> method.
+<h1>ReversibleRange</h1>
 
-<p>
-<Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Return type
-</TH>
-<TH>
-Semantics
-</TH>
-</TR>
-
-<TR>
-<TD VAlign=top>
-Font
-</TD>
-<TD VAlign=top>
-<tt>a.front()</tt>
-</TD>
-<TD VAlign=top>
-<tt>reference</tt> if <tt>a</tt> is mutable, <br> <tt>const_reference</tt>
-otherwise.
-</TD>
-<TD VAlign=top>
-Equivalent to <tt>*(a.first())</tt>.
-</TD>
-</TR>
-
-</table>
-
-
-<h4>ReversibleCollection</h4>
-
-The container provides access to iterators that traverse in both
+<h3>Description</h3>
+This concept provides access to iterators that traverse in both
 directions (forward and reverse). The iterator type must meet all of
 the requirements of <a
 href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>
 except that the reference type does not have to be a real C++
-reference. The ReversibleCollection adds the following requirements
-to those of ForwardCollection.
-<p>
+reference. 
 
+<h3>Refinement of</h3>
+Range
+
+<h3>Associated types</h3>
+
+<Table border>
+<TR>
+<TD VAlign=top>
+Reverse Iterator type
+</TD>
+<TD VAlign=top>
+<tt>X::reverse_iterator</tt>
+</TD>
+<TD VAlign=top>
+The type of iterator used to iterate through a Range's
+   elements in reverse order.  The iterator's value type is expected to be the
+   Range's value type.  A conversion
+   from the reverse iterator type to the const reverse iterator type must exist.
+   The iterator type must at least be a <a
+href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>.
+</TD>
+</TR>
+<TR>
+<TD VAlign=top>
+Const reverse iterator type
+</TD>
+<TD VAlign=top>
+<tt>X::const_reverse_iterator</tt>
+</TD>
+<TD VAlign=top>
+A type of reverse iterator that may be used to examine, but not to modify,
+   a Range's elements.
+</TD>
+</TR>
+</table>
+
+
+<h3>Valid expressions</h3>
+    
 <Table border>
 <TR>
 <TH>
@@ -551,53 +534,43 @@ Equivalent to <tt>X::reverse_iterator(a.begin())</tt>.
 </TD>
 </tr>
 
-<TR>
-<TD VAlign=top>
-Back
-</TD>
-<TD VAlign=top>
-<tt>a.back()</tt>
-</TD>
-<TD VAlign=top>
-<tt>reference</tt> if <tt>a</tt> is mutable, <br> <tt>const_reference</tt>
-otherwise.
-</TD>
-<TD VAlign=top>
-Equivalent to <tt>*(--a.end())</tt>.
-</TD>
-</TR>
-
 </table>
 
-<h4>SequentialCollection</h4>
+<h3>Complexity guarantees</h3>
 
-The elements are arranged in a strict linear order. No extra methods
-are required.
--->
+<tt>rbegin()</tt> has the same complexity as <tt>end()</tt> and 
+<tt>rend()</tt> has the same complexity as <tt>begin()</tt> from Range.
 
+<h3>Models</h3>
+
+<ul>
+<li> std::vector&lt;T>
+<li> std::list&lt;T>
+</ul>
+
+<hr>
 <h3>Notes</h3>
 
 <P><A name="1">[1]</A> 
 
 The reference type does not have to be a real C++ reference. The
 requirements of the reference type depend on the context within which
-the Collection is being used. Specifically it depends on the
-requirements the context places on the value type of the Collection.
-The reference type of the Collection must meet the same requirements
+the Range is being used. Specifically it depends on the
+requirements the context places on the value type of the Range.
+The reference type of the Range must meet the same requirements
 as the value type. In addition, the reference objects must be
-equivalent to the value type objects in the collection (which is
-trivially true if they are the same).  Also, in a mutable Collection,
+equivalent to the value type objects in the Range (which is
+trivially true if they are the same).  Also, in a mutable Range,
 an assignment to the reference object must result in an assignment to
-the object in the Collection (again, which is trivially true if they
+the object in the Range (again, which is trivially true if they
 are the same object, but non-trivial if the reference type is a proxy
 class).
 
-<h3>See also</h3>
-<A href="http://www.sgi.com/Technology/STL/Container.html">Container</A>
 
-
-<br>
+<br><br>
 <HR>
+<br>
+
 <TABLE>
 <TR valign=top>
 <TD nowrap>Copyright &copy 2000</TD><TD>
