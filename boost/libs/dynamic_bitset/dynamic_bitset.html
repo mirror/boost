@@ -405,9 +405,10 @@ Some people prefer the name &quot;toggle&quot; to
 
 <h3><a name="header-files">Header Files</a></h3>
 
-<p>Defined in the header <A href="../../boost/dynamic_bitset.hpp">
+<p>The class <tt>dynamic_bitset</tt> is defined in the header <A
+href="../../boost/dynamic_bitset.hpp">
 boost/dynamic_bitset.hpp</A>. Also, there is a forward declaration for
-class <tt>dynamic_bitset</tt> in the header <A
+<tt>dynamic_bitset</tt> in the header <A
 href="../../boost/dynamic_bitset_fwd.hpp">
 boost/dynamic_bitset_fwd.hpp</A>.</p>
 
@@ -469,7 +470,7 @@ None.
 <pre>
 <a name="reference">dynamic_bitset::reference</a>
 </pre>
-A proxy class that acts as a reference to a single bit.  It contains
+<p>A proxy class that acts as a reference to a single bit.  It contains
 an assignment operator, a conversion to <tt>bool</tt>, an
 <tt>operator~</tt>, and a member function <tt>flip</tt>.  It exists
 only as a helper class for <tt>dynamic_bitset</tt>'s
@@ -479,7 +480,7 @@ an instance of <tt>dynamic_bitset</tt>, <tt>i, j</tt> are of
 <tt>size_type</tt> and in the range <tt>[0,b.size())</tt>.  Also, note
 that when we write <tt>b[i]</tt> we mean an object of type
 <tt>reference</tt> that was initalized from <tt>b[i]</tt>.  The
-variable <tt>x</tt> is a <tt>bool</tt>.
+variable <tt>x</tt> is a <tt>bool</tt>.</p>
 
 <table border=1>
 <tr><th>Expression</th><th>Semantics</th></tr>
