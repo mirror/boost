@@ -106,6 +106,7 @@ template<> struct arg<i>
     {
         typedef BOOST_PP_CAT(U,i) type;
 #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x561 && defined(BOOST_STRICT_CONFIG))
+     private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
 #endif
@@ -128,6 +129,7 @@ template<> struct arg<-1>
     {
         typedef U1 type;
 #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x561 && defined(BOOST_STRICT_CONFIG))
+     private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
 #endif
