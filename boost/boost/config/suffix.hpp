@@ -337,67 +337,71 @@ namespace std {
 #  define BOOST_DEDUCED_TYPENAME
 #endif
 
-// BOOST_[APPEND_]TEMPLATE_EXPLICITLY_SPECIFIED_[NON_]TYPE macros -------------//
+// BOOST_[APPEND_]EXPLICIT_TEMPLATE_[NON_]TYPE macros --------------------------//
 //
 // Some compilers have problems with function templates whose
-// template parameters don't appear in the function parameter list.
-//
-// Basically they just link one instantiation of the template in
-// the final executable.
+// template parameters don't appear in the function parameter
+// list (basically they just link one instantiation of the
+// template in the final executable). These macros provide a
+// uniform way to cope with the problem with no effects on the
+// calling syntax.
 
 // Example:
 //
 //  #include <iostream>
 //  #include <ostream>
+//  #include <typeinfo>
 //
 //  template <int n>
-//  void f() { std::cout << n << '\n'; }
-
+//  void f() { std::cout << n << ' '; }
+//
+//  template <typename T>
+//  void g() { std::cout << typeid(T).name() << ' '; }
+//
 //  int main() {
-//      f<1>();
-//      f<2>();
+//    f<1>();
+//    f<2>();
+//
+//    g<int>();
+//    g<double>();
 //  }
 //
-// OUTPUT is:
+// With VC++ 6.0 the output is:
 //
-//  2
-//  2
+//   2 2 double double
 //
-// Write the definition of f as
+// To fix it, write
 //
-//  template <int n>
-//  void f(BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(int, n))
-//    { std::cout << n << '\n'; }
+//   template <int n>
+//   void f(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int, n)) { ... }
+//
+//   template <typename T>
+//   void g(BOOST_EXPLICIT_TEMPLATE_TYPE(T)) { ... }
+//
+
 
 #if defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
-# include "boost/type.hpp"
-# include "boost/non_type.hpp"
+#  include "boost/type.hpp"
+#  include "boost/non_type.hpp"
 
-// For type parameters
+#  define BOOST_EXPLICIT_TEMPLATE_TYPE(t)         boost::type<t>* = 0
+#  define BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  boost::non_type<t, v>* = 0
 
-#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)                \
-                                    boost::type<t>* = 0
-#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)         \
-             , BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)
-
-// For non-type parameters
-//
-#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)         \
-                                    boost::non_type<t, v>* = 0
-#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)  \
-             , BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)
-
+#  define BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)         \
+             , BOOST_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  \
+             , BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
 
 #else
 
 // no workaround needed: expand to nothing
 
-#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)
-#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)
+#  define BOOST_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
 
-#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)
-#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)
+#  define BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
 
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
