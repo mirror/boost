@@ -19,18 +19,18 @@
 #endif              
 
 #include <iosfwd>                           // streamsize.
-#include <iterator>                         // back_insert_iterator. 
 #include <string>                           // char_traits. 
-#include <boost/config.hpp>                 // partial spec.
+#include <boost/config.hpp>                 // partial spec, deduced typename.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/select.hpp>        
-#include <boost/iostreams/detail/ios_traits.hpp>        
+#include <boost/iostreams/detail/ios_traits.hpp>     
+#include <boost/iostreams/detail/is_iterator_range.hpp>        
 #include <boost/iostreams/detail/wrap_unwrap.hpp> 
-#include <boost/iterator/iterator_traits.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>      
 #include <boost/mpl/int.hpp>  
 #include <boost/range/iterator_range.hpp>
+#include <boost/range/value_type.hpp>
 #include <boost/type_traits/is_convertible.hpp>     
 #define BOOST_SELECT_BY_SIZE_MAX_CASE 9     
 #include <boost/iostreams/detail/select_by_size.hpp>                     
@@ -42,22 +42,41 @@ namespace boost { namespace iostreams {
 namespace detail {
 
 template<typename T>
-struct member_char_type { typedef typename T::char_type type; };
+struct get_char_type { typedef typename T::char_type type; };
 
 } // End namespace detail.
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
+
 template<typename T>
 struct io_char 
-    : detail::member_char_type<
+    : detail::get_char_type<
           typename detail::unwrapped_type<T>::type
       > 
     { };
+
 template<typename Iter>
 struct io_char< iterator_range<Iter> > {
     typedef typename iterator_value<Iter>::type type;
 };
+
 #else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //------------------//
+
+template<typename T>
+struct io_char {
+    template<typename U>
+    struct get_value_type {
+        typedef typename range_value<U>::type type;
+    };
+    typedef typename 
+            mpl::eval_if<
+                is_iterator_range<T>,
+                get_value_type<T>,
+                detail::get_char_type<
+                    BOOST_DEDUCED_TYPENAME detail::unwrapped_type<T>::type
+                >
+            >::type type;
+};
 
 #endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
 
@@ -171,7 +190,7 @@ namespace detail {
 
 template<typename T> // VC6 requires this intermediate traits template.
 struct get_int_type { 
-    typedef std::char_traits<typename io_char<T>::type>  traits_type; 
+    typedef std::char_traits<BOOST_DEDUCED_TYPENAME io_char<T>::type>  traits_type; 
     typedef typename traits_type::int_type                  type; 
 };
                 
