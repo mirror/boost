@@ -399,7 +399,7 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
             if(value)
                 *current |= mask;
 
-            mask >>= 1;
+            mask /= 2;
             ++n;
         }
         size_type get_count() const { return n; }
