@@ -27,27 +27,9 @@ main()
   std::string ids2 = boost::gregorian::to_iso_extended_string(d2);
   check("check iso extended string: "+ids2, ids2 == "2001-12-30");
 
-  //TODO REMOVE THIS STUFF
-  //  std::stringstream os;
-  // typedef boost::gregorian::date::ymd_type ymd_type;
-  
-//   typedef boost::date_time::ymd_formatter<ymd_type, boost::date_time::simple_format> ymdf;
-//   ymd_type ymd = d1.year_month_day();
-//   ymdf::ymd_put(ymd, os);
-//   check("ostream low level check string", 
-//     os.str() == std::string("2002-Jan-02"));
-
-
-//   typedef boost::date_time::date_formatter<boost::gregorian::date, 
-//                                       boost::date_time::simple_format> datef;
-//   os.str("");
-//   datef::date_to_ostream(d1, os);
-//   check("ostream low level check string", 
-//     os.str() == std::string("2002-Jan-02"));
-  
-   
   using namespace boost::gregorian;
   date d3(neg_infin);
+  std::cout  << "|" << to_simple_string(d3) << "|" << std::endl;
   check("check negative infinity",     
         (to_simple_string(d3) == std::string("-infinity")));
   date d4(pos_infin);

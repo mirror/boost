@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include <iostream>
@@ -93,6 +93,35 @@ main()
   check("Add zero days", date(1999,1,1) + zeroDays == date(1999,1,1));
   //can't do this...
   //check("Add date to duration", date_duration(365) + date(1999,1,1) == date(2000,1,1));
+
+  {
+    date d(2003,Oct,31);
+    date_duration dd(55);
+    d += dd;
+    check("date += date_duration", d == date(2003,Dec,25));
+    d -= dd;
+    check("date -= date_duration", d == date(2003,Oct,31));
+    /* special_values is more thoroughly tested later,
+     * this is just a test of += & -= with special values */
+    d += date_duration(pos_infin);
+    check("date += inf_dur", d == date(pos_infin));
+    d -= dd;
+    check("inf_date -= dur", d == date(pos_infin));
+  }
+  {
+    date d(2003,Oct,31);
+    date_duration dd1(pos_infin), dd2(neg_infin), dd3(not_a_date_time);
+    check("date + inf_dur", d + dd1 == date(pos_infin));
+    check("date + inf_dur", d + dd2 == date(neg_infin));
+    check("date + nan_dur", d + dd3 == date(not_a_date_time));
+    check("date - inf_dur", d - dd1 == date(neg_infin));
+    check("date - inf_dur", d - dd2 == date(pos_infin));
+    check("date - nan_dur", d - dd3 == date(not_a_date_time));
+    check("inf_date + inf_dur", date(pos_infin) + dd1 == date(pos_infin));
+    check("inf_date - inf_dur", date(pos_infin) - dd1 == date(not_a_date_time));
+    check("inf_date + inf_dur", date(neg_infin) + dd1 == date(not_a_date_time));
+    check("inf_date - inf_dur", date(neg_infin) - dd1 == date(neg_infin));
+  }
 
 
   try {
