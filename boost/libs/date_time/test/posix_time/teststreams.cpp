@@ -33,20 +33,25 @@ main()
   check("check time output: "+ss.str(), 
         ss.str() == std::string("2002-May-01 12:10:05"));
 
+  //  ss.imbue(global); 
+  time_period tp(t1, ptime(d1, hours(23)+time_duration::unit()));
+  ss.str("");
+  ss << tp;
+  check("check time period output: "+ ss.str(), 
+        ss.str() == std::string("[2002-May-01 12:10:05/2002-May-01 23:00:00]"));
+
   //Send out the same time with german
-  std::locale global;
   typedef boost::date_time::all_date_names_put<greg_facet_config> date_facet;
-  std::locale german(global, 
-                     new date_facet(de_short_month_names, 
-                                    de_long_month_names,
-                                    de_special_value_names,
-                                    de_short_weekday_names,
-                                    de_long_weekday_names,
-                                    '.',
-                                    boost::date_time::ymd_order_dmy,
-                                    boost::date_time::month_as_short_string));
  
-  ss.imbue(german); 
+  ss.imbue(std::locale(std::locale::classic(),
+                       new date_facet(de_short_month_names, 
+                                      de_long_month_names,
+                                      de_special_value_names,
+                                      de_short_weekday_names,
+                                      de_long_weekday_names,
+                                      '.',
+                                      boost::date_time::ymd_order_dmy,
+                                      boost::date_time::month_as_short_string))); 
   ss.str("");
   ss << t1;
   check("check time output: "+ ss.str(), 
@@ -68,14 +73,7 @@ main()
   check("check time period output: "+ ss.str(), 
         ss.str() == std::string("-00:40:00"));
 
-  ss.imbue(global); 
-  time_period tp(t1, ptime(d1, hours(23)+time_duration::unit()));
-  ss.str("");
-  ss << tp;
-  check("check time period output: "+ ss.str(), 
-        ss.str() == std::string("[2002-May-01 12:10:05/2002-May-01 23:00:00]"));
 
-  ss.imbue(german); 
   ss.str("");
   ss << tp;
   check("check time period output - german: "+ ss.str(), 
