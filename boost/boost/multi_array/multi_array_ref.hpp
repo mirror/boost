@@ -221,7 +221,7 @@ public:
   operator[](const detail::multi_array::
              index_gen<NumDims,NDims>& indices)
     const {
-    typedef const_array_view<NDims>::type return_type;
+    typedef typename const_array_view<NDims>::type return_type;
     return
       super_type::generate_array_view(boost::type<return_type>(),
                                       indices,
@@ -507,7 +507,7 @@ public:
   typename array_view<NDims>::type 
   operator[](const detail::multi_array::
              index_gen<NumDims,NDims>& indices) {
-    typedef array_view<NDims>::type return_type;
+    typedef typename array_view<NDims>::type return_type;
     return
       super_type::generate_array_view(boost::type<return_type>(),
                                       indices,

@@ -5,6 +5,7 @@
 
 #define MULTIARRAY_TEST_ASSIGN
 #include "generative_tests.hpp"
+#include "boost/concept_check.hpp" // for ignore_unused_variable_warning
 
 // iterator-test-specific code
 
@@ -112,6 +113,7 @@ void construct_iterators(Array&) {
 #endif
     typename Array::const_iterator ci2 = i1;
     typename Array::const_reverse_iterator cr2 = cr1;
+    ignore_unused_variable_warning(cr2);
   }
 }
 

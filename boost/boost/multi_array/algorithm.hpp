@@ -83,7 +83,7 @@ copy_n__(RAIter first, Size count,
 template <class InputIter, class Size, class OutputIter>
 inline OutputIter
 copy_n__(InputIter first, Size count, OutputIter result) {
-  typedef std::iterator_traits<InputIter>::iterator_category cat;
+  typedef typename std::iterator_traits<InputIter>::iterator_category cat;
   return copy_n__(first, count, result, cat());
 }
 
