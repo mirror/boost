@@ -1,18 +1,19 @@
 #ifndef BOOST_PREPROCESSOR_LIST_FOR_EACH_HPP
 #define BOOST_PREPROCESSOR_LIST_FOR_EACH_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/list/for_each.hpp">Click here to see the header.</a>
 */
@@ -20,8 +21,8 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/for.hpp>
 
-//! Repeats F(R,P,BOOST_PP_LIST_AT(L,I)) for each I = [0,BOOST_PP_LIST_SIZE(L)[.
-/*!
+/** Repeats F(R,P,BOOST_PP_LIST_AT(L,I)) for each I = [0,BOOST_PP_LIST_SIZE(L)[.
+
 In other words, expands to the sequence:
 
 <PRE>\verbatim

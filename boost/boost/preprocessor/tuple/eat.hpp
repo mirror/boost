@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_TUPLE_EAT_HPP
 #define BOOST_PREPROCESSOR_TUPLE_EAT_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/tuple/eat.hpp">Click here to see the header.</a>
 */
 
-//! Expands to a macro that eats a tuple of the specified length.
-/*!
+/** Expands to a macro that eats a tuple of the specified length.
+
 BOOST_PP_TUPLE_EAT() is designed to be used with BOOST_PP_IF() like
 BOOST_PP_EMPTY().
 

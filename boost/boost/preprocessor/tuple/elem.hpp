@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_TUPLE_ELEM_HPP
 #define BOOST_PREPROCESSOR_TUPLE_ELEM_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/tuple/elem.hpp">Click here to see the header.</a>
 */
 
-//! Expands to the I:th element of an N-tuple.
-/*!
+/** Expands to the I:th element of an N-tuple.
+
 For example,
 
 <PRE>\verbatim
@@ -43,21 +44,23 @@ See BOOST_PP_LIMIT_TUPLE.
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
-// This is a workaround for a CodeWarrior PP bug. Strictly speaking
-// this workaround invokes undefined behavior, but it works as desired.
+/* This is a workaround for a CodeWarrior PP bug. Strictly speaking
+ * this workaround invokes undefined behavior, but it works as desired.
+ */
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I##T
 #elif !defined(BOOST_NO_COMPILER_CONFIG) && defined(_MSC_VER)
 #  include <boost/preprocessor/expand.hpp>
-// This is a workaround for a MSVC++ PP bug. It should not be necessary
-// to use BOOST_PP_EXPAND(). Works on standard conforming compilers, too.
+/* This is a workaround for a MSVC++ PP bug. It should not be necessary
+ * to use BOOST_PP_EXPAND(). Works on standard conforming compilers, too.
+ */
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_EXPAND(BOOST_PP_TUPLE##N##_ELEM##I T)
 #else
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I T
 #endif
 
-// NOTE: TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
-// of O(N*N*N) space and O(1) time. The current trade-off seems better.
-
+/* NOTE: TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
+ * of O(N*N*N) space and O(1) time. The current trade-off seems better.
+ */
 #define BOOST_PP_TUPLE1_ELEM0(A) A
 
 #define BOOST_PP_TUPLE2_ELEM0(A,B) A
@@ -211,6 +214,6 @@ See BOOST_PP_LIMIT_TUPLE.
 #define BOOST_PP_TUPLE16_ELEM15(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) P
 #endif
 
-//! Obsolete. Use BOOST_PP_TUPLE_ELEM().
+/** Obsolete. Use BOOST_PP_TUPLE_ELEM(). */
 #define BOOST_PREPROCESSOR_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM(N,I,T)
 #endif

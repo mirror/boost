@@ -1,26 +1,27 @@
 #ifndef BOOST_PREPROCESSOR_TUPLE_TO_LIST_HPP
 #define BOOST_PREPROCESSOR_TUPLE_TO_LIST_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/tuple/to_list.hpp">Click here to see the header.</a>
 */
 
 #include <boost/preprocessor/list/adt.hpp>
 
-//! Converts a tuple to a list.
-/*!
+/** Converts a tuple to a list.
+
 See BOOST_PP_LIST_CONS() for an example.
 
 See BOOST_PP_LIMIT_TUPLE.

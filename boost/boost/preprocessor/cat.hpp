@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_CAT_HPP
 #define BOOST_PREPROCESSOR_CAT_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/cat.hpp">Click here to see the header.</a>
 */
 
-//! Delays the catenation of X and Y.
-/*!
+/** Delays the catenation of X and Y.
+
 For example,
 
 <PRE>\verbatim
@@ -69,6 +70,6 @@ the above would expand to:
 #define BOOST_PP_DO_CAT(X,Y) X##Y
 #endif
 
-//! Obsolete. Use BOOST_PP_CAT().
+/** Obsolete. Use BOOST_PP_CAT(). */
 #define BOOST_PREPROCESSOR_CAT(X,Y) BOOST_PP_CAT(X,Y)
 #endif

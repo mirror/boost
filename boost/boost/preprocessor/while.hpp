@@ -1,18 +1,19 @@
 #ifndef BOOST_PREPROCESSOR_WHILE_HPP
 #define BOOST_PREPROCESSOR_WHILE_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/while.hpp">Click here to see the header.</a>
 */
@@ -20,8 +21,8 @@
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-//! Iterates F(D,X) while C(D,X) is true.
-/*!
+/** Iterates F(D,X) while C(D,X) is true.
+
 <H3>Legend</H3>
 
 <B>X</B> is the current state of iteration. The state is usually a tuple.

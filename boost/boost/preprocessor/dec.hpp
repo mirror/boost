@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_DEC_HPP
 #define BOOST_PREPROCESSOR_DEC_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/dec.hpp">Click here to see the header.</a>
 */
 
-//! Decrements X expanding to a single token.
-/*!
+/** Decrements X expanding to a single token.
+
 For example, BOOST_PP_DEC(3) expands to 2 (a single token).
 
 BOOST_PP_DEC() uses saturation arithmetic. Decrementing 0 yeilds a 0.
@@ -161,6 +162,6 @@ supported.
 #define BOOST_PP_DEC128 127
 #endif
 
-//! Obsolete. Use BOOST_PP_DEC().
+/** Obsolete. Use BOOST_PP_DEC(). */
 #define BOOST_PREPROCESSOR_DEC(X) BOOST_PP_DEC(X)
 #endif

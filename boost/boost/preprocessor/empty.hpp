@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_EMPTY_HPP
 #define BOOST_PREPROCESSOR_EMPTY_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/empty.hpp">Click here to see the header.</a>
 */
 
-//! Expands to nothing. Used with BOOST_PP_IF() and as an unused parameter.
-/*!
+/** Expands to nothing. Used with BOOST_PP_IF() and as an unused parameter.
+
 Example usage as the implementation of BOOST_PP_COMMA_IF(C):
 
 <PRE>\verbatim
@@ -71,6 +72,6 @@ implementing the subscripting operators of a random access container.
 */
 #define BOOST_PP_EMPTY()
 
-//! Obsolete. Use BOOST_PP_EMPTY().
+/** Obsolete. Use BOOST_PP_EMPTY(). */
 #define BOOST_PREPROCESSOR_EMPTY()
 #endif

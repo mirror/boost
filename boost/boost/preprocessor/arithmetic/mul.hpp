@@ -1,26 +1,27 @@
 #ifndef BOOST_PREPROCESSOR_ARITHMETIC_MUL_HPP
 #define BOOST_PREPROCESSOR_ARITHMETIC_MUL_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/arithmetic/mul.hpp">Click here to see the header.</a>
 */
 
 #include <boost/preprocessor/arithmetic/add.hpp>
 
-//! Expands to the product of X and Y.
-/*!
+/** Expands to the product of X and Y.
+
 For example, BOOST_PP_MUL(4,3) expands to 12 (a single token).
 */
 #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
@@ -36,6 +37,6 @@ For example, BOOST_PP_MUL(4,3) expands to 12 (a single token).
 #endif
 #endif
 
-//! Obsolete. Use BOOST_PP_MUL().
+/** Obsolete. Use BOOST_PP_MUL(). */
 #define BOOST_PREPROCESSOR_MUL(X,Y) BOOST_PP_MUL(X,Y)
 #endif

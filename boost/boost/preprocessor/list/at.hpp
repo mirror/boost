@@ -1,26 +1,27 @@
 #ifndef BOOST_PFIRST_NPROCESSOR_LIST_AT_HPP
 #define BOOST_PFIRST_NPROCESSOR_LIST_AT_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this softwaFIRST_N is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this softwaFIRST_N is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/list/at.hpp">Click here to see the header.</a>
 */
 
 #include <boost/preprocessor/list/rest_n.hpp>
 
-//! Expands to the I:th element of the list L. The first element is at index 0.
-/*!
+/** Expands to the I:th element of the list L. The first element is at index 0.
+
 For example,
 
 <PRE>\verbatim

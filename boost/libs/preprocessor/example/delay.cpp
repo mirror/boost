@@ -1,32 +1,34 @@
-// Copyright (C) 2002
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
-
-// See http://www.boost.org for most recent version.
+/* Copyright (C) 2002
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
 #include <boost/preprocessor/while.hpp>
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/empty.hpp>
 
-// The time complexity of DELAY(N) is O(pow(2,N)).
-//
-// Handy when recompiles are too fast to take a coffee break. :)
-//
-// Template metaprogramming can be used for implementing similar
-// delays. Unfortunately template instantiation consumes memory,
-// therefore compilers usually fail to fully compile long template
-// based delays, because they run out of memory.
-//
-// On many compilers (e.g. g++, MSVC++), this macro takes only a
-// small amount of memory to preprocess. On some compilers (e.g.
-// MWCW), however, this macro seems to consume huge amounts of
-// memory.
+/* The time complexity of DELAY(N) is O(pow(2,N)).
+ *
+ * Handy when recompiles are too fast to take a coffee break. :)
+ *
+ * Template metaprogramming can be used for implementing similar
+ * delays. Unfortunately template instantiation consumes memory,
+ * therefore compilers usually fail to fully compile long template
+ * based delays, because they run out of memory.
+ *
+ * On many compilers (e.g. g++, MSVC++), this macro takes only a
+ * small amount of memory to preprocess. On some compilers (e.g.
+ * MWCW), however, this macro seems to consume huge amounts of
+ * memory.
+ */
 
 #ifndef DELAY_MAX
 #define DELAY_MAX 16

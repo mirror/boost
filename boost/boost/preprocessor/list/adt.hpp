@@ -1,18 +1,19 @@
 #ifndef BOOST_PREPROCESSOR_LIST_ADT_HPP
 #define BOOST_PREPROCESSOR_LIST_ADT_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/list/adt.hpp">Click here to see the header.</a>
 
@@ -26,8 +27,8 @@ code that depends on the internal representation details.
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/logical/not.hpp>
 
-//! List constructor.
-/*!
+/** List constructor.
+
 Lists are build using list constructors BOOST_PP_LIST_NIL and
 BOOST_PP_LIST_CONS(). For example,
 
@@ -50,14 +51,14 @@ Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.
 */
 #define BOOST_PP_LIST_CONS(H,T) (H,T,1)
 
-//! List nil constructor.
-/*!
+/** List nil constructor.
+
 See BOOST_PP_LIST_CONS().
 */
 #define BOOST_PP_LIST_NIL (_,_,0)
 
-//! Expands to 1 if the list is not nil and 0 otherwise.
-/*!
+/** Expands to 1 if the list is not nil and 0 otherwise.
+
 See BOOST_PP_LIST_IS_NIL().
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
@@ -66,8 +67,8 @@ See BOOST_PP_LIST_IS_NIL().
 #  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE3_ELEM2 L
 #endif
 
-//! Expands to 1 if the list is nil and 0 otherwise.
-/*!
+/** Expands to 1 if the list is nil and 0 otherwise.
+
 See BOOST_PP_LIST_IS_CONS().
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
@@ -76,8 +77,8 @@ See BOOST_PP_LIST_IS_CONS().
 #  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 L)
 #endif
 
-//! Expands to the first element of the list. The list must not be nil.
-/*!
+/** Expands to the first element of the list. The list must not be nil.
+
 For example,
 
 <PRE>\verbatim
@@ -94,8 +95,8 @@ See BOOST_PP_LIST_REST().
 #  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE3_ELEM0 L
 #endif
 
-//! Expands to a list of all but the first element of the list. The list must not be nil.
-/*!
+/** Expands to a list of all but the first element of the list. The list must not be nil.
+
 For example,
 
 <PRE>\verbatim

@@ -1,18 +1,19 @@
 #ifndef BOOST_PREPROCESSOR_ARITHMETIC_ADD_HPP
 #define BOOST_PREPROCESSOR_ARITHMETIC_ADD_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/arithmetic/add.hpp">Click here to see the header.</a>
 */
@@ -22,8 +23,8 @@
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/while.hpp>
 
-//! Expands to the sum of X and Y.
-/*!
+/** Expands to the sum of X and Y.
+
 For example, BOOST_PP_ADD(4,3) expands to 7 (a single token).
 */
 #define BOOST_PP_ADD(X,Y) BOOST_PP_ADD_D(0,X,Y)
@@ -39,6 +40,6 @@ For example, BOOST_PP_ADD(4,3) expands to 7 (a single token).
 #endif
 #endif
 
-//! Obsolete. Use BOOST_PP_ADD().
+/** Obsolete. Use BOOST_PP_ADD(). */
 #define BOOST_PREPROCESSOR_ADD(X,Y) BOOST_PP_ADD(X,Y)
 #endif

@@ -1,23 +1,24 @@
 #ifndef BOOST_PREPROCESSOR_REPEAT_2ND_HPP
 #define BOOST_PREPROCESSOR_REPEAT_2ND_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/repeat_2nd.hpp">Click here to see the header.</a>
 */
 
-//! Same as BOOST_PP_REPEAT(), but implemented independently.
+/** Same as BOOST_PP_REPEAT(), but implemented independently. */
 #define BOOST_PP_REPEAT_2ND(N,M,P) BOOST_PP_REPEAT_2ND_DELAY(N,M,P)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -153,6 +154,6 @@
 #define BOOST_PP_REPEAT_2ND128(M,P) BOOST_PP_REPEAT_2ND127(M,P) M(127,P)
 #endif
 
-//! Obsolete. Use BOOST_PP_REPEAT_2ND().
+/** Obsolete. Use BOOST_PP_REPEAT_2ND(). */
 #define BOOST_PREPROCESSOR_REPEAT_2ND(N,M,P) BOOST_PP_REPEAT_2ND(N,M,P)
 #endif

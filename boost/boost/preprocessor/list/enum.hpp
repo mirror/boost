@@ -1,18 +1,19 @@
 #ifndef BOOST_PREPROCESSOR_LIST_ENUM_HPP
 #define BOOST_PREPROCESSOR_LIST_ENUM_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/list/enum.hpp">Click here to see the header.</a>
 */
@@ -20,8 +21,8 @@
 #include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/list/for_each.hpp>
 
-//! Converts the list to a comma separated list.
-/*!
+/** Converts the list to a comma separated list.
+
 For example,
 
 <PRE>\verbatim

@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_INC_HPP
 #define BOOST_PREPROCESSOR_INC_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/inc.hpp">Click here to see the header.</a>
 */
 
-//! Increments X expanding to a single token. 
-/*!
+/** Increments X expanding to a single token. 
+
 For example, BOOST_PP_INC(3) expands to 4 (a single token).
 
 BOOST_PP_INC() uses saturation arithmetic. Incrementing a
@@ -162,6 +163,6 @@ supported.
 #define BOOST_PP_INC128 128
 #endif
 
-//! Obsolete. Use BOOST_PP_INC().
+/** Obsolete. Use BOOST_PP_INC(). */
 #define BOOST_PREPROCESSOR_INC(X) BOOST_PP_INC(X)
 #endif

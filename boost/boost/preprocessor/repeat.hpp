@@ -1,24 +1,25 @@
 #ifndef BOOST_PREPROCESSOR_REPEAT_HPP
 #define BOOST_PREPROCESSOR_REPEAT_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/repeat.hpp">Click here to see the header.</a>
 */
 
-//! Repeats the macro M(I,P) for I = 0 to N-1.
-/*!
+/** Repeats the macro M(I,P) for I = 0 to N-1.
+
 In other words, expands to the sequence:
 
 <PRE>\verbatim
@@ -33,7 +34,7 @@ See BOOST_PP_LIMIT_MAG.
 BOOST_PP_REPEAT_3RD() macros. For example,
 
 <PRE>\verbatim
-  // A generalized macro for generating 2D arrays
+   * A generalized macro for generating 2D arrays
   #define ARRAY_2D(W,H,M,P)\
     BOOST_PP_REPEAT_2ND\
     ( H\
@@ -60,7 +61,7 @@ BOOST_PP_REPEAT_3RD() macros. For example,
       )\
     )
 
-  // Here we use the above macro to generate something
+   * Here we use the above macro to generate something
   #define ELEM(X,Y,W,H,E) BOOST_PP_COMMA_IF(BOOST_PP_OR(X,Y)) E##_##X##_##Y
 
   ARRAY_2D(3,4,ELEM,elem)
@@ -216,6 +217,6 @@ See BOOST_PP_FOR().
 #define BOOST_PP_REPEAT128(M,P) BOOST_PP_REPEAT127(M,P) M(127,P)
 #endif
 
-//! Obsolete. Use BOOST_PP_REPEAT().
+/** Obsolete. Use BOOST_PP_REPEAT(). */
 #define BOOST_PREPROCESSOR_REPEAT(N,M,P) BOOST_PP_REPEAT(N,M,P)
 #endif

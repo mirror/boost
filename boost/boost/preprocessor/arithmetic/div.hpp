@@ -1,18 +1,19 @@
 #ifndef BOOST_PREPROCESSOR_ARITHMETIC_DIV_HPP
 #define BOOST_PREPROCESSOR_ARITHMETIC_DIV_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/arithmetic/div.hpp">Click here to see the header.</a>
 */
@@ -20,8 +21,8 @@
 #include <boost/preprocessor/comparison/less_equal.hpp>
 #include <boost/preprocessor/inc.hpp>
 
-//! Expands to the quotient of X and Y.
-/*!
+/** Expands to the quotient of X and Y.
+
 For example, BOOST_PP_DIV(4,3) expands to 1 (a single token).
 */
 #define BOOST_PP_DIV(X,Y) BOOST_PP_DIV_D(0,X,Y)
@@ -37,6 +38,6 @@ For example, BOOST_PP_DIV(4,3) expands to 1 (a single token).
 #endif
 #endif
 
-//! Obsolete. Use BOOST_PP_DIV().
+/** Obsolete. Use BOOST_PP_DIV(). */
 #define BOOST_PREPROCESSOR_DIV(X,Y) BOOST_PP_DIV(X,Y)
 #endif

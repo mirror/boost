@@ -1,26 +1,27 @@
 #ifndef BOOST_PREPROCESSOR_ARITHMETIC_MOD_HPP
 #define BOOST_PREPROCESSOR_ARITHMETIC_MOD_HPP
 
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
-// See http://www.boost.org for most recent version.
-
-/*! \file
+/** \file
 
 <a href="../../../../boost/preprocessor/arithmetic/mod.hpp">Click here to see the header.</a>
 */
 
 #include <boost/preprocessor/comparison/less_equal.hpp>
 
-//! Expands to the remainder of X and Y.
-/*!
+/** Expands to the remainder of X and Y.
+
 For example, BOOST_PP_MOD(4,3) expands to 1 (a single token).
 */
 #define BOOST_PP_MOD(X,Y) BOOST_PP_MOD_D(0,X,Y)
@@ -31,6 +32,6 @@ For example, BOOST_PP_MOD(4,3) expands to 1 (a single token).
 #define BOOST_PP_MOD_F(D,P) (BOOST_PP_SUB_D(D,BOOST_PP_TUPLE2_ELEM0 P,BOOST_PP_TUPLE2_ELEM1 P),BOOST_PP_TUPLE2_ELEM1 P)
 #endif
 
-//! Obsolete. Use BOOST_PP_MOD().
+/** Obsolete. Use BOOST_PP_MOD(). */
 #define BOOST_PREPROCESSOR_MOD(X,Y) BOOST_PP_MOD(X,Y)
 #endif
