@@ -23,7 +23,7 @@
     invoking <tt>operator--()</tt> moves the base iterator forward. The Boost
     reverse iterator adaptor is better to use than the
     <tt>std::reverse_iterator</tt> class in situations where pairs of
-    mutable/const iterators are needed (e.g., in containers) because
+    mutable/constant iterators are needed (e.g., in containers) because
     comparisons and conversions between the mutable and const versions are
     implemented correctly.
 
@@ -194,6 +194,8 @@ letters in descending order:  wroolllhed!
 reverse_iterator_generator::type(const BidirectionalIterator&amp; it)
 </pre>
     </blockquote>
+
+
     <br>
      <br>
      
@@ -243,6 +245,72 @@ letters in ascending order:  !dehllloorw
     </blockquote>
     <hr>
 
+    <h2><a name="interactions">Constant/Mutable Iterator Interactions</a></h2>
+
+    <p>One failing of the standard <tt><a
+    href="http://www.sgi.com/tech/stl/ReverseIterator.html">reverse_iterator</a></tt>
+    adaptor is that it doesn't properly support interactions between adapted
+    <tt>const</tt> and non-<tt>const</tt> iterators. For example:
+<blockquote>
+<pre>
+#include &lt;vector&gt;
+
+template &lt;class T&gt; void convert(T x) {}
+
+// Test interactions of a matched pair of random access iterators
+template &lt;class Iterator, class ConstIterator&gt;
+void test_interactions(Iterator i, ConstIterator ci)
+{
+  bool eq = i == ci;               // comparisons
+  bool ne = i != ci;            
+  bool lt = i &lt; ci;
+  bool le = i &lt;= ci;
+  bool gt = i &gt; ci;
+  bool ge = i &gt;= ci;
+  std::size_t distance = i - ci;   // difference
+  ci = i;                          // assignment
+  ConstIterator ci2(i);            // construction
+  convert&lt;ConstIterator&gt;(i);       // implicit conversion
+}
+
+void f()
+{
+  typedef std::vector&lt;int&gt; vec;
+  vec v;
+  const vec&amp; cv;
+
+  test_interactions(v.begin(), cv.begin());   // <font color="#007F00">OK</font>
+  test_interactions(v.rbegin(), cv.rbegin()); // <font color="#FF0000">ERRORS ON EVERY TEST!!</font>
+</pre>
+</blockquote>
+Reverse iterators created with <tt>boost::reverse_iterator_generator</tt> don't have this problem, though:
+<blockquote>
+<pre>
+  typedef boost::reverse_iterator_generator&lt;vec::iterator&gt;::type ri;
+  typedef boost::reverse_iterator_generator&lt;vec::const_iterator&gt;::type cri;
+  test_interactions(ri(v.begin()), cri(cv.begin()));   // <font color="#007F00">OK!!</font>
+</pre>
+</blockquote>
+Or, more simply,
+<blockquote>
+<pre>
+  test_interactions(
+    boost::make_reverse_iterator(v.begin()), 
+    boost::make_reverse_iterator(cv.begin()));   // <font color="#007F00">OK!!</font>
+}
+</pre>
+</blockquote>
+
+<p>If you are wondering why there is no
+<tt>reverse_iterator_pair_generator</tt> in the manner of <tt><a
+href="projection_iterator.htm#projection_iterator_pair_generator">projection_iterator_pair_generator</a></tt>,
+the answer is simple: we tried it, but found that in practice it took
+<i>more</i> typing to use <tt>reverse_iterator_pair_generator</tt> than to
+simply use <tt>reverse_iterator_generator</tt> twice!<br><br>
+
+<hr>
+
+    
     <p>Revised 
     <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->15
     Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" -->
