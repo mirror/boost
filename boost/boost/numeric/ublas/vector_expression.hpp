@@ -220,10 +220,10 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E::reference>::type reference;
 #endif
     private:
-        typedef E expression_type;
         typedef const vector_reference<E> const_self_type;
         typedef vector_reference<E> self_type;
     public:
+        typedef E refered_type;
         typedef const_self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef typename E::storage_category storage_category;
@@ -234,23 +234,27 @@ namespace boost { namespace numeric { namespace ublas {
         vector_reference ():
             e_ (nil_) {}
         BOOST_UBLAS_INLINE
-        vector_reference (expression_type &e):
+        vector_reference (refered_type &e):
             e_ (e) {}
 
         // Accessors
         BOOST_UBLAS_INLINE
         size_type size () const {
-            return e_.size ();
+            return expression ().size ();
         }
+
+    private:
+        // Expression accessors - const correct
         BOOST_UBLAS_INLINE
-        const expression_type &expression () const {
+        const refered_type &expression () const {
             return e_;
         }
         BOOST_UBLAS_INLINE
-        expression_type &expression () {
+        refered_type &expression () {
             return e_;
         }
 
+    public:
         // Element access
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
         BOOST_UBLAS_INLINE
@@ -273,12 +277,12 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) const {
-            return e_ (i);
+            return expression () (i);
         }
 
         BOOST_UBLAS_INLINE
         reference operator [] (size_type i) const {
-            return e_ [i];
+            return expression () [i];
         }
 #endif
 
@@ -412,14 +416,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        expression_type &e_;
-        static expression_type nil_;
+        refered_type &e_;
+        static refered_type nil_;
     };
 
     template<class E>
-    typename vector_reference<E>::expression_type vector_reference<E>::nil_
+    typename vector_reference<E>::refered_type vector_reference<E>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME vector_reference<E>::expression_type ();
+        = BOOST_UBLAS_TYPENAME vector_reference<E>::refered_type ();
 #endif
     ;
 
@@ -444,7 +448,6 @@ namespace boost { namespace numeric { namespace ublas {
                                           value_type>::type reference;
     private:
         typedef const value_type *const_pointer;
-        typedef const_pointer pointer;
         typedef F functor_type;
         typedef typename boost::mpl::if_<boost::is_const<expression_type>,
                                           typename E::const_closure_type,
@@ -461,6 +464,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_unary ():
             e_ () {}
         BOOST_UBLAS_INLINE
+        // ISSUE may be used as mutable expression.
         // vector_unary (const expression_type &e):
         vector_unary (expression_type &e):
             e_ (e) {}
@@ -470,11 +474,15 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return e_.size ();
         }
+
+    private:
+        // Expression accessors
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {
             return e_;
         }
 
+    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -738,7 +746,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
     private:
         typedef const value_type *const_pointer;
-        typedef const_pointer pointer;
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -764,6 +771,9 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const { 
             return BOOST_UBLAS_SAME (e1_.size (), e2_.size ()); 
         }
+
+    private:
+        // Expression accesors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
             return e1_;
@@ -773,6 +783,7 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_;
         }
 
+    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -1132,7 +1143,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
     private:
         typedef const value_type *const_pointer;
-        typedef const_pointer pointer;
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -1158,6 +1168,9 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return e2_.size ();
         }
+
+    private:
+        // Expression accesors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
             return e1_;
@@ -1167,6 +1180,7 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_;
         }
 
+    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -1405,6 +1419,9 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return e1_.size (); 
         }
+
+    private:
+        // Expression accesors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
             return e1_;
@@ -1414,6 +1431,7 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_;
         }
 
+    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -1645,12 +1663,14 @@ namespace boost { namespace numeric { namespace ublas {
         vector_scalar_unary (const expression_type &e):
             e_ (e) {}
 
-        // Accessors
+        // Expression accessors
+    private:
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {
             return e_;
         }
 
+    public:
         BOOST_UBLAS_INLINE
         operator value_type () const {
             return evaluate (iterator_category ());
@@ -1777,6 +1797,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_scalar_binary (const expression1_type &e1, const expression2_type  &e2):
             e1_ (e1), e2_ (e2) {}
 
+    private:
         // Accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -1787,6 +1808,7 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_;
         }
 
+    public:
         BOOST_UBLAS_INLINE
         operator value_type () const {
             return evaluate (iterator_category ());
