@@ -25,7 +25,7 @@
 
 #if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
 
-#   if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#   if (!defined(BOOST_MSVC) || BOOST_MSVC > 1300) && (!defined _MSC_VER || !defined(BOOST_INTEL_CXX_VERSION) || BOOST_INTEL_CXX_VERSION > 500)
 
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
@@ -61,19 +61,20 @@ struct has_##name \
 // note that the code is _not_ standard-conforming, but it works, 
 // and it resolves some nasty ICE cases with the above implementation
 
-// Modified dwa 8/Oct/02 to handle reference types. Still won't work
-// for array types; I don't have an answer for that one.
+// Modified dwa 8/Oct/02 to handle reference types.
+
+namespace boost { namespace mpl { namespace aux { struct has_xxx_tag; } } }
 #   define BOOST_MPL_HAS_XXX_TRAIT_DEF_(name) \
-template< typename T, typename name = int > \
+template< typename T, typename name = ::boost::mpl::aux::has_xxx_tag > \
 struct has_##name : T \
 { \
  private: \
-    static boost::mpl::aux::no_tag test(int*); \
+    static boost::mpl::aux::no_tag test(void(*)(::boost::mpl::aux::has_xxx_tag)); \
     static boost::mpl::aux::yes_tag test(...); \
 \
  public: \
     BOOST_STATIC_CONSTANT(bool, value =  \
-        sizeof(test(static_cast<name(*)()>(0))) != sizeof(boost::mpl::aux::no_tag) \
+        sizeof(test(static_cast<void(*)(name)>(0))) != sizeof(boost::mpl::aux::no_tag) \
         ); \
 }; \
 \
