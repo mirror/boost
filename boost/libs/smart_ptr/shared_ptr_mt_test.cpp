@@ -143,9 +143,9 @@ int const m = 16; // threads
 
 int main()
 {
-	std::puts(title);
+    std::puts(title);
 
-	boost::shared_ptr<int> pi(new int);
+    boost::shared_ptr<int> pi(new int);
 
     pthread_t a[m];
 
