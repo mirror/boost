@@ -48,7 +48,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Must come last.
-#include <boost/iostreams/detail/disable_warnings.hpp>
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
 #include <boost/config/abi_prefix.hpp>        
 
 namespace boost { namespace iostreams {
@@ -249,6 +249,6 @@ struct direct_impl<boost::iostreams::mapped_file> {
 } } // End namespaces iostreams, boost.
 
 #include <boost/config/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
-#include <boost/iostreams/detail/enable_warnings.hpp> // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_MAPPED_FILE_HPP_INCLUDED

@@ -14,14 +14,14 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>
-
 #include <cassert>     
 #include <cstdio>                            
 #include <stdexcept>                       // logic_error.               
 #include <boost/config.hpp>                // BOOST_STATIC_CONSTANT, 
 #include <boost/iostreams/categories.hpp> 
 #include <boost/iostreams/pipable.hpp>      
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
 
 #define BOOST_IOSTREAMS_ASSERT_UNREACHABLE(val)   \
     (assert("unreachable code" == 0), val) \
@@ -284,6 +284,6 @@ typedef basic_newline_filter<wchar_t>  newline_wfilter;
 
 } } // End namespaces iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp>
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_NEWLINE_FILTER_HPP_INCLUDED

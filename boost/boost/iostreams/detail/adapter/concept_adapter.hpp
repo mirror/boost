@@ -7,8 +7,6 @@
 #ifndef BOOST_IOSTREAMS_DETAIL_CONCEPT_ADAPTER_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_CONCEPT_ADAPTER_HPP_INCLUDED
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <boost/config.hpp>                             // SFINAE.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/categories.hpp>
@@ -20,6 +18,8 @@
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/static_assert.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -251,6 +251,6 @@ struct flt_wrapper_impl<output> {
 
 } } } // End namespaces detail, iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CONCEPT_ADAPTER_HPP_INCLUDED

@@ -111,7 +111,7 @@ struct code_converter_impl {
         } catch (std::exception&) { /* */ } 
     }
 
-    #include <boost/iostreams/detail/disable_warnings.hpp> // Borland 5.x
+    #include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
     void open(const Device& dev, std::streamsize buffer_size)
     {
         if (open_)
@@ -133,7 +133,7 @@ struct code_converter_impl {
         dev_ = dev;
         open_ = true;
     }
-    #include <boost/iostreams/detail/enable_warnings.hpp> // Borland 5.x
+    #include <boost/iostreams/detail/config/enable_warnings.hpp> // Borland 5.x
 
     bool is_open() const { return open_ != 0;}
 

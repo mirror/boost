@@ -389,7 +389,7 @@ struct close_impl<any_tag> {
     static void close(T&, Sink&, std::ios::openmode) { }
 };
 
-#include <boost/iostreams/detail/disable_warnings.hpp> // Borland.
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland.
 template<>
 struct close_impl<closable_tag> {
     template<typename T>
@@ -411,7 +411,7 @@ struct close_impl<closable_tag> {
             t.close(snk);
     }
 };
-#include <boost/iostreams/detail/enable_warnings.hpp>
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 template<>
 struct close_impl<two_sequence> {

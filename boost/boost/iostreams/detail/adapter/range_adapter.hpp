@@ -11,8 +11,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <algorithm>                             // min.
 #include <cassert>
 #include <cstddef>                               // ptrdiff_t.
@@ -26,6 +24,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/utility/enable_if.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -168,6 +168,6 @@ struct range_adapter_impl<random_access_traversal_tag> {
 
 } } } // End namespaces detail, iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_RANGE_ADAPTER_HPP_INCLUDED //---------------//

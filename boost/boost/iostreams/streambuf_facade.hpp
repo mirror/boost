@@ -11,8 +11,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <memory>            // allocator.
 #include <boost/config.hpp>  // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
@@ -22,6 +20,8 @@
 #include <boost/iostreams/detail/streambuf/indirect_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -127,6 +127,6 @@ private:
 
 #endif // #ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 
-#include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_STREAMBUF_FACADE_HPP_INCLUDED

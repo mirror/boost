@@ -35,8 +35,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <cassert>
 #include <memory>                               // allocator
 #include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
@@ -46,6 +44,8 @@
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>       // read, write.
 #include <boost/shared_ptr.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
 
@@ -259,6 +259,6 @@ symmetric_filter_adapter_impl<SymmetricFilter, Alloc>::unconsumed_input() const
 
 } } // End namespaces iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_SYMMETRIC_FILTER_ADAPTER_HPP_INCLUDED

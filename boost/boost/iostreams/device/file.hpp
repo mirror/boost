@@ -19,13 +19,13 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <fstream>
 #include <locale>
 #include <string>                                // pathnames, char_traits.
 #include <boost/iostreams/categories.hpp>               
 #include <boost/shared_ptr.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
 
@@ -130,6 +130,6 @@ void basic_file<Ch>::close() { pimpl_->file_.close(); }
 
 } } // End namespaces iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp> // MSVC
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC
 
 #endif // #ifndef BOOST_IOSTREAMS_FILE_HPP_INCLUDED

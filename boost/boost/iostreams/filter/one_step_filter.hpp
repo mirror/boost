@@ -11,8 +11,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <algorithm>                             // copy, min.
 #include <cassert>
 #include <ios>                                   // openmode.
@@ -20,6 +18,8 @@
 #include <vector>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/closer.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
 
@@ -129,6 +129,6 @@ private:
 
 } } // End namespaces iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_ONE_STEP_FILTER_HPP_INCLUDED

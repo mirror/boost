@@ -11,8 +11,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp> // MSVC.
-
 #include <cassert>
 #include <cstddef>
 #include <utility>                              // pair.
@@ -21,6 +19,8 @@
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/optional.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // MSVC.
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -246,6 +246,6 @@ inline bool direct_streambuf<T, Tr>::two_head() const
 
 } } } // End namespaces detail, iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp> // MSVC
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_DIRECT_STREAMBUF_HPP_INCLUDED

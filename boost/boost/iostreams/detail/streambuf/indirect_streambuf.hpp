@@ -13,8 +13,6 @@
 #ifndef BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC, Borland 5.x
-
 #include <algorithm>                             // min, max.
 #include <cassert>
 #include <exception>
@@ -31,6 +29,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/optional.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC, Borland 5.x
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -437,6 +437,6 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::init_put_area()
 
 } } } // End namespaces detail, iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp> // MSVC, Borland 5.x
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC, Borland 5.x
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED

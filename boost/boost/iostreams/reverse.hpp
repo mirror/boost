@@ -11,8 +11,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <algorithm>                             // copy, min.  
 #include <deque>                               
 #include <memory>                                // allocator.
@@ -27,6 +25,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
 
@@ -140,6 +140,6 @@ reverse(const Filter& f)
 
 } } // End namespaces iostreams, boost.
 
-#include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
+#include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 
 #endif // #ifndef BOOST_IOSTREAMS_REVERSE_HPP_INCLUDED

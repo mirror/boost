@@ -11,8 +11,6 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
-
 #include <istream>
 #include <memory>                                // allocator.
 #include <ostream>
@@ -20,6 +18,8 @@
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
 
@@ -134,6 +134,6 @@ typedef wfiltering_stream<output>  filtering_wostream;
 
 } } // End namespace iostreams, boost
 
-#include <boost/iostreams/detail/enable_warnings.hpp> // MSVC
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC
 
 #endif // #ifndef BOOST_IOSTREAMS_FILTER_STREAM_HPP_INCLUDED
