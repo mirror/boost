@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost apply_visitor.hpp header file
+// boost variant/apply_visitor.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,11 +14,11 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_APPLY_VISITOR_HPP
-#define BOOST_APPLY_VISITOR_HPP
+#ifndef BOOST_VARIANT_APPLY_VISITOR_HPP
+#define BOOST_VARIANT_APPLY_VISITOR_HPP
 
 #include "boost/variant/detail/apply_visitor_unary.hpp"
 #include "boost/variant/detail/apply_visitor_binary.hpp"
 #include "boost/variant/detail/apply_visitor_delayed.hpp"
 
-#endif // BOOST_APPLY_VISITOR_HPP
+#endif // BOOST_VARIANT_APPLY_VISITOR_HPP
