@@ -17,7 +17,6 @@
 #include <cassert>
 #include <cstddef>
 
-#include <boost/integer_traits.hpp>
 #include <boost/utf8_codecvt_facet.hpp>
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
@@ -163,7 +162,7 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
 // How many char objects can I process to get <= max_limit
 // wchar_t objects?
 int utf8_codecvt_facet_wchar_t::do_length(
-    std::mbstate_t &,
+    BOOST_CODECVT_DO_LENGTH_CONST std::mbstate_t &,
     const char * from,
     const char * from_end, 
     std::size_t max_limit
@@ -316,7 +315,10 @@ std::codecvt_base::result utf8_codecvt_facet_char::do_out(
 // How many bytes objects can I process to get <= max_limit
 // char objects?
 int utf8_codecvt_facet_char::do_length(
-    const utf8_codecvt_facet_wchar_t::mbstate_t & initial_state,
+    // it seems that the standard doesn't use const so these librarires
+    // would be in error
+    BOOST_CODECVT_DO_LENGTH_CONST
+    utf8_codecvt_facet_wchar_t::mbstate_t & initial_state,
     const char * from_next,
     const char * from_end, 
     std::size_t max_limit
