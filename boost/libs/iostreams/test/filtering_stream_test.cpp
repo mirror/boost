@@ -27,7 +27,7 @@
 #include "seek_test.hpp"
 #include "putback_test.hpp"
 
-using boost::unit_test_framework::test_suite;
+using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite(int, char* [])
 {

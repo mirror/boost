@@ -13,7 +13,7 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
-using boost::unit_test_framework::test_suite;      
+using boost::unit_test::test_suite;      
 
 void array_test()
 {

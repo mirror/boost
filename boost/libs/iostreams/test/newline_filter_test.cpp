@@ -21,7 +21,7 @@ using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::newline;
 using namespace boost::iostreams::test;
-using boost::unit_test_framework::test_suite; 
+using boost::unit_test::test_suite; 
 
 const char* text =
     "abcde\r" "abcde\n" "abcde\r\n"

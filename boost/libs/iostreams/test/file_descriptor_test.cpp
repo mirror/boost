@@ -16,7 +16,7 @@ using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
 using std::ifstream;
-using boost::unit_test_framework::test_suite;   
+using boost::unit_test::test_suite;   
 
 void file_descriptor_test()
 {

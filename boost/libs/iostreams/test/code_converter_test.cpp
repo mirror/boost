@@ -109,7 +109,7 @@ using namespace std;
 using namespace boost::iostreams;
 using namespace boost::iostreams::detail;
 using namespace boost::iostreams::test;
-using boost::unit_test_framework::test_suite;     
+using boost::unit_test::test_suite;     
 
 const int max_length = 30;
 const unsigned int string_length = 100;
