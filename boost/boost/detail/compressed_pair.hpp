@@ -104,10 +104,10 @@ namespace details
       compressed_pair_imp(first_param_type x, second_param_type y)
          : first_(x), second_(y) {}
 
-      explicit compressed_pair_imp(first_param_type x)
+      compressed_pair_imp(first_param_type x)
          : first_(x) {}
 
-      explicit compressed_pair_imp(second_param_type y)
+      compressed_pair_imp(second_param_type y)
          : second_(y) {}
 
       first_reference       first()       {return first_;}
@@ -116,7 +116,7 @@ namespace details
       second_reference       second()       {return second_;}
       second_const_reference second() const {return second_;}
 
-      void swap(compressed_pair_imp& y)
+      void swap(compressed_pair_imp<T1, T2, 0>& y)
       {
          cp_swap(first_, y.first_);
          cp_swap(second_, y.second_);
@@ -365,7 +365,7 @@ public:
    second_reference       second()       {return base::second();}
    second_const_reference second() const {return base::second();}
 
-   void swap(compressed_pair& y) { base::swap(y); }
+   void swap(compressed_pair& y) { base::swap(static_cast<base&>(y)); }
 };
 
 // JM
