@@ -43,13 +43,8 @@ const int run                  = BZ_RUN;
 
 //------------------Implementation of bzip2_error-----------------------------//
                     
-bzip2_error::bzip2_error(int error) 
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
-        : std::ios_base::failure 
-    #else
-        : detail::failure 
-    #endif
-          ("bzip2 error"), error_(error) 
+bzip2_error::bzip2_error(int error)
+    : BOOST_IOSTREAMS_FAILURE("bzip2 error"), error_(error) 
     { }
 
 void bzip2_error::check(int error)

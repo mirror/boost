@@ -129,7 +129,7 @@ void mapped_file_source::open( const std::string& path,
     using namespace std;
 
     if (is_open())
-        throw detail::failure("file already open");
+        throw BOOST_IOSTREAMS_FAILURE("file already open");
     if (!pimpl_)
         pimpl_.reset(new impl_type);
     else
@@ -237,7 +237,7 @@ void mapped_file_source::open( const std::string& path,
     using namespace std;
 
     if (is_open())
-        throw detail::failure("file already open");
+        throw BOOST_IOSTREAMS_FAILURE("file already open");
     if (!pimpl_)
         pimpl_.reset(new impl_type);
     else

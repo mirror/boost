@@ -105,7 +105,7 @@ void file_descriptor::open
     #endif
 
     if (fd_ == -1)
-        throw detail::failure("bad open");
+        throw BOOST_IOSTREAMS_FAILURE("bad open");
     close_ = true;
 }
 
@@ -114,7 +114,7 @@ std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
     errno = 0;
     std::streamsize result = BOOST_RTL(read)(fd_, s, n);
     if (errno != 0)
-        throw detail::failure("bad open");
+        throw BOOST_IOSTREAMS_FAILURE("bad open");
     return result;
 }
 
@@ -148,7 +148,7 @@ std::streamoff file_descriptor::seek
 void file_descriptor::close()
 {
     if (close_ && fd_ != -1 && BOOST_RTL(close)(fd_) == -1)
-        throw detail::failure("bad close");
+        throw BOOST_IOSTREAMS_FAILURE("bad close");
 }
 
 } } // End namespaces iostreams, boost.
