@@ -18,6 +18,11 @@
 #define BOOST_NO_SWPRINTF 
 #define BOOST_NO_CWCTYPE
 
+#ifdef __GNUC__
+   // GNU C on HP-UX does not support threads (checked up to gcc 3.3)
+#  define BOOST_DISABLE_THREADS
+#endif
+
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
 #include <boost/config/posix_features.hpp>
