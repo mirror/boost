@@ -21,8 +21,8 @@
 // "know" each other, they can only pass the ball back and forth because the
 // event representing the ball also carries two boost::function objects.
 // Both reference the fifo_scheduler<>::queue_event() function, binding the
-// scheduler and the handle of the opponent. One can be used to return the ball
-// to the opponent and the other can be used to abort the game.
+// scheduler and the handle of the opponent. One can be used to return the
+// ball to the opponent and the other can be used to abort the game.
 // Depending on whether the program is compiled single-threaded or
 // multi-threaded and the USE_TWO_THREADS define above, the two
 // machines either run in the same thread without/with mutex locking or in two
