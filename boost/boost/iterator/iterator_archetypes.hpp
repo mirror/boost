@@ -470,7 +470,8 @@ struct iterator_archetype
 # endif
 
     iterator_archetype() { }
-    iterator_archetype(iterator_archetype const&) { }
+    iterator_archetype(iterator_archetype const& x)
+      : detail::iterator_archetype_base<Value, AccessCategory, TraversalCategory>(x) { }
 
     iterator_archetype& operator=(iterator_archetype const&) { return *this; }
 
