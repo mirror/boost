@@ -25,9 +25,6 @@ void save_schedule(const bus_schedule &s, const char * filename){
 
 int main(int argc, char *argv[])
 {   
-    std::string filename(boost::archive::tmpdir());
-    filename += "/demo_save.xml";
-
     // make the schedule
     bus_schedule original_schedule;
 

@@ -288,7 +288,7 @@ void
 restore_schedule(bus_schedule &s, const char * filename)
 {
     // open the archive
-    std::ifstream ifs("../example/demofile.txt");
+    std::ifstream ifs(filename);
     boost::archive::text_iarchive ia(ifs);
 
     // restore the schedule from the archive

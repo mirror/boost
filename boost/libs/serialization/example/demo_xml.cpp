@@ -28,7 +28,7 @@ namespace std{
 
 void save_schedule(const bus_schedule &s, const char * filename){
     // make an archive
-    std::ofstream ofs("../example/demofile.xml");
+    std::ofstream ofs(filename);
     assert(ofs.good());
     boost::archive::xml_oarchive oa(ofs);
     oa << BOOST_SERIALIZATION_NVP(s);
@@ -38,7 +38,7 @@ void
 restore_schedule(bus_schedule &s, const char * filename)
 {
     // open the archive
-    std::ifstream ifs("../example/demofile.xml");
+    std::ifstream ifs(filename);
     assert(ifs.good());
     boost::archive::xml_iarchive ia(ifs);
 
