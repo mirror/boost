@@ -19,7 +19,7 @@ rule regex-test-run ( sources + : input * )
             $(input)
          :  # test-files
          :  # requirements
-			<threading>multi
+         <threading>multi
          :  # test name
         ] ;
 }

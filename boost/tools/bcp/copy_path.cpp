@@ -23,7 +23,7 @@ void bcp_implementation::copy_path(const fs::path& p)
    if(fs::exists(m_dest_path / p))
    {
       std::cout << "Copying (and overwriting) file: " << p.string() << "\n";
-	  fs::remove(m_dest_path / p);
+     fs::remove(m_dest_path / p);
    }
    else
       std::cout << "Copying file: " << p.string() << "\n";

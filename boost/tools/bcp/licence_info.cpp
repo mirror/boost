@@ -55,9 +55,9 @@ std::pair<const licence_info*, int> get_licences()
          "<P>Use, modification and distribution is subject to the "
          "Boost Software License, Version 1.0. (See accompanying file "
          "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
-		 )
+       )
       ,
-	   licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+distribute\\W+and\\W+sell\\W+this\\W+software\\W+and\\W+its\\W+documentation"
+      licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+distribute\\W+and\\W+sell\\W+this\\W+software\\W+and\\W+its\\W+documentation"
          "\\W+for\\W+any\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee"
          "\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice\\W+appears?\\W+in\\W+all\\W+copies\\W+and"
          "\\W+that\\W+both\\W+(the|that)\\W+copyright\\W+notice\\W+and\\W+this\\W+permission\\W+notice\\W+appears?"
@@ -82,7 +82,7 @@ std::pair<const licence_info*, int> get_licences()
          "in supporting documentation.  <I>Author</I> makes no representations "
          "about the suitability of this software for any purpose. "
          "It is provided \"as is\" without express or implied warranty.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+distribute\\W+and\\W+sell\\W+this\\W+software"
          "\\W+for\\W+any\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee"
@@ -108,7 +108,7 @@ std::pair<const licence_info*, int> get_licences()
          "in supporting documentation.  <I>Author</I> makes no representations "
          "about the suitability of this software for any purpose. "
          "It is provided \"as is\" without express or implied warranty.</P>"
-		 )
+       )
       ,
       licence_info(
          boost::regex(
@@ -130,7 +130,7 @@ std::pair<const licence_info*, int> get_licences()
          "is granted provided this copyright notice appears in all copies.<BR>\n"
          "This software is provided \"as is\" without express or implied<BR>\n"
          "warranty, and with no claim as to its suitability for any purpose.</P>\n"
-		 )
+       )
       ,
       licence_info(
          boost::regex(
@@ -152,7 +152,7 @@ std::pair<const licence_info*, int> get_licences()
          "this copyright notice appears in all copies.  This software is "
          "provided \"as is\" without express or implied warranty, and with "
          "no claim at to its suitability for any purpose.</p>\n"
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy\\W+use\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted"
                      "\\W+provided\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies"
@@ -176,7 +176,7 @@ std::pair<const licence_info*, int> get_licences()
          "that the code was modified is included with the copyright notice.</P>\n"
          "<P>This software is provided \"as is\" without express or implied warranty,\n"
          "and with no claim as to its suitability for any purpose.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("This\\W+file\\W+is\\W+part\\W+of\\W+the\\W+(Boost\\W+Graph|Generic\\W+Graph\\W+Component)\\W+Library"
                      "\\W+You\\W+should\\W+have\\W+received\\W+a\\W+copy\\W+of\\W+the\\W+License\\W+Agreement\\W+for\\W+the"
@@ -220,7 +220,7 @@ std::pair<const licence_info*, int> get_licences()
          "PARTICULAR PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE COMPONENTS "
          "OR DOCUMENTATION WILL NOT INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS "
          "OR OTHER RIGHTS.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy\\W+use\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is"
                      "\\W+granted\\W+provided\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies\\W+and"
@@ -241,7 +241,7 @@ std::pair<const licence_info*, int> get_licences()
          "modified version are clearly marked as such. This software is provided "
          "\"as is\" without express or implied warranty, and with no claim as to its "
          "suitability for any purpose.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("This\\W+file\\W+can\\W+be\\W+redistributed\\W+and\\W+or\\W+modified\\W+under\\W+the\\W+terms\\W+found"
                      "\\W+in\\W+copyright\\W+html"
@@ -259,7 +259,7 @@ std::pair<const licence_info*, int> get_licences()
          "in <a href=\"http://www.boost.org/libs/pool/doc/copyright.html\">copyright.html</a></P>\n"
          "<P>This software and its documentation is provided \"as is\" without express or "
          "implied warranty, and with no claim as to its suitability for any purpose</P>"
-		 )
+       )
       ,
       licence_info(boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software"
                      "\\W+is\\W+hereby\\W+granted\\W+without\\W+fee\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice"
@@ -284,7 +284,7 @@ std::pair<const licence_info*, int> get_licences()
          "<I>Author</I> makes no representations about the suitability of this "
          "software for any purpose. It is provided \"as is\" without express or "
          "implied warranty.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy"
                      "\\W+use\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted\\W+provided"
@@ -304,7 +304,7 @@ std::pair<const licence_info*, int> get_licences()
          "this copyright notice appears in all copies of the source. This "
          "software is provided \"as is\" without express or implied warranty, "
          "and with no claim as to its suitability for any purpose."
-		 )
+       )
       ,
       licence_info(boost::regex("This\\W+software\\W+is\\W+provided\\W+as-is\\W+without\\W+any\\W+express\\W+or\\W+implied"
       "\\W+warranty\\W+In\\W+no\\W+event\\W+will\\W+the\\W+copyright\\W+holder\\W+be\\W+held\\W+liable\\W+for"
@@ -343,7 +343,7 @@ std::pair<const licence_info*, int> get_licences()
          "not be misrepresented as being the original software. </P>"
          "<P>3.  This notice may not be removed or altered from any source "
          "distribution. "
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software"
                      "\\W+is\\W+hereby\\W+granted\\W+without\\W+fee\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice"
@@ -368,7 +368,7 @@ std::pair<const licence_info*, int> get_licences()
          "None of the above authors nor <I>Author's Organisation</I> make any "
          "representation about the suitability of this software for any "
          "purpose. It is provided \"as is\" without express or implied warranty."
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+and\\W+distribute\\W+this\\W+software\\W+for\\W+any"
                      "\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee\\W+provided\\W+that\\W+this\\W+copyright\\W+and"
@@ -387,7 +387,7 @@ std::pair<const licence_info*, int> get_licences()
          "purpose is hereby granted without fee, provided that this copyright and "
          "permissions notice appear in all copies and derivatives.</P>"
          "<P>This software is provided \"as is\" without express or implied warranty.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("This\\W+material\\W+is\\W+provided\\W+as\\W+is\\W+with\\W+absolutely\\W+no\\W+warranty\\W+expressed"
                      "\\W+or\\W+implied\\W+Any\\W+use\\W+is\\W+at\\W+your\\W+own\\W+risk"
@@ -411,7 +411,7 @@ std::pair<const licence_info*, int> get_licences()
          "Permission to modify the code and to distribute modified code is granted, "
          "provided the above notices are retained, and a notice that the code was "
          "modified is included with the above copyright notice.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy\\W+use\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted\\W+provided"
                      "\\W+that\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies"
@@ -435,7 +435,7 @@ std::pair<const licence_info*, int> get_licences()
          "that the code was modified is included with the copyright notice.</P>"
          "<P>This software is provided \"as is\" without express or implied warranty, and "
          "with no claim as to its suitability for any purpose.</P>"
-		 )
+       )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy\\W+and\\W+use\\W+this\\W+software\\W+is\\W+granted"
                                  "\\W+provided\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies"
@@ -460,7 +460,7 @@ std::pair<const licence_info*, int> get_licences()
          "that the code was modified is included with the copyright notice.</P>"
          "<P>This software is provided \"as is\" without express or implied warranty, "
          "and with no claim as to its suitability for any purpose.</P>"
-		 )
+       )
       ,
    };
    return std::pair<const licence_info*, int>(licences, sizeof(licences)/sizeof(licences[0]));

@@ -6,22 +6,22 @@ SOURCES = command_line main time_boost time_greta time_localised_boost time_pcre
 
 if $(HS_REGEX_PATH)
 {
-	HS_SOURCES = $(HS_REGEX_PATH)/regcomp.c $(HS_REGEX_PATH)/regerror.c $(HS_REGEX_PATH)/regexec.c $(HS_REGEX_PATH)/regfree.c ;
-	POSIX_OPTS = <define>BOOST_HAS_POSIX=1 <include>$(HS_REGEX_PATH) ;
+   HS_SOURCES = $(HS_REGEX_PATH)/regcomp.c $(HS_REGEX_PATH)/regerror.c $(HS_REGEX_PATH)/regexec.c $(HS_REGEX_PATH)/regfree.c ;
+   POSIX_OPTS = <define>BOOST_HAS_POSIX=1 <include>$(HS_REGEX_PATH) ;
 }
 else if $(USE_POSIX)
 {
-	POSIX_OPTS = <define>BOOST_HAS_POSIX=1 ;
+   POSIX_OPTS = <define>BOOST_HAS_POSIX=1 ;
 }
 
 if $(PCRE_PATH)
 {
-	PCRE_SOURCES = $(PCRE_PATH)/chartables.c $(PCRE_PATH)/get.c $(PCRE_PATH)/pcre.c $(PCRE_PATH)/study.c ;
-	PCRE_OPTS = <define>BOOST_HAS_PCRE=1 <include>$(PCRE_PATH) ;
+   PCRE_SOURCES = $(PCRE_PATH)/chartables.c $(PCRE_PATH)/get.c $(PCRE_PATH)/pcre.c $(PCRE_PATH)/study.c ;
+   PCRE_OPTS = <define>BOOST_HAS_PCRE=1 <include>$(PCRE_PATH) ;
 }
 else if $(USE_PCRE)
 {
-	PCRE_OPTS = <define>BOOST_HAS_PCRE=1 <find-library>pcre ;
+   PCRE_OPTS = <define>BOOST_HAS_PCRE=1 <find-library>pcre ;
 }
 
 

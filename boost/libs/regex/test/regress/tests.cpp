@@ -3,12 +3,12 @@
  * Copyright (c) 1998-2002
  * Dr John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *
   *   FILE     tests.cpp
@@ -170,7 +170,7 @@ bool grep_test_predicate<iterator, Alloc>::operator()(const boost::match_results
    // check $`:
    start = m[-1].first - base;
    end = m[-1].second - base;
-   if(match_id && 
+   if(match_id &&
       ( (end != matches[match_id]) || (start != matches[match_id - 1]) )
    )
    {
@@ -204,7 +204,7 @@ bool grep_test_predicate<iterator, Alloc>::operator()(const boost::match_results
       cout << "regex++ grep error in line(): found " << start << " expected " << end << endl;
    }
    */
-   // 
+   //
    // now check line_start()
    /* don't check this, it's not supported in the new algorithm....
    start = m.line_start() - base;
@@ -242,8 +242,8 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
       }
       return;
    }
-   
-   
+
+
    if(recurse)
    {
       // copy and assign test:
@@ -257,7 +257,7 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
       cpp_tests(e3, false);
 #endif
    }
-   
+
    if(e.error_code())
    {
       // verify that we don't expect expression to compile
@@ -304,7 +304,7 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
             if(m[0].matched)
             {
                begin_error();
-               cout << "regex++ API result mismatch, found full match when partial match was expected: found (" 
+               cout << "regex++ API result mismatch, found full match when partial match was expected: found ("
                         << (m[0].first - x) << "," <<
                         (m[0].second - x) << ")" << endl;
             }
@@ -556,8 +556,8 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
 
 unsigned int hl_match_id;
 
-bool 
-#if defined(__BORLANDC__) || defined(BOOST_MSVC)
+bool
+#if (defined(__BORLANDC__) || defined(BOOST_MSVC)) && !defined(BOOST_DISABLE_WIN32)
 __cdecl
 #endif
 hl_grep_test_proc(const RegEx& e)
@@ -591,7 +591,7 @@ hl_grep_test_proc(const RegEx& e)
    end = start + e.Length(-1);
    if(start == -1)
    {
-      if(hl_match_id && 
+      if(hl_match_id &&
          ( matches[hl_match_id] != matches[hl_match_id - 1] )
       )
       {
@@ -606,7 +606,7 @@ hl_grep_test_proc(const RegEx& e)
    }
    else
    {
-      if(hl_match_id && 
+      if(hl_match_id &&
          ( (end != matches[hl_match_id]) || (start != matches[hl_match_id - 1]) )
       )
       {
