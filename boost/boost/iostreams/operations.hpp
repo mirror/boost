@@ -316,7 +316,7 @@ struct seek_impl<any_tag> {
     static std::streamoff seek( T& t, std::streamoff off, 
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode )
-    { return t.seek(off, way); }
+    { return static_cast<std::streamoff>(t.seek(off, way)); }
 };
 
 template<>
@@ -325,7 +325,7 @@ struct seek_impl<two_head> {
     static std::streamoff seek( T& t, std::streamoff off, 
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
-    { return t.seek(off, way, which); }
+    { return static_cast<std::streamoff>(t.seek(off, way, which)); }
 };
 
 struct seek_impl_basic_ios {
