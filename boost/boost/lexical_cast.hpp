@@ -10,7 +10,8 @@
 // who:   contributed by Kevlin Henney,
 //        enhanced with contributions from Terje Slettebø,
 //        with additional fixes and suggestions from Gennaro Prota,
-//        Beman Dawes, Dave Abrahams, Daryle Walker, and other Boosters
+//        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
+//        and other Boosters
 // when:  November 2000, March 2003
 
 #include <string>
@@ -148,12 +149,17 @@ namespace boost
             }
             bool operator>>(std::string &output)
             {
-                return std::getline(stream, output, char_type()).eof();
+                #if defined(BOOST_NO_STRINGSTREAM)
+                stream << '\0';
+                #endif
+                output = stream.str();
+                return true;
             }
             #ifndef DISABLE_WIDE_CHAR_SUPPORT
             bool operator>>(std::wstring &output)
             {
-                return std::getline(stream, output, char_type()).eof();
+                output = stream.str();
+                return true;
             }
             #endif
         private:
