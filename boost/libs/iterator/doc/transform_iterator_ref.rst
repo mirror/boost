@@ -15,8 +15,8 @@
     template<class F2, class I2, class R2, class V2>
     transform_iterator(
           transform_iterator<F2, I2, R2, V2> const& t
-        , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition
-        , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition
+        , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition only
+        , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition only
     );
     Iterator base() const;
     UnaryFunction functor() const;
@@ -24,8 +24,8 @@
     transform_iterator& operator++();
     transform_iterator& operator--();
   private:
-    Iterator m_iterator; // exposition
-    UnaryFunction m_f;   // exposition
+    Iterator m_iterator; // exposition only
+    UnaryFunction m_f;   // exposition only
   };
 
 

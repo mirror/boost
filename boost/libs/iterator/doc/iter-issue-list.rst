@@ -243,9 +243,10 @@ specification.
 Transform iterator has a two-part specification: it does this, in other words, it does that. "In other 
 words" always means "I didn't say it right, so I'll try again." We need to say it once. 
 
-:Proposed resolution: **Needs work** (Jeremy)
-
-Reword.
+:Proposed resolution:
+  Changed the introduction to: The transform iterator adapts an iterator by modifying the
+  ``operator*`` to apply a function object to the result of
+  dereferencing the iterator and returning the result.
 
 9.12 Transform_iterator shouldn't mandate private member 
 ========================================================

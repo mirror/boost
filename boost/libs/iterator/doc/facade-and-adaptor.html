@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
 <title>Iterator Facade and Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -83,54 +83,55 @@ by adapting other iterators.</td>
 </li>
 <li><a class="reference" href="#iterator-adaptor-lib-iterator-adaptor" id="id32" name="id32">Iterator adaptor [lib.iterator.adaptor]</a><ul>
 <li><a class="reference" href="#class-template-iterator-adaptor" id="id33" name="id33">Class template <tt class="literal"><span class="pre">iterator_adaptor</span></tt></a></li>
-<li><a class="reference" href="#iterator-adaptor-base-class-parameters" id="id34" name="id34"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></li>
-<li><a class="reference" href="#iterator-adaptor-usage" id="id35" name="id35"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> usage</a></li>
-<li><a class="reference" href="#iterator-adaptor-public-operations" id="id36" name="id36"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></li>
-<li><a class="reference" href="#iterator-adaptor-protected-member-functions" id="id37" name="id37"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></li>
-<li><a class="reference" href="#iterator-adaptor-private-member-functions" id="id38" name="id38"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></li>
+<li><a class="reference" href="#iterator-adaptor-requirements" id="id34" name="id34"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></li>
+<li><a class="reference" href="#iterator-adaptor-base-class-parameters" id="id35" name="id35"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></li>
+<li><a class="reference" href="#iterator-adaptor-models" id="id36" name="id36"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></li>
+<li><a class="reference" href="#iterator-adaptor-public-operations" id="id37" name="id37"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></li>
+<li><a class="reference" href="#iterator-adaptor-protected-member-functions" id="id38" name="id38"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></li>
+<li><a class="reference" href="#iterator-adaptor-private-member-functions" id="id39" name="id39"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#specialized-adaptors-lib-iterator-special-adaptors" id="id39" name="id39">Specialized adaptors [lib.iterator.special.adaptors]</a><ul>
-<li><a class="reference" href="#indirect-iterator" id="id40" name="id40">Indirect iterator</a><ul>
-<li><a class="reference" href="#class-template-indirect-iterator" id="id41" name="id41">Class template <tt class="literal"><span class="pre">indirect_iterator</span></tt></a></li>
-<li><a class="reference" href="#indirect-iterator-requirements" id="id42" name="id42"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#indirect-iterator-models" id="id43" name="id43"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#indirect-iterator-operations" id="id44" name="id44"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#specialized-adaptors-lib-iterator-special-adaptors" id="id40" name="id40">Specialized adaptors [lib.iterator.special.adaptors]</a><ul>
+<li><a class="reference" href="#indirect-iterator" id="id41" name="id41">Indirect iterator</a><ul>
+<li><a class="reference" href="#class-template-indirect-iterator" id="id42" name="id42">Class template <tt class="literal"><span class="pre">indirect_iterator</span></tt></a></li>
+<li><a class="reference" href="#indirect-iterator-requirements" id="id43" name="id43"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#indirect-iterator-models" id="id44" name="id44"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#indirect-iterator-operations" id="id45" name="id45"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#reverse-iterator" id="id45" name="id45">Reverse iterator</a><ul>
-<li><a class="reference" href="#class-template-reverse-iterator" id="id46" name="id46">Class template <tt class="literal"><span class="pre">reverse_iterator</span></tt></a></li>
-<li><a class="reference" href="#reverse-iterator-requirements" id="id47" name="id47"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#reverse-iterator-models" id="id48" name="id48"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#reverse-iterator-operations" id="id49" name="id49"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#reverse-iterator" id="id46" name="id46">Reverse iterator</a><ul>
+<li><a class="reference" href="#class-template-reverse-iterator" id="id47" name="id47">Class template <tt class="literal"><span class="pre">reverse_iterator</span></tt></a></li>
+<li><a class="reference" href="#reverse-iterator-requirements" id="id48" name="id48"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#reverse-iterator-models" id="id49" name="id49"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#reverse-iterator-operations" id="id50" name="id50"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#transform-iterator" id="id50" name="id50">Transform iterator</a><ul>
-<li><a class="reference" href="#class-template-transform-iterator" id="id51" name="id51">Class template <tt class="literal"><span class="pre">transform_iterator</span></tt></a></li>
-<li><a class="reference" href="#transform-iterator-requirements" id="id52" name="id52"><tt class="literal"><span class="pre">transform_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#transform-iterator-models" id="id53" name="id53"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#transform-iterator-operations" id="id54" name="id54"><tt class="literal"><span class="pre">transform_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#transform-iterator" id="id51" name="id51">Transform iterator</a><ul>
+<li><a class="reference" href="#class-template-transform-iterator" id="id52" name="id52">Class template <tt class="literal"><span class="pre">transform_iterator</span></tt></a></li>
+<li><a class="reference" href="#transform-iterator-requirements" id="id53" name="id53"><tt class="literal"><span class="pre">transform_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#transform-iterator-models" id="id54" name="id54"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#transform-iterator-operations" id="id55" name="id55"><tt class="literal"><span class="pre">transform_iterator</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#filter-iterator" id="id55" name="id55">Filter iterator</a><ul>
-<li><a class="reference" href="#class-template-filter-iterator" id="id56" name="id56">Class template <tt class="literal"><span class="pre">filter_iterator</span></tt></a></li>
-<li><a class="reference" href="#filter-iterator-requirements" id="id57" name="id57"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#filter-iterator-models" id="id58" name="id58"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#filter-iterator-operations" id="id59" name="id59"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#filter-iterator" id="id56" name="id56">Filter iterator</a><ul>
+<li><a class="reference" href="#class-template-filter-iterator" id="id57" name="id57">Class template <tt class="literal"><span class="pre">filter_iterator</span></tt></a></li>
+<li><a class="reference" href="#filter-iterator-requirements" id="id58" name="id58"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#filter-iterator-models" id="id59" name="id59"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#filter-iterator-operations" id="id60" name="id60"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#counting-iterator" id="id60" name="id60">Counting iterator</a><ul>
-<li><a class="reference" href="#class-template-counting-iterator" id="id61" name="id61">Class template <tt class="literal"><span class="pre">counting_iterator</span></tt></a></li>
-<li><a class="reference" href="#counting-iterator-requirements" id="id62" name="id62"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#counting-iterator-models" id="id63" name="id63"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#counting-iterator-operations" id="id64" name="id64"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#counting-iterator" id="id61" name="id61">Counting iterator</a><ul>
+<li><a class="reference" href="#class-template-counting-iterator" id="id62" name="id62">Class template <tt class="literal"><span class="pre">counting_iterator</span></tt></a></li>
+<li><a class="reference" href="#counting-iterator-requirements" id="id63" name="id63"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#counting-iterator-models" id="id64" name="id64"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#counting-iterator-operations" id="id65" name="id65"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#function-output-iterator" id="id65" name="id65">Function output iterator</a><ul>
-<li><a class="reference" href="#class-template-function-output-iterator" id="id66" name="id66">Class template <tt class="literal"><span class="pre">function_output_iterator</span></tt></a></li>
-<li><a class="reference" href="#function-output-iterator-requirements" id="id67" name="id67"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#function-output-iterator-operations" id="id68" name="id68"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#function-output-iterator-output-proxy-operations" id="id69" name="id69"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></li>
+<li><a class="reference" href="#function-output-iterator" id="id66" name="id66">Function output iterator</a><ul>
+<li><a class="reference" href="#class-template-function-output-iterator" id="id67" name="id67">Class template <tt class="literal"><span class="pre">function_output_iterator</span></tt></a></li>
+<li><a class="reference" href="#function-output-iterator-requirements" id="id68" name="id68"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#function-output-iterator-operations" id="id69" name="id69"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#function-output-iterator-output-proxy-operations" id="id70" name="id70"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></li>
 </ul>
 </li>
 </ul>
@@ -325,7 +326,7 @@ of the derived iterator type.  These member functions are described
 briefly below and in more detail in the iterator facade
 requirements.</p>
 <blockquote>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -724,7 +725,7 @@ is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
 <a class="target" id="core-operations" name="core-operations"></a><div class="topic">
 <p class="topic-title"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="19%" />
 <col width="21%" />
@@ -1011,13 +1012,13 @@ rights reserved. -->
 template &lt;
     class Derived
   , class Base
-  , class Value        = use_default
-  , class CategoryOrTraversal  = use_default
-  , class Reference  = use_default
+  , class Value               = use_default
+  , class CategoryOrTraversal = use_default
+  , class Reference           = use_default
   , class Difference = use_default
 &gt;
 class iterator_adaptor 
-  : public iterator_facade&lt;Derived, <em>V</em>, <em>C</em>, <em>R</em>, <em>D</em>&gt; // see <a class="reference" href="#base-parameters">details</a>
+  : public iterator_facade&lt;Derived, <em>V</em>, <em>C</em>, <em>R</em>, <em>D</em>&gt; // see <a class="reference" href="#requirements">details</a>
 {
     friend class iterator_core_access;
  public:
@@ -1049,9 +1050,15 @@ class iterator_adaptor
     Base m_iterator; // exposition only
 };
 </pre>
+<a class="target" id="requirements" name="requirements"></a></div>
+<div class="section" id="iterator-adaptor-requirements">
+<h3><a class="toc-backref" href="#id34" name="iterator-adaptor-requirements"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h3>
+<p>The <tt class="literal"><span class="pre">Derived</span></tt> template argument must be a publicly derived from
+<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.</p>
+<p>The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy Constructible.</p>
 <a class="target" id="base-parameters" name="base-parameters"></a></div>
 <div class="section" id="iterator-adaptor-base-class-parameters">
-<h3><a class="toc-backref" href="#id34" name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h3>
+<h3><a class="toc-backref" href="#id35" name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h3>
 <p>The <em>V</em>, <em>C</em>, <em>R</em>, and <em>D</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
 used as a base class in the summary of <tt class="literal"><span class="pre">iterator_adaptor</span></tt>
 above are defined as follows:</p>
@@ -1080,20 +1087,18 @@ above are defined as follows:</p>
           return Difference
 </pre>
 </div>
-<div class="section" id="iterator-adaptor-usage">
-<h3><a class="toc-backref" href="#id35" name="iterator-adaptor-usage"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> usage</a></h3>
-<p>The <tt class="literal"><span class="pre">Derived</span></tt> template parameter must be a publicly derived from
-<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.  In order for <tt class="literal"><span class="pre">Derived</span></tt> to model the
-iterator concepts corresponding to
-<tt class="literal"><span class="pre">iterator_traits&lt;Derived&gt;::iterator_category</span></tt>, the expressions
-involving <tt class="literal"><span class="pre">m_iterator</span></tt> in the specifications of those private
-member functions of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> that may be called by
-<tt class="literal"><span class="pre">iterator_facade&lt;Derived,</span> <span class="pre">V,</span> <span class="pre">C,</span> <span class="pre">R,</span> <span class="pre">D&gt;</span></tt>
-in evaluating any valid expression involving <tt class="literal"><span class="pre">Derived</span></tt>
-in those concepts' requirements.</p>
+<div class="section" id="iterator-adaptor-models">
+<h3><a class="toc-backref" href="#id36" name="iterator-adaptor-models"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></h3>
+<p>In order for <tt class="literal"><span class="pre">Derived</span></tt> to model the iterator concepts corresponding
+to <tt class="literal"><span class="pre">iterator_traits&lt;Derived&gt;::iterator_category</span></tt>, the expressions
+involving <tt class="literal"><span class="pre">m_iterator</span></tt> in the specifications of those private member
+functions of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> that may be called by
+<tt class="literal"><span class="pre">iterator_facade&lt;Derived,</span> <span class="pre">V,</span> <span class="pre">C,</span> <span class="pre">R,</span> <span class="pre">D&gt;</span></tt> in evaluating any valid
+expression involving <tt class="literal"><span class="pre">Derived</span></tt> in those concepts' requirements.</p>
+<!-- The above is confusing and needs a rewrite. -JGS -->
 </div>
 <div class="section" id="iterator-adaptor-public-operations">
-<h3><a class="toc-backref" href="#id36" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h3>
+<h3><a class="toc-backref" href="#id37" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h3>
 <p><tt class="literal"><span class="pre">iterator_adaptor();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1127,7 +1132,7 @@ in those concepts' requirements.</p>
 </table>
 </div>
 <div class="section" id="iterator-adaptor-protected-member-functions">
-<h3><a class="toc-backref" href="#id37" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h3>
+<h3><a class="toc-backref" href="#id38" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h3>
 <p><tt class="literal"><span class="pre">Base</span> <span class="pre">const&amp;</span> <span class="pre">base_reference()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1148,7 +1153,7 @@ in those concepts' requirements.</p>
 </table>
 </div>
 <div class="section" id="iterator-adaptor-private-member-functions">
-<h3><a class="toc-backref" href="#id38" name="iterator-adaptor-private-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></h3>
+<h3><a class="toc-backref" href="#id39" name="iterator-adaptor-private-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></h3>
 <p><tt class="literal"><span class="pre">typename</span> <span class="pre">iterator_adaptor::reference</span> <span class="pre">dereference()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1217,7 +1222,7 @@ typename iterator_adaptor::difference_type distance_to(
 </div>
 </div>
 <div class="section" id="specialized-adaptors-lib-iterator-special-adaptors">
-<h2><a class="toc-backref" href="#id39" name="specialized-adaptors-lib-iterator-special-adaptors">Specialized adaptors [lib.iterator.special.adaptors]</a></h2>
+<h2><a class="toc-backref" href="#id40" name="specialized-adaptors-lib-iterator-special-adaptors">Specialized adaptors [lib.iterator.special.adaptors]</a></h2>
 <p>The <tt class="literal"><span class="pre">enable_if_convertible&lt;X,Y&gt;::type</span></tt> expression used in
 this section is for exposition purposes. The converting constructors
 for specialized adaptors should be only be in an overload set provided
@@ -1246,7 +1251,7 @@ take the constructor out of the overload set when the types are not
 implicitly convertible.  
 ]</p>
 <div class="section" id="indirect-iterator">
-<h3><a class="toc-backref" href="#id40" name="indirect-iterator">Indirect iterator</a></h3>
+<h3><a class="toc-backref" href="#id41" name="indirect-iterator">Indirect iterator</a></h3>
 <p>The indirect iterator adapts an iterator by applying an <em>extra</em>
 dereference inside of <tt class="literal"><span class="pre">operator*()</span></tt>. For example, this iterator
 adaptor makes it possible to view a container of pointers
@@ -1255,7 +1260,7 @@ adaptor makes it possible to view a container of pointers
 <!-- At some point we should add the capability to handle
 iterators over smart pointers, which the impl handles. -JGS -->
 <div class="section" id="class-template-indirect-iterator">
-<h4><a class="toc-backref" href="#id41" name="class-template-indirect-iterator">Class template <tt class="literal"><span class="pre">indirect_iterator</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id42" name="class-template-indirect-iterator">Class template <tt class="literal"><span class="pre">indirect_iterator</span></tt></a></h4>
 <pre class="literal-block">
 template &lt;
     class Iterator
@@ -1327,7 +1332,7 @@ satisfies the requirements of the concepts modeled by the indirect
 iterator as specified in the models section.</p>
 </div>
 <div class="section" id="indirect-iterator-requirements">
-<h4><a class="toc-backref" href="#id42" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id43" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h4>
 <p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
 Iterator. The <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> argument shall be one of the
 standard iterator tags or <tt class="literal"><span class="pre">use_default</span></tt>. If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>
@@ -1343,7 +1348,7 @@ is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied
 default for the <tt class="literal"><span class="pre">value_type</span></tt> member.</p>
 </div>
 <div class="section" id="indirect-iterator-models">
-<h4><a class="toc-backref" href="#id43" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h4>
+<h4><a class="toc-backref" href="#id44" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h4>
 <p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is a standard iterator tag,
 <tt class="literal"><span class="pre">indirect_iterator</span></tt> is a model of the iterator concept corresponding
 to the tag, otherwise <tt class="literal"><span class="pre">indirect_iterator</span></tt> satisfies the requirements
@@ -1357,7 +1362,7 @@ the <tt class="literal"><span class="pre">Iterator</span></tt> argument.</p>
 <tt class="literal"><span class="pre">indirect_iterator</span></tt> models Lvalue Iterator.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
-<h4><a class="toc-backref" href="#id44" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id45" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h4>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="literal"><span class="pre">indirect_iterator</span></tt>, <tt class="literal"><span class="pre">indirect_iterator</span></tt> provides the following
 operations.</p>
@@ -1449,13 +1454,11 @@ indirect_iterator(
 </div>
 </div>
 <div class="section" id="reverse-iterator">
-<h3><a class="toc-backref" href="#id45" name="reverse-iterator">Reverse iterator</a></h3>
-<!-- I think we'd better strike the old reverse_iterator text from the standard, eh? -->
-<p>The reverse iterator adaptor flips the direction of a base iterator's
-motion. Invoking <tt class="literal"><span class="pre">operator++()</span></tt> moves the base iterator backward and
-invoking <tt class="literal"><span class="pre">operator--()</span></tt> moves the base iterator forward.</p>
+<h3><a class="toc-backref" href="#id46" name="reverse-iterator">Reverse iterator</a></h3>
+<p>The reverse iterator adaptor iterates through the adapted iterator
+range in the opposite direction.</p>
 <div class="section" id="class-template-reverse-iterator">
-<h4><a class="toc-backref" href="#id46" name="class-template-reverse-iterator">Class template <tt class="literal"><span class="pre">reverse_iterator</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id47" name="class-template-reverse-iterator">Class template <tt class="literal"><span class="pre">reverse_iterator</span></tt></a></h4>
 <pre class="literal-block">
 template &lt;class Iterator&gt;
 class reverse_iterator
@@ -1479,19 +1482,88 @@ private:
 </pre>
 </div>
 <div class="section" id="reverse-iterator-requirements">
-<h4><a class="toc-backref" href="#id47" name="reverse-iterator-requirements"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id48" name="reverse-iterator-requirements"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></h4>
 <p>The base <tt class="literal"><span class="pre">Iterator</span></tt> must be a model of Bidirectional Traversal
 Iterator and Readable Iterator.</p>
 </div>
 <div class="section" id="reverse-iterator-models">
-<h4><a class="toc-backref" href="#id48" name="reverse-iterator-models"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></h4>
-<p><tt class="literal"><span class="pre">reverse_iterator</span></tt> models Bidirectional Traversal Iterator and
-Readable Iterator.  In addition, <tt class="literal"><span class="pre">reverse_iterator</span></tt> models the same
-standard iterator access concepts that the <tt class="literal"><span class="pre">Iterator</span></tt>
-argument models.</p>
+<h4><a class="toc-backref" href="#id49" name="reverse-iterator-models"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></h4>
+<p>The concepts that <tt class="literal"><span class="pre">reverse_iterator</span></tt> models are dependent on what
+concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
+following tables.</p>
+<table class="table" frame="border" rules="all">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">reverse_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Bidirectional Traversal Iterator</td>
+<td>Bidirectional Traversal Iterator</td>
+</tr>
+<tr><td>Random Access Traversal Iterator</td>
+<td>Random Access Traversal Iterator</td>
+</tr>
+</tbody>
+</table>
+<table class="table" frame="border" rules="all">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">reverse_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Readable Iterator</td>
+<td>Readable Iterator</td>
+</tr>
+<tr><td>Writable Iterator</td>
+<td>Writable Iterator</td>
+</tr>
+<tr><td>Lvalue Iterator</td>
+<td>Lvalue Iterator</td>
+</tr>
+</tbody>
+</table>
+<table class="table" frame="border" rules="all">
+<colgroup>
+<col width="62%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">reverse_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Readable Lvalue Iterator,
+Bidirectional Traversal Iterator</td>
+<td>Bidirectional Iterator</td>
+</tr>
+<tr><td>Writable Lvalue Iterator,
+Bidirectional Traversal Iterator</td>
+<td>Mutable Bidirectional Iterator</td>
+</tr>
+<tr><td>Readable Lvalue Iterator,
+Random Access Traversal Iterator</td>
+<td>Random Access Iterator</td>
+</tr>
+<tr><td>Writable Lvalue Iterator,
+Random Access Traversal Iterator</td>
+<td>Mutable Random Access Iterator</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="reverse-iterator-operations">
-<h4><a class="toc-backref" href="#id49" name="reverse-iterator-operations"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id50" name="reverse-iterator-operations"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></h4>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="literal"><span class="pre">reverse_iterator</span></tt>, <tt class="literal"><span class="pre">reverse_iterator</span></tt> provides the following
 operations.</p>
@@ -1554,7 +1626,7 @@ reverse_iterator(
 </table>
 <pre class="literal-block">
 Iterator tmp = m_iterator;
-return *..tmp;
+return *--tmp;
 </pre>
 <p><tt class="literal"><span class="pre">reverse_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
@@ -1581,14 +1653,12 @@ return *..tmp;
 </div>
 </div>
 <div class="section" id="transform-iterator">
-<h3><a class="toc-backref" href="#id50" name="transform-iterator">Transform iterator</a></h3>
-<p>The transform iterator adapts an iterator by applying some function
-object to the result of dereferencing the iterator. In other words,
-the <tt class="literal"><span class="pre">operator*</span></tt> of the transform iterator first dereferences the
-base iterator, passes the result of this to the function object, and
-then returns the result.</p>
+<h3><a class="toc-backref" href="#id51" name="transform-iterator">Transform iterator</a></h3>
+<p>The transform iterator adapts an iterator by modifying the
+<tt class="literal"><span class="pre">operator*</span></tt> to apply a function object to the result of
+dereferencing the iterator and returning the result.</p>
 <div class="section" id="class-template-transform-iterator">
-<h4><a class="toc-backref" href="#id51" name="class-template-transform-iterator">Class template <tt class="literal"><span class="pre">transform_iterator</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id52" name="class-template-transform-iterator">Class template <tt class="literal"><span class="pre">transform_iterator</span></tt></a></h4>
 <!-- Version 1.3 of this document was accepted for TR1 -->
 <pre class="literal-block">
 template &lt;class UnaryFunction,
@@ -1604,8 +1674,8 @@ public:
   template&lt;class F2, class I2, class R2, class V2&gt;
   transform_iterator(
         transform_iterator&lt;F2, I2, R2, V2&gt; const&amp; t
-      , typename enable_if_convertible&lt;I2, Iterator&gt;::type* = 0      // exposition
-      , typename enable_if_convertible&lt;F2, UnaryFunction&gt;::type* = 0 // exposition
+      , typename enable_if_convertible&lt;I2, Iterator&gt;::type* = 0      // exposition only
+      , typename enable_if_convertible&lt;F2, UnaryFunction&gt;::type* = 0 // exposition only
   );
   Iterator base() const;
   UnaryFunction functor() const;
@@ -1613,13 +1683,13 @@ public:
   transform_iterator&amp; operator++();
   transform_iterator&amp; operator--();
 private:
-  Iterator m_iterator; // exposition
-  UnaryFunction m_f;   // exposition
+  Iterator m_iterator; // exposition only
+  UnaryFunction m_f;   // exposition only
 };
 </pre>
 </div>
 <div class="section" id="transform-iterator-requirements">
-<h4><a class="toc-backref" href="#id52" name="transform-iterator-requirements"><tt class="literal"><span class="pre">transform_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id53" name="transform-iterator-requirements"><tt class="literal"><span class="pre">transform_iterator</span></tt> requirements</a></h4>
 <p>The type <tt class="literal"><span class="pre">UnaryFunction</span></tt> must be Assignable, Copy Constructible, and
 the expression <tt class="literal"><span class="pre">f(*i)</span></tt> must be valid where <tt class="literal"><span class="pre">f</span></tt> is an object of
 type <tt class="literal"><span class="pre">UnaryFunction</span></tt>, <tt class="literal"><span class="pre">i</span></tt> is an object of type <tt class="literal"><span class="pre">Iterator</span></tt>, and
@@ -1628,7 +1698,7 @@ where the type of <tt class="literal"><span class="pre">f(*i)</span></tt> must b
 <p>The type <tt class="literal"><span class="pre">Iterator</span></tt> must at least model Readable Iterator.</p>
 </div>
 <div class="section" id="transform-iterator-models">
-<h4><a class="toc-backref" href="#id53" name="transform-iterator-models"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</a></h4>
+<h4><a class="toc-backref" href="#id54" name="transform-iterator-models"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</a></h4>
 <p>The resulting <tt class="literal"><span class="pre">transform_iterator</span></tt> models the most refined of the
 following options that is also modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
 <blockquote>
@@ -1646,7 +1716,7 @@ concept that is modeled by <tt class="literal"><span class="pre">Iterator</span>
 The <tt class="literal"><span class="pre">value_type</span></tt> is <tt class="literal"><span class="pre">remove_cv&lt;remove_reference&lt;reference&gt;</span> <span class="pre">&gt;::type</span></tt>.</p>
 </div>
 <div class="section" id="transform-iterator-operations">
-<h4><a class="toc-backref" href="#id54" name="transform-iterator-operations"><tt class="literal"><span class="pre">transform_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id55" name="transform-iterator-operations"><tt class="literal"><span class="pre">transform_iterator</span></tt> operations</a></h4>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="literal"><span class="pre">transform_iterator</span></tt>, <tt class="literal"><span class="pre">transform_iterator</span></tt> provides the following
 operations.</p>
@@ -1739,7 +1809,7 @@ transform_iterator(
 </div>
 </div>
 <div class="section" id="filter-iterator">
-<h3><a class="toc-backref" href="#id55" name="filter-iterator">Filter iterator</a></h3>
+<h3><a class="toc-backref" href="#id56" name="filter-iterator">Filter iterator</a></h3>
 <p>The filter iterator adaptor creates a view of an iterator range in
 which some elements of the range are skipped over. A predicate
 function object controls which elements are skipped. When the
@@ -1751,7 +1821,7 @@ of the underlying range. Therefore the constructor of the filter
 iterator takes two iterator parameters: the position for the filtered
 iterator and the end of the range.</p>
 <div class="section" id="class-template-filter-iterator">
-<h4><a class="toc-backref" href="#id56" name="class-template-filter-iterator">Class template <tt class="literal"><span class="pre">filter_iterator</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id57" name="class-template-filter-iterator">Class template <tt class="literal"><span class="pre">filter_iterator</span></tt></a></h4>
 <pre class="literal-block">
 template &lt;class Predicate, class Iterator&gt;
 class filter_iterator
@@ -1787,7 +1857,7 @@ corresponding to each standard concept modeled by <tt class="literal"><span clas
 as described in the models section.</p>
 </div>
 <div class="section" id="filter-iterator-requirements">
-<h4><a class="toc-backref" href="#id57" name="filter-iterator-requirements"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id58" name="filter-iterator-requirements"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h4>
 <p>The <tt class="literal"><span class="pre">Predicate</span></tt> argument must be Assignable, Copy Constructible, and
 the expression <tt class="literal"><span class="pre">p(x)</span></tt> must be valid where <tt class="literal"><span class="pre">p</span></tt> is an object of type
 <tt class="literal"><span class="pre">Predicate</span></tt>, <tt class="literal"><span class="pre">x</span></tt> is an object of type
@@ -1798,11 +1868,11 @@ Iterator and Single Pass Iterator or it shall meet the requirements of
 Input Iterator.</p>
 </div>
 <div class="section" id="filter-iterator-models">
-<h4><a class="toc-backref" href="#id58" name="filter-iterator-models"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></h4>
+<h4><a class="toc-backref" href="#id59" name="filter-iterator-models"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></h4>
 <p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on what
 concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
 following tables.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="33%" />
 <col width="67%" />
@@ -1821,7 +1891,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="41%" />
 <col width="59%" />
@@ -1843,7 +1913,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="63%" />
 <col width="38%" />
@@ -1867,7 +1937,7 @@ following tables.</p>
 </table>
 </div>
 <div class="section" id="filter-iterator-operations">
-<h4><a class="toc-backref" href="#id59" name="filter-iterator-operations"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id60" name="filter-iterator-operations"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h4>
 <p>In addition to those operations required by the concepts that
 <tt class="literal"><span class="pre">filter_iterator</span></tt> models, <tt class="literal"><span class="pre">filter_iterator</span></tt> provides the following
 operations.</p>
@@ -1977,11 +2047,11 @@ or <tt class="literal"><span class="pre">m_pred(*m_iter)</span> <span class="pre
 </div>
 </div>
 <div class="section" id="counting-iterator">
-<h3><a class="toc-backref" href="#id60" name="counting-iterator">Counting iterator</a></h3>
+<h3><a class="toc-backref" href="#id61" name="counting-iterator">Counting iterator</a></h3>
 <p><tt class="literal"><span class="pre">counting_iterator</span></tt> adapts an arithmetic type, such as <tt class="literal"><span class="pre">int</span></tt>, by
 adding an <tt class="literal"><span class="pre">operator*</span></tt> that returns the current value of the object.</p>
 <div class="section" id="class-template-counting-iterator">
-<h4><a class="toc-backref" href="#id61" name="class-template-counting-iterator">Class template <tt class="literal"><span class="pre">counting_iterator</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id62" name="class-template-counting-iterator">Class template <tt class="literal"><span class="pre">counting_iterator</span></tt></a></h4>
 <pre class="literal-block">
 template &lt;
     class Incrementable
@@ -2009,13 +2079,13 @@ the cases when the <tt class="literal"><span class="pre">Incrementable</span></t
 </dl>
 </div>
 <div class="section" id="counting-iterator-requirements">
-<h4><a class="toc-backref" href="#id62" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id63" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h4>
 <p>The <tt class="literal"><span class="pre">Incrementable</span></tt> type must be Default Constructible, Copy
 Constructible, and Assignable.  The default distance is
 an implementation defined signed integral type.</p>
 </div>
 <div class="section" id="counting-iterator-models">
-<h4><a class="toc-backref" href="#id63" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h4>
+<h4><a class="toc-backref" href="#id64" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h4>
 <p><tt class="literal"><span class="pre">counting_iterator</span></tt> models Readable Lvalue Iterator.</p>
 <p>Furthermore, if you wish to create a counting iterator that is a Forward
 Traversal Iterator, then the following expressions must be valid:</p>
@@ -2040,7 +2110,7 @@ i &lt; j
 </pre>
 </div>
 <div class="section" id="counting-iterator-operations">
-<h4><a class="toc-backref" href="#id64" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id65" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h4>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="literal"><span class="pre">counting_iterator</span></tt>, <tt class="literal"><span class="pre">counting_iterator</span></tt> provides the following
 operations.</p>
@@ -2115,7 +2185,7 @@ constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
 </div>
 </div>
 <div class="section" id="function-output-iterator">
-<h3><a class="toc-backref" href="#id65" name="function-output-iterator">Function output iterator</a></h3>
+<h3><a class="toc-backref" href="#id66" name="function-output-iterator">Function output iterator</a></h3>
 <p>The function output iterator adaptor makes it easier to create custom
 output iterators. The adaptor takes a unary function and creates a
 model of Output Iterator. Each item assigned to the output iterator is
@@ -2124,7 +2194,7 @@ iterator is that creating a conforming output iterator is non-trivial,
 particularly because the proper implementation usually requires a
 proxy object.</p>
 <div class="section" id="class-template-function-output-iterator">
-<h4><a class="toc-backref" href="#id66" name="class-template-function-output-iterator">Class template <tt class="literal"><span class="pre">function_output_iterator</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id67" name="class-template-function-output-iterator">Class template <tt class="literal"><span class="pre">function_output_iterator</span></tt></a></h4>
 <pre class="literal-block">
 template &lt;class UnaryFunction&gt;
 class function_output_iterator {
@@ -2151,7 +2221,7 @@ public:
 </pre>
 </div>
 <div class="section" id="function-output-iterator-requirements">
-<h4><a class="toc-backref" href="#id67" name="function-output-iterator-requirements"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id68" name="function-output-iterator-requirements"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h4>
 <p>The <tt class="literal"><span class="pre">UnaryFunction</span></tt> must be Assignable, Copy Constructible, and the
 expression <tt class="literal"><span class="pre">f(x)</span></tt> must be valid, where <tt class="literal"><span class="pre">f</span></tt> is an object of type
 <tt class="literal"><span class="pre">UnaryFunction</span></tt> and <tt class="literal"><span class="pre">x</span></tt> is an object of a type accepted by <tt class="literal"><span class="pre">f</span></tt>.
@@ -2159,7 +2229,7 @@ The resulting <tt class="literal"><span class="pre">function_output_iterator</sp
 and Incrementable Iterator concepts.</p>
 </div>
 <div class="section" id="function-output-iterator-operations">
-<h4><a class="toc-backref" href="#id68" name="function-output-iterator-operations"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id69" name="function-output-iterator-operations"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></h4>
 <p><tt class="literal"><span class="pre">explicit</span> <span class="pre">function_output_iterator(const</span> <span class="pre">UnaryFunction&amp;</span> <span class="pre">f</span> <span class="pre">=</span> <span class="pre">UnaryFunction());</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2200,7 +2270,7 @@ a copy of the unary function <tt class="literal"><span class="pre">f</span></tt>
 </table>
 </div>
 <div class="section" id="function-output-iterator-output-proxy-operations">
-<h4><a class="toc-backref" href="#id69" name="function-output-iterator-output-proxy-operations"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id70" name="function-output-iterator-output-proxy-operations"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></h4>
 <p><tt class="literal"><span class="pre">output_proxy(UnaryFunction&amp;</span> <span class="pre">f);</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2235,10 +2305,10 @@ LocalWords:  OtherIncrementable Coplien -->
 </div>
 </div>
 </div>
-<hr class="footer" />
+<hr class="footer"/>
 <div class="footer">
 <a class="reference" href="facade-and-adaptor.rst">View document source</a>.
-Generated on: 2004-01-12 17:28 UTC.
+Generated on: 2004-01-12 18:37 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
