@@ -151,7 +151,7 @@ namespace local_time {
           throw ambiguous_result(ss.str());
         }
         else{ // NADT on error
-          time_ = posix_time::posix_time_system::get_time_rep(date_type(date_time::not_a_date_time), time_duration_type(date_time::not_a_date_time));
+          this->time_ = posix_time::posix_time_system::get_time_rep(date_type(date_time::not_a_date_time), time_duration_type(date_time::not_a_date_time));
         }
       }
       else if(result == invalid_time_label){
@@ -161,19 +161,19 @@ namespace local_time {
           throw time_label_invalid(ss.str());
         }
         else{ // NADT on error
-          time_ = posix_time::posix_time_system::get_time_rep(date_type(date_time::not_a_date_time), time_duration_type(date_time::not_a_date_time));
+          this->time_ = posix_time::posix_time_system::get_time_rep(date_type(date_time::not_a_date_time), time_duration_type(date_time::not_a_date_time));
         }
       }
       else if(result == is_in_dst){
         utc_time_type t = 
           construction_adjustment(utc_time_type(d, td), tz, true);
-        time_ = posix_time::posix_time_system::get_time_rep(t.date(), 
+        this->time_ = posix_time::posix_time_system::get_time_rep(t.date(), 
                                                             t.time_of_day());
       }
       else{
         utc_time_type t = 
           construction_adjustment(utc_time_type(d, td), tz, false);
-        time_ = posix_time::posix_time_system::get_time_rep(t.date(), 
+        this->time_ = posix_time::posix_time_system::get_time_rep(t.date(), 
                                                             t.time_of_day());
       }
     }
@@ -425,7 +425,7 @@ namespace local_time {
     //! Local_date_time += date_duration 
     local_date_time_base operator+=(const date_duration_type& dd)
     {
-      time_ = time_system_type::add_days(time_,dd);
+      this->time_ = time_system_type::add_days(time_,dd);
       return *this;
     }
     //! Local_date_time - date_duration 
@@ -436,7 +436,7 @@ namespace local_time {
     //! Local_date_time -= date_duration 
     local_date_time_base operator-=(const date_duration_type& dd)
     {
-      time_ = time_system_type::subtract_days(time_,dd);
+      this->time_ = time_system_type::subtract_days(time_,dd);
       return *this;
     }
     //! Local_date_time + time_duration 
@@ -447,7 +447,7 @@ namespace local_time {
     //! Local_date_time += time_duration 
     local_date_time_base operator+=(const time_duration_type& td) 
     {
-      time_ = time_system_type::add_time_duration(time_,td);
+      this->time_ = time_system_type::add_time_duration(time_,td);
       return *this;
     }
     //! Local_date_time - time_duration 
@@ -458,7 +458,7 @@ namespace local_time {
     //! Local_date_time -= time_duration 
     local_date_time_base operator-=(const time_duration_type& td)
     {
-      time_ = time_system_type::subtract_time_duration(time_,td);
+      this->time_ = time_system_type::subtract_time_duration(time_,td);
       return *this;
     }
   private:
