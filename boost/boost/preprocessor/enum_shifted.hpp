@@ -1,5 +1,5 @@
-#ifndef BOOST_PREPROCESSOR_ENUM_PARAMS_HPP
-#define BOOST_PREPROCESSOR_ENUM_PARAMS_HPP
+#ifndef BOOST_PREPROCESSOR_ENUM_SHIFTED_HPP
+#define BOOST_PREPROCESSOR_ENUM_SHIFTED_HPP
 
 // Copyright (C) 2001
 // Housemarque Oy
@@ -14,28 +14,26 @@
 
 /*! \file
 
-<a href="../../../../boost/preprocessor/enum_params.hpp">Click here to see the header.</a>
+<a href="../../../../boost/preprocessor/enum_shifted.hpp">Click here to see the header.</a>
 */
 
-#include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum.hpp>
+#include <boost/preprocessor/dec.hpp>
+#include <boost/preprocessor/inc.hpp>
 
-//! Generates a comma separated list of parameters.
+//! Generates a comma separated shifted list.
 /*!
 In other words, expands to the sequence:
 
 <PRE>\verbatim
-  P##0, P##1, ..., P##N-1
+  F(1,P), F(2,P), ..., F(N-1,P)
 \endverbatim</PRE>
 
 NOTE: The implementation uses BOOST_PP_REPEAT().
 */
-#define BOOST_PP_ENUM_PARAMS(N,P) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_F,P)
+#define BOOST_PP_ENUM_SHIFTED(N,F,P) BOOST_PP_ENUM(BOOST_PP_DEC(N),BOOST_PP_ENUM_SHIFTED_F,(F,P))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_ENUM_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
+#define BOOST_PP_ENUM_SHIFTED_F(I,FP) BOOST_PP_TUPLE_ELEM(2,0,FP)(BOOST_PP_INC(I),BOOST_PP_TUPLE_ELEM(2,1,FP))
 #endif
-
-//! Obsolete. Use BOOST_PP_ENUM_PARAMS().
-#define BOOST_PREPROCESSOR_ENUM_PARAMS(N,P) BOOST_PP_ENUM_PARAMS(N,P)
 #endif

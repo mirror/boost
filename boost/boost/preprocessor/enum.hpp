@@ -1,5 +1,5 @@
-#ifndef BOOST_PREPROCESSOR_ENUM_PARAMS_HPP
-#define BOOST_PREPROCESSOR_ENUM_PARAMS_HPP
+#ifndef BOOST_PREPROCESSOR_ENUM_HPP
+#define BOOST_PREPROCESSOR_ENUM_HPP
 
 // Copyright (C) 2001
 // Housemarque Oy
@@ -14,28 +14,27 @@
 
 /*! \file
 
-<a href="../../../../boost/preprocessor/enum_params.hpp">Click here to see the header.</a>
+<a href="../../../../boost/preprocessor/enum.hpp">Click here to see the header.</a>
 */
 
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/enum.hpp>
+#include <boost/preprocessor/comma_if.hpp>
+#include <boost/preprocessor/expand.hpp>
+#include <boost/preprocessor/repeat.hpp>
+#include <boost/preprocessor/tuple.hpp>
 
-//! Generates a comma separated list of parameters.
+//! Generates a comma separated list.
 /*!
 In other words, expands to the sequence:
 
 <PRE>\verbatim
-  P##0, P##1, ..., P##N-1
+  F(0,P), F(1,P), ..., F(N-1,P)
 \endverbatim</PRE>
 
 NOTE: The implementation uses BOOST_PP_REPEAT().
 */
-#define BOOST_PP_ENUM_PARAMS(N,P) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_F,P)
+#define BOOST_PP_ENUM(N,F,P) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_F,(F,P))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_ENUM_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
+#define BOOST_PP_ENUM_F(I,FP) BOOST_PP_COMMA_IF(I) BOOST_PP_EXPAND(BOOST_PP_TUPLE_ELEM(2,0,FP)(I,BOOST_PP_TUPLE_ELEM(2,1,FP)))
 #endif
-
-//! Obsolete. Use BOOST_PP_ENUM_PARAMS().
-#define BOOST_PREPROCESSOR_ENUM_PARAMS(N,P) BOOST_PP_ENUM_PARAMS(N,P)
 #endif

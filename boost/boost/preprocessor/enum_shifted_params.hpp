@@ -18,10 +18,7 @@
 */
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/comma_if.hpp>
-#include <boost/preprocessor/dec.hpp>
-#include <boost/preprocessor/inc.hpp>
-#include <boost/preprocessor/repeat.hpp>
+#include <boost/preprocessor/enum_shifted.hpp>
 
 //! Generates a comma separated list of shifted actual parameters.
 /*!
@@ -37,10 +34,10 @@ RATIONALE:
 - This macro facilitates a typical usage of the library. Shifted parameter
 lists are common in template metaprograms. 
 */
-#define BOOST_PP_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_REPEAT(BOOST_PP_DEC(N),BOOST_PP_SHIFTED_PARAM,P)
+#define BOOST_PP_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED(N,BOOST_PP_ENUM_SHIFTED_PARAMS_F,P)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_SHIFTED_PARAM(I,P) BOOST_PP_COMMA_IF(I) BOOST_PP_CAT(P,BOOST_PP_INC(I))
+#define BOOST_PP_ENUM_SHIFTED_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
 #endif
 
 //! Obsolete. Use BOOST_PP_ENUM_SHIFTED_PARAMS().

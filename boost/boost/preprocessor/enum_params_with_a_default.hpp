@@ -18,9 +18,7 @@
 */
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/comma_if.hpp>
-#include <boost/preprocessor/repeat.hpp>
-#include <boost/preprocessor/tuple.hpp>
+#include <boost/preprocessor/enum.hpp>
 
 //! Generates a comma separated list of parameters with a default.
 /*!
@@ -32,10 +30,10 @@ In other words, expands to the sequence:
 
 NOTE: The implementation uses BOOST_PP_REPEAT().
 */
-#define BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(N,P,D) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT_F,(P,D))
+#define BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(N,P,D) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT_F,(P,D))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT_F(I,PD) BOOST_PP_COMMA_IF(I) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,PD),I)=BOOST_PP_TUPLE_ELEM(2,1,PD)
+#define BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT_F(I,PD) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,PD),I)=BOOST_PP_TUPLE_ELEM(2,1,PD)
 #endif
 
 //! Obsolete. Use BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT().
