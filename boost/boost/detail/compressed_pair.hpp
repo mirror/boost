@@ -8,6 +8,9 @@
 // compressed_pair: pair that "compresses" empty members
 // (see libs/utility/compressed_pair.htm)
 //
+// JM changes 25 Jan 2004:
+// For the case where T1 == T2 and both are empty, then first() and second()
+// should return different objects.
 // JM changes 25 Jan 2000:
 // Removed default arguments from compressed_pair_switch to get
 // C++ Builder 4 to accept them
@@ -268,20 +271,21 @@ namespace details
 
       compressed_pair_imp() {}
 
-      compressed_pair_imp(first_param_type x, second_param_type)
-         : first_type(x) {}
+      compressed_pair_imp(first_param_type x, second_param_type y)
+         : first_type(x), m_second(y) {}
 
       compressed_pair_imp(first_param_type x)
-         : first_type(x) {}
+         : first_type(x), m_second(x) {}
 
       first_reference       first()       {return *this;}
       first_const_reference first() const {return *this;}
 
-      second_reference       second()       {return *this;}
-      second_const_reference second() const {return *this;}
+      second_reference       second()       {return m_second;}
+      second_const_reference second() const {return m_second;}
 
       void swap(::boost::compressed_pair<T1,T2>&) {}
    private:
+      T2 m_second;
    };
 
    // 5    T1 == T2 and are not empty:   //JM
