@@ -37,7 +37,7 @@
 #  define BOOST_HAS_GETTIMEOFDAY
 #  define BOOST_HAS_SIGACTION
 
-#  ifndef __APPLE_CC__
+#  if (__GNUC__ < 3) && !defined( __APPLE_CC__)
 
 // GCC strange "ignore std" mode works better if you pretend everything
 // is in the std namespace, for the most part.
@@ -65,5 +65,6 @@
 #  endif
 
 #endif
+
 
 
