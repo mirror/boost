@@ -11,6 +11,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <cstdlib>
 
 #include <boost/config.hpp> /* prevents some nasty warns in MSVC */
 #include <boost/algorithm/minmax_element.hpp>
@@ -226,6 +227,10 @@ void test(int n BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Value))
 
 int test_main( int argc, char* argv[] )
 {
+#ifndef BOOST_NO_STDC_NAMESPACE
+  using std::atoi;
+#endif
+
   int n = 100;
   if (argc > 1) n = atoi(argv[1]);
 
