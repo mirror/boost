@@ -27,8 +27,11 @@
 #define BOOST_NO_TEMPLATED_STREAMS
 #define BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING
 #endif
+#   if (__GNUC__ == 2 && __GNUC_MINOR__ <= 95) 
+#define BOOST_LAMBDA_FAILS_IN_TEMPLATE_KEYWORD_AFTER_SCOPE_OPER
+#endif
 #endif  // __GNUC__
-
+ 
 
 #if defined __KCC
 
