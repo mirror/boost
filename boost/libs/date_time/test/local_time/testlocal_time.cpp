@@ -315,6 +315,10 @@ main()
           (az_lt + days(2)).to_string() == "2003-Aug-30 05:00:00 MST");
       check("local - days", 
           (az_lt - days(2)).to_string() == "2003-Aug-26 05:00:00 MST");
+      check("local += days", 
+          (az_lt += days(2)).to_string() == "2003-Aug-30 05:00:00 MST");
+      check("local -= days", 
+          (az_lt -= days(2)).to_string() == "2003-Aug-28 05:00:00 MST");
       check("local + time_duration", 
           (az_lt + hours(2)).to_string() == "2003-Aug-28 07:00:00 MST");
       check("local - time_duration", 
@@ -323,6 +327,32 @@ main()
       check("pos_infinity > local", sv_lt > au_lt); 
       local_date_time sv_lt2(sv_lt + days(2));
       check("pos_infin + duration == pos_infin", sv_lt2 == sv_lt);
+   
+#if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
+      months m(2);
+      years y(2);
+      check("Local + months", 
+          (az_lt + m).to_string() == "2003-Oct-28 05:00:00 MST");
+      az_lt += m;
+      check("Local += months", 
+          az_lt.to_string() == "2003-Oct-28 05:00:00 MST");
+      check("Local - months", 
+          (az_lt - m).to_string() == "2003-Aug-28 05:00:00 MST");
+      az_lt -= m;
+      check("Local -= months", 
+          az_lt.to_string() == "2003-Aug-28 05:00:00 MST");
+      check("Local + years", 
+          (az_lt + y).to_string() == "2005-Aug-28 05:00:00 MST");
+      az_lt += y;
+      check("Local += years", 
+          az_lt.to_string() == "2005-Aug-28 05:00:00 MST");
+      check("Local - years", 
+          (az_lt - y).to_string() == "2003-Aug-28 05:00:00 MST");
+      az_lt -= y;
+      check("Local -= years", 
+          az_lt.to_string() == "2003-Aug-28 05:00:00 MST");
+      
+#endif // BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
     }
   }
   catch(std::exception& e) {
