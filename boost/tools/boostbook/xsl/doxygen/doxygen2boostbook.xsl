@@ -19,9 +19,13 @@
     This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
   </xsl:param>
 
+  <!-- The namespace used to identify code that should not be
+       processed at all. -->
+  <xsl:param name="boost.doxygen.detailns">detail</xsl:param>
+
   <!-- The substring used to identify unspecified types that we can't
        mask from within Doxygen. This is a hack (big surprise). -->
-  <xsl:param name="boost.doxygen.detail">detail::</xsl:param>
+  <xsl:param name="boost.doxygen.detail"><xsl:value-of select="$boost.doxygen.detailns"/>::</xsl:param>
 
   <!-- The title that will be used for the BoostBook library reference emitted. 
        If left blank, BoostBook will assign a default title. -->
@@ -41,9 +45,9 @@
 
   <xsl:template match="doxygen">
     <library-reference>
-	  <xsl:if test="string($boost.doxygen.reftitle) != ''">
-	    <title><xsl:copy-of select="$boost.doxygen.reftitle"/></title>
-	  </xsl:if>
+          <xsl:if test="string($boost.doxygen.reftitle) != ''">
+            <title><xsl:copy-of select="$boost.doxygen.reftitle"/></title>
+          </xsl:if>
       <xsl:apply-templates select="key('compounds-by-kind', 'file')"/>
     </library-reference>
   </xsl:template>
@@ -103,7 +107,8 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
     <xsl:variable name="fullname" select="string(compoundname)"/>
 
-    <xsl:if test="$with-namespace-refs[string(text())=$fullname]">
+    <xsl:if test="$with-namespace-refs[string(text())=$fullname]
+                  and not(contains($fullname, $boost.doxygen.detailns))">
       <!-- Namespace without the prefix -->
       <xsl:variable name="rest">
         <xsl:call-template name="strip-qualifiers">
@@ -1204,9 +1209,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <xsl:template match="para" mode="purpose">
-    <simpara>
-      <xsl:apply-templates select="*|text()" mode="passthrough"/>
-    </simpara>
+    <xsl:apply-templates select="*|text()" mode="passthrough"/>
   </xsl:template>
 
  </xsl:stylesheet>
