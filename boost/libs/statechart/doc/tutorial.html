@@ -71,7 +71,13 @@ redundancy-free textual description of the state chart.</p>
 distribution 1.31.0:</p>
 <ul>
   <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
-  <li>GCC 3.2 (MinGW; Red Hat Linux)</li>
+  <li>GCC 3.3.1 (MinGW)</li>
+</ul>
+<p>In addition, the previous version of the library has also been tested on 
+the following platforms (I expect the current version to work, but it hasn't 
+been tested yet):</p>
+<ul>
+  <li>GCC 3.2 (MinGW, Red Hat Linux)</li>
   <li>
   <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
   Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
@@ -1264,7 +1270,7 @@ achieve with destructors only:</p>
 	<li>There is no guarantee that <code>exit()</code> will be called:<ul>
 		<li>If the client destructs the state machine object without calling
 		<code>terminate()</code> beforehand then the currently active states are 
-		destructed without calling <code>exit()</code> beforehand. This is necessary 
+		destructed without calling <code>exit()</code>. This is necessary 
 		because an exception that is possibly thrown from <code>exit()</code> 
 		could not be propagated on to the state machine client</li>
 		<li><code>exit()</code> is not called when a previously executed action 
@@ -1450,7 +1456,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38692" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
