@@ -74,7 +74,7 @@ inline long atomic_conditional_increment( long * pw )
 
     long r;
 
-    __asm__ __volatile__
+    __asm__
     (
         "movl %0, %%eax\n\t"
         "0:\n\t"
@@ -85,9 +85,9 @@ inline long atomic_conditional_increment( long * pw )
         "cmpxchgl %%ebx, %0\n\t"
         "jne 0b\n\t"
         "1:":
-        "=m"( *pw ), "=&%eax"( r ): // outputs (%0, %1)
+        "=m"( *pw ), "=&a"( r ): // outputs (%0, %1)
         "m"( *pw ): // input (%2)
-        "%ebx", "memory", "cc" // clobbers
+        "ebx", "cc" // clobbers
     );
 
     return r;
