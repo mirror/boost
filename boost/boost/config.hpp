@@ -502,7 +502,7 @@
 #     if __SGI_STL_PORT >= 0x400 || __SGI_STL_PORT >= 0x321 && defined(__STL_USE_NAMESPACES)
         // a perfectly good implementation of std::iterator is supplied
         // A conforming allocator is supplied, but the compiler cannot cope
-        // when using "rebind".
+        // when using "rebind".  (Douglas Gregor)
 #       define BOOST_NO_STD_ALLOCATOR
 #     elif defined(__SGI_STL_ITERATOR)
 #       define BOOST_NO_STD_ITERATOR // No std::iterator in this case
