@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 18 Feb 2001   David Abrahams
+//      Reinstated reverse_iterator_pair_generator
 // 16 Feb 2001   David Abrahams
 //      Add an implicit conversion operator to operator_arrow_proxy
 //      as CW and BCC workarounds.
@@ -859,6 +861,21 @@ struct reverse_iterator_generator
 {
     typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
         Value,Reference,Pointer,Category,Distance> type;
+};
+
+template <class BidirectionalIterator,
+    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<BidirectionalIterator>::value_type>
+struct reverse_iterator_pair_generator
+{
+    typedef boost::detail::iterator_traits<BidirectionalIterator>::iterator_category category;
+    typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
+        Value, Value&, Value*
+        typename boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
+        typename boost::detail::iterator_traits<BidirectionalIterator>::difference_type> iterator;
+    typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
+        Value, const Value&, const Value*
+        typename boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
+        typename boost::detail::iterator_traits<BidirectionalIterator>::difference_type> const_iterator;
 };
 
 template <class BidirectionalIterator>
