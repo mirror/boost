@@ -9,7 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//  21 May 01  Require complete type on delete (suggested by Vladimir Prus)
+//  21 May 01  Require complete type where incomplete type is unsafe.
+//             (suggested by Vladimir Prus)
 //  21 May 01  operator= fails if operand transitively owned by *this, as in a
 //             linked list (report by Ken Johnson, fix by Beman Dawes)
 //  21 Jan 01  Suppress some useless warnings with MSVC (David Abrahams)
@@ -59,6 +60,11 @@
 #include <functional>         // for std::less
 #include <boost/static_assert.hpp> // for BOOST_STATIC_ASSERT
 
+#ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+# pragma warning(push)
+# pragma warning(disable:4284) // return type for 'identifier::operator->' is not a UDT or reference to a UDT. Will produce errors if applied using infix notation
+#endif    
+
 namespace boost {
 
 //  scoped_ptr  --------------------------------------------------------------//
@@ -80,13 +86,7 @@ template<typename T> class scoped_ptr : noncopyable {
   void reset( T* p=0 )          { if ( ptr != p ) { checked_delete(ptr); ptr = p; } }
   T& operator*() const          { return *ptr; }  // never throws
 #ifdef BOOST_MSVC
-# pragma warning(push)
-# pragma warning(disable:4284) // return type for 'identifier::operator->' is not a UDT or reference to a UDT. Will produce errors if applied using infix notation
-#endif    
   T* operator->() const         { return ptr; }  // never throws
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif    
   T* get() const                { return ptr; }  // never throws
 #ifdef BOOST_SMART_PTR_CONVERSION
   // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
@@ -216,14 +216,7 @@ template<typename T> class shared_ptr {
    } // reset
 
    T& operator*() const          { return *px; }  // never throws
-#ifdef BOOST_MSVC
-# pragma warning(push)
-# pragma warning(disable:4284) // return type for 'identifier::operator->' is not a UDT or reference to a UDT. Will produce errors if applied using infix notation
-#endif    
    T* operator->() const         { return px; }  // never throws
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif    
    T* get() const                { return px; }  // never throws
  #ifdef BOOST_SMART_PTR_CONVERSION
    // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
@@ -396,6 +389,10 @@ template<typename T>
 } // namespace std
 
 #endif  // ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif    
 
 #endif  // BOOST_SMART_PTR_HPP
 
