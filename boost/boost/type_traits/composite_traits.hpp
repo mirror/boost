@@ -65,6 +65,10 @@ template <typename T, std::size_t N> struct is_array<const volatile T[N]>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace detail{
+
+   template <typename T>
+   struct is_reference_or_const_volatile;
+
    struct pointer_helper
    {
       pointer_helper(const volatile void*);
@@ -152,7 +156,7 @@ public:
       (::boost::type_traits::ice_and<
          (1 == sizeof(detail::is_array_helper(&t, t))),
          ::boost::type_traits::ice_not<
-            ::boost::is_reference<T>::value>::value,
+            ::boost::detail::is_reference_or_const_volatile<T>::value>::value,
          ::boost::type_traits::ice_not<
             (1 == sizeof(detail::is_function_tester(t)))>::value
       >::value));
@@ -274,20 +278,63 @@ template <typename T> struct is_reference<T&const volatile>
 #  pragma warning(push)
 #  pragma warning(disable: 4181)
 #endif // BOOST_MSVC
-template <typename T> struct is_reference
-{ 
-private:
-   typedef T const volatile cv_t;
-public:
-   BOOST_STATIC_CONSTANT(bool, value = 
-      (::boost::type_traits::ice_or<
-      ::boost::type_traits::ice_not<
-         ::boost::is_const<cv_t>::value
-      >::value, 
-      ::boost::type_traits::ice_not<
-         ::boost::is_volatile<cv_t>::value>::value
-      >::value));
+
+
+namespace detail
+{
+  template <typename T> struct is_reference_or_const_volatile
+  { 
+   private:
+      typedef T const volatile cv_t;
+   public:
+      BOOST_STATIC_CONSTANT(bool, value = 
+                            (::boost::type_traits::ice_or<
+                             ::boost::type_traits::ice_not<
+                             ::boost::is_const<cv_t>::value
+                             >::value, 
+                             ::boost::type_traits::ice_not<
+                             ::boost::is_volatile<cv_t>::value>::value
+                             >::value));
+  };
+  
+  no_type non_array_is_reference_helper(...);
+  template <typename T>
+  yes_type non_array_is_reference_helper(T&(*)());
+
+  template <bool isarray_>
+  struct is_reference_helper
+  {
+      template <class T>
+      struct apply
+      {
+          typedef T (*pf_t)();
+          static pf_t pf;
+    
+          BOOST_STATIC_CONSTANT(
+              bool, value = (1 == sizeof(::boost::detail::non_array_is_reference_helper(pf))));
+      };
+  };
+
+  template <>
+  struct is_reference_helper<true>
+  {
+      template <class T>
+      struct apply
+      {
+          BOOST_STATIC_CONSTANT(bool, value = false);
+      };
+  };
+}
+
+template <typename T>
+struct is_reference
+{
+    BOOST_STATIC_CONSTANT(
+        bool, value = ::boost::detail::is_reference_helper<
+            is_array<T>::value
+        >::template apply<T>::value);
 };
+    
 template <> struct is_reference<void>
 {
    BOOST_STATIC_CONSTANT(bool, value = false);
