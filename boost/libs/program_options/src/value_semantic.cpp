@@ -30,7 +30,8 @@ namespace boost { namespace program_options {
             }
             xparse(value_store, local_tokens);
 #else
-            throw std::runtime_error("UTF-8 conversion not supported.");
+            throw_exception(
+                std::runtime_error("UTF-8 conversion not supported."));
 #endif
         } else {
             // Already in local encoding, pass unmodified
@@ -76,9 +77,9 @@ namespace boost { namespace program_options {
                           const std::vector<std::string>& new_tokens) const
     {
         if (!value_store.empty()) 
-            throw multiple_occurrences("multiple_occurrences");
+            throw_exception(multiple_occurrences("multiple_occurrences"));
         if (new_tokens.size() > 1)
-            throw multiple_values("multiple_values");
+            throw_exception(multiple_values("multiple_values"));
         value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
     }
 
@@ -118,7 +119,8 @@ namespace boost { namespace program_options {
         else if (s == "off" || s == "no" || s == "0" || s == "false")
             v = any(false);
         else
-            throw validation_error("'" + s + "' doesn't look like a bool value.");
+            throw_exception(validation_error(
+                                "'" + s + "' doesn't look like a bool value."));
     }
 
     // This is blatant copy-paste. However, templating this will cause a problem,
@@ -140,7 +142,7 @@ namespace boost { namespace program_options {
         else if (s == L"off" || s == L"no" || s == L"0" || s == L"false")
             v = any(false);
         else
-            throw validation_error("invalid bool value");
+            throw_exception(validation_error("invalid bool value"));
     }
 #endif
     BOOST_PROGRAM_OPTIONS_DECL 
@@ -175,7 +177,7 @@ namespace boost { namespace program_options {
         void check_first_occurrence(const boost::any& value)
         {
             if (!value.empty())
-                throw multiple_occurrences("multiple_occurrences");
+                throw_exception(multiple_occurrences("multiple_occurrences"));
         }
     }
 

@@ -10,6 +10,7 @@
 
 #include <boost/program_options/detail/cmdline.hpp>
 #include <boost/program_options/errors.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <string>
 #include <utility>
@@ -140,7 +141,7 @@ namespace boost { namespace program_options { namespace detail {
             error = "style disallows all characters for short options";
 
         if (error)
-            throw invalid_command_line_style(error);
+            throw_exception(invalid_command_line_style(error));
 
         // Need to check that if guessing and long disguise are enabled
         // -f will mean the same as -foo
@@ -292,7 +293,7 @@ namespace boost { namespace program_options { namespace detail {
     {
         static string empty;
         if (m_option_values.size() > 1)
-            throw multiple_values("multiple values");
+            throw_exception(multiple_values("multiple values"));
         return m_option_values.empty() ? empty : m_option_values.front();
     }
 
@@ -720,7 +721,7 @@ namespace boost { namespace program_options { namespace detail {
         else if (p == '+')
             return require_parameters;
         else
-            throw logic_error("Invalid property character");
+            throw_exception(logic_error("Invalid property character"));
     }
 
     void 
@@ -741,10 +742,10 @@ namespace boost { namespace program_options { namespace detail {
             switch(e) {
             case ed_unknown_option:
                 re = invalid_command_line_syntax::extra_parameter;
-                throw unknown_option(m_current);
+                throw_exception(unknown_option(m_current));
             case ed_ambiguous_option:
                 re = invalid_command_line_syntax::extra_parameter;
-                throw ambiguous_option(m_current, vector<string>());
+                throw_exception(ambiguous_option(m_current, vector<string>()));
             case ed_long_not_allowed:
                 re = invalid_command_line_syntax::long_not_allowed;
                 break;
@@ -768,7 +769,7 @@ namespace boost { namespace program_options { namespace detail {
             case ed_success:
                 return;                
             }
-            throw invalid_command_line_syntax(m_current, re);
+            throw_exception(invalid_command_line_syntax(m_current, re));
         }        
     }
 

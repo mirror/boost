@@ -12,10 +12,11 @@
 // should move that to a separate headers.
 #include <boost/program_options/parsers.hpp>
 
+
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
-
 #include <boost/detail/workaround.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <cassert>
 #include <climits>
@@ -169,12 +170,16 @@ namespace boost { namespace program_options {
         assert(!s.empty() || !l.empty());
         if (!s.empty())
             if (name2index.count("-" + s) != 0)
-                throw duplicate_option_error("Short name '" + s + "' is already present");
+                throw_exception(
+                    duplicate_option_error(
+                        "Short name '" + s + "' is already present"));
             else
                 name2index["-" + s] = options.size();
         if (!l.empty())
             if (name2index.count(s) != 0)
-                throw duplicate_option_error("Long name '" + s + "' is already present");
+                throw_exception(
+                    duplicate_option_error(
+                        "Long name '" + s + "' is already present"));
             else
                 name2index[l] = options.size();
         options.push_back(desc);
@@ -299,8 +304,8 @@ namespace boost { namespace program_options {
                 // only one tab per paragraph allowed
                 if (count(par.begin(), par.end(), '\t') > 1)
                 {
-                    throw program_options::error(
-                        "Only one tab per paragraph is allowed");
+                    throw_exception(program_options::error(
+                        "Only one tab per paragraph is allowed"));
                 }
           
                 // erase tab from string

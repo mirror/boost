@@ -17,6 +17,7 @@
 #include <boost/program_options/detail/convert.hpp>
 
 #include <boost/bind.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <cctype>
 
@@ -136,8 +137,8 @@ namespace boost { namespace program_options {
                 if (opt.position_key != -1) {
                     if (position >= m_positional->max_total_count())
                     {
-                        throw too_many_positional_options_error(
-                            "too many positional options");
+                        throw_exception(too_many_positional_options_error(
+                            "too many positional options"));
                     }
                     opt.string_key = m_positional->name_for_position(position);
                     ++position;
@@ -188,7 +189,7 @@ namespace boost { namespace program_options {
             const option_description& d = desc.find(*i);
 
             if (d.long_name().empty())
-                throw error("long name required for config file");
+                throw_exception(error("long name required for config file"));
 
             allowed_options.insert(d.long_name());
         }

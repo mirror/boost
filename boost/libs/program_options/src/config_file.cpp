@@ -10,6 +10,7 @@
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/detail/convert.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -54,7 +55,7 @@ namespace boost { namespace program_options { namespace detail {
                     bad_prefixes = true;
             }
             if (bad_prefixes)
-                throw error("bad prefixes");
+                throw_exception(error("bad prefixes"));
             allowed_prefixes.insert(s);
         }
     }
@@ -100,10 +101,10 @@ namespace boost { namespace program_options { namespace detail {
                     string value = trim_ws(s.substr(n+1));
 
                     if (!allowed_option(name))
-                        throw unknown_option(name);
+                        throw_exception(unknown_option(name));
                                         
                     if (value.empty())
-                        throw invalid_syntax(s, "no value given");
+                        throw_exception(invalid_syntax(s, "no value given"));
                     
                     found = true;
                     this->value().string_key = name;
@@ -112,7 +113,7 @@ namespace boost { namespace program_options { namespace detail {
                     break;
 
                 } else {
-                    throw invalid_syntax(s, "unrecognized line");
+                    throw_exception(invalid_syntax(s, "unrecognized line"));
                 }
             }
         }

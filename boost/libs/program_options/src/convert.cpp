@@ -17,6 +17,7 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/detail/convert.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <boost/bind.hpp>
 
@@ -62,14 +63,14 @@ namespace boost { namespace detail {
                 fun(state, from, from_end, from, buffer, to_end, to_next);
             
             if (r == std::codecvt_base::error)
-                throw std::logic_error("character conversion failed");
+                throw_exception(std::logic_error("character conversion failed"));
             // 'partial' is not an error, it just means not all source
             // characters were converted. However, we need to check that at
             // least one new target character was produced. If not, it means
             // the source data is incomplete, and since we don't have extra
             // data to add to source, it's error.
             if (to_next == buffer)
-                throw std::logic_error("character conversion failed");
+                throw_exception(std::logic_error("character conversion failed"));
             
             // Add converted characters
             result.append(buffer, to_next);

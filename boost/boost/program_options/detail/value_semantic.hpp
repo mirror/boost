@@ -6,6 +6,8 @@
 // This file defines template functions that are declared in
 // ../value_semantic.hpp.
 
+#include <boost/throw_exception.hpp>
+
 namespace boost { namespace program_options { 
 
     extern BOOST_PROGRAM_OPTIONS_DECL std::string arg;
@@ -81,7 +83,7 @@ namespace boost { namespace program_options {
             v = any(lexical_cast<T>(s));
         }
         catch(const bad_lexical_cast&) {
-            throw invalid_option_value(s);
+            throw_exception(invalid_option_value(s));
         }
     }
 
@@ -135,7 +137,7 @@ namespace boost { namespace program_options {
                 tv->push_back(boost::lexical_cast<T>(s[i]));
             }
             catch(const bad_lexical_cast& /*e*/) {
-                throw invalid_option_value(s[i]);
+                throw_exception(invalid_option_value(s[i]));
             }
         }
     }
