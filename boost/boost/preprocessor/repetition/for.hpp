@@ -16,7 +16,7 @@
 # define BOOST_PREPROCESSOR_REPETITION_FOR_HPP
 #
 # include <boost/preprocessor/cat.hpp>
-# // include <boost/preprocessor/debug/error.hpp>
+# include <boost/preprocessor/debug/error.hpp>
 # include <boost/preprocessor/detail/auto_rec.hpp>
 #
 # /* BOOST_PP_FOR */

@@ -13,7 +13,6 @@
 # ifndef BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 # define BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 #
-# //include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/control/iif.hpp>
 #
 # /* BOOST_PP_AUTO_REC */

@@ -15,7 +15,7 @@
 #
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
-# // include <boost/preprocessor/debug/error.hpp>
+# include <boost/preprocessor/debug/error.hpp>
 # include <boost/preprocessor/detail/auto_rec.hpp>
 # include <boost/preprocessor/repetition/repeat.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>

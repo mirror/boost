@@ -19,7 +19,7 @@
 # include <boost/preprocessor/arithmetic/dec.hpp>
 # include <boost/preprocessor/arithmetic/inc.hpp>
 # include <boost/preprocessor/config/config.hpp>
-# // include <boost/preprocessor/debug/error.hpp>
+# include <boost/preprocessor/debug/error.hpp>
 # include <boost/preprocessor/detail/auto_rec.hpp>
 # include <boost/preprocessor/punctuation/comma_if.hpp>
 # include <boost/preprocessor/repetition/repeat.hpp>
