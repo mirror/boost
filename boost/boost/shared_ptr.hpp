@@ -268,7 +268,10 @@ public:
         return px != 0;
     }
 
-#elif defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+#elif \
+    ( defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, < 0x3200) ) || \
+    ( defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 304) )
+
     typedef T * (this_type::*unspecified_bool_type)() const;
     
     operator unspecified_bool_type() const // never throws
