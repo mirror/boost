@@ -271,8 +271,8 @@ bool operator != ( optional<T> const& x, optional<T> const& y )
 //
 namespace optional_detail {
 
-#ifdef __GNUC__
-   // workaround for GCC (JM):
+#if defined(__GNUC__) && (BOOST_WORKAROUND(__GNUC__, <= 2) || __GNUC__ == 3 && BOOST_WORKAROUND(__GNUC_MINOR__, < 3))
+   // workaround for GCC earlier than version 3.3 (JM):
    using std::swap;
 #endif
 
@@ -296,7 +296,7 @@ void optional_swap ( optional<T>& x, optional<T>& y )
   }
   else if ( !!x && !!y )
   {
-#ifndef BOOST_NO_STDC_NAMESPACE
+#if !(defined(__GNUC__) && (BOOST_WORKAROUND(__GNUC__, <= 2) || __GNUC__ == 3 && BOOST_WORKAROUND(__GNUC_MINOR__, < 3)))
     // allow for Koenig lookup
     using std::swap ;
 #endif
