@@ -8,7 +8,7 @@
 # pragma warning(pop)
 #else
 # if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-#  pragma option pop
-#  pragma option pop
+#  pragma warn .8008     // Condition always true/false.
+#  pragma warn .8080     // identifier declared but never used.
 # endif
 #endif

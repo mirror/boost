@@ -13,8 +13,8 @@
 # pragma warning(disable:4244)    // Conversion: possible loss of data.
 #else
 # if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-#  pragma option push -w-8008     // Condition always true/false.
-#  pragma option push -w8080      // identifier declared but never used.
+#  pragma warn -8008     // Condition always true/false.
+#  pragma warn -8080     // identifier declared but never used.
 # endif
 #endif
 
