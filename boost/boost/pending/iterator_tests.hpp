@@ -1,5 +1,5 @@
 #ifndef BOOST_ITERATOR_TESTS_HPP
-#define BOOST_ITERATOR_TESTS_HPP
+# define BOOST_ITERATOR_TESTS_HPP
 
 // This is meant to be the beginnings of a comprehensive, generic
 // test suite for STL concepts such as iterators and containers.
@@ -8,8 +8,10 @@
 // 04 Feb 2001  Added lvalue test, corrected preconditions
 //              (David Abrahams)
 
-#include <iterator>
-#include <assert.h>
+# include <iterator>
+# include <assert.h>
+# include <boost/type_traits.hpp>
+# include <boost/static_assert.hpp>
 
 namespace boost {
 
@@ -87,21 +89,47 @@ void input_iterator_test(Iterator i, T v1, T v2)
 
 // how to test output iterator?
 
+
+template <bool is_pointer> struct lvalue_test
+{
+    template <class Iterator> static void check(Iterator)
+    {
+# ifndef BOOST_NO_STD_ITERATOR_TRAITS
+        typedef typename std::iterator_traits<Iterator>::reference reference;
+        typedef typename std::iterator_traits<Iterator>::value_type value_type;
+# else
+        typedef typename Iterator::reference reference;
+        typedef typename Iterator::value_type value_type;
+# endif
+        BOOST_STATIC_ASSERT(boost::is_reference<reference>::value);
+        BOOST_STATIC_ASSERT((boost::is_same<reference,value_type&>::value
+                             || boost::is_same<reference,value_type const&>::value
+            ));
+    }
+};
+
+# ifdef BOOST_NO_STD_ITERATOR_TRAITS
+template <> struct lvalue_test<true> {
+    template <class T> static void check(T) {}
+};
+#endif
+
 template <class Iterator, class T>
 void forward_iterator_test(Iterator i, T v1, T v2) 
 {
   input_iterator_test(i, v1, v2);
-  
-  // Test for lvalue
-  const T* p = &*i;
-  (void)p;
+
+ // borland doesn't allow non-type template parameters
+# if !defined(__BORLANDC__) || (__BORLANDC__ > 0x551)
+  lvalue_test<(boost::is_pointer<Iterator>::value)>::check(i);
+#endif
 }
 
 // Preconditions: *i == v1, *++i == v2, --i
 template <class Iterator, class T>
 void bidirectional_iterator_test(Iterator i, T v1, T v2)
 {
-  input_iterator_test(i, v1, v2);
+  forward_iterator_test(i, v1, v2);
   ++i;
 
   Iterator i1 = i, i2 = i;
