@@ -27,6 +27,18 @@
   BOOST_PP_CAT(P,BOOST_PP_DEC(N)) = BOOST_PP_CAT(D,BOOST_PP_DEC(N))
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(3,x,y)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  x0 = y0, x1 = y1, x2 = y2
+</pre>
+
 <h3>Uses</h3>
 <ul>
   <li>BOOST_PP_REPEAT()</li>

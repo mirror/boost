@@ -16,6 +16,8 @@
 /** <p>Concatenates <code>X</code> and <code>Y</code> after they are macro
 expanded.</p>
 
+<p>For example, <code>BOOST_PP_CAT(A,BOOST_PP_CAT(_,B))</code> expands to <code>A_B</code>.</p>
+
 <h3>Example</h3>
 <ul>
   <li><a href="../../example/static_assert.c">static_assert.c</a></li>

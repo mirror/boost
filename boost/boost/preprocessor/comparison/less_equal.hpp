@@ -19,6 +19,8 @@
 /** <p>Expands to <code>1</code> if <code>X &lt;= Y</code> and <code>0</code>
 otherwise.</p>
 
+<p>For example, <code>BOOST_PP_LESS_EQUAL(7,5)</code> expands to <code>0</code>.</p>
+
 <h3>Uses</h3>
 <ul>
   <li>BOOST_PP_WHILE()</li>

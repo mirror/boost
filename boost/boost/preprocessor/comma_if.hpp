@@ -19,6 +19,8 @@
 
 /** <p>Expands to a comma if <code>C != 0</code> and nothing if
 <code>C == 0</code>.</p>
+
+<p>For example, <code>BOOST_PP_COMMA_IF(0)</code> expands to nothing.</p>
 */
 #define BOOST_PP_COMMA_IF(C) BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 

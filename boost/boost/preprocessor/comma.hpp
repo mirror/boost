@@ -13,7 +13,18 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Expands to a comma. Can be used with BOOST_PP_IF().</p>
+/** <p>Expands to a comma.</p>
+
+<p>Commas need special handling in preprocessor code, because commas are used
+for separating macro parameters.</p>
+
+<p>For example,</p>
+
+<pre>
+  BOOST_PP_IF(1,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
+</pre>
+
+<p>expands to a comma.</p>
 
 <h3>See</h3>
 <ul>

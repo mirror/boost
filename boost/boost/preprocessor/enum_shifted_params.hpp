@@ -23,6 +23,17 @@
 <pre>
   BOOST_PP_CAT(P,1), BOOST_PP_CAT(P,2), ..., BOOST_PP_CAT(P,BOOST_PP_DEC(N))
 </pre>
+<p>For example,</p>
+
+<pre>
+  BOOST_PP_ENUM_SHIFTED_PARAMS(3,x)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  x1, x2
+</pre>
 
 <h3>Uses</h3>
 <ul>

@@ -13,10 +13,16 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/empty.hpp>
-#include <boost/preprocessor/if.hpp>
+#include <boost/preprocessor/logical/bool.hpp>
 
 /** <p>Expands to <code>T</code> if <code>C != 0</code> and to nothing if <code>C == 0</code>.</p>
+
+<p>For example, <code>BOOST_PP_IF_THEN(1,^)</code> expands to <code>^</code>.</p>
 */
-#define BOOST_PP_IF_THEN(C,T) BOOST_PP_IF(C,T BOOST_PP_EMPTY,BOOST_PP_EMPTY)()
+#define BOOST_PP_IF_THEN(C,T) BOOST_PP_IF_THEN_BOOL(BOOST_PP_BOOL(C),T)
+
+#define BOOST_PP_IF_THEN_BOOL(C,T) BOOST_PP_IF_THEN_BOOL_DELAY(C,T)
+#define BOOST_PP_IF_THEN_BOOL_DELAY(C,T) BOOST_PP_IF_THEN_BOOL##C(T)
+#define BOOST_PP_IF_THEN_BOOL0(T)
+#define BOOST_PP_IF_THEN_BOOL1(T) T
 #endif

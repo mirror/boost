@@ -35,6 +35,20 @@
   F(1,P), F(2,P), ..., F(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(N),P)
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TYPED_PARAM(I,P)\
+    <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,P),I) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,P),I)
+  <a href="enum_shifted.htm#BOOST_PP_ENUM_SHIFTED">BOOST_PP_ENUM_SHIFTED</a>(3,TYPED_PARAM,(X,x))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  X1 x1, X2 x2
+</pre>
+
 <h3>Uses</h3>
 <ul>
   <li><a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>()</li>

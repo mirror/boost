@@ -25,6 +25,20 @@
   F(0,P), F(1,P), ..., F(BOOST_PP_DEC(N),P)
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TYPED_PARAM(I,P)\
+    BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,P),I) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,1,P),I)
+  BOOST_PP_ENUM(3,TYPED_PARAM,(X,x))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  X0 x0, X1 x1, X2 x2
+</pre>
+
 <h3>Uses</h3>
 <ul>
   <li>BOOST_PP_REPEAT()</li>

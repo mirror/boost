@@ -18,6 +18,8 @@
 /** <p>Expands to <code>1</code> if <code>X &gt; Y</code> and <code>0</code>
 otherwise.</p>
 
+<p>For example, <code>BOOST_PP_GREATER(4,3)</code> expands to <code>1</code>.</p>
+
 <h3>Uses</h3>
 <ul>
   <li>BOOST_PP_WHILE()</li>
