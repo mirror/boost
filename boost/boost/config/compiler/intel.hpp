@@ -34,7 +34,7 @@
 #  define BOOST_NO_TEMPLATE_TEMPLATES
 #endif
 
-#if (BOOST_INTEL_CXX_VERSION <= 600) || !defined(BOOST_STRICT_CONFIG)
+#if (BOOST_INTEL_CXX_VERSION <= 600)
 
 #  if defined(_MSC_VER) && (_MSC_VER <= 1300) // added check for <= VC 7 (Peter Dimov)
 
@@ -59,6 +59,10 @@
 #     define BOOST_NO_INTEGRAL_INT64_T
 #  endif
 
+#endif
+
+#if defined(__ICL) && (__ICL <= 710)
+#  define BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS
 #endif
 
 // See http://aspn.activestate.com/ASPN/Mail/Message/boost/1614864
