@@ -1,4 +1,4 @@
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Boost.MultiArray Reference Manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article"><div class="titlepage"><div><h1 class="title"><a name="id170680"></a>Boost.MultiArray Reference Manual</h1></div><div><h3 class="author">Ronald Garcia</h3><div class="affiliation"><span class="orgname">Indiana University<br></span><span class="orgdiv">Open Systems Lab<br></span></div></div><div><p class="copyright">Copyright © 2002 Ronald Garcia</p></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><a href="#synopsis">Library Synopsis</a></dt><dt><a href="#MultiArray">MultiArray Concept</a></dt><dd><dl><dt><a href="#id178376">Notation</a></dt><dt><a href="#id174783">Associated Types</a></dt><dt><a href="#id175406">Valid expressions</a></dt><dt><a href="#id248758">Complexity guarantees</a></dt><dt><a href="#id248780">Invariants</a></dt><dt><a href="#view_types">Associated Types for Views</a></dt><dd><dl><dt><a href="#index_range">index_range</a></dt><dt><a href="#index_gen">index_gen</a></dt></dl></dd><dt><a href="#id250491">Models</a></dt></dl></dd><dt><a href="#array_types">Array Components</a></dt><dd><dl><dt><a href="#multi_array">multi_array</a></dt><dt><a href="#multi_array_ref">multi_array_ref</a></dt><dt><a href="#const_multi_array_ref">const_multi_array_ref</a></dt></dl></dd><dt><a href="#auxiliary">Auxiliary Components</a></dt><dd><dl><dt><a href="#multi_array_types">multi_array_types</a></dt><dt><a href="#extent_range">extent_range</a></dt><dt><a href="#extent_gen">extent_gen</a></dt><dt><a href="#id250788">Global Objects</a></dt><dd><dl><dt><a href="#extents">extents</a></dt><dt><a href="#indices">indices</a></dt></dl></dd><dt><a href="#generators">View and SubArray Generators</a></dt><dt><a href="#memory_layout">Memory Layout Specifiers</a></dt><dd><dl><dt><a href="#c_storage_order">c_storage_order</a></dt><dt><a href="#fortran_storage_order">fortran_storage_order</a></dt><dt><a href="#general_storage_order">general_storage_order</a></dt></dl></dd></dl></dd></dl></div><fake><p>Boost.MultiArray is composed of several components.
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Boost.MultiArray Reference Manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article"><div class="titlepage"><div><h1 class="title"><a name="id171292"></a>Boost.MultiArray Reference Manual</h1></div><div><h3 class="author">Ronald Garcia</h3><div class="affiliation"><span class="orgname">Indiana University<br></span><span class="orgdiv">Open Systems Lab<br></span></div></div><div><p class="copyright">Copyright © 2002 Ronald Garcia</p></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><a href="#synopsis">Library Synopsis</a></dt><dt><a href="#MultiArray">MultiArray Concept</a></dt><dd><dl><dt><a href="#id179006">Notation</a></dt><dt><a href="#id175494">Associated Types</a></dt><dt><a href="#id250868">Valid expressions</a></dt><dt><a href="#id251805">Complexity guarantees</a></dt><dt><a href="#id251847">Invariants</a></dt><dt><a href="#view_types">Associated Types for Views</a></dt><dd><dl><dt><a href="#index_range">index_range</a></dt><dt><a href="#index_gen">index_gen</a></dt></dl></dd><dt><a href="#id253521">Models</a></dt></dl></dd><dt><a href="#array_types">Array Components</a></dt><dd><dl><dt><a href="#multi_array">multi_array</a></dt><dt><a href="#multi_array_ref">multi_array_ref</a></dt><dt><a href="#const_multi_array_ref">const_multi_array_ref</a></dt></dl></dd><dt><a href="#auxiliary">Auxiliary Components</a></dt><dd><dl><dt><a href="#multi_array_types">multi_array_types</a></dt><dt><a href="#extent_range">extent_range</a></dt><dt><a href="#extent_gen">extent_gen</a></dt><dt><a href="#id253883">Global Objects</a></dt><dd><dl><dt><a href="#extents">extents</a></dt><dt><a href="#indices">indices</a></dt></dl></dd><dt><a href="#generators">View and SubArray Generators</a></dt><dt><a href="#memory_layout">Memory Layout Specifiers</a></dt><dd><dl><dt><a href="#c_storage_order">c_storage_order</a></dt><dt><a href="#fortran_storage_order">fortran_storage_order</a></dt><dt><a href="#general_storage_order">general_storage_order</a></dt></dl></dd></dl></dd></dl></div><fake><p>Boost.MultiArray is composed of several components.
 The MultiArray concept defines a generic interface to multidimensional
 containers.
 <tt>multi_array</tt> is a general purpose container class
@@ -150,7 +150,7 @@ number of possible element layouts.  For example, the elements of a 2
 dimensional array can be stored by row (i.e., the elements of each row
 are stored contiguously) or by column (i.e., the elements of each
 column are stored contiguously).
-</p></fake><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id178376"></a>Notation</h3></div></div><fake><p>What follows are the descriptions of symbols that will be used
+</p></fake><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id179006"></a>Notation</h3></div></div><fake><p>What follows are the descriptions of symbols that will be used
 to describe the MultiArray interface.</p></fake><div class="table"><p><b>Table 1. Notation</b></p><table summary="Notation" border="1"><colgroup><col><col></colgroup><tbody><tr><td><tt>A</tt></td><td>A type that is a model of MultiArray
 </td></tr><tr><td><tt>a</tt></td><td>An object of type <tt>A</tt></td></tr><tr><td><tt>NumDims</tt></td><td>The numeric dimension parameter associated with
 <tt>A</tt>.</td></tr><tr><td><tt>Dims</tt></td><td>Some numeric dimension parameter such that 
@@ -158,7 +158,7 @@ to describe the MultiArray interface.</p></fake><div class="table"><p><b>Table 1
 </td></tr><tr><td><tt>indices</tt></td><td>An object created by some number of chained calls
 to <tt>index_gen::operator[](index_range)</tt>.</td></tr><tr><td><tt>index_list</tt></td><td>An object whose type models
 <a href="../../utility/Collection.html" target="_top">Collection</a></td></tr><tr><td><tt>idx</tt></td><td>A signed integral value.</td></tr><tr><td><tt>tmp</tt></td><td>An object of type
-	      <tt>boost::array&lt;index,NumDims&gt;</tt></td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id174783"></a>Associated Types</h3></div></div><fake><p>
+	      <tt>boost::array&lt;index,NumDims&gt;</tt></td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id175494"></a>Associated Types</h3></div></div><fake><p>
 </p></fake><div class="table"><p><b>Table 2. Associated Types</b></p><table summary="Associated Types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><tt>value_type</tt></td><td>This is the value type of the container.
   If <tt>NumDims == 1</tt>, then this is
 <tt>element</tt>. Otherwise, this is the value type of the
@@ -228,7 +228,7 @@ It models MultiArray.
 </td></tr><tr><td><tt>template
 const_array_view&lt;Dims&gt;::type</tt></td><td>
 This is the const view type with <tt>Dims</tt> dimensions.
-</td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id175406"></a>Valid expressions</h3></div></div><div class="table"><p><b>Table 3. Valid Expressions</b></p><table summary="Valid Expressions" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Expression</th><th>Return type</th><th>Semantics</th></tr></thead><tbody><tr><td><tt>a.shape()</tt></td><td><tt>const size_type*</tt></td><td>
+</td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id250868"></a>Valid expressions</h3></div></div><div class="table"><p><b>Table 3. Valid Expressions</b></p><table summary="Valid Expressions" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Expression</th><th>Return type</th><th>Semantics</th></tr></thead><tbody><tr><td><tt>a.shape()</tt></td><td><tt>const size_type*</tt></td><td>
 This returns a list of <tt>NumDims</tt> elements specifying the
 extent of each array dimension.
 </td></tr><tr><td><tt>a.strides()</tt></td><td><tt>const index*</tt></td><td>
@@ -315,11 +315,11 @@ type must model <a href="http://www.sgi.com/tech/stl/EqualityComparable.html" ta
 expression to be valid.</td></tr><tr><td><tt>a &gt;= b</tt></td><td>bool</td><td>This performs a lexicographical comparison of the
 values of <tt>a</tt> and <tt>b</tt>.  The element
 type must model <a href="http://www.sgi.com/tech/stl/LessThanComparable.html" target="_top">LessThanComparable</a> for this
-expression to be valid.</td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id248758"></a>Complexity guarantees</h3></div></div><tt>begin()</tt> and <tt>end()</tt> execute in amortized
+expression to be valid.</td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id251805"></a>Complexity guarantees</h3></div></div><tt>begin()</tt> and <tt>end()</tt> execute in amortized
 constant time.
 <tt>size()</tt> executes in at most linear time in the 
 MultiArray's size. 
-</div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id248780"></a>Invariants</h3></div></div><div class="table"><p><b>Table 4. Invariants</b></p><table summary="Invariants" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Valid range</td><td><tt>[a.begin(),a.end())</tt> is a valid range.
+</div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id251847"></a>Invariants</h3></div></div><div class="table"><p><b>Table 4. Invariants</b></p><table summary="Invariants" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Valid range</td><td><tt>[a.begin(),a.end())</tt> is a valid range.
             </td></tr><tr><td>Range size</td><td><tt>a.size() == std::distance(a.begin(),a.end());</tt>.
 </td></tr><tr><td>Completeness</td><td>
 Iteration through the range 
@@ -421,7 +421,7 @@ range, <tt>index_range(idx,idx).</tt> Note that this is NOT
 equivalent to <tt>x[index_range(idx,idx)].</tt>, which will
 return an object of type
 <tt>gen_type&lt;Dims+1,Ranges+1&gt;::type</tt>.
-</td></tr></tbody></table></div></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id250491"></a>Models</h3></div></div><div class="itemizedlist"><ul type="disc"><li><tt>multi_array</tt></li><li><tt>multi_array_ref</tt></li><li><tt>const_multi_array_ref</tt></li><li><tt>template array_view&lt;Dims&gt;::type</tt></li><li><tt>template const_array_view&lt;Dims&gt;::type</tt></li><li><tt>template subarray&lt;Dims&gt;::type</tt></li><li><tt>template const_subarray&lt;Dims&gt;::type</tt></li></ul></div></div></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="array_types"></a>Array Components</h2></div></div><fake><p>
+</td></tr></tbody></table></div></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id253521"></a>Models</h3></div></div><div class="itemizedlist"><ul type="disc"><li><tt>multi_array</tt></li><li><tt>multi_array_ref</tt></li><li><tt>const_multi_array_ref</tt></li><li><tt>template array_view&lt;Dims&gt;::type</tt></li><li><tt>template const_array_view&lt;Dims&gt;::type</tt></li><li><tt>template subarray&lt;Dims&gt;::type</tt></li><li><tt>template const_subarray&lt;Dims&gt;::type</tt></li></ul></div></div></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="array_types"></a>Array Components</h2></div></div><fake><p>
 Boost.MultiArray defines an array class,
 <tt>multi_array</tt>, and two adapter classes,
 <tt>multi_array_ref</tt> and 
@@ -568,6 +568,8 @@ public:
 
   // constructors and destructors
 
+  multi_array();
+
   template &lt;typename ExtentList&gt;
   explicit multi_array(const ExtentList&amp; sizes,
                        const storage_order&amp; store = c_storage_order(),
@@ -632,6 +634,7 @@ public:
     void			reshape(const SizeList&amp; sizes)
   template &lt;typename BaseList&gt;	void reindex(const BaseList&amp; values);
   void				reindex(index value);
+  multi_array&amp;                  resize(extents_tuple&amp; extents);
 };
 
 </pre></p><p><b>Constructors. </b><div class="variablelist"><dl><dt><span class="term"><pre class="programlisting">template &lt;typename ExtentList&gt;
@@ -668,7 +671,10 @@ copy of <tt>x</tt>.
 </p></fake><p><b>Complexity. </b> This performs O(<tt>x.num_elements()</tt>) calls to
 <tt>element</tt>'s copy 
 constructor.
-</p></dd></dl></div><p><b>Note on Constructors. </b>
+</p></dd><dt><span class="term"><pre class="programlisting">
+multi_array();
+</pre></span></dt><dd><fake><p>This constructs a <tt>multi_array</tt> whose shape is (0,...,0) and contains no elements.
+</p></fake></dd></dl></div><p><b>Note on Constructors. </b>
 The  <tt>multi_array</tt> construction expressions,
 <pre class="programlisting">
      multi_array&lt;int,3&gt; A(boost::extents[5][4][3]);
@@ -705,7 +711,15 @@ void assign(InputIterator begin, InputIterator end);
 The <tt>assign</tt> member function performs
 O(<tt>this-&gt;num_elements()</tt>) calls to
 <tt>ValueType</tt>'s copy constructor.
-</p></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="multi_array_ref"></a><tt>multi_array_ref</tt></h3></div></div><fake><p>
+</p></dd><dt><span class="term">
+<pre class="programlisting">multi_array&amp; resize(extent_gen::gen_type&lt;NumDims&gt;::type ranges);
+</pre></span></dt><dd><fake><p>
+This function resizes an array to the shape specified by 
+<tt>ranges</tt>. The contents of the array are preserved 
+whenever possible; if the new array size is smaller, then some data will 
+be lost. Any new elements created by resizing the array are initialized with 
+the <tt>element</tt> default constructor.
+</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="multi_array_ref"></a><tt>multi_array_ref</tt></h3></div></div><fake><p>
 <tt>multi_array_ref</tt> is a multi-dimensional container
 adaptor.  It provides the MultiArray interface over any contiguous
 block of elements.  <tt>multi_array_ref</tt> exports the
@@ -1078,7 +1092,7 @@ operator[](index idx) const;</tt></span></dt><dd><fake><p>This function returns 
 <tt>extent_range</tt> objects in addition to
 <tt>extent_range(0,idx).</tt> This function gives the array
 constructors a similar syntax to traditional C multidimensional array
-declaration.</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id250788"></a>Global Objects</h3></div></div><fake><p>For syntactic convenience, Boost.MultiArray defines two 
+declaration.</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id253883"></a>Global Objects</h3></div></div><fake><p>For syntactic convenience, Boost.MultiArray defines two 
 global objects as part of its
 interface.  These objects play the role of object generators;
 expressions involving them create other objects of interest.

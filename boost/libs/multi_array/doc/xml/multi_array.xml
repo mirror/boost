@@ -60,6 +60,8 @@ public:
 
   // constructors and destructors
 
+  multi_array();
+
   template <typename ExtentList>
   explicit multi_array(const ExtentList& sizes,
                        const storage_order& store = c_storage_order(),
@@ -124,6 +126,7 @@ public:
     void			reshape(const SizeList& sizes)
   template <typename BaseList>	void reindex(const BaseList& values);
   void				reindex(index value);
+  multi_array&                  resize(extents_tuple& extents);
 };
 ]]>
 </programlisting>
@@ -200,6 +203,16 @@ copy of <literal>x</literal>.
 <literal>element</literal>'s copy 
 constructor.
 </para></formalpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><programlisting>
+<![CDATA[multi_array();]]>
+</programlisting></term>
+<listitem>
+<para>This constructs a <literal>multi_array</literal> whose shape is (0,...,0) and contains no elements.
+</para>
 </listitem>
 </varlistentry>
 
@@ -294,6 +307,22 @@ O(<literal>this->num_elements()</literal>) calls to
 </formalpara>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<programlisting><![CDATA[multi_array& resize(extent_gen::gen_type<NumDims>::type ranges);]]>
+</programlisting></term> 
+<listitem>
+<para>
+This function resizes an array to the shape specified by 
+<literal>ranges</literal>. The contents of the array are preserved 
+whenever possible; if the new array size is smaller, then some data will 
+be lost. Any new elements created by resizing the array are initialized with 
+the <literal>element</literal> default constructor.
+</para>
+</listitem>
+</varlistentry> 
+
 </variablelist>
 </formalpara>
 </sect2>
