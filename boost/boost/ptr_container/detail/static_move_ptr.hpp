@@ -43,8 +43,8 @@ public:
     typedef typename remove_bounds<T>::type             element_type;
     typedef Deleter                                     deleter_type;
 private:
-    BOOST_STATIC_CONSTANT(bool, is_array = boost::is_array<T>::value);
-    BOOST_STATIC_ASSERT(!is_array);
+    //BOOST_STATIC_CONSTANT(bool, is_array = boost::is_array<T>::value);
+    //BOOST_STATIC_ASSERT(!is_array);
     //
     // Reamrk: won't compile when element_type is abstract base
     //  (is_same<T, element_type[]>::value*/
