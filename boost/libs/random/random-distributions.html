@@ -146,16 +146,14 @@ the order
 </ul>
 
 <p>
-All distribution functions satisfy the input iterator requirements
-(std:24.1.1 [lib.input.iterators]) in addition to the NumberGenerator
-requirements.  After an invocation of <code>operator()</code>, the
-effects of invocations of <code>operator*</code> are undefined until
-the next call to <code>operator++</code>.  <em>Providing the input
-iterator interface incurs a run-time overhead which should not be
-imposed on all users.  This feature is therefore deprecated and will
-be removed at a later time.  Use an
+<em>The distribution functions no longer satisfy the input iterator
+requirements (std:24.1.1 [lib.input.iterators]), because this is
+redundant given the Generator interface and imposes a run-time
+overhead on all users.  Moreover, a Generator interface appeals to
+random number generation as being more "natural".  Use an
 <a href="../utility/iterator_adaptors.htm">iterator adaptor</a>
-instead.</em>
+if you need to wrap any of the generators in an input iterator
+interface.</em>
 <p>
 
 All of the distribution functions described below store a non-const
