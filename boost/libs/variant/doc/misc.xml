@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-
 <section id="variant.misc">
   <title>Miscellaneous Notes</title>
+
+<using-namespace name="boost"/>
 
 <section id="variant.versus-any">
   <title>Boost.Variant vs. Boost.Any</title>
 
-  <para>TODO</para>
+  <para>As a discriminated union container, the Variant library shares many
+    of the same features of the <libraryname>Any</libraryname> library.
+    However, since neither library wholly encapsulates the features of the
+    other, one library cannot be generally recommended for use over the
+    other.</para>
+
+  <para>That said, Boost.Variant has several advantages over Boost.Any,
+    such as:
+
+    <itemizedlist>
+      <listitem>Boost.Variant guarantees the type of its content is one of a
+        finite, user-specified set of types.</listitem>
+      <listitem>Boost.Variant provides <emphasis>compile-time</emphasis>
+        type-safe visitation of its content. (By contrast, the current version
+        of Boost.Any provides no visitation mechanism at all.)</listitem>
+      <listitem>Boost.Variant enables generic visitation of its content.
+        (Even if Boost.Any did provide a visitation mechanism, it would enable
+        visitation only of explicitly-specified types.)</listitem>
+      <listitem>Boost.Variant offers an efficient, stack-based storage scheme
+        (avoiding the overhead of dynamic allocation).</listitem>
+    </itemizedlist>
+
+  </para>
+
+  <para>Of course, Boost.Any has several advantages over Boost.Variant,
+    such as:
+
+    <itemizedlist>
+      <listitem>Boost.Any, as its name implies, allows virtually any type for
+        its content, providing great flexibility.</listitem>
+      <listitem>Boost.Any provides the no-throw guarantee of exception safety
+        for its swap operation.</listitem>
+      <listitem>Boost.Any makes little use of template metaprogramming
+        techniques (avoiding potentially hard-to-read error messages and
+        significant compile-time processor and memory demands).</listitem>
+    </itemizedlist>
+
+  </para>
 
 </section>
 
@@ -18,30 +56,105 @@
   <para>The library aims for 100% ANSI/ISO C++ conformance. However, this is
     strictly impossible due to the inherently non-portable nature of the
     <libraryname>Type Traits</libraryname> library's
-    <code>type_with_alignment</code> facility. In practice though, no
-    compilers or platforms have been discovered where this reliance on
-    undefined behavior has been an issue.</para>
+    <code><classname>type_with_alignment</classname></code> facility. In
+    practice though, no compilers or platforms have been discovered where this
+    reliance on undefined behavior has been an issue.</para>
 
   <para>Additionally, significant effort has been expended to ensure proper
     functioning despite various compiler bugs and other conformance problems.
     To date the library <link linkend="variant.tests">testsuite</link> has
-    been compiled and tested successfully for basic functionality on at least
-    the following compilers:</para>
+    been compiled and tested successfully on at least the following compilers
+    for basic and advanced functionality:
 
-  <itemizedlist>
-    <listitem>Microsoft Visual C++, versions 6 SP5, 7.0, and 7.1</listitem>
-    <listitem>GNU GCC, versions 2.95.3, 3.1, 3.2.3, and 3.3.1</listitem>
-    <listitem>Metrowerks CodeWarrior Pro 8.3</listitem>
-    <listitem>Intel C++ 7.1</listitem>
-    <listitem>Comeau C++ 4.3.0</listitem>
-    <listitem>Borland C++Builder versions 5.5.1 and 5.6.4</listitem>
-  </itemizedlist>
+    <informaltable>
+      <tgroup cols="5">
+        <thead>
+          <row>
+            <entry></entry>
+            <entry>Basic</entry>
+            <entry>
+              <code>variant&lt;T&amp;&gt;</code>
+            </entry>
+            <entry>
+              <link linkend="variant.tutorial.type-sequence-syntax">
+                <code>variant&lt;<emphasis>types</emphasis>&gt;</code>
+              </link>
+            </entry>
+            <entry>
+              <link linkend="variant.tutorial.recursive-variant">
+                <code>recursive_variant</code>
+              </link>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>Borland C++ 5.5.1 and 5.6.4</entry>
+            <entry>X</entry>
+            <entry></entry>
+            <entry></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>Comeau C++ 4.3.0</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+          </row>
+          <row>
+            <entry>GNU GCC 3.3.1</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+          </row>
+          <row>
+            <entry>GNU GCC 2.95.3</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry></entry>
+            <entry>X</entry>
+          </row>
+          <row>
+            <entry>Intel C++ 7.0</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+          </row>
+          <row>
+            <entry>Metrowerks CodeWarrior 8.3</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+          </row>
+          <row>
+            <entry>Microsoft Visual C++ 7.1</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+            <entry>X</entry>
+          </row>
+          <row>
+            <entry>Microsoft Visual C++ 6 SP5 and 7</entry>
+            <entry>X</entry>
+            <entry></entry>
+            <entry></entry>
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
 
-  <para>The current state of the testsuite in CVS may be found on the
+  </para>
+
+  <para>Finally, the current state of the testsuite in CVS may be found on the
     <ulink url="http://boost.sourceforge.net/regression-logs">Test Summary</ulink>
-    page. Please note, however, that this page reports on pre-release code
-    found in the Boost CVS and likely does not match the state of code found
-    in Boost releases.</para>
+    page. Please note, however, that this page reports on day-to-day changes
+    to inter-release code found in the Boost CVS and thus likely does not
+    match the state of code found in Boost releases.</para>
 
 </section>
 
