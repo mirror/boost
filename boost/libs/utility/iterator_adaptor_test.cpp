@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  10 Feb 01 Use new adaptors interface. (David Abrahams)
 //  10 Feb 01 Use new filter_ interface. (David Abrahams)
 //  09 Feb 01 Use new reverse_ and indirect_ interfaces. Replace
 //            BOOST_NO_STD_ITERATOR_TRAITS with
@@ -68,10 +69,10 @@ struct my_const_iter_traits {
 };
 
 typedef boost::iterator_adaptor<dummyT*, 
-  boost::default_iterator_policies, my_iter_traits> my_iterator;
+  boost::default_iterator_policies, dummyT> my_iterator;
 
 typedef boost::iterator_adaptor<const dummyT*, 
-  boost::default_iterator_policies, my_const_iter_traits> const_my_iterator;
+  boost::default_iterator_policies, const dummyT> const_my_iterator;
 
 
 struct mult_functor {
@@ -242,20 +243,23 @@ main()
     indirect_iterator i = ptr;
     boost::random_access_iterator_test(i, N, array);
 
-    boost::random_access_iterator_test(boost::make_indirect_iterator<dummyT>(ptr), N, array);
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
+#endif
     
     const_indirect_iterator j = ptr;
     boost::random_access_iterator_test(j, N, array);
 
     dummyT*const* const_ptr = ptr;
     
-    boost::random_access_iterator_test(boost::make_indirect_iterator<const dummyT>(const_ptr), N, array);
-
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
+#endif
     boost::const_nonconst_iterator_test(i, ++j);
 
     more_indirect_iterator_tests();
   }
-  
+
   // Test projection_iterator_pair_generator
   {    
     typedef std::pair<dummyT,dummyT> Pair;
@@ -267,7 +271,7 @@ main()
       Pair*, const Pair*
       > Projection;
     
-    Projection::iterator i = pair_array;
+    Projection::iterator i(pair_array);
     boost::random_access_iterator_test(i, N, array);
 
     boost::random_access_iterator_test(boost::make_projection_iterator(pair_array, select1st_<Pair>()), N, array);    
