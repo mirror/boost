@@ -52,7 +52,7 @@ struct select_base
 } // namespace vinit_detail
 
 template<class T>
-class value_initialized : vinit_detail::select_base<T>::type
+class value_initialized : private vinit_detail::select_base<T>::type
 {
   public :
 
