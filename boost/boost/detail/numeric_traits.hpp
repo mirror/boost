@@ -165,7 +165,7 @@ namespace boost { namespace detail {
       typedef typename
       if_true<(sizeof(Integer) >= sizeof(intmax_t))>::template then<
                
-        typename if_true<is_signed<Integer>::value>::template then<
+        typename if_true<(is_signed<Integer>::value)>::template then<
           Integer,
           intmax_t
         >::type,
