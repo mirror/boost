@@ -105,7 +105,7 @@ struct resolve_traits {
     // Note: test for is_iterator_range must come before test for output
     // iterator.
     typedef typename 
-            do_select<
+            select<
                 is_std_io<T>,
                 mode_adapter<Mode, T>,
                 is_iterator_range<T>,
@@ -129,8 +129,7 @@ struct resolve_traits {
 template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type 
 resolve(const T& t, mpl::true_)
-{ 
-    // Bad overload resolution.
+{   // Bad overload resolution.
     return wrap(const_cast<T&>(t));
 }
 
