@@ -9,12 +9,14 @@
 <section id="variant.ack">
   <title>Acknowledgments</title>
 
-<para>Eric Friedman and Itay Maman designed the initial submission.</para>
+<para>Eric Friedman and Itay Maman designed the initial submission; Eric was
+  the primary implementer.</para>
 
-<para>Eric Friedman expanded upon the initial submission significantly --
-  adding <code><classname>make_recursive_variant</classname></code>,
+<para>Eric is also the library maintainer and has expanded upon the initial
+  submission -- adding
+  <code><classname>make_recursive_variant</classname></code>,
   <code><classname>make_variant_over</classname></code>, support for
-  reference content, etc. -- and is the library maintainer.</para>
+  reference content, etc.</para>
 
 <para>Andrei Alexandrescu's work in
     [<link linkend="variant.refs.ale01a">Ale01a</link>]
@@ -109,25 +111,25 @@ interface, and implementation of the library.</para>
     2002.
 </para>
 <para id="variant.refs.gur02">
-    <ulink url="http://www.boost.org/libs/mpl">[Gur02]</ulink>
+    <libraryname alt="MPL">[Gur02]</libraryname>
     Aleksey Gurtovoy.
     <emphasis>Boost Metaprogramming Library.</emphasis>
     2002.
 </para>
 <para id="variant.refs.hen01">
-    <ulink url="http://www.boost.org/libs/any">[Hen01]</ulink>
+    <libraryname alt="Any">[Hen01]</libraryname>
     Kevlin Henney.
     <emphasis>Boost Any Library.</emphasis>
     2001.
 </para>
 <para id="variant.refs.mk02">
-    <ulink url="http://www.boost.org/libs/preprocessor">[MK02]</ulink>
+    <libraryname alt="Preprocessor">[MK02]</libraryname>
     Paul Mensonides and Vesa Karvonen.
     <emphasis>Boost Preprocessor Library.</emphasis>
     2002.
 </para>
 <para id="variant.refs.mcd+01">
-    <ulink url="http://www.boost.org/libs/type_traits">[MCD+01]</ulink>
+    <libraryname alt="Type Traits">[MCD+01]</libraryname>
     Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat Marcus, John Maddock, and Jeremy Siek.
     <emphasis>Boost Type Traits Library</emphasis>.
     2001.
