@@ -36,6 +36,7 @@ void test_conversion_to_int();
 void test_conversion_to_double();
 void test_conversion_to_bool();
 void test_conversion_to_string();
+void test_conversion_from_to_wchar_t_alias();
 void test_conversion_to_pointer();
 void test_conversion_from_wchar_t();
 void test_conversion_to_wchar_t();
@@ -50,6 +51,7 @@ unit_test_framework::test_suite *init_unit_test_suite(int, char **)
     suite->add(BOOST_TEST_CASE(test_conversion_to_int));
     suite->add(BOOST_TEST_CASE(test_conversion_to_double));
     suite->add(BOOST_TEST_CASE(test_conversion_to_bool));
+    suite->add(BOOST_TEST_CASE(test_conversion_from_to_wchar_t_alias));
     suite->add(BOOST_TEST_CASE(test_conversion_to_pointer));
     suite->add(BOOST_TEST_CASE(test_conversion_to_string));
     #ifndef DISABLE_WIDE_CHAR_SUPPORT
@@ -177,6 +179,17 @@ void test_conversion_to_string()
     BOOST_CHECK_EQUAL("Test", lexical_cast<std::string>(std::string("Test")));
     BOOST_CHECK_EQUAL(" ", lexical_cast<std::string>(std::string(" ")));
     BOOST_CHECK_EQUAL("", lexical_cast<std::string>(std::string("")));
+}
+
+void test_conversion_from_to_wchar_t_alias()
+{
+    BOOST_CHECK_EQUAL(123, lexical_cast<unsigned short>("123"));
+    BOOST_CHECK_EQUAL(123, lexical_cast<unsigned int>("123"));
+    BOOST_CHECK_EQUAL(123, lexical_cast<unsigned long>("123"));
+    BOOST_CHECK_EQUAL(std::string("123"),
+        lexical_cast<std::string>(static_cast<unsigned short>(123)));
+    BOOST_CHECK_EQUAL(std::string("123"), lexical_cast<std::string>(123u));
+    BOOST_CHECK_EQUAL(std::string("123"), lexical_cast<std::string>(123ul));
 }
 
 void test_conversion_to_pointer()
