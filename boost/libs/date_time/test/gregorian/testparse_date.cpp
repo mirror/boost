@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -10,7 +10,35 @@
 #include "boost/lexical_cast.hpp"
 #include <iostream>
 #include <string>
- 
+
+// missing or misspelled parts of date string tests
+// 'output_str' will be overwritten with what() from caught exception
+bool failure_tests(std::string date_spec, 
+                   std::string& output_str)
+{
+  using namespace boost::gregorian;
+  bool result = false;
+  date d(not_a_date_time);
+  try {
+    d = from_simple_string(date_spec);
+  }
+  catch(bad_year by){ // ex: "205-Jan-15"
+    result = true;
+    output_str = by.what();
+  }
+  catch(bad_month bm){ // ex: "2005-Jsn-15"
+    result = true;
+    output_str = bm.what();
+  }
+  catch(bad_day_of_month bd){ // ex: "2005-Jan-51"
+    result = true;
+    output_str = bd.what();
+  }
+  catch(...){
+    // test failed - unexpected exception, leave result set to false
+  }
+  return result;
+}
 
 int
 main() 
@@ -62,6 +90,24 @@ main()
 
     date d11 = from_us_string("feb 29 2000");
     check("american date with comma: feb 29 2000 ", d11 == d);
+
+    // test for missing or misspelled date spec components
+    std::string output_str("unexpected exception caught");
+    check("Year misspelled/out of range: " + output_str,
+        failure_tests("205-Jan-15", output_str));
+    output_str = "unexpected exception caught";
+    check("Month misspelled: " + output_str,
+        failure_tests("2005-Jsn-15", output_str));
+    output_str = "unexpected exception caught";
+    check("Day out of range: " + output_str,
+        failure_tests("2005-Jan-55", output_str));
+    output_str = "unexpected exception caught";
+    check("Missing month and day: " + output_str,
+        failure_tests("2005", output_str));
+    output_str = "unexpected exception caught";
+    check("Missing day: " + output_str,
+        failure_tests("2005-Jan", output_str));
+
 
 #if defined(BOOST_DATE_TIME_NO_LOCALE) || defined(BOOST_NO_STD_ITERATOR_TRAITS) || !defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 
@@ -120,7 +166,7 @@ main()
     check("December", d == d2);
     check("December", d == d3);
 #if defined(BOOST_NO_STD_ITERATOR_TRAITS)
-    check("date from stream no available: no std iterator traits", false);
+    check("date from stream not available: no std iterator traits", false);
 #else
     // from stream
     d = date(2000, 10, 31);
