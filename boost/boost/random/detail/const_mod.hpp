@@ -35,6 +35,39 @@ namespace random {
  * IntType must be an integral type.
  */
 
+namespace detail {
+
+  template<bool is_signed>
+  struct do_add
+  { };
+
+  template<>
+  struct do_add<true>
+  {
+    template<class IntType>
+    static IntType add(IntType m, IntType x, IntType c)
+    {
+      x += (c-m);
+      if(x < 0)
+        x += m;
+      return x;
+    }
+  };
+
+  template<>
+  struct do_add<false>
+  {
+    template<class IntType>
+    static IntType add(IntType, IntType, IntType)
+    {
+      // difficult
+      assert(!"const_mod::add with c too large");
+      return 0;
+    }
+  };
+} // namespace detail
+
+
 template<class IntType, IntType m>
 class const_mod
 {
@@ -45,13 +78,8 @@ public:
       return x;
     else if(c <= traits::const_max - m)    // i.e. m+c < max
       return add_small(x, c);
-    else if(traits::is_signed)
-      return add_signed(x, c);
-    else {
-      // difficult
-      assert(!"const_mod::add with c too large");
-      return 0;
-    }
+    else
+      return detail::do_add<traits::is_signed>::add(m, x, c);
   }
 
   static IntType mult(IntType a, IntType x)
@@ -90,14 +118,6 @@ private:
     x += c;
     if(x >= m)
       x -= m;
-    return x;
-  }
-
-  static IntType add_signed(IntType x, IntType c)
-  {
-    x += (c-m);
-    if(x < 0)
-      x += m;
     return x;
   }
 
