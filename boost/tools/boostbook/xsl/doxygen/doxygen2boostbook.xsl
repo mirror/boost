@@ -27,7 +27,7 @@
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
-  <xsl:key name="inner-classes" match="compounddef[not(attribute::kind='namespace')]/innerclass" use="@refid"/>
+  <xsl:key name="inner-classes" match="compounddef[not(attribute::kind='namespace') and not(attribute::kind='file')]/innerclass" use="@refid"/>
 
   <xsl:strip-space elements="briefdescription detaileddescription"/>
 
@@ -388,6 +388,16 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="innerclass" mode="toplevel">
+    <xsl:param name="with-namespace-refs"/>
+    <xsl:param name="in-file"/>
+
+    <xsl:apply-templates select="key('compounds-by-id', @refid)">
+      <xsl:with-param name="with-namespace-refs" 
+        select="$with-namespace-refs"/>
+      <xsl:with-param name="in-file" select="$in-file"/>
+    </xsl:apply-templates>
+  </xsl:template>
 
   <xsl:template match="innerclass">
     <xsl:param name="with-namespace-refs"/>
