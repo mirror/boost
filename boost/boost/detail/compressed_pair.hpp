@@ -75,7 +75,9 @@ namespace details
    template <typename T>
    inline void cp_swap(T& t1, T& t2)
    {
+#ifndef __GNUC__
       using std::swap;
+#endif
       swap(t1, t2);
    }
 

@@ -134,7 +134,9 @@ template class boost::compressed_pair<empty_UDT, empty_POD_UDT>;
 // first references:
 template double& compressed_pair<double, int&>::first();
 template int& compressed_pair<double, int&>::second();
+#if !(defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ < 95))
 template compressed_pair<double, int&>::compressed_pair(int&);
+#endif
 template compressed_pair<double, int&>::compressed_pair(call_traits<double>::param_type,int&);
 //
 // and then arrays:
@@ -142,7 +144,9 @@ template compressed_pair<double, int&>::compressed_pair(call_traits<double>::par
 template call_traits<int[2]>::reference compressed_pair<double, int[2]>::second();
 #endif
 template call_traits<double>::reference compressed_pair<double, int[2]>::first();
-template compressed_pair<double, int[2]>::compressed_pair(const double&);
+#if !(defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ < 95))
+template compressed_pair<double, int[2]>::compressed_pair(call_traits<double>::param_type);
+#endif
 template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

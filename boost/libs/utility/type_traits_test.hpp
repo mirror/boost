@@ -35,6 +35,7 @@ struct ct_checker
 
 #ifdef BOOST_MSVC
 #define value_test(v, x) ++test_count;\
+                        {typedef ct_checker<(x)> this_is_a_compile_time_check_;}\
                          if(!do_compare((int)v,(int)x)){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
 #else
 #define value_test(v, x) ++test_count;\
@@ -108,3 +109,4 @@ unsigned test_count = 0;
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
+

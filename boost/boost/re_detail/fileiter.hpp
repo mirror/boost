@@ -250,6 +250,12 @@ public:
       assert(node < file->_last);
       return file ? *(*node + sizeof(int) + offset) : char(0);
    }
+   char operator[] (long off)const
+   {
+      mapfile_iterator tmp(*this);
+      tmp += off;
+      return *tmp;
+   }
    mapfile_iterator& operator++ ();
    mapfile_iterator operator++ (int);
    mapfile_iterator& operator-- ();
@@ -280,8 +286,25 @@ public:
    {
       return i.position() < j.position();
    }
+   friend inline bool operator>(const mapfile_iterator& i, const mapfile_iterator& j)
+   {
+      return i.position() > j.position();
+   }
+   friend inline bool operator<=(const mapfile_iterator& i, const mapfile_iterator& j)
+   {
+      return i.position() <= j.position();
+   }
+   friend inline bool operator>=(const mapfile_iterator& i, const mapfile_iterator& j)
+   {
+      return i.position() >= j.position();
+   }
 
    friend mapfile_iterator operator + (const mapfile_iterator& i, long off);
+   friend mapfile_iterator operator + (long off, const mapfile_iterator& i)
+   {
+      mapfile_iterator tmp(i);
+      return tmp += off;
+   }
    friend mapfile_iterator operator - (const mapfile_iterator& i, long off);
    friend inline long operator - (const mapfile_iterator& i, const mapfile_iterator& j)
    {

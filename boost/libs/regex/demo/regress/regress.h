@@ -287,6 +287,11 @@ struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, std::ptrdiff_t)
   bool operator<(const self& x) const {
     return (cur < x.cur);
   }
+  friend self operator+(difference_type n, const self& i)
+  {
+    self tmp = i;
+    return tmp += n;
+  }
 };
 
 #if defined(__SGI_STL_PORT) && (__SGI_STL_PORT >= 0x400)

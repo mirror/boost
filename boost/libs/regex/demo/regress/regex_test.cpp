@@ -33,9 +33,14 @@
 //
 namespace boost{
 
+#if defined(__GNUC__) && defined(__BEOS__)
+#define ra_it const char*
+#define test_char_type char
+#else
 typedef const char* ra_it;
-typedef char char_type;
-typedef std::basic_string<char_type> test_string_type;
+typedef char test_char_type;
+#endif
+typedef std::basic_string<test_char_type> test_string_type;
 
 bool pred1(const match_results<ra_it>&)
 { return true; }
@@ -50,57 +55,57 @@ regbase::flag_type f = regbase::escape_in_lists | regbase::char_classes | regbas
                        | regbase::failbit | regbase::literal | regbase::icase | regbase::nocollate | regbase::basic
                        | regbase::extended | regbase::normal | regbase::emacs | regbase::awk | regbase::grep | regbase::egrep | regbase::sed;
 
-template class reg_expression<char_type>;
+template class reg_expression<test_char_type>;
 template class sub_match<ra_it>;
 template class match_results<ra_it>;
 
 template bool regex_match(ra_it,
                  ra_it,
                  match_results<ra_it>& m,
-                 const reg_expression<char_type>& e,
+                 const reg_expression<test_char_type>& e,
                  unsigned flags);
 template bool regex_match(ra_it,
                  ra_it,
-                 const reg_expression<char_type>& e,
+                 const reg_expression<test_char_type>& e,
                  unsigned flags);
 template bool regex_search(ra_it,
                 ra_it,
                 match_results<ra_it>& m,
-                const reg_expression<char_type>& e,
+                const reg_expression<test_char_type>& e,
                 unsigned flags);
 template unsigned int regex_grep(pred1_type,
                         ra_it,
                         ra_it,
-                        const reg_expression<char_type>& e,
+                        const reg_expression<test_char_type>& e,
                         unsigned flags);
-template char_type* regex_format(char_type*,
+template test_char_type* regex_format(test_char_type*,
                             const match_results<ra_it>& m,
-                            const char_type* fmt,
+                            const test_char_type* fmt,
                             unsigned flags);
-template char_type* regex_format(char_type*,
+template test_char_type* regex_format(test_char_type*,
                             const match_results<ra_it>& m,
                             const test_string_type& fmt,
                             unsigned flags);
-template char_type* regex_merge(char_type*,
+template test_char_type* regex_merge(test_char_type*,
                           ra_it,
                           ra_it,
-                          const reg_expression<char_type>&,
-                          const char_type*,
+                          const reg_expression<test_char_type>&,
+                          const test_char_type*,
                           unsigned int flags);
-template char_type* regex_merge(char_type*,
+template test_char_type* regex_merge(test_char_type*,
                            ra_it,
                            ra_it,
-                           const reg_expression<char_type>& e,
+                           const reg_expression<test_char_type>& e,
                            const test_string_type&,
                            unsigned int flags);
 template std::size_t regex_split(test_string_type*,
                         test_string_type&,
-                        const reg_expression<char_type>&,
+                        const reg_expression<test_char_type>&,
                         unsigned flags,
                         std::size_t);
 template std::size_t regex_split(test_string_type*,
                         test_string_type& s,
-                        const reg_expression<char_type>& e,
+                        const reg_expression<test_char_type>& e,
                         unsigned flags);
 
 template std::size_t regex_split(test_string_type*, test_string_type&);
@@ -110,50 +115,50 @@ template std::size_t regex_split(test_string_type*, test_string_type&);
 // the following prototypes are only available if partial ordering
 // of template functions is supported:
 //
-template bool regex_match(const char_type*,
-                 match_results<const char_type*>& m,
-                 const reg_expression<char_type>& e,
+template bool regex_match(const test_char_type*,
+                 match_results<const test_char_type*>& m,
+                 const reg_expression<test_char_type>& e,
                  unsigned flags);
 template bool regex_match(const test_string_type&,
                  match_results<test_string_type::const_iterator>&,
-                 const reg_expression<char_type>&,
+                 const reg_expression<test_char_type>&,
                  unsigned flags);
-template bool regex_match(const char_type*,
-                 const reg_expression<char_type>&,
+template bool regex_match(const test_char_type*,
+                 const reg_expression<test_char_type>&,
                  unsigned flags);
 template bool regex_match(const test_string_type&,
-                 const reg_expression<char_type>&,
+                 const reg_expression<test_char_type>&,
                  unsigned flags);
-template bool regex_search(const char_type*,
-                match_results<const char_type*>&,
-                const reg_expression<char_type>&,
+template bool regex_search(const test_char_type*,
+                match_results<const test_char_type*>&,
+                const reg_expression<test_char_type>&,
                 unsigned flags);
 template bool regex_search(const test_string_type&,
                 match_results<test_string_type::const_iterator>&,
-                const reg_expression<char_type>&,
+                const reg_expression<test_char_type>&,
                 unsigned flags);
 template unsigned int regex_grep(pred1_type,
-              const char_type*,
-              const reg_expression<char_type>&,
+              const test_char_type*,
+              const reg_expression<test_char_type>&,
               unsigned flags);
 template unsigned int regex_grep(pred2_type,
               const test_string_type&,
-              const reg_expression<char_type>&,
+              const reg_expression<test_char_type>&,
               unsigned flags);
 template test_string_type regex_format
                                  (const match_results<test_string_type::const_iterator>& m,
-                                  const char_type*,
+                                  const test_char_type*,
                                   unsigned flags);
 template test_string_type regex_format
                                  (const match_results<test_string_type::const_iterator>&,
                                   const test_string_type&,
                                   unsigned flags);
 template test_string_type regex_merge(const test_string_type&,
-                                     const reg_expression<char_type>&,
-                                     const char_type*,
+                                     const reg_expression<test_char_type>&,
+                                     const test_char_type*,
                                      unsigned int flags);
 template test_string_type regex_merge(const test_string_type&,
-                                     const reg_expression<char_type>&,
+                                     const reg_expression<test_char_type>&,
                                      const test_string_type&,
                                      unsigned int flags);
 
