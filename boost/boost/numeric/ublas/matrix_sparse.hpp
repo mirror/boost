@@ -259,10 +259,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
+        typedef A array_type;
     private:
         typedef F functor_type;
-        typedef A array_type;
-        typedef const A const_array_type;
         typedef const sparse_matrix<T, F, A> const_self_type;
         typedef sparse_matrix<T, F, A> self_type;
     public:
@@ -313,7 +312,7 @@ namespace boost { namespace numeric { namespace ublas {
             return data_.size ();
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -2531,9 +2530,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef IA index_array_type;
         typedef TA value_array_type;
+    private:
         typedef F functor_type;
         typedef const compressed_matrix<T, F, IB, IA, TA> const_self_type;
         typedef compressed_matrix<T, F, IB, IA, TA> self_type;
@@ -3871,9 +3870,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef IA index_array_type;
         typedef TA value_array_type;
+    private:
         typedef F functor_type;
         typedef const coordinate_matrix<T, F, IB, IA, TA> const_self_type;
         typedef coordinate_matrix<T, F, IB, IA, TA> self_type;

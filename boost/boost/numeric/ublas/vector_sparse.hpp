@@ -255,9 +255,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef A array_type;
-        typedef const A const_array_type;
+    private:
         typedef const sparse_vector<T, A> const_self_type;
         typedef sparse_vector<T, A> self_type;
     public:
@@ -303,7 +302,7 @@ namespace boost { namespace numeric { namespace ublas {
             return data_.size ();
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -747,9 +746,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef IA index_array_type;
         typedef TA value_array_type;
+    private:
         typedef const compressed_vector<T, IB, IA, TA> const_self_type;
         typedef compressed_vector<T, IB, IA, TA> self_type;
     public:
@@ -1314,9 +1313,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef IA index_array_type;
         typedef TA value_array_type;
+    private:
         typedef const coordinate_vector<T, IB, IA, TA> const_self_type;
         typedef coordinate_vector<T, IB, IA, TA> self_type;
     public:
