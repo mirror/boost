@@ -67,9 +67,9 @@ main()
   time_duration utd2 = -utd;
   //std::cout << td_d << '\n' << utd2 << std::endl;
   check("unary-", ((utd2.hours() == -1) &&
-	           (utd2.minutes() == 2) &&
-		   (utd2.seconds() == 3) &&
-		   (utd2.fractional_seconds() == 4)) );
+	           (utd2.minutes() == -2) &&
+		   (utd2.seconds() == -3) &&
+		   (utd2.fractional_seconds() == -4)) );
   utd2 = -hours(5);
   check("unary-", utd2.hours() == -5);
   utd2 = -utd2;
@@ -123,10 +123,13 @@ main()
     if (time_duration::resolution() == boost::date_time::nano) {
       check("millisec",  ms.fractional_seconds() == 9000000);
       check("total_seconds - nofrac", ms.total_seconds() == 0);
+      check("total_millisec", ms.total_milliseconds() == 9);
+      check("ticks per second", time_duration::ticks_per_second() == 1000000000);
     }
     else {
       check("millisec 9000",  ms.fractional_seconds() == 9000);
       check("total_seconds - nofrac", ms.total_seconds() == 0);
+      check("total_millisec", ms.total_milliseconds() == 9);
     }
   }
 
@@ -135,6 +138,8 @@ main()
     nanosec ns(9);
     //  time_duration t_10(0,0,0,); //00:00:00.00009
     check("nanosec",  ns.fractional_seconds() == 9);
+    check("total nanosec",  ns.total_nanoseconds() == 9);
+    check("total microsec - truncated",  ns.total_microseconds() == 0);
     std::cout << to_simple_string(ns) << std::endl;
     time_duration ns18 = ns + ns;
     check("nanosec",  ns18.fractional_seconds() == 18);
@@ -155,6 +160,8 @@ main()
   time_duration td_12(1,2,3,10); 
   std::cout << td_12.total_seconds() << std::endl;
   check("total seconds 3723 hours",  td_12.total_seconds() == 3723);
+
+  //  time_duration t_11a = t_11/time_duration(0,3,0);
 
   check("division", (hours(2)/2) == hours(1));
   check("division", (hours(3)/2) == time_duration(1,30,0));
@@ -177,6 +184,24 @@ main()
   check("600000 hours", tdl1.hours() == 600000);
   time_duration tdl2(2000000, 0, 0, 0);
   check("2000000 hours", tdl2.hours() == 2000000);
+
+  check("total milliseconds", seconds(1).total_milliseconds() == 1000);
+  check("total microseconds", seconds(1).total_microseconds() == 1000000);
+  check("total nanoseconds", seconds(1).total_nanoseconds() == 1000000000);
+  check("total milliseconds", hours(1).total_milliseconds() == 3600*1000);
+  boost::int64_t tms = static_cast<boost::int64_t>(3600)*1000000*1001; //ms per sec
+  check("total microseconds 1000 hours", hours(1001).total_microseconds() == tms);
+  tms = static_cast<boost::int64_t>(3600)*365*24*1000;
+  std::cout << "tms: " << (t2-t1).total_milliseconds() << std::endl;
+  check("total milliseconds - one year", (t2-t1).total_milliseconds() == tms);
+  tms = 3600*365*24*static_cast<boost::int64_t>(1000000000);
+  std::cout << "nano per year: " << (t2-t1).total_nanoseconds() << std::endl;
+  check("total nanoseconds - one year", (t2-t1).total_nanoseconds() == tms);
+
+  // make it into a double
+  double d1 = microseconds(25).ticks()/(double)time_duration::ticks_per_second();
+  std::cout << d1 << std::endl;
+  
   //Following causes errors on several compilers about value to large for
   //type.  So it is commented out for now.  Strangely works on gcc 3.3
   //eg: integer constant out of range
