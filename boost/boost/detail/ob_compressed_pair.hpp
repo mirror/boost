@@ -113,6 +113,16 @@ public:
    compressed_pair_0(const ::boost::compressed_pair<T1,T2>& x)
       : _first(x.first()), _second(x.second()) {}
 
+#if 0
+  compressed_pair_0& operator=(const compressed_pair_0& x) {
+    cout << "assigning compressed pair 0" << endl;
+    _first = x._first;
+    _second = x._second;
+    cout << "finished assigning compressed pair 0" << endl;
+    return *this;
+  }
+#endif
+
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }
 
@@ -145,13 +155,26 @@ public:
 
             compressed_pair_1() : T2(), _first() {}
             compressed_pair_1(first_param_type x, second_param_type y) : T2(y), _first(x) {}
+
    template <class A>
    explicit compressed_pair_1(const A& val)
    {
       init_one<best_conversion_traits<A, T1, T2>::value>::init(val, &_first, static_cast<T2*>(this));
    }
+
    compressed_pair_1(const ::boost::compressed_pair<T1,T2>& x)
       : T2(x.second()), _first(x.first()) {}
+
+#ifdef BOOST_MSVC
+  // Total weirdness. If the assignment to _first is moved after
+  // the call to the inherited operator=, then this breaks graph/test/graph.cpp
+  // by way of iterator_adaptor.
+  compressed_pair_1& operator=(const compressed_pair_1& x) {
+    _first = x._first;
+    T2::operator=(x);
+    return *this;
+  }
+#endif
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }
@@ -193,6 +216,15 @@ public:
    compressed_pair_2(const ::boost::compressed_pair<T1,T2>& x)
       : T1(x.first()), _second(x.second()) {}
 
+#if 0
+  compressed_pair_2& operator=(const compressed_pair_2& x) {
+    cout << "assigning compressed pair 2" << endl;
+    T1::operator=(x);
+    _second = x._second;
+    cout << "finished assigning compressed pair 2" << endl;
+    return *this;
+  }
+#endif
    first_reference       first()       { return *this; }
    first_const_reference first() const { return *this; }
 
