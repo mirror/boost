@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -66,14 +66,6 @@ bool BOOST_REGEX_CALL re_maybe_set_member(charT c,
 
 } // namespace re_detail
 
-#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
-//
-// Ugly ugly hack,
-// templates don't merge if they contain switch statements so declare these
-// templates in unnamed namespace (ie with internal linkage), each translation
-// unit then gets its own local copy, it works seemlessly but bloats the app.
-namespace{
-#endif
 
 template <class charT, class traits, class Allocator>
 inline bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&)
@@ -2070,10 +2062,6 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned in
 }
 
 
-#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
-} // namespace
-#endif
-
 #ifdef __BORLANDC__
   #pragma option pop
 #endif
@@ -2082,6 +2070,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned in
 
 
 #endif   // BOOST_REGEX_COMPILE_HPP
+
 
 
 

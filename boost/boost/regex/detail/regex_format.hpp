@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -572,6 +572,7 @@ std::basic_string<charT> regex_merge(const std::basic_string<charT>& s,
 } // namespace boost
 
 #endif  // BOOST_REGEX_FORMAT_HPP
+
 
 
 

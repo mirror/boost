@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -1901,6 +1901,7 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string
 } // namespace boost
 
 #endif   // BOOST_REGEX_MATCH_HPP
+
 
 
 

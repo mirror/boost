@@ -26,7 +26,7 @@ C1=-c -O2 -I../../../
 
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/instances.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
 
 all : $(DIRNAME)  $(DIRNAME) $(DIRNAME)/boost_regex ./$(DIRNAME)/libboost_regex.so
 
@@ -59,6 +59,9 @@ $(DIRNAME)/boost_regex/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
 $(DIRNAME)/boost_regex/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o $(DIRNAME)/boost_regex/fileiter.o $(C1) $(CXXFLAGS) ../src/fileiter.cpp
 
+$(DIRNAME)/boost_regex/instances.o: ../src/instances.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o $(DIRNAME)/boost_regex/instances.o $(C1) $(CXXFLAGS) ../src/instances.cpp
+
 $(DIRNAME)/boost_regex/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o $(DIRNAME)/boost_regex/posix_api.o $(C1) $(CXXFLAGS) ../src/posix_api.cpp
 
@@ -77,12 +80,15 @@ $(DIRNAME)/boost_regex/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEA
 $(DIRNAME)/boost_regex/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o $(DIRNAME)/boost_regex/wide_posix_api.o $(C1) $(CXXFLAGS) ../src/wide_posix_api.cpp
 
+$(DIRNAME)/boost_regex/winstances.o: ../src/winstances.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o $(DIRNAME)/boost_regex/winstances.o $(C1) $(CXXFLAGS) ../src/winstances.cpp
+
 $(DIRNAME)/boost_regex : 
 	mkdir -p $(DIRNAME)/boost_regex
 
 boost_regex_clean :
 	rm -f $(DIRNAME)/boost_regex/*.o
 
-./$(DIRNAME)/libboost_regex.so : $(DIRNAME)/boost_regex/c_regex_traits.o $(DIRNAME)/boost_regex/c_regex_traits_common.o $(DIRNAME)/boost_regex/cpp_regex_traits.o $(DIRNAME)/boost_regex/cregex.o $(DIRNAME)/boost_regex/fileiter.o $(DIRNAME)/boost_regex/posix_api.o $(DIRNAME)/boost_regex/regex.o $(DIRNAME)/boost_regex/regex_debug.o $(DIRNAME)/boost_regex/regex_synch.o $(DIRNAME)/boost_regex/w32_regex_traits.o $(DIRNAME)/boost_regex/wide_posix_api.o
-	$(LINKER) $(LDFLAGS) -o $(DIRNAME)/libboost_regex.so  $(DIRNAME)/boost_regex/c_regex_traits.o $(DIRNAME)/boost_regex/c_regex_traits_common.o $(DIRNAME)/boost_regex/cpp_regex_traits.o $(DIRNAME)/boost_regex/cregex.o $(DIRNAME)/boost_regex/fileiter.o $(DIRNAME)/boost_regex/posix_api.o $(DIRNAME)/boost_regex/regex.o $(DIRNAME)/boost_regex/regex_debug.o $(DIRNAME)/boost_regex/regex_synch.o $(DIRNAME)/boost_regex/w32_regex_traits.o $(DIRNAME)/boost_regex/wide_posix_api.o $(LIBS)
+./$(DIRNAME)/libboost_regex.so : $(DIRNAME)/boost_regex/c_regex_traits.o $(DIRNAME)/boost_regex/c_regex_traits_common.o $(DIRNAME)/boost_regex/cpp_regex_traits.o $(DIRNAME)/boost_regex/cregex.o $(DIRNAME)/boost_regex/fileiter.o $(DIRNAME)/boost_regex/instances.o $(DIRNAME)/boost_regex/posix_api.o $(DIRNAME)/boost_regex/regex.o $(DIRNAME)/boost_regex/regex_debug.o $(DIRNAME)/boost_regex/regex_synch.o $(DIRNAME)/boost_regex/w32_regex_traits.o $(DIRNAME)/boost_regex/wide_posix_api.o $(DIRNAME)/boost_regex/winstances.o
+	$(LINKER) $(LDFLAGS) -o $(DIRNAME)/libboost_regex.so  $(DIRNAME)/boost_regex/c_regex_traits.o $(DIRNAME)/boost_regex/c_regex_traits_common.o $(DIRNAME)/boost_regex/cpp_regex_traits.o $(DIRNAME)/boost_regex/cregex.o $(DIRNAME)/boost_regex/fileiter.o $(DIRNAME)/boost_regex/instances.o $(DIRNAME)/boost_regex/posix_api.o $(DIRNAME)/boost_regex/regex.o $(DIRNAME)/boost_regex/regex_debug.o $(DIRNAME)/boost_regex/regex_synch.o $(DIRNAME)/boost_regex/w32_regex_traits.o $(DIRNAME)/boost_regex/wide_posix_api.o $(DIRNAME)/boost_regex/winstances.o $(LIBS)
 

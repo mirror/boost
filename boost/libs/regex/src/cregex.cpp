@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -617,6 +617,7 @@ basic_string<char>::replace<const char*>(char* f1, char* f2, const char* i1, con
 #endif
 
 #endif
+
 
 
 

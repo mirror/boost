@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -1050,4 +1050,5 @@ std::size_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, std:
 #endif // BOOST_NO_WREGEX
 
 } // namespace boost
+
 

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -46,3 +46,4 @@
 #include "libs/regex/src/regex.cpp"
 #include "libs/regex/src/regex_debug.cpp"
 #include "libs/regex/src/regex_synch.cpp"
+

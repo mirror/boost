@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -450,15 +450,6 @@ class match_results;
 // regular expression:
 //
 
-#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
-//
-// Ugly ugly hack, 
-// template don't merge if they contain switch statements so declare these
-// templates in unnamed namespace (ie with internal linkage), each translation
-// unit then gets its own local copy, it works seemlessly but bloats the app.
-namespace{
-#endif
-
 #ifdef BOOST_REGEX_NO_FWD
 template <class charT, class traits = regex_traits<charT>, class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 #else
@@ -466,10 +457,10 @@ template <class charT, class traits, class Allocator >
 #endif
 class reg_expression : public regbase
 {
+public:
    typedef typename traits::size_type traits_size_type;
    typedef typename traits::uchar_type traits_uchar_type;
    typedef typename traits::string_type traits_string_type;
-public:
    // typedefs:
    typedef charT char_type;
    typedef traits traits_type;
@@ -712,7 +703,7 @@ protected:
 };
 
 template <class charT, class traits, class Allocator>
-void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::swap(reg_expression& that)throw()
+inline void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::swap(reg_expression& that)throw()
 {
    // this is not as efficient as it should be,
    // however swapping traits classes is problematic
@@ -722,10 +713,6 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::swap(reg_express
    *this = e;
 }
 
-
-#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
-} // namespace
-#endif
 
 //
 // class match_results and match_results_base
@@ -1533,6 +1520,32 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
 
 #include <boost/regex/detail/regex_compile.hpp>
 
+//
+// template instances:
+//
+#define BOOST_REGEX_CHAR_T char
+#ifdef BOOST_REGEX_NARROW_INSTANTIATE
+#  define BOOST_REGEX_INSTANTIATE
+#endif
+#include <boost/regex/detail/instances.hpp>
+#undef BOOST_REGEX_CHAR_T
+#ifdef BOOST_REGEX_INSTANTIATE
+#  undef BOOST_REGEX_INSTANTIATE
+#endif
+
+#ifndef BOOST_NO_WREGEX
+#define BOOST_REGEX_CHAR_T wchar_t
+#ifdef BOOST_REGEX_WIDE_INSTANTIATE
+#  define BOOST_REGEX_INSTANTIATE
+#endif
+#include <boost/regex/detail/instances.hpp>
+#undef BOOST_REGEX_CHAR_T
+#ifdef BOOST_REGEX_INSTANTIATE
+#  undef BOOST_REGEX_INSTANTIATE
+#endif
+#endif
+
+
 namespace boost{
 #ifdef BOOST_REGEX_NO_FWD
 typedef reg_expression<char, regex_traits<char>, BOOST_DEFAULT_ALLOCATOR(char)> regex;
@@ -1549,7 +1562,6 @@ typedef match_results<std::wstring::const_iterator> wsmatch;
 #endif
 
 } // namespace boost
-
 #include <boost/regex/detail/regex_match.hpp>
 #include <boost/regex/detail/regex_format.hpp>
 #include <boost/regex/detail/regex_split.hpp>
@@ -1558,6 +1570,7 @@ typedef match_results<std::wstring::const_iterator> wsmatch;
 #endif  // __cplusplus
 
 #endif  // include
+
 
 
 

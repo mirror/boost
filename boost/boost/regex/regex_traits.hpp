@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -536,7 +536,13 @@ private:
 
 } // namspace boost
 
+#ifdef __BORLANDC__
+  #pragma option pop
+#endif
 #include <locale>
+#ifdef __BORLANDC__
+   #pragma option push -a4 -b -Ve -pc
+#endif
 
 namespace boost{
 
@@ -796,5 +802,6 @@ class regex_traits : public cpp_regex_traits<charT>
 } // namespace boost
 
 #endif // include
+
 
 

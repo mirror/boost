@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -236,6 +236,18 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 
 #ifndef BOOST_NO_STD_MESSAGES
    // load any custom collate names:
+   //
+   // for some reason Borland C++ Builder 6 won't let us use
+   // std::isspace(char, std::locale) unless we call it
+   // unqualifed - weird.
+   //
+#if defined(__BORLANDC__) && (__BORLANDC__ == 0x560)
+   using namespace std;
+#  define BOOST_REGEX_STD
+#else
+#  define BOOST_REGEX_STD std::
+#endif
+
    std::string c1, c2;
    i = 400;
    if((int)cat >= 0)
@@ -245,13 +257,13 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
       {
          const char* p1, *p2, *p3, *p4;;
          p1 = c2.c_str();
-         while(*p1 && std::isspace((char)*p1, l))++p1;
+         while(*p1 && BOOST_REGEX_STD isspace((char)*p1, l))++p1;
          p2 = p1;
-         while(*p2 && !std::isspace((char)*p2, l))++p2;
+         while(*p2 && !BOOST_REGEX_STD isspace((char)*p2, l))++p2;
          p3 = p2;
-         while(*p3 && std::isspace((char)*p3, l))++p3;
+         while(*p3 && BOOST_REGEX_STD isspace((char)*p3, l))++p3;
          p4 = p3;
-         while(*p4 && !std::isspace((char)*p4, l))++p4;
+         while(*p4 && !BOOST_REGEX_STD isspace((char)*p4, l))++p4;
          collating_elements[std::string(p1, p2)] = std::string(p3, p4);
 
          ++i;
@@ -630,13 +642,13 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       {
          const wchar_t* p1, *p2, *p3, *p4;;
          p1 = c2.c_str();
-         while(*p1 && std::isspace((wchar_t)*p1, l))++p1;
+         while(*p1 && BOOST_REGEX_STD isspace((wchar_t)*p1, l))++p1;
          p2 = p1;
-         while(*p2 && !std::isspace((wchar_t)*p2, l))++p2;
+         while(*p2 && !BOOST_REGEX_STD isspace((wchar_t)*p2, l))++p2;
          p3 = p2;
-         while(*p3 && std::isspace((wchar_t)*p3, l))++p3;
+         while(*p3 && BOOST_REGEX_STD isspace((wchar_t)*p3, l))++p3;
          p4 = p3;
-         while(*p4 && !std::isspace((wchar_t)*p4, l))++p4;
+         while(*p4 && !BOOST_REGEX_STD isspace((wchar_t)*p4, l))++p4;
          collating_elements[std::basic_string<wchar_t>(p1, p2)] = std::basic_string<wchar_t>(p3, p4);
 
          ++i;
@@ -847,3 +859,4 @@ std::size_t BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, st
 } // namespace boost
 
 #endif
+

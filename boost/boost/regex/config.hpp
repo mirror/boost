@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -40,6 +40,11 @@
          // this is harmless for a staic link:
 #        define _RWSTD_COMPILE_INSTANTIATE
 #     endif
+#  endif
+#  if (__BORLANDC__ <= 0x540) && !defined(BOOST_REGEX_NO_LIB) && !defined(_NO_VCL)
+      // C++ Builder 4 and earlier, we can't tell whether we should be using
+      // the VCL runtime or not, do a static link instead:
+#     define BOOST_REGEX_STATIC_LINK
 #  endif
    //
    // VCL support:
@@ -591,3 +596,4 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
+

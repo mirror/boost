@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -242,6 +242,7 @@ void* BOOST_REGEX_CALL raw_storage<Allocator>::insert(size_type pos, size_type n
 } // namespace boost
 
 #endif
+
 
 
 

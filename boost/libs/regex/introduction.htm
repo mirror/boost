@@ -244,8 +244,8 @@ can use it, instructions for specific platforms are as follows: </p>
     <li>Open up a console window and change to the
         &lt;boost&gt;\libs\regex\build directory. </li>
     <li>Select the appropriate makefile (bcb4.mak for C++ Builder
-        4, bcb5.mak for C++ Builder 5, and bcc55.mak for the 5.5
-        command line tools). </li>
+        4, bcb5.mak for C++ Builder 5, and bcb6.mak for C++
+        Builder 6). </li>
     <li>Invoke the makefile (pass the full path to your version
         of make if you have more than one version installed, the
         makefile relies on the path to make to obtain your C++
@@ -284,9 +284,21 @@ line tools then you must define the pre-processor symbol _NO_VCL
 in order to ensure that the correct link libraries are selected:
 the C++ Builder IDE normally sets this automatically. Hint, users
 of the 5.5 command line tools may want to add a -D_NO_VCL to bcc32.cfg
-in order to set this option permanently. <br>
-&nbsp; <br>
-&nbsp; </p>
+in order to set this option permanently. </p>
+
+<p>If you would prefer to do a static link to the regex libraries
+even when using the dll runtime then define
+BOOST_REGEX_STATIC_LINK, and if you want to suppress automatic
+linking altogether (and supply your own custom build of the lib)
+then define BOOST_REGEX_NO_LIB.</p>
+
+<p>If you are building with C++ Builder 6, you will find that
+&lt;boost/regex.hpp&gt; can not be used in a pre-compiled header
+(the actual problem is in &lt;locale&gt; which gets included by
+&lt;boost/regex.hpp&gt;), if this causes problems for you, then
+try defining BOOST_NO_STD_LOCALE when building, this will disable
+some features throughout boost, but may save you a lot in compile
+times!</p>
 
 <p><b>Microsoft Visual C++ 6</b><strong> and 7</strong></p>
 
@@ -358,9 +370,11 @@ then you could use:</p>
 <p>nmake INCLUDES=&quot;-Ic:/stlport/stlport&quot; XLFLAGS=&quot;/LIBPATH:c:/stlport/lib&quot;
 -fvc6-stlport.mak</p>
 
-<p>If you are building with the full STLPort v4, then use the vc6-stlport.mak
-file provided (The full STLPort libraries appear not to support
-single-thread static builds). <br>
+<p>If you are building with the full STLPort v4.x, then use the
+vc6-stlport.mak file provided and set the environment variable
+STLPORT_PATH to point to the location of your STLport
+installation (Note that the full STLPort libraries appear not to
+support single-thread static builds). <br>
 &nbsp; <br>
 &nbsp; </p>
 

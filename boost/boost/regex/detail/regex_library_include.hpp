@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -22,160 +22,162 @@
   *                by regex.hpp, do not include on its own.
   */
 
+/*************************************************************************
 
-#ifndef BOOST_REGEX_LIBRARY_INCLUDE_HPP
+Libraries for Borland and Microsoft compilers are automatically
+selected here, the name of the lib is selected according to the following
+formula:
+
+BOOST_LIB_NAME
+   + "_"
+   + BOOST_LIB_TOOLSET
+   + "_"
+   + BOOST_LIB_THREAD_OPT
+   + BOOST_LIB_RT_OPT
+   + BOOST_LIB_LINK_OPT
+   + BOOST_LIB_DEBUG_OPT
+
+These are defined as:
+
+BOOST_LIB_NAME:       The base name of the lib (boost_regex).
+
+BOOST_LIB_TOOLSET:    The compiler toolset name (vc6, vc7, bcb5 etc).
+
+BOOST_LIB_THREAD_OPT: "s" for single thread builds,
+                      "m" for multithread builds.
+
+BOOST_LIB_RT_OPT:     "s" for static runtime,
+                      "d" for dynamic runtime.
+
+BOOST_LIB_LINK_OPT:   "s" for static link,
+                      "i" for dynamic link.
+
+BOOST_LIB_DEBUG_OPT:  nothing for release builds,
+                      "d" for debug builds,
+                      "dd" for debug-diagnostic builds (_STLP_DEBUG).
+
+***************************************************************************/
+
+#if !defined(BOOST_REGEX_LIBRARY_INCLUDE_HPP) && !defined(BOOST_REGEX_NO_LIB)
 #define BOOST_REGEX_LIBRARY_INCLUDE_HPP
-#ifndef BOOST_REGEX_NO_LIB
 
-#if defined(BOOST_MSVC) && !defined(BOOST_REGEX_BUILD_DLL)
-#if defined(__SGI_STL_PORT) || defined(_STLP_VERSION)
-   #ifdef _DLL
-      // All these are multithreaded:
-      #if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
-         #pragma comment(lib, "vc6-stlport-re300ddl.lib")
-      #elif defined(_DEBUG)
-         #pragma comment(lib, "vc6-stlport-re300dl.lib")
-      #elif defined(BOOST_REGEX_STATIC_LINK)
-         // static regex lib, dll runtime
-         #pragma comment(lib, "vc6-stlport-re300ls.lib")
-      #else // DEBUG
-         #pragma comment(lib, "vc6-stlport-re300l.lib")
-      #endif // _DEBUG
-   #else // _DLL
-      #ifdef _MT
-         #if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
-            #pragma comment(lib, "vc6-stlport-re300ddm.lib")
-         #elif defined(_DEBUG)
-            #pragma comment(lib, "vc6-stlport-re300dm.lib")
-         #else //_DEBUG
-            #pragma comment(lib, "vc6-stlport-re300m.lib")
-         #endif //_DEBUG
-      #else //_MT
-         // STLPort does not support single threaded builds:
-         #error STLPort does not support single threaded builds
-      #endif //_MT
-   #endif //_DLL
-#elif _MSC_VER < 1300
-   #ifdef _DLL
-      // All these are multithreaded:
-      #ifdef _DEBUG
-         #pragma comment(lib, "vc6-re300dl.lib")
-      #elif defined(BOOST_REGEX_STATIC_LINK)
-         // static regex lib, dll runtime
-         #pragma comment(lib, "vc6-re300ls.lib")
-      #else // DEBUG
-         #pragma comment(lib, "vc6-re300l.lib")
-      #endif // _DEBUG
-   #else // _DLL
-      #ifdef _MT
-         #ifdef _DEBUG
-            #pragma comment(lib, "vc6-re300dm.lib")
-         #else //_DEBUG
-            #pragma comment(lib, "vc6-re300m.lib")
-         #endif //_DEBUG
-      #else //_MT
-         #ifdef _DEBUG
-            #pragma comment(lib, "vc6-re300d.lib")
-         #else //_DEBUG
-            #pragma comment(lib, "vc6-re300.lib")
-         #endif //_DEBUG
-      #endif //_MT
-   #endif //_DLL
+#define BOOST_LIB_NAME "boost_regex"
+
+//
+// select toolset:
+//
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1200) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+
+   // vc6-stlport:
+#  define BOOST_LIB_TOOLSET "vc6-stlport"
+
+#elif defined(BOOST_MSVC) && (BOOST_MSVC == 1200)
+
+   // vc6:
+#  define BOOST_LIB_TOOLSET "vc6"
+
+#elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1300)
+
+   // vc7:
+#  define BOOST_LIB_TOOLSET "vc7"
+
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x560)
+
+   // CBuilder 6:
+#  define BOOST_LIB_TOOLSET "bcb6"
+
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
+
+   // CBuilder 6:
+#  define BOOST_LIB_TOOLSET "bcb5"
+
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x540)
+
+   // CBuilder 6:
+#  define BOOST_LIB_TOOLSET "bcb4"
+
+#endif
+
+//
+// select thread opt:
+//
+#if defined(_MT) || defined(__MT__)
+#  define BOOST_LIB_THREAD_OPT "m"
 #else
-   #ifdef _DLL
-      // All these are multithreaded:
-      #ifdef _DEBUG
-         #pragma comment(lib, "vc7-re300dl.lib")
-      #elif defined(BOOST_REGEX_STATIC_LINK)
-         // static regex lib, dll runtime
-         #pragma comment(lib, "vc7-re300ls.lib")
-      #else // DEBUG
-         #pragma comment(lib, "vc7-re300l.lib")
-      #endif // _DEBUG
-   #else // _DLL
-      #ifdef _MT
-         #ifdef _DEBUG
-            #pragma comment(lib, "vc7-re300dm.lib")
-         #else //_DEBUG
-            #pragma comment(lib, "vc7-re300m.lib")
-         #endif //_DEBUG
-      #else //_MT
-         #ifdef _DEBUG
-            #pragma comment(lib, "vc7-re300d.lib")
-         #else //_DEBUG
-            #pragma comment(lib, "vc7-re300.lib")
-         #endif //_DEBUG
-      #endif //_MT
-   #endif //_DLL
-#endif // __SGI_STL_PORT
-#endif //BOOST_MSVC
+#  define BOOST_LIB_THREAD_OPT "s"
+#endif
 
+//
+// select runtime opt:
+//
+#if defined(_DLL) || defined(_RTLDLL)
+#  define BOOST_LIB_RT_OPT "d"
+#else
+#  define BOOST_LIB_RT_OPT "s"
+#endif
 
-#if defined(__BORLANDC__) && !defined(BOOST_REGEX_BUILD_DLL)
-   
-   #if __BORLANDC__ < 0x550
-   
-   #ifdef BOOST_REGEX_USE_VCL
-   
-      #ifdef _RTLDLL
-         #pragma comment(lib, "bcb4re300lv.lib")
-      #else
-         #pragma comment(lib, "bcb4re300v.lib")
-      #endif
-   
-   #else // VCL
-   
-   #ifdef _RTLDLL
-      #ifdef __MT__
-         #pragma comment(lib, "bcb4re300lm.lib")
-      #else // __MT__
-         #pragma comment(lib, "bcb4re300l.lib")
-      #endif // __MT__
-   #else //_RTLDLL
-      #ifdef __MT__
-         #pragma comment(lib, "bcb4re300m.lib")
-      #else // __MT__
-         #pragma comment(lib, "bcb4re300.lib")
-      #endif // __MT__
-   #endif // _RTLDLL
-   
-   #endif // VCL
-   
-   #else // C++ Builder 5:
+//
+// select linkage opt:
+//
+#if (defined(_DLL) || defined(_RTLDLL)) && !defined(BOOST_REGEX_STATIC_LINK)
+#  define BOOST_LIB_LINK_OPT "i"
+#else
+#  define BOOST_LIB_LINK_OPT "s"
+#endif
 
-   #ifdef BOOST_REGEX_USE_VCL
-   
-      #ifdef _RTLDLL
-         #pragma comment(lib, "bcb5re300lv.lib")
-      #else
-         #pragma comment(lib, "bcb5re300v.lib")
-      #endif
-   
-   #else // VCL
-   
-   #ifdef _RTLDLL
-      #ifdef __MT__
-         #pragma comment(lib, "bcb5re300lm.lib")
-      #else // __MT__
-         #pragma comment(lib, "bcb5re300l.lib")
-      #endif // __MT__
-   #else //_RTLDLL
-      #ifdef __MT__
-         #pragma comment(lib, "bcb5re300m.lib")
-      #else // __MT__
-         #pragma comment(lib, "bcb5re300.lib")
-      #endif // __MT__
-   #endif // _RTLDLL
-   
-   #endif // VCL
-   
-   #endif   
-   
-#endif //__BORLANDC__
+//
+// select debug opt:
+//
+#if defined(BOOST_MSVC) && defined(_DEBUG) && (defined(_STLP_DEBUG) || defined(__STL_DEBUG))
+#  define BOOST_LIB_DEBUG_OPT "dd"
+#elif defined(BOOST_MSVC) && defined(_DEBUG)
+#  define BOOST_LIB_DEBUG_OPT "d"
+#elif defined(__BORLANDC__) && (__BORLANDC__ == 0x560) && (defined(_STLP_DEBUG) || defined(__STL_DEBUG))
+#  define BOOST_LIB_DEBUG_OPT "dd"
+#else
+#  define BOOST_LIB_DEBUG_OPT 
+#endif
 
-#endif //BOOST_REGEX_NO_LIB
+//
+// now include the lib:
+//
+#if defined(BOOST_LIB_NAME) \
+      && defined(BOOST_LIB_TOOLSET) \
+      && defined(BOOST_LIB_THREAD_OPT) \
+      && defined(BOOST_LIB_RT_OPT) \
+      && defined(BOOST_LIB_LINK_OPT) \
+      && defined(BOOST_LIB_DEBUG_OPT)
+
+#  pragma comment(lib, BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_LINK_OPT BOOST_LIB_DEBUG_OPT ".lib")
+
+#endif
+
+//
+// finally undef any macros we may have set:
+//
+#if defined(BOOST_LIB_NAME)
+#  undef BOOST_LIB_NAME
+#endif
+#if defined(BOOST_LIB_TOOLSET)
+#  undef BOOST_LIB_TOOLSET
+#endif
+#if defined(BOOST_LIB_THREAD_OPT)
+#  undef BOOST_LIB_THREAD_OPT
+#endif
+#if defined(BOOST_LIB_RT_OPT)
+#  undef BOOST_LIB_RT_OPT
+#endif
+#if defined(BOOST_LIB_LINK_OPT)
+#  undef BOOST_LIB_LINK_OPT
+#endif
+#if defined(BOOST_LIB_DEBUG_OPT)
+#  undef BOOST_LIB_DEBUG_OPT
+#endif
+
 
 #endif // BOOST_REGEX_LIBRARY_INCLUDE_HPP
+
+
 
 
 

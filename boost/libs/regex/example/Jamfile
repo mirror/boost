@@ -69,7 +69,7 @@ unit-test regex_grep_example_1 : snippets/regex_grep_example_1.cpp
 	: 
 		debug
 	:
-		../../../boost/smart_ptr.hpp
+		../../../boost/rational.hpp
 	;
 
 unit-test regex_grep_example_2 : snippets/regex_grep_example_2.cpp
@@ -81,7 +81,7 @@ unit-test regex_grep_example_2 : snippets/regex_grep_example_2.cpp
 	: 
 		debug
 	:
-		../../../boost/smart_ptr.hpp
+		../../../boost/rational.hpp
 	;
 
 unit-test regex_grep_example_3 : snippets/regex_grep_example_3.cpp
@@ -93,7 +93,7 @@ unit-test regex_grep_example_3 : snippets/regex_grep_example_3.cpp
 	: 
 		debug
 	:
-		../../../boost/smart_ptr.hpp
+		../../../boost/rational.hpp
 	;
 
 unit-test regex_grep_example_4 : snippets/regex_grep_example_4.cpp
@@ -105,7 +105,7 @@ unit-test regex_grep_example_4 : snippets/regex_grep_example_4.cpp
 	: 
 		debug
 	:
-		../../../boost/smart_ptr.hpp
+		../../../boost/rational.hpp
 	;
 
 unit-test regex_match_example : snippets/regex_match_example.cpp
@@ -129,7 +129,7 @@ unit-test regex_merge_example : snippets/regex_merge_example.cpp
 	: 
 		debug
 	:
-		../../../boost/smart_ptr.hpp
+		../../../boost/rational.hpp
 	;
 
 unit-test regex_search_example : snippets/regex_search_example.cpp
@@ -141,7 +141,7 @@ unit-test regex_search_example : snippets/regex_search_example.cpp
 	: 
 		debug
 	:
-		../../../boost/smart_ptr.hpp
+		../../../boost/rational.hpp
 	;
 
 unit-test regex_split_example_1 : snippets/regex_split_example_1.cpp
@@ -167,6 +167,7 @@ unit-test regex_split_example_2 : snippets/regex_split_example_2.cpp
 	:
 		../index.htm
 	;
+
 
 
 

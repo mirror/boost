@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -1091,4 +1091,5 @@ unsigned short w32_regex_traits<wchar_t>::wide_unicode_classes[] = {
 } // namespace boost
 
 #endif // #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+
 

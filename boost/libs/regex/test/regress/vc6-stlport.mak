@@ -18,11 +18,20 @@ INCLUDES=
 #
 XLFLAGS=
 
-CFLAGS= $(INCLUDES) /Oityb1 /GF /Gy -GX -GR -I..\..\..\..\ $(CXXFLAGS)
+!IF "$(MSVCDIR)" == ""
+!ERROR Variable MSVCDIR not set.
+!ENDIF
 
-LFLAGS= -link /LIBPATH:..\..\build\vc6-stlport user32.lib $(XLFLAGS)
+!IF "$(STLPORT_PATH)" == ""
+!ERROR Variable STLPORT_PATH not set.
+!ENDIF
 
-all :: r1m.exe r2m.exe r4m.exe r5m.exe r1l.exe r2l.exe r4l.exe r5l.exe r1ls.exe r2ls.exe r4ls.exe r5ls.exe r1md.exe r2md.exe r4md.exe r5md.exe r1lmd.exe r2lmd.exe r4lmd.exe r5lmd.exe r1mdd.exe r2mdd.exe r4mdd.exe r5mdd.exe r1lmdd.exe r2lmdd.exe
+
+CFLAGS= $(INCLUDES) /I$(STLPORT_PATH)\stlport /O2 /GF /Gy -GX -GR -I..\..\..\..\ $(CXXFLAGS)
+
+LFLAGS= -link /LIBPATH:..\..\build\vc6-stlport /LIBPATH:$(STLPORT_PATH)\lib user32.lib $(XLFLAGS)
+
+all : $(STLPORT_PATH)\stlport\string r1m.exe r2m.exe r4m.exe r5m.exe r1l.exe r2l.exe r4l.exe r5l.exe r1ls.exe r2ls.exe r4ls.exe r5ls.exe r1md.exe r2md.exe r4md.exe r5md.exe r1lmd.exe r2lmd.exe r4lmd.exe r5lmd.exe r1mdd.exe r2mdd.exe r4mdd.exe r5mdd.exe r1lmdd.exe r2lmdd.exe
 	echo testing static multi-threaded version....
 	r1m tests.txt test1252.txt
 	r2m tests.txt
@@ -186,6 +195,8 @@ r5mdd.exe : tests.cpp parse.cpp regress.cpp
 
 r6mdd.exe : tests.cpp parse.cpp regress.cpp
 	cl /MTd /D_MT $(CFLAGS) -o r6mdd.exe -D__STL_DEBUG /D_STLP_DEBUG -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+
 
 
 

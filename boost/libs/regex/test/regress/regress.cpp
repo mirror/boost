@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -283,5 +283,6 @@ void jm_debug_alloc::deallocate(void* pv, size_type n)
    --(*blocks);
    delete[] p;
 }
+
 
 

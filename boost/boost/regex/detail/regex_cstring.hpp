@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -127,6 +127,7 @@ inline void BOOST_REGEX_CALL re_strfree(charT* p)
 } // namespace boost
 
 #endif  // BOOST_REGEX_CSTRING_HPP
+
 
 
 

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -27,6 +27,8 @@
 #include <wchar.h>
 #define UNICODE
 #include <boost/regex.h>
+
+#ifndef BOOST_NO_WREGEX
 
 const wchar_t* expression = L"^";
 const wchar_t* text = L"\n      ";
@@ -66,4 +68,7 @@ int main()
    return 0;
 }
 
+#else
+#  error "This library has not been configured for wide character support"
+#endif
 

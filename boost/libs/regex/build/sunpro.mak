@@ -34,7 +34,7 @@ SUNWS_CACHE_NAME=SunWS_cache
 
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/instances.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
 
 all : sunpro sunpro/libboost_regex$(LIBSUFFIX) sunpro/libboost_regex$(LIBSUFFIX).a sunpro/libboost_regex_mt$(LIBSUFFIX) sunpro/libboost_regex_mt$(LIBSUFFIX).a sunpro/shared_libboost_regex$(LIBSUFFIX) sunpro/libboost_regex$(LIBSUFFIX).so sunpro/shared_libboost_regex_mt$(LIBSUFFIX) sunpro/libboost_regex_mt$(LIBSUFFIX).so
 
@@ -66,6 +66,9 @@ sunpro/libboost_regex$(LIBSUFFIX)/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
 sunpro/libboost_regex$(LIBSUFFIX)/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -O2 -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX)/fileiter.o ../src/fileiter.cpp
 
+sunpro/libboost_regex$(LIBSUFFIX)/instances.o: ../src/instances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -O2 -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX)/instances.o ../src/instances.cpp
+
 sunpro/libboost_regex$(LIBSUFFIX)/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -O2 -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX)/posix_api.o ../src/posix_api.cpp
 
@@ -84,6 +87,9 @@ sunpro/libboost_regex$(LIBSUFFIX)/w32_regex_traits.o: ../src/w32_regex_traits.cp
 sunpro/libboost_regex$(LIBSUFFIX)/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -O2 -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX)/wide_posix_api.o ../src/wide_posix_api.cpp
 
+sunpro/libboost_regex$(LIBSUFFIX)/winstances.o: ../src/winstances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -O2 -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX)/winstances.o ../src/winstances.cpp
+
 sunpro/libboost_regex$(LIBSUFFIX) : 
 	mkdir -p sunpro/libboost_regex$(LIBSUFFIX)
 
@@ -91,8 +97,8 @@ libboost_regex$(LIBSUFFIX)_clean :
 	rm -f sunpro/libboost_regex$(LIBSUFFIX)/*.o
 	rm -fr sunpro/libboost_regex$(LIBSUFFIX)/$(SUNWS_CACHE_NAME)
 
-sunpro/libboost_regex$(LIBSUFFIX).a : sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/cregex.o sunpro/libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex$(LIBSUFFIX)/regex.o sunpro/libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/wide_posix_api.o
-	CC -xar $(CXXFLAGS) $(LDFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX).a  sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/cregex.o sunpro/libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex$(LIBSUFFIX)/regex.o sunpro/libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/wide_posix_api.o
+sunpro/libboost_regex$(LIBSUFFIX).a : sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/cregex.o sunpro/libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex$(LIBSUFFIX)/instances.o sunpro/libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex$(LIBSUFFIX)/regex.o sunpro/libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/wide_posix_api.o sunpro/libboost_regex$(LIBSUFFIX)/winstances.o
+	CC -xar $(CXXFLAGS) $(LDFLAGS) -o sunpro/libboost_regex$(LIBSUFFIX).a  sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/cregex.o sunpro/libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex$(LIBSUFFIX)/instances.o sunpro/libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex$(LIBSUFFIX)/regex.o sunpro/libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex$(LIBSUFFIX)/wide_posix_api.o sunpro/libboost_regex$(LIBSUFFIX)/winstances.o
 
 ########################################################
 #
@@ -114,6 +120,9 @@ sunpro/libboost_regex_mt$(LIBSUFFIX)/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
 sunpro/libboost_regex_mt$(LIBSUFFIX)/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX)/fileiter.o ../src/fileiter.cpp
 
+sunpro/libboost_regex_mt$(LIBSUFFIX)/instances.o: ../src/instances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX)/instances.o ../src/instances.cpp
+
 sunpro/libboost_regex_mt$(LIBSUFFIX)/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX)/posix_api.o ../src/posix_api.cpp
 
@@ -132,6 +141,9 @@ sunpro/libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o: ../src/w32_regex_traits
 sunpro/libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o ../src/wide_posix_api.cpp
 
+sunpro/libboost_regex_mt$(LIBSUFFIX)/winstances.o: ../src/winstances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX)/winstances.o ../src/winstances.cpp
+
 sunpro/libboost_regex_mt$(LIBSUFFIX) : 
 	mkdir -p sunpro/libboost_regex_mt$(LIBSUFFIX)
 
@@ -139,8 +151,8 @@ libboost_regex_mt$(LIBSUFFIX)_clean :
 	rm -f sunpro/libboost_regex_mt$(LIBSUFFIX)/*.o
 	rm -fr sunpro/libboost_regex_mt$(LIBSUFFIX)/$(SUNWS_CACHE_NAME)
 
-sunpro/libboost_regex_mt$(LIBSUFFIX).a : sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o
-	CC -xar $(CXXFLAGS) $(LDFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX).a  sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o
+sunpro/libboost_regex_mt$(LIBSUFFIX).a : sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex_mt$(LIBSUFFIX)/instances.o sunpro/libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o sunpro/libboost_regex_mt$(LIBSUFFIX)/winstances.o
+	CC -xar $(CXXFLAGS) $(LDFLAGS) -o sunpro/libboost_regex_mt$(LIBSUFFIX).a  sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/libboost_regex_mt$(LIBSUFFIX)/instances.o sunpro/libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o sunpro/libboost_regex_mt$(LIBSUFFIX)/winstances.o
 
 ########################################################
 #
@@ -162,6 +174,9 @@ sunpro/shared_libboost_regex$(LIBSUFFIX)/cregex.o: ../src/cregex.cpp $(ALL_HEADE
 sunpro/shared_libboost_regex$(LIBSUFFIX)/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -KPIC -O2 -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex$(LIBSUFFIX)/fileiter.o ../src/fileiter.cpp
 
+sunpro/shared_libboost_regex$(LIBSUFFIX)/instances.o: ../src/instances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -KPIC -O2 -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex$(LIBSUFFIX)/instances.o ../src/instances.cpp
+
 sunpro/shared_libboost_regex$(LIBSUFFIX)/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -KPIC -O2 -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex$(LIBSUFFIX)/posix_api.o ../src/posix_api.cpp
 
@@ -180,6 +195,9 @@ sunpro/shared_libboost_regex$(LIBSUFFIX)/w32_regex_traits.o: ../src/w32_regex_tr
 sunpro/shared_libboost_regex$(LIBSUFFIX)/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -KPIC -O2 -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex$(LIBSUFFIX)/wide_posix_api.o ../src/wide_posix_api.cpp
 
+sunpro/shared_libboost_regex$(LIBSUFFIX)/winstances.o: ../src/winstances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -KPIC -O2 -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex$(LIBSUFFIX)/winstances.o ../src/winstances.cpp
+
 sunpro/shared_libboost_regex$(LIBSUFFIX) :
 	mkdir -p sunpro/shared_libboost_regex$(LIBSUFFIX)
 
@@ -187,8 +205,8 @@ libboost_regex$(LIBSUFFIX)_clean_shared :
 	rm -f sunpro/shared_libboost_regex$(LIBSUFFIX)/*.o
 	rm -fr sunpro/shared_libboost_regex$(LIBSUFFIX)/$(SUNWS_CACHE_NAME)
 
-sunpro/libboost_regex$(LIBSUFFIX).so : sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/wide_posix_api.o
-	CC -KPIC -O2 -I../../../ -G -o sunpro/libboost_regex$(LIBSUFFIX).so $(LDFLAGS)  sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/wide_posix_api.o $(LIBS)
+sunpro/libboost_regex$(LIBSUFFIX).so : sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex$(LIBSUFFIX)/instances.o sunpro/shared_libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/wide_posix_api.o sunpro/shared_libboost_regex$(LIBSUFFIX)/winstances.o
+	CC -KPIC -O2 -I../../../ -G -o sunpro/libboost_regex$(LIBSUFFIX).so $(LDFLAGS)  sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex$(LIBSUFFIX)/instances.o sunpro/shared_libboost_regex$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex$(LIBSUFFIX)/wide_posix_api.o sunpro/shared_libboost_regex$(LIBSUFFIX)/winstances.o $(LIBS)
 
 ########################################################
 #
@@ -210,6 +228,9 @@ sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cregex.o: ../src/cregex.cpp $(ALL_HE
 sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -KPIC -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/fileiter.o ../src/fileiter.cpp
 
+sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/instances.o: ../src/instances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -KPIC -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/instances.o ../src/instances.cpp
+
 sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -KPIC -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/posix_api.o ../src/posix_api.cpp
 
@@ -228,6 +249,9 @@ sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o: ../src/w32_regex
 sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	CC -c $(INCLUDES) -KPIC -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o ../src/wide_posix_api.cpp
 
+sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/winstances.o: ../src/winstances.cpp $(ALL_HEADER)
+	CC -c $(INCLUDES) -KPIC -O2 -mt -I../../../ $(CXXFLAGS) -o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/winstances.o ../src/winstances.cpp
+
 sunpro/shared_libboost_regex_mt$(LIBSUFFIX) :
 	mkdir -p sunpro/shared_libboost_regex_mt$(LIBSUFFIX)
 
@@ -235,6 +259,6 @@ libboost_regex_mt$(LIBSUFFIX)_clean_shared :
 	rm -f sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/*.o
 	rm -fr sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/$(SUNWS_CACHE_NAME)
 
-sunpro/libboost_regex_mt$(LIBSUFFIX).so : sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o
-	CC -KPIC -O2 -mt -I../../../ -G -o sunpro/libboost_regex_mt$(LIBSUFFIX).so $(LDFLAGS)  sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o $(LIBS)
+sunpro/libboost_regex_mt$(LIBSUFFIX).so : sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/instances.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/winstances.o
+	CC -KPIC -O2 -mt -I../../../ -G -o sunpro/libboost_regex_mt$(LIBSUFFIX).so $(LDFLAGS)  sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/c_regex_traits_common.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cpp_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/cregex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/fileiter.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/instances.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/posix_api.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_debug.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/regex_synch.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/w32_regex_traits.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/wide_posix_api.o sunpro/shared_libboost_regex_mt$(LIBSUFFIX)/winstances.o $(LIBS)
 

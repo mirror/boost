@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -45,6 +45,13 @@
 // define this if bool is not a real type:
 // #define BOOST_REGEX_NO_BOOL
 
+// define this if no template instances are to be placed in
+// the library rather than users object files:
+// #define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+
+// define this if the forward declarations in regex_fwd.hpp
+// cause more problems than they are worth:
+// #define BOOST_REGEX_NO_FWD
 
 
 

@@ -2,7 +2,7 @@ subproject libs/regex/build ;
 
 SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
        cregex fileiter posix_api regex regex_debug
-       regex_synch w32_regex_traits wide_posix_api ;
+       regex_synch w32_regex_traits wide_posix_api instances winstances ;
        
 lib boost_regex : ../src/$(SOURCES).cpp 
     : 
@@ -29,5 +29,6 @@ stage bin-stage : <lib>boost_regex <dll>boost_regex
     :
         debug release
     ;
+
 
 

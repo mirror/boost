@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -30,7 +30,9 @@ using std::cin;
 using std::cerr;
 using std::endl;
 #endif
-#pragma hrdstop
+#ifdef __BORLANDC__
+#  pragma hrdstop
+#endif
 
 #include <boost/regex/detail/fileiter.hpp>
 #include "jgrep.h"
@@ -273,6 +275,8 @@ int main(int argc, char * argv[])
       usage();
    return 0;
 }
+
+
 
 
 

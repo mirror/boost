@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -31,10 +31,6 @@
 // define BOOST_REGEX_NO_FWD if this
 // header doesn't work!
 //
-#ifdef __CYGWIN__
-#  define BOOST_REGEX_NO_FWD
-#endif
-
 #ifdef BOOST_REGEX_NO_FWD
 #  ifndef BOOST_RE_REGEX_HPP
 #     include <boost/regex.hpp>
@@ -67,3 +63,5 @@ typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_DEFAULT_ALLOCATOR(w
 #endif  // BOOST_REGEX_NO_FWD
 
 #endif
+
+

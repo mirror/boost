@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2000
+ * Copyright (c) 1998-2002
  * Dr John Maddock
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -434,6 +434,7 @@ typedef boost::reg_expression<char_t, boost::c_regex_traits<char_t>, jm_debug_al
 #define REG_MERGE_COPY 16
 
 #endif
+
 
 
 
