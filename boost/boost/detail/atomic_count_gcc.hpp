@@ -51,7 +51,7 @@ private:
     atomic_count(atomic_count const &);
     atomic_count & operator=(atomic_count const &);
 
-    _Atomic_word value_;
+    mutable _Atomic_word value_;
 };
 
 } // namespace detail
