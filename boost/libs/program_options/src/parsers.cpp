@@ -34,11 +34,19 @@
 #include <unistd.h>
 #endif
 
+// The 'environ' should be declared in some cases. E.g. Linux man page says:
+// (This variable must be declared in the user program, but is declared in 
+// the header file unistd.h in case the header files came from libc4 or libc5, 
+// and in case they came from glibc and _GNU_SOURCE was defined.) 
+// To be safe, declare it here.
+
 // It appears that on Mac OS X the 'environ' variable is not
 // available to dynamically linked libraries.
 #if defined(__APPLE__) && defined(__DYNAMIC__)
 #include <crt_externs.h>
 static char** environ = *_NSGetEnviron();
+#else
+extern char** environ;
 #endif
 
 using namespace std;
