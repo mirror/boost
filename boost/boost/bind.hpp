@@ -12,6 +12,7 @@
 //
 //  Copyright (c) 2001-2004 Peter Dimov and Multi Media Ltd.
 //  Copyright (c) 2001 David Abrahams
+//  Copyright (c) 2005 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -919,17 +920,54 @@ public:
 
 #endif
 
-// bind_t::operator==
+// function_equal
 
-template<class R, class F, class L> bool operator==(bind_t<R, F, L> const & a, bind_t<R, F, L> const & b)
+#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+// put overloads in _bi, rely on ADL
+
+# ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+template<class R, class F, class L> bool function_equal( bind_t<R, F, L> const & a, bind_t<R, F, L> const & b )
 {
     return a.compare(b);
 }
 
-template<class R, class F, class L> bool operator!=(bind_t<R, F, L> const & a, bind_t<R, F, L> const & b)
+# else
+
+template<class R, class F, class L> bool function_equal_impl( bind_t<R, F, L> const & a, bind_t<R, F, L> const & b, int )
 {
-    return !a.compare(b);
+    return a.compare(b);
 }
+
+# endif // #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+#else // BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+// put overloads in boost
+
+} // namespace _bi
+
+# ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+template<class R, class F, class L> bool function_equal( _bi::bind_t<R, F, L> const & a, _bi::bind_t<R, F, L> const & b )
+{
+    return a.compare(b);
+}
+
+# else
+
+template<class R, class F, class L> bool function_equal_impl( _bi::bind_t<R, F, L> const & a, _bi::bind_t<R, F, L> const & b, int )
+{
+    return a.compare(b);
+}
+
+# endif // #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+namespace _bi
+{
+
+#endif // BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 
 // add_value
 

@@ -10,7 +10,7 @@
 //
 //  bind_eq_test.cpp - boost::bind equality operator
 //
-//  Copyright (c) 2004 Peter Dimov
+//  Copyright (c) 2004, 2005 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -19,6 +19,10 @@
 
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
+
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+# include <boost/function_equal.hpp>
+#endif
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 #pragma warning(push, 3)
@@ -142,14 +146,24 @@ void fv_9(X, X, X, X, X, X, X, X, X)
 
 template<class F> void test_eq(F f1, F f2)
 {
-    BOOST_TEST(f1 == f2);
-    BOOST_TEST(!(f1 != f2));
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+    using boost::function_equal;
+
+#endif
+
+    BOOST_TEST( function_equal( f1, f2 ) );
 }
 
 template<class F> void test_ne(F f1, F f2)
 {
-    BOOST_TEST(f1 != f2);
-    BOOST_TEST(!(f1 == f2));
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+    using boost::function_equal;
+
+#endif
+
+    BOOST_TEST( !function_equal( f1, f2 ) );
 }
 
 // 0
