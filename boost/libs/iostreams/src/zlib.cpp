@@ -58,7 +58,7 @@ const int buf_error            = Z_BUF_ERROR;
 //------------------Implementation of zlib_error------------------------------//
                     
 zlib_error::zlib_error(int error) 
-    : std::ios_base::failure("zlib error"), error_(error) { }
+    : detail::failure("zlib error"), error_(error) { }
 
 void zlib_error::check(int error)
 {

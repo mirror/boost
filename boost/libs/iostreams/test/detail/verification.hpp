@@ -16,29 +16,26 @@
 #include <ostream>
 
 #include <boost/config.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include "./constants.hpp"
+
+// Included only by tests; no need to #undef.
+#ifndef BOOST_IOSTREAM_NO_STREAM_TEMPLATES
+# define BOOST_TEMPLATE_DECL template<typename Ch, typename Tr>
+# define BOOST_CHAR Ch
+# define BOOST_ISTREAM std::basic_istream<Ch, Tr>
+# define BOOST_OSTREAM std::basic_ostream<Ch, Tr>
+#else
+# define BOOST_TEMPLATE_DECL
+# define BOOST_CHAR char
+# define BOOST_ISTREAM std::istream
+# define BOOST_OSTREAM std::ostream
+#endif
 
 namespace boost { namespace iostreams { namespace test {
 
-template<typename Ch, typename Tr>
-bool compare_streams_in_chars(std::basic_istream<Ch, Tr>&, std::basic_istream<Ch, Tr>&);
-template<typename Ch, typename Tr>
-bool compare_streams_in_chunks(std::basic_istream<Ch, Tr>&, std::basic_istream<Ch, Tr>&);
-bool compare_files(const std::string&, const std::string&);
-template<typename Container, typename Ch, typename Tr>
-bool compare_container_and_stream(Container&, std::basic_istream<Ch, Tr>&);
-template<typename Ch, typename Tr>
-void write_data_in_chars(std::basic_ostream<Ch, Tr>&);
-template<typename Ch, typename Tr>
-void write_data_in_chunks(std::basic_ostream<Ch, Tr>& os);
-bool test_seekable_in_chars(std::iostream& io);
-bool test_seekable_in_chunks(std::iostream& io);
-bool unbuffered_putback_test(std::istream&);
-bool buffered_putback_test(std::istream&);
-
-template<typename Ch, typename Tr>
-bool compare_streams_in_chars
-    (std::basic_istream<Ch, Tr>& first, std::basic_istream<Ch, Tr>& second)
+BOOST_TEMPLATE_DECL
+bool compare_streams_in_chars(BOOST_ISTREAM& first, BOOST_ISTREAM& second)
 {
     for (int z = 0; z < 10; ++z)
         for (int w = 0; w < data_length(); ++w)
@@ -47,19 +44,18 @@ bool compare_streams_in_chars
     return true;
 }
 
-template<typename Ch, typename Tr>
-bool compare_streams_in_chunks
-    (std::basic_istream<Ch, Tr>& first, std::basic_istream<Ch, Tr>& second)
+BOOST_TEMPLATE_DECL
+bool compare_streams_in_chunks(BOOST_ISTREAM& first, BOOST_ISTREAM& second)
 {
     int i = 0;
     do {
-        Ch buf_one[chunk_size];
-        Ch buf_two[chunk_size];
+        BOOST_CHAR buf_one[chunk_size];
+        BOOST_CHAR buf_two[chunk_size];
         first.read(buf_one, chunk_size);
         second.read(buf_two, chunk_size);
         std::streamsize amt = first.gcount();
         if ( amt != second.gcount() ||
-             std::char_traits<Ch>::compare(buf_one, buf_two, amt) != 0 )
+             std::char_traits<BOOST_CHAR>::compare(buf_one, buf_two, amt) != 0 )
             return false;
         ++i;
     } while (!first.eof());
@@ -73,8 +69,12 @@ bool compare_files(const std::string& first, const std::string& second)
     return compare_streams_in_chunks(one, two);
 }
 
-template<typename Container, typename Ch, typename Tr>
-bool compare_container_and_stream(Container& cnt, std::basic_istream<Ch, Tr>& is)
+#ifndef BOOST_IOSTREAM_NO_STREAM_TEMPLATES
+    template<typename Container, typename Ch, typename Tr>
+#else
+    template<typename Container>
+#endif
+bool compare_container_and_stream(Container& cnt, BOOST_ISTREAM& is)
 {
     typename Container::iterator first = cnt.begin();
     typename Container::iterator last = cnt.end();
@@ -85,19 +85,19 @@ bool compare_container_and_stream(Container& cnt, std::basic_istream<Ch, Tr>& is
     return true;
 }
 
-template<typename Ch, typename Tr>
-void write_data_in_chars(std::basic_ostream<Ch, Tr>& os)
+BOOST_TEMPLATE_DECL
+void write_data_in_chars(BOOST_OSTREAM& os)
 {
     for (int z = 0; z < data_reps; ++z) 
         for (int w = 0; w < data_length(); ++w) 
-            os.put(detail::data((Ch*)0)[w]);
+            os.put(detail::data((BOOST_CHAR*)0)[w]);
     os.flush();
 }
 
-template<typename Ch, typename Tr>
-void write_data_in_chunks(std::basic_ostream<Ch, Tr>& os)
+BOOST_TEMPLATE_DECL
+void write_data_in_chunks(BOOST_OSTREAM& os)
 {
-    const Ch* buf = detail::data((Ch*)0);
+    const BOOST_CHAR* buf = detail::data((BOOST_CHAR*)0);
     for (int z = 0; z < data_reps; ++z)
         os.write(buf, data_length());
     os.flush();

@@ -44,7 +44,7 @@ const int run                  = BZ_RUN;
 //------------------Implementation of bzip2_error-----------------------------//
                     
 bzip2_error::bzip2_error(int error) 
-    : std::ios_base::failure("bzip2 error"), error_(error) { }
+    : detail::failure("bzip2 error"), error_(error) { }
 
 void bzip2_error::check(int error)
 {
