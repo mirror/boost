@@ -12,18 +12,40 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
+#include<iostream>
+#include<stdexcept>
+#include<string>
+
+#define BOOST_ENABLE_ASSERT_HANDLER
+
 #include "boost/optional.hpp"
+#include "boost/utility/in_place_factory.hpp"
 
-//
-// THIS TEST SHOULD FAIL TO COMPILE
-//
-void test_no_implicit_conversion()
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#include "boost/test/minimal.hpp"
+
+#include "optional_test_common.cpp"
+
+struct A
 {
-  boost::optional<int> opt(1) ;
+  A ( double a0, std::string a1 ) : m_a0(a0), m_a1(a1) {}
 
-  // You can compare against 0 or against another optional<>,
-  // but not against another value
-  if ( opt == 1 ) ;
+  friend bool operator == ( A const& x, A const& y )
+    { return x.m_a0 == y.m_a0 && x.m_a1 == y.m_a1 ; }
+
+  double      m_a0 ;
+  std::string m_a1 ;
+} ;
+
+int test_main( int, char* [] )
+{
+  int invalid_extra_parameter ;
+  boost::optional<A> opt2 ( boost::in_place(3.14,"pi",invalid_extra_parameter) ) ;
+
+  return 0;
 }
 
 

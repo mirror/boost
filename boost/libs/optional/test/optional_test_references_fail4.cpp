@@ -17,13 +17,11 @@
 //
 // THIS TEST SHOULD FAIL TO COMPILE
 //
-void test_no_implicit_conversion()
+void optional_reference__test_no_converting_initialization()
 {
-  boost::optional<int> opt(1) ;
-
-  // You can compare against 0 or against another optional<>,
-  // but not against another value
-  if ( opt == 1 ) ;
+  short v = 1 ;
+  short& r = v;
+  boost::optional<int&> opt(r) ;
 }
 
 

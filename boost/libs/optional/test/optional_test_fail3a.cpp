@@ -12,18 +12,17 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
+#include<string>
+
 #include "boost/optional.hpp"
 
 //
 // THIS TEST SHOULD FAIL TO COMPILE
 //
-void test_no_implicit_conversion()
+void test_no_unsupported_conversion()
 {
-  boost::optional<int> opt(1) ;
-
-  // You can compare against 0 or against another optional<>,
-  // but not against another value
-  if ( opt == 1 ) ;
+  boost::optional<int> opt1(1) ;
+  boost::optional< std::string > opt2( opt1 ) ; // Cannot convert from "int" to "std::string"
 }
 
 
