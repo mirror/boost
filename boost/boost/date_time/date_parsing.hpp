@@ -36,7 +36,7 @@ namespace date_time {
   inline
   std::string convert_to_lower(const std::string& inp)
   {
-    std::string tmp("");
+    std::string tmp;
     unsigned i = 0;
 #if defined(BOOST_NO_STD_LOCALE)
     while(i < inp.length())
@@ -48,10 +48,11 @@ namespace date_time {
     {
       // tolower and others were brought in to std for borland >= v564
       // in compiler_config.hpp
-      tmp += std::tolower(inp.at(i++), loc);
+      std::string::value_type c(inp.at(i++));
+      tmp += std::tolower(c, loc);
 #endif
     }
-    return std::string(tmp);
+    return tmp;
   }
 
   //! Helper function for parse_date.
