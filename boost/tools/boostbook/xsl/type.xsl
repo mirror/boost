@@ -13,12 +13,17 @@
   <xsl:param name="boost.compact.enum">1</xsl:param>
 
   <xsl:template match="class|struct|union" mode="generate.id">
-    <xsl:value-of select="local-name(.)"/>
-    <xsl:text>.</xsl:text>
-    <xsl:call-template name="fully-qualified-name">
-      <xsl:with-param name="node" select="."/>
-      <xsl:with-param name="separator" select="'.'"/>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="count(key('named-entities', @name))=1">
+        <xsl:value-of select="@name"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="fully-qualified-name">
+          <xsl:with-param name="node" select="."/>
+          <xsl:with-param name="separator" select="'.'"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="enum" mode="generate.id">

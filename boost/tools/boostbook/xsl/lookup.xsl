@@ -2,10 +2,22 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
+  <xsl:param name="boost.max.id.length">26</xsl:param>
+
   <!-- Generate an ID for the entity referenced -->
   <xsl:template name="generate.id">
     <xsl:param name="node" select="."/>
-    <xsl:apply-templates select="$node" mode="generate.id"/>
+    <xsl:variable name="id">
+      <xsl:apply-templates select="$node" mode="generate.id"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="string-length($id) &gt; $boost.max.id.length">
+        <xsl:value-of select="generate-id($node)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="string($id)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*" mode="generate.id">
