@@ -12,6 +12,18 @@
 //
 // Revision History:
 
+// 09 Feb 2001   Jeremy Siek
+//      Added iterator constructor to allow const adaptor
+//      from non-const adaptee.
+//
+//      Changed make_xxx to pass iterators by-value to
+//      get arrays converted to pointers.
+//
+//      Removed InnerIterator template parameter from
+//      indirect_iterator_generator.
+//
+//      Rearranged parameters for make_filter_iterator
+//
 // 07 Feb 2001   Jeremy Siek
 //      Removed some const iterator adaptor generators.
 //
@@ -416,6 +428,13 @@ public:
       policies().initialize(iter());
     }
 
+    // To allow construction of const adaptor from non-const adaptee.
+    template <class OtherIterator>
+    iterator_adaptor(const OtherIterator& it, const Policies& p = Policies())
+        : m_iter_p(it, p) {
+      policies().initialize(iter());
+    }
+
     template <class OtherIter, class OtherTraits>
     iterator_adaptor (const iterator_adaptor<OtherIter, Policies,
             OtherTraits>& src)
@@ -601,7 +620,7 @@ public:
 template <class AdaptableUnaryFunction, class Iterator>
 inline typename transform_iterator_generator<AdaptableUnaryFunction,Iterator>::type
 make_transform_iterator(
-    const Iterator& base,
+    Iterator base,
     const AdaptableUnaryFunction& f = AdaptableUnaryFunction())
 {
     typedef typename transform_iterator_generator<AdaptableUnaryFunction,Iterator>::type result_t;
@@ -631,9 +650,9 @@ struct indirect_iterator_policies : public default_iterator_policies
 };
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
-    // Mutable -> mutable indirect iterator;  Immutable -> immutable indirect iterator
-          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = boost::detail::iterator_traits<InnerIterator>
+          // Mutable reference and pointer type in traits class -> mutable indirect iterator;  
+          // Immutable reference and pointer type in traits class -> immutable indirect iterator
+          class InnerTraits = boost::detail::iterator_traits<typename boost::detail::iterator_traits<OuterIterator>::value_type>
          >
 class indirect_iterator_generator
 {
@@ -652,36 +671,38 @@ public:
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class ConstInnerIterator, // Immutable
           class ConstInnerTraits = boost::detail::iterator_traits<ConstInnerIterator>,
-          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = boost::detail::iterator_traits<InnerIterator>
+          class InnerTraits = boost::detail::iterator_traits<typename boost::detail::iterator_traits<OuterIterator>::value_type>
            >
 struct indirect_iterator_pair_generator
 {
   typedef typename indirect_iterator_generator<OuterIterator,
-    InnerIterator, InnerTraits>::type iterator;
+    InnerTraits>::type iterator;
   typedef typename indirect_iterator_generator<OuterIterator,
-    ConstInnerIterator, ConstInnerTraits>::type const_iterator;
+    ConstInnerTraits>::type const_iterator;
 };
 
-template <class OuterIterator, class InnerIterator, class InnerTraits>
-inline typename indirect_iterator_generator<OuterIterator, InnerIterator, InnerTraits>::type
-make_indirect_iterator(OuterIterator outer, InnerIterator, InnerTraits)
-{
-    typedef typename indirect_iterator_generator
-        <OuterIterator, InnerIterator, InnerTraits>::type result_t;
-    return result_t(outer);
-}
-
-#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+// WARNING: Do not use the one argument version of
+// make_indirect_iterator() if the iterator is a builtin pointer type
+// and if your compiler does not support partial specialization.
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
-make_indirect_iterator(OuterIterator outer)
+make_indirect_iterator(OuterIterator base)
 {
     typedef typename indirect_iterator_generator
         <OuterIterator>::type result_t;
-    return result_t(outer);
+    return result_t(base);
 }
-#endif
+
+// Tried to allow InnerTraits to be provided by explicit template
+// argument to the function, but could not get it to work. -Jeremy Siek
+template <class InnerTraits, class OuterIterator>
+inline typename indirect_iterator_generator<OuterIterator, InnerTraits>::type
+make_indirect_iterator(OuterIterator base, InnerTraits)
+{
+    typedef typename indirect_iterator_generator
+        <OuterIterator, InnerTraits>::type result_t;
+    return result_t(base);
+}
 
 
 //=============================================================================
@@ -728,6 +749,10 @@ struct reverse_iterator_generator
         Traits> type;
 };
 
+// WARNING: Do not use the one template parameter version of
+// make_reverse_iterator() if the iterator is a builtin pointer type
+// and if your compiler does not support partial specialization.
+
 template <class Iterator>
 inline typename reverse_iterator_generator<Iterator>::type
 make_reverse_iterator(Iterator base)
@@ -746,6 +771,7 @@ make_reverse_iterator(Iterator base, Traits* = 0)
     typedef typename reverse_iterator_generator<Iterator, Traits>::type result_t;
     return result_t(base);
 }
+
 
 //=============================================================================
 // Projection Iterators Adaptor
@@ -799,7 +825,9 @@ struct projection_iterator_pair_generator {
 
 template <class AdaptableUnaryFunction, class Iterator>
 inline typename projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type
-make_projection_iterator(Iterator iter, AdaptableUnaryFunction f)
+make_projection_iterator(
+    Iterator iter, 
+    const AdaptableUnaryFunction& f = AdaptableUnaryFunction())
 {
     typedef typename projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type result_t;
     return result_t(iter, f);
@@ -807,7 +835,9 @@ make_projection_iterator(Iterator iter, AdaptableUnaryFunction f)
 
 template <class AdaptableUnaryFunction, class Iterator>
 inline typename const_projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type
-make_const_projection_iterator(Iterator iter, AdaptableUnaryFunction f)
+make_const_projection_iterator(
+    Iterator iter, 
+    const AdaptableUnaryFunction& f = AdaptableUnaryFunction())
 {
     typedef typename const_projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type result_t;
     return result_t(iter, f);
@@ -856,27 +886,38 @@ public:
 };
 
 
-template <class Predicate, class Iterator, class Traits>
-inline typename filter_iterator_generator<Predicate, Iterator, Traits>::type
-make_filter_iterator(Iterator first, Iterator last, Predicate p, Traits)
-{
-  typedef filter_iterator_generator<Predicate, Iterator, Traits> Gen;
-  typedef typename Gen::policies_type policies_t;
-  typedef typename Gen::type result_t;
-  return result_t(first, policies_t(p, last));
-}
+// WARNING: Do not use this three argument version of
+// make_filter_iterator() if the iterator is a builtin pointer type
+// and if your compiler does not support partial specialization.
 
-#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+// If the Predicate argument "p" is left out, an explicit template
+// argument for the Predicate is required, i.e.,
+// make_filter_iterator<Predicate>(f, l).
 template <class Predicate, class Iterator>
 inline typename filter_iterator_generator<Predicate, Iterator>::type
-make_filter_iterator(Iterator first, Iterator last, Predicate p)
+make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate())
 {
   typedef filter_iterator_generator<Predicate, Iterator> Gen;
   typedef typename Gen::policies_type policies_t;
   typedef typename Gen::type result_t;
   return result_t(first, policies_t(p, last));
 }
-#endif
+
+// Supply the Traits type via an exaplicit template argument, i.e.,
+// make_filter_iterator<Traits>(f, l).
+//
+// If the Predicate argument "p" is left out, an explicit template
+// argument for the Predicate is also required, i.e.,
+// make_filter_iterator<Traits, Predicate>(f, l).
+template <class Traits, class Predicate, class Iterator>
+inline typename filter_iterator_generator<Predicate, Iterator, Traits>::type
+make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate(), Traits* = 0)
+{
+  typedef filter_iterator_generator<Predicate, Iterator, Traits> Gen;
+  typedef typename Gen::policies_type policies_t;
+  typedef typename Gen::type result_t;
+  return result_t(first, policies_t(p, last));
+}
 
 
 } // namespace boost
