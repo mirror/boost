@@ -6,8 +6,8 @@
 //  MACRO:         BOOST_NO_USING_TEMPLATE
 //  TITLE:         using template declarations
 //  DESCRIPTION:   The compiler will not accept a using declaration
-//                 that imports a template from the global namespace
-//                 into a named namespace.  Probably Borland specific.
+//                 that imports a class or function template
+//                 into a named namespace.  Probably Borland/MSVC6 specific.
 
 template <class T>
 int global_foo(T)
@@ -38,6 +38,7 @@ int test()
 }
 
 }
+
 
 
 
