@@ -28,7 +28,7 @@
 
 template<class V, int N>
 void test_blas_1<V, N>::operator () () {
-    try {
+    {
         value_type t;
         real_type n;
         V v1 (N), v2 (N);
@@ -87,12 +87,6 @@ void test_blas_1<V, N>::operator () () {
         initialize_vector (v2);
         ublas::blas_1::rot (value_type (1), v1, value_type (1), v2);
         std::cout << "rot (1, v1, 1, v2) = " << v1 << " " << v2 << std::endl;
-    }
-    catch (std::exception &e) {
-        std::cout << e.what () << std::endl;
-    }
-    catch (...) {
-        std::cout << "unknown exception" << std::endl;
     }
 }
 

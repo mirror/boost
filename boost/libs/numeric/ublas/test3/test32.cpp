@@ -32,8 +32,8 @@ struct test_my_matrix_vector {
     typedef typename V::value_type value_type;
 
     template<class VP, class MP>
-    void operator () (VP &v1, VP &v2, MP &m1) const {
-        try {
+    void test_with (VP &v1, VP &v2, MP &m1) const {
+        {
             // Rows and columns
             initialize_matrix (m1);
             for (int i = 0; i < N; ++ i) {
@@ -57,43 +57,31 @@ struct test_my_matrix_vector {
             v2 = ublas::prod (v1, m1);
             std::cout << "prod (v1, m1) = " << v2 << std::endl;
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () () const {
-        try {
+        {
             V v1 (N, N), v2 (N, N);
             M m1 (N, N, N * N);
 
-            (*this) (v1, v2, m1);
+            test_with (v1, v2, m1);
 
             ublas::matrix_row<M> mr1 (m1, 0), mr2 (m1, N - 1);
-            (*this) (mr1, mr2, m1);
+            test_with (mr1, mr2, m1);
 
             ublas::matrix_column<M> mc1 (m1, 0), mc2 (m1, N - 1);
-            (*this) (mc1, mc2, m1);
+            test_with (mc1, mc2, m1);
 
 #ifdef USE_RANGE
             ublas::matrix_vector_range<M> mvr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                           mvr2 (m1, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mvr1, mvr2, m1);
+            test_with (mvr1, mvr2, m1);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_vector_slice<M> mvs1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                           mvs2 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (mvs1, mvs2, m1);
+            test_with (mvs1, mvs2, m1);
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -224,16 +212,16 @@ void test_matrix_vector () {
     std::cout << "float, map_array" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
                           ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
-    //                       ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >, ublas::map_array<std::size_t, ublas::sparse_vector<float, ublas::map_array<std::size_t, float> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >,
+                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<float, ublas::map_array<std::size_t, float> >, ublas::map_array<std::size_t, ublas::sparse_vector<float, ublas::map_array<std::size_t, float> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, map_array" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
                           ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
-    //                       ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >, ublas::map_array<std::size_t, ublas::sparse_vector<double, ublas::map_array<std::size_t, double> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >,
+                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<double, ublas::map_array<std::size_t, double> >, ublas::map_array<std::size_t, ublas::sparse_vector<double, ublas::map_array<std::size_t, double> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
@@ -241,16 +229,16 @@ void test_matrix_vector () {
     std::cout << "std::complex<float>, map_array" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
                           ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
-    //                       ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >, ublas::map_array<std::size_t, ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >,
+                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > >, ublas::map_array<std::size_t, ublas::sparse_vector<std::complex<float>, ublas::map_array<std::size_t, std::complex<float> > > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, map_array" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
                           ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
-    //                       ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >, ublas::map_array<std::size_t, ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >,
+                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > >, ublas::map_array<std::size_t, ublas::sparse_vector<std::complex<double>, ublas::map_array<std::size_t, std::complex<double> > > > > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -260,16 +248,16 @@ void test_matrix_vector () {
     std::cout << "float, std::map" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
                           ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::vector<ublas::sparse_vector<float, std::map<std::size_t, float> > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
-    //                       ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >, std::map<std::size_t, ublas::sparse_vector<float, std::map<std::size_t, float> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >,
+                          ublas::generalized_vector_of_vector<float, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<float, std::map<std::size_t, float> >, std::map<std::size_t, ublas::sparse_vector<float, std::map<std::size_t, float> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "double, std::map" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
                           ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::vector<ublas::sparse_vector<double, std::map<std::size_t, double> > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
-    //                       ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >, std::map<std::size_t, ublas::sparse_vector<double, std::map<std::size_t, double> > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >,
+                          ublas::generalized_vector_of_vector<double, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<double, std::map<std::size_t, double> >, std::map<std::size_t, ublas::sparse_vector<double, std::map<std::size_t, double> > > > >, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
@@ -277,16 +265,16 @@ void test_matrix_vector () {
     std::cout << "std::complex<float>, std::map" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
                           ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
-    //                       ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >, std::map<std::size_t, ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >,
+                          ublas::generalized_vector_of_vector<std::complex<float>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > >, std::map<std::size_t, ublas::sparse_vector<std::complex<float>, std::map<std::size_t, std::complex<float> > > > > >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, std::map" << std::endl;
     test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
                           ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > >, 3 > () ();
-    // test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
-    //                       ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >, std::map<std::size_t, ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > > >, 3 > () ();
+    test_my_matrix_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >,
+                          ublas::generalized_vector_of_vector<std::complex<double>, ublas::row_major, ublas::sparse_vector<ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > >, std::map<std::size_t, ublas::sparse_vector<std::complex<double>, std::map<std::size_t, std::complex<double> > > > > >, 3 > () ();
 #endif
 #endif
 #endif
@@ -348,4 +336,3 @@ void test_matrix_vector () {
 #endif
 #endif
 }
-

@@ -30,8 +30,8 @@ struct test_my_matrix_vector {
     typedef typename V::value_type value_type;
 
     template<class VP, class MP>
-    void operator () (VP &v1, VP &v2, MP &m1) const {
-        try {
+    void test_with (VP &v1, VP &v2, MP &m1) const {
+        {
 #ifndef USE_DIAGONAL
             // Rows and columns
             initialize_matrix (m1);
@@ -59,15 +59,9 @@ struct test_my_matrix_vector {
             std::cout << "prod (v1, m1) = " << v2 << std::endl;
 #endif
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () () const {
-        try {
+        {
             V v1 (N), v2 (N);
 #ifdef USE_BANDED
             M m1 (N, N, 1, 1);
@@ -75,90 +69,79 @@ struct test_my_matrix_vector {
 #ifdef USE_DIAGONAL
             M m1 (N, N);
 #endif
-            (*this) (v1, v2, m1);
+            test_with (v1, v2, m1);
 
             ublas::matrix_row<M> mr1 (m1, 1), mr2 (m1, 1);
-            (*this) (mr1, mr2, m1);
+            test_with (mr1, mr2, m1);
 
             ublas::matrix_column<M> mc1 (m1, 1), mc2 (m1, 1);
-            (*this) (mc1, mc2, m1);
+            test_with (mc1, mc2, m1);
 
 #ifdef USE_RANGE
             ublas::matrix_vector_range<M> mvr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                           mvr2 (m1, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mvr1, mvr2, m1);
+            test_with (mvr1, mvr2, m1);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_vector_slice<M> mvs1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                           mvs2 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (mvs1, mvs2, m1);
+            test_with (mvs1, mvs2, m1);
 #endif
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
+
     void operator () (int) const {
 #ifdef USE_ADAPTOR
-        try {
+        {
 #ifdef USE_BANDED
             V v1 (N), v2 (N);
             M m1 (N, N, 1, 1);
             ublas::banded_adaptor<M> bam1 (m1, 1, 1);
-            (*this) (v1, v2, bam1);
+            test_with (v1, v2, bam1);
 
             ublas::matrix_row<ublas::banded_adaptor<M> > mr1 (bam1, 1), mr2 (bam1, 1);
-            (*this) (mr1, mr2, bam1);
+            test_with (mr1, mr2, bam1);
 
             ublas::matrix_column<ublas::banded_adaptor<M> > mc1 (bam1, 1), mc2 (bam1, 1);
-            (*this) (mc1, mc2, bam1);
+            test_with (mc1, mc2, bam1);
 
 #ifdef USE_RANGE
             ublas::matrix_vector_range<ublas::banded_adaptor<M> > mvr1 (bam1, ublas::range (0, N), ublas::range (0, N)),
                                                                   mvr2 (bam1, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mvr1, mvr2, bam1);
+            test_with (mvr1, mvr2, bam1);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_vector_slice<ublas::banded_adaptor<M> > mvs1 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                   mvs2 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (mvs1, mvs2, bam1);
+            test_with (mvs1, mvs2, bam1);
 #endif
 #endif
 #ifdef USE_DIAGONAL
             V v1 (N), v2 (N);
             M m1 (N, N);
             ublas::diagonal_adaptor<M> dam1 (m1);
-            (*this) (v1, v2, dam1);
+            test_with (v1, v2, dam1);
 
             ublas::matrix_row<ublas::diagonal_adaptor<M> > mr1 (dam1, 1), mr2 (dam1, 1);
-            (*this) (mr1, mr2, dam1);
+            test_with (mr1, mr2, dam1);
 
             ublas::matrix_column<ublas::diagonal_adaptor<M> > mc1 (dam1, 1), mc2 (dam1, 1);
-            (*this) (mc1, mc2, dam1);
+            test_with (mc1, mc2, dam1);
 
 #ifdef USE_RANGE
             ublas::matrix_vector_range<ublas::diagonal_adaptor<M> > mvr1 (dam1, ublas::range (0, N), ublas::range (0, N)),
                                                                     mvr2 (dam1, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mvr1, mvr2, dam1);
+            test_with (mvr1, mvr2, dam1);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_vector_slice<ublas::diagonal_adaptor<M> > mvs1 (dam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                     mvs2 (dam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (mvs1, mvs2, dam1);
+            test_with (mvs1, mvs2, dam1);
 #endif
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
 #endif
     }
@@ -388,4 +371,3 @@ void test_matrix_vector () {
 #endif
 #endif
 }
-

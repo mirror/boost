@@ -30,8 +30,8 @@ struct test_my_matrix {
     typedef typename M::value_type value_type;
 
     template<class MP>
-    void operator () (MP &m1, MP &m2, MP &m3) const {
-        try {
+    void test_with (MP &m1, MP &m2, MP &m3) const {
+        {
             value_type t;
 
             // Copy and swap
@@ -104,65 +104,47 @@ struct test_my_matrix {
             m3 = ublas::prod (m1, m2);
             std::cout << "prod (m1, m2) = " << m3 << std::endl;
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () () const {
-        try {
+        {
             M m1 (N, N), m2 (N, N), m3 (N, N);
-            (*this) (m1, m2, m3);
+            test_with (m1, m2, m3);
 
 #ifdef USE_RANGE
             ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                    mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
                                    mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mr1, mr2, mr3);
+            test_with (mr1, mr2, mr3);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_slice<M> ms1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                    ms2 (m2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                    ms3 (m3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (ms1, ms2, ms3);
+            test_with (ms1, ms2, ms3);
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
     void operator () (int) const {
 #ifdef USE_ADAPTOR
-        try {
+        {
             M m1 (N, N), m2 (N, N), m3 (N, N);
             ublas::triangular_adaptor<M> tam1 (m1), tam2 (m2), tam3 (m3);
-            (*this) (tam1, tam2, tam3);
+            test_with (tam1, tam2, tam3);
 
 #ifdef USE_RANGE
             ublas::matrix_range<ublas::triangular_adaptor<M> > mr1 (tam1, ublas::range (0, N), ublas::range (0, N)),
                                                                mr2 (tam2, ublas::range (0, N), ublas::range (0, N)),
                                                                mr3 (tam3, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mr1, mr2, mr3);
+            test_with (mr1, mr2, mr3);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_slice<ublas::triangular_adaptor<M> > ms1 (tam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                ms2 (tam2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                ms3 (tam3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (ms1, ms2, ms3);
+            test_with (ms1, ms2, ms3);
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
 #endif
     }
@@ -256,5 +238,3 @@ std::cout << "std::complex<double>, std::vector" << std::endl;
 #endif
 #endif
 }
-
-

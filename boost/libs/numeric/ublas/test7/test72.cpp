@@ -32,8 +32,8 @@ struct test_my_matrix_vector {
     typedef typename V::value_type value_type;
 
     template<class VP, class MP>
-    void operator () (VP &v1, VP &v2, MP &m1) const {
-        try {
+    void test_with (VP &v1, VP &v2, MP &m1) const {
+        {
             // Rows and columns
             initialize_matrix (m1);
             for (int i = 0; i < N; ++ i) {
@@ -57,42 +57,30 @@ struct test_my_matrix_vector {
             v2 = ublas::prod (v1, m1);
             std::cout << "prod (v1, m1) = " << v2 << std::endl;
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () () const {
-        try {
+        {
             V v1 (N), v2 (N);
             M m1 (N, N);
-            (*this) (v1, v2, m1);
+            test_with (v1, v2, m1);
 
             ublas::matrix_row<M> mr1 (m1, 0), mr2 (m1, 1);
-            (*this) (mr1, mr2, m1);
+            test_with (mr1, mr2, m1);
 
             ublas::matrix_column<M> mc1 (m1, 0), mc2 (m1, 1);
-            (*this) (mc1, mc2, m1);
+            test_with (mc1, mc2, m1);
 
 #ifdef USE_RANGE
             ublas::matrix_vector_range<M> mvr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                           mvr2 (m1, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mvr1, mvr2, m1);
+            test_with (mvr1, mvr2, m1);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_vector_slice<M> mvs1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                           mvs2 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (mvs1, mvs2, m1);
+            test_with (mvs1, mvs2, m1);
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -273,5 +261,3 @@ void test_matrix_vector () {
 #endif
 #endif
 }
-
-

@@ -30,8 +30,8 @@ struct test_my_matrix {
     typedef typename M::value_type value_type;
 
     template<class MP>
-    void operator () (MP &m1, MP &m2, MP &m3) const {
-        try {
+    void test_with (MP &m1, MP &m2, MP &m3) const {
+        {
             value_type t;
 
             // Copy and swap
@@ -104,91 +104,73 @@ struct test_my_matrix {
             // Banded times banded isn't banded
             std::cout << "prod (m1, m2) = " << ublas::prod (m1, m2) << std::endl;
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () () const {
-        try {
+        {
 #ifdef USE_BANDED
             M m1 (N, N, 1, 1), m2 (N, N, 1, 1), m3 (N, N, 1, 1);
 #endif
 #ifdef USE_DIAGONAL
             M m1 (N, N), m2 (N, N), m3 (N, N);
 #endif
-            (*this) (m1, m2, m3);
+            test_with (m1, m2, m3);
 
 #ifdef USE_RANGE
             ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                    mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
                                    mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mr1, mr2, mr3);
+            test_with (mr1, mr2, mr3);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_slice<M> ms1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                    ms2 (m2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                    ms3 (m3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (ms1, ms2, ms3);
+            test_with (ms1, ms2, ms3);
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
     void operator () (int) const {
 #ifdef USE_ADAPTOR
-        try {
+        {
 #ifdef USE_BANDED
             M m1 (N, N, 1, 1), m2 (N, N, 1, 1), m3 (N, N, 1, 1);
             ublas::banded_adaptor<M> bam1 (m1, 1, 1), bam2 (m2, 1, 1), bam3 (m3, 1, 1);
-            (*this) (bam1, bam2, bam3);
+            test_with (bam1, bam2, bam3);
 
 #ifdef USE_RANGE
             ublas::matrix_range<ublas::banded_adaptor<M> > mr1 (bam1, ublas::range (0, N), ublas::range (0, N)),
                                                            mr2 (bam2, ublas::range (0, N), ublas::range (0, N)),
                                                            mr3 (bam3, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mr1, mr2, mr3);
+            test_with (mr1, mr2, mr3);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_slice<ublas::banded_adaptor<M> > ms1 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                            ms2 (bam2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                            ms3 (bam3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (ms1, ms2, ms3);
+            test_with (ms1, ms2, ms3);
 #endif
 #endif
 #ifdef USE_DIAGONAL
             M m1 (N, N), m2 (N, N), m3 (N, N);
             ublas::diagonal_adaptor<M> dam1 (m1), dam2 (m2), dam3 (m3);
-            (*this) (dam1, dam2, dam3);
+            test_with (dam1, dam2, dam3);
 
 #ifdef USE_RANGE
             ublas::matrix_range<ublas::diagonal_adaptor<M> > mr1 (dam1, ublas::range (0, N), ublas::range (0, N)),
                                                              mr2 (dam2, ublas::range (0, N), ublas::range (0, N)),
                                                              mr3 (dam3, ublas::range (0, N), ublas::range (0, N));
-            (*this) (mr1, mr2, mr3);
+            test_with (mr1, mr2, mr3);
 #endif
 
 #ifdef USE_SLICE
             ublas::matrix_slice<ublas::diagonal_adaptor<M> > ms1 (dam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                              ms2 (dam2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                              ms3 (dam3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            (*this) (ms1, ms2, ms3);
+            test_with (ms1, ms2, ms3);
 #endif
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
 #endif
 
@@ -371,5 +353,3 @@ void test_matrix () {
 #endif
 #endif
 }
-
-

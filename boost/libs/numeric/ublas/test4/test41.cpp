@@ -32,8 +32,8 @@ struct test_my_vector {
     typedef typename ublas::type_traits<value_type>::real_type real_type;
 
     template<class VP>
-    void operator () (VP &v1, VP &v2, VP &v3) const {
-        try {
+    void test_with (VP &v1, VP &v2, VP &v3) const {
+        {
             value_type t;
             size_type i;
             real_type n;
@@ -113,37 +113,25 @@ struct test_my_vector {
             t = ublas::inner_prod (v1, v2);
             std::cout << "inner_prod (v1, v2) = " << t << std::endl;
         }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () () const {
-        try {
+        {
             V v1 (N), v2 (N), v3 (N);
-            (*this) (v1, v2, v3);
+            test_with (v1, v2, v3);
 
 #ifdef USE_RANGE
             ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
                                    vr2 (v2, ublas::range (0, N)),
                                    vr3 (v3, ublas::range (0, N));
-            (*this) (vr1, vr2, vr3);
+            test_with (vr1, vr2, vr3);
 #endif
 
 #ifdef USE_SLICE
             ublas::vector_slice<V> vs1 (v1, ublas::slice (0, 1, N)),
                                    vs2 (v2, ublas::slice (0, 1, N)),
                                    vs3 (v3, ublas::slice (0, 1, N));
-            (*this) (vs1, vs2, vs3);
+            test_with (vs1, vs2, vs3);
 #endif
-        }
-        catch (std::exception &e) {
-            std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -224,4 +212,3 @@ void test_vector () {
 #endif
 #endif
 }
-
