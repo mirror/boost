@@ -74,13 +74,14 @@ int main(){
   local_date_time ldt6(b_time, phx);
       
  
-  // %c is the default format flag. "%c %z" adds the time zone portion to it
   typedef boost::date_time::time_facet<local_date_time, char> ldt_facet;
-  ldt_facet* timefacet = new ldt_facet("%c %Z"); // full name
+  //ldt_facet* timefacet = new ldt_facet("%c %Z"); // full name
+  ldt_facet* timefacet = new ldt_facet("%a %b %d %H:%M:%S %Y %Z"); // full name
   std::locale loc1(std::locale::classic(), timefacet);
   
   typedef boost::date_time::time_facet<ptime, char> pt_facet;
-  pt_facet* ptimefacet1 = new pt_facet("%c %Z"); // show that zone is ignored
+  //pt_facet* ptimefacet1 = new pt_facet("%c %Z"); // show that zone is ignored
+  pt_facet* ptimefacet1 = new pt_facet("%a %b %d %H:%M:%S %Y %Z"); // show that zone is ignored
   std::locale loc2(std::locale::classic(), ptimefacet1);
 
 
@@ -94,12 +95,14 @@ int main(){
   teststreaming("New York in winter", ldt5, std::string("Wed Dec 15 07:00:00 2004 Eastern Standard Time"), loc1);
   teststreaming("Phoenix in Summer", ldt6, std::string("Sun Aug 15 05:00:00 2004 Mountain Standard Time"), loc1);
  
-  ptimefacet1->format("%c %z"); // show that zone abbrev is ignored
+  //ptimefacet1->format("%c %z"); // show that zone abbrev is ignored
+  ptimefacet1->format("%a %b %d %H:%M:%S %Y %z"); // show that zone abbrev is ignored
   std::cout << "\nTime zone abbreviation tests" << std::endl;
   teststreaming("ptime with %z flag\n", a_time, std::string("Wed Dec 15 12:00:00 2004") , loc2);
 
   // using standard format
-  timefacet->format("%c %z"); // abbreviated zone
+  //timefacet->format("%c %z"); // abbreviated zone
+  timefacet->format("%a %b %d %H:%M:%S %Y %z"); // abbreviated zone
   teststreaming("UTC local_date_time", ldt1, std::string("Wed Dec 15 12:00:00 2004 UTC"), loc1);
   teststreaming("Chicago in summer", ldt2, std::string("Sun Aug 15 07:00:00 2004 CDT") , loc1);
   teststreaming("Denver in winter", ldt3, std::string("Wed Dec 15 05:00:00 2004 MST"), loc1);
@@ -155,7 +158,8 @@ int main(){
 
   
   typedef boost::date_time::time_facet<local_date_time, wchar_t> wldt_facet;
-  wldt_facet* wtimefacet = new wldt_facet(L"%c %Z"); // full name
+  //wldt_facet* wtimefacet = new wldt_facet(L"%c %Z"); // full name
+  wldt_facet* wtimefacet = new wldt_facet(L"%a %b %d %H:%M:%S %Y %Z"); // full name
   std::locale loc3(std::locale::classic(), wtimefacet);
   
   /* Again, wide stream tests are more thoroughly done in the 
@@ -164,7 +168,8 @@ int main(){
   teststreaming("UTC local_date_time", ldt1, std::wstring(L"Wed Dec 15 12:00:00 2004 Coordinated Universal Time"), loc3);
   teststreaming("Chicago in summer", ldt2, std::wstring(L"Sun Aug 15 07:00:00 2004 Central Daylight Time") , loc3);
  
-  wtimefacet->format(L"%c %z"); // abbrev
+  //wtimefacet->format(L"%c %z"); // abbrev
+  wtimefacet->format(L"%a %b %d %H:%M:%S %Y %z"); // abbrev
   std::cout << "\nAbbreviated time zone names tests - wide stream" << std::endl;
   teststreaming("UTC local_date_time", ldt1, std::wstring(L"Wed Dec 15 12:00:00 2004 UTC"), loc3);
   teststreaming("Phoenix in Summer", ldt6, std::wstring(L"Sun Aug 15 05:00:00 2004 MST"), loc3);

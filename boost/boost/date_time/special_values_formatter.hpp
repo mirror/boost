@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <string>
+#include "boost/date_time/special_defs.hpp"
 
 namespace boost { namespace date_time {
 
@@ -60,7 +61,7 @@ namespace boost { namespace date_time {
     }
 
     OutItrT put_special(OutItrT next, 
-                        const boost::date_time::special_values value) const 
+                        const boost::date_time::special_values& value) const 
     {
       
       unsigned int index = value;

@@ -87,19 +87,22 @@ int main() {
     {
       wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
       teststreaming("widestream default classic time", t, 
-                    std::wstring(L"Wed Oct 13 18:01:56 2004"),
+                    //std::wstring(L"Wed Oct 13 18:01:56 2004"),
+                    std::wstring(L"10/13/04 18:01:56"),
                     std::locale(std::locale::classic(), timefacet));
     }
     {
       wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
       teststreaming("widestream default classic time with fractional seconds truncated", t, 
-                    std::wstring(L"Wed Oct 13 18:01:56 2004"),
+                    //std::wstring(L"Wed Oct 13 18:01:56 2004"),
+                    std::wstring(L"10/13/04 18:01:56"),
                     std::locale(std::locale::classic(), timefacet));
     }
     {
       wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
       teststreaming("widestream default time period with fractional seconds truncated", tp, 
-                    std::wstring(L"[Wed Oct 13 18:01:56 2004/Wed Oct 20 19:02:57 2004]"),
+                    //std::wstring(L"[Wed Oct 13 18:01:56 2004/Wed Oct 20 19:02:57 2004]"),
+                    std::wstring(L"[10/13/04 18:01:56/10/20/04 19:02:57]"),
                     std::locale(std::locale::classic(), timefacet));
     }
     {

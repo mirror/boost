@@ -295,6 +295,7 @@ int main() {
   // date_generator tests
   {
     partial_date pd(31,Oct);
+    teststreaming("partial date", pd, std::string("31 Oct"));
     first_kday_of_month fkd(Tuesday, Sep);
     teststreaming("first kday", fkd, std::string("first Tue of Sep"));
     nth_kday_of_month nkd2(nth_kday_of_month::second, Tuesday, Sep);
