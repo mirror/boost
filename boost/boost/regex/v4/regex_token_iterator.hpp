@@ -103,22 +103,14 @@ public:
       if(regex_search(first, end, what, *pre, flags) == true)
       {
          N = 0;
-#if 1
          result = ((subs[N] == -1) ? what.prefix() : what[(int)subs[N]]);
-#else
-         result = ((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[(int)subs[N]].str()));
-#endif
          return true;
       }
       else if((subs[N] == -1) && (first != end))
       {
-#if 1
          result.first = first;
          result.second = end;
          result.matched = (first != end);
-#else
-         result = value_type(first, end);
-#endif
          return true;
       }
       return false;
@@ -142,11 +134,7 @@ public:
       if(N+1 < (int)subs.size())
       {
          ++N;
-#if 1
          result =((subs[N] == -1) ? what.prefix() : what[subs[N]]);
-#else
-         result =((subs[N] == -1) ? value_type(what.prefix().first, what.prefix().second) : value_type(what[subs[N]].first, what[subs[N]].second));
-#endif
          return true;
       }
       if(what.prefix().first != what[0].second)
@@ -155,23 +143,15 @@ public:
       if(regex_search(last_end, end, what, *pre, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
       {
          N =0;
-#if 1
          result =((subs[N] == -1) ? what.prefix() : what[subs[N]]);
-#else
-         result =((subs[N] == -1) ? value_type(what.prefix().first, what.prefix().second) : value_type(what[subs[N]].first, what[subs[N]].second));
-#endif
          return true;
       }
       else if((last_end != end) && (subs[0] == -1))
       {
          N =-1;
-#if 1
          result.first = last_end;
          result.second = end;
          result.matched = (last_end != end);
-#else
-         result = value_type(last_end, end);
-#endif
          return true;
       }
       return false;
@@ -189,11 +169,7 @@ private:
    typedef shared_ptr<impl> pimpl;
 public:
    typedef          basic_regex<charT, traits, Allocator>                   regex_type;
-#if 1
    typedef          sub_match<BidirectionalIterator>                        value_type;
-#else
-   typedef          std::basic_string<charT>                                value_type;
-#endif
    typedef typename re_detail::regex_iterator_traits<BidirectionalIterator>::difference_type 
                                                                             difference_type;
    typedef          const value_type*                                       pointer;

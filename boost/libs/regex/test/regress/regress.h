@@ -283,7 +283,7 @@ struct debug_iterator
 
   debug_iterator(T c, T f, T l)
     : cur(c), first(f), last(l) {}
-  debug_iterator() : cur(), first(), last() {}
+  debug_iterator(int = 0) : cur(), first(), last() {}
   debug_iterator(const debug_iterator& x)
     : cur(x.cur), first(x.first), last(x.last) {}
   debug_iterator& operator=(const debug_iterator& x)

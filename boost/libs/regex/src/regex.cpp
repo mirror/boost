@@ -55,6 +55,21 @@ regbase::regbase(const regbase& b)
 
 namespace re_detail{
 
+//
+// error checking API:
+//
+BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex::flag_type /*ef*/, match_flag_type mf)
+{
+   //
+   // can't mix match_extra with POSIX matching rules:
+   //
+   if((mf & match_extra) && (mf & match_posix))
+   {
+      std::logic_error msg("Usage Error: Can't mix regular expression captures with POSIX matching rules");
+      throw_exception(msg);
+   }
+}
+
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
 
 BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page()

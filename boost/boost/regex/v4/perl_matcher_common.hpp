@@ -117,6 +117,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
    m_presult->set_base(base);
    if(m_match_flags & match_posix)
       m_result = *m_presult;
+   verify_options(re.flags(), m_match_flags);
    if(0 == match_prefix())
       return false;
    return m_result[0].second == last;
@@ -206,6 +207,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
       m_result.set_base(base);
    }
 
+   verify_options(re.flags(), m_match_flags);
    // find out what kind of expression we have:
    unsigned type = (m_match_flags & match_continuous) ? 
       static_cast<unsigned int>(regbase::restart_continue) 
@@ -253,6 +255,19 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_prefix()
       m_presult->set_second(last, 0, false);
       position = last;
    }
+#ifdef BOOST_REGEX_MATCH_EXTRA
+   if(m_has_found_match && (match_extra & m_match_flags))
+   {
+      //
+      // we have a match, reverse the capture information:
+      //
+      for(unsigned i = 0; i < m_presult->size(); ++i)
+      {
+         typename sub_match<BidiIterator>::capture_sequence_type & seq = ((*m_presult)[i]).get_captures();
+         std::reverse(seq.begin(), seq.end());
+      }
+   }
+#endif
    if(!m_has_found_match)
       position = restart; // reset search postion
    return m_has_found_match;
@@ -297,15 +312,20 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_literal()
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_start_line()
 {
-   if((position == base) && ((m_match_flags & match_prev_avail) == 0))
+   if(position == base)
    {
-      if((m_match_flags & match_not_bol) == 0)
+      if((m_match_flags & match_prev_avail) == 0)
       {
-         pstate = pstate->next.p;
-         return true;
+         if((m_match_flags & match_not_bol) == 0)
+         {
+            pstate = pstate->next.p;
+            return true;
+         }
+         return false;
       }
-      return false;
    }
+   else if(m_match_flags & match_single_line)
+      return false;
 
    // check the previous value character:
    BidiIterator t(position);
@@ -331,6 +351,8 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_end_line()
 {
    if(position != last)
    {
+      if(m_match_flags & match_single_line)
+         return false;
       // we're not yet at the end so *first is always valid:
       if(traits_inst.is_separator(*position))
       {
@@ -387,6 +409,14 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_match()
       m_result.maybe_assign(*m_presult);
       return false;
    }
+#ifdef BOOST_REGEX_MATCH_EXTRA
+   if(match_extra & m_match_flags)
+   {
+      for(unsigned i = 0; i < m_presult->size(); ++i)
+         if((*m_presult)[i].matched)
+            ((*m_presult)[i]).get_captures().push_back((*m_presult)[i]);
+   }
+#endif
    return true;
 }
 

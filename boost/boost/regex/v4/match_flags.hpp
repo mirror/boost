@@ -55,7 +55,12 @@ typedef enum _match_flags
    match_perl = match_all << 1,                      // Use perl matching rules
    match_posix = match_perl << 1,                    // Use POSIX matching rules
    match_nosubs = match_posix << 1,                  // don't trap marked subs
-   match_max = match_nosubs,
+   match_extra = match_nosubs << 1,                  // include full capture information for repeated captures
+   match_single_line = match_extra << 1,             // treat text as single line and ignor any \n's when matching ^ and $.
+   match_unused1 = match_single_line << 1,           // unused
+   match_unused2 = match_unused1 << 1,               // unused
+   match_unused3 = match_unused2 << 1,               // unused
+   match_max = match_unused3,
 
    format_perl = 0,                                  // perl style replacement
    format_default = 0,                               // ditto.
@@ -117,6 +122,8 @@ using regex_constants::match_all;
 using regex_constants::match_perl;
 using regex_constants::match_posix;
 using regex_constants::match_nosubs;
+using regex_constants::match_extra;
+using regex_constants::match_single_line;
 //using regex_constants::match_max;
 using regex_constants::format_all;
 using regex_constants::format_sed;

@@ -85,3 +85,8 @@
 // if you don't want boost.regex to cache memory.
 // #define BOOST_REGEX_MAX_CACHE_BLOCKS 16
 
+// define this if you want to be able to access extended capture
+// information in your sub_match's (caution this will slow things
+// down quite a bit).
+// #define BOOST_REGEX_MATCH_EXTRA
+

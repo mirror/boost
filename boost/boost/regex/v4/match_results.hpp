@@ -25,19 +25,19 @@
 
 namespace boost{
 
-template <class RandomAccessIterator
-         , class Allocator = BOOST_DEFAULT_ALLOCATOR(sub_match<RandomAccessIterator> )
+template <class BidiIterator
+         , class Allocator = BOOST_DEFAULT_ALLOCATOR(sub_match<BidiIterator> )
          >
 class match_results
 { 
 private:
 #ifndef BOOST_NO_STD_ALLOCATOR
-   typedef          std::vector<sub_match<RandomAccessIterator>, Allocator> vector_type;
+   typedef          std::vector<sub_match<BidiIterator>, Allocator> vector_type;
 #else
-   typedef          std::vector<sub_match<RandomAccessIterator> >           vector_type;
+   typedef          std::vector<sub_match<BidiIterator> >           vector_type;
 #endif
 public: 
-   typedef          sub_match<RandomAccessIterator>                         value_type;
+   typedef          sub_match<BidiIterator>                         value_type;
 #if  !defined(BOOST_NO_STD_ALLOCATOR) && !(defined(BOOST_MSVC) && defined(_STLPORT_VERSION))
    typedef typename Allocator::const_reference                              const_reference;
 #else
@@ -47,11 +47,11 @@ public:
    typedef typename vector_type::const_iterator                             const_iterator;
    typedef          const_iterator                                          iterator;
    typedef typename re_detail::regex_iterator_traits<
-                                    RandomAccessIterator>::difference_type  difference_type;
+                                    BidiIterator>::difference_type  difference_type;
    typedef typename Allocator::size_type                                    size_type;
    typedef          Allocator                                               allocator_type;
    typedef typename re_detail::regex_iterator_traits<
-                                    RandomAccessIterator>::value_type       char_type;
+                                    BidiIterator>::value_type       char_type;
    typedef          std::basic_string<char_type>                            string_type;
 
    // construct/copy/destroy:
@@ -91,10 +91,10 @@ public:
       sub += 2;
       if(sub < m_subs.size())
       {
-         const sub_match<RandomAccessIterator>& s = m_subs[sub];
+         const sub_match<BidiIterator>& s = m_subs[sub];
          if(s.matched)
          {
-            return boost::re_detail::distance((RandomAccessIterator)(m_base), (RandomAccessIterator)(s.first));
+            return boost::re_detail::distance((BidiIterator)(m_base), (BidiIterator)(s.first));
          }
       }
       return ~static_cast<difference_type>(0);
@@ -105,7 +105,7 @@ public:
       string_type result;
       if(sub < (int)m_subs.size() && (sub > 0))
       {
-         const sub_match<RandomAccessIterator>& s = m_subs[sub];
+         const sub_match<BidiIterator>& s = m_subs[sub];
          if(s.matched)
          {
             result = s;
@@ -174,9 +174,18 @@ public:
    bool operator!=(const match_results& that)const
    { return !(*this == that); }
 
+#ifdef BOOST_REGEX_MATCH_EXTRA
+   typedef typename sub_match<BidiIterator>::capture_sequence_type capture_sequence_type;
+
+   const capture_sequence_type& captures(int i)const
+   {
+      return (*this)[i].captures();
+   }
+#endif
+
    //
    // private access functions:
-   void BOOST_REGEX_CALL set_second(RandomAccessIterator i)
+   void BOOST_REGEX_CALL set_second(BidiIterator i)
    {
       assert(m_subs.size() > 2);
       m_subs[2].second = i;
@@ -188,7 +197,7 @@ public:
       m_null.matched = false;
    }
 
-   void BOOST_REGEX_CALL set_second(RandomAccessIterator i, size_type pos, bool m = true)
+   void BOOST_REGEX_CALL set_second(BidiIterator i, size_type pos, bool m = true)
    {
       pos += 2;
       assert(m_subs.size() > pos);
@@ -203,7 +212,7 @@ public:
          m_null.matched = false;
       }
    }
-   void BOOST_REGEX_CALL set_size(size_type n, RandomAccessIterator i, RandomAccessIterator j)
+   void BOOST_REGEX_CALL set_size(size_type n, BidiIterator i, BidiIterator j)
    {
       value_type v(j);
       size_type len = m_subs.size();
@@ -220,11 +229,11 @@ public:
       }
       m_subs[1].first = i;
    }
-   void BOOST_REGEX_CALL set_base(RandomAccessIterator pos)
+   void BOOST_REGEX_CALL set_base(BidiIterator pos)
    {
       m_base = pos;
    }
-   void BOOST_REGEX_CALL set_first(RandomAccessIterator i)
+   void BOOST_REGEX_CALL set_first(BidiIterator i)
    {
       // set up prefix:
       m_subs[1].second = i;
@@ -238,7 +247,7 @@ public:
          m_subs[n].matched = false;
       }
    }
-   void BOOST_REGEX_CALL set_first(RandomAccessIterator i, size_type pos)
+   void BOOST_REGEX_CALL set_first(BidiIterator i, size_type pos)
    {
       assert(pos+2 < m_subs.size());
       if(pos)
@@ -246,22 +255,22 @@ public:
       else
          set_first(i);
    }
-   void BOOST_REGEX_CALL maybe_assign(const match_results<RandomAccessIterator, Allocator>& m);
+   void BOOST_REGEX_CALL maybe_assign(const match_results<BidiIterator, Allocator>& m);
 
 
 private:
    vector_type            m_subs; // subexpressions
-   RandomAccessIterator   m_base; // where the search started from
-   sub_match<RandomAccessIterator> m_null; // a null match
+   BidiIterator   m_base; // where the search started from
+   sub_match<BidiIterator> m_null; // a null match
 };
 
-template <class RandomAccessIterator, class Allocator>
-void BOOST_REGEX_CALL match_results<RandomAccessIterator, Allocator>::maybe_assign(const match_results<RandomAccessIterator, Allocator>& m)
+template <class BidiIterator, class Allocator>
+void BOOST_REGEX_CALL match_results<BidiIterator, Allocator>::maybe_assign(const match_results<BidiIterator, Allocator>& m)
 {
    const_iterator p1, p2;
    p1 = begin();
    p2 = m.begin();
-   RandomAccessIterator base = (*this)[-1].first;
+   BidiIterator base = (*this)[-1].first;
    std::size_t len1 = 0;
    std::size_t len2 = 0;
    std::size_t base1 = 0;
@@ -276,8 +285,8 @@ void BOOST_REGEX_CALL match_results<RandomAccessIterator, Allocator>::maybe_assi
       if(base1 < base2) return;
       if(base2 < base1) break;
 
-      len1 = boost::re_detail::distance((RandomAccessIterator)p1->first, (RandomAccessIterator)p1->second);
-      len2 = boost::re_detail::distance((RandomAccessIterator)p2->first, (RandomAccessIterator)p2->second);
+      len1 = boost::re_detail::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
+      len2 = boost::re_detail::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
       if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
          break;
       if((p1->matched == true) && (p2->matched == false))
@@ -293,24 +302,24 @@ void BOOST_REGEX_CALL match_results<RandomAccessIterator, Allocator>::maybe_assi
       *this = m;
 }
 
-template <class RandomAccessIterator, class Allocator>
-void swap(match_results<RandomAccessIterator, Allocator>& a, match_results<RandomAccessIterator, Allocator>& b)
+template <class BidiIterator, class Allocator>
+void swap(match_results<BidiIterator, Allocator>& a, match_results<BidiIterator, Allocator>& b)
 {
    a.swap(b);
 }
 
 #ifndef BOOST_NO_STD_LOCALE
-template <class charT, class traits, class RandomAccessIterator, class Allocator>
+template <class charT, class traits, class BidiIterator, class Allocator>
 std::basic_ostream<charT, traits>&
    operator << (std::basic_ostream<charT, traits>& os,
-                const match_results<RandomAccessIterator, Allocator>& s)
+                const match_results<BidiIterator, Allocator>& s)
 {
    return (os << s.str());
 }
 #else
-template <class RandomAccessIterator, class Allocator>
+template <class BidiIterator, class Allocator>
 std::ostream& operator << (std::ostream& os,
-                           const match_results<RandomAccessIterator, Allocator>& s)
+                           const match_results<BidiIterator, Allocator>& s)
 {
    return (os << s.str());
 }

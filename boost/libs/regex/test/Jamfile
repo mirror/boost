@@ -4,6 +4,7 @@ subproject libs/regex/test ;
 
 # bring in the rules for testing
 import testing ;
+subinclude libs/regex/test/captures ;
 
 #
 # this template defines the options common to
@@ -130,7 +131,29 @@ test-suite regex
       ]
       [ compile concepts/wide_concept_check.cpp
       ]
+      
+     [ run
+	# sources
+    captures/captures_test.cpp
+    <template>../build/regex-options
+    # dependencies
+    <lib>captures/boost_regex_extra
+    <lib>../../test/build/boost_test_exec_monitor
+ :  # additional args
+ :  # test-files
+ :  # requirements
+    <threading>multi
+    <define>BOOST_REGEX_MATCH_EXTRA=1
+    <define>BOOST_REGEX_NO_LIB=1
+ :  # test name
+    captures_test
+ ]
+
 ;
+
+
+
+
 
 
 

@@ -35,13 +35,14 @@ class backup_subex
 public:
    template <class A>
    backup_subex(const match_results<BidiIterator, A>& w, int i)
-      : index(i), sub(w[i]) {}
+      : index(i), sub(w[i], false) {}
    template <class A>
    void restore(match_results<BidiIterator, A>& w)
    {
       w.set_first(sub.first, index);
       w.set_second(sub.second, index, sub.matched);
    }
+   const sub_match<BidiIterator>& get() { return sub; }
 };
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
@@ -126,6 +127,33 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark(
          pstate = pstate->next.p->next.p;
          r = match_all_states();
          pstate = next_pstate;
+#ifdef BOOST_REGEX_MATCH_EXTRA
+         if(r && (m_match_flags & match_extra))
+         {
+            //
+            // our captures have been stored in *m_presult
+            // we need to unpack them, and insert them
+            // back in the right order when we unwind the stack:
+            //
+            unsigned i;
+            match_results<BidiIterator, Allocator> tm(*m_presult);
+            for(i = 0; i < tm.size(); ++i)
+               (*m_presult)[i].get_captures().clear();
+            // match everything else:
+            r = match_all_states();
+            // now place the stored captures back:
+            for(i = 0; i < tm.size(); ++i)
+            {
+               typedef typename sub_match<BidiIterator>::capture_sequence_type seq;
+               seq& s1 = (*m_presult)[i].get_captures();
+               const seq& s2 = tm[i].captures();
+               s1.insert(
+                  s1.end(), 
+                  s2.begin(), 
+                  s2.end());
+            }
+         }
+#endif
          break;
       }
    default:
@@ -139,6 +167,13 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark(
          r = match_all_states();
          if(r == false)
             sub.restore(*m_presult);
+#ifdef BOOST_REGEX_MATCH_EXTRA
+         //
+         // we have a match, push the capture information onto the stack:
+         //
+         else if(sub.get().matched && (match_extra & m_match_flags))
+            ((*m_presult)[index]).get_captures().push_back(sub.get());
+#endif
       }
       else
       {

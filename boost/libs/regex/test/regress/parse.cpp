@@ -88,6 +88,7 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("match_continuous"), 16, match_continuous, 3 },
                           { BOOST_RE_STR("match_partial"), 13, match_partial, 3 },
                           { BOOST_RE_STR("match_nosubs"), 12, match_nosubs, 3 },
+                          { BOOST_RE_STR("match_single_line"), 17, match_single_line, 3 },
 
                           { BOOST_RE_STR("format_all"), 10, format_all, 3 },
                           { BOOST_RE_STR("format_sed"), 10, format_sed, 3 },

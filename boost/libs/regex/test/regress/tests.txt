@@ -292,6 +292,22 @@ ab$ ab -1 -1
 ab$ abxx -1 -1
 ab$ ab\nzz 0 2
 
+; line anchors, single line mode
+- match_default normal match_single_line REG_NO_POSIX_TEST
+^ab ab 0 2
+^ab xxabxx -1 -1
+^ab xx\nabzz -1 -1
+ab$ ab 0 2
+ab$ abxx -1 -1
+ab$ ab\nzz -1 -1
+- match_default match_not_bol match_not_eol normal REG_NO_POSIX_TEST match_single_line
+^ab ab -1 -1
+^ab xxabxx -1 -1
+^ab xx\nabzz -1 -1
+ab$ ab -1 -1
+ab$ abxx -1 -1
+ab$ ab\nzz -1 -1
+
 ; back references
 - match_default normal REG_PERL
 a(b)\2c	!

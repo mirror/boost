@@ -55,11 +55,9 @@
 #  include <boost/detail/allocator.hpp>
 #  include <boost/regex/config/cstring.hpp>
 #  include <boost/throw_exception.hpp>
+#  include <boost/scoped_ptr.hpp>
 #  ifndef BOOST_NO_STD_LOCALE
 #     include <locale>
-#  endif
-#  ifdef BOOST_REGEX_MATCH_EXTRA
-#     include <boost/scoped_ptr.hpp>
 #  endif
 #else
    //

@@ -309,11 +309,38 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark(
       }
    case -3:
       {
-         // independent sub-expression:
+         // independent sub-expression, currently this is always recursive:
          const re_syntax_base* next_pstate = static_cast<const re_jump*>(pstate->next.p)->alt.p->next.p;
          pstate = pstate->next.p->next.p;
          bool r = match_all_states();
          pstate = next_pstate;
+#ifdef BOOST_REGEX_MATCH_EXTRA
+         if(r && (m_match_flags & match_extra))
+         {
+            //
+            // our captures have been stored in *m_presult
+            // we need to unpack them, and insert them
+            // back in the right order when we unwind the stack:
+            //
+            match_results<BidiIterator, Allocator> tm(*m_presult);
+            unsigned i;
+            for(i = 0; i < tm.size(); ++i)
+               (*m_presult)[i].get_captures().clear();
+            // match everything else:
+            r = match_all_states();
+            // now place the stored captures back:
+            for(i = 0; i < tm.size(); ++i)
+            {
+               typedef typename sub_match<BidiIterator>::capture_sequence_type seq;
+               seq& s1 = (*m_presult)[i].get_captures();
+               const seq& s2 = tm[i].captures();
+               s1.insert(
+                  s1.end(), 
+                  s2.begin(), 
+                  s2.end());
+            }
+         }
+#endif
          return r;
       }
    default:
@@ -809,6 +836,13 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_paren(boo
       m_presult->set_first(pmp->sub.first, pmp->index);
       m_presult->set_second(pmp->sub.second, pmp->index, pmp->sub.matched);
    }
+#ifdef BOOST_REGEX_MATCH_EXTRA
+   //
+   // we have a match, push the capture information onto the stack:
+   //
+   else if(pmp->sub.matched && (match_extra & m_match_flags))
+      ((*m_presult)[pmp->index]).get_captures().push_back(pmp->sub);
+#endif
    // unwind stack:
    m_backup_state = pmp+1;
    boost::re_detail::inplace_destroy(pmp);

@@ -45,7 +45,26 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_token_iterator_eg_2.cpp : $(BOOST_ROOT)/libs/regex/doc/index.html ]
 [ regex-test-run snippets/regex_iterator_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 
+[ run
+	# sources
+    snippets/captures_example.cpp
+    <template>../build/regex-options
+    # dependencies
+    <lib>../test/captures/boost_regex_extra
+ :  # additional args
+ :  # test-files
+ :  # requirements
+    <threading>multi
+    <define>BOOST_REGEX_MATCH_EXTRA=1
+    <define>BOOST_REGEX_NO_LIB=1
+ :  # test name
+    captures_example
+ ]
+
+
 ;
+
+
 
 
 

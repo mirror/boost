@@ -83,6 +83,58 @@ struct sub_match : public std::pair<BidiIterator, BidiIterator>
    bool operator>=(const sub_match& that)const
    { return compare(that) >= 0; }
 
+#ifdef BOOST_REGEX_MATCH_EXTRA
+   typedef std::vector<sub_match<BidiIterator> > capture_sequence_type;
+
+   const capture_sequence_type& captures()const
+   {
+      if(!m_captures) 
+         m_captures.reset(new capture_sequence_type());
+      return *m_captures;
+   }
+   //
+   // Private implementation API: DO NOT USE!
+   //
+   capture_sequence_type& get_captures()const
+   {
+      if(!m_captures) 
+         m_captures.reset(new capture_sequence_type());
+      return *m_captures;
+   }
+
+private:
+   mutable boost::scoped_ptr<capture_sequence_type> m_captures;
+public:
+
+#endif
+   sub_match(const sub_match& that, bool 
+#ifdef BOOST_REGEX_MATCH_EXTRA
+      deep_copy
+#endif
+      = true
+      ) 
+      : std::pair<BidiIterator, BidiIterator>(that), 
+        matched(that.matched) 
+   {
+#ifdef BOOST_REGEX_MATCH_EXTRA
+      if(that.m_captures)
+         if(deep_copy)
+            m_captures.reset(new capture_sequence_type(*(that.m_captures)));
+#endif
+   }
+   sub_match& operator=(const sub_match& that)
+   {
+      this->first = that.first;
+      this->second = that.second;
+      matched = that.matched;
+#ifdef BOOST_REGEX_MATCH_EXTRA
+      if(that.m_captures)
+         get_captures() = *(that.m_captures);
+#endif
+      return *this;
+   }
+
+
 #ifdef BOOST_OLD_REGEX_H
    //
    // the following are deprecated, do not use!!

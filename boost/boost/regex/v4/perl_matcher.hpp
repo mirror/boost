@@ -13,7 +13,6 @@
 #define BOOST_REGEX_MATCHER_HPP
 
 #include <boost/regex/v4/iterator_category.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -22,7 +21,13 @@
 namespace boost{
 namespace re_detail{
 
-   //
+//
+// error checking API:
+//
+BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex::flag_type ef, match_flag_type mf);
+
+
+//
 // Unfortunately Rogue Waves standard library appears to have a bug
 // in std::basic_string::compare that results in eroneous answers
 // in some cases (tested with Borland C++ 5.1, Rogue Wave lib version

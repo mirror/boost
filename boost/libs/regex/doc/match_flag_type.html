@@ -46,6 +46,7 @@ static const match_flag_type match_any;
 static const match_flag_type match_not_null;
 static const match_flag_type match_continuous;
 static const match_flag_type match_partial;
+static const match_flag_type match_single_line;
 static const match_flag_type match_prev_avail;
 static const match_flag_type match_not_dot_newline;
 static const match_flag_type match_not_dot_null;
@@ -167,6 +168,20 @@ static const match_flag_type format_all;
                   in a full match.</p>
             </td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="50%">match_extra</TD>
+            <TD vAlign="top" width="50%">Instructs the matching engine to retain all available <A href="captures.html">
+                  capture</A> information; if a capturing group is repeated then information 
+               about every repeat is available via <A href="match_results.html#m17">match_results::captures()</A>
+               or <A href="sub_match.html#m8">sub_match_captures().</A></TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="50%">match_single_line</TD>
+            <TD vAlign="top" width="50%">Equivalent to Perl's s/ modifier; prevents ^ from 
+               matching after an embedded newline character (so that it only matches at the 
+               start of the text being matched), and $ from matching before an embedded 
+               newline (so that it only matches at the end of the text being matched).</TD>
+         </TR>
          <tr>
             <td valign="top" width="50%">
                <p>match_prev_avail</p>
@@ -259,8 +274,7 @@ static const match_flag_type format_all;
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
