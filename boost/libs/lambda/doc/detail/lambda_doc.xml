@@ -1578,13 +1578,7 @@ for_each(a, a+5,
 The BLL supports an alternative syntax for control expressions, suggested
 by Joel de Guzmann. 
 By overloading the <literal>operator[]</literal> we can
-get a closer resemblance with the built-in control structures. 
-For example, using this syntax the <literal>if_then</literal> example above
-can be written as:
-<programlisting>
-<![CDATA[for_each(a.begin(), a.end(), 
-         if(_1 % 2 == 0)[ cout << _1 ])]]>  
-</programlisting>
+get a closer resemblance with the built-in control structures:
 
 <programlisting>
 <![CDATA[if_(condition)[then_part]
@@ -1592,6 +1586,13 @@ if_(condition)[then_part].else_[else_part]
 while_(condition)[body]
 do_[body].while_(condition)
 for_(init, condition, increment)[body]]]>
+</programlisting>
+
+For example, using this syntax the <literal>if_then</literal> example above
+can be written as:
+<programlisting>
+<![CDATA[for_each(a.begin(), a.end(), 
+         if(_1 % 2 == 0)[ cout << _1 ])]]>  
 </programlisting>
 
 As more experience is gained, we may end up deprecating one or the other 
@@ -3029,14 +3030,14 @@ lambda functors; and these wrappers have types that are easy to type out.
 For example:
 
 <programlisting>
-<![CDATA[boost::function<int, int, int> f = _1 + _2;
-boost::function<int&, int&> g = unlambda(_1 += 10);
+<![CDATA[boost::function<int(int, int)> f = _1 + _2;
+boost::function<int&(int&)> g = (_1 += 10);
 int i = 1, j = 2;
 f(i); // returns 3
 g(i); // sets i to = 11;]]>
 </programlisting>
 
-The return and parameter types of the wrapped function object must be written explicilty as template arguments to the wrapper template <literal>boost::function</literal>; even when lambda functors, which otherwise have generic parameters, are wrapped.
+The return and parameter types of the wrapped function object must be written explicilty as the template argument to the wrapper template <literal>boost::function</literal>; even when lambda functors, which otherwise have generic parameters, are wrapped.
 Wrapping a function object with <literal>boost::function</literal> introduces a performance cost comparable to virtual function dispatch, though virtual functions are not actually used.
 
 Note that storing lambda functors inside <literal>boost::function</literal> 
@@ -3054,7 +3055,7 @@ For example:
 <programlisting>
 <![CDATA[int* sum = new int();
 *sum = 0;
-boost::function<int&, int> counter = *sum += _1;
+boost::function<int&(int)> counter = *sum += _1;
 counter(5); // ok, *sum = 5;
 delete sum; 
 counter(3); // error, *sum does not exist anymore]]>

@@ -635,13 +635,7 @@ for_each(a, a+5,
 The BLL supports an alternative syntax for control expressions, suggested
 by Joel de Guzmann. 
 By overloading the <tt>operator[]</tt> we can
-get a closer resemblance with the built-in control structures. 
-For example, using this syntax the <tt>if_then</tt> example above
-can be written as:
-<pre class="programlisting">
-for_each(a.begin(), a.end(), 
-         if(_1 % 2 == 0)[ cout &lt;&lt; _1 ])  
-</pre>
+get a closer resemblance with the built-in control structures:
 
 <pre class="programlisting">
 if_(condition)[then_part]
@@ -649,6 +643,13 @@ if_(condition)[then_part].else_[else_part]
 while_(condition)[body]
 do_[body].while_(condition)
 for_(init, condition, increment)[body]
+</pre>
+
+For example, using this syntax the <tt>if_then</tt> example above
+can be written as:
+<pre class="programlisting">
+for_each(a.begin(), a.end(), 
+         if(_1 % 2 == 0)[ cout &lt;&lt; _1 ])  
 </pre>
 
 As more experience is gained, we may end up deprecating one or the other 
@@ -975,7 +976,7 @@ int nested(const F&amp; f) {
 }
 </pre>
 
-</p></div><div class="section"><div class="titlepage"><div><h5 class="title"><a name="id2805743"></a>5.9.1.2. Protect</h5></div></div><p>
+</p></div><div class="section"><div class="titlepage"><div><h5 class="title"><a name="id2805742"></a>5.9.1.2. Protect</h5></div></div><p>
 The <tt>protect</tt> function is related to unlambda. 
 
 It is also used to prevent the argument substitution taking place, 
@@ -1080,7 +1081,7 @@ since calls to sub lambda functors are made inside the BLL,
 and are not affected by the non-const rvalue problem.
 </p></li></ol></div>
 
-</p></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2806049"></a>5.10. Casts, sizeof and typeid</h3></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="sect:cast_expressions"></a>5.10.1. 
+</p></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2806048"></a>5.10. Casts, sizeof and typeid</h3></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="sect:cast_expressions"></a>5.10.1. 
 Cast expressions
 </h4></div></div><p>
 The BLL defines its counterparts for the four cast expressions 
@@ -1109,7 +1110,7 @@ int count = 0;
 for_each(a.begin(), a.end(), 
          if_then(ll_dynamic_cast&lt;derived*&gt;(_1), ++var(count)));
 </pre>
-</p></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2806151"></a>5.10.2. Sizeof and typeid</h4></div></div><p>
+</p></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2806150"></a>5.10.2. Sizeof and typeid</h4></div></div><p>
 The BLL counterparts for these expressions are named 
 <tt>ll_sizeof</tt> and <tt>ll_typeid</tt>.
 
