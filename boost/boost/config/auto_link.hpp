@@ -19,6 +19,7 @@ Before including this header you must define one or more of define the following
 
 BOOST_LIB_NAME:       Required: A string containing the basename of the library,
                       for example boost_regex.
+BOOST_LIB_TOOLSET:    Optional: the base name of the toolset.
 BOOST_DYN_LINK:       Optional: when set link to dll rather than static library.
 BOOST_LIB_DIAGNOSTIC: Optional: when set the header will print out the name
                       of the library selected (useful for debugging).
@@ -103,8 +104,9 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #  error "Incompatible build options"
 #endif
 //
-// select toolset:
+// select toolset if not defined already:
 //
+#ifndef BOOST_LIB_TOOLSET
 #if defined(BOOST_MSVC) && (BOOST_MSVC == 1200)
 
    // vc6:
@@ -146,6 +148,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #  define BOOST_LIB_TOOLSET "cw9"
 
 #endif
+#endif // BOOST_LIB_TOOLSET
 
 //
 // select thread opt:

@@ -288,6 +288,17 @@ export LIBS=
                   off.</P>
             </TD>
          </TR>
+         <TR>
+            <TD vAlign="top">BOOST_LIB_DIAGNOSTIC</TD>
+            <TD>Causes the auto-linking code to output diagnostic messages indicating the name 
+               of the library that is selected for linking.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top">BOOST_LIB_TOOLSET</TD>
+            <TD>Overrides the name of the toolset part of the name of library being linked to; 
+               note if defined this must be defined to a quoted string literal, for example 
+               "abc".</TD>
+         </TR>
       </table>
       <h4><a name="advanced_config"></a>Advanced configuration usage</h4>
       <p>By setting various macros on the compiler command line or by editing &lt;<a href="../../boost/config/user.hpp">boost/config/user.hpp</a>&gt;, 
