@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 26 Sep 2001   David Abrahams
+//      Added borland bug fix
 // 08 Mar 2001   Jeremy Siek
 //      Added support for optional named template parameters.
 // 19 Feb 2001   David Abrahams
@@ -644,9 +646,9 @@ struct iterator_adaptor :
         policies().initialize(iter());
     }
 
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) || defined(__BORLANDC__)
     // This is required to prevent a bug in how VC++ generates
-    // the assignment operator for compressed_pair.
+    // the assignment operator for compressed_pairv
     iterator_adaptor& operator= (const iterator_adaptor& x) {
         m_iter_p = x.m_iter_p;
         return *this;
