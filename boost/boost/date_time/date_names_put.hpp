@@ -106,7 +106,7 @@ namespace date_time {
       virtual void do_put_month_short(iter_type& oitr, month_enum moy) const
       {
         month_type gm(moy);
-	charT c = '\0';
+        charT c = '\0';
         put_string(oitr, gm.as_short_string(c));
       }
       //! Default facet implementation uses month_type defaults
@@ -114,7 +114,7 @@ namespace date_time {
                                      month_enum moy) const
       {
         month_type gm(moy);
-	charT c = '\0';
+        charT c = '\0';
         put_string(oitr, gm.as_long_string(c));
       }
       //! Default facet implementation for special value types
@@ -234,23 +234,23 @@ namespace date_time {
 
       const charT* const* get_short_month_names() const 
       {
-	return month_short_names_;
+        return month_short_names_;
       }
       const charT* const* get_long_month_names() const 
       {
-	return month_long_names_;
+        return month_long_names_;
       }
       const charT* const* get_special_value_names() const 
       {
-	return special_value_names_;
+        return special_value_names_;
       }
       const charT* const* get_short_weekday_names()const  
       {
-	return weekday_short_names_;
+        return weekday_short_names_;
       }
       const charT* const* get_long_weekday_names()const 
       {
-	return weekday_long_names_;
+        return weekday_long_names_;
       }
 
     protected:

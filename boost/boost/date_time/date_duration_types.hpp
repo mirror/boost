@@ -51,103 +51,103 @@ namespace date_time {
       months_duration(int_rep num) : _m(num) {}
       months_duration(special_values sv) : _m(sv) 
       {
-	_m = int_rep::from_special(sv);
+        _m = int_rep::from_special(sv);
       }
       int_rep number_of_months() const { return _m; }
       //! returns a negative duration
       duration_type get_neg_offset(const date_type& d) const
       {
-	month_adjustor_type m_adj(_m.as_number());
-	return duration_type(m_adj.get_neg_offset(d));
+        month_adjustor_type m_adj(_m.as_number());
+        return duration_type(m_adj.get_neg_offset(d));
       }
       duration_type get_offset(const date_type& d) const
       {
-	month_adjustor_type m_adj(_m.as_number());
-	return duration_type(m_adj.get_offset(d));
+        month_adjustor_type m_adj(_m.as_number());
+        return duration_type(m_adj.get_offset(d));
       }
       bool operator==(const months_type& rhs) const
       {
-	return(_m == rhs._m);
+        return(_m == rhs._m);
       }
       bool operator!=(const months_type& rhs) const
       {
-	return(_m != rhs._m);
+        return(_m != rhs._m);
       }
       months_type operator+(const months_type& rhs)const
       {
-	return months_type(_m + rhs._m);
+        return months_type(_m + rhs._m);
       }
       months_type& operator+=(const months_type& rhs)
       {
-	_m = _m + rhs._m;
-	return *this;
+        _m = _m + rhs._m;
+        return *this;
       }
       months_type operator-(const months_type& rhs)const
       {
-	return months_type(_m - rhs._m);
+        return months_type(_m - rhs._m);
       }
       months_type& operator-=(const months_type& rhs)
       {
-	_m = _m - rhs._m;
-	return *this;
+        _m = _m - rhs._m;
+        return *this;
       }
       months_type operator*(const int_type rhs)const
       {
-	return months_type(_m * rhs);
+        return months_type(_m * rhs);
       }
       months_type& operator*=(const int_type rhs)
       {
-	_m = _m * rhs;
-	return *this;
+        _m = _m * rhs;
+        return *this;
       }
       months_type operator/(const int_type rhs)const
       {
-	return months_type(_m / rhs);
+        return months_type(_m / rhs);
       }
       months_type& operator/=(const int_type rhs)
       {
-	_m = _m / rhs;
-	return *this;
+        _m = _m / rhs;
+        return *this;
       }
       months_type operator+(const years_type& y)const
       {
-	return months_type(y.number_of_years() * 12 + _m);
+        return months_type(y.number_of_years() * 12 + _m);
       }
       months_type& operator+=(const years_type& y)
       {
-	_m = y.number_of_years() * 12 + _m;
-	return *this;
+        _m = y.number_of_years() * 12 + _m;
+        return *this;
       }
       months_type operator-(const years_type& y) const
       {
-	return months_type(_m - y.number_of_years() * 12);
+        return months_type(_m - y.number_of_years() * 12);
       }
       months_type& operator-=(const years_type& y)
       {
-	_m = _m - y.number_of_years() * 12;
-	return *this;
+        _m = _m - y.number_of_years() * 12;
+        return *this;
       }
 
       //
       friend date_type operator+(const date_type& d, const months_type& m)
       {
-	return d + m.get_offset(d);
+        return d + m.get_offset(d);
       }
       friend date_type operator+=(date_type& d, const months_type& m)
       {
-	return d += m.get_offset(d);
+        return d += m.get_offset(d);
       }
       friend date_type operator-(const date_type& d, const months_type& m)
       {
-	// get_neg_offset returns a negative duration, so we add
-	return d + m.get_neg_offset(d);
+        // get_neg_offset returns a negative duration, so we add
+        return d + m.get_neg_offset(d);
       }
       friend date_type operator-=(date_type& d, const months_type& m)
       {
-	// get_neg_offset returns a negative duration, so we add
-	return d += m.get_neg_offset(d);
+        // get_neg_offset returns a negative duration, so we add
+        return d += m.get_neg_offset(d);
       }
-	
+        
     private:
       int_rep _m;
   };
@@ -173,91 +173,91 @@ namespace date_time {
       years_duration(int_rep num) : _y(num) {}
       years_duration(special_values sv) : _y(sv) 
       {
-	_y = int_rep::from_special(sv);
+        _y = int_rep::from_special(sv);
       }
       int_rep number_of_years() const { return _y; }
       //! returns a negative duration
       duration_type get_neg_offset(const date_type& d) const
       {
-	month_adjustor_type m_adj(_y.as_number() * 12);
-	return duration_type(m_adj.get_neg_offset(d));
+        month_adjustor_type m_adj(_y.as_number() * 12);
+        return duration_type(m_adj.get_neg_offset(d));
       }
       duration_type get_offset(const date_type& d) const
       {
-	month_adjustor_type m_adj(_y.as_number() * 12);
-	return duration_type(m_adj.get_offset(d));
+        month_adjustor_type m_adj(_y.as_number() * 12);
+        return duration_type(m_adj.get_offset(d));
       }
       bool operator==(const years_type& rhs) const
       {
-	return(_y == rhs._y);
+        return(_y == rhs._y);
       }
       bool operator!=(const years_type& rhs) const
       {
-	return(_y != rhs._y);
+        return(_y != rhs._y);
       }
       years_type operator+(const years_type& rhs)const
       {
-	return years_type(_y + rhs._y);
+        return years_type(_y + rhs._y);
       }
       years_type& operator+=(const years_type& rhs)
       {
-	_y = _y + rhs._y;
-	return *this;
+        _y = _y + rhs._y;
+        return *this;
       }
       years_type operator-(const years_type& rhs)const
       {
-	return years_type(_y - rhs._y);
+        return years_type(_y - rhs._y);
       }
       years_type& operator-=(const years_type& rhs)
       {
-	_y = _y - rhs._y;
-	return *this;
+        _y = _y - rhs._y;
+        return *this;
       }
       years_type operator*(const int_type rhs)const
       {
-	return years_type(_y * rhs);
+        return years_type(_y * rhs);
       }
       years_type& operator*=(const int_type rhs)
       {
-	_y = _y * rhs;
-	return *this;
+        _y = _y * rhs;
+        return *this;
       }
       years_type operator/(const int_type rhs)const
       {
-	return years_type(_y / rhs);
+        return years_type(_y / rhs);
       }
       years_type& operator/=(const int_type rhs)
       {
-	_y = _y / rhs;
-	return *this;
+        _y = _y / rhs;
+        return *this;
       }
       months_type operator+(const months_type& m) const
       {
-	return(months_type(_y * 12 + m.number_of_months()));
+        return(months_type(_y * 12 + m.number_of_months()));
       }
       months_type operator-(const months_type& m) const
       {
-	return(months_type(_y * 12 - m.number_of_months()));
+        return(months_type(_y * 12 - m.number_of_months()));
       }
 
       //
       friend date_type operator+(const date_type& d, const years_type& y)
       {
-	return d + y.get_offset(d);
+        return d + y.get_offset(d);
       }
       friend date_type operator+=(date_type& d, const years_type& y)
       {
-	return d += y.get_offset(d);
+        return d += y.get_offset(d);
       }
       friend date_type operator-(const date_type& d, const years_type& y)
       {
-	// get_neg_offset returns a negative duration, so we add
-	return d + y.get_neg_offset(d);
+        // get_neg_offset returns a negative duration, so we add
+        return d + y.get_neg_offset(d);
       }
       friend date_type operator-=(date_type& d, const years_type& y)
       {
-	// get_neg_offset returns a negative duration, so we add
-	return d += y.get_neg_offset(d);
+        // get_neg_offset returns a negative duration, so we add
+        return d += y.get_neg_offset(d);
       }
 
     private:

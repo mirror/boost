@@ -89,7 +89,7 @@ inline void load_construct_data(Archive & ar,
 //! Function to save gregorian::date_duration objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::date_duration & dd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   typename gregorian::date_duration::duration_rep dr = dd.get_rep();
   ar & make_nvp("date_duration", dr);
@@ -115,7 +115,7 @@ inline void load_construct_data(Archive & ar, gregorian::date_duration* dd,
 //! helper unction to save date_duration objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::date_duration::duration_rep & dr, 
-    	  unsigned int version)
+          unsigned int version)
 {
   typename gregorian::date_duration::duration_rep::int_type it = dr.as_number();
   ar & make_nvp("date_duration: duration_rep", it);
@@ -144,7 +144,7 @@ inline void load_construct_data(Archive & ar, gregorian::date_duration::duration
  */
 template<class Archive>
 void save(Archive & ar, const gregorian::date_period& dp, 
-    	  unsigned int version)
+          unsigned int version)
 {
   typename gregorian::date d1 = dp.begin();
   typename gregorian::date d2 = dp.end();
@@ -179,7 +179,7 @@ inline void load_construct_data(Archive & ar, gregorian::date_period* dp,
 //! Function to save gregorian::greg_month objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::greg_month& gm, 
-    	  unsigned int version)
+          unsigned int version)
 {
   unsigned short us = gm.as_number();
   ar & make_nvp("greg_month", us);
@@ -205,7 +205,7 @@ inline void load_construct_data(Archive & ar, gregorian::greg_month* gm,
 //! Function to save gregorian::greg_day objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::greg_day& gd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   unsigned short us = gd.as_number();
   ar & make_nvp("greg_day", us);
@@ -231,7 +231,7 @@ inline void load_construct_data(Archive & ar, gregorian::greg_day* gd,
 //! Function to save gregorian::greg_weekday objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::greg_weekday& gd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   unsigned short us = gd.as_number();
   ar & make_nvp("greg_weekday", us);
@@ -262,7 +262,7 @@ inline void load_construct_data(Archive & ar, gregorian::greg_weekday* gd,
  */
 template<class Archive>
 void save(Archive & ar, const gregorian::partial_date& pd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   ar & make_nvp("partial_date: day", pd.day());
   ar & make_nvp("partial_date: month", pd.month());
@@ -298,7 +298,7 @@ inline void load_construct_data(Archive & ar, gregorian::partial_date* pd,
  */
 template<class Archive>
 void save(Archive & ar, const gregorian::nth_kday_of_month& nkd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   ar & make_nvp("nth_kday_of_month: week_num", nkd.nth_week());
   ar & make_nvp("nth_kday_of_month: day_of_week", nkd.day_of_week());
@@ -323,12 +323,12 @@ void load(Archive & ar, gregorian::nth_kday_of_month& nkd, unsigned int version)
 //!override needed b/c no default constructor
 template<class Archive>
 inline void load_construct_data(Archive & ar, 
-    				gregorian::nth_kday_of_month* nkd, 
+                                gregorian::nth_kday_of_month* nkd, 
                                 const unsigned int file_version)
 {
   // values used are not significant
   ::new(pd) gregorian::nth_kday_of_month(gregorian::nth_kday_of_month::first,
-      					 gregorian::Monday,gregorian::Jan);
+                                         gregorian::Monday,gregorian::Jan);
 }
 
 /**** first_kday_of_month ****/
@@ -339,7 +339,7 @@ inline void load_construct_data(Archive & ar,
  */
 template<class Archive>
 void save(Archive & ar, const gregorian::first_kday_of_month& fkd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   ar & make_nvp("first_kday_of_month: day_of_week", fkd.day_of_week());
   ar & make_nvp("first_kday_of_month: month", fkd.month());
@@ -361,7 +361,7 @@ void load(Archive & ar, gregorian::first_kday_of_month& fkd, unsigned int versio
 //!override needed b/c no default constructor
 template<class Archive>
 inline void load_construct_data(Archive & ar, 
-    				gregorian::first_kday_of_month* fkd, 
+                                gregorian::first_kday_of_month* fkd, 
                                 const unsigned int file_version)
 {
   // values used are not significant
@@ -376,7 +376,7 @@ inline void load_construct_data(Archive & ar,
  */
 template<class Archive>
 void save(Archive & ar, const gregorian::last_kday_of_month& lkd, 
-    	  unsigned int version)
+          unsigned int version)
 {
   ar & make_nvp("last_kday_of_month: day_of_week", lkd.day_of_week());
   ar & make_nvp("last_kday_of_month: month", lkd.month());
@@ -398,7 +398,7 @@ void load(Archive & ar, gregorian::last_kday_of_month& lkd, unsigned int version
 //!override needed b/c no default constructor
 template<class Archive>
 inline void load_construct_data(Archive & ar, 
-    				gregorian::last_kday_of_month* lkd, 
+                                gregorian::last_kday_of_month* lkd, 
                                 const unsigned int file_version)
 {
   // values used are not significant
@@ -410,7 +410,7 @@ inline void load_construct_data(Archive & ar,
 //! Function to save first_day_of_the_week_before objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::first_kday_before& fkdb, 
-    	  unsigned int version)
+          unsigned int version)
 {
   ar & make_nvp("first_kday_before: day_of_week", fkdb.day_of_week());
 }
@@ -426,7 +426,7 @@ void load(Archive & ar, gregorian::first_kday_before& fkdb, unsigned int version
 //!override needed b/c no default constructor
 template<class Archive>
 inline void load_construct_data(Archive & ar, 
-    				gregorian::first_kday_before* fkdb, 
+                                gregorian::first_kday_before* fkdb, 
                                 const unsigned int file_version)
 {
   // values used are not significant
@@ -438,7 +438,7 @@ inline void load_construct_data(Archive & ar,
 //! Function to save first_day_of_the_week_after objects using serialization lib
 template<class Archive>
 void save(Archive & ar, const gregorian::first_kday_after& fkda, 
-    	  unsigned int version)
+          unsigned int version)
 {
   ar & make_nvp("first_kday_after: day_of_week", fkda.day_of_week());
 }
@@ -454,7 +454,7 @@ void load(Archive & ar, gregorian::first_kday_after& fkda, unsigned int version)
 //!override needed b/c no default constructor
 template<class Archive>
 inline void load_construct_data(Archive & ar, 
-    				gregorian::first_kday_after* fkda, 
+                                gregorian::first_kday_after* fkda, 
                                 const unsigned int file_version)
 {
   // values used are not significant

@@ -67,7 +67,7 @@ namespace date_time {
         typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
         typename month_type::month_map_type::iterator iter = ptr->find(s);
         if(iter != ptr->end()) { // required for STLport
-	  return iter->second;
+          return iter->second;
         }
       }
       return 13; // intentionally out of range - name not found
@@ -81,12 +81,12 @@ namespace date_time {
      * greg_weekday::max() or date_time::NumSpecialValues */
     template<class charT>
     short find_match(const charT* const* short_names, 
-		     const charT* const* long_names, const int limit,
-		     const std::basic_string<charT>& s) {
+                     const charT* const* long_names, const int limit,
+                     const std::basic_string<charT>& s) {
       for(int i = 0; i <= limit; ++i){
-	if(short_names[i] == s || long_names[i] == s){
-	  return i;
-	}
+        if(short_names[i] == s || long_names[i] == s){
+          return i;
+        }
       }
       return limit+1; // not-found, return a value out of range
     }
@@ -240,7 +240,7 @@ namespace date_time {
     from_simple_string_type(const std::basic_string<charT>& s){
       typedef typename boost::char_separator<charT> char_separator;
       typedef typename boost::tokenizer<char_separator, typename std::basic_string<charT>::const_iterator, 
-					  std::basic_string<charT> > tokenizer;
+                                          std::basic_string<charT> > tokenizer;
       const charT sep_list[] = {'[','/',']','\0'};
       char_separator sep(sep_list);
       tokenizer tokens(s, sep);
@@ -248,7 +248,7 @@ namespace date_time {
       std::basic_string<charT> date_string = *tok_it;
       // get 2 string iterators and generate a date from them
       typename std::basic_string<charT>::iterator date_string_start = date_string.begin(), 
-						  date_string_end = date_string.end(); 
+                                                  date_string_end = date_string.end(); 
       typedef typename std::iterator_traits<typename std::basic_string<charT>::iterator>::value_type value_type;
       date_type d1 = from_stream_type<date_type>(date_string_start, date_string_end, value_type());
       date_string = *(++tok_it); // next token

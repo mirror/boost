@@ -36,7 +36,7 @@ namespace date_time {
         os << td.get_rep(); 
       }
       else {
-	charT fill_char = '0';
+        charT fill_char = '0';
         if(td.is_negative()) {
           os << '-';
         }
@@ -77,7 +77,7 @@ namespace date_time {
       os << d;
       if(!d.is_infinity() && !d.is_not_a_date())
       {
-	os << " "; //TODO: fix the separator here.
+        os << " "; //TODO: fix the separator here.
         duration_formatter::duration_put(t.time_of_day(), os);
       }
       

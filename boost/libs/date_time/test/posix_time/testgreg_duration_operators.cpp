@@ -26,36 +26,36 @@ int main(){
   {
     ptime p(date(2001, Oct, 31), hours(5));
     check("ptime + months", 
-	ptime(date(2002, Feb, 28), hours(5)) == p + months(4));
+        ptime(date(2002, Feb, 28), hours(5)) == p + months(4));
     p += months(4);
     check("ptime += months", 
-	ptime(date(2002, Feb, 28), hours(5)) == p);
+        ptime(date(2002, Feb, 28), hours(5)) == p);
   }
   {
     ptime p(date(2001, Oct, 31), hours(5));
     check("ptime - months", 
-	ptime(date(2001, Apr, 30), hours(5)) == p - months(6));
+        ptime(date(2001, Apr, 30), hours(5)) == p - months(6));
     p -= months(6);
     check("ptime -= months", 
-	ptime(date(2001, Apr, 30), hours(5)) == p);
+        ptime(date(2001, Apr, 30), hours(5)) == p);
   }
 
   /*** years ***/
   {
     ptime p(date(2001, Feb, 28), hours(5));
     check("ptime + years", 
-	ptime(date(2004, Feb, 29), hours(5)) == p + years(3));
+        ptime(date(2004, Feb, 29), hours(5)) == p + years(3));
     p += years(3);
     check("ptime += years", 
-	ptime(date(2004, Feb, 29), hours(5)) == p);
+        ptime(date(2004, Feb, 29), hours(5)) == p);
   }
   {
     ptime p(date(2000, Feb, 29), hours(5));
     check("ptime - years", 
-	ptime(date(1998, Feb, 28), hours(5)) == p - years(2));
+        ptime(date(1998, Feb, 28), hours(5)) == p - years(2));
     p -= years(2);
     check("ptime -= years", 
-	ptime(date(1998, Feb, 28), hours(5)) == p);
+        ptime(date(1998, Feb, 28), hours(5)) == p);
   }
 
   
@@ -65,18 +65,18 @@ int main(){
   {
     ptime p(date(2001, Feb, 28), hours(5));
     check("ptime + weeks", 
-	ptime(date(2001, Mar, 21), hours(5)) == p + weeks(3));
+        ptime(date(2001, Mar, 21), hours(5)) == p + weeks(3));
     p += weeks(3);
     check("ptime += weeks", 
-	ptime(date(2001, Mar, 21), hours(5)) == p);
+        ptime(date(2001, Mar, 21), hours(5)) == p);
   }
   {
     ptime p(date(2001, Feb, 28), hours(5));
     check("ptime - weeks", 
-	ptime(date(2001, Feb, 14), hours(5)) == p - weeks(2));
+        ptime(date(2001, Feb, 14), hours(5)) == p - weeks(2));
     p -= weeks(2);
     check("ptime -= weeks", 
-	ptime(date(2001, Feb, 14), hours(5)) == p);
+        ptime(date(2001, Feb, 14), hours(5)) == p);
   }
 
 #endif // BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES

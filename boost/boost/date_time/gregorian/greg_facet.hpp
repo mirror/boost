@@ -231,7 +231,7 @@ namespace gregorian {
   template<class charT>
   inline
   std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is,
-      					date_period& dp)
+                                        date_period& dp)
   {
     std::basic_string<charT> s;
     is >> s;
@@ -241,10 +241,10 @@ namespace gregorian {
 
   //! generates a locale with the set of gregorian name-strings of type char*
   BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, char type);
-#ifndef BOOST_NO_CWCHAR
+#ifndef BOOST_NO_STD_WSTRING
   //! generates a locale with the set of gregorian name-strings of type wchar_t*
   BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, wchar_t type);
-#endif // BOOST_NO_CWCHAR
+#endif // BOOST_NO_STD_WSTRING
 
   //! operator>> for gregorian::greg_month - throws exception if invalid month given
   template<class charT>
