@@ -164,10 +164,7 @@ namespace std {
 
 
 // Detect other compilers with serious defects
-#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
- || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
- || defined(BOOST_NO_SFINAE)
- || defined(BOOST_NO_STDC_NAMESPACE)
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_SFINAE) || defined(BOOST_NO_STDC_NAMESPACE)
 #define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
 
