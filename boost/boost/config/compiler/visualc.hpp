@@ -52,7 +52,7 @@
 
 #endif
 
-#if _MSC_VER <= 1310
+#if _MSC_VER < 1310
 #  define BOOST_NO_SWPRINTF
 #endif
 

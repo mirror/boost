@@ -68,7 +68,7 @@ template class BOOST_REGEX_DECL match_results<std::basic_string<BOOST_REGEX_CHAR
 #pragma warning(push)
 #pragma warning(disable : 4251 4231 4660)
 
-template class BOOST_REGEX_DECL regex_traits< BOOST_REGEX_CHAR_T >;
+//template class BOOST_REGEX_DECL regex_traits< BOOST_REGEX_CHAR_T >;
 template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 template class BOOST_REGEX_DECL re_detail::match_results_base<BOOST_REGEX_CHAR_T const*, BOOST_DEFAULT_ALLOCATOR(re_detail::def_alloc_param_traits<BOOST_REGEX_CHAR_T const*>::type)>;
 template class BOOST_REGEX_DECL re_detail::match_results_base<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator, BOOST_DEFAULT_ALLOCATOR(re_detail::def_alloc_param_traits<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator>::type)>;

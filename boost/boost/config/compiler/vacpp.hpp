@@ -7,9 +7,21 @@
 
 //  Visual Age (IBM) C++ compiler setup:
 
-#define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-#define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-#define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#if __IBMCPP__ <= 501
+#  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#endif
+
+#if (__IBMCPP__ <= 502) || !defined(BOOST_STRICT_CONFIG)
+// Actually the compiler supports inclass member initialization but it
+// requires a definition for the class member and it doesn't recognize
+// it as an integral constant expression when used as a template argument.
+#  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+
+#  define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
+#  define BOOST_NO_INTEGRAL_INT64_T
+#endif
+
 //
 // On AIX thread support seems to be indicated by _THREAD_SAFE:
 //

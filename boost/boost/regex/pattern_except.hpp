@@ -31,12 +31,19 @@ namespace boost{
    #pragma option push -a8 -b -Vx -Ve -pc
 #endif
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4275)
+#endif
 class BOOST_REGEX_DECL bad_pattern : public std::runtime_error
 {
 public:
    explicit bad_pattern(const std::string& s) : std::runtime_error(s){};
    ~bad_pattern() throw();
 };
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 class BOOST_REGEX_DECL bad_expression : public bad_pattern
 {

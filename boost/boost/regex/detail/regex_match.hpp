@@ -195,7 +195,7 @@ public:
    difference_type max_state_count;
    iterator* loop_starts;
 
-   _priv_match_data(const match_results_base<iterator, Allocator>&, iterator, iterator, unsigned);
+   _priv_match_data(const match_results_base<iterator, Allocator>&, iterator, iterator, std::size_t);
    
    ~_priv_match_data()
    {
@@ -211,7 +211,7 @@ public:
    {
       return loop_starts;
    }
-   void estimate_max_state_count(iterator a, iterator b, unsigned states, std::random_access_iterator_tag*)
+   void estimate_max_state_count(iterator a, iterator b, std::size_t states, std::random_access_iterator_tag*)
    {
       difference_type dist = std::distance(a,b);
       states *= states;
@@ -221,7 +221,7 @@ public:
       else
          max_state_count = 1000 + states * dist;
    }
-   void estimate_max_state_count(iterator a, iterator b, unsigned states, void*)
+   void estimate_max_state_count(iterator a, iterator b, std::size_t states, void*)
    {
       // we don't know how long the sequence is:
       max_state_count = BOOST_REGEX_MAX_STATE_COUNT;
@@ -229,14 +229,16 @@ public:
 };
 
 template <class iterator, class Allocator>
-_priv_match_data<iterator, Allocator>::_priv_match_data(const match_results_base<iterator, Allocator>& m, iterator a, iterator b, unsigned states)
+_priv_match_data<iterator, Allocator>::_priv_match_data(const match_results_base<iterator, Allocator>& m, iterator a, iterator b, std::size_t states)
   : temp_match(m), matches(64, m.allocator()), prev_pos(64, m.allocator()), prev_record(64, m.allocator())
 {
+  typedef typename regex_iterator_traits<iterator>::iterator_category category;
+  
   accumulators = 0;
   caccumulators = 0;
   loop_starts = 0;
   state_count = 0;
-  estimate_max_state_count(a, b, states, static_cast<typename regex_iterator_traits<iterator>::iterator_category*>(0));
+  estimate_max_state_count(a, b, states, static_cast<category*>(0));
 }
 
 template <class iterator, class Allocator>
@@ -1088,8 +1090,8 @@ bool query_match_aux(iterator first,
 
    if(match_found || have_partial_match)
    {
-      return true;
       pd.state_count = 0;
+      return true;
    }
 
    // if we get to here then everything has failed
@@ -1964,6 +1966,9 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string
 } // namespace boost
 
 #endif   // BOOST_REGEX_MATCH_HPP
+
+
+
 
 
 

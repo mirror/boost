@@ -103,7 +103,7 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 5.6:
+// last known and checked version is 5.7 (Kylix 3):
 #if (__BORLANDC__ > 0x570)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
@@ -111,6 +111,7 @@
 #     pragma message( "Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
 
