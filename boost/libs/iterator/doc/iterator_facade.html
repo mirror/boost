@@ -7,7 +7,7 @@
 <title>Iterator Facade</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
-<meta name="date" content="2003-09-14" />
+<meta name="date" content="2003-11-24" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
 <style type="text/css"><!--
 
@@ -218,7 +218,7 @@ ul.auto-toc {
 Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport
 Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2003-09-14</td></tr>
+<td>2003-11-24</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
 </tbody>
@@ -227,31 +227,39 @@ Railway Operation and Construction</a></td></tr>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">abstract:</th><td class="field-body"></td>
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body"><tt class="literal"><span class="pre">iterator_facade</span></tt> is a base class template that implements the
+interface of standard iterators in terms of a few core functions
+and associated types, to be supplied by a derived iterator class.</td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">iterator_facade</span></tt> is a base class template that implements the
-interface of standard iterators in terms of a few core functions
-and associated types, to be supplied by a derived iterator class.</p>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#motivation" id="id7" name="id7">Motivation</a></li>
-<li><a class="reference" href="#usage" id="id8" name="id8">Usage</a></li>
-<li><a class="reference" href="#iterator-core-access" id="id9" name="id9">Iterator Core Access</a></li>
-<li><a class="reference" href="#operator" id="id10" name="id10"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
-<li><a class="reference" href="#id2" id="id11" name="id11"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
-<li><a class="reference" href="#reference" id="id12" name="id12">Reference</a><ul>
-<li><a class="reference" href="#iterator-facade-usage" id="id13" name="id13"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></li>
-<li><a class="reference" href="#iterator-facade-iterator-category" id="id14" name="id14"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id15" name="id15"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference" href="#overview" id="id7" name="id7">Overview</a><ul>
+<li><a class="reference" href="#motivation" id="id8" name="id8">Motivation</a></li>
+<li><a class="reference" href="#usage" id="id9" name="id9">Usage</a></li>
+<li><a class="reference" href="#iterator-core-access" id="id10" name="id10">Iterator Core Access</a></li>
+<li><a class="reference" href="#operator" id="id11" name="id11"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
+<li><a class="reference" href="#id2" id="id12" name="id12"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#tutorial-example" id="id13" name="id13">Tutorial Example</a></li>
+<li><a class="reference" href="#reference" id="id14" name="id14">Reference</a><ul>
+<li><a class="reference" href="#ref" id="id15" name="id15">Ref</a><ul>
+<li><a class="reference" href="#iterator-facade-usage" id="id16" name="id16"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></li>
+<li><a class="reference" href="#iterator-facade-iterator-category" id="id17" name="id17"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id18" name="id18"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="overview">
+<h1><a class="toc-backref" href="#id7" name="overview">Overview</a></h1>
 <div class="section" id="motivation">
-<h1><a class="toc-backref" href="#id7" name="motivation">Motivation</a></h1>
+<h2><a class="toc-backref" href="#id8" name="motivation">Motivation</a></h2>
 <!-- Version 1.1 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -295,15 +303,16 @@ impossible.</li>
 </blockquote>
 </div>
 <div class="section" id="usage">
-<h1><a class="toc-backref" href="#id8" name="usage">Usage</a></h1>
-<p>The user of <tt class="literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from an
-specialization of <tt class="literal"><span class="pre">iterator_facade</span></tt> which takes the derived iterator
-class as the first template parameter.  The order of the other
-template parameters to <tt class="literal"><span class="pre">iterator_facade</span></tt> have been carefully chosen
-to take advantage of useful defaults.  For example, when defining a
-constant lvalue iterator, the user can pass a const-qualified version
-of the iterator's <tt class="literal"><span class="pre">value_type</span></tt> as <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt>
-parameter and omit the <tt class="literal"><span class="pre">Reference</span></tt> parameter which follows.</p>
+<h2><a class="toc-backref" href="#id9" name="usage">Usage</a></h2>
+<p>The user of <tt class="literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from a
+specialization of <tt class="literal"><span class="pre">iterator_facade</span></tt> and passes the derived
+iterator class as <tt class="literal"><span class="pre">iterator_facade</span></tt>'s first template parameter.
+The order of the other template parameters have been carefully
+chosen to take advantage of useful defaults.  For example, when
+defining a constant lvalue iterator, the user can pass a
+const-qualified version of the iterator's <tt class="literal"><span class="pre">value_type</span></tt> as
+<tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt> parameter and omit the
+<tt class="literal"><span class="pre">Reference</span></tt> parameter which follows.</p>
 <p>The derived iterator class must define member functions implementing
 the iterator's core behaviors.  The following table describes
 expressions which are required to be valid depending on the category
@@ -358,7 +367,7 @@ Iterator or a more-refined iterator concept, a default constructor is
 required.</p>
 </div>
 <div class="section" id="iterator-core-access">
-<h1><a class="toc-backref" href="#id9" name="iterator-core-access">Iterator Core Access</a></h1>
+<h2><a class="toc-backref" href="#id10" name="iterator-core-access">Iterator Core Access</a></h2>
 <p><tt class="literal"><span class="pre">iterator_facade</span></tt> and the operator implementations need to be able
 to access the core member functions in the derived class.  Making the
 core member functions public would expose an implementation detail to
@@ -392,7 +401,7 @@ open a safety loophole, as every core member function preserves the
 invariants of the iterator.</p>
 </div>
 <div class="section" id="operator">
-<h1><a class="toc-backref" href="#id10" name="operator"><tt class="literal"><span class="pre">operator[]</span></tt></a></h1>
+<h2><a class="toc-backref" href="#id11" name="operator"><tt class="literal"><span class="pre">operator[]</span></tt></a></h2>
 <p>The indexing operator for a generalized iterator presents special
 challenges.  A random access iterator's <tt class="literal"><span class="pre">operator[]</span></tt> is only
 required to return something convertible to its <tt class="literal"><span class="pre">value_type</span></tt>.
@@ -413,7 +422,7 @@ iterator class; it will hide the one supplied by <tt class="literal"><span class
 from clients of her iterator.</p>
 <a class="target" id="operator-arrow" name="operator-arrow"></a></div>
 <div class="section" id="id2">
-<h1><a class="toc-backref" href="#id11" name="id2"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h1>
+<h2><a class="toc-backref" href="#id12" name="id2"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h2>
 <p>The <tt class="literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
 iterator) need not in fact be a reference, so long as it is
 convertible to the iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  When the <tt class="literal"><span class="pre">value_type</span></tt>
@@ -433,8 +442,16 @@ Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </tbody>
 </table>
 </div>
+</div>
+<div class="section" id="tutorial-example">
+<h1><a class="toc-backref" href="#id13" name="tutorial-example">Tutorial Example</a></h1>
+<p>I'm working on a Tutorial example to go here.</p>
+</div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id12" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id14" name="reference">Reference</a></h1>
+<div class="section" id="ref">
+<h2><a class="toc-backref" href="#id15" name="ref">Ref</a></h2>
+<p>We need to resolve the title levels here.</p>
 <!-- Version 1.3 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -546,7 +563,7 @@ struct enable_if_interoperable
 {};
 </pre>
 <div class="section" id="iterator-facade-usage">
-<h2><a class="toc-backref" href="#id13" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h2>
+<h3><a class="toc-backref" href="#id16" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h3>
 <p>The following table describes the typical valid expressions on
 <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
@@ -630,7 +647,7 @@ Iterator</td>
 </table>
 <a class="target" id="facade-iterator-category" name="facade-iterator-category"></a></div>
 <div class="section" id="iterator-facade-iterator-category">
-<h2><a class="toc-backref" href="#id14" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h2>
+<h3><a class="toc-backref" href="#id17" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h3>
 <p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade&lt;X,V,R,C,D&gt;</span></tt>
 is a type which satisfies the following conditions:</p>
 <blockquote>
@@ -683,7 +700,7 @@ convertible, and not to any more-derived traversal tag type.</p>
 </blockquote>
 </div>
 <div class="section" id="iterator-facade-operations">
-<h2><a class="toc-backref" href="#id15" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
+<h3><a class="toc-backref" href="#id18" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h3>
 <p>The operations in this section are described in terms of operations on
 the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
@@ -822,10 +839,11 @@ return tmp -= n;
 </div>
 </div>
 </div>
+</div>
 <hr class="footer" />
 <div class="footer">
 <a class="reference" href="iterator_facade.rst">View document source</a>.
-Generated on: 2003-11-24 05:00 UTC.
+Generated on: 2004-01-10 18:59 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

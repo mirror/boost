@@ -16,19 +16,30 @@
 
 :abstract:
 
-.. include:: iterator_facade_abstract.rst
+  .. include:: iterator_facade_abstract.rst
 
 .. contents:: Table of Contents
 
+Overview
+========
 
 Motivation
 ----------
 
 .. include:: iterator_facade_body.rst
 
+Tutorial Example
+================
+
+I'm working on a Tutorial example to go here.
 
 Reference
----------
+=========
+
+Ref
+---
+
+We need to resolve the title levels here.
 
 .. include:: iterator_facade_ref.rst
 

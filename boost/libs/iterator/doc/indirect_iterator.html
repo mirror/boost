@@ -242,70 +242,104 @@ iterators over smart pointers, which the impl handles. -JGS -->
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#indirect-iterator-requirements" id="id1" name="id1"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#indirect-iterator-operations" id="id2" name="id2"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#indirect-iterator-models" id="id2" name="id2"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#indirect-iterator-operations" id="id3" name="id3"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
 </ul>
 </div>
 <pre class="literal-block">
 template &lt;
     class Iterator
   , class Value = use_default
-  , unsigned Access  = use_default_access
-  , class Traversal  = use_default
+  , class CategoryOrTraversal = use_default
   , class Reference = use_default
   , class Difference = use_default
 &gt;
 class indirect_iterator
-  : public iterator_adaptor&lt;/* see discussion */&gt;
 {
-    friend class iterator_core_access;
  public:
+    typedef /* see below */ value_type;
+    typedef /* see below */ reference;
+    typedef /* see below */ pointer;
+    typedef /* see below */ difference_type;
+    typedef /* see below */ iterator_category;
+
     indirect_iterator();
     indirect_iterator(Iterator x);
+
     template &lt;
-        class Iterator2, class Value2, unsigned Access2, class Traversal2
+        class Iterator2, class Value2, class Category2
       , class Reference2, class Difference2
     &gt;
     indirect_iterator(
         indirect_iterator&lt;
-             Iterator2, Value2, Access2, Traversal2, Reference2, Difference2
+             Iterator2, Value2, Category2, Reference2, Difference2
         &gt; const&amp; y
       , typename enable_if_convertible&lt;Iterator2, Iterator&gt;::type* = 0 // exposition
     );
-private: // as-if specification
-    typename indirect_iterator::reference dereference() const
-    {
-        return **this-&gt;base();
-    }
 };
 </pre>
+<p>The member types of <tt class="literal"><span class="pre">indirect_iterator</span></tt> are defined according to the
+following pseudo-code.  We use the abbreviation
+<tt class="literal"><span class="pre">V=iterator_traits&lt;Iterator&gt;::value_type</span></tt>.:</p>
+<pre class="literal-block">
+if (Value is use_default) then
+    typedef iterator_traits&lt;V&gt;::value_type value_type;
+else
+    typedef remove_const&lt;Value&gt;::type value_type;
+
+if (Reference is use_default) then
+    if (Value is use_default) then
+        typedef iterator_traits&lt;V&gt;::reference reference;
+    else
+        typedef Value&amp; reference;
+else
+    typedef Reference reference;
+
+if (Value is use_default) then
+    typedef ?? pointer;
+else
+    typedef Value* pointer;
+
+if (Difference is use_default)
+    typedef iterator_traits&lt;Iterator&gt;::difference_type difference_type;
+else
+    typedef Difference difference_type;
+</pre>
+<p>The member <tt class="literal"><span class="pre">indirect_iterator::iterator_category</span></tt> is a type that
+satisfies the requirements of the concepts modeled by the indirect
+iterator as specified in the models section.</p>
 <div class="section" id="indirect-iterator-requirements">
 <h1><a class="toc-backref" href="#id1" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h1>
-<p>The <tt class="literal"><span class="pre">value_type</span></tt> of the <tt class="literal"><span class="pre">Iterator</span></tt> template parameter should
-itself be dereferenceable. The return type of the <tt class="literal"><span class="pre">operator*</span></tt> for
-the <tt class="literal"><span class="pre">value_type</span></tt> must be the same type as the <tt class="literal"><span class="pre">Reference</span></tt> template
-parameter. The <tt class="literal"><span class="pre">Value</span></tt> template parameter will be the <tt class="literal"><span class="pre">value_type</span></tt>
-for the <tt class="literal"><span class="pre">indirect_iterator</span></tt>, unless <tt class="literal"><span class="pre">Value</span></tt> is const. If <tt class="literal"><span class="pre">Value</span></tt>
-is <tt class="literal"><span class="pre">const</span> <span class="pre">X</span></tt>, then <tt class="literal"><span class="pre">value_type</span></tt> will be <em>non-</em> <tt class="literal"><span class="pre">const</span> <span class="pre">X</span></tt>.  The
-default for <tt class="literal"><span class="pre">Value</span></tt> is</p>
-<pre class="literal-block">
-iterator_traits&lt; iterator_traits&lt;Iterator&gt;::value_type &gt;::value_type
-</pre>
-<p>If the default is used for <tt class="literal"><span class="pre">Value</span></tt>, then there must be a valid
-specialization of <tt class="literal"><span class="pre">iterator_traits</span></tt> for the value type of the base
-iterator.</p>
-<p>The <tt class="literal"><span class="pre">Reference</span></tt> parameter will be the <tt class="literal"><span class="pre">reference</span></tt> type of the
-<tt class="literal"><span class="pre">indirect_iterator</span></tt>. The default is <tt class="literal"><span class="pre">Value&amp;</span></tt>.</p>
-<p>The <tt class="literal"><span class="pre">Access</span></tt> and <tt class="literal"><span class="pre">Traversal</span></tt> parameters are passed unchanged to
-the corresponding parameters of the <tt class="literal"><span class="pre">iterator_adaptor</span></tt> base
-class, and  the <tt class="literal"><span class="pre">Iterator</span></tt> parameter is passed unchanged as the
-<tt class="literal"><span class="pre">Base</span></tt> parameter to the <tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class.</p>
-<p>The indirect iterator will model the most refined standard traversal
-concept that is modeled by the <tt class="literal"><span class="pre">Iterator</span></tt> type.  The indirect
-iterator will model the most refined standard access concept that is
-modeled by the value type of <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
+<p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
+Iterator. The <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> argument shall be one of the
+standard iterator tags or <tt class="literal"><span class="pre">use_default</span></tt>. If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>
+is an iterator tag, the template parameter <tt class="literal"><span class="pre">Iterator</span></tt> argument shall
+meet the traversal requirements corresponding to the iterator tag.</p>
+<p>The expression <tt class="literal"><span class="pre">*v</span></tt>, where <tt class="literal"><span class="pre">v</span></tt> is an object of type
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, must be a valid expression
+and must be convertible to <tt class="literal"><span class="pre">indirect_iterator::reference</span></tt>.  Also
+<tt class="literal"><span class="pre">indirect_iterator::reference</span></tt> must be convertible to
+<tt class="literal"><span class="pre">indirect_iterator::value</span></tt>.  There are further requirements on the
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="literal"><span class="pre">Value</span></tt> parameter
+is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied by the algorithm for deducing the
+default for the <tt class="literal"><span class="pre">value_type</span></tt> member.</p>
+</div>
+<div class="section" id="indirect-iterator-models">
+<h1><a class="toc-backref" href="#id2" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h1>
+<p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is a standard iterator tag,
+<tt class="literal"><span class="pre">indirect_iterator</span></tt> is a model of the iterator concept corresponding
+to the tag, otherwise <tt class="literal"><span class="pre">indirect_iterator</span></tt> satisfies the requirements
+of the most refined standard traversal concept that is satisfied by
+the <tt class="literal"><span class="pre">Iterator</span></tt> argument.</p>
+<p><tt class="literal"><span class="pre">indirect_iterator</span></tt> models Readable Iterator.  If
+<tt class="literal"><span class="pre">indirect_iterator::reference(*v)</span> <span class="pre">=</span> <span class="pre">t</span></tt> is a valid expression (where
+<tt class="literal"><span class="pre">t</span></tt> is an object of type <tt class="literal"><span class="pre">indirect_iterator::value_type</span></tt>) then
+<tt class="literal"><span class="pre">indirect_iterator</span></tt> models Writable Iterator. If
+<tt class="literal"><span class="pre">indirect_iterator::reference</span></tt> is a reference then
+<tt class="literal"><span class="pre">indirect_iterator</span></tt> models Lvalue Iterator.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
-<h1><a class="toc-backref" href="#id2" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id3" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>
 <p><tt class="literal"><span class="pre">indirect_iterator();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -313,8 +347,8 @@ modeled by the value type of <tt class="literal"><span class="pre">Iterator</spa
 <tbody valign="top">
 <tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Iterator</span></tt> must be Default Constructible.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> with
-a default constructed base object.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> with 
+a default-constructed <tt class="literal"><span class="pre">iterator_adaptor</span></tt> subobject.</td>
 </tr>
 </tbody>
 </table>
@@ -346,7 +380,8 @@ indirect_iterator(
 <tbody valign="top">
 <tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Iterator2</span></tt> is implicitly convertible to <tt class="literal"><span class="pre">Iterator</span></tt>.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> that is a copy of <tt class="literal"><span class="pre">y</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> whose 
+<tt class="literal"><span class="pre">iterator_adaptor</span></tt> subobject is constructed from <tt class="literal"><span class="pre">y.base()</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -355,7 +390,7 @@ indirect_iterator(
 <hr class="footer" />
 <div class="footer">
 <a class="reference" href="indirect_iterator.rst">View document source</a>.
-Generated on: 2003-11-24 05:00 UTC.
+Generated on: 2004-01-10 18:59 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

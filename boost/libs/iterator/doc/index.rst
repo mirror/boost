@@ -84,11 +84,14 @@ up often.  In order to ease the implementation of new iterators,
 the Boost.Iterator library provides the |facade|_ class template,
 which implements many useful defaults and compile-time checks
 designed to help the author iterator ensure that his iterator is
-correct.  It is common to define a new iterator which behaves like
-another iterator, but which modifies some aspect of its behavior.
-For that purpose, the library supplies the |adaptor|_ class
-template, which is specially designed to take advantage of as much
-of the underlying iterator's behavior as possible.
+correct.  
+
+It is also common to define a new iterator that is similar to some
+underlying iterator or iterator-like type, but that modifies some
+aspect of the underlying type's behavior.  For that purpose, the
+library supplies the |adaptor|_ class template, which is specially
+designed to take advantage of as much of the underlying type's
+behavior as possible.
 
 .. |facade| replace:: ``iterator_facade``
 .. _facade: iterator_facade.html

@@ -46,14 +46,15 @@ objects for several reasons:
 Usage
 -----
 
-The user of ``iterator_facade`` derives his iterator class from an
-specialization of ``iterator_facade`` which takes the derived iterator
-class as the first template parameter.  The order of the other
-template parameters to ``iterator_facade`` have been carefully chosen
-to take advantage of useful defaults.  For example, when defining a
-constant lvalue iterator, the user can pass a const-qualified version
-of the iterator's ``value_type`` as ``iterator_facade``\ 's ``Value``
-parameter and omit the ``Reference`` parameter which follows.
+The user of ``iterator_facade`` derives his iterator class from a
+specialization of ``iterator_facade`` and passes the derived
+iterator class as ``iterator_facade``\ 's first template parameter.
+The order of the other template parameters have been carefully
+chosen to take advantage of useful defaults.  For example, when
+defining a constant lvalue iterator, the user can pass a
+const-qualified version of the iterator's ``value_type`` as
+``iterator_facade``\ 's ``Value`` parameter and omit the
+``Reference`` parameter which follows.
 
 The derived iterator class must define member functions implementing
 the iterator's core behaviors.  The following table describes
