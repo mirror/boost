@@ -479,19 +479,19 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       typename base_type::direct_state_base_ptr_type & pSelf,
       typename state_base_type::node_state_base_ptr_type &
         pOutermostUnstableState,
-      bool callExitActions )
+      bool performFullExit )
     {
       inner_context_ptr_type pMostDerivedSelf =
         polymorphic_downcast< MostDerived * >( this );
       pSelf = 0;
-      exit_impl( pMostDerivedSelf, pOutermostUnstableState, callExitActions );
+      exit_impl( pMostDerivedSelf, pOutermostUnstableState, performFullExit );
     }
 
     void exit_impl(
       inner_context_ptr_type & pSelf,
       typename state_base_type::node_state_base_ptr_type &
         pOutermostUnstableState,
-      bool callExitActions )
+      bool performFullExit )
     {
       switch ( this->ref_count() )
       {
@@ -515,7 +515,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
               pOutermostUnstableState );
           }
 
-          if ( callExitActions )
+          if ( performFullExit )
           {
             pSelf->exit();
             check_store_shallow_history< stores_shallow_history >();
@@ -525,7 +525,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
           context_ptr_type pContext = pContext_;
           pSelf = 0;
           pContext->exit_impl(
-            pContext, pOutermostUnstableState, callExitActions );
+            pContext, pOutermostUnstableState, performFullExit );
           break;
         }
         default:
@@ -574,7 +574,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     {
       const inner_context_ptr_type pInnerContext( new MostDerived );
       pInnerContext->set_context( pContext );
-      outermostContextBase.add( pInnerContext, false );
+      outermostContextBase.add( pInnerContext );
       return pInnerContext;
     }
 
@@ -593,8 +593,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     {
       typedef typename mpl::if_<
         mpl::empty< InnerList >,
-        deep_construct_inner_impl_leaf_state,
-        deep_construct_inner_impl_node_state
+        deep_construct_inner_impl_empty,
+        deep_construct_inner_impl_non_empty
       >::type impl;
       impl::template deep_construct_inner_impl< InnerList >(
         pInnerContext, outermostContextBase );
@@ -612,28 +612,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    struct deep_construct_inner_impl_node_state
-    {
-      template< class InnerList >
-      static void deep_construct_inner_impl(
-        const inner_context_ptr_type & pInnerContext,
-        outermost_context_base_type & outermostContextBase )
-      {
-        node_state_deep_construct_inner< InnerList >(
-          pInnerContext, outermostContextBase );
-      }
-    };
-
-    struct deep_construct_inner_impl_leaf_state
-    {
-      template< class InnerList >
-      static void deep_construct_inner_impl(
-        const inner_context_ptr_type &,
-        outermost_context_base_type & )
-      {
-      }
-    };
-
     struct context_ptr_impl_other_context
     {
       template< class OtherContext, class State >
@@ -801,7 +779,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return do_discard_event;
     }
 
-    struct local_react_impl_nonempty
+    struct local_react_impl_non_empty
     {
       template< class ReactionList, class State >
       static result local_react_impl(
@@ -821,7 +799,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         return reactionResult;
       }
     };
-    friend struct local_react_impl_nonempty;
+    friend struct local_react_impl_non_empty;
 
     struct local_react_impl_empty
     {
@@ -841,7 +819,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       typedef typename mpl::if_<
         mpl::empty< ReactionList >,
         local_react_impl_empty,
-        local_react_impl_nonempty
+        local_react_impl_non_empty
       >::type impl;
       return impl::template local_react_impl< ReactionList >(
         *this, evt, eventType );
@@ -866,10 +844,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       }
     };
 
-    struct node_state_deep_construct_inner_impl_non_empty_list
+    struct deep_construct_inner_impl_non_empty
     {
       template< class InnerList >
-      static void node_state_deep_construct_inner_impl(
+      static void deep_construct_inner_impl(
         const inner_context_ptr_type & pInnerContext,
         outermost_context_base_type & outermostContextBase )
       {
@@ -887,36 +865,17 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
             typename current_inner::orthogonal_position >::type >::value ) );
 
         current_inner::deep_construct( pInnerContext, outermostContextBase );
-
-        typedef typename mpl::pop_front< InnerList >::type recurse_list;
-        node_state_deep_construct_inner_impl_holder< recurse_list >::
-          template node_state_deep_construct_inner_impl< recurse_list >(
-            pInnerContext, outermostContextBase );
+        deep_construct_inner< typename mpl::pop_front< InnerList >::type >(
+          pInnerContext, outermostContextBase );
       }
     };
 
-    struct node_state_deep_construct_inner_impl_empty_list
+    struct deep_construct_inner_impl_empty
     {
       template< class InnerList >
-      static void node_state_deep_construct_inner_impl(
+      static void deep_construct_inner_impl(
         const inner_context_ptr_type &, outermost_context_base_type & ) {}
     };
-
-    template< class InnerList >
-    struct node_state_deep_construct_inner_impl_holder : mpl::if_<
-      mpl::empty< InnerList >,
-      node_state_deep_construct_inner_impl_empty_list,
-      node_state_deep_construct_inner_impl_non_empty_list >::type {};
-
-    template< class InnerList >
-    static void node_state_deep_construct_inner(
-      const inner_context_ptr_type & pInnerContext,
-      outermost_context_base_type & outermostContextBase )
-    {
-      node_state_deep_construct_inner_impl_holder< InnerList >::
-        template node_state_deep_construct_inner_impl< InnerList >(
-          pInnerContext, outermostContextBase );
-    }
 
     struct check_store_shallow_history_impl_no
     {
@@ -984,14 +943,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 #endif
 
 
-
-template< class MostDerived, class Context, class Reactions,
-          class InnerInitial, history_mode historyMode >
-inline void intrusive_ptr_add_ref( const ::boost::fsm::simple_state<
-  MostDerived, Context, Reactions, InnerInitial, historyMode > * pBase )
-{
-  pBase->add_ref();
-}
 
 template< class MostDerived, class Context, class Reactions,
           class InnerInitial, history_mode historyMode >

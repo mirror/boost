@@ -410,7 +410,7 @@ class state_machine : noncopyable
       currentStatesEnd_( currentStates_.end() ),
       pOutermostState_( 0 ),
       isInnermostCommonOuter_( false ),
-      isExceptionPending_( false )
+      performFullExit_( true )
     {
     }
 
@@ -506,19 +506,20 @@ class state_machine : noncopyable
 
     void terminate_as_reaction( state_base_type & theState )
     {
-      terminate_impl( theState, !isExceptionPending_ );
+      terminate_impl( theState, performFullExit_ );
       pOutermostUnstableState_ = 0;
     }
 
     void terminate_as_part_of_transit( state_base_type & theState )
     {
-      terminate_impl( theState, !isExceptionPending_ );
+      terminate_impl( theState, performFullExit_ );
       isInnermostCommonOuter_ = true;
     }
 
     void terminate_as_part_of_transit( state_machine & )
     {
-      terminate_impl( *pOutermostState_, !isExceptionPending_ );
+      terminate_impl( *pOutermostState_, performFullExit_ );
+      isInnermostCommonOuter_ = true;
     }
 
     void post_event( const event_base_ptr_type & pEvent )
@@ -529,27 +530,19 @@ class state_machine : noncopyable
 
 
     template< class State >
-    void add(
-      const intrusive_ptr< State > & pState,
-      bool isInnermostCommonOuter )
+    void add( const intrusive_ptr< State > & pState )
     {
       // The second dummy argument is necessary because the call to the
       // overloaded function add_impl would otherwise be ambiguous.
       node_state_base_ptr_type pNewOutermostUnstableStateCandidate =
         add_impl( pState, *pState );
 
-      const state_base_type * const pCurrentOutermostUnstableState =
-        get_pointer( pOutermostUnstableState_ );
-
-      // TODO: outer_state_ptr() is a virtual function, which could be called
-      // non-virtually here (State is the most-derived type). Investigate why
-      // MSVC7.1 has problems with non-virtual call.
-      if ( ( pCurrentOutermostUnstableState == 0 ) ||
-        ( is_in_highest_orthogonal_region< State >() ||
-          isInnermostCommonOuter_ ) &&
-        ( pCurrentOutermostUnstableState == pState->outer_state_ptr() ) )
+      if ( isInnermostCommonOuter_ ||
+        is_in_highest_orthogonal_region< State >() &&
+        ( get_pointer( pOutermostUnstableState_ ) ==
+          pState->State::outer_state_ptr() ) )
       {
-        isInnermostCommonOuter_ = isInnermostCommonOuter;
+        isInnermostCommonOuter_ = false;
         pOutermostUnstableState_ = pNewOutermostUnstableStateCandidate;
       }
     }
@@ -759,22 +752,20 @@ class state_machine : noncopyable
 
       BOOST_ASSERT( pHandlingState != 0 );
 
-      isExceptionPending_ = true;
+      // Setting a member variable to a special value for the duration of a
+      // call surely looks like a kludge (normally it should be a parameter of
+      // the call). However, in this case it is unavoidable because the call
+      // below could result in a call to user code where passing through an
+      // additional bool parameter is not acceptable.
+      performFullExit_ = false;
       const result reactionResult = pHandlingState->react_impl(
         exceptionEvent, exceptionEvent.dynamic_type() );
+      // If the above call throws then performFullExit_ will obviously not be
+      // set back to true. In this case the termination triggered by the
+      // scope guard further up in the call stack will take care of this.
+      performFullExit_ = true;
 
-      if ( reactionResult == do_defer_event )
-      {
-        // For intrusive_from_this() to work, the exception event must have
-        // been allocated with new. With the library-supplied
-        // exception_translator this is not the case, so users will have to
-        // craft their own should they ever need to defer an exception event.
-        // Deferring exception events makes sense only in very rare cases and
-        // is dangerous unless operator new never throws.
-        defer_event( exceptionEvent, pHandlingState );
-      }
-
-      return ( reactionResult != do_forward_event ) &&
+      return ( reactionResult == do_discard_event ) &&
         ( get_pointer( pOutermostUnstableState_ ) == 0 );
     }
 
@@ -827,7 +818,6 @@ class state_machine : noncopyable
     {
       terminator guard( *this );
       BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
-      isExceptionPending_ = false;
       const typename rtti_policy_type::id_type eventType = evt.dynamic_type();
       result reactionResult = do_forward_event;
       
@@ -861,12 +851,14 @@ class state_machine : noncopyable
     }
 
 
-    void terminate_impl( bool callExitActions )
+    void terminate_impl( bool performFullExit )
     {
+      performFullExit_ = true;
+
       if ( !terminated() )
       {
         // this also empties deferredMap_
-        terminate_impl( *pOutermostState_, callExitActions );
+        terminate_impl( *pOutermostState_, performFullExit );
       }
 
       eventQueue_.clear();
@@ -874,7 +866,7 @@ class state_machine : noncopyable
       deepHistoryMap_.clear();
     }
 
-    void terminate_impl( state_base_type & theState, bool callExitActions )
+    void terminate_impl( state_base_type & theState, bool performFullExit )
     {
       isInnermostCommonOuter_ = false;
 
@@ -884,7 +876,7 @@ class state_machine : noncopyable
       if ( get_pointer( pOutermostUnstableState_ ) != 0 )
       {
         theState.remove_from_state_list(
-          currentStatesEnd_, pOutermostUnstableState_, callExitActions );
+          currentStatesEnd_, pOutermostUnstableState_, performFullExit );
       }
       // Optimization: We want to find out whether currentStates_ has size 1
       // and if yes use the optimized implementation below. Since
@@ -898,14 +890,14 @@ class state_machine : noncopyable
         // without orthogonal regions.
         leaf_state_ptr_type & pState = *currentStatesEnd_;
         pState->exit_impl(
-          pState, pOutermostUnstableState_, callExitActions );
+          pState, pOutermostUnstableState_, performFullExit );
       }
       else
       {
         BOOST_ASSERT( currentStates_.size() > 1 );
         // The machine is stable and there are multiple innermost states
         theState.remove_from_state_list(
-          ++currentStatesEnd_, pOutermostUnstableState_, callExitActions );
+          ++currentStatesEnd_, pOutermostUnstableState_, performFullExit );
       }
     }
 
@@ -937,7 +929,7 @@ class state_machine : noncopyable
     }
 
     template< class State >
-    bool is_in_highest_orthogonal_region()
+    static bool is_in_highest_orthogonal_region()
     {
       return mpl::equal_to<
         typename State::orthogonal_position,
@@ -978,7 +970,7 @@ class state_machine : noncopyable
       typename history_map_type::iterator pFoundSlot = historyMap.find(
         history_key_type::make_history_key< DefaultState >() );
       
-      if ( pFoundSlot == historyMap.end() || ( pFoundSlot->second == 0 ) )
+      if ( ( pFoundSlot == historyMap.end() ) || ( pFoundSlot->second == 0 ) )
       {
         // We have never entered this state before or history was cleared
         DefaultState::deep_construct(
@@ -1030,7 +1022,7 @@ class state_machine : noncopyable
     bool isInnermostCommonOuter_;
     node_state_base_ptr_type pOutermostUnstableState_;
     ExceptionTranslator translator_;
-    bool isExceptionPending_;
+    bool performFullExit_;
     history_map_type shallowHistoryMap_;
     history_map_type deepHistoryMap_;
 };

@@ -52,7 +52,7 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
     virtual void remove_from_state_list(
       typename base_type::state_list_type::iterator & statesEnd,
       typename base_type::node_state_base_ptr_type & pOutermostUnstableState,
-      bool callExitActions )
+      bool performFullExit )
     {
       --statesEnd;
       swap( *listPosition_, *statesEnd );
@@ -60,13 +60,13 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
       direct_state_base_ptr_type & pState = *statesEnd;
       // Because the list owns the leaf_state, this leads to the immediate
       // termination of this state.
-      pState->exit_impl( pState, pOutermostUnstableState, callExitActions );
+      pState->exit_impl( pState, pOutermostUnstableState, performFullExit );
     }
 
     virtual void exit_impl(
       direct_state_base_ptr_type & pSelf,
       typename base_type::node_state_base_ptr_type & pOutermostUnstableState,
-      bool callExitActions ) = 0;
+      bool performFullExit ) = 0;
 
   private:
     //////////////////////////////////////////////////////////////////////////

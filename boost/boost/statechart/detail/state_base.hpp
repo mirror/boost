@@ -157,7 +157,7 @@ class state_base :
     virtual void remove_from_state_list(
       typename state_list_type::iterator & statesEnd,
       node_state_base_ptr_type & pOutermostUnstableState,
-      bool callExitActions ) = 0;
+      bool performFullExit ) = 0;
 
   private:
     //////////////////////////////////////////////////////////////////////////

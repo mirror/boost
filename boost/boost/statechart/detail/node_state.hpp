@@ -49,7 +49,7 @@ class node_state_base : public state_base< Allocator, RttiPolicy >
     virtual void exit_impl(
       direct_state_base_ptr_type & pSelf,
       typename base_type::node_state_base_ptr_type & pOutermostUnstableState,
-      bool callExitActions ) = 0;
+      bool performFullExit ) = 0;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
       typename state_base_type::state_list_type::iterator & statesEnd,
       typename state_base_type::node_state_base_ptr_type &
         pOutermostUnstableState,
-      bool callExitActions )
+      bool performFullExit )
     {
       state_base_type ** const pPastEnd =
         &pInnerStates[ OrthogonalRegionCount::value ];
@@ -112,7 +112,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
         BOOST_ASSERT( get_pointer( pOutermostUnstableState ) == this );
         typename state_base_type::node_state_base_ptr_type pSelf =
           pOutermostUnstableState;
-        pSelf->exit_impl( pSelf, pOutermostUnstableState, callExitActions );
+        pSelf->exit_impl( pSelf, pOutermostUnstableState, performFullExit );
       }
       else
       {
@@ -126,7 +126,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
           if ( *pState != 0 )
           {
             ( *pState )->remove_from_state_list(
-              statesEnd, pOutermostUnstableState, callExitActions );
+              statesEnd, pOutermostUnstableState, performFullExit );
           }
         }
       }

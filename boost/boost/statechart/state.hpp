@@ -47,7 +47,7 @@ class state : public simple_state<
 
     state( my_context ctx )
     {
-      base_type::set_context( ctx.pContext_ );
+      this->set_context( ctx.pContext_ );
     }
 
     ~state() {}
@@ -87,7 +87,7 @@ class state : public simple_state<
     {
       const inner_context_ptr_type pInnerContext(
         new MostDerived( my_context( pContext ) ) );
-      outermostContextBase.add( pInnerContext, false );
+      outermostContextBase.add( pInnerContext );
       return pInnerContext;
     }
 };
