@@ -18,7 +18,6 @@
 #define BOOST_UBLAS_STORAGE_H
 
 #include <algorithm>
-#include <vector>
 
 #ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
 #include <boost/shared_array.hpp>
@@ -1389,8 +1388,8 @@ namespace boost { namespace numeric { namespace ublas {
     public:
         typedef A array_type;
         typedef const A const_array_type;
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef typename A::value_type value_type;
         typedef typename A::const_reference const_reference;
         typedef typename A::reference reference;
