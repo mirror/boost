@@ -1016,6 +1016,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
         BOOST_UBLAS_USING banded_matrix<T, F, A>::operator =;
 #endif
+        typedef std::size_t size_type;
         typedef banded_matrix<T, F, A> matrix_type;
 
         // Construction and destruction
@@ -1023,10 +1024,10 @@ namespace boost { namespace numeric { namespace ublas {
         diagonal_matrix ():
             matrix_type () {}
         BOOST_UBLAS_INLINE
-        diagonal_matrix (std::size_t size):
+        diagonal_matrix (size_type size):
             matrix_type (size, size) {}
         BOOST_UBLAS_INLINE
-        diagonal_matrix (std::size_t size1, std::size_t size2):
+        diagonal_matrix (size_type size1, size_type size2):
             matrix_type (size1, size2) {}
         template<class AE>
         BOOST_UBLAS_INLINE
