@@ -270,7 +270,7 @@ using std::distance;
 #  define BOOST_REGEX_USE_C_LOCALE
 #endif
 
-#ifdef BOOST_REGEX_USE_WIN32_LOCALE
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 #  include <windows.h>
 #endif
 
