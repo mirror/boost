@@ -106,10 +106,10 @@ private:
 
 
 // Class-static data definitions
-typename test_opr_base::fruit_array_type
+test_opr_base::fruit_array_type
  test_opr_base::fruit = { "apple", "orange", "pear", "peach", "grape", "plum" };
 
-typename test_opr_base::scratch_array_type
+test_opr_base::scratch_array_type
  test_opr_base::scratch = "";
 
 template <typename T, typename R, typename P>
