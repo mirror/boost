@@ -24,6 +24,13 @@
 #include "boost/detail/workaround.hpp"
 
 
+// Codewarrior 8.3 for Windows fails without this.
+// Thanks Howard Hinnant ;)
+//
+#ifdef __MWERKS__
+#pragma parse_func_templ off
+#endif
+
 
 #if defined BOOST_NO_STD_WSTRING || defined BOOST_NO_STD_LOCALE
 # define BOOST_DYNAMIC_BITSET_NO_WCHAR_T_TESTS
