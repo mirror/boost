@@ -147,7 +147,7 @@
 	    <entry>From delimited string.</entry>
 	    <entry>
 	      std::string ts("23:59:59.000");
-	      time_duraton td(duration_from_string(ts))
+	      time_duration td(duration_from_string(ts))
 	    </entry>
 	  </row>
 	</tbody>
