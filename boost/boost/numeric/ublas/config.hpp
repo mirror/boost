@@ -89,6 +89,8 @@
 // Version 7.1
 #if BOOST_MSVC == 1310
 
+// Seeming still some problems with function templates
+#define BOOST_UBLAS_MSVC71_FUNCTION_TEMPLATE_ORDERING
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
 // The second workaround looks like BOOST_UBLAS_QUALIFIED_TYPENAME.
