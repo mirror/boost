@@ -482,7 +482,7 @@ private:
  // so we only use them for those compilers.
 #if defined(__GNUC__)
  struct accept_any {
-   template <class T> accept_any(const T&) { }
+   template <class T> accept_any(const T&);
  };
  template <class T>
  struct checker
