@@ -25,6 +25,8 @@
 #include <boost/checked_delete.hpp>
 #include <boost/detail/atomic_count.hpp>
 
+#include <functional>         // for std::less
+
 namespace boost
 {
 
@@ -215,6 +217,16 @@ public:
     {
         return pi_->use_count() == 1;
     }
+
+    friend inline bool operator==(shared_count const & a, shared_count const & b)
+    {
+        return a.pi_ == b.pi_;
+    }
+
+    friend inline bool operator<(shared_count const & a, shared_count const & b)
+    {
+        return std::less<counted_base *>()(a.pi_, b.pi_);
+    }
 };
 
 class weak_count
@@ -274,6 +286,16 @@ public:
     long use_count() const // nothrow
     {
         return pi_->use_count();
+    }
+
+    friend inline bool operator==(weak_count const & a, weak_count const & b)
+    {
+        return a.pi_ == b.pi_;
+    }
+
+    friend inline bool operator<(weak_count const & a, weak_count const & b)
+    {
+        return std::less<counted_base *>()(a.pi_, b.pi_);
     }
 };
 

@@ -29,6 +29,7 @@
 #include <memory>             // for std::auto_ptr
 #include <algorithm>          // for std::swap
 #include <functional>         // for std::less
+#include <typeinfo>           // for std::bad_cast
 
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)

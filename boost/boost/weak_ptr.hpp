@@ -22,7 +22,7 @@
 #include <boost/detail/shared_count.hpp>
 
 #include <algorithm>          // for std::swap
-#include <functional>         // for std::less
+#include <typeinfo>           // for std::bad_cast
 
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
@@ -133,6 +133,11 @@ public:
         pn.swap(other.pn);
     }
 
+    bool less(this_type const & rhs) const // implementation detail, never throws
+    {
+        return pn < rhs.pn;
+    }
+
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
 
@@ -161,7 +166,7 @@ template<class T, class U> inline bool operator!=(weak_ptr<T> const & a, weak_pt
 
 template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const & b)
 {
-    return std::less<T*>()(a.get(), b.get());
+    return a.less(b);
 }
 
 template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)

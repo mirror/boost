@@ -46,6 +46,11 @@ struct X
         std::cout << "X(" << this << ")::~X()\n";
     }
 
+    virtual int id() const
+    {
+        return 1;
+    }
+
 private:
 
     X(X const &);
@@ -64,6 +69,11 @@ struct Y: public X
     {
         --cnt;
         std::cout << "Y(" << this << ")::~Y()\n";
+    }
+
+    virtual int id() const
+    {
+        return 2;
     }
 
 private:
@@ -86,6 +96,76 @@ void release_object(int * p)
     std::cout << "release_object()\n";
 }
 
+template<class T> void test_is_X(T const & p)
+{
+    BOOST_TEST(p->id() == 1);
+    BOOST_TEST((*p).id() == 1);
+}
+
+template<class T> void test_is_Y(T const & p)
+{
+    BOOST_TEST(p->id() == 2);
+    BOOST_TEST((*p).id() == 2);
+}
+
+// std::rel_ops::operator!= breaks x != y when defined in the global namespace
+
+#if defined(__STL_BEGIN_RELOPS_NAMESPACE) && !defined(__STL_USE_NAMESPACE_FOR_RELOPS)
+#  define BOOST_BROKEN_INEQUALITY
+#endif
+
+template<class T> void test_eq(T const & a, T const & b)
+{
+    BOOST_TEST(a == b);
+
+#ifndef BOOST_BROKEN_INEQUALITY
+
+    BOOST_TEST(!(a != b));
+
+#endif
+
+    BOOST_TEST(!(a < b));
+    BOOST_TEST(!(b < a));
+}
+
+template<class T> void test_ne(T const & a, T const & b)
+{
+    BOOST_TEST(!(a == b));
+
+#ifndef BOOST_BROKEN_INEQUALITY
+
+    BOOST_TEST(a != b);
+
+#endif
+
+    BOOST_TEST(a < b || b < a);
+    BOOST_TEST(!(a < b && b < a));
+}
+
+template<class T, class U> void test_eq2(T const & a, U const & b)
+{
+    BOOST_TEST(a == b);
+
+#ifndef BOOST_BROKEN_INEQUALITY
+
+    BOOST_TEST(!(a != b));
+
+#endif
+
+}
+
+template<class T, class U> void test_ne2(T const & a, U const & b)
+{
+    BOOST_TEST(!(a == b));
+
+#ifndef BOOST_BROKEN_INEQUALITY
+
+    BOOST_TEST(a != b);
+
+#endif
+
+}
+
 int test_main(int, char * [])
 {
     using namespace boost;
@@ -93,6 +173,15 @@ int test_main(int, char * [])
     {
         shared_ptr<X> p(new Y);
         shared_ptr<X> p2(new X);
+
+        test_is_Y(p);
+        test_is_X(p2);
+        test_ne(p, p2);
+
+        {
+            shared_ptr<X> q(p);
+            test_eq(p, q);
+        }
 
         shared_ptr<Y> p3 = shared_dynamic_cast<Y>(p);
         shared_ptr<Y> p4 = shared_dynamic_cast<Y>(p2);
@@ -102,7 +191,13 @@ int test_main(int, char * [])
         BOOST_TEST(p3.use_count() == 2);
         BOOST_TEST(p4.use_count() == 1);
 
+        test_is_Y(p3);
+        test_eq2(p, p3);
+        test_ne2(p2, p4);
+
         shared_ptr<void> p5(p);
+
+        test_eq2(p, p5);
 
         std::cout << "--\n";
 
@@ -125,13 +220,19 @@ int test_main(int, char * [])
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(wp2.get() != 0);
 
+        test_is_Y(wp2);
+        test_ne(wp1, wp2);
+
         weak_ptr<Y> wp3 = shared_dynamic_cast<Y>(wp2);
 
         BOOST_TEST(wp3.use_count() == 1);
         BOOST_TEST(wp3.get() != 0);
-        BOOST_TEST(wp2 == wp3);
+
+        test_eq2(wp2, wp3);
 
         weak_ptr<X> wp4(wp3);
+
+        test_eq(wp2, wp4);
 
         wp1 = p2;
         wp1 = p4;
@@ -140,7 +241,13 @@ int test_main(int, char * [])
 
         BOOST_TEST(wp1.use_count() == 1);
         BOOST_TEST(wp1.get() != 0);
-        BOOST_TEST(wp1 == wp2);
+
+        test_eq(wp1, wp2);
+
+        weak_ptr<X> wp5;
+
+        bool b1 = wp1 < wp5;
+        bool b2 = wp5 < wp1;
 
         p5.reset();
 
@@ -152,6 +259,12 @@ int test_main(int, char * [])
 
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(wp3.get() == 0);
+
+        // Test operator< stability for std::set< weak_ptr<> >
+        // Thanks to Joe Gottman for pointing this out
+
+        BOOST_TEST(b1 == (wp1 < wp5));
+        BOOST_TEST(b2 == (wp5 < wp1));
 
         shared_ptr<int> p6(get_object(), release_object);
     }
