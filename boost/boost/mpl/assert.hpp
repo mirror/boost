@@ -210,7 +210,18 @@ enum { \
 
 // BOOST_MPL_ASSERT_NOT((pred<x,...>))
 
-#define BOOST_MPL_ASSERT_NOT(pred) \
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#   define BOOST_MPL_ASSERT_NOT(pred) \
+enum { \
+    BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
+          boost::mpl::assertion<false>::failed( \
+              boost::mpl::assert_not_arg( (void (*) pred)0, 1 ) \
+            ) \
+        ) \
+}\
+/**/
+#else
+#   define BOOST_MPL_ASSERT_NOT(pred) \
 enum { \
     BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
           boost::mpl::assertion_failed<false>( \
@@ -219,6 +230,7 @@ enum { \
         ) \
 }\
 /**/
+#endif
 
 // BOOST_MPL_ASSERT_RELATION(x, ==|!=|<=|<|>=|>, y)
 
