@@ -124,7 +124,7 @@ if(shared_ptr&lt;int&gt; r = <A href="#make_shared" >make_shared</A>(q))
 		<pre>weak_ptr();</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs an <EM>empty</EM> <b>weak_ptr</b>.</p>
-			<p><b>Postconditions:</b> <code>use count() == 0<i>???</i></code>.</p>
+			<p><b>Postconditions:</b> <code>use_count() == 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote><a name="constructors"></a>
 		<pre>template&lt;class Y&gt; weak_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r);
@@ -135,6 +135,7 @@ template&lt;class Y&gt; weak_ptr(weak_ptr&lt;Y&gt; const &amp; r);</pre>
 				<STRONG>weak_ptr</STRONG>; otherwise, constructs a <b>weak_ptr</b> that <EM>shares 
 					ownership</EM> with <STRONG>r</STRONG> as if by storing a copy of the 
 				pointer stored in <b>r</b>.</p>
+			<p><b>Postconditions:</b> <code>use_count() == r.use_count()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
 		<h3><a name="destructor">destructor</a></h3>
@@ -244,7 +245,8 @@ public:
     }
 };
 </pre>
-<p><br></p>
+		<p><br>
+		</p>
 		<hr>
 		<p>$Date$</p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 

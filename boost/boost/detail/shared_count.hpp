@@ -8,7 +8,7 @@
 //
 //  detail/shared_count.hpp
 //
-//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001, 2002, 2003 Peter Dimov and Multi Media Ltd.
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -386,7 +386,7 @@ public:
 
     long use_count() const // nothrow
     {
-        return pi_ != 0? pi_->use_count(): 42; // '42' is an example of 'unspecified'
+        return pi_ != 0? pi_->use_count(): 0;
     }
 
     bool unique() const // nothrow

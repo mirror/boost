@@ -258,7 +258,8 @@ template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never 
 		<blockquote>
 			<p><b>Effects:</b> If <b>r</b> is <EM>empty</EM>, constructs an <EM>empty</EM> <b>shared_ptr</b>; 
 				otherwise, constructs a <b>shared_ptr</b> that <EM>shares ownership</EM> with <b>r</b>.</p>
-			<p><b>Postconditions:</b> <code>get() == r.get()</code>.</p>
+			<p><b>Postconditions:</b> <code>get() == r.get() &amp;&amp; use_count() == 
+					r.use_count()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
 		<pre>template&lt;class Y&gt; explicit shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A>&lt;Y&gt; const &amp; r);</pre>
@@ -266,6 +267,7 @@ template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never 
 			<p><b>Effects:</b> If <b>r</b> is <EM>empty</EM>, constructs an <EM>empty</EM> <b>shared_ptr</b>; 
 				otherwise, constructs a <b>shared_ptr</b> that <EM>shares ownership</EM> with <b>r</b>
 				and stores a copy of the pointer stored in <STRONG>r</STRONG>.</p>
+			<p><b>Postconditions:</b> <code>use_count() == r.use_count()</code>.</p>
 			<p><b>Throws:</b> <b>bad_weak_ptr</b> when <code>r.use_count() == 0</code>.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
 				effect.</p>
@@ -359,9 +361,9 @@ q = p;
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const; // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> the number of <b>shared_ptr</b> objects that <i>share ownership</i>
-				with <b>*this</b>, or an unspecified nonnegative value when <STRONG>*this</STRONG>
-				is <EM>empty</EM>.</p>
+			<p><b>Returns:</b> the number of <b>shared_ptr</b> objects, <STRONG>*this</STRONG> included, that
+				<i>share ownership</i> with <b>*this</b>, or an unspecified nonnegative value 
+				when <STRONG>*this</STRONG> is <EM>empty</EM>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> <code>use_count()</code> is not necessarily efficient. Use only 
 				for debugging and testing purposes, not for production code.</P>

@@ -9,7 +9,7 @@
 //
 //  shared_ptr_test.cpp
 //
-//  Copyright (c) 2002 Peter Dimov
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -481,18 +481,21 @@ void copy_constructor()
         BOOST_TEST(pi2? false: true);
         BOOST_TEST(!pi2);
         BOOST_TEST(pi2.get() == 0);
+        BOOST_TEST(pi2.use_count() == pi.use_count());
 
         boost::shared_ptr<void> pi3(pi);
         BOOST_TEST(pi3 == pi);
         BOOST_TEST(pi3? false: true);
         BOOST_TEST(!pi3);
         BOOST_TEST(pi3.get() == 0);
+        BOOST_TEST(pi3.use_count() == pi.use_count());
 
         boost::shared_ptr<void> pi4(pi3);
         BOOST_TEST(pi4 == pi3);
         BOOST_TEST(pi4? false: true);
         BOOST_TEST(!pi4);
         BOOST_TEST(pi4.get() == 0);
+        BOOST_TEST(pi4.use_count() == pi3.use_count());
     }
 
     {
@@ -503,6 +506,7 @@ void copy_constructor()
         BOOST_TEST(pv2? false: true);
         BOOST_TEST(!pv2);
         BOOST_TEST(pv2.get() == 0);
+        BOOST_TEST(pv2.use_count() == pv.use_count());
     }
 
     {
@@ -513,12 +517,14 @@ void copy_constructor()
         BOOST_TEST(px2? false: true);
         BOOST_TEST(!px2);
         BOOST_TEST(px2.get() == 0);
+        BOOST_TEST(px2.use_count() == px.use_count());
 
         boost::shared_ptr<void> px3(px);
         BOOST_TEST(px3 == px);
         BOOST_TEST(px3? false: true);
         BOOST_TEST(!px3);
         BOOST_TEST(px3.get() == 0);
+        BOOST_TEST(px3.use_count() == px.use_count());
     }
 
     {
@@ -531,8 +537,7 @@ void copy_constructor()
         BOOST_TEST(pi2.get() == 0);
         BOOST_TEST(pi2.use_count() == 2);
         BOOST_TEST(!pi2.unique());
-
-        BOOST_TEST(pi.use_count() == pi2.use_count());
+        BOOST_TEST(pi2.use_count() == pi.use_count());
         BOOST_TEST(!(pi < pi2 || pi2 < pi)); // shared ownership test
 
         boost::shared_ptr<void> pi3(pi);
@@ -542,6 +547,8 @@ void copy_constructor()
         BOOST_TEST(pi3.get() == 0);
         BOOST_TEST(pi3.use_count() == 3);
         BOOST_TEST(!pi3.unique());
+        BOOST_TEST(pi3.use_count() == pi.use_count());
+        BOOST_TEST(!(pi < pi3 || pi3 < pi)); // shared ownership test
 
         boost::shared_ptr<void> pi4(pi2);
         BOOST_TEST(pi4 == pi2);
@@ -550,6 +557,8 @@ void copy_constructor()
         BOOST_TEST(pi4.get() == 0);
         BOOST_TEST(pi4.use_count() == 4);
         BOOST_TEST(!pi4.unique());
+        BOOST_TEST(pi4.use_count() == pi2.use_count());
+        BOOST_TEST(!(pi2 < pi4 || pi4 < pi2)); // shared ownership test
 
         BOOST_TEST(pi3.use_count() == pi4.use_count());
         BOOST_TEST(!(pi3 < pi4 || pi4 < pi3)); // shared ownership test
@@ -565,8 +574,7 @@ void copy_constructor()
         BOOST_TEST(px2.get() == 0);
         BOOST_TEST(px2.use_count() == 2);
         BOOST_TEST(!px2.unique());
-
-        BOOST_TEST(px.use_count() == px2.use_count());
+        BOOST_TEST(px2.use_count() == px.use_count());
         BOOST_TEST(!(px < px2 || px2 < px)); // shared ownership test
 
         boost::shared_ptr<void> px3(px);
@@ -576,6 +584,8 @@ void copy_constructor()
         BOOST_TEST(px3.get() == 0);
         BOOST_TEST(px3.use_count() == 3);
         BOOST_TEST(!px3.unique());
+        BOOST_TEST(px3.use_count() == px.use_count());
+        BOOST_TEST(!(px < px3 || px3 < px)); // shared ownership test
 
         boost::shared_ptr<void> px4(px2);
         BOOST_TEST(px4 == px2);
@@ -584,6 +594,8 @@ void copy_constructor()
         BOOST_TEST(px4.get() == 0);
         BOOST_TEST(px4.use_count() == 4);
         BOOST_TEST(!px4.unique());
+        BOOST_TEST(px4.use_count() == px2.use_count());
+        BOOST_TEST(!(px2 < px4 || px4 < px2)); // shared ownership test
 
         BOOST_TEST(px3.use_count() == px4.use_count());
         BOOST_TEST(!(px3 < px4 || px4 < px3)); // shared ownership test
@@ -601,8 +613,7 @@ void copy_constructor()
         BOOST_TEST(pi2.use_count() == 2);
         BOOST_TEST(!pi2.unique());
         BOOST_TEST(*pi2 == 7);
-
-        BOOST_TEST(pi.use_count() == pi2.use_count());
+        BOOST_TEST(pi2.use_count() == pi.use_count());
         BOOST_TEST(!(pi < pi2 || pi2 < pi)); // shared ownership test
     }
 
@@ -618,8 +629,7 @@ void copy_constructor()
         BOOST_TEST(pv2.get() == p);
         BOOST_TEST(pv2.use_count() == 2);
         BOOST_TEST(!pv2.unique());
-
-        BOOST_TEST(pv.use_count() == pv2.use_count());
+        BOOST_TEST(pv2.use_count() == pv.use_count());
         BOOST_TEST(!(pv < pv2 || pv2 < pv)); // shared ownership test
     }
 
@@ -640,7 +650,7 @@ void copy_constructor()
 
         BOOST_TEST(X::instances == 1);
 
-        BOOST_TEST(px.use_count() == px2.use_count());
+        BOOST_TEST(px2.use_count() == px.use_count());
         BOOST_TEST(!(px < px2 || px2 < px)); // shared ownership test
 
         boost::shared_ptr<void> px3(px);
@@ -650,6 +660,8 @@ void copy_constructor()
         BOOST_TEST(px3.get() == p);
         BOOST_TEST(px3.use_count() == 3);
         BOOST_TEST(!px3.unique());
+        BOOST_TEST(px3.use_count() == px.use_count());
+        BOOST_TEST(!(px < px3 || px3 < px)); // shared ownership test
 
         boost::shared_ptr<void> px4(px2);
         BOOST_TEST(px4 == px2);
@@ -658,6 +670,8 @@ void copy_constructor()
         BOOST_TEST(px4.get() == p);
         BOOST_TEST(px4.use_count() == 4);
         BOOST_TEST(!px4.unique());
+        BOOST_TEST(px4.use_count() == px2.use_count());
+        BOOST_TEST(!(px2 < px4 || px4 < px2)); // shared ownership test
 
         BOOST_TEST(px3.use_count() == px4.use_count());
         BOOST_TEST(!(px3 < px4 || px4 < px3)); // shared ownership test
@@ -678,6 +692,8 @@ void copy_constructor()
         BOOST_TEST(px.get() == p);
         BOOST_TEST(px.use_count() == 2);
         BOOST_TEST(!px.unique());
+        BOOST_TEST(px.use_count() == py.use_count());
+        BOOST_TEST(!(px < py || py < px)); // shared ownership test
 
         BOOST_TEST(X::instances == 1);
         BOOST_TEST(Y::instances == 1);
@@ -689,6 +705,8 @@ void copy_constructor()
         BOOST_TEST(pv.get() == px.get());
         BOOST_TEST(pv.use_count() == 3);
         BOOST_TEST(!pv.unique());
+        BOOST_TEST(pv.use_count() == px.use_count());
+        BOOST_TEST(!(px < pv || pv < px)); // shared ownership test
 
         boost::shared_ptr<void const> pv2(py);
         BOOST_TEST(pv2 == py);
@@ -697,6 +715,8 @@ void copy_constructor()
         BOOST_TEST(pv2.get() == py.get());
         BOOST_TEST(pv2.use_count() == 4);
         BOOST_TEST(!pv2.unique());
+        BOOST_TEST(pv2.use_count() == py.use_count());
+        BOOST_TEST(!(py < pv2 || pv2 < py)); // shared ownership test
 
         BOOST_TEST(pv.use_count() == pv2.use_count());
         BOOST_TEST(!(pv < pv2 || pv2 < pv)); // shared ownership test
@@ -710,6 +730,7 @@ void weak_ptr_constructor()
 {
     {
         boost::weak_ptr<Y> wp;
+        BOOST_TEST(wp.use_count() == 0);
 
         try
         {
@@ -730,48 +751,69 @@ void weak_ptr_constructor()
         }
     }
 
-    boost::shared_ptr<Y> p(new Y);
-    boost::weak_ptr<Y> wp(p);
-
     {
-        boost::shared_ptr<Y> p2(wp);
-        BOOST_TEST(p2? true: false);
-        BOOST_TEST(!!p2);
-        BOOST_TEST(p2.get() == p.get());
-        BOOST_TEST(p2.use_count() == 2);
-        BOOST_TEST(!p2.unique());
+        boost::shared_ptr<Y> p;
+        boost::weak_ptr<Y> wp(p);
 
-        BOOST_TEST(p.use_count() == p2.use_count());
-        BOOST_TEST(!(p < p2 || p2 < p)); // shared ownership test
+        if(wp.use_count() != 0) // 0 allowed but not required
+        {
+            boost::shared_ptr<Y> p2(wp);
+            BOOST_TEST(p2.use_count() == wp.use_count());
+            BOOST_TEST(p2.get() == 0);
 
-        boost::shared_ptr<X> p3(wp);
-        BOOST_TEST(p3? true: false);
-        BOOST_TEST(!!p3);
-        BOOST_TEST(p3.get() == p.get());
-        BOOST_TEST(p3.use_count() == 3);
-        BOOST_TEST(!p3.unique());
-
-        BOOST_TEST(p.use_count() == p3.use_count());
+            boost::shared_ptr<X> p3(wp);
+            BOOST_TEST(p3.use_count() == wp.use_count());
+            BOOST_TEST(p3.get() == 0);
+        }
     }
 
-    p.reset();
+    {
+        boost::shared_ptr<Y> p(new Y);
+        boost::weak_ptr<Y> wp(p);
 
-    try
-    {
-        boost::shared_ptr<Y> p2(wp);
-        BOOST_ERROR("shared_ptr<Y> p2(wp) failed to throw");
-    }
-    catch(boost::bad_weak_ptr)
-    {
-    }
+        {
+            boost::shared_ptr<Y> p2(wp);
+            BOOST_TEST(p2? true: false);
+            BOOST_TEST(!!p2);
+            BOOST_TEST(p2.get() == p.get());
+            BOOST_TEST(p2.use_count() == 2);
+            BOOST_TEST(!p2.unique());
+            BOOST_TEST(p2.use_count() == wp.use_count());
 
-    try
-    {
-        boost::shared_ptr<X> p3(wp);
-        BOOST_ERROR("shared_ptr<X> p3(wp) failed to throw");
-    }
-    catch(boost::bad_weak_ptr)
-    {
+            BOOST_TEST(p.use_count() == p2.use_count());
+            BOOST_TEST(!(p < p2 || p2 < p)); // shared ownership test
+
+            boost::shared_ptr<X> p3(wp);
+            BOOST_TEST(p3? true: false);
+            BOOST_TEST(!!p3);
+            BOOST_TEST(p3.get() == p.get());
+            BOOST_TEST(p3.use_count() == 3);
+            BOOST_TEST(!p3.unique());
+            BOOST_TEST(p3.use_count() == wp.use_count());
+
+            BOOST_TEST(p.use_count() == p3.use_count());
+        }
+
+        p.reset();
+        BOOST_TEST(wp.use_count() == 0);
+
+        try
+        {
+            boost::shared_ptr<Y> p2(wp);
+            BOOST_ERROR("shared_ptr<Y> p2(wp) failed to throw");
+        }
+        catch(boost::bad_weak_ptr)
+        {
+        }
+
+        try
+        {
+            boost::shared_ptr<X> p3(wp);
+            BOOST_ERROR("shared_ptr<X> p3(wp) failed to throw");
+        }
+        catch(boost::bad_weak_ptr)
+        {
+        }
     }
 }
 

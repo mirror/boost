@@ -1,7 +1,7 @@
 //
 //  sp_debug_hooks.cpp
 //
-//  Copyright (c) 2002 Peter Dimov
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.

@@ -9,7 +9,7 @@
 //
 //  weak_ptr_test.cpp
 //
-//  Copyright (c) 2002 Peter Dimov
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -88,10 +88,10 @@ void shared_ptr_constructor()
         boost::shared_ptr<int> sp;
 
         boost::weak_ptr<int> wp(sp);
-        BOOST_TEST(wp.use_count() == 0);
+        BOOST_TEST(wp.use_count() == sp.use_count());
 
         boost::weak_ptr<void> wp2(sp);
-        BOOST_TEST(wp2.use_count() == 0);
+        BOOST_TEST(wp2.use_count() == sp.use_count());
     }
 
     {
@@ -99,6 +99,7 @@ void shared_ptr_constructor()
 
         {
             boost::weak_ptr<int> wp(sp);
+            BOOST_TEST(wp.use_count() == sp.use_count());
             BOOST_TEST(wp.use_count() == 1);
             boost::shared_ptr<int> sp2(wp);
             BOOST_TEST(wp.use_count() == 2);
@@ -107,6 +108,7 @@ void shared_ptr_constructor()
 
         {
             boost::weak_ptr<void> wp(sp);
+            BOOST_TEST(wp.use_count() == sp.use_count());
             BOOST_TEST(wp.use_count() == 1);
             boost::shared_ptr<void> sp2(wp);
             BOOST_TEST(wp.use_count() == 2);
@@ -119,6 +121,7 @@ void shared_ptr_constructor()
 
         {
             boost::weak_ptr<int> wp(sp);
+            BOOST_TEST(wp.use_count() == sp.use_count());
             BOOST_TEST(wp.use_count() == 1);
             boost::shared_ptr<int> sp2(wp);
             BOOST_TEST(wp.use_count() == 2);
@@ -127,6 +130,7 @@ void shared_ptr_constructor()
 
         {
             boost::weak_ptr<void> wp(sp);
+            BOOST_TEST(wp.use_count() == sp.use_count());
             BOOST_TEST(wp.use_count() == 1);
             boost::shared_ptr<void> sp2(wp);
             BOOST_TEST(wp.use_count() == 2);
@@ -138,13 +142,14 @@ void shared_ptr_constructor()
         boost::shared_ptr<void> sp;
 
         boost::weak_ptr<void> wp(sp);
-        BOOST_TEST(wp.use_count() == 0);
+        BOOST_TEST(wp.use_count() == sp.use_count());
     }
 
     {
         boost::shared_ptr<void> sp(static_cast<int*>(0));
 
         boost::weak_ptr<void> wp(sp);
+        BOOST_TEST(wp.use_count() == sp.use_count());
         BOOST_TEST(wp.use_count() == 1);
         boost::shared_ptr<void> sp2(wp);
         BOOST_TEST(wp.use_count() == 2);
@@ -155,6 +160,7 @@ void shared_ptr_constructor()
         boost::shared_ptr<void> sp(new int);
 
         boost::weak_ptr<void> wp(sp);
+        BOOST_TEST(wp.use_count() == sp.use_count());
         BOOST_TEST(wp.use_count() == 1);
         boost::shared_ptr<void> sp2(wp);
         BOOST_TEST(wp.use_count() == 2);
@@ -165,10 +171,10 @@ void shared_ptr_constructor()
         boost::shared_ptr<incomplete> sp;
 
         boost::weak_ptr<incomplete> wp(sp);
-        BOOST_TEST(wp.use_count() == 0);
+        BOOST_TEST(wp.use_count() == sp.use_count());
 
         boost::weak_ptr<void> wp2(sp);
-        BOOST_TEST(wp2.use_count() == 0);
+        BOOST_TEST(wp2.use_count() == sp.use_count());
     }
 
     {
@@ -176,6 +182,7 @@ void shared_ptr_constructor()
 
         {
             boost::weak_ptr<incomplete> wp(sp);
+            BOOST_TEST(wp.use_count() == sp.use_count());
             BOOST_TEST(wp.use_count() == 1);
             boost::shared_ptr<incomplete> sp2(wp);
             BOOST_TEST(wp.use_count() == 2);
@@ -184,6 +191,7 @@ void shared_ptr_constructor()
 
         {
             boost::weak_ptr<void> wp(sp);
+            BOOST_TEST(wp.use_count() == sp.use_count());
             BOOST_TEST(wp.use_count() == 1);
             boost::shared_ptr<void> sp2(wp);
             BOOST_TEST(wp.use_count() == 2);
@@ -195,6 +203,7 @@ void shared_ptr_constructor()
         boost::shared_ptr<void> sp = create_incomplete();
 
         boost::weak_ptr<void> wp(sp);
+        BOOST_TEST(wp.use_count() == sp.use_count());
         BOOST_TEST(wp.use_count() == 1);
         boost::shared_ptr<void> sp2(wp);
         BOOST_TEST(wp.use_count() == 2);
@@ -207,18 +216,21 @@ void copy_constructor()
     {
         boost::weak_ptr<int> wp;
         boost::weak_ptr<int> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 0);
     }
 
     {
         boost::weak_ptr<void> wp;
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 0);
     }
 
     {
         boost::weak_ptr<incomplete> wp;
         boost::weak_ptr<incomplete> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 0);
     }
 
@@ -227,6 +239,7 @@ void copy_constructor()
         boost::weak_ptr<int> wp(sp);
 
         boost::weak_ptr<int> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -234,6 +247,7 @@ void copy_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<int> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -243,6 +257,7 @@ void copy_constructor()
         boost::weak_ptr<int> wp(sp);
 
         boost::weak_ptr<int> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -250,6 +265,7 @@ void copy_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<int> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -259,6 +275,7 @@ void copy_constructor()
         boost::weak_ptr<void> wp(sp);
 
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -266,6 +283,7 @@ void copy_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<void> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -275,6 +293,7 @@ void copy_constructor()
         boost::weak_ptr<void> wp(sp);
 
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -282,6 +301,7 @@ void copy_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<void> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -291,6 +311,7 @@ void copy_constructor()
         boost::weak_ptr<incomplete> wp(sp);
 
         boost::weak_ptr<incomplete> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -298,6 +319,7 @@ void copy_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<incomplete> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -308,12 +330,14 @@ void conversion_constructor()
     {
         boost::weak_ptr<int> wp;
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 0);
     }
 
     {
         boost::weak_ptr<incomplete> wp;
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 0);
     }
 
@@ -321,9 +345,11 @@ void conversion_constructor()
         boost::weak_ptr<Z> wp;
 
         boost::weak_ptr<X> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 0);
 
         boost::weak_ptr<Y> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
     }
 
@@ -332,6 +358,7 @@ void conversion_constructor()
         boost::weak_ptr<int> wp(sp);
 
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -339,6 +366,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<void> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -348,6 +376,7 @@ void conversion_constructor()
         boost::weak_ptr<int> wp(sp);
 
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -355,6 +384,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<void> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -364,6 +394,7 @@ void conversion_constructor()
         boost::weak_ptr<incomplete> wp(sp);
 
         boost::weak_ptr<void> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -371,6 +402,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<void> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -380,6 +412,7 @@ void conversion_constructor()
         boost::weak_ptr<Z> wp(sp);
 
         boost::weak_ptr<X> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -387,6 +420,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<X> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -396,6 +430,7 @@ void conversion_constructor()
         boost::weak_ptr<Z> wp(sp);
 
         boost::weak_ptr<Y> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -403,6 +438,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<Y> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -412,6 +448,7 @@ void conversion_constructor()
         boost::weak_ptr<Z> wp(sp);
 
         boost::weak_ptr<X> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -419,6 +456,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<X> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
@@ -428,6 +466,7 @@ void conversion_constructor()
         boost::weak_ptr<Z> wp(sp);
 
         boost::weak_ptr<Y> wp2(wp);
+        BOOST_TEST(wp2.use_count() == wp.use_count());
         BOOST_TEST(wp2.use_count() == 1);
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
@@ -435,6 +474,7 @@ void conversion_constructor()
         BOOST_TEST(!(wp < wp2 || wp2 < wp));
 
         boost::weak_ptr<Y> wp3(wp);
+        BOOST_TEST(wp3.use_count() == wp.use_count());
         BOOST_TEST(wp3.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
     }
