@@ -59,6 +59,7 @@ public:
     : _rng1(rng1), _rng2(rng2) { }
   template<class It> xor_combine(It& first, It last)
     : _rng1(first, last), _rng2( /* advanced by other call */ first, last) { }
+  void seed() { _rng1.seed(); _rng2.seed(); }
   template<class It> void seed(It& first, It last)
   {
     _rng1.seed(first, last);
