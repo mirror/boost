@@ -145,7 +145,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::~indirect_streambuf()
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::open
-    (const T& t, std::streamsize buffer_size, std::streamsize pback_size)
+    (const T& t, int buffer_size, int pback_size)
 {
     using namespace std;
 
@@ -163,9 +163,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
 
     // Construct input buffer.
     if (can_read()) {
-        pback_size_ =
-            std::max( static_cast<streamsize>(2), // STLPort needs 2.
-                      pback_size );
+        pback_size_ = (std::max)(2, pback_size); // STLPort needs 2.
         streamsize size =
             pback_size_ +
             ( buffer_size ? buffer_size: 1 );
@@ -227,8 +225,8 @@ indirect_streambuf<T, Tr, Alloc, Mode>::underflow()
     if (gptr() < egptr()) return traits_type::to_int_type(*gptr());
 
     // Fill putback buffer.
-    streamsize keep = std::min( static_cast<streamsize>(gptr() - eback()),
-                                pback_size_ );
+    streamsize keep = (std::min)( static_cast<streamsize>(gptr() - eback()),
+                                  pback_size_ );
     if (keep)
         traits_type::move( buf.data() + (pback_size_ - keep),
                            gptr() - keep, keep );
@@ -255,7 +253,7 @@ std::streamsize indirect_streambuf<T, Tr, Alloc, Mode>::xsgetn
     if (!gptr()) init_get_area();
     buffer_type& buf = in();
     streamsize avail =
-        std::min(n, static_cast<streamsize>(egptr() - gptr()));
+        (std::min)(n, static_cast<streamsize>(egptr() - gptr()));
 
     // Fill request from buffer.
     if (avail) {
@@ -268,8 +266,8 @@ std::streamsize indirect_streambuf<T, Tr, Alloc, Mode>::xsgetn
     streamsize amt = obj().read(s + avail, n - avail, next_);
 
     // Fill putback buffer:
-    streamsize keep = std::min(avail + amt, pback_size_);
-    streamsize overflow = std::max((streamsize) 0, keep - amt);
+    streamsize keep = (std::min)(avail + amt, pback_size_);
+    streamsize overflow = (std::max)((streamsize) 0, keep - amt);
     if (overflow > 0)
         traits_type::move( buf.data() + pback_size_ - keep,
                            gptr() - overflow, overflow );
