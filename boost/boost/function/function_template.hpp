@@ -1044,6 +1044,9 @@ namespace boost {
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
     {
+      if (this == &f)
+        return *this;
+
       clear();
 
       if (!f.empty()) {
@@ -1064,6 +1067,9 @@ namespace boost {
     // Assignment from another BOOST_FUNCTION_FUNCTION
     void set(const BOOST_FUNCTION_FUNCTION& f)
     {
+      if (this == &f)
+        return;
+
       clear();
 
       if (!f.empty()) {
@@ -1624,6 +1630,9 @@ namespace boost {
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
     {
+      if (this == &f)
+        return *this;
+
       clear();
 
       if (!f.empty()) {
@@ -1644,6 +1653,9 @@ namespace boost {
     // Assignment from another BOOST_FUNCTION_FUNCTION
     void set(const BOOST_FUNCTION_FUNCTION& f)
     {
+      if (this == &f)
+        return;
+
       clear();
 
       if (!f.empty()) {

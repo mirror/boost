@@ -462,6 +462,9 @@ namespace boost {
                                                                             
     function& operator=(const function& f)                                  
     {   
+      if (this == &f)
+        return *this;
+
       const base_type& bf = static_cast<const base_type&>(f);
       base_type* self = this;
       self->set(bf);
@@ -470,6 +473,9 @@ namespace boost {
 
     void set(const function& f)                             
     {
+      if (this == &f)
+        return;
+
       const base_type& bf = static_cast<const base_type&>(f);
       base_type* self = this;
       self->set(bf);
