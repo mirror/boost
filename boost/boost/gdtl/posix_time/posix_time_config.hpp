@@ -107,6 +107,7 @@ namespace posix_time {
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits resolution_traits;
+    static const boost::int64_t tick_per_second =  1000000000;
   };
 
 #else

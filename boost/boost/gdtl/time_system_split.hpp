@@ -25,7 +25,7 @@ namespace gdtl {
     typedef typename config::resolution_traits   resolution_traits;
 
     //86400 is number of seconds in a day...
-    typedef gdtl::wrapping_int<int_type, INT64_C(86400) * resolution_traits::ticks_per_second > wrap_int_type;
+    typedef gdtl::wrapping_int<int_type, INT64_C(86400) * config::tick_per_second > wrap_int_type;
 
     static time_rep_type get_time_rep(const date_type& day,
 				      const time_duration_type& tod,
