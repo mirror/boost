@@ -19,6 +19,7 @@
 
 #include "boost/mpl/begin_end_fwd.hpp"
 #include "boost/mpl/sequence_tag_fwd.hpp"
+#include "boost/mpl/void.hpp"
 #include "boost/mpl/aux_/traits_lambda_spec.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
 
@@ -67,12 +68,12 @@ AUX_AGLORITM_TRAIT_SPEC(end, nested_begin_end_tag, typename Sequence::end)
 // if a type 'T' does not contain 'begin/end' or 'tag' members 
 // and doesn't specialize either 'begin/end' or 'begin_traits/end_traits' 
 // templates, then we end up here
-AUX_AGLORITM_TRAIT_SPEC(begin, non_sequence_tag, non_sequence_tag)
-AUX_AGLORITM_TRAIT_SPEC(end, non_sequence_tag, non_sequence_tag)
+AUX_AGLORITM_TRAIT_SPEC(begin, non_sequence_tag, void_)
+AUX_AGLORITM_TRAIT_SPEC(end, non_sequence_tag, void_)
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
-AUX_AGLORITM_TRAIT_SPEC(begin, int, non_sequence_tag)
-AUX_AGLORITM_TRAIT_SPEC(end, int, non_sequence_tag)
+#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+AUX_AGLORITM_TRAIT_SPEC(begin, int, int)
+AUX_AGLORITM_TRAIT_SPEC(end, int, int)
 #endif
 
 #   undef AUX_AGLORITM_TRAIT_SPEC

@@ -18,24 +18,74 @@
 #define BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
 
 #include "boost/mpl/logical/not.hpp"
+#include "boost/mpl/logical/or.hpp"
 #include "boost/mpl/begin_end.hpp"
+#include "boost/mpl/if.hpp"
+#include "boost/mpl/bool_c.hpp"
 #include "boost/mpl/sequence_tag_fwd.hpp"
+#include "boost/mpl/identity.hpp"
+#include "boost/mpl/void.hpp"
+#include "boost/mpl/aux_/has_tag.hpp"
+#include "boost/mpl/aux_/has_begin.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
 #include "boost/type_traits/is_same.hpp"
+#include "boost/type_traits/is_class.hpp"
 
 namespace boost { namespace mpl {
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+
+namespace aux {
+
+template< typename T > struct is_sequence_impl
+    : logical_or<
+          identity< aux::has_tag<T> >
+        , identity< aux::has_begin<T> >
+        >
+{
+};
+
+} // namespace aux
+        
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
+    >
+struct is_sequence
+    : if_<
+          boost::is_class<T> 
+        , aux::is_sequence_impl<T>
+        , bool_c<false>
+        >::type
+{
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_sequence,(T))
+};
+
+#elif defined(BOOST_NO_MPL_AUX_HAS_XXX)
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
     >
 struct is_sequence
-    : logical_not< is_same< typename begin<T>::type, non_sequence_tag > >
+    : bool_c<false>
+{
+};
+
+#else
+
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
+    >
+struct is_sequence
+    : logical_not< is_same< typename begin<T>::type, void_ > >
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_sequence,(T))
 };
+
+#endif // BOOST_MSVC
 
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct is_sequence<int>

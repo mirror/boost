@@ -72,18 +72,21 @@ struct inherit2
     : T1, T2
 {
     typedef inherit2 type;
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, inherit2, (T1,T2))
 };
 
 template< typename T1 > 
 struct inherit2<T1,empty_base>
 {
     typedef T1 type;
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(2, inherit2, (T1,empty_base))
 };
 
 template< typename T2 > 
 struct inherit2<empty_base,T2>
 {
     typedef T2 type;
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(2, inherit2, (empty_base,T2))
 };
 
 // needed to disambiguate the previous two in case when both 
@@ -92,6 +95,7 @@ template<>
 struct inherit2<empty_base,empty_base>
 {
     typedef empty_base type;
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(2, inherit2, (empty_base,empty_base))
 };
 
 #else
@@ -150,7 +154,7 @@ struct inherit2
         >::template result_< inherit2<T1,T2>,T1,T2 >
 {
     typedef typename inherit2::type_ type;
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,inherit2,(T1,T2))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, inherit2, (T1,T2))
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -183,7 +187,11 @@ struct BOOST_PP_CAT(inherit,n)
         , BOOST_PP_CAT(T,n)
         >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(n,BOOST_PP_CAT(inherit,n),(BOOST_MPL_PP_PARAMS(n, T)))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(
+          n
+        , BOOST_PP_CAT(inherit,n)
+        , (BOOST_MPL_PP_PARAMS(n, T))
+        )
 };
 
 BOOST_MPL_AUX_VOID_SPEC(n, BOOST_PP_CAT(inherit,n))

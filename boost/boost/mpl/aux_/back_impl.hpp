@@ -21,14 +21,14 @@
 #include "boost/mpl/prior.hpp"
 #include "boost/mpl/aux_/deref_wknd.hpp"
 #include "boost/mpl/aux_/traits_lambda_spec.hpp"
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/eti.hpp"
 
 namespace boost {
 namespace mpl {
 
 // default implementation, requires at least bi-directional iterators;
 // conrete sequences might override it by specializing either the 
-// |back_traits| or the primary |back| template
+// 'back_traits' or the primary 'back' template
 
 template< typename Tag >
 struct back_traits
@@ -36,10 +36,10 @@ struct back_traits
     template< typename Sequence > struct algorithm
     {
         typedef typename end<Sequence>::type iter_;
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
-        typedef typename iter_::prior last_;
-#else
+#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
         typedef typename prior<iter_>::type last_;
+#else
+        typedef typename iter_::prior last_;
 #endif
         typedef typename BOOST_MPL_AUX_DEREF_WNKD(last_) type;
     };

@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
-// boost mpl/prior.hpp header file
+// boost mpl/test/is_sequence.cpp source file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2000-02
+// Copyright (c) 2002-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -14,35 +14,25 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_PRIOR_HPP_INCLUDED
-#define BOOST_MPL_PRIOR_HPP_INCLUDED
+#include "boost/mpl/list.hpp"
+#include "boost/mpl/vector.hpp"
+#include "boost/mpl/range_c.hpp"
+#include "boost/mpl/is_sequence.hpp"
+#include "boost/static_assert.hpp"
 
-#include "boost/mpl/aux_/void_spec.hpp"
-#include "boost/mpl/aux_/lambda_support.hpp"
-#include "boost/mpl/aux_/config/eti.hpp"
+using namespace boost::mpl;
 
-namespace boost {
-namespace mpl {
+struct UDT {};
 
-template<
-      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
-    >
-struct prior
+int main()
 {
-    typedef typename T::prior type;
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,prior,(T))
-};
+    BOOST_STATIC_ASSERT(!is_sequence< int >::value);
+    BOOST_STATIC_ASSERT(!is_sequence< int& >::value);
+    BOOST_STATIC_ASSERT(!is_sequence< UDT >::value);
+    BOOST_STATIC_ASSERT(!is_sequence< UDT* >::value);
+    BOOST_STATIC_ASSERT((is_sequence< range_c<int,0,0> >::value));
+    BOOST_STATIC_ASSERT(is_sequence< list<> >::value);
+    BOOST_STATIC_ASSERT(is_sequence< vector<> >::value);
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
-template<> struct prior<int>
-{
-    typedef prior<int> type;
-};
-#endif
-
-BOOST_MPL_AUX_VOID_SPEC(1, prior)
-
-} // namespace mpl
-} // namespace boost
-
-#endif // BOOST_MPL_PRIOR_HPP_INCLUDED
+    return 0;
+}

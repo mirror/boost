@@ -22,19 +22,81 @@
 #include "boost/mpl/aux_/has_begin.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
-
-#include "boost/type_traits/is_class.hpp"
+#include "boost/mpl/aux_/yes_no.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
 namespace boost { namespace mpl {
 
 // agurt, 27/nov/02: have to use a simplistic 'sequence_tag' implementation
 // on MSVC to avoid dreadful "internal structure overflow" error
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
+    >
+struct sequence_tag
+{
+    typedef typename Sequence::tag type;
+};
+
+#elif BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+
+// agurt, 07/feb/03: workaround for what seems to be MSVC 7.0-specific ETI issue
+
+namespace aux {
+
+template< bool >
+struct sequence_tag_impl
+{
+    template< typename Sequence > struct result_
+    {
+        typedef typename Sequence::tag type;
+    };
+};
+
+template<>
+struct sequence_tag_impl<false>
+{
+    template< typename Sequence > struct result_
+    {
+        typedef int type;
+    };
+};
+
+struct int_convertible_
+{
+    int_convertible_(int);
+};
+
+template< typename T >
+struct is_msvc_70_ETI_arg
+{ 
+    static no_tag test(...);
+    static yes_tag test(int_convertible_);
+    static T get();
+
+    BOOST_STATIC_CONSTANT(bool, value = 
+          sizeof(test(get())) == sizeof(yes_tag)
+        );
+};
+
+} // namespace aux
+
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
+    >
+struct sequence_tag
+    : aux::sequence_tag_impl< !aux::is_msvc_70_ETI_arg<Sequence>::value >
+        ::template result_<Sequence>
+{
+};
+
+#else
 
 namespace aux {
 
 template< bool has_tag_, bool has_begin_ >
-struct class_sequence_tag_impl
+struct sequence_tag_impl
 {
     // agurt 24/nov/02: MSVC 6.5 gets confused in 'sequence_tag_impl<true>' 
     // specialization below, if we name it 'result_' here
@@ -42,7 +104,7 @@ struct class_sequence_tag_impl
 };
 
 #   define AUX_CLASS_SEQUENCE_TAG_SPEC(has_tag, has_begin, result_type) \
-template<> struct class_sequence_tag_impl<has_tag,has_begin> \
+template<> struct sequence_tag_impl<has_tag,has_begin> \
 { \
     template< typename Sequence > struct result2_ \
     { \
@@ -58,28 +120,6 @@ AUX_CLASS_SEQUENCE_TAG_SPEC(false, false, non_sequence_tag)
 
 #   undef AUX_CLASS_SEQUENCE_TAG_SPEC
 
-
-template< bool is_class_ >
-struct sequence_tag_impl
-{
-    template< typename Sequence > struct result_
-    {
-        typedef non_sequence_tag type;
-    };
-};
-
-template<>
-struct sequence_tag_impl<true>
-{
-    template< typename Sequence > struct result_
-        : class_sequence_tag_impl<
-              ::boost::mpl::aux::has_tag<Sequence>::value
-            , ::boost::mpl::aux::has_begin<Sequence>::value
-            >::template result2_<Sequence>
-    {
-    };
-};
-
 } // namespace aux
 
 template<
@@ -87,28 +127,18 @@ template<
     >
 struct sequence_tag
     : aux::sequence_tag_impl<
-          ::boost::is_class<Sequence>::value
-        >::template result_<Sequence>
+          ::boost::mpl::aux::has_tag<Sequence>::value
+        , ::boost::mpl::aux::has_begin<Sequence>::value
+        >::template result2_<Sequence>
 {
-};
-
-#else 
-
-template<
-      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
-    >
-struct sequence_tag
-{
-    typedef typename Sequence::tag type;
 };
 
 #endif // BOOST_MSVC
 
-
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct sequence_tag<int>
 {
-    typedef non_sequence_tag type;
+    typedef int type;
 };
 #endif
 

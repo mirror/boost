@@ -19,7 +19,7 @@
 
 #include "boost/mpl/aux_/config/eti.hpp"
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -31,7 +31,7 @@ struct deref_wknd
 
 template<> struct deref_wknd<int>
 {
-    typedef deref_wknd type;
+    typedef int type;
 };
 
 }}} // namespace boost::mpl::aux

@@ -34,7 +34,7 @@
 template< typename T > \
 boost::mpl::aux::yes_tag \
 trait##_helper( \
-      T const volatile* \
+      boost::mpl::aux::type_wrapper<T> const volatile* \
     , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME T::name>* = 0 \
     ); \
 \
@@ -44,14 +44,19 @@ trait##_helper(...); \
 template< typename T > \
 struct trait \
 { \
-     BOOST_STATIC_CONSTANT(bool, value = \
-        sizeof((trait##_helper)(static_cast<T*>(0))) \
+    typedef boost::mpl::aux::type_wrapper<T> t_; \
+    BOOST_STATIC_CONSTANT(bool, value = \
+          sizeof((trait##_helper)(static_cast<t_*>(0))) \
             == sizeof(boost::mpl::aux::yes_tag) \
         ); \
 }; \
 /**/
 
 #   else
+
+#include "boost/mpl/if.hpp"
+#include "boost/mpl/bool_c.hpp"
+#include "boost/preprocessor/cat.hpp"
 
 // agurt, 11/sep/02: MSVC version, based on a USENET newsgroup's posting by 
 // John Madsen (comp.lang.c++.moderated, 1999-11-12 19:17:06 GMT);
@@ -61,12 +66,29 @@ struct trait \
 // Modified dwa 8/Oct/02 to handle reference types.
 
 namespace boost { namespace mpl { namespace aux {
+
 struct has_xxx_tag;
+
+template< typename T >
+struct msvc_is_incomplete
+{
+    struct incomplete_;
+    BOOST_STATIC_CONSTANT(bool, value = 
+          sizeof(void (T::*)()) == sizeof(void (incomplete_::*)())
+        );
+};
+
+template<>
+struct msvc_is_incomplete<int>
+{
+    BOOST_STATIC_CONSTANT(bool, value = false);
+};
+
 }}}
 
 #   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name, unused) \
 template< typename T, typename name = ::boost::mpl::aux::has_xxx_tag > \
-struct trait : T \
+struct BOOST_PP_CAT(trait,_impl) : T \
 { \
  private: \
     static boost::mpl::aux::no_tag test(void(*)(::boost::mpl::aux::has_xxx_tag)); \
@@ -77,6 +99,15 @@ struct trait : T \
         sizeof(test(static_cast<void(*)(name)>(0))) \
             != sizeof(boost::mpl::aux::no_tag) \
         ); \
+}; \
+\
+template< typename T > struct trait \
+    : boost::mpl::if_c< \
+          boost::mpl::aux::msvc_is_incomplete<T>::value \
+        , boost::mpl::bool_c<false> \
+        , BOOST_PP_CAT(trait,_impl)<T> \
+        >::type \
+{ \
 }; \
 \
 BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, void) \
@@ -96,9 +127,9 @@ BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, long double) \
 /**/
 
 #   define BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, T) \
-template<> struct trait<T,boost::mpl::aux::has_xxx_tag> \
+template<> struct trait<T> \
 { \
-    enum { value = false }; \
+    BOOST_STATIC_CONSTANT(bool,value = false); \
 }; \
 /**/
 

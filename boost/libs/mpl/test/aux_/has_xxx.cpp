@@ -15,6 +15,7 @@
 // without express or implied warranty.
 
 #include "boost/mpl/aux_/has_xxx.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 #include "boost/static_assert.hpp"
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(xxx_type)
@@ -31,12 +32,15 @@ struct a9 { typedef void (xxx_type)(); };
 
 int main()
 {
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    BOOST_STATIC_ASSERT(!has_xxx_type<int&>::value);
+    BOOST_STATIC_ASSERT(!has_xxx_type<int*>::value);
+    BOOST_STATIC_ASSERT(!has_xxx_type<int[]>::value);
+    BOOST_STATIC_ASSERT(!has_xxx_type<int (*)()>::value);
+#endif
+
     BOOST_STATIC_ASSERT(!has_xxx_type<int>::value);
-
-    #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
     BOOST_STATIC_ASSERT(!has_xxx_type<a1>::value);
-    #endif
-
     BOOST_STATIC_ASSERT(!has_xxx_type<a2>::value);
     BOOST_STATIC_ASSERT(has_xxx_type<a3>::value);
     BOOST_STATIC_ASSERT(has_xxx_type<a4>::value);
