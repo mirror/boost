@@ -7,6 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  13 Feb 2001 Test new VC6 workarounds (David Abrahams)
 //  11 Feb 2001 Final fixes for Borland (David Abrahams)
 //  11 Feb 2001 Some fixes for Borland get it closer on that compiler
 //              (David Abrahams)
@@ -26,18 +27,53 @@
 #include <cassert>
 #include <iostream>
 
-struct my_iterator
-    : boost::forward_iterator_helper<my_iterator, char, long, const char*, const char&>
+// An iterator for which we can get traits.
+struct my_iterator1
+    : boost::forward_iterator_helper<my_iterator1, char, long, const char*, const char&>
 {
-    my_iterator(const char* p) : m_p(p) {}
+    my_iterator1(const char* p) : m_p(p) {}
     
-    bool operator==(const my_iterator& rhs) const
+    bool operator==(const my_iterator1& rhs) const
         { return this->m_p == rhs.m_p; }
 
-    my_iterator& operator++() { ++this->m_p; return *this; }
+    my_iterator1& operator++() { ++this->m_p; return *this; }
     const char& operator*() { return *m_p; }
  private:
     const char* m_p;
+};
+
+// Used to prove that we don't require std::iterator<> in the hierarchy under
+// MSVC6, and that we can compute all the traits for a standard-conforming UDT
+// iterator.
+struct my_iterator2
+    : boost::equality_comparable<my_iterator2
+    , boost::incrementable<my_iterator2
+    , boost::dereferenceable<my_iterator2,const char*> > >
+{
+    typedef char value_type;
+    typedef long difference_type;
+    typedef const char* pointer;
+    typedef const char& reference;
+    typedef std::forward_iterator_tag iterator_category;
+    
+    my_iterator2(const char* p) : m_p(p) {}
+    
+    bool operator==(const my_iterator2& rhs) const
+        { return this->m_p == rhs.m_p; }
+
+    my_iterator2& operator++() { ++this->m_p; return *this; }
+    const char& operator*() { return *m_p; }
+ private:
+    const char* m_p;
+};
+
+// Used to prove that we're not overly confused by the existence of
+// std::iterator<> in the hierarchy under MSVC6 - we should find that
+// boost::detail::iterator_traits<my_iterator3>::difference_type is int.
+struct my_iterator3 : my_iterator1
+{
+    typedef int difference_type;
+    my_iterator3(const char* p) : my_iterator1(p) {}
 };
 
 template <class Iterator,
@@ -141,8 +177,14 @@ maybe_pointer_test<std::vector<int>::iterator, int, std::ptrdiff_t, int*, int&, 
 maybe_pointer_test<int*, int, std::ptrdiff_t, int*, int&, std::random_access_iterator_tag>
         int_pointer_test;
 
-non_pointer_test<my_iterator, char, long, const char*, const char&, std::forward_iterator_tag>
-       my_iterator_test;
+non_pointer_test<my_iterator1, char, long, const char*, const char&, std::forward_iterator_tag>
+       my_iterator1_test;
+                    
+non_pointer_test<my_iterator2, char, long, const char*, const char&, std::forward_iterator_tag>
+       my_iterator2_test;
+                    
+non_pointer_test<my_iterator3, char, int, const char*, const char&, std::forward_iterator_tag>
+       my_iterator3_test;
                     
 int main()
 {
@@ -158,7 +200,9 @@ int main()
         assert(boost::detail::distance(v.begin(), v.end()) == length);
 
         assert(boost::detail::distance(&ints[0], ints + length) == length);
-        assert(boost::detail::distance(my_iterator(chars), my_iterator(chars + length)) == length);
+        assert(boost::detail::distance(my_iterator1(chars), my_iterator1(chars + length)) == length);
+        assert(boost::detail::distance(my_iterator2(chars), my_iterator2(chars + length)) == length);
+        assert(boost::detail::distance(my_iterator3(chars), my_iterator3(chars + length)) == length);
     }
     return 0;
 }
