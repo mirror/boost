@@ -34,7 +34,7 @@ namespace  {
 
   template<class Tr, class Ch> inline
   void empty_buf(BOOST_IO_STD basic_ostringstream<Ch,Tr> & os) { 
-    static const std::basic_string<Ch, Tr> emptyStr; // avoids 2 cases ( "" and  L"" )
+    static const std::basic_string<Ch, Tr> emptyStr;
     os.str(emptyStr); 
   }
 
@@ -70,7 +70,21 @@ namespace  {
   } // -do_pad(..) 
 
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
+// MSVC needs to be tricked to disambiguate this simple overload..
+// the trick is in "boost/format/msvc_disambiguater.hpp"
+  
+  template< class Ch, class Tr, class T> inline
+  void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
+    disambiguater<Ch, Tr, T>::put_head(os, x, 1L);
+  }
+  template< class Ch, class Tr, class T> inline
+  void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
+    disambiguater<Ch, Tr, T>::put_last(os, x, 1L);
+  }
+
+#else  
+
   template< class Ch, class Tr, class T> inline
   void put_head(BOOST_IO_STD basic_ostream<Ch, Tr>& , const T& ) {
   }
@@ -90,7 +104,7 @@ namespace  {
     os << group_last(x.a1_); // this selects the last element
   }
 
-#ifdef BOOST_OVERLOAD_FOR_NON_CONST 
+#ifndef BOOST_NO_OVERLOAD_FOR_NON_CONST 
   template< class Ch, class Tr, class T> inline
   void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& , T& ) {
   }
@@ -100,19 +114,6 @@ namespace  {
     os << x ;
   }
 #endif
-
-#else  // MSVC needs to be tricked to disambiguate this simple overload..
-       // the trick is in "boost/format/msvc_disambiguater.hpp"
-  
-  template< class Ch, class Tr, class T> inline
-  void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
-    disambiguater<Ch, Tr, T>::put_head(os, x, 1L);
-  }
-  template< class Ch, class Tr, class T> inline
-  void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
-    disambiguater<Ch, Tr, T>::put_last(os, x, 1L);
-  }
-
 #endif  // -msvc workaround
 
 
@@ -190,16 +191,16 @@ void put( T x,
           if( (d=w - tmp.size()) <=0 ) 
             {
               // minimal length is already >= w, so no padding  (cool!)
-              std::swap(res, tmp ); 
+              res.swap(tmp);
             }
           else
             { // hum..  we need to pad (it was necessarily multi-output)
               typedef typename string_t::size_type size_type;
               size_type i = 0;
               while( i<tmp.size() && tmp[i] == res[i] ) // find where we should pad.
-                ++i; 
+                ++i;
               tmp.insert(i, static_cast<size_type>( d ), oss_.fill());
-              std::swap(res, tmp );
+              res.swap( tmp );
             }
         }
       else 

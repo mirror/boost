@@ -27,7 +27,6 @@
 #include <boost/assert.hpp>
 
 
-
 namespace boost {
 namespace io {
 namespace detail {
@@ -35,11 +34,11 @@ namespace detail {
   template<class Ch, class Stream> inline
   bool wrap_isdigit(Ch c, Stream &os) 
   {
-#ifndef BOOST_NO_STD_LOCALE
+#ifndef BOOST_BAD_ISDIGIT
     return std::isdigit(c, os.rdbuf()->getloc() );
-#else
-    return isdigit(c);
-#endif // no no-locale
+# else
+    return std::isdigit(c); // this is a good backup solution.
+#endif 
   } //end- wrap_isdigit(..)
 
   template<class Res, class Ch, class Tr> inline

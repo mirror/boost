@@ -63,7 +63,7 @@ public:
     return io::detail::feed<CharT, Traits, const T&>(*this,x);
   }
 
-#ifdef BOOST_OVERLOAD_FOR_NON_CONST
+#ifndef BOOST_NO_OVERLOAD_FOR_NON_CONST
   template<class T>  basic_format&   operator%(T& x) 
   {
     return io::detail::feed<CharT, Traits, T&>(*this,x);
@@ -94,14 +94,15 @@ public:
   // final output
   string_t str() const;
   friend BOOST_IO_STD basic_ostream<Ch, Tr>& 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
-  operator<< <Ch, Tr> ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
-#else
+#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) \
+ &&  BOOST_WORKAROUND( BOOST_MSVC,  BOOST_TESTED_AT( 1300) )
   operator<< ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
+#else
+  operator<< <Ch, Tr> ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
 #endif
                       
 
-#if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  && !defined( __BORLANDC__ )
+#if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) )
 
   template<class Ch2, class Tr2, class T>  friend basic_format<Ch2, Tr2>&  
   io::detail::feed(basic_format<Ch2,Tr2>&, T);
