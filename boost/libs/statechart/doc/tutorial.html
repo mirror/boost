@@ -70,9 +70,12 @@ redundancy-free textual description of the state chart.</p>
 <p>All examples have been tested on the following platforms using boost 
 distribution 1.31.0:</p>
 <ul>
-  <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
-  <li>GCC3.2 (MinGW, Red Hat Linux)</li>
-  <li>Intel8.0 (Win32)</li>
+  <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
+  <li>GCC 3.2 (MinGW; Red Hat Linux)</li>
+  <li>
+  <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
+  Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
+  <li>Intel 8.0 (Win32, MS Visual Studio 2003 std library)</li>
 </ul>
 <p><b><font color="#FF0000">Caution: Bugs in atomic_count_gcc.hpp break 
 boost::fsm on Linux! Please see readme.txt in </font>
@@ -112,15 +115,15 @@ the task at hand. Specifically:</p>
   and <a href="#A stop watch">stop watch</a> examples explaining the most 
   basic features that all users of the library should understand. Small and 
   simple machines with just a handful of states can be implemented reasonably 
-  well by using just these features.</li>
+  well by using just these features</li>
   <li>Afterwards, the <a href="#A digital camera">digital camera</a> example 
   explains the intermediate features most of which should be known by anyone 
-  wanting to build larger machines with up to roughly a dozen states.</li>
+  wanting to build larger machines with up to roughly a dozen states</li>
   <li>Finally, users wanting to create even more complex machines and project 
   architects evaluating boost::fsm should also read the
   <a href="#Advanced topics">Advanced topics</a> section at the end. Moreover, 
   reading the <a href="rationale.html#Limitations">Limitations</a> section in 
-  the Rationale is strongly suggested.</li>
+  the Rationale is strongly suggested</li>
 </ul>
 <h2><a name="Hello World!">Hello World!</a></h2>
 <p>We will use the simplest possible program to make our first steps. The 
@@ -1391,7 +1394,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13981" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13982" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

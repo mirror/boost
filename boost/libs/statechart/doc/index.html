@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/05/12<!--webbot bot="Timestamp" endspan i-checksum="12599" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/05/21<!--webbot bot="Timestamp" endspan i-checksum="12598" --></font></td>
   </tr>
 </table>
 <hr>
@@ -52,9 +52,12 @@ include:</p>
 <p>All code has been tested on the following platforms using boost 
 distribution 1.31.0:</p>
 <ul>
-  <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
-  <li>GCC3.2 (MinGW, Red Hat Linux)</li>
-  <li>Intel8.0 (Win32)</li>
+  <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
+  <li>GCC 3.2 (MinGW; Red Hat Linux)</li>
+  <li>
+  <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
+  Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
+  <li>Intel 8.0 (Win32, MS Visual Studio 2003 std library)</li>
 </ul>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
@@ -92,6 +95,12 @@ the making:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>22 May, 2004</p>
+<ul>
+  <li>Integrated the Intel7.0 workarounds provided by Pavel Vozenilek (most 
+  are std library workarounds)</li>
+  <li>Added the Intel7.0 section to the configuration page</li>
+</ul>
 <p>12 May, 2004</p>
 <ul>
   <li>Fixed a bug that could have led to an <code>exception_thrown</code> 
@@ -232,7 +241,7 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13983" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13982" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
