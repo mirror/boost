@@ -23,43 +23,43 @@ DEPENDS all : test ;
 				:
 				: container
 			]
-		: [ run 
+		  [ run 
 				trim_test.cpp
 			  : :
 				:
 				: trim
 			]
-		: [ run 
+		  [ run 
 				conv_test.cpp
 			  : :
 				:
 				: conv
 			]
-		: [ run 
+		  [ run 
 				predicate_test.cpp
 			  : :
 				:
 				: predicate
 			]
-		: [ run 
+		  [ run 
 				find_test.cpp
 			  : :
 				:
 				: find
 			]
-		  : [ run
+		  [ run
 				split_test.cpp
 			  : :
 				:
 				: split
 			]
-		: [ run 
+		  [ run 
 				replace_test.cpp
 			  : :
 				:
 				: replace
 			]
-		: [ run 
+		  [ run 
 				regex_test.cpp
 				<lib>../../../regex/build/boost_regex
 			  : :
