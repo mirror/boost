@@ -39,7 +39,7 @@ has_##name##_helper( \
     ); \
 \
 template< typename T > \
-no_tag has_##name##_helper( \
+boost::mpl::aux::no_tag has_##name##_helper( \
       boost::mpl::aux::type_wrapper<T>* \
     , ... \
     ); \
@@ -61,6 +61,8 @@ struct has_##name \
 // note that the code is _not_ standard-conforming, but it works, 
 // and it resolves some nasty ICE cases with the above implementation
 
+// Modified dwa 8/Oct/02 to handle reference types. Still won't work
+// for array types; I don't have an answer for that one.
 #   define BOOST_MPL_HAS_XXX_TRAIT_DEF_(name) \
 template< typename T, typename name = int > \
 struct has_##name : T \
@@ -71,7 +73,7 @@ struct has_##name : T \
 \
  public: \
     BOOST_STATIC_CONSTANT(bool, value =  \
-        sizeof(test(static_cast<name*>(0))) != sizeof(boost::mpl::aux::no_tag) \
+        sizeof(test(static_cast<name(*)()>(0))) != sizeof(boost::mpl::aux::no_tag) \
         ); \
 }; \
 \
