@@ -58,7 +58,7 @@
       // BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE:
       // These are predicated on _XOPEN_VERSION, and appears to be first released
       // in issue 4, version 2 (_XOPEN_VERSION > 500).
-#     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION+0 > 500)
+#     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION+0 >= 500)
 #        define BOOST_HAS_GETTIMEOFDAY
 #        define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 #     endif
