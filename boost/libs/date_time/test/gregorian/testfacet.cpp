@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst 
  */
 
 #include <sstream>
@@ -190,12 +190,28 @@ main()
   check("check date period: "+os3.str(), 
         os3.str() == std::string("[Oktober 01 2002/Oktober 03 2002]"));
 
+
+  /*******************************************************************/
+  /* Streaming operations for date durations                         */
+  /*******************************************************************/
+
+  date_duration dur(26);
+  std::stringstream ss2;
+  ss2 << dur;
+  check("date_duration stream out", ss2.str() == std::string("26"));
+
+  dur = date_duration(boost::date_time::pos_infin);
+  ss2.str("");
+  ss2 << dur;
+  check("date_duration stream out", ss2.str() == std::string("+infinity"));
+
   /*******************************************************************/
   /* Streaming operations for date generator functions               */
   /*******************************************************************/
 
   partial_date pd(26, Jun);
-  std::stringstream ss2;
+  //std::stringstream ss2;
+  ss2.str("");
   ss2 << pd;
   check("partial date stream out", ss2.str() == std::string("26 Jun"));
 
