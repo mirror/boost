@@ -21,7 +21,6 @@ template<class base>
 struct subscript_layer : base
 {
 #define DEF(CV)\
-  template<class base>\
   CV() typename base::value_type& operator[](typename base::index_type i) CV()\
   { return base::begin()[i]; }
 
