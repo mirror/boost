@@ -48,6 +48,12 @@ public:
     BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
     assert(min < max);
+    if(random::equal_signed_unsigned(_brange, _range))
+      _range_comparison = 0;
+    else if(random::lessthan_signed_unsigned(_brange, _range))
+      _range_comparison = -1;
+    else
+      _range_comparison = 1;
   }
   result_type operator()();
   result_type min() const { return _min; }
@@ -65,16 +71,17 @@ private:
   base_type & _rng;
   result_type _min, _max, _range;
   base_result _bmin, _brange;
+  int _range_comparison;
 };
 
 template<class UniformRandomNumberGenerator, class IntType>
 inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
 {
-  if(random::equal_signed_unsigned(_range, _brange)) {
+  if(_range_comparison == 0) {
     // this will probably never happen in real life
     // basically nothing to do; just take care we don't overflow / underflow
     return static_cast<result_type>(_rng() - _bmin) + _min;
-  } else if(random::lessthan_signed_unsigned(_brange, _range)) {
+  } else if(_range_comparison < 0) {
     // use rejection method to handle things like 0..3 --> 0..4
     for(;;) {
       // concatenate several invocations of the base RNG
