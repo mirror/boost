@@ -328,6 +328,7 @@
 #     define BOOST_NO_STD_ALLOCATOR
 #     define BOOST_NO_STD_MIN_MAX
 #   endif
+#   define BOOST_NO_INTRINSIC_WCHAR_T // tentative addition - required for VC6 compatibility? (added by JM 19 Feb 2001)
 
 
 //  Metrowerks CodeWarrior  --------------------------------------------------//
