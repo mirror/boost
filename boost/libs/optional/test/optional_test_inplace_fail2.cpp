@@ -15,10 +15,10 @@
 
 #define BOOST_ENABLE_ASSERT_HANDLER
 
-#include "boost/optional.hpp"
+#include "boost/optional/optional.hpp"
 
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
-#include "boost/detail/typed_in_place_factory.hpp"
+#include "boost/utility/typed_in_place_factory.hpp"
 #endif
 
 #ifdef __BORLANDC__

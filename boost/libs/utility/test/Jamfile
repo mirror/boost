@@ -18,7 +18,7 @@ local test_monitor = <lib>@boost/libs/test/build/boost_test_exec_monitor ;
 
 # Please keep the tests ordered by filename
 test-suite utility
-    : 
+    :
         [ run ../addressof_test.cpp $(test_monitor) ]
         [ run ../assert_test.cpp ]
         [ run ../base_from_member_test.cpp ]
@@ -37,13 +37,16 @@ test-suite utility
         [ run ../enable_if_partial_specializations.cpp $(test_monitor) ]
         [ run ../iterator_traits_test.cpp ]
         [ run ../iterators_test.cpp $(test_monitor) ]
-        [ run next_prior_test.cpp $(test_monitor) ]       
+        [ run next_prior_test.cpp $(test_monitor) ]
         [ compile-fail ../noncopyable_test.cpp ]
         [ run ../numeric_traits_test.cpp ]
         [ run ../operators_test.cpp $(test_monitor) ]
         [ compile ../ref_ct_test.cpp  ]
         [ run ../ref_test.cpp $(test_monitor) ]
-        [ compile result_of_test.cpp ]   
+        [ compile result_of_test.cpp ]
         [ run ../shared_iterator_test.cpp ]
         [ run ../value_init_test.cpp ]
+        [ compile-fail ../value_init_test_fail1.cpp ]
+        [ compile-fail ../value_init_test_fail2.cpp ]
+        [ compile-fail ../value_init_test_fail3.cpp ]
     ;

@@ -77,8 +77,8 @@
 
 namespace boost {
 
-class InPlaceFactoryBase ;
-class TypedInPlaceFactoryBase ;
+class in_place_factory_base ;
+class typed_in_place_factory_base ;
 
 namespace optional_detail {
 
@@ -143,7 +143,7 @@ class optional_base : public optional_tag
   protected :
 
     typedef T value_type ;
-    
+
     typedef mpl::true_  is_reference_tag ;
     typedef mpl::false_ is_not_reference_tag ;
 
@@ -190,7 +190,7 @@ class optional_base : public optional_tag
         construct(rhs.get_impl());
     }
 
-    
+
     // This is used for both converting and in-place constructions.
     // Derived classes use the 'tag' to select the appropriate
     // implementation (the correct 'construct()' overload)
@@ -202,8 +202,8 @@ class optional_base : public optional_tag
       construct(expr,tag);
     }
 
-    
-    
+
+
     // No-throw (assuming T::~T() doesn't)
     ~optional_base() { destroy() ; }
 
@@ -227,10 +227,10 @@ class optional_base : public optional_tag
     // Assigns from "none", destroying the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)
     void assign ( detail::none_t const& ) { destroy(); }
-    
+
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     template<class Expr>
-    void assign_expr ( Expr const& expr, Expr const* tag ) 
+    void assign_expr ( Expr const& expr, Expr const* tag )
       {
         destroy();
         construct(expr,tag);
@@ -266,7 +266,7 @@ class optional_base : public optional_tag
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     // Constructs in-place using the given factory
     template<class Expr>
-    void construct ( Expr const& factory, InPlaceFactoryBase const* )
+    void construct ( Expr const& factory, in_place_factory_base const* )
      {
        BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
        factory.BOOST_NESTED_TEMPLATE apply<value_type>(m_storage.address()) ;
@@ -275,7 +275,7 @@ class optional_base : public optional_tag
 
     // Constructs in-place using the given typed factory
     template<class Expr>
-    void construct ( Expr const& factory, TypedInPlaceFactoryBase const* )
+    void construct ( Expr const& factory, typed_in_place_factory_base const* )
      {
        BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
        factory.apply(m_storage.address()) ;
@@ -375,7 +375,7 @@ class optional : public optional_detail::optional_base<T>
     typedef BOOST_DEDUCED_TYPENAME base::unspecified_bool_type  unspecified_bool_type ;
 
   public :
-  
+
     typedef optional<T> this_type ;
 
     typedef BOOST_DEDUCED_TYPENAME base::value_type           value_type ;
@@ -397,7 +397,7 @@ class optional : public optional_detail::optional_base<T>
     // Can throw if T::T(T const&) does
     optional ( argument_type val ) : base(val) {}
 
-    
+
 #ifndef BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
     // NOTE: MSVC needs templated versions first
 
@@ -431,7 +431,7 @@ class optional : public optional_detail::optional_base<T>
     // Creates a deep copy of another optional<T>
     // Can throw if T::T(T const&) does
     optional ( optional const& rhs ) : base(rhs) {}
-    
+
    // No-throw (assuming T::~T() doesn't)
     ~optional() {}
 

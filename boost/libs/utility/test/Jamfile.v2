@@ -11,7 +11,7 @@ import testing ;
 
 # Please keep the tests ordered by filename
 test-suite utility
-    : 
+    :
         [ run ../addressof_test.cpp ../../test/build//boost_test_exec_monitor ]
         [ run ../assert_test.cpp ]
         [ run ../base_from_member_test.cpp ]
@@ -39,4 +39,7 @@ test-suite utility
         [ compile result_of_test.cpp ]
         [ run ../shared_iterator_test.cpp ]
         [ run ../value_init_test.cpp ]
+        [ compile-fail ../value_init_test_fail1.cpp ]
+        [ compile-fail ../value_init_test_fail2.cpp ]
+        [ compile-fail ../value_init_test_fail3.cpp ]
     ;

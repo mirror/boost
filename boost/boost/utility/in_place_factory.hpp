@@ -12,21 +12,21 @@
 #ifndef BOOST_UTILITY_INPLACE_FACTORY_25AGO2003_HPP
 #define BOOST_UTILITY_INPLACE_FACTORY_25AGO2003_HPP
 
-#include <boost/detail/in_place_factory_prefix.hpp>
+#include <boost/utility/detail/in_place_factory_prefix.hpp>
 
 #include <boost/type.hpp>
 
 namespace boost {
 
-class InPlaceFactoryBase {} ;
+class in_place_factory_base {} ;
 
 #define BOOST_DEFINE_INPLACE_FACTORY_CLASS(z,n,_) \
 template< BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n),class A) > \
-class BOOST_PP_CAT(InPlaceFactory, BOOST_PP_INC(n) ) : public InPlaceFactoryBase \
+class BOOST_PP_CAT(in_place_factory, BOOST_PP_INC(n) ) : public in_place_factory_base \
 { \
 public: \
 \
-  BOOST_PP_CAT(InPlaceFactory, BOOST_PP_INC(n) ) ( BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_INC(n),A,const& a) ) \
+  BOOST_PP_CAT(in_place_factory, BOOST_PP_INC(n) ) ( BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_INC(n),A,const& a) ) \
     : \
     BOOST_PP_ENUM( BOOST_PP_INC(n), BOOST_DEFINE_INPLACE_FACTORY_CLASS_MEMBER_INIT, _ ) \
   {} \
@@ -41,10 +41,10 @@ public: \
 } ; \
 \
 template< BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n),class A) > \
-BOOST_PP_CAT(InPlaceFactory, BOOST_PP_INC(n) ) < BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), A ) > \
+BOOST_PP_CAT(in_place_factory, BOOST_PP_INC(n) ) < BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), A ) > \
 in_place ( BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_INC(n),A, const& a) ) \
 { \
-  return BOOST_PP_CAT(InPlaceFactory, BOOST_PP_INC(n) ) < BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), A ) > \
+  return BOOST_PP_CAT(in_place_factory, BOOST_PP_INC(n) ) < BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), A ) > \
            ( BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), a ) ) ; \
 } ; \
 
