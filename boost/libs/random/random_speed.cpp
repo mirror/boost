@@ -85,7 +85,8 @@ void show_elapsed(double end, int iter, const std::string & name)
 template<class Result, class RNG>
 void timing(RNG & rng, int iter, const std::string& name, const Result&)
 {
-  volatile Result tmp; // make sure we're not optimizing too much
+  // make sure we're not optimizing too much
+  volatile typename RNG::result_type tmp;
   boost::timer t;
   for(int i = 0; i < iter; i++)
     tmp = rng();
@@ -209,6 +210,7 @@ int main(int argc, char*argv[])
   run(iter, "mt19937", boost::mt19937());
 
   run(iter, "subtract_with_carry", boost::random::ranlux_base());
+  run(iter, "subtract_with_carry_01", boost::random::ranlux_base_01());
   run(iter, "ranlux3", boost::ranlux3());
   run(iter, "ranlux4", boost::ranlux4());
   run(iter, "ranlux3_01", boost::ranlux3_01());
