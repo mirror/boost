@@ -1519,7 +1519,9 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         matrix_closure_type data_;
         range r1_;
         range r2_;
@@ -2018,7 +2020,9 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         matrix_closure_type data_;
         slice s1_;
         slice s2_;
@@ -2518,7 +2522,9 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
@@ -4356,7 +4362,9 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator2 (begin2 ());
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         matrix_closure_type data_;
         slice s1_;
         slice s2_;
@@ -5294,7 +5302,9 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator2 (begin2 ());
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;

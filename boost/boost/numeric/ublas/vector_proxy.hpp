@@ -1053,8 +1053,7 @@ return true;
             return reverse_iterator (begin ());
         }
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-// VC++ 6.0 cannot access data_ from iterator
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
 #endif
         vector_closure_type data_;
@@ -1598,8 +1597,7 @@ return true;
             return reverse_iterator (begin ());
         }
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-// VC++ 6.0 cannot access data_ from iterator
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
 #endif
         vector_closure_type data_;
