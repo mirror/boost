@@ -85,7 +85,7 @@ public: // _should_ be noncopyable, but GCC compiler emits error
     aligned_storage(const aligned_storage&);
     aligned_storage& operator=(const aligned_storage&);
 
-#endif // gcc2.x workaround
+#endif // gcc < 3.2.3 workaround
 
 public: // structors
 
