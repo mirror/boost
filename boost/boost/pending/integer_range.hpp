@@ -16,7 +16,7 @@
 #ifdef BOOST_MSVC
 #include <boost/pending/detail/int_iterator.hpp>
 #else
-#include <boost/pending/iterator_adaptor.hpp>
+#include <boost/pending/iterator_adaptors.hpp>
 #endif
 
 namespace boost {
