@@ -38,15 +38,12 @@ namespace date_time {
     while(i < inp.length())
     {
       tmp += static_cast<char>(tolower(inp.at(i++)));
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0564) 
-    std::locale loc("");
-    while(i < inp.length())
-    {
-      tmp += stlport::tolower(inp.at(i++), loc);
 #else
     std::locale loc("");
     while(i < inp.length())
     {
+      // tolower and others were brought in to std for borland >= v564
+      // in compiler_config.hpp
       tmp += std::tolower(inp.at(i++), loc);
 #endif
     }
