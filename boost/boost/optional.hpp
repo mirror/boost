@@ -58,7 +58,13 @@
 #define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 #endif
 
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x551)
+// BCB (5.5.1) cannot parse the nested template struct in an inplace factory.
+#define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+#endif
+
+#if !defined(BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT) \
+    && BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
 // BCB (up to 5.64) has the following bug:
 //   If there is a member function/operator template of the form
 //     template<class Expr> mfunc( Expr expr ) ;
@@ -68,11 +74,6 @@
 #define BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
 #endif
 
-
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x551)
-// BCB (5.5.1) cannot parse the nested template struct in an inplace factory.
-#define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
-#endif
 
 namespace boost {
 
