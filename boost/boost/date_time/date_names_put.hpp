@@ -5,7 +5,7 @@
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst 
  * $Date$
  */
 
@@ -17,6 +17,7 @@
 #include "boost/date_time/special_defs.hpp"
 #include "boost/date_time/date_defs.hpp"
 #include "boost/date_time/parse_format_base.hpp"
+#include "boost/lexical_cast.hpp"
 #include <locale>
 
 
@@ -172,7 +173,7 @@ namespace date_time {
       }
       void put_string(iter_type& oi, const char* const s) const
       {
-        string_type s1(s);
+        string_type s1(boost::lexical_cast<string_type>(s));
         typename string_type::iterator si,end;
         for (si=s1.begin(), end=s1.end(); si!=end; si++, oi++) {
           *oi = *si;

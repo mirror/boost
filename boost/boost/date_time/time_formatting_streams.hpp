@@ -36,21 +36,22 @@ namespace date_time {
         os << td.get_rep(); 
       }
       else {
+	charT fill_char = '0';
         if(td.is_negative()) {
           os << '-';
         }
-        os  << std::setw(2) << std::setfill('0') 
+        os  << std::setw(2) << std::setfill(fill_char) 
             << absolute_value(td.hours()) << ":";
-        os  << std::setw(2) << std::setfill('0') 
+        os  << std::setw(2) << std::setfill(fill_char) 
             << absolute_value(td.minutes()) << ":";
-        os  << std::setw(2) << std::setfill('0') 
+        os  << std::setw(2) << std::setfill(fill_char) 
             << absolute_value(td.seconds());
         fractional_seconds_type frac_sec = 
           absolute_value(td.fractional_seconds());
         if (frac_sec != 0) {
           os  << "." 
               << std::setw(time_duration_type::num_fractional_digits())
-              << std::setfill('0')
+              << std::setfill(fill_char)
               << frac_sec;
         }
       } // else
