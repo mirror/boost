@@ -83,7 +83,11 @@ namespace date_time {
 
   //! Useful generator functor for finding holidays 
   /*! Based on the idea in Cal. Calc. for finding holidays that are
-   *  the 'first Monday of September'.
+   *  the 'first Monday of September'. When instantiated with
+   *  'fifth' kday of month, the result will be the last kday of month
+   *  which can be the fourth or fifth depending on the structure of 
+   *  the month.
+   *
    *  The algorithm here basically guesses for the first
    *  day of the month.  Then finds the first day of the correct
    *  type.  That is, if the first of the month is a Tuesday
@@ -123,6 +127,10 @@ namespace date_time {
       while (week < wn_) {
         d = d + one_week;
         week++;
+      }
+      // remove wrapping to next month behavior
+      if(d.month() != month_) { 
+	d = d - one_week;
       }
       return d;
     }
