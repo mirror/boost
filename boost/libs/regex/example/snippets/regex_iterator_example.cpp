@@ -89,6 +89,7 @@ int main(int argc, const char** argv)
       cout << "Processing file " << argv[i] << endl;
       std::ifstream fs(argv[i]);
       load_file(text, fs);
+      fs.close();
       // construct our iterators:
       boost::sregex_iterator m1(text.begin(), text.end(), expression);
       boost::sregex_iterator m2;

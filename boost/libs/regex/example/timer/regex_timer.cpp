@@ -359,7 +359,10 @@ int main(int argc, char**argv)
    }
 
    if(pbuf)
+   {
       cin.rdbuf(pbuf);
+      ifs.close();
+   }
 
    return 0;
 }

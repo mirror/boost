@@ -55,6 +55,7 @@ int main(int argc, char** argv)
       s.erase();
       std::ifstream is(argv[i]);
       load_file(s, is);
+      is.close();
       boost::regex_split(std::back_inserter(l), s, e);
       while(l.size())
       {
@@ -74,6 +75,7 @@ int main(int argc, char** argv)
       s.erase();
       std::ifstream is(argv[i]);
       load_file(s, is);
+      is.close();
       while(boost::regex_split(std::ostream_iterator<std::string>(std::cout), s, e, boost::match_default, 1)) std::cout << std::endl;
    }
 

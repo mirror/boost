@@ -123,6 +123,7 @@ int main(int argc, const char** argv)
       cout << "Processing file " << argv[i] << endl;
       std::ifstream fs(argv[i]);
       load_file(text, fs);
+      fs.close();
       class_index i;
       i.IndexClasses(text);
       cout << i.get_map().size() << " matches found" << endl;

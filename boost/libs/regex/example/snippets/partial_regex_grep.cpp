@@ -79,6 +79,7 @@ int main(int argc, char* argv[])
          std::ifstream fs(argv[i]);
          if(fs.bad()) continue;
          search(fs);
+         fs.close();
       }
    }
    else

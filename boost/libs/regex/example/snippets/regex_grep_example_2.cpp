@@ -101,6 +101,7 @@ int main(int argc, const char** argv)
       cout << "Processing file " << argv[i] << endl;
       std::ifstream fs(argv[i]);
       load_file(text, fs);
+      fs.close();
       IndexClasses(text);
       cout << class_index.size() << " matches found" << endl;
       map_type::iterator c, d;

@@ -62,6 +62,7 @@ int main(int argc, const char** argv)
       std::ifstream fs(argv[i]);
       std::string in;
       load_file(in, fs);
+      fs.close();
       std::string out_name = std::string(argv[i]) + std::string(".htm");
       std::ofstream os(out_name.c_str());
       os << header_text;
@@ -76,6 +77,7 @@ int main(int argc, const char** argv)
       std::ostream_iterator<char> out(os);
       boost::regex_merge(out, s.begin(), s.end(), e1, format_string, boost::match_default | boost::format_all);
       os << footer_text;
+      os.close();
    }
    }
    catch(...)

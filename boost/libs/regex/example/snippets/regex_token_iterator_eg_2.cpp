@@ -53,6 +53,7 @@ int main(int argc, char** argv)
       s.erase();
       std::ifstream is(argv[i]);
       load_file(s, is);
+      is.close();
       boost::sregex_token_iterator i(s.begin(), s.end(), e, 1);
       boost::sregex_token_iterator j;
       while(i != j)
@@ -71,6 +72,7 @@ int main(int argc, char** argv)
       s.erase();
       std::ifstream is(argv[i]);
       load_file(s, is);
+      is.close();
       const int subs[] = {1, 0,};
       boost::sregex_token_iterator i(s.begin(), s.end(), e, subs);
       boost::sregex_token_iterator j;
