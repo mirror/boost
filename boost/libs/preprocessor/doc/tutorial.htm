@@ -103,7 +103,7 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
   specifically does not support repetition or recursive macros. Library support 
   is needed!</p>
 <p><i>For detailed information on the capabilities and limitations of the preprocessor, 
-  please refer to the C++ standard <A href="references.htm#[5]">[5]</A>.</i></p>
+  please refer to the C++ standard <A href="bibliography.htm#[Std]">[Std]</A>.</i></p>
 <h3>The motivation example revisited</h3>
 <p>Using the primitives of the PREPROCESSOR library, the is_function_tester()s 
   could be implemented like this:</p>
@@ -158,8 +158,8 @@ BOOST_PP_DEF(/)
 the line continuation operator when they are aligned.</P>
 <P><B>NOTES:</B> You can extend this example by defining more and different kinds 
   of operators. Before doing so, consider using the Algebraic Categories technique 
-  introduced in <A href="references.htm#[3]">[3]</A> or a Layered Architecture (see for instance 
-  <A href="references.htm#[2]">[2]</A>). However, at some point you must type the operator tokens 
+  introduced in <A href="bibliography.htm#[Barton]">[Barton]</A> or a Layered Architecture (see for instance 
+  <A href="bibliography.htm#[Czarnecki]">[Czarnecki]</A>). However, at some point you must type the operator tokens 
   *, /, +, -, ..., because it is impossible to generate them using templates. 
   The resulting Categorical Repetition of tokens can be eliminated by using preprocessor 
   metaprogramming.</P>
@@ -369,7 +369,7 @@ BOOST_PP_REPEAT
 </blockquote>
 
 <P><B>NOTE:</B> The repetition of the above 
-example can be eliminated using template metaprogramming <A href="references.htm#[2]">[2]</A>&nbsp;as well. However 
+example can be eliminated using template metaprogramming <A href="bibliography.htm#[Czarnecki]">[Czarnecki]</A>&nbsp;as well. However 
 categorical repetition of operator tokens can not be completely eliminated by 
 using template metaprogramming.</P>
 <HR>
