@@ -90,7 +90,7 @@ main()
     }
   }
 
-#ifdef BOOST_GDTL_HAS_NANOSECONDS
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
   if (time_duration::resolution() >= boost::date_time::nano) {
     nanosec ns(9);
     //  time_duration t_10(0,0,0,); //00:00:00.00009
