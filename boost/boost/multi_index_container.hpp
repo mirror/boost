@@ -171,7 +171,7 @@ public:
   {
     BOOST_MULTI_INDEX_CHECK_INVARIANT;
     multi_index_container<Value,IndexSpecifierList,Allocator> tmp(x);
-    swap(tmp);
+    this->swap(tmp);
     return *this;
   }
 

@@ -221,8 +221,6 @@ public:
   {
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
     std::pair<final_node_type*,bool> p=this->final_insert_(x);
-    /* "this->" not required by std, but CW9.2 seems to need it */
-
     return std::pair<iterator,bool>(make_iterator(p.first),p.second);
   }
 
@@ -231,7 +229,7 @@ public:
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(position);
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(position,*this);
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
-    std::pair<final_node_type*,bool> p=final_insert_(
+    std::pair<final_node_type*,bool> p=this->final_insert_(
       x,static_cast<final_node_type*>(position.get_node()));
     return make_iterator(p.first);
   }
@@ -260,7 +258,7 @@ public:
     position.detach();
 #endif
 
-    final_erase_(static_cast<final_node_type*>(position.get_node()));
+    this->final_erase_(static_cast<final_node_type*>(position.get_node()));
   }
   
   size_type erase(key_param_type x)
@@ -294,7 +292,7 @@ public:
     BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(position);
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(position,*this);
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
-    return final_replace_(
+    return this->final_replace_(
       x,static_cast<final_node_type*>(position.get_node()));
   }
 
@@ -315,7 +313,7 @@ public:
     position.detach();
 #endif
 
-    return final_modify_(
+    return this->final_modify_(
       mod,static_cast<final_node_type*>(position.get_node()));
   }
 
@@ -333,7 +331,7 @@ public:
   void swap(ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x)
   {
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
-    final_swap_(x.final());
+    this->final_swap_(x.final());
   }
 
   void clear()
