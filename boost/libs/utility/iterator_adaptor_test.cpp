@@ -246,14 +246,10 @@ main()
     boost::random_access_iterator_test(i, N, array);
 
     typedef boost::iterator<std::random_access_iterator_tag, dummyT> InnerTraits;
-#if 0
-    boost::random_access_iterator_test(boost::make_indirect_iterator<InnerTraits>(&*ptr), N, array);
-#else
-    boost::random_access_iterator_test(boost::make_indirect_iterator<InnerTraits, dummyT**>(&*ptr), N, array);
-#endif
+    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr, InnerTraits()), N, array);
 
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-    boost::random_access_iterator_test(boost::make_indirect_iterator(&*ptr), N, array);
+    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
 #endif
 
     const_indirect_iterator j = ptr;
@@ -261,11 +257,8 @@ main()
 
     dummyT*const* const_ptr = ptr;
     typedef boost::iterator<std::random_access_iterator_tag,dummyT,std::ptrdiff_t,const dummyT*,const dummyT&> ConstInnerTraits;
-#if 0
-    boost::random_access_iterator_test(boost::make_indirect_iterator<ConstInnerTraits>(const_ptr), N, array);
-#else
-    boost::random_access_iterator_test(boost::make_indirect_iterator<ConstInnerTraits,dummyT*const*>(const_ptr), N, array);
-#endif
+
+    boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr, ConstInnerTraits()), N, array);
 
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
@@ -380,12 +373,22 @@ main()
     FilterIter i(array, FilterPolicies(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
+    typedef boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t, dummyT*, dummyT&> FilterTraits;
+    boost::forward_iterator_test(boost::make_filter_iterator<FilterTraits>
+       (array, array + N, one_or_four() ), dummyT(1), dummyT(4));
+
+    boost::forward_iterator_test(boost::make_filter_iterator<FilterTraits, one_or_four>
+        (array, array + N), dummyT(1), dummyT(4));
+
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::forward_iterator_test(boost::make_filter_iterator(
-        array, array + N, one_or_four()
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-        , boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t, dummyT*, dummyT&>()
+        array, array + N, one_or_four()), dummyT(1), dummyT(4));
+
+    boost::forward_iterator_test(boost::make_filter_iterator<one_or_four>(
+        array, array + N), dummyT(1), dummyT(4));
 #endif
-        ), dummyT(1), dummyT(4));
+    
+
   }
   std::cout << "test successful " << std::endl;
   return 0;
