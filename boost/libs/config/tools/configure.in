@@ -65,6 +65,61 @@ esac
 ]
 )
 
+dnl Set the boost main directory.
+AC_MSG_CHECKING(for boost main tree)
+boost_base=
+AC_ARG_WITH(boost,
+  AC_HELP_STRING([--with-boost=DIR],[path to the boost main tree]),
+  [
+  #echo "--with boost is set"
+  if test "x$withval" != "x"; then
+    if test "x$withval" != no; then
+      boost_base=`echo "$withval" | sed 's,//*,/,g' | sed 's,/$,,'`
+      #echo boost_base=$boost_base
+      if test -f "$boost_base/boost/config.hpp"; then
+        if test -f "$boost_base/libs/config/configure"; then :; else
+          boost_base=
+          #echo "$boost_base/libs/config/configure" not found
+        fi
+      else
+        #echo "$boost_base/boost/config.hpp" not found
+        boost_base=
+      fi
+    fi
+  fi
+  ]
+)
+if test "x$boost_base" = "x"; then
+  boost_base=`expr "x$0" : 'x\(.*\)/[^/]*' \| '.'`
+  boost_base="$boost_base/../.."
+  if test -f "$boost_base/boost/config.hpp"; then
+    if test -f "$boost_base/libs/config/configure"; then :; else
+      boost_base=
+    fi
+  else
+    boost_base=
+  fi
+fi
+if test "x$boost_base" = "x"; then
+  for d in /usr/local /usr/local/lib /usr/local/src $HOME $HOME/lib $HOME/src ./ ../ ../../
+  do
+    if test -f "$d/boost/config.hpp"; then
+      if test -f "$d/libs/config/configure"; then
+        boost_base="$d"
+        break
+      fi
+    fi
+  done
+fi
+if test "x$boost_base" != "x"; then
+  AC_MSG_RESULT([$boost_base])
+else
+  AC_MSG_RESULT([not found])
+  AC_MSG_ERROR([The boost main tree was not found.
+  Specify its location by the --with-boost option.])
+fi
+  
+
 
 # Save that, as it is being redefined several times 
 use_ac_ext=$ac_ext
@@ -75,9 +130,9 @@ ac_ext=$use_ac_ext
 AC_LANG_CPLUSPLUS
 
 if test $enable_test = 'yes'; then
-CXXFLAGS="-I../../ -I./test $CXXFLAGS"
+   CXXFLAGS="-I$boost_base -I$boost_base/libs/config/test $CXXFLAGS"
 else
-CXXFLAGS="-I../../ -I./test $CXXFLAGS -DBOOST_NO_CONFIG"
+   CXXFLAGS="-I$boost_base -I$boost_base/libs/config/test $CXXFLAGS -DBOOST_NO_CONFIG"
 fi
 
 dnl check for some standard libraries
@@ -90,7 +145,7 @@ AC_HAVE_LIBRARY(rt)
 #
 # enumerate test files and test each one:
 #
-for file in ./test/boost_no*.cxx; do
+for file in $boost_base/libs/config/test/boost_no*.cxx; do
 
    basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
    macroname=`cat $file | grep '^//[[]    []]*MACRO:' | sed 's/.*MACRO:[[]    []]*\([[]_A-Z0-9[]]*\).*/\1/'`
@@ -174,7 +229,7 @@ done
 #
 # enumerate optional test files and test each one:
 #
-for file in ./test/boost_has*.cxx; do
+for file in $boost_base/libs/config/test/boost_has*.cxx; do
 
    basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
    macroname=`cat $file | grep '^//[[]    []]*MACRO:' | sed 's/.*MACRO:[[]    []]*\([[]_A-Z0-9[]]*\).*/\1/'`
@@ -377,6 +432,8 @@ cat_conts="$cat_conts"
 )
 
 fi
+
+
 
 
 
