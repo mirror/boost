@@ -1362,7 +1362,7 @@ namespace boost { namespace numeric { namespace ublas {
                 filled_ = 0;
             }
             size_ = size;
-            BOOST_UBLAS_CHECK (filled_ <= non_zeros, internal_logic ());
+            BOOST_UBLAS_CHECK (filled_ <= non_zeros_, internal_logic ());
         }
         // Reserving
         BOOST_UBLAS_INLINE
@@ -1380,7 +1380,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data (). resize (non_zeros_);
                 filled_ = 0;
             }
-            BOOST_UBLAS_CHECK (filled_ <= non_zeros, internal_logic ());
+            BOOST_UBLAS_CHECK (filled_ <= non_zeros_, internal_logic ());
         }
 
         // Proxy support

@@ -3931,7 +3931,7 @@ namespace boost { namespace numeric { namespace ublas {
             index2_data ().resize (non_zeros_);
             value_data ().resize (non_zeros_);
             filled_ = 0;
-            BOOST_UBLAS_CHECK (filled_ <= non_zeros, internal_logic ());
+            BOOST_UBLAS_CHECK (filled_ <= non_zeros_, internal_logic ());
         }
 
         // Reserving
@@ -3951,7 +3951,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().resize (non_zeros_);
                 filled_ = 0;
             }
-            BOOST_UBLAS_CHECK (filled_ <= non_zeros, internal_logic ());
+            BOOST_UBLAS_CHECK (filled_ <= non_zeros_, internal_logic ());
         }
 
         // Proxy support
