@@ -61,6 +61,7 @@ namespace boost { namespace numeric { namespace ublas {
 #define BOOST_UBLAS_SAME(size1, size2) (size1)
 #endif
 
+    // No initialise - tag parameter specified to disable construction of array value_types's
     struct no_init {};
 
     // Unbounded array - with allocator
@@ -75,11 +76,15 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef T *pointer;
 
-        // Construction and destruction, no default constructor
+        // Construction and destruction
+        explicit BOOST_UBLAS_INLINE
+        unbounded_array (const A&a = A()):
+            size_ (0), data_ (alloc.allocate (0)) {
+        }
         explicit BOOST_UBLAS_INLINE
         unbounded_array (size_type size, const A&a = A()):
             size_ (size), data_ (alloc.allocate (size)) {
-            value_type v = value_type();
+            const value_type v = value_type();
             for (iterator i = begin(); i != end(); ++i) {
                 alloc.construct (&(*i), v);
             }
@@ -121,7 +126,7 @@ namespace boost { namespace numeric { namespace ublas {
                             alloc.construct (&(*di), *si);
                             ++di;
                         }
-                        value_type v = value_type();
+                        const value_type v = value_type();
                         for (; di != data + size; ++di) {
                             alloc.construct (&(*di), v);
                         }
@@ -291,24 +296,24 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
 
         // Construction and destruction
-        explicit BOOST_UBLAS_INLINE
+        BOOST_UBLAS_INLINE
         bounded_array ():
             // Kresimir Fresl suggested to change the default back to the template argument.
-            // size_ (0) /* , data_ () */ {
             size_ (N) /* , data_ () */ {
-            std::fill (data_, data_ + size_, value_type ());
+            const value_type v = value_type();
+            for (iterator i = begin(); i != end(); ++i) {
+                new (&(*i)) value_type(v);
+            }
         }
-        explicit BOOST_UBLAS_INLINE
-        bounded_array (no_init):
-            // Kresimir Fresl suggested to change the default back to the template argument.
-            // size_ (0) /* , data_ () */ {
-            size_ (N) /* , data_ () */ {}
         explicit BOOST_UBLAS_INLINE
         bounded_array (size_type size):
             size_ (size) /* , data_ () */ {
             if (size_ > N)
                 bad_size ().raise ();
-            std::fill (data_, data_ + size_, value_type ());
+            const value_type v = value_type();
+            for (iterator i = begin(); i != end(); ++i) {
+                new (&(*i)) value_type(v);
+            }
         }
         BOOST_UBLAS_INLINE
         bounded_array (size_type size, no_init):
@@ -935,8 +940,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef size_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
-        // DEPRECATED typedef const value_type *const_pointer;
-        // DEPRECATED typedef value_type *pointer;
+        typedef const value_type *const_pointer;
+        typedef value_type *pointer;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1133,8 +1138,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef size_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
-        // DEPRECATED typedef const value_type *const_pointer;
-        // DEPRECATED typedef value_type *pointer;
+        typedef const value_type *const_pointer;
+        typedef value_type *pointer;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1578,11 +1583,13 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         size_type size_;
         array_type data_;
-        static indirect_array all_;
+        const static indirect_array all_;
     };
 
     template<class A>
-    indirect_array<A> indirect_array<A>::all_;
+    const indirect_array<A> indirect_array<A>::all_;
+
+
 
     // Gunter Winkler contributed the classes index_pair, index_pair_array,
     // index_triple and index_triple_array to enable inplace sort of parallel arrays.
