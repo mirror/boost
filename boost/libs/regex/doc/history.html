@@ -35,22 +35,32 @@
             Deprecated all interfaces that are not part of the <A href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1429.htm">
                regular expression standardization proposal</A>.
          <LI>
-         Added regex_iterator and regex_token_iterator.
+            Added <A href="regex_iterator.html">regex_iterator</A> and <A href="regex_token_iterator.html">
+               regex_token_iterator</A>
+         .
          <LI>
          Added support for Perl style independent sub-expressions.
          <LI>
-            Added non-member operators to the sub_match class, so that you can compare 
-            sub_match's with strings, or add them to a string to produce a new string.</LI></UL>
+            Added non-member operators to the<A href="sub_match.html"> sub_match class</A>, 
+         so that you can compare sub_match's with strings, or add them to a string to 
+         produce a new string.
+         <LI>
+            Added experimental support for <A href="captures.html">extended capture 
+               information</A>.
+         <LI>
+            Changed the match flags so that they are a distinct type (not an integer), if 
+            you try to pass the match flags as an integer rather than<A href="match_flag_type.html">
+               match_flag_type</A> to the regex algorithms then you will now get a compiler 
+            error.</LI></UL>
       <P>
          <HR>
       <P></P>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         22 Dec 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
