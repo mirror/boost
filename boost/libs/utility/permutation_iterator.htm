@@ -47,7 +47,7 @@ namespace boost {
 <p>The <code>permutation_iterator_generator</code> is a helper class whose purpose
 is to construct a permutation iterator <strong>type</strong>. This class has
 two template arguments, the first being the iterator type over the range V, the
-second being the type of iterator over the indices.
+second being the type of the iterator over the indices.
 
 <blockquote>
 <pre>
@@ -78,9 +78,9 @@ of <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessI
 <tr>
 <td><tt>IndexIterator</tt></td>
 <td>The iterator over the new indexing scheme. This type must at least be a model
-of <a href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a></td>.
+of <a href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>.
 The <code>IndexIterator::value_type</code> must be convertible to the 
-<code>ElementIterator::difference_type</code>.
+<code>ElementIterator::difference_type</code>.</td>
 </table>
 
 <h3>Concept Model</h3>
@@ -91,9 +91,9 @@ The permutation iterator implements the member functions
 and operators required for the 
 <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access Iterator</a>
 concept. However, the permutation iterator can only meet the complexity guarantees 
-of the same concept as the OrderIterator. Thus for instance, although the permutation
+of the same concept as the IndexIterator. Thus for instance, although the permutation
 iterator provides <code>operator+=(distance)</code>, this operation will take linear time
-in case the OrderIterator is a model of ForwardIterator instead of amortized constant time.
+in case the IndexIterator is a model of ForwardIterator instead of amortized constant time.
 
 <br>
 
@@ -108,7 +108,7 @@ types.
 <pre>
 template &lt;class ElementIterator, class IndexIterator &gt;
 typename permutation_iterator_generator&lt;ElementIterator, IndexIterator&gt;::type
-make_permutation_iterator(ElementIterator&amp; base, IndexIterator&amp; order);
+make_permutation_iterator(ElementIterator&amp; base, IndexIterator&amp; indices);
 </pre>
 </blockquote>
 
