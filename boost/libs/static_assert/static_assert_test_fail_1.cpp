@@ -10,9 +10,11 @@
 //
 // all these tests should fail:
 //
+typedef char a1[2];
+typedef char a2[3];
 
 // Namespace scope
-BOOST_STATIC_ASSERT(sizeof(int) == sizeof(char)); // will not compile
+BOOST_STATIC_ASSERT(sizeof(a1) == sizeof(a2)); // will not compile
 
 
 

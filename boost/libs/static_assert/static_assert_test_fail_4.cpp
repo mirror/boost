@@ -18,7 +18,7 @@ struct Bob
   public:
 
   // Member function scope: provides access to member variables
-  int x;
+  char x[4];
   char c;
   int f()
   {

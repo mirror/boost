@@ -10,11 +10,13 @@
 //
 // this tests should fail:
 //
+typedef char a1[2];
+typedef char a2[3];
 
 struct Bob
 {
   private:  // can be in private, to avoid namespace pollution
-    BOOST_STATIC_ASSERT(sizeof(int) == sizeof(char)); // will not compile
+    BOOST_STATIC_ASSERT(sizeof(a1) == sizeof(a2)); // will not compile
   public:
 
   // Member function scope: provides access to member variables
@@ -26,7 +28,6 @@ struct Bob
     BOOST_STATIC_ASSERT(sizeof(x) == 4);
     BOOST_STATIC_ASSERT(sizeof(c) == 1);
 #endif
-    //BOOST_STATIC_ASSERT((sizeof(x) == sizeof(c))); // should not compile
     return x;
   }
 };

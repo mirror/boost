@@ -10,11 +10,13 @@
 //
 // all these tests should fail:
 //
+typedef char a1[2];
+typedef char a2[3];
 
 // Function (block) scope
 void f()
 {
-  BOOST_STATIC_ASSERT(sizeof(int) == sizeof(char)); // should not compile
+  BOOST_STATIC_ASSERT(sizeof(a1) == sizeof(a2)); // should not compile
 }
 
 
