@@ -24,6 +24,7 @@ struct short_string
 
    short_string(const char* src) 
    {
+      size_t e_limit = this->e_limit; // avoid warnings on some compilers
       size_t src_len = strlen(src);
       
       len_ = std::min(src_len, e_limit-1);
