@@ -487,9 +487,15 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
          Requires: <tt>B</tt> is convertible to <tt>Base</tt>.
 
       <tr>
-        <td><tt>base_type base() const;</tt>
+        <td><tt>const base_type& base() const;</tt>
+           <br><br>
+         Return a const reference to the base object.
+
+      <tr>        <td><tt>base_type& base();</tt>
          <br><br>
-         Return a copy of the base object.
+         Return a reference to the base object. This is to give the policies object
+         access to the base object. See <a href="#policies">above</a> for policies
+         iterator_adaptor interaction.<a href="#8">[8]</a>
     </table>
 
     <h3><a name="example">Example</a></h3>
@@ -760,7 +766,8 @@ struct iterator_adaptor
     iterator_adaptor();
     explicit iterator_adaptor(const Base&amp;, const Policies&amp; = Policies());
 
-    base_type base() const;
+    base_type&       base();
+    const base_type& base() const;
 
     template &lt;class B, class V, class R, class P&gt;
     iterator_adaptor(
@@ -891,6 +898,10 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     <tt>Base</tt> type is a const pointer, then the correct defaults
     for the <tt>reference</tt> and <tt>pointer</tt> types can not be
     deduced. You must specify these types explicitly.
+    <p><a name="8">[8]</a>
+    Exposing the base object might be considered as being dangerous.
+    A possible fix would require compiler support for template friends. 
+    As this is not widely available today, the base object remains exposed for now.
 
     <hr>
 
