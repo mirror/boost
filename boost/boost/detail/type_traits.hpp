@@ -487,17 +487,21 @@ struct is_convertible<void, void>
 };
 //
 // get the alignment of some arbitrary type:
+namespace detail{
+// hack for MWCW:
+template <class T>
+class alignment_of_hack
+{
+   char c;
+   T t;
+   alignment_of_hack();
+};
+}
 template <class T>
 class alignment_of
 {
-   struct padded
-   {
-      char c;
-      T t;
-      padded();
-   };
 public:
-   static const unsigned value = sizeof(padded) - sizeof(T);
+   static const unsigned value = sizeof(detail::alignment_of_hack<T>) - sizeof(T);
 };
 //
 // references have to be treated specially, assume
@@ -603,6 +607,7 @@ public:
 #undef BOOST_HAS_TRIVIAL_DESTRUCTOR
 
 #endif // BOOST_DETAIL_TYPE_TRAITS_HPP
+
 
 
 
