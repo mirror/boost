@@ -101,7 +101,7 @@ private:
     virtual void save(const unsigned long t){
         ArchiveImplementation::save(t);
     }
-    #ifndef BOOST_NO_INT64
+    #if !defined(BOOST_NO_INT64_T)
     virtual void save(const int64_t t){
         ArchiveImplementation::save(t);
     }

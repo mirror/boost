@@ -16,6 +16,11 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STD_WSTREAMBUF
+#error "wide char i/o not supported on this platform"
+#else
+
 #include <istream>
 #include <boost/archive/basic_binary_iprimitive.hpp>
 #include <boost/archive/basic_binary_iarchive.hpp>
@@ -73,4 +78,5 @@ public:
 } // namespace archive
 } // namespace boost
 
+#endif // BOOST_NO_STD_WSTREAMBUF
 #endif // BOOST_ARCHIVE_BINARY_WIARCHIVE_HPP

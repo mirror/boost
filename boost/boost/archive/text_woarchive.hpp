@@ -16,10 +16,14 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STD_WSTREAMBUF
+#error "wide char i/o not supported on this platform"
+#else
+
 #include <cstddef> // size_t
 #include <ostream>
 
-#include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::size_t; 
@@ -103,4 +107,5 @@ public:
 } // namespace archive
 } // namespace boost
 
+#endif // BOOST_NO_STD_WSTREAMBUF
 #endif // BOOST_ARCHIVE_TEXT_WOARCHIVE_HPP

@@ -28,16 +28,6 @@ namespace std{
 
 #include <boost/cstdint.hpp>
 
-// determine if its necessary to handle _int64_t specifically
-#if !defined(BOOST_NO_INT64)
-#if ULONG_MAX != 0xffffffff
-#if ULONG_MAX == 18446744073709551615 // 2**64 - 1
-#define BOOST_NO_INTRINSIC_INT64_T
-#define BOOST_NO_INTRINSIC_UINT64_T
-#endif
-#endif
-#endif
-
 #include <boost/pfto.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/archive/detail/oserializer.hpp>
@@ -75,7 +65,7 @@ public:
     virtual void save(const unsigned int t) = 0;
     virtual void save(const long t) = 0;
     virtual void save(const unsigned long t) = 0;
-    #if !defined(BOOST_NO_INT64) && !defined(BOOST_NO_INTRINSIC_INT64_T)
+    #if !defined(BOOST_NO_INT64_T)
     virtual void save(const int64_t t) = 0;
     virtual void save(const uint64_t t) = 0;
     #endif

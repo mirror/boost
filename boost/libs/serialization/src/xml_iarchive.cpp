@@ -38,4 +38,3 @@ template class detail::archive_pointer_iserializer<xml_iarchive> ;
 
 } // namespace archive
 } // namespace boost
-
