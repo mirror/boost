@@ -92,8 +92,16 @@ enum float_denorm_style {
   static const __mem_type __mem_name = __mem_value
 #endif /* BOOST_NO_INCLASS_MEMBER_INITIALIZATION */
 
-// Base class for all specializations of numeric_limits.
+// Deal with min/max for MinGW
+#ifdef min
+# undef min
+#endif
 
+#ifdef max
+# undef max
+#endif
+
+// Base class for all specializations of numeric_limits.
 template <class __number>
 class _Numeric_limits_base {
 public:
