@@ -366,9 +366,10 @@ main()
     FilterIter i(array, FilterPolicies(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
-    BOOST_STATIC_ASSERT((boost::is_same<
-                          boost::detail::iterator_traits<FilterIter>::iterator_category,
-                        std::forward_iterator_tag>::value));
+    enum { is_forward = boost::is_same<
+           FilterIter::iterator_category,
+           std::forward_iterator_tag>::value };
+    BOOST_STATIC_ASSERT(is_forward);
 
     // On compilers not supporting partial specialization, we can do more type
     // deduction with deque iterators than with pointers... unless the library
