@@ -91,7 +91,13 @@ http://boost-sandbox.sf.net/fsm.zip</a> and unpack it somewhere on your harddriv
 	<li>To compile the examples, invoke bjam with your toolset. For example, 
 	for MSVC7.1, type <code>bjam &quot;-sTOOLS=vc-7_1&quot;</code>. This may 
 	take a few minutes. After the build has finished you will find all 
-	executables in <code>D:\Data\boost_1_32_0\libs\fsm\examples\run</code></li>
+	executables in <code>
+	D:\Data\boost_1_32_0\libs\fsm\examples\run</code>. In addition to the 
+	examples discussed in this tutorial, this script also builds the 
+	BitMachine executable in different variants, which show the effects of 
+	various choices on runtime performance, executable size, etc. Moreover, 
+	the Handcrafted executable is also built, which serves to compare 
+	performance of a simple boost::fsm machine with its handcrafted equivalent</li>
 	<li>To run the tests, invoke bjam in the directory
 	<code>D:\Data\boost_1_32_0\libs\fsm\test</code></li>
 </ol>
@@ -1463,9 +1469,9 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39364" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38835" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
