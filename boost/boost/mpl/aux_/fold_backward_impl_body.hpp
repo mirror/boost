@@ -21,6 +21,7 @@
 #   include "boost/mpl/aux_/apply.hpp"
 #   include "boost/mpl/aux_/next.hpp"
 #   include "boost/mpl/aux_/config/ctps.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 
 #   include "boost/mpl/limits/unrolling.hpp"
 #   include "boost/mpl/aux_/preprocessor/repeat.hpp"
@@ -75,7 +76,7 @@ namespace aux {
 
 //: forward declaration
 template<
-      long N
+      BOOST_MPL_AUX_NTTP_DECL(long, N)
     , typename First
     , typename Last
     , typename State
@@ -93,7 +94,7 @@ struct AUX_FOLD_IMPL_NAME;
 
 // implementation for N that exceeds BOOST_MPL_UNROLLING_LIMIT
 template<
-      long N
+      BOOST_MPL_AUX_NTTP_DECL(long, N)
     , typename First
     , typename Last
     , typename State
@@ -174,7 +175,7 @@ struct AUX_FOLD_IMPL_NAME<-1,Last,Last,State,BackwardOp,ForwardOp>
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-template< long >
+template< BOOST_MPL_AUX_NTTP_DECL(long, N) >
 struct AUX_FOLD_CHUNK_NAME;
 
 #   define BOOST_PP_ITERATION_PARAMS_1 \
@@ -182,7 +183,7 @@ struct AUX_FOLD_CHUNK_NAME;
 #   include BOOST_PP_ITERATE()
 
 // implementation for N that exceeds BOOST_MPL_UNROLLING_LIMIT
-template< long N > 
+template< BOOST_MPL_AUX_NTTP_DECL(long, N) > 
 struct AUX_FOLD_CHUNK_NAME
 {
     template<
@@ -304,7 +305,7 @@ struct BOOST_PP_CAT(BOOST_MPL_AUX_FOLD_IMPL_NAME_PREFIX,_step)
 };
 
 template<
-      long N
+      BOOST_MPL_AUX_NTTP_DECL(long, N)
     , typename First
     , typename Last
     , typename State

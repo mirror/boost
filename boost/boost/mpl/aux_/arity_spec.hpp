@@ -26,7 +26,7 @@
 #if defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
 #   define BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(i,type,name) \
 namespace aux { \
-template< int N, BOOST_MPL_PP_PARAMS(i,type T) > \
+template< BOOST_MPL_AUX_NTTP_DECL(int, N), BOOST_MPL_PP_PARAMS(i,type T) > \
 struct arity< \
       name< BOOST_MPL_PP_PARAMS(i,T) > \
     , N \

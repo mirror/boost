@@ -21,6 +21,8 @@
 #ifndef BOOST_MPL_ARG_HPP_INCLUDED
 #define BOOST_MPL_ARG_HPP_INCLUDED
 
+#include "boost/mpl/aux_/config/static_constant.hpp"
+
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/arg_fwd.hpp"
 #   include "boost/mpl/void.hpp"
@@ -31,8 +33,8 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) && \
-    !defined(BOOST_MPL_PREPROCESSING_MODE)
+#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) \
+ && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER arg.hpp
 #   include "boost/mpl/aux_/include_preprocessed.hpp"
@@ -43,11 +45,11 @@
 #   include "boost/mpl/aux_/preprocessor/params.hpp"
 #   include "boost/mpl/aux_/config/lambda.hpp"
 #   include "boost/mpl/aux_/config/dtp.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 
 #   include "boost/preprocessor/iterate.hpp"
 #   include "boost/preprocessor/inc.hpp"
 #   include "boost/preprocessor/cat.hpp"
-#   include "boost/config.hpp"
 
 namespace boost {
 namespace mpl {

@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 #define BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/static_constant.hpp"
 
 namespace boost {
 namespace mpl {

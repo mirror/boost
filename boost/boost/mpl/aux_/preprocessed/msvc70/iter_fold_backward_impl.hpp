@@ -16,7 +16,7 @@ template<
     > 
 struct iter_fold_backward_impl;
 
-template< long >
+template< long N >
 struct iter_fold_backward_chunk;
 
 template<>

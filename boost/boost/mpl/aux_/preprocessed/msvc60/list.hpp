@@ -5,7 +5,7 @@ namespace boost {
 namespace mpl {
 
 namespace aux {
-template< int > struct list_impl_chooser;
+template< nttp_int N > struct list_impl_chooser;
 }
 
 namespace aux {
@@ -222,13 +222,13 @@ namespace aux {
 template< typename T >
 struct is_list_arg
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+    enum { value = true };
 };
 
 template<>
 struct is_list_arg<void_>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+    enum { value = false };
 };
 
 template<
@@ -237,7 +237,13 @@ template<
     >
 struct list_count_args
 {
-    BOOST_STATIC_CONSTANT(int, value = is_list_arg<T1>::value + is_list_arg<T2>::value + is_list_arg<T3>::value + is_list_arg<T4>::value + is_list_arg<T5>::value + is_list_arg<T6>::value + is_list_arg<T7>::value + is_list_arg<T8>::value + is_list_arg<T9>::value + is_list_arg<T10>::value);
+    enum { value =
+          is_list_arg<T1>::value + is_list_arg<T2>::value 
+        + is_list_arg<T3>::value + is_list_arg<T4>::value 
+        + is_list_arg<T5>::value + is_list_arg<T6>::value 
+        + is_list_arg<T7>::value + is_list_arg<T8>::value 
+        + is_list_arg<T9>::value + is_list_arg<T10>::value
+        };
 };
 
 template<
@@ -247,8 +253,9 @@ template<
 struct list_impl
 {
     typedef aux::list_count_args< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9 > arg_num_;
-    typedef typename aux::list_impl_chooser< arg_num_::value >
-        ::template result_< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9 >::type type;
+    typedef typename aux::list_impl_chooser< 
+          arg_num_::value
+        >::template result_< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9 >::type type;
 };
 
 } // namespace aux

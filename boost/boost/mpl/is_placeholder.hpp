@@ -21,6 +21,7 @@
 #include "boost/mpl/bool_c.hpp"
 #include "boost/mpl/aux_/yes_no.hpp"
 #include "boost/mpl/aux_/config/ctps.hpp"
+#include "boost/mpl/aux_/config/nttp.hpp"
 
 namespace boost { namespace mpl {
 
@@ -32,7 +33,7 @@ struct is_placeholder
 {
 };
 
-template< int N >
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct is_placeholder< arg<N> >
     : bool_c<true>
 {
@@ -44,7 +45,7 @@ namespace aux {
 
 aux::no_tag is_placeholder_helper(...);
 
-template< int N >
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
 aux::yes_tag is_placeholder_helper(arg<N>*);
 
 } // namespace aux

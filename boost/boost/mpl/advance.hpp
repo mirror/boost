@@ -30,6 +30,7 @@
 #include "boost/mpl/aux_/common_name_wknd.hpp"
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/config/nttp.hpp"
 #include "boost/config.hpp"
 
 namespace boost {
@@ -79,7 +80,7 @@ struct advance
 
 template<
       typename Iterator
-    , long N
+    , BOOST_MPL_AUX_NTTP_DECL(long, N)
     >
 struct advance_c
 {
@@ -160,7 +161,7 @@ struct advance
 
 template<
       typename Iterator
-    , long N
+    , BOOST_MPL_AUX_NTTP_DECL(long, N)
     >
 struct advance_c
 {

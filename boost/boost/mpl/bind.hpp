@@ -24,11 +24,8 @@
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/config/bind.hpp"
 #include "boost/mpl/aux_/config/lambda.hpp"
-
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#   include "boost/type_traits/is_reference.hpp"
-#endif 
-
+#include "boost/mpl/aux_/config/ctps.hpp"
+#include "boost/mpl/aux_/config/static_constant.hpp"
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/placeholder.hpp"
@@ -38,7 +35,9 @@
 #   include "boost/mpl/aux_/arity_spec.hpp"
 #   include "boost/mpl/aux_/type_wrapper.hpp"
 #   include "boost/mpl/aux_/yes_no.hpp"
-#   include "boost/type_traits/same_traits.hpp"
+#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#       include "boost/type_traits/is_reference.hpp"
+#   endif 
 #endif
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
@@ -58,16 +57,16 @@
 #   include "boost/mpl/aux_/preprocessor/params.hpp"
 #   include "boost/mpl/aux_/preprocessor/default_params.hpp"
 #   include "boost/mpl/aux_/preprocessor/def_params_tail.hpp"
+#   include "boost/mpl/aux_/preprocessor/partial_spec_params.hpp"
 #   include "boost/mpl/aux_/preprocessor/enum.hpp"
 #   include "boost/mpl/aux_/preprocessor/add.hpp"
-#   include "boost/mpl/aux_/preprocessor/sub.hpp"
 #   include "boost/mpl/aux_/config/dtp.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 
 #   include "boost/preprocessor/iterate.hpp"
 #   include "boost/preprocessor/comma_if.hpp"
 #   include "boost/preprocessor/cat.hpp"
 #   include "boost/preprocessor/inc.hpp"
-#   include "boost/config.hpp"
 
 namespace boost {
 namespace mpl {
@@ -98,12 +97,8 @@ namespace mpl {
     /**/
 
 #   define AUX_BIND_N_SPEC_PARAMS(n, param, def) \
-    BOOST_PP_COMMA_IF(n) BOOST_MPL_PP_PARAMS(n, param) \
-    BOOST_PP_COMMA_IF(BOOST_MPL_PP_SUB(BOOST_MPL_METAFUNCTION_MAX_ARITY,n)) \
-    BOOST_MPL_PP_ENUM( \
-          BOOST_MPL_PP_SUB(BOOST_MPL_METAFUNCTION_MAX_ARITY,n) \
-        , def \
-        ) \
+    BOOST_PP_COMMA_IF(n) \
+    BOOST_MPL_PP_PARTIAL_SPEC_PARAMS(n, param, def) \
     /**/
 
 #if !defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
@@ -239,7 +234,7 @@ namespace aux {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template<
-      int N, AUX_BIND_PARAMS(typename U)
+      BOOST_MPL_AUX_NTTP_DECL(int, N), AUX_BIND_PARAMS(typename U)
     >
 struct resolve_bind_arg< arg<N>,AUX_BIND_PARAMS(U) >
 {
@@ -278,7 +273,7 @@ struct resolve_bind_arg< bind2nd<F,T>, AUX_BIND_PARAMS(U) >
 #else
 // agurt, 10/mar/02: the forward declaration has to appear before any of
 // 'is_bind_helper' overloads, otherwise MSVC6.5 issues an ICE on it
-template< int > struct bind_impl_chooser;
+template< BOOST_MPL_AUX_NTTP_DECL(int, arity_) > struct bind_impl_chooser;
 
 aux::no_tag is_bind_helper(...);
 template< typename T > aux::no_tag is_bind_helper(protect<T>*);
@@ -294,37 +289,36 @@ template<
 aux::yes_tag is_bind_helper(bind<F,AUX_BIND_PARAMS(T)>*);
 #endif
 
-template< int N >
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
 aux::yes_tag is_bind_helper(arg<N>*);
 
 template< typename F, typename T > aux::yes_tag is_bind_helper(bind1st<F,T>*);
 template< typename F, typename T > aux::yes_tag is_bind_helper(bind2nd<F,T>*);
 
-template < bool ref = true >
+template< bool is_ref_ = true >
 struct is_bind_template_impl
 {
-    template < typename T >
-    struct apply
+    template< typename T > struct result_
     {
         BOOST_STATIC_CONSTANT(bool, value = false);
     };
 };
 
-template <>
+template<>
 struct is_bind_template_impl<false>
 {
-    template< typename T >
-    struct apply
+    template< typename T > struct result_
     {
-        BOOST_STATIC_CONSTANT(bool, value = sizeof(aux::is_bind_helper(static_cast<T*>(0)))
-                              == sizeof(aux::yes_tag)
+        BOOST_STATIC_CONSTANT(bool, value = 
+              sizeof(aux::is_bind_helper(static_cast<T*>(0))) 
+                == sizeof(aux::yes_tag)
             );
     };
 };
 
 template< typename T > struct is_bind_template
-    : is_bind_template_impl<boost::detail::is_reference_impl< T >::value>
-        ::template apply< T >
+    : is_bind_template_impl< ::boost::detail::is_reference_impl<T>::value >
+        ::template result_<T>
 {
 };
 

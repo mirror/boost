@@ -48,6 +48,7 @@
 #else
 
 #   include "boost/mpl/limits/vector.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 
 #   include "boost/preprocessor/arithmetic/sub.hpp"
 #   include "boost/preprocessor/tuple/elem.hpp"
@@ -100,7 +101,7 @@ template<
 struct vector;
 #else
 namespace aux {
-template< int > struct vector_impl_chooser;
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct vector_impl_chooser;
 }
 #endif
 

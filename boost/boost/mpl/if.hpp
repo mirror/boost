@@ -17,6 +17,7 @@
 #define BOOST_MPL_IF_HPP_INCLUDED
 
 #include "boost/mpl/aux_/value_wknd.hpp"
+#include "boost/mpl/aux_/ice_cast.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/config.hpp"
@@ -53,7 +54,7 @@ template<
 struct if_
 {
     typedef typename if_c<
-          BOOST_MPL_AUX_VALUE_WKND(C)::value
+          BOOST_MPL_AUX_ICE_CAST(bool, BOOST_MPL_AUX_VALUE_WKND(C)::value)
         , T1
         , T2
         >::type type;
@@ -98,7 +99,7 @@ struct if_
     enum { c_ = C::value };
 
  public:
-    typedef typename answer<c_>::type type;
+    typedef typename answer< BOOST_MPL_AUX_ICE_CAST(bool, c_) >::type type;
 };
 
 #else
@@ -147,7 +148,7 @@ template<
     >
 struct if_
 {
-    typedef typename aux::if_impl< C::value >
+    typedef typename aux::if_impl< BOOST_MPL_AUX_ICE_CAST(bool, C::value) >
         ::template result_<T1,T2>::type type;
 
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))

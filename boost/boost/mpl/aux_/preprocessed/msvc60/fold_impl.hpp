@@ -7,7 +7,7 @@ namespace aux {
 
 // forward declaration
 template<
-      long N
+      nttp_long N
     , typename First
     , typename Last
     , typename State
@@ -15,7 +15,7 @@ template<
     > 
 struct fold_impl;
 
-template< long >
+template< nttp_long N >
 struct fold_chunk;
 
 template<>
@@ -176,7 +176,7 @@ struct fold_chunk<4>
 
 };
 
-template< long N > 
+template< nttp_long N > 
 struct fold_chunk
 {
     template<
@@ -276,7 +276,7 @@ struct fold_step
 };
 
 template<
-      long N
+      nttp_long N
     , typename First
     , typename Last
     , typename State

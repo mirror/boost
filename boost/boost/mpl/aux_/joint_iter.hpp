@@ -21,8 +21,8 @@
 #include "boost/mpl/aux_/config/ctps.hpp"
 #include "boost/type_traits/is_same.hpp"
 
-namespace boost {
-namespace mpl {
+namespace boost { namespace mpl {
+
 namespace aux {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -128,14 +128,13 @@ struct joint_iter
         ::template result_<Iterator1,LastIterator1,Iterator2>
 {
 };
-        
+
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace aux
 
 BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(3, aux::joint_iter)
 
-} // namespace mpl
-} // namespace boost
+}} // namespace boost::mpl
 
 #endif // BOOST_MPL_AUX_JOINT_ITER_HPP_INCLUDED

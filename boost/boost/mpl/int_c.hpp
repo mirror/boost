@@ -17,12 +17,13 @@
 #ifndef BOOST_MPL_INT_C_HPP_INCLUDED
 #define BOOST_MPL_INT_C_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/nttp.hpp"
+#include "boost/mpl/aux_/config/static_constant.hpp"
 
 namespace boost {
 namespace mpl {
 
-template< int N >
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct int_c
 {
     BOOST_STATIC_CONSTANT(int, value = N);

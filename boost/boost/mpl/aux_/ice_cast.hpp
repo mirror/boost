@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
-// boost mpl/protect.hpp header file
+// boost mpl/aux_/ice_cast.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
 // Copyright (c) 2001-02
-// Peter Dimov, Aleksey Gurtovoy
+// Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -14,32 +14,18 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_PROTECT_HPP_INCLUDED
-#define BOOST_MPL_PROTECT_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+#define BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
 
-#include "boost/mpl/aux_/arity.hpp"
-#include "boost/mpl/aux_/config/dtp.hpp"
+#include "boost/config.hpp"
 
-namespace boost {
-namespace mpl {
-
-template< typename T >
-struct protect : T
-{
-    typedef protect type;
-};
-
-#if defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
-namespace aux { 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N), typename T >
-struct arity< protect<T>, N > 
-    : arity<T,N>
-{ 
-};
-} // namespace aux
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
+ || defined(__GNUC__) && __GNUC__ < 3
+#   define BOOST_MPL_AUX_ICE_CAST(T, expr) expr
+#elif defined(__MWERKS__) && __MWERKS__ <= 0x3001
+#   define BOOST_MPL_AUX_ICE_CAST(T, expr) (T)(expr)
+#else
+#   define BOOST_MPL_AUX_ICE_CAST(T, expr) static_cast<T>(expr)
 #endif
 
-} // namespace mpl
-} // namespace boost
-
-#endif // BOOST_MPL_PROTECT_HPP_INCLUDED
+#endif // BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED

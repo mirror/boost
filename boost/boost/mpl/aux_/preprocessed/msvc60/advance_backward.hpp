@@ -5,7 +5,7 @@ namespace boost {
 namespace mpl {
 namespace aux {
 
-template< long N > struct advance_backward;
+template< nttp_long N > struct advance_backward;
 
 template<>
 struct advance_backward<0>
@@ -102,7 +102,7 @@ struct advance_backward<4>
 
 };
 
-template< long N >
+template< nttp_long N >
 struct advance_backward
 {
     template< typename Iterator > struct apply

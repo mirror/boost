@@ -26,7 +26,7 @@
 #include "boost/mpl/aux_/template_arity_fwd.hpp"
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
 #include "boost/mpl/aux_/config/dtp.hpp"
-#include "boost/mpl/aux_/config/ntp.hpp"
+#include "boost/mpl/aux_/config/nttp.hpp"
 #include "boost/mpl/aux_/config/ttp.hpp"
 #include "boost/mpl/aux_/config/lambda.hpp"
 #include "boost/mpl/aux_/config/overload_resolution.hpp"
@@ -40,7 +40,7 @@
 #if defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
 #   define BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) \
 namespace aux { \
-template< BOOST_MPL_AUX_NTP_DECL(int, N) > \
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > \
 struct arity< \
       name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
     , N \

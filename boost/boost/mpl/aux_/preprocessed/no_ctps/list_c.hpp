@@ -5,7 +5,7 @@ namespace boost {
 namespace mpl {
 
 namespace aux {
-template< int > struct list_c_impl_chooser;
+template< int N > struct list_c_impl_chooser;
 }
 
 namespace aux {
@@ -233,13 +233,13 @@ namespace aux {
 template< long T >
 struct is_list_c_arg
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+    static bool const value = true;
 };
 
 template<>
 struct is_list_c_arg<LONG_MAX>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+    static bool const value = false;
 };
 
 template<
@@ -248,7 +248,13 @@ template<
     >
 struct list_c_count_args
 {
-    BOOST_STATIC_CONSTANT(int, value = is_list_c_arg<T1>::value + is_list_c_arg<T2>::value + is_list_c_arg<T3>::value + is_list_c_arg<T4>::value + is_list_c_arg<T5>::value + is_list_c_arg<T6>::value + is_list_c_arg<T7>::value + is_list_c_arg<T8>::value + is_list_c_arg<T9>::value + is_list_c_arg<T10>::value);
+    static int const value =
+          is_list_c_arg<T1>::value + is_list_c_arg<T2>::value 
+        + is_list_c_arg<T3>::value + is_list_c_arg<T4>::value 
+        + is_list_c_arg<T5>::value + is_list_c_arg<T6>::value 
+        + is_list_c_arg<T7>::value + is_list_c_arg<T8>::value 
+        + is_list_c_arg<T9>::value + is_list_c_arg<T10>::value
+        ;
 };
 
 template<

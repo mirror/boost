@@ -57,7 +57,7 @@ template< typename F, typename T > struct bind2nd;
 
 namespace aux {
 
-template< int > struct bind_impl_chooser;
+template< int arity_ > struct bind_impl_chooser;
 
 aux::no_tag is_bind_helper(...);
 template< typename T > aux::no_tag is_bind_helper(protect<T>*);
@@ -74,11 +74,31 @@ aux::yes_tag is_bind_helper(arg<N>*);
 template< typename F, typename T > aux::yes_tag is_bind_helper(bind1st< F,T >*);
 template< typename F, typename T > aux::yes_tag is_bind_helper(bind2nd< F,T >*);
 
-template< typename T > struct is_bind_template
+template< bool is_ref_ = true >
+struct is_bind_template_impl
 {
-    BOOST_STATIC_CONSTANT(bool, value =         sizeof(aux::is_bind_helper(static_cast<T*>(0)))
- == sizeof(aux::yes_tag)
-        );
+    template< typename T > struct result_
+    {
+        static bool const value = false;
+    };
+};
+
+template<>
+struct is_bind_template_impl<false>
+{
+    template< typename T > struct result_
+    {
+        static bool const value =
+             sizeof(aux::is_bind_helper(static_cast<T*>(0))) ==
+             sizeof(aux::yes_tag)
+            ;
+    };
+};
+
+template< typename T > struct is_bind_template
+    : is_bind_template_impl< ::boost::detail::is_reference_impl<T>::value >
+        ::template result_<T>
+{
 };
 
 } // namespace aux
@@ -401,13 +421,13 @@ namespace aux {
 template< typename T >
 struct is_bind_arg
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+    static bool const value = true;
 };
 
 template<>
 struct is_bind_arg<void_>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+    static bool const value = false;
 };
 
 template<
@@ -415,7 +435,11 @@ template<
     >
 struct bind_count_args
 {
-    BOOST_STATIC_CONSTANT(int, value = is_bind_arg<T1>::value + is_bind_arg<T2>::value + is_bind_arg<T3>::value + is_bind_arg<T4>::value + is_bind_arg<T5>::value);
+    static int const value =
+          is_bind_arg<T1>::value + is_bind_arg<T2>::value 
+        + is_bind_arg<T3>::value + is_bind_arg<T4>::value 
+        + is_bind_arg<T5>::value
+        ;
 };
 
 }

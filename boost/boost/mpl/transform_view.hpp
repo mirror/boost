@@ -19,25 +19,11 @@
 
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/lambda.hpp"
-#include "boost/mpl/apply.hpp"
+#include "boost/mpl/aux_/transform_iter.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
-#include "boost/mpl/aux_/lambda_spec.hpp"
 
 namespace boost {
 namespace mpl {
-
-template< typename Iterator, typename F >
-struct transform_iter
-{
-    typedef Iterator base;
-    typedef typename base::category category;
-    typedef transform_iter<typename base::next,F> next;
-    
-    typedef typename apply1<
-          F
-        , typename base::type
-        >::type type;
-};
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
@@ -45,14 +31,17 @@ template<
     >
 struct transform_view
 {
-    struct tag;
-    typedef transform_view type;
+ private:
     typedef typename lambda<F>::type f_;
-    typedef transform_iter< typename begin<Sequence>::type,f_ > begin;
-    typedef transform_iter< typename end<Sequence>::type,f_ > end;
+    typedef typename begin<Sequence>::type first_;
+    typedef typename end<Sequence>::type last_;
+ 
+ public:
+    struct tag;
+    typedef aux::transform_iter< first_,last_,f_ > begin;
+    typedef aux::transform_iter< last_,last_,f_ > end;
 };
 
-BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(2,transform_iter)
 BOOST_MPL_AUX_VOID_SPEC(2, transform_view)
 
 } // namespace mpl

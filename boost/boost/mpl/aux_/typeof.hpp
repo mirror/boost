@@ -25,6 +25,7 @@
 #   define BOOST_MPL_AUX_TYPEOF(T,x) __typeof__(x)
 #else
 #   include "boost/config.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 
 namespace boost {
 namespace mpl {
@@ -33,8 +34,8 @@ namespace mpl {
 // by Bill Gibbons, C++ User Journal, November 2000
 
 namespace aux {
-template< long N > struct typeof_answer { typedef char type[N]; };
-template< long > struct typeof_c;
+template< BOOST_MPL_AUX_NTTP_DECL(long, N) > struct typeof_answer { typedef char type[N]; };
+template< BOOST_MPL_AUX_NTTP_DECL(long, S) > struct typeof_c;
 }
 
 #define BOOST_MPL_AUX_REGISTER_TYPE(index, T) \

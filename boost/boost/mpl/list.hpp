@@ -47,6 +47,7 @@
 
 #else
 
+#   include "boost/mpl/aux_/config/nttp.hpp"
 #   include "boost/mpl/limits/list.hpp"
 
 #   include "boost/preprocessor/arithmetic/sub.hpp"
@@ -100,7 +101,7 @@ template<
 struct list;
 #else
 namespace aux {
-template< int > struct list_impl_chooser;
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct list_impl_chooser;
 }
 #endif
 
@@ -125,8 +126,9 @@ template<
 struct list_impl
 {
     typedef aux::list_count_args< AUX_LIST_PARAMS(T) > arg_num_;
-    typedef typename aux::list_impl_chooser< arg_num_::value >
-        ::template result_< AUX_LIST_PARAMS(T) >::type type;
+    typedef typename aux::list_impl_chooser< 
+          arg_num_::value
+        >::template result_< AUX_LIST_PARAMS(T) >::type type;
 };
 
 } // namespace aux

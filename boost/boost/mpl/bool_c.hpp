@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_BOOL_C_HPP_INCLUDED
 #define BOOST_MPL_BOOL_C_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/static_constant.hpp"
 
 namespace boost {
 namespace mpl {
@@ -33,6 +33,12 @@ template< bool C > struct bool_c
 // shorcuts
 typedef bool_c<true> true_c;
 typedef bool_c<false> false_c;
+
+namespace v2_1 {
+using mpl::bool_c;
+using mpl::true_c;
+using mpl::false_c;
+}
 
 } // namespace mpl
 } // namespace boost 

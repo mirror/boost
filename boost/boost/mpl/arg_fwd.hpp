@@ -17,10 +17,12 @@
 #ifndef BOOST_MPL_ARG_FWD_HPP_INCLUDED
 #define BOOST_MPL_ARG_FWD_HPP_INCLUDED
 
+#include "boost/mpl/aux_/config/nttp.hpp"
+
 namespace boost {
 namespace mpl {
 
-template< int N > struct arg;
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct arg;
 
 } // namespace mpl
 } // namespace boost 

@@ -21,6 +21,7 @@
 #include "boost/mpl/aux_/typeof.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/config.hpp"
 
@@ -60,6 +61,7 @@ struct modulus
         , BOOST_MPL_AUX_VALUE_WKND(T2)::value
         >
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, modulus, (T1,T2))
 };
 
 BOOST_MPL_AUX_VOID_SPEC(2,modulus)

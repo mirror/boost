@@ -6,7 +6,7 @@ namespace mpl {
 
 namespace aux {
 
-template< int arity, bool Protect > struct lambda_impl
+template< int arity_, bool Protect > struct lambda_impl
 {
     template< typename T > struct result_
     {
@@ -146,10 +146,12 @@ template<> struct lambda_impl<5, true>
 
 template< typename T, bool Protect = true >
 struct lambda
+    : aux::lambda_impl<
+          ::boost::mpl::aux::template_arity<T>::value
 
-    : aux::lambda_impl< ::boost::mpl::aux::template_arity<T>::value, Protect >
+        , Protect
 
-        ::template result_<T>
+        >::template result_<T>
 {
 };
 

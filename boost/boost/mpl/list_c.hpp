@@ -48,6 +48,7 @@
 #else
 
 #   include "boost/mpl/limits/list.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 
 #   include "boost/preprocessor/arithmetic/sub.hpp"
 #   include "boost/preprocessor/tuple/elem.hpp"
@@ -105,12 +106,12 @@ namespace mpl {
 // forward declaration
 template<
       typename T
-    , AUX_LIST_C_DEFAULT_PARAMS(long C, LONG_MAX)
+    , AUX_LIST_C_DEFAULT_PARAMS(BOOST_MPL_AUX_NTTP_DECL(long, C), LONG_MAX)
     >
 struct list_c;
 #else
 namespace aux {
-template< int > struct list_c_impl_chooser;
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct list_c_impl_chooser;
 }
 #endif
 
@@ -125,14 +126,14 @@ namespace aux {
 // list_count_args
 #define BOOST_MPL_AUX_COUNT_ARGS_PREFIX list_c
 #define BOOST_MPL_AUX_COUNT_ARGS_DEFAULT LONG_MAX
-#define BOOST_MPL_AUX_COUNT_ARGS_TEMPLATE_PARAM long T
+#define BOOST_MPL_AUX_COUNT_ARGS_TEMPLATE_PARAM BOOST_MPL_AUX_NTTP_DECL(long, T)
 #define BOOST_MPL_AUX_COUNT_ARGS_ARITY BOOST_MPL_LIMIT_LIST_SIZE
 #define BOOST_MPL_AUX_COUNT_ARGS_USE_STANDARD_PP_PRIMITIVES
 #include "boost/mpl/aux_/count_args.hpp"
 
 template<
       typename T
-    , AUX_LIST_C_PARAMS(long C)
+    , AUX_LIST_C_PARAMS(BOOST_MPL_AUX_NTTP_DECL(long, C))
     >
 struct list_c_impl
 {
@@ -145,7 +146,7 @@ struct list_c_impl
 
 template<
       typename T
-    , AUX_LIST_C_DEFAULT_PARAMS(long C, LONG_MAX)
+    , AUX_LIST_C_DEFAULT_PARAMS(BOOST_MPL_AUX_NTTP_DECL(long, C), LONG_MAX)
     >
 struct list_c
     : aux::list_c_impl< T,AUX_LIST_C_PARAMS(C) >::type
@@ -181,7 +182,7 @@ struct list_c
 //: primary template (not a specialization!)
 template<
       typename T
-    AUX_LIST_C_N_PARAMS(i, long C)
+    AUX_LIST_C_N_PARAMS(i, BOOST_MPL_AUX_NTTP_DECL(long, C))
     >
 struct list_c
     : AUX_LIST_C(i)< T AUX_LIST_C_N_PARAMS(i, C) >
@@ -193,7 +194,7 @@ struct list_c
 
 template<
       typename T
-    AUX_LIST_C_N_PARAMS(i, long C)
+    AUX_LIST_C_N_PARAMS(i, BOOST_MPL_AUX_NTTP_DECL(long, C))
     >
 struct list_c< T,AUX_LIST_C_N_PARTIAL_SPEC_PARAMS(i, C, LONG_MAX) >
     : AUX_LIST_C(i)< T AUX_LIST_C_N_PARAMS(i, C) >
@@ -212,7 +213,7 @@ struct list_c_impl_chooser<i>
 {
     template<
           typename T
-        , AUX_LIST_C_PARAMS(long C)
+        , AUX_LIST_C_PARAMS(BOOST_MPL_AUX_NTTP_DECL(long, C))
         >
     struct result_
     {

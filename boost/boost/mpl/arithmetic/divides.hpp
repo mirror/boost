@@ -21,6 +21,7 @@
 #include "boost/mpl/aux_/typeof.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/config.hpp"
 
@@ -66,6 +67,7 @@ struct divides
         , BOOST_MPL_AUX_VALUE_WKND(T5)::value
         >
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(5, divides, (T1,T2,T3,T4,T5))
 };
 
 BOOST_MPL_AUX_VOID_SPEC_EXT(2,5,divides)

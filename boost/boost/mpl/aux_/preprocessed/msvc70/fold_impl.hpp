@@ -15,7 +15,7 @@ template<
     > 
 struct fold_impl;
 
-template< long >
+template< long N >
 struct fold_chunk;
 
 template<>

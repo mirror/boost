@@ -42,10 +42,11 @@
 #   include "boost/mpl/limits/arity.hpp"
 #   include "boost/mpl/aux_/preprocessor/params.hpp"
 #   include "boost/mpl/aux_/preprocessor/default_params.hpp"
+#   include "boost/mpl/aux_/preprocessor/partial_spec_params.hpp"
 #   include "boost/mpl/aux_/preprocessor/enum.hpp"
 #   include "boost/mpl/aux_/preprocessor/add.hpp"
-#   include "boost/mpl/aux_/preprocessor/sub.hpp"
 #   include "boost/mpl/aux_/config/dtp.hpp"
+#   include "boost/mpl/aux_/config/nttp.hpp"
 #   include "boost/mpl/aux_/config/eti.hpp"
 #   include "boost/mpl/aux_/config/lambda.hpp"
 
@@ -90,12 +91,8 @@ namespace mpl {
     /**/
 
 #   define AUX_APPLY_N_PARTIAL_SPEC_PARAMS(n, param, def) \
-    BOOST_PP_COMMA_IF(n) BOOST_MPL_PP_PARAMS(n, param) \
-    BOOST_PP_COMMA_IF(BOOST_MPL_PP_SUB(BOOST_MPL_METAFUNCTION_MAX_ARITY,n)) \
-    BOOST_MPL_PP_ENUM( \
-          BOOST_MPL_PP_SUB(BOOST_MPL_METAFUNCTION_MAX_ARITY,n) \
-        , def \
-        ) \
+    BOOST_PP_COMMA_IF(n) \
+    BOOST_MPL_PP_PARTIAL_SPEC_PARAMS(n, param, def) \
     /**/
     
 #   define AUX_APPLY_N_SPEC_PARAMS(n, param) \
@@ -112,7 +109,7 @@ template<
 struct apply;
 #else
 namespace aux {
-template< int > struct apply_impl_chooser;
+template< BOOST_MPL_AUX_NTTP_DECL(int, arity_) > struct apply_impl_chooser;
 }
 #endif
 

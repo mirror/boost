@@ -5,7 +5,7 @@ namespace boost {
 namespace mpl {
 
 namespace aux {
-template< int > struct apply_impl_chooser;
+template< int arity_ > struct apply_impl_chooser;
 }
 
 template< typename F >
@@ -263,13 +263,13 @@ namespace aux {
 template< typename T >
 struct is_apply_arg
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+    static bool const value = true;
 };
 
 template<>
 struct is_apply_arg<void_>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+    static bool const value = false;
 };
 
 template<
@@ -277,7 +277,11 @@ template<
     >
 struct apply_count_args
 {
-    BOOST_STATIC_CONSTANT(int, value = is_apply_arg<T1>::value + is_apply_arg<T2>::value + is_apply_arg<T3>::value + is_apply_arg<T4>::value + is_apply_arg<T5>::value);
+    static int const value =
+          is_apply_arg<T1>::value + is_apply_arg<T2>::value 
+        + is_apply_arg<T3>::value + is_apply_arg<T4>::value 
+        + is_apply_arg<T5>::value
+        ;
 };
 
 } // namespace aux

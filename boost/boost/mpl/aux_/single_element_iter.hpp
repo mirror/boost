@@ -25,6 +25,7 @@
 #include "boost/mpl/aux_/iterator_names.hpp"
 #include "boost/mpl/aux_/lambda_spec.hpp"
 #include "boost/mpl/aux_/config/ctps.hpp"
+#include "boost/mpl/aux_/config/nttp.hpp"
 
 namespace boost { namespace mpl { 
 
@@ -34,7 +35,7 @@ template< typename T, int N >
 struct single_element_iter;
 
 // random access support
-template< typename T, int N >
+template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct single_iter_base
 {
     typedef ra_iter_tag_ category;
@@ -79,7 +80,7 @@ struct single_element_iter<T,1>
 
 #else
 
-template< int N > struct single_iter_impl
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct single_iter_impl
 {
     template< typename T > struct result_;
 };
@@ -105,7 +106,7 @@ struct single_iter_impl<1>
     };
 };
 
-template< typename T, int N >
+template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct single_element_iter
     : single_iter_impl<N>::template result_<T>
 {

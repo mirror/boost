@@ -20,6 +20,7 @@
 #include "boost/mpl/integral_c.hpp"
 #include "boost/mpl/aux_/typeof.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/config.hpp"
 
 namespace boost {
@@ -37,6 +38,8 @@ struct negate
 #else
     typedef integral_c<value_type, (-T::value)> type;
 #endif
+
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1, negate, (T))
 };
 
 BOOST_MPL_AUX_VOID_SPEC(1,negate)
