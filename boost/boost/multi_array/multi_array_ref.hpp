@@ -54,7 +54,7 @@ public:
   typedef typename super_type::difference_type difference_type;
   typedef typename super_type::index index;
   typedef typename super_type::extent_range extent_range;
-
+  typedef general_storage_order<NumDims> storage_order_type;
 
   // template typedefs
   template <std::size_t NDims>
@@ -192,6 +192,11 @@ public:
 
   const index* index_bases() const {
     return index_base_list_.data();
+  }
+
+
+  const storage_order_type& storage_order() const {
+    return storage_;
   }
 
   template <typename IndexList>
@@ -334,7 +339,7 @@ public:
   typedef boost::array<index,NumDims> index_list;
 
   TPtr base_;
-  general_storage_order<NumDims> storage_;
+  storage_order_type storage_;
   size_list extent_list_;
   index_list stride_list_;
   index_list index_base_list_;

@@ -45,12 +45,13 @@ public:
   typedef *implementation-defined*              const_iterator;
   typedef *implementation-defined*              reverse_iterator;
   typedef *implementation-defined*              const_reverse_iterator;
-  typedef multi_array_types::size_type           size_type;
-  typedef multi_array_types::index               index;
-  typedef multi_array_types::index_gen           index_gen;
-  typedef multi_array_types::index_range         index_range;
-  typedef multi_array_types::extent_gen          extent_gen;
-  typedef multi_array_types::extent_range        extent_range;
+  typedef multi_array_types::size_type          size_type;
+  typedef multi_array_types::index              index;
+  typedef multi_array_types::index_gen          index_gen;
+  typedef multi_array_types::index_range        index_range;
+  typedef multi_array_types::extent_gen         extent_gen;
+  typedef multi_array_types::extent_range       extent_range;
+  typedef *implementation-defined*              storage_order_type;
   
   // template typedefs
   template <std::size_t Dims> struct            subarray;
@@ -63,9 +64,9 @@ public:
 
   template <typename ExtentList>
   explicit multi_array_ref(element* data, const ExtentList& sizes,
-                       const storage_order& store = c_storage_order());
+                       const storage_order_type& store = c_storage_order());
   explicit multi_array_ref(element* data, const extents_tuple& ranges,
-                       const storage_order& store = c_storage_order());
+                       const storage_order_type& store = c_storage_order());
   multi_array_ref(const multi_array_ref& x);
   ~multi_array_ref();
 
@@ -107,6 +108,7 @@ public:
   const size_type*		shape() const;
   const index*			strides() const;
   const index*			index_bases() const;
+  const storage_order_type&     storage_order() const;
 
   // comparators
   bool operator==(const multi_array_ref& rhs);

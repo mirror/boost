@@ -1,4 +1,4 @@
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Boost.MultiArray Reference Manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article"><div class="titlepage"><div><h1 class="title"><a name="id171292"></a>Boost.MultiArray Reference Manual</h1></div><div><h3 class="author">Ronald Garcia</h3><div class="affiliation"><span class="orgname">Indiana University<br></span><span class="orgdiv">Open Systems Lab<br></span></div></div><div><p class="copyright">Copyright © 2002 Ronald Garcia</p></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><a href="#synopsis">Library Synopsis</a></dt><dt><a href="#MultiArray">MultiArray Concept</a></dt><dd><dl><dt><a href="#id179006">Notation</a></dt><dt><a href="#id175494">Associated Types</a></dt><dt><a href="#id250868">Valid expressions</a></dt><dt><a href="#id251805">Complexity guarantees</a></dt><dt><a href="#id251847">Invariants</a></dt><dt><a href="#view_types">Associated Types for Views</a></dt><dd><dl><dt><a href="#index_range">index_range</a></dt><dt><a href="#index_gen">index_gen</a></dt></dl></dd><dt><a href="#id253521">Models</a></dt></dl></dd><dt><a href="#array_types">Array Components</a></dt><dd><dl><dt><a href="#multi_array">multi_array</a></dt><dt><a href="#multi_array_ref">multi_array_ref</a></dt><dt><a href="#const_multi_array_ref">const_multi_array_ref</a></dt></dl></dd><dt><a href="#auxiliary">Auxiliary Components</a></dt><dd><dl><dt><a href="#multi_array_types">multi_array_types</a></dt><dt><a href="#extent_range">extent_range</a></dt><dt><a href="#extent_gen">extent_gen</a></dt><dt><a href="#id253883">Global Objects</a></dt><dd><dl><dt><a href="#extents">extents</a></dt><dt><a href="#indices">indices</a></dt></dl></dd><dt><a href="#generators">View and SubArray Generators</a></dt><dt><a href="#memory_layout">Memory Layout Specifiers</a></dt><dd><dl><dt><a href="#c_storage_order">c_storage_order</a></dt><dt><a href="#fortran_storage_order">fortran_storage_order</a></dt><dt><a href="#general_storage_order">general_storage_order</a></dt></dl></dd></dl></dd></dl></div><fake><p>Boost.MultiArray is composed of several components.
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Boost.MultiArray Reference Manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article"><div class="titlepage"><div><h1 class="title"><a name="id170468"></a>Boost.MultiArray Reference Manual</h1></div><div><h3 class="author">Ronald Garcia</h3><div class="affiliation"><span class="orgname">Indiana University<br></span><span class="orgdiv">Open Systems Lab<br></span></div></div><div><p class="copyright">Copyright © 2002 Ronald Garcia</p></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><a href="#synopsis">Library Synopsis</a></dt><dt><a href="#MultiArray">MultiArray Concept</a></dt><dd><dl><dt><a href="#id179006">Notation</a></dt><dt><a href="#id175494">Associated Types</a></dt><dt><a href="#id250868">Valid expressions</a></dt><dt><a href="#id251805">Complexity guarantees</a></dt><dt><a href="#id251847">Invariants</a></dt><dt><a href="#view_types">Associated Types for Views</a></dt><dd><dl><dt><a href="#index_range">index_range</a></dt><dt><a href="#index_gen">index_gen</a></dt></dl></dd><dt><a href="#id253521">Models</a></dt></dl></dd><dt><a href="#array_types">Array Components</a></dt><dd><dl><dt><a href="#multi_array">multi_array</a></dt><dt><a href="#multi_array_ref">multi_array_ref</a></dt><dt><a href="#const_multi_array_ref">const_multi_array_ref</a></dt></dl></dd><dt><a href="#auxiliary">Auxiliary Components</a></dt><dd><dl><dt><a href="#multi_array_types">multi_array_types</a></dt><dt><a href="#extent_range">extent_range</a></dt><dt><a href="#extent_gen">extent_gen</a></dt><dt><a href="#id253863">Global Objects</a></dt><dd><dl><dt><a href="#extents">extents</a></dt><dt><a href="#indices">indices</a></dt></dl></dd><dt><a href="#generators">View and SubArray Generators</a></dt><dt><a href="#memory_layout">Memory Layout Specifiers</a></dt><dd><dl><dt><a href="#c_storage_order">c_storage_order</a></dt><dt><a href="#fortran_storage_order">fortran_storage_order</a></dt><dt><a href="#general_storage_order">general_storage_order</a></dt></dl></dd></dl></dd></dl></div><fake><p>Boost.MultiArray is composed of several components.
 The MultiArray concept defines a generic interface to multidimensional
 containers.
 <tt>multi_array</tt> is a general purpose container class
@@ -552,13 +552,15 @@ public:
   typedef *implementation-defined*              const_iterator;
   typedef *implementation-defined*              reverse_iterator;
   typedef *implementation-defined*              const_reverse_iterator;
-  typedef multi_array_types::size_type           size_type;
-  typedef multi_array_types::index               index;
-  typedef multi_array_types::index_gen           index_gen;
-  typedef multi_array_types::index_range         index_range;
-  typedef multi_array_types::extent_gen          extent_gen;
-  typedef multi_array_types::extent_range        extent_range;
+  typedef multi_array_types::size_type          size_type;
+  typedef multi_array_types::index              index;
+  typedef multi_array_types::index_gen          index_gen;
+  typedef multi_array_types::index_range        index_range;
+  typedef multi_array_types::extent_gen         extent_gen;
+  typedef multi_array_types::extent_range       extent_range;
+  typedef *implementation-defined*              storage_order_type;
   
+
   // template typedefs
   template &lt;std::size_t Dims&gt; struct            subarray;
   template &lt;std::size_t Dims&gt; struct            const_subarray;
@@ -572,10 +574,10 @@ public:
 
   template &lt;typename ExtentList&gt;
   explicit multi_array(const ExtentList&amp; sizes,
-                       const storage_order&amp; store = c_storage_order(),
+                       const storage_order_type&amp; store = c_storage_order(),
                        const Allocator&amp; alloc = Allocator());
   explicit multi_array(const extents_tuple&amp; ranges,
-                       const storage_order&amp; store = c_storage_order(),
+                       const storage_order_type&amp; store = c_storage_order(),
 	               const Allocator&amp; alloc = Allocator());
   multi_array(const multi_array&amp; x);
   ~multi_array();
@@ -618,6 +620,7 @@ public:
   const size_type*		shape() const;
   const index*			strides() const;
   const index*			index_bases() const;
+  const storage_order_type&amp;     storage_order() const;
 
   // comparators
   bool operator==(const multi_array&amp; rhs);
@@ -639,7 +642,7 @@ public:
 
 </pre></p><p><b>Constructors. </b><div class="variablelist"><dl><dt><span class="term"><pre class="programlisting">template &lt;typename ExtentList&gt;
 explicit multi_array(const ExtentList&amp; sizes,
-                     const storage_order&amp; store = c_storage_order(),
+                     const storage_order_type&amp; store = c_storage_order(),
                      const Allocator&amp; alloc = Allocator());
 </pre></span></dt><dd><fake><p>
 This constructs a <tt>multi_array</tt> using the specified
@@ -652,7 +655,7 @@ allocate the contained elements.
 <tt>ExtentList</tt> must model <a href="../../utility/Collection.html" target="_top">Collection</a>.
 </p><p><b>Preconditions. </b><tt>sizes.size() == NumDims;</tt></p></dd><dt><span class="term">
 <pre class="programlisting">explicit multi_array(extent_gen::gen_type&lt;NumDims&gt;::type ranges,
-                     const storage_order&amp; store = c_storage_order(),
+                     const storage_order_type&amp; store = c_storage_order(),
                      const Allocator&amp; alloc = Allocator());
 </pre></span></dt><dd><fake><p>
 This constructs a <tt>multi_array</tt> using the specified
@@ -719,7 +722,11 @@ This function resizes an array to the shape specified by
 whenever possible; if the new array size is smaller, then some data will 
 be lost. Any new elements created by resizing the array are initialized with 
 the <tt>element</tt> default constructor.
-</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="multi_array_ref"></a><tt>multi_array_ref</tt></h3></div></div><fake><p>
+</p></fake></dd></dl></div></p><p><b>Queries. </b><div class="variablelist"><dl><dt><span class="term"><pre class="programlisting">
+storage_order_type&amp; storage_order() const;
+</pre>
+</span></dt><dd><fake><p>This query returns the storage order object associated with the 
+<tt>multi_array</tt> in question.  It can be used to construct a new array with the same storage order.</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="multi_array_ref"></a><tt>multi_array_ref</tt></h3></div></div><fake><p>
 <tt>multi_array_ref</tt> is a multi-dimensional container
 adaptor.  It provides the MultiArray interface over any contiguous
 block of elements.  <tt>multi_array_ref</tt> exports the
@@ -752,12 +759,13 @@ public:
   typedef *implementation-defined*              const_iterator;
   typedef *implementation-defined*              reverse_iterator;
   typedef *implementation-defined*              const_reverse_iterator;
-  typedef multi_array_types::size_type           size_type;
-  typedef multi_array_types::index               index;
-  typedef multi_array_types::index_gen           index_gen;
-  typedef multi_array_types::index_range         index_range;
-  typedef multi_array_types::extent_gen          extent_gen;
-  typedef multi_array_types::extent_range        extent_range;
+  typedef multi_array_types::size_type          size_type;
+  typedef multi_array_types::index              index;
+  typedef multi_array_types::index_gen          index_gen;
+  typedef multi_array_types::index_range        index_range;
+  typedef multi_array_types::extent_gen         extent_gen;
+  typedef multi_array_types::extent_range       extent_range;
+  typedef *implementation-defined*              storage_order_type;
   
   // template typedefs
   template &lt;std::size_t Dims&gt; struct            subarray;
@@ -770,9 +778,9 @@ public:
 
   template &lt;typename ExtentList&gt;
   explicit multi_array_ref(element* data, const ExtentList&amp; sizes,
-                       const storage_order&amp; store = c_storage_order());
+                       const storage_order_type&amp; store = c_storage_order());
   explicit multi_array_ref(element* data, const extents_tuple&amp; ranges,
-                       const storage_order&amp; store = c_storage_order());
+                       const storage_order_type&amp; store = c_storage_order());
   multi_array_ref(const multi_array_ref&amp; x);
   ~multi_array_ref();
 
@@ -814,6 +822,7 @@ public:
   const size_type*		shape() const;
   const index*			strides() const;
   const index*			index_bases() const;
+  const storage_order_type&amp;     storage_order() const;
 
   // comparators
   bool operator==(const multi_array_ref&amp; rhs);
@@ -909,12 +918,13 @@ public:
   typedef *implementation-defined*              const_iterator;
   typedef *implementation-defined*              reverse_iterator;
   typedef *implementation-defined*              const_reverse_iterator;
-  typedef multi_array_types::size_type           size_type;
-  typedef multi_array_types::index               index;
-  typedef multi_array_types::index_gen           index_gen;
-  typedef multi_array_types::index_range         index_range;
-  typedef multi_array_types::extent_gen          extent_gen;
-  typedef multi_array_types::extent_range        extent_range;
+  typedef multi_array_types::size_type          size_type;
+  typedef multi_array_types::index              index;
+  typedef multi_array_types::index_gen          index_gen;
+  typedef multi_array_types::index_range        index_range;
+  typedef multi_array_types::extent_gen         extent_gen;
+  typedef multi_array_types::extent_range       extent_range;
+  typedef *implementation-defined*              storage_order_type;
   
   // template typedefs
   template &lt;std::size_t Dims&gt; struct            subarray;
@@ -927,9 +937,9 @@ public:
 
   template &lt;typename ExtentList&gt;
   explicit const_multi_array_ref(const element* data, const ExtentList&amp; sizes,
-                       const storage_order&amp; store = c_storage_order());
+                       const storage_order_type&amp; store = c_storage_order());
   explicit const_multi_array_ref(const element* data, const extents_tuple&amp; ranges,
-                       const storage_order&amp; store = c_storage_order());
+                       const storage_order_type&amp; store = c_storage_order());
   const_multi_array_ref(const const_multi_array_ref&amp; x);
   ~const_multi_array_ref();
 
@@ -958,6 +968,7 @@ public:
   const size_type*		shape() const;
   const index*			strides() const;
   const index*			index_bases() const;
+  const storage_order_type&amp;     storage_order() const;
 
   // comparators
   bool operator==(const const_multi_array_ref&amp; rhs);
@@ -1092,7 +1103,7 @@ operator[](index idx) const;</tt></span></dt><dd><fake><p>This function returns 
 <tt>extent_range</tt> objects in addition to
 <tt>extent_range(0,idx).</tt> This function gives the array
 constructors a similar syntax to traditional C multidimensional array
-declaration.</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id253883"></a>Global Objects</h3></div></div><fake><p>For syntactic convenience, Boost.MultiArray defines two 
+declaration.</p></fake></dd></dl></div></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id253863"></a>Global Objects</h3></div></div><fake><p>For syntactic convenience, Boost.MultiArray defines two 
 global objects as part of its
 interface.  These objects play the role of object generators;
 expressions involving them create other objects of interest.
