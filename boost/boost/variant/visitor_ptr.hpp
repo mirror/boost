@@ -70,7 +70,7 @@ public: // static visitor interfaces
     }
 
     template <typename U>
-    result_type operator()(const U& operand) const
+    result_type operator()(const U&) const
     {
         throw bad_visit();
     }
