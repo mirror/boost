@@ -56,7 +56,7 @@
 #endif
 
 #if _MSC_VER+0 >= 1000
-#  ifndef _NATIVE_WCHAR_T_DEFINED
+#  if !defined(_NATIVE_WCHAR_T_DEFINED) && !defined(_WCHAR_T_DEFINED)
 #     define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
 #  if _MSC_VER >= 1200
