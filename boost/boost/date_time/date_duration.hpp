@@ -45,6 +45,10 @@ namespace date_time {
     {
       return days_;
     }
+    bool is_special()const
+    {
+      return days_.is_special();
+    }
     //! returns days as value, not object.
     duration_rep_type days() const 
     {

@@ -2,7 +2,7 @@
 #define DATE_TIME_DATE_HPP___
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/year_month_day.hpp"
@@ -102,6 +102,11 @@ namespace date_time {
     {
       return days_ == rhs.days_;
     }
+    //! check to see if date is a special value
+    bool is_special()const
+    {
+      return(is_not_a_date() || is_infinity());
+    }
     //! check to see if date is not a value
     bool is_not_a_date()  const
     {
@@ -135,13 +140,34 @@ namespace date_time {
     
     date_type operator-(const duration_type& dd) const
     {
+      if(dd.is_special())
+      {
+        return date_type(date_rep_type(days_) - dd.get_rep());
+      }
       return date_type(date_rep_type(days_) - dd.days());
     }
-    date_rep_type day_count() const {return days_;};
+    date_type operator-=(const duration_type& dd)
+    {
+      *this = *this - dd;
+      return date_type(days_);
+    }
+    date_rep_type day_count() const 
+    {
+      return days_;
+    };
     //allow internal access from operators
     date_type operator+(const duration_type& dd) const
     {
+      if(dd.is_special())
+      {
+        return date_type(date_rep_type(days_) + dd.get_rep());
+      }
       return date_type(date_rep_type(days_) + dd.days());
+    }
+    date_type operator+=(const duration_type& dd)
+    {
+      *this = *this + dd; 
+      return date_type(days_);
     }
 
     //see reference
