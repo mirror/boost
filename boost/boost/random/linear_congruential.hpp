@@ -98,39 +98,56 @@ public:
 
   static bool validation(IntType x) { return val == x; }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+#ifdef BOOST_NO_OPERATORS_IN_NAMESPACE
+    
+  // Use a member function; Streamable concept not supported.
+  bool operator==(const linear_congruential& rhs) const
+  { return _x == rhs._x; }
+  bool operator!=(const linear_congruential& rhs) const
+  { return !(*this == rhs); }
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os,
-             const linear_congruential& lcg)
-  { os << lcg._x; return os; }
-
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, linear_congruential& lcg)
-  { is >> lcg._x; return is; }
-#endif
-
+#else 
   friend bool operator==(const linear_congruential& x,
                          const linear_congruential& y)
   { return x._x == y._x; }
   friend bool operator!=(const linear_congruential& x,
                          const linear_congruential& y)
   { return !(x == y); }
-#else
-  // Use a member function; Streamable concept not supported.
-  bool operator==(const linear_congruential& rhs) const
-  { return _x == rhs._x; }
-  bool operator!=(const linear_congruential& rhs) const
-  { return !(*this == rhs); }
-#endif
+    
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+  template<class CharT, class Traits, class IntType_, IntType_ a_, IntType_ c_, IntType_ m_, IntType_ val_>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os,
+             linear_congruential<IntType_,a_,c_,m_,val_> const& lcg);
 
+  template<class CharT, class Traits, class IntType_, IntType_ a_, IntType_ c_, IntType_ m_, IntType_ val_>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>&,
+             linear_congruential<IntType_,a_,c_,m_,val_>&);
+    
 private:
+#endif
+#endif
+    
   IntType _modulus;   // work-around for gcc "divide by zero" warning in ctor
   IntType _x;
 };
+
+template<class CharT, class Traits, class IntType, IntType a, IntType c, IntType m, IntType val>
+std::basic_ostream<CharT,Traits>&
+operator<<(std::basic_ostream<CharT,Traits>& os,
+           const linear_congruential<IntType,a,c,m,val>& lcg)
+{
+    return os << lcg._x;
+}
+
+template<class CharT, class Traits, class IntType, IntType a, IntType c, IntType m, IntType val>
+std::basic_istream<CharT,Traits>&
+operator>>(std::basic_istream<CharT,Traits>& is,
+           linear_congruential<IntType,a,c,m,val>& lcg)
+{
+    return is >> lcg._x;
+}
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
