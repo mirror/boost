@@ -297,7 +297,7 @@ make_tuple_test()
 
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    A a; B b;
+    A a = A(); B b;
     const A ca = a;
     make_tuple(cref(a), b);
     make_tuple(ref(a), b);
