@@ -34,6 +34,7 @@ test-suite iterator
     [ run counting_iterator_test.cpp ]
     [ run permutation_iterator_test.cpp : : : # <stlport-iostream>on 
     ]
+    [ compile iterator_categories.cpp ]
     [ run zip_iterator_test.cpp ]
       
     [ run ../../utility/iterator_adaptor_examples.cpp ]
