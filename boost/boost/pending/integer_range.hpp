@@ -34,13 +34,14 @@ namespace boost {
 struct counting_iterator_policies : public default_iterator_policies
 {
     template <class IntegerType>
-    IntegerType dereference(type<IntegerType>, const IntegerType& i) const
+    const IntegerType&
+    dereference(type<const IntegerType&>, const IntegerType& i) const
         { return i; }
 };
 template <class IntegerType>
 struct counting_iterator_traits {
     typedef IntegerType value_type;
-    typedef IntegerType reference;
+    typedef const IntegerType& reference;
     typedef value_type* pointer;
     typedef std::ptrdiff_t difference_type;
     typedef std::random_access_iterator_tag iterator_category;
@@ -79,6 +80,13 @@ struct integer_range {
 protected:
     IntegerType m_start, m_finish;
 };
+
+template <class IntegerType>
+inline integer_range<IntegerType>
+make_integer_range(IntegerType first, IntegerType last)
+{
+  return integer_range<IntegerType>(first, last);
+}
 
 } // namespace boost
 
