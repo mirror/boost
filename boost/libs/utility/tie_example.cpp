@@ -14,7 +14,7 @@
 //
 // 3 successfully inserted.
 // 9 was already in the set.
-// There were 2 occurances of 4.
+// There were 2 occurrences of 4.
 
 #include <set>
 #include <algorithm>
@@ -55,7 +55,7 @@ main(int, char*[])
 
     boost::tie(i,end) = std::equal_range(vals, vals + 6, 4);
     std::cout << "There were " << std::distance(i,end)
-	      << " occurances of " << *i << "." << std::endl;
+	      << " occurrences of " << *i << "." << std::endl;
     // Footnote: of course one would normally just use std::count()
     // to get this information, but that would spoil the example :)
   }
