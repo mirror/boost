@@ -1,0 +1,441 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>The Context Object</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <link rel="stylesheet" href="theme/style.css" type="text/css">
+    </head>
+    <body text="#000000" background="theme/bkd.gif">
+<table width="100%" border="0" cellspacing="2" background="theme/bkd2.gif">
+  <tr> 
+    <td width="21"> <h1></h1></td>
+    <td width="885"> <font face="Verdana, Arial, Helvetica, sans-serif"><b><font size="6">The 
+      Context Object</font></b></font></td>
+    <td width="96"><a href="http://spirit.sf.net"><img src="theme/wave.gif" width="93" height="68" align="right" border="0"></a></td>
+  </tr>
+</table>
+<br>
+  <table border="0">
+    <tr> 
+      <td width="10"></td>
+      <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
+      <td width="30"><a href="quickstart.html"><img src="theme/l_arr.gif" width="20" height="19" border="0"></a></td>
+      <td width="30"><a href="class_reference_inputpolicy.html"><img src="theme/r_arr.gif" border="0"></a></td>
+    </tr>
+  </table>
+<blockquote> 
+  <p><a href="class_reference_context.html#introduction">Introduction</a><br>
+    <a href="class_reference_context.html#header_synopsis">Header 'wave/context.hpp' synopsis</a><br>
+	<a href="class_reference_context.html#public_typedefs">Public Typedefs</a><br>
+    <a href="class_reference_context.html#template_parameters">Template parameters</a><br>
+    <a href="class_reference_context.html#member_functions">Member functions</a></p>
+  </blockquote>
+<h2><b><a name="introduction"></a>Introduction</b></h2>
+<p>The <tt>boost::wave::context&lt;&gt;</tt> object is the main user visible object of 
+  the <tt>Wave</tt> library. It exists to generate the pair of iterators, which 
+  while dereferenced return the preprocessed tokens. Additionally it is used 
+  to control other aspects of the preprocessing, such as </p>
+<blockquote> 
+  <p><STRONG><IMG id="IMG1" height="13" src="theme/bullet.gif" width="13"></STRONG>&nbsp;include 
+    search pathes, which define, where to search for files to be included with 
+    <tt>#include&nbsp;&lt;...&gt;</tt> and <tt>#include&nbsp;"..."</tt> directives<br>
+    <STRONG><img src="theme/bullet.gif" width="13" height="13">&nbsp;</STRONG>which 
+    macros to predefine and which of the predefined macros to undefine<br>
+    <STRONG><img src="theme/bullet.gif" width="13" height="13">&nbsp;</STRONG>several 
+    other options as for instance to control, whether to enable several extensions 
+    to the C++ Standard (as for instance variadics and placemarkers) or not.</p>
+</blockquote>
+<h2><b><a name="header_synopsis"></a>Header <a href="http://cvs.sourceforge.net/viewcvs.py/boost-sandbox/boost/boost/wave/cpp_context.hpp?view=markup">wave/cpp_context.hpp</a> 
+  synopsis</b></h2>
+<pre><span class="keyword">namespace</span> <span class="identifier">boost</span> {
+<span class="keyword">namespace</span> <span class="identifier">wave</span> { 
+    
+    <span class="keyword">template</span> &lt;
+        <span class="keyword">typename</span> IteratorT, <span class="keyword">typename</span> LexIteratorT, 
+        <span class="keyword">typename</span> InputPolicyT, <span class="keyword">typename</span> TracePolicyT 
+    &gt; 
+    <span class="keyword">class</span> context <span class="special">:</span> <span class="keyword">public</span> InputPolicyT 
+    {
+    <span class="keyword">public</span>: 
+
+        <span class="keyword">typedef</span> pp_iterator&lt;context&gt; iterator_type; 
+        <span class="keyword">typedef</span> TokenT token_type;
+        <span class="keyword">typedef</span> <span class="keyword">typename</span> token_type::position_type position_type;
+
+    <span class="comment">// constructor</span>
+        <a href="class_reference_context.html#constructor">context</a>(IteratorT <span class="keyword">const</span> &amp;first_, 
+            IteratorT <span class="keyword">const</span> &amp;last_, 
+            <span class="keyword">char const</span> *fname = <span class="string">"&lt;Unknown&gt;"</span>,
+            TracePolicyT &amp;trace = TracePolicyT())
+
+    <span class="comment">// iterator interface</span>
+        iterator_type <a href="class_reference_context.html#iterator_interface_begin">begin</a>() <span class="keyword">const</span>;
+        iterator_type <a href="class_reference_context.html#iterator_interface_end">end</a>() <span class="keyword">const</span>;
+
+    <span class="comment">// maintain include paths</span>
+        <span class="keyword">bool</span> <a href="class_reference_context.html#add_include_path">add_include_path</a>(<span class="keyword">char const</span> *path_);
+        <span class="keyword">bool</span> <a href="class_reference_context.html#add_sysinclude_path">add_sysinclude_path</a>(<span class="keyword">char const</span> *path_);
+        <span class="keyword">void</span> <a href="class_reference_context.html#set_sysinclude_delimiter">set_sysinclude_delimiter</a>();
+  
+        size_t <a href="class_reference_context.html#get_iteration_depth">get_iteration_depth</a>() <span class="keyword">const</span>;
+
+    <span class="comment">// maintain defined macros</span>
+        <span class="keyword">bool</span> <a href="class_reference_context.html#add_macro_definition">add_macro_definition</a>(<span class="keyword">std::string</span> macrostring, 
+            <span class="keyword">bool</span> is_predefined = <span class="keyword">false</span>);
+        <span class="keyword">bool</span> <a href="class_reference_context.html#is_defined_macro">is_defined_macro</a>(<span class="keyword">std::string const</span> &amp;name) <span class="keyword">const</span>;
+        <span class="keyword">bool</span> <a href="class_reference_context.html#remove_macro_definition">remove_macro_definition</a>(<span class="keyword">std::string const</span> &amp;name, 
+            <span class="keyword">bool</span> even_predefined = <span class="keyword">false</span>);
+        <span class="keyword">void</span> <a href="class_reference_context.html#reset_macro_definitions">reset_macro_definitions</a>();
+
+    <span class="comment">// other options</span>
+        <span class="keyword">void</span> <a href="class_reference_context.html#language_support">set_language</a>(language_support enable);
+        language_support <a href="class_reference_context.html#language_support">get_language</a>() <span class="keyword">const</span>;<br>
+        <span class="keyword">void</span> <a href="class_reference_context.html#set_max_include_nesting_depth">set_max_include_nesting_depth</a>(size_t new_depth);<br>        size_t <a href="class_reference_context.html#set_max_include_nesting_depth">get_max_include_nesting_depth</a>() <span class="keyword">const</span>;<br>
+    <span class="comment">// get the Wave version information </span>
+        <span class="keyword">static std::string</span> <a href="class_reference_context.html#get_version">get_version</a>();
+        <span class="keyword">static std::string</span> <a href="class_reference_context.html#get_version">get_version_string</a>();
+    };
+
+}   <span class="comment">// namespace wave</span>
+}   <span class="comment">// namespace boost</span></pre>
+<h2><b><a name="template_parameters"></a>Template parameters</b></h2>
+<p>The <tt>boost::wave::context</tt> object has three template parameters to specify 
+  the concrete behaviour of its operation. The following table describes these 
+  with more detail.</p>
+<table width="90%" border="0" align="center">
+  <tr> 
+    <td colspan="2" class="table_title"><b>Template parameters required for the 
+      <tt>boost::wave::context</tt> class </b></td>
+  </tr>
+  <tr> 
+    <td width="32%" class="table_cells"><code>IteratorT</code></td>
+    <td width="68%" class="table_cells"><p>The type of the underlying iterator, 
+        through which the input stream is accessed. <br>
+        This should be at least an <tt>forward_iterator</tt> type iterator.</p></td>
+  </tr>
+  <tr> 
+    <td class="table_cells"><code>LexIteratorT</code></td>
+    <td class="table_cells"><p>The type of the lexer type to be used by the <tt>Wave</tt> 
+        library to identify tokens in the input stream.</p></td>
+  </tr>
+  <tr> 
+    <td class="table_cells"><code>InputPolicyT</code></td>
+    <td class="table_cells"><p>The type of the input policy class, which allows 
+        to customize the behaviour of the Wave library and the type of the iterators 
+        to use, when it comes to including and opening an included file.</p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>TracePolicyT</code></td>
+    <td class="table_cells"><p>The type of the trace policy class, which allows 
+        to customize the trace output generated while expanding macros. </p></td>
+  </tr>
+</table>
+<p>For further information about the lexer type to use, please refer to the <a href="class_reference_lexer.html">The 
+  Lexer Interface </a>.</p>
+<p>If the template parameter <tt>InputPolicyT</tt> is omitted, the template <tt>wave::iteration_context_policies::load_file_to_string</tt> 
+  is used. For further information about the input policy, please refer to the 
+  topic <a href="class_reference_inputpolicy.html">The Input Policy</a>.</p>
+<p>If the template parameter TracePolicyT is omitted, the <tt>wave::macro_trace_policies::no_tracing</tt> 
+  policy type is used, i.e. by default there is no tracing performed. For further 
+  information about the tracing policy, please refer to the topic <a href="class_reference_contextpolicy.html">The 
+  Tracing Policy</a>. </p>
+<h2><a name="public_typedefs"></a>Public Typedefs</h2>
+<p>The <tt>boost::wave::context</tt> template defines the following public typedefs, which may be useful while using this class:</p>
+<table width="90%" border="0" align="center">
+  <tr>
+    <td colspan="2" class="table_title"><b>Public typedef's defined by the <tt>boost::wave::context</tt> class </b></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>iterator_type</code></td>
+    <td class="table_cells"><p>The <tt>IteratorT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>lex_type</code></td>
+    <td class="table_cells"><p>The <tt>LexIteratorT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+  </tr>
+  <tr>
+    <td width="32%" class="table_cells"><code>token_type</code></td>
+    <td width="68%" class="table_cells"><p>The token type, which is returned by the <tt>context</tt> generated iterators. This type is taken from the <tt>LexIteratorT</tt> template parameter provided, whicle the <tt>context</tt> class was instantiated.</p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>input_policy_type</code></td>
+    <td class="table_cells"><p>The <tt>InputPolicyT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>trace_policy_type</code></td>
+    <td class="table_cells"><p>The <tt>TracePolicyT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>position_type</code></td>
+    <td class="table_cells"><p>The type of the position information contained in every returned token, which describes the point, at which the given token was recognised. </p></td>
+  </tr>
+</table>
+<h2><b><a name="member_functions"></a>Member functions</b></h2>
+<p><b><a name="constructor" id="constructor"></a>Constructor</b></p>
+<pre>    context(IteratorT <span class="keyword">const</span> &amp;first, 
+        IteratorT <span class="keyword">const</span> &amp;last, 
+        <span class="keyword">char const</span> *filename,
+        TracePolicyT &amp;trace);</pre>
+<blockquote> 
+  <p>Constructs a context object on top of the input stream given by the pair 
+    of auxilliary iterators <tt>[first,&nbsp;last)</tt>. The iterators should 
+    be at least <tt>forward_iterator</tt> type iterators. The filename parameter 
+    is to be supplied for informational purposes only. This string is used for 
+    indicating the token positions inside the input stream, it is not validated 
+    against the file system. If the filename parameter is not given it defaults 
+    to <span class="copyright">&quot;&lt;Unknown&gt;&quot;</span>. If the trace 
+    parameter isn't supplied it defaults to a default constructed <tt>TracePolicyT</tt> 
+    object. </p>
+  <p>Additionally the macro symbol table is filled with the predefined macros 
+    and the current reference directory is set to the path of the given filename. 
+    If this filename does not reference valid file system item, the current reference 
+    directory is set to the current system directory. (The current reference directory 
+    is the file system path, which is used as the target directory during the 
+    processing of <tt>#include&nbsp;&quot;...&quot;</tt> directives),</p>
+</blockquote>
+<h3>Iterator interface</h3>
+<p>The pair of iterators returned by the <tt>context::begin</tt> and <tt>context::end</tt> 
+  functions is the main interface for accessing the preprocessed tokens from the 
+  preprocessor engine. While iterating over the given iterator range <tt>[begin,&nbsp;end)</tt> 
+  there are returned the preprocessed C++ tokens, which are generated on the fly 
+  from the underlying input stream. The returned iterators are conceptually of 
+  <tt>forward_iterator</tt> type.</p>
+<p><b><a name="iterator_interface_begin"></a></b><b>begin</b></p>
+<pre>    iterator_type begin();</pre>
+<blockquote>
+  <p>Initializes and returns the starting iterator for the preprocessed token 
+    stream.</p>
+  
+</blockquote>
+<p><b><a name="iterator_interface_end" id="iterator_interface_end"></a></b><b>end</b></p>
+<pre>    iterator_type end() <span class="keyword">const</span>;</pre>
+<blockquote> 
+  <p>Initializes and returns the end of stream iterator to compare with for detecting 
+    the end of the preprocessed token stream.</p>
+</blockquote>
+<h3>Maintain include paths</h3>
+<p>The <tt>Wave</tt> library maintains two separate search pathes for include 
+  files. A search path for user include files and a search path for system include 
+  files. Any directories specified with the <a href="#add_include_path">add_include_path()</a> 
+  function before the function <a href="class_reference_context.html#set_sysinclude_delimiter">set_sysinclude_delimiter()</a> 
+  is called are searched only for the case of <tt>#include&nbsp;&quot;...&quot;</tt> 
+  directives, they are not searched for <tt>#include&nbsp;&lt;file&gt;</tt> directives. 
+  I.e. these directories are added to the user include search path. </p>
+<p>If additional directories are specified with the <a href="#add_include_path">add_include_path()</a> 
+  function after a call to the function <a href="class_reference_context.html#set_sysinclude_delimiter">set_sysinclude_delimiter()</a>, 
+  these directories are searched for all <tt>#include</tt> directives. I.e. these 
+  directories are added to the system include search path.</p>
+<p>In addition, a call to the function <a href="class_reference_context.html#set_sysinclude_delimiter">set_sysinclude_delimiter()</a> 
+  inhibits the use of the current reference directory as the first search directory 
+  for <tt>#include&nbsp;&quot;...&quot;</tt> directives. Therefore, the current 
+  reference directory is searched only, if it is requested explicitly with a call 
+  to the function <a href="#add_include_path">add_include_path(&quot;.&quot;)</a>. 
+</p>
+<p>Callig both functions, the <a href="class_reference_context.html#set_sysinclude_delimiter">set_sysinclude_delimiter()</a> 
+  and <a href="#add_include_path">add_include_path(&quot;.&quot;)</a> allows you 
+  to control precisely, which directories are searched before the current one 
+  and which are searched after.</p>
+<p>These functions are modelled after the command line behaviour implemented by 
+  the popular gcc compiler.<br>
+</p>
+<p><a name="add_include_path"></a><b>add_include_path</b></p>
+<pre>    <span class="keyword">bool</span> add_include_path(<span class="keyword">char const</span> *path);
+</pre>
+<blockquote> 
+  <p>Adds the given file system path to the user include search paths. After a 
+    call to the <a href="class_reference_context.html#set_sysinclude_delimiter">set_sysinclude_delimiter()</a> 
+    this function adds the given file system path to the system include search 
+    paths. Note though, that the given path is validated against the file system. 
+  </p>
+  <p>If the given path string does not form a name of a valid file system directory 
+    item, the function returns <tt>false</tt>. If the given path was successfully 
+    added to the include search paths in question, the function returns <tt>true</tt>.</p>
+</blockquote>
+<p><a name="add_sysinclude_path"></a><b>add_sysinclude_path</b></p>
+<pre>    <span class="keyword">bool</span> add_sysinclude_path(<span class="keyword">char const</span> *path);</pre>
+<blockquote> 
+  <p>Adds the given file system path to the system include search paths. This 
+    function operates on the system include search path regardless of the mode 
+    of operation of the <a href="#add_include_path">add_include_path()</a>. Note 
+    though, that the given path is validated against the file system.</p>
+  <p>If the given path string does not form a name of a valid file system directory 
+    item, the function returns <tt>false</tt>. If the given path was successfully 
+    added to the system include search paths, the function returns <tt>true</tt>.</p>
+</blockquote>
+<p><a name="set_sysinclude_delimiter"></a><b>set_sysinclude_delimiter</b></p>
+<pre>    <span class="keyword">void</span> set_sysinclude_delimiter();</pre>
+<blockquote> 
+  <p>Switches the mode, how the <a href="#add_include_path">add_include_path()</a> 
+    function operates. By default the given file system path is added to the user 
+    include search paths. After calling this function a subsequent call to the 
+    <a href="#add_include_path">add_include_path()</a> adds the given file system 
+    path to the system include search paths. Additionally it inhibits the the 
+    use of the current reference directory as the first search directory for <tt>#include&nbsp;&quot;...&quot;</tt> 
+    directives.</p>
+</blockquote>
+<p><a name="get_iteration_depth"></a><b>get_iteration_depth</b></p>
+<pre>    size_t get_iteration_depth() <span class="keyword">const</span>;</pre>
+<blockquote> 
+  <p>Returns the actual include iteration depth, i.e. the current number of include 
+    levels to be poped from the include iteration context, before the main (topmost) 
+    iteration context is reached.</p>
+</blockquote>
+<h3>Maintain defined macros</h3>
+<p><a name="add_macro_definition"></a><b>add_macro_definition</b></p>
+<pre><span class="keyword">    bool</span> add_macro_definition(
+        <span class="keyword">std::string</span> macrostring, 
+        bool is_predefined); 
+</pre>
+<blockquote> 
+  <p>Adds a new macro definition to the macro symbol table. The parameter <tt>macrostring</tt> 
+    should contain the macro to define in the command line format, i.e. something 
+    like <tt>MACRO(x)=definition</tt>. The following table describes this format 
+    in more detail. The parameter <tt>is_predefined</tt> should be true while 
+    defining predefined macros, i.e. macros, which are not undefinable with an 
+    <tt>#undef</tt> directive from inside the preprocessed input stream. If this 
+    parameter is not given, it defaults to <tt>false</tt>.</p>
+  <table width="90%" border="0" align="center">
+    <tr> 
+      <td colspan="2" class="table_title"><b>Summary of possible formats for defining 
+        macros </b></td>
+    </tr>
+    <tr> 
+      <td width="32%" class="table_cells"><code>MACRO</code></td>
+      <td width="68%" class="table_cells"><code>define <tt>MACRO</tt> as 1</code></td>
+    </tr>
+    <tr> 
+      <td class="table_cells"><code>MACRO=</code></td>
+      <td class="table_cells"><code>define <tt>MACRO</tt> as nothing (empty)</code></td>
+    </tr>
+    <tr> 
+      <td class="table_cells"><code>MACRO=definition</code></td>
+      <td class="table_cells"><code>define <tt>MACRO</tt> as <tt>definition</tt></code></td>
+    </tr>
+    <tr> 
+      <td width="32%" class="table_cells"><code>MACRO(x)</code></td>
+      <td width="68%" class="table_cells"><code>define <tt>MACRO(x)</tt> as 1</code></td>
+    </tr>
+    <tr> 
+      <td class="table_cells"><code>MACRO(x)=</code></td>
+      <td class="table_cells"><code>define <tt>MACRO(x)</tt> as nothing (empty)</code></td>
+    </tr>
+    <tr> 
+      <td class="table_cells"><code>MACRO(x)=definition</code></td>
+      <td class="table_cells"><code>define <tt>MACRO(x)</tt> as <tt>definition</tt></code></td>
+    </tr>
+  </table>
+  <p>The function returns <tt>false</tt>, if the macro to define already was defined 
+    and the new definition is equivalent to the existing one, it returns true, 
+    if the new macro was successfully added to the macro symbol table.</p>
+  <p>If the given macro definition resembles a redefinition and the new macro 
+    is not identical to the already defined macro (in the sense defined by the 
+    C++ Standard), the function throws a corresponding <tt>preprocess_exception</tt>.</p>
+</blockquote>
+<p><a name="is_defined_macro"></a><b>is_defined_macro</b></p>
+<pre><span class="keyword">    bool</span> is_defined_macro(<span class="keyword">std::string const</span> &amp;name) <span class="keyword">const</span>; </pre>
+<blockquote>
+  <p>Returns, if a macro with the given <tt>name</tt> is defined, i.e. if it is 
+    contained in the macro symbol table.</p>
+</blockquote>
+<p><a name="remove_macro_definition"></a><b>remove_macro_definition</b></p>
+<pre><span class="keyword">    bool</span> remove_macro_definition(
+        <span class="keyword">std::string const</span> &amp;name, 
+        <span class="keyword">bool</span> even_predefined); </pre>
+<blockquote>
+  <p>Removes the definition of the macro with the given <tt>name</tt> from the 
+    macro symbol table. This operation is equivalent to an <tt>#undef</tt> directive 
+    with this <tt>name</tt> executed from within the input stream. If the parameter 
+    <tt>even_predefined</tt> is <tt>true</tt>, then the macro is removed from 
+    the macro symbol table even, if it is defined as a predefined macro. </p>
+  <p>Note though, that the following macros are <b>not</b> undefinable in any 
+    case: <tt>__FILE__</tt>, <tt>__LINE__</tt>, <tt>__DATE__</tt>, <tt>__TIME__</tt>, 
+    <tt>__cplusplus</tt>, <tt>__STDC__</tt>. If the parameter <tt>even_predefined</tt> 
+    is not given, it defaults to <tt>false</tt>.</p>
+  <p>The function returns <tt>false</tt>, if the macro to undefine was not defined 
+    and returns <tt>true</tt> otherwise.</p>
+  <p>If the macro to remove may not be undefined (it is a predefined macro and 
+    the parameter <tt>even_predefined</tt> is set to <tt>false</tt> or it is one 
+    of the mentioned not undefinable macros above) the function throws a <tt>preprocess_exception</tt>.</p>
+</blockquote>
+<p><a name="reset_macro_definitions"></a><b>reset_macro_definitions</b></p>
+<pre><span class="keyword">    void</span> reset_macro_definitions(); </pre>
+<blockquote> 
+  <p>Resets the macro symbol table to it's initial state, i.e. undefines all user 
+    defined macros and inserts the internal predefined macros as described <a href="predefined_macros.html">here</a>.</p>
+</blockquote>
+<h3><a name="get_version"></a>Get Version information</h3>
+<p><b>get_version</b></p>
+<pre><span class="keyword">    </span><span class="keyword">static std::string</span> get_version(); </pre>
+<blockquote>
+  <p>Returns a string containing the current Wave version formatted as <span class="string">0xvvrsbbbb</span> 
+    (this is a string representation of the equivalent hexadecimal number), where 
+    <span class="literal">'vv'</span> is the version number, <span class="literal">'r'</span> 
+    the release number, <span class="literal">'s'</span> the subrelease number 
+    and <span class="literal">'bbbb'</span> the build number. A possible return 
+    value looks like <span class="literal">0x00910454</span>. The returned value 
+    is the same as is inserted in the preprocessed token stream, when the predefined 
+    macro <tt>__WAVE_VERSION__</tt> is expanded.</p>
+</blockquote>
+<p><b>get_version_str</b></p>
+<pre><span class="keyword">    </span><span class="keyword">static std::string</span> get_version_str(); </pre>
+<blockquote> 
+  <p>Returns a string containing the current Wave version formatted as <span class="string">&quot;v.rr.ss.bbbb&quot;</span>, 
+    where <span class="literal">'v'</span> is the version number, <span class="literal">'rr'</span> 
+    the release number, <span class="literal">'ss'</span> the subrelease number 
+    and <span class="literal">'bbbb'</span> the build number. A possible return 
+    value looks like <span class="literal">&quot;0.9.1.454&quot;</span>. The returned 
+    value is the same as is inserted in the preprocessed token stream, when the 
+    predefined macro <tt>__WAVE_VERSION_STR__</tt> is expanded.</p>
+</blockquote>
+<h3>Control extended options</h3>
+<p><a name="language_support"></a>set_language<br>
+  get_language</p>
+<pre><span class="keyword">    void</span> set_language(<span class="keyword">language_support</span> language);
+    <span class="keyword">language_support</span> get_language() <span class="keyword">const</span>;</pre>
+<blockquote> 
+  <p>This functions allow to specify the language mode, in which the <tt>Wave</tt> 
+    library should work. The possible language modes are defined by the enumerated 
+    type <tt>language_support</tt>:</p>
+  <pre>    <span class="keyword">enum</span> language_support {
+    <span class="comment">// support flags for C++98</span>
+        support_normal = 0x01,
+        support_cpp = support_normal,
+    
+    <span class="comment">// support flags for C99</span>
+        support_variadics = 0x02,
+        support_c99 = support_variadics,
+    };</pre>
+  <p>When used with <tt>support_variadics</tt> the support for variadics, placemarkers 
+    and the <tt>operator _Pragma()</tt> is enabled in normal C++ mode. The <tt>support_c99</tt> 
+     switch to the C99 language support.</p>
+</blockquote>
+<p><a name="set_max_include_nesting_depth" id="set_max_include_nesting_depth"></a>set_max_include_nesting_depth<br>
+  g et_max_include_nesting_depth</p>
+<pre><span class="keyword">    void</span> set_max_include_nesting_depth(size_t new_depth); 
+    size_t get_max_include_nesting_depth() <span class="keyword">const</span>;</pre>
+<blockquote> 
+  <p>This functions allow to set or to get the maximal possible include file nesting 
+    depth supported by the <tt>Wave</tt> library. The initial value for this is 
+    determined by the preprocessing constant <tt>WAVE_MAX_INCLUDE_LEVEL_DEPTH</tt> 
+    (see <a href="compiletime_config.html">here</a>).</p>
+</blockquote>
+<table border="0">
+  <tr> 
+    <td width="10"></td>
+    <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
+    <td width="30"><a href="quickstart.html"><img src="theme/l_arr.gif" width="20" height="19" border="0"></a></td>
+    <td width="30"><a href="class_reference_inputpolicy.html"><img src="theme/r_arr.gif" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1">
+<p class="copyright">Copyright &copy; 2003-2005 Hartmut Kaiser<br>
+  <br>
+  <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
+<span class="updated"></span>
+<p class="copyright"><span class="updated">Last updated: 
+  <!-- #BeginDate format:fcAm1m -->Saturday, February 12, 2005  9:05<!-- #EndDate -->
+  </span>
+</p>
+<p>&nbsp;</p>
+</body>
+</html>

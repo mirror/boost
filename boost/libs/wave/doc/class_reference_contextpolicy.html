@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>The Context Policy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="theme/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="2" background="theme/bkd2.gif">
+  <tr> 
+    <td width="21"> <h1></h1></td>
+    <td width="885"> <font face="Verdana, Arial, Helvetica, sans-serif"><b><font size="6">The 
+      Context Policy</font></b></font></td>
+    <td width="96"><a href="http://spirit.sf.net"><img src="theme/wave.gif" width="93" height="68" align="right" border="0"></a></td>
+  </tr>
+</table>
+<br>
+<table border="0">
+  <tr> 
+    <td width="10"></td>
+    <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
+    <td width="30"><a href="class_reference_inputpolicy.html"><img src="theme/l_arr.gif" width="20" height="19" border="0"></a></td>
+    <td width="30"><a href="class_reference_lexer.html"><img src="theme/r_arr.gif" border="0"></a></td>
+  </tr>
+</table>
+<blockquote> 
+  <p><a href="class_reference_tracepolicy.html#introduction">Introduction</a><br>
+    <a href="class_reference_tracepolicy.html#header_synopsis">Header 'wave/preprocessing_hooks.hpp' 
+    synopsis</a><br>
+    <a href="class_reference_tracepolicy.html#member_functions">Member functions</a></p>
+</blockquote>
+<h2><b><a name="introduction"></a>Introduction</b></h2>
+<p>The context policy is used to provide callback hooks, which are called from inside the library into the user code, whenever</p>
+<ul>
+  <li>a macro get's defined or undefind, </li>
+  <li>a macro is expanded or rescanned,</li>
+  <li>an include file is opened or left, </li>
+  <li> a pragma of the form <tt>'wave option[(value)]'</tt> is recognised. </li>
+</ul>
+<p>This policy type is used as a template parameter to the <a href="class_reference_context.html"><tt>wave::context&lt;&gt;</tt></a> 
+  object, where the default policy provides empty hooks functions only.</p>
+<h2><a name="header_synopsis"></a>Header <a href="http://cvs.sourceforge.net/viewcvs.py/boost-sandbox/boost/boost/wave/preprocessing_hooks.hpp?view=markup">wave/preprocessing_hooks.hpp</a> 
+  synopsis</h2>
+<pre>
+<span class="keyword">namespace</span> boost {
+<span class="keyword">namespace</span> wave {
+<span class="keyword">namespace</span> context_policies {
+ 
+    <span class="keyword">struct</span> default_preprocessing_hooks {
+
+        <span class="comment">// general control function</span>
+        template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macrodef, 
+            <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, 
+            ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, 
+            <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments);
+ 
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macro, 
+            ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);
+ 
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanded_macro">expanded_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
+ 
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanded_macro">rescanned_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
+
+        <span class="comment">// include file tracing functions</span>
+        <span class="keyword">void </span><a href="class_reference_tracepolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;filename, 
+            std::size_t include_depth, <span class="keyword">bool</span> is_system_include); 
+
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#returning_from_include_file">returning_from_include_file</a>();
+
+        <span class="comment">// interpretation of #pragma's of the form </span>
+        <span class="comment">// 'wave option[(value)]'</span>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+		bool <a href="class_reference_tracepolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
+            <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, 
+            ContainerT <span class="keyword">const</span> &amp;values, 
+            <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;pragma_token);
+
+        <span class="comment">// macro definition hooks</span>
+        <span class="keyword">template</span> &lt;
+            <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ParametersT, <span class="keyword">typename</span> DefinitionT
+        &gt;
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#defined_macro">defined_macro</a>(TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">bool</span> is_functionlike,
+            ParametersT <span class="keyword">const</span> &amp;parameters, DefinitionT <span class="keyword">const</span> &amp;definition,
+            <span class="keyword">bool</span> is_predefined);
+
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StringT&gt;
+        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#undefined_macro">undefined_macro</a>(StringT <span class="keyword">const</span> &amp;name);
+    };
+
+}}}   <span class="comment">// namespace boost::wave::context_policies</span></pre>
+<h2><a name="member_functions"></a>Member functions</h2>
+<h3>Macro expansion tracking functions</h3>
+<p><a name="expanding_function_like_macro"></a><b>expanding_function_like_macro</b></p>
+<pre><span class="keyword">    template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> expanding_function_like_macro(TokenT <span class="keyword">const</span> &amp;macrodef, 
+        <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, 
+        ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, 
+        <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments);</pre>
+<blockquote> 
+  <p>The function <tt>expanding_function_like_macro</tt> is called, whenever a 
+    function-like macro is to be expanded, i.e. <i>before</i> the actual expansion 
+    starts.</p>
+  <p>The <tt>macroname</tt> parameter marks the position where the macro to expand 
+    is defined. It contains the token which identifies the macro name used inside 
+    the corresponding macro definition.</p>
+  <p>The <tt>formal_args</tt> parameter holds the formal arguments used during 
+    the definition of the macro. </p>
+  <p>The <tt>definition</tt> parameter holds the macro definition for the macro 
+    to trace. This is a standard STL container which holds the token sequence 
+    identified during the macro definition as the macro replacement list.</p>
+  <p>The <tt>macrocall</tt> parameter marks the position where this macro is invoked. 
+    It contains the token, which identifies the macro call inside the preprocessed 
+    input stream. </p>
+  <p>The <tt>arguments</tt> parameter holds the macro arguments used during the 
+    invocation of the macro. This is a vector of standard STL containers which 
+    contain the token sequences identified at the position of the macro call as 
+    the arguments to be used during the macro expansion. </p>
+</blockquote>
+<p><a name="expanding_object_like_macro"></a><b>expanding_object_like_macro</b></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> expanding_object_like_macro(TokenT <span class="keyword">const</span> &amp;macro, 
+        ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);
+</pre>
+<blockquote> 
+  <p>The function <tt>expanding_object_like_macro</tt> is called, whenever a object-like 
+    macro is to be expanded, i.e. <i>before</i> the actual expansion starts.</p>
+  <p>The <tt>macroname</tt> parameter marks the position where the macro to expand 
+    is defined. It contains the token which identifies the macro name used inside 
+    the corresponding macro definition.</p>
+  <p> The <tt>definition</tt> parameter holds the macro definition for the macro 
+    to trace. This is a standard STL container which holds the token sequence 
+    identified during the macro definition as the macro replacement list.</p>
+  <p>The <tt>macrocall</tt> parameter marks the position where this macro is invoked. 
+    It contains the token which identifies the macro call inside the preprocessed 
+    input stream. </p>
+</blockquote>
+<p><a name="expanded_macro"></a><b>expanded_macro</b></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> expanded_macro(ContainerT <span class="keyword">const</span> &amp;result);
+</pre>
+<blockquote> 
+  <p>The function <tt>expanded_macro</tt> is called whenever the expansion of 
+    a macro is finished, the replacement list is completely scanned and the identified 
+    macros herein are replaced by its corresponding expansion results, but <i>before</i> 
+    the rescanning process starts.</p>
+  <p>The parameter <tt>result</tt> contains the the result of the macro expansion 
+    so far. This is a standard STL container containing the generated token sequence.</p>
+</blockquote>
+<p><a name="rescanned_macro"></a><b>rescanned_macro</b></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> rescanned_macro(ContainerT <span class="keyword">const</span> &amp;result);
+</pre>
+<blockquote> 
+  <p>The function <tt>rescanned_macro</tt> is called whenever the rescanning 
+    of a macro is finished, i.e. the macro expansion is complete.</p>
+  <p>The parameter <tt>result</tt> contains the the result of the whole macro 
+    expansion. This is a standard STL container containing the generated token 
+    sequence.</p>
+</blockquote>
+<h3>Include file tracing functions</h3>
+<p><a name="opened_include_file" id="opened_include_file"></a><strong>opened_include_file</strong></p>
+<pre>    <span class="keyword">void</span> opened_include_file(std::string <span class="keyword">const</span> &amp;filename, 
+        std::size_t include_depth, <span class="keyword">bool</span> is_system_include);
+</pre>
+<blockquote> 
+  <p>The function <tt>opened_include_file</tt> is called whenever a file referred 
+    by an #include directive was successfully located and opened.</p>
+  <p>The parameter <tt>filename</tt> contains the full file system path of the 
+    opened file.</p>
+  <p>The <tt>include_depth</tt> parameter contains the current include file depth. 
+  </p>
+  <p>The <tt>is_system_include</tt> parameter denotes, if the given file was found 
+    as a result of a <tt>#include&nbsp;&lt;...&gt;</tt> directive.</p>
+</blockquote>
+<p><a name="returning_from_include_file" id="returning_from_include_file"></a><strong>returning_from_include_file</strong></p>
+<pre>    <span class="keyword">void</span> returning_from_include_file();
+</pre>
+<blockquote> 
+  <p>The function <tt>returning_from_include_file</tt> is called whenever an 
+    included file is about to be closed after it's processing is complete.</p>
+</blockquote>
+<h3>Interpretation of #pragma's</h3>
+<p><strong><a name="interpret_pragma"></a>interpret_pragma</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Context, <span class="keyword">typename</span> ContainerT&gt;
+    bool <a href="class_reference_tracepolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
+        <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, 
+        ContainerT <span class="keyword">const</span> &amp;values, 
+        <span class="keyword">typename</span> ContextT::token_type<span class="keyword"> const</span> &amp;pragma_token);
+</pre>
+<blockquote> 
+  <p>The function <tt>interpret_pragma</tt> is called whenever an unrecognized 
+    <tt>#pragma&nbsp;wave&nbsp;...</tt> or operator <tt>_Pragma(&quot;wave&nbsp;...&quot;)</tt> 
+    is found in the input stream.</p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
+  <p>The <tt>pending</tt> parameter may be used to push tokens back into the input 
+    stream which are to be used as the replacement text for the whole <tt>#pragma&nbsp;wave()</tt> 
+    directive. If this sequence is left empty, no replacement takes place, i.e. 
+    the interpreted directive is removed from the generated token stream.</p>
+  <p>The <tt>option</tt> parameter contains the name of the interpreted pragma.</p>
+  <p>The <tt>values</tt> parameter holds the value of the parameter provided to 
+    the pragma operator.</p>
+  <p>The <tt>pragma_token</tt> parameter contains the actual #pragma token which 
+    may be used for extraction of the location information for some error output.</p>
+  <p>If the return value is 'false', the whole #pragma directive is interpreted 
+    as unknown and a corresponding error message is issued. A return value of 
+    'true' signs a successful interpretation of the given #pragma.<br>
+  </p>
+</blockquote>
+<h3>Macro definition </h3>
+<p><strong><a name="defined_macro" id="defined_macro"></a>defined_macro</strong></p>
+<pre>    <span class="keyword">template</span> &lt;
+        <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ParametersT, <span class="keyword">typename</span> DefinitionT
+    &gt;
+    <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#defined_macro">defined_macro</a>(TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">bool</span> is_functionlike,
+        ParametersT <span class="keyword">const</span> &amp;parameters, DefinitionT <span class="keyword">const</span> &amp;definition,
+        <span class="keyword">bool</span> is_predefined);
+</pre>
+<blockquote>  <p>The function <tt>defined_macro</tt> is called whenever a macro was defined successfully.</p>
+  <p>The parameter <tt>name</tt> is a reference to the token holding the macro name.</p>
+  <p>The parameter <tt>is_functionlike</tt> is set to true whenever the newly 
+    defined macro is defined as a function like macro.</p>
+  <p>The parameter <tt>parameters</tt> holds the parameter tokens for the macro
+      definition. If the macro has no parameters or if it is a object like
+  macro, then this container is empty.</p>
+  <p>The parameter <tt>definition</tt> contains the token sequence given as the
+  replacement sequence (definition part) of the newly defined macro.</p>
+  <p>The parameter <tt>is_predefined</tt> is set to true for all macros predefined 
+      during the initialisation pahase of the library.<br>
+  </p>
+</blockquote>
+<p><strong><a name="undefined_macro" id="undefined_macro"></a>undefined_macro</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StringT&gt;
+    <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#undefined_macro">undefined_macro</a>(StringT <span class="keyword">const</span> &amp;name);
+</pre>
+<blockquote>
+  <p>The function <tt>undefined_macro</tt> is called whenever a macro definition
+    was removed successfully.</p>
+  <p>The parameter <tt>name</tt> holds the name of the macro which definition was removed.<br>
+  </p>
+</blockquote>
+<table border="0">
+  <tr> 
+    <td width="10"></td>
+    <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
+    <td width="30"><a href="class_reference_inputpolicy.html"><img src="theme/l_arr.gif" width="20" height="19" border="0"></a></td>
+    <td width="30"><a href="class_reference_lexer.html"><img src="theme/r_arr.gif" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1">
+<p class="copyright">Copyright &copy; 2003-2005 Hartmut Kaiser<br>
+  <br>
+<font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
+<span class="updated"></span>
+<p class="copyright"><span class="updated">Last updated: 
+  <!-- #BeginDate format:fcAm1m -->Thursday, February 17, 2005  9:21<!-- #EndDate -->
+</span></p>
+</body>
+</html>

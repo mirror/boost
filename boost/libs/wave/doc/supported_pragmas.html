@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Supported Pragma Directives</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="theme/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="2" background="theme/bkd2.gif">
+  <tr> 
+    <td width="21"> <h1></h1></td>
+    <td width="885"> <font face="Verdana, Arial, Helvetica, sans-serif"><b><font size="6">Supported 
+      Pragma Directives</font></b></font></td>
+    <td width="96"><a href="http://spirit.sf.net"><img src="theme/wave.gif" width="93" height="68" align="right" border="0"></a></td>
+  </tr>
+</table>
+<br>
+<table border="0">
+  <tr> 
+    <td width="10"></td>
+    <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
+    <td width="30"><a href="predefined_macros.html"><img src="theme/l_arr.gif" border="0"></a></td>
+    <td width="30"><a href="macro_expansion_process.html"><img src="theme/r_arr.gif" border="0"></a></td>
+  </tr>
+</table>
+<p>The Wave preprocessor library supports a couple of specific <tt>#pragma</tt> 
+  directives, which may be used to control some of the library features. All directives 
+  described here are usable as conventional <tt>#pragma</tt> directives and as 
+  <tt>operator&nbsp;_Pragma</tt> (if variadics are enabled). So for instance the 
+  following directives are functionally identical:</p>
+<pre>    #pragma wave trace(enable)  </pre>
+<p>and </p>
+<pre>    _Pragma(&quot;wave trace(enable)&quot;)</pre>
+<p>All <tt>Wave</tt> specific pragma's must have the general form <tt>'wave option[(value)]'</tt>, 
+  where <tt>'wave'</tt> is the specific keyword, <tt>'option'</tt> is the concrete 
+  pragma functionality to trigger and <tt>'value'</tt> is an optional value to 
+  be supplied to the <tt>'option'</tt> functionality. The following table lists 
+  all possible pragma functions supported by the <tt>Wave</tt> library. For all recognised pragmas of this general form the interpret_pragma hook function from inside the context_policies are call, so that the user of the library is responsible for </p>
+<table width="77%" border="0" align="center">
+  <tr> 
+    <td colspan="4"> <p class="table_title">Supported pragma's</p></td>
+  </tr>
+  <tr> 
+    <td> <p class="toc_title" width="36%">pragma option</p></td>
+    <td> <p class="toc_title" width="28%">pragma value</p></td>
+    <td> <p class="toc_title" width="36%">description</p></td>
+    <td> <p class="toc_title" width="36%">supported by</p></td>
+  </tr>
+  <tr> 
+    <td class="table_cells" width="19%"> <p>trace</p></td>
+    <td class="table_cells"  width="18%"> <p>enable/on/1<br>
+        disable/off/0</p></td>
+    <td class="table_cells"  width="43%"><p>Enable or disable the tracing of the 
+        macro expansion process. This is needed, even if there is given the --trace 
+        command line option, because the trace output is generated only, if there 
+        is at least one trace(enable) pragma found.</p></td>
+    <td class="table_cells" width="20%"><p>Wave driver</p></td>
+  </tr>
+  <tr> 
+    <td class="table_cells"><p>stop</p></td>
+    <td class="table_cells"><p>message</p></td>
+    <td class="table_cells"><p>Stop the execution of <tt>Wave</tt> and print out 
+        the given message. This is very helpful for direct debugging purposes.</p></td>
+    <td class="table_cells"><p>Wave driver</p></td>
+  </tr>
+  
+  <tr> 
+    <td class="table_cells"><p>system</p></td>
+    <td class="table_cells"><p>command</p></td>
+    <td class="table_cells"><p>Try to spawn the 'command' as a new operating system 
+        command and intercept the generated stdout and stderr. The stdout output 
+        of this command (if any) is retokenized and used as the replacement text 
+        for the whole pragma, the stderr output is ignored. The command is considered 
+        to be successful, if/when the return value is zero, otherwise an error 
+        is reported. <br>
+      </p></td>
+    <td class="table_cells"><p>Wave driver</p></td>
+  </tr>
+  <tr> 
+    <td class="table_cells"><p>timer</p></td>
+    <td class="table_cells"><p> restart/0<br>
+        &lt;no value&gt; <br>
+        suspend<br>
+        resume </p></td>
+    <td class="table_cells"><p>The value <tt>restart</tt> set the current elapsed 
+        time to 0 and restarts the timer.<br>
+        If no value is provided, the current elpsed time is printed to the std::cerr 
+        stream.<br>
+        The values <tt>suspend</tt> and <tt>resume</tt> allow to temporarily stop 
+        the timing.</p></td>
+    <td class="table_cells"><p>Wave driver</p></td>
+  </tr>
+</table>
+<p>All pragma's not listed here but flagged as <tt>'wave'</tt> are reported as 
+  errors. The handling of all remaining pragma's depends on the compilation constant 
+  <code><tt>WAVE_RETURN_PRAGMA_DIRECTIVES</tt></code>, which allows to specify, 
+  if those pragmas are left unchanged in the output stream or not. Please note, 
+  that the operator _Pragma variant is always subject to full preprocessing, before 
+  the pragma itself is evaluated. The #pragma variant is subject to preprocessing 
+  only, if the <code><tt>WAVE_PREPROCESS_PRAGMA_BODY</tt></code> compilation constant 
+  was specified during compilation. For more information about the possible compilation 
+  constants look <a href="compiletime_config.html">here</a>.</p>
+<p>Additionally the Wave preprocessor supports the <tt>#pragma once</tt> directive, 
+  which specifies that the file, in which the pragma resides, will be included 
+  (opened) only once by the compiler in a build. This may be used to optimize 
+  the preprocessing of larger compilation units, which include a lot of files. Note though, that the #pragma once directive is supported only, if the compile time constant <tt>WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library</span>.</p>
+<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> function (see <a href="class_reference_contextpolicy.html#interpret_pragma">here</a>) which should the handle additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements the <tt>#pragma wave timer()</tt> directive with the help of a supplied <tt>interpret_pragma</tt> function. </p>
+<table border="0">
+  <tr> 
+    <td width="10"></td>
+    <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
+    <td width="30"><a href="predefined_macros.html"><img src="theme/l_arr.gif" border="0"></a></td>
+    <td width="30"><a href="macro_expansion_process.html"><img src="theme/r_arr.gif" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1">
+<p class="copyright">Copyright &copy; 2003-2005 Hartmut Kaiser<br>
+  <br>
+<font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
+<span class="updated"></span>
+<p class="copyright"><span class="updated">Last updated: 
+  <!-- #BeginDate format:fcAm1m -->Monday, January 17, 2005  16:39<!-- #EndDate -->
+  </span>
+</p>
+<p>&nbsp;</p>
+</body>
+</html>

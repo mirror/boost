@@ -1,0 +1,18 @@
+# Wave: A Standard compliant C++ preprocessor library
+#
+# Boost Wave Library Sample Build Jamfile (list_includes)
+#
+# http://spirit.sourceforge.net/
+#
+# Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost 
+# Software License, Version 1.0. (See accompanying file 
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+exe list_includes
+    :   ../list_includes.cpp 
+        ../../../build//boost_wave
+        $(BOOST_ROOT)/boost/program_options//boost_program_options     
+    :
+        <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
+    ;
+
