@@ -27,7 +27,7 @@ template<typename T> class scoped_array // noncopyable
 {
 private:
 
-    T* ptr;
+    T * ptr;
 
     scoped_array(scoped_array const &);
     scoped_array & operator=(scoped_array const &);
@@ -57,14 +57,14 @@ public:
         }
     }
 
-    T& operator[](std::ptrdiff_t i) const // never throws
+    T & operator[](std::ptrdiff_t i) const // never throws
     {
         BOOST_ASSERT(ptr != 0);
         BOOST_ASSERT(i >= 0);
         return ptr[i];
     }
 
-    T* get() const // never throws
+    T * get() const // never throws
     {
         return ptr;
     }

@@ -230,10 +230,10 @@ See the smart pointer
 <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
 <p>The <b>operator&lt;</b> overload is provided to define an ordering so that <b>shared_ptr</b>
 objects can be used in associative containers such as <b>std::map</b>.
-The implementation uses std::less&lt;T*&gt; to perform the
+The implementation uses <b>std::less&lt;T *&gt;</b> to perform the
 comparison. This ensures that the comparison is handled correctly, since the
 standard mandates that relational operations on pointers are unspecified (5.9 [expr.rel]
-paragraph 2) but std::less&lt;&gt; on pointers is well-defined (20.3.3 [lib.comparisons]
+paragraph 2) but <b>std::less&lt;&gt;</b> on pointers is well-defined (20.3.3 [lib.comparisons]
 paragraph 8).</p>
 
 <h3><a name="free-swap">swap</a></h3>
