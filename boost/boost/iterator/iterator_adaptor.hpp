@@ -148,9 +148,18 @@ namespace boost
     >
     struct iterator_adaptor_base
     {
-     private: // intermediate results
-        typedef typename detail::ia_dflt_help<
-           Category, BOOST_ITERATOR_CATEGORY<Base>
+    private: // intermediate results
+
+        typedef typename mpl::apply_if<
+            mpl::or_< 
+                is_same<Category, use_default>
+              , mpl::or_<
+                    is_access_tag<Category>
+                  , is_traversal_tag<Category>
+                >
+            >
+          , BOOST_ITERATOR_CATEGORY<Base>
+          , mpl::identity<Category>
         >::type category;
 
         typedef typename detail::ia_dflt_help<
@@ -170,9 +179,17 @@ namespace boost
                 Value, iterator_value<Base>
             >::type
                 
-          , typename access_category_tag<category, reference>::type
-                
-          , typename traversal_category_tag<category>::type
+         , typename mpl::apply_if<
+               is_access_tag<Category>
+             , mpl::identity<Category>
+             , access_category_tag<category, reference>
+           >::type
+
+         , typename mpl::apply_if<
+               is_traversal_tag<Category>
+             , mpl::identity<Category>
+             , traversal_category_tag<category>
+           >::type
                 
           , reference
                 

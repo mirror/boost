@@ -91,6 +91,25 @@ void category_test()
         std::output_iterator_tag,std::random_access_iterator_tag, std::output_iterator_tag
     >::value;
     
+    BOOST_STATIC_ASSERT((is_traversal_tag< incrementable_traversal_tag >::value));
+    BOOST_STATIC_ASSERT((is_traversal_tag< single_pass_traversal_tag   >::value));
+    BOOST_STATIC_ASSERT((is_traversal_tag< forward_traversal_tag       >::value));
+    BOOST_STATIC_ASSERT((is_traversal_tag< bidirectional_traversal_tag >::value));
+    BOOST_STATIC_ASSERT((is_traversal_tag< random_access_traversal_tag >::value));
+
+    BOOST_STATIC_ASSERT((!is_traversal_tag< std::input_iterator_tag >::value));
+    BOOST_STATIC_ASSERT((!is_traversal_tag< readable_iterator_tag   >::value));
+
+    BOOST_STATIC_ASSERT((is_access_tag< readable_iterator_tag          >::value));
+    BOOST_STATIC_ASSERT((is_access_tag< writable_iterator_tag          >::value));
+    BOOST_STATIC_ASSERT((is_access_tag< swappable_iterator_tag         >::value));
+    BOOST_STATIC_ASSERT((is_access_tag< readable_writable_iterator_tag >::value));
+    BOOST_STATIC_ASSERT((is_access_tag< readable_lvalue_iterator_tag   >::value));
+    BOOST_STATIC_ASSERT((is_access_tag< writable_lvalue_iterator_tag   >::value));
+
+    BOOST_STATIC_ASSERT((!is_access_tag< std::input_iterator_tag     >::value));
+    BOOST_STATIC_ASSERT((!is_access_tag< incrementable_traversal_tag >::value));
+
     (void)test;
 }
 

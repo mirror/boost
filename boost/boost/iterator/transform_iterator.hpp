@@ -90,10 +90,7 @@ namespace boost
       transform_iterator<UnaryFunction, Iterator, Reference, Value>
         , Iterator
         , cv_value_type  
-        , iterator_tag<
-             access_category
-           , typename traversal_category<Iterator>::type
-          >
+        , access_category
         , result_type  
       > type;
     };

@@ -112,6 +112,17 @@ public:
   {}
 };
 
+// Non-functional iterator for category modification checking
+template <class Iter, class Category>
+struct modify_category 
+  :  boost::iterator_adaptor<
+         modify_category<Iter, Category>
+       , Iter
+       , boost::use_default
+       , Category
+     >
+{};
+  
 template <class T>
 struct fwd_iterator
   : boost::iterator_adaptor<
@@ -221,6 +232,15 @@ main()
 
     test = static_assert_same<BaseIter::iterator_category::access, boost::writable_lvalue_iterator_tag>::value;
     test = static_assert_same<Iter::iterator_category::access, boost::readable_lvalue_iterator_tag>::value;
+  
+    // Test category modification
+    typedef modify_category<BaseIter, boost::readable_iterator_tag> ReadableIter;
+    test = static_assert_same<ReadableIter::iterator_category::access, boost::readable_iterator_tag>::value;
+
+    typedef modify_category<BaseIter, boost::incrementable_traversal_tag> IncrementableIter;
+    test = static_assert_same<BaseIter::iterator_category::traversal, boost::random_access_traversal_tag>::value;
+    test = static_assert_same<IncrementableIter::iterator_category::traversal, boost::incrementable_traversal_tag>::value;
+
   }
   
   // Test the iterator_adaptor

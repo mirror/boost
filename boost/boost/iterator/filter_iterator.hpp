@@ -15,34 +15,25 @@
 
 namespace boost
 {
-  namespace detail
-  {
-    template <class Iterator>
-    struct filter_iterator_category
-    {
-       typedef iterator_tag<
-           typename access_category<Iterator>::type
-         , typename minimum_category<
-               bidirectional_traversal_tag
-             , typename traversal_category<Iterator>::type
-           >::type 
-       > type;
-    };
-
-  } // namespace detail
 
   template <class Predicate, class Iterator>
   class filter_iterator
       : public iterator_adaptor<
             filter_iterator<Predicate, Iterator>, Iterator
           , use_default
-          , typename detail::filter_iterator_category<Iterator>::type
+          , typename detail::minimum_category<
+                bidirectional_traversal_tag
+              , typename traversal_category<Iterator>::type
+            >::type 
         >
   {
       typedef iterator_adaptor<
             filter_iterator<Predicate, Iterator>, Iterator
           , use_default
-          , typename detail::filter_iterator_category<Iterator>::type
+          , typename detail::minimum_category<
+                bidirectional_traversal_tag
+              , typename traversal_category<Iterator>::type
+            >::type 
         > super_t;
 
       friend class iterator_core_access;

@@ -329,6 +329,25 @@ namespace boost
     template <> struct minimum_category<int, int> { typedef minimum_category type; };
 # endif
 
+    //
+    // Tag classification for use in iterator_adaptor
+    //
+    template <class Tag>
+    struct is_access_tag
+      : mpl::or_<
+            is_tag<readable_iterator_tag, Tag>
+          , mpl::or_< 
+                is_tag<writable_iterator_tag, Tag>
+              , is_tag<swappable_iterator_tag, Tag>
+            >
+        >
+    {};
+
+    template <class Tag>
+    struct is_traversal_tag
+      : is_tag<incrementable_traversal_tag, Tag>
+    {};
+
   } // namespace detail
 
 } // namespace boost
