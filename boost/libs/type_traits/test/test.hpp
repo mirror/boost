@@ -24,7 +24,7 @@
 //
 #ifdef TEST_STD
 
-#define tt std
+#define tt std::tr1
 
 //#define TYPE_TRAITS(x) <type_traits>
 //#define TYPE_COMPARE(x) <type_compare>
