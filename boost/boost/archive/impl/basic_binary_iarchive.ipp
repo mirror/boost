@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// basic_text_iarchive.ipp:
+// basic_binary_iarchive.ipp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -21,19 +21,19 @@ namespace std{
 
 #include <boost/detail/workaround.hpp>
 
-#include <boost/archive/basic_text_iarchive.hpp>
+#include <boost/archive/basic_binary_iarchive.hpp>
 
 namespace boost {
 namespace archive {
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// implementation of text_text_archive
+// implementation of binary_binary_archive
 template<class Archive>
-void 
+void
 #if !defined(__BORLANDC__)
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
-basic_text_iarchive<Archive>::load_override(class_name_type & t, int){
+basic_binary_iarchive<Archive>::load_override(class_name_type & t, int){
     std::string cn;
     cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);
     load_override(cn, 0);
@@ -51,7 +51,7 @@ void
 #if !defined(__BORLANDC__)
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
-basic_text_iarchive<Archive>::init(void){
+basic_binary_iarchive<Archive>::init(){
     // read signature in an archive version independent manner
     std::string file_signature;
     * this->This() >> file_signature;
@@ -64,12 +64,12 @@ basic_text_iarchive<Archive>::init(void){
     // support the format of the archive being read
     version_type input_library_version;
     * this->This() >> input_library_version;
-
+    
     #if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     detail::
     #endif
     basic_iarchive::init(input_library_version);
-
+    
     // extra little .t is to get around borland quirk
     if(ARCHIVE_VERSION() < input_library_version.t)
         boost::throw_exception(

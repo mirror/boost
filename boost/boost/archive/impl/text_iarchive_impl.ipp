@@ -28,7 +28,11 @@ namespace boost {
 namespace archive {
 
 template<class Archive>
-void text_iarchive_impl<Archive>::load(char *s)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_iarchive_impl<Archive>::load(char *s)
 {
     std::size_t size;
     * this->This() >> size;
@@ -40,7 +44,11 @@ void text_iarchive_impl<Archive>::load(char *s)
 }
 
 template<class Archive>
-void text_iarchive_impl<Archive>::load(std::string &s)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_iarchive_impl<Archive>::load(std::string &s)
 {
     std::size_t size;
     * this->This() >> size;
@@ -57,7 +65,11 @@ void text_iarchive_impl<Archive>::load(std::string &s)
 #ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void text_iarchive_impl<Archive>::load(wchar_t *ws)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_iarchive_impl<Archive>::load(wchar_t *ws)
 {
     std::size_t size;
     * this->This() >> size;
@@ -66,11 +78,15 @@ void text_iarchive_impl<Archive>::load(wchar_t *ws)
     is.read((char *)ws, size * sizeof(wchar_t)/sizeof(char));
     ws[size] = L'\0';
 }
-#endif
+#endif // BOOST_NO_INTRINSIC_WCHAR_T
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void text_iarchive_impl<Archive>::load(std::wstring &ws)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_iarchive_impl<Archive>::load(std::wstring &ws)
 {
     std::size_t size;
     * this->This() >> size;
@@ -84,8 +100,23 @@ void text_iarchive_impl<Archive>::load(std::wstring &ws)
     is.read((char *)ws.data(), size * sizeof(wchar_t)/sizeof(char));
 }
 
-#endif
+#endif // BOOST_NO_STD_WSTRING
 #endif // BOOST_NO_CWCHAR
+
+template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE 
+#endif
+text_iarchive_impl<Archive>::text_iarchive_impl(std::istream & is, unsigned int flags) :
+    basic_text_iprimitive<std::istream>(
+        is, 
+        0 != (flags & no_codecvt)
+    ),
+    basic_text_iarchive<Archive>()
+{
+    if(0 == (flags & no_header))
+        this->basic_text_iarchive<Archive>::init();
+}
 
 } // namespace archive
 } // namespace boost

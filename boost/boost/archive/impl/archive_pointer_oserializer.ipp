@@ -18,12 +18,16 @@ namespace archive {
 namespace detail {
 
 template<class Archive>
-basic_serializer_map & oserializer_map(){
+basic_serializer_map & 
+oserializer_map(){
     static basic_serializer_map map;
     return map;
 }
 
 template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 archive_pointer_oserializer<Archive>::archive_pointer_oserializer(
     const boost::serialization::extended_type_info & type
 ) :
@@ -33,6 +37,9 @@ archive_pointer_oserializer<Archive>::archive_pointer_oserializer(
 }
 
 template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 const basic_pointer_oserializer * 
 archive_pointer_oserializer<Archive>::find(
     const boost::serialization::extended_type_info & type

@@ -10,11 +10,13 @@
 
 #include <cassert>
 #include <cstddef> // size_t
+#include <cstring> // memcpy
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
-    using ::size_t; 
+    using ::size_t;
+    using ::memcpy;
 } // namespace std
 #endif
 
@@ -34,7 +36,11 @@ namespace archive {
 // implementation of basic_binary_iprimitive
 
 template<class Archive, class IStream>
-void basic_binary_iprimitive<Archive, IStream>::init()
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_binary_iprimitive<Archive, IStream>::init()
 {
     // Detect  attempts to pass native binary archives across
     // incompatible platforms. This is not fool proof but its
@@ -71,7 +77,11 @@ void basic_binary_iprimitive<Archive, IStream>::init()
 }
 
 template<class Archive, class IStream>
-void basic_binary_iprimitive<Archive, IStream>::load(wchar_t * ws)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_binary_iprimitive<Archive, IStream>::load(wchar_t * ws)
 {
     std::size_t l;
     this->This()->load(l);
@@ -80,7 +90,11 @@ void basic_binary_iprimitive<Archive, IStream>::load(wchar_t * ws)
 }
 
 template<class Archive, class IStream>
-void basic_binary_iprimitive<Archive, IStream>::load(std::string & s)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_binary_iprimitive<Archive, IStream>::load(std::string & s)
 {
     std::size_t l;
     this->This()->load(l);
@@ -95,7 +109,11 @@ void basic_binary_iprimitive<Archive, IStream>::load(std::string & s)
 
 #ifndef BOOST_NO_CWCHAR
 template<class Archive, class IStream>
-void basic_binary_iprimitive<Archive, IStream>::load(char * s)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_binary_iprimitive<Archive, IStream>::load(char * s)
 {
     std::size_t l;
     this->This()->load(l);
@@ -106,7 +124,11 @@ void basic_binary_iprimitive<Archive, IStream>::load(char * s)
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive, class IStream>
-void basic_binary_iprimitive<Archive, IStream>::load(std::wstring & ws)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_binary_iprimitive<Archive, IStream>::load(std::wstring & ws)
 {
     std::size_t l;
     this->This()->load(l);
@@ -121,6 +143,9 @@ void basic_binary_iprimitive<Archive, IStream>::load(std::wstring & ws)
 #endif
 
 template<class Archive, class IStream>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 basic_binary_iprimitive<Archive, IStream>::basic_binary_iprimitive(
     IStream &is_, 
     bool no_codecvt
@@ -143,6 +168,9 @@ basic_binary_iprimitive<Archive, IStream>::basic_binary_iprimitive(
 // scoped_ptr requires that archive_locale be a complete type at time of
 // destruction so define destructor here rather than in the header
 template<class Archive, class IStream>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 basic_binary_iprimitive<Archive, IStream>::~basic_binary_iprimitive(){
 }
 

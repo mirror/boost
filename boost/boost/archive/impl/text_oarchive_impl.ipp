@@ -27,7 +27,6 @@ namespace std{ using ::wcslen; }
 #endif
 #endif
 
-#include <boost/archive/codecvt_null.hpp>
 #include <boost/archive/add_facet.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
@@ -39,7 +38,11 @@ namespace archive {
 // of template parameters used to create a text_oprimitive
 
 template<class Archive>
-void text_oarchive_impl<Archive>::save(const char * s)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_oarchive_impl<Archive>::save(const char * s)
 {
     unsigned len = std::ostream::traits_type::length(s);
     *this->This() << len;
@@ -48,7 +51,11 @@ void text_oarchive_impl<Archive>::save(const char * s)
 }
 
 template<class Archive>
-void text_oarchive_impl<Archive>::save(const std::string &s)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_oarchive_impl<Archive>::save(const std::string &s)
 {
     unsigned size = s.size();
     *this->This() << size;
@@ -59,7 +66,11 @@ void text_oarchive_impl<Archive>::save(const std::string &s)
 #ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void text_oarchive_impl<Archive>::save(const wchar_t * ws)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_oarchive_impl<Archive>::save(const wchar_t * ws)
 {
     std::size_t l = std::wcslen(ws);
     * this->This() << l;
@@ -70,7 +81,11 @@ void text_oarchive_impl<Archive>::save(const wchar_t * ws)
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void text_oarchive_impl<Archive>::save(const std::wstring &ws)
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE
+#endif
+text_oarchive_impl<Archive>::save(const std::wstring &ws)
 {
     std::size_t l = ws.size();
     * this->This() << l;
@@ -79,6 +94,40 @@ void text_oarchive_impl<Archive>::save(const std::wstring &ws)
 }
 #endif
 #endif // BOOST_NO_CWCHAR
+
+template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE 
+#endif
+text_oarchive_impl<Archive>::text_oarchive_impl(std::ostream & os, unsigned int flags) :
+    basic_text_oprimitive<std::ostream>(
+        os, 
+        0 != (flags & no_codecvt)
+    ),
+    basic_text_oarchive<Archive>()
+{
+    if(0 == (flags & no_header))
+        this->basic_text_oarchive<Archive>::init();
+}
+
+template<class Archive>
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE 
+#endif
+text_oarchive_impl<Archive>::save_binary(const void *address, std::size_t count){
+    put('\n');
+    this->end_preamble();
+    #if ! defined(__MWERKS__)
+    this->basic_text_oprimitive<std::ostream>::save_binary(
+    #else
+    this->basic_text_oprimitive::save_binary(
+    #endif
+        address, 
+        count
+    );
+    this->delimiter = this->eol;
+}
 
 } // namespace archive
 } // namespace boost

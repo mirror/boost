@@ -87,7 +87,9 @@ void save_iterator(std::wostream &os, InputIterator begin, InputIterator end){
 }
 
 template<class Archive>
-void xml_woarchive_impl<Archive>::save(const std::string & s){
+void
+BOOST_DECL_WARCHIVE
+xml_woarchive_impl<Archive>::save(const std::string & s){
     // note: we don't use s.begin() and s.end() because dinkumware
     // doesn't have string::value_type defined. So use a wrapper
     // around these values to implement the definitions.
@@ -98,24 +100,38 @@ void xml_woarchive_impl<Archive>::save(const std::string & s){
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void xml_woarchive_impl<Archive>::save(const std::wstring & ws){
+void
+BOOST_DECL_WARCHIVE
+xml_woarchive_impl<Archive>::save(const std::wstring & ws){
+#if 0
     typedef iterators::xml_escape<std::wstring::const_iterator> xmbtows;
     std::copy(
         xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.begin())),
         xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.end())),
         boost::archive::iterators::ostream_iterator<wchar_t>(os)
     );
+#endif
+    typedef iterators::xml_escape<const wchar_t *> xmbtows;
+    std::copy(
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.data())),
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.data() + ws.size())),
+        boost::archive::iterators::ostream_iterator<wchar_t>(os)
+    );
 }
 #endif //BOOST_NO_STD_WSTRING
 
 template<class Archive>
-void xml_woarchive_impl<Archive>::save(const char * s){
+void
+BOOST_DECL_WARCHIVE
+xml_woarchive_impl<Archive>::save(const char * s){
    save_iterator(os, s, s + std::strlen(s));
 }
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void xml_woarchive_impl<Archive>::save(const wchar_t * ws){
+void
+BOOST_DECL_WARCHIVE
+xml_woarchive_impl<Archive>::save(const wchar_t * ws){
     os << ws;
     typedef iterators::xml_escape<const wchar_t *> xmbtows;
     std::copy(
@@ -127,6 +143,9 @@ void xml_woarchive_impl<Archive>::save(const wchar_t * ws){
 #endif
 
 template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
 xml_woarchive_impl<Archive>::xml_woarchive_impl(
     std::wostream & os_,
     unsigned int flags

@@ -23,7 +23,11 @@ namespace archive {
 // implementation of xml_text_archive
 
 template<class Archive>
-void basic_xml_iarchive<Archive>::load_start(const char *name){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::load_start(const char *name){
     // if there's no name
     if(NULL == name)
         return;
@@ -39,7 +43,11 @@ void basic_xml_iarchive<Archive>::load_start(const char *name){
 }
 
 template<class Archive>
-void basic_xml_iarchive<Archive>::load_end(const char *name){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::load_end(const char *name){
     // if there's no name
     if(NULL == name)
         return;
@@ -71,24 +79,55 @@ void basic_xml_iarchive<Archive>::load_end(const char *name){
 }
 
 template<class Archive>
-void basic_xml_iarchive<Archive>::load_override(object_id_type & t, int){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::load_override(object_id_type & t, int){
     t = this->This()->gimpl->rv.object_id;
 }
 
 template<class Archive>
-void basic_xml_iarchive<Archive>::load_override(version_type & t, int){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::load_override(version_type & t, int){
     t = this->This()->gimpl->rv.version;
 }
 
 template<class Archive>
-void basic_xml_iarchive<Archive>::load_override(class_id_type & t, int){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::load_override(class_id_type & t, int){
     t = this->This()->gimpl->rv.class_id;
 }
 
 template<class Archive>
-void basic_xml_iarchive<Archive>::load_override(tracking_type & t, int){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::load_override(tracking_type & t, int){
     t = this->This()->gimpl->rv.tracking_level;
 }
+
+template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::basic_xml_iarchive(unsigned int flags) :
+    header(false),
+    no_checking(false),
+    depth(0)
+{}
+template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_iarchive<Archive>::~basic_xml_iarchive(){}
 
 } // namespace archive
 } // namespace boost

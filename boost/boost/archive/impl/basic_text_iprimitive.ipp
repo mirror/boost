@@ -21,6 +21,7 @@ namespace std{
 #include <boost/pfto.hpp>
 
 #include <boost/archive/basic_text_iprimitive.hpp>
+#include <boost/archive/codecvt_null.hpp>
 #include <boost/archive/add_facet.hpp>
 
 #include <boost/archive/iterators/remove_whitespace.hpp>
@@ -34,7 +35,11 @@ namespace archive {
 // translate base64 text into binary and copy into buffer
 // until buffer is full.
 template<class IStream>
-void basic_text_iprimitive<IStream>::load_binary(
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_text_iprimitive<IStream>::load_binary(
     void *address, 
     std::size_t count
 ){
@@ -88,8 +93,11 @@ void basic_text_iprimitive<IStream>::load_binary(
 }
 
 template<class IStream>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 basic_text_iprimitive<IStream>::basic_text_iprimitive(
-    IStream  &is_, 
+    IStream  &is_,
     bool no_codecvt
 ) : 
     is(is_),
@@ -111,6 +119,9 @@ basic_text_iprimitive<IStream>::basic_text_iprimitive(
 }
 
 template<class IStream>
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 basic_text_iprimitive<IStream>::~basic_text_iprimitive(){
 }
 

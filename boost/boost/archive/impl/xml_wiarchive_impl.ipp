@@ -68,7 +68,11 @@ void copy_to_ptr(char * s, const std::wstring & ws){
 } // anonymous
 
 template<class Archive>
-void xml_wiarchive_impl<Archive>::load(std::string & s){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
+xml_wiarchive_impl<Archive>::load(std::string & s){
     std::wstring ws;
     bool result = gimpl->parse_string(is, ws);
     if(! result)
@@ -93,7 +97,11 @@ void xml_wiarchive_impl<Archive>::load(std::string & s){
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void xml_wiarchive_impl<Archive>::load(std::wstring & ws){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
+xml_wiarchive_impl<Archive>::load(std::wstring & ws){
     bool result = gimpl->parse_string(is, ws);
     if(! result)
         boost::throw_exception(
@@ -103,7 +111,11 @@ void xml_wiarchive_impl<Archive>::load(std::wstring & ws){
 #endif
 
 template<class Archive>
-void xml_wiarchive_impl<Archive>::load(char * s){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
+xml_wiarchive_impl<Archive>::load(char * s){
     std::wstring ws;
     bool result = gimpl->parse_string(is, ws);
     if(! result)
@@ -115,7 +127,11 @@ void xml_wiarchive_impl<Archive>::load(char * s){
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void xml_wiarchive_impl<Archive>::load(wchar_t * ws){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
+xml_wiarchive_impl<Archive>::load(wchar_t * ws){
     std::wstring twstring;
     bool result = gimpl->parse_string(is, twstring);
     if(! result)
@@ -128,7 +144,11 @@ void xml_wiarchive_impl<Archive>::load(wchar_t * ws){
 #endif
 
 template<class Archive>
-void xml_wiarchive_impl<Archive>::load_override(class_name_type & t, int){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
+xml_wiarchive_impl<Archive>::load_override(class_name_type & t, int){
     const std::wstring & ws = gimpl->rv.class_name;
     if(ws.size() > BOOST_SERIALIZATION_MAX_KEY_SIZE - 1)
         boost::throw_exception(archive_exception::invalid_class_name);
@@ -136,11 +156,18 @@ void xml_wiarchive_impl<Archive>::load_override(class_name_type & t, int){
 }
 
 template<class Archive>
-void xml_wiarchive_impl<Archive>::init(){
+void
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
+xml_wiarchive_impl<Archive>::init(){
     gimpl->init(is);
 }
 
 template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
 xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
     std::wistream &is_,
     unsigned int flags
@@ -165,6 +192,9 @@ xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
 }
 
 template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE
+#endif
 xml_wiarchive_impl<Archive>::~xml_wiarchive_impl(){
     if(this->header)
         gimpl->windup(is);

@@ -29,7 +29,9 @@ namespace archive {
 // implementation of wiprimtives functions
 //
 template<class Archive>
-void text_wiarchive_impl<Archive>::load(char *s)
+void
+BOOST_DECL_WARCHIVE
+text_wiarchive_impl<Archive>::load(char *s)
 {
     std::size_t size;
     * this->This() >> size;
@@ -42,7 +44,9 @@ void text_wiarchive_impl<Archive>::load(char *s)
 }
 
 template<class Archive>
-void text_wiarchive_impl<Archive>::load(std::string &s)
+void
+BOOST_DECL_WARCHIVE
+text_wiarchive_impl<Archive>::load(std::string &s)
 {
     std::size_t size;
     * this->This() >> size;
@@ -61,7 +65,9 @@ void text_wiarchive_impl<Archive>::load(std::string &s)
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void text_wiarchive_impl<Archive>::load(wchar_t *s)
+void
+BOOST_DECL_WARCHIVE
+text_wiarchive_impl<Archive>::load(wchar_t *s)
 {
     std::size_t size;
     * this->This() >> size;
@@ -75,7 +81,9 @@ void text_wiarchive_impl<Archive>::load(wchar_t *s)
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void text_wiarchive_impl<Archive>::load(std::wstring &ws)
+void
+BOOST_DECL_WARCHIVE
+text_wiarchive_impl<Archive>::load(std::wstring &ws)
 {
     std::size_t size;
     * this->This() >> size;

@@ -18,7 +18,11 @@ namespace archive {
 // implemenations of functions common to both types of xml output
 
 template<class Archive>
-void basic_xml_oarchive<Archive>::write_attribute(
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::write_attribute(
     const char *attribute_name, 
     int t,
     const char *conjunction
@@ -31,7 +35,11 @@ void basic_xml_oarchive<Archive>::write_attribute(
 }
     
 template<class Archive>
-void basic_xml_oarchive<Archive>::write_attribute(
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::write_attribute(
     const char *attribute_name, 
     const char *key
 ){
@@ -43,14 +51,22 @@ void basic_xml_oarchive<Archive>::write_attribute(
 }
     
 template<class Archive>
-void basic_xml_oarchive<Archive>::indent(){
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::indent(){
     int i;
     for(i = depth; i-- > 0;)
         this->This()->put('\t');
 }
 
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_start(const char *name)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_start(const char *name)
 {
     if(NULL == name)
         return;
@@ -67,7 +83,11 @@ void basic_xml_oarchive<Archive>::save_start(const char *name)
 }
 
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_end(const char *name)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_end(const char *name)
 {
     if(NULL == name)
         return;
@@ -86,7 +106,11 @@ void basic_xml_oarchive<Archive>::save_end(const char *name)
 }
 
 template<class Archive>
-void basic_xml_oarchive<Archive>::end_preamble(){
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::end_preamble(){
     if(pending_preamble){
         this->This()->put('>');
         pending_preamble = false;
@@ -94,72 +118,111 @@ void basic_xml_oarchive<Archive>::end_preamble(){
 }
 
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(const object_id_type & t, int)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(const object_id_type & t, int)
 {
     int i = t.t; // extra .t is for borland
-    write_attribute(OBJECT_ID, i, "=\"_"); 
+    write_attribute(OBJECT_ID(), i, "=\"_"); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(
     const object_reference_type & t,
     int
 ){
     int i = t.t; // extra .t is for borland
-    write_attribute(OBJECT_REFERENCE, i, "=\"_"); 
+    write_attribute(OBJECT_REFERENCE(), i, "=\"_"); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(const version_type & t, int)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(const version_type & t, int)
 {
     int i = t.t; // extra .t is for borland
-    write_attribute(VERSION, i); 
+    write_attribute(VERSION(), i); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(const class_id_type & t, int)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(const class_id_type & t, int)
 {
-    write_attribute(CLASS_ID, t); 
+    write_attribute(CLASS_ID(), t); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(
     const class_id_reference_type & t,
     int
 ){
-    write_attribute(CLASS_ID_REFERENCE, t); 
+    write_attribute(CLASS_ID_REFERENCE(), t); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(
     const class_id_optional_type & t,
     int
 ){
-    write_attribute(CLASS_ID, t); 
+    write_attribute(CLASS_ID(), t); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(const class_name_type & t, int)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(const class_name_type & t, int)
 {
     const char * key = t;
     if(NULL == key)
         return;
-    write_attribute(CLASS_NAME, key); 
+    write_attribute(CLASS_NAME(), key); 
 }
 template<class Archive>
-void basic_xml_oarchive<Archive>::save_override(const tracking_type & t, int)
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::save_override(const tracking_type & t, int)
 {
-    write_attribute(TRACKING, t.t); // extra .t is for borland 
+    write_attribute(TRACKING(), t.t); // extra .t is for borland 
 }
 
 template<class Archive>
-void basic_xml_oarchive<Archive>::init(){
+void 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
+basic_xml_oarchive<Archive>::init(){
     // xml header
     header = true;
     this->This()->put("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n");
     this->This()->put("<!DOCTYPE boost_serialization>\n");
     // xml document wrapper - outer root
     this->This()->put("<boost_serialization");
-    write_attribute("signature", ARCHIVE_SIGNATURE); 
-    write_attribute("version", static_cast<unsigned int>(ARCHIVE_VERSION)); 
+    write_attribute("signature", ARCHIVE_SIGNATURE()); 
+    write_attribute("version", ARCHIVE_VERSION()); 
     this->This()->put(">\n");
 }
 
-template<class Archive>
+template<class Archive> 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 basic_xml_oarchive<Archive>::basic_xml_oarchive(unsigned int flags) :
     depth(0),
     indent_next(false),
@@ -168,7 +231,10 @@ basic_xml_oarchive<Archive>::basic_xml_oarchive(unsigned int flags) :
 {
 }
 
-template<class Archive>
+template<class Archive> 
+#if !defined(__BORLANDC__)
+BOOST_DECL_ARCHIVE_OR_WARCHIVE
+#endif
 basic_xml_oarchive<Archive>::~basic_xml_oarchive(){
     if(!header)
         return;
