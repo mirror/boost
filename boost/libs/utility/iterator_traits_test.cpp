@@ -7,6 +7,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  11 Feb 2001 Some fixes for Borland get it closer on that compiler
+//              (David Abrahams)
 //  07 Feb 2001 More comprehensive testing; factored out static tests for
 //              better reuse (David Abrahams)
 //  21 Jan 2001 Quick fix to my_iterator, which wasn't returning a
@@ -109,14 +111,21 @@ struct maybe_pointer_test
 input_iterator_test<std::istream_iterator<int>, int, std::ptrdiff_t, int*, int&, std::input_iterator_tag>
         istream_iterator_test;
 
+// 
+#if defined(__BORLANDC__) && !defined(__SGI_STL_PORT)
+typedef ::std::char_traits<char>::off_type distance;
+non_pointer_test<std::ostream_iterator<int>,int,
+    distance,int*,int&,std::output_iterator_tag> ostream_iterator_test;
+#elif !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
 non_pointer_test<std::ostream_iterator<int>,
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
-    void,
-#else // the VC6 standard lib gives ostream_iterator an incorrect value_type
-    int,
-#endif
-    void, void, void, std::output_iterator_tag>
+    void, void, void, void, std::output_iterator_tag>
         ostream_iterator_test;
+#else
+non_pointer_test<std::ostream_iterator<int>,
+    int, void, void, void, std::output_iterator_tag>
+        ostream_iterator_test;
+#endif
+
 
 #ifdef __KCC
   typedef long std_list_diff_type;
