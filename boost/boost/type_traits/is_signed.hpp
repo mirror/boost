@@ -21,6 +21,8 @@ namespace boost {
 
 namespace detail{
 
+#if (defined(__EDG_VERSION__) && __EDG_VERSION__ <= 238)
+
 template <class T>
 struct is_signed_helper
 {
@@ -63,6 +65,46 @@ struct is_signed_imp
    BOOST_STATIC_CONSTANT(bool, value = type::value);
 #endif
 };
+
+#else
+
+template <class T> struct is_signed_imp : public false_type{};
+template <> struct is_signed_imp<signed char> : public true_type{};
+template <> struct is_signed_imp<const signed char> : public true_type{};
+template <> struct is_signed_imp<volatile signed char> : public true_type{};
+template <> struct is_signed_imp<const volatile signed char> : public true_type{};
+template <> struct is_signed_imp<short> : public true_type{};
+template <> struct is_signed_imp<const short> : public true_type{};
+template <> struct is_signed_imp<volatile short> : public true_type{};
+template <> struct is_signed_imp<const volatile short> : public true_type{};
+template <> struct is_signed_imp<int> : public true_type{};
+template <> struct is_signed_imp<const int> : public true_type{};
+template <> struct is_signed_imp<volatile int> : public true_type{};
+template <> struct is_signed_imp<const volatile int> : public true_type{};
+template <> struct is_signed_imp<long> : public true_type{};
+template <> struct is_signed_imp<const long> : public true_type{};
+template <> struct is_signed_imp<volatile long> : public true_type{};
+template <> struct is_signed_imp<const volatile long> : public true_type{};
+#ifdef BOOST_HAS_LONG_LONG
+template <> struct is_signed_imp<long long> : public true_type{};
+template <> struct is_signed_imp<const long long> : public true_type{};
+template <> struct is_signed_imp<volatile long long> : public true_type{};
+template <> struct is_signed_imp<const volatile long long> : public true_type{};
+#endif
+#if defined(CHAR_MIN) && (CHAR_MIN != 0)
+template <> struct is_signed_imp<char> : public true_type{};
+template <> struct is_signed_imp<const char> : public true_type{};
+template <> struct is_signed_imp<volatile char> : public true_type{};
+template <> struct is_signed_imp<const volatile char> : public true_type{};
+#endif
+#if defined(WCHAR_MIN) && (WCHAR_MIN != 0)
+template <> struct is_signed_imp<wchar_t> : public true_type{};
+template <> struct is_signed_imp<const wchar_t> : public true_type{};
+template <> struct is_signed_imp<volatile wchar_t> : public true_type{};
+template <> struct is_signed_imp<const volatile wchar_t> : public true_type{};
+#endif
+
+#endif
 
 }
 
