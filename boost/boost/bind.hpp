@@ -885,7 +885,7 @@ private:
 
 #else
 
-template <class R> struct bind_t_generator
+template<class R> struct bind_t_generator
 {
 
 template<class F, class L> class implementation
@@ -929,29 +929,16 @@ private:
 
 };
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-#pragma warning(push)
-#pragma warning(disable: 4097) // typedef name 'base' used as a synonym for class
-#endif
-
-template<class R, class F, class L> class bind_t: public bind_t_generator<R>::BOOST_NESTED_TEMPLATE implementation<F, L>
+template<class R2, class F, class L> class bind_t: public bind_t_generator<R2>::BOOST_NESTED_TEMPLATE implementation<F, L>
 {
-private:
-
-    typedef typename bind_t_generator<R>::template implementation<F, L> base;
-
 public:
 
-    bind_t(F f, L const & l): base(f, l) {}
+    bind_t(F f, L const & l): bind_t_generator<R2>::BOOST_NESTED_TEMPLATE implementation<F, L>(f, l) {}
 
 private:
 
     bind_t & operator= (bind_t const &);
 };
-
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-#pragma warning(pop)
-#endif
 
 #endif
 
