@@ -292,7 +292,7 @@ namespace test // tester is the driver class for a sequence of tests
             cerr << result << endl;
         }
 
-        cerr << passed + failed << " tests: "
+        cerr << (passed + failed) << " tests: "
              << passed << " passed, "
              << failed << " failed";
 
