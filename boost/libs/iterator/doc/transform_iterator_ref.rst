@@ -24,8 +24,8 @@
         , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition only
         , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition only
     );
-    Iterator base() const;
     UnaryFunction functor() const;
+    Iterator base() const;
     reference operator*() const;
     transform_iterator& operator++();
     transform_iterator& operator--();
@@ -72,7 +72,7 @@ The argument ``Iterator`` shall model Readable Iterator.
 .............................
 
 The resulting ``transform_iterator`` models the most refined of the
-following options that is also modeled by ``Iterator``.
+following that is also modeled by ``Iterator``.
 
   * Writable Lvalue Iterator if ``transform_iterator::reference`` is a non-const reference. 
 
@@ -140,14 +140,14 @@ operations.
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
 
 
-``Iterator base() const;``
-
-:Returns: ``m_iterator``
-
-
 ``UnaryFunction functor() const;``
 
 :Returns: ``m_f``
+
+
+``Iterator base() const;``
+
+:Returns: ``m_iterator``
 
 
 ``reference operator*() const;``
