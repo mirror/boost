@@ -7,7 +7,7 @@ LIBS=@LIBS@
 EXE=@ac_exe_ext@
 OBJ=@ac_obj_ext@
 
-LIBDEP=../../build/libboost_regex.a ../../../../boost/re_detail/regex_options.hpp ../../../../boost/re_detail/regex_config.hpp
+LIBDEP=../../build/libboost_regex.a ../../../../boost/regex/detail/regex_options.hpp ../../../../boost/regex/detail/regex_config.hpp
 
 regex_timer$(EXE) : regex_timer$(OBJ)
 	$(CXX) -o timer$(EXE) regex_timer$(OBJ) -L../../build -lboost_regex $(LIBS)

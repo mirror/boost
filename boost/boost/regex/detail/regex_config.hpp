@@ -34,11 +34,12 @@ and Microsoft Visual C++ should be auto-recognised and configured. The HP aCC an
 SunPro C++ compiler should also be supported - but run configure for best results.
 The SGI, HP, Microsoft and Rogue Wave STL's should be auto-recognised and configured.
 Do not change this file unless you really really have to, add options to
-<boost/re_detail/_opt.h> instead. See <jm_opt.h> for a full list of macros and their usage.
+<boost/regex/detail/regex_options.hpp> instead. See <regex_options.hpp> for a
+full list of macros and their usage.
 
 ************************************************************************/
 
-#include <boost/re_detail/regex_options.hpp>
+#include <boost/regex/detail/regex_options.hpp>
 
 #ifdef __cplusplus
 #include <cstdlib>
@@ -160,7 +161,7 @@ Do not change this file unless you really really have to, add options to
          #define BOOST_RE_IX_DECL __declspec( dllimport )
       #endif
    #endif
-   #include <boost/re_detail/regex_library_include.hpp>
+   #include <boost/regex/detail/regex_library_include.hpp>
 
 #include <cwchar>
 #include <cwctype>
@@ -228,7 +229,7 @@ Do not change this file unless you really really have to, add options to
          #define BOOST_RE_IX_DECL __declspec( dllimport ) 
       #endif
    #endif
-   #include <boost/re_detail/regex_library_include.hpp>
+   #include <boost/regex/detail/regex_library_include.hpp>
 
 #endif
 

@@ -24,7 +24,7 @@
 #if !defined(BOOST_RE_NO_STRING_H)
 #include <map>
 #include <list>
-#include <boost/re_detail/fileiter.hpp>
+#include <boost/regex/detail/fileiter.hpp>
 #include <cstdio>
 
 namespace boost{

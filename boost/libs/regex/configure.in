@@ -1,7 +1,7 @@
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(../../boost/regex.hpp)
-AC_CONFIG_HEADER(../../boost/re_detail/regex_options.hpp:jm_opt.in)
+AC_CONFIG_HEADER(../../boost/regex/detail/regex_options.hpp:jm_opt.in)
 AC_DEFINE(BOOST_RE_AUTO_CONFIGURE, [])
 dnl Disable any caching here 
 define([AC_CACHE_LOAD], )dnl
@@ -1368,9 +1368,9 @@ fi
 #
 ac_all_h=""
 ac_all_dep=""
-for file in ../../boost/re_detail/*.hpp
+for file in ../../boost/regex/detail/*.hpp
 do
-	if test "$file" != '../../boost/re_detail/*.hpp'; then
+	if test "$file" != '../../boost/regex/detail/*.hpp'; then
 		ac_all_h="$ac_all_h ../$file"
 		ac_all_dep="$ac_all_dep $file"
 	fi
@@ -1660,14 +1660,14 @@ AC_MSG_RESULT(***)
 AC_OUTPUT(lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile)
 AC_MSG_RESULT(***)
 AC_MSG_RESULT($0: regex++ package tuned for use with \"${CXX}\" compiler.)
-AC_MSG_RESULT($0: To restore original settings - copy jm_opt.in to ../../boost/re_detail/regex_options.hpp)
+AC_MSG_RESULT($0: To restore original settings - copy jm_opt.in to ../../boost/regex/detail/regex_options.hpp)
 AC_MSG_RESULT(***)
 
 #post processing cleanup:
-sed 's%^[ 	]*#[ 	]*undef[ 	][ 	]*\(.*\)[ 	]*$%/* #define \1 */%' ../../boost/re_detail/regex_options.hpp > jm_opt.out
-cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
-sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
-cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
+sed 's%^[ 	]*#[ 	]*undef[ 	][ 	]*\(.*\)[ 	]*$%/* #define \1 */%' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
+cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
+sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
+cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 rm -f jm_opt.out
 
 

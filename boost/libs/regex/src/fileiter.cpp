@@ -23,7 +23,7 @@
 
 #include <climits>
 #include <stdexcept>
-#include <boost/re_detail/fileiter.hpp>
+#include <boost/regex/detail/fileiter.hpp>
 
 #if defined(__CYGWIN__) || defined(__CYGWIN32__)
 #include <sys/cygwin.h>

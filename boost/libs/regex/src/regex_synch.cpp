@@ -20,7 +20,7 @@
   *   DESCRIPTION: Thread synch helper functions, for regular
   *                expression library.
   */
-#include <boost/re_detail/regex_synch.hpp>
+#include <boost/regex/detail/regex_synch.hpp>
 
 namespace boost{
    namespace re_detail{

@@ -3375,9 +3375,9 @@ fi
 #
 ac_all_h=""
 ac_all_dep=""
-for file in ../../boost/re_detail/*.hpp
+for file in ../../boost/regex/detail/*.hpp
 do
-	if test "$file" != '../../boost/re_detail/*.hpp'; then
+	if test "$file" != '../../boost/regex/detail/*.hpp'; then
 		ac_all_h="$ac_all_h ../$file"
 		ac_all_dep="$ac_all_dep $file"
 	fi
@@ -3773,7 +3773,7 @@ done
 
 ac_given_srcdir=$srcdir
 
-trap 'rm -fr `echo "lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile ../../boost/re_detail/regex_options.hpp:jm_opt.in" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile ../../boost/regex/detail/regex_options.hpp:jm_opt.in" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -3928,7 +3928,7 @@ ac_eD='%g'
 if test "${CONFIG_HEADERS+set}" != set; then
 EOF
 cat >> $CONFIG_STATUS <<EOF
-  CONFIG_HEADERS="../../boost/re_detail/regex_options.hpp:jm_opt.in"
+  CONFIG_HEADERS="../../boost/regex/detail/regex_options.hpp:jm_opt.in"
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 fi
@@ -4027,14 +4027,14 @@ test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 echo "$ac_t""***" 1>&6
 echo "$ac_t""$0: regex++ package tuned for use with \"${CXX}\" compiler." 1>&6
-echo "$ac_t""$0: To restore original settings - copy jm_opt.in to ../../boost/re_detail/regex_options.hpp" 1>&6
+echo "$ac_t""$0: To restore original settings - copy jm_opt.in to ../../boost/regex/detail/regex_options.hpp" 1>&6
 echo "$ac_t""***" 1>&6
 
 #post processing cleanup:
-sed 's%^ 	*#[ 	]*undef[ 	][ 	]*\(.*\)[ 	]*$%/* #define \1 */%' ../../boost/re_detail/regex_options.hpp > jm_opt.out
-cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
-sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
-cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
+sed 's%^ 	*#[ 	]*undef[ 	][ 	]*\(.*\)[ 	]*$%/* #define \1 */%' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
+cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
+sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
+cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 rm -f jm_opt.out
 
 

@@ -936,21 +936,21 @@ EOF
 
 #
 # locate all the header dependencies:
-header="../../../boost/cregex.hpp ../../../boost/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex_traits.hpp"
+header="../../../boost/cregex.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex/regex_traits.hpp"
 
-for file in ../../boost/re_detail/*.hpp
+for file in ../../boost/regex/detail/*.hpp
 do
 
-if test $file != '../../boost/re_detail/*.hpp'; then
+if test $file != '../../boost/regex/detail/*.hpp'; then
 	header="$header ../$file"
 fi
 
 done
 
-for file in ../../boost/re_detail/*.hxx
+for file in ../../boost/regex/detail/*.hxx
 do
 
-if test $file != '../../boost/re_detail/*.hxx'; then
+if test $file != '../../boost/regex/detail/*.hxx'; then
 	header="$header $file"
 fi
 

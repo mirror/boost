@@ -39,16 +39,16 @@
 #endif
 
 #include <new>
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 #if !defined(BOOST_RE_NO_TYPEINFO)
 #include <typeinfo>
 #endif
 #include <cstring>
-#include <boost/re_detail/regex_stack.hpp>
-#include <boost/re_detail/regex_raw_buffer.hpp>
-#include <boost/re_detail/regex_kmp.hpp>
-#include <boost/pattern_except.hpp>
-#include <boost/regex_traits.hpp>
+#include <boost/regex/detail/regex_stack.hpp>
+#include <boost/regex/detail/regex_raw_buffer.hpp>
+#include <boost/regex/detail/regex_kmp.hpp>
+#include <boost/regex/pattern_except.hpp>
+#include <boost/regex/regex_traits.hpp>
 #include <boost/type_traits/cv_traits.hpp>
 
 
@@ -1475,7 +1475,7 @@ iterator BOOST_RE_CALL re_is_set_member(iterator next,
 
 } // namespace boost
 
-#include <boost/re_detail/regex_compile.hpp>
+#include <boost/regex/detail/regex_compile.hpp>
 
 namespace boost{
 
@@ -1491,9 +1491,9 @@ typedef match_results<const wchar_t*> wcmatch;
 
 } // namespace boost
 
-#include <boost/re_detail/regex_match.hpp>
-#include <boost/re_detail/regex_format.hpp>
-#include <boost/re_detail/regex_split.hpp>
+#include <boost/regex/detail/regex_match.hpp>
+#include <boost/regex/detail/regex_format.hpp>
+#include <boost/regex/detail/regex_split.hpp>
 
 
 #endif  // __cplusplus

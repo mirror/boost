@@ -16,7 +16,7 @@
 #ifndef BOOST_FILEITER_H
 #define BOOST_FILEITER_H
 
-#include <boost/re_detail/fileiter.hpp>
+#include <boost/regex/detail/fileiter.hpp>
 
 using boost::re_detail::directory_iterator;
 using boost::re_detail::file_iterator;

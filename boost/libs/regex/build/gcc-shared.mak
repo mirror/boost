@@ -29,7 +29,7 @@ C1=-c -O2 -I../../../ -fPIC
 C2=-c -g -I../../../ -fPIC
 
 
-ALL_HEADER=../../../boost/cregex.hpp ../../../boost/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex_traits.hpp ../../../boost/re_detail/fileiter.hpp ../../../boost/re_detail/regex_compile.hpp ../../../boost/re_detail/regex_config.hpp ../../../boost/re_detail/regex_cstring.hpp ../../../boost/re_detail/regex_format.hpp ../../../boost/re_detail/regex_kmp.hpp ../../../boost/re_detail/regex_library_include.hpp ../../../boost/re_detail/regex_match.hpp ../../../boost/re_detail/regex_options.hpp ../../../boost/re_detail/regex_raw_buffer.hpp ../../../boost/re_detail/regex_split.hpp ../../../boost/re_detail/regex_stack.hpp ../../../boost/re_detail/regex_synch.hpp
+ALL_HEADER=../../../boost/cregex.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_config.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_options.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
 
 all : gcc  gcc gcc/boost_regex_shared ./gcc/libboost_regex.so gcc gcc/boost_regex_debug_shared ./gcc/libboost_regex_debug.so
 

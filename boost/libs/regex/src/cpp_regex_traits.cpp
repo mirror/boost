@@ -24,7 +24,7 @@
 #include <list>
 #include <cctype>
 #include <iostream>
-#include <boost/regex_traits.hpp>
+#include <boost/regex/regex_traits.hpp>
 #include <map>
 #include <boost/cregex.hpp>
 #include "primary_transform.hpp"

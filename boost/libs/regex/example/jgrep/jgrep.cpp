@@ -31,7 +31,7 @@ using std::endl;
 #endif
 #pragma hrdstop
 
-#include <boost/re_detail/fileiter.hpp>
+#include <boost/regex/detail/fileiter.hpp>
 
 #include "jgrep.h"
 

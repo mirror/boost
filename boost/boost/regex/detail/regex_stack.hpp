@@ -26,10 +26,10 @@
 #define BOOST_REGEX_STACK_HPP
 
 #ifndef BOOST_REGEX_CONFIG_HPP
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 #endif
 #ifndef BOOST_REGEX_RAW_BUFFER_HPP
-#include <boost/re_detail/regex_raw_buffer.hpp>
+#include <boost/regex/detail/regex_raw_buffer.hpp>
 #endif
 
 namespace boost{

@@ -25,7 +25,7 @@
 #ifndef BOOST_RE_FILEITER_HPP
 #define BOOST_RE_FILEITER_HPP
 
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 
 #if (defined(__CYGWIN__) || defined(__CYGWIN32__)) && !defined(BOOST_RE_NO_W32)
 #error "Sorry, can't mix <windows.h> with STL code and gcc compiler: if you ran configure, try again with configure --disable-ms-windows"

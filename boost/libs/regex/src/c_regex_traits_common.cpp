@@ -26,8 +26,8 @@
 #include <cstdio>
 #include <list>
 #include <cctype>
-#include <boost/regex_traits.hpp>
-#include <boost/re_detail/regex_synch.hpp>
+#include <boost/regex/regex_traits.hpp>
+#include <boost/regex/detail/regex_synch.hpp>
 
 
 namespace boost{

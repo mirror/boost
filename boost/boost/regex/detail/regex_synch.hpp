@@ -26,7 +26,7 @@
 #define BOOST_REGEX_SYNCH_HPP
 
 #ifndef BOOST_REGEX_CONFIG_HPP
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 #endif
 
 #if defined(BOOST_RE_PLATFORM_W32) && defined(BOOST_RE_THREADS)

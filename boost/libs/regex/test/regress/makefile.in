@@ -9,7 +9,7 @@ OBJ=@ac_obj_ext@
 
 total : @ac_regress@
 
-LIBDEP=../../build/libboost_regex.a ../../../../boost/re_detail/regex_options.hpp ../../../../boost/re_detail/regex_config.hpp
+LIBDEP=../../build/libboost_regex.a ../../../../boost/regex/detail/regex_options.hpp ../../../../boost/regex/detail/regex_config.hpp
 
 r1$(EXE) :: tests.cpp parse.cpp regress.cpp
 	$(CXX) -o r1$(EXE) $(CXXFLAGS) tests.cpp parse.cpp regress.cpp $(LIBS)

@@ -20,7 +20,7 @@
   *   DESCRIPTION: Implements the wide character POSIX API wrappers.
   */
 
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 
 #ifndef BOOST_RE_NO_WCSTRING
 

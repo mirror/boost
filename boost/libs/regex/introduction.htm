@@ -227,11 +227,11 @@ will attempt to extract suitable compiler configuration options
 from the STL used. Otherwise the library will assume that the
 compiler is fully compliant with the C++ standard: unless various
 options are defined to depreciate features not implemented by
-your compiler. These options are documented in &lt;boost/re_detail/regex_options.hpp&gt;,
+your compiler. These options are documented in &lt;boost/regex/detail/regex_options.hpp&gt;,
 if you want to add permanent configuration options add them to
-&lt;boost/re_detail/regex_options.hpp&gt; which is provided for
+&lt;boost/regex/detail/regex_options.hpp&gt; which is provided for
 this purpose - this will allow you to keep your configuration
-options between library versions by retaining &lt;boost/re_detail/regex_options.hpp&gt;.
+options between library versions by retaining &lt;boost/regex/detail/regex_options.hpp&gt;.
 </p>
 
 <p>The library will encase all code inside namespace boost. </p>
@@ -445,7 +445,7 @@ code can do. Other compiler features may be implemented (and
 therefore detected by configure) but known to be buggy, again in
 this case it may be necessary to disable the feature in order to
 compile regex++ to stable code. The output file from configure is
-&lt;boost&gt;/boost/re_detail/regex_options.hpp, this file lists
+&lt;boost&gt;/boost/regex/detail/regex_options.hpp, this file lists
 all the macros that can be defined to configure regex++ along
 with a description to illustrate their usage, experiment changing
 options in regex_options.hpp one at a time until you achieve the

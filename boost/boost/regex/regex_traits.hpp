@@ -24,7 +24,7 @@
 #define BOOST_REGEX_TRAITS_HPP
 
 #include <boost/cregex.hpp>
-#include <boost/re_detail/regex_cstring.hpp>
+#include <boost/regex/detail/regex_cstring.hpp>
 
 namespace boost{
 

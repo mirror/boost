@@ -26,7 +26,7 @@
 #define BOOST_REGEX_KMP_HPP
 
 #ifdef BOOST_REGEX_CONFIG_HPP
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 #endif
 
 

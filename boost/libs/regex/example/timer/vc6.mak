@@ -7,7 +7,7 @@ LIBS=/link /LIBPATH:..\..\build\vc6 kernel32.lib user32.lib
 EXE=.exe
 OBJ=.obj
 
-LIBDEP= ../../../../boost/re_detail/regex_options.hpp ../../../../boost/re_detail/regex_config.hpp
+LIBDEP= ../../../../boost/regex/detail/regex_options.hpp ../../../../boost/regex/detail/regex_config.hpp
 
 regex_timer$(EXE) : regex_timer$(OBJ)
 	$(CXX) -o timer$(EXE) regex_timer$(OBJ) $(LIBS)
@@ -17,6 +17,7 @@ regex_timer$(OBJ) : regex_timer.cpp $(LIBDEP)
 
 timer$(OBJ) : ../../../timer/timer.cpp $(LIBDEP)
 	$(CXX) -c $(CXXFLAGS) ../../../timer/timer.cpp
+
 
 
 

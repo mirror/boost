@@ -290,7 +290,7 @@ It is provided "as is" without express or implied warranty.</PRE></I></TD>
 
 <P><HR></P>
 <H3><A NAME="bad_expression"></A>Exception classes.</H3>
-<P>#include &lt;<A HREF="../../boost/pattern_except.hpp">boost/pat_except.hpp</A>&gt; </P>
+<P>#include &lt;<A HREF="../../boost/regex/pattern_except.hpp">boost/pat_except.hpp</A>&gt; </P>
 <P>An instance of <I>bad_expression</I> is thrown whenever a bad regular expression is encountered. </P>
 <B><PRE>namespace</B> boost{
 
@@ -663,7 +663,7 @@ reg_expression&amp; assign(iterator first, iterator last, flag_type f = regbase:
 
 <P><HR></P>
 <I><H3><A NAME="regex_char_traits"></A>Class regex_traits</H3>
-</I><FONT SIZE=2><P>#include &lt;</FONT><A HREF="../../boost/regex_traits.hpp"><FONT SIZE=2>boost/regex_traits.hpp</FONT></A><FONT SIZE=2>&gt; </P>
+</I><FONT SIZE=2><P>#include &lt;</FONT><A HREF="../../boost/regex/regex_traits.hpp"><FONT SIZE=2>boost/regex/regex_traits.hpp</FONT></A><FONT SIZE=2>&gt; </P>
 <I><P>This is a preliminary version of the regular expression traits class, and is subject to change</I>. </P>
 <P>The purpose of the traits class is to make it easier to customise the behaviour of <I>reg_expression </I>and the associated matching algorithms. Custom traits classes can handle special character sets or define additional character classes, for example one could define [[:kanji:]] as the set of all (Unicode) kanji characters. This library provides three traits classes and a wrapper class <I>regex_traits</I>, which inherits from one of these depending upon the default localisation model in use, class <I>c_regex_traits</I> encapsulates the global C locale, class <I>w32_regex_traits</I> encapsulates the global Win32 locale (only available on Win32 systems), and class <I>cpp_regex_traits</I> encapsulates the C++ locale (only provided if std::locale is supported): </P>
 </FONT><PRE>template &lt;class charT&gt; class c_regex_traits;

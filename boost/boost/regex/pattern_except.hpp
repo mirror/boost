@@ -23,7 +23,7 @@
 #ifndef BOOST_RE_PAT_EXCEPT_HPP
 #define BOOST_RE_PAT_EXCEPT_HPP
 
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 
 namespace boost{
 

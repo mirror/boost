@@ -24,7 +24,7 @@
 #ifndef BOOST_RE_CREGEX_HPP
 #define BOOST_RE_CREGEX_HPP
 
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 
 #ifdef __BORLANDC__
    #if __BORLANDC__ == 0x530

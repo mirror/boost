@@ -26,9 +26,9 @@
 #include <cctype>
 #include <cstdio>
 #include <boost/cregex.hpp>
-#include <boost/regex_traits.hpp>
-#include <boost/re_detail/regex_synch.hpp>
-#include <boost/re_detail/regex_cstring.hpp>
+#include <boost/regex/regex_traits.hpp>
+#include <boost/regex/detail/regex_synch.hpp>
+#include <boost/regex/detail/regex_cstring.hpp>
 
 #include "primary_transform.hpp"
 

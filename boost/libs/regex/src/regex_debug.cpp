@@ -21,8 +21,8 @@
   */
 
 
-#include <boost/re_detail/regex_config.hpp>
-#include <boost/re_detail/regex_raw_buffer.hpp>
+#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/detail/regex_raw_buffer.hpp>
 #include <boost/regex.hpp>
 
 #ifdef BOOST_MSVC

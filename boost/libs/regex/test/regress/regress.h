@@ -25,7 +25,7 @@
 #ifndef _REGRESS_H
 #define _REGRESS_H
 
-#include <boost/re_detail/regex_config.hpp>
+#include <boost/regex/detail/regex_config.hpp>
 
 #ifdef BOOST_RE_OLD_IOSTREAM
 #include <iostream.h>
