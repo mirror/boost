@@ -20,6 +20,7 @@
 #define BOOST_FUNCTION_HPP
 
 #include <boost/function/function_base.hpp>
+#include <boost/type_traits/function_traits.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/function/function1.hpp>
 #include <boost/function/function2.hpp>
@@ -35,6 +36,217 @@
 namespace boost {
   namespace detail {
     namespace function {
+      template<typename Signature> 
+      struct function_traits
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 0);
+        typedef void result_type;
+        typedef void arg1_type;
+        typedef void arg2_type;
+        typedef void arg3_type;
+        typedef void arg4_type;
+        typedef void arg5_type;
+        typedef void arg6_type;
+        typedef void arg7_type;
+        typedef void arg8_type;
+        typedef void arg9_type;
+        typedef void arg10_type;
+      };
+
+      template<typename R>
+      struct function_traits<R ()>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 0);
+        typedef R result_type;
+        typedef unusable arg1_type;
+        typedef unusable arg2_type;
+        typedef unusable arg3_type;
+        typedef unusable arg4_type;
+        typedef unusable arg5_type;
+        typedef unusable arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+      
+      template<typename R, typename T1>
+      struct function_traits<R (T1)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 1);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef unusable arg2_type;
+        typedef unusable arg3_type;
+        typedef unusable arg4_type;
+        typedef unusable arg5_type;
+        typedef unusable arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+      
+      template<typename R, typename T1, typename T2>
+      struct function_traits<R (T1, T2)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 2);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef unusable arg3_type;
+        typedef unusable arg4_type;
+        typedef unusable arg5_type;
+        typedef unusable arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3>
+      struct function_traits<R (T1, T2, T3)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 3);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef unusable arg4_type;
+        typedef unusable arg5_type;
+        typedef unusable arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4>
+      struct function_traits<R (T1, T2, T3, T4)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 4);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef unusable arg5_type;
+        typedef unusable arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+               typename T5>
+      struct function_traits<R (T1, T2, T3, T4, T5)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 5);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef T5 arg5_type;
+        typedef unusable arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+               typename T5, typename T6>
+      struct function_traits<R (T1, T2, T3, T4, T5, T6)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 6);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef T5 arg5_type;
+        typedef T6 arg6_type;
+        typedef unusable arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+               typename T5, typename T6, typename T7>
+      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 7);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef T5 arg5_type;
+        typedef T6 arg6_type;
+        typedef T7 arg7_type;
+        typedef unusable arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+               typename T5, typename T6, typename T7, typename T8>
+      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7, T8)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 8);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef T5 arg5_type;
+        typedef T6 arg6_type;
+        typedef T7 arg7_type;
+        typedef T8 arg8_type;
+        typedef unusable arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+               typename T5, typename T6, typename T7, typename T8, typename T9>
+      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 9);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef T5 arg5_type;
+        typedef T6 arg6_type;
+        typedef T7 arg7_type;
+        typedef T8 arg8_type;
+        typedef T9 arg9_type;
+        typedef unusable arg10_type;
+      };
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+               typename T5, typename T6, typename T7, typename T8, typename T9,
+               typename T10>
+      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
+      {
+        BOOST_STATIC_CONSTANT(int, arity = 10);
+        typedef R result_type;
+        typedef T1 arg1_type;
+        typedef T2 arg2_type;
+        typedef T3 arg3_type;
+        typedef T4 arg4_type;
+        typedef T5 arg5_type;
+        typedef T6 arg6_type;
+        typedef T7 arg7_type;
+        typedef T8 arg8_type;
+        typedef T9 arg9_type;
+        typedef T10 arg10_type;
+      };
+
       // Choose the appropriate underlying implementation
       template<int Args> struct real_get_function_impl {};
 
@@ -320,23 +532,73 @@ namespace boost {
       };
 
       template<
-        typename R, 
-        typename T1, 
-        typename T2, 
-        typename T3, 
-        typename T4,
-        typename T5, 
-        typename T6, 
-        typename T7, 
-        typename T8, 
-        typename T9,
-        typename T10,
-        typename Policy = empty_function_policy,
-        typename Mixin = empty_function_mixin,
-        typename Allocator = std::allocator<function_base> 
+        typename InR, 
+        typename InT1, 
+        typename InT2, 
+        typename InT3, 
+        typename InT4,
+        typename InT5, 
+        typename InT6, 
+        typename InT7, 
+        typename InT8, 
+        typename InT9,
+        typename InT10,
+        typename InPolicy = empty_function_policy,
+        typename InMixin = empty_function_mixin,
+        typename InAllocator = std::allocator<function_base> 
       >
-      struct get_function_impl
+      class get_function_impl
       {
+        BOOST_STATIC_CONSTANT(bool, encoded_param = is_function<InR>::value);
+        typedef function_traits<InR> traits;
+      public:                       
+
+        typedef typename ct_if<encoded_param,
+                               typename traits::result_type,
+                               InR>::type R;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg1_type,
+                               InT1>::type T1;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg2_type,
+                               InT2>::type T2;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg3_type,
+                               InT3>::type T3;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg4_type,
+                               InT4>::type T4;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg5_type,
+                               InT5>::type T5;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg6_type,
+                               InT6>::type T6;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg7_type,
+                               InT7>::type T7;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg8_type,
+                               InT8>::type T8;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg9_type,
+                               InT9>::type T9;
+        typedef typename ct_if<encoded_param,
+                               typename traits::arg10_type,
+                               InT10>::type T10;        
+        typedef typename ct_if<(encoded_param && 
+                                !is_same<InT1, unusable>::value),
+                               InT1,
+                               InPolicy>::type Policy;
+        typedef typename ct_if<(encoded_param && 
+                                !is_same<InT2, unusable>::value),
+                               InT2,
+                               InMixin>::type Mixin;
+        typedef typename ct_if<(encoded_param && 
+                                !is_same<InT3, unusable>::value),
+                               InT3,
+                               InAllocator>::type Allocator;
+
         typedef typename real_get_function_impl<
           (count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)
           >::template params<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
@@ -345,28 +607,45 @@ namespace boost {
       };
 
   template<
-    typename R, 
-    typename T1, 
-    typename T2, 
-    typename T3, 
-    typename T4,
-    typename T5, 
-    typename T6, 
-    typename T7, 
-    typename T8, 
-    typename T9,
-    typename T10,
-    typename MyPolicy = empty_function_policy,
-    typename MyMixin = empty_function_mixin,
-    typename MyAllocator = std::allocator<function_base> 
+    typename InR, 
+    typename InT1, 
+    typename InT2, 
+    typename InT3, 
+    typename InT4,
+    typename InT5, 
+    typename InT6, 
+    typename InT7, 
+    typename InT8, 
+    typename InT9,
+    typename InT10,
+    typename InMyPolicy = empty_function_policy,
+    typename InMyMixin = empty_function_mixin,
+    typename InMyAllocator = std::allocator<function_base> 
   >
-  struct function_traits_builder
+  class function_traits_builder
   {
-    typedef typename get_function_impl<R, T1, T2, T3, T4, T5, T6, T7, 
-                                       T8, T9, T10, MyPolicy, MyMixin, 
-                                       MyAllocator>::type
-      type;
+    typedef get_function_impl<InR, InT1, InT2, InT3, InT4, InT5, InT6, InT7, 
+                              InT8, InT9, InT10, InMyPolicy, InMyMixin, 
+                              InMyAllocator>
+      impl;
 
+    typedef typename impl::R MyR;
+    typedef typename impl::T1 MyT1;
+    typedef typename impl::T2 MyT2;
+    typedef typename impl::T3 MyT3;
+    typedef typename impl::T4 MyT4;
+    typedef typename impl::T5 MyT5;
+    typedef typename impl::T6 MyT6;
+    typedef typename impl::T7 MyT7;
+    typedef typename impl::T8 MyT8;
+    typedef typename impl::T9 MyT9;
+    typedef typename impl::T10 MyT10;
+    typedef typename impl::Policy MyPolicy;
+    typedef typename impl::Mixin MyMixin;
+    typedef typename impl::Allocator MyAllocator;
+
+  public:
+    typedef typename impl::type type;
     typedef MyPolicy    policy_type;
     typedef MyMixin     mixin_type;
     typedef MyAllocator allocator_type;
@@ -374,28 +653,28 @@ namespace boost {
 #ifndef BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
     template<typename Policy>
     struct policy : 
-        public function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7, T8, T9,
-                                       T10, Policy, mixin_type, 
-                                       allocator_type> {};
+        public function_traits_builder<MyR, MyT1, MyT2, MyT3, MyT4, MyT5, MyT6,
+                                       MyT7, MyT8, MyT9, MyT10, Policy, 
+                                       mixin_type, allocator_type> {};
 
     template<typename Mixin>
     struct mixin : 
-        public function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7, T8, T9,
-                                       T10, policy_type, Mixin, 
-                                       allocator_type> {};
+        public function_traits_builder<MyR, MyT1, MyT2, MyT3, MyT4, MyT5, MyT6,
+                                       MyT7, MyT8, MyT9, MyT10, policy_type, 
+                                       Mixin, allocator_type> {};
 
     template<typename Allocator>
     struct allocator : 
-        public function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7, T8, T9,
-                                       T10, policy_type, mixin_type, 
-                                       Allocator> {};
+        public function_traits_builder<MyR, MyT1, MyT2, MyT3, MyT4, MyT5, MyT6,
+                                       MyT7, MyT8, MyT9, MyT10, policy_type, 
+                                       mixin_type, Allocator> {};
 #else
     template<typename Policy>
     struct policy 
     {
-      typedef typename function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7,
-                                               T8, T9, T10, Policy, 
-                                               mixin_type, 
+      typedef typename function_traits_builder<MyR, MyT1, MyT2, MyT3, MyT4, 
+                                               MyT5, MyT6, MyT7, MyT8, MyT9, 
+                                               MyT10, Policy, mixin_type, 
                                                allocator_type>::type
         type;
     };
@@ -403,8 +682,9 @@ namespace boost {
     template<typename Mixin>
     struct mixin
     {
-      typedef typename function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7,
-                                               T8, T9, T10, policy_type, Mixin,
+      typedef typename function_traits_builder<MyR, MyT1, MyT2, MyT3, MyT4, 
+                                               MyT5, MyT6, MyT7, MyT8, MyT9, 
+                                               MyT10, policy_type, Mixin,
                                                allocator_type>::type
         type;
     };
@@ -412,9 +692,10 @@ namespace boost {
     template<typename Allocator>
     struct allocator
     {
-      typedef typename function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7,
-                                               T8, T9, T10, policy_type, 
-                                               mixin_type, Allocator>::type
+      typedef typename function_traits_builder<MyR, MyT1, MyT2, MyT3, MyT4, 
+                                               MyT5, MyT6, MyT7, MyT8, MyT9, 
+                                               MyT10, policy_type, mixin_type,
+                                               Allocator>::type
         type;
     };
 #endif
