@@ -52,12 +52,13 @@ namespace boost {
   // is really quite innocent. The name of this class needs to be
   // changed.
   template <class T>
-  class static_object {
+  class static_object
+  {
   public:
-    static T& get() {
-     static char d[sizeof(T)];
-      return *reinterpret_cast<T*>(d);
-    }
+      static T& get()
+      {
+          return *reinterpret_cast<T*>(0);
+      }
   };
 
   template <class Base = null_archetype<> >
