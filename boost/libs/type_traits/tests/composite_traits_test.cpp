@@ -109,8 +109,11 @@ unsigned int expected_failures = 2;
 unsigned int expected_failures = 1; // can't handle cv-qualified references
 #elif defined(BOOST_MSVC)
 unsigned int expected_failures = 1;
+#elif defined(__MWERKS__)
+unsigned int expected_failures = 1; // is_enum doesn't work
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 

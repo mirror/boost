@@ -166,7 +166,12 @@ int main(int argc, char* argv[])
    // because we can't tell the difference between
    // unions and classes:
    value_fail(true, boost::is_empty<empty_union_UDT>::value)
+#if defined(__MWERKS__)
+   // apparent compiler bug causes this to fail to compile:
+   value_fail(false, boost::is_empty<enum_UDT>::value)
+#else
    soft_value_test(false, boost::is_empty<enum_UDT>::value)
+#endif
    soft_value_test(true, boost::is_empty<boost::noncopyable>::value)
    soft_value_test(false, boost::is_empty<non_empty>::value)
 
@@ -187,5 +192,6 @@ unsigned int expected_failures = 19;
 #else
 unsigned int expected_failures = 4;
 #endif
+
 
 
