@@ -81,7 +81,9 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 //
 // Only include what follows for known and supported compilers:
 //
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if (defined(BOOST_MSVC) && defined(_MSC_EXTENSIONS)) \
+    || defined(__BORLANDC__) \
+    || (defined(__ICL) && defined(_MSC_EXTENSIONS) && (_MSC_VER >= 1200))
 
 #ifndef BOOST_VERSION_HPP
 #  include <boost/version.hpp>
@@ -121,6 +123,11 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 
    // CBuilder 6:
 #  define BOOST_LIB_TOOLSET "bcb"
+
+#elif defined(__ICL)
+
+   // Intel C++, no version number:
+#  define BOOST_LIB_TOOLSET "iw"
 
 #endif
 
