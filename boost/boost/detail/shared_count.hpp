@@ -49,6 +49,11 @@ private:
 
 public:
 
+    counted_base():
+        use_count_(0), weak_count_(0), self_deleter_(&self_delete)
+    {
+    }
+
     // pre: initial_use_count <= initial_weak_count
 
     explicit counted_base(long initial_use_count, long initial_weak_count):
