@@ -29,10 +29,10 @@
 template<class T> struct is_integral {enum {value = false};};
 
 /* Macro for defining a specialization of is_integral<> template. */
-#define IS_INTEGRAL_SPECIALIZATION(R,_,L)\
-  template<> struct is_integral<BOOST_PP_LIST_AT(L,1)() BOOST_PP_LIST_AT(L,0)> {enum {value = true};};
+#define IS_INTEGRAL_SPECIALIZATION(R,L)\
+  template<> struct is_integral<BOOST_PP_TUPLE_ELEM(2,0,L)() BOOST_PP_TUPLE_ELEM(2,1,L)> {enum {value = true};};
 
-BOOST_PP_LIST_FOR_EACH_PRODUCT(IS_INTEGRAL_SPECIALIZATION,_,BOOST_PP_TUPLE_TO_LIST(2,(CV_QUALIFIERS, INTEGRAL_TYPES)))
+BOOST_PP_LIST_FOR_EACH_PRODUCT(IS_INTEGRAL_SPECIALIZATION,2,(CV_QUALIFIERS, INTEGRAL_TYPES))
 #undef IS_INTEGRAL_SPECIALIZATION
 #undef CV_QUALIFIERS
 #undef INTEGRAL_TYPES
