@@ -58,7 +58,7 @@
 #ifndef BOOST_CONFIG_HPP
 #define BOOST_CONFIG_HPP
 
-#define BOOST_VERSION 102102
+#define BOOST_VERSION 102200
 
 //  BOOST_VERSION % 100 is the sub-minor version
 //  BOOST_VERSION / 100 % 1000 is the minor version
