@@ -51,13 +51,18 @@ void test_disabled()
 
 #define BOOST_ENABLE_ASSERT_HANDLER
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <cstdio>
 
 int handler_invoked = 0;
 
 void boost::assertion_failed(char const * expr, char const * function, char const * file, long line)
 {
-    std::printf("Expression: %s\nFunction: %s\nFile: %s\nLine: %ld\n\n", expr, function, file, line);
+#if !defined(BOOST_NO_STDC_NAMESPACE)
+    using std::printf;
+#endif
+
+    printf("Expression: %s\nFunction: %s\nFile: %s\nLine: %ld\n\n", expr, function, file, line);
     ++handler_invoked;
 }
 

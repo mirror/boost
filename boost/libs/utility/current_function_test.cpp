@@ -18,11 +18,16 @@
 //
 
 #include <boost/current_function.hpp>
+#include <boost/config.hpp>
 #include <cstdio>
 
 void message(char const * file, long line, char const * func, char const * msg)
 {
-    std::printf("%s(%ld): %s in function '%s'\n", file, line, msg, func);
+#if !defined(BOOST_NO_STDC_NAMESPACE)
+    using std::printf;
+#endif
+
+    printf("%s(%ld): %s in function '%s'\n", file, line, msg, func);
 }
 
 #define MESSAGE(msg) message(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, msg)
