@@ -10,6 +10,10 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 //
+
+// Thes code is modified from its original form to meet the needs of
+// Boost.MultiArray.
+
 // Revision History:
 
 // 27 Mar 2002  Ronald Garcia
