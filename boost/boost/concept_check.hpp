@@ -124,6 +124,9 @@ struct require_same { typedef T type; };
   template <> struct SignedIntegerConcept<short> { void constraints() {} };
   template <> struct SignedIntegerConcept<int> { void constraints() {} };
   template <> struct SignedIntegerConcept<long> { void constraints() {} };
+# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
+  template <> struct SignedIntegerConcept<long long> { void constraints() {} };
+# endif
   // etc.
 #endif      
 
