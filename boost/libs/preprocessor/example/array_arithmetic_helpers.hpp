@@ -1,7 +1,7 @@
 #ifndef BOOST_LIBS_PREPROCESSOR_EXAMPLE_ARRAY_ARITHMETIC_HELPERS_HPP
 #define BOOST_LIBS_PREPROCESSOR_EXAMPLE_ARRAY_ARITHMETIC_HELPERS_HPP
 
-// Copyright (C) 2001
+// Copyright (C) 2002
 // Housemarque Oy
 // http://www.housemarque.com
 //
