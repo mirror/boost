@@ -103,7 +103,7 @@
 #endif
 
 #ifndef BOOST_NO_WREGEX
-#define BOOST_REGEX_CHAR_T wchar_t
+#define BOOST_REGEX_CHAR_T boost::regex_wchar_type
 #ifdef BOOST_REGEX_WIDE_INSTANTIATE
 #  define BOOST_REGEX_INSTANTIATE
 #endif
