@@ -31,8 +31,7 @@
     xmlns:xi   CDATA   #FIXED   "http://www.w3.org/2001/XInclude">
  -->
 
-<!ENTITY % local.common.attrib "xml:base      CDATA  #IMPLIED
-                                last-revision CDATA  #IMPLIED">
+<!ENTITY % local.common.attrib "last-revision CDATA  #IMPLIED">
 
 <!--========== Define the BoostBook extensions ==========-->
 <!ENTITY % boost.common.attrib "%local.common.attrib;
