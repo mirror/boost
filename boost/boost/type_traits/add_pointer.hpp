@@ -19,12 +19,48 @@ namespace boost {
 
 namespace detail {
 
+#ifdef __BORLANDC__
+//
+// For some reason this implementation stops Borlands compiler
+// from dropping cv-qualifiers, it still fails with references
+// to arrays for some reason though (shrug...) (JM 20021104)
+//
+template <typename T>
+struct add_pointer_impl
+{
+    typedef T* type;
+};
+template <typename T>
+struct add_pointer_impl<T&>
+{
+    typedef T* type;
+};
+template <typename T>
+struct add_pointer_impl<T&const>
+{
+    typedef T* type;
+};
+template <typename T>
+struct add_pointer_impl<T&volatile>
+{
+    typedef T* type;
+};
+template <typename T>
+struct add_pointer_impl<T&const volatile>
+{
+    typedef T* type;
+};
+
+#else
+
 template <typename T>
 struct add_pointer_impl
 {
     typedef typename remove_reference<T>::type no_ref_type;
     typedef no_ref_type* type;
 };
+
+#endif
 
 } // namespace detail
 
