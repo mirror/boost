@@ -30,6 +30,7 @@
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
+#include "boost/mpl/aux_/deref_wknd.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 
 #include "boost/aligned_storage.hpp"
@@ -54,7 +55,6 @@
 #include "boost/mpl/contains.hpp"
 #include "boost/mpl/count_if.hpp"
 #include "boost/mpl/distance.hpp"
-#include "boost/mpl/deref.hpp"
 #include "boost/mpl/empty.hpp"
 #include "boost/mpl/equal_to.hpp"
 #include "boost/mpl/identity.hpp"
@@ -73,6 +73,21 @@
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
 
+
+//////////////////////////////////////////////////////////////////////////
+// BOOST_VARIANT_MINIMIZE_SIZE
+//
+// When #defined, implementation employs all known means to minimize the
+// size of variant objects. However, often unsuccessful due to alignment
+// issues, and potentially harmful to runtime speed, so not enabled by
+// default. (TODO: Investigate further.)
+//
+#if defined(BOOST_VARIANT_MINIMIZE_SIZE)
+#   include <climits> // for SCHAR_MAX
+#   include "boost/mpl/less.hpp"
+#   include "boost/mpl/long.hpp"
+#   include "boost/mpl/O1_size.hpp"
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
@@ -103,7 +118,7 @@ private: // helpers, for metafunction result (below)
 
 public: // metafunction result
 
-    typedef typename mpl::deref<max_it>::type
+    typedef typename BOOST_MPL_AUX_DEREF_WNKD(max_it)
         type;
 
 };
@@ -520,30 +535,7 @@ private:
 
 #endif // borland workaround
 
-private: // static precondition assertions
-
-#if defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
-
-    // Sequences are not supported for compilers that do not support
-    // using declarations in templates (see below).
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-    BOOST_STATIC_ASSERT((
-          BOOST_MPL_AUX_VALUE_WKND(
-              mpl::not_< mpl::is_sequence<T0> >
-            )::value
-        ));
-
-#else
-
-    BOOST_STATIC_CONSTANT(bool, not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
-
-    BOOST_STATIC_ASSERT(not_is_sequence_T0);
-
-#endif
-
-#endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
+#if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
 
 public: // typedefs
 
@@ -554,6 +546,34 @@ public: // typedefs
               BOOST_VARIANT_ENUM_PARAMS(T)
             >
         >::type types;
+
+#else // defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+
+public: // typedefs
+
+    typedef typename detail::variant::make_variant_list<
+          BOOST_VARIANT_ENUM_PARAMS(T)
+        >::type types;
+
+private: // static precondition assertions
+
+    // Sequences are not supported for compilers that do not support
+    // using declarations in templates (see below).
+
+#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+    BOOST_STATIC_ASSERT((
+          ::boost::mpl::not_< mpl::is_sequence<T0> >::value
+        ));
+
+#   else // MSVC6
+
+    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
+    BOOST_STATIC_ASSERT(msvc_not_is_sequence_T0);
+
+#   endif // MSVC6 workaround
+
+#endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 
 private: // static precondition assertions, cont.
 
@@ -607,7 +627,28 @@ private: // representation (int which_)
     // if which_ >= 0:
     // * then which() -> which_
     // * else which() -> -(which_ + 1)
-    int which_;
+
+#if !defined(BOOST_VARIANT_MINIMIZE_SIZE)
+
+    typedef int which_t;
+
+#else // defined(BOOST_VARIANT_MINIMIZE_SIZE)
+
+    // [if O1_size available, then attempt which_t size optimization...]
+    // [select signed char if fewer than SCHAR_MAX types, else signed int:]
+    typedef typename mpl::apply_if<
+          mpl::equal_to< mpl::O1_size<types>, mpl::long_<-1> >
+        , mpl::identity< int >
+        , mpl::if_<
+              mpl::less< mpl::O1_size<types>, mpl::int_<SCHAR_MAX> >
+            , signed char
+            , int
+            >
+        >::type which_t;
+
+#endif // BOOST_VARIANT_MINIMIZE_SIZE switch
+
+    which_t which_;
 
     static bool using_storage1_impl(mpl::true_)
     {
@@ -631,12 +672,12 @@ private: // representation (int which_)
 
     void activate_storage1(int which)
     {
-        which_ = which;
+        which_ = static_cast<which_t>( which );
     }
 
     void activate_storage2(int which)
     {
-        which_ = -(which + 1);
+        which_ = static_cast<which_t>( -(which + 1) );
     }
 
 private: // representation (aligned double-storage)
@@ -735,7 +776,7 @@ private: // helpers, for structors (below)
             {
             private: // helpers, for static functions (below)
 
-                typedef typename Iterator::type
+                typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iterator)
                     T;
 
             public: // static functions
@@ -1297,7 +1338,7 @@ private: // helpers, for visitation support (below)
 
         // Otherwise, tail recurse, checking next iteration:
         typename mpl::next<Which>::type* next_which = 0;
-        typename NextIt::type* next_type = 0;
+        typename BOOST_MPL_AUX_DEREF_WNKD(NextIt)* next_type = 0;
         typedef typename mpl::next<NextIt>::type next_next_it_t;
         next_next_it_t* next_next_it = 0;
         typedef typename is_same<next_next_it_t, LastIt>::type next_next_is_last;
@@ -1352,7 +1393,7 @@ public:
     {
         mpl::int_<0>* first_which = 0;
         typedef typename mpl::begin<types>::type first_it;
-        typename first_it::type* first_type = 0;
+        typename BOOST_MPL_AUX_DEREF_WNKD(first_it)* first_type = 0;
         typename mpl::next<first_it>::type* next_it = 0;
         typename mpl::end<types>::type* last_it = 0;
 
@@ -1370,7 +1411,7 @@ public:
     {
         mpl::int_<0>* first_which = 0;
         typedef typename mpl::begin<types>::type first_it;
-        typename first_it::type* first_type = 0;
+        typename BOOST_MPL_AUX_DEREF_WNKD(first_it)* first_type = 0;
         typename mpl::next<first_it>::type* next_it = 0;
         typename mpl::end<types>::type* last_it = 0;
 
