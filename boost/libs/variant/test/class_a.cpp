@@ -1,6 +1,6 @@
 //File: class_a.cpp
 
-
+#include <algorithm> // for std::swap
 #include <sstream>
 #include <iostream>
 #include <assert.h>

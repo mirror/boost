@@ -223,15 +223,15 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
    //
    // Check get<>()
    //
-   BOOST_CHECK(get<const S>(&vari));
-   BOOST_CHECK(get<S>(&mut_vari));
+   BOOST_CHECK(boost::get<const S>(&vari));
+   BOOST_CHECK(boost::get<S>(&mut_vari));
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
    int count = 0;
    try
    {
-      const S& r = get<const S>(vari);
+      const S& r = boost::get<const S>(vari);
       ptr1 = &r;
    }
    catch(bad_get& )
@@ -241,7 +241,7 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
 
    try
    {
-      S& mut_r = get<S>(mut_vari);
+      S& mut_r = boost::get<S>(mut_vari);
       ptr2 = &mut_r;
    }
    catch(bad_get& )
@@ -274,17 +274,17 @@ inline void verify_not(const VariantType& vari, spec<S>)
    //
    // Check get<>()
    //
-   BOOST_CHECK(!get<const S>(&vari));
+   BOOST_CHECK(!boost::get<const S>(&vari));
 
    VariantType& mut_vari = const_cast<VariantType&>(vari);
-   BOOST_CHECK(!get<S>(&mut_vari));
+   BOOST_CHECK(!boost::get<S>(&mut_vari));
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
    int count = 0;
    try
    {
-      const S& r = get<const S>(vari);
+      const S& r = boost::get<const S>(vari);
       ptr1 = &r;
    }
    catch(bad_get& )
@@ -294,7 +294,7 @@ inline void verify_not(const VariantType& vari, spec<S>)
 
    try
    {
-      S& mut_r = get<S>(mut_vari);
+      S& mut_r = boost::get<S>(mut_vari);
       ptr2 = &mut_r;
    }
    catch(bad_get& )
