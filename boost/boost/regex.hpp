@@ -30,6 +30,10 @@
 
 #include <boost/cregex.hpp>
 
+#ifdef BOOST_RE_DEBUG
+# include <iosfwd>
+#endif
+
 #ifdef __cplusplus
 
 // what follows is all C++ don't include in C builds!!
@@ -192,6 +196,11 @@ enum syntax_element_type
    syntax_element_soft_buffer_end = syntax_element_combining + 1,
    syntax_element_restart_continue = syntax_element_soft_buffer_end + 1
 };
+
+#ifdef BOOST_RE_DEBUG
+// dwa 09/26/00 - This is needed to suppress warnings about an ambiguous conversion
+ostream& operator<<(ostream&, syntax_element_type);
+#endif
 
 union offset_type
 {
