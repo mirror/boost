@@ -18,6 +18,7 @@
 #include <string>
 #include <cassert>
 #include <cmath>
+#include <iterator>
 #include <boost/random.hpp>
 #include <boost/config.hpp>
 
@@ -89,7 +90,8 @@ void instantiate_iterator_interface(Generator & gen)
   (void) &ref;
   typename Generator::difference_type diff = 0;
   (void) &diff;
-  std::input_iterator_tag it(typename Generator::iterator_category());
+  typedef typename Generator::iterator_category iterator_category;
+  std::input_iterator_tag it = iterator_category();
   (void) &it;
 
   assert(res == *gen++);
