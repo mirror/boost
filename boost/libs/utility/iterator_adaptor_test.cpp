@@ -156,7 +156,8 @@ main()
       boost::default_iterator_policies,
       boost::value_type_is<const int> > Iter1;
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::value_type, int>::value));
-#if defined(__BORLANDC__) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300
+    
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551)) || BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     // We currently don't know how to workaround this bug.
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, int&>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, int*>::value));
@@ -282,7 +283,11 @@ main()
     
     // Many compilers' builtin deque iterators don't interoperate well, though
     // STLport fixes that problem.
-#if defined(__SGI_STL_PORT) || !defined(__GNUC__) && !defined(__BORLANDC__) && (!defined(BOOST_MSVC) || BOOST_MSVC > 1200)
+#if defined(__SGI_STL_PORT)                                            \
+ || (!BOOST_WORKAROUND(__GNUC__, < 3)                                   \
+     && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))         \
+     && !BOOST_WORKAROUND(BOOST_MSVC, <= 1200))
+    
     boost::const_nonconst_iterator_test(i, ++j);
 #endif
   }
@@ -305,7 +310,7 @@ main()
 #endif
         >::type filter_iter;
 
-#if defined(__BORLANDC__)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     // Borland is choking on accessing the policies_type explicitly
     // from the filter_iter. 
     boost::forward_iterator_test(make_filter_iterator(array, array+N, 
@@ -316,8 +321,7 @@ main()
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 #endif
 
-#if !defined(__BORLANDC__)
-    // 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     enum { is_forward = boost::is_same<
            filter_iter::iterator_category,
            std::forward_iterator_tag>::value };
@@ -327,7 +331,7 @@ main()
     // On compilers not supporting partial specialization, we can do more type
     // deduction with deque iterators than with pointers... unless the library
     // is broken ;-(
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 || defined(__SGI_STL_PORT)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200 && !__SGI_STL_PORT)
     std::deque<dummyT> array2;
     std::copy(array+0, array+N, std::back_inserter(array2));
     boost::forward_iterator_test(
@@ -339,7 +343,7 @@ main()
         dummyT(1), dummyT(4));
 #endif
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 // This just freaks MSVC out completely
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200) // This just freaks MSVC6 out completely
     boost::forward_iterator_test(
         boost::make_filter_iterator<one_or_four>(
             boost::make_reverse_iterator(array2.end()),
@@ -363,7 +367,8 @@ main()
   // check operator-> with a forward iterator
   {
     boost::forward_iterator_archetype<dummyT> forward_iter;
-#if defined(__BORLANDC__)
+    
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     typedef boost::iterator_adaptor<boost::forward_iterator_archetype<dummyT>,
       boost::default_iterator_policies,
       dummyT, const dummyT&, const dummyT*, 
