@@ -37,7 +37,7 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
         
         template< typename C >
-        inline BOOST_RANGE_DEDUCED_TYPENAME C::size_type
+        inline BOOST_DEDUCED_TYPENAME C::size_type
         size( const C& c )
         {
             return c.size(); 
@@ -83,7 +83,7 @@ namespace range_detail
             return range_detail::str_size( s );
         }
         
-} // namespace 'range'
+} // namespace 'range_detail'
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_size<T>::type size( const T& r )

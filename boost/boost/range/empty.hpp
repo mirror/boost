@@ -35,7 +35,7 @@ namespace range_detail
         template< typename C >
         inline bool empty( const C& c )
         {
-            return begin( c ) == end( c );
+            return boost::begin( c ) == boost::end( c );
         }
 
         //////////////////////////////////////////////////////////////////////
