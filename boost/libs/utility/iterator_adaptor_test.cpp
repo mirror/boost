@@ -58,11 +58,23 @@ struct mult_functor {
   int a;
 };
 
+template <class Pair>
+struct select1st_ 
+  : public unary_function<Pair, typename Pair::first_type>
+{
+  const typename Pair::first_type& operator()(const Pair& x) const {
+    return x.first;
+  }
+  typename Pair::first_type& operator()(Pair& x) const {
+    return x.first;
+  }
+};
+
 int
 main()
 {
   dummyT array[] = { dummyT(0), dummyT(1), dummyT(2), 
-		     dummyT(3), dummyT(4), dummyT(5) };
+                     dummyT(3), dummyT(4), dummyT(5) };
   const int N = sizeof(array)/sizeof(dummyT);
 
   // sanity check, if this doesn't pass the test is buggy
@@ -92,7 +104,7 @@ main()
       i(y, mult_functor(2));
     boost::random_access_iterator_test(i, N, x);
   }
-  // Test indirect_iterator
+  // Test indirect_iterators
   {
     dummyT* ptr[N];
     for (int k = 0; k < N; ++k)
@@ -109,6 +121,27 @@ main()
     boost::random_access_iterator_test(j, N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);    
+  }
+  // Test projection_iterators
+  {    
+    typedef std::pair<dummyT,dummyT> Pair;
+    Pair pair_array[N];
+    for (int k = 0; k < N; ++k)
+      pair_array[k].first = array[k];
+
+    typedef boost::projection_iterators<select1st_<Pair>,
+      Pair*, const Pair*,
+      boost::iterator<std::random_access_iterator_tag, Pair>,
+      boost::iterator<std::random_access_iterator_tag, const Pair>
+      > Projection;
+    
+    Projection::iterator i = pair_array;
+    boost::random_access_iterator_test(i, N, array);
+
+    Projection::const_iterator j = pair_array;
+    boost::random_access_iterator_test(i, N, array);
+
+    boost::const_nonconst_iterator_test(i, ++j);
   }
   // Test reverse_iterators
   {

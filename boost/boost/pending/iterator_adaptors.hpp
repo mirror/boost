@@ -440,24 +440,6 @@ struct indirect_iterator
     > type;
 };
 
-template <class OuterIterator, class ConstInnerIterator,
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class OuterTraits,
-          class ConstInnerTraits
-#else
-          class OuterTraits = std::iterator_traits<OuterIterator>,
-          class ConstInnerTraits = std::iterator_traits<ConstInnerIterator>
-#endif
-           >
-struct const_indirect_iterator
-{
-    typedef iterator_adaptor<OuterIterator,
-        indirect_iterator_policies,
-        indirect_traits<OuterIterator, ConstInnerIterator,
-                        OuterTraits, ConstInnerTraits>
-    > type;
-};
-
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class InnerIterator,      // Mutable
           class ConstInnerIterator, // Immutable
@@ -562,6 +544,9 @@ struct reverse_iterators
     typedef typename Adaptor::iterator iterator;
     typedef typename Adaptor::const_iterator const_iterator;
 };
+
+//=============================================================================
+// Projection Iterators Adaptor
 
 template <class AdaptableUnaryFunction>
 struct projection_iterator_policies :
