@@ -9,7 +9,7 @@
 #include "boost/date_time/iso_format.hpp"
 #include "boost/date_time/date_format_simple.hpp"
 #include "boost/date_time/posix_time/posix_time_types.hpp"
-
+#include "boost/date_time/time_formatting_streams.hpp"
  
 namespace boost {
 
@@ -109,6 +109,46 @@ namespace posix_time {
     std::string ts = gregorian::to_iso_extended_string(t.date()) + "T";
     return ts + to_simple_string(t.time_of_day());
   }
+
+//The following code is removed for configurations with good std::locale support (eg: MSVC6, gcc 2.9x)
+#ifndef BOOST_DATE_TIME_NO_LOCALE
+
+  //! ostream operator for posix_time::time_duration
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, const time_duration& td)
+  {
+    typedef boost::date_time::ostream_time_duration_formatter<time_duration, charT> duration_formatter;
+    duration_formatter::duration_put(td, os);
+    return os;
+  }
+
+  //! ostream operator for posix_time::ptime
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, const ptime& t)
+  {
+    typedef boost::date_time::ostream_time_formatter<ptime, charT> time_formatter;
+    time_formatter::time_put(t, os);
+    return os;
+  }
+
+  //! ostream operator for posix_time::time_period
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, const time_period& tp)
+  {
+    typedef boost::date_time::ostream_time_period_formatter<time_period, charT> period_formatter;
+    period_formatter::period_put(tp, os);
+    return os;
+  }
+
+
+
+#endif
 
 
 } } //namespace posix_time
