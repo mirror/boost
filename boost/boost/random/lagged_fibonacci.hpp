@@ -410,6 +410,8 @@ template<class RealType, int w, unsigned int p, unsigned int q>
 const unsigned int lagged_fibonacci_01<RealType, w, p, q>::long_lag;
 template<class RealType, int w, unsigned int p, unsigned int q>
 const unsigned int lagged_fibonacci_01<RealType, w, p, q>::short_lag;
+template<class RealType, int w, unsigned int p, unsigned int q>
+const int lagged_fibonacci_01<RealType,w,p,q>::word_size;
 
 #endif
 

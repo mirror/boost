@@ -183,6 +183,8 @@ template<class IntType, IntType a, IntType c, IntType m, IntType val>
 const typename linear_congruential<IntType, a, c, m, val>::result_type linear_congruential<IntType, a, c, m, val>::min_value;
 template<class IntType, IntType a, IntType c, IntType m, IntType val>
 const typename linear_congruential<IntType, a, c, m, val>::result_type linear_congruential<IntType, a, c, m, val>::max_value;
+template<class IntType, IntType a, IntType c, IntType m, IntType val>
+const IntType linear_congruential<IntType,a,c,m,val>::modulus;
 #endif
 
 } // namespace random
