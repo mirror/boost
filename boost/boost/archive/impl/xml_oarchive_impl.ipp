@@ -20,10 +20,13 @@ namespace std{
 } // namespace std
 #endif
 
-#include <boost/archive/wcslen.hpp>
 #include <boost/archive/iterators/xml_escape.hpp>
-#include <boost/archive/iterators/mb_from_wchar.hpp>
 #include <boost/archive/iterators/ostream_iterator.hpp>
+
+#ifndef BOOST_NO_CWCHAR
+#include <boost/archive/wcslen.hpp>
+#include <boost/archive/iterators/mb_from_wchar.hpp>
+#endif
 
 namespace boost {
 namespace archive {
@@ -31,6 +34,8 @@ namespace archive {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // implemenations of functions specific to char archives
 
+// wide char stuff used by char archives
+#ifndef BOOST_NO_CWCHAR
 // copy chars to output escaping to xml and translating wide chars to mb chars
 template<class InputIterator>
 void save_iterator(std::ostream &os, InputIterator begin, InputIterator end){
@@ -43,6 +48,24 @@ void save_iterator(std::ostream &os, InputIterator begin, InputIterator end){
         boost::archive::iterators::ostream_iterator<char>(os)
     );
 }
+
+#ifndef BOOST_NO_STD_WSTRING
+template<class Archive>
+void xml_oarchive_impl<Archive>::save(const std::wstring & ws){
+//  at least one library doesn't typedef value_type for strings
+//  so rather than using string directly make a pointer iterator out of it
+    save_iterator(os, ws.data(), ws.data() + std::wcslen(ws.data()));
+}
+#endif
+
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+template<class Archive>
+void xml_oarchive_impl<Archive>::save(const wchar_t * ws){
+    save_iterator(os, ws, ws + std::wcslen(ws));
+}
+#endif
+
+#endif // BOOST_NO_CWCHAR
 
 template<class Archive>
 void xml_oarchive_impl<Archive>::save(const std::string & s){
@@ -58,15 +81,6 @@ void xml_oarchive_impl<Archive>::save(const std::string & s){
     );
 }
 
-#ifndef BOOST_NO_STD_WSTRING
-template<class Archive>
-void xml_oarchive_impl<Archive>::save(const std::wstring & ws){
-//  at least one library doesn't typedef value_type for strings
-//  so rather than using string directly make a pointer iterator out of it
-    save_iterator(os, ws.data(), ws.data() + std::wcslen(ws.data()));
-}
-#endif
-
 template<class Archive>
 void xml_oarchive_impl<Archive>::save(const char * s){
     typedef boost::archive::iterators::xml_escape<
@@ -78,13 +92,6 @@ void xml_oarchive_impl<Archive>::save(const char * s){
         boost::archive::iterators::ostream_iterator<char>(os)
     );
 }
-
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
-template<class Archive>
-void xml_oarchive_impl<Archive>::save(const wchar_t * ws){
-    save_iterator(os, ws, ws + std::wcslen(ws));
-}
-#endif
 
 template<class Archive>
 xml_oarchive_impl<Archive>::xml_oarchive_impl(

@@ -10,14 +10,21 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <cstdlib> // mbtowc
 #include <cstring> // memcpy
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
-    using ::memcpy; 
-    using ::mbtowc;
+    using ::memcpy;
 } // namespace std
 #endif
+
+#ifndef BOOST_NO_CWCHAR
+#include <cstdlib> // mbtowc
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::mbtowc;
+ } // namespace std
+#endif
+#endif // BOOST_NO_CWCHAR
 
 #include <boost/detail/workaround.hpp> // RogueWave and Dinkumware
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
@@ -39,15 +46,9 @@ namespace archive {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // implemenations of functions specific to char archives
 
-template<class Archive>
-void xml_iarchive_impl<Archive>::load(std::string &s){
-    bool result = gimpl->parse_string(is, s);
-    if(! result)
-        boost::throw_exception(
-            xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
-        );
-}
+// wide char stuff used by char archives
 
+#ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
 void xml_iarchive_impl<Archive>::load(std::wstring &ws){
@@ -79,19 +80,7 @@ void xml_iarchive_impl<Archive>::load(std::wstring &ws){
         );
     }
 }
-#endif
-
-template<class Archive>
-void xml_iarchive_impl<Archive>::load(char * s){
-    std::string tstring;
-    bool result = gimpl->parse_string(is, tstring);
-    if(! result)
-        boost::throw_exception(
-            xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
-        );
-    std::memcpy(s, tstring.data(), tstring.size());
-    s[tstring.size()] = 0;
-}
+#endif // BOOST_NO_STD_WSTRING
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
@@ -122,6 +111,29 @@ void xml_iarchive_impl<Archive>::load(wchar_t * ws){
     *ws = L'\0';
 }
 #endif
+
+#endif // BOOST_NO_CWCHAR
+
+template<class Archive>
+void xml_iarchive_impl<Archive>::load(std::string &s){
+    bool result = gimpl->parse_string(is, s);
+    if(! result)
+        boost::throw_exception(
+            xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
+        );
+}
+
+template<class Archive>
+void xml_iarchive_impl<Archive>::load(char * s){
+    std::string tstring;
+    bool result = gimpl->parse_string(is, tstring);
+    if(! result)
+        boost::throw_exception(
+            xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
+        );
+    std::memcpy(s, tstring.data(), tstring.size());
+    s[tstring.size()] = 0;
+}
 
 template<class Archive>
 void xml_iarchive_impl<Archive>::load_override(class_name_type & t, int){

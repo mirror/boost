@@ -18,22 +18,17 @@
 
 #include <cassert>
 #include <cstddef> // size_t
+#include <cstdlib> // for wctomb()
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::size_t; 
+    using ::wctomb;
 } // namespace std
 #endif
 
 #include <boost/pfto.hpp>
-
-#include <cstdlib> // for wctomb()
-#include <boost/config.hpp>
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ using ::wctomb; }
-#endif
-
 #include <boost/iterator/iterator_adaptor.hpp>
 
 namespace boost { 
