@@ -57,7 +57,7 @@ struct is_std_io
 namespace detail {
 
 template<typename T>
-struct get_char_type { typedef typename T::char_type type; };
+struct member_char_type { typedef typename T::char_type type; };
 
 } // End namespace detail.
 
@@ -65,7 +65,7 @@ struct get_char_type { typedef typename T::char_type type; };
 
 template<typename T>
 struct io_char 
-    : detail::get_char_type<
+    : detail::member_char_type<
           typename detail::unwrapped_type<T>::type
       > 
     { };
@@ -87,7 +87,7 @@ struct io_char {
             mpl::eval_if<
                 is_iterator_range<T>,
                 get_value_type<T>,
-                detail::get_char_type<
+                detail::member_char_type<
                     BOOST_DEDUCED_TYPENAME detail::unwrapped_type<T>::type
                 >
             >::type type;
@@ -104,49 +104,25 @@ struct member_io_category { typedef typename T::io_category type; };
 
 } // End namespace detail.
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
-
 template<typename T>
 struct io_category {
-    typedef typename  
-            select<
-                is_iostream<T>,      iostream_tag, 
-                is_istream<T>,       istream_tag, 
-                is_ostream<T>,       ostream_tag,
-                is_streambuf<T>,     streambuf_tag,
-                is_stringstream<T>,  stringstream_tag,
-                is_stringbuf<T>,     stringbuf_tag,
-                mpl::true_,          lazy< detail::member_io_category<T> >
-            >::type type;     
-};
-
-template<typename T>
-struct io_category< boost::reference_wrapper<T> > 
-    : io_category<T> 
-    { };
-template<typename T>
-struct io_category< const boost::reference_wrapper<T> > 
-    : io_category<T> 
-    { };
-
-#else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //------------------//
-
-template<typename T>
-struct io_category {
+    template<typename U>
+    struct member_io_category { 
+        typedef typename U::io_category type; 
+    };
     typedef typename detail::unwrapped_type<T>::type U;
     typedef typename  
-            select<
-                is_iostream<U>,       iostream_tag, 
-                is_istream<U>,        istream_tag, 
-                is_ostream<U>,        ostream_tag,
-                is_streambuf<U>,      streambuf_tag,
-                is_stringstream<U>,   stringstream_tag,
-                is_stringbuf<U>,      stringbuf_tag,
-                mpl::true_,           lazy< detail::member_io_category<U> >
-            >::type type;     
+            mpl::eval_if<
+                is_std_io<U>,
+                select<
+                    is_iostream<U>,   iostream_tag, 
+                    is_istream<U>,    istream_tag, 
+                    is_ostream<U>,    ostream_tag,
+                    is_streambuf<U>,  streambuf_tag
+                >,
+                detail::member_io_category<U>
+            >::type type;      
 };
-
-#endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
 
 //------------------Definition of get_category--------------------------------//
 
