@@ -313,6 +313,28 @@ template<typename T> inline T * get_pointer(shared_ptr<T> const & p)
     return p.get();
 }
 
+// shared_from_this() creates a shared_ptr from a raw pointer (usually 'this')
+
+namespace detail
+{
+
+inline void sp_assert_counted_base(boost::counted_base const *)
+{
+}
+
+template<class T> inline T * sp_remove_const(T const * p)
+{
+    return const_cast<T *>(p);
+}
+
+} // namespace detail
+
+template<class T> shared_ptr<T> shared_from_this(T * p)
+{
+    detail::sp_assert_counted_base(p);
+    return shared_ptr<T>(detail::sp_remove_const(p));
+}
+
 } // namespace boost
 
 #ifdef BOOST_MSVC
