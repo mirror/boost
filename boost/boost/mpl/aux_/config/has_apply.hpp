@@ -22,6 +22,7 @@
     && (   defined(BOOST_MPL_CFG_NO_HAS_XXX) \
         || BOOST_WORKAROUND(__EDG_VERSION__, < 300) \
         || BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+        || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202)) \
         )
 
 #   define BOOST_MPL_CFG_NO_HAS_APPLY
