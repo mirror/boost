@@ -733,7 +733,7 @@ public:
          return true;
       if((f & char_class_blank) && ((c == ' ') || (c == '\t')))
          return true;
-      if((f & char_class_unicode) && (c > (size_type)(uchar_type)255))
+      if((f & char_class_unicode) && ((uchar_type)c > (uchar_type)255))
          return true;
       return false;
    }
