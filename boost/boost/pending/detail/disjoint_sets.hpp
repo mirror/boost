@@ -56,7 +56,7 @@ link_sets(ParentPA p, RankPA rank, Vertex i, Vertex j,
   else {
     put(p, i, j);
     if (get(rank, i) == get(rank, j)) 
-      ++at(rank, j);
+      ++rank[j];
   }
 }  
 
