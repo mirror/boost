@@ -19,20 +19,11 @@
 //
 
 #include <boost/config.hpp>
-
-#if defined(BOOST_SP_USE_STD_ALLOCATOR) && defined(BOOST_SP_USE_QUICK_ALLOCATOR)
-# error BOOST_SP_USE_STD_ALLOCATOR and BOOST_SP_USE_QUICK_ALLOCATOR are incompatible.
-#endif
-
 #include <boost/checked_delete.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/detail/bad_weak_ptr.hpp>
 #include <boost/detail/sp_counted_base.hpp>
 #include <boost/detail/sp_counted_impl.hpp>
-
-#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
-#include <boost/detail/quick_allocator.hpp>
-#endif
 
 #include <memory>           // std::auto_ptr, std::allocator
 #include <functional>       // std::less
@@ -79,6 +70,36 @@ public:
     {
     }
 
+    template<class Y> explicit shared_count( Y * p ): pi_( 0 )
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
+    {
+#ifndef BOOST_NO_EXCEPTIONS
+
+        try
+        {
+            pi_ = new sp_counted_impl_p<Y>( p );
+        }
+        catch(...)
+        {
+            boost::checked_delete( p );
+            throw;
+        }
+
+#else
+
+        pi_ = new sp_counted_impl_p<Y>( p );
+
+        if( pi_ == 0 )
+        {
+            boost::checked_delete( p );
+            boost::throw_exception( std::bad_alloc() );
+        }
+
+#endif
+    }
+
     template<class P, class D> shared_count(P p, D d): pi_(0)
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
@@ -114,11 +135,20 @@ public:
     // auto_ptr<Y> is special cased to provide the strong guarantee
 
     template<class Y>
-    explicit shared_count(std::auto_ptr<Y> & r): pi_(new sp_counted_impl_pd< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>()))
+    explicit shared_count( std::auto_ptr<Y> & r ): pi_( new sp_counted_impl_p<Y>( r.get() ) )
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
+#ifdef BOOST_NO_EXCEPTIONS
+
+        if( pi_ == 0 )
+        {
+            boost::throw_exception(std::bad_alloc());
+        }
+
+#endif
+
         r.release();
     }
 
@@ -126,7 +156,7 @@ public:
 
     ~shared_count() // nothrow
     {
-        if(pi_ != 0) pi_->release();
+        if( pi_ != 0 ) pi_->release();
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         id_ = 0;
 #endif
@@ -137,7 +167,7 @@ public:
         , id_(shared_count_id)
 #endif
     {
-        if(pi_ != 0) pi_->add_ref_copy();
+        if( pi_ != 0 ) pi_->add_ref_copy();
     }
 
     explicit shared_count(weak_count const & r); // throws bad_weak_ptr when r.use_count() == 0
@@ -146,10 +176,10 @@ public:
     {
         sp_counted_base * tmp = r.pi_;
 
-        if(tmp != pi_)
+        if( tmp != pi_ )
         {
-            if(tmp != 0) tmp->add_ref_copy();
-            if(pi_ != 0) pi_->release();
+            if( tmp != 0 ) tmp->add_ref_copy();
+            if( pi_ != 0 ) pi_->release();
             pi_ = tmp;
         }
 
@@ -180,12 +210,12 @@ public:
 
     friend inline bool operator<(shared_count const & a, shared_count const & b)
     {
-        return std::less<sp_counted_base *>()(a.pi_, b.pi_);
+        return std::less<sp_counted_base *>()( a.pi_, b.pi_ );
     }
 
     void * get_deleter(std::type_info const & ti) const
     {
-        return pi_? pi_->get_deleter(ti): 0;
+        return pi_? pi_->get_deleter( ti ): 0;
     }
 };
 
@@ -278,7 +308,7 @@ public:
     }
 };
 
-inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
+inline shared_count::shared_count( weak_count const & r ): pi_( r.pi_ )
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif

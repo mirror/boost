@@ -121,7 +121,7 @@ public:
     }
 
     template<class Y>
-    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
+    explicit shared_ptr( Y * p ): px( p ), pn( p ) // Y must be complete
     {
         detail::sp_enable_shared_from_this( pn, p, p );
     }

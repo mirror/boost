@@ -38,51 +38,77 @@
 namespace boost
 {
 
-// Debug hooks
-
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
-void sp_scalar_constructor_hook(void * px, std::size_t size, void * pn);
-void sp_array_constructor_hook(void * px);
-void sp_scalar_destructor_hook(void * px, std::size_t size, void * pn);
-void sp_array_destructor_hook(void * px);
+void sp_scalar_constructor_hook( void * px, std::size_t size, void * pn );
+void sp_scalar_destructor_hook( void * px, std::size_t size, void * pn );
 
 #endif
 
 namespace detail
 {
 
+template<class X> class sp_counted_impl_p: public sp_counted_base
+{
+private:
+
+    X * px_;
+
+    sp_counted_impl_p( sp_counted_impl_p const & );
+    sp_counted_impl_p & operator= ( sp_counted_impl_p const & );
+
+    typedef sp_counted_impl_p<X> this_type;
+
+public:
+
+    explicit sp_counted_impl_p( X * px ): px_( px )
+    {
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+        boost::sp_scalar_constructor_hook( px, sizeof(X), this );
+#endif
+    }
 
-template<class T> void cbi_call_constructor_hook(sp_counted_base * pn, T * px, checked_deleter<T> const &, int)
-{
-    boost::sp_scalar_constructor_hook(px, sizeof(T), pn);
-}
+    virtual void dispose() // nothrow
+    {
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+        boost::sp_scalar_destructor_hook( px_, sizeof(X), this );
+#endif
+        boost::checked_delete( px_ );
+    }
 
-template<class T> void cbi_call_constructor_hook(sp_counted_base *, T * px, checked_array_deleter<T> const &, int)
-{
-    boost::sp_array_constructor_hook(px);
-}
+    virtual void * get_deleter( std::type_info const & )
+    {
+        return 0;
+    }
 
-template<class P, class D> void cbi_call_constructor_hook(sp_counted_base *, P const &, D const &, long)
-{
-}
+#if defined(BOOST_SP_USE_STD_ALLOCATOR)
 
-template<class T> void cbi_call_destructor_hook(sp_counted_base * pn, T * px, checked_deleter<T> const &, int)
-{
-    boost::sp_scalar_destructor_hook(px, sizeof(T), pn);
-}
+    void * operator new( std::size_t )
+    {
+        return std::allocator<this_type>().allocate( 1, static_cast<this_type *>(0) );
+    }
 
-template<class T> void cbi_call_destructor_hook(sp_counted_base *, T * px, checked_array_deleter<T> const &, int)
-{
-    boost::sp_array_destructor_hook(px);
-}
-
-template<class P, class D> void cbi_call_destructor_hook(sp_counted_base *, P const &, D const &, long)
-{
-}
+    void operator delete( void * p )
+    {
+        std::allocator<this_type>().deallocate( static_cast<this_type *>(p), 1 );
+    }
 
 #endif
+
+#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+
+    void * operator new( std::size_t )
+    {
+        return quick_allocator<this_type>::alloc();
+    }
+
+    void operator delete( void * p )
+    {
+        quick_allocator<this_type>::dealloc( p );
+    }
+
+#endif
+};
 
 //
 // Borland's Codeguard trips up over the -Vx- option here:
@@ -98,8 +124,8 @@ private:
     P ptr; // copy constructor must not throw
     D del; // copy constructor must not throw
 
-    sp_counted_impl_pd(sp_counted_impl_pd const &);
-    sp_counted_impl_pd & operator= (sp_counted_impl_pd const &);
+    sp_counted_impl_pd( sp_counted_impl_pd const & );
+    sp_counted_impl_pd & operator= ( sp_counted_impl_pd const & );
 
     typedef sp_counted_impl_pd<P, D> this_type;
 
@@ -107,50 +133,44 @@ public:
 
     // pre: d(p) must not throw
 
-    sp_counted_impl_pd(P p, D d): ptr(p), del(d)
+    sp_counted_impl_pd( P p, D d ): ptr(p), del(d)
     {
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        detail::cbi_call_constructor_hook(this, p, d, 0);
-#endif
     }
 
     virtual void dispose() // nothrow
     {
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        detail::cbi_call_destructor_hook(this, ptr, del, 0);
-#endif
-        del(ptr);
+        del( ptr );
     }
 
-    virtual void * get_deleter(std::type_info const & ti)
+    virtual void * get_deleter( std::type_info const & ti )
     {
         return ti == typeid(D)? &del: 0;
     }
 
 #if defined(BOOST_SP_USE_STD_ALLOCATOR)
 
-    void * operator new(std::size_t)
+    void * operator new( std::size_t )
     {
-        return std::allocator<this_type>().allocate(1, static_cast<this_type *>(0));
+        return std::allocator<this_type>().allocate( 1, static_cast<this_type *>(0) );
     }
 
-    void operator delete(void * p)
+    void operator delete( void * p )
     {
-        std::allocator<this_type>().deallocate(static_cast<this_type *>(p), 1);
+        std::allocator<this_type>().deallocate( static_cast<this_type *>(p), 1 );
     }
 
 #endif
 
 #if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
 
-    void * operator new(std::size_t)
+    void * operator new( std::size_t )
     {
         return quick_allocator<this_type>::alloc();
     }
 
-    void operator delete(void * p)
+    void operator delete( void * p )
     {
-        quick_allocator<this_type>::dealloc(p);
+        quick_allocator<this_type>::dealloc( p );
     }
 
 #endif
