@@ -715,9 +715,9 @@ template<class R, class F, class L> struct add_value< bind_t<R, F, L> >
 
 #else
 
-template<int I> struct _avt_0;
+// template<int I> struct _avt_0;
 
-template<> struct _avt_0<1>
+template<int I> struct _avt_0 // <1>
 {
     template<class T> struct inner
     {
