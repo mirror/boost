@@ -152,37 +152,145 @@ desc.add_options()
       <para>The syntactic information is provided by the
         <classname>boost::program_options::options_description</classname> class
         and some methods of the
-        <classname>boost::program_options::value_semantic</classname> class.
-        The simplest usage is illustrated below:
-<programlisting>
+        <classname>boost::program_options::value_semantic</classname> class
+        and includes:        
+        <itemizedlist>
+          <listitem>
+            <para>
+              name of the option, used to identify the option inside the
+              program,
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              description of the option, which can be presented to the user,
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              the allowed number of source tokens that comprise options's
+              value, which is used during parsing.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+
+      <para>Consider the following example:
+      <programlisting>
 options_description desc;
 desc.add_options()
     ("help", "produce help message")
-    ;
-</programlisting>
-        This declares one option named "help" and associates a description with
-        it. The user is not allowed to specify any value.
-      </para>
-      
-      <para>To make an option accept a value, you'd need the
-        <code>value</code> function mentioned above:
-<programlisting>
-options_description desc;
-desc.add_options()
     ("compression", value&lt;string&gt;(), "compression level")
     ("verbose", value&lt;string&gt;()->implicit(), "verbosity level")
     ("email", value&lt;string&gt;()->multitoken(), "email to send to")
     ;
-</programlisting>
-        With these declarations, the user must specify a value for
-        the first option, using a single token. For the second option, the user
-        may either provide a single token for the value, or no token at
-        all. For the last option, the value can span several tokens. For
-        example, the following command line is OK:
-        <screen>
-          test --compression 10 --verbose --email beadle@mars beadle2@mars
-        </screen>      
+      </programlisting>
+      For the first parameter, we specify only the name and the
+      description. No value can be specified in the parsed source.
+      For the first option, the user must specify a value, using a single
+      token. For the third option, the user may either provide a single token
+      for the value, or no token at all. For the last option, the value can
+      span several tokens. For example, the following command line is OK:
+      <screen>
+          test --help --compression 10 --verbose --email beadle@mars beadle2@mars
+      </screen>      
       </para>
+
+      <section>
+        <title>Description formatting</title>
+
+        <para>
+          Sometimes the description can get rather long, for example, when
+          several option's values need separate documentation. Below we
+          describe some simple formatting mechanisms you can use.
+        </para>
+
+        <para>The description string has one or more paragraphs, separated by
+        the newline character ('\n'). When an option is output, the library
+        will compute the indentation for options's description. Each of the
+        paragraph is output as a separate line with that intentation. If 
+        a paragraph does not fit on one line it is spanned over multiple
+        lines (which will have the same intentation).
+>!!!!!!!!!! The library tries to prevent chopped words and leading spaces in new lines.
+>!!!!!!! Words are chopped only if longer than half the available space. Leading
+> spaces are only skipped if not followed by a space.
+        </para>
+
+        <para>You may specify additional indent for the first specified by
+        inserting spaces at the beginning of a paragraph. For example: 
+        <programlisting>
+options.add_options()
+    ("help", "   A long help msg a long help msg a long help msg a long help
+msg a long help msg a long help msg a long help msg a long help msg ")
+    ;  
+        </programlisting>
+        will specify a four-space indent for the first line. The output will
+        look like:
+        <screen>
+  --help                    A long help msg a long
+                        help msg a long help msg
+                        a long help msg a long
+                        help msg a long help msg
+                        a long help msg a long
+                        help msg
+          
+        </screen>
+        </para>
+
+        <para>For the case where line is wrapped, you can want an additional
+        indent for wrapped text. This can be done by
+        inserting a tabulator character ('\t') at the desired position. For
+        example: 
+        <programlisting>
+options.add_options()
+      ("well_formated", "As you can see this is a very well formatted
+option description.\n"
+                        "You can do this for example:\n\n"
+                        "Values:\n"
+                        "  Value1: \tdoes this and that, bla bla bla bla
+bla bla bla bla bla bla bla bla bla bla bla\n"
+                        "  Value2: \tdoes something else, bla bla bla bla
+bla bla bla bla bla bla bla bla bla bla bla\n\n"
+                        "    This paragraph has a first line indent only,
+bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla");          
+        </programlisting>
+        will produce:
+        <screen>
+  --well_formated       As you can see this is a
+                        very well formatted
+                        option description.
+                        You can do this for
+                        example:
+
+                        Values:
+                          Value1: does this and
+                                  that, bla bla
+                                  bla bla bla bla
+                                  bla bla bla bla
+                                  bla bla bla bla
+                                  bla
+                          Value2: does something
+                                  else, bla bla
+                                  bla bla bla bla
+                                  bla bla bla bla
+                                  bla bla bla bla
+                                  bla
+
+                            This paragraph has a
+                        first line indent only,
+                        bla bla bla bla bla bla
+                        bla bla bla bla bla bla
+                        bla bla bla
+        </screen>
+        The tab character is removed before output. Only one tabulator per
+        paragraph is allowed, otherwisee an exception of type
+        program_options::error is thrown. Finally, the tabulator is ignored if
+        it's is not on the first line of the paragraph or is on the last
+        possible position of the first line.
+        </para>
+
+      </section>
+
     </section>
       
     <section>
