@@ -269,9 +269,9 @@ types of containers.
   <span class=keyword>void</span> <span class=identifier>remove</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>value</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Predicate</span><span class=special>&gt;</span> <span class=keyword>void</span> <span class=identifier>remove_if</span><span class=special>(</span><span class=identifier>Predicate</span> <span class=identifier>pred</span><span class=special>);</span>
 
-  <span class=keyword>void</span> <span class=identifier>ordered_unique</span><span class=special>();</span>
+  <span class=keyword>void</span> <span class=identifier>unique</span><span class=special>();</span>
   <span class=keyword>template</span> <span class=special>&lt;</span><span class=keyword>class</span> <span class=identifier>BinaryPredicate</span><span class=special>&gt;</span>
-  <span class=keyword>void</span> <span class=identifier>ordered_unique</span><span class=special>(</span><span class=identifier>BinaryPredicate</span> <span class=identifier>binary_pred</span><span class=special>);</span>
+  <span class=keyword>void</span> <span class=identifier>unique</span><span class=special>(</span><span class=identifier>BinaryPredicate</span> <span class=identifier>binary_pred</span><span class=special>);</span>
 
   <span class=keyword>void</span> <span class=identifier>merge</span><span class=special>(</span><b>index class name</b><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
   <span class=keyword>template</span> <span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Compare</span><span class=special>&gt;</span> <span class=keyword>void</span> <span class=identifier>merge</span><span class=special>(</span><b>index class name</b><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=identifier>Compare</span> <span class=identifier>comp</span><span class=special>);</span>
@@ -829,7 +829,7 @@ Key extraction
 
 <br>
 
-<p>Revised July 26th 2004</p>
+<p>Revised September 28th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
