@@ -193,8 +193,8 @@ base object serialization with:
 // register the relationship between each derived class
 // its polymorphic base
 void_cast_register&lt;
-    boost::detail::sp_counted_base, 
     boost::detail::sp_counted_base_impl&lt;P, D&gt;
+    boost::detail::sp_counted_base, 
 &gt;();
 </code></pre>
 and we don't have to include a trival serializer for <code style="white-space: normal">sp_counted_base</code>

@@ -27,38 +27,41 @@ http://www.boost.org/LICENSE_1_0.txt)
 <hr>
 <dl class="index">
   <dt><a href="#requirements">Requirements</a></dt>
-  <dt><a href="#Platforms">Platforms</a></dt>
-  <dt><a href="#recent_improvements">Differences from Draft #20</a></dt>
+  <dt><a href="#recent_improvements">Differences from version 1.32</a></dt>
   <dt><a href="#todo">Pending Issues</a></dt>
 </dl>
-This is the Boost 1.32 Serialization Library.
+This is the Boost 1.33 Serialization Library.
 There are currently no known bugs. However, due to compiler/library quirks and or 
-bugs, some tests fail.
+bugs, some tests fail with some combinations of compilers and libraries.
 <h2><a name="requirements"></a>Requirements</h2>
-This library requires Boost version 1.32 or later.  Depending on the compiler used,
-It may also require spirit 1.6x which is not part of the standard boost distribution.
+This library requires Boost version 1.32 or later.
 <p>
-The serialization library requires the boost spirit package to load XML archives.
+The serialization library uses the boost spirit package to load XML archives.
 We have found that all tests pass using spirit 1.6x. Spirit 1.8 and higher does not work with
 older compilers - specificallly MSVC 6, Borland and GCC < 3.0.
-If you are using one of these two compilers, you may download a version
+If you are using one of these compilers, you may download a version
 of spirit 1.6 <a href="http://spirit.sourceforge.net/index.php?doc=download/index.html">here</a>.
 To use this downloaded version rather than the one included with boost,
 set an environmental variable SPIRIT_ROOT to be equal to the root 
 directory where the downloaded copy of spirit has been placed. E. G.
 <pre><code>
-set SPIRIT_ROOT=c:/spirit161
+set SPIRIT_ROOT=c:/spirit16
 </code></pre>
-If you're not using bjam and the jamfile to build the library, be sure that
+If you're not using bjam and the Jamfile to build the library, be sure that
 the directory which contains the version of spirit you plan to use is placed
 at the front of the list of include paths.
 
-<h2><a name="recent_improvements"></a>Differences from Draft #20</h2>
+<h2><a name="recent_improvements"></a>Differences from Boost 1.32</h2>
 <ul>
-    <li>Support for <em>Argument Dependent Looup</em> for serialization override invocations.
+    <li>Dynamic Linking Library (DLLs and shared libraries) for platforms which support them. See
+    <a href="../../../more/getting_started.html#auto-link">Automatic Linking on Windows</a>.
+    <li>Implementation of auto-link for compilers which can support this.
+    <li>Better support for <em>Argument Dependent Lookup</em> and two-phase lookup.
+    This results in simpler rules regarding the placing of serialization specializations
+    namespaces.
     <li>Enhanced documentation to help explain usage of the above.
     <li>Adjustments to improve support for less conformant compilers.
-    <li>A few bug fixes.
+    <li>Miscelleanous bug fixes.
 </ul>
 
 <h2><a name="todo"></a>Pending issues</h2>
@@ -69,6 +72,11 @@ at the front of the list of include paths.
     <li>currently can't serialize through a pointer an object a of class
     that implements its own <code style="white-space: normal">new/delete</code> operators.
 </ul>
+<p>
+Aside from the above, there are a number of issus related to specific platforms.  
+These are listed in <a href="implementation.html#othercompilerissues">Specific Compiler/Library Issues</a>.
+
+
 
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 

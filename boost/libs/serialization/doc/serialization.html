@@ -27,9 +27,10 @@ http://www.boost.org/LICENSE_1_0.txt)
 <hr>
 <dl class="page-index">
   <dt><a href="#member">Member Function</a>
-  <dt><a href="#Free">Free Function</a>
-  <dt><a href="#Base">Base Classes</a>
-  <dt><a href="#Versioning">Versioning</a>
+  <dt><a href="#free">Free Function</a>
+  <dt><a href="#namespaces">Namespaces for Free Function Overrides</a>
+  <dt><a href="#base">Base Classes</a>
+  <dt><a href="#bersioning">Versioning</a>
   <dt><a href="#splitting">Splitting <code style="white-space: normal">serialize</code> into 
      <code style="white-space: normal">save/load</code></a>
   <dl class="page-index">
@@ -137,73 +138,17 @@ specify the data to be saved/loaded by sequential application of the archive
 </code></pre>
 
 <h4><a name="namespaces">Namespaces for Free Function Overrides</a></h4>
-The question arises as to which <code>namespace</code> free serialization functions should be part of.
-<p>
-The options for this depend on:
+For maximum portability, include any free functions templates and definitions in the 
+namespace <code style="white-space: normal">boost::serialization</code>.  If portability is not a concern and the
+compiler being used supports ADL (Argument Dependent Lookup) the free functions and
+templates can be in any of the following namespaces:
 <ul>
-<li>Whether or not the compiler implements Argument Dependent Lookup.
-<li>whether or not the compiler implements Two Phase Lookup
-<li>whether or not the type to be serialized is a dependent type.
+<li><code style="white-space: normal">boost::serialization</code>
+<li>namespace of the archive class
+<li>namespace of the type being serialized
 </ul>
-according to the following table:
-<p>
-<table border>
-<tr><th align="right">ADL</th><th align="right">Two Phase<br>Lookup</th><th align="right">Dependent<br>Type T?</th><th>Namespace permitted</th></tr>
-<tr><td align="right">no<td align="right">no<td align="right">-<td><code>boost::serialization</tr>
-<tr><td align="right">no<td align="right">yes<td align="right">-<td>no compilers do this</tr>
-<tr><td align="right">yes<td align="right">no<td align="right">-<td><code>boost::serialzation</code><br><code>namespace of T<br><code>namespace of Archive</code></tr>
-<tr><td align="right">yes<td align="right">yes<td align="right">no<td><code>namespace of T<br><code>namespace of Archive</code></tr>
-<tr><td align="right">yes<td align="right">yes<td align="right">yes<td><code>boost::serialization<br><code>namespace of T<br><code>namespace of Archive</code></tr>
-</table>
-<p>
-To deal with this while maintaining portability, the test programs use the following 
-before specifying free function overloads:
-<pre><code>
-// function specializations must be defined in the appropriate
-// namespace - boost::serialization
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace boost { namespace serialization {
-#endif
-</code></pre>
-which works for all compilers.
-<p>
 
-From Vandervoorde and Josuttis book 
-"C++ Templates - A Complete Guide"<a href="bibliography.html#14">[14]</a>
-page 509:
-<blockquote>
-<strong>dependant name</strong><br>
-A name the meaning of which depends on a template parameter.
-For example, A<T>::x is a dependant name when A or T is a template parameter.
-The name of a function in a function call is also dependant if any of the arguments in the call
-has a type that depends on a template parameter.
-For example, f in f((T*)0) is dependent if T is a template parameter.
-The name of a template parameter is not considered dependent, however.
-</blockquote>
-
-and page 515:
-<blockquote>
-<strong>two-phase lookup</strong><br>
-The name lookup mechanism used for names in templates. The "two phases" are 
-(1) the phase during which a template definition is first encountered by a compiler, and
-(2) the instantiation of a template. <i>Nondependant names</i> are looked up only in the first phase,
-but during this first phase <i>nondepdendent</i> base class are not considered.
-<i>Dependant</i> names with a scope qualifier(::) are looked up only in the second phase.
-Dependant names without a scop qualifier may be looked up in both places, but in the 
-second phase only argument-dependant lookup is performed.
-</blockquote>
-
-In this library, the file <code style="white-space: normal">serialization.hpp</code>,
-which calls the serialization override,
-is included by including any archive classes. This would suggest that all serialization 
-overrides could be in any of the three possible namespaces if the serialization code is
-included before the archives.  However, this is not always possible.  Our implementation 
-of "export" functionality requires just the opposite.
-
-<p>
-This is consided inelegant to say the least. Hopefully, this may be improved in the future.
-
-<h3><a name="Base">Base Classes</a></h3>
+<h3><a name="base">Base Classes</a></h3>
 If the class to be serialized is derived from another class, its data
 should be serialized with the following syntax:
 <pre><code>
@@ -221,7 +166,7 @@ certain code used for tracking of objects, and registering base-derived
 relationships and other bookkeeping that is required for the serialization
 system to function as designed.  For this reason, all <code style="white-space: normal">serialize</code>
 member functions should be <code style="white-space: normal">private</code>.
-<h3><a name="Versioning">Versioning</a></h3>
+<h3><a name="versioning">Versioning</a></h3>
 It will eventually occur that class definitions change after archives have
 been created. When a class instance is saved, the current version
 in included in the class information stored in the archive.  When the class instance
@@ -247,7 +192,7 @@ The current version of the class is assigned as a
         ar &amp; member3;
 }
 </code></pre>
-<h3><a name="Splitting">Splitting <code style="white-space: normal">serialize</code> into Save/Load</a></h3>
+<h3><a name="splitting">Splitting <code style="white-space: normal">serialize</code> into Save/Load</a></h3>
 There are times when it is inconvenient to use the same
 template for both save and load functions.  For example, this might occur if versioning
 gets complex.  
