@@ -8,6 +8,12 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
+
+#ifdef BOOST_NO_STD_WSTREAMBUF
+#error "wide char i/o not supported on this platform"
+#else
+
 #if (defined _MSC_VER) && (_MSC_VER == 1200)
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
@@ -23,3 +29,5 @@ template class basic_text_oprimitive<std::wostream> ;
 
 } // namespace archive
 } // namespace boost
+
+#endif // BOOST_NO_STD_WSTREAMBUF

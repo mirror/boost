@@ -9,6 +9,11 @@
 
 //#include <cstdlib> // for multi-byte converson routines
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STD_WSTREAMBUF
+#error "wide char i/o not supported on this platform"
+#else
+
 #include <cassert>
 #include <cstddef>
 
@@ -158,7 +163,7 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
 // How many char objects can I process to get <= max_limit
 // wchar_t objects?
 int utf8_codecvt_facet_wchar_t::do_length(
-    std::mbstate_t &,
+    const std::mbstate_t &,
     const char * from,
     const char * from_end, 
     std::size_t max_limit
@@ -344,3 +349,5 @@ int utf8_codecvt_facet_char::do_length(
     return total_length;
 }
 #endif
+
+#endif //BOOST_NO_STD_WSTREAMBUF

@@ -10,9 +10,8 @@
 
 #include <boost/config.hpp>
 
-#include <boost/static_assert.hpp>
 #ifdef BOOST_NO_STD_WSTREAMBUF
-BOOST_STATIC_ASSERT(false);
+#error "wide char i/o not supported on this platform"
 #else
 
 #include <boost/archive/binary_woarchive.hpp>
