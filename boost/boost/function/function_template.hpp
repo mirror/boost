@@ -101,7 +101,7 @@ namespace boost {
                         BOOST_FUNCTION_PARMS)
 
         {
-          FunctionObj* f = static_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
+          FunctionObj* f = (FunctionObj*)(function_obj_ptr.obj_ptr);
           return (*f)(BOOST_FUNCTION_ARGS);
         }
       };
@@ -118,7 +118,7 @@ namespace boost {
                                BOOST_FUNCTION_PARMS)
 
         {
-          FunctionObj* f = static_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
+          FunctionObj* f = (FunctionObj*)(function_obj_ptr.obj_ptr);
           (*f)(BOOST_FUNCTION_ARGS);
           return unusable();
         }
