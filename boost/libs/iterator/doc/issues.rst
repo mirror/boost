@@ -260,16 +260,21 @@ information, we'll change ``iterator_tag`` so that it computes the
 old-style category in terms of the iterator's traversal category,
 ``reference``, and ``value_type``.
 
-Details
-=======
+Future Enhancements
+===================
 
-A cleaner solution would change ``iterator_traits`` as follows,
-though this does not constitute a "pure bolt-on"::
+For C++0x, we could consider a change to ``iterator_traits`` which
+allows the user to avoid the use of iterator_tag (or similar
+devices) altogether and write a new-style iterator by specifying
+only a traversal tag.  This change is not being proposed as it does
+not constitute a "pure bolt-on"::
 
   iterator_traits<I>::iterator_category
     = if (I::iterator_category is a type) // use mpl::has_xxx (SFINAE)
          return I::iterator_category
 
+      // Only old-style output iterators may have a void value_type 
+      // or difference_type
       if (iterator_value_type<I>::type is void
           || iterator_difference_type<I>::type is void
       )
