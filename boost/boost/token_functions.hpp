@@ -250,10 +250,10 @@ namespace boost{
 
      explicit char_delimiters_separator(bool return_delims = false, 
 		 const Char * returnable = 0,const Char * nonreturnable = 0)
-		 :nonreturnable_(nonreturnable?nonreturnable:string_type().c_str()),
-		 returnable_(returnable?returnable:string_type().c_str()),
-		 no_ispunct_(returnable),no_isspace_(nonreturnable),
-		 return_delims_(return_delims){}
+		 :returnable_(returnable?returnable:string_type().c_str()),
+		 nonreturnable_(nonreturnable?nonreturnable:string_type().c_str()),
+		 return_delims_(return_delims),no_ispunct_(returnable),
+		 no_isspace_(nonreturnable){}
 
      void reset(){}
 
@@ -294,4 +294,3 @@ namespace boost{
 
 
 #endif 
-
