@@ -25,6 +25,7 @@
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
 #include "boost/aligned_storage.hpp"
+#include "boost/assert.hpp"
 #include "boost/compressed_pair.hpp"
 #include "boost/empty.hpp"
 #include "boost/incomplete_fwd.hpp"
@@ -1038,54 +1039,69 @@ public: // queries
 
 private: // helpers, for visitation support (below)
 
-    template <typename Which, typename Iterator, typename LastIterator, typename Variant, typename Visitor>
+    template <typename Which, typename T, typename Variant, typename Visitor>
+    static
+        typename Visitor::result_type
+    apply_visitor_impl(const int var_which, Variant& var, Visitor& visitor)
+    {
+        typedef typename mpl::if_<
+              is_const<Variant>
+            , const T
+            , T
+            >::type cv_type;
+
+        BOOST_ASSERT(var_which == Which::value);
+        return visitor(
+              *static_cast< cv_type* >( var.active_storage() )
+            );
+    }
+
+    template <
+          typename Which, typename T
+        , typename NextIt, typename LastIt
+        , typename Variant, typename Visitor
+        >
     static
         typename Visitor::result_type
     apply_visitor_impl(
           const int var_which // [const-ness may aid in optimization by compiler]
         , Variant& var
         , Visitor& visitor
-        , mpl::false_// is_last
+        , mpl::false_// next_is_last
         )
     {
         typedef typename mpl::next<Which>::type next_which;
-        typedef typename mpl::next<Iterator>::type next_iter;
-        typedef mpl::bool_<is_same<next_iter, LastIterator>::value> next_is_last;
-        typedef typename mpl::apply_if<
-              is_const<Variant>
-            , add_const<typename Iterator::type>
-            , mpl::identity<typename Iterator::type>
-            >::type T;
+        typedef typename NextIt::type next_type;
+        typedef typename mpl::next<NextIt>::type next_next_it;
+        typedef typename is_same<next_next_it, LastIt>::type next_next_is_last;
 
         if (var_which == Which::value)
         {
-            return visitor(
-                  *static_cast<T*>( var.active_storage() )
-                );
+            return apply_visitor_impl<Which, T>(var_which, var, visitor);
         }
 
-        return apply_visitor_impl<next_which, next_iter, LastIterator>(
-              var_which
-            , var
-            , visitor
-            , next_is_last()
-            );
+        return apply_visitor_impl<
+              next_which, next_type
+            , next_next_it, LastIt
+            , Variant, Visitor  // explicitly specify for g++ 2.95 (and others?)
+            >(var_which, var, visitor, next_next_is_last());
     }
 
-    template <typename W, typename I, typename LI, typename Variant, typename Visitor>
+    template <
+          typename Which, typename T
+        , typename NI, typename LI
+        , typename Variant, typename Visitor
+        >
     static
         typename Visitor::result_type
     apply_visitor_impl(
-          const int
-        , Variant&
-        , Visitor&
-        , mpl::true_// is_last
+          const int var_which
+        , Variant& var
+        , Visitor& visitor
+        , mpl::true_// next_is_last
         )
     {
-        // | This is never called at runtime: a visitor must handle at |
-        // | least one of the variant's types. Throw to circumvent the |
-        // | compile-time requirement that a value is returned:        |
-        throw;
+        return apply_visitor_impl<Which, T>(var_which, var, visitor);
     }
 
 // helpers, for visitation support (below) -- private when possible
@@ -1106,10 +1122,16 @@ public:
         typename Visitor::result_type
     raw_apply_visitor(Visitor& visitor)
     {
+        typedef mpl::int_<0> first_which;
+        typedef typename mpl::begin<types>::type first_it;
+        typedef typename first_it::type first_type;
+        typedef typename mpl::next<first_it>::type next_it;
+        typedef typename mpl::end<types>::type last_it;
+
         return apply_visitor_impl<
-              mpl::int_<0>
-            , typename mpl::begin<types>::type
-            , typename mpl::end<types>::type
+              first_which, first_type
+            , next_it, last_it
+            , variant, Visitor
             >(which(), *this, visitor, mpl::false_());
     }
 
@@ -1117,10 +1139,16 @@ public:
         typename Visitor::result_type
     raw_apply_visitor(Visitor& visitor) const
     {
+        typedef mpl::int_<0> first_which;
+        typedef typename mpl::begin<types>::type first_it;
+        typedef typename first_it::type first_type;
+        typedef typename mpl::next<first_it>::type next_it;
+        typedef typename mpl::end<types>::type last_it;
+
         return apply_visitor_impl<
-              mpl::int_<0>
-            , typename mpl::begin<types>::type
-            , typename mpl::end<types>::type
+              first_which, first_type
+            , next_it, last_it
+            , const variant, Visitor
             >(which(), *this, visitor, mpl::false_());
     }
 
