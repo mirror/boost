@@ -1145,6 +1145,16 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
    return dat;
 }
 
+#ifndef __CODEGUARD__
+// this must not be inline when Borland's codeguard support is turned
+// on, otherwise we _will_ get surious codeguard errors...
+inline
+#endif
+ re_detail::re_syntax_base* add_offset(void* base, std::ptrdiff_t off)
+{
+   return (re_detail::re_syntax_base*)((char*)base + off);
+}
+
 
 template <class charT, class traits, class Allocator>
 void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces)
@@ -1168,7 +1178,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
          switch(ptr->type)
          {
          case re_detail::syntax_element_rep:
-            ((re_detail::re_jump*)ptr)->alt.p = (re_detail::re_syntax_base*)(base + ((re_detail::re_jump*)ptr)->alt.i);
+            ((re_detail::re_jump*)ptr)->alt.p = add_offset(base, ((re_detail::re_jump*)ptr)->alt.i);
 #ifdef BOOST_RE_DEBUG
             if((re_detail::padding_mask & (int)((re_detail::re_jump*)ptr)->alt.p) && (((re_detail::re_jump*)ptr)->alt.p != b))
             {
@@ -1181,7 +1191,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
             goto rebase;
          case re_detail::syntax_element_jump:
          case re_detail::syntax_element_alt:
-            ((re_detail::re_jump*)ptr)->alt.p = (re_detail::re_syntax_base*)(base + ((re_detail::re_jump*)ptr)->alt.i);
+            ((re_detail::re_jump*)ptr)->alt.p = add_offset(base, ((re_detail::re_jump*)ptr)->alt.i);
 #ifdef BOOST_RE_DEBUG
             if((re_detail::padding_mask & (int)((re_detail::re_jump*)ptr)->alt.p) && (((re_detail::re_jump*)ptr)->alt.p != b))
             {
@@ -1203,7 +1213,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
             goto rebase;
          default:
             rebase:
-            ptr->next.p = (re_detail::re_syntax_base*)(base + ptr->next.i);
+            ptr->next.p = add_offset(base, ptr->next.i);
 #ifdef BOOST_RE_DEBUG
             if((re_detail::padding_mask & (int)(ptr->next.p)) && (((re_detail::re_jump*)ptr)->alt.p != b))
             {
