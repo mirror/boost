@@ -57,5 +57,5 @@ test-suite iterator
     [ run ../../utility/reverse_iterator_example.cpp ]
     [ run ../../utility/transform_iterator_example.cpp ]
     [ run ../../utility/iterator_traits_test.cpp ]
-      
+    [ run ../../utility/shared_iterator_test.cpp ]
 ;

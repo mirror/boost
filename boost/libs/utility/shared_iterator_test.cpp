@@ -1,7 +1,18 @@
-// (C) Copyright Ronald Garcia 2003. Permission to copy, use, modify, sell and
-// distribute this software is granted provided this copyright notice appears
-// in all copies. This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright 2003 The Trustees of Indiana University.
+
+// Use, modification and distribution is subject to the Boost Software 
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+//  Shared container iterator adaptor 
+//  Author: Ronald Garcia
+//  See http://boost.org/libs/utility/shared_container_iterator.html 
+//  for documentation. 
+
+//
+// shared_iterator_test.cpp - Regression tests for shared_container_iterator.
+//
+
 
 #include "boost/shared_container_iterator.hpp"
 #include "boost/shared_ptr.hpp"
