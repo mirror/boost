@@ -117,13 +117,14 @@ void call_traits_checker<T>::operator()(param_type p)
    assert(t == c.value());
    assert(t == c.get());
    assert(t == c.const_get());
-
+#ifndef __ICL
    //cout << "typeof contained<" << typeid(T).name() << ">::v_ is:           " << typeid(&contained<T>::v_).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::value() is:      " << typeid(&contained<T>::value).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::get() is:        " << typeid(&contained<T>::get).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::const_get() is:  " << typeid(&contained<T>::const_get).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::call() is:       " << typeid(&contained<T>::call).name() << endl;
    cout << endl;
+#endif
 }
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -371,5 +372,6 @@ unsigned int expected_failures = 4;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
