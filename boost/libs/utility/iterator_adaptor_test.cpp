@@ -59,6 +59,7 @@
 #include <vector>
 #include <deque>
 #include <set>
+#include <list>
 
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
@@ -138,12 +139,12 @@ main()
   }
   {  
     // Test computation of default when the Value is const
-    typedef boost::iterator_adaptor<int*,
+    typedef boost::iterator_adaptor<std::list<int>::iterator,
       boost::default_iterator_policies,
       boost::value_type_is<const int> > Iter1;
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::value_type, int>::value));
 #ifdef __BORLANDC__
-    // This is a bug
+    // This is a bug...
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, int&>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, int*>::value));
 #else
@@ -155,14 +156,14 @@ main()
     // Test with no defaults
     typedef boost::iterator_adaptor<int*, boost::default_iterator_policies,
       boost::reference_is<long>,
-      boost::pointer_is<float>,
+      boost::pointer_is<float*>,
       boost::value_type_is<char>,
       boost::iterator_category_is<std::input_iterator_tag>,
       boost::difference_type_is<int>
     > Iter1;
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::value_type, char>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, long>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, float>::value));
+    BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, float*>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::difference_type, int>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::iterator_category, std::input_iterator_tag>::value));
   }
