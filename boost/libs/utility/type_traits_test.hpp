@@ -1,15 +1,19 @@
- // boost::compressed_pair test program   
+// boost::compressed_pair test program   
     
- //  (C) Copyright John Maddock 2000. Permission to copy, use, modify, sell and   
- //  distribute this software is granted provided this copyright notice appears   
- //  in all copies. This software is provided "as is" without express or implied   
- //  warranty, and with no claim as to its suitability for any purpose.   
+//  (C) Copyright John Maddock 2000. Permission to copy, use, modify, sell and
+//  distribute this software is granted provided this copyright notice appears
+//  in all copies. This software is provided "as is" without express or implied
+//  warranty, and with no claim as to its suitability for any purpose.
 
 // common test code for type_traits_test.cpp/call_traits_test.cpp/compressed_pair_test.cpp
 
 
 #ifndef BOOST_TYPE_TRAITS_TEST_HPP
 #define BOOST_TYPE_TRAITS_TEST_HPP
+
+// Variable declarations must come before test_align due to two-phase lookup
+unsigned failures = 0;
+unsigned test_count = 0;
 
 //
 // this one is here just to suppress warnings:
@@ -94,8 +98,6 @@ struct test_align<T&>
 
 //
 // define tests here
-unsigned failures = 0;
-unsigned test_count = 0;
 
 //
 // turn off some warnings:
