@@ -17,7 +17,7 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
 
-/** <p>Repeats the macro <code>MACRO(INDEX,DATA)</code> for <code>INDEX = [FIRST,LAST[</code>.</p>
+/** <p>Repeats the macro <code>MACRO(INDEX,DATA)</code> for <code>INDEX = [FIRST,LAST)</code>.</p>
 
 <p>In other words, expands to the sequence:</p>
 

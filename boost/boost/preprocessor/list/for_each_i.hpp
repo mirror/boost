@@ -18,7 +18,7 @@
 #include <boost/preprocessor/for.hpp>
 
 /** <p>Repeats <code>MACRO(R,DATA,INDEX,BOOST_PP_LIST_AT(LIST,INDEX))</code> for each INDEX = [0,
-BOOST_PP_LIST_SIZE(LIST)[.</p>
+BOOST_PP_LIST_SIZE(LIST)).</p>
 
 <p>In other words, expands to the sequence:</p>
 
