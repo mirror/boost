@@ -38,6 +38,7 @@
 
 
 namespace boost {
+namespace tuples {
 
 inline bool operator==(const null_type&, const null_type&) { return true; }
 inline bool operator>=(const null_type&, const null_type&) { return true; }
@@ -48,7 +49,6 @@ inline bool operator>(const null_type&, const null_type&) { return false; }
 
 
 namespace detail {
-namespace tuples {
   // comparison operators check statically the length of its operands and
   // delegate the comparing task to the following functions. Hence
   // the static check is only made once (should help the compiler).  
@@ -107,7 +107,6 @@ inline bool gte(const T1& lhs, const T2& rhs) {
 template<>
 inline bool gte<null_type,null_type>(const null_type&, const null_type&) { return true; }
 
-} // end of namespace tuples
 } // end of namespace detail
 
 
@@ -116,10 +115,10 @@ inline bool gte<null_type,null_type>(const null_type&, const null_type&) { retur
 template<class T1, class T2, class S1, class S2>
 inline bool operator==(const cons<T1, T2>& lhs, const cons<S1, S2>& rhs)
 {
-  // check that tuple_lengths are equal
-  BOOST_STATIC_ASSERT(tuple_length<T2>::value == tuple_length<S2>::value);
+  // check that tuple lengths are equal
+  BOOST_STATIC_ASSERT(length<T2>::value == length<S2>::value);
 
-  return  detail::tuples::eq(lhs, rhs);
+  return  detail::eq(lhs, rhs);
 }
 
 // not equal -----
@@ -128,52 +127,53 @@ template<class T1, class T2, class S1, class S2>
 inline bool operator!=(const cons<T1, T2>& lhs, const cons<S1, S2>& rhs)
 {
 
-  // check that tuple_lengths are equal
-  BOOST_STATIC_ASSERT(tuple_length<T2>::value == tuple_length<S2>::value);
+  // check that tuple lengths are equal
+  BOOST_STATIC_ASSERT(length<T2>::value == length<S2>::value);
 
-  return detail::tuples::neq(lhs, rhs);
+  return detail::neq(lhs, rhs);
 }
 
 // <
 template<class T1, class T2, class S1, class S2>
 inline bool operator<(const cons<T1, T2>& lhs, const cons<S1, S2>& rhs)
 {
-  // check that tuple_lengths are equal
-  BOOST_STATIC_ASSERT(tuple_length<T2>::value == tuple_length<S2>::value);
+  // check that tuple lengths are equal
+  BOOST_STATIC_ASSERT(length<T2>::value == length<S2>::value);
 
-  return detail::tuples::lt(lhs, rhs);
+  return detail::lt(lhs, rhs);
 }
 
 // >
 template<class T1, class T2, class S1, class S2>
 inline bool operator>(const cons<T1, T2>& lhs, const cons<S1, S2>& rhs)
 {
-  // check that tuple_lengths are equal
-  BOOST_STATIC_ASSERT(tuple_length<T2>::value == tuple_length<S2>::value);
+  // check that tuple lengths are equal
+  BOOST_STATIC_ASSERT(length<T2>::value == length<S2>::value);
 
-  return detail::tuples::gt(lhs, rhs);
+  return detail::gt(lhs, rhs);
 }
 
 // <=
 template<class T1, class T2, class S1, class S2>
 inline bool operator<=(const cons<T1, T2>& lhs, const cons<S1, S2>& rhs)
 {
-  // check that tuple_lengths are equal
-  BOOST_STATIC_ASSERT(tuple_length<T2>::value == tuple_length<S2>::value);
+  // check that tuple lengths are equal
+  BOOST_STATIC_ASSERT(length<T2>::value == length<S2>::value);
 
-  return detail::tuples::lte(lhs, rhs);
+  return detail::lte(lhs, rhs);
 }
 
 // >=
 template<class T1, class T2, class S1, class S2>
 inline bool operator>=(const cons<T1, T2>& lhs, const cons<S1, S2>& rhs)
 {
-  // check that tuple_lengths are equal
-  BOOST_STATIC_ASSERT(tuple_length<T2>::value == tuple_length<S2>::value);
+  // check that tuple lengths are equal
+  BOOST_STATIC_ASSERT(length<T2>::value == length<S2>::value);
 
-  return detail::tuples::gte(lhs, rhs);
+  return detail::gte(lhs, rhs);
 }
 
+} // end of namespace tuples
 } // end of namespace boost
 
 

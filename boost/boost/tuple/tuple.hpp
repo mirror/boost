@@ -32,5 +32,14 @@
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+namespace boost {				    
+
+using tuples::tuple;
+using tuples::make_tuple;
+using tuples::tie;
+using tuples::get;
+   
+} // end namespace boost
+
 
 #endif	// BOOST_TUPLE_HPP
