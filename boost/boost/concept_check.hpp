@@ -712,7 +712,7 @@ struct require_same { typedef T type; };
 
       const_constraints(c);
     }
-    void const_constraits(const RandomAccessContainer& c) {
+    void const_constraints(const RandomAccessContainer& c) {
       const_reference r = c[n];
       ignore_unused_variable_warning(r);
     }
