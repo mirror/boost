@@ -58,7 +58,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     const std::size_t ulong_width = std::numeric_limits<unsigned long>::digits;
     const unsigned long ulong_max =(std::numeric_limits<unsigned long>::max)();
 
-    unsigned long numbers[]   = { 0, 1, 40247, ulong_max >> 1, ulong_max };
+    static unsigned long numbers[]   = { 0, 1, 40247, ulong_max >> 1, ulong_max };
     const std::size_t array_count = sizeof(numbers) / sizeof(numbers[0]);
 
     for (std::size_t i = 0; i < array_count; ++i) {
