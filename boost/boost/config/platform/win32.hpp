@@ -13,15 +13,20 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
-#ifndef BOOST_DISABLE_WIN32
 //
 // Win32 will normally be using native Win32 threads,
-// but there is a pthread library avaliable as an option:
+// but there is a pthread library avaliable as an option,
+// we used to disable this when BOOST_DISABLE_WIN32 was 
+// defined but no longer - this should allow some
+// files to be compiled in strict mode - while maintaining
+// a consistent setting of BOOST_HAS_THREADS across
+// all translation units (needed for shared_ptr etc).
 //
 #ifndef BOOST_HAS_PTHREADS
 #  define BOOST_HAS_WINTHREADS
 #endif
 
+#ifndef BOOST_DISABLE_WIN32
 // WEK: Added
 #define BOOST_HAS_FTIME
 

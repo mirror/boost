@@ -49,11 +49,14 @@
 // If the streams are not native, and we have a "using ::x" compiler bug
 // then the io stream facets are not available in namespace std::
 //
-#if !defined(_STLP_OWN_IOSTREAMS) && defined(_STLP_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
-#  define BOOST_NO_STD_LOCALE
-#endif
-#if !defined(__SGI_STL_OWN_IOSTREAMS) && defined(__STL_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
-#  define BOOST_NO_STD_LOCALE
+#ifdef _STLPORT_VERSION
+#  if !defined(_STLP_OWN_IOSTREAMS) && defined(_STLP_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
+#     define BOOST_NO_STD_LOCALE
+#  endif
+#else
+#  if !defined(__SGI_STL_OWN_IOSTREAMS) && defined(__STL_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
+#     define BOOST_NO_STD_LOCALE
+#  endif
 #endif
 
 //
