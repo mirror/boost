@@ -16,7 +16,40 @@
 <section id="variant.tutorial.preprocessor">
   <title>Preprocessor macros</title>
 
-  <!-- TODO -->
+  <para>While the <code>variant</code> class template's variadic parameter
+    list greatly simplifies use for specific instantiations of the template,
+    it significantly complicates use for generic instantiations. For instance,
+    while it is immediately clear how one might write a function accepting a
+    specific <code>variant</code> instantiation, say
+    <code>variant&lt;int, std::string&gt;</code>, it is less clear how one
+    might write a function accepting any given <code>variant</code>.</para>
+
+  <para>Due to the lack of support for true variadic template parameter lists
+    in the C++98 standard, the preprocessor is needed. While the
+    <libraryname>Preprocessor</libraryname> library provides a general and
+    powerful solution, the need to repeat
+    <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>
+    unnecessarily clutters otherwise simple code. Therefore, for common
+    use-cases, this library provides its own macro
+    <code><link linkend="variant.macro.BOOST_VARIANT_ENUM_PARAMS">BOOST_VARIANT_ENUM_PARAMS</link></code>.</para>
+
+  <para>This macro simplifies for the user the process of declaring 
+    <code>variant</code> types in function templates or explicit partial
+    specializations of class templates, as shown in the following:
+
+<programlisting>// general cases
+template &lt;typename T&gt; void some_func(const T &amp;);
+template &lt;typename T&gt; class some_class;
+
+// function template overload
+template &lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(typename T)</emphasis>&gt;
+void some_func(const <classname>boost::variant</classname>&lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(T)</emphasis>&gt; &amp;);
+
+// explicit partial specialization
+template &lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(typename T)</emphasis>&gt;
+class some_class&lt; <classname>boost::variant</classname>&lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(T)</emphasis>&gt; &gt;;</programlisting>
+
+  </para>
 
 </section>
 
@@ -121,12 +154,19 @@ int_tree_t var(result);</programlisting>
 
   </para>
 
-  <para>One might represent the content of the resultant <code>var</code> as
+  <para>One might represent the resultant content of <code>var</code> as
     <code>( 1 ( 3 5 ) 7 )</code>. The &quot;depth&quot; of this tree could
     of course be greater, and is in fact limited only by available
     memory.</para>
 
-  <!-- TODO: Add portability note and boost::incomplete workaround -->
+  <para><emphasis role="bold">Portability</emphasis>: Unfortunately, due to
+    standard conformance issues in several compilers,
+    <code>recursive_variant</code> is not universally supported. On these
+    compilers the library indicates its lack of support for via the definition
+    of the preprocessor symbol
+    <code><link linkend="variant.macro.BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT">BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT</link></code>.</para>
+
+  <!-- TODO: mention boost::incomplete workaround -->
 
 </section>
 
