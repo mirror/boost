@@ -1,10 +1,11 @@
-// demo.cpp : demonstrates usage of serialization system
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// demo.cpp
 //
+// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-//
-//  See http://www.boost.org for updates, documentation, and revision history.
+
 
 #include <iomanip>
 #include <iostream>
@@ -296,9 +297,6 @@ restore_schedule(bus_schedule &s, const char * filename)
 
 int main(int argc, char *argv[])
 {   
-	std::string filename(boost::archive::tmpdir());
-	filename += "/demofile.txt";
-
     // make the schedule
     bus_schedule original_schedule;
 
@@ -351,6 +349,9 @@ int main(int argc, char *argv[])
     std::cout << "original schedule";
     std::cout << original_schedule;
     
+    std::string filename(boost::archive::tmpdir());
+    filename += "/demofile.txt";
+
     // save the schedule
     save_schedule(original_schedule, filename.c_str());
 

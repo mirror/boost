@@ -81,8 +81,8 @@ test_main( int /* argc */, char* /* argv */[] )
     A a;
     B b;
     std::string filename;
-	filename += boost::archive::tmpdir();
-	filename += '/';
+    filename += boost::archive::tmpdir();
+    filename += '/';
     filename += BOOST_PP_STRINGIZE(testfile_);
     filename += BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST);
     out(filename.c_str(), a, b);

@@ -58,17 +58,17 @@ private:
         ar & BOOST_SERIALIZATION_NVP(g);
         #endif
         #if BOOST_WORKAROUND(__BORLANDC__,  <= 0x551 )
-        	int i;
-        	if(Archive::is_saving::value){
-        		i = l;
-        		ar & BOOST_SERIALIZATION_NVP(i);
-        	}
-        	else{
-        		ar & BOOST_SERIALIZATION_NVP(i);
-        		l = i;
-        	}
+            int i;
+            if(Archive::is_saving::value){
+                i = l;
+                ar & BOOST_SERIALIZATION_NVP(i);
+            }
+            else{
+                ar & BOOST_SERIALIZATION_NVP(i);
+                l = i;
+            }
         #else
-        	ar & BOOST_SERIALIZATION_NVP(l);
+            ar & BOOST_SERIALIZATION_NVP(l);
         #endif
         ar & BOOST_SERIALIZATION_NVP(m);
         ar & BOOST_SERIALIZATION_NVP(n);

@@ -17,7 +17,14 @@
 #include <locale>
 #include <vector>
 
+#include <cstdio> // remove
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include "test_tools.hpp"
 
 #include <boost/archive/add_facet.hpp>
@@ -73,10 +80,10 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         ofs.open(testfile, std::ios::binary);
         std::copy(
             td::wchar_encoding,
-        	// borland 5.60 complains about this
+            // borland 5.60 complains about this
             // td::wchar_encoding + sizeof(td::wchar_encoding)/sizeof(wchar_t),
-        	// so use this instead
-        	td::wchar_encoding + 13,
+            // so use this instead
+            td::wchar_encoding + 13,
             boost::archive::iterators::ostream_iterator<wchar_t>(ofs)
         );
     }
@@ -85,11 +92,11 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         std::wifstream ifs;
         ifs.imbue(*null_locale);
         ifs.open(testfile, std::ios::binary);
- 		ok = std::equal(
+        ok = std::equal(
             td::wchar_encoding,
-        	// borland 5.60 complains about this
+            // borland 5.60 complains about this
             // td::wchar_encoding + sizeof(td::wchar_encoding)/sizeof(wchar_t),
-        	// so use this instead
+            // so use this instead
             td::wchar_encoding + 13,
             boost::archive::iterators::istream_iterator<wchar_t>(ifs)
         );
@@ -105,14 +112,14 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         
         std::wifstream ifs("testfile2");
         ifs.imbue(*null_locale);
-        int i2;	
+        int i2;
         ifs >> i2;
         BOOST_CHECK(i == i2);
         ifs.close();
     }
  
     delete null_locale;
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

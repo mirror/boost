@@ -14,8 +14,16 @@
 #include <fstream>
 #include <string>
 
-#include <boost/serialization/shared_ptr.hpp>
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/archive/tmpdir.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -71,8 +79,8 @@ void display(boost::shared_ptr<A> &spa, boost::shared_ptr<A> &spa1)
 
 int main(int argc, char *argv[])
 {
-	std::string filename(boost::archive::tmpdir());
-	filename += "/testfile";
+    std::string filename(boost::archive::tmpdir());
+    filename += "/testfile";
 
     // create  a new shared pointer to ta new object of type A
     boost::shared_ptr<A> spa(new A);
@@ -122,11 +130,11 @@ int main(int argc, char *argv[])
         boost::archive::text_oarchive oa(ofs);
         oa.register_type(static_cast<B *>(NULL));
         oa.register_type(
-        	static_cast<
-        		boost::detail::sp_counted_base_impl<
-        			B *, boost::checked_deleter<B> 
-        		> *
-        	>(NULL)
+            static_cast<
+                boost::detail::sp_counted_base_impl<
+                    B *, boost::checked_deleter<B> 
+                > *
+            >(NULL)
         );
         oa << spa;
         oa << spa1;
@@ -146,18 +154,18 @@ int main(int argc, char *argv[])
         // restore the schedule from the archive
         ia.register_type(static_cast<B *>(NULL));
         ia.register_type(
-        	static_cast<
-        		boost::detail::sp_counted_base_impl<
-        			B *, boost::checked_deleter<B> 
-        		> *
-        	>(NULL)
+            static_cast<
+                boost::detail::sp_counted_base_impl<
+                    B *, boost::checked_deleter<B> 
+                > *
+            >(NULL)
         );
         ia >> spa;
         ia >> spa1;
     }
     display(spa, spa1);
     ///////////////
-	std::remove(filename.c_str());
+    std::remove(filename.c_str());
 
     // obj of type A gets destroyed
     // as smart_ptr goes out of scope

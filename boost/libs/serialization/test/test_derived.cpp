@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
 
@@ -126,7 +134,7 @@ test_main( int /* argc */, char* /* argv */[] )
 
     save_derived(testfile);
     load_derived(testfile);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

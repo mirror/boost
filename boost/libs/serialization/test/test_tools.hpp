@@ -21,7 +21,7 @@
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::tmpnam;
-	using ::remove;
+    using ::remove;
 }
 #endif
 
@@ -38,7 +38,7 @@ struct leak_reporter {
         _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
     }
     ~leak_reporter(){
-//		_CrtDumpMemoryLeaks(); // replaced by the above
+//        _CrtDumpMemoryLeaks(); // replaced by the above
     }
 };
 leak_reporter leak_reporter::instance;
@@ -58,19 +58,24 @@ leak_reporter leak_reporter::instance;
 
 #if defined(__BORLANDC__) 
 namespace { 
-    using std::_tempnam;
-    using std::getenv;
-	// borland defines strcpy as a macro in release mode
+    // borland defines strcpy as a macro in release mode
     #if ! defined(NDEBUG)
     using std::strcpy;
     #endif
 }
 #endif
 
+#if defined(BOOST_MSVC)
+    namespace std{ 
+        using ::_tempnam;
+    } // namespace std
+#endif  
+
+
 char * tmpnam(char * buffer){
     static char ibuffer [256];
-	const char * dname = boost::archive::tmpdir();
-	/* const */ char * tfilename = _tempnam(dname, "ser");
+    char * dname = boost::archive::tmpdir();
+    char * tfilename = std::_tempnam(dname, "ser");
     if(NULL == buffer){
         strcpy(ibuffer, tfilename);
         delete tfilename;

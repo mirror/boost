@@ -18,9 +18,9 @@
 #include <boost/archive/detail/basic_serializer_map.hpp>
 
 namespace boost {
-	namespace serialization {
-		class extended_type_info;
-	}
+    namespace serialization {
+        class extended_type_info;
+    }
 namespace archive {
 namespace detail {
 
@@ -30,9 +30,9 @@ bool basic_serializer_map::insert(const basic_serializer * bs){
 
 class basic_serializer_arg : public basic_serializer {
 public:
-	basic_serializer_arg(const serialization::extended_type_info & eti) :
-		basic_serializer(eti)
-	{}
+    basic_serializer_arg(const serialization::extended_type_info & eti) :
+        basic_serializer(eti)
+    {}
 };
 
 const basic_serializer * basic_serializer_map::tfind(

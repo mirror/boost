@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/serialization/list.hpp>
 #ifdef BOOST_HAS_SLIST
 #include <boost/serialization/slist.hpp>
@@ -59,7 +67,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(aslist == aslist1);
     
     #endif
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+//
 // demo_portable_binary_archive.cpp
-
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+//
+// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -35,11 +36,11 @@ class A
 public:
     bool operator==(A & rhs){
         return
-        	i == rhs.i && ui == rhs.ui && l == rhs.l && ul == rhs.ul
+            i == rhs.i && ui == rhs.ui && l == rhs.l && ul == rhs.ul
         ;
     }
     A() :
-		i(std::rand()),
+        i(std::rand()),
         ui(std::rand()),
         l(std::rand()),
         ul(std::rand())

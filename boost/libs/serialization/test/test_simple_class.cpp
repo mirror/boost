@@ -10,9 +10,17 @@
 
 // invoke header for a custom archive test.
 
-#include "test_tools.hpp"
-
 #include <fstream>
+
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
+#include "test_tools.hpp"
 
 #include <boost/serialization/nvp.hpp>
 #include "A.hpp"

@@ -176,11 +176,11 @@ class basic_iarchive_impl
         const basic_iserializer & bis
     );
 
-	// redirect through virtual functions to load functions for this archive
-	template<class T>
-	void load(basic_iarchive & ar, T & t){
-		ar.vload(t);
-	}
+    // redirect through virtual functions to load functions for this archive
+    template<class T>
+    void load(basic_iarchive & ar, T & t){
+        ar.vload(t);
+    }
 
 public:
     void delete_created_pointers();
@@ -197,7 +197,7 @@ public:
         void * & t, 
         const basic_pointer_iserializer * bpis,
         const basic_pointer_iserializer * (*finder)(
-        	const boost::serialization::extended_type_info & type
+            const boost::serialization::extended_type_info & type
         )
     );
 }; 
@@ -209,7 +209,7 @@ basic_iarchive_impl::delete_created_pointers()
         const created_pointer_type & cp = created_pointers.front();
 
         // figure out the class of the object to be deleted
- 		// note: extra line used to evand borland issue
+        // note: extra line used to evade borland issue
         const int id = cp.class_id;
         const cobject_id & co = cobject_id_vector[id];
         // with the appropriate input serializer, 
@@ -251,7 +251,7 @@ basic_iarchive_impl::load_preamble(
         }
         else{
             // override tracking with indicator from class information
-        	co.tracking_level = co.bis_ptr->tracking();
+            co.tracking_level = co.bis_ptr->tracking();
             co.file_version = version_type(
                 co.bis_ptr->version()
             );
@@ -329,7 +329,7 @@ basic_iarchive_impl::load_pointer(
         if(NULL == bpis_ptr
         // or polymorphic
         || bpis_ptr->get_basic_serializer().is_polymorphic()){
-        	// is must have been exported
+            // is must have been exported
             char key[BOOST_SERIALIZATION_MAX_KEY_SIZE];
             class_name_type class_name(key);
             load(ar, class_name);
@@ -345,11 +345,11 @@ basic_iarchive_impl::load_pointer(
         }
         assert(NULL != bpis_ptr);
         class_id_type new_cid = register_type(bpis_ptr->get_basic_serializer());
-		int i = cid;
+        int i = cid;
         cobject_id_vector[i].bpis_ptr = bpis_ptr;
         assert(new_cid == cid);
     }
-	int i = cid;
+    int i = cid;
     cobject_id & co = cobject_id_vector[i];
     const basic_iserializer * bis_ptr = co.bis_ptr;
     bpis_ptr = co.bpis_ptr;
@@ -368,25 +368,25 @@ basic_iarchive_impl::load_pointer(
         state_saver<bool> x(is_object);
         is_object = false;
 
-		if(bis_ptr->tracking()){
-			// predict next object id to be created
-			const unsigned int i = object_id_vector.size();
+        if(bis_ptr->tracking()){
+            // predict next object id to be created
+            const unsigned int i = object_id_vector.size();
 
-			// because the following operation could move the items
-			// don't use co after this
-			object_id_vector.push_back(aobject(t, cid));
-			bpis_ptr->load_object_ptr(
-				ar, 
-				object_id_vector[i].address, 
-				co.file_version
-			);
-			t = object_id_vector[i].address;
+            // because the following operation could move the items
+            // don't use co after this
+            object_id_vector.push_back(aobject(t, cid));
+            bpis_ptr->load_object_ptr(
+                ar, 
+                object_id_vector[i].address, 
+                co.file_version
+            );
+            t = object_id_vector[i].address;
             // and add to list of created pointers
             created_pointers.push_back(created_pointer_type(cid, t));
-		}
-		else{
-			bpis_ptr->load_object_ptr(ar, t, co.file_version);
-		}
+        }
+        else{
+            bpis_ptr->load_object_ptr(ar, t, co.file_version);
+        }
         assert(NULL != t);
     }
 
@@ -403,7 +403,7 @@ basic_iarchive::basic_iarchive() :
 
 basic_iarchive::~basic_iarchive()
 {
-	delete pimpl;
+    delete pimpl;
 }
 
 void basic_iarchive::load_object(

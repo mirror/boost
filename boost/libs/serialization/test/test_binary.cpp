@@ -8,13 +8,16 @@
 
 // should pass compilation and execution
 
+#include <fstream>
+
 #include <cstdlib> // for rand()
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ using ::rand; }
+namespace std{ 
+    using ::rand; 
+    using ::remove;
+}
 #endif
-
-#include <fstream>
 
 #include "test_tools.hpp"
 
@@ -30,8 +33,8 @@ class A {
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
         ar & boost::serialization::make_nvp(
-        	"data",
-        	boost::serialization::make_binary_object(data, sizeof(data))
+            "data",
+            boost::serialization::make_binary_object(data, sizeof(data))
         );
     }
 
@@ -79,7 +82,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(i == i1);
     BOOST_CHECK(a == a1);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -36,7 +36,7 @@ class fast_binary_oarchive :
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
-	friend class boost::archive::detail::interface_oarchive<derived_t>;
+    friend class boost::archive::detail::interface_oarchive<derived_t>;
     friend class basic_binary_oarchive<derived_t>;
     friend class basic_binary_oprimitive<derived_t, std::ostream>;
     friend class boost::archive::save_access;
@@ -44,7 +44,7 @@ public:
     // add base class to the places considered when matching
     // save function to a specific set of arguments.  Note, this didn't
     // work on my MSVC 7.0 system 
-//	using binary_oarchive_impl<derived_t>::load_override;
+//        using binary_oarchive_impl<derived_t>::load_override;
     // so we use the sure-fire method below.  This failed to work as well
     template<class T>
     void save_override(const T & t, BOOST_PFTO int){
@@ -85,7 +85,7 @@ class fast_binary_iarchive :
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
-	friend class boost::archive::detail::interface_iarchive<derived_t>;
+    friend class boost::archive::detail::interface_iarchive<derived_t>;
     friend class basic_binary_iarchive<derived_t>;
     friend class basic_binary_iprimitive<derived_t, std::istream>;
     friend class boost::archive::load_access;
@@ -93,7 +93,7 @@ public:
     // add base class to the places considered when matching
     // save function to a specific set of arguments.  Note, this didn't
     // work on my MSVC 7.0 system 
-//	using binary_oarchive_impl<derived_t>::load_override;
+//        using binary_oarchive_impl<derived_t>::load_override;
     // so we use the sure-fire method below.  This failed to work as well
     template<class T>
     void load_override(T & t, BOOST_PFTO int){

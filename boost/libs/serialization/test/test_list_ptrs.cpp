@@ -10,7 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/checked_delete.hpp>
@@ -105,7 +112,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         boost::checked_deleter<A>()
     );  
     #endif
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

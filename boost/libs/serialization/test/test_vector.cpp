@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include "test_tools.hpp"
 
 #include <boost/serialization/vector.hpp>
@@ -37,7 +45,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> boost::serialization::make_nvp("avector", avector1);
     }
     BOOST_CHECK(avector == avector1);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

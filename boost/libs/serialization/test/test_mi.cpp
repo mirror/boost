@@ -1,8 +1,24 @@
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// test_mi.cpp
+
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// Use, modification and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 // test of serialization of base classes with multiple inheritance
 // contributed by Peter Dimov
 
 #include <iostream>
 #include <fstream>
+
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
 
 #include "test_tools.hpp"
 
@@ -113,6 +129,6 @@ test_main( int /* argc */, char* /* argv */[] )
     std::cout << "pb->get_y(): " << pb->get_y() << std::endl;
 
     delete pc;
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }

@@ -20,12 +20,12 @@ class polymorphic_oarchive;
 
 struct A {
     // class a contains a pointer to a "hidden" declaration
-	void serialize(boost::archive::polymorphic_iarchive & ar, const unsigned int file_version);
-	void serialize(boost::archive::polymorphic_oarchive & ar, const unsigned int file_version);
-	int data;
-	bool operator==(const A & rhs) const {
-		return data == rhs.data;
-	}
+    void serialize(boost::archive::polymorphic_iarchive & ar, const unsigned int file_version);
+    void serialize(boost::archive::polymorphic_oarchive & ar, const unsigned int file_version);
+    int data;
+    bool operator==(const A & rhs) const {
+        return data == rhs.data;
+    }
 };
 
 #endif // BOOST_SERIALIZATION_EXAMPLE_DEMO_POLYMORPHIC_A_HPP

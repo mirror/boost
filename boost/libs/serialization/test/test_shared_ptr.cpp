@@ -10,11 +10,20 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/serialization/shared_ptr.hpp>
 #include "test_tools.hpp"
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/type_traits/broken_compiler_spec.hpp>
+
 
 // This is a simple class.  It contains a counter of the number
 // of objects of this class which have been instantiated.
@@ -103,7 +112,7 @@ void test_save_and_load2(boost::shared_ptr<A>& first, boost::shared_ptr<A>& seco
         ia >> BOOST_SERIALIZATION_NVP(second);
     }
     BOOST_CHECK(boost::get_pointer(first) == boost::get_pointer(second));
-	std::remove(testfile);
+    std::remove(testfile);
 }
 
 // This does the tests

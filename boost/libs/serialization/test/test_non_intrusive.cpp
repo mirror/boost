@@ -13,14 +13,15 @@
 // b) usage of a non-default constructor
 
 #include <fstream>
-#include <cstdlib> // for rand()
+#include <cstdlib> // for rand(), remove
 #include <cmath> // for fabs()
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
-    using ::rand; 
-    using ::fabs; 
+    using ::rand;
+    using ::fabs;
+    using ::remove;
 }
 #endif
 
@@ -163,7 +164,7 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
     save(testfile);
     load(testfile);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

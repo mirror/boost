@@ -128,7 +128,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(amultimap == amultimap1);
     #endif
 
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -25,5 +25,4 @@ runtest VC7.1
 TOOLS=msvc6
 makepath
 runtest msvc
-
-
+runtest msvc-stlport

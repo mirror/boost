@@ -68,24 +68,24 @@ rule run-invoke ( test-name : sources * : defn * )
     if $(BOOST_SERIALIZATION_TEST_RELEASE) {
         return [ 
             run 
-            	$(sources)
-            	<lib>../../test/build/boost_test_exec_monitor
-            	<lib>../../serialization/build/boost_serialization
+                $(sources)
+                <lib>../../test/build/boost_test_exec_monitor
+                <lib>../../serialization/build/boost_serialization
             : # args
             : # input files
             : # requirements
-            	# <threading>single
-            	# <runtime-link>static
-            	<stlport-iostream>on 
-            	<borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
+                # <threading>single
+                # <runtime-link>static
+                <stlport-iostream>on 
+                <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
                 <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
                 <borland-5.6.4><*><cxxflags>"-w-8080 -w-8071 -w-8057"
-            	<define>$(defn)
-            	<include>$(BOOST_ROOT)
+                <define>$(defn)
+                <include>$(BOOST_ROOT)
             : # name
-            	$(test-name)_release
+                $(test-name)_release
             : # default-build
-            	release
+                release
         ] ;
     }
 }
@@ -103,10 +103,10 @@ rule test-bsl-run_archive ( test-name : archive-name : sources * ) {
         return [
             run-invoke $(test-name)_$(archive-name)
             : 
-            	$(test-name).cpp $(sources).cpp
-            	<lib>../../../libs/serialization/build/boost_wserialization
+                $(test-name).cpp $(sources).cpp
+                <lib>../../../libs/serialization/build/boost_wserialization
             :
-            	BOOST_ARCHIVE_TEST=$(archive-name).hpp
+                BOOST_ARCHIVE_TEST=$(archive-name).hpp
         ] ;
     case "*" :
         return [
@@ -127,7 +127,7 @@ rule test-bsl-run_files ( test-name ) {
     for local defn in $(BOOST_ARCHIVE_LIST) {
         test-bsl-run_archive $(test-name) : $(defn:LB) ;
     }
-}	
+}
     
 test-suite "serialization" : 
     [ test-bsl-run_files test_array ]
@@ -182,14 +182,14 @@ if $(BOOST_SERIALIZATION_TEST) {
         [
             run-invoke test_codecvt_null 
             :
-            	test_codecvt_null.cpp
-            	<lib>../../../libs/serialization/build/boost_wserialization
+                test_codecvt_null.cpp
+                <lib>../../../libs/serialization/build/boost_wserialization
         ]
         [
             run-invoke test_utf8_codecvt
             :
-            	test_utf8_codecvt.cpp
-            	<lib>../../../libs/serialization/build/boost_wserialization
+                test_utf8_codecvt.cpp
+                <lib>../../../libs/serialization/build/boost_wserialization
         ]
 
         # demos
@@ -213,5 +213,5 @@ if $(BOOST_SERIALIZATION_TEST) {
         # should compile
         [ compile test_const.cpp ]
     ;
-} 
+}
 

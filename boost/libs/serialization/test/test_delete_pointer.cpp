@@ -9,6 +9,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/vector.hpp>
@@ -114,7 +122,7 @@ test_main( int /* argc */, char* /* argv */[] )
 
     //identify the leaks
     BOOST_CHECK(A::objcount == 0);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

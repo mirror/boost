@@ -16,6 +16,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -233,7 +241,7 @@ test_main( int /* argc */, char* /* argv */[] )
     save_derived(testfile);
     load_derived(testfile);
 
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

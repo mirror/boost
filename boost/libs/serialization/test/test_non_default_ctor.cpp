@@ -14,7 +14,7 @@
 
 #include <fstream>
 
-#include <cstdlib> // for rand()
+#include <cstdlib> // for rand(), remove()
 #include <cmath> // for fabs()
 
 #include <boost/config.hpp>
@@ -22,6 +22,7 @@
 namespace std{
     using ::rand; 
     using ::fabs; 
+    using ::remove;
 }
 #endif
 
@@ -188,7 +189,7 @@ test_main( int /* argc */, char* /* argv */[] )
     save(testfile);
     load(testfile);
     BOOST_CHECK(0 == A::count);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

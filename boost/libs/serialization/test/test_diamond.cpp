@@ -11,7 +11,14 @@
 #include <fstream>
 #include <iostream>
 
-#include <boost/serialization/string.hpp>
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/utility.hpp>
 
@@ -57,8 +64,8 @@ public:
     {
         return i == another.i && m == another.m;
     }
-	// make virtual to evade gcc quirk
-	virtual ~base() {};
+    // make virtual to evade gcc quirk
+    virtual ~base() {};
 private:
     int i;
     std::map<int, std::string> m;    
@@ -162,6 +169,6 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(1 == save_count);
     BOOST_CHECK(1 == load_count);
     BOOST_CHECK(b2 == b);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }

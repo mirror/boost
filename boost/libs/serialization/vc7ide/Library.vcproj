@@ -577,7 +577,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\basic_text_iprmitive.cpp">
+				RelativePath="..\src\basic_text_iprimitive.cpp">
 			</File>
 			<File
 				RelativePath="..\src\basic_text_oprimitive.cpp">

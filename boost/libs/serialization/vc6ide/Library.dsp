@@ -657,6 +657,14 @@ SOURCE=..\src\basic_serializer_map.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\basic_text_iprimitive.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\basic_text_oprimitive.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\basic_xml_archive.cpp
 # End Source File
 # Begin Source File
@@ -702,10 +710,6 @@ SOURCE=..\src\text_iarchive.cpp
 # Begin Source File
 
 SOURCE=..\src\text_oarchive.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\utf8_codecvt_facet.cpp
 # End Source File
 # Begin Source File
 

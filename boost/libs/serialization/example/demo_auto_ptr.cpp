@@ -1,24 +1,28 @@
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// demo_auto_ptr.cpp
 
-// demo_auto_ptr.cpp : demonstrates adding serialization to a template
-//
+// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-//
-//  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <list>
 #include <memory>
 #include <fstream>
 #include <string>
 
-#include <boost/config.hpp> // std::autoptr inteface wrong in dinkumware
-#include <boost/detail/workaround.hpp>
+#include <cstdio> // remove, std::autoptr inteface wrong in dinkumware
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/archive/tmpdir.hpp>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/detail/workaround.hpp>
 
 #include <boost/serialization/split_free.hpp>
 
@@ -106,8 +110,8 @@ void load(std::auto_ptr<A> &spa, const char *filename)
 
 int main(int argc, char *argv[])
 {
-	std::string filename = boost::archive::tmpdir();
-	filename += "/testfile";
+    std::string filename = boost::archive::tmpdir();
+    filename += "/testfile";
 
     // create  a new auto pointer to ta new object of type A
     std::auto_ptr<A> spa(new A);
@@ -126,6 +130,6 @@ int main(int argc, char *argv[])
     load(spa, filename.c_str());
     // obj of type A gets destroyed
     // as auto_ptr goes out of scope
-	std::remove(filename.c_str());
+    std::remove(filename.c_str());
     return 0;
 }

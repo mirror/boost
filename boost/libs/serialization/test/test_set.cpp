@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/serialization/set.hpp>
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_set.hpp>
@@ -93,6 +101,6 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(ahash_multiset == ahash_multiset1);
     
 #endif
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }

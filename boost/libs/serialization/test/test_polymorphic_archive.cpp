@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #if !defined(BOOST_ARCHIVE_TEST)
 #define BOOST_ARCHIVE_TEST polymorphic_text_archive.hpp
 #endif
@@ -40,6 +48,6 @@ int test_main(int /* argc */, char * /* argv */ [])
         ia_interface >> BOOST_SERIALIZATION_NVP(d1);
     }
     BOOST_CHECK(d == d1);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }

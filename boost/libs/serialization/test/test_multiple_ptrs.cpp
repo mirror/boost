@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include "test_tools.hpp"
 
 #include "D.hpp"
@@ -32,7 +40,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> boost::serialization::make_nvp("a", a1);
     }
     BOOST_CHECK(a == a1);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

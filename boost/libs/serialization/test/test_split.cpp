@@ -9,7 +9,14 @@
 // should pass compilation and execution
 
 #include <fstream>
-#include <cstdio>
+
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
 
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/split_free.hpp>
@@ -145,7 +152,7 @@ test_main( int /* argc */, char* /* argv */[] )
 
     out(testfile, a, b, c);
     in(testfile, a, b, c);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

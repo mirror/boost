@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include "test_tools.hpp"
 #include <boost/serialization/base_object.hpp>
 
@@ -71,7 +79,7 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
     save(testfile);
     load(testfile);
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

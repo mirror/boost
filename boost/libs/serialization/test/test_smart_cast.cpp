@@ -49,15 +49,15 @@ void test_static_reference_cast_2(){
     BOOST_CHECK_EQUAL(& b2, & scb2);
 
     // downcast
-//	BOOST_CHECK_EQUAL(& d, & (smart_cast<Derived &, Base1 &>(b1)));
-//	BOOST_CHECK_EQUAL(& d, & (smart_cast<Derived &, Base2 &>(b2)));
+//    BOOST_CHECK_EQUAL(& d, & (smart_cast<Derived &, Base1 &>(b1)));
+//    BOOST_CHECK_EQUAL(& d, & (smart_cast<Derived &, Base2 &>(b2)));
 
     // crosscast pointers fails at compiler time
     // BOOST_CHECK_EQUAL(pB2,smart_cast<B2 *>(pB1));
     // though explicit cross cast will always work
     BOOST_CHECK_EQUAL(& b2,(
         & smart_cast<Base2 &, Derived &>(
-        	smart_cast<Derived &, Base1 &>(b1)
+            smart_cast<Derived &, Base1 &>(b1)
         ))
     );
 }
@@ -81,7 +81,7 @@ void test_static_reference_cast_1(){
     // though explicit cross cast will always work
     BOOST_CHECK_EQUAL(& b2,(
         & smart_cast_reference<Base2 &>(
-        	smart_cast_reference<Derived &>(b1)
+            smart_cast_reference<Derived &>(b1)
         ))
     );
 }
@@ -107,7 +107,7 @@ void test_static_pointer_cast(){
     // though explicit cross cast will always work
     BOOST_CHECK_EQUAL(pB2,
         smart_cast<Base2 *>(
-        	smart_cast<Derived *>(pB1)
+            smart_cast<Derived *>(pB1)
         )
     );
 }
@@ -159,7 +159,7 @@ void test_dynamic_reference_cast_2(){
     // explicit cross cast should always work
     BOOST_CHECK_EQUAL(& b2, (
         & smart_cast<VBase2 &, VDerived &>(
-        	smart_cast<VDerived &, VBase1 &>(b1)
+            smart_cast<VDerived &, VBase1 &>(b1)
         ))
     );
 }
@@ -183,7 +183,7 @@ void test_dynamic_reference_cast_1(){
     // explicit cross cast should always work
     BOOST_CHECK_EQUAL(& b2, (
         & smart_cast_reference<VBase2 &>(
-        	smart_cast_reference<VDerived &>(b1)
+            smart_cast_reference<VDerived &>(b1)
         ))
     );
 }
@@ -208,7 +208,7 @@ void test_dynamic_pointer_cast(){
     // though explicit cross cast will always work
     BOOST_CHECK_EQUAL(pB2,
         smart_cast<VBase2 *>(
-        	smart_cast<VDerived *>(pB1)
+            smart_cast<VDerived *>(pB1)
         )
     );
 }

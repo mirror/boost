@@ -1,11 +1,11 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// demo_xml_save.hpp : demonstrates usage of serialization system
 //
+// demo_xml_save.cpp
+//
+// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-//
-//  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <iostream>
 #include <string>
@@ -25,10 +25,10 @@ void save_schedule(const bus_schedule &s, const char * filename){
 
 int main(int argc, char *argv[])
 {   
-	std::string filename(boost::archive::tmpdir());
-	filename += "/demo_save.xml";
+    std::string filename(boost::archive::tmpdir());
+    filename += "/demo_save.xml";
 
-	// make the schedule
+    // make the schedule
     bus_schedule original_schedule;
 
     // fill in the data
@@ -80,6 +80,9 @@ int main(int argc, char *argv[])
     std::cout << "original schedule";
     std::cout << original_schedule;
     
+    std::string filename(boost::archive::tmpdir());
+    filename += "/demo_save.xml";
+
     // save the schedule
     save_schedule(original_schedule, filename.c_str());
 

@@ -27,7 +27,7 @@
 
 class portable_binary_oarchive :
     // don't derive from binary_oarchive !!!
-	public boost::archive::binary_oarchive_impl<portable_binary_oarchive>
+    public boost::archive::binary_oarchive_impl<portable_binary_oarchive>
 {
     typedef portable_binary_oarchive derived_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -41,21 +41,21 @@ public:
         long ll = l;
         char size = 0;;
         do{
-        	ll >>= 8;
-        	++size;
+            ll >>= 8;
+            ++size;
         }while(ll != -1 && ll != 0);
 
         os.put(size);
 
-		// we choose to use litle endian
+        // we choose to use litle endian
         #ifdef BOOST_BIG_ENDIAN
-			char * first = static_cast<char *>(static_cast<void *>(& l));
-			char * last = first + size - 1;
-			for(;first < last;++first, --last){
-				char x = *first;
-				*last = *first;
-				*first = x;
-			}
+            char * first = static_cast<char *>(static_cast<void *>(& l));
+            char * last = first + size - 1;
+            for(;first < last;++first, --last){
+                char x = *first;
+                *last = *first;
+                *first = x;
+            }
         #endif
         save_binary(& l, size);
     }
@@ -84,15 +84,15 @@ public:
 public:
     portable_binary_oarchive(std::ostream & os, unsigned flags = 0) :
         boost::archive::binary_oarchive_impl<derived_t>(
-        	os, 
-			flags | boost::archive::no_header // skip default header checking 
+            os, 
+            flags | boost::archive::no_header // skip default header checking 
         )
     {
         // use our own header checking
         if(0 != (flags & boost::archive::no_header)){
-			boost::archive::basic_binary_oarchive<derived_t>::init();
-        	// skip the following for "portable" binary archives
-        	// boost::archive::basic_binary_iprimitive<derived_t, std::ostream>::init();
+            boost::archive::basic_binary_oarchive<derived_t>::init();
+            // skip the following for "portable" binary archives
+            // boost::archive::basic_binary_iprimitive<derived_t, std::ostream>::init();
         }
     }
 };

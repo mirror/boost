@@ -328,14 +328,14 @@ basic_oarchive_impl::save_pointer(
                 const char * key = NULL;
                 if(NULL != eti)
                     key = eti->key;
-				if(NULL != key){
-					// the following is required by IBM C++ compiler which
-					// makes a copy when passing a non-const to a const.  This
-					// is permitted by the standard but rarely seen in practice
-					const class_name_type cn(key);
+                if(NULL != key){
+                    // the following is required by IBM C++ compiler which
+                    // makes a copy when passing a non-const to a const.  This
+                    // is permitted by the standard but rarely seen in practice
+                    const class_name_type cn(key);
                     // write out the external class identifier
                     ar.vsave(cn);
-				}
+                }
                 else
                     // without an external class name
                     // we won't be able to de-serialize it so bail now
@@ -374,7 +374,7 @@ basic_oarchive::basic_oarchive()
 
 basic_oarchive::~basic_oarchive()
 {
-	delete pimpl;
+    delete pimpl;
 }
 
 void basic_oarchive::save_object(

@@ -23,7 +23,7 @@
 // exception to be thrown if integer read from archive doesn't fit
 // variable being loaded
 class portable_binary_archive_exception : 
-	public virtual boost::archive::archive_exception
+    public virtual boost::archive::archive_exception
 {
 public:
     typedef enum {
@@ -38,7 +38,7 @@ public:
         case incompatible_integer_size:
             msg = "integer cannot be represented";
         default:
-			boost::archive::archive_exception::what();
+            boost::archive::archive_exception::what();
         }
         return msg;
     }
@@ -50,32 +50,32 @@ public:
 // be passed across systems. Note:floating point types not addressed here
 class portable_binary_iarchive :
     // don't derive from binary_oarchive !!!
-	public boost::archive::binary_iarchive_impl<portable_binary_iarchive>
+    public boost::archive::binary_iarchive_impl<portable_binary_iarchive>
 {
-	typedef portable_binary_iarchive derived_t;
+    typedef portable_binary_iarchive derived_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class boost::archive::basic_binary_iarchive<derived_t>;
     friend class boost::archive::basic_binary_iprimitive<derived_t, std::istream>;
-	friend class boost::archive::load_access;
+    friend class boost::archive::load_access;
 #endif
     void load_impl(long & l, char maxsize){
         char size;
         size = is.get();
         if(size > maxsize)
-        	throw portable_binary_archive_exception() ;
-		l = 0;
-		load_binary(& l, size);
-		// we choose to use litle endian
-		#ifdef BOOST_BIG_ENDIAN
-			char * first = static_cast<char *>(static_cast<void *>(& l));
-			char * last = first + sizeof(l) - 1;
-			for(;first < last;++first, --last){
-				char x = *first;
-				*last = *first;
-				*first = x;
-			}
+            throw portable_binary_archive_exception() ;
+        l = 0;
+        load_binary(& l, size);
+        // we choose to use litle endian
+        #ifdef BOOST_BIG_ENDIAN
+            char * first = static_cast<char *>(static_cast<void *>(& l));
+            char * last = first + sizeof(l) - 1;
+            for(;first < last;++first, --last){
+                char x = *first;
+                *last = *first;
+                *first = x;
+            }
         #endif
     }
     // default fall through for any types not specified here
@@ -106,15 +106,15 @@ public:
 public:
     portable_binary_iarchive(std::istream & is, unsigned flags = 0) :
         boost::archive::binary_iarchive_impl<derived_t>(
-        	is, 
-        	flags | boost::archive::no_header // skip default header checking 
+            is, 
+            flags | boost::archive::no_header // skip default header checking 
         )
     {
         // use our own header checking
         if(0 != (flags & boost::archive::no_header)){
-        	boost::archive::basic_binary_iarchive<derived_t>::init();
-        	// skip the following for "portable" binary archives
-        	// boost::archive::basic_binary_oprimitive<derived_t, std::ostream>::init();
+            boost::archive::basic_binary_iarchive<derived_t>::init();
+            // skip the following for "portable" binary archives
+            // boost::archive::basic_binary_oprimitive<derived_t, std::ostream>::init();
         }
     }
 };

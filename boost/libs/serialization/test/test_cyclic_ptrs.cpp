@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include "A.hpp"
 
 #include <boost/serialization/nvp.hpp>
@@ -109,7 +117,7 @@ int test_main( int /* argc */, char* /* argv */[] )
             oa << BOOST_SERIALIZATION_NVP(k);
         }
         BOOST_CATCH (boost::archive::archive_exception ae){
-        	exception = ae;
+            exception = ae;
         }
         BOOST_CHECK(
             exception.code == boost::archive::archive_exception::pointer_conflict
@@ -121,19 +129,19 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
         exception = boost::archive::archive_exception(
-        	boost::archive::archive_exception::no_exception
+            boost::archive::archive_exception::no_exception
         );
         BOOST_TRY {
             ia >> BOOST_SERIALIZATION_NVP(k);
         }
         BOOST_CATCH (boost::archive::archive_exception ae){
-        	exception = ae;
+            exception = ae;
         }
         BOOST_CHECK(
             exception.code == boost::archive::archive_exception::pointer_conflict
         );
     }
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

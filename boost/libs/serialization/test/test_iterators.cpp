@@ -132,9 +132,9 @@ void test_transform_width(unsigned int size){
 
     BOOST_CHECK(
         std::equal(
-        	rawdata,
-        	rawdata + size,
-        	translator2(BOOST_MAKE_PFTO_WRAPPER(v6.begin()))
+            rawdata,
+            rawdata + size,
+            translator2(BOOST_MAKE_PFTO_WRAPPER(v6.begin()))
         )
     );
 

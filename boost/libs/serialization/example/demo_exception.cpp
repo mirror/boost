@@ -1,3 +1,11 @@
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// demo_exception.cpp
+
+// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
+// Use, modification and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 // Example of safe exception handling for pointer de-serialization
 // 
 // This example was prepared by Robert Ramey to demonstrate and test 
@@ -9,17 +17,25 @@
 // in the analysis and testing of issues of exception safety 
 // of the serialization library.
 
-#include <boost/config.hpp>
-#ifndef BOOST_NO_EXCEPTIONS
-#include <exception>
-#endif
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <string>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/archive/tmpdir.hpp>
+
+#ifndef BOOST_NO_EXCEPTIONS
+#include <exception>
+#endif
+
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/split_member.hpp>
 
@@ -216,10 +232,10 @@ void load(School * & school, const char *filename){
 }
 
 int main(int argc, char *argv[]){
-	std::string filename(boost::archive::tmpdir());
-	filename += "/demofile.txt";
+    std::string filename(boost::archive::tmpdir());
+    filename += "/demofile.txt";
 
-	School *school = new School();
+    School *school = new School();
     std::cout << "1. student count = " << Student::count << std::endl;
     std::cout << "2. class count = " << Course::count << std::endl;
     init(school);
@@ -236,6 +252,6 @@ int main(int argc, char *argv[]){
     delete school;
     std::cout << "9. student count = " << Student::count << std::endl;
     std::cout << "10. class count = " << Course::count << std::endl;
-	std::remove(filename.c_str());
+    std::remove(filename.c_str());
     return Student::count + Course::count;
 }

@@ -10,6 +10,14 @@
 
 #include <fstream>
 
+#include <cstdio> // remove
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+}
+#endif
+
 #include <boost/serialization/deque.hpp>
 
 #include <boost/archive/archive_exception.hpp>
@@ -37,7 +45,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(adeque == adeque1);
     
-	std::remove(testfile);
+    std::remove(testfile);
     return boost::exit_success;
 }
 

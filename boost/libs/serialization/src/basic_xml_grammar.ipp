@@ -147,7 +147,7 @@ bool basic_xml_grammar<CharType>::my_parse(
     BOOST_DEDUCED_TYPENAME basic_xml_grammar<CharType>::IStream & is,
     const rule_t & rule_,
     CharType delimiter
-){		
+){
     if(is.fail()){
         boost::throw_exception(
             archive_exception(archive_exception::stream_error)
@@ -163,8 +163,8 @@ bool basic_xml_grammar<CharType>::my_parse(
     do{
         val = is.get();
         arg += val;
-		if(is.fail())
-			return false;
+        if(is.fail())
+            return false;
     }
     while(val != delimiter);
     
@@ -180,7 +180,7 @@ bool basic_xml_grammar<CharType>::my_parse(
 
 template<class CharType>
 bool basic_xml_grammar<CharType>::parse_start_tag(
-	BOOST_DEDUCED_TYPENAME basic_xml_grammar<CharType>::IStream & is
+    BOOST_DEDUCED_TYPENAME basic_xml_grammar<CharType>::IStream & is
 ) {
     if(is.fail()){
         boost::throw_exception(
@@ -220,7 +220,7 @@ bool basic_xml_grammar<CharType>::parse_string(IStream & is, StringType & s) {
 
 template<class CharType>
 basic_xml_grammar<CharType>::basic_xml_grammar(){
-	init_chset();
+    init_chset();
     S =
         +(Sch)
     ;
@@ -389,7 +389,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 
 template<class CharType>
 void basic_xml_grammar<CharType>::init(IStream & is){
-	init_chset();
+    init_chset();
     if(! my_parse(is, XMLDecl))
         boost::throw_exception(
             xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
@@ -411,10 +411,10 @@ void basic_xml_grammar<CharType>::init(IStream & is){
 template<class CharType>
 void basic_xml_grammar<CharType>::windup(IStream & is){
     if(is.fail())
-		return;
-	// uh-oh - don't exception from code called by a destructor !
-	// so just ignore any failure.
-	my_parse(is, ETag);
+        return;
+    // uh-oh - don't exception from code called by a destructor !
+    // so just ignore any failure.
+    my_parse(is, ETag);
 }
 
 } // namespace archive

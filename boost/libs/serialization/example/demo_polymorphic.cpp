@@ -21,44 +21,44 @@
 int main(int argc, char* argv[])
 {
     A a, a1;
-	{
-		// test with a text archive
-		std::stringstream ss;
-		{
-			// instantiate archive which inhertis polymorphic interface
-			// and the normal text archive implementation
-			boost::archive::polymorphic_text_oarchive oa(ss);
-			boost::archive::polymorphic_oarchive & oa_interface = oa; 
-			// we can just just the interface for saving
-			oa_interface << a;
-		}
-		{
-			// or we can use the implementation directly
-			boost::archive::polymorphic_text_iarchive ia(ss);
-			ia >> a1;
-		}
-	}
-	if(! (a == a1))
-		return 1;
-	{
-		//test with a binary archive
-		std::stringstream ss;
-		{
-			// instantiate archive which inhertis polymorphic interface
-			// and the normal binary archive implementation
-			boost::archive::polymorphic_binary_oarchive oa(ss);
-			oa << a;
-		}
-		{
-			// see above
-			boost::archive::polymorphic_binary_iarchive ia(ss);
-			boost::archive::polymorphic_iarchive & ia_interface = ia; 
-			// use just the polymorphic interface for loading.
-			ia_interface >> a1;
-		}
-	}
-	if(! (a == a1))
-		return 1;
-	return 0;
+    {
+        // test with a text archive
+        std::stringstream ss;
+        {
+            // instantiate archive which inhertis polymorphic interface
+            // and the normal text archive implementation
+            boost::archive::polymorphic_text_oarchive oa(ss);
+            boost::archive::polymorphic_oarchive & oa_interface = oa; 
+            // we can just just the interface for saving
+            oa_interface << a;
+        }
+        {
+            // or we can use the implementation directly
+            boost::archive::polymorphic_text_iarchive ia(ss);
+            ia >> a1;
+        }
+    }
+    if(! (a == a1))
+        return 1;
+    {
+        //test with a binary archive
+        std::stringstream ss;
+        {
+            // instantiate archive which inhertis polymorphic interface
+            // and the normal binary archive implementation
+            boost::archive::polymorphic_binary_oarchive oa(ss);
+            oa << a;
+        }
+        {
+            // see above
+            boost::archive::polymorphic_binary_iarchive ia(ss);
+            boost::archive::polymorphic_iarchive & ia_interface = ia; 
+            // use just the polymorphic interface for loading.
+            ia_interface >> a1;
+        }
+    }
+    if(! (a == a1))
+        return 1;
+    return 0;
 }
 

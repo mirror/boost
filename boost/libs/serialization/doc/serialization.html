@@ -1,5 +1,11 @@
 <!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<!--
+(C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
+Use, modification and distribution is subject to the Boost Software
+License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt)
+-->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
@@ -467,12 +473,14 @@ can be found in the example
 <a href="../../../boost/serialization/shared_ptr.hpp" target="shared_ptr_hpp">
 shared_ptr.hpp
 </a>
+<!--
 Only the most minimal change to
 <a href="../../../boost/serialization/shared_count.hpp" target="shared_count_hpp"> 
 shared_count.hpp</a>
 (to gain access to some private members) was necessary to achieve this.
 This should demonstrate how easy it is to non-intrusively
 implement serialization to any data type or template. 
+-->
 <p>
 In the specification of serialization for templates, its common
 to split <code style="white-space: normal">serialize</code> 

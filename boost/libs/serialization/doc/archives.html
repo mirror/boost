@@ -104,7 +104,7 @@ public:
         return *this &lt;&lt; t;
     }
 
-    void save_binary(const void *address, size_t count);
+    void save_binary(const void *address, std::size_t count);
 
     template&lt;class T&gt;
     register_type(T * t = NULL);
@@ -148,7 +148,7 @@ Appends an object of type T to the archive.  The object may be
 </dd>
 
 <dt><h4><code>
-void save_binary(const void *address, size_t count);
+void save_binary(const void *address, std::size_t count);
 </code></h4></dt>
 <dd>
 Appends to the archive <code style="white-space: normal">count</code> bytes found at 
@@ -253,7 +253,7 @@ public:
 
     void delete_created_pointers();
 
-    void load_binary(void *address, size_t count);
+    void load_binary(void *address, std::size_t count);
 
     template&lt;class T&gt;
     register_type(T * t = NULL);
@@ -301,7 +301,7 @@ Retrieves an object of type T from the archive.  The object may be
 </dd>
 
 <dt><h4><code>
-void load_binary(void *address, size_t count);
+void load_binary(void *address, std::size_t count);
 </code></h4></dt>
 <dd>
 Retrieves from the archive <code style="white-space: normal">count</code> bytes and stores
@@ -388,7 +388,7 @@ for all archives.  Archive classes have other members not mentioned here.
 However they are related to the internal functioning of the library and
 are not meant to be called by users of an archive.  Implementation of new
 archives is discussed in 
-<a href="newarchive#implementation">New Archives - Implementation</a>.
+<a href="archive_reference.html#implementation">New Archives - Implementation</a>.
 
 <p>
 The existence of the <code style="white-space: normal">&lt;&lt;</code> 

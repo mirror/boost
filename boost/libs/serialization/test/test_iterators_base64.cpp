@@ -47,11 +47,11 @@ void test_base64(){
     typedef 
         boost::archive::iterators::insert_linebreaks<
             boost::archive::iterators::base64_from_binary<
-            	boost::archive::iterators::transform_width<
-            		CharType *
-            		,6
-            		,sizeof(CharType) * 8
-            	>
+                boost::archive::iterators::transform_width<
+                    CharType *
+                    ,6
+                    ,sizeof(CharType) * 8
+                >
             > 
             ,72
         > 
@@ -67,9 +67,9 @@ void test_base64(){
     typedef 
         boost::archive::iterators::transform_width<
             boost::archive::iterators::binary_from_base64<
-            	boost::archive::iterators::remove_whitespace<
-            		BOOST_DEDUCED_TYPENAME text_base64_type::iterator
-            	>
+                boost::archive::iterators::remove_whitespace<
+                    BOOST_DEDUCED_TYPENAME text_base64_type::iterator
+                >
             >,
             sizeof(CharType) * 8,
             6
@@ -77,9 +77,9 @@ void test_base64(){
     
     BOOST_CHECK(
         std::equal(
-        	rawdata,
-        	rawdata + size,
-        	translate_in(BOOST_MAKE_PFTO_WRAPPER(text_base64.begin()))
+            rawdata,
+            rawdata + size,
+            translate_in(BOOST_MAKE_PFTO_WRAPPER(text_base64.begin()))
         )
     );
 
