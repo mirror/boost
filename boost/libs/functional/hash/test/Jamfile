@@ -20,16 +20,12 @@ rule hash-test ( name )
 }
 
 {
-    test-suite "hash_std"
+    test-suite "functional/hash"
         :
             [ hash-test hash_number_test ]
             [ hash-test hash_pointer_test ]
             [ hash-test hash_float_test ]
             [ hash-test hash_string_test ]
-        ;
-
-    test-suite "hash_extensions"
-        :
             [ hash-test hash_range_test ]
             [ hash-test hash_custom_test ]
             [ hash-test hash_vector_test ]

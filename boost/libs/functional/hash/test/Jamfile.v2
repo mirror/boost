@@ -8,16 +8,12 @@ import testing ;
 
 alias framework : /boost/test//boost_unit_test_framework ;
 
-test-suite /boost/hash_std
+test-suite functional/hash
     :
         [ run hash_number_test.cpp framework ]
         [ run hash_pointer_test.cpp framework ]
         [ run hash_float_test.cpp framework ]
         [ run hash_string_test.cpp framework ]
-    ;
-
-test-suite /boost/hash_extensions
-    :
         [ run hash_range_test.cpp framework ]
         [ run hash_custom_test.cpp framework ]
         [ run hash_vector_test.cpp framework ]
