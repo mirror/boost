@@ -1,6 +1,6 @@
 /* statistic_tests.cpp file
  *
- * Copyright Jens Maurer 2000
+ * Copyright Jens Maurer 2000, 2002
  * Permission to use, copy, modify, sell, and distribute this software
  * is hereby granted without fee provided that the above copyright notice
  * appears in all copies and that both that copyright notice and this
@@ -24,7 +24,7 @@
 #include <iomanip>
 #include <string>
 #include <functional>
-#include <cmath>
+#include <math.h>  // lgamma is not in namespace std
 #include <vector>
 #include <algorithm>
 
@@ -81,7 +81,7 @@ private:
 
 
 template<class IntType, int r, int s, IntType m, IntType val>
-class lagged_fibonacci
+class lagged_fibonacci_int
 {
 public:
   typedef IntType result_type;
@@ -96,9 +96,9 @@ public:
     max_value = m-1
   };
 #endif
-  explicit lagged_fibonacci(IntType start) { seed(start); }
+  explicit lagged_fibonacci_int(IntType start) { seed(start); }
   template<class Generator>
-  explicit lagged_fibonacci(Generator & gen) { seed(gen); }
+  explicit lagged_fibonacci_int(Generator & gen) { seed(gen); }
   void seed(IntType start)
   {
     linear_congruential<uint32_t, 299375077, 0, 0, 0> init;
@@ -162,7 +162,7 @@ namespace Haertel {
     1<<30, 0> NLG_Inv5;
   typedef boost::random::additive_congruential<boost::int32_t, 6,
     (1<<30)-35, 0> MRG_Acorn7;
-  typedef boost::random::lagged_fibonacci<boost::uint32_t, 607, 273,
+  typedef boost::random::lagged_fibonacci_int<boost::uint32_t, 607, 273,
     0, 0> MRG_Fib2;
 
   template<class Gen, class T>
@@ -224,7 +224,7 @@ class chi_square_density : public std::unary_function<double, double>
 public:
   chi_square_density(int freedom)
     : _exponent( static_cast<double>(freedom)/2-1 ),
-      _factor(1/(std::pow(2, _exponent+1) * std::exp(std::lgamma(_exponent+1))))
+      _factor(1/(std::pow(2, _exponent+1) * std::exp(lgamma(_exponent+1))))
   { }
 
   double operator()(double x)
@@ -301,7 +301,7 @@ public:
 
     std::cout << "  2D: " << std::flush;
     equidistribution_2d_experiment equi_2d(classes);
-    unsigned int root = static_cast<unsigned int>(std::sqrt(classes));
+    unsigned int root = static_cast<unsigned int>(std::sqrt(double(classes)));
     assert(root * root == classes);
     uniform_smallint<RNG> uint_square(rng, 0, root-1);
     check(run_experiment(test_distrib_chi_square,
