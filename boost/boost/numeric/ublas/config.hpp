@@ -165,9 +165,10 @@ namespace std {
 // Thanks to Kresimir Fresl for porting to Comeau.
 #if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
 
-// Without this we don't get abs overloads for float types in <cmath>
-// This should should be library version specific.
+// Missing std::abs overloads for float types in <cmath> are in <cstdlib>
+#if defined(__LIBCOMO__) && (__LIBCOMO_VERSION__ <= 31)
 #include <cstdlib>
+#endif
 
 #endif
 
@@ -175,7 +176,7 @@ namespace std {
 
 #if defined (__sgi) && ! defined (BOOST_STRICT_CONFIG)
 
-// Without this we don't get abs overloads for float types in <cmath>
+// Missing std::abs overloads for float types in <cmath> are in <cstdlib>
 // This should should be library version specific.
 #include <cstdlib>
 
