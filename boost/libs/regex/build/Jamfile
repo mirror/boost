@@ -12,6 +12,7 @@ template regex-options
      <define>BOOST_REGEX_NO_LIB=1        
      <debug><define>BOOST_REGEX_CONFIG_INFO=1
      <sysinclude>$(BOOST_ROOT)
+     <native-wchar_t>on
      # como requires this:
      <como-win32><*><define>BOOST_REGEX_NO_W32=1
    ;
@@ -33,6 +34,7 @@ SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
        
 lib boost_regex : ../src/$(SOURCES).cpp <template>regex-options
     : 
+        [ common-names ]
     : 
         debug release
     ;
@@ -40,6 +42,7 @@ lib boost_regex : ../src/$(SOURCES).cpp <template>regex-options
 
 dll boost_regex : ../src/$(SOURCES).cpp <template>regex-dll-options
     : 
+        [ common-names ]
     : 
         debug release
     ;
@@ -50,8 +53,7 @@ version-tag = $(version-tag:J="_") ;
 stage stage/lib : <lib>boost_regex <dll>boost_regex
     :
         <locate>$(BOOST_ROOT)
-        common-stage-tag
-        <tag><postfix>-$(version-tag)
+        [ common-names ]
         <target>stage
         <target>all
     :
