@@ -11,6 +11,11 @@
  * See http://www.boost.org for most recent version.
  */
 
-#define BOOST_PP_DETAIL_EXPAND(X) X
-#define BOOST_PP_DETAIL_EXPAND2(X,Y) BOOST_PP_DETAIL_EXPAND(X Y)
+# define BOOST_PP_DETAIL_EXPAND(X) X
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+#  define BOOST_PP_DETAIL_EXPAND2(X,Y) BOOST_PP_DETAIL_EXPAND(X Y)
+# else
+#  define BOOST_PP_DETAIL_EXPAND2(X, Y) BOOST_PP_DETAIL_EXPAND2_DELAY(X, Y)
+#  define BOOST_PP_DETAIL_EXPAND2_DELAY(X, Y) X ## Y
+# endif 
 #endif
