@@ -30,11 +30,12 @@
       <P>The template class <CODE>regex_token_iterator</CODE> is an iterator adapter; 
          that is to say it represents a new view of an existing iterator sequence, by 
          enumerating all the occurrences of a regular expression within that sequence, 
-         and presenting one or more new strings for each match found. Each position 
-         enumerated by the iterator is a string that represents what matched a 
-         particular sub-expression within the regular expression. When class <CODE>regex_token_iterator</CODE>
-         is used to enumerate a single sub-expression with index -1, then the iterator 
-         performs field splitting: that is to say it enumerates one string for each 
+         and presenting one or more character sequence for each match found. Each 
+         position enumerated by the iterator is a <A href="sub_match.html">sub_match</A> 
+         object that represents what matched a particular sub-expression within the 
+         regular expression. When class <CODE>regex_token_iterator</CODE> is used to 
+         enumerate a single sub-expression with index -1, then the iterator performs 
+         field splitting: that is to say it enumerates one character sequence for each 
          section of the character container sequence that does not match the regular 
          expression specified.</P>
       <PRE>
@@ -46,7 +47,8 @@ class regex_token_iterator
 {
 public:
    typedef          <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;                   regex_type;
-   typedef          basic_string&lt;charT&gt;                                     value_type;
+   typedef          <A href="sub_match.html">sub_match</A>                     
+             &lt;BidirectionalIterator&gt;                                     value_type;
    typedef typename iterator_traits&lt;BidirectionalIterator&gt;::difference_type difference_type;
    typedef          const value_type*                                       pointer;
    typedef          const value_type&amp;                                       reference;
@@ -140,13 +142,13 @@ regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const reg
          <B>Effects: </B>returns <CODE>!(*this == that)</CODE>.</P>
       <PRE><A name=o4></A>const value_type&amp; operator*()const;</PRE>
       <P>
-         <B>Effects: </B>returns the current string being enumerated.</P>
+         <B>Effects: </B>returns the current character sequence being enumerated.</P>
       <PRE><A name=o5></A>const value_type* operator-&gt;()const;</PRE>
       <P>
          <B>Effects: </B>returns <CODE>&amp;(*this)</CODE>.</P>
       <PRE><A name=o6></A>regex_token_iterator&amp; operator++();</PRE>
       <P>
-         <B>Effects: </B>Moves on to the next string to be enumerated.</P>
+         <B>Effects: </B>Moves on to the next character sequence to be enumerated.</P>
       <P><STRONG>Throws:</STRONG> <CODE>std::runtime_error</CODE> if the complexity of 
          matching the expression against an N character string begins to exceed O(N<SUP>2</SUP>), 
          or if the program runs out of stack space while matching the expression (if 
@@ -275,8 +277,7 @@ boost::regex e(<FONT color=#0000ff>"&lt;\\s*A\\s+[^&gt;]*href\\s*=\\s*\"([^\"]*)
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

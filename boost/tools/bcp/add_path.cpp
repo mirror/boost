@@ -204,7 +204,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       //
       fs::path include_file;
       try{
-         include_file = *i;
+         include_file = i->str();
       }
       catch(const fs::filesystem_error& e)
       {

@@ -209,6 +209,9 @@ using std::distance;
 #  ifdef BOOST_REGEX_DYN_LINK
 #     define BOOST_DYN_LINK
 #  endif
+#ifdef BOOST_REGEX_DIAG
+#  define BOOST_LIB_DIAGNOSTIC
+#endif
 #  include <boost/config/auto_link.hpp>
 #endif
 

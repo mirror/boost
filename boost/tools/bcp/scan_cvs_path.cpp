@@ -35,7 +35,7 @@ void bcp_implementation::scan_cvs_path(const fs::path& p)
       boost::regex_token_iterator<const char*> j;
       while(i != j)
       {
-         fs::path recursion_dir(p / *i);
+         fs::path recursion_dir(p / i->str());
          scan_cvs_path(recursion_dir);
          ++i;
       }
@@ -47,9 +47,9 @@ void bcp_implementation::scan_cvs_path(const fs::path& p)
 #endif
       while(i != j)
       {
-         fs::path file = p / *i;
+         fs::path file = p / i->str();
          ++i;
-         bool binary = !(i->empty());
+         bool binary = i->length() ? true : false;
          ++i;
          m_cvs_paths[file] = binary;
       }
