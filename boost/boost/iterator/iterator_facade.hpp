@@ -47,7 +47,7 @@ namespace boost
     >
     struct enable_if_interoperable
 #ifndef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
-      : ::boost::detail::enable_if<
+      : ::boost::iterator::enable_if<
            mpl::or_<
                is_convertible<Facade1, Facade2>
              , is_convertible<Facade2, Facade1>
