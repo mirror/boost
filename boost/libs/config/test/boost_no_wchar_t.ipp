@@ -11,7 +11,9 @@
 //                 to explicitly specialize a template on wchar_t if there
 //                 is already a specialization for other integer types.
 
+#ifndef BOOST_NO_CWCHAR
 #include <wchar.h>
+#endif
 
 namespace boost_no_intrinsic_wchar_t{
 
