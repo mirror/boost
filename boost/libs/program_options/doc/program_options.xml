@@ -40,11 +40,11 @@
     <title>Introduction</title>
 
     <para>The program_options library allows program developers to obtain
-    <emphasis>program options</emphasis>, i.e. (name, value) pairs from the user,
+    <emphasis>program options</emphasis>, that is (name, value) pairs from the user,
     via conventional methods such as command line and config file.</para>
 
     <para>Why would you use such a library, and why is it better than parsing
-    your command line by trivial hand-written code?
+    your command line by straightforward hand-written code?
       <itemizedlist>
         <listitem>
           <para>It's easier. The syntax for declaring options is simple, and
@@ -78,9 +78,6 @@
 
   <xi:include href="tutorial.xml"/>  
   <xi:include href="overview.xml"/>  
-  <xi:include href="options_description.xml"/>  
-
-  
   
   <xi:include href="howto.xml"/>
   <xi:include href="design.xml"/>

@@ -18,7 +18,7 @@
   </para>
 
   <section>
-    <title>Getting started</title>
+    <title>Getting Started</title>
 
   <para>The first example is the simplest possible: it only handles two
     options. Here's the source code (the full program is in
@@ -90,7 +90,7 @@ Compression level was set to 10.
   </section>
 
   <section>
-    <title>Option details</title>
+    <title>Option Details</title>
     
   <para>An Option value, surely, can have other types than <code>int</code>, and
   can have other interesting properties, which we'll discuss right now. The
@@ -118,7 +118,7 @@ desc.add_options()
     It's a good idea to have this option in all cases.</para>
 
   <para>The "optimization" option shows two new features. First, we specify
-    the address of the variable(<code>&opt</code>). After storing values, that
+    the address of the variable(<code>&amp;opt</code>). After storing values, that
     variable will have the value of the option. Second, we specify a default
     value of 10, which will be used if no value is specified by the user.
   </para>
@@ -216,7 +216,7 @@ Optimization level is 4
   </section>
 
   <section>
-    <title>Multiple sources</title>
+    <title>Multiple Sources</title>
 
     <para>It's quite likely that specifying all options to our compiler on the
     command line will annoy users. What if a user installs a new library and

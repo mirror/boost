@@ -6,7 +6,7 @@
     %entities;
 ]>
 <section id="program_options.overview">
-  <title>Library overview</title>
+  <title>Library Overview</title>
 
   <para>In the tutorial section, we saw several examples of library usage.
     Here we will describe the overall library design including the primary
@@ -83,7 +83,7 @@
 -->
 
   <section>
-    <title>Options description component</title>
+    <title>Options Description Component</title>
 
     <para>The options description component has three main classes:
       &option_description;, &value_semantic; and &options_description;. The
@@ -109,19 +109,152 @@ desc.add_options()
     </para>
 
     <para>The call to the <code>value</code> function creates an instance of
-    a suitable class, derived from <code>options_semantic</code>. Calling member
-    functions of that instance allows one to specify additional information. (This
-    essentially emulates named parameters of the constructor). Calls to
-    <code>operator()</code> on the object returned by <code>add_options</code>
-    forward arguments to the constructor of the <code>option_description</code>
-    class and add the new instance.</para>
+      a class derived from <code>value_sematintic</code>: <code>typed_value</code>.
+      That class contains the code to parse
+      values of specific type, and contains a number of methods which can be
+      called by the user to  specify additional information. (This
+      essentially emulates named parameters of the constructor). Calls to
+      <code>operator()</code> on the object returned by <code>add_options</code>
+      forward arguments to the constructor of the <code>option_description</code>
+      class and add the new instance. 
+    </para>
 
+    <para>
+      Note that in addition to the
+      <code>value</code>, library provides the <code>bool_switch</code>
+      function, and user can write his own function which will return
+      other subclasses of <code>value_semantic</code> with 
+      different behaviour. For the remainder of this section, we'll talk only
+      about the <code>value</code> function.
+    </para>
+
+    <para>The information about option is divided into syntactic and
+      semantic. Syntactic information includes the name of the option and the
+      number of tokens which can be used to specify the value. This
+      information is used by parsers to group tokens into (name, value) pairs,
+      where value is just a vector of strings
+      (<code>std::vector&lt;std::string&gt;</code>). The semantic layer
+      is responsible for converting the value of the option into more usable C++
+      types. 
+    </para>
+
+    <para>This separation is an important part of library design. The parsers
+      use only the syntactic layer, which takes away some of the freedom to
+      use overly complex structures. For example, it's not easy to parse
+      syntax like: <screen>calc --expression=1 + 2/3</screen> because it's not
+      possible to parse <screen>1 + 2/3</screen> without knowing that it's a C
+      expression. With a little help from the user the task becomes trivial,
+      and the syntax clear: <screen>calc --expression="1 + 2/3"</screen>
+    </para>
+
+    <section>
+      <title>Syntactic information</title>
+      <para>The syntactic information is provided by the
+        <classname>boost::program_options::options_description</classname> class
+        and some methods of the
+        <classname>boost::program_options::value_semantic</classname> class.
+        The simplest usage is illustrated below:
+        <programlisting>
+          options_description desc;
+          desc.add_options()
+          ("help", "produce help message")
+          ;
+        </programlisting>
+        This declares one option named "help" and associates a description with
+        it. The user is not allowed to specify any value.
+      </para>
+      
+      <para>To make an option accept a value, you'd need the
+        <code>value</code> function mentioned above:
+        <programlisting>
+          options_description desc;
+          desc.add_options()
+          ("compression", "compression level", value&lt;string&gt;())
+          ("verbose", "verbosity level", value&lt;string&gt;()->implicit())
+          ("email", "email to send to", value&lt;string&gt;()->multitoken());
+        </programlisting>
+        With these declarations, the user must specify a value for
+        the first option, using a single token. For the second option, the user
+        may either provide a single token for the value, or no token at
+        all. For the last option, the value can span several tokens. For
+        example, the following command line is OK:
+        <screen>
+          test --compression 10 --verbose --email beadle@mars beadle2@mars
+        </screen>      
+      </para>
+    </section>
+      
+    <section>
+      <title>Semantic information</title>
+      
+      <para>The semantic information is completely provided by the 
+        <classname>boost::program_options::value_semantic</classname> class. For
+        example:
+<programlisting>
+options_description desc;
+desc.add_options()
+    ("compression", "compression level", value&lt;int&gt;()->default(10));
+    ("email", "email", value&lt; vector&lt;string&gt; &gt;()
+        ->composing()->notify(&amp;your_function);
+</programlisting>      
+        These declarations specify that default value of the first option is 10,
+        that the second option can appear several times and all instances should
+        be merged, and that after parsing is done, the library will  call
+        function <code>&amp;your_function</code>, passing the value of the
+        "email" option as argument.      
+      </para>
+    </section>
+    
+    <section>
+      <title>Positional options</title>
+      
+      <para>Our definition of option as (name, value) pairs is simple and
+        useful, but in one special case of the command line, there's a
+        problem. A command line can include a <firstterm>positional option</firstterm>,
+        which does not specify any name at all, for example:
+        <screen>
+          archiver --compression=9 /etc/passwd
+        </screen>
+        Here, the "/etc/passwd" element does not have any option name.
+      </para>
+      
+      <para>One solution is to ask the user to extract positional options
+        himself and process them as he likes. However, there's a nicer approach
+        -- provide a method to automatically assign the names for positional
+        options, so that the above command line can be interpreted the same way
+        as:
+        <screen>
+          archiver --compression=9 --input-file=/etc/passwd
+        </screen>
+      </para>
+      
+      <para>The &positional_options_desc; class allows the command line
+        parser to assign the names. The class specifies how many positional options
+        are allowed, and for each allowed option, specifies the name. For example:
+        <programlisting>
+          positional_options_description pd; pd.add("input-file", 1, 1);
+        </programlisting> specifies that for exactly one, first, positional
+        option the name will be "input-file".
+      </para>
+      
+      <para>It's possible to specify that a number, or even all positional options, be
+        given the same name.
+        <programlisting>
+          positional_options_description pd;
+          pd.add("output-file", 2, 2).add_optional("input-file", 0, -1);
+        </programlisting>
+        In the above example, the first two positional options will be associated
+        with name "output-file", and any others with the name "input-file".
+      </para>
+      
+    </section>
+              
     <!-- Note that the classes are not modified during parsing -->
           
   </section>
 
   <section>
-    <title>Parsers component</title>
+    <title>Parsers Component</title>
 
     <para>The parsers component splits input sources into (name, value) pairs.
       Each parser looks for possible options and consults the options
@@ -180,7 +313,7 @@ desc.add_options()
 
 
   <section>
-    <title>Storage component</title>
+    <title>Storage Component</title>
 
     <para>The storage component is responsible for:
       <itemizedlist>
@@ -227,7 +360,7 @@ desc.add_options()
   </section>
 
   <section>
-    <title>Annotated list of symbols</title>
+    <title>Annotated List of Symbols</title>
     
     <para>The following table describes all the important symbols in the
       library, for quick access.</para>

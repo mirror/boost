@@ -9,10 +9,19 @@
 
   <title>How To</title>
 
-  <para>This section describes how the library can be used in specific situations.</para>
+  <para>This section describes how the library can be used in specific
+  situations.</para>
+
+<!--
+
+validators
+positional options
+options groups/hidden options
+
+-->
 
   <section>
-    <title>Unicode support</title>
+    <title>Unicode Support</title>
 
     <para>To use the library with Unicode, you'd need to:
       <itemizedlist>

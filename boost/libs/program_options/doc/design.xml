@@ -6,14 +6,14 @@
     %entities;
 ]>
 <section id="program_options.design">
-  <title>Design discussion</title>
+  <title>Design Discussion</title>
 
   <para>This section focuses on some of the design questions.
   </para>
 
   <section id="program_options.design.unicode">
 
-    <title>Unicode support</title>
+    <title>Unicode Support</title>
 
     <para>Unicode support was one of the features specifically requested
       during the formal review. Throughout this document "Unicode support" is
