@@ -128,7 +128,7 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
          {
             if(STR_COMP(s1, p) <= 0)
             {
-               while(*p)++p;
+               do{ ++p; }while(*p);
                ++p;
                if(STR_COMP(s1, p) >= 0)
                   return set_->isnot ? next : ++next;
@@ -136,11 +136,11 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
             else
             {
                // skip first string
-               while(*p)++p;
+               do{ ++p; }while(*p);
                ++p;
             }
             // skip second string
-            while(*p)++p;
+            do{ ++p; }while(*p);
             ++p;
          }
       }
@@ -154,7 +154,7 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
             if(STR_COMP(s1, p) == 0)
                return set_->isnot ? next : ++next;
             // skip string
-            while(*p)++p;
+            do{ ++p; }while(*p);
             ++p;
          }
       }
