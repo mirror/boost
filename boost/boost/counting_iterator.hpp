@@ -47,6 +47,7 @@
 # include <boost/iterator_adaptors.hpp>
 # include <boost/type_traits.hpp>
 # include <boost/detail/numeric_traits.hpp>
+# include <boost/static_assert.hpp>
 # ifndef BOOST_NO_LIMITS
 #  include <limits>
 # endif
@@ -123,11 +124,13 @@ namespace detail {
   // limitations of the compiler and library.
   template <class T>
   struct is_numeric {
+    // For a while, this wasn't true, but we rely on it below. This is a regression assert.
+    BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
     enum { value = 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         std::numeric_limits<T>::is_specialized
 #elif defined(__BORLANDC__)
-        ::boost::is_integral<T>::value || ::boost::is_same<T,char>::value
+        ::boost::is_integral<T>::value
 #else
         boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value
 #endif
