@@ -86,7 +86,7 @@ struct advance< v_iter<Vector,n_>,Distance>
 {
     typedef v_iter<
           Vector
-        , (n_ + BOOST_MPL_AUX_NESTED_VALUE_WKND(long, Distance::value))
+        , (n_ + BOOST_MPL_AUX_NESTED_VALUE_WKND(long, Distance))
         > type;
 };
 
