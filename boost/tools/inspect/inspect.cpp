@@ -23,6 +23,7 @@
 #include <list>
 #include <utility>
 #include <algorithm>
+#include <cstring>
 
 #include "inspector.hpp" // includes <string>, <boost/filesystem/path.hpp>,
                          // <iostream>, <set>
@@ -319,14 +320,66 @@ int cpp_main( int argc, char * argv[] )
 {
   fs::initial_path();
 
+  bool license_ck = true;
+  bool copyright_ck = true;
+  bool crlf_ck = true;
+  bool link_ck = true;
+  bool long_name_ck = true;
+  bool tab_ck = true;
+
+  if ( argc > 1 && *argv[1] == '-' )
+  {
+    license_ck = false;
+    copyright_ck = false;
+    crlf_ck = false;
+    link_ck = false;
+    long_name_ck = false;
+    tab_ck = false;
+  }
+
+  for(; argc > 1; --argc, ++argv )
+  {
+    if ( std::strcmp( argv[1], "-license" ) == 0 )
+      license_ck = true;
+    else if ( std::strcmp( argv[1], "-copyright" ) == 0 )
+      copyright_ck = true;
+    else if ( std::strcmp( argv[1], "-crlf" ) == 0 )
+      crlf_ck = true;
+    else if ( std::strcmp( argv[1], "-link" ) == 0 )
+      link_ck = true;
+    else if ( std::strcmp( argv[1], "-long_name" ) == 0 )
+      long_name_ck = true;
+    else if ( std::strcmp( argv[1], "-tab" ) == 0 )
+      tab_ck = true;
+    else
+    {
+      std::cerr << "unknown option: " << argv[1]
+      << "\nvalid options are:\n"
+         "  -license\n"
+         "  -copyright\n"
+         "  -crlf\n"
+         "  -link\n"
+         "  -long_name\n"
+         "  -tab\n"
+         "default is all checks on; otherwise options specify desired checks\n";
+      return 1;
+    }
+  }
+
   inspector_list inspectors;
 
-  inspectors.push_back( inspector_element( new boost::inspect::license_check ) );
-  inspectors.push_back( inspector_element( new boost::inspect::copyright_check ) );
-  inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
-  inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
-  inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
-  inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
+  if ( license_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::license_check ) );
+  if ( copyright_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::copyright_check ) );
+  if ( crlf_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
+  if ( link_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
+  if ( long_name_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
+  if ( tab_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
 
   visit_all( "boost-root", fs::initial_path(), inspectors );
 
