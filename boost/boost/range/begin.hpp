@@ -84,7 +84,8 @@ namespace range_detail
     // string
     //////////////////////////////////////////////////////////////////////
 
-#if BOOST_WORKAROUND(__MWERKS__, <= 0x3204 ) // up to 9.3
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3204 ) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+// CW up to 9.3 and borland have troubles with function ordering
     inline const char* begin( const char* s )
     {
         return s;
