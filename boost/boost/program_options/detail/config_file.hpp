@@ -16,6 +16,7 @@
 #include <boost/program_options/option.hpp>
 #include <boost/program_options/eof_iterator.hpp>
 
+#include <boost/detail/workaround.hpp>
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
 #include <boost/program_options/detail/convert.hpp>
 #endif
@@ -24,7 +25,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <boost/detail/workaround.hpp>
+
 
 namespace boost { namespace program_options { namespace detail {
 
