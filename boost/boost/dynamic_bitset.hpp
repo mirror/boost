@@ -303,6 +303,7 @@ public:
     template <typename B, typename A, typename CharT, typename Alloc>
     friend void dump_to_string(const dynamic_bitset<B, A>& b, 
                                std::basic_string<CharT, Alloc>& s);
+
 #endif
 
 private:
@@ -313,10 +314,7 @@ private:
     bool test_(size_type bit) const;
     void set_block_(size_type blocknum, Block b);
 
-  
-#ifndef BOOST_DYN_BITSET_USE_FRIENDS
 public:
-#endif
 
     // This is templated on the whole String instead of just CharT,
     // Traits, Alloc to avoid compiler bugs.
