@@ -80,6 +80,7 @@ distribution 1.31.0:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
   <li>GCC3.2 (MinGW, Red Hat Linux)</li>
+  <li>Intel8.0 (Win32)</li>
 </ul>
 <p><b><font color="#FF0000">Caution: Bugs in atomic_count_gcc.hpp break 
 boost::fsm on Linux! Please see readme.txt in </font>
@@ -532,13 +533,12 @@ fsm::result Idle::react( const EvConfig &amp; )
 {
   return transit&lt; Configuring &gt;();
 }</pre>
-<p><b><font color="#FF0000">Caution: Any call to <code>
-simple_state&lt;&gt;::transit&lt;&gt;()</code> or <code>simple_state&lt;&gt;::terminate()</code> 
-(see <a href="reference.html#transit1">reference</a>) will inevitably destruct 
-the state object (similar to <code>delete this;</code>)! That is, code 
-executed after any of these calls may invoke undefined behavior!</font></b> 
-That's why these functions should only be called as part of a return 
-statement.</p>
+<p><b><font color="#FF0000">Caution: Any call to <code>simple_state&lt;&gt;::transit&lt;&gt;()</code> 
+or <code>simple_state&lt;&gt;::terminate()</code> (see
+<a href="reference.html#transit1">reference</a>) will inevitably destruct the 
+state object (similar to <code>delete this;</code>)! That is, code executed 
+after any of these calls may invoke undefined behavior!</font></b> That's why 
+these functions should only be called as part of a return statement.</p>
 <h3><a name="Guards">Guards</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
@@ -804,12 +804,12 @@ and the appropriate states entered. The former is expressed by passing either
 <code>has_shallow_history</code>, <code>has_deep_history</code> or <code>
 has_full_history</code> (which combines shallow and deep history) as the last 
 parameter to the <code>simple_state</code> and <code>state</code> class 
-templates. The latter is expressed by specifying either <code>
-shallow_history&lt;&gt;</code> or <code>deep_history&lt;&gt;</code> as a transition 
-destination or, as we'll see in an instant, as an inner initial state. Because 
-it is possible that a state containing a history pseudo state has never been 
-entered before a transition to history is made, both class templates demand a 
-parameter specifying the default state to enter in such situations.</p>
+templates. The latter is expressed by specifying either <code>shallow_history&lt;&gt;</code> 
+or <code>deep_history&lt;&gt;</code> as a transition destination or, as we'll see in 
+an instant, as an inner initial state. Because it is possible that a state 
+containing a history pseudo state has never been entered before a transition 
+to history is made, both class templates demand a parameter specifying the 
+default state to enter in such situations.</p>
 <p>The redundancy necessary for using history is checked for consistency at 
 compile time. That is, the state machine wouldn't have compiled had we 
 forgotten to pass <code>has_deep_history</code> to the base of <code>
@@ -951,12 +951,11 @@ currently resides in. To some extent this is already possible with <code>
 state_cast&lt;&gt;()</code> and <code>state_downcast&lt;&gt;()</code> but their utility is 
 rather limited because both only return a yes/no answer to the question &quot;Are 
 you in state X?&quot;. It is possible to ask more sophisticated questions when you 
-pass an additional base class rather than a state class to <code>
-state_cast&lt;&gt;()</code> but this involves more work (all states need to derive 
-from and implement the additional base), is slow (under the hood <code>
-state_cast&lt;&gt;()</code> uses <code>dynamic_cast</code>), forces projects to 
-compile with C++ RTTI turned on and has a negative impact on state entry/exit 
-speed.</p>
+pass an additional base class rather than a state class to <code>state_cast&lt;&gt;()</code> 
+but this involves more work (all states need to derive from and implement the 
+additional base), is slow (under the hood <code>state_cast&lt;&gt;()</code> uses
+<code>dynamic_cast</code>), forces projects to compile with C++ RTTI turned on 
+and has a negative impact on state entry/exit speed.</p>
 <p>Especially for debugging it would be so much more useful being able to ask 
 &quot;In which state(s) are you?&quot;. For this purpose it is possible to iterate over 
 all active <b>innermost</b> states with <code>state_machine&lt;&gt;::state_begin()</code> 
@@ -977,10 +976,9 @@ configuration as follows (see the Keyboard example for the complete code):</p>
     ++region;
   }
 }</pre>
-<p>If necessary, the outer states can be accessed with <code>
-state_machine&lt;&gt;::state_base_type::outer_state_ptr()</code>, which returns a 
-pointer to <code>const state_machine&lt;&gt;::state_base_type</code>. When called on 
-an outermost state this function simply returns 0.</p>
+<p>If necessary, the outer states can be accessed with <code>state_machine&lt;&gt;::state_base_type::outer_state_ptr()</code>, 
+which returns a pointer to <code>const state_machine&lt;&gt;::state_base_type</code>. 
+When called on an outermost state this function simply returns 0.</p>
 <h3><a name="State type information">State type information</a></h3>
 <p>To cut down on executable size some applications must be compiled with C++ 
 RTTI turned off. This would render the ability to iterate over all active 
@@ -1328,7 +1326,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28864" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28872" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
