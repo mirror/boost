@@ -439,7 +439,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
       <xsl:when test="string(type)='class' or string(type)='typename'">
         <template-type-parameter>
           <xsl:attribute name="name">
-            <xsl:value-of select="string(declname)"/>
+            <xsl:value-of select="normalize-space(string(declname))"/>
           </xsl:attribute>
           <xsl:if test="defval">
             <default>
@@ -452,7 +452,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
       <xsl:otherwise>
         <template-nontype-parameter>
           <xsl:attribute name="name">
-            <xsl:value-of select="string(declname)"/>
+            <xsl:value-of select="normalize-space(string(declname))"/>
           </xsl:attribute>
           <type>
             <xsl:apply-templates select="type"/>
@@ -705,7 +705,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <parameter>
       <!-- Parameter name -->
       <xsl:attribute name="name">
-        <xsl:value-of select="declname/text()"/>
+        <xsl:value-of select="normalize-space(declname/text())"/>
       </xsl:attribute>
 
       <!-- Parameter type -->
@@ -729,7 +729,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
       <!-- Parameter description -->
       <xsl:variable name="name">
-        <xsl:value-of select="declname/text()"/>
+        <xsl:value-of select="normalize-space(declname/text())"/>
       </xsl:variable>
 
       <xsl:apply-templates select="../detaileddescription/para/parameterlist[attribute::kind='param']/parameterdescription"
