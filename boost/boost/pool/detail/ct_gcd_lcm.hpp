@@ -1,0 +1,68 @@
+// Copyright (C) 2000 Stephen Cleary (shammah@voyager.net)
+//
+// This file can be redistributed and/or modified under the terms found
+//  in "copyright.html"
+// This software and its documentation is provided "as is" without express or
+//  implied warranty, and with no claim as to its suitability for any purpose.
+//
+// See http://www.boost.org for updates, documentation, and revision history.
+
+#ifndef BOOST_POOL_CT_GCD_LCM_HPP
+#define BOOST_POOL_CT_GCD_LCM_HPP
+
+#include <boost/pool/detail/postulate.hpp>
+
+namespace boost {
+
+namespace details {
+namespace pool {
+
+// Compile-time calculation of greatest common divisor and least common multiple
+
+//
+// ct_gcd is a compile-time algorithm that calculates the greatest common
+//  divisor of two unsigned integers, using Euclid's algorithm.
+//
+// assumes: A != 0 && B != 0
+//
+namespace details {
+template <unsigned A, unsigned B, bool Bis0>
+struct ct_gcd_helper;
+template <unsigned A, unsigned B>
+struct ct_gcd_helper<A, B, false>
+{
+//WAS:  static const unsigned value = ct_gcd_helper<B, (A % B), (A % B) == 0>::value;
+  static const unsigned value = ct_gcd_helper<B, (A % B), ((A % B) == 0)>::value;
+};
+template <unsigned A, unsigned B>
+struct ct_gcd_helper<A, B, true>
+{
+  static const unsigned value = A;
+};
+} // namespace details
+
+template <unsigned A, unsigned B>
+struct ct_gcd
+{
+  BOOST_POOL_POSTULATE(A != 0 && B != 0);
+  static const unsigned value = details::ct_gcd_helper<A, B, false>::value;
+};
+
+//
+// ct_lcm is a compile-time algorithm that calculates the least common
+//  multiple of two unsigned integers.
+//
+// assumes: A != 0 && B != 0
+//
+template <unsigned A, unsigned B>
+struct ct_lcm
+{
+  static const unsigned value = A / ct_gcd<A, B>::value * B;
+};
+
+} // namespace pool
+} // namespace details
+
+} // namespace boost
+
+#endif

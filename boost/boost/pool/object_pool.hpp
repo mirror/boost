@@ -1,0 +1,124 @@
+// Copyright (C) 2000, 2001 Stephen Cleary (shammah@voyager.net)
+//
+// This file can be redistributed and/or modified under the terms found
+//  in "copyright.html"
+// This software and its documentation is provided "as is" without express or
+//  implied warranty, and with no claim as to its suitability for any purpose.
+//
+// See http://www.boost.org for updates, documentation, and revision history.
+
+#ifndef BOOST_OBJECT_POOL_HPP
+#define BOOST_OBJECT_POOL_HPP
+
+#include <boost/pool/object_pool_fwd.hpp>
+
+// boost::pool
+#include <boost/pool/pool.hpp>
+
+namespace boost {
+
+// T must have a non-throwing destructor
+template <typename T, typename UserAllocator>
+class object_pool: protected pool<UserAllocator>
+{
+  public:
+    typedef T element_type;
+    typedef UserAllocator user_allocator;
+    typedef typename pool<UserAllocator>::size_type size_type;
+    typedef typename pool<UserAllocator>::difference_type difference_type;
+
+  public:
+    // This constructor parameter is an extension!
+    explicit object_pool(const size_type next_size = 32)
+    :pool<UserAllocator>(sizeof(T), next_size) { }
+
+    ~object_pool();
+
+    // Returns 0 if out-of-memory
+    element_type * malloc()
+    { return static_cast<element_type *>(pool<UserAllocator>::ordered_malloc()); }
+    void free(element_type * const chunk)
+    { pool<UserAllocator>::ordered_free(chunk); }
+    bool is_from(element_type * const chunk) const
+    { return pool<UserAllocator>::is_from(chunk); }
+
+    element_type * construct()
+    {
+      element_type * const ret = malloc();
+      if (ret == 0)
+        return ret;
+      try { new (ret) element_type(); }
+      catch (...) { free(ret); throw; }
+      return ret;
+    }
+
+    // Include automatically-generated file for family of template construct()
+    //  functions
+    #include <boost/pool/detail/pool_construct.inc>
+
+    void destroy(element_type * const chunk)
+    {
+      chunk->~T();
+      free(chunk);
+    }
+
+    // These functions are extensions!
+    size_type get_next_size() const { return pool<UserAllocator>::get_next_size(); }
+    void set_next_size(const size_type x) { pool<UserAllocator>::set_next_size(x); }
+};
+
+template <typename T, typename UserAllocator>
+object_pool<T, UserAllocator>::~object_pool()
+{
+  // handle trivial case
+  if (!list.valid())
+    return;
+
+  details::PODptr<size_type> iter = list;
+  details::PODptr<size_type> next = iter;
+
+  // Start 'freed_iter' at beginning of free list
+  void * freed_iter = first;
+
+  const size_type partition_size = alloc_size();
+
+  do
+  {
+    // increment next
+    next = next.next();
+
+    // delete all contained objects that aren't freed
+
+    // Iterate 'i' through all chunks in the memory block
+    for (char * i = iter.begin(); i != iter.end(); i += partition_size)
+    {
+      // If this chunk is free
+      if (i == freed_iter)
+      {
+        // Increment freed_iter to point to next in free list
+        freed_iter = nextof(freed_iter);
+
+        // Continue searching chunks in the memory block
+        continue;
+      }
+
+      // This chunk is not free (allocated), so call its destructor
+      static_cast<T *>(static_cast<void *>(i))->~T();
+      // and continue searching chunks in the memory block
+    }
+
+    // free storage
+    UserAllocator::free(iter.begin());
+
+    // increment iter
+    iter = next;
+  } while (iter.valid());
+
+  // Make the block list empty so that the inherited destructor doesn't try to
+  //  free it again.
+  list.invalidate();
+}
+
+} // namespace boost
+
+#endif
