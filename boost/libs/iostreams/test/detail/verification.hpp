@@ -90,14 +90,14 @@ void write_data_in_chars(std::basic_ostream<Ch, Tr>& os)
 {
     for (int z = 0; z < data_reps; ++z) 
         for (int w = 0; w < data_length(); ++w) 
-            os.put(data<Ch>()[w]);
+            os.put(detail::data((Ch*)0)[w]);
     os.flush();
 }
 
 template<typename Ch, typename Tr>
 void write_data_in_chunks(std::basic_ostream<Ch, Tr>& os)
 {
-    const Ch* buf = data<Ch>();
+    const Ch* buf = detail::data((Ch*)0);
     for (int z = 0; z < data_reps; ++z)
         os.write(buf, data_length());
     os.flush();
@@ -108,14 +108,14 @@ bool test_seekable_in_chars(std::iostream& io)
     for (int i = 0; i < data_reps; ++i) {
         int j;
         for (j = 0; j < chunk_size; ++j)
-            io.put(data<char>()[j]);
+            io.put(narrow_data()[j]);
         io.seekp(-chunk_size, std::ios::cur);
         for (j = 0; j < chunk_size; ++j)
-            if (io.get() != data<char>()[j])
+            if (io.get() != narrow_data()[j])
                return false;
         io.seekp(-chunk_size, std::ios::cur);
         for (j = 0; j < chunk_size; ++j)
-            io.put(data<char>()[j]);
+            io.put(narrow_data()[j]);
     }
     return true;
 }
@@ -123,14 +123,14 @@ bool test_seekable_in_chars(std::iostream& io)
 bool test_seekable_in_chunks(std::iostream& io)
 {
     for (int i = 0; i < data_reps; ++i) {
-        io.write(data<char>(), chunk_size);
+        io.write(narrow_data(), chunk_size);
         io.seekp(-chunk_size, std::ios::cur);
         char buf[chunk_size];
         io.read(buf, chunk_size);
-        if (strncmp(buf, data<char>(), chunk_size) != 0)
+        if (strncmp(buf, narrow_data(), chunk_size) != 0)
             return false;
         io.seekp(-chunk_size, std::ios::cur);
-        io.write(data<char>(), chunk_size);
+        io.write(narrow_data(), chunk_size);
     }
     return true;
 }

@@ -45,14 +45,14 @@ inline const wchar_t* data(wchar_t*)
 
 } // End namespace detail.
 
-template<typename Ch>
-inline const Ch* data() { return detail::data((Ch*)0); }
+inline const char* narrow_data() { return detail::data((char*)0); }
 
+inline const wchar_t* wide_data() { return detail::data((wchar_t*)0); }
 
 // Length of string returned by data().
 inline int data_length() 
 { 
-    static int len = (int) strlen(data<char>());
+    static int len = (int) strlen(narrow_data());
     return len;
 }
 

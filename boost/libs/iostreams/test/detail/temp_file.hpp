@@ -76,7 +76,7 @@ struct test_file : public temp_file {
         {
             ::std::ofstream f(name().c_str());
             const ::std::string n(name());
-            const char* buf = data<char>();
+            const char* buf = narrow_data();
             for (int z = 0; z < data_reps; ++z)
                 f.write(buf, data_length());
         }
@@ -87,7 +87,7 @@ struct uppercase_file : public temp_file {
     uppercase_file()
         {
             ::std::ofstream f(name().c_str());
-            const char* buf = data<char>();
+            const char* buf = narrow_data();
             for (int z = 0; z < data_reps; ++z)
                 for (int w = 0; w < data_length(); ++w)
                     f.put((char) std::toupper(buf[w]));
@@ -98,7 +98,7 @@ struct lowercase_file : public temp_file {
     lowercase_file()
         {
             ::std::ofstream f(name().c_str());
-            const char* buf = data<char>();
+            const char* buf = narrow_data();
             for (int z = 0; z < data_reps; ++z)
                 for (int w = 0; w < data_length(); ++w)
                     f.put((char) std::tolower(buf[w]));

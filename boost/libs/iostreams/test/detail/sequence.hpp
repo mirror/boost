@@ -19,10 +19,10 @@ template<typename Ch = char>
 struct test_sequence : public std::vector<Ch> {
     test_sequence()
         {
+            const Ch* buf = test::detail::data((Ch*)0);
             this->reserve(data_reps * data_length());
             for (int z = 0; z < data_reps; ++z)
-                std::copy( test::data<Ch>(), test::data<Ch>() + data_length(),
-                           std::back_inserter(*this) );
+                std::copy(buf, buf + data_length(), std::back_inserter(*this));
         }
 };
 
