@@ -604,20 +604,25 @@ public:
    //
    // str:
    std::basic_string<charT> BOOST_RE_CALL str()const
-   { return std::basic_string<charT>(_expression, _expression_len); }
+   {
+      std::basic_string<charT> result;
+      if(this->error_code() == 0)
+         result = std::basic_string<charT>(_expression, _expression_len);
+      return result;
+   }
    //
    // begin, end:
    const_iterator BOOST_RE_CALL begin()const
-   { return _expression; }
+   { return (this->error_code() ? 0 : _expression); }
    const_iterator BOOST_RE_CALL end()const
-   { return _expression + _expression_len; }
+   { return (this->error_code() ? 0 : _expression + _expression_len); }
    //
    // swap:
    void BOOST_RE_CALL swap(reg_expression&)throw();
    //
    // size:
    size_type BOOST_RE_CALL size()const
-   { return _expression_len; }
+   { return (this->error_code() ? 0 : _expression_len); }
    //
    // max_size:
    size_type BOOST_RE_CALL max_size()const
@@ -627,14 +632,14 @@ public:
    bool BOOST_RE_CALL empty()const
    { return this->error_code(); }
 
-   unsigned BOOST_RE_CALL mark_count()const { return marks; }
+   unsigned BOOST_RE_CALL mark_count()const { return (this->error_code() ? 0 : marks); }
    bool BOOST_RE_CALL operator==(const reg_expression&)const;
    bool BOOST_RE_CALL operator<(const reg_expression&)const;
    //
    // The following are deprecated as public interfaces
    // but are available for compatability with earlier versions.
    allocator_type BOOST_RE_CALL allocator()const;
-   const charT* BOOST_RE_CALL expression()const { return _expression; }
+   const charT* BOOST_RE_CALL expression()const { return (this->error_code() ? 0 : _expression); }
    unsigned int BOOST_RE_CALL set_expression(const charT* p, const charT* end, flag_type f = regbase::normal);
    unsigned int BOOST_RE_CALL set_expression(const charT* p, flag_type f = regbase::normal) { return set_expression(p, p + traits_type::length(p), f); }
    //
