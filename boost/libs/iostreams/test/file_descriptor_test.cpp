@@ -31,7 +31,7 @@ void file_descriptor_test()
     //--------------Test file_descriptor_source-------------------------------//
 
     {
-        fdistream  first(file_descriptor_source(test1.name()), (std::streamsize) 0);
+        fdistream  first(file_descriptor_source(test1.name()), 0);
         ifstream   second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
@@ -40,7 +40,7 @@ void file_descriptor_test()
     }
 
     {
-        fdistream  first(file_descriptor_source(test1.name()), (std::streamsize) 0);
+        fdistream  first(file_descriptor_source(test1.name()), 0);
         ifstream   second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
