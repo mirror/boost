@@ -18,7 +18,7 @@
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 
 #ifdef BOOST_NO_STRINGSTREAM
 #include <strstream>
@@ -28,8 +28,13 @@
 
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
-    defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    defined(BOOST_NO_STD_LOCALE) || \
+    defined(BOOST_NO_CWCHAR)
 #define DISABLE_WIDE_CHAR_SUPPORT
+#endif
+
+#ifdef BOOST_NO_INTRINSIC_WCHAR_T
+#include <cwchar>
 #endif
 
 namespace boost
@@ -169,6 +174,8 @@ namespace boost
 
             #if defined(BOOST_NO_STRINGSTREAM)
             std::strstream stream;
+            #elif defined(BOOST_NO_STD_LOCALE)
+            std::stringstream stream;
             #else
             std::basic_stringstream<char_type> stream;
             #endif
