@@ -75,7 +75,7 @@ template<typename T> class shared_ptr
 private:
 
     // Borland 5.5.1 specific workarounds
-    typedef checked_deleter<T> deleter;
+//  typedef checked_deleter<T> deleter;
     typedef shared_ptr<T> this_type;
 
 public:
@@ -86,7 +86,8 @@ public:
     {
     }
 
-    explicit shared_ptr(T * p): px(p), pn(p, deleter()) // requires complete type
+    template<typename Y>
+    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
     {
     }
 
@@ -96,13 +97,14 @@ public:
     // shared_ptr will release p by calling d(p)
     //
 
-    template<typename D> shared_ptr(T * p, D d): px(p), pn(p, d)
+    template<typename Y, typename D> shared_ptr(Y * p, D d): px(p), pn(p, d)
     {
     }
 
 //  generated copy constructor, assignment, destructor are fine
 
-    explicit shared_ptr(weak_ptr<T> const & r): px(r.px), pn(r.pn) // may throw
+    template<typename Y>
+    explicit shared_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // may throw
     {
     }
 
@@ -176,13 +178,13 @@ public:
         this_type().swap(*this);
     }
 
-    void reset(T * p) // requires complete type
+    template<typename Y> void reset(Y * p) // Y must be complete
     {
         BOOST_ASSERT(p == 0 || p != px); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
-    template<typename D> void reset(T * p, D d)
+    template<typename Y, typename D> void reset(Y * p, D d)
     {
         this_type(p, d).swap(*this);
     }
