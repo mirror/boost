@@ -35,6 +35,7 @@
 #include <string>
 #include <cctype>
 #include <algorithm> // for find_if
+#include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
 
 //
@@ -301,6 +302,9 @@ namespace boost{
     bool operator()(InputIterator& next, InputIterator end, Token& tok)
     {
 			typedef tokenizer_detail::assign_or_plus_equal<
+#if     !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+        typename
+#endif
 				tokenizer_detail::get_iterator_category<
 				InputIterator>::iterator_category> assigner;
 
@@ -393,6 +397,9 @@ namespace boost{
     bool operator()(InputIterator& next, InputIterator end, Token& tok)
     {
 			typedef tokenizer_detail::assign_or_plus_equal<
+#if     !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+        typename
+#endif
 				tokenizer_detail::get_iterator_category<
 				InputIterator>::iterator_category> assigner;
 
