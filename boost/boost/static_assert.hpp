@@ -25,11 +25,13 @@
 
 namespace boost{
 
-template <bool> struct STATIC_ASSERTION_FAILURE;
+// HP aCC cannot deal with missing names for template value parameters
+template <bool x> struct STATIC_ASSERTION_FAILURE;
 
 template <> struct STATIC_ASSERTION_FAILURE<true>{};
 
-template<int> struct static_assert_test{};
+// HP aCC cannot deal with missing names for template value parameters
+template<int x> struct static_assert_test{};
 
 }
 
