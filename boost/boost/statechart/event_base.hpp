@@ -13,6 +13,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/config.hpp>
 
 
 
