@@ -74,6 +74,8 @@
       bool <A href="#unique" >unique</A>() const; // never throws
       long <A href="#use_count" >use_count</A>() const; // never throws
 
+      operator <a href="#conversions"><i>implementation-defined-type</i></a> () const; // never throws
+
       void <A href="#swap" >swap</A>(shared_ptr&lt;T&gt; &amp; b); // never throws
   };
 
@@ -255,6 +257,17 @@ q = p;
 				be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
 					common requirements</A>.</P>
 		</blockquote>
+		<h3><a name="conversions">conversions</a></h3>
+		<pre>operator <i>implementation-defined-type</i> () const; // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> an implementation defined value that, when used in boolean 
+				contexts, is equivalent to <code>get() != 0</code>.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> This conversion operator allows <b>shared_ptr</b> objects to be 
+				used in boolean contexts, like <code>if (p && p-&gt;valid()) {}</code>. The 
+				actual target type is typically a pointer to a member function, avloiding many 
+				of the implicit conversion pitfalls.</P>
+		</blockquote>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<blockquote>
@@ -284,7 +297,7 @@ q = p;
 		<pre>template&lt;typename T&gt;
   bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> An implementation-defined value such that <code>operator&lt;</code>
+			<p><b>Returns:</b> an implementation-defined value such that <code>operator&lt;</code>
 				is a strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
 				of the C++ standard.</p>
 			<p><b>Throws:</b> nothing.</p>
@@ -347,7 +360,8 @@ q = p;
 			<P><B>Returns:</B> A <STRONG>shared_ptr&lt;T&gt;</STRONG> object that stores a copy 
 				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE>
 				and shares ownership with <B>r</B>.</P>
-			<P><B>Throws:</B> <STRONG>std::bad_cast</STRONG> when the pointer cannot be converted.</P>
+			<P><B>Throws:</B> <STRONG>std::bad_cast</STRONG> when the pointer cannot be 
+				converted.</P>
 			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
 		</BLOCKQUOTE>
 		<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>
