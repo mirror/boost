@@ -38,6 +38,17 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<const float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<float[2]>::value, false);
 
+//
+// tricky cases:
+//
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<test_abc1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<foo1_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<foo2_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<foo3_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<foo4_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_float<incomplete_type>::value, false);
+
 TT_TEST_END
 
 

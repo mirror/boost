@@ -32,6 +32,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<f1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<convertible_to_pointer>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<test_abc1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_array<incomplete_type>::value, false);
+
 
 TT_TEST_END
 

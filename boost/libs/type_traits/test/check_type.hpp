@@ -25,12 +25,12 @@ expected_value:   the type we expect to find.
 
 #define BOOST_CHECK_TYPE(type_expression, expected_type)\
 do{\
-   if(!::boost::is_same<type_expression, expected_type>::value){\
+   if(!::boost::is_same< type_expression, expected_type >::value){\
    BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression)\
       << "\" did not have the expected type:\n\tevaluating:   boost::is_same<"\
       << BOOST_STRINGIZE(type_expression) << ", " << BOOST_STRINGIZE(expected_type)\
       << ">" << "\n\tfound:        "\
-      << typeid(::boost::is_same<type_expression, expected_type>).name());\
+      << typeid(::boost::is_same< type_expression, expected_type >).name());\
    }else\
       BOOST_CHECK_MESSAGE(true, "Validating Type Expression: \""\
          << BOOST_STRINGIZE(expression) << "\"");\

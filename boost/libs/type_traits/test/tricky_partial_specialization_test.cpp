@@ -6,19 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_class)
 #include TYPE_TRAITS(alignment_of)
 #include TYPE_TRAITS(has_nothrow_assign)
 #include TYPE_TRAITS(has_nothrow_constructor)
 #include TYPE_TRAITS(has_nothrow_copy)
-#include TYPE_TRAITS(has_trivial_assign)
-#include TYPE_TRAITS(has_trivial_constructor)
-#include TYPE_TRAITS(has_trivial_copy)
-#include TYPE_TRAITS(has_trivial_destructor)
 #include TYPE_TRAITS(is_base_and_derived)
-#include TYPE_TRAITS(is_object)
-#include TYPE_TRAITS(is_POD)
-#include TYPE_TRAITS(is_scalar)
 #include TYPE_COMPARE(is_same)
 #include TYPE_COMPARE(is_convertible)
 

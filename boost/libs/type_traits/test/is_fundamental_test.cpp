@@ -138,6 +138,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_fundamental<float*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_fundamental<float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_fundamental<const float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_fundamental<float[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_fundamental<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_fundamental<foo0_t>::value, false);
 
 TT_TEST_END
 

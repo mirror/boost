@@ -31,13 +31,13 @@ namespace boost{
       { return static_cast<U>(found) == expected; }
 
 #define BOOST_CHECK_INTEGRAL_CONSTANT(expression, expected_value)\
-   if(!::boost::detail::tt_compare(::boost::detail::integral_constant<(expression)>::value(), expression)){\
+   if(!::boost::detail::tt_compare(::boost::detail::integral_constant<(int)(expression)>::value(), expression)){\
       BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had differing values depending upon whether it was used as an integral constant expression or not");\
    }else{\
       BOOST_CHECK_MESSAGE(true, "Validating Integral Constant Expression: \"" << BOOST_STRINGIZE(expression) << "\"");\
    }\
    if(!::boost::detail::tt_compare(expression, expected_value))\
-      BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had an invalid value (found " << ::boost::detail::integral_constant<(expression)>::value() << ", expected " << expected_value << ")" )
+      BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had an invalid value (found " << ::boost::detail::integral_constant<(int)(expression)>::value() << ", expected " << expected_value << ")" )
 
       /*
       macro:
@@ -49,16 +49,16 @@ namespace boost{
       */
 
 #define BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(expression, expected_value, alternate_value)\
-   if(!::boost::detail::tt_compare(::boost::detail::integral_constant<(expression)>::value(), expression)){\
+   if(!::boost::detail::tt_compare(::boost::detail::integral_constant<(int)(expression)>::value(), expression)){\
       BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had differing values depending upon whether it was used as an integral constant expression or not");\
    }else{\
       BOOST_CHECK_MESSAGE(true, "Validating Integral Constant Expression: \"" << BOOST_STRINGIZE(expression) << "\"");\
    }\
    if(!::boost::detail::tt_compare(expression, expected_value))\
       if(!::boost::detail::tt_compare(expression, alternate_value))\
-         BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had an invalid value (found " << ::boost::detail::integral_constant<(expression)>::value() << ", expected " << expected_value << ")" );\
+         BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had an invalid value (found " << ::boost::detail::integral_constant<(int)(expression)>::value() << ", expected " << expected_value << ")" );\
       else\
-         BOOST_WARN_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" did not have the value we wish it to have (found " << ::boost::detail::integral_constant<(expression)>::value() << ", expected " << expected_value << ")" )
+         BOOST_WARN_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" did not have the value we wish it to have (found " << ::boost::detail::integral_constant<(int)(expression)>::value() << ", expected " << expected_value << ")" )
 
 
    }//detail
@@ -66,5 +66,6 @@ namespace boost{
 
 
 #endif
+
 
 

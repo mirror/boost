@@ -120,6 +120,13 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<int[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<test_abc1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<foo1_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<foo2_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<foo3_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<foo4_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_integral<incomplete_type>::value, false);
 
 TT_TEST_END
 

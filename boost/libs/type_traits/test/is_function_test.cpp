@@ -29,6 +29,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int[]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int (*)(int)>::value, false);
 
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<incomplete_type>::value, false);
 
 TT_TEST_END
 

@@ -18,6 +18,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<int>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<volatile int>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<volatile UDT>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<volatile const UDT>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_volatile<foo0_t>::value, false);
 
 TT_TEST_END
 

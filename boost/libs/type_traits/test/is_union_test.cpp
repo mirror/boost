@@ -41,6 +41,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT[2]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<void>::value, false);
 
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<test_abc1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<foo1_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<foo2_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<foo3_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<foo4_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<incomplete_type>::value, false);
+
 TT_TEST_END
 
 

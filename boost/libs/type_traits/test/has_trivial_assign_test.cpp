@@ -151,6 +151,9 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_assign<POD_UDT>::value, tru
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_assign<POD_union_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_assign<empty_POD_union_UDT>::value, true, false);
 
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<test_abc1>::value, false);
+
 TT_TEST_END
 
 

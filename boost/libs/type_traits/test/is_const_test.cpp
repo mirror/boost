@@ -20,6 +20,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const UDT>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const volatile UDT>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<cr_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<foo0_t>::value, false);
 
 TT_TEST_END
 

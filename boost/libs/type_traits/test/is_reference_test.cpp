@@ -25,6 +25,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<int (&)[2]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<bool>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<test_abc1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<incomplete_type>::value, false);
 
 TT_TEST_END
 

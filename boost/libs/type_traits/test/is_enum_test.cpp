@@ -17,6 +17,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<boost::noncopyable>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<test_abc1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<incomplete_type>::value, false);
 
 TT_TEST_END
 

@@ -134,6 +134,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<const float&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<float[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<incomplete_type>::value, false);
 
 TT_TEST_END
 

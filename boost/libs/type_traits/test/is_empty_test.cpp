@@ -34,6 +34,7 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_empty<boost::noncopyable>::value, tr
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<enum_UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<non_empty>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<const non_empty&>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<foo4_t>::value, false);
 
 TT_TEST_END
 

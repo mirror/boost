@@ -247,8 +247,18 @@ struct test_abc2
    virtual void foo2() = 0;
 };
 
+struct test_abc3 : public test_abc1
+{
+   virtual void foo3() = 0;
+};
+
 struct incomplete_type;
 
+typedef void foo0_t();
+typedef void foo1_t(int);
+typedef void foo2_t(int&, double);
+typedef void foo3_t(int&, bool, int, int);
+typedef void foo4_t(int, bool, int*, int[], int, int, int, int, int);
 
 
 #endif
