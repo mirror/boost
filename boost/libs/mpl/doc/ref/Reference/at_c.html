@@ -1,0 +1,59 @@
+<!doctype html public "-//ietf//dtd html//en">
+<html><head><title>boost::mpl::Reference/at c</title>
+<link rel="stylesheet" href="../mpl_wiki.css">
+</head><body bgcolor="white">
+<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>at_c</h1><h3>Synopsis</h3>
+<p>
+<pre>
+template&lt;
+      long n
+    , typename Sequence
+    &gt;
+struct at_c
+{
+    typedef <em>unspecified</em> type;
+};
+</pre>
+<p>
+<h3>Description</h3>
+<p>
+Returns a type identical to the <code>n</code>-th element from the beginning of the sequence. <code>at_c&lt;n,Sequence&gt;::type</code> is a shorcut notation for <code>at&lt; integral_c&lt;long,n&gt;, Sequence&gt;::type</code>.
+<p>
+<h3>Definition</h3>
+<p>
+<pre>
+#include "<a href="../../../../../\boost/mpl/at.hpp">boost/mpl/at.hpp</a>"
+</pre>
+<p>
+<h3>Parameters</h3>
+<table border="1">
+<tr><th>&nbsp;Parameter&nbsp;</th><th>&nbsp;Requirement&nbsp;</th><th>&nbsp;Description &nbsp;</th></tr>
+<tr><td><code>n</code></td><td>An compile-time integral constant</td><td>An offset from the beginning of the sequence that specifies the element to be retrieved. </td></tr>
+<tr><td><code>Sequence</code></td><td>A model of <a href="../Forward_Sequence.html">Forward Sequence</a></td><td>A sequence being examined. </td></tr>
+</table>
+<p>
+<h3>Expression semantics</h3>
+<p>
+<table border="1">
+<tr><th>&nbsp;Expression&nbsp;</th><th>&nbsp;Expression&nbsp;type&nbsp;</th><th>&nbsp;Precondition&nbsp;</th><th>&nbsp;Semantics&nbsp;</th><th>&nbsp;Postcondition&nbsp;</th></tr>
+<tr><td><code>typedef at_c&lt;n,Sequence&gt;::type t;</code></td><td>A type</td><td><code>0 &lt;= n &lt; size&lt;Sequence&gt;::type::value</code></td><td>Equivalent to <code>typedef at&lt; integral_c&lt;long,n&gt;, Sequence&gt;::type t;</code></td><td></td></tr>
+</table>
+<p>
+<h3>Complexity</h3>
+<p>
+Depends on the implementation of the particular sequence it is applied to. Linear in the worst case, or amortized constant time.
+<p>
+<h3>Example</h3>
+<p>
+<pre>
+typedef <a href="../Reference/range_c.html">range_c</a>&lt;long,10,50&gt; range;
+BOOST_STATIC_ASSERT(at_c&lt;0,range&gt;::type::value == 10);
+BOOST_STATIC_ASSERT(at_c&lt;10,range&gt;::type::value == 20);
+BOOST_STATIC_ASSERT(at_c&lt;40,range&gt;::type::value == 50);
+</pre>
+<p>
+<h3>See also</h3>
+<p>
+<a href="../Forward_Sequence.html">Forward Sequence</a>, <code><a href="../Reference/at.html">at</a></code>, <code><a href="../Reference/front.html">front</a></code>, <code><a href="../Reference/back.html">back</a></code>
+<p><hr>
+<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 3:50 am</body></html>

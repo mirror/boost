@@ -1,0 +1,62 @@
+<!doctype html public "-//ietf//dtd html//en">
+<html><head><title>boost::mpl::Reference/logical or</title>
+<link rel="stylesheet" href="../mpl_wiki.css">
+</head><body bgcolor="white">
+<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>logical_or</h1><h3>Synopsis</h3>
+<p>
+<pre>
+template&lt; 
+      typename F1
+    , typename F2
+    , typename F3 = false_c
+    ...
+    , typename Fn = false_c
+    &gt;
+struct logical_or
+{
+    typedef <em>unspecified</em> type;
+};
+</pre>
+<p>
+<h3>Description</h3>
+<p>
+Returns the result of short-circuit <em>logical or</em> (<code>||</code>) operation on its arguments.
+<p>
+<h3>Definition</h3>
+<p>
+<pre>
+#include "<a href="../../../../../\boost/mpl/logical/or.hpp">boost/mpl/logical/or.hpp</a>"
+</pre>
+<p>
+<h3>Parameters</h3>
+<table border="1">
+<tr><th>&nbsp;Parameter&nbsp;</th><th>&nbsp;Requirement&nbsp;</th><th>&nbsp;Description &nbsp;</th></tr>
+<tr><td><code>F1, F2, .., Fn</code></td><td>A model of nullary <a href="../Metafunction.html">Metafunction</a></td><td></td></tr>
+</table>
+<p>
+<h3>Expression semantics</h3>
+<p>
+<table border="1">
+<tr><th>&nbsp;Expression&nbsp;</th><th>&nbsp;Expression&nbsp;type&nbsp;</th><th>&nbsp;Precondition&nbsp;</th><th>&nbsp;Semantics&nbsp;</th><th>&nbsp;Postcondition&nbsp;</th></tr>
+<tr><td><code>typedef logical_or&lt;f1,f2,..,fn&gt;::type c;</code></td><td>A model of <code>bool</code> <a href="../Integral_Constant.html">Integral Constant</a></td><td></td><td>Returns <code>true_c</code> if either of <code>f1::type::value, f2::type::value, .., fn::type::value</code> expressions evaluates to true, and <code>false_c</code> otherwise; guarantees left-to-right evaluation; moreover, the operands subsequent to the first <code>fi</code> metafunction that evaluates to true are not evaluated.</td><td></td></tr>
+</table>
+<p>
+<h3>Example</h3>
+<p>
+<pre>
+<span class="cxx-comment">// will generate compile-time error if invoked with T == any fundamental type</span>
+template&lt; typename T &gt; struct fail
+{
+   typedef typename T::nonexistent type;
+};
+<p>
+BOOST_STATIC_ASSERT((logical_or&lt; false_c,true_c &gt;::type::value == true));
+BOOST_STATIC_ASSERT((logical_or&lt; true_c,fail&lt;int&gt; &gt;::type::value == true)); <span class="cxx-comment">// ok, fail&lt;int&gt; is never invoked</span>
+BOOST_STATIC_ASSERT((logical_or&lt; false_c,true_c,fail&lt;int&gt; &gt;::type::value == true)); <span class="cxx-comment">// ok too</span>
+</pre>
+<p>
+<h3>See also</h3>
+<p>
+<a href="../Metafunctions.html">Metafunctions</a>, <code><a href="../Reference/logical_and.html">logical_and</a></code>, <code><a href="../Reference/logical_not.html">logical_not</a></code>
+<p><hr>
+<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 4:12 am</body></html>

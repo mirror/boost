@@ -1,0 +1,60 @@
+<!doctype html public "-//ietf//dtd html//en">
+<html><head><title>boost::mpl::Metafunction</title>
+<link rel="stylesheet" href="./mpl_wiki.css">
+</head><body bgcolor="white">
+<h1><a href="./Table_of_Content.html"><img src="./mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>Metafunction</h1><h3>Description</h3>
+<p>
+A Metafunction is a class template that represents a function invocable at compile-time. A metafunction is invoked by instantiating the class template with particular template parameters (metafunction arguments); the result of metafunction application is accessible through the instantiation's nested <code>type</code> typedef. A metafunction can have a variable number of parameters.
+<p>
+<h3>Example</h3>
+<p>
+<pre>
+<span class="cxx-comment">// binary metafunction</span>
+template&lt; typename T1, typename T2 &gt;
+struct is_same
+{
+    typedef false_c type;
+};
+<p>
+template&lt; typename T &gt;
+struct is_same
+{
+    typedef true_c type;
+};
+<p>
+<span class="cxx-comment">// metafunction invocation</span>
+typedef is_same&lt;int,char&gt;::type res;
+BOOST_STATIC_ASSERT(!res::value);
+</pre>
+<p>
+<p>
+<h3>Valid expressions</h3>
+<p>
+<table border="1">
+<tr><th>&nbsp;Expression&nbsp;</th><th>&nbsp;Expression type &nbsp;</th></tr>
+<tr><td><code>typename f::type</code></td><td>A type </td></tr>
+<tr><td><code>typename f&lt;t1,..,tn&gt;::type</code></td><td>A type </td></tr>
+</table>
+<p>
+<h3>Expression semantics</h3>
+<p>
+<table border="1">
+<tr><th>&nbsp;Expression&nbsp;</th><th>&nbsp;Complexity&nbsp;</th><th>&nbsp;Precondition&nbsp;</th><th>&nbsp;Semantics&nbsp;</th><th>&nbsp;Postcondition&nbsp;</th></tr>
+<tr><td><code>typename f::type</code></td><td>Metafunction dependent</td><td><code>f</code> is a nullary metafunction; <code>f::type</code> is a <em>type-name</em></td><td><code>f::type</code> is the result of the metafunction invocation</td><td></td></tr>
+<tr><td><code>typename f&lt;t1,..,tn&gt;::type</code></td><td>Metafunction dependent</td><td><code>f</code> is an <code>n</code>-ary metafunction; <code>t1,..,tn</code> are types; <code>f&lt;t1,..,tn&gt;::type</code> is a <em>type-name</em></td><td><code>f&lt;t1,..,tn&gt;::type</code> is the result of the metafunction invocation with the input arguments <code>t1,..,tn</code></td><td></td></tr>
+</table>
+<p>
+<h3>Models</h3>
+<p>
+<ul>
+<li><code><a href="./Reference/plus.html">plus</a></code>
+<li><code><a href="./Reference/logical_not.html">logical_not</a></code>
+<li><code><a href="./Reference/size.html">size</a></code>
+<li><code>max_element</code>
+</ul>
+<p>
+<h3>See also</h3>
+<p>
+<a href="./Metafunctions.html">Metafunctions</a>, [Metafunction Class]
+<p><hr>
+<a href="./Table_of_Content.html">Table of Content</a><br>Last edited July 16, 2002 11:27 pm</body></html>
