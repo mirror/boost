@@ -181,16 +181,19 @@ namespace boost { namespace program_options {
     }
 
     
+    template<>
     basic_command_line_parser<wchar_t>::
     basic_command_line_parser(const std::vector<std::wstring>& args)
     : m_style(0), m_desc(0), m_positional(0), m_args(utf8_args(args))
     {}
 
+    template<>
     basic_command_line_parser<wchar_t>::
     basic_command_line_parser(int argc, wchar_t* argv[])
     : m_style(0), m_desc(0), m_positional(0), m_args(utf8_args(argc, argv))
     {}
 
+    template<>
     wparsed_options 
     basic_command_line_parser<wchar_t>::run() const
     {
