@@ -782,7 +782,9 @@ struct BoostRegexConcept
       std::ptrdiff_t pt = except.position();
       ignore_unused_variable_warning(pt);
       const Regex ce, ce2;
+#ifndef BOOST_NO_STD_LOCALE
       m_stream << ce;
+#endif
       unsigned i = ce.error_code();
       ignore_unused_variable_warning(i);
       pointer_type p = ce.expression();
@@ -829,8 +831,10 @@ struct BoostRegexConcept
       m_string = m_char + m_sub;
       ignore_unused_variable_warning(m_string);
 
+#ifndef BOOST_NO_STD_LOCALE
       m_stream << m_sub;
       m_stream << m_cresults;
+#endif
    }
 
    std::basic_ostream<value_type> m_stream;
