@@ -47,7 +47,7 @@ class fifo_worker : noncopyable
   public:
     //////////////////////////////////////////////////////////////////////////
     #ifdef BOOST_HAS_THREADS
-    fifo_worker( bool waitOnEmptyQueue = true ) :
+    fifo_worker( bool waitOnEmptyQueue = false ) :
       waitOnEmptyQueue_( waitOnEmptyQueue ),
     #else
     fifo_worker() :
@@ -63,7 +63,10 @@ class fifo_worker : noncopyable
     // implementation object inside work_item.
     void queue_work_item( work_item & item )
     {
-      BOOST_ASSERT( !item.empty() );
+      if ( item.empty() )
+      {
+        return;
+      }
 
       #ifdef BOOST_HAS_THREADS
       mutex::scoped_lock lock( mutex_ );
@@ -118,6 +121,7 @@ class fifo_worker : noncopyable
         }
 
         item();
+        ++itemCount;
       }
 
       return itemCount;
