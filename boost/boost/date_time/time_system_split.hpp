@@ -13,7 +13,7 @@ namespace boost {
 namespace date_time {
 
   //! An unadjusted time system implementation.
-#if (defined(BOOST_MSVC))  
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT))  
   template<typename config, boost::int32_t ticks_per_second>
 #else
   template<typename config>
@@ -29,7 +29,7 @@ namespace date_time {
     typedef typename config::resolution_traits   resolution_traits;
 
     //86400 is number of seconds in a day...
-#if (defined(BOOST_MSVC))  
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT))  
     typedef date_time::wrapping_int<int_type, INT64_C(86400) * ticks_per_second > wrap_int_type;
 #else
     typedef date_time::wrapping_int<int_type, INT64_C(86400) * config::tick_per_second > wrap_int_type;

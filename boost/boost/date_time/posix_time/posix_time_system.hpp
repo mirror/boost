@@ -10,6 +10,7 @@
 #include "boost/date_time/posix_time/posix_time_config.hpp"
 #include "boost/date_time/time_system_split.hpp"
 #include "boost/date_time/time_system_counted.hpp"
+#include "boost/date_time/compiler_config.hpp"
 
 
 namespace boost {
@@ -17,7 +18,7 @@ namespace posix_time {
 
 #ifdef BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 
-#if (defined(BOOST_MSVC))  
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
   typedef date_time::split_timedate_system<posix_time_system_config, 1000000000> posix_time_system;
 #else
   typedef date_time::split_timedate_system<posix_time_system_config> posix_time_system;

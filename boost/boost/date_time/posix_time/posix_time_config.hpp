@@ -10,6 +10,8 @@
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/wrapping_int.hpp"
 #include "boost/limits.hpp"
+#include "boost/date_time/compiler_config.hpp"
+
 //force the definition of INT64_C macro used in posix_time_system
 #ifndef __STDC_CONSTANT_MACROS
 #define __STDC_CONSTANT_MACROS
@@ -107,7 +109,7 @@ namespace posix_time {
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits resolution_traits;
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
 #else
     BOOST_STATIC_CONSTANT(boost::int64_t, tick_per_second = 1000000000);
 #endif
@@ -124,7 +126,7 @@ namespace posix_time {
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits resolution_traits;
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
 #else
     BOOST_STATIC_CONSTANT(boost::int64_t, tick_per_second = 1000000);
 #endif
