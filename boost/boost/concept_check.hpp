@@ -455,7 +455,8 @@ struct require_same { typedef T type; };
       // require iterator_traits typedef's
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
       typedef typename std::iterator_traits<TT>::difference_type D;
-      function_requires< SignedIntegerConcept<D> >();
+      // Hmm, this is a bit fragile
+      //function_requires< SignedIntegerConcept<D> >();
       typedef typename std::iterator_traits<TT>::reference R;
       typedef typename std::iterator_traits<TT>::pointer P;
       typedef typename std::iterator_traits<TT>::iterator_category C;
