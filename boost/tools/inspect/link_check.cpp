@@ -55,7 +55,7 @@ namespace boost
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );
       boost::match_results< string::const_iterator > what; 
-      unsigned int flags = boost::match_default; 
+      boost::match_flag_type flags = boost::match_default; 
 
       while( boost::regex_search( start, end, what, url_regex, flags) ) 
       { 
@@ -154,3 +154,4 @@ namespace boost
 
   } // namespace inspect
 } // namespace boost
+
