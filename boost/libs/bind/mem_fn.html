@@ -75,7 +75,7 @@ define an enhanced <b>for_each</b> algorithm with an overload of the form:
 </p>
 
 <pre>
-template&lt;class It, class R&gt; void for_each(It first, It last, R (*pmf) ())
+template&lt;class It, class R, class T&gt; void for_each(It first, It last, R (T::*pmf) ())
 {
     std::for_each(first, last, boost::mem_fn(pmf));
 }
@@ -93,7 +93,7 @@ that will allow the convenient syntax:
 When documenting the feature, the library author will simply state:
 </p>
 
-<h4 style="margin-left: 20pt;">template&lt;class It, class R&gt; void for_each(It first, It last, R (*pmf) ());</h4>
+<h4 style="margin-left: 20pt;">template&lt;class It, class R, class T&gt; void for_each(It first, It last, R (T::*pmf) ());</h4>
 
 <p style="margin-left: 20pt;">
 <b>Effects:</b> equivalent to std::for_each(first, last, boost::mem_fn(pmf));</tt>
