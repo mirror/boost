@@ -2,7 +2,7 @@
 #define DATE_TIME_DATE_GENERATORS_HPP__
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst 
  */
 /*! @file date_generators.hpp
   Definition and implementation of date algorithm templates
@@ -13,7 +13,6 @@
 namespace boost {
 namespace date_time {
 
-  
   //! Generates a date by applying the year to the given month and day.
   /*!
     Example usage: 
@@ -56,6 +55,9 @@ namespace date_time {
       return (day_ < rhs.day_);
     }
 
+    // added for streaming purposes 
+    month_type month()const{return month_;}
+    day_type day()const{return day_;}
     
   private:
     day_type day_;
@@ -108,12 +110,32 @@ namespace date_time {
       }
       return d;
     }
+    // added for streaming
+    month_type month() const 
+    {
+      return month_;
+    }
+    week_num nth_week() const
+    {
+      return wn_;
+    }
+    day_of_week_type day_of_week() const
+    { 
+      return dow_;
+    } 
+    const char* nth_week_as_str() const
+    {
+      return nth_as_str(wn_);
+    }
   private:
     month_type month_;
     week_num wn_;
     day_of_week_type dow_;
   };
 
+  //! Returns nth arg as string. 1 -> "first", 2 -> "second", max is 5.
+  const char* nth_as_str(int n);
+  
   //! Useful generator functor for finding holidays and daylight savings 
   /*! Similar to nth_kday_of_month, but requires less paramters
    *  \ingroup date_alg
@@ -143,6 +165,15 @@ namespace date_time {
         d = d + one_day;
       }
       return d;
+    }
+    // added for streaming
+    month_type month() const
+    {
+      return month_;
+    }
+    day_of_week_type day_of_week() const
+    {
+      return dow_;
     }
   private:
     month_type month_;
@@ -184,6 +215,15 @@ namespace date_time {
       }
       return d;
     }
+    // added for streaming
+    month_type month() const 
+    {
+      return month_;
+    }
+    day_of_week_type day_of_week() const
+    {
+      return dow_;
+    }
   private:
     month_type month_;
     day_of_week_type dow_;
@@ -218,7 +258,11 @@ namespace date_time {
       }
       return d;
     }
-    
+    // added for streaming
+    day_of_week_type day_of_week() const 
+    {
+      return dow_;
+    }
   private:
     day_of_week_type dow_;
   };
@@ -251,7 +295,11 @@ namespace date_time {
       }
       return d;
     }
-    
+    // added for streaming
+    day_of_week_type day_of_week() const
+    {
+      return dow_;
+    }
   private:
     day_of_week_type dow_;
   };
@@ -280,3 +328,4 @@ namespace date_time {
 
 
 #endif
+

@@ -1,12 +1,13 @@
 #ifndef GREGORIAN_FACET_HPP___
 #define GREGORIAN_FACET_HPP___
-/* Copyright (c) 2002 CrystalClear Software, Inc.
+/* Copyright (c) 2002, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/date_formatting_locales.hpp" // sets BOOST_DATE_TIME_NO_LOCALE
+#include <string>
 
 //This file is basically commented out if locales are not supported
 #ifndef BOOST_DATE_TIME_NO_LOCALE
@@ -110,6 +111,96 @@ namespace gregorian {
     return os;
   }
 
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, const date_duration& dd)
+  {
+    os << dd.days();
+    return os;
+  }
+
+  //! operator<< for gregorian::partial_date. Output: "Jan 1"
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, const partial_date& pd)
+  {
+    os << pd.day() << ' ' << pd.month().as_short_string() ; 
+    return os;
+  }
+
+  /** operator<< for gregorian::nth_kday_of_month.  
+   * Output: "first Mon of Jun"
+   */
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, 
+             const nth_kday_of_month& nkd)
+  {
+    //std::string str_wk_num[] = {"", "first", "second", 
+    //"third", "fourth", "fifth"};
+    //os << str_wk_num[nkd.nth_week()] << ' ' 
+    os << nkd.nth_week_as_str() << ' ' 
+       << nkd.day_of_week() << " of "
+       << nkd.month().as_short_string() ; 
+    return os;
+  }
+
+  /** operator<< for gregorian::first_kday_of_month.
+   * Output: "first Mon of Jun"
+   */
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, 
+             const first_kday_of_month& fkd)
+  {
+    os << "first " << fkd.day_of_week() << " of " 
+       << fkd.month().as_short_string() ; 
+    return os;
+  }
+
+  /** operator<< for gregorian::last_kday_of_month.
+   * Output: "last Mon of Jun"
+   */
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, 
+             const last_kday_of_month& lkd)
+  {
+    os << "last " << lkd.day_of_week() << " of " 
+       << lkd.month().as_short_string() ; 
+    return os;
+  }
+
+  /** operator<< for gregorian::first_kday_after.
+   * Output: "first Mon after"
+   */
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, 
+             const first_kday_after& fka)
+  {
+    os << fka.day_of_week() << " after"; 
+    return os;
+  }
+
+  /** operator<< for gregorian::first_kday_before.
+   * Output: "first Mon before"
+   */
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, 
+             const first_kday_before& fkb)
+  {
+    os << fkb.day_of_week() << " before"; 
+    return os;
+  }
 
 } } //namespace gregorian
 
