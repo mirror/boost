@@ -32,7 +32,7 @@ namespace std{
 #include <boost/archive/iterators/ostream_iterator.hpp>
 #include <boost/archive/iterators/istream_iterator.hpp>
 
-template<size_t S>
+template<std::size_t S>
 struct test_data
 {
     static wchar_t wchar_encoding[];
