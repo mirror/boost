@@ -17,6 +17,9 @@
 #ifndef BOOST_UBLAS_MATRIX_ASSIGN_H
 #define BOOST_UBLAS_MATRIX_ASSIGN_H
 
+// Required for make_conformant storage
+#include <vector>
+
 // Iterators based on ideas of Jeremy Siek
 
 namespace boost { namespace numeric { namespace ublas {
