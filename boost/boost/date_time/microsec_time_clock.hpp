@@ -45,6 +45,7 @@ namespace date_time {
     typedef typename time_duration_type::rep_type resolution_traits_type;
 
     //! return a local time object for the given zone, based on computer clock
+    //JKG -- looks like we could rewrite this against universal_time
     template<class time_zone_type>
     static time_type local_time(shared_ptr<time_zone_type> tz_ptr) {
       typedef typename time_type::utc_time_type utc_time_type;
@@ -62,17 +63,29 @@ namespace date_time {
 #ifdef BOOST_HAS_GETTIMEOFDAY
     //! Return the local time based on computer clock settings
     static time_type local_time() {
-      timeval tv;
-      gettimeofday(&tv, 0); //gettimeofday does not support TZ adjust on Linux.
-      return create_time(&tv);
+      return create_time(LOCAL);
+    }
+
+    //! Get the current day in universal date as a ymd_type
+    static time_type universal_time()
+    {
+      return create_time(GMT);
     }
 
   private:
-    static time_type create_time(timeval* tv) {
+    enum TZ_FOR_CREATE { LOCAL, GMT };
+    static time_type create_time(TZ_FOR_CREATE tz) {
+      timeval tv;
+      gettimeofday(&tv, 0); //gettimeofday does not support TZ adjust on Linux.
       time_t t = tv->tv_sec;
       boost::uint32_t fs = tv->tv_usec;
-      ::std::time(&t);
-      tm* curr = localtime(&t);
+      //::std::time(&t);
+      tm* curr = 0;
+      if (tz == LOCAL) {
+        tm* curr = localtime(&t);
+      } else {
+        tm* curr = gmtime(&t);
+      }
       date_type d(curr->tm_year + 1900,
                   curr->tm_mon + 1,
                   curr->tm_mday);
