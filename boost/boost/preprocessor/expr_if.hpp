@@ -13,9 +13,6 @@
  * See http://www.boost.org for most recent version.
  */
 
-// pm:  not necessary if using manual delay
-// #include <boost/preprocessor/detail/cat.hpp>
-
 #include <boost/preprocessor/logical/bool.hpp>
 
 /** <p>Expands to <code>EXPR</code> if <code>COND != 0</code> and to nothing if <code>COND == 0</code>.</p>
