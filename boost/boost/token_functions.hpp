@@ -9,6 +9,8 @@
 // See http://www.boost.org/libs/tokenizer for documentation.
 
 // Revision History:
+// 01 Oct 2004   Joaquín M López Muñoz
+//      Workaround for a problem with string::assign in msvc-stlport
 // 06 Apr 2004   John Bandela
 //      Fixed a bug involving using char_delimiter with a true input iterator
 // 28 Nov 2003   Robert Zeh and John Bandela
@@ -36,6 +38,7 @@
 #include <cctype>
 #include <algorithm> // for find_if
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/mpl/if.hpp>
 
 //
@@ -208,7 +211,21 @@ namespace boost{
   struct assign_or_plus_equal {
     template<class Iterator, class Token>
     static void assign(Iterator b, Iterator e, Token &t) {
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200) &&\
+    BOOST_WORKAROUND(__SGI_STL_PORT, < 0x500) &&\
+    defined(_STLP_DEBUG) &&\
+    (defined(_STLP_USE_DYNAMIC_LIB) || defined(_DLL))
+    // Problem with string::assign for msvc-stlport in debug mode: the
+    // linker is not able to import the templatized version of this memfun.
+    // See http://www.stlport.com/dcforum/DCForumID6/1763.html for details.
+
+      t = Token();
+      while(b != e) t += *b++;
+#else
       t.assign(b, e);
+#endif
+
     }
 
     template<class Token, class Value> 
