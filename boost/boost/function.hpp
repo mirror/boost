@@ -460,7 +460,7 @@ namespace boost {
                       
 #ifdef __BORLANDC__
     template<typename Functor>
-    function(const Functor* fc) : base_type(fc) {}
+    function(Functor* f) : base_type(f) {}
 #endif // __BORLANDC__
                                                       
     function(const function& f) : base_type(static_cast<const base_type&>(f)){}
@@ -474,9 +474,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    function& operator=(const Functor* fc)
+    function& operator=(Functor* f)
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
       return *this;
     }
@@ -502,9 +501,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    void set(const Functor* fc)
+    void set(Functor* f)
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
     }
 #endif // __BORLANDC__

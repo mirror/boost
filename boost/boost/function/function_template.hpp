@@ -842,9 +842,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(const Functor* fc) : base_type() 
+    BOOST_FUNCTION_FUNCTION(Functor* f) : base_type() 
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
     }
 #endif // __BORLANDC__
@@ -904,9 +903,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(const Functor* fc)
+    BOOST_FUNCTION_FUNCTION& operator=(Functor* f)
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
       return *this;
     }
@@ -920,9 +918,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    void set(const Functor* fc)
+    void set(Functor* f)
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
     }
 #endif // __BORLANDC__
@@ -983,9 +980,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(const Functor* fc) : base_type() 
+    BOOST_FUNCTION_FUNCTION(Functor* f) : base_type() 
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
     }
 #endif // __BORLANDC__
@@ -1038,9 +1034,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(const Functor* fc)
+    BOOST_FUNCTION_FUNCTION& operator=(Functor* f)
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
       return *this;
     }
@@ -1054,9 +1049,8 @@ namespace boost {
 
 #ifdef __BORLANDC__
     template<typename Functor>
-    void set(const Functor* fc)
+    void set(Functor* f)
     {
-      Functor* f = const_cast<Functor*>(fc);
       this->assign_to(f);
     }
 #endif // __BORLANDC__
