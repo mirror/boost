@@ -39,6 +39,7 @@
 
 #   if(__MWERKS__ <= 0x3204)  // 9.3
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#     define BOOST_NO_IS_ABSTRACT
 #    endif
 
 #if !__option(wchar_type)
