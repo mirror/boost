@@ -14,28 +14,24 @@
 #include <algorithm>
 #include <locale>
 
+#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings 
+                            // for BOOST_DEDUCED_TYPENAME
 #include <cstring> // strlen
-#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
+#include <cstdlib> // mbtowc
+#include <cwchar>  // wcslen
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::strlen; 
+    #if ! defined(BOOST_NO_INTRINSIC_WCHAR_T)
+        using ::mbtowc; 
+        using ::wcslen;
+    #endif
 } // namespace std
 #endif
 
 #include <boost/throw_exception.hpp>
 #include <boost/utf8_codecvt_facet.hpp>
-
-#include <cstring>
-#include <cstdlib> // mbtowc
-
-#include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
-#if defined(BOOST_NO_STDC_NAMESPACE) && ! defined(__LIBCOMO__)
-namespace std{ 
-    using ::strlen; 
-    using ::mbtowc; 
-} //std
-#endif
-
 #include <boost/pfto.hpp>
 
 #include <boost/archive/iterators/xml_escape.hpp>
@@ -105,8 +101,8 @@ template<class Archive>
 void xml_woarchive_impl<Archive>::save(const std::wstring & ws){
     typedef iterators::xml_escape<std::wstring::const_iterator> xmbtows;
     std::copy(
-        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.data())),
-        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.data() + ws.size())),
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.begin())),
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.end())),
         boost::archive::iterators::ostream_iterator<wchar_t>(os)
     );
 }
@@ -139,7 +135,7 @@ xml_woarchive_impl<Archive>::xml_woarchive_impl(
         os_,
         true // don't change the codecvt - use the one below
     ),
-    basic_xml_oarchive<Archive>(flags)
+    basic_xml_oarchive<Archive>()
 {
     // Standard behavior is that imbue can be called
     // a) before output is invoked or
