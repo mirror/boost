@@ -44,9 +44,9 @@ struct bitset_test {
     std::size_t M = std::min(N, CHAR_BIT * sizeof(unsigned long));
     std::size_t I;
     for (I = 0; I < M; ++I)
-      BOOST_TEST(b[I] == nth_bit(num, I));
+      BOOST_CHECK(b[I] == nth_bit(num, I));
     for (; I < N; ++I)
-      BOOST_TEST(b[I] == 0);
+      BOOST_CHECK(b[I] == 0);
   }
 
   //   from string
@@ -79,10 +79,10 @@ struct bitset_test {
         std::size_t M = std::min(N, rlen);
         std::size_t j;
         for (j = 0; j < M; ++j)
-          BOOST_TEST(b[j] == (str[pos + M - 1 - j] == '1'));
+          BOOST_CHECK(b[j] == (str[pos + M - 1 - j] == '1'));
         // If M < N, remaining bit positions are initialize to zero
         for (; j < N; ++j)
-          BOOST_TEST(b[j] == 0);
+          BOOST_CHECK(b[j] == 0);
       }
     }
   }
@@ -97,7 +97,7 @@ struct bitset_test {
     for (std::size_t b = 0; b < n; ++b) {
       for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
         std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
-        BOOST_TEST(bset[bit] == nth_bit(blocks[b], i));
+        BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
       }
     }
   }
@@ -106,13 +106,13 @@ struct bitset_test {
   static void copy_constructor(const Bitset& b)
   {
     Bitset copy(b);
-    BOOST_TEST(b == copy);
+    BOOST_CHECK(b == copy);
 
     // Changes to the copy do not affect the original
     if (b.size() > 0) {
       std::size_t pos = copy.size() / 2;
       copy.flip(pos);
-      BOOST_TEST(copy[pos] != b[pos]);
+      BOOST_CHECK(copy[pos] != b[pos]);
     }
   }
 
@@ -121,13 +121,13 @@ struct bitset_test {
   {
     Bitset b(lhs);
     b = rhs;
-    BOOST_TEST(b == rhs);
+    BOOST_CHECK(b == rhs);
     
     // Changes to the copy do not affect the original
     if (b.size() > 0) {
       std::size_t pos = b.size() / 2;
       b.flip(pos);
-      BOOST_TEST(b[pos] != rhs[pos]);
+      BOOST_CHECK(b[pos] != rhs[pos]);
     }
   }
 
@@ -137,45 +137,45 @@ struct bitset_test {
 
     // Test no change in size
     b.resize(lhs.size());
-    BOOST_TEST(b == lhs);
+    BOOST_CHECK(b == lhs);
 
     // Test increase in size
     b.resize(lhs.size() * 2, true);
 
     std::size_t i;
     for (i = 0; i < lhs.size(); ++i)
-      BOOST_TEST(b[i] == lhs[i]);
+      BOOST_CHECK(b[i] == lhs[i]);
     for (; i < b.size(); ++i)
-      BOOST_TEST(b[i] == true);
+      BOOST_CHECK(b[i] == true);
 
     // Test decrease in size
     b.resize(lhs.size());
     for (i = 0; i < lhs.size(); ++i)
-      BOOST_TEST(b[i] == lhs[i]);
+      BOOST_CHECK(b[i] == lhs[i]);
   }
 
   static void clear(const Bitset& lhs)
   {
     Bitset b(lhs);
     b.clear();
-    BOOST_TEST(b.size() == 0);
+    BOOST_CHECK(b.size() == 0);
   }
 
   static void append_bit(const Bitset& lhs)
   {
     Bitset b(lhs);
     b.push_back(true);
-    BOOST_TEST(b.size() == lhs.size() + 1);
-    BOOST_TEST(b[b.size() - 1] == true);
+    BOOST_CHECK(b.size() == lhs.size() + 1);
+    BOOST_CHECK(b[b.size() - 1] == true);
     for (std::size_t i = 0; i < lhs.size(); ++i)
-      BOOST_TEST(b[i] == lhs[i]);
+      BOOST_CHECK(b[i] == lhs[i]);
     
     b.push_back(false);
-    BOOST_TEST(b.size() == lhs.size() + 2);
-    BOOST_TEST(b[b.size() - 1] == false);
-    BOOST_TEST(b[b.size() - 2] == true);
+    BOOST_CHECK(b.size() == lhs.size() + 2);
+    BOOST_CHECK(b[b.size() - 1] == false);
+    BOOST_CHECK(b[b.size() - 2] == true);
     for (std::size_t i = 0; i < lhs.size(); ++i)
-      BOOST_TEST(b[i] == lhs[i]);
+      BOOST_CHECK(b[i] == lhs[i]);
   }
 
   static void append_block(const Bitset& lhs)
@@ -183,9 +183,9 @@ struct bitset_test {
     Bitset b(lhs);
     Block value(128);
     b.append(value);
-    BOOST_TEST(b.size() == lhs.size() + Bitset::bits_per_block);
+    BOOST_CHECK(b.size() == lhs.size() + Bitset::bits_per_block);
     for (std::size_t i = 0; i < Bitset::bits_per_block; ++i)
-      BOOST_TEST(b[lhs.size() + i] == bool((value >> i) & 1));
+      BOOST_CHECK(b[lhs.size() + i] == bool((value >> i) & 1));
   }
   
   static void append_block_range(const Bitset& lhs, std::vector<Block> blocks)
@@ -195,7 +195,7 @@ struct bitset_test {
     for (typename std::vector<Block>::iterator i = blocks.begin();
          i != blocks.end(); ++i)
       c.append(*i);
-    BOOST_TEST(b == c);
+    BOOST_CHECK(b == c);
   }
 
   // operator[] and reference members
@@ -209,9 +209,9 @@ struct bitset_test {
     // x = ~b[i]
     for (i = 0; i < b.size(); ++i) {
       bool x = b[i];
-      BOOST_TEST(x == bit_vec[i]);
+      BOOST_CHECK(x == bit_vec[i]);
       x = ~b[i];
-      BOOST_TEST(x == !bit_vec[i]);
+      BOOST_CHECK(x == !bit_vec[i]);
     }
     Bitset prev(b);
 
@@ -221,9 +221,9 @@ struct bitset_test {
       b[j] = x;
       for (k = 0; k < b.size(); ++k)
         if (j == k)
-          BOOST_TEST(b[k] == x);
+          BOOST_CHECK(b[k] == x);
         else
-          BOOST_TEST(b[k] == prev[k]);
+          BOOST_CHECK(b[k] == prev[k]);
       b[j] = prev[j];
     }
     b.flip();
@@ -233,9 +233,9 @@ struct bitset_test {
       b[i] = prev[i];
       for (j = 0; j < b.size(); ++j) {
         if (i == j)
-          BOOST_TEST(b[j] == prev[j]);
+          BOOST_CHECK(b[j] == prev[j]);
         else
-          BOOST_TEST(b[j] == !prev[j]);
+          BOOST_CHECK(b[j] == !prev[j]);
       }
       b[i] = !prev[i];
     }
@@ -245,9 +245,9 @@ struct bitset_test {
       b[i].flip();
       for (j = 0; j < b.size(); ++j) {
         if (i == j)
-          BOOST_TEST(b[j] == prev[j]);
+          BOOST_CHECK(b[j] == prev[j]);
         else
-          BOOST_TEST(b[j] == !prev[j]);
+          BOOST_CHECK(b[j] == !prev[j]);
       }
       b[i].flip();
     }
@@ -268,9 +268,9 @@ struct bitset_test {
     // clear, and leaves all other bits unchanged.
     for (std::size_t I = 0; I < lhs.size(); ++I)
       if (rhs[I] == 0)
-        BOOST_TEST(lhs[I] == 0);
+        BOOST_CHECK(lhs[I] == 0);
       else
-        BOOST_TEST(lhs[I] == prev[I]);
+        BOOST_CHECK(lhs[I] == prev[I]);
   }
 
   // PRE: b.size() == rhs.size()
@@ -283,9 +283,9 @@ struct bitset_test {
     // leaves all other bits unchanged.
     for (std::size_t I = 0; I < lhs.size(); ++I)
       if (rhs[I] == 1)
-        BOOST_TEST(lhs[I] == 1);
+        BOOST_CHECK(lhs[I] == 1);
       else
-        BOOST_TEST(lhs[I] == prev[I]);
+        BOOST_CHECK(lhs[I] == prev[I]);
   }
 
   // PRE: b.size() == rhs.size()
@@ -298,9 +298,9 @@ struct bitset_test {
     // and leaves all other bits unchanged.
     for (std::size_t I = 0; I < lhs.size(); ++I)
       if (rhs[I] == 1)
-        BOOST_TEST(lhs[I] == !prev[I]);
+        BOOST_CHECK(lhs[I] == !prev[I]);
       else
-        BOOST_TEST(lhs[I] == prev[I]);
+        BOOST_CHECK(lhs[I] == prev[I]);
   }
 
   // PRE: b.size() == rhs.size()
@@ -313,9 +313,9 @@ struct bitset_test {
     // and leaves all other bits unchanged.
     for (std::size_t I = 0; I < lhs.size(); ++I)
       if (rhs[I] == 1)
-        BOOST_TEST(lhs[I] == 0);
+        BOOST_CHECK(lhs[I] == 0);
       else
-        BOOST_TEST(lhs[I] == prev[I]);
+        BOOST_CHECK(lhs[I] == prev[I]);
   }
 
   static void shift_left_assignment(const Bitset& b, std::size_t pos)
@@ -329,9 +329,9 @@ struct bitset_test {
     //   position I - pos
     for (std::size_t I = 0; I < lhs.size(); ++I)
       if (I < pos)
-        BOOST_TEST(lhs[I] == 0);
+        BOOST_CHECK(lhs[I] == 0);
       else
-        BOOST_TEST(lhs[I] == prev[I - pos]);
+        BOOST_CHECK(lhs[I] == prev[I - pos]);
   }
 
   static void shift_right_assignment(const Bitset& b, std::size_t pos)
@@ -346,9 +346,9 @@ struct bitset_test {
     std::size_t N = lhs.size();
     for (std::size_t I = 0; I < N; ++I)
       if (pos >= N - I)
-        BOOST_TEST(lhs[I] == 0);
+        BOOST_CHECK(lhs[I] == 0);
       else
-        BOOST_TEST(lhs[I] == prev[I + pos]);
+        BOOST_CHECK(lhs[I] == prev[I + pos]);
   }
 
 
@@ -357,7 +357,7 @@ struct bitset_test {
     Bitset lhs(b);
     lhs.set();
     for (std::size_t I = 0; I < lhs.size(); ++I)
-      BOOST_TEST(lhs[I] == 1);
+      BOOST_CHECK(lhs[I] == 1);
   }
 
   static void set_one(const Bitset& b, std::size_t pos, bool value)
@@ -368,12 +368,12 @@ struct bitset_test {
       Bitset prev(lhs);
       // Stores a new value in the bit at position pos in lhs.
       lhs.set(pos, value);
-      BOOST_TEST(lhs[pos] == value);
+      BOOST_CHECK(lhs[pos] == value);
 
       // All other values of lhs remain unchanged
       for (std::size_t I = 0; I < N; ++I)
         if (I != pos)
-          BOOST_TEST(lhs[I] == prev[I]);
+          BOOST_CHECK(lhs[I] == prev[I]);
     } else {
       // Not in range, doesn't satisfy precondition.
     }
@@ -385,7 +385,7 @@ struct bitset_test {
     // Resets all bits in lhs
     lhs.reset();
     for (std::size_t I = 0; I < lhs.size(); ++I)
-      BOOST_TEST(lhs[I] == 0);
+      BOOST_CHECK(lhs[I] == 0);
   }
 
   static void reset_one(const Bitset& b, std::size_t pos)
@@ -396,12 +396,12 @@ struct bitset_test {
       Bitset prev(lhs);
       lhs.reset(pos);
       // Resets the bit at position pos in lhs
-      BOOST_TEST(lhs[pos] == 0);
+      BOOST_CHECK(lhs[pos] == 0);
 
       // All other values of lhs remain unchanged
       for (std::size_t I = 0; I < N; ++I)
         if (I != pos)
-          BOOST_TEST(lhs[I] == prev[I]);
+          BOOST_CHECK(lhs[I] == prev[I]);
     } else {
       // Not in range, doesn't satisfy precondition.
     }
@@ -411,7 +411,7 @@ struct bitset_test {
   {
     Bitset lhs(b);
     Bitset x(lhs);
-    BOOST_TEST(~lhs == x.flip());
+    BOOST_CHECK(~lhs == x.flip());
   }
 
   static void flip_all(const Bitset& b)
@@ -422,7 +422,7 @@ struct bitset_test {
     lhs.flip();
     // Toggles all the bits in lhs 
     for (std::size_t I = 0; I < N; ++I)
-      BOOST_TEST(lhs[I] == !prev[I]);
+      BOOST_CHECK(lhs[I] == !prev[I]);
   }
 
   static void flip_one(const Bitset& b, std::size_t pos)
@@ -433,12 +433,12 @@ struct bitset_test {
       Bitset prev(lhs);
       lhs.flip(pos);
       // Toggles the bit at position pos in lhs
-      BOOST_TEST(lhs[pos] == !prev[pos]);
+      BOOST_CHECK(lhs[pos] == !prev[pos]);
 
       // All other values of lhs remain unchanged
       for (std::size_t I = 0; I < N; ++I)
         if (I != pos)
-          BOOST_TEST(lhs[I] == prev[I]);
+          BOOST_CHECK(lhs[I] == prev[I]);
     } else {
       // Not in range, doesn't satisfy precondition.
     }
@@ -456,17 +456,17 @@ struct bitset_test {
     if (will_overflow) {
       try {
         (void)lhs.to_ulong();
-        BOOST_TEST(false); // It should have thrown and exception
+        BOOST_CHECK(false); // It should have thrown and exception
       } catch (std::overflow_error) {
         // Good!
       } catch (...) {
-        BOOST_TEST(false); // threw the wrong exception
+        BOOST_CHECK(false); // threw the wrong exception
       }
     } else {
       unsigned long num = lhs.to_ulong();
       // Make sure the number is right
       for (std::size_t I = 0; I < N; ++I)
-        BOOST_TEST(lhs[I] == nth_bit(num, I));
+        BOOST_CHECK(lhs[I] == nth_bit(num, I));
     }
   }
 
@@ -483,9 +483,9 @@ struct bitset_test {
     std::string str;
     boost::to_string(b, str);
     std::size_t N = b.size();
-    BOOST_TEST(str.size() == b.size());
+    BOOST_CHECK(str.size() == b.size());
     for (std::size_t I = 0; I < b.size(); ++I)
-      BOOST_TEST(b[I] == 0 ? (str[N - 1 - I] == '0') : (str[N - 1 - I] == '1'));
+      BOOST_CHECK(b[I] == 0 ? (str[N - 1 - I] == '0') : (str[N - 1 - I] == '1'));
   }
 
   static void count(const Bitset& b)
@@ -495,22 +495,22 @@ struct bitset_test {
     for (std::size_t I = 0; I < b.size(); ++I)
       if (b[I])
         ++c_real;
-    BOOST_TEST(c == c_real);
+    BOOST_CHECK(c == c_real);
   }
 
   static void size(const Bitset& b)
   {
-    BOOST_TEST(Bitset(b).set().count() == b.size());
+    BOOST_CHECK(Bitset(b).set().count() == b.size());
   }
 
   static void any(const Bitset& b)
   {
-    BOOST_TEST(b.any() == (b.count() > 0));
+    BOOST_CHECK(b.any() == (b.count() > 0));
   }
 
   static void none(const Bitset& b)
   {
-    BOOST_TEST(b.none() == (b.count() == 0));
+    BOOST_CHECK(b.none() == (b.count() == 0));
   }
 
   static void subset(const Bitset& a, const Bitset& b)
@@ -518,7 +518,7 @@ struct bitset_test {
     if (a.is_subset_of(b)) {
       for (std::size_t I = 0; I < a.size(); ++I)
 	if (a[I])
-	  BOOST_TEST(b[I]);
+	  BOOST_CHECK(b[I]);
     } else {
       bool is_subset = true;
       for (std::size_t I = 0; I < a.size(); ++I)
@@ -526,7 +526,7 @@ struct bitset_test {
 	  is_subset = false;
 	  break;
 	}
-      BOOST_TEST(is_subset == false);
+      BOOST_CHECK(is_subset == false);
     }
   }
 
@@ -535,8 +535,8 @@ struct bitset_test {
     if (a.is_proper_subset_of(b)) {
       for (std::size_t I = 0; I < a.size(); ++I)
 	if (a[I])
-	  BOOST_TEST(b[I]);
-      BOOST_TEST(a.count() < b.count());
+	  BOOST_CHECK(b[I]);
+      BOOST_CHECK(a.count() < b.count());
     } else {
       bool is_subset = true;
       for (std::size_t I = 0; I < a.size(); ++I)
@@ -544,7 +544,7 @@ struct bitset_test {
 	  is_subset = false;
 	  break;
 	}
-      BOOST_TEST(is_subset == false || a.count() >= b.count());
+      BOOST_CHECK(is_subset == false || a.count() >= b.count());
     }
   }
 
@@ -552,7 +552,7 @@ struct bitset_test {
   {
     if (a == b) {
       for (std::size_t I = 0; I < a.size(); ++I)
-        BOOST_TEST(a[I] == b[I]);
+        BOOST_CHECK(a[I] == b[I]);
     } else {
       if (a.size() == b.size()) {
         bool diff = false;
@@ -561,7 +561,7 @@ struct bitset_test {
             diff = true;
             break;
           }
-        BOOST_TEST(diff);
+        BOOST_CHECK(diff);
       }
     }
   }
@@ -576,11 +576,11 @@ struct bitset_test {
             diff = true;
             break;
           }
-        BOOST_TEST(diff);
+        BOOST_CHECK(diff);
       }
     } else {
       for (std::size_t I = 0; I < a.size(); ++I)
-        BOOST_TEST(a[I] == b[I]);
+        BOOST_CHECK(a[I] == b[I]);
     }
   }
 
@@ -608,33 +608,33 @@ struct bitset_test {
   static void operator_less_than(const Bitset& a, const Bitset& b)
   {
     if (less_than(a, b))
-      BOOST_TEST(a < b);
+      BOOST_CHECK(a < b);
     else
-      BOOST_TEST(!(a < b));
+      BOOST_CHECK(!(a < b));
   }
 
   static void operator_greater_than(const Bitset& a, const Bitset& b)
   {
     if (less_than(a, b) || a == b)
-      BOOST_TEST(!(a > b));
+      BOOST_CHECK(!(a > b));
     else
-      BOOST_TEST(a > b);
+      BOOST_CHECK(a > b);
   }
 
   static void operator_less_than_eq(const Bitset& a, const Bitset& b)
   {
     if (less_than(a, b) || a == b)
-      BOOST_TEST(a <= b);
+      BOOST_CHECK(a <= b);
     else
-      BOOST_TEST(!(a <= b));
+      BOOST_CHECK(!(a <= b));
   }
 
   static void operator_greater_than_eq(const Bitset& a, const Bitset& b)
   {
     if (less_than(a, b))
-      BOOST_TEST(!(a >= b));
+      BOOST_CHECK(!(a >= b));
     else
-      BOOST_TEST(a >= b);
+      BOOST_CHECK(a >= b);
   }
 
   static void test_bit(const Bitset& b, std::size_t pos)
@@ -642,7 +642,7 @@ struct bitset_test {
     Bitset lhs(b);
     std::size_t N = lhs.size();
     if (pos < N) {
-      BOOST_TEST(lhs.test(pos) == lhs[pos]);
+      BOOST_CHECK(lhs.test(pos) == lhs[pos]);
     } else {
       // Not in range, doesn't satisfy precondition.
     }
@@ -651,13 +651,13 @@ struct bitset_test {
   static void operator_shift_left(const Bitset& lhs, std::size_t pos)
   {
     Bitset x(lhs);
-    BOOST_TEST((lhs << pos) == (x <<= pos));
+    BOOST_CHECK((lhs << pos) == (x <<= pos));
   }
 
   static void operator_shift_right(const Bitset& lhs, std::size_t pos)
   {
     Bitset x(lhs);
-    BOOST_TEST((lhs >> pos) == (x >>= pos));
+    BOOST_CHECK((lhs >> pos) == (x >>= pos));
   }
 
   // operator|
@@ -665,7 +665,7 @@ struct bitset_test {
   void operator_or(const Bitset& lhs, const Bitset& rhs)
   {
     Bitset x(lhs);
-    BOOST_TEST((lhs | rhs) == (x |= rhs));
+    BOOST_CHECK((lhs | rhs) == (x |= rhs));
   }
 
   // operator&
@@ -673,7 +673,7 @@ struct bitset_test {
   void operator_and(const Bitset& lhs, const Bitset& rhs)
   {
     Bitset x(lhs);
-    BOOST_TEST((lhs & rhs) == (x &= rhs));
+    BOOST_CHECK((lhs & rhs) == (x &= rhs));
   }
 
   // operator^
@@ -681,7 +681,7 @@ struct bitset_test {
   void operator_xor(const Bitset& lhs, const Bitset& rhs)
   {
     Bitset x(lhs);
-    BOOST_TEST((lhs ^ rhs) == (x ^= rhs));
+    BOOST_CHECK((lhs ^ rhs) == (x ^= rhs));
   }
 
   // operator-
@@ -689,7 +689,7 @@ struct bitset_test {
   void operator_sub(const Bitset& lhs, const Bitset& rhs)
   {
     Bitset x(lhs);
-    BOOST_TEST((lhs - rhs) == (x -= rhs));
+    BOOST_CHECK((lhs - rhs) == (x -= rhs));
   }
 
   // operator<<(ostream,
@@ -706,7 +706,7 @@ struct bitset_test {
     {
       std::ifstream f("tmp");
       f >> x;
-      BOOST_TEST(out == x);
+      BOOST_CHECK(out == x);
     }
   }
 
