@@ -15,7 +15,7 @@
 #include <memory>            // allocator.
 #include <ios>               // failure.
 #include <new>               // bad_alloc.
-#include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME.
+#include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>  // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
@@ -275,7 +275,12 @@ void* bzip2_allocator<Alloc, Base>::alloc(void* self, int items, int size)
 { 
     size_type len = items * size;
     char* ptr = 
-        static_cast<allocator_type*>(self)->allocate(len + sizeof(size_type)); 
+        static_cast<allocator_type*>(self)->allocate
+            (len + sizeof(size_type)
+            #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
+                , (char*)0
+            #endif
+            );
     *reinterpret_cast<size_type*>(ptr) = len;
     return ptr + sizeof(size_type);
 }
