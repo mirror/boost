@@ -877,6 +877,10 @@ a+(b+) "...aaabb,,,ab*abbb?" $1 "...bb,,,ab*abbb?"
 - match_default normal REG_EXTENDED REG_PERL
 a** !
 a*? aa 0 0
+^a*?$ aa 0 2
+^.*?$ aa 0 2
+^(?:a)*?$ aa 0 2
+^[ab]*?$ aa 0 2
 a?? aa 0 0
 a++ !
 a+? aa 0 1
