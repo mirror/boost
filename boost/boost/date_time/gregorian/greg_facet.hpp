@@ -91,6 +91,25 @@ namespace gregorian {
     return os;
   }
 
+  //! operator<< for gregorian::date_period typical output: [2002-Jan-01/2002-Jan-31]
+  /*! Uses the date facet to determine output string as well as selection of long 
+   *  or short string fr dates.
+   *  Default if no facet is installed is to output a 3 char english string for the
+   *  day of the week.
+   */
+  template <class charT, class traits>
+  inline
+  std::basic_ostream<charT, traits>&
+  operator<<(std::basic_ostream<charT, traits>& os, const date_period& dp)
+  {
+    os << '['; //TODO: facet or manipulator for periods?
+    os << dp.begin();
+    os << '/'; //TODO: facet or manipulator for periods?
+    os << dp.last();
+    os << ']'; 
+    return os;
+  }
+
 
 } } //namespace gregorian
 
