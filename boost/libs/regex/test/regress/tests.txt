@@ -861,6 +861,9 @@ abc|\w+? abcd 0 3
 (?:(a+)b+) xaaabbba 1 7 1 4
 (?:a+(b+)) xaaabbba 1 7 4 7
 a+(?#b+)b+ xaaabbba 1 7
+(a)(?:b|$) ab 0 2 0 1
+(a)(?:b|$) a 0 1 0 1
+
 
 ;
 ; try some partial matches:
@@ -898,5 +901,6 @@ a+(?#b+)b+ xaaabbba 1 7
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ abc3 -1 -1
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ abC3 0 4
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ ABCD3 -1 -1
+
 
 

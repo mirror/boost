@@ -453,12 +453,26 @@ __cdecl
 hl_grep_test_proc(const RegEx& e)
 {
    int start, end;
+
    start = e.Position(0);
    end = start + e.Length();
    if((matches[hl_match_id] != start) || (matches[hl_match_id + 1] != end))
    {
       begin_error();
       cout << "class RegEx grep match error: found [" << start << "," << end << "] expected [" << matches[hl_match_id] << "," << matches[hl_match_id+1] << "]" << endl;
+   }
+   if(0 == (flags[4] & REG_GREP))
+   {
+      for(unsigned int sub = 1; sub < e.Marks(); ++sub)
+      {
+         start = e.Position(sub);
+         end = start + e.Length(sub);
+         if((matches[2*sub] != start) || (matches[2*sub + 1] != end))
+         {
+            begin_error();
+            cout << "class RegEx grep match error: found in sub " << sub << " [" << start << "," << end << "] expected [" << matches[2*sub] << "," << matches[2*sub+1] << "]" << endl;
+         }
+      }
    }
 
    //
