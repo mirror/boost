@@ -126,6 +126,12 @@ public:
         return p_ == 0? 0: &intrusive_ptr::get;
     }
 
+    // operator! is a Borland-specific workaround
+    bool operator! () const
+    {
+        return p_ == 0;
+    }
+
     void swap(intrusive_ptr & rhs)
     {
         T * tmp = p_;
@@ -167,6 +173,17 @@ template<class T> inline bool operator!=(T * a, intrusive_ptr<T> const & b)
 {
     return a != b.get();
 }
+
+#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
+
+// Resolve the ambiguity between our op!= and the one in rel_ops
+
+template<class T> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
+{
+    return a.get() != b.get();
+}
+
+#endif
 
 template<class T> inline bool operator<(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
 {
