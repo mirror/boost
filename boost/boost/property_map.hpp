@@ -368,6 +368,65 @@ namespace boost {
     return PMap(iter, id);
   }
 
+  template <class RandomAccessIterator, 
+    class IndexMap
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+    , class T, class R
+#else
+    , class T = typename std::iterator_traits<RandomAccessIterator>::value_type
+    , class R = typename std::iterator_traits<RandomAccessIterator>::reference
+#endif
+     >
+  class safe_iterator_property_map
+    : public boost::put_get_helper< R, 
+        safe_iterator_property_map<RandomAccessIterator, IndexMap,
+        T, R> >
+  {
+  public:
+    typedef void key_type; 
+    typedef T value_type;
+    typedef R reference;
+    typedef boost::lvalue_property_map_tag category;
+
+    inline safe_iterator_property_map(
+      RandomAccessIterator first = RandomAccessIterator(), 
+      std::size_t n = 0, 
+      const IndexMap& _id = IndexMap() ) 
+      : iter(first), n(n), index(_id) { }
+    template <class Key>
+    inline R operator[](Key v) const {
+      assert(get(index, v) < n);
+      return *(iter + get(index, v)) ;
+    }
+  protected:
+    RandomAccessIterator iter;
+    typename property_traits<IndexMap>::value_type n;
+    IndexMap index;
+  };
+
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  template <class RAIter, class ID>
+  inline safe_iterator_property_map<
+    RAIter, ID,
+    typename std::iterator_traits<RAIter>::value_type,
+    typename std::iterator_traits<RAIter>::reference>
+  make_safe_iterator_property_map(RAIter iter, std::size_t n, ID id) {
+    function_requires< RandomAccessIteratorConcept<RAIter> >();
+    typedef safe_iterator_property_map<
+      RAIter, ID,
+      typename std::iterator_traits<RAIter>::value_type,
+      typename std::iterator_traits<RAIter>::reference> PA;
+    return PA(iter, n, id);
+  }
+#endif
+  template <class RAIter, class Value, class ID>
+  inline safe_iterator_property_map<RAIter, ID, Value, Value&>
+  make_safe_iterator_property_map(RAIter iter, std::size_t n, ID id, Value) {
+    function_requires< RandomAccessIteratorConcept<RAIter> >();
+    typedef safe_iterator_property_map<RAIter, ID, Value, Value&> PMap;
+    return PMap(iter, n, id);
+  }
+
   //=========================================================================
   // An adaptor to turn a Unique Pair Associative Container like std::map or
   // std::hash_map into an Lvalue Property Map.
