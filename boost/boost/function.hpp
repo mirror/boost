@@ -548,7 +548,6 @@ namespace boost {
       class get_function_impl
       {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        BOOST_STATIC_CONSTANT(bool, encoded_param = is_function<InR>::value);
         typedef function_traits<InR*> traits;
       public:                       
 
@@ -787,17 +786,20 @@ namespace boost {
     }
 
     template<typename Functor>
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
+    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f,
+             int deprecated = 0)
     {
       self_type(f).swap(*this);
     }
 
-    void set(const base_type& f)
+    void set(const base_type& f,
+             int deprecated = 0)
     {
       self_type(f).swap(*this);
     }
 
-    void set(const self_type& f)                             
+    void set(const self_type& f,
+             int deprecated = 0)                             
     {
       self_type(f).swap(*this);
     }   

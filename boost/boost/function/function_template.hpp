@@ -322,7 +322,8 @@ namespace boost {
     }
 
     template<typename Functor>
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
+    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f,
+             int deprecated = 0)
     {
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
@@ -338,7 +339,8 @@ namespace boost {
     }
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
-    void set(const BOOST_FUNCTION_FUNCTION& f)
+    void set(const BOOST_FUNCTION_FUNCTION& f,
+             int deprecated = 0)
     {
       if (&f == this)
         return;
