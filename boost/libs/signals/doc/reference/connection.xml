@@ -69,6 +69,30 @@
           </method>
         </method-group>
 
+        <method-group name="blocking">
+          <method name="block">
+            <type>void</type>
+            <parameter name="should_block">
+              <paramtype>bool</paramtype>
+              <default>true</default>
+            </parameter>
+            <requires><simpara><code>connected()</code></simpara></requires>
+            <postconditions><simpara><code>blocked() == should_block</code></simpara></postconditions>
+            <throws><simpara>Will not throw.</simpara></throws>
+          </method>
+          <method name="unblock">
+            <type>void</type>
+            <requires><simpara><code>connected()</code></simpara></requires>
+            <postconditions><simpara><code>!blocked()</code></simpara></postconditions>
+            <throws><simpara>Will not throw.</simpara></throws>
+          </method>
+          <method name="blocked" cv="const">
+            <type>bool</type>
+            <returns><simpara><code>true</code> if the associated slot is either disconnected or blocked, <code>false</code> otherwise.</simpara></returns>
+            <throws><simpara>Will not throw.</simpara></throws>
+          </method>
+        </method-group>
+
         <method-group name="modifiers">
           <method name="swap">
             <type>void</type>

@@ -11,7 +11,6 @@
 #define BOOST_SIGNALS_SLOT_CALL_ITERATOR
 
 #include <memory>
-#include <functional>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/signals/detail/config.hpp>
@@ -49,33 +48,33 @@ namespace boost {
 
       public:
         slot_call_iterator(Iterator iter_in, Iterator end_in, Function f,
-			   optional<result_type> &c)
+                           optional<result_type> &c)
           : iter(iter_in), end(end_in), f(f), cache(&c)
         {
-          iter = std::find_if(iter, end, std::not1(is_disconnected()));
+          iter = std::find_if(iter, end, is_callable());
         }
 
         typename inherited::reference
         dereference() const
         {
-	  if (!cache->is_initialized()) {
-	    cache->reset(f(*iter));
-	  }
+          if (!cache->is_initialized()) {
+            cache->reset(f(*iter));
+          }
 
           return cache->get();
         }
 
         void increment()
         {
-          iter = std::find_if(++iter, end, std::not1(is_disconnected()));
-	  cache->reset();
+          iter = std::find_if(++iter, end, is_callable());
+          cache->reset();
         }
 
         bool equal(const slot_call_iterator& other) const
         {
-          iter = std::find_if(iter, end, std::not1(is_disconnected()));
+          iter = std::find_if(iter, end, is_callable());
           other.iter = std::find_if(other.iter, other.end,
-                                    std::not1(is_disconnected()));
+                                    is_callable());
           return iter == other.iter;
         }
 

@@ -92,6 +92,20 @@ test_remove_self()
   s0(); std::cout << std::endl;
   BOOST_CHECK(test_output == "123");
 
+  std::cout << "Blocking 2" << std::endl;
+
+  connections[2].block();
+  test_output = "";
+  s0(); std::cout << std::endl;
+  BOOST_CHECK(test_output == "13");
+
+  std::cout << "Unblocking 2" << std::endl;
+
+  connections[2].unblock();
+  test_output = "";
+  s0(); std::cout << std::endl;
+  BOOST_CHECK(test_output == "123");
+
   s0.disconnect_all_slots();
   BOOST_CHECK(s0.empty());
 

@@ -676,6 +676,29 @@ sig(); <emphasis>// Does nothing: there are no connected slots</emphasis>
 </programlisting>
 </section>
 
+<section><title>Blocking Slots (Beginner)</title> 
+
+<para>Slots can be temporarily "blocked", meaning that they will be
+ignored when the signal is invoked but have not been disconnected. The
+<code><methodname>block</methodname></code> member function
+temporarily blocks a slot, which can be unblocked via
+<code><methodname>unblock</methodname></code>. Here is an example of
+blocking/unblocking slots:</para>
+
+<programlisting>
+boost::signals::connection c = sig.<methodname>connect</methodname>(HelloWorld());
+sig(); <emphasis>// Prints "Hello, World!"</emphasis>
+
+c.<methodname>block</methodname>(); <emphasis>// block the slot</emphasis>
+assert(c.<methodname>blocked</methodname>());
+sig(); <emphasis>// No output: the slot is blocked</emphasis>
+
+c.<methodname>unblock</methodname>(); <emphasis>// unblock the slot</emphasis>
+sig(); <emphasis>// Prints "Hello, World!"</emphasis>
+</programlisting>
+
+</section>
+
 <section><title>Scoped connections (Intermediate)</title>
 <para>The <code>boost::signals::scoped_connection</code> class
 references a signal/slot connection that will be disconnected when

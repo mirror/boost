@@ -24,6 +24,7 @@ namespace boost {
           // signal for the connection to be connected.
           con->signal = static_cast<void*>(this);
           con->signal_data = 0;
+          con->blocked_ = false ;
           con->signal_disconnect = &bound_object_destructed;
         }
 
@@ -38,8 +39,8 @@ namespace boost {
 
         // Now notify each of the bound objects that they are connected to this
         // slot.
-        for(std::vector<const trackable*>::iterator i = 
-              data->bound_objects.begin(); 
+        for(std::vector<const trackable*>::iterator i =
+              data->bound_objects.begin();
             i != data->bound_objects.end(); ++i) {
           // Notify the object that the slot is connecting to it
           BOOST_SIGNALS_NAMESPACE::detail::bound_object binding;
