@@ -12,7 +12,9 @@ Jens Maurer &lt;Jens.Maurer@gmx.net&gt;
 <br>
 Document Nxxxx
 <br>
-<code>$Id: proposal.html,v 1.14 2002/10/01 23:05:32 jmaurer Exp $</code>
+<em>Draft</em>
+<br>
+<code>$Id: proposal.html,v 1.21 2002/10/06 23:18:37 jmaurer Exp $</code>
 </font>
 
 <h1>A Proposal to Add an Extensible Random Number Facility to the
@@ -67,7 +69,7 @@ libraries, usually implemented in C or Fortran, is available from the
 scientific community.  Some implement just one random number
 engine, others seek to provide a full framework.  I know of no
 comprehensive C++ framework for generating random numbers that adheres
-to the design principles put forth section III.
+to the design principles put forth in section III.
 <p>
 
 Random number generators are appropriate for this TR because they fall
@@ -95,7 +97,7 @@ not strictly necessary.
 <p>
 
 In case the ISO C99 extensions become part of this TR, section IV should
-be reviewed whether some requirements should be reformulated with the
+be reviewed whether some requirements could be reformulated with the
 ISO C99 extensions.
 
 
@@ -137,10 +139,10 @@ The choice of engines and distributions is also contrasted against the
 following literature:
 
 <ul>
-<li>Knuth, "the Art of Computer Programming Vol. 2"
+<li>Donald E. Knuth, "The Art of Computer Programming Vol. 2"
 </li>
 
-<li>"Numerical Recipes"
+<li>William H. Press et al., "Numerical Recipes in C"
 </li>
 
 </ul>
@@ -156,12 +158,16 @@ framework.
 <li>has a tight enough specification to get reliable cross-platform
 results
 <li>allows storage of state on non-volatile media (e.g., in a disk
-file)
+file) to resume computation later
 <li>does not impede sequence "jump-ahead" for parallel computation
-<li>provides a variety of base engines, to verify simulation results
-<li>provides a variety of distributions, for various common tasks
+<li>provides a variety of base engines, not just one
+<li>allows the user to write its own base engines and use it with the
+library-provided distributions
+<li>provides the most popular distributions
+<li>allows the user to write its own distributions and use it with the
+library-provided engines
 <li>does not prevent implementations with utmost efficiency 
-<li>provides a choice of pseudo-random numbers (for simulations etc.)
+<li>provides both pseudo-random number engines (for simulations etc.)
 and "true" non-deterministic random numbers (for cryptography)
 </ul>
 
@@ -181,7 +187,7 @@ moves from one internal state to the next x(i+1) := f(x(i)), and an
 output function o that produces the output o(x(i)) of the generator.
 This is an entirely deterministic process, it is determined by the
 initial state x(0) and functions f and o only.  Apparent randomness is
-achieved only because the client has a limited perception.
+achieved only because the user has limited perception.
 <p>
 
 A <em>non-deterministic random-number engine</em> provides a
@@ -190,7 +196,11 @@ certain quantum-level physics experiments, measuring the time
 difference between radioactive decay of individual atoms or noise of a
 Zehner diode.  Relatively unforeseeable random sources are also (the
 low bits of) timing between key touches, mouse movements, Ethernet
-packet arrivals, etc.
+packet arrivals, etc.  An estimate for the amount of
+unforeseeability is the entropy, an concept from information theory.
+Completely foreseeable sequences (e.g., from pseudo-random number
+engines) have entropy 0, if all bits are unforeseeable, the entropy is
+equal to the number of bits in each number.
 <p>
 
 Pseudo-random number engines are usually much faster than
@@ -200,12 +210,6 @@ there is a common interface feature subset of both pseudo-random and
 non-deterministic random-number engines.  For example, a
 non-deterministic random-number engine could be employed to produce
 random numbers with normal distribution; this is probably unlikely.
-<p>
-
-Library implementors may want to provide additional non-deterministic
-random-number engines adhering to the interface specified in this
-proposal.  Those engine might give additional information such as
-entropy estimates or have optional blocking/non-blocking behavior.
 <p>
 
 Other libraries, including those mentioned above, only provide
@@ -232,8 +236,9 @@ This proposal honours this conceptual separation, but maintains a
 common interface subset between engines and distributions.  This
 ensures that library users needing uniformly distributed random
 numbers can directly invoke an engine which matches the requirements
-without the need to employ a distribution wrapper.
-<em>[This might not be true: distributions have references to engines.]</em>
+without the need to employ a distribution wrapper.  This use might
+restrict the choice of engines, e.g. to those that produce integer
+random numbers.</em>
 <p>
 
 Furthermore, this proposal sets up requirements for distributions so
@@ -255,24 +260,26 @@ This proposal attempts to specify the engines precisely; two different
 implementations, with the same seed, should return the same output
 sequence.  This forces implementations to use the well-researched
 engines specified hereinafter, and users can have confidence in their
-quality.
+quality and the limits thereof.
 <p>
 
 On the other hand, the specifications for the distributions only
 define the statistical result, not the precise algorithm to use.  This
 is different from engines, because for distribution algorithms,
-rigorous proofs of their correctness are available.  For example,
-there are at least a handful of algorithms known to produce normally
-distributed random numbers from uniformly distributed ones.  Which one
-of these is most efficient depends on at least the relative execution
-speeds for various trigonometric functions, cache and branch
-prediction behaviour, and desired memory use.  This proposal therefore
-leaves the choice of the algorithm to the implementation.  It follows
-that output sequences for the distributions will not be identical
-across implementations.  It is expected that implementations will
-carefully choose the algorithms for distributions up front, since it
-is certainly surprising to customers if some distribution produces
-different numbers from one standard library version to the next.
+rigorous proofs of their correctness are available, usually under the
+precondition that the input random numbers are (truely) uniformly
+distributed.  For example, there are at least a handful of algorithms
+known to produce normally distributed random numbers from uniformly
+distributed ones.  Which one of these is most efficient depends on at
+least the relative execution speeds for various trigonometric
+functions, cache and branch prediction behaviour of the CPU, and
+desired memory use.  This proposal therefore leaves the choice of the
+algorithm to the implementation.  It follows that output sequences for
+the distributions will not be identical across implementations.  It is
+expected that implementations will carefully choose the algorithms for
+distributions up front, since it is certainly surprising to customers
+if some distribution produces different numbers from one
+implementation version to the next.
 <p>
 
 Other libraries usually provide the same differentiation between
@@ -290,7 +297,7 @@ The layering sketched in the previous subsection can be implemented by
 either a template mechanism or by using virtual functions in a class
 hierarchy.  This proposal uses templates.  Template parameters are
 usually some base type and values denoting fixed parameters for the
-functions f and o, e.g. a modulus.
+functions f and o, e.g. a word size or modulus.
 <p>
 
 For virtual functions in a class hierarchy, the core language requires
@@ -358,11 +365,11 @@ optimizer can benefit from the constants and potentially produce
 better code, for example by unrolling loops with fixed loop count.
 <p>
 
-Providing parameters as constructor arguments allows for more
-flexibility for the library user, for example when experimenting with
-several parameterizations.  Predefined parameterizations can be
-provided by defining wrapper types which default the constructor
-parameters.
+As an alternative, providing parameters as constructor arguments
+allows for more flexibility for the library user, for example when
+experimenting with several parameterizations.  Predefined
+parameterizations can be provided by defining wrapper types which
+default the constructor parameters.
 <p>
 
 Other libraries have hard-coded the parameters of their engines and do
@@ -458,13 +465,12 @@ Only one engine of each class should be provided.
 <li>integers or floating-point numbers produced (Some engines produce
 uniformly distributed integers in the range [min,max], however, most
 distribution functions expect uniformly distributed floating-point
-numbers in the range [0,1[ as the input sequence.  The obvious
-conversion requires a relatively costly floating-point division for
-each random number used.  However, since the division is by the
-constant (max-min+1), it can be replaced by a multiplication with the
-precomputed value (max-min+1)<sup>-1</sup>.  To save even the
+numbers in the range [0,1) as the input sequence.  The obvious
+conversion requires a relatively costly integer to floating-point
+conversion plus a floating-point multiplication by
+(max-min+1)<sup>-1</sup> for each random number used.  To save the
 multiplication, some engines can directly produce floating-point
-numbers in the range [0,1[ by maintaining the state x(i) in an
+numbers in the range [0,1) by maintaining the state x(i) in an
 appropriately normalized form, given a sufficiently good
 implementation of basic floating-point operations (e.g. IEEE
 754).</li>
@@ -496,6 +502,7 @@ quality and/or less size.
 <table border="1">
 <tr>
 <th>engine</th>
+<th>int / float</th>
 <th>quality</th>
 <th>speed</th>
 <th>size of state</th>
@@ -505,6 +512,7 @@ quality and/or less size.
 
 <tr>
 <td>linear_congruential</td>
+<td>int</td>
 <td>medium</td>
 <td>medium</td>
 <td>1 word</td>
@@ -516,6 +524,7 @@ parameters.</td>
 
 <tr>
 <td>mersenne_twister</td>
+<td>int</td>
 <td>good</td>
 <td>fast</td>
 <td>624 words</td>
@@ -526,27 +535,28 @@ equidistribution in high dimensions</td>
 
 <tr>
 <td>lagged_fibonacci</td>
+<td>both</td>
 <td>medium</td>
 <td>fast</td>
 <td>up to 80,000 words</td>
 <td>no</td>
-<td>very long cycles possible, fails birthday spacings test, may store
-the state in the [0,1[ range (see lagged_fibonacci01).</td>
+<td>very long cycles possible, fails birthday spacings test.</td>
 </tr>
 
 <tr>
 <td>subtract_with_carry</td>
+<td>both</td>
 <td>medium</td>
 <td>fast</td>
 <td>25 words</td>
 <td>no</td>
-<td>very long cycles possible, fails some statistical tests, may store
-the state in the [0,1[ range (see subtract_with_carry01).  Can be
+<td>very long cycles possible, fails some statistical tests.  Can be
 improved with the discard_block compound engine.</td>
 </tr>
 
 <tr>
 <td>linear_feedback_shift</td>
+<td>int</td>
 <td>medium</td>
 <td>fast</td>
 <td>1 word</td>
@@ -558,6 +568,7 @@ xor_combine compound engine.</td>
 
 <tr>
 <td>shuffle_output</td>
+<td>int</td>
 <td>good</td>
 <td>fast</td>
 <td>base engine + 100 words</td>
@@ -568,6 +579,7 @@ overhead for generation (one multiplication)</td>
 
 <tr>
 <td>discard_block</td>
+<td>both</td>
 <td>good</td>
 <td>slow</td>
 <td>base engine + 1 word</td>
@@ -579,6 +591,7 @@ is reduced to 10% to 3% of the base engine's.</td>
 
 <tr>
 <td>xor_combine</td>
+<td>int</td>
 <td>good</td>
 <td>fast</td>
 <td>base engines</td>
@@ -696,9 +709,8 @@ mod 2<sup>31</sup>-85</td>
 LCG(2<sup>31</sup>-249, 40692)) mod 2<sup>31</sup>-85</td>
 <td>additive_combine&lt;
     shuffle_output&lt;<br>
-    linear_congruential&lt;int, 40014, 0, 2147483563, 0>, 32&gt;,<br>
-    linear_congruential&lt;int, 40692, 0, 2147483399, 0>,
-  val> (additive_combine not in proposal)</td>
+    linear_congruential&lt;int, 40014, 0, 2147483563>, 32&gt;,<br>
+    linear_congruential&lt;int, 40692, 0, 2147483399> > (additive_combine not in proposal)</td>
 <td>-</td>
 <td>-</td>
 <td>ran2</td>
@@ -1122,35 +1134,41 @@ NumberGenerator ---- UniformRandomNumberGenerator ---- Pseudo-RandomNumberGenera
 
 <h3>K. Validation</h3>
 
-All pseudo-random number engines provide a <code>validate</code>
-static member function which can be used to check whether the engine
-has been implemented correctly on the given platform.  The
-<code>validate</code> function compares its argument against a
-pre-computed and hardcoded value that is the 10001th number in the
-random number sequence.  The user is expected to default-construct the
-given engine, retrieve 10000 random numbers from it and then call
-<code>validate()</code> with the 10001th number to validate the
-implementation.
+How can a user have confidence that the implementation of a
+random-number engine is exactly as specified, correctly taking into
+account any platform pecularities (e.g., odd-sized ints)?  After all,
+minor typos in the implementation might not be apparent; the numbers
+produced may look "random".  This proposal therefore specifies for
+each engine the 10000th number in the random number sequence that a
+default-constructed engine object produces.
 <p>
 
 This is considered an important feature for library implementors and
 serious users to check whether the provided library on the given
 platform returns the correct numbers.  It could be argued that a
 library implementor should provide a correct implementation of some
-standard feature in any case, and thus the standard requiring a
-user-checkable validation feature in the actual library code is
-actually superfluous.  Should this be the view of the committee, the
-validation values could easily become part of the semantic
-specification and be removed from the coding requirements.
+standard feature in any case.
 <p>
 
 No other library I have encountered provides explicit validation
-features, although some of them claim to be widely portable.
+values in either their specification or their implementation, although
+some of them claim to be widely portable.
 <p>
-<em>The implementation of this is ugly: You usually provide a template
-parameter with the validation value, which doesn't work for
-floating-point values.  Probably it's better to have the validation as
-a specification feature only, not an implementation feature.</em>
+
+Another design option for validation that was part of early drafts of
+this proposal is moving the reference number (10000th value in the
+sequence) from specification space to implementation space, thus
+providing a <code>validation(x)</code> static member function for each
+engine that compares the hard-coded 10000th value of the sequence with
+some user-provided value <code>x</code> presumeably obtained by
+actually invoking the random-number engine object 10000 times.  Due to
+the template-based design, this amounted to a "val" template value
+parameter for each engine, and the <code>validation(x)</code> function
+reduced to the trivial comparison "val == x".  Handling validation for
+floating-point engines required more machinery, because template value
+parameters cannot be of floating-point type.  Also, from a conceptual
+perspective, it seems odd to demand a validation decision from the
+very entitiy which you want to validate.
 
 
 <h3>L. Non-Volatile Storage of Engine State</h3>
@@ -1257,6 +1275,15 @@ implementation's choice is acceptable.
 these be given as "int" or "unsigned int"?  Using "unsigned int"
 sometimes adds significant clutter to the presentation.
 
+<li>Specifiy operator&lt;&lt; semantics more precisely.
+
+<li>Specify mersenne_twister and other engines precisely.
+
+<li>Specify default seeding precisely.
+
+<li>Specify what happens when reading from [first, last).  What types
+are required?
+
 </ul>
 
 
@@ -1287,7 +1314,8 @@ a (possibly <code>const</code>) value of <code>X</code>.
 to function object)</th>
 </tr>
 
-<tr><td>expression</td>
+<tr>
+<td>expression</td>
 <td>return&nbsp;type</td>
 <td>pre/post-condition</td>
 <td>complexity</td>
@@ -1297,8 +1325,7 @@ to function object)</th>
 <td><code>X::result_type</code></td>
 <td>T</td>
 <td><code>std::numeric_limits&lt;T&gt;::is_specialized</code> is
-<code>true</code>, <code>T</code> is
-<code>LessThanComparable</code> <em>[Why less-than-compare?]</td>
+<code>true</code></td>
 <td>compile-time</td>
 </tr>
 
@@ -1391,7 +1418,7 @@ object.</code></td>
 In the following table, <code>X</code> denotes a pseudo-random number
 engine class returning objects of type <code>T</code>, <code>t</code>
 is a value of <code>T</code>, <code>u</code> is a value of
-<code>X</code>, <code>v</code> is an lvalue of <code>X</code,
+<code>X</code>, <code>v</code> is an lvalue of <code>X</code>,
 <code>it1</code> is an lvalue and <code>it2</code> is a (possibly
 <code>const</code>) value of an input iterator type <code>It</code>
 having value type convertible to <code>T</code>, <code>x</code>,
@@ -1445,11 +1472,12 @@ state.  If the size of the range [it1,it2) is insufficient, leaves
 <tr>
 <td><code>u.seed(it1, it2)</code></td>
 <td>void</td>
-<td>post: If there are sufficient values in [it1, it2) to initialize
-the state of <code>u</code>, then <code>u == X(it1,it2)</code>.
-Otherwise, <code>it1 == it2</code>, throws
-<code>invalid_argument</code>, and leaves <code>u</code> in an
-undefined state.</td>
+<td>post: If there are sufficiently many values in [it1, it2) to
+initialize the state of <code>u</code>, then <code>u ==
+X(it1,it2)</code>.  Otherwise, <code>it1 == it2</code>, throws
+<code>invalid_argument</code>, and further use of <code>u</code>
+(except destruction) is undefined until a <code>seed</code> member
+function has been executed without throwing an exception.</td>
 <td>O(size of state)</td>
 </tr>
 
@@ -1459,16 +1487,6 @@ undefined state.</td>
 <td>given the state u(i) of the engine, computes u(i+1), sets the
 state to u(i+1), and returns some output dependent on u(i+1)</td>
 <td>amortized constant</td>
-</tr>
-
-<tr>
-<td><code>X::validation(t)</code></td>
-<td><code>bool</code></td>
-<td>Given the random number sequence provided by repeated invocations
-of <code>operator()</code> of a default-constructed X, returns true if
-the 10001th element of said sequence is equal to <code>t</code>, false
-otherwise.</td>
-<td>constant</td>
 </tr>
 
 <tr>
@@ -1490,8 +1508,14 @@ of x is equal to the current state y(j) of y.</td>
 <td><code>os &lt;&lt; x</code></td>
 <td><code>std::ostream&</code></td>
 <td>writes a textual representation of the state x(i) of
-<code>x</code> on <code>os</code>.  <em>What happens if os is in a
-weird state?</em></td>
+<code>x</code> to <code>os</code>, with
+<code>os.<em>fmtflags</em></code> set to
+<code>ios_base::dec|ios_base::fixed|ios_base::left</code> and the fill
+character set to the space character.  In the output, adjacent numbers
+are separated by one or more space characters.
+<br>
+post: The <code>os.<em>fmtflags</em></code> and fill character are
+unchanged. </td>
 <td>O(size of state)</td>
 </tr>
 
@@ -1499,8 +1523,7 @@ weird state?</em></td>
 <td><code>is &gt;&gt; v</code></td>
 <td><code>std::istream&</code></td>
 <td>sets the state v(i) of <code>v</code> as determined by reading its
-textual representation from <code>is</code>.  <em>What happens if is
-is in a weird state?  How to restore state from point of save?</em></td>
+textual representation from <code>is</code>.
 <td>O(size of state)</td>
 </tr>
 
@@ -1537,8 +1560,20 @@ numbers of type <code>U</code>.
 <tr>
 <td><code>X(x)</code></td>
 <td><code>X</code></td>
-<td>copy construction; X(x) refers to the same underlying source of
-random numbers as x; invokes <code>reset</code> on the copy.</td>
+<td>copy construction; invokes <code>reset</code> on the copy
+<br>
+post: X(x) refers to the same underlying source of random numbers as
+x; X(x) has the same parameters as x</td>
+<td>constant</td>
+</tr>
+
+<tr>
+<td><code>u = x</code></td>
+<td><code>X&</code></td>
+<td>copy assignment; invokes <code>reset</code> on u
+<br>
+post: u refers to the same underlying source of random numbers as x; u
+has the same parameters as x</td>
 <td>constant</td>
 </tr>
 
@@ -1569,9 +1604,22 @@ of random numbers</td>
 </tr>
 
 </table>
-
-
 <p>
+
+In the following subclauses, a template parameter named
+<code>UniformRandomNumberGenerator</code> shall denote a class that
+satisfies all the requirements of a uniform random number generator.
+Furthermore, a template parameter named <code>RealType</code> shall
+denote a type that holds an approximation to a real number.  This type
+shall meet the requirements for a numeric type (26.1
+[lib.numeric.requirements]), the binary operators +, -, *, / shall be
+applicable to it, a conversion from <code>double</code> shall exist,
+and function signatures analogous to those
+for type <code>double</code> in subclause 26.5 [lib.c.math] shall be
+available by argument-dependent lookup (3.4.2 [basic.lookup.koenig]).
+<em>[Footnote: The built-in floating-point types <code>float</code>
+and <code>double</code> meet these requirements.]</em>
+
 
 <h3>Header <code>&lt;random&gt;</code> synopsis</h3>
 
@@ -1630,11 +1678,11 @@ integral constant expressions.
 <h4>Class template <code>linear_congruential</code></h4>
 
 A <code>linear_congruential</code> engine produces random numbers
-using a linear function x(i+1) := (a * x(i) + c) % m.
+using a linear function x(i+1) := (a * x(i) + c) mod m.
 
 <pre>
 namespace std {
-  template&lt;class IntType, IntType a, IntType c, IntType m, IntType val&gt;
+  template&lt;class IntType, IntType a, IntType c, IntType m&gt;
   class linear_congruential
   {
   public:
@@ -1652,34 +1700,28 @@ namespace std {
     // <em> constructors and member function</em>
     explicit linear_congruential(IntType x0 = 1);
     template&lt;class In&gt; linear_congruential(In& first, In last);
-    void seed(IntType x0);
+    void seed(IntType x0 = 1);
     template&lt;class In&gt; void seed(In& first, In last);
     result_type min() const;
     result_type max() const;
     result_type operator()();
-    static bool validation(result_type x) const;
   };
 
-  template&lt;class IntType, IntType a, IntType c, IntType m, IntType val&gt;
-  bool operator==(const linear_congruential&lt;IntType, a, c, m, val&gt;& x,
-                  const linear_congruential&lt;IntType, a, c, m, val&gt;& y);
-  template&lt;class IntType, IntType a, IntType c, IntType m, IntType val&gt;
-  bool operator!=(const linear_congruential&lt;IntType, a, c, m, val&gt;& x,
-                  const linear_congruential&lt;IntType, a, c, m, val&gt;& y);
+  template&lt;class IntType, IntType a, IntType c, IntType m&gt;
+  bool operator==(const linear_congruential&lt;IntType, a, c, m&gt;& x,
+                  const linear_congruential&lt;IntType, a, c, m&gt;& y);
+  template&lt;class IntType, IntType a, IntType c, IntType m&gt;
+  bool operator!=(const linear_congruential&lt;IntType, a, c, m&gt;& x,
+                  const linear_congruential&lt;IntType, a, c, m&gt;& y);
 
   template&lt;class CharT, class traits,
-           class IntType, IntType a, IntType c, IntType m, IntType val&gt;
+           class IntType, IntType a, IntType c, IntType m&gt;
   basic_ostream&lt;CharT, traits&gt;& operator&lt;&lt;(basic_ostream&lt;CharT, traits&gt;& os,
-                                           const linear_congruential&lt;IntType, a, c, m, val&gt;& x);  
+                                           const linear_congruential&lt;IntType, a, c, m&gt;& x);  
   template&lt;class CharT, class traits,
-           class IntType, IntType a, IntType c, IntType m, IntType val&gt;
+           class IntType, IntType a, IntType c, IntType m&gt;
   basic_istream&lt;CharT, traits&gt;& operator&gt;&gt;(basic_istream&lt;CharT, traits&gt;& is, 
-                                           linear_congruential&lt;IntType, a, c, m, val&gt;& x);
-
-  typedef random::linear_congruential&lt;/* <em>implementation defined</em> */, 16807, 0, 2147483647,
-       1043618065&gt; minstd_rand0;
-  typedef random::linear_congruential&lt;/* <em>implementation defined</em> */, 48271, 0, 2147483647,
-       399268537&gt; minstd_rand;
+                                           linear_congruential&lt;IntType, a, c, m&gt;& x);
 }
 </pre>
 
@@ -1687,76 +1729,83 @@ namespace std {
 <p>
 
 The template parameter <code>IntType</code> shall denote an integral
-type.  If the template parameter m is 0, the behaviour is
-implementation defined.  Otherwise, the template parameters a and c
-shall be less than m.  The template parameter <code>val</code> shall
-have the value x(10001), using x(0) = 1.  The size of the state x(i)
-is sizeof(IntType).
+type.  If the template parameter <code>m</code> is 0, the behaviour is
+implementation-defined.  Otherwise, the template parameters
+<code>a</code> and <code>c</code> shall be less than m.
+<p>
+
+The size of the state x(i) is sizeof(IntType).
 
 
 <pre>    explicit linear_congruential(IntType x0 = 1)</pre>
 
-<strong>Requires:</strong> <code>c &gt 0 || x0 &gt; 0</code>
+<strong>Requires:</strong> <code>c &gt; 0 || (x0 % m) &gt; 0</code>
 <br>
 <strong>Effects:</strong> Constructs a
 <code>linear_congruential</code> engine with state x(0) :=
 <code>x0</code>.
 
 
-<pre>    void seed(IntType x0)</pre>
+<pre>    void seed(IntType x0 = 1)</pre>
 
-<strong>Requires:</strong> <code>c &gt 0 || x0 &gt; 0</code>
+<strong>Requires:</strong> <code>c &gt; 0 || (x0 % m) &gt; 0</code>
 <br>
 <strong>Effects:</strong> Sets the state x(i) of the engine to
 <code>x0</code>.
 
 
-<pre>    static bool validation(result_type x) const</pre>
-
-<strong>Returns:</strong> <code>x == val</code>
-
-
 <pre>
   template&lt;class CharT, class traits,
-           class IntType, IntType a, IntType c, IntType m, IntType val&gt;
+           class IntType, IntType a, IntType c, IntType m&gt;
   basic_ostream&lt;CharT, traits&gt;& operator&lt;&lt;(basic_ostream&lt;CharT, traits&gt;& os,
-                                           const linear_congruential&lt;IntType, a, c, m, val&gt;& x);  
+                                           const linear_congruential&lt;IntType, a, c, m&gt;& x);  
 </pre>
 <strong>Effects:</strong> As if <code>os &lt;&lt; x(i)</code>.
 
-<pre>
-  template&lt;class CharT, class traits,
-           class IntType, IntType a, IntType c, IntType m, IntType val&gt;
-  basic_istream&lt;CharT, traits&gt;& operator&gt;&gt;(basic_istream&lt;CharT, traits&gt;& is, 
-                                           linear_congruential&lt;IntType, a, c, m, val&gt;& x);
-</pre>
-<strong>Effects:</strong> As if <code>is &gt;&gt; x(i)</code>.
 
 <h4>Class template <code>mersenne_twister</code></h4>
 
 A <code>mersenne_twister</code> engine produces random numbers
-x(i) using the MT algorithm.
+o(x(i)) using the following computation, performed modulo
+2<sup>w</sup>.  <code>um</code> is a value with only the upper
+<code>w-r</code> bits set in its binary representation.
+<code>lm</code> is a value with only its lower <code>r</code> bits set
+in its binary representation.  <em>rshift</em> is a bitwise right
+shift with zero-valued bits appearing in the high bits of the result.
+<em>lshift</em> is a bitwise left shift with zero-valued bits
+appearing in the low bits of the result.
+
+<ul>
+<li>y(i) = (x(i-n) <em>bitand</em> um) | (x(i-(n-1)) <em>bitand</em> lm)
+<li>If the lowest bit of the binary representation of y(i) is set,
+x(i) = x(i-(n-m)) <em>xor</em> (y(i) <em>rshift</em> 1) <em>xor</em> a;
+otherwise x(i) = x(i-(n-m)) <em>xor</em> (y(i) <em>rshift</em> 1).
+<li>z1(i) = x(i) <em>xor</em> ( x(i) <em>rshift</em> u )
+<li>z2(i) = z1(i) <em>xor</em> ( (z1(i) <em>lshift</em> s) <em>bitand</em> b )
+<li>z3(i) = z2(i) <em>xor</em> ( (z2(i) <em>lshift</em> t) <em>bitand</em> c )
+<li>o(x(i)) = z3(i) <em>xor</em> ( z3(i) <em>rshift</em> l )
+</ul>
 
 <pre>
 namespace std {
-  template&lt;class DataType, int w, int n, int m, int r, DataType a, int u,
-  int s, DataType b, int t, DataType c, int l, IntType val&gt;
+  template&lt;class UIntType, int w, int n, int m, int r, UIntType a, int u,
+  int s, UIntType b, int t, UIntType c, int l&gt;
   class mersenne_twister
   {
   public:
     // <em>types</em>
-    typedef DataType result_type;
+    typedef UIntType result_type;
 
     // <em>parameter values</em>
     static const int state_size = n;
     static const int shift_size = m;
     static const int mask_bits = r;
-    static const DataType parameter_a = a;
+    static const UIntType parameter_a = a;
     static const int output_u = u;
     static const int output_s = s;
-    static const DataType output_b = b;
+    static const UIntType output_b = b;
     static const int output_t = t;
-    static const DataType output_c = c;
+    static const UIntType output_c = c;
     static const int output_l = l;
     static const bool has_fixed_range = true;
     static const result_type min_value = <em>...</em>;
@@ -1764,105 +1813,107 @@ namespace std {
 
     // <em> constructors and member function</em>
     mersenne_twister();
-    explicit mersenne_twister(DataType value);
-    template&lt;class Generator&gt; explicit mersenne_twister(Generator &amp; gen);
+    explicit mersenne_twister(UIntType value);
     template&lt;class In&gt; mersenne_twister(In& first, In last);
     void seed();
-    void seed(DataType value);
-    template&lt;class Generator&gt; void seed(Generator &amp; gen);
+    void seed(UIntType value);
     template&lt;class In&gt; void seed(In& first, In last);
     result_type min() const;
     result_type max() const;
     result_type operator()();
-    static bool validation(result_type) const;
   };
 
-  template&lt;class DataType, int w, int n, int m, int r, DataType a, int u,
-           int s, DataType b, int t, DataType c, int l, IntType val&gt;
-  bool operator==(const mersenne_twister&lt;DataType, w, n, m, r, a, u, s, b, t, c, l, val>& y,
-                  const mersenne_twister&lt;DataType, w, n, m, r, a, u, s, b, t, c, l, val>& x);
-  template&lt;class DataType, int w, int n, int m, int r, DataType a, int u,
-           int s, DataType b, int t, DataType c, int l, IntType val&gt;
-  bool operator!=(const mersenne_twister&lt;DataType, w, n, m, r, a, u, s, b, t, c, l, val>& y,
-                  const mersenne_twister&lt;DataType, w, n, m, r, a, u, s, b, t, c, l, val>& x);
+  template&lt;class UIntType, int w, int n, int m, int r, UIntType a, int u,
+           int s, UIntType b, int t, UIntType c, int l&gt;
+  bool operator==(const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& y,
+                  const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& x);
+  template&lt;class UIntType, int w, int n, int m, int r, UIntType a, int u,
+           int s, UIntType b, int t, UIntType c, int l&gt;
+  bool operator!=(const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& y,
+                  const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& x);
 
   template&lt;class CharT, class traits,
-           class DataType, int w, int n, int m, int r, DataType a, int u,
-           int s, DataType b, int t, DataType c, int l, IntType val&gt;
+           class UIntType, int w, int n, int m, int r, UIntType a, int u,
+           int s, UIntType b, int t, UIntType c, int l&gt;
   basic_ostream&lt;CharT, traits&gt;& operator&lt;&lt;(basic_ostream&lt;CharT, traits&gt;& os,
-                                           const mersenne_twister&lt;DataType, w, n, m, r, a, u, s, b, t, c, l, val>& x);
+                                           const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& x);
   template&lt;class CharT, class traits,
-           class DataType, int w, int n, int m, int r, DataType a, int u,
-           int s, DataType b, int t, DataType c, int l, IntType val&gt;
+           class UIntType, int w, int n, int m, int r, UIntType a, int u,
+           int s, UIntType b, int t, UIntType c, int l&gt;
   basic_istream&lt;CharT, traits&gt;& operator&gt;&gt;(basic_istream&lt;CharT, traits&gt;& is, 
-                                           mersenne_twister&lt;DataType, w, n, m, r, a, u, s, b, t, c, l, val>& x);
-
-  typedef mersenne_twister&lt;/* <em>implementation defined</em> */,32,351,175,19,0xccab8ee7,11,7,0x31b6ab00,15,0xffe50000,17, 2742893714U&gt; mt11213b;
-  typedef mersenne_twister&lt;/* <em>implementation defined</em> */,32,624,397,31,0x9908b0df,11,7,0x9d2c5680,15,0xefc60000,18, 3346425566U&gt; mt19937;
+                                           mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& x);
 }
 </pre>
 
-The template parameter <code>DataType</code> shall denote an unsigned
+The template parameter <code>UIntType</code> shall denote an unsigned
 integral type.  It shall be large enough to store values up to
 2<sup>w</sup>-1.  Also, the following relations shall hold:
 1&lt=m&lt=n.  0&lt=r,u,s,t,l&lt=w.  0&lt=a,b,c&lt=2<sup>w</sup>-1.
-The template parameter <code>val</code> shall have the value x(10001),
-using the default x(0).  The size of the state x(i) is <code>n *
-sizeof(DataType)</code>.
+<p>
+
+The size of the state x(i) is <code>n * sizeof(UIntType)</code>.
 
 
 <pre>    mersenne_twister()</pre>
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 engine and invokes <code>seed()</code>.
-<br>
-<strong>Complexity:</strong> O(n)
 
 <pre>    explicit mersenne_twister(result_type value)</pre>
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 engine and invokes <code>seed(value)</code>.
-<br>
-<strong>Complexity:</strong> O(n)
 
-<pre>    template&lt;class Generator&gt; explicit mersenne_twister(Generator &amp; gen)</pre>
+<pre>    template&lt;class In&gt; explicit mersenne_twister(In& first, In last)</pre>
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
-engine and invokes <code>seed(gen)</code>.
-<br>
-<strong>Complexity:</strong> Exactly <code>n</code> invocations of
-<code>gen</code>.
+engine and invokes <code>seed(first, last)</code>.
 
-<pre>void seed()</pre>
-
+<pre>    void seed()</pre>
 <strong>Effects:</strong> Invokes
-<code>seed(static_cast&lt;result_type&gt;(4357))</code>.
-<br>
-<strong>Complexity:</strong> O(n)
+<code>seed(4357)</code>.
 
 <pre>    void seed(result_type value)</pre>
-
-<strong>Effects:</strong> As if
-<pre>
-    linear_congruential&lt;unsigned long, 69069ul, 0, 0, 0&gt; lcg(value);
-    seed(lcg);
-</pre>
-<strong>Complexity:</strong> O(n)
-<p>
-<em>[This is broken: cannot use m=0 without explaining at
-linear_congruential.]</em>
-
-
-<pre>    template&lt;class Generator&gt; void seed(Generator &amp; gen)</pre>
-
-<strong>Effects:</strong> Sets the state of this
-<code>mersenne_twister</code> to the values returned by <code>n</code>
-invocations of <code>gen</code>.
+<strong>Requires:</strong> <code>value &gt; 0</code>
 <br>
-<strong>Complexity:</strong> Exactly <code>n</code> invocations of
-<code>gen</code>.
+<strong>Effects:</strong> With a linear congruential generator l(i)
+having parameters m<sub>l</sub> = 2<sup>32</sup>, a<sub>l</sub> = 69069,
+c<sub>l</sub> = 0, and l(0) = <code>value</code>, sets x(-n) ... x(-1)
+to l(1) ... l(n), respectively.
+<br>
+<strong>Complexity:</strong> O(n)
 
+<pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
+<strong>Effects:</strong> Given the values z<sub>0</sub>
+... z<sub>n-1</sub> obtained by dereferencing [first, first+n), sets
+x(-n) ... x(-1) to z<sub>0</sub> mod 2<sup>32</sup>
+... z<sub>n-1</sub> mod 2<sup>32</sup>.
+<br>
+<strong>Complexity:</strong> Exactly <code>n</code> dereferences of
+<code>first</code>.
 
-<pre>    static bool validation(result_type x) const</pre>
+<pre>
+    template&lt;class UIntType, int w, int n, int m, int r, UIntType a, int u,
+             int s, UIntType b, int t, UIntType c, int l&gt;
+    bool operator==(const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& y,
+                    const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& x)
+</pre>
+<strong>Returns:</strong> x(i-n) == y(j-n) and ... and x(i-1) ==
+y(j-1)
+<br>
+<strong>Notes:</strong> Assumes the next output of <code>x</code> is
+o(x(i)) and the next output of <code>y</code> is o(y(j)).
+<br>
+<strong>Complexity:</strong> O(n)
 
-<strong>Returns:</strong> <code>x == val</code>
+<pre>
+    template&lt;class CharT, class traits,
+             class UIntType, int w, int n, int m, int r, UIntType a, int u,
+             int s, UIntType b, int t, UIntType c, int l&gt;
+    basic_ostream&lt;CharT, traits&gt;& operator&lt;&lt;(basic_ostream&lt;CharT, traits&gt;& os,
+                                             const mersenne_twister&lt;UIntType, w, n, m, r, a, u, s, b, t, c, l>& x)
+</pre>
+<strong>Effects:</strong> Writes x(i-n), ... x(i-1) to
+<code>os</code>, in that order.
+<br>
+<strong>Complexity:</strong> O(n)
 
 
 <h4>Class template <code>lagged_fibonacci</code></h4>
@@ -1873,7 +1924,7 @@ using x(i) = (x(i-q) + x(i-p)) mod m.
 
 <pre>
 namespace std {
-  template&lt;class IntType, IntType m, int p, int q, IntType val&gt;
+  template&lt;class IntType, IntType m, int p, int q&gt;
   class lagged_fibonacci
   {
   public:
@@ -1891,31 +1942,28 @@ namespace std {
     // <em> constructors and member function</em>
     lagged_fibonacci();
     explicit lagged_fibonacci(IntType value);
-    template&lt;class Generator&gt; explicit lagged_fibonacci(Generator & gen);
     template&lt;class In&gt; lagged_fibonacci(In& first, In last);
     void seed(IntType value = 331u);
-    template&lt;class Generator&gt; void seed(Generator & gen);
     template&lt;class In&gt; void seed(In& first, In last);
     result_type min() const;
     result_type max() const;
     result_type operator()();
-    static bool validation(result_type x) const;
   };
-  template&lt;class IntType, IntType m, int p, int q, IntType val&gt;
-  bool operator==(const lagged_fibonacci&lt;IntType, m, p, q, val&gt x,
-                  const lagged_fibonacci&lt;IntType, m, p, q, val&gt y);
+  template&lt;class IntType, IntType m, int p, int q&gt;
+  bool operator==(const lagged_fibonacci&lt;IntType, m, p, q&gt; x,
+                  const lagged_fibonacci&lt;IntType, m, p, q&gt; y);
 
-  template&lt;class IntType, IntType m, int p, int q, IntType val&gt;
-  bool operator!=(const lagged_fibonacci&lt;IntType, m, p, q, val&gt x,
-                  const lagged_fibonacci&lt;IntType, m, p, q, val&gt y);
+  template&lt;class IntType, IntType m, int p, int q&gt;
+  bool operator!=(const lagged_fibonacci&lt;IntType, m, p, q&gt; x,
+                  const lagged_fibonacci&lt;IntType, m, p, q&gt; y);
 }
 </pre>
 
 The template parameter <code>IntType</code> shall denote an unsigned
-integral type.  The following relation shall hold: 0&lt;=q&lt;p.  The
-template parameter <code>val</code> shall have the value x(10001),
-using the default x(0).  The size of the state is <code>p *
-sizeof(IntType)</code>.
+integral type.  The following relation shall hold: 0&lt;=q&lt;p.
+<p>
+
+The size of the state is <code>p * sizeof(IntType)</code>.
 
 <pre>    lagged_fibonacci()</pre>
 <strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
@@ -1925,13 +1973,13 @@ engine and invokes <code>seed()</code>.
 <strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
 engine and invokes <code>seed(value)</code>.
 
-<pre>    template&lt;class Generator&gt; explicit lagged_fibonacci(Generator &amp; gen)</pre>
+<pre>    template&lt;class In&gt; lagged_fibonacci(In& first, In last)</pre>
 <strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
-engine and invokes <code>seed(gen)</code>.
+engine and invokes <code>seed(first, last)</code>.
 
 <pre>    void seed()</pre>
 <strong>Effects:</strong> Invokes
-<code>seed(static_cast&lt;result_type&gt;(331))</code>.
+<code>seed(331)</code>.
 <br>
 <strong>Complexity:</strong> O(p)
 
@@ -1943,19 +1991,243 @@ engine and invokes <code>seed(gen)</code>.
 </pre>
 <strong>Complexity:</strong> O(p)
 
-<pre>    template&lt;class Generator&gt; void seed(Generator &amp; gen)</pre>#
+<pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
 <strong>Effects:</strong> Sets the state of this
 <code>lagged_fibonacci</code> to the values returned by <code>p</code>
-invocations of <code>gen</code>.
+invocations of <code>*first++</code>.
 <br>
 <strong>Complexity:</strong> Exactly <code>p</code> invocations of
-<code>gen</code>.
+<code>first.operator++()</code>.
 
 
-<pre>    static bool validation(result_type x) const</pre>
+<h4>Class template <code>subtract_with_carry</code></h4>
 
-<strong>Returns:</strong> <code>x == val</code>
+A <code>subtract_with_carry</code> engine produces integer random numbers
+using x(i) = (x(i-s) - x(i-r) - carry(i-1)) mod m; carry(i) = 1 if
+x(i-s) - x(i-r) - carry(i-1) &lt; 0, else carry(i) = 0.
+<p>
 
+<pre>
+namespace std {
+  template&lt;class IntType, IntType m, int s, int r&gt;
+  class subtract_with_carry
+  {
+  public:
+    // <em>types</em>
+    typedef IntType result_type;
+
+    // <em>parameter values</em>
+    static const IntType modulus = m;
+    static const int long_lag = r;
+    static const int short_lag = s;
+    static const bool has_fixed_range = true;
+    static const result_type min_value = <em>...</em>;
+    static const result_type max_value = <em>...</em>;
+
+    // <em> constructors and member function</em>
+    subtract_with_carry();
+    explicit subtract_with_carry(IntType value);
+    template&lt;class In&gt; subtract_with_carry(In& first, In last);
+    void seed(IntType value = 19780503);
+    template&lt;class In&gt; void seed(In& first, In last);
+    result_type min() const;
+    result_type max() const;
+    result_type operator()();
+  };
+  template&lt;class IntType, IntType m, int s, int r&gt;
+  bool operator==(const subtract_with_carry&lt;IntType, m, s, r&gt; & x,
+                  const subtract_with_carry&lt;IntType, m, s, r&gt; & y);
+
+  template&lt;class IntType, IntType m, int s, int r&gt;
+  bool operator!=(const subtract_with_carry&lt;IntType, m, s, r&gt; & x,
+                  const subtract_with_carry&lt;IntType, m, s, r&gt; & y);
+
+  template&lt;class CharT, class Traits,
+           class IntType, IntType m, int s, int r&gt;
+  std::basic_ostream&lt;CharT,Traits>& operator&lt;&lt;(std::basic_ostream&lt;CharT,Traits>& os,
+                                               const subtract_with_carry&lt;IntType, m, s, r&gt& f);
+
+  template&lt;class CharT, class Traits,
+          class IntType, IntType m, int s, int r&gt;
+  std::basic_istream&lt;CharT,Traits>& operator&gt;&gt;(std::basic_istream&lt;CharT,Traits>& is, 
+                                               subtract_with_carry&lt;IntType, m, s, r&gt& f);
+}
+</pre>
+
+The template parameter <code>IntType</code> shall denote an signed
+integral type.  The following relation shall hold: 0&lt;s&lt;r.
+<p>
+
+The size of the state is <code>r * sizeof(IntType)</code>.
+
+<pre>    subtract_with_carry()</pre>
+<strong>Effects:</strong> Constructs a <code>subtract_with_carry</code>
+engine and invokes <code>seed()</code>.
+
+<pre>    explicit subtract_with_carry(IntType value)</pre>
+<strong>Effects:</strong> Constructs a <code>subtract_with_carry</code>
+engine and invokes <code>seed(value)</code>.
+
+<pre>    template&lt;class In&gt; subtract_with_carry(In& first, In last)</pre>
+<strong>Effects:</strong> Constructs a <code>subtract_with_carry</code>
+engine and invokes <code>seed(first, last)</code>.
+
+<pre>    void seed(IntType value = 19780503)</pre>
+<strong>Requires:</strong> <code>value &gt; 0</code>
+<br>
+<strong>Effects:</strong> With a linear congruential generator l(i)
+having parameters m<sub>l</sub> = 2147483563, a<sub>l</sub> = 40014,
+c<sub>l</sub> = 0, and l(0) = <code>value</code>, sets x(-r) ... x(-1)
+to l(1) mod m ... l(r) mod m, respectively.  If x(-1) == 0, sets
+carry(-1) = 1, else sets carry(-1) = 0.
+<br>
+<strong>Complexity:</strong> O(r)
+
+<pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
+<strong>Effects:</strong> Given the values z<sub>0</sub>
+... z<sub>r-1</sub> obtained by dereferencing [first, first+r), sets
+x(-r) ... x(-1) to z<sub>0</sub> mod m ... z<sub>r-1</sub> mod m.
+If x(-1) == 0, sets carry(-1) = 1, else sets carry(-1) = 0.
+<br>
+<strong>Complexity:</strong> Exactly <code>r</code> dereferences of
+<code>first</code>.
+
+<pre>
+    template&lt;class IntType, IntType m, int s, int r&gt;
+    bool operator==(const subtract_with_carry&lt;IntType, m, s, r&gt; & x,
+                    const subtract_with_carry&lt;IntType, m, s, r&gt; & y)
+</pre>
+<strong>Returns:</strong> x(i-r) == y(j-r) and ... and x(i-1) ==
+y(j-1).
+<br>
+<strong>Notes:</strong> Assumes the next output of <code>x</code> is
+o(x(i)) and the next output of <code>y</code> is y(j).
+<br>
+<strong>Complexity:</strong> O(r)
+
+<pre>
+    template&lt;class CharT, class Traits,
+          class IntType, IntType m, int s, int r&gt;
+    std::basic_ostream&lt;CharT,Traits>& operator&lt;&lt;(std::basic_ostream&lt;CharT,Traits>& os,
+                                                 const subtract_with_carry&lt;IntType, m, s, r&gt;& f)
+</pre>
+<strong>Effects:</strong> Writes x(i-r) ... x(i-1), carry(i-1) to
+<code>os</code>, in that order.
+<br>
+<strong>Complexity:</strong> O(r)
+
+
+<h4>Class template <code>subtract_with_carry_01</code></h4>
+
+A <code>subtract_with_carry_01</code> engine produces floating-point
+random numbers using x(i) = (x(i-s) - x(i-r) - carry(i-1)) mod 1;
+carry(i) = 2<sup>-w</sup> if x(i-s) - x(i-r) - carry(i-1) &lt; 0, else
+carry(i) = 0.
+<p>
+
+<pre>
+namespace std {
+  template&lt;class RealType, int w, int s, int r&gt;
+  class subtract_with_carry_01
+  {
+  public:
+    // <em>types</em>
+    typedef RealType result_type;
+
+    // <em>parameter values</em>
+    static const int word_size = w;
+    static const int long_lag = r;
+    static const int short_lag = s;
+    static const bool has_fixed_range = true;
+    static const result_type min_value = <em>...</em>;
+    static const result_type max_value = <em>...</em>;
+
+    // <em> constructors and member function</em>
+    subtract_with_carry_01();
+    explicit subtract_with_carry_01(unsigned int value);
+    template&lt;class In&gt; subtract_with_carry_01(In& first, In last);
+    void seed(unsigned int value = 19780503);
+    template&lt;class In&gt; void seed(In& first, In last);
+    result_type min() const;
+    result_type max() const;
+    result_type operator()();
+  };
+  template&lt;class RealType, int w, int s, int r&gt;
+  bool operator==(const subtract_with_carry_01&lt;RealType, w, s, r&gt; x,
+                  const subtract_with_carry_01&lt;RealType, w, s, r&gt; y);
+
+  template&lt;class RealType, int w, int s, int r&gt;
+  bool operator!=(const subtract_with_carry_01&lt;RealType, w, s, r&gt; x,
+                  const subtract_with_carry_01&lt;RealType, w, s, r&gt; y);
+
+  template&lt;class CharT, class Traits,
+           class RealType, int w, int s, int r&gt;
+  std::basic_ostream&lt;CharT,Traits>& operator&lt;&lt;(std::basic_ostream&lt;CharT,Traits>& os,
+                                               const subtract_with_carry_01&lt;RealType, w, s, r&gt& f);
+
+  template&lt;class CharT, class Traits,
+           class RealType, int w, int s, int r&gt;
+  std::basic_istream&lt;CharT,Traits>& operator&gt;&gt;(std::basic_istream&lt;CharT,Traits>& is, 
+                                               subtract_with_carry_01&lt;RealType, w, s, r&gt& f);
+}
+</pre>
+
+The following relation shall hold: 0&lt;s&lt;r.
+<p>
+
+The size of the state is <code>r * sizeof(IntType)</code>.
+
+<pre>    subtract_with_carry_01()</pre>
+<strong>Effects:</strong> Constructs a <code>subtract_with_carry_01</code>
+engine and invokes <code>seed()</code>.
+
+<pre>    explicit subtract_with_carry_01(unsigned int value)</pre>
+<strong>Effects:</strong> Constructs a <code>subtract_with_carry_01</code>
+engine and invokes <code>seed(value)</code>.
+
+<pre>    template&lt;class In&gt; subtract_with_carry_01(In& first, In last)</pre>
+<strong>Effects:</strong> Constructs a <code>subtract_with_carry_01</code>
+engine and invokes <code>seed(first, last)</code>.
+
+<pre>    void seed(unsigned int value = 19780503)</pre>
+<strong>Effects:</strong> With a linear congruential generator l(i)
+having parameters m = 2147483563, a = 40014, c = 0, and l(0) =
+<code>value</code>, sets x(-r) ... x(-1) to (l(1)*2<sup>-w</sup>) mod 1
+... (l(r)*2<sup>-w</sup>) mod 1, respectively.  If x(-1) == 0, sets
+carry(-1) = 2<sup>-w</sup>, else sets carry(-1) = 0.
+<br>
+<strong>Complexity:</strong> O(r)
+
+<pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
+<strong>Effects:</strong> Given the values z<sub>0</sub>
+... z<sub>r-1</sub> obtained by dereferencing [first, first+r), sets
+x(-r) ... x(-1) to (z<sub>0</sub>*2<sup>-w</sup>) mod 1
+... (z<sub>r-1</sub>*2<sup>-w</sup>) mod 1.  If x(-1) == 0, sets
+carry(-1) = 2<sup>-w</sup>, else sets carry(-1) = 0.
+<br>
+<strong>Complexity:</strong> O(r)
+
+<pre>
+    template&lt;class RealType, int w, int s, int r&gt;
+    bool operator==(const subtract_with_carry&lt;RealType, w, s, r&gt; x,
+                    const subtract_with_carry&lt;RealType, w, s, r&gt; y);
+</pre>
+<strong>Returns:</strong> true, if and only if x(i-r) == y(j-r) and
+... and x(i-1) == y(j-1).
+<br>
+<strong>Complexity:</strong> O(r)
+
+<pre>
+    template&lt;class CharT, class Traits,
+             class RealType, int w, int s, int r&gt;
+    std::basic_ostream&lt;CharT,Traits>& operator&lt;&lt;(std::basic_ostream&lt;CharT,Traits>& os,
+                                                 const subtract_with_carry&lt;RealType, w, s, r&gt& f);
+</pre>
+<strong>Effects:</strong> Write x(i-r)*2<sup>w</sup>
+... x(i-1)*2<sup>w</sup>, carry(i-1)*2<sup>w</sup> to <code>os</code>,
+in that order.
+<br>
+<strong>Complexity:</strong> O(r)
 
 
 <h4>Class template <code>shuffle_output</code></h4>
@@ -1967,8 +2239,7 @@ what the state is.]</em>
 
 <pre>
 namespace std {
-  template&lt;class UniformRandomNumberGenerator, int k, 
-    typename UniformRandomNumberGenerator::result_type val&gt;
+  template&lt;class UniformRandomNumberGenerator, int k&gt;
   class shuffle_output
   {
   public:
@@ -1977,83 +2248,67 @@ namespace std {
     typedef typename base_type::result_type result_type;
   
     // <em>parameter values</em>
-    static const bool has_fixed_range = base_type::has_fixed_range;
+    static const bool has_fixed_range = /* <em>implementation-defined</em> */;
     static const int buffer_size = k;
   
     // <em> constructors and member function</em>
     shuffle_output();
-    template&lt;class T&gt; explicit shuffle_output(T seed);
     explicit shuffle_output(const base_type & rng);
     template&lt;class In&gt; shuffle_output(In& first, In last);
     void seed();
-    template&lt;class T&gt; void seed(T s);
     template&lt;class In&gt; void seed(In& first, In last);
     const base_type& base() const;
     result_type min() const;
     result_type max() const;
     result_type operator()();  
-    static bool validation(result_type x);
   private:
     // void init();                 <em>exposition only</em>
     // base_type b;                 <em>exposition only</em>
     // result_type v[k];            <em>exposition only</em>
     // result_type y;               <em>exposition only</em>
   };
+  template&lt;class UniformRandomNumberGenerator, int k&gt;
+  bool operator==(const shuffle_output&lt;UniformRandomNumberGenerator,k&gt; & x,
+                 (const shuffle_output&lt;UniformRandomNumberGenerator,k&gt; & y);
   template&lt;class UniformRandomNumberGenerator, int k, 
     typename UniformRandomNumberGenerator::result_type val&gt;
-  bool operator==(const shuffle_output&lt;UniformRandomNumberGenerator,k,val&gt; & x,
-                 (const shuffle_output&lt;UniformRandomNumberGenerator,k,val&gt; & y);
-  template&lt;class UniformRandomNumberGenerator, int k, 
-    typename UniformRandomNumberGenerator::result_type val&gt;
-  bool operator!=(const shuffle_output&lt;UniformRandomNumberGenerator,k,val&gt; & x,
-                 (const shuffle_output&lt;UniformRandomNumberGenerator,k,val&gt; & y);
+  bool operator!=(const shuffle_output&lt;UniformRandomNumberGenerator,k&gt; & x,
+                 (const shuffle_output&lt;UniformRandomNumberGenerator,k&gt; & y);
 }
 </pre>
 
 The template parameter <code>UniformRandomNumberGenerator</code> shall
 denote a class that satisfies all the requirements of a uniform random
-number generator. The template parameter <code>val</code> shall have
-the value x(10001), using the default x(0).  The size of the state is
-the size of <code><em>b</em></code plus <code>sizeof(v[k]) +
-sizeof(y)</code>.
+number generator.
+<p>
+
+The size of the state is the size of <code><em>b</em></code plus
+<code>sizeof(v[k]) + sizeof(y)</code>.
 
 <pre>    shuffle_output()</pre>
 <strong>Effects:</strong> Constructs a <code>shuffle_output</code>
-engine.  For <em>b</em>, invokes <code>base_type</code>'s
-default constructor.  Invokes <code><em>init()</em></code>.
-
-<pre>    template&lt;class T&gt; explicit shuffle_output(T x)</pre>
-<strong>Effects:</strong> Constructs a <code>shuffle_output</code>
-engine.  For <em>b</em>, invokes <code>base_type</code>'s
-(possibly explicit) constructor taking a single argument of
-<code>T</code>.  Invokes <code><em>init()</em></code>.
-<br>
-<strong>Notes:</strong> Only those specializations of the function
-template are available where <code>base_type(x)</code> is well-formed.
+engine.  To construct the subobject <em>b</em>, invokes
+its default constructor.  Then, invokes <code><em>init()</em></code>.
 
 <pre>    explicit shuffle_output(const base_type & rng);</pre>
 <strong>Effects:</strong> Constructs a <code>shuffle_output</code>
 engine.  Initializes <em>b</em> with a copy of <code>rng</code>.
-Invokes <code><em>init()</em></code>.
+Then, invokes <code><em>init()</em></code>.
+
+<pre>    template&lt;class In&gt; explicit shuffle_output(In& first, In last)</pre>
+<strong>Effects:</strong> Constructs a <code>shuffle_output</code>
+engine.  To construct the subobject <em>b</em>, invokes <code>b(first, last)</code>.  Then, invokes <code><em>init()</em></code>.
 
 <pre>    void seed()</pre>
 <strong>Effects:</strong> Invokes <code><em>b</em>.seed()</code>,
 then <code><em>init()</em></code>.
 
-<pre>    template&lt;class T&gt; void seed(T s)</pre>
-<strong>Effects:</strong> Invokes <code><em>b</em>.seed(s)</code>,
+<pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
+<strong>Effects:</strong> Invokes <code><em>b</em>.seed(first,last)</code>,
 then <code><em>init()</em></code>.
-<br>
-<strong>Notes:</strong> Only those specializations of the function
-template are available where <code><em>b</em>.seed(x)</code> is
-well-formed.
-
 
 <pre>    const base_type& base() const</pre>
 <strong>Returns:</strong> <em>b</em>
-
-<pre>    static bool validation(result_type x) const</pre>
-<strong>Returns:</strong> <code>x == val</code>
 
 <pre>    void init()</pre>
 <strong>Effects:</strong> Sets <code><em>v[j]</em></code> (for j = 0
@@ -2061,7 +2316,7 @@ well-formed.
 <code><em>b</em></code>.
 <br>
 <strong>Complexity:</strong> Exactly <code>k+1</code> invocations of
-<code>base</code>.
+<code><em>b</em></code>.
 
 
 <h4>Class template <code>discard_block</code></h4>
@@ -2072,8 +2327,7 @@ base engine by discarding blocks of data.
 
 <pre>
 namespace std {
-  template&lt;class UniformRandomNumberGenerator, int p, int r, 
-    typename UniformRandomNumberGenerator::result_type val&gt;
+  template&lt;class UniformRandomNumberGenerator, int p, int r&gt;
   class discard_block
   {
   public:
@@ -2082,118 +2336,130 @@ namespace std {
     typedef typename base_type::result_type result_type;
   
     // <em>parameter values</em>
-    static const bool has_fixed_range = base_type::has_fixed_range;
+    static const bool has_fixed_range = false;
     static const int block_size = p;
     static const int used_block = r;
   
     // <em> constructors and member function</em>
     discard_block();
-    template&lt;class T&gt; explicit discard_block(T seed);
     explicit discard_block(const base_type & rng);
     template&lt;class In&gt; discard_block(In& first, In last);
     void seed();
-    template&lt;class T&gt; void seed(T s);
     template&lt;class In&gt; void seed(In& first, In last);
     const base_type& base() const;
     result_type min() const;
     result_type max() const;
     result_type operator()();  
-    static bool validation(result_type x);
   private:
-    // base_type base;              <em>exposition only</em>
+    // base_type b;                 <em>exposition only</em>
     // int n;                       <em>exposition only</em>
   };
-  template&lt;class UniformRandomNumberGenerator, int p, int r, 
-    typename UniformRandomNumberGenerator::result_type val&gt;
-  bool operator==(const discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & x,
-                 (const discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & y);
+  template&lt;class UniformRandomNumberGenerator, int p, int r&gt;
+  bool operator==(const discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & x,
+                 (const discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & y);
   template&lt;class UniformRandomNumberGenerator, int p, int r,
     typename UniformRandomNumberGenerator::result_type val&gt;
-  bool operator!=(const discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & x,
-                 (const discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & y);
+  bool operator!=(const discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & x,
+                 (const discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & y);
 
   template&lt;class CharT, class traits,
-           class UniformRandomNumberGenerator, int p, int r,
-           typename UniformRandomNumberGenerator::result_type val&gt;
+           class UniformRandomNumberGenerator, int p, int r>
   basic_ostream&lt;CharT, traits&gt;& operator&lt;&lt;(basic_ostream&lt;CharT, traits&gt;& os,
-                                           const discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & x);
+                                           const discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & x);
   template&lt;class CharT, class traits,
-           class UniformRandomNumberGenerator, int p, int r,
-           typename UniformRandomNumberGenerator::result_type val&gt;
+           class UniformRandomNumberGenerator, int p, int r&gt;
   basic_istream&lt;CharT, traits&gt;& operator&gt;&gt;(basic_istream&lt;CharT, traits&gt;& is, 
-                                           discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & x);
+                                           discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & x);
 
 }
 </pre>
 
 The template parameter <code>UniformRandomNumberGenerator</code> shall
 denote a class that satisfies all the requirements of a uniform random
-number generator. r &lt;= p. The template parameter <code>val</code> shall have
-the value x(10001), using the default x(0).  The size of the state is
-the size of <code><em>b</em></code> plus sizeof(n).
+number generator. r &lt;= p.  The size of the state is the size of
+<code><em>b</em></code> plus sizeof(n).
 
 <pre>    discard_block()</pre>
 <strong>Effects:</strong> Constructs a <code>discard_block</code>
-engine.  For <em>b</em>, invokes <code>base_type</code>'s
-default constructor.  Sets <code>n = 0</code>.
-
-<pre>    template&lt;class T&gt; explicit discard_block(T x)</pre>
-<strong>Effects:</strong> Constructs a <code>discard_block</code>
-engine.  For <em>b</em>, invokes <code>base_type</code>'s
-(possibly explicit) constructor taking a single argument of
-<code>T</code>.  Sets <code>n = 0</code>.
-<br>
-<strong>Notes:</strong> Only those specializations of the function
-template are available where <code>base_type(x)</code> is well-formed.
+engine.  To construct the subobject <em>b</em>, invokes its default
+constructor.  Sets <code>n = 0</code>.
 
 <pre>    explicit discard_block(const base_type & rng);</pre>
 <strong>Effects:</strong> Constructs a <code>discard_block</code>
 engine.  Initializes <em>b</em> with a copy of <code>rng</code>.
 Sets <code>n = 0</code>.
 
+<pre>    template&lt;class In&gt; explicit discard_block(In& first, In last)</pre>
+<strong>Effects:</strong> Constructs a <code>discard_block</code>
+engine.  To construct the subobject <em>b</em>, invokes the
+<code>b(first, last)</code> constructor.  Sets <code>n = 0</code>.
+
 <pre>    void seed()</pre>
 <strong>Effects:</strong> Invokes <code><em>b</em>.seed()</code>
 and sets <code>n = 0</code>.
 
-<pre>    template&lt;class T&gt; void seed(T s)</pre>
-<strong>Effects:</strong> Invokes <code><em>b</em>.seed(s)</code>
-and sets <code>n = 0</code>.
-<br>
-<strong>Notes:</strong> Only those specializations of the function
-template are available where <code><em>b</em>.seed(x)</code> is
-well-formed.
+<pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
+<strong>Effects:</strong> Invokes <code><em>b</em>.seed(first,
+last)</code> and sets <code>n = 0</code>.
 
 <pre>    const base_type& base() const</pre>
 <strong>Returns:</strong> <em>b</em>
 
 <pre>    result_type operator()()</pre>
-<strong>Effects:</strong> If n &gt;= r, invokes
+<strong>Effects:</strong> If <em>n</em> &gt;= r, invokes
 <code><em>b</em></code> (p-r) times, discards the values returned,
-and sets <code>n = 0</code>.  In any case, increments <code>n</code>
-and returns <code><em>b()</em></code>.
-
-<pre>    static bool validation(result_type x) const</pre>
-<strong>Returns:</strong> <code>x == val</code>
+and sets <code>n = 0</code>.  In any case, then increments
+<code>n</code> and returns <code><em>b()</em></code>.
 
 <pre>
   template&lt;class CharT, class traits,
-           class UniformRandomNumberGenerator, int p, int r,
-           typename UniformRandomNumberGenerator::result_type val&gt;
+           class UniformRandomNumberGenerator, int p, int r&gt;
   basic_ostream&lt;CharT, traits&gt;& operator&lt;&lt;(basic_ostream&lt;CharT, traits&gt;& os,
-                                           const discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & x);
+                                           const discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & x);
 </pre>
 <strong>Effects:</strong> As if <code>os &lt;&lt; <em>b</em>
 &lt;&lt; <em>n</em></code>.
 
 <pre>
   template&lt;class CharT, class traits,
-           class UniformRandomNumberGenerator, int p, int r,
-           typename UniformRandomNumberGenerator::result_type val&gt;
+           class UniformRandomNumberGenerator, int p, int r&gt;
   basic_istream&lt;CharT, traits&gt;& operator&gt;&gt;(basic_istream&lt;CharT, traits&gt;& is, 
-                                           discard_block&lt;UniformRandomNumberGenerator,p,r,val&gt; & x);
+                                           discard_block&lt;UniformRandomNumberGenerator,p,r&gt; & x);
 </pre>
 <strong>Effects:</strong> As if <code>is &gt;&gt; <em>b</em>
 &gt;&gt; <em>n</em></code>.
+
+
+<h3>Engines with predefined parameters</h3>
+
+<pre>
+namespace std {
+  typedef linear_congruential&lt;/* <em>implementation defined</em> */, 16807, 0, 2147483647&gt; minstd_rand0;
+  typedef linear_congruential&lt;/* <em>implementation defined</em> */, 48271, 0, 2147483647&gt; minstd_rand;
+
+  typedef mersenne_twister&lt;/* <em>implementation defined</em> */,32,624,397,31,0x9908b0df,11,7,0x9d2c5680,15,0xefc60000,18&gt; mt19937;
+
+  typedef subtract_with_carry_01<float, 24, 10, 24> ranlux_base_01;
+  typedef subtract_with_carry_01<double, 48, 10, 24> ranlux64_base_01;
+
+  typedef discard_block&lt;subtract_with_carry</* <em>implementation defined</em> */, (1<<24), 10, 24>, 223, 24> ranlux3;
+  typedef discard_block&lt;subtract_with_carry</* <em>implementation defined</em> */, (1<<24), 10, 24>, 389, 24> ranlux4;
+
+  typedef discard_block&lt;subtract_with_carry_01<float, 24, 10, 24>, 223, 24> ranlux3_01;
+  typedef discard_block&lt;subtract_with_carry_01<float, 24, 10, 24>, 389, 24> ranlux4_01;
+}
+</pre>
+
+For a default-constructed <code>minstd_rand0</code> object, x(10000) =
+1043618065.  For a default-constructed <code>minstd_rand</code>
+object, x(10000) = 399268537.
+<p>
+
+For a default-constructed <code>mt19937</code> object, x(10000) =
+3346425566.
+<p>
+
+
 
 
 <h3>Class <code>random_device</code></h3>
@@ -2279,19 +2545,6 @@ x.x).  Descriptions are provided here only for operations on the
 distributions that are not described in one of these tables or for
 operations where there is additional semantic information.  No
 function described in this section throws an exception.
-<p>
-In this section, the template parameter
-<code>UniformRandomNumberGenerator</code> shall denote a class that
-satisfies all the requirements of a uniform random number generator.
-Furthermore, a template parameter named <code>RealType</code> shall
-denote a type that holds an approximation to a real number.  This type
-shall meet the requirements for a numeric type (26.1
-[lib.numeric.requirements]), the binary operators +, -, *, / shall be
-applicable to it, and function signatures analogous to those
-for type <code>double</code> in section 26.5 [lib.c.math] shall be
-available by argument-dependent lookup (3.4.2 [basic.lookup.koenig]).
-<em>[Footnote: The built-in floating-point types <code>float</code>
-and <code>double</code> meet these requirements.]</em>
 <p>
 The algorithms for producing each of the specified distributions are
 implementation-defined.
@@ -2498,7 +2751,7 @@ the reference to the underlying source of random
 numbers.
 
 <pre>    result_type operator()()</pre>
-<strong>Returns:</strong> If the argument for the template parameter
+<strong>Notes:</strong> If the argument for the template parameter
 <code>UniformRandomNumberGenerator</code> is a
 <code>linear_congruential</code> generator, uses the least significant
 bits of the numbers produced by the latter for least significant
@@ -2533,13 +2786,15 @@ namespace std {
 </pre>
 
 <pre>    exponential_distribution(base_type& rng, const result_type& lambda)</pre>
-
 <strong>Requires:</strong> lambda &gt; 0
 <br>
 <strong>Effects:</strong> Constructs an
 <code>exponential_distribution</code> object with <code>rng</code> as
 the reference to the underlying source of random
 numbers. <code>lambda</code> is the parameter for the distribution.
+
+<pre>    RealType lambda() const</pre>
+<strong>Returns:</strong> The "lambda" parameter of the distribution.
 
 
 <h4>Class template <code>normal_distribution</code></h4>
