@@ -48,7 +48,7 @@
 #if defined(__MWERKS__)
 #include <crtl.h>
 #else
-#ifndef __BORLANDC__
+#ifndef _WIN32
 extern char** environ;
 #endif
 #endif
