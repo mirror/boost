@@ -22,6 +22,8 @@
 
 #include "boost/variant/detail/apply_visitor_unary.hpp"
 
+#include "boost/variant/variant_fwd.hpp"
+
 namespace boost {
 
 //////////////////////////////////////////////////////////////////////////
@@ -105,29 +107,45 @@ public: // visitor interfaces
 
 }} // namespace detail::variant
 
-#define BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(CV1_, CV2_, CV3_)               \
-    template <typename Visitor, typename Visitable1, typename Visitable2>      \
-    inline                                                                     \
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)   \
-    apply_visitor(                                                             \
-          CV1_ Visitor& visitor                                                \
-        , CV2_ Visitable1& visitable1                                          \
-        , CV3_ Visitable2& visitable2                                          \
-        )                                                                      \
-    {                                                                          \
-        detail::variant::apply_visitor_binary_unwrap<                          \
-              CV1_ Visitor                                                     \
-            , CV2_ Visitable2                                                  \
-            > unwrapper(visitor, visitable2);                                  \
-                                                                               \
-        return boost::apply_visitor(unwrapper, visitable1);                    \
-    }                                                                          \
+#define BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(CV1_, CV2_, CV3_) \
+    template <                                          \
+          typename Visitor                              \
+        , BOOST_VARIANT_ENUM_PARAMS(typename T)         \
+        , BOOST_VARIANT_ENUM_PARAMS(typename U)         \
+        >                                               \
+    inline                                              \
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(          \
+              typename Visitor::result_type             \
+            )                                           \
+    apply_visitor(                                      \
+          CV1_ Visitor& visitor                         \
+        , CV2_ boost::variant<                          \
+              BOOST_VARIANT_ENUM_PARAMS(T)              \
+            >& var1                                     \
+        , CV3_ boost::variant<                          \
+              BOOST_VARIANT_ENUM_PARAMS(U)              \
+            >& var2                                     \
+        )                                               \
+    {                                                   \
+        detail::variant::apply_visitor_binary_unwrap<   \
+              CV1_ Visitor                              \
+            , CV2_ boost::variant<                      \
+                  BOOST_VARIANT_ENUM_PARAMS(U)          \
+                >                                       \
+            > unwrapper(visitor, var2);                 \
+                                                        \
+        return boost::apply_visitor(unwrapper, var1);   \
+    }                                                   \
     /**/
 
-BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(
-      BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY
-    , 3
-    )
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+    BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY, 3)
+#else
+    BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(BOOST_VARIANT_AUX_NOTHING,BOOST_VARIANT_AUX_NOTHING,BOOST_VARIANT_AUX_NOTHING)
+    BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(BOOST_VARIANT_AUX_NOTHING,BOOST_VARIANT_AUX_NOTHING,const)
+    BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(BOOST_VARIANT_AUX_NOTHING,const,BOOST_VARIANT_AUX_NOTHING)
+    BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(BOOST_VARIANT_AUX_NOTHING,const,const)
+#endif
 
 #undef BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY
 
