@@ -11,6 +11,9 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   18 SEP 00  BOOST_NO_SLIST, BOOST_NO_HASH, 
+//              BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
+//              BOOST_NO_LIMITS (Jeremy Siek)
 //    1 Sep 00  BOOST_NO_PRIVATE_IN_AGGREGATE added. (Mark Rodgers)
 //   23 Jul 00  Fixed spelling of BOOST_NO_INCLASS_MEMBER_INITIALIZATION in
 //              comment (Dave Abrahams). 
@@ -132,6 +135,17 @@
 //  so a flag is supplied (signalling presence; thus the default is not
 //  present, conforming to the current C++ standard).
 
+//  BOOST_NO_SLIST: The C++ implementation does not provide the slist class.
+
+//  BOOST_NO_HASH: The C++ implementation does not provide the hash_set
+//  or hash_map classes.
+
+//  BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS: The standard library does not provide
+//  templated iterator constructors for its containers.
+
+//  BOOST_NO_LIMITS: The C++ implementation does not provide the <limits> header.
+
+
 //  Compilers are listed in alphabetic order (except VC++ last - see below)---//
 
 //  GNU CC (also known as GCC and G++)  --------------------------------------//
@@ -141,6 +155,7 @@
 #     include <iterator>  // not sure this is the right way to do this -JGS
 #     if !defined(_CXXRT_STD) && !defined(__SGI_STL) // need to ask Dietmar about this -JGS
 #       define BOOST_NO_STD_ITERATOR
+#       define BOOST_NO_LIMITS
 #     endif
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -238,6 +253,9 @@
 #       define BOOST_NO_STD_ITERATOR // No std::iterator in this case
 #     else
 #       define BOOST_MSVC_STD_ITERATOR 1
+#       define BOOST_NO_SLIST
+#       define BOOST_NO_HASH
+#       define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #     endif
 #     define BOOST_NO_STD_ITERATOR_TRAITS
 
