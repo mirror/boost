@@ -2,6 +2,9 @@
 // who:   developed by Kevlin Henney
 // when:  November 2000
 // where: tested with BCC 5.5, MSVC 6.0, and g++ 2.91
+//
+// ChangeLog:
+//      20 Jan 2001 - Fixed a warning for MSVC (Dave Abrahams)
 
 #ifndef TEST_INCLUDED
 #define TEST_INCLUDED
@@ -111,14 +114,14 @@ namespace test // test utilities
         check(lhs != rhs, "expected unequal values: " + description);
     }
 
-    inline void check_null(const void * ptr, const std::string & description)
+    inline void check_null(const void* ptr, const std::string & description)
     {
         check(!ptr, "expected null pointer: " + description);
     }
 
-    inline void check_non_null(const void * ptr, const std::string & description)
+    inline void check_non_null(const void* ptr, const std::string & description)
     {
-        check(ptr, "expected non-null pointer: " + description);
+        check(ptr != 0, "expected non-null pointer: " + description);
     }
 }
 
