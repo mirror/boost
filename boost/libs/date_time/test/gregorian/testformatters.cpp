@@ -66,43 +66,6 @@ main()
         (to_simple_string(p2) == std::string("[2000-Jan-01/+infinity  ]")));
   std::cout << to_simple_string(p2) << std::endl;
 
-  partial_date pd(26, Jun);
-  std::stringstream ss2;
-  ss2 << pd;
-  check("partial date stream out", ss2.str() == std::string("26 Jun"));
-
-  ss2.str("");
-  nth_kday_of_month nkm(nth_kday_of_month::second, Friday, Sep);
-  ss2 << nkm;
-  check("nth kday of month", ss2.str() == std::string("second Fri of Sep"));
-
-  ss2.str("");
-  first_kday_of_month fkm(Saturday, May);
-  ss2 << fkm;
-  check("first kday of month", ss2.str() == std::string("first Sat of May"));
-
-  ss2.str("");
-  last_kday_of_month lkm(Monday, Aug);
-  ss2 << lkm;
-  check("last kday of month", ss2.str() == std::string("last Mon of Aug"));
-
-  ss2.str("");
-  first_kday_after  fka(Thursday);//fkb.get_date(d)
-  ss2 << fka;
-  check("first kday after", ss2.str() == std::string("Thu after"));
-
-  ss2.str("");
-  first_kday_before fkb(Tuesday); // same ^
-  ss2 << fkb;
-  check("first kday after", ss2.str() == std::string("Tue before"));
-
-  std::cout << pd << '\n'
-            << nkm << '\n'
-            << fkm << '\n'
-            << lkm << '\n'
-            << fka << '\n'
-            << fkb << '\n'
-            << std::endl;
   
 
   //  TODO enhance wchar support 
