@@ -158,7 +158,7 @@ void basic_xml_oarchive<Archive>::init(){
     // xml document wrapper - outer root
     this->This()->put("<boost_serialization");
     write_attribute("signature", ARCHIVE_SIGNATURE); 
-    write_attribute("version", static_cast<const unsigned int>(ARCHIVE_VERSION)); 
+    write_attribute("version", static_cast<unsigned int>(ARCHIVE_VERSION)); 
     this->This()->put(">\n");
 }
 
