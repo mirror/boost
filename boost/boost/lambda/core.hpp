@@ -1,4 +1,18 @@
 // -- core.hpp -- Boost Lambda Library -------------------------------------
+//
+// Copyright (C) 2000 Gary Powell (powellg@amazon.com)
+// Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+//
+// Permission to copy, use, sell and distribute this software is granted
+// provided this copyright notice appears in all copies. 
+// Permission to modify the code and to distribute modified code is granted
+// provided this copyright notice appears in all copies, and a notice 
+// that the code was modified is included with the copyright notice.
+//
+// This software is provided "as is" without express or implied warranty, 
+// and with no claim as to its suitability for any purpose.
+//
+// For more information, see www.boost.org
 // 
 // Includes the core of LL, without any real features for client:
 // 
