@@ -32,8 +32,8 @@
 
 //
 // Prior to version 2.2.0 the primary template for std::numeric_limits
-// does not have compile time constants, even though specialisations of that
-// template do...
+// does not have compile time constants, even though specializations of that
+// template do:
 //
 #if BOOST_RWSTD_VER < 0x020200
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -47,14 +47,14 @@
 #endif
 
 //
-// No iterator traits without partial specialisation:
+// No iterator traits without partial specialization:
 //
 #if defined(_RWSTD_NO_CLASS_PARTIAL_SPEC) || defined(RWSTD_NO_CLASS_PARTIAL_SPEC)
 #  define BOOST_NO_STD_ITERATOR_TRAITS
 #endif
 
 //
-// Prior to version 2.0, std::auto_ptr was buggy, and their were no
+// Prior to version 2.0, std::auto_ptr was buggy, and there were no
 // new-style iostreams, and no conformant std::allocator:
 //
 #if (BOOST_RWSTD_VER < 0x020000)
@@ -88,14 +88,16 @@
 
 //
 // There's no std::distance prior to version 2, or without
-// partial specialisation support:
+// partial specialization support:
 //
 #if (BOOST_RWSTD_VER < 0x020000) || defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
     #define BOOST_NO_STD_DISTANCE
 #endif
 
-// Some versions of the rogue wave library, don't have assignable
+//
+// Some versions of the rogue wave library don't have assignable
 // OutputIterators:
+//
 #if BOOST_RWSTD_VER < 0x020100
 #  define BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN
 #endif

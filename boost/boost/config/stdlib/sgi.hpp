@@ -15,7 +15,7 @@
 #endif
 
 //
-// no std::iterator traits without partial specialisation:
+// No std::iterator traits without partial specialisation:
 //
 #if !defined(__STL_CLASS_PARTIAL_SPECIALIZATION)
 #  define BOOST_NO_STD_ITERATOR_TRAITS
@@ -51,7 +51,7 @@
 #endif
 
 //
-// we always have SGI style hash_set, hash_map, and slist:
+// We always have SGI style hash_set, hash_map, and slist:
 //
 #define BOOST_HAS_HASH
 #define BOOST_HAS_SLIST
@@ -68,7 +68,7 @@
 #endif
 
 //
-// there is no standard iterator unless we have namespace support:
+// There is no standard iterator unless we have namespace support:
 //
 #if !defined(__STL_USE_NAMESPACES)
 #  define BOOST_NO_STD_ITERATOR

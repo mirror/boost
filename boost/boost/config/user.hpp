@@ -1,6 +1,6 @@
 //  (C) Copyright Boost.org 2001.
 //  Do not check in modified versions of this file,
-//  This file may be customised by the end user, but not by boost.
+//  This file may be customized by the end user, but not by boost.
 
 //
 //  Use this file to define a site and compiler specific
@@ -31,7 +31,7 @@
 // define this to disable all config options,
 // excluding the user config.  Use if your
 // setup is fully ISO compliant, and has no
-// useful extentions, or for autoconf generated
+// useful extensions, or for autoconf generated
 // setups:
 // #define BOOST_NO_CONFIG
 
@@ -42,10 +42,10 @@
 // setting this flag, causes the config to assume
 // that unknown compiler versions are fully conformant
 // with the standard:
-// #define BOOST_STRICT_CONFIC
+// #define BOOST_STRICT_CONFIG
 
 // define this to cause the config to halt compilation
-// with a #error if it encounters anything unknown -
+// with an #error if it encounters anything unknown --
 // either an unknown compiler version or an unknown
 // compiler/platform/library:
 // #define BOOST_ASSERT_CONFIG

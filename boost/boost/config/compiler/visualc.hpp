@@ -38,7 +38,7 @@
 #  define BOOST_NO_SWPRINTF
 //#  define BOOST_NO_POINTER_TO_MEMBER_CONST
    //
-   // disable man/max macros if defined:
+   // disable min/max macros if defined:
    //
 #  ifdef min
 #     undef min
@@ -46,7 +46,7 @@
 #  ifdef max
 #     undef max
 #  endif
-   // disable man/max macro defines on vc6:
+   // disable min/max macro defines on vc6:
    //
 #  define NOMINMAX
 #endif
