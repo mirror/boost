@@ -22,4 +22,9 @@
 #define BOOST_STRING_TYPENAME BOOST_DEDUCED_TYPENAME
 #endif
 
+// Metrowerks workaround
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
+#pragma parse_func_templ off
+#endif
+
 #endif  // BOOST_STRING_CONFIG_HPP
