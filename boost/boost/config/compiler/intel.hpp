@@ -76,8 +76,8 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 600:
-#if (BOOST_INTEL_CXX_VERSION > 600)
+// last known and checked version:
+#if (BOOST_INTEL_CXX_VERSION > 700)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
