@@ -101,11 +101,11 @@ template class BOOST_REGEX_DECL match_results<std::basic_string<BOOST_REGEX_CHAR
 #     define template template<>
 #  endif
 
-template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression<BOOST_REGEX_CHAR_T>(const BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T)&);
-template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression<BOOST_REGEX_CHAR_T>(const BOOST_REGEX_CHAR_T* p, reg_expression<BOOST_REGEX_CHAR_T>::flag_type f, const BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T)& a);
-template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression<BOOST_REGEX_CHAR_T>(const BOOST_REGEX_CHAR_T* p, size_type len, reg_expression<BOOST_REGEX_CHAR_T>::flag_type f, const BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T)&);
-template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression<BOOST_REGEX_CHAR_T>(const reg_expression<BOOST_REGEX_CHAR_T>&);
-template reg_expression<BOOST_REGEX_CHAR_T>::~reg_expression<BOOST_REGEX_CHAR_T>();
+template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression(const BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T)&);
+template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression(const BOOST_REGEX_CHAR_T* p, reg_expression<BOOST_REGEX_CHAR_T>::flag_type f, const BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T)& a);
+template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression(const BOOST_REGEX_CHAR_T* p, size_type len, reg_expression<BOOST_REGEX_CHAR_T>::flag_type f, const BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T)&);
+template reg_expression<BOOST_REGEX_CHAR_T>::reg_expression(const reg_expression<BOOST_REGEX_CHAR_T>&);
+template reg_expression<BOOST_REGEX_CHAR_T>::~reg_expression();
 template reg_expression<BOOST_REGEX_CHAR_T>& BOOST_REGEX_CALL reg_expression<BOOST_REGEX_CHAR_T>::operator=(const reg_expression&);
 template BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T) BOOST_REGEX_CALL reg_expression<BOOST_REGEX_CHAR_T>::get_allocator()const;
 template bool BOOST_REGEX_CALL reg_expression<BOOST_REGEX_CHAR_T>::operator==(const reg_expression<BOOST_REGEX_CHAR_T>&)const;

@@ -54,15 +54,6 @@
 #  endif
 #endif
 
-#ifdef __MWERKS__
-#  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
-#endif
-#ifdef __IBMCPP__
-#  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
-#endif
-
-
-
 /*****************************************************************************
  *
  *  Include all the headers we need here:
@@ -157,6 +148,19 @@
 // this probably doesn't affect any current compilers:
 #if defined(bool) || defined(true) || defined(false)
 #  define BOOST_REGEX_NO_BOOL
+#endif
+
+// We don't make our templates external if the compiler
+// can't handle it:
+#if defined(BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS) || defined(__ICL) || defined(__ICC)\
+   && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+#  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+#endif
+
+// disable our own file-iterators and mapfiles if we can't
+// support them:
+#if !defined(BOOST_HAS_DIRENT_H) && !(defined(_WIN32) && !defined(BOOST_REGEX_NO_W32))
+#  define BOOST_REGEX_NO_FILEITER
 #endif
 
 #ifdef __cplusplus
@@ -599,9 +603,18 @@ namespace std{
 #ifdef __cplusplus
 namespace boost{ namespace re_detail{
 
+#ifdef BOOST_MSVC
+#pragma warning (push)
+#pragma warning (disable : 4100)
+#endif
+
 template <class T>
 inline void pointer_destroy(T* p)
 { p->~T(); (void)p; }
+
+#ifdef BOOST_MSVC
+#pragma warning (pop)
+#endif
 
 template <class T>
 inline void pointer_construct(T* p, const T& t)
@@ -611,6 +624,7 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
+
 
 
 

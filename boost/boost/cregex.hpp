@@ -262,10 +262,12 @@ public:
    unsigned int Grep(std::vector<std::string>& v, const std::string& s, unsigned int flags = match_default) { return Grep(v, s.c_str(), flags); }
    unsigned int Grep(std::vector<std::size_t>& v, const char* p, unsigned int flags = match_default);
    unsigned int Grep(std::vector<std::size_t>& v, const std::string& s, unsigned int flags = match_default) { return Grep(v, s.c_str(), flags); }
+#ifndef BOOST_REGEX_NO_FILEITER
    unsigned int GrepFiles(GrepFileCallback cb, const char* files, bool recurse = false, unsigned int flags = match_default);
    unsigned int GrepFiles(GrepFileCallback cb, const std::string& files, bool recurse = false, unsigned int flags = match_default) { return GrepFiles(cb, files.c_str(), recurse, flags); }
    unsigned int FindFiles(FindFilesCallback cb, const char* files, bool recurse = false, unsigned int flags = match_default);
    unsigned int FindFiles(FindFilesCallback cb, const std::string& files, bool recurse = false, unsigned int flags = match_default) { return FindFiles(cb, files.c_str(), recurse, flags); }
+#endif
 
    std::string Merge(const std::string& in, const std::string& fmt,
                        bool copy = true, unsigned int flags = match_default);

@@ -874,7 +874,8 @@ protected:
       sub_match<iterator> head, tail, null;
       unsigned int lines;
       iterator line_pos, base;
-      c_reference(const Allocator& a) : c_alloc(a) {  }
+      c_reference(const Allocator& a)
+         : c_alloc(a), cmatches(0), count(0), lines(0) {  }
 
       bool operator==(const c_reference& that)const
       {
