@@ -21,6 +21,9 @@
 #  if !(defined(_GLOBAL_USING) && (_GLOBAL_USING+0 > 0)) && !defined(_STD)   // can be defined in yvals.h
 #     define BOOST_NO_STDC_NAMESPACE
 #  endif
+#  if !(defined(_HAS_MEMBER_TEMPLATES_REBIND) && (_HAS_MEMBER_TEMPLATES_REBIND+0 > 0))
+#     define BOOST_NO_STD_ALLOCATOR
+#  endif
 #  if defined(_MSC_VER) && (_MSC_VER < 1300)
       // if this lib version is set up for vc6 then there is no std::use_facet:
 #     define BOOST_NO_STD_USE_FACET
