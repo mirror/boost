@@ -1053,7 +1053,10 @@ return true;
             return reverse_iterator (begin ());
         }
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
+// VC++ 6.0 cannot access data_ from iterator
     private:
+#endif
         vector_closure_type data_;
         slice s_;
         static vector_type nil_;
@@ -1595,7 +1598,10 @@ return true;
             return reverse_iterator (begin ());
         }
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
+// VC++ 6.0 cannot access data_ from iterator
     private:
+#endif
         vector_closure_type data_;
         indirect_array_type ia_;
         static vector_type nil_;
