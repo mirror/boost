@@ -28,7 +28,7 @@
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="5"
 				BufferSecurityCheck="TRUE"
-				DisableLanguageExtensions="FALSE"
+				DisableLanguageExtensions="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"

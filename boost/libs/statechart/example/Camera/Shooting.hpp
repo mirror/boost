@@ -16,7 +16,7 @@
 #include <boost/fsm/state.hpp>
 #include <boost/fsm/transition.hpp>
 #include <boost/fsm/custom_reaction.hpp>
-#include <boost/fsm/deferal.hpp>
+#include <boost/fsm/deferral.hpp>
 #include <boost/mpl/list.hpp>
 
 namespace fsm = boost::fsm;
@@ -40,7 +40,7 @@ struct Shooting : public fsm::simple_state< Shooting, Camera,
 };
 
 struct Focusing : public fsm::state< Focusing, Shooting, mpl::list<
-  fsm::custom_reaction< EvInFocus >, fsm::deferal< EvShutterFull > > >
+  fsm::custom_reaction< EvInFocus >, fsm::deferral< EvShutterFull > > >
 {
   Focusing( my_context ctx );
   fsm::result react( const EvInFocus & );

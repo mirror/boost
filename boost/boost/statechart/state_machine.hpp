@@ -451,7 +451,7 @@ class state_machine : private noncopyable
 
       // We are not guaranteed to find an entry because a state is marked for
       // having deferred events _before_ the event is actually deferred. An
-      // exception might be thrown during deferal.
+      // exception might be thrown during deferral.
       if ( pFound != deferredMap_.end() )
       {
         eventQueue_.splice( eventQueue_.end(), pFound->second );

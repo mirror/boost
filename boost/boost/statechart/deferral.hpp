@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_DEFERAL_HPP_INCLUDED
-#define BOOST_FSM_DEFERAL_HPP_INCLUDED
+#ifndef BOOST_FSM_DEFERRAL_HPP_INCLUDED
+#define BOOST_FSM_DEFERRAL_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -23,7 +23,7 @@ namespace fsm
 
 //////////////////////////////////////////////////////////////////////////////
 template< class Event >
-struct deferal
+struct deferral
 {
   template< class State, class EventBase, class IdType >
   static result react(
