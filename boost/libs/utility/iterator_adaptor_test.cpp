@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  04 Feb 01 Fix for compilers without standard iterator_traits
+//            (David Abrahams)
 //  13 Jun 00 Added const version of the iterator tests (Jeremy Siek)
 //  12 Dec 99 Initial version with iterator operators (Jeremy Siek)
 
@@ -17,7 +19,7 @@
 
 #include <algorithm>
 #include <functional>
-#include <boost/pending/iterator_adaptors.hpp>
+#include <boost/iterator_adaptors.hpp>
 #include <boost/pending/iterator_tests.hpp>
 #include <boost/pending/integer_range.hpp>
 
@@ -182,9 +184,8 @@ main()
       boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t,
       dummyT*, dummyT&> >::type FilterIter;
     FilterIter i(array);
-    boost::forward_iterator_test(i, 1, 4);
+    boost::forward_iterator_test(i, dummyT(1), dummyT(4));
   }
   std::cout << "test successful " << std::endl;
-
   return 0;
 }
