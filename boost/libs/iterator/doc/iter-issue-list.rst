@@ -83,6 +83,10 @@ N1541 48
 
   **Needs work** (Dave)  I'm not happy with Pete's proposal.
 
+  (thw) Pete is correct with regard to the requirement. Removing the
+  interoperable stuff would be an error. By all means we don't want
+  undefined behaviour here.
+
 9.4 enable_if_convertible unspecified, conflicts with requires 
 ==============================================================
 
@@ -108,6 +112,7 @@ There are two problems. First, enable_if_convertible is never specified, so we d
 know what this is supposed to do. Second: we could reasonably say that this overload should be 
 disabled in certain cases or we could reasonably say that behavior is undefined, but we can’t say 
 both. 
+
 Thomas Witt writes that the goal of putting in enable_if_convertible here is to make 
 sure that a specific overload doesn’t interfere with the generic case except when that overload 
 makes sense. He agrees that what we currently have is deficient. 
@@ -281,12 +286,10 @@ encouraged to ignore this argument if it won't work right, why is it there?
 :Status: New 
 
 Shortly after N1550 was accepted, we discovered that an iterator's lvalueness can be determined 
-knowing only itsvalue_type. This predicate can be calculated even for old-style iterators (on 
-N1541 51 
-
+knowing only its value_type. This predicate can be calculated even for old-style iterators (on 
 whose reference type the standard places few requirements). A trait in the Boost iterator library 
 does it by relying on the compiler's unwillingness to bind an rvalue to a T& function template 
-parameter. Similarly, it is possible to detect an iterator's readability knowing only itsvalue_type. 
+parameter. Similarly, it is possible to detect an iterator's readability knowing only its value_type. 
 Thus, any interface which asks the user to explicitly describe an iterator's lvalue-ness or 
 readability seems to introduce needless complexity. 
 
@@ -413,7 +416,6 @@ having a hard time justifying their impact on the rest of the proposal(s).
 
 :Proposed Resolution: See the resolution to 9.15.
 
-
 9.19 Non-Uniformity of the "lvalue_iterator Bit" 
 ================================================
 
@@ -472,6 +474,10 @@ be worth giving the names of these tags (and the associated concepts) some extra
     random_access_traversal_tag
 
 
+   ** Needs work ** (thw) I still believe that implicit_traversal_tag is more
+   appropriate than incrementable_traversal_tag
+
+
 9.21 iterator_facade Derived template argument underspecified 
 =============================================================
 
@@ -499,6 +505,12 @@ from a specialization of iterator_facade whose first template argument is Iter."
 awkward, but at the moment I don't see a better way of phrasing it. 
 
 :Proposed resolution:   **Needs work** (Dave) Reword.
+   01/01/04 thw
+   The wording is certainly insufficient. AFAICS there are two issues.
+   First the issue addressed by Pete i.e. specifying the requirements for
+   implementing a valid iterator. The other issue I can see is that we 
+   need to be able to unambigously cast the iterator_facade specialisation
+   to Iter.
 
 9.22 return type of Iterator difference for iterator facade 
 ===========================================================
@@ -528,6 +540,11 @@ right?
   to ::
 
     typename enable_if_interoperable<Dr1, Dr2, D1>::type
+
+   01/01/04 thw 
+   Almost, the return type should be the difference_type of the
+   converted to iterator. BTW how does std::distance handle
+   different but interoperable iterator types?
 
 
 9.23 Iterator_facade: minor wording Issue 

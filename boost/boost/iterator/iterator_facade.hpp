@@ -64,6 +64,72 @@ namespace boost
     };
 
     //
+    // Determines the iterator type that can be
+    // safely used to implement binary operators
+    //
+    template <
+        class Facade1,
+       class Facade2
+    >
+    struct interoperable_base 
+      : mpl::if_<
+            is_convertible<Facade1, Facade2>
+          , Facade2
+          , Facade1
+        >
+    {
+    };
+
+    template <class Facade1, class Facade2>
+    struct difference_type
+    {
+      typedef typename interoperable_base<Facade1, Facade2>::type::difference_type type;
+    };
+
+    template <class Facade1, class Facade2>
+    bool equal(Facade1 const&, Facade2 const&);
+
+    template <class Facade1, class Facade2>
+    typename Facade1::difference_type distance_to(Facade1 const&, Facade2 const&);
+
+    template <bool UseLhsMember>
+    struct facade_binary_operator
+    {
+      template <class Facade1, class Facade2>
+      static bool equal(Facade1 const& lhs,
+                        Facade2 const& rhs)
+      {
+        return ::boost::detail::equal(lhs, rhs);
+      }
+
+      template <class Facade1, class Facade2>
+      static typename Facade1::difference_type distance_to(Facade1 const& lhs,
+                                                         Facade2 const& rhs)
+      {
+        return ::boost::detail::distance_to(lhs, rhs);
+      }
+    };
+    
+    template <>
+    struct facade_binary_operator<false>
+    {
+      template <class Facade1, class Facade2>
+      static bool equal(Facade1 const& lhs,
+                        Facade2 const& rhs)
+      {
+        return ::boost::detail::equal(rhs, lhs);
+      }
+
+      template <class Facade1, class Facade2>
+      static typename Facade2::difference_type distance_to(Facade1 const& lhs,
+                                                         Facade2 const& rhs)
+      {
+        return -::boost::detail::distance_to(rhs, lhs);
+      }
+    };
+    
+
+    //
     // Generates associated types for an iterator_facade with the
     // given parameters.
     //
@@ -256,9 +322,11 @@ namespace boost
       BOOST_ITERATOR_FACADE_RELATION(>=)
 #  undef BOOST_ITERATOR_FACADE_RELATION
 
-      BOOST_ITERATOR_FACADE_INTEROP_HEAD(
-          friend, -, typename Derived1::difference_type)
-      ;
+      template < class Derived1, class V1, class TC1, class R1, class D1 , class Derived2, class V2, class TC2, class R2, class D2 > friend typename detail::enable_if_interoperable< Derived1, Derived2, typename std::iterator_traits<typename detail::interoperable_base<Derived1, Derived2> ::type > ::difference_type > ::type operator -( iterator_facade<Derived1, V1, TC1, R1, D1> const& lhs , iterator_facade<Derived2, V2, TC2, R2, D2> const& rhs);
+
+//       BOOST_ITERATOR_FACADE_INTEROP_HEAD(
+//                                          friend, -, (typename std::iterator_traits<typename detail::interoperable_base<Derived1, Derived2>::type >::difference_type))
+//       ;
 
       BOOST_ITERATOR_FACADE_PLUS_HEAD(
           friend                                
@@ -297,7 +365,7 @@ namespace boost
       template <class Facade1, class Facade2>
       static bool equal(Facade1 const& f1, Facade2 const& f2)
       {
-          return f1.equal(f2);
+        return detail::facade_binary_operator< is_convertible< Facade2, Facade1 >::value >::equal(f1, f2);
       }
 
       template <class Facade>
@@ -307,16 +375,50 @@ namespace boost
       }
 
       template <class Facade1, class Facade2>
-      static typename Facade1::difference_type distance_to(
+      static typename detail::difference_type<Facade1, Facade2>::type distance_to(
                                                            Facade1 const& f1, Facade2 const& f2)
       {
-          return f1.distance_to(f2);
+        return detail::facade_binary_operator< is_convertible< Facade2, Facade1 >::value >::distance_to(f1, f2);
       }
 
    private:
       // objects of this class are useless
       iterator_core_access(); //undefined
+
+    // We would need template friends for these to be private
+   public:
+      template <class Facade1, class Facade2>
+      static bool equal_fwd(Facade1 const& f1, Facade2 const& f2)
+      {
+          return f1.equal(f2);
+      }
+
+      template <class Facade1, class Facade2>
+      static typename Facade1::difference_type distance_to_fwd(
+                                                           Facade1 const& f1, Facade2 const& f2)
+      {
+          return f1.distance_to(f2);
+      }
+
   };
+
+  namespace detail
+  {
+
+
+    template <class Facade1, class Facade2>
+    bool equal(Facade1 const& f1, Facade2 const& f2)
+    {
+      return iterator_core_access::equal_fwd(f1, f2);
+    }
+
+    template <class Facade1, class Facade2>
+    typename Facade1::difference_type distance_to(Facade1 const& f1, Facade2 const& f2)
+    {
+      return iterator_core_access::distance_to_fwd(f1, f2);
+    }
+
+  }
 
   //
   // iterator_facade - use as a public base class for defining new
@@ -550,18 +652,24 @@ namespace boost
   BOOST_ITERATOR_FACADE_RELATION(>=, return 0 <=, distance_to)
 # undef BOOST_ITERATOR_FACADE_RELATION
 
-  // operator- requires an additional part in the static assertion
-  BOOST_ITERATOR_FACADE_INTEROP(
-      -
-    , typename Derived1::difference_type
-    , (is_same<
-           BOOST_DEDUCED_TYPENAME Derived1::difference_type
-         , BOOST_DEDUCED_TYPENAME Derived2::difference_type
-       >::value)
-    , return
-    , distance_to )
+//   // operator- requires an additional part in the static assertion
+//   BOOST_ITERATOR_FACADE_INTEROP(
+//       -
+//     , typename Derived1::difference_type
+//     , (is_same<
+//            BOOST_DEDUCED_TYPENAME Derived1::difference_type
+//          , BOOST_DEDUCED_TYPENAME Derived2::difference_type
+//        >::value)
+//     , return
+  //    , distance_to )
 # undef BOOST_ITERATOR_FACADE_INTEROP
 # undef BOOST_ITERATOR_FACADE_INTEROP_HEAD
+
+    template < class Derived1, class V1, class TC1, class R1, class D1 , class Derived2, class V2, class TC2, class R2, class D2 > typename detail::enable_if_interoperable< Derived1, Derived2, typename std::iterator_traits<typename detail::interoperable_base<Derived1, Derived2> ::type > ::difference_type > ::type operator -( iterator_facade<Derived1, V1, TC1, R1, D1> const& lhs , iterator_facade<Derived2, V2, TC2, R2, D2> const& rhs)
+  {
+    return iterator_core_access::distance_to(static_cast<Derived2 const&>(rhs), static_cast<Derived1 const&>(lhs));
+  }
+
 
 # define BOOST_ITERATOR_FACADE_PLUS(args)           \
   BOOST_ITERATOR_FACADE_PLUS_HEAD(inline, args)     \
