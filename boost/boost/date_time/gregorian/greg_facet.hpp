@@ -116,7 +116,8 @@ namespace gregorian {
   std::basic_ostream<charT, traits>&
   operator<<(std::basic_ostream<charT, traits>& os, const date_duration& dd)
   {
-    os << dd.days();
+    //os << dd.days();
+    os << dd.get_rep();
     return os;
   }
 
@@ -130,27 +131,20 @@ namespace gregorian {
     return os;
   }
 
-  /** operator<< for gregorian::nth_kday_of_month.  
-   * Output: "first Mon of Jun"
-   */
+  //! operator<< for gregorian::nth_kday_of_month. Output: "first Mon of Jun"
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
   operator<<(std::basic_ostream<charT, traits>& os, 
              const nth_kday_of_month& nkd)
   {
-    //std::string str_wk_num[] = {"", "first", "second", 
-    //"third", "fourth", "fifth"};
-    //os << str_wk_num[nkd.nth_week()] << ' ' 
     os << nkd.nth_week_as_str() << ' ' 
        << nkd.day_of_week() << " of "
        << nkd.month().as_short_string() ; 
     return os;
   }
 
-  /** operator<< for gregorian::first_kday_of_month.
-   * Output: "first Mon of Jun"
-   */
+  //! operator<< for gregorian::first_kday_of_month. Output: "first Mon of Jun"
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
@@ -162,9 +156,7 @@ namespace gregorian {
     return os;
   }
 
-  /** operator<< for gregorian::last_kday_of_month.
-   * Output: "last Mon of Jun"
-   */
+  //! operator<< for gregorian::last_kday_of_month. Output: "last Mon of Jun"
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
@@ -176,9 +168,7 @@ namespace gregorian {
     return os;
   }
 
-  /** operator<< for gregorian::first_kday_after.
-   * Output: "first Mon after"
-   */
+  //! operator<< for gregorian::first_kday_after. Output: "first Mon after"
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
@@ -189,9 +179,7 @@ namespace gregorian {
     return os;
   }
 
-  /** operator<< for gregorian::first_kday_before.
-   * Output: "first Mon before"
-   */
+  //! operator<< for gregorian::first_kday_before. Output: "first Mon before"
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
