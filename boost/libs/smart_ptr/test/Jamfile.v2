@@ -14,7 +14,7 @@ import testing ;
 {
     test-suite "smart_ptr"
         : [ run smart_ptr_test.cpp ]
-          [ run shared_ptr_basic_test.cpp : : : <toolset><gcc>:<cxxflags>-Wno-non-virtual-dtor ]
+          [ run shared_ptr_basic_test.cpp : : : <toolset>gcc:<cxxflags>-Wno-non-virtual-dtor ]
           [ run shared_ptr_test.cpp : : : <toolset>gcc:<cxxflags>-Wno-non-virtual-dtor ]
           [ run weak_ptr_test.cpp ]
           [ run shared_from_this_test.cpp : : : <toolset>gcc:<cxxflags>-Wno-non-virtual-dtor ]
