@@ -7,7 +7,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-// Test, if additional whitespace is inserteted at appropriate places.
+// Test, if additional whitespace is inserted at appropriate places.
 
 #define STRINGIZE(x) STRINGIZE_D(x)
 #define STRINGIZE_D(x) #x
