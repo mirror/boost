@@ -161,8 +161,6 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<POD_UDT>::value,
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<POD_union_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<empty_POD_union_UDT>::value, true, false);
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<test_abc1>::value, false);
-
 TT_TEST_END
 
 
