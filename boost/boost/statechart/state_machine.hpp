@@ -878,26 +878,24 @@ class state_machine : noncopyable
     {
       isInnermostCommonOuter_ = false;
 
-      if ( currentStates_.begin() == currentStatesEnd_ )
+      if ( get_pointer( pOutermostUnstableState_ ) != 0 )
       {
-        // We can only get here when the state machine is non-orthogonal and
-        // unstable
-        BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) != 0 );
-        node_state_base_ptr_type pSelf = pOutermostUnstableState_;
-        pSelf->exit_impl( pSelf, pOutermostUnstableState_, callExitActions );
+        theState.remove_from_state_list(
+          currentStatesEnd_, pOutermostUnstableState_, callExitActions );
       }
       else if ( currentStates_.begin() == --currentStatesEnd_ )
       {
-        // The following optimization is only correct for a machine
-        // without orthogonal states.
+        // The machine is stable and there is exactly one innermost state
+        BOOST_ASSERT( !currentStates_.empty() );
+        // The following optimization is only correct for a stable machine
+        // without orthogonal regions.
         leaf_state_ptr_type & pState = *currentStatesEnd_;
         pState->exit_impl(
           pState, pOutermostUnstableState_, callExitActions );
       }
       else
       {
-        // This would work for all cases, but is unnecessarily inefficient
-        // for a non-orthogonal state machine.
+        // The machine is stable and there are multiple innermost states
         theState.remove_from_state_list(
           ++currentStatesEnd_, pOutermostUnstableState_, callExitActions );
       }
