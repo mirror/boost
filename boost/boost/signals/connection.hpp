@@ -76,14 +76,14 @@ namespace boost {
       bool connected() const { return con.get() && con->signal_disconnect; }
 
       // Comparison of connections
-      inline bool operator==(const connection& other) const;
-      inline bool operator<(const connection& other) const;
+      bool operator==(const connection& other) const;
+      bool operator<(const connection& other) const;
 
       // Connection assignment
       connection& operator=(const connection& other) ;
 
       // Swap connections
-      inline void swap(connection& other);
+      void swap(connection& other);
 
     public: // TBD: CHANGE THIS
       // Set whether this connection object is controlling or not
