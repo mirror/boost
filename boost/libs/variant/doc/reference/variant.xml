@@ -235,7 +235,9 @@
               exceptions arising from the <code>swap</code> of the contents of
               <code>*this</code> and <code>other</code>. Otherwise, may fail
               with any exceptions arising from either of the copy constructors
-              of the contained types.</simpara>
+              of the contained types. Also, in the event of insufficient
+              memory, may fail with <code>std::bad_alloc</code>
+              (<link linkend="variant.design.never-empty.problem">why?</link>).</simpara>
           </throws>
         </method>
 
@@ -267,7 +269,9 @@
               exceptions arising from the assignment of the content of
               <code>rhs</code> into the content <code>*this</code>. Otherwise,
               may fail with any exceptions arising from the copy constructor
-              of the contained type of <code>rhs</code>.</simpara>
+              of the contained type of <code>rhs</code>. Also, in the event of
+              insufficient memory, may fail with <code>std::bad_alloc</code>
+              (<link linkend="variant.design.never-empty.problem">why?</link>).</simpara>
           </throws>
         </method>
 
@@ -309,7 +313,9 @@
               the assignment of <code>rhs</code> into the content
               <code>*this</code>. Otherwise, may fail with any exceptions
               arising from the conversion of <code>rhs</code> to one of the
-              bounded types.</simpara>
+              bounded types. Also, in the event of insufficient memory, may
+              fail with <code>std::bad_alloc</code>
+              (<link linkend="variant.design.never-empty.problem">why?</link>).</simpara>
           </throws>
         </method>
 
@@ -336,11 +342,13 @@
 
           <returns>
             <simpara><code>false</code>: <code>variant</code> always contains
-              exactly one of its bounded types.</simpara>
+              exactly one of its bounded types. (See
+              <xref linkend="variant.design.never-empty"/>
+              for more information.)</simpara>
           </returns>
 
           <rationale>
-            <simpara>Provides generic compatibility with
+            <simpara>Facilitates generic compatibility with
               <classname>boost::any</classname>.</simpara>
           </rationale>
 
@@ -553,8 +561,8 @@
 
         <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
         <itemizedlist>
-          <listitem><code>Sequence</code> must meet the requirements of the
-            <libraryname>MPL</libraryname> <emphasis>Sequence</emphasis>
+          <listitem><code>Sequence</code> must meet the requirements of
+            <libraryname>MPL</libraryname>'s <emphasis>Sequence</emphasis>
             concept.</listitem>
           <listitem>Due to standard conformance problems in several compilers,
             <code>make_variant_over</code> may not be supported on your
