@@ -12,6 +12,18 @@
 //
 // Revision History:
 
+// 07 Feb 2001
+//      Removed iterator_adaptor_pair_generator and
+//      reverse_iterator_pair_generator (more such culling to come)
+//
+//      Improved comments
+//
+//      Changed all uses of std::iterator_traits as default arguments
+//      to boost::detail::iterator_traits for improved utility in
+//      non-generic contexts
+//
+//      Fixed naming convention of non-template parameter names
+//
 // 06 Feb 2001
 //      Produce operator-> proxy objects for InputIterators
 //
@@ -335,8 +347,8 @@ namespace detail {
 } // namespace detail
 
 //============================================================================
-// iterator_adaptor - A generalized adaptor around an existing
-//   iterator, which is itself an iterator
+//iterator_adaptor - Adapts a generic piece of data as an iterator. Adaptation
+//      is especially easy if the data being adapted is itself an iterator
 //
 //   Iterator - the iterator type being wrapped.
 //
@@ -347,11 +359,7 @@ namespace detail {
 //      std::iterator_traits for the resulting iterator.
 //
 template <class Iterator, class Policies, 
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class Traits
-#else
-          class Traits = std::iterator_traits<Iterator>
-#endif
+          class Traits = boost::detail::iterator_traits<Iterator>
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
@@ -540,28 +548,6 @@ operator!=(const iterator_adaptor<Iterator1,Policies,Traits1>& x,
 #endif
 
 //=============================================================================
-// iterator_adaptor_pair_generator - A type generator that simplifies creating
-//   mutable/const pairs of iterator adaptors.
-
-template <class Iterator, class ConstIterator, 
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class Traits, 
-          class ConstTraits,
-#else
-          class Traits = std::iterator_traits<Iterator>, 
-          class ConstTraits = std::iterator_traits<ConstIterator>,
-#endif
-          class Policies = default_iterator_policies>
-class iterator_adaptor_pair_generator
-{
-public:
-    typedef iterator_adaptor<Iterator, Policies, Traits> iterator;
-    typedef iterator_adaptor<ConstIterator, Policies, ConstTraits> 
-      const_iterator;
-};
-
-
-//=============================================================================
 // Transform Iterator Adaptor
 //
 // Upon deference, apply some unary function object and return the
@@ -635,14 +621,9 @@ struct indirect_iterator_policies : public default_iterator_policies
 };
 
 template <class OuterIterator,
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class InnerIterator,
-          class InnerTraits,
-#else
-          class InnerIterator = typename std::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = std::iterator_traits<InnerIterator>,
-#endif
-          class OuterTraits = boost::detail::iterator_traits<OuterIterator>
+          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
+          class InnerTraits = boost::detail::iterator_traits<InnerIterator>,
+          class OuterTraits = boost::detail::iterator_traits<OuterIterator> // never needed (?)
        >
 struct indirect_traits
 {
@@ -654,15 +635,10 @@ struct indirect_traits
 };
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class InnerIterator,      // Mutable -> mutable indirect iterator
-                                    // Immutable -> immutable indirect iterator
-          class InnerTraits,
-#else
-          class InnerIterator = typename std::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = std::iterator_traits<InnerIterator>,
-#endif
-          class OuterTraits = boost::detail::iterator_traits<OuterIterator>
+    // Mutable -> mutable indirect iterator;  Immutable -> immutable indirect iterator
+          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
+          class InnerTraits = boost::detail::iterator_traits<InnerIterator>,
+          class OuterTraits = boost::detail::iterator_traits<OuterIterator> // never needed (?)
            >
 struct indirect_iterator_generator
 {
@@ -675,28 +651,20 @@ struct indirect_iterator_generator
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class ConstInnerIterator, // Immutable
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class ConstInnerTraits,
-          class InnerIterator,      // Mutable
-          class InnerTraits,
-#else
-          class ConstInnerTraits = std::iterator_traits<ConstInnerIterator>,
-          class InnerIterator = typename std::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = std::iterator_traits<InnerIterator>,
-#endif
-          class OuterTraits = boost::detail::iterator_traits<OuterIterator>
+          class ConstInnerTraits = boost::detail::iterator_traits<ConstInnerIterator>,
+          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
+          class InnerTraits = boost::detail::iterator_traits<InnerIterator>,
+          class OuterTraits = boost::detail::iterator_traits<OuterIterator> // never needed (?)
            >
 struct indirect_iterator_pair_generator
 {
-    typedef iterator_adaptor_pair_generator<OuterIterator, OuterIterator,
-        indirect_traits<OuterIterator, InnerIterator,
-                        InnerTraits, OuterTraits>,
-        indirect_traits<OuterIterator, ConstInnerIterator,
-                        ConstInnerTraits, OuterTraits>,
-        indirect_iterator_policies
-        > pair_generator;
-    typedef typename pair_generator::iterator iterator;
-    typedef typename pair_generator::const_iterator const_iterator;
+    typedef iterator_adaptor<OuterIterator,
+        indirect_traits<OuterIterator, InnerIterator, InnerTraits, OuterTraits>,
+        indirect_iterator_policies> iterator;
+        
+    typedef iterator_adaptor<OuterIterator,
+        indirect_traits<OuterIterator, ConstInnerIterator, ConstInnerTraits, OuterTraits>,
+        indirect_iterator_policies> const_iterator;
 };
 
 
@@ -736,11 +704,7 @@ struct reverse_iterator_policies : public default_iterator_policies
 };
   
 template <class Iterator,
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-          class Traits = std::iterator_traits<Iterator>
-#else
-          class Traits
-#endif
+          class Traits = boost::detail::iterator_traits<Iterator>
          >
 struct reverse_iterator_generator
 {
@@ -749,33 +713,12 @@ struct reverse_iterator_generator
 };
 
 template <class ConstIterator,
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-          class ConstTraits = std::iterator_traits<ConstIterator>
-#else
-          class ConstTraits
-#endif
+          class ConstTraits = boost::detail::iterator_traits<ConstIterator>
          >
 struct const_reverse_iterator_generator
 {
     typedef iterator_adaptor<ConstIterator, reverse_iterator_policies,
         ConstTraits> type;
-};
-
-template <class Iterator, class ConstIterator,
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-          class Traits = std::iterator_traits<Iterator>, 
-          class ConstTraits = std::iterator_traits<ConstIterator>
-#else
-          class Traits,
-          class ConstTraits
-#endif
-         >
-struct reverse_iterator_pair_generator
-{
-    typedef iterator_adaptor_pair_generator<Iterator,ConstIterator,Traits,ConstTraits,
-        reverse_iterator_policies> pair_generator;
-    typedef typename pair_generator::iterator iterator;
-    typedef typename pair_generator::const_iterator const_iterator;
 };
 
 //=============================================================================
@@ -818,10 +761,10 @@ template <class AdaptableUnaryFunction, class Iterator,
         >
 struct projection_iterator_generator {
     typedef projection_iterator_traits<AdaptableUnaryFunction, Traits>
-            Projection_Traits;
+            projection_traits;
     typedef iterator_adaptor<Iterator,
             projection_iterator_policies<AdaptableUnaryFunction>,
-            Projection_Traits> type;
+            projection_traits> type;
 };
 
 template <class AdaptableUnaryFunction, class Iterator,
@@ -829,10 +772,10 @@ template <class AdaptableUnaryFunction, class Iterator,
         >
 struct const_projection_iterator_generator {
     typedef const_projection_iterator_traits<AdaptableUnaryFunction,
-            Traits> Projection_Traits;
+            Traits> projection_traits;
     typedef iterator_adaptor<Iterator,
             projection_iterator_policies<AdaptableUnaryFunction>,
-            Projection_Traits> type;
+            projection_traits> type;
 };
 
 template <class AdaptableUnaryFunction, class Iterator, class ConstIterator,
@@ -841,14 +784,13 @@ template <class AdaptableUnaryFunction, class Iterator, class ConstIterator,
         >
 struct projection_iterator_pair_generator {
     typedef projection_iterator_traits<AdaptableUnaryFunction, Traits>
-            Projection_Traits;
+            projection_traits;
     typedef const_projection_iterator_traits<AdaptableUnaryFunction,
-            ConstTraits> Const_Projection_Traits;
-    typedef iterator_adaptor_pair_generator<Iterator, ConstIterator,
-            Projection_Traits, Const_Projection_Traits,
-            projection_iterator_policies<AdaptableUnaryFunction> > pair_generator;
-    typedef typename pair_generator::iterator iterator;
-    typedef typename pair_generator::const_iterator const_iterator;
+            ConstTraits> const_projection_traits;
+    typedef iterator_adaptor<Iterator, projection_iterator_policies<AdaptableUnaryFunction>,
+        projection_traits> iterator;
+    typedef iterator_adaptor<ConstIterator, projection_iterator_policies<AdaptableUnaryFunction>,
+        const_projection_traits > const_iterator;
 };
 
 //=============================================================================
@@ -884,11 +826,7 @@ struct projection_iterator_pair_generator {
   };
   
   template <class Predicate, class Iterator, 
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-            class Traits = std::iterator_traits<Iterator>
-#else
-            class Traits
-#endif
+            class Traits = boost::detail::iterator_traits<Iterator>
            >
   class filter_iterator_generator {
     typedef filter_iterator_policies<Predicate, Iterator> Policies;
