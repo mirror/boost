@@ -80,8 +80,8 @@ public:
 
 int test()
 {
-   mem_fun(&tester::foo1);
-   mem_fun(&tester::foo2);
+   boost_no_pointer_to_member_const::mem_fun(&tester::foo1);
+   boost_no_pointer_to_member_const::mem_fun(&tester::foo2);
    return 0;
 }
 
