@@ -73,6 +73,7 @@ void test_binary() {
   }
 
 using std::abs;
+using std::sqrt;
 
 new_unary_bunch(bunch_pos, +, true);
 new_unary_bunch(bunch_neg, -, true);
