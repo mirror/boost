@@ -174,10 +174,10 @@ namespace date_time {
     typedef typename date_type::duration_type        duration_type;
     //!Specify the first 'Sunday' in 'April' spec
     /*!@param dow The day of week, eg: Sunday, Monday, etc
-     * @param month The month of the year, eg: Jan, Feb, Mar, etc
+     * @param m The month of the year, eg: Jan, Feb, Mar, etc
      */ 
-    first_kday_of_month(day_of_week_type dow, month_type month) :
-      month_(month),
+    first_kday_of_month(day_of_week_type dow, month_type m) :
+      month_(m),
       dow_(dow)
     {}
     //! Return a concrete date when provided with a year specific year.
@@ -223,10 +223,10 @@ namespace date_time {
     typedef typename date_type::duration_type        duration_type;
     //!Specify the date spec like last 'Sunday' in 'April' spec
     /*!@param dow The day of week, eg: Sunday, Monday, etc
-     * @param month The month of the year, eg: Jan, Feb, Mar, etc
+     * @param m The month of the year, eg: Jan, Feb, Mar, etc
      */ 
-    last_kday_of_month(day_of_week_type dow, month_type month) :
-      month_(month),
+    last_kday_of_month(day_of_week_type dow, month_type m) :
+      month_(m),
       dow_(dow)
     {}
     //! Return a concrete date when provided with a year specific year.
