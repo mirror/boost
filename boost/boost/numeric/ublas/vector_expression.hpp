@@ -30,11 +30,14 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Base class for uBLAS staticaly derived expressions - see the Barton Nackman trick
     //  Provides numeric properties for linear algebra
+    // FIXME
+    // The template instantiation order needs to be analyses to ensure
+     // class typedefs of E are fully defined.
     template<class E>
     class ublas_expression {
     public:
         typedef E expression_type;
-        /* FIXME expression properties are undefined due to a template instantiation order problem
+        /* FIXME
         typedef typename E::type_category type_category;
         typedef typename E::value_type value_type;
         */
@@ -173,6 +176,9 @@ namespace boost { namespace numeric { namespace ublas {
 
 
     // Base class for Vector Expressions - see the Barton Nackman trick
+    // This class could define an common interface for all
+    // statically derived expression type classes.
+    // We implement the casts to the statically derived type.
     template<class E>
     class vector_expression:
         public ublas_expression<E> {
@@ -181,6 +187,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef E expression_type;
         typedef vector_tag type_category;
         typedef abstract_tag simd_category;
+        // FIXME Template instantiation order problem
+        // typedef typename E::size_type size_type;
  
         typedef noalias_proxy<E> noalias_proxy_type;
         typedef const vector_range<const E> const_vector_range_type;
@@ -189,11 +197,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_slice<E> vector_slice_type;
         typedef const vector_indirect<const E> const_vector_indirect_type;
         typedef vector_indirect<E> vector_indirect_type;
-
-        // This class could define an common interface for all
-        // statically derived expression type classes.
-        // Due to a compiler deficiency - one can not reference class typedefs of E
-        // on MSVC 6.0 (error C2027) - we only implement the casts.
 
         BOOST_UBLAS_INLINE
         const expression_type &operator () () const {

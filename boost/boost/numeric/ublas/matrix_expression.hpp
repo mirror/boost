@@ -25,6 +25,10 @@
 namespace boost { namespace numeric { namespace ublas {
 
     // Base class Matrix Expressions - see the Barton Nackman trick
+    // This class could define an common interface for all
+    // statically derived expression type classes.
+    // We implement the casts to the statically derived type.
+
     template<class E>
     class matrix_expression:
         public ublas_expression<E> {
@@ -47,11 +51,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_slice<E> matrix_slice_type;
         typedef const matrix_indirect<const E> const_matrix_indirect_type;
         typedef matrix_indirect<E> matrix_indirect_type;
-
-        // This class could define an common interface for all
-        // statically derived expression type classes.
-        // Due to a compiler deficiency - one can not reference class typedefs of E
-        // on MSVC 6.0 (error C2027) - we only implement the casts.
 
         BOOST_UBLAS_INLINE
         const expression_type &operator () () const {
