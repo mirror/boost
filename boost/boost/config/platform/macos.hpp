@@ -11,13 +11,22 @@
 
 // If __MACH__, we're using the BSD standard C library, not the MSL:
 #if defined(__MACH__)
+
 #  define BOOST_NO_CTYPE_FUNCTIONS
 #  define BOOST_NO_CWCHAR
-#  define BOOST_NO_STDC_NAMESPACE
 #  ifndef BOOST_HAS_UNISTD_H
 #    define BOOST_HAS_UNISTD_H
 #  endif
 #  ifndef BOOST_HAS_STDINT_H
 #     define BOOST_HAS_STDINT_H
 #  endif
+
+#  ifndef __APPLE_CC__
+
+// GCC strange "ignore std" mode works better if you pretend everything
+// is in the std namespace, for the most part.
+
+#    define BOOST_NO_STDC_NAMESPACE
+#  endif
+
 #endif
