@@ -38,8 +38,12 @@ namespace boost
 
 int test_main(int,char**)
 {
+#ifndef BOOST_NO_USING_TEMPLATE
      using boost::int_t;
      using boost::uint_t;
+#else
+     using namespace boost;
+#endif
 
 #ifdef BOOST_SHOW_TYPES
      std::cout << 32 << ' '; test( int_t<32>::least() ); 
