@@ -304,7 +304,7 @@ namespace boost {
                typename GroupCompare,
                typename SlotFunction>
       struct get_signal_impl : 
-        public real_get_signal_impl<function_traits<Signature>::arity,
+        public real_get_signal_impl<(function_traits<Signature>::arity),
                                     Signature,
                                     Combiner,
                                     Group,

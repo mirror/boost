@@ -35,7 +35,7 @@ namespace boost {
   };
   
   template<>
-  class last_value<void> {
+  struct last_value<void> {
     struct unusable {};
 
   public:
