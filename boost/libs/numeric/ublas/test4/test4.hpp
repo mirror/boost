@@ -17,8 +17,8 @@
 #ifndef TEST4_H
 #define TEST4_H
 
-#define USE_BANDED
-//#define USE_DIAGONAL
+//#define USE_BANDED
+#define USE_DIAGONAL
 
 namespace ublas = boost::numeric::ublas;
 
