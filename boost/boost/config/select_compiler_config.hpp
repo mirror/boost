@@ -14,6 +14,10 @@
 //  Comeau C++
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/comeau.hpp"
 
+#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
+//  Intel
+#   define BOOST_COMPILER_CONFIG "boost/config/compiler/intel.hpp"
+
 # elif defined __GNUC__
 //  GNU C++:
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/gcc.hpp"
@@ -37,10 +41,6 @@
 #elif defined __BORLANDC__
 //  Borland
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/borland.hpp"
-
-#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
-//  Intel
-#   define BOOST_COMPILER_CONFIG "boost/config/compiler/intel.hpp"
 
 #elif defined  __MWERKS__
 //  Metrowerks CodeWarrior
