@@ -67,7 +67,17 @@ namespace gregorian {
     //! Constructor for infinities, not a date, max and min date
     explicit date(special_values sv):
       date_time::date<date, gregorian_calendar, date_duration>(date_rep_type::from_special(sv))
-    {}
+    {
+      if (sv == min_date_time)
+      {
+        *this = date(1400, 1, 1);
+      }
+      if (sv == max_date_time)
+      {
+        *this = date(9999, 12, 31);
+      }
+
+    }
     //!Return the Julian Day number for the date.
     date_int_type julian_day() const
     {
