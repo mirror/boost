@@ -18,10 +18,10 @@
 // it as an integral constant expression when used as a template argument.
 #  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #  define BOOST_NO_INTEGRAL_INT64_T
+#  define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif
 
 #if (__IBMCPP__ <= 600)
-#  define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif
 
 //
