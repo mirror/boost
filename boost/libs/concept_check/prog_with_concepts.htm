@@ -1,3 +1,23 @@
+<HTML>
+<!--
+  -- Copyright (c) Jeremy Siek and Andrew Lumsdaine 2000
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  We make no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  -->
+<Head>
+<Title>Programming With Concepts</Title>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+        ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost" width="277" height="86"> 
+
+<BR Clear>
 
 <h2><a name="programming-with-concepts">Programming with Concepts</a></h2>
 
@@ -30,6 +50,9 @@ When designing the concepts for some problem domain it is important to
 keep in mind their purpose, namely to express the requirements for the
 input to the components.  With respect to the requirement minimization
 principle, this means we want to minimize concepts.  
+
+<!-- the following discussion does not match the Standard definition
+ of LessThanComparable and needs to be changed -Jeremy
 
 <p>
 It is important to note, however, that
@@ -82,6 +105,8 @@ LessThanComparable</a> is given as the requirement for
 <tt>std::stable_sort()</tt>, then the maintainer is given a reasonable
 amount of flexibility within which to work.
 
+-->
+
 <p>
 Minimality in concepts is a property associated with the underlying
 semantics of the problem domain being represented.  In the problem
@@ -104,3 +129,20 @@ important to factor families of requirements into rather fine-grained
 concepts.  For example, the requirements for iterators are factored
 into the six STL iterator concepts (trivial, output, input, forward,
 bidirectional, and random access).
+
+<p>
+<a href="./implementation.htm">Next: Implementation</a><br>
+<a href="./concept_covering.htm">Prev: Concept Covering and Archetypes</a>
+
+<br>
+<HR>
+<TABLE>
+<TR valign=top>
+<TD nowrap>Copyright &copy 2000</TD><TD>
+<A HREF="../../people/jeremy_siek.htm">Jeremy Siek</A>,
+Univ.of Notre Dame (<A
+HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+</TD></TR></TABLE>
+
+</BODY>
+</HTML> 

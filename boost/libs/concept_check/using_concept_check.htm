@@ -1,29 +1,74 @@
+<HTML>
+<!--
+  -- Copyright (c) Jeremy Siek and Andrew Lumsdaine 2000
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  We make no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  -->
+<Head>
+<Title>Using Concept Checks</Title>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+        ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost" width="277" height="86"> 
+
+<BR Clear>
+
+
 <h2><a name="using-concept-checks">Using Concept Checks</a></h2>
 
 For each concept there is a concept checking class which can be used
 to make sure that a given type (or set of types) models the concept.
-The Boost Concept Checking Library includes concept checking classes
+The Boost Concept Checking Library (BCCL) includes concept checking classes
 for all of the concepts used in the C++ standard library and a few
-more. The <a href="#reference">Reference</a> section below lists these
+more. The <a href="./reference.htm">Reference</a> section lists these
 concept checking classes. In addition, other boost libraries come with
 concept checking classes for the concepts that are particular to those
-libraries.  An example of one of these classes is the
-<tt>EqualityComparableConcept</tt> class.
+libraries. For example, there are <a
+href="../graph/doc/graph_concepts.html">graph concepts</a> and <a
+href="../property_map/property_map.html">property map concepts</a>.
+Also, whenever <b>anyone</b> writing a class of function template
+needs to express requirements that are not yet stated by an existing
+concept, a new concept checking class should be created. How
+to do this is explained in <a href="./creating_concepts.htm">Creating
+Concept Checking Classes</a>.
+
+<p>
+An example of a concept checking class from the BCCL is the
+<tt>EqualityComparableConcept</tt> class. The class corresponds to the
+EqualityComparable requirements described in 20.1.1 of the C++
+Standard, and to the <a
+href="http://www.sgi.com/Technology/STL/EqualityComparable.html">EqualityComparable</a>
+concept documented in the SGI STL.
 
 <pre>
-  template &lt;class T&gt; struct EqualityComparableConcept;
+  template &lt;class T&gt;
+  struct EqualityComparableConcept;
 </pre>
 
+The template argument <tt>T</tt> will the type to be checked. That is,
+the purpose of <tt>EqualityComparableConcept</tt> is to make sure that
+the template argument given for <tt>T</tt> models the
+EqualityComparable concept.
+
+<p>
 Each concept checking class has a member function named
 <tt>constraints()</tt> which contains the valid expressions for the
-concept. To check whether some type, say <tt>foo</tt>, is
-EqualityComparable, we need to instantiate the concept checking class
-with foo: <tt>EqualityComparableConcept&lt;foo&gt;</tt> and then find
-a way to get the compiler to compile the <tt>constraints()</tt>
-function without actually calling it. The Boost Concept Checking
+concept. To check whether some type is EqualityComparable we need to
+instantiate the concept checking class with the type and then find a
+way to get the compiler to compile the <tt>constraints()</tt> function
+without actually executing the function. The Boost Concept Checking
 Library defines two utilities that make this easy:
 <tt>function_requires()</tt> and <tt>BOOST_CLASS_REQUIRES</tt>.
-<tt>function_requires()</tt> function can be used in function bodies
+
+<h4><tt>function_requires()</tt></h4>
+
+The <tt>function_requires()</tt> function can be used in function bodies
 and the <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside class
 bodies. The <tt>function_requires()</tt> function takes no arguments,
 but has a template parameter for the concept checking class. This
@@ -31,25 +76,62 @@ means that the instantiated concept checking class must be given as an
 explicit template argument, as shown below.
 
 <pre>
-  void some_function_using_foo() {
-    function_requires&lt; EqualityComparableConcept&lt;foo&gt; &gt;();
+  // In my library:
+  template &lt;class T&gt;
+  void generic_library_function(T x)
+  {
+    function_requires&lt; EqualityComparableConcept&lt;T&gt; &gt;();
     // ...
   };
+
+  // In the user's code:  
+  class foo {
+    //... 
+  };
+
+  int main() {
+    foo f;
+    generic_library_function(f);
+    return 0;
+  }
 </pre>
+
+
+<h4><tt>BOOST_CLASS_REQUIRES</tt></h4>
 
 The <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside a class
 definition to check whether some type models a concept. 
 
 <pre>
-  struct some_class_using_foo {
-    BOOST_CLASS_REQUIRES(foo, EqualityComparableConcept);
+  // In my library:
+  template &lt;class T&gt;
+  struct generic_library_class
+  {
+    BOOST_CLASS_REQUIRES(T, EqualityComparableConcept);
+    // ...
   };
+
+  // In the user's code:  
+  class foo {
+    //... 
+  };
+
+  int main() {
+    generic_library_class&lt;foo&gt; glc;
+    // ...
+    return 0;
+  }
 </pre>
 
-To add concept checks to the <tt>std::stable_sort()</tt> function the
-library implementor would simply insert <tt>function_requires()</tt>
-at the top of <tt>std::stable_sort()</tt> to make sure the template
-parameter type models <a
+
+<h4>Example</h4>
+
+<p>
+Getting back to the earlier <a
+href="./concept_check.htm#motivating-example">motivating example</a>,
+one good applicatino of concept checks would be to insert
+<tt>function_requires()</tt> at the top of <tt>std::stable_sort()</tt>
+to make sure the template parameter type models <a
 href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a>. In addition, <tt>std::stable_sort()</tt>
 requires that the <tt>value_type</tt> of the iterators be
@@ -122,60 +204,22 @@ not be sure whether some type models a particular concept. This can
 easily be checked by creating a small program and using
 <tt>function_requires()</tt> with the type and concept in question.
 The file <a
-href="./stl_concept_checks.cpp"><tt>stl_concept_checks.cpp</tt></a>
-gives and example of applying the concept checks to STL
-containers. The file is listed here:
+href="./stl_concept_check.cpp"><tt>stl_concept_checks.cpp</tt></a>
+gives and example of applying the concept checks to STL containers.
 
-<pre>
-  #include &lt;boost/concept_check.hpp&gt;
+<p>
+<a href="./concept_check.htm">Prev: Concept Checking Introduction</a> <br>
+<a href="./creating_concepts.htm">Next: Creating Concept Checking Classes</a>
 
-  #include &lt;iterator&gt;
-  #include &lt;set&gt;
-  #include &lt;map&gt;
-  #include &lt;vector&gt;
-  #include &lt;list&gt;
-  #include &lt;deque&gt;
+<br>
+<HR>
+<TABLE>
+<TR valign=top>
+<TD nowrap>Copyright &copy 2000</TD><TD>
+<A HREF="../../people/jeremy_siek.htm">Jeremy Siek</A>,
+Univ.of Notre Dame (<A
+HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+</TD></TR></TABLE>
 
-  int
-  main()
-  {
-    typedef std::vector&lt;int&gt; Vector;
-    typedef std::deque&lt;int&gt; Deque;
-    typedef std::list&lt;int&gt; List;
-
-    function_requires&lt; Mutable_RandomAccessContainer&lt;Vector&gt; &gt;();
-    function_requires&lt; BackInsertionSequence&lt;Vector&gt; &gt;();
-
-    function_requires&lt; Mutable_RandomAccessContainer&lt;Deque&gt; &gt;();
-    function_requires&lt; FrontInsertionSequence&lt;Deque&gt; &gt;();
-    function_requires&lt; BackInsertionSequence&lt;Deque&gt; &gt;();
-
-    function_requires&lt; Mutable_ReversibleContainer&lt;List&gt; &gt;();
-    function_requires&lt; FrontInsertionSequence&lt;List&gt; &gt;();
-    function_requires&lt; BackInsertionSequence&lt;List&gt; &gt;();
-
-    typedef std::set&lt;int&gt; Set;
-    typedef std::multiset&lt;int&gt; MultiSet;
-    typedef std::map&lt;int,int&gt; Map;
-    typedef std::multimap&lt;int,int&gt; MultiMap;
-
-    function_requires&lt; SortedAssociativeContainer&lt;Set&gt; &gt;();
-    function_requires&lt; SimpleAssociativeContainer&lt;Set&gt; &gt;();
-    function_requires&lt; UniqueAssociativeContainer&lt;Set&gt; &gt;();
-
-    function_requires&lt; SortedAssociativeContainer&lt;MultiSet&gt; &gt;();
-    function_requires&lt; SimpleAssociativeContainer&lt;MultiSet&gt; &gt;();
-    function_requires&lt; MultipleAssociativeContainer&lt;MultiSet&gt; &gt;();
-
-    function_requires&lt; SortedAssociativeContainer&lt;Map&gt; &gt;();
-    function_requires&lt; UniqueAssociativeContainer&lt;Map&gt; &gt;();
-    function_requires&lt; PairAssociativeContainer&lt;Map&gt; &gt;();
-
-    function_requires&lt; SortedAssociativeContainer&lt;MultiMap&gt; &gt;();
-    function_requires&lt; MultipleAssociativeContainer&lt;MultiMap&gt; &gt;();
-    function_requires&lt; PairAssociativeContainer&lt;MultiMap&gt; &gt;();
-
-    return 0;
-  }
-</pre>
-
+</BODY>
+</HTML> 

@@ -1,9 +1,30 @@
+<HTML>
+<!--
+  -- Copyright (c) Jeremy Siek and Andrew Lumsdaine 2000
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  We make no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  -->
+<Head>
+<Title>Boost Concept Checking Reference</Title>
+</Head>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+        ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost" width="277" height="86"> 
+
+<BR Clear>
 
 <h2><a name="reference">Reference</a></h2>
 
   <OL>
   <LI><a href="#functions">Functions</a></LI>
-  <LI><a href="#classes">Classes</a></LI>
+  <LI><a href="#macros">Macros</a></LI>
   <LI><a href="#basic-concepts">Basic Concept Checking Classes</a></LI>
   <LI><a href="#iterator-concepts">Iterator Concept Checking Classes</a></LI>
   <LI><a href="#function-object-concepts">Function Object Concept Checking Classes</a></LI>
@@ -21,26 +42,16 @@
   void function_requires();
 </pre>
 
-<h3><a name="classes">Classes</a></h3>
-<pre>
-  template &lt;class Concept&gt;
-  struct class_requires {
-    typedef ... check;
-  };
-</pre>
+<h3><a name="macros">Macros</a></h3>
 
 <pre>
-  // Make sure that <i>Type1</i> and <i>Type2</i> are exactly the same type.
-  // If they are not, then the nested typedef for <tt>type</tt> will
-  // not exist and cause a compiler error.
-  template &lt;class Type1, class Type2&gt;
-  struct require_same {
-    typedef ... type;
-  };
-  // usage example
-  typedef typedef require_same<int,int>::type req1; // this will compile OK
-  typedef typedef require_same<int,float>::type req1; // this will cause a compiler error
+  // Apply concept checks in class definitions.
+  BOOST_CLASS_REQUIRES(<i>type</i>, <i>concept</i>);
+  BOOST_CLASS_REQUIRES2(<i>type1</i>, <i>type2</i>, <i>concept</i>);
+  BOOST_CLASS_REQUIRES3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>concept</i>);
+  BOOST_CLASS_REQUIRES4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>concept</i>);
 </pre>
+
 
 <h3><a name="basic-concepts">Basic Concept Checking Classes</a></h3>
 
@@ -48,28 +59,36 @@
   template &lt;class T&gt; struct Integer_concept; // Is T a built-in integer type?
   template &lt;class T&gt; struct SignedIntegerConcept; // Is T a built-in signed integer type?
   template &lt;class X, class Y&gt; struct ConvertibleConcept; // Is X convertible to Y?
-  template &lt;class T&gt; struct AssignableConcept;
-  template &lt;class T&gt; struct DefaultConstructibleConcept;
-  template &lt;class T&gt; struct CopyConstructibleConcept;
-  template &lt;class T&gt; struct BooleanConcept;
-  template &lt;class T&gt; struct EqualityComparableConcept;
-  // Is class T equality comparable on the left side with type Left?
-  template &lt;class T, class Left&gt; struct LeftEqualityComparableConcept;
-  template &lt;class T&gt; struct LessThanComparableConcept;
+  template &lt;class T&gt; struct <a
+  href="../utility/Assignable.html">Assignable</a>Concept; // Standard ref 23.1
+  template &lt;class T&gt; struct SGI<a href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</a>Concept;
+  template &lt;class T&gt; struct <a href="http://www.sgi.com/Technology/STL/DefaultConstructible.html">DefaultConstructible</a>Concept;
+  template &lt;class T&gt; struct <a
+    href="../utility/CopyConstructible.html">CopyConstructible</a>Concept; // Standard ref 20.1.3
+  template &lt;class T&gt; struct <a
+    href="http://www.sgi.com/Technology/STL/EqualityComparable.html">EqualityComparable</a>Concept; // Standard ref 20.1.1
+  template &lt;class T&gt; struct <a
+    href="../utility/LessThanComparable.html">LessThanComparable</a>Concept; // Standard ref 20.1.2
+  template &lt;class T&gt; struct ComparableConcept; // The SGI STL <a href="http://www.sgi.com/Technology/STL/LessThanComparable.html">LessThanComparable</a> concept
 </pre>
 
 <h3><a name="iterator-concepts">Iterator Concept Checking Classes</a></h3>
 
 <pre>
-  template &lt;class Iter&gt; struct TrivialIteratorConcept;
+  template &lt;class Iter&gt; struct <a href="http://www.sgi.com/Technology/STL/trivial.html">TrivialIterator</a>Concept;
   template &lt;class Iter&gt; struct Mutable_TrivialIteratorConcept;
-  template &lt;class Iter&gt; struct InputIteratorConcept;
-  template &lt;class Iter, class T&gt; struct OutputIteratorConcept;
-  template &lt;class Iter&gt; struct ForwardIteratorConcept;
+  template &lt;class Iter&gt; struct <a
+    href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</a>Concept; // Standard ref 24.1.1 Table 72
+  template &lt;class Iter, class T&gt; struct <a
+    href="http://www.sgi.com/Technology/STL/OutputIterator.html">OutputIterator</a>Concept; // Standard ref 24.1.2 Table 73
+  template &lt;class Iter&gt; struct <a
+    href="http://www.sgi.com/Technology/STL/ForwardIterator.html">ForwardIterator</a>Concept; // Standard ref 24.1.3 Table 74
   template &lt;class Iter&gt; struct Mutable_ForwardIteratorConcept;
-  template &lt;class Iter&gt; struct BidirectionalIteratorConcept;
+  template &lt;class Iter&gt; struct <a
+    href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>Concept; // Standard ref 24.1.4 Table 75
   template &lt;class Iter&gt; struct Mutable_BidirectionalIteratorConcept;
-  template &lt;class Iter&gt; struct RandomAccessIteratorConcept;
+  template &lt;class Iter&gt; struct <a
+    href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>Concept; // Standard ref 24.1.5 Table 76
   template &lt;class Iter&gt; struct Mutable_RandomAccessIteratorConcept;
 </pre>
 
@@ -87,23 +106,23 @@
 <h3><a name="container-concepts">Container Concept Checking Classes</a></h3>
 
 <pre>
-  template &lt;class C&gt; struct ContainerConcept;
+  template &lt;class C&gt; struct ContainerConcept; // Standard ref 23.1 Table 65
   template &lt;class C&gt; struct Mutable_ContainerConcept;
 
   template &lt;class C&gt; struct ForwardContainerConcept;
   template &lt;class C&gt; struct Mutable_ForwardContainerConcept;
 
-  template &lt;class C&gt; struct ReversibleContainerConcept;
+  template &lt;class C&gt; struct ReversibleContainerConcept; // Standard ref 23.1 Table 66
   template &lt;class C&gt; struct Mutable_ReversibleContainerConcept;
 
   template &lt;class C&gt; struct RandomAccessContainerConcept;
   template &lt;class C&gt; struct Mutable_RandomAccessContainerConcept;
 
-  template &lt;class C&gt; struct SequenceConcept;
+  template &lt;class C&gt; struct SequenceConcept; // Standard ref 23.1.1
   template &lt;class C&gt; struct FrontInsertionSequenceConcept;
   template &lt;class C&gt; struct BackInsertionSequenceConcept;
 
-  template &lt;class C&gt; struct AssociativeContainerConcept;
+  template &lt;class C&gt; struct AssociativeContainerConcept; // Standard ref 23.1.2 Table 69
   template &lt;class C&gt; struct UniqueAssociativeContainerConcept;
   template &lt;class C&gt; struct MultipleAssociativeContainerConcept;
   template &lt;class C&gt; struct SimpleAssociativeContainerConcept;
@@ -115,11 +134,10 @@
 <h3><a name="basic-archetype">Basic Archetype Classes</a></h3>
 
 <pre>
-  class null_archetype; // A type that models no concepts.
+  template &lt;class T = int&gt; class null_archetype; // A type that models no concepts.
   template &lt;class Base = null_archetype&gt; class default_constructible_archetype;
   template &lt;class Base = null_archetype&gt; class assignable_archetype;
   template &lt;class Base = null_archetype&gt; class copy_constructible_archetype;
-  template &lt;class Left, class Base = null_archetype&gt; class left_equality_comparable_archetype;
   template &lt;class Base = null_archetype&gt; class equality_comparable_archetype;
   template &lt;class T, class Base = null_archetype&gt; class convertible_to_archetype;
 </pre>
@@ -150,3 +168,20 @@
 UNDER CONSTRUCTION
 </pre>
 
+<p>
+<a href="./concept_check.htm">Back to Introduction</a>
+<br>
+<a href="./implementation.htm">Prev: Implementation</a>
+
+<br>
+<HR>
+<TABLE>
+<TR valign=top>
+<TD nowrap>Copyright &copy 2000</TD><TD>
+<A HREF="../../people/jeremy_siek.htm">Jeremy Siek</A>,
+Univ.of Notre Dame (<A
+HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+</TD></TR></TABLE>
+
+</BODY>
+</HTML> 

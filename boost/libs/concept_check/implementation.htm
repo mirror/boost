@@ -1,3 +1,23 @@
+<HTML>
+<!--
+  -- Copyright (c) Jeremy Siek and Andrew Lumsdaine 2000
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  We make no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  -->
+<Head>
+<Title>Concept Checking Implementation</Title>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+        ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost" width="277" height="86"> 
+
+<BR Clear>
 
 
 <h2><a name="implementation">Implementation</a></h2>
@@ -26,14 +46,16 @@ can be applied to the <tt>std::stable_sort()</tt> function:
 
 <pre>
   template &lt;class RandomAccessIterator&gt;
-  void stable_sort_constraints(RandomAccessIterator i) {
+  void stable_sort_constraints(RandomAccessIterator i)
+  {
     typename std::iterator_traits&lt;RandomAccessIterator&gt;
       ::difference_type n;
     i += n;  // exercise the requirements for RandomAccessIterator
     ...
   }
   template &lt;class RandomAccessIterator&gt;
-  void stable_sort(RandomAccessIterator first, RandomAccessIterator last) {
+  void stable_sort(RandomAccessIterator first, RandomAccessIterator last)
+  {
     typedef void (*fptr_type)(RandomAccessIterator);
     fptr_type x = &stable_sort_constraints;
     ...
@@ -54,8 +76,10 @@ members of the concept checking class.
 
 <pre>
   template &lt;class Iter&gt;
-  struct RandomAccessIterator_concept {
-    void constraints() {
+  struct RandomAccessIterator_concept
+  {
+    void constraints()
+    {
       i += n;
       ...
     }
@@ -78,10 +102,10 @@ href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a>.
 
 <pre>
-  template &lt;class RandomAccessIter&gt;
-  void stable_sort(RandomAccessIter first, RandomAccessIter last)
+  template &lt;class Iter&gt;
+  void stable_sort(Iter first, Iter last)
   {
-    function_requires< RandomAccessIteratorConcept<RandomAccessIter> >();
+    function_requires&lt; RandomAccessIteratorConcept&lt;Iter&gt; &gt;();
     ...
   }
 </pre>
@@ -96,13 +120,43 @@ the concept's valid expressions. We then assign <tt>x</tt> to
 everything in a do-while loop to prevent name collisions.
 
 <pre>
-  template <class Concept>
+  template &lt;class Concept&gt;
   void function_requires()
   {
     void (Concept::*x)() = BOOST_FPTR Concept::constraints;
     ignore_unused_variable_warning(x);
   }
 </pre>
+
+To check the type parameters of class templates, we provide the
+<tt>BOOST_CLASS_REQUIRES</tt> macro which can be used inside the body of a
+class definition (whereas <tt>function_requires()</tt> can only be used
+inside of a function body).  This macro declares a nested class
+template, where the template parameter is a function pointer. We then
+use the nested class type in a typedef with the function pointer type
+of the constraint function as the template argument. We use the
+<tt>type_var</tt> and <tt>concept</tt> names in the nested class and
+typedef names to help prevent name collisions.
+
+<pre>
+#define BOOST_CLASS_REQUIRES(type_var, concept) \
+  typedef void (concept &lt;type_var&gt;::* func##type_var##concept)(); \
+  template &lt;func##type_var##concept _Tp1&gt; \
+  struct concept_checking_##type_var##concept { }; \
+  typedef concept_checking_##type_var##concept&lt; \
+    BOOST_FPTR concept &lt;type_var&gt;::constraints&gt; \
+    concept_checking_typedef_##type_var##concept
+</pre>
+
+In addition, there are versions of <tt>BOOST_CLASS_REQUIRES</tt> that
+take more arguments, to handle concepts that include interactions
+between two or more types.  <tt>BOOST_CLASS_REQUIRES</tt> was not used
+in the implementation of the BCCL concept checks because several
+compilers do not implement template parameters of function pointer
+type.
+
+
+<!-- We decided not to go with this version since it is easier to misuse
 
 To check the type parameters of class templates, we provide the
 <tt>class_requires</tt> class which can be used inside the body of a
@@ -131,3 +185,21 @@ Boost Concept Checking Library concept checks because several
 compilers do not implement template parameters of function pointer
 type.
 
+-->
+
+<p>
+<a href="./reference.htm">Next: Reference</a><br>
+<a href="./prog_with_concepts.html">Prev: Programming With Concepts</a>
+
+<br>
+<HR>
+<TABLE>
+<TR valign=top>
+<TD nowrap>Copyright &copy 2000</TD><TD>
+<A HREF="../../people/jeremy_siek.htm">Jeremy Siek</A>,
+Univ.of Notre Dame (<A
+HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+</TD></TR></TABLE>
+
+</BODY>
+</HTML> 
