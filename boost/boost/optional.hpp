@@ -201,11 +201,20 @@ class optional_base : public optional_tag
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
-    void assign ( optional_base const& rhs ) { assign_impl(rhs,is_reference_predicate()); }
-
+    void assign ( optional_base const& rhs )
+      {
+        destroy();
+        if ( rhs.is_initialized() )
+          construct(rhs.get_impl());
+      }
+    
     // Assigns from a T (deep-copies the rhs value)
     // Basic Guarantee: If T::( T const& ) throws, this is left UNINITIALIZED
-    void assign ( argument_type val ) { assign_impl(val,is_reference_predicate()); }
+    void assign ( argument_type val )
+      {
+        destroy();
+        construct(val);
+      }
 
     // Assigns from "none", destroying the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)
@@ -213,7 +222,11 @@ class optional_base : public optional_tag
 
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     template<class Expr>
-    void assign_expr ( Expr const& expr, Expr const* tag ) { assign_expr_impl(expr,tag,is_reference_predicate()) ; }
+    void assign_expr ( Expr const& expr, Expr const* tag ) 
+      {
+        destroy();
+        construct(expr,tag);
+      }
 #endif
 
   public :
@@ -224,7 +237,7 @@ class optional_base : public optional_tag
 
     // Replaces the current value -if any- with 'val'
     // Basic Guarantee: If T::T( T const& ) throws this is left UNINITIALIZED.
-    void reset ( argument_type val ) { assign_impl(val,is_reference_predicate()); }
+    void reset ( argument_type val ) { assign(val); }
 
     // Returns a pointer to the value if this is initialized, otherwise,
     // returns NULL.
@@ -273,13 +286,6 @@ class optional_base : public optional_tag
        m_initialized = true ;
      }
 
-    template<class Expr>
-    void assign_expr_to_ref ( Expr const& expr, void const* )
-     {
-       get_impl() = expr ;
-       m_initialized = true ;
-     }
-
 #ifdef BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
     // BCB5.64 (and probably lower versions) workaround.
     //   The in-place factories are supported by means of catch-all constructors
@@ -305,84 +311,7 @@ class optional_base : public optional_tag
          m_initialized = true ;
        }
      }
-    template<class Expr>
-    void assign_expr_to_ref ( Expr const& expr, optional_tag const* )
-     {
-       if ( expr.is_initialized() )
-       {
-         // An exception can be thrown here.
-         // It it happens, THIS will be left uninitialized.
-         get_impl() = expr.get() ;
-         m_initialized = true ;
-       }
-     }
 #endif
-
-    void assign_impl ( optional_base const& rhs, is_not_reference_tag tag )
-      {
-        destroy();
-        if ( rhs.is_initialized() )
-          construct(rhs.get_impl());
-      }
-
-    void assign_impl ( optional_base const& rhs, is_reference_tag )
-      {
-        if ( is_initialized() )
-        {
-          destroy();
-          if ( rhs.is_initialized() )
-            assign_to_referenced(rhs.get_impl());
-        }
-        else
-        {
-          if ( rhs.is_initialized() )
-            construct(rhs.get_impl());
-        }
-      }
-
-    void assign_impl ( argument_type val, is_not_reference_tag )
-      {
-        destroy();
-        construct(val);
-      }
-
-    void assign_impl ( argument_type val, is_reference_tag )
-      {
-        if ( is_initialized() )
-        {
-          destroy();
-          assign_to_referenced(val);
-        }
-        else
-          construct(val);
-      }
-
-#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
-    template<class Expr>
-    void assign_expr_impl ( Expr const& expr, Expr const* expr_tag, is_not_reference_tag )
-      {
-        destroy();
-        construct(expr,expr_tag);
-      }
-
-    template<class Expr>
-    void assign_expr_impl ( Expr const& expr, Expr const* expr_tag, is_reference_tag )
-      {
-        if ( is_initialized() )
-        {
-          destroy();
-          assign_expr_to_ref(expr,expr_tag);
-        }
-        else
-          construct(expr,expr_tag);
-      }
-#endif
-
-    void assign_to_referenced ( argument_type val )
-      {
-        get_impl() = val ;
-        m_initialized = true ;
-      }
 
     void destroy()
       {
@@ -517,7 +446,7 @@ class optional : public optional_detail::optional_base<T>
         {
           // An exception can be thrown here.
           // It it happens, THIS will be left uninitialized.
-          this->assign_val(rhs.get());
+          this->assign(rhs.get());
         }
         return *this ;
       }

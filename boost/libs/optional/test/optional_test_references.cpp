@@ -308,23 +308,12 @@ void test_with_class_type()
   BOOST_CHECK ( X::count == 0 ) ;
 }
 
-void test_aliasing()
-{
-  int a = 1 ;
-  optional<int&> opt(a);
-  int b = 2 ;
-  opt = b;
-  BOOST_CHECK( a == b ) ;
-
-}
-
 int test_main( int, char* [] )
 {
   try
   {
     test_with_class_type();
     test_with_builtin_types();
-    test_aliasing();
   }
   catch ( ... )
   {
