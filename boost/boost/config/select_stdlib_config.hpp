@@ -17,7 +17,7 @@
 
 #include <utility>
 
-#if defined(__SGI_STL_PORT)
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 // STLPort library; this _must_ come first, otherwise since
 // STLport typically sits on top of some other library, we
 // can end up detecting that first rather than STLport:
