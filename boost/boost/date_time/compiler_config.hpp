@@ -3,6 +3,7 @@
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
+ * $Id$
  */
 
 // This file performs some local compiler configurations
