@@ -295,7 +295,9 @@ namespace boost {
 
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
     BOOST_FUNCTION_FUNCTION(clear_type*) : function_base(), invoker(0) {}
-#endif // BOOST_FUNCTION_NO_ENABLE_IF
+#else
+    BOOST_FUNCTION_FUNCTION(int) : function_base(), invoker(0) {}
+#endif
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) :
       function_base(),
@@ -348,7 +350,13 @@ namespace boost {
       this->clear();
       return *this;
     }
-#endif // BOOST_FUNCTION_NO_ENABLE_IF
+#else
+    BOOST_FUNCTION_FUNCTION& operator=(int)
+    {
+      this->clear();
+      return *this;
+    }
+#endif
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
