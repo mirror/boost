@@ -288,9 +288,13 @@ Do not change this file unless you really really have to, add options to
    	#define BOOST_RE_NO_WCSTRING
    #endif
    //
-   // for now we'll always define these:
-   #define BOOST_RE_NO_WCTYPE_H
-   #define BOOST_RE_NO_WCSTRING
+   // for now we'll always define these
+   // unless we know that the platform can cope
+   // with woide character strings:
+   #if !defined(linux)
+   	#define BOOST_RE_NO_WCTYPE_H
+   	#define BOOST_RE_NO_WCSTRING
+   #endif
 
 #endif
 
@@ -1217,6 +1221,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

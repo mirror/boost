@@ -436,7 +436,11 @@ std::string BOOST_RE_CALL to_narrow(const std::basic_string<wchar_t>& is, const 
    scoped_array<char> t(pc);
    //typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_type;
    //const cvt_type& cvt = BOOST_RE_USE_FACET(l, cvt_type);
+   #ifdef BOOST_MSVC
    std::mbstate_t state = 0;
+   #else
+   std::mbstate_t state = std::mbstate_t();
+   #endif
 
    const wchar_t* next_in;
    char* next_out;
@@ -474,7 +478,12 @@ std::wstring BOOST_RE_CALL to_wide(const std::string& is, const std::codecvt<wch
    scoped_array<wchar_t> t(pc);
    //typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_type;
    //const cvt_type& cvt = BOOST_RE_USE_FACET(l, cvt_type);
+   #ifdef BOOST_MSVC
    std::mbstate_t state = 0;
+   #else
+   std::mbstate_t state = std::mbstate_t();
+   #endif
+
 
    wchar_t* next_out;
    const char* next_in;
