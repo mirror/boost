@@ -28,7 +28,9 @@
 		</p>
 		<P>When <STRONG>BOOST_NO_EXCEPTIONS</STRONG> is not defined, <tt>boost::throw_exception(e)</tt>
 			is equivalent to <tt>throw e</tt>. Otherwise, the function is left undefined, 
-			and the user is expected to supply an appropriate definition.</P>
+			and the user is expected to supply an appropriate definition. Callers of <tt>throw_exception</tt>
+			are allowed to assume that the function never returns; therefore, if the 
+			user-defined <tt>throw_exception</tt> returns, the behavior is undefined.</P>
 		<h3><a name="Synopsis">Synopsis</a></h3>
 		<pre>
 namespace boost
