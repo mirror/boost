@@ -10,6 +10,13 @@
 //  support partial specialisation. (C) John Maddock 2000
 
 /* Release notes:
+   01st October 2000:
+      Fixed is_pointer, is_reference, is_const, is_volatile, is_same, is_member_pointer
+      using ideas suggested from "Generic<Programming>: Mappings between Types and Values" 
+      by Andrei Alexandrescu (see http://www.cuj.com/experts/1810/alexandr.html).
+      Mat Marcus and Jesse Jones posted a version of is_pointer very similar to this one
+      on the boost list (Copyright 2000 Adobe Systems Incorporated and others. 
+      All rights reserved.).
    31st July 2000:
       Added is_convertable, alignment_of.
    23rd July 2000:
@@ -82,11 +89,48 @@ template <typename T> struct remove_bounds{ typedef T type; };
 // fundamental property classes:
 
 //* is a type T  declared const - is_const<T>
+namespace detail{
+   typedef char yes_result;
+   typedef char (&no_result)[8];
+   yes_result is_const_helper(const volatile void*);
+   double is_const_helper(volatile void *);
+   yes_result is_volatile_helper(const volatile void*);
+   double is_volatile_helper(const void *);
+}
+
 template <typename T>
-struct is_const{ enum{ value = false }; };
+struct is_const
+{ 
+private:
+   static T t;
+public:
+   enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_const_helper(&t))) }; 
+};
+
 template <typename T>
-struct is_volatile{ enum{ value = false }; };
-template <typename T, typename U> struct is_same { enum{ value = false }; };
+struct is_volatile
+{ 
+private:
+   static T t;
+public:
+   enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_volatile_helper(&t))) }; 
+};
+
+namespace detail{
+   template <class T>
+   yes_result is_same_helper(T*, T*);
+   no_result is_same_helper(...);
+}
+
+template <typename T, typename U> struct is_same 
+{ 
+private:
+   static T t;
+   static U u;
+public:
+   enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_same_helper(&t,&u))) }; 
+};
+
 template <typename T> struct is_void{ enum{ value = false }; };
 template <> struct is_void<void>{ enum{ value = true }; };
 
@@ -208,36 +252,47 @@ template <typename T> struct is_fundamental
 { enum{ value = is_standard_fundamental<T>::value || is_extension_fundamental<T>::value}; };
 
 //* is a type T an array - is_array<T>
+namespace detail{
+   template <class T>
+   yes_result is_array_helper(const volatile T*, const volatile T*);
+   double is_array_helper(...);
+}
 template <typename T> struct is_array
-{ enum{ value = false}; };
+{ 
+private:
+   static T t;
+public:
+   enum{ value = (1 == sizeof(detail::is_array_helper(t, &t)))}; 
+};
 
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
-template <typename T> struct is_pointer { enum{ value = false}; };
-template <> struct is_pointer<char*> { enum{ value = true}; };
-template <> struct is_pointer<const char*> { enum{ value = true}; };
-template <> struct is_pointer<unsigned char*> { enum{ value = true}; };
-template <> struct is_pointer<const unsigned char*> { enum{ value = true}; };
-template <> struct is_pointer<signed char*> { enum{ value = true}; };
-template <> struct is_pointer<const signed char*> { enum{ value = true}; };
-template <> struct is_pointer<short*> { enum{ value = true}; };
-template <> struct is_pointer<const short*> { enum{ value = true}; };
-template <> struct is_pointer<unsigned short*> { enum{ value = true}; };
-template <> struct is_pointer<const unsigned short*> { enum{ value = true}; };
-template <> struct is_pointer<int*> { enum{ value = true}; };
-template <> struct is_pointer<const int*> { enum{ value = true}; };
-template <> struct is_pointer<unsigned int*> { enum{ value = true}; };
-template <> struct is_pointer<const unsigned int*> { enum{ value = true}; };
-template <> struct is_pointer<long*> { enum{ value = true}; };
-template <> struct is_pointer<const long*> { enum{ value = true}; };
-template <> struct is_pointer<unsigned long*> { enum{ value = true}; };
-template <> struct is_pointer<const unsigned long*> { enum{ value = true}; };
-template <> struct is_pointer<float*> { enum{ value = true}; };
-template <> struct is_pointer<const float*> { enum{ value = true}; };
-template <> struct is_pointer<double*> { enum{ value = true}; };
-template <> struct is_pointer<const double*> { enum{ value = true}; };
+namespace detail{
+   yes_result is_pointer_helper(const volatile void*const volatile);
+   double is_pointer_helper(...);
+}
+
+template <typename T> struct is_pointer 
+{ 
+private:
+   static T t;
+public:
+   enum{ value = !is_const<T>::value 
+                 && !is_volatile<T>::value 
+                 && (1 == sizeof(detail::is_pointer_helper(t)))}; 
+};
 
 //* is a type T a reference type - is_reference<T>
-template <typename T> struct is_reference { enum{ value = false}; };
+template <typename T> struct is_reference 
+{ 
+private:
+   typedef T const volatile cv_t;
+public:
+   enum{ value = !is_const<cv_t>::value || !is_volatile<cv_t>::value }; 
+};
+template <> struct is_reference<void> 
+{ 
+   enum{ value = false }; 
+};
 
 //*? is a type T a union type - is_union<T>
 template <typename T> struct is_union
@@ -248,8 +303,24 @@ template <typename T> struct is_enum
 { enum{ value = BOOST_IS_ENUM(T) }; };
 
 //* is a type T a member function pointer - is_member_pointer<T>
+namespace detail{
+   template <class T, class U>
+   yes_result is_member_pointer_helper(T (U::*));
+   template <class T, class U>
+   yes_result is_member_pointer_helper(T (U::*)(void));
+   template <class T, class U, class A1>
+   yes_result is_member_pointer_helper(T (U::*)(A1));
+   template <class T, class U, class A1, class A2>
+   yes_result is_member_pointer_helper(T (U::*)(A1, A2));
+   double is_member_pointer_helper(...);
+}
 template <typename T> struct is_member_pointer
-{ enum{ value = false}; };
+{ 
+private:
+   static T t;
+public:
+   enum{ value = (1 == sizeof(detail::is_member_pointer_helper(t))) }; 
+};
 
 //* is type T an object type (allows cv-qual)
 template <typename T> struct is_object
@@ -300,14 +371,12 @@ namespace detail{
   struct from_not_void_conversion {
     template <class From, class To>
     struct bind {
-      typedef char (&no)[1];
-      typedef char (&yes)[2];
-      static no check(...);
-      static yes check(To);
+      static no_result check(...);
+      static yes_result check(To);
     public:
       void foo(); // avoid warning about all members being private
       static From from;
-      enum { exists = sizeof( check(from) ) == sizeof(yes) };
+      enum { exists = sizeof( check(from) ) == sizeof(yes_result) };
     };
   };
   struct from_is_void_conversion {
@@ -337,14 +406,12 @@ class is_convertible
 public:
  enum { value = Conversion::exists };
 #else
-   typedef char (&no)[1];
-   typedef char (&yes)[2];
-   static no check(...);
-   static yes check(To);
+   static detail::no_result check(...);
+   static detail::yes_result check(To);
  public:
    void foo(); // avoid warning about all members being private
    static From from;
-   enum { value = sizeof( check(from) ) == sizeof(yes) };
+   enum { value = sizeof( check(from) ) == sizeof(detail::yes_result) };
 #endif
 };
 

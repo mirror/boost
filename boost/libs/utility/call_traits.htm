@@ -27,10 +27,16 @@ never occur, and that parameters are passed in the most efficient
 manner possible (see <a href="#examples">examples</a>). In each
 case if your existing practice is to use the type defined on the
 left, then replace it with the call_traits defined type on the
-right. Note that for compilers that do not support partial
-specialization, no benefit will occur from using call_traits: the
-call_traits defined types will always be the same as the existing
-practice in this case.</p>
+right. </p>
+
+<p>Note that for compilers that do not support either partial
+specialization or member templates, no benefit will occur from
+using call_traits: the call_traits defined types will always be
+the same as the existing practice in this case. In addition if
+only member templates and not partial template specialisation is
+support by the compiler (for example Visual C++ 6) then call_traits
+can not be used with array types (although it can be used to
+solve the reference to reference problem).</p>
 
 <table border="0" cellpadding="7" cellspacing="1" width="797">
     <tr>
@@ -569,7 +575,9 @@ std::pair&lt;
 degraded to pointers if the deduced types are arrays, similar
 situations occur in the standard binders and adapters: in
 principle in any function that &quot;wraps&quot; a temporary
-whose type is deduced.</p>
+whose type is deduced. Note that the function arguments to make_pair
+are not expressed in terms of call_traits: doing so would prevent
+template argument deduction from functioning.</p>
 
 <h4><a name="ex4"></a>Example 4 (optimising fill):</h4>
 
@@ -631,6 +639,14 @@ explicitly parallel instructions: if any of these are supported.
 Exactly how much mileage you will get from this depends upon your
 compiler - we could really use some accurate benchmarking
 software as part of boost for cases like this.</p>
+
+<p>Note that the function arguments to fill are not expressed in
+terms of call_traits: doing so would prevent template argument
+deduction from functioning. Instead fill acts as a &quot;thin
+wrapper&quot; that is there to perform template argument
+deduction, the compiler will optimise away the call to fill all
+together, replacing it with the call to filler&lt;&gt;::do_fill,
+which does use call_traits.</p>
 
 <h3>Rationale</h3>
 
@@ -713,7 +729,7 @@ specialisation).</p>
 
 <hr>
 
-<p>Revised 18 June 2000</p>
+<p>Revised 01 September 2000</p>
 
 <p>© Copyright boost.org 2000. Permission to copy, use, modify,
 sell and distribute this document is granted provided this
