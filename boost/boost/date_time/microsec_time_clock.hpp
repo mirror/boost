@@ -87,16 +87,19 @@ namespace date_time {
     
   private:
     static time_type create_time(FILETIME& ft) {
-      // this offset calculation was borrowed from the boost::threads library
-      const boost::uint64_t TIMESPEC_TO_FILETIME_OFFSET =
-        ((boost::uint64_t)27111902UL << 32) +
-        (boost::uint64_t)3577643008UL;
-      boost::int_fast32_t sec = 
-        (int)((*(__int64*)&ft - TIMESPEC_TO_FILETIME_OFFSET) / 10000000);
-      boost::int_fast32_t sub_sec = 
-        (int)((*(__int64*)&ft - TIMESPEC_TO_FILETIME_OFFSET -
-               ((__int64)sec * (__int64)10000000)) / 10); // in microseconds
+      // offset is difference (in 100-nanoseconds) from
+      // 1970-Jan-01 to 1601-Jan-01
+      boost::uint64_t c1 = 27111902;
+      boost::uint64_t c2 = 3577643008;
+      const boost::uint64_t OFFSET = (c1 << 32) + c2;
 
+      boost::uint64_t filetime = ft.dwHighDateTime;
+      filetime = filetime << 32;
+      filetime += ft.dwLowDateTime;
+      filetime -= OFFSET; 
+      // filetime now holds 100-nanoseconds since 1970-Jan-01
+
+      boost::uint32_t sub_sec = (filetime % 10000000) / 10; // microseconds
      
       time_t t;
       ::std::time(&t); 
@@ -111,7 +114,7 @@ namespace date_time {
       //and all the fractional seconds return 0.
       int adjust = resolution_traits_type::res_adjust()/1000000;
 
-	  time_duration_type td(curr->tm_hour,
+      time_duration_type td(curr->tm_hour,
                             curr->tm_min,
                             curr->tm_sec,
                             sub_sec * adjust);
@@ -129,3 +132,4 @@ namespace date_time {
 
 
 #endif
+
