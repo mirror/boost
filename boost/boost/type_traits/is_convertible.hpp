@@ -18,6 +18,9 @@
 
 #include "boost/type_traits/detail/yes_no_type.hpp"
 #include "boost/type_traits/config.hpp"
+#include "boost/type_traits/is_array.hpp"
+#include "boost/type_traits/add_reference.hpp"
+#include "boost/type_traits/ice.hpp"
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
 #   include "boost/type_traits/is_void.hpp"
@@ -166,16 +169,30 @@ struct is_convertible_impl
     static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To);
     static From _m_from;
 
-    BOOST_STATIC_CONSTANT(bool, value = 
+    BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
         );
 };
 
 #endif // is_convertible_impl
 
+template <typename From, typename To>
+struct is_convertible_forwarder
+{
+    typedef typename add_reference<From>::type ref_type;
+    BOOST_STATIC_CONSTANT(bool, value =
+        (::boost::type_traits::ice_and<
+            ::boost::detail::is_convertible_impl<ref_type,To>::value,
+            ::boost::type_traits::ice_not<
+               ::boost::is_array<To>::value
+            >::value
+        >::value)
+        );
+};
+
 } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_impl<From,To>::value))
+BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_forwarder<From,To>::value))
 
 //
 // Now add the full and partial specialisations
