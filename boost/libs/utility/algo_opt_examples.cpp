@@ -196,7 +196,7 @@ struct filler<true>
    template <typename I, typename T>
    static void do_fill(I first, I last, T val)
    {
-      memset(first, val, last-first);
+      std::memset(first, val, last-first);
    }
 };
 
@@ -416,6 +416,7 @@ int main()
    cout << "Press any key to exit...";
    cin.get();
 }
+
 
 
 
