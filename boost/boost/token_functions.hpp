@@ -12,6 +12,10 @@
 
 // Revision History:
 
+// 20 Feb 2002   John Maddock
+//      Removed using namespace std declarations and added
+//      workaround for BOOST_NO_STDC_NAMESPACE (the library
+//      can be safely mixed with regex).
 // 06 Feb 2002   Jeremy Siek
 //      Added char_separator.
 // 02 Feb 2002   Jeremy Siek
@@ -26,6 +30,26 @@
 #include <cassert>
 #include <string>
 #include <cctype>
+
+//
+// the following must not be macros if we are to prefix them
+// with std:: (they shouldn't be macros anyway...)
+//
+#ifdef ispunct
+#  undef ispunct
+#endif
+#ifdef isspace
+#  undef isspace
+#endif
+//
+// fix namespace problems:
+//
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{
+ using ::ispunct;
+ using ::isspace;
+}
+#endif
 
 namespace boost{
 
@@ -340,8 +364,7 @@ namespace boost{
       if (m_kept_delims.length())
         return m_kept_delims.find(E) != string_type::npos;
       else if (m_use_ispunct) {
-        using namespace std;
-        return ispunct(E) != 0;
+        return std::ispunct(E) != 0;
       } else
         return false;
     }
@@ -350,8 +373,7 @@ namespace boost{
       if (m_dropped_delims.length())
         return m_dropped_delims.find(E) != string_type::npos;
       else if (m_use_isspace) {
-        using namespace std; 
-        return isspace(E) != 0;
+        return std::isspace(E) != 0;
       } else
         return false;
     }
@@ -392,8 +414,7 @@ namespace boost{
       else{
         if (no_ispunct_) {return false;}
         else{
-          using namespace std;
-          int r = ispunct(E);
+          int r = std::ispunct(E);
           return r != 0;
         }
       }
@@ -405,8 +426,7 @@ namespace boost{
       else{
         if (no_isspace_) {return false;}
         else{
-          using namespace std; 
-          int r = isspace(E);
+          int r = std::isspace(E);
           return r != 0;
         }
       }
