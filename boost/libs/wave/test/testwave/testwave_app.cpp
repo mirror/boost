@@ -8,7 +8,7 @@
 =============================================================================*/
 
 // system headers
-#include <std::string>
+#include <string>
 #include <iostream>
 
 // include boost
