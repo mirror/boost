@@ -10,7 +10,7 @@
   <xsl:param name="html.stylesheet" select="'reference.css'"/>
   <xsl:param name="navig.graphics" select="1"/>
   <xsl:param name="navig.graphics.extension" select="'.png'"/>
-  <xsl:param name="chapter.autolabel" select="0"/>
+  <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
