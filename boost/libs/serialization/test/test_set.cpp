@@ -14,6 +14,11 @@
 
 #include <cstdio> // remove
 #include <boost/config.hpp>
+
+if defined __COMO__
+#error - this test fails on comeau with disatrous results
+#endif
+
 #include <boost/detail/workaround.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
