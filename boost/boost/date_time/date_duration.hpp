@@ -19,8 +19,8 @@ namespace date_time {
     , boost::equality_comparable< date_duration< duration_rep>
     , boost::addable< date_duration< duration_rep>
     , boost::subtractable< date_duration< duration_rep>
-    , boost::dividable<date_duration<duration_rep>, int
-    > > > > >
+    // boost::dividable<date_duration<duration_rep>, int>
+    > > > >// >
   {
   public:
     //! Construct from a day count
@@ -50,6 +50,7 @@ namespace date_time {
     {
       return days_ < rhs.days_;
     }
+	
     //! Subtract another duration -- result is signed
     date_duration operator-=(const date_duration& rhs)
     {
@@ -69,6 +70,9 @@ namespace date_time {
       days_ /= divisor;
       return *this;
     }
+	date_duration operator/(int divisor){
+	  return date_duration(days_ / divisor);
+	}
     
     //! return sign information
     bool is_negative() const
@@ -94,3 +98,4 @@ namespace date_time {
  */
 
 #endif
+
