@@ -3,14 +3,15 @@
 <head>
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <title>Boost Timer Documentation</title>
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000">
 
-<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" WIDTH="277" HEIGHT="86">
+<h1>
+<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">
  Timer Library</h1>
 <p>The timer library provides two headers and three classes: </p>
 
@@ -22,17 +23,17 @@
       <td><b>Functionality</b></td>
     </tr>
     <tr>
-      <td>timer.hpp</td>
+      <td><a href="../../boost/timer.hpp">timer.hpp</a></td>
       <td><a href="#Class timer">timer</a></td>
       <td>Measure elapsed time.</td>
     </tr>
     <tr>
-      <td>progress.hpp</td>
+      <td><a href="../../boost/progress.hpp">progress.hpp</a></td>
       <td><a href="#Class progress_timer">progress_timer</a></td>
       <td>Measure elapsed time (using timer), display on destruction.</td>
     </tr>
     <tr>
-      <td>progress.hpp</td>
+      <td><a href="../../boost/progress.hpp">progress.hpp</a></td>
       <td><a href="#Class progress_display">progress_display</a></td>
       <td>Display an indication of progress toward a known goal.</td>
     </tr>
@@ -52,7 +53,7 @@ low as 596.5 hours (or even less) for the supplied implementation. Because of
 these limitations, this timer cannot be depended upon to
 be robust, and should not be used if that is of any concern.</p>
 <h3>Synopsis</h3>
-<pre>#include &lt;boost/timer.hpp&gt;
+<pre>#include &lt;<a href="../../boost/timer.hpp">boost/timer.hpp</a>&gt;
 namespace boost {
 class timer {
  public:
@@ -83,7 +84,7 @@ destruction displays an elapsed time message at an appropriate place in an appro
 The supplied implementation defaults to a character display on std::cout.</p>
 <p>Class progress_timer is often used to time program execution.&nbsp; Its use is as simple as:</p>
 <blockquote>
-  <pre>#include &lt;boost/progress.hpp&gt;
+  <pre>#include &lt;<a href="../../boost/progress.hpp">boost/progress.hpp</a>&gt;
 int main()
 {
    progress_timer t;  // start timing
@@ -98,7 +99,7 @@ int main()
 <p>Note that &quot;s&quot; is the official System International d'Unités
 abbreviation for seconds.</p>
 <h3>Synopsis</h3>
-<pre>#include &lt;boost/progress.hpp&gt;
+<pre>#include &lt;<a href="../../boost/progress.hpp">boost/progress.hpp</a>&gt;
 namespace boost {
 class progress_timer : public <a href="#Class timer">timer</a>, <a href="../utility/utility.htm#noncopyable">noncopyable</a>  {
  public:
@@ -141,11 +142,15 @@ class progress_display : <a href="../utility/utility.htm#noncopyable">noncopyabl
    // Effects: restart(expected_count)
 
    progress_display( unsigned long expected_count,
-                     std::ostream&amp; os ) // os is hint; implementation may ignore
-   // Effects: restart(expected_count)
+                     std::ostream&amp; os,  // os is hint; implementation may ignore
+                     const std::string &amp; s1 = &quot;\n&quot;, //leading strings
+                     const std::string &amp; s2 = &quot;&quot;,
+                     const std::string &amp; s3 = &quot;&quot; )
+   // Effects: save copy of leading strings, restart(expected_count)
 
    void           restart( unsigned long expected_count );
-   //  Effects: display appropriate scale
+   //  Effects: display appropriate scale on three lines,
+   //  prefaced by stored copy of s1, s2, s3, respectively, from constructor
    //  Postconditions: count()==0, expected_count()==expected_count
 
    unsigned long  operator+=( unsigned long increment )
@@ -177,7 +182,8 @@ suggested separating the more widely useful timer class from the more targeted
 progress classes. Sean Corfield suggested allowing output to any ostream.&nbsp;
 Dave Abrahams, Valentin Bonnard, Ed Brey, Andy Glew, and Dietmar Kühl also
 provided useful comments.&nbsp; Ed Brey suggested timer::elapsed_max(). John
-Maddock suggested timer::elapsed_min().</p>
+Maddock suggested timer::elapsed_min(). Toon Knapen suggested the optional 
+leading strings, to allow for labeling the progress display</p>
 <h2>Rationale</h2>
 <p>The early versions of the timer classes had separate implementation
 files.&nbsp; This caused problems for users not wishing to build libraries,
@@ -201,7 +207,7 @@ all copies. The software described is provided &quot;as is&quot; without express
 or implied&nbsp; warranty, and with no claim as to its suitability for any
 purpose.</p>
 
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->January 12, 2001<!--webbot bot="Timestamp" endspan i-checksum="30945" -->
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->December 01, 2001<!--webbot bot="Timestamp" i-checksum="39463" endspan -->
 </p>
 
 </body>

@@ -8,6 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   1 Dec 01  Add leading progress display strings (suggested by Toon Knapen)
 //  20 May 01  Introduce several static_casts<> to eliminate warning messages
 //             (Fixed by Beman, reported by Herve Bronnimann)
 //  12 Jan 01  Change to inline implementation to allow use without library
@@ -22,7 +23,8 @@
 #include <boost/timer.hpp>
 #include <boost/utility.hpp>  // for noncopyable
 #include <boost/cstdint.hpp>  // for uintmax_t
-#include <iostream>
+#include <iostream>           // for ostream, cout, etc
+#include <string>             // for string
 
 namespace boost {
 
@@ -36,7 +38,8 @@ class progress_timer : public timer, noncopyable
   
  public:
   explicit progress_timer( std::ostream & os = std::cout )
-     : _os(os) {}  // os is hint; implementation may ignore
+     // os is hint; implementation may ignore, particularly in embedded systems
+     : m_os(os) {}
   ~progress_timer()
   {
   //  A) Throwing an exception from a destructor is a Bad Thing.
@@ -46,20 +49,20 @@ class progress_timer : public timer, noncopyable
     try
     {
       // use istream instead of ios_base to workaround GNU problem (Greg Chicares)
-      std::istream::fmtflags old_flags = _os.setf( std::istream::fixed,
+      std::istream::fmtflags old_flags = m_os.setf( std::istream::fixed,
                                                    std::istream::floatfield );
-      std::streamsize old_prec = _os.precision( 2 );
-      _os << elapsed() << " s\n" // "s" is System International d'Unités std
-                       << std::endl;
-      _os.flags( old_flags );
-      _os.precision( old_prec );
+      std::streamsize old_prec = m_os.precision( 2 );
+      m_os << elapsed() << " s\n" // "s" is System International d'Unités std
+                        << std::endl;
+      m_os.flags( old_flags );
+      m_os.precision( old_prec );
     }
 
     catch (...) {} // eat any exceptions
   } // ~progress_timer
 
  private:
-  std::ostream & _os;
+  std::ostream & m_os;
 };
 
 
@@ -76,9 +79,12 @@ class progress_display : noncopyable
 {
  public:
   explicit progress_display( unsigned long expected_count,
-                             std::ostream & os = std::cout )
-   // os is hint; implementation may ignore
-   : _os(os) { restart(expected_count); }
+                             std::ostream & os = std::cout,
+                             const std::string & s1 = "\n", //leading strings
+                             const std::string & s2 = "",
+                             const std::string & s3 = "" )
+   // os is hint; implementation may ignore, particularly in embedded systems
+   : m_os(os), m_s1(s1), m_s2(s2), m_s3(s3) { restart(expected_count); }
 
   void           restart( unsigned long expected_count )
   //  Effects: display appropriate scale
@@ -87,8 +93,10 @@ class progress_display : noncopyable
     _count = _next_tic_count = _tic = 0;
     _expected_count = expected_count;
 
-    _os << "\n0%   10   20   30   40   50   60   70   80   90   100%\n"
-             "|----|----|----|----|----|----|----|----|----|----|" << std::endl;
+    m_os << m_s1 << "0%   10   20   30   40   50   60   70   80   90   100%\n"
+         << m_s2 << "|----|----|----|----|----|----|----|----|----|----|"
+         << std::endl  // endl implies flush, which ensures display
+         << m_s3;
     if ( !_expected_count ) _expected_count = 1;  // prevent divide by zero
   } // restart
 
@@ -106,7 +114,11 @@ class progress_display : noncopyable
   unsigned long  expected_count() const { return _expected_count; }
 
   private:
-  std::ostream & _os; // may not be present in all imps
+  std::ostream &     m_os;  // may not be present in all imps
+  const std::string  m_s1;  // string is more general, safer than 
+  const std::string  m_s2;  //  const char *, and efficiency or size are
+  const std::string  m_s3;  //  not issues
+
   unsigned long _count, _expected_count, _next_tic_count;
   unsigned int  _tic;
   void display_tic()
@@ -117,12 +129,12 @@ class progress_display : noncopyable
     unsigned int tics_needed =
       static_cast<unsigned int>(
         (static_cast<double>(_count)/_expected_count)*50.0 );
-    do { _os << '*' << std::flush; } while ( ++_tic < tics_needed );
+    do { m_os << '*' << std::flush; } while ( ++_tic < tics_needed );
     _next_tic_count = 
       static_cast<unsigned long>((_tic/50.0)*_expected_count);
     if ( _count == _expected_count ) {
-      if ( _tic < 51 ) _os << '*';
-      _os << std::endl;
+      if ( _tic < 51 ) m_os << '*';
+      m_os << std::endl;
       }
   } // display_tic
 };
