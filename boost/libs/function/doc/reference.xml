@@ -106,6 +106,18 @@
 
         <throws><simpara>Will not throw.</simpara></throws>
       </overloaded-method>
+
+      <method name="contains" cv="const">
+        <template>
+          <template-type-parameter name="Functor"/>
+        </template>
+        <type>bool</type>
+        <parameter name="f">
+          <paramtype>const Functor&amp;</paramtype>
+        </parameter>
+        <returns><simpara><code>true</code> if <code>this-&gt;<methodname>target</methodname>&lt;Functor&gt;()</code> is non-NULL and <code><functionname>function_equal</functionname>(*(this-&gt;target&lt;Functor&gt;()), f)</code></simpara></returns>
+ 
+      </method>
     </method-group>
   </class>
 
@@ -262,6 +274,18 @@
 
         <throws><simpara>Will not throw.</simpara></throws>
       </overloaded-method>
+
+      <method name="contains" cv="const">
+        <template>
+          <template-type-parameter name="Functor"/>
+        </template>
+        <type>bool</type>
+        <parameter name="f">
+          <paramtype>const Functor&amp;</paramtype>
+        </parameter>
+        <returns><simpara><code>true</code> if <code>this-&gt;<methodname>target</methodname>&lt;Functor&gt;()</code> is non-NULL and <code><functionname>function_equal</functionname>(*(this-&gt;target&lt;Functor&gt;()), f)</code></simpara></returns>
+ 
+      </method>
     </method-group>
 
     <method-group name="invocation">
@@ -377,8 +401,9 @@
 
             <listitem><simpara><code>g</code> is not of type
             <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
-            and <code>*(f.target&lt;Functor&gt;()) ==
-            g</code>.</simpara></listitem>
+            and
+            <code><functionname>function_equal</functionname>(*(f.target&lt;Functor&gt;()),
+            g)</code>.</simpara></listitem>
 
           </itemizedlist>
           </simpara></returns>
@@ -479,8 +504,7 @@
 
             <listitem><simpara><code>g</code> is not of type
             <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
-            and <code>*(f.target&lt;Functor&gt;()) !=
-            g</code>.</simpara></listitem>
+            and <code>!<functionname>function_equal</functionname>(*(f.target&lt;Functor&gt;()), g)</code>.</simpara></listitem>
 
           </itemizedlist>
           </simpara></returns>
@@ -672,6 +696,18 @@
         pointer.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </overloaded-method>
+
+      <method name="contains" cv="const">
+        <template>
+          <template-type-parameter name="Functor"/>
+        </template>
+        <type>bool</type>
+        <parameter name="f">
+          <paramtype>const Functor&amp;</paramtype>
+        </parameter>
+        <returns><simpara><code>true</code> if <code>this-&gt;<methodname>target</methodname>&lt;Functor&gt;()</code> is non-NULL and <code><functionname>function_equal</functionname>(*(this-&gt;target&lt;Functor&gt;()), f)</code></simpara></returns>
+ 
+      </method>
     </method-group>
 
     <method-group name="invocation">
@@ -766,8 +802,7 @@
 
             <listitem><simpara><code>g</code> is not of type
             <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
-            and <code>*(f.target&lt;Functor&gt;()) ==
-            g</code>.</simpara></listitem>
+            and <code><functionname>function_equals</functionname>(*(f.target&lt;Functor&gt;()), g)</code>.</simpara></listitem>
 
           </itemizedlist>
           </simpara></returns>
@@ -850,8 +885,7 @@
 
             <listitem><simpara><code>g</code> is not of type
             <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
-            and <code>*(f.target&lt;Functor&gt;()) !=
-            g</code>.</simpara></listitem>
+            and <code>!<functionname>function_equals</functionname>(*(f.target&lt;Functor&gt;()), g)</code>.</simpara></listitem>
 
           </itemizedlist>
           </simpara></returns>
@@ -870,5 +904,26 @@
     </free-function-group>
   </class>
 </namespace>
+</header>
+
+<header name="boost/function_equal.hpp">
+  <namespace name="boost">
+  <function name="function_equal">
+    <template>
+      <template-type-parameter name="F"/>
+      <template-type-parameter name="G"/>
+    </template>
+    <type>bool</type>
+    <parameter name="f">
+      <paramtype>const F&amp;</paramtype>
+    </parameter>
+    <parameter name="g">
+      <paramtype>const G&amp;</paramtype>
+    </parameter>
+    <purpose><simpara>Compare two function objects for equality.</simpara></purpose>
+    <returns><simpara><code>f == g</code>.</simpara></returns>
+    <throws><simpara>Only if <code>f == g</code> throws.</simpara></throws>
+  </function>
+  </namespace>
 </header>
 </library-reference>

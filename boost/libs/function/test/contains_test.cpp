@@ -59,6 +59,7 @@ static void equal_test()
   BOOST_TEST(&forty_two == f);
   BOOST_TEST(f != ReturnInt(17));
   BOOST_TEST(ReturnInt(17) != f);
+  BOOST_TEST(f.contains(&forty_two));
 
   f = ReturnInt(17);
   BOOST_TEST(f != &forty_two);
@@ -67,6 +68,7 @@ static void equal_test()
   BOOST_TEST(ReturnInt(17) == f);
   BOOST_TEST(f != ReturnInt(16));
   BOOST_TEST(ReturnInt(16) != f);
+  BOOST_TEST(f.contains(ReturnInt(17)));
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   boost::function<int(void)> g;

@@ -1,6 +1,6 @@
 // Boost.Function library
 
-//  Copyright Doug Gregor 2001-2003. Use, modification and
+//  Copyright Doug Gregor 2001-2004. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -28,6 +28,7 @@
 #else
 #  include "boost/mpl/bool.hpp"
 #endif
+#include <boost/function_equal.hpp>
 
 // Borrowed from Boost.Python library: determines the cases where we
 // need to use std::type_info::name to compare instead of operator==.
@@ -336,7 +337,7 @@ namespace boost {
                       mpl::bool_<false>)
         {
           if (const Functor* fp = f.template target<Functor>())
-            return *fp == g;
+            return function_equal(*fp, g);
           else return false;
         }
 
@@ -356,7 +357,7 @@ namespace boost {
                           mpl::bool_<false>)
         {
           if (const Functor* fp = f.template target<Functor>())
-            return *fp != g;
+            return !function_equal(*fp, g);
           else return true;
         }
 
@@ -418,6 +419,16 @@ public:
       else {
         typedef typename detail::function::get_function_tag<Functor>::type tag;
         return get_functor_pointer<Functor>(tag(), 0);
+      }
+    }
+
+  template<typename F>
+    bool contains(const F& f) const
+    {
+      if (const F* fp = this->template target<F>()) {
+        return function_equal(*fp, f);
+      } else {
+        return false;
       }
     }
 
