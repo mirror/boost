@@ -47,21 +47,21 @@ public: // structors
     recursive_wrapper(const recursive_wrapper& operand);
     recursive_wrapper(const T& operand);
 
+private: // helpers, for modifiers (below)
+
+    void assign(const T& rhs);
+
 public: // modifiers
 
     recursive_wrapper& operator=(const recursive_wrapper& rhs)
     {
-        recursive_wrapper temp(rhs);
-        swap(temp);
-
+        assign( rhs.get() );
         return *this;
     }
 
     recursive_wrapper& operator=(const T& rhs)
     {
-        recursive_wrapper temp(rhs);
-        swap(temp);
-
+        assign( rhs );
         return *this;
     }
 
@@ -104,6 +104,12 @@ template <typename T>
 recursive_wrapper<T>::recursive_wrapper(const T& operand)
     : p_(new T(operand))
 {
+}
+
+template <typename T>
+void recursive_wrapper<T>::assign(const T& rhs)
+{
+    this->get() = rhs;
 }
 
 // function template swap
