@@ -96,7 +96,7 @@ public:
 #endif
 private:
   uniform_01<base_type, RealType> _rng;
-  const result_type _mean, _sigma;
+  result_type _mean, _sigma;
   result_type _r1, _r2, _cached_rho;
   bool _valid;
 };

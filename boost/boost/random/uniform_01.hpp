@@ -44,35 +44,34 @@ public:
 #endif
 
   explicit uniform_01(base_type & rng)
-    : _rng(rng),
+    : _rng(&rng),
       _factor(1.0 /
-              (static_cast<result_type>(_rng.max()-_rng.min()) +
+              (static_cast<result_type>(_rng->max()-_rng->min()) +
                (std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0)))
   {
   }
-  // compiler-generated copy ctor is fine
-  // assignment is disallowed because there is a reference member
+  // compiler-generated copy ctor and copy assignment are fine
 
   result_type min() const { return 0.0; }
   result_type max() const { return 1.0; }
-  base_type& base() const { return _rng; }
+  base_type& base() const { return *_rng; }
   void reset() { }
 
   result_type operator()() {
-    return static_cast<result_type>(_rng() - _rng.min()) * _factor;
+    return static_cast<result_type>((*_rng)() - _rng->min()) * _factor;
   }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_01& x, const uniform_01& y)
-  { return x._rng == y._rng; }
+  { return *x._rng == *y._rng; }
 #else
   // Use a member function
   bool operator==(const uniform_01& rhs) const
-  { return _rng == rhs._rng;  }
+  { return *_rng == *rhs._rng;  }
 #endif
 private:
   typedef typename base_type::result_type base_result;
-  base_type & _rng;
+  base_type * _rng;
   result_type _factor;
 };
 

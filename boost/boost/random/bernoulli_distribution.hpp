@@ -33,10 +33,10 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef bool result_type;
   bernoulli_distribution(base_type & rng, const RealType& p) 
-    : _rng(rng),
+    : _rng(&rng),
       _p(p),
       _threshold(static_cast<base_result>
-                 (p * (_rng.max() - _rng.min())) + _rng.min())
+                 (p * (_rng->max() - _rng->min())) + _rng->min())
   {
     // for p == 0, we can only set _threshold = 0, which is not enough
     assert(p >= 0);
@@ -45,24 +45,24 @@ public:
   // compiler-generated copy ctor is fine
   // assignment is disallowed because there is a reference member
 
-  base_type& base() const { return _rng; }
+  base_type& base() const { return *_rng; }
   RealType p() const { return _p; }
   void reset() { }
 
-  result_type operator()() { return _p > 0 && _rng() <= _threshold; }
+  result_type operator()() { return _p > 0 && (*_rng)() <= _threshold; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const bernoulli_distribution& x, 
                          const bernoulli_distribution& y)
-  { return x._threshold == y._threshold && x._rng == y._rng; }
+  { return x._threshold == y._threshold && *x._rng == *y._rng; }
 #else
   // Use a member function
   bool operator==(const bernoulli_distribution& rhs) const
-  { return _threshold == rhs._threshold && _rng == rhs._rng;  }
+  { return _threshold == rhs._threshold && *_rng == *rhs._rng;  }
 #endif
 private:
   typedef typename base_type::result_type base_result;
-  base_type & _rng;
+  base_type * _rng;
   RealType _p;
   base_result _threshold;
 };
