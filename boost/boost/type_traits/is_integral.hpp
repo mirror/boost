@@ -35,6 +35,9 @@ BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,bool,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,char,true)
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
+// If the following line fails to compile and you're using the Intel
+// compiler, see http://lists.boost.org/MailArchives/boost-users/msg06567.php,
+// and define BOOST_NO_INTRINSIC_WCHAR_T on the command line.
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,wchar_t,true)
 #endif
 
