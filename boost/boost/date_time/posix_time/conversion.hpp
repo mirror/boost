@@ -16,7 +16,7 @@ namespace posix_time {
 
   //! Function that converts a time_t into a ptime.
   inline
-  ptime from_time_t(time_t t) 
+  ptime from_time_t(std::time_t t) 
   {
     ptime start(gregorian::date(1970,1,1));
     return start + seconds(t);
