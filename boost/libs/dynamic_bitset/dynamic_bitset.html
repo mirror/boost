@@ -1282,6 +1282,22 @@ or equal <tt>b.num_blocks()</tt>.
 
 <hr>
 <pre>
+template &lt;typename BlockIterator, typename Block, typename Alloc&gt;
+void <a name="from_block_range">from_block_range</a>(BlockIterator first,
+    BlockIterator last, const dynamic_bitset&lt;Block, Alloc&gt;&amp; b)
+</pre>
+<b>Effects:</b> Reads blocks from the iterator range into the
+bitset. <br>
+
+<b>Requires:</b> The type <tt>BlockIterator</tt> must be a model of <a
+href="http://www.sgi.com/tech/stl/InputIterator.html">Input
+Iterator</a> and its <tt>value_type</tt> must be the same type as
+<tt>Block</tt>. The size of the iterator range must be less or equal
+to <tt>b.num_blocks()</tt>.
+
+
+<hr>
+<pre>
 template &lt;typename Char, typename Traits, typename Block, typename Alloc&gt;
 basic_ostream&lt;Char, Traits&gt;&amp;
 <a name="op-out">operator&lt;&lt;</a>(basic_ostream&lt;Char, Traits&gt;&amp; os, const dynamic_bitset&lt;Block, Alloc&gt;&amp; x)
