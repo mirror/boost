@@ -48,7 +48,7 @@
 namespace boost{
    namespace re_detail{
 
-typedef WIN32_FIND_DATA _fi_find_data;
+typedef WIN32_FIND_DATAA _fi_find_data;
 typedef HANDLE _fi_find_handle;
 
    } // namespace re_detail
