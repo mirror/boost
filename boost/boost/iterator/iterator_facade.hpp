@@ -362,7 +362,7 @@ namespace boost
     , class Value
     , class AccessCategory
     , class TraversalCategory
-    , class Reference   = typename detail::const_qualified_ref<Value, AccessCategory>::type
+    , class Reference   = BOOST_ARG_DEPENDENT_TYPENAME detail::const_qualified_ref<Value, AccessCategory>::type
     , class Difference  = std::ptrdiff_t
   >
   class iterator_facade
