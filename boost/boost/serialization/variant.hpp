@@ -116,7 +116,7 @@ struct variant_impl {
         V & v,
         unsigned int version
     ){
-        typedef mpl::eval_if<mpl::empty<S>,
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<mpl::empty<S>,
             mpl::identity<load_null>,
             mpl::identity<load_impl>
         >::type typex;
