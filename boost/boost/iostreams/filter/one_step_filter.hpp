@@ -57,8 +57,10 @@ public:
             do_read(src);
         streamsize amt =
             std::min(n, static_cast<streamsize>(data_.size() - ptr_));
-        BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy(s, &data_[ptr_], amt);
-        ptr_ += amt;
+        if (amt) {
+            BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy(s, &data_[ptr_], amt);
+            ptr_ += amt;
+        }
         return amt;
     }
 
@@ -90,7 +92,8 @@ public:
     }
 
 protected:
-    typedef std::vector<Ch, Alloc>        vector_type;
+    typedef std::vector<Ch, Alloc>           vector_type;
+    typedef typename vector_type::size_type  size_type;
 private:
     virtual void do_filter(const vector_type& src, vector_type& dest) = 0;
 
@@ -123,9 +126,9 @@ private:
     };
 
     // Note: typically will not be copied while vector contains data.
-    vector_type      data_;
-    std::streamsize  ptr_;
-    int              state_;
+    vector_type  data_;
+    size_type    ptr_;
+    int          state_;
 };
 
 } } // End namespaces iostreams, boost.
