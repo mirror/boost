@@ -2017,6 +2017,10 @@ c++std-lib-12333:
     +-------------+-----------+-----------------------------------+
 
 
+  At the end of the section reverse_iterator models, add:
+  The type ``iterator_traits<Iterator>::reference`` must be the type of
+  ``*i``, where ``i`` is an object of type ``Iterator``.
+
 
 :Rationale: Ideally there should be requirements on the reference
   type, however, since Readable Iterator is suppose to correspond
@@ -3557,6 +3561,23 @@ this issue.
 
    :Proposed resolution: add "from" before "making"
 
+2. mention of obsolete projection_iterator
+
+  :Proposed Resolution:
+
+    From n1530, in the **Specialized Adaptors** section, remove:
+
+      ``projection_iterator``, which is similar to ``transform_iterator``
+      except that when dereferenced it returns a reference instead of
+      a value.
+
+  :Rationale:
+    This iterator was in the original boost library, but the new
+    iterator concepts allowed this iterator to be
+    folded into ``transform_iterator``.
+
+
+
 9.46y N1530: ``base()`` return-by-value is costly
 =================================================
 
@@ -3796,3 +3817,6 @@ to:
   |``c.distance_to(z)``|convertible to        |equivalent to            |Random Access Traversal    |
   |                    |``F::difference_type``|``distance(c, X(z))``.   |Iterator                   |
   +--------------------+----------------------+-------------------------+---------------------------+
+
+
+
