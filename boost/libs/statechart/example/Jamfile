@@ -27,6 +27,9 @@ rule fsm-st-example-build (
   exe $(target-name)
     : $(directory)/$(sources).cpp <template>fsm-common-options
     : <threading>single
+      # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems with
+      # the automatic detection of the threading mode. We therefore manually
+      # turn MT off here
       <define>BOOST_DISABLE_THREADS
       $(additional-options)
   ;
