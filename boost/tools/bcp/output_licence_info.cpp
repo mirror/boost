@@ -244,7 +244,7 @@ void bcp_implementation::output_licence_info()
    // Output list of files that could be moved over to the Boost Software License
    //
    os << "<h2><a name=\"to-bsl\"></a>Files that could be converted to the Boost Software License</h2>\n"
-       "<P>The following files could be converted to the Boost Software License, but have not yet been:</P>\n<BLOCKQUOTE><P>";
+     "<P>The following " << m_can_migrate_to_bsl.size() << " files could be converted to the Boost Software License, but have not yet been:</P>\n<BLOCKQUOTE><P>";
    i2 = m_can_migrate_to_bsl.begin();
    j2 = m_can_migrate_to_bsl.end();
    while(i2 != j2)
@@ -257,7 +257,7 @@ void bcp_implementation::output_licence_info()
    // Output list of files that can not be moved over to the Boost Software License
    //
    os << "<h2><a name=\"not-to-bsl\"></a>Files that can NOT be converted to the Boost Software License</h2>\n"
-       "<P>The following files cannot be converted to the Boost Software License because we need the permission of more authors:</P>\n<BLOCKQUOTE><P>";
+     "<P>The following " << m_cannot_migrate_to_bsl.size() << " files cannot be converted to the Boost Software License because we need the permission of more authors:</P>\n<BLOCKQUOTE><P>";
    i2 = m_cannot_migrate_to_bsl.begin();
    j2 = m_cannot_migrate_to_bsl.end();
    while(i2 != j2)

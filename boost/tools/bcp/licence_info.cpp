@@ -106,7 +106,7 @@ std::pair<const licence_info*, int> get_licences()
          "\\W+in\\W+supporting\\W+documentation.{1, 100}\\W+no\\W+representations"
          "\\W+(are\\W+made\\W+)?about\\W+the\\W+suitability\\W+of\\W+this\\W+software\\W+for\\W+any\\W+purpose"
          "\\W+It\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty"
-         "|preprocessed\\W+version\\W+of\\W+boost/mpl/.*\\.hpp\\W+header\\W+see\\W+the\\W+original\\W+for\\W+copyright\\W+information", boost::regex::perl | boost::regex::icase)
+         , boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
          ,
@@ -201,6 +201,7 @@ std::pair<const licence_info*, int> get_licences()
                      "\\W+Permission\\W+to\\W+modify\\W+the\\W+code\\W+and\\W+to\\W+distribute\\W+modified\\W+code\\W+is\\W+granted"
                      "\\W+provided\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies\\W+and\\W+a\\W+notice"
                      "\\W+that\\W+the\\W+code\\W+was\\W+modified\\W+is\\W+included\\W+with\\W+the\\W+copyright\\W+notice"
+                     "\\W+This\\W+software\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty\\W+and\\W+with\\W+no\\W+claim\\W+as\\W+to\\W+its\\W+suitability\\W+for\\W+any\\W+purpose"
                      , boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
@@ -569,6 +570,26 @@ std::pair<const licence_info*, int> get_licences()
          " charge may be made for the software and its documentation except to cover"
          " cost of distribution.</P>"
          "<P>This software is provided \"as is\" without express or implied warranty.</P>"
+       )
+      ,
+      licence_info( boost::regex("preprocessed\\W+version\\W+of\\W+boost/mpl/.*\\.hpp\\W+header\\W+see\\W+the\\W+original\\W+for\\W+copyright\\W+information", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "SGI Style Licence (MPL preprocessed file)"
+         ,
+         "<P>Copyright (c) <I>Date</I><BR>"
+         "<I>Author</I><BR>"
+         "<BR>"
+         "Permission to use, copy, modify, distribute and sell this software "
+         "and its documentation for any purpose is hereby granted without fee, "
+         "provided that the above copyright notice appear in all copies and "
+         "that both that copyright notice and this permission notice appear "
+         "in supporting documentation.  <I>Author</I> makes no representations "
+         "about the suitability of this software for any purpose. "
+         "It is provided \"as is\" without express or implied warranty.</P>"
        )
       ,
    };

@@ -71,7 +71,8 @@ find_prefix(const fileview& v, fileview::const_iterator start_of_line)
   fileview::const_iterator first_noncomment_char = start_of_line;
   while (*first_noncomment_char == '/'
          || *first_noncomment_char == '*'
-         || *first_noncomment_char == ' ')
+         || *first_noncomment_char == ' '
+         || *first_noncomment_char == '#')
     ++first_noncomment_char;
 
   return std::string(start_of_line, first_noncomment_char);
@@ -120,7 +121,8 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
            start_of_license = m[0].first;
          end_of_license = m[0].second;
 
-         if (is_non_bsl_license(i)) has_non_bsl_license = true;
+         if (is_non_bsl_license(i) && i < licences.second - 1) 
+           has_non_bsl_license = true;
 
          // add this licence to the list:
          m_licence_data[i].files.insert(p);
@@ -196,7 +198,8 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
 
    if (has_non_bsl_license) {
      bool converted = false;
-     if (nonbsl_author_count == 0 && licence_count == 1) {
+     if (nonbsl_author_count == 0 
+         && licence_count == 1) {
        // Grab a few lines of context
        fileview::const_iterator context_start = 
          context_before_license(v, start_of_license);
