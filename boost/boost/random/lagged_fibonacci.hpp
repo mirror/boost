@@ -35,7 +35,6 @@ namespace random {
 // lagged Fibonacci generator for the range [0..1)
 // contributed by Matthias Troyer
 // for p=55, q=24 originally by G. J. Mitchell and D. P. Moore 1958
-// (at the end of the file, because it uses uniform_01 for seeding)
 
 template<class T, unsigned int p, unsigned int q>
 struct fibonacci_validation
