@@ -112,7 +112,7 @@ public:
     stream_facade( const reference_wrapper<Device>& ref,
                    std::streamsize buffer_size = -1,
                    std::streamsize pback_size = -1 )
-    { this->open_impl(ref , buffer_size, pback_size); }
+    { this->open_impl(ref, buffer_size, pback_size); }
     void open( typename detail::param_type<Device>::type t,
                std::streamsize buffer_size = -1,
                std::streamsize pback_size = -1 )
@@ -120,7 +120,7 @@ public:
     void open( const reference_wrapper<Device>& ref ,
                std::streamsize buffer_size = -1,
                std::streamsize pback_size = -1 )
-    { this->open_impl(ref , buffer_size, pback_size); }
+    { this->open_impl(ref, buffer_size, pback_size); }
     template<typename U0> 
     stream_facade(const U0& u0) 
     { this->open_impl(Device(u0)); }

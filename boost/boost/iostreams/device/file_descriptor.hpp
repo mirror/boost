@@ -30,13 +30,13 @@ public:
     typedef char char_type;
     struct io_category : public seekable_device_tag, closable_tag { };
     file_descriptor() : fd_(-1), close_(false) { }
-    file_descriptor(int fd, bool close = false) 
+    explicit file_descriptor(int fd, bool close = false) 
         : fd_(fd), close_(close) { }
-    file_descriptor( const std::string& path, 
-                     std::ios::openmode mode =
-                         std::ios::in | std::ios::out,
-                     std::ios::openmode base_mode =
-                         std::ios::in | std::ios::out )
+    explicit file_descriptor( const std::string& path, 
+                              std::ios::openmode mode =
+                                  std::ios::in | std::ios::out,
+                              std::ios::openmode base_mode =
+                                  std::ios::in | std::ios::out )
     { open(path, mode, base_mode); }
     void open( const std::string& path, 
                std::ios::openmode =
@@ -59,10 +59,10 @@ struct file_descriptor_source : private file_descriptor {
     using file_descriptor::open;
     using file_descriptor::close;
     file_descriptor_source() { } 
-    file_descriptor_source(int fd, bool close = false) 
+    explicit file_descriptor_source(int fd, bool close = false) 
         : file_descriptor(fd, close) { }
-    file_descriptor_source( const std::string& path, 
-                            std::ios::openmode m = std::ios::in )
+    explicit file_descriptor_source( const std::string& path, 
+                                     std::ios::openmode m = std::ios::in )
         : file_descriptor(path, m & ~std::ios::out, std::ios::in) 
         { }
 };
@@ -74,10 +74,10 @@ struct file_descriptor_sink : private file_descriptor {
     using file_descriptor::open;
     using file_descriptor::close;
     file_descriptor_sink() { } 
-    file_descriptor_sink(int fd, bool close = false) 
+    explicit file_descriptor_sink(int fd, bool close = false) 
         : file_descriptor(fd, close) { }
-    file_descriptor_sink( const std::string& path, 
-                          std::ios::openmode m = std::ios::out )
+    explicit file_descriptor_sink( const std::string& path, 
+                                   std::ios::openmode m = std::ios::out )
         : file_descriptor(path, m & ~std::ios::in, std::ios::out) 
         { }
 };
