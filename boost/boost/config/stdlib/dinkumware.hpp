@@ -28,6 +28,8 @@
       // if this lib version is set up for vc6 then there is no std::use_facet:
 #     define BOOST_NO_STD_USE_FACET
 #     define BOOST_HAS_TWO_ARG_USE_FACET
+      // C lib functions aren't in namespace std either:
+#     define BOOST_NO_STDC_NAMESPACE
 #  endif
 // 3.06 appears to have (non-sgi versions of) <hash_set> & <hash_map>, 
 // and no <slist> at all
