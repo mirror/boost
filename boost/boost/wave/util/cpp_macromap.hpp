@@ -211,12 +211,12 @@ macromap<ContextT>::add_macro(token_type const &name, bool has_parameters,
     if (!is_predefined && impl::is_special_macroname (name.get_value())) {
     // exclude special macro names
         BOOST_WAVE_THROW(preprocess_exception, illegal_redefinition, 
-            name.get_value(), main_pos);
+            name.get_value().c_str(), main_pos);
     }
     if (AltExtTokenType == (token_id(name) & ExtTokenOnlyMask)) {
     // exclude special operator names
         BOOST_WAVE_THROW(preprocess_exception, illegal_operator_redefinition, 
-            name.get_value(), main_pos);
+            name.get_value().c_str(), main_pos);
     }
     
 // try to define the new macro
@@ -230,7 +230,7 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
             !impl::definition_equals((*it).second->macrodefinition, definition))
         {
             BOOST_WAVE_THROW(preprocess_exception, macro_redefinition, 
-                name.get_value(), main_pos);
+                name.get_value().c_str(), main_pos);
         }
         return false;
     }
@@ -252,7 +252,7 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
             if (pit != names.end()) {
             // duplicate parameter name
                 BOOST_WAVE_THROW(preprocess_exception, duplicate_parameter_name, 
-                    (*pit), main_pos);
+                    (*pit).c_str(), main_pos);
             }
             names.insert((*itp).get_value());
         }
@@ -271,7 +271,7 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
 
     if (!p.second) {
         BOOST_WAVE_THROW(preprocess_exception, macro_insertion_error, 
-            name.get_value(), main_pos);
+            name.get_value().c_str(), main_pos);
     }
 
 // add the parameters and the definition
@@ -324,7 +324,7 @@ macromap<ContextT>::is_defined(IteratorT const &begin,
             !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
         {
             BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
-                impl::get_full_name(begin, end), main_pos);
+                impl::get_full_name(begin, end).c_str(), main_pos);
         }
 
     IteratorT it = begin;
@@ -334,7 +334,7 @@ macromap<ContextT>::is_defined(IteratorT const &begin,
         if (++it != end) {
         // there should be only one token as the inspected name
             BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
-                impl::get_full_name(begin, end), main_pos);
+                impl::get_full_name(begin, end).c_str(), main_pos);
         }
         return cit != current_macros -> end();
     }
@@ -358,7 +358,7 @@ macromap<ContextT>::remove_macro(token_type const &token,
         if ((*it).second->is_predefined) {
             if (!even_predefined || impl::is_special_macroname(name)) {
                 BOOST_WAVE_THROW(preprocess_exception, bad_undefine_statement, 
-                    name, main_pos);
+                    name.c_str(), main_pos);
             }
         }
         current_macros->erase(it);
@@ -369,7 +369,7 @@ macromap<ContextT>::remove_macro(token_type const &token,
     }
     else if (impl::is_special_macroname(name)) {
         BOOST_WAVE_THROW(preprocess_exception, bad_undefine_statement, 
-            name, main_pos);
+            name.c_str(), main_pos);
     }
     return false;       // macro was not defined
 }
@@ -583,7 +583,7 @@ token_type startof_argument_list = *next;
         {
         // there shouldn't be any arguments
             BOOST_WAVE_THROW(preprocess_exception, too_many_macroarguments, 
-                curr_token.get_value(), main_pos);
+                curr_token.get_value().c_str(), main_pos);
         }
         
         switch (id) {
@@ -1071,7 +1071,7 @@ ContainerT replacement_list;
             {
             // too few macro arguments
                 BOOST_WAVE_THROW(preprocess_exception, too_few_macroarguments, 
-                    curr_token.get_value(), main_pos);
+                    curr_token.get_value().c_str(), main_pos);
             }
             
             if (count_args > macro_def.macroparameters.size() ||
@@ -1083,7 +1083,7 @@ ContainerT replacement_list;
                 {
                 // too many macro arguments
                     BOOST_WAVE_THROW(preprocess_exception, too_many_macroarguments, 
-                        curr_token.get_value(), main_pos);
+                        curr_token.get_value().c_str(), main_pos);
                 }
             }
                 
@@ -1290,12 +1290,12 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     if (1 > count_args || 1 > arguments.size()) {
     // too few macro arguments
         BOOST_WAVE_THROW(preprocess_exception, too_few_macroarguments, 
-            pragma_token.get_value(), pragma_token.get_position());
+            pragma_token.get_value().c_str(), pragma_token.get_position());
     }
     if (1 < count_args || 1 < arguments.size()) {
     // too many macro arguments
         BOOST_WAVE_THROW(preprocess_exception, too_many_macroarguments, 
-            pragma_token.get_value(), pragma_token.get_position());
+            pragma_token.get_value().c_str(), pragma_token.get_position());
     }
 
 // preprocess the pragma token body
@@ -1508,7 +1508,7 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
                 error_string += (*save).get_value();
                 error_string += "\"";
                 BOOST_WAVE_THROW(preprocess_exception, invalid_concat,
-                    error_string, main_pos);
+                    error_string.c_str(), main_pos);
             }
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0

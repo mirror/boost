@@ -157,8 +157,8 @@ boost::spirit::tree_parse_info<lexer_type> hit =
         lexer_type(begin, end, position_type(), language), lexer_type());
 
     if (!hit.match || (!hit.full && T_EOF != token_id(*hit.stop))) {
-        BOOST_WAVE_THROW(preprocess_exception, bad_macro_definition, macrostring, 
-            act_pos);
+        BOOST_WAVE_THROW(preprocess_exception, bad_macro_definition, 
+            macrostring.c_str(), act_pos);
     }
     
 // retrieve the macro definition from the parse tree
@@ -511,8 +511,8 @@ bool returned_from_include_file = returned_from_include();
             if (T_EOF == id) {
                 if (!seen_newline) {
                 // warn, if this file does not end with a newline
-                    BOOST_WAVE_THROW(preprocess_exception, last_line_not_terminated, 
-                        "", act_pos);
+                    BOOST_WAVE_THROW(preprocess_exception, 
+                        last_line_not_terminated, "", act_pos);
                 }
                 
             // returned from an include file, continue with the next token
@@ -574,7 +574,8 @@ bool returned_from_include_file = returned_from_include();
 // overall eof reached
     if (ctx.get_if_block_depth() > 0) {
     // missing endif directive(s)
-        BOOST_WAVE_THROW(preprocess_exception, missing_matching_endif, "", act_pos);
+        BOOST_WAVE_THROW(preprocess_exception, missing_matching_endif, "", 
+            act_pos);
     }
 
     whitespace.shift_tokens(T_EOF);     // whitespace controller
@@ -948,14 +949,16 @@ pp_iterator_functor<ContextT>::on_include (string_type const &s,
 typename string_type::size_type pos_end = s.find_last_of(is_system ? '>' : '\"');
 
     if (string_type::npos == pos_end) {
-        BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, s, act_pos);
+        BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, 
+            s.c_str(), act_pos);
     }
 
 typename string_type::size_type pos_begin = 
     s.find_last_of(is_system ? '<' : '\"', pos_end-1);
 
     if (string_type::npos == pos_begin) {
-        BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, s, act_pos);
+        BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, 
+            s.c_str(), act_pos);
     }
 
 std::string file_token(s.substr(pos_begin, pos_end-pos_begin+1).c_str());
@@ -986,13 +989,15 @@ char const *current_name = 0;   // never try to match current file name
     ctx.get_trace_policy().found_include_directive(f);
 
     if (!ctx.find_include_file (file_path, dir_path, is_system, current_name)) {
-        BOOST_WAVE_THROW(preprocess_exception, bad_include_file, file_path, act_pos);
+        BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 
+            file_path.c_str(), act_pos);
     }
 
 fs::path native_path(file_path, fs::native);
 
     if (!fs::exists(native_path)) {
-        BOOST_WAVE_THROW(preprocess_exception, bad_include_file, file_path, act_pos);
+        BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 
+            file_path.c_str(), act_pos);
     }
 
 // test, if this file is known through a #pragma once directive
@@ -1067,7 +1072,7 @@ bool is_system = '<' == s[0] && '>' == s[s.size()-1];
     if (!is_system && !('\"' == s[0] && '\"' == s[s.size()-1])) {
     // should resolve into something like <...> or "..."
         BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, 
-            s, act_pos);
+            s.c_str(), act_pos);
     }
     on_include(s, is_system, include_next);
 }
@@ -1115,7 +1120,7 @@ bool has_parameters = false;
                 if (seen_ellipses) {
                 // ellipses are not the last given formal argument
                     BOOST_WAVE_THROW(preprocess_exception, bad_define_statement, 
-                        macroname.get_value(), (*pit).get_position());
+                        macroname.get_value().c_str(), (*pit).get_position());
                 }
                 if (T_ELLIPSIS == token_id(*pit)) 
                     seen_ellipses = true;
@@ -1129,7 +1134,7 @@ bool has_parameters = false;
                 bool seen_va_args = false;
                 definition_iterator_t pend = macrodefinition.end();
                 for (definition_iterator_t dit = macrodefinition.begin(); 
-                    dit != pend; ++dit) 
+                     dit != pend; ++dit) 
                 {
                     if (T_IDENTIFIER == token_id(*dit) && 
                         "__VA_ARGS__" == (*dit).get_value())
@@ -1140,7 +1145,7 @@ bool has_parameters = false;
                 if (seen_va_args) {
                 // must not have seen __VA_ARGS__ placeholder
                     BOOST_WAVE_THROW(preprocess_exception, bad_define_statement, 
-                        macroname.get_value(), act_token.get_position());
+                        macroname.get_value().c_str(), act_token.get_position());
                 }
             }
         }
@@ -1159,7 +1164,7 @@ bool has_parameters = false;
                 if (T_ELLIPSIS == token_id(*pit)) {
                 // if variadics are disabled, no ellipses should be given
                     BOOST_WAVE_THROW(preprocess_exception, bad_define_statement, 
-                        macroname.get_value(), (*pit).get_position());
+                        macroname.get_value().c_str(), (*pit).get_position());
                 }
             }
         }
@@ -1382,7 +1387,8 @@ pp_iterator_functor<ContextT>::on_illformed(
     typename result_type::string_type const &s)
 {
     BOOST_ASSERT(ctx.get_if_block_status());
-    BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, s, act_pos);
+    BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, s.c_str(), 
+        act_pos);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1466,7 +1472,7 @@ string_type file_name;
             file_name))
         {
             BOOST_WAVE_THROW(preprocess_exception, bad_line_statement, 
-                boost::wave::util::impl::as_string(expanded), act_pos)
+                boost::wave::util::impl::as_string(expanded).c_str(), act_pos)
         }
     }
     
@@ -1540,7 +1546,7 @@ token_sequence_type toexpand;
 
 // report the corresponding error
     BOOST_WAVE_THROW(preprocess_exception, error_directive, 
-        boost::wave::util::impl::as_string(expanded), act_pos);
+        boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
 }
 
 #if BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
@@ -1585,7 +1591,7 @@ token_sequence_type toexpand;
 
 // report the corresponding error
     BOOST_WAVE_THROW(preprocess_exception, warning_directive, 
-        boost::wave::util::impl::as_string(expanded), act_pos);
+        boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
 }
 #endif // BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
 

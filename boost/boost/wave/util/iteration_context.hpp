@@ -52,8 +52,8 @@ public:
 
             using namespace std;    // for some systems ltoa is in namespace std
             sprintf(buffer, "%d", max_include_nesting_depth);
-            BOOST_WAVE_THROW(preprocess_exception, include_nesting_too_deep, buffer,
-                pos);
+            BOOST_WAVE_THROW(preprocess_exception, include_nesting_too_deep, 
+                buffer, pos);
         }
         iter_ctx.push(val); 
     }

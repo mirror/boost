@@ -727,7 +727,7 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     std::string directive = get_directivename(found_directive);
     
         BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
-            directive, act_pos);
+            directive.c_str(), act_pos);
     }
 
     found_eof_ = found_eof;

@@ -643,7 +643,8 @@ parse_info<iterator_type> hit = parse (first, last, g[spirit_assign_actor(result
         if (if_block_status) {
             typedef typename token_sequence_type::value_type::string_type string_type;
             BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
-                boost::wave::util::impl::as_string<string_type>(first, last), act_pos);
+                boost::wave::util::impl::as_string<string_type>(first, last).c_str(), 
+                act_pos);
         }
         else {
         //  as the if_block_status is false any errors will not be reported
@@ -675,7 +676,7 @@ parse_info<iterator_type> hit = parse (first, last, g[spirit_assign_actor(result
                     typedef typename token_sequence_type::value_type::string_type 
                         string_type;
                     BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
-                        boost::wave::util::impl::as_string<string_type>(first, last), 
+                        boost::wave::util::impl::as_string<string_type>(first, last).c_str(), 
                         act_pos);
                 }
                 else {
@@ -692,7 +693,7 @@ parse_info<iterator_type> hit = parse (first, last, g[spirit_assign_actor(result
     // division by zero occured
         typedef typename token_sequence_type::value_type::string_type string_type;
         BOOST_WAVE_THROW(preprocess_exception, division_by_zero, 
-            boost::wave::util::impl::as_string<string_type>(first, last), 
+            boost::wave::util::impl::as_string<string_type>(first, last).c_str(), 
             act_pos);
     }
     

@@ -61,7 +61,7 @@ namespace iteration_context_policies {
                 std::ifstream instream(iter_ctx.filename.c_str());
                 if (!instream.is_open()) {
                     BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 
-                        iter_ctx.filename, act_pos);
+                        iter_ctx.filename.c_str(), act_pos);
                 }
                 instream.unsetf(std::ios::skipws);
                 
@@ -113,7 +113,7 @@ namespace iteration_context_policies {
                 iter_ctx.instream.open(iter_ctx.filename.c_str());
                 if (!iter_ctx.instream.is_open()) {
                     BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 
-                        iter_ctx.filename, act_pos);
+                        iter_ctx.filename.c_str(), act_pos);
                 }
                 iter_ctx.instream.unsetf(std::ios::skipws);
 

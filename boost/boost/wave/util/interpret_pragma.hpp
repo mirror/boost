@@ -122,7 +122,7 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                 option_str += ")";
             }
             BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
-                option_str, act_token.get_position());
+                option_str.c_str(), act_token.get_position());
         }
         return true;
     }

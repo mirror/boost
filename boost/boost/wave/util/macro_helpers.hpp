@@ -207,7 +207,8 @@ namespace impl {
     as_string (ContainerT const &token_sequence)
     {
         typedef typename ContainerT::value_type::string_type string_type;
-        return as_string<string_type>(token_sequence.begin(), token_sequence.end());
+        return as_string<string_type>(token_sequence.begin(), 
+            token_sequence.end());
     }
     
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0

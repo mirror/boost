@@ -214,7 +214,7 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
 
     if (!hit.hit) {
         BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
-            token_val, token.get_position());
+            token_val.c_str(), token.get_position());
     }
     return result;
 }
