@@ -21,7 +21,7 @@
 #error "macro already defined!"
 #endif
 
-#ifdef __BORLANDC__
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #define BOOST_RANGE_DEDUCED_TYPENAME
 #else
 #define BOOST_RANGE_DEDUCED_TYPENAME BOOST_DEDUCED_TYPENAME

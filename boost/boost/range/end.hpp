@@ -118,7 +118,28 @@ inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type end( const T& r )
     return range_detail::end( r );
 }
 
+
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+// BCB is not able to overload pointer when class overloads are also available
+template<>
+inline range_const_iterator<const char*>::type end<const char*>( const char*& r )
+{
+    return range_detail::str_end( r );
+}
+
+template<>
+inline range_const_iterator<const wchar_t*>::type end<const wchar_t*>( const wchar_t*& r )
+{
+    return range_detail::str_end( r );
+}
+
+#endif
+
+
 } // namespace 'boost'
+
+
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
