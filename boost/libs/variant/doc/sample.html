@@ -34,22 +34,19 @@
 <hr>
 <h2><a name="quick">A quick example</a></h2>
 <p>This program computes the total sum of numerical values of various types.</p>
-<p>The code defines a <code>variant</code> object, <code>v1</code>, which can 
+<p>The code defines a <code>variant</code> object, <code>v1</code>, which can
  hold a value of this set of types: <code>short, int, float</code>, and <code>
  double</code>.</p>
 <p><code>double_sum</code> is a visitor class: Its function-call operator, <code>
  double_sum::operator()</code>, accepts a single value, and adds it to the <code>
- total_</code> data member. The program uses the construct: &quot;<code>boost::apply_visitor(visitor, 
- variant);</code>&quot; to invoke the visitor object, <code>(ds)</code> on the 
+ total_</code> data member. The program uses the construct: &quot;<code>boost::apply_visitor(visitor,
+ variant);</code>&quot; to invoke the visitor object, <code>(ds)</code> on the
  specified variant <code>(v1)</code>.</p>
-<p>Naturally, <code>ds.total_</code> holds the total of all previously &quot;visited&quot; 
- values, and - therefore - at the bottom of <code>main()</code>, its value is: 5 
+<p>Naturally, <code>ds.total_</code> holds the total of all previously &quot;visited&quot;
+ values, and - therefore - at the bottom of <code>main()</code>, its value is: 5
  + 16 + 3.11 + 15.3 = 39.41.</p>
 <pre>#include &lt;iostream&gt;
-
 #include &quot;boost/variant.hpp&quot;
-#include &quot;boost/apply_visitor.hpp&quot;
-#include &quot;boost/static_visitor.hpp&quot;
 
 struct double_sum : boost::static_visitor&lt;double&gt;
 {
@@ -90,16 +87,14 @@ int main(int, char* [] )
 </pre>
 <hr>
 <h2><a name="tree">A binary tree implementation</a></h2>
-<p>This sample program shows how <code>incomplete&lt;T&gt;</code> can be used to 
+<p>This sample program shows how <code>incomplete&lt;T&gt;</code> can be used to
  define recursive <code>variants</code>.<br>
- The code creates a small binary tree and then performs an in-order walk thru 
+ The code creates a small binary tree and then performs an in-order walk thru
  its nodes, producing this output: 3 4 6 10 19 20 23<br>
 </p>
 <pre>#include &lt;iostream&gt;
 
 #include &quot;boost/variant.hpp&quot;
-#include &quot;boost/apply_visitor.hpp&quot;
-#include &quot;boost/static_visitor.hpp&quot;
 #include &quot;boost/incomplete.hpp&quot;
 
 
@@ -163,9 +158,9 @@ int main(int, char* [] )
 <hr>
 <h2><a name="poly">Polymorphism: Inheritance vs. Variants</a></h2>
 <p>Let's assume we need to write a program that manipulates instances of <code>
- star</code> and <code>space_ship</code>, where each of these two classes 
- inherits from <code>space_object</code>. The program maintains a <code>vector</code> 
- of pointers to these objects, which is used to calculate the total weight of 
+ star</code> and <code>space_ship</code>, where each of these two classes
+ inherits from <code>space_object</code>. The program maintains a <code>vector</code>
+ of pointers to these objects, which is used to calculate the total weight of
  all <code>star</code> objects: </p>
 <pre>   //
    //  'classic' inheritance-based implementation
@@ -235,21 +230,21 @@ int main(int, char* [] )
 <p>The are several issues worth noticing about this sample:<br>
 </p>
 <ul>
-  <li>The code is bound to define a vector of pointers, rather than objects. 
-  This incurs considerable time overhead and could cause memory leaks if 
+  <li>The code is bound to define a vector of pointers, rather than objects.
+  This incurs considerable time overhead and could cause memory leaks if
   destruction is not handled properly. </li>
-  <li>the dynamic_cast&lt;&gt; used by <code>total_weight::operator()</code> is a 
-  costly operation. Alternatively, one can define an <code>enum</code> type 
-  which will be used to correctly identify the concrete object, but this is an 
-  error prone technique: the author must manually set the correct value for each 
+  <li>the dynamic_cast&lt;&gt; used by <code>total_weight::operator()</code> is a
+  costly operation. Alternatively, one can define an <code>enum</code> type
+  which will be used to correctly identify the concrete object, but this is an
+  error prone technique: the author must manually set the correct value for each
   new concrete class. </li>
-  <li><code>total_weight</code> is unsafe when new classes are introduced. 
+  <li><code>total_weight</code> is unsafe when new classes are introduced.
   Suppose a new class, <code>black_hole</code> - inherits directly from <code>
-  space_object</code> - is added to the code. <code>total_weight</code> will 
-  silently ignore this class, possibly creating a havoc of run-time problems. 
+  space_object</code> - is added to the code. <code>total_weight</code> will
+  silently ignore this class, possibly creating a havoc of run-time problems.
   This is a major flaw from software engineering standpoint. </li>
 </ul>
-<p>This real-life design problem can be elegantly solved using variants. Here is 
+<p>This real-life design problem can be elegantly solved using variants. Here is
  the variant-based code: </p>
 <pre>   //
    //  Variant-based implementation
@@ -259,8 +254,6 @@ int main(int, char* [] )
    #include &lt;iostream&gt;
 
    #include &quot;boost/variant.hpp&quot;
-   #include &quot;boost/apply_visitor.hpp&quot;
-   #include &quot;boost/static_visitor.hpp&quot;
 
    struct space_ship
    {
@@ -314,20 +307,20 @@ int main(int, char* [] )
    }
 
 </pre>
-<p>This implementation directly addresses the three issues raised by the 
+<p>This implementation directly addresses the three issues raised by the
  non-variant implementation: (1) The <code>space_objects</code> vector now holds
  <b>objects</b> (rather than pointers), (2) <code>dynamic_cast&lt;&gt;</code>s are <b>
- not needed</b> at all, and - most importantly - (3) the compiler <b>will 
- produce an error</b> if <code>total_weight</code> is not changed, when a new 
+ not needed</b> at all, and - most importantly - (3) the compiler <b>will
+ produce an error</b> if <code>total_weight</code> is not changed, when a new
  class is introduced. </p>
 <hr>
 <p>Revised 14 February 2003</p>
 <p><i>© Copyright Eric Friedman and Itay Maman 2002-2003. All rights reserved.</i></p>
-<p>Permission to use, copy, modify, distribute and sell this software and its 
- documentation for any purpose is hereby granted without fee, provided that the 
- above copyright notice appear in all copies and that both that copyright notice 
- and this permission notice appear in supporting documentation. Eric Friedman 
- and Itay Maman make no representations about the suitability of this software 
+<p>Permission to use, copy, modify, distribute and sell this software and its
+ documentation for any purpose is hereby granted without fee, provided that the
+ above copyright notice appear in all copies and that both that copyright notice
+ and this permission notice appear in supporting documentation. Eric Friedman
+ and Itay Maman make no representations about the suitability of this software
  for any purpose. It is provided &quot;as is&quot; without express or implied warranty.</p>
 
 </body>
