@@ -149,11 +149,11 @@ according to the following table:
 <p>
 <table border>
 <tr><th align="right">ADL</th><th align="right">Two Phase<br>Lookup</th><th align="right">Dependent<br>Type T?</th><th>Namespace permitted</th></tr>
-<tr><td align="right">no<td align="right">no<td align="right">-<td><code>boost::serialzation</tr>
+<tr><td align="right">no<td align="right">no<td align="right">-<td><code>boost::serialization</tr>
 <tr><td align="right">no<td align="right">yes<td align="right">-<td>no compilers do this</tr>
 <tr><td align="right">yes<td align="right">no<td align="right">-<td><code>boost::serialzation</code><br><code>namespace of T<br><code>namespace of Archive</code></tr>
 <tr><td align="right">yes<td align="right">yes<td align="right">no<td><code>namespace of T<br><code>namespace of Archive</code></tr>
-<tr><td align="right">yes<td align="right">yes<td align="right">yes<td><code>boost::serialzation<br><code>namespace of T<br><code>namespace of Archive</code></tr>
+<tr><td align="right">yes<td align="right">yes<td align="right">yes<td><code>boost::serialization<br><code>namespace of T<br><code>namespace of Archive</code></tr>
 </table>
 <p>
 To deal with this while maintaining portability, the test programs use the following 

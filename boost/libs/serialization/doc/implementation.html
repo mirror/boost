@@ -32,13 +32,13 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#partialtemplatespecialization">Partial Template Specialization</a>
   <dt><a href="#othercompilerissues">Specific Compiler/Library Issues</a>
   <dl class="page-index">
-    <dt><a href="#gcc">GCC 3.2 and 3.3</a>
+    <dt><a href="#gcc">GCC 3.X</a>
+    <dt><a href="#gcc">GCC 2.95</a>
     <dt><a href="#intel80">Intel 8.0</a>
     <dt><a href="#vc71">Visual C++ 7.1</a>
     <dt><a href="#vc70">Visual C++ 7.0</a>
     <dt><a href="#vc6">Visual C++ 6.0</a>
     <dt><a href="#borland564">Borland 5.64</a>
-    <dt><a href="#borland560">Borland 5.60 and earlier</a>
     <dt><a href="#borland551">Borland 5.51 and earlier</a>
     <dt><a href="#dinkumware">Dinkumware Library</a>
   </dl>
@@ -194,8 +194,18 @@ so that one may write <code style="white-space: normal">ar.register_type(static_
 the syntax described above.
 </ul>
 <h3><a name="othercompilerissues">Specific Compiler/Library Issues</a></h3>
-<h4><a name="gcc">GCC 3.2, 3.3 and 3.4</a></h4>
-GCC under Cygwin fails to support wide character I/O.  All tests using wide char I/O fail.
+
+<h4><a name="gcc3x">GCC 3.X</a></h4>
+GCC versions for Cygwin and MinGW fail to support wide character I/O.  
+So all tests using wide char I/O fail.  Note that if wide character I/O support
+is added with STLPort, all tests complete successfully.
+<h4><a name="gcc295">GCC 2.95</a></h4>
+All of the above plus:<br>
+<ul>
+    <li>The serialization library depends on the templeted stream implemention
+    to function properly.  So STLPort must be used to build the library.
+    <li>Polymorphic archive tests fail.
+</ul>
 <h4><a name="Intel80">Intel C++ 8.0</a></h4>
 No known issues. All tests compile and run in debug and release modes.
 <h4><a name="vc71">Visual C++ 7.1</a></h4>
@@ -248,22 +258,16 @@ all the above issues for Visual C++ 7.0 plus:
 </ul>
 <h4><a name="borland564">Borland 5.64</a></h4>
 <ul>
-    <li><code style="white-space: normal">enum</code> data members cannot be serialized.  Conversion to/from integers
-    will work around the problem.
+    <li><code style="white-space: normal">enum</code> data members cannot be serialized.
+    Conversion to/from integers will work around the problem.
     <li>Default array serialization fails.  Workaround this by doing it with a loop.
     <li>If class serialize functions are not accessable either by making them public or by
     including <code style="white-space: normal">friend</code> declarations as described in 
     <a href="serialization.html#member">Class Serialization - Member Function</a>, the
     will compile but fail at runtime.
-    <li>The demo programs leave temporary files in the directory that contains the source
-    for the demo programs rather than the temporary directory specified by the environment.
+    <li>tests using custom extended type which doesn't use rtti fails.
 </ul>
-<h4><a name="borland560">Borland 5.60 and earlier</a></h4>
-All of the above issues for Borland 5.64 plus:
-<ul>
-    <li>All tests and demos using "export" functionality fail
-</ul>
-<h4><a name="borland51">Borland 5.51 and earlier</a></h4>
+<h4><a name="borland551">Borland 5.51 and earlier</a></h4>
 All of the above issues for Borland 5.64 plus:
 <ul>
     <li>Most tests using Wide character XML files fail. This happens somewhere within the

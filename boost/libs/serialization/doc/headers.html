@@ -271,7 +271,7 @@ boost/archive/basic_text_iprimitive.hpp
 Implementation of serialization of primitive types in terms of an character
 or wide character text streams. This is used in the implementation of text and
 xml archives.  Presumably this would be useful for implementations of other variations
-of text archives such as userfriendly text, windows ini files.
+of text archives such as user friendly text or windows ini files.
 </dd>
 
 <dt><a target="basic_binary_oprimitive" href="../../../boost/archive/basic_binary_oprimitive.hpp">
@@ -352,7 +352,7 @@ contains *.ipp files which implement templates. These templates are instantiated
 only by archive implementation so are generally not included in user code modules.
 <p>
 The trade offs related to library implementation via pre-compiled code and templated
-headers are pretty well known.  This library uses both.  It uses templated headers
+headers are well known.  This library uses both.  It uses templated headers
 to generate code to serialize user and primitive types and it uses pre-compiled
 library code for that part of the code which only depends upon the archive type.
 Building of the library generates and compiles code for all archives implemented.
