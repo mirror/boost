@@ -159,7 +159,7 @@ template <> struct stream_as<boost::intmax_t>  {
 // Standard promotion process for streaming
 template <class T> struct promote
 {
-    typename stream_as<T>::t1 static from(T x) {
+    static typename stream_as<T>::t1 from(T x) {
         typedef typename stream_as<T>::t1 t1;
         return t1(x);
     }
