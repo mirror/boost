@@ -327,7 +327,6 @@ namespace detail {
     }
 
 
-namespace {
     template<class string_t, class Stream>
     int upper_bound_from_fstring(const string_t& buf, 
                                  const typename string_t::value_type arg_mark,
@@ -356,9 +355,6 @@ namespace {
         }
         return num_items;
     }
-} //namespace 
-
-
 } // detail namespace
 } // io namespace
 
