@@ -456,29 +456,16 @@ namespace boost {
     function() : base_type() {}                                     
                                                                             
     template<typename Functor>                                              
-    function(const Functor& f) : base_type(f) {}
+    function(Functor BOOST_MSVC_ONLY(const &) f) : base_type(f) {}
                       
-#ifdef __BORLANDC__
-    template<typename Functor> function(Functor* f) : base_type(f) {}
-#endif // __BORLANDC__
-
     function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
          
     template<typename Functor>
-    function& operator=(const Functor& f)
+    self_type& operator=(Functor BOOST_MSVC_ONLY(const &) f)
     {
       self_type(f).swap(*this);
       return *this;
     }
-
-#ifdef __BORLANDC__
-    template<typename Functor>
-    self_type& operator=(Functor* f)
-    {
-      self_type(f).swap(*this);
-      return *this;
-    }
-#endif // __BORLANDC__
 
     self_type& operator=(const base_type& f)
     {
@@ -486,26 +473,18 @@ namespace boost {
       return *this;
     }
 
-    self_type& operator=(const self_type& f)                                  
+    self_type& operator=(const self_type& f)
     {   
       self_type(f).swap(*this);
       return *this;                                                         
     }                                                           
 
     template<typename Functor>
-    void set(const Functor& f)
+    void set(Functor BOOST_MSVC_ONLY(const &) f)
     {
       self_type(f).swap(*this);
     }
 
-#ifdef __BORLANDC__
-    template<typename Functor>
-    void set(Functor* f)
-    {
-      self_type(f).swap(*this);
-    }
-#endif // __BORLANDC__
- 
     void set(const base_type& f)
     {
       self_type(f).swap(*this);

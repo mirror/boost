@@ -102,7 +102,7 @@ test_zero_args()
   BOOST_TEST(v1.empty());
 
   // Assignment to an empty function from a free function
-  v1 = &write_five;
+  v1 = BOOST_MSVC_ONLY(&) write_five;
   BOOST_TEST(!v1.empty());
 
   // Invocation
@@ -111,7 +111,7 @@ test_zero_args()
   BOOST_TEST(global_int == 5);
 
   // Assignment to a non-empty function from a free function
-  v1 = &write_three;
+  v1 = BOOST_MSVC_ONLY(&) write_three;
   BOOST_TEST(!v1.empty());
 
   // Invocation
@@ -163,7 +163,7 @@ test_zero_args()
   BOOST_TEST(v2.empty());
 
   // Assignment to an empty function from a free function
-  v2.set(&write_five);
+  v2.set(BOOST_MSVC_ONLY(&) write_five);
   BOOST_TEST(v2);
 
   // Invocation
@@ -172,7 +172,7 @@ test_zero_args()
   BOOST_TEST(global_int == 5);
 
   // Assignment to a non-empty function from a free function
-  v2 = &write_three;
+  v2 = BOOST_MSVC_ONLY(&) write_three;
   BOOST_TEST(!v2.empty());
 
   // Invocation
@@ -227,7 +227,7 @@ test_zero_args()
   BOOST_TEST(global_int == 3);
 
   // Assign to a function from a function with a function
-  v2 = &write_five;
+  v2 = BOOST_MSVC_ONLY(&) write_five;
   v1 = v2;
   BOOST_TEST(!v1.empty());
   BOOST_TEST(!v2.empty());

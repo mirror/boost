@@ -203,23 +203,14 @@ namespace boost {
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(const Functor& f) :
+    BOOST_FUNCTION_FUNCTION(Functor BOOST_MSVC_ONLY(const &) f) :
       function_base(), Mixin(), invoker(0)
     {
       this->assign_to(f);
     }
 
-#ifdef __BORLANDC__
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor* f) :
-      function_base(), Mixin(), invoker(0)
-    {
-      this->assign_to(f);
-    }
-#endif // __BORLANDC__
-
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(const Functor& f, const Mixin& m) :
+    BOOST_FUNCTION_FUNCTION(Functor f, const Mixin& m) :
       function_base(), Mixin(m), invoker(0)
     {
       this->assign_to(f);
@@ -253,34 +244,17 @@ namespace boost {
     // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to 
     // construct.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(const Functor& f)
+    BOOST_FUNCTION_FUNCTION& operator=(Functor f)
     {
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
       return *this;
     }
 
-#ifdef __BORLANDC__
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(Functor* f)
-    {
-      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
-      return *this;
-    }
-#endif // __BORLANDC__
-
-    template<typename Functor>
-    void set(const Functor& f)
+    void set(Functor f)
     {
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
-
-#ifdef __BORLANDC__
-    template<typename Functor>
-    void set(Functor* f)
-    {
-      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
-    }
-#endif // __BORLANDC__
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
@@ -333,7 +307,7 @@ namespace boost {
     }
 
     template<typename Functor>
-    void assign_to(const Functor& f)
+    void assign_to(Functor f)
     {
       typedef typename detail::function::get_function_tag<Functor>::type tag;
       this->assign_to(f, tag());
@@ -356,7 +330,9 @@ namespace boost {
         manager = &detail::function::functor_manager<FunctionPtr, 
                                                      Allocator>::manage;
         functor = manager(detail::function::any_pointer(
-                            reinterpret_cast<void (*)()>(f)
+			    // should be a reinterpret cast, but some compilers
+			    // insist on giving cv-qualifiers to free functions
+                            (void (*)())(f)
                           ),
                           detail::function::clone_functor_tag);
       }
@@ -371,7 +347,7 @@ namespace boost {
 #endif // BOOST_FUNCTION_NUM_ARGS > 0
         
     template<typename FunctionObj>
-    void assign_to(const FunctionObj& f, detail::function::function_obj_tag)
+    void assign_to(FunctionObj f, detail::function::function_obj_tag)
     {
       if (!detail::function::has_empty_target(&f)) {
         typedef 

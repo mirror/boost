@@ -102,7 +102,7 @@ test_zero_args()
   BOOST_TEST(v1.empty());
 
   // Assignment to an empty function from a free function
-  v1 = &write_five;
+  v1 = write_five;
   BOOST_TEST(!v1.empty());
 
   // Invocation
@@ -129,7 +129,7 @@ test_zero_args()
   BOOST_TEST(global_int == 5);
 
   // Assignment to a non-empty function from a free function
-  v1 = &write_three;
+  v1 = write_three;
   BOOST_TEST(!v1.empty());
 
   // Invocation

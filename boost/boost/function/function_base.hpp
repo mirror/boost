@@ -25,6 +25,12 @@
 #include <boost/type_traits.hpp>
 #include <boost/ref.hpp>
 
+#ifdef BOOST_MSVC
+#  define BOOST_MSVC_ONLY(x) x
+#else
+#  define BOOST_MSVC_ONLY(x)
+#endif // not MSVC
+
 namespace boost {
   namespace detail {
     namespace function {
