@@ -133,7 +133,7 @@ main()
   boost::function_requires< 
      boost::RandomAccessIteratorPoliciesConcept<
        boost::default_iterator_policies,
-       boost::iterator_adaptor<int*, boost::default_iterator_policies>,
+       boost::iterator_adaptor<storage::iterator, boost::default_iterator_policies>,
        boost::iterator<std::random_access_iterator_tag, int, std::ptrdiff_t,
                       int*, int&>
       > >();
@@ -156,7 +156,7 @@ main()
       boost::default_iterator_policies,
       boost::value_type_is<const int> > Iter1;
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::value_type, int>::value));
-#if defined(__BORLANDC__) || defined(BOOST_MSVC)
+#if defined(__BORLANDC__) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300
     // We currently don't know how to workaround this bug.
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, int&>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, int*>::value));
@@ -282,7 +282,7 @@ main()
     
     // Many compilers' builtin deque iterators don't interoperate well, though
     // STLport fixes that problem.
-#if defined(__SGI_STL_PORT) || !defined(__GNUC__) && !defined(__BORLANDC__) && !defined(BOOST_MSVC)
+#if defined(__SGI_STL_PORT) || !defined(__GNUC__) && !defined(__BORLANDC__) && (!defined(BOOST_MSVC) || BOOST_MSVC > 1200)
     boost::const_nonconst_iterator_test(i, ++j);
 #endif
   }
@@ -327,7 +327,7 @@ main()
     // On compilers not supporting partial specialization, we can do more type
     // deduction with deque iterators than with pointers... unless the library
     // is broken ;-(
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 || defined(__SGI_STL_PORT)
     std::deque<dummyT> array2;
     std::copy(array+0, array+N, std::back_inserter(array2));
     boost::forward_iterator_test(
@@ -339,7 +339,7 @@ main()
         dummyT(1), dummyT(4));
 #endif
 
-#if !defined(BOOST_MSVC) // This just freaks MSVC out completely
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 // This just freaks MSVC out completely
     boost::forward_iterator_test(
         boost::make_filter_iterator<one_or_four>(
             boost::make_reverse_iterator(array2.end()),

@@ -31,7 +31,7 @@ typedef std::set<storage::iterator> iterator_set;
 void more_indirect_iterator_tests()
 {
 // For some reason all heck breaks loose in the compiler under these conditions.
-#if !defined(BOOST_MSVC) || !defined(__STL_DEBUG)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 || !defined(__STL_DEBUG)
     storage store(1000);
     std::generate(store.begin(), store.end(), rand);
     

@@ -347,7 +347,7 @@ void test(Number* = 0)
 
     // factoring out difference_type for the assert below confused Borland :(
     typedef boost::detail::is_signed<
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
         typename
 #endif
         boost::detail::numeric_traits<Number>::difference_type

@@ -247,7 +247,7 @@ int main()
 
    // wrapping an iterator or non-built-in integer type causes an INTERNAL
    // COMPILER ERROR in MSVC without STLport. I'm clueless as to why.
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200 || defined(__SGI_STL_PORT)
     // Test user-defined type.
     test_integer<my_int1>();
     test_integer<my_int2>();

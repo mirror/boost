@@ -103,7 +103,7 @@ void random_sorted_sequence(T& seq)
     sort_by_value(seq);
 }
 
-# if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
+# if defined(BOOST_MSVC) && BOOST_MSVC < 1300 && !defined(__SGI_STL_PORT)
 // VC6's standard lib doesn't have a template member function for list::sort()
 template <>
 void random_sorted_sequence(std::list<std::string>& result)
