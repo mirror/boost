@@ -47,9 +47,9 @@ namespace boost{
 //
 
 template <class charT>
-size_t BOOST_RE_CALL re_strlen(const charT *s)
+std::size_t BOOST_RE_CALL re_strlen(const charT *s)
 {
-   size_t len = 0;
+   std::size_t len = 0;
    while(*s)
    {
       ++s;
@@ -58,14 +58,14 @@ size_t BOOST_RE_CALL re_strlen(const charT *s)
    return len;
 }
 
-inline size_t BOOST_RE_CALL re_strlen(const char *s)
+inline std::size_t BOOST_RE_CALL re_strlen(const char *s)
 {
    return std::strlen(s);
 }
 
 #ifndef BOOST_RE_NO_WCSTRING
 
-inline size_t BOOST_RE_CALL re_strlen(const wchar_t *s)
+inline std::size_t BOOST_RE_CALL re_strlen(const wchar_t *s)
 {
    return std::wcslen(s);
 }
@@ -133,6 +133,7 @@ inline void BOOST_RE_CALL re_strfree(charT* p)
 } // namespace boost
 
 #endif  // BOOST_REGEX_CSTRING_HPP
+
 
 
 

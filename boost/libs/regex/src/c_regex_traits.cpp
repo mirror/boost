@@ -275,13 +275,13 @@ void BOOST_RE_CALL re_update_collate()
       {
          char* p1, *p2, *p3, *p4;;
          p1 = buf;
-         while(*p1 && isspace(*p1))++p1;
+         while(*p1 && std::isspace(*p1))++p1;
          p2 = p1;
-         while(*p2 && !isspace(*p2))++p2;
+         while(*p2 && !std::isspace(*p2))++p2;
          p3 = p2;
-         while(*p3 && isspace(*p3))++p3;
+         while(*p3 && std::isspace(*p3))++p3;
          p4 = p3;
-         while(*p4 && !isspace(*p4))++p4;
+         while(*p4 && !std::isspace(*p4))++p4;
          pcoll_names->push_back(collate_name_t(p1, p2, p3, p4));
          ++i;
          re_get_message(buf, 256, i);
@@ -641,15 +641,15 @@ void c_regex_traits<char>::free()
 void BOOST_RE_CALL c_regex_traits<char>::transform(std::string& out, const std::string& in)
 {
    BOOST_RE_GUARD_STACK
-   size_t n = strxfrm(0, in.c_str(), 0);
-   if(n == (size_t)(-1))
+   std::size_t n = std::strxfrm(0, in.c_str(), 0);
+   if(n == (std::size_t)(-1))
    {
       out = in;
       return;
    }
    scoped_array<char> buf(new char[n+1]);
-   n = strxfrm(buf.get(), in.c_str(), n+1);
-   if(n == (size_t)(-1))
+   n = std::strxfrm(buf.get(), in.c_str(), n+1);
+   if(n == (std::size_t)(-1))
    {
       out = in;
       return;
@@ -888,20 +888,20 @@ void BOOST_RE_CALL c_regex_traits<wchar_t>::transform(std::basic_string<wchar_t>
 {
    BOOST_RE_GUARD_STACK
 #ifndef BOOST_MSVC
-   size_t n = std::wcsxfrm(0, in.c_str(), 0);
+   std::size_t n = std::wcsxfrm(0, in.c_str(), 0);
 #else
    // broken wcsxfrm under VC6 doesn't check size of
    // output buffer, we have no choice but to guess!
-   size_t n = 100 * in.size();
+   std::size_t n = 100 * in.size();
 #endif
-   if((n == (size_t)(-1)) || (n == 0))
+   if((n == (std::size_t)(-1)) || (n == 0))
    {
       out = in;
       return;
    }
    scoped_array<wchar_t> buf(new wchar_t[n+1]);
    n = std::wcsxfrm(buf.get(), in.c_str(), n+1);
-   if(n == (size_t)(-1))
+   if(n == (std::size_t)(-1))
    {
       out = in;
       return;

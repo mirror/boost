@@ -56,7 +56,7 @@ regbase::flag_type f = regbase::escape_in_lists | regbase::char_classes | regbas
                        | regbase::extended | regbase::normal | regbase::emacs | regbase::awk | regbase::grep | regbase::egrep | regbase::sed;
 
 template class reg_expression<test_char_type>;
-template class sub_match<ra_it>;
+template struct sub_match<ra_it>;
 template class match_results<ra_it>;
 
 template bool regex_match(ra_it,

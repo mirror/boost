@@ -169,7 +169,7 @@ class BOOST_RE_IX_DECL mapfile_iterator;
 class BOOST_RE_IX_DECL mapfile
 {
    typedef char* pointer;
-   FILE* hfile;
+   std::FILE* hfile;
    long int _size;
    pointer* _first;
    pointer* _last;

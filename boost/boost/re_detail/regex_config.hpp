@@ -287,10 +287,10 @@ Do not change this file unless you really really have to, add options to
    #ifdef __BASTRING__
    	#define BOOST_RE_NO_WCSTRING
    #endif
-   #if defined(__BEOS__)
-   	#define BOOST_RE_NO_WCTYPE_H
-   	#define BOOST_RE_NO_WCSTRING
-   #endif
+   //
+   // for now we'll always define these:
+   #define BOOST_RE_NO_WCTYPE_H
+   #define BOOST_RE_NO_WCSTRING
 
 #endif
 
@@ -1213,6 +1213,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

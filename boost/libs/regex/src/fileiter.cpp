@@ -264,7 +264,7 @@ void mapfile::unlock(pointer* node)const
    }
 }
 
-long int get_file_length(FILE* hfile)
+long int get_file_length(std::FILE* hfile)
 {
    BOOST_RE_GUARD_STACK
    long int result;

@@ -162,7 +162,7 @@ inline bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator==(c
 {
    return (_flags == e.flags())
            && (_expression_len == e._expression_len)
-           && (memcmp(_expression, e._expression, _expression_len * sizeof(charT)) == 0);
+           && (std::memcmp(_expression, e._expression, _expression_len * sizeof(charT)) == 0);
 }
 
 template <class charT, class traits, class Allocator>
@@ -172,7 +172,7 @@ bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator<(const reg
    // we can't offer a diffinitive ordering, but we can be consistant:
    if(_flags != e.flags()) return _flags < e.flags();
    if(_expression_len != e._expression_len) return _expression_len < e._expression_len;
-   return memcmp(expression(), e.expression(), _expression_len);
+   return std::memcmp(expression(), e.expression(), _expression_len);
 }
 
 template <class charT, class traits, class Allocator>
