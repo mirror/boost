@@ -139,16 +139,31 @@ namespace boost
            template <class T>
            struct limits : std::numeric_limits<T>
            {
-               static inline T min()
-               {
-                   return std::numeric_limits<T>::min() >= 0
-                       // unary minus causes integral promotion, thus the static_cast<>
-                       ? static_cast<T>(-std::numeric_limits<T>::max())
-                       : std::numeric_limits<T>::min();
-               }
-           };
+    	     static inline T min()
+# ifndef __GNUC__ // bug workaround courtesy Jens Maurer
+             {
+                 return std::numeric_limits<T>::min() >= 0
+                     // unary minus causes integral promotion, thus the static_cast<>
+                     ? static_cast<T>(-std::numeric_limits<T>::max())
+                     : std::numeric_limits<T>::min();
+             }
+# else
+                 ;
+# endif
+	       };
        };
-       
+
+# ifdef __GNUC__ // bug workaround courtesy Jens Maurer
+      template<> template<class T>
+      inline T numeric_min_select<true>::limits<T>::min()
+      {
+           return std::numeric_limits<T>::min() >= 0
+               // unary minus causes integral promotion, thus the static_cast<>
+               ? static_cast<T>(-std::numeric_limits<T>::max())
+               : std::numeric_limits<T>::min();
+       }
+# endif
+    
        template<>
        struct numeric_min_select<false>
        {
