@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
@@ -21,6 +21,16 @@ main()
 //     check("default construction -- 0 secs", td.seconds() == 0);
 //     check("default construction -- 0 min", td.minutes() == 0); 
   }
+  
+  // construct from components
+  time_duration td1(1,25,0);
+  time_duration td3(td1.hours(),td1.minutes(),td1.seconds());
+  check("total up elements", td1 == td3);
+  td1 = -td1; // td1 == "-1:25:00"
+  td3 = time_duration(td1.hours(),td1.minutes(),td1.seconds());
+  check("total up elements-invered sign", td1 == td3);
+  
+  
   time_duration t_1(0,1,40);
   time_duration t_2(0,1,41);
   check("less test", !(t_2 < t_2));
