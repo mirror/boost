@@ -166,17 +166,14 @@ namespace boost
     // A metafunction that gets the result type for operator->.  Also
     // has a static function make() which builds the result from a
     // Reference
-    template <class Value, class Category, class Reference, class Pointer>
+    template <class Value, class Reference, class Pointer>
     struct operator_arrow_result
     {
         // CWPro8.3 won't accept "operator_arrow_result::type", and we
         // need that type below, so metafunction forwarding would be a
         // losing proposition here.
         typedef typename mpl::if_<
-            is_tag<
-                readable_lvalue_iterator_tag
-              , typename access_category_tag<Category,Reference>::type
-            >
+            is_reference<Reference>
           , Pointer
           , operator_arrow_proxy<Value>
         >::type type;
@@ -190,16 +187,15 @@ namespace boost
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     // Deal with ETI
     template<>
-    struct operator_arrow_result<int, int, int, int>
+    struct operator_arrow_result<int, int, int>
     {
         typedef int type;
     };
 # endif
 
     //
-    // Facade is actually an iterator. We require Facade here
-    // so that we do not have to go through iterator_traits
-    // to access the traits
+    // Iterator is actually an iterator_facade, so we do not have to
+    // go through iterator_traits to access the traits.
     //
     template <class Iterator>
     class operator_brackets_proxy
@@ -422,7 +418,6 @@ namespace boost
 
       typename detail::operator_arrow_result<
           value_type
-        , iterator_category
         , reference
         , pointer
       >::type
@@ -430,7 +425,6 @@ namespace boost
       {
           return detail::operator_arrow_result<
               value_type
-            , iterator_category
             , reference
             , pointer
           >::make(*this->derived());
