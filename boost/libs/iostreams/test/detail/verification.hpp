@@ -19,9 +19,16 @@
 # include <iostream.h>
 #endif
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include "./constants.hpp"
+
+// Code generation bugs cause tests to fail with global optimization.
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# pragma optimize("g", off)
+#endif
 
 // Included only by tests; no need to #undef.
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
@@ -180,5 +187,9 @@ bool buffered_putback_test(std::istream& is)
 }
 
 } } } // End namespaces test, iostreams, boost.
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# pragma optimize("", on)
+#endif
 
 #endif // #ifndef BOOST_IOSTREAMS_TEST_VERIFICATION_HPP_INCLUDED

@@ -5,6 +5,8 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <fstream>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/iostreams/stream_facade.hpp>
 #include <boost/test/test_tools.hpp>
@@ -17,6 +19,11 @@ using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
 using boost::unit_test_framework::test_suite;   
+
+// Code generation bugs cause tests to fail with global optimization.
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# pragma optimize("g", off)
+#endif
 
 void mapped_file_test()
 {
@@ -101,6 +108,10 @@ void mapped_file_test()
         );
     }
 }
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# pragma optimize("", on)
+#endif
 
 test_suite* init_unit_test_suite(int, char* []) 
 {

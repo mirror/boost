@@ -5,6 +5,9 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <vector>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+#include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -19,6 +22,12 @@ using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
 using boost::unit_test_framework::test_suite;  
+
+
+// Code generation bugs cause tests to fail with global optimization.
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# pragma optimize("g", off)
+#endif
 
 void seekable_filter_test()
 {
@@ -70,6 +79,10 @@ void seekable_filter_test()
         );
     }
 }
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# pragma optimize("", on)
+#endif
 
 test_suite* init_unit_test_suite(int, char* []) 
 {
