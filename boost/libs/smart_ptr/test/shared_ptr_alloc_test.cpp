@@ -135,6 +135,12 @@ int main()
     std::cout << "BOOST_SP_USE_QUICK_ALLOCATOR: (not defined)\n";
 #endif
 
+#if defined(BOOST_QA_PAGE_SIZE)
+    std::cout << "BOOST_QA_PAGE_SIZE: " << BOOST_QA_PAGE_SIZE << "\n";
+#else
+    std::cout << "BOOST_QA_PAGE_SIZE: (not defined)\n";
+#endif
+
     std::cout << n << " shared_ptr<int> allocations + deallocations:\n";
 
     test<int>();

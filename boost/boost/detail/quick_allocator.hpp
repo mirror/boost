@@ -55,7 +55,15 @@ template<unsigned size, unsigned align> struct allocator_impl
     //
     // The other alternative is to use much bigger pages (1M.)
 
+#if defined(BOOST_QA_PAGE_SIZE)
+
+    enum { items_per_page = BOOST_QA_PAGE_SIZE / size };
+
+#else
+
     enum { items_per_page = 496 / size }; // 1048560 / size
+
+#endif
 
 #ifdef BOOST_HAS_THREADS
     static lightweight_mutex mutex;
