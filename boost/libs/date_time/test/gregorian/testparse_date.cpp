@@ -307,6 +307,16 @@ main()
   std::string d10s = to_simple_string(d10);
   date d11 = from_simple_string(d10s);
   check("to from string inversion", d10 == d11);
+
+  try {
+    using namespace boost::gregorian;
+    std::string ud(""); //empty string error sf bug# 1155556
+    date d1(from_simple_string(ud));
+    check("empty string",  false); //should never reach this piont
+  }
+  catch(std::exception& e) {
+    check(std::string("empty string parse (exception expected): ") + e.what(),  true);
+  }
   
 
 //Calendar Week + Day Number
