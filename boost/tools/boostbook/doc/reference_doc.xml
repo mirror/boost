@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE section SYSTEM "../../dtd/boostbook.dtd">
-<section xmlns:xi="http://www.w3.org/2001/XInclude">
+<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<section xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook.reference"
+         last-revision="$Date$">
   <title>Documenting C++ Constructs</title>
 
   <para>This section describes the documentation of C++ constructs
@@ -10,6 +12,22 @@
   BoostBook XSL stylesheets generate cross-referenced reference
   documentation for C++ libraries with a consistent look and
   feel.</para>
+
+  <para>The basic scheme for documenting C++ elements in BoostBook is
+  that the name of the XML element for a particular C++ construct
+  matches the name of the C++ keyword (e.g.,
+  <sgmltag>typedef</sgmltag>, <sgmltag>template</sgmltag>,
+  <sgmltag>enum</sgmltag>) or concept (e.g.,
+  <sgmltag>constructor</sgmltag>,
+  <sgmltag>class-specialization</sgmltag>). Each attribute for a named
+  declaration requires a <code>name</code> attribute that gives the
+  name of the entity in C++. The content model of the elements then
+  follows from the information provided in a C++ declaration, e.g.,
+  function parameter lists, type, default values, but each element may
+  also contain a <sgmltag>purpose</sgmltag> element, containing a
+  short description of the purpose of the entity begin described,
+  and/or a <sgmltag>description</sgmltag> element, containing extended
+  documentation.</para>
 
   <section>
     <title>Library references and headers</title>
@@ -116,8 +134,7 @@
     <functionname>boost::any_cast</functionname>.</para>
 
     <para>Class templates are defined by &lt;class&gt; elements with a
-    &lt;template&gt; child element at the beginning. Templates are
-    discussed <xref linkend="boostbook.templates"/>.</para>
+    &lt;template&gt; child element at the beginning.</para>
   </section>
 
   <section id="boostbook.functions">
@@ -283,10 +300,5 @@
         </tbody>
       </tgroup>
     </table>
-  </section>
-
-  <section id="boostbook.templates">
-    <title>Templates</title>
-    <para>To be written...</para>
   </section>
 </section>

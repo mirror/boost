@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE section SYSTEM "../../dtd/boostbook.dtd">
-<section xmlns:xi="http://www.w3.org/2001/XInclude">
+<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<section xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook.documenting"
+         last-revision="$Date$">
   <title>Documenting libraries</title>
     
   <para>BoostBook is an extension to <ulink
@@ -28,8 +30,10 @@
       <title>A Skeletal BoostBook Library</title>
       <programlisting>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;!DOCTYPE library SYSTEM "../../dtd/boostbook.dtd"&gt;
-&lt;library name="Any" dirname="any" xmlns:xi="http://www.w3.org/2001/XInclude" id="any"&gt;
+&lt;!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd"&gt;
+&lt;library name="Any" dirname="any" xmlns:xi="http://www.w3.org/2001/XInclude"
+  id="any" last-revision="$Date$"&gt;
   &lt;libraryinfo&gt;
     &lt;author&gt;
       &lt;firstname&gt;Kevlin&lt;/firstname&gt;
@@ -44,13 +48,11 @@
 </programlisting>
     </example>
 
-    <para>The first two lines identify this document as a BoostBook
+    <para>The first three lines identify this document as a BoostBook
     <ulink url="http://www.w3.org/XML/">XML</ulink> document. The
     DOCTYPE line states that the document conforms to the BoostBook
-    DTD (here accessed via the relative path
-    <code>../../dtd/boostbook.dtd</code>, though this path may change
-    depending on the location of <code>any.xml</code>) and that the
-    top-level element is a BoostBook &lt;library&gt;.</para>
+    DTD, and that the top-level element is a BoostBook
+    &lt;library&gt;.</para>
 
     <para>The &lt;library&gt; element actually describes the aspects
     of BoostBook library documentation. The attributes for the
@@ -87,6 +89,14 @@
           alphanumeric characters and underscores.</simpara>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term><code>last-revision</code></term>
+        <listitem>
+          <simpara>Always set to <code>$Date$</code>, which is
+          expanded by CVS to include the date and time that the file
+          was last modified.</simpara>
+        </listitem>
+      </varlistentry>
     </variablelist>
 
     <para>Inside the &lt;library&gt; element we have the
@@ -102,7 +112,7 @@
     &lt;librarycategory&gt; elements. Each &lt;librarycategory&gt;
     element has a <code>name</code> element that identifies one of the
     categories. The actual list of categories is in the file
-    <filename>boost-sandbox/libs/documentation/examples/boost.xml</filename>.
+    <filename>doc/src/boost.xml</filename>.
     </para>
 
     <para>At this point, we can apply the BoostBook XSL stylesheets to
