@@ -6,17 +6,25 @@
 // implied warranty, and with no claim as to its suitability for any
 // purpose.
 
-// With optimizations by Gennaro Prota.
+// With optimizations, bug fixes, and improvements by Gennaro Prota.
 
+// -------------------------------------
+// CHANGE LOG:
+//
+// - corrected workaround for Dinkum lib's allocate() [GP]
+// - changed macro test for old iostreams [GP]
+// - removed #include <vector> for now. [JGS]
+// - Added __GNUC__ to compilers that cannot handle the constructor from basic_string. [JGS]
 
 #ifndef BOOST_DYNAMIC_BITSET_HPP
 #define BOOST_DYNAMIC_BITSET_HPP
 
+#include <boost/config.hpp>
 #include <cassert>
 #include <string>
 #include <iosfwd>
 #include <cstring>             // for memset, memcpy, memcmp, etc.
-#include <stdexcept>           // for std::domain_error
+#include <stdexcept>           // for std::overflow_error
 #include <algorithm>           // for std::swap, std::min, std::copy, std::fill
 
 #if defined(__GNUC__) && !defined(__SGI_STL_PORT)
@@ -25,12 +33,11 @@
 #include <cctype>               // for isspace
 #endif
 
-#include <vector>
-
 #include "boost/dynamic_bitset_fwd.hpp" //G.P.S.
 #include "boost/detail/dynamic_bitset.hpp"
 
-#ifdef __GNUC__ // this isn't right... what's the right way to detect?
+#if defined (__STL_CONFIG_H) && (!defined (__SGI_STL_PORT) ||                  \
+                                  defined (__STL_USE_NEW_IOSTREAMS) ) /* old sgi */
 #define BOOST_OLD_IOSTREAMS
 #endif
 
@@ -164,7 +171,9 @@ public:
                const Allocator& alloc = Allocator());
 
     // from string
-#if defined(BOOST_OLD_IOSTREAMS) || defined(__BORLANDC__)
+#if defined(BOOST_OLD_IOSTREAMS) || defined(__BORLANDC__) || defined(__GNUC__)
+    // The appearance of __GNUC__ in the above #if is due to a bug in g++
+    // concerning the expression std::basic_string<CharT, Traits, Alloc>::npos. -JGS
     explicit
     dynamic_bitset(const std::string& s,
                std::string::size_type pos = 0, 
@@ -497,11 +506,7 @@ resize(size_type num_bits, bool value)
   if (num_bits == size())
     return;
   size_type new_nblocks = this->calc_num_blocks(num_bits);
-#if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306) // Dinkumware for VC6/7
-  Block* d = this->m_alloc.allocate(new_nblocks, 0);
-#else
-  Block* d = this->m_alloc.allocate(new_nblocks);
-#endif
+  Block* d = this->m_alloc.allocate(new_nblocks, static_cast<void const *>(0));
   if (num_bits < size()) { // shrink
     std::copy(this->m_bits, this->m_bits + new_nblocks, d);
     std::swap(d, this->m_bits);
