@@ -1456,7 +1456,9 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 // member function pointers
 
-#if defined(BOOST_MEM_FN_ENABLE_STDCALL) || (defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+// MSVC 7.0 and Metrowerks 7.1 can't handle the "main line"
+
+#if defined(BOOST_MEM_FN_ENABLE_STDCALL) || (defined(BOOST_MSVC) && BOOST_MSVC <= 1300)  || (defined(__MWERKS__) && (__MWERKS__ <= 0x2406))
 
 #if defined(BOOST_MEM_FN_ENABLE_STDCALL)
 #define BOOST_BIND_MF_CC __stdcall
