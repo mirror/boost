@@ -7,6 +7,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  23 Jan 2001 Now statically selecting a test for signed numbers to avoid
+//              warnings with fancy compilers. Added commentary and
+//              additional dumping of traits data for tested types.
 //  21 Jan 2001 Initial version (David Abrahams)
 
 #include <boost/detail/numeric_traits.hpp>
@@ -31,6 +34,7 @@
 # define DECLARE_CLASS_CONST(type, init) enum { init }
 #endif
 
+// =================================================================================
 // template class complement_traits<Number> --
 //
 //    statically computes the max and min for 1s and 2s-complement binary
@@ -118,6 +122,8 @@ struct complement_traits
     DECLARE_CLASS_CONST(Number, min = (complement_traits_aux<Number, sizeof(Number)>::min));
 };
 
+// =================================================================================
+
 // Support for streaming various numeric types in exactly the format I want. I
 // needed this in addition to all the assertions so that I could see exactly
 // what was going on.
@@ -198,6 +204,7 @@ typename stream_as<T>::t2 stream_number(T x)
 {
     return promote<T>::from(x);
 }
+// =================================================================================
 
 //
 // Tests for built-in signed and unsigned types
@@ -246,6 +253,56 @@ void test_aux(unsigned_tag, Number* = 0)
 
 // Tests for signed numbers. The extra default Number parameter works around an
 // MSVC bug.
+struct out_of_range_tag {};
+struct in_range_tag {};
+
+// This test morsel gets executed for numbers whose difference will always be
+// representable in intmax_t
+template <class Number>
+void signed_test(in_range_tag, Number* = 0)
+{
+    BOOST_STATIC_ASSERT(boost::detail::is_signed<Number>::value);
+    typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
+    const Number max = complement_traits<Number>::max;
+    const Number min = complement_traits<Number>::min;
+    
+    difference_type d1 = boost::detail::numeric_distance(min, max);
+    difference_type d2 = boost::detail::numeric_distance(max, min);
+
+    std::cout << stream_number(min) << "->" << stream_number(max) << "==";
+    std::cout << std::dec << stream_number(d1) << "; ";
+    std::cout << std::hex << stream_number(max) << "->" << stream_number(min)
+              << "==" << std::dec << stream_number(d2) << "..." << std::flush;
+    assert(d1 == difference_type(max) - difference_type(min));
+    assert(d2 == difference_type(min) - difference_type(max));
+}
+
+// This test morsel gets executed for numbers whose difference may exceed the
+// capacity of intmax_t.
+template <class Number>
+void signed_test(out_of_range_tag, Number* = 0)
+{
+    BOOST_STATIC_ASSERT(boost::detail::is_signed<Number>::value);
+    typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
+    const Number max = complement_traits<Number>::max;
+    const Number min = complement_traits<Number>::min;
+
+    difference_type min_distance = complement_traits<difference_type>::min;
+    difference_type max_distance = complement_traits<difference_type>::max;
+
+    const Number n1 = Number(min + max_distance);
+    const Number n2 = Number(max + min_distance);
+    difference_type d1 = boost::detail::numeric_distance(min, n1);
+    difference_type d2 = boost::detail::numeric_distance(max, n2);
+
+    std::cout << stream_number(min) << "->" << stream_number(n1) << "==";
+    std::cout << std::dec << stream_number(d1) << "; ";
+    std::cout << std::hex << stream_number(max) << "->" << stream_number(n2)
+              << "==" << std::dec << stream_number(d2) << "..." << std::flush;
+    assert(d1 == max_distance);
+    assert(d2 == min_distance);
+}
+
 template <class Number>
 void test_aux(signed_tag, Number* = 0)
 {
@@ -266,19 +323,15 @@ void test_aux(signed_tag, Number* = 0)
               << stream_number(max) << "..." << std::flush;
     std::cout << "difference_type = " << typeid(difference_type).name() << "..."
               << std::flush;
-    assert(min < max);
 
-    difference_type d1 = boost::detail::numeric_distance(min, max);
-    difference_type d2 = boost::detail::numeric_distance(max, min);
-    if (sizeof(Number) < sizeof(boost::intmax_t))
-    {
-        std::cout << stream_number(min) << "->" << stream_number(max) << "==";
-        std::cout << std::dec << stream_number(d1) << "; ";
-        std::cout << std::hex << stream_number(max) << "->" << stream_number(min)
-                  << "==" << std::dec << stream_number(d2) << "..." << std::flush;
-        assert(d1 == difference_type(max) - difference_type(min));
-        assert(d2 == difference_type(min) - difference_type(max));
-    }
+    typedef typename boost::detail::if_true<
+                          (sizeof(Number) < sizeof(boost::intmax_t))>
+                        ::template then<
+                          in_range_tag,
+                          out_of_range_tag
+                        >::type
+        range_tag;
+    signed_test<Number>(range_tag());
 }
 
 
@@ -287,7 +340,13 @@ void test_aux(signed_tag, Number* = 0)
 template <class Number>
 void test(Number* = 0)
 {
-    std::cout << "testing " << typeid(Number).name() << "..." << std::flush;
+    std::cout << "testing " << typeid(Number).name() << ":\n"
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+              << "is_signed: " << (std::numeric_limits<Number>::is_signed ? "true\n" : "false\n")
+              << "is_bounded: " << (std::numeric_limits<Number>::is_bounded ? "true\n" : "false\n")
+              << "digits: " << std::numeric_limits<Number>::digits << "\n"
+#endif
+              << "..." << std::flush;
     typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
     BOOST_STATIC_ASSERT(boost::detail::is_signed<difference_type>::value);
 
