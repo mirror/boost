@@ -6,7 +6,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/aux_/Attic/reverse_fold_impl.hpp" header
+// Preprocessed version of "boost/mpl/aux_/reverse_fold_impl.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl { namespace aux {

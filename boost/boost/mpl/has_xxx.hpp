@@ -95,7 +95,8 @@ struct BOOST_PP_CAT(trait,_impl) : T \
     typedef boost::mpl::bool_<value> type; \
 }; \
 \
-template< typename T, bool fallback_ = default_ > struct trait \
+template< typename T, typename fallback_ = boost::mpl::bool_<default_> > \
+struct trait \
     : boost::mpl::if_c< \
           boost::mpl::aux::msvc_is_incomplete<T>::value \
         , boost::mpl::bool_<false> \
@@ -157,7 +158,8 @@ boost::mpl::aux::yes_tag BOOST_PP_CAT(trait,_helper_)( \
 \
 boost::mpl::aux::no_tag BOOST_PP_CAT(trait,_helper_)(...); \
 \
-template< typename T, bool fallback_ = default_ > struct trait \
+template< typename T, typename fallback_ = boost::mpl::bool_<default_> > \
+struct trait \
 { \
     typedef BOOST_PP_CAT(trait,_wrapper_)<T> t_; \
     BOOST_STATIC_CONSTANT(bool, value = \
@@ -171,7 +173,8 @@ template< typename T, bool fallback_ = default_ > struct trait \
 #   else // other SFINAE-capable compilers
 
 #   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, default_) \
-template< typename T, bool fallback_ = default_ > struct trait \
+template< typename T, typename fallback_ = boost::mpl::bool_<default_> > \
+struct trait \
 { \
     struct gcc_3_2_wknd \
     { \
@@ -201,11 +204,11 @@ template< typename T, bool fallback_ = default_ > struct trait \
 // placeholder implementation
 
 #   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, default_) \
-template< typename T, bool fallback_ = default_ > \
+template< typename T, typename fallback_ = boost::mpl::bool_<default_> > \
 struct trait \
 { \
-    BOOST_STATIC_CONSTANT(bool, value = fallback_); \
-    typedef boost::mpl::bool_<fallback_> type; \
+    BOOST_STATIC_CONSTANT(bool, value = fallback_::value); \
+    typedef fallback_ type; \
 }; \
 /**/
 

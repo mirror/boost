@@ -20,6 +20,7 @@
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include <boost/mpl/aux_/arity.hpp>
+#   include <boost/mpl/aux_/has_apply.hpp>
 #   include <boost/mpl/aux_/na.hpp>
 #   include <boost/mpl/aux_/msvc_never_true.hpp>
 #endif
@@ -40,6 +41,7 @@
 #   include <boost/mpl/aux_/preprocessor/add.hpp>
 #   include <boost/mpl/aux_/config/dtp.hpp>
 #   include <boost/mpl/aux_/config/eti.hpp>
+#   include <boost/mpl/aux_/config/ctps.hpp>
 #   include <boost/mpl/aux_/config/msvc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
 
@@ -128,6 +130,9 @@ struct BOOST_PP_CAT(apply_wrap,i_)
 
 template<
       typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+#if i_ == 0
+    , typename has_apply_ = typename aux::has_apply<F>::type
+#endif
     >
 struct BOOST_PP_CAT(apply_wrap,i_)
 // metafunction forwarding confuses MSVC 7.0
@@ -141,6 +146,14 @@ struct BOOST_PP_CAT(apply_wrap,i_)
         >::type type;
 #endif
 };
+
+#if i_ == 0 && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+template< typename F >
+struct BOOST_PP_CAT(apply_wrap,i_)<F,true_>
+    : F::apply
+{
+};
+#endif
 
 #   endif // workarounds
 

@@ -6,13 +6,16 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/Attic/apply_wrap.hpp" header
+// Preprocessed version of "boost/mpl/apply_wrap.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl {
 
 template<
       typename F
+
+    , typename has_apply_ = typename aux::has_apply<F>::type
+
     >
 struct apply_wrap0
 
@@ -20,8 +23,15 @@ struct apply_wrap0
 {
 };
 
+template< typename F >
+struct apply_wrap0< F,true_ >
+    : F::apply
+{
+};
+
 template<
       typename F, typename T1
+
     >
 struct apply_wrap1
 
@@ -31,6 +41,7 @@ struct apply_wrap1
 
 template<
       typename F, typename T1, typename T2
+
     >
 struct apply_wrap2
 
@@ -40,6 +51,7 @@ struct apply_wrap2
 
 template<
       typename F, typename T1, typename T2, typename T3
+
     >
 struct apply_wrap3
 
@@ -49,6 +61,7 @@ struct apply_wrap3
 
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
+
     >
 struct apply_wrap4
 
@@ -59,6 +72,7 @@ struct apply_wrap4
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
     , typename T5
+
     >
 struct apply_wrap5
 

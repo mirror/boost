@@ -16,8 +16,9 @@
 
 #include <boost/mpl/aux_/adl_barrier.hpp>
 #include <boost/mpl/aux_/nttp_decl.hpp>
-#include <boost/mpl/aux_/config/workaround.hpp>
+#include <boost/mpl/aux_/config/arrays.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
@@ -47,8 +48,7 @@ template< BOOST_MPL_AUX_NTTP_DECL(long, n) > struct weighted_tag
 #endif
 };
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
-    || BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+#if defined(BOOST_MPL_CFG_NO_DEPENDENT_ARRAY_TYPES)
 template<> struct weighted_tag<0>
 {
     typedef char (&type)[1];
