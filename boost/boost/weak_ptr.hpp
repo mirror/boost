@@ -16,8 +16,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <cstring> // for std::memcpy
-
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
@@ -25,6 +23,8 @@
 
 namespace boost
 {
+
+template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r); // never throws
 
 template<class T> class weak_ptr
 {
@@ -43,12 +43,39 @@ public:
 
 //  generated copy constructor, assignment, destructor are fine
 
+
+//
+//  The simple implementation of the converting constructor:
+//
+//  template<class Y>
+//  weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+//  {
+//  }
+//
+//  has a serious problem.
+//
+//  r.px may already have been invalidated. The px(r.px)
+//  conversion may require access to *r.px (virtual inheritance).
+//
+//  It is not possible to avoid spurious access violations since
+//  in multithreaded programs r.px may be invalidated at any point.
+//
+//  A safe conversion between weak_ptr<T> and weak_ptr<Y> must involve
+//  a temporary shared_ptr.
+//
+//  It is not yet clear whether the converting constructor should be
+//  present at all, or it's better to require an explicit make_shared call.
+//
+//  The only case for the converting constructor is the weak_ptr<T> -> weak_ptr<cv void>
+//  conversion.
+//
+
     template<class Y>
-    weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
+    weak_ptr(weak_ptr<Y> const & r) // never throws
     {
-        // r.px may be an invalid pointer value
-        using namespace std;
-        memcpy(&this->px, &r.px, sizeof(r.px));
+        shared_ptr<Y> tmp = make_shared(r);
+        px = tmp.px;
+        pn = tmp.pn;
     }
 
     template<class Y>
@@ -57,14 +84,6 @@ public:
     }
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
-
-    template<class Y>
-    weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
-    {
-        px = r.px;
-        pn = r.pn;
-        return *this;
-    }
 
     template<class Y>
     weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
