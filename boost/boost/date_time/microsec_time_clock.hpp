@@ -18,7 +18,7 @@
 #include "boost/cstdint.hpp"
 
 #ifdef BOOST_HAS_FTIME
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #ifdef BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
@@ -90,7 +90,7 @@ namespace date_time {
       // offset is difference (in 100-nanoseconds) from
       // 1970-Jan-01 to 1601-Jan-01
       boost::uint64_t c1 = 27111902;
-      boost::uint64_t c2 = 3577643008;
+      boost::uint64_t c2 = 3577643008UL; // 'UL' removes compiler warnings
       const boost::uint64_t OFFSET = (c1 << 32) + c2;
 
       boost::uint64_t filetime = ft.dwHighDateTime;
