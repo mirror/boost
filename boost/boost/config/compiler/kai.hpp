@@ -14,6 +14,11 @@
 #     define BOOST_NO_STDC_NAMESPACE
 #   endif
 
+// see also common_edg.hpp which needs a special check for __KCC
+# if !defined(_EXCEPTIONS)
+#     define BOOST_NO_EXCEPTIONS
+# endif
+
 #define BOOST_COMPILER "Kai C++ version " BOOST_STRINGIZE(__KCC_VERSION)
 
 //
