@@ -41,7 +41,7 @@ public:
                                const result_type& sigma = 1)
     : _rng(rng), _mean(mean), _sigma(sigma), _valid(false)
   {
-    assert(sigma > 0);
+    assert(sigma >= 0);
     this->iterator_init();
   }
   // compiler-generated copy constructor is fine
