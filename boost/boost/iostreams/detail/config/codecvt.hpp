@@ -30,7 +30,7 @@
 
 //------------------Check for codecvt ctor taking a reference count-----------//
 
-#if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) || \
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205)) || \
     BOOST_WORKAROUND(_STLPORT_VERSION, < 0x461) \
     /**/
 # define BOOST_IOSTREAMS_NO_CODECVT_CTOR_FROM_SIZE_T
