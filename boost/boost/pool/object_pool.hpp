@@ -15,6 +15,11 @@
 // boost::pool
 #include <boost/pool/pool.hpp>
 
+// The following code will be put into Boost.Config in a later revision
+#if defined(BOOST_MSVC) || defined(__KCC)
+# define BOOST_NO_TEMPLATE_CV_REF_OVERLOADS
+#endif
+
 // There are a few places in this file where the expression "this->m" is used.
 // This expression is used to force instantiation-time name lookup, which I am
 //   informed is required for strict Standard compliance.  It's only necessary
@@ -69,7 +74,11 @@ class object_pool: protected pool<UserAllocator>
 
     // Include automatically-generated file for family of template construct()
     //  functions
-    #include <boost/pool/detail/pool_construct.inc>
+#ifndef BOOST_NO_TEMPLATE_CV_REF_OVERLOADS
+#   include <boost/pool/detail/pool_construct.inc>
+#else
+#   include <boost/pool/detail/pool_construct_simple.inc>
+#endif
 
     void destroy(element_type * const chunk)
     {
