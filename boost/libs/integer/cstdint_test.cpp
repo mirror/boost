@@ -99,7 +99,14 @@ void integral_constant_type_check(T1, T2)
    // numeric_limits implementations currently
    // vary too much, or are incomplete or missing.
    //
+#if defined(BOOST_HAS_STDINT_H)
+   // if we have a native stdint.h
+   // then the INTXX_C macros may define
+   // a type that's wider than required:
+   assert(sizeof(T1) <= sizeof(T2));
+#else
    assert(sizeof(T1) == sizeof(T2));
+#endif
    T1 t1 = -1;
    T2 t2 = -1;
    assert(t1 == t2);
