@@ -16,7 +16,7 @@
 #endif
 #include <string>
 
-namespace test // test tuple comprises name and nullary function (object)
+namespace any_tests // test tuple comprises name and nullary function (object)
 {
     template<typename string_type, typename function_type>
     struct test
@@ -34,7 +34,7 @@ namespace test // test tuple comprises name and nullary function (object)
     };
 }
 
-namespace test // failure exception used to indicate checked test failures
+namespace any_tests // failure exception used to indicate checked test failures
 {
     class failure : public std::exception
     {
@@ -61,7 +61,7 @@ namespace test // failure exception used to indicate checked test failures
     };
 }
 
-namespace test // not_implemented exception used to mark unimplemented tests
+namespace any_tests // not_implemented exception used to mark unimplemented tests
 {
     class not_implemented : public std::exception
     {
@@ -75,7 +75,7 @@ namespace test // not_implemented exception used to mark unimplemented tests
     };
 }
 
-namespace test // test utilities
+namespace any_tests // test utilities
 {
     inline void check(bool condition, const std::string & description)
     {
@@ -126,13 +126,13 @@ namespace test // test utilities
     try \
     { \
         expression; \
-        throw ::test::failure(description); \
+        throw ::any_tests::failure(description); \
     } \
     catch(exception &) \
     { \
     }
 
-namespace test // memory tracking (enabled if test new and delete linked in)
+namespace any_tests // memory tracking (enabled if test new and delete linked in)
 {
     class allocations
     {
@@ -197,7 +197,7 @@ namespace test // memory tracking (enabled if test new and delete linked in)
     };
 }
 
-namespace test // tester is the driver class for a sequence of tests
+namespace any_tests // tester is the driver class for a sequence of tests
 {
     template<typename test_iterator>
     class tester
