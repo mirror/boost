@@ -25,7 +25,7 @@
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
-      class slot_base {
+      class BOOST_SIGNALS_DECL slot_base {
         // We would have to enumerate all of the signalN classes here as
         // friends to make this private (as it otherwise should be). We can't
         // name all of them because we don't know how many there are.
@@ -42,45 +42,6 @@ namespace boost {
         // Create a connection for this slot
         void create_connection();
 
-        // Get the slot so that it can be copied
-        template<typename F>
-        reference_wrapper<const F>
-        get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::signal_tag)
-          { return reference_wrapper<const F>(f); }
-
-        template<typename F>
-        const F& get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::reference_tag)
-          { return f; }
-
-        template<typename F>
-        const F& get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::value_tag)
-          { return f; }
-
-        // Get the slot so that it can be inspected for trackable objects
-        template<typename F>
-        const F& get_inspectable_slot(const F& f,
-                                      BOOST_SIGNALS_NAMESPACE::detail::signal_tag)
-          { return f; }
-
-        template<typename F>
-        const F& get_inspectable_slot(const reference_wrapper<F>& f,
-                                      BOOST_SIGNALS_NAMESPACE::detail::reference_tag)
-          { return f.get(); }
-
-        template<typename F>
-        const F& get_inspectable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::value_tag)
-          { return f; }
-
-        // Determines the type of the slot - is it a signal, a reference to a
-        // slot or just a normal slot.
-        template<typename F>
-        typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type
-        tag_type(const F&)
-        {
-          typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type tag;
-          return tag;
-        }
-
         mutable std::vector<const trackable*> bound_objects;
         connection watch_bound_objects;
 
@@ -88,20 +49,63 @@ namespace boost {
         static void bound_object_destructed(void*, void*) {}
       };
     } // end namespace detail
+
+    // Get the slot so that it can be copied
+    template<typename F>
+    reference_wrapper<const F>
+    get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::signal_tag)
+      { return reference_wrapper<const F>(f); }
+
+    template<typename F>
+    const F&
+    get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::reference_tag)
+      { return f; }
+
+    template<typename F>
+    const F&
+    get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::value_tag)
+      { return f; }
+
+    // Get the slot so that it can be inspected for trackable objects
+    template<typename F>
+    const F&
+    get_inspectable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::signal_tag)
+      { return f; }
+
+    template<typename F>
+    const F&
+    get_inspectable_slot(const reference_wrapper<F>& f, BOOST_SIGNALS_NAMESPACE::detail::reference_tag)
+      { return f.get(); }
+
+    template<typename F>
+    const F&
+    get_inspectable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::value_tag)
+      { return f; }
+
+    // Determines the type of the slot - is it a signal, a reference to a
+    // slot or just a normal slot.
+    template<typename F>
+    typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type
+    tag_type(const F&)
+    {
+      typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type tag;
+      return tag;
+    }
+
   } // end namespace BOOST_SIGNALS_NAMESPACE
 
   template<typename SlotFunction>
   class slot : public BOOST_SIGNALS_NAMESPACE::detail::slot_base {
   public:
     template<typename F>
-    slot(const F& f) : slot_function(get_invocable_slot(f, tag_type(f)))
+    slot(const F& f) : slot_function(BOOST_SIGNALS_NAMESPACE::get_invocable_slot(f, BOOST_SIGNALS_NAMESPACE::tag_type(f)))
     {
       // Visit each of the bound objects and store them for later use
       // An exception thrown here will allow the basic_connection to be
       // destroyed when this goes out of scope, and no other connections
       // have been made.
       BOOST_SIGNALS_NAMESPACE::detail::bound_objects_visitor do_bind(bound_objects);
-      visit_each(do_bind, get_inspectable_slot(f, tag_type(f)));
+      visit_each(do_bind, BOOST_SIGNALS_NAMESPACE::get_inspectable_slot(f, BOOST_SIGNALS_NAMESPACE::tag_type(f)));
 
       create_connection();
     }

@@ -56,7 +56,7 @@ namespace boost {
 
     // The user may freely pass around the "connection" object and terminate
     // the connection at any time using disconnect().
-    class connection : 
+    class BOOST_SIGNALS_DECL connection : 
       private less_than_comparable1<connection>,
       private equality_comparable1<connection>
     {
@@ -107,7 +107,7 @@ namespace boost {
 
     // Similar to connection, but will disconnect the connection when it is
     // destroyed unless release() has been called.
-    class scoped_connection : public connection {
+    class BOOST_SIGNALS_DECL scoped_connection : public connection {
     public:
       scoped_connection() : connection(), released(false) {}
       scoped_connection(const connection&);

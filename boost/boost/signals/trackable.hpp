@@ -30,7 +30,7 @@ namespace BOOST_SIGNALS_NAMESPACE {
   // Base class for "trackable" objects that can be tracked when they are
   // bound in slot target functions. When a trackable object is destroyed,
   // the signal/slot connections are disconnected automatically.
-  class trackable {
+  class BOOST_SIGNALS_DECL trackable {
   private:
     static void signal_disconnected(void* obj, void* data);
 

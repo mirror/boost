@@ -71,7 +71,7 @@ namespace boost {
 
       // Must be constructed before calling the slots, because it safely
       // manages call depth
-      class call_notification {
+      class BOOST_SIGNALS_DECL call_notification {
       public:
         call_notification(const shared_ptr<signal_base_impl>&);
         ~call_notification();
@@ -81,7 +81,7 @@ namespace boost {
         
       // Implementation of base class for all signals. It handles the 
       // management of the underlying slot lists.
-      class signal_base_impl {
+      class BOOST_SIGNALS_DECL signal_base_impl {
       public:
         friend class call_notification;
 
@@ -152,7 +152,7 @@ namespace boost {
         mutable slot_container_type slots_;
       };
 
-      class signal_base : public noncopyable {
+      class BOOST_SIGNALS_DECL signal_base : public noncopyable {
       public:
         typedef signal_base_impl::compare_type compare_type;
 
