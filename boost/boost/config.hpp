@@ -286,6 +286,7 @@
 #   endif
 
 #   pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
+#   pragma warning( disable : 4503 ) // warning: decorated name length exceeded
 
 # endif // Microsoft (excluding Intel/EDG frontend) 
 
