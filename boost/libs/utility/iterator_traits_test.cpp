@@ -69,11 +69,17 @@ BOOST_STATIC_ASSERT((
       boost::detail::iterator_traits<std::list<int>::iterator>::iterator_category,
       std::bidirectional_iterator_tag
     >::value));
-                    
+
+#ifdef __KCC
+  typedef long std_list_diff_type;
+#else
+  typedef std::ptrdiff_t std_list_diff_type;
+#endif
+
 BOOST_STATIC_ASSERT((
     boost::is_same<
       boost::detail::iterator_traits<std::list<int>::iterator>::difference_type,
-      std::ptrdiff_t
+      std_list_diff_type
     >::value));
 
 // vector<int>::iterator (random_access_iterator_tag, ptrdiff_t)
