@@ -1,9 +1,11 @@
-//-----------------------------------------------------------------------------
-// boost/mpl/if.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02 Boost.org
+
+#ifndef BOOST_MPL_IF_HPP_INCLUDED
+#define BOOST_MPL_IF_HPP_INCLUDED
+
+// + file: boost/mpl/if.hpp
+// + last modified: 10/mar/03
+
+// Copyright (c) 2000-03 Boost.org
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -12,9 +14,8 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#ifndef BOOST_MPL_IF_HPP_INCLUDED
-#define BOOST_MPL_IF_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/aux_/ice_cast.hpp"
@@ -85,7 +86,7 @@ struct if_c
 {
  private:
     template<bool> struct answer        { typedef T1 type; };
-    template<>     struct answer<false>	{ typedef T2 type; };
+    template<>     struct answer<false> { typedef T2 type; };
  
  public:
     typedef typename answer< C_ >::type type;
@@ -102,7 +103,7 @@ struct if_
 {
  private:
     template<bool> struct answer        { typedef T1 type; };
-    template<>     struct answer<false>	{ typedef T2 type; };
+    template<>     struct answer<false> { typedef T2 type; };
 
     // agurt, 17/sep/02: in some situations MSVC 7.0 doesn't 
     // handle 'answer<C::value>' expression very well

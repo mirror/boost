@@ -1,9 +1,11 @@
-//-----------------------------------------------------------------------------
-// boost mpl/remove_if.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#ifndef BOOST_MPL_REMOVE_IF_HPP_INCLUDED
+#define BOOST_MPL_REMOVE_IF_HPP_INCLUDED
+
+// + file: boost/mpl/remove_if.hpp
+// + last modified: 10/mar/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,9 +15,8 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#ifndef BOOST_MPL_REMOVE_IF_HPP_INCLUDED
-#define BOOST_MPL_REMOVE_IF_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #include "boost/mpl/fold_backward.hpp"
 #include "boost/mpl/clear.hpp"
@@ -36,7 +37,7 @@ template< typename Pred > struct remove_if_helper
     template< typename Sequence, typename U > struct apply
     {
         typedef typename apply_if<
-			  typename apply1<Pred, U>::type
+              typename apply1<Pred,U>::type
             , identity<Sequence>
             , push_front<Sequence,U>
             >::type type;
