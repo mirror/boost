@@ -18,6 +18,10 @@
 #define BOOST_NO_STD_MESSAGES
 #endif
 
+#ifndef MSIPL_WCHART
+#define BOOST_NO_STD_WSTRING
+#endif
+
 #define BOOST_STDLIB "Modena C++ standard library"
 
 
