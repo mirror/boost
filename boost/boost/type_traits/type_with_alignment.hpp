@@ -1,4 +1,3 @@
-
 //  (C) Copyright John Maddock 2000.
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -57,12 +56,64 @@ typedef int (alignment_dummy::*member_function_ptr)();
         BOOST_PP_LIST_APPEND(BOOST_TT_ALIGNMENT_BASE_TYPES,     \
                              BOOST_TT_ALIGNMENT_STRUCT_TYPES)
 
-#define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                                 \
-        typename mpl::if_c<                                                    \
-           (alignment_of< T >::value == target && !BOOST_PP_CAT(found,I)),     \
-           T, char>::type BOOST_PP_CAT(t,I);                                   \
-        enum { BOOST_PP_CAT(found,BOOST_PP_INC(I)) =                           \
-               alignment_of< T >::value == target || BOOST_PP_CAT(found,I) } ;
+//
+// lower_alignment_helper --
+//
+// This template gets instantiated a lot, so use partial
+// specialization when available to reduce the compiler burden.
+//
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template <bool found = true>
+struct lower_alignment_helper_impl
+{
+    template <std::size_t, class>
+    struct apply
+    {
+        typedef char type;
+        enum { value = true };
+    };
+};
+
+template <>
+struct lower_alignment_helper_impl<false>
+{
+    template <std::size_t target, class TestType>
+    struct apply
+      : mpl::if_c<(alignment_of<TestType>::value == target), TestType, char>
+    {
+        enum { value = (alignment_of<TestType>::value == target) };
+    };
+};
+
+template <bool found, std::size_t target, class TestType>
+struct lower_alignment_helper
+  : lower_alignment_helper_impl<found>::template apply<target,TestType>
+{
+};
+#else
+template <bool found, std::size_t target, class TestType>
+struct lower_alignment_helper
+{
+    typedef char type;
+    enum { value = true };
+};
+
+template <std::size_t target, class TestType>
+struct lower_alignment_helper<false,target,TestType>
+  : mpl::if_c<(alignment_of<TestType>::value == target), TestType, char>
+{
+    enum { value = (alignment_of<TestType>::value == target) };
+};
+#endif
+
+#define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                                  \
+        typename lower_alignment_helper<                                        \
+          BOOST_PP_CAT(found,I),target,T                                        \
+        >::type BOOST_PP_CAT(t,I);                                              \
+        enum {                                                                  \
+            BOOST_PP_CAT(found,BOOST_PP_INC(I))                                 \
+              = lower_alignment_helper<BOOST_PP_CAT(found,I),target,T >::value  \
+        };
 
 #define BOOST_TT_CHOOSE_T(R,P,I,T) T BOOST_PP_CAT(t,I);
 
