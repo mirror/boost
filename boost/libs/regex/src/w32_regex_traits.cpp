@@ -503,7 +503,7 @@ w32_regex_traits<char>::~w32_regex_traits()
 #endif
    // add reference to static member here to ensure
    // that the linker includes it in the .exe:
-   if((--entry_count == 0) && (0 != &w32_regex_traits<char>::i))
+   if((--entry_count == 0) && (0 != &w32_regex_traits<char>::i) && is_init)
       do_free();
 #ifdef BOOST_HAS_THREADS
    g.acquire(false);
@@ -672,7 +672,7 @@ w32_regex_traits<wchar_t>::~w32_regex_traits()
 #endif
    // add reference to static member here to ensure
    // that the linker includes it in the .exe:
-   if((--entry_count == 0) && (0 != &w32_regex_traits<wchar_t>::init_))
+   if((--entry_count == 0) && (0 != &w32_regex_traits<wchar_t>::init_) && is_init)
       do_free();
 #ifdef BOOST_HAS_THREADS
    g.acquire(false);
