@@ -34,8 +34,8 @@ struct int_c
     // either
 #if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
  private:
-    BOOST_STATIC_CONSTANT(T, next_value = (N + 1));
-    BOOST_STATIC_CONSTANT(T, prior_value = (N - 1));
+    BOOST_STATIC_CONSTANT(int, next_value = (N + 1));
+    BOOST_STATIC_CONSTANT(int, prior_value = (N - 1));
  public:
     typedef int_c<next_value> next;
     typedef int_c<prior_value> prior;
