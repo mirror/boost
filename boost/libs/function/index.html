@@ -1,12 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="../../boost.css">
     <title>Boost.Function</title>
   </head>
 
-  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+  <body>
 
-  <h1><IMG SRC="../../c++boost.gif" WIDTH="276" HEIGHT="86">Header &lt;<a HREF="../../boost/function.hpp">boost/function.hpp</a>&gt;</h1>
+  <h1><img src="../../c++boost.gif" width="276" height="86" alt="C++ Boost">Header &lt;<a HREF="../../boost/function.hpp">boost/function.hpp</a>&gt;</h1>
 
 <p> The header &lt;<a HREF="../../boost/function.hpp">boost/function.hpp</a>&gt; includes a family of class templates that are function object wrappers. The notion is similar to a generalized callback. It shares features with function pointers in that both define a call interface (e.g., a function taking two integer arguments and returning a floating-point value) through which some implementation can be called, and the implementation that is invoked may change throughout the course of the program.
 
@@ -24,7 +26,7 @@
   <li><a href="doc/faq.html">Frequently Asked Questions</a></li>
 </ul>
 
-<a name="compatibility"><h2>Compatibility Note</h2></a>
+<h2><a name="compatibility">Compatibility Note</a></h2>
 <p> <b>Version 1.30.0</b>: All deprecated features have been removed
 from Boost.Function. 
 
@@ -79,7 +81,7 @@ from Boost.Function.
    <li>Boost.Function can be adapted to perform operations before and after each call, allowing, for instance, synchronization primitives to be made part of the function type.</li>
 </ul>
 
-And, of course, function pointers have several advantages over Boost.Function:
+<p> And, of course, function pointers have several advantages over Boost.Function:
 
 <ul>
     <li> Function pointers are smaller (the size of one pointer instead of three) </li>
