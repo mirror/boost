@@ -15,10 +15,10 @@
 #include <list>
 #include <iostream>
 
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/std/list_traits.hpp>
 #include <boost/algorithm/string/std/string_traits.hpp>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/erase.hpp>
 
 // equals predicate is used for result comparison
 #include <boost/algorithm/string/predicate.hpp>

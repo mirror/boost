@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <boost/regex.hpp>
+#include <boost/algorithm/string/sequence_traits.hpp>
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
