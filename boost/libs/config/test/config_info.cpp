@@ -278,6 +278,7 @@ void print_compiler_macros()
   PRINT_MACRO(__STDC_HOSTED__);
   PRINT_MACRO(__COMO__);
   PRINT_MACRO(__COMO_VERSION__);
+  PRINT_MACRO(__DM__);
 }
 
 void print_stdlib_macros()

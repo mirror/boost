@@ -192,8 +192,8 @@ EOF
    echo "compile-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
    echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
-   echo "[ run $basename""_pass.cpp <template>config_test_options ]" >> ../test/Jamfile
-   echo "[ compile-fail $basename""_fail.cpp <template>config_test_options ] ;" >> ../test/Jamfile
+   echo "[ run $basename""_pass.cpp <template>config_options ]" >> ../test/Jamfile
+   echo "[ compile-fail $basename""_fail.cpp <template>config_options ] ;" >> ../test/Jamfile
    
 done
 
@@ -318,8 +318,8 @@ EOF
    echo "compile-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
    echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
-   echo "[ run $basename""_pass.cpp <template>config_test_options ]" >> ../test/Jamfile
-   echo "[ compile-fail $basename""_fail.cpp <template>config_test_options ] ;" >> ../test/Jamfile
+   echo "[ run $basename""_pass.cpp <template>config_options ]" >> ../test/Jamfile
+   echo "[ compile-fail $basename""_fail.cpp <template>config_options ] ;" >> ../test/Jamfile
 
 done
 

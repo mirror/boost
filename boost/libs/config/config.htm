@@ -624,6 +624,12 @@ f(&amp;bar); // should choose #2.</pre>
                templates. See <a href="../../boost/functional.hpp">boost/functional.hpp</a> for 
                example.</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="51%">BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</TD>
+            <TD vAlign="top" width="16%">Compiler</TD>
+            <TD vAlign="top" width="33%">Pointers to members don't work when used as template 
+               parameters.</TD>
+         </TR>
          <tr>
             <td valign="top" width="51%">BOOST_NO_PRIVATE_IN_AGGREGATE</td>
             <td valign="top" width="16%">Compiler</td>
@@ -1319,12 +1325,12 @@ namespace boost{
       <p>When you name the macro, follow the BOOST_NO_SOMETHING naming convention, so 
          that it's obvious that this is a macro reporting a defect.</p>
       <p>Finally, add the test program to the regression tests. You will need to place 
-         the test case in a .cxx file with the following comments near the top:</p>
+         the test case in a .ipp file with the following comments near the top:</p>
       <pre>//  MACRO:         BOOST_NO_FOO
 //  TITLE:         foo
 //  DESCRIPTION:   If the compiler fails to support foo</pre>
       <p>These comments are processed by the autoconf script, so make sure the format 
-         follows the one given. The file should be named "boost_no_foo.cxx", where foo 
+         follows the one given. The file should be named "boost_no_foo.ipp", where foo 
          is the defect description - try and keep the file name under the Mac 30 
          character filename limit though. You will also need to provide a function 
          prototype "int test()" that is declared in a namespace with the same name as 
@@ -1349,7 +1355,7 @@ int test()
       <h4><a name="feature_guidelines"></a>Adding New Feature Test Macros</h4>
       <p>When you need to add a macro that describes a feature that the standard does 
          not require, follow the convention for adding a new defect macro (above), but 
-         call the macro BOOST_HAS_FOO, and name the test file "boost_has_foo.cxx". Try 
+         call the macro BOOST_HAS_FOO, and name the test file "boost_has_foo.ipp". Try 
          not to add feature test macros unnecessarily, if there is a platform specific 
          macro that can already be used (for example _WIN32, __BEOS__, or __linux) to 
          identify the feature then use that. Try to keep the macro to a feature group, 
