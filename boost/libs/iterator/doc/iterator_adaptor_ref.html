@@ -3,33 +3,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
+<title></title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document">
 <!-- Version 1.4 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
-<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-rights reserved. -->
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.  -->
 <pre class="literal-block">
 template &lt;
     class Derived
   , class Base
-  , class Value        = use_default
-  , class CategoryOrTraversal  = use_default
-  , class Reference  = use_default
+  , class Value               = use_default
+  , class CategoryOrTraversal = use_default
+  , class Reference           = use_default
   , class Difference = use_default
 &gt;
 class iterator_adaptor 
-  : public iterator_facade&lt;Derived, <em>V</em>, <em>C</em>, <em>R</em>, <em>D</em>&gt; // see <a class="reference" href="#base-parameters">details</a>
+  : public iterator_facade&lt;Derived, <em>V'</em>, <em>C'</em>, <em>R'</em>, <em>D'</em>&gt; // see <a class="reference" href="#base-parameters">details</a>
 {
     friend class iterator_core_access;
  public:
     iterator_adaptor();
     explicit iterator_adaptor(Base iter);
-    Base base() const;
+    Base const&amp; base() const;
  protected:
+    typedef iterator_adaptor iterator_adaptor_;
     Base const&amp; base_reference() const;
     Base&amp; base_reference();
  private: // Core iterator interface for iterator_facade.  
@@ -54,23 +55,28 @@ class iterator_adaptor
     Base m_iterator; // exposition only
 };
 </pre>
-<a class="target" id="base-parameters" name="base-parameters"></a><div class="section" id="iterator-adaptor-base-class-parameters">
+<a class="target" id="requirements" name="requirements"></a><div class="section" id="iterator-adaptor-requirements">
+<h1><a name="iterator-adaptor-requirements"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h1>
+<p><tt class="literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_adaptor*)</span></tt> shall be well-formed.
+The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy Constructible.</p>
+<a class="target" id="base-parameters" name="base-parameters"></a></div>
+<div class="section" id="iterator-adaptor-base-class-parameters">
 <h1><a name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h1>
-<p>The <em>V</em>, <em>C</em>, <em>R</em>, and <em>D</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
+<p>The <em>V'</em>, <em>C'</em>, <em>R'</em>, and <em>D'</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
 used as a base class in the summary of <tt class="literal"><span class="pre">iterator_adaptor</span></tt>
 above are defined as follows:</p>
 <pre class="literal-block">
-<em>V</em> = if (Value is use_default)
+<em>V'</em> = if (Value is use_default)
           return iterator_traits&lt;Base&gt;::value_type
       else
           return Value
 
-<em>C</em> = if (CategoryOrTraversal is use_default)
+<em>C'</em> = if (CategoryOrTraversal is use_default)
           return iterator_traversal&lt;Base&gt;::type
       else
           return CategoryOrTraversal
 
-<em>R</em> = if (Reference is use_default)
+<em>R'</em> = if (Reference is use_default)
           if (Value is use_default)
               return iterator_traits&lt;Base&gt;::reference
           else
@@ -78,23 +84,22 @@ above are defined as follows:</p>
       else
           return Reference
 
-<em>D</em> = if (Difference is use_default)
+<em>D'</em> = if (Difference is use_default)
           return iterator_traits&lt;Base&gt;::difference_type
       else
           return Difference
 </pre>
-</div>
-<div class="section" id="iterator-adaptor-usage">
-<h1><a name="iterator-adaptor-usage"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> usage</a></h1>
-<p>The <tt class="literal"><span class="pre">Derived</span></tt> template parameter must be a publicly derived from
-<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.  In order for <tt class="literal"><span class="pre">Derived</span></tt> to model the
-iterator concepts corresponding to
-<tt class="literal"><span class="pre">iterator_traits&lt;Derived&gt;::iterator_category</span></tt>, the expressions
-involving <tt class="literal"><span class="pre">m_iterator</span></tt> in the specifications of those private
-member functions of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> that may be called by
-<tt class="literal"><span class="pre">iterator_facade&lt;Derived,</span> <span class="pre">V,</span> <span class="pre">C,</span> <span class="pre">R,</span> <span class="pre">D&gt;</span></tt>
-in evaluating any valid expression involving <tt class="literal"><span class="pre">Derived</span></tt>
-in those concepts' requirements.</p>
+<!-- ``iterator_adaptor`` models
+- - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+In order for ``Derived`` to model the iterator concepts corresponding
+to ``iterator_traits<Derived>::iterator_category``, the expressions
+involving ``m_iterator`` in the specifications of those private member
+functions of ``iterator_adaptor`` that may be called by
+``iterator_facade<Derived, V, C, R, D>`` in evaluating any valid
+expression involving ``Derived`` in those concepts' requirements. -->
+<!-- The above is confusing and needs a rewrite. -JGS -->
+<!-- That's why it's removed.  We're embracing inheritance, remember? -->
 </div>
 <div class="section" id="iterator-adaptor-public-operations">
 <h1><a name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h1>
@@ -120,7 +125,7 @@ in those concepts' requirements.</p>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Base</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Base</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -220,10 +225,9 @@ typename iterator_adaptor::difference_type distance_to(
 </table>
 </div>
 </div>
-<hr class="footer"/>
+<hr class="footer" />
 <div class="footer">
 <a class="reference" href="iterator_adaptor_ref.rst">View document source</a>.
-Generated on: 2004-01-12 15:25 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

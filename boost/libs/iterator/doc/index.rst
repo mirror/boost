@@ -17,7 +17,7 @@ __ ../../../index.htm
                 Lab`_, `Zephyr Associates, Inc.`_
 :date:          $Date$
 
-:copyright:     Copyright David Abrahams, Jeremy Siek, Thomas Witt 2003. All rights reserved
+:copyright:     Copyright David Abrahams, Jeremy Siek, Thomas Witt 2003.
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu

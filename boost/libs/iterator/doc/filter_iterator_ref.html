@@ -3,11 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
+<title></title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document">
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt -->
+<!-- 2004. Use, modification and distribution is subject to the Boost -->
+<!-- Software License, Version 1.0. (See accompanying  file -->
+<!-- LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)  -->
 <pre class="literal-block">
 template &lt;class Predicate, class Iterator&gt;
 class filter_iterator
@@ -29,35 +34,36 @@ class filter_iterator
         );
     Predicate predicate() const;
     Iterator end() const;
-    Iterator base() const;
+    Iterator const&amp; base() const;
     reference operator*() const;
     filter_iterator&amp; operator++();
 private:
-    Predicate m_pred; // exposition
-    Iterator m_iter;  // exposition
-    Iterator m_end;   // exposition
+    Predicate m_pred; // exposition only
+    Iterator m_iter;  // exposition only
+    Iterator m_end;   // exposition only
 };
 </pre>
-<p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member is a type convertible to the tags
-corresponding to each standard concept modeled by <tt class="literal"><span class="pre">filter_iterator</span></tt>,
-as described in the models section.</p>
+<p>If <tt class="literal"><span class="pre">Iterator</span></tt> models Readable Lvalue Iterator and Forward Traversal
+Iterator then <tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to
+<tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>. Otherwise <tt class="literal"><span class="pre">iterator_category</span></tt> is
+convertible to <tt class="literal"><span class="pre">std::input_iterator_tag</span></tt>.</p>
 <div class="section" id="filter-iterator-requirements">
 <h1><a name="filter-iterator-requirements"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h1>
+<p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
+Iterator and Single Pass Iterator or it shall meet the requirements of
+Input Iterator.</p>
 <p>The <tt class="literal"><span class="pre">Predicate</span></tt> argument must be Assignable, Copy Constructible, and
 the expression <tt class="literal"><span class="pre">p(x)</span></tt> must be valid where <tt class="literal"><span class="pre">p</span></tt> is an object of type
 <tt class="literal"><span class="pre">Predicate</span></tt>, <tt class="literal"><span class="pre">x</span></tt> is an object of type
 <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, and where the type of
 <tt class="literal"><span class="pre">p(x)</span></tt> must be convertible to <tt class="literal"><span class="pre">bool</span></tt>.</p>
-<p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
-Iterator and Single Pass Iterator or it shall meet the requirements of
-Input Iterator.</p>
 </div>
 <div class="section" id="filter-iterator-models">
 <h1><a name="filter-iterator-models"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></h1>
 <p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on which
 concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
 following tables.</p>
-<table class="table" frame="border" rules="all">
+<table border="1" class="table">
 <colgroup>
 <col width="33%" />
 <col width="67%" />
@@ -76,7 +82,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table class="table" frame="border" rules="all">
+<table border="1" class="table">
 <colgroup>
 <col width="41%" />
 <col width="59%" />
@@ -98,7 +104,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table class="table" frame="border" rules="all">
+<table border="1" class="table">
 <colgroup>
 <col width="63%" />
 <col width="38%" />
@@ -120,6 +126,8 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
+<p><tt class="literal"><span class="pre">filter_iterator&lt;P1,</span> <span class="pre">X&gt;</span></tt> is interoperable with <tt class="literal"><span class="pre">filter_iterator&lt;P2,</span> <span class="pre">Y&gt;</span></tt> 
+if and only if <tt class="literal"><span class="pre">X</span></tt> is interoperable with <tt class="literal"><span class="pre">Y</span></tt>.</p>
 </div>
 <div class="section" id="filter-iterator-operations">
 <h1><a name="filter-iterator-operations"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h1>
@@ -133,7 +141,7 @@ operations.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Predicate</span></tt> and <tt class="literal"><span class="pre">Iterator</span></tt> must be Default Constructible.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <tt class="literal"><span class="pre">filter_iterator</span></tt> whose``m_pred``,  <tt class="literal"><span class="pre">m_iter</span></tt>, and <tt class="literal"><span class="pre">m_end</span></tt> 
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs a <tt class="literal"><span class="pre">filter_iterator</span></tt> whose``m_pred``,  <tt class="literal"><span class="pre">m_iter</span></tt>, and <tt class="literal"><span class="pre">m_end</span></tt> 
 members are a default constructed.</td>
 </tr>
 </tbody>
@@ -143,7 +151,7 @@ members are a default constructed.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A <tt class="literal"><span class="pre">filter_iterator</span></tt> where <tt class="literal"><span class="pre">m_iter</span></tt> is either
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs a <tt class="literal"><span class="pre">filter_iterator</span></tt> where <tt class="literal"><span class="pre">m_iter</span></tt> is either
 the first position in the range <tt class="literal"><span class="pre">[x,end)</span></tt> such that <tt class="literal"><span class="pre">f(*m_iter)</span> <span class="pre">==</span> <span class="pre">true</span></tt> 
 or else``m_iter == end``. The member <tt class="literal"><span class="pre">m_pred</span></tt> is constructed from
 <tt class="literal"><span class="pre">f</span></tt> and <tt class="literal"><span class="pre">m_end</span></tt> from <tt class="literal"><span class="pre">end</span></tt>.</td>
@@ -155,9 +163,10 @@ or else``m_iter == end``. The member <tt class="literal"><span class="pre">m_pre
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Predicate</span></tt> must be Default Constructible.</td>
+<tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Predicate</span></tt> must be Default Constructible and
+<tt class="literal"><span class="pre">Predicate</span></tt> is a class type (not a function pointer).</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A <tt class="literal"><span class="pre">filter_iterator</span></tt> where <tt class="literal"><span class="pre">m_iter</span></tt> is either
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs a <tt class="literal"><span class="pre">filter_iterator</span></tt> where <tt class="literal"><span class="pre">m_iter</span></tt> is either
 the first position in the range <tt class="literal"><span class="pre">[x,end)</span></tt> such that <tt class="literal"><span class="pre">m_pred(*m_iter)</span> <span class="pre">==</span> <span class="pre">true</span></tt> 
 or else``m_iter == end``. The member <tt class="literal"><span class="pre">m_pred</span></tt> is default constructed.</td>
 </tr>
@@ -176,7 +185,7 @@ filter_iterator(
 <tbody valign="top">
 <tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">OtherIterator</span></tt> is implicitly convertible to <tt class="literal"><span class="pre">Iterator</span></tt>.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A filter iterator whose members are copied from <tt class="literal"><span class="pre">t</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs a filter iterator whose members are copied from <tt class="literal"><span class="pre">t</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -198,7 +207,7 @@ filter_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -231,10 +240,9 @@ or <tt class="literal"><span class="pre">m_pred(*m_iter)</span> <span class="pre
 </table>
 </div>
 </div>
-<hr class="footer"/>
+<hr class="footer" />
 <div class="footer">
 <a class="reference" href="filter_iterator_ref.rst">View document source</a>.
-Generated on: 2004-01-13 02:57 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

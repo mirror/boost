@@ -3,27 +3,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
 <title>Iterator concept and adapter issues</title>
-<meta name="date" content="2004-01-21" />
-<meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003." />
+<meta name="date" content="2004-01-27" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="iterator-concept-and-adapter-issues">
 <h1 class="title">Iterator concept and adapter issues</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
 <col class="docinfo-content" />
 <tbody valign="top">
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-01-21</td></tr>
-<tr><th class="docinfo-name">Copyright:</th>
-<td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.</td></tr>
+<td>2004-01-27</td></tr>
 </tbody>
 </table>
+<div class="document" id="iterator-concept-and-adapter-issues">
 <div class="contents topic" id="index">
-<p class="topic-title"><a name="index">Index</a></p>
+<p class="topic-title first"><a name="index">Index</a></p>
 <ul class="simple">
 <li><a class="reference" href="#issues-from-matt-s-tr-issues-list" id="id1" name="id1">Issues from Matt's TR issues list</a><ul>
 <li><a class="reference" href="#iterator-access-overspecified" id="id2" name="id2">9.1 iterator_access overspecified?</a></li>
@@ -800,7 +797,7 @@ capability.</p>
 </blockquote>
 <p>From the Readable Iterator Requirements table, remove:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="37%" />
 <col width="37%" />
@@ -816,7 +813,7 @@ capability.</p>
 </blockquote>
 <p>From the Writable Iterator Requirements table, remove:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="37%" />
 <col width="21%" />
@@ -832,7 +829,7 @@ capability.</p>
 </blockquote>
 <p>From the Swappable Iterator Requirements table, remove:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="37%" />
 <col width="19%" />
@@ -1632,7 +1629,7 @@ random_access_traversal_tag
 <p>In [lib.iterator.traversal]:</p>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="39%" />
 <col width="37%" />
@@ -1649,7 +1646,7 @@ random_access_traversal_tag
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="39%" />
 <col width="37%" />
@@ -1666,7 +1663,7 @@ random_access_traversal_tag
 </blockquote>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="36%" />
 <col width="33%" />
@@ -1683,7 +1680,7 @@ random_access_traversal_tag
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="36%" />
 <col width="33%" />
@@ -1700,7 +1697,7 @@ random_access_traversal_tag
 </blockquote>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="44%" />
 <col width="39%" />
@@ -1717,7 +1714,7 @@ random_access_traversal_tag
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="38%" />
 <col width="34%" />
@@ -1734,7 +1731,7 @@ random_access_traversal_tag
 </blockquote>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="35%" />
 <col width="44%" />
@@ -1751,7 +1748,7 @@ random_access_traversal_tag
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="38%" />
 <col width="37%" />
@@ -1768,7 +1765,7 @@ random_access_traversal_tag
 </blockquote>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="31%" />
 <col width="35%" />
@@ -1787,7 +1784,7 @@ random_access_traversal_tag
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="28%" />
 <col width="30%" />
@@ -2452,7 +2449,7 @@ Incrementable Iterator concepts.</dd>
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">function_output_iterator</span></tt> models</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">function_output_iterator</span></tt> models</p>
 <blockquote>
 <tt class="literal"><span class="pre">function_output_iterator</span></tt> is a model of the Writable and
 Incrementable Iterator concepts.</blockquote>
@@ -2612,7 +2609,7 @@ of any specified member of type <tt class="literal"><span class="pre">T</span></
 </dl>
 <p>From the Input Iterator Requirements table, remove:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="37%" />
 <col width="37%" />
@@ -2629,7 +2626,7 @@ of any specified member of type <tt class="literal"><span class="pre">T</span></
 </blockquote>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="37%" />
 <col width="37%" />
@@ -2648,7 +2645,7 @@ equivalent to <tt class="literal"><span class="pre">*b</span></tt></td>
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="28%" />
 <col width="20%" />
@@ -2678,7 +2675,7 @@ type of the iterator.</dd>
 </dl>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="42%" />
 <col width="14%" />
@@ -2705,7 +2702,7 @@ cv-qualification</td>
 </blockquote>
 <p>to:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="22%" />
 <col width="19%" />
@@ -2970,7 +2967,7 @@ does not provide the 'b' versions of these functions.</p>
 <tr><td>&nbsp;</td><td class="field-body"><p class="first">Remove the 'b' versions.</p>
 <p>In <tt class="literal"><span class="pre">iterator_facade</span></tt> requirements, remove:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="19%" />
 <col width="18%" />
@@ -2989,7 +2986,7 @@ equivalent.</td>
 </blockquote>
 <p>and remove:</p>
 <blockquote class="last">
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="19%" />
 <col width="18%" />
@@ -3063,7 +3060,7 @@ distance(c, (X)z)?</p>
 <tr><td>&nbsp;</td><td class="field-body"><p class="first">Removed the 'b' versions (see 9.35) and added the cast.</p>
 <p>Change:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="19%" />
 <col width="18%" />
@@ -3085,7 +3082,7 @@ Iterator</td>
 </blockquote>
 <p>to:</p>
 <blockquote class="last">
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="21%" />
 <col width="23%" />
@@ -3154,7 +3151,7 @@ below, <tt class="literal"><span class="pre">x</span></tt> is an object of type 
 type <tt class="literal"><span class="pre">Y</span></tt>, <tt class="literal"><span class="pre">Distance</span></tt> is
 <tt class="literal"><span class="pre">iterator_traits&lt;Y&gt;::difference_type</span></tt>, and <tt class="literal"><span class="pre">n</span></tt> represents a
 constant object of type <tt class="literal"><span class="pre">Distance</span></tt>.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="13%" />
 <col width="27%" />
@@ -3195,7 +3192,7 @@ constant object of type <tt class="literal"><span class="pre">Distance</span></t
 </table>
 <p>If <tt class="literal"><span class="pre">X</span></tt> and <tt class="literal"><span class="pre">Y</span></tt> both model Random Access Traversal Iterator then
 the following additional requirements must be met.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="12%" />
 <col width="25%" />
@@ -3294,7 +3291,7 @@ class iterator_adaptor
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</p>
 <blockquote>
 <p>The <em>V'</em>, <em>C'</em>, <em>R'</em>, and <em>D'</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
 used as a base class in the summary of <tt class="literal"><span class="pre">iterator_adaptor</span></tt>
@@ -3404,7 +3401,7 @@ else
 <p>After the requirements section, add:</p>
 </div>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</p>
 <blockquote>
 <p>In addition to the concepts indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>
 and by <tt class="literal"><span class="pre">iterator_traversal&lt;indirect_iterator&gt;::type</span></tt>, a
@@ -3569,13 +3566,13 @@ by <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
 </dl>
 </div>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</p>
 <blockquote>
 <p>A specialization of <tt class="literal"><span class="pre">reverse_iterator</span></tt> models the same iterator
 traversal and iterator access concepts modeled by its <tt class="literal"><span class="pre">Iterator</span></tt>
 argument.  In addition, it may model old iterator concepts
 specified in the following table:</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="53%" />
 <col width="47%" />
@@ -3798,7 +3795,7 @@ The <tt class="literal"><span class="pre">value_type</span></tt> is <tt class="l
 <p>After the requirements section, add:</p>
 </div>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</p>
 <blockquote>
 <p>The resulting <tt class="literal"><span class="pre">transform_iterator</span></tt> models the most refined of the
 following options that is also modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
@@ -3817,7 +3814,7 @@ concept that is modeled by the <tt class="literal"><span class="pre">Iterator</s
 <p>If <tt class="literal"><span class="pre">transform_iterator</span></tt> is a model of Readable Lvalue Iterator then
 it models the following original iterator concepts depending on what
 the <tt class="literal"><span class="pre">Iterator</span></tt> argument models.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="50%" />
 <col width="50%" />
@@ -3946,12 +3943,12 @@ Input Iterator.</dd>
 <p>After the requirements section, add:</p>
 </div>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</p>
 <blockquote>
 <p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on which
 concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
 following tables.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="33%" />
 <col width="67%" />
@@ -3970,7 +3967,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="41%" />
 <col width="59%" />
@@ -3992,7 +3989,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="63%" />
 <col width="38%" />
@@ -4287,7 +4284,7 @@ the following must must also be valid:</dd>
 <p>After the requirements section, add:</p>
 </div>
 <div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</p>
+<p class="topic-title first"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</p>
 <blockquote>
 <p>Specializations of <tt class="literal"><span class="pre">counting_iterator</span></tt> model Readable Lvalue
 Iterator. In addition, they model the concepts corresponding to the
@@ -4433,7 +4430,7 @@ object copy constructed from <tt class="literal"><span class="pre">x</span></tt>
 <p>c++std-lib-12585:</p>
 <p>Readable Iterator Requirements says:</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="13%" />
 <col width="10%" />
@@ -4802,7 +4799,7 @@ struct indirect_reference;
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title">Class template <tt class="literal"><span class="pre">pointee</span></tt></p>
+<p class="topic-title first">Class template <tt class="literal"><span class="pre">pointee</span></tt></p>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -4846,7 +4843,7 @@ else
 </pre>
 </div>
 <div class="topic">
-<p class="topic-title">Class template <tt class="literal"><span class="pre">indirect_reference</span></tt></p>
+<p class="topic-title first">Class template <tt class="literal"><span class="pre">indirect_reference</span></tt></p>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -4991,7 +4988,7 @@ Traversal Iterator to include Default Constructible.</p>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Forward Traversal Iterator</em>
 concept if the following expressions are valid and respect the stated
 semantics.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="44%" />
 <col width="39%" />
@@ -5010,7 +5007,7 @@ concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> m
 Default Constructible and Single Pass Iterator, the following
 expressions are valid and respect the
 stated semantics.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="38%" />
 <col width="34%" />
@@ -5122,7 +5119,7 @@ object of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="l
 object of a single pass iterator type interoperable with X, and <tt class="literal"><span class="pre">z</span></tt>
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="19%" />
 <col width="18%" />
@@ -5202,7 +5199,7 @@ object of a single pass iterator type interoperable with <tt class="literal"><sp
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
 <p><strong>iterator_facade Core Operations</strong></p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="21%" />
 <col width="23%" />

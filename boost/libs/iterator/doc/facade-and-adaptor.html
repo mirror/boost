@@ -7,7 +7,7 @@
 <title>Iterator Facade and Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, Zephyr Associates, Inc." />
-<meta name="date" content="2004-01-21" />
+<meta name="date" content="2004-11-01" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
@@ -24,7 +24,7 @@
 <td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
 Lab</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-01-21</td></tr>
+<td>2004-11-01</td></tr>
 <tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">This is a revised version of <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a>=03-0113, which was
 accepted for Technical Report 1 by the C++ standard
 committee's library working group.</td>
@@ -38,7 +38,7 @@ n1530_, the paper accepted by the LWG. -->
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td>
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.</td>
 </tr>
 </tbody>
 </table>
@@ -266,8 +266,7 @@ interoperability without introducing unwanted overloads.</p>
 <h2><a class="toc-backref" href="#id20" name="iterator-facade">Iterator Facade</a></h2>
 <!-- Version 1.1 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
-<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-rights reserved -->
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.  -->
 <p>While the iterator interface is rich, there is a core subset of the
 interface that is necessary for all the functionality.  We have
 identified the following core behaviors for iterators:</p>
@@ -454,8 +453,7 @@ Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 <h2><a class="toc-backref" href="#id25" name="iterator-adaptor">Iterator Adaptor</a></h2>
 <!-- Version 1.2 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
-<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-rights reserved -->
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.  -->
 <p>The <tt class="literal"><span class="pre">iterator_adaptor</span></tt> class template adapts some <tt class="literal"><span class="pre">Base</span></tt> <a class="footnote-reference" href="#base" id="id7" name="id7"><sup>3</sup></a>
 type to create a new iterator.  Instantiations of <tt class="literal"><span class="pre">iterator_adaptor</span></tt>
 are derived from a corresponding instantiation of <tt class="literal"><span class="pre">iterator_facade</span></tt>
@@ -603,8 +601,7 @@ and associated types, to be supplied by a derived iterator class.</p>
 <h3><a class="toc-backref" href="#id30" name="class-template-iterator-facade">Class template <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
 <!-- Version 1.3 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
-<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-rights reserved -->
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.  -->
 <pre class="literal-block">
 template &lt;
     class Derived
@@ -1168,8 +1165,7 @@ operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <h2><a class="toc-backref" href="#id33" name="iterator-adaptor-lib-iterator-adaptor">Iterator adaptor [lib.iterator.adaptor]</a></h2>
 <!-- Version 1.1 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG. -->
-<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-rights reserved -->
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.  -->
 <p>Each specialization of the <tt class="literal"><span class="pre">iterator_adaptor</span></tt> class template is derived from
 a specialization of <tt class="literal"><span class="pre">iterator_facade</span></tt>. The core interface functions
 expected by <tt class="literal"><span class="pre">iterator_facade</span></tt> are implemented in terms of the
@@ -1184,8 +1180,7 @@ core interface functions of <tt class="literal"><span class="pre">iterator_facad
 <h3><a class="toc-backref" href="#id34" name="class-template-iterator-adaptor">Class template <tt class="literal"><span class="pre">iterator_adaptor</span></tt></a></h3>
 <!-- Version 1.4 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
-<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-rights reserved. -->
+<!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.  -->
 <pre class="literal-block">
 template &lt;
     class Derived
