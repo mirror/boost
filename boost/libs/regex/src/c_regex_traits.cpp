@@ -701,7 +701,7 @@ int BOOST_RE_CALL c_regex_traits<char>::toi(const char*& first, const char* last
       // if radix is less than zero, then restrict
       // return value to charT. NB assumes sizeof(charT) <= sizeof(int)
       radix *= -1;
-      maxval = 1 << (sizeof(*first) * CHAR_BIT - 1);
+      maxval = 1u << (sizeof(*first) * CHAR_BIT - 1);
       maxval /= radix;
       maxval *= 2;
       maxval -= 1;
@@ -954,7 +954,7 @@ int BOOST_RE_CALL c_regex_traits<wchar_t>::toi(const wchar_t*& first, const wcha
       // if radix is less than zero, then restrict
       // return value to charT. NB assumes sizeof(charT) <= sizeof(int)
       radix *= -1;
-      maxval = 1 << (sizeof(*first) * CHAR_BIT - 1);
+      maxval = 1u << (sizeof(*first) * CHAR_BIT - 1);
       maxval /= radix;
       maxval *= 2;
       maxval -= 1;
