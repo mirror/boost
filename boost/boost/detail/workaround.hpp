@@ -29,7 +29,7 @@
 // which the workaround was known to have been required.  It only has
 // value as a comment unless BOOST_DETECT_OUTDATED_WORKAROUNDS is
 // defined, in which case a compiler warning or error will be issued
-// when the compiler version exceeds the argument to BOOST_CHECKED_AT
+// when the compiler version exceeds the argument to BOOST_TESTED_AT
 
 # ifndef BOOST_STRICT_CONFIG
 
