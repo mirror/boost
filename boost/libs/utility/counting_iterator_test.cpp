@@ -131,7 +131,7 @@ void test_aux(CountingIterator start, CountingIterator finish)
 template <class Incrementable>
 void test(Incrementable start, Incrementable finish)
 {
-    test_aux(boost::counting_iterator(start), boost::counting_iterator(finish));
+    test_aux(boost::make_counting_iterator(start), boost::make_counting_iterator(finish));
 }
 
 template <class Integer>
@@ -184,6 +184,6 @@ int main()
 #endif
     // Also prove that we can handle raw pointers.
     int array[2000];
-    test(boost::counting_iterator(array), boost::counting_iterator(array+2000-1));
+    test(boost::make_counting_iterator(array), boost::make_counting_iterator(array+2000-1));
     return 0;
 }

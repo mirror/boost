@@ -22,12 +22,14 @@
 //
 //   template <class Incrementable>
 //     typename counting_iterator_generator<Incrementable>::type
-//     counting_iterator(Incrementable);
+//     make_counting_iterator(Incrementable);
 //
 //     A function which produces an adapted counting iterator over values of
 //     Incrementable.
 // 
 // Revision History
+// 07 Feb 2001  rename counting_iterator() -> make_counting_iterator()
+//              (David Abrahams)        
 // 04 Feb 2001  Added counting_iterator_generator; updated comments
 //              (David Abrahams)
 // 24 Jan 2001  initial revision, based on Jeremy Siek's
@@ -178,7 +180,7 @@ struct counting_iterator_generator
 // Manufacture a counting iterator for an arbitrary incrementable type
 template <class Incrementable>
 inline typename counting_iterator_generator<Incrementable>::type
-counting_iterator(Incrementable x)
+make_counting_iterator(Incrementable x)
 {
     return iterator_adaptor<Incrementable,
         counting_iterator_policies<Incrementable>,
