@@ -169,12 +169,16 @@ void element_access_test()
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   double d = 2.7; 
   A a;
-  tuple<int, double&, const A&> t(1, d, a);
-  const tuple<int, double&, const A> ct = t;
+  tuple<int, double&, const A&, int> t(1, d, a, 2);
+  const tuple<int, double&, const A, int> ct = t;
 
-  int i = tuples::get<0>(t);
-  int j = tuples::get<0>(ct);
-  BOOST_TEST(i == 1 && j == 1);
+  int i  = tuples::get<0>(t);
+  int i2 = tuples::get<3>(t);
+
+  BOOST_TEST(i == 1 && i2 == 2);
+
+  int j  = tuples::get<0>(ct);
+  BOOST_TEST(j == 1);
    
   tuples::get<0>(t) = 5;
   BOOST_TEST(t.head == 5);
@@ -193,7 +197,35 @@ void element_access_test()
   ++tuples::get<0>(t);
   BOOST_TEST(tuples::get<0>(t) == 6);
 
-  dummy(i); dummy(j); dummy(e); // avoid warns for unused variables
+  dummy(i); dummy(i2); dummy(j); dummy(e); // avoid warns for unused variables
+#else
+  double d = 2.7; 
+  A a;
+  tuple<int, double, const A, int> t(1, d, a, 2);
+
+  int i  = tuples::get<0>(t);
+  int i2 = tuples::get<3>(t);
+
+  BOOST_TEST(i == 1 && i2 == 2);
+   
+  tuples::get<0>(t) = 5;
+  BOOST_TEST(t.head == 5);
+   
+  //  tuples::get<0>(ct) = 5; // can't assign to const
+
+  double e = tuples::get<1>(t);
+  BOOST_TEST(e > 2.69 && e < 2.71);
+	     
+  tuples::get<1>(t) = 3.14+i;
+  BOOST_TEST(tuples::get<1>(t) > 4.13 && tuples::get<1>(t) < 4.15);
+
+  //  tuples::get<4>(t) = A(); // can't assign to const
+  //  dummy(tuples::get<5>(ct)); // illegal index
+
+  ++tuples::get<0>(t);
+  BOOST_TEST(tuples::get<0>(t) == 6);
+
+  dummy(i); dummy(i2); dummy(e); // avoid warns for unused variables
 #endif
 }
 
@@ -419,6 +451,26 @@ void const_tuple_test()
   BOOST_TEST(tuples::get<1>(t1) == 3.3f);
 }
 
+// ----------------------------------------------------------------------------
+// - testing length -----------------------------------------------------------
+// ----------------------------------------------------------------------------
+void tuple_length_test()
+{
+  typedef tuple<int, float, double> t1;
+  using tuples::cons;
+  typedef cons<int, cons< float, cons <double, tuples::null_type> > > t1_cons;
+  typedef tuple<> t2;
+  typedef tuples::null_type t3;  
+
+  BOOST_STATIC_ASSERT(tuples::length<t1>::value == 3);
+  BOOST_STATIC_ASSERT(tuples::length<t1_cons>::value == 3);
+  BOOST_STATIC_ASSERT(tuples::length<t2>::value == 0);
+  BOOST_STATIC_ASSERT(tuples::length<t3>::value == 0);
+
+}
+
+
+
 
 // ----------------------------------------------------------------------------
 // - main ---------------------------------------------------------------------
@@ -436,5 +488,6 @@ int test_main(int, char *[]) {
   ordering_test();
   cons_test();
   const_tuple_test();
+  tuple_length_test();
   return 0;
 }
