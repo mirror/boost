@@ -45,7 +45,7 @@ namespace boost {
           m_map(m) {}
 
     private:
-      typename lvalue_pmap_iter::reference
+      typename super_t::reference
       dereference() const
       {
         return m_map[*(this->base_reference())];
@@ -80,7 +80,7 @@ namespace boost {
           m_map(m) {}
 
     private:
-      typename readable_pmap_iter::reference
+      typename super_t::reference
       dereference() const
       {
         return get(m_map, *(this->base_reference()));
