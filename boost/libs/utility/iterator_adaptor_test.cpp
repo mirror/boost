@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  08 Mar 01 Moved indirect and transform tests to separate files.
+//            (Jeremy Siek)
 //  19 Feb 01 Take adavantage of improved iterator_traits to do more tests
 //            on MSVC. Hack around an MSVC-with-STLport internal compiler
 //            error. (David Abrahams)
