@@ -62,8 +62,6 @@ public:
   typedef typename super_type::const_reference const_reference;
   typedef typename super_type::iterator iterator;
   typedef typename super_type::const_iterator const_iterator;
-  typedef typename super_type::iter_base iter_base;
-  typedef typename super_type::const_iter_base const_iter_base;
   typedef typename super_type::reverse_iterator reverse_iterator;
   typedef typename super_type::const_reverse_iterator const_reverse_iterator;
   typedef typename super_type::element element;

@@ -44,7 +44,6 @@ public:
   typedef typename super_type::value_type value_type;
   typedef typename super_type::const_reference const_reference;
   typedef typename super_type::const_iterator const_iterator;
-  typedef typename super_type::const_iter_base const_iter_base;
   typedef typename super_type::const_reverse_iterator const_reverse_iterator;
   typedef typename super_type::element element;
   typedef typename super_type::size_type size_type;
@@ -142,13 +141,13 @@ public:
                                       origin());
   }
   const_iterator begin() const {
-    return const_iterator(const_iter_base(*index_bases(),origin(),
-                                   shape(),strides(),index_bases()));
+    return const_iterator(*index_bases(),origin(),
+                          shape(),strides(),index_bases());
   }
 
   const_iterator end() const {
-    return const_iterator(const_iter_base(*index_bases()+*shape(),origin(),
-                                   shape(),strides(),index_bases()));
+    return const_iterator(*index_bases()+*shape(),origin(),
+                          shape(),strides(),index_bases());
   }
   
   const_reverse_iterator rbegin() const {
@@ -262,11 +261,9 @@ public:
   typedef typename super_type::value_type value_type;
   typedef typename super_type::reference reference;
   typedef typename super_type::iterator iterator;
-  typedef typename super_type::iter_base iter_base;
   typedef typename super_type::reverse_iterator reverse_iterator;
   typedef typename super_type::const_reference const_reference;
   typedef typename super_type::const_iterator const_iterator;
-  typedef typename super_type::const_iter_base const_iter_base;
   typedef typename super_type::const_reverse_iterator const_reverse_iterator;
   typedef typename super_type::element element;
   typedef typename super_type::size_type size_type;
@@ -353,15 +350,15 @@ public:
   
   
   iterator begin() {
-    return iterator(iter_base(*this->index_bases(),origin(),
-                              this->shape(),this->strides(),
-                              this->index_bases()));
+    return iterator(*this->index_bases(),origin(),
+                    this->shape(),this->strides(),
+                    this->index_bases());
   }
 
   iterator end() {
-    return iterator(iter_base(*this->index_bases()+*this->shape(),origin(),
-                              this->shape(),this->strides(),
-                              this->index_bases()));
+    return iterator(*this->index_bases()+*this->shape(),origin(),
+                    this->shape(),this->strides(),
+                    this->index_bases());
   }
 
   reverse_iterator rbegin() {

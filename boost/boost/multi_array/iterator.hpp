@@ -19,7 +19,7 @@
 //
 
 #include "boost/multi_array/base.hpp"
-#include "boost/multi_array/iterator_adaptors.hpp"
+#include "boost/iterator/iterator_facade.hpp"
 #include "boost/iterator/reverse_iterator.hpp"
 #include <cstddef>
 #include <iterator>
@@ -32,137 +32,156 @@ namespace multi_array {
 // iterator components
 /////////////////////////////////////////////////////////////////////////
 
-template <typename T, typename TPtr>
-struct iterator_base : private multi_array_base {
-  typedef multi_array_base super_type;
-  typedef super_type::index index;
-  typedef super_type::size_type size_type;
+template <class T>
+struct operator_arrow_proxy
+{
+  operator_arrow_proxy(T const& px) : value_(px) {}
+  T* operator->() const { return &value_; }
+  // This function is needed for MWCW and BCC, which won't call operator->
+  // again automatically per 13.3.1.2 para 8
+  operator T*() const { return &value_; }
+  mutable T value_;
+};
+
+
+template <typename T, typename TPtr, std::size_t NumDims,
+          typename AccessCategory, typename Reference>
+class array_iterator :
+    public iterator_facade<
+             array_iterator<T,TPtr,NumDims,AccessCategory,Reference>,
+             typename value_accessor_generator<T,NumDims>::type::value_type,
+             AccessCategory,
+             ::boost::random_access_traversal_tag,
+             Reference
+           >,
+    private value_accessor_generator<T,NumDims>::type
+{
+  friend class iterator_core_access;
+  template <typename TT, typename TP, std::size_t N, typename AC, typename R>
+    friend class array_iterator;
+
+  typedef typename value_accessor_generator<T,NumDims>::type access_t;
+
+  typedef  iterator_facade<
+             array_iterator<T,TPtr,NumDims,AccessCategory,Reference>,
+             typename access_t::value_type,
+             AccessCategory,
+             ::boost::random_access_traversal_tag,
+             Reference
+           > facade_type;
+
+  typedef typename value_accessor_generator<T,NumDims>::type access_t;
+  typedef typename access_t::index index;
+  typedef typename access_t::size_type size_type;
 
   index idx_;
   TPtr base_;
   const size_type* extents_;
   const index* strides_;
   const index* index_base_;
+ 
+public:
+  // Typedefs to circumvent ambiguities between parent classes
+  typedef typename facade_type::reference reference;
+  typedef typename facade_type::value_type value_type;
+  typedef typename facade_type::difference_type difference_type;
 
-  iterator_base(int idx, TPtr base, const size_type* extents,
+  array_iterator() {}
+
+  array_iterator(int idx, TPtr base, const size_type* extents,
                 const index* strides,
                 const index* index_base) :
     idx_(idx), base_(base), extents_(extents),
-    strides_(strides), index_base_(index_base) {
-  }
+    strides_(strides), index_base_(index_base) { }
 
-  template <typename OPtr>
-  iterator_base(const iterator_base<T,OPtr>& rhs) :
-    idx_(rhs.idx_), base_(rhs.base_), extents_(rhs.extents_),
-    strides_(rhs.strides_), index_base_(rhs.index_base_) {
-  }
+  template <typename OPtr, typename ORef>
+  array_iterator(const
+                 array_iterator<T,OPtr,NumDims,AccessCategory,ORef>& rhs)
+    : idx_(rhs.idx_), base_(rhs.base_), extents_(rhs.extents_),
+    strides_(rhs.strides_), index_base_(rhs.index_base_) { }
 
-  // default constructor required
-  iterator_base() {}
-};
 
-template<typename T, std::size_t NumDims>
-struct iterator_policies :
-  public boost::detail::multi_array::default_iterator_policies,
-  private value_accessor_generator<T,NumDims>::type {
-private:
-  typedef typename value_accessor_generator<T,NumDims>::type super_type;
-public:
-  template <class IteratorAdaptor>
-  typename IteratorAdaptor::reference
-  dereference(const IteratorAdaptor& iter) const {
-    typedef typename IteratorAdaptor::reference reference;
-    return super_type::access(boost::type<reference>(),
-                              iter.base().idx_,
-                              iter.base().base_,
-                              iter.base().extents_,
-                              iter.base().strides_,
-                              iter.base().index_base_);
+  // RG - we make our own operator->
+  operator_arrow_proxy<reference>
+  operator->() const
+  {
+    return operator_arrow_proxy<reference>(this->dereference());
   }
   
+
+  reference dereference() const {
+    return access_t::access(boost::type<reference>(),
+                            idx_,
+                            base_,
+                            extents_,
+                            strides_,
+                            index_base_);
+  }
+  
+  void increment() { ++idx_; }
+  void decrement() { --idx_; }
+
   template <class IteratorAdaptor>
-  static void increment(IteratorAdaptor& x) { ++x.base().idx_; }
+  bool equal(IteratorAdaptor& rhs) const {
+    return (idx_ == rhs.idx_) &&
+      (base_ == rhs.base_) &&
+      (extents_ == rhs.extents_) &&
+      (strides_ == rhs.strides_) &&
+      (index_base_ == rhs.index_base_);
+  }
+
+  template <class DifferenceType>
+  void advance(DifferenceType n) {
+    idx_ += n;
+  }
 
   template <class IteratorAdaptor>
-  static void decrement(IteratorAdaptor& x) { --x.base().idx_; }
-
-  template <class IteratorAdaptor1, class IteratorAdaptor2>
-  bool equal(IteratorAdaptor1& lhs, IteratorAdaptor2& rhs) const {
-    return (lhs.base().idx_ == rhs.base().idx_) &&
-      (lhs.base().base_ == rhs.base().base_) &&
-      (lhs.base().extents_ == rhs.base().extents_) &&
-      (lhs.base().strides_ == rhs.base().strides_) &&
-      (lhs.base().index_base_ == rhs.base().index_base_);
+  typename facade_type::difference_type
+  distance_to(IteratorAdaptor& rhs) const {
+    return rhs.idx_ - idx_;
   }
 
-  template <class IteratorAdaptor, class DifferenceType>
-  static void advance(IteratorAdaptor& x, DifferenceType n) {
-    x.base().idx_ += n;
-  }
 
-  template <class IteratorAdaptor1, class IteratorAdaptor2>
-  typename IteratorAdaptor1::difference_type
-  distance(IteratorAdaptor1& lhs, IteratorAdaptor2& rhs) const {
-    return rhs.base().idx_ - lhs.base().idx_;
-  }
 };
 
-
-template <typename T, typename base_type,
-  std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct iterator_gen_helper {
-private:
-  typedef iterator_policies<T,NumDims> policies;
-  typedef value_type* pointer_type;
-  typedef tag category;
-public:
-  typedef boost::detail::multi_array::iterator_adaptor<base_type,policies,value_type,
-    reference_type,pointer_type,category,difference_type> type;
-};
 
 
 template <typename T, std::size_t NumDims, typename value_type,
   typename reference_type, typename tag, typename difference_type>
 struct iterator_generator {
-private:
-  typedef iterator_base<T,T*> base_type;
-public:
-  typedef typename iterator_gen_helper<T,base_type,NumDims,value_type,
-    reference_type,tag,difference_type>::type type;
+  // RG: readable_writeable is temporary until later dim-based fixes
+  typedef  array_iterator<T,T*,NumDims,
+             ::boost::readable_iterator_tag,reference_type> type;
 };
 
 template <typename T,  std::size_t NumDims, typename value_type,
   typename reference_type, typename tag, typename difference_type>
 struct const_iterator_generator {
-private:
-  typedef iterator_base<T,const T*> base_type;
-public:
-  typedef typename iterator_gen_helper<T,base_type,NumDims,value_type,
-    reference_type,tag,difference_type>::type type;
+  // RG: readable is temporary until later dim-based fixes
+  typedef array_iterator<T,const T*,NumDims,
+            readable_iterator_tag,reference_type> type;
 };
 
 template <typename T, std::size_t NumDims, typename value_type,
   typename reference_type, typename tag, typename difference_type>
 struct reverse_iterator_generator {
 private:
-  typedef iterator_base<T,T*> base_type;
-  typedef typename iterator_gen_helper<T,base_type,NumDims,value_type,
-    reference_type,tag,difference_type>::type it_type;
+  typedef typename iterator_generator<T,NumDims,value_type,reference_type,
+    tag,difference_type>::type iterator_type;
 public:
-  typedef typename boost::reverse_iterator<it_type> type;
+  typedef ::boost::reverse_iterator<iterator_type> type;
 };
 
 template <typename T,  std::size_t NumDims, typename value_type,
   typename reference_type, typename tag, typename difference_type>
 struct const_reverse_iterator_generator {
 private:
-  typedef iterator_base<T,const T*> base_type;
-  typedef typename iterator_gen_helper<T,base_type,NumDims,value_type,
-    reference_type,tag,difference_type>::type it_type;
+  typedef typename const_iterator_generator<T,NumDims,value_type,
+    reference_type,tag,difference_type>::type iterator_type;
 public:
-  typedef typename boost::reverse_iterator<it_type> type;
+  typedef ::boost::reverse_iterator<iterator_type> type;
 };
+
 
 } // namespace multi_array
 } // namespace detail
