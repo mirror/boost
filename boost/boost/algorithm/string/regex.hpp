@@ -30,7 +30,7 @@ namespace boost {
 
         //! Find regex algorithm
         /*!
-            Search for a subsequence matching the given regex in the input.
+            Search for a substring matching the given regex in the input.
             
             \param Input A container which will be searched.
             \param Rx A regular expression
@@ -60,15 +60,18 @@ namespace boost {
 
         //! Replace regex algorithm
         /*!
-            Search for a subsequence matching given regex and format it with 
-            the specified format. The result is copied to the given output iterator.
+            Search for a substring matching given regex and format it with 
+            the specified format.             
+            The result is a modified copy of the input. It is returned as a sequence 
+            or copied to an output iterator.
 
             \param Output A output iterator to which the result will be copied
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character
+            \return An output iterator pointing just after last inserted character or
+                    a modified copy of the input            
         */
         template< 
             typename OutputIteratorT,
@@ -92,14 +95,7 @@ namespace boost {
 
         //! Replace regex algorithm
         /*!
-            Search for a subsequence matching given regex and format it with 
-            the specified format. The result is a modified copy of the input.
-
-            \param Input An input sequence
-            \param Rx A regular expression
-            \param Format Regex format definition
-            \param Flags Regex options
-            \return A modified copy of the input
+            \overload
         */
         template< 
             typename SequenceT, 
@@ -120,10 +116,10 @@ namespace boost {
 
         //! Replace regex algorithm
         /*!
-            Search for a subsequence matching given regex and format it with 
-            the specified format. The input sequence is modified in-place.
+            Search for a substring matching given regex and format it with 
+            the specified format. The input string is modified in-place.
 
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
             \param Flags Regex options
@@ -149,15 +145,17 @@ namespace boost {
 
         //! Replace all regex algorithm
         /*!
-            Format all subsequences, matching given regex, with the specified format. 
-            The result is copied to the given output iterator.
+            Format all substrings, matching given regex, with the specified format. 
+            The result is a modified copy of the input. It is returned as a sequence 
+            or copied to an output iterator.
 
             \param Output A output iterator to which the result will be copied
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character
+            \return An output iterator pointing just after last inserted character or
+                    a modified copy of the input            
         */
         template< 
             typename OutputIteratorT,
@@ -181,14 +179,7 @@ namespace boost {
 
         //! Replace all regex algorithm
         /*!
-            Format all subsequences, mathing given regex, with the specified format. 
-            The result is a modified copy of the input.
-
-            \param Input An input sequence
-            \param Rx A regular expression
-            \param Format Regex format definition
-            \param Flags Regex options
-            \return A modified copy of the input
+            \overload
         */
         template< 
             typename SequenceT, 
@@ -209,10 +200,10 @@ namespace boost {
 
         //! Replace all regex algorithm
         /*!
-            Format all subsequences, matching given regex, with the specified format. 
-            The input sequence is modified in-place.
+            Format all substrings, matching given regex, with the specified format. 
+            The input string is modified in-place.
 
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
             \param Flags Regex options
@@ -238,14 +229,16 @@ namespace boost {
 
         //! Erase regex algorithm
         /*!
-            Remove a subsequence matching given regex from the input.
-            The result is copied to the given output iterator.
+            Remove a substring matching given regex from the input.
+            The result is a modified copy of the input. It is returned as a sequence 
+            or copied to an output iterator.                        
 
             \param Output A output iterator to which the result will be copied
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character
+            \return An output iterator pointing just after last inserted character or
+                       a modified copy of the input                        
         */
         template< 
             typename OutputIteratorT,
@@ -267,13 +260,7 @@ namespace boost {
 
         //! Erase regex algorithm
         /*!
-            Remove a subsequence matching given regex from the input.
-            The result is a modified copy of the input.
-
-            \param Input An input sequence
-            \param Rx A regular expression
-            \param Flags Regex options
-            \return A modified copy of the input
+            \overload
         */
         template< 
             typename SequenceT, 
@@ -292,10 +279,10 @@ namespace boost {
 
         //! Erase regex algorithm
         /*!
-            Remove a subsequence matching given regex from the input.
-            The input sequence is modified in-place.
+            Remove a substring matching given regex from the input.
+            The input string is modified in-place.
 
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
         */
@@ -318,14 +305,17 @@ namespace boost {
 
         //! Erase all regex algorithm
         /*!
-            Erase all subsequences, matching given regex, from the input.
-            The result is copied to the given output iterator.
+            Erase all substrings, matching given regex, from the input.
+            The result is a modified copy of the input. It is returned as a sequence 
+            or copied to an output iterator.
+            
 
             \param Output A output iterator to which the result will be copied
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character
+            \return An output iterator pointing just after last inserted character or
+                       a modified copy of the input                        
         */
         template< 
             typename OutputIteratorT,
@@ -347,13 +337,7 @@ namespace boost {
 
         //! Erase all regex algorithm
         /*!
-            Erase all subsequences, matching given regex, from the input.
-            The result is a modified copy of the input.
-
-            \param Input An input sequence
-            \param Rx A regular expression
-            \param Flags Regex options
-            \return A modified copy of the input
+            \overload
         */
         template< 
             typename SequenceT, 
@@ -372,10 +356,10 @@ namespace boost {
 
         //! Erase all regex algorithm
         /*!
-            Erase all subsequences, matching given regex, from the input.
-            The input sequence is modified in-place.
+            Erase all substrings, matching given regex, from the input.
+            The input string is modified in-place.
 
-            \param Input An input sequence
+            \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
         */

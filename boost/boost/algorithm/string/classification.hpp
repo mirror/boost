@@ -216,65 +216,65 @@ namespace boost {
         {
             return detail::is_from_rangeF<CharT>(From,To); 
         }
-		
-		// predicate combinators ---------------------------------------------------//
+        
+        // predicate combinators ---------------------------------------------------//
 
-		//! predicate 'and' composition predicate
-		/*!
-			Construct the \c class_and predicate. This predicate can be used
-			to logically combine two classification predicates. \c class_and holds,
-			if both predicates return true.
+        //! predicate 'and' composition predicate
+        /*!
+            Construct the \c class_and predicate. This predicate can be used
+            to logically combine two classification predicates. \c class_and holds,
+            if both predicates return true.
 
-			\param Pred1 The first predicate
-			\param Pred2 The second predicate
-			\return An instance of the \c class_and predicate     
-		*/
-		template<typename Pred1T, typename Pred2T>
-		inline detail::pred_andF<Pred1T, Pred2T>
-		operator&&( 
-			const predicate_facade<Pred1T>& Pred1, 
-			const predicate_facade<Pred2T>& Pred2 )
-		{    
-			return detail::pred_andF<Pred1T,Pred2T>(
-				static_cast<const Pred1T&>(Pred1), 
-				static_cast<const Pred2T&>(Pred2) );
-		}
+            \param Pred1 The first predicate
+            \param Pred2 The second predicate
+            \return An instance of the \c class_and predicate     
+        */
+        template<typename Pred1T, typename Pred2T>
+        inline detail::pred_andF<Pred1T, Pred2T>
+        operator&&( 
+            const predicate_facade<Pred1T>& Pred1, 
+            const predicate_facade<Pred2T>& Pred2 )
+        {    
+            return detail::pred_andF<Pred1T,Pred2T>(
+                static_cast<const Pred1T&>(Pred1), 
+                static_cast<const Pred2T&>(Pred2) );
+        }
 
-		//! predicate 'or' composition predicate
-		/*!
-			Construct the \c class_or predicate. This predicate can be used
-			to logically combine two classification predicates. \c class_or holds,
-			if one of the predicates return true.
+        //! predicate 'or' composition predicate
+        /*!
+            Construct the \c class_or predicate. This predicate can be used
+            to logically combine two classification predicates. \c class_or holds,
+            if one of the predicates return true.
 
-			\param Pred1 The first predicate
-			\param Pred2 The second predicate
-			\return An instance of the \c class_or predicate     
-		*/
-		template<typename Pred1T, typename Pred2T>
-		inline detail::pred_orF<Pred1T, Pred2T>
-		operator||( 
-			const predicate_facade<Pred1T>& Pred1, 
-			const predicate_facade<Pred2T>& Pred2 )
-		{    
-			return detail::pred_orF<Pred1T,Pred2T>(
-				static_cast<const Pred1T&>(Pred1), 
-				static_cast<const Pred2T&>(Pred2));
-		}
+            \param Pred1 The first predicate
+            \param Pred2 The second predicate
+            \return An instance of the \c class_or predicate     
+        */
+        template<typename Pred1T, typename Pred2T>
+        inline detail::pred_orF<Pred1T, Pred2T>
+        operator||( 
+            const predicate_facade<Pred1T>& Pred1, 
+            const predicate_facade<Pred2T>& Pred2 )
+        {    
+            return detail::pred_orF<Pred1T,Pred2T>(
+                static_cast<const Pred1T&>(Pred1), 
+                static_cast<const Pred2T&>(Pred2));
+        }
 
-		//! predicate negation operator
-		/*!
-			Construct the \c class_not predicate. This predicate represents a negation. 
-			\c class_or holds, if of the predicates return false.
+        //! predicate negation operator
+        /*!
+            Construct the \c class_not predicate. This predicate represents a negation. 
+            \c class_or holds, if of the predicates return false.
 
-			\param Pred The predicate to be negated
-			\return An instance of the \c class_not predicate     
-		*/
-		template<typename PredT>
-		inline detail::pred_notF<PredT>
-		operator!( const predicate_facade<PredT>& Pred )
-		{
-			return detail::pred_notF<PredT>(static_cast<const PredT&>(Pred)); 
-		}
+            \param Pred The predicate to be negated
+            \return An instance of the \c class_not predicate     
+        */
+        template<typename PredT>
+        inline detail::pred_notF<PredT>
+        operator!( const predicate_facade<PredT>& Pred )
+        {
+            return detail::pred_notF<PredT>(static_cast<const PredT&>(Pred)); 
+        }
 
     } // namespace algorithm
 

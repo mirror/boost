@@ -22,7 +22,7 @@
 namespace boost {
     namespace algorithm {
         namespace detail {
-			
+            
 //  classification functors -----------------------------------------------//
             
             // is_classified functor

@@ -19,8 +19,7 @@
 
 /*! \file
     Defines Finder generators. Finder object is a functor which is able to 
-    find a subsequence matching a specific criterium in an input
-    sequence. 
+    find a substring matching a specific criterium in the input.
     Finders are used as a pluggable components for replace, find 
     and split facilities. This header contains generator functions 
     for finders provided in this library.
@@ -34,10 +33,11 @@ namespace boost {
         //! "First" finder 
         /*!
             Construct the \c first_finder. The finder searches for the first
-            occurrence of the search sequence in a given input.
+            occurrence of the string in a given input.
             The result is given as a \c iterator_range delimiting the match.
 
-            \param Search A sequence to be searched for.
+            \param Search A string to be searched for.
+            \param Comp An element comparison predicate
             \return An instance of the \c first_finder object
         */
         template<typename ContainerT>
@@ -55,15 +55,7 @@ namespace boost {
 
         //! "First" finder
         /*!
-            Construct the \c first_finder. The finder searches for the first
-            occurrence of the search sequence in a given input.
-            The result is given as a \c iterator_range delimiting the match.
-
-            Elements are compared using the given predicate.
-
-            \param Search A sequence to be searched for.
-            \param Comp An element comparison predicate
-            \return An instance of the \c first_finder object
+            \overload
         */
         template<typename ContainerT,typename PredicateT>
         inline detail::first_finderF<
@@ -82,10 +74,11 @@ namespace boost {
         //! "Last" finder
         /*!
             Construct the \c last_finder. The finder searches for the last
-            occurrence of the search sequence in a given input.
+            occurrence of the string in a given input.
             The result is given as a \c iterator_range delimiting the match.
 
-            \param Search A sequence to be searched for.
+            \param Search A string to be searched for.
+            \param Comp An element comparison predicate
             \return An instance of the \c last_finder object
         */
         template<typename ContainerT>
@@ -102,15 +95,7 @@ namespace boost {
         }
         //! "Last" finder
         /*!
-            Construct the \c last_finder. The finder searches for the last
-            occurrence of the search sequence in a given input.
-            The result is given as a \c iterator_range delimiting the match.
-
-            Elements are compared using the given predicate.
-
-            \param Search A sequence to be searched for.
-            \param Comp An element comparison predicate
-            \return An instance of the \c last_finder object
+            \overload
         */
         template<typename ContainerT, typename PredicateT>
         inline detail::last_finderF<
@@ -127,12 +112,13 @@ namespace boost {
 
         //! "Nth" finder
         /*!
-            Construct the \c nth_finder. The finder searches for the n-th
-            occurrence of the search sequence in a given input.
+            Construct the \c nth_finder. The finder searches for the n-th (zero-indexed)
+            occurrence of the string in a given input.
             The result is given as a \c iterator_range delimiting the match.
 
-            \param Search A sequence to be searched for.
+            \param Search A string to be searched for.
             \param Nth An index of the match to be find
+            \param Comp An element comparison predicate
             \return An instance of the \c nth_finder object
         */
         template<typename ContainerT>
@@ -151,16 +137,7 @@ namespace boost {
         }
         //! "Nth" finder
         /*!
-            Construct the \c nth_finder. The finder searches for the n-th
-            occurrence of the search sequence in a given input.
-            The result is given as a \c iterator_range delimiting the match.
-
-            Elements are compared using the given predicate.
-
-            \param Search A sequence to be searched for.
-            \param Nth An index of the match to be find
-            \param Comp An element comparison predicate
-            \return An instance of the \c nth_finder object
+            \overload
         */
         template<typename ContainerT, typename PredicateT>
         inline detail::nth_finderF<
@@ -181,7 +158,7 @@ namespace boost {
         //! "Head" finder
         /*!
             Construct the \c head_finder. The finder returns a head of a given
-            input. Head is a prefix of a sequence up to n elements in
+            input. Head is a prefix of a string up to n elements in
             size. If an input has less then n elements, whole input is 
             considered a head.
             The result is given as a \c iterator_range delimiting the match.
@@ -198,7 +175,7 @@ namespace boost {
         //! "Tail" finder
         /*!
             Construct the \c tail_finder. The finder returns a tail of a given
-            input. Tail is a suffix of the sequence up to n elements in
+            input. Tail is a suffix of a string up to n elements in
             size. If an input has less then n elements, whole input is 
             considered a head.
             The result is given as a \c iterator_range delimiting the match.
@@ -219,9 +196,9 @@ namespace boost {
             algorithm, with an exception that it return a range of
             instead of a single iterator.
 
-            If bCompress is set to true, adjacent matching tokens are 
+            If "compress token mode" is enabled, adjacent matching tokens are 
             concatenated into one match. Thus the finder can be used to 
-            search for continuous segments of elements satisfying the 
+            search for continuous segments of characters satisfying the 
             given predicate.
 
             The result is given as a \c iterator_range delimiting the match.
@@ -247,6 +224,7 @@ namespace boost {
 
             \param Begin Beginning of the range
             \param End End of the range
+            \param Range The range.
             \return An instance of the \c range_finger object
         */
         template< typename ForwardIteratorT >
@@ -259,9 +237,7 @@ namespace boost {
         }
 
         //! "Range" finder
-        /*!
-            \param Range The range.
-
+        /*!       
             \overload
         */
         template< typename ForwardIteratorT >

@@ -26,7 +26,7 @@ namespace boost {
         //! find_iterator
         /*!    
             Find iterator encapsulates a Finder and allows
-            an incremental searching in the sequence.
+            an incremental searching in a string.
             Each increment moves the iterator to the next match.
 
             Find iterator is readable forward traversal iterator.
@@ -168,7 +168,7 @@ namespace boost {
 
         //! find iterator construction helper
         /*!
-         *    Construct a find iterator to iterate through the specified collection
+         *    Construct a find iterator to iterate through the specified string
          */
         template<typename CollectionT, typename FinderT>
         inline find_iterator< 
@@ -186,7 +186,7 @@ namespace boost {
         //! split_iterator
         /*!    
             Split iterator encapsulates a Finder and allows
-            an incremental searching in the sequence.
+            an incremental searching in a string.
             Unlike the find iterator, split iterator iterates
             through gasps between matches.
 
@@ -264,8 +264,8 @@ namespace boost {
             */
             template<typename FinderT, typename CollectionT>
             split_iterator(
-					CollectionT& Col,
-					FinderT Finder ) :
+                    CollectionT& Col,
+                    FinderT Finder ) :
                 detail::find_iterator_base<IteratorT>(Finder,0),
                 m_Match(begin(Col),begin(Col)),
                 m_Next(begin(Col)),

@@ -24,12 +24,12 @@ namespace boost {
 
 //  predicate facade ------------------------------------------------------//
 
-		//! Predicate facade
+        //! Predicate facade
         /*!
             This class allows to recognize classification
             predicates, so that they can be combined using
             composition operators.
-			Every classification predicate must be derived from this class.
+            Every classification predicate must be derived from this class.
         */
         template<typename Derived>
         struct predicate_facade {};

@@ -34,8 +34,8 @@ namespace boost {
         /*!
             This predicate holds when the test collection is a prefix of the Input.
             In other word, if the input starts with the test.
-			When optional predicate is specified, it is used for character-wise
-			comparison.
+            When optional predicate is specified, it is used for character-wise
+            comparison.
 
             \param Input An input sequence
             \param Test A test sequence
@@ -71,8 +71,8 @@ namespace boost {
 
         //! 'Starts with' predicate
         /*!
-			\overload
-		*/
+            \overload
+        */
         template<typename Collection1T, typename Collection2T>
         inline bool starts_with( 
             const Collection1T& Input, 
@@ -108,8 +108,8 @@ namespace boost {
         /*!
             This predicate holds when the test container is a suffix of the Input.
             In other word, if the input ends with the test.
-			When optional predicate is specified, it is used for character-wise
-			comparison.
+            When optional predicate is specified, it is used for character-wise
+            comparison.
 
 
             \param Input An input sequence
@@ -141,7 +141,7 @@ namespace boost {
 
         //! 'Ends with' predicate
         /*!
-			\overload
+            \overload
         */
         template<typename Collection1T, typename Collection2T>
         inline bool ends_with( 
@@ -177,7 +177,7 @@ namespace boost {
         /*!
             This predicate holds when the test container is contained in the Input.
             When optional predicate is specified, it is used for character-wise
-			comparison.
+            comparison.
 
             \param Input An input sequence
             \param Test A test sequence
@@ -201,8 +201,8 @@ namespace boost {
 
         //! 'Contains' predicate
         /*!
-			\overload
-		*/
+            \overload
+        */
         template<typename Collection1T, typename Collection2T>
         inline bool contains( 
             const Collection1T& Input, 
@@ -237,7 +237,7 @@ namespace boost {
             This predicate holds when the test container is equal to the
             input container i.e. all elements in both containers are same.
             When optional predicate is specified, it is used for character-wise
-			comparison.
+            comparison.
 
             \param Input An input sequence
             \param Test A test sequence
@@ -275,7 +275,7 @@ namespace boost {
 
         //! 'Equals' predicate
         /*!
-			\overload
+            \overload
         */
         template<typename Collection1T, typename Collection2T>
         inline bool equals( 

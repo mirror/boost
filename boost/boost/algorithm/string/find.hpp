@@ -19,7 +19,7 @@
 
 /*! \file
     Defines a set of find algorithms. The algorithms are searching
-    for a subsequence of the input. The result is given as an \c iterator_range
+    for a substring if the input. The result is given as an \c iterator_range
     delimiting the substring.
 */
 
@@ -32,7 +32,7 @@ namespace boost {
         /*!
             Search the input using the given finder.
 
-            \param Input A collection which will be searched.
+            \param Input A string which will be searched.
             \param Finder Finder object used for searching.
             \return 
                 An \c iterator_range delimiting the match. 
@@ -54,10 +54,9 @@ namespace boost {
 
         //! Find first algorithm
         /*!
-            Search for a first match of search sequence in the 
-            input collection. 
+            Search for the first match of the string in the input. 
             
-            \param Input A container which will be searched.
+            \param Input A string which will be searched.
             \param Search A string to be searched for.
             \return 
                 An \c iterator_range delimiting the match. 
@@ -78,10 +77,10 @@ namespace boost {
 
         //! Find first algorithm ( case insensitive )
         /*!
-            Search for a first match of search sequence in the 
-            input collection. Searching is case insensitive.
+            Search for the first match of the string in the input. 
+            Searching is case insensitive.
             
-            \param Input A container which will be searched.
+            \param Input A string which will be searched.
             \param Search A string to be searched for.
             \param Loc a locale used for case insensitive comparison
             \return 
@@ -106,10 +105,9 @@ namespace boost {
 
         //! Find last algorithm
         /*!
-            Search for a last match of search sequence in the 
-            input collection. 
+            Search for the last match of the string in the input. 
             
-            \param Input A container which will be searched.
+            \param Input A string which will be searched.
             \param Search A string to be searched for.
             \return 
                 An \c iterator_range delimiting the match. 
@@ -130,10 +128,10 @@ namespace boost {
 
         //! Find last algorithm ( case insensitive )
         /*!
-            Search for a last match of search sequence in the 
-            input collection. Searching is case insensitive.
+            Search for the last match a string in the input. 
+            Searching is case insensitive.
             
-            \param Input A container which will be searched.
+            \param Input A string which will be searched.
             \param Search A string to be searched for.
             \param Loc a locale used for case insensitive comparison
             \return 
@@ -158,12 +156,12 @@ namespace boost {
 
         //! Find n-th algorithm 
         /*!
-            Search for an n-th match of search sequence in the 
-            input collection.         
+            Search for the n-th (zero-indexed) match of the string in the 
+            input.         
             
-            \param Input A container which will be searched.
+            \param Input A string which will be searched.
             \param Search A string to be searched for.
-            \param Nth An index of the match to be found.
+            \param Nth An index (zero-indexed) of the match to be found.
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Collection1T::iterator or 
@@ -184,12 +182,12 @@ namespace boost {
 
         //! Find n-th algorithm ( case insensitive ).
         /*!
-            Search for an n-th match of search sequence in the 
-            input collection. Searching is case insensitive.
+            Search for the n-th (zero-indexed) match of the string in the 
+            input. Searching is case insensitive.
             
-            \param Input A container which will be searched.
+            \param Input A string which will be searched.
             \param Search A string to be searched for.
-            \param Nth An index of the match to be found.
+            \param Nth An index (zero-indexed) of the match to be found.
             \param Loc a locale used for case insensitive comparison
             \return 
                 An \c iterator_range delimiting the match. 
@@ -214,11 +212,11 @@ namespace boost {
 
         //! Find head algorithm
         /*!
-            Get the head of the input. Head is a prefix of 
-            a seqence of given size. If the sequence is shorter then required,
-            whole sequence if considered to be the head.
+            Get the head of the input. Head is a prefix of the string of the 
+            given size. If the input is shorter then required, whole input if considered 
+            to be the head.
 
-            \param Input A container which will be searched.
+            \param Input An input string
             \param N A length of the head
             \return 
                 An \c iterator_range delimiting the match. 
@@ -241,11 +239,11 @@ namespace boost {
 
         //! Find tail algorithm
         /*!
-            Get the tail of the input. Head is a suffix of 
-            a seqence of given size. If the sequence is shorter then required,
-            whole sequence if considered to be the tail.
+            Get the head of the input. Head is a suffix of the string of the 
+            given size. If the input is shorter then required, whole input if considered 
+            to be the tail.
 
-            \param Input A container which will be searched.
+            \param Input An input string
             \param N A length of the tail
             \return 
                 An \c iterator_range delimiting the match. 
@@ -268,10 +266,11 @@ namespace boost {
 
         //! Find token algorithm
         /*!
-            Look for a given token in the collection. Token is specified by a predicate.
-            If bCompressed is given, adjacent tokens are considered to be one match.
+            Look for a given token in the string. Token is a character that matches the
+            given predicate.
+            If the "token compress mode" is enabled, adjacent tokens are considered to be one match.
             
-            \param Input A container which will be searched.
+            \param Input A input string.
             \param Pred An unary predicate to identify a token
             \param eCompress Enable/Disable compressing of adjacent tokens
             \return 

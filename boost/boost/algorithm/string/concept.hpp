@@ -24,7 +24,7 @@ namespace boost {
         //! Finder concept
         /*!
             Defines finder concept. Finder is a functor which selects
-            an arbitraty part of a container. Search is performed on
+            an arbitrary part of a string. Search is performed on
             the range specified by starting and ending iterators.
 
             Result of the find operation must be convertible to iterator_range.

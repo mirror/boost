@@ -33,13 +33,15 @@ namespace boost {
         /*!
             Use the Finder to search for a substring. Use the Formatter to format
             this substring and replace it in the input.
-            The resulting sequence is copied to the given output iterator.
+            The result is a modified copy of the input. It is returned as a sequence 
+            or copied to an output iterator.
     
             \param Output A output iterator to which the result will be copied
             \param Input An input sequence
             \param Finder A Finder object used to search for a match to be replaced
             \param Formatter A Formatter object used to format a match
-            \return An output iterator pointing just after last inserted character
+            \return An output iterator pointing just after last inserted character or
+                a modified copy of the input
         */
         template< 
             typename OutputIteratorT,
@@ -71,14 +73,7 @@ namespace boost {
 
         //! Generic replace algorithm
         /*!
-            Use the Finder to search for a substring. Use the Formatter to format
-            this substring and replace it in the input.
-            The result is the modified copy of the input.
-
-            \param Input An input sequence
-            \param Finder A Finder object used to search for a match to be replaced
-            \param Formatter A Formatter object used to format a match
-            \return A modified copy of the input 
+            \overload
         */
         template< 
             typename SequenceT, 
@@ -147,13 +142,15 @@ namespace boost {
             Use the Finder to search for a substring. Use the Formatter to format
             this substring and replace it in the input. Repeat this for all matching
             substrings.
-            The resulting sequence is copied to the given output iterator.
+            The result is a modified copy of the input. It is returned as a sequence 
+            or copied to an output iterator.
 
             \param Output A output iterator to which the result will be copied
             \param Input An input sequence
             \param Finder A Finder object used to search for a match to be replaced
             \param Formatter A Formatter object used to format a match
-            \return An output iterator pointing just after last inserted character
+            \return An output iterator pointing just after last inserted character or
+                a modified copy of the input
         */
         template< 
             typename OutputIteratorT,
@@ -185,15 +182,7 @@ namespace boost {
 
         //! Generic replace all algorithm
         /*!
-            Use the Finder to search for a substring. Use the Formatter to format
-            this substring and replace it in the input. Repeat this for all matching
-            substrings.
-            The result is the modified copy of the input.
-
-            \param Input An input sequence
-            \param Finder A Finder object used to search for a match to be replaced
-            \param Formatter A Formatter object used to format a match
-            \return A modified copy of the input 
+            \overload
         */
         template< 
             typename SequenceT, 

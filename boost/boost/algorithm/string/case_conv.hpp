@@ -32,14 +32,14 @@ namespace boost {
         /*!
             Each element of the input sequence is converted to lower
             case. The result is a copy of the input converted to lower case.
-			It is returned as a sequence or copied to an output iterator.
+            It is returned as a sequence or copied to an output iterator.
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
             \param Loc A locale used for conversion
             \return 
-				An output iterator pointing just after last inserted character or
-				a copy of the input
+                An output iterator pointing just after last inserted character or
+                a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 
@@ -58,8 +58,8 @@ namespace boost {
 
         //! Convert to lower case
         /*!
-			\overload
-		*/
+            \overload
+        */
         template<typename SequenceT>
         inline SequenceT to_lower_copy( 
             const SequenceT& Input, 
@@ -103,14 +103,14 @@ namespace boost {
         /*!
             Each element of the input sequence is converted to upper
             case. The result is a copy of the input converted to upper case.
-			It is returned as a sequence or copied to an output iterator
+            It is returned as a sequence or copied to an output iterator
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
             \param Loc A locale used for conversion
             \return 
-				An output iterator pointing just after last inserted character or
-				a copy of the input
+                An output iterator pointing just after last inserted character or
+                a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 
@@ -129,8 +129,8 @@ namespace boost {
 
         //! Convert to upper case
         /*!
-			\overload
-		*/
+            \overload
+        */
         template<typename SequenceT>
         inline SequenceT to_upper_copy( 
             const SequenceT& Input, 
