@@ -32,21 +32,20 @@ type. Otherwise ``difference_type`` is ``Difference``.
 
 If ``CategoryOrTraversal`` is not ``use_default`` then the member
 ``iterator_category`` is ``CategoryOrTraversal``.  Otherwise, if
-``Incrementable`` is a numberic type ``iterator_category`` is a
-type convertible to ``random_access_iterator_tag``.  Otherwise,
-``iterator_category`` is unspecified, and the ``counting_iterator``
-specialization models the same iterator traversal concepts modeled
-by ``Incrementable``.
+``numeric_limits<Incrementable>::is_specialized``, then
+``iterator_category`` is a type convertible to
+``random_access_iterator_tag``.  Otherwise, ``iterator_category`` is
+unspecified, and the ``counting_iterator`` specialization models the
+same iterator traversal concepts modeled by ``Incrementable``.
 
 [*Note:* implementers are encouraged to provide an implementation of
-  ``operator-`` and a ``difference_type`` that avoid overflows in
+  ``operator-`` and a ``difference_type`` that avoids overflows in
   the cases when the ``Incrementable`` type is a numeric type.]
 
 ``counting_iterator`` requirements
 ..................................
 
-``Incrementable`` must be Default Constructible, Copy
-Constructible, and Assignable.
+The ``Incrementable`` argument shall be Copy Constructible and Assignable.
 
 If ``iterator_category`` is convertible to ``forward_iterator_tag``
 or ``forward_traversal_tag``, the following must be well-formed::
@@ -76,7 +75,9 @@ the following must must also be valid::
 
 Specializations of ``counting_iterator`` model Readable Lvalue
 Iterator. In addition, they model the concepts corresponding to the
-iterator tags to which their ``iterator_category`` is convertible.
+iterator tags to which their ``iterator_category`` is convertible and
+also corresponding to ``CategoryOrTraversal`` when
+``CategoryOrTraversal`` is an iterator tag (and not ``use_default``).
 
 
 ``counting_iterator`` operations
@@ -89,6 +90,7 @@ operations.
 
 ``counting_iterator();``
 
+:Requires: ``Incrementable`` is Default Constructible.
 :Effects: Default construct the member ``m_inc``.
 
 
