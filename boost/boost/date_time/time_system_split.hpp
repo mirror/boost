@@ -13,7 +13,11 @@ namespace boost {
 namespace date_time {
 
   //! An unadjusted time system implementation.
+#if (defined(BOOST_MSVC))  
+  template<typename config, boost::int32_t ticks_per_second>
+#else
   template<typename config>
+#endif
   class split_timedate_system
   {
    public:
@@ -25,7 +29,11 @@ namespace date_time {
     typedef typename config::resolution_traits   resolution_traits;
 
     //86400 is number of seconds in a day...
+#if (defined(BOOST_MSVC))  
+    typedef date_time::wrapping_int<int_type, INT64_C(86400) * ticks_per_second > wrap_int_type;
+#else
     typedef date_time::wrapping_int<int_type, INT64_C(86400) * config::tick_per_second > wrap_int_type;
+#endif
 
     static time_rep_type get_time_rep(const date_type& day,
 				      const time_duration_type& tod,

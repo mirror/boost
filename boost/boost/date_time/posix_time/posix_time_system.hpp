@@ -16,8 +16,12 @@ namespace boost {
 namespace posix_time { 
 
 #ifdef BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
-  
+
+#if (defined(BOOST_MSVC))  
+  typedef date_time::split_timedate_system<posix_time_system_config, 1000000000> posix_time_system;
+#else
   typedef date_time::split_timedate_system<posix_time_system_config> posix_time_system;
+#endif
 
 #else
 

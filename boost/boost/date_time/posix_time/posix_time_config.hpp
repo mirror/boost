@@ -43,9 +43,9 @@ namespace posix_time {
 				       1000000, 6 > time_res_traits;
 
 
-// #undef BOOST_GDTL_HAS_MILLISECONDS
-// #undef BOOST_GDTL_HAS_MICROSECONDS
-// #undef BOOST_GDTL_HAS_NANOSECONDS
+// #undef BOOST_DATE_TIME_HAS_MILLISECONDS
+// #undef BOOST_DATE_TIME_HAS_MICROSECONDS
+// #undef BOOST_DATE_TIME_HAS_NANOSECONDS
 //   typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::tenth, 
 // 				       10, 0 > time_res_traits;
 
@@ -107,7 +107,10 @@ namespace posix_time {
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits resolution_traits;
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#else
     static const boost::int64_t tick_per_second =  1000000000;
+#endif
   };
 
 #else
@@ -121,7 +124,10 @@ namespace posix_time {
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
     typedef time_res_traits resolution_traits;
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#else
     static const boost::int64_t tick_per_second =  1000000;
+#endif
   };
 
 #endif
