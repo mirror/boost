@@ -18,6 +18,10 @@
  * are almost certainly incorrect for any other platform.
  */
 
+/* The above comment is almost certainly out of date. This file works
+ * on systems other than SGI MIPSpro C++ now.
+ */
+
 /*
  * Revision history:
  * 10 Aug 2001:
@@ -35,8 +39,11 @@
 
 #include <climits>
 #include <cfloat>
-#include <cwchar>             // for WCHAR_MIN and WCHAR_MAX
 #include <boost/config.hpp>
+
+#ifndef BOOST_NO_CWCHAR
+#include <cwchar> // for WCHAR_MIN and WCHAR_MAX
+#endif
 
 #if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__ppc__) || defined(__hppa) || defined(_MIPSEB)
 #define BOOST_BIG_ENDIAN
