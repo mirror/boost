@@ -88,11 +88,14 @@ namespace boost
             typedef wchar_t type;
         };
 
+        #ifndef BOOST_NO_STD_WSTRING
         template<>
         struct stream_char<std::wstring>
         {
             typedef wchar_t type;
         };
+        #endif
+
         #endif
 
         template<typename TargetChar, typename SourceChar>
