@@ -24,8 +24,10 @@ namespace gregorian {
     typedef boost::date_time::weekdays weekday_enum;
   };
 
+  //! Create the base facet type for gregorian::date
   typedef boost::date_time::date_names_put<greg_facet_config> greg_base_facet;
   
+  //! ostream operator for gregorian::date
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
