@@ -70,6 +70,11 @@ namespace boost {
   };
 #endif
 
+} // namespace boost
+
+  // These need to go in global namespace because Koenig
+  // lookup does not apply to T*.
+
   // V must be convertible to T
   template <class T, class V>
   inline void put(T* pa, std::ptrdiff_t k, const V& val) { pa[k] = val;  }
@@ -82,6 +87,8 @@ namespace boost {
 
   template <class T>
   inline const T& at(const T* pa, std::ptrdiff_t k) { return pa[k]; }
+
+namespace boost {
 
   //=========================================================================
   // concept checks for property maps
