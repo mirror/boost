@@ -392,7 +392,7 @@ template <class R, class T, class A0, class A1, class A2, class A3, class A4, cl
 struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28)>{ BOOST_STATIC_CONSTANT(bool, value = true); };
 
 // Metrowerks thinks this creates ambiguities
-# if !defined(__MWERKS__) || __MWERKS__ > 0x2406
+# if !defined(__MWERKS__) || __MWERKS__ > 0x2407
 
 template <class R, class T>
 struct is_member_function_pointer<R (T::*)(void)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };

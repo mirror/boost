@@ -146,7 +146,7 @@ unsigned int expected_failures = 1; // can't handle cv-qualified references
 # endif
 #elif defined(BOOST_MSVC)
 unsigned int expected_failures = 0;
-#elif defined(__MWERKS__) || defined(__HP_aCC)
+#elif defined(__MWERKS__) && __MWERKS__ <= 0x2407 || defined(__HP_aCC)
 unsigned int expected_failures = 1; // is_enum doesn't work
 #else
 unsigned int expected_failures = 0;
