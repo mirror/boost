@@ -32,7 +32,7 @@ namespace std{ using ::wcslen; }
 #include <boost/archive/iterators/ostream_iterator.hpp>
 
 #include <boost/archive/add_facet.hpp>
-#include <boost/utf8_codecvt_facet.hpp>
+#include <boost/archive/detail/utf8_codecvt_facet.hpp>
 
 template<std::size_t s>
 struct test_data
@@ -99,7 +99,10 @@ int
 test_main(int /* argc */, char * /* argv */[]) {
     std::locale old_loc;
     std::locale * utf8_locale
-        = boost::archive::add_facet(old_loc, new utf8_codecvt_facet<wchar_t, char>);
+        = boost::archive::add_facet(
+            old_loc, 
+            new boost::archive::detail::utf8_codecvt_facet
+        );
 
     typedef char utf8_t;
     typedef test_data<sizeof(wchar_t)> td;
