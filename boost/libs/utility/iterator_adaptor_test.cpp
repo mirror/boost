@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  07 Feb 01 Added tests for the make_xxx_iterator() helper functions.
+//            (Jeremy Siek)
 //  07 Feb 01 Replaced use of xxx_pair_generator with xxx_generator where
 //            possible (which was all but the projection iterator).
 //            (Jeremy Siek)
@@ -249,8 +251,23 @@ main()
     indirect_iterator i = ptr;
     boost::random_access_iterator_test(i, N, array);
 
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+    typedef boost::iterator<std::random_access_iterator_tag, dummyT> InnerTraits;
+    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr, *ptr, InnerTraits()), N, array);
+#else
+    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
+#endif
+
     const_indirect_iterator j = ptr;
     boost::random_access_iterator_test(j, N, array);
+
+    dummyT*const* const_ptr = ptr;
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+    typedef boost::iterator<std::random_access_iterator_tag,dummyT,std::ptrdiff_t,const dummyT*,const dummyT&> ConstInnerTraits;
+    boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr, *const_ptr, ConstInnerTraits()), N, array);
+#else
+    boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
+#endif
 
     boost::const_nonconst_iterator_test(i, ++j);
 
@@ -272,8 +289,12 @@ main()
     Projection::iterator i = pair_array;
     boost::random_access_iterator_test(i, N, array);
 
+    boost::random_access_iterator_test(boost::make_projection_iterator(pair_array, select1st_<Pair>()), N, array);    
+
     Projection::const_iterator j = pair_array;
     boost::random_access_iterator_test(j, N, array);
+
+    boost::random_access_iterator_test(boost::make_const_projection_iterator(pair_array, select1st_<Pair>()), N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);
   }
@@ -292,8 +313,23 @@ main()
     reverse_iterator i = reversed + N;
     boost::random_access_iterator_test(i, N, array);
 
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+    tyepdef boost::iterator<std::random_access_iterator_tag,dummyT> ReverseTraits;
+    boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N, ReverseTraits()), N, array);
+#else
+    boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
+#endif
+
     const_reverse_iterator j = reversed + N;
     boost::random_access_iterator_test(j, N, array);
+
+    const dummyT* const_reversed = reversed;
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+    typedef boost::iterator<std::random_access_iterator_tag,const dummyT> ConstReverseTraits;
+    boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N, ConstReverseTraits()), N, array);
+#else
+    boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
+#endif
 
     boost::const_nonconst_iterator_test(i, ++j);    
   }
@@ -309,9 +345,13 @@ main()
   {
     typedef boost::filter_iterator_generator<one_or_four, dummyT*,
       boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t,
-      dummyT*, dummyT&> >::type FilterIter;
-    FilterIter i(array);
+      dummyT*, dummyT&> > FilterGen;
+    typedef FilterGen::type FilterIter;
+    typedef FilterGen::policies_type FilterPolicies;
+    FilterIter i(array, FilterPolicies(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
+
+    boost::forward_iterator_test(boost::make_filter_iterator(array, array + N, one_or_four()), dummyT(1), dummyT(4));
   }
   std::cout << "test successful " << std::endl;
   return 0;
