@@ -151,8 +151,8 @@ basic_format<Ch,Tr>& basic_format<Ch,Tr> ::clear_bind(int argN)
 {
     if(argN<1 || argN > num_args_ || bound_.size()==0 || !bound_[argN-1] ) 
       {
-        if( exceptions() & out_of_range_bit )
-          boost::throw_exception(out_of_range()); // arg not in range.
+        if( exceptions() & io::out_of_range_bit )
+          boost::throw_exception(io::out_of_range()); // arg not in range.
         else return *this;
       }
     bound_[argN-1]=false;
@@ -209,8 +209,8 @@ basic_format<Ch, Tr>&  bind_arg_body( basic_format<Ch, Tr>& self,
     if(self.dumped_) self.clear(); // needed, because we will modify cur_arg_..
     if(argN<1 || argN > self.num_args_) 
       {
-        if( self.exceptions() & out_of_range_bit )
-          boost::throw_exception(out_of_range()); // arg not in range.
+        if( self.exceptions() & io::out_of_range_bit )
+          boost::throw_exception(io::out_of_range()); // arg not in range.
         else return self;
       }
     if(self.bound_.size()==0) 
@@ -246,8 +246,8 @@ basic_format<Ch, Tr>&  modify_item_body( basic_format<Ch, Tr>& self,
 {
   if(itemN<1 || itemN >= static_cast<signed int>(self.items_.size() )) 
     {
-      if( self.exceptions() & out_of_range_bit ) 
-        boost::throw_exception(out_of_range()); // item not in range.
+      if( self.exceptions() & io::out_of_range_bit ) 
+        boost::throw_exception(io::out_of_range()); // item not in range.
       else return self;
     }
   self.items_[itemN-1].ref_state_.apply_manip( manipulator );
