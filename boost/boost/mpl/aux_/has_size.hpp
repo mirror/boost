@@ -33,16 +33,16 @@ namespace aux {
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
 template< typename T >
-yes_tag has_size_helper(type_wrapper<T>, BOOST_MSVC_TYPENAME T::size*);
+yes_tag has_size_helper(type_wrapper<T>*, BOOST_MSVC_TYPENAME T::size*);
 
 template< typename T >
-no_tag has_size_helper(type_wrapper<T>, ...);
+no_tag has_size_helper(type_wrapper<T>*, ...);
 
 template< typename T >
 struct has_size
 {
      BOOST_STATIC_CONSTANT(bool, value = 
-        sizeof(has_size_helper(type_wrapper<T>(), 0)) == sizeof(yes_tag)
+        sizeof(has_size_helper((type_wrapper<T>*)0, 0)) == sizeof(yes_tag)
         );
 };
 
