@@ -124,12 +124,22 @@ int main(int , char* [] )
 </pre>
 <hr>
 <h2><a name="Instantiation">Instantiation</a></h2>
-<p>A concrete <code>variant</code> instantiation has this general form: </p>
-<pre>typedef boost::variant&lt;T1, T2, ... TN&gt; variant_type;
+<p>A concrete <code>variant</code> instantiation can use either of these two
+equivalent notations:</p>
+<pre>typedef boost::variant&lt;T1,T2, ... Tn&gt; variant_type;
+typedef boost::variant&lt;boost::mpl::vector&lt;T1,T2, ... Tn&gt; &gt; variant_type;
 </pre>
-<p>Where the types <code>T1, T2, ... TN</code> must model the
+<p>Where the types <code>T1, T2, ... Tn</code> must model the
  <a href="reference.html#BoundedTypes">BoundedType</a> concept. An instance of
- <code>variant_type</code> is capable of holding a value of any of these types.</p>
+ <code>variant_type</code> is capable of holding a value of any of these
+types.<Br>
+<br>
+Comments:<ul>
+<li>The second notation is not supported by all compilers</li>
+<li>In the second notation, <code>boost::mpl::vector</code> can be
+replaced by any other mpl sequence</code>
+</ul>
+
 <h3>Examples: </h3>
 <pre>   boost::variant&lt;int, char, double&gt; v1; // OK
 
@@ -139,7 +149,7 @@ int main(int , char* [] )
 
    variant&lt;char, const char*, void*&gt; v5; // OK - const char* is not a top-level const type
 </pre>
-<p>If one of these types is incomplete at the instantiation point, it must be 
+<p>If one of these types is incomplete at the instantiation point, it must be
  enclosed inside an <code>incomplete&lt;&gt;</code> wrapper, as shown below:<br>
 </p>
 <pre>   struct jas1; // Forward declaration of jas1 (Just Another Struct)

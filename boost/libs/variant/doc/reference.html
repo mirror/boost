@@ -91,24 +91,34 @@ namespace boost
         <p></p>
         <hr>
         <h2><a name="BoundedType"><i>BoundedType</i>&nbsp;Concept</a></h2>
-        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1, T2, ... , T<i>n</i>&gt;</code>,
+        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1,T2,...,T<i>n</i>&gt;</code>,
             each type <code>T<i>i</i></code> is a <b>bounded type</b> of the <code>variant</code>.</p>
         <p>The requirements on bounded types are as follows:</p>
         <ul>
-            <li><i>CopyConstructible</i> [20.1.3].</li>
-            <LI><I>Assignable</I>.</LI>
+            <li><em>CopyConstructible</em> [20.1.3].</li>
+            <LI><em><a href="../../utility/Assignable.html">Assignable</em></a>.</LI>
             <li>Destructor upholds the no-throw exception-safety guarantee.</li>
             <li>Not top-level <code>const</code>-qualified.</li>
             <li>Not a reference type</li>
             <li>Complete at the point of variant template instantiation.
-	    (See <code><a href="#incomplete"> incomplete&lt;T&gt;</a></code> 
+	    (See <code><a href="#incomplete"> incomplete&lt;T&gt;</a></code>
 	    wrapper for a solution to containing incomplete types.)</li>
         </ul>
-        <p>A <code>variant</code>'s first bounded type has the additional requirement that
-            it&nbsp;is <em>DefaultConstructible</em> [??].</p>
+        <p>Additional requirements on the first type T1:</p>
+        <ul>
+            <li>If <code>T1</code> is a
+	    <a href="../../mpl/doc/ref/Sequences.html"><code>boost::mpl</code></a>
+	    sequence,and no other types are specified (i.e: <i>n</i> = 1),
+	    then the instantiated variant will use the types contained in
+	    <code>T1</code> as its <em>Bounded Types</em>.
+            </li>
+            <li><code>T1</code> must be <em>DefaultConstructible</em> [20.1.4]
+	    if the <code>variant</code> is expected to be default constructible.
+            </li>
+        </ul>
         <hr>
         <h2><a name="Visitor"><i>Visitor</i> Concept</a></h2>
-        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1, T2, ... , T<i>n</i>&gt;</code>,
+        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1,T2,...,T<i>n</i>&gt;</code>,
             a function object which unambiguously accepts any value of
 each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
 <B>Visitor</B> of of the <CODE>variant</CODE>.
@@ -137,16 +147,16 @@ each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
         return i * 2;
     }
 
-    int operator()(std::string&amp; s)
+    int operator()(const std::string&amp; s)
     {
         return s.length();
     }
 };</pre>
-        <p>Another example is the following class, which exposes a templated function
-            operator, allowing it to operate on values of many types. Thus, the following
-            class is a visitor of any <code>variant</code> whose bounded types each support
-            streaming output:</p>
-        <pre>class printer
+        <p>Another example is the following class, which exposes a templated 
+	function call operator, allowing it to operate on values of many types. 
+	Thus, the following class is a visitor of any <code>variant</code> 
+	whose bounded types each support streaming output:</p>
+<pre>class printer
 {
     typedef void result_type;
 
@@ -453,7 +463,7 @@ operator&lt;&lt;(BOOST_TEMPLATED_STREAM(ostream, E,T)&, const empty& );  // NOP
 <p>
 A <code>variant</code> object holding a value of
 type <code>boost::empty</code> is considered to be empty.<br>
-This convention is acknowledged by <code>varinat::empty()</code> - Its
+This convention is acknowledged by <code>varinat::empty()</code>: Its
 return value is <code>true</code>, only if the held value is of type
 <code>boost::empty</code>.<br>
 <br>
@@ -475,7 +485,7 @@ as one of its <a href="#BoundedType">BoundedTypes</a>, can never be in an empty
 state. At any given point it holds a valid value.
 </li>
 <li>Empty variants are visitable. Consequently, every visitor of a possibly
-empty variant, must be capable of accepting a <code>boost::empty</code> value.
+empty variant, must accept a <code>boost::empty</code> value.
 </li>
 <li><code>boost::empty</code> has no state. Thus, when two instances of
 <code>boost::empty</code> are tested for equality, the result is always
