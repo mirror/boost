@@ -212,7 +212,7 @@ namespace boost{
     }
 
     template<class Token, class Value> 
-    static void plus_equal(Token &t, const Value &v) {
+    static void plus_equal(Token &, const Value &) {
     
   }
 
@@ -220,7 +220,7 @@ namespace boost{
     // the clear. 
     //
     template<class Token>
-    static void clear(Token &t) {
+    static void clear(Token &) {
 
     }
   };
