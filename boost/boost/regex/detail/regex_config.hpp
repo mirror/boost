@@ -121,8 +121,12 @@ full list of macros and their usage.
       #define BOOST_RE_CALL
       #define BOOST_RE_CCALL
    #else
-      #define BOOST_RE_CALL __fastcall
-      #define BOOST_RE_CCALL __stdcall
+      #ifndef BOOST_RE_CALL
+         #define BOOST_RE_CALL __fastcall
+      #endif
+      #ifndef BOOST_RE_CCALL
+         #define BOOST_RE_CCALL __stdcall
+      #endif
    #endif
 
    #define BOOST_RE_NO_CAT
@@ -160,12 +164,16 @@ full list of macros and their usage.
 //
 // only want "real" Visual C++ here:
 #if defined(BOOST_MSVC) && !defined(__WATCOMC__) && !defined(__BORLANDC__) && !defined(__GNUC__) && !defined(__MWERKS__) && !defined (__ICL)
-   #ifdef _DEBUG
-      #define BOOST_RE_CALL __cdecl
-   #else
-      #define BOOST_RE_CALL __fastcall
-#endif
-   #define BOOST_RE_CCALL __stdcall
+   #ifndef BOOST_RE_CALL
+      #ifdef _DEBUG
+         #define BOOST_RE_CALL __cdecl
+      #else
+         #define BOOST_RE_CALL __fastcall
+      #endif
+   #endif
+   #ifndef BOOST_RE_CCALL
+      #define BOOST_RE_CCALL __stdcall
+   #endif
 
    #if BOOST_MSVC < 1100
       #define BOOST_RE_NO_NAMESPACES
@@ -207,7 +215,7 @@ full list of macros and their usage.
 
    //
    // import export options:
-   #if defined(_DLL) && !defined(BOOST_RE_STATIC_LIB)
+   #if defined(_DLL) && !defined(BOOST_RE_STATIC_LIB) && !defined(BOOST_RE_NO_LIB)
       #ifdef BOOST_RE_BUILD_DLL
          #define BOOST_RE_IX_DECL __declspec( dllexport )
       #elif !defined(BOOST_REGEX_LIBRARY_INCLUDE_HPP) && !defined(BOOST_RE_NO_LIB)

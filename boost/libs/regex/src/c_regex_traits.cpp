@@ -403,7 +403,7 @@ namespace re_detail{
 
 char c_traits_base::regex_message_catalogue[200] = {0};
 
-std::string c_traits_base::error_string(unsigned id)
+std::string BOOST_RE_CALL c_traits_base::error_string(unsigned id)
 {
    return re_get_error_str(id);
 }
@@ -527,7 +527,7 @@ bool BOOST_RE_CALL c_traits_base::do_lookup_collate(std::string& buf, const char
    return result;
 }
 
-std::string c_traits_base::set_message_catalogue(const std::string& l)
+std::string BOOST_RE_CALL c_traits_base::set_message_catalogue(const std::string& l)
 {
    if(sizeof(regex_message_catalogue) <= l.size())
       return l;
@@ -571,7 +571,7 @@ bool BOOST_RE_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_string
 
 c_regex_traits<char> c_regex_traits<char>::i;
 
-void c_regex_traits<char>::init()
+void BOOST_RE_CALL c_regex_traits<char>::init()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_RE_THREADS
