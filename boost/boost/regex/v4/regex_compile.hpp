@@ -1066,7 +1066,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
       ++csingles;
       const traits_string_type& s = singles.peek();
       std::size_t len = (s.size() + 1) * sizeof(charT);
-      if(len > sizeof(charT))
+      if(len > sizeof(charT) * 2)
          singleton = false;
       std::memcpy(reinterpret_cast<charT*>(data.extend(len)), s.c_str(), len);
       singles.pop();

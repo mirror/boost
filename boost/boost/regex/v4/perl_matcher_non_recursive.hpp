@@ -927,8 +927,8 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_greedy_si
 
    const re_repeat* rep = pmp->rep;
    unsigned count = pmp->count;
-   assert(rep->next.p);
-   assert(rep->alt.p);
+   assert(rep->next.p != 0);
+   assert(rep->alt.p != 0);
 
    count -= rep->min;
    
@@ -977,8 +977,8 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_slow_dot_
    const re_repeat* rep = pmp->rep;
    unsigned count = pmp->count;
    assert(rep->type == syntax_element_dot_rep);
-   assert(rep->next.p);
-   assert(rep->alt.p);
+   assert(rep->next.p != 0);
+   assert(rep->alt.p != 0);
    assert(rep->next.p->type == syntax_element_wild);
 
    assert(count < rep->max);
@@ -1095,8 +1095,8 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_char_repe
    position = pmp->last_position;
 
    assert(rep->type == syntax_element_char_rep);
-   assert(rep->next.p);
-   assert(rep->alt.p);
+   assert(rep->next.p != 0);
+   assert(rep->alt.p != 0);
    assert(rep->next.p->type == syntax_element_literal);
    assert(count < rep->max);
 
@@ -1159,8 +1159,8 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_short_set
    position = pmp->last_position;
 
    assert(rep->type == syntax_element_short_set_rep);
-   assert(rep->next.p);
-   assert(rep->alt.p);
+   assert(rep->next.p != 0);
+   assert(rep->alt.p != 0);
    assert(rep->next.p->type == syntax_element_set);
    assert(count < rep->max);
    
@@ -1223,8 +1223,8 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_long_set_
    position = pmp->last_position;
 
    assert(rep->type == syntax_element_long_set_rep);
-   assert(rep->next.p);
-   assert(rep->alt.p);
+   assert(rep->next.p != 0);
+   assert(rep->alt.p != 0);
    assert(rep->next.p->type == syntax_element_long_set);
    assert(position != last);
    assert(count < rep->max);
