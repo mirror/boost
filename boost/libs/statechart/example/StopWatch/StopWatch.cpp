@@ -8,7 +8,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-// The following code implements the state-machine:
+// The following code implements the state-machine (this is the version
+// discussed in the tutorial):
+//
 //  --------------------------------
 // |                                |
 // |           O     Active         |
@@ -48,7 +50,6 @@
 
 
 namespace fsm = boost::fsm;
-namespace mpl = boost::mpl;
 
 
 
