@@ -26,9 +26,18 @@
 #   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #endif
 
+# if !defined(__EXCEPTIONS)
+#     define BOOST_NO_EXCEPTIONS
+# endif
+
+# if !defined(__NO_LONG_LONG)
+#     define BOOST_HAS_LONG_LONG
+# endif
+
 #ifdef c_plusplus
 // EDG has "long long" in non-strict mode
 // However, some libraries have insufficient "long long" support
 // #define BOOST_HAS_LONG_LONG
 #endif
+
 
