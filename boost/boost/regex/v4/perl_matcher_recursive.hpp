@@ -27,9 +27,6 @@
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
-#ifdef __BORLANDC__
-#pragma option push -w-8008 -w-8066 -w-8004
-#endif
 
 namespace boost{
 namespace re_detail{
@@ -416,6 +413,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_char_repea
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
+#ifdef __BORLANDC__
+#pragma option push -w-8008 -w-8066 -w-8004
+#endif
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
    assert(1 == static_cast<const re_literal*>(rep->next.p)->length);
    const char_type what = *reinterpret_cast<const char_type*>(static_cast<const re_literal*>(rep->next.p) + 1);
@@ -479,6 +479,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_char_repea
       position = ++save_pos;
       ++count;
    }while(true);
+#ifdef __BORLANDC__
+#pragma option pop
+#endif
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -490,6 +493,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_set_repeat
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable:4127)
+#endif
+#ifdef __BORLANDC__
+#pragma option push -w-8008 -w-8066 -w-8004
 #endif
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
    const unsigned char* map = static_cast<const re_set*>(rep->next.p)->_map;
@@ -553,6 +559,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_set_repeat
       position = ++save_pos;
       ++count;
    }while(true);
+#ifdef __BORLANDC__
+#pragma option pop
+#endif
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -564,6 +573,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_long_set_r
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable:4127)
+#endif
+#ifdef __BORLANDC__
+#pragma option push -w-8008 -w-8066 -w-8004
 #endif
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
    const re_set_long* set = static_cast<const re_set_long*>(pstate->next.p);
@@ -627,6 +639,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_long_set_r
       position = ++save_pos;
       ++count;
    }while(true);
+#ifdef __BORLANDC__
+#pragma option pop
+#endif
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -686,9 +701,6 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::backtrack_till_m
 } // namespace re_detail
 } // namespace boost
 
-#ifdef __BORLANDC__
-#pragma option pop
-#endif
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif

@@ -266,10 +266,6 @@ inline int (toupper)(int i)
 using ::toupper;
 #endif
 
-#ifdef __BORLANDC__
-#pragma option pop
-#endif
-
 #else
 
 #undef memcmp
@@ -296,6 +292,11 @@ using ::toupper;
 #undef tolower
 #undef toupper
 
+#endif
+
+
+#ifdef __BORLANDC__
+#pragma option pop
 #endif
 
 } // namespace std

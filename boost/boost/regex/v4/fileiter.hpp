@@ -102,6 +102,10 @@ _fi_find_handle _fi_FindFirstFile(const char* lpFileName, _fi_find_data* lpFindF
 bool _fi_FindNextFile(_fi_find_handle hFindFile,   _fi_find_data* lpFindFileData);
 bool _fi_FindClose(_fi_find_handle hFindFile);
 
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+
    } // namespace re_detail
 } // namespace boost
 
@@ -123,6 +127,10 @@ bool _fi_FindClose(_fi_find_handle hFindFile);
 
 namespace boost{
    namespace re_detail{
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 
 #ifdef BOOST_REGEX_FI_WIN32_MAP // win32 mapfile
 

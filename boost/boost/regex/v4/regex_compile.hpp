@@ -1222,7 +1222,6 @@ inline
    return reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<char*>(base) + off);
 }
 
-
 template <class charT, class traits, class Allocator>
 void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces)
 {
@@ -2175,6 +2174,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned in
 
 
 #endif   // BOOST_REGEX_COMPILE_HPP
+
 
 
 

@@ -39,7 +39,7 @@ struct sub_match : public std::pair<BidiIterator, BidiIterator>
    typedef typename re_detail::regex_iterator_traits<BidiIterator>::difference_type  difference_type;
 #endif
    typedef          BidiIterator                                                     iterator_type;
-   
+
    bool matched;
 
    sub_match() : std::pair<BidiIterator, BidiIterator>(), matched(false) {}
