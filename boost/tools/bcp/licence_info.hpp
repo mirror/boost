@@ -23,15 +23,15 @@ struct licence_info
    //instaed:
    //
    licence_info(const boost::regex& e1, 
-				const boost::regex& e2, 
-				const std::string& s1, 
-				const std::string& s2, 
-				const std::string& s3)
-				: licence_signature(e1), 
-				  copyright_signature(e2),
-				  copyright_formatter(s1),
-				  licence_name(s2),
-				  licence_text(s3){}
+            const boost::regex& e2, 
+            const std::string& s1, 
+            const std::string& s2, 
+            const std::string& s3)
+            : licence_signature(e1), 
+              copyright_signature(e2),
+              copyright_formatter(s1),
+              licence_name(s2),
+              licence_text(s3){}
 };
 
 std::pair<const licence_info*, int> get_licences();

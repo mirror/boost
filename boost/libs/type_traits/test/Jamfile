@@ -3,7 +3,7 @@ subproject libs/type_traits/test ;
 
 # bring in the rules for testing
 import testing ;
-    			
+            
 rule type-traits-run ( sources + )
 {
         return [ 
@@ -24,9 +24,9 @@ rule type-traits-run ( sources + )
 }
 
 lib type_traits_init : init.cpp 
-    	: 
-        	<sysinclude>$(BOOST_ROOT)
-    	: 
+      : 
+         <sysinclude>$(BOOST_ROOT)
+      : 
 ;
     
         
