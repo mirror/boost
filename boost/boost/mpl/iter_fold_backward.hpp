@@ -48,7 +48,7 @@ struct iter_fold_backward
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           4
         , iter_fold_backward
-        , (Sequence,State,ForwardOp,ForwardOp)
+        , (Sequence,State,BackwardOp,ForwardOp)
         )
 };
 
