@@ -1,7 +1,14 @@
 /* The following shows the creation of a facet for the output of 
  * dates in German (please forgive me for any errors in my German --
  * I'm not a native speaker).
+ * 
+ * This program uses the pre 1.33 version of date_time 
+ * input/output code. Typically the USE_DATE_TIME_PRE_1_33_FACET_IO
+ * macro would be defined in a Jamfile but it was defined in this 
+ * file for the sake of the example.
  */
+
+#define USE_DATE_TIME_PRE_1_33_FACET_IO
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include <iostream>

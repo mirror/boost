@@ -35,7 +35,9 @@ exe month_add : <lib>../build/boost_date_time
 
 exe localization : <lib>../build/boost_date_time
                   gregorian/localization.cpp
-                : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
+                : <include>$(BOOST_ROOT) 
+#                 <define>USE_DATE_TIME_PRE_1_33_FACET_IO 
+                  $(DATE_TIME_PROPERTIES) 
                 ;
 
 exe print_holidays : <lib>../build/boost_date_time
@@ -76,6 +78,21 @@ exe time_math : <lib>../build/boost_date_time
 exe time_periods : <lib>../build/boost_date_time
                   posix_time/time_periods.cpp
                 : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG  
+                ;
+
+exe simple_time_zone : <lib>../build/boost_date_time
+                  local_time/simple_time_zone.cpp
+                : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
+                ;
+
+exe calc_rules : <lib>../build/boost_date_time
+                  local_time/calc_rules.cpp
+                : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
+                ;
+
+exe seconds_since_epoch : <lib>../build/boost_date_time
+                  local_time/seconds_since_epoch.cpp
+                : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
                 ;
 
 # Copyright (c) 2002-2004
