@@ -14,17 +14,31 @@
 #include <string>
 #include <memory>
 #include <new>
+#include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
-#include <boost/type_traits/arithmetic_traits.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/composite_traits.hpp>
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/ref.hpp>
 #include <boost/pending/ct_if.hpp>
 #include <boost/detail/workaround.hpp>
-
 #ifndef BOOST_NO_SFINAE
 #  include "boost/utility/enable_if.hpp"
+#else
+#  include "boost/mpl/bool.hpp"
+#endif
+
+// Borrowed from Boost.Python library: determines the cases where we
+// need to use std::type_info::name to compare instead of operator==.
+# if (defined(__GNUC__) && __GNUC__ >= 3) \
+ || defined(_AIX) \
+ || (   defined(__sgi) && defined(__host_mips))
+#  include <cstring>
+#  define BOOST_FUNCTION_COMPARE_TYPE_ID(X,Y) \
+     (std::strcmp((X).name(),(Y).name()) == 0)
+# else
+#  define BOOST_FUNCTION_COMPARE_TYPE_ID(X,Y) (X==Y)
 #endif
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_STRICT_CONFIG)
@@ -139,7 +153,8 @@ namespace boost {
       // The operation type to perform on the given functor/function pointer
       enum functor_manager_operation_type {
         clone_functor_tag,
-        destroy_functor_tag
+        destroy_functor_tag,
+        check_functor_type_tag
       };
 
       // Tags used to decide between different types of functions
@@ -172,14 +187,27 @@ namespace boost {
 
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
-      inline any_pointer trivial_manager(any_pointer f,
-                                         functor_manager_operation_type op)
-      {
-        if (op == clone_functor_tag)
-          return f;
-        else
+      template<typename F>
+        inline any_pointer
+        trivial_manager(any_pointer f, functor_manager_operation_type op)
+        {
+          switch (op) {
+          case clone_functor_tag: return f;
+
+          case destroy_functor_tag:
+            return make_any_pointer(reinterpret_cast<void*>(0));
+
+          case check_functor_type_tag:
+            {
+              std::type_info* t = static_cast<std::type_info*>(f.obj_ptr);
+              bool equal = BOOST_FUNCTION_COMPARE_TYPE_ID(typeid(F), *t);
+              return equal? f : make_any_pointer(reinterpret_cast<void*>(0));
+            }
+          }
+
+          // Clears up a warning with GCC 3.2.3
           return make_any_pointer(reinterpret_cast<void*>(0));
-      }
+        }
 
       /**
        * The functor_manager class contains a static function "manage" which
@@ -264,13 +292,59 @@ namespace boost {
         static any_pointer
         manage(any_pointer functor_ptr, functor_manager_operation_type op)
         {
-          typedef typename get_function_tag<functor_type>::type tag_type;
-          return manager(functor_ptr, op, tag_type());
+          if (op == check_functor_type_tag) {
+            std::type_info* type =
+              static_cast<std::type_info*>(functor_ptr.obj_ptr);
+            bool equal =
+              BOOST_FUNCTION_COMPARE_TYPE_ID(typeid(Functor), *type);
+            return (equal? functor_ptr
+                    : make_any_pointer(reinterpret_cast<void*>(0)));
+          }
+          else {
+            typedef typename get_function_tag<functor_type>::type tag_type;
+            return manager(functor_ptr, op, tag_type());
+          }
         }
       };
 
       // A type that is only used for comparisons against zero
       struct useless_clear_type {};
+
+#ifdef BOOST_NO_SFINAE
+      // These routines perform comparisons between a Boost.Function
+      // object and an arbitrary function object (when the last
+      // parameter is mpl::bool_<false>) or against zero (when the
+      // last parameter is mpl::bool_<true>). They are only necessary
+      // for compilers that don't support SFINAE.
+      template<typename Function, typename Functor>
+        bool
+        compare_equal(const Function& f, const Functor&, mpl::bool_<true>)
+        { return f.empty(); }
+
+      template<typename Function, typename Functor>
+        bool
+        compare_not_equal(const Function& f, const Functor&, mpl::bool_<true>)
+        { return !f.empty(); }
+
+      template<typename Function, typename Functor>
+        bool
+        compare_equal(const Function& f, const Functor& g, mpl::bool_<false>)
+        {
+          if (const Functor* fp = f.template contains<Functor>())
+            return *fp == g;
+          else return false;
+        }
+
+      template<typename Function, typename Functor>
+        bool
+        compare_not_equal(const Function& f, const Functor& g,
+                          mpl::bool_<false>)
+        {
+          if (const Functor* fp = f.template contains<Functor>())
+            return *fp != g;
+          else return true;
+        }
+#endif // BOOST_NO_SFINAE
     } // end namespace function
   } // end namespace detail
 
@@ -291,11 +365,59 @@ public:
   // Is this function empty?
   bool empty() const { return !manager; }
 
+  template<typename Functor>
+    Functor* contains()
+    {
+      if (!manager) return 0;
+
+      detail::function::any_pointer result =
+        manager(detail::function::make_any_pointer(&typeid(Functor)),
+                detail::function::check_functor_type_tag);
+      if (!result.obj_ptr) return false;
+      else {
+        typedef typename detail::function::get_function_tag<Functor>::type tag;
+        return get_functor_pointer<Functor>(tag(), 0);
+      }
+    }
+
+  template<typename Functor>
+    const Functor* contains() const
+    {
+      if (!manager) return 0;
+
+      detail::function::any_pointer result =
+        manager(detail::function::make_any_pointer(&typeid(Functor)),
+                detail::function::check_functor_type_tag);
+      if (!result.obj_ptr) return false;
+      else {
+        typedef typename detail::function::get_function_tag<Functor>::type tag;
+        return get_functor_pointer<Functor>(tag(), 0);
+      }
+    }
+
 public: // should be protected, but GCC 2.95.3 will fail to allow access
   detail::function::any_pointer (*manager)(
     detail::function::any_pointer,
     detail::function::functor_manager_operation_type);
   detail::function::any_pointer functor;
+
+private:
+  template<typename Functor>
+    Functor* get_functor_pointer(detail::function::function_ptr_tag, int)
+    { return &reinterpret_cast<Functor>(functor.func_ptr); }
+
+  template<typename Functor, typename Tag>
+    Functor* get_functor_pointer(Tag, long)
+    { return static_cast<Functor*>(functor.obj_ptr); }
+
+  template<typename Functor>
+    const Functor*
+    get_functor_pointer(detail::function::function_ptr_tag, int) const
+    { return &reinterpret_cast<const Functor>(functor.func_ptr); }
+
+  template<typename Functor, typename Tag>
+    const Functor* get_functor_pointer(Tag, long) const
+    { return static_cast<const Functor*>(functor.const_obj_ptr); }
 };
 
 /**
@@ -308,16 +430,7 @@ public:
   bad_function_call() : std::runtime_error("call to empty boost::function") {}
 };
 
-/* Poison comparison between Boost.Function objects (because it is
- * meaningless). The comparisons would otherwise be allowed because of the
- * conversion required to allow syntax such as:
- *   boost::function<int, int> f;
- *   if (f) { f(5); }
- */
-void operator==(const function_base&, const function_base&);
-void operator!=(const function_base&, const function_base&);
-
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+#ifndef BOOST_NO_SFINAE
 inline bool operator==(const function_base& f,
                        detail::function::useless_clear_type*)
 {

@@ -508,7 +508,7 @@ namespace boost {
           invoker_type;
 
         invoker = &invoker_type::invoke;
-        this->manager = &detail::function::trivial_manager;
+        this->manager = &detail::function::trivial_manager<FunctionObj>;
         this->functor =
           this->manager(
             detail::function::make_any_pointer(
@@ -529,7 +529,7 @@ namespace boost {
                      >::type
           invoker_type;
       invoker = &invoker_type::invoke;
-      this->manager = &detail::function::trivial_manager;
+      this->manager = &detail::function::trivial_manager<FunctionObj>;
       this->functor = detail::function::make_any_pointer(this);
     }
 
@@ -555,6 +555,143 @@ namespace boost {
   {
     f1.swap(f2);
   }
+
+// Poison comparisons between boost::function objects of the same type.
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator>
+  void operator==(const BOOST_FUNCTION_FUNCTION<
+                          R BOOST_FUNCTION_COMMA
+                          BOOST_FUNCTION_TEMPLATE_ARGS ,
+                          Allocator>&,
+                  const BOOST_FUNCTION_FUNCTION<
+                          R BOOST_FUNCTION_COMMA
+                          BOOST_FUNCTION_TEMPLATE_ARGS ,
+                  Allocator>&);
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator>
+  void operator!=(const BOOST_FUNCTION_FUNCTION<
+                          R BOOST_FUNCTION_COMMA
+                          BOOST_FUNCTION_TEMPLATE_ARGS ,
+                          Allocator>&,
+                  const BOOST_FUNCTION_FUNCTION<
+                          R BOOST_FUNCTION_COMMA
+                          BOOST_FUNCTION_TEMPLATE_ARGS ,
+                  Allocator>&);
+
+#ifdef BOOST_NO_SFINAE
+// Comparisons between boost::function objects and arbitrary function objects
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  inline bool
+  operator==(const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f,
+             Functor g)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_equal(f, g, integral());
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  inline bool
+  operator==(Functor g,
+             const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_equal(f, g, integral());
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  inline bool
+  operator!=(const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f,
+             Functor g)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_not_equal(f, g, integral());
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  inline bool
+  operator!=(Functor g,
+             const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_not_equal(f, g, integral());
+  }
+#else
+
+#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)           \
+  typename enable_if_c<(::boost::type_traits::ice_not<                \
+                         (is_integral<Functor>::value)>::value),      \
+                       Type>::type
+
+// Comparisons between boost::function objects and arbitrary function objects
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f,
+             Functor g)
+  {
+    if (const Functor* fp = f.template contains<Functor>()) return *fp == g;
+    else return false;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(Functor g,
+             const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f)
+  {
+    if (const Functor* fp = f.template contains<Functor>()) return g == *fp;
+    else return false;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f,
+             Functor g)
+  {
+    if (const Functor* fp = f.template contains<Functor>()) return *fp != g;
+    else return true;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(Functor g,
+             const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f)
+  {
+    if (const Functor* fp = f.template contains<Functor>()) return g != *fp;
+    else return true;
+  }
+#undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL
+#endif // Compiler supporting SFINAE
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 
