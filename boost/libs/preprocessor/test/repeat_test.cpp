@@ -25,17 +25,17 @@
 #define ENUM_PARAMS_TEST_MAX 50
 #endif
 
-#define CONSTANT(I,A) const A##I = I;
+#define CONSTANT(I,A) const BOOST_PP_CAT(A,I) = I;
 BOOST_PP_REPEAT(ENUM_PARAMS_TEST_MAX, CONSTANT, int default_param_)
 #undef CONSTANT
 
 #define TEST_ENUM_PARAMS(N)\
   void BOOST_PP_CAT(test_enum_params,N)(\
-    BOOST_PP_ENUM_PARAMS(N, double x));\
+    BOOST_PP_ENUM_PARAMS(N, int x));\
   void BOOST_PP_CAT(test_enum_params_with_a_default,N)(\
-    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(N, double x, 0));\
+    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(N, int x, 0));\
   void BOOST_PP_CAT(test_enum_params_with_defaults,N)(\
-    BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(N, double x, default_param_));
+    BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(N, int x, default_param_));
 
 TEST_ENUM_PARAMS(0)
 TEST_ENUM_PARAMS(ENUM_PARAMS_TEST_MAX)
