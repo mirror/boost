@@ -13,6 +13,7 @@
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/utility.hpp>
+#include <boost/type_traits/alignment_traits.hpp>
 //
 // define tests here
 unsigned failures = 0;
