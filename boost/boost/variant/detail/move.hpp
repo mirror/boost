@@ -33,6 +33,8 @@ namespace detail { namespace variant {
 //////////////////////////////////////////////////////////////////////////
 // forward declares
 //
+// NOTE: Incomplete until (if?) Boost.Move becomes part of Boost.
+//
 template <typename Deriving> class moveable;
 template <typename T>        class move_source;
 template <typename T>        class move_return;
