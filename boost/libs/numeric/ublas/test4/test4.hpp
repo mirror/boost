@@ -43,7 +43,6 @@ void initialize_matrix (M &m) {
             m (i, j) = i * size1 + j + 1.f;
 }
 
-void test_vector ();
 void test_matrix_vector ();
 void test_matrix ();
 

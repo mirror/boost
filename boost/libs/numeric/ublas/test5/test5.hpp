@@ -60,7 +60,6 @@ void initialize_matrix (M &m) {
 }
 
 
-void test_vector ();
 void test_matrix_vector ();
 void test_matrix ();
 
