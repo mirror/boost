@@ -594,7 +594,7 @@ namespace boost { namespace numeric { namespace ublas {
             vector_expression<self_type> (),
             size_ (0), index_ (0) {}
         BOOST_UBLAS_INLINE
-        unit_vector (size_type size, size_type index):
+        explicit unit_vector (size_type size, size_type index = 0):
             vector_expression<self_type> (),
             size_ (size), index_ (index) {}
         BOOST_UBLAS_INLINE
@@ -1062,7 +1062,7 @@ namespace boost { namespace numeric { namespace ublas {
             vector_expression<self_type> (),
             size_ (0), value_ () {}
         BOOST_UBLAS_INLINE
-        scalar_vector (size_type size, const value_type &value):
+        explicit scalar_vector (size_type size, const value_type &value = value_type(1)):
             vector_expression<self_type> (),
             size_ (size), value_ (value) {}
         BOOST_UBLAS_INLINE

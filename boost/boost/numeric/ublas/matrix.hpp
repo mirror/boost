@@ -2926,7 +2926,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (0), size2_ (0), value_ () {}
         BOOST_UBLAS_INLINE
-        scalar_matrix (size_type size1, size_type size2, const value_type &value):
+        scalar_matrix (size_type size1, size_type size2, const value_type &value = value_type(1)):
             matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), value_ (value) {}
         BOOST_UBLAS_INLINE
