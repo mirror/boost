@@ -33,6 +33,14 @@
 #  define BOOST_HAS_LONG_LONG
 #endif
 
+// GCC 3.x will clean up all of those nasty macro definitions that
+// BOOST_NO_CTYPE_FUNCTIONS is intended to help work around, so undefine
+// it under GCC 3.x.
+#if defined(__GNUC__) && (__GNUC__ >= 3) && defined(BOOST_NO_CTYPE_FUNCTIONS)
+#  undef BOOST_NO_CTYPE_FUNCTIONS
+#endif
+
+
 //
 // Assume any extensions are in namespace std:: unless stated otherwise:
 //
