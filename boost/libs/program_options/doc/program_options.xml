@@ -30,8 +30,7 @@
             
     <librarypurpose>
       Facilities to obtain configuration data from command line, config files
-      and other sources
-    </librarypurpose>
+      and other sources</librarypurpose>
     <librarycategory name="category:data-structures"></librarycategory>
   </libraryinfo>
   
