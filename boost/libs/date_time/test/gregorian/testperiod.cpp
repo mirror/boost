@@ -82,14 +82,14 @@ int main()
   date_period r4(date(2000,Jan,5), date(2000,Jan,10));
   check("[5 -10) merge [6-9)  -> [5-10)", i1.merge(i5) == r4);
 
-  check("[5-10) hull [1-7)  -> [1-10)", i1.hull(i2) == r3);
-  check("[1-7)  hull [7-10) -> [1-10)", i2.hull(i4) == r3);
-  check("[7-10)  hull [1-7) -> [1-10)", i4.hull(i2) == r3);
-  check("[1-15)  hull [1-7) -> [1-15)", i3.hull(i2) == i3);
+  check("[5-10) span [1-7)  -> [1-10)", i1.span(i2) == r3);
+  check("[1-7)  span [7-10) -> [1-10)", i2.span(i4) == r3);
+  check("[7-10)  span [1-7) -> [1-10)", i4.span(i2) == r3);
+  check("[1-15)  span [1-7) -> [1-15)", i3.span(i2) == i3);
 
   date_period i6(date(2000,Jan,1), date(2000,Jan,2));
-  check("[1-2)  hull [7-10) -> [1-10)", i6.hull(i4) == r3);
-  check("[7-10)  hull [1-2) -> [1-10)", i4.hull(i6) == r3);
+  check("[1-2)  span [7-10) -> [1-10)", i6.span(i4) == r3);
+  check("[7-10)  span [1-2) -> [1-10)", i4.span(i6) == r3);
   
 
   date bf_start(2000,Jan,5);
