@@ -26,6 +26,10 @@
 #include <string>     // for std::string
 #include <strstream>  // for std::ostrstream
 
+# ifdef BOOST_NO_STDC_NAMESPACE
+    namespace std { using ::strcmp; }
+# endif
+
 
 // Iterator test class
 template <class T, class R, class P>
