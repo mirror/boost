@@ -52,12 +52,12 @@ namespace std {
 
 // workaround for errors associated with wide string output 
 // modifications. compilers affected are:
-// Borland 551, gcc295 (not stlport), msvc6, mingw
+// Borland 551, gcc295 (not stlport), msvc6, mingw, cygwin
 // Any of these compilers *should* work if used with StlPort's streams
 #if ((defined(__GNUC__) && (__GNUC__ < 3)) || \
      (defined(_MSC_VER) && (_MSC_VER <= 1200)) || \
-     (defined(__MINGW32__)) || \
-     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551))) && \
+     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551)) || \
+     (defined(BOOST_NO_STD_WSTRING))) && \
      !defined(_STLP_OWN_IOSTREAMS)
 #define BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
 #endif
