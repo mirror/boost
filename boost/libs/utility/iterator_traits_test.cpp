@@ -7,6 +7,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  21 Jan 2001 Quick fix to my_iterator, which wasn't returning a
+//              reference type from operator* (David Abrahams)
 //  19 Jan 2001 Initial version with iterator operators (David Abrahams)
 
 #include <boost/detail/iterator.hpp>
@@ -28,7 +30,7 @@ struct my_iterator
         { return this->m_p == rhs.m_p; }
 
     my_iterator& operator++() { ++this->m_p; return *this; }
-    const char operator*() { return *m_p; }
+    const char& operator*() { return *m_p; }
  private:
     const char* m_p;
 };
