@@ -47,7 +47,9 @@
       Base m_iterator; // exposition only
   };
 
-__ : 
+__ base_parameters_
+
+.. _base_parameters:
 
 ``iterator_adaptor`` base class parameters
 ------------------------------------------
