@@ -40,8 +40,8 @@ public:
   BOOST_STATIC_CONSTANT(result_type, min_value = integer_traits<result_type>::const_min);
   BOOST_STATIC_CONSTANT(result_type, max_value = integer_traits<result_type>::const_max);
 
-  result_type min() const { return min_value; }
-  result_type max() const { return max_value; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return min_value; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return max_value; }
   explicit random_device(const std::string& token = default_token);
   ~random_device();
   double entropy() const;
