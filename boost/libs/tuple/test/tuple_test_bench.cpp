@@ -273,6 +273,14 @@ void foo8()
 #endif
 }
 
+// Testing const tuples
+void foo9()
+{
+  const tuple<int, float> t1(5, 3.3f);
+  BOOST_TEST(get<0>(t1) == 5);
+  BOOST_TEST(get<1>(t1) == 3.3f);
+}
+
 
 // --------------------------------
 // ----------------------------
@@ -286,6 +294,7 @@ int test_main(int, char *[]) {
   foo6();
   foo7();
   foo8();
+  foo9();
 
   return 0;
 }

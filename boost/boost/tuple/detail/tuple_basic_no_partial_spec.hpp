@@ -264,18 +264,18 @@ namespace boost {
     template<int N>
     struct element
     {
-      template<typename Tuple>
+      template<typename Head, typename Tail>
       static inline
-      typename detail::tuples::tuple_element_ref<N, Tuple>::RET
-      get(Tuple& t)
+      typename detail::tuples::tuple_element_ref<N, cons<Head, Tail> >::RET
+      get(cons<Head, Tail>& t)
       {
         return element<N-1>::get(t.tail);
       }
 
-      template<typename Tuple>
+      template<typename Head, typename Tail>
       static inline
-      typename detail::tuples::tuple_element_const_ref<N, Tuple>::RET
-      get(const Tuple& t)
+      typename detail::tuples::tuple_element_const_ref<N, cons<Head, Tail> >::RET
+      get(const cons<Head, Tail>& t)
       {
         return element<N-1>::get(t.tail);
       }
@@ -284,18 +284,18 @@ namespace boost {
     template<>
     struct element<0>
     {
-      template<typename Tuple>
+      template<typename Head, typename Tail>
       static inline
-      typename add_reference<typename Tuple::head_type>::type
-      get(Tuple& t)
+      typename add_reference<Head>::type
+      get(cons<Head, Tail>& t)
       {
         return t.head;
       }
 
-      template<typename Tuple>
+      template<typename Head, typename Tail>
       static inline
-      typename add_reference<const typename Tuple::head_type>::type
-      get(const Tuple& t)
+      typename add_reference<const Head>::type
+      get(const cons<Head, Tail>& t)
       {
         return t.head;
       }
@@ -361,22 +361,25 @@ namespace boost {
       }
     };
 
-    // Retrieve the Nth element in the typle
-    template<int N, typename Tuple>
-    typename detail::tuples::tuple_element_ref<N, Tuple>::RET
-    get(Tuple& t)
+    namespace detail {
+    namespace tuples {
+      template<int N> struct workaround_holder {};
+    }}
+
+    template<int N, typename Head, typename Tail>
+    typename detail::tuples::tuple_element_ref<N, cons<Head, Tail> >::RET
+    get(cons<Head, Tail>& t, detail::tuples::workaround_holder<N>* = 0)
     {
       return element<N>::get(t);
     }
 
-    // Retrieve the Nth element in the typle
-    template<int N, typename Tuple>
-    typename detail::tuples::tuple_element_const_ref<N, Tuple>::RET
-    get(const Tuple& t) 
+    template<int N, typename Head, typename Tail>
+    typename detail::tuples::tuple_element_const_ref<N, cons<Head, Tail> >::RET
+    get(const cons<Head, Tail>& t, detail::tuples::workaround_holder<N>* = 0)
     {
       return element<N>::get(t);
     }
-     
+
     // Make a tuple
     template<typename T1>
     inline
