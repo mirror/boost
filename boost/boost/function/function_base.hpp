@@ -486,10 +486,17 @@ namespace detail {
       return f->empty();
     }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
     inline bool has_empty_target(const void*)
     {
       return false;
     }
+#else
+    inline bool has_empty_target(...)
+    {
+      return false;
+    }
+#endif
   } // end namespace function
 } // end namespace detail
 } // end namespace boost
