@@ -1,16 +1,13 @@
-// -*- C++ -*-
-//  Boost general library 'format'  ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
-
-//  (C) Samuel Krempp 2001
-//                  krempp@crans.ens-cachan.fr
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
-
 // ----------------------------------------------------------------------------
-// sample_new_features.cpp : demonstrate features that were added to printf's syntax
+// sample_new_features.cpp : demonstrate features added to printf's syntax
+// ----------------------------------------------------------------------------
+
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/format for library home page
+
 // ----------------------------------------------------------------------------
 
 #include <iostream>
