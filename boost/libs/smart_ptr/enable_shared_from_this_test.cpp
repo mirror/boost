@@ -66,9 +66,12 @@ void test()
     BOOST_TEST(py.use_count() == 3);
 }
 
+void test2();
+
 int main()
 {
     test();
+    test2();
     return boost::report_errors();
 }
 
@@ -101,4 +104,9 @@ boost::shared_ptr<Y> createY()
 {
     boost::shared_ptr<Y> pi(new impl2);
     return pi;
+}
+
+void test2()
+{
+    boost::shared_ptr<Y> pi(static_cast<impl2*>(0));
 }
