@@ -15,10 +15,10 @@
 USAGE:
 ~~~~~~
 
-Before including this header you must one or more of define the following macros:
+Before including this header you must define one or more of define the following macros:
 
 BOOST_LIB_NAME:       Required: A string containing the basename of the library, 
-                      for example "boost_regex".
+                      for example boost_regex.
 BOOST_DYN_LINK:       Optional: when set link to dll rather than static library.
 BOOST_LIB_DIAGNOSTIC: Optional: when set the header will print out the name
                       of the library selected (useful for debugging).
@@ -37,10 +37,10 @@ BOOST_LIB_PREFIX
    + BOOST_LIB_NAME
    + "_"
    + BOOST_LIB_TOOLSET
-   + "_"
    + BOOST_LIB_THREAD_OPT
    + BOOST_LIB_RT_OPT
-   + BOOST_LIB_DEBUG_OPT
+   "-"
+   + BOOST_LIB_VERSION
 
 These are defined as:
 
@@ -50,50 +50,55 @@ BOOST_LIB_NAME:       The base name of the lib ( for example boost_regex).
 
 BOOST_LIB_TOOLSET:    The compiler toolset name (vc6, vc7, bcb5 etc).
 
-BOOST_LIB_THREAD_OPT: "s" for single thread builds,
-                      "m" for multithread builds.
+BOOST_LIB_THREAD_OPT: "-mt" for multithread builds, otherwise nothing.
 
-BOOST_LIB_RT_OPT:     "s" for static runtime,
-                      "d" for dynamic runtime.
+BOOST_LIB_RT_OPT:     A suffix that indicates the runtime library used,
+                      contains one or more of the following letters after
+                      a hiphen:
 
-BOOST_LIB_DEBUG_OPT:  nothing for release builds,
-                      "d" for debug builds,
-                      "dd" for debug-diagnostic builds (_STLP_DEBUG).
+                      s      static runtime (dynamic if not present).
+                      d      debug build (release if not present).
+                      g      debug/diagnostic runtime (release if not present).
+                      p      STLPort Build.
+
+BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
+
 
 ***************************************************************************/
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 
+#ifndef BOOST_CONFIG_HPP
+#  include <boost/config.hpp>
+#endif
+#ifndef BOOST_VERSION_HPP
+#  include <boost/version.hpp>
+#endif
+
 #ifndef BOOST_LIB_NAME
 #  error "Macro BOOST_LIB_NAME not set (internal error)"
+#endif
+
+//
+// error check:
+//
+#if defined(__MSVC_RUNTIME_CHECKS) && !defined(_DEBUG)
+#  pragma message("Using the /RTC option without specifying a debug runtime will lead to linker errors")
+#  pragma message("Hint: go to the code generation options and switch to one of the debugging runtimes")
+#  error "Incompatible build options"
 #endif
 //
 // select toolset:
 //
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1200) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
-
-   // vc6-stlport:
-#  define BOOST_LIB_TOOLSET "vc6-stlport"
-
-#elif defined(BOOST_MSVC) && (BOOST_MSVC == 1200)
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1200)
 
    // vc6:
 #  define BOOST_LIB_TOOLSET "vc6"
-
-#elif defined(BOOST_MSVC) && (BOOST_MSVC == 1300) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
-
-   // vc6-stlport:
-#  define BOOST_LIB_TOOLSET "vc7-stlport"
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC == 1300)
 
    // vc7:
 #  define BOOST_LIB_TOOLSET "vc7"
-
-#elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1310) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
-
-   // vc71-stlport:
-#  define BOOST_LIB_TOOLSET "vc71-stlport"
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1310)
 
@@ -103,17 +108,12 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x560)
 
    // CBuilder 6:
-#  define BOOST_LIB_TOOLSET "bcb6"
+#  define BOOST_LIB_TOOLSET "bcb"
 
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
 
-   // CBuilder 6:
+   // CBuilder 5:
 #  define BOOST_LIB_TOOLSET "bcb5"
-
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x540)
-
-   // CBuilder 6:
-#  define BOOST_LIB_TOOLSET "bcb4"
 
 #endif
 
@@ -121,18 +121,118 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 // select thread opt:
 //
 #if defined(_MT) || defined(__MT__)
-#  define BOOST_LIB_THREAD_OPT "m"
+#  define BOOST_LIB_THREAD_OPT "-mt"
 #else
-#  define BOOST_LIB_THREAD_OPT "s"
+#  define BOOST_LIB_THREAD_OPT
 #endif
 
+#ifdef _MSC_VER
+
+#  ifdef _DLL
+
+#     if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && (defined(_STLP_OWN_IOSTREAMS) || defined(__STL_OWN_IOSTREAMS))
+
+#        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
+#            define BOOST_LIB_RT_OPT "-gdp"
+#        elif defined(_DEBUG)
+#            define BOOST_LIB_RT_OPT "-gdp"
+#            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
+#            error "Build options aren't compatible with pre-built libraries"
+#        else
+#            define BOOST_LIB_RT_OPT "-p"
+#        endif
+
+#     elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+
+#        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
+#            define BOOST_LIB_RT_OPT "-gdpn"
+#        elif defined(_DEBUG)
+#            define BOOST_LIB_RT_OPT "-gdpn"
+#            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
+#            error "Build options aren't compatible with pre-built libraries"
+#        else
+#            define BOOST_LIB_RT_OPT "-pn"
+#        endif
+
+#     else
+
+#        if defined(_DEBUG)
+#            define BOOST_LIB_RT_OPT "-gd"
+#        else
+#            define BOOST_LIB_RT_OPT 
+#        endif
+
+#     endif
+
+#  else
+
+#     if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && (defined(_STLP_OWN_IOSTREAMS) || defined(__STL_OWN_IOSTREAMS))
+
+#        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
+#            define BOOST_LIB_RT_OPT "-sgdp"
+#        elif defined(_DEBUG)
+#             define BOOST_LIB_RT_OPT "-sgdp"
+#            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
+#            error "Build options aren't compatible with pre-built libraries"
+#        else
+#            define BOOST_LIB_RT_OPT "-sp"
+#        endif
+
+#     elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+
+#        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
+#            define BOOST_LIB_RT_OPT "-sgdpn"
+#        elif defined(_DEBUG)
+#             define BOOST_LIB_RT_OPT "-sgdpn"
+#            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
+#            error "Build options aren't compatible with pre-built libraries"
+#        else
+#            define BOOST_LIB_RT_OPT "-spn"
+#        endif
+
+#     else
+
+#        if defined(_DEBUG)
+#             define BOOST_LIB_RT_OPT "-sgd"
+#        else
+#            define BOOST_LIB_RT_OPT "-s"
+#        endif
+
+#     endif
+
+#  endif
+
+#elif defined(__BORLANDC__)
+
 //
-// select runtime opt:
+// figure out whether we want the debug builds or not:
 //
-#if defined(_DLL) || defined(_RTLDLL)
-#  define BOOST_LIB_RT_OPT "d"
-#else
-#  define BOOST_LIB_RT_OPT "s"
+#pragma defineonoption BOOST_BORLAND_DEBUG -v
+//
+// sanity check:
+//
+#if defined(__STL_DEBUG) || defined(_STLP_DEBUG)
+#error "Pre-built versions of the Boost libraries are not provided in STLPort-debug form"
+#endif
+
+#  ifdef _RTLDLL
+
+#     ifdef BOOST_BORLAND_DEBUG
+#         define BOOST_LIB_RT_OPT "-d"
+#     else
+#         define BOOST_LIB_RT_OPT 
+#     endif
+
+#  else
+
+#     ifdef BOOST_BORLAND_DEBUG
+#         define BOOST_LIB_RT_OPT "-sd"
+#     else
+#         define BOOST_LIB_RT_OPT "-s"
+#     endif
+
+#  endif
+
 #endif
 
 //
@@ -147,19 +247,6 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 #endif
 
 //
-// select debug opt:
-//
-#if defined(BOOST_MSVC) && defined(_DEBUG) && (defined(_STLP_DEBUG) || defined(__STL_DEBUG))
-#  define BOOST_LIB_DEBUG_OPT "dd"
-#elif defined(BOOST_MSVC) && defined(_DEBUG)
-#  define BOOST_LIB_DEBUG_OPT "d"
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (defined(_STLP_DEBUG) || defined(__STL_DEBUG))
-#  define BOOST_LIB_DEBUG_OPT "dd"
-#else
-#  define BOOST_LIB_DEBUG_OPT 
-#endif
-
-//
 // now include the lib:
 //
 #if defined(BOOST_LIB_NAME) \
@@ -167,14 +254,19 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
       && defined(BOOST_LIB_TOOLSET) \
       && defined(BOOST_LIB_THREAD_OPT) \
       && defined(BOOST_LIB_RT_OPT) \
-      && defined(BOOST_LIB_DEBUG_OPT)
+      && defined(BOOST_LIB_VERSION)
 
-#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
+#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
 #ifdef BOOST_LIB_DIAGNOSTIC
-#  pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
+#  pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
 #endif
 
+#else
+#  error "some required macros where not defined (internal logic error)."
 #endif
+
+
+#endif // _MSC_VER || __BORLANDC__
 
 //
 // finally undef any macros we may have set:
@@ -200,9 +292,6 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 #if defined(BOOST_DYN_LINK)
 #  undef BOOST_DYN_LINK
 #endif
-
-#endif // _MSC_VER || __BORLANDC__
-
 
 
 
