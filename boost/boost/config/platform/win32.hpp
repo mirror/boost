@@ -52,6 +52,7 @@
 #endif
 
 #ifdef BOOST_MSVC
+#include <algorithm> // for existing std::min and std::max
 namespace std{
   // Apparently, something in the Microsoft libraries requires the "long"
   // overload, because it calls the min/max functions with arguments of
