@@ -1267,6 +1267,10 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
 #  pragma warning(push)
 #  pragma warning(disable: 4127)
 #endif
+#ifdef __OpenBSD__
+   // strxfrm not working on OpenBSD??
+   f |= regbase::nocollate;
+#endif
 
    if(p == expression())
    {
@@ -2101,6 +2105,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned in
 
 
 #endif   // BOOST_REGEX_COMPILE_HPP
+
 
 
 
