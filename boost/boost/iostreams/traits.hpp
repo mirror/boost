@@ -24,7 +24,8 @@
 #include <boost/iostreams/detail/bool_trait_def.hpp> 
 #include <boost/iostreams/detail/is_iterator_range.hpp>    
 #include <boost/iostreams/detail/ios_traits.hpp>   
-#include <boost/iostreams/detail/select.hpp>            
+#include <boost/iostreams/detail/select.hpp>        
+#include <boost/iostreams/detail/select_by_size.hpp>      
 #include <boost/iostreams/detail/wrap_unwrap.hpp> 
 #include <boost/mpl/bool.hpp>   
 #include <boost/mpl/eval_if.hpp>
@@ -34,8 +35,6 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/value_type.hpp>
 #include <boost/type_traits/is_convertible.hpp>     
-#define BOOST_SELECT_BY_SIZE_MAX_CASE 9     
-#include <boost/iostreams/detail/select_by_size.hpp>    
 
 namespace boost { namespace iostreams {          
 
@@ -160,20 +159,20 @@ namespace detail {
 
 template<int N> struct io_mode_impl;
 
-#define BOOST_IOSTREAMS_MODE_IMPL_SPEC(tag_, id_) \
+#define BOOST_IOSTREAMS_MODE_HELPER(tag_, id_) \
     case_<id_> io_mode_impl_helper(tag_); \
     template<> struct io_mode_impl<id_> { typedef tag_ type; }; \
     /**/
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(input, 1)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(output, 2)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(bidirectional, 3)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(input_seekable, 4)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(output_seekable, 5)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(seekable, 6)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(dual_seekable, 7)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(bidirectional_seekable, 8)
-BOOST_IOSTREAMS_MODE_IMPL_SPEC(dual_use, 9)
-#undef BOOST_IOSTREAMS_MODE_IMPL_SPEC
+BOOST_IOSTREAMS_MODE_HELPER(input, 1)
+BOOST_IOSTREAMS_MODE_HELPER(output, 2)
+BOOST_IOSTREAMS_MODE_HELPER(bidirectional, 3)
+BOOST_IOSTREAMS_MODE_HELPER(input_seekable, 4)
+BOOST_IOSTREAMS_MODE_HELPER(output_seekable, 5)
+BOOST_IOSTREAMS_MODE_HELPER(seekable, 6)
+BOOST_IOSTREAMS_MODE_HELPER(dual_seekable, 7)
+BOOST_IOSTREAMS_MODE_HELPER(bidirectional_seekable, 8)
+BOOST_IOSTREAMS_MODE_HELPER(dual_use, 9)
+#undef BOOST_IOSTREAMS_MODE_HELPER
 
 template<typename T>
 struct io_mode_id {
