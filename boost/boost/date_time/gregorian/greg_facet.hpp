@@ -208,10 +208,9 @@ namespace gregorian {
   std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, date& d)
   {
     std::istream_iterator<std::basic_string<charT>, charT> beg(is), eos;
-    //std::locale loc = is.getloc();
     
     typedef boost::date_time::all_date_names_put<greg_facet_config, charT> facet_def;
-    d = from_stream(beg, eos);//, &loc);
+    d = from_stream(beg, eos);
     return is;
   }
 #endif // BOOST_NO_STD_ITERATOR_TRAITS
