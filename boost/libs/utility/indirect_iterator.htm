@@ -42,12 +42,12 @@ reference indirect_iterator::operator*() const {
 <pre>
 namespace boost {
   template &lt;class BaseIterator,
-            class Value, class Reference, class Pointer&gt;
+            class Value, class Reference, class Pointer, class Category&gt;
   struct indirect_iterator_generator;
   
   template &lt;class BaseIterator,
       class Value, class Pointer, class Reference, 
-            class ConstPointer, class ConstReference&gt;
+            class ConstPointer, class ConstReference, class Category&gt;b
   struct indirect_iterator_pair_generator;
 
   template &lt;class BaseIterator&gt;
@@ -127,10 +127,9 @@ int main(int, char*[])
         <td><tt>BaseIterator</tt> 
 
         <td>The iterator type being wrapped. The <tt>value_type</tt>
-        of the base iterator should itself be dereferenceable. 
-        Also, if the default <tt>Value</tt> template
-	parameter is used, the <tt>value_type</tt> must provide
-        a specialization of <tt>iterator_traits</tt>.
+        of the base iterator should itself be dereferenceable.  
+        The return type of the <tt>operator*</tt> for the
+        <tt>value_type</tt> should match the <tt>Reference</tt> type.
 
       <tr>
         <td><tt>Value</tt> 
@@ -138,7 +137,10 @@ int main(int, char*[])
         <td>The <tt>value_type</tt> of the resulting iterator, unless const. If
         Value is <tt>const X</tt>, a conforming compiler makes the
         <tt>value_type</tt> <tt><i>non-</i>const X</tt><a href=
-        "iterator_adaptors.htm#1">[1]</a>.<br>
+        "iterator_adaptors.htm#1">[1]</a>. Note that if the default
+         is used for <tt>Value</tt>, then there must be a valid specialization
+         of <tt>iterator_traits</tt> for the value type of the base iterator.
+         <br>
          <b>Default:</b> <tt>std::iterator_traits&lt;<br>
            std::iterator_traits&lt;BaseIterator&gt;::value_type
         &gt;::value_type</tt><a href="#2">[2]</a> 
@@ -156,17 +158,24 @@ int main(int, char*[])
         <td>The <tt>pointer</tt> type of the resulting iterator, and in
         particular, the result type of <tt>operator-&gt;()</tt>.<br>
          <b>Default:</b> <tt>Value*</tt> 
+
+      <tr>
+        <td><tt>Category</tt> 
+        <td>The <tt>iterator_category</tt> type for the resulting iterator.<br>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseIterator&gt;::iterator_category</tt> 
+
     </table>
 
     <h3>Concept Model</h3>
     The indirect iterator will model whichever <a href=
-    "http://www.sgi.com/tech/stl/Iterators.html">standard iterator concept
-    category</a> is modeled by the base iterator. Thus, if the base iterator is
-    a model of <a href=
-    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
-    Iterator</a> then so is the resulting indirect iterator. If the base
-    iterator models a more restrictive concept, the resulting indirect iterator
-    will model the same concept. 
+    "http://www.sgi.com/tech/stl/Iterators.html">standard iterator
+    concept category</a> is modeled by the base iterator. Thus, if the
+    base iterator is a model of <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+    Access Iterator</a> then so is the resulting indirect iterator. If
+    the base iterator models a more restrictive concept, the resulting
+    indirect iterator will model the same concept <a href="#3">[3]</a>.
 
     <h3>Members</h3>
     The indirect iterator type implements the member functions and operators
@@ -256,14 +265,20 @@ b,c,d,e,f,g,h,
 
         <td>The iterator type being wrapped. The <tt>value_type</tt> of the
         base iterator should itself be dereferenceable.
-        Also, if the default <tt>Value</tt> template
-	parameter is used, the <tt>value_type</tt> must provide
-        a specialization of <tt>iterator_traits</tt>.
+        The return type of the <tt>operator*</tt> for the
+        <tt>value_type</tt> should match the <tt>Reference</tt> type.
 
       <tr>
         <td><tt>Value</tt> 
 
-        <td>The <tt>value_type</tt> of the resulting iterators<br>
+        <td>The <tt>value_type</tt> of the resulting iterators.
+         If Value is <tt>const X</tt>, a conforming compiler makes the
+         <tt>value_type</tt> <tt><i>non-</i>const X</tt><a href=
+         "iterator_adaptors.htm#1">[1]</a>. Note that if the default
+         is used for <tt>Value</tt>, then there must be a valid
+         specialization of <tt>iterator_traits</tt> for the value type
+         of the base iterator.<br>
+
          <b>Default:</b> <tt>std::iterator_traits&lt;<br>
            std::iterator_traits&lt;BaseIterator&gt;::value_type
         &gt;::value_type</tt><a href="#2">[2]</a> 
@@ -296,17 +311,26 @@ b,c,d,e,f,g,h,
         <td>The <tt>pointer</tt> type of the resulting <tt>const_iterator</tt>,
         and in particular, the result type of its <tt>operator-&gt;()</tt>.<br>
          <b>Default:</b> <tt>const Value*</tt> 
+
+      <tr>
+        <td><tt>Category</tt> 
+        <td>The <tt>iterator_category</tt> type for the resulting iterator.<br>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseIterator&gt;::iterator_category</tt> 
     </table>
 
     <h3>Concept Model</h3>
+
     The indirect iterators will model whichever <a href=
-    "http://www.sgi.com/tech/stl/Iterators.html">standard iterator concept
-    category</a> is modeled by the base iterator. Thus, if the base iterator is
-    a model of <a href=
-    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
-    Iterator</a> then so are the resulting indirect iterators. If the base
-    iterator models a more restrictive concept, the resulting indirect
-    iterators will model the same concept. 
+    "http://www.sgi.com/tech/stl/Iterators.html">standard iterator
+    concept category</a> is modeled by the base iterator. Thus, if the
+    base iterator is a model of <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+    Access Iterator</a> then so are the resulting indirect
+    iterators. If the base iterator models a more restrictive concept,
+    the resulting indirect iterators will model the same concept <a
+    href="#3">[3]</a>.
+
 
     <h3>Members</h3>
     The resulting <tt>iterator</tt> and <tt>const_iterator</tt> types implement
@@ -378,6 +402,22 @@ a,b,c,d,e,f,g,
     builtin pointer type, you will not be able to use the default for
     <tt>Value</tt> and will need to specify this type explicitly.
     <hr>
+
+    <p><a name="3">[3]</a>There is a caveat to which concept the
+    indirect iterator can model.  If the return type of the
+    <tt>operator*</tt> for the base iterator's value type is not a
+    true reference, then strickly speaking, the indirect iterator can
+    not be a model of <a href=
+    "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward
+    Iterator</a> or any of the concepts that refine it. In this case
+    the <tt>Category</tt> for the indirect iterator should be
+    specified as <tt>std::input_iterator_tag</tt>. However, even in
+    this case, if the base iterator is a random access iterator, the
+    resulting indirect iterator will still satisfy most of the
+    requirements for <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+    Access Iterator</a>.
+    
 
     <p>Revised 
     <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10
