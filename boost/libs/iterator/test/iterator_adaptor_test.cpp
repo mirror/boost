@@ -316,6 +316,19 @@ main()
       assert((*i).m_x == i->foo());      
   }
 
+  // check that base_type is correct
+  {
+    // Test constant iterator idiom
+    typedef ptr_iterator<int> BaseIter;
+
+    test = static_assert_same<BaseIter::base_type,int*>::value;
+    test = static_assert_same<constant_iterator<BaseIter>::base_type,BaseIter>::value;
+
+    typedef modify_traversal<BaseIter, boost::incrementable_traversal_tag> IncrementableIter;
+
+    test = static_assert_same<IncrementableIter::base_type,BaseIter>::value;
+  }
+
   std::cout << "test successful " << std::endl;
   (void)test;
   return 0;
