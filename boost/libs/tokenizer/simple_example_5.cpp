@@ -32,4 +32,5 @@ int main(){
    for(;beg!=end;++beg){
      cout << *beg << "\n";
    }
+   return 0;
 }

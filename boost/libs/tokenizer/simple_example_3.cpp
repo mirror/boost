@@ -23,4 +23,5 @@ int main(){
    for(tokenizer<offset_separator>::iterator beg=tok.begin(); beg!=tok.end();++beg){
        cout << *beg << "\n";
    }
+   return 0;
 }

@@ -21,5 +21,6 @@ int main(){
    for(tokenizer<char_delimiters_separator<char> >::iterator beg=tok.begin(); beg!=tok.end();++beg){
        cout << *beg << "\n";
    }
+   return 0;
 }
 
