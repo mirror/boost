@@ -34,7 +34,7 @@ namespace detail {
   template<class Ch, class Stream> inline
   bool wrap_isdigit(Ch c, Stream &os) 
   {
-#ifndef BOOST_BAD_ISDIGIT
+#ifndef BOOST_NO_LOCALE_ISIDIGIT
     return std::isdigit(c, os.rdbuf()->getloc() );
 # else
     using namespace std;
