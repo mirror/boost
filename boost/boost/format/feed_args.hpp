@@ -70,7 +70,7 @@ namespace  {
   } // -do_pad(..) 
 
 
-#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
+#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) 
 // MSVC needs to be tricked to disambiguate this simple overload..
 // the trick is in "boost/format/msvc_disambiguater.hpp"
   

@@ -94,8 +94,7 @@ public:
   // final output
   string_t str() const;
   friend BOOST_IO_STD basic_ostream<Ch, Tr>& 
-#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) \
- &&  BOOST_WORKAROUND( BOOST_MSVC,  BOOST_TESTED_AT( 1300) )
+#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) 
   operator<< ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
 #else
   operator<< <Ch, Tr> ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
