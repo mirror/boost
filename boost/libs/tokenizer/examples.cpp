@@ -30,7 +30,7 @@ int test_main(int, char**)
 	{
 		
 		const string test_string = "This,,is, a.test..";
-		const string answer[] = {"This","is","a","test"};
+		string answer[] = {"This","is","a","test"};
 		typedef tokenizer<> Tok;
 		Tok t(test_string);
 		BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
@@ -38,7 +38,7 @@ int test_main(int, char**)
 
 	{
 		const string test_string = "Field 1,\"embedded,comma\",quote \\\", escape \\\\";
-		const string answer[] = {"Field 1","embedded,comma","quote \""," escape \\"};
+		string answer[] = {"Field 1","embedded,comma","quote \""," escape \\"};
 		typedef tokenizer<escaped_list_separator<char> > Tok;
 		Tok t(test_string);
 		BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
@@ -47,7 +47,7 @@ int test_main(int, char**)
 
 	{
 		const string test_string = "12252001";
-		const string answer[] = {"12","25","2001"};
+		string answer[] = {"12","25","2001"};
 		typedef tokenizer<offset_separator > Tok;
 		boost::array<int,3> offsets = {{2,2,4}};
 		offset_separator func(offsets.begin(),offsets.end());
@@ -60,7 +60,7 @@ int test_main(int, char**)
 	{
 		
 		const string test_string = "This,,is, a.test..";
-		const string answer[] = {"This","is","a","test"};
+		string answer[] = {"This","is","a","test"};
 		typedef token_iterator_generator<char_delimiters_separator<char> >::type Iter;
 		Iter begin = make_token_iterator<string>(test_string.begin(),
 			test_string.end(),char_delimiters_separator<char>());
@@ -70,7 +70,7 @@ int test_main(int, char**)
 
 	{
 		const string test_string = "Field 1,\"embedded,comma\",quote \\\", escape \\\\";
-		const string answer[] = {"Field 1","embedded,comma","quote \""," escape \\"};
+		string answer[] = {"Field 1","embedded,comma","quote \""," escape \\"};
 		typedef token_iterator_generator<escaped_list_separator<char> >::type Iter;
 		Iter begin = make_token_iterator<string>(test_string.begin(),
 			test_string.end(),escaped_list_separator<char>());
@@ -81,7 +81,7 @@ int test_main(int, char**)
 
 	{
 		const string test_string = "12252001";
-		const string answer[] = {"12","25","2001"};
+		string answer[] = {"12","25","2001"};
 		typedef token_iterator_generator<offset_separator>::type Iter;
 		boost::array<int,3> offsets = {{2,2,4}};
 		offset_separator func(offsets.begin(),offsets.end());
@@ -116,7 +116,7 @@ int test_main(int, char**)
 	// Test non-default constructed char_delimiters_separator
 	{
 		const string test_string = "how,are you, doing";
-		const string answer[] = {"how",",","are you",","," doing"};
+		string answer[] = {"how",",","are you",","," doing"};
 		tokenizer<> t(test_string,char_delimiters_separator<char>(true,",",""));
 		BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
 	}
