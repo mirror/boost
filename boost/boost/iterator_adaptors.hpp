@@ -9,6 +9,9 @@
 // copyright notice appears in all copies. This software is provided
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
+//
+// Revision History:
+// 04 Feb 2001  MWERKS bug workaround
 
 #ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
 #define BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
@@ -807,7 +810,11 @@ struct projection_iterators {
     void initialize(Iterator& x) {
       advance(x);
     }
-    void increment(Iterator& x) {
+
+    // dwa 2/4/01 - The Iter template argument neccessary for compatibility with
+    // a MWCW bug workaround
+    template <class Iter>
+    void increment(Iter& x) {
       ++x;
       advance(x);
     }
