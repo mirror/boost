@@ -39,19 +39,18 @@ namespace boost { namespace numeric { namespace ublas {
         // Thanks to Karl Meerbergen for the functor workaround which we use by default
         template <class A>
         struct resize_functor {
+            void operator() (A& a, typename A::size_type size, bool ) const {
+                a.resize (size, typename A::value_type (0));
+            }
+        };
+        // Specialise for storage_array
+        template <class A>
+        struct resize_functor<storage_array<A> > {
             void operator() (A& a, typename A::size_type size, bool preserve) const {
                 if (preserve)
                     a.resize (size, typename A::value_type (0));
                 else
                     a.resize_new (size);
-            }
-        };
-
-        // Specialise for std::vector
-        template <class T>
-        struct resize_functor<std::vector<T> > {
-            void operator() (std::vector<T>& a, typename std::vector<T>::size_type size, bool ) const {
-                a.resize (size);
             }
         };
 
@@ -69,7 +68,7 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 a.resize_new (size);
         }
-        /* ISSUE Specialise for std::vector
+        /* ISSUE Specialise for std::vector ONLY
          * however some (MSVC-6/7) compilers without template partial specialization
          * also think this is ambiguous when std::vector is used!
          */
