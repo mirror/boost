@@ -21,7 +21,7 @@
 #include "boost/mpl/aux_/yes_no.hpp"
 #include "boost/mpl/aux_/config/msvc_typename.hpp"
 #include "boost/mpl/aux_/config/overload_resolution.hpp"
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/static_constant.hpp"
 
 #if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION) && (!defined(__GNUC__) || __GNUC__ == 3)
 
@@ -117,6 +117,9 @@ template<> struct trait<T,boost::mpl::aux::has_xxx_tag> \
 #   endif // BOOST_MSVC > 1300
 
 #else 
+
+// agurt, 11/jan/03: signals a stub-only implementation
+#   define BOOST_NO_MPL_AUX_HAS_XXX
 
 #   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, default_value) \
 template< typename T > \
