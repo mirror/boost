@@ -96,6 +96,11 @@ struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
 
 #define BOOST_MPL_AUX_VOID_SPEC_PARAM(param) param = void_
 
+// agurt, 16/sep/02: temporary fix for VisualAge C++
+#if defined(__IBMCPP__)
+#   define BOOST_MPL_AUX_VOID_SPEC(i, name) /**/
+#   define BOOST_MPL_AUX_VOID_SPEC_EXT(i, j, name) /**/
+#else
 #define BOOST_MPL_AUX_VOID_SPEC(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) \
@@ -107,6 +112,6 @@ BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(i, j, name) \
 /**/
-
+#endif
 
 #endif // BOOST_MPL_AUX_VOID_SPEC_HPP_INCLUDED
