@@ -21,12 +21,12 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/included/unit_test_framework.hpp>
-#include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
     defined(BOOST_NO_STD_LOCALE) || \
-    defined(BOOST_NO_CWCHAR)
+    defined(BOOST_NO_CWCHAR) || \
+    defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
 #define DISABLE_WIDE_CHAR_SUPPORT
 #endif
 
@@ -220,9 +220,7 @@ void test_conversion_to_wchar_t()
     #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0));
-    #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1200))
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(123), boost::bad_lexical_cast);
-    #endif
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1.0));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0.0));
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(true));
@@ -232,17 +230,13 @@ void test_conversion_to_wchar_t()
     BOOST_CHECK_EQUAL(L'A', lexical_cast<wchar_t>(L"A"));
     BOOST_CHECK_EQUAL(L' ', lexical_cast<wchar_t>(L" "));
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(L""), boost::bad_lexical_cast);
-    #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1200))
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(L"Test"), boost::bad_lexical_cast);
-    #endif
     BOOST_CHECK_EQUAL(L'A', lexical_cast<wchar_t>(std::wstring(L"A")));
     BOOST_CHECK_EQUAL(L' ', lexical_cast<wchar_t>(std::wstring(L" ")));
     BOOST_CHECK_THROW(
         lexical_cast<wchar_t>(std::wstring(L"")), boost::bad_lexical_cast);
-    #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1200))
     BOOST_CHECK_THROW(
         lexical_cast<wchar_t>(std::wstring(L"Test")), boost::bad_lexical_cast);
-    #endif
     #endif
 }
 
