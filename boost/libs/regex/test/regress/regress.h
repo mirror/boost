@@ -36,7 +36,7 @@
 #  define BOOST_REGEX_NO_TEST
 #endif
 
-#if defined(__GNUC__) && (__GNUC__ < 3) && defined(_STLP_VERSION) && defined(BOOST_REGEX_DYN_LINK)
+#if defined(__GNUC__) && (__GNUC__ < 3) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && defined(BOOST_REGEX_DYN_LINK)
 // gcc2.95 + STLport runs out of memory trying to link, looks like a compiler bug...
 #  define BOOST_REGEX_NO_TEST
 #endif
@@ -453,6 +453,7 @@ typedef boost::basic_regex<char_t, boost::c_regex_traits<char_t>, jm_debug_alloc
 #endif
 
 #endif
+
 
 
 
