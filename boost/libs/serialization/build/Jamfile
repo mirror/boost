@@ -63,7 +63,7 @@ lib boost_serialization
         <vc7.1><*><cxxflags>-Gy
         <define>BOOST_TEST_NO_AUTO_LINK=1
     : ## default-build
-        <runtime-link>static <threading>single/multi
+        <runtime-link>static/dynamic <threading>single/multi
 ;
 
 lib boost_wserialization
@@ -85,7 +85,7 @@ lib boost_wserialization
         <define>BOOST_TEST_NO_AUTO_LINK=1
         <vacpp><*><define>BOOST_MPL_USE_APPLY_INTERNALLY
     : ## default-build
-        <runtime-link>static <threading>single/multi
+        <runtime-link>static/dynamic <threading>single/multi
 ;
 
 install serialization lib :
