@@ -123,6 +123,8 @@ void histograms()
   histogram(uniform_01<PRNG>(rng), 100000, -0.5, 1.5, "uniform_01(0,1)");
   histogram(bernoulli_distribution<PRNG>(rng, 0.2), 100000, -0.5, 1.5,
             "bernoulli(0.2)");
+  histogram(binomial_distribution<PRNG>(rng, 4, 0.2), 100000, -1, 5,
+            "binomial(4, 0.2)");
   histogram(triangle_distribution<PRNG>(rng, 1, 2, 8), 100000, 0, 10,
             "triangle(1,2,8)");
   histogram(geometric_distribution<PRNG>(rng, 5.0/6.0), 100000, 0, 10,
