@@ -41,7 +41,33 @@ algorithms as class templates with template value parameters, hidden
 in namespace <code>boost::random</code>.  Any particular choice of
 parameters is represented as the appropriately specializing
 <code>typedef</code> in namespace <code>boost</code>.
+<p>
 
+Pseudo-random number generators should not be constructed
+(initialized) frequently during program execution, for two reasons.
+First, initialization requires full initialization of the internal
+state of the generator.  Thus, generators with a lot of internal state
+(see below) are costly to initialize.  Second, initialization always
+requires some value used as a "seed" for the generated sequence.  It
+is usually difficult to obtain several good seed values.  For example,
+one method to obtain a seed is to determine the current time at the
+highest resolution available, e.g. microseconds or nanoseconds.  When
+the pseudo-random number generator is initialized again with the
+then-current time as the seed, it is likely that this is at a
+near-constant (non-random) distance from the time given as the seed
+for first initialization.  The distance could even be zero if the
+resolution of the clock is low, thus the generator re-iterates the
+same sequence of random numbers.  For some applications, this is
+inappropriate.
+<p>
+
+Note that all pseudo-random number generators described below are
+CopyConstructible and Assignable.  Copying or assigning a generator
+will copy all its internal state, so the original and the copy will
+generate the identical sequence of random numbers.  Often, such
+behavior is not wanted.  In particular, beware of the algorithms from
+the standard library such as std::generate.  They take a functor
+argument by value, thereby invoking the copy constructor when called.
 <p>
 
 The following table gives an overview of some characteristics of the

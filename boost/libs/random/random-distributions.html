@@ -150,7 +150,22 @@ All distribution functions satisfy the input iterator requirements
 (std:24.1.1 [lib.input.iterators]) in addition to the NumberGenerator
 requirements.  After an invocation of <code>operator()</code>, the
 effects of invocations of <code>operator*</code> are undefined until
-the next call to <code>operator++</code>.
+the next call to <code>operator++</code>.  <em>Providing the input
+iterator interface incurs a run-time overhead which should not be
+imposed on all users.  This feature is therefore deprecated and will
+be removed at a later time.  Use an
+<a href="../utility/iterator_adaptors.htm">iterator adaptor</a>
+instead.</em>
+<p>
+
+All of the distribution functions described below store a non-const
+reference to the underlying source of random numbers.  Therefore, the
+distribution functions are not Assignable.  However, they are
+CopyConstructible.  Copying a distribution function will copy the
+parameter values.  Furthermore, both the copy and the original will
+refer to the same underlying source of random numbers.  Therefore,
+both the copy and the original will obtain their underlying random
+numbers from a single sequence.
 
 <p>
 In this description, I have refrained from documenting those members
