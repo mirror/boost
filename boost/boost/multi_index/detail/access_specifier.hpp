@@ -15,14 +15,21 @@
 /* In those compilers that do not accept the member template friend syntax,
  * some protected and private sections might need to be specified as
  * public.
+ * As per a discussion on the Boost mailing list, and pending the
+ * resolution of whether BOOST_NO_MEMBER_TEMPLATE_FRIENDS should
+ * apply to MSVC 8.0, I act here as if it did. The relevant
+ * discussion can be found at:
+ *   [boost] [config] seems like VC 8.0 needsBOOST_NO_MEMBER_TEMPLATE_FRIENDS
+ *   http://lists.boost.org/MailArchives/boost/msg68369.php
  */
 
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-#define BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS protected
-#define BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS private
-#else
+#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS) ||\
+    defined(BOOST_MSVC)&&(BOOST_MSVC==1400)
 #define BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS public
 #define BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS public
+#else
+#define BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS protected
+#define BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS private
 #endif
 
 /* GCC does not correctly support in-class using declarations for template
