@@ -45,8 +45,8 @@ void test_binary() {
       I rII = F::f_II(a, b);
       I rIT1 = F::f_IT(a, bl), rIT2 = F::f_IT(a, bu);
       I rTI1 = F::f_TI(al, b), rTI2 = F::f_TI(au, b);
-      T rTT1 = F::f_TT(al, bl), rTT2 = F::f_TT(al, bu),
-        rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
+      T rTT1 = F::f_TT(al, bl), rTT2 = F::f_TT(al, bu);
+      T rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
       BOOST_REQUIRE(in(rTT1, rIT1));
       BOOST_REQUIRE(in(rTT3, rIT1));
       BOOST_REQUIRE(in(rTT2, rIT2));
