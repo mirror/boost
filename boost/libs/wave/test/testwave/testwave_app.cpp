@@ -8,7 +8,7 @@
 =============================================================================*/
 
 // system headers
-#include <string>
+#include <std::string>
 #include <iostream>
 
 // include boost
@@ -451,7 +451,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 //  initialise the given context from the parsed options
 //  add include directories to the system include search paths
     if (vm.count("sysinclude")) {
-    std::vector<string> syspaths = 
+    std::vector<std::string> syspaths = 
         vm["sysinclude"].as<std::vector<std::string> >();
     
         std::vector<std::string>::const_iterator end = syspaths.end();
