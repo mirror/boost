@@ -38,6 +38,12 @@ namespace boost {
           { return obj == other.obj && data == other.data; }
         bool operator<(const bound_object& other) const
           { return obj < other.obj; }
+
+        // To support intel 80 compiler, 2004/03/18 (Mark Rodgers)
+        bool operator!=(const bound_object& other) const
+        { return !(*this==other); }
+        bool operator>(const bound_object& other) const
+        { return !(*this < other); }
       };
 
       // Describes the connection between a signal and the objects that are
