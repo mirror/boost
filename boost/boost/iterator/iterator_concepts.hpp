@@ -60,19 +60,13 @@ namespace boost_concepts {
   class ReadableIteratorConcept {
   public:
     typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type value_type;
-    typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference reference;
 
     void constraints() {
-      boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
-      boost::function_requires< boost::EqualityComparableConcept<Iterator> >();
-      boost::function_requires< 
-        boost::DefaultConstructibleConcept<Iterator> >();
+      boost::function_requires< boost::AssignableConcept<Iterator> >();
+      boost::function_requires< boost::CopyConstructibleConcept<Iterator> >();
 
-      reference r = *i; // or perhaps read(x)
-      value_type v = r;
-      value_type v2 = *i;
+      value_type v = *i;
       boost::ignore_unused_variable_warning(v);
-      boost::ignore_unused_variable_warning(v2);
     }
     Iterator i;
   };
@@ -85,12 +79,8 @@ namespace boost_concepts {
   public:
       
     void constraints() {
-      boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
-      boost::function_requires< boost::EqualityComparableConcept<Iterator> >();
-      boost::function_requires< 
-        boost::DefaultConstructibleConcept<Iterator> >();
-      
-      *i = v; // a good alternative could be something like write(x, v)
+      boost::function_requires< boost::CopyConstructibleConcept<Iterator> >();
+      *i = v;
     }
     ValueType v;
     Iterator i;
@@ -112,20 +102,11 @@ namespace boost_concepts {
   {
    public:
       typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
-      typedef typename boost::detail::iterator_traits<Iterator>::reference reference;
 
       void constraints()
       {
           boost::function_requires< ReadableIteratorConcept<Iterator> >();
-
-          typedef boost::mpl::or_<
-              boost::is_same<reference, value_type&>
-            , boost::is_same<reference, value_type const&>
-          > correct_reference;
-        
-          BOOST_STATIC_ASSERT(correct_reference::value);
-
-          reference v = *i;
+          const value_type& v = *i;
           boost::ignore_unused_variable_warning(v);
     }
     Iterator i;
@@ -159,9 +140,8 @@ namespace boost_concepts {
     typedef typename boost::iterator_traversal<Iterator>::type traversal_category;
 
     void constraints() {
-      boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
-      boost::function_requires< 
-        boost::DefaultConstructibleConcept<Iterator> >();
+      boost::function_requires< boost::AssignableConcept<Iterator> >();
+      boost::function_requires< boost::CopyConstructibleConcept<Iterator> >();
 
       BOOST_STATIC_ASSERT(
           (boost::is_convertible<
@@ -203,6 +183,8 @@ namespace boost_concepts {
 
     void constraints() {
       boost::function_requires< SinglePassIteratorConcept<Iterator> >();
+      boost::function_requires< 
+        boost::DefaultConstructibleConcept<Iterator> >();
 
       typedef boost::mpl::and_<
         boost::is_integral<difference_type>,
