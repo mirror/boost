@@ -73,7 +73,10 @@ rule fsm-compile-fail-variants ( source )
 
 test-suite fsm :
   [ fsm-st-run-variants TransitionTest ]
-  [ fsm-st-run-variants DeferralTest ]
   [ fsm-compile-fail-variants InvalidTransitionTest1 ]
+  [ fsm-compile-fail-variants InvalidTransitionTest2 ]
+  [ fsm-compile-fail-variants InvalidTransitionTest3 ]
+  [ fsm-compile-fail-variants InvalidTransitionTest4 ]
+  [ fsm-st-run-variants DeferralTest ]
 ;
       
