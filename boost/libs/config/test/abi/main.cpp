@@ -7,8 +7,9 @@
 
 //
 // before we do anything else, we need to mess with the compilers ABI:
-// 
-#ifdef _MSC_VER
+//
+#include <boost/config.hpp>
+#ifdef BOOST_MSVC
 #pragma pack(1)
 #elif defined(__BORLANDC__)
 #pragma option -Ve- -Vx- -a1 -b-
