@@ -28,11 +28,11 @@ namespace mpl = boost::mpl;
 int main()
 {
     using namespace mpl::placeholder;
-    typedef mpl::list<int,char,long,short,char,long,double,long> types;
+    typedef mpl::list<int,char&,long,short,char&,long,double,long> types;
     typedef mpl::list_c<int,1,0,5,1,7,5,0,5> values;
     
     BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_float<_> >::type::value == 1));
-    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,char> >::type::value == 2));
+    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,char&> >::type::value == 2));
     BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,void> >::type::value == 0));
 
     BOOST_STATIC_ASSERT((mpl::count_if< values, mpl::lt<5> >::type::value == 4));
