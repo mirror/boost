@@ -126,55 +126,60 @@
 
       <typedef name="type"><type>T</type></typedef>
 
-      <constructor>
+      <constructor specifiers="explicit">
         <parameter name="t">
           <paramtype>T&amp;</paramtype>
         </parameter>
 
-        <effects><para>Constructs a
+        <effects><simpara>Constructs a
         <computeroutput><classname>reference_wrapper</classname></computeroutput>
         object that stores a reference to
-        <computeroutput>t</computeroutput>.</para></effects>
+        <computeroutput>t</computeroutput>.</simpara></effects>
 
-        <throws><para>Does not throw.</para></throws>
+        <throws><simpara>Does not throw.</simpara></throws>
       </constructor>    
 
-      <member-function-group name="access">
-        <method name="conversion-operator" return-type="T&amp;" cv="const">
-          <returns><para>The stored reference.</para></returns>
-          <throws><para>Does not throw.</para></throws>
+      <method-group name="access">
+        <method name="conversion-operator" cv="const">
+          <type>T&amp;</type>
+          <returns><simpara>The stored reference.</simpara></returns>
+          <throws><simpara>Does not throw.</simpara></throws>
         </method>
 
-        <method name="get" return-type="T&amp;" cv="const">
-          <returns><para>The stored reference.</para></returns>
-          <throws><para>Does not throw.</para></throws>
+        <method name="get" cv="const">
+          <type>T&amp;</type>
+          <returns><simpara>The stored reference.</simpara></returns>
+          <throws><simpara>Does not throw.</simpara></throws>
         </method>
 
-        <method name="get_pointer" return-type="T*" cv="const">
-          <returns><para>A pointer to the object referenced by the stored reference.</para></returns>
-          <throws><para>Does not throw.</para></throws>
+        <method name="get_pointer" cv="const">
+          <type>T*</type>
+          <returns><simpara>A pointer to the object referenced by the stored reference.</simpara></returns>
+          <throws><simpara>Does not throw.</simpara></throws>
         </method>
-      </member-function-group>
+      </method-group>
 
       <free-function-group name="constructors">
-        <function name="ref" return-type="reference_wrapper&lt;T&gt;">
+        <function name="ref">
+          <type>reference_wrapper&lt;T&gt;</type>
           <parameter name="t">
             <paramtype>T&amp;</paramtype>
           </parameter>
 
-          <returns><para><computeroutput><classname>reference_wrapper</classname>&lt;T&gt;(t)</computeroutput></para></returns>
+          <returns><simpara><computeroutput><classname>reference_wrapper</classname>&lt;T&gt;(t)</computeroutput></simpara></returns>
 
-          <throws><para>Does not throw.</para></throws>
+          <throws><simpara>Does not throw.</simpara></throws>
         </function>
 
-        <function name="cref" return-type="reference_wrapper&lt;T const&gt;">
+        <function name="cref">
+          <type>reference_wrapper&lt;T const&gt;</type>
           <parameter name="t">
             <paramtype>T const&amp;</paramtype>
           </parameter>
 
-          <returns><para><computeroutput><classname>reference_wrapper</classname>&lt;T const&gt;(t)</computeroutput></para></returns>
+          <returns><simpara><computeroutput><classname>reference_wrapper</classname>&lt;T const&gt;(t)</computeroutput></simpara></returns>
 
-          <throws><para>Does not throw.</para></throws>
+          <throws><simpara>Does not throw.</simpara></throws>
         </function>
       </free-function-group>
     </class>

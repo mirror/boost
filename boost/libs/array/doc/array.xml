@@ -2,8 +2,6 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <library name="Array" dirname="array" id="array" last-revision="$Date$">
-  <title>Boost.Array</title>
- 
   <libraryinfo>
     <author>
       <firstname>Nicolai</firstname>
@@ -27,6 +25,8 @@
     <librarycategory name="category:containers"/>
   </libraryinfo>
 
+  <title>Boost.Array</title>
+ 
   <section id="array.intro">
     <title>Introduction</title> 
 
@@ -140,7 +140,7 @@
             <effects><simpara><code>std::copy(rhs.<methodname>begin</methodname>(),rhs.<methodname>end</methodname>(), <methodname>begin</methodname>())</code></simpara></effects>
           </copy-assignment>
 
-          <member-function-group name="iterator support">
+          <method-group name="iterator support">
             <overloaded-method name="begin">
               <signature>
                 <type>iterator</type>
@@ -164,9 +164,9 @@
               <returns><simpara>iterator for position after the last element</simpara></returns>
               <throws><simpara>will not throw</simpara></throws>
             </overloaded-method>
-          </member-function-group>
+          </method-group>
 
-          <member-function-group name="reverse iterator support">
+          <method-group name="reverse iterator support">
             <overloaded-method name="rbegin">
               <signature>
                 <type>reverse_iterator</type>
@@ -188,9 +188,9 @@
 
               <returns><simpara>reverse iterator for position after the last element in reverse iteration</simpara></returns>
             </overloaded-method>
-          </member-function-group>
+          </method-group>
 
-          <member-function-group name="capacity">
+          <method-group name="capacity">
             <method name="size">
               <type>size_type</type>
               <returns><simpara><code>N</code></simpara></returns>
@@ -205,9 +205,9 @@
               <returns><simpara><code>N</code></simpara></returns>
               <throws><simpara>will not throw</simpara></throws>
             </method>
-          </member-function-group>
+          </method-group>
 
-          <member-function-group name="element access">
+          <method-group name="element access">
             <overloaded-method name="operator[]">
               <signature>
                 <type>reference</type>
@@ -276,9 +276,9 @@
               <returns><simpara><code>elems</code></simpara></returns>
               <throws><simpara>will not throw</simpara></throws>
             </method>
-          </member-function-group>
+          </method-group>
 
-          <member-function-group name="modifiers">
+          <method-group name="modifiers">
             <method name="swap">
               <type>void</type>
               <parameter name="other">
@@ -294,7 +294,7 @@
               </parameter>
               <effects><simpara><code>std::fill_n(<methodname>begin</methodname>(), N, value)</code></simpara></effects>
             </method>
-          </member-function-group>
+          </method-group>
 
           <data-member name="elems[N]"> <!-- HACK -->
             <type>T</type>

@@ -255,7 +255,7 @@ public:
           <code><functionname>any_cast</functionname></code> of an
           <code><classname>any</classname></code> value.</purpose>
 
-          <method name="what" cv="const">
+          <method name="what" specifiers="virtual" cv="const">
             <type>const char *</type>
           </method>
         </class>
@@ -353,7 +353,7 @@ public:
             of exception safety.</simpara></throws>
           </copy-assignment>
 
-          <member-function-group name="modifiers">
+          <method-group name="modifiers">
             <method name="swap">
               <type><classname>any</classname> &amp;</type>
 
@@ -369,9 +369,9 @@ public:
 
               <throws><simpara>Nothing.</simpara></throws>
             </method>
-          </member-function-group>
+          </method-group>
 
-          <member-function-group name="queries">
+          <method-group name="queries">
             <method name="empty" cv="const">
               <type>bool</type>
 
@@ -392,7 +392,7 @@ public:
               either at compile time or only at
               runtime.</simpara></notes>
             </method>
-          </member-function-group>
+          </method-group>
         </class>
 
         <overloaded-function name="any_cast">

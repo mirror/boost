@@ -76,12 +76,13 @@
     objects. Objects of type function_base may not be created
     directly.</purpose>
 
-    <member-function-group name="capacity">
-      <method name="empty" return-type="bool" cv="const">
+    <method-group name="capacity">
+      <method name="empty" cv="const">
+        <type>bool</type>
         <returns><simpara><code>true</code> if <code>this</code> has a target, and <code>false</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
   </class>
 
   <class name="functionN">
@@ -124,7 +125,7 @@
     </typedef>
     <typedef name="arg1_type"><type>T1</type></typedef>
     <typedef name="arg2_type"><type>T2</type></typedef>
-    <typedef name="..."/>
+    <typedef name="..."><type/></typedef>
     <typedef name="argN_type"><type>TN</type></typedef>
 
     <static-constant name="arity">
@@ -168,39 +169,44 @@
       <throws><simpara>Will not throw when the target of <code>f</code> is a stateless function object or a reference to the function object.</simpara></throws>
     </copy-assignment>
 
-    <member-function-group name="modifiers">
-      <method name="swap" return-type="void">
+    <method-group name="modifiers">
+      <method name="swap">
+        <type>void</type>
         <parameter name="f"><paramtype>const <classname>functionN</classname>&amp;</paramtype></parameter>
         <effects><simpara>Interchanges the targets of <code>*this</code> and <code>f</code>.</simpara></effects>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
-      <method name="clear" return-type="void">
+      <method name="clear">
+        <type>void</type>
         <postconditions><simpara>this-&gt;<methodname>empty</methodname>()</simpara></postconditions>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
 
-    <member-function-group name="capacity">
+    <method-group name="capacity">
       <method name="empty" cv="const">
         <type>bool</type>
         <returns><simpara><code>true</code> if <code>this</code> has a target, and <code>false</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
-      <method name="conversion-operator" return-type="safe_bool" cv="const">
+      <method name="conversion-operator" cv="const">
+        <type>safe_bool</type>
         <returns><simpara>A <code>safe_bool</code> that evaluates <code>false</code> in a boolean context when <code>this-&gt;<methodname>empty</methodname>()</code>, and <code>true</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
-      <method name="operator!" return-type="bool" cv="const">
+      <method name="operator!" cv="const">
+        <type>bool</type>
         <returns><simpara><code>this-&gt;<methodname>empty</methodname>()</code></simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
 
-    <member-function-group name="invocation">
-      <method name="operator()" return-type="result_type" cv="const">
+    <method-group name="invocation">
+      <method name="operator()" cv="const">
+        <type>result_type</type>
         <parameter name="a1"><paramtype>arg1_type</paramtype></parameter>
         <parameter name="a2"><paramtype>arg2_type</paramtype></parameter>
         <parameter><paramtype>...</paramtype></parameter>
@@ -209,10 +215,10 @@
         <returns><simpara>if <code>R</code> is <code>void</code>, nothing is returned; otherwise, the return value of the call to <code>f</code> is returned.</simpara></returns>
         <throws><simpara><code><classname>bad_function_call</classname></code> if <code>!this-&gt;<methodname>empty</methodname>()</code>. Otherwise, may through any exception thrown by the target function <code>f</code>.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
 
     <free-function-group name="specialized algorithms">
-      <function name="swap" return-type="void">
+      <function name="swap">
         <template>
           <template-type-parameter name="T1"/>
           <template-type-parameter name="T2"/>
@@ -220,6 +226,7 @@
           <template-type-parameter name="TN"/>
           <template-type-parameter name="Allocator"/>
         </template>
+        <type>void</type>
         <parameter name="f1"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
         <effects><simpara><code>f1.<methodname>swap</methodname>(f2)</code></simpara></effects>
@@ -228,7 +235,7 @@
     </free-function-group>
 
     <free-function-group name="undefined operators">
-      <function name="operator==" return-type="void">
+      <function name="operator==">
         <template>
           <template-type-parameter name="T1"/>
           <template-type-parameter name="T2"/>
@@ -241,13 +248,14 @@
           <template-type-parameter name="UN"/>
           <template-type-parameter name="Allocator2"/>
         </template>
+        <type>void</type>
         <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
         <notes><simpara>This function must be left undefined.</simpara></notes>
         <rationale><simpara>The <code>safe_bool</code> conversion opens a loophole whereby two function instances can be compared via <code>==</code>. This undefined <code>void operator ==</code> closes the loophole and ensures a compile-time or link-time error.</simpara></rationale>
       </function>
 
-      <function name="operator!=" return-type="void">
+      <function name="operator!=">
         <template>
           <template-type-parameter name="T1"/>
           <template-type-parameter name="T2"/>
@@ -260,6 +268,7 @@
           <template-type-parameter name="UN"/>
           <template-type-parameter name="Allocator2"/>
         </template>
+        <type>void</type>
         <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
         <notes><simpara>This function must be left undefined.</simpara></notes>
@@ -270,7 +279,9 @@
 
   <class name="function">
     <template>
-      <template-type-parameter name="Signature" comment="Function type R (T1, T2, ..., TN)"/>
+      <template-type-parameter name="Signature">
+        <purpose>Function type R (T1, T2, ..., TN)</purpose>
+      </template-type-parameter>
       <template-type-parameter name="Allocator">
         <default><classname>std::allocator</classname>&lt;void&gt;</default>
       </template-type-parameter>
@@ -311,7 +322,7 @@
     </typedef>
     <typedef name="arg1_type"><type>T1</type></typedef>
     <typedef name="arg2_type"><type>T2</type></typedef>
-    <typedef name="..."/>
+    <typedef name="..."><type/></typedef>
     <typedef name="argN_type"><type>TN</type></typedef>
 
     <static-constant name="arity">
@@ -371,38 +382,44 @@
       <throws><simpara>Will not throw when the target of <code>f</code> is a stateless function object or a reference to the function object.</simpara></throws>
     </copy-assignment>
 
-    <member-function-group name="modifiers">
-      <method name="swap" return-type="void">
+    <method-group name="modifiers">
+      <method name="swap">
+        <type>void</type>
         <parameter name="f"><paramtype>const <classname>function</classname>&amp;</paramtype></parameter>
         <effects><simpara>Interchanges the targets of <code>*this</code> and <code>f</code>.</simpara></effects>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
-      <method name="clear" return-type="void">
+      <method name="clear">
+        <type>void</type>
         <postconditions><simpara><code>this-&gt;<methodname>empty</methodname>()</code></simpara></postconditions>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
 
-    <member-function-group name="capacity">
-      <method name="empty" return-type="bool" cv="const">
+    <method-group name="capacity">
+      <method name="empty" cv="const">
+        <type>bool</type>
         <returns><simpara><code>true</code> if <code>this</code> has a target, and <code>false</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
-      <method name="conversion-operator" return-type="safe_bool" cv="const">
+      <method name="conversion-operator" cv="const">
+        <type>safe_bool</type>
         <returns><simpara>A <code>safe_bool</code> that evaluates <code>false</code> in a boolean context when <code>this-&gt;<methodname>empty</methodname>()</code>, and <code>true</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
-      <method name="operator!" return-type="bool" cv="const">
+      <method name="operator!" cv="const">
+        <type>bool</type>
         <returns><simpara><code>this-&gt;<methodname>empty</methodname>()</code></simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
 
-    <member-function-group name="invocation">
-      <method name="operator()" return-type="result_type" cv="const">
+    <method-group name="invocation">
+      <method name="operator()" cv="const">
+        <type>result_type</type>
         <parameter name="a1"><paramtype>arg1_type</paramtype></parameter>
         <parameter name="a2"><paramtype>arg2_type</paramtype></parameter>
         <parameter><paramtype>...</paramtype></parameter>
@@ -411,14 +428,15 @@
         <returns><simpara>if <code>R</code> is <code>void</code>, nothing is returned; otherwise, the return value of the call to <code>f</code> is returned.</simpara></returns>
         <throws><simpara><code><classname>bad_function_call</classname></code> if <code>!this-&gt;<methodname>empty</methodname>()</code>. Otherwise, may through any exception thrown by the target function <code>f</code>.</simpara></throws>
       </method>
-    </member-function-group>
+    </method-group>
 
     <free-function-group name="specialized algorithms">
-      <function name="swap" return-type="void">
+      <function name="swap">
         <template>
           <template-type-parameter name="Signature"/>
           <template-type-parameter name="Allocator"/>
         </template>
+        <type>void</type>
         <parameter name="f1"><paramtype><classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype><classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
         <effects><simpara><code>f1.<methodname>swap</methodname>(f2)</code></simpara></effects>
@@ -427,26 +445,28 @@
     </free-function-group>
 
     <free-function-group name="undefined operators">
-      <function name="operator==" return-type="void">
+      <function name="operator==">
         <template>
           <template-type-parameter name="Signature1"/>
           <template-type-parameter name="Allocator1"/>
           <template-type-parameter name="Signature2"/>
           <template-type-parameter name="Allocator2"/>
         </template>
+        <type>void</type>
         <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
         <notes><simpara>This function must be left undefined.</simpara></notes>
         <rationale><simpara>The <code>safe_bool</code> conversion opens a loophole whereby two function instances can be compared via <code>==</code>. This undefined <code>void operator ==</code> closes the loophole and ensures a compile-time or link-time error.</simpara></rationale>
       </function>
 
-      <function name="operator!=" return-type="void">
+      <function name="operator!=">
         <template>
           <template-type-parameter name="Signature1"/>
           <template-type-parameter name="Allocator1"/>
           <template-type-parameter name="Signature2"/>
           <template-type-parameter name="Allocator2"/>
         </template>
+        <type>void</type>
         <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
         <notes><simpara>This function must be left undefined.</simpara></notes>

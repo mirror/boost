@@ -210,7 +210,7 @@ X x;
 f(&amp;x, 5);</programlisting>
 </entry>
 <entry>
-<programlisting conformance="portable" name="function.tutorial.mem_fun.portable"><classname alt="functionN">boost::function2</classname>&lt;int, X*, int&gt; f;
+<programlisting name="function.tutorial.mem_fun.portable"><classname alt="functionN">boost::function2</classname>&lt;int, X*, int&gt; f;
 
 f = &amp;X::foo;
   
@@ -299,7 +299,7 @@ f(&amp;x, 5);</programlisting>
   <classname>boost::function</classname>&lt;int (int)&gt; f2(f);</programlisting>
 </entry>
 <entry>
-<programlisting conformance="portable" name="function.tutorial.ref.portable">  stateful_type a_function_object;
+<programlisting name="function.tutorial.ref.portable">  stateful_type a_function_object;
   <classname alt="functionN">boost::function1</classname>&lt;int, int&gt; f;
   f = <functionname>boost::ref</functionname>(a_function_object);
 
