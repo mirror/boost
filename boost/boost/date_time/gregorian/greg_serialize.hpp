@@ -14,9 +14,12 @@
 #include "boost/serialization/split_free.hpp"
 
 
+
+namespace boost {
+namespace serialization {
+
 // macros to split serialize functions into save & load functions
-// These macros must be used outside the namespace
-// the expanded version is below for gregorian::date
+// An expanded version is below for gregorian::date
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::date_duration)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::date_duration::duration_rep)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::date_period)
@@ -30,8 +33,6 @@ BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::last_kday_of_month)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::first_kday_before)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::first_kday_after)
 
-namespace boost {
-namespace serialization {
 
 /*! Method that does serialization for gregorian::date -- splits to load/save
  */

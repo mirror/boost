@@ -13,13 +13,15 @@
 #include "boost/date_time/gregorian/greg_serialize.hpp"
 #include "boost/serialization/split_free.hpp"
 
+
+namespace boost {
+namespace serialization {
+
 // macros to split serialize functions into save & load functions
 BOOST_SERIALIZATION_SPLIT_FREE(boost::posix_time::ptime)
 BOOST_SERIALIZATION_SPLIT_FREE(boost::posix_time::time_duration)
 BOOST_SERIALIZATION_SPLIT_FREE(boost::posix_time::time_period)
 
-namespace boost {
-namespace serialization {
 
 /*** time_duration ***/
 
