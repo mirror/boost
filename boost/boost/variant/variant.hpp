@@ -82,7 +82,8 @@
 // and potentially increase runtime performance. (TODO: Investigate further.)
 //
 #if !defined(BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
-#   define BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE 5
+#   define BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE   \
+        BOOST_VARIANT_LIMIT_TYPES
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -613,13 +614,19 @@ public: // static functions
 //
 
 template <typename T>
-inline T& cast_storage(void* storage, T* = 0)
+inline T& cast_storage(
+      void* storage
+      BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T)
+    )
 {
     return *static_cast<T*>(storage);
 }
 
 template <typename T>
-inline const T& cast_storage(const void* storage, T* = 0)
+inline const T& cast_storage(
+      const void* storage
+      BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T)
+    )
 {
     return *static_cast<const T*>(storage);
 }
