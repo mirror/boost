@@ -1,8 +1,8 @@
 #ifndef DATE_TIME_DATE_DURATION__
 #define DATE_TIME_DATE_DURATION__
-/* Copyright (c) 2000 CrystalClear Software, Inc.
+/* Copyright (c) 2000, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 
@@ -16,12 +16,21 @@ namespace date_time {
   template<class duration_rep>
   class date_duration : private
       boost::less_than_comparable<date_duration< duration_rep> 
-    , boost::equality_comparable< date_duration< duration_rep> 
-    > >
+    , boost::equality_comparable< date_duration< duration_rep>
+    , boost::addable< date_duration< duration_rep>
+    , boost::subtractable< date_duration< duration_rep>
+    , boost::dividable<date_duration<duration_rep>, int
+    > > > > >
   {
   public:
     //! Construct from a day count
     explicit date_duration(duration_rep days) : days_(days) {};
+
+    // copy constructor required for dividable<>
+    //! Construct from another date_duration (Copy Constructor)
+    date_duration(const date_duration<duration_rep>& other) 
+      : days_(other.days_){}
+    
     duration_rep days() const 
     {
       return days_;
@@ -42,15 +51,25 @@ namespace date_time {
       return days_ < rhs.days_;
     }
     //! Subtract another duration -- result is signed
-    date_duration operator-(const date_duration& rhs) const
+    date_duration operator-=(const date_duration& rhs)
     {
-      return date_duration<duration_rep>(days_ - rhs.days_);
+      days_ -= rhs.days_;
+      return *this;
     }
     //! Add a duration -- result is signed
-    date_duration operator+(const date_duration& rhs) const
+    date_duration operator+=(const date_duration& rhs)
     {
-      return date_duration<duration_rep>(days_ + rhs.days_);
+      days_ += rhs.days_;
+      return *this;
     }
+
+     /*! Division operations on a duration with an integer.
+     * dividable<> provides operator/(int) */
+    date_duration operator/=(int divisor){
+      days_ /= divisor;
+      return *this;
+    }
+    
     //! return sign information
     bool is_negative() const
     {
