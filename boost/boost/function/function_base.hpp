@@ -68,6 +68,10 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
+#if defined(__SUNPRO_CC) && __SUNPRO_CC <= 0x540 && !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_FUNCTION_NO_ENABLE_IF
+#endif
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace boost {
 
@@ -280,7 +284,11 @@ namespace boost {
         }
       };
 
+#  if defined(BOOST_STRICT_CONFIG) || !defined(__HP_aCC) || __HP_aCC > 33900
       template<bool>
+#  else
+      template<bool x>
+#  endif 
       struct enabled
       {
         template<typename T>
