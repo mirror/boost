@@ -14,6 +14,12 @@
 #include "boost/limits.hpp"
 #include "boost/config.hpp"
 
+// Codewarrior 8.3 for Windows fails without this
+#ifdef __MERKS__
+#pragma parse_func_templ off
+#endif
+
+
 template <typename Tests, typename String>
 void run_string_tests(const String& s
                       BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tests)
