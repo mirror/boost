@@ -131,11 +131,11 @@
     <p><tt>iterator_adaptor</tt> is declared like this:
 <pre>
 template &lt;class Base, class Policies, 
-    class ValueOrNamedParams = typename std::iterator_traits&lt;Base&gt;::value_type,
-    class ReferenceOrNamedParams = <i>...(see below)</i>,
-    class PointerOrNamedParams = <i>...(see below)</i>,
-    class CategoryOrNamedParams = typename std::iterator_traits&lt;Base&gt;::iterator_category,
-    class DistanceOrNamedParams = typename std::iterator_traits&lt;Base&gt;::difference_type&gt;
+    class ValueOrNamedParam = typename std::iterator_traits&lt;Base&gt;::value_type,
+    class ReferenceOrNamedParam = <i>...(see below)</i>,
+    class PointerOrNamedParam = <i>...(see below)</i>,
+    class CategoryOrNamedParam = typename std::iterator_traits&lt;Base&gt;::iterator_category,
+    class DistanceOrNamedParam = typename std::iterator_traits&lt;Base&gt;::difference_type&gt;
 struct iterator_adaptor;
 </pre>
 
@@ -208,11 +208,9 @@ struct iterator_adaptor;
         <tt>std::iterator_traits&lt;BaseType&gt;::difference_type</tt> 
 
       <tr>
-         <td><tt>NamedParams</tt>
+         <td><tt>NamedParam</tt>
 
-         <td>A list of named template parameters generated using the
-            <a href="#iterator_traits_generator">
-            <tt>iterator_traits_generator</tt></a> class (see below).
+         <td>A named template parameter (see below).
     </table>
 
     <h3><a name="named_template_parameters">Named Template Parameters</a></h3>
@@ -223,59 +221,32 @@ struct iterator_adaptor;
     template parameter, but use the defaults for the third through
     fifth. As a solution to these problems we provide a mechanism for
     naming the last five template parameters, and providing them in
-    any order through the <tt>iterator_traits_generator</tt> class.
-
+    any order through a set of named template parameters. The following
+    classes are provided for specifying the parameters. Any of these
+    classes can be used for any of the last five template parameters
+    of <tt>iterator_adaptor</tt>.
     <blockquote>
 <pre>
-<a name="iterator_traits_generator">class iterator_traits_generator</a>
-{
-public:
-  template &lt;class Value&gt;
-  struct value_type : public <i>recursive magic</i> { };
-
-  template &lt;class Reference&gt;
-  struct reference : public <i>recursive magic</i> { };
-
-  template &lt;class Pointer&gt;
-  struct pointer : public <i>recursive magic</i> { };
-
-  template &lt;class Distance&gt;
-  struct difference_type : public <i>recursive magic</i> { };
-
-  template &lt;class Category&gt;
-  struct iterator_category : public <i>recursive magic</i> { };
-};
+template &lt;class Value&gt; struct value_type_is;
+template &lt;class Reference&gt; struct reference_is;
+template &lt;class Pointer&gt; struct pointer_is;
+template &lt;class Distance&gt; struct difference_type_is;
+template &lt;class Category&gt; struct iterator_category_is;
 </pre>
     </blockquote>
 
-    The <tt>iterator_traits_generator</tt> is used to create a list of
-    of template arguments. For example, suppose you want to set the
-    <tt>Reference</tt> and <tt>Category</tt> parameters, and use the
-    defaults for the rest. Then you can use the traits generator as
-    follows:
+    For example, the following adapts <tt>foo_iterator</tt> to create
+    an <a href=
+    "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a>
+    with <tt>reference</tt> type <tt>foo</tt>, and whose other traits
+    are determined according to the defaults described <a
+    href="#template_parameters">above</a>.
 
     <blockquote>
 <pre>
-iterator_traits_generator::reference&lt;foo&gt;::category&lt;std::input_iterator_tag&gt;
-</pre>
-    </blockquote>
-
-    This generated type can then be passed into the <tt>iterator_adaptor</tt>
-    class to replace any of the last five parameters. If you use the traits
-    generator in the <i>i</i>th parameter position, then the parameters <i>i</i>
-    through 7 will use the types specified in the generator. For example, the
-    following adapts <tt>foo_iterator</tt> to create an <a href=
-    "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a> with
-    <tt>reference</tt> type <tt>foo</tt>, and whose other traits are determined
-    according to the defaults described <a href="#template_parameters">above</a>.
-
-    <blockquote>
-<pre>
-iterator_adaptor&lt;foo_iterator, foo_policies,
-    iterator_traits_generator
-    ::reference&lt;foo&gt;
-    ::iterator_category&lt;std::input_iterator_tag&gt;
-&gt;
+typedef iterator_adaptor&lt;foo_iterator, foo_policies,
+  reference_is&lt;foo&gt;, iterator_category_is&lt;std::input_iterator_tag&gt;
+  &gt; MyIterator;
 </pre>
     </blockquote>
 
