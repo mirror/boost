@@ -30,7 +30,6 @@
       // while others do not...
       // 
 #     define BOOST_HAS_THREADS
-#     warning "Boost threading support turned on, you may need to link against -lpthread unless you define BOOST_DISABLE_THREADS when building."
 #  else
 #     define BOOST_DISABLE_THREADS
 #  endif
