@@ -77,6 +77,7 @@ EOF
 	else
 		echo ./$subdir/lib$libname.a : $all_obj >> $tout
 		echo "	ar -r $subdir/lib$libname.a $all_obj" >> $tout
+		echo "	-ar -s $subdir/lib$libname.a" >> $tout
 	fi
 	echo "" >> $tout
 }
@@ -233,4 +234,5 @@ gcc_gen_shared
 #
 # remove tmep files;
 rm -f $tout $iout
+
 

@@ -26,6 +26,10 @@
 #include <boost/regex.hpp>
 #include "regress.h"
 
+# ifdef BOOST_MSVC
+#  pragma warning(disable: 4244 4267)
+#endif
+
 using namespace boost;
 
 template <class M1, class M2>

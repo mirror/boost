@@ -95,6 +95,7 @@ boost_regex_clean :
 
 ./gcc/libboost_regex.a : gcc/boost_regex/c_regex_traits.o gcc/boost_regex/c_regex_traits_common.o gcc/boost_regex/cpp_regex_traits.o gcc/boost_regex/cregex.o gcc/boost_regex/fileiter.o gcc/boost_regex/instances.o gcc/boost_regex/posix_api.o gcc/boost_regex/regex.o gcc/boost_regex/regex_debug.o gcc/boost_regex/regex_synch.o gcc/boost_regex/w32_regex_traits.o gcc/boost_regex/wide_posix_api.o gcc/boost_regex/winstances.o
 	ar -r gcc/libboost_regex.a  gcc/boost_regex/c_regex_traits.o gcc/boost_regex/c_regex_traits_common.o gcc/boost_regex/cpp_regex_traits.o gcc/boost_regex/cregex.o gcc/boost_regex/fileiter.o gcc/boost_regex/instances.o gcc/boost_regex/posix_api.o gcc/boost_regex/regex.o gcc/boost_regex/regex_debug.o gcc/boost_regex/regex_synch.o gcc/boost_regex/w32_regex_traits.o gcc/boost_regex/wide_posix_api.o gcc/boost_regex/winstances.o
+	-ar -s gcc/libboost_regex.a
 
 ########################################################
 #
@@ -148,4 +149,5 @@ boost_regex_debug_clean :
 
 ./gcc/libboost_regex_debug.a : gcc/boost_regex_debug/c_regex_traits.o gcc/boost_regex_debug/c_regex_traits_common.o gcc/boost_regex_debug/cpp_regex_traits.o gcc/boost_regex_debug/cregex.o gcc/boost_regex_debug/fileiter.o gcc/boost_regex_debug/instances.o gcc/boost_regex_debug/posix_api.o gcc/boost_regex_debug/regex.o gcc/boost_regex_debug/regex_debug.o gcc/boost_regex_debug/regex_synch.o gcc/boost_regex_debug/w32_regex_traits.o gcc/boost_regex_debug/wide_posix_api.o gcc/boost_regex_debug/winstances.o
 	ar -r gcc/libboost_regex_debug.a  gcc/boost_regex_debug/c_regex_traits.o gcc/boost_regex_debug/c_regex_traits_common.o gcc/boost_regex_debug/cpp_regex_traits.o gcc/boost_regex_debug/cregex.o gcc/boost_regex_debug/fileiter.o gcc/boost_regex_debug/instances.o gcc/boost_regex_debug/posix_api.o gcc/boost_regex_debug/regex.o gcc/boost_regex_debug/regex_debug.o gcc/boost_regex_debug/regex_synch.o gcc/boost_regex_debug/w32_regex_traits.o gcc/boost_regex_debug/wide_posix_api.o gcc/boost_regex_debug/winstances.o
+	-ar -s gcc/libboost_regex_debug.a
 

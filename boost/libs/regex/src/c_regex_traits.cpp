@@ -664,7 +664,9 @@ void BOOST_REGEX_CALL c_regex_traits<char>::m_free()
    re_free_classes();
    re_free_collate();
    --entry_count;
-   if(entry_count == 0)
+   // add reference to static member here to ensure
+   // that the linker includes it in the .exe:
+   if((entry_count == 0) && (0 != &c_regex_traits<char>::i))
    {
       delete ctype_name;
       delete collate_name;
@@ -888,7 +890,9 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
    re_message_free();
    re_free_classes();
    re_free_collate();
-   if(nlsw_count == 0)
+   // add reference to static member here to ensure
+   // that the linker includes it in the .exe:
+   if((nlsw_count == 0) && (0 != &c_regex_traits<wchar_t>::init_))
    {
       // cleanup:
       delete wlocale_name;
