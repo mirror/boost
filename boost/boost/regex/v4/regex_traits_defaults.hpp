@@ -146,7 +146,7 @@ struct character_pointer_range
 template <class charT>
 int get_default_class_id(const charT* p1, const charT* p2)
 {
-   static const charT data[] = {
+   static const charT data[72] = {
       'a', 'l', 'n', 'u', 'm',
       'a', 'l', 'p', 'h', 'a',
       'b', 'l', 'a', 'n', 'k',
@@ -163,7 +163,7 @@ int get_default_class_id(const charT* p1, const charT* p2)
       'x', 'd', 'i', 'g', 'i', 't',
    };
 
-   static const character_pointer_range<charT> ranges[] = 
+   static const character_pointer_range<charT> ranges[19] = 
    {
       {data+0, data+5,}, // alnum
       {data+5, data+10,}, // alpha
