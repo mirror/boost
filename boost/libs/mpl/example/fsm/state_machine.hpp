@@ -33,7 +33,7 @@ template< typename Derived >
 class state_machine
 {
  private:
-    typedef	state_machine self_t;
+    typedef state_machine self_t;
     typedef aux::base_event base_event_t;
     typedef boost::shared_ptr<base_event_t const> base_event_ptr_t;
     
@@ -82,7 +82,7 @@ class state_machine
     {
     }
 
-    virtual	~state_machine()
+    virtual ~state_machine()
     {
     }
 
@@ -120,7 +120,7 @@ class state_machine
     void do_transition(base_event_t const& evt)
     {
         typedef typename Derived::transition_table STT_;
-        typedef	typename aux::STT_impl_gen< STT_ >::type STT_impl_;
+        typedef typename aux::STT_impl_gen< STT_ >::type STT_impl_;
 
         m_state = STT_impl_::do_transition(
               static_cast<Derived&>(*this)
@@ -129,7 +129,7 @@ class state_machine
             );
     }
 
-    state_t	m_state;
+    state_t m_state;
     std::queue< base_event_ptr_t > m_events_queue;
 };
 

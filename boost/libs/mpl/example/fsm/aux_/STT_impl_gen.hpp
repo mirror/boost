@@ -36,7 +36,7 @@ struct STT_void_row_impl
 {
     typedef typename Transition::from_state_t   state_t;
     typedef typename Transition::fsm_t          fsm_t;
-    typedef	typename Transition::base_event_t   base_event_t;
+    typedef typename Transition::base_event_t   base_event_t;
 
     static long do_process_event(fsm_t&, long state, base_event_t const&)
     {
@@ -61,7 +61,7 @@ struct STT_event_row_impl
 {
     typedef typename Transition::from_state_t   state_t;
     typedef typename Transition::fsm_t          fsm_t;
-    typedef	typename Transition::base_event_t   base_event_t;
+    typedef typename Transition::base_event_t   base_event_t;
 
     static long do_process_event(fsm_t& fsm, long state, base_event_t const& evt)
     {
@@ -89,7 +89,7 @@ struct STT_state_row_impl
     : PrevRowImpl
 {
     typedef typename PrevRowImpl::fsm_t         fsm_t;
-    typedef	typename PrevRowImpl::base_event_t  base_event_t;
+    typedef typename PrevRowImpl::base_event_t  base_event_t;
 
     static long do_transition(fsm_t& fsm, long state, base_event_t const& evt)
     {
