@@ -21,6 +21,8 @@
 #include "boost/variant/detail/define_forwarding_func.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
 
+#include "boost/variant/variant_fwd.hpp"
+
 namespace boost {
 
 //////////////////////////////////////////////////////////////////////////
