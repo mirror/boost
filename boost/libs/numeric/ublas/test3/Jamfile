@@ -5,8 +5,8 @@ SOURCES = test3 test31 test32 test33 ;
 exe test3
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
+      <define>BOOST_UBLAS_SAFE
       <define>USE_RANGE
-      <debug><define>BOOST_UBLAS_TYPE_CHECK
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 

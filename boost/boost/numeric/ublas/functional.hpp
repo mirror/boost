@@ -315,31 +315,31 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E>
         BOOST_UBLAS_INLINE
-        result_type operator () (const vector_expression<E> &e) const { 
+        result_type operator () (const vector_expression<E> &e) const {
             real_type t (0);
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_1 (e () (i)));
                 t += u;
             }
-            return t; 
+            return t;
         }
         // Dense case
         template<class I>
         BOOST_UBLAS_INLINE
-        result_type operator () (difference_type size, I it) const { 
+        result_type operator () (difference_type size, I it) const {
             real_type t (0);
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_1 (*it));
                 t += u;
                 ++ it;
             }
-            return t; 
+            return t;
         }
         // Sparse case
         template<class I>
         BOOST_UBLAS_INLINE
-        result_type operator () (I it, const I &it_end) const { 
+        result_type operator () (I it, const I &it_end) const {
             real_type t (0);
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_1 (*it));
@@ -459,28 +459,28 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E>
         BOOST_UBLAS_INLINE
-        result_type operator () (const vector_expression<E> &e) const { 
+        result_type operator () (const vector_expression<E> &e) const {
             real_type t (0);
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_inf (e () (i)));
-                if (u > t) 
+                if (u > t)
                     t = u;
             }
-            return t; 
+            return t;
         }
         // Dense case
         template<class I>
         BOOST_UBLAS_INLINE
-        result_type operator () (difference_type size, I it) const { 
+        result_type operator () (difference_type size, I it) const {
             real_type t (0);
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
-                if (u > t) 
+                if (u > t)
                     t = u;
                 ++ it;
             }
-            return t; 
+            return t;
         }
         // Sparse case
         template<class I>
@@ -519,8 +519,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E> &e) const {
-            result_type i_norm_inf (-1);
-            real_type t (-1);
+            // Here we'd better guarantee a valid return value to achieve BLAS compatibility
+            // result_type i_norm_inf (-1);
+            result_type i_norm_inf (e ().size () == 0 ? -1 : 0);
+            real_type t (0);
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_inf (e () (i)));
@@ -535,8 +537,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I it) const {
-            result_type i_norm_inf (-1);
-            real_type t (-1);
+            // Here we'd better guarantee a valid return value to achieve BLAS compatibility
+            // result_type i_norm_inf (-1);
+            result_type i_norm_inf (size == 0 ? -1 : 0);
+            real_type t (0);
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
                 if (u > t) {
@@ -551,8 +555,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (I it, const I &it_end) const {
-            result_type i_norm_inf (-1);
-            real_type t (-1);
+            // Here we'd better guarantee a valid return value to achieve BLAS compatibility
+            // result_type i_norm_inf (-1);
+            result_type i_norm_inf (it ().size () == 0 ? -1 : 0);
+            real_type t (0);
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
                 if (u > t) {
@@ -575,7 +581,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T1, class T2, class TR>
-    struct vector_inner_prod: 
+    struct vector_inner_prod:
         public vector_scalar_binary_functor<T1, T2, TR> {
         typedef typename vector_scalar_binary_functor<T1, T2, TR>::size_type size_type ;
         typedef typename vector_scalar_binary_functor<T1, T2, TR>::difference_type difference_type;
@@ -694,17 +700,6 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
-#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
-            result_type t (0);
-            if (it1 != it1_end && it1.index () < it2.index ())
-                it1 += std::min (it2.index () - it1.index (), size_type (it1_end - it1));
-            if (it2 != it2_end && it2.index () < it1.index ())
-                it2 += std::min (it1.index () - it2.index (), size_type (it2_end - it2));
-            difference_type size (std::min (size_type (it1_end - it1), size_type (it2_end - it2)));
-            while (-- size >= 0)
-                t += *it1 * *it2, ++ it1, ++ it2;
-            return t;
-#else
             result_type t (0);
             if (it1 != it1_end && it1.index2 () < it2.index ())
                 it1 += std::min (it2.index () - it1.index2 (), size_type (it1_end - it1));
@@ -714,16 +709,14 @@ namespace boost { namespace numeric { namespace ublas {
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
-#endif
         }
         // Sparse case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) const {
-#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             result_type t (0);
             while (it1 != it1_end && it2 != it2_end) {
-                difference_type compare = it1.index () - it2.index ();
+                difference_type compare = it1.index2 () - it2.index ();
                 if (compare < 0)
                     ++ it1;
                 else if (compare == 0)
@@ -732,19 +725,6 @@ namespace boost { namespace numeric { namespace ublas {
                     ++ it2;
             }
             return t;
-#else
-            result_type t (0);
-            while (it1 != it1_end && it2 != it2_end) {
-                difference_type compare = it1.index2 () - it2.index ();
-                if (compare < 0) 
-                    ++ it1;
-                else if (compare == 0) 
-                    t += *it1 * *it2, ++ it1, ++ it2;
-                else if (compare > 0)
-                    ++ it2;
-            }
-            return t; 
-#endif
         }
     };
 
@@ -789,17 +769,6 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
-#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
-            result_type t (0);
-            if (it1 != it1_end && it1.index () < it2.index ())
-                it1 += std::min (it2.index () - it1.index (), size_type (it1_end - it1));
-            if (it2 != it2_end && it2.index () < it1.index ())
-                it2 += std::min (it1.index () - it2.index (), size_type (it2_end - it2));
-            difference_type size (std::min (size_type (it1_end - it1), size_type (it2_end - it2)));
-            while (-- size >= 0)
-                t += *it1 * *it2, ++ it1, ++ it2;
-            return t;
-#else
             result_type t (0);
             if (it1 != it1_end && it1.index () < it2.index1 ())
                 it1 += std::min (it2.index1 () - it1.index (), size_type (it1_end - it1));
@@ -808,38 +777,23 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type size (std::min (size_type (it1_end - it1), size_type (it2_end - it2)));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
-            return t; 
-#endif
+            return t;
         }
         // Sparse case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) const { 
-#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
-            result_type t (0);
-            while (it1 != it1_end && it2 != it2_end) {
-                difference_type compare = it1.index () - it2.index ();
-                if (compare < 0) 
-                    ++ it1;
-                else if (compare == 0) 
-                    t += *it1 * *it2, ++ it1, ++ it2;
-                else if (compare > 0)
-                    ++ it2;
-            }
-            return t; 
-#else
             result_type t (0);
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index () - it2.index1 ();
-                if (compare < 0) 
+                if (compare < 0)
                     ++ it1;
-                else if (compare == 0) 
+                else if (compare == 0)
                     t += *it1 * *it2, ++ it1, ++ it2;
                 else if (compare > 0)
                     ++ it2;
             }
-            return t; 
-#endif
+            return t;
         }
     };
 
@@ -901,12 +855,12 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type size (std::min (size_type (it1_end - it1), size_type (it2_end - it2)));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
-            return t; 
+            return t;
         }
         // Sparse case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
-        result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) const { 
+        result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) const {
             result_type t (0);
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index2 () - it2.index1 ();

@@ -5,7 +5,6 @@ SOURCES = bench2 bench21 bench22 bench23 ;
 exe bench2
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
-      <debug><define>BOOST_UBLAS_TYPE_CHECK
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 

@@ -450,10 +450,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef R reference;
         typedef typename I::container_type container_type;
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
-#endif
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -494,7 +492,6 @@ namespace boost { namespace numeric { namespace ublas {
             return (-- tmp).index2 ();
         }
 
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
@@ -513,7 +510,6 @@ namespace boost { namespace numeric { namespace ublas {
         dual_reverse_iterator_type rend () const {
             return dual_reverse_iterator_type (begin ());
         }
-#endif
 
         // Comparison
         BOOST_UBLAS_INLINE
@@ -565,10 +561,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef R reference;
         typedef typename I::container_type container_type;
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
-#endif
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -609,7 +603,6 @@ namespace boost { namespace numeric { namespace ublas {
             return (-- tmp).index2 ();
         }
 
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
@@ -628,7 +621,6 @@ namespace boost { namespace numeric { namespace ublas {
         dual_reverse_iterator_type rend () const {
             return dual_reverse_iterator_type (begin ());
         }
-#endif
 
         // Comparison
         BOOST_UBLAS_INLINE
@@ -789,10 +781,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef I iterator_type;
         typedef typename I::container_type container_type;
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
-#endif
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -876,7 +866,6 @@ namespace boost { namespace numeric { namespace ublas {
             return (-- tmp).index2 ();
         }
 
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
@@ -895,7 +884,6 @@ namespace boost { namespace numeric { namespace ublas {
         dual_reverse_iterator_type rend () const {
             return dual_reverse_iterator_type (begin ());
         }
-#endif
     };
 
 #ifndef BOOST_UBLAS_FRIEND_FUNCTION
@@ -929,10 +917,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef I iterator_type;
         typedef typename I::container_type container_type;
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
-#endif
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1016,7 +1002,6 @@ namespace boost { namespace numeric { namespace ublas {
             return (-- tmp).index2 ();
         }
 
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
@@ -1035,7 +1020,6 @@ namespace boost { namespace numeric { namespace ublas {
         dual_reverse_iterator_type rend () const {
             return dual_reverse_iterator_type (begin ());
         }
-#endif
     };
 
 #ifndef BOOST_UBLAS_FRIEND_FUNCTION
@@ -1137,9 +1121,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Comparison
         BOOST_UBLAS_INLINE
         bool operator == (const indexed_iterator &it) const {
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-#endif
             return it_ == it.it_;
         }
 
@@ -1257,9 +1239,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Comparison
         BOOST_UBLAS_INLINE
         bool operator == (const indexed_const_iterator &it) const {
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-#endif
             return it_ == it.it_;
         }
 

@@ -296,11 +296,11 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
             public container_const_reference&lt;vector_range&gt;,
             public random_access_iterator_base&lt;const_iterator, value_type&gt; {
         public:
-            typedef typename V::const_iterator::iterator_category iterator_category;
-            typedef typename V::const_iterator::difference_type difference_type;
-            typedef typename V::const_iterator::value_type value_type;
-            typedef typename V::const_iterator::reference reference;
-            typedef typename V::const_iterator::pointer pointer;
+            typedef typename const_iterator_type::iterator_category iterator_category;
+            typedef typename const_iterator_type::difference_type difference_type;
+            typedef typename const_iterator_type::value_type value_type;
+            typedef typename const_iterator_type::reference reference;
+            typedef typename const_iterator_type::pointer pointer;
 
             // Construction and destruction
             const_iterator ();
@@ -335,11 +335,11 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
             public container_reference&lt;vector_range&gt;,
             public random_access_iterator_base&lt;iterator, value_type&gt; {
         public:
-            typedef typename V::iterator::iterator_category iterator_category;
-            typedef typename V::iterator::difference_type difference_type;
-            typedef typename V::iterator::value_type value_type;
-            typedef typename V::iterator::reference reference;
-            typedef typename V::iterator::pointer pointer;
+            typedef typename iterator_type::iterator_category iterator_category;
+            typedef typename iterator_type::difference_type difference_type;
+            typedef typename iterator_type::value_type value_type;
+            typedef typename iterator_type::reference reference;
+            typedef typename iterator_type::pointer pointer;
 
             // Construction and destruction
             iterator ();

@@ -201,10 +201,20 @@ void test_blas_3<M, N>::operator () () {
     }
 }
 
+#ifdef USE_FLOAT
 template struct test_blas_3<ublas::matrix<float>, 3>;
+#endif
+
+#ifdef USE_DOUBLE
 template struct test_blas_3<ublas::matrix<double>, 3>;
+#endif
 
 #ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
 template struct test_blas_3<ublas::matrix<std::complex<float> >, 3>;
+#endif
+
+#ifdef USE_DOUBLE
 template struct test_blas_3<ublas::matrix<std::complex<double> >, 3>;
+#endif
 #endif

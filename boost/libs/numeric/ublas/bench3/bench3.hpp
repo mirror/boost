@@ -143,6 +143,8 @@ struct bench_3 {
 struct safe_tag {};
 struct fast_tag {};
 
+// #define USE_FLOAT
+#define USE_DOUBLE
 // #define USE_STD_COMPLEX
 
 #define USE_C_ARRAY
@@ -151,6 +153,6 @@ struct fast_tag {};
 // #define USE_STD_VALARRAY
 #define USE_STD_VECTOR
 
-#endif 
+#endif
 
 

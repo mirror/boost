@@ -65,8 +65,10 @@ struct test_blas_3 {
     void operator () ();
 };
 
-// #define USE_STD_COMPLEX
+#define USE_FLOAT
+#define USE_DOUBLE
+#define USE_STD_COMPLEX
 
-#endif 
+#endif
 
 

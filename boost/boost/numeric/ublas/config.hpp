@@ -21,6 +21,7 @@
 #include <cstddef>
 
 #include <boost/config.hpp>
+#include <boost/type_traits.hpp>
 #include <boost/limits.hpp>
 
 #ifdef BOOST_MSVC
@@ -53,6 +54,15 @@
 // IO via streams
 #define BOOST_UBLAS_USE_STREAM
 // #endif
+
+
+
+// Enable different sparse element proxies
+// These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
+// Thanks to Marc Duflot for spotting this.
+// #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
+#define BOOST_UBLAS_STRICT_VECTOR_SPARSE
+#define BOOST_UBLAS_STRICT_MATRIX_SPARSE
 
 
 
@@ -95,7 +105,7 @@
 // Bounds check
 #define BOOST_UBLAS_BOUNDS_CHECK
 // Type check for non dense matrices
-// #define BOOST_UBLAS_TYPE_CHECK
+#define BOOST_UBLAS_TYPE_CHECK
 
 #endif
 
@@ -118,9 +128,6 @@
 // #define BOOST_UBLAS_ET_REFERENCE
 // #define BOOST_UBLAS_ET_CLOSURE_VALUE
 #define BOOST_UBLAS_ET_CLOSURE_REFERENCE
-
-// Use canonical iterators.
-// #define BOOST_UBLAS_USE_CANONICAL_ITERATOR
 
 // Use indexed iterators.
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -161,8 +168,6 @@
 #define BOOST_MSVC_STD_ITERATOR
 #endif
 
-#define BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
-
 #endif
 
 
@@ -182,8 +187,6 @@
 #define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
 
 #define BOOST_UBLAS_USE_LONG_DOUBLE
-
-#define BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
 
 #endif
 
@@ -225,8 +228,6 @@
 // ICC sometimes needs qualified type names.
 #define BOOST_UBLAS_QUALIFIED_TYPENAME
 
-#define BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
-
 #endif
 
 
@@ -242,14 +243,27 @@
 
 #define BOOST_UBLAS_USE_LONG_DOUBLE
 
-#define BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
-
 #endif
 
 
 
 // Forward declarations
 namespace boost { namespace numeric { namespace ublas {
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    namespace detail {
+
+        template<bool, typename T1, typename T2>
+        struct ct_if {
+            typedef T1 type;
+        };
+        template<typename T1, typename T2>
+        struct ct_if<false, T1, T2> {
+            typedef T2 type;
+        };
+
+    }
+#endif
 
     template<class T>
     class unbounded_array;
@@ -290,27 +304,14 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E>
     class matrix_row;
-    template<class E, class I>
-    class matrix_row_iterator;
-    template<class E, class I>
-    class matrix_row_const_iterator;
     template<class E>
     class matrix_column;
-    template<class E, class I>
-    class matrix_column_iterator;
-    template<class E, class I>
-    class matrix_column_const_iterator;
     template<class E>
     class matrix_range;
     template<class E>
     class matrix_slice;
     template<class E, class IA = indirect_array<> >
     class matrix_indirect;
-
-    template<class F>
-    struct vector_assign_scalar;
-    template<class F>
-    struct vector_assign;
 
     template<class T, class A = unbounded_array<T> >
     class vector;
@@ -324,8 +325,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class A = map_array<std::size_t, T> >
     class sparse_vector;
 
-    template<class T, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
+    template<class T, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
     class compressed_vector;
+
+    template<class T, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
+    class coordinate_vector;
 
     struct unknown_orientation_tag {};
 
@@ -334,13 +338,6 @@ namespace boost { namespace numeric { namespace ublas {
 
     struct column_major_tag {};
     struct column_major;
-
-    template<class F>
-    struct matrix_assign_scalar;
-    template<class F>
-    struct matrix_assign;
-    template<class F>
-    struct matrix_swap;
 
     template<class T, class F = row_major, class A = unbounded_array<T> >
     class matrix;
@@ -393,9 +390,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class F = row_major, class A = map_array<std::size_t, map_array<std::size_t, T> > >
     class sparse_vector_of_sparse_vector;
 
-    template<class T, class F = row_major, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
+    template<class T, class F = row_major, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
     class compressed_matrix;
 
+    template<class T, class F = row_major, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
+    class coordinate_matrix;
 
     template<class V>
     typename V::size_type num_elements (const V &v) {

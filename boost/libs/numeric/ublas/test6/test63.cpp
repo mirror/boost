@@ -201,57 +201,87 @@ void test_matrix () {
     std::cout << "test_matrix" << std::endl;
 
 #ifdef USE_BOUNDED_ARRAY
+#ifdef USE_FLOAT
     std::cout << "float, bounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<float, ublas::lower, ublas::row_major, ublas::bounded_array<float, 3 * 3> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<float, ublas::lower, ublas::row_major, ublas::bounded_array<float, 3 * 3> >, 3 > () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "double, bounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<double, ublas::lower, ublas::row_major, ublas::bounded_array<double, 3 * 3> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<double, ublas::lower, ublas::row_major, ublas::bounded_array<double, 3 * 3> >, 3 > () (0);
+#endif
 
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
     std::cout << "std::complex<float>, bounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<std::complex<float>, ublas::lower, ublas::row_major, ublas::bounded_array<std::complex<float>, 3 * 3> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<std::complex<float>, ublas::lower, ublas::row_major, ublas::bounded_array<std::complex<float>, 3 * 3> >, 3 > () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>, bounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<std::complex<double>, ublas::lower, ublas::row_major, ublas::bounded_array<std::complex<double>, 3 * 3> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<std::complex<double>, ublas::lower, ublas::row_major, ublas::bounded_array<std::complex<double>, 3 * 3> >, 3 > () (0);
 #endif
+#endif
+#endif
 
 #ifdef USE_UNBOUNDED_ARRAY
+#ifdef USE_FLOAT
     std::cout << "float, unbounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<float, ublas::lower, ublas::row_major, ublas::unbounded_array<float> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<float, ublas::lower, ublas::row_major, ublas::unbounded_array<float> >, 3 > () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "double, unbounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<double, ublas::lower, ublas::row_major, ublas::unbounded_array<double> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<double, ublas::lower, ublas::row_major, ublas::unbounded_array<double> >, 3 > () (0);
+#endif
 
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
     std::cout << "std::complex<float>, unbounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<std::complex<float>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<float> > >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<std::complex<float>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<float> > >, 3 > () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>, unbounded_array" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<std::complex<double>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<std::complex<double>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () (0);
 #endif
+#endif
+#endif
 
 #ifdef USE_STD_VECTOR
+#ifdef USE_FLOAT
     std::cout << "float, std::vector" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<float, ublas::lower, ublas::row_major, std::vector<float> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<float, ublas::lower, ublas::row_major, std::vector<float> >, 3 > () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "double, std::vector" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<double, ublas::lower, ublas::row_major, std::vector<double> >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<double, ublas::lower, ublas::row_major, std::vector<double> >, 3 > () (0);
+#endif
 
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
     std::cout << "std::complex<float>, std::vector" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<std::complex<float>, ublas::lower, ublas::row_major, std::vector<std::complex<float> > >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<std::complex<float>, ublas::lower, ublas::row_major, std::vector<std::complex<float> > >, 3 > () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>, std::vector" << std::endl;
     test_my_matrix<ublas::symmetric_matrix<std::complex<double>, ublas::lower, ublas::row_major, std::vector<std::complex<double> > >, 3 > () ();
     test_my_matrix<ublas::symmetric_matrix<std::complex<double>, ublas::lower, ublas::row_major, std::vector<std::complex<double> > >, 3 > () (0);
+#endif
+#endif
 #endif
 }
 

@@ -436,9 +436,9 @@ how BLAS calls may be mapped onto our classes. </p>
         <td><code>y = a * prod (A, x) + b * y </code>or<code><br>
         y = a * prod (trans (A), x) + b * y </code>or<code><br>
         y = a * prod (herm (A), x) + b * y</code></td>
-        <td><em>y &lt;- A x + b y </em>or<em><br>
-        y &lt;- A</em><sup><em>T</em></sup><em> x + b y<br>
-        y &lt;- A</em><sup><em>H</em></sup><em> x + b y</em></td>
+        <td><em>y &lt;- a A x + b y </em>or<em><br>
+        y &lt;- a A</em><sup><em>T</em></sup><em> x + b y<br>
+        y &lt;- a A</em><sup><em>H</em></sup><em> x + b y</em></td>
         <td>Adds the scaled product of a matrix with a vector.</td>
     </tr>
     <tr>

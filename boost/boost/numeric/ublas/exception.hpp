@@ -30,13 +30,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::runtime_error {
         BOOST_UBLAS_EXPLICIT
-        divide_by_zero (const std::string &s = "exception: divide by zero"): 
+        divide_by_zero (const std::string &s = "exception: divide by zero"):
             std::runtime_error (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: divide by zero";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -48,13 +48,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::logic_error {
         BOOST_UBLAS_EXPLICIT
-        internal_logic (const std::string &s = "exception: internal logic"): 
+        internal_logic (const std::string &s = "exception: internal logic"):
             std::logic_error (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: internal logic";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -66,13 +66,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::logic_error {
         BOOST_UBLAS_EXPLICIT
-        external_logic (const std::string &s = "exception: external logic"): 
+        external_logic (const std::string &s = "exception: external logic"):
             std::logic_error (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: external logic";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -84,13 +84,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::invalid_argument {
         BOOST_UBLAS_EXPLICIT
-        bad_argument (const std::string &s = "exception: bad argument"): 
+        bad_argument (const std::string &s = "exception: bad argument"):
             std::invalid_argument (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: bad argument";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -102,13 +102,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::domain_error {
         BOOST_UBLAS_EXPLICIT
-        bad_size (const std::string &s = "exception: bad size"): 
+        bad_size (const std::string &s = "exception: bad size"):
             std::domain_error (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: bad size";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -120,13 +120,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::out_of_range {
         BOOST_UBLAS_EXPLICIT
-        bad_index (const std::string &s = "exception: bad index"): 
+        bad_index (const std::string &s = "exception: bad index"):
             std::out_of_range (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: bad index";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -138,13 +138,13 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::runtime_error {
         BOOST_UBLAS_EXPLICIT
-        singular (const std::string &s = "exception: singular"): 
+        singular (const std::string &s = "exception: singular"):
             std::runtime_error (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: singular";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();
@@ -162,7 +162,7 @@ namespace boost { namespace numeric { namespace ublas {
         //     return "exception: non real";
         // }
         virtual void raise () {
-#ifndef BOOST_NO_EXCEPTIONS
+#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
             abort ();

@@ -33,49 +33,76 @@ int main () {
 
     std::cout << "test_blas_1" << std::endl;
 
+#ifdef USE_FLOAT
     std::cout << "float" << std::endl;
     test_blas_1<ublas::vector<float>, 3> () ();
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "double" << std::endl;
     test_blas_1<ublas::vector<double>, 3> () ();
+#endif
 
 #ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
     std::cout << "std::complex<float>" << std::endl;
     test_blas_1<ublas::vector<std::complex<float> >, 3> () ();
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>" << std::endl;
     test_blas_1<ublas::vector<std::complex<double> >, 3> () ();
+#endif
 #endif
 
     std::cout << "test_blas_2" << std::endl;
 
+#ifdef USE_FLOAT
     std::cout << "float" << std::endl;
     test_blas_2<ublas::vector<float>, ublas::matrix<float>, 3> () ();
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "double" << std::endl;
     test_blas_2<ublas::vector<double>, ublas::matrix<double>, 3> () ();
+#endif
 
 #ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
     std::cout << "std::complex<float>" << std::endl;
     test_blas_2<ublas::vector<std::complex<float> >, ublas::matrix<std::complex<float> >, 3> () ();
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>" << std::endl;
     test_blas_2<ublas::vector<std::complex<double> >, ublas::matrix<std::complex<double> >, 3> () ();
 #endif
+#endif
 
+    std::cout << "test_blas_3" << std::endl;
+
+#ifdef USE_FLOAT
     std::cout << "float" << std::endl;
     test_blas_3<ublas::matrix<float>, 3> () ();
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "double" << std::endl;
     test_blas_3<ublas::matrix<double>, 3> () ();
+#endif
 
 #ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
     std::cout << "std::complex<float>" << std::endl;
     test_blas_3<ublas::matrix<std::complex<float> >, 3> () ();
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>" << std::endl;
     test_blas_3<ublas::matrix<std::complex<double> >, 3> () ();
 #endif
+#endif
+
     return 0;
 }
 

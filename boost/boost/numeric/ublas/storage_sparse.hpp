@@ -26,67 +26,215 @@
 #include <boost/numeric/ublas/iterator.hpp>
 #include <boost/numeric/ublas/storage.hpp>
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-// This fixes a [1] = a [0] = 1, but won't work on broken compilers.
-// Thanks to Marc Duflot for spotting this.
-#define BOOST_UBLAS_STRICT_SPARSE_ELEMENT_ASSIGN
-#include <complex>
-#endif
-
 namespace boost { namespace numeric { namespace ublas {
 
-    template<class P>
-    struct less {
-        BOOST_UBLAS_INLINE
-        bool operator () (const P &p1, const P &p2) {
-            return p1.first < p2.first;
-        }
-    };
+    namespace detail {
 
+        template<class I, class T, class C>
+        BOOST_UBLAS_INLINE
+        I lower_bound (const I &begin, const I &end, const T &t, C compare) {
+            // t <= *begin <=> ! (*begin < t)
+            if (begin == end || ! compare (*begin, t))
+                return begin;
+            if (compare (*(end - 1), t))
+                return end;
+            return std::lower_bound (begin, end, t, compare);
+        }
+        template<class I, class T, class C>
+        BOOST_UBLAS_INLINE
+        I upper_bound (const I &begin, const I &end, const T &t, C compare) {
+            if (begin == end || compare (t, *begin))
+                return begin;
+            // (*end - 1) <= t <=> ! (t < *end)
+            if (! compare (t, *(end - 1)))
+                return end;
+            return std::upper_bound (begin, end, t, compare);
+        }
+
+        template<class P>
+        struct less_pair {
+            BOOST_UBLAS_INLINE
+            bool operator () (const P &p1, const P &p2) {
+                return p1.first < p2.first;
+            }
+        };
+        template<class T>
+        struct less_triple {
+            BOOST_UBLAS_INLINE
+            bool operator () (const T &t1, const T &t2) {
+                return t1.first.first < t2.first.first ||
+                       (t1.first.first == t2.first.first && t1.first.second < t2.first.second);
+            }
+        };
+
+    }
+
+#ifdef BOOST_UBLAS_STRICT_STORAGE_SPARSE
     template<class D>
-    struct map_value_traits {
+    struct sparse_storage_element_traits {
         typedef typename D::index_type index_type;
         typedef typename D::data_const_reference data_const_reference;
         typedef typename D::data_reference data_reference;
     };
     template<>
-    struct map_value_traits<float> {
+    struct sparse_storage_element_traits<float> {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
     template<>
-    struct map_value_traits<double> {
+    struct sparse_storage_element_traits<double> {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
     template<>
-    struct map_value_traits<long double> {
+    struct sparse_storage_element_traits<long double> {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
 #endif
     template<>
-    struct map_value_traits<std::complex<float> > {
+    struct sparse_storage_element_traits<std::complex<float> > {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
     template<>
-    struct map_value_traits<std::complex<double> > {
+    struct sparse_storage_element_traits<std::complex<double> > {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
     template<>
-    struct map_value_traits<std::complex<long double> > {
+    struct sparse_storage_element_traits<std::complex<long double> > {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
+    };
+#endif
+
+    template<class A>
+    class sparse_storage_element:
+       public container_reference<A> {
+    public:
+        typedef A array_type;
+        typedef typename A::index_type index_type;
+        typedef typename A::data_value_type data_value_type;
+        // typedef const data_value_type &data_const_reference;
+        typedef typename type_traits<data_value_type>::const_reference data_const_reference;
+        typedef data_value_type &data_reference;
+        typedef std::pair<index_type, data_value_type> value_type;
+        typedef std::pair<index_type, data_value_type> *pointer;
+
+        // Construction and destruction
+        BOOST_UBLAS_INLINE
+        sparse_storage_element (array_type &a, pointer it):
+            container_reference<array_type> (a), it_ (it), i_ (it->first), d_ (it->second) {}
+        BOOST_UBLAS_INLINE
+        sparse_storage_element (array_type &a, index_type i):
+            container_reference<array_type> (a), it_ (), i_ (i), d_ () {
+            pointer it = (*this) ().find (i_);
+            if (it == (*this) ().end ())
+                it = (*this) ().insert ((*this) ().end (), value_type (i_, d_));
+            d_ = it->second;
+        }
+        BOOST_UBLAS_INLINE
+        ~sparse_storage_element () {
+            if (! it_)
+                it_ = (*this) ().find (i_);
+            BOOST_UBLAS_CHECK (it_ != (*this) ().end (), internal_logic ());
+            it_->second = d_;
+        }
+
+        // Element access
+        // FIXME: GCC 3.1 warn's, if enabled
+        // BOOST_UBLAS_INLINE
+        // const sparse_storage_element_traits<data_value_type>::data_const_reference
+        // operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) const {
+        //     return d_ [i];
+        // }
+        BOOST_UBLAS_INLINE
+        typename sparse_storage_element_traits<data_value_type>::data_reference
+        operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) {
+            return d_ [i];
+        }
+
+        // Assignment
+        template<class D>
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator = (const D &d) {
+            d_ = d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator = (const sparse_storage_element &p) {
+            d_ = p.d_;
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator += (const D &d) {
+            d_ += d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator += (const sparse_storage_element &p) {
+            d_ += p.d_;
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator -= (const D &d) {
+            d_ -= d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator -= (const sparse_storage_element &p) {
+            d_ -= p.d_;
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator *= (const D &d) {
+            d_ *= d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator *= (const sparse_storage_element &p) {
+            d_ *= p.d_;
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator /= (const D &d) {
+            d_ /= d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator /= (const sparse_storage_element &p) {
+            d_ /= p.d_;
+            return *this;
+        }
+
+        // FIXME: GCC 3.1 warn's, if enabled
+        // Conversion
+        BOOST_UBLAS_INLINE
+        // operator const data_const_reference () const {
+        //     return d_;
+        // }
+        BOOST_UBLAS_INLINE
+        operator data_reference () {
+            return d_;
+        }
+
+    private:
+        pointer it_;
+        index_type i_;
+        data_value_type d_;
     };
 #endif
 
@@ -100,11 +248,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T data_value_type;
         // typedef const T &data_const_reference;
         typedef typename type_traits<T>::const_reference data_const_reference;
-#ifndef BOOST_UBLAS_STRICT_SPARSE_ELEMENT_ASSIGN
+#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
         typedef T &data_reference;
 #else
-        class proxy;
-        typedef proxy data_reference;
+        typedef sparse_storage_element<map_array> data_reference;
 #endif
         typedef std::pair<I, T> value_type;
         typedef const std::pair<I, T> &const_reference;
@@ -146,6 +293,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
                 // Assuming std compliant allocator as requested during review.
@@ -165,6 +313,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type capacity) {
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (capacity > capacity_) {
                 pointer data = new value_type [capacity];
                 // Assuming std compliant allocator as requested during review.
@@ -185,146 +334,16 @@ namespace boost { namespace numeric { namespace ublas {
             return size_;
         }
 
-#ifdef BOOST_UBLAS_STRICT_SPARSE_ELEMENT_ASSIGN
-        class proxy:
-            public container_reference<map_array> {
-        public:
-#ifdef BOOST_MSVC
-            typedef I index_type;
-            typedef T data_value_type;
-            // typedef const T &data_const_reference;
-            typedef typename type_traits<T>::const_reference data_const_reference;
-            typedef T &data_reference;
-            typedef std::pair<I, T> *pointer;
-#else
-            typedef typename map_array::index_type index_type;
-            typedef typename map_array::data_value_type data_value_type;
-            // typedef const typename map_array::data_value_type &data_const_reference;
-            typedef typename type_traits<typename map_array::data_value_type>::const_reference data_const_reference;
-            typedef typename map_array::data_value_type &data_reference;
-            typedef std::pair<index_type, data_value_type> *pointer;
-#endif
-
-            // Construction and destruction
-            BOOST_UBLAS_INLINE
-            proxy (map_array &a, pointer it):
-                container_reference<map_array> (a), it_ (it), i_ (it->first), d_ (it->second) {}
-            BOOST_UBLAS_INLINE
-            proxy (map_array &a, index_type i):
-                container_reference<map_array> (a), it_ (), i_ (i), d_ () {
-                pointer it = (*this) ().find (i_);
-                if (it == (*this) ().end ())
-                    it = (*this) ().insert ((*this) ().end (), value_type (i_, d_));
-                d_ = it->second;
-            }
-            BOOST_UBLAS_INLINE
-            ~proxy () {
-                if (! it_)
-                    it_ = (*this) ().find (i_);
-                BOOST_UBLAS_CHECK (it_ != (*this) ().end (), internal_logic ());
-                it_->second = d_;
-            }
-
-            // Element access
-            // FIXME: GCC 3.1 warn's, if enabled
-            // BOOST_UBLAS_INLINE
-            // const map_value_traits<data_value_type>::data_const_reference
-            // operator [] (typename map_value_traits<data_value_type>::index_type i) const {
-            //     return d_ [i];
-            // }
-            BOOST_UBLAS_INLINE
-            typename map_value_traits<data_value_type>::data_reference
-            operator [] (typename map_value_traits<data_value_type>::index_type i) {
-                return d_ [i];
-            }
-
-            // Assignment
-            template<class D>
-            BOOST_UBLAS_INLINE
-            proxy &operator = (const D &d) {
-                d_ = d;
-                return *this;
-            }
-            BOOST_UBLAS_INLINE
-            proxy &operator = (const proxy &p) {
-                d_ = p.d_;
-                return *this;
-            }
-            template<class D>
-            BOOST_UBLAS_INLINE
-            proxy &operator += (const D &d) {
-                d_ += d;
-                return *this;
-            }
-            BOOST_UBLAS_INLINE
-            proxy &operator += (const proxy &p) {
-                d_ += p.d_;
-                return *this;
-            }
-            template<class D>
-            BOOST_UBLAS_INLINE
-            proxy &operator -= (const D &d) {
-                d_ -= d;
-                return *this;
-            }
-            BOOST_UBLAS_INLINE
-            proxy &operator -= (const proxy &p) {
-                d_ -= p.d_;
-                return *this;
-            }
-            template<class D>
-            BOOST_UBLAS_INLINE
-            proxy &operator *= (const D &d) {
-                d_ *= d;
-                return *this;
-            }
-            BOOST_UBLAS_INLINE
-            proxy &operator *= (const proxy &p) {
-                d_ *= p.d_;
-                return *this;
-            }
-            template<class D>
-            BOOST_UBLAS_INLINE
-            proxy &operator /= (const D &d) {
-                d_ /= d;
-                return *this;
-            }
-            BOOST_UBLAS_INLINE
-            proxy &operator /= (const proxy &p) {
-                d_ /= p.d_;
-                return *this;
-            }
-
-            // Conversion
-            // FIXME: GCC 3.1 warn's, if enabled
-            //  BOOST_UBLAS_INLINE
-            //  operator const data_const_reference () const {
-            //      return d_;
-            //  }
-            BOOST_UBLAS_INLINE
-            operator data_reference () {
-                return d_;
-            }
-
-        private:
-            pointer it_;
-            index_type i_;
-            data_value_type d_;
-        };
-#endif
-
         // Element access
         BOOST_UBLAS_INLINE
         data_reference operator [] (index_type i) {
-#ifndef BOOST_UBLAS_STRICT_SPARSE_ELEMENT_ASSIGN
+#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
             pointer it = find (i);
             if (it == end ())
                 it = insert (end (), value_type (i, data_value_type ()));
             BOOST_UBLAS_CHECK (it != end (), internal_logic ());
             return it->second;
 #else
-            // This fixes a [1] = a [0] = 1.
-            // Thanks to Marc Duflot for spotting this.
             return data_reference (*this, i);
 #endif
         }
@@ -368,28 +387,28 @@ namespace boost { namespace numeric { namespace ublas {
         // Element insertion and deletion
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        pointer insert (pointer it, const value_type &p) {
+        pointer push_back (pointer it, const value_type &p) {
             if (size () == 0 || (it = end () - 1)->first < p.first) {
                 resize (size () + 1);
                 *(it = end () - 1) = p;
                 return it;
             }
-#ifdef BOOST_UBLAS_APPEND_ONLY
             // Raising exceptions abstracted as requested during review.
             // throw external_logic ();
             external_logic ().raise ();
             return it;
-#else
-            it = std::upper_bound (begin (), end (), p, less<value_type> ());
-            BOOST_UBLAS_CHECK (it != end (), internal_logic ());
-            BOOST_UBLAS_CHECK (it->first != p.first, external_logic ());
+        }
+        // This function seems to be big. So we do not let the compiler inline it.
+        // BOOST_UBLAS_INLINE
+        pointer insert (pointer it, const value_type &p) {
+            it = detail::lower_bound (begin (), end (), p, detail::less_pair<value_type> ());
             difference_type n = it - begin ();
+            BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n) || it->first != p.first, external_logic ());
             resize (size () + 1);
             it = begin () + n;
             std::copy_backward (it, end () - 1, end ());
             *it = p;
             return it;
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
@@ -404,7 +423,7 @@ namespace boost { namespace numeric { namespace ublas {
             resize (size () + it2 - it1);
             it = begin () + n;
             std::copy (it1, it2, it);
-            std::sort (begin (), end (), less<value_type> ());
+            std::sort (begin (), end (), detail::less_pair<value_type> ());
 #endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
@@ -441,7 +460,7 @@ namespace boost { namespace numeric { namespace ublas {
         const_pointer find (index_type i) const {
 #ifdef BOOST_UBLAS_DEPRECATED
             std::pair<const_pointer, const_pointer> pit;
-            pit = std::equal_range (begin (), end (), value_type (i, data_value_type ()), less<value_type> ());
+            pit = std::equal_range (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
             if (pit.first->first == i)
                 return pit.first;
             else if (pit.second->first == i)
@@ -449,7 +468,7 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 return end ();
 #else
-            const_pointer it (std::lower_bound (begin (), end (), value_type (i, data_value_type ()), less<value_type> ()));
+            const_pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
@@ -460,7 +479,7 @@ namespace boost { namespace numeric { namespace ublas {
         pointer find (index_type i) {
 #ifdef BOOST_UBLAS_DEPRECATED
             std::pair<pointer, pointer> pit;
-            pit = std::equal_range (begin (), end (), value_type (i, data_value_type ()), less<value_type> ());
+            pit = std::equal_range (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
             if (pit.first->first == i)
                 return pit.first;
             else if (pit.second->first == i)
@@ -468,7 +487,7 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 return end ();
 #else
-            pointer it (std::lower_bound (begin (), end (), value_type (i, data_value_type ()), less<value_type> ()));
+            pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
@@ -477,23 +496,23 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer lower_bound (index_type i) const {
-            return std::lower_bound (begin (), end (), value_type (i, data_value_type ()), less<value_type> ());
+            return detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer lower_bound (index_type i) {
-            return std::lower_bound (begin (), end (), value_type (i, data_value_type ()), less<value_type> ());
+            return detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
         }
 #ifdef BOOST_UBLAS_DEPRECATED
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer upper_bound (index_type i) const {
-            return std::upper_bound (begin (), end (), value_type (i, data_value_type ()), less<value_type> ());
+            return detail::upper_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer upper_bound (index_type i) {
-            return std::upper_bound (begin (), end (), value_type (i, data_value_type ()), less<value_type> ());
+            return detail::upper_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
         }
 #endif
 
@@ -586,9 +605,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template<class A>
-    struct map_traits {
-        typedef void proxy;
-    };
+    struct map_traits {};
     template<class I, class T>
     struct map_traits<std::map<I, T> > {
         typedef typename std::map<I, T>::size_type size_type;
@@ -662,6 +679,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
                 // Assuming std compliant allocator as requested during review.
@@ -681,6 +699,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type capacity) {
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (capacity > capacity_) {
                 pointer data = new value_type [capacity];
                 // Assuming std compliant allocator as requested during review.
@@ -750,28 +769,28 @@ namespace boost { namespace numeric { namespace ublas {
         // Element insertion and deletion
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        pointer insert (pointer it, const value_type &p) {
+        pointer push_back (pointer it, const value_type &p) {
             if (size () == 0 || (*(it = end () - 1)) < p) {
                 resize (size () + 1);
                 *(it = end () - 1) = p;
                 return it;
-            } 
-#ifdef BOOST_UBLAS_APPEND_ONLY
+            }
             // Raising exceptions abstracted as requested during review.
             // throw external_logic ();
             external_logic ().raise ();
             return it;
-#else
-            it = std::upper_bound (begin (), end (), p, std::less<value_type> ());
-            BOOST_UBLAS_CHECK (it != end (), internal_logic ());
-            BOOST_UBLAS_CHECK (*it != p, external_logic ());
+        }
+        // This function seems to be big. So we do not let the compiler inline it.
+        // BOOST_UBLAS_INLINE
+        pointer insert (pointer it, const value_type &p) {
+            it = detail::lower_bound (begin (), end (), p, std::less<value_type> ());
             difference_type n = it - begin ();
+            BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n) || *it != p, external_logic ());
             resize (size () + 1);
             it = begin () + n;
             std::copy_backward (it, end () - 1, end ());
             *it = p;
             return it;
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
@@ -823,7 +842,7 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 return end ();
 #else
-            const_pointer it (std::lower_bound (begin (), end (), i, std::less<value_type> ()));
+            const_pointer it (detail::lower_bound (begin (), end (), i, std::less<value_type> ()));
             if (it == end () || *it != i)
                 it = end ();
             return it;
@@ -842,7 +861,7 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 return end ();
 #else
-            pointer it (std::lower_bound (begin (), end (), i, std::less<value_type> ()));
+            pointer it (detail::lower_bound (begin (), end (), i, std::less<value_type> ()));
             if (it == end () || *it != i)
                 it = end ();
             return it;
@@ -851,23 +870,23 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer lower_bound (index_type i) const {
-            return std::lower_bound (begin (), end (), i, std::less<value_type> ());
+            return detail::lower_bound (begin (), end (), i, std::less<value_type> ());
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer lower_bound (index_type i) {
-            return std::lower_bound (begin (), end (), i, std::less<value_type> ());
+            return detail::lower_bound (begin (), end (), i, std::less<value_type> ());
         }
 #ifdef BOOST_UBLAS_DEPRECATED
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer upper_bound (index_type i) const {
-            return std::upper_bound (begin (), end (), i, std::less<value_type> ());
+            return detail::upper_bound (begin (), end (), i, std::less<value_type> ());
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer upper_bound (index_type i) {
-            return std::upper_bound (begin (), end (), i, std::less<value_type> ());
+            return detail::upper_bound (begin (), end (), i, std::less<value_type> ());
         }
 #endif
 

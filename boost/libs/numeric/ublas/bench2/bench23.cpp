@@ -131,29 +131,51 @@ template<class T, int N>
 void bench_3<T, N>::operator () (int runs) {
     header ("bench_3");
 
-    header ("prod (sparse_matrix, sparse_matrix)");
+    header ("prod (matrix, matrix)");
 
     header ("C array");
     bench_c_matrix_prod<T, N> () (runs);
 
+#ifdef USE_SPARSE_MATRIX
 #ifdef USE_MAP_ARRAY
-    header ("sparse_matrix<map_array, row_major>, sparse_matrix<map_array, column_major> safe");
-    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, ublas::map_array<std::size_t, T> >, 
+    header ("sparse_matrix<row_major, map_array>, sparse_matrix<column_major, map_array> safe");
+    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, ublas::map_array<std::size_t, T> >,
                          ublas::sparse_matrix<T, ublas::column_major, ublas::map_array<std::size_t, T> >, N> () (runs, safe_tag ());
 
-    header ("sparse_matrix<map_array, row_major>, sparse_matrix<map_array, column_major> fast");
-    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, ublas::map_array<std::size_t, T> >, 
+    header ("sparse_matrix<row_major, map_array>, sparse_matrix<column_major, map_array> fast");
+    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, ublas::map_array<std::size_t, T> >,
                          ublas::sparse_matrix<T, ublas::column_major, ublas::map_array<std::size_t, T> >, N> () (runs, fast_tag ());
 #endif
 
 #ifdef USE_STD_MAP
-    header ("sparse_matrix<std::map, row_major>, sparse_matrix<std::map, column_major> safe");
-    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, std::map<std::size_t, T> >, 
+    header ("sparse_matrix<row_major, std::map>, sparse_matrix<column_major, std::map> safe");
+    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, std::map<std::size_t, T> >,
                          ublas::sparse_matrix<T, ublas::column_major, std::map<std::size_t, T> >, N> () (runs, safe_tag ());
 
-    header ("sparse_matrix<std::map, row_major>, sparse_matrix<std::map, column_major> fast");
-    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, std::map<std::size_t, T> >, 
+    header ("sparse_matrix<row_major, std::map>, sparse_matrix<column_major, std::map> fast");
+    bench_my_matrix_prod<ublas::sparse_matrix<T, ublas::row_major, std::map<std::size_t, T> >,
                          ublas::sparse_matrix<T, ublas::column_major, std::map<std::size_t, T> >, N> () (runs, fast_tag ());
+#endif
+#endif
+
+#ifdef USE_COMPRESSED_MATRIX
+    header ("compressed_matrix<row_major>, compressed_matrix<column_major> safe");
+    bench_my_matrix_prod<ublas::compressed_matrix<T, ublas::row_major>,
+                         ublas::compressed_matrix<T, ublas::column_major>, N> () (runs, safe_tag ());
+
+    header ("compressed_matrix<row_major>, compressed_matrix<column_major> fast");
+    bench_my_matrix_prod<ublas::compressed_matrix<T, ublas::row_major>,
+                         ublas::compressed_matrix<T, ublas::column_major>, N> () (runs, fast_tag ());
+#endif
+
+#ifdef USE_COORDINATE_MATRIX
+    header ("coordinate_matrix<row_major>, coordinate_matrix<column_major> safe");
+    bench_my_matrix_prod<ublas::coordinate_matrix<T, ublas::row_major>,
+                         ublas::coordinate_matrix<T, ublas::column_major>, N> () (runs, safe_tag ());
+
+    header ("coordinate_matrix<row_major>, coordinate_matrix<column_major> fast");
+    bench_my_matrix_prod<ublas::coordinate_matrix<T, ublas::row_major>,
+                         ublas::coordinate_matrix<T, ublas::column_major>, N> () (runs, fast_tag ());
 #endif
 
 #ifdef USE_STD_VALARRAY
@@ -162,28 +184,34 @@ void bench_3<T, N>::operator () (int runs) {
 #endif
 }
 
+#ifdef USE_FLOAT
 template struct bench_3<float, 3>;
 template struct bench_3<float, 10>;
 template struct bench_3<float, 30>;
 template struct bench_3<float, 100>;
+#endif
 
+#ifdef USE_DOUBLE
 template struct bench_3<double, 3>;
 template struct bench_3<double, 10>;
 template struct bench_3<double, 30>;
 template struct bench_3<double, 100>;
+#endif
 
 #ifdef USE_STD_COMPLEX
-
+#ifdef USE_FLOAT
 template struct bench_3<std::complex<float>, 3>;
 template struct bench_3<std::complex<float>, 10>;
 template struct bench_3<std::complex<float>, 30>;
 template struct bench_3<std::complex<float>, 100>;
+#endif
 
+#ifdef USE_DOUBLE
 template struct bench_3<std::complex<double>, 3>;
 template struct bench_3<std::complex<double>, 10>;
 template struct bench_3<std::complex<double>, 30>;
 template struct bench_3<std::complex<double>, 100>;
-
+#endif
 #endif
 
 

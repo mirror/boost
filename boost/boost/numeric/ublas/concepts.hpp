@@ -263,19 +263,13 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I>
     struct Indexed2DIteratorConcept {
         typedef I iterator_type;
-#ifndef BOOST_UBLAS_USE_CANONICAL_ITERATOR
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
-#endif
 
         static void constraints () {
             iterator_type it = iterator_type ();
             // Function call
             it ();
-#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
-            // Indices
-            it.index ();
-#else
             // Indices
             it.index1 ();
             it.index2 ();
@@ -289,7 +283,6 @@ namespace boost { namespace numeric { namespace ublas {
             ignore_unused_variable_warning (it_end);
             ignore_unused_variable_warning (it_rbegin);
             ignore_unused_variable_warning (it_rend);
-#endif
         }
     };
 

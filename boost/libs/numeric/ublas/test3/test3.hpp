@@ -25,6 +25,10 @@ void test_matrix_vector ();
 
 void test_matrix ();
 
+// #define USE_FLOAT
+#define USE_DOUBLE
+// #define USE_STD_COMPLEX
+
 // #define USE_RANGE
 // #define USE_SLICE
 
@@ -32,11 +36,13 @@ void test_matrix ();
 // #define USE_STD_MAP
 
 #define USE_SPARSE_VECTOR
-// #define USE_COMPRESSED_VECTOR
+#define USE_COMPRESSED_VECTOR
+#define USE_COORDINATE_VECTOR
 
 #define USE_SPARSE_MATRIX
 // #define USE_SPARSE_VECTOR_OF_SPARSE_VECTOR
-// #define USE_COMPRESSED_MATRIX
+#define USE_COMPRESSED_MATRIX
+#define USE_COORDINATE_MATRIX
 
 #endif
 
