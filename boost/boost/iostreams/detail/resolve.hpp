@@ -61,7 +61,11 @@ template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type
 resolve( const T& t 
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)
+
+         // I suspect that the compilers which require this workaround may
+         // be correct, but I'm not sure why :(
          #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(810)) || \
+             BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205)) || \
              !defined(BOOST_INTEL) && ( BOOST_WORKAROUND(__GNUC__, <= 3) || \
              BOOST_WORKAROUND(__GNUC__, == 4) && \
              BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(0)) ) \
