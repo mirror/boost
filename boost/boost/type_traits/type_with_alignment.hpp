@@ -12,6 +12,8 @@
 #include "boost/preprocessor/list/for_each_i.hpp"
 #include "boost/preprocessor/tuple/to_list.hpp"
 #include "boost/preprocessor/cat.hpp"
+#include <boost/preprocessor/list/transform.hpp>
+#include <boost/preprocessor/list/append.hpp>
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/is_pod.hpp"
 #include "boost/static_assert.hpp"
@@ -38,10 +40,21 @@ typedef void (*function_ptr)();
 typedef int (alignment_dummy::*member_ptr);
 typedef int (alignment_dummy::*member_function_ptr)();
 
-#define BOOST_TT_ALIGNMENT_TYPES BOOST_PP_TUPLE_TO_LIST( \
+#define BOOST_TT_ALIGNMENT_BASE_TYPES BOOST_PP_TUPLE_TO_LIST( \
         11, ( \
         char, short, int, long, float, double, long double \
         , void*, function_ptr, member_ptr, member_function_ptr))
+
+#define BOOST_TT_HAS_ONE_T(D,Data,T) boost::detail::has_one_T<T>
+
+#define BOOST_TT_ALIGNMENT_STRUCT_TYPES                         \
+        BOOST_PP_LIST_TRANSFORM(BOOST_TT_HAS_ONE_T,             \
+                                X,                              \
+                                BOOST_TT_ALIGNMENT_BASE_TYPES)
+
+#define BOOST_TT_ALIGNMENT_TYPES                                \
+        BOOST_PP_LIST_APPEND(BOOST_TT_ALIGNMENT_BASE_TYPES,     \
+                             BOOST_TT_ALIGNMENT_STRUCT_TYPES)
 
 #define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                               \
         typename mpl::if_c<                                                  \
@@ -51,6 +64,12 @@ typedef int (alignment_dummy::*member_function_ptr)();
                alignment_of<T>::value == target || BOOST_PP_CAT(found,I) } ;
 
 #define BOOST_TT_CHOOSE_T(R,P,I,T) T BOOST_PP_CAT(t,I);
+
+template <typename T>
+struct has_one_T
+{
+  T data;
+};
 
 template <std::size_t target>
 union lower_alignment
@@ -73,6 +92,9 @@ union max_align
         )
 };
 
+#undef BOOST_TT_ALIGNMENT_BASE_TYPES
+#undef BOOST_TT_HAS_ONE_T
+#undef BOOST_TT_ALIGNMENT_STRUCT_TYPES
 #undef BOOST_TT_ALIGNMENT_TYPES
 #undef BOOST_TT_CHOOSE_MIN_ALIGNMENT
 #undef BOOST_TT_CHOOSE_T
