@@ -28,7 +28,8 @@ main()
 {
 //   std::locale native("");
 //   std::cout << "native: " << native.name() << std::endl;
-#ifndef BOOST_NO_STD_LOCALE
+//#ifndef BOOST_NO_STD_LOCALE
+#ifndef BOOST_DATE_TIME_NO_LOCALE
 
   using namespace boost::gregorian;
 
@@ -132,7 +133,7 @@ main()
 #else
   check("All pass, no tests executed - Locales not supported", true);
 
-#endif //BOOST_NO_STD_LOCALE
+#endif //BOOST_DATE_TIME_NO_LOCALE
 
   printTestStats();
 
