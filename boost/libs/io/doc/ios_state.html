@@ -215,7 +215,7 @@ attribute back to the saved value.</p>
 	</tr>
 	<tr>
 		<td><code>boost::io::basic_ios_iostate_saver&lt;Ch, Tr&gt;</code></td>
-		<td>Failure state of the stream <a href="#Note1">[1]</a></td>
+		<td>Failure state of the stream <a href="#Note1">[1]</a>, <a href="#Note2">[2]</a></td>
 		<td><code>std::ios_base::iostate</code></td>
 		<td><code>rdstate</code></td>
 		<td><code>clear</code></td>
@@ -268,11 +268,13 @@ attribute back to the saved value.</p>
 	<li>When the associated stream buffer is changed, the stream's
 		failure state set is reset to &quot;good&quot; if the given stream
 		buffer's address is non-NULL, but the &quot;bad&quot; failure
-		state is set if that address is NULL.  Given a NULL stream
-		buffer address, an exception is thrown if the &quot;bad&quot;
-		failure state is being watched.  This could mean that the <a
-		name="Note2">constructor or destructor of this class template
-		may throw</a>.</li>
+		state is set if that address is NULL.  This means that a saved
+                failure state of &quot;good&quot; may be restored as &quot;bad&quot;
+                if the stream is stripped of an associated stream buffer.  Worse,
+                given a NULL stream buffer address, an exception is thrown if the
+                &quot;bad&quot; failure state is being watched.  This could mean
+                that the <a name="Note2">constructor or destructor of these class
+                templates may throw</a>.</li>
 	<li>The <a name="Note3">saver for the locale uses the
 		<code>std::basic_ios&lt;Ch, Tr&gt;</code> class to extract their
 		information</a>, although it could have used the functionality
@@ -431,6 +433,6 @@ int  main()
 <p>Copyright 2002 Daryle Walker.  Use, modification, and distribution
 are subject to the Boost Software License, Version 1.0.  (See accompanying
 file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at
-&lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.</p>
+&lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>
 </html>
