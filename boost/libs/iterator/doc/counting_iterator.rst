@@ -21,10 +21,9 @@
   The counting iterator adaptor adds this crucial piece of
   functionality to whatever type it wraps.  One can use the
   counting iterator adaptor not only with integer types, but with
-  any type that is **Incrementable** (see type requirements
-  below).
+  any incrementable type.
 
-.. include:: counting_iterator_abstract.rst
+  .. include:: counting_iterator_abstract.rst
 
 .. contents:: Table of Contents
 
