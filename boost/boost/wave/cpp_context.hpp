@@ -23,7 +23,7 @@
 
 #include <boost/wave/util/unput_queue_iterator.hpp>
 #include <boost/wave/util/cpp_ifblock.hpp>
-#include <boost/wave/util/cpp_include_pathes.hpp>
+#include <boost/wave/util/cpp_include_paths.hpp>
 #include <boost/wave/util/iteration_context.hpp>
 #include <boost/wave/util/cpp_iterator.hpp>
 #include <boost/wave/util/cpp_macromap.hpp>
@@ -114,11 +114,9 @@ public:
 // iterator interface
     iterator_type begin() 
     { 
-    boost::filesystem::path filepath = includes.complete_path(filename.c_str());
-
         includes.set_current_directory(filename.c_str());
-        return iterator_type(*this, first, last, 
-            position_type(filepath.string().c_str()), get_language()); 
+        return iterator_type(*this, first, last, position_type(filename.c_str()),
+            get_language()); 
     }
     iterator_type end() const 
         { return iterator_type(); }
@@ -191,7 +189,7 @@ protected:
         boost::wave::context<IteratorT, lexer_type, InputPolicyT, TraceT> >;
 #endif
     
-// maintain include pathes (helper functions)
+// maintain include paths (helper functions)
     bool find_include_file (std::string &s, std::string &d, bool is_system, 
         char const *current_file) const
     { return includes.find_include_file(s, d, is_system, current_file); }
@@ -295,7 +293,7 @@ private:
 #endif 
     
     boost::wave::util::if_block_stack ifblocks;   // conditional compilation contexts
-    boost::wave::util::include_pathes includes;   // lists of include directories to search
+    boost::wave::util::include_paths includes;    // lists of include directories to search
     iteration_context_stack_type iter_ctxs;       // iteration contexts
     boost::wave::util::macromap<self_type> macros;  // map of defined macros
     boost::wave::language_support language;       // supported language/extensions

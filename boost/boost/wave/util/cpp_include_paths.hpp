@@ -8,8 +8,8 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#if !defined(CPP_INCLUDE_PATHES_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED)
-#define CPP_INCLUDE_PATHES_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED
+#if !defined(CPP_include_paths_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED)
+#define CPP_include_paths_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED
 
 #include <string>
 #include <list>
@@ -28,7 +28,7 @@ namespace util {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  include_pathes - controlling the include path search order
+//  include_paths - controlling the include path search order
 //
 //  General notes:
 //
@@ -52,16 +52,18 @@ namespace util {
 //      after.
 //
 ///////////////////////////////////////////////////////////////////////////////
-class include_pathes
+class include_paths
 {
-    typedef std::list<boost::filesystem::path> include_list_type;
+    typedef std::list<std::pair<boost::filesystem::path, std::string> > 
+        include_list_type;
+    typedef include_list_type::value_type include_value_type;
     
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     typedef std::set<std::string> pragma_once_set_t;
 #endif
 
 public:
-    include_pathes()
+    include_paths()
     :   was_sys_include_path(false),
         current_dir(boost::filesystem::initial_path()),
         current_rel_dir(boost::filesystem::initial_path())
@@ -70,7 +72,7 @@ public:
     bool add_include_path(char const *path_, bool is_system = false)
     {
         return add_include_path(path_, (is_system || was_sys_include_path) ? 
-            system_include_pathes : user_include_pathes);
+            system_include_paths : user_include_paths);
     }
     void set_sys_include_delimiter() { was_sys_include_path = true; }
     bool find_include_file (std::string &s, std::string &dir, bool is_system, 
@@ -78,8 +80,6 @@ public:
     void set_current_directory(char const *path_);
 
     void init_initial_path() { boost::filesystem::initial_path(); }
-
-    boost::filesystem::path complete_path(char const *path_);
     
 protected:
     bool find_include_file (std::string &s, std::string &dir, 
@@ -87,8 +87,8 @@ protected:
     bool add_include_path(char const *path_, include_list_type &pathes_);
 
 private:
-    include_list_type user_include_pathes;
-    include_list_type system_include_pathes;
+    include_list_type user_include_paths;
+    include_list_type system_include_paths;
     bool was_sys_include_path;          // saw a set_sys_include_delimiter()
     boost::filesystem::path current_dir;
     boost::filesystem::path current_rel_dir;
@@ -113,22 +113,20 @@ private:
 //  Add an include path to one of the search lists (user include path or system 
 //  include path).
 inline
-bool include_pathes::add_include_path (
+bool include_paths::add_include_path (
     char const *path_, include_list_type &pathes_)
 {
     namespace fs = boost::filesystem;
     if (path_) {
-    fs::path newpath = fs::path(path_, fs::native);
+    fs::path newpath = fs::complete(fs::path(path_, fs::native), current_dir);
 
-        if (newpath.is_complete() &&
-            !fs::exists(newpath) || !fs::is_directory(newpath)) 
-        {
-        // the given path is absolute and does not form a name of a valid 
-        // file system directory item
+        if (!fs::exists(newpath) || !fs::is_directory(newpath)) {
+        // the given path does not form a name of a valid file system directory
+        // item
             return false;
         }
 
-        pathes_.push_back (newpath);
+        pathes_.push_back (include_value_type(newpath, path_));
         return true;
     }
     return false;
@@ -137,14 +135,14 @@ bool include_pathes::add_include_path (
 ///////////////////////////////////////////////////////////////////////////////
 //  Find an include file by traversing the list of include directories
 inline
-bool include_pathes::find_include_file (std::string &s, std::string &dir, 
+bool include_paths::find_include_file (std::string &s, std::string &dir, 
     include_list_type const &pathes, char const *current_file) const
 {
     namespace fs = boost::filesystem;
     typedef include_list_type::const_iterator const_include_list_iter_t;
 
     const_include_list_iter_t it = pathes.begin();
-    const_include_list_iter_t include_pathes_end = pathes.end();
+    const_include_list_iter_t include_paths_end = pathes.end();
 
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0    
     if (0 != current_file) {
@@ -157,8 +155,8 @@ bool include_pathes::find_include_file (std::string &s, std::string &dir,
     // file was found.
 
         fs::path file_path (current_file, fs::native);
-        for (/**/; it != include_pathes_end; ++it) {
-            fs::path currpath ((*it).string(), fs::native);
+        for (/**/; it != include_paths_end; ++it) {
+            fs::path currpath ((*it).first.string(), fs::native);
 	          if (std::equal(currpath.begin(), currpath.end(), file_path.begin())) 
 	          {
                 ++it;     // start searching with the next directory
@@ -168,20 +166,12 @@ bool include_pathes::find_include_file (std::string &s, std::string &dir,
     }
 #endif
 
-    for (/**/; it != include_pathes_end; ++it) {
-    fs::path currpath;
-    
-        if ((*it).is_complete()) //  the include path is absolute
-            currpath = *it;
-        else {
-        //  the include path is relative, compose an absolute path from the 
-        //  current directory
-            currpath = fs::complete(*it, current_dir);
-        }
+    for (/**/; it != include_paths_end; ++it) {
+        fs::path currpath ((*it).first.string(), fs::native);
         currpath /= fs::path(s, fs::native);      // append filename
-        
+
         if (fs::exists(currpath)) {
-            fs::path dirpath = *it;
+            fs::path dirpath ((*it).second, fs::native);
             dirpath /= fs::path(s, fs::native);
             
             dir = dirpath.string();
@@ -196,7 +186,7 @@ bool include_pathes::find_include_file (std::string &s, std::string &dir,
 //  Find an include file by searching the user and system includes in the 
 //  correct sequence (as it was configured by the user of the driver program)
 inline bool 
-include_pathes::find_include_file (std::string &s, std::string &dir, 
+include_paths::find_include_file (std::string &s, std::string &dir, 
     bool is_system, char const *current_file) const
 {
     namespace fs = boost::filesystem;
@@ -221,14 +211,14 @@ include_pathes::find_include_file (std::string &s, std::string &dir,
 
         // iterate all user include file directories to find the file
             if (0 == current_file)
-                return find_include_file(s, dir, user_include_pathes, 0);
+                return find_include_file(s, dir, user_include_paths, 0);
 
         // #include_next doesn't distinguish between <file> and "file"
         // ... fall through
         }
 
     // iterate all user include file directories to find the file
-        if (find_include_file(s, dir, user_include_pathes, current_file))
+        if (find_include_file(s, dir, user_include_paths, current_file))
             return true;
 
     // if nothing found, fall through
@@ -236,30 +226,19 @@ include_pathes::find_include_file (std::string &s, std::string &dir,
     }
 
 // iterate all system include file directories to find the file
-    return find_include_file (s, dir, system_include_pathes, current_file);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  complete the given path wrt the current directory
-inline 
-boost::filesystem::path include_pathes::complete_path(char const *path_)
-{
-    namespace fs = boost::filesystem;
-    fs::path filepath(path_, fs::native);
-    return filepath.is_complete() ? 
-        filepath : fs::complete(filepath, current_dir);
+    return find_include_file (s, dir, system_include_paths, current_file);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Set current directory from a given file name
+
 inline
-void include_pathes::set_current_directory(char const *path_)
+void include_paths::set_current_directory(char const *path_)
 {
     namespace fs = boost::filesystem;
     
     fs::path filepath (path_, fs::native);
     fs::path filename = fs::complete(filepath, current_dir);
-
     if (fs::exists(filename) && fs::is_directory(filename)) {
         current_dir = filename;
         current_rel_dir = filepath;
@@ -275,4 +254,4 @@ void include_pathes::set_current_directory(char const *path_)
 }   // namespace wave
 }   // namespace boost
 
-#endif // !defined(CPP_INCLUDE_PATHES_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED)
+#endif // !defined(CPP_include_paths_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED)
