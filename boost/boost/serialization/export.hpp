@@ -86,7 +86,7 @@ namespace export_impl
                 Archive::is_loading::value || Archive::is_saving::value
             );
             #endif
-            BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME Archive::is_saving,
                 mpl::identity<o>,
             // else
@@ -95,7 +95,8 @@ namespace export_impl
                 mpl::identity<i>,
             // else
                 mpl::identity<nothing>
-            > >::type::invoke();
+            > >::type typex;
+            typex::invoke();
         }
     };
 
@@ -107,11 +108,12 @@ namespace export_impl
     public:
         static void instantiate(){
             archive<head, T>::instantiate();
-            BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 mpl::empty<tail>,
                 mpl::identity<nothing>,
                 mpl::identity<for_each_archive<tail, T> >
-            >::type::instantiate();
+            >::type typex;
+            typex::instantiate();
         }
     };
 
