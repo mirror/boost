@@ -48,11 +48,11 @@
 #include "boost/type_traits/is_same.hpp"
 #include "boost/variant/static_visitor.hpp"
 
+#include "boost/mpl/apply.hpp"
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/contains.hpp"
-#include "boost/mpl/count_if.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/empty.hpp"
 #include "boost/mpl/equal_to.hpp"
@@ -61,6 +61,8 @@
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iter_fold.hpp"
+#include "boost/mpl/front.hpp"
+#include "boost/mpl/lambda.hpp"
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
@@ -602,6 +604,56 @@ public: // static functions
 #endif // !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction enable_recursive
+//
+// Enables the boost::variant<..., boost::recursive_variant, ...> syntax.
+//
+
+template <typename T, typename U1>
+struct rebind1
+{
+private:
+    typedef typename mpl::lambda<
+          mpl::identity<T>
+        >::type le_;
+
+public:
+    typedef typename mpl::apply_if<
+          is_same< le_, mpl::identity<T> >
+        , le_ // identity<T>
+        , mpl::apply1<le_, U1>
+        >::type type;
+};
+
+template <typename T, typename Variant>
+struct enable_recursive
+{
+private: // helpers, for metafunction result (below)
+
+    typedef typename rebind1<T, Variant>::type t_;
+
+public: // metafunction result
+
+    // [Wrap with incomplete only if rebind really changed something:]
+    typedef typename mpl::if_<
+          is_same< t_, T >
+        , t_
+        , boost::incomplete<t_>
+        >::type type;
+
+};
+
+template <typename Variant>
+struct quoted_enable_recursive
+{
+    template <typename T>
+    struct apply
+        : enable_recursive<T, Variant>
+    {
+    };
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) function template cast_storage
 //
 // Casts the given storage to the specified type, but with qualification.
@@ -764,46 +816,64 @@ apply_visitor_impl(
 // See docs and boost/variant/variant_fwd.hpp for more information.
 //
 template <
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
     BOOST_VARIANT_ENUM_PARAMS(typename T_)
-#else
-    BOOST_VARIANT_ENUM_PARAMS(typename T)
-#endif
   >
 class variant
 {
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
-
-private:
-
-    // borland seemingly cannot use template arguments within class scope,
-    // so we define the following typedefs to workaround:
-    #define BOOST_VARIANT_AUX_BORLAND_TYPEDEFS(z,N,_)  \
-        typedef BOOST_PP_CAT(T_,N) BOOST_PP_CAT(T,N);  \
-        /**/
-    BOOST_PP_REPEAT(
-          BOOST_VARIANT_LIMIT_TYPES
-        , BOOST_VARIANT_AUX_BORLAND_TYPEDEFS
-        , _
-        )
-    #undef BOOST_VARIANT_AUX_BORLAND_TYPEDEFS
-
-#endif // borland workaround
-
 #if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+
+private: // helpers, for typedefs (below)
+
+    typedef typename mpl::apply_if<
+          mpl::is_sequence<T_0>
+        , mpl::identity<T_0>
+        , detail::variant::make_variant_list<
+              BOOST_VARIANT_ENUM_PARAMS(T_)
+            >
+        >::type plain_nonrecursive_types;
 
 public: // typedefs
 
-    typedef typename mpl::apply_if<
-          mpl::is_sequence<T0>
-        , mpl::identity<T0>
-        , detail::variant::make_variant_list<
-              BOOST_VARIANT_ENUM_PARAMS(T)
-            >
+    typedef typename mpl::transform<
+          plain_nonrecursive_types
+        , mpl::protect< detail::variant::quoted_enable_recursive<variant> >
         >::type types;
 
+private: // private typedefs
+
+    typedef typename mpl::front<types>::type T0;
+
 #else // defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+
+private: // helpers, for typedefs (below)
+
+#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+    typedef variant wknd_self_t;
+
+    #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_)  \
+        typedef typename detail::variant::enable_recursive< \
+              BOOST_PP_CAT(T_,N)                            \
+            , wknd_self_t                                   \
+            >::type BOOST_PP_CAT(T,N);                      \
+        /**/
+
+#   else // MSVC6
+
+    #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_)  \
+        typedef BOOST_PP_CAT(T_,N) BOOST_PP_CAT(T,N);   \
+        /**/
+
+#   endif // MSVC6 workaround
+
+    BOOST_PP_REPEAT(
+          BOOST_VARIANT_LIMIT_TYPES
+        , BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS
+        , _
+        )
+
+    #undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS
 
 public: // typedefs
 
@@ -824,6 +894,7 @@ private: // static precondition assertions
 
 #   else // MSVC6
 
+    // for some reason, msvc needs following all on one line:
     BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
     BOOST_STATIC_ASSERT(msvc_not_is_sequence_T0);
 

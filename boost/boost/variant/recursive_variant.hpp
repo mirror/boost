@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
-// boost variant.hpp header file
+// boost variant/recursive_variant.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
 // Copyright (c) 2003
-// Eric Friedman, Itay Maman
+// Eric Friedman
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -14,18 +14,16 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_VARIANT_HPP
-#define BOOST_VARIANT_HPP
+#ifndef BOOST_VARIANT_RECURSIVE_VARIANT_HPP
+#define BOOST_VARIANT_RECURSIVE_VARIANT_HPP
 
-// variant "main"
-#include "boost/variant/variant_fwd.hpp"
-#include "boost/variant/variant.hpp"
+#include "boost/incomplete.hpp" // only forward-declared in variant.hpp
+#include "boost/mpl/arg.hpp"
 
-// common applications
-#include "boost/variant/recursive_variant.hpp"
-#include "boost/variant/get.hpp"
-#include "boost/variant/apply_visitor.hpp"
-#include "boost/variant/static_visitor.hpp"
-#include "boost/variant/visitor_ptr.hpp"
+namespace boost {
 
-#endif // BOOST_VARIANT_HPP
+typedef mpl::arg<1> recursive_variant;
+
+} // namespace boost
+
+#endif // BOOST_VARIANT_RECURSIVE_VARIANT_HPP
