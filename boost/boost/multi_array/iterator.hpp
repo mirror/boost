@@ -20,7 +20,7 @@
 
 #include "boost/multi_array/base.hpp"
 #include "boost/multi_array/iterator_adaptors.hpp"
-#include "boost/iterator_adaptors.hpp"
+#include "boost/iterator/reverse_iterator.hpp"
 #include <cstddef>
 #include <iterator>
 
@@ -150,7 +150,7 @@ private:
   typedef typename iterator_gen_helper<T,base_type,NumDims,value_type,
     reference_type,tag,difference_type>::type it_type;
 public:
-  typedef typename boost::reverse_iterator_generator<it_type>::type type;
+  typedef typename boost::reverse_iterator<it_type> type;
 };
 
 template <typename T,  std::size_t NumDims, typename value_type,
@@ -161,7 +161,7 @@ private:
   typedef typename iterator_gen_helper<T,base_type,NumDims,value_type,
     reference_type,tag,difference_type>::type it_type;
 public:
-  typedef typename boost::reverse_iterator_generator<it_type>::type type;
+  typedef typename boost::reverse_iterator<it_type> type;
 };
 
 } // namespace multi_array
