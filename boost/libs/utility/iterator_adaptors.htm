@@ -767,10 +767,10 @@ struct iterator_adaptor
     iterator_adaptor(
         const iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;);
 
-    reference operator*() const;
+    reference operator*() const; <a href="#6">[6]</a>
     <i>operator_arrow_result_type</i> operator-&gt;() const; <a href=
 "#3">[3]</a>
-    <i>value_type</i> operator[](difference_type n) const; <a href="#3">[4]</a>
+    <i>value_type</i> operator[](difference_type n) const; <a href="#3">[4]</a>, <a href="#6">[6]</a>
 
     iterator_adaptor&amp; operator++();
     iterator_adaptor&amp; operator++(int);
@@ -857,6 +857,34 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     Forward Iterator</a>, so you will need to use a less restrictive
     iterator category such as <tt>std::input_iterator_tag</tt>.
 
+    <p><a name="6">[6]</a>
+    There is a common misconception that an iterator should have two
+    versions of <tt>operator*</tt> and of <tt>operator[]</tt>, one
+    version that is a <tt>const</tt> member function and one version
+    that is non-<tt>const</tt>. Perhaps the source of this
+    misconception is that containers typically have const and
+    non-const versions of many of their member functions.  Iterators,
+    however, are different. A particular iterator type can be either
+    <i>mutable</i> or <i>constant</i> (but not both).  One can assign
+    to and change the object pointed to by a mutable iterator whereas a
+    constant iterator returns constant objects when dereferenced. Whether
+    the iterator object itself is <tt>const</tt> has nothing to do with
+    whether the iterator is mutable or constant.  This is analogous to
+    the way built-in pointer types behave.  For example, one can
+    modify objects pointed to by a <tt>const</tt> pointer
+<pre>
+    int* const x = new int;
+    int i = 3;
+    *x = i;
+</pre>
+    but one cannot modify objects pointed to by a pointer
+    to <tt>const</tt>
+<pre>
+    int const* x = new int;
+    int i = 3;
+    *x = i;
+</pre>
+
     <hr>
 
     <p>Revised 
@@ -871,7 +899,7 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
 
 </body>
 
-    <!--  LocalWords:  HTML html charset alt gif abrahams htm const
+    <!--  LocalWords:  HTML html charset alt gif abrahams htm const iterator
         incrementable david abrahams
          -->
      
@@ -887,5 +915,7 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     <!--  LocalWords:  iostream hpp sizeof InputIterator constness ConstIterator
          David Abrahams
          -->
+<!--  LocalWords:  Iterators dereferenced
+ -->
 </html>
 
