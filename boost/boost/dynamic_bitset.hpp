@@ -634,7 +634,7 @@ dynamic_bitset<Block, Allocator>::operator<<=(size_type n)
     //else
     if (n > 0)
     {
-        size_type  const last  = m_num_blocks - 1; // m_num_blocks is >= 1
+        size_type  const last  = this->m_num_blocks - 1; // m_num_blocks is >= 1
         size_type  const div   = n / bits_per_block; // div is <= last
         size_type  const r     = n % bits_per_block;
         
@@ -645,16 +645,16 @@ dynamic_bitset<Block, Allocator>::operator<<=(size_type n)
             block_type const rs = bits_per_block - r;
 
             for (size_type i = last-div; i>0; --i) {
-                m_bits[i+div] = (m_bits[i] << r) | (m_bits[i-1] >> rs);
+                this->m_bits[i+div] = (this->m_bits[i] << r) | (this->m_bits[i-1] >> rs);
             }
-            m_bits[div] = m_bits[0] << r;
+            this->m_bits[div] = this->m_bits[0] << r;
             
         }
         else {
             for (size_type i = last-div; i>0; --i) {
-                m_bits[i+div] = m_bits[i];
+                this->m_bits[i+div] = this->m_bits[i];
             }
-            m_bits[div] = m_bits[0];
+            this->m_bits[div] = this->m_bits[0];
         }
         
         
@@ -715,7 +715,7 @@ dynamic_bitset<B, A> & dynamic_bitset<B, A>::operator>>=(size_type n) {
     //else
     if (n>0){
 
-        size_type  const last  = m_num_blocks - 1; // m_num_blocks is >= 1
+        size_type  const last  = this->m_num_blocks - 1; // m_num_blocks is >= 1
         size_type  const div   = n / bits_per_block; // div is <= last
         size_type  const r     = n % bits_per_block;
         
@@ -743,7 +743,7 @@ dynamic_bitset<B, A> & dynamic_bitset<B, A>::operator>>=(size_type n) {
         
         
         // div blocks are zero filled at the most significant end
-        std::fill(m_bits+(m_num_blocks-div), m_bits+m_num_blocks, static_cast<block_type>(0));
+        std::fill(this->m_bits+(this->m_num_blocks-div), this->m_bits+this->m_num_blocks, static_cast<block_type>(0));
     }
 
     return *this;
