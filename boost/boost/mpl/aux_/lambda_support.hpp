@@ -24,9 +24,13 @@
 #else
 
 #   include <boost/mpl/int_fwd.hpp>
+#   include <boost/mpl/aux_/yes_no.hpp>
+#   include <boost/mpl/aux_/na_fwd.hpp>
 #   include <boost/mpl/aux_/preprocessor/params.hpp>
+#   include <boost/mpl/aux_/preprocessor/enum.hpp>
 #   include <boost/mpl/aux_/config/msvc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
+
 #   include <boost/preprocessor/tuple/to_list.hpp>
 #   include <boost/preprocessor/list/for_each_i.hpp>
 #   include <boost/preprocessor/inc.hpp>
@@ -109,15 +113,19 @@ template< typename T > struct has_rebind_tag;
 #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT_HAS_REBIND(i, name, params) \
 template< BOOST_MPL_PP_PARAMS(i,typename T) > \
-char operator|( \
+::boost::mpl::aux::yes_tag operator|( \
       ::boost::mpl::aux::has_rebind_tag<int> \
     , name<BOOST_MPL_PP_PARAMS(i,T)>* \
+    ); \
+::boost::mpl::aux::no_tag operator|( \
+      ::boost::mpl::aux::has_rebind_tag<int> \
+    , name< BOOST_MPL_PP_ENUM(i,::boost::mpl::na) >* \
     ); \
 /**/
 #elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT_HAS_REBIND(i, name, params) \
 template< BOOST_MPL_PP_PARAMS(i,typename T) > \
-char operator|( \
+::boost::mpl::aux::yes_tag operator|( \
       ::boost::mpl::aux::has_rebind_tag<int> \
     , ::boost::mpl::aux::has_rebind_tag< name<BOOST_MPL_PP_PARAMS(i,T)> >* \
     ); \

@@ -17,7 +17,7 @@
 namespace boost { namespace mpl { namespace aux {
 
 struct half_open_range_tag;
-struct rc_iter_tag;
+struct r_iter_tag;
 
 }}}
 

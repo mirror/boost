@@ -15,35 +15,85 @@
 // $Revision$
 
 #include <boost/mpl/iterator_tags.hpp>
+#include <boost/mpl/advance_fwd.hpp>
+#include <boost/mpl/distance_fwd.hpp>
 #include <boost/mpl/next_prior.hpp>
+#include <boost/mpl/deref.hpp>
 #include <boost/mpl/plus.hpp>
 #include <boost/mpl/minus.hpp>
-#include <boost/mpl/aux_/iterator_names.hpp>
+#include <boost/mpl/aux_/value_wknd.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
 
 namespace boost { namespace mpl {
 
-template< typename N >
-struct rc_iter
+// theoretically will work on any discrete numeric type
+template< typename N > struct r_iter
 {
-    typedef aux::rc_iter_tag tag;
+    typedef aux::r_iter_tag tag;
     typedef random_access_iterator_tag category;
     typedef N type;
 
-    typedef rc_iter<typename mpl::next<N>::type> next;
-    typedef rc_iter<typename mpl::prior<N>::type> prior;
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+    typedef r_iter< typename mpl::next<N>::type > next;
+    typedef r_iter< typename mpl::prior<N>::type > prior;
+#endif
+};
 
-    template< typename D >
-    struct BOOST_MPL_AUX_ITERATOR_ADVANCE
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+template<
+      typename N
+    >
+struct next< r_iter<N> >
+{
+    typedef r_iter< typename mpl::next<N>::type > type;
+};
+
+template<
+      typename N
+    >
+struct prior< r_iter<N> >
+{
+    typedef r_iter< typename mpl::prior<N>::type > type;
+};
+
+#endif
+
+
+template<> struct advance_impl<aux::r_iter_tag>
+{
+    template< typename Iter, typename Dist > struct apply
     {
-        typedef rc_iter<
-              typename plus<N,D>::type
-            > type;
+        typedef typename Iter::type n_;
+        typedef typename plus<n_,Dist>::type m_;
+        
+        // agurt, 10/nov/04: to be generic, the code have to do something along
+        // the lines below...
+        //
+        // typedef typename apply_wrap1<
+        //       numeric_cast< typename m_::tag, typename n_::tag >
+        //     , m_
+        //     >::type result_;
+        //
+        // ... meanwhile:
+        
+        typedef integral_c< 
+              typename n_::value_type
+            , BOOST_MPL_AUX_VALUE_WKND(m_)::value 
+            > result_;
+        
+        typedef r_iter<result_> type;
     };
+};
 
-    template< typename U >
-    struct BOOST_MPL_AUX_ITERATOR_DISTANCE
+template<> struct distance_impl<aux::r_iter_tag>
+{
+    template< typename Iter1, typename Iter2 > struct apply
+        : minus<
+              typename Iter2::type
+            , typename Iter1::type
+            >
     {
-        typedef typename minus<typename U::type,N>::type type;
     };
 };
 

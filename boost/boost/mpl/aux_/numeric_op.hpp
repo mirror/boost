@@ -22,6 +22,7 @@
 #   include <boost/mpl/apply_wrap.hpp>
 #   include <boost/mpl/eval_if.hpp>
 #   include <boost/mpl/tag.hpp>
+#   include <boost/mpl/aux_/numeric_cast_utils.hpp>
 #   include <boost/mpl/aux_/na.hpp>
 #   include <boost/mpl/aux_/na_spec.hpp>
 #   include <boost/mpl/aux_/lambda_support.hpp>
@@ -92,7 +93,7 @@ struct AUX778076_OP_IMPL_NAME
 #endif
         , aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag1>,Tag1,Tag2 >
         , aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag2,Tag2>,Tag1,Tag2 >
-        >
+        >::type
 {
 };
 

@@ -40,6 +40,7 @@ template<> struct msvc_eti_base_impl<true>
         typedef result_ first;
         typedef result_ second;
         typedef result_ tag;
+        enum { value = 0 };
     };
 };
 
@@ -68,6 +69,7 @@ template<> struct msvc_eti_base<int>
     typedef msvc_eti_base first;
     typedef msvc_eti_base second;
     typedef msvc_eti_base tag;
+    enum { value = 0 };
 };
 
 }}}

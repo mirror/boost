@@ -60,7 +60,7 @@ struct has_rebind
 #else // the rest
 
 template< typename T > struct has_rebind_tag {};
-yes_tag operator|(has_rebind_tag<int>, void const volatile*);
+no_tag operator|(has_rebind_tag<int>, void const volatile*);
 
 #   if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 template< typename T >
@@ -68,7 +68,7 @@ struct has_rebind
 {
     static has_rebind_tag<T>* get();
     BOOST_STATIC_CONSTANT(bool, value = 
-          sizeof(has_rebind_tag<int>() | get()) == sizeof(char)
+          sizeof(has_rebind_tag<int>() | get()) == sizeof(yes_tag)
         );
 };
 #   else // __BORLANDC__
@@ -77,7 +77,7 @@ struct has_rebind_impl
 {
     static T* get();
     BOOST_STATIC_CONSTANT(bool, value = 
-          sizeof(has_rebind_tag<int>() | get()) == sizeof(char)
+          sizeof(has_rebind_tag<int>() | get()) == sizeof(yes_tag)
         );
 };
 

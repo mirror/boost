@@ -104,6 +104,7 @@ struct lambda< \
     > \
 { \
     typedef false_ is_le; \
+    typedef name< BOOST_MPL_AUX_NA_PARAMS(i) > result_; \
     typedef name< BOOST_MPL_AUX_NA_PARAMS(i) > type; \
 }; \
 /**/

@@ -15,21 +15,9 @@
 // $Revision$
 
 #include <boost/mpl/bool.hpp>
-#include <boost/mpl/aux_/adl_barrier.hpp>
+#include <boost/mpl/aux_/na_fwd.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
-
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
-
-// n.a. == not available
-struct na 
-{
-    typedef na type;
-    enum { value = 0 };
-};
-
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
-BOOST_MPL_AUX_ADL_BARRIER_DECL(na)
 
 namespace boost { namespace mpl {
 
