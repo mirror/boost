@@ -42,7 +42,7 @@ BOOST_IS_ABSTRACT(boost::detail::sp_counted_base)
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
 namespace boost { 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace serialization {
 #else
 namespace detail {
@@ -126,7 +126,7 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
-#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#if ! defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 } // detail
 #endif
 
@@ -154,7 +154,7 @@ inline void serialize(
     ar & boost::serialization::make_nvp("pn", t.pn);
 }
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 } // serialization
 #endif
 } // namespace boost
@@ -177,4 +177,4 @@ inline void serialize(
     )                                             \
     /**/
 
-#endif
+#endif // BOOST_SERIALIZATION_SHARED_PTR_HPP
