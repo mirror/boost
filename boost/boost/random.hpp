@@ -234,6 +234,20 @@ private:                      // don't instantiate
   const_mod();
 };
 
+template<>
+class const_mod<unsigned long, 0>
+{
+  typedef unsigned long IntType;
+public:
+  static IntType add(IntType x, IntType c) { return x+c; }
+  static IntType mult(IntType a, IntType x) { return a*x; }
+  static IntType mult_add(IntType a, IntType x, IntType c) { return a*x+c; }
+
+  // m is not prime, thus invert is not useful
+private:                      // don't instantiate
+  const_mod();
+};
+
 // the modulus is some power of 2: rely partly on machine overflow handling
 // we only specialize for rand48 at the moment
 #ifndef BOOST_NO_INT64_T
