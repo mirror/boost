@@ -30,14 +30,19 @@ If the ``Diference`` argument is ``use_default`` then the
 ``difference_type`` member is an implementation defined signed
 integral type.
 
-The member ``iterator_category`` is a type that satisfies the
-requirements of the concepts modeled by the ``counting_iterator`` as
-specified in the models section.
+If ``CategoryOrTraversal`` is not ``use_default`` then the member
+``iterator_category`` is ``CategoryOrTraversal``.  Otherwise, if
+``Incrementable`` is a numeric type then ``iterator_category`` is a
+type convertible to ``random_access_traversal_tag`` and
+``random_access_iterator_tag``. If ``Incrementable`` is not a numeric
+type then ``iterator_category`` is
+``iterator_traversal<Incrementable>::type``.
 
 
 [*Note:* implementers are encouraged to provide an implementation of
   ``distance_to`` and a ``difference_type`` that avoids overflows in
   the cases when the ``Incrementable`` type is a numeric type.]
+
 
 ``counting_iterator`` requirements
 ..................................
@@ -45,29 +50,23 @@ specified in the models section.
 The ``Incrementable`` type must be Default Constructible, Copy
 Constructible, and Assignable. 
 
-
-``counting_iterator`` models
-............................
-
-``counting_iterator`` models Readable Lvalue Iterator.
-
-Furthermore, if you wish to create a counting iterator that is a
-Forward Traversal Iterator and also Forward Iterator, then the
-following expressions must be valid::
+If ``iterator_category`` is convertible to ``forward_iterator_tag`` or
+``forward_traversal_tag`` then the following expressions must be valid::
 
     Incrementable i, j;
     ++i         // pre-increment
     i == j      // operator equal
 
-If you wish to create a counting iterator that is a Bidirectional
-Traversal Iterator and also Bidirectional Iterator, then pre-decrement
-is also required::
+
+If ``iterator_category`` is convertible to
+``bidirectional_iterator_tag`` or ``bidirectional_traversal_tag`` then
+pre-decrement is required::
 
     --i
 
-If you wish to create a counting iterator that is a Random Access
-Traversal Iterator and also Random Access Iterator, then these
-additional expressions are also required::
+If ``iterator_category`` is convertible to
+``random_access_iterator_tag`` or ``random_access_traversal_tag`` then
+these additional expressions are also required::
 
     counting_iterator::difference_type n;
     i += n
@@ -75,6 +74,14 @@ additional expressions are also required::
     i < j
 
 
+
+``counting_iterator`` models
+............................
+
+``counting_iterator`` models Readable Lvalue Iterator. In addition,
+``counting_iterator`` models the concepts corresponding to the
+iterator tags that ``counting_iterator::iterator_category`` is
+convertible to.
 
 
 ``counting_iterator`` operations

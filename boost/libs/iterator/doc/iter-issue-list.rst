@@ -980,8 +980,12 @@ categories. There is no description of what the argument to
 iterator_adaptor should be.
 
 
-:Proposed resolution:   **Needs work** (Jeremy)
-
+:Proposed resolution:
+  We no longer inherit from iterator_adaptor. So instead,
+  we specify the iterator_category in terms of the Traversal type
+  (which is now called CategoryOrTraversal). Also the
+  requirements and models section was reorganized to
+  match these changes and to make more sense.
 
 
 

@@ -477,7 +477,7 @@ stated semantics.
 |                                |                               |    return tmp;     |
 |                                |                               | }                  |
 +--------------------------------+-------------------------------+--------------------+
-|``traversal_category<X>::type`` |Convertible to                 |                    |
+|``iterator_traversal<X>::type`` |Convertible to                 |                    |
 |                                |``incrementable_traversal_tag``|                    |
 +--------------------------------+-------------------------------+--------------------+
 
@@ -509,7 +509,7 @@ semantics.
 +--------------------------------+-----------------------------+---------------------------+
 |``a != b``                      |convertible to ``bool``      |``!(a == b)``              |
 +--------------------------------+-----------------------------+---------------------------+
-|``traversal_category<X>::type`` |Convertible to               |                           |
+|``iterator_traversal<X>::type`` |Convertible to               |                           |
 |                                |``single_pass_traversal_tag``|                           |
 +--------------------------------+-----------------------------+---------------------------+
 
@@ -541,7 +541,7 @@ stated semantics.
 |                                       |the distance between iterators     |                            |
 |                                       |                                   |                            |
 +---------------------------------------+-----------------------------------+----------------------------+
-|``traversal_category<X>::type``        |Convertible to                     |                            |
+|``iterator_traversal<X>::type``        |Convertible to                     |                            |
 |                                       |``forward_traversal_tag``          |                            |
 +---------------------------------------+-----------------------------------+----------------------------+
 
@@ -581,7 +581,7 @@ respect the stated semantics.
 |                                    |                                             |   return tmp;       |
 |                                    |                                             | }                   |
 +------------------------------------+---------------------------------------------+---------------------+
-|``traversal_category<X>::type``     |Convertible to                               |                     |
+|``iterator_traversal<X>::type``     |Convertible to                               |                     |
 |                                    |``bidirectional_traversal_tag``              |                     |
 |                                    |                                             |                     |
 +------------------------------------+---------------------------------------------+---------------------+
@@ -649,7 +649,7 @@ constant object of type ``Distance``.
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 |``a <= b``                                 |convertible to ``bool``                          |``!(a > b)``             |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
-|``traversal_category<X>::type``            |Convertible to                                   |                         |                      |
+|``iterator_traversal<X>::type``            |Convertible to                                   |                         |                      |
 |                                           |``random_access_traversal_tag``                  |                         |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 
@@ -684,7 +684,7 @@ yields ``true`` if, for an object ``a`` of type ``X``, ``*a`` is
 convertible to ``iterator_traits<X>::value_type``, and ``false``
 otherwise.
 
-``iterator_traversal<X>::value_type`` is defined to be:
+``iterator_traversal<X>::type`` is defined to be:
 
 .. parsed-literal::
 
