@@ -88,6 +88,51 @@ namespace date_time {
 
   }
 
+  //! Parse time duration part of an iso time of form: hhmmss (eg: 120259 is 12 hours 2 min 59 seconds)
+  template<class time_duration>
+  inline
+  time_duration
+  parse_undelimited_time_duration(const std::string& s)
+  {
+    int offsets[] = {2,2,2};
+    int pos = 0;
+    short hours, min, sec;
+    boost::offset_separator osf(offsets, offsets+3); 
+    boost::tokenizer<boost::offset_separator> tok(s, osf);
+    for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti){
+      short i = boost::lexical_cast<int>(*ti);
+      //      std::cout << i << std::endl;
+      switch(pos) {
+      case 0: hours = i; break;
+      case 1: min = i; break;
+      case 2: sec = i; break;
+      };
+      pos++;
+    } 
+    return time_duration(hours, min, sec);
+  }
+
+  //! Parse time string of form YYYYMMDDThhmmss where T is delimeter between date and time
+  template<class time_type>
+  inline
+  time_type
+  parse_iso_time(const std::string& s, char sep)
+  {
+    typedef typename time_type::time_duration_type time_duration;
+    typedef typename time_type::date_type date_type;
+
+    //split date/time on a unique delimiter char such as ' ' or 'T'
+    std::string date_string, tod_string;
+    split(s, sep, date_string, tod_string);
+    //call parse_date with first string
+    date_type d = parse_undelimited_date<date_type>(date_string);
+    //call parse_time_duration with remaining string
+    time_duration td = parse_undelimited_time_duration<time_duration>(tod_string);
+    //construct a time
+    return time_type(d, td);
+  }
+
+
 
 } }//namespace date_time
 

@@ -22,6 +22,10 @@ namespace posix_time {
     return date_time::parse_delimited_time<ptime>(s, ' ');
   }
 
+  inline ptime from_iso_string(const std::string& s) {
+    return date_time::parse_iso_time<ptime>(s, 'T');
+  }
+
 
 
 } } //namespace posix_time
