@@ -115,7 +115,16 @@ public:
 
     virtual void * get_deleter(std::type_info const & ti) = 0;
 
-    void add_ref()
+    void add_ref_copy()
+    {
+#if defined(BOOST_HAS_THREADS)
+        mutex_type::scoped_lock lock(mtx_);
+#endif
+        ++use_count_;
+        ++weak_count_;
+    }
+
+    void add_ref_lock()
     {
 #if defined(BOOST_HAS_THREADS)
         mutex_type::scoped_lock lock(mtx_);
@@ -384,7 +393,7 @@ public:
         , id_(shared_count_id)
 #endif
     {
-        if(pi_ != 0) pi_->add_ref();
+        if(pi_ != 0) pi_->add_ref_copy();
     }
 
     explicit shared_count(weak_count const & r); // throws bad_weak_ptr when r.use_count() == 0
@@ -392,7 +401,7 @@ public:
     shared_count & operator= (shared_count const & r) // nothrow
     {
         sp_counted_base * tmp = r.pi_;
-        if(tmp != 0) tmp->add_ref();
+        if(tmp != 0) tmp->add_ref_copy();
         if(pi_ != 0) pi_->release();
         pi_ = tmp;
 
@@ -532,7 +541,7 @@ inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
 {
     if(pi_ != 0)
     {
-        pi_->add_ref();
+        pi_->add_ref_lock();
     }
     else
     {
