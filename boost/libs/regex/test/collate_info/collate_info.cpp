@@ -12,6 +12,15 @@
 // most of the workarounds and headers we need are already in here:
 #include <boost/regex.hpp> 
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{
+   using ::strxfrm;
+#ifndef BOOST_NO_WREGEX
+   using ::wcsxfrm;
+#endif
+}
+#endif
+
 #include <iostream>
 
 template <class charT>
@@ -177,19 +186,23 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
 #ifndef BOOST_NO_WREGEX
    print_c_info(wchar_t(0), "wchar_t");
 #endif
-   print_c_info(char(0), "char");
+   print_cpp_info(char(0), "char");
 #ifndef BOOST_NO_WREGEX
-   print_c_info(wchar_t(0), "wchar_t");
+   print_cpp_info(wchar_t(0), "wchar_t");
 #endif
 
-   print_sort_syntax(boost::c_regex_traits<char>(), "boost::c_regex_traits<char>");
+   boost::c_regex_traits<char> a;
+   print_sort_syntax(a, "boost::c_regex_traits<char>");
 #ifndef BOOST_NO_WREGEX
-   print_sort_syntax(boost::c_regex_traits<wchar_t>(), "boost::c_regex_traits<wchar_t>");
+   boost::c_regex_traits<wchar_t> b;
+   print_sort_syntax(b, "boost::c_regex_traits<wchar_t>");
 #endif
 #ifndef BOOST_NO_STD_LOCALE
-   print_sort_syntax(boost::cpp_regex_traits<char>(), "boost::c_regex_traits<char>");
+   boost::cpp_regex_traits<char> c;
+   print_sort_syntax(c, "boost::cpp_regex_traits<char>");
 #ifndef BOOST_NO_WREGEX
-   print_sort_syntax(boost::cpp_regex_traits<wchar_t>(), "boost::c_regex_traits<wchar_t>");
+   boost::cpp_regex_traits<wchar_t> d;
+   print_sort_syntax(d, "boost::cpp_regex_traits<wchar_t>");
 #endif
    print_ctype_info(char(0), "char");
 #ifndef BOOST_NO_WREGEX
