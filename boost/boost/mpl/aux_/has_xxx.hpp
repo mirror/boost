@@ -70,14 +70,28 @@ namespace boost { namespace mpl { namespace aux {
 
 struct has_xxx_tag;
 
+#      if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+    template <class U>
+    struct msvc_incomplete_array
+    {
+        typedef char (&type)[sizeof(U) + 1];
+    };
+#      endif 
+
 template <typename T>
 struct msvc_is_incomplete
 {
     // MSVC is capable of some kinds of SFINAE.  If U is an incomplete
     // type, it won't pick the second overload
     static char tester(...);
+
+#      if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
     template <class U>
-    static char(& tester(type_wrapper<U>) )[sizeof(U) + 1];
+    static typename msvc_incomplete_array<U>::type tester(type_wrapper<U>);
+#      else
+    template <class U>
+    static char (& tester(type_wrapper<U>) )[sizeof(U)+1];
+#      endif 
     
     BOOST_STATIC_CONSTANT(
         bool, value = sizeof(tester(type_wrapper<T>())) == 1);
