@@ -35,8 +35,7 @@ If ``CategoryOrTraversal`` is not ``use_default`` then the member
 ``numeric_limits<Incrementable>::is_specialized``, then
 ``iterator_category`` is a type convertible to
 ``random_access_iterator_tag``.  Otherwise, ``iterator_category`` is
-unspecified, and the ``counting_iterator`` specialization models the
-same iterator traversal concepts modeled by ``Incrementable``.
+unspecified.
 
 [*Note:* implementers are encouraged to provide an implementation of
   ``operator-`` and a ``difference_type`` that avoids overflows in
@@ -75,9 +74,15 @@ the following must must also be valid::
 
 Specializations of ``counting_iterator`` model Readable Lvalue
 Iterator. In addition, they model the concepts corresponding to the
-iterator tags to which their ``iterator_category`` is convertible and
-also corresponding to ``CategoryOrTraversal`` when
-``CategoryOrTraversal`` is an iterator tag (and not ``use_default``).
+iterator tags to which their ``iterator_category`` is convertible.
+Also, if ``CategoryOrTraversal`` is not ``use_default`` then
+``counting_iterator`` models the concept corresponding to the iterator
+tag ``CategoryOrTraversal``.  Otherwise, if
+``numeric_limits<Incrementable>::is_specialized``, then
+``counting_iterator`` models Random Access Traversal Iterator.
+Otherwise, ``counting_iterator`` models the same iterator traversal
+concepts modeled by ``Incrementable``.
+
 
 
 ``counting_iterator`` operations
