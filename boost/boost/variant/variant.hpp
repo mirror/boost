@@ -355,9 +355,69 @@ struct reflect
 public: // visitor interfaces
 
     template <typename T>
-    const std::type_info& operator()(const T&)
+    const std::type_info& operator()(const T&) const
     {
         return typeid(T);
+    }
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) class compare_equal
+//
+// Generic static visitor that compares the given lhs storage with the visited
+// rhs content using operator==.
+//
+struct compare_equal
+    : public static_visitor<bool>
+{
+private: // representation
+
+    const void* lhs_;
+
+public: // structors
+
+    explicit compare_equal(const void* lhs)
+        : lhs_(lhs)
+    {
+    }
+
+public: // visitor interfaces
+
+    template <typename T>
+    bool operator()(const T& rhs) const
+    {
+        return *static_cast<const T*>(lhs_) == rhs;
+    }
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) class compare_less
+//
+// Generic static visitor that compares the given lhs storage with the visited
+// rhs content using operator<.
+//
+struct compare_less
+    : public static_visitor<bool>
+{
+private: // representation
+
+    const void* lhs_;
+
+public: // structors
+
+    explicit compare_less(const void* lhs)
+        : lhs_(lhs)
+    {
+    }
+
+public: // visitor interfaces
+
+    template <typename T>
+    bool operator()(const T& rhs) const
+    {
+        return *static_cast<const T*>(lhs_) < rhs;
     }
 
 };
@@ -1561,6 +1621,34 @@ public: // queries
     {
         detail::variant::reflect visitor;
         return this->apply_visitor(visitor);
+    }
+
+public: // comparison operators
+
+    bool operator==(const variant& rhs) const
+    {
+        if (this->which() != rhs.which())
+            return false;
+
+        detail::variant::compare_equal visitor( active_storage() );
+        return rhs.apply_visitor(visitor);
+    }
+
+    bool operator<(const variant& rhs) const
+    {
+        //
+        // Dirk Schreib suggested this collating order.
+        //
+
+        if (this->which() == rhs.which())
+        {
+            detail::variant::compare_less visitor( active_storage() );
+            return rhs.apply_visitor(visitor);
+        }
+        else
+        {
+            return this->which() < rhs.which();
+        }
     }
 
 // helpers, for visitation support (below) -- private when possible
