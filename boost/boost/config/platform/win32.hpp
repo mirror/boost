@@ -13,6 +13,10 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
+#if !defined(__GNUC__) && !defined(BOOST_HAS_DECLSPEC)
+#  define BOOST_HAS_DECLSPEC
+#endif
+
 //
 // Win32 will normally be using native Win32 threads,
 // but there is a pthread library avaliable as an option,
@@ -70,3 +74,4 @@ namespace std{
 using std::min;
 using std::max;
 #     endif
+
