@@ -138,7 +138,7 @@ template <class T>
 struct is_function
 {
 private:
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_MEMBER_TEMPLATES)
    typedef typename detail::is_function_chooser< ::boost::is_reference<T>::value>::template rebind<T> binder;
    typedef typename binder::type m_type;
 #else
