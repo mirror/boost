@@ -20,9 +20,27 @@
 #include "boost/mpl/aux_/joint_iter.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/plus.hpp"
+#include "boost/mpl/size_fwd.hpp"
 
 namespace boost {
 namespace mpl {
+
+namespace aux
+{
+  struct joint_view_tag;
+}
+
+template <>
+struct size_traits< aux::joint_view_tag >
+{
+    template < typename JointView > struct algorithm
+      : plus<
+            size<typename JointView::sequence1>
+          , size<typename JointView::sequence2>
+        >
+    {};
+};
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence1_)
@@ -31,13 +49,17 @@ template<
 struct joint_view
 {
  private:
+    friend struct size_traits< aux::joint_view_tag >;
+    typedef Sequence1_ sequence1;
+    typedef Sequence2_ sequence2;
+    
     typedef typename begin<Sequence1_>::type first1_;
     typedef typename end<Sequence1_>::type last1_;
     typedef typename begin<Sequence2_>::type first2_;
     typedef typename end<Sequence2_>::type last2_;
 
  public:
-    struct tag;
+    typedef aux::joint_view_tag tag;
     typedef typename aux::joint_iter<first1_,last1_,first2_> begin;
     typedef typename aux::joint_iter<last1_,last1_,last2_> end;
 };
