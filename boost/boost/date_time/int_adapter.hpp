@@ -107,6 +107,14 @@ public:
     return (value_ == neg_infinity().as_number() ||
             value_ == pos_infinity().as_number());
   }
+  bool is_pos_infinity()const
+  {
+    return(value_ == pos_infinity().as_number());
+  }
+  bool is_neg_infinity()const
+  {
+    return(value_ == neg_infinity().as_number());
+  }
   bool is_nan() const
   {
     return (value_ == not_a_number().as_number());
