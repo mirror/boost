@@ -27,7 +27,9 @@ Indices provide interfaces similar to those of STL containers, making using them
 familiar. The concept of multi-indexing over the same collection of elements is
 borrowed from relational database terminology and allows for the specification of
 complex data structures in the spirit of multiply indexed relational tables where
-simple sets and maps are not enough.
+simple sets and maps are not enough. A wide selection of indices is provided,
+modeled after analogous STL containers like <code>std::set</code>,
+<code>std::list</code> and hashed sets.
 </p>
 
 <p>
@@ -35,6 +37,26 @@ Boost.MultiIndex features additional functionalities, like subobject searching,
 range querying and in-place updating of elements, which make it a convenient replacement
 for <code>std::set</code> and <code>set::multiset</code> even when no multi-indexing
 capabilities are needed.
+</p>
+
+<p>
+The versatile nature of Boost.MultiIndex allows for the specification of
+a wide spectrum of different data structures. The following are possible
+examples of use developed in the documentation:
+<ul>
+  <li><a href="tutorial.html#multipe_sort">Sets with several iteration orders
+    and search criteria</a>.</li>
+  <li><a href="tutorial.html#list_fast_lookup">Lists with fast lookup</a>
+    and/or without duplicates.</li>
+  <li><a href="examples.html#example4">Bidirectional maps</a>, i.e. maps
+    searchable either for key or value.</li>
+  <li><a href="examples.html#example9">MRU (most recently used) lists</a>,
+    structures keeping the <i>n</i> last referenced items, beginning with
+    the newest ones.</li>
+  <li><a href="advanced_topics.html#emulate_std_containers">Emulations of
+    standard containers</a> taking advantage of the extra functionalities
+    provided by Boost.MultiIndex.</li>
+</ul>
 </p>
 
 <h2>Contents</h2>
@@ -62,9 +84,9 @@ Tutorial
 
 <br>
 
-<p>Revised November 30th 2004</p>
+<p>Revised March 15th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
