@@ -18,6 +18,9 @@
 #include "boost/date_time/period.hpp"
 #include "boost/date_time/gregorian/greg_calendar.hpp"
 #include "boost/date_time/gregorian/greg_duration.hpp"
+#if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
+#include "boost/date_time/gregorian/greg_duration_types.hpp"
+#endif
 #include "boost/date_time/gregorian/greg_date.hpp"
 #include "boost/date_time/date_generators.hpp"
 #include "boost/date_time/date_clock_device.hpp"
@@ -85,6 +88,13 @@ namespace gregorian {
    */
   typedef date_time::date_itr<date_time::year_functor<date>,
                               date> year_iterator;
+
+  // bring in these date_generator functions from date_time namespace
+  using date_time::days_until_weekday;
+  using date_time::days_before_weekday;
+  using date_time::next_weekday;
+  using date_time::previous_weekday;
+
 } } //namespace gregorian
 
 
