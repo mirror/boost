@@ -213,7 +213,7 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile-fail test_level_not_serializable.cpp ]
         
         # should compile
-        [ compile test_const.cpp ]
+        [ compile test_const.cpp : std::locale-support ]
     ;
 }
 
