@@ -36,7 +36,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				OutputFile="$(OutDir)/InvalidTransitionTest1.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\bin\boost\libs\test\build\libboost_test_exec_monitor.lib\vc-7_1\debug\threading-multi"
@@ -88,7 +87,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				OutputFile="$(OutDir)/InvalidTransitionTest1.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\bin\boost\libs\test\build\libboost_test_exec_monitor.lib\vc-7_1\release\threading-multi"
