@@ -1,0 +1,53 @@
+<html>
+
+<head>
+<TITLE>The Boost Format library</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<table border="1" bgcolor="#007F7F" cellpadding="2">
+  <tr>
+    <td bgcolor="#FFFFFF"><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" width="277" height="86"></td>
+    <td><a href="../../index.htm"><font face="Arial" color="#FFFFFF"><big>Home </big></font></a></td>
+    <td><a href="../libraries.htm"><font face="Arial" color="#FFFFFF"><big>Libraries </big></font></a></td>
+    <td><a href="../../people/people.htm"><font face="Arial" color="#FFFFFF"><big>People </big></font></a></td>
+    <td><a href="../../more/faq.htm"><font face="Arial" color="#FFFFFF"><big>FAQ </big></font></a></td>
+    <td><a href="../../more/index.htm"><font face="Arial" color="#FFFFFF"><big>More </big></font></a></td>
+  </tr>
+</table>
+
+<h1>Type-safe 'printf-like' format library</h1>
+
+<p>The timer library supplies a timer class for measuring elapsed time, a
+progress_timer class for reporting elapsed time, and a progress_display class
+for displaying an indication of progress toward a goal.
+The format library provides a class for formatting arguments according to a format-string, 
+as does printf, but with two major differences :
+<br>
+<ul>
+<li>format sends the arguments to an internal stream, and so is entirely type-safe and 
+naturally supports all user-defined types.</li>
+<li>The printf(...) prototype can not be used correctly in the strongly typed context of format,
+and thus the function call with arbitrary arguments is replaced by successive calls to an 
+<i>argument feeding</i> <b>operator%</b>
+</li>
+</ul>
+
+</p>
+
+<p>
+<br>
+You can find more Details in :
+<ul>
+  <li><a href="doc/format.html">Documentation</a> (HTML).</li>
+  <li>Headers <a href="../../boost/format.hpp">format.hpp</a> and <a href="../../boost/format/format.ihh">format.ihh</a></li>
+  <li>Test program <a href="example/">example directory</a></li>
+</ul>
+Submitted by Samuel Krempp.
+
+</p>
+</body>
+
+</html>
