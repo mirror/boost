@@ -396,9 +396,9 @@ map_type class_index;
       load_file(text, fs);
       <i><font color=
 #000080>// construct our iterators:</font></i>
-      boost::regex_iterator&lt;std::string::const_iterator&gt; m1(text.begin(), text.end(), expression);
-      boost::regex_iterator&lt;std::string::const_iterator&gt; m2;
-      std::for_each(m1, m2, ®ex_callback);
+      boost::sregex_iterator m1(text.begin(), text.end(), expression);
+      boost::sregex_iterator m2;
+      std::for_each(m1, m2, &amp;regex_callback);
       <i><font color="#000080">// copy results:</font></i>
       cout &lt;&lt; class_index.size() &lt;&lt; <font color=
 #0000ff>" matches found"</font> &lt;&lt; endl;
@@ -424,8 +424,7 @@ color=
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

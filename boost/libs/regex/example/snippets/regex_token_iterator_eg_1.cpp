@@ -54,8 +54,8 @@ int main(int argc)
          s = "This is a string of tokens";
 
       boost::regex re("\\s+");
-      boost::regex_token_iterator<std::string::const_iterator> i(s.begin(), s.end(), re, -1);
-      boost::regex_token_iterator<std::string::const_iterator> j;
+      boost::sregex_token_iterator i(s.begin(), s.end(), re, -1);
+      boost::sregex_token_iterator j;
 
       unsigned count = 0;
       while(i != j)

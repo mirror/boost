@@ -90,8 +90,8 @@ int main(int argc, const char** argv)
       std::ifstream fs(argv[i]);
       load_file(text, fs);
       // construct our iterators:
-      boost::regex_iterator<std::string::const_iterator> m1(text.begin(), text.end(), expression);
-      boost::regex_iterator<std::string::const_iterator> m2;
+      boost::sregex_iterator m1(text.begin(), text.end(), expression);
+      boost::sregex_iterator m2;
       std::for_each(m1, m2, &regex_callback);
       // copy results:
       cout << class_index.size() << " matches found" << endl;

@@ -191,8 +191,8 @@ regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const reg
          s = <FONT color=#0000ff>"This is a string of tokens"</FONT>;
 
       boost::regex re(<FONT color=#0000ff>"\\s+"</FONT>);
-      boost::regex_token_iterator&lt;std::string::const_iterator&gt; i(s.begin(), s.end(), re, -<FONT color=#0000a0>1</FONT>);
-      boost::regex_token_iterator&lt;std::string::const_iterator&gt; j;
+      boost::sregex_token_iterator i(s.begin(), s.end(), re, -<FONT color=#0000a0>1</FONT>);
+      boost::sregex_token_iterator j;
 
       <B>unsigned</B> count = <FONT color=#0000a0>0</FONT>;
       <B>while</B>(i != j)
@@ -246,9 +246,8 @@ boost::regex e(<FONT color=#0000ff>"&lt;\\s*A\\s+[^&gt;]*href\\s*=\\s*\"([^\"]*)
       s.erase();
       std::ifstream is(argv[i]);
       load_file(s, is);
-      boost::regex_token_iterator&lt;std::string::const_iterator&gt;
-         i(s.begin(), s.end(), e, <FONT color=#0000a0>1</FONT>);
-      boost::regex_token_iterator&lt;std::string::const_iterator&gt; j;
+      boost::sregex_token_iterator i(s.begin(), s.end(), e, <FONT color=#0000a0>1</FONT>);
+      boost::sregex_token_iterator j;
       <B>while</B>(i != j)
       {
          std::cout &lt;&lt; *i++ &lt;&lt; std::endl;
@@ -266,9 +265,8 @@ boost::regex e(<FONT color=#0000ff>"&lt;\\s*A\\s+[^&gt;]*href\\s*=\\s*\"([^\"]*)
       std::ifstream is(argv[i]);
       load_file(s, is);
       <B>const</B> <B>int</B> subs[] = {<FONT color=#0000a0>1</FONT>, <FONT color=#0000a0>0</FONT>,};
-      boost::regex_token_iterator&lt;std::string::const_iterator&gt;
-         i(s.begin(), s.end(), e, subs);
-      boost::regex_token_iterator&lt;std::string::const_iterator&gt; j;
+      boost::sregex_token_iterator i(s.begin(), s.end(), e, subs);
+      boost::sregex_token_iterator j;
       <B>while</B>(i != j)
       {
          std::cout &lt;&lt; *i++ &lt;&lt; std::endl;
