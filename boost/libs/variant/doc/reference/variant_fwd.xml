@@ -23,8 +23,8 @@
   <macro name="BOOST_VARIANT_ENUM_PARAMS" kind="functionlike">
     <macro-parameter name="param"/>
 
-    <purpose><simpara>Enumerate parameters for use with <code><classname>boost:
- ariant</classname></code></simpara></purpose>
+    <purpose><simpara>Enumerate parameters for use with
+      <code><classname>boost::variant</classname></code>.</simpara></purpose>
 
     <description>
       <para>Expands to a comma-separated sequence of length
@@ -49,7 +49,7 @@
 
     <purpose><simpara>Enumerate all but the first parameter for use
     with
-    <code><classname>boost::variant</classname></code></simpara></purpose>
+    <code><classname>boost::variant</classname></code>.</simpara></purpose>
 
     <description>
       <para>Expands to a comma-separated sequence of length
