@@ -124,10 +124,6 @@
 
 /* STL options: */
 
-/* BOOST_RE_NO_EXCEPTION_H         Define if you do not a compliant <exception>
-                             header file. */
-#undef BOOST_RE_NO_EXCEPTION_H
-
 /* BOOST_RE_NO_ITERATOR_H          Define if you do not have a version of <iterator>. */
 #undef BOOST_RE_NO_ITERATOR_H
 
@@ -419,9 +415,7 @@ syntax error
 #endif
 
 
-#ifndef BOOST_RE_NO_EXCEPTION_H
-#include <exception>
-#endif
+#include <stdexcept>
 
 #ifndef BOOST_RE_NO_ITERATOR_H
 #include <iterator>

@@ -124,10 +124,6 @@
 
 /* STL options: */
 
-/* BOOST_RE_NO_EXCEPTION_H         Define if you do not a compliant <exception>
-                             header file. */
-/* #define BOOST_RE_NO_EXCEPTION_H */
-
 /* BOOST_RE_NO_ITERATOR_H          Define if you do not have a version of <iterator>. */
 /* #define BOOST_RE_NO_ITERATOR_H */
 

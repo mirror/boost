@@ -87,34 +87,7 @@ Do not change this file unless you really really have to, add options to
       #define BOOST_RE_NO_MUTABLE
    #endif
 
-   #if __BORLANDC__ < 0x520
-      #define BOOST_RE_NO_WCSTRING
-      #define BOOST_RE_NO_INT64
-      // Early versions of Borlands namespace code can't cope with iterators
-      // that are in different namespaces from STL code.
-      #define boost std
-      #define BOOST_RE_NO_NOT_EQUAL
-   #endif
-
-   #if __BORLANDC__ < 0x530
-      #define BOOST_RE_NO_WCTYPE_H
-      #define BOOST_RE_NO_WCHAR_H
-      #define BOOST_RE_OLD_IOSTREAM
-      #define BOOST_RE_NO_TRICKY_DEFAULT_PARAM
-      #define BOOST_RE_NO_EXCEPTION_H
-      #ifndef __WIN32__
-         #define BOOST_RE_NO_WCSTRING
-      #endif
-      #define BOOST_RE_NO_LOCALE_H
-      #define BOOST_RE_NO_TEMPLATE_RETURNS
-      //
-      // this is a hack to get around buggy namespace support in the
-      // 0x520 compiler version
-      #define BOOST_RE_NO_USING
-      #define BOOST_RE_USING_HACK
-      #define BOOST_RE_OLD_IOSTREAM
-   #endif
-
+   // versions prior to 0x530 not supported:
    #if __BORLANDC__ < 0x540
       #define BOOST_RE_NO_MEMBER_TEMPLATES
       // inline contructors exhibit strange behaviour
@@ -267,9 +240,6 @@ Do not change this file unless you really really have to, add options to
       #define BOOST_RE_NO_PARTIAL_FUNC_SPEC
       #define BOOST_RE_NO_TEMPLATE_FRIEND
    #endif
-   #ifndef __STL_USE_NAMESPACES
-      //#define BOOST_RE_NO_EXCEPTION_H
-   #endif
    #define BOOST_RE_INT64t long long
    #define BOOST_RE_IMM64(val) val##LL
 
@@ -309,9 +279,6 @@ Do not change this file unless you really really have to, add options to
       #define BOOST_RE_NO_MEMBER_TEMPLATES
       #define BOOST_RE_OLD_IOSTREAM
    #endif
-   #ifndef __STL_USE_NAMESPACES
-      #define BOOST_RE_NO_EXCEPTION_H
-   #endif
    #define BOOST_RE_INT64t long long
    #define BOOST_RE_IMM64(val) val##LL
    #define BOOST_RE_NESTED_TEMPLATE_DECL
@@ -327,17 +294,11 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_NO_NAMESPACES
    #define BOOST_RE_NO_MUTABLE
    #define BOOST_RE_OLD_IOSTREAM
-   #ifndef __STL_USE_NAMESPACES
-      #define BOOST_RE_NO_EXCEPTION_H
-   #endif
    #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_TEMPLATE_FRIEND
 #else
    #if !defined(_NAMESPACE_STD)
       #define BOOST_RE_OLD_IOSTREAM
-      #ifndef __STL_USE_NAMESPACES
-         #define BOOST_RE_NO_EXCEPTION_H
-      #endif
    #endif
    #define BOOST_RE_NESTED_TEMPLATE_DECL template
 #endif
@@ -434,17 +395,8 @@ typedef unsigned long jm_uintfast32_t;
 /* STL configuration goes here: */
 
 #ifndef BOOST_RE_AUTO_CONFIGURE
-#ifdef BOOST_RE_NO_STL
-   #define BOOST_RE_NO_EXCEPTION_H
-   #define BOOST_RE_NO_ITERATOR_H
-   #define BOOST_RE_NO_MEMORY_H
-   #define BOOST_RE_NO_LOCALE_H
-   #define BOOST_RE_NO_STRING_H
-#endif
 
-#ifndef BOOST_RE_NO_EXCEPTION_H
-   #include <exception>
-#endif
+#include <stdexcept>
 
 #ifndef BOOST_RE_NO_ITERATOR_H
    #include <iterator>

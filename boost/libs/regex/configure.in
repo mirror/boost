@@ -921,39 +921,6 @@ have_std_namespace="yes"
 [AC_MSG_RESULT(no - either STL is not present or in a non-standard namespace.)
 AC_MSG_ERROR([Sorry, you can't compile this library unless the standard library is in namespace std.])])
 
-AC_MSG_CHECKING(for <exception>)
-AC_TRY_COMPILE(
-[ 
-#include <exception>
-#include "confdefs.h"
-
-class bad_expression : public std::exception
-{
-   unsigned int code;
-public:
-   bad_expression(unsigned int err) : code(err) {}
-   bad_expression(const bad_expression& e) : std::exception(e), code(e.code) {}
-   bad_expression& operator=(const bad_expression& e)
-   {
-      std::exception::operator=(e);
-      code = e.code;
-      return *this;
-   }
-   virtual const char* what()const throw();
-};
-
-
-std::exception e;
-std::bad_exception e3;
-],
-[
-],
-[AC_MSG_RESULT(yes)
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_NO_EXCEPTION_H, [])
-])
-
 AC_MSG_CHECKING(for <iterator>)
 AC_TRY_COMPILE(
 [ 

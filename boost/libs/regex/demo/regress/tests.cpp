@@ -613,7 +613,6 @@ void run_tests()
       re_type e(expression.c_str(), f);
       cpp_tests(e, true);
    }
-   #ifndef BOOST_RE_NO_EXCEPTION_H
    catch(const std::exception& e)
    {
       //
@@ -624,7 +623,6 @@ void run_tests()
          cout << "Unexpected exception thrown from C++ library: " << e.what() << endl;
       }
    }
-   #endif
    catch(...)
    {
       begin_error();

@@ -26,6 +26,18 @@
 // disable automatic selection of support library:
 #define BOOST_RE_NO_LIB
 
+#if defined(_MSC_VER) && defined(__STL_DEBUG) && defined(_DLL)
+//
+// Ugly hack:
+// when this file is built with VC6 + STLPort 4 we get unresolved externals
+// from std::wstring if __STL_DEBUG is defined.  As a workaround disable
+// STL debugging support in this case.  This weakens the regression tests
+// but is still better than not being able to run them at all.  This should be
+// removed once STLPort gets fixed.
+//
+#undef __STL_DEBUG
+#endif
+
 #include <boost/regex.hpp>
 
 #ifdef BOOST_RE_NO_WCSTRING
@@ -162,7 +174,6 @@ template test_string_type regex_merge(const test_string_type&,
                                      unsigned int flags);
 
 #endif
-
 
 } // namespace boost
 
