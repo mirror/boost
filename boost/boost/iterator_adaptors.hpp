@@ -147,7 +147,7 @@ namespace boost {
 template <class Policies, class Adapted, class Traits>
 struct TrivialIteratorPoliciesConcept
 {
-  typedef typename Traits::reference Reference;
+  typedef typename Traits::reference reference;
   void constraints() {
     function_requires< AssignableConcept<Policies> >();
     function_requires< DefaultConstructibleConcept<Policies> >();
@@ -157,7 +157,7 @@ struct TrivialIteratorPoliciesConcept
     const_constraints();
   }
   void const_constraints() const {
-    Reference r = p.dereference(x);
+    reference r = p.dereference(x);
     b = p.equal(x, x);
     ignore_unused_variable_warning(r);
   }
@@ -766,7 +766,7 @@ namespace detail {
 
 
 // This macro definition is only temporary in this file
-# if !defined(BOOST_MSVC)
+# if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
 #  define BOOST_ARG_DEPENDENT_TYPENAME typename
 # else
 #  define BOOST_ARG_DEPENDENT_TYPENAME
@@ -855,9 +855,9 @@ struct iterator_adaptor :
         policies().initialize(base());
     }
 
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__BORLANDC__)
     // This is required to prevent a bug in how VC++ generates
-    // the assignment operator for compressed_pairv
+    // the assignment operator for compressed_pair
     iterator_adaptor& operator= (const iterator_adaptor& x) {
         m_iter_p = x.m_iter_p;
         return *this;
@@ -1097,7 +1097,7 @@ struct indirect_iterator_policies : public default_iterator_policies
 };
 
 namespace detail {
-# if !defined(BOOST_MSVC) // stragely instantiated even when unused! Maybe try a recursive template someday ;-)
+# if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // strangely instantiated even when unused! Maybe try a recursive template someday ;-)
   template <class T>
   struct traits_of_value_type {
       typedef typename boost::detail::iterator_traits<T>::value_type outer_value;
@@ -1110,12 +1110,12 @@ namespace detail {
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class Value
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::value_type
 #endif
           , class Reference
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::reference
 #else
@@ -1124,7 +1124,7 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
           , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<
                         OuterIterator>::iterator_category
           , class Pointer
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::pointer
 #else
@@ -1139,12 +1139,12 @@ struct indirect_iterator_generator
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class Value
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::value_type
 #endif
           , class Reference
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::reference
 #else
@@ -1154,7 +1154,7 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
           , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<
                 OuterIterator>::iterator_category
           , class Pointer
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::pointer
 #else
@@ -1170,7 +1170,7 @@ struct indirect_iterator_pair_generator
     Value, ConstReference,Category,ConstPointer>::type const_iterator;
 };
 
-#ifndef BOOST_MSVC
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
 make_indirect_iterator(OuterIterator base)
@@ -1392,7 +1392,7 @@ template <class Predicate, class Iterator,
 class filter_iterator_generator {
     BOOST_STATIC_CONSTANT(bool, is_bidirectional
         = (boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value));
-#ifndef BOOST_MSVC // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
+#if !defined(BOOST_MSVC)  || BOOST_MSVC > 1300 // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
     BOOST_STATIC_ASSERT(!is_bidirectional);
 #endif
     typedef filter_iterator_policies<Predicate,Iterator> policies_type;
