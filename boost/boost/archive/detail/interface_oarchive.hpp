@@ -106,7 +106,7 @@ public:
         // the & operator
         template<class T>
         Archive & operator&(T & t){
-            return *this << const_cast<const T &>(t);
+            return *this << t;
         }
     #endif
 };
