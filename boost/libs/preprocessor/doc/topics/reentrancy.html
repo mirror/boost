@@ -11,7 +11,7 @@
 			Macro expansion in the preprocessor is entirely functional.&nbsp; Therefore, 
 			there is no iteration.&nbsp; Unfortunately, the preprocessor also disallows 
 			recursion.&nbsp; This means that the library must fake iteration or recursion 
-			by defining seqs of macros that are implemented similarly.&nbsp;
+			by defining sets of macros that are implemented similarly.&nbsp;
 		</div>
 		<div>
 			To illustrate, here is a simple concatenation macro:
@@ -73,7 +73,7 @@ CONCAT_1(A, B(2, p, q)) // pq
 		</div>
 		<div>
 			This is an example of <i>generic reentrance</i>, in this case, into a fictional 
-			seq of concatenation macros.&nbsp; The <code>c</code> parameter represents the 
+			set of concatenation macros.&nbsp; The <code>c</code> parameter represents the 
 			"state" of the concatenation construct, and as long as the user keeps track of 
 			this state, <code>AB</code> can be used inside of a concatenation macro.
 		</div>
@@ -82,8 +82,8 @@ CONCAT_1(A, B(2, p, q)) // pq
 			being inside itself or provide multiple, equivalent definitions of a construct 
 			and provide a uniform way to <i>reenter</i> that construct.&nbsp; There are 
 			several contructs that <i>require</i> recursion (such as <b>BOOST_PP_WHILE</b>).&nbsp; 
-			Consequently, the library chooses to provide several seqs of macros with 
-			mechanisms to reenter the seq at a macro that has not already been used.
+			Consequently, the library chooses to provide several sets of macros with 
+			mechanisms to reenter the set at a macro that has not already been used.
 		</div>
 		<div>
 			In particular, the library must provide reentrance for <b>BOOST_PP_FOR</b>, <b>BOOST_PP_REPEAT</b>, 
@@ -103,7 +103,7 @@ CONCAT_1(A, B(2, p, q)) // pq
 			Several user-defined macros are passed to each of these constructs (for use as 
 			predicates, operations, etc.).&nbsp; Every time a user-defined macro is 
 			invoked, it is passed the current state of the construct that invoked it so 
-			that the macro can reenter the respective seq if necessary.
+			that the macro can reenter the respective set if necessary.
 		</div>
 		<div>
 			These states are used in one of two ways--either by concatenating to or passing 
@@ -111,8 +111,8 @@ CONCAT_1(A, B(2, p, q)) // pq
 		</div>
 		<div>
 			There are three types of macros that use these state parameters.&nbsp; First, 
-			the seq itself which is reentered through concatenation.&nbsp; Second, 
-			corresponding seqs that act like they are a part of the the primary seq.&nbsp; 
+			the set itself which is reentered through concatenation.&nbsp; Second, 
+			corresponding sets that act like they are a part of the the primary set.&nbsp; 
 			These are also reentered through concatenation.&nbsp; And third, macros that 
 			internally use the first or second type of macro.&nbsp; These macros take the 
 			state as an additional argument.
@@ -121,7 +121,7 @@ CONCAT_1(A, B(2, p, q)) // pq
 			The state of <b>BOOST_PP_WHILE</b> is symbolized by the letter <i>D</i>.&nbsp; 
 			Two user-defined macros are passed to <b>BOOST_PP_WHILE</b>--a predicate and an 
 			operation.&nbsp; When <b>BOOST_PP_WHILE</b> expands these macros, it passes 
-			along its state so that these macros can reenter the <b>BOOST_PP_WHILE</b> seq.&nbsp;
+			along its state so that these macros can reenter the <b>BOOST_PP_WHILE</b> set.&nbsp;
 		</div>
 		<div>
 			Consider the following multiplication implementation that illustrates this 
@@ -216,7 +216,7 @@ MUL(3, 2) // expands to 6
 			## <i>d</i>.
 		</div>
 		<div>
-			The same seq of conventions are used for <b>BOOST_PP_FOR</b> and <b>BOOST_PP_REPEAT</b>, 
+			The same set of conventions are used for <b>BOOST_PP_FOR</b> and <b>BOOST_PP_REPEAT</b>, 
 			but with the letters <i>R</i> and <i>Z</i>, respectively, to symbolize their 
 			states.
 		</div>
@@ -250,7 +250,7 @@ MUL(3, 2) // expands to 6
 			it works here, but suffice to say it <i>does</i> work.
 		</div>
 		<div>
-			Using automatic recursion to reenter various seqs of macros is obviously much 
+			Using automatic recursion to reenter various sets of macros is obviously much 
 			simpler.&nbsp; It completely hides the underlying implementation details.&nbsp; 
 			So, if it is so much easier to use, why do the state parameters still 
 			exist?&nbsp; The reason is simple as well.&nbsp; When state parameters are 
@@ -276,12 +276,9 @@ MUL(3, 2) // expands to 6
 			See Also
 		</h4>
 		<ul>
-			<li>
-				<a href="../ref/for.html">BOOST_PP_FOR</a></li>
-			<li>
-				<a href="../ref/repeat.html">BOOST_PP_REPEAT</a></li>
-			<li>
-				<a href="../ref/while.html">BOOST_PP_WHILE</a></li>
+			<li><a href="../ref/for.html">BOOST_PP_FOR</a></li>
+			<li><a href="../ref/repeat.html">BOOST_PP_REPEAT</a></li>
+			<li><a href="../ref/while.html">BOOST_PP_WHILE</a></li>
 		</ul>
 		<div class="sig">
 			- Paul Mensonides
