@@ -15,7 +15,7 @@
 
 // mf0
 
-template<class R, class T> class BOOST_MEM_FN_NAME(mf0)
+template<class R, class T BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf0)
 {
 public:
 
@@ -24,7 +24,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) ();
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) ())
     F f_;
 
 public:
@@ -49,7 +49,7 @@ public:
 
 // cmf0
 
-template<class R, class T> class BOOST_MEM_FN_NAME(cmf0)
+template<class R, class T BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf0)
 {
 public:
 
@@ -58,7 +58,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) () const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) () const)
     F f_;
 
 public:
@@ -78,7 +78,7 @@ public:
 
 // mf1
 
-template<class R, class T, class A1> class BOOST_MEM_FN_NAME(mf1)
+template<class R, class T, class A1 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf1)
 {
 public:
 
@@ -88,7 +88,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1))
     F f_;
 
 public:
@@ -113,7 +113,7 @@ public:
 
 // cmf1
 
-template<class R, class T, class A1> class BOOST_MEM_FN_NAME(cmf1)
+template<class R, class T, class A1 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf1)
 {
 public:
 
@@ -123,7 +123,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1) const)
     F f_;
 
 public:
@@ -143,7 +143,7 @@ public:
 
 // mf2
 
-template<class R, class T, class A1, class A2> class BOOST_MEM_FN_NAME(mf2)
+template<class R, class T, class A1, class A2 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf2)
 {
 public:
 
@@ -151,7 +151,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2))
     F f_;
 
 public:
@@ -176,7 +176,7 @@ public:
 
 // cmf2
 
-template<class R, class T, class A1, class A2> class BOOST_MEM_FN_NAME(cmf2)
+template<class R, class T, class A1, class A2 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf2)
 {
 public:
 
@@ -184,7 +184,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2) const)
     F f_;
 
 public:
@@ -204,7 +204,7 @@ public:
 
 // mf3
 
-template<class R, class T, class A1, class A2, class A3> class BOOST_MEM_FN_NAME(mf3)
+template<class R, class T, class A1, class A2, class A3 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf3)
 {
 public:
 
@@ -212,7 +212,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3))
     F f_;
 
 public:
@@ -237,7 +237,7 @@ public:
 
 // cmf3
 
-template<class R, class T, class A1, class A2, class A3> class BOOST_MEM_FN_NAME(cmf3)
+template<class R, class T, class A1, class A2, class A3 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf3)
 {
 public:
 
@@ -245,7 +245,7 @@ public:
 
 private:
 
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3) const)
     F f_;
 
 public:
@@ -265,7 +265,7 @@ public:
 
 // mf4
 
-template<class R, class T, class A1, class A2, class A3, class A4> class BOOST_MEM_FN_NAME(mf4)
+template<class R, class T, class A1, class A2, class A3, class A4 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf4)
 {
 public:
 
@@ -273,7 +273,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4))
     F f_;
 
 public:
@@ -298,7 +298,7 @@ public:
 
 // cmf4
 
-template<class R, class T, class A1, class A2, class A3, class A4> class BOOST_MEM_FN_NAME(cmf4)
+template<class R, class T, class A1, class A2, class A3, class A4 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf4)
 {
 public:
 
@@ -306,7 +306,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4) const)
     F f_;
 
 public:
@@ -326,7 +326,7 @@ public:
 
 // mf5
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5> class BOOST_MEM_FN_NAME(mf5)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf5)
 {
 public:
 
@@ -334,7 +334,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5))
     F f_;
 
 public:
@@ -359,7 +359,7 @@ public:
 
 // cmf5
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5> class BOOST_MEM_FN_NAME(cmf5)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf5)
 {
 public:
 
@@ -367,7 +367,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5) const)
     F f_;
 
 public:
@@ -387,7 +387,7 @@ public:
 
 // mf6
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6> class BOOST_MEM_FN_NAME(mf6)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf6)
 {
 public:
 
@@ -395,7 +395,7 @@ public:
 
 private:
 
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6))
     F f_;
 
 public:
@@ -420,7 +420,7 @@ public:
 
 // cmf6
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6> class BOOST_MEM_FN_NAME(cmf6)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf6)
 {
 public:
 
@@ -428,7 +428,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6) const)
     F f_;
 
 public:
@@ -448,7 +448,7 @@ public:
 
 // mf7
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7> class BOOST_MEM_FN_NAME(mf7)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf7)
 {
 public:
 
@@ -456,7 +456,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7))
     F f_;
 
 public:
@@ -481,7 +481,7 @@ public:
 
 // cmf7
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7> class BOOST_MEM_FN_NAME(cmf7)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf7)
 {
 public:
 
@@ -489,7 +489,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7) const)
     F f_;
 
 public:
@@ -509,7 +509,7 @@ public:
 
 // mf8
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> class BOOST_MEM_FN_NAME(mf8)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(mf8)
 {
 public:
 
@@ -517,7 +517,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7, A8);
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7, A8))
     F f_;
 
 public:
@@ -542,7 +542,7 @@ public:
 
 // cmf8
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> class BOOST_MEM_FN_NAME(cmf8)
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8 BOOST_MEM_FN_CLASS_F> class BOOST_MEM_FN_NAME(cmf8)
 {
 public:
 
@@ -550,7 +550,7 @@ public:
 
 private:
     
-    typedef R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7, A8) const;
+    BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1, A2, A3, A4, A5, A6, A7, A8) const)
     F f_;
 
 public:
