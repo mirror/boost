@@ -26,10 +26,16 @@
 
 namespace boost {
 
-template <class T> void ignore_unused_variable_warning(const T&) { }
+/*
+  "inline" is used for ignore_unused_variable_warning()
+   and function_requires() to make sure there is no
+   overhead with g++.
+ */
+
+template <class T> inline void ignore_unused_variable_warning(const T&) { }
 
 template <class Concept>
-void function_requires()
+inline void function_requires()
 {
 #if !defined(NDEBUG)
   void (Concept::*x)() = BOOST_FPTR Concept::constraints;
