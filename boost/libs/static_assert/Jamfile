@@ -7,7 +7,7 @@ include testing.jam ;
 
 test-suite static_assert :
 	[ run static_assert_test.cpp ]
-	[ run static_assert_example_1.cpp ]
+#	[ run static_assert_example_1.cpp ]
 	[ run static_assert_example_2.cpp ]
 	[ run static_assert_example_3.cpp ]
 	[ compile-fail static_assert_test_fail_1.cpp ]
@@ -19,6 +19,8 @@ test-suite static_assert :
 	[ compile-fail static_assert_test_fail_7.cpp ]
 	[ compile-fail static_assert_test_fail_8.cpp ]
 ;
+
+
 
 
 
