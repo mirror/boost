@@ -1,4 +1,4 @@
-/* Copyright (c) 2001 CrystalClear Software, Inc.
+/* Copyright (c) 2001, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
  */
@@ -82,19 +82,14 @@ int main()
   date_period r4(date(2000,Jan,5), date(2000,Jan,10));
   check("[5 -10) merge [6-9)  -> [5-10)", i1.merge(i5) == r4);
 
-  check("[5-10) merge_inclusive [1-7)  -> [1-10)", 
-        i1.merge_inclusive(i2) == r3);
-  check("[1-7)  merge_inclusive [7-10) -> [1-10)", 
-        i2.merge_inclusive(i4) == r3);
-  check("[7-10)  merge_inclusive [1-7) -> [1-10)", 
-        i4.merge_inclusive(i2) == r3);
-  check("[1-15)  merge_inclusive [1-7) -> [1-15)", 
-        i3.merge_inclusive(i2) == i3);
+  check("[5-10) hull [1-7)  -> [1-10)", i1.hull(i2) == r3);
+  check("[1-7)  hull [7-10) -> [1-10)", i2.hull(i4) == r3);
+  check("[7-10)  hull [1-7) -> [1-10)", i4.hull(i2) == r3);
+  check("[1-15)  hull [1-7) -> [1-15)", i3.hull(i2) == i3);
+
   date_period i6(date(2000,Jan,1), date(2000,Jan,2));
-  check("[1-2)  merge_inclusive [7-10) -> [1-10)", 
-        i6.merge_inclusive(i4) == r3);
-  check("[7-10)  merge_inclusive [1-2) -> [1-10)", 
-        i4.merge_inclusive(i6) == r3);
+  check("[1-2)  hull [7-10) -> [1-10)", i6.hull(i4) == r3);
+  check("[7-10)  hull [1-2) -> [1-10)", i4.hull(i6) == r3);
   
 
   date bf_start(2000,Jan,5);
@@ -151,7 +146,7 @@ int main()
 }
 
 /*
- * Copyright (c) 2001
+ * Copyright (c) 2001, 2003
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -161,8 +156,5 @@ int main()
  * in supporting documentation.  CrystalClear Software makes no
  * representations about the suitability of this software for any
  * purpose.  It is provided as is without express or implied warranty.
- *
- *
- * Author:  Jeff Garland (jeff@CrystalClearSoftware.com)
  *
  */
