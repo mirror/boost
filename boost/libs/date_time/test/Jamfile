@@ -19,60 +19,50 @@ DEPENDS all : test ;
     [ run testtime_resolution_traits.cpp ]
     [ run testwrapping_int.cpp ]
     [ run testconstrained_value.cpp ]
-    [ run testgregorian_calendar.cpp 
-      : : : <define>DATE_TIME_INLINE ]
+    [ run testgregorian_calendar.cpp ]
    ; 
 
    test-suite date_time_gregorian
      : 
-   [ run gregorian/testdate.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testdate_duration.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testdate_iterator.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testfacet.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testformatters.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testgenerators.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testgreg_cal.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testgreg_day.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]          
-   [ run gregorian/testgreg_month.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
-   [ run gregorian/testparse_date.cpp
-     <lib>../build/boost_date_time : : : <define>DATE_TIME_INLINE ]
+   [ run gregorian/testdate.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testdate_duration.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testdate_iterator.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testfacet.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testformatters.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testgenerators.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testgreg_cal.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testgreg_day.cpp <lib>../build/boost_date_time ]          
+   [ run gregorian/testgreg_month.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testparse_date.cpp <lib>../build/boost_date_time ]
  ;
 
    test-suite date_time_posixtime
      : 
    [ run posix_time/testc_local_adjustor.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testclock.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testdst_rules.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testduration.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testiterator.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testparse_time.cpp
      <lib>../build/boost_date_time 
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testperiod.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testtime.cpp
      <lib>../build/boost_date_time
-    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
  ;
+
 }
       
