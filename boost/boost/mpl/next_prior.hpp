@@ -14,10 +14,14 @@
 // $Date$
 // $Revision$
 
+#include <boost/mpl/aux_/common_name_wknd.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 
 namespace boost { namespace mpl {
+
+BOOST_MPL_AUX_COMMON_NAME_WKND(next)
+BOOST_MPL_AUX_COMMON_NAME_WKND(prior)
 
 template<
       typename BOOST_MPL_AUX_NA_PARAM(T)
