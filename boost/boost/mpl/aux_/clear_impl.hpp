@@ -32,17 +32,6 @@ struct clear_traits
     template< typename Sequence > struct algorithm;
 };
 
-#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
-template<>
-struct clear_traits<int>
-{
-    template< typename Sequence > struct algorithm
-    {
-        typedef int type;
-    };
-};
-#endif
-
 BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1,clear_traits)
 
 } // namespace mpl
