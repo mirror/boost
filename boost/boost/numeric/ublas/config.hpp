@@ -135,19 +135,8 @@
 
 
 
-// Thanks to Roberto Andres Ruiz Vial for porting to Intel.
-#if defined (__ICL) && ! defined (BOOST_STRICT_CONFIG)
-
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
-
-#endif
-
-
-
-// Intel Compiler under Linux
-#if defined (__ICC) && ! defined (BOOST_STRICT_CONFIG)
+// Intel Compiler
+#if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
@@ -160,10 +149,9 @@
 // ICC allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 
-// Needed for ICC on Itanium?
-#ifdef BOOST_UBLAS_ICC_DEFINE_SWAP
+// Define swap for index_pair and triple.
+#if (BOOST_INTEL <= 800)
 namespace boost { namespace numeric { namespace ublas {
-
     template<class C, class IC>
     class indexed_iterator;
 
@@ -171,11 +159,10 @@ namespace boost { namespace numeric { namespace ublas {
     class index_pair;
     template<class M>
     class index_triple;
-
 }}}
 
 namespace std {
-
+	// Needed for ICC on Itanium?
     template<class C, class IC>
     inline
     void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
@@ -193,7 +180,6 @@ namespace std {
     void swap (boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2) {
         i1.swap (i2);
     }
-
 }
 #endif
 
