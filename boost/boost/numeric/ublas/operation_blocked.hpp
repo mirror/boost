@@ -19,17 +19,17 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    template<class V, std::size_t BS, class E1, class E2>
+    template<class V, typename V::size_type BS, class E1, class E2>
     BOOST_UBLAS_INLINE
     V
     block_prod (const matrix_expression<E1> &e1,
                 const vector_expression<E2> &e2) {
         typedef V vector_type;
-        const std::size_t block_size = BS;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
+        const size_type block_size = BS;
 
         V v (e1 ().size1 ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -74,17 +74,17 @@ namespace boost { namespace numeric { namespace ublas {
         return v;
     }
 
-    template<class V, std::size_t BS, class E1, class E2>
+    template<class V, typename V::size_type BS, class E1, class E2>
     BOOST_UBLAS_INLINE
     V
     block_prod (const vector_expression<E1> &e1,
                 const matrix_expression<E2> &e2) {
         typedef V vector_type;
-        const std::size_t block_size = BS;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
+        const size_type block_size = BS;
 
         V v (e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -128,18 +128,18 @@ namespace boost { namespace numeric { namespace ublas {
         return v;
     }
 
-    template<class M, std::size_t BS, class E1, class E2>
+    template<class M, typename M::size_type BS, class E1, class E2>
     BOOST_UBLAS_INLINE
     M
     block_prod (const matrix_expression<E1> &e1,
                 const matrix_expression<E2> &e2,
                 row_major_tag) {
         typedef M matrix_type;
-        const std::size_t block_size = BS;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
+        const size_type block_size = BS;
 
         M m (e1 ().size1 (), e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -189,18 +189,18 @@ namespace boost { namespace numeric { namespace ublas {
         return m;
     }
 
-    template<class M, std::size_t BS, class E1, class E2>
+    template<class M, typename M::size_type BS, class E1, class E2>
     BOOST_UBLAS_INLINE
     M
     block_prod (const matrix_expression<E1> &e1,
                 const matrix_expression<E2> &e2,
                 column_major_tag) {
         typedef M matrix_type;
-        const std::size_t block_size = BS;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
+        const size_type block_size = BS;
 
         M m (e1 ().size1 (), e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
@@ -251,7 +251,7 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // Dispatcher
-    template<class M, std::size_t BS, class E1, class E2>
+    template<class M, typename M::size_type BS, class E1, class E2>
     BOOST_UBLAS_INLINE
     M
     block_prod (const matrix_expression<E1> &e1,
