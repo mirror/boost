@@ -22,7 +22,7 @@
 #if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
  || defined(BOOST_MSVC) && BOOST_MSVC < 1300
 
-#   include "boost/mpl/bool_c.hpp"
+#   include "boost/mpl/bool.hpp"
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -34,7 +34,7 @@ struct bool_value_wknd
 
 template<>
 struct bool_value_wknd<int>
-    : false_c
+    : false_
 {
 };
 

@@ -18,8 +18,8 @@
 #define BOOST_MPL_AUX_RANGE_C_ITERATOR_HPP_INCLUDED
 
 #include "boost/mpl/iterator_tag.hpp"
-#include "boost/mpl/arithmetic/plus.hpp"
-#include "boost/mpl/arithmetic/minus.hpp"
+#include "boost/mpl/plus.hpp"
+#include "boost/mpl/minus.hpp"
 #include "boost/mpl/aux_/iterator_names.hpp"
 
 namespace boost {

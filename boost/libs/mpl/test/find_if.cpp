@@ -26,7 +26,7 @@ namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     typedef mpl::list9<int,char,long,short,char,long,double,float,char>::type types;
 
     typedef mpl::find_if< types, boost::is_float<_> >::type iter1;

@@ -23,7 +23,7 @@ namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     typedef mpl::list<int,float,float,char,int,int,int,double>::type types;
     typedef mpl::unique<types>::type result;
 

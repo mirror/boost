@@ -17,8 +17,8 @@
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/comparison.hpp"
 #include "boost/mpl/lambda.hpp"
-#include "boost/mpl/int_c.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/int.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/apply.hpp"
 
@@ -35,16 +35,16 @@ struct my
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
 
     // !(x == char) && !(x == double) && x convertible to int || sizeof(x) > 8
     typedef mpl::lambda<
-        mpl::logical_or<
-              mpl::logical_and<
-                    mpl::logical_not< boost::is_same<_1, char> >
-                  , mpl::logical_not< boost::is_float<_1> >
+        mpl::or_<
+              mpl::and_<
+                    mpl::not_< boost::is_same<_1, char> >
+                  , mpl::not_< boost::is_float<_1> >
                   >
-            , mpl::greater< mpl::sizeof_<_1>, mpl::int_c<8> >
+            , mpl::greater< mpl::sizeof_<_1>, mpl::int_<8> >
             >
         >::type f1;
 
@@ -55,7 +55,7 @@ int main()
 
     // x == y || x == my || sizeof(x) == sizeof(y)
     typedef mpl::lambda<
-        mpl::logical_or< 
+        mpl::or_< 
               boost::is_same<_1, _2>
             , boost::is_same<_2, my>
             , mpl::equal_to< mpl::sizeof_<_1>, mpl::sizeof_<_2> >
@@ -71,9 +71,9 @@ int main()
 
     // bind <-> lambda interaction
     typedef mpl::lambda< mpl::less<_1,_2> >::type pred;
-    typedef mpl::bind2< pred, _1, mpl::int_c<4> > f3;
+    typedef mpl::bind2< pred, _1, mpl::int_<4> > f3;
     
-    BOOST_STATIC_ASSERT((mpl::apply1< f3,mpl::int_c<3> >::type::value));
+    BOOST_STATIC_ASSERT((mpl::apply1< f3,mpl::int_<3> >::type::value));
           
     return 0;
 }

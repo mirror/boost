@@ -21,7 +21,7 @@
 #include <iostream>
 
 namespace mpl = boost::mpl;
-using namespace mpl::placeholder;
+using namespace mpl::placeholders;
 
 template< typename T >
 struct tuple_field

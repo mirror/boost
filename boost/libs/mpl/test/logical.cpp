@@ -15,33 +15,33 @@
 // without express or implied warranty.
 
 #include "boost/mpl/logical.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
 
 struct my;
-struct true_c : mpl::true_c {};
-struct false_c : mpl::false_c {};
+struct true_ : mpl::true_ {};
+struct false_ : mpl::false_ {};
 
 int main()
 {
-    BOOST_STATIC_ASSERT((mpl::logical_and< true_c,true_c >::value == true));
-    BOOST_STATIC_ASSERT((mpl::logical_and< false_c,true_c >::value == false));
-    BOOST_STATIC_ASSERT((mpl::logical_and< true_c,false_c >::value == false));
-    BOOST_STATIC_ASSERT((mpl::logical_and< false_c,false_c >::value == false));
-    BOOST_STATIC_ASSERT((mpl::logical_and< false_c,my >::value == false));
-    BOOST_STATIC_ASSERT((mpl::logical_and< false_c,my,my >::value == false));
+    BOOST_STATIC_ASSERT((mpl::and_< true_,true_ >::value == true));
+    BOOST_STATIC_ASSERT((mpl::and_< false_,true_ >::value == false));
+    BOOST_STATIC_ASSERT((mpl::and_< true_,false_ >::value == false));
+    BOOST_STATIC_ASSERT((mpl::and_< false_,false_ >::value == false));
+    BOOST_STATIC_ASSERT((mpl::and_< false_,my >::value == false));
+    BOOST_STATIC_ASSERT((mpl::and_< false_,my,my >::value == false));
 
-    BOOST_STATIC_ASSERT((mpl::logical_or< true_c,true_c >::value == true));
-    BOOST_STATIC_ASSERT((mpl::logical_or< false_c,true_c >::value == true));
-    BOOST_STATIC_ASSERT((mpl::logical_or< true_c,false_c >::value == true));
-    BOOST_STATIC_ASSERT((mpl::logical_or< false_c,false_c >::value == false));
-    BOOST_STATIC_ASSERT((mpl::logical_or< true_c,my >::value == true));
-    BOOST_STATIC_ASSERT((mpl::logical_or< true_c,my,my >::value == true));
+    BOOST_STATIC_ASSERT((mpl::or_< true_,true_ >::value == true));
+    BOOST_STATIC_ASSERT((mpl::or_< false_,true_ >::value == true));
+    BOOST_STATIC_ASSERT((mpl::or_< true_,false_ >::value == true));
+    BOOST_STATIC_ASSERT((mpl::or_< false_,false_ >::value == false));
+    BOOST_STATIC_ASSERT((mpl::or_< true_,my >::value == true));
+    BOOST_STATIC_ASSERT((mpl::or_< true_,my,my >::value == true));
 
-    BOOST_STATIC_ASSERT((mpl::logical_not< true_c >::value == false));
-    BOOST_STATIC_ASSERT((mpl::logical_not< false_c >::value == true));
+    BOOST_STATIC_ASSERT((mpl::not_< true_ >::value == false));
+    BOOST_STATIC_ASSERT((mpl::not_< false_ >::value == true));
   
     return 0;
 }

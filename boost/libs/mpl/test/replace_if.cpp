@@ -16,19 +16,19 @@
 
 #include "boost/mpl/replace_if.hpp"
 #include "boost/mpl/list_c.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/equal.hpp"
-#include "boost/mpl/comparison/greater.hpp"
-#include "boost/mpl/comparison/equal_to.hpp"
+#include "boost/mpl/greater.hpp"
+#include "boost/mpl/equal_to.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     typedef mpl::list_c<int,1,4,5,2,7,5,3,5>::type numbers;
-    typedef mpl::replace_if< numbers, mpl::gt<4>, mpl::int_c<0> >::type result;
+    typedef mpl::replace_if< numbers, mpl::gt<4>, mpl::int_<0> >::type result;
 
     typedef mpl::list_c<int,1,4,0,2,0,0,3,0>::type answer;
     BOOST_STATIC_ASSERT((mpl::equal< answer,result,mpl::equal_to<_,_> >::type::value));

@@ -17,12 +17,12 @@
 #ifndef BOOST_MPL_V2_1_INT_HPP_INCLUDED
 #define BOOST_MPL_V2_1_INT_HPP_INCLUDED
 
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/aux_/config/nttp.hpp"
 
 namespace boost { namespace mpl { namespace v2_1 {
 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct int_ : mpl::int_c<N> {};
+template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct int_ : mpl::int_<N> {};
 
 }}} // namespace boost::mpl::v2_1
 

@@ -19,7 +19,7 @@
 #include "boost/mpl/list_c.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/begin_end.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/assert_is_same.hpp"
 #include "boost/static_assert.hpp"
 

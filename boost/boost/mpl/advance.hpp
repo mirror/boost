@@ -17,8 +17,8 @@
 #ifndef BOOST_MPL_ADVANCE_HPP_INCLUDED
 #define BOOST_MPL_ADVANCE_HPP_INCLUDED
 
-#include "boost/mpl/arithmetic/negate.hpp"
-#include "boost/mpl/comparison/less.hpp"
+#include "boost/mpl/negate.hpp"
+#include "boost/mpl/less.hpp"
 #include "boost/mpl/integral_c.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/iterator_tag.hpp"

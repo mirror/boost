@@ -150,7 +150,7 @@ template<>
 struct empty_traits< aux::vector_tag< 31> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -328,7 +328,7 @@ template<>
 struct empty_traits< aux::vector_tag< 32> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -507,7 +507,7 @@ template<>
 struct empty_traits< aux::vector_tag< 33> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -689,7 +689,7 @@ template<>
 struct empty_traits< aux::vector_tag< 34> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -872,7 +872,7 @@ template<>
 struct empty_traits< aux::vector_tag< 35> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -1059,7 +1059,7 @@ template<>
 struct empty_traits< aux::vector_tag< 36> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -1247,7 +1247,7 @@ template<>
 struct empty_traits< aux::vector_tag< 37> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -1438,7 +1438,7 @@ template<>
 struct empty_traits< aux::vector_tag< 38> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -1630,7 +1630,7 @@ template<>
 struct empty_traits< aux::vector_tag< 39> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };
@@ -1825,7 +1825,7 @@ template<>
 struct empty_traits< aux::vector_tag< 40> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };

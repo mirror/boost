@@ -19,7 +19,7 @@
 
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/apply.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/lambda.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/aux_/unwrap.hpp"

@@ -1,9 +1,11 @@
-//-----------------------------------------------------------------------------
-// boost mpl/arithmetic.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#ifndef BOOST_MPL_ARITHMETIC_HPP_INCLUDED
+#define BOOST_MPL_ARITHMETIC_HPP_INCLUDED
+
+// + file: boost/mpl/arithmetic.hpp
+// + last modified: 25/feb/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,15 +15,14 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#ifndef BOOST_MPL_ARITHMETIC_HPP_INCLUDED
-#define BOOST_MPL_ARITHMETIC_HPP_INCLUDED
-
-#include "boost/mpl/arithmetic/plus.hpp"
-#include "boost/mpl/arithmetic/minus.hpp"
-#include "boost/mpl/arithmetic/multiplies.hpp"
-#include "boost/mpl/arithmetic/divides.hpp"
-#include "boost/mpl/arithmetic/modulus.hpp"
-#include "boost/mpl/arithmetic/negate.hpp"
+#include "boost/mpl/plus.hpp"
+#include "boost/mpl/minus.hpp"
+#include "boost/mpl/multiplies.hpp"
+#include "boost/mpl/divides.hpp"
+#include "boost/mpl/modulus.hpp"
+#include "boost/mpl/negate.hpp"
 
 #endif // BOOST_MPL_ARITHMETIC_HPP_INCLUDED

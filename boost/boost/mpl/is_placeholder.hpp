@@ -18,7 +18,7 @@
 #define BOOST_MPL_IS_PLACEHOLDER_HPP_INCLUDED
 
 #include "boost/mpl/arg_fwd.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/aux_/yes_no.hpp"
 #include "boost/mpl/aux_/config/ctps.hpp"
 #include "boost/mpl/aux_/config/nttp.hpp"
@@ -29,13 +29,13 @@ namespace boost { namespace mpl {
 
 template< typename T >
 struct is_placeholder
-    : bool_c<false>
+    : bool_<false>
 {
 };
 
 template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct is_placeholder< arg<N> >
-    : bool_c<true>
+    : bool_<true>
 {
 };
 

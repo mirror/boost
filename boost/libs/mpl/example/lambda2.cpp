@@ -16,11 +16,11 @@
 
 #include "boost/mpl/v2_1.hpp"
 
-#include "boost/mpl/logical/not.hpp"
-#include "boost/mpl/logical/or.hpp"
-#include "boost/mpl/comparison/less.hpp"
-#include "boost/mpl/comparison/equal_to.hpp"
-#include "boost/mpl/arithmetic/multiplies.hpp"
+#include "boost/mpl/not.hpp"
+#include "boost/mpl/or.hpp"
+#include "boost/mpl/less.hpp"
+#include "boost/mpl/equal_to.hpp"
+#include "boost/mpl/multiplies.hpp"
 #include "boost/mpl/prior.hpp"
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/count_if.hpp"
@@ -30,7 +30,7 @@
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
-using namespace mpl::placeholder;
+using namespace mpl::placeholders;
 using namespace mpl::v2_1;
 
 

@@ -17,13 +17,13 @@
 // no include guards, the header is intended for multiple inclusion!
 
 #include "boost/type_traits/detail/template_arity_spec.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/config.hpp"
 
 #if defined(__SUNPRO_CC)
 #   define BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
-    typedef mpl::bool_c< C > type; \
+    typedef mpl::bool_< C > type; \
     enum { value = type::value }; \
     /**/
 #   define BOOST_TT_AUX_BOOL_C_BASE(C)
@@ -31,7 +31,7 @@
 #elif defined(BOOST_MSVC) && BOOST_MSVC <= 1200
 
 #   define BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
-    typedef mpl::bool_c< C > base_; \
+    typedef mpl::bool_< C > base_; \
     using base_::value; \
     /**/
 
@@ -42,7 +42,7 @@
 #endif
 
 #ifndef BOOST_TT_AUX_BOOL_C_BASE
-#   define BOOST_TT_AUX_BOOL_C_BASE(C) : mpl::bool_c< C >
+#   define BOOST_TT_AUX_BOOL_C_BASE(C) : mpl::bool_< C >
 #endif 
 
 

@@ -14,12 +14,12 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#include "boost/mpl/arithmetic/multiplies.hpp"
+#include "boost/mpl/multiplies.hpp"
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/lower_bound.hpp"
 #include "boost/mpl/transform_view.hpp"
 #include "boost/mpl/sizeof.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/base.hpp"
 #include "boost/mpl/apply_if.hpp"
@@ -28,7 +28,7 @@
 #include "boost/mpl/assert_is_same.hpp"
 
 namespace mpl = boost::mpl;
-using namespace mpl::placeholder;
+using namespace mpl::placeholders;
 
 template< int bit_size >
 class big_int
@@ -42,9 +42,9 @@ struct integer
     typedef mpl::list<char,short,int,long> builtins_;
     typedef typename mpl::base< typename mpl::lower_bound<
           mpl::transform_view< builtins_
-            , mpl::multiplies< mpl::sizeof_<_1>, mpl::int_c<8> >
+            , mpl::multiplies< mpl::sizeof_<_1>, mpl::int_<8> >
             >
-        , mpl::int_c<bit_size>
+        , mpl::int_<bit_size>
         >::type >::type iter_;
 
     typedef typename mpl::end<builtins_>::type last_;

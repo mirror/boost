@@ -19,7 +19,7 @@
 
 #include "boost/mpl/aux_/has_xxx.hpp"
 #include "boost/mpl/if.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/type_traits/is_class.hpp"
 
 namespace boost { namespace mpl { namespace aux {
@@ -31,7 +31,7 @@ struct has_rebind
     : if_c< 
           ::boost::is_class<T>::value
         , has_rebind_impl<T>
-        , bool_c<false>
+        , bool_<false>
         >::type
 {
 };

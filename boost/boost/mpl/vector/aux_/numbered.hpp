@@ -157,7 +157,7 @@ template<>
 struct empty_traits< aux::vector_tag<i> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };

@@ -149,7 +149,7 @@ struct lambda
     : aux::lambda_impl<
           ::boost::mpl::aux::template_arity<T>::value
 
-        , bool_c<Protect>::value
+        , bool_<Protect>::value
 
         >::template result_<T>
 {

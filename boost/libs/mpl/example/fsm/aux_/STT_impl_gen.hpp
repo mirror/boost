@@ -29,7 +29,7 @@ namespace fsm {
 namespace aux {
 
 namespace mpl = boost::mpl;
-using namespace mpl::placeholder;
+using namespace mpl::placeholders;
 
 template< typename Transition > 
 struct STT_void_row_impl

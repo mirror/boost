@@ -15,8 +15,8 @@
 // without express or implied warranty.
 
 #include "boost/mpl/always.hpp"
-#include "boost/mpl/bool_c.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/bool.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/apply.hpp"
 #include "boost/static_assert.hpp"
 
@@ -24,19 +24,19 @@ namespace mpl = boost::mpl;
 
 int main()
 {
-    typedef mpl::always<mpl::true_c> always_true;
-    typedef mpl::apply1< always_true,mpl::false_c >::type res1;
-    typedef mpl::apply2< always_true,mpl::false_c,mpl::false_c >::type res2;
-    typedef mpl::apply3< always_true,mpl::false_c,mpl::false_c,mpl::false_c >::type res3;
+    typedef mpl::always<mpl::true_> always_true;
+    typedef mpl::apply1< always_true,mpl::false_ >::type res1;
+    typedef mpl::apply2< always_true,mpl::false_,mpl::false_ >::type res2;
+    typedef mpl::apply3< always_true,mpl::false_,mpl::false_,mpl::false_ >::type res3;
 
     BOOST_STATIC_ASSERT(res1::value == true);
     BOOST_STATIC_ASSERT(res2::value == true);
     BOOST_STATIC_ASSERT(res3::value == true);
 
-    typedef mpl::always< mpl::int_c<10> > always_10;
-    typedef mpl::apply1< always_10,mpl::int_c<0> >::type res4;
-    typedef mpl::apply2< always_10,mpl::int_c<0>,mpl::int_c<0> >::type res5;
-    typedef mpl::apply3< always_10,mpl::int_c<0>,mpl::int_c<0>,mpl::int_c<0> >::type res6;
+    typedef mpl::always< mpl::int_<10> > always_10;
+    typedef mpl::apply1< always_10,mpl::int_<0> >::type res4;
+    typedef mpl::apply2< always_10,mpl::int_<0>,mpl::int_<0> >::type res5;
+    typedef mpl::apply3< always_10,mpl::int_<0>,mpl::int_<0>,mpl::int_<0> >::type res6;
 
     BOOST_STATIC_ASSERT(res4::value == 10);
     BOOST_STATIC_ASSERT(res5::value == 10);

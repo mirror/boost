@@ -15,17 +15,17 @@
 // without express or implied warranty.
 
 #include "boost/mpl/arithmetic.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
 
 int main()
 {
-    typedef mpl::int_c<0> _0;
-    typedef mpl::int_c<1> _1;
-    typedef mpl::int_c<3> _3;
-    typedef mpl::int_c<10> _10;
+    typedef mpl::int_<0> _0;
+    typedef mpl::int_<1> _1;
+    typedef mpl::int_<3> _3;
+    typedef mpl::int_<10> _10;
 
     BOOST_STATIC_ASSERT((mpl::plus<_0,_10>::value == 10));
     BOOST_STATIC_ASSERT((mpl::plus<_10,_0>::value == 10));

@@ -16,16 +16,16 @@
 
 #include "boost/mpl/next.hpp"
 #include "boost/mpl/prior.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/assert_is_same.hpp"
 
 namespace mpl = boost::mpl;
     
 int main()
 {
-    typedef mpl::int_c<0> _0;
-    typedef mpl::int_c<1> _1;
-    typedef mpl::int_c<2> _2;
+    typedef mpl::int_<0> _0;
+    typedef mpl::int_<1> _1;
+    typedef mpl::int_<2> _2;
 
     BOOST_MPL_ASSERT_IS_SAME(mpl::next<_0>::type, _1);
     BOOST_MPL_ASSERT_IS_SAME(mpl::next<_1>::type, _2);

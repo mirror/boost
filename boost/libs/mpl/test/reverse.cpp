@@ -18,14 +18,14 @@
 #include "boost/mpl/list_c.hpp"
 #include "boost/mpl/range_c.hpp"
 #include "boost/mpl/equal.hpp"
-#include "boost/mpl/comparison/equal_to.hpp"
+#include "boost/mpl/equal_to.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     typedef mpl::list_c<int,9,8,7,6,5,4,3,2,1,0>::type numbers;
     typedef mpl::reverse< numbers >::type result;
 

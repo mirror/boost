@@ -21,7 +21,7 @@
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/at.hpp"
 #include "boost/mpl/equal.hpp"
-#include "boost/mpl/comparison/equal_to.hpp"
+#include "boost/mpl/equal_to.hpp"
 #include "boost/mpl/math/is_even.hpp"
 #include "boost/static_assert.hpp"
 

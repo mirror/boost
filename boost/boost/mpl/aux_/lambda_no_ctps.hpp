@@ -25,7 +25,7 @@
 #   include "boost/mpl/lambda_fwd.hpp"
 #   include "boost/mpl/bind.hpp"
 #   include "boost/mpl/protect.hpp"
-#   include "boost/mpl/bool_c.hpp"
+#   include "boost/mpl/bool.hpp"
 #   include "boost/mpl/aux_/template_arity.hpp"
 #endif
 
@@ -81,7 +81,7 @@ struct lambda
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
         , Protect
 #else
-        , bool_c<Protect>::value
+        , bool_<Protect>::value
 #endif
         >::template result_<T>
 {

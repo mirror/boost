@@ -1,9 +1,11 @@
-//-----------------------------------------------------------------------------
-// boost/mpl/intergal_c.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#ifndef BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
+#define BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
+
+// + file: boost/mpl/integral_c.hpp
+// + last modified: 25/feb/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,63 +15,29 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#ifndef BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
-#define BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #include "boost/mpl/aux_/ice_cast.hpp"
-#include "boost/mpl/aux_/config/static_constant.hpp"
+#include "boost/mpl/aux_/config/ctps.hpp"
 #include "boost/mpl/aux_/config/workaround.hpp"
 
-namespace boost {
-namespace mpl {
-
-template< typename T,
-// the type of non-type template arguments may not depend on template arguments
 #if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
-        long
-#else 
-        T
-#endif 
-          N >
-struct integral_c
-{
-    BOOST_STATIC_CONSTANT(T, value = N);
-    typedef integral_c type;
-    typedef T value_type;
-
-    // Note that the static_casts below are there to handle the case
-    // where T is an enum type.
-    
-    // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
-    // while some other don't like 'value + 1' (Borland), and some don't like
-    // either
-#if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
- private:
-    BOOST_STATIC_CONSTANT(T, next_value = BOOST_MPL_AUX_ICE_CAST(T, (N + 1)));
-    BOOST_STATIC_CONSTANT(T, prior_value = BOOST_MPL_AUX_ICE_CAST(T, (N - 1)));
- public:
-    typedef integral_c<T, next_value> next;
-    typedef integral_c<T, prior_value> prior;
-#elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
-    || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
-    || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
-    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (N + 1))> next;
-    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (N - 1))> prior;
+// the type of non-type template arguments may not depend on template arguments
+#   define AUX_WRAPPER_PARAMS(N) typename T, long N
 #else
-    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (value + 1))> next;
-    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (value - 1))> prior;
+#   define AUX_WRAPPER_PARAMS(N) typename T, T N
 #endif
 
-    // enables uniform function call syntax for families of overloaded 
-    // functions that return objects of both arithmetic ('int', 'long',
-    // 'double', etc.) and 'integral_c<..>' types (for an example, see 
-    // "mpl/example/power.cpp")
-    operator T() const { return this->value; } 
-};
+#define AUX_WRAPPER_NAME integral_c
+#define AUX_WRAPPER_VALUE_TYPE T
+#define AUX_WRAPPER_INST(value) AUX_WRAPPER_NAME< T, value >
+#include "boost/mpl/aux_/integral_wrapper.hpp"
+
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
  && !BOOST_WORKAROUND(__BORLANDC__, <= 0x551)
+namespace boost { namespace mpl {
 // 'bool' constant doesn't have 'next'/'prior' members
 template< bool C >
 struct integral_c<bool, C>
@@ -78,9 +46,7 @@ struct integral_c<bool, C>
     typedef integral_c type;
     operator bool() const { return this->value; }
 };
+}}
 #endif
-
-} // namespace mpl
-} // namespace boost 
 
 #endif // BOOST_MPL_INTEGRAL_C_HPP_INCLUDED

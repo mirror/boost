@@ -18,8 +18,8 @@
 #define BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
 
 #include "boost/mpl/iterator_tag.hpp"
-#include "boost/mpl/arithmetic/plus.hpp"
-#include "boost/mpl/arithmetic/minus.hpp"
+#include "boost/mpl/plus.hpp"
+#include "boost/mpl/minus.hpp"
 #include "boost/mpl/aux_/iterator_names.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/vector/aux_/item.hpp"

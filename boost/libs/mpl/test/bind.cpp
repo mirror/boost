@@ -44,7 +44,7 @@ struct f5
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     
     typedef mpl::apply1< mpl::bind1<f1,_1>,int >::type r11;
     typedef mpl::apply5< mpl::bind1<f1,_5>,void,void,void,void,int >::type r12;

@@ -22,7 +22,7 @@
 #if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
  || defined(BOOST_MPL_MSVC_60_ETI_BUG)
  
-#   include "boost/mpl/int_c.hpp"
+#   include "boost/mpl/int.hpp"
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -35,7 +35,7 @@ struct value_wknd
 #if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<>
 struct value_wknd<int>
-    : int_c<0>
+    : int_<0>
 {
 };
 #endif

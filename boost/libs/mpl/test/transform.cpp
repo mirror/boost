@@ -24,7 +24,7 @@ namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     typedef mpl::list<char,short,int,long,float,double> types;
     typedef mpl::list<char*,short*,int*,long*,float*,double*> pointers;
 

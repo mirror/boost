@@ -19,12 +19,12 @@
 
 #include "boost/mpl/aux_/iter_fold_if_impl.hpp"
 #include "boost/mpl/aux_/iter_apply.hpp"
-#include "boost/mpl/logical/and.hpp"
-#include "boost/mpl/logical/not.hpp"
+#include "boost/mpl/and.hpp"
+#include "boost/mpl/not.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/next.hpp"
 #include "boost/mpl/always.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/lambda.hpp"
 #include "boost/mpl/bind.hpp"
 #include "boost/mpl/apply.hpp"
@@ -51,9 +51,9 @@ struct equal_pred
         >
     struct apply
     {
-        typedef typename logical_and< 
-              logical_not< is_same<Iterator1,LastIterator1> >
-            , logical_not< is_same<Iterator2,LastIterator2> >
+        typedef typename and_< 
+              not_< is_same<Iterator1,LastIterator1> >
+            , not_< is_same<Iterator2,LastIterator2> >
             , aux::iter_apply2<Predicate,Iterator1,Iterator2>
             >::type type;
     };
@@ -81,12 +81,12 @@ struct equal
         , next<>
         , aux::equal_pred<pred_,last1_,last2_>
         , void_
-        , always<false_c>
+        , always<false_>
         > fold_;
 
     typedef typename fold_::iterator iter1_;
     typedef typename fold_::state iter2_;
-    typedef logical_and<
+    typedef and_<
           is_same<iter1_,last1_>
         , is_same<iter2_,last2_>
         > result_;

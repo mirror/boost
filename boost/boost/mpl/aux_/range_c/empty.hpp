@@ -18,7 +18,7 @@
 #define BOOST_MPL_AUX_RANGE_C_EMPTY_HPP_INCLUDED
 
 #include "boost/mpl/empty_fwd.hpp"
-#include "boost/mpl/comparison/equal_to.hpp"
+#include "boost/mpl/equal_to.hpp"
 #include "boost/mpl/aux_/range_c/tag.hpp"
 
 namespace boost {

@@ -26,7 +26,7 @@ namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
 
     typedef mpl::list10_c<int,10,11,12,13,14,15,16,17,18,19>::type numbers;
     typedef mpl::copy_backward<

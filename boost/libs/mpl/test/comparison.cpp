@@ -15,15 +15,15 @@
 // without express or implied warranty.
 
 #include "boost/mpl/comparison.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
 
 int main()
 {
-    typedef mpl::int_c<0> _0;
-    typedef mpl::int_c<10> _10;
+    typedef mpl::int_<0> _0;
+    typedef mpl::int_<10> _10;
 
     BOOST_STATIC_ASSERT((mpl::less<_0, _10>::value));
     BOOST_STATIC_ASSERT((!mpl::less<_10, _0>::value));

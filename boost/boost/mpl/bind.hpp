@@ -28,7 +28,7 @@
 #include "boost/mpl/aux_/config/static_constant.hpp"
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
-#   include "boost/mpl/placeholder.hpp"
+#   include "boost/mpl/placeholders.hpp"
 #   include "boost/mpl/void.hpp"
 #   include "boost/mpl/protect.hpp"
 #   include "boost/mpl/limits/arity.hpp"

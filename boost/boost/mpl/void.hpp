@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_VOID_HPP_INCLUDED
 #define BOOST_MPL_VOID_HPP_INCLUDED
 
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/config.hpp"
 
 namespace boost {
@@ -31,19 +31,19 @@ struct void_ {};
 
 template< typename T >
 struct is_void_
-    : false_c
+    : false_
 {
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
-    using false_c::value;
+    using false_::value;
 #endif
 };
 
 template<>
 struct is_void_<void_>
-    : true_c
+    : true_
 {
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
-    using true_c::value;
+    using true_::value;
 #endif
 };
 

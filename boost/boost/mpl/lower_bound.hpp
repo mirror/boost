@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_LOWER_BOUND_HPP_INCLUDED
 #define BOOST_MPL_LOWER_BOUND_HPP_INCLUDED
 
-#include "boost/mpl/comparison/less.hpp"
+#include "boost/mpl/less.hpp"
 #include "boost/mpl/lambda.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
@@ -26,20 +26,20 @@
 #endif
 
 #if !defined(BOOST_MPL_CFG_STRIPPED_DOWN_LOWER_BOUND_IMPL)
-#   include "boost/mpl/arithmetic/minus.hpp"
-#   include "boost/mpl/arithmetic/divides.hpp"
+#   include "boost/mpl/minus.hpp"
+#   include "boost/mpl/divides.hpp"
 #   include "boost/mpl/size.hpp"
 #   include "boost/mpl/advance.hpp"
 #   include "boost/mpl/begin_end.hpp"
 #   include "boost/mpl/integral_c.hpp"
-#   include "boost/mpl/int_c.hpp"
+#   include "boost/mpl/int.hpp"
 #   include "boost/mpl/apply_if.hpp"
 #   include "boost/mpl/apply.hpp"
 #   include "boost/mpl/aux_/apply.hpp"
 #   include "boost/mpl/aux_/deref_wknd.hpp"
 #   include "boost/mpl/aux_/value_wknd.hpp"
 #else
-#   include "boost/mpl/logical/not.hpp"
+#   include "boost/mpl/not.hpp"
 #   include "boost/mpl/find.hpp"
 #   include "boost/mpl/bind.hpp"
 #endif
@@ -60,7 +60,7 @@ template<
     , typename pred_ = typename lambda<Predicate>::type
     >
 struct lower_bound
-    : find_if< Sequence, bind1< logical_not<>, bind2<pred_,_,T> > >
+    : find_if< Sequence, bind1< not_<>, bind2<pred_,_,T> > >
 {
 };
 

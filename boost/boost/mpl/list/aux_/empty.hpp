@@ -18,7 +18,7 @@
 #define BOOST_MPL_LIST_AUX_EMPTY_HPP_INCLUDED
 
 #include "boost/mpl/empty_fwd.hpp"
-#include "boost/mpl/logical/not.hpp"
+#include "boost/mpl/not.hpp"
 #include "boost/mpl/list/aux_/tag.hpp"
 
 namespace boost {
@@ -28,7 +28,7 @@ template<>
 struct empty_traits< aux::list_tag >
 {
     template< typename List > struct algorithm
-        : logical_not<typename List::size>
+        : not_<typename List::size>
     {
     };
 };

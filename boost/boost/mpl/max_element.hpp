@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_MAX_ELEMENT_HPP_INCLUDED
 #define BOOST_MPL_MAX_ELEMENT_HPP_INCLUDED
 
-#include "boost/mpl/comparison/less.hpp"
+#include "boost/mpl/less.hpp"
 #include "boost/mpl/iter_fold.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/if.hpp"

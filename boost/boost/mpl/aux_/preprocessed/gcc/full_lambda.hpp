@@ -11,7 +11,7 @@ template<
     >
 struct lambda_impl
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef T type;
 };
 
@@ -31,13 +31,13 @@ template<
     , bool C5 = false
     >
 struct lambda_or
-    : true_c
+    : true_
 {
 };
 
 template<>
 struct lambda_or< false,false,false,false,false >
-    : false_c
+    : false_
 {
 };
 
@@ -46,7 +46,7 @@ struct lambda_or< false,false,false,false,false >
 template< int N, bool Protect >
 struct lambda_impl< arg<N>,Protect,-1 >
 {
-    typedef true_c is_le;
+    typedef true_ is_le;
     typedef arg<N> type;
 };
 
@@ -59,7 +59,7 @@ struct lambda_impl<
     , Protect, 1
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind0<
           F
         > type;
@@ -144,7 +144,7 @@ struct lambda_impl<
     , Protect, 2
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind1<
           F
         , T1
@@ -232,7 +232,7 @@ struct lambda_impl<
     , Protect, 3
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind2<
           F
         , T1, T2
@@ -321,7 +321,7 @@ struct lambda_impl<
     , Protect, 4
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind3<
           F
         , T1, T2, T3
@@ -415,7 +415,7 @@ struct lambda_impl<
     , Protect, 5
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind4<
           F
         , T1, T2, T3, T4
@@ -527,7 +527,7 @@ struct lambda_impl<
     , Protect, 6
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind5<
           F
         , T1, T2, T3, T4, T5
@@ -538,7 +538,7 @@ struct lambda_impl<
 template< typename T, bool Protect >
 struct lambda_impl< protect<T>,Protect,1 >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef protect<T> type;
 };
 
@@ -553,7 +553,7 @@ struct lambda_impl<
     , Protect, 6
     >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind< F,T1,T2,T3,T4,T5 > type;
 };
 
@@ -563,7 +563,7 @@ template<
     >
 struct lambda_impl< bind1st<F,T>,Protect,2 >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind1st< F,T > type;
 };
 
@@ -573,7 +573,7 @@ template<
     >
 struct lambda_impl< bind2nd<F,T>,Protect,2 >
 {
-    typedef false_c is_le;
+    typedef false_ is_le;
     typedef bind2nd< F,T > type;
 };
 

@@ -15,7 +15,7 @@
 // without express or implied warranty.
 
 #include "boost/mpl/is_placeholder.hpp"
-#include "boost/mpl/placeholder.hpp"
+#include "boost/mpl/placeholders.hpp"
 
 #include "boost/preprocessor/repeat.hpp"
 #include "boost/preprocessor/inc.hpp"

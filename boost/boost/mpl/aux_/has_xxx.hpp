@@ -55,7 +55,7 @@ struct trait \
 #   else
 
 #include "boost/mpl/if.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/preprocessor/cat.hpp"
 
 // agurt, 11/sep/02: MSVC version, based on a USENET newsgroup's posting by 
@@ -104,7 +104,7 @@ struct BOOST_PP_CAT(trait,_impl) : T \
 template< typename T > struct trait \
     : boost::mpl::if_c< \
           boost::mpl::aux::msvc_is_incomplete<T>::value \
-        , boost::mpl::bool_c<false> \
+        , boost::mpl::bool_<false> \
         , BOOST_PP_CAT(trait,_impl)<T> \
         >::type \
 { \

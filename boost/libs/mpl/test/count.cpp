@@ -17,7 +17,7 @@
 #include "boost/mpl/count.hpp"
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/list_c.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;

@@ -18,8 +18,8 @@
 #define BOOST_MPL_VECTOR_AUX_EMPTY_HPP_INCLUDED
 
 #include "boost/mpl/empty_fwd.hpp"
-#include "boost/mpl/logical/not.hpp"
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/not.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/vector/aux_/tag.hpp"
 #include "boost/mpl/aux_/config/vector.hpp"
 #include "boost/config.hpp"
@@ -33,7 +33,7 @@ template<>
 struct empty_traits< aux::vector_tag >
 {
     template< typename Vector > struct algorithm
-        : logical_not< typename Vector::size >
+        : not_< typename Vector::size >
     {
     };
 };
@@ -44,7 +44,7 @@ template<>
 struct empty_traits< aux::vector_tag<0> >
 {
     template< typename Vector > struct algorithm
-        : true_c
+        : true_
     {
     };
 };
@@ -55,7 +55,7 @@ template< long N >
 struct empty_traits< aux::vector_tag<N> >
 {
     template< typename Vector > struct algorithm
-        : false_c
+        : false_
     {
     };
 };

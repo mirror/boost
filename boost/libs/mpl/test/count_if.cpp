@@ -17,8 +17,8 @@
 #include "boost/mpl/count_if.hpp"
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/list_c.hpp"
-#include "boost/mpl/comparison/less.hpp"
-#include "boost/mpl/comparison/equal_to.hpp"
+#include "boost/mpl/less.hpp"
+#include "boost/mpl/equal_to.hpp"
 #include "boost/type_traits/is_float.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "boost/static_assert.hpp"
@@ -27,7 +27,7 @@ namespace mpl = boost::mpl;
 
 int main()
 {
-    using namespace mpl::placeholder;
+    using namespace mpl::placeholders;
     typedef mpl::list<int,char&,long,short,char&,long,double,long> types;
     typedef mpl::list_c<int,1,0,5,1,7,5,0,5> values;
     

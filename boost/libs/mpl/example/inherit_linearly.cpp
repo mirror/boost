@@ -15,13 +15,13 @@
 // without express or implied warranty.
 
 #include "boost/mpl/inherit_linearly.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/list.hpp"
 
 #include <iostream>
 
 namespace mpl = boost::mpl;
-using namespace mpl::placeholder;
+using namespace mpl::placeholders;
 
 template< typename Base, typename T >
 struct tuple_part
@@ -36,7 +36,7 @@ struct tuple_part
 
 struct empty_tuple
 {
-    typedef mpl::int_c<-1> index;
+    typedef mpl::int_<-1> index;
 };
 
 
@@ -51,14 +51,14 @@ int main()
 {
     my_tuple t;
     
-    field(t, mpl::int_c<0>()) = -1;
-    field(t, mpl::int_c<1>()) = "text";
-    field(t, mpl::int_c<2>()) = false;
+    field(t, mpl::int_<0>()) = -1;
+    field(t, mpl::int_<1>()) = "text";
+    field(t, mpl::int_<2>()) = false;
 
     std::cout
-        << field(t, mpl::int_c<0>()) << '\n'
-        << field(t, mpl::int_c<1>()) << '\n'
-        << field(t, mpl::int_c<2>()) << '\n'
+        << field(t, mpl::int_<0>()) << '\n'
+        << field(t, mpl::int_<1>()) << '\n'
+        << field(t, mpl::int_<2>()) << '\n'
         ;
 
     return 0;

@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_MATH_IS_EVEN_HPP_INCLUDED
 #define BOOST_MPL_MATH_IS_EVEN_HPP_INCLUDED
 
-#include "boost/mpl/bool_c.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
@@ -30,7 +30,7 @@ template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(N)
     >
 struct is_even
-    : bool_c<((N::value % 2) == 0)>
+    : bool_<((N::value % 2) == 0)>
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_even,(N))
 };

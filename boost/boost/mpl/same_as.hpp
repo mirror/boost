@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_SAME_AS_HPP_INCLUDED
 #define BOOST_MPL_SAME_AS_HPP_INCLUDED
 
-#include "boost/mpl/logical/not.hpp"
+#include "boost/mpl/not.hpp"
 #include "boost/mpl/aux_/lambda_spec.hpp"
 #include "boost/type_traits/is_same.hpp"
 
@@ -43,11 +43,11 @@ struct not_same_as
 {
     template< typename T2 > struct apply
 #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x51 && defined(BOOST_STRICT_CONFIG))
-        : logical_not< is_same<T1,T2> >
+        : not_< is_same<T1,T2> >
     {
 #else
     {
-        typedef typename logical_not< is_same<T1,T2> >::type type;
+        typedef typename not_< is_same<T1,T2> >::type type;
 #endif
     };
 };

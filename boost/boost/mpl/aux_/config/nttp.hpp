@@ -38,6 +38,8 @@
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
 
+#include "boost/preprocessor/cat.hpp"
+
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 namespace boost { namespace mpl {
 typedef int     nttp_int;
@@ -45,7 +47,7 @@ typedef long    nttp_long;
 }}
 #endif
 
-#   define BOOST_MPL_AUX_NTTP_DECL(T, x) nttp_##T x /**/
+#   define BOOST_MPL_AUX_NTTP_DECL(T, x) BOOST_PP_CAT(nttp_,T) x /**/
 
 #else
 #   define BOOST_MPL_AUX_NTTP_DECL(T, x) T x /**/

@@ -18,7 +18,7 @@
 #define BOOST_MPL_AUX_RANGE_C_SIZE_HPP_INCLUDED
 
 #include "boost/mpl/size_fwd.hpp"
-#include "boost/mpl/arithmetic/minus.hpp"
+#include "boost/mpl/minus.hpp"
 #include "boost/mpl/aux_/range_c/tag.hpp"
 
 namespace boost {

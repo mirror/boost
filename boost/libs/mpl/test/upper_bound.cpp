@@ -17,8 +17,8 @@
 #include "boost/mpl/upper_bound.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/list_c.hpp"
-#include "boost/mpl/comparison/less.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/less.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
@@ -26,7 +26,7 @@ namespace mpl = boost::mpl;
 int main()
 {
     typedef mpl::list_c<int,1,2,3,3,3,5,8> numbers;
-    typedef mpl::upper_bound< numbers, mpl::int_c<3> >::type iter;
+    typedef mpl::upper_bound< numbers, mpl::int_<3> >::type iter;
     BOOST_STATIC_ASSERT((mpl::distance< mpl::begin<numbers>::type,iter >::type::value == 5));
     BOOST_STATIC_ASSERT(iter::type::value == 5);
     return 0;

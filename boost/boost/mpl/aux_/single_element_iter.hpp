@@ -18,9 +18,9 @@
 #define BOOST_MPL_AUX_SINGLE_ELEMENT_ITER_HPP_INCLUDED
 
 #include "boost/mpl/iterator_tag.hpp"
-#include "boost/mpl/arithmetic/plus.hpp"
-#include "boost/mpl/arithmetic/minus.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/plus.hpp"
+#include "boost/mpl/minus.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/aux_/iterator_names.hpp"
 #include "boost/mpl/aux_/lambda_spec.hpp"
@@ -39,12 +39,12 @@ template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct single_iter_base
 {
     typedef ra_iter_tag_ category;
-    typedef int_c<N> position;
+    typedef int_<N> position;
 
     template< typename D >
     struct BOOST_MPL_AUX_ITERATOR_ADVANCE
     {
-        typedef plus< int_c<N>,D > n_;
+        typedef plus< int_<N>,D > n_;
         typedef single_element_iter<
               T
             , BOOST_MPL_AUX_VALUE_WKND(n_)::value
@@ -56,7 +56,7 @@ struct single_iter_base
     {
         typedef typename minus<
               typename U::position
-            , int_c<N>
+            , int_<N>
             >::type type;
     };
 };

@@ -17,8 +17,8 @@
 #include "boost/mpl/copy_if.hpp"
 #include "boost/mpl/list_c.hpp"
 #include "boost/mpl/push_front.hpp"
-#include "boost/mpl/comparison/less.hpp"
-#include "boost/mpl/int_c.hpp"
+#include "boost/mpl/less.hpp"
+#include "boost/mpl/int.hpp"
 #include "boost/mpl/equal.hpp"
 #include "boost/mpl/size.hpp"
 #include "boost/static_assert.hpp"
@@ -34,7 +34,7 @@ int main()
           numbers
         , mpl::list0_c<int>
         , mpl::push_front<_,_>
-        , mpl::less<_,mpl::int_c<5> >
+        , mpl::less<_,mpl::int_<5> >
         >::type result;
 
     BOOST_STATIC_ASSERT(mpl::size<result>::value == 5);

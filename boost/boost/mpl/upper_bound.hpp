@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_UPPER_BOUND_HPP_INCLUDED
 #define BOOST_MPL_UPPER_BOUND_HPP_INCLUDED
 
-#include "boost/mpl/comparison/less.hpp"
+#include "boost/mpl/less.hpp"
 #include "boost/mpl/lambda.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
@@ -26,13 +26,13 @@
 #endif
 
 #if !defined(BOOST_MPL_CFG_STRIPPED_DOWN_UPPER_BOUND_IMPL)
-#   include "boost/mpl/arithmetic/minus.hpp"
-#   include "boost/mpl/arithmetic/divides.hpp"
+#   include "boost/mpl/minus.hpp"
+#   include "boost/mpl/divides.hpp"
 #   include "boost/mpl/size.hpp"
 #   include "boost/mpl/advance.hpp"
 #   include "boost/mpl/begin_end.hpp"
 #   include "boost/mpl/integral_c.hpp"
-#   include "boost/mpl/int_c.hpp"
+#   include "boost/mpl/int.hpp"
 #   include "boost/mpl/apply_if.hpp"
 #   include "boost/mpl/apply.hpp"
 #   include "boost/mpl/aux_/apply.hpp"
