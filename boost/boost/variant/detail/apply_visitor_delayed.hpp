@@ -14,13 +14,13 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_VISITOR_APPLY_VISITOR_DELAYED_HPP
-#define BOOST_VISITOR_APPLY_VISITOR_DELAYED_HPP
+#ifndef BOOST_VARIANT_DETAIL_APPLY_VISITOR_DELAYED_HPP
+#define BOOST_VARIANT_DETAIL_APPLY_VISITOR_DELAYED_HPP
+
+#include "boost/variant/detail/generic_result_type.hpp"
 
 #include "boost/variant/detail/apply_visitor_unary.hpp"
 #include "boost/variant/detail/apply_visitor_binary.hpp"
-
-#include "boost/variant/detail/define_forwarding_func.hpp"
 
 namespace boost {
 
@@ -42,7 +42,7 @@ namespace boost {
 template <typename Visitor>
 class apply_visitor_delayed_t
 {
-public: // typedefs
+public: // visitor typedefs
 
     typedef typename Visitor::result_type
         result_type;
@@ -58,44 +58,23 @@ public: // structors
     {
     }
 
-public: // unary function operators
+public: // unary visitor interface
 
-#   define BOOST_AUX_APPLY_VISITOR_DELAYED_T_UNARY_FUNC_OPERATOR(CV__)    \
-    template <typename Visitable>                       \
-    result_type operator()(                             \
-          CV__ Visitable& visitable                     \
-        )                                               \
-    {                                                   \
-        return apply_visitor(visitor_, visitable);      \
-    }                                                   \
-    /**/
+    template <typename Visitable>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(Visitable& visitable)
+    {
+        return apply_visitor(visitor_, visitable);
+    }
 
-    BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(
-          BOOST_AUX_APPLY_VISITOR_DELAYED_T_UNARY_FUNC_OPERATOR
-        , 1
-        )
+public: // binary visitor interface
 
-#   undef BOOST_AUX_APPLY_VISITOR_DELAYED_T_UNARY_FUNC_OPERATOR
-
-public: // binary function operators
-
-#   define BOOST_AUX_APPLY_VISITOR_DELAYED_T_BINARY_FUNC_OPERATOR(CV1__, CV2__)   \
-    template <typename Visitable1, typename Visitable2>         \
-    result_type operator()(                                     \
-          CV1__ Visitable1& visitable1                          \
-        , CV2__ Visitable2& visitable2                          \
-        )                                                       \
-    {                                                           \
-        return apply_visitor(visitor_, visitable1, visitable2); \
-    }                                                           \
-    /**/
-
-    BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(
-          BOOST_AUX_APPLY_VISITOR_DELAYED_T_BINARY_FUNC_OPERATOR
-        , 2
-        )
-
-#   undef BOOST_AUX_APPLY_VISITOR_DELAYED_T_BINARY_FUNC_OPERATOR
+    template <typename Visitable1, typename Visitable2>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(Visitable1& visitable1, Visitable2& visitable2)
+    {
+        return apply_visitor(visitor_, visitable1, visitable2);
+    }
 
 };
 
@@ -107,4 +86,4 @@ inline apply_visitor_delayed_t<Visitor> apply_visitor(Visitor& visitor)
 
 } // namespace boost
 
-#endif // BOOST_VISITOR_APPLY_VISITOR_DELAYED_HPP
+#endif // BOOST_VARIANT_DETAIL_APPLY_VISITOR_DELAYED_HPP

@@ -17,8 +17,10 @@
 #ifndef BOOST_VARIANT_DETAIL_APPLY_VISITOR_BINARY_HPP
 #define BOOST_VARIANT_DETAIL_APPLY_VISITOR_BINARY_HPP
 
-#include "boost/variant/detail/apply_visitor_unary.hpp"
+#include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/define_forwarding_func.hpp"
+
+#include "boost/variant/detail/apply_visitor_unary.hpp"
 
 namespace boost {
 
@@ -30,95 +32,96 @@ namespace boost {
 // expression visitor(x, y).
 //
 
-namespace detail { namespace visitor {
+namespace detail { namespace variant {
 
 template <typename Visitor, typename Value1>
-class binary_delay0
+class apply_visitor_binary_invoke
 {
-public:
+public: // visitor typedefs
+
     typedef typename Visitor::result_type
         result_type;
 
-private:
+private: // representation
+
     Visitor& visitor_;
     Value1& value1_;
 
-public:
-    binary_delay0(Visitor& visitor, Value1& value1)
+public: // structors
+
+    apply_visitor_binary_invoke(Visitor& visitor, Value1& value1)
         : visitor_(visitor)
         , value1_(value1)
     {
     }
 
-    template <typename Value0>
-    result_type operator()(Value0& value0)
+public: // visitor interfaces
+
+    template <typename Value2>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(Value2& value2)
     {
-        return visitor_(value0, value1_);
+        return visitor_(value1_, value2);
     }
 
-    template <typename Value0>
-    result_type operator()(const Value0& value0)
-    {
-        return visitor_(value0, value1_);
-    }
 };
 
-template <typename Visitor, typename Visitable1>
-class binary_delay1
+template <typename Visitor, typename Visitable2>
+class apply_visitor_binary_unwrap
 {
-public:
+public: // visitor typedefs
+
     typedef typename Visitor::result_type
         result_type;
 
-private:
-    Visitor& visitor_;
-    Visitable1& visitable1_;
+private: // representation
 
-public:
-    binary_delay1(Visitor& visitor, Visitable1& visitable1)
+    Visitor& visitor_;
+    Visitable2& visitable2_;
+
+public: // structors
+
+    apply_visitor_binary_unwrap(Visitor& visitor, Visitable2& visitable2)
         : visitor_(visitor)
-        , visitable1_(visitable1)
+        , visitable2_(visitable2)
     {
     }
 
-#   define BOOST_AUX_BINARY_VISITOR_DELAY1_FUNC_OPERATOR(CV__)  \
-    template <typename Visitable2>                              \
-    result_type operator()(CV__ Visitable2& visitable2)         \
-    {                                                           \
-        binary_delay0<                                          \
-              Visitor                                           \
-            , CV__ Visitable2                                   \
-            > delayer(visitor_, visitable2);                    \
-        return boost::apply_visitor(delayer, visitable1_);      \
-    }                                                           \
-    /**/
+public: // visitor interfaces
 
-    BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(
-          BOOST_AUX_BINARY_VISITOR_DELAY1_FUNC_OPERATOR
-        , 1
-        )
+    template <typename Value1>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(Value1& value1)
+    {
+        apply_visitor_binary_invoke<
+              Visitor
+            , Value1
+            > invoker(visitor_, value1);
 
-#   undef BOOST_AUX_BINARY_VISITOR_DELAY1_FUNC_OPERATOR
+        return boost::apply_visitor(invoker, visitable2_);
+    }
+
 };
 
-}} // namespace detail::visitor
+}} // namespace detail::variant
 
-#define BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(CV1__, CV2__, CV3__)         \
-    template <typename Visitor, typename Visitable1, typename Visitable2>   \
-    inline                                                                  \
-        typename Visitor::result_type                                       \
-    apply_visitor(                                                          \
-          CV1__ Visitor& visitor                                            \
-        , CV2__ Visitable1& visitable1                                      \
-        , CV3__ Visitable2& visitable2                                      \
-        )                                                                   \
-    {                                                                       \
-        detail::visitor::binary_delay1<                                     \
-              CV1__ Visitor                                                 \
-            , CV2__ Visitable1                                              \
-            > delayer(visitor, visitable1);                                 \
-        return boost::apply_visitor(delayer, visitable2);                   \
-    }                                                                       \
+#define BOOST_VARIANT_AUX_APPLY_VISITOR_BINARY(CV1_, CV2_, CV3_)               \
+    template <typename Visitor, typename Visitable1, typename Visitable2>      \
+    inline                                                                     \
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)   \
+    apply_visitor(                                                             \
+          CV1_ Visitor& visitor                                                \
+        , CV2_ Visitable1& visitable1                                          \
+        , CV3_ Visitable2& visitable2                                          \
+        )                                                                      \
+    {                                                                          \
+        detail::variant::apply_visitor_binary_unwrap<                          \
+              CV1_ Visitor                                                     \
+            , CV2_ Visitable2                                                  \
+            > unwrapper(visitor, visitable2);                                  \
+                                                                               \
+        return boost::apply_visitor(unwrapper, visitable1);                    \
+    }                                                                          \
     /**/
 
 BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(
