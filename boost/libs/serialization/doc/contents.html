@@ -48,21 +48,24 @@ function collapse_all() {
   }
 }
 
-if(navigator.appName.indexOf("Netscape") != -1){
-	document.onclick = clickHandlerNS;
-	
-}
-else
-if(navigator.appName.indexOf("Microsoft") != -1){
-	document.onclick = clickHandlerIE;
+
+function initialize() {
+  if(navigator.appName.indexOf("Netscape") != -1){
+    document.onclick = clickHandlerNS;
+    collapse_all();
+  }
+  else
+  if(navigator.appName.indexOf("Microsoft") != -1){
+    document.onclick = clickHandlerIE;
+    collapse_all();
+  }
 }
 
 //-->
 </script>
 
 </head>
-<body onload="collapse_all()">
-<body>
+<body onload="initialize()">
 <h2>Contents</h2>
 <small>
 <!--
