@@ -124,9 +124,9 @@ namespace detail{
  * types (although the standard forbids use of offsetof on these),
  * so it serves as a workaround in this compiler for all practical
  * purposes.
- * Surprisingly enough, other compilers (Intel C++ 7.1 at least)
- * have similar bugs. This replacement of member<> can be used for
- * them too.
+ * Surprisingly enough, other compilers, like Intel C++ 7.0/7.1 and
+ * Visual Age 6.0, have similar bugs. This replacement of member<>
+ * can be used for them too.
  */
 
 template<class Class,typename Type,std::size_t OffsetOfMember>
@@ -209,7 +209,7 @@ struct member_offset:
 };
 
 /* A proposal has been issued to add a defect macro in Boost.Config to detect
- * this problem with pointer to members as template arguments. While
+ * this problem with pointers to members as template arguments. While
  * the macro gets into the library, we follow our own heuristics in order to
  * define BOOST_MULTI_INDEX_MEMBER as a convenient wrapper of member<> and
  * member_offset<>
@@ -218,7 +218,8 @@ struct member_offset:
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) ||\
     defined(BOOST_MSVC)&&(BOOST_MSVC<1310) ||\
     defined(BOOST_INTEL_CXX_VERSION)&&defined(_MSC_VER)&&\
-           (BOOST_INTEL_CXX_VERSION<=700)
+           (BOOST_INTEL_CXX_VERSION<=700) ||\
+    defined(__IBMCPP__)&&(__IBMCPP__<=600)
 #define BOOST_MULTI_INDEX_MEMBER(Class,Type,MemberName) \
 ::boost::multi_index::member_offset<Class,Type,offsetof(Class,MemberName)>
 #else
