@@ -373,10 +373,24 @@ template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 
 // get_deleter (experimental)
 
+#if defined(__GNUC__) &&  (__GNUC__ < 3)
+
+// g++ 2.9x doesn't allow static_cast<X const *>(void *)
+
+template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
+{
+    void const * q = p._internal_get_deleter(typeid(D));
+    return const_cast<D *>(static_cast<D const *>(q));
+}
+
+#else
+
 template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 {
     return static_cast<D *>(p._internal_get_deleter(typeid(D)));
 }
+
+#endif
 
 } // namespace boost
 
