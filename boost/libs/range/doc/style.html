@@ -2,145 +2,122 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Boost.Range Terminology and Style Guidelines </title>
-<link rel="stylesheet" href="style.css" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Terminology and Style Guidelines </title>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
-<body>
+    <body>
 
-  <table border="0" >
-    <tr>
-      <td ><img src="cboost.gif" border="0" ></td>
-      <td >
-        <h1 align="center">Boost.Range terminology and style guidelines</h1>
-      </td>
-    </tr>
-  </table>
-  
-  <p>
-  The use of a consistent terminologi is as important for 
-  iterator <a href="range.html#range">Range</a>s and 
-  <a href="range.html#external_range">ExternalRange</a>-based algorithms
-  as it is for iterators and iterator-based algorithms. 
-  If a conventional set of names are adopted, we can avoid misunderstandings 
-  and write generic function prototypes that are <i>self-documenting</i>.
-   </p>
-   
-   <p>
-   Since iterator ranges are characterized by a specific underlying
-   iterator type, we get a type of iterator range for each type of  
-   iterator. Hence we can speak of the following types of iterator
-   ranges:
-   <ul>
-       <li> Range
-       <li> ReversibleRange    
-       <li> <i>Value access</i> category:
-           <ul>
-               <li> ReadableRange
-               <li> WriteableRange   
-               <li> SwappableRange    
-               <li> LvalueRange
-           </ul>
-       <li> <i>Traversal</i> category:    
-           <ul>
-               <li> IncrementableRange
-               <li> SinglePassRange    
-               <li> ForwardRange    
-               <li> BidirectionalRange    
-               <li> RandomAccessRange   
-           </ul>
-   </ul>
-   Notice how we have used the categories from the 
-   <a href=../../iterator/doc/new-iter-concepts.html>new style iterators</a>. 
-   Similarly, for <a href="range.html#external_range">ExternalRange</a> 
-   we have
-   <ul>
-       <li> XRange
-       <li> XReversibleRange    
-       <li> <i>Value access</i> category:
-           <ul>
-               <li> XReadableRange
-               <li> XWriteableRange   
-               <li> XSwappableRange    
-               <li> XLvalueRange
-           </ul>
-       <li> <i>Traversal</i> category:    
-           <ul>
-               <li> XIncrementableRange
-               <li> XSinglePassRange    
-               <li> XForwardRange    
-               <li> XBidirectionalRange    
-               <li> XRandomAccessRange   
-           </ul>
-   </ul>
-   The convention of using an <code>X</code> to mean "External" save us from 
-rediculously long parameter names and is easy to associate with an
-   <a href=external_concepts.html>external concept</a>. 
-   
-   <p>
-   Notice that an interator (and therefore an iterator range) has
-   one <i>traversal</i> property and one or more properties from the 
-   <i>value access</i> category. So in reality we will mostly talk about 
-   mixtures such as <ul> <li>RandomAccessReadableWriteableRange
-       <li>XForwardLvalueRange
-   </ul>
-   By convention, we should always specify the <i>travelsal</i> property first
-   as done above. This seems resonable since there will only be one 
-   <i>traversal</i> property, but perhaps many <i>value acccess</i> properties. 
-   </p>
- 
-   <p>
-   As an example, consider how we specify the interface of 
-   <code>std::sort()</code>. The iterator-based version looks like 
-   this:
-   
-   <pre>
+    <table border="0" >
+        <tr>
+            <td ><img src="cboost.gif" border="0" ></td>
+            <td ><h1 align="center">Boost.Range </h1></td> </tr>
+    </table>
+
+    <h2>Terminology and style guidelines </h2>
+    
+    <p>
+    The use of a consistent terminologi is as important for iterator <a href="range.html#range">Range</a>s 
+    and <a href="range.html#external_range">ExternalRange</a>-based algorithms as it 
+    is for iterators and iterator-based algorithms. If a conventional set of names 
+    are adopted, we can avoid misunderstandings and write generic function 
+    prototypes that are <i>self-documenting</i>.
+    </p>
+
+    <p>
+    Since iterator ranges are characterized by a specific underlying iterator type, 
+    we get a type of iterator range for each type of iterator. Hence we can speak of 
+    the following types of iterator ranges:
+    <ul>
+        <li>
+            Range
+        <li>
+            ReversibleRange
+        <li>
+            <i>Value access</i> category:
+            <ul>
+                <li>
+                    ReadableRange
+                <li>
+                    WriteableRange
+                <li>
+                    SwappableRange
+                <li>
+                    LvalueRange
+            </ul>
+        <li>
+            <i>Traversal</i> category:
+            <ul>
+                <li>
+                    IncrementableRange
+                <li>
+                    SinglePassRange
+                <li>
+                    ForwardRange
+                <li>
+                    BidirectionalRange
+                <li>
+                    RandomAccessRange
+            </ul>
+    </ul>
+    Notice how we have used the categories from the <a href=../../iterator/doc/new-iter-concepts.html>new 
+    style iterators</a>.
+     
+    <p>
+    Notice that an interator (and therefore an iterator range) has one <i>traversal</i> 
+    property and one or more properties from the <i>value access</i> category. So in 
+    reality we will mostly talk about mixtures such as 
+    <ul>
+        <li>
+            RandomAccessReadableWriteableRange
+        <li>
+            ForwardLvalueRange
+    </ul>
+    By convention, we should always specify the <i>travelsal</i> property first as 
+    done above. This seems resonable since there will only be one <i>traversal</i> 
+    property, but perhaps many <i>value acccess</i> properties.
+    </p>
+
+    <p>
+    As an example, consider how we specify the interface of <code>std::sort()</code>. 
+    The iterator-based version looks like this:
+
+    <pre>
    template< class RandomAccessTraversalReadableWritableIterator >
    void sort( RandomAccessTraversalReadableWritableIterator first,
               RandomAccessTraversalReadableWritableIterator last );
    </pre>
-   For external iterator ranges the interface becomes
-   
-   <pre>
-   template< class XRandomAccessReadableWritableRange >
-   void sort( XRandomAccessReadableWritableRange& r );
-   </pre>
-   Had the function been specified like
-   
-   <pre>
+    For iterator ranges the interface becomes
+
+    <pre>
    template< class RandomAccessReadableWritableRange >
    void sort( RandomAccessReadableWritableRange& r );
    </pre>
-   
-   we should expect the underlying code to call <code>r.begin()</code> 
-   and <code>r.end()</code> to extract the iterators instead of
-   <code>begin( r )</code> and <code>end( r )</code>. In general
-   it is much more flexible to rely on external iterator ranges
-   than iterator ranges.
-   </p>
- </p>
-   
-  
-  <hr>
-  <p>
+
+
+    </p>
+
+
+    <hr>
+    <p>
     (C) Copyright Thorsten Ottosen 2003-2004
-  </p>
+    </p>
 
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
 
-</body>
+    </body>
 </html>
 

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Introduction </title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="cboost.gif" border="0" ></td>
+            <td ><h1 align="center">Boost.Range</h1></td>
+        </tr>
+    </table>
+
+    <h2>Introduction</h2>
+    <p>
+    This library makes it possible to treat different types as if they have 
+    implemented a subset of the container requirements (see &sect;23.1of the C++ 
+    standard). Formally, that subset is defined by the  <a href="Range.htm"
+  target="_self" >Range</a> concept. The subset deals mostly with iterator 
+  returning functions and nested <code >typedef</code>s. The main goal is to treat 
+  built-in arrays, standard containers, pairs of iterators and some iterators 
+  uniformly.
+    </p>
+    <p  >
+    The main advantages are
+    <ul  >
+        <li  >
+            safe use of built-in arrays
+        </li>
+        <li  >
+            simpler implementation of generic container algorithms
+        </li>
+        <li  >
+            more flexible client code
+        </li>
+        <li  >
+            correct handling of null-terminated strings
+        </li>
+    </ul>
+    </p>
+    <p  >
+    Below are given a small example (the complete example can be found <a href="../test/algorithm_example.cpp" target="_self" >here</a> 
+    ):
+    <pre  >
+       
+       //
+       // Example: extracting bounds in generic algorithms
+       //
+                       
+       template&lt; typename XRange, typename T &gt;
+       inline typename boost::iterator_of&lt;XRange&gt;::type
+       find( XRange& c, const T& value )
+       {
+           return std::find( boost::begin( c ), boost::end( c ), value );
+       }
+
+       template&lt; typename XRange, typename T &gt;
+       inline typename boost::const_iterator_of&lt;XRange&gt;::type
+       find( const XRange& c, const T& value )
+       {
+           return std::find( boost::begin( c ), boost::end( c ), value );
+       }
+                       
+       //
+       // replace first value and return its index
+       //
+       template&lt; typename EC, typename T &gt;
+       inline typename boost::size_type_of&lt; EC &gt;::type
+       my_generic_replace( EC& c, const T& value, const T& replacement )
+       {
+           typename boost::const_iterator_of&lt;EC&gt;::type found = find( c, value );
+           *found = replacement;
+           return std::distance( boost::begin( c ), found );
+       }
+                       
+       //
+       // usage
+       //
+       std::vector&lt;int&gt;              my_vector;
+       typedef vector&lt;int&gt;::iterator iterator;
+       std::pair&lt;iterator,iterator&gt;  my_view( my_vector.begin(), my_vector.begin(
+       ) + N );
+       char str[] = "a string";
+       // ...
+       std::cout &lt;&lt; my_generic_replace( my_vector, 4, 2 )
+                 &lt;&lt; my_generic_replace( my_view, 4, 2 )
+                 &lt;&lt; my_generic_replace( str, 'a', 'b' );
+       </pre>
+
+    By using the free-standing functions and type-generators, the code automatically 
+    works for all the types supported by this library. Notice that we have to 
+    provide two version of <code  >find()</code> since we cannot forward a non-const 
+    rvalue with reference arguments (see this article about  <a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_self" >The 
+    Forwarding Problem</a> ).
+
+    </p>
+
+
+    <hr>
+    <p>
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    </body>
+</html>
+

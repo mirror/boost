@@ -1,112 +1,128 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title> Boost.Range External Range Implementation </title><meta http-equiv="Content-Type"content="text/html; charset=iso-8859-1"></head> <body><table  ><tr  ><td  ><img src="cboost.gif" width="100%" border="0"></td><td  ><h1  ><br>Boost.Range External Range Implementation </h1></td></tr></table><ul  ><li  ><a href="#Introduction" >Introduction</a></li><li  ><a href="#Reference" >Reference</a></li><ul  ><li  ><a href="#Synopsis" >Synopsis</a></li><li  ><a href="#Library headers" >Library headers</a></li><li  ><a href="#Semantics" >Semantics</a></li></ul><li  ><a href="#Examples" >Examples</a></li><li  ><a href="#Portability" >Portability</a></li><li  ><a href="#FAQ" >FAQ</a></li><li  ><a href="#History" >History</a></li></ul><hr size="1" ><h2  >Introduction</h2><a name="Introduction" ></a><p  >This library makes it possible to treat different types as if they have 
-                     implemented a subset of the container requirements 
-                     (see &sect;23.1of the C++ standard). Formally, that subset is defined by
-                     the  <a href="Collection.htm" target="_self" >CollectionConcept.</a>  
-                    The subset deals mostly with
-                     iterator returning functions and nested <code  >typedef</code>s.
-                    The main goal is to treat built-in arrays, standard containers,
-                     pairs of iterators and some iterators uniformly. Formally, this library is an implementation
-                    of the <a href="#ExternalCollectionConcept" >ExternalCollectionConcept</a> (see also this explanation of  <a href="external_concepts.html" target="_self" >External Concepts</a> ).</p><p  >The main advantages are <ul  ><li  >safe use of built-in arrays</li><li  >simpler implementation of generic container algorithms</li><li  >more flexible client code</li><li  >correct handling of null-terminated strings</li></ul></p><p  >Below are given a small example (the complete example can be found <a href="../test/algorithm_example.cpp" target="_self" >here</a> ):<pre  >
-       //
-       // Example: extracting bounds in generic algorithms
-       //                
-                       
-       template&lt; typename ExternalCollection, typename T &gt;
-       inline typename boost::iterator_of&lt;ExternalCollection&gt;::type
-       find( ExternalCollection& c, const T& value )
-       {
-           return std::find( boost::begin( c ), boost::end( c ), value );
-       }
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>Boost.Range Range Implementation </title>
+    <meta http-equiv="Content-Type"content="text/html; charset=iso-8859-1">
+</head>
 
-       template&lt; typename ExternalCollection, typename T &gt;
-       inline typename boost::const_iterator_of&lt;ExternalCollection&gt;::type 
-       find( const ExternalCollection& c, const T& value )
-       {
-           return std::find( boost::begin( c ), boost::end( c ), value );
-       }
-                       
-       // 
-       // replace first value and return its index
-       //                                
-       template&lt; typename EC, typename T &gt;
-       inline typename boost::size_type_of&lt; EC &gt;::type
-       my_generic_replace( EC& c, const T& value, const T& replacement )
-       {
-           typename boost::const_iterator_of&lt;EC&gt;::type found = find( c, value );
-           *found = replacement;
-           return std::distance( boost::begin( c ), found );
-       }                  
-                       
-       // 
-       // usage
-       //                                
-       std::vector&lt;int&gt;              my_vector;
-       typedef vector&lt;int&gt;::iterator iterator;
-       std::pair&lt;iterator,iterator&gt;  my_view( my_vector.begin(), my_vector.begin() + N );
-       char str[] = "a string";
-       // ...
-       std::cout &lt;&lt; my_generic_replace( my_vector, 4, 2 )
-                 &lt;&lt; my_generic_replace( my_view, 4, 2 )
-                 &lt;&lt; my_generic_replace( str, 'a', 'b' );
-       </pre>By using the free-standing functions and type-generators, the code automatically 
-         works for all the types supported by this library. Notice that we have to provide
-         two version of <code  >find()</code> since we cannot 
-         forward a non-const rvalue with reference arguments (see this article about  <a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_self" >The Forwarding Problem</a> ).</p><hr size="1" ><h2  >Reference</h2><a name="Reference" ></a><p  ><pre  >#include &lt;boost/collection_traits.hpp&gt;</pre></p><p  >Five types of objects are currently supported by the library:<ul  ><li  >standard containers</li><li  >built-in arrays</li><li  >null terminated strings (this includes <code  >char[]</code>,<code  >wchar_t[]</code>,<code  >char*</code>, and <code  >wchar_t*</code>)</li><li  ><code  >std::pair&lt;iterator,iterator&gt;</code></li><li  >iterators which when default constructed denotes the end of the range</li></ul>It is worth noticing that some functionality requires partial template specialization, in particular,
-                    full array support does (remark: this is a very small problem since one would use <code>boost::array<></code>
-                     anyway). Also note that arrays and pointers of <code  >char</code> or <code  >whar_t</code> are treated special because of their use in string algorithms.</p><h3  >ExternalCollectionConcept</h3><a name="ExternalCollectionConcept" ></a><p  >The concept is defined by the type-generators and the
-                                      functions below. Even though these functions are defined in
-                                      namespace <code>boost</code>, there is no such general requirement, that is,
-                                     if one wants to extend the list of supported types, it can be done in any
-                                     namespace.</p><h3  >Synopsis</h3><a name="Synopsis" ></a><p  ><pre>
-    namespace boost 
+<body>
+
+
+
+<table  >
+    <tr  >
+        <td  ><img src="cboost.gif" width="100%" border="0"></td>
+        <td  ><h1  ><br>
+            Boost.Range </h1></td>
+    </tr>
+</table>
+
+<h2>Range and ReversibleRange Implementation</h2>
+
+<ul  >
+    <li>
+        <a href="#overview">Overview</a>
+    <li  >
+        <a href="#Synopsis" >Synopsis</a>
+    </li>
+    <li  >
+        <a href="#Semantics" >Semantics</a>
+    </li>
+    <li  >
+        <a href="#Examples" >Examples</a>
+    </li>
+</ul>
+<hr size="1" >
+
+<h3>Overview</h3>
+<p>
+Five types of objects are currently supported by the library:
+<ul  >
+    <li  >
+        standard containers
+    </li>
+    <li  >
+        built-in arrays
+    </li>
+    <li  >
+        null terminated strings (this includes <code  >char[]</code>,<code  >wchar_t[]</code>,
+        <code  >char*</code>, and <code  >wchar_t*</code>)
+    </li>
+    <li  >
+        <code  >std::pair&lt;iterator,iterator&gt;</code>
+    </li>
+    <li  >
+        iterators which when default constructed denotes the end of the range
+    </li>
+</ul>
+It is worth noticing that some functionality requires partial template 
+specialization, in particular, full array support does (remark: this is a very 
+small problem since one would use <code>boost::array<></code> anyway). Also note 
+that arrays and pointers of <code  >char</code> or <code  >whar_t</code> are 
+treated special because of their use in string algorithms.
+</p>
+<h3  >ExternalCollectionConcept</h3><a name="ExternalCollectionConcept" ></a>
+<p  >
+The concept is defined by the type-generators and the functions below. Even 
+though these functions are defined in namespace <code>boost</code>, there is no 
+such general requirement, that is, if one wants to extend the list of supported 
+types, it can be done in any namespace.
+</p>
+<h3  >Synopsis</h3><a name="Synopsis" ></a>
+<p  >
+<pre>
+    namespace boost
     {
-        //             
+        //
         // type generators
-        //              
+        //
         
-        template< typename EC >                                     
+        template< typename EC >
         struct <a href="#value_type_of" >value_type_of</a>
         {
-            typedef ... type; // type of stored objects 
+            typedef ... type; // type of stored objects
         };
                      
-        template< typename EC >                                     
-        struct <a href="#iterator_of" >iterator_of</a> 
+        template< typename EC >
+        struct <a href="#iterator_of" >iterator_of</a>
         {
             typedef ... type; // iterator over stored objects
         };
         
-        template< typename EC >                                     
-        struct <a href="#const_iterator_of" >const_iterator_of</a>      
+        template< typename EC >
+        struct <a href="#const_iterator_of" >const_iterator_of</a>
         {
-            typedef ... type; // iterator over immutable stored objects 
+            typedef ... type; // iterator over immutable stored objects
         };
 
-        template< typename EC >                                     
+        template< typename EC >
         struct <a href="#difference_type_of" >difference_type_of</a>
         {
-            typedef ... type; 
+            typedef ... type;
             BOOST_STATIC_ASSERT( boost::is_signed< type >::value );
             //
-            // remark: if std::iterator_traits<> works for the type, this assertion must hold
+            // remark: if std::iterator_traits<> works for the type, this assertion must
+            hold
             //
-            BOOST_STATIC_ASSERT( boost::is_same< type, std::iterator_traits< typename 
-                                                       <a href="#iterator_of" >iterator_of</a>< EC >::type >::difference_type>::value );         
+            BOOST_STATIC_ASSERT( boost::is_same< type, std::iterator_traits< typename
+                                                       <a href="#iterator_of" >iterator_of</a>< EC >::type >::difference_type>::value );
         };
 
-        template< typename EC >                                     
+        template< typename EC >
         struct <a href="#size_type_of" >size_type_of</a>
         {
             typedef ... type;
             BOOST_STATIC_ASSERT( boost::is_unsigned< type >::value );
-            BOOST_STATIC_ASSERT( sizeof( type ) >= sizeof( <a href="#difference_type_of" >difference_type_of</a>< EC >::type ) );                   
+            BOOST_STATIC_ASSERT( sizeof( type ) >= sizeof( <a href="#difference_type_of" >
+            difference_type_of</a>< EC >::type ) );
         };
 
-        template< typename EC >                                     
-        struct <a href="#result_iterator_of" >result_iterator_of</a>     
+        template< typename EC >
+        struct <a href="#result_iterator_of" >result_iterator_of</a>
         {
-            typedef ... type; 
-            // <a href="#iterator_of" >iterator_of</a>< EC >::type if EC is non-const, <a href="#const_iterator_of" >const_iterator_of</a>< EC >::type otherwise         
+            typedef ... type;
+            // <a href="#iterator_of" >iterator_of</a>< EC >::type if EC is non-const, <a href="#const_iterator_of" >
+            const_iterator_of</a>< EC >::type otherwise
         };
                      
         //
@@ -115,15 +131,15 @@
         
         template< typename EC >
         inline typename iterator_of<EC>::type
-        <a href="#begin" >begin</a>( EC& c );               
+        <a href="#begin" >begin</a>( EC& c );
     
         template< typename EC >
         inline typename const_iterator_of< EC >::type
-        <a href="#begin" >begin</a>( const EC& c );                       
+        <a href="#begin" >begin</a>( const EC& c );
             
         template< typename EC >
         inline typename iterator_of< EC >::type
-        <a href="#end" >end</a>( EC& c );  
+        <a href="#end" >end</a>( EC& c );
                           
         template< typename EC >
         inline typename const_iterator_of< EC >::type
@@ -131,38 +147,230 @@
         
         template< typename EC >
         inline bool
-        <a href="#empty" >empty</a>( const EC& c );         
+        <a href="#empty" >empty</a>( const EC& c );
                    
         template< typename EC >
         inline typename size_type_of< EC >::type
         <a href="#size" >size</a>( const EC& c );
                      
-     } // namespace 'boost' </pre></p><h3  >Library headers</h3><a name="Library headers" ></a><table cellpadding=5 border=1 > <tr  ><th  >Header</th><th  >Includes</th></tr><tr  ><td  ><code  >&lt;boost/collection_traits.hpp&gt;</code></td><td  >everything</td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/types.hpp&gt;</code></td><td  >every type-generator</td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/functions.hpp&gt;</code></td><td  >every function</td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/value_type.hpp&gt;</code></td><td  ><a href="#value_type_of" >value_type_of</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/iterator.hpp&gt;</code></td><td  ><a href="#iterator_of" >iterator_of</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/const_iterator.hpp&gt;</code></td><td  ><a href="#const_iterator_of" >const_iterator_of</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/difference_type.hpp&gt;</code></td><td  ><a href="#difference_type_of" >difference_type_of</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/size_type.hpp&gt;</code></td><td  ><a href="#size_type_of" >size_type_of</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/result_iterator.hpp&gt;</code></td><td  ><a href="#result_iterator_of" >result_iterator_of</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/begin.hpp&gt;</code></td><td  ><a href="#begin" >begin</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/end.hpp&gt;</code></td><td  ><a href="#end" >end</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/empty.hpp&gt;</code></td><td  ><a href="#empty" >empty</a></td></tr><tr  ><td  ><code  >&lt;boost/collection_traits/size.hpp&gt;</code></td><td  ><a href="#size" >size</a></td></tr> </table><br><h3  >Semantics</h3><a name="Semantics" ></a><p  >In the table <code  >C</code> is a type that conforms to the ExternalCollectionConcept and <code  >c</code> is an object of that type.<code  > SC</code> will denote a standard
-                  container, <code  > T[sz]</code> will denote an array of type <code  >T</code> of size <code  >sz</code>, <code  >P</code> will denote <code  >std::pair&lt;&gt;</code>, <code  > I</code> means an iterator which default construction
-                  denotes the end of the range and <code  >sc,t,p,i</code> are objects of these types, 
-                  respectively. Special cases for <code  >char*</code> and <code  >wchar_t*</code> are described explicitly. </p><table border=1 cellpadding=5 > <tr  ><th  >Expression</th><th  >Return type</th><th  >Complexity</th></tr><tr  ><a name="value_type_of" ></a><td  ><code  >value_type_of&lt;C&gt;::type</code></td><td  ><code  >SC::value_type</code><br><code  >T</code><br><code  >std::iterator_traits&lt;P::first_type&gt;::value_type</code><br><code  >std::iterator_traits&lt;I&gt;::value_type</code></td><td  >compile time</td></tr><tr  ><a name="iterator_of" ></a><td  ><code  >iterator_of&lt;C&gt;::type</code></td><td  ><code  >SC::iterator</code><br><code  >T*</code><br><code  >P::first_type</code><br><code  >I</code></td><td  >compile time</td></tr><tr  ><a name="const_iterator_of" ></a><td  ><code  >const_iterator_of&lt;C&gt;::type</code></td><td  ><code  >SC::const_iterator</code><br><code  >const T*</code><br><code  >P::first_type</code><br><code  >I</code></td><td  >compile time</td></tr><tr  ><a name="difference_type_of" ></a><td  ><code  >difference_type_of&lt;C&gt;::type</code></td><td  ><code  >SC::difference_type</code><br><code  >std::ptrdiff_t</code><br><code  >std::iterator_traits&lt;P::first_type&gt;::difference_type</code><br><code  >std::iterator_traits&lt;I&gt;::difference_type</code></td><td  >compile time</td></tr><tr  ><a name="size_type_of" ></a><td  ><code  >size_type_of&lt;C&gt;::type</code></td><td  ><code  >SC::size_type</code><br><code  >std::size_t</code><br><code  >std::size_t</code><br><code  >std::size_t</code></td><td  >compile time</td></tr><tr  ><a name="result_iterator_of" ></a><td  ><code  >result_iterator_of&lt;C&gt;::type</code></td><td  ><code  >const_iterator_of&lt;C&gt;::type</code> if <code  >C</code> is <code  >const</code><br><code  >iterator_of&lt;C&gt;::type</code> otherwise </td><td  >compile time</td></tr> </table> <br> <table border=1 cellpadding=5 > <tr  ><th  >Expression</th><th  >Return type</th><th  >Effects</th><th  >Complexity</th></tr><tr  ><a name="begin" ></a><td  ><code  >begin( c )</code></td><td  ><code  >result_iterator_of&lt;C&gt;::type</code></td><td  ><code  >sc.begin()</code><br><code  >t</code><br><code  >p.first</code><br><code  >i</code></td><td  >constant time</td></tr><tr  ><a name="end" ></a><td  ><code  >end( c )</code></td><td  ><code  >result_iterator_of&lt;C&gt;::type</code></td><td  ><code  >sc.end()</code><br><code  >t + std::char_traits&lt;C&gt;::length( t )</code> if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code><br><code  >t + sz - 1</code> if <code  >C</code> is <code  >char[sz]</code> or <code  >wchar_t[sz]</code><br><code  >t + sz</code> otherwise <br><code  >p.second</code><br><code  >I()</code></td><td  >linear if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code><br>constant time otherwise</td></tr><tr  ><a name="empty" ></a><td  ><code  >empty( c )</code></td><td  >Convertible to <code  >bool</code></td><td  ><code  >sc.empty()</code><br><code  >size( t ) == 0</code><br><code  >p.first == p.second</code><br><code  >begin( i ) == end( i )</code></td><td  >linear if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code><br>constant time otherwise<br></td></tr><tr  ><a name="size" ></a><td  ><code  >size( c )</code></td><td  ><code  >size_type_of&lt;C&gt;::type</code></td><td  ><code  >sc.size()</code><br><code  >end( t ) - begin( t )</code><br><code  >distance( p.first, p.second )</code><br><code  >not available for iterators</code></td><td  >linear if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code><br> or if <code  >std::distance()</code> is linear <br>constant time otherwise</td></tr> </table><p  >Please note that <code  >char*</code>,<code  >whar_t*</code>,<code  >char[]</code>, and <code  >wchar_t[]</code> behaves differently from
-               normal arrays only for <code  >size()</code> and <code  >end()</code>. 
-              Note that the null pointer is allowed as an argument in these cases.</p><br><hr size="1" ><h2  >Examples</h2><a name="Examples" ></a><p  >Some examples are given in the accompanying test
-                      files:</p><ul  ><li  > <a href="../test/iterator.cpp" target="_self" ><code  >iterator.cpp</code></a> </li> shows how to implement a container version of <code  >std::copy()</code> that works with <code  >std::ifstream_iterator&lt;&gt;.</code><li  > <a href="../test/string.cpp" target="_self" ><code  >string.cpp</code></a> </li> shows how to implement a container version of <code  >std::find()</code> that works with <code  >char[],wchar_t[],char*,wchar_t*.</code><li  > <a href="../test/algorithm_example.cpp" target="_self" ><code  >algorithm_example.cpp</code></a> </li> shows the replace example from the introduction. </ul><hr size="1" ><h2  >Portability</h2><a name="Portability" ></a><p  >Full support for built-in arrays require that the
-                        compiler supports class template partial specialization.</p><p  >Notice that some compilers cannot do function template ordering
-                        properly. In that case one cannot rely of <code  >result_iterator_of&lt;&gt;</code> and a single function definition; instead one needs to supply
-                        a function overloaded for const and non-const arguments if it is required.</p><p  >Full support for iterators like <code  >std::istream_iterator&lt;&gt;</code> depends very
-                        much on a conforming standard library.</p><p  >Most of the tests have been run successfully on these compilers<ul  ><li  >vc7.1</li><li  >gcc3.2</li><li  >como4.3.0.1</li><li  >bcc6</li></ul></p><hr size="1" ><h2  >FAQ</h2><a name="FAQ" ></a><ol  ><li  >Why is there no difference between <code  >iterator_of&lt;C&gt;::type</code> and <code  >const_iterator_of&lt;C&gt;::type</code> for <code  >std::pair&lt;iterator,iterator&gt;</code> or iterators which default construction denotes the end of the range?</li><p  >In general it is not possible nor desirable to find a corresponding <code  >const_iterator</code>. When it is possible to come up with
-               one, the client might choose to
-               construct a <code  >std::pair&lt;const_iterator,const_iterator&gt;</code> object. </p><li  >Why does the traits not supply more types or more functions?<p  >The traits class have been kept small because its current interface 
-                    will serve most purposes. If and when a genuine need arises for
-                    more functionality, it can be implemented.</p></li><li  >How should I implement generic algorithms for external collections?<p  >One should always start with a generic algorithm that takes two iterators as input. Then use the 
-                     collection traits to build handier versions on top of the base algorithm.</p></li></ol><hr size="1" ><h2  >History</h2><a name="History" ></a><p  >The library have been under way for a long time. Dietmar Kühl originally
-     intended to submit an <code  >array_traits&lt;&gt;</code> class template which had most 
-     of the functionality present now, but only for arrays and standard containers.
-      Meanwhile work on container algorithms
-     in various context showed the need for handling pairs of iterators, and 
-     string libraries needed special treatment of character arrays. 
-     Thorsten Ottosen wrote everything from the ground up including the first
-     work-around for missing partial template specialization. Pavol Droba helped to
-     improve the work-around for handicapped compilers and the special character support.
-     The naming scheme of type-generators was suggested by Peter Dimov. </p><hr size="1" ><p  >&copy; Thorsten Ottosen 2003-2004 (nesotto_AT_cs.auc.dk).
-    Permission to copy, use, modify, sell and distribute this software is granted provided this copyright notice appears
-     in all copies. This software is provided "as is" without express or implied warranty, and with no
-         claim as to its suitability for any purpose.</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></body></html>
- <!-- Copyright Dezide Aps 2003-2004 -->
+     } // namespace 'boost' </pre>
+</p>
+
+
+<h3  >Semantics</h3><a name="Semantics" ></a>
+<p  >
+In the table <code  >C</code> is a type that conforms to the
+ExternalCollectionConcept and <code  >c</code> is an object of that type.<code  >
+SC</code>
+will denote a standard container, <code  >T[sz]</code> will denote an array of
+type <code  >T</code> of size <code  >sz</code>, <code  >P</code> will denote <code  >
+std::pair&lt;&gt;</code>,
+<code  >I</code> means an iterator which default construction denotes the end of
+the range and <code  >sc,t,p,i</code> are objects of these types, respectively.
+Special cases for <code  >char*</code> and <code  >wchar_t*</code> are described
+explicitly.
+</p>
+<table border="1" cellpadding="5" >
+    <tr  >
+        <th  >Expression</th>
+        <th  >Return type</th>
+        <th  >Complexity</th>
+    </tr>
+    <tr  >
+        <a name="value_type_of" ></a>
+        <td  ><code  >value_type_of&lt;C&gt;::type</code></td>
+        <td  ><code  >SC::value_type</code><br>
+            <code  >T</code><br>
+            <code  >std::iterator_traits&lt;P::first_type&gt;::value_type</code><br>
+        <td  >compile time</td>
+    </tr>
+    <tr  >
+        <a name="iterator_of" ></a>
+        <td  ><code  >iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >SC::iterator</code><br>
+            <code  >T*</code><br>
+            <code  >P::first_type</code><br>
+        <td  >compile time</td>
+    </tr>
+    <tr  >
+        <a name="const_iterator_of" ></a>
+        <td  ><code  >const_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >SC::const_iterator</code><br>
+            <code  >const T*</code><br>
+            <code  >P::first_type</code><br>
+        <td  >compile time</td>
+    </tr>
+    <tr  >
+        <a name="difference_type_of" ></a>
+        <td  ><code  >difference_type_of&lt;C&gt;::type</code></td>
+        <td  ><code  >SC::difference_type</code><br>
+            <code  >std::ptrdiff_t</code><br>
+            <code  >std::iterator_traits&lt;P::first_type&gt;:: difference_type</code><br>
+        <td  >compile time</td>
+    </tr>
+    <tr  >
+        <a name="size_type_of" ></a>
+        <td  ><code  >size_type_of&lt;C&gt;::type</code></td>
+        <td  ><code  >SC::size_type</code><br>
+            <code  >std::size_t</code><br>
+            <code  >std::size_t</code><br>
+        <td  >compile time</td>
+    </tr>
+    <tr  >
+        <a name="result_iterator_of" ></a>
+        <td  ><code  >result_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >const_iterator_of&lt; C&gt;::type</code> if <code  >C</code> is <code  >
+        const</code>
+            <br>
+            <code  >iterator_of&lt;C&gt;::type</code> otherwise </td>
+        <td  >compile time</td>
+    </tr>
+        <tr  >
+        <a name="reverse_iterator_of" ></a>
+        <td  ><code  >reverse_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >boost::reverse_iterator< typename iterator_of&lt;T>::type
+></code><br> <td  >compile time</td>
+    </tr>
+    <tr  >
+        <a name="const_reverse_iterator_of" ></a>
+        <td  ><code  >const_reverse_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >boost::reverse_iterator< typename const_iterator_of&lt;T>::type ></code><br>
+        <td  >compile time</td>
+</tr> <tr  >
+        <a name="reverse_result_iterator_of" ></a>
+        <td  ><code  >reverse_result_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >boost::reverse_iterator< typename result_iterator_of&lt;T&gt;::
+        type ></code>
+        <td  >compile time</td>
+    </tr>
+
+
+</table>
+<br>
+<table border="1" cellpadding="5" >
+    <tr  >
+        <th  >Expression</th>
+        <th  >Return type</th>
+        <th  >Returns</th>
+        <th  >Complexity</th>
+    </tr>
+    <tr  >
+        <a name="begin" ></a>
+        <td  ><code  >begin( c )</code></td>
+        <td  ><code  >result_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >sc.begin()</code><br>
+            <code  >t</code><br>
+            <code  >p.first</code><br>
+        <td  >constant time</td>
+    </tr>
+    <tr  >
+        <a name="end" ></a>
+        <td  ><code  >end( c )</code></td>
+        <td  ><code  >result_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >sc.end()</code><br>
+            <code  >t + std::char_traits&lt;C&gt;::length( t )</code> if <code  >C</code> is <code  >
+            char*</code>
+            or <code  >wchar_t*</code><br>
+            <code  >t + sz - 1</code> if <code  >C</code> is <code  >char[sz]</code> or <code  >
+            wchar_t[sz]</code>
+            <br>
+            <code  >t + sz</code> otherwise <br>
+            <code  >p.second</code><br>
+        <td  >linear if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code>
+            <br>
+            constant time otherwise</td>
+    </tr>
+    <tr  >
+        <a name="empty" ></a>
+        <td  ><code  >empty( c )</code></td>
+        <td  >Convertible to <code  >bool</code></td>
+        <td  ><code  >sc.empty()</code><br>
+            <code  >size( t ) == 0</code><br>
+            <code  >p.first == p.second</code><br>
+        <td  >linear if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code>
+            <br>
+            constant time otherwise<br>
+        </td>
+    </tr>
+    <tr  >
+        <a name="size" ></a>
+        <td  ><code  >size( c )</code></td>
+        <td  ><code  >size_type_of&lt;C&gt;::type</code></td>
+        <td  ><code  >sc.size()</code><br>
+            <code  >end( t ) - begin( t )</code><br>
+            <code  >distance( p. first, p.second )</code><br>
+        <td  >linear if <code  >C</code> is <code  >char*</code> or <code  >wchar_t*</code>
+            <br>
+            or if <code  >std::distance()</code> is linear <br>
+            constant time otherwise</td>
+    </tr>
+        <tr  >
+        <a name="rbegin" ></a>
+        <td  ><code  >rbegin( c )</code></td>
+        <td  ><code  >reverse_result_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >reverse_result_iterator_of&lt;C&gt;::type( end( c ) )</code>
+            <br>
+        <td  >same as <code>end()</code> </td>
+    </tr>
+    <tr  >
+        <a name="rend" ></a>
+        <td  ><code  >rend( c )</code></td>
+        <td  ><code  >reverse_result_iterator_of&lt;C&gt;::type</code></td>
+        <td  ><code  >reverse_result_iterator_of&lt;C&gt;::type( begin( c ) )</code>
+        <td  > same as <code>begin()</code></td>
+    </tr>
+
+</table>
+
+<p  >
+Please note that <code  >char*</code>,<code  >whar_t*</code>,<code  >char[]</code>,
+and <code  >wchar_t[]</code> behaves differently from normal arrays only for <code  >
+size()</code>
+and <code  >end()</code>. Note that the null pointer is allowed as an argument
+in these cases.
+</p>
+
+
+<hr size="1" ><h2  >Examples</h2><a name="Examples" ></a>
+<p  >
+Some examples are given in the accompanying test files:
+</p>
+<ul  >
+    <li  >
+        <a href="../test/iterator.cpp" target="_self" ><code  >iterator.cpp</code></a> 
+    </li>
+    shows how to implement a container version of <code  >std::copy()</code> that 
+    works with <code  >std::ifstream_iterator&lt;&gt;.</code>
+    <li  >
+        <a href="../test/string.cpp" target="_self" ><code  >string.cpp</code></a> 
+    </li>
+    shows how to implement a container version of <code  >std::find()</code> that 
+    works with <code  >char[],wchar_t[],char*,wchar_t*.</code>
+    <li  >
+        <a href="../test/algorithm_example.cpp" target="_self" ><code  >algorithm_example.cpp</code></a> 
+        
+    </li>
+    shows the replace example from the introduction. 
+</ul>
+
+    <hr>
+    <p>
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    </body>
+</html>

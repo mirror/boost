@@ -11,181 +11,112 @@
   -- purpose.  It is provided "as is" without express or implied warranty.
   -->
 <Head>
-<Title>Range Concepts</Title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <Title>Range Concepts</Title>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </HEAD>
-<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
-	ALINK="#ff0000"> 
-<IMG SRC="cboost.gif" 
-     ALT="C++ Boost"> 
-<IMG SRC="/Images/stat.gif" ALT="" BORDER=0   WIDTH = "6"  HEIGHT = "6" >
 
-<BR Clear>
-<a name=range>
-<H1>Range</H1>
+<table border="0" >
+    <tr>
+        <td ><img src="cboost.gif" border="0" ></td>
+        <td ><h1 align="center">Boost.Range </h1></td>
+    </tr>
+</table>
+
+<h2>Range concepts </h2>
+
+<ul>
+    <li>
+        <a href="#range">Range</a>
+    <li>
+        <a href="#reversible_range">ReversibleRange</a>
+</ul>
+<hr>
+
+<a name="range"><H1>Range</H1>
 
 <h3>Description</h3>
 
 A Range is a <i>concept</i> similar to the STL <a
-href="http://www.sgi.com/Technology/STL/Container.html">Container</a>
-concept.  A Range provides iterators for accessing a range of
-elements and provides information about the number of elements in the
-Range.  However, a Range has fewer requirements than a
-Container. The motivation for the Range concept is that there are
-many useful Container-like types that do not meet the full
-requirements of Container, and many algorithms that can be written
-with this reduced set of requirements. In particular, a Range does
-not necessarily
+href="http://www.sgi.com/Technology/STL/Container.html">Container</a> concept. A 
+Range provides iterators for accessing a range of elements and provides 
+information about the number of elements in the Range.  However, a Range has 
+fewer requirements than a Container. The motivation for the Range concept is 
+that there are many useful Container-like types that do not meet the full 
+requirements of Container, and many algorithms that can be written with this 
+reduced set of requirements. In particular, a Range does not necessarily
 
 <ul>
-    <li> own the elements that can be accessed through it,
-    <li> have copy semantics,    
-    <li> require that the associated reference type is a real C++ reference.
+    <li>
+        own the elements that can be accessed through it,
+    <li>
+        have copy semantics,
+    <li>
+        require that the associated reference type is a real C++ reference.
 </ul>
 
-Because of the second requirement, a Range object must
-be passed by reference in generic code.
+Because of the second requirement, a Range object must be passed by reference in 
+generic code.
 
 <p>
 
 <h3>Notation</h3>
 <Table>
-<TR>
-<TD VAlign=top>
-<tt>X</tt>
-</TD>
-<TD VAlign=top>
-A type that is a model of Range.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-<tt>a</tt>, <tt>b</tt>
-</TD>
-<TD VAlign=top>
-Object of type <tt>X</tt>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-<tt>T</tt>
-</TD>
-<TD VAlign=top>
-The value type of <tt>X</tt>.
-</TD>
-</tr>
+    <TR>
+        <TD VAlign="top"><tt>X</tt></TD>
+        <TD VAlign="top">A type that is a model of Range.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top"><tt>a</tt>, <tt>b</tt></TD>
+        <TD VAlign="top">Object of type <tt>X</tt>.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top"><tt>T</tt></TD>
+        <TD VAlign="top">The value type of <tt>X</tt>.</TD>
+    </tr>
 </table>
 
 <h3>Associated types</h3>
 
-<Table border>
-<TR>
-<TD VAlign=top>
-Value type
-</TD>
-<TD VAlign=top>
-<tt>X::value_type</tt>
-</TD>
-<TD VAlign=top>
-The type of the object stored in a Range.  
-    <!--
-If the Collection is <i>mutable</i> then
-the value type must be <A
-href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</A>.
-Otherwise the value type must be <a href="./CopyConstructible.html">CopyConstructible</a>.
-    -->
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Iterator type
-</TD>
-<TD VAlign=top>
-<tt>X::iterator</tt>
-</TD>
-<TD VAlign=top>
-The type of iterator used to iterate through a Range's
-   elements.  The iterator's value type is expected to be the
-   Range's value type.  A conversion
-   from the iterator type to the const iterator type must exist.
-   The iterator type must at least be an <A 
-href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</A>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Const iterator type
-</TD>
-<TD VAlign=top>
-<tt>X::const_iterator</tt>
-</TD>
-<TD VAlign=top>
-A type of iterator that may be used to examine, but not to modify,
-   a Range's elements.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Reference type
-</TD>
-<TD VAlign=top>
-<tt>X::reference</tt>
-</TD>
-<TD VAlign=top>
-A type that behaves like a reference to the Range's value type.
-<a href="#1">[1]</a>
-</TD>
-</TR>
-        <!--
-<TR>
-<TD VAlign=top>
-Const reference type
-</TD>
-<TD VAlign=top>
-<tt>X::const_reference</tt>
-</TD>
-
-    <TD VAlign=top>
-A type that behaves like a const reference to the Collection's value type.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Pointer type
-</TD>
-<TD VAlign=top>
-<tt>X::pointer</tt>
-</TD>
-<TD VAlign=top>
-A type that behaves as a pointer to the Collection's value type.
-</TD>
-</TR>
-        -->
-        
-<TR>
-<TD VAlign=top>
-Distance type
-</TD>
-<TD VAlign=top>
-<tt>X::difference_type</tt>
-</TD>
-<TD VAlign=top>
-A signed integral type used to represent the distance between two
-   of the Range's iterators.  This type must be the same as 
-   the iterator's distance type.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Size type
-</TD>
-<TD VAlign=top>
-<tt>X::size_type</tt>
-</TD>
-<TD VAlign=top>
-An unsigned integral type that can represent any nonnegative value
-   of the Range's distance type.
-</TD>
-</tr>
+<table border=1 cellpadding=5>
+    <TR>
+        <TD VAlign="top">Value type</TD>
+        <TD VAlign="top"><tt>value_type_of&lt;X>::type</tt></TD>
+        <TD VAlign="top">The type of the object stored in a Range.
+    </TR>
+    <TR>
+        <TD VAlign="top">Iterator type</TD>
+        <TD VAlign="top"><tt>iterator_of&lt;X>::type</tt></TD>
+        <TD VAlign="top">The type of iterator used to iterate through a Range's elements. 
+        The iterator's value type is expected to be the Range's value type.  A 
+        conversion from the iterator type to the const iterator type must exist. The 
+        iterator type must at least be an <A
+                      href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</A>.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Const iterator type</TD>
+        <TD VAlign="top"><tt>const_iterator_of&lt;X>::type</tt></TD>
+        <TD VAlign="top">A type of iterator that may be used to examine, but not to 
+        modify, a Range's elements.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Reference type</TD>
+        <TD VAlign="top"><tt>reference_of&lt;X>::type</tt></TD>
+        <TD VAlign="top">A type that behaves like a reference to the Range's value type. <a href="#1">[1]</a></TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Distance type</TD>
+        <TD VAlign="top"><tt>difference_type_of&lt;>::type</tt></TD>
+        <TD VAlign="top">A signed integral type used to represent the distance between 
+        two of the Range's iterators.  This type must be the same as the iterator's 
+        distance type.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Size type</TD>
+        <TD VAlign="top"><tt>size_type_of&lt;X>::type</tt></TD>
+        <TD VAlign="top">An unsigned integral type that can represent any nonnegative 
+        value of the Range's distance type.</TD>
+    </tr>
 </table>
 
 
@@ -194,395 +125,209 @@ An unsigned integral type that can represent any nonnegative value
 The following expressions must be valid.
 <p>
 
-<Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Return type
-</TH>
-</TR>
-<TR>
-<TD VAlign=top>
-Beginning of range
-</TD>
-<TD VAlign=top>
-<tt>a.begin()</tt>
-</TD>
-<TD VAlign=top>
-<tt>iterator</tt> if <tt>a</tt> is mutable, <tt>const_iterator</tt> otherwise
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-End of range
-</TD>
-<TD VAlign=top>
-<tt>a.end()</tt>
-</TD>
-<TD VAlign=top>
-<tt>iterator</tt> if <tt>a</tt> is mutable, <tt>const_iterator</tt> otherwise
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Size
-</TD>
-<TD VAlign=top>
-<tt>a.size()</tt>
-</TD>
-<TD VAlign=top>
-<tt>size_type</tt>
-</TD>
-</TR>
-<!--
-<TR>
-<TD VAlign=top>
-Maximum size
-</TD>
-<TD VAlign=top>
-<tt>a.max_size()</tt>
-</TD>
-<TD VAlign=top>
-<tt>size_type</tt>
-</TD>
-</TR>
-<TR>
--->
-<TD VAlign=top>
-Empty range
-</TD>
-<TD VAlign=top>
-<tt>a.empty()</tt>
-</TD>
-<TD VAlign=top>
-Convertible to <tt>bool</tt>
-</TD>
-</TR>
-<TR>
-    <!--
-<TD VAlign=top>
-Swap
-</TD>
-<TD VAlign=top>
-<tt>a.swap(b)</tt>
-</TD>
-<TD VAlign=top>
-<tt>void</tt>
-</TD> -->
-</tr>
+<Table border=1 cellpadding=5>
+    <TR>
+        <TH>Name</TH>
+        <TH>Expression</TH>
+        <TH>Return type</TH>
+    </TR>
+    <TR>
+        <TD VAlign="top">Beginning of range</TD>
+        <TD VAlign="top"><tt>begin(a)</tt></TD>
+        <TD VAlign="top"><tt>iterator</tt> if <tt>a</tt> is mutable, <tt>const_iterator</tt> 
+        otherwise</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">End of range</TD>
+        <TD VAlign="top"><tt>end(a)</tt></TD>
+        <TD VAlign="top"><tt>iterator</tt> if <tt>a</tt> is mutable, <tt>const_iterator</tt> 
+        otherwise</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Size of range</TD>
+        <TD VAlign="top"><tt>size(a)</tt></TD>
+        <TD VAlign="top"><tt>size_type</tt></TD>
+    </TR>
+    <TD VAlign="top">Is range empty?</TD>
+    <TD VAlign="top"><tt>empty(a)</tt></TD>
+    <TD VAlign="top">Convertible to <tt>bool</tt></TD>
+    </TR>
+    <TR>
+    </tr>
 </table>
 <h3>Expression semantics</h3>
 
 <Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Semantics
-</TH>
-<TH>
-Postcondition
-</TH>
-</TR>
-<TD VAlign=top>
-<TR>
-<TD VAlign=top>
-Beginning of range
-</TD>
-<TD VAlign=top>
-<tt>a.begin()</tt>
-</TD>
-<TD VAlign=top>
-Returns an iterator pointing to the first element in the Range.
-</TD>
-<TD VAlign=top>
-<tt>a.begin()</tt> is either dereferenceable or past-the-end.  It is
-   past-the-end if and only if <tt>a.size() == 0</tt>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-End of range
-</TD>
-<TD VAlign=top>
-<tt>a.end()</tt>
-</TD>
-<TD VAlign=top>
-Returns an iterator pointing one past the last element in the
-   Range.
-</TD>
-<TD VAlign=top>
-<tt>a.end()</tt> is past-the-end.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Size
-</TD>
-<TD VAlign=top>
-<tt>a.size()</tt>
-</TD>
-<TD VAlign=top>
-Returns the size of the Collection, that is, its number of elements.
-</TD>
-<TD VAlign=top>
-<tt>a.size() &gt;= 0 
-</TD>
-</TR>
-<!--
-<TR>
-<TD VAlign=top>
-Maximum size
-</TD>
-<TD VAlign=top>
-<tt>a.max_size()</tt>
-</TD>
-<TD VAlign=top>
-&nbsp;
-</TD>
-<TD VAlign=top>
-Returns the largest size that this Collection can ever have. <A href="#8">[8]</A>
-</TD>
-<TD VAlign=top>
-<tt>a.max_size() &gt;= 0 &amp;&amp; a.max_size() &gt;= a.size()</tt>
-</TD>
-</TR>
- -->
-<TR>
-<TD VAlign=top>
-Empty Collection
-</TD>
-<TD VAlign=top>
-<tt>a.empty()</tt>
-</TD>
-<TD VAlign=top>
-Equivalent to <tt>a.size() == 0</tt>.  (But possibly faster.)
-</TD>
-<TD VAlign=top>
-&nbsp;
-</TD>
-</TR>
-<TR>
-    <!--
-<TD VAlign=top>
-Swap
-</TD>
-    
-<TD VAlign=top>
-<tt>a.swap(b)</tt>
-</TD>
-<TD VAlign=top>
-Equivalent to <tt>swap(a,b)</tt>
-</TD> 
-<TD VAlign=top>
-&nbsp;
-</TD>
-    -->
-</tr>
+    <TR>
+        <TH>Expression</TH>
+        <TH>Semantics</TH>
+        <TH>Postcondition</TH>
+    </TR>
+    <TD VAlign="top">
+        <TR>
+            <TD VAlign="top"><tt>begin(a)</tt></TD>
+            <TD VAlign="top">Returns an iterator pointing to the first element in the Range.</TD>
+            <TD VAlign="top"><tt>begin(a)</tt> is either dereferenceable or 
+past-the-end. It is past-the-end if and only if <tt>size(a) == 0</tt>.</TD>
+        </TR>
+        <TR>
+            <TD VAlign="top"><tt>end(a)</tt></TD>
+            <TD VAlign="top">Returns an iterator pointing one past the last element in the 
+            Range.</TD>
+            <TD VAlign="top"><tt>end(a)</tt> is past-the-end.</TD>
+        </TR>
+        <TR>
+            <TD VAlign="top"><tt>size(a)</tt></TD>
+            <TD VAlign="top">Returns the size of the Collection, that is, its number of 
+            elements.</TD>
+            <TD VAlign="top"><tt>size(a) &gt;= 0</TD>
+        </TR>
+        <TR>
+            <TD VAlign="top"><tt>empty(a)</tt></TD>
+            <TD VAlign="top">Equivalent to <tt>size(a) == 0</tt>.  (But 
+possibly faster.)</TD> <TD VAlign="top">&nbsp;-&nbsp;</TD>
+        </TR>
 </table>
+
 <h3>Complexity guarantees</h3>
 
-All four functions are at most amortized linear time. For
-most practical purposes, one can expect
-<tt>begin()</tt>, <tt>end()</tt> and <tt>empty()</tt> to be amortized constant 
-time. 
+All four functions are at most amortized linear time. For most practical 
+purposes, one can expect <tt>begin(a)</tt>, <tt>end(a)</tt> and 
+<tt>empty(a)</tt> to be amortized constant time.
 
 <h3>Invariants</h3>
 <Table border>
-<TR>
-<TD VAlign=top>
-Valid range
-</TD>
-<TD VAlign=top>
-For any Range <tt>a</tt>, <tt>[a.begin(), a.end())</tt> is a valid
-   range.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Range size
-</TD>
-<TD VAlign=top>
-<tt>a.size()</tt> is equal to the distance from <tt>a.begin()</tt> to <tt>a.end()</tt>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Completeness
-</TD>
-<TD VAlign=top>
-An algorithm that iterates through the range <tt>[a.begin(), a.end())</tt>
-   will pass through every element of <tt>a</tt>.
-</TD>
-</tr>
+    <TR>
+        <TD VAlign="top">Valid range</TD>
+        <TD VAlign="top">For any Range <tt>a</tt>, <tt>[begin(a),end(a))</tt> is a
+        valid range, that is, <code>end(a)</code> is reachable from <code>begin(a)</code>
+         in a finite number of increments.</TD> 
+   </TR>
+    <TR>
+        <TD VAlign="top">Range size</TD>
+        <TD VAlign="top"><tt>size(a)</tt> is equal to the distance from 
+<tt>begin(a)</tt> to <tt>end(a)</tt>.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Completeness</TD>
+        <TD VAlign="top">An algorithm that iterates through the range 
+<tt>[begin(a),end(a))</tt> will pass through every element of <tt>a</tt>.</TD>
+    </tr>
 </table>
 
 
 <h3>Models</h3>
 <UL>
-<LI> <tt>boost::array&lt;T,sz></tt> 
-<LI> <tt>std::vector&lt;bool&gt;</tt>
+    <li>
+        <code>All models of <A href="http://www.sgi.com/Technology/STL/Container.html">Container</A></code>
+    <LI>
+        <tt>boost::array&lt;T,sz></tt>
+    <LI>
+        <tt>std::vector&lt;bool&gt;</tt>
 </UL>
 
-<h3>See also</h3>
-<A href="http://www.sgi.com/Technology/STL/Container.html">Container</A>
+<h3>See also</h3> <A href="http://www.sgi.com/Technology/STL/Container.html">Container</A>
 
-<br><br>
+<br>
+<br>
 <hr>
 <br>
 
-<a name=reversible_range>
-<h1>ReversibleRange</h1>
+<a name=reversible_range><h1>ReversibleRange</h1>
 
 
-<h3>Description</h3>
-This concept provides access to iterators that traverse in both
-directions (forward and reverse). The iterator type must meet all of
-the requirements of <a
-href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>
-except that the reference type does not have to be a real C++
-reference. 
+<h3>Description</h3> This concept provides access to iterators that traverse in 
+both directions (forward and reverse). The iterator type must meet all of the 
+requirements of <a
+href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a> 
+except that the reference type does not have to be a real C++ reference.
 
-<h3>Refinement of</h3>
-Range
+<h3>Refinement of</h3> Range
 
 <h3>Associated types</h3>
 
 <Table border>
-<TR>
-<TD VAlign=top>
-Reverse Iterator type
-</TD>
-<TD VAlign=top>
-<tt>X::reverse_iterator</tt>
-</TD>
-<TD VAlign=top>
-The type of iterator used to iterate through a Range's
-   elements in reverse order.  The iterator's value type is expected to be the
-   Range's value type.  A conversion
-   from the reverse iterator type to the const reverse iterator type must exist.
-   The iterator type must at least be a <a
-href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Const reverse iterator type
-</TD>
-<TD VAlign=top>
-<tt>X::const_reverse_iterator</tt>
-</TD>
-<TD VAlign=top>
-A type of reverse iterator that may be used to examine, but not to modify,
-   a Range's elements.
-</TD>
-</TR>
+    <TR>
+        <TD VAlign="top">Reverse Iterator type</TD>
+        <TD VAlign="top"><tt>X::reverse_iterator</tt></TD>
+        <TD VAlign="top">The type of iterator used to iterate through a Range's elements 
+        in reverse order.  The iterator's value type is expected to be the Range's value 
+        type.  A conversion from the reverse iterator type to the const reverse iterator 
+        type must exist. The iterator type must at least be a <a
+                      href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>.</TD>
+    </TR>
+    <TR>
+        <TD VAlign="top">Const reverse iterator type</TD>
+        <TD VAlign="top"><tt>X::const_reverse_iterator</tt></TD>
+        <TD VAlign="top">A type of reverse iterator that may be used to examine, but not 
+        to modify, a Range's elements.</TD>
+    </TR>
 </table>
 
 
 <h3>Valid expressions</h3>
-    
+
 <Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Return type
-</TH>
-<TH>
-Semantics
-</TH>
-</TR>
-<TR>
-<TD VAlign=top>
-Beginning of range
-</TD>
-<TD VAlign=top>
-<tt>a.rbegin()</tt>
-</TD>
-<TD VAlign=top>
-<tt>reverse_iterator</tt> if <tt>a</tt> is mutable,
-<tt>const_reverse_iterator</tt> otherwise.
-</TD>
-<TD VAlign=top>
-Equivalent to <tt>X::reverse_iterator(a.end())</tt>.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-End of range
-</TD>
-<TD VAlign=top>
-<tt>a.rend()</tt>
-</TD>
-<TD VAlign=top>
-<tt>reverse_iterator</tt> if <tt>a</tt> is mutable,
-<tt>const_reverse_iterator</tt> otherwise.
-</TD>
-<TD VAlign=top>
-Equivalent to <tt>X::reverse_iterator(a.begin())</tt>.
-</TD>
-</tr>
+    <TR>
+        <TH>Name</TH>
+        <TH>Expression</TH>
+        <TH>Return type</TH>
+        <TH>Semantics</TH>
+    </TR>
+    <TR>
+        <TD VAlign="top">Beginning of range</TD>
+        <TD VAlign="top"><tt>rbegin(a)</tt></TD>
+        <TD VAlign="top"><tt>reverse_iterator</tt> if <tt>a</tt> is mutable, <tt>const_reverse_iterator</tt> 
+        otherwise.</TD>
+        <TD VAlign="top">Equivalent to <tt>X::reverse_iterator(end(a))</tt>.</TD> </TR>
+    <TR>
+        <TD VAlign="top">End of range</TD>
+        <TD VAlign="top"><tt>rend(a)</tt></TD>
+        <TD VAlign="top"><tt>reverse_iterator</tt> if <tt>a</tt> is mutable, <tt>const_reverse_iterator</tt> 
+        otherwise.</TD>
+        <TD VAlign="top">Equivalent to 
+<tt>X::reverse_iterator(begin(a))</tt>.</TD> </tr>
 
 </table>
 
 <h3>Complexity guarantees</h3>
 
-<tt>rbegin()</tt> has the same complexity as <tt>end()</tt> and 
-<tt>rend()</tt> has the same complexity as <tt>begin()</tt> from Range.
+<tt>rbegin(a)</tt> has the same complexity as <tt>end(a)</tt> and 
+<tt>rend(a)</tt> has the same complexity as <tt>begin(a)</tt> from Range.
 
 <h3>Models</h3>
 
 <ul>
-<li> std::vector&lt;T>
-<li> std::list&lt;T>
+    <li>
+        std::vector&lt;T>
+    <li>
+        std::list&lt;T>
 </ul>
 
 <hr>
 <h3>Notes</h3>
 
-<P><A name="1">[1]</A> 
+<P>
+<A name="1">[1]</A>
 
-The reference type does not have to be a real C++ reference. The
-requirements of the reference type depend on the context within which
-the Range is being used. Specifically it depends on the
-requirements the context places on the value type of the Range.
-The reference type of the Range must meet the same requirements
-as the value type. In addition, the reference objects must be
-equivalent to the value type objects in the Range (which is
-trivially true if they are the same).  Also, in a mutable Range,
-an assignment to the reference object must result in an assignment to
-the object in the Range (again, which is trivially true if they
-are the same object, but non-trivial if the reference type is a proxy
-class).
+The reference type does not have to be a real C++ reference. The requirements of 
+the reference type is that it <i>behaves</i> like a real reference. Hence the 
+reference type must be convertible to the value_type and assignment through 
 
-
-<br><br>
+<br>
+<br>
 <HR>
 <br>
 
 <TABLE>
-<TR valign=top>
-<TD nowrap>Copyright &copy 2000</TD><TD>
-<A HREF=http://www.boost.org/people/jeremy_siek.htm>Jeremy Siek</A>, Univ.of Notre Dame and C++ Library & Compiler Group/SGI (<A HREF="mailto:jsiek@engr.sgi.com">jsiek@engr.sgi.com</A>)
-</TD></TR>
-<tr >
-<TD nowrap>Copyright &copy 2004</TD><TD>
-Thorsten Ottosen.
+    <TR valign="top">
+        <TD nowrap>Copyright &copy 2000</TD>
+        <TD><A HREF=http://www.boost.org/people/jeremy_siek.htm>Jeremy Siek</A>
+    </TR>
+    <tr >
+        <TD nowrap>Copyright &copy 2004</TD>
+        <TD>Thorsten Ottosen.
 </TABLE>
 
 </BODY>
-</HTML> 
+</HTML>

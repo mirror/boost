@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range FAQ </title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="cboost.gif" border="0" ></td>
+            <td ><h1 align="center">Boost.Range</h1></td>
+        </tr>
+    </table>
+
+    <p>
+    <h2  >FAQ</h2> 
+    <a name="FAQ" ></a>
+    <ol  >
+        <li  >
+            Why is there no difference between <code  >iterator_of&lt;C&gt;::type</code> and <code  >const_iterator_of&lt;C&gt;::type</code> 
+            for <code  >std::pair&lt;iterator, iterator&gt;</code>.
+        </li>
+        <p  >
+        In general it is not possible nor desirable to find a corresponding <code  >const_iterator</code>. 
+        When it is possible to come up with one, the client might choose to construct a <code  >std::pair&lt;const_iterator,const_iterator&gt;</code> 
+        object.
+        </p>
+        <li  >
+            Why is there not supplied more types or more functions?
+            <p  >
+            The library have been kept small because its current interface will serve
+            most purposes. If and when a genuine need arises for more functionality, it can 
+            be implemented.
+            </p>
+        </li>
+        <li  >
+            How should I implement generic algorithms for ranges?
+            <p  >
+            One should always start with a generic algorithm that takes two 
+            iterators (or more) as
+            input. Then use Boost.Range to build handier versions on top of the 
+            iterator based algorithm. Please notice that once the range version
+            of the algorithm is done, it makes sense <i>not</i> to expose the
+            iterator version in the public interface.
+            </p>
+        </li>
+    </ol>
+
+
+    <hr>
+    <p>
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    </body>
+</html>
+

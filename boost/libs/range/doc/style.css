@@ -21,3 +21,11 @@ pre{
 .preprocessor{color: #3F007F;}
 .string{font-style: italic; color: #666666;}
 .literal{font-style: italic; color: #666666;}
+
+table
+{
+ cellpadding: 5px;
+ border: 2px;
+}
+
+
