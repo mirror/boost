@@ -414,7 +414,7 @@ __iterator_category(const debug_iterator<T>&) {
 }
 #endif
 
-#if defined(_WIN32) && !defined(BOOST_RE_TEST_LOCALE_CPP) && !defined(BOOST_RE_TEST_LOCALE_C) && !defined(BOOST_RE_TEST_LOCALE_W32)
+#if defined(_WIN32) && !defined(BOOST_RE_TEST_LOCALE_CPP) && !defined(BOOST_RE_TEST_LOCALE_C) && !defined(BOOST_RE_TEST_LOCALE_W32)&& !defined(BOOST_REGEX_NO_W32)
 #define BOOST_RE_TEST_LOCALE_W32
 #endif
 
@@ -434,6 +434,7 @@ typedef boost::reg_expression<char_t, boost::c_regex_traits<char_t>, jm_debug_al
 #define REG_MERGE_COPY 16
 
 #endif
+
 
 
 
