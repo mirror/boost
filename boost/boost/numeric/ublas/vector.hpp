@@ -93,7 +93,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (preserve)
-                data ().resize (size, typename A::value_type (0));
+                data ().resize (size, typename A::value_type());
             else
                 data ().resize (size);
         }
