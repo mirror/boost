@@ -56,10 +56,10 @@
 // traits concepts, then redefine the appropriate macros to pick
 // up on the compiler support:
 
-#define BOOST_IS_CLASS(T) !is_union<T>::value && \
-    !is_scalar<T>::value && \
-    !is_array<T>::value && \
-    !is_reference<T>::value && \
+#define BOOST_IS_CLASS(T) !is_union<T>::value & \
+    !is_scalar<T>::value & \
+    !is_array<T>::value & \
+    !is_reference<T>::value & \
     !is_void<T>::value
 #define BOOST_IS_ENUM(T) false
 #define BOOST_IS_UNION(T) false
@@ -134,8 +134,8 @@ private:
    static U u;
 public:
    enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_same_helper(&t,&u)))
-                 && (is_reference<T>::value == is_reference<U>::value)
-                 && (sizeof(T) == sizeof(U)) }; 
+                 & (is_reference<T>::value == is_reference<U>::value)
+                 & (sizeof(T) == sizeof(U)) }; 
 };
 
 template <typename T> struct is_void{ enum{ value = false }; };
@@ -167,7 +167,7 @@ template <> struct is_standard_signed_integral<signed long>
 
 //* is a type T an integral type described in the standard (3.9.1p7)
 template <typename T> struct is_standard_integral
-{ enum{ value = is_standard_unsigned_integral<T>::value ||
+{ enum{ value = is_standard_unsigned_integral<T>::value |
 is_standard_signed_integral<T>::value }; };
 template <> struct is_standard_integral<char>
 { enum{ value = true}; };
@@ -188,11 +188,11 @@ template <> struct is_standard_float<long double>
 
 //* is a type T an arithmetic type described in the standard (3.9.1p8)
 template <typename T> struct is_standard_arithmetic
-{ enum{ value = is_standard_integral<T>::value || is_standard_float<T>::value}; };
+{ enum{ value = is_standard_integral<T>::value | is_standard_float<T>::value}; };
 
 //* is a type T a fundamental type described in the standard (3.9.1)
 template <typename T> struct is_standard_fundamental
-{ enum{ value = is_standard_arithmetic<T>::value || is_void<T>::value}; };
+{ enum{ value = is_standard_arithmetic<T>::value | is_void<T>::value}; };
 
 //* is a type T an unsigned integral type provided by a compiler extension
 // specialise for compiler defined extentions:
@@ -219,7 +219,7 @@ template <> struct is_extension_signed_integral<__int64>
 
 //* is a type T an integral type provided by a compiler extension
 template <typename T> struct is_extension_integral
-{ enum{ value = is_extension_signed_integral<T>::value ||
+{ enum{ value = is_extension_signed_integral<T>::value |
       is_extension_unsigned_integral<T>::value }; };
 
 //* is a type T a floating-point type provided by a compiler extension
@@ -228,35 +228,35 @@ template <typename T> struct is_extension_float
 
 //* is a type T an arithmetic type provided by a compiler extension
 template <typename T> struct is_extension_arithmetic
-{ enum{ value = is_extension_integral<T>::value || is_extension_float<T>::value}; };
+{ enum{ value = is_extension_integral<T>::value | is_extension_float<T>::value}; };
 
 //* is a type T a fundamental type provided by a compiler extension
 template <typename T> struct is_extension_fundamental
-{ enum{ value = is_extension_arithmetic<T>::value || is_void<T>::value}; };
+{ enum{ value = is_extension_arithmetic<T>::value | is_void<T>::value}; };
 
 //* is a type T an unsigned integral type provided by the compiler or standard
 template <typename T> struct is_unsigned_integral
-{ enum{ value = is_standard_unsigned_integral<T>::value || is_extension_unsigned_integral<T>::value}; };
+{ enum{ value = is_standard_unsigned_integral<T>::value | is_extension_unsigned_integral<T>::value}; };
 
 //* is a type T a signed integral type provided by the compiler or standard
 template <typename T> struct is_signed_integral
-{ enum{ value = is_standard_signed_integral<T>::value || is_extension_signed_integral<T>::value}; };
+{ enum{ value = is_standard_signed_integral<T>::value | is_extension_signed_integral<T>::value}; };
 
 //* is a type T an integral type provided by the compiler or standard
 template <typename T> struct is_integral
-{ enum{ value = is_standard_integral<T>::value || is_extension_integral<T>::value}; };
+{ enum{ value = is_standard_integral<T>::value | is_extension_integral<T>::value}; };
 
 //* is a type T a floating-point type provided by the compiler or standard
 template <typename T> struct is_float
-{ enum{ value = is_standard_float<T>::value || is_extension_float<T>::value}; };
+{ enum{ value = is_standard_float<T>::value | is_extension_float<T>::value}; };
 
 //* is a type T an arithmetic type provided by the compiler or standard
 template <typename T> struct is_arithmetic
-{ enum{ value = is_standard_arithmetic<T>::value || is_extension_arithmetic<T>::value}; };
+{ enum{ value = is_standard_arithmetic<T>::value | is_extension_arithmetic<T>::value}; };
 
 //* is a type T a fundamental type provided by the compiler or standard
 template <typename T> struct is_fundamental
-{ enum{ value = is_standard_fundamental<T>::value || is_extension_fundamental<T>::value}; };
+{ enum{ value = is_standard_fundamental<T>::value | is_extension_fundamental<T>::value}; };
 
 //* is a type T an array - is_array<T>
 namespace detail{
@@ -287,9 +287,9 @@ private:
    static T t;
 public:
    enum{ value = (1 == sizeof(detail::is_pointer_helper(t))) 
-                 && (1 == sizeof(detail::is_array_helper(&t, t)))
-                 && !is_reference<T>::value
-                 && !(1 == sizeof(detail::is_pointer_helper3(t))) }; 
+                 & (1 == sizeof(detail::is_array_helper(&t, t)))
+                 & !is_reference<T>::value
+                 & !(1 == sizeof(detail::is_pointer_helper3(t))) }; 
 };
 
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
@@ -299,11 +299,11 @@ private:
    static T t;
 public:
    enum{ value = (!is_const<T>::value 
-                 && !is_volatile<T>::value 
-                 && !is_reference<T>::value
-                 && !is_array<T>::value)
-                 && ((1 == sizeof(detail::is_pointer_helper(t)))
-                     || (1 == sizeof(detail::is_pointer_helper3(t)))) }; 
+                 & !is_volatile<T>::value 
+                 & !is_reference<T>::value
+                 & !is_array<T>::value)
+                 & ((1 == sizeof(detail::is_pointer_helper(t)))
+                     | (1 == sizeof(detail::is_pointer_helper3(t)))) }; 
 };
 
 # ifdef BOOST_MSVC
@@ -319,9 +319,7 @@ private:
 public:
    enum // dwa 10/27/00 - VC6.4 seems to choke on short-circuit (&&,||)
    {    // evaluations in constant expressions
-       value = !is_const<cv_t>::value ? true
-             : !is_volatile<cv_t>::value ? true
-             : false
+       value = !is_const<cv_t>::value | !is_volatile<cv_t>::value
    }; 
 };
 template <> struct is_reference<void> 
@@ -363,28 +361,28 @@ public:
 
 //* is type T an object type (allows cv-qual)
 template <typename T> struct is_object
-{ enum{ value = !is_reference<T>::value && !is_void<T>::value }; };
+{ enum{ value = !is_reference<T>::value & !is_void<T>::value }; };
 
 //* is type T a standard scalar type (allows cv-qual)
 template <typename T> struct is_standard_scalar
 { enum{ value = is_standard_arithmetic<T>::value
-      || is_enum<T>::value
-      || is_pointer<T>::value
-      || is_member_pointer<T>::value }; };
+      | is_enum<T>::value
+      | is_pointer<T>::value
+      | is_member_pointer<T>::value }; };
 
 //* is type T an extension scalar type (allows cv-qual)
 template <typename T> struct is_extension_scalar
 { enum{ value = is_extension_arithmetic<T>::value
-      || is_enum<T>::value
-      || is_pointer<T>::value
-      || is_member_pointer<T>::value }; };
+      | is_enum<T>::value
+      | is_pointer<T>::value
+      | is_member_pointer<T>::value }; };
 
 //* is type T a builtin scalar type (allows cv-qual)
 template <typename T> struct is_scalar
 { enum{ value = is_arithmetic<T>::value
-      || is_enum<T>::value
-      || is_pointer<T>::value
-      || is_member_pointer<T>::value }; };
+      | is_enum<T>::value
+      | is_pointer<T>::value
+      | is_member_pointer<T>::value }; };
 
 //*? is a type T a class type (class/struct) - is_class<T>
 template <typename T> struct is_class
@@ -392,14 +390,14 @@ template <typename T> struct is_class
 
 //*? is a type T a compound type
 template <typename T> struct is_compound
-{ enum{ value = is_array<T>::value || is_pointer<T>::value
-      || is_reference<T>::value || is_class<T>::value || is_union<T>::value
-      || is_enum<T>::value || is_member_pointer<T>::value }; };
+{ enum{ value = is_array<T>::value | is_pointer<T>::value
+      | is_reference<T>::value | is_class<T>::value | is_union<T>::value
+      | is_enum<T>::value | is_member_pointer<T>::value }; };
 
 //*? is type T a POD type (allows cv-qual)
 template <typename T> struct is_POD
 { enum{ value = is_scalar<T>::value  //JM 7Jan2000
-      || BOOST_IS_POD(T) }; };
+      | BOOST_IS_POD(T) }; };
 
 namespace detail{
 
@@ -519,15 +517,15 @@ struct is_empty
 private:
    typedef detail::empty_helper_chooser<
       !is_convertible<T,int>::value
-      && !is_convertible<T,double>::value
-      && !is_pointer<T>::value
-      && !is_member_pointer<T>::value
-      && !is_array<T>::value
-      && !is_convertible<T, const volatile void*>::value> chooser;
+      & !is_convertible<T,double>::value
+      & !is_pointer<T>::value
+      & !is_member_pointer<T>::value
+      & !is_array<T>::value
+      & !is_convertible<T, const volatile void*>::value> chooser;
    typedef typename chooser::template rebind<T> bound_type;
    typedef typename bound_type::type eh_type;
 public:
-   enum{ value = eh_type::value || BOOST_IS_EMPTY(T) }; 
+   enum{ value = eh_type::value | BOOST_IS_EMPTY(T) }; 
 };
 
 #else
@@ -538,27 +536,27 @@ template <typename T> struct is_empty
 //*? T has trivial default constructor (allows cv-qual)
 template <typename T> struct has_trivial_constructor
 {
-  enum{ value = is_POD<T>::value || BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) };
+  enum{ value = is_POD<T>::value | BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) };
 };
 
 //*? T has trivial copy constructor (allows cv-qual)
 template <typename T> struct has_trivial_copy
 {
-  enum{ value = is_POD<T>::value || BOOST_HAS_TRIVIAL_COPY(T) };
+  enum{ value = is_POD<T>::value | BOOST_HAS_TRIVIAL_COPY(T) };
 };
 
 //*? T has trivial assignment operator (allows cv-qual)
 template <typename T>
 struct has_trivial_assign
 {
-  enum{ value = is_POD<T>::value || BOOST_HAS_TRIVIAL_ASSIGN(T) };
+  enum{ value = is_POD<T>::value | BOOST_HAS_TRIVIAL_ASSIGN(T) };
 };
 
 //*? T has trivial destructor (allows cv-qual)
 template <typename T>
 struct has_trivial_destructor
 {
-  enum{ value = is_POD<T>::value || BOOST_HAS_TRIVIAL_DESTRUCTOR(T) };
+  enum{ value = is_POD<T>::value | BOOST_HAS_TRIVIAL_DESTRUCTOR(T) };
 };
 
 } // namespace boost
