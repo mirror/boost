@@ -34,11 +34,7 @@ namespace boost{
    namespace re_detail{
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 template <class charT>
@@ -102,9 +98,7 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
 }
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
    } // namepsace re_detail

@@ -29,11 +29,7 @@
 namespace boost{
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 template <class charT>
@@ -786,9 +782,7 @@ class regex_traits : public cpp_regex_traits<charT>
 #endif
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
 } // namespace boost

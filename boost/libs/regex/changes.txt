@@ -1,6 +1,7 @@
 Version 311:
 FIXED:    Support for STLPort 4.1b6.
 FIXED:    Library calling convention for VC6 debug builds.
+FIXED:    Borland compiler support when using non-default calling convention.
 CHANGED:  Reorganised and simplified config setup.
 
 Version 310:
@@ -222,6 +223,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 

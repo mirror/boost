@@ -55,11 +55,7 @@
 namespace boost{
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 namespace re_detail{
@@ -1464,9 +1460,7 @@ iterator BOOST_RE_CALL re_is_set_member(iterator next,
 } // namepsace re_detail
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
 } // namespace boost

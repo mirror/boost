@@ -42,11 +42,7 @@ namespace boost{
    namespace re_detail{
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 void BOOST_RE_CALL re_init_threads();
@@ -167,9 +163,7 @@ BOOST_RE_IX_DECL extern unsigned int re_lock_count;
 #endif // BOOST_RE_THREADS
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
 } // namespace re_detail

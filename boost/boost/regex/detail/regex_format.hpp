@@ -39,11 +39,7 @@ enum format_flags_t{
 namespace re_detail{
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve -w-8037
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 template <class O, class I>
@@ -569,9 +565,7 @@ std::basic_string<charT> regex_merge(const std::basic_string<charT>& s,
 }
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
 } // namespace boost

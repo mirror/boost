@@ -249,7 +249,7 @@ full list of macros and their usage.
    // for now we'll always define these
    // unless we know that the platform can cope
    // with wide character strings:
-   #if !defined(linux) 
+   #if !defined(linux) || (defined(__GLIBCPP__) && !defined(_GLIBCPP_USE_WCHAR_T))
    	#define BOOST_RE_NO_WCTYPE_H
    	#define BOOST_RE_NO_WCSTRING
    #endif
@@ -580,11 +580,7 @@ namespace boost{
    namespace re_detail{
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 // add our destroy functions:
@@ -735,11 +731,6 @@ inline bool BOOST_RE_CALL boolify(I val)
 #define BOOST_RE_MAKE_BOOL(x) x
 #endif
 
-#ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
-  #pragma option pop
- #endif
-#endif
 
 template <class T, class A>
 struct rebind_allocator
@@ -760,6 +751,9 @@ std::ptrdiff_t distance(const T& x, const T& y)
 using std::distance;
 #endif
 
+#ifdef __BORLANDC__
+  #pragma option pop
+#endif
 } // namespace re_detail
 
 } // namespace boost
@@ -1056,6 +1050,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

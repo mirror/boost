@@ -438,7 +438,11 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
 
 unsigned int hl_match_id;
 
-bool hl_grep_test_proc(const RegEx& e)
+bool 
+#if defined(__BORLANDC__) || defined(BOOST_MSVC)
+__cdecl
+#endif
+hl_grep_test_proc(const RegEx& e)
 {
    int start, end;
    start = e.Position(0);

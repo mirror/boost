@@ -27,11 +27,7 @@
 #include <boost/regex/detail/regex_config.hpp>
 
 #ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
-   #endif
+   #pragma option push -a4 -b -Ve -pc
 #endif
 
 /* include these defs only for POSIX compatablity */
@@ -287,9 +283,7 @@ public:
 };
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
 } // namespace boost

@@ -25,15 +25,11 @@
 #define BOOST_REGEX_COMPILE_HPP
 
 namespace boost{
+#ifdef __BORLANDC__
+   #pragma option push -a4 -b -Ve -pc
+#endif
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b -Ve
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
-   #endif
-#endif
 
 template <class traits>
 struct kmp_translator
@@ -2035,9 +2031,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fail(unsigned int e
 #endif
 
 #ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
   #pragma option pop
- #endif
 #endif
 
 } // namespace boost
