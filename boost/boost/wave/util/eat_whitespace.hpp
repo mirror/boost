@@ -77,8 +77,11 @@ eat_whitespace<TokenT>::general(TokenT &token, bool &skipped_newline)
             }
         }
 
-        if (!preserve_comments && token.get_value().size() > 1)
+        if ((!preserve_comments || T_CCOMMENT != id) && 
+            token.get_value().size() > 1)
+        {
             token.set_value(" ");   // replace with a single space
+        }
     }
     else {
         state = &eat_whitespace::general;
@@ -108,7 +111,11 @@ eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline)
         {
             skipped_newline = true;
         }
-        return !preserve_comments;
+        if (preserve_comments) {
+            state = &eat_whitespace::general;
+            return false;
+        }
+        // fall through...
     }
     return true;
 }

@@ -41,11 +41,14 @@ CHANGELOG
 - Fixed a compilation error of the testwave executable (added a missing 
   namespace specifier).
 - Added a missing header to make cpp.re.cpp compile on CW.
-- __BASE_FILE__ predefined macro now returns a properly escaped file name 
+- The predefined macro __BASE_FILE__ now returns a properly escaped file name 
   string.
 - Fixed the function boost::wave::util::impl::unescape_lit().
+- Added the Wave unit test framework. For now it contains about 60 unit tests
+  executed by a special test driver (testwave).
 - Added the '$F' replacement string to the testwave application. This allows
   to handle file paths sensitive comparison of the expected and real results.
+- Fixed a minor problem in the whitespace eating component.
 
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
