@@ -39,6 +39,10 @@
 #define BOOST_VARIANT_AUX_RETURN_VOID  \
     /**/
 
+#define BOOST_VARIANT_AUX_RETURN_VOID_TYPE \
+    void    \
+    /**/
+
 #else // defined(BOOST_NO_VOID_RETURNS)
 
 namespace boost {
@@ -79,6 +83,9 @@ struct no_void_returns_helper<void>
 #define BOOST_VARIANT_AUX_RETURN_VOID  \
     return ::boost::detail::variant::fake_return_void()     \
     /**/
+
+#define BOOST_VARIANT_AUX_RETURN_VOID_TYPE  \
+    ::boost::detail::variant::fake_return_void
 
 #endif // BOOST_NO_VOID_RETURNS workaround
 

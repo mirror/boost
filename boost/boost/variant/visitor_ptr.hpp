@@ -108,7 +108,7 @@ private: // helpers, for static visitor interfaces (below)
         return visitor_(operand);
     }
 
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(void)
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
     execute_impl(argument_fwd_type operand, mpl::true_) const
     {
         visitor_(operand);
