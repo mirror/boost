@@ -19,8 +19,7 @@
 
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
-#include <boost/numeric/ublas/vector_expression.hpp>
-#include <boost/numeric/ublas/matrix_expression.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 // Symmetric matrices are square. Thanks to Peter Schmitteckert for spotting this.
@@ -43,9 +42,9 @@ namespace boost { namespace numeric { namespace ublas {
         return true;
     }
 
-    // Array based symmetric matrix class 
+    // Array based symmetric matrix class
     template<class T, class F1, class F2, class A>
-    class symmetric_matrix: 
+    class symmetric_matrix:
         public matrix_expression<symmetric_matrix<T, F1, F2, A> > {
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
@@ -65,7 +64,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const symmetric_matrix<T, F1, F2, A> const_self_type;
         typedef symmetric_matrix<T, F1, F2, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef packed_tag storage_category;
         typedef typename F1::packed_category packed_category;
@@ -359,7 +362,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator2 find_last2 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 j = functor1_type::restrict2 (i, j);
             return iterator2 (*this, i, j);
         }
@@ -920,20 +923,20 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_reference,
-                                       typename M::reference>::type reference;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_reference,
+                                          typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_pointer,
-                                       typename M::pointer>::type pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_pointer,
+                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_closure_type,
-                                       typename M::closure_type>::type matrix_closure_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_closure_type,
+                                          typename M::closure_type>::type matrix_closure_type;
 #endif
         typedef const symmetric_adaptor<M, F> const_self_type;
         typedef symmetric_adaptor<M, F> self_type;
@@ -992,6 +995,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Element access
+#ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
@@ -1010,6 +1014,17 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 return data () (j, i);
         }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i, size_type j) const {
+            BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
+            if (functor_type::other (i, j))
+                return data () (i, j);
+            else
+                return data () (j, i);
+        }
+#endif
 
         // Assignment
         BOOST_UBLAS_INLINE
@@ -1116,7 +1131,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_first1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor_type::restrict1 (i, j);
             return iterator1 (*this, i, j);
         }
@@ -1360,7 +1375,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
                 container_reference<symmetric_adaptor>::assign (&it ());
@@ -1605,7 +1620,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
                 container_reference<symmetric_adaptor>::assign (&it ());

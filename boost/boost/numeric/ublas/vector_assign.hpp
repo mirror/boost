@@ -25,7 +25,6 @@
 namespace boost { namespace numeric { namespace ublas {
 
     template<class E1, class E2>
-    static
     BOOST_UBLAS_INLINE
     bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
         typedef BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
@@ -385,6 +384,7 @@ namespace boost { namespace numeric { namespace ublas {
             functor_type () (v (index), e () (index));
             // The proxies could reference the same container.
             restart (e, index, ite, ite_end);
+            restart (v, index, it, it_end);
         }
 #endif
         while (it != it_end) {
@@ -496,6 +496,7 @@ namespace boost { namespace numeric { namespace ublas {
             functor_type () (v (index), e () (index));
             // The proxies could reference the same container.
             restart (e, index, ite, ite_end);
+            restart (v, index, it, it_end);
         }
         while (it != it_end) {
             // Sparse proxies don't need to be conformant.
@@ -504,6 +505,7 @@ namespace boost { namespace numeric { namespace ublas {
             functor_type () (v (index), e () (index));
             // The proxies could reference the same container.
             restart (v, index, it, it_end);
+            restart (e, index, ite, ite_end);
         }
 #endif
     }

@@ -222,6 +222,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
     template<class E>
     class vector_const_reference:
         public vector_expression<vector_const_reference<E> > {
@@ -310,6 +311,12 @@ namespace boost { namespace numeric { namespace ublas {
             return const_reverse_iterator (begin ());
         }
 
+#ifdef BOOST_MSVC_STD_ITERATOR
+        typedef reverse_iterator_base<const_iterator, value_type, const_reference> reverse_iterator;
+#else
+        typedef reverse_iterator_base<const_iterator> reverse_iterator;
+#endif
+
     private:
         const expression_type &e_;
         static expression_type nil_;
@@ -317,6 +324,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E>
     typename vector_const_reference<E>::expression_type vector_const_reference<E>::nil_;
+#endif
 
     template<class E>
     class vector_reference:
@@ -329,12 +337,27 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename E::value_type value_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef typename E::const_reference const_reference;
         typedef typename E::reference reference;
         typedef typename E::const_pointer const_pointer;
         typedef typename E::pointer pointer;
         typedef typename E::const_iterator const_iterator_type;
         typedef typename E::iterator iterator_type;
+#else
+        typedef typename E::const_reference const_reference;
+        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+                                          typename E::const_reference,
+                                          typename E::reference>::type reference;
+        typedef typename E::const_pointer const_pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+                                          typename E::const_pointer,
+                                          typename E::pointer>::type pointer;
+        typedef typename E::const_iterator const_iterator_type;
+        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+                                          typename E::const_iterator,
+                                          typename E::iterator>::type iterator_type;
+#endif
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -360,12 +383,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Resizing
+#ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
             expression ().resize (size);
         }
+#else
+        BOOST_UBLAS_INLINE
+        void resize (size_type size) const {
+            expression ().resize (size);
+        }
+#endif
 
         // Element access
+#ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
             return expression () (i);
@@ -383,6 +414,17 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator [] (size_type i) {
             return expression () [i];
         }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i) const {
+            return e_ (i);
+        }
+
+        BOOST_UBLAS_INLINE
+        reference operator [] (size_type i) const {
+            return e_ [i];
+        }
+#endif
 
         typedef const_iterator_type const_iterator;
         typedef iterator_type iterator;

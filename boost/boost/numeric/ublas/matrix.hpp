@@ -49,7 +49,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const matrix<T, F, A> const_self_type;
         typedef matrix<T, F, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename A::const_iterator const_iterator_type;
         typedef typename A::iterator iterator_type;
@@ -908,7 +912,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const vector_of_vector<T, F, A> const_self_type;
         typedef vector_of_vector<T, F, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename A::const_iterator vector_const_iterator_type;
         typedef typename A::iterator vector_iterator_type;
@@ -1831,7 +1839,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const identity_matrix<T> const_self_type;
         typedef identity_matrix<T> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef size_type const_iterator_type;
         typedef packed_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
@@ -2262,7 +2274,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const zero_matrix<T> const_self_type;
         typedef zero_matrix<T> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef size_type const_iterator_type;
         typedef sparse_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
@@ -2680,7 +2696,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const scalar_matrix<T> const_self_type;
         typedef scalar_matrix<T> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef size_type const_iterator_type;
         typedef dense_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
@@ -3099,7 +3119,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const c_matrix<T, N, M> const_self_type;
         typedef c_matrix<T, N, M> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef const T *const_iterator_type;
         typedef T *iterator_type;

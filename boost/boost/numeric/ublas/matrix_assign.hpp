@@ -25,7 +25,6 @@
 namespace boost { namespace numeric { namespace ublas {
 
     template<class E1, class E2>
-    static
     BOOST_UBLAS_INLINE
     bool equals (const matrix_expression<E1> &e1, const matrix_expression<E2> &e2) {
         typedef BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
@@ -714,6 +713,7 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
+                    restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
                 }
 #endif
                 while (it2 != it2_end) {
@@ -731,6 +731,8 @@ namespace boost { namespace numeric { namespace ublas {
                 ++ it1;
             } else if (compare > 0) {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+                typename M::iterator2 it2;
+                typename M::iterator2 it2_end;
                 typename E::const_iterator2 it2e (it1e.begin ());
                 typename E::const_iterator2 it2e_end (it1e.end ());
                 while (it2e != it2e_end) {
@@ -740,6 +742,7 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
+                    restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
                 }
 #endif
                 ++ it1e;
@@ -747,6 +750,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         while (it1e != it1e_end) {
+            typename M::iterator2 it2;
+            typename M::iterator2 it2_end;
             typename E::const_iterator2 it2e (it1e.begin ());
             typename E::const_iterator2 it2e_end (it1e.end ());
             while (it2e != it2e_end) {
@@ -756,6 +761,7 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
                 restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
+                restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
             }
             ++ it1e;
         }
@@ -827,6 +833,7 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
+                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                 }
 #endif
                 while (it1 != it1_end) {
@@ -844,6 +851,8 @@ namespace boost { namespace numeric { namespace ublas {
                 ++ it2;
             } else if (compare > 0) {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+                typename M::iterator1 it1;
+                typename M::iterator1 it1_end;
                 typename E::const_iterator1 it1e (it2e.begin ());
                 typename E::const_iterator1 it1e_end (it2e.end ());
                 while (it1e != it1e_end) {
@@ -853,6 +862,7 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
+                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                 }
 #endif
                 ++ it2e;
@@ -860,6 +870,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         while (it2e != it2e_end) {
+            typename M::iterator1 it1;
+            typename M::iterator1 it1_end;
             typename E::const_iterator1 it1e (it2e.begin ());
             typename E::const_iterator1 it1e_end (it2e.end ());
             while (it1e != it1e_end) {
@@ -869,6 +881,7 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
                 restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
+                restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
             }
             ++ it2e;
         }
@@ -1070,6 +1083,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
                 typename M::iterator2 it2 (it1.begin ());
                 typename M::iterator2 it2_end (it1.end ());
+                typename E::iterator2 it2e;
+                typename E::iterator2 it2e_end;
                 while (it2 != it2_end) {
                     // Sparse proxies don't need to be conformant.
                     // Thanks to Michael Stevens for suggesting this.
@@ -1077,11 +1092,14 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
+                    restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
                 }
 #endif
                 ++ it1;
             } else if (compare > 0) {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+                typename M::iterator2 it2;
+                typename M::iterator2 it2_end;
                 typename E::iterator2 it2e (it1e.begin ());
                 typename E::iterator2 it2e_end (it1e.end ());
                 while (it2e != it2e_end) {
@@ -1091,6 +1109,7 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
+                    restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
                 }
 #endif
                 ++ it1e;
@@ -1098,6 +1117,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         while (it1e != it1e_end) {
+            typename M::iterator2 it2;
+            typename M::iterator2 it2_end;
             typename E::iterator2 it2e (it1e.begin ());
             typename E::iterator2 it2e_end (it1e.end ());
             while (it2e != it2e_end) {
@@ -1107,12 +1128,15 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
                 restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
+                restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
             }
             ++ it1e;
         }
         while (it1 != it1_end) {
             typename M::iterator2 it2 (it1.begin ());
             typename M::iterator2 it2_end (it1.end ());
+            typename E::iterator2 it2e;
+            typename E::iterator2 it2e_end;
             while (it2 != it2_end) {
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
@@ -1120,6 +1144,7 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
                 restart (m, index1, index2, it1, it1_end, it2, it2_end, row_major_tag ());
+                restart (e, index1, index2, it1e, it1e_end, it2e, it2e_end, row_major_tag ());
             }
             ++ it1;
         }
@@ -1198,6 +1223,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
                 typename M::iterator1 it1 (it2.begin ());
                 typename M::iterator1 it1_end (it2.end ());
+                typename E::iterator1 it1e;
+                typename E::iterator1 it1e_end;
                 while (it1 != it1_end) {
                     // Sparse proxies don't need to be conformant.
                     // Thanks to Michael Stevens for suggesting this.
@@ -1205,11 +1232,14 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
+                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
                 }
 #endif
                 ++ it2;
             } else if (compare > 0) {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+                typename M::iterator1 it1;
+                typename M::iterator1 it1_end;
                 typename E::iterator1 it1e (it2e.begin ());
                 typename E::iterator1 it1e_end (it2e.end ());
                 while (it1e != it1e_end) {
@@ -1219,6 +1249,7 @@ namespace boost { namespace numeric { namespace ublas {
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
                     restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
+                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                 }
 #endif
                 ++ it2e;
@@ -1226,6 +1257,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         while (it2e != it2e_end) {
+            typename M::iterator1 it1;
+            typename M::iterator1 it1_end;
             typename E::iterator1 it1e (it2e.begin ());
             typename E::iterator1 it1e_end (it2e.end ());
             while (it1e != it1e_end) {
@@ -1235,12 +1268,15 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
                 restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
+                restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
             }
             ++ it2e;
         }
         while (it2 != it2_end) {
             typename M::iterator1 it1 (it2.begin ());
             typename M::iterator1 it1_end (it2.end ());
+            typename E::iterator1 it1e;
+            typename E::iterator1 it1e_end;
             while (it1 != it1_end) {
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
@@ -1248,6 +1284,7 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
                 restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
+                restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
             }
             ++ it2;
         }

@@ -47,7 +47,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const vector<T, A> const_self_type;
         typedef vector<T, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef vector_reference<self_type> closure_type;
         typedef typename A::const_iterator const_iterator_type;
         typedef typename A::iterator iterator_type;
@@ -538,7 +542,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const unit_vector<T> const_self_type;
         typedef unit_vector<T> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef size_type const_iterator_type;
         typedef packed_tag storage_category;
 
@@ -778,7 +786,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const zero_vector<T> const_self_type;
         typedef zero_vector<T> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef size_type const_iterator_type;
         typedef sparse_tag storage_category;
 
@@ -982,7 +994,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const scalar_vector<T> const_self_type;
         typedef scalar_vector<T> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef size_type const_iterator_type;
         typedef dense_tag storage_category;
 
@@ -1215,7 +1231,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const c_vector<T, N> const_self_type;
         typedef c_vector<T, N> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef vector_reference<self_type> closure_type;
         typedef const T *const_iterator_type;
         typedef T *iterator_type;

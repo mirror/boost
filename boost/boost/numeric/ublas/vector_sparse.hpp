@@ -194,7 +194,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const sparse_vector<T, A> const_self_type;
         typedef sparse_vector<T, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef vector_reference<self_type> closure_type;
         typedef typename A::const_iterator const_iterator_type;
         typedef typename A::iterator iterator_type;
@@ -689,7 +693,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef TA value_array_type;
         typedef const compressed_vector<T, IB, IA, TA> const_self_type;
         typedef compressed_vector<T, IB, IA, TA> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef vector_reference<self_type> closure_type;
         typedef typename IA::const_iterator const_iterator_type;
         typedef typename IA::iterator iterator_type;
@@ -1257,7 +1265,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef TA value_array_type;
         typedef const coordinate_vector<T, IB, IA, TA> const_self_type;
         typedef coordinate_vector<T, IB, IA, TA> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const vector_reference<const_self_type> const_closure_type;
+#endif
         typedef vector_reference<self_type> closure_type;
         typedef typename IA::const_iterator const_iterator_type;
         typedef typename IA::iterator iterator_type;

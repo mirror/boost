@@ -597,7 +597,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (size != size_) {
-                data = new value_type [size];
+                pointer data = new value_type [size];
                 // Assuming std compliant allocator as requested during review.
                 // if (! data)
                 //     throw std::bad_alloc ();

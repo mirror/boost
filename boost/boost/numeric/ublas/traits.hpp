@@ -545,6 +545,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T1, class T2>
     struct promote_traits {
+        // Default promotion will badly fail, if the types are different.
+        // Thanks to Kresimir Fresl for spotting this.
+        BOOST_STATIC_ASSERT ((boost::is_same<T1, T2>::value));
         typedef T1 promote_type;
     };
 

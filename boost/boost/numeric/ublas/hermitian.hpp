@@ -19,8 +19,7 @@
 
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
-#include <boost/numeric/ublas/vector_expression.hpp>
-#include <boost/numeric/ublas/matrix_expression.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 // Hermitian matrices are square. Thanks to Peter Schmitteckert for spotting this.
@@ -43,9 +42,138 @@ namespace boost { namespace numeric { namespace ublas {
         return true;
     }
 
-    // Array based hermitian matrix class 
+#ifdef BOOST_UBLAS_STRICT_HERMITIAN
+    template<class M>
+    class hermitian_matrix_element:
+       public container_reference<M> {
+    public:
+        typedef M matrix_type;
+        typedef typename M::size_type size_type;
+        typedef typename M::value_type value_type;
+        // typedef const value_type &const_reference;
+        typedef typename type_traits<value_type>::const_reference const_reference;
+        typedef value_type &reference;
+        typedef value_type *pointer;
+
+        // Construction and destruction
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element (matrix_type &m, size_type i, size_type j, value_type d):
+            container_reference<matrix_type> (m), i_ (i), j_ (j), d_ (d) {}
+        BOOST_UBLAS_INLINE
+        ~hermitian_matrix_element () {
+            ((*this) ()).at (i_, j_, d_);
+        }
+
+        // Assignment
+        template<class D>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator = (const D &d) {
+            d_ = d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator = (const hermitian_matrix_element &p) {
+            d_ = p.d_;
+            return *this;
+        }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator = (const hermitian_matrix_element<OM> &p) {
+            d_ = value_type (p);
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator += (const D &d) {
+            d_ += d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator += (const hermitian_matrix_element &p) {
+            d_ += p.d_;
+            return *this;
+        }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator += (const hermitian_matrix_element<OM> &p) {
+            d_ += value_type (p);
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator -= (const D &d) {
+            d_ -= d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator -= (const hermitian_matrix_element &p) {
+            d_ -= p.d_;
+            return *this;
+        }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator -= (const hermitian_matrix_element<OM> &p) {
+            d_ -= value_type (p);
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator *= (const D &d) {
+            d_ *= d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator *= (const hermitian_matrix_element &p) {
+            d_ *= p.d_;
+            return *this;
+        }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator *= (const hermitian_matrix_element<OM> &p) {
+            d_ *= value_type (p);
+            return *this;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator /= (const D &d) {
+            d_ /= d;
+            return *this;
+        }
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator /= (const hermitian_matrix_element &p) {
+            d_ /= p.d_;
+            return *this;
+        }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        hermitian_matrix_element &operator /= (const hermitian_matrix_element<OM> &p) {
+            d_ /= value_type (p);
+            return *this;
+        }
+
+        // Conversion
+        // FIXME: GCC 3.1 warns, if enabled
+#ifndef __GNUC__
+        BOOST_UBLAS_INLINE
+        operator const_reference () const {
+            return d_;
+        }
+#endif
+        BOOST_UBLAS_INLINE
+        operator reference () {
+            return d_;
+        }
+
+    private:
+        size_type i_;
+        size_type j_;
+        value_type d_;
+    };
+#endif
+
+    // Array based hermitian matrix class
     template<class T, class F1, class F2, class A>
-    class hermitian_matrix: 
+    class hermitian_matrix:
         public matrix_expression<hermitian_matrix<T, F1, F2, A> > {
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
@@ -57,7 +185,11 @@ namespace boost { namespace numeric { namespace ublas {
         // FIXME: no better way to not return the address of a temporary?
         // typedef const T &const_reference;
         typedef const T const_reference;
+#ifndef BOOST_UBLAS_STRICT_HERMITIAN
         typedef T &reference;
+#else
+        typedef hermitian_matrix_element<hermitian_matrix<T, F1, F2, A> > reference;
+#endif
         typedef const T *const_pointer;
         typedef T *pointer;
         typedef F1 functor1_type;
@@ -66,7 +198,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef A array_type;
         typedef const hermitian_matrix<T, F1, F2, A> const_self_type;
         typedef hermitian_matrix<T, F1, F2, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef packed_tag storage_category;
         typedef typename F1::packed_category packed_category;
@@ -98,7 +234,7 @@ namespace boost { namespace numeric { namespace ublas {
         hermitian_matrix (const matrix_expression<AE> &ae): 
             size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())),
             data_ (functor1_type::packed_size (ae ().size1 (), ae ().size2 ())) {
-            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -138,7 +274,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
             // if (i == j)
             //    return type_traits<value_type>::real (data () [functor1_type::element (functor2_type (), i, size_, i, size_)]);
-            // else 
+            // else
             if (functor1_type::other (i, j))
                 return data () [functor1_type::element (functor2_type (), i, size_, j, size_)];
             else
@@ -148,6 +284,7 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
+#ifndef BOOST_UBLAS_STRICT_HERMITIAN
             if (functor1_type::other (i, j))
                 return data () [functor1_type::element (functor2_type (), i, size_, j, size_)];
             else {
@@ -156,6 +293,24 @@ namespace boost { namespace numeric { namespace ublas {
                 external_logic ().raise ();
                 return conj_ = type_traits<value_type>::conj (data () [functor1_type::element (functor2_type (), j, size_, i, size_)]);
             }
+#else
+            if (functor1_type::other (i, j))
+                return reference (*this, i, j, data () [functor1_type::element (functor2_type (), i, size_, j, size_)]);
+            else
+                return reference (*this, i, j, type_traits<value_type>::conj (data () [functor1_type::element (functor2_type (), j, size_, i, size_)]));
+#endif
+        }
+        BOOST_UBLAS_INLINE
+        void at (size_type i, size_type j, value_type t) {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_, bad_index ());
+            // if (i == j)
+            //    data () [functor1_type::element (functor2_type (), i, size_, i, size_)] = type_traits<value_type>::real (t);
+            // else
+            if (functor1_type::other (i, j))
+                data () [functor1_type::element (functor2_type (), i, size_, j, size_)] = t;
+            else
+                data () [functor1_type::element (functor2_type (), j, size_, i, size_)] = type_traits<value_type>::conj (t);
         }
 
         // Assignment
@@ -345,7 +500,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_first1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor1_type::restrict1 (i, j);
             return iterator1 (*this, i, j);
         }
@@ -355,7 +510,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_last1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor1_type::restrict1 (i, j);
             return iterator1 (*this, i, j);
         }
@@ -365,7 +520,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator2 find_first2 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 j = functor1_type::restrict2 (i, j);
             return iterator2 (*this, i, j);
         }
@@ -375,7 +530,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator2 find_last2 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 j = functor1_type::restrict2 (i, j);
             return iterator2 (*this, i, j);
         }
@@ -559,7 +714,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -804,7 +959,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -937,30 +1092,40 @@ namespace boost { namespace numeric { namespace ublas {
         // FIXME: no better way to not return the address of a temporary?
         // typedef typename M::const_reference const_reference;
         typedef typename M::value_type const_reference;
+#ifndef BOOST_UBLAS_STRICT_HERMITIAN
         typedef typename M::reference reference;
+#else
+        typedef hermitian_matrix_element<hermitian_adaptor<M, F> > reference;
+#endif
         typedef typename M::const_pointer const_pointer;
         typedef typename M::pointer pointer;
 #else
         // FIXME: no better way to not return the address of a temporary?
         // typedef typename M::const_reference const_reference;
-        // typedef typename detail::ct_if<boost::is_const<M>::value,
-        //                               typename M::const_reference,
-        //                               typename M::reference>::type reference;
+        // typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        //                                   typename M::const_reference,
+        //                                   typename M::reference>::type reference;
         typedef typename M::value_type const_reference;
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::value_type,
-                                       typename M::reference>::type reference;
+#ifndef BOOST_UBLAS_STRICT_HERMITIAN
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::value_type,
+                                          typename M::reference>::type reference;
+#else
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::value_type,
+                                          hermitian_matrix_element<const hermitian_adaptor<M, F> > >::type reference;
+#endif
         typedef typename M::const_pointer const_pointer;
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_pointer,
-                                       typename M::pointer>::type pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_pointer,
+                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_closure_type,
-                                       typename M::closure_type>::type matrix_closure_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_closure_type,
+                                          typename M::closure_type>::type matrix_closure_type;
 #endif
         typedef const hermitian_adaptor<M, F> const_self_type;
         typedef hermitian_adaptor<M, F> self_type;
@@ -978,7 +1143,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
         }
         BOOST_UBLAS_INLINE
-        hermitian_adaptor (matrix_type &data): 
+        hermitian_adaptor (matrix_type &data):
             data_ (data) {
             BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
         }
@@ -990,11 +1155,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return data_.size1 ();
         }
         BOOST_UBLAS_INLINE
-        size_type size2 () const { 
+        size_type size2 () const {
             return data_.size2 ();
         }
         BOOST_UBLAS_INLINE
@@ -1019,6 +1184,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Element access
+#ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
@@ -1035,6 +1201,7 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
+#ifndef BOOST_UBLAS_STRICT_HERMITIAN
             if (functor_type::other (i, j))
                 return data () (i, j);
             else {
@@ -1043,12 +1210,64 @@ namespace boost { namespace numeric { namespace ublas {
                 external_logic ().raise ();
                 return conj_ = type_traits<value_type>::conj (data () (j, i));
             }
+#else
+            if (functor_type::other (i, j))
+                return reference (*this, i, j, data () (i, j));
+            else
+                return reference (*this, i, j, type_traits<value_type>::conj (data () (j, i)));
+#endif
         }
+        BOOST_UBLAS_INLINE
+        void at (size_type i, size_type j, value_type t) {
+            BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
+            // if (i == j)
+            //     data () (i, i) = type_traits<value_type>::real (t);
+            // else
+            if (functor_type::other (i, j))
+                data () (i, j) = t;
+            else
+                data () (j, i) = type_traits<value_type>::conj (t);
+        }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i, size_type j) const {
+            BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
+#ifndef BOOST_UBLAS_STRICT_HERMITIAN
+            if (functor_type::other (i, j))
+                return data () (i, j);
+            else {
+                // Raising exceptions abstracted as requested during review.
+                // throw external_logic ();
+                external_logic ().raise ();
+                return conj_ = type_traits<value_type>::conj (data () (j, i));
+            }
+#else
+            if (functor_type::other (i, j))
+                return reference (*this, i, j, data () (i, j));
+            else
+                return reference (*this, i, j, type_traits<value_type>::conj (data () (j, i)));
+#endif
+        }
+        BOOST_UBLAS_INLINE
+        void at (size_type i, size_type j, value_type t) const {
+            BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
+            // if (i == j)
+            //     data () (i, i) = type_traits<value_type>::real (t);
+            // else
+            if (functor_type::other (i, j))
+                data () (i, j) = t;
+            else
+                data () (j, i) = type_traits<value_type>::conj (t);
+        }
+#endif
 
         // Assignment
         BOOST_UBLAS_INLINE
-        hermitian_adaptor &operator = (const hermitian_adaptor &m) { 
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, m); 
+        hermitian_adaptor &operator = (const hermitian_adaptor &m) {
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, m);
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1158,7 +1377,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_first1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor_type::restrict1 (i, j);
             return iterator1 (*this, i, j);
         }
@@ -1168,7 +1387,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_last1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor_type::restrict1 (i, j);
             return iterator1 (*this, i, j);
         }
@@ -1253,7 +1472,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -1402,7 +1621,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
                 container_reference<hermitian_adaptor>::assign (&it ());
@@ -1647,7 +1866,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
                 container_reference<hermitian_adaptor>::assign (&it ());

@@ -21,8 +21,11 @@
 #include <cstddef>
 
 #include <boost/config.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/limits.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_const.hpp>
 
 
 
@@ -179,13 +182,17 @@
 // #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
+// #define BOOST_UBLAS_STRICT_HERMITIAN
 #endif
 
 // Enable compile time typedefs for proxies
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 // Doesn't work under Borland
 #ifndef __BORLANDC__
+#define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+// #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
 #define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+// #define BOOST_UBLAS_PROXY_CONST_MEMBER
 #define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
 #endif
 #endif
@@ -254,21 +261,6 @@
 
 // Forward declarations
 namespace boost { namespace numeric { namespace ublas {
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    namespace detail {
-
-        template<bool, typename T1, typename T2>
-        struct ct_if {
-            typedef T1 type;
-        };
-        template<typename T1, typename T2>
-        struct ct_if<false, T1, T2> {
-            typedef T2 type;
-        };
-
-    }
-#endif
 
     template<class T>
     class unbounded_array;

@@ -19,8 +19,7 @@
 
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
-#include <boost/numeric/ublas/vector_expression.hpp>
-#include <boost/numeric/ublas/matrix_expression.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -47,7 +46,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const banded_matrix<T, F, A> const_self_type;
         typedef banded_matrix<T, F, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef packed_tag storage_category;
         typedef typename F::orientation_category orientation_category;
@@ -126,16 +129,16 @@ namespace boost { namespace numeric { namespace ublas {
             size_type k = std::max (i, j);
             size_type l = lower_ + j - i;
             if (k < std::max (size1_, size2_) &&
-                l < lower_ + 1 + upper_) 
+                l < lower_ + 1 + upper_)
                 return data () [functor_type::element (k, std::max (size1_, size2_),
-                                                       l, lower_ + 1 + upper_)]; 
+                                                       l, lower_ + 1 + upper_)];
 #else
             size_type k = j;
             size_type l = upper_ + i - j;
             if (k < size2_ &&
                 l < lower_ + 1 + upper_)
                 return data () [functor_type::element (k, size2_,
-                                                       l, lower_ + 1 + upper_)]; 
+                                                       l, lower_ + 1 + upper_)];
 #endif
             return zero_;
         }
@@ -147,20 +150,22 @@ namespace boost { namespace numeric { namespace ublas {
             size_type k = std::max (i, j);
             size_type l = lower_ + j - i;
             if (k < std::max (size1_, size2_) &&
-                l < lower_ + 1 + upper_) 
+                l < lower_ + 1 + upper_)
                 return data () [functor_type::element (k, std::max (size1_, size2_),
-                                                       l, lower_ + 1 + upper_)]; 
+                                                       l, lower_ + 1 + upper_)];
 #else
             size_type k = j;
             size_type l = upper_ + i - j;
             if (k < size2_ &&
-                l < lower_ + 1 + upper_) 
+                l < lower_ + 1 + upper_)
                 return data () [functor_type::element (k, size2_,
-                                                       l, lower_ + 1 + upper_)]; 
+                                                       l, lower_ + 1 + upper_)];
 #endif
+#ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
             // Raising exceptions abstracted as requested during review.
             // throw external_logic ();
             external_logic ().raise ();
+#endif
             return zero_;
         }
 
@@ -996,20 +1001,20 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_reference,
-                                       typename M::reference>::type reference;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_reference,
+                                          typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_pointer,
-                                       typename M::pointer>::type pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_pointer,
+                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename detail::ct_if<boost::is_const<M>::value,
-                                       typename M::const_closure_type,
-                                       typename M::closure_type>::type matrix_closure_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_closure_type,
+                                          typename M::closure_type>::type matrix_closure_type;
 #endif
         typedef const banded_adaptor<M> const_self_type;
         typedef banded_adaptor<M> self_type;
@@ -1070,6 +1075,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Element access
+#ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
@@ -1097,25 +1103,53 @@ namespace boost { namespace numeric { namespace ublas {
             size_type k = std::max (i, j);
             size_type l = lower_ + j - i;
             if (k < std::max (size1 (), size2 ()) &&
-                l < lower_ + 1 + upper_) 
-                return data () (i, j); 
+                l < lower_ + 1 + upper_)
+                return data () (i, j);
 #else
             size_type k = j;
             size_type l = upper_ + i - j;
             if (k < size2 () &&
-                l < lower_ + 1 + upper_) 
-                return data () (i, j); 
+                l < lower_ + 1 + upper_)
+                return data () (i, j);
 #endif
+#ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
             // Raising exceptions abstracted as requested during review.
             // throw external_logic ();
             external_logic ().raise ();
+#endif            
             return zero_;
         }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i, size_type j) const {
+            BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
+#ifdef BOOST_UBLAS_OWN_BANDED
+            size_type k = std::max (i, j);
+            size_type l = lower_ + j - i;
+            if (k < std::max (size1 (), size2 ()) &&
+                l < lower_ + 1 + upper_)
+                return data () (i, j);
+#else
+            size_type k = j;
+            size_type l = upper_ + i - j;
+            if (k < size2 () &&
+                l < lower_ + 1 + upper_)
+                return data () (i, j);
+#endif
+#ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
+            // Raising exceptions abstracted as requested during review.
+            // throw external_logic ();
+            external_logic ().raise ();
+#endif            
+            return zero_;
+        }
+#endif
 
         // Assignment
         BOOST_UBLAS_INLINE
-        banded_adaptor &operator = (const banded_adaptor &m) { 
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, m); 
+        banded_adaptor &operator = (const banded_adaptor &m) {
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, m);
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1377,7 +1411,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<banded_adaptor>::assign (&it ());
@@ -1466,7 +1500,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -1496,7 +1530,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
                 container_reference<banded_adaptor>::assign (&it ());
@@ -1741,7 +1775,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
                 container_reference<banded_adaptor>::assign (&it ());

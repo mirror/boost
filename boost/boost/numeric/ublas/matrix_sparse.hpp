@@ -44,8 +44,8 @@ namespace boost { namespace numeric { namespace ublas {
         sparse_matrix_element (matrix_type &m, pointer it, size_type i, size_type j):
             container_reference<matrix_type> (m), it_ (it), i_ (i), j_ (j), d_ (*it) {}
         BOOST_UBLAS_INLINE
-        sparse_matrix_element (matrix_type &v, size_type i, size_type j):
-            container_reference<matrix_type> (v), it_ (), i_ (i), j_ (j), d_ () {
+        sparse_matrix_element (matrix_type &m, size_type i, size_type j):
+            container_reference<matrix_type> (m), it_ (), i_ (i), j_ (j), d_ () {
             pointer it = (*this) ().find_element (i_, j_);
             if (! it)
                 (*this) ().insert (i_, j_, d_);
@@ -196,7 +196,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const A const_array_type;
         typedef const sparse_matrix<T, F, A> const_self_type;
         typedef sparse_matrix<T, F, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename A::const_iterator const_iterator_type;
         typedef typename A::iterator iterator_type;
@@ -1226,7 +1230,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef const sparse_vector_of_sparse_vector<T, F, A> const_self_type;
         typedef sparse_vector_of_sparse_vector<T, F, A> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename A::value_type::second_type vector_data_value_type;
         typedef typename A::const_iterator vector_const_iterator_type;
@@ -2328,7 +2336,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef const compressed_matrix<T, F, IB, IA, TA> const_self_type;
         typedef compressed_matrix<T, F, IB, IA, TA> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename IA::const_iterator vector_const_iterator_type;
         typedef typename IA::iterator vector_iterator_type;
@@ -3573,7 +3585,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef const coordinate_matrix<T, F, IB, IA, TA> const_self_type;
         typedef coordinate_matrix<T, F, IB, IA, TA> self_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
+#else
+        typedef const matrix_reference<const_self_type> const_closure_type;
+#endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename IA::const_iterator vector_const_iterator_type;
         typedef typename IA::iterator vector_iterator_type;

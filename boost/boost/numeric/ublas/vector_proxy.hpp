@@ -44,20 +44,20 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::pointer pointer;
 #else
         typedef typename V::const_reference const_reference;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_reference,
-                                       typename V::reference>::type reference;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_reference,
+                                          typename V::reference>::type reference;
         typedef typename V::const_pointer const_pointer;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_pointer,
-                                       typename V::pointer>::type pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_pointer,
+                                          typename V::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename V::closure_type vector_closure_type;
 #else
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_closure_type,
-                                       typename V::closure_type>::type vector_closure_type;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_closure_type,
+                                          typename V::closure_type>::type vector_closure_type;
 #endif
         typedef const vector_range<vector_type> const_closure_type;
         typedef vector_range<vector_type> closure_type;
@@ -66,9 +66,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::iterator iterator_type;
 #else
         typedef typename V::const_iterator const_iterator_type;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_iterator,
-                                       typename V::iterator>::type iterator_type;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_iterator,
+                                          typename V::iterator>::type iterator_type;
 #endif
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
@@ -143,6 +143,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Element access
+#ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
             return data () (r_ (i));
@@ -160,6 +161,17 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator [] (size_type i) {
             return (*this) (i);
         }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i) const {
+            return data () (r_ (i));
+        }
+
+        BOOST_UBLAS_INLINE
+        reference operator [] (size_type i) const {
+            return (*this) (i);
+        }
+#endif
 
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
@@ -257,9 +269,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-        typedef indexed_iterator<vector_range<vector_type>, 
+        typedef indexed_iterator<vector_range<vector_type>,
                                  BOOST_UBLAS_TYPENAME iterator_type::iterator_category> iterator;
-        typedef indexed_const_iterator<vector_range<vector_type>, 
+        typedef indexed_const_iterator<vector_range<vector_type>,
                                        BOOST_UBLAS_TYPENAME const_iterator_type::iterator_category> const_iterator;
 #else
         class const_iterator;
@@ -487,7 +499,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_.index () - (*this) ().start ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator &operator = (const iterator &it) {
                 container_reference<vector_range>::assign (&it ());
@@ -575,11 +587,16 @@ namespace boost { namespace numeric { namespace ublas {
     vector_range<V> project (V &data, const range<> &r) {
         return vector_range<V> (data, r);
     }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_range<const V> project_const (const V &data, const range<> &r) {
+        return vector_range<const V> (data, r);
+    }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<const V> project (const V &data, const range<> &r) {
-        return vector_range<const V> (data, r);
+    vector_range<V> project (const V &data, const range<> &r) {
+        return vector_range<V> (const_cast<V &> (data), r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -593,11 +610,16 @@ namespace boost { namespace numeric { namespace ublas {
     vector_range<V> project (V &data, const range &r) {
         return vector_range<V> (data, r);
     }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_range<const V> project_const (const V &data, const range &r) {
+        return vector_range<const V> (data, r);
+    }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<const V> project (const V &data, const range &r) {
-        return vector_range<const V> (data, r);
+    vector_range<V> project (const V &data, const range &r) {
+        return vector_range<V> (const_cast<V &> (data), r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -627,20 +649,20 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::pointer pointer;
 #else
         typedef typename V::const_reference const_reference;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_reference,
-                                       typename V::reference>::type reference;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_reference,
+                                          typename V::reference>::type reference;
         typedef typename V::const_pointer const_pointer;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_pointer,
-                                       typename V::pointer>::type pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_pointer,
+                                          typename V::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename V::closure_type vector_closure_type;
 #else
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_closure_type,
-                                       typename V::closure_type>::type vector_closure_type;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_closure_type,
+                                          typename V::closure_type>::type vector_closure_type;
 #endif
         typedef const vector_slice<vector_type> const_closure_type;
         typedef vector_slice<vector_type> closure_type;
@@ -700,8 +722,8 @@ namespace boost { namespace numeric { namespace ublas {
             return s_.stride ();
         }
         BOOST_UBLAS_INLINE
-        size_type size () const { 
-            return s_.size (); 
+        size_type size () const {
+            return s_.size ();
         }
         BOOST_UBLAS_INLINE
         const vector_closure_type &data () const {
@@ -728,23 +750,35 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Element access
+#ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return data () (s_ (i)); 
+            return data () (s_ (i));
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
-            return data () (s_ (i)); 
+            return data () (s_ (i));
         }
 
         BOOST_UBLAS_INLINE
-        const_reference operator [] (size_type i) const { 
-            return (*this) (i); 
+        const_reference operator [] (size_type i) const {
+            return (*this) (i);
         }
         BOOST_UBLAS_INLINE
         reference operator [] (size_type i) {
-            return (*this) (i); 
+            return (*this) (i);
         }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i) const {
+            return data () (s_ (i));
+        }
+
+        BOOST_UBLAS_INLINE
+        reference operator [] (size_type i) const {
+            return (*this) (i);
+        }
+#endif
 
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
@@ -850,7 +884,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-        typedef indexed_iterator<vector_slice<vector_type>, 
+        typedef indexed_iterator<vector_slice<vector_type>,
                                  BOOST_UBLAS_TYPENAME vector_type::iterator::iterator_category> iterator;
         typedef indexed_const_iterator<vector_slice<vector_type>,
                                        BOOST_UBLAS_TYPENAME vector_type::const_iterator::iterator_category> const_iterator;
@@ -1066,7 +1100,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_.index ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator &operator = (const iterator &it) {
                 container_reference<vector_slice>::assign (&it ());
@@ -1161,11 +1195,16 @@ namespace boost { namespace numeric { namespace ublas {
     vector_slice<V> project (V &data, const slice<> &s) {
         return vector_slice<V> (data, s);
     }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_slice<const V> project_const (const V &data, const slice<> &s) {
+        return vector_slice<const V> (data, s);
+    }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<const V> project (const V &data, const slice<> &s) {
-        return vector_slice<const V> (data, s);
+    vector_slice<V> project (const V &data, const slice<> &s) {
+        return vector_slice<V> (const_cast<V &> (data) s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -1186,11 +1225,16 @@ namespace boost { namespace numeric { namespace ublas {
     vector_slice<V> project (V &data, const slice &s) {
         return vector_slice<V> (data, s);
     }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_slice<const V> project_const (const V &data, const slice &s) {
+        return vector_slice<const V> (data, s);
+    }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<const V> project (const V &data, const slice &s) {
-        return vector_slice<const V> (data, s);
+    vector_slice<V> project (const V &data, const slice &s) {
+        return vector_slice<V> (const_cast<V &> (data), s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -1224,20 +1268,20 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::pointer pointer;
 #else
         typedef typename V::const_reference const_reference;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_reference,
-                                       typename V::reference>::type reference;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_reference,
+                                          typename V::reference>::type reference;
         typedef typename V::const_pointer const_pointer;
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_pointer,
-                                       typename V::pointer>::type pointer;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_pointer,
+                                          typename V::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename V::closure_type vector_closure_type;
 #else
-        typedef typename detail::ct_if<boost::is_const<V>::value,
-                                       typename V::const_closure_type,
-                                       typename V::closure_type>::type vector_closure_type;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_closure_type,
+                                          typename V::closure_type>::type vector_closure_type;
 #endif
         typedef const vector_indirect<vector_type, indirect_array_type> const_closure_type;
         typedef vector_indirect<vector_type, indirect_array_type> closure_type;
@@ -1307,6 +1351,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Element access
+#ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
             return data () (ia_ (i));
@@ -1324,6 +1369,17 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator [] (size_type i) {
             return (*this) (i);
         }
+#else
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i) const {
+            return data () (ia_ (i));
+        }
+
+        BOOST_UBLAS_INLINE
+        reference operator [] (size_type i) const {
+            return (*this) (i);
+        }
+#endif
 
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
@@ -1760,11 +1816,16 @@ namespace boost { namespace numeric { namespace ublas {
     // vector_indirect<V, IA > project (V &data, const IA &ia) {
     //     return vector_indirect<V, IA > (data, ia);
     // }
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // vector_indirect<const V, IA > project_const (const V &data, const IA &ia) {
+    //     return vector_indirect<const V, IA > (data, ia);
+    // }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     // template<class V, class IA>
     // BOOST_UBLAS_INLINE
-    // vector_indirect<const V, IA> project (const V &data, const IA &ia) {
-    //     return vector_indirect<const V, IA> (data, ia);
+    // vector_indirect<V, IA> project (const V &data, const IA &ia) {
+    //     return vector_indirect<V, IA> (const_cast<V &> (data), ia);
     // }
     // template<class V, class IA>
     // BOOST_UBLAS_INLINE
@@ -1777,11 +1838,16 @@ namespace boost { namespace numeric { namespace ublas {
     vector_indirect<V, indirect_array<A> > project (V &data, const indirect_array<A> &ia) {
         return vector_indirect<V, indirect_array<A> > (data, ia);
     }
+    template<class V, class A>
+    BOOST_UBLAS_INLINE
+    vector_indirect<const V, indirect_array<A> > project_const (const V &data, const indirect_array<A> &ia) {
+        return vector_indirect<const V, indirect_array<A> > (data, ia);
+    }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V, class A>
     BOOST_UBLAS_INLINE
-    vector_indirect<const V, indirect_array<A> > project (const V &data, const indirect_array<A> &ia) {
-        return vector_indirect<const V, indirect_array<A> > (data, ia);
+    vector_indirect<V, indirect_array<A> > project (const V &data, const indirect_array<A> &ia) {
+        return vector_indirect<V, indirect_array<A> > (const_cast<V &> (data), ia);
     }
     template<class V, class A>
     BOOST_UBLAS_INLINE
