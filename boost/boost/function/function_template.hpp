@@ -21,7 +21,6 @@
 
 #define BOOST_FUNCTION_TEMPLATE_ARGS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, T)
 
-
 #define BOOST_FUNCTION_PARM(J,I,D) BOOST_PP_CAT(T,I) BOOST_PP_CAT(a,I)
 
 #define BOOST_FUNCTION_PARMS BOOST_PP_ENUM(BOOST_FUNCTION_NUM_ARGS,BOOST_FUNCTION_PARM,BOOST_PP_EMPTY)
@@ -247,6 +246,13 @@ namespace boost {
   public:
     BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
 
+    // add signature for boost::lambda
+    template<typename Args>
+    struct sig
+    {
+      typedef internal_result_type type;
+    };
+
 #if BOOST_FUNCTION_NUM_ARGS == 1
     typedef T0 argument_type;
 #elif BOOST_FUNCTION_NUM_ARGS == 2
@@ -289,7 +295,8 @@ namespace boost {
 
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
-      assert(!this->empty());
+      if (this->empty())
+        boost::throw_exception(bad_function_call());
 
       internal_result_type result = invoker(function_base::functor
                                             BOOST_FUNCTION_COMMA
@@ -533,11 +540,6 @@ class function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>
                                   BOOST_FUNCTION_COMMA Allocator> base_type;
   typedef function self_type;
 
-  struct clear_type {};
-
-  class holder;
-  friend class holder;
-
 public:
   typedef typename base_type::allocator_type allocator_type;
 
@@ -548,43 +550,27 @@ public:
 
   function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
 
-  self_type& operator=(self_type& f)
+  function(const base_type& f) : base_type(static_cast<const base_type&>(f)){}
+
+  self_type& operator=(const self_type& f)
   {
     self_type(f).swap(*this);
     return *this;
   }
 
-  inline self_type& operator=(holder h);
-
-  self_type& operator=(clear_type*)
+  template<typename Functor>
+  self_type& operator=(Functor f)
   {
-    this->clear();
+    self_type(f).swap(*this);
+    return *this;
+  }
+
+  self_type& operator=(const base_type& f)
+  {
+    self_type(f).swap(*this);
     return *this;
   }
 };
-
-template<typename R BOOST_FUNCTION_COMMA
-         BOOST_FUNCTION_TEMPLATE_PARMS,
-         typename Allocator>
-class function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>::holder
-{
-public:
-  template<typename F> holder(F f) : func(f) {}
-  holder(const base_type& f) : func(f) {}
-  holder(const self_type& f) : func(f) {}
-
-  self_type func;
-};
-
-template<typename R BOOST_FUNCTION_COMMA
-         BOOST_FUNCTION_TEMPLATE_PARMS,
-         typename Allocator>
-function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>&
-function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>::operator=(holder h)
-{
-  h.func.swap(*this);
-  return *this;
-}
 
 #undef BOOST_FUNCTION_PARTIAL_SPEC
 #endif // have partial specialization

@@ -76,7 +76,7 @@ test_zero_args()
 
   // clear() method
   v1.clear();
-  BOOST_TEST(v1.empty());
+  BOOST_TEST(v1 == 0);
 
   // Assignment to an empty function
   v1 = three;

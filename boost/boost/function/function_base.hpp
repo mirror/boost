@@ -17,6 +17,7 @@
 #define BOOST_FUNCTION_BASE_HEADER
 
 #include <stdexcept>
+#include <string>
 #include <memory>
 #include <new>
 #include <boost/config.hpp>
@@ -255,52 +256,62 @@ namespace boost {
     } // end namespace function
   } // end namespace detail
 
-  /**
-   * The function_base class contains the basic elements needed for the
-   * function1, function2, function3, etc. classes. It is common to all
-   * functions (and as such can be used to tell if we have one of the
-   * functionN objects).
-   */
-  class function_base
+/**
+ * The function_base class contains the basic elements needed for the
+ * function1, function2, function3, etc. classes. It is common to all
+ * functions (and as such can be used to tell if we have one of the
+ * functionN objects).
+ */
+class function_base
+{
+public:
+  function_base() : manager(0)
   {
-  public:
-    function_base() : manager(0)
+    functor.obj_ptr = 0;
+  }
+
+  // Is this function empty?
+  bool empty() const { return !manager; }
+
+public: // should be protected, but GCC 2.95.3 will fail to allow access
+  detail::function::any_pointer (*manager)(
+    detail::function::any_pointer,
+    detail::function::functor_manager_operation_type);
+  detail::function::any_pointer functor;
+};
+
+/**
+ * The bad_function_call exception class is thrown when a boost::function
+ * object is invoked
+ */
+class bad_function_call : public std::runtime_error
+{
+public:
+  bad_function_call() : std::runtime_error("call to empty boost::function") {}
+};
+
+/* Poison comparison between Boost.Function objects (because it is
+ * meaningless). The comparisons would otherwise be allowed because of the
+ * conversion required to allow syntax such as:
+ *   boost::function<int, int> f;
+ *   if (f) { f(5); }
+ */
+void operator==(const function_base&, const function_base&);
+void operator!=(const function_base&, const function_base&);
+
+namespace detail {
+  namespace function {
+    inline bool has_empty_target(const function_base* f)
     {
-      functor.obj_ptr = 0;
+      return f->empty();
     }
 
-    // Is this function empty?
-    bool empty() const { return !manager; }
-
-  public: // should be protected, but GCC 2.95.3 will fail to allow access
-    detail::function::any_pointer (*manager)(
-                           detail::function::any_pointer,
-                           detail::function::functor_manager_operation_type);
-    detail::function::any_pointer functor;
-  };
-
-  /* Poison comparison between Boost.Function objects (because it is
-   * meaningless). The comparisons would otherwise be allowed because of the
-   * conversion required to allow syntax such as:
-   *   boost::function<int, int> f;
-   *   if (f) { f(5); }
-   */
-  void operator==(const function_base&, const function_base&);
-  void operator!=(const function_base&, const function_base&);
-
-  namespace detail {
-    namespace function {
-      inline bool has_empty_target(const function_base* f)
-      {
-        return f->empty();
-      }
-
-      inline bool has_empty_target(...)
-      {
-        return false;
-      }
-    } // end namespace function
-  } // end namespace detail
-}
+    inline bool has_empty_target(...)
+    {
+      return false;
+    }
+  } // end namespace function
+} // end namespace detail
+} // end namespace boost
 
 #endif // BOOST_FUNCTION_BASE_HEADER

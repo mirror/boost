@@ -20,6 +20,7 @@
 #include <functional>
 #include <cassert>
 #include <string>
+#include <utility>
 
 using namespace boost;
 using namespace std;
@@ -98,7 +99,7 @@ test_zero_args()
   BOOST_TEST(global_int == 5);
 
   // clear
-  v1 = 0;
+  v1.clear();
   BOOST_TEST(0 == v1);
 
   // Assignment to an empty function from a free function
@@ -696,6 +697,43 @@ static void test_allocator()
 #endif // ndef BOOST_NO_STD_ALLOCATOR
 }
 
+static void test_exception()
+{
+  boost::function<int (int, int)> f;
+  try {
+    f(5, 4);
+    BOOST_TEST(false);
+  }
+  catch(boost::bad_function_call) {
+    // okay
+  }
+}
+
+typedef boost::function< void * (void * reader) > reader_type;
+typedef std::pair<int, reader_type> mapped_type;
+
+static void test_implicit()
+{
+  mapped_type m;
+  m = mapped_type();
+}
+
+static void test_call_obj(boost::function<int (int, int)> f)
+{
+  assert(!f.empty());
+}
+
+static void test_call_cref(const boost::function<int (int, int)>& f)
+{
+  assert(!f.empty());
+}
+
+static void test_call()
+{
+  test_call_obj(std::plus<int>());
+  test_call_cref(std::plus<int>());
+}
+
 int test_main(int, char* [])
 {
   test_zero_args();
@@ -705,6 +743,9 @@ int test_main(int, char* [])
   test_member_functions();
   test_ref();
   test_allocator();
+  test_exception();
+  test_implicit();
+  test_call();
 
   return 0;
 }
