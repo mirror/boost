@@ -697,8 +697,6 @@ pseudo-code.
                      return input_output_iterator_tag;
                  else
                      return input_iterator_tag;
-             else if (access & writable_iterator)
-                 return output_iterator_tag;
              else
                  return null_category_tag;
          } else if ((access & readable_iterator) and (access & writable_iterator)

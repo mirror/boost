@@ -856,8 +856,6 @@ inherit-category(access, traversal-tag) =
                  return input_output_iterator_tag;
              else
                  return input_iterator_tag;
-         else if (access &amp; writable_iterator)
-             return output_iterator_tag;
          else
              return null_category_tag;
      } else if ((access &amp; readable_iterator) and (access &amp; writable_iterator)
