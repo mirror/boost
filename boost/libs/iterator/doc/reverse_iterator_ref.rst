@@ -31,19 +31,8 @@ Iterator and Readable Iterator.
 
 ``reverse_iterator`` models Bidirectional Traversal Iterator and
 Readable Iterator.  In addition, ``reverse_iterator`` models the same
-standard iterator access concepts (if any) that the ``Iterator``
-argument models. Also, ``reverse_iterator`` models concepts
-according to the following table.
-
-+--------------------------------+-----------------------------------------------------------+
-| If ``Iterator`` models         | then ``reverse_iterator`` models                          |
-+================================+===========================================================+
-| Bidirectional Iterator         | Bidirectional Iterator, Readable Lvalue Iterator,         |
-|                                | Bidirectional Traversal Iterator                          |
-+--------------------------------+-----------------------------------------------------------+
-| Mutable Bidirectional Iterator | Mutable Bidirectional Iterator, Writable Lvalue Iterator, |
-|                                | Bidirectional Traversal Iterator                          |
-+--------------------------------+-----------------------------------------------------------+
+standard iterator access concepts that the ``Iterator``
+argument models.
 
 
 

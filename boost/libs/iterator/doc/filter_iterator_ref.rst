@@ -81,19 +81,6 @@ following tables.
 | Writable Lvalue Iterator, Forward Traversal Iterator  | Mutable Forward Iterator        |
 +-------------------------------------------------------+---------------------------------+
 
-+-----------------------------+----------------------------------------------------------+
-| If ``Iterator`` models      | then ``filter_iterator`` models                          |
-+=============================+==========================================================+
-| Input Iterator              | Input Iterator, Readable Iterator, Single Pass Iterator  |
-+-----------------------------+----------------------------------------------------------+
-| Forward Iterator            | Forward Iterator, Readable Lvalue Iterator,              |
-|                             | Forward Traversal Iterator                               |
-+-----------------------------+----------------------------------------------------------+
-| Mutable Forward Iterator    | Mutable Forward Iterator, Writable Lvalue Iterator,      |
-|                             | Forward Traversal Iterator                               |
-+-----------------------------+----------------------------------------------------------+
-
-
 
 ``filter_iterator`` operations
 ------------------------------
