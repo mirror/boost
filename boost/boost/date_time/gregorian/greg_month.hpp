@@ -35,7 +35,7 @@ namespace gregorian {
     //! Construct a month from the months_of_year enumeration
     greg_month(months_of_year theMonth) : greg_month_rep(theMonth) {}
     //! Construct from a short value
-    greg_month(short theMonth) : greg_month_rep(theMonth) {}
+    greg_month(unsigned short theMonth) : greg_month_rep(theMonth) {}
     //! Convert the value back to a short
     operator unsigned short()  const {return value_;}
     //! Returns month as number from 1 to 12
