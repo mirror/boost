@@ -34,7 +34,6 @@
 #     ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
-#     define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 #     define BOOST_NO_SWPRINTF
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #  endif
@@ -64,6 +63,7 @@
 #     warning "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
 
 
 
