@@ -458,6 +458,8 @@ INSTANT(boost::mt11213b)
 
 int test_main(int, char*[])
 {
+
+#if !defined(__INTEL_COMPILER) || !defined(_MSC_VER) || __INTEL_COMPILER > 700 
   instantiate_all();
   validate_all();
   boost::mt19937 mt;
@@ -476,4 +478,8 @@ int test_main(int, char*[])
   (void) x();
 
   return 0;
+#else
+  std::cout << "Intel 7.00 on Win32 loops, so the test is disabled\n";
+  return 1;
+#endif
 }
