@@ -127,8 +127,9 @@ main()
   
   ss.str("");
   ss << pd1;
-  s = "1 Jan";
+  s = "01 Jan";
   check("streaming partial_date", ss.str() == s);
+  std::cout << ss.str() << std::endl;
   
   ss.str("");
   ss << lsif;

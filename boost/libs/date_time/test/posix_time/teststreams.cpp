@@ -5,6 +5,7 @@
  * Author: Jeff Garland, Bart Garst
  */
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 
 #ifndef BOOST_DATE_TIME_NO_LOCALE
@@ -29,10 +30,16 @@ main()
   std::stringstream ss;
   date d1(2002,May,1);
   ptime t1(d1, hours(12)+minutes(10)+seconds(5));
-  ss << t1;
+  time_duration td0(12,10,5,123);
+  ptime t0(d1, td0);
+  ss << t0;
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
   check("check time output: "+ss.str(), 
-        ss.str() == std::string("2002-May-01 12:10:05"));
-
+        ss.str() == std::string("2002-May-01 12:10:05.000000123"));
+#else
+  check("check time output: "+ss.str(), 
+        ss.str() == std::string("2002-May-01 12:10:05.000123"));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
   //  ss.imbue(global); 
   time_period tp(t1, ptime(d1, hours(23)+time_duration::unit()));
   ss.str("");
