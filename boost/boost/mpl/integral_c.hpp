@@ -37,24 +37,27 @@ struct integral_c
     typedef integral_c type;
     typedef T value_type;
 
+    // Note that the static_casts below are there to handle the case
+    // where T is an enum type.
+    
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
     // while some other don't like 'value + 1' (Borland), and some don't like
     // either
 #if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
  private:
-    BOOST_STATIC_CONSTANT(T, next_value = (N + 1));
-    BOOST_STATIC_CONSTANT(T, prior_value = (N - 1));
+    BOOST_STATIC_CONSTANT(T, next_value = static_cast<T>(N + 1));
+    BOOST_STATIC_CONSTANT(T, prior_value = static_cast<T>(N - 1));
  public:
     typedef integral_c<T, next_value> next;
     typedef integral_c<T, prior_value> prior;
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
     || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
     || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
-    typedef integral_c<T, (N + 1)> next;
-    typedef integral_c<T, (N - 1)> prior;
+    typedef integral_c<T, static_cast<T>(N + 1)> next;
+    typedef integral_c<T, static_cast<T>(N - 1)> prior;
 #else
-    typedef integral_c<T, (value + 1)> next;
-    typedef integral_c<T, (value - 1)> prior;
+    typedef integral_c<T, static_cast<T>(value + 1)> next;
+    typedef integral_c<T, static_cast<T>(value - 1)> prior;
 #endif
 
     // enables uniform function call syntax for families of overloaded 
