@@ -79,5 +79,9 @@ main()
     boost_concepts::WritableLvalueIteratorConcept<old_iterator> >();
   boost::function_requires<
     boost_concepts::RandomAccessTraversalConcept<old_iterator> >();
+
+  boost::function_requires<
+	boost_concepts::InteroperableIteratorConcept<int*, int const*> >();
+
   return 0;
 }
