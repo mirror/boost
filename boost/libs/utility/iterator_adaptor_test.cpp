@@ -308,7 +308,7 @@ main()
     boost::random_access_iterator_test(i, N, array);
 
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-    tyepdef boost::iterator<std::random_access_iterator_tag,dummyT> ReverseTraits;
+    typedef boost::iterator<std::random_access_iterator_tag,dummyT> ReverseTraits;
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N, ReverseTraits()), N, array);
 #else
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
@@ -345,7 +345,12 @@ main()
     FilterIter i(array, FilterPolicies(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
-    boost::forward_iterator_test(boost::make_filter_iterator(array, array + N, one_or_four()), dummyT(1), dummyT(4));
+    boost::forward_iterator_test(boost::make_filter_iterator(
+        array, array + N, one_or_four()
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+        , boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t, dummyT*, dummyT&>()
+#endif
+        ), dummyT(1), dummyT(4));
   }
   std::cout << "test successful " << std::endl;
   return 0;
