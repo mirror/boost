@@ -33,23 +33,25 @@
 
 #      define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused)    \
 template< typename T >                                                  \
-boost::mpl::aux::yes_tag                                                \
-trait##_helper(                                                         \
-      boost::mpl::aux::type_wrapper<T> const volatile*                  \
-    , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME T::name>* = 0   \
-    );                                                                  \
-                                                                        \
-boost::mpl::aux::no_tag                                                 \
-trait##_helper(...);                                                    \
-                                                                        \
-template< typename T >                                                  \
 struct trait                                                            \
 {                                                                       \
+    template< typename U >                                              \
+    static boost::mpl::aux::yes_tag                                     \
+    helper(                                                             \
+        boost::mpl::aux::type_wrapper<U> const volatile*                \
+      , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME U::name>* = 0 \
+    );                                                                  \
+                                                                        \
+    static boost::mpl::aux::no_tag                                      \
+    helper(...);                                                        \
+                                                                        \
     typedef boost::mpl::aux::type_wrapper<T> t_;                        \
-    BOOST_STATIC_CONSTANT(bool, value =                                 \
-          sizeof((trait##_helper)(static_cast<t_*>(0)))                 \
-            == sizeof(boost::mpl::aux::yes_tag)                         \
-        );                                                              \
+                                                                        \
+    BOOST_STATIC_CONSTANT(                                              \
+        bool, value =                                                   \
+        sizeof(trait<T>::helper(static_cast<t_*>(0)))                   \
+        == sizeof(boost::mpl::aux::yes_tag)                             \
+    );                                                                  \
 };                                                                      \
 /**/
 
