@@ -14,6 +14,7 @@
  */
 
 #include <boost/preprocessor/detail/auto_rec.hpp>
+#include <boost/preprocessor/expand.hpp>
 
 /** <p>Repeats the macro <code>MACRO(INDEX,DATA)</code> for <code>INDEX = [0,COUNT)</code>.</p>
 
@@ -73,9 +74,9 @@ are directly supported.</p>
 #define BOOST_PP_REPEATBOOST_PP_REPEAT_AUTO_REC3(M,P)\
   (TOO MANY NESTED REPEATS!)
 
-#define BOOST_PP_REPEAT_AUTO_REC1(M,P) M P
-#define BOOST_PP_REPEAT_AUTO_REC2(M,P) M P
-#define BOOST_PP_REPEAT_AUTO_REC3(M,P) M P
+#define BOOST_PP_REPEAT_AUTO_REC1(M,P) BOOST_PP_EXPAND(M P)
+#define BOOST_PP_REPEAT_AUTO_REC2(M,P) BOOST_PP_EXPAND(M P)
+#define BOOST_PP_REPEAT_AUTO_REC3(M,P) BOOST_PP_EXPAND(M P)
 
 #define BOOST_PP_REPEAT1(C,M,D) BOOST_PP_REPEAT_AUTO_REC1(BOOST_PP_R1_DELAY(C),(M,D))
 #define BOOST_PP_R1_DELAY(C) BOOST_PP_R1_##C
