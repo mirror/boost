@@ -36,7 +36,6 @@
 #        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
 #     define BOOST_NO_SWPRINTF
-#     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #  endif
 
 // Void returns, 64 bit integrals don't work when emulating VC 6 (Peter Dimov)
