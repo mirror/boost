@@ -14,10 +14,10 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/tokenizer.hpp"
 #include <string>
+#include <sstream>
 #include <map>
 #include <stdexcept>
 #include <fstream>
-#include <iostream> // debugging -- TODO remove
 
 namespace boost {
   namespace date_time {
@@ -25,10 +25,112 @@ namespace boost {
 
     struct data_not_accessible : public std::logic_error
     {
-      data_not_accessible() : std::logic_error(std::string("Unable to locate or access the required datafile to construct this class.")) {}
+      data_not_accessible() : std::logic_error(std::string("Unable to locate or access the required datafile.")) {}
       data_not_accessible(const std::string& filespec) : std::logic_error(std::string("Unable to locate or access the required datafile. Filespec: " + filespec)) {}
     };
- 
+    struct bad_field_count : public std::out_of_range
+    {
+      bad_field_count(const std::string& s) : std::out_of_range(s) {}
+    };
+
+    //! Creates a database of time_zones from csv datafile
+    /*! The csv file containing the zone_specs used by the
+     * tz_db_base is intended to be customized by the
+     * library user. When customizing this file (or creating your own) the
+     * file must follow a specific format.
+     * 
+     * This first line is expected to contain column headings and is therefore
+     * not processed by the tz_db_base.
+     *
+     * Each record (line) must have eleven fields. Some of those fields can
+     * be empty. Every field (even empty ones) must be enclosed in 
+     * double-quotes.
+     * Ex:
+     * @code
+     * "America/Phoenix" <- string enclosed in quotes
+     * ""                <- empty field
+     * @endcode
+     * 
+     * Some fields represent a length of time. The format of these fields 
+     * must be:
+     * @code
+     * "{+|-}hh:mm[:ss]" <- length-of-time format
+     * @endcode
+     * Where the plus or minus is mandatory and the seconds are optional.
+     * 
+     * Since some time zones do not use daylight savings it is not always 
+     * necessary for every field in a zone_spec to contain a value. All 
+     * zone_specs must have at least ID and GMT offset. Zones that use 
+     * daylight savings must have all fields filled except: 
+     * STD ABBR, STD NAME, DST NAME. You should take note 
+     * that DST ABBR is mandatory for zones that use daylight savings 
+     * (see field descriptions for further details).
+     *
+     * ******* Fields and their description/details ********* 
+     *     
+     * ID: 
+     * Contains the identifying string for the zone_spec. Any string will
+     * do as long as it's unique. No two ID's can be the same. 
+     *
+     * STD ABBR:
+     * STD NAME:
+     * DST ABBR:
+     * DST NAME:
+     * These four are all the names and abbreviations used by the time 
+     * zone being described. While any string will do in these fields, 
+     * care should be taken. These fields hold the strings that will be 
+     * used in the output of many of the local_time classes. 
+     * Ex:
+     * @code
+     * time_zone nyc = tz_db.time_zone_from_region("America/New_York");
+     * local_time ny_time(date(2004, Aug, 30), IS_DST, nyc);
+     * cout << ny_time.to_long_string() << endl;
+     * // 2004-Aug-30 00:00:00 Eastern Daylight Time
+     * cout << ny_time.to_short_string() << endl;
+     * // 2004-Aug-30 00:00:00 EDT
+     * @endcode
+     *
+     * NOTE: The exact format/function names may vary - see local_time 
+     * documentation for further details.
+     *
+     * GMT offset:
+     * This is the number of hours added to utc to get the local time 
+     * before any daylight savings adjustments are made. Some examples 
+     * are: America/New_York offset -5 hours, & Africa/Cairo offset +2 hours.
+     * The format must follow the length-of-time format described above.
+     *
+     * DST adjustment:
+     * The amount of time added to gmt_offset when daylight savings is in 
+     * effect. The format must follow the length-of-time format described
+     * above.
+     *
+     * DST Start Date rule:
+     * This is a specially formatted string that describes the day of year
+     * in which the transition take place. It holds three fields of it's own,
+     * separated by semicolons. 
+     * The first field indicates the "nth" weekday of the month. The possible 
+     * values are: 1 (first), 2 (second), 3 (third), 4 (fourth), 5 (fifth), 
+     * and -1 (last).
+     * The second field indicates the day-of-week from 0-6 (Sun=0).
+     * The third field indicates the month from 1-12 (Jan=1).
+     * 
+     * Examples are: "-1;5;9"="Last Friday of September", 
+     * "2;1;3"="Second Monday of March"
+     *
+     * Start time:
+     * Start time is the number of hours past midnight, on the day of the
+     * start transition, the transition takes place. More simply put, the 
+     * time of day the transition is made (in 24 hours format). The format
+     * must follow the length-of-time format described above with the 
+     * exception that it must always be positive.
+     *
+     * DST End date rule:
+     * See DST Start date rule. The difference here is this is the day 
+     * daylight savings ends (transition to STD).
+     *
+     * End time:
+     * Same as Start time.
+     */
     template<class time_zone_type, class rule_type>
     class tz_db_base {
     public:
@@ -51,8 +153,9 @@ namespace boost {
       //! Constructs an empty database
       tz_db_base() {}
 
-      //! Process csv data file, may throw "local_time::data_not_accessible"
-      void load_from_file(const std::string& pathspec) throw(data_not_accessible)
+      //! Process csv data file, may throw exceptions
+      /*! May throw data_not_accessible, or bad_field_count exceptions */
+      void load_from_file(const std::string& pathspec)
       {
         string_type in_str;
         std::string  buff;
@@ -177,9 +280,10 @@ namespace boost {
       {
         
         std::vector<string_type> result;
-        typedef boost::token_iterator_generator<boost::escaped_list_separator<charT> >::type token_iter_type;
-        token_iter_type i = boost::make_token_iterator<string_type>(s.begin(),
-                                                                    s.end(),boost::escaped_list_separator<charT>());
+        typedef boost::token_iterator_generator<boost::escaped_list_separator<charT>, string_type::const_iterator, string_type >::type token_iter_type;
+
+        token_iter_type i = boost::make_token_iterator<string_type>(s.begin(), s.end(),boost::escaped_list_separator<charT>());
+
         token_iter_type end;
         while (i != end) {
           result.push_back(*i);
@@ -188,12 +292,13 @@ namespace boost {
 
         enum db_fields { ID, STDABBR, STDNAME, DSTABBR, DSTNAME, GMTOFFSET,
                          DSTADJUST, START_DATE_RULE, START_TIME, END_DATE_RULE,
-                         END_TIME };
+                         END_TIME, FIELD_COUNT };
 
-        if (result.size() != END_TIME) { 
-          //TODO throw exception because number of fields is wrong 
-          //something like 'Expecting 13 fields, got ' result.size() fields
-          // in line (add the line that is wrong here).
+        if (result.size() != FIELD_COUNT) { 
+          std::stringstream msg;
+          msg << "Expecting " << FIELD_COUNT << " fields, got " 
+            << result.size() << " fields in line: " << s;
+          throw bad_field_count(msg.str());
         }
 
         // initializations

@@ -89,16 +89,22 @@ namespace local_time{
       return zone_names_.std_zone_abbrev();
     }
     //!String for the timezone when in daylight savings (eg: EDT)
+    /*! For those time zones that have no DST, an empty string is used */
     virtual std::string dst_zone_abbrev() const
     {
       return zone_names_.dst_zone_abbrev();
     }
     //!String for the zone when not in daylight savings (eg: Eastern Standard Time)
+    /*! The full STD name is not extracted from the posix time zone string. 
+     * Therefore, the STD abbreviation is used in it's place */
     virtual std::string std_zone_name()const
     {
       return zone_names_.std_zone_name();
     }
     //!String for the timezone when in daylight savings (eg: Eastern Daylight Time)
+    /*! The full DST name is not extracted from the posix time zone string. 
+     * Therefore, the STD abbreviation is used in it's place. For time zones 
+     * that have no DST, an empty string is used */
     virtual std::string dst_zone_name()const
     {
       return zone_names_.dst_zone_name();
@@ -149,12 +155,11 @@ namespace local_time{
     /*! Extract time zone abbreviations for STD & DST as well
      * as the offsets for the time the shift occurs and how
      * much of a shift. At this time full time zone names are
-     * NOT extracted so default values of "std_name" & "dst_name"
-     * are used. */
+     * NOT extracted so the abbreviations are used in their place */
     void calc_zone(const std::string& obj){
       std::stringstream ss("");
       std::string::const_iterator sit = obj.begin();
-      std::string std_zone_abbrev("std_abbrev"), dst_zone_abbrev("no-dst"), dst_zone_name("no-dst");
+      std::string std_zone_abbrev("std_abbrev"), dst_zone_abbrev("");
 
       // get 'std' name/abbrev
       while(isalpha(*sit)){
@@ -190,7 +195,6 @@ namespace local_time{
         }
         dst_zone_abbrev = ss.str(); 
 	ss.str("");
-	dst_zone_name = "dst_name"; // default name
 
         // get DST offset if given
         if(sit != obj.end()){
@@ -213,7 +217,8 @@ namespace local_time{
 	  throw bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_));
 	}
       }
-      zone_names_ = time_zone_names("std_name", std_zone_abbrev, dst_zone_name, dst_zone_abbrev);
+      // full names not extracted so abbrevs used in their place
+      zone_names_ = time_zone_names(std_zone_abbrev, std_zone_abbrev, dst_zone_abbrev, dst_zone_abbrev);
     }
 
     void calc_rules(const std::string& start, const std::string& end){
