@@ -1,9 +1,6 @@
 #!/usr/bin/perl -w
-# simply updates the id attribute of the library-reference tag in
-# the generated *.boostbook files. It will NOT update a file that already
-# has an id attribute set for library-reference.
-#
-# Bart Garst - 7/1/2004
+# Bart Garst - 7/1/2004 
+# additional comments at bottom of file
 
 use strict;
 
@@ -18,25 +15,44 @@ my %files = (
 
 
 foreach my $key(keys %files) {
-  fix_id($key, $files{$key});
+  rewrite_tags($key, $files{$key});
 }
 
 exit;
 
 ### subroutines ###
 
-sub fix_id {
+# separate words at underscores and capitalize first letter of each
+sub make_title {
+  my $a = shift || die "Missing required parameter to make_title()\n";
+  my @wrds = split(/_/, $a); # remove underscores
+  foreach(@wrds){
+    $_ = "\u$_"; # capitalize first letter
+  }
+  $a = join(" ",@wrds);
+
+  return $a;
+}
+
+sub rewrite_tags {
   my $filename = shift || die "Error: argument 1 missing to sub $!";
   my $id_tag = shift || die "Error: argument 2 missing to sub $!";
-  my ($line, @new_file);
+  my ($line, @new_file, $title);
   
   print "...processing $filename...\n";
+
+  # prepare a title from id attribute
+  $title = make_title($id_tag);
   
   # open & read file and change appropriate line
   open(INP, "<$filename") || die "File open (read) failed: $!";
   while($line = <INP>){
     if($line =~ /<library-reference>/) {
-      push(@new_file, "<library-reference id=\"$id_tag\">\n");
+      push(@new_file, "<section id=\"$id_tag\">\n");
+      push(@new_file, "<title>$title</title>\n");
+    }
+    elsif($line =~ /<\/library-reference>/) {
+      push(@new_file, "</section>\n");
     }
     else{
       push(@new_file, $line);
@@ -53,3 +69,13 @@ sub fix_id {
 }
 
 __END__
+
+Rewrites the library-reference tagset as a section tagset and adds
+a title to the generated *.boostbook files. It will NOT update a 
+file that has already been rewritten.
+
+Change log
+7/19/2004
+        - rewrite library-reference tags as section tags and add title tags
+        - renamed fix_id sub to rewrite_tags.
+        

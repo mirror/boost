@@ -1,65 +1,9 @@
 <?xml version="1.0" standalone="yes"?>
-<library-reference id="posix_time_reference">
+<section id="posix_time_reference">
+<title>Posix Time Reference</title>
   <header name="boost/date_time/posix_time/conversion.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
         <function name="from_time_t">
           <type>
             <classname>ptime</classname>
@@ -77,63 +21,6 @@
   <header name="boost/date_time/posix_time/date_duration_operators.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
         <function name="operator+">
           <type>
             <classname>ptime</classname>
@@ -328,62 +215,8 @@
             </parameter>
           </constructor>
         </class>
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
         <typedef name="time_res_traits">
           <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -447,107 +280,17 @@
         <typedef name="microseconds">
           <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
         </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/posix_time/posix_time_system.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
         <typedef name="int64_time_rep">
           <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
         </typedef>
         <typedef name="posix_time_system">
           <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -555,27 +298,6 @@
   <header name="boost/date_time/posix_time/posix_time_types.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
         <typedef name="time_iterator">
           <purpose>
             <simpara>Iterator over a defined time duration. </simpara>
@@ -599,18 +321,6 @@
             <simpara>Define US dst rule calculator for the posix_time system. </simpara>
           </purpose>
           <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -674,126 +384,12 @@
           </constructor>
           <constructor/>
         </class>
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/posix_time/time_formatters.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
         <function name="to_simple_string_type">
           <type>std::basic_string&lt; charT &gt;</type>
           <template>
@@ -805,17 +401,6 @@
             </paramtype>
           </parameter>
         </function>
-        <function name="to_simple_wstring">
-          <type>std::wstring</type>
-          <parameter name="td">
-            <paramtype>
-              <classname>time_duration</classname>
-            </paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Time duration to wstring -hh::mm::ss.fffffff. Example: 10:09:03.0123456. </simpara>
-          </purpose>
-        </function>
         <function name="to_iso_string_type">
           <type>std::basic_string&lt; charT &gt;</type>
           <template>
@@ -826,17 +411,6 @@
               <classname>time_duration</classname>
             </paramtype>
           </parameter>
-        </function>
-        <function name="to_iso_wstring">
-          <type>std::wstring</type>
-          <parameter name="td">
-            <paramtype>
-              <classname>time_duration</classname>
-            </paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Time duration in iso format -hhmmss,fffffff Example: 10:09:03,0123456. </simpara>
-          </purpose>
         </function>
         <function name="to_simple_string_type">
           <type>std::basic_string&lt; charT &gt;</type>
@@ -852,14 +426,6 @@
             <simpara>Time to simple format CCYY-mmm-dd hh:mm:ss.fffffff. </simpara>
           </purpose>
         </function>
-        <function name="to_simple_wstring">
-          <type>std::wstring</type>
-          <parameter name="t">
-            <paramtype>
-              <classname>ptime</classname>
-            </paramtype>
-          </parameter>
-        </function>
         <function name="to_simple_string_type">
           <type>std::basic_string&lt; charT &gt;</type>
           <template>
@@ -868,15 +434,6 @@
           <parameter name="tp">
             <paramtype>time_period</paramtype>
           </parameter>
-        </function>
-        <function name="to_simple_wstring">
-          <type>std::wstring</type>
-          <parameter name="tp">
-            <paramtype>time_period</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Convert to wstring of form [YYYY-mmm-DD HH:MM::SS.ffffff/YYYY-mmm-DD HH:MM::SS.fffffff]. </simpara>
-          </purpose>
         </function>
         <function name="to_iso_string_type">
           <type>std::basic_string&lt; charT &gt;</type>
@@ -889,17 +446,6 @@
             </paramtype>
           </parameter>
         </function>
-        <function name="to_iso_wstring">
-          <type>std::wstring</type>
-          <parameter name="t">
-            <paramtype>
-              <classname>ptime</classname>
-            </paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Convert iso short form YYYYMMDDTHHMMSS where T is the date-time separator. </simpara>
-          </purpose>
-        </function>
         <function name="to_iso_extended_string_type">
           <type>std::basic_string&lt; charT &gt;</type>
           <template>
@@ -910,6 +456,56 @@
               <classname>ptime</classname>
             </paramtype>
           </parameter>
+        </function>
+        <function name="to_simple_wstring">
+          <type>std::wstring</type>
+          <parameter name="td">
+            <paramtype>
+              <classname>time_duration</classname>
+            </paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Time duration to wstring -hh::mm::ss.fffffff. Example: 10:09:03.0123456. </simpara>
+          </purpose>
+        </function>
+        <function name="to_iso_wstring">
+          <type>std::wstring</type>
+          <parameter name="td">
+            <paramtype>
+              <classname>time_duration</classname>
+            </paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Time duration in iso format -hhmmss,fffffff Example: 10:09:03,0123456. </simpara>
+          </purpose>
+        </function>
+        <function name="to_simple_wstring">
+          <type>std::wstring</type>
+          <parameter name="t">
+            <paramtype>
+              <classname>ptime</classname>
+            </paramtype>
+          </parameter>
+        </function>
+        <function name="to_simple_wstring">
+          <type>std::wstring</type>
+          <parameter name="tp">
+            <paramtype>time_period</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Convert to wstring of form [YYYY-mmm-DD HH:MM::SS.ffffff/YYYY-mmm-DD HH:MM::SS.fffffff]. </simpara>
+          </purpose>
+        </function>
+        <function name="to_iso_wstring">
+          <type>std::wstring</type>
+          <parameter name="t">
+            <paramtype>
+              <classname>ptime</classname>
+            </paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Convert iso short form YYYYMMDDTHHMMSS where T is the date-time separator. </simpara>
+          </purpose>
         </function>
         <function name="to_iso_extended_wstring">
           <type>std::wstring</type>
@@ -967,63 +563,6 @@
   <header name="boost/date_time/posix_time/time_formatters_limited.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
         <function name="to_simple_string">
           <type>std::string</type>
           <parameter name="td">
@@ -1142,63 +681,6 @@
   <header name="boost/date_time/posix_time/time_parsers.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
-        <typedef name="time_period">
-          <purpose>
-            <simpara>Time period type. </simpara>
-          </purpose>
-          <type>date_time::period&lt; <classname>ptime</classname>, <classname>time_duration</classname> &gt;</type>
-        </typedef>
         <function name="duration_from_string">
           <type>
             <classname>time_duration</classname>
@@ -1235,57 +717,6 @@
   <header name="boost/date_time/posix_time/time_period.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="millisec">
-          <purpose>
-            <simpara>Allows expression of durations as milli seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="milliseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000 &gt;</type>
-        </typedef>
-        <typedef name="microsec">
-          <purpose>
-            <simpara>Allows expression of durations as micro seconds. </simpara>
-          </purpose>
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="microseconds">
-          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
-        </typedef>
-        <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="time_iterator">
-          <purpose>
-            <simpara>Iterator over a defined time duration. </simpara>
-          </purpose>
-          <type>date_time::time_itr&lt; <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="second_clock">
-          <purpose>
-            <simpara>A time clock that has a resolution of one second. </simpara>
-          </purpose>
-          <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
-        </typedef>
-        <typedef name="no_dst">
-          <purpose>
-            <simpara>Define a dst null dst rule for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::null_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="us_dst">
-          <purpose>
-            <simpara>Define US dst rule calculator for the posix_time system. </simpara>
-          </purpose>
-          <type>date_time::us_dst_rules&lt; ptime::date_type, <classname>time_duration</classname> &gt;</type>
-        </typedef>
-        <typedef name="int64_time_rep">
-          <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
-        </typedef>
         <typedef name="time_period">
           <purpose>
             <simpara>Time period type. </simpara>
@@ -1463,4 +894,4 @@
       </namespace>
     </namespace>
   </header>
-</library-reference>
+</section>

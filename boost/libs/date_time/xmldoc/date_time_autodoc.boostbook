@@ -1,5 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<library-reference id="date_time_reference">
+<section id="date_time_reference">
+<title>Date Time Reference</title>
   <header name="boost/date_time/adjust_functors.hpp">
     <namespace name="boost">
       <namespace name="date_time">
@@ -141,15 +142,6 @@
             </parameter>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -188,15 +180,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -204,7 +187,6 @@
     <para>Provide workarounds related to the ctime header</para>
   </header>
   <header name="boost/date_time/compiler_config.hpp">
-    <macro name="BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES"/>
     <macro name="BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES"/>
     <macro name="INT64_C" kind="functionlike">
       <macro-parameter name="value"/>
@@ -493,15 +475,6 @@
             </parameter>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -556,30 +529,12 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/date_defs.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <enum name="weekdays">
           <enumvalue name="Sunday"/>
           <enumvalue name="Monday"/>
@@ -793,15 +748,6 @@
             </method>
           </method-group>
         </struct>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -1090,15 +1036,6 @@
             </parameter>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -1181,15 +1118,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -1307,31 +1235,12 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/date_formatting_limited.hpp">
     <namespace name="boost">
-      <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-      </namespace>
+      <namespace name="date_time"/>
     </namespace>
   </header>
   <header name="boost/date_time/date_formatting_locales.hpp">
@@ -1492,15 +1401,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -1916,15 +1816,6 @@
           <constructor/>
           <destructor/>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <function name="nth_as_str">
           <type>BOOST_DATE_TIME_DECL const  char *</type>
           <parameter name="n">
@@ -2144,15 +2035,6 @@
           </constructor>
           <destructor/>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <enum name="date_resolutions">
           <enumvalue name="day"/>
           <enumvalue name="week"/>
@@ -2567,30 +2449,12 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/date_parsing.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <function name="convert_to_lower">
           <type>std::string</type>
           <parameter name="inp">
@@ -3089,15 +2953,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <enum name="time_is_dst_result">
           <enumvalue name="is_not_in_dst"/>
           <enumvalue name="is_in_dst"/>
@@ -3184,15 +3039,6 @@
           </method-group>
           <destructor/>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -3313,15 +3159,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -3620,15 +3457,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <function name="operator&lt;&lt;">
           <type>std::basic_ostream&lt; charT, traits &gt; &amp;</type>
           <template>
@@ -3805,15 +3633,6 @@
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -3972,15 +3791,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <function name="dummy_to_prevent_msvc6_ice">
           <type>void</type>
         </function>
@@ -4013,15 +3823,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           </constructor>
           <destructor/>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4202,15 +4003,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </struct>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4221,15 +4013,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
   <header name="boost/date_time/parse_format_base.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <enum name="month_format_spec">
           <enumvalue name="month_as_integer"/>
           <enumvalue name="month_as_short_string"/>
@@ -4266,11 +4049,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           </purpose>
           <description>
             <para>This template uses a class to represent a time point within the period and another class to represent a duration. As a result, this class is not appropriate for use when the number and duration representation are the same (eg: in the regular number domain).</para>
-            <para>A period can be specified by providing either the starting point and a duration or the starting point and the end point( end is NOT part of the period but 1 unit past it. A period will be "invalid" if either start_point &gt;= end_point or the given duration is &lt; 0. Any valid period will return true for is_null().</para>
+            <para>A period can be specified by providing either the starting point and a duration or the starting point and the end point( end is NOT part of the period but 1 unit past it. A period will be "invalid" if either start_point &gt;= end_point or the given duration is &lt; 0. Any valid period will return false for is_null().</para>
             <para>Zero length periods are considered valid. In this case the start point is exactly 1 unit less than the end point, in other words start is equal to last.</para>
-            <para>THIS PARAGRAPH NEEDS RE-WRITING In the case that the begin and last are the same, the period has a length of zero units. For example, suppose this is a period of days. That is, each "point" represents a single day. If the start and the last is the same day then the period represents that single day for a length of one. The same applies if each "point" represents a month or a year.</para>
-            <para>The way to think of this is that the granularity of the point_rep class is similar to the ticks on a ruler. The more ticks, the finer the resolution of a range that can be defined. A range defined on a ruler with 1cm resolution between the 1cm mark and the 2cm mark is 1cm long. In the ruler range, the 1cm mark is in the range while the 2cm mark is not.</para>
-            <para>THIS PARAGRAPH IS CONFUSING While the ruler analogy useful, it is not how date ranges are naturally thought about (at least by me). That is, it is more natural to think of a date as including up to the end of the second time point. So when I say day 1 to day 2 I usually mean from the beginning of day 1 to the end of day 2.</para>
+            <para>In the case that the begin and last are the same, the period has a length of zero units. For example, suppose this is a period of days. That is, each time-point represents a single day. If the start and the last is the same day then the period is zero length.</para>
             <para>The best way to handle periods is usually to provide a start point and a duration. So, day1 + 7 days is a week period which includes all of the first day and 6 more days (eg: Sun to Sat). </para>
           </description>
           <typedef name="point_type">
@@ -4462,30 +4243,12 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </description>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/special_defs.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <enum name="special_values">
           <enumvalue name="not_a_date_time"/>
           <enumvalue name="neg_infin"/>
@@ -4669,15 +4432,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </parameter>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4719,15 +4473,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4735,15 +4480,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
     <para>This file contains nice definitions for handling the resoluion of various time reprsentations.</para>
     <namespace name="boost">
       <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <enum name="time_resolutions">
           <enumvalue name="sec"/>
           <enumvalue name="tenth"/>
@@ -5056,15 +4792,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </parameter>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -5167,15 +4894,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -5251,30 +4969,12 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </parameter>
           </constructor>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/time_parsing.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
         <function name="parse_delimited_time_duration">
           <type>
             <classname>time_duration</classname>
@@ -5783,15 +5483,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -5935,15 +5626,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -6062,15 +5744,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -6120,16 +5793,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <type>DayType</type>
           </data-member>
         </struct>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
-</library-reference>
+</section>

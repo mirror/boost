@@ -1,14 +1,8 @@
 <section id="date_time.doxy" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Doxygen Generated Library Reference</title>
+  <title>Library Reference</title>
   
   <para>
-    The following is a detailed reference of the date_time library. It is broken down into 3 sections: 
-    <orderedlist>
-      <listitem><link linkend="date_time_reference">date_time namespace</link> (top link)</listitem>
-      <listitem><link linkend="gregorian_reference">gregorian namespace</link> (second link)</listitem> 
-      <listitem><link linkend="posix_time_reference">posix_time namespace</link> (third link)</listitem>
-    </orderedlist>
-    A click on any of the reference links will take you to a list of the header files found in that section. Following one of those links will take you to a list of the items declared in that header file. Further sublinks take you to detailed descriptions of each individual item.
+    The following is a detailed reference of the date_time library. A click on any of the reference links will take you to a list of the header files found in that section. Following one of those links will take you to a list of the items declared in that header file. Further sublinks take you to detailed descriptions of each individual item.
   </para>
 
   <xi:include href="date_time_autodoc.boostbook"/>
