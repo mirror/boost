@@ -118,7 +118,10 @@ struct BOOST_REGEX_DECL regex_traits_base
       syntax_Z = 51,                            // for \Z
       syntax_G = 52,                            // for \G
 
-      syntax_max = 53
+      // new extentions:
+      syntax_not = 53,                          // for (?!...)
+
+      syntax_max = 54
    };
 };
 

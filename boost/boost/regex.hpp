@@ -216,7 +216,7 @@ struct re_syntax_base
 // marks start or end of (...)
 struct re_brace : public re_syntax_base
 {
-   unsigned int index;
+   int index;
 };
 
 //

@@ -302,6 +302,7 @@ bool query_match_aux(iterator first,
    const re_syntax_base* ptr = access::first(e);
    bool match_found = false;
    bool have_partial_match = false;
+   bool unwind_stack = false;
    bool need_push_match = (e.mark_count() > 1);
    int cur_acc = -1;    // no active accumulator
    pd.set_accumulator_size(access::repeat_count(e));
@@ -357,13 +358,46 @@ bool query_match_aux(iterator first,
          }
          goto failure;
       case syntax_element_startmark:
+         start_mark_jump:
          if(((re_brace*)ptr)->index > 0)
+         {
             temp_match.set_first(first, ((re_brace*)ptr)->index);
+         }
+         else if(
+            (((re_brace*)ptr)->index == -1)
+            || (((re_brace*)ptr)->index == -2)
+         )
+         {
+           matches.push(temp_match);
+            for(k = 0; k <= cur_acc; ++k)
+               prev_pos.push(start_loop[k]);
+            prev_pos.push(first);
+            prev_record.push(ptr);
+            for(k = 0; k <= cur_acc; ++k)
+               prev_acc.push(accumulators[k]);
+            prev_acc.push(cur_acc);
+            prev_acc.push(match_found);
+            match_found = false;
+            // skip next jump and fall through:
+            ptr = ptr->next.p;
+         }
          ptr = ptr->next.p;
          break;
       case syntax_element_endmark:
+         end_mark_jump:
          if(((re_brace*)ptr)->index > 0)
+         {
             temp_match.set_second(first, ((re_brace*)ptr)->index);
+         }
+         else if(
+            (((re_brace*)ptr)->index == -1)
+            || (((re_brace*)ptr)->index == -2)
+         )
+         {
+            match_found = true;
+            unwind_stack = true;
+            goto failure;
+         }
          ptr = ptr->next.p;
          break;
       case syntax_element_literal:
@@ -773,13 +807,9 @@ bool query_match_aux(iterator first,
       case syntax_element_match:
          goto match_jump;
       case syntax_element_startmark:
-         temp_match.set_first(first, ((re_brace*)ptr)->index);
-         ptr = ptr->next.p;
-         break;
+         goto start_mark_jump;
       case syntax_element_endmark:
-         temp_match.set_second(first, ((re_brace*)ptr)->index);
-         ptr = ptr->next.p;
-         break;
+         goto end_mark_jump;
       case syntax_element_start_line:
          goto outer_line_check;
       case syntax_element_end_line:
@@ -915,6 +945,7 @@ bool query_match_aux(iterator first,
          for(k = cur_acc; k >= 0; --k)
             prev_pos.pop(start_loop[k]);
          prev_record.pop();
+         if(unwind_stack) goto failure; // unwinding forward assert
          goto retry;
       case syntax_element_rep:
       {
@@ -933,6 +964,7 @@ bool query_match_aux(iterator first,
          for(k = cur_acc; k >= 0; --k)
             prev_acc.pop(accumulators[k]);
          prev_record.pop();
+         if(unwind_stack) goto failure; // unwinding forward assert
          if((unsigned int)++accumulators[cur_acc] > ((re_repeat*)ptr)->max)
             goto failure;  // repetions exhausted.
          //
@@ -947,11 +979,42 @@ bool query_match_aux(iterator first,
          start_loop[cur_acc] = first;
          goto retry;
       }
+      case syntax_element_startmark:
+      {
+         bool saved_matched = match_found;
+         matches.pop(temp_match);
+         match_found = prev_acc.peek();
+         prev_acc.pop();
+         prev_acc.pop(cur_acc);
+         for(k = cur_acc; k >= 0; --k)
+            prev_acc.pop(accumulators[k]);
+         prev_pos.pop(first);
+         for(k = cur_acc; k >= 0; --k)
+            prev_pos.pop(start_loop[k]);
+         prev_record.pop();
+         unwind_stack = false;
+         if(static_cast<const re_brace*>(ptr)->index == -1)
+         {
+            if (saved_matched == false)
+               goto failure;
+            ptr = static_cast<const re_jump*>(ptr->next.p)->alt.p->next.p;
+            goto retry;
+         }
+         if(static_cast<const re_brace*>(ptr)->index == -2)
+         {
+            if (saved_matched == true)
+               goto failure;
+            ptr = static_cast<const re_jump*>(ptr->next.p)->alt.p->next.p;
+            goto retry;
+         }
+         else goto failure;
+      }
       case syntax_element_match:
          if(need_push_match)
             matches.pop(temp_match);
          prev_pos.pop(first);
          prev_record.pop();
+         if(unwind_stack) goto failure; // unwinding forward assert
          goto retry;
      default:
          jm_assert(0);

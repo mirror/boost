@@ -24,14 +24,16 @@
 #define BOOST_REGEX_SOURCE
 
 #include <boost/regex/config.hpp>
-#include <boost/regex/detail/regex_raw_buffer.hpp>
-#include <boost/regex.hpp>
+
+#ifdef BOOST_REGEX_DEBUG
 
 #ifdef BOOST_MSVC
 #include <crtdbg.h>
 #endif
 
-#ifdef BOOST_REGEX_DEBUG
+#include <boost/regex/detail/regex_raw_buffer.hpp>
+#include <boost/regex.hpp>
+
 #ifndef BOOST_RE_OLD_IOSTREAM
 #include <ostream>
 #else 

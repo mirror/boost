@@ -194,6 +194,8 @@ const mss default_messages[] = {
                               { 100 + c_regex_traits<char>::syntax_Z, "Z", },
                               { 100 + c_regex_traits<char>::syntax_G, "G", },
 
+                              { 100 + c_regex_traits<char>::syntax_not, "!", },
+
                             { 0, "", },
                          };
 

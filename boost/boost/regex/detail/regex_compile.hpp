@@ -444,6 +444,12 @@ bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::probe_start(
    switch(node->type)
    {
    case re_detail::syntax_element_startmark:
+      if(static_cast<const re_detail::re_brace*>(node)->index == -1)
+      {
+         return probe_start(node->next.p->next.p, cc, terminal)
+            && probe_start(static_cast<const re_detail::re_jump*>(node->next.p)->alt.p, cc, terminal);
+      }
+      // fall through:
    case re_detail::syntax_element_endmark:
    case re_detail::syntax_element_start_line:
    case re_detail::syntax_element_word_boundary:
@@ -1207,7 +1213,8 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
             }
             goto rebase;
          case re_detail::syntax_element_endmark:
-            pb[((re_detail::re_brace*)ptr)->index] = true;
+            if(((re_detail::re_brace*)ptr)->index > 0)
+               pb[((re_detail::re_brace*)ptr)->index] = true;
             goto rebase;
          default:
             rebase:
@@ -1261,7 +1268,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
    const charT* ptr = p;
    marks = 0;
    re_detail::jstack<unsigned int, Allocator> mark(64, data.allocator());
-   re_detail::jstack<unsigned int, Allocator> markid(64, data.allocator());
+   re_detail::jstack<int, Allocator> markid(64, data.allocator());
    unsigned int last_mark_popped = 0;
    register traits_size_type c;
    register re_detail::re_syntax_base* dat;
@@ -1325,6 +1332,28 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
                markid.push(0);
                ++ptr;
                continue;
+            case traits_type::syntax_equal:
+               ((re_detail::re_brace*)dat)->index = -1;
+               markid.pop();
+               markid.push(-1);
+               common_forward_assert:
+               --marks;
+               ++ptr;
+               // extend:
+               dat = add_simple(dat, re_detail::syntax_element_jump, re_detail::re_jump_size);
+               data.align();
+               //
+               // we don't know what value to put here yet,
+               // use an arbitrarily large value for now
+               // and check it later:
+               ((re_detail::re_jump*)dat)->alt.i = INT_MAX/2;
+               mark.push(data.size() - re_detail::re_jump_size);
+               continue;
+            case traits_type::syntax_not:
+               ((re_detail::re_brace*)dat)->index = -2;
+               markid.pop();
+               markid.push(-2);
+               goto common_forward_assert;
             case traits_type::syntax_hash:
                // comment just skip it:
                ((re_detail::re_brace*)dat)->index = 0;
