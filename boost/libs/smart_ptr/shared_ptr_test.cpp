@@ -190,7 +190,10 @@ template<class T> void test_is_zero(boost::shared_ptr<T> const & p)
 
 template<class T> void test_is_nonzero(boost::shared_ptr<T> const & p)
 {
-    BOOST_TEST(p);
+    // p? true: false is used to test p in a boolean context.
+    // BOOST_TEST(p) is not guaranteed to test the conversion,
+    // as the macro might test !!p instead.
+    BOOST_TEST(p? true: false);
     BOOST_TEST(p.get() != 0);
 }
 
