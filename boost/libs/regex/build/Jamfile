@@ -5,23 +5,23 @@ SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
        regex_synch w32_regex_traits wide_posix_api ;
        
 lib libboost_regex$(SUFLIB) : ../src/$(SOURCES).cpp 
-	: 
-		<include>../../../
-		<define>BOOST_RE_NO_LIB=1
-	: 
-		debug release
+    : 
+        <include>$(BOOST_ROOT)
+        <define>BOOST_RE_NO_LIB=1
+    : 
+        debug release
       <runtime-link>dynamic
-	;
+    ;
 
 
 dll libboost_regex$(SUFDLL[1]) : ../src/$(SOURCES).cpp 
-	: 
-		<include>../../../
-		<define>BOOST_RE_BUILD_DLL=1
-	: 
-		debug release
+    : 
+        <include>$(BOOST_ROOT)
+        <define>BOOST_RE_BUILD_DLL=1
+    : 
+        debug release
       <runtime-link>dynamic
-	;
+    ;
 
 
 
