@@ -21,11 +21,10 @@
 #ifndef BOOST_FORMAT_PARSING_HPP
 #define BOOST_FORMAT_PARSING_HPP
 
-#ifdef BOOST_MSVC
 #ifdef isdigit
 #undef isdigit
-#endif
-#endif // MSVC workaround
+#endif // many platforms have isdigit as a macro, mixes things up.
+
 
 
 #include "boost/format/format_class.hpp"
@@ -46,7 +45,7 @@ namespace detail {
     // Effects : reads s[start:] and converts digits into an integral n, of type Res
     // Returns : n
   {
-    using namespace std; // isdigit is better without 'std::' for borland 0x560
+    using namespace std; 
     Res n = 0;
     while(start<s.size() && isdigit(s[start], os.rdbuf()->getloc() ) ) {
       char cur_ch = os.narrow( s[start], 0);
@@ -68,7 +67,7 @@ namespace detail {
     // Effects : advance *pos_p by skipping printf's asterisk fields.
     // Returns : nothing
   {
-    using namespace std; // isdigit is better without 'std::' for borland 0x560
+    using namespace std;
     assert( pos_p != 0);
     if(*pos_p >= buf.size() ) return;
     if(buf[ *pos_p]==os.widen('*')) {
