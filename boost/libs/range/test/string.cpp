@@ -68,19 +68,16 @@ void check_char()
     BOOST_STATIC_ASSERT(( is_same<  range_size<char_iterator_t>::type, std::size_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  range_result_iterator<char_iterator_t>::type, char_iterator_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  range_result_iterator<const char*>::type, const char* >::value ));
-    //
-    // note: why does is_same<  result_iterator<const char_iterator_t>::type, const char* >::value
-    // fail?!?
     
     BOOST_STATIC_ASSERT(( is_same< range_value<char_array_t>::type, 
                                     char>::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<char[10]>::type, char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<char[10]>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<char_array_t>::type, char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<char_array_t>::type, const char* >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<char_array_t>::type,                           
                                     ::std::ptrdiff_t >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<char_array_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<char[10]>::type, char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const char[10]>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<char_array_t>::type, char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const char_array_t>::type, const char* >::value ));
 
     BOOST_CHECK_EQUAL( begin( char_s ), char_s );
     std::size_t sz = size( char_s );
@@ -136,11 +133,16 @@ void check_string()
         
     wchar_t to_search = L'n';
     BOOST_CHECK( find( char_ws, to_search ) != end( char_ws ) );    
+
+#if BOOST_WORKAROUND(_MSC_VER, BOOST_TESTED_AT(1300))
+
     BOOST_CHECK( find( my_wstring, to_search ) != end( my_wstring ) );
+
 #endif  
+#endif
     
     find( check_rvalue_return(), 'n' );
- 
+
 }
 
 
