@@ -208,7 +208,9 @@ namespace boost {
                 return true;
             }
             
-            return (first_finder(Test,Comp)(begin(Input), end(Input)));
+            // Use the temporary variable to make VACPP happy
+            bool bResult=(first_finder(Test,Comp)(begin(Input), end(Input)));
+            return bResult;
         }
 
         //! 'Contains' predicate
