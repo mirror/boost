@@ -75,7 +75,7 @@ public:
         this_type(p).swap(*this);
     }
 
-    template <typename D> void reset(T * p = 0, D d)
+    template <typename D> void reset(T * p, D d)
     {
         this_type(p, d).swap(*this);
     }
