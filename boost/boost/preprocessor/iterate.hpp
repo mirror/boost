@@ -11,12 +11,15 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# include <boost/preprocessor/detail/cat.hpp>
+# include <boost/preprocessor/array.hpp>
 # include <boost/preprocessor/dec.hpp>
 # include <boost/preprocessor/inc.hpp>
 # include <boost/preprocessor/stringize.hpp>
 #
 # include <boost/preprocessor/tuple/elem.hpp>
+#
+# include <boost/preprocessor/detail/cat.hpp>
+# include <boost/preprocessor/detail/line.hpp>
 #
 # define BOOST_PP_ITERATION_DEPTH_LIMIT 5
 # define BOOST_PP_ITERATION_LIMIT 256
@@ -37,6 +40,10 @@
 # define BOOST_PP_FRAME_FINISH(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_ITERATION_FINISH_, i)
 # define BOOST_PP_RELATIVE_FINISH(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_RELATIVE_, i)(BOOST_PP_ITERATION_FINISH_)
 #
+# define BOOST_PP_ITERATION_FLAGS() BOOST_PP_DETAIL_CAT2(BOOST_PP_ITERATION_FLAGS_, BOOST_PP_ITERATION_DEPTH())
+# define BOOST_PP_FRAME_FLAGS(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_ITERATION_FLAGS_, i)
+# define BOOST_PP_RELATIVE_FLAGS(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_RELATIVE_, i)(BOOST_PP_ITERATION_FLAGS_)
+#
 # define BOOST_PP_RELATIVE_0(m) BOOST_PP_DETAIL_CAT2(m, BOOST_PP_ITERATION_DEPTH())
 # define BOOST_PP_RELATIVE_1(m) BOOST_PP_DETAIL_CAT2(m, BOOST_PP_DEC(BOOST_PP_ITERATION_DEPTH()))
 # define BOOST_PP_RELATIVE_2(m) BOOST_PP_DETAIL_CAT2(m, BOOST_PP_DEC(BOOST_PP_DEC(BOOST_PP_ITERATION_DEPTH())))
@@ -45,13 +52,12 @@
 #
 # define BOOST_PP_SET_ITERATION_START() BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/iterate/lower, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()), ., hpp>)
 # define BOOST_PP_SET_ITERATION_FINISH() BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/iterate/upper, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()), ., hpp>)
+# define BOOST_PP_SET_ITERATION_FLAGS() BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/iterate/flags, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()), ., hpp>)
 #
 # if !defined(__MWERKS__) || __MWERKS__ > 0x3000
 #   define BOOST_PP_LINE(line, file) line BOOST_PP_STRINGIZE(BOOST_PP_DETAIL_CAT2(file, BOOST_PP_DETAIL_CAT2(BOOST_PP_LINE_, BOOST_PP_ITERATION_DEPTH())()))
-#   define BOOST_PP_DETAIL_LINE() 1 ""
 # else
 #   define BOOST_PP_LINE(line, file) __LINE__ __FILE__
-#   define BOOST_PP_DETAIL_LINE() __LINE__
 # endif
 #
 # define BOOST_PP_LINE_0() (!BOOST_PP_ERROR_NO_ACTIVE_ITERATION)
