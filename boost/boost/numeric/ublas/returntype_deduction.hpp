@@ -8,7 +8,7 @@
 #ifndef BOOST_NUMERIC_UBLAS_NUMERICTYPE_DEDUCTION_IPP
 #define BOOST_NUMERIC_UBLAS_NUMERICTYPE_DEDUCTION_IPP
 
-/* See original boost/utility/type_deduction.hpp for comments */
+// See original in boost-sandbox/boost/utility/type_deduction.hpp for comments
 
 #include <boost/mpl/vector/vector20.hpp>
 #include <boost/mpl/at.hpp>
