@@ -42,11 +42,11 @@ void assertion_failed (char const * expr, char const * func, char const * file, 
                + string("\" at file \"")
                + string(file)
                + string("\" function \"")
-               + string(func) 
+               + string(func)
                + string("\"") ;
 
   TRACE(msg);
-  
+
   throw std::logic_error(msg);
 }
 
@@ -54,20 +54,14 @@ void assertion_failed (char const * expr, char const * func, char const * file, 
 
 using boost::optional ;
 
+template<class T> inline void unused_variable ( T ) {}
+
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 using boost::swap ;
 using boost::get_pointer ;
 #endif
 
 #define ARG(T) (static_cast< T const* >(0))
-
-//#define SHOW_COMPILATION_FAIL_1
-//#define SHOW_COMPILATION_FAIL_2
-//#define SHOW_COMPILATION_FAIL_3
-//#define SHOW_COMPILATION_FAIL_4a
-//#define SHOW_COMPILATION_FAIL_4b
-//#define SHOW_COMPILATION_FAIL_5a
-//#define SHOW_COMPILATION_FAIL_5b
 
 //
 // Helper class used to verify the lifetime managment of the values held by optional
@@ -344,25 +338,6 @@ void test_basics( T const* )
   ob.reset();
   check_is_pending_dtor( ARG(T) ) ;
   check_uninitialized(ob);
-
-#ifdef SHOW_COMPILATION_FAIL_1
-  // This is illegal since 'oa2' is const.
-  *oa2 = oa ;
-#endif
-
-#ifdef SHOW_COMPILATION_FAIL_2
-  T c(3);
-  // Direct Value Assignment is not allowed.
-  // Use operator*() instead.
-  oa = c ;
-#endif
-
-#ifdef SHOW_COMPILATION_FAIL_3
-  T d(4);
-  // Direct Value Construction is explicit.
-  optional<T> oc = d ;
-#endif
-
 }
 
 //
@@ -404,9 +379,9 @@ void test_uninitialized_access( T const* )
   bool passed = false ;
   try
   {
-    // This should throw becasue 'def' is uninitialized
+    // This should throw because 'def' is uninitialized
     T const& n = *def ;
-    (n);
+    unused_variable(n);
     passed = true ;
   }
   catch (...) {}
@@ -415,8 +390,9 @@ void test_uninitialized_access( T const* )
   passed = false ;
   try
   {
-    T v(1) ; (v);
-    // This should throw becasue 'def' is uninitialized
+    T v(1) ;
+    unused_variable(v);
+    // This should throw because 'def' is uninitialized
     *def = v ;
     passed = true ;
   }
@@ -426,9 +402,9 @@ void test_uninitialized_access( T const* )
   passed = false ;
   try
   {
-    // This should throw becasue 'def' is uninitialized
+    // This should throw because 'def' is uninitialized
     T v = *(def.operator->()) ;
-    (v);
+    unused_variable(v);
     passed = true ;
   }
   catch (...) {}
@@ -803,16 +779,6 @@ void test_relops( T const* )
   optional<T> opt1(v1);
   optional<T> opt2(v2);
 
-#ifdef SHOW_COMPILATION_FAIL_4a
-  // You can compare against 0 or against another optional<>,
-  // but not against another value 
-  if ( def0 == 1 ) ;
-#endif
-
-#ifdef SHOW_COMPILATION_FAIL_4b
-  if ( def0 != 1 ) ;
-#endif
-
   // Check identity
   BOOST_CHECK ( def0 == def0 ) ;
   BOOST_CHECK ( opt0 == opt0 ) ;
@@ -858,7 +824,7 @@ void test_with_class_type()
   test_no_throwing_swap( ARG(X) );
   test_throwing_swap( ARG(X) );
   test_relops( ARG(X) ) ;
-   BOOST_CHECK ( X::count == 0 ) ;
+  BOOST_CHECK ( X::count == 0 ) ;
 }
 
 int eat ( char ) { return 1 ; }
@@ -874,7 +840,7 @@ template<class T>
 void test_no_implicit_conversions_impl( T const& )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   optional<T> def ;
   BOOST_CHECK ( eat(def) == 0 ) ;
 }
@@ -909,15 +875,6 @@ void test_conversions()
   optional<double> opt3 ;
   opt3 = opt2 ;
   BOOST_CHECK(*opt3 == d);
-
-#ifdef SHOW_COMPILATION_FAIL_5a
-  optional<A> opt4(opt0);
-#endif
-
-#ifdef SHOW_COMPILATION_FAIL_5b
-  optional<A> opt5 ;
-  opt5 = opt0;
-#endif
 }
 
 int test_main( int, char* [] )
