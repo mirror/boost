@@ -1,8 +1,8 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright David Abrahams 2002 - 2003. 
-//  (C) Copyright Aleksey Gurtovoy 2002. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright David Abrahams 2002 - 2003.
+//  (C) Copyright Aleksey Gurtovoy 2002.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -28,7 +28,7 @@
 #endif
 
 // Version 7.0 (Kylix) and below:
-#if (__BORLANDC__ <= 0x570) || !defined(BOOST_STRICT_CONFIG)
+#if (__BORLANDC__ <= 0x570)
 #  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
@@ -47,7 +47,7 @@
 
 //
 // new bug in 5.61:
-#if __BORLANDC__ >= 0x561
+#if (__BORLANDC__ >= 0x561) && (__BORLANDC__ <= 0x570)
    // this seems to be needed by the command line compiler, but not the IDE:
 #  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
@@ -91,7 +91,7 @@
 //
 // check for exception handling support:
 //
-#if !defined(_CPPUNWIND) && !defined(BOOST_CPPUNWIND)
+#if !defined(_CPPUNWIND) && !defined(BOOST_CPPUNWIND) && !defined(__EXCEPTIONS)
 #  define BOOST_NO_EXCEPTIONS
 #endif
 //
@@ -125,8 +125,8 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 5.7 (Kylix 3):
-#if (__BORLANDC__ > 0x570)
+// last known and checked version is 1536 (Builder X preview):
+#if (__BORLANDC__ > 1536)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
