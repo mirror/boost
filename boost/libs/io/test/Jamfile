@@ -1,0 +1,34 @@
+#  Boost.IO Library test Jamfile
+#
+#  Copyright (c) 2003 Daryle Walker
+#
+#  Permission to copy, use, modify, sell and distribute this software
+#  is granted provided this copyright notice appears in all copies.
+#  This software is provided "as is" without express or implied
+#  warranty, and with no claim as to its suitability for any purpose.
+
+subproject libs/io/test ;
+
+import testing ;
+
+# Make tests run by default.
+DEPENDS all : test ;
+
+{
+
+test-suite "io"
+   :    [  run ios_state_unit_test.cpp 
+                <lib>../../../libs/test/build/boost_test_exec_monitor
+              : # args
+              : # input files
+              : std::locale-support
+        ]
+
+        [ run ios_state_test.cpp 
+                <lib>../../../libs/test/build/boost_test_exec_monitor
+              : # args
+              : # input files
+              : std::locale-support
+        ]
+  ;
+}
