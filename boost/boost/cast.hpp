@@ -48,6 +48,7 @@
 # include <typeinfo>
 # include <boost/type.hpp>
 # include <boost/limits.hpp>
+# include <boost/detail/select_type.hpp>
 
 //  It has been demonstrated numerous times that MSVC 6.0 fails silently at link
 //  time if you use a template function which has template parameters that don't
@@ -125,52 +126,25 @@ namespace boost
   
     namespace detail
     {
-       template <bool is_signed> struct numeric_min_select;
-    
-       template<>
-       struct numeric_min_select<true>
-       {
-         template <class T>
-         struct limits : std::numeric_limits<T>
-         {
+      template <class T>
+      struct signed_numeric_limits : std::numeric_limits<T>
+      {
              static inline T min()
-# ifndef __GNUC__ // bug workaround courtesy Jens Maurer
-             {
-                 return std::numeric_limits<T>::min() >= 0
+         {
+             return std::numeric_limits<T>::min() >= 0
                      // unary minus causes integral promotion, thus the static_cast<>
                      ? static_cast<T>(-std::numeric_limits<T>::max())
                      : std::numeric_limits<T>::min();
-             }
-# else
-             ;
-# endif
          };
-       };
-
-# ifdef __GNUC__ // bug workaround courtesy Jens Maurer
-      template<> template<class T>
-      inline T numeric_min_select<true>::limits<T>::min()
-      {
-           return std::numeric_limits<T>::min() >= 0
-               // unary minus causes integral promotion, thus the static_cast<>
-               ? static_cast<T>(-std::numeric_limits<T>::max())
-               : std::numeric_limits<T>::min();
-      }
-# endif
-    
-      template<>
-      struct numeric_min_select<false>
-      {
-          template <class T>
-          struct limits : std::numeric_limits<T> {};
       };
-      
+   
       // Move to namespace boost in utility.hpp?
       template <class T, bool specialized>
       struct fixed_numeric_limits_base
-          : public numeric_min_select<
-                       std::numeric_limits<T>::is_signed 
-                   >::template limits<T>
+          : public if_true< std::numeric_limits<T>::is_signed >
+           ::template then< signed_numeric_limits<T>,
+                            std::numeric_limits<T>
+                   >::type
       {};
       
       template <class T>
