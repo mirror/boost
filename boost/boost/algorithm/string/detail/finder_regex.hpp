@@ -33,7 +33,7 @@ namespace boost {
                 typedef BOOST_STRING_TYPENAME base_type::difference_type difference_type;
                 typedef BOOST_STRING_TYPENAME base_type::const_iterator const_iterator;
                 typedef BOOST_STRING_TYPENAME base_type::iterator iterator;
-				typedef boost::match_results<iterator> match_results_type;
+                typedef boost::match_results<iterator> match_results_type;
 
                 // Construction
 

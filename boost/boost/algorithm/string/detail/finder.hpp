@@ -310,7 +310,7 @@ namespace boost {
                     input_iterator_type It=Begin;
                     for(
                         unsigned int Index=0; 
-                        Index<m_N && It!=End; ++Index,++It );
+                        Index<m_N && It!=End; ++Index,++It ) {};
     
                     return result_type( Begin, It );
                 }
@@ -378,10 +378,10 @@ namespace boost {
                     input_iterator_type It2=Begin;
                     
                     // Advance It2 by N incremets
-                    for( Index=0; Index<m_N && It2!=End; ++Index,++It2 );
+                    for( Index=0; Index<m_N && It2!=End; ++Index,++It2 ) {};
 
                     // Advance It, It2 to the end
-                    for(; It2!=End; ++It,++It2 );
+                    for(; It2!=End; ++It,++It2 ) {};
 
                     return result_type( It, It2 );
                 }
@@ -399,7 +399,7 @@ namespace boost {
                     input_iterator_type It=End;
                     for(
                         unsigned int Index=0; 
-                        Index<m_N && It!=Begin; ++Index,--It );
+                        Index<m_N && It!=Begin; ++Index,--It ) {};
     
                     return result_type( It, End );
                 }
