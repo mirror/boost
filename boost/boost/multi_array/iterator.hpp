@@ -97,7 +97,7 @@ public:
 
   template <class IteratorAdaptor, class DifferenceType>
   static void advance(IteratorAdaptor& x, DifferenceType n) {
-    x.idx_ += n;
+    x.base().idx_ += n;
   }
 
   template <class IteratorAdaptor1, class IteratorAdaptor2>
