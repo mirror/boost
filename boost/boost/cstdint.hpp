@@ -35,6 +35,8 @@
       // this is triggered with GCC, because it defines __cplusplus < 199707L
 #     define BOOST_NO_INT64_T
 #   endif 
+# elif defined(__FreeBSD__)
+#   include <inttypes.h>
 # else
 #   include <stdint.h>
 # endif
@@ -79,9 +81,55 @@ namespace boost
 
 } // namespace boost
 
+#elif defined(__FreeBSD__) && (__FreeBSD__ <= 4)
+// FreeBSD has an <inttypes.h> that contains much of what we need
+# include <inttypes.h>
+
+namespace boost {
+
+  using ::int8_t;             
+  typedef int8_t int_least8_t;       
+  typedef int8_t int_fast8_t;        
+  using ::uint8_t;            
+  typedef uint8_t uint_least8_t;      
+  typedef uint8_t uint_fast8_t;       
+                     
+  using ::int16_t;            
+  typedef int16_t int_least16_t;      
+  typedef int16_t int_fast16_t;       
+  using ::uint16_t;           
+  typedef uint16_t uint_least16_t;     
+  typedef uint16_t uint_fast16_t;      
+                     
+  using ::int32_t;            
+  typedef int32_t int_least32_t;      
+  typedef int32_t int_fast32_t;       
+  using ::uint32_t;           
+  typedef uint32_t uint_least32_t;     
+  typedef uint32_t uint_fast32_t;      
+         
+# ifndef BOOST_NO_INT64_T          
+
+  using ::int64_t;            
+  typedef int64_t int_least64_t;      
+  typedef int64_t int_fast64_t;       
+  using ::uint64_t;           
+  typedef uint64_t uint_least64_t;     
+  typedef uint64_t uint_fast64_t;      
+
+  typedef int64_t intmax_t;
+  typedef uint64_t uintmax_t;
+
+# else
+
+  typedef int32_t intmax_t;
+  typedef uint32_t uintmax_t;
+
+# endif
+
+} // namespace boost
 
 #else  // BOOST_HAS_STDINT_H
-
 
 # include <limits.h> // implementation artifact; not part of interface
 
