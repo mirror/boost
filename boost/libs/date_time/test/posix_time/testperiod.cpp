@@ -16,6 +16,7 @@ int main()
   time_period p3 = p2;
   check("assignment", p3 == p2);
   time_period p4(t1,hours(1));
+  check("length", p4.length() == hours(1));
   std::cout << to_simple_string(t1) << std::endl;
   std::cout << to_simple_string(p4) << std::endl;
   std::cout << to_simple_string(p1) << std::endl;

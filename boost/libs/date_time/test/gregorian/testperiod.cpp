@@ -8,13 +8,13 @@ int main()
   date d1(2000,Jan,1),d2(2000,Jan,4);
   date d3 = d2;
   check("assignment", d3 == d2);
-  date_duration fourDays(4);
   date_period p1(d1,d2);
   date_period p2(d1,date_duration(3));
   check("construction and ==", p1 == p2);
-  check("begin", p1.begin() == d1);
-  check("last",  p1.last()  == d2-date_duration(1) );
-  check("end",   p1.end()   == d2);
+  check("begin",  p1.begin()  == d1);
+  check("last",   p1.last()   == d2-date_duration(1) );
+  check("end",    p1.end()    == d2);
+  check("length", p2.length() == date_duration(3));
   check("contains begin", p1.contains(d1));
   check("contains last", !p1.contains(d2));
   date_period p3(date(2000,Jan,4),date(2000,Feb,1));
@@ -37,6 +37,7 @@ int main()
   check("not contains period", !p6.contains(p5));
   
   //shift test
+  date_duration fourDays(4);
   p1.shift(fourDays); //from 2000-Jan-01--2000-Jan-04
   date_period shifted(date(2000,Jan,5),date(2000,Jan,8));
   //   std::cout << to_string(p1.begin()) <<"--" 
