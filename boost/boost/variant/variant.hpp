@@ -220,7 +220,7 @@ public: // metafunction result
 #if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 
 template<>
-struct make_storage<int>
+struct make_storage<int,int>
 {
     typedef int type;
 };
