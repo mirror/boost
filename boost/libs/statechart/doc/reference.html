@@ -6,7 +6,7 @@
 <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
-<title>The boost::fsm library - Tutorial</title>
+<title>The boost::fsm library - Reference</title>
 </head>
 
 <body link="#0000ff" vlink="#800080">
@@ -39,6 +39,8 @@
   <code>asynchronous_state_machine</code></a></dd>
   <dt><a href="#event_processor.hpp">event_processor.hpp</a></dt>
   <dd><a href="#Class template event_processor">Class template event_processor</a></dd>
+  <dt><a href="#worker.hpp">worker.hpp</a></dt>
+  <dd><a href="#Class template worker">Class template worker</a></dd>
   <dt>&nbsp;</dt>
   <dt><a href="#simple_state.hpp">simple_state.hpp</a></dt>
   <dd><a href="#Typedef no_reactions">Typedef <code>no_reactions</code></a></dd>
@@ -359,8 +361,8 @@ all history information.</p>
   that does the following:<ol type="a">
     <li>Searches a reaction suitable for the current event, starting with the 
     current innermost state and moving outward until a state defining a 
-    reaction for the event is found. Returns <code>simple_state::forward_event()</code> 
-    if no reaction has been found.</li>
+    reaction for the event is found. Returns <code>
+    simple_state::forward_event()</code> if no reaction has been found.</li>
     <li>Executes the found reaction. If the reaction result is equal to the 
     return value of <code>simple_state::forward_event()</code> then resumes 
     the reaction search (step a). Returns the reaction result otherwise</li>
@@ -1766,7 +1768,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->02 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28864" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28866" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
