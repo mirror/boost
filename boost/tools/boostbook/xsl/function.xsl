@@ -14,6 +14,13 @@
        "standardese", for now -->
   <xsl:param name="boost.generation.mode">compact</xsl:param>
 
+  <!-- The longest type length that is considered "short" for the
+       layout of function return types. When the length of the result type
+       and any storage specifiers is greater than this length, they will be
+       placed on a separate line from the function name and parameters
+       unless everything fits on a single line. -->
+  <xsl:param name="boost.short.result.type">6</xsl:param>
+
   <!-- Display a function declaration -->
   <xsl:template name="function">
     <xsl:param name="indentation"/>
@@ -55,6 +62,9 @@
 
     <!-- True if this is the function's separate documentation -->
     <xsl:param name="standalone" select="false()"/>
+
+    <!-- True if we should suppress the template header -->
+    <xsl:param name="suppress-template" select="false()"/>
 
     <!-- Calculate the type -->
     <xsl:variable name="type">
@@ -109,7 +119,8 @@
     </xsl:variable>
 
     <xsl:if test="not ($standalone) or 
-                  (local-name(.)='signature' and (position() &gt; 1))">
+                  (local-name(.)='signature' and (position() &gt; 1))
+                  or $suppress-template">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
 
@@ -120,7 +131,14 @@
     
     <!-- Build the template header -->
     <xsl:variable name="template-length">
-      <xsl:call-template name="template.synopsis.length"/>
+      <xsl:choose>
+        <xsl:when test="$suppress-template">
+          0
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="template.synopsis.length"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
         
     <!-- Build a full parameter string (without line breaks) -->
@@ -156,40 +174,21 @@
         <xsl:apply-templates select="template" mode="synopsis">
           <xsl:with-param name="indentation" select="$indentation"/>
         </xsl:apply-templates>
-        <xsl:text>&#10;</xsl:text>
-        <xsl:call-template name="indent">
-          <xsl:with-param name="indentation" select="$indentation + 2"/>
-        </xsl:call-template>
         
-        <!-- Emit the function declaration without parameters -->
-        <xsl:call-template name="source-highlight">
-          <xsl:with-param name="text" select="$type"/>
-        </xsl:call-template>
-        <xsl:call-template name="link-or-anchor">
-          <xsl:with-param name="to" select="$link-to"/>
-          <xsl:with-param name="text">
-             <xsl:call-template name="source-highlight">
-                <xsl:with-param name="text" 
-                  select="$function-name"/>
-              </xsl:call-template>            
-          </xsl:with-param>
-          <xsl:with-param name="link-type" select="$link-type"/>
-          <xsl:with-param name="highlight" select="true()"/>
-        </xsl:call-template>
-
-        <!-- Emit the parameters -->
-        <xsl:text>(</xsl:text>
-        <xsl:call-template name="function-parameters">
+        <!-- Emit the rest of the function declaration (without the
+             template header) indented two extra spaces. -->
+        <xsl:call-template name="function">
+          <xsl:with-param name="indentation" select="$indentation + 2"/>
+          <xsl:with-param name="is-reference" select="$is-reference"/>
           <xsl:with-param name="include-names" select="$include-names"/>
-          <xsl:with-param name="indentation" 
-            select="$indentation + 3 + string-length($type) +
-                    string-length($function-name)"/>
-          <xsl:with-param name="final" select="true()"/>
-        </xsl:call-template>
-        <xsl:text>)</xsl:text>
-
-        <xsl:call-template name="source-highlight">
-          <xsl:with-param name="text" select="$postdeclarator"/>
+          <xsl:with-param name="link-type" select="$link-type"/>
+          <xsl:with-param name="link-to" select="$link-to"/>
+          <xsl:with-param name="constructor-for" select="$constructor-for"/>
+          <xsl:with-param name="destructor-for" select="$destructor-for"/>
+          <xsl:with-param name="copy-assign-for" select="$copy-assign-for"/>
+          <xsl:with-param name="name" select="$name"/>
+          <xsl:with-param name="standalone" select="$standalone"/>
+          <xsl:with-param name="suppress-template" select="true()"/>
         </xsl:call-template>
       </xsl:when>
 
@@ -198,11 +197,13 @@
         <xsl:call-template name="link-or-anchor">
           <xsl:with-param name="to" select="$link-to"/>
           <xsl:with-param name="text">
-            <xsl:apply-templates select="template" mode="synopsis">
-              <xsl:with-param name="indentation" select="$indentation"/>
-              <xsl:with-param name="wrap" select="false()"/>
-              <xsl:with-param name="highlight" select="false()"/>
-            </xsl:apply-templates>
+            <xsl:if test="not($suppress-template)">
+              <xsl:apply-templates select="template" mode="synopsis">
+                <xsl:with-param name="indentation" select="$indentation"/>
+                <xsl:with-param name="wrap" select="false()"/>
+                <xsl:with-param name="highlight" select="false()"/>
+              </xsl:apply-templates>
+            </xsl:if>
             <xsl:value-of select="$type"/>
             <xsl:value-of select="$function-name"/>
             <xsl:text>(</xsl:text>
@@ -218,17 +219,35 @@
           </xsl:with-param>
           <xsl:with-param name="link-type" select="$link-type"/>
           <xsl:with-param name="highlight" select="true()"/>
-        </xsl:call-template>        
+        </xsl:call-template>
+        <xsl:text>;</xsl:text>    
       </xsl:when>
 
       <!-- This declaration will take multiple lines -->
       <xsl:otherwise>
-        <xsl:apply-templates select="template" mode="synopsis">
-          <xsl:with-param name="indentation" select="$indentation"/>
-        </xsl:apply-templates>
         <xsl:call-template name="source-highlight">
           <xsl:with-param name="text" select="$type"/>
         </xsl:call-template>
+        <xsl:if test="string-length($type) &gt; $boost.short.result.type">
+          <xsl:text>&#10;</xsl:text>
+          <xsl:call-template name="indent">
+            <xsl:with-param name="indentation" select="$indentation"/>
+          </xsl:call-template>
+        </xsl:if>
+
+        <!-- Determine how many columns the type and storage
+             specifiers take on the same line as the function name. -->
+        <xsl:variable name="type-length">
+          <xsl:choose>
+            <xsl:when test="string-length($type) &gt; $boost.short.result.type">
+              0
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="string-length($type)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+
         <xsl:call-template name="link-or-anchor">
           <xsl:with-param name="to" select="$link-to"/>
           <xsl:with-param name="text" select="$function-name"/>
@@ -239,7 +258,7 @@
         <xsl:call-template name="function-parameters">
           <xsl:with-param name="include-names" select="$include-names"/>
           <xsl:with-param name="indentation" 
-            select="$indentation + $template-length + string-length($type)
+            select="$indentation + $type-length 
                     + string-length($function-name) + 1"/>
           <xsl:with-param name="final" select="true()"/>
         </xsl:call-template>                
@@ -247,9 +266,9 @@
         <xsl:call-template name="source-highlight">
           <xsl:with-param name="text" select="$postdeclarator"/>
         </xsl:call-template>
+        <xsl:text>;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>;</xsl:text>
   </xsl:template>    
 
   <!-- Synopsis of function parameters, e.g., "(const T&, int x = 5)" -->
@@ -660,6 +679,23 @@
       <xsl:apply-templates select="purpose/*"/>
     </xsl:if>
 
+    <!-- Document parameters -->
+    <xsl:if test="parameter/description">
+      <variablelist spacing="compact">
+        <title>Parameters</title>
+        <xsl:for-each select="parameter">
+          <xsl:if test="description">
+            <varlistentry>
+              <term><xsl:value-of select="@name"/></term>
+              <listitem>
+                <xsl:apply-templates select="description/*"/>
+              </listitem>
+            </varlistentry>
+          </xsl:if>
+        </xsl:for-each>
+      </variablelist>
+    </xsl:if>
+
     <xsl:apply-templates select="description/*"/>
 
     <xsl:if test="para">
@@ -715,7 +751,7 @@
 
   <!-- The "compact" function requirements mode uses variable lists -->
   <xsl:template name="function.requirements.compact">
-    <variablelist>
+    <variablelist spacing="boost">
       <xsl:apply-templates 
         select="requires|effects|postconditions|returns|throws|complexity|
                 notes|rationale"

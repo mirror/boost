@@ -267,8 +267,10 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
                                        string(compoundname))"/>
         </xsl:attribute>
         
-        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:if test="briefdescription/*|detaileddescription/*">
+          <xsl:apply-templates select="briefdescription/*" mode="passthrough"/>
+          <xsl:apply-templates select="detaileddescription/*" mode="passthrough"/>
+        </xsl:if>
         
         <xsl:apply-templates mode="toplevel">
           <xsl:with-param name="with-namespace-refs"
@@ -455,6 +457,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         </method-group>
         <xsl:apply-templates/>
       </xsl:when>
+      <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
+        <xsl:apply-templates/>
+      </xsl:when>
       <xsl:when test="@kind='public-type'">
         <xsl:apply-templates/>
       </xsl:when>
@@ -466,7 +471,13 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
       <xsl:when test="@kind='typedef'">
         <xsl:apply-templates/>
       </xsl:when>
+      <xsl:when test="@kind='var'">
+        <xsl:apply-templates/>
+      </xsl:when>
       <xsl:when test="@kind='enum'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="@kind='user-defined'">
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
@@ -532,6 +543,9 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
       <xsl:when test="@kind='enum'">
         <xsl:call-template name="enum"/>
       </xsl:when>
+      <xsl:when test="@kind='variable'">
+        <xsl:call-template name="variable"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:message>
 Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
@@ -572,14 +586,40 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:apply-templates select="type/*|type/text()" mode="passthrough"/>
       </paramtype>
 
-      <!-- TBD: handling of parameter descriptions -->
+      <!-- Default argument -->
       <xsl:if test="defval">
         <default>
           <xsl:apply-templates select="defval/*|defval/text()" 
             mode="passthrough"/>
         </default>
       </xsl:if>
+
+      <!-- Parameter description -->
+      <xsl:variable name="name">
+        <xsl:value-of select="declname/text()"/>
+      </xsl:variable>
+
+      <xsl:apply-templates select="../detaileddescription/para/parameterlist[attribute::kind='param']/parameterdescription"
+        mode="parameter.description">
+        <xsl:with-param name="name">
+          <xsl:value-of select="$name"/>
+        </xsl:with-param>
+      </xsl:apply-templates>
     </parameter>
+  </xsl:template>
+
+  <xsl:template match="parameterdescription" mode="parameter.description">
+    <!-- The parameter name we are looking for -->
+    <xsl:param name="name"/>
+
+    <!-- The parametername node associated with this description -->
+    <xsl:variable name="name-node" select="../*[position()=1]"/>
+
+    <xsl:if test="string($name-node/text()) = $name">
+      <description>
+        <xsl:apply-templates select="para" mode="passthrough"/>
+      </description>
+    </xsl:if>
   </xsl:template>
 
   <!-- Handle function children -->
@@ -681,6 +721,30 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
       <xsl:call-template name="function.children"/>
     </method>
+  </xsl:template>
+
+  <!-- Handle member variables -->
+  <xsl:template name="variable">
+    <data-member>
+      <xsl:attribute name="name">
+        <xsl:value-of select="name/text()"/>
+      </xsl:attribute>
+
+      <!-- Specifiers -->
+      <xsl:if test="@static = 'yes'">
+        <xsl:attribute name="specifiers">static</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@mutable = 'yes'">
+        <xsl:attribute name="specifiers">mutable</xsl:attribute>
+      </xsl:if>
+
+      <type>
+        <xsl:apply-templates select="type/text()|type/*" mode="passthrough"/>
+      </type>
+
+      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+    </data-member>
   </xsl:template>
 
   <!-- Things we ignore directly -->

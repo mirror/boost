@@ -211,7 +211,8 @@
 
 <!ELEMENT data-member (type, purpose?, description?)>
 <!ATTLIST data-member 
-    name   CDATA  #REQUIRED
+    name         CDATA  #REQUIRED
+    specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT paramtype ANY>
@@ -370,7 +371,7 @@
 
 <!ELEMENT if-fails ANY>
 
-<!ELEMENT parameter (paramtype, default?)>
+<!ELEMENT parameter (paramtype, default?, description?)>
 <!ATTLIST parameter 
      name CDATA #IMPLIED>
 
