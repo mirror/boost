@@ -17,6 +17,7 @@
 #include "boost/mpl/insert_range.hpp"
 #include "boost/mpl/find.hpp"
 #include "boost/mpl/list_c.hpp"
+#include "boost/mpl/list.hpp"
 #include "boost/mpl/size.hpp"
 #include "boost/mpl/range_c.hpp"
 #include "boost/mpl/equal.hpp"
@@ -32,5 +33,14 @@ int main()
 
     BOOST_STATIC_ASSERT(mpl::size<range>::type::value == 10);
     BOOST_STATIC_ASSERT((mpl::equal< range,mpl::range_c<int,0,10> >::type::value));
+
+    typedef mpl::insert_range<
+                mpl::list0<>,
+                mpl::end< mpl::list0<> >::type,
+                mpl::list<int>
+            >::type result2;
+    
+    BOOST_STATIC_ASSERT((mpl::size<result2>::type::value == 1));
+
     return 0;
 }
