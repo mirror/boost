@@ -1,4 +1,51 @@
 
+> Similarly, is there some easy to use hook for customizing the "arg" to
+> indicate the type of the data (similar to how the textual representation
+> of the default argument can be changed, e.g.
+> value<Infile>(&forests_file)->default_value(default_in,"STDIN"), so that
+> I could get something like: "-f filename (=STDIN)   :" instead of "-f
+> arg (=STDIN)  :"?
+
+> A minor nit pick, with option groups (chained options_description), the
+> colons for the same group align but not across groups.
+
+
+There's another possibility:
+
+   value<type>(&variable, "filename")->......
+
+something like that was in the pre-review version, with the difference that the value name was also used to specify flags, e.g "filename?" would mean the value is optional.
+
+
+Should we also store the name specified on the command line in basic_option,
+so that validation_error can mention the *specified* option name?
+
+
+The config file is a bit different from command line. E.g. 'bool_switch' can't
+be specified in the config file. Further, it's not possible to specify a list
+of values in config file. For example, you can't write
+
+   include=a,b,c,d
+
+(or some other separator). You need:
+
+   include=a
+   ...
+   include=d
+
+
+ 
+> I often find it beneficial to start a log file, by tracing all options
+> in effect. Thus, it would be nice if one could iterate over all values
+> in a variable_map and get a string representation of all values. Perhaps
+> as an iterator range to the original string that was parsed into the
+> value in the first place. Using as<string> delegates to boost::any and
+> only succeeds if the value is indeed a string (a design decision I can
+> only applaud, btw), so I'm out of luck there.
+
+
+
+
 UML diagram?
 
 src/cmdline.cpp: function strncmp_nocase():
@@ -133,3 +180,24 @@ he should link the program_options library.
 > for later review.  (I think it had something to do with the fact that
 > program_options doesn't "know" the type of each option.)  I think it will
 > acquire the status of a Frequently-Asked Question.)
+
+
+> > Agreed. Though it's no FAQ section yet.... maybe, I can add this to howto
+>
+> section, though a question without full solution is not good.
+>
+> For the time being, those who want to know if such a display function
+> exists will have their question answered and the reason for it.  I suppose
+> that the library user could insert a series of statements in his program
+> immediately after the "notify" function which would write each known option
+> to a file for later examination.  Some people may use a number of "assert"
+> statements instead. They would only come into play in the debug mode.
+
+More visibility for bool_switch.
+
+
+> BTW: I thought of one other comment. One of the things I missed a little
+> in the documentation is a description of the config file format, as well
+> as what can be achieved with the po::command_line_style::style_t enum. I
+> think most users will need this information sooner or later. A few
+> examples would be fine... But then again time is such a precious thing
