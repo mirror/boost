@@ -37,6 +37,21 @@ template <typename Deriving> class moveable;
 template <typename T>        class move_source;
 template <typename T>        class move_return;
 
+namespace detail {
+
+// (detail) moveable_tag
+//
+// Concrete type from which moveable<T> derives.
+//
+// TODO: Move into moveable_fwd.hpp and define has_move_constructor.
+//
+template <typename Deriving>
+struct moveable_tag
+{
+};
+
+} // namespace detail
+
 //////////////////////////////////////////////////////////////////////////
 // function template move
 //
@@ -46,7 +61,7 @@ template <typename T>        class move_return;
 
 namespace detail {
 
-// (detail) class template move
+// (detail) class template move_type
 //
 // Metafunction that, given moveable T, provides move_source<T>, else T&.
 //
@@ -56,7 +71,7 @@ struct move_type
 public: // metafunction result
 
     typedef typename mpl::if_<
-          is_base_and_derived<moveable<T>, T>
+          is_base_and_derived<detail::moveable_tag<T>, T>
         , move_source<T>
         , T&
         >::type type;
