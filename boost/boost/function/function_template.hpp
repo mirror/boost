@@ -139,7 +139,7 @@ namespace boost {
       {
         static R invoke(any_pointer BOOST_FUNCTION_COMMA BOOST_FUNCTION_PARMS)
         {
-          FunctionObj f;
+          FunctionObj f = FunctionObj();
           return f(BOOST_FUNCTION_ARGS);
         }
       };
@@ -155,7 +155,7 @@ namespace boost {
                                BOOST_FUNCTION_PARMS)
 
         {
-          FunctionObj f;
+          FunctionObj f = FunctionObj();
           f(BOOST_FUNCTION_ARGS);
           return unusable();
         }
