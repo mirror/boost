@@ -166,28 +166,6 @@ private:
 public:
    typedef no_b_type* type;
 };
-#ifdef __BORLANDC__
-template <typename T, std::size_t N>
-struct add_pointer<T (&)[N]>
-{
-   typedef T* type;
-};
-template <typename T, std::size_t N>
-struct add_pointer<T const (&)[N]>
-{
-   typedef const T* type;
-};
-template <typename T, std::size_t N>
-struct add_pointer<T volatile (&)[N]>
-{
-   typedef volatile T* type;
-};
-template <typename T, std::size_t N>
-struct add_pointer<T const volatile (&)[N]>
-{
-   typedef const volatile T* type;
-};
-#endif
 
 } // namespace boost
 

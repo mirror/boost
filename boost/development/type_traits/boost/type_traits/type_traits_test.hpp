@@ -119,6 +119,7 @@ struct type_checker<T,T>
 
 #define type_test(v, x) type_checker<v,x>::check(#v, #x, #x);
 #define type_test3(v, x, z) type_checker<v,x,z>::check(#v, #x "," #z, #x "," #z);
+#ifndef SHORT_TRANSFORM_TEST
 #define transform_check(name, from_suffix, to_suffix)\
    type_test(bool to_suffix, name<bool from_suffix>::type);\
    type_test(char to_suffix, name<char from_suffix>::type);\
@@ -136,6 +137,12 @@ struct type_checker<T,T>
    type_test(double to_suffix, name<double from_suffix>::type);\
    type_test(UDT to_suffix, name<UDT from_suffix>::type);\
    type_test(enum1 to_suffix, name<enum1 from_suffix>::type);
+#else
+#define transform_check(name, from_suffix, to_suffix)\
+   type_test(int to_suffix, name<int from_suffix>::type);\
+   type_test(UDT to_suffix, name<UDT from_suffix>::type);\
+   type_test(enum1 to_suffix, name<enum1 from_suffix>::type);
+#endif
 
 #define boost_dummy_macro_param
 

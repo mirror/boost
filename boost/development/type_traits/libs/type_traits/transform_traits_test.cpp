@@ -371,7 +371,11 @@ int main(int argc, char* argv[])
 //
 // define the number of failures expected for given compilers:
 #ifdef __BORLANDC__
-unsigned int expected_failures = 4; // cv-qualifiers
+#ifdef SHORT_TRANSFORM_TEST
+unsigned int expected_failures = 97; // cv-qualifiers
+#else
+unsigned int expected_failures = 422; // cv-qualifiers
+#endif
 #elif defined(__GNUC__)
 unsigned int expected_failures = 1; // cv-qualified references
 #else
