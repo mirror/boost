@@ -53,6 +53,9 @@ template<int x> struct static_assert_test{};
 // an eye catching error message.  The result of the sizeof expression is either
 // used as an enum initialiser, or as a template argument depending which version
 // is in use...
+// Note that the argument to the assert is explicitly cast to bool using old-
+// style casts: too many compilers currently have problems with static_cast
+// when used inside integral constant expressions.
 //
 #if !defined(BOOST_BUGGY_INTEGRAL_CONSTANT_EXPRESSIONS) && !defined(__MWERKS__)
 #ifndef BOOST_MSVC
