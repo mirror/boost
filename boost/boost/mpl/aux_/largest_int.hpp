@@ -37,6 +37,11 @@ template<> struct integral_rank<unsigned int>   : int_<9> {};
 template<> struct integral_rank<long>           : int_<10> {};
 template<> struct integral_rank<unsigned long>  : int_<11> {};
 
+#if defined(BOOST_HAS_LONG_LONG)
+template<> struct integral_rank<long_long_type> : int_<12> {};
+template<> struct integral_rank<ulong_long_type>: int_<13> {};
+#endif
+
 template< typename T1, typename T2 > struct largest_int
 #if !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
     : if_c< 
