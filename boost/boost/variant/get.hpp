@@ -156,16 +156,16 @@ get(
 
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline
-    typename add_pointer<U>::type
+    typename add_pointer<const U>::type
 get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
-    typedef typename add_pointer<U>::type U_ptr;
+    typedef typename add_pointer<const U>::type U_ptr;
     if (!operand) return static_cast<U_ptr>(0);
 
-    detail::variant::get_visitor<U> v;
+    detail::variant::get_visitor<const U> v;
     return operand->apply_visitor(v);
 }
 
@@ -187,14 +187,14 @@ get(
 
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline
-    typename add_reference<U>::type
+    typename add_reference<const U>::type
 get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
-    typedef typename add_pointer<U>::type U_ptr;
-    U_ptr result = get<U>(&operand);
+    typedef typename add_pointer<const U>::type U_ptr;
+    U_ptr result = get<const U>(&operand);
 
     if (!result)
         throw bad_get();

@@ -277,8 +277,7 @@ inline void verify(VariantType& var, spec<S>, std::string str = "")
    // Check get<>()
    //
    BOOST_CHECK(boost::get<S>(&var));
-   BOOST_CHECK(!boost::get<S>(&cvar));
-   BOOST_CHECK(boost::get<const S>(&cvar));
+   BOOST_CHECK(boost::get<S>(&cvar));
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
@@ -294,12 +293,12 @@ inline void verify(VariantType& var, spec<S>, std::string str = "")
 
    try
    {
-      const S& cr = boost::get<const S>(cvar);
+      const S& cr = boost::get<S>(cvar);
       ptr2 = &cr;
    }
    catch(boost::bad_get& )
    {
-      BOOST_ERROR( "get<const S> failed unexpectedly" );
+      BOOST_ERROR( "get<S> const failed unexpectedly" );
    }
 
    BOOST_CHECK(ptr1 != 0 && ptr2 == ptr1);
@@ -327,7 +326,7 @@ inline void verify_not(VariantType& var, spec<S>)
    // Check get<>()
    //
    BOOST_CHECK(!boost::get<S>(&var));
-   BOOST_CHECK(!boost::get<const S>(&cvar));
+   BOOST_CHECK(!boost::get<S>(&cvar));
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
@@ -345,8 +344,8 @@ inline void verify_not(VariantType& var, spec<S>)
 
    try
    {
-      const S& cr = boost::get<const S>(var); // should throw
-      BOOST_ERROR( "get<const S> passed unexpectedly" );
+      const S& cr = boost::get<S>(var); // should throw
+      BOOST_ERROR( "get<S> const passed unexpectedly" );
 
       ptr2 = &cr;
    }

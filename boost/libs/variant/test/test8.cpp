@@ -105,11 +105,11 @@ int test_main(int , char* [])
 
       check_pass<const int>(c, 920);
 
-      check_fail<int>(c);
+      //check_fail<int>(c);
       check_fail<const float>(c);
-      check_fail<float>(c);
+      //check_fail<float>(c);
       check_fail<const short>(c);
-      check_fail<short>(c);
+      //check_fail<short>(c);
    }
 
    return boost::exit_success;

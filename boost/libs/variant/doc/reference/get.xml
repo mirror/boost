@@ -46,7 +46,7 @@
           <template-type-parameter name="TN"/>
         </template>
 
-        <type>U *</type>
+        <type>const U *</type>
 
         <parameter name="operand">
           <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; *</paramtype>
@@ -78,7 +78,7 @@
           <template-type-parameter name="TN"/>
         </template>
 
-        <type>U &amp;</type>
+        <type>const U &amp;</type>
 
         <parameter name="operand">
           <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
