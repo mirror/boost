@@ -16,9 +16,10 @@
 #include <algorithm>                       // max.
 #include <cstring>                         // memcpy.
 #include <exception>
-#include <iosfwd>                          // streamsize, streamoff.
+#include <ios>                             // failure, openmode, int types.
 #include <string>
-#include <boost/config.hpp>                // BOOST_DEDUCED_TYPENAME.
+#include <boost/config.hpp>                // DEDUCED_TYPENAME, MSVC.
+#include <boost/detail/workaround.hpp>     
 #include <boost/iostreams/constants.hpp>   // default_buffer_size.
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
@@ -27,7 +28,6 @@
 #include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/forward.hpp>
-#include <boost/iostreams/detail/ios.hpp>  // failure, openmode, int types.
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -39,9 +39,11 @@
 
 namespace boost { namespace iostreams {
 
-struct code_conversion_error : public detail::failure {
+// VC6 gets confused by the typedef detail::failure here.
+struct code_conversion_error : std::ios_base::failure 
+{
     code_conversion_error() 
-        : detail::failure("code conversion error")
+        : std::ios_base::failure("code conversion error")
         { }
 };
 
