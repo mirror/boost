@@ -223,7 +223,13 @@ namespace program_options {
         std::vector< shared_ptr<option_description> > options;
         std::map<std::string, int> name2index;
         // Whether the option comes from one of declared groups.
+#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, BOOST_TESTED_AT(313))
+        // vector<bool> is buggy there, see
+        // http://support.microsoft.com/default.aspx?scid=kb;en-us;837698
+        std::vector<char> belong_to_group;
+#else
         std::vector<bool> belong_to_group;
+#endif
 
         std::vector<options_description> groups;
 
