@@ -59,18 +59,6 @@ int cpp_main(int argc, char* argv[])
    value_test(false, (boost::is_convertible<test_abc1&, int_constructible>::value));
    value_test(false, (boost::is_convertible<int_constructible, test_abc1&>::value));
 
-   value_test(false, (boost::is_base_and_derived<Derived,Base>::value));
-   value_test(true, (boost::is_base_and_derived<Derived,Derived>::value));
-   value_test(true, (boost::is_base_and_derived<Base,Base>::value));
-   value_test(true, (boost::is_base_and_derived<Base,Derived>::value));
-   value_test(false, (boost::is_base_and_derived<NonDerived,Base>::value));
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-   value_test(false, (boost::is_base_and_derived<Base&,Derived>::value));
-   value_test(false, (boost::is_base_and_derived<Base&,Derived&>::value));
-   value_test(false, (boost::is_base_and_derived<Base,Derived&>::value));
-   value_test(false, (boost::is_base_and_derived<Base,void>::value));
-#endif
-
    return check_result(argc, argv);
 }
 

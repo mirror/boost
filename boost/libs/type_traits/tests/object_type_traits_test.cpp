@@ -269,6 +269,24 @@ int cpp_main(int argc, char* argv[])
    soft_value_test(false, boost::is_empty<const non_empty&>::value)
    soft_value_test(true, boost::is_empty<non_default_constructable_UDT>::value)
 
+   value_test(false, (boost::is_base_and_derived<Derived,Base>::value));
+   value_test(true, (boost::is_base_and_derived<Derived,Derived>::value));
+   value_test(true, (boost::is_base_and_derived<Base,Base>::value));
+   value_test(true, (boost::is_base_and_derived<Base,Derived>::value));
+   value_test(false, (boost::is_base_and_derived<NonDerived,Base>::value));
+   value_test(false, (boost::is_base_and_derived<Base,void>::value));
+   value_test(false, (boost::is_base_and_derived<Base,const void>::value));
+   value_test(false, (boost::is_base_and_derived<void,Derived>::value));
+   value_test(false, (boost::is_base_and_derived<const void,Derived>::value));
+   value_test(false, (boost::is_base_and_derived<int, int>::value));
+   value_test(false, (boost::is_base_and_derived<const int, int>::value));
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, (boost::is_base_and_derived<Base&,Derived>::value));
+   value_test(false, (boost::is_base_and_derived<Base&,Derived&>::value));
+   value_test(false, (boost::is_base_and_derived<Base,Derived&>::value));
+   value_test(false, (boost::is_base_and_derived<Base,void>::value));
+#endif
+
    return check_result(argc, argv);
 }
 
