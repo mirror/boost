@@ -2,7 +2,7 @@
 #define DATE_TIME_SIMPLE_FORMAT_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/parse_format_base.hpp"
@@ -17,17 +17,17 @@ public:
   //! String used printed is date is invalid
   static const char* not_a_date()
   {
-    return "not-a-date";
+    return "not-a-date-time";
   }
   //! String used to for positive infinity value
   static const char* pos_infinity()
   {       //2001-Jan-03
-    return "+infinity  ";
+    return "+infinity";
   }
   //! String used to for positive infinity value
   static const char* neg_infinity()
   {
-    return "-infinity  ";
+    return "-infinity";
   }
   //! Describe month format
   static month_format_spec month_format()
