@@ -156,6 +156,41 @@ int main(){
   check("Abbrevs", caus_tz.std_zone_abbrev() == std::string("CAS"));
 //   check("Abbrevs", nyc2.std_zone_abbrev() == std::string("EST"));
 
+  {
+    /**** first/last of month Julian & non-Julian tests ****/
+    // Mar-01 & Oct-31, count begins at 1
+    std::string spec("FST+3FDT,J60,J304"); 
+    posix_time_zone fl_1(spec);
+    check("Julian First/last of month", fl_1.dst_local_start_time(2003) == 
+        ptime(date(2003,Mar,1),hours(2)));
+    check("Julian First/last of month", fl_1.dst_local_end_time(2003) == 
+        ptime(date(2003,Oct,31),hours(2)));
+    check("Julian First/last of month", fl_1.dst_local_start_time(2004) == 
+        ptime(date(2004,Mar,1),hours(2)));
+    check("Julian First/last of month", fl_1.dst_local_end_time(2004) == 
+        ptime(date(2004,Oct,31),hours(2)));
+    
+    // Mar-01 & Oct-31 Non-leap year, count begins at 0
+    spec = "FST+3FDT,59,304"; // "304" is not a mistake here, see posix_time_zone docs
+    posix_time_zone fl_2(spec);
+    try{
+      check("Non-Julian First/last of month", fl_2.dst_local_start_time(2003) ==
+          ptime(date(2003,Mar,1),hours(2)));
+    }catch(std::exception e){
+      check("Expected exception caught for Non-Julian day of 59, in non-leap year (Feb-29)", true);
+    }
+    check("Non-Julian First/last of month", fl_2.dst_local_end_time(2003) == 
+        ptime(date(2003,Oct,31),hours(2)));
+    
+    // Mar-01 & Oct-31 leap year, count begins at 0
+    spec = "FST+3FDT,60,304"; 
+    posix_time_zone fl_3(spec);
+    check("Non-Julian First/last of month", fl_3.dst_local_start_time(2004) ==
+        ptime(date(2004,Mar,1),hours(2)));
+    check("Non-Julian First/last of month", fl_3.dst_local_end_time(2004) ==
+        ptime(date(2004,Oct,31),hours(2)));
+  }
+
   printTestStats();
   return 0;
 }
