@@ -56,6 +56,7 @@ namespace boost
     namespace aux
     {
       BOOST_MPL_HAS_XXX_TRAIT_DEF(element_type)
+      BOOST_MPL_HAS_XXX_TRAIT_DEF(type)
     }
 
     template <class T>
@@ -133,6 +134,7 @@ namespace boost
     template <class Dereferenceable>
     struct default_indirect_value
     {
+#if 0
         typedef typename remove_cv<
             typename referent<Dereferenceable>::type
         >::type referent_t;
@@ -140,11 +142,27 @@ namespace boost
         typedef typename mpl::if_<
             mpl::or_<
                 class_has_element_type<Dereferenceable>
-              , iterator_is_mutable<Dereferenceable>
+	  , iterator_is_mutable<Dereferenceable> // This doesn't work when Dereferencable is not an iterator. -JGS
             >
           , referent_t
           , referent_t const
         >::type type;
+#else
+      template <class D>
+      struct get_from_iter {
+	typedef typename mpl::apply_if<
+            iterator_is_mutable<Dereferenceable>
+            , iterator_value<Dereferenceable>
+            , iterator_value<Dereferenceable> const
+	>::type type;
+      };
+
+      typedef typename mpl::apply_if<
+	aux::has_type< referent<Dereferenceable> >
+	, referent<Dereferenceable>
+        , get_from_iter<Dereferenceable>
+      >::type type;
+#endif
     };
     
     template <class Iter, class Value, class Category, class Reference, class Difference>
@@ -173,6 +191,7 @@ namespace boost
   // Dereferenceable::element_type if such a member exists (thus
   // handling the boost smart pointers and auto_ptr), and
   // iterator_traits<Dereferenceable>::value_type otherwise.
+#if 0
   template <class Dereferenceable>
   struct referent
     : mpl::apply_if<
@@ -181,6 +200,20 @@ namespace boost
         , iterator_value<Dereferenceable>
       >
   {};
+#else
+  namespace detail {
+    struct has_no_type { };
+  }
+  template <class Dereferenceable>
+  struct referent
+    : mpl::if_<
+          detail::class_has_element_type<Dereferenceable>
+        , detail::element_type<Dereferenceable>
+        , detail::has_no_type
+    >::type
+  {};
+
+#endif
     
   template <
       class Iterator
