@@ -53,10 +53,10 @@ namespace boost {
 #endif
 
 class dynamic_bitset : 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-    public
-#else
+#ifdef BOOST_DYN_BITSET_USE_FRIENDS
     private
+#else
+    public
 #endif
     detail::dynamic_bitset_base<Block, Allocator>
 {
@@ -164,7 +164,7 @@ public:
                const Allocator& alloc = Allocator());
 
     // from string
-#ifdef BOOST_OLD_IOSTREAMS
+#if defined(BOOST_OLD_IOSTREAMS) || defined(__BORLANDC__)
     explicit
     dynamic_bitset(const std::string& s,
                std::string::size_type pos = 0, 
@@ -284,7 +284,7 @@ public:
     bool is_proper_subset_of(const dynamic_bitset& a) const;
 
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifdef BOOST_DYN_BITSET_USE_FRIENDS
     // lexicographical comparison
     template <typename B, typename A>
     friend bool operator==(const dynamic_bitset<B, A>& a, 
@@ -314,7 +314,9 @@ private:
     void set_block_(size_type blocknum, Block b);
 
   
-public:// would be private if friends were more portable
+#ifndef BOOST_DYN_BITSET_USE_FRIENDS
+public:
+#endif
 
     // This is templated on the whole String instead of just CharT,
     // Traits, Alloc to avoid compiler bugs.

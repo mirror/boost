@@ -14,6 +14,10 @@
 #include "boost/config.hpp"
 #include "boost/detail/iterator.hpp"
 
+#if !(defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined(__BORLANDC__))
+#define BOOST_DYN_BITSET_USE_FRIENDS
+#endif
+
 namespace boost {
 
   namespace detail {
@@ -42,15 +46,15 @@ namespace boost {
 
     template <typename Block, typename Allocator>
     class dynamic_bitset_base : 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-        public
-#else
+#ifdef BOOST_DYN_BITSET_USE_FRIENDS
         protected
+#else
+        public
 #endif
         dynamic_bitset_alloc_base<Allocator>
     {
       typedef std::size_t size_type;
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifndef BOOST_DYN_BITSET_USE_FRIENDS
     public:
 #endif
       enum { bits_per_block = CHAR_BIT * sizeof(Block) };
@@ -77,7 +81,7 @@ namespace boost {
         if (m_bits)
           this->m_alloc.deallocate(m_bits, m_num_blocks);
       }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifdef BOOST_DYN_BITSET_USE_FRIENDS
     protected: 
 #endif
       Block* m_bits;
