@@ -15,7 +15,6 @@
 
 #include <boost/test/test_tools.hpp>
 
-#include <iterator>
 #include <set>
 #include <map>
 #include <string>
@@ -35,37 +34,42 @@ struct EvToE : fsm::event< EvToE > {};
 struct A;
 struct StateIterationTest : fsm::state_machine< StateIterationTest, A >
 {
-  StateIterationTest();
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    StateIterationTest();
 
-  void AssertInState( const std::string & stateNames ) const
-  {
-    stateNamesCache_.clear();
-
-    for ( state_iterator currentState = state_begin();
-      currentState != state_end(); ++currentState )
+    void AssertInState( const std::string & stateNames ) const
     {
-      const StateNamesMap::const_iterator found =
-        stateNamesMap_.find( currentState->dynamic_type() );
-      BOOST_REQUIRE( found != stateNamesMap_.end() );
-      stateNamesCache_.insert( found->second );
+      stateNamesCache_.clear();
+
+      for ( state_iterator currentState = state_begin();
+        currentState != state_end(); ++currentState )
+      {
+        const StateNamesMap::const_iterator found =
+          stateNamesMap_.find( currentState->dynamic_type() );
+        BOOST_REQUIRE( found != stateNamesMap_.end() );
+        stateNamesCache_.insert( found->second );
+      }
+
+      std::string::const_iterator expectedName = stateNames.begin();
+
+      BOOST_REQUIRE( stateNames.size() == stateNamesCache_.size() );
+
+      for ( StateNamesCache::const_iterator actualName =
+        stateNamesCache_.begin();
+        actualName != stateNamesCache_.end(); ++actualName, ++expectedName )
+      {
+        BOOST_REQUIRE( ( *actualName )[ 0 ] == *expectedName );
+      }
     }
 
-    std::string::const_iterator expectedName = stateNames.begin();
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    typedef std::map< state_base_type::id_type, std::string > StateNamesMap;
+    typedef std::set< std::string > StateNamesCache;
 
-    BOOST_REQUIRE( stateNames.size() == stateNamesCache_.size() );
-
-    for ( StateNamesCache::const_iterator actualName = stateNamesCache_.begin();
-      actualName != stateNamesCache_.end(); ++actualName, ++expectedName )
-    {
-      BOOST_REQUIRE( ( *actualName )[ 0 ] == *expectedName );
-    }
-  }
-
-  typedef std::map< state_base_type::id_type, std::string > StateNamesMap;
-  typedef std::set< std::string > StateNamesCache;
-
-  StateNamesMap stateNamesMap_;
-  mutable StateNamesCache stateNamesCache_;
+    StateNamesMap stateNamesMap_;
+    mutable StateNamesCache stateNamesCache_;
 };
 
 struct C;
