@@ -146,33 +146,6 @@
 
 
 
-// Borland Compiler
-#if defined (__BORLANDC__) && ! defined (BOOST_STRICT_CONFIG)
-
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
-
-#define BOOST_UBLAS_NO_ELEMENT_PROXIES
-#define BOOST_UBLAS_NO_SMART_PROXIES
-
-#define BOOST_UBLAS_NO_PROXY_SHORTCUTS
-#define BOOST_UBLAS_NO_DERIVED_HELPERS
-
-// BCC's <complex> broken.
-// Thanks to John Maddock for providing a workaround.
-#if defined(_STLPORT_VERSION) && defined(_STLP_USE_OWN_NAMESPACE) && !defined(std)
-#include <complex>
-namespace std {
-    using stlport::abs;
-    using stlport::sqrt;
-}
-#endif
-
-#endif
-
-
-
 // Thanks to Roberto Andres Ruiz Vial for porting to Intel.
 #if defined (__ICL) && ! defined (BOOST_STRICT_CONFIG)
 
