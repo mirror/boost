@@ -28,6 +28,7 @@ test-suite ptr_container :
     [ sc-test view_example ]
 #    [ sc-test ptr_container_adapter ]
 #    [ sc-test ptr_map_adapter ]
-     [ sc-test tut1 ]   
-     [ sc-test indirect_fun ]
+    [ sc-test iterator_test ]
+    [ sc-test tut1 ]   
+    [ sc-test indirect_fun ]
     ;
