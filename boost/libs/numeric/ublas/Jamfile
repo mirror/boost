@@ -14,20 +14,10 @@
 #   GeNeSys mbH & Co. KG in producing this work.
 #
 
+subproject libs/numeric/ublas ;
+
+# bring in rules for testing
 import testing ;
-
-SOURCES = concepts ;
-
-exe concepts
-    : $(SOURCES).cpp
-    : <include>$(BOOST_ROOT)
-      <sysinclude>$(BOOST_ROOT)
-      <define>EXTERNAL
-#      <gcc><*><cxxflags>"-fabi-version=0"
-      <intel-linux><*><cxxflags>"-Xc"
-      <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
-      <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
-    ;
 
 test-suite uBLAS
     : [ run test1/test1.cpp
@@ -109,17 +99,15 @@ test-suite uBLAS
         : # args
         : # input files
         : # requirements
-
+	        <define>BOOST_UBLAS_USE_INTERVAL
           # borland warns so often that successful compilation is prevented.
             <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
             <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
-	    <define>BOOST_UBLAS_USE_INTERVAL
       ]
-      [ run concepts.cpp
-        : # args
-        : # input files
+      [ compile concepts.cpp
         : # requirements
-
+            <define>EXTERNAL
+            <intel-linux><*><cxxflags>"-Xc"
           # borland warns so often that successful compilation is prevented.
             <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
             <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
