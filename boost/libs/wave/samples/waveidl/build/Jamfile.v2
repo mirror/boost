@@ -15,7 +15,7 @@ exe waveidl
         ../instantiate_predef_macros.cpp
         ../instantiate_re2c_lexer.cpp
         ../instantiate_re2c_lexer_string.cpp
-        ../idllexer/idl.re.cpp
+        ../idllexer/idl_re.cpp
         ../../../build//boost_wave
         $(BOOST_ROOT)/boost/program_options//boost_program_options
     :

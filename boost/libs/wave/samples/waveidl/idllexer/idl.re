@@ -34,7 +34,7 @@
 #include <boost/wave/cpplexer/re2clex/aq.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 
-#include "idl.re.hpp"
+#include "idl_re.hpp"
 
 #if defined(_MSC_VER) && !defined(__COMO__)
 #pragma warning (disable: 4101)     // 'foo' : unreferenced local variable

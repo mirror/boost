@@ -483,9 +483,9 @@ template <typename E, class A>
 const typename SimpleStringStorage<E, A>::Data
 SimpleStringStorage<E, A>::emptyString_ = typename SimpleStringStorage<E, A>::Data();
 //{ 
-//	const_cast<E*>(SimpleStringStorage<E, A>::emptyString_.buffer_), 
-//	const_cast<E*>(SimpleStringStorage<E, A>::emptyString_.buffer_), 
-//	{ E() }
+//  const_cast<E*>(SimpleStringStorage<E, A>::emptyString_.buffer_), 
+//  const_cast<E*>(SimpleStringStorage<E, A>::emptyString_.buffer_), 
+//  { E() }
 //};
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -832,7 +832,7 @@ public:
     typedef typename allocator_type::size_type size_type;
     
 private:
-	enum { temp1 = threshold * sizeof(value_type) > sizeof(Storage) 
+  enum { temp1 = threshold * sizeof(value_type) > sizeof(Storage) 
         ? threshold  * sizeof(value_type) 
         : sizeof(Storage) };
     
@@ -840,7 +840,7 @@ private:
 
 public:
     enum { maxSmallString = 
-		(temp2 + sizeof(value_type) - 1) / sizeof(value_type) };
+    (temp2 + sizeof(value_type) - 1) / sizeof(value_type) };
     
 private:
     enum { magic = maxSmallString + 1 };
@@ -871,7 +871,7 @@ private:
     }
         
 public:
-	SmallStringOpt(const SmallStringOpt& s)
+  SmallStringOpt(const SmallStringOpt& s)
     {
         if (s.Small())
         {
@@ -1203,7 +1203,7 @@ private:
 public:
     CowString(const CowString& s)
     {
-        if (s.GetRefs() == std::numeric_limits<RefCountType>::max())
+        if (s.GetRefs() == (std::numeric_limits<RefCountType>::max)())
         {
             // must make a brand new copy
             new(buf_) Storage(s.Data()); // non shallow
@@ -1243,7 +1243,7 @@ public:
     {
 //        CowString(rhs).swap(*this);
         if (--Refs() == 0) Data().~Storage();
-        if (rhs.GetRefs() == std::numeric_limits<RefCountType>::max())
+        if (rhs.GetRefs() == (std::numeric_limits<RefCountType>::max)())
         {
             // must make a brand new copy
             new(buf_) Storage(rhs.Data()); // non shallow
@@ -2291,7 +2291,7 @@ std::basic_istream<typename flex_string<E, T, A, S>::value_type,
     typename flex_string<E, T, A, S>::traits_type>&
 operator>>(
     std::basic_istream<typename flex_string<E, T, A, S>::value_type, 
-		typename flex_string<E, T, A, S>::traits_type>& is,
+    typename flex_string<E, T, A, S>::traits_type>& is,
     flex_string<E, T, A, S>& str);
 
 template <typename E, class T, class A, class S>
@@ -2299,7 +2299,7 @@ std::basic_ostream<typename flex_string<E, T, A, S>::value_type,
     typename flex_string<E, T, A, S>::traits_type>&
 operator<<(
     std::basic_ostream<typename flex_string<E, T, A, S>::value_type, 
-		typename flex_string<E, T, A, S>::traits_type>& os,
+    typename flex_string<E, T, A, S>::traits_type>& os,
     const flex_string<E, T, A, S>& str)
 { return os << str.c_str(); }
 

@@ -14,13 +14,13 @@ project boost/wave
 
 SOURCES = instantiate_cpp_exprgrammar 
           instantiate_cpp_grammar 
-          instantiate_cpp_literalgrammars 
+          instantiate_cpp_literalgrs 
           instantiate_defined_grammar
           instantiate_predef_macros 
           instantiate_re2c_lexer
-          instantiate_re2c_lexer_string
+          instantiate_re2c_lexer_str
           cpplexer/re2clex/aq 
-          cpplexer/re2clex/cpp.re
+          cpplexer/re2clex/cpp_re
     ;
 
 lib boost_wave
@@ -29,5 +29,5 @@ lib boost_wave
     :
         <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
         # Not supported by V2 
-        # <no-warn>cpp.re.cpp
+        # <no-warn>cpp_re.cpp
     ;

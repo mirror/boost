@@ -34,7 +34,7 @@
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/cpplexer/re2clex/aq.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
-#include <boost/wave/cpplexer/re2clex/cpp.re.hpp>
+#include <boost/wave/cpplexer/re2clex/cpp_re.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(BOOST_MSVC)

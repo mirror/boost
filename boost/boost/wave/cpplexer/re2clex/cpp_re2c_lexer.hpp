@@ -36,7 +36,7 @@
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
-#include <boost/wave/cpplexer/re2clex/cpp.re.hpp>
+#include <boost/wave/cpplexer/re2clex/cpp_re.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {

@@ -35,7 +35,7 @@
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 
-#include "idl.re.hpp"
+#include "idl_re.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {

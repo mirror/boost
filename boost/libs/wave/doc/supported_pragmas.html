@@ -105,7 +105,7 @@
   which specifies that the file, in which the pragma resides, will be included 
   (opened) only once by the compiler in a build. This may be used to optimize 
   the preprocessing of larger compilation units, which include a lot of files. Note though, that the #pragma once directive is supported only, if the compile time constant <tt>WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library</span>.</p>
-<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> function (see <a href="class_reference_contextpolicy.html#interpret_pragma">here</a>) which should the handle additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements the <tt>#pragma wave timer()</tt> directive with the help of a supplied <tt>interpret_pragma</tt> function. </p>
+<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should the handle additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements the <tt>#pragma wave timer()</tt> directive with the help of a supplied <tt>interpret_pragma</tt> function. </p>
 <table border="0">
   <tr> 
     <td width="10"></td>
