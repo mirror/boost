@@ -249,6 +249,67 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) class template known_get
+//
+// Visitor that returns a reference to content of the specified type.
+//
+// Precondition: visited variant MUST contain logical content of type T.
+//
+template <typename T>
+class known_get
+    : public static_visitor<T&>
+{
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+public: // visitor interface
+
+    T& operator()(T& operand) const
+    {
+        return operand;
+    }
+
+    template <typename U>
+    T& operator()(U&) const
+    {
+        // logical error to be here: see precondition above
+        BOOST_ASSERT(false);
+        return ::boost::detail::variant::forced_return< T& >();
+    }
+
+#else // MSVC6
+
+private: // helpers, for visitor interface (below)
+
+    T& execute(T& operand, mpl::true_) const
+    {
+        return operand;
+    }
+
+    template <typename U>
+    T& execute(U& operand, mpl::false_) const
+    {
+        // logical error to be here: see precondition above
+        BOOST_ASSERT(false);
+        return ::boost::detail::variant::forced_return< T& >();
+    }
+
+public: // visitor interface
+
+    template <typename U>
+    T& operator()(U& operand) const
+    {
+        typedef typename is_same< U,T >::type
+            U_is_T;
+
+        return execute(operand, U_is_T());
+    }
+
+#endif // MSVC6 workaround
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class copy_into
 //
 // Internal visitor that copies the value it visits into the given buffer.
@@ -420,6 +481,75 @@ public: // visitor interface
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) class backup_assigner
+//
+// Internal visitor that "assigns" the given value to the visited value,
+// using backup to recover if the destroy-copy sequence fails.
+//
+// NOTE: This needs to be a friend of variant, as it needs access to
+// indicate_which, indicate_backup_which, etc.
+//
+template <typename Variant, typename RhsT>
+class backup_assigner
+    : public static_visitor<>
+{
+private: // representation
+
+    Variant& lhs_;
+    int rhs_which_;
+    const RhsT& rhs_content_;
+
+public: // structors
+
+    backup_assigner(Variant& lhs, int rhs_which, const RhsT& rhs_content)
+        : lhs_(lhs)
+        , rhs_which_(rhs_which)
+        , rhs_content_(rhs_content)
+    {
+    }
+
+public: // visitor interface
+
+    template <typename LhsT>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(LhsT& lhs_content, int)
+    {
+        // Backup lhs content...
+        LhsT* backup_lhs_ptr = new LhsT(lhs_content);
+
+        // ...destroy lhs content...
+        lhs_content.~LhsT(); // nothrow
+
+        try
+        {
+            // ...and attempt to copy rhs content into lhs storage:
+            new(lhs_.storage_.address()) RhsT(rhs_content_);
+        }
+        catch (...)
+        {
+            // In case of failure, copy backup pointer to lhs storage...
+            new(lhs_.storage_.address())
+                backup_holder<LhsT>( backup_lhs_ptr ); // nothrow
+
+            // ...indicate now using backup...
+            lhs_.indicate_backup_which( lhs_.which() ); // nothrow
+
+            // ...and rethrow:
+            throw;
+        }
+
+        // In case of success, indicate success...
+        lhs_.indicate_which(rhs_which_); // nothrow
+
+        // ...and delete backup:
+        delete backup_lhs_ptr; // nothrow
+
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class swap_with
 //
 // Internal visitor that swaps visited value with given storage.
@@ -487,6 +617,44 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) class comparer
+//
+// Generic static visitor that compares the content of the given lhs variant
+// with the visited rhs content using Comp.
+//
+// Precondition: lhs.which() == rhs.which()
+//
+template <typename Variant, typename Comp>
+class comparer
+    : public static_visitor<bool>
+{
+private: // representation
+
+    const Variant& lhs_;
+
+public: // structors
+
+    explicit comparer(const Variant& lhs)
+        : lhs_(lhs)
+    {
+    }
+
+public: // visitor interfaces
+
+    template <typename T>
+    bool operator()(const T& rhs_content) const
+    {
+        // Since the precondition ensures lhs and rhs types are same, get T...
+        known_get<const T> getter;
+        const T& lhs_content = lhs_.apply_visitor(getter);
+
+        // ...and compare lhs and rhs contents:
+        return Comp()(lhs_content, rhs_content);
+    }
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class equal_comp
 //
 // Generic function object compares lhs with rhs using operator==.
@@ -512,67 +680,6 @@ struct less_comp
     {
         return lhs < rhs;
     }
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// (detail) class template known_get
-//
-// Visitor that returns a reference to content of the specified type.
-//
-// Precondition: visited variant MUST contain logical content of type T.
-//
-template <typename T>
-class known_get
-    : public static_visitor<T&>
-{
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-public: // visitor interface
-
-    T& operator()(T& operand) const
-    {
-        return operand;
-    }
-
-    template <typename U>
-    T& operator()(U&) const
-    {
-        // logical error to be here: see precondition above
-        BOOST_ASSERT(false);
-        return ::boost::detail::variant::forced_return< T& >();
-    }
-
-#else // MSVC6
-
-private: // helpers, for visitor interface (below)
-
-    T& execute(T& operand, mpl::true_) const
-    {
-        return operand;
-    }
-
-    template <typename U>
-    T& execute(U& operand, mpl::false_) const
-    {
-        // logical error to be here: see precondition above
-        BOOST_ASSERT(false);
-        return ::boost::detail::variant::forced_return< T& >();
-    }
-
-public: // visitor interface
-
-    template <typename U>
-    T& operator()(U& operand) const
-    {
-        typedef typename is_same< U,T >::type
-            U_is_T;
-
-        return execute(operand, U_is_T());
-    }
-
-#endif // MSVC6 workaround
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1192,74 +1299,9 @@ public: // structors, cont.
 
 private: // helpers, for modifiers (below)
 
-    // class backup_assigner
-    //
-    // Internal visitor that "assigns" the given value to the visited value,
-    // using backup to recover if the destroy-copy sequence fails.
-    //
-
-    template <typename RhsT>
-    class backup_assigner
-        : public static_visitor<>
-    {
-    private: // representation
-
-        variant& lhs_;
-        int rhs_which_;
-        const RhsT& rhs_content_;
-
-    public: // structors
-
-        backup_assigner(variant& lhs, int rhs_which, const RhsT& rhs_content)
-            : lhs_(lhs)
-            , rhs_which_(rhs_which)
-            , rhs_content_(rhs_content)
-        {
-        }
-
-    public: // visitor interface
-
-        template <typename LhsT>
-            BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-        internal_visit(LhsT& lhs_content, int)
-        {
-            // Backup lhs content...
-            LhsT* backup_lhs_ptr = new LhsT(lhs_content);
-
-            // ...destroy lhs content...
-            lhs_content.~LhsT(); // nothrow
-
-            try
-            {
-                // ...and attempt to copy rhs content into lhs storage:
-                new(lhs_.storage_.address()) RhsT(rhs_content_);
-            }
-            catch (...)
-            {
-                // In case of failure, copy backup pointer to lhs storage...
-                new(lhs_.storage_.address())
-                    detail::variant::backup_holder<LhsT>( backup_lhs_ptr ); // nothrow
-
-                // ...indicate now using backup...
-                lhs_.indicate_backup_which( lhs_.which() ); // nothrow
-
-                // ...and rethrow:
-                throw;
-            }
-
-            // In case of success, indicate success...
-            lhs_.indicate_which(rhs_which_); // nothrow
-
-            // ...and delete backup:
-            delete backup_lhs_ptr; // nothrow
-
-            BOOST_VARIANT_AUX_RETURN_VOID;
-        }
-
-    };
-
 #   if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-    template <typename RhsT> friend class backup_assigner;
+    template <typename Variant, typename RhsT>
+    friend class detail::variant::backup_assigner;
 #   endif
 
     // class assigner
@@ -1369,7 +1411,8 @@ private: // helpers, for modifiers (below)
             , mpl::false_// T0_has_nothrow_constructor
             )
         {
-            backup_assigner<RhsT> visitor(lhs_, rhs_which_, rhs_content);
+            detail::variant::backup_assigner<wknd_self_t, RhsT>
+                visitor(lhs_, rhs_which_, rhs_content);
             lhs_.internal_apply_visitor(visitor);
         }
 
@@ -1420,7 +1463,7 @@ private: // helpers, for modifiers (below)
     template <typename T>
     void assign(const T& rhs)
     {
-        // If direct assignment is not possible...
+        // If direct T-to-T assignment is not possible...
         detail::variant::direct_assigner<const T> direct_assign(rhs);
         if (this->apply_visitor(direct_assign) == false)
         {
@@ -1497,45 +1540,6 @@ public: // queries
         return this->apply_visitor(visitor);
     }
 
-private: // helpers, for comparison operators (below)
-
-    // (detail) class compare
-    //
-    // Generic static visitor that compares the content of the given lhs variant
-    // with the visited rhs content using Comp.
-    //
-    // Precondition: lhs.which() == rhs.which()
-    //
-    template <typename Comp>
-    struct compare
-        : public static_visitor<bool>
-    {
-    private: // representation
-
-        const variant& lhs_;
-
-    public: // structors
-
-        explicit compare(const variant& lhs)
-            : lhs_(lhs)
-        {
-        }
-
-    public: // visitor interfaces
-
-        template <typename T>
-        bool operator()(const T& rhs_content) const
-        {
-            // Since the precondition ensures lhs and rhs types are same, get T...
-            detail::variant::known_get<const T> getter;
-            const T& lhs_content = lhs_.apply_visitor(getter);
-
-            // ...and compare lhs and rhs contents:
-            return Comp()(lhs_content, rhs_content);
-        }
-
-    };
-
 public: // prevent comparison with foreign types
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
@@ -1578,7 +1582,9 @@ public: // comparison operators
         if (this->which() != rhs.which())
             return false;
 
-        compare< detail::variant::equal_comp > visitor(*this);
+        detail::variant::comparer<
+              variant, detail::variant::equal_comp
+            > visitor(*this);
         return rhs.apply_visitor(visitor);
     }
 
@@ -1591,7 +1597,9 @@ public: // comparison operators
         if (this->which() != rhs.which())
             return this->which() < rhs.which();
 
-        compare< detail::variant::less_comp > visitor(*this);
+        detail::variant::comparer<
+              variant, detail::variant::less_comp
+            > visitor(*this);
         return rhs.apply_visitor(visitor);
     }
 
