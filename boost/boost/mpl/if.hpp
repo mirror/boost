@@ -100,6 +100,8 @@ struct if_
 
  public:
     typedef typename answer< BOOST_MPL_AUX_ICE_CAST(bool, c_) >::type type;
+
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))
 };
 
 #else
