@@ -150,18 +150,18 @@ template <class T>
 struct in_iterator
   : boost::iterator_adaptor<
         in_iterator<T>
-      , boost::input_iterator_archetype<T>
+      , boost::input_iterator_archetype_no_proxy<T>
     >
 {
 private:
   typedef boost::iterator_adaptor<
         in_iterator<T>
-      , boost::input_iterator_archetype<T>
+      , boost::input_iterator_archetype_no_proxy<T>
   > super_t;
     
 public:
   in_iterator() { }
-  in_iterator(boost::input_iterator_archetype<T> d) : super_t(d) { }
+  in_iterator(boost::input_iterator_archetype_no_proxy<T> d) : super_t(d) { }
 };
 
 template <class Iter>
@@ -309,7 +309,7 @@ main()
   
   // check operator-> with an input iterator
   {
-    boost::input_iterator_archetype<dummyT> input_iter;
+    boost::input_iterator_archetype_no_proxy<dummyT> input_iter;
     typedef in_iterator<dummyT> adaptor_type;
     adaptor_type i(input_iter);
     int zero = 0;
