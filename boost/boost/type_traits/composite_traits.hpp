@@ -69,10 +69,10 @@ namespace detail{
    {
       pointer_helper(const volatile void*);
    };
-   yes_type is_pointer_helper(pointer_helper);
-   no_type is_pointer_helper(...);
+   yes_type BOOST_TT_DECL is_pointer_helper(pointer_helper);
+   no_type BOOST_TT_DECL is_pointer_helper(...);
 
-::boost::type_traits::no_type is_function_tester(...);
+::boost::type_traits::no_type BOOST_TT_DECL is_function_tester(...);
 template <class R>
 ::boost::type_traits::yes_type is_function_tester(R (*)(void));
 template <class R, class A0>
@@ -140,7 +140,7 @@ template <class R, class A0, class A1, class A2, class A3, class A4, class A5, c
    yes_type is_array_helper(const volatile void*, const volatile void*);
    template <class T>
    no_type is_array_helper(T*const volatile*, const volatile void*);
-   no_type is_array_helper(...);
+   no_type BOOST_TT_DECL is_array_helper(...);
 } // namespace detail
 template <typename T> 
 struct is_array
@@ -871,11 +871,11 @@ template <class R, class T, class A0, class A1, class A2, class A3, class A4, cl
 ::boost::type_traits::yes_type is_member_function_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28) const volatile);
 template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28, class A29>
 ::boost::type_traits::yes_type is_member_function_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29) const volatile);
-::boost::type_traits::no_type is_member_function_pointer_helper(...);
+::boost::type_traits::no_type BOOST_TT_DECL is_member_function_pointer_helper(...);
 
 template <class R, class T>
-::boost::type_traits::yes_type is_member_pointer_helper(R T::*);
-::boost::type_traits::no_type is_member_pointer_helper(...);
+::boost::type_traits::yes_type BOOST_TT_DECL is_member_pointer_helper(R T::*);
+::boost::type_traits::no_type BOOST_TT_DECL is_member_pointer_helper(...);
 
 }
 template <typename T>

@@ -54,8 +54,8 @@ namespace detail{
   struct from_not_void_conversion {
     template <class From, class To>
     struct n_bind {
-      static no_type _m_check(...);
-      static yes_type _m_check(To);
+      static no_type BOOST_TT_DECL _m_check(...);
+      static yes_type BOOST_TT_DECL _m_check(To);
     public:
       void foo(); // avoid warning about all members being private
       static From _m_from;
@@ -98,19 +98,21 @@ template <class From, class To>
 struct is_convertible_helper
 {
 private:
+#pragma option push -w-8074
    // This workaround for Borland breaks the EDG C++ frontend,
    // so we only use it for Borland.
    template <class T>
    struct checker
    {
-      static type_traits::no_type _m_check(...);
-      static type_traits::yes_type _m_check(T);
+      static type_traits::no_type BOOST_TT_DECL _m_check(...);
+      static type_traits::yes_type BOOST_TT_DECL _m_check(T);
    };
    static From _m_from;
 public:
    static const bool value = sizeof( checker<To>::_m_check(_m_from) ) == sizeof(type_traits::yes_type);
 
    void foo(); // avoid warning about all members being private
+#pragma option pop
 };
 
 template <class From, class To>
@@ -192,8 +194,8 @@ template <class From, class To>
 struct is_convertible
 {
 private:
-   static type_traits::no_type _m_check(...);
-   static type_traits::yes_type _m_check(To);
+   static type_traits::no_type BOOST_TT_DECL _m_check(...);
+   static type_traits::yes_type BOOST_TT_DECL _m_check(To);
    static From _m_from;
 public:
    BOOST_STATIC_CONSTANT(bool, value = sizeof( _m_check(_m_from) ) == sizeof(type_traits::yes_type));

@@ -79,6 +79,16 @@
 #  define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) false
 #endif
 
+//
+// whenever we have a conversion function with elipses
+// it needs to be declared _cdecl to suppress compiler
+// warnings from MS and Borland compilers:
+#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#define BOOST_TT_DECL _cdecl
+#else
+#define BOOST_TT_DECL
+#endif
+
 
 namespace boost{
 //

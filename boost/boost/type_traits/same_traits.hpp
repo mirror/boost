@@ -77,8 +77,8 @@ struct is_same {
 
 namespace detail{
    template <class T>
-   ::boost::type_traits::yes_type is_same_helper(T*, T*);
-   ::boost::type_traits::no_type is_same_helper(...);
+   ::boost::type_traits::yes_type BOOST_TT_DECL is_same_helper(T*, T*);
+   ::boost::type_traits::no_type BOOST_TT_DECL is_same_helper(...);
 }
 
 template <typename T, typename U>
