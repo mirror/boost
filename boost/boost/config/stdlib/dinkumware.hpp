@@ -18,7 +18,7 @@
 #if defined(_CPPLIB_VER) && (_CPPLIB_VER >= 306)
    // full dinkumware 3.06 and above
    // fully conforming provided the compiler supports it:
-#  if !(defined(_GLOBAL_USING) && (_GLOBAL_USING > 0)) && !defined(_STD)   // can be defined in yvals.h
+#  if !(defined(_GLOBAL_USING) && (_GLOBAL_USING+0 > 0)) && !defined(_STD)   // can be defined in yvals.h
 #     define BOOST_NO_STDC_NAMESPACE
 #  endif
 #  if defined(_MSC_VER) && (_MSC_VER < 1300)
