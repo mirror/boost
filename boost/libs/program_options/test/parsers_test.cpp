@@ -57,6 +57,22 @@ void check_value(const woption& option, const char* name, const wchar_t* value)
     BOOST_CHECK(option.value.front() == value);
 }
 
+vector<string> sv(char* array[], unsigned size)
+{
+    vector<string> r;
+    for (unsigned i = 0; i < size; ++i)
+        r.push_back(array[i]);
+    return r;
+}
+
+vector<wstring> sv(wchar_t* array[], unsigned size)
+{
+    vector<wstring> r;
+    for (unsigned i = 0; i < size; ++i)
+        r.push_back(array[i]);
+    return r;
+}
+
 
 void test_command_line()
 {
@@ -102,8 +118,8 @@ void test_command_line()
         ;
     char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "--bar", "-b4", "-b",
                          "--plug3=10"};
-    vector<string> cmdline3(cmdline3_,
-                            cmdline3_ + sizeof(cmdline3_)/sizeof(cmdline3_[0]));
+    vector<string> cmdline3 = sv(cmdline3_,
+                                 sizeof(cmdline3_)/sizeof(cmdline3_[0]));
     vector<option> a3 = 
         command_line_parser(cmdline3).options(desc).run().options;
                        
@@ -126,8 +142,8 @@ void test_command_line()
     // Check Unicode, 
     wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11", L"--bar", 
                              L"-b4", L"-b", L"--plug3=10"};
-    vector<wstring> cmdline4(cmdline4_,
-                             cmdline4_ + sizeof(cmdline4_)/sizeof(cmdline4_[0]));
+    vector<wstring> cmdline4 = sv(cmdline4_,
+                                  sizeof(cmdline4_)/sizeof(cmdline4_[0]));
     vector<woption> a4 = 
         wcommand_line_parser(cmdline4).options(desc).run().options;
 
