@@ -299,9 +299,11 @@
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::alignment_of&lt;T&gt;::value</code></td>
-            <td valign="top" width="28%" bgcolor="#c0c0c0">Identifies the alignment 
-               requirements of T. Actually returns a value that is only guaranteed to be a 
-               multiple of the actual alignment requirements of T</td>
+            <td valign="top" width="28%" bgcolor="#c0c0c0">
+               <P>Identifies the alignment requirements of T. Actually returns a value that is 
+                  only guaranteed to be a multiple of the actual alignment requirements of T.</P>
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">&nbsp;</td>
             <td valign="top" width="25%" bgcolor="#c0c0c0">&nbsp;</td>
             <td valign="top" width="5%">&nbsp;</td>
@@ -309,10 +311,13 @@
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_empty&lt;T&gt;::value</code></td>
-            <td valign="top" width="28%" bgcolor="#c0c0c0">True if T is an empty struct or 
-               class. If the compiler implements the "zero sized empty base classes" 
-               optimisation, then is_empty will correctly guess whether T is empty. Relies 
-               upon is_class to determine whether T is a class type.
+            <td valign="top" width="28%" bgcolor="#c0c0c0">
+               <P>True if T is an empty struct or class. If the compiler implements the "zero 
+                  sized empty base classes" optimisation, then is_empty will correctly guess 
+                  whether T is empty. Relies upon is_class to determine whether T is a class 
+                  type.
+               </P>
+               <P>T must be a complete type.</P>
             </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0"><p align="center">10p5</p>
             </td>
@@ -351,7 +356,9 @@
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_polymorphic&lt;T&gt;::value</code></td>
             <td valign="top" width="28%" bgcolor="#c0c0c0">Evaluates to true only if T is a 
-               polymorphic type.</td>
+               polymorphic type.
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">10.3</td>
             <td valign="top" width="25%" bgcolor="#c0c0c0">Requires knowledge of the compilers 
                ABI, does actually seem to work with the majority of compilers though.</td>
@@ -361,7 +368,9 @@
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_pod&lt;T&gt;::value</code></td>
             <td valign="top" width="28%" bgcolor="#c0c0c0">Evaluates to true only if T is a 
-               cv-qualified POD type.</td>
+               cv-qualified POD type.
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0"><p align="center">3.9p10</p>
                <p align="center">9p4</p>
             </td>
@@ -392,7 +401,9 @@
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::has_trivial_copy&lt;T&gt;::value</code></td>
             <td valign="top" width="28%" bgcolor="#c0c0c0">True if T has a trivial copy 
-               constructor.</td>
+               constructor.
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">12.8p6</td>
             <td valign="top" width="25%" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>has_trivial_copy </code>will never 
@@ -407,7 +418,9 @@
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::has_trivial_assign&lt;T&gt;::value</code></td>
             <td valign="top" width="28%" bgcolor="#c0c0c0">True if T has a trivial assignment 
-               operator.</td>
+               operator.
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">12.8p11</td>
             <td valign="top" width="25%" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>has_trivial_assign </code>will never 
@@ -421,7 +434,9 @@
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::has_trivial_destructor&lt;T&gt;::value</code></td>
-            <td valign="top" width="28%" bgcolor="#c0c0c0">True if T has a trivial destructor.</td>
+            <td valign="top" width="28%" bgcolor="#c0c0c0">True if T has a trivial destructor.
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">12.4p3</td>
             <td valign="top" width="25%" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>has_trivial_destructor </code>will 
@@ -436,7 +451,9 @@
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_stateless&lt;T&gt;::value</code></td>
             <td valign="top" width="28%" bgcolor="#c0c0c0">True if T is stateless, meaning 
-               that T has no storage and its constructors and destructors are trivial.</td>
+               that T has no storage and its constructors and destructors are trivial.
+               <P>T must be a complete type.</P>
+            </td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">&nbsp;</td>
             <td valign="top" width="25%" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>is_stateless </code>will never 
@@ -458,7 +475,9 @@
             <td>&nbsp;</td>
             <td valign="top" bgcolor="#c0c0c0"><code>::boost::has_nothrow_constructor&lt;T&gt;::value</code></td>
             <td valign="top" bgcolor="#c0c0c0">True if T has a non-throwing default 
-               constructor.</td>
+               constructor.
+               <P>T must be a complete type.</P>
+            </td>
             <td bgcolor="#c0c0c0">&nbsp;</td>
             <td align="center" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>has_nothrow_constructor </code>will 
@@ -472,7 +491,9 @@
          <tr>
             <td>&nbsp;</td>
             <td valign="top" bgcolor="#c0c0c0"><code>::boost::has_nothrow_copy&lt;T&gt;::value</code></td>
-            <td valign="top" bgcolor="#c0c0c0">True if T has a non-throwing copy constructor.</td>
+            <td valign="top" bgcolor="#c0c0c0">True if T has a non-throwing copy constructor.
+               <P>T must be a complete type.</P>
+            </td>
             <td bgcolor="#c0c0c0">&nbsp;</td>
             <td align="center" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>has_nothrow_copy </code>will never 
@@ -487,7 +508,9 @@
             <td>&nbsp;</td>
             <td valign="top" bgcolor="#c0c0c0"><code>::boost::has_nothrow_assign&lt;T&gt;::value</code></td>
             <td valign="top" bgcolor="#c0c0c0">True if T has a non-throwing assignment 
-               operator.</td>
+               operator.
+               <P>T must be a complete type.</P>
+            </td>
             <td bgcolor="#c0c0c0">&nbsp;</td>
             <td align="center" bgcolor="#c0c0c0"><p align="left">Without some (as yet 
                   unspecified) help from the compiler, <code>has_nothrow_assign </code>will never 
@@ -687,10 +710,8 @@ bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
             <td valign="top" width="28%" bgcolor="#c0c0c0">A type that is the same as
                <SPAN class="SpellE">
                   <CODE>
-                     <SPAN style="FONT-SIZE: 10pt">remove_reference</SPAN></CODE></SPAN><CODE><SPAN style="FONT-SIZE: 10pt">&lt;T&gt;::type*</SPAN></CODE>
-               if T is a reference type, otherwise <CODE>
-                  <SPAN style="FONT-SIZE: 10pt">T*</SPAN></CODE>. For example "int" and 
-               "int&amp;" both become "int*".</td>
+                     <SPAN style="FONT-SIZE: 10pt">remove_reference</SPAN></CODE></SPAN><CODE><SPAN style="FONT-SIZE: 10pt">&lt;T&gt;::type*</SPAN></CODE>. 
+               For example "int" and "int&amp;" both become "int*".</td>
             <td valign="top" width="13%" bgcolor="#c0c0c0">8.3.1</td>
             <td width="25%" bgcolor="#c0c0c0"><p align="left">If the compiler does not support 
                   partial-specialization of class templates, then this template will not compile 
