@@ -17,8 +17,8 @@
 #ifndef BOOST_UBLAS_MATRIX_H
 #define BOOST_UBLAS_MATRIX_H
 
-#include <boost/numeric/ublas//matrix_expression.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix_expression.hpp>
 #include <boost/numeric/ublas/detail/matrix_assign.hpp>
 
 // Iterators based on ideas of Jeremy Siek
