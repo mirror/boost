@@ -27,6 +27,12 @@
 
 # include <boost/detail/sp_counted_base_gcc_x86.hpp>
 
+//#elif defined( __GNUC__ ) && defined( __powerpc__ )
+//# include <boost/detail/sp_counted_base_gcc_ppc.hpp>
+
+//#elif defined( __MWERKS__ ) && defined( __POWERPC__ )
+//# include <boost/detail/sp_counted_base_cw_ppc.hpp>
+
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
 
 # include <boost/detail/sp_counted_base_w32.hpp>
