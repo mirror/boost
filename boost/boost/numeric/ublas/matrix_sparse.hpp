@@ -19,7 +19,6 @@
 
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage_sparse.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
 
 // Iterators based on ideas of Jeremy Siek
@@ -248,15 +247,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &true_reference;
         typedef T *pointer;
         typedef F functor_type;
-        typedef const sparse_matrix<T, F, A> const_self_type;
         typedef sparse_matrix<T, F, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef sparse_vector<T, A> vector_temporary_type;
+        typedef self_type matrix_temporary_type;
         typedef sparse_tag storage_category;
         typedef typename F::orientation_category orientation_category;
 
@@ -1300,15 +1300,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef A array_type;
         typedef const A const_array_type;
         typedef F functor_type;
-        typedef const sparse_vector_of_sparse_vector<T, F, A> const_self_type;
         typedef sparse_vector_of_sparse_vector<T, F, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef sparse_vector<T, typename A::value_type> vector_temporary_type;
+        typedef self_type matrix_temporary_type;
         typedef typename A::value_type::second_type vector_data_value_type;
         typedef sparse_tag storage_category;
         typedef typename F::orientation_category orientation_category;
@@ -2476,15 +2477,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &true_reference;
         typedef T *pointer;
         typedef F functor_type;
-        typedef const compressed_matrix<T, F, IB, IA, TA> const_self_type;
         typedef compressed_matrix<T, F, IB, IA, TA> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef compressed_vector<T, IB, IA, TA> vector_temporary_type;
+        typedef self_type matrix_temporary_type;
         typedef sparse_tag storage_category;
         typedef typename F::orientation_category orientation_category;
 
@@ -2492,10 +2494,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         compressed_matrix ():
             matrix_expression<self_type> (),
-            size1_ (0), size2_ (0), non_zeros_ (0),
+            size1_ (0), size2_ (0), non_zeros_ (max_nz (0)),
             filled1_ (1), filled2_ (0),
-            index1_data_ (1),
-            index2_data_ (0), value_data_ (0) {
+            index1_data_ (functor_type::size1 (size1_, size2_) + 1),
+            index2_data_ (non_zeros_), value_data_ (non_zeros_) {
             index1_data_ [filled1_ - 1] = k_based (filled2_);
         }
         BOOST_UBLAS_INLINE
@@ -2504,7 +2506,7 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ (size1), size2_ (size2), non_zeros_ (max_nz (non_zeros)),
             filled1_ (1), filled2_ (0),
             index1_data_ (functor_type::size1 (size1_, size2_) + 1),
-            index2_data_ (non_zeros), value_data_ (non_zeros) {
+            index2_data_ (non_zeros_), value_data_ (non_zeros_) {
             index1_data_ [filled1_ - 1] = k_based (filled2_);
         }
         BOOST_UBLAS_INLINE
@@ -2523,7 +2525,7 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (max_nz (non_zeros)),
             filled1_ (1), filled2_ (0),
             index1_data_ (functor_type::size1 (ae ().size1 (), ae ().size2 ()) + 1),
-            index2_data_ (non_zeros), value_data_ (non_zeros) {
+            index2_data_ (non_zeros_), value_data_ (non_zeros_) {
             index1_data_ [filled1_ - 1] = k_based (filled2_);
             matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
@@ -3813,15 +3815,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &true_reference;
         typedef T *pointer;
         typedef F functor_type;
-        typedef const coordinate_matrix<T, F, IB, IA, TA> const_self_type;
         typedef coordinate_matrix<T, F, IB, IA, TA> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef coordinate_vector<T, IB, IA, TA> vector_temporary_type;
+        typedef self_type matrix_temporary_type;
         typedef sparse_tag storage_category;
         typedef typename F::orientation_category orientation_category;
 
@@ -3829,17 +3832,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         coordinate_matrix ():
             matrix_expression<self_type> (),
-            size1_ (0), size2_ (0), non_zeros_ (0),
+            size1_ (0), size2_ (0), non_zeros_ (max_nz (0)),
             filled_ (0),
-            sorted_ (true), index1_data_ (0),
-            index2_data_ (0), value_data_ (0) {}
+            sorted_ (true), index1_data_ (non_zeros_),
+            index2_data_ (non_zeros_), value_data_ (non_zeros_) {}
         BOOST_UBLAS_INLINE
         coordinate_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
             matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), non_zeros_ (max_nz (non_zeros)),
             filled_ (0),
-            sorted_ (true), index1_data_ (non_zeros),
-            index2_data_ (non_zeros), value_data_ (non_zeros) {
+            sorted_ (true), index1_data_ (non_zeros_),
+            index2_data_ (non_zeros_), value_data_ (non_zeros_) {
         }
         BOOST_UBLAS_INLINE
         coordinate_matrix (const coordinate_matrix &m):
@@ -3855,8 +3858,8 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (max_nz (non_zeros)),
             filled_ (0),
-            sorted_ (true), index1_data_ (non_zeros),
-            index2_data_ (non_zeros), value_data_ (non_zeros) {
+            sorted_ (true), index1_data_ (non_zeros_),
+            index2_data_ (non_zeros_), value_data_ (non_zeros_) {
             matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 

@@ -242,15 +242,15 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef T &true_reference;
         typedef T *pointer;
-        typedef const sparse_vector<T, A> const_self_type;
         typedef sparse_vector<T, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const vector_const_reference<const_self_type> const_closure_type;
+        typedef const vector_const_reference<const self_type> const_closure_type;
 #else
-        typedef const vector_reference<const_self_type> const_closure_type;
+        typedef const vector_reference<const self_type> const_closure_type;
 #endif
         typedef vector_reference<self_type> closure_type;
+        typedef self_type vector_temporary_type;
         typedef sparse_tag storage_category;
 
         // Construction and destruction
@@ -705,28 +705,28 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef T &true_reference;
         typedef T *pointer;
-        typedef const compressed_vector<T, IB, IA, TA> const_self_type;
         typedef compressed_vector<T, IB, IA, TA> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const vector_const_reference<const_self_type> const_closure_type;
+        typedef const vector_const_reference<const self_type> const_closure_type;
 #else
-        typedef const vector_reference<const_self_type> const_closure_type;
+        typedef const vector_reference<const self_type> const_closure_type;
 #endif
         typedef vector_reference<self_type> closure_type;
+        typedef self_type vector_temporary_type;
         typedef sparse_tag storage_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         compressed_vector ():
             vector_expression<self_type> (),
-            size_ (0), non_zeros_ (0), filled_ (0),
-            index_data_ (0), value_data_ (0) {}
+            size_ (0), non_zeros_ (max_nz (0)), filled_ (0),
+            index_data_ (non_zeros_), value_data_ (non_zeros_) {}
         explicit BOOST_UBLAS_INLINE
         compressed_vector (size_type size, size_type non_zeros = 0):
             vector_expression<self_type> (),
-            size_ (size), non_zeros_ (non_zeros), filled_ (0),
-            index_data_ (non_zeros), value_data_ (non_zeros) {
+            size_ (size), non_zeros_ (max_nz (non_zeros)), filled_ (0),
+            index_data_ (non_zeros_), value_data_ (non_zeros_) {
         }
         BOOST_UBLAS_INLINE
         compressed_vector (const compressed_vector &v):
@@ -737,8 +737,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         compressed_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
             vector_expression<self_type> (),
-            size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
-            index_data_ (non_zeros), value_data_ (non_zeros) {
+            size_ (ae ().size ()), non_zeros_ (max_nz (non_zeros)), filled_ (0),
+            index_data_ (non_zeros_), value_data_ (non_zeros_) {
             vector_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -777,13 +777,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Resizing
+    private:
+        BOOST_UBLAS_INLINE
+        size_type max_nz (size_type non_zeros) const {
+            non_zeros = (std::max) (non_zeros, size_type (1));
+            non_zeros = (std::min) (non_zeros, size_);
+            return non_zeros;
+        }
+    public:
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             // FIXME preserve unimplemented
             BOOST_UBLAS_CHECK (!preserve, internal_logic ());
             size_ = size;
-            non_zeros_ = (std::max) (non_zeros_, size_type (1));
-            non_zeros_ = (std::min) (non_zeros_, size_);
+            non_zeros_ = max_nz (non_zeros_);
             index_data (). resize (non_zeros_);
             value_data (). resize (non_zeros_);
             filled_ = 0;
@@ -792,8 +799,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros, bool preserve = true) {
-            non_zeros_ = (std::max) (non_zeros, size_type (1));
-            non_zeros_ = (std::min) (non_zeros_, size_);
+            non_zeros_ = max_nz (non_zeros);
             if (preserve) {
                 index_data (). resize (non_zeros_, size_type ());
                 value_data (). resize (non_zeros_, value_type ());
@@ -1259,28 +1265,28 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef T &true_reference;
         typedef T *pointer;
-        typedef const coordinate_vector<T, IB, IA, TA> const_self_type;
         typedef coordinate_vector<T, IB, IA, TA> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const vector_const_reference<const_self_type> const_closure_type;
+        typedef const vector_const_reference<const self_type> const_closure_type;
 #else
-        typedef const vector_reference<const_self_type> const_closure_type;
+        typedef const vector_reference<const self_type> const_closure_type;
 #endif
         typedef vector_reference<self_type> closure_type;
+        typedef self_type vector_temporary_type;
         typedef sparse_tag storage_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         coordinate_vector ():
             vector_expression<self_type> (),
-            size_ (0), non_zeros_ (0), filled_ (0),
-            sorted_ (true), index_data_ (0), value_data_ (0) {}
+            size_ (0), non_zeros_ (max_nz (0)), filled_ (0),
+            sorted_ (true), index_data_ (non_zeros_), value_data_ (non_zeros_) {}
         explicit BOOST_UBLAS_INLINE
         coordinate_vector (size_type size, size_type non_zeros = 0):
             vector_expression<self_type> (),
-            size_ (size), non_zeros_ (non_zeros), filled_ (0),
-            sorted_ (true), index_data_ (non_zeros), value_data_ (non_zeros) {
+            size_ (size), non_zeros_ (max_nz (non_zeros)), filled_ (0),
+            sorted_ (true), index_data_ (non_zeros_), value_data_ (non_zeros_) {
         }
         BOOST_UBLAS_INLINE
         coordinate_vector (const coordinate_vector &v):
@@ -1291,8 +1297,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         coordinate_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
             vector_expression<self_type> (),
-            size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
-            sorted_ (true), index_data_ (non_zeros), value_data_ (non_zeros) {
+            size_ (ae ().size ()), non_zeros_ (max_nz (non_zeros)), filled_ (0),
+            sorted_ (true), index_data_ (non_zeros_), value_data_ (non_zeros_) {
             vector_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -1331,14 +1337,21 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Resizing
+    private:
+        BOOST_UBLAS_INLINE
+        size_type max_nz (size_type non_zeros) const {
+            non_zeros = (std::max) (non_zeros, size_type (1));
+            non_zeros = (std::min) (non_zeros, size_);
+            return non_zeros;
+        }
+    public:
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             // FIXME preserve unimplemented
             BOOST_UBLAS_CHECK (!preserve, internal_logic ());
             if (preserve)
                 sort ();    // remove duplicate elements.
-            non_zeros_ = (std::max) (non_zeros_, size_type (1));
-            non_zeros_ = (std::min) (non_zeros_, size);
+            non_zeros_ = max_nz (non_zeros_);
             if (preserve) {
                 index_data (). resize (non_zeros_, size_type ());
                 value_data (). resize (non_zeros_, value_type ());
@@ -1356,8 +1369,7 @@ namespace boost { namespace numeric { namespace ublas {
         void reserve (size_type non_zeros, bool preserve = true) {
             if (preserve)
                 sort ();    // remove duplicate elements.
-            non_zeros_ = (std::max) (non_zeros, size_type (1));
-            non_zeros_ = (std::min) (non_zeros_, size_);
+            non_zeros_ = max_nz (non_zeros);
             if (preserve) {
                 index_data (). resize (non_zeros_, size_type ());
                 value_data (). resize (non_zeros_, value_type ());
