@@ -62,43 +62,6 @@ do { \
   __x = __x; } while (0)
 
 
-#if 0
-
-// static member not required by standard to be instantiated
-#define CLASS_REQUIRES(__tv, __concept) \
-  typedef void (__concept##_concept <__tv>::* __func##__tv##__concept)(); \
-  template <__func##__tv##__concept _Tp1> \
-  struct __dummy_struct_##__tv##__concept { }; \
-  static __dummy_struct_##__tv##__concept< \
-    BOOST_FPTR __concept##_concept <__tv>::constraints>  \
-  __dummy_ptr_##__tv##__concept
-
-#define CLASS_REQUIRES2(__tv1, __tv2, __concept) \
-  typedef void (__concept##_concept <__tv1,__tv2>::* __func##__tv1##__tv2##__concept)(); \
-  template <__func##__tv1##__tv2##__concept _Tp1> \
-  struct __dummy_struct_##__tv1##__tv2##__concept { }; \
-  static __dummy_struct_##__tv1##__tv2##__concept< \
-    BOOST_FPTR __concept##_concept <__tv1,__tv2>::constraints>  \
-  __dummy_ptr_##__tv1##__tv2##__concept
-
-#define CLASS_REQUIRES3(__tv1, __tv2, __tv3, __concept) \
-  typedef void (__concept##_concept <__tv1,__tv2,__tv3>::* __func##__tv1##__tv2##__tv3##__concept)(); \
-  template <__func##__tv1##__tv2##__tv3##__concept _Tp1> \
-  struct __dummy_struct_##__tv1##__tv2##__tv3##__concept { }; \
-  static __dummy_struct_##__tv1##__tv2##__tv3##__concept< \
-    BOOST_FPTR __concept##_concept <__tv1,__tv2,__tv3>::constraints>  \
-  __dummy_ptr_##__tv1##__tv2##__tv3##__concept
-
-#define CLASS_REQUIRES4(__tv1, __tv2, __tv3, __tv4, __concept) \
-  typedef void (__concept##_concept <__tv1,__tv2,__tv3,__tv4>::* __func##__tv1##__tv2##__tv3##__tv4##__concept)(); \
-  template <__func##__tv1##__tv2##__tv3##__tv4##__concept _Tp1> \
-  struct __dummy_struct_##__tv1##__tv2##__tv3##__tv4##__concept { }; \
-  static __dummy_struct_##__tv1##__tv2##__tv3##__tv4##__concept< \
-    BOOST_FPTR __concept##_concept <__tv1,__tv2,__tv3,__tv4>::constraints>  \
-  __dummy_ptr_##__tv1##__tv2##__tv3##__tv4##__concept
-
-#else
-
 #define CLASS_REQUIRES(__tv, __concept) \
   typedef void (__concept##_concept <__tv>::* __func##__tv##__concept)(); \
   template <__func##__tv##__concept _Tp1> \
@@ -130,8 +93,6 @@ do { \
   typedef __dummy_struct_##__tv1##__tv2##__tv3##__tv4##__concept< \
     BOOST_FPTR __concept##_concept <__tv1,__tv2,__tv3,__tv4>::constraints>  \
     __dummy_typedef_##__tv1##__tv2##__tv3##__tv4##__concept
-
-#endif
 
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
