@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for iterators.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -17,71 +17,124 @@
 
 using namespace boost::multi_index;
 
+template<typename Index>
+void test_non_const_iterators(Index& i,int target)
+{
+  typedef typename Index::iterator         iterator;
+  typedef typename Index::reverse_iterator reverse_iterator;
+
+  int n=0;
+  for(iterator it=i.begin();it!=i.end();++it){
+    n+=it->id;
+  }
+  int m=0;
+  for(reverse_iterator rit=i.rbegin();rit!=i.rend();++rit){
+    m+=rit->id;
+  }
+  int p=0;
+  for(iterator it2=i.end();it2!=i.begin();){
+    --it2;
+    p+=it2->id;
+  }
+  int q=0;
+  for(reverse_iterator rit2=i.rend();rit2!=i.rbegin();){
+    --rit2;
+    q+=rit2->id;
+  }
+
+  BOOST_CHECK(n==target&&n==m&&n==p&&n==q);
+}
+
+template<typename Index>
+void test_const_iterators(const Index& i,int target)
+{
+  typedef typename Index::const_iterator         const_iterator;
+  typedef typename Index::const_reverse_iterator const_reverse_iterator;
+
+  int n=0;
+  for(const_iterator it=i.begin();it!=i.end();++it){
+    n+=it->id;
+  }
+  int m=0;
+  for(const_reverse_iterator rit=i.rbegin();rit!=i.rend();++rit){
+    m+=rit->id;
+  }
+  int p=0;
+  for(const_iterator it2=i.end();it2!=i.begin();){
+    --it2;
+    p+=it2->id;
+  }
+  int q=0;
+  for(const_reverse_iterator rit2=i.rend();rit2!=i.rbegin();){
+    --rit2;
+    q+=rit2->id;
+  }
+
+  BOOST_CHECK(n==target&&n==m&&n==p&&n==q);
+}
+
+template<typename Index>
+void test_non_const_hashed_iterators(Index& i,int target)
+{
+  typedef typename Index::iterator       iterator;
+  typedef typename Index::local_iterator local_iterator;
+  typedef typename Index::size_type      size_type;
+
+  int n=0;
+  for(iterator it=i.begin();it!=i.end();++it){
+    n+=it->id;
+  }
+  int m=0;
+  for(size_type buc=0;buc<i.bucket_count();++buc){
+    for(local_iterator it=i.begin(buc);it!=i.end(buc);++it){
+      m+=it->id;
+    }
+  }
+
+  BOOST_CHECK(n==target&&n==m);
+}
+
+template<typename Index>
+void test_const_hashed_iterators(Index& i,int target)
+{
+  typedef typename Index::const_iterator       const_iterator;
+  typedef typename Index::const_local_iterator const_local_iterator;
+  typedef typename Index::size_type            size_type;
+
+  int n=0;
+  for(const_iterator it=i.begin();it!=i.end();++it){
+    n+=it->id;
+  }
+  int m=0;
+  for(size_type buc=0;buc<i.bucket_count();++buc){
+    for(const_local_iterator it=i.begin(buc);it!=i.end(buc);++it){
+      m+=it->id;
+    }
+  }
+
+  BOOST_CHECK(n==target&&n==m);
+}
+
 void test_iterators()
 {
   employee_set es;
 
-  es.insert(employee(0,"Joe",31));
-  es.insert(employee(1,"Robert",27));
-  es.insert(employee(2,"John",40));
-  es.insert(employee(3,"Albert",20));
-  es.insert(employee(4,"John",57));
+  es.insert(employee(0,"Joe",31,1123));
+  es.insert(employee(1,"Robert",27,5601));
+  es.insert(employee(2,"John",40,7889));
+  es.insert(employee(3,"Albert",20,9012));
+  es.insert(employee(4,"John",57,1002));
 
-  {
-    int n=0;
-    for(employee_set::const_iterator it=es.begin();it!=es.end();++it){
-      n+=it->id;
-    }
-    int m=0;
-    for(employee_set::reverse_iterator rit=es.rbegin();rit!=es.rend();++rit){
-      m+=rit->id;
-    }
-    int p=0;
-    for(employee_set::const_iterator it2=es.end();it2!=es.begin();){
-      --it2;
-      p+=it2->id;
-    }
-    int q=0;
-    for(employee_set::reverse_iterator rit2=es.rend();rit2!=es.rbegin();){
-      --rit2;
-      q+=rit2->id;
-    }
+  int target=0+1+2+3+4;
 
-    BOOST_CHECK(n==0+1+2+3+4&&n==m&&n==p&&n==q);
-  }
-
-  {
-    int n=0;
-    employee_set_by_name& i1=get<by_name>(es);
-    for(employee_set_by_name::iterator it=i1.begin();it!=i1.end();++it){
-      n+=it->id;
-    }
-    int m=0;
-    const employee_set_by_age& i2=get<2>(es);
-    for(employee_set_by_age::const_reverse_iterator rit=i2.rbegin();
-        rit!=i2.rend();++rit){
-      m+=rit->id;
-    }
-    int p=0;
-    const employee_set_as_inserted& i3=get<3>(es);
-    for(
-      employee_set_as_inserted::const_reverse_iterator rit2=i3.rbegin();
-      rit2!=i3.rend();++rit2){
-      p+=rit2->id;
-    }
-    int q=0;
-    for(employee_set_by_name::iterator it2=i1.end();it2!=i1.begin();){
-      --it2;
-      q+=it2->id;
-    }
-    int r=0;
-    for(
-      employee_set_as_inserted::const_iterator it3=i3.end();
-      it3!=i3.begin();){
-      --it3;
-      r+=it3->id;
-    }
-
-    BOOST_CHECK(n==0+1+2+3+4&&n==m&&n==p&&n==q&&n==r);
-  }
+  test_non_const_iterators       (es,target);
+  test_const_iterators           (es,target);
+  test_non_const_hashed_iterators(get<1>(es),target);
+  test_const_hashed_iterators    (get<1>(es),target);
+  test_non_const_iterators       (get<2>(es),target);
+  test_const_iterators           (get<2>(es),target);
+  test_non_const_iterators       (get<3>(es),target);
+  test_const_iterators           (get<3>(es),target);
+  test_non_const_hashed_iterators(get<4>(es),target);
+  test_const_hashed_iterators    (get<4>(es),target);
 }

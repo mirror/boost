@@ -1,6 +1,6 @@
 /* Boost.MultiIndex basic test.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -18,14 +18,6 @@
 #include <boost/test/test_tools.hpp>
 
 using namespace boost::multi_index;
-
-struct less_by_employee_name
-{
-  bool operator()(const employee& e1,const employee& e2)const
-  {
-    return e1.name<e2.name;
-  }
-};
 
 struct less_by_employee_age
 {
@@ -47,19 +39,22 @@ void test_basic()
 #endif
 
   const employee_set_by_age& i2=get<2>(es);
-  employee_set_as_inserted& i3=get<3>(es);
+  employee_set_as_inserted&  i3=get<3>(es);
+  employee_set_by_ssn&       i4=get<ssn>(es);
 
-  es.insert(employee(0,"Joe",31));
-  i1.insert(employee(1,"Robert",27));
-  es.insert(employee(2,"John",40));
-  i3.push_back(employee(3,"Albert",20));
-  es.insert(employee(4,"John",57));
+  es.insert(employee(0,"Joe",31,1123));
+  es.insert(employee(5,"Anna",41,1123));   /* clash*/
+  i1.insert(employee(1,"Robert",27,5601));
+  es.insert(employee(2,"John",40,7889));
+  i3.push_back(employee(3,"Albert",20,9012));
+  i4.insert(employee(4,"John",57,1002));
+  i4.insert(employee(0,"Andrew",60,2302)); /* clash */
 
-  v.push_back(employee(0,"Joe",31));
-  v.push_back(employee(1,"Robert",27));
-  v.push_back(employee(2,"John",40));
-  v.push_back(employee(3,"Albert",20));
-  v.push_back(employee(4,"John",57));
+  v.push_back(employee(0,"Joe",31,1123));
+  v.push_back(employee(1,"Robert",27,5601));
+  v.push_back(employee(2,"John",40,7889));
+  v.push_back(employee(3,"Albert",20,9012));
+  v.push_back(employee(4,"John",57,1002));
 
   {
     /* by insertion order */
@@ -72,13 +67,6 @@ void test_basic()
 
     std::sort(v.begin(),v.end());
     BOOST_CHECK(std::equal(es.begin(),es.end(),v.begin()));
-  }
-
-  {
-    /* by name */
-
-    std::sort(v.begin(),v.end(),less_by_employee_name());
-    BOOST_CHECK(std::equal(i1.begin(),i1.end(),v.begin()));
   }
 
   {

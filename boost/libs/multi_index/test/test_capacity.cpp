@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for capacity memfuns.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -21,18 +21,20 @@ void test_capacity()
 {
   employee_set es;
 
-  es.insert(employee(0,"Joe",31));
-  es.insert(employee(1,"Robert",27));
-  es.insert(employee(2,"John",40));
-  es.insert(employee(3,"Albert",20));
-  es.insert(employee(4,"John",57));
+  es.insert(employee(0,"Joe",31,1123));
+  es.insert(employee(1,"Robert",27,5601));
+  es.insert(employee(2,"John",40,7889));
+  es.insert(employee(3,"Albert",20,9012));
+  es.insert(employee(4,"John",57,1002));
 
   BOOST_CHECK(!es.empty());
   BOOST_CHECK(es.size()==5);
   BOOST_CHECK(es.size()<=es.max_size());
 
   es.erase(es.begin());
+  BOOST_CHECK(!get<name>(es).empty());
   BOOST_CHECK(get<name>(es).size()==4);
+  BOOST_CHECK(get<name>(es).size()<=get<name>(es).max_size());
 
   es.erase(es.begin());
   BOOST_CHECK(!get<as_inserted>(es).empty());

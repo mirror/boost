@@ -15,6 +15,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include "pre_multi_index.hpp"
 #include <boost/multi_index_container.hpp>
+#include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/key_extractors.hpp>
@@ -109,50 +110,76 @@ void test_serialization(const MultiIndexContainer& m)
   BOOST_CHECK(it_end==project<0>(m2,it2));
 }
 
-struct container_holder
+void test_hashed_index_serialization()
 {
+  const int N=100;
+  const int SHUFFLE=10232;
+
   typedef multi_index_container<
     int,
     indexed_by<
+      hashed_unique<identity<int> >,
       sequenced<>
     >
-  > multi_index_t;
+  > hashed_set;
 
-  container_holder(const multi_index_t& m_):m(m_){}
+  hashed_set hs;
 
-  bool operator==(const container_holder& x)const
-  {
-    return m==x.m;
+  for(int i=0;i<N;++i){
+    hs.insert(i*SHUFFLE);
   }
 
-  multi_index_t m;
-
-private:
-  friend class boost::serialization::access;
-
-  template<class Archive>
-  void serialize(Archive& ar,const unsigned int)
+  std::ostringstream oss;
   {
-    ar&m;
+    boost::archive::text_oarchive oa(oss);
+    oa<<hs;
+
+    for(int i=0;i<N;++i){
+      hashed_set::iterator it=hs.find(i*SHUFFLE);
+      oa<<it;
+    }
+    hashed_set::iterator it=hs.end();
+    oa<<it;
+
+    for(std::size_t buc=0;buc<hs.bucket_count();++buc){
+      for(hashed_set::local_iterator it=hs.begin(buc),it_end=hs.end(buc);
+          it!=it_end;++it){
+        oa<<*it;
+        oa<<it;
+      }
+      hashed_set::local_iterator it2=hs.end(buc);
+      oa<<it2;
+    }
   }
-};
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-namespace boost{
-namespace serialization{
-#endif
+  hashed_set hs2;
+  std::istringstream iss(oss.str());
+  boost::archive::text_iarchive ia(iss);
+  ia>>hs2;
+  BOOST_CHECK(get<1>(hs)==get<1>(hs2));
 
-template<class Archive>
-inline void load_construct_data(
- Archive& ar,container_holder* p,const unsigned int)
-{
-  ::new(p)container_holder(container_holder::multi_index_t());
+  for(int j=0;j<N;++j){
+    hashed_set::iterator it;
+    ia>>it;
+    BOOST_CHECK(*it==j*SHUFFLE);
+  }
+  hashed_set::iterator it;
+  ia>>it;
+  BOOST_CHECK(it==hs2.end());
+
+  for(std::size_t buc=0;buc<hs2.bucket_count();++buc){
+    for(std::size_t k=0;k<hs2.bucket_size(buc);++k){
+      int n;
+      hashed_set::local_iterator it;
+      ia>>n;
+      ia>>it;
+      BOOST_CHECK(*it==n);
+    }
+    hashed_set::local_iterator it2;
+    ia>>it2;
+    BOOST_CHECK(it2==hs2.end(buc));
+  }
 }
-
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-} /* namespace serialization */
-} /* namespace boost */
-#endif
 
 void test_serialization()
 {
@@ -236,20 +263,5 @@ void test_serialization()
     m.insert(pair_of_ints(10,1));
     test_serialization(m);
   }
-  {
-    typedef multi_index_container<
-      container_holder,
-      indexed_by<
-        sequenced<>
-      >
-    > multi_index_t;
-
-    multi_index_t m;
-    container_holder::multi_index_t c1,c2;
-    for(int i=0;i<100;++i)c1.push_back(i);
-    for(int j=100;j<200;++j)c2.push_back(j);
-    m.push_back(container_holder(c1));
-    m.push_back(container_holder(c2));
-    test_serialization(m); 
-  }
+  test_hashed_index_serialization();
 }

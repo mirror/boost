@@ -1,7 +1,7 @@
 /* Boost.MultiIndex test for interconvertibilty between const and
  * non-const iterators.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -21,13 +21,13 @@ using namespace boost::multi_index;
 void test_conv_iterators()
 {
   employee_set es;
-  es.insert(employee(2,"John",40));
+  es.insert(employee(2,"John",40,7889));
 
   {
     const employee_set& ces=es;
-    employee_set::iterator        it=es.find(employee(2,"John",40));
-    employee_set::const_iterator it1=es.find(employee(2,"John",40));
-    employee_set::const_iterator it2=ces.find(employee(2,"John",40));
+    employee_set::iterator        it=es.find(employee(2,"John",40,7889));
+    employee_set::const_iterator it1=es.find(employee(2,"John",40,7889));
+    employee_set::const_iterator it2=ces.find(employee(2,"John",40,7889));
 
     BOOST_CHECK(it==it1&&it1==it2&&it2==it);
     BOOST_CHECK(*it==*it1&&*it1==*it2&&*it2==*it);
@@ -38,6 +38,16 @@ void test_conv_iterators()
     employee_set_by_name::iterator        it=i1.find("John");
     employee_set_by_name::const_iterator it1=i1.find("John");
     employee_set_by_name::const_iterator it2=ci1.find("John");
+
+    BOOST_CHECK(it==it1&&it1==it2&&it2==it);
+    BOOST_CHECK(*it==*it1&&*it1==*it2&&*it2==*it);
+  }
+  {
+    employee_set_by_name&        i1=get<1>(es);
+    const employee_set_by_name& ci1=get<1>(es);
+    employee_set_by_name::local_iterator        it=i1.begin(i1.bucket("John"));
+    employee_set_by_name::const_local_iterator it1=i1.begin(i1.bucket("John"));
+    employee_set_by_name::const_local_iterator it2=ci1.begin(ci1.bucket("John"));
 
     BOOST_CHECK(it==it1&&it1==it2&&it2==it);
     BOOST_CHECK(*it==*it1&&*it1==*it2&&*it2==*it);

@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for special set operations.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -12,24 +12,52 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
+#include <sstream>
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
 #include <boost/test/test_tools.hpp>
 
 using namespace boost::multi_index;
 
-struct comp_initial
+static int string_to_int(const std::string& str)
 {
-  bool operator()(char ch,const std::string& s)const
+  std::istringstream iss(str);
+  int                res;
+  iss>>res;
+  return res;
+}
+
+struct comp_int_string
+{
+  bool operator()(int x,const std::string& y)const
   {
-    if(s.empty())return false;
-    return ch<s[0];
+    return x<string_to_int(y);
   }
 
-  bool operator()(const std::string& s,char ch)const
+  bool operator()(const std::string& x,int y)const
   {
-    if(s.empty())return true;
-    return s[0]<ch;
+    return string_to_int(x)<y;
+  }
+};
+
+struct hash_string_as_int
+{
+  int operator()(const std::string& x)const
+  {
+    return boost::hash<int>()(string_to_int(x));
+  }
+};
+
+struct eq_string_int
+{
+  bool operator()(int x,const std::string& y)const
+  {
+    return x==string_to_int(y);
+  }
+
+  bool operator()(const std::string& x,int y)const
+  {
+    return operator()(y,x);
   }
 };
 
@@ -37,22 +65,30 @@ void test_special_set_ops()
 {
   employee_set es;
 
-  es.insert(employee(0,"Joe",31));
-  es.insert(employee(1,"Robert",27));
-  es.insert(employee(2,"John",40));
-  es.insert(employee(3,"Albert",20));
-  es.insert(employee(4,"John",57));
+  es.insert(employee(0,"Joe",31,1123));
+  es.insert(employee(1,"Robert",27,5601));
+  es.insert(employee(2,"John",40,7889));
+  es.insert(employee(3,"Albert",20,9012));
+  es.insert(employee(4,"John",57,1002));
 
-  BOOST_CHECK(std::distance(
-    get<name>(es).lower_bound('J',comp_initial()),
-    get<name>(es).upper_bound('J',comp_initial()))==3);
+  std::pair<employee_set_by_ssn::iterator,employee_set_by_ssn::iterator> p=
+    get<ssn>(es).equal_range(
+      "7889",hash_string_as_int(),eq_string_int());
 
-  BOOST_CHECK(get<name>(es).find('A',comp_initial())->name[0]=='A');
+  BOOST_CHECK(std::distance(p.first,p.second)==1&&(p.first)->id==2);
+
+  BOOST_CHECK(
+    get<ssn>(es).count(
+      "5601",hash_string_as_int(),eq_string_int())==1);
+
+  BOOST_CHECK(
+    get<ssn>(es).find(
+      "1123",hash_string_as_int(),eq_string_int())->name=="Joe");
 
   BOOST_CHECK(
     std::distance(
-      get<age>(es).lower_bound(27),
-      get<age>(es).upper_bound(40))==3);
+      get<age>(es).lower_bound("27",comp_int_string()),
+      get<age>(es).upper_bound("40",comp_int_string()))==3);
 
   BOOST_CHECK(es.count(2,employee::comp_id())==1);
   BOOST_CHECK(es.count(5,employee::comp_id())==0);

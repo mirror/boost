@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for comparison functions.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -31,27 +31,27 @@ struct lookup_list{
 void test_comparison()
 {
   employee_set              es;
-  employee_set_by_name&     i1=get<1>(es);
+  employee_set_by_age&      i2=get<2>(es);
   employee_set_as_inserted& i3=get<3>(es);
-  es.insert(employee(0,"Joe",31));
-  es.insert(employee(1,"Robert",27));
-  es.insert(employee(2,"John",40));
-  es.insert(employee(3,"Albert",20));
-  es.insert(employee(4,"John",57));
+  es.insert(employee(0,"Joe",31,1123));
+  es.insert(employee(1,"Robert",27,5601));
+  es.insert(employee(2,"John",40,7889));
+  es.insert(employee(3,"Albert",20,9012));
+  es.insert(employee(4,"John",57,1002));
 
   employee_set              es2;
-  employee_set_by_name&     i12=get<name>(es2);
+  employee_set_by_age&      i22=get<age>(es2);
   employee_set_as_inserted& i32=get<3>(es2);
-  es2.insert(employee(0,"Joe",31));
-  es2.insert(employee(1,"Robert",27));
-  es2.insert(employee(2,"John",40));
-  es2.insert(employee(3,"Albert",20));
+  es.insert(employee(0,"Joe",31,1123));
+  es.insert(employee(1,"Robert",27,5601));
+  es.insert(employee(2,"John",40,7889));
+  es.insert(employee(3,"Albert",20,9012));
 
   BOOST_CHECK(es==es&&es<=es&&es>=es&&
-              i12==i12&&i12<=i12&&i12>=i12&&
+              i22==i22&&i22<=i22&&i22>=i22&&
               i32==i32&&i32<=i32&&i32>=i32);
   BOOST_CHECK(es!=es2&&es2<es&&es>es2&&!(es<=es2)&&!(es2>=es));
-  BOOST_CHECK(i1!=i12&&i12<i1&&i1>i12&&!(i1<=i12)&&!(i12>=i1));
+  BOOST_CHECK(i2!=i22&&i22<i2&&i2>i22&&!(i2<=i22)&&!(i22>=i2));
   BOOST_CHECK(i3!=i32&&i32<i3&&i3>i32&&!(i3<=i32)&&!(i32>=i3));
 
   lookup_list<int>::type  l1;
