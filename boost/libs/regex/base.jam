@@ -10,6 +10,8 @@ template regex-options
      <define>BOOST_REGEX_NO_LIB=1        
      <debug><define>BOOST_REGEX_CONFIG_INFO=1
      <sysinclude>$(BOOST_ROOT)
+     # como requires this:
+     <como-win32><*><define>BOOST_REGEX_NO_W32=1
    ;
 
 #
