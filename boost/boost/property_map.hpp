@@ -76,7 +76,12 @@ namespace boost {
   };
 #endif
 
+#ifndef BOOST_MSVC
+  // MSVC doesn't have Koenig lookup, so the user has to
+  // do boost::get() anyways, and the using clause
+  // doesn't really work for MSVC.
 } // namespace boost
+#endif
 
   // These need to go in global namespace because Koenig
   // lookup does not apply to T*.
@@ -94,11 +99,12 @@ namespace boost {
   template <class T>
   inline const T& at(const T* pa, std::ptrdiff_t k) { return pa[k]; }
 
+#ifndef BOOST_MSVC
 namespace boost {
-
   using ::put;
   using ::get;
   using ::at;
+#endif
 
   //=========================================================================
   // concept checks for property maps
