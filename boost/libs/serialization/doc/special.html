@@ -40,6 +40,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     <dt><a href="#numerics">Numerics</a>
     <dt><a href="#traits">Traits</a>
   </dl>
+  <dt><a href="#binary_archives">Binary Archives</a>
   <dt><a href="#xml_archives">XML Archives</a>
   <dt><a href="exceptions.html">Archive Exceptions</a>
   <dt><a href="exception_safety.html">Exception Safety</a>
@@ -450,6 +451,16 @@ Another way to avoid this problem is to assign serialization traits
 to all specializations of the template <code style="white-space: normal">my_wrapper</code>
 for all primitive types so that class information is never saved.  This is what has
 been done for our implementation of serializations for STL collections.
+
+<h3><a name="binary_archives">Binary Archives</a></h3>
+Standard stream i/o on some systems will expand linefeed characters to carriage-return/linefeed 
+on output. This creates a problem for binary archives.  The easiest way to handle this is to 
+open streams for binary archives in "binary mode" by using the flag 
+<code style="white-space: normal">ios::binary</code>.  If this is not done, the archive generated
+will be unreadable.
+<p>
+Unfortunately, no way has been found to detect this error before loading the archive.  Debug builds
+will assert when this is detected so that may be helpful in catching this error.
 
 <h3><a name="xml_archives">XML Archives</a></h3>
 XML archives present a somewhat special case. 
