@@ -16,19 +16,13 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
+#include <boost/detail/winapi.hpp>
+
 namespace boost
 {
 
 namespace detail
 {
-
-// Avoid #including <windows.h>
-
-namespace win32
-{
-extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement(long volatile *);
-extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(long volatile *);
-}
 
 class atomic_count
 {
@@ -40,12 +34,12 @@ public:
 
     long operator++()
     {
-        return win32::InterlockedIncrement(&value_);
+        return winapi::InterlockedIncrement(&value_);
     }
 
     long operator--()
     {
-        return win32::InterlockedDecrement(&value_);
+        return winapi::InterlockedDecrement(&value_);
     }
 
     operator long() const

@@ -37,16 +37,28 @@
 
 #include <boost/config.hpp>
 
+//
+//  Note to implementors: if you write a platform-specific lightweight_mutex
+//  for a platform that supports pthreads, be sure to test its performance
+//  against the pthreads-based version using smart_ptr_timing_test.cpp and
+//  smart_ptr_mt_test.cpp. Custom versions are usually not worth the trouble
+//  _unless_ the performance gains are substantial.
+//
+
 #ifndef BOOST_HAS_THREADS
 #  include <boost/detail/lwm_nop.hpp>
-#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-#  include <boost/detail/lwm_win32.hpp>
-//#elif defined(linux) || defined(__linux) || defined(__linux__)
 #elif defined(BOOST_USE_ASM_ATOMIC_H)
 #  include <boost/detail/lwm_linux.hpp>
+#elif defined(BOOST_LWM_USE_CRITICAL_SECTION)
+#  include <boost/detail/lwm_win32_cs.hpp>
+#elif defined(BOOST_LWM_USE_PTHREADS)
+#  include <boost/detail/lwm_pthreads.hpp>
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+#  include <boost/detail/lwm_win32.hpp>
 #elif defined(__sgi)
 #  include <boost/detail/lwm_irix.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
+#  define BOOST_LWM_USE_PTHREADS
 #  include <boost/detail/lwm_pthreads.hpp>
 #else
 #  include <boost/detail/lwm_nop.hpp>

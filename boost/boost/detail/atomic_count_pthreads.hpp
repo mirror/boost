@@ -19,10 +19,8 @@
 //    inefficiencies. Example: a class with two atomic_count members
 //    can get away with a single mutex.
 //
-//  Define a macro so that users can detect the situation and optimize.
+//  Users can detect this situation by checking BOOST_AC_USE_PTHREADS.
 //
-
-#define BOOST_ATOMIC_COUNT_USES_PTHREADS
 
 namespace boost
 {
