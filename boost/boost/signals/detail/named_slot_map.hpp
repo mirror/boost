@@ -94,7 +94,11 @@ public:
 private:
   named_slot_map_iterator(std::auto_ptr<impl>);
 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+  shared_ptr<impl> impl_;
+#else
   scoped_ptr<impl> impl_;
+#endif
 
   friend class named_slot_map;
 };
@@ -118,7 +122,12 @@ public:
 
 private:
   class impl;
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+  shared_ptr<impl> impl_;
+#else
   scoped_ptr<impl> impl_;
+#endif
 };
 
 } } }
