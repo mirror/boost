@@ -12,6 +12,7 @@
 #include <boost/iterator.hpp>
 #include <utility>
 #include <boost/pending/limits.hpp>
+#include <boost/static_assert.hpp>
 
 #if (__GNUC__) || defined(__KCC) || defined(__ghs) || defined(__MWERKS__)
 #define BOOST_FPTR &
@@ -95,9 +96,10 @@ struct require_same { typedef T type; };
   struct IntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      errortype_must_be_an_integer_type();
+      x.error_type_not_an_integer();
 #endif      
     }
+    T x;
   };
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <> struct IntegerConcept<short> { void constraints() {} };
@@ -346,6 +348,7 @@ struct require_same { typedef T type; };
       f(arg);                 // require operator()
     }
     Func f;
+    Arg arg;
   };
 #endif
 
@@ -590,13 +593,16 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< InputIteratorConcept<const_iterator> >();
       function_requires< AssignableConcept<Container> >();
-      const Container c;
+      const_constraints(c);
+    }
+    void const_constraints(const Container& c) {
       i = c.begin();
       i = c.end();
       n = c.size();
       n = c.max_size();
       b = c.empty();
     }
+    Container c;
     bool b;
     const_iterator i;
     size_type n;
@@ -654,12 +660,15 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< ForwardContainerConcept<ReversibleContainer> >();
       function_requires< BidirectionalIteratorConcept<const_iterator> >();
-      function_requires< BidirectionalIteratorConcept<const_reverse_iterator> >();
-
-      const ReversibleContainer c;
+      function_requires< 
+        BidirectionalIteratorConcept<const_reverse_iterator> >();
+      const_constraints(c);
+    }
+    void const_constraints(const ReversibleContainer& c) {
       const_reverse_iterator i = c.rbegin();
       i = c.rend();
     }
+    ReversibleContainer c;
   };
 
   template <class ReversibleContainer>
@@ -670,9 +679,11 @@ struct require_same { typedef T type; };
 
     void constraints() {
       function_requires< ReversibleContainerConcept<ReversibleContainer> >();
-      function_requires< Mutable_ForwardContainerConcept<ReversibleContainer> >();
+      function_requires<
+        Mutable_ForwardContainerConcept<ReversibleContainer> >();
       function_requires< Mutable_BidirectionalIteratorConcept<iterator> >();
-      function_requires< Mutable_BidirectionalIteratorConcept<reverse_iterator> >();
+      function_requires<
+        Mutable_BidirectionalIteratorConcept<reverse_iterator> >();
 
       reverse_iterator i = c.rbegin();
       i = c.rend();
@@ -692,12 +703,16 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< ReversibleContainerConcept<RandomAccessContainer> >();
       function_requires< RandomAccessIteratorConcept<const_iterator> >();
-      function_requires< RandomAccessIteratorConcept<const_reverse_iterator> >();
+      function_requires<
+        RandomAccessIteratorConcept<const_reverse_iterator> >();
 
-      const RandomAccessContainer c;
+      const_constraints(c);
+    }
+    void const_constraits(const RandomAccessContainer& c) {
       const_reference r = c[n];
       ignore_unused_variable_warning(r);
     }
+    RandomAccessContainer c;
     size_type n;
   };
 
@@ -710,10 +725,13 @@ struct require_same { typedef T type; };
     typedef typename RandomAccessContainer::reverse_iterator reverse_iterator;
 
     void constraints() {
-      function_requires< RandomAccessContainerConcept<RandomAccessContainer> >();
-      function_requires< Mutable_ReversibleContainerConcept<RandomAccessContainer> >();
+      function_requires<
+        RandomAccessContainerConcept<RandomAccessContainer> >();
+      function_requires<
+        Mutable_ReversibleContainerConcept<RandomAccessContainer> >();
       function_requires< Mutable_RandomAccessIteratorConcept<iterator> >();
-      function_requires< Mutable_RandomAccessIteratorConcept<reverse_iterator> >();
+      function_requires<
+        Mutable_RandomAccessIteratorConcept<reverse_iterator> >();
 
       reference r = c[i];
       ignore_unused_variable_warning(r);
