@@ -69,7 +69,17 @@
 
         <xsl:apply-templates select="para|section" mode="annotation"/>
         
-        <xsl:apply-templates mode="synopsis">
+        <xsl:if test="macro and namespace">
+          <xsl:call-template name="synopsis">
+            <xsl:with-param name="text">
+              <xsl:apply-templates mode="synopsis" select="macro">
+                <xsl:with-param name="indentation" select="0"/>
+              </xsl:apply-templates>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+
+        <xsl:apply-templates mode="synopsis" select="namespace">
           <xsl:with-param name="indentation" select="0"/>
         </xsl:apply-templates>
         
@@ -341,7 +351,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
 
   <!-- These DocBook elements have special meaning. Use the annotation mode -->
   <xsl:template match="classname|methodname|functionname|libraryname|
-                       conceptname">
+                       conceptname|macroname">
     <xsl:apply-templates select="." mode="annotation"/>
   </xsl:template>
 

@@ -11,6 +11,7 @@
   <xsl:include href="library.xsl"/>
   <xsl:include href="index.xsl"/>
   <xsl:include href="error.xsl"/>
+  <xsl:include href="macro.xsl"/>
   <xsl:include href="testing/testsuite.xsl"/>
   <xsl:include href="caramel/concept2docbook.xsl"/>
   
