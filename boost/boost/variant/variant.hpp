@@ -196,6 +196,7 @@ struct find_fallback_type<int>
 // Provides an aligned storage type capable of holding any of the types
 // specified in the given type-sequence.
 //
+
 template <typename Types, typename NeverUsesBackupFlag>
 struct make_storage
 {
@@ -205,10 +206,10 @@ private: // helpers, for metafunction result (below)
           NeverUsesBackupFlag
         , mpl::identity< Types >
         , mpl::push_front<
-              Types
-            , backup_holder<void*>
+              Types, backup_holder<void*>
             >
         >::type types;
+
     typedef typename max_value<
           types, mpl::sizeof_<mpl::_1>
         >::type max_size;
@@ -1050,6 +1051,13 @@ private: // helpers, for representation (below)
     {
     };
 
+    // [TODO: Index of fallback type could be determined *during* search.]
+    typedef typename mpl::apply_if<
+          has_fallback_type_
+        , mpl::index_of< internal_types, fallback_type_ >
+        , mpl::identity< detail::variant::no_fallback_type >
+        >::type fallback_type_index_;
+
     typedef has_fallback_type_
         never_uses_backup_flag;
 
@@ -1481,9 +1489,7 @@ private: // helpers, for modifiers (below)
 
                 // ...indicate construction of fallback type...
                 lhs_.indicate_which(
-                      ::boost::mpl::index_of<
-                          internal_types, fallback_type_
-                        >::type::value
+                      BOOST_MPL_AUX_VALUE_WKND(fallback_type_index_)::value
                     ); // nothrow
 
                 // ...and rethrow:
