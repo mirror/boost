@@ -1,6 +1,6 @@
 #ifndef DATE_TIME_COMPILER_CONFIG_HPP___
 #define DATE_TIME_COMPILER_CONFIG_HPP___
-/* Copyright (c) 2002 CrystalClear Software, Inc.
+/* Copyright (c) 2002, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland, Bart Garst
  * $Date$
@@ -41,7 +41,49 @@
 #define BOOST_DATE_TIME_NO_WISTREAM_ITERATOR
 #endif
 
-/* Copyright (c) 2002
+
+// Borland v5.64 does not have the following in std namespace; v5.5.1 does
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x0564) 
+#include <locale>
+namespace std {
+  using stlport::tolower;
+  using stlport::ctype;
+  using stlport::use_facet;
+}
+#endif
+
+/* The following handles the definition of the necessary macros
+ * for dll building on Win32 platforms.
+ * 
+ * For code that will be placed in the date_time .dll, 
+ * it must be properly prefixed with BOOST_DATE_TIME_DECL.
+ * The corresponding .cpp file must have BOOST_DATE_TIME_SOURCES
+ * defined before including its header. For examples see:
+ * greg_month.hpp & greg_month.cpp
+ * 
+ */
+
+#if defined(_MSC_VER) && defined(_DLL)
+# define BOOST_DATE_TIME_HAS_DLL_RUNTIME
+#endif
+
+// BOOST_DATE_TIME_STATIC_LINK is defined in libs/date_time/build/Jamfile
+#if (defined(BOOST_DATE_TIME_HAS_DLL_RUNTIME) && \
+     !defined(BOOST_DATE_TIME_STATIC_LINK))
+# if defined(BOOST_DATE_TIME_SOURCE)
+#  define BOOST_DATE_TIME_DECL __declspec(dllexport)
+#  define BOOST_DATE_TIME_BUILD_DLL
+# else
+#  define BOOST_DATE_TIME_DECL __declspec(dllimport)
+# endif
+#endif
+
+#ifndef BOOST_DATE_TIME_DECL
+# define BOOST_DATE_TIME_DECL
+#endif
+
+
+/* Copyright (c) 2002, 2003
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software
