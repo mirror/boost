@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
-//  Revision Historyä
+//  Revision History
 //   31 Oct 01  use BOOST_HAS_LONG_LONG to check for "long long" (Jens M.)
 //   16 Apr 01  check LONGLONG_MAX when looking for "long long" (Jens Maurer)
 //   23 Jan 01  prefer "long" over "int" for int32_t and intmax_t (Jens Maurer)
