@@ -27,7 +27,8 @@ int main()
     // use some common STL container operations
     std::cout << "static_size: " << a.size() << std::endl;
     std::cout << "size:        " << a.size() << std::endl;
-    std::cout << "empty:       " << std::boolalpha << a.empty() << std::endl;
+    // Can't use std::boolalpha because it isn't portable
+    std::cout << "empty:       " << (a.empty()? "true" : "false") << std::endl;
     std::cout << "max_size:    " << a.max_size() << std::endl;
     std::cout << "front:       " << a.front() << std::endl;
     std::cout << "back:        " << a.back() << std::endl;

@@ -17,7 +17,7 @@ int main()
     // copy and change order
     boost::array<std::string,4> seasons_orig = seasons;
     for (unsigned i=seasons.size()-1; i>0; --i) {
-        swap(seasons.at(i),seasons.at((i+1)%seasons.size()));
+        std::swap(seasons.at(i),seasons.at((i+1)%seasons.size()));
     }
 
     std::cout << "one way:   ";
@@ -25,7 +25,7 @@ int main()
 
     // try swap()
     std::cout << "other way: ";
-    swap(seasons,seasons_orig);
+    std::swap(seasons,seasons_orig);
     print_elements(seasons);
 
     // try reverse iterators
