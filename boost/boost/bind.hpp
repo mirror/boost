@@ -135,10 +135,14 @@ template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* * pm, int)
     return _mfi::dm<R, T>(*pm);
 }
 
+#if !BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+// IBM/VisualAge 6.0 is not able to handle this overload.
 template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* const * pm, int)
 {
     return _mfi::dm<R, T>(*pm);
 }
+#endif
+
 
 #endif
 
