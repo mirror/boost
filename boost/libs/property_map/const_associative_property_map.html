@@ -41,7 +41,50 @@ the lifetime of the container must encompass the use of the adaptor.
 
 <h3>Example</h3>
 
-Care do donate one?
+<a href="./example1.cpp">example1.cpp</a>:
+<pre>
+<font color="#008040">#include &lt;iostream&gt;</font>
+<font color="#008040">#include &lt;map&gt;</font>
+<font color="#008040">#include &lt;string&gt;</font>
+<font color="#008040">#include &lt;boost/property_map.hpp&gt;</font>
+
+
+<B>template</B> &lt;<B>typename</B> ConstAddressMap&gt;
+<B>void</B> display(ConstAddressMap address)
+{
+  <B>typedef</B> <B>typename</B> boost::property_traits&lt;ConstAddressMap&gt;::value_type
+    value_type;
+  <B>typedef</B> <B>typename</B> boost::property_traits&lt;ConstAddressMap&gt;::key_type key_type;
+
+  key_type fred = <font color="#0000FF">"Fred"</font>;
+  key_type joe = <font color="#0000FF">"Joe"</font>;
+
+  value_type freds_address = get(address, fred);
+  value_type joes_address = get(address, joe);
+  
+  std::cout &lt;&lt; fred &lt;&lt; <font color="#0000FF">": "</font> &lt;&lt; freds_address &lt;&lt; <font color="#0000FF">"\n"</font>
+	    &lt;&lt; joe  &lt;&lt; <font color="#0000FF">": "</font> &lt;&lt; joes_address  &lt;&lt; <font color="#0000FF">"\n"</font>;
+}
+
+<B>int</B>
+main()
+{
+  std::map&lt;std::string, std::string&gt; name2address;
+  boost::const_associative_property_map&lt; std::map&lt;std::string, std::string&gt; &gt;
+    address_map(name2address);
+
+  name2address.insert(make_pair(std::string(<font color="#0000FF">"Fred"</font>), 
+				std::string(<font color="#0000FF">"710 West 13th Street"</font>)));
+  name2address.insert(make_pair(std::string(<font color="#0000FF">"Joe"</font>), 
+				std::string(<font color="#0000FF">"710 West 13th Street"</font>)));
+
+  display(address_map);
+  
+  <B>return</B> EXIT_SUCCESS;
+}
+
+
+</PRE>
 
 <H3>Where Defined</H3>
 
