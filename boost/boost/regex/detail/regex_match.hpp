@@ -1051,10 +1051,6 @@ namespace{
 template <class Predicate, class I, class charT, class traits, class A, class A2>
 unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<charT, traits, A>& e, unsigned flags, A2 a)
 {
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable: 4800)
-#endif
    typedef access_t<charT, traits, A> access;
 
    if(e.flags() & regbase::failbit)
