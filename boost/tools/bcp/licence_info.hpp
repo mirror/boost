@@ -10,30 +10,30 @@
 #include <boost/regex.hpp>
 #include <utility>
 
-struct licence_info
+struct license_info
 {
-   boost::regex licence_signature;
+   boost::regex license_signature;
    boost::regex copyright_signature;
    std::string  copyright_formatter;
-   std::string  licence_name;
-   std::string  licence_text;
+   std::string  license_name;
+   std::string  license_text;
    //
-   // we should really be able to initialize licence_info as an
+   // we should really be able to initialize license_info as an
    // aggregate, but some compilers reject this, so use a constructor
    //instead:
    //
-   licence_info(const boost::regex& e1, 
+   license_info(const boost::regex& e1, 
             const boost::regex& e2, 
             const std::string& s1, 
             const std::string& s2, 
             const std::string& s3)
-            : licence_signature(e1), 
+            : license_signature(e1), 
               copyright_signature(e2),
               copyright_formatter(s1),
-              licence_name(s2),
-              licence_text(s3){}
+              license_name(s2),
+              license_text(s3){}
 };
 
-std::pair<const licence_info*, int> get_licences();
+std::pair<const license_info*, int> get_licenses();
 
 std::string format_authors_name(const std::string& name);

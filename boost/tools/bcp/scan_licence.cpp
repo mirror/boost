@@ -100,13 +100,13 @@ static bool is_non_bsl_license(int index)
   return index > 2;
 }
 
-void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
+void bcp_implementation::scan_license(const fs::path& p, const fileview& v)
 {
-   std::pair<const licence_info*, int> licences = get_licences();
+   std::pair<const license_info*, int> licenses = get_licenses();
    //
-   // scan file for all the licences in the list:
+   // scan file for all the licenses in the list:
    //
-   int licence_count = 0;
+   int license_count = 0;
    int author_count = 0;
    int nonbsl_author_count = 0;
    bool has_non_bsl_license = false;
@@ -114,24 +114,24 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
                             end_of_license = v.end();
    bool start_in_middle_of_line = false;
 
-   for(int i = 0; i < licences.second; ++i)
+   for(int i = 0; i < licenses.second; ++i)
    {
       boost::match_results<fileview::const_iterator> m;
-      if(boost::regex_search(v.begin(), v.end(), m, licences.first[i].licence_signature))
+      if(boost::regex_search(v.begin(), v.end(), m, licenses.first[i].license_signature))
       {
            start_of_license = m[0].first;
          end_of_license = m[0].second;
 
-         if (is_non_bsl_license(i) && i < licences.second - 1) 
+         if (is_non_bsl_license(i) && i < licenses.second - 1) 
            has_non_bsl_license = true;
 
-         // add this licence to the list:
-         m_licence_data[i].files.insert(p);
-         ++licence_count;
+         // add this license to the list:
+         m_license_data[i].files.insert(p);
+         ++license_count;
          //
          // scan for the associated copyright declarations:
          //
-         boost::regex_iterator<const char*> cpy(v.begin(), v.end(), licences.first[i].copyright_signature);
+         boost::regex_iterator<const char*> cpy(v.begin(), v.end(), licenses.first[i].copyright_signature);
          boost::regex_iterator<const char*> ecpy;
          while(cpy != ecpy)
          {
@@ -144,7 +144,7 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
 #endif
 
             // extract the copy holders as a list:
-            std::string author_list = cpy->format(licences.first[i].copyright_formatter, boost::format_all);
+            std::string author_list = cpy->format(licenses.first[i].copyright_formatter, boost::format_all);
             // now enumerate that list for all the names:
             static const boost::regex author_separator("(?:\\s*,(?!\\s*(?:inc|ltd)\\b)\\s*|\\s+(,\\s*)?(and|&)\\s+)|by\\s+", boost::regex::perl | boost::regex::icase);
             boost::regex_token_iterator<std::string::const_iterator> atr(author_list.begin(), author_list.end(), author_separator, -1);
@@ -156,7 +156,7 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
                // add to list of authors for this file:
                if(name.size() && name[0] != '-')
                {
-                  m_licence_data[i].authors.insert(name);
+                  m_license_data[i].authors.insert(name);
                   // add file to author index:
                   m_author_data[name].insert(p);
                   ++author_count;
@@ -192,15 +192,15 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
            ++end_of_license;
       }
    }
-   if(licence_count == 0)
-      m_unknown_licences.insert(p);
-   if(licence_count && !author_count)
+   if(license_count == 0)
+      m_unknown_licenses.insert(p);
+   if(license_count && !author_count)
       m_unknown_authors.insert(p);
 
    if (has_non_bsl_license) {
      bool converted = false;
      if (nonbsl_author_count == 0 
-         && licence_count == 1) {
+         && license_count == 1) {
        // Grab a few lines of context
        fileview::const_iterator context_start = 
          context_before_license(v, start_of_license);

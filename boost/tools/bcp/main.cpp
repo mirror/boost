@@ -87,7 +87,7 @@ int cpp_main(int argc, char* argv[])
       }
       else if(0 == std::strcmp("--report", argv[i]))
       {
-         papp->enable_licence_mode();
+         papp->enable_license_mode();
       }
       else if(0 == std::strcmp("--cvs", argv[i]))
       {

@@ -18,7 +18,7 @@
 #include <string>
 
 bcp_implementation::bcp_implementation()
-  : m_list_mode(false), m_licence_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false)
+  : m_list_mode(false), m_license_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false)
 {
 }
 
@@ -45,9 +45,9 @@ void bcp_implementation::enable_scan_mode()
    m_scan_mode = true;
 }
 
-void bcp_implementation::enable_licence_mode()
+void bcp_implementation::enable_license_mode()
 {
-   m_licence_mode = true;
+   m_license_mode = true;
 }
 
 void bcp_implementation::enable_bsl_convert_mode()
@@ -85,7 +85,7 @@ int bcp_implementation::run()
    //
    // check output path is OK:
    //
-   if(!m_list_mode && !m_licence_mode && !fs::exists(m_dest_path))
+   if(!m_list_mode && !m_license_mode && !fs::exists(m_dest_path))
    {
       std::string msg("Destination path does not exist: ");
       msg.append(m_dest_path.native_file_string());
@@ -99,7 +99,7 @@ int bcp_implementation::run()
       scan_cvs_path(fs::path());
    }
    //
-   // if in licence mode, try to load more/blanket_permission.txt
+   // if in license mode, try to load more/blanket_permission.txt
    //
    fs::path blanket_permission(m_boost_path / "more" / "blanket-permission.txt");
    if (fs::exists(blanket_permission)) {
@@ -178,7 +178,7 @@ int bcp_implementation::run()
    std::set<fs::path, path_less>::iterator m, n;
    m = m_copy_paths.begin();
    n = m_copy_paths.end();
-   if(!m_licence_mode)
+   if(!m_license_mode)
    {
       while(m != n)
       {
@@ -190,7 +190,7 @@ int bcp_implementation::run()
       }
    }
    else
-      output_licence_info();
+      output_license_info();
    return 0;
 }
 

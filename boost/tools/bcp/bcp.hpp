@@ -21,7 +21,7 @@ public:
    virtual void enable_cvs_mode() = 0;
    virtual void enable_unix_lines() = 0;
    virtual void enable_scan_mode() = 0;
-   virtual void enable_licence_mode() = 0;
+   virtual void enable_license_mode() = 0;
    virtual void enable_bsl_convert_mode() = 0;
    virtual void enable_bsl_summary_mode() = 0;
    virtual void set_boost_path(const char* p) = 0;

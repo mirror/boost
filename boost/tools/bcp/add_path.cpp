@@ -193,8 +193,8 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       view.open(p);
    else
       view.open(m_boost_path / p);
-   if(m_licence_mode && !scanfile)
-      scan_licence(p, view);
+   if(m_license_mode && !scanfile)
+      scan_license(p, view);
    boost::regex_token_iterator<const char*> i(view.begin(), view.end(), e, 1);
    boost::regex_token_iterator<const char*> j;
    while(i != j)
