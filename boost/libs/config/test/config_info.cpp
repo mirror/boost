@@ -18,8 +18,8 @@
 #include <unistd.h>
 #endif
 
-unsigned int indent = 4;
-unsigned int width = 40;
+static unsigned int indent = 4;
+static unsigned int width = 40;
 
 using std::cout;
 using std::istream;
