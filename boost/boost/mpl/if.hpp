@@ -17,6 +17,7 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
+#include "boost/mpl/void.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/aux_/static_cast.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
@@ -115,7 +116,7 @@ struct if_
 // on the result of is_reference.
 
 template <class T1, class T2, class T3, class T4> struct bind3;
-template <template <class T1, class T2, class T3> class F> struct quote3;
+template <template <class T1, class T2, class T3> class F, class tag> struct quote3;
 
 namespace aux
 {
@@ -134,7 +135,7 @@ namespace aux
 template<
       typename T1, typename T2, typename T3
     >
-struct bind3<quote3<if_>, T1, T2, T3>
+struct bind3<quote3<if_, void_>, T1, T2, T3>
 {
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -143,7 +144,7 @@ struct bind3<quote3<if_>, T1, T2, T3>
     struct apply
     {
      private:
-        typedef quote3<if_> a0;
+        typedef quote3<if_, void_> a0;
         typedef mpl::arg< 1> n1;
         
         typedef aux::replace_unnamed_arg< T1,n1 > r1;
