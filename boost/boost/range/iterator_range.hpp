@@ -11,6 +11,13 @@
 #ifndef BOOST_RANGE_ITERATOR_RANGE_HPP
 #define BOOST_RANGE_ITERATOR_RANGE_HPP
 
+#include <boost/config.hpp> // Define __STL_CONFIG_H, if appropriate.
+#ifndef BOOST_OLD_IOSTREAMS // From boost/dynamic_bitset.hpp.
+# if defined(__STL_CONFIG_H) && !defined (__STL_USE_NEW_IOSTREAMS)
+#  define BOOST_OLD_IOSTREAMS
+# endif
+#endif // #ifndef BOOST_OLD_IOSTREAMS
+
 #include <boost/range/functions.hpp>
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/difference_type.hpp>
@@ -18,7 +25,11 @@
 #include <boost/assert.hpp>
 #include <iterator>
 #include <algorithm>
-#include <ostream>
+#ifndef BOOST_OLD_IOSTREAMS
+# include <ostream>
+#else
+# include <ostream.h>
+#endif
 #include <cstddef>
 
 
@@ -56,6 +67,37 @@ namespace boost
                                                  begin(r), 
                                                  end(r) );                
         }
+
+        // The functions adl_begin and adl_end are implemented in a separate
+        // class for gcc-2.9x
+        template<typename IteratorT>
+        struct iterator_range_impl {
+            template< class ForwardRange >
+            static IteratorT adl_begin( ForwardRange& r )
+            {
+                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+                return boost::begin( r );
+                #else
+                using boost::begin;
+                return IteratorT( begin( r ) );
+                #endif
+            }
+            
+            template< class ForwardRange >
+            static IteratorT adl_end( ForwardRange& r )
+            {
+                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+                return boost::end( r );
+                #else
+                using boost::end;
+                return IteratorT( end( r ) );
+                #endif
+            }
+        };
+            
+        struct range_tag { };
+        struct const_range_tag { };
+
     }
 
 //  iterator range template class -----------------------------------------//
@@ -80,7 +122,11 @@ namespace boost
         template<typename IteratorT> 
         class iterator_range
         {
+        protected: // Used by sub_range
+            //! implementation class
+            typedef iterator_range_detail::iterator_range_impl<IteratorT> impl;
         public:
+
             //! this type
             typedef iterator_range<IteratorT> type;
             //BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(value_type);
@@ -116,13 +162,25 @@ namespace boost
             //! Constructor from a Range
             template< class Range >
             iterator_range( const Range& r ) : 
-                m_Begin( adl_begin( r ) ), m_End( adl_end( r ) ), 
+                m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) ), 
                 singular(false) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( Range& r ) : 
-                m_Begin( adl_begin( r ) ), m_End( adl_end( r ) ), 
+                m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) ), 
+                singular(false) {}
+
+            //! Constructor from a Range
+            template< class Range >
+            iterator_range( const Range& r, iterator_range_detail::const_range_tag ) : 
+                m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) ), 
+                singular(false) {}
+
+            //! Constructor from a Range
+            template< class Range >
+            iterator_range( Range& r, iterator_range_detail::range_tag ) : 
+                m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) ), 
                 singular(false) {}
             
             template< class Iterator >
@@ -140,8 +198,8 @@ namespace boost
             template< class ForwardRange >
             iterator_range& operator=( ForwardRange& r )
             {
-                m_Begin  = adl_begin( r ); 
-                m_End    = adl_end( r );
+                m_Begin  = impl::adl_begin( r ); 
+                m_End    = impl::adl_end( r );
                 singular = false;
                 return *this;
             }
@@ -149,8 +207,8 @@ namespace boost
             template< class ForwardRange >
             iterator_range& operator=( const ForwardRange& r )
             {
-                m_Begin  = adl_begin( r ); 
-                m_End    = adl_end( r );
+                m_Begin  = impl::adl_begin( r ); 
+                m_End    = impl::adl_end( r );
                 singular = false;
                 return *this;
             }
@@ -232,29 +290,6 @@ namespace boost
                BOOST_ASSERT( sz < size() );
                return m_Begin[sz];
            }
-    
-        protected:
-            template< class ForwardRange >
-            iterator adl_begin( ForwardRange& r )
-            {
-                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-                return boost::begin( r );
-                #else
-                using boost::begin;
-                return iterator( begin( r ) );
-                #endif
-            }
-            
-            template< class ForwardRange >
-            iterator adl_end( ForwardRange& r )
-            {
-                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-                return boost::end( r );
-                #else
-                using boost::end;
-                return iterator( end( r ) );
-                #endif
-            }
             
         private:
             // begin and end iterators
@@ -277,7 +312,9 @@ namespace boost
             return r.empty();
         }
 #endif
-        
+
+#ifndef BOOST_OLD_IOSTREAMS   
+
         //! iterator_range output operator
         /*!
             Output the range to an ostream. Elements are outputed
@@ -291,6 +328,24 @@ namespace boost
             std::copy( begin(r), end(r), std::ostream_iterator<Elem>(Os));
             return Os;
         }
+
+#else
+
+        //! iterator_range output operator
+        /*!
+            Output the range to an ostream. Elements are outputed
+            in a sequence without separators.
+        */
+        template< typename IteratorT >
+        inline std::ostream& operator<<( 
+                    std::ostream& Os,
+                    const iterator_range<IteratorT>& r )
+        {
+            std::copy( begin(r), end(r), std::ostream_iterator<char>(Os));
+            return Os;
+        }
+
+#endif
 
         /////////////////////////////////////////////////////////////////////
         // comparison operators
@@ -402,16 +457,16 @@ namespace boost
         inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type >
         make_iterator_range( ForwardRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type >
-                ( r );
+           return iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type >
+                ( r, iterator_range_detail::range_tag() );
         }
 
         template< class ForwardRange >
         inline iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type >
         make_iterator_range( const ForwardRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type >
-                ( r );
+           return iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type >
+                ( r, iterator_range_detail::const_range_tag() );
         }
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -505,5 +560,6 @@ namespace boost
 
 } // namespace 'boost'
 
+#undef BOOST_OLD_IOSTREAMS
 
 #endif
