@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <section id="variant.concepts">
   <title>Concepts</title>
-  
+
+  <using-namespace name="boost"/>
+
   <section id="variant.concepts.bounded-type">
     <title><emphasis>BoundedType</emphasis></title>
 
