@@ -46,6 +46,7 @@
 #include <boost/iterator_adaptors.hpp>
 #include <boost/pending/iterator_tests.hpp>
 #include <boost/pending/integer_range.hpp>
+#include <boost/concept_archetype.hpp>
 #include <stdlib.h>
 #include <vector>
 #include <deque>
@@ -54,8 +55,6 @@
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
-
-std::istream& operator>>(std::istream& is, dummyT&) { return is; }
 
 struct my_iter_traits {
   typedef dummyT value_type;
@@ -426,17 +425,24 @@ main()
 
   // check operator-> with a forward iterator
   {
-    my_iterator i = array;
-    assert((*i).m_x == i->foo());
+    boost::forward_iterator_archetype<dummyT> forward_iter;
+    typedef boost::iterator_adaptor<boost::forward_iterator_archetype<dummyT>,
+      boost::default_iterator_policies,
+      dummyT, const dummyT&, const dummyT*, 
+      std::forward_iterator_tag, std::ptrdiff_t> adaptor_type;
+    adaptor_type i(forward_iter);
+    if (0) // don't do this, just make sure it compiles
+      assert((*i).m_x == i->foo());      
   }
   // check operator-> with an input iterator
   {
-    typedef boost::iterator_adaptor<std::istream_iterator<dummyT>,
-      boost::default_iterator_policies> adaptor_type;
-    std::istream_iterator<dummyT> input_iter(std::cin);
+    boost::input_iterator_archetype<dummyT> input_iter;
+    typedef boost::iterator_adaptor<boost::input_iterator_archetype<dummyT>,
+      boost::default_iterator_policies,
+      dummyT, const dummyT&, const dummyT*, 
+      std::input_iterator_tag, std::ptrdiff_t> adaptor_type;
     adaptor_type i(input_iter);
-    if (0) // don't do this (and hang the test waiting for input), 
-           // just make sure it compiles
+    if (0) // don't do this, just make sure it compiles
       assert((*i).m_x == i->foo());      
   }
 
