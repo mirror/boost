@@ -44,6 +44,15 @@ struct write_const_1_nonconst_2
   void operator()() const { global_int = 1; }
 };
 
+struct add_to_obj
+{
+  add_to_obj(int v) : value(v) {}
+
+  int operator()(int x) const { return value + x; }
+
+  int value;
+};
+
 static void
 test_zero_args()
 {
@@ -514,6 +523,8 @@ test_zero_args()
   BOOST_TEST(i1);
   i1.clear();
   BOOST_TEST(!i1);
+
+  BOOST_TEST(i1.target_type() == typeid(void));
 }
 
 static void
@@ -529,6 +540,17 @@ test_one_arg()
 
   function1<std::string, char*> id2(&identity_str);
   BOOST_TEST(id2("foo") == "foo");
+
+  add_to_obj add_to(5);
+  function1<int, int> f2(add_to);
+  BOOST_TEST(f2(3) == 8);
+  BOOST_TEST(f2.target_type() == typeid(add_to_obj));
+  function_cast<add_to_obj>(f2).value = 12;
+  BOOST_TEST(f2(3) == 15);
+
+  const function1<int, int> cf2(add_to);
+  BOOST_TEST(cf2(3) == 8);
+  BOOST_TEST(cf2.target_type() == typeid(add_to_obj));  
 }
 
 static void
