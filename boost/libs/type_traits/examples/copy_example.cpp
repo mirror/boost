@@ -111,7 +111,7 @@ inline I2 copy_(const I1& first, const I1& last, const I2& out)
 }
 
 template<typename T>
-inline T* copy_(const T* first, const T* last, T* out)
+inline T* copy_(const T*& first, const T*& last, T*& out)
 {
    return detail::copier< 
       ::boost::has_trivial_assign<T>::value
@@ -233,6 +233,7 @@ int cpp_main(int argc, char* argv[])
 
    return 0;
 }
+
 
 
 
