@@ -26,13 +26,12 @@
 
 #include <boost/config.hpp>
 #include <boost/pfto.hpp>
-
 #include <boost/detail/workaround.hpp>
+
 #include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 
 #include <boost/serialization/string.hpp>
-//#include <boost/serialization/nvp.hpp>
 
 namespace boost {
 namespace archive {
@@ -60,27 +59,6 @@ protected:
     void load_override(T & t, BOOST_PFTO int){
         archive::load(* this->This(), t);
     }
-#if 0
-    // text based archives treat strings as primitives
-    void load_override(std::string &t, int){
-        this->This()->load(t);
-    }
-    #ifndef BOOST_NO_STD_WSTRING
-    void load_override(std::wstring &t, int){
-        this->This()->load(t);
-    }
-    #endif
-    #if 0
-    void load_override(char *t, int){
-        this->This()->load(t);
-    }
-    #ifndef BOOST_NO_CWCHAR
-    void load_override(wchar_t *t, int){
-        this->This()->load(t);
-    }
-    #endif
-    #endif
-#endif
     // text file don't include the optional information 
     void load_override(class_id_optional_type & /*t*/, int){}
     void load_override(class_name_type & t, int);

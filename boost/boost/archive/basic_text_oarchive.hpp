@@ -31,7 +31,6 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/serialization/string.hpp>
-//#include <boost/serialization/nvp.hpp>
 
 namespace boost {
 namespace archive {
@@ -72,27 +71,6 @@ protected:
         archive::save(* this->This(), t);
     }
 
-#if 0
-    // text based archives treat strings as primitives
-    void save_override(const std::string &t, int){
-        this->This()->save(t);
-    }
-    #ifndef BOOST_NO_STD_WSTRING
-    void save_override(const std::wstring &t, int){
-        this->This()->save(t);
-    }
-    #endif
-    #if 0
-    void save_override(const char *t, int){
-        this->This()->save(t);
-    }
-    #ifndef BOOST_NO_CWCHAR
-    void save_override(const wchar_t *t, int){
-        this->This()->save(t);
-    }
-    #endif
-    #endif
-#endif
     // start new objects on a new line
     void save_override(const object_id_type & t, int){
         this->This()->newline();

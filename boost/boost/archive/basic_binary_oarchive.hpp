@@ -27,11 +27,10 @@
 #include <boost/pfto.hpp>
 
 #include <boost/detail/workaround.hpp>
-#include <boost/archive/detail/oserializer.hpp>
+#include <boost/archive/detail/interface_oarchive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
 
 #include <boost/serialization/string.hpp>
-//#include <boost/serialization/nvp.hpp>
 
 namespace boost {
 namespace archive {
@@ -68,35 +67,6 @@ protected:
     {
         archive::save(* this->This(), t);
     }
-#if 0
-    // special treatment for name-value pairs.  In a simple
-    // text archive, just output the value in the normal way.
-    // the name is not used
-    template<class T>
-    void save_override(const boost::serialization::nvp<T> & t, int)
-    {
-        * this->This() << t.value();
-    }
-    // binary based archives treat strings as primitives
-    void save_override(const std::string &t, int){
-        this->This()->save(t);
-    }
-    #ifndef BOOST_NO_STD_WSTRING
-    void save_override(const std::wstring &t, int){
-        this->This()->save(t);
-    }
-    #endif
-    #if 0
-    void save_override(const char *t, int){
-        this->This()->save(t);
-    }
-    #ifndef BOOST_NO_CWCHAR
-    void save_override(const wchar_t *t, int){
-        this->This()->save(t);
-    }
-    #endif
-    #endif
-#endif
     // binary files don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
 

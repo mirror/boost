@@ -19,12 +19,6 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/type_traits/is_same.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/identity.hpp>
-
 #include <boost/archive/detail/common_oarchive.hpp>
 
 #include <boost/serialization/nvp.hpp>
@@ -70,45 +64,6 @@ protected:
     void save_start(const char *name);
     void save_end(const char *name);
     void end_preamble();
-
-#if 0
-    // note: we have to go through a little extra funny business
-    // to accommodate non-conforming compilers.
-    template<class T>
-    struct save_primitive_impl {
-        static void invoke(Archive & ar, const T & t){
-            archive::save_access::save_primitive(ar, t);
-        }
-    };
-
-    template<class T>
-    struct save_non_primitive_impl {
-        static void invoke(Archive & ar, const T & t){
-            archive::save(ar, t);
-        }
-    };
-
-    template<class T>
-    void save_impl(const T & t){
-        mpl::eval_if<
-            #ifndef BOOST_NO_STD_WSTRING
-                 mpl::or_<
-                    mpl::equal_to<
-                        ::boost::serialization::implementation_level<T>,
-                        // don't forget the damn space between < and :: !
-                        mpl::int_< ::boost::serialization::primitive_type>
-                    >,
-                    is_same<T, std::string>,
-                    is_same<T, std::wstring>
-                >,
-            #else
-               is_same<T, std::string>,
-            #endif
-            mpl::identity<save_primitive_impl<T> >,
-            mpl::identity<save_non_primitive_impl<T> >
-        >::type::invoke(* this->This(),  t);
-    }
-#endif
 
     // Anything not an attribute and not a name-value pair is an
     // error and should be trapped here.

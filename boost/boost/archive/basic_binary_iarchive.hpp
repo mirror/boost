@@ -33,11 +33,10 @@
 #include <boost/throw_exception.hpp>
 #include <boost/pfto.hpp>
 
-#include <boost/archive/detail/iserializer.hpp>
+#include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 
 #include <boost/serialization/string.hpp>
-//#include <boost/serialization/nvp.hpp>
 
 namespace boost { 
 namespace archive {
@@ -66,36 +65,6 @@ protected:
     {
         archive::load(* this->This(), t);
     }
-#if 0
-    // special treatment for name-value pairs.  just output the value in 
-    // the normal way. The name is not used.
-    template<class T>
-    void load_override(const boost::serialization::nvp<T> & t,  int)
-    {
-        * this->This() >> t.value();
-    }
-
-    // treat the following as prmitive - working around the serialization
-    // system
-    void load_override(std::string & t, int){
-        this->This()->load(t);
-    }
-    #ifndef BOOST_NO_STD_WSTRING
-    void load_override(std::wstring & t, int){
-        this->This()->load(t);
-    }
-    #endif
-    #if 0
-    void load_override(char * t, int){
-        this->This()->load(t);
-    }
-    #ifndef BOOST_NO_CWCHAR
-    void load_override(wchar_t * t, int){
-        this->This()->load(t);
-    }
-    #endif
-    #endif
-#endif
     // binary files don't include the optional information 
     void load_override(class_id_optional_type & /* t */, int){}
 

@@ -19,20 +19,13 @@
 #include <string>
 
 #include <boost/config.hpp>
+#include <boost/pfto.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/identity.hpp>
-
+#include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/tracking.hpp>
-#include <boost/serialization/level.hpp>
 #include <boost/serialization/string.hpp> // makes strings prmitive
 
 namespace boost {
@@ -60,58 +53,6 @@ protected:
     void load_start(const char *name);
     void load_end(const char *name);
 
-#if 0
-    // note: we have to go through a little extra funny business
-    // to accommodate non-conforming compilers.
-    template<class T>
-    struct load_primitive_impl {
-        static void invoke(Archive & ar, T & t){
-            archive::load_access::load_primitive(ar, t);
-        }
-    };
-
-    template<class T>
-    struct load_non_primitive_impl {
-        static void invoke(Archive & ar, T & t){
-            archive::load(ar, t);
-        }
-    };
-
-    template<class T>
-    void load_impl(T & t){
-        BOOST_STATIC_ASSERT(
-            serialization::not_serializable 
-            !=  serialization::implementation_level<T>::value
-        );
-        mpl::eval_if<
-            #ifndef BOOST_NO_STD_WSTRING
-                mpl::or_<
-                    mpl::equal_to<
-                        ::boost::serialization::implementation_level<T>,
-                        // don't forget the damn space between < and :: !
-                        mpl::int_< ::boost::serialization::primitive_type>
-                    >,
-                    is_same<T, std::string>,
-                    is_same<T, std::wstring>
-                >,
-            #else
-                is_same<T, std::string>,
-            #endif
-            mpl::identity<load_primitive_impl<T> >,
-            mpl::identity<load_non_primitive_impl<T> >
-        >::type::invoke(* this->This(),  t);
-    }
-    // Anything not an attribute and not a name-value pair is an
-    // error and should be trapped here.
-    template<class T>
-    void load_override(T & t,  BOOST_PFTO int)
-    {
-        // If your program fails to compile here, its most likely due to
-        // not specifying an nvp wrapper around the variable to
-        // be serialized.
-        BOOST_STATIC_ASSERT(0 == sizeof(T));
-    }
-#endif
     // Anything not an attribute and not a name-value pair is an
     // should be trapped here.
     template<class T>
