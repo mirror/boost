@@ -7,25 +7,8 @@
 #include <iostream>
 using namespace std;
 
-template <typename Array>
-void print(std::ostream& os, const Array& A)
-{
-  typename Array::const_iterator i;
-  os << "[";
-  for (i = A.begin(); i != A.end(); ++i) {
-    print(os, *i);
-    if (boost::next(i) != A.end())
-      os << ',';
-  }
-  os << "]";
-}
 
-void print(std::ostream& os, const int& x)
-{
-  os << x;
-}
-
-int main() {
+int test_main(int,char*[]) {
 
   typedef boost::multi_array<int,3> marray;
 
@@ -74,4 +57,5 @@ int main() {
     BOOST_TEST(std::accumulate(defaultA.data(),
                                defaultA.data()+(2*3*4),0) == 0);
   }
+  return boost::exit_success;
 }
