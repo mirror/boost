@@ -57,7 +57,8 @@ namespace boost
          union dummy_u
          {
              char data[ sizeof(T) ];
-             type_with_alignment< ::boost::alignment_of<T>::value >::type aligner_;
+             BOOST_DEDUCED_TYPENAME type_with_alignment<
+               ::boost::alignment_of<T>::value >::type aligner_;
          } dummy_ ;
 
       public:
