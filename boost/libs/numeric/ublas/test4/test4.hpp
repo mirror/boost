@@ -25,11 +25,8 @@ void test_matrix_vector ();
 
 void test_matrix ();
 
-// Borland gets out of memory!
-#ifndef __BORLANDC__
-#define USE_RANGE
+// #define USE_RANGE
 // #define USE_SLICE
-#endif
 
 // #define USE_BOUNDED_ARRAY
 #define USE_UNBOUNDED_ARRAY

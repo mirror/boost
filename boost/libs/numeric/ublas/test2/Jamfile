@@ -3,8 +3,9 @@ subproject libs/numeric/ublas/test2 ;
 SOURCES = test2 test21 test22 test23 ;
 
 exe test2
-	: $(SOURCES).cpp
-	: <include>$(BOOST_ROOT)
-	  <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
-	;
+    : $(SOURCES).cpp
+    : <include>$(BOOST_ROOT)
+      <debug><define>BOOST_UBLAS_TYPE_CHECK
+      <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+    ;
 
