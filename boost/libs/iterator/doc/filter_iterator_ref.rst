@@ -23,7 +23,7 @@
   };
 
 
-The ``iterator_category`` is a type convertible to the tags
+The ``iterator_category`` member is a type convertible to the tags
 corresponding to each standard concept modeled by ``filter_iterator``,
 as described in the models section.
 
@@ -111,13 +111,18 @@ operations.
 
 ``filter_iterator(Predicate f, Iterator x, Iterator end = Iterator());``
 
-:Returns: A ``filter_iterator`` at position ``x`` that filters according
-    to predicate ``f`` and that will not increment past ``end``.
+:Returns: A ``filter_iterator`` at the first position in the range ``[x,end)``
+    such that ``f(*this->base()) == true`` or else at position ``end``.
 
 
 ``filter_iterator(Iterator x, Iterator end = Iterator());``
 
 :Requires: ``Predicate`` must be Default Constructible.
+:Returns: A ``filter_iterator`` at the first position in the range ``[x,end)``
+    such that ``f(*this->base()) == true``, where ``f`` is a default
+    constructed ``Predicate``, or else at position ``end``.
+
+
 :Returns: A ``filter_iterator`` at position ``x`` that filters 
     according to a default constructed ``Predicate``
     and that will not increment past ``end``.
@@ -132,7 +137,8 @@ operations.
         );``
 
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
-:Returns: A copy of iterator ``t``. 
+:Returns: A filter iterator at the same position as iterator ``t`` 
+  whose predicate and end are copies of ``t.predicate`` and ``t.end()`` . 
 
 
 ``Predicate predicate() const;``
@@ -144,3 +150,16 @@ operations.
 
 :Returns: A copy of the object ``end`` used to construct ``*this``.
 
+
+
+``reference operator*();``
+
+:Returns: ``*(this->base())``
+
+
+``filter_iterator& operator++();``
+
+:Effects: Increments ``*this`` and then continues to
+  increment ``*this`` until either ``this->base() == this->end()``
+  or ``f(**this) == true``.
+  
