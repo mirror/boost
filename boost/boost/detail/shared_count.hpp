@@ -355,6 +355,9 @@ public:
     ~shared_count() // nothrow
     {
         if(pi_ != 0) pi_->release();
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        id_ = 0;
+#endif
     }
 
     shared_count(shared_count const & r): pi_(r.pi_) // nothrow
@@ -455,6 +458,9 @@ public:
     ~weak_count() // nothrow
     {
         if(pi_ != 0) pi_->weak_release();
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        id_ = 0;
+#endif
     }
 
     weak_count & operator= (shared_count const & r) // nothrow
