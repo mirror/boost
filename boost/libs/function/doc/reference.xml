@@ -83,6 +83,30 @@
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
     </method-group>
+
+    <method-group name="target access">
+      <overloaded-method name="target">
+        <signature>
+          <template> 
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>Functor*</type>
+        </signature>
+        <signature cv="const">
+          <template> 
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>const Functor*</type>
+        </signature>
+
+        <returns><simpara>If <code>this</code> stores a target of type
+        <code>Functor</code>, returns the address of the
+        target. Otherwise, returns the NULL
+        pointer.</simpara></returns>
+
+        <throws><simpara>Will not throw.</simpara></throws>
+      </overloaded-method>
+    </method-group>
   </class>
 
   <class name="functionN">
@@ -216,6 +240,30 @@
       </method>
     </method-group>
 
+    <method-group name="target access">
+      <overloaded-method name="target">
+        <signature>
+          <template> 
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>Functor*</type>
+        </signature>
+        <signature cv="const">
+          <template> 
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>const Functor*</type>
+        </signature>
+
+        <returns><simpara>If <code>this</code> stores a target of type
+        <code>Functor</code>, returns the address of the
+        target. Otherwise, returns the NULL
+        pointer.</simpara></returns>
+
+        <throws><simpara>Will not throw.</simpara></throws>
+      </overloaded-method>
+    </method-group>
+
     <method-group name="invocation">
       <method name="operator()" cv="const">
         <type>result_type</type>
@@ -246,46 +294,208 @@
       </function>
     </free-function-group>
 
-    <free-function-group name="undefined operators">
-      <function name="operator==">
-        <template>
-          <template-type-parameter name="T1"/>
-          <template-type-parameter name="T2"/>
-          <template-varargs/>
-          <template-type-parameter name="TN"/>
-          <template-type-parameter name="Allocator1"/>
-          <template-type-parameter name="U1"/>
-          <template-type-parameter name="U2"/>
-          <template-varargs/>
-          <template-type-parameter name="UN"/>
-          <template-type-parameter name="Allocator2"/>
-        </template>
-        <type>void</type>
-        <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
-        <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
-        <notes><simpara>This function must be left undefined.</simpara></notes>
-        <rationale><simpara>The <code>safe_bool</code> conversion opens a loophole whereby two function instances can be compared via <code>==</code>. This undefined <code>void operator ==</code> closes the loophole and ensures a compile-time or link-time error.</simpara></rationale>
-      </function>
+    <free-function-group name="comparison operators">
+      <overloaded-function name="operator==">
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator1"/>
+            <template-type-parameter name="U1"/>
+            <template-type-parameter name="U2"/>
+            <template-varargs/>
+            <template-type-parameter name="UN"/>
+            <template-type-parameter name="Allocator2"/>
+          </template>
+          <type>void</type>
+          <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
+        </signature>
 
-      <function name="operator!=">
-        <template>
-          <template-type-parameter name="T1"/>
-          <template-type-parameter name="T2"/>
-          <template-varargs/>
-          <template-type-parameter name="TN"/>
-          <template-type-parameter name="Allocator1"/>
-          <template-type-parameter name="U1"/>
-          <template-type-parameter name="U2"/>
-          <template-varargs/>
-          <template-type-parameter name="UN"/>
-          <template-type-parameter name="Allocator2"/>
-        </template>
-        <type>void</type>
-        <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
-        <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
-        <notes><simpara>This function must be left undefined.</simpara></notes>
-        <rationale><simpara>The <code>safe_bool</code> conversion opens a loophole whereby two function instances can be compared via <code>!=</code>. This undefined <code>void operator !=</code> closes the loophole and ensures a compile-time or link-time error.</simpara></rationale>
-      </function>
+        <returns><simpara>True when <code>f</code> stores an object of
+        type <code>Functor</code> and one of the following conditions applies:
+          <itemizedlist>
+
+            <listitem><simpara><code>g</code> is of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>f.target&lt;Functor&gt;() == g.<methodname
+            alt="reference_wrapper::get_pointer">get_pointer</methodname>()</code>.</simpara></listitem>
+
+            <listitem><simpara><code>g</code> is not of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>*(f.target&lt;Functor&gt;()) ==
+            g</code>.</simpara></listitem>
+
+          </itemizedlist>
+          </simpara></returns>
+
+        <notes><simpara><code><classname>functionN</classname></code>
+        objects are not
+        <conceptname>EqualityComparable</conceptname>.</simpara></notes>
+
+        <rationale><simpara>The <code>safe_bool</code> conversion
+        opens a loophole whereby two <code>functionN</code>
+        instances can be compared via <code>==</code>, although this
+        is not feasible to implement. The undefined <code>void
+        operator==</code> closes the loophole and ensures a
+        compile-time or link-time error.</simpara></rationale>
+      </overloaded-function>
+
+      <overloaded-function name="operator!=">
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="T1"/>
+            <template-type-parameter name="T2"/>
+            <template-varargs/>
+            <template-type-parameter name="TN"/>
+            <template-type-parameter name="Allocator1"/>
+            <template-type-parameter name="U1"/>
+            <template-type-parameter name="U2"/>
+            <template-varargs/>
+            <template-type-parameter name="UN"/>
+            <template-type-parameter name="Allocator2"/>
+          </template>
+          <type>void</type>
+          <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
+        </signature>
+
+        <returns><simpara>True when <code>f</code> does not store an
+        object of type <code>Functor</code> or it stores an object of
+        type <code>Functor</code> and one of the following conditions
+        applies:
+          <itemizedlist>
+
+            <listitem><simpara><code>g</code> is of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>f.target&lt;Functor&gt;() != g.<methodname
+            alt="reference_wrapper::get_pointer">get_pointer</methodname>()</code>.</simpara></listitem>
+
+            <listitem><simpara><code>g</code> is not of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>*(f.target&lt;Functor&gt;()) !=
+            g</code>.</simpara></listitem>
+
+          </itemizedlist>
+          </simpara></returns>
+
+        <notes><simpara><code><classname>functionN</classname></code>
+        objects are not
+        <conceptname>EqualityComparable</conceptname>.</simpara></notes>
+
+        <rationale><simpara>The <code>safe_bool</code> conversion
+        opens a loophole whereby two <code>functionN</code>
+        instances can be compared via <code>!=</code>, although this
+        is not feasible to implement. The undefined <code>void
+        operator!=</code> closes the loophole and ensures a
+        compile-time or link-time error.</simpara></rationale>
+      </overloaded-function>
     </free-function-group>
   </class>
 
@@ -441,6 +651,29 @@
       </method>
     </method-group>
 
+    <method-group name="target access">
+      <overloaded-method name="target">
+        <signature>
+          <template> 
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>Functor*</type>
+        </signature>
+        <signature cv="const">
+          <template> 
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>const Functor*</type>
+        </signature>
+
+        <returns><simpara>If <code>this</code> stores a target of type
+        <code>Functor</code>, returns the address of the
+        target. Otherwise, returns the NULL
+        pointer.</simpara></returns>
+        <throws><simpara>Will not throw.</simpara></throws>
+      </overloaded-method>
+    </method-group>
+
     <method-group name="invocation">
       <method name="operator()" cv="const">
         <type>result_type</type>
@@ -468,34 +701,172 @@
       </function>
     </free-function-group>
 
-    <free-function-group name="undefined operators">
-      <function name="operator==">
-        <template>
-          <template-type-parameter name="Signature1"/>
-          <template-type-parameter name="Allocator1"/>
-          <template-type-parameter name="Signature2"/>
-          <template-type-parameter name="Allocator2"/>
-        </template>
-        <type>void</type>
-        <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
-        <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
-        <notes><simpara>This function must be left undefined.</simpara></notes>
-        <rationale><simpara>The <code>safe_bool</code> conversion opens a loophole whereby two function instances can be compared via <code>==</code>. This undefined <code>void operator ==</code> closes the loophole and ensures a compile-time or link-time error.</simpara></rationale>
-      </function>
+    <free-function-group name="comparison operators">
+      <overloaded-function name="operator==">
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="Signature1"/>
+            <template-type-parameter name="Allocator1"/>
+            <template-type-parameter name="Signature2"/>
+            <template-type-parameter name="Allocator2"/>
+          </template>
+          <type>void</type>
+          <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
+        </signature>
 
-      <function name="operator!=">
-        <template>
-          <template-type-parameter name="Signature1"/>
-          <template-type-parameter name="Allocator1"/>
-          <template-type-parameter name="Signature2"/>
-          <template-type-parameter name="Allocator2"/>
-        </template>
-        <type>void</type>
-        <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
-        <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
-        <notes><simpara>This function must be left undefined.</simpara></notes>
-        <rationale><simpara>The <code>safe_bool</code> conversion opens a loophole whereby two function instances can be compared via <code>!=</code>. This undefined <code>void operator !=</code> closes the loophole and ensures a compile-time or link-time error.</simpara></rationale>
-      </function>
+        <returns><simpara>True when <code>f</code> stores an object of
+        type <code>Functor</code> and one of the following conditions applies:
+          <itemizedlist>
+
+            <listitem><simpara><code>g</code> is of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>f.target&lt;Functor&gt;() == g.<methodname
+            alt="reference_wrapper::get_pointer">get_pointer</methodname>()</code>.</simpara></listitem>
+
+            <listitem><simpara><code>g</code> is not of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>*(f.target&lt;Functor&gt;()) ==
+            g</code>.</simpara></listitem>
+
+          </itemizedlist>
+          </simpara></returns>
+
+        <notes><simpara><code><classname>function</classname></code>
+        objects are not
+        <conceptname>EqualityComparable</conceptname>.</simpara></notes>
+
+        <rationale><simpara>The <code>safe_bool</code> conversion
+        opens a loophole whereby two <code>function</code>
+        instances can be compared via <code>==</code>, although this
+        is not feasible to implement. The undefined <code>void
+        operator==</code> closes the loophole and ensures a
+        compile-time or link-time error.</simpara></rationale>
+      </overloaded-function>
+
+      <overloaded-function name="operator!=">
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype>Functor</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+        </signature>
+        <signature>
+          <template>
+            <template-type-parameter name="Signature"/>
+            <template-type-parameter name="Allocator"/>
+            <template-type-parameter name="Functor"/>
+          </template>
+          <type>bool</type>
+          <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+        </signature>        
+        <signature>
+          <template>
+            <template-type-parameter name="Signature1"/>
+            <template-type-parameter name="Allocator1"/>
+            <template-type-parameter name="Signature2"/>
+            <template-type-parameter name="Allocator2"/>
+          </template>
+          <type>void</type>
+          <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
+        </signature>
+
+        <returns><simpara>True when <code>f</code> does not store an
+        object of type <code>Functor</code> or it stores an object of
+        type <code>Functor</code> and one of the following conditions
+        applies:
+          <itemizedlist>
+
+            <listitem><simpara><code>g</code> is of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>f.target&lt;Functor&gt;() != g.<methodname
+            alt="reference_wrapper::get_pointer">get_pointer</methodname>()</code>.</simpara></listitem>
+
+            <listitem><simpara><code>g</code> is not of type
+            <code><classname>reference_wrapper</classname>&lt;Functor&gt;</code>
+            and <code>*(f.target&lt;Functor&gt;()) !=
+            g</code>.</simpara></listitem>
+
+          </itemizedlist>
+          </simpara></returns>
+
+        <notes><simpara><code><classname>function</classname></code>
+        objects are not
+        <conceptname>EqualityComparable</conceptname>.</simpara></notes>
+
+        <rationale><simpara>The <code>safe_bool</code> conversion
+        opens a loophole whereby two <code>function</code>
+        instances can be compared via <code>!=</code>, although this
+        is not feasible to implement. The undefined <code>void
+        operator!=</code> closes the loophole and ensures a
+        compile-time or link-time error.</simpara></rationale>
+      </overloaded-function>
     </free-function-group>
   </class>
 </namespace>

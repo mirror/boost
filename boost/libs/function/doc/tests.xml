@@ -26,6 +26,12 @@
     <if-fails><para>Either Boost.Lambda does not work on the platform, or Boost.Function cannot safely be applied without the use of <functionname>boost::unlambda</functionname>.</para></if-fails>
   </run-test>
 
+  <run-test filename="contains_test.cpp">
+    <purpose><para>Test the operation of the
+    <code><methodname>target</methodname></code> member function and the
+    equality operators.</para></purpose>
+  </run-test>
+
   <compile-fail-test filename="function_test_fail1.cpp">
     <purpose><para>Test the (incorrect!) use of comparisons between Boost.Function function objects.</para></purpose>
     <if-fails><para>Intuitive (but incorrect!) code may compile and will give meaningless results.</para></if-fails>
