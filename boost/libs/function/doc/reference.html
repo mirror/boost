@@ -45,15 +45,15 @@
     <i>// Construction</i>
     <a href="#functionN_default"><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
     <a href="#functionN_copy">function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
-    <a href="#functionN_target"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b>, <b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
+    <a href="#functionN_target"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F, <b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
     <a href="#functionN_target_ref"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(reference_wrapper&lt;F&gt;)</a>;
     
     <i>// Assignment</i>
     <a href="#functionN_copy_assn">function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
-    <a href="#functionN_target_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b>)</a>;
+    <a href="#functionN_target_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(F)</a>;
     <a href="#functionN_target_ref_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(reference_wrapper&lt;F&gt;)</a>;
     <a href="#functionN_copy_set"><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
-    <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b>)</a>;
+    <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F)</a>;
     <a href="#functionN_swap"><b>void</b> swap(function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_clear"><b>void</b> clear()</a>;
 
@@ -87,16 +87,16 @@
     <i>// Construction</i>
     function();
     function(<b>const</b> function<b>&amp;</b>);
-    function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>);
-    <b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b>);
+    function(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    <b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F);
     
     <i>// Assignment</i>
     function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<b>&amp;</b>);
-    function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>);
-    <b>template</b>&lt;<b>typename</b> F&gt; function<b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b>);
+    function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    <b>template</b>&lt;<b>typename</b> F&gt; function<b>&amp;</b> <b>operator</b>=(F);
     <b>void</b> set(<b>const</b> function<b>&amp;</b>);
-    <b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>);
-    <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b>);
+    <b>void</b> set(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F);
   };
 
   <b>template</b>&lt;<b>typename</b> ResultType,
@@ -174,7 +174,7 @@
   <li><b>Postconditions</b>: <code>f</code> contains a copy of the <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for the <code>f</code> is copy-constructed from the mixin of <code>g</code>.</li>
 </ul>
 
-<p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b> g, <b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
+<p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F g, <b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
 <ul>
   <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
@@ -196,7 +196,7 @@
   <li><b>Returns</b>: <code>*this</code>.</li>
 </ul>
 
-<p> <a name="functionN_target_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b> g);</code></a>
+<p> <a name="functionN_target_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(F g);</code></a>
 <ul>
   <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
@@ -217,7 +217,7 @@
   <li><b>Effects</b>: <code><a href="#functionN_copy_assn">*this = g</a></code>.</li>
 </ul>
 
-<p> <a name="functionN_target_set"><code><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b> g);</code></a>
+<p> <a name="functionN_target_set"><code><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F g);</code></a>
 <ul>
   <li><b>Effects</b>: <code><a href="#functionN_target_assn">*this = g</a></code>.</li>
 </ul>
@@ -288,7 +288,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Sun Oct 28 00:40:55 EDT 2001
+Last modified: Wed Dec  5 18:14:37 EST 2001
 <!-- hhmts end -->
   </body>
 </html>

@@ -60,8 +60,10 @@ else
 <p> Free function pointers can be considered singleton function objects with const function call operators, and can therefore be directly used with the function object wrappers:
 <pre>
   float mul_ints(int x, int y) { return ((float)x) * y; }
-  f = &mul_ints;
+  f = &amp;mul_ints;
 </pre>
+
+<p> Note that the <code>&amp;</code> isn't really necessary unless you happen to be using Microsoft Visual C++ version 6.
 
 <h3>Member functions</h3>
 <a name="member_func">
@@ -73,10 +75,10 @@ object. This is often referred to as "argument binding", and is beyond the scope
   };
 
   boost::function&lt;int, X*, int&gt; f;
-  f = &X::foo;
+  f = &amp;X::foo;
   
   X x;
-  f(&x, 5);
+  f(&amp;x, 5);
 </pre>
 <p> Several libraries exist that support argument binding. Three such libraries are summarized below:
 <ul>
@@ -196,7 +198,7 @@ boost::function2&lt;float, int, int, SynchronizedPolicy, SynchronizedMixin&gt; f
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 12:47:11 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Sun Oct 28 00:49:02 EDT 2001
+Last modified: Wed Dec  5 17:48:40 EST 2001
 <!-- hhmts end -->
   </body>
 </html>
