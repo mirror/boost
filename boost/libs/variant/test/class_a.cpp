@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost variant/get.hpp header file
+// boost-libs variant/test/class_a.cpp source file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -13,8 +13,6 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-//File: class_a.cpp
 
 #include <algorithm> // for std::swap
 #include <sstream>
