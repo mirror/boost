@@ -9,7 +9,7 @@
 
 //  See http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_INTERNALS_HPP
 #define BOOST_FORMAT_INTERNALS_HPP
@@ -19,6 +19,7 @@
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
 #include <boost/limits.hpp>
+#include <boost/format/detail/compat_workarounds.hpp>
 #include <boost/format/alt_sstream.hpp> // used as a dummy stream
 
 namespace boost {
@@ -26,7 +27,7 @@ namespace io {
 namespace detail {
 
 
-//----- stream_format_state --------------------------------------------------//
+//---- stream_format_state --------------------------------------------------//
 
 //   set of params that define the format state of a stream
     template<class Ch, class Tr> 
@@ -56,7 +57,7 @@ namespace detail {
     };  
 
 
-//----- format_item  ---------------------------------------------------------//
+//---- format_item  ---------------------------------------------------------//
 
 //   stores all parameters that can be specified in format strings
     template<class Ch, class Tr, class Alloc>  
@@ -97,9 +98,9 @@ namespace detail {
 
 
 
-//---- Definitions  ------------------------------------------------------------
+//--- Definitions  ------------------------------------------------------------
 
-// ---   stream_format_state:: -------------------------------------------------
+// -   stream_format_state:: -------------------------------------------------
     template<class Ch, class Tr>
     void stream_format_state<Ch,Tr>:: apply_on (basic_ios & os,
                       boost::io::detail::locale_or_dummy_t * loc_default) const {

@@ -1,6 +1,6 @@
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //  format_fwd.hpp :  forward declarations
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_FWD_HPP
 #define BOOST_FORMAT_FWD_HPP
@@ -25,7 +25,7 @@ namespace boost {
         class Tr = BOOST_IO_STD char_traits<Ch>, class Alloc = std::allocator<Ch> > 
 #else
               class Tr = std::string_char_traits<Ch>, class Alloc = std::allocator<Ch> > 
-#endif
+#endif  // gcc-2.96 has traits in a non-conformant 'string_char_traits' template
     class basic_format;
 
     typedef basic_format<char >     format;
@@ -41,30 +41,17 @@ namespace boost {
                                  out_of_range_bit = 8,
                                  all_error_bits = 255, no_error_bits=0 };
                   
-        template<class Ch, class Tr, class Alloc> 
-        std::basic_string<Ch, Tr, Alloc> str (const basic_format<Ch, Tr, Alloc>& ) ;
-
-        namespace detail {
-#if !defined(BOOST_NO_STD_LOCALE)
-            typedef std::locale  locale_or_dummy_t;
-#else
-            typedef int          locale_or_dummy_t; // used to avoid placing ifdefs everywhere
-#endif
-        } // namespace detail
-
     } // namespace io
 
+    template<class Ch, class Tr, class Alloc> 
+    std::basic_string<Ch, Tr, Alloc> str (const basic_format<Ch, Tr, Alloc>& ) ;
 
     template< class Ch, class Tr, class Alloc> 
-    typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string & 
-    operator<<( typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string& ,
+    typename io::CompatOStream< BOOST_IO_STD basic_ostream<Ch, Tr> >::type_for_string & 
+    operator<<( typename io::CompatOStream< BOOST_IO_STD basic_ostream<Ch, Tr> >::type_for_string& ,
                 const basic_format<Ch, Tr, Alloc>&);
 
 
 } // namespace boost
 
 #endif // BOOST_FORMAT_FWD_HPP
-// class basic_ostream<char,string_char_traits<char> > & 
-// boost::operator <<<char, string_char_traits<char>, allocator<char> >
-//   (basic_ostream<char,string_char_traits<char> > &, 
-//    const boost::basic_format<char,string_char_traits<char>,allocator<char> > &)

@@ -9,7 +9,7 @@
 //  See http://www.boost.org/libs/format for library home page
 
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_IMPLEMENTATION_HPP
 #define BOOST_FORMAT_IMPLEMENTATION_HPP
@@ -21,7 +21,7 @@
 
 namespace boost {
 
-// --------  basic_format implementation -------------------------------------------//
+// ---  basic_format implementation -----------------------------------------//
 
     template< class Ch, class Tr, class Alloc>
     basic_format<Ch, Tr, Alloc>:: basic_format(const Ch* str)
@@ -140,7 +140,8 @@ namespace boost {
         cur_arg_=0; dumped_=false;
         // maybe first arg is bound:
         if(bound_.size() != 0) {
-            for(; cur_arg_ < num_args_ && bound_[cur_arg_]; ++cur_arg_);
+            for(; cur_arg_ < num_args_ && bound_[cur_arg_]; ++cur_arg_)
+                {}
         }
         return *this;
     }

@@ -1,7 +1,6 @@
-// -*- C++ -*-
-// ------------------------------------------------------------------------------
-// free_funcs.hpp :  implementation of the free functions declared in boost::format
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// free_funcs.hpp :  implementation of the free functions of boost::format
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -9,7 +8,7 @@
 
 //  See http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_FUNCS_HPP
 #define BOOST_FORMAT_FUNCS_HPP
@@ -19,14 +18,14 @@
 
 namespace boost {
 
+    template<class Ch, class Tr> inline 
+    std::basic_string<Ch, Tr> str(const basic_format<Ch, Tr>& f) {
+        // adds up all pieces of strings and converted items, and return the formatted string
+        return f.str();
+    }
     namespace io {
-        template<class Ch, class Tr> inline 
-        std::basic_string<Ch, Tr> str(const basic_format<Ch, Tr>& f) {
-            // adds up all pieces of strings and converted items, and return the formatted string
-            return f.str();
-        }
-
-    }   // - namespace io
+         using ::boost::str; // keep compatibility with when it was defined in this N.S.
+     }   // - namespace io
 
     template< class Ch, class Tr, class Alloc> 
     typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string & 

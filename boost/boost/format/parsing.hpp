@@ -1,7 +1,7 @@
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // parsing.hpp :  implementation of the parsing member functions
 //                      ( parse, parse_printf_directive)
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -9,7 +9,7 @@
 
 // see http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_PARSING_HPP
 #define BOOST_FORMAT_PARSING_HPP
@@ -42,10 +42,6 @@ namespace detail {
 
         return const_or_not(fac).narrow(c, deflt);
     }
-//     template<class Ch, class Facet> inline
-//     Ch wrap_widen(const Facet& fac, char c) {
-//         return const_or_not(fac).widen(c);
-//     } 
 
     template<class Ch, class Facet> inline
     bool wrap_isdigit(const Facet& fac, Ch c) {
@@ -65,12 +61,13 @@ namespace detail {
     }
 
 
+    // Input : [start, last) iterators range and a
+    //          a Facet to use its widen/narrow member function
+    // Effects : read sequence and convert digits into integral n, of type Res
+    // Returns : n
     template<class Res, class Iter, class Facet>
-    Iter str2int(const Iter & start, const Iter & last, Res & res, const Facet& fac) 
-        // Input : [start, last) iterators range and a
-        //          a Facet to use its widen/narrow member function
-        // Effects : reads sequence and converts digits into an integral n, of type Res
-        // Returns : n
+    Iter str2int (const Iter & start, const Iter & last, Res & res, 
+                 const Facet& fac) 
     {
         using namespace std;
         Iter it;
@@ -83,13 +80,13 @@ namespace detail {
         return it;
     }
 
+    // skip printf's "asterisk-fields" directives in the format-string buf
+    // Input : char string, with starting index *pos_p
+    //         a Facet merely to use its widen/narrow member function
+    // Effects : advance *pos_p by skipping printf's asterisk fields.
+    // Returns : nothing
     template<class Iter, class Facet>
     Iter skip_asterisk(Iter start, Iter last, const Facet& fac) 
-        // skip printf's "asterisk-fields" directives in the format-string buf
-        // Input : char string, with starting index *pos_p
-        //         a Facet merely to use its widen/narrow member function
-        // Effects : advance *pos_p by skipping printf's asterisk fields.
-        // Returns : nothing
     {
         using namespace std;
         ++ start;
@@ -100,27 +97,32 @@ namespace detail {
     }
 
 
-    inline void maybe_throw_exception(unsigned char exceptions, std::size_t pos, std::size_t size)
-        // auxiliary func called by parse_printf_directive
-        // for centralising error handling
-        // it either throws if user sets the corresponding flag, or does nothing.
+    // auxiliary func called by parse_printf_directive
+    // for centralising error handling
+    // it either throws if user sets the corresponding flag, or does nothing.
+    inline void maybe_throw_exception(unsigned char exceptions, 
+                                      std::size_t pos, std::size_t size)
     {
         if(exceptions & io::bad_format_string_bit)
             boost::throw_exception(io::bad_format_string(pos, size) );
     }
     
 
+    // Input: the position of a printf-directive in the format-string
+    //    a basic_ios& merely to use its widen/narrow member function
+    //    a bitset'exceptions' telling whether to throw exceptions on errors.
+    // Returns:
+    //  true if parse succeeded (ignore some errors if exceptions disabled)
+    //  false if it failed so bad that the directive should be printed verbatim
+    // Effects:
+    //  start is incremented so that *start is the first char after
+    //     this directive
+    //  *fpar is set with the parameters read in the directive
     template<class Ch, class Tr, class Alloc, class Iter, class Facet>
     bool parse_printf_directive(Iter & start, const Iter& last, 
-                                detail::format_item<Ch, Tr, Alloc> * fpar, const Facet& fac,
+                                detail::format_item<Ch, Tr, Alloc> * fpar,
+                                const Facet& fac,
                                 std::size_t offset, unsigned char exceptions)
-        // Input: a 'printf-directive' in the format-string, starting at buf[ *pos_p ]
-        //        a basic_ios& merely to use its widen/narrow member function
-        //        a bitset'excpetions' telling whether to throw exceptions on errors.
-        // Returns: true if parse somehow succeeded (ignore some errors if exceptions disabled)
-        //          false if it failed so bad that the directive should be printed verbatim
-        // Effects:  *pos_p is incremented so that buf[*pos_p] is the first char after the directive
-        //           *fpar is set with the parameters read in the directive
     {
         typedef typename basic_format<Ch, Tr, Alloc>::format_item_t format_item_t;
 
@@ -128,7 +130,7 @@ namespace detail {
         bool precision_set = false;
         bool in_brackets=false;
         Iter start0 = start;
-        size_t fstring_size = last-start0+offset;
+        std::size_t fstring_size = last-start0+offset;
         if(*start== const_or_not(fac).widen( '|')) {
             in_brackets=true;
             if( ++start >= last ) {

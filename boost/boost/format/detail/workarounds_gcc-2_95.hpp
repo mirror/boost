@@ -1,6 +1,6 @@
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //  workarounds for gcc < 3.0. 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -9,24 +9,27 @@
 //  See http://www.boost.org/libs/format for library home page
 
 
-// -------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 // There's a lot to do, the stdlib shipped with gcc prior to 3.x 
 // was terribly non-conforming. 
 // . defines macros switches
-// .  supplies  template classes   basic_foo<char, Tr> where gcc only supplies foo. i.e :
+// . supplies template classes basic_foo<char,Tr> where gcc only supplies foo.
+//  i.e :
 //     -  basic_ios<char, Tr>        from ios
 //     -  basic_ostream<char, Tr>    from ostream
 //     -  basic_srteambuf<char, Tr>  from streambuf
-//   these can be used transparently. (but it obviously does not work for wchar_t)
+// these can be used transparently. (it obviously does not work for wchar_t)
 // . specialise CompatAlloc and CompatTraits to wrap gcc-2.95's 
 //    string_char_traits and std::alloc 
 
-#if  BOOST_WORKAROUND(__GNUC__, < 3) & defined(__STL_CONFIG_H) // only for broken gcc stdlib
+#if  BOOST_WORKAROUND(__GNUC__, < 3) & defined(__STL_CONFIG_H) 
+   // only for broken gcc stdlib
 #ifndef BOOST_FORMAT_WORKAROUNDS_GCC295_H
 #define BOOST_FORMAT_WORKAROUNDS_GCC295_H
 
-#include <iostream> // SGI STL doesnt have <ostream> and others, so we need iostream.
+#include <iostream> 
+   // SGI STL doesnt have <ostream> and others, so we need iostream.
 
 #include <streambuf.h>
 #define BOOST_FORMAT_STREAMBUF_DEFINED
@@ -98,7 +101,7 @@ namespace boost {
     namespace io {
 
 
-        // ** CompatTraits gcc2.95 specialisations ------------------------------------------------
+        // ** CompatTraits gcc2.95 specialisations ----------------------------
         template<class Ch>
         class CompatTraits< ::std::string_char_traits<Ch> >
             : public ::std::string_char_traits<Ch> 
@@ -117,7 +120,7 @@ namespace boost {
                 return static_cast<char_type>(meta); }
             static int_type 
             to_int_type(const char_type& ch) {
-                return static_cast<int_type>(static_cast<unsigned char>(ch) ); }
+                return static_cast<int_type>(static_cast<unsigned char>(ch) );}
             static bool 
             eq_int_type(const int_type& left, const int_type& right) {
                 return left == right; }
@@ -133,20 +136,22 @@ namespace boost {
 
         template<class Ch>
         class CompatTraits< ::std::char_traits<Ch> >
-        // this will be used by classes using default template argument Tr=std::char_traits<Ch>
-        // so in fact, we want the type_for_string to reflect the default Tr for this stdlib,
+        // this will be used by classes using default template argument 
+        // Tr=std::char_traits<Ch> so in fact, we want the type_for_string
+        // to reflect the default Tr for this stdlib,
         // -> string_char_traits.  
         // The real traits stuff is placed in the previous CompatTraits, 
         // this one just points to it as compatible_type;
         {
         public:
             typedef ::std::string_char_traits<Ch> type_for_string;
-            typedef CompatTraits< ::std::string_char_traits<Ch> > compatible_type;
+            typedef CompatTraits< ::std::string_char_traits<Ch> > 
+               compatible_type;
         };
 
 
 
-        // ** CompatAlloc gcc-2.95  specialisations ------------------------------------------
+        // ** CompatAlloc gcc-2.95  specialisations ---------------------------
         template<class Ch>
         class CompatAlloc< ::std::allocator<Ch> >
         {
@@ -163,7 +168,7 @@ namespace boost {
             typedef ::std::allocator<char> compatible_type;
         };
 
-       // ** CompatOStream gcc-2.95  specialisations ------------------------------------------
+       // ** CompatOStream gcc-2.95  specialisations --------------------------
         template<class Ch, class Tr>
         class CompatOStream< ::std::basic_ostream<Ch, Tr> >
             : public ::std::basic_ostream<Ch, Tr>
@@ -172,7 +177,8 @@ namespace boost {
             typedef ::std::ostream      type_for_string;
             typedef CompatOStream             compatible_type;
 
-            CompatOStream(::std::streambuf * p) : ::std::basic_ostream<Ch,Tr> (p) {}
+            CompatOStream(::std::streambuf * p) 
+                : ::std::basic_ostream<Ch,Tr> (p) {}
         };
 
     } // N.S. io

@@ -1,7 +1,7 @@
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //  feed_args.hpp :  functions for processing each argument 
 //                      (feed, feed_manip, and distribute)
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -9,7 +9,7 @@
 
 //  See http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_FEED_ARGS_HPP
 #define BOOST_FORMAT_FEED_ARGS_HPP
@@ -33,8 +33,8 @@ namespace detail {
                  std::ios_base::fmtflags f, 
                  const Ch prefix_space, // 0 if no space-padding
                  bool center) 
-        // applies centered / left / right  padding  to the string  [beg, beg+size[
-        // Effects : the result is placed in res.
+    // applies centered/left/right  padding  to the string  [beg, beg+size[
+    // Effects : the result is placed in res.
     {
         res.resize(0);
         std::streamsize n=w-size-!!prefix_space;
@@ -114,7 +114,7 @@ namespace detail {
               const format_item<Ch, Tr, Alloc>& specs, 
               typename basic_format<Ch, Tr, Alloc>::string_type& res, 
               typename basic_format<Ch, Tr, Alloc>::internal_streambuf_t & buf,
-              io::detail::locale_or_dummy_t *loc = NULL)
+              io::detail::locale_or_dummy_t *loc_p = NULL)
     {
         // does the actual conversion of x, with given params, into a string
         // using the supplied stringbuf.
@@ -124,7 +124,7 @@ namespace detail {
         typedef typename string_type::size_type size_type;
 
         basic_oaltstringstream<Ch, Tr, Alloc>  oss( &buf);
-        specs.fmtstate_.apply_on(oss, loc);
+        specs.fmtstate_.apply_on(oss, loc_p);
 
         // the stream format state can be modified by manipulators in the argument :
         put_head( oss, x );
@@ -179,7 +179,7 @@ namespace detail {
                 // make a new stream, to start re-formatting from scratch :
                 buf.clear_buffer();
                 basic_oaltstringstream<Ch, Tr, Alloc>  oss2( &buf);
-                specs.fmtstate_.apply_on(oss2, loc);
+                specs.fmtstate_.apply_on(oss2, loc_p);
                 put_head( oss2, x );
 
                 oss2.width(0);

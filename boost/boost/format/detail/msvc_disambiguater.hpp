@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 // msvc_disambiguater.hpp : msvc workarounds. (for put_{head|last} overloads)
-//                          the trick was described in boost's list  by Aleksey Gurtovoy
+//               the trick was described in boost's list  by Aleksey Gurtovoy
 // ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
@@ -9,12 +9,13 @@
 
 // see http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_MSVC_DISAMBIGUATER_HPP
 #define BOOST_MSVC_DISAMBIGUATER_HPP
 
-#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300)  // this whole header is specifically for msvc
+#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300)
+   // this whole header is specifically for msvc
 
 #include "boost/format/group.hpp"
 #include <ostream>

@@ -1,6 +1,6 @@
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //  alt_sstream_impl.hpp : alternative stringstream, templates implementation 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -8,14 +8,14 @@
 
 //  See http://www.boost.org/libs/format for library home page
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_SK_ALT_SSTREAM_IMPL_HPP
 #define BOOST_SK_ALT_SSTREAM_IMPL_HPP
 
 namespace boost {
     namespace io {
-// ---- Implementation  ------------------------------------------------------//
+// --- Implementation  ------------------------------------------------------//
 
         template<class Ch, class Tr, class Alloc>
         void basic_altstringbuf<Ch, Tr, Alloc>:: 
@@ -37,11 +37,12 @@ namespace boost {
         template<class Ch, class Tr, class Alloc>
         void basic_altstringbuf<Ch, Tr, Alloc>:: 
         str (const string_type& s) {
-            dealloc();
             std::size_t sz=s.size();
             if(sz != 0 && mode_ & (ios_base::in | ios_base::out) ) {
-                Ch *new_ptr = alloc_.allocate(sz);
-                s.copy(new_ptr);
+                Ch *new_ptr = alloc_.allocate(sz, is_allocated_? eback() : 0);
+                // if this didnt throw, we're safe, update the buffer
+                dealloc();
+                sz = s.copy(new_ptr);
                 putend_ = new_ptr + sz;
                 if(mode_ & ios_base::in)
                     streambuf_t::setg(new_ptr, new_ptr, new_ptr + sz);
@@ -54,6 +55,8 @@ namespace boost {
                 }
                 is_allocated_ = true;
             }
+            else 
+                dealloc();
         }
         template<class Ch, class Tr, class Alloc>
         Ch*   basic_altstringbuf<Ch, Tr, Alloc>:: 
@@ -88,7 +91,8 @@ namespace boost {
         }
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type  basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type  
+        basic_altstringbuf<Ch, Tr, Alloc>:: 
         seekoff (off_type off, ios_base::seekdir way, ios_base::openmode which) {
             if(pptr() != NULL && putend_ < pptr())
                 putend_ = pptr();
@@ -133,7 +137,8 @@ namespace boost {
 
         
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type 
+        basic_altstringbuf<Ch, Tr, Alloc>:: 
         seekpos (pos_type pos, ios_base::openmode which) {
             std::streamoff off = pos; // properly converted by operator
             if(pptr() != NULL && putend_ < pptr())
@@ -142,7 +147,7 @@ namespace boost {
             else if(which & ios_base::in && gptr() != NULL) {
                 // get area
                 if(0 <= off && off <= putend_ - eback()) {
-                    gbump((int)(eback() - gptr() + off));
+                    streambuf_t::gbump((int)(eback() - gptr() + off));
                     if(which & ios_base::out && pptr() != NULL) {
                         // update pptr to match gptr
                         streambuf_t::pbump(gptr()-pptr());
@@ -166,7 +171,8 @@ namespace boost {
 
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type
+        basic_altstringbuf<Ch, Tr, Alloc>:: 
         underflow () {
             if(gptr() == NULL) // no get area -> nothing to get.
                 return (traits_type::eof()); 
@@ -187,7 +193,8 @@ namespace boost {
 
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type 
+        basic_altstringbuf<Ch, Tr, Alloc>:: 
         pbackfail (int_type meta) {
             if(gptr() != NULL  &&  (eback() < gptr()) 
                && (mode_ & (ios_base::out)
@@ -206,7 +213,8 @@ namespace boost {
 
 
         template<class Ch, class Tr, class Alloc>
-        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type basic_altstringbuf<Ch, Tr, Alloc>:: 
+        typename basic_altstringbuf<Ch, Tr, Alloc>::int_type 
+        basic_altstringbuf<Ch, Tr, Alloc>:: 
         overflow (int_type meta) {
             if(traits_type::eq_int_type(traits_type::eof(), meta))
                 return traits_type::not_eof(meta); // nothing to do
@@ -214,21 +222,25 @@ namespace boost {
                 streambuf_t::sputc(traits_type::to_char_type(meta));
                 return meta;
             }
-            else if(! (mode_ & ios_base::out)) // no write position, and cant make one
+            else if(! (mode_ & ios_base::out)) 
+                // no write position, and cant make one
                 return traits_type::eof(); 
             else { // make a write position available
                 std::size_t prev_size = pptr() == NULL ? 0 : epptr() - eback();
                 std::size_t new_size = prev_size;
-                std::size_t add_size = new_size / 2;  // exponential growth : size *= 1.5
+                // exponential growth : size *= 1.5
+                std::size_t add_size = new_size / 2;
                 if(add_size < alloc_min)
                     add_size = alloc_min;
                 Ch * newptr = NULL,  *oldptr = eback();
 
-                while (0 < add_size && (std::numeric_limits<std::size_t>::max()-add_size < new_size) )
-                    add_size /= 2;  // make sure adding add_size wont overflow size_t
+                // make sure adding add_size wont overflow size_t
+                while (0 < add_size && (std::numeric_limits<std::size_t>::max()
+                                        - add_size < new_size) )
+                    add_size /= 2;
                 if(0 < add_size) {
                     new_size += add_size;
-                    newptr = alloc_.allocate(new_size);
+                    newptr = alloc_.allocate(new_size, is_allocated_? oldptr : 0);
                 }
 
                 if(0 < prev_size)

@@ -1,9 +1,9 @@
 // -*- C++ -*-
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // config_macros.hpp : configuration macros for the format library
-// only BOOST_IO_STD is absolutely needed (since it should be 'std::' in general)
+// only BOOST_IO_STD is absolutely needed (it should be 'std::' in general)
 // others are compiler-specific workaround macros used in #ifdef switches
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 //  Copyright Samuel Krempp 2003. Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0. (See accompanying
@@ -12,7 +12,7 @@
 // see http://www.boost.org/libs/format for library home page
 
 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_CONFIG_MACROS_HPP
 #define BOOST_FORMAT_CONFIG_MACROS_HPP
@@ -32,7 +32,7 @@
 #include <boost/format/detail/workarounds_stlport.hpp>  // stlport workarounds
 
 #ifndef BOOST_IO_STD
-#  define BOOST_IO_STD std::
+#  define BOOST_IO_STD ::std::
 #endif
 
 #if defined(BOOST_NO_STD_LOCALE) || \
@@ -65,9 +65,31 @@ namespace boost {
       using std::basic_ostream;
     }
   }
+#if ! defined(BOOST_NO_STD_LOCALE)
+    using std::locale;
+    namespace io {
+        using std::locale;
+        namespace detail {
+            using std::locale;
+        }
+    }
+#endif // locale
 }
-#endif
+  // -end N.S. boost
+#endif // needs_using_declaration
 
-// ------------------------------------------------------------------------------
+
+// ***  hide std::locale if it doesnt exist. 
+// this typedef is either std::locale or int, avoids placing ifdefs everywhere
+namespace boost { namespace io { namespace detail {
+#if ! defined(BOOST_NO_STD_LOCALE)
+    typedef BOOST_IO_STD locale locale_or_dummy_t;
+#else 
+    typedef int          locale_or_dummy_t;
+#endif
+} } }
+
+
+// ----------------------------------------------------------------------------
 
 #endif // BOOST_FORMAT_MACROS_DEFAULT_HPP
