@@ -165,7 +165,7 @@ interval<T, Policies> div_zero_part1(const interval<T, Policies>& x,
   const T& xu = x.upper();
   const T& yl = y.lower();
   const T& yu = y.upper();
-  typedef typename I::checking checking;
+  typedef typename Policies::checking checking;
   const T& inf = checking::inf();
   if (is_neg(xu))
     { b = true;  return I(-inf, rnd.div_up(xu, yu), true); }
@@ -182,7 +182,7 @@ interval<T, Policies> div_zero_part2(const interval<T, Policies>& x,
   // assert(y.lower() < 0 && y.upper() > 0 && (div_zero_part1(x, y, b), b));
   typename Policies::rounding rnd;
   typedef interval<T, Policies> I;
-  typedef typename I::checking checking;
+  typedef typename Policies::checking checking;
   const T& inf = checking::inf();
   if (is_neg(x.upper()))
     return I(rnd.div_down(x.upper(), y.lower()), inf, true);
