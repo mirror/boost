@@ -51,6 +51,10 @@ class unescape
 
     typedef unescape<Derived, Base> this_t;
     typedef BOOST_DEDUCED_TYPENAME super_t::reference reference_type;
+public:
+    // gcc 3.4.1 - linux required that this be public
+    typedef BOOST_DEDUCED_TYPENAME super_t::value_type value_type;
+private:
 
     reference_type dereference_impl() {
         if(! m_full){
@@ -75,8 +79,6 @@ class unescape
     };
 
 public:
-    // gcc 3.4.1 - linux required that this be public
-    typedef BOOST_DEDUCED_TYPENAME super_t::value_type value_type;
 
     unescape(Base base) : 
         super_t(base),
