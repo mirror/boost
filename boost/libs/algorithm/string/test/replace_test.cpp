@@ -67,16 +67,18 @@ void sequence_traits_test()
     BOOST_CHECK( strout==Output ); \
 \
     /* In-place test */\
-    BOOST_CHECKPOINT( #Algo " - Inplace(vector)" );\
     vector<char> vec1( str1.begin(), str1.end() );\
-\
-    BOOST_CHECKPOINT( #Algo " - Inplace(list)" );\
     list<char> list1( str1.begin(), str1.end() );\
 \
+    BOOST_CHECKPOINT( #Algo " - Inplace(string)" );\
     Algo( str1, BOOST_PP_SEQ_ENUM( Params ) ); \
-    BOOST_CHECK( equals( str1, Output ) );\
+    BOOST_CHECK( equals( str1, Output ) ); \
+\
+    BOOST_CHECKPOINT( #Algo " - Inplace(vector)" );\
     Algo( vec1, BOOST_PP_SEQ_ENUM( Params ) ); \
     BOOST_CHECK( equals( vec1, Output ) );\
+\
+    BOOST_CHECKPOINT( #Algo " - Inplace(list)" );\
     Algo( list1, BOOST_PP_SEQ_ENUM( Params ) ); \
     BOOST_CHECK( equals( list1, Output ) );\
 }
