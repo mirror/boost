@@ -15,6 +15,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  11 Feb 01 Fixed bugs in the iterator helpers which prevented explicitly
+//            supplied arguments from actually being used (Dave Abrahams)
 //  04 Jul 00 Fixed NO_OPERATORS_IN_NAMESPACE bugs, major cleanup and
 //            refactoring of compiler workarounds, additional documentation
 //            (Alexy Gurtovoy and Mark Rodgers with some help and prompting from
@@ -514,7 +516,7 @@ struct forward_iterator_helper
   : equality_comparable<T
   , incrementable<T
   , dereferenceable<T,P
-  , boost::iterator<std::forward_iterator_tag, V, D
+  , boost::iterator<std::forward_iterator_tag,V,D,P,R
     > > > > {};
 
 template <class T,
@@ -527,7 +529,7 @@ struct bidirectional_iterator_helper
   , incrementable<T
   , decrementable<T
   , dereferenceable<T,P
-  , boost::iterator<std::bidirectional_iterator_tag, V, D
+  , boost::iterator<std::bidirectional_iterator_tag,V,D,P,R
     > > > > > {};
 
 template <class T,
@@ -544,7 +546,7 @@ struct random_access_iterator_helper
   , addable2<T,D
   , subtractable2<T,D
   , indexable<T,D,R
-  , boost::iterator<std::random_access_iterator_tag, V, D
+  , boost::iterator<std::random_access_iterator_tag,V,D,P,R
     > > > > > > > > >
 {
 #ifndef __BORLANDC__
