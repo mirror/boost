@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
-// boost variant/detail/define_forwarding_func.hpp header file
+// boost variant/detail/forced_return.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2002-2003
+// Copyright (c) 2003
 // Eric Friedman
 //
 // Permission to use, copy, modify, distribute and sell this software
