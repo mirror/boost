@@ -12,65 +12,62 @@
 #  include <boost/utility/enable_if.hpp>
 # endif
 
-namespace impl
+template <class Value>
+class node_iter
+  : public boost::iterator_facade<
+        node_iter<Value>
+      , Value
+      , boost::forward_traversal_tag
+    >
 {
-  template <class Value>
-  class node_iterator
-    : public boost::iterator_facade<
-          node_iterator<Value>
-        , Value
-        , boost::forward_traversal_tag
-      >
-  {
-   private:
-      enum enabler {};
-      
-   public:
-      node_iterator()
-        : m_node(0)
-      {}
+ private:
+    struct enabler {};  // a private type avoids misuse
 
-      explicit node_iterator(Value* p)
-        : m_node(p)
-      {}
+ public:
+    node_iter()
+      : m_node(0) {}
 
-      template <class OtherValue>
-      node_iterator(
-          node_iterator<OtherValue> const& other
+    explicit node_iter(Value* p)
+      : m_node(p) {}
+
+    template <class OtherValue>
+    node_iter(
+        node_iter<OtherValue> const& other
 # ifndef BOOST_NO_SFINAE
-        , typename boost::enable_if<boost::is_convertible<OtherValue*,Value*>,enabler*>::type = 0
+      , typename boost::enable_if<
+            boost::is_convertible<OtherValue*,Value*>
+          , enabler
+        >::type = enabler()
 # endif 
-      )
-        : m_node(other.m_node)
-      {
-      }
-        
+    )
+      : m_node(other.m_node) {}
 
-      friend class boost::iterator_core_access;
+
 # if !BOOST_WORKAROUND(__GNUC__, == 2)
-   private: // GCC2 can't even grant that friendship to template member functions
+ private: // GCC2 can't even grant that friendship to template member functions
 # endif 
-      template <class OtherValue>
-      bool equal(node_iterator<OtherValue> const& other) const
-      { return this->m_node == other.m_node; }
-    
-   public:
-      void increment()
-      { m_node = m_node->next(); }
+    friend class boost::iterator_core_access;
 
-      Value& dereference() const
-      { return *m_node; }
+    template <class OtherValue>
+    bool equal(node_iter<OtherValue> const& other) const
+    {
+        return this->m_node == other.m_node;
+    }
+
+ private:
+    void increment() { m_node = m_node->next(); }
+
+    Value& dereference() const { return *m_node; }
 
 # ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-   public:
+ public:
 # else 
-      template <class> friend class node_iterator;
+    template <class> friend class node_iter;
 # endif 
-      Value* m_node;
-  };
-}
+    Value* m_node;
+};
 
-typedef impl::node_iterator<node_base> node_iterator;
-typedef impl::node_iterator<node_base const> node_const_iterator;
+typedef node_iter<node_base> node_iterator;
+typedef node_iter<node_base const> node_const_iterator;
 
 #endif // NODE_ITERATOR2_DWA2004110_HPP

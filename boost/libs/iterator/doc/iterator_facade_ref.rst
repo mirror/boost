@@ -136,6 +136,11 @@ object of a single pass iterator type interoperable with ``X``, and ``z``
 is a constant object of a random access traversal iterator type
 interoperable with ``X``.
 
+.. _`core operations`:
+
+``iterator_facade`` Core Operations
+'''''''''''''''''''''''''''''''''''
+
 +--------------------+----------------------+-------------------------------------+---------------------------+
 |Expression          |Return Type           |Assertion/Note                       |Used to implement Iterator |
 |                    |                      |                                     |Concept(s)                 |
@@ -143,19 +148,16 @@ interoperable with ``X``.
 |``c.dereference()`` |``F::reference``      |                                     |Readable Iterator, Writable|
 |                    |                      |                                     |Iterator                   |
 +--------------------+----------------------+-------------------------------------+---------------------------+
-|``c.equal(b)``      |convertible to bool   |true iff ``b`` and ``c`` are         |Single Pass Iterator       |
-|                    |                      |equivalent.                          |                           |
-+--------------------+----------------------+-------------------------------------+---------------------------+
 |``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
 |                    |                      |same position.  Implements ``c == y``|                           |
 |                    |                      |and ``c != y``.                      |                           |
 +--------------------+----------------------+-------------------------------------+---------------------------+
-|``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
-|                    |                      |                                     |Iterator                   |
-+--------------------+----------------------+-------------------------------------+---------------------------+
 |``a.increment()``   |unused                |                                     |Incrementable Iterator     |
 +--------------------+----------------------+-------------------------------------+---------------------------+
 |``a.decrement()``   |unused                |                                     |Bidirectional Traversal    |
+|                    |                      |                                     |Iterator                   |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
 |                    |                      |                                     |Iterator                   |
 +--------------------+----------------------+-------------------------------------+---------------------------+
 |``c.distance_to(b)``|convertible to        |equivalent to ``distance(c, b)``     |Random Access Traversal    |

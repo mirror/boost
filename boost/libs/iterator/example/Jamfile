@@ -2,6 +2,9 @@ subproject libs/iterator/example ;
 
 import testing ;
 
+# Make tests run by default.
+DEPENDS all : test ;
+
 test-suite iterator_examples
   : [ run reverse_iterator.cpp ]
     [ run node_iterator1.cpp ]

@@ -23,7 +23,7 @@ struct node_base
     }
 
     virtual void print(std::ostream& s) const = 0;
-    virtual void twice() = 0;
+    virtual void double_me() = 0;
         
     void append(node_base* p)
     {
@@ -51,7 +51,7 @@ struct node : node_base
     {}
 
     void print(std::ostream& s) const { s << this->m_value; }
-    void twice() { m_value += m_value; }
+    void double_me() { m_value += m_value; }
     
  private:
     T m_value;

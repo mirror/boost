@@ -23,9 +23,9 @@ class node_iterator
       : m_node(p)
 	{}
 
+ private:
 	friend class boost::iterator_core_access;
 
- private:
 	void increment()
     { m_node = m_node->next(); }
     

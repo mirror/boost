@@ -31,7 +31,7 @@ int main()
     
     std::for_each(
         node_iterator(nodes.get()), node_iterator()
-      , boost::mem_fn(&node_base::twice)
+      , boost::mem_fn(&node_base::double_me)
     );
 
     std::copy(

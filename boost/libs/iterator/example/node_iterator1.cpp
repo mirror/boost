@@ -23,7 +23,7 @@ int main()
     
     std::for_each(
         node_iterator(nodes.get()), node_iterator()
-      , std::mem_fun_ref(&node_base::twice)
+      , std::mem_fun_ref(&node_base::double_me)
     );
 
     std::copy(
