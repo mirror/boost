@@ -13,6 +13,7 @@
 #include "boost/type_traits/is_convertible.hpp"
 #include "boost/type_traits/detail/ice_or.hpp"
 #include "boost/type_traits/config.hpp"
+#include "boost/type_traits/intrinsics.hpp"
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #   include "boost/type_traits/remove_cv.hpp"
@@ -204,3 +205,4 @@ BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_empty,void const volatile,false)
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif // BOOST_TT_IS_EMPTY_HPP_INCLUDED
+
