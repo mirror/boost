@@ -25,7 +25,7 @@ UBLAS_TESTSET ?=
 
 UBLAS_TESTSET_SPARSE ?= 
             <define>USE_DOUBLE <define>USE_STD_COMPLEX
-            <define>USE_RANGE <define>USE_SLICE	 # Too complex for regression testing
+            # <define>USE_RANGE <define>USE_SLICE	 # Too complex for regression testing
             <define>USE_UNBOUNDED_ARRAY
 			<define>USE_STD_MAP
             <define>USE_SPARSE_VECTOR <define>USE_COMPRESSED_VECTOR <define>USE_COORDINATE_VECTOR
