@@ -44,35 +44,35 @@
  * Validate correct implementation
  */
 
-// validation by experiment from mt19937.c
-bool check(uint32_t x, const boost::mt19937&) { return x == 3346425566U; }
-
 // own run
-bool check(uint32_t x, const boost::mt11213b&) { return x == 0xa37d3c92; }
+bool check(unsigned long x, const boost::mt11213b&) { return x == 0xa37d3c92; }
+
+// validation by experiment from mt19937.c
+bool check(unsigned long x, const boost::mt19937&) { return x == 3346425566U; }
 
 // validation values from the publications
-bool check(int32_t x, const boost::minstd_rand0&) { return x == 1043618065; }
+bool check(int x, const boost::minstd_rand0&) { return x == 1043618065; }
 
 // validation values from the publications
-bool check(int32_t x, const boost::minstd_rand&) { return x == 399268537; }
+bool check(int x, const boost::minstd_rand&) { return x == 399268537; }
 
 // by experiment from lrand48()
-bool check(int32_t x, const boost::rand48&) { return x == 1993516219; }
+bool check(unsigned long x, const boost::rand48&) { return x == 1993516219; }
 
 // ????
-bool check(int32_t x, const boost::taus88&) { return x == 3535848941; }
+bool check(unsigned long x, const boost::taus88&) { return x == 3535848941; }
 
 // ????
-bool check(int32_t x, const boost::ecuyer1988&) { return x == 2060321752; }
+bool check(int x, const boost::ecuyer1988&) { return x == 2060321752; }
 
 // validation by experiment from Harry Erwin's generator.h (private e-mail)
-bool check(int32_t x, const boost::kreutzer1986&) { return x == 139726; }
+bool check(unsigned int x, const boost::kreutzer1986&) { return x == 139726; }
 
 bool check(double x, const boost::lagged_fibonacci607&) { return x == 0.4293817707235914; }
 
 // principal operation validated with CLHEP, values by experiment
-bool check(uint32_t x, const boost::ranlux3&) { return x == 5957620; }
-bool check(uint32_t x, const boost::ranlux4&) { return x == 8587295; }
+bool check(unsigned long x, const boost::ranlux3&) { return x == 5957620; }
+bool check(unsigned long x, const boost::ranlux4&) { return x == 8587295; }
 
 bool check(float x, const boost::ranlux3_01&)
 { return std::abs(x-5957620/std::pow(2.0f,24)) < 1e-6; }
@@ -126,11 +126,14 @@ void instantiate_dist(const Dist& dist)
 {
   // check reference maintenance throughout
   typename Dist::base_type& b = dist.base();
-  Dist d = dist;  // make a copy
+  Dist d = dist;       // copy ctor
   typename Dist::result_type result = d();
   b();
   BOOST_TEST(d.base() == b);
   d.reset();
+  // d = dist;            // copy assignment
+  // b();
+  // BOOST_TEST(d.base() == b);
 }
 
 template<class URNG, class ResultType>
@@ -149,7 +152,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   BOOST_TEST(urng == urng2);     // operator==
   BOOST_TEST(!(urng != urng2));  // operator!=
   urng();
-  urng2 = urng;              // assignment
+  urng2 = urng;                  // copy assignment
   BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
 
@@ -202,6 +205,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 
   // instantiate various distributions with this URNG
+  instantiate_dist(boost::uniform_01<URNG>(urng));
   instantiate_dist(boost::uniform_smallint<URNG>(urng, 0, 11));
   instantiate_dist(boost::uniform_int<URNG>(urng, -200, 20000));
   instantiate_dist(boost::uniform_real<URNG>(urng, 0, 2.1));
