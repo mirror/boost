@@ -323,12 +323,6 @@ namespace boost {
         };
       };
 
-      template<typename T1, typename T2>
-      struct is_not_same
-      {
-  	    BOOST_STATIC_CONSTANT(bool, value = !(is_same<T1, T2>::value));
-      };
-
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       template<bool GetIt, typename Traits> 
       struct get_arg1_type
