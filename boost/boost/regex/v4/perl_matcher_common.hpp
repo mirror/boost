@@ -612,7 +612,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_any
          // run out of characters, try a null match if possible:
          if(access::first(re)->can_be_null)
             return match_prefix();
-         return false;
+         break;
       }
       // now try and obtain a match:
       if(match_prefix())
@@ -647,7 +647,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_wor
       while((position != last) && !traits_inst.is_class(*position, traits::char_class_word))
          ++position;
       if(position == last)
-         return false;
+         break;
 
       if(access::can_start(*position, _map, (unsigned char)mask_any) )
       {
@@ -655,7 +655,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_wor
             return true;
       }
       if(position == last)
-         return false;
+         break;
    } while(true);
    return false;
 #ifdef BOOST_MSVC
