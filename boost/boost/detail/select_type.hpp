@@ -1,0 +1,36 @@
+// (C) Copyright David Abrahams 2001. Permission to copy, use, modify,
+// sell and distribute this software is granted provided this
+// copyright notice appears in all copies. This software is provided
+// "as is" without express or implied warranty, and with no claim as
+// to its suitability for any purpose.
+//
+// See http://www.boost.org for most recent version including documentation.
+
+// Revision History
+// 06 Feb 2001 - Created (David Abrahams)
+
+#ifndef SELECT_TYPE_DWA20010206_HPP
+# define SELECT_TYPE_DWA20010206_HPP
+
+namespace boost { namespace detail {
+
+  // Template class if_true -- select among 2 types based on a bool constant expression
+  // Usage:
+  //   typename if_true<(bool_const_expression)>::template then<true_type, false_type>::type
+  template <bool> struct if_true;
+
+  template <>
+  struct if_true<true>
+  {
+      template <class T, class F>
+      struct then { typedef T type; };
+  };
+
+  template <>
+  struct if_true<false>
+  {
+      template <class T, class F>
+      struct then { typedef F type; };
+  };
+}}
+#endif // SELECT_TYPE_DWA20010206_HPP
