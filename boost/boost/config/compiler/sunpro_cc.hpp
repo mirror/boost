@@ -9,7 +9,7 @@
 
 #    if __SUNPRO_CC <= 0x500
 #      define BOOST_NO_MEMBER_TEMPLATES
-#      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#      define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #    endif
 
 #    if (__SUNPRO_CC <= 0x520)
