@@ -23,6 +23,17 @@ void special_values_tests()
   date d(2003,Oct,31);
 
   { // special values construction tests
+    ptime p_sv1(pos_infin);
+    std::string s("+infinity");
+    check("from special value +infinity", to_simple_string(p_sv1) == s);
+    ptime p_sv2(neg_infin);
+    s = "-infinity";
+    check("from special value -infinity", to_iso_string(p_sv2) == s);
+    ptime p_sv3(not_a_date_time);
+    s = "not-a-date-time";
+    check("from special value NADT", to_iso_extended_string(p_sv3) == s);
+  }
+  { // special values construction tests
     ptime p_sv1(d_pi, td);
     std::string s("+infinity");
     check("duration & special_date", to_simple_string(p_sv1) == s);
