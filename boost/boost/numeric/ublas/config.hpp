@@ -363,7 +363,7 @@ namespace std {
 #define BOOST_UBLAS_BOUNDS_CHECK
 
 // Type check for non dense matrices
-#ifndef BOOST_NO_UBLAS_TYPE_CHECK
+#ifndef BOOST_UBLAS_NO_TYPE_CHECK
 #define BOOST_UBLAS_TYPE_CHECK
 #endif
 
