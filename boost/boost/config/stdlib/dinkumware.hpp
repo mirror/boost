@@ -29,7 +29,7 @@
 #     define BOOST_NO_STD_ALLOCATOR
 #  endif
 #  define BOOST_HAS_PARTIAL_STD_ALLOCATOR
-#  if (defined(_MSC_VER) && (_MSC_VER < 1300)) && !defined(__BORLANDC__)
+#  if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
       // if this lib version is set up for vc6 then there is no std::use_facet:
 #     define BOOST_NO_STD_USE_FACET
 #     define BOOST_HAS_TWO_ARG_USE_FACET
