@@ -809,6 +809,14 @@ public: // internal visitor interfaces, cont.
 
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// (detail) no_fallback_type
+//
+// Incomplete type used to trigger helpful compiler error if fallback type
+// optimization is attempted when inappropriate.
+//
+class no_fallback_type;
+
 }} // namespace detail::variant
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -966,12 +974,26 @@ private: // static precondition assertions
 
 private: // helpers, for representation (below)
 
-    struct T0_has_nothrow_constructor_
-        : has_nothrow_constructor<internal_T0>
+    typedef typename mpl::end<internal_types>::type
+        internal_types_end;
+
+    typedef typename mpl::find_if<
+          internal_types
+        , has_nothrow_constructor<mpl::_1>
+        >::type fallback_type_it_;
+
+    struct has_fallback_type_
+        : mpl::not_< is_same< fallback_type_it_,internal_types_end > >
     {
     };
 
-    typedef T0_has_nothrow_constructor_
+    typedef typename mpl::apply_if<
+          has_fallback_type_
+        , fallback_type_it_ // dereference
+        , mpl::identity< detail::variant::no_fallback_type >
+        >::type fallback_type_;
+
+    typedef has_fallback_type_
         never_uses_backup_flag;
 
     typedef typename detail::variant::make_storage<
@@ -1341,7 +1363,7 @@ private: // helpers, for modifiers (below)
               const RhsT& rhs_content
             , mpl::true_// has_nothrow_copy
             , B1// has_nothrow_move_constructor
-            , B2// T0_has_nothrow_constructor
+            , B2// has_fallback_type
             )
         {
             // Destroy lhs's content...
@@ -1360,7 +1382,7 @@ private: // helpers, for modifiers (below)
               const RhsT& rhs_content
             , mpl::false_// has_nothrow_copy
             , mpl::true_// has_nothrow_move_constructor
-            , B// T0_has_nothrow_constructor
+            , B// has_fallback_type
             )
         {
             // Attempt to make a temporary copy (so as to move it below)...
@@ -1382,7 +1404,7 @@ private: // helpers, for modifiers (below)
               const RhsT& rhs_content
             , mpl::false_// has_nothrow_copy
             , mpl::false_// has_nothrow_move_constructor
-            , mpl::true_// T0_has_nothrow_constructor
+            , mpl::true_// has_fallback_type
             )
         {
             // Destroy lhs's content...
@@ -1396,9 +1418,9 @@ private: // helpers, for modifiers (below)
             }
             catch (...)
             {
-                // In case of failure, default-construct T0 in lhs's storage...
+                // In case of failure, default-construct fallback type in lhs's storage...
                 new (lhs_.storage_.address())
-                    internal_T0; // nothrow
+                    fallback_type_; // nothrow
 
                 // ...indicate the construction...
                 lhs_.indicate_which(0);
@@ -1416,7 +1438,7 @@ private: // helpers, for modifiers (below)
               const RhsT& rhs_content
             , mpl::false_// has_nothrow_copy
             , mpl::false_// has_nothrow_move_constructor
-            , mpl::false_// T0_has_nothrow_constructor
+            , mpl::false_// has_fallback_type
             )
         {
             detail::variant::backup_assigner<wknd_self_t, RhsT>
@@ -1441,7 +1463,7 @@ private: // helpers, for modifiers (below)
                   rhs_content
                 , nothrow_copy()
                 , nothrow_move_constructor()
-                , T0_has_nothrow_constructor_()
+                , has_fallback_type_()
                 );
 
             BOOST_VARIANT_AUX_RETURN_VOID;
