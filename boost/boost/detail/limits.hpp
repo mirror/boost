@@ -33,6 +33,7 @@
 
 #include <climits>
 #include <cfloat>
+#include <cwchar>             // for WCHAR_MIN and WCHAR_MAX
 #include <boost/config.hpp>
 
 #if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__hppa)
