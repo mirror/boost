@@ -78,14 +78,14 @@ still in the making:</p>
 <h2>Change history</h2>
 <p>12 October 2003:</p>
 <ul>
-  <li><b>Breaking change</b>: Removed <code>rtti_policy</code> from the 
+  <li><b>Breaking change</b>: Removed <code>rtti_policy&lt;&gt;</code> from the 
   interface. By default, the library now uses its own (often faster) RTTI 
   implementation. Users can demand the use of native C++ RTTI by defining
-  <code>BOOST_FSM_USE_INTERNAL_RTTI</code>. This change only affects users who 
+  <code>BOOST_FSM_USE_NATIVE_RTTI</code>. This change only affects users who 
   customized <code>state_machine&lt;&gt;</code>, <code>asynchronous_state_machine&lt;&gt;</code> 
   or <code>worker&lt;&gt;</code></li>
   <li><b>Breaking change</b>: Reordered template arguments of <code>
-  state_machine</code> and <code>asynchronous_state_machine</code>. This 
+  state_machine&lt;&gt;</code> and <code>asynchronous_state_machine&lt;&gt;</code>. This 
   change only affects users who customized <code>state_machine&lt;&gt;</code> or
   <code>asynchronous_state_machine&lt;&gt;</code></li>
   <li>Added shallow/deep history support and updated documentation accordingly</li>
