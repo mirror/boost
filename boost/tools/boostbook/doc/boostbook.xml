@@ -295,17 +295,9 @@ using boostbook : DOCBOOK_XSL_DIR
       <para>This section details the steps necessary to use Doxygen to
       extract documentation and comments from source code to build a
       BoostBook document (and transform it into end-user
-      documentation). This capability is under heavy development
-      (you've been warned). Requirements are:
-        <itemizedlist>
-          <listitem><simpara>Doxygen from CVS, described at <ulink url="http://www.stack.nl/~dimitri/doxygen/download.html#cvs"/></simpara></listitem>
-          <listitem><simpara>My monolithic XML file patch to Doxygen CVS, available at <ulink url="http://sourceforge.net/mailarchive/forum.php?thread_id=1886710&amp;forum_id=1985"/></simpara></listitem>
-        </itemizedlist>        
-      </para>
-      
-      <para>Once you have a checkout of Doxygen from CVS, apple the
-      monolithic XML file patch and rebuild Doxygen. Next, we
-      configure Boost.Build for Doxygen support by editing
+      documentation). You will need a somewhat recent version of <ulink url="http://www.doxygen.org">Doxygen</ulink>; 1.2.18 or newer should suffice.</para>
+
+      <para>Boost.Build can be configured for Doxygen support by editing
       <filename>user-config.jam</filename> or
       <filename>site-config.jam</filename> to add:
 
