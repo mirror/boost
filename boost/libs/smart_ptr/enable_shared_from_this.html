@@ -71,9 +71,9 @@ public:
 			<p>
 				<b>Requires:</b> <STRONG>enable_shared_from_this&lt;T&gt;</STRONG> must be an 
 				accessible base class of <b>T</b>. <STRONG>*this</STRONG> must be a subobject 
-				of an instance <STRONG>t</STRONG> of type <STRONG>T</STRONG>. There must have 
-				existed at least one <STRONG>shared_ptr</STRONG> instance <STRONG>p</STRONG> pointing 
-				to <STRONG>t</STRONG>.
+				of an instance <STRONG>t</STRONG> of type <STRONG>T</STRONG> . There must exist 
+				at least one <STRONG>shared_ptr</STRONG> instance <STRONG>p</STRONG> that <EM>owns</EM>
+				<STRONG>t</STRONG>.
 			</p>
 			<p>
 				<b>Returns:</b> A <b>shared_ptr&lt;T&gt;</b> instance <b>r</b> that shares 
@@ -85,9 +85,9 @@ public:
 		</blockquote>
 		<p>
 			<br>
-			<small>Copyright © 2002 by Peter Dimov. Permission to copy, use, modify, sell and 
-				distribute this document is granted provided this copyright notice appears in 
-				all copies. This document is provided "as is" without express or implied 
+			<small>Copyright © 2002, 2003 by Peter Dimov. Permission to copy, use, modify, sell 
+				and distribute this document is granted provided this copyright notice appears 
+				in all copies. This document is provided "as is" without express or implied 
 				warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>

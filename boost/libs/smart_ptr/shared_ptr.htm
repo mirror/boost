@@ -8,7 +8,6 @@
 		<h1><IMG height="86" alt="c++boost.gif (8819 bytes)" src="../../c++boost.gif" width="277" align="middle">shared_ptr 
 			class template</h1>
 		<p><A href="#Introduction">Introduction</A><br>
-			<A href="#Motivation">Motivation</A><br>
 			<A href="#BestPractices">Best Practices</A><br>
 			<A href="#Synopsis">Synopsis</A><br>
 			<A href="#Members">Members</A><br>
@@ -47,8 +46,6 @@
 			to <STRONG>shared_ptr&lt;T const&gt;</STRONG>, to <STRONG>shared_ptr&lt;U&gt;</STRONG>
 			where <STRONG>U</STRONG> is an accessible base of <STRONG>T</STRONG>, and to <STRONG>
 				shared_ptr&lt;void&gt;</STRONG>.</P>
-		<h2><a name="Motivation">Motivation</a></h2>
-		<p>[...]</p>
 		<h2><a name="BestPractices">Best Practices</a></h2>
 		<P>A simple guideline that nearly eliminates the possibility of memory leaks is: 
 			always use a named smart pointer variable to hold the result of <STRONG>new. </STRONG>
@@ -83,8 +80,8 @@ void bad()
 			evaluated in unspecified order, it is possible for <STRONG>new int(2)</STRONG> to 
 			be evaluated first, <STRONG>g()</STRONG> second, and we may never get to the <STRONG>
 				shared_ptr </STRONG>constructor if <STRONG>g</STRONG> throws an exception. 
-			See <A href="http://www.gotw.ca/gotw/056.htm">Herb Sutter's treatment</A> of 
-			the issue for more information.</P>
+			See <A href="http://www.gotw.ca/gotw/056.htm">Herb Sutter's treatment</A> (also <A href="http://www.cuj.com/reference/articles/2002/0212/0212_sutter.htm">
+				here</A>) of the issue for more information.</P>
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
@@ -150,6 +147,8 @@ void bad()
   template&lt;class E, class T, class Y&gt;
     std::basic_ostream&lt;E, T&gt; &amp; <A href="#insertion-operator" >operator&lt;&lt;</A> (std::basic_ostream&lt;E, T&gt; &amp; os, shared_ptr&lt;Y&gt; const &amp; p);
 
+  template&lt;class D, class T&gt;
+    D * <A href="#get_deleter">get_deleter</A>(shared_ptr&lt;T&gt; const &amp; p);
 }</pre>
 		<P><EM>[It might be convenient to relax the requirements on <STRONG>shared_ptr</STRONG>'s 
 				signature, allowing an additional, defaulted, template parameter; the parameter 
@@ -193,7 +192,7 @@ void bad()
 				must be a complete type. The expression <code>delete p</code> must be 
 				well-formed, must not invoke undefined behavior, and must not throw exceptions.
 			</p>
-			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, storing a copy of <b>p</b>.</p>
+			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>owns</EM> the pointer <b>p</b>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
 			<p><b>Throws:</b> <b>std::bad_alloc</b> or an implementation-defined exception when 
 				a resource other than memory could not be obtained.</p>
@@ -220,7 +219,8 @@ void bad()
 				of <b>D</b> must not throw. The expression <code>d(p)</code> must be 
 				well-formed, must not invoke undefined behavior, and must not throw exceptions.
 			</p>
-			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, storing a copy of <b>p</b> and <b>d</b>.</p>
+			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>owns</EM> the pointer <STRONG>
+					p</STRONG> and the deleter <b>d</b>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
 			<p><b>Throws:</b> <b>std::bad_alloc</b> or an implementation-defined exception when 
 				a resource other than memory could not be obtained.</p>
@@ -288,9 +288,19 @@ template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never 
 		<h3><a name="destructor">destructor</a></h3>
 		<pre>~shared_ptr(); // never throws</pre>
 		<BLOCKQUOTE>
-			<P><B>Effects:</B> If <STRONG>*this</STRONG> is the sole owner (<code>use_count() == 1</code>), 
-				destroys the object pointed to by the stored pointer as specified at 
-				construction time.</P>
+			<P><B>Effects:</B></P>
+			<UL>
+				<LI>
+					If <STRONG>*this</STRONG> is <EM>empty</EM>, or <EM>shares ownership</EM> with 
+					another <STRONG>shared_ptr</STRONG> instance (<code>use_count() &gt; 1</code>), 
+				there are no side effects.
+				<LI>
+					Otherwise, if <STRONG>*this</STRONG> <EM>owns</EM> a pointer <STRONG>p</STRONG> 
+					and a deleter <STRONG>d</STRONG>, <code>d(p)</code>
+				is called.
+				<LI>
+					Otherwise, <STRONG>*this</STRONG> <EM>owns</EM> a pointer <STRONG>p</STRONG>, 
+					and <code>delete p</code> is called.</LI></UL>
 			<P><B>Throws:</B> nothing.</P>
 		</BLOCKQUOTE>
 		<H3><a name="assignment">assignment</a></H3>
@@ -381,7 +391,7 @@ q = p;
 		</blockquote>
 		<P><EM>[The conversion to bool is not merely syntactic sugar. It allows <STRONG>shared_ptr</STRONG>s 
 				to be declared in conditions when using <STRONG>dynamic_pointer_cast </STRONG>or
-				<STRONG>make_shared</STRONG>.]</EM></P>
+				<STRONG>get_shared_ptr</STRONG>.]</EM></P>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<blockquote>
@@ -489,6 +499,14 @@ q = p;
 			<p><STRONG>Effects:</STRONG> <code>os &lt;&lt; p.get();</code>.</p>
 			<P><B>Returns:</B> <b>os</b>.</P>
 		</BLOCKQUOTE>
+		<h3><a name="get_deleter">get_deleter</a></h3>
+		<pre>template&lt;class D, class T&gt;
+    D * get_deleter(shared_ptr&lt;T&gt; const &amp; p);</pre>
+		<BLOCKQUOTE>
+			<P><B>Returns:</B> If <STRONG>*this</STRONG> <EM>owns</EM> a deleter <STRONG>d</STRONG>
+				of type (cv-unqualified) <STRONG>D</STRONG>, returns <code>&amp;d</code>; 
+				otherwise returns 0.</P>
+		</BLOCKQUOTE>
 		<h2><a name="example">Example</a></h2>
 		<p>See <A href="example/shared_ptr_example.cpp">shared_ptr_example.cpp</A> for a 
 			complete example program. The program builds a <b>std::vector</b> and <b>std::set</b>
@@ -505,7 +523,7 @@ q = p;
 		<p>One common usage of <b>shared_ptr</b> is to implement a handle/body (also called 
 			pimpl) idiom which avoids exposing the body (implementation) in the header 
 			file.</p>
-		<p>The <A href="example/shared_ptr_example2_test.cpp">shared_ptr_example2_test.cpp</A> 
+		<p>The <A href="example/shared_ptr_example2_test.cpp">shared_ptr_example2_test.cpp</A>
 			sample program includes a header file, <A href="example/shared_ptr_example2.hpp">shared_ptr_example2.hpp</A>, 
 			which uses a <b>shared_ptr&lt;&gt;</b> to an incomplete type to hide the 
 			implementation. The instantiation of member functions which require a complete 
@@ -648,20 +666,15 @@ int * p = a.release();
 			obtain a non-const pointer from a const one and then proceed to modify the 
 			object through it.<b>shared_ptr</b> is "as close to raw pointers as possible 
 			but no closer".<BR>
-		</P>
-		<P><b>Q.</b> Why doesn't <b>shared_ptr</b> provide (your pet feature here)?</P>
-		<P>
-			<b>A.</b> Because (your pet feature here) would mandate a reference counted 
-			implementation or a linked list implementation, or some other specific 
-			implementation. This is not the intent.<BR>
+			<BR>
 		</P>
 		<hr>
 		<p>
 			$Date$</p>
-		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
-			Copyright 2002, 2003 Peter Dimov. Permission to copy, use, modify, sell and 
-			distribute this document is granted provided this copyright notice appears in 
-			all copies. This document is provided "as is" without express or implied 
-			warranty, and with no claim as to its suitability for any purpose.</p>
+		<p><small>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
+				Copyright 2002, 2003 Peter Dimov. Permission to copy, use, modify, sell and 
+				distribute this document is granted provided this copyright notice appears in 
+				all copies. This document is provided "as is" without express or implied 
+				warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>

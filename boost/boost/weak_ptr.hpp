@@ -24,7 +24,7 @@
 namespace boost
 {
 
-template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r); // never throws
+template<class T> shared_ptr<T> get_shared_ptr(weak_ptr<T> const & r); // never throws
 
 template<class T> class weak_ptr
 {
@@ -64,7 +64,7 @@ public:
     template<class Y>
     weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
     {
-        px = boost::make_shared(r).get();
+        px = boost::get_shared_ptr(r).get();
     }
 
     template<class Y>
@@ -77,7 +77,7 @@ public:
     template<class Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
     {
-        px = boost::make_shared(r).get();
+        px = boost::get_shared_ptr(r).get();
         pn = r.pn;
         return *this;
     }
@@ -151,7 +151,7 @@ template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
     a.swap(b);
 }
 
-template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never throws
+template<class T> shared_ptr<T> get_shared_ptr(weak_ptr<T> const & r) // never throws
 {
 #if defined(BOOST_HAS_THREADS)
 
@@ -178,6 +178,12 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never thro
     return r.use_count() == 0? shared_ptr<T>(): shared_ptr<T>(r);
 
 #endif
+}
+
+// deprecated, provided for backward compatibility
+template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r)
+{
+    return boost::get_shared_ptr(r);
 }
 
 } // namespace boost

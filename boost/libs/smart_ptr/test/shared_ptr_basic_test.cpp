@@ -94,7 +94,7 @@ template<class T> void test_is_Y(boost::shared_ptr<T> const & p)
 
 template<class T> void test_is_Y(boost::weak_ptr<T> const & p)
 {
-    boost::shared_ptr<T> q = boost::make_shared(p);
+    boost::shared_ptr<T> q = boost::get_shared_ptr(p);
     BOOST_TEST(q.get() != 0);
     BOOST_TEST(q->id() == 2);
 }
@@ -221,7 +221,7 @@ int main()
         {
         }
 
-        test_is_zero(boost::make_shared(wp1));
+        test_is_zero(boost::get_shared_ptr(wp1));
 
         weak_ptr<X> wp2 = static_pointer_cast<X>(p5);
 
@@ -232,10 +232,10 @@ int main()
         // Scoped to not affect the subsequent use_count() tests.
         {
             shared_ptr<X> sp2(wp2);
-            test_is_nonzero(boost::make_shared(wp2));
+            test_is_nonzero(boost::get_shared_ptr(wp2));
         }
 
-        weak_ptr<Y> wp3 = dynamic_pointer_cast<Y>(boost::make_shared(wp2));
+        weak_ptr<Y> wp3 = dynamic_pointer_cast<Y>(boost::get_shared_ptr(wp2));
 
         BOOST_TEST(wp3.use_count() == 1);
         test_shared(wp2, wp3);
@@ -246,7 +246,7 @@ int main()
         test_shared(wp2, wp4);
 
         wp1 = p2;
-        test_is_zero(boost::make_shared(wp1));
+        test_is_zero(boost::get_shared_ptr(wp1));
 
         wp1 = p4;
         wp1 = wp3;

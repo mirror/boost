@@ -19,9 +19,9 @@
 			the reference count by using an unqualified call to the function <STRONG>intrusive_ptr_add_ref</STRONG>, 
 			passing it the pointer as an argument. Similarly, when an <STRONG>intrusive_ptr</STRONG>
 			is destroyed, it calls <STRONG>intrusive_ptr_release</STRONG>; this function is 
-			responsible for destroying the object when its reference count drops to 
-			zero. The user is expected to provide suitable definitions of these two 
-			functions. On compilers that support argument-dependent lookup, <STRONG>intrusive_ptr_add_ref</STRONG>
+			responsible for destroying the object when its reference count drops to zero. 
+			The user is expected to provide suitable definitions of these two functions. On 
+			compilers that support argument-dependent lookup, <STRONG>intrusive_ptr_add_ref</STRONG>
 			and <STRONG>intrusive_ptr_release</STRONG> should be defined in the namespace 
 			that corresponds to their parameter; otherwise, the definitions need to go in 
 			namespace <STRONG>boost</STRONG>.</p>
@@ -39,8 +39,8 @@
 			<LI>
 				<STRONG>intrusive_ptr&lt;T&gt;</STRONG> can be constructed from an arbitrary 
 				raw pointer of type <STRONG>T *</STRONG>.</LI></UL>
-		<P>As a general rule, if it isn't obvious whether <STRONG>intrusive_ptr</STRONG>
-			better fits your needs than <STRONG>shared_ptr</STRONG>, try a <STRONG>shared_ptr</STRONG>-based 
+		<P>As a general rule, if it isn't obvious whether <STRONG>intrusive_ptr</STRONG> better 
+			fits your needs than <STRONG>shared_ptr</STRONG>, try a <STRONG>shared_ptr</STRONG>-based 
 			design first.</P>
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
@@ -268,9 +268,9 @@ intrusive_ptr &amp; operator=(T * r);</pre>
 		<p>
 			$Date$</p>
 		<p>
-			Copyright © 2003 Peter Dimov. Permission to copy, use, modify, sell and 
+			<small>Copyright © 2003 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
 			all copies. This document is provided "as is" without express or implied 
-			warranty, and with no claim as to its suitability for any purpose.</p>
+			warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>

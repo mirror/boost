@@ -3094,7 +3094,7 @@ public:
 
     virtual boost::shared_ptr<X> getX()
     {
-        boost::shared_ptr<X> px = boost::make_shared(weak_this);
+        boost::shared_ptr<X> px = boost::get_shared_ptr(weak_this);
         return px;
     }
 };

@@ -8,7 +8,6 @@
 		<h1><IMG height="86" alt="c++boost.gif (8819 bytes)" src="../../c++boost.gif" width="277" align="middle">weak_ptr 
 			class template</h1>
 		<p><A href="#Introduction">Introduction</A><br>
-			<A href="#Motivation">Motivation</A><br>
 			<A href="#Synopsis">Synopsis</A><br>
 			<A href="#Members">Members</A><br>
 			<A href="#functions">Free Functions</A><br>
@@ -18,12 +17,12 @@
 		<p>The <b>weak_ptr</b> class template stores a "weak reference" to an object that's 
 			already managed by a <b>shared_ptr</b>. To access the object, a <STRONG>weak_ptr</STRONG>
 			can be converted to a <STRONG>shared_ptr</STRONG> using <A href="shared_ptr.htm#constructors">
-				the <STRONG>shared_ptr</STRONG> constructor</A> or the function <STRONG><A href="#make_shared">
-					make_shared</A></STRONG>. When the last <b>shared_ptr</b> to the object 
-			goes away and the object is deleted, the attempt to obtain a <STRONG>shared_ptr</STRONG>
+				the <STRONG>shared_ptr</STRONG> constructor</A> or the function <STRONG><A href="#get_shared_ptr">
+					get_shared_ptr</A></STRONG>. When the last <b>shared_ptr</b> to the 
+			object goes away and the object is deleted, the attempt to obtain a <STRONG>shared_ptr</STRONG>
 			from the <b>weak_ptr</b> instances that refer to the deleted object will fail: 
 			the constructor will throw an exception of type <STRONG>boost::bad_weak_ptr</STRONG>, 
-			and <STRONG>make_shared</STRONG> will return an <EM>empty</EM> <STRONG>shared_ptr</STRONG>.</p>
+			and <STRONG>get_shared_ptr</STRONG> will return an <EM>empty</EM> <STRONG>shared_ptr</STRONG>.</p>
 		<p>Every <b>weak_ptr</b> meets the <b>CopyConstructible</b> and <b>Assignable</b> requirements 
 			of the C++ Standard Library, and so can be used in standard library containers. 
 			Comparison operators are supplied so that <b>weak_ptr</b> works with the 
@@ -56,7 +55,7 @@ weak_ptr&lt;int&gt; q(p);
 
 // some time later
 
-if(shared_ptr&lt;int&gt; r = <A href="#make_shared" >make_shared</A>(q))
+if(shared_ptr&lt;int&gt; r = <A href="#get_shared_ptr" >get_shared_ptr</A>(q))
 {
     // use *r
 }
@@ -64,17 +63,6 @@ if(shared_ptr&lt;int&gt; r = <A href="#make_shared" >make_shared</A>(q))
 		<p>Now <STRONG>r</STRONG> holds a reference to the object that was pointed by <STRONG>q</STRONG>. 
 			Even if <code>p.reset()</code> is executed in another thread, the object will 
 			stay alive until <STRONG>r</STRONG> goes out of scope (or is reset.)</p>
-		<h2><a name="Motivation">Motivation</a></h2>
-		<p>[a mechanism to avoid dangling pointers]</p>
-		<P>[a way to break shared_ptr cycles]</P>
-		<P>[weak pointer to this - a technique to obtain a shared_ptr to this from within a 
-			member function]</P>
-		<P>[map&lt;weak_ptr, ...&gt; - a technique to associate arbitrary data with 
-			shared_ptr managed objects]</P>
-		<P>[gameobject/tank example]</P>
-		<P>[cache example]</P>
-		<P>[comparison: weak_ptr vs observer and other approaches]</P>
-		<P>[hard to reinvent, subtle implementation, with many pitfalls]</P>
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
@@ -110,7 +98,7 @@ if(shared_ptr&lt;int&gt; r = <A href="#make_shared" >make_shared</A>(q))
     void <A href="#free-swap" >swap</A>(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b);
 
   template&lt;class T&gt;
-    shared_ptr&lt;T&gt; <A href="#make_shared" >make_shared</A>(weak_ptr&lt;T&gt; const &amp; r);
+    shared_ptr&lt;T&gt; <A href="#get_shared_ptr" >get_shared_ptr</A>(weak_ptr&lt;T&gt; const &amp; r);
 
 }
 </pre>
@@ -210,9 +198,9 @@ template&lt;class Y&gt; weak_ptr &amp; <A href="#assignment" >operator=</A>(shar
 			<P><B>Notes:</B> Matches the interface of <B>std::swap</B>. Provided as an aid to 
 				generic programming.</P>
 		</BLOCKQUOTE>
-		<h3><a name="make_shared">make_shared</a></h3>
+		<h3><a name="get_shared_ptr">get_shared_ptr</a></h3>
 		<pre>template&lt;class T&gt;
-  shared_ptr&lt;T&gt; make_shared(weak_ptr&lt;T&gt; &amp; const r)</pre>
+  shared_ptr&lt;T&gt; get_shared_ptr(weak_ptr&lt;T&gt; &amp; const r)</pre>
 		<BLOCKQUOTE>
 			<P><B>Returns:</B> <code>r.expired()? shared_ptr&lt;T&gt;(): shared_ptr&lt;T&gt;(r)</code>.</P>
 			<P><B>Throws:</B> nothing.</P>
@@ -249,11 +237,11 @@ public:
 		</p>
 		<hr>
 		<p>$Date$</p>
-		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
+		<p><small>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002, 2003 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
 			all copies. This document is provided "as is" without express or implied 
-			warranty, and with no claim as to its suitability for any purpose.</p>
+			warranty, and with no claim as to its suitability for any purpose.</small></p>
 		</A>
 	</body>
 </html>
