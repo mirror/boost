@@ -96,7 +96,7 @@ struct require_same { typedef T type; };
   struct IntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      x.error_type_not_an_integer();
+      x.error_type_must_be_an_integer_type();
 #endif      
     }
     T x;
@@ -115,9 +115,10 @@ struct require_same { typedef T type; };
   struct SignedIntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      errortype_must_be_a_signed_integer_type();
+      x.error_type_must_be_a_signed_integer_type();
 #endif      
     }
+    T x;
   };
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <> struct SignedIntegerConcept<short> { void constraints() {} };
