@@ -14,8 +14,10 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/is_msvc_eti_arg.hpp>
+#include <boost/mpl/aux_/config/eti.hpp>
+#include <boost/mpl/aux_/config/gcc.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -52,6 +54,10 @@ template< typename T > struct msvc_eti_base
 template< typename T > struct msvc_eti_base
     : T
 {
+#if BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, > 0x0300) \
+    && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304))
+    template< typename U > msvc_eti_base( U& x ) : T(x) {}
+#endif
     typedef T type;
 };
 
