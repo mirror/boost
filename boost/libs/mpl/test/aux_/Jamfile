@@ -10,3 +10,4 @@ compile has_distance.cpp ;
 compile has_xxx.cpp ;
 compile no_has_xxx.cpp ;
 compile typeof.cpp ;
+compile template_arity.cpp ;
