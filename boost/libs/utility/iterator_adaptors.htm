@@ -423,27 +423,27 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
     { return *x; }
 
   template &lt;class BaseType&gt;
-  static void increment(BaseType&amp; x)
+  void increment(BaseType&amp; x)
     { ++x; }
 
   template &lt;class BaseType1, class BaseType2&gt;
-  bool equal(BaseType1&amp; x, BaseType2&amp; y) const
+  bool equal(const BaseType1&amp; x, const BaseType2&amp; y) const
     { return x == y; }
 
   template &lt;class BaseType&gt;
-  static void decrement(BaseType&amp; x)
+  void decrement(BaseType&amp; x)
     { --x; }
 
   template &lt;class BaseType, class DifferenceType&gt;
-  static void advance(BaseType&amp; x, DifferenceType n)
+  void advance(BaseType&amp; x, DifferenceType n)
     { x += n; }
 
   template &lt;class Difference, class BaseType1, class BaseType2&gt;
-  Difference distance(type&lt;Difference&gt;, BaseType1&amp; x, BaseType2&amp; y) const
+  Difference distance(type&lt;Difference&gt;, const BaseType1&amp; x, const BaseType2&amp; y) const
     { return y - x; }
 
   template &lt;class BaseType1, class BaseType2&gt;
-  bool less(BaseType1&amp; x, BaseType2&amp; y) const
+  bool less(const BaseType1&amp; x, const BaseType2&amp; y) const
     { return x &lt; y; }
 };
 </pre>
