@@ -26,12 +26,17 @@ struct InnermostDefault : fsm::state< MostDerived, Context >
 
   InnermostDefault( my_context ctx ) : base_type( ctx )
   {
-    this->outermost_context().Entry( typeid( MostDerived ) );
+    this->outermost_context().template ActualEntry< MostDerived >();
   }
 
   ~InnermostDefault()
   {
-    this->outermost_context().Exit( typeid( MostDerived ) );
+    this->outermost_context().template ActualDestructor< MostDerived >();
+  }
+
+  void exit()
+  {
+    this->outermost_context().template ActualExitFunction< MostDerived >();
   }
 };
 

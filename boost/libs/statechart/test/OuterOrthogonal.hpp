@@ -37,12 +37,17 @@ struct Orthogonal0 : fsm::state< MostDerived, Context, Reactions,
 
   Orthogonal0( my_context ctx ) : base_type( ctx )
   {
-    this->outermost_context().Entry( typeid( MostDerived ) );
+    this->outermost_context().template ActualEntry< MostDerived >();
   }
 
   ~Orthogonal0()
   {
-    this->outermost_context().Exit( typeid( MostDerived ) );
+    this->outermost_context().template ActualDestructor< MostDerived >();
+  }
+
+  void exit()
+  {
+    this->outermost_context().template ActualExitFunction< MostDerived >();
   }
 };
 
@@ -63,12 +68,48 @@ struct Orthogonal1 : fsm::state< MostDerived, Context, Reactions,
 
   Orthogonal1( my_context ctx ) : base_type( ctx )
   {
-    this->outermost_context().Entry( typeid( MostDerived ) );
+    this->outermost_context().template ActualEntry< MostDerived >();
   }
 
   ~Orthogonal1()
   {
-    this->outermost_context().Exit( typeid( MostDerived ) );
+    this->outermost_context().template ActualDestructor< MostDerived >();
+  }
+
+  void exit()
+  {
+    this->outermost_context().template ActualExitFunction< MostDerived >();
+  }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+template<
+  class MostDerived, class Context, class Reactions, class InitialState2 >
+struct Orthogonal2 : fsm::state< MostDerived, Context, Reactions,
+  mpl::list<
+    Default0< MostDerived >,
+    Default1< MostDerived >,
+    InitialState2 > >
+{
+  typedef fsm::state< 
+    MostDerived, Context, Reactions, mpl::list< Default0< MostDerived >,
+      Default1< MostDerived >, InitialState2 > > base_type;
+  typedef typename base_type::my_context my_context;
+  typedef Orthogonal2 my_base;
+
+  Orthogonal2( my_context ctx ) : base_type( ctx )
+  {
+    this->outermost_context().template ActualEntry< MostDerived >();
+  }
+
+  ~Orthogonal2()
+  {
+    this->outermost_context().template ActualDestructor< MostDerived >();
+  }
+
+  void exit()
+  {
+    this->outermost_context().template ActualExitFunction< MostDerived >();
   }
 };
 
