@@ -25,7 +25,7 @@
 #include "boost/preprocessor/enum_params.hpp"
 #include "boost/preprocessor/repeat.hpp"
 
-#include "boost/empty.hpp"
+#include "boost/empty_fwd.hpp"
 
 #if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 #   include "boost/preprocessor/enum_params_with_a_default.hpp"

@@ -17,6 +17,8 @@
 #ifndef BOOST_EMPTY_HPP
 #define BOOST_EMPTY_HPP
 
+#include "boost/empty_fwd.hpp"
+
 #include <iosfwd> // for std::basic_ostream forward declare
 
 #include "boost/config.hpp"
