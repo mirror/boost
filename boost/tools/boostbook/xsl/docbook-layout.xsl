@@ -192,4 +192,13 @@
         "/>
      </xsl:call-template>
   </xsl:template>
+
+  <!-- When there is both a title and a caption for a table, only use the 
+       title. -->
+  <xsl:template match="table" mode="title.markup">
+    <xsl:param name="allow-anchors" select="0"/>
+    <xsl:apply-templates select="(title|caption)[1]" mode="title.markup">
+      <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
+    </xsl:apply-templates>
+  </xsl:template>
 </xsl:stylesheet>
