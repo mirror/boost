@@ -325,10 +325,14 @@ namespace boost {
                     typedef ForwardIteratorT input_iterator_type;
                     typedef iterator_range<ForwardIteratorT> result_type;
 
-                    input_iterator_type It=Begin+m_N;
-                    if ( It >= End ) It=End;
-
-                    return result_type( Begin, It );
+                    if(std::distance(Begin,End) >= m_N)
+                    {
+                        return result_type(Begin,End);
+                    }
+                    else
+                    {
+                        return result_type(Begin,Begin+m_N);
+                    }
                 }
 
             private:
