@@ -49,13 +49,13 @@ int test_main(int /*argc*/, char * /*argv*/[])
    for(i = 0; i < 20; ++i)
    {
       boost::shared_ptr<test_object> p = boost::object_cache<int, test_object>::get(i, max_cache_size);
-      BOOST_TEST(p->value() == i);
+      BOOST_CHECK(p->value() == i);
       p = boost::object_cache<int, test_object>::get(i, max_cache_size);
-      BOOST_TEST(p->value() == i);
+      BOOST_CHECK(p->value() == i);
       if(i)
       {
          p = boost::object_cache<int, test_object>::get(i-1, max_cache_size);
-         BOOST_TEST(p->value() == i-1);
+         BOOST_CHECK(p->value() == i-1);
       }
    }
    int current_count = test_object::count();
@@ -64,12 +64,12 @@ int test_main(int /*argc*/, char * /*argv*/[])
       for(i = 20 - max_cache_size; i < 20; ++i)
       {
          boost::shared_ptr<test_object> p = boost::object_cache<int, test_object>::get(i, max_cache_size);
-         BOOST_TEST(p->value() == i);
+         BOOST_CHECK(p->value() == i);
          p = boost::object_cache<int, test_object>::get(i, max_cache_size);
-         BOOST_TEST(p->value() == i);
+         BOOST_CHECK(p->value() == i);
       }
    }
-   BOOST_TEST(current_count == test_object::count());
+   BOOST_CHECK(current_count == test_object::count());
    return 0;
 }
 
