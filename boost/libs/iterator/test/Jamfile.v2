@@ -44,14 +44,4 @@ test-suite iterator
     [ run permutation_iterator_test.cpp : : : # <stlport-iostream>on 
     ]
       
-    [ run ../../utility/iterator_adaptor_examples.cpp ]
-    [ run ../../utility/counting_iterator_example.cpp ]
-    [ run ../../utility/filter_iterator_example.cpp ]
-    [ run ../../utility/fun_out_iter_example.cpp ]
-    [ run ../../utility/indirect_iterator_example.cpp ]
-    [ run ../../utility/projection_iterator_example.cpp ]
-    [ run ../../utility/reverse_iterator_example.cpp ]
-    [ run ../../utility/transform_iterator_example.cpp ]
-    [ run ../../utility/iterator_traits_test.cpp ]
-    [ run ../../utility/shared_iterator_test.cpp ]
 ;
