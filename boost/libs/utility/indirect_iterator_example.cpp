@@ -29,8 +29,7 @@ int main(int, char*[])
 
   // Example of using indirect_iterator_pair_generator
 
-  typedef boost::indirect_iterator_pair_generator<char**,
-    char, char*, char&, const char*, const char&> PairGen;
+  typedef boost::indirect_iterator_pair_generator<char**, char> PairGen;
 
   char mutable_characters[N];
   char* pointers_to_mutable_chars[N];
