@@ -39,6 +39,10 @@
 #   define BOOST_HAS_TRIVIAL_COPY(T) ::boost::is_same< typename ::__type_traits<T>::has_trivial_copy_constructor, ::__true_type>::value
 #   define BOOST_HAS_TRIVIAL_ASSIGN(T) ::boost::is_same< typename ::__type_traits<T>::has_trivial_assignment_operator, ::__true_type>::value
 #   define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) ::boost::is_same< typename ::__type_traits<T>::has_trivial_destructor, ::__true_type>::value
+
+#   ifdef __sgi
+#      define BOOST_HAS_TYPE_TRAITS_INTRINSICS
+#   endif
 #endif
 
 #if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x8000)
@@ -53,6 +57,7 @@
 #   define BOOST_HAS_TRIVIAL_COPY(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_copy_ctor<T>::value
 #   define BOOST_HAS_TRIVIAL_ASSIGN(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_assignment<T>::value
 #   define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_dtor<T>::value
+#   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
 
 #ifndef BOOST_IS_UNION
