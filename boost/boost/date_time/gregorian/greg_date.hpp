@@ -44,6 +44,12 @@ namespace gregorian {
     typedef gregorian_calendar::date_rep_type date_rep_type;
     typedef gregorian_calendar::date_int_type date_int_type;
     typedef date_duration  duration_type;
+#if !defined(DATE_TIME_NO_DEFAULT_CONSTRUCTOR)
+    //! Default constructor constructs with not_a_date_time
+    date():
+      date_time::date<date, gregorian_calendar, date_duration>(date_rep_type::from_special(not_a_date_time))
+    {}
+#endif // DATE_TIME_NO_DEFAULT_CONSTRUCTOR
     //! Main constructor with year, month, day
     date(year_type y, month_type m, day_type d) 
       : date_time::date<date, gregorian_calendar, date_duration>(y, m, d)

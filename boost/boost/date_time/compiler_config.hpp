@@ -19,6 +19,8 @@
 #define BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
 #endif
 
+// To Force no default constructors for date & ptime, un-comment following
+//#define DATE_TIME_NO_DEFAULT_CONSTRUCTOR
 
 #if (defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) || (defined(__BORLANDC__)))
 #define BOOST_DATE_TIME_NO_MEMBER_INIT
