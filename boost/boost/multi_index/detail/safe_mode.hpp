@@ -98,7 +98,7 @@ protected:
 BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
   friend class safe_container_base;
 
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_MULTI_INDEX_NO_MEMBER_TEMPLATE_FRIENDS)
   template<typename Iterator> friend
     void safe_mode::detach_equivalent_iterators(Iterator&);
 #endif
@@ -130,7 +130,7 @@ public:
 BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
   friend class safe_iterator_base;
 
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_MULTI_INDEX_NO_MEMBER_TEMPLATE_FRIENDS)
   template<typename Iterator> friend
     void safe_mode::detach_equivalent_iterators(Iterator&);
 #endif

@@ -77,7 +77,7 @@ class multi_index_container:
 #endif
 
 private:
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_MULTI_INDEX_NO_MEMBER_TEMPLATE_FRIENDS)
   template <typename,typename,typename> friend class  detail::index_base;
   template <typename,typename>          friend class  detail::header_holder;
   template <typename,typename>          friend class  detail::converter;
