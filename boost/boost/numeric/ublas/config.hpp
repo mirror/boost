@@ -286,7 +286,7 @@ bool disable_type_check<Dummy>::value = false;
 // #define BOOST_UBLAS_SIMPLE_ET_DEBUG
 
 // Select stream types defined for IO
-#if !define (BOOST_UBLAS_USE_STREAM) && !define(BOOST_UBLAS_USE_BASIC_STREAM)
+#if !defined(BOOST_UBLAS_USE_STREAM) && !defined(BOOST_UBLAS_USE_BASIC_STREAM)
 #define BOOST_UBLAS_USE_STREAM
 #endif
 
