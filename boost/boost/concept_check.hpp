@@ -6,6 +6,7 @@
 // to its suitability for any purpose.
 //
 // Revision History:
+//   02 April 2001: Removed limits header altogether. (Jeremy Siek)
 //   01 April 2001: Modified to use new <boost/limits.hpp> header. (JMaddock)
 //
 #ifndef BOOST_CONCEPT_CHECKS_HPP
@@ -14,7 +15,6 @@
 #include <boost/config.hpp>
 #include <boost/iterator.hpp>
 #include <utility>
-#include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 
 #if defined(BOOST_MSVC) || defined(__BORLANDC__)
