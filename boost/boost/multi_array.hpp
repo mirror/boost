@@ -196,7 +196,7 @@ public:
     boost::array<size_type,NumDims> min_extents;
 
     const size_type& (*min)(const size_type&, const size_type&) =
-      std::min<size_type>;
+      std::min;
     std::transform(new_array.extent_list_.begin(),new_array.extent_list_.end(),
                    this->extent_list_.begin(),
                    min_extents.begin(),
