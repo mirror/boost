@@ -89,7 +89,7 @@ struct singleton_pool
       details::pool::guard<Mutex> g(p);
       p.p.ordered_free(ptr);
     }
-    static void free(void * const ptr, const std::size_t n)
+    static void free(void * const ptr, const size_type n)
     {
       pool_type & p = singleton::instance();
       details::pool::guard<Mutex> g(p);
