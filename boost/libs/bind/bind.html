@@ -501,7 +501,7 @@ int main()
 		<p>On some platforms, extern "C" functions, like <b>std::strcmp</b>, are not 
 			recognized by the short form of bind.
 		</p>
-		<P>See also <A href="#stdcall" name="stdcall">"__stdcall" and "pascal" Support</A>.</P>
+		<P>See also <A href="#stdcall">"__stdcall" and "pascal" Support</A>.</P>
 		<h3><a name="err_const_arg"><b>const</b> in signatures</a></h3>
 		<p>Some compilers, including MSVC 6.0 and Borland C++ 5.5.1, have problems with the 
 			top-level <b>const</b> in function signatures:
@@ -779,14 +779,18 @@ namespace
 				<A href="test/bind_fastcall_test.cpp">libs/bind/test/bind_fastcall_test.cpp</A>
 			(test with __fastcall functions)
 			<li>
-				<A href="test/bind_fastcall_mf_test.cpp">libs/bind/test/bind_fastcall_mf_test.cpp</A> (test 
-				with __fastcall member functions)</li></ul>
+				<A href="test/bind_fastcall_mf_test.cpp">libs/bind/test/bind_fastcall_mf_test.cpp</A>
+				(test with __fastcall member functions)</li></ul>
 		<h3><a name="Dependencies">Dependencies</a></h3>
 		<ul>
-			<li><A href="../config/config.htm">Boost.Config</A></li>
-			<li><A href="ref.html">boost/ref.hpp</A></li>
-			<li><A href="mem_fn.html">boost/mem_fn.hpp</A></li>
-			<li><A href="../../boost/type.hpp">boost/type.hpp</A></li>
+			<li>
+				<A href="../config/config.htm">Boost.Config</A></li>
+			<li>
+				<A href="ref.html">boost/ref.hpp</A></li>
+			<li>
+				<A href="mem_fn.html">boost/mem_fn.hpp</A></li>
+			<li>
+				<A href="../../boost/type.hpp">boost/type.hpp</A></li>
 		</ul>
 		<h3><a name="NumberOfArguments">Number of Arguments</a></h3>
 		<p>This implementation supports function objects with up to nine arguments. This is 
@@ -822,7 +826,7 @@ namespace
 				The <a href="http://staff.cs.utu.fi/BL/">Binder Library</a>
 			by Jaakko Järvi;
 			<li>
-				The <a href="http://lambda.cs.utu.fi/">Lambda Library</a>
+				The <a href="../lambda/">Lambda Library</a> (now part of Boost)
 			by Jaakko Järvi and Gary Powell (the successor to the Binder Library);
 			<li>
 				<a href="http://matfys.lth.se/~petter/src/more/stlext/index.html">Extensions to the 
