@@ -211,31 +211,6 @@ namespace std {
 #endif
 
 
-// Enable assignment of non conformant proxies
-#define BOOST_UBLAS_NON_CONFORMANT_PROXIES
-
-// Enable different sparse element proxies
-// These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
-// Thanks to Marc Duflot for spotting this.
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-// #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
-#define BOOST_UBLAS_STRICT_VECTOR_SPARSE
-#define BOOST_UBLAS_STRICT_MATRIX_SPARSE
-#endif
-
-// Hermitian matrices can also use element proxies to allow assignment to conjugate triangle
-// #define BOOST_UBLAS_STRICT_HERMITIAN
-
-
-// Enable compile time typedefs for proxies
-#define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-#define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-#define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
-// #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
-// #define BOOST_UBLAS_PROXY_CONST_MEMBER
-
-
-
 // Enable performance options in RELEASE mode
 #ifdef NDEBUG
 
@@ -277,8 +252,11 @@ namespace std {
 #endif
 
 
-// Control type compatibility numeric runtime checks for non dense matrices.
-// Require additional storage and complexity
+/*
+ * Type compatibility checks
+ *  Control type compatibility numeric runtime checks for non dense matrices.
+ *  Require additional storage and complexity
+ */
 #if BOOST_UBLAS_TYPE_CHECK
 template <class Dummy>
 struct disable_type_check
@@ -296,6 +274,12 @@ bool disable_type_check<Dummy>::value = false;
 #endif
 
 
+/*
+ * General Configuration
+ */
+
+// Operator () is alreadly heavily over used. Use project member function for proxies
+#define BOOST_UBLAS_NO_PROXY_SHORTCUTS
 
 // In order to simplify debugging is is possible to simplify expression template
 // so they are restricted to a single operation
@@ -324,7 +308,33 @@ bool disable_type_check<Dummy>::value = false;
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR
 
 // Alignment of bounded arrays. align(16) possibly useful for ICC
+#ifndef BOOST_UBLAS_BOUNDED_ARRAY_ALIGN
 #define BOOST_UBLAS_BOUNDED_ARRAY_ALIGN
+#endif
+
+// Enable assignment of non conformant proxies
+#define BOOST_UBLAS_NON_CONFORMANT_PROXIES
+
+// Enable different sparse element proxies
+// These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
+// Thanks to Marc Duflot for spotting this.
+#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
+// #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
+#define BOOST_UBLAS_STRICT_VECTOR_SPARSE
+#define BOOST_UBLAS_STRICT_MATRIX_SPARSE
+#endif
+
+// Hermitian matrices can also use element proxies to allow assignment to conjugate triangle
+// #define BOOST_UBLAS_STRICT_HERMITIAN
+
+
+// Enable compile time typedefs for proxies
+#define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+#define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+#define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+// #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
+// #define BOOST_UBLAS_PROXY_CONST_MEMBER
+
 
 #include <boost/numeric/ublas/fwd.hpp>
 
