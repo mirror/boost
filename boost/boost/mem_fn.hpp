@@ -31,15 +31,7 @@ template<class T> T * get_pointer(T * p)
     return p;
 }
 
-// implementation of get_pointer for boost::shared_ptr
-// this will probably migrate to boost/shared_ptr.hpp
-
-template<class T> class shared_ptr;
-
-template<class T> T * get_pointer(shared_ptr<T> const & p)
-{
-    return p.get();
-}
+// get_pointer(shared_ptr<T> const & p) has been moved to shared_ptr.hpp
 
 #if defined(BOOST_NO_VOID_RETURNS)
 
