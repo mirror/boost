@@ -14,12 +14,6 @@ using namespace boost::program_options;
 #include <boost/test/test_tools.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-template<class T, unsigned N>
-unsigned size(const T (&t)[N])
-{
-    return N;
-}
-
 void test_winmain()
 {
     using namespace std;
@@ -28,7 +22,8 @@ void test_winmain()
 #define TEST(input, expected) \
     char* BOOST_PP_CAT(e, __LINE__)[] = expected;\
     vector<string> BOOST_PP_CAT(v, __LINE__) = split_winmain(input);\
-    BOOST_REQUIRE(BOOST_PP_CAT(v, __LINE__).size() == size(BOOST_PP_CAT(e, __LINE__)));\
+    BOOST_REQUIRE(BOOST_PP_CAT(v, __LINE__).size() == \
+            sizeof(BOOST_PP_CAT(e, __LINE__))/sizeof(char*));\
     BOOST_CHECK_EQUAL_COLLECTIONS(BOOST_PP_CAT(v, __LINE__).begin(),\
                                   BOOST_PP_CAT(v, __LINE__).end(),\
                                   BOOST_PP_CAT(e, __LINE__));    
