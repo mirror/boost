@@ -11,6 +11,7 @@
 #include <boost/config.hpp>
 #include <boost/pending/cstddef.hpp>
 #include <boost/concept_check.hpp>
+#include <boost/concept_archetype.hpp>
 
 namespace boost {
 
@@ -209,6 +210,17 @@ namespace boost {
     Key k;
     typename property_traits<PMap>::value_type val;
   };
+  template <typename KeyArchetype, typename ValueArchetype>
+  struct readable_property_map_archetype {
+    typedef KeyArchetype key_type;
+    typedef ValueArchetype value_type;
+    typedef readable_property_map_tag category;
+  };
+  template <typename K, typename V>
+  V get(const readable_property_map_archetype<K,V>&, const K&) {
+    return V(dummy_cons);
+  }
+
 
   template <class PMap, class Key>
   struct WritablePropertyMapConcept
@@ -224,6 +236,15 @@ namespace boost {
     Key k;
     typename property_traits<PMap>::value_type val;
   };
+  template <typename KeyArchetype, typename ValueArchetype>
+  struct writable_property_map_archetype {
+    typedef KeyArchetype key_type;
+    typedef ValueArchetype value_type;
+    typedef readable_property_map_tag category;
+  };
+  template <typename K, typename V>
+  void put(const writable_property_map_archetype<K,V>&, const K&, const V&) { }
+
 
   template <class PMap, class Key>
   struct ReadWritePropertyMapConcept
@@ -236,6 +257,11 @@ namespace boost {
       function_requires< ConvertibleConcept<Category, ReadWriteTag> >();
     }
   };
+  template <typename KeyArchetype, typename ValueArchetype>
+  struct read_write_property_map_archetype
+    : public readable_property_map_archetype<KeyArchetype, ValueArchetype>,
+      public writable_property_map_archetype<KeyArchetype, ValueArchetype> { };
+
 
   template <class PMap, class Key>
   struct LvaluePropertyMapConcept
@@ -252,6 +278,19 @@ namespace boost {
     PMap pmap;
     Key k;
   };
+  template <typename KeyArchetype, typename ValueArchetype>
+  struct lvalue_property_map_archetype
+    : public readable_property_map_archetype<KeyArchetype, ValueArchetype>
+  {
+    typedef KeyArchetype key_type;
+    typedef ValueArchetype value_type;
+    typedef lvalue_property_map_tag category;
+    const value_type& operator[](const key_type&) const { return s_v; }
+    static value_type s_v;
+  };
+  template <typename K, typename V>
+  V lvalue_property_map_archetype<K,V>::s_v(dummy_cons);
+
 
   template <class PMap, class Key>
   struct Mutable_LvaluePropertyMapConcept
@@ -268,6 +307,20 @@ namespace boost {
     PMap pmap;
     Key k;
   };
+  template <typename KeyArchetype, typename ValueArchetype>
+  struct mutable_lvalue_property_map_archetype
+    : public readable_property_map_archetype<KeyArchetype, ValueArchetype>,
+      public writable_property_map_archetype<KeyArchetype, ValueArchetype>
+  {
+    typedef KeyArchetype key_type;
+    typedef ValueArchetype value_type;
+    typedef lvalue_property_map_tag category;
+    value_type& operator[](const key_type&) const { return s_v; }
+    static value_type s_v;
+  };
+  template <typename K, typename V>
+  V mutable_lvalue_property_map_archetype<K,V>::s_v(dummy_cons);
+
 
   struct identity_property_map;
 
