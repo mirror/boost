@@ -80,8 +80,6 @@ And, of course, function pointers have several advantages over Boost.Function:
 
 <p> In Boost.Function, an alternative but equivalent approach was taken using free functions instead of virtual functions. The Boost.Function object essentially holds two pointers to make a valid target call: a void pointer to the function object it contains and a void pointer to an "invoker" that can call the function object, given the function pointer. This invoker function performs the argument and return value conversions Boost.Function provides. A third pointer points to a free function called the "manager", which handles the cloning and destruction of function objects. The scheme is typesafe because the only functions that actually handle the function object, the invoker and the manager, are instantiated given the type of the function object, so they can safely cast the incoming void pointer (the function object pointer) to the appropriate type.
 
-<p> A compiler with strong interprocedural analysis could significantly reduce the overhead associated with virtual function calls such that the alternative used by Boost.Function is less efficient. No compiler has yet been found where this is true, but when it does occur the BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS macro can be defined to revert to the simpler implementation based on virtual functions.
-
 <h2><a name="acknowledgements">Acknowledgements</a></h2>
 <p> Many people were involved in the construction of this library. William Kempf, Jesse Jones and Karl Nelson were all extremely helpful in isolating an interface and scope for the library. John Maddock managed the formal review, and many reviewers gave excellent comments on interface, implementation, and documentation. 
 
