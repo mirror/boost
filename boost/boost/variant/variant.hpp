@@ -442,11 +442,21 @@ private: // static precondition assertions
 
     // Sequences are not supported for compilers that do not support
     // using declarations in templates (see below).
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
     BOOST_STATIC_ASSERT((
           BOOST_MPL_AUX_VALUE_WKND(
               mpl::not_< mpl::is_sequence<T0> >
             )::value
         ));
+
+#else
+
+    // temporarily nothing: maybe this will work for MSVC6
+    /**/
+
+#endif
 
 #endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 
