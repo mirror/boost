@@ -374,7 +374,7 @@ int main()
     test<unsigned int>();
     test<long>();
     test<unsigned long>();
-#if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
+#if defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_INTEGRAL_INT64_T)
     test<long long>();
     test<unsigned long long>();
 #elif defined(BOOST_MSVC)

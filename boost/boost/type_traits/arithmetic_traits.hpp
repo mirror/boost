@@ -32,7 +32,7 @@ template <typename T> struct is_void{ BOOST_STATIC_CONSTANT(bool, value = false)
 template <> struct is_void<void>{ BOOST_STATIC_CONSTANT(bool, value = true); };
 
 //* is a type T an [cv-qualified-] integral type described in the standard (3.9.1p3)
-// as an extention we include long long, as this is likely to be added to the 
+// as an extention we include long long, as this is likely to be added to the
 // standard at a later date
 template <typename T> struct is_integral
 { BOOST_STATIC_CONSTANT(bool, value = false); };
@@ -61,13 +61,12 @@ template <> struct is_integral<wchar_t>
 template <> struct is_integral<bool>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 
-# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
+# if defined(BOOST_HAS_LONG_LONG)
 template <> struct is_integral<unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#endif
-#if defined(__BORLANDC__) || defined(_MSC_VER) && !defined(__MWERKS__)
+#elif defined(__BORLANDC__) || defined(_MSC_VER)
 template <> struct is_integral<unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<__int64>
@@ -122,13 +121,12 @@ template <> struct is_integral<const wchar_t>
 template <> struct is_integral<const bool>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 
-# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
+# if defined(BOOST_HAS_LONG_LONG)
 template <> struct is_integral<const unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#endif  // ULLONG_MAX
-#if defined(__BORLANDC__) || defined(_MSC_VER) && !defined(__MWERKS__)
+#elif defined(__BORLANDC__) || defined(_MSC_VER)
 template <> struct is_integral<const unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const __int64>
@@ -168,13 +166,12 @@ template <> struct is_integral<volatile  wchar_t>
 template <> struct is_integral<volatile  bool>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 
-# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
+# if defined(BOOST_HAS_LONG_LONG)
 template <> struct is_integral<volatile  unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<volatile  long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#endif  // ULLONG_MAX
-#if defined(__BORLANDC__) || defined(_MSC_VER) && !defined(__MWERKS__)
+#elif defined(__BORLANDC__) || defined(_MSC_VER)
 template <> struct is_integral<volatile  unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<volatile  __int64>
@@ -214,13 +211,12 @@ template <> struct is_integral<const volatile wchar_t>
 template <> struct is_integral<const volatile bool>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 
-# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
+# if defined(BOOST_HAS_LONG_LONG)
 template <> struct is_integral<const volatile unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const volatile long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#endif  // ULLONG_MAX
-#if defined(__BORLANDC__) || defined(_MSC_VER) && !defined(__MWERKS__)
+#elif defined(__BORLANDC__) || defined(_MSC_VER)
 template <> struct is_integral<const volatile unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const volatile __int64>
