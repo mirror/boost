@@ -113,6 +113,6 @@ main()
   ptime t2(date(2002,7,14));
   check("One year of hours: 365*24=8760",  365*24 == ((t2-t1).hours()));
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 }

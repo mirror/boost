@@ -64,7 +64,6 @@ int main()
                           ptime(d1,time_duration(4,0,0))));
   
   
-  printTestStats();
+  return printTestStats();
 
-  return 0;
 }

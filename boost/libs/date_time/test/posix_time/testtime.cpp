@@ -103,6 +103,6 @@ main()
   ptime t18(d, hours(25));
   std::cout << to_simple_string(t18) << std::endl;
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 }
