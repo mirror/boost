@@ -36,6 +36,6 @@ produces a list containing 1, 2, 3 and 4.
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_LIST_APPEND_D(D,L,P) BOOST_PP_LIST_FOLD_RIGHT_D(D,BOOST_PP_LIST_APPEND_F,L,P)
-#define BOOST_PP_LIST_APPEND_F(D,H,P) BOOST_PP_LIST_CONS(H,P)
+#define BOOST_PP_LIST_APPEND_F(D,H,P) (H,P,1)
 #endif
 #endif
