@@ -30,22 +30,16 @@ class state : public simple_state<
 {
   typedef simple_state< MostDerived, Context, Reactions, InnerInitial >
     base_type;
-
   protected:
     //////////////////////////////////////////////////////////////////////////
-    typedef typename base_type::outermost_context_type outermost_context_type;
-    typedef typename base_type::context_ptr_type context_ptr_type;
-    typedef typename base_type::inner_context_ptr_type inner_context_ptr_type;
-    typedef typename base_type::inner_initial_list inner_initial_list;
-
     struct my_context
     {
-      my_context( context_ptr_type pContext ) :
+      my_context( typename base_type::context_ptr_type pContext ) :
         pContext_( pContext )
       {
       }
 
-      context_ptr_type pContext_;
+      typename base_type::context_ptr_type pContext_;
     };
 
     typedef state my_base;
@@ -61,6 +55,11 @@ class state : public simple_state<
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     // See base class for documentation
+    typedef typename base_type::outermost_context_type outermost_context_type;
+    typedef typename base_type::inner_context_ptr_type inner_context_ptr_type;
+    typedef typename base_type::context_ptr_type context_ptr_type;
+    typedef typename base_type::inner_initial_list inner_initial_list;
+
     static void deep_construct( outermost_context_type & outermostContext )
     {
       deep_construct( &outermostContext, outermostContext );
