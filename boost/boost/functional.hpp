@@ -1,5 +1,6 @@
 // ------------------------------------------------------------------------------
 // Boost functional.hpp header file
+// See http://www.boost.org for updates, documentation, and revision history.
 // ------------------------------------------------------------------------------
 // Copyright (c) 2000
 // Cadenza New Zealand Ltd
@@ -14,23 +15,6 @@
 // warranty.
 // ------------------------------------------------------------------------------
 // $Id$
-// ------------------------------------------------------------------------------
-// $Log$
-// Revision 1.2  2000/08/01 07:53:58  mark_rodgers
-// Workarounds for Metrowerks as suggested by Fabrice Truillot.
-//
-// Revision 1.1.1.1  2000/07/07 16:03:47  beman
-// 1.16.1 initial CVS checkin
-//
-// Revision 1.3  2000/06/26 09:44:54  mark
-// Updated following feedback from Jens Maurer.
-//
-// Revision 1.2  2000/05/17 08:36:30  mark
-// Fixed problems with function object traits thanks to ideas
-// from John Maddock.
-//
-// Revision 1.1  2000/05/07 08:26:51  mark
-// Initial revision
 // ------------------------------------------------------------------------------
 
 #ifndef BOOST_FUNCTIONAL_HPP
@@ -194,6 +178,12 @@ namespace boost
         return unary_negate<Predicate>((typename unary_traits<Predicate>::param_type)pred);
     }
 
+    template <class Predicate>
+    unary_negate<Predicate> not1(Predicate &pred)
+    {
+        return unary_negate<Predicate>(pred);
+    }
+
     // --------------------------------------------------------------------------
     // binary_negate, not2
     // --------------------------------------------------------------------------
@@ -223,6 +213,12 @@ namespace boost
         // The cast is to placate Borland C++Builder in certain circumstances.
         // I don't think it should be necessary.
         return binary_negate<Predicate>((typename binary_traits<Predicate>::param_type)pred);
+    }
+
+    template <class Predicate>
+    binary_negate<Predicate> not2(Predicate &pred)
+    {
+        return binary_negate<Predicate>(pred);
     }
         
     // --------------------------------------------------------------------------
@@ -262,6 +258,15 @@ namespace boost
         return binder1st<Operation>((typename binary_traits<Operation>::param_type)op, x);
     }
 
+    template <class Operation>
+    inline binder1st<Operation> bind1st(Operation &op,
+                                        typename call_traits<
+                                                    typename binary_traits<Operation>::first_argument_type
+                                        >::param_type x)
+    {
+        return binder1st<Operation>(op, x);
+    }
+
     // --------------------------------------------------------------------------
     // binder2nd, bind2nd
     // --------------------------------------------------------------------------
@@ -297,6 +302,15 @@ namespace boost
         // The cast is to placate Borland C++Builder in certain circumstances.
         // I don't think it should be necessary.
         return binder2nd<Operation>((typename binary_traits<Operation>::param_type)op, x);
+    }
+
+    template <class Operation>
+    inline binder2nd<Operation> bind2nd(Operation &op,
+                                        typename call_traits<
+                                                    typename binary_traits<Operation>::second_argument_type
+                                        >::param_type x)
+    {
+        return binder2nd<Operation>(op, x);
     }
 
     // --------------------------------------------------------------------------
