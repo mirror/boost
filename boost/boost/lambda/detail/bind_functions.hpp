@@ -36,6 +36,7 @@ template<class T> struct constify_non_funcs {
 }
 #endif
 // 1-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result>
 inline const
 lambda_functor<
@@ -45,7 +46,7 @@ lambda_functor<
   >
 >
 
-bind(Result(&a1)()) {
+bind(Result(& a1)()) {
   return
     lambda_functor_base<
       action<1, function_action<1, Result> >,
@@ -55,7 +56,7 @@ bind(Result(&a1)()) {
       (a1)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1>
@@ -173,9 +174,10 @@ bind(Result(* const & a1)()) {
 }
 
 
- #endif 
+#endif 
 
 // 2-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Arg2>
 inline const
 lambda_functor<
@@ -195,9 +197,9 @@ bind(Result(&a1)(Par1), const Arg2& a2) {
       (a1, a2)
     );
 }
+#endif
 
-
- #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
+#ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2>
 inline const
 lambda_functor<
@@ -316,6 +318,7 @@ bind(Result(* const & a1)(Par1), const Arg2& a2) {
  #endif 
 
 // 3-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Arg2, class Arg3>
 inline const
 lambda_functor<
@@ -341,7 +344,7 @@ bind(Result(&a1)(Par1, Par2), const Arg2& a2, const Arg3& a3) {
       (a1, a2, a3)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3>
@@ -484,6 +487,7 @@ bind(Result(* const & a1)(Par1, Par2), const Arg2& a2, const Arg3& a3) {
  #endif 
 
 // 4-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Arg2,
           class Arg3, class Arg4>
 inline const
@@ -511,7 +515,7 @@ bind(Result(&a1)(Par1, Par2, Par3), const Arg2& a2, const Arg3& a3,
       (a1, a2, a3, a4)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4>
@@ -658,6 +662,7 @@ bind(Result(* const & a1)(Par1, Par2, Par3), const Arg2& a2,
  #endif 
 
 // 5-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Par4,
           class Arg2, class Arg3, class Arg4, class Arg5>
 inline const
@@ -688,7 +693,7 @@ bind(Result(&a1)(Par1, Par2, Par3, Par4), const Arg2& a2, const Arg3& a3,
       (a1, a2, a3, a4, a5)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4, class Arg5>
@@ -844,6 +849,7 @@ bind(Result(* const & a1)(Par1, Par2, Par3, Par4), const Arg2& a2,
  #endif 
 
 // 6-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Par4,
           class Par5, class Arg2, class Arg3, class Arg4, class Arg5,
           class Arg6>
@@ -875,7 +881,7 @@ bind(Result(&a1)(Par1, Par2, Par3, Par4, Par5), const Arg2& a2,
       (a1, a2, a3, a4, a5, a6)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4, class Arg5,
@@ -1034,6 +1040,7 @@ bind(Result(* const & a1)(Par1, Par2, Par3, Par4, Par5), const Arg2& a2,
  #endif 
 
 // 7-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Par4,
           class Par5, class Par6, class Arg2, class Arg3, class Arg4,
           class Arg5, class Arg6, class Arg7>
@@ -1066,7 +1073,7 @@ bind(Result(&a1)(Par1, Par2, Par3, Par4, Par5, Par6), const Arg2& a2,
       (a1, a2, a3, a4, a5, a6, a7)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4, class Arg5,
@@ -1232,6 +1239,7 @@ bind(Result(* const & a1)(Par1, Par2, Par3, Par4, Par5, Par6),
  #endif 
 
 // 8-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Par4,
           class Par5, class Par6, class Par7, class Arg2, class Arg3,
           class Arg4, class Arg5, class Arg6, class Arg7, class Arg8>
@@ -1264,7 +1272,7 @@ bind(Result(&a1)(Par1, Par2, Par3, Par4, Par5, Par6, Par7), const Arg2& a2,
       (a1, a2, a3, a4, a5, a6, a7, a8)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4, class Arg5,
@@ -1430,6 +1438,7 @@ bind(Result(* const & a1)(Par1, Par2, Par3, Par4, Par5, Par6, Par7),
  #endif 
 
 // 9-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Par4,
           class Par5, class Par6, class Par7, class Par8, class Arg2,
           class Arg3, class Arg4, class Arg5, class Arg6, class Arg7,
@@ -1466,7 +1475,7 @@ bind(Result(&a1)(Par1, Par2, Par3, Par4, Par5, Par6, Par7, Par8),
       (a1, a2, a3, a4, a5, a6, a7, a8, a9)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4, class Arg5,
@@ -1644,6 +1653,7 @@ bind(Result(* const & a1)(Par1, Par2, Par3, Par4, Par5, Par6, Par7, Par8),
  #endif 
 
 // 10-argument bind functions --------------------------
+#ifndef BOOST_REF_TO_FUNC_CONFLICTS_WITH_REF_TO_T
 template <class Result, class Par1, class Par2, class Par3, class Par4,
           class Par5, class Par6, class Par7, class Par8, class Par9,
           class Arg2, class Arg3, class Arg4, class Arg5, class Arg6,
@@ -1681,7 +1691,7 @@ bind(Result(&a1)(Par1, Par2, Par3, Par4, Par5, Par6, Par7, Par8, Par9),
       (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
     );
 }
-
+#endif
 
  #ifndef BOOST_LAMBDA_INCORRECT_BIND_OVERLOADING 
 template <class Arg1, class Arg2, class Arg3, class Arg4, class Arg5,
