@@ -24,6 +24,7 @@ Fernando Cacciola,
 Joel de Guzman,
 Brad King,
 Giovanni Bajo,
+Eugene Gladyshev,
 and others provided helpful feedback and suggestions to refine the semantics,
 interface, and implementation of the library.</para>
 
@@ -32,6 +33,20 @@ interface, and implementation of the library.</para>
 <section id="variant.biblio">
   <title>Bibliography</title>
 
+<para id="variant.biblio.abr00">
+    [Abr98] David Abrahams.
+    &quot;<ulink url="http://boost.org/more/generic_exception_safety.html">Exception-Safety in Generic Components</ulink>.&quot;
+    M. Jazayeri, R. Loos, D. Musser (eds.):
+      Generic Programming '98, Proc. of a Dagstuhl Seminar, Lecture Notes on Computer Science, Vol. 1766, pp. 69-79.
+    Springer-Verlag Berlin Heidelberg.
+    2000.
+</para>
+<para id="variant.biblio.abr01">
+    [Abr01] David Abrahams.
+    &quot;<ulink url="http://boost.org/more/error_handling.html">Error and Exception Handling</ulink>.&quot;
+    Boost technical article.
+    2001-2003.
+</para>
 <para id="variant.biblio.ale01a">
     [Ale01A] Andrei Alexandrescu.
     &quot;<ulink url="http://www.oonumerics.org/tmpw01/alexandrescu.pdf">An Implementation of Discriminated Unions in C++</ulink>.&quot;
@@ -59,6 +74,11 @@ interface, and implementation of the library.</para>
     &quot;<ulink url="http://lists.boost.org/MailArchives/boost/msg30415.php">Proposal --- A type-safe union</ulink>.&quot;
     Boost public discussion.
     2002.
+</para>
+<para id="variant.biblio.c++98">
+  [C++98] <emphasis>International Standard, Programming Languages – C++</emphasis>.
+  ISO/IEC:14882.
+  1998.
 </para>
 <para id="variant.biblio.fri02">
     [Fri02] Eric Friedman.
