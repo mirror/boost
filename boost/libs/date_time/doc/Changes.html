@@ -22,7 +22,11 @@
 	<tr class="content">
            <td class="nowrap">Feature</td>
            <td>Output streaming now supports wide stream output on compiler /
-               standard library combinations that support wide streams.
+               standard library combinations that support wide streams. 
+               This allows code like:<br>
+                &nbsp;&nbsp;std::wstringstream wss;<br>
+                &nbsp;&nbsp;date d(2003,Aug,21);<br>
+                &nbsp;&nbsp;wss &lt;&lt; d;<br>
                Thanks to Bart Garst for this change.
           </td>
         </tr>
@@ -248,7 +252,7 @@
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Feb  1 11:26:05 MST 2004
+Last modified: Sun Feb  1 11:32:09 MST 2004
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2004
 </small></address>
