@@ -1,0 +1,120 @@
+#ifndef BOOST_ARCHIVE_POLYMORPHIC_IARCHIVE_HPP
+#define BOOST_ARCHIVE_POLYMORPHIC_IARCHIVE_HPP
+
+// MS compatible compilers support #pragma once
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// polymorphic_iarchive.hpp
+
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// Use, modification and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org for updates, documentation, and revision history.
+#include <string>
+#include <boost/cstdint.hpp>
+
+#include <boost/pfto.hpp>
+#include <boost/serialization/nvp.hpp>
+#include <boost/archive/detail/iserializer.hpp>
+#include <boost/archive/detail/interface_iarchive.hpp>
+
+namespace boost { 
+namespace archive {
+namespace detail {
+    class basic_iarchive;
+}
+
+class polymorphic_iarchive :
+    public detail::interface_iarchive<polymorphic_iarchive>
+{
+    friend class detail::interface_iarchive<polymorphic_iarchive>;
+    friend class load_access;
+private:
+    // primitive types the only ones permitted by polymorphic archives
+    virtual void load(bool & t) = 0;
+
+    virtual void load(char & t) = 0;
+    virtual void load(signed char & t) = 0;
+    virtual void load(unsigned char & t) = 0;
+    #ifndef BOOST_NO_CWCHAR
+    #ifndef BOOST_NO_INTRINSIC_WCHAR_T
+    virtual void load(wchar_t & t) = 0;
+    #endif
+    #endif
+    virtual void load(short & t) = 0;
+    virtual void load(unsigned short & t) = 0;
+    virtual void load(int & t) = 0;
+    virtual void load(unsigned int & t) = 0;
+    virtual void load(long & t) = 0;
+    virtual void load(unsigned long & t) = 0;
+
+    #ifndef BOOST_NO_INT64
+    virtual void load(int64_t & t) = 0;
+    virtual void load(uint64_t & t) = 0;
+    #endif
+    virtual void load(float & t) = 0;
+    virtual void load(double & t) = 0;
+
+    // string types are treated as primitives
+    virtual void load(std::string & t) = 0;
+    #ifndef BOOST_NO_STD_WSTRING
+    virtual void load(std::wstring & t) = 0;
+    #endif
+
+    // used for xml and other tagged formats
+    virtual void load_start(const char * name) = 0;
+    virtual void load_end(const char * name) = 0;
+    virtual void register_basic_serializer(const detail::basic_iserializer & bis) = 0;
+public:
+    // these are used by the serialization library implementation.
+    // should be private but it aint that easy
+    virtual void load_object(
+        void *t, 
+        const detail::basic_iserializer & bis
+    ) = 0;
+    virtual const detail::basic_pointer_iserializer * load_pointer(
+        void * & t, 
+        const detail::basic_pointer_iserializer * bpis_ptr,
+        const detail::basic_pointer_iserializer * (*finder)(
+            const boost::serialization::extended_type_info & type
+        )
+    ) = 0;
+public:
+    // utility function implemented by all legal archives
+    virtual unsigned int library_version() const = 0;
+    virtual void load_binary(void * t, size_t size) = 0;
+
+    virtual void delete_created_pointers() = 0;
+
+    // at least one compiler, borland (there might be others) won't pass 
+    // unmatched overrides to the base class - so do it explicitly here.
+    template<class T>
+    void load_override(T & t, BOOST_PFTO int)
+    {
+        detail::interface_iarchive<polymorphic_iarchive>
+        	::load_override(t, 0);
+    }
+
+    // special treatment for name-value pairs.
+    template<class T>
+    void load_override(boost::serialization::nvp<T> & t, int)
+    {
+        load_start(t.name());
+        archive::load(* this, t.value());
+ 		load_end(t.name());
+    }
+};
+
+} // namespace archive
+} // namespace boost
+
+// required by smart_cast for compilers not implementing 
+// partial template specialization
+BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::polymorphic_iarchive)
+
+#endif // BOOST_ARCHIVE_POLYMORPHIC_IARCHIVE_HPP

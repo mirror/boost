@@ -1,0 +1,105 @@
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// basic_text_iprimitive.ipp:
+
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . Permission to copy, 
+// use, modify, sell and distribute this software is granted provided this
+// copyright notice appears in all copies. This software is provided "as is"
+// without express or implied warranty, and with no claim as to its suitability
+// for any purpose.
+
+//  See http://www.boost.org for updates, documentation, and revision history.
+
+#include <boost/config.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/pfto.hpp>
+
+#include <boost/archive/basic_text_iprimitive.hpp>
+#include <boost/archive/add_facet.hpp>
+
+#include <boost/archive/iterators/remove_whitespace.hpp>
+#include <boost/archive/iterators/istream_iterator.hpp>
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+
+namespace boost { 
+namespace archive {
+
+// translate base64 text into binary and copy into buffer
+// until buffer is full.
+template<class IStream>
+void basic_text_iprimitive<IStream>::load_binary(
+    void *address, 
+    size_t count
+){
+    typedef BOOST_DEDUCED_TYPENAME IStream::char_type CharType;
+    
+    if(0 == count)
+        return;
+        
+    assert(
+        static_cast<size_t>(std::numeric_limits<std::streamsize>::max())
+        > (count + sizeof(CharType) - 1)/sizeof(CharType)
+    );
+        
+    if(is.fail())
+        boost::throw_exception(archive_exception(archive_exception::stream_error));
+    // convert from base64 to binary
+    typedef typename
+        iterators::transform_width<
+            iterators::binary_from_base64<
+                iterators::remove_whitespace<
+                	iterators::istream_iterator<CharType>
+                >
+            	,CharType
+            >
+            ,8
+            ,6
+            ,CharType
+        > 
+        binary;
+
+    binary ti_begin = binary(
+        BOOST_MAKE_PFTO_WRAPPER(
+            iterators::istream_iterator<CharType>(is)
+        )
+    );
+                
+    char * caddr = static_cast<char *>(address);
+    
+    // take care that we don't increment anymore than necessary
+    while(--count > 0){
+        *caddr++ = static_cast<char>(*ti_begin);
+        ++ti_begin;
+    }
+    *caddr = static_cast<char>(*ti_begin);
+}
+
+template<class IStream>
+basic_text_iprimitive<IStream>::basic_text_iprimitive(
+    IStream  &is_, 
+    bool no_codecvt
+) : 
+    is(is_),
+    flags_saver(is_),
+    precision_saver(is_),
+    locale_saver(is_),
+    archive_locale(NULL)
+{
+    if(! no_codecvt){
+        archive_locale.reset(
+            add_facet(
+                std::locale::classic(), 
+                new codecvt_null<BOOST_DEDUCED_TYPENAME IStream::char_type>
+            )
+        );
+        is.imbue(* archive_locale);
+    }
+    is >> std::noboolalpha;
+}
+
+template<class IStream>
+basic_text_iprimitive<IStream>::~basic_text_iprimitive(){
+}
+
+} // namespace archive
+} // namespace boost
