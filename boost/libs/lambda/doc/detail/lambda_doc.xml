@@ -2720,7 +2720,7 @@ Note however, that evaluating a lambda functor consist of a sequence of calls to
 If the compiler fails to actually expand these functions inline, 
 the performance can suffer. 
 The running time can more than double if this happens.
-Although the above tests do not include such an expression, we have experiensed
+Although the above tests do not include such an expression, we have experienced
 this for some seemingly simple expressions.
 
 
