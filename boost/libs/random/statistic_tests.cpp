@@ -141,13 +141,13 @@ private:
 // (additional parameterizations of the basic templates)
 namespace Haertel {
   typedef boost::random::linear_congruential<boost::uint64_t, 45965, 453816691,
-    (1ull<<31), 0> LCG_Af2;
+    (boost::uint64_t(1)<<31), 0> LCG_Af2;
   typedef boost::random::linear_congruential<boost::uint64_t, 211936855, 0,
-    (1ull<<29)-3, 0> LCG_Die1;
+    (boost::uint64_t(1)<<29)-3, 0> LCG_Die1;
   typedef boost::random::linear_congruential<boost::uint32_t, 2824527309u, 0,
     0, 0> LCG_Fis;
   typedef boost::random::linear_congruential<boost::uint64_t, 950706376u, 0,
-    (1ull<<31)-1, 0> LCG_FM;
+    (boost::uint64_t(1)<<31)-1, 0> LCG_FM;
   typedef boost::random::linear_congruential<boost::int32_t, 51081, 0,
     2147483647, 0> LCG_Hae;
   typedef boost::random::linear_congruential<boost::uint32_t, 69069, 1,
