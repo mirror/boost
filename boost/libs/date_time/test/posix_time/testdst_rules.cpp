@@ -364,8 +364,8 @@ main()
     ptime acst_amgbig2(acst_dst_end, time_duration(1,59,59));   //ambiguous 
     ptime acst_notdst2(acst_dst_end, time_duration(2,0,0));   //always not dst
     
-    std::cout << "acst dst_start: " << acst_dst_calc::local_dst_start_day(2002)
-              << std::endl;
+//     std::cout << "acst dst_start: " << acst_dst_calc::local_dst_start_day(2002)
+//               << std::endl;
     check("acst dst start", acst_dst_calc::local_dst_start_day(2002) == acst_dst_start);
     check("acst dst end",   acst_dst_calc::local_dst_end_day(2002) == acst_dst_end);
     check("acst dst boundary",   acst_dst_calc::is_dst_boundary_day(acst_dst_start));
@@ -393,8 +393,8 @@ main()
           acst_dst_calc::local_is_dst(acst_indst,time_duration(0,0,0))==boost::date_time::is_in_dst);
     check("acst check if time is dst -- not",   
           acst_dst_calc::local_is_dst(acst_notdst,time_duration(0,0,0))==boost::date_time::is_not_in_dst);
-    ptime utc_t = ptime(acst_dst_start, hours(2)) - time_duration(16,30,0);
-    std::cout << "UTC date/time of Adelaide switch over: " << utc_t << std::endl;
+    //    ptime utc_t = ptime(acst_dst_start, hours(2)) - time_duration(16,30,0);
+    //    std::cout << "UTC date/time of Adelaide switch over: " << utc_t << std::endl;
     
   }
 
