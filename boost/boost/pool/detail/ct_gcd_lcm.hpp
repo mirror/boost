@@ -37,8 +37,10 @@ struct ct_gcd_helper<A, B, false>
 {
   BOOST_STATIC_CONSTANT(unsigned, A_mod_B_ = A % B);
   BOOST_STATIC_CONSTANT(unsigned, value =
-      (::boost::details::pool::details::ct_gcd_helper<B, A_mod_B_,
-          ::boost::type_traits::ice_eq<A_mod_B_, 0>::value>::value) );
+      (::boost::details::pool::details::ct_gcd_helper<
+        B, static_cast<unsigned>(A_mod_B_),
+        ::boost::type_traits::ice_eq<A_mod_B_, 0>::value
+        >::value) );
 };
 template <unsigned A, unsigned B>
 struct ct_gcd_helper<A, B, true>
