@@ -224,10 +224,12 @@ namespace any_tests // test definitions
             "references don't refer to original");
 
         ++ra1;
-        check_true(any_cast<int>(a) == i + 1, "modified through reference");
+	int v = any_cast<int>(a);
+        check_true((v == i + 1), "modified through reference");
 
         --rb1;
-        check_true(any_cast<int>(b) == i - 1, "modified through reference");
+	int v2 = any_cast<int>(b);
+        check_true((v2 == i - 1), "modified through reference");
 
         TEST_CHECK_THROW(
             any_cast<char&>(a),
