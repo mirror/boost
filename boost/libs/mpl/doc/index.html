@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>The Boost MPL Library</title>
+<title>THE BOOST MPL LIBRARY</title>
 <link rel="stylesheet" href="article.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.50.0">
 </head>
@@ -11,7 +11,7 @@
 <div class="titlepage">
 <div>
 <div class="articletitle">
-<h1 class="title"><a name="idafawr"></a>The Boost MPL Library</h1>
+<h1 class="title"><a name="idafawr"></a>THE BOOST MPL LIBRARY</h1>
 </div>
 </div>
 </div>
@@ -69,7 +69,7 @@
 
 <div class="itemizedlist">
 <ul type="box">
-<li style="list-style-type: square">A. Gurtovoy, D. Abrahams, <a href="./paper/html/index.html" target="_top">The Boost C++ Metaprogramming Library</a>, March 2002 | [<a href="./paper/mpl_paper.html" target="_top">as single .html</a>]</li>
+<li style="list-style-type: square">A. Gurtovoy, D. Abrahams, <a href="./paper/html/index.html" target="_top">The Boost C++ Metaprogramming Library</a>, March 2002 | [<a href="./paper/mpl_paper.pdf" target="_top">as .pdf</a>] [<a href="./paper/mpl_paper.html" target="_top">as single .html</a>]</li>
 
 <li style="list-style-type: square"><a href="./ref/Table_of_Content.html" target="_top">Reference documentation</a>
 <div class="orderedlist">
@@ -97,19 +97,7 @@
 </div>
 </div>
 
-<p>The latest library sources are available from:</p>
-
-<div class="itemizedlist">
-<ul type="box">
-<li style="list-style-type: square">The <a href="http://www.boost.org/more/download.html#CVS" target="_top">boost CVS</a>, <tt>mpl_v2</tt> branch (<tt>cvs update -P -rmpl_v2 boost/mpl boost/type_traits libs/mpl</tt>)</li>
-
-<li style="list-style-type: square">From here - <a href="http://www.mywikinet.com/mpl/mpl_23_jul_02.zip" target="_top">http://www.mywikinet.com/mpl/mpl_23_jul_02.zip</a></li>
-</ul>
-</div>
-
-<p>The library also requires the latest version of Boost Preprocessor library, that can be also obtained from <a href="http://www.boost.org/more/download.html#CVS" target="_top">boost CVS</a> or from here - <a href="http://www.mywikinet.com/mpl/preprocessor_19_jul_02.zip" target="_top">http://www.mywikinet.com/mpl/preprocessor_19_jul_02.zip</a>.</p>
-
-<p>A full archive that contains the library itself + all its dependencies - and therefore can be installed over a clean <a href="http://boost.sourceforge.net/release/boost_1_28_0.zip" target="_top">Boost 1.28 distribution</a> - is available from here - <a href="http://www.mywikinet.com/mpl/mpl_23_jul_02_full.zip" target="_top">http://www.mywikinet.com/mpl/mpl_23_jul_02_full.zip</a>.</p>
+<p>The latest library sources are available from the main trunk of the <a href="http://www.boost.org/more/download.html#CVS" target="_top">Boost CVS</a>. <a href="http://boost.sourceforge.net/release/">Boost 1.29 distribution</a> contains a couple months old version of the library.</p>
 </div>
 
 <div class="section">
@@ -275,7 +263,7 @@ Error: name followed by "::" must be a class or namespace name
 
 <p>because the expression <tt>typename T::element_type</tt> is not valid in case of <tt>T == char*</tt>.</p>
 
-<p>Here's what we need to do to make <tt>pointed_type</tt> work for plain pointers: <sup><a name="idagqwr" href="#ftn.IDAGQWR">1</a></sup> instead of instantiating our two potential results before passing them to <tt>if_</tt>, we need to write metafunctions that can be used to instantiate the results; then we can use <tt>if_</tt> to choose a metafunction, and only then should we use that function to get the result.</p>
+<p>Here's what we need to do to make <tt>pointed_type</tt> work for plain pointers: <sup><a name="idakqwr" href="#ftn.IDAKQWR">1</a></sup> instead of instantiating our two potential results before passing them to <tt>if_</tt>, we need to write metafunctions that can be used to instantiate the results; then we can use <tt>if_</tt> to choose a metafunction, and only then should we use that function to get the result.</p>
 
 <p><tt>boost::remove_pointer</tt> already is a metafunction. We just need to write an auxiliary function to return the <tt>element_type</tt> of a pointer type:</p>
 
@@ -491,7 +479,7 @@ struct remove_pointer_if
 <div class="footnotes"><br>
 <hr width="100" align="left">
 <div class="footnote">
-<p><sup><a name="ftn.idagqwr" href="#IDAGQWR">1</a></sup> It would be easy to implement <tt>pointed_type</tt> using partial specialization to distinguish the case where <tt>T</tt> is a pointer. <tt>if_</tt> is used here to avoid creating a complicated example.</p>
+<p><sup><a name="ftn.idakqwr" href="#IDAKQWR">1</a></sup> It would be easy to implement <tt>pointed_type</tt> using partial specialization to distinguish the case where <tt>T</tt> is a pointer. <tt>if_</tt> is used here to avoid creating a complicated example.</p>
 </div>
 
 <div class="footnote">
