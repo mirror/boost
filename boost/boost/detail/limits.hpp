@@ -20,6 +20,8 @@
 
 /*
  * Revision history:
+ * 13 Apr 2001:
+ *    Added powerpc to the big endian family. (Jeremy Siek)
  * 5 Apr 2001:
  *    Added sparc (big endian) processor support (John Maddock).
  * Initial sub:
@@ -33,7 +35,7 @@
 #include <cfloat>
 #include <boost/config.hpp>
 
-#if defined(__sparc) || defined(__sparc__)
+#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__)
 #define BOOST_BIG_ENDIAN
 #elif !defined(__i386__)
 #error This file is not correctly set up for your cpu type.
