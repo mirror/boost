@@ -12,7 +12,11 @@
 
 namespace any_tests
 {
-    typedef test::test<const char *, void (*)()> test_case;
+    // dwa 2002/10/31 - workaround for a SunPro problem wherein it has
+    // problems with types that have the same name as the enclosing
+    // namespace
+    using test::test;  
+    typedef test<const char *, void (*)()> test_case;
     typedef const test_case * test_case_iterator;
 
     extern const test_case_iterator begin, end;
@@ -21,7 +25,7 @@ namespace any_tests
 int main()
 {
     using namespace any_tests;
-    test::tester<test_case_iterator> test_suite(begin, end);
+    ::test::tester<test_case_iterator> test_suite(begin, end);
     return test_suite() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
