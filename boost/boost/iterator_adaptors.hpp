@@ -127,12 +127,9 @@
 # include <boost/type_traits/conversion_traits.hpp>
 # include <boost/detail/iterator.hpp>
 # include <boost/detail/select_type.hpp>
+# include <boost/detail/workaround.hpp>
 
-// I was having some problems with VC6. I couldn't tell whether our hack for
-// stock GCC was causing problems so I needed an easy way to turn it on and
-// off. Now we can test the hack with various compilers and still have an
-// "out" if it doesn't work. -dwa 7/31/00
-# if __GNUC__ == 2 && __GNUC_MINOR__ <= 96 && !defined(__STL_USE_NAMESPACES)
+# if BOOST_WORKAROUND(__GNUC__, == 2) && __GNUC_MINOR__ <= 96 && !defined(__STL_USE_NAMESPACES)
 #  define BOOST_RELOPS_AMBIGUITY_BUG 1
 # endif
 
@@ -566,7 +563,7 @@ namespace detail {
   // An associative list is a list of key-value pairs. The list is
   // built out of cons_type's and is terminated by end_of_list.
 
-# if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(__BORLANDC__)
+# if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || BOOST_WORKAROUND(__BORLANDC__, != 0)
   template <class AssocList, class Key>
   struct find_param;
 
@@ -629,7 +626,7 @@ namespace detail {
       enum { value = is_convertible< typename add_reference< Value >::type, add_reference< named_template_param_base >::type >::value };
   };
 
-# if defined(__MWERKS__) && __MWERKS__ <= 0x2406 // workaround for broken is_convertible implementation
+# if BOOST_WORKAROUND(__MWERKS__, <= 0x2407) // workaround for broken is_convertible implementation
   template <class T> struct is_named_parameter<value_type_is<T> > { enum { value = true }; };
   template <class T> struct is_named_parameter<reference_is<T> > { enum { value = true }; };
   template <class T> struct is_named_parameter<pointer_is<T> > { enum { value = true }; };
@@ -639,7 +636,7 @@ namespace detail {
 
   template <class Key, class Value>
   struct make_arg {
-# ifdef __BORLANDC__
+# if BOOST_WORKAROUND(__BORLANDC__, > 0)
     // Borland C++ doesn't like the extra indirection of is_named_parameter
     typedef typename
       if_true<(is_convertible<Value,named_template_param_base>::value)>::
@@ -773,7 +770,7 @@ namespace detail {
 
 
 // This macro definition is only temporary in this file
-# if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+# if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 #  define BOOST_ARG_DEPENDENT_TYPENAME typename
 # else
 #  define BOOST_ARG_DEPENDENT_TYPENAME
@@ -862,7 +859,7 @@ struct iterator_adaptor :
         policies().initialize(base());
     }
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__BORLANDC__)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__BORLANDC__, > 0)
     // This is required to prevent a bug in how VC++ generates
     // the assignment operator for compressed_pair
     iterator_adaptor& operator= (const iterator_adaptor& x) {
@@ -874,7 +871,7 @@ struct iterator_adaptor :
          return policies().dereference(*this);
     }
 
-#ifdef BOOST_MSVC
+#if BOOST_WORKAROUND(BOOST_MSVC, > 0)
 # pragma warning(push)
 # pragma warning( disable : 4284 )
 #endif
@@ -883,7 +880,7 @@ struct iterator_adaptor :
     operator->() const
         { return detail::operator_arrow(*this, iterator_category()); }
 
-#ifdef BOOST_MSVC
+#if BOOST_WORKAROUND(BOOST_MSVC, > 0)
 # pragma warning(pop)
 #endif
 
@@ -892,7 +889,7 @@ struct iterator_adaptor :
         { return *(*this + n); }
 
     self& operator++() {
-#if !defined(__MWERKS__) || __MWERKS__ >= 0x2405
+#if !BOOST_WORKAROUND(__MWERKS__, <  0x2405)
         policies().increment(*this);
 #else
         // Odd bug, MWERKS couldn't  deduce the type for the member template
@@ -905,7 +902,7 @@ struct iterator_adaptor :
     self operator++(int) { self tmp(*this); ++*this; return tmp; }
 
     self& operator--() {
-#if !defined(__MWERKS__) || __MWERKS__ >= 0x2405
+#if !BOOST_WORKAROUND(__MWERKS__, <  0x2405)
         policies().decrement(*this);
 #else
         policies().decrement<self>(*this);
@@ -1105,7 +1102,7 @@ struct indirect_iterator_policies : public default_iterator_policies
 };
 
 namespace detail {
-# if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // strangely instantiated even when unused! Maybe try a recursive template someday ;-)
+# if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) // strangely instantiated even when unused! Maybe try a recursive template someday ;-)
   template <class T>
   struct traits_of_value_type {
       typedef typename boost::detail::iterator_traits<T>::value_type outer_value;
@@ -1118,12 +1115,12 @@ namespace detail {
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class Value
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::value_type
 #endif
           , class Reference
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::reference
 #else
@@ -1132,7 +1129,7 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
           , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<
                         OuterIterator>::iterator_category
           , class Pointer
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::pointer
 #else
@@ -1147,12 +1144,12 @@ struct indirect_iterator_generator
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class Value
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::value_type
 #endif
           , class Reference
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::reference
 #else
@@ -1162,7 +1159,7 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
           , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<
                 OuterIterator>::iterator_category
           , class Pointer
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
                         OuterIterator>::pointer
 #else
@@ -1178,7 +1175,7 @@ struct indirect_iterator_pair_generator
     Value, ConstReference,Category,ConstPointer>::type const_iterator;
 };
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
 make_indirect_iterator(OuterIterator base)
@@ -1364,7 +1361,7 @@ namespace detail {
   template <class Iterator>
   struct non_bidirectional_category
   {
-# if !defined(__MWERKS__) || __MWERKS__ > 0x2406
+# if !BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
       typedef typename reduce_to_base_class<
               std::forward_iterator_tag,
                    typename iterator_traits<Iterator>::iterator_category
@@ -1400,7 +1397,7 @@ template <class Predicate, class Iterator,
 class filter_iterator_generator {
     BOOST_STATIC_CONSTANT(bool, is_bidirectional
         = (boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value));
-#if !defined(BOOST_MSVC)  || BOOST_MSVC > 1300 // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
     BOOST_STATIC_ASSERT(!is_bidirectional);
 #endif
     typedef filter_iterator_policies<Predicate,Iterator> policies_type;
