@@ -138,7 +138,6 @@ namespace boost {
 			    ptr_or_obj_tag>::type type;
       };
 
-#ifndef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       /**
        * The functor_manager class contains a static function "manage" which
        * can clone or destroy the given function/function object pointer. 
@@ -232,7 +231,6 @@ namespace boost {
           return manager(functor_ptr, op, tag_type());
         }
       };
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
       // value=1 if the given type is not "unusable"
       template<typename T>
@@ -278,16 +276,6 @@ namespace boost {
    */
   class function_base 
   {
-#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-  public:
-    function_base() : impl(0) {}
-
-    bool empty() const { return impl == 0; }
-
-    
-  protected:
-    void* impl; // Derived class is responsible for knowing the real type
-#else
   public:
     function_base() : manager(0), functor(static_cast<void*>(0)) {}
     
@@ -299,7 +287,6 @@ namespace boost {
                            detail::function::any_pointer, 
                            detail::function::functor_manager_operation_type);
     detail::function::any_pointer functor;
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
   private:
     struct dummy {
