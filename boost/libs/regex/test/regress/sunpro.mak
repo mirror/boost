@@ -8,7 +8,7 @@ CXX= CC $(INCLUDES) -I../../../../ -I./ $(CXXFLAGS) -L../../../../stage/lib -L..
 #
 # sources to compile for each test:
 #
-SOURCES=tests.cpp parse.cpp regress.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
+SOURCES=*.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
 
 total : r rm r/regress rm/regress rs rms rs/regress rms/regress rw rmw rw/regress rmw/regress rsw rmsw rsw/regress rmsw/regress
 	echo testsing narrow character versions:
@@ -94,6 +94,8 @@ clean:
 	rm -f *.o
 	rm -fr SunWS_cache
 	rm -fr r rm rs rms rw rmw rsw rmsw
+
+
 
 
 

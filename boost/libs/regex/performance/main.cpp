@@ -66,6 +66,14 @@ void test_match(const std::string& re, const std::string& text, const std::strin
       std::cout << "\tPCRE regex: " << time << "s\n";
    }
 #endif
+#ifdef BOOST_HAS_XPRESSIVE
+   if(time_xpressive == true)
+   {
+      time = dxpr::time_match(re, text, icase);
+      r.xpressive_time = time;
+      std::cout << "\txpressive regex: " << time << "s\n";
+   }
+#endif
    r.finalise();
    result_list.push_back(r);
 }
@@ -117,6 +125,14 @@ void test_find_all(const std::string& re, const std::string& text, const std::st
       time = pcr::time_find_all(re, text, icase);
       r.pcre_time = time;
       std::cout << "\tPCRE regex: " << time << "s\n";
+   }
+#endif
+#ifdef BOOST_HAS_XPRESSIVE
+   if(time_xpressive == true)
+   {
+      time = dxpr::time_find_all(re, text, icase);
+      r.xpressive_time = time;
+      std::cout << "\txpressive regex: " << time << "s\n";
    }
 #endif
    r.finalise();

@@ -53,6 +53,8 @@ public:
    ogrep_predicate(unsigned int& i, const char* p, iterator start, iterator end) : lines(i), filename(p), last_line(-1), end_of_storage(end), last_line_start(start) {}
    ogrep_predicate(const ogrep_predicate& o) : lines(o.lines), filename(o.filename), last_line(o.last_line), end_of_storage(o.end_of_storage), last_line_start(o.last_line_start) {}
    bool operator () (const boost::match_results<iterator, Allocator>& i);
+private:
+   void operator=(const ogrep_predicate&);
 };
 
 // ideally we'd ignor the allocator type and use a template member function

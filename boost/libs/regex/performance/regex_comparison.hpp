@@ -26,6 +26,7 @@ extern bool time_greta;
 extern bool time_safe_greta;
 extern bool time_posix;
 extern bool time_pcre;
+extern bool time_xpressive;
 
 extern bool test_matches;
 extern bool test_short_twain;
@@ -53,6 +54,7 @@ struct results
    double safe_greta_time;
    double posix_time;
    double pcre_time;
+   double xpressive_time;
    double factor;
    std::string expression;
    std::string description;
@@ -63,7 +65,8 @@ struct results
         safe_greta_time(-1),
         posix_time(-1),
         pcre_time(-1),
-        factor((std::numeric_limits<double>::max)()),
+        xpressive_time(-1),
+        factor(std::numeric_limits<double>::max()),
         expression(ex), 
         description(desc)
    {}
@@ -81,6 +84,8 @@ struct results
          factor = posix_time;
       if((pcre_time >= 0) && (pcre_time < factor))
          factor = pcre_time;
+      if((xpressive_time >= 0) && (xpressive_time < factor))
+         factor = xpressive_time;
    }
 };
 
@@ -123,6 +128,12 @@ double time_match(const std::string& re, const std::string& text, bool icase);
 double time_find_all(const std::string& re, const std::string& text, bool icase);
 
 }
+namespace dxpr {
+// xpressive tests:
+double time_match(const std::string& re, const std::string& text, bool icase);
+double time_find_all(const std::string& re, const std::string& text, bool icase);
+}
+
 void test_match(const std::string& re, const std::string& text, const std::string& description, bool icase = false);
 void test_find_all(const std::string& re, const std::string& text, const std::string& description, bool icase = false);
 inline void test_match(const std::string& re, const std::string& text, bool icase = false)

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2002
+ * Copyright (c) 1998-2004
  * Dr John Maddock
  *
  * Use, modification and distribution are subject to the 
@@ -26,6 +26,13 @@
 #if defined(BOOST_REGEX_HAS_MS_STACK_GUARD) && defined(_MSC_VER) && (_MSC_VER >= 1300)
 #  include <malloc.h>
 #endif
+#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#define NOGDI
+#define NOUSER
+#include <windows.h>
+#endif
 
 #if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_REGEX_V3)
 #if BOOST_REGEX_MAX_CACHE_BLOCKS == 0
@@ -43,18 +50,39 @@ namespace boost{
 // that dll builds contain the Virtual table for these
 // types - this ensures that exceptions can be thrown
 // from the dll and caught in an exe.
-bad_pattern::~bad_pattern() throw() {}
-bad_expression::~bad_expression() throw() {}
+regex_error::regex_error(const std::string& s, regex_constants::error_type err, std::ptrdiff_t pos) 
+   : std::runtime_error(s)
+   , m_error_code(err)
+   , m_position(pos) 
+{
+}
 
-regbase::regbase()
-   : _flags(regbase::failbit){}
+regex_error::regex_error(regex_constants::error_type err) 
+   : std::runtime_error(::boost::re_detail::get_default_error_string(err))
+   , m_error_code(err)
+   , m_position(0) 
+{
+}
 
-regbase::regbase(const regbase& b)
-   : _flags(b._flags){}
+regex_error::~regex_error() throw() 
+{
+}
+
+void regex_error::raise()const
+{
+#ifndef BOOST_NO_EXCEPTIONS
+   ::boost::throw_exception(*this);
+#endif
+}
+
 
 
 namespace re_detail{
 
+BOOST_REGEX_DECL void BOOST_REGEX_CALL raise_runtime_error(const std::runtime_error& ex)
+{
+   ::boost::throw_exception(ex);
+}
 //
 // error checking API:
 //
@@ -73,6 +101,29 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex::flag_type /*
 }
 
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+
+static void execute_eror()
+{
+   // we only get here after a stack overflow,
+   // this has to be a separate proceedure because we 
+   // can't mix __try{}__except block with local objects  
+   // that have destructors:
+   reset_stack_guard_page();
+   std::runtime_error err("Out of stack space, while attempting to match a regular expression.");
+   raise_runtime_error(err);
+}
+
+bool BOOST_REGEX_CALL abstract_protected_call::execute()const
+{
+   __try{
+      return this->call();
+   }__except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode())
+   {
+      execute_eror();
+   }
+   // We never really get here at all:
+   return false;
+}
 
 BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page()
 {
@@ -118,12 +169,6 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page()
 }
 #endif
 
-BOOST_REGEX_DECL void BOOST_REGEX_CALL raise_regex_exception(const std::string& msg)
-{
-   bad_expression e(msg);
-   throw_exception(e);
-}
-
 #if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_REGEX_V3)
 
 #if BOOST_REGEX_MAX_CACHE_BLOCKS == 0
@@ -140,7 +185,11 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void* p)
 
 #else
 
+#ifdef BOOST_HAS_THREADS
+mem_block_cache block_cache = { 0, 0, BOOST_STATIC_MUTEX_INIT, };
+#else
 mem_block_cache block_cache = { 0, 0, };
+#endif
 
 BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block()
 {

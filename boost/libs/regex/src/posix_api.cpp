@@ -19,7 +19,17 @@
 #define BOOST_REGEX_SOURCE
 
 #include <cstdio>
+#include <boost/cregex.hpp>
 #include <boost/regex.hpp>
+
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{
+   using ::sprintf;
+   using ::strcpy;
+   using ::strcmp;
+}
+#endif
+
 
 namespace boost{
 
@@ -35,7 +45,6 @@ const char* names[] = {"REG_NOERROR", "REG_NOMATCH", "REG_BADPAT", "REG_ECOLLATE
 
 BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char* ptr, int f)
 {
-   BOOST_RE_GUARD_STACK
    if(expression->re_magic != magic_value)
    {
       expression->guts = 0;
@@ -54,7 +63,7 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
 #endif
    }
    // set default flags:
-   boost::uint_fast32_t flags = (f & REG_EXTENDED) ? regex::extended : regex::basic;
+   boost::uint_fast32_t flags = (f & REG_PERLEX) ? 0 : ((f & REG_EXTENDED) ? regex::extended : regex::basic);
    expression->eflags = (f & REG_NEWLINE) ? match_not_dot_newline : match_default;
    // and translate those that are actually set:
 
@@ -67,20 +76,19 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
    }
 
    if(f & REG_NOSUB)
-      expression->eflags |= match_any;
+   {
+      //expression->eflags |= match_any;
+      flags |= regex::nosubs;
+   }
 
    if(f & REG_NOSPEC)
       flags |= regex::literal;
    if(f & REG_ICASE)
       flags |= regex::icase;
    if(f & REG_ESCAPE_IN_LISTS)
-      flags |= regex::escape_in_lists;
+      flags &= ~regex::no_escape_in_lists;
    if(f & REG_NEWLINE_ALT)
       flags |= regex::newline_alt;
-#ifndef BOOST_REGEX_V3
-   if(f & REG_PERLEX)
-      flags |= regex::perlex;
-#endif
 
    const char* p2;
    if(f & REG_PEND)
@@ -97,7 +105,12 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
       expression->re_nsub = static_cast<regex*>(expression->guts)->mark_count() - 1;
       result = static_cast<regex*>(expression->guts)->error_code();
 #ifndef BOOST_NO_EXCEPTIONS
-   } catch(...)
+   } 
+   catch(const boost::regex_error& be)
+   {
+      result = be.code();
+   }
+   catch(...)
    {
       result = REG_E_UNKNOWN;
    }
@@ -110,12 +123,11 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
 
 BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA* e, char* buf, regsize_t buf_size)
 {
-   BOOST_RE_GUARD_STACK
    std::size_t result = 0;
    if(code & REG_ITOA)
    {
       code &= ~REG_ITOA;
-      if(code <= REG_E_UNKNOWN)
+      if(code <= (int)REG_E_UNKNOWN)
       {
          result = std::strlen(names[code]) + 1;
          if(buf_size >= result)
@@ -129,30 +141,29 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
       char localbuf[5];
       if(e == 0)
          return 0;
-      for(int i = 0; i <= REG_E_UNKNOWN; ++i)
+      for(int i = 0; i <= (int)REG_E_UNKNOWN; ++i)
       {
          if(std::strcmp(e->re_endp, names[i]) == 0)
          {
-            std::sprintf(localbuf, "%d", i);
+            (std::sprintf)(localbuf, "%d", i);
             if(std::strlen(localbuf) < buf_size)
                std::strcpy(buf, localbuf);
             return std::strlen(localbuf) + 1;
          }
       }
-      std::sprintf(localbuf, "%d", 0);
+      (std::sprintf)(localbuf, "%d", 0);
       if(std::strlen(localbuf) < buf_size)
          std::strcpy(buf, localbuf);
       return std::strlen(localbuf) + 1;
    }
-   if(code <= REG_E_UNKNOWN)
+   if(code <= (int)REG_E_UNKNOWN)
    {
       std::string p;
       if((e) && (e->re_magic == magic_value))
-         p = static_cast<regex*>(e->guts)->get_traits().error_string(code);
+         p = static_cast<regex*>(e->guts)->get_traits().error_string(static_cast< ::boost::regex_constants::error_type>(code));
       else
       {
-         boost::regex_traits<char> t;
-         p = t.error_string(code);
+         p = re_detail::get_default_error_string(static_cast< ::boost::regex_constants::error_type>(code));
       }
       std::size_t len = p.size();
       if(len < buf_size)
@@ -168,7 +179,10 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
 
 BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, const char* buf, regsize_t n, regmatch_t* array, int eflags)
 {
-   BOOST_RE_GUARD_STACK
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4267)
+#endif
    bool result = false;
    match_flag_type flags = match_default | expression->eflags;
    const char* end;
@@ -209,7 +223,7 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, cons
    if(result)
    {
       // extract what matched:
-     unsigned int i;
+      std::size_t i;
       for(i = 0; (i < n) && (i < expression->re_nsub + 1); ++i)
       {
          array[i].rm_so = (m[i].matched == false) ? -1 : (m[i].first - buf);
@@ -224,11 +238,13 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, cons
       return 0;
    }
    return REG_NOMATCH;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 }
 
 BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeA(regex_tA* expression)
 {
-   BOOST_RE_GUARD_STACK
    if(expression->re_magic == magic_value)
    {
       delete static_cast<regex*>(expression->guts);

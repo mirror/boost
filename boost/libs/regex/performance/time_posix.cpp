@@ -27,7 +27,7 @@ double time_match(const std::string& re, const std::string& text, bool icase)
    int counter, repeats;
    double result = 0;
    double run;
-   if(0 != regcomp(&e, re.c_str(), (icase ? REG_ICASE | REG_EXTENDED : REG_EXTENDED)))
+   if(0 != ::regcomp(&e, re.c_str(), (icase ? REG_ICASE | REG_EXTENDED : REG_EXTENDED)))
       return -1;
    do
    {
@@ -50,7 +50,7 @@ double time_match(const std::string& re, const std::string& text, bool icase)
          regexec(&e, text.c_str(), e.re_nsub, what, 0);
       }
       run = tim.elapsed();
-      result = (std::min)(run, result);
+      result = std::min(run, result);
    }
    regfree(&e);
    return result / iter;
@@ -116,7 +116,7 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
          }
       }
       run = tim.elapsed();
-      result = (std::min)(run, result);
+      result = std::min(run, result);
    }
    return result / iter;
 }

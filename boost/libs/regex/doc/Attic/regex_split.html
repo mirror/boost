@@ -35,17 +35,17 @@
       <P>Algorithm regex_split performs a similar operation to the perl split operation, 
          and comes in three overloaded forms:
       </P>
-      <PRE><B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> charT, <B>class</B> Traits1, <B>class</B> Alloc1, <B>class</B> Traits2, <B>class</B> Alloc2&gt;
+      <PRE><B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> charT, <B>class</B> Traits1, <B>class</B> Alloc1, <B>class</B> Traits2&gt;
 std::size_t regex_split(OutputIterator out,&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std::basic_string&lt;charT, Traits1, Alloc1&gt;&amp; s,&nbsp;
-&nbsp;<B> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const</B> basic_regex&lt;charT, Traits2, Alloc2&gt;&amp; e,
+&nbsp;<B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const</B> basic_regex&lt;charT, Traits2&gt;&amp; e,
 &nbsp;<STRONG>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</STRONG>boost::match_flag_type flags,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std::size_t max_split);
 
-<B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> charT, <B>class</B> Traits1, <B>class</B> Alloc1, <B>class</B> Traits2, <B>class</B> Alloc2&gt;
+<B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> charT, <B>class</B> Traits1, <B>class</B> Alloc1, <B>class</B> Traits2&gt;
 std::size_t regex_split(OutputIterator out,&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std::basic_string&lt;charT, Traits1, Alloc1&gt;&amp; s,&nbsp;
-&nbsp;<B> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const</B> basic_regex&lt;charT, Traits2, Alloc2&gt;&amp; e,
+&nbsp;<B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const</B> basic_regex&lt;charT, Traits2&gt;&amp; e,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; boost::match_flag_type flags = match_default);
 
 <B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> charT, <B>class</B> Traits1, <B>class</B> Alloc1&gt;
@@ -132,9 +132,9 @@ boost::regex e(<FONT color=#000080>"&lt;\\s*A\\s+[^&gt;]*href\\s*=\\s*\"([^\"]*)
    <B>return</B> 0;
 }</PRE>
       <HR>
-      <p>Revised 
+      <p>Revised&nbsp; 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         04 Feb 2004 
+         26 June&nbsp;2004 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
             <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>

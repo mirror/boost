@@ -1,0 +1,688 @@
+/*
+ *
+ * Copyright (c) 2004
+ * Dr John Maddock
+ *
+ * Use, modification and distribution are subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ *
+ */
+ 
+ /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_traits_defaults.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares API's for access to regex_traits default properties.
+  */
+
+#define BOOST_REGEX_SOURCE
+#include <boost/regex/regex_traits.hpp>
+
+#include <cctype>
+#ifndef BOOST_NO_WREGEX
+#include <cwctype>
+#endif
+
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{
+   using ::tolower;
+   using ::toupper;
+#ifndef BOOST_NO_WREGEX
+   using ::towlower;
+   using ::towupper;
+#endif
+}
+#endif
+
+
+namespace boost{ namespace re_detail{
+
+BOOST_REGEX_DECL const char* BOOST_REGEX_CALL get_default_syntax(regex_constants::syntax_type n)
+{
+   // if the user hasn't supplied a message catalog, then this supplies
+   // default "messages" for us to load in the range 1-100.
+   const char* messages[] = {
+         "",
+         "(",
+         ")",
+         "$",
+         "^",
+         ".",
+         "*",
+         "+",
+         "?",
+         "[",
+         "]",
+         "|",
+         "\\",
+         "#",
+         "-",
+         "{",
+         "}",
+         "0123456789",
+         "b",
+         "B",
+         "<",
+         ">",
+         "",
+         "",
+         "A`",
+         "z'",
+         "\n",
+         ",",
+         "a",
+         "f",
+         "n",
+         "r",
+         "t",
+         "v",
+         "x",
+         "c",
+         ":",
+         "=",
+         "e",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "E",
+         "Q",
+         "X",
+         "C",
+         "Z",
+         "G",
+         "!",
+         "p",
+         "P",
+         "N",
+   };
+
+   return ((n >= (sizeof(messages) / sizeof(messages[1]))) ? "" : messages[n]);
+}
+
+BOOST_REGEX_DECL const char* BOOST_REGEX_CALL get_default_error_string(regex_constants::error_type n)
+{
+   static const char* const s_default_error_messages[] = {
+      "Success",             /* REG_NOERROR */
+      "No match",             /* REG_NOMATCH */
+      "Invalid regular expression",    /* REG_BADPAT */
+      "Invalid collation character",      /* REG_ECOLLATE */
+      "Invalid character class name",     /* REG_ECTYPE */
+      "Invalid or trailing backslash",         /* REG_EESCAPE */
+      "Invalid back reference",        /* REG_ESUBREG */
+      "Unmatched [ or [^",       /* REG_EBRACK */
+      "Unmatched ( or \\(",         /* REG_EPAREN */
+      "Unmatched { or \\{",           /* REG_EBRACE */
+      "Invalid content of repeat range",     /* REG_BADBR */
+      "Invalid range end",       /* REG_ERANGE */
+      "Memory exhausted",           /* REG_ESPACE */
+      "Invalid preceding regular expression",   /* REG_BADRPT */
+      "Premature end of regular expression", /* REG_EEND */
+      "Regular expression too big",    /* REG_ESIZE */
+      "Unmatched ) or \\)",         /* REG_ERPAREN */
+      "Empty expression",           /* REG_EMPTY */
+      "Complexity requirements exceeded",  /* REG_ECOMPLEXITY */
+      "Out of stack space", /* REG_ESTACK */
+      "Unknown error",    /* REG_E_UNKNOWN */
+      "",
+      "",
+      "",
+   };
+
+   return (n > ::boost::regex_constants::error_unknown) ? s_default_error_messages[ ::boost::regex_constants::error_unknown] : s_default_error_messages[n];
+}
+
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL is_combining_implementation(boost::uint_least16_t c)
+{
+   const boost::uint_least16_t combining_ranges[] = { 0x0300, 0x0361, 
+                           0x0483, 0x0486, 
+                           0x0903, 0x0903, 
+                           0x093E, 0x0940, 
+                           0x0949, 0x094C,
+                           0x0982, 0x0983,
+                           0x09BE, 0x09C0,
+                           0x09C7, 0x09CC,
+                           0x09D7, 0x09D7,
+                           0x0A3E, 0x0A40,
+                           0x0A83, 0x0A83,
+                           0x0ABE, 0x0AC0,
+                           0x0AC9, 0x0ACC,
+                           0x0B02, 0x0B03,
+                           0x0B3E, 0x0B3E,
+                           0x0B40, 0x0B40,
+                           0x0B47, 0x0B4C,
+                           0x0B57, 0x0B57,
+                           0x0B83, 0x0B83,
+                           0x0BBE, 0x0BBF,
+                           0x0BC1, 0x0BCC,
+                           0x0BD7, 0x0BD7,
+                           0x0C01, 0x0C03,
+                           0x0C41, 0x0C44,
+                           0x0C82, 0x0C83,
+                           0x0CBE, 0x0CBE,
+                           0x0CC0, 0x0CC4,
+                           0x0CC7, 0x0CCB,
+                           0x0CD5, 0x0CD6,
+                           0x0D02, 0x0D03,
+                           0x0D3E, 0x0D40,
+                           0x0D46, 0x0D4C,
+                           0x0D57, 0x0D57,
+                           0x0F7F, 0x0F7F,
+                           0x20D0, 0x20E1, 
+                           0x3099, 0x309A,
+                           0xFE20, 0xFE23, 
+                           0xffff, 0xffff, };
+
+      const boost::uint_least16_t* p = combining_ranges + 1;
+   while(*p < c) p += 2;
+   --p;
+   if((c >= *p) && (c <= *(p+1)))
+         return true;
+   return false;
+}
+
+//
+// these are the POSIX collating names:
+//
+BOOST_REGEX_DECL const char* def_coll_names[] = {
+"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "alert", "backspace", "tab", "newline", 
+"vertical-tab", "form-feed", "carriage-return", "SO", "SI", "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", 
+"SYN", "ETB", "CAN", "EM", "SUB", "ESC", "IS4", "IS3", "IS2", "IS1", "space", "exclamation-mark", 
+"quotation-mark", "number-sign", "dollar-sign", "percent-sign", "ampersand", "apostrophe", 
+"left-parenthesis", "right-parenthesis", "asterisk", "plus-sign", "comma", "hyphen", 
+"period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", 
+"colon", "semicolon", "less-than-sign", "equals-sign", "greater-than-sign", 
+"question-mark", "commercial-at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", 
+"Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "left-square-bracket", "backslash", 
+"right-square-bracket", "circumflex", "underscore", "grave-accent", "a", "b", "c", "d", "e", "f", 
+"g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "left-curly-bracket", 
+"vertical-line", "right-curly-bracket", "tilde", "DEL", "", 
+};
+
+// these multi-character collating elements
+// should keep most Western-European locales
+// happy - we should really localise these a
+// little more - but this will have to do for
+// now:
+
+BOOST_REGEX_DECL const char* def_multi_coll[] = {
+   "ae",
+   "Ae",
+   "AE",
+   "ch",
+   "Ch",
+   "CH",
+   "ll",
+   "Ll",
+   "LL",
+   "ss",
+   "Ss",
+   "SS",
+   "nj",
+   "Nj",
+   "NJ",
+   "dz",
+   "Dz",
+   "DZ",
+   "lj",
+   "Lj",
+   "LJ",
+   "",
+};
+
+
+
+BOOST_REGEX_DECL std::string BOOST_REGEX_CALL lookup_default_collate_name(const std::string& name)
+{
+   unsigned int i = 0;
+   while(*def_coll_names[i])
+   {
+      if(def_coll_names[i] == name)
+      {
+         return std::string(1, char(i));
+      }
+      ++i;
+   }
+   i = 0;
+   while(*def_multi_coll[i])
+   {
+      if(def_multi_coll[i] == name)
+      {
+         return def_multi_coll[i];
+      }
+      ++i;
+   }
+   return std::string();
+}
+
+BOOST_REGEX_DECL char BOOST_REGEX_CALL global_lower(char c)
+{
+   return static_cast<char>((std::tolower)(c));
+}
+
+BOOST_REGEX_DECL char BOOST_REGEX_CALL global_upper(char c)
+{
+   return static_cast<char>((std::toupper)(c));
+}
+#ifndef BOOST_NO_WREGEX
+BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_lower(wchar_t c)
+{
+   return (std::towlower)(c);
+}
+
+BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_upper(wchar_t c)
+{
+   return (std::towupper)(c);
+}
+#ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL global_lower(unsigned short c)
+{
+   return (std::towlower)(c);
+}
+
+BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL global_upper(unsigned short c)
+{
+   return (std::towupper)(c);
+}
+#endif
+
+#endif
+
+BOOST_REGEX_DECL regex_constants::escape_syntax_type BOOST_REGEX_CALL get_default_escape_syntax_type(char c)
+{
+   //
+   // char_syntax determines how the compiler treats a given character
+   // in a regular expression.
+   //
+   static regex_constants::escape_syntax_type char_syntax[] = {
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,     /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /* */    // 32
+      regex_constants::escape_type_identity,        /*!*/
+      regex_constants::escape_type_identity,        /*"*/
+      regex_constants::escape_type_identity,        /*#*/
+      regex_constants::escape_type_identity,        /*$*/
+      regex_constants::escape_type_identity,        /*%*/
+      regex_constants::escape_type_identity,        /*&*/
+      regex_constants::escape_type_end_buffer,        /*'*/
+      regex_constants::syntax_open_mark,        /*(*/
+      regex_constants::syntax_close_mark,        /*)*/
+      regex_constants::escape_type_identity,        /***/
+      regex_constants::syntax_plus,                 /*+*/
+      regex_constants::escape_type_identity,        /*,*/
+      regex_constants::escape_type_identity,        /*-*/
+      regex_constants::escape_type_identity,        /*.*/
+      regex_constants::escape_type_identity,        /*/*/
+      regex_constants::escape_type_decimal,        /*0*/
+      regex_constants::escape_type_backref,        /*1*/
+      regex_constants::escape_type_backref,        /*2*/
+      regex_constants::escape_type_backref,        /*3*/
+      regex_constants::escape_type_backref,        /*4*/
+      regex_constants::escape_type_backref,        /*5*/
+      regex_constants::escape_type_backref,        /*6*/
+      regex_constants::escape_type_backref,        /*7*/
+      regex_constants::escape_type_backref,        /*8*/
+      regex_constants::escape_type_backref,        /*9*/
+      regex_constants::escape_type_identity,        /*:*/
+      regex_constants::escape_type_identity,        /*;*/
+      regex_constants::escape_type_left_word,        /*<*/
+      regex_constants::escape_type_identity,        /*=*/
+      regex_constants::escape_type_right_word,        /*>*/
+      regex_constants::syntax_question,              /*?*/
+      regex_constants::escape_type_identity,         /*@*/
+      regex_constants::escape_type_start_buffer,     /*A*/
+      regex_constants::escape_type_not_word_assert,  /*B*/
+      regex_constants::escape_type_C,                /*C*/
+      regex_constants::escape_type_not_class,        /*D*/
+      regex_constants::escape_type_E,                /*E*/
+      regex_constants::escape_type_not_class,        /*F*/
+      regex_constants::escape_type_G,                /*G*/
+      regex_constants::escape_type_not_class,        /*H*/
+      regex_constants::escape_type_not_class,        /*I*/
+      regex_constants::escape_type_not_class,        /*J*/
+      regex_constants::escape_type_not_class,        /*K*/
+      regex_constants::escape_type_not_class,        /*L*/
+      regex_constants::escape_type_not_class,        /*M*/
+      regex_constants::escape_type_named_char,       /*N*/
+      regex_constants::escape_type_not_class,        /*O*/
+      regex_constants::escape_type_not_property,     /*P*/
+      regex_constants::escape_type_Q,                /*Q*/
+      regex_constants::escape_type_not_class,        /*R*/
+      regex_constants::escape_type_not_class,        /*S*/
+      regex_constants::escape_type_not_class,        /*T*/
+      regex_constants::escape_type_not_class,        /*U*/
+      regex_constants::escape_type_not_class,        /*V*/
+      regex_constants::escape_type_not_class,        /*W*/
+      regex_constants::escape_type_X,                /*X*/
+      regex_constants::escape_type_not_class,        /*Y*/
+      regex_constants::escape_type_Z,                /*Z*/
+      regex_constants::escape_type_identity,        /*[*/
+      regex_constants::escape_type_identity,        /*\*/
+      regex_constants::escape_type_identity,        /*]*/
+      regex_constants::escape_type_identity,        /*^*/
+      regex_constants::escape_type_identity,        /*_*/
+      regex_constants::escape_type_start_buffer,        /*`*/
+      regex_constants::escape_type_control_a,        /*a*/
+      regex_constants::escape_type_word_assert,        /*b*/
+      regex_constants::escape_type_ascii_control,        /*c*/
+      regex_constants::escape_type_class,        /*d*/
+      regex_constants::escape_type_e,        /*e*/
+      regex_constants::escape_type_control_f,       /*f*/
+      regex_constants::escape_type_class,        /*g*/
+      regex_constants::escape_type_class,        /*h*/
+      regex_constants::escape_type_class,        /*i*/
+      regex_constants::escape_type_class,        /*j*/
+      regex_constants::escape_type_class,        /*k*/
+      regex_constants::escape_type_class,        /*l*/
+      regex_constants::escape_type_class,        /*m*/
+      regex_constants::escape_type_control_n,       /*n*/
+      regex_constants::escape_type_class,           /*o*/
+      regex_constants::escape_type_property,        /*p*/
+      regex_constants::escape_type_class,           /*q*/
+      regex_constants::escape_type_control_r,       /*r*/
+      regex_constants::escape_type_class,           /*s*/
+      regex_constants::escape_type_control_t,       /*t*/
+      regex_constants::escape_type_class,         /*u*/
+      regex_constants::escape_type_control_v,       /*v*/
+      regex_constants::escape_type_class,           /*w*/
+      regex_constants::escape_type_hex,             /*x*/
+      regex_constants::escape_type_class,           /*y*/
+      regex_constants::escape_type_end_buffer,      /*z*/
+      regex_constants::syntax_open_brace,           /*{*/
+      regex_constants::syntax_or,                   /*|*/
+      regex_constants::syntax_close_brace,          /*}*/
+      regex_constants::escape_type_identity,        /*~*/
+      regex_constants::escape_type_identity,        /**/
+      regex_constants::escape_type_identity,        /*Ä*/
+      regex_constants::escape_type_identity,        /*Å*/
+      regex_constants::escape_type_identity,        /*Ç*/
+      regex_constants::escape_type_identity,        /*É*/
+      regex_constants::escape_type_identity,        /*Ñ*/
+      regex_constants::escape_type_identity,        /*Ö*/
+      regex_constants::escape_type_identity,        /*Ü*/
+      regex_constants::escape_type_identity,        /*á*/
+      regex_constants::escape_type_identity,        /*à*/
+      regex_constants::escape_type_identity,        /*â*/
+      regex_constants::escape_type_identity,        /*ä*/
+      regex_constants::escape_type_identity,        /*ã*/
+      regex_constants::escape_type_identity,        /*å*/
+      regex_constants::escape_type_identity,        /*ç*/
+      regex_constants::escape_type_identity,        /*é*/
+      regex_constants::escape_type_identity,        /*è*/
+      regex_constants::escape_type_identity,        /*ê*/
+      regex_constants::escape_type_identity,        /*ë*/
+      regex_constants::escape_type_identity,        /*í*/
+      regex_constants::escape_type_identity,        /*ì*/
+      regex_constants::escape_type_identity,        /*î*/
+      regex_constants::escape_type_identity,        /*ï*/
+      regex_constants::escape_type_identity,        /*ñ*/
+      regex_constants::escape_type_identity,        /*ó*/
+      regex_constants::escape_type_identity,        /*ò*/
+      regex_constants::escape_type_identity,        /*ô*/
+      regex_constants::escape_type_identity,        /*ö*/
+      regex_constants::escape_type_identity,        /*õ*/
+      regex_constants::escape_type_identity,        /*ú*/
+      regex_constants::escape_type_identity,        /*ù*/
+      regex_constants::escape_type_identity,        /*û*/
+      regex_constants::escape_type_identity,        /*ü*/
+      regex_constants::escape_type_identity,        /*†*/
+      regex_constants::escape_type_identity,        /*°*/
+      regex_constants::escape_type_identity,        /*¢*/
+      regex_constants::escape_type_identity,        /*£*/
+      regex_constants::escape_type_identity,        /*§*/
+      regex_constants::escape_type_identity,        /*•*/
+      regex_constants::escape_type_identity,        /*¶*/
+      regex_constants::escape_type_identity,        /*ß*/
+      regex_constants::escape_type_identity,        /*®*/
+      regex_constants::escape_type_identity,        /*©*/
+      regex_constants::escape_type_identity,        /*™*/
+      regex_constants::escape_type_identity,        /*´*/
+      regex_constants::escape_type_identity,        /*¨*/
+      regex_constants::escape_type_identity,        /*≠*/
+      regex_constants::escape_type_identity,        /*Æ*/
+      regex_constants::escape_type_identity,        /*Ø*/
+      regex_constants::escape_type_identity,        /*∞*/
+      regex_constants::escape_type_identity,        /*±*/
+      regex_constants::escape_type_identity,        /*≤*/
+      regex_constants::escape_type_identity,        /*≥*/
+      regex_constants::escape_type_identity,        /*¥*/
+      regex_constants::escape_type_identity,        /*µ*/
+      regex_constants::escape_type_identity,        /*∂*/
+   };
+
+   return char_syntax[(unsigned char)c];
+}
+
+BOOST_REGEX_DECL regex_constants::syntax_type BOOST_REGEX_CALL get_default_syntax_type(char c)
+{
+   //
+   // char_syntax determines how the compiler treats a given character
+   // in a regular expression.
+   //
+   static regex_constants::syntax_type char_syntax[] = {
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_newline,     /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /* */    // 32
+      regex_constants::syntax_not,        /*!*/
+      regex_constants::syntax_char,        /*"*/
+      regex_constants::syntax_hash,        /*#*/
+      regex_constants::syntax_dollar,        /*$*/
+      regex_constants::syntax_char,        /*%*/
+      regex_constants::syntax_char,        /*&*/
+      regex_constants::syntax_char,        /*'*/
+      regex_constants::syntax_open_mark,        /*(*/
+      regex_constants::syntax_close_mark,        /*)*/
+      regex_constants::syntax_star,        /***/
+      regex_constants::syntax_plus,        /*+*/
+      regex_constants::syntax_comma,        /*,*/
+      regex_constants::syntax_dash,        /*-*/
+      regex_constants::syntax_dot,        /*.*/
+      regex_constants::syntax_char,        /*/*/
+      regex_constants::syntax_digit,        /*0*/
+      regex_constants::syntax_digit,        /*1*/
+      regex_constants::syntax_digit,        /*2*/
+      regex_constants::syntax_digit,        /*3*/
+      regex_constants::syntax_digit,        /*4*/
+      regex_constants::syntax_digit,        /*5*/
+      regex_constants::syntax_digit,        /*6*/
+      regex_constants::syntax_digit,        /*7*/
+      regex_constants::syntax_digit,        /*8*/
+      regex_constants::syntax_digit,        /*9*/
+      regex_constants::syntax_colon,        /*:*/
+      regex_constants::syntax_char,        /*;*/
+      regex_constants::escape_type_left_word, /*<*/
+      regex_constants::syntax_equal,        /*=*/
+      regex_constants::escape_type_right_word, /*>*/
+      regex_constants::syntax_question,        /*?*/
+      regex_constants::syntax_char,        /*@*/
+      regex_constants::syntax_char,        /*A*/
+      regex_constants::syntax_char,        /*B*/
+      regex_constants::syntax_char,        /*C*/
+      regex_constants::syntax_char,        /*D*/
+      regex_constants::syntax_char,        /*E*/
+      regex_constants::syntax_char,        /*F*/
+      regex_constants::syntax_char,        /*G*/
+      regex_constants::syntax_char,        /*H*/
+      regex_constants::syntax_char,        /*I*/
+      regex_constants::syntax_char,        /*J*/
+      regex_constants::syntax_char,        /*K*/
+      regex_constants::syntax_char,        /*L*/
+      regex_constants::syntax_char,        /*M*/
+      regex_constants::syntax_char,        /*N*/
+      regex_constants::syntax_char,        /*O*/
+      regex_constants::syntax_char,        /*P*/
+      regex_constants::syntax_char,        /*Q*/
+      regex_constants::syntax_char,        /*R*/
+      regex_constants::syntax_char,        /*S*/
+      regex_constants::syntax_char,        /*T*/
+      regex_constants::syntax_char,        /*U*/
+      regex_constants::syntax_char,        /*V*/
+      regex_constants::syntax_char,        /*W*/
+      regex_constants::syntax_char,        /*X*/
+      regex_constants::syntax_char,        /*Y*/
+      regex_constants::syntax_char,        /*Z*/
+      regex_constants::syntax_open_set,        /*[*/
+      regex_constants::syntax_escape,        /*\*/
+      regex_constants::syntax_close_set,        /*]*/
+      regex_constants::syntax_caret,        /*^*/
+      regex_constants::syntax_char,        /*_*/
+      regex_constants::syntax_char,        /*`*/
+      regex_constants::syntax_char,        /*a*/
+      regex_constants::syntax_char,        /*b*/
+      regex_constants::syntax_char,        /*c*/
+      regex_constants::syntax_char,        /*d*/
+      regex_constants::syntax_char,        /*e*/
+      regex_constants::syntax_char,        /*f*/
+      regex_constants::syntax_char,        /*g*/
+      regex_constants::syntax_char,        /*h*/
+      regex_constants::syntax_char,        /*i*/
+      regex_constants::syntax_char,        /*j*/
+      regex_constants::syntax_char,        /*k*/
+      regex_constants::syntax_char,        /*l*/
+      regex_constants::syntax_char,        /*m*/
+      regex_constants::syntax_char,        /*n*/
+      regex_constants::syntax_char,        /*o*/
+      regex_constants::syntax_char,        /*p*/
+      regex_constants::syntax_char,        /*q*/
+      regex_constants::syntax_char,        /*r*/
+      regex_constants::syntax_char,        /*s*/
+      regex_constants::syntax_char,        /*t*/
+      regex_constants::syntax_char,        /*u*/
+      regex_constants::syntax_char,        /*v*/
+      regex_constants::syntax_char,        /*w*/
+      regex_constants::syntax_char,        /*x*/
+      regex_constants::syntax_char,        /*y*/
+      regex_constants::syntax_char,        /*z*/
+      regex_constants::syntax_open_brace,        /*{*/
+      regex_constants::syntax_or,        /*|*/
+      regex_constants::syntax_close_brace,        /*}*/
+      regex_constants::syntax_char,        /*~*/
+      regex_constants::syntax_char,        /**/
+      regex_constants::syntax_char,        /*Ä*/
+      regex_constants::syntax_char,        /*Å*/
+      regex_constants::syntax_char,        /*Ç*/
+      regex_constants::syntax_char,        /*É*/
+      regex_constants::syntax_char,        /*Ñ*/
+      regex_constants::syntax_char,        /*Ö*/
+      regex_constants::syntax_char,        /*Ü*/
+      regex_constants::syntax_char,        /*á*/
+      regex_constants::syntax_char,        /*à*/
+      regex_constants::syntax_char,        /*â*/
+      regex_constants::syntax_char,        /*ä*/
+      regex_constants::syntax_char,        /*ã*/
+      regex_constants::syntax_char,        /*å*/
+      regex_constants::syntax_char,        /*ç*/
+      regex_constants::syntax_char,        /*é*/
+      regex_constants::syntax_char,        /*è*/
+      regex_constants::syntax_char,        /*ê*/
+      regex_constants::syntax_char,        /*ë*/
+      regex_constants::syntax_char,        /*í*/
+      regex_constants::syntax_char,        /*ì*/
+      regex_constants::syntax_char,        /*î*/
+      regex_constants::syntax_char,        /*ï*/
+      regex_constants::syntax_char,        /*ñ*/
+      regex_constants::syntax_char,        /*ó*/
+      regex_constants::syntax_char,        /*ò*/
+      regex_constants::syntax_char,        /*ô*/
+      regex_constants::syntax_char,        /*ö*/
+      regex_constants::syntax_char,        /*õ*/
+      regex_constants::syntax_char,        /*ú*/
+      regex_constants::syntax_char,        /*ù*/
+      regex_constants::syntax_char,        /*û*/
+      regex_constants::syntax_char,        /*ü*/
+      regex_constants::syntax_char,        /*†*/
+      regex_constants::syntax_char,        /*°*/
+      regex_constants::syntax_char,        /*¢*/
+      regex_constants::syntax_char,        /*£*/
+      regex_constants::syntax_char,        /*§*/
+      regex_constants::syntax_char,        /*•*/
+      regex_constants::syntax_char,        /*¶*/
+      regex_constants::syntax_char,        /*ß*/
+      regex_constants::syntax_char,        /*®*/
+      regex_constants::syntax_char,        /*©*/
+      regex_constants::syntax_char,        /*™*/
+      regex_constants::syntax_char,        /*´*/
+      regex_constants::syntax_char,        /*¨*/
+      regex_constants::syntax_char,        /*≠*/
+      regex_constants::syntax_char,        /*Æ*/
+      regex_constants::syntax_char,        /*Ø*/
+      regex_constants::syntax_char,        /*∞*/
+      regex_constants::syntax_char,        /*±*/
+      regex_constants::syntax_char,        /*≤*/
+      regex_constants::syntax_char,        /*≥*/
+      regex_constants::syntax_char,        /*¥*/
+      regex_constants::syntax_char,        /*µ*/
+      regex_constants::syntax_char,        /*∂*/
+   };
+
+   return char_syntax[(unsigned char)c];
+}
+
+
+} // re_detail
+} // boost

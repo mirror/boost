@@ -37,12 +37,11 @@
       <pre>
 template &lt;class BidirectionalIterator, 
           class charT = iterator_traits&lt;BidirectionalIterator&gt;::value_type,
-          class traits = regex_traits&lt;charT&gt;,
-          class Allocator = allocator&lt;charT&gt; &gt;
+          class traits = regex_traits&lt;charT&gt; &gt;
 class regex_iterator 
 {
 public:
-   typedef          <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;                   regex_type;
+   typedef          <A href="basic_regex.html">basic_regex</A>&lt;charT, traits&gt;                              regex_type;
    typedef          <A href="match_results.html">match_results</A>&lt;BidirectionalIterator&gt;                    value_type;
    typedef typename iterator_traits&lt;BidirectionalIterator&gt;::difference_type difference_type;
    typedef          const value_type*                                       pointer;
@@ -63,12 +62,23 @@ public:
    regex_iterator <A href="#o7">operator</A>++(int);
 };
 
-typedef regex_iterator&lt;const char*&gt;                  cregex_iterator;
-typedef regex_iterator&lt;std::string::const_iterator&gt;  sregex_iterator;
-#ifndef BOOST_NO_WREGEX
-typedef regex_iterator&lt;const wchar_t*&gt;               wcregex_iterator;
-typedef regex_iterator&lt;std::wstring::const_iterator&gt; wsregex_iterator;
-#endif
+typedef
+regex_iterator&lt;const
+
+char*&gt; cregex_iterator; typedef                  regex_iterator&lt;std::string::const_iterator&gt;
+sregex_iterator; #ifndef  BOOST_NO_WREGEX
+typedef regex_iterator&lt;const
+wchar_t*&gt; wcregex_iterator; typedef               regex_iterator&lt;std::wstring::const_iterator&gt;
+wsregex_iterator; #endif template
+&lt;class
+
+charT, class traits&gt; regex_iterator&lt;const charT*,
+charT, traits&gt; 
+   <A href="#make_regex_iterator">make_regex_iterator</A>(const charT* p, const basic_regex&lt;charT, traits&gt;&amp; e, regex_constants::match_flag_type m =       regex_constants::match_default); template  &lt;class
+   
+charT, class traits, class ST, class SA&gt; regex_iterator&lt;typename std::basic_string&lt;charT,
+ST, SA&gt;::const_iterator, charT, traits&gt; 
+   <A href="#make_regex_iterator">make_regex_iterator</A>(const std::basic_string&lt;charT, ST, SA&gt;&amp; p, const basic_regex&lt;charT, traits&gt;&amp; e, regex_constants::match_flag_type m = regex_constants::match_default);
 
 </pre>
       <h3><a name="description"></a>Description</h3>
@@ -300,6 +310,20 @@ regex_iterator operator++(int);
          then calls <code>++(*this)</code>.</p>
       <b></b>
       <p><b>Returns:</b> <code>result</code>.</p>
+      <PRE><A name=make_regex_iterator></A>template &lt;class charT, class traits&gt; regex_iterator&lt;const charT*, charT, traits&gt;
+make_regex_iterator(const charT* 
+   p, const basic_regex&lt;charT, 
+                       traits&gt;&amp; e, regex_constants::match_flag_type m 
+                       = regex_constants::match_default); template &lt;class
+                       
+charT, class traits, class ST, class SA&gt; regex_iterator&lt;typename std::basic_string&lt;charT,
+ST, SA&gt;::const_iterator, charT, traits&gt; 
+   make_regex_iterator(const std::basic_string&lt;charT, ST, SA&gt;&amp; p, 
+                       const basic_regex&lt;charT, traits&gt;&amp; e, 
+                       regex_constants::match_flag_type m = regex_constants::match_default);
+</PRE>
+      <P><STRONG>Effects:</STRONG> returns an iterator that enumerates all occurences of 
+         expression <EM>e</EM> in text <EM>p</EM> using match_flags <EM>m</EM>.</P>
       <h3>Examples</h3>
       <p>The following <a href="../example/snippets/regex_iterator_example.cpp">example</a>
          takes a C++ source file and builds up an index of class names, and the location 
@@ -419,12 +443,12 @@ color=
 }
 </pre>
       <hr>
-      <p>Revised 
+      <p>Revised&nbsp;&nbsp; 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         06 Jan 05&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2005<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

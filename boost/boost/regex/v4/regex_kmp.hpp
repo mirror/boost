@@ -55,7 +55,7 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
    typedef typename boost::detail::rebind_allocator<char, Allocator>::type atype;
    int i, j, m;
    i = 0;
-   m = static_cast<int>(boost::re_detail::distance(first, last));
+   m = static_cast<int>(::boost::re_detail::distance(first, last));
    ++m;
    unsigned int size = sizeof(kmp_info<charT>) + sizeof(int)*m + sizeof(charT)*m;
    --m;

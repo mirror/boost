@@ -32,51 +32,22 @@
          your application, and not in the PC's directory path. Note that if you link to 
          a static version of your run time library, then you will also link to a static 
          version of boost.regex and no dll's will need to be distributed. The possible 
-         boost.regex dll and library names are computed according to the following 
-         formula:<BR>
+         boost.regex dll and library names are computed according to the <A href="../../../more/getting_started.html#step5">
+            formula given in the getting started guide</A>.
       </P>
-      <P></P>
-      <P>BOOST_LIB_PREFIX<BR>
-         + "boost_regex_"<BR>
-         + BOOST_LIB_TOOLSET<BR>
-         + "_"<BR>
-         + BOOST_LIB_THREAD_OPT<BR>
-         + BOOST_LIB_RT_OPT<BR>
-         + BOOST_LIB_DEBUG_OPT<BR>
-         <BR>
-         These are defined as:</P>
-      <P>BOOST_LIB_PREFIX: Either "lib" if this is a static link library, 
-         or&nbsp;nothing for dynamic / shared&nbsp;libraries.<BR>
-         <BR>
-         BOOST_LIB_TOOLSET: The compiler toolset name (vc6, vc7, bcb5 etc).<BR>
-         <BR>
-         BOOST_LIB_THREAD_OPT: "s" for single thread builds,<BR>
-         "m" for multithread builds.<BR>
-         <BR>
-         BOOST_LIB_RT_OPT: "s" for static runtime,<BR>
-         "d" for dynamic runtime.<BR>
-         <BR>
-         BOOST_LIB_LINK_OPT: "s" for static link,<BR>
-         "i" for dynamic link.<BR>
-         <BR>
-         BOOST_LIB_DEBUG_OPT: nothing for release builds,<BR>
-         "d" for debug builds,<BR>
-         "dd" for debug-diagnostic builds (_STLP_DEBUG).</P>
-      <P>
-      Note: you can disable automatic library selection by defining the symbol 
-      BOOST_REGEX_NO_LIB when compiling, this is useful if you want to statically 
-      link even though you're using the dll version of your run time library, or if 
-      you need to debug boost.regex.
+      <P>Note: you can disable automatic library selection by defining the symbol 
+         BOOST_REGEX_NO_LIB when compiling, this is useful if you want to build 
+         Boost.Regex yourself in your IDE, or if you need to debug boost.regex.
+      </P>
       <P>
          <HR>
       <P></P>
-      <p>Revised 
+      <p>Revised&nbsp; 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         28 June 2004&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

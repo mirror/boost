@@ -19,15 +19,7 @@
 
 #include <boost/regex.hpp>
 
-// case sensitive reg_expression determines our allocator type:
-typedef boost::reg_expression<char> re_type;
-typedef re_type::allocator_type allocator_type;
-
-// now declare static (global) data, including an allocator
-// instance which we'll pass to all instances that require an allocator.
-
-extern allocator_type a;
-
+typedef boost::basic_regex<char> re_type;
 extern re_type e;
 
 // flags for output:

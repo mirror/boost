@@ -2,7 +2,7 @@
 
 subproject libs/regex/performance ;
 
-SOURCES = command_line main time_boost time_greta time_localised_boost time_pcre time_posix time_safe_greta ;
+SOURCES = command_line main time_boost time_greta time_localised_boost time_pcre time_dynamic_xpressive time_posix time_safe_greta ;
 
 if $(HS_REGEX_PATH)
 {
@@ -38,6 +38,7 @@ exe regex_comparison :
     $(POSIX_OPTS)
     $(PCRE_OPTS)
     ;
+
 
 
 

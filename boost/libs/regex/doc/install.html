@@ -1,23 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
    <head>
-      <title>Boost.Regex: Index</title>
+      <title>Boost.Regex: Installation</title>
       <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-      <link rel="stylesheet" type="text/css" href="../../../boost.css">
-   </head>
+      <LINK href="../../../boost.css" type="text/css" rel="stylesheet"></head>
    <body>
       <P>
          <TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="0">
             <TR>
-               <td valign="top" width="300">
-                  <h3><a href="../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../boost.png" border="0"></a></h3>
+               <td vAlign="top" width="300">
+                  <h3><A href="../../../index.htm"><IMG height="86" alt="C++ Boost" src="../../../boost.png" width="277" border="0"></A></h3>
                </td>
                <TD width="353">
                   <H1 align="center">Boost.Regex</H1>
                   <H2 align="center">Installation</H2>
                </TD>
                <td width="50">
-                  <h3><a href="index.html"><img height="45" width="43" alt="Boost.Regex Index" src="uarrow.gif" border="0"></a></h3>
+                  <h3><A href="index.html"><IMG height="45" alt="Boost.Regex Index" src="uarrow.gif" width="43" border="0"></A></h3>
                </td>
             </TR>
          </TABLE>
@@ -41,8 +40,23 @@
          or archive file before you can use it, instructions for specific platforms are 
          as follows:
       </P>
-      <P><B><A name="bcb"></A>Borland C++ Builder:</B>
-      </P>
+      <H3><A name="bjam"></A>Building with bjam</H3>
+      <P>This is now the preferred method for building and installing this library, 
+         please refer to the <A href="../../../more/getting_started.html">getting started 
+            guide</A> for more information.</P>
+      <H3><A name="unicode"></A>Building With Unicode and ICU Support</H3>
+      <P>A default build of this library does not enable <A href="unicode.html">Unciode 
+            support</A> via ICU.&nbsp; To do that you need to set the environment 
+         variable ICU_PATH to point to the route directory of your ICU installation, for 
+         example if ICU was installed to /usr/local you might use:</P>
+      <PRE>bjam -sICU_PATH=/usr/local -sTOOLS=<A href="../../../more/getting_started.html#Tools" >my-compiler</A></PRE>
+      <P>Note that ICU is a C++ library just like Boost is, as such your copy of ICU 
+         must have been built with the same C++ compiler (and compiler version) that you 
+         are using to build Boost.&nbsp; <STRONG>Boost.Regex will not work correctly unless 
+            you ensure that this is the case</STRONG>.</P>
+      <H2><A name="make"></A>Building via makefiles</H2>
+      <H3><A name="bcb"></A>Borland C++ Builder:
+      </H3>
       <UL>
          <LI>
          Open up a console window and change to the &lt;boost&gt;\libs\regex\build 
@@ -84,7 +98,7 @@
       </P>
       <P>If you would prefer to do a dynamic link to the regex libraries when using the 
          dll runtime then define BOOST_REGEX_DYN_LINK (you must do this if you want to 
-         use boost.regex in multiple dll's), otherwise Boost.regex will be staically 
+         use boost.regex in multiple dll's), otherwise Boost.regex will be statically 
          linked by default.&nbsp;</P>
       <P>If you want to suppress automatic linking altogether (and supply your own 
          custom build of the lib) then define BOOST_REGEX_NO_LIB.</P>
@@ -94,7 +108,7 @@
          if this causes problems for you, then try defining BOOST_NO_STD_LOCALE when 
          building, this will disable some features throughout boost, but may save you a 
          lot in compile times!</P>
-      <P><B><A name="vc"></A>Microsoft Visual C++ 6</B><STRONG> and 7</STRONG></P>
+      <H3><A name="vc"></A>Microsoft Visual C++ 6 and 7</H3>
       <P>You need version 6 of MSVC to build this library. If you are using VC5 then you 
          may want to look at one of the previous releases of this <A href="http://ourworld.compuserve.com/homepages/john_maddock/regexpp.htm">
             library</A>
@@ -117,14 +131,17 @@
       <P>You can delete all the temporary files created during the build (excluding lib 
          and dll files) using:</P>
       <PRE>nmake -fvc6.mak clean </PRE>
+      <P>If you want to build with ICU support, then you need to pass the path to your 
+         ICU directory to the makefile, for example with:
+      </P>
+      <PRE>nmake ICU_PATH=c:\open-source\icu -fvc71.mak install</PRE>
       <P>Finally when you use regex++ it is only necessary for you to add the 
          &lt;boost&gt; root directory to your list of include directories for that 
          project. It is not necessary for you to manually add a .lib file to the 
          project; the headers will automatically select the correct .lib file for your 
          build mode and tell the linker to include it.
       </P>
-      <P>
-         Note that if you want to dynamically link to the regex library when using the 
+      <P>Note that if you want to dynamically link to the regex library when using the 
          dynamic C++ runtime, define BOOST_REGEX_DYN_LINK when building your project.</P>
       <P>If you want to add the source directly to your project then define 
          BOOST_REGEX_NO_LIB to disable automatic library selection.</P>
@@ -155,26 +172,28 @@
             modify the makefile to add /Zc:wchar_t before building the library.
          </LI>
       </UL>
-      <P><B><A name="gcc"></A>GCC(2.95 and 3.x)</B>
-      </P>
-      <P>The best way to&nbsp;build with gcc is using the <A href="../../../more/getting_started.html">
-            normal boost Jamfile in &lt;boost&gt;/libs/regex/build</A>, alternatively 
-         there is a conservative makefile for the g++ compiler. From the command prompt 
-         change to the &lt;boost&gt;/libs/regex/build directory and type:
+      <H3><A name="gcc"></A>GCC(2.95 and 3.x)
+      </H3>
+      <P>You can build with gcc using the normal boost Jamfile in 
+         &lt;boost&gt;/libs/regex/build, alternatively there is a conservative makefile 
+         for the g++ compiler. From the command prompt change to the 
+         &lt;boost&gt;/libs/regex/build directory and type:
       </P>
       <PRE>make -fgcc.mak </PRE>
       <P>At the end of the build process you should have a gcc sub-directory containing 
-         release and debug versions of the library (libboost_regex-gcc-1_32.a and 
-         libboost_regex-gcc-d-1_32.a). When you build projects that use regex++, you 
-         will need to add the boost install directory to your list of include paths and 
-         add &lt;boost&gt;/libs/regex/build/gcc/libboost_regex-gcc-1_32.a to your list 
-         of library files.
+         release and debug versions of the library (libboost_regex.a and 
+         libboost_regex_debug.a). When you build projects that use regex++, you will 
+         need to add the boost install directory to your list of include paths and add 
+         &lt;boost&gt;/libs/regex/build/gcc/libboost_regex.a to your list of library 
+         files.
       </P>
       <P>There is also a makefile to build the library as a shared library:</P>
       <PRE>make -fgcc-shared.mak</PRE>
-      <P>which will build&nbsp;libboost_regex-gcc-1_32.so and 
-         libboost_regex-gcc-d-1_32.so.</P>
+      <P>which will build libboost_regex.so and libboost_regex_debug.so.</P>
       <P>Both of the these makefiles support the following environment variables:</P>
+      <P>ICU_PATH: tells the makefile to build with Unicode support, set to the path 
+         where your ICU installation is located, for example with: <code>make 
+            ICU_PATH=/usr/local install -fgcc.mak</code></P>
       <P>CXXFLAGS: extra compiler options - note that this applies to both the debug and 
          release builds.</P>
       <P>INCLUDES: additional include directories.</P>
@@ -183,7 +202,7 @@
       <P>For the more adventurous there is a configure script in 
          &lt;boost&gt;/libs/config; see the <A href="../../config/config.htm">config 
             library documentation</A>.</P>
-      <P><B><A name="sun"></A>Sun Workshop 6.1</B></P>
+      <H3><A name="sun"></A>Sun Workshop 6.1</H3>
       <P>There is a makefile for the sun (6.1) compiler (C++ version 3.12). From the 
          command prompt change to the &lt;boost&gt;/libs/regex/build directory and type:
       </P>
@@ -206,29 +225,22 @@
          you can set these by defining the appropriate macros, for example:</P>
       <PRE>dmake CXXFLAGS="-xarch=v9" LDFLAGS="-xarch=v9" LIBSUFFIX="_v9" -f sunpro.mak</PRE>
       <P>will build v9 variants of the regex library named libboost_regex_v9.a etc.</P>
-      <P><B><A name="other"></A>Other compilers:</B>
-      </P>
-      <P>There is a generic makefile (<A href="../build/generic.mak">generic.mak</A>
-      ) provided in &lt;boost-root&gt;/libs/regex/build - see that makefile for 
-      details of environment variables that need to be set before use.
-      <P>
-         Alternatively you can using the <A href="../../../more/getting_started.html">Jam 
-            based build system</A>: cd into &lt;boost&gt;/libs/regex/build and run:<PRE>bjam -sTOOLS=mytoolset</PRE>
-      <P>
-         If you need to configure the library for your platform, then refer to the <A href="../../config/config.htm">
-            config library documentation</A>
-      .
-      <P>
+      <H3><A name="other"></A>Makefiles for Other compilers:
+      </H3>
+      <P>There is a generic makefile (<A href="../build/generic.mak">generic.mak</A> ) 
+         provided in &lt;boost-root&gt;/libs/regex/build - see that makefile for details 
+         of environment variables that need to be set before use.
          <HR>
       <P></P>
-      <p>Revised 
+      <p>Revised&nbsp; 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         09 Jan 2005&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2005<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
+

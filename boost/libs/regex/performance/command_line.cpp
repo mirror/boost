@@ -33,6 +33,7 @@ bool time_greta = false;
 bool time_safe_greta = false;
 bool time_posix = false;
 bool time_pcre = false;
+bool time_xpressive = false;
 
 bool test_matches = false;
 bool test_code = false;
@@ -79,6 +80,10 @@ int handle_argument(const std::string& what)
 #ifdef BOOST_HAS_PCRE
    else if(what == "-pcre")
       time_pcre = true;
+#endif
+#ifdef BOOST_HAS_XPRESSIVE
+   else if(what == "-xpressive")
+      time_xpressive = true;
 #endif
    else if(what == "-all")
    {

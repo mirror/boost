@@ -58,6 +58,15 @@
 #     endif
 #  endif
 
+#if __BORLANDC__ < 0x600
+//
+// string workarounds:
+//
+#include <cstring>
+#undef strcmp
+#undef strcpy
+#endif
+
 #endif
 
 

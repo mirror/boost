@@ -18,7 +18,7 @@ XLFLAGS=
 #
 # sources to compile for each test:
 #
-SOURCES=tests.cpp parse.cpp regress.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
+SOURCES=*.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
 
 CFLAGS= $(INCLUDES) /GB /GF /Gy -GX -GR -I..\..\..\..\ $(CXXFLAGS) /DBOOST_LIB_DIAGNOSTIC=1 /Zc:wchar_t
 
@@ -208,6 +208,8 @@ r5lmd.exe : $(SOURCES)
 
 r6lmd.exe : $(SOURCES)
 	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r6lmd.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(LFLAGS)
+
+
 
 
 

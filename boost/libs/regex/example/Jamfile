@@ -5,6 +5,41 @@ subproject libs/regex/example ;
 # bring in the rules for testing
 import testing  ;
 
+#
+# test for MFC by looking inside VC++ include directories:
+#
+if ! $(gMFC_CHECK)
+{
+   gMFC_CHECK = true ;
+   if $(VS71COMNTOOLS)
+   {
+      VS71COMNTOOLS = $(VS71COMNTOOLS:J=" ") ;
+      if [ GLOB $(VS71COMNTOOLS)..\\..\\VC7\\atlmfc\\include : cstringt.h ]
+      {
+         ECHO MFC/ATL regex wrappers will be tested when building with VC7.1 ;
+         REGEX_MFC_OPTS += "<vc-7_1><*><define>TEST_MFC=1" ;
+      }
+   }
+   if $(VSCOMNTOOLS)
+   {
+      VSCOMNTOOLS = $(VSCOMNTOOLS:J=" ") ;
+      if [ GLOB $(VSCOMNTOOLS)\\..\\..\\VC7\\atlmfc\\include : cstringt.h ]
+      {
+         ECHO MFC/ATL regex wrappers will be tested when building with VC7 ;
+         REGEX_MFC_OPTS += "<vc7><*><define>TEST_MFC=1" ;
+      }
+   }
+   if $(VS80COMNTOOLS)
+   {
+      VS80COMNTOOLS = $(VS80COMNTOOLS:J=" ") ;
+      if [ GLOB $(VS80COMNTOOLS)..\\..\\VC8\\atlmfc\\include : cstringt.h ]
+      {
+         ECHO MFC/ATL regex wrappers will be tested when building with VC8 ;
+         REGEX_MFC_OPTS += "<vc-8_0><*><define>TEST_MFC=1" ;
+      }
+   }
+}
+
 rule regex-test-run ( sources + : input * )
 {
         return [ 
@@ -20,6 +55,7 @@ rule regex-test-run ( sources + : input * )
          :  # test-files
          :  # requirements
          <threading>multi
+         $(REGEX_MFC_OPTS)
          :  # test name
         ] ;
 }
@@ -29,6 +65,8 @@ test-suite regex-examples :
 [ regex-test-run timer/regex_timer.cpp <template>../build/msvc-stlport-tricky : $(BOOST_ROOT)/libs/regex/example/timer/input_script.txt ]
 [ regex-test-run jgrep/jgrep.cpp jgrep/main.cpp : -n boost/ $(BOOST_ROOT)/boost/regex.hpp ]
 [ regex-test-run snippets/credit_card_example.cpp ]
+[ regex-test-run snippets/mfc_example.cpp ]
+[ regex-test-run snippets/icu_example.cpp ]
 [ regex-test-run snippets/partial_regex_grep.cpp : $(BOOST_ROOT)/libs/regex/index.htm ]
 [ regex-test-run snippets/partial_regex_match.cpp : 1234-5678-8765-4 ]
 [ regex-test-run snippets/regex_grep_example_1.cpp : $(BOOST_ROOT)/boost/rational.hpp ]

@@ -23,40 +23,49 @@
          </TABLE>
       </P>
       <HR>
-      <H3>Synopsis</H3>
+      <H3>Contents</H3>
+      <dl class="index">
+         <dt><a href="#synopsis">Synopsis</a> <dt><a href="#description">Description</a>
+               <dd>
+                  <dl class="index">
+                     <dt><a href="#perl">Options for Perl Regular Expressions</a> <dt><a href="#extended">Options 
+                              for POSIX Extended Regular Expressions</a> <dt><a href="#basic">Options for POSIX 
+                                 Basic Regular Expressions</a> <dt><a href="#literals">Options for String Literals</a></dt>
+                  </dl>
+               </dd>
+      </dl>
+      <H3><A name="synopsis"></A>Synopsis</H3>
       <P>Type syntax_option type is an implementation specific bitmask type that 
          controls how a regular expression string is to be interpreted.&nbsp; For 
          convenience note that all the constants listed here, are also duplicated within 
          the scope of class template <A href="basic_regex.html">basic_regex</A>.</P>
       <PRE>namespace std{ namespace regex_constants{
 
-typedef <EM>implementation-specific-bitmask-type</EM>   
-
-  syntax_option_type;
+typedef <EM>implementation-specific-bitmask-type</EM> syntax_option_type;<BR>
 // these flags are standardized:
 static const syntax_option_type normal;
-static const syntax_option_type icase;
-static const syntax_option_type nosubs;
-static const syntax_option_type optimize;
-static const syntax_option_type collate;
 static const syntax_option_type ECMAScript = normal;
 static const syntax_option_type JavaScript = normal;
 static const syntax_option_type JScript = normal;
-static const syntax_option_type basic;
+static const syntax_option_type perl = normal;<BR>static const syntax_option_type basic;
+static const syntax_option_type sed = basic;
 static const syntax_option_type extended;
 static const syntax_option_type awk;
 static const syntax_option_type grep;
 static const syntax_option_type egrep;
-static const syntax_option_type sed = basic;
-static const syntax_option_type perl;<BR>// these are boost.regex specific:<BR>static const syntax_option_type escape_in_lists;<BR>static const syntax_option_type char_classes;<BR>static const syntax_option_type intervals;<BR>static const syntax_option_type limited_ops;<BR>static const syntax_option_type newline_alt;<BR>static const syntax_option_type bk_plus_qm;<BR>static const syntax_option_type bk_braces;<BR>static const syntax_option_type bk_parens;<BR>static const syntax_option_type bk_refs;<BR>static const syntax_option_type bk_vbar;<BR>static const syntax_option_type use_except;<BR>static const syntax_option_type failbit;<BR>static const syntax_option_type literal;<BR>static const syntax_option_type nocollate;<BR>static const syntax_option_type perlex;<BR>static const syntax_option_type emacs;<BR>
+static const syntax_option_type icase;
+static const syntax_option_type nosubs;
+static const syntax_option_type optimize;
+static const syntax_option_type collate;
+// other boost.regex specific options are listed below<BR>
 } // namespace regex_constants
 } // namespace std</PRE>
-      <H3>Description</H3>
+      <H3><A name="description"></A>Description</H3>
       <P>The type <CODE>syntax_option_type</CODE> is an implementation specific bitmask 
          type (17.3.2.1.2). Setting its elements has the effects listed in the table 
          below, a valid value of type <CODE>syntax_option_type</CODE> will always have 
-         exactly one of the elements <CODE>normal, basic, extended, awk, grep, egrep, sed 
-            or perl</CODE> set.</P>
+         exactly one of the elements <CODE>normal, basic, extended, awk, grep, egrep, sed, 
+            literal&nbsp;or perl</CODE> set.</P>
       <P>Note that for convenience all the constants listed here are duplicated within 
          the scope of class template basic_regex, so you can use any of:</P>
       <PRE>boost::regex_constants::constant_name</PRE>
@@ -65,52 +74,81 @@ static const syntax_option_type perl;<BR>// these are boost.regex specific:<BR>s
       <P>or</P>
       <PRE>boost::wregex::constant_name</PRE>
       <P>in an interchangeable manner.</P>
+      <H4><A name="perl"></A>Options for Perl Regular Expressions:</H4>
+      <P>One of the following must always be set for perl regular expressions:</P>
       <P>
-         <TABLE id="Table2" height="1274" cellSpacing="1" cellPadding="7" width="100%" border="0">
+         <TABLE id="Table4" cellSpacing="1" cellPadding="1" width="100%" border="1">
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>Element</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>Effect if set</P>
-               </TD>
+               <TD><STRONG>Element</STRONG></TD>
+               <TD><STRONG>Standardized</STRONG></TD>
+               <TD><STRONG>Effect when set</STRONG></TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>normal</P>
+               <TD>
+                  <P>ECMAScript</P>
                </TD>
-               <TD vAlign="top" width="50%">
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that the grammar recognized by the regular expression engine uses its 
                      normal semantics: that is the same as that given in the ECMA-262, ECMAScript 
                      Language Specification, Chapter 15 part 10, RegExp (Regular Expression) Objects 
                      (FWD.1).</P>
-                  <P>boost.regex also recognizes most perl-compatible extensions in this mode.</P>
+                  <P>boost.regex also recognizes all of the perl-compatible (?...) extensions in 
+                     this mode.</P>
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>icase</P>
-               </TD>
-               <TD vAlign="top" width="50%">
+               <TD>perl</TD>
+               <TD>No</TD>
+               <TD>As above.</TD>
+            </TR>
+            <TR>
+               <TD>normal</TD>
+               <TD>No</TD>
+               <TD>As above.</TD>
+            </TR>
+            <TR>
+               <TD>JavaScript</TD>
+               <TD>No</TD>
+               <TD>As above.</TD>
+            </TR>
+            <TR>
+               <TD>JScript</TD>
+               <TD>No</TD>
+               <TD>As above.</TD>
+            </TR>
+         </TABLE>
+      </P>
+      <P>The following options may also be set when using perl-style regular 
+         expressions:</P>
+      <P>
+         <TABLE id="Table5" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD><STRONG>Element</STRONG></TD>
+               <TD><STRONG>Standardized</STRONG></TD>
+               <TD><STRONG>Effect when set</STRONG></TD>
+            </TR>
+            <TR>
+               <TD>icase</TD>
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that matching of regular expressions against a character container 
                      sequence shall be performed without regard to case.</P>
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>nosubs</P>
-               </TD>
-               <TD vAlign="top" width="50%">
+               <TD>nosubs</TD>
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that when a regular expression is matched against a character 
                      container sequence, then no sub-expression matches are to be stored in the 
                      supplied match_results structure.</P>
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>optimize</P>
-               </TD>
-               <TD vAlign="top" width="50%">
+               <TD>optimize</TD>
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that the regular expression engine should pay more attention to the 
                      speed with which regular expressions are matched, and less to the speed with 
                      which regular expression objects are constructed. Otherwise it has no 
@@ -119,91 +157,80 @@ static const syntax_option_type perl;<BR>// these are boost.regex specific:<BR>s
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>collate</P>
-               </TD>
-               <TD vAlign="top" width="50%">
+               <TD>collate</TD>
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that character ranges of the form "[a-b]" should be locale sensitive.</P>
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>ECMAScript</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>The same as normal.</P>
-               </TD>
+               <TD>newline_alt</TD>
+               <TD>No</TD>
+               <TD>Specifies that the \n character has the same effect as the alternation 
+                  operator |.&nbsp; Allows newline separated lists to be used as a list of 
+                  alternatives.</TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>JavaScript</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>The same as normal.</P>
-               </TD>
+               <TD>no_mod_m</TD>
+               <TD>No</TD>
+               <TD>Normally Boost.Regex behaves as if the Perl m-modifier is on: so the 
+                  assertions ^ and $ match after and before embedded newlines respectively, 
+                  setting this flags is equivalent to prefixing the expression with (?-m).</TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>JScript</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>The same as normal.</P>
-               </TD>
+               <TD>no_mod_s</TD>
+               <TD>No</TD>
+               <TD>Normally whether Boost.Regex will match "." against a newline character is 
+                  determined by the <A href="match_flag_type.html">match flag</A> match_dot_not_newline.&nbsp; 
+                  Specifying this flag is equivalent to prefixing the expression with (?-s) and 
+                  therefore causes "." not to match a newline character regardless of whether 
+                  match_not_dot_newline is set in the match flags.</TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>basic</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>Specifies that the grammar recognized by the regular expression engine is the 
-                     same as that used by POSIX basic regular expressions in IEEE Std 1003.1-2001, 
-                     Portable Operating System Interface (POSIX ), Base Definitions and Headers, 
-                     Section 9, Regular Expressions (FWD.1).
-                  </P>
-               </TD>
+               <TD>mod_s</TD>
+               <TD>No</TD>
+               <TD>Normally whether Boost.Regex will match "." against a newline character is 
+                  determined by the <A href="match_flag_type.html">match flag</A> match_dot_not_newline.&nbsp; 
+                  Specifying this flag is equivalent to prefixing the expression with (?s) and 
+                  therefore causes "." to match a newline character regardless of whether 
+                  match_not_dot_newline is set in the match flags.</TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>extended</P>
-               </TD>
-               <TD vAlign="top" width="50%">
+               <TD>mod_x</TD>
+               <TD>No</TD>
+               <TD>Turns on the perl x-modifier: causes unescaped whitespace in the expression to 
+                  be ignored.</TD>
+            </TR>
+         </TABLE>
+      </P>
+      <H4><A name="extended"></A>Options for POSIX Extended Regular Expressions:</H4>
+      <P>Exactly one of the following must always be set for POSIX extended regular 
+         expressions:</P>
+      <P>
+         <TABLE id="Table6" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD>Element</TD>
+               <TD>Standardized</TD>
+               <TD>Effect when set</TD>
+            </TR>
+            <TR>
+               <TD>extended</TD>
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that the grammar recognized by the regular expression engine is the 
                      same as that used by POSIX extended regular expressions in IEEE Std 
                      1003.1-2001, Portable Operating System Interface (POSIX ), Base Definitions and 
-                     Headers, Section 9, Regular Expressions (FWD.1).</P>
+                     Headers, Section 9, Regular Expressions (FWD.1).&nbsp;
+                  </P>
+                  <P>In addition some perl-style escape sequences are supported (The POSIX standard 
+                     specifies that only "special" characters may be escaped, all other escape 
+                     sequences result in undefined behavior).</P>
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>awk</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>Specifies that the grammar recognized by the regular expression engine is the 
-                     same as that used by POSIX utility awk in IEEE Std 1003.1-2001, Portable 
-                     Operating System Interface (POSIX ), Shells and Utilities, Section 4, awk 
-                     (FWD.1).</P>
-                  <P>That is to say: the same as POSIX extended syntax, but with escape sequences in 
-                     character classes permitted.</P>
-               </TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="316">
-                  <P>grep</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>Specifies that the grammar recognized by the regular expression engine is the 
-                     same as that used by POSIX utility grep in IEEE Std 1003.1-2001, Portable 
-                     Operating System Interface (POSIX ), Shells and Utilities, Section 4, 
-                     Utilities, grep (FWD.1).</P>
-                  <P>That is to say, the same as POSIX basic syntax, but with the newline character 
-                     acting as an alternation character in addition to "|".</P>
-               </TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="316">
-                  <P>egrep</P>
-               </TD>
-               <TD vAlign="top" width="50%">
+               <TD>egrep</TD>
+               <TD>Yes</TD>
+               <TD>
                   <P>Specifies that the grammar recognized by the regular expression engine is the 
                      same as that used by POSIX utility grep when given the -E option in IEEE Std 
                      1003.1-2001, Portable Operating System Interface (POSIX ), Shells and 
@@ -213,118 +240,256 @@ static const syntax_option_type perl;<BR>// these are boost.regex specific:<BR>s
                </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="316">
-                  <P>sed</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>The same as basic.</P>
-               </TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="316">
-                  <P>perl</P>
-               </TD>
-               <TD vAlign="top" width="50%">
-                  <P>The same as normal.</P>
+               <TD>awk</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that the grammar recognized by the regular expression engine is the 
+                     same as that used by POSIX utility awk in IEEE Std 1003.1-2001, Portable 
+                     Operating System Interface (POSIX ), Shells and Utilities, Section 4, awk 
+                     (FWD.1).</P>
+                  <P>That is to say: the same as POSIX extended syntax, but with escape sequences in 
+                     character classes permitted.</P>
+                  <P>In addition some perl-style escape sequences are supported (actually the awk 
+                     syntax requires \a \b \t \v \f \n and \r to be recognised,&nbsp;but other 
+                     escape sequences invoke undefined behavior according to the POSIX standard).</P>
                </TD>
             </TR>
          </TABLE>
       </P>
-      <P>The following constants are specific to this particular regular expression 
-         implementation and do not appear in the <A href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1429.htm">
-            regular expression standardization proposal</A>:</P>
+      <P>The following options may also be set when using POSIX extended regular 
+         expressions:</P>
       <P>
-         <TABLE id="Table3" cellSpacing="0" cellPadding="7" width="100%" border="0">
+         <TABLE id="Table7" cellSpacing="1" cellPadding="1" width="100%" border="1">
             <TR>
-               <TD vAlign="top" width="45%">regbase::escape_in_lists</TD>
-               <TD vAlign="top" width="45%">Allows the use of the escape "\" character in sets of 
-                  characters, for example [\]] represents the set of characters containing only 
-                  "]". If this flag is not set then "\" is an ordinary character inside sets.</TD>
+               <TD><STRONG>Element</STRONG></TD>
+               <TD><STRONG>Standardized</STRONG></TD>
+               <TD><STRONG>Effect when set</STRONG></TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="45%">regbase::char_classes</TD>
-               <TD vAlign="top" width="45%">When this bit is set, character classes [:classname:] 
-                  are allowed inside character set declarations, for example "[[:word:]]" 
-                  represents the set of all characters that belong to the character class "word".</TD>
+               <TD>icase</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that matching of regular expressions against a character container 
+                     sequence shall be performed without regard to case.</P>
+               </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="45%">regbase:: intervals</TD>
-               <TD vAlign="top" width="45%">When this bit is set, repetition intervals are 
-                  allowed, for example "a{2,4}" represents a repeat of between 2 and 4 letter 
-                  a's.</TD>
+               <TD>nosubs</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that when a regular expression is matched against a character 
+                     container sequence, then no sub-expression matches are to be stored in the 
+                     supplied match_results structure.</P>
+               </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="45%">regbase:: limited_ops</TD>
-               <TD vAlign="top" width="45%">When this bit is set all of "+", "?" and "|" are 
-                  ordinary characters in all situations.</TD>
+               <TD>optimize</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that the regular expression engine should pay more attention to the 
+                     speed with which regular expressions are matched, and less to the speed with 
+                     which regular expression objects are constructed. Otherwise it has no 
+                     detectable effect on the program output.&nbsp; This currently has no effect for 
+                     boost.regex.</P>
+               </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="45%">regbase:: newline_alt</TD>
-               <TD vAlign="top" width="45%">When this bit is set, then the newline character "\n" 
-                  has the same effect as the alternation operator "|".</TD>
+               <TD>collate</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that character ranges of the form "[a-b]" should be locale sensitive.</P>
+               </TD>
             </TR>
             <TR>
-               <TD vAlign="top" width="45%">regbase:: bk_plus_qm</TD>
-               <TD vAlign="top" width="45%">When this bit is set then "\+" represents the one or 
-                  more repetition operator and "\?" represents the zero or one repetition 
-                  operator. When this bit is not set then "+" and "?" are used instead.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase:: bk_braces</TD>
-               <TD vAlign="top" width="45%">When this bit is set then "\{" and "\}" are used for 
-                  bounded repetitions and "{" and "}" are normal characters. This is the opposite 
-                  of default behavior.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase:: bk_parens</TD>
-               <TD vAlign="top" width="45%">When this bit is set then "\(" and "\)" are used to 
-                  group sub-expressions and "(" and ")" are ordinary characters, this is the 
-                  opposite of default behavior.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase:: bk_refs</TD>
-               <TD vAlign="top" width="45%">When this bit is set then back references are 
-                  allowed.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase:: bk_vbar</TD>
-               <TD vAlign="top" width="45%">When this bit is set then "\|" represents the 
-                  alternation operator and "|" is an ordinary character. This is the opposite of 
-                  default behavior.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase:: use_except</TD>
-               <TD vAlign="top" width="45%">When this bit is set then a <A href="#bad_expression">bad_expression</A>
-                  exception will be thrown on error.&nbsp; Use of this flag is deprecated - 
-                  basic_regex will always throw on error.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase:: failbit</TD>
-               <TD vAlign="top" width="45%">This bit is set on error, if regbase::use_except is 
-                  not set, then this bit should be checked to see if a regular expression is 
-                  valid before usage.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%">regbase::literal</TD>
-               <TD vAlign="top" width="45%">All characters in the string are treated as literals, 
-                  there are no special characters or escape sequences.</TD>
-            </TR>
-            <TR>
-               <TD vAlign="top" width="45%" height="24">regbase::emacs</TD>
-               <TD vAlign="top" width="45%" height="24">Provides compatability with the emacs 
-                  editor, eqivalent to: bk_braces | bk_parens | bk_refs | bk_vbar.</TD>
+               <TD>newline_alt</TD>
+               <TD>No</TD>
+               <TD>Specifies that the \n character has the same effect as the alternation 
+                  operator |.&nbsp; Allows newline separated lists to be used as a list of 
+                  alternatives.</TD>
             </TR>
          </TABLE>
       </P>
+      <H4><A name="basic"></A>Options for POSIX Basic Regular Expressions:</H4>
+      <P>Exactly one of the following must always be set for POSIX basic regular 
+         expressions:</P>
+      <P>
+         <TABLE id="Table8" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD>Element</TD>
+               <TD>Standardized</TD>
+               <TD>Effect When Set</TD>
+            </TR>
+            <TR>
+               <TD>basic</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that the grammar recognized by the regular expression engine is the 
+                     same as that used by <A href="syntax_basic.html#Basic">POSIX basic regular 
+                        expressions</A> in IEEE Std 1003.1-2001, Portable Operating System Interface 
+                     (POSIX ), Base Definitions and Headers, Section 9, Regular Expressions (FWD.1).
+                  </P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>sed</TD>
+               <TD>No</TD>
+               <TD>As Above.</TD>
+            </TR>
+            <TR>
+               <TD>grep</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that the grammar recognized by the regular expression engine is the 
+                     same as that used by <A href="syntax_basic.html#grep">POSIX utility grep</A> in 
+                     IEEE Std 1003.1-2001, Portable Operating System Interface (POSIX ), Shells and 
+                     Utilities, Section 4, Utilities, grep (FWD.1).</P>
+                  <P>That is to say, the same as POSIX basic syntax, but with the newline character 
+                     acting as an alternation character; the expression is treated as a newline 
+                     separated list of alternatives.</P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>emacs</TD>
+               <TD>No</TD>
+               <TD>Specifies that the grammar recognised is the superset of the POSIX-Basic 
+                  syntax used by the <A href="syntax_basic.html#emacs">emacs</A> program.</TD>
+            </TR>
+         </TABLE>
+      </P>
+      <P>The following options may also be set when using POSIX basic regular 
+         expressions:</P>
+      <P>
+         <TABLE id="Table9" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD><STRONG>Element</STRONG></TD>
+               <TD><STRONG>Standardized</STRONG></TD>
+               <TD><STRONG>Effect when set</STRONG></TD>
+            </TR>
+            <TR>
+               <TD>icase</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that matching of regular expressions against a character container 
+                     sequence shall be performed without regard to case.</P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>nosubs</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that when a regular expression is matched against a character 
+                     container sequence, then no sub-expression matches are to be stored in the 
+                     supplied match_results structure.</P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>optimize</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that the regular expression engine should pay more attention to the 
+                     speed with which regular expressions are matched, and less to the speed with 
+                     which regular expression objects are constructed. Otherwise it has no 
+                     detectable effect on the program output.&nbsp; This currently has no effect for 
+                     boost.regex.</P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>collate</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that character ranges of the form "[a-b]" should be locale 
+                     sensitive.&nbsp; <STRONG>This bit is</STRONG> <STRONG>on by default</STRONG> for 
+                     POSIX-Basic regular expressions, but can be unset to force ranges to be 
+                     compared by code point only.</P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>newline_alt</TD>
+               <TD>No</TD>
+               <TD>Specifies that the \n character has the same effect as the alternation 
+                  operator |.&nbsp; Allows newline separated lists to be used as a list of 
+                  alternatives.&nbsp; This bit is already set, if you use the <EM>grep</EM> option.</TD>
+            </TR>
+            <TR>
+               <TD>no_char_classes</TD>
+               <TD>No</TD>
+               <TD>When set then character classes such as [[:alnum:]] are not allowed.</TD>
+            </TR>
+            <TR>
+               <TD>no_intervals</TD>
+               <TD>No</TD>
+               <TD>When set then bounded repeats such as a{2,3} are not permitted.</TD>
+            </TR>
+            <TR>
+               <TD>bk_plus_qm</TD>
+               <TD>No</TD>
+               <TD>When set then \? acts as a zero-or-one repeat operator, and \+ acts as a 
+                  one-or-more repeat operator.</TD>
+            </TR>
+            <TR>
+               <TD>bk_vbar</TD>
+               <TD>No</TD>
+               <TD>When set then \| acts as the alternation operator.</TD>
+            </TR>
+         </TABLE>
+      </P>
+      <H4><A name="literals"></A>Options for Literal Strings:</H4>
+      <P>The following must always be set to interpret the expression as a string 
+         literal:</P>
+      <P>
+         <TABLE id="Table10" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD>Element</TD>
+               <TD>Standardized</TD>
+               <TD>Effect when set</TD>
+            </TR>
+            <TR>
+               <TD>literal</TD>
+               <TD>Yes</TD>
+               <TD>Treat the string as a literal (no special characters).</TD>
+            </TR>
+         </TABLE>
+      </P>
+      <P>The following options may also be combined with the <EM>literal</EM> flag:</P>
+      <P>
+         <TABLE id="Table11" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD>Element</TD>
+               <TD>Standardized</TD>
+               <TD>Effect when set</TD>
+            </TR>
+            <TR>
+               <TD>icase</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that matching of regular expressions against a character container 
+                     sequence shall be performed without regard to case.</P>
+               </TD>
+            </TR>
+            <TR>
+               <TD>optimize</TD>
+               <TD>Yes</TD>
+               <TD>
+                  <P>Specifies that the regular expression engine should pay more attention to the 
+                     speed with which regular expressions are matched, and less to the speed with 
+                     which regular expression objects are constructed. Otherwise it has no 
+                     detectable effect on the program output.&nbsp; This currently has no effect for 
+                     boost.regex.</P>
+               </TD>
+            </TR>
+         </TABLE>
+      </P>
+      <P>&nbsp;</P>
       <HR>
-      <p>Revised 
+      <p>Revised&nbsp; 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         23 June 2004&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
+

@@ -51,7 +51,7 @@
       <p>Class template match_results is most commonly used as one of the typedefs 
          cmatch, wcmatch, smatch, or wsmatch:</p>
       <pre>template &lt;class BidirectionalIterator,
-          class Allocator = allocator&lt;sub_match&lt;BidirectionalIterator&gt; &gt;
+          class Allocator = std::allocator&lt;sub_match&lt;BidirectionalIterator&gt; &gt;
 class match_results;
 
 typedef match_results&lt;const char*&gt; cmatch;
@@ -60,7 +60,7 @@ typedef match_results&lt;string::const_iterator&gt; smatch;
 typedef match_results&lt;wstring::const_iterator&gt; wsmatch;
 
 template &lt;class BidirectionalIterator,
-          class Allocator = allocator&lt;sub_match&lt;BidirectionalIterator&gt; &gt;
+          class Allocator = std::allocator&lt;sub_match&lt;BidirectionalIterator&gt; &gt;
 class match_results
 { 
 public: 
@@ -455,4 +455,3 @@ void swap(match_results&lt;BidirectionalIterator, Allocator&gt;&amp; m1,
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-

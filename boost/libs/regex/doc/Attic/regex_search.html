@@ -35,55 +35,47 @@
          match could conceivably start at that position. The algorithm is defined as 
          follows:
          <PRE>template &lt;class BidirectionalIterator, 
-          class Allocator, class charT,
-          class traits, class Allocator2&gt;
+          class Allocator, class charT, class traits&gt;
 bool <A href="#f1">regex_search</A>(BidirectionalIterator first, BidirectionalIterator last,
                   <a href="match_results.html">match_results</a>&lt;BidirectionalIterator, Allocator&gt;&amp; m,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator2&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);
                   
 template &lt;class ST, class SA, 
-          class Allocator, class charT,
-          class traits, class Allocator2&gt; 
+          class Allocator, class charT, class traits&gt; 
 bool <A href="#f2">regex_search</A>(const basic_string&lt;charT, ST, SA&gt;&amp; s, 
                   <a href="match_results.html">match_results</a>&lt;
                       typename basic_string&lt;charT, ST,SA&gt;::const_iterator, 
                       Allocator&gt;&amp; m, 
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator2&gt;&amp; e, 
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e, 
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default); 
           
-template&lt;class charT, class Allocator, class traits, 
-         class Allocator2&gt; 
+template&lt;class charT, class Allocator, class traits&gt; 
 bool <A href="#f3">regex_search</A>(const charT* str, 
                   <a href="match_results.html">match_results</a>&lt;const charT*, Allocator&gt;&amp; m, 
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator2&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);
                   
-template &lt;class BidirectionalIterator, class Allocator,
-          class charT, class traits&gt;                
+template &lt;class BidirectionalIterator, class charT, class traits&gt;                
 bool <A href="#f4">regex_search</A>(BidirectionalIterator first, BidirectionalIterator last, 
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator&gt;&amp; e, 
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e, 
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default); 
                   
-template &lt;class charT, class Allocator, 
-          class traits&gt; 
+template &lt;class charT, class traits&gt; 
 bool <A href="#f5">regex_search</A>(const charT* str, 
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator&gt;&amp; e, 
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e, 
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default); 
                   
-template&lt;class ST, class SA,
-         class Allocator, class charT, 
-         class traits&gt;
+template&lt;class ST, class SA, class charT, class traits&gt;
 bool <A href="#f6">regex_search</A>(const basic_string&lt;charT, ST, SA&gt;&amp; s,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);
 </PRE>
          <H3><A name="description"></A>Description</H3>
-         <PRE><A name=f1></A>template &lt;class BidirectionalIterator, class Allocator, class charT,
-          class traits, class Allocator2&gt;
+         <PRE><A name=f1></A>template &lt;class BidirectionalIterator, class Allocator, class charT, class traits&gt;
 bool regex_search(BidirectionalIterator first, BidirectionalIterator last,
                   <a href="match_results.html">match_results</a>&lt;BidirectionalIterator, Allocator&gt;&amp; m,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator2&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);</PRE>
       <P><B> Requires:</B> Type BidirectionalIterator meets the requirements of a 
          Bidirectional Iterator (24.1.4).</P>
@@ -234,38 +226,36 @@ bool regex_search(BidirectionalIterator first, BidirectionalIterator last,
                </TD></TR></TABLE>
          </CENTER>
       </DIV>
-      <PRE><A name=f2></A>template &lt;class charT, class Allocator, class traits, class Allocator2&gt;
+      <PRE><A name=f2></A>template &lt;class charT, class Allocator, class traits&gt;
 bool regex_search(const charT* str, <a href="match_results.html">match_results</a>&lt;const charT*, Allocator&gt;&amp; m,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator2&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);</PRE>
       <P><B> Effects:</B> Returns the result of <CODE>regex_search(str, str + 
             char_traits&lt;charT&gt;::length(str), m, e, flags)</CODE>.</P>
       <PRE><A name=f3></A>template &lt;class ST, class SA, class Allocator, class charT,
-          class traits, class Allocator2&gt;
+          class traits&gt;
 bool regex_search(const basic_string&lt;charT, ST, SA&gt;&amp; s,
                   <a href="match_results.html">match_results</a>&lt;typename basic_string&lt;charT, ST, SA&gt;::const_iterator, Allocator&gt;&amp; m,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator2&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);</PRE>
       <P><B> Effects:</B> Returns the result of <CODE>regex_search(s.begin(), s.end(), m, 
             e, flags)</CODE>.</P>
-      <PRE><A name=f4></A>template &lt;class iterator, class Allocator, class charT,
-          class traits&gt;
+      <PRE><A name=f4></A>template &lt;class iterator, class charT, class traits&gt;
 bool regex_search(iterator first, iterator last,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);</PRE>
       <P><B> Effects:</B> Behaves "as if" by constructing an instance of <CODE><a href="match_results.html">
                match_results</a>&lt;</CODE>BidirectionalIterator<CODE>&gt; what</CODE>, 
          and then returning the result of <CODE>regex_search(first, last, what, e, flags)</CODE>.</P>
-      <PRE><A name=f5></A>template &lt;class charT, class Allocator, class traits&gt;
+      <PRE><A name=f5></A>template &lt;class charT, class traits&gt;
 bool regex_search(const charT* str
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);</PRE>
       <P><B> Effects:</B> Returns the result of <CODE>regex_search(str, str + 
             char_traits&lt;charT&gt;::length(str), e, flags)</CODE>.</P>
-      <PRE><A name=f6></A>template &lt;class ST, class SA, class Allocator, class charT,
-          class traits&gt;
+      <PRE><A name=f6></A>template &lt;class ST, class SA, class charT, class traits&gt;
 bool regex_search(const basic_string&lt;charT, ST, SA&gt;&amp; s,
-                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits, Allocator&gt;&amp; e,
+                  const <a href="basic_regex.html">basic_regex</a>&lt;charT, traits&gt;&amp; e,
                   <a href="match_flag_type.html">match_flag_type</a> flags = match_default);</PRE>
       <P><B> Effects:</B> Returns the result of <CODE>regex_search(s.begin(), s.end(), e, 
             flags)</CODE>.
@@ -314,7 +304,7 @@ void</B> IndexClasses(map_type&amp; m, <B>const</B> std::string&amp; file)
       <HR>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         04 Feb 2004 
+         23 June 2004 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
             <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>

@@ -33,8 +33,13 @@ using std::getline;
 
 #include <boost/config.hpp>
 #include <boost/regex.hpp>
+#include <boost/cregex.hpp>
 #include <boost/timer.hpp> 
 #include <boost/smart_ptr.hpp>
+
+#if defined(_WIN32) && defined(BOOST_REGEX_USE_WIN32_LOCALE)
+#include <windows.h>
+#endif
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || defined(__sgi)
 // maybe no Koenig lookup, use using declaration instead:
@@ -367,7 +372,9 @@ int main(int argc, char**argv)
    return 0;
 }
 
-
+#if defined(_WIN32) && defined(BOOST_REGEX_USE_WIN32_LOCALE)
+#pragma message(lib, "user32.lib")
+#endif
 
 
 

@@ -1,13 +1,20 @@
 /*
  *
- * Copyright (c) 2004
+ * Copyright (c) 2003-2004
  * Dr John Maddock
  *
- * Use, modification and distribution are subject to the
- * Boost Software License, Version 1.0. (See accompanying file
+ * Use, modification and distribution are subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
+
+ /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         captures_example.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Demonstrate the behaviour of captures.
+  */
 
 #include <boost/regex.hpp>
 #include <iostream>

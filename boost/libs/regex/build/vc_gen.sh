@@ -46,7 +46,7 @@ EOF
 		obj="$subdir$stlport_suffix/$libname/$obj"
 		all_obj="$all_obj $obj"
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
-		echo "	cl \$(INCLUDES) $opts \$(CXXFLAGS) -Y- -Fo./$subdir$stlport_suffix/$libname/ -Fd$subdir$stlport_suffix/$libname.pdb $file" >> $tout
+		echo "	cl \$(INCLUDES) $opts \$(CXXFLAGS) \$(ICU_COMPILE_OPTS) -Y- -Fo./$subdir$stlport_suffix/$libname/ -Fd$subdir$stlport_suffix/$libname.pdb $file" >> $tout
 		echo "" >> $tout
 	done
 #
@@ -96,7 +96,7 @@ EOF
 		obj="$subdir$stlport_suffix/$libname/$obj"
 		all_obj="$all_obj $obj"
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
-		echo "	cl \$(INCLUDES) $opts \$(CXXFLAGS) -Y- -Fo./$subdir$stlport_suffix/$libname/ -Fd$subdir$stlport_suffix/$libname.pdb $file" >> $tout
+		echo "	cl \$(INCLUDES) $opts \$(CXXFLAGS) \$(ICU_COMPILE_OPTS) -Y- -Fo./$subdir$stlport_suffix/$libname/ -Fd$subdir$stlport_suffix/$libname.pdb $file" >> $tout
 		echo "" >> $tout
 	done
 #
@@ -116,7 +116,7 @@ EOF
 #
 #	 now for the main target for this library:
 	echo ./$subdir$stlport_suffix/$libname.lib : $all_obj >> $tout
-	echo "	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:\"$subdir$stlport_suffix/$libname.pdb\" /debug /machine:I386 /out:\"$subdir$stlport_suffix/$libname.dll\" /implib:\"$subdir$stlport_suffix/$libname.lib\" /LIBPATH:\$(STLPORT_PATH)\\lib \$(XLFLAGS) $all_obj" >> $tout
+	echo "	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:\"$subdir$stlport_suffix/$libname.pdb\" /debug /machine:I386 /out:\"$subdir$stlport_suffix/$libname.dll\" /implib:\"$subdir$stlport_suffix/$libname.lib\" /LIBPATH:\$(STLPORT_PATH)\\lib \$(XLFLAGS) \$(ICU_LINK_OPTS) $all_obj" >> $tout
 	echo "" >> $tout
 }
 
@@ -182,6 +182,10 @@ function vc6_gen()
 #
 
 #
+# path to ICU library installation goes here:
+#
+ICU_PATH=
+#
 # Add additional compiler options here:
 #
 CXXFLAGS=
@@ -206,6 +210,18 @@ NULL=nul
 
 !IF "\$(MSVCDIR)" == ""
 !ERROR Variable MSVCDIR not set.
+!ENDIF
+
+!IF "\$(ICU_PATH)" == ""
+ICU_COMPILE_OPTS=
+ICU_LINK_OPTS=
+!MESSAGE Building Boost.Regex without ICU / Unicode support:
+!MESSAGE Hint: set ICU_PATH on the nmake command line to point 
+!MESSAGE to your ICU installation if you have one.
+!ELSE
+ICU_COMPILE_OPTS= -DBOOST_HAS_ICU=1 -I\$(ICU_PATH)\\include
+ICU_LINK_OPTS= /LIBPATH:\$(ICU_PATH)\\lib icuin.lib icuuc.lib
+!MESSAGE Building Boost.Regex with ICU in \$(ICU_PATH)
 !ENDIF
 
 EOF
@@ -290,6 +306,10 @@ function vc6_stlp_gen()
 #
 
 #
+# ICU setup:
+#
+ICU_PATH=
+#
 # Add additional compiler options here:
 #
 CXXFLAGS=
@@ -318,6 +338,18 @@ NULL=nul
 
 !IF "\$(STLPORT_PATH)" == ""
 !ERROR Variable STLPORT_PATH not set.
+!ENDIF
+
+!IF "\$(ICU_PATH)" == ""
+ICU_COMPILE_OPTS=
+ICU_LINK_OPTS=
+!MESSAGE Building Boost.Regex without ICU / Unicode support:
+!MESSAGE Hint: set ICU_PATH on the nmake command line to point 
+!MESSAGE to your ICU installation if you have one.
+!ELSE
+ICU_COMPILE_OPTS= -DBOOST_HAS_ICU=1 -I\$(ICU_PATH)\\include
+ICU_LINK_OPTS= /LIBPATH:\$(ICU_PATH)\\lib icuin.lib icuuc.lib
+!MESSAGE Building Boost.Regex with ICU in \$(ICU_PATH)
 !ENDIF
 
 EOF
@@ -368,8 +400,6 @@ subdir="vc7"
 vc6_gen
 #
 # generate vc7-stlport makefile:
-debug_extra="/GX /RTC1"
-release_extra=""
 is_stlport="yes"
 out="vc7-stlport.mak"
 no_single="yes"
@@ -377,8 +407,6 @@ subdir="vc7"
 vc6_stlp_gen
 #
 # generate vc71 makefile:
-debug_extra="/GX /RTC1 /Zc:wchar_t"
-release_extra="/Zc:wchar_t"
 is_stlport="no"
 out="vc71.mak"
 no_single="no"
@@ -386,8 +414,6 @@ subdir="vc71"
 vc6_gen
 #
 # generate vc71-stlport makefile:
-debug_extra="/GX /RTC1"
-release_extra=""
 is_stlport="yes"
 out="vc71-stlport.mak"
 no_single="yes"
@@ -398,7 +424,6 @@ vc6_stlp_gen
 #
 # remove tmep files;
 rm -f $tout $iout
-
 
 
 

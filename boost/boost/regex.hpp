@@ -28,11 +28,7 @@
 #include <boost/regex/config.hpp>
 #endif
 
-#ifdef BOOST_REGEX_V3
-#include <boost/regex/v3/regex.hpp>
-#else
 #include <boost/regex/v4/regex.hpp>
-#endif
 
 #endif  // include
 

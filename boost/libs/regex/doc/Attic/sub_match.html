@@ -62,7 +62,15 @@
          is false, and members <CODE>first</CODE> and <CODE>second</CODE> represent the 
          character range that formed the partial match.</P>
       <PRE>namespace boost{
-      
+
+template &lt;class BidirectionalIterator&gt;
+class sub_match;
+
+typedef sub_match&lt;const char*&gt; csub_match;
+typedef sub_match&lt;const wchar_t*&gt; wcsub_match;
+typedef sub_match&lt;std::string::const_iterator&gt; ssub_match;
+typedef sub_match&lt;std::wstring::const_iterator&gt; wssub_match;
+
 template &lt;class BidirectionalIterator&gt;
 class sub_match : public std::pair&lt;BidirectionalIterator, BidirectionalIterator&gt;
 {
@@ -323,10 +331,11 @@ basic_ostream&lt;charT, traits&gt;&amp;
          sub_match occupies more memory resulting in complex expressions running out of 
          memory or stack space more quickly during matching.
          <LI>
-         The matching algorithms are less efficient at handling some features 
-         (independent sub-expressions for example), even when match_extra is not used.
+            The matching algorithms are less efficient at handling some features 
+            (independent sub-expressions for example), even when <EM>match_extra</EM>
+         is not used.
          <LI>
-            The matching algorithms are much less efficient (i.e. slower), when match_extra 
+            The matching algorithms are much less efficient (i.e. slower), when <EM>match_extra</EM>
             is used.&nbsp; Mostly this is down to the extra memory allocations that have to 
             take place.</LI></UL>
       <H4>sub_match non-member operators</H4>
@@ -550,13 +559,13 @@ basic_ostream&lt;charT, traits&gt;&amp;
          <HR>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         22&nbsp;Dec 2004 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
+            2004</i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-

@@ -7,16 +7,19 @@ CXX= g++ $(INCLUDES) -L../../../../stage/lib -I../../../../ -I./ $(CXXFLAGS) -L.
 #
 # sources to compile for each test:
 #
-SOURCES=tests.cpp parse.cpp regress.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
+SOURCES=*.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
 
 total : gcc_regress
 	export LD_LIBRARY_PATH="../../build/gcc:$LD_LIBRARY_PATH" && ./gcc_regress tests.txt
 
 gcc_regress : $(SOURCES)
-	$(CXX) -O2 -o gcc_regress $(SOURCES) -lboost_regex $(LIBS)
+	$(CXX) -O2 -o gcc_regress $(SOURCES) ../../build/gcc/libboost_regex-gcc*.a $(LIBS)
 
 debug : $(SOURCES)
-	$(CXX) -g -o gcc_regress $(SOURCES) -lboost_regex_debug $(LIBS)
+	$(CXX) -g -o gcc_regress $(SOURCES) ../../build/gcc/libboost_regex-gcc-d*.a $(LIBS)
+
+
+
 
 
 

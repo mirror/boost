@@ -6,14 +6,76 @@ subproject libs/regex/test ;
 import testing ;
 subinclude libs/regex/test/captures ;
 
+R_SOURCE = 
+basic_tests.cpp
+main.cpp
+test_alt.cpp
+test_anchors.cpp
+test_asserts.cpp
+test_backrefs.cpp
+test_deprecated.cpp
+test_emacs.cpp
+test_escapes.cpp
+test_grep.cpp
+test_locale.cpp
+test_mfc.cpp
+test_non_greedy_repeats.cpp
+test_perl_ex.cpp
+test_replace.cpp
+test_sets.cpp
+test_simple_repeats.cpp
+test_tricky_cases.cpp
+test_icu.cpp
+test_unicode.cpp
+test_overloads.cpp
+test_operators.cpp
+;
+
+#
+# test for MFC by looking inside VC++ include directories:
+#
+if ! $(gMFC_CHECK)
+{
+   gMFC_CHECK = true ;
+   if $(VS71COMNTOOLS)
+   {
+      VS71COMNTOOLS = $(VS71COMNTOOLS:J=" ") ;
+      if [ GLOB $(VS71COMNTOOLS)..\\..\\VC7\\atlmfc\\include : cstringt.h ]
+      {
+         ECHO MFC/ATL regex wrappers will be tested when building with VC7.1 ;
+         REGEX_MFC_OPTS += "<vc-7_1><*><define>TEST_MFC=1" ;
+      }
+   }
+   if $(VSCOMNTOOLS)
+   {
+      VSCOMNTOOLS = $(VSCOMNTOOLS:J=" ") ;
+      if [ GLOB $(VSCOMNTOOLS)\\..\\..\\VC7\\atlmfc\\include : cstringt.h ]
+      {
+         ECHO MFC/ATL regex wrappers will be tested when building with VC7 ;
+         REGEX_MFC_OPTS += "<vc7><*><define>TEST_MFC=1" ;
+      }
+   }
+   if $(VS80COMNTOOLS)
+   {
+      VS80COMNTOOLS = $(VS80COMNTOOLS:J=" ") ;
+      if [ GLOB $(VS80COMNTOOLS)..\\..\\VC8\\atlmfc\\include : cstringt.h ]
+      {
+         ECHO MFC/ATL regex wrappers will be tested when building with VC8 ;
+         REGEX_MFC_OPTS += "<vc-8_0><*><define>TEST_MFC=1" ;
+      }
+   }
+}
+
 #
 # this template defines the options common to
 # all regex tests:
 #
 template test 
    : <template>../build/regex-options 
+     <template>../build/regex-test-options
      <lib>../build/boost_regex            # sources
    : <threading>multi
+     $(REGEX_MFC_OPTS)
    ;
  
 #
@@ -22,9 +84,7 @@ template test
 #
 template regression
     : <template>test                    # sources
-      regress/parse.cpp
-      regress/regress.cpp 
-      regress/tests.cpp
+      regress/$(R_SOURCE)
       <lib>../../test/build/boost_prg_exec_monitor
     ;
 
@@ -46,6 +106,7 @@ rule regex-test ( name : sources + : requirements * : input-files * )
 #
 template test-dll 
    : <template>../build/regex-dll-options 
+     <template>../build/regex-test-options
      <dll>../build/boost_regex            # sources
    : <threading>multi
    ;
@@ -56,9 +117,7 @@ template test-dll
 #
 template regression-dll
     : <template>test-dll                    # sources
-      regress/parse.cpp
-      regress/regress.cpp 
-      regress/tests.cpp
+      regress/$(R_SOURCE)
       <lib>../../test/build/boost_prg_exec_monitor
     ;
 
@@ -67,14 +126,7 @@ test-suite regex
       [ regex-test regex_regress
           : <template>regression     # sources
           :                          # requirements
-          : regress/tests.txt        # input files
-      ]
-
-      [ regex-test regex_wide_regress
-          : <template>regression     # sources
-            <template>../build/msvc-stlport-tricky
-          : <define>TEST_UNICODE=1   # requirements
-          : regress/tests.txt        # input files
+          :                          # input files
       ]
 
       [ regex-test posix_api_check
@@ -107,6 +159,17 @@ test-suite regex
             <lib>../../test/build/boost_test_exec_monitor
       ]
       
+      [ run unicode/unicode_iterator_test.cpp ]
+      [ regex-test static_mutex_test
+          : <template>test                      # sources
+            static_mutex/static_mutex_test.cpp
+            <dll>../../thread/build/boost_thread
+      ]
+      [ regex-test object_cache_test
+          : <template>test                      # sources
+            object_cache/object_cache_test.cpp
+      ]
+      
       [ run config_info/regex_config_info.cpp <template>test 
       : : : <test-info>always_show_run_output ]
 
@@ -116,20 +179,13 @@ test-suite regex
 
       [ regex-test regex_regress_dll
           : <template>regression-dll     # sources
-          :                          # requirements
-          : regress/tests.txt        # input files
-      ]
-
-      [ regex-test regex_wide_regress_dll
-          : <template>regression-dll     # sources
-            <template>../build/msvc-stlport-tricky
-          : <define>TEST_UNICODE=1   # requirements
-          : regress/tests.txt        # input files
+          :                              # requirements
+          :                              # input files
       ]
 
       [ compile concepts/concept_check.cpp
       ]
-      [ compile concepts/wide_concept_check.cpp
+      [ compile concepts/icu_concept_check.cpp
       ]
       
      [ run
@@ -150,6 +206,11 @@ test-suite regex
  ]
 
 ;
+
+
+
+
+
 
 
 

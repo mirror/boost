@@ -1,6 +1,117 @@
 # copyright John Maddock 2003
 
 subproject libs/regex/build ;
+# bring in the rules for testing
+import testing ;
+
+#
+# ICU configuration:
+#
+rule check-icu-config ( )
+{
+   if ! $(gICU_CONFIG_CHECKED)
+   {
+      if $(ICU_PATH)
+      {
+         dir += $(ICU_PATH) ;
+      }
+      
+      if [ GLOB $(dir)$(SLASH)include$(SLASH)unicode : utypes.h ]
+      {
+         ECHO Building Boost.Regex with Unicode/ICU support enabled ;
+         ECHO Using ICU in $(ICU_PATH:J=" ")$(SLASH)include ;
+         gHAS_ICU = true ;
+         
+         # try and find ICU libraries, look for NT versions first:
+         if $(ICU_LINK)
+         {
+            gICU_LIBS += <linkflags>$(ICU_LINK) ;
+         }
+         else if [ GLOB $(dir)$(SLASH)lib : icuuc.* ]
+         {
+            gICU_LIBS += <find-library>icuuc ;
+         }
+         else if [ GLOB $(dir)$(SLASH)lib : libicuuc.* ]
+         {
+            gICU_LIBS += <find-library>icuuc ;
+         }
+         else if [ GLOB $(ICU_PATH)/lib : cygicuuc.dll ]
+         {
+            gICU_LIBS += <library-file>$(ICU_PATH)/lib/cygicuuc.dll ;
+         }
+         else if [ GLOB /usr/local/lib : cygicuuc.dll ]
+         {
+            gICU_LIBS += <library-file>/usr/local/lib/cygicuuc.dll ;
+         }
+         else
+         {
+            ECHO ICU shared common library not found. ;
+            ECHO HINT: Set the environment variable ICU_LINK to contain ;
+            ECHO       the linker options required to link to ICU. ;
+         }
+         
+         if $(ICU_LINK)
+         {
+            # gICU_LIBS += <linkflags>$(ICU_LINK) ;
+         }
+         else if [ GLOB $(dir)$(SLASH)lib : icuin.* ]
+         {
+            gICU_LIBS += <find-library>icuin ;
+         }
+         else if [ GLOB $(dir)$(SLASH)lib : libicui18n.* ]
+         {
+            gICU_LIBS += <find-library>icui18n ;
+         }
+         else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
+         {
+            gICU_LIBS += <library-file>$(ICU_PATH)/lib/cygicuin.dll ;
+         }
+         else if [ GLOB /usr/local/lib : cygicuin.dll ]
+         {
+            gICU_LIBS += <library-file>/usr/local/lib/cygicuin.dll ;
+         }
+         else
+         {
+            ECHO ICU shared i18n library not found. ;
+            ECHO HINT: Set the environment variable ICU_LINK to contain ;
+            ECHO       the linker options required to link to ICU. ;
+         }
+      }
+      else
+      {
+         ECHO ****************************************************** ;
+         ECHO ;
+         ECHO Building Boost.Regex with Unicode/ICU support disabled. ;
+         ECHO HINT: define the environment variable ICU_PATH to point to the ;
+         ECHO root directy of your ICU installation if you have one. ;
+         ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")$(SLASH)include$(SLASH)unicode ;
+         ECHO ;
+         ECHO ****************************************************** ;
+      }
+      gICU_CONFIG_CHECKED = true ;
+   }
+    if $(gHAS_ICU)
+    {
+        return true ;
+    }
+}
+
+if [ check-icu-config ]
+{
+   BOOST_REGEX_ICU_OPTS = "<define>BOOST_HAS_ICU=1" ;
+   if $(gICU_LIBS)
+   {
+      BOOST_REGEX_ICU_OPTS += $(gICU_LIBS) ;
+      # this one is required for VC++ :
+      BOOST_REGEX_ICU_TEST_OPTS = "<native-wchar_t>off" ;
+   }
+   if $(ICU_PATH)
+   {
+      BOOST_REGEX_ICU_OPTS += "<sysinclude>$(ICU_PATH)/include" ;
+      BOOST_REGEX_ICU_OPTS += "<library-path>$(ICU_PATH)/lib" ;
+   }
+   # ECHO "BOOST_REGEX_ICU_OPTS =" $(BOOST_REGEX_ICU_OPTS) ;
+}
 
 #
 # this template defines the options common to
@@ -14,6 +125,12 @@ template regex-options
      # <native-wchar_t>on
      # como requires this:
      <como-win32><*><define>BOOST_REGEX_NO_W32=1
+     $(BOOST_REGEX_ICU_OPTS)
+   ;
+template regex-test-options
+   : # sources
+   : # requirements
+     $(BOOST_REGEX_ICU_TEST_OPTS)
    ;
 
 #
@@ -37,11 +154,27 @@ template msvc-stlport-tricky
      <define>BOOST_ALL_NO_LIB=1
    ;
 
-SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
-       cregex fileiter posix_api regex regex_debug
-       regex_synch w32_regex_traits wide_posix_api instances winstances ;
+SOURCES = 
+   c_regex_traits.cpp
+   cpp_regex_traits.cpp
+   cregex.cpp
+   fileiter.cpp
+   icu.cpp
+   instances.cpp
+   posix_api.cpp
+   regex.cpp
+   regex_debug.cpp
+   regex_raw_buffer.cpp
+   regex_traits_defaults.cpp
+   static_mutex.cpp
+   w32_regex_traits.cpp
+   wc_regex_traits.cpp
+   wide_posix_api.cpp
+   winstances.cpp 
+   usinstances.cpp ;
+   
        
-lib boost_regex : ../src/$(SOURCES).cpp <template>regex-options
+lib boost_regex : ../src/$(SOURCES) <template>regex-options
     : 
         common-variant-tag
     : 
@@ -49,7 +182,7 @@ lib boost_regex : ../src/$(SOURCES).cpp <template>regex-options
     ;
 
 
-dll boost_regex : ../src/$(SOURCES).cpp <template>regex-dll-options
+dll boost_regex : ../src/$(SOURCES) <template>regex-dll-options
     : 
         common-variant-tag
     : 

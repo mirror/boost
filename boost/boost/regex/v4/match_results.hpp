@@ -24,10 +24,12 @@
 #endif
 
 namespace boost{
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4251 4231 4660)
+#endif
 
-template <class BidiIterator
-         , class Allocator = BOOST_DEFAULT_ALLOCATOR(sub_match<BidiIterator> )
-         >
+template <class BidiIterator, class Allocator>
 class match_results
 { 
 private:
@@ -73,7 +75,7 @@ public:
 
    // size:
    size_type size() const
-   { return (m_subs.size() >= 2) ? m_subs.size() - 2 : 0; }
+   { return empty() ? 0 : m_subs.size() - 2; }
    size_type max_size() const
    { return m_subs.max_size(); }
    bool empty() const
@@ -94,7 +96,7 @@ public:
          const sub_match<BidiIterator>& s = m_subs[sub];
          if(s.matched)
          {
-            return boost::re_detail::distance((BidiIterator)(m_base), (BidiIterator)(s.first));
+            return ::boost::re_detail::distance((BidiIterator)(m_base), (BidiIterator)(s.first));
          }
       }
       return ~static_cast<difference_type>(0);
@@ -108,7 +110,7 @@ public:
          const sub_match<BidiIterator>& s = m_subs[sub];
          if(s.matched)
          {
-            result = s;
+            result = s.str();
          }
       }
       return result;
@@ -134,7 +136,7 @@ public:
    }
    const_iterator begin() const
    {
-      return (m_subs.size() >= 2) ? (m_subs.begin() + 2) : m_subs.end();
+      return (m_subs.size() > 2) ? (m_subs.begin() + 2) : m_subs.end();
    }
    const_iterator end() const
    {
@@ -151,7 +153,26 @@ public:
    string_type format(const string_type& fmt,
                       match_flag_type flags = format_default) const
    {
-      return regex_format(*this, fmt, flags);
+      return regex_format<BidiIterator, char_type>(*this, fmt, flags);
+   }
+   // format with locale:
+   template <class OutputIterator, class RegexT>
+   OutputIterator format(OutputIterator out,
+                         const string_type& fmt,
+                         match_flag_type flags,
+                         const RegexT& re) const
+   {
+      return ::boost::re_detail::regex_format_imp(out, *this, fmt.data(), fmt.data() + fmt.size(), flags, re.get_traits());
+   }
+   template <class RegexT>
+   string_type format(const string_type& fmt,
+                      match_flag_type flags,
+                      const RegexT& re) const
+   {
+      string_type result;
+      re_detail::string_out_iterator<string_type> i(result);
+      ::boost::re_detail::regex_format_imp(i, *this, fmt.data(), fmt.data() + fmt.size(), flags, re.get_traits());
+      return result;
    }
 
    allocator_type get_allocator() const
@@ -233,6 +254,10 @@ public:
    {
       m_base = pos;
    }
+   BidiIterator base()const
+   {
+      return m_base;
+   }
    void BOOST_REGEX_CALL set_first(BidiIterator i)
    {
       // set up prefix:
@@ -280,13 +305,13 @@ void BOOST_REGEX_CALL match_results<BidiIterator, Allocator>::maybe_assign(const
    {
       //
       // leftmost takes priority over longest:
-      base1 = boost::re_detail::distance(base, p1->first);
-      base2 = boost::re_detail::distance(base, p2->first);
+      base1 = ::boost::re_detail::distance(base, p1->first);
+      base2 = ::boost::re_detail::distance(base, p2->first);
       if(base1 < base2) return;
       if(base2 < base1) break;
 
-      len1 = boost::re_detail::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
-      len2 = boost::re_detail::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
+      len1 = ::boost::re_detail::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
+      len2 = ::boost::re_detail::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
       if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
          break;
       if((p1->matched == true) && (p2->matched == false))
@@ -325,6 +350,9 @@ std::ostream& operator << (std::ostream& os,
 }
 #endif
 
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 } // namespace boost
 
 #ifdef BOOST_HAS_ABI_HEADERS

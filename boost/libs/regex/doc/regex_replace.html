@@ -35,29 +35,27 @@
          unchanged only if the <EM>flags</EM> parameter does not have the flag <A href="match_flag_type.html">
             format_no_copy</A> set. If the flag <A href="match_flag_type.html">format_first_only</A>
          is set then only the first occurrence is replaced rather than all 
-         occurrences.&nbsp;<PRE>template &lt;class OutputIterator, class BidirectionalIterator, class traits,
-          class Allocator, class charT&gt;
+         occurrences.&nbsp;<PRE>template &lt;class OutputIterator, class BidirectionalIterator, class traits, class charT&gt;
 OutputIterator <A href="#f1">regex_replace</A>(OutputIterator out,
                            BidirectionalIterator first,
                            BidirectionalIterator last,
-                           const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
+                           const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits&gt;&amp; e,
                            const basic_string&lt;charT&gt;&amp; fmt,
                            <A href="match_flag_type.html">match_flag_type flags = match_default</A>);
 
-template &lt;class traits, class Allocator, class charT&gt;
+template &lt;class traits, class charT&gt;
 basic_string&lt;charT&gt; <A href="#f2">regex_replace</A>(const basic_string&lt;charT&gt;&amp; s,
-                            const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
+                            const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits&gt;&amp; e,
                             const basic_string&lt;charT&gt;&amp; fmt,
                             <A href="match_flag_type.html">match_flag_type flags = match_default</A>);
 
 </PRE>
          <H3><A name="description"></A>Description</H3>
-         <PRE><A name=f1></A>template &lt;class OutputIterator, class BidirectionalIterator, class traits,
-          class Allocator, class charT&gt;
+         <PRE><A name=f1></A>template &lt;class OutputIterator, class BidirectionalIterator, class traits, class charT&gt;
 OutputIterator regex_replace(OutputIterator out,
                            BidirectionalIterator first,
                            BidirectionalIterator last,
-                           const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
+                           const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits&gt;&amp; e,
                            const basic_string&lt;charT&gt;&amp; fmt,
                            <A href="match_flag_type.html">match_flag_type flags = match_default</A>);</PRE>
       <P>Enumerates all the occurences of expression <EM>e</EM> in the sequence [first, 
@@ -126,9 +124,9 @@ OutputIterator regex_replace(OutputIterator out,
             configured</A> in non-recursive mode).</P>
       <P><B> Returns:</B> <CODE>out</CODE>.
       </P>
-      <PRE><A name=f2></A>template &lt;class traits, class Allocator, class charT&gt;
+      <PRE><A name=f2></A>template &lt;class traits, class charT&gt;
 basic_string&lt;charT&gt; regex_replace(const basic_string&lt;charT&gt;&amp; s,
-                            const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
+                            const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits&gt;&amp; e,
                             const basic_string&lt;charT&gt;&amp; fmt,
                             <A href="match_flag_type.html">match_flag_type flags = match_default</A>);</PRE>
       <P><B> Effects:</B> Constructs an object <CODE>basic_string&lt;charT&gt; result</CODE>, 
@@ -245,13 +243,12 @@ boost::regex e1, e2;
 <B>const</B> <B>char</B>* footer_text = <FONT color=#0000ff>"&lt;/PRE&gt;\n&lt;/BODY&gt;\n\n"</FONT>;
       </PRE>
       <HR>
-      <p>Revised 
+      <p>Revised&nbsp; 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         26 June 2004&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

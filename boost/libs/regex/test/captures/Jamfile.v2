@@ -4,13 +4,29 @@ project
     : source-location ../../src
     ;
 
-EX_SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
-       cregex fileiter posix_api regex regex_debug
-       regex_synch w32_regex_traits wide_posix_api instances winstances ;
+EX_SOURCES = 
+   c_regex_traits.cpp
+   cpp_regex_traits.cpp
+   cregex.cpp
+   fileiter.cpp
+   icu.cpp
+   instances.cpp
+   posix_api.cpp
+   regex.cpp
+   regex_debug.cpp
+   regex_raw_buffer.cpp
+   regex_traits_defaults.cpp
+   static_mutex.cpp
+   w32_regex_traits.cpp
+   wc_regex_traits.cpp
+   wide_posix_api.cpp
+   winstances.cpp 
+   usinstances.cpp ;
        
-lib boost_regex_extra : $(EX_SOURCES).cpp
+lib boost_regex_extra : $(EX_SOURCES)
     : 
         <define>BOOST_REGEX_MATCH_EXTRA=1
+	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
     : 
     ;
 

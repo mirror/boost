@@ -55,7 +55,7 @@ EOF
 		obj="$subdir/$obj_dir/$obj"
 		all_obj="$all_obj $obj"
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
-		echo "	\$(CXX) \$(INCLUDES) -o $obj $opts \$(CXXFLAGS) $file" >> $tout
+		echo "	\$(CXX) \$(INCLUDES) -o $obj $opts \$(CXXFLAGS) \$(ICU_CXXFLAGS) $file" >> $tout
 		echo "" >> $tout
 	done
 #
@@ -73,7 +73,7 @@ EOF
 #	 now for the main target for this library:
           if test "$gcc_shared" == "yes"; then
 		echo ./$subdir/lib$libname.so : $all_obj >> $tout
-		echo "	\$(LINKER) -o $subdir/lib$libname.so \$(LDFLAGS) $all_obj \$(LIBS)" >> $tout
+		echo "	\$(LINKER) -o $subdir/lib$libname.so \$(LDFLAGS)  \$(ICU_LDFLAGS) $all_obj \$(ICU_LIBS) \$(LIBS)" >> $tout
 	else
 		echo ./$subdir/lib$libname.a : $all_obj >> $tout
 		echo "	ar -r $subdir/lib$libname.a $all_obj" >> $tout
@@ -115,6 +115,7 @@ function gcc_gen()
 
 #
 # the following environment variables are recognised:
+# ICU_PATH= Path to ICU installation.
 # CXXFLAGS= extra compiler options - note applies to all build variants
 # INCLUDES= additional include directories
 # LDFLAGS=  additional linker options
@@ -133,6 +134,16 @@ C1=-c -O2 -I../../../
 #
 C2=-c -g -I../../../
 
+ifeq "\$(ICU_PATH)" ""
+\$(warning "Building Boost.Regex without ICU / Unicode support:")
+\$(warning "Hint: set ICU_PATH on the nmake command line to point ")
+\$(warning "to your ICU installation if you have one.")
+else
+ICU_CXXFLAGS= -DBOOST_HAS_ICU=1 -I\$(ICU_PATH)/include
+ICU_LDFLAGS= -L\$(ICU_PATH)/lib
+ICU_LIBS= -licui18n -licuuc
+\$(warning "Building Boost.Regex with ICU in \$(ICU_PATH)")
+endif
 
 EOF
 	echo "" >> $out
@@ -184,6 +195,7 @@ function gcc_gen_shared()
 
 #
 # the following environment variables are recognised:
+# ICU_PATH= Path to ICU installation.
 # CXXFLAGS= extra compiler options - note applies to all build variants
 # INCLUDES= additional include directories
 # LDFLAGS=  additional linker options
@@ -201,6 +213,17 @@ C1=-c -O2 -I../../../ -fPIC
 # compiler options for debug build:
 #
 C2=-c -g -I../../../ -fPIC
+
+ifeq "\$(ICU_PATH)" ""
+\$(warning "Building Boost.Regex without ICU / Unicode support:")
+\$(warning "Hint: set ICU_PATH on the nmake command line to point ")
+\$(warning "to your ICU installation if you have one.")
+else
+ICU_CXXFLAGS= -DBOOST_HAS_ICU=1 -I\$(ICU_PATH)/include
+ICU_LDFLAGS= -L\$(ICU_PATH)/lib
+ICU_LIBS= -licui18n -licuuc
+\$(warning "Building Boost.Regex with ICU in \$(ICU_PATH)")
+endif
 
 EOF
 	echo "" >> $out
@@ -234,5 +257,6 @@ gcc_gen_shared
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 

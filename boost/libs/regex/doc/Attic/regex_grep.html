@@ -37,11 +37,11 @@
          locate all the (non-overlapping) matches with a given regular expression. The 
          function is declared as:</p>
       <pre>
-<b>template</b> &lt;<b>class</b> Predicate, <b>class</b> iterator, <b>class</b> charT, <b>class</b> traits, <b>class</b> Allocator&gt;
+<b>template</b> &lt;<b>class</b> Predicate, <b>class</b> iterator, <b>class</b> charT, <b>class</b> traits&gt;
 <b>unsigned</b> <b>int</b> regex_grep(Predicate foo,
                          iterator first,
                          iterator last,
-                         <b>const</b> basic_regex&lt;charT, traits, Allocator&gt;&amp; e,
+                         <b>const</b> basic_regex&lt;charT, traits&gt;&amp; e,
                          boost::match_flag_type flags = match_default)
 </pre>
       <p>The library also defines the following convenience versions, which take either 
@@ -49,16 +49,16 @@
          iterators [note - these versions may not be available, or may be available in a 
          more limited form, depending upon your compilers capabilities]:</p>
       <pre>
-<b>template</b> &lt;<b>class</b> Predicate, <b>class</b> charT, <b>class</b> Allocator, <b>class</b> traits&gt;
+<b>template</b> &lt;<b>class</b> Predicate, <b>class</b> charT, <b>class</b> traits&gt;
 <b>unsigned</b> <b>int</b> regex_grep(Predicate foo, 
               <b>const</b> charT* str, 
-              <b>const</b> basic_regex&lt;charT, traits, Allocator&gt;&amp; e, 
+              <b>const</b> basic_regex&lt;charT, traits&gt;&amp; e, 
               boost::match_flag_type flags = match_default);
 
-<b>template</b> &lt;<b>class</b> Predicate, <b>class</b> ST, <b>class</b> SA, <b>class</b> Allocator, <b>class</b> charT, <b>class</b> traits&gt;
+<b>template</b> &lt;<b>class</b> Predicate, <b>class</b> ST, <b>class</b> SA, <b>class</b> charT, <b>class</b> traits&gt;
 <b>unsigned</b> <b>int</b> regex_grep(Predicate foo, 
               <b>const</b> std::basic_string&lt;charT, ST, SA&gt;&amp; s, 
-              <b>const</b> basic_regex&lt;charT, traits, Allocator&gt;&amp; e, 
+              <b>const</b> basic_regex&lt;charT, traits&gt;&amp; e, 
               boost::match_flag_type flags = match_default);
 </pre>
       <p>The parameters for the primary version of regex_grep have the following 
@@ -101,23 +101,19 @@
       <br>
       <br>
       <p>The algorithm finds all of the non-overlapping matches of the expression e, for 
-         each match it fills a <a href="#reg_match">match_results</a>&lt;iterator, 
-         Allocator&gt; structure, which contains information on what matched, and calls 
-         the predicate foo, passing the match_results&lt;iterator, Allocator&gt; as a 
-         single argument. If the predicate returns true, then the grep operation 
-         continues, otherwise it terminates without searching for further matches. The 
-         function returns the number of matches found.</p>
+         each match it fills a <a href="#reg_match">match_results</a>&lt;iterator&gt; 
+         structure, which contains information on what matched, and calls the predicate 
+         foo, passing the match_results&lt;iterator&gt; as a single argument. If the 
+         predicate returns true, then the grep operation continues, otherwise it 
+         terminates without searching for further matches. The function returns the 
+         number of matches found.</p>
       <p>The general form of the predicate is:</p>
       <pre>
 <b>struct</b> grep_predicate
 {
- <b>  bool</b> <b>operator</b>()(<b>const</b> match_results&lt;iterator_type, typename expression_type::alloc_type::template rebind&lt;sub_match&lt;BidirectionalIterator&gt; &gt;::other&gt;&amp; m);
+ <b>  bool</b> <b>operator</b>()(<b>const</b> match_results&lt;iterator_type&gt;&amp; m);
 };
 </pre>
-      <p>Note that in almost every case the allocator parameter can be omitted, when 
-         specifying the <a href="match_results.html">match_results</a> type, 
-         alternatively one of the typedefs cmatch, wcmatch, smatch or wsmatch can be 
-         used.</p>
       <p>For example the regular expression "a*b" would find one match in the string 
          "aaaaab" and two in the string "aaabb".</p>
       <p>Remember this algorithm can be used for a lot more than implementing a version 
@@ -370,7 +366,7 @@ index[std::string(what[5].first, what[5].second) + std::string(what[6].first, wh
       <hr>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         04 Feb 2004 
+         26 June 2004 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
             <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>

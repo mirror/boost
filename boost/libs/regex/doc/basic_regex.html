@@ -29,23 +29,22 @@
 #include &lt;<a href="../../../boost/regex.hpp">boost/regex.hpp</a>&gt;
 </pre>
       <p>The template class <em>basic_regex</em> encapsulates regular expression parsing 
-         and compilation. The class takes three template parameters:</p>
+         and compilation. The class takes two template parameters:</p>
       <p><b><i>charT</i></b>: determines the character type, i.e. either char or 
-         wchar_t.</p>
+         wchar_t; see <EM><A href="concepts.html#charT">charT concept</A></EM>.</p>
       <p><b><i>traits</i></b>: determines the behavior of the character type, for 
          example which character class names are recognized. A default traits class is 
-         provided: <a href="regex_traits.html">regex_traits&lt;charT&gt;</a>.</p>
-      <p><b><i>Allocator</i></b>: the allocator class used to allocate memory by the 
-         class.</p>
+         provided: <a href="regex_traits.html">regex_traits&lt;charT&gt;</a>.&nbsp; See 
+         also <EM><A href="concepts.html#traits">traits concept</A></EM>.</p>
       <p>For ease of use there are two typedefs that define the two standard <i>basic_regex</i>
-         instances, unless you want to use custom traits classes or allocators, you 
-         won't need to use anything other than these:</p>
+         instances, unless you want to use custom traits classes or non-standard 
+         character types, you won't need to use anything other than these:</p>
       <pre>
 <b>namespace</b> boost{
-<b>template</b> &lt;<b>class</b> charT, <b>class</b> traits = regex_traits&lt;charT&gt;, <b>class</b> Allocator = std::allocator&lt;charT&gt;  &gt;
+<b>template</b> &lt;<b>class</b> charT, <b>class</b> traits = regex_traits&lt;charT&gt;  &gt;
 <b>class</b> basic_regex;
-<b>typedef</b> basic_regex&lt;<b>char</b>&gt; regex;
-<b>typedef</b> basic_regex&lt;<b>wchar_t&gt;</b> wregex;
+<b>typedef</b> basic_regex&lt;<b>char</b>&gt;      regex;
+<b>typedef</b> basic_regex&lt;<b>wchar_t&gt;</b>   wregex;
 }
 </pre>
       <p>The definition of <i>basic_regex</i> follows: it is based very closely on class 
@@ -53,60 +52,60 @@
       <pre>
 namespace boost{
 
-template &lt;class charT,
-          class traits = regex_traits&lt;charT&gt;,
-          class Allocator = allocator&lt;charT&gt; &gt;
-class basic_regex
-{
-public:
+template &lt;class  charT, class traits = regex_traits&lt;charT&gt; &gt;
+class basic_regex {
+   public:          
    // types:
    typedef          charT                                value_type;
-   typedef          implementation defined               const_iterator;
-   typedef          const_iterator                       iterator;
-   typedef typename Allocator::reference                 reference;
-   typedef typename Allocator::const_reference           const_reference;
-   typedef typename Allocator::difference_type           difference_type;
-   typedef typename Allocator::size_type                 size_type;
-   typedef          Allocator                            allocator_type;
+   typedef          implementation-specific              const_iterator;
+   typedef          const_iterator                       iterator;                 
+   typedef          charT&amp;                               reference;           
+   typedef          const charT&amp;                         const_reference;           
+   typedef          std::ptrdiff_t                       difference_type;                 
+   typedef          std::size_t                          size_type;
    typedef          regex_constants::syntax_option_type  flag_type;
    typedef typename traits::locale_type                  locale_type;
 
    // constants:
-   static const regex_constants::syntax_option_type normal = regex_constants::normal;
-   static const regex_constants::syntax_option_type icase = regex_constants::icase;
-   static const regex_constants::syntax_option_type nosubs = regex_constants::nosubs;
-   static const regex_constants::syntax_option_type optimize = regex_constants::optimize;
-   static const regex_constants::syntax_option_type collate = regex_constants::collate;
-   static const regex_constants::syntax_option_type ECMAScript = normal;
-   static const regex_constants::syntax_option_type JavaScript = normal;
-   static const regex_constants::syntax_option_type JScript = normal;
-   // these flags are optional, if the functionality is supported
-   // then the flags shall take these names.
-   static const regex_constants::syntax_option_type basic = regex_constants::basic;
-   static const regex_constants::syntax_option_type extended = regex_constants::extended;
-   static const regex_constants::syntax_option_type awk = regex_constants::awk;
-   static const regex_constants::syntax_option_type grep = regex_constants::grep;
-   static const regex_constants::syntax_option_type egrep = regex_constants::egrep;
-   static const regex_constants::syntax_option_type sed = basic = regex_constants::sed;
-   static const regex_constants::syntax_option_type perl = regex_constants::perl;
+   // main option selection:
+   static const regex_constants::syntax_option_type normal          = regex_constants::normal;
+   static const regex_constants::syntax_option_type ECMAScript      = normal;
+   static const regex_constants::syntax_option_type JavaScript      = normal;
+   static const regex_constants::syntax_option_type JScript         = normal;
+   static const regex_constants::syntax_option_type basic           = regex_constants::basic;
+   static const regex_constants::syntax_option_type extended        = regex_constants::extended;
+   static const regex_constants::syntax_option_type awk             = regex_constants::awk;
+   static const regex_constants::syntax_option_type grep            = regex_constants::grep;
+   static const regex_constants::syntax_option_type egrep           = regex_constants::egrep;
+   static const regex_constants::syntax_option_type sed             = basic = regex_constants::sed;
+   static const regex_constants::syntax_option_type perl            = regex_constants::perl;
+   static const regex_constants::syntax_option_type literal         = regex_constants::literal;
+   // modifiers specific to perl expressions:
+   static const regex_constants::syntax_option_type no_mod_m        = regex_constants::no_mod_m;
+   static const regex_constants::syntax_option_type no_mod_s        = regex_constants::no_mod_s;
+   static const regex_constants::syntax_option_type mod_s           = regex_constants::mod_s;
+   static const regex_constants::syntax_option_type mod_x           = regex_constants::mod_x;
+   // modifiers specific to POSIX basic expressions:
+   static const regex_constants::syntax_option_type bk_plus_qm      = regex_constants::bk_plus_qm;
+   static const regex_constants::syntax_option_type bk_vbar         = regex_constants::bk_vbar
+   static const regex_constants::syntax_option_type no_char_classes = regex_constants::no_char_classes
+   static const regex_constants::syntax_option_type no_intervals    = regex_constants::no_intervals
+   // common modifiers:
+   static const regex_constants::syntax_option_type nosubs          = regex_constants::nosubs;
+   static const regex_constants::syntax_option_type optimize        = regex_constants::optimize;
+   static const regex_constants::syntax_option_type collate         = regex_constants::collate;
+   static const regex_constants::syntax_option_type newline_alt     = regex_constants::newline_alt;
 
    // construct/copy/destroy:
-   explicit <A href="#c1">basic_regex</A>(const Allocator&amp; a = Allocator());
-   explicit <A href="#c2">basic_regex</A>(const charT* p, flag_type f = regex_constants::normal,
-                        const Allocator&amp; a = Allocator());
-   <A href="#c3">basic_regex</A>(const charT* p1, const charT* p2, flag_type f = regex_constants::normal,
-               const Allocator&amp; a = Allocator());
-   <A href="#c4">basic_regex</A>(const charT* p, size_type len, flag_type f,
-               const Allocator&amp; a = Allocator());
+   explicit <A href="#c1">basic_regex</A> ();
+   explicit <A href="#c2">basic_regex</A>(const  charT* p, flag_type f = regex_constants::normal);
+   <A href="#c3">basic_regex</A>(const charT* p1, const  charT* p2, flag_type f = regex_constants::normal);
+   <A href="#c4">basic_regex</A>(const charT* p, size_type len, flag_type  f);
    <A href="#c5">basic_regex</A>(const basic_regex&amp;);
    template &lt;class ST, class SA&gt;
-   explicit <A href="#c6">basic_regex</A>(const basic_string&lt;charT, ST, SA&gt;&amp; p,
-                        flag_type f = regex_constants::normal,
-                        const Allocator&amp; a = Allocator());
+   explicit <A href="#c6">basic_regex</A>(const basic_string&lt;charT, ST,  SA&gt;&amp; p, flag_type f = regex_constants::normal);
    template &lt;class InputIterator&gt;
-   <A href="#c7">basic_regex</A>(InputIterator first, inputIterator last,
-               flag_type f = regex_constants::normal,
-               const Allocator&amp; a = Allocator());
+   <A href="#c7">basic_regex</A>(InputIterator first,  InputIterator last, flag_type f = regex_constants::normal);
 
    ~basic_regex();
    basic_regex&amp; <A href="#o1">operator</A>=(const basic_regex&amp;);
@@ -134,7 +133,6 @@ public:
                        flag_type f = regex_constants::normal);
 
    // const operations:
-   Allocator <A href="#m7">get_allocator</A>() const;
    flag_type <A href="#m8">flags</A>() const;
    basic_string&lt;charT&gt; <A href="#m9">str</A>() const;
    int <A href="#m10">compare</A>(basic_regex&amp;) const;
@@ -145,33 +143,33 @@ public:
    void <A href="#m13">swap</A>(basic_regex&amp;) throw();
 };
 
-template &lt;class charT, class traits, class Allocator&gt;
-bool <A href="#o4">operator</A> == (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
-template &lt;class charT, class traits, class Allocator&gt;
-bool <A href="#o5">operator</A> != (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
-template &lt;class charT, class traits, class Allocator&gt;
-bool <A href="#o7">operator</A> &lt; (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                 const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
-template &lt;class charT, class traits, class Allocator&gt;
-bool <A href="#o8">operator</A> &lt;= (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
-template &lt;class charT, class traits, class Allocator&gt;
-bool <A href="#o9">operator</A> &gt;= (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
-template &lt;class charT, class traits, class Allocator&gt;
-bool <A href="#o10">operator</A> &gt; (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                 const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool <A href="#o4">operator</A> == (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool <A href="#o5">operator</A> != (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool <A href="#o7">operator</A> &lt; (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                 const basic_regex&lt;charT, traits&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool <A href="#o8">operator</A> &lt;= (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool <A href="#o9">operator</A> &gt;= (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool <A href="#o10">operator</A> &gt; (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                 const basic_regex&lt;charT, traits&gt;&amp; rhs);
 
-template &lt;class charT, class io_traits, class re_traits, class Allocator&gt;
+template &lt;class charT, class io_traits, class re_traits&gt;
 basic_ostream&lt;charT, io_traits&gt;&amp;
    <A href="#o11">operator</A> &lt;&lt; (basic_ostream&lt;charT, io_traits&gt;&amp; os,
-                const basic_regex&lt;charT, re_traits, Allocator&gt;&amp; e);
+                const basic_regex&lt;charT, re_traits&gt;&amp; e);
 
-template &lt;class charT, class traits, class Allocator&gt;
-void <A href="#o12">swap</A>(basic_regex&lt;charT, traits, Allocator&gt;&amp; e1,
-          basic_regex&lt;charT, traits, Allocator&gt;&amp; e2);
+template &lt;class charT, class traits&gt;
+void <A href="#o12">swap</A>(basic_regex&lt;charT, traits&gt;&amp; e1,
+          basic_regex&lt;charT, traits&gt;&amp; e2);
 
 typedef basic_regex&lt;char&gt; regex;
 typedef basic_regex&lt;wchar_t&gt; wregex;
@@ -182,21 +180,34 @@ typedef basic_regex&lt;wchar_t&gt; wregex;
       <p>Class&nbsp;<em>basic_regex</em> has the following public member functions:</p>
       <h4>basic_regex constants</h4>
       <pre>
-static const regex_constants::syntax_option_type normal = regex_constants::normal;
-static const regex_constants::syntax_option_type icase = regex_constants::icase;
-static const regex_constants::syntax_option_type nosubs = regex_constants::nosubs;
-static const regex_constants::syntax_option_type optimize = regex_constants::optimize;
-static const regex_constants::syntax_option_type collate = regex_constants::collate;
-static const regex_constants::syntax_option_type ECMAScript = normal;
-static const regex_constants::syntax_option_type JavaScript = normal;
-static const regex_constants::syntax_option_type JScript = normal;
-static const regex_constants::syntax_option_type basic = regex_constants::basic;
-static const regex_constants::syntax_option_type extended = regex_constants::extended;
-static const regex_constants::syntax_option_type awk = regex_constants::awk;
-static const regex_constants::syntax_option_type grep = regex_constants::grep;
-static const regex_constants::syntax_option_type egrep = regex_constants::egrep;
-static const regex_constants::syntax_option_type sed = basic = regex_constants::sed;
-static const regex_constants::syntax_option_type perl = regex_constants::perl;
+// main option selection:
+static const regex_constants::syntax_option_type normal           = regex_constants::normal;
+static const regex_constants::syntax_option_type ECMAScript       = normal;
+static const regex_constants::syntax_option_type JavaScript       = normal;
+static const regex_constants::syntax_option_type JScript          = normal;
+static const regex_constants::syntax_option_type basic            = regex_constants::basic;
+static const regex_constants::syntax_option_type extended         = regex_constants::extended;
+static const regex_constants::syntax_option_type awk              = regex_constants::awk;
+static const regex_constants::syntax_option_type grep             = regex_constants::grep;
+static const regex_constants::syntax_option_type egrep            = regex_constants::egrep;
+static const regex_constants::syntax_option_type sed              = regex_constants::sed;
+static const regex_constants::syntax_option_type perl             = regex_constants::perl;
+static const regex_constants::syntax_option_type literal          = regex_constants::literal;
+// modifiers specific to perl expressions:
+static const regex_constants::syntax_option_type no_mod_m         = regex_constants::no_mod_m;
+static const regex_constants::syntax_option_type no_mod_s         = regex_constants::no_mod_s;
+static const regex_constants::syntax_option_type mod_s            = regex_constants::mod_s;
+static const regex_constants::syntax_option_type mod_x            = regex_constants::mod_x;
+// modifiers specific to POSIX basic expressions:
+static const regex_constants::syntax_option_type bk_plus_qm       = regex_constants::bk_plus_qm;
+static const regex_constants::syntax_option_type bk_vbar          = regex_constants::bk_vbar
+static const regex_constants::syntax_option_type no_char_classes  = regex_constants::no_char_classes
+static const regex_constants::syntax_option_type no_intervals     = regex_constants::no_intervals
+// common modifiers:
+static const regex_constants::syntax_option_type nosubs           = regex_constants::nosubs;
+static const regex_constants::syntax_option_type optimize         = regex_constants::optimize;
+static const regex_constants::syntax_option_type collate          = regex_constants::collate;
+static const regex_constants::syntax_option_type newline_alt      = regex_constants::newline_alt;
 </pre>
       <p>The static constant members are provided as synonyms for the constants declared 
          in namespace <code>boost::regex_constants</code>; for each constant of type <code><A href="syntax_option_type.html">
@@ -204,11 +215,7 @@ static const regex_constants::syntax_option_type perl = regex_constants::perl;
          then a constant with the same name, type and value is declared within the scope 
          of <code>basic_regex</code>.</p>
       <h4>basic_regex constructors</h4>
-      <p>In all <code>basic_regex</code> constructors, a copy of the <code>Allocator</code>
-         argument is used for any memory allocation performed by the constructor or 
-         member functions during the lifetime of the object.</p>
-      <pre>
-basic_regex(const Allocator&amp; a = Allocator());
+      <pre><A name=c1> basic_regex();
 </pre>
       <P><b>Effects:</b> Constructs an object of class <code>basic_regex</code>. The 
          postconditions of this function are indicated in the table:</P>
@@ -252,7 +259,7 @@ basic_regex(const Allocator&amp; a = Allocator());
             </table>
          </center>
       </div>
-      <pre> <A name=c2></A>basic_regex(const charT* p, flag_type f = regex_constants::normal, const Allocator&amp; a = Allocator());
+      <pre><A name=c2><BR> basic_regex(const charT* p, flag_type f = regex_constants::normal);
  
 </pre>
       <P><b>Requires:</b> <i>p</i> shall not be a null pointer.</P>
@@ -322,7 +329,7 @@ basic_regex(const Allocator&amp; a = Allocator());
       <pre>
  
 </pre>
-      <PRE><A name=c3></A>basic_regex(const charT* p1, const charT* p2, flag_type f = regex_constants::normal, const Allocator&amp; a = Allocator());</PRE>
+      <PRE><A name=c3></A>basic_regex(const charT* p1, const charT* p2, flag_type f = regex_constants::normal);</PRE>
       <p><b>Requires:</b> <i>p1</i> and <i>p2</i> are not null pointers, <code>p1 &lt; p2</code>.</p>
       <p><b>Throws:</b> <code>bad_expression</code> if [p1,p2) is not a valid regular 
          expression.</p>
@@ -390,8 +397,7 @@ basic_regex(const Allocator&amp; a = Allocator());
       <pre>
  
 </pre>
-      <pre><A name=c4></A>
-basic_regex(const charT* p, size_type len, flag_type f, const Allocator&amp; a = Allocator());
+      <pre><A name=c4></A>basic_regex(const charT* p, size_type len, flag_type f);
 </pre>
       <p><b>Requires:</b> <i>p</i> shall not be a null pointer, <code>len &lt; max_size()</code>.</p>
       <p><b>Throws:</b> <code>bad_expression</code> if <i>p</i> is not a valid regular 
@@ -457,11 +463,7 @@ basic_regex(const charT* p, size_type len, flag_type f, const Allocator&amp; a =
             </table>
          </center>
       </div>
-      <pre>
-  
-</pre>
-      <pre><A name=c5></A>
-basic_regex(const basic_regex&amp; e);
+      <pre><A name=c5></A><BR>basic_regex(const basic_regex&amp; e);
 </pre>
       <p><b>Effects:</b> Constructs an object of class <code>basic_regex</code> as a 
          copy of the object <i>e</i>. The postconditions of this function are indicated 
@@ -522,14 +524,9 @@ basic_regex(const basic_regex&amp; e);
             </table>
          </center>
       </div>
-      <pre>
- 
-</pre>
-      <pre>
+      <pre><BR>
 template &lt;class ST, class SA&gt;
-<A name=c6></A>
-basic_regex(const basic_string&lt;charT, ST, SA&gt;&amp; s,
-            flag_type f = regex_constants::normal, const Allocator&amp; a = Allocator());
+<A name=c6></A>basic_regex(const basic_string&lt;charT, ST, SA&gt;&amp; s, flag_type f = regex_constants::normal);
 </pre>
       <p><b>Throws:</b> <code>bad_expression</code> if <i>s</i> is not a valid regular 
          expression.</p>
@@ -594,14 +591,9 @@ basic_regex(const basic_string&lt;charT, ST, SA&gt;&amp; s,
             </table>
          </center>
       </div>
-      <pre>
- 
-</pre>
-      <pre>
+      <pre><BR>
 template &lt;class ForwardIterator&gt;
-<A name=c7></A>
-basic_regex(ForwardIterator first, ForwardIterator last,
-            flag_type f = regex_constants::normal, const Allocator&amp; a = Allocator());
+<A name=c7></A>basic_regex(ForwardIterator first, ForwardIterator last, flag_type f = regex_constants::normal);
 </pre>
       <p><b>Throws:</b> <code>bad_expression</code> if the sequence <i>[first, last)</i> 
          is not a valid regular expression.</p>
@@ -667,15 +659,11 @@ basic_regex(ForwardIterator first, ForwardIterator last,
             </table>
          </center>
       </div>
-      <pre>
-  
-</pre>
       <pre><A name=o1></A>
 basic_regex&amp; operator=(const basic_regex&amp; e);
 </pre>
       <p><b>Effects:</b> Returns the result of <code>assign(e.str(), e.flags())</code>.</p>
-      <pre><A name=o2></A>
-basic_regex&amp; operator=(const charT* ptr);
+      <pre><A name=o2></A>basic_regex&amp; operator=(const charT* ptr);
 </pre>
       <p><b>Requires:</b> <i>p</i> shall not be a null pointer.</p>
       <p><b>Effects:</b> Returns the result of <code>assign(ptr)</code>.</p>
@@ -685,23 +673,23 @@ basic_regex&amp; operator=(const basic_string&lt;charT, ST, SA&gt;&amp; p);
 </pre>
       <p><b>Effects:</b> Returns the result of <code>assign(p)</code>.</p>
       <h4>basic_regex iterators</h4>
-      <pre><A name=m1></A>
+      <pre>
 const_iterator begin() const;
 </pre>
       <p><b>Effects:</b> Returns a starting iterator to a sequence of characters 
          representing the regular expression.</p>
-      <pre><A name=m2></A>
+      <pre>
 const_iterator end() const;
 </pre>
       <p><b>Effects:</b> Returns termination iterator to a sequence of characters 
          representing the regular expression.</p>
       <h4>basic_regex capacity</h4>
-      <pre><A name=m3></A>
+      <pre>
 size_type size() const;
 </pre>
       <p><b>Effects:</b> Returns the length of the sequence of characters representing 
          the regular expression.</p>
-      <pre><A name=m4></A>
+      <pre>
 size_type max_size() const;
 </pre>
       <p><b>Effects:</b> Returns the maximum length of the sequence of characters 
@@ -716,7 +704,7 @@ bool empty() const;
       <p><b>Effects:</b> Returns the number of marked sub-expressions within the regular 
          expresion.</p>
       <h4>basic_regex assign</h4>
-      <pre><A name=a1></A>
+      <pre><A name=a1>
 basic_regex&amp; assign(const basic_regex&amp; that);
 </pre>
       <p><b>Effects:</b> Returns <code>assign(that.str(), that.flags())</code>.</p>
@@ -803,11 +791,7 @@ basic_regex&amp; assign(InputIterator first, InputIterator last,
          requirements (24.1.1).</p>
       <p><b>Effects:</b> Returns <code>assign(string_type(first, last), f)</code>.</p>
       <h4>basic_regex constant operations</h4>
-      <pre><A name=m7></A>Allocator get_allocator() const;
-</pre>
-      <p><b>Effects:</b> Returns a copy of the Allocator that was passed to the object's 
-         constructor.</p>
-      <pre><A name=m8></A>flag_type flags() const;
+      <pre><A name=m7></A><A name=m8></A>flag_type flags() const;
 </pre>
       <p><b>Effects:</b> Returns a copy of the regular expression syntax flags that were 
          passed to the object's constructor, or the last call to <code>assign.</code></p>
@@ -834,7 +818,7 @@ locale_type getloc() const;
             traits_inst</code> is a (default initialized) instance of the template 
          parameter <code>traits</code> stored within the object.</p>
       <h4>basic_regex swap</h4>
-      <pre><A name=m13></A>
+      <pre>
 void swap(basic_regex&amp; e) throw();
 </pre>
       <p><b>Effects:</b> Swaps the contents of the two regular expressions.</p>
@@ -847,66 +831,65 @@ void swap(basic_regex&amp; e) throw();
          please note that these are likely to be removed from the standard library 
          proposal, so use with care if you are writing portable code.</P>
       <pre><A name=o4></A>
-template &lt;class charT, class traits, class Allocator&gt;
-bool operator == (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool operator == (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> Returns <code>lhs.compare(rhs) == 0</code>.</p>
       <pre><A name=o5></A>
-template &lt;class charT, class traits, class Allocator&gt;
-bool operator != (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool operator != (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> Returns <code>lhs.compare(rhs) != 0</code>.</p>
       <pre><A name=o7></A>
-template &lt;class charT, class traits, class Allocator&gt;
-bool operator &lt; (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                 const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool operator &lt; (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                 const basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> Returns <code>lhs.compare(rhs) &lt; 0</code>.</p>
       <pre><A name=o8></A>
-template &lt;class charT, class traits, class Allocator&gt;
-bool operator &lt;= (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool operator &lt;= (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> Returns <code>lhs.compare(rhs) &lt;= 0</code>.</p>
       <pre><A name=o9></A>
-template &lt;class charT, class traits, class Allocator&gt;
-bool operator &gt;= (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                  const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool operator &gt;= (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                  const basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> Returns <code>lhs.compare(rhs) &gt;= 0</code>.</p>
       <pre><A name=o10></A>
-template &lt;class charT, class traits, class Allocator&gt;
-bool operator &gt; (const basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-                 const basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+bool operator &gt; (const basic_regex&lt;charT, traits&gt;&amp; lhs,
+                 const basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> Returns <code>lhs.compare(rhs) &gt; 0</code>.</p>
       <h5>basic_regex inserter.</h5>
       <P>The basic_regex stream inserter is provided on an experimental basis, and 
          outputs the textual representation of the expression to the stream:</P>
       <pre><A name=o11></A>
-template &lt;class charT, class io_traits, class re_traits, class Allocator&gt;
+template &lt;class charT, class io_traits, class re_traits&gt;
 basic_ostream&lt;charT, io_traits&gt;&amp;
    operator &lt;&lt; (basic_ostream&lt;charT, io_traits&gt;&amp; os
-                const basic_regex&lt;charT, re_traits, Allocator&gt;&amp; e);
+                const basic_regex&lt;charT, re_traits&gt;&amp; e);
 </pre>
       <p><b>Effects:</b> Returns (os &lt;&lt; e.str()).</p>
       <h5>basic_regex non-member swap</h5>
       <pre><A name=o12></A>
-template &lt;class charT, class traits, class Allocator&gt;
-void swap(basic_regex&lt;charT, traits, Allocator&gt;&amp; lhs,
-          basic_regex&lt;charT, traits, Allocator&gt;&amp; rhs);
+template &lt;class charT, class traits&gt;
+void swap(basic_regex&lt;charT, traits&gt;&amp; lhs,
+          basic_regex&lt;charT, traits&gt;&amp; rhs);
 </pre>
       <p><b>Effects:</b> calls <code>lhs.swap(rhs)</code>.</p>
       <hr>
-      <p>Revised 
+      <p>Revised 7 Aug 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         2004&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

@@ -15,40 +15,26 @@
   */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <boost/regex.hpp>
-#ifdef JM_OLD_IOSTREAM
-#include <iostream.h>
-#else
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-using std::cout;
-using std::cin;
-using std::cerr;
-using std::endl;
-#endif
-#ifdef __BORLANDC__
-#  pragma hrdstop
-#endif
+#include <algorithm>
 
-#ifdef BOOST_REGEX_V3
-#include <boost/regex/v3/fileiter.hpp>
-#else
+#include <boost/regex.hpp>
 #include <boost/regex/v4/fileiter.hpp>
-#endif
 #include "jgrep.h"
 #ifndef BOOST_REGEX_NO_FILEITER
 
-#ifndef JM_ALGO_INCLUDED
-// HP and SGI STL's use <algo.h> instead
-// this will have been pulled in by <jm_cfg.h>
-// for std::distance
-#include <algorithm>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{
+   using ::strcpy;
+   using ::strcat;
+   using ::sprintf;
+}
 #endif
 
-allocator_type a;
 
-re_type e(a);
+re_type e;
 //rei_type ei(a);
 
 // flags for output:
@@ -65,7 +51,7 @@ bool verbose = false;
 
 void usage()
 {
-   cout <<
+   std::cout <<
 "jgrep version 0.95\n"
 "usage: jgrep [-options] expression file [files...]\n"
 "\n"
@@ -84,7 +70,7 @@ void usage()
 "expression: a regular expression, or a literal string if -r- is specified\n"
 "\n"
 "files:  one or more files to search, the names can contain the wildcard\n"
-"        characters ? and *\n" << endl;
+"        characters ? and *\n" << std::endl;
 
 }
 
@@ -123,9 +109,9 @@ void parse_switch(const char* flag)
                   verbose = false;
                   break;
                default:
-                  cout << "Undefined option -";
-                  cout.put(*flag);
-                  cout << endl;
+                  std::cout << "Undefined option -";
+                  std::cout.put(*flag);
+                  std::cout << std::endl;
             }
             // turn off prev character:
             break;
@@ -159,9 +145,9 @@ void parse_switch(const char* flag)
          case '+':
             break;
          default:
-            cout << "Undefined option -";
-            cout.put(*flag);
-            cout << endl;
+            std::cout << "Undefined option -";
+            std::cout.put(*flag);
+            std::cout << std::endl;
       }
       ++flag;
    }
@@ -172,7 +158,6 @@ using namespace boost;
 void HandleFile(const char* wild)
 {
    using namespace boost;
-   jm_trace("Handling file " << wild);
    file_iterator end;
    file_iterator start(wild);
 
@@ -193,14 +178,12 @@ void HandleFile(const char* wild)
          std::strcat(buf, directory_iterator::separator());
          std::strcat(buf, "*");
       }
-      jm_trace("Enumerating directories: " << buf);
       directory_iterator dstart(buf);
       directory_iterator dend;
 
       // now get the file mask bit of "wild":
       const char* ptr = wild + rootlen;
       if(*ptr) ++ptr;
-      jm_trace("File mask part is: " << ptr);
 
       while(dstart != dend)
       {
@@ -217,7 +200,6 @@ int done = 0;
 void HandleArg(const char* arg)
 {
    using namespace boost;
-   jm_trace("Handling argument: " << arg);
    if(*arg == '-')
    {
       parse_switch(arg);
@@ -286,7 +268,7 @@ int main(int argc, char * argv[])
 
 int main(int argc, char * argv[])
 {
-   std::cout <<
+   std::std::cout <<
    "\n<note>\n"
    "This functionality is not available on with this compiler on this platform.\n"
    "</note>\n";

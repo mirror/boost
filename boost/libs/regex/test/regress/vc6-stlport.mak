@@ -24,7 +24,7 @@ XLFLAGS=
 #
 # sources to compile for each test:
 #
-SOURCES=tests.cpp parse.cpp regress.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
+SOURCES=*.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
 
 !IF "$(MSVCDIR)" == ""
 !ERROR Variable MSVCDIR not set.
@@ -203,6 +203,8 @@ r5mdd.exe : $(SOURCES)
 
 r6mdd.exe : $(SOURCES)
 	cl /MTd $(CXXDEBUG) /D_MT $(CFLAGS) -o r6mdd.exe -D__STL_DEBUG /D_STLP_DEBUG -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(LFLAGS)
+
+
 
 
 
