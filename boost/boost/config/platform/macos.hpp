@@ -39,5 +39,21 @@
 #    define BOOST_NO_STDC_NAMESPACE
 #  endif
 
-#endif
+#else
 
+// We will eventually support threads in non-Carbon builds, but we do
+// not support this yet.
+#  if TARGET_CARBON
+
+#    define BOOST_HAS_MPTASKS
+
+// The MP task implementation of Boost Threads aims to replace MP-unsafe
+// parts of the MSL, so we turn on threads unconditionally.
+#    define BOOST_HAS_THREADS
+
+// The remote call manager depends on this.
+#    define BOOST_BIND_ENABLE_PASCAL
+
+#  endif
+
+#endif
