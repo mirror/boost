@@ -53,7 +53,6 @@
 #   endif 
 
 #define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
-#undef BOOST_COMPILER_VERSION
 
 //
 // versions check:
