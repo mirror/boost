@@ -102,7 +102,7 @@ public:
 #endif
                       
 
-#if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) )
+#if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) ) && !BOOST_WORKAROUND( _CRAYC, != 0)
 
   template<class Ch2, class Tr2, class T>  friend basic_format<Ch2, Tr2>&  
   io::detail::feed(basic_format<Ch2,Tr2>&, T);
