@@ -121,6 +121,8 @@
 #   define BOOST_COMPILER_VERSION 7.0
 # elif _MSC_VER == 1310
 #   define BOOST_COMPILER_VERSION 7.1
+# elif _MSC_VER == 1400
+#   define BOOST_COMPILER_VERSION 8.0
 # else
 #   define BOOST_COMPILER_VERSION _MSC_VER
 # endif
