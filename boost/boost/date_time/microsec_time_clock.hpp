@@ -42,6 +42,21 @@ namespace date_time {
     typedef typename time_type::date_type date_type;
     typedef typename time_type::time_duration_type time_duration_type;
     typedef typename time_duration_type::rep_type resolution_traits_type;
+
+    //! return a local time object for the given zone, based on computer clock
+    template<class time_zone_type>
+    static time_type local_time(shared_ptr<time_zone_type> tz_ptr) {
+      typedef typename time_type::utc_time_type utc_time_type;
+      typedef second_clock<utc_time_type> second_clock;
+      // we'll need to know the utc_offset this machine has 
+      // in order to get a utc_time_type set to utc
+      utc_time_type utc_time = second_clock::universal_time();
+      time_duration_type utc_offset = second_clock::local_time() - utc_time;
+      // use micro clock to get a local time with sub seconds
+      // and adjust it to get a true utc time reading with sub seconds
+      utc_time = microsec_clock<utc_time_type>::local_time() - utc_offset;
+      return time_type(utc_time, tz_ptr);
+    }
     
 #ifdef BOOST_HAS_GETTIMEOFDAY
     //! Return the local time based on computer clock settings
