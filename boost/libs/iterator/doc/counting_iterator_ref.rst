@@ -17,7 +17,7 @@
       counting_iterator();
       counting_iterator(counting_iterator const& rhs);
       explicit counting_iterator(Incrementable x);
-      Incrementable base() const;
+      Incrementable const& base() const;
       reference operator*() const;
       counting_iterator& operator++();
       counting_iterator& operator--();
@@ -140,6 +140,6 @@ operations.
 :Returns: ``*this``  
 
 
-``Incrementable base() const;``
+``Incrementable const& base() const;``
 
 :Returns: ``m_inc``

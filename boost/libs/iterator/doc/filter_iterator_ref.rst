@@ -25,7 +25,7 @@
           );
       Predicate predicate() const;
       Iterator end() const;
-      Iterator base() const;
+      Iterator const& base() const;
       reference operator*() const;
       filter_iterator& operator++();
   private:
@@ -151,7 +151,7 @@ operations.
 :Returns: ``m_end``
 
 
-``Iterator base() const;``
+``Iterator const& base() const;``
 
 :Returns: ``m_iterator``
 

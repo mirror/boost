@@ -48,7 +48,7 @@ Issue 9.43x
 
 Issues 9.37x and 9.12
 
-+    Iterator base() const;
++    Iterator const& base() const;
 +    reference operator*() const;
 +    transform_iterator& operator++();
 +    transform_iterator& operator--();
@@ -170,7 +170,7 @@ Issue 9.37x.
  :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
  
 +
-+``Iterator base() const;``
++``Iterator const& base() const;``
 +
 +:Returns: ``m_iterator``
 +

@@ -18,7 +18,7 @@
         reverse_iterator<OtherIterator> const& r
       , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0 // exposition
     );
-    Iterator base() const;
+    Iterator const& base() const;
     reference operator*() const;
     reverse_iterator& operator++();
     reverse_iterator& operator--();
@@ -108,7 +108,7 @@ operations.
 
 
 
-``Iterator base() const;``
+``Iterator const& base() const;``
 
 :Returns: ``m_iterator``
 

@@ -996,7 +996,7 @@ provide rather than how they're implemented.
 
   to::
 
-        Iterator base() const;
+        Iterator const& base() const;
         reference operator*() const;
         indirect_iterator& operator++();
         indirect_iterator& operator--();
@@ -1068,7 +1068,7 @@ provide rather than how they're implemented.
 
   After ``UnaryFunction functor() const;`` add::
 
-     Iterator base() const;
+     Iterator const& base() const;
      reference operator*() const;
      transform_iterator& operator++();
      transform_iterator& operator--();
@@ -1173,7 +1173,7 @@ provide rather than how they're implemented.
 
   After the entry for ``functor()``, add::
 
-    ``Iterator base() const;``
+    ``Iterator const& base() const;``
     
     :Returns: ``m_iterator``
     
@@ -1447,4 +1447,6 @@ specification
 
    :Proposed resolution: add "from" before "making"
 
+9.46y N1530: ``base()``
+=====================================================
 

@@ -15,13 +15,13 @@
     , class Difference = use_default
   >
   class iterator_adaptor 
-    : public iterator_facade<Derived, *V*, *C*, *R*, *D*> // see details__
+    : public iterator_facade<Derived, *V'*, *C'*, *R'*, *D'*> // see details__
   {
       friend class iterator_core_access;
    public:
       iterator_adaptor();
       explicit iterator_adaptor(Base iter);
-      Base const base() const;
+      Base const const& base() const;
    protected:
       Base const& base_reference() const;
       Base& base_reference();
@@ -47,18 +47,16 @@
       Base m_iterator; // exposition only
   };
 
-
-__ requirements_
+__ base_parameters_
 
 .. _requirements:
 
 ``iterator_adaptor`` requirements
 ---------------------------------
 
-The ``Derived`` template argument must be a publicly derived from
-``iterator_adaptor``.
-
-The ``Base`` argument shall be Assignable and Copy Constructible.
+The ``Base`` argument shall be Assignable and Copy
+Constructible. In addition,
+``static_cast<Derived*>(iterator_adaptor*)`` shall be well-formed.
 
 
 .. _base_parameters:
@@ -66,23 +64,23 @@ The ``Base`` argument shall be Assignable and Copy Constructible.
 ``iterator_adaptor`` base class parameters
 ------------------------------------------
 
-The *V*, *C*, *R*, and *D* parameters of the ``iterator_facade``
+The *V'*, *C'*, *R'*, and *D'* parameters of the ``iterator_facade``
 used as a base class in the summary of ``iterator_adaptor``
 above are defined as follows:
 
 .. parsed-literal::
 
-   *V* = if (Value is use_default)
+   *V'* = if (Value is use_default)
              return iterator_traits<Base>::value_type
          else
              return Value
 
-   *C* = if (CategoryOrTraversal is use_default)
+   *C'* = if (CategoryOrTraversal is use_default)
              return iterator_traversal<Base>::type
          else
              return CategoryOrTraversal
 
-   *R* = if (Reference is use_default)
+   *R'* = if (Reference is use_default)
              if (Value is use_default)
                  return iterator_traits<Base>::reference
              else
@@ -90,7 +88,7 @@ above are defined as follows:
          else
              return Reference
 
-   *D* = if (Difference is use_default)
+   *D'* = if (Difference is use_default)
              return iterator_traits<Base>::difference_type
          else
              return Difference
@@ -122,14 +120,9 @@ expression involving ``Derived`` in those concepts' requirements.
 :Returns: An instance of ``iterator_adaptor`` with
     ``m_iterator`` copy constructed from ``iter``.
 
-``Base const base() const;``
+``Base const& base() const;``
 
 :Returns: ``m_iterator``
-
-[Note: specifying ``Base const`` gives implementations license to
-return ``Base const&`` for efficiency's sake.  If ``base()``
-returned just ``Base``, it would be possible to call non-``const``
-member functions on the result object directly]
 
 ``iterator_adaptor`` protected member functions
 -----------------------------------------------

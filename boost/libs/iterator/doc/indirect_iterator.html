@@ -90,7 +90,7 @@ class indirect_iterator
       , typename enable_if_convertible&lt;Iterator2, Iterator&gt;::type* = 0 // exposition
     );
 
-    Iterator base() const;
+    Iterator const&amp; base() const;
     reference operator*() const;
     indirect_iterator&amp; operator++();
     indirect_iterator&amp; operator--();
@@ -126,11 +126,11 @@ else
     typedef Difference difference_type;
 
 if (CategoryOrTraversal is use_default)
-    typedef <a class="reference" href="iterator_facade.html#iterator-category"><em>iterator-category</em></a>(
+    typedef <em>iterator-category</em> (
         iterator_traversal&lt;Iterator&gt;::type,``reference``,``value_type``
     ) iterator_category;
 else
-    typedef <a class="reference" href="iterator_facade.html#iterator-category"><em>iterator-category</em></a>(
+    typedef <em>iterator-category</em> (
         CategoryOrTraversal,``reference``,``value_type``
     ) iterator_category;
 </pre>
@@ -220,7 +220,7 @@ indirect_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

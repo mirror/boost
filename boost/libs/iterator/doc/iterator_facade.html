@@ -408,7 +408,7 @@ traversal tags would add no information]</p>
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <p>The <tt class="literal"><span class="pre">enable_if_interoperable</span></tt> template used above is for exposition
-purposes.  The member operators should be only be in an overload set
+purposes.  The member operators should only be in an overload set
 provided the derived types <tt class="literal"><span class="pre">Dr1</span></tt> and <tt class="literal"><span class="pre">Dr2</span></tt> are interoperable, 
 meaning that at least one of the types is convertible to the other.  The
 <tt class="literal"><span class="pre">enable_if_interoperable</span></tt> approach uses SFINAE to take the operators
@@ -785,7 +785,7 @@ operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
 <tt class="literal"><span class="pre">-lhs.distance_to(rhs)</span></tt>. Otherwise,
-<tt class="literal"><span class="pre">-rhs.distance_to(lhs)</span></tt>.</td>
+<tt class="literal"><span class="pre">rhs.distance_to(lhs)</span></tt>.</td>
 </tr>
 </tbody>
 </table>

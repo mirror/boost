@@ -30,7 +30,7 @@
         , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
       );
 
-      Iterator base() const;
+      Iterator const& base() const;
       reference operator*() const;
       indirect_iterator& operator++();
       indirect_iterator& operator--();
@@ -155,7 +155,7 @@ following operations.
     ``m_iterator`` subobject is constructed from ``y.base()``.
 
 
-``Iterator base() const;``
+``Iterator const& base() const;``
 
 :Returns: ``m_iterator``
 

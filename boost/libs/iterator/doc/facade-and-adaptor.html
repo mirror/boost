@@ -1158,13 +1158,13 @@ template &lt;
   , class Difference = use_default
 &gt;
 class iterator_adaptor 
-  : public iterator_facade&lt;Derived, <em>V</em>, <em>C</em>, <em>R</em>, <em>D</em>&gt; // see <a class="reference" href="#requirements">details</a>
+  : public iterator_facade&lt;Derived, <em>V'</em>, <em>C'</em>, <em>R'</em>, <em>D'</em>&gt; // see <a class="reference" href="#base-parameters">details</a>
 {
     friend class iterator_core_access;
  public:
     iterator_adaptor();
     explicit iterator_adaptor(Base iter);
-    Base const base() const;
+    Base const const&amp; base() const;
  protected:
     Base const&amp; base_reference() const;
     Base&amp; base_reference();
@@ -1193,27 +1193,27 @@ class iterator_adaptor
 <a class="target" id="requirements" name="requirements"></a></div>
 <div class="section" id="iterator-adaptor-requirements">
 <h3><a class="toc-backref" href="#id36" name="iterator-adaptor-requirements"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h3>
-<p>The <tt class="literal"><span class="pre">Derived</span></tt> template argument must be a publicly derived from
-<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.</p>
-<p>The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy Constructible.</p>
+<p>The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy
+Constructible. In addition,
+<tt class="literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_adaptor*)</span></tt> shall be well-formed.</p>
 <a class="target" id="base-parameters" name="base-parameters"></a></div>
 <div class="section" id="iterator-adaptor-base-class-parameters">
 <h3><a class="toc-backref" href="#id37" name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h3>
-<p>The <em>V</em>, <em>C</em>, <em>R</em>, and <em>D</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
+<p>The <em>V'</em>, <em>C'</em>, <em>R'</em>, and <em>D'</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
 used as a base class in the summary of <tt class="literal"><span class="pre">iterator_adaptor</span></tt>
 above are defined as follows:</p>
 <pre class="literal-block">
-<em>V</em> = if (Value is use_default)
+<em>V'</em> = if (Value is use_default)
           return iterator_traits&lt;Base&gt;::value_type
       else
           return Value
 
-<em>C</em> = if (CategoryOrTraversal is use_default)
+<em>C'</em> = if (CategoryOrTraversal is use_default)
           return iterator_traversal&lt;Base&gt;::type
       else
           return CategoryOrTraversal
 
-<em>R</em> = if (Reference is use_default)
+<em>R'</em> = if (Reference is use_default)
           if (Value is use_default)
               return iterator_traits&lt;Base&gt;::reference
           else
@@ -1221,7 +1221,7 @@ above are defined as follows:</p>
       else
           return Reference
 
-<em>D</em> = if (Difference is use_default)
+<em>D'</em> = if (Difference is use_default)
           return iterator_traits&lt;Base&gt;::difference_type
       else
           return Difference
@@ -1261,7 +1261,7 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Base</span> <span class="pre">const</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Base</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1270,10 +1270,6 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 </tr>
 </tbody>
 </table>
-<p>[Note: specifying <tt class="literal"><span class="pre">Base</span> <span class="pre">const</span></tt> gives implementations license to
-return <tt class="literal"><span class="pre">Base</span> <span class="pre">const&amp;</span></tt> for efficiency's sake.  If <tt class="literal"><span class="pre">base()</span></tt>
-returned just <tt class="literal"><span class="pre">Base</span></tt>, it would be possible to call non-<tt class="literal"><span class="pre">const</span></tt>
-member functions on the result object directly]</p>
 </div>
 <div class="section" id="iterator-adaptor-protected-member-functions">
 <h3><a class="toc-backref" href="#id40" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h3>
@@ -1516,7 +1512,7 @@ class indirect_iterator
       , typename enable_if_convertible&lt;Iterator2, Iterator&gt;::type* = 0 // exposition
     );
 
-    Iterator base() const;
+    Iterator const&amp; base() const;
     reference operator*() const;
     indirect_iterator&amp; operator++();
     indirect_iterator&amp; operator--();
@@ -1552,11 +1548,11 @@ else
     typedef Difference difference_type;
 
 if (CategoryOrTraversal is use_default)
-    typedef <a class="reference" href="#id12"><em>iterator-category</em></a>(
+    typedef <em>iterator-category</em> (
         iterator_traversal&lt;Iterator&gt;::type,``reference``,``value_type``
     ) iterator_category;
 else
-    typedef <a class="reference" href="#id12"><em>iterator-category</em></a>(
+    typedef <em>iterator-category</em> (
         CategoryOrTraversal,``reference``,``value_type``
     ) iterator_category;
 </pre>
@@ -1646,7 +1642,7 @@ indirect_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1713,7 +1709,7 @@ public:
       reverse_iterator&lt;OtherIterator&gt; const&amp; r
     , typename enable_if_convertible&lt;OtherIterator, Iterator&gt;::type* = 0 // exposition
   );
-  Iterator base() const;
+  Iterator const&amp; base() const;
   reference operator*() const;
   reverse_iterator&amp; operator++();
   reverse_iterator&amp; operator--();
@@ -1816,7 +1812,7 @@ reverse_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1893,8 +1889,8 @@ public:
       , typename enable_if_convertible&lt;I2, Iterator&gt;::type* = 0      // exposition only
       , typename enable_if_convertible&lt;F2, UnaryFunction&gt;::type* = 0 // exposition only
   );
-  Iterator base() const;
   UnaryFunction functor() const;
+  Iterator const&amp; base() const;
   reference operator*() const;
   transform_iterator&amp; operator++();
   transform_iterator&amp; operator--();
@@ -1932,7 +1928,7 @@ where the type of <tt class="literal"><span class="pre">f(*i)</span></tt> must b
 <div class="section" id="transform-iterator-models">
 <h4><a class="toc-backref" href="#id58" name="transform-iterator-models"><tt class="literal"><span class="pre">transform_iterator</span></tt> models</a></h4>
 <p>The resulting <tt class="literal"><span class="pre">transform_iterator</span></tt> models the most refined of the
-following options that is also modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
+following that is also modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
 <blockquote>
 <ul class="simple">
 <li>Writable Lvalue Iterator if <tt class="literal"><span class="pre">transform_iterator::reference</span></tt> is a non-const reference.</li>
@@ -2018,21 +2014,21 @@ transform_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
-<table class="field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">m_iterator</span></tt></td>
-</tr>
-</tbody>
-</table>
 <p><tt class="literal"><span class="pre">UnaryFunction</span> <span class="pre">functor()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">m_f</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">m_iterator</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -2108,7 +2104,7 @@ class filter_iterator
         );
     Predicate predicate() const;
     Iterator end() const;
-    Iterator base() const;
+    Iterator const&amp; base() const;
     reference operator*() const;
     filter_iterator&amp; operator++();
 private:
@@ -2282,7 +2278,7 @@ filter_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2340,7 +2336,7 @@ class counting_iterator
     counting_iterator();
     counting_iterator(counting_iterator const&amp; rhs);
     explicit counting_iterator(Incrementable x);
-    Incrementable base() const;
+    Incrementable const&amp; base() const;
     reference operator*() const;
     counting_iterator&amp; operator++();
     counting_iterator&amp; operator--();
@@ -2364,9 +2360,12 @@ else
          iterator_traversal&lt;Incrementable&gt;::type, 
          Incrementable, const Incrementable&amp;)
 </pre>
-<p>[<em>Note:</em> implementers are encouraged to provide an implementation
-of <tt class="literal"><span class="pre">operator-</span></tt> and a default <tt class="literal"><span class="pre">difference_type</span></tt> that avoid
-overflows when <tt class="literal"><span class="pre">Incrementable</span></tt> is a numeric type.]</p>
+<dl>
+<dt>[<em>Note:</em> implementers are encouraged to provide an implementation of</dt>
+<dd><tt class="literal"><span class="pre">operator-</span></tt> and a <tt class="literal"><span class="pre">difference_type</span></tt> that avoids overflows in
+the cases where <tt class="literal"><span class="pre">std::numeric_limits&lt;Incrementable&gt;::is_specialized</span></tt>
+is true.]</dd>
+</dl>
 </div>
 <div class="section" id="counting-iterator-requirements">
 <h4><a class="toc-backref" href="#id67" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h4>
@@ -2475,7 +2474,7 @@ operations.</p>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Incrementable</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Incrementable</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

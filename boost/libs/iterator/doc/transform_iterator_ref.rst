@@ -25,7 +25,7 @@
         , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition only
     );
     UnaryFunction functor() const;
-    Iterator base() const;
+    Iterator const& base() const;
     reference operator*() const;
     transform_iterator& operator++();
     transform_iterator& operator--();
@@ -145,7 +145,7 @@ operations.
 :Returns: ``m_f``
 
 
-``Iterator base() const;``
+``Iterator const& base() const;``
 
 :Returns: ``m_iterator``
 

@@ -20,7 +20,7 @@
 	);
     reference operator*() const;
     permutation_iterator& operator++();
-    ElementIterator base() const;
+    ElementIterator const& base() const;
   private:
     ElementIterator m_elt;      // exposition only
     IndexIterator m_order;      // exposition only
@@ -111,7 +111,7 @@ following operations.
 :Returns: ``*this``
 
 
-``ElementIterator base() const;``
+``ElementIterator const& base() const;``
 
 :Returns: ``m_order``
 

@@ -63,7 +63,7 @@ Issue 9.37x
 -          return **this->base();
 -      }
 +
-+      Iterator base() const;
++      Iterator const& base() const;
 +      reference operator*() const;
 +      indirect_iterator& operator++();
 +      indirect_iterator& operator--();
@@ -223,7 +223,7 @@ Issue 9.29
 
 Issue 9.37x
 
-+``Iterator base() const;``
++``Iterator const& base() const;``
  
 +:Returns: ``m_iterator``
 +

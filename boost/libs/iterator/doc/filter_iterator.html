@@ -86,7 +86,7 @@ class filter_iterator
         );
     Predicate predicate() const;
     Iterator end() const;
-    Iterator base() const;
+    Iterator const&amp; base() const;
     reference operator*() const;
     filter_iterator&amp; operator++();
 private:
@@ -260,7 +260,7 @@ filter_iterator(
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
