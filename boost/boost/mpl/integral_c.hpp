@@ -17,6 +17,7 @@
 #ifndef BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 #define BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 
+#include "boost/mpl/aux_/ice_cast.hpp"
 #include "boost/mpl/aux_/config/static_constant.hpp"
 #include "boost/mpl/aux_/config/workaround.hpp"
 
@@ -45,23 +46,19 @@ struct integral_c
     // either
 #if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
  private:
-    BOOST_STATIC_CONSTANT(T, next_value = static_cast<T>(N + 1));
-    BOOST_STATIC_CONSTANT(T, prior_value = static_cast<T>(N - 1));
+    BOOST_STATIC_CONSTANT(T, next_value = BOOST_MPL_AUX_ICE_CAST(T, (N + 1)));
+    BOOST_STATIC_CONSTANT(T, prior_value = BOOST_MPL_AUX_ICE_CAST(T, (N - 1)));
  public:
     typedef integral_c<T, next_value> next;
     typedef integral_c<T, prior_value> prior;
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+    || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
     || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
-    // Borland can't handle the casts, and HP doesn't need them
-    // because the 2nd template parameter is not T but long
-    typedef integral_c<T, N + 1> next;
-    typedef integral_c<T, N - 1> prior;
-#elif BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502))
-    typedef integral_c<T, static_cast<T>(N + 1)> next;
-    typedef integral_c<T, static_cast<T>(N - 1)> prior;
+    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (N + 1))> next;
+    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (N - 1))> prior;
 #else
-    typedef integral_c<T, static_cast<T>(value + 1)> next;
-    typedef integral_c<T, static_cast<T>(value - 1)> prior;
+    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (value + 1))> next;
+    typedef integral_c<T, BOOST_MPL_AUX_ICE_CAST(T, (value - 1))> prior;
 #endif
 
     // enables uniform function call syntax for families of overloaded 

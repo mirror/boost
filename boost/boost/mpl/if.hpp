@@ -20,6 +20,7 @@
 #include "boost/mpl/aux_/ice_cast.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 #include "boost/config.hpp"
 
 namespace boost {
@@ -56,7 +57,11 @@ struct if_
  private:
     // agurt, 02/jan/03: two-step 'type' definition for the sake of aCC 
     typedef if_c<
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
+          BOOST_MPL_AUX_VALUE_WKND(C)::value
+#else
           BOOST_MPL_AUX_ICE_CAST(bool, BOOST_MPL_AUX_VALUE_WKND(C)::value)
+#endif
         , T1
         , T2
         > almost_type_;

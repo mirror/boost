@@ -3,7 +3,7 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2001-02
+// Copyright (c) 2001-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -17,12 +17,12 @@
 #ifndef BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
 #define BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__GNUC__) && __GNUC__ < 3
-#   define BOOST_MPL_AUX_ICE_CAST(T, expr) expr
-#elif defined(__MWERKS__) && __MWERKS__ <= 0x3001
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+ || BOOST_WORKAROUND(__GNUC__, < 3)
+#   define BOOST_MPL_AUX_ICE_CAST(T, expr) T(expr)
+#elif BOOST_WORKAROUND(__MWERKS__, <= 0x3001)
 #   define BOOST_MPL_AUX_ICE_CAST(T, expr) (T)(expr)
 #else
 #   define BOOST_MPL_AUX_ICE_CAST(T, expr) static_cast<T>(expr)
