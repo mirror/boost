@@ -14,6 +14,7 @@
 #include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
 
 #include <memory>                                       // allocator.
+#include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/streambuf/direct_streambuf.hpp>
@@ -21,9 +22,7 @@
 #include <boost/iostreams/traits.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace iostreams {
-
-namespace detail {
+namespace boost { namespace iostreams { namespace detail {
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 struct streambuf_facade_traits {
@@ -35,7 +34,13 @@ struct streambuf_facade_traits {
             >::type type;
 };
 
-} // End namespace detail.
+} } } // End namespaces detail, iostreams, boost
+
+#ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
+# include <boost/iostreams/detail/broken_overload_resolution/streambuf_facade.hpp>
+#else 
+
+namespace boost { namespace iostreams {
 
 template< typename T, 
           typename Tr = 
@@ -108,6 +113,8 @@ private:
 };
 
 } } // End namespaces iostreams, boost.
+
+#endif // #ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 
 #include <boost/iostreams/detail/enable_warnings.hpp>  // MSVC.
 

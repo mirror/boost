@@ -14,15 +14,14 @@
 #include <istream>
 #include <ostream>
 #include <boost/iostreams/constants.hpp>
+#include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/streambuf_facade.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace iostreams {
-
-namespace detail {
+namespace boost { namespace iostreams { namespace detail {
 
 template<typename Device, typename Tr>
 struct stream_facade_traits {
@@ -70,7 +69,13 @@ public:
     stream_facade_base() : pbase_type(), stream_type(&member) { }
 };
 
-} // End namespace detail.
+} } } // End namespaces detail, iostreams, boost.
+
+#ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
+# include <boost/iostreams/detail/broken_overload_resolution/stream_facade.hpp>
+#else 
+
+namespace boost { namespace iostreams {
 
 //
 // Template name: stream_facade.
@@ -94,9 +99,6 @@ public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(Device)        char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
-    typedef base_from_member<
-                streambuf_facade<Device, Tr, Alloc>
-            >                                        pbase_type;
     typedef typename
             detail::stream_facade_traits<
                 Device, Tr
@@ -155,5 +157,7 @@ private:
 };
 
 } } // End namespaces iostreams, boost.
+
+#endif // #ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 
 #endif // #ifndef BOOST_IOSTREAMS_STREAM_FACADE_HPP_INCLUDED
