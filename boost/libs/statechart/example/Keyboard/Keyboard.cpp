@@ -22,12 +22,18 @@
 #include <boost/fsm/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
+#include <boost/config.hpp>
 
 #include <iostream>
 #include <iomanip>
 
 namespace fsm = boost::fsm;
 namespace mpl = boost::mpl;
+
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 304 ) // access control not specified
+#  pragma warning( disable: 981 ) // operands are evaluated in unspecified order
+#endif
 
 
 
@@ -87,39 +93,41 @@ struct ScrollLockOff : fsm::simple_state<
   ScrollLockOff, Active::orthogonal< 2 >,
   fsm::transition< EvScrollLockPressed, ScrollLockOn > > {};
 
-
-void DisplayStateConfiguration( const Keyboard & keyboard )
+namespace
 {
-  char orthogonalRegion = 'a';
-
-  for ( Keyboard::state_iterator pLeafState = keyboard.state_begin();
-    pLeafState != keyboard.state_end(); ++pLeafState )
+  void DisplayStateConfiguration( const Keyboard & keyboard )
   {
-    std::cout << "Orthogonal region " << orthogonalRegion << ": ";
+    char orthogonalRegion = 'a';
 
-    const Keyboard::state_base_type * pState = &*pLeafState;
-
-    while ( pState != 0 )
+    for ( Keyboard::state_iterator pLeafState = keyboard.state_begin();
+      pLeafState != keyboard.state_end(); ++pLeafState )
     {
-      if ( pState != &*pLeafState )
+      std::cout << "Orthogonal region " << orthogonalRegion << ": ";
+
+      const Keyboard::state_base_type * pState = &*pLeafState;
+
+      while ( pState != 0 )
       {
-        std::cout << " -> ";
+        if ( pState != &*pLeafState )
+        {
+          std::cout << " -> ";
+        }
+
+        #ifdef BOOST_FSM_USE_NATIVE_RTTI
+        std::cout << std::setw( 15 ) << typeid( *pState ).name();
+        #else
+        std::cout << std::setw( 15 ) <<
+          pState->custom_dynamic_type_ptr< char >();
+        #endif
+        pState = pState->outer_state_ptr();
       }
 
-      #ifdef BOOST_FSM_USE_NATIVE_RTTI
-      std::cout << std::setw( 15 ) << typeid( *pState ).name();
-      #else
-      std::cout << std::setw( 15 ) <<
-        pState->custom_dynamic_type_ptr< char >();
-      #endif
-      pState = pState->outer_state_ptr();
+      std::cout << "\n";
+      ++orthogonalRegion;
     }
 
     std::cout << "\n";
-    ++orthogonalRegion;
   }
-
-  std::cout << "\n";
 }
 
 

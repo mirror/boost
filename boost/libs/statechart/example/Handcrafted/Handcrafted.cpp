@@ -1,9 +1,8 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -16,20 +15,35 @@
 
 
 
+#include <boost/config.hpp>
+
 #include <iostream>
 #include <iomanip>
 #include <ctime>
 
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 304 ) // access control not specified
+#endif
 
 
-const unsigned int noOfStates = 2;
-const unsigned int noOfTransitions = 2;
 
-// common prime factors of 2^n-1 for n in [1,8]
-const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
+namespace
+{
+  const unsigned int noOfStates = 2;
+  const unsigned int noOfTransitions = 2;
 
-unsigned long eventsSentTotal = 0;
+  // common prime factors of 2^n-1 for n in [1,8]
+  const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
 
+  unsigned long eventsSentTotal = 0;
+
+  char GetKey()
+  {
+    char key;
+    std::cin >> key;
+    return key;
+  }
+}
 
 
 class EvFlipBit;
@@ -118,7 +132,7 @@ class BitMachine
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    struct On : public state< On >
+    struct On : state< On >
     {
       virtual const state_base & react( const EvFlipBit & ) const
       {
@@ -139,19 +153,9 @@ class BitMachine
 
 
 
-char GetKey()
-{
-  char key;
-  std::cin >> key;
-  return key;
-}
-
 //////////////////////////////////////////////////////////////////////////////
-int main( int argc, char * argv[] )
+int main()
 {
-  argc;
-  argv;
-
   std::cout << "boost::fsm Handcrafted example\n";
   std::cout << "Machine configuration: " << noOfStates <<
     " states interconnected with " << noOfTransitions << " transitions.\n\n";

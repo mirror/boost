@@ -46,13 +46,21 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+
+#ifdef BOOST_MSVC
+#  pragma warning( disable: 4127 ) // conditional expression is constant
+#  pragma warning( disable: 4251 ) // class needs to have dll-interface
+#  pragma warning( disable: 4275 ) // non-dll class used as base for dll class
+#  pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
+#endif
+
 #ifdef BOOST_HAS_THREADS
 #  include <boost/thread/thread.hpp>
 #endif
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
 #  ifdef BOOST_HAS_THREADS
      // for some reason the following is not automatically defined
-#    ifdef BOOST_MSVC
+#    if defined( BOOST_MSVC ) | defined( BOOST_INTEL )
 #      define __WIN32__
 #    endif
 #  else
@@ -65,18 +73,29 @@
 #include <ctime>
 #include <memory> // std::allocator
 
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 304 ) // access control not specified
+#  pragma warning( disable: 383 ) // reference to temporary used
+#  pragma warning( disable: 981 ) // operands are evaluated in unspecified order
+#endif
+
+
+
 namespace fsm = boost::fsm;
 namespace mpl = boost::mpl;
 
 
+
 const unsigned int noOfEvents = 1000000;
 
-template< class T >
-boost::intrusive_ptr< T > MakeIntrusive( T * pObject )
+namespace
 {
-  return boost::intrusive_ptr< T >( pObject );
+  template< class T >
+  boost::intrusive_ptr< T > MakeIntrusive( T * pObject )
+  {
+    return boost::intrusive_ptr< T >( pObject );
+  }
 }
-
 
 struct BallReturned : fsm::event< BallReturned >
 {
@@ -188,11 +207,14 @@ struct Waiting : fsm::state< Waiting, Player, mpl::list<
 
 
 
-char GetKey()
+namespace
 {
-  char key;
-  std::cin >> key;
-  return key;
+  char GetKey()
+  {
+    char key;
+    std::cin >> key;
+    return key;
+  }
 }
 
 int main()

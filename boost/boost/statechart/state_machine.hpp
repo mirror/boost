@@ -16,6 +16,7 @@
 
 #include <boost/fsm/detail/state_base.hpp>
 #include <boost/fsm/detail/constructor.hpp>
+#include <boost/fsm/detail/avoid_unused_warning.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/clear.hpp>
@@ -30,14 +31,14 @@
 #include <boost/config.hpp>  // BOOST_STATIC_CONSTANT
 
 #ifdef BOOST_MSVC
-#pragma warning( push )
-#pragma warning( disable: 4702 ) // unreachable code (in release mode only)
+#  pragma warning( push )
+#  pragma warning( disable: 4702 ) // unreachable code (in release mode only)
 #endif
 
 #include <map>
 
 #ifdef BOOST_MSVC
-#pragma warning( pop )
+#  pragma warning( pop )
 #endif
 
 #include <memory>   // std::allocator
@@ -50,8 +51,8 @@
 #ifdef BOOST_MSVC
 // We permanently turn off the following level 4 warnings because users will
 // have to do so themselves anyway if we turn them back on
-#pragma warning( disable: 4511 ) // copy constructor could not be generated
-#pragma warning( disable: 4512 ) // assignment operator could not be generated
+#  pragma warning( disable: 4511 ) // copy constructor could not be generated
+#  pragma warning( disable: 4512 ) // assignment operator could not be generated
 #endif
 
 
@@ -518,13 +519,13 @@ class state_machine : noncopyable
       detail::orthogonal_position_type position, state_base_type * )
     {
       BOOST_ASSERT( position == 0 );
-      position;
+      detail::avoid_unused_warning( position );
     }
 
     void remove_inner_state( detail::orthogonal_position_type position )
     {
       BOOST_ASSERT( position == 0 );
-      position;
+      detail::avoid_unused_warning( position );
     }
 
     void release_events( const state_base_type * pForState )

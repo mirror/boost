@@ -11,6 +11,12 @@
 #include "Shooting.hpp"
 #include <iostream>
 
+#include <boost/config.hpp>
+
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 383 ) // reference to temporary used
+#endif
+
 
 
 Shooting::Shooting()

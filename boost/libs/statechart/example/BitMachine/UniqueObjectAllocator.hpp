@@ -9,6 +9,8 @@
 
 
 
+#include <boost/fsm/detail/avoid_unused_warning.hpp>
+
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/type_traits/type_with_alignment.hpp>
 
@@ -24,7 +26,7 @@ class UniqueObjectAllocator
     //////////////////////////////////////////////////////////////////////////
     static void * allocate( size_t size )
     {
-      size;
+      boost::fsm::detail::avoid_unused_warning( size );
       BOOST_ASSERT( !constructed_ && ( size == sizeof( T ) ) );
       constructed_ = true;
       return &storage_.data[ 0 ];
@@ -32,8 +34,8 @@ class UniqueObjectAllocator
 
     static void deallocate( void * p, size_t size )
     {
-      p;
-      size;
+      boost::fsm::detail::avoid_unused_warning( p );
+      boost::fsm::detail::avoid_unused_warning( size );
       BOOST_ASSERT( constructed_ &&
         ( p == &storage_.data[ 0 ] ) && ( size == sizeof( T ) ) );
       constructed_ = false;

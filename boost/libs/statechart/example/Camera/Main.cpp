@@ -41,18 +41,19 @@
 
 
 
-char GetKey()
+namespace
 {
-  char key;
-  std::cin >> key;
-  return key;
+  char GetKey()
+  {
+    char key;
+    std::cin >> key;
+    return key;
+  }
 }
 
-int main( int argc, char * argv[] )
-{
-  argc;
-  argv;
 
+int main()
+{
   std::cout << "boost::fsm Camera example\n\n";
 
   std::cout << "h<CR>: Press shutter half-way\n";

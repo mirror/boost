@@ -20,14 +20,14 @@
 #include <boost/config.hpp>
 
 #ifdef BOOST_MSVC
-#pragma warning( push )
-#pragma warning( disable: 4702 ) // unreachable code (in release mode only)
+#  pragma warning( push )
+#  pragma warning( disable: 4702 ) // unreachable code (in release mode only)
 #endif
 
 #include <list>
 
 #ifdef BOOST_MSVC
-#pragma warning( pop )
+#  pragma warning( pop )
 #endif
 
 
@@ -35,8 +35,8 @@
 #ifdef BOOST_MSVC
 // We permanently turn off the following level 4 warnings because users will
 // have to do so themselves anyway if we turn them back on
-#pragma warning( disable: 4511 ) // copy constructor could not be generated
-#pragma warning( disable: 4512 ) // assignment operator could not be generated
+#  pragma warning( disable: 4511 ) // copy constructor could not be generated
+#  pragma warning( disable: 4512 ) // assignment operator could not be generated
 #endif
 
 

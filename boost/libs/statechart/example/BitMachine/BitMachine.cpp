@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 6;
+const unsigned int noOfBits = 1;
 #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
@@ -58,23 +58,17 @@ const unsigned int noOfBits = 6;
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/range_c.hpp>
 #include <boost/mpl/placeholders.hpp>
-
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 
 #ifdef BOOST_MSVC
-#pragma warning( push )
-#pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
-#pragma warning( disable: 4127 ) // conditional expression is constant
+#  pragma warning( disable: 4127 ) // conditional expression is constant
+#  pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
 #endif
 
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
-#define BOOST_NO_MT
-#include <boost/pool/pool_alloc.hpp>
-#endif
-
-#ifdef BOOST_MSVC
-#pragma warning( pop )
+#  define BOOST_NO_MT
+#  include <boost/pool/pool_alloc.hpp>
 #endif
 
 #include <iostream>
@@ -82,7 +76,13 @@ const unsigned int noOfBits = 6;
 #include <ctime>
 
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
-#include "UniqueObject.hpp"
+#  include "UniqueObject.hpp"
+#endif
+
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 304 ) // access control not specified
+#  pragma warning( disable: 444 ) // destructor for base is not virtual
+#  pragma warning( disable: 981 ) // operands are evaluated in unspecified order
 #endif
 
 
@@ -92,39 +92,6 @@ namespace mpl = boost::mpl;
 using namespace mpl::placeholders;
 
 
-
-const unsigned int noOfStates = 1 << noOfBits;
-const unsigned int noOfTransitions = noOfStates * noOfBits;
-
-// common prime factors of 2^n-1 for n in [1,8]
-const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
-const unsigned int noOfLaps = noOfEvents / ( noOfStates - 1 );
-
-unsigned long eventsSentTotal = 0;
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-void DisplayBits( unsigned int number )
-{
-  char buffer[ noOfBits + 1 ];
-  buffer[ noOfBits ] = 0;
-
-  for ( unsigned int bit = 0; bit < noOfBits; ++bit )
-  {
-    buffer[ bit ] = number & ( 1 << ( noOfBits - bit - 1 ) ) ? '1' : '0';
-  }
-
-  std::cout << "Current state: " << std::setw( 4 ) <<
-    number << " (" << buffer << ")" << std::endl;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-template< unsigned int bitNo >
-struct EvFlipBit : fsm::event< EvFlipBit< bitNo > > {};
-
-const fsm::event_base * pFlipBitEvents[ 10 ] = { 0 };
 
 template< unsigned int stateNo >
 struct BitState;
@@ -136,6 +103,94 @@ struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 >,
 struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 > > {};
 #endif
 
+//////////////////////////////////////////////////////////////////////////////
+struct IDisplay
+{
+  virtual void Display() const = 0;
+};
+
+namespace
+{
+  const unsigned int noOfStates = 1 << noOfBits;
+  const unsigned int noOfTransitions = noOfStates * noOfBits;
+
+  // common prime factors of 2^n-1 for n in [1,8]
+  const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
+  const unsigned int noOfLaps = noOfEvents / ( noOfStates - 1 );
+
+  unsigned long eventsSentTotal = 0;
+
+  ////////////////////////////////////////////////////////////////////////////
+  void DisplayBits( unsigned int number )
+  {
+    char buffer[ noOfBits + 1 ];
+    buffer[ noOfBits ] = 0;
+
+    for ( unsigned int bit = 0; bit < noOfBits; ++bit )
+    {
+      buffer[ bit ] = number & ( 1 << ( noOfBits - bit - 1 ) ) ? '1' : '0';
+    }
+
+    std::cout << "Current state: " << std::setw( 4 ) <<
+      number << " (" << buffer << ")" << std::endl;
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////
+  void DisplayMachineState( const BitMachine & bitMachine )
+  {
+    bitMachine.state_cast< const IDisplay & >().Display();
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  const fsm::event_base * pFlipBitEvents[ 10 ] = { 0 };
+
+  ////////////////////////////////////////////////////////////////////////////
+  template< unsigned int msb, bool display >
+  void VisitAllStates( BitMachine & bitMachine )
+  {
+    VisitAllStates< msb - 1, display >( bitMachine );
+    bitMachine.process_event( *pFlipBitEvents[ msb ] );
+    ++eventsSentTotal;
+
+    bool false_ = false; // avoid conditional expression is constant warning
+
+    if ( display || false_ )
+    {
+      DisplayMachineState( bitMachine );
+    }
+
+    VisitAllStates< msb - 1, display >( bitMachine );
+  }
+
+  template<>
+  void VisitAllStates< 0, false >( BitMachine & bitMachine )
+  {
+    bitMachine.process_event( *pFlipBitEvents[ 0 ] );
+    ++eventsSentTotal;
+  }
+
+  template<>
+  void VisitAllStates< 0, true >( BitMachine & bitMachine )
+  {
+    bitMachine.process_event( *pFlipBitEvents[ 0 ] );
+    ++eventsSentTotal;
+    DisplayMachineState( bitMachine );
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  char GetKey()
+  {
+    char key;
+    std::cin >> key;
+    return key;
+  }
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+template< unsigned int bitNo >
+struct EvFlipBit : fsm::event< EvFlipBit< bitNo > > {};
 
 //////////////////////////////////////////////////////////////////////////////
 template< class BitNo, class StateNo >
@@ -169,14 +224,6 @@ struct FlipTransitionList
       FlipTransition< _, mpl::integral_c< unsigned int, stateNo > > >::type type;
 };
 
-
-//////////////////////////////////////////////////////////////////////////////
-struct IDisplay
-{
-  virtual void DisplayBits() const = 0;
-};
-
-
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int stateNo >
 struct BitState :
@@ -188,71 +235,17 @@ struct BitState :
   IDisplay
   #endif
 {
-  virtual void DisplayBits() const
+  virtual void Display() const
   {
-    ::DisplayBits( stateNo );
+    DisplayBits( stateNo );
   }
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-void DisplayMachineState( const BitMachine & bitMachine )
-{
-  bitMachine.state_cast< const IDisplay & >().DisplayBits();
-}
-
-template< unsigned int msb, bool display >
-void VisitAllStates( BitMachine & bitMachine )
-{
-  VisitAllStates< msb - 1, display >( bitMachine );
-  bitMachine.process_event( *pFlipBitEvents[ msb ] );
-  ++eventsSentTotal;
-
-#ifdef BOOST_MSVC
-#pragma warning( push )
-#pragma warning( disable: 4127 )
-#endif
-  if ( display )
-  {
-    DisplayMachineState( bitMachine );
-  }
-#ifdef BOOST_MSVC
-#pragma warning( pop )
-#endif
-
-  VisitAllStates< msb - 1, display >( bitMachine );
-}
-
-template<>
-void VisitAllStates< 0, false >( BitMachine & bitMachine )
-{
-  bitMachine.process_event( *pFlipBitEvents[ 0 ] );
-  ++eventsSentTotal;
-}
-
-template<>
-void VisitAllStates< 0, true >( BitMachine & bitMachine )
-{
-  bitMachine.process_event( *pFlipBitEvents[ 0 ] );
-  ++eventsSentTotal;
-  DisplayMachineState( bitMachine );
-}
-
-
-char GetKey()
-{
-  char key;
-  std::cin >> key;
-  return key;
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
-int main( int argc, char * argv[] )
+int main()
 {
-  argc;
-  argv;
-
   BOOST_ASSERT( noOfBits <= 10 );
 
   const EvFlipBit< 0 > flip0;

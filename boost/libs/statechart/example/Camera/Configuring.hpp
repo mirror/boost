@@ -10,8 +10,17 @@
 
 
 #include "Camera.hpp"
+
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/transition.hpp>
+
+#include <boost/config.hpp>
+
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 304 ) // access control not specified
+#endif
+
+
 
 namespace fsm = boost::fsm;
 

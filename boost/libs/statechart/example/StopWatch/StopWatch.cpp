@@ -34,8 +34,16 @@
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/transition.hpp>
 
+#include <boost/config.hpp>
+
 #include <ctime>
 #include <iostream>
+
+#ifdef BOOST_INTEL
+#  pragma warning( disable: 304 ) // access control not specified
+#  pragma warning( disable: 444 ) // destructor for base is not virtual
+#  pragma warning( disable: 981 ) // operands are evaluated in unspecified order
+#endif
 
 
 
@@ -114,12 +122,14 @@ struct Stopped :
 };
 
 
-
-char GetKey()
+namespace
 {
-  char key;
-  std::cin >> key;
-  return key;
+  char GetKey()
+  {
+    char key;
+    std::cin >> key;
+    return key;
+  }
 }
 
 int main()

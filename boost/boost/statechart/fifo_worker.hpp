@@ -16,8 +16,17 @@
 #include <boost/bind.hpp>
 
 #ifdef BOOST_HAS_THREADS
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/condition.hpp>
+#  ifdef BOOST_MSVC
+#    pragma warning( push )
+#    pragma warning( disable: 4275 ) // non-dll class used as base for dll class
+#  endif
+
+#  include <boost/thread/mutex.hpp>
+#  include <boost/thread/condition.hpp>
+
+#  ifdef BOOST_MSVC
+#    pragma warning( pop )
+#  endif
 #endif
 
 #include <list>
