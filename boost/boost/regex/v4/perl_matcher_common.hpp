@@ -736,7 +736,6 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_lit
    int len = info->len;
    const char_type* x = info->pstr;
    int j = 0; 
-   bool icase = re.flags() & regex_constants::icase;
    while (position != last) 
    {
       while((j > -1) && (x[j] != traits_inst.translate(*position, icase))) 

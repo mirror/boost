@@ -25,6 +25,7 @@
 
 #include <cstring>
 #include <cctype>
+#ifndef __sgi
 #ifdef __KCC
 #include <ios>
 #endif
@@ -225,5 +226,7 @@ using ::toupper;
 #endif
 
 } // namespace std
+
+#endif // __sgi
 
 #endif
