@@ -49,9 +49,9 @@ void test_int_sequence()
     using namespace boost::assign;  
     C c;
     
-    BOOST_CHECK_EQUAL( c.size(), 0 );
+    BOOST_CHECK_EQUAL( c.size(), 0u );
     c +=1,2,3,4,5,6,7,8,9,10;
-    BOOST_CHECK_EQUAL( c.size(), 10 );
+    BOOST_CHECK_EQUAL( c.size(), 10u );
 }
 
 
@@ -62,9 +62,9 @@ void test_string_sequence()
     using namespace boost::assign;  
     C c;
 
-    BOOST_CHECK_EQUAL( c.size(), 0 );
+    BOOST_CHECK_EQUAL( c.size(), 0u );
     c += "1","2","3","4","5","6","7","8","9","10";
-    BOOST_CHECK_EQUAL( c.size(), 10 );
+    BOOST_CHECK_EQUAL( c.size(), 10u );
 }
 
 
@@ -77,10 +77,10 @@ void test_tuple_sequence()
     using namespace boost::assign;  
     C c;
     
-    BOOST_CHECK_EQUAL( c.size(), 0 );
+    BOOST_CHECK_EQUAL( c.size(), 0u );
     c += P("1",1), P("2",2), P("3",3), P("4",4), P("5",5), P("6",6), 
          P("7",7), P("8",8), P("9",9), P("10",10);
-    BOOST_CHECK_EQUAL( c.size(), 10 );
+    BOOST_CHECK_EQUAL( c.size(), 10u );
 }
 
 
@@ -96,7 +96,7 @@ void test_map()
          P( "july",      31 ), P( "august",   31 ),
          P( "september", 30 ), P( "october",  31 ),
          P( "november",  30 ), P( "december", 31 );
-    BOOST_CHECK_EQUAL( m.size(), 12 );
+    BOOST_CHECK_EQUAL( m.size(), 12u );
     m.clear();
     insert( m )
         ( "january",   31 )( "february", 28 )
@@ -105,7 +105,7 @@ void test_map()
         ( "july",      31 )( "august",   31 )
         ( "september", 30 )( "october",  31 )
         ( "november",  30 )( "december", 31 );
-    BOOST_CHECK_EQUAL( m.size(), 12 );
+    BOOST_CHECK_EQUAL( m.size(), 12u );
 }
 
 
@@ -120,9 +120,9 @@ void test_tuple()
     push_back( v_three ) (1,2,3) ("1","2","3");
     push_back( v_four ) (1,2,3,4) ("1","2","3","4");
     push_back( v_five ) (1,2,3,4,5) ("1","2","3","4","5");
-    BOOST_CHECK_EQUAL( v_three.size(), 2 );
-    BOOST_CHECK_EQUAL( v_four.size(), 2 );
-    BOOST_CHECK_EQUAL( v_five.size(), 2 );
+    BOOST_CHECK_EQUAL( v_three.size(), 2u );
+    BOOST_CHECK_EQUAL( v_four.size(), 2u );
+    BOOST_CHECK_EQUAL( v_five.size(), 2u );
 
 }
 

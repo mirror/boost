@@ -87,7 +87,7 @@ void check_list_inserter()
     
     my_vector<int> vec;
     vec = 1,2,3,4,5,6,7,8,9,10;
-    BOOST_CHECK_EQUAL( vec.size(), 10 );
+    BOOST_CHECK_EQUAL( vec.size(), 10u );
     BOOST_CHECK_EQUAL( vec[0], 1 );
     BOOST_CHECK_EQUAL( vec[9], 10 );
 }

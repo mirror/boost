@@ -44,7 +44,7 @@ template< class C >
 void test_sequence_list_of_string()
 {
     const C c = ba::list_of( "foo" )( "bar" );   
-    BOOST_CHECK_EQUAL( c.size(), 2 );
+    BOOST_CHECK_EQUAL( c.size(), 2u );
 }
 
 template< class C >
@@ -52,22 +52,22 @@ void test_sequence_list_of_int()
 {
     const C c  = ba::list_of(1)(2)(3)(4);
     const C c2 = (ba::list_of(1),2,3,4);
-    BOOST_CHECK_EQUAL( c.size(), 4 );
-    BOOST_CHECK_EQUAL( c2.size(), 4 );
+    BOOST_CHECK_EQUAL( c.size(), 4u );
+    BOOST_CHECK_EQUAL( c2.size(), 4u );
     C c3 = ba::list_of(1).repeat( 1, 2 )(3);
-    BOOST_CHECK_EQUAL( c3.size(), 3 );
+    BOOST_CHECK_EQUAL( c3.size(), 3u );
         
     c3 = ba::list_of(1).repeat_fun( 10, &std::rand )(2)(3);
-    BOOST_CHECK_EQUAL( c3.size(), 13 );
+    BOOST_CHECK_EQUAL( c3.size(), 13u );
 }
 
 template< class C >
 void test_map_list_of()
 {
     const C c  = ba::list_of< std::pair<std::string,int> >( "foo", 1 )( "bar", 2 )( "buh", 3 )( "bah", 4 );
-    BOOST_CHECK_EQUAL( c.size(), 4 );
+    BOOST_CHECK_EQUAL( c.size(), 4u );
     const C c2  = ba::map_list_of( "foo", 1 )( "bar", 2 )( "buh", 3 )( "bah", 4 );
-    BOOST_CHECK_EQUAL( c2.size(), 4 );
+    BOOST_CHECK_EQUAL( c2.size(), 4u );
 }
 
 void test_vector_matrix()
