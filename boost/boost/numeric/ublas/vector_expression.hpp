@@ -221,17 +221,19 @@ namespace boost { namespace numeric { namespace ublas {
             return expression () [i];
         }
 
+        // Comparison
+        BOOST_UBLAS_INLINE
+        bool operator == (const vector_const_reference &vr) const {
+            return &(*this).expression () == &vr.expression ();
+        }
+
         typedef const_iterator_type const_iterator;
         typedef const_iterator iterator;
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
-            return expression ().find_first (i);
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-            return expression ().find_last (i);
+        const_iterator find (size_type i) const {
+            return expression ().find (i);
         }
 
         // Iterator is the iterator of the referenced expression.
@@ -294,8 +296,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::reference reference;
         typedef typename E::const_pointer const_pointer;
         typedef typename E::pointer pointer;
-        typedef typename E::const_iterator const_iterator_type;
-        typedef typename E::iterator iterator_type;
 #else
         typedef typename E::const_reference const_reference;
         typedef typename boost::mpl::if_c<boost::is_const<E>::value,
@@ -305,6 +305,15 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename boost::mpl::if_c<boost::is_const<E>::value,
                                           typename E::const_pointer,
                                           typename E::pointer>::type pointer;
+#endif
+        typedef const vector_reference<E> const_self_type;
+        typedef vector_reference<E> self_type;
+        typedef const_self_type const_closure_type;
+        typedef const_closure_type closure_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+        typedef typename E::const_iterator const_iterator_type;
+        typedef typename E::iterator iterator_type;
+#else
         typedef typename E::const_iterator const_iterator_type;
         typedef typename boost::mpl::if_c<boost::is_const<E>::value,
                                           typename E::const_iterator,
@@ -332,6 +341,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         expression_type &expression () {
             return e_;
+        }
+
+        // Comparison
+        BOOST_UBLAS_INLINE
+        bool operator == (const vector_reference &vr) const {
+            return &(*this).expression () == &vr.expression ();
         }
 
         // Resizing
@@ -378,25 +393,73 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Assignment
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &operator = (const vector_expression<AE> &ae) {
+            expression ().operator = (ae);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &reset (const vector_expression<AE> &ae) {
+            expression ().reset (ae);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &assign (const vector_expression<AE> &ae) {
+            expression ().assign (ae);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &operator += (const vector_expression<AE> &ae) {
+            expression ().operator += (ae);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &plus_assign (const vector_expression<AE> &ae) {
+            expression ().plus_assign (ae);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &operator -= (const vector_expression<AE> &ae) {
+            expression ().operator -= (ae);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        vector_reference &minus_assign (const vector_expression<AE> &ae) {
+            expression ().minus_assign (ae);
+            return *this;
+        }
+        template<class AT>
+        BOOST_UBLAS_INLINE
+        vector_reference &operator *= (const AT &at) {
+            expression ().operator *= (at);
+            return *this;
+        }
+        template<class AT>
+        BOOST_UBLAS_INLINE
+        vector_reference &operator /= (const AT &at) {
+            expression ().operator /= (at);
+            return *this;
+        }
+
         typedef const_iterator_type const_iterator;
         typedef iterator_type iterator;
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
-            return expression ().find_first (i);
+        const_iterator find (size_type i) const {
+            return expression ().find (i);
         }
         BOOST_UBLAS_INLINE
-        iterator find_first (size_type i) {
-            return expression ().find_first (i);
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-            return expression ().find_last (i);
-        }
-        BOOST_UBLAS_INLINE
-        iterator find_last (size_type i) {
-            return expression ().find_last (i);
+        iterator find (size_type i) {
+            return expression ().find (i);
         }
 
         // Iterator is the iterator of the referenced expression.
@@ -522,21 +585,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
+        const_iterator find (size_type i) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            const_iterator_type it (e_.find_first (i));
+            const_iterator_type it (e_.find (i));
             return const_iterator (*this, it.index ());
 #else
-            return const_iterator (*this, e_.find_first (i));
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            const_iterator_type it (e_.find_last (i));
-            return const_iterator (*this, it.index ());
-#else
-            return const_iterator (*this, e_.find_last (i));
+            return const_iterator (*this, e_.find (i));
 #endif
         }
 
@@ -638,11 +692,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0); 
+            return find (0); 
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ()); 
+            return find (size ()); 
         }
 
         // Reverse iterator
@@ -802,26 +856,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
-            const_iterator1_type it1 (e1_.find_first (i));
-            const_iterator1_type it1_end (e1_.find_first (size ()));
-            const_iterator2_type it2 (e2_.find_first (i));
-            const_iterator2_type it2_end (e2_.find_first (size ()));
+        const_iterator find (size_type i) const {
+            const_iterator1_type it1 (e1_.find (i));
+            const_iterator1_type it1_end (e1_.find (size ()));
+            const_iterator2_type it2 (e2_.find (i));
+            const_iterator2_type it2_end (e2_.find (size ()));
             i = std::min (it1 != it1_end ? it1.index () : size (),
-                          it2 != it2_end ? it2.index () : size ());
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return const_iterator (*this, i);
-#else
-            return const_iterator (*this, i, it1, it1_end, it2, it2_end);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-            const_iterator1_type it1 (e1_.find_last (i));
-            const_iterator1_type it1_end (e1_.find_last (size ()));
-            const_iterator2_type it2 (e2_.find_last (i));
-            const_iterator2_type it2_end (e2_.find_last (size ()));
-            i = std::max (it1 != it1_end ? it1.index () : size (),
                           it2 != it2_end ? it2.index () : size ());
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, i);
@@ -1039,11 +1079,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ());
+            return find (size ());
         }
 
         // Reverse iterator
@@ -1196,21 +1236,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
+        const_iterator find (size_type i) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            const_iterator2_type it (e2_.find_first (i));
+            const_iterator2_type it (e2_.find (i));
             return const_iterator (*this, it.index ());
 #else
-            return const_iterator (*this, e1_, e2_.find_first (i));
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            const_iterator2_type it (e2_.find_last (i));
-            return const_iterator (*this, it.index ());
-#else
-            return const_iterator (*this, e1_, e2_.find_last (i));
+            return const_iterator (*this, e1_, e2_.find (i));
 #endif
         }
 
@@ -1320,11 +1351,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0); 
+            return find (0); 
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ()); 
+            return find (size ()); 
         }
 
         // Reverse iterator
@@ -1439,21 +1470,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
+        const_iterator find (size_type i) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            const_iterator1_type it (e1_.find_first (i));
+            const_iterator1_type it (e1_.find (i));
             return const_iterator (*this, it.index ());
 #else
-            return const_iterator (*this, e1_.find_first (i), e2_);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            const_iterator1_type it (e1_.find_last (i));
-            return const_iterator (*this, it.index ());
-#else
-            return const_iterator (*this, e1_.find_last (i), e2_);
+            return const_iterator (*this, e1_.find (i), e2_);
 #endif
         }
 
@@ -1563,11 +1585,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ());
+            return find (size ());
         }
 
         // Reverse iterator

@@ -264,6 +264,8 @@ void test_matrix () {
     test_my_matrix<ublas::banded_matrix<std::complex<double>, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () ();
     test_my_matrix<ublas::banded_matrix<std::complex<double>, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () (0);
 #endif
+#endif
+#endif
 
 #ifdef USE_STD_VECTOR
 #ifdef USE_FLOAT
@@ -276,8 +278,6 @@ void test_matrix () {
     std::cout << "double, std::vector" << std::endl;
     test_my_matrix<ublas::banded_matrix<double, ublas::row_major, std::vector<double> >, 3 > () ();
     test_my_matrix<ublas::banded_matrix<double, ublas::row_major, std::vector<double> >, 3 > () (0);
-#endif
-#endif
 #endif
 
 #ifdef USE_STD_COMPLEX
@@ -350,6 +350,8 @@ void test_matrix () {
     test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () ();
     test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () (0);
 #endif
+#endif
+#endif
 
 #ifdef USE_STD_VECTOR
 #ifdef USE_FLOAT
@@ -362,8 +364,6 @@ void test_matrix () {
     std::cout << "double, std::vector" << std::endl;
     test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, std::vector<double> >, 3 > () ();
     test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, std::vector<double> >, 3 > () (0);
-#endif
-#endif
 #endif
 
 #ifdef USE_STD_COMPLEX

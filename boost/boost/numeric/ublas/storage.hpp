@@ -297,13 +297,7 @@ namespace boost { namespace numeric { namespace ublas {
         pointer data_;
     };
 
-    template<class T>
-    BOOST_UBLAS_INLINE
-    unbounded_array<T> &assign_temporary (unbounded_array<T> &a1, unbounded_array<T> &a2) { 
-        return a1.assign_temporary (a2);
-    }
-
-    // Bounded array 
+    // Bounded array
     template<class T, std::size_t N>
     class bounded_array {
     public:
@@ -517,14 +511,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         size_type size_;
-        value_type data_ [N];
+        BOOST_UBLAS_ALIGN_16 value_type data_ [N];
     };
-
-    template<class T, std::size_t N>
-    BOOST_UBLAS_INLINE
-    bounded_array<T, N> &assign_temporary (bounded_array<T, N> &a1, bounded_array<T, N> &a2) {
-        return a1.assign_temporary (a2);
-    }
 
 #ifdef BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
 
@@ -1053,28 +1041,41 @@ namespace boost { namespace numeric { namespace ublas {
 
 #endif
 
-    template<class T>
-    BOOST_UBLAS_INLINE
-    std::valarray<T> &assign_temporary (std::valarray<T> &a1, std::valarray<T> &a2) {
-        // Too unusual semantic.
-        // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
-        if (&a1 != &a2) {
-            BOOST_UBLAS_CHECK (a1.size () == a2.size (), bad_size ());
-            a1 = a2;
-        }
-        return a1;
-    }
+    namespace detail {
+        using namespace boost::numeric::ublas;
 
-    template<class T>
-    BOOST_UBLAS_INLINE
-    std::vector<T> &assign_temporary (std::vector<T> &a1, std::vector<T> &a2) {
-        // Too unusual semantic.
-        // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
-        if (&a1 != &a2) {
-            BOOST_UBLAS_CHECK (a1.size () == a2.size (), bad_size ());
-            a1.swap (a2);
+        // Some helpers for unbounded_array
+
+        template<class T>
+        BOOST_UBLAS_INLINE
+        void resize (unbounded_array<T> &a, typename unbounded_array<T>::size_type size, bool preserve) {
+            a.resize (size, preserve);
         }
-        return a1;
+
+        // Some helpers for bounded_array
+
+        template<class T, std::size_t N>
+        BOOST_UBLAS_INLINE
+        void resize (bounded_array<T, N> &a, typename bounded_array<T, N>::size_type size, bool preserve) {
+            a.resize (size, preserve);
+        }
+
+        // Some helpers for array_adaptor
+
+        template<class T>
+        BOOST_UBLAS_INLINE
+        void resize (array_adaptor<T> &a, typename array_adaptor<T>::size_type size, bool preserve) {
+            a.resize (size, preserve);
+        }
+
+        // Some helpers for std::vector
+
+        template<class T>
+        BOOST_UBLAS_INLINE
+        void resize (std::vector<T> &a, typename std::vector<T>::size_type size, bool preserve) {
+            a.resize (size);
+        }
+
     }
 
     // Range class
@@ -1727,36 +1728,286 @@ namespace boost { namespace numeric { namespace ublas {
     template<class A>
     indirect_array<A> indirect_array<A>::all_;
 
+    // Gunter Winkler contributed the classes index_pair, index_pair_array,
+    // index_triple and index_triple_array to enable inplace sort of parallel arrays.
+
+    template <class V>
+    class index_pair :
+        private boost::noncopyable,
+        public container_reference<V> {
+    public:
+        typedef index_pair<V> self_type;
+        typedef typename V::size_type size_type;
+
+        BOOST_UBLAS_INLINE
+        index_pair(V& v, size_type i) :
+            container_reference<V>(v), i_(i),
+            v1_(v.data1_[i]), v2_(v.data2_[i]) {}
+        BOOST_UBLAS_INLINE
+        index_pair(const self_type& rhs) :
+            container_reference<V>(), i_(-1),
+            v1_(rhs.v1_), v2_(rhs.v2_) {}
+
+        BOOST_UBLAS_INLINE
+        self_type& operator=(const self_type& rhs) {
+            v1_ = rhs.v1_;
+            v2_ = rhs.v2_;
+            if (i_ != size_type(-1)) {
+                (*this)().data1_[i_] = v1_;
+                (*this)().data2_[i_] = v2_;
+            }
+            return *this;
+        }
+
+        BOOST_UBLAS_INLINE
+        void swap(self_type rhs) {
+            self_type tmp(rhs);
+            rhs = *this;
+            *this = tmp;
+        }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
+        BOOST_UBLAS_INLINE
+        friend void swap(self_type lhs, self_type rhs) {
+            lhs.swap(rhs);
+        }
+#endif
+
+        BOOST_UBLAS_INLINE
+        bool compare(const self_type& rhs) const {
+            return (v1_ < rhs.v1_);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator < (const self_type& lhs, const self_type& rhs) {
+            return lhs.compare(rhs);
+        }
+
+    private:
+        size_type i_;
+        typename V::value1_type v1_;
+        typename V::value2_type v2_;
+    };
+
+    template <class V1, class V2>
+    class index_pair_array:
+        private boost::noncopyable {
+    public:
+        typedef index_pair_array<V1, V2> self_type;
+        typedef typename V1::value_type value1_type;
+        typedef typename V2::value_type value2_type;
+
+        typedef typename std::size_t size_type;
+        typedef typename std::ptrdiff_t difference_type;
+        typedef index_pair<self_type> value_type;
+        typedef value_type reference;
+        typedef const value_type& const_reference;
+
+        BOOST_UBLAS_INLINE
+        index_pair_array(size_type size, V1& data1, V2& data2) :
+              size_(size),data1_(data1),data2_(data2) {}
+
+        BOOST_UBLAS_INLINE
+        const size_type size() const {
+            return size_;
+        }
+
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i) const {
+            return value_type((*this), i);
+        }
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i) {
+            return value_type((*this), i);
+        }
+
+        typedef indexed_iterator<self_type, std::random_access_iterator_tag> iterator;
+        typedef indexed_const_iterator<self_type, std::random_access_iterator_tag> const_iterator;
+
+        BOOST_UBLAS_INLINE
+        iterator begin() {
+            return iterator( (*this), 0);
+        }
+        BOOST_UBLAS_INLINE
+        iterator end() {
+            return iterator( (*this), size());
+        }
+
+        BOOST_UBLAS_INLINE
+        const_iterator begin() const {
+            return const_iterator( (*this), 0);
+        }
+        BOOST_UBLAS_INLINE
+        const_iterator end() const {
+            return const_iterator( (*this), size());
+        }
+
+        // unnecessary function:
+        BOOST_UBLAS_INLINE
+        bool compare(size_type i1, size_type i2) const {
+            return data1_[i1] < data1_[i2];
+        }
+
+        // gives a large speedup
+        BOOST_UBLAS_INLINE
+        friend void iter_swap(const iterator& lhs, const iterator& rhs) {
+            const size_type i1 = lhs.index();
+            const size_type i2 = rhs.index();
+            std::swap(lhs().data1_[i1], rhs().data1_[i2]);
+            std::swap(lhs().data2_[i1], rhs().data2_[i2]);
+        }
+
+    private:
+        size_type size_;
+        V1& data1_;
+        V2& data2_;
+
+        // friend class value_type;
+        friend class index_pair<self_type>;
+    };
+
+    template <class M>
+    class index_triple :
+        private boost::noncopyable,
+        public container_reference<M> {
+    public:
+        typedef index_triple<M> self_type;
+        typedef typename M::size_type size_type;
+
+        BOOST_UBLAS_INLINE
+        index_triple(M& m, size_type i) :
+            container_reference<M>(m), i_(i),
+            v1_(m.data1_[i]), v2_(m.data2_[i]), v3_(m.data3_[i]) {}
+        BOOST_UBLAS_INLINE
+        index_triple(const self_type& rhs) :
+            container_reference<M>(), i_(-1),
+            v1_(rhs.v1_), v2_(rhs.v2_), v3_(rhs.v3_) {}
+
+        BOOST_UBLAS_INLINE
+        self_type& operator=(const self_type& rhs) {
+            v1_ = rhs.v1_;
+            v2_ = rhs.v2_;
+            v3_ = rhs.v3_;
+            if (i_ != size_type(-1)) {
+                (*this)().data1_[i_] = v1_;
+                (*this)().data2_[i_] = v2_;
+                (*this)().data3_[i_] = v3_;
+            }
+            return *this;
+        }
+
+        BOOST_UBLAS_INLINE
+        void swap(self_type rhs) {
+            self_type tmp(rhs);
+            rhs = *this;
+            *this = tmp;
+        }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
+        BOOST_UBLAS_INLINE
+        friend void swap(self_type lhs, self_type rhs) {
+            lhs.swap(rhs);
+        }
+#endif
+
+        BOOST_UBLAS_INLINE
+        bool compare(const self_type& rhs) const {
+            return ((v1_ < rhs.v1_) ||
+                    (v1_ == rhs.v1_ && v2_ < rhs.v2_));
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator < (const self_type& lhs, const self_type& rhs) {
+            return lhs.compare(rhs);
+        }
+
+    private:
+        size_type i_;
+        typename M::value1_type v1_;
+        typename M::value2_type v2_;
+        typename M::value3_type v3_;
+    };
+
+    template <class V1, class V2, class V3>
+    class index_triple_array:
+        private boost::noncopyable {
+    public:
+        typedef index_triple_array<V1, V2, V3> self_type;
+        typedef typename V1::value_type value1_type;
+        typedef typename V2::value_type value2_type;
+        typedef typename V3::value_type value3_type;
+
+        typedef typename std::size_t size_type;
+        typedef typename std::ptrdiff_t difference_type;
+        typedef index_triple<self_type> value_type;
+        typedef value_type reference;
+        typedef const value_type& const_reference;
+
+        BOOST_UBLAS_INLINE
+        index_triple_array(size_type size, V1& data1, V2& data2, V3& data3) :
+              size_(size),data1_(data1),data2_(data2),data3_(data3) {}
+
+        BOOST_UBLAS_INLINE
+        const size_type size() const {
+            return size_;
+        }
+
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i) const {
+            return value_type((*this), i);
+        }
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i) {
+            return value_type((*this), i);
+        }
+
+        typedef indexed_iterator<self_type, std::random_access_iterator_tag> iterator;
+        typedef indexed_const_iterator<self_type, std::random_access_iterator_tag> const_iterator;
+
+        BOOST_UBLAS_INLINE
+        iterator begin() {
+            return iterator( (*this), 0);
+        }
+        BOOST_UBLAS_INLINE
+        iterator end() {
+            return iterator( (*this), size());
+        }
+
+        BOOST_UBLAS_INLINE
+        const_iterator begin() const {
+            return const_iterator( (*this), 0);
+        }
+        BOOST_UBLAS_INLINE
+        const_iterator end() const {
+            return const_iterator( (*this), size());
+        }
+
+        // unnecessary function:
+        BOOST_UBLAS_INLINE
+        bool compare(size_type i1, size_type i2) const {
+            return ((data1_[i1] < data1_[i2]) ||
+                    (data1_[i1] == data1_[i2] && data2_[i1] < data2_[i2]));
+        }
+
+        // gives a large speedup
+        BOOST_UBLAS_INLINE
+        friend void iter_swap(const iterator& lhs, const iterator& rhs) {
+            const size_type i1 = lhs.index();
+            const size_type i2 = rhs.index();
+            std::swap(lhs().data1_[i1], rhs().data1_[i2]);
+            std::swap(lhs().data2_[i1], rhs().data2_[i2]);
+            std::swap(lhs().data3_[i1], rhs().data3_[i2]);
+        }
+
+    private:
+        size_type size_;
+        V1& data1_;
+        V2& data2_;
+        V3& data3_;
+
+        // friend class value_type;
+        friend class index_triple<self_type>;
+    };
+
 }}}
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

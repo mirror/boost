@@ -228,6 +228,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
+        // Comparison
+        BOOST_UBLAS_INLINE
+        bool operator == (const vector_range &vr) const {
+            return (*this).data () == vr.data () && r_ == vr.r_;
+        }
+
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_range vr) {
@@ -259,8 +265,8 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
-            const_iterator_type it (data ().find_first (start () + i));
+        const_iterator find (size_type i) const {
+            const_iterator_type it (data ().find (start () + i));
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, it.index ());
 #else
@@ -268,26 +274,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        iterator find_first (size_type i) {
-            iterator_type it (data ().find_first (start () + i));
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return iterator (*this, it.index ());
-#else
-            return iterator (*this, it);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-            const_iterator_type it (data ().find_last (start () + i));
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return const_iterator (*this, it.index ());
-#else
-            return const_iterator (*this, it);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        iterator find_last (size_type i) {
-            iterator_type it (data ().find_last (start () + i));
+        iterator find (size_type i) {
+            iterator_type it (data ().find (start () + i));
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator (*this, it.index ());
 #else
@@ -359,7 +347,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -387,12 +375,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -403,11 +391,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ());
+            return find (size ());
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -463,7 +451,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -491,12 +479,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -509,11 +497,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         iterator begin () {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find_first (size ());
+            return find (size ());
         }
 
         // Reverse iterator
@@ -573,6 +561,11 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     vector_range<V> project (const V &data, const range &r) {
         return vector_range<V> (const_cast<V &> (data), r);
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_range<V> project (vector_range<V> &data, const range &r) {
+        return data.project (r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -786,6 +779,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
+        // Comparison
+        BOOST_UBLAS_INLINE
+        bool operator == (const vector_slice &vs) const {
+            return (*this).data () == vs.data () && s_ == vs.s_;
+        }
+
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_slice vs) {
@@ -817,7 +816,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
+        const_iterator find (size_type i) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, i);
 #else
@@ -825,23 +824,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        iterator find_first (size_type i) {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return iterator (*this, i);
-#else
-            return iterator (*this, s_.begin () + i);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return const_iterator (*this, i);
-#else
-            return const_iterator (*this, s_.begin () + i);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        iterator find_last (size_type i) {
+        iterator find (size_type i) {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator (*this, i);
 #else
@@ -908,7 +891,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -936,12 +919,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -952,11 +935,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ());
+            return find (size ());
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1007,7 +990,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -1035,12 +1018,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -1053,11 +1036,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         iterator begin () {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find_first (size ());
+            return find (size ());
         }
 
         // Reverse iterator
@@ -1105,6 +1088,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
+    vector_slice<V> project (vector_slice<V> &data, const range &r) {
+        return data.project (r);
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
     vector_slice<V> project (const vector_slice<V> &data, const range &r) {
         return data.project (r);
     }
@@ -1124,6 +1112,11 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     vector_slice<V> project (const V &data, const slice &s) {
         return vector_slice<V> (const_cast<V &> (data), s);
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_slice<V> project (vector_slice<V> &data, const slice &s) {
+        return data.project (s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -1339,6 +1332,12 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
+        // Comparison
+        BOOST_UBLAS_INLINE
+        bool operator == (const vector_indirect &vi) const {
+            return (*this).data () == vi.data () && ia_ == vi.ia_;
+        }
+
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_indirect vi) {
@@ -1370,7 +1369,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator find_first (size_type i) const {
+        const_iterator find (size_type i) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, i);
 #else
@@ -1378,23 +1377,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        iterator find_first (size_type i) {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return iterator (*this, i);
-#else
-            return iterator (*this, ia_.begin () + i);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator find_last (size_type i) const {
-#ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-            return const_iterator (*this, i);
-#else
-            return const_iterator (*this, ia_.begin () + i);
-#endif
-        }
-        BOOST_UBLAS_INLINE
-        iterator find_last (size_type i) {
+        iterator find (size_type i) {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator (*this, i);
 #else
@@ -1461,7 +1444,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -1489,12 +1472,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -1505,11 +1488,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_first (size ());
+            return find (size ());
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1560,7 +1543,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -1588,12 +1571,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -1606,11 +1589,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         iterator begin () {
-            return find_first (0);
+            return find (0);
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find_first (size ());
+            return find (size ());
         }
 
         // Reverse iterator
@@ -1658,8 +1641,18 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V, class IA>
     BOOST_UBLAS_INLINE
+    vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const range &r) {
+        return data.project (r);
+    }
+    template<class V, class IA>
+    BOOST_UBLAS_INLINE
     vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const range &r) {
         return data.project (r);
+    }
+    template<class V, class IA>
+    BOOST_UBLAS_INLINE
+    vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const slice &s) {
+        return data.project (s);
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
@@ -1686,6 +1679,11 @@ namespace boost { namespace numeric { namespace ublas {
     // }
     // template<class V, class IA>
     // BOOST_UBLAS_INLINE
+    // vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const IA &ia) {
+    //     return data.project (ia);
+    // }
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
     // vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const IA &ia) {
     //     return data.project (ia);
     // }
@@ -1705,6 +1703,11 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     vector_indirect<V, indirect_array<A> > project (const V &data, const indirect_array<A> &ia) {
         return vector_indirect<V, indirect_array<A> > (const_cast<V &> (data), ia);
+    }
+    template<class V, class A>
+    BOOST_UBLAS_INLINE
+    vector_indirect<V, indirect_array<A> > project (vector_indirect<V, indirect_array<A> > &data, const indirect_array<A> &ia) {
+        return data.project (ia);
     }
     template<class V, class A>
     BOOST_UBLAS_INLINE

@@ -14,12 +14,14 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
+// LU factorizations in the spirit of LAPACK and Golub & van Loan
+
 #ifndef BOOST_UBLAS_LU_H
 #define BOOST_UBLAS_LU_H
 
 namespace boost { namespace numeric { namespace ublas {
 
-    template<class T, class A = unbounded_array<T> >
+    template<class T = std::size_t, class A = unbounded_array<T> >
     class permutation_matrix:
         public vector<T, A> {
     public:
@@ -75,6 +77,41 @@ namespace boost { namespace numeric { namespace ublas {
         swap_rows (pm, mv, BOOST_UBLAS_TYPENAME MV::type_category ());
     }
 
+    // LU factorization without pivoting
+    template<class M>
+    typename M::size_type lu_factorize (M &m) {
+        typedef M matrix_type;
+        typedef BOOST_UBLAS_TYPENAME M::size_type size_type;
+        typedef BOOST_UBLAS_TYPENAME M::value_type value_type;
+
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix_type cm (m);
+#endif
+        int singular = 0;
+        size_type size1 = m.size1 ();
+        size_type size2 = m.size2 ();
+        size_type size = std::min (size1, size2);
+        for (size_type i = 0; i < size; ++ i) {
+            matrix_column<M> mci (column (m, i));
+            matrix_row<M> mri (row (m, i));
+            if (m (i, i) != value_type ()) {
+                project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
+            } else if (singular == 0) {
+                singular = i + 1;
+            }
+            project (m, range (i + 1, size1), range (i + 1, size2)).minus_assign (
+                outer_prod (project (mci, range (i + 1, size1)),
+                            project (mri, range (i + 1, size2))));
+        }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (singular != 0 ||
+                           equals (prod (triangular_adaptor<matrix_type, unit_lower> (m),
+                                         triangular_adaptor<matrix_type, upper> (m)), cm), internal_logic ());
+#endif
+        return singular;
+    }
+
+    // LU factorization with partial pivoting
     template<class M, class PM>
     typename M::size_type lu_factorize (M &m, PM &pm) {
         typedef M matrix_type;
@@ -209,47 +246,88 @@ namespace boost { namespace numeric { namespace ublas {
         return singular;
     }
 
+    // LU substitution
+    template<class M, class E>
+    void lu_substitute (const M &m, vector_expression<E> &e) {
+        typedef const M const_matrix_type;
+        typedef vector<typename E::value_type> vector_type;
+
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        vector_type cv1 (e);
+#endif
+        inplace_solve (m, e, unit_lower_tag ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), e), cv1), internal_logic ());
+        vector_type cv2 (e);
+#endif
+        inplace_solve (m, e, upper_tag ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, upper> (m), e), cv2), internal_logic ());
+#endif
+    }
+    template<class M, class E>
+    void lu_substitute (const M &m, matrix_expression<E> &e) {
+        typedef const M const_matrix_type;
+        typedef matrix<typename E::value_type> matrix_type;
+
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix_type cm1 (e);
+#endif
+        inplace_solve (m, e, unit_lower_tag ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), e), cm1), internal_logic ());
+        matrix_type cm2 (e);
+#endif
+        inplace_solve (m, e, upper_tag ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, upper> (m), e), cm2), internal_logic ());
+#endif
+    }
     template<class M, class PMT, class PMA, class MV>
     void lu_substitute (const M &m, const permutation_matrix<PMT, PMA> &pm, MV &mv) {
-        typedef const M const_matrix_type;
-        typedef typename boost::mpl::if_c<boost::is_same<typename MV::type_category, vector_tag>::value,
-                                          vector<typename MV::value_type>,
-                                          matrix<typename MV::value_type> >::type matrix_vector_type;
-
         swap_rows (pm, mv);
+        lu_substitute (m, mv);
+    }
+    template<class E, class M>
+    void lu_substitute (vector_expression<E> &e, const M &m) {
+        typedef const M const_matrix_type;
+        typedef vector<typename E::value_type> vector_type;
+
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        matrix_vector_type cmv1 (mv);
+        vector_type cv1 (e);
 #endif
-        inplace_solve (m, mv, unit_lower_tag ());
+        inplace_solve (e, m, upper_tag ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), mv), cmv1), internal_logic ());
-        matrix_vector_type cmv2 (mv);
+        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, upper> (m)), cv1), internal_logic ());
+        vector_type cv2 (e);
 #endif
-        inplace_solve (m, mv, upper_tag ());
+        inplace_solve (e, m, unit_lower_tag ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, upper> (m), mv), cmv2), internal_logic ());
+        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, unit_lower> (m)), cv2), internal_logic ());
+#endif
+    }
+    template<class E, class M>
+    void lu_substitute (matrix_expression<E> &e, const M &m) {
+        typedef const M const_matrix_type;
+        typedef matrix<typename E::value_type> matrix_type;
+
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix_type cm1 (e);
+#endif
+        inplace_solve (e, m, upper_tag ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, upper> (m)), cm1), internal_logic ());
+        matrix_type cm2 (e);
+#endif
+        inplace_solve (e, m, unit_lower_tag ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, unit_lower> (m)), cm2), internal_logic ());
 #endif
     }
     template<class MV, class M, class PMT, class PMA>
     void lu_substitute (MV &mv, const M &m, const permutation_matrix<PMT, PMA> &pm) {
-        typedef const M const_matrix_type;
-        typedef typename boost::mpl::if_c<boost::is_same<typename MV::type_category, vector_tag>::value,
-                                          vector<typename MV::value_type>,
-                                          matrix<typename MV::value_type> >::type matrix_vector_type;
-
         swap_rows (pm, mv);
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        matrix_vector_type cmv1 (mv);
-#endif
-        inplace_solve (mv, m, upper_tag ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (mv, triangular_adaptor<const_matrix_type, upper> (m)), cmv1), internal_logic ());
-        matrix_vector_type cmv2 (mv);
-#endif
-        inplace_solve (mv, m, unit_lower_tag ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (mv, triangular_adaptor<const_matrix_type, unit_lower> (m)), cmv2), internal_logic ());
-#endif
+        lu_substitute (mv, m);
     }
 
 }}}

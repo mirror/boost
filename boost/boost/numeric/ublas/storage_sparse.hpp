@@ -285,9 +285,25 @@ namespace boost { namespace numeric { namespace ublas {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
+            std::fill (data_, data_ + size_, value_type ());
+        }
+        BOOST_UBLAS_INLINE
+        map_array (no_init):
+            capacity_ (0), data_ (new value_type [0]), size_ (0) {
+            // Assuming std compliant allocator as requested during review.
+            // if (! data_)
+            //     throw std::bad_alloc ();
         }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         map_array (size_type size):
+            capacity_ (size), data_ (new value_type [size]), size_ (0) {
+            // Assuming std compliant allocator as requested during review.
+            // if (! data_)
+            //     throw std::bad_alloc ();
+            std::fill (data_, data_ + size_, value_type ());
+        }
+        BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
+        map_array (size_type size, no_init):
             capacity_ (size), data_ (new value_type [size]), size_ (0) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
@@ -320,7 +336,8 @@ namespace boost { namespace numeric { namespace ublas {
                 //     throw std::bad_alloc ();
                 // if (! data_)
                 //     throw std::bad_alloc ();
-                std::copy (data_, data_ + size_, data);
+                std::copy (data_, data_ + std::min (size, size_), data);
+                std::fill (data + std::min (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -597,21 +614,53 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size_;
     };
 
-    template<class I, class T>
-    BOOST_UBLAS_INLINE
-    map_array<I, T> &assign_temporary (map_array<I, T> &a1, map_array<I, T> &a2) {
-        return a1.assign_temporary (a2);
+    namespace detail {
+        using namespace boost::numeric::ublas;
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template<class A>
+        struct map_traits {};
+
+        template<class I, class T>
+        struct map_traits<map_array<I, T> > {
+            typedef typename map_array<I, T>::data_reference reference;
+        };
+
+        template<class I, class T>
+        struct map_traits<std::map<I, T> > {
+            typedef typename std::map<I, T>::mapped_type &reference;
+
+        };
+#endif
+
+        // Some helpers for map_array
+
+        template<class I, class T>
+        BOOST_UBLAS_INLINE
+        void reserve (map_array<I, T> &a, typename map_array<I, T>::size_type capacity) {
+            a.reserve (capacity);
+        }
+
+        template<class I, class T>
+        BOOST_UBLAS_INLINE
+        typename map_array<I, T>::data_reference make_reference (map_array<I, T> &a, typename map_array<I, T>::iterator it) {
+            return reference (a, it);
+        }
+
+        // Some helpers for std::map
+
+        template<class I, class T>
+        BOOST_UBLAS_INLINE
+        void reserve (std::map<I, T> &a, typename std::map<I, T>::size_type capacity) {}
+
+        template<class I, class T>
+        BOOST_UBLAS_INLINE
+        typename std::map<I, T>::mapped_type &make_reference (std::map<I, T> &a, typename std::map<I, T>::iterator it) {
+            return (*it).second;
+        }
+
     }
 
-    template<class I, class T, class F>
-    BOOST_UBLAS_INLINE
-    std::map<I, T, F> &assign_temporary (std::map<I, T, F> &a1, std::map<I, T, F> &a2) {
-        // Too unusual semantic.
-        // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
-        if (&a1 != &a2)
-            a1.swap (a2);
-        return  a1;
-    }
     // This specialization is missing in Dinkumware's STL?!
     template<class I, class T, class F>
     BOOST_UBLAS_INLINE
@@ -621,35 +670,6 @@ namespace boost { namespace numeric { namespace ublas {
         if (&a1 != &a2)
             a1.swap (a2);
     }
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template<class A>
-    struct map_traits {};
-    template<class I, class T>
-    struct map_traits<std::map<I, T> > {
-        typedef typename std::map<I, T>::size_type size_type;
-        typedef typename std::map<I, T>::mapped_type &reference;
-
-        static void reserve (std::map<I, T> &a, size_type capacity) {}
-
-        static reference make_reference (std::map<I, T> &a, typename std::map<I, T>::iterator it) {
-            return (*it).second;
-        }
-    };
-    template<class I, class T>
-    struct map_traits<map_array<I, T> > {
-        typedef typename map_array<I, T>::size_type size_type;
-        typedef typename map_array<I, T>::data_reference reference;
-
-        static void reserve (map_array<I, T> &a, size_type capacity) {
-            a.reserve (capacity);
-        }
-
-        static reference make_reference (map_array<I, T> &a, typename map_array<I, T>::iterator it) {
-            return reference (a, it);
-        }
-    };
-#endif
 
     // Set array
     template<class I>
@@ -671,9 +691,25 @@ namespace boost { namespace numeric { namespace ublas {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
+            std::fill (data_, data_ + size_, value_type ());
+        }
+        BOOST_UBLAS_INLINE
+        set_array (no_init):
+            capacity_ (0), data_ (new value_type [0]), size_ (0) {
+            // Assuming std compliant allocator as requested during review.
+            // if (! data_)
+            //     throw std::bad_alloc ();
         }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         set_array (size_type size):
+            capacity_ (size), data_ (new value_type [size]), size_ (0) {
+            // Assuming std compliant allocator as requested during review.
+            // if (! data_)
+            //     throw std::bad_alloc ();
+            std::fill (data_, data_ + size_, value_type ());
+        }
+        BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
+        set_array (size_type size, no_init):
             capacity_ (size), data_ (new value_type [size]), size_ (0) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
@@ -706,7 +742,8 @@ namespace boost { namespace numeric { namespace ublas {
                 //     throw std::bad_alloc ();
                 // if (! data_)
                 //     throw std::bad_alloc ();
-                std::copy (data_, data_ + size_, data);
+                std::copy (data_, data_ + std::min (size, size_), data);
+                std::fill (data + std::min (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -971,21 +1008,6 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size_;
     };
 
-    template<class I>
-    BOOST_UBLAS_INLINE
-    set_array<I> &assign_temporary (set_array<I> &a1, set_array<I> &a2) {
-        return a1.assign_temporary (a2);
-    }
-
-    template<class I, class F>
-    BOOST_UBLAS_INLINE
-    std::set<I, F> &assign_temporary (std::set<I, F> &a1, std::set<I, F> &a2) {
-        // Too unusual semantic.
-        // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
-        if (&a1 != &a2)
-            a1.swap (a2);
-        return  a1;
-    }
     // This specialization is missing in Dinkumware's STL?!
     template<class I, class F>
     BOOST_UBLAS_INLINE

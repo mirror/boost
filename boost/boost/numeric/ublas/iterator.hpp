@@ -1119,10 +1119,12 @@ namespace boost { namespace numeric { namespace ublas {
             return it_;
         }
 
-        // Assignment 
+        // Assignment
         BOOST_UBLAS_INLINE
         indexed_iterator &operator = (const indexed_iterator &it) {
-            assign (&it ());
+            // FIX: ICC needs full qualification?!
+            // assign (&it ());
+            container_reference<C>::assign (&it ());
             it_ = it.it_;
             return *this;
         }
@@ -1132,6 +1134,11 @@ namespace boost { namespace numeric { namespace ublas {
         bool operator == (const indexed_iterator &it) const {
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
             return it_ == it.it_;
+        }
+        BOOST_UBLAS_INLINE
+        bool operator < (const indexed_iterator &it) const {
+            BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+            return it_ < it.it_;
         }
 
     private:
@@ -1238,10 +1245,12 @@ namespace boost { namespace numeric { namespace ublas {
             return it_;
         }
 
-        // Assignment 
+        // Assignment
         BOOST_UBLAS_INLINE
         indexed_const_iterator &operator = (const indexed_const_iterator &it) {
-            assign (&it ());
+            // FIX: ICC needs full qualification?!
+            // assign (&it ());
+            container_const_reference<C>::assign (&it ());
             it_ = it.it_;
             return *this;
         }
@@ -1251,6 +1260,11 @@ namespace boost { namespace numeric { namespace ublas {
         bool operator == (const indexed_const_iterator &it) const {
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
             return it_ == it.it_;
+        }
+        BOOST_UBLAS_INLINE
+        bool operator < (const indexed_const_iterator &it) const {
+            BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+            return it_ < it.it_;
         }
 
     private:
@@ -1372,11 +1386,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
-            return (*this) ().find_first2 (1, index1 (), 0); 
+            return (*this) ().find2 (1, index1 (), 0); 
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
-            return (*this) ().find_first2 (1, index1 (), (*this) ().size2 ());
+            return (*this) ().find2 (1, index1 (), (*this) ().size2 ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -1390,7 +1404,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         indexed_iterator1 &operator = (const indexed_iterator1 &it) {
-            assign (&it ());
+            // FIX: ICC needs full qualification?!
+            // assign (&it ());
+            container_reference<C>::assign (&it ());
             it1_ = it.it1_;
             it2_ = it.it2_;
             return *this;
@@ -1402,6 +1418,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
             BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
             return it1_ == it.it1_;
+        }
+        BOOST_UBLAS_INLINE
+        bool operator < (const indexed_iterator1 &it) const {
+            BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+            BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
+            return it1_ < it.it1_;
         }
 
     private:
@@ -1526,11 +1548,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
-            return (*this) ().find_first2 (1, index1 (), 0); 
+            return (*this) ().find2 (1, index1 (), 0); 
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
-            return (*this) ().find_first2 (1, index1 (), (*this) ().size2 ()); 
+            return (*this) ().find2 (1, index1 (), (*this) ().size2 ()); 
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -1544,7 +1566,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         indexed_const_iterator1 &operator = (const indexed_const_iterator1 &it) {
-            assign (&it ());
+            // FIX: ICC needs full qualification?!
+            // assign (&it ());
+            container_const_reference<C>::assign (&it ());
             it1_ = it.it1_;
             it2_ = it.it2_;
             return *this;
@@ -1556,6 +1580,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
             BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
             return it1_ == it.it1_;
+        }
+        BOOST_UBLAS_INLINE
+        bool operator < (const indexed_const_iterator1 &it) const {
+            BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+            BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
+            return it1_ < it.it1_;
         }
 
     private:
@@ -1675,11 +1705,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
-            return (*this) ().find_first1 (1, 0, index2 ());
+            return (*this) ().find1 (1, 0, index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
-            return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
+            return (*this) ().find1 (1, (*this) ().size1 (), index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -1693,7 +1723,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         indexed_iterator2 &operator = (const indexed_iterator2 &it) {
-            assign (&it ());
+            // FIX: ICC needs full qualification?!
+            // assign (&it ());
+            container_reference<C>::assign (&it ());
             it1_ = it.it1_;
             it2_ = it.it2_;
             return *this;
@@ -1705,6 +1737,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
             BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
             return it2_ == it.it2_;
+        }
+        BOOST_UBLAS_INLINE
+        bool operator < (const indexed_iterator2 &it) const {
+            BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+            BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
+            return it2_ < it.it2_;
         }
 
     private:
@@ -1826,11 +1864,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
-            return (*this) ().find_first1 (1, 0, index2 ());
+            return (*this) ().find1 (1, 0, index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
-            return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
+            return (*this) ().find1 (1, (*this) ().size1 (), index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -1844,7 +1882,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         indexed_const_iterator2 &operator = (const indexed_const_iterator2 &it) {
-            assign (&it ());
+            // FIX: ICC needs full qualification?!
+            // assign (&it ());
+            container_const_reference<C>::assign (&it ());
             it1_ = it.it1_;
             it2_ = it.it2_;
             return *this;
@@ -1856,6 +1896,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
             BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
             return it2_ == it.it2_;
+        }
+        BOOST_UBLAS_INLINE
+        bool operator < (const indexed_const_iterator2 &it) const {
+            BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+            BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
+            return it2_ < it.it2_;
         }
 
     private:

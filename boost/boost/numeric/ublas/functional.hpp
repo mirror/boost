@@ -19,6 +19,13 @@
 
 #include <functional>
 
+#ifdef BOOST_UBLAS_HAVE_BINDINGS
+#include <boost/numeric/bindings/traits/std_vector.hpp>
+#include <boost/numeric/bindings/traits/ublas_vector.hpp>
+#include <boost/numeric/bindings/traits/ublas_matrix.hpp>
+#include <boost/numeric/bindings/atlas/cblas.hpp>
+#endif
+
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/traits.hpp>
@@ -599,12 +606,13 @@ namespace boost { namespace numeric { namespace ublas {
         result_type operator () (const vector_expression<E1> &e1,
                                  const vector_expression<E2> &e2,
                                  concrete_tag) const {
+#ifndef BOOST_UBLAS_HAVE_BINDINGS
             size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
-            result_type t (0);
             const T1 *data1 = data_const (e1 ());
             const T2 *data2 = data_const (e2 ());
             size_type s1 = stride (e1 ());
             size_type s2 = stride (e2 ());
+            result_type t (0);
             if (s1 == 1 && s2 == 1) {
                 for (size_type i = 0; i < size; ++ i)
                     t += data1 [i] * data2 [i];
@@ -619,6 +627,9 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [i1] * data2 [i2];
             }
             return t;
+#else
+            return boost::numeric::bindings::atlas::dot (e1 (), e2 ());
+#endif
         }
         template<class E1, class E2>
         BOOST_UBLAS_INLINE
@@ -735,12 +746,13 @@ namespace boost { namespace numeric { namespace ublas {
         result_type operator () (const matrix_expression<E1> &e1,
                                  const vector_expression<E2> &e2,
                                  size_type i, concrete_tag) const {
+#ifndef BOOST_UBLAS_HAVE_BINDINGS
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
-            result_type t (0);
             const T1 *data1 = data_const (e1 ()) + i * stride1 (e1 ());
             const T2 *data2 = data_const (e2 ());
             size_type s1 = stride2 (e1 ());
             size_type s2 = stride (e2 ());
+            result_type t (0);
             if (s1 == 1 && s2 == 1) {
                 for (size_type j = 0; j < size; ++ j)
                     t += data1 [j] * data2 [j];
@@ -755,6 +767,9 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [j1] * data2 [j2];
             }
             return t;
+#else
+            return boost::numeric::bindings::atlas::dot (e1 ().row (i), e2 ());
+#endif
         }
         template<class E1, class E2>
         BOOST_UBLAS_INLINE
@@ -882,12 +897,13 @@ namespace boost { namespace numeric { namespace ublas {
         result_type operator () (const vector_expression<E1> &e1,
                                  const matrix_expression<E2> &e2,
                                  size_type i, concrete_tag) const {
+#ifndef BOOST_UBLAS_HAVE_BINDINGS
             size_type size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
-            result_type t (0);
             const T1 *data1 = data_const (e1 ());
             const T2 *data2 = data_const (e2 ()) + i * stride2 (e2 ());
             size_type s1 = stride (e1 ());
             size_type s2 = stride1 (e2 ());
+            result_type t (0);
             if (s1 == 1 && s2 == 1) {
                 for (size_type j = 0; j < size; ++ j)
                     t += data1 [j] * data2 [j];
@@ -902,6 +918,9 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [j1] * data2 [j2];
             }
             return t;
+#else
+            return boost::numeric::bindings::atlas::dot (e1 (), e2 ().column (i));
+#endif
         }
         template<class E1, class E2>
         BOOST_UBLAS_INLINE
@@ -1038,12 +1057,13 @@ namespace boost { namespace numeric { namespace ublas {
         result_type operator () (const matrix_expression<E1> &e1,
                                  const matrix_expression<E2> &e2,
                                  size_type i, size_type j, concrete_tag) const {
+#ifndef BOOST_UBLAS_HAVE_BINDINGS
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
-            result_type t (0);
             const T1 *data1 = data_const (e1 ()) + i * stride1 (e1 ());
             const T2 *data2 = data_const (e2 ()) + j * stride2 (e2 ());
             size_type s1 = stride2 (e1 ());
             size_type s2 = stride1 (e2 ());
+            result_type t (0);
             if (s1 == 1 && s2 == 1) {
                 for (size_type k = 0; k < size; ++ k)
                     t += data1 [k] * data2 [k];
@@ -1058,6 +1078,9 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [k1] * data2 [k2];
             }
             return t;
+#else
+            return boost::numeric::bindings::atlas::dot (e1 ().row (i), e2 ().column (j));
+#endif
         }
         template<class E1, class E2>
         BOOST_UBLAS_INLINE

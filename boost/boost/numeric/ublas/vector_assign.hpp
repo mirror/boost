@@ -29,18 +29,16 @@ namespace boost { namespace numeric { namespace ublas {
     bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
         typedef BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                      BOOST_UBLAS_TYPENAME E2::value_type>::promote_type>::real_type real_type;
-        // Check, that the values match at least half.
-        static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
 #ifndef __GNUC__
-        return norm_inf (e1 - e2) < sqrt_epsilon *
+        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                std::max<real_type> (std::max<real_type> (norm_inf (e1),
                                                          norm_inf (e2)),
-                                    std::numeric_limits<real_type>::min ());
+                                    BOOST_UBLAS_TYPE_CHECK_MIN);
 #else
         // GCC 3.1, oops?!
-        return norm_inf (e1 - e2) < sqrt_epsilon *
+        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                std::max (real_type (std::max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
-                         real_type (std::numeric_limits<real_type>::min ()));
+                         real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
 #endif
     }
 
@@ -49,8 +47,8 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     void restart (const vector_expression<E> &e, typename E::size_type index,
                   typename E::const_iterator &ite, typename E::const_iterator &ite_end) {
-        ite = e ().find_first (index);
-        ite_end = e ().find_first (e ().size ());
+        ite = e ().find (index);
+        ite_end = e ().find (e ().size ());
         if (ite != ite_end && ite.index () == index)
             ++ ite;
     }
@@ -58,8 +56,8 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     void restart (vector_expression<E> &e, typename E::size_type index,
                   typename E::iterator &ite, typename E::iterator &ite_end) {
-        ite = e ().find_first (index);
-        ite_end = e ().find_first (e ().size ());
+        ite = e ().find (index);
+        ite_end = e ().find (e ().size ());
         if (ite != ite_end && ite.index () == index)
             ++ ite;
     }

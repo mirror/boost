@@ -159,7 +159,7 @@ struct bench_3 {
 struct safe_tag {};
 struct fast_tag {};
 
-// #define USE_FLOAT
+#define USE_FLOAT
 #define USE_DOUBLE
 // #define USE_STD_COMPLEX
 

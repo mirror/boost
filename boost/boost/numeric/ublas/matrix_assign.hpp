@@ -29,18 +29,16 @@ namespace boost { namespace numeric { namespace ublas {
     bool equals (const matrix_expression<E1> &e1, const matrix_expression<E2> &e2) {
         typedef BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                      BOOST_UBLAS_TYPENAME E2::value_type>::promote_type>::real_type real_type;
-        // Check, that the values match at least half.
-        static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
 #ifndef __GNUC__
-        return norm_inf (e1 - e2) < sqrt_epsilon *
+        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                std::max<real_type> (std::max<real_type> (norm_inf (e1),
                                                          norm_inf (e2)),
-                                    std::numeric_limits<real_type>::min ());
+                                    BOOST_UBLAS_TYPE_CHECK_MIN);
 #else
         // GCC 3.1, oops?!
-        return norm_inf (e1 - e2) < sqrt_epsilon *
+        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                std::max (real_type (std::max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
-                         real_type (std::numeric_limits<real_type>::min ()));
+                         real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
 #endif
     }
 
@@ -50,10 +48,10 @@ namespace boost { namespace numeric { namespace ublas {
     void restart (const matrix_expression<E> &e, typename E::size_type index1, typename E::size_type index2,
                   typename E::const_iterator1 &it1e, typename E::const_iterator1 &it1e_end,
                   typename E::const_iterator2 &it2e, typename E::const_iterator2 &it2e_end, row_major_tag) {
-        it1e = e ().find_first1 (0, index1, 0);
-        it1e_end = e ().find_first1 (0, e ().size1 (), 0);
-        it2e = e ().find_first2 (1, index1, index2);
-        it2e_end = e ().find_first2 (1, index1, e ().size2 ());
+        it1e = e ().find1 (0, index1, 0);
+        it1e_end = e ().find1 (0, e ().size1 (), 0);
+        it2e = e ().find2 (1, index1, index2);
+        it2e_end = e ().find2 (1, index1, e ().size2 ());
         if (it2e != it2e_end && it2e.index2 () == index2)
             ++ it2e;
     }
@@ -62,10 +60,10 @@ namespace boost { namespace numeric { namespace ublas {
     void restart (const matrix_expression<E> &e, typename E::size_type index1, typename E::size_type index2,
                   typename E::const_iterator2 &it2e, typename E::const_iterator2 &it2e_end,
                   typename E::const_iterator1 &it1e, typename E::const_iterator1 &it1e_end, column_major_tag) {
-        it2e = e ().find_first2 (0, 0, index2);
-        it2e_end = e ().find_first2 (0, 0, e ().size2 ());
-        it1e = e ().find_first1 (1, index1, index2);
-        it1e_end = e ().find_first1 (1, e ().size1 (), index2);
+        it2e = e ().find2 (0, 0, index2);
+        it2e_end = e ().find2 (0, 0, e ().size2 ());
+        it1e = e ().find1 (1, index1, index2);
+        it1e_end = e ().find1 (1, e ().size1 (), index2);
         if (it1e != it1e_end && it1e.index1 () == index1)
             ++ it1e;
     }
@@ -74,10 +72,10 @@ namespace boost { namespace numeric { namespace ublas {
     void restart (matrix_expression<E> &e, typename E::size_type index1, typename E::size_type index2,
                   typename E::iterator1 &it1e, typename E::iterator1 &it1e_end,
                   typename E::iterator2 &it2e, typename E::iterator2 &it2e_end, row_major_tag) {
-        it1e = e ().find_first1 (0, index1, 0);
-        it1e_end = e ().find_first1 (0, e ().size1 (), 0);
-        it2e = e ().find_first2 (1, index1, index2);
-        it2e_end = e ().find_first2 (1, index1, e ().size2 ());
+        it1e = e ().find1 (0, index1, 0);
+        it1e_end = e ().find1 (0, e ().size1 (), 0);
+        it2e = e ().find2 (1, index1, index2);
+        it2e_end = e ().find2 (1, index1, e ().size2 ());
         if (it2e != it2e_end && it2e.index2 () == index2)
             ++ it2e;
     }
@@ -86,10 +84,10 @@ namespace boost { namespace numeric { namespace ublas {
     void restart (matrix_expression<E> &e, typename E::size_type index1, typename E::size_type index2,
                   typename E::iterator2 &it2e, typename E::iterator2 &it2e_end,
                   typename E::iterator1 &it1e, typename E::iterator1 &it1e_end, column_major_tag) {
-        it2e = e ().find_first2 (0, 0, index2);
-        it2e_end = e ().find_first2 (0, 0, e ().size2 ());
-        it1e = e ().find_first1 (1, index1, index2);
-        it1e_end = e ().find_first1 (1, e ().size1 (), index2);
+        it2e = e ().find2 (0, 0, index2);
+        it2e_end = e ().find2 (0, 0, e ().size2 ());
+        it1e = e ().find1 (1, index1, index2);
+        it1e_end = e ().find1 (1, e ().size1 (), index2);
         if (it1e != it1e_end && it1e.index1 () == index1)
             ++ it1e;
     }

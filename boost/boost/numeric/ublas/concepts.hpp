@@ -589,8 +589,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type n (0), i (0);
             value_type t = value_type ();
             // Find (internal?)
-            const_iterator_type cit_lower (v.find_first (i));
-            const_iterator_type cit_upper (v.find_last (i));
+            const_iterator_type cit (v.find (i));
             // Beginning of range
             const_iterator_type cit_begin (v.begin ());
             // End of range
@@ -613,8 +612,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Element access
             t = v (i);
             ignore_unused_variable_warning (n);
-            ignore_unused_variable_warning (cit_lower);
-            ignore_unused_variable_warning (cit_upper);
+            ignore_unused_variable_warning (cit);
             ignore_unused_variable_warning (cit_begin);
             ignore_unused_variable_warning (cit_end);
             ignore_unused_variable_warning (crit_begin);
@@ -638,8 +636,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i (0);
             value_type t = value_type ();
             // Find (internal?)
-            iterator_type it_lower (v.find_first (i));
-            iterator_type it_upper (v.find_last (i));
+            iterator_type it (v.find (i));
             // Beginning of range
             iterator_type it_begin (v.begin ());
             // End of range
@@ -658,8 +655,7 @@ namespace boost { namespace numeric { namespace ublas {
             v2 -= v1;
             v2.minus_assign (v1);
             v *= t;
-            ignore_unused_variable_warning (it_lower);
-            ignore_unused_variable_warning (it_upper);
+            ignore_unused_variable_warning (it);
             ignore_unused_variable_warning (it_begin);
             ignore_unused_variable_warning (it_end);
             ignore_unused_variable_warning (rit_begin);
@@ -684,10 +680,8 @@ namespace boost { namespace numeric { namespace ublas {
             size_type n (0), i (0), j (0);
             value_type t = value_type ();
             // Find (internal?)
-            const_iterator1_type cit1_lower (m.find_first1 (0, i, j));
-            const_iterator1_type cit1_upper (m.find_last1 (0, i, j));
-            const_iterator2_type cit2_lower (m.find_first2 (0, i, j));
-            const_iterator2_type cit2_upper (m.find_last2 (0, i, j));
+            const_iterator1_type cit1 (m.find1 (0, i, j));
+            const_iterator2_type cit2 (m.find2 (0, i, j));
             // Beginning of range
             const_iterator1_type cit1_begin (m.begin1 ());
             const_iterator2_type cit2_begin (m.begin2 ());
@@ -717,10 +711,8 @@ namespace boost { namespace numeric { namespace ublas {
             // Element access
             t = m (i, j);
             ignore_unused_variable_warning (n);
-            ignore_unused_variable_warning (cit1_lower);
-            ignore_unused_variable_warning (cit1_upper);
-            ignore_unused_variable_warning (cit2_lower);
-            ignore_unused_variable_warning (cit2_upper);
+            ignore_unused_variable_warning (cit1);
+            ignore_unused_variable_warning (cit2);
             ignore_unused_variable_warning (cit1_begin);
             ignore_unused_variable_warning (cit2_begin);
             ignore_unused_variable_warning (cit1_end);
@@ -750,10 +742,8 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i (0), j (0);
             value_type t = value_type ();
             // Find (internal?)
-            iterator1_type it1_lower (m.find_first1 (0, i, j));
-            iterator1_type it1_upper (m.find_last1 (0, i, j));
-            iterator2_type it2_lower (m.find_first2 (0, i, j));
-            iterator2_type it2_upper (m.find_last2 (0, i, j));
+            iterator1_type it1 (m.find1 (0, i, j));
+            iterator2_type it2 (m.find2 (0, i, j));
             // Beginning of range
             iterator1_type it1_begin (m.begin1 ());
             iterator2_type it2_begin (m.begin2 ());
@@ -776,10 +766,8 @@ namespace boost { namespace numeric { namespace ublas {
             m2 -= m1;
             m2.minus_assign (m1);
             m *= t;
-            ignore_unused_variable_warning (it1_lower);
-            ignore_unused_variable_warning (it1_upper);
-            ignore_unused_variable_warning (it2_lower);
-            ignore_unused_variable_warning (it2_upper);
+            ignore_unused_variable_warning (it1);
+            ignore_unused_variable_warning (it2);
             ignore_unused_variable_warning (it1_begin);
             ignore_unused_variable_warning (it2_begin);
             ignore_unused_variable_warning (it1_end);

@@ -36,6 +36,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T real_type;
         typedef T precision_type;
 
+#ifdef BOOST_UBLAS_DEPRECATED
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 0);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 0);
 
@@ -94,13 +95,12 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
+#endif
     };
 
     template<>
@@ -173,12 +173,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
     template<>
@@ -255,12 +253,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
@@ -334,12 +330,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #endif
@@ -409,12 +403,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
     template<>
@@ -486,12 +478,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
@@ -560,12 +550,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #endif
@@ -784,12 +772,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
     template<>
@@ -854,12 +840,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
@@ -921,12 +905,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #endif
@@ -997,12 +979,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
     template<>
@@ -1074,12 +1054,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
@@ -1148,12 +1126,10 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
-            // Check, that the values match at least half.
-            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
-            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+            return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                    std::max (std::max (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
-                             std::numeric_limits<real_type>::min ());
+                             BOOST_UBLAS_TYPE_CHECK_MIN);
         }
     };
 #endif

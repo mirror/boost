@@ -90,12 +90,10 @@
 //     typedef signed ptrdiff_t;
 //
 //     template<class T>
-//     BOOST_UBLAS_INLINE
 //     const T &max (const T &t1, const T &t2) {
 //         return t1 > t2 ? t1 : t2;
 //     }
 //     template<class T>
-//     BOOST_UBLAS_INLINE
 //     const T &min (const T &t1, const T &t2) {
 //         return t1 < t2 ? t1 : t2;
 //     }
@@ -219,6 +217,28 @@ namespace std {
 
 #define BOOST_UBLAS_USE_SIMD
 
+namespace boost { namespace numeric { namespace ublas {
+
+    template <class V>
+    class index_pair;
+    template <class M>
+    class index_triple;
+
+}}}
+
+namespace std {
+
+    template<class V>
+    void swap(boost::numeric::ublas::index_pair<V> i1, boost::numeric::ublas::index_pair<V> i2) {
+        i1.swap(i2);
+    }
+    template<class M>
+    void swap(boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2) {
+        i1.swap(i2);
+    }
+
+}
+
 #endif
 
 
@@ -329,6 +349,12 @@ namespace std {
 #ifdef BOOST_UBLAS_TYPE_CHECK
 static bool disable_type_check = false;
 #endif
+#ifndef BOOST_UBLAS_TYPE_CHECK_EPSILON
+#define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()))
+#endif
+#ifndef BOOST_UBLAS_TYPE_CHECK_MIN
+#define BOOST_UBLAS_TYPE_CHECK_MIN (std::numeric_limits<real_type>::min ())
+#endif
 
 
 
@@ -346,6 +372,10 @@ static bool disable_type_check = false;
 
 // Use indexed iterators.
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR
+
+// 16 byte aligned arrays (for ICC)
+// #define BOOST_UBLAS_ALIGN_16 __declspec (align (16))
+#define BOOST_UBLAS_ALIGN_16
 
 
 
@@ -526,21 +556,21 @@ namespace boost { namespace numeric { namespace ublas {
         template <class E>
         BOOST_UBLAS_INLINE
         closure_type &operator= (const E& e) {
-            lval_.expression ().assign (e);
+            lval_.assign (e);
             return lval_;
         }
 
         template <class E>
         BOOST_UBLAS_INLINE
         closure_type &operator+= (const E& e) {
-            lval_.expression ().plus_assign (e);
+            lval_.plus_assign (e);
             return lval_;
         }
 
         template <class E>
         BOOST_UBLAS_INLINE
         closure_type &operator-= (const E& e) {
-            lval_.expression ().minus_assign (e);
+            lval_.minus_assign (e);
             return lval_;
         }
 
@@ -554,6 +584,11 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     noalias_proxy<C> noalias (C& lvalue) {
         return noalias_proxy<C> (lvalue);
+    }
+    template <class C>
+    BOOST_UBLAS_INLINE
+    noalias_proxy<const C> noalias (const C& lvalue) {
+        return noalias_proxy<const C> (lvalue);
     }
 
     template<class V>
