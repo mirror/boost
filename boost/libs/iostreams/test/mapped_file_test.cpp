@@ -18,7 +18,7 @@ using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
-using boost::unit_test_framework::test_suite;   
+using boost::unit_test::test_suite;   
 
 // Code generation bugs cause tests to fail with global optimization.
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -41,6 +41,10 @@ void mapped_file_test()
             "failed reading from stream_facade<mapped_file_source> in chars"
         );
 
+        BOOST_MESSAGE(
+            "suceeded reading from stream_facade<mapped_file_source> in chars"
+        );
+
         first.close();
         second.close();
 
@@ -52,6 +56,10 @@ void mapped_file_test()
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from stream_facade<mapped_file_source> in chunks"
+        );
+
+        BOOST_MESSAGE(
+            "suceeded reading from stream_facade<mapped_file_source> in chunks"
         );
     }
 
@@ -72,6 +80,10 @@ void mapped_file_test()
             "failed writing to stream_facade<mapped_file_sink> in chars"
         );
 
+        BOOST_MESSAGE(
+            "suceeded writing to stream_facade<mapped_file_source> in chars"
+        );
+
         // Test writing to a stream_facade based on a mapped_file_sink, in 
         // chunks. (Also tests reopening the stream.)
         out.open(mapped_file_sink(second.name()));
@@ -80,6 +92,10 @@ void mapped_file_test()
         BOOST_CHECK_MESSAGE(
             compare_files(second.name(), test.name()),
             "failed writing to stream_facade<mapped_file_sink> in chunks"
+        );
+
+        BOOST_MESSAGE(
+            "suceeded writing to stream_facade<mapped_file_source> in chunks"
         );
     }
 
@@ -96,6 +112,10 @@ void mapped_file_test()
             "failed seeking within stream_facade<mapped_file> in chars"
         );
 
+        BOOST_MESSAGE(
+            "suceeded seeking within stream_facade<mapped_file> in chars"
+        );
+
         io.close();
 
         // Test reading, writing and seeking within a stream_facade based on a 
@@ -105,6 +125,10 @@ void mapped_file_test()
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),
             "failed seeking within stream_facade<mapped_file> in chunks"
+        );
+
+        BOOST_MESSAGE(
+            "suceeded seeking within stream_facade<mapped_file> in chunks"
         );
     }
 }
