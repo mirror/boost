@@ -1380,7 +1380,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct iterator_base_traits<std::random_access_iterator_tag> {
         template<class I, class T>
         struct iterator_base {
-            typedef random_access_iterator_base<std::bidirectional_iterator_tag, I, T> type;
+            typedef random_access_iterator_base<std::random_access_iterator_tag, I, T> type;
         };
     };
     template<>
