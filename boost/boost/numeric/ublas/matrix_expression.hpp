@@ -1,4 +1,3 @@
-
 //
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
