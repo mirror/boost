@@ -41,7 +41,8 @@
 #       if defined(_WIN32)
 #           define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f
 #       else
-#           define BOOST_FORCE_INCLUDE(f) f __attribute__ ((used))
+//#           define BOOST_FORCE_INCLUDE(f) f __attribute__ ((used))
+#           define BOOST_FORCE_INCLUDE(f) f
 #       endif
 #    endif
 // MSVC

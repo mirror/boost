@@ -38,6 +38,11 @@
 
 #include <boost/archive/detail/known_archive_types.hpp>
 
+#if defined(__MWERKS__)
+#pragma push
+#pragma opt_dead_code off
+#endif
+
 namespace boost {
 
 namespace archive {
@@ -167,7 +172,7 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
 
 // gcc needs special treatment
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && (__GNUC__ * 10 +  __GNUC_MINOR__) < 34 
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
         namespace boost { namespace archive { namespace detail {     \
         template                                                     \
@@ -194,7 +199,7 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
         template<>                                                   \
         const guid_initializer<T, ASEQ>                              \
             guid_initializer<T, ASEQ>::instance(K);                  \
-        template                                                     \
+        template<>                                                   \
         const guid_initializer<T, ASEQ> &                            \
         boost_template_instantiate(T &, ASEQ &);                     \
         } } }                                                        \
@@ -233,5 +238,9 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
         boost::archive::detail::known_archive_types<false>::type \
     )                                                            \
     /**/
+
+#if defined(__MWERKS__)
+#pragma pop
+#endif
 
 #endif // BOOST_SERIALIZATION_EXPORT_HPP
