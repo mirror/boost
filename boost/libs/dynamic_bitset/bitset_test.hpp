@@ -937,11 +937,11 @@ struct bitset_test {
                               const char * file_name
                               )
   {
-#  if defined BOOST_OLD_IOSTREAMS
+#if defined BOOST_OLD_IOSTREAMS
     typedef char char_type;
     typedef std::string string_type;
     typedef ifstream corresponding_input_stream_type;
-#  else
+#else
     typedef typename Stream::char_type char_type;
     typedef std::basic_string<char_type> string_type;
     typedef std::basic_ifstream<char_type> corresponding_input_stream_type;
