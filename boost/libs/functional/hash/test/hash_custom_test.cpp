@@ -30,7 +30,7 @@ namespace test
 namespace boost
 #endif
 {
-    std::size_t hash_value(custom x)
+    std::size_t hash_value(test::custom x)
     {
         return x.hash();
     }
