@@ -30,12 +30,24 @@
 namespace mpl = boost::mpl;
 using mpl::_;
 
-struct printer
+struct type_printer
 {
-    printer(std::ostream& s) : f_stream(&s) {}
+    type_printer(std::ostream& s) : f_stream(&s) {}
     template< typename U > void operator()(mpl::identity<U>)
     {
         *f_stream << typeid(U).name() << '\n';
+    }
+
+ private:
+    std::ostream* f_stream;
+};
+
+struct value_printer
+{
+    value_printer(std::ostream& s) : f_stream(&s) {}
+    template< typename U > void operator()(U x)
+    {
+        *f_stream << x << '\n';
     }
 
  private:
@@ -49,7 +61,7 @@ struct printer
 int main()
 {
     typedef mpl::list<char,short,int,long,float,double> types;
-    mpl::for_each< types,mpl::make_identity<_> >(printer(std::cout));
+    mpl::for_each< types,mpl::make_identity<_> >(type_printer(std::cout));
 
     typedef mpl::range_c<int,0,10> numbers;
     std::vector<int> v;
@@ -65,6 +77,8 @@ int main()
         );
 #endif
 
+    mpl::for_each< numbers >(value_printer(std::cout));
+    
     for (int i = 0; i < v.size(); ++i)
         assert(v[i] == i);
 
