@@ -134,7 +134,7 @@ namespace boost { namespace program_options {
         bool apply_default(boost::any&) const { return false; }
 
         /** Does nothing. */
-        void notify(const boost::any& value_store) const {}        
+        void notify(const boost::any&) const {}        
     private:
         bool m_zero_tokens;
     };

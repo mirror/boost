@@ -66,15 +66,14 @@ namespace boost { namespace program_options {
     /** Validates 's' and updates 'v'.
         @pre 'v' is either empty or in the state assigned by the previous
         invocation of 'validate'.
-        Specializations are provided for bool, float, int, and string.
-        The target type is specified via a parameter of which has type of 
+        The target type is specified via a parameter which has the type of 
         pointer to the desired type. This is workaround for compilers without
         partial template ordering, just like the last 'long/int' parameter.
     */
     template<class T, class charT>
     void validate(boost::any& v, 
                   const std::vector< std::basic_string<charT> >& xs, 
-                  T* target_type, long)
+                  T*, long)
     {
         validators::check_first_occurrence(v);
         std::basic_string<charT> s(validators::get_single_string(xs));
