@@ -24,13 +24,9 @@
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
-// Version 6.0 and below:
-#if (__BORLANDC__ <= 0x560)
-#  define BOOST_NO_INTEGRAL_INT64_T
-#endif
-
 // Version 7.0 (Kylix) and below:
 #if (__BORLANDC__ <= 0x570) || !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
 #  define BOOST_NO_USING_TEMPLATE
@@ -40,13 +36,29 @@
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 
+//
+// new bug in 5.61:
+#if __BORLANDC__ >= 0x561
+   // this seems to be needed by the command line compiler, but not the IDE:
+#  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#endif
+
 #  ifdef _WIN32
 #     define BOOST_NO_SWPRINTF
-#  elif defined(linux)
+#  elif defined(linux) || defined(__linux__) || defined(__linux)
       // we should really be able to do without this
       // but the wcs* functions aren't imported into std::
 #     define BOOST_NO_STDC_NAMESPACE
+      // _CPPUNWIND doesn't get automatically set for some reason:
+#     pragma defineonoption BOOST_CPPUNWIND -x
 #  endif
+#endif
+
+//
+// Post 0x561 we have long long and stdint.h:
+#if __BORLANDC__ >= 0x561
+#  define BOOST_HAS_LONG_LONG
+#  define BOOST_HAS_STDINT_H
 #endif
 
 // Borland C++Builder 6 defaults to using STLPort.  If _USE_OLD_RW_STL is
@@ -67,7 +79,7 @@
 //
 // check for exception handling support:
 //
-#ifndef _CPPUNWIND
+#if !defined(_CPPUNWIND) && !defined(BOOST_CPPUNWIND)
 #  define BOOST_NO_EXCEPTIONS
 #endif
 //
@@ -96,6 +108,8 @@
 #     pragma message( "Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
+
 
 
 

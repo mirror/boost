@@ -57,8 +57,12 @@
    // libraries:
    //
 #  ifndef _Windows
-#     define BOOST_REGEX_NO_LIB
-#     define BOOST_REGEX_STATIC_LINK
+#     ifndef BOOST_REGEX_NO_LIB
+#        define BOOST_REGEX_NO_LIB
+#     endif
+#     ifndef BOOST_REGEX_STATIC_LINK
+#        define BOOST_REGEX_STATIC_LINK
+#     endif
 #  endif
 
 #endif
