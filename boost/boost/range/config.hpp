@@ -11,6 +11,8 @@
 #ifndef BOOST_RANGE_CONFIG_HPP
 #define BOOST_RANGE_CONFIG_HPP
 
+#include <boost/detail/workaround.hpp>
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
 #endif
