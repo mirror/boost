@@ -4009,7 +4009,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
   <header name="boost/date_time/locale_config.hpp">
     <macro name="DATE_TIME_LOCALE_CONFIG_HPP____"/>
   </header>
-  <header name="boost/date_time/microsec_time_clock.hpp"/>
+  <header name="boost/date_time/microsec_time_clock.hpp">
+    <para>This file contains a high resolution time clock implementation.</para>
+  </header>
   <header name="boost/date_time/parse_format_base.hpp">
     <namespace name="boost">
       <namespace name="date_time">
