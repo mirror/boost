@@ -384,12 +384,13 @@ namespace boost {
     typedef typename C::value_type::second_type value_type;
     typedef value_type& reference;
     typedef lvalue_property_map_tag category;
-    associative_property_map(C& c) : m_c(c) { }
+    associative_property_map() : m_c(0) { }
+    associative_property_map(C& c) : m_c(&c) { }
     reference operator[](const key_type& k) const {
-      return m_c[k];
+      return (*m_c)[k];
     }
   private:
-    C& m_c;
+    C* m_c;
   };
 
   template <class UniquePairAssociativeContainer>
@@ -411,12 +412,13 @@ namespace boost {
     typedef typename C::value_type::second_type value_type;
     typedef const value_type& reference;
     typedef lvalue_property_map_tag category;
-    const_associative_property_map(const C& c) : m_c(c) { }
+    const_associative_property_map() : m_c(0) { }
+    const_associative_property_map(const C& c) : m_c(&c) { }
     reference operator[](const key_type& k) const {
-      return m_c[k];
+      return (*m_c)[k];
     }
   private:
-    C& m_c;
+    C* m_c;
   };
   
   template <class UniquePairAssociativeContainer>
@@ -444,23 +446,28 @@ namespace boost {
   //=========================================================================
   // A property map that does not do anything, for
   // when you have to supply a property map, but don't need it.
+  namespace detail {
+    struct dummy_pmap_reference {
+      template <class T>
+      dummy_pmap_reference& operator=(const T&) { return *this; }
+      operator int() { return 0; }
+    };
+  }
   class dummy_property_map 
-    : public boost::put_get_helper< const int&, dummy_property_map  > 
+    : public boost::put_get_helper<detail::dummy_pmap_reference,
+        dummy_property_map  > 
   {
   public:
     typedef void key_type; 
     typedef int value_type;
-    struct reference {
-      template <class T>
-      reference& operator=(const T&) { return *this; }
-    };
-    typedef boost::lvalue_property_map_tag category;
+    typedef detail::dummy_pmap_reference reference;
+    typedef boost::read_write_property_map_tag category;
     inline dummy_property_map() : c(0) { }
     inline dummy_property_map(value_type cc) : c(cc) { }
     inline dummy_property_map(const dummy_property_map& x)
       : c(x.c) { }
     template <class Vertex>
-    inline reference operator[](Vertex)  const { return reference(); }
+    inline reference operator[](Vertex) const { return reference(); }
    protected:
     value_type c;
   };
