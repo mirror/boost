@@ -2,7 +2,7 @@
 #define DATE_TIME_COMPILER_CONFIG_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  * $Date$
  */
 
@@ -26,6 +26,15 @@
 #define INT64_C(value)  long long(value)
 #endif
 
+//Workaround for missing transform
+#if (defined(__BORLANDC__) || (defined(BOOST_MSVC) && (_MSC_VER <= 1200)))
+#define BOOST_DATE_TIME_NO_STD_TRANSFORM  1
+#endif
+
+/* Workaround for Borland iterator error. Error was "Cannot convert 'istream *' to 'wistream *' in function istream_iterator<>::istream_iterator() */
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551)
+#define BOOST_DATE_TIME_NO_WISTREAM_ITERATOR
+#endif
 
 /* Copyright (c) 2002
  * CrystalClear Software, Inc.
