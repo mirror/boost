@@ -13,9 +13,9 @@
 #include <boost/fsm/fifo_worker.hpp>
 #include <boost/fsm/processor_container.hpp>
 
-#include <boost/config.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/config.hpp> // BOOST_HAS_THREADS
 
 
 

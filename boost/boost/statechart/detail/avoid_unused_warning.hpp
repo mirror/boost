@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_AVOID_UNUSED_WARNING_HPP_INCLUDED
-#define BOOST_FSM_AVOID_UNUSED_WARNING_HPP_INCLUDED
+#ifndef BOOST_FSM_DETAIL_AVOID_UNUSED_WARNING_HPP_INCLUDED
+#define BOOST_FSM_DETAIL_AVOID_UNUSED_WARNING_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) Andreas Huber Doenni 2002-2004.
 // Use, modification and distribution are subject to the Boost Software

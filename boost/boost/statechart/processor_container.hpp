@@ -18,7 +18,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/bind.hpp>
-#include <boost/config.hpp>
+#include <boost/config.hpp> // BOOST_WORKAROUND, BOOST_INTEL
 
 #include <set>
 #include <memory>   // std::allocator, std::auto_ptr

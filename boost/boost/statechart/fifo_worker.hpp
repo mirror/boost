@@ -9,11 +9,11 @@
 
 
 
-#include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/bind.hpp>
+#include <boost/config.hpp> // BOOST_HAS_THREADS, BOOST_MSVC
 
 #ifdef BOOST_HAS_THREADS
 #  ifdef BOOST_MSVC

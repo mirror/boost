@@ -17,7 +17,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
-#include <boost/config.hpp>
+#include <boost/config.hpp> // BOOST_MSVC
 
 #ifdef BOOST_MSVC
 #  pragma warning( push )

@@ -9,8 +9,8 @@
 
 
 
-#include <boost/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/config.hpp> // BOOST_MSVC
 
 #include <typeinfo> // std::type_info
 
