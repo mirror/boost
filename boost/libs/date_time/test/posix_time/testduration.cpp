@@ -53,6 +53,11 @@ main()
 				 t_5.fractional_seconds() == 5));
   t_5 = time_duration(3,15,8,0) / 2;
   check("divide int", t_5 == time_duration(1,37,34,0));
+  {
+    time_duration td = hours(5);
+    td *= 5;
+    check("mult-equals int", time_duration(25,0,0,0) == td);
+  }
  
   
   t_5 = t_2 + t_1;
@@ -179,7 +184,27 @@ main()
   check("multiplication", time_duration(3,0,0)*2 == hours(6));
   check("multiplication", hours(3600)*1000 == hours(3600000));
 
-
+  // special_values operations
+  time_duration pi_dur(pos_infin), ni_dur(neg_infin), ndt_dur(not_a_date_time);
+  check("+infin + -infin", pi_dur + ni_dur == ndt_dur);
+  check("infin / int", pi_dur / 3 == pi_dur);
+  check("infin + duration", pi_dur + td_12 == pi_dur);
+  check("infin - duration", pi_dur - td_12 == pi_dur);
+  check("unary-", -pi_dur == ni_dur);
+  check("-infin less than +infin", ni_dur < pi_dur);
+  check("-infin less than duration", ni_dur < td_12);
+  check("+infin greater than duration", pi_dur > td_12);
+  std::string result(""), answer("+infinity");
+  result = to_simple_string(pi_dur);
+  check("to string +infin", result==answer);
+  result = to_simple_string(ni_dur);
+  answer = "-infinity";
+  check("to string +infin", result==answer);
+  result = to_simple_string(ndt_dur);
+  //answer = "not-a-number";
+  answer = "not-a-date-time";
+  check("to string +infin", result==answer);
+ 
   using namespace boost::gregorian;
   ptime t1(date(2001,7,14));
   ptime t2(date(2002,7,14));
@@ -202,12 +227,14 @@ main()
   boost::int64_t tms = static_cast<boost::int64_t>(3600)*1000000*1001; //ms per sec
   check("total microseconds 1000 hours", hours(1001).total_microseconds() == tms);
   tms = static_cast<boost::int64_t>(3600)*365*24*1000;
-  std::cout << "tms: " << (t2-t1).total_milliseconds() << std::endl;
   check("total milliseconds - one year", (t2-t1).total_milliseconds() == tms);
   tms = 3600*365*24*static_cast<boost::int64_t>(1000000000);
-  std::cout << "nano per year: " << (t2-t1).total_nanoseconds() << std::endl;
   check("total nanoseconds - one year", (t2-t1).total_nanoseconds() == tms);
-
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#else
+  std::cout << "tms: " << (t2-t1).total_milliseconds() << std::endl;
+  std::cout << "nano per year: " << (t2-t1).total_nanoseconds() << std::endl;
+#endif
   // make it into a double
   double d1 = microseconds(25).ticks()/(double)time_duration::ticks_per_second();
   std::cout << d1 << std::endl;

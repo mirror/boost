@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include <iostream>
@@ -8,6 +8,83 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 
+void special_values_tests()
+{
+  using namespace boost::posix_time;
+  using namespace boost::gregorian;
+
+  time_duration td_pi(pos_infin), td_ni(neg_infin), td_ndt(not_a_date_time);
+  date_duration dd_pi(pos_infin), /*dd_ni(neg_infin),*/ dd_ndt(not_a_date_time);
+  date d_pi(pos_infin), d_ni(neg_infin), d_ndt(not_a_date_time);
+  time_duration td(1,2,3,4);
+  date_duration dd(1234);
+  date d(2003,Oct,31);
+
+  { // special values construction tests
+    ptime p_sv1(d_pi, td);
+    std::string s("+infinity");
+    check("duration & special_date", to_simple_string(p_sv1) == s);
+    ptime p_sv2(d_ni, td);
+    s = "-infinity";
+    check("duration & special_date", to_iso_string(p_sv2) == s);
+    ptime p_sv3(d_ndt, td);
+    s = "not-a-date-time";
+    check("duration & special_date", to_iso_extended_string(p_sv3) == s);
+  }
+  { // special values construction tests
+    ptime p_sv1(d_ndt, td);
+    std::string s("not-a-date-time");
+    check("NADT & duration", to_simple_string(p_sv1) == s);
+    ptime p_sv2(d, td_ndt);
+    check("date & NADT", to_iso_string(p_sv2) == s);
+    ptime p_sv3(d_pi, td_ni);
+    check("+infinity_date & -infinity_duration", 
+	to_iso_extended_string(p_sv3) == s);
+
+  }
+  { // special values tests
+    ptime p_sv1(d, td_pi), pt(d,td);
+    std::string s("+infinity");
+    check("special_duration & date", to_simple_string(p_sv1) == s);
+    check("ptime::date() +infinity", to_simple_string(p_sv1.date()) == s);
+    ptime p_sv2(d, td_ni);
+    s = "-infinity";
+    check("special_duration & date", to_iso_string(p_sv2) == s);
+    check("ptime::time_of_day() -infinity", 
+	to_simple_string(p_sv2.time_of_day()) == s);
+    ptime p_sv3(d, td_ndt);
+    s = "not-a-date-time";
+    check("special_duration & date", to_iso_extended_string(p_sv3) == s);
+    check("ptime::date() - NADT", to_simple_string(p_sv3.date()) == s);
+    check("ptime::time_of_day() - NADT", 
+	to_simple_string(p_sv3.time_of_day()) == s);
+    check("-infinity less than ...", p_sv2 < p_sv1);
+    check("-infinity less than ...", p_sv2 < pt);
+    check("+infinity greater than ...", pt < p_sv1);
+    check("-infinity less than equal to ...", p_sv2 <= p_sv2);
+    check("-infinity less than equal to ...", p_sv2 <= pt);
+    check("+infinity greater than equal to ...", p_sv1 >= pt);
+    check("not equal", p_sv1 != p_sv2);
+    check("not equal", p_sv3 != p_sv2);
+    check("not equal", pt != p_sv1);
+
+    check("is_pos_infinity", p_sv1.is_infinity() && p_sv1.is_pos_infinity());
+    check("is_neg_infinity", p_sv2.is_infinity() && p_sv2.is_neg_infinity());
+    check("is_not_a_date_time", !p_sv3.is_infinity() && p_sv3.is_not_a_date_time());
+   
+    check("special_ptime + date_duration", p_sv1 + dd == p_sv1);
+    check("ptime - special_date_duration", pt - dd_pi == p_sv2);
+    check("ptime - special_date_duration", pt - dd_ndt == p_sv3);
+    
+    check("special_ptime + time_duration", p_sv2 + td == p_sv2);
+    check("special_ptime - time_duration", pt - td_ni == p_sv1);
+    check("ptime + special_time_duration", pt + td_ndt == p_sv3);
+    check("ptime - special_ptime", pt - p_sv1 == td_ni);
+    check("ptime - special_ptime", pt - p_sv2 == td_pi);
+    check("ptime - special_ptime", pt - p_sv3 == td_ndt);
+    check("special_ptime - special_ptime", p_sv2 - p_sv2 == td_ndt);
+  }
+}
 
 int
 main() 
@@ -45,6 +122,21 @@ main()
   check("operator+(date_duration)", t6 == ptime(d3,td));
   ptime t7 = t1 - twodays;
   check("operator-(date_duration)", t7 == ptime(date(2001,Nov,29),td));
+  {
+    ptime t6b(date(2003,Oct,31),time_duration(10,0,0,0));
+    t6b += date_duration(55);
+    check("operator +=(date_duration)", t6b ==
+	ptime(date(2003,Dec,25), time_duration(10,0,0,0)));
+    t6b += hours(6);
+    check("operator +=(time_duration)", t6b ==
+	ptime(date(2003,Dec,25), time_duration(16,0,0,0)));
+    t6b -= date_duration(55);
+    check("operator -=(date_duration)", t6b ==
+	ptime(date(2003,Oct,31), time_duration(16,0,0,0)));
+    t6b -= hours(6);
+    check("operator -=(time_duration)", t6b ==
+	ptime(date(2003,Oct,31), time_duration(10,0,0,0)));
+  }
   time_duration td2(1,2,3); 
   ptime t8(date(2001,Dec,1)); //midnight
   ptime t9 = t8 + td2; //Dec 2 at 01:02:03
@@ -130,6 +222,7 @@ main()
   check("time_t conversion of 1960483634", 
         t18 == ptime(date(2032,2,15), time_duration(18,47,14)));
 
+  special_values_tests();
 
   return printTestStats();
 
