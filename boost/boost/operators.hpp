@@ -894,9 +894,11 @@ template <class T,
           class P = V*,
           class R = V&>
 struct forward_iterator_helper
-  : forward_iteratable<T, P
+  : equality_comparable1<T
+  , incrementable<T
+  , dereferenceable<T, P
   , boost::iterator<std::forward_iterator_tag, V, D, P, R
-    > > {};
+    > > > > {};
 
 template <class T,
           class V,
@@ -904,9 +906,11 @@ template <class T,
           class P = V*,
           class R = V&>
 struct bidirectional_iterator_helper
-  : bidirectional_iteratable<T, P
+  : equality_comparable1<T
+  , unit_steppable<T
+  , dereferenceable<T, P
   , boost::iterator<std::bidirectional_iterator_tag, V, D, P, R
-    > > {};
+    > > > > {};
 
 template <class T,
           class V, 
@@ -914,9 +918,13 @@ template <class T,
           class P = V*,
           class R = V&>
 struct random_access_iterator_helper
-  : random_access_iteratable<T, P, D, R
+  : totally_ordered1<T
+  , unit_steppable<T
+  , dereferenceable<T, P
+  , additive2<T, D
+  , indexable<T, D, R
   , boost::iterator<std::random_access_iterator_tag, V, D, P, R
-    > >
+    > > > > > >
 {
   friend D requires_difference_operator(const T& x, const T& y) {
     return x - y;
