@@ -115,8 +115,8 @@ private:
    int* blocks, *count;
    jm_debug_alloc* guard;
 public:
-   typedef size_t    size_type;
-   typedef ptrdiff_t difference_type;
+   typedef std::size_t    size_type;
+   typedef std::ptrdiff_t difference_type;
    typedef char*        pointer;
    typedef const char*  const_pointer;
    typedef char&        reference;
@@ -182,7 +182,7 @@ public:
 // class debug_iterator
 //
 template <class T>
-struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, ptrdiff_t)
+struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, std::ptrdiff_t)
 {
    typedef std::ptrdiff_t                    difference_type;
    typedef char_t                            value_type;
@@ -190,7 +190,7 @@ struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, ptrdiff_t)
    typedef char_t&                           reference;
    typedef std::random_access_iterator_tag   iterator_category;
    typedef debug_iterator                    self;
-   typedef size_t                            size_type;
+   typedef std::size_t                       size_type;
 
   T cur;
   T first;

@@ -741,7 +741,7 @@ struct sub_match
       }
       return result;
    }
-   #ifndef BOOST_OLD_REGEX_H
+   #ifdef BOOST_OLD_REGEX_H
    //
    // the following are deprecated, do not use!!
    //
@@ -774,7 +774,7 @@ struct sub_match
    }
 };
 
-#ifndef BOOST_OLD_REGEX_H
+#ifdef BOOST_OLD_REGEX_H
 namespace re_detail{
 template <class iterator, class charT>
 int do_toi(iterator i, iterator j, char c, int radix)
