@@ -227,24 +227,28 @@ implementation.&nbsp;&nbsp; The
 instantiation of member functions which require a complete type occurs in the <a href="shared_ptr_example2.cpp">shared_ptr_example2.cpp</a>
 implementation file.</p>
 <h2><a name="FAQ">Frequently Asked Questions</a></h2>
-<p><b>Q</b>. Why doesn't <b>shared_ptr</b> have template parameters supplying
+<p><b>Q.</b> Why doesn't <b>shared_ptr</b> have template parameters supplying
 traits or policies to allow extensive user customization?<br>
-<b>A</b>. Parameterization discourages users.&nbsp; <b>Shared_ptr</b> is
+<b>A.</b> Parameterization discourages users.&nbsp; <b>Shared_ptr</b> is
 carefully crafted to meet common needs without extensive parameterization.
 Someday a highly configurable smart pointer may be invented that is also very
 easy to use and very hard to misuse.&nbsp; Until then, <b>shared_ptr</b> is the
 smart pointer of choice for a wide range of applications.&nbsp; (Those
 interested in policy based smart pointers should read <a href="http://cseng.aw.com/book/0,,0201704315,00.html">Modern
 C++ Design</a> by Andrei Alexandrescu.)</p>
-<p><b>Q</b>. Why doesn't <b>shared_ptr</b> use a linked list implementation?<br>
-<b>A</b>. A linked list implementation does not offer enough advantages to
+<p><b>Q.</b> Why doesn't <b>shared_ptr</b> use a linked list implementation?<br>
+<b>A.</b> A linked list implementation does not offer enough advantages to
 offset the added cost of an extra pointer.&nbsp; See <a href="smarttests.htm">timings</a>
 page.</p>
-<p><b>Q</b>. Why don't <b>shared_ptr</b> (and the other Boost smart pointers)
+<p><b>Q.</b> Why don't <b>shared_ptr</b> (and the other Boost smart pointers)
 supply an automatic conversion to <b>T*</b>?<br>
-<b>A</b>. Automatic conversion is believed to be too error prone.</p>
+<b>A.</b> Automatic conversion is believed to be too error prone.</p>
+<p><b>Q.</b> Why does <b>shared_ptr</b> supply use_count()?<br>
+<b>A.</b> As an aid to writing test cases and debugging displays. One of the
+progenitors had use_count(), and it was useful in tracking down bugs in a
+complex project that turned out to have cyclic-dependencies.</p>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->12 July, 2001<!--webbot bot="Timestamp" endspan i-checksum="21065" -->
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->13 July, 2001<!--webbot bot="Timestamp" endspan i-checksum="21067" -->
 </p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
