@@ -701,7 +701,7 @@ the ``access_category`` and ``traversal_category`` traits access the
 ``access`` and ``traversal`` member types within ``iterator_tag``.
 For iterators whose ``iterator_traits<Iter>::iterator_category`` type
 is not ``iterator_tag`` and instead is a tag convertible to one of the
-original tags, the appropriate traversal and access tags is deduced.
+original tags, the appropriate traversal and access tags are deduced.
 The following pseudo-code describes the algorithm.
 
 ::
@@ -763,6 +763,7 @@ category tags for pointer types.
   };
 
 
+.. We need to document the requirements for the type parameters of iterator_tag.
 
 ..
  LocalWords:  Abrahams Siek Witt const bool Sutter's WG int UL LI href Lvalue
