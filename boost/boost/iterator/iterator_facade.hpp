@@ -814,8 +814,8 @@ namespace boost
           is_interoperable< Derived1, Derived2 >::value                         \
       ));                                                                       \
       return_prefix iterator_core_access::base_op(                              \
-          static_cast<Derived1 const&>(lhs)                                     \
-        , static_cast<Derived2 const&>(rhs)                                     \
+          *static_cast<Derived1 const*>(&lhs)                                   \
+        , *static_cast<Derived2 const*>(&rhs)                                   \
         , BOOST_ITERATOR_CONVERTIBLE(Derived2,Derived1)                         \
       );                                                                        \
   }
