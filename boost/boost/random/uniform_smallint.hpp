@@ -26,6 +26,7 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/random/uniform_01.hpp>
 
 namespace boost {
 
