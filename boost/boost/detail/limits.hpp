@@ -24,6 +24,8 @@
 
 /*
  * Revision history:
+ * 21 Sep 2001:
+ *    Only include <cwchar> if BOOST_NO_CWCHAR is defined. (Darin Adler)
  * 10 Aug 2001:
  *    Added MIPS (big endian) to the big endian family. (Jens Maurer)
  * 13 Apr 2001:
