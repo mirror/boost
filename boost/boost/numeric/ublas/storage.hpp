@@ -1818,8 +1818,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V1::value_type value1_type;
         typedef typename V2::value_type value2_type;
 
-        typedef typename std::size_t size_type;
-        typedef typename std::ptrdiff_t difference_type;
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
         typedef index_pair<self_type> value_type;
         typedef value_type reference;
         // typedef const value_type& const_reference;
@@ -1980,8 +1980,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V2::value_type value2_type;
         typedef typename V3::value_type value3_type;
 
-        typedef typename std::size_t size_type;
-        typedef typename std::ptrdiff_t difference_type;
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
         typedef index_triple<self_type> value_type;
         typedef value_type reference;
         // typedef const value_type& const_reference;

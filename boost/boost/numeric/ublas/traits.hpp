@@ -1005,10 +1005,11 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef typename boost::mpl::if_c<index1 >= index2,
                                           iter1,
-                                          iter2>::type::type builtin_promote_type;
+                                          iter2>::type iter;
+        typedef typename iter::type builtin_promote_type;
         typedef typename boost::mpl::if_c<boost::is_same<T1, T2>::value,
                                           T1,
-                                          builtin_promote_type>::type promote_type;                         
+                                          builtin_promote_type>::type promote_type;
     };
 
     template<class T1, class T2>
