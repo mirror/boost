@@ -20,7 +20,7 @@
 #ifndef BOOST_MACROS_STLPORT_HPP
 #define BOOST_MACROS_STLPORT_HPP
 
-#include "boost/config.hpp"
+#include <boost/config.hpp>
 
 // *** This should go to "boost/config/stdlib/stlport.hpp".
 

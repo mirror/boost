@@ -20,8 +20,9 @@
 #define BOOST_FORMAT_FWD_HPP
 
 #include <string>
-#include <ostream>
-#include "boost/config.hpp"
+#include <iosfwd>
+
+#include <boost/config.hpp>
 
 namespace boost {
 
