@@ -15,7 +15,8 @@
 #include <string>
 
 using namespace std;
-
+using namespace boost::assign;  
+    
 template< typename K, typename V >
 inline pair<K,V> P( K k, V v )
 {
@@ -46,7 +47,6 @@ struct five
 template< class C >
 void test_int_sequence()
 {
-    using namespace boost::assign;  
     C c;
     
     BOOST_CHECK_EQUAL( c.size(), 0u );
@@ -59,7 +59,6 @@ void test_int_sequence()
 template< class C >
 void test_string_sequence()
 {
-    using namespace boost::assign;  
     C c;
 
     BOOST_CHECK_EQUAL( c.size(), 0u );
@@ -74,7 +73,6 @@ typedef pair<string,int> tuple;
 template< class C >
 void test_tuple_sequence()
 {
-    using namespace boost::assign;  
     C c;
     
     BOOST_CHECK_EQUAL( c.size(), 0u );
@@ -88,7 +86,6 @@ void test_tuple_sequence()
 template< class M >
 void test_map()
 {
-    using namespace boost::assign;  
     M m;
     m += P( "january",   31 ), P( "february", 28 ),
          P( "march",     31 ), P( "april",    30 ),
@@ -112,7 +109,6 @@ void test_map()
 
 void test_tuple()
 {
-    using namespace boost::assign;      
     vector<three>    v_three;
     vector<four>     v_four;
     vector<five>     v_five;
@@ -130,8 +126,6 @@ void test_tuple()
 
 void check_std()
 {
-
-    using namespace boost::assign;      
     test_int_sequence< deque<int> >();
     test_int_sequence< list<int> >();          
     test_int_sequence< vector<int> >();       

@@ -53,7 +53,10 @@ void check_list_inserter()
     using namespace boost::assign;
     vector<int> v;
     
-    make_list_inserter( &function_ptr<int> )( 5 ),3;
+    //
+    // @note: cast only necessary on CodeWarrior
+    //
+    make_list_inserter( (void (*)(int))&function_ptr<int> )( 5 ),3;
     make_list_inserter( functor() )( 4 ),2;
     make_list_inserter( bind( &vector<int>::push_back, &v, _1 ) )( 6 ),4;
     BOOST_CHECK_EQUAL( v.size(), 2u );
