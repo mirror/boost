@@ -13,7 +13,11 @@
 //                 presence; thus the default is not present, conforming
 //                 to the current C++ standard).
 
-#include <boost/cstdint.h>
+# if defined(__hpux) || defined(__FreeBSD__) || defined(__IBMCPP__)
+#   include <inttypes.h>
+# else
+#   include <stdint.h>
+# endif
 
 namespace boost_has_stdint_h{
 
@@ -30,6 +34,7 @@ int test()
 }
 
 }
+
 
 
 
