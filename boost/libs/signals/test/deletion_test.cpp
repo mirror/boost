@@ -227,7 +227,11 @@ test_disconnect_equal()
   s0(); std::cout << std::endl;
   BOOST_TEST(test_output == "0123");
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1700)
+  connections[2].disconnect();
+#else
   s0.disconnect(remove_connection(2));
+#endif
 
   test_output = "";
   s0(); std::cout << std::endl;

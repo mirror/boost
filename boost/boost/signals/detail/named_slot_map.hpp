@@ -66,41 +66,43 @@ private:
   Compare comp;
 };
 
+class BOOST_SIGNALS_DECL named_slot_map_iterator :
+  public iterator_facade<named_slot_map_iterator,
+                         connection_slot_pair,
+                         forward_traversal_tag>
+{
+  class impl;
+
+  typedef iterator_facade<named_slot_map_iterator,
+                          connection_slot_pair,
+                          forward_traversal_tag> inherited;
+public:
+  named_slot_map_iterator();
+  named_slot_map_iterator(const named_slot_map_iterator& other);
+  ~named_slot_map_iterator();
+  named_slot_map_iterator& operator=(const named_slot_map_iterator& other);
+
+  connection_slot_pair& dereference() const;
+  void increment();
+  bool equal(const named_slot_map_iterator& other) const;
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1701)
+  void decrement();
+  void advance(difference_type);
+#endif
+
+private:
+  named_slot_map_iterator(std::auto_ptr<impl>);
+
+  scoped_ptr<impl> impl_;
+
+  friend class named_slot_map;
+};
+
 class BOOST_SIGNALS_DECL named_slot_map
 {
 public:
-  class BOOST_SIGNALS_DECL iterator :
-    public iterator_facade<iterator,
-                           connection_slot_pair,
-                           forward_traversal_tag>
-  {
-    class impl;
-
-    typedef iterator_facade<iterator,
-                            connection_slot_pair,
-                            forward_traversal_tag> inherited;
-  public:
-    iterator();
-    iterator(const iterator& other);
-    ~iterator();
-    iterator& operator=(const iterator& other);
-
-    connection_slot_pair& dereference() const;
-    void increment();
-    bool equal(const iterator& other) const;
-
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1701)
-    void decrement();
-    void advance(difference_type);
-#endif
-
-  private:
-    iterator(std::auto_ptr<impl>);
-
-    scoped_ptr<impl> impl_;
-
-    friend class named_slot_map;
-  };
+  typedef named_slot_map_iterator iterator;
 
   named_slot_map(const compare_type& compare);
   ~named_slot_map();
