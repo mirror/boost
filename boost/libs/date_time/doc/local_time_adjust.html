@@ -19,9 +19,8 @@
 <p>
 <font class="bold">Local Time Adjustment</font> 
 <p>
-<a href="local_time_adjust.html#header">Header</a> -- 
-<a href="local_time_adjust.html#classoverview">Class Overview</a> -- 
-<a href="local_time_adjust.html#more">More Info</a>
+<a href="#header">Header</a> -- 
+<a href="#classoverview">Class Overview</a> -- 
 <p>
 <h2><a name="intro">Introduction</a></h2>
 <p>
@@ -42,7 +41,8 @@ approach depends on the ctime API and will provide incorrect results
 if the environment is set incorrectly.
 The other approach allows conversion from any zone to UTC and back
 independent of the settings of the time zone settings of the 
-computer.  The <a href="local__utc__conversion_8cpp-example.html">local utc conversion example</a> demonstrates both of these techniques.
+computer.  The <a href="exp-local_utc_conversion.html">local utc conversion example</a> 
+demonstrates both of these techniques.
 
 <p>
 <h2><a name="header">Header</a></h2>
@@ -68,11 +68,11 @@ or
      </td></tr>
 <tr><td>date_time::local_adjustor&lt;ptime, utc_offset, dst_rules&gt;::<font class="el">utc_to_local</font>(ptime)</td>
     <td>Calculate local machine time from a UTC time based daylight savings rules and utc offset</td>
-    <td><a href="local__utc__conversion_8cpp-example.html">example</a>
+    <td><a href="exp-local_utc_conversion.html">example</a>
      </td></tr>
 <tr><td>date_time::local_adjustor&lt;ptime, utc_offset, dst_rules&gt;::<font class="el">local_to_utc</font>(ptime)</td>
     <td>Calculate UTC time based on daylight savings rules and utc offset.</td>
-    <td><a href="local__utc__conversion_8cpp-example.html">example</a>
+    <td><a href="exp-local_utc_conversion.html">example</a>
      </td></tr>
 
 </table>
@@ -83,7 +83,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Wed Aug 21 15:50:17 MST 2002
+Last modified: Thu Sep  5 07:34:28 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
