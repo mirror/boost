@@ -1,12 +1,12 @@
-#ifndef BOOST_DETAIL_LWM_WIN32_HPP_INCLUDED
-#define BOOST_DETAIL_LWM_WIN32_HPP_INCLUDED
+#ifndef BOOST_DETAIL_LWM_LINUX_HPP_INCLUDED
+#define BOOST_DETAIL_LWM_LINUX_HPP_INCLUDED
 
 #if _MSC_VER >= 1020
 #pragma once
 #endif
 
 //
-//  boost/detail/lwm_win32.hpp
+//  boost/detail/lwm_linux.hpp
 //
 //  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
 //
@@ -16,30 +16,29 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
+#include <asm/atomic.h>
+
 namespace boost
 {
 
 namespace detail
 {
 
-// avoid including <windows.h>
-
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchange(long volatile *, long);
-extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long);
-
 class lightweight_mutex
 {
 private:
 
-    long l_;
+    atomic_t a_;
 
     lightweight_mutex(lightweight_mutex const &);
     lightweight_mutex & operator=(lightweight_mutex const &);
 
 public:
 
-    lightweight_mutex(): l_(0)
+    lightweight_mutex()
     {
+        atomic_t a = ATOMIC_INIT(1);
+        a_ = a;
     }
 
     class scoped_lock;
@@ -58,18 +57,16 @@ public:
 
         explicit scoped_lock(lightweight_mutex & m): m_(m)
         {
-            while( InterlockedExchange(&m_.l_, 1) ) Sleep(0);
+            while( !atomic_dec_and_test(&m_.a_) )
+            {
+                atomic_inc(&m_.a_);
+                // sched_yield();
+            }
         }
 
         ~scoped_lock()
         {
-            InterlockedExchange(&m_.l_, 0);
-
-            // Note: adding a Sleep(0) here will make
-            // the mutex more fair and will increase the overall
-            // performance of the application substantially in
-            // high contention situations, but will penalize the
-            // low contention / single thread case up to 5x
+            atomic_inc(&m_.a_);
         }
     };
 };
