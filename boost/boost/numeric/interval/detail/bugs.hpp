@@ -30,7 +30,7 @@
 #  endif
 #else
 #  define BOOST_NUMERIC_INTERVAL_using_math(a) using std::a
-#  if defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ == 4)
+#  if defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ > 3)
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using ::a
 #  elif defined(BOOST_HAS_INV_HYPERBOLIC)
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using std::a
