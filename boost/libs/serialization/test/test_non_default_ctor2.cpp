@@ -26,24 +26,24 @@ namespace std{
 class IntValueHolder
 {
 public:
-	IntValueHolder()
-		:	value(0)
-	{}
+    IntValueHolder()
+        :	value(0)
+    {}
 
-	IntValueHolder(int newvalue)
-		:	value(newvalue)
-	{}
+    IntValueHolder(int newvalue)
+        :	value(newvalue)
+    {}
 
-	int GetValue() const { return value; }
+    int GetValue() const { return value; }
 
 private:
-	int value;
+    int value;
 
-	friend class boost::serialization::access;
+    friend class boost::serialization::access;
 
-	template <class ArchiveT>
+    template <class ArchiveT>
     void serialize(ArchiveT& ar, const unsigned int /* file_version */)
-	{
+    {
         ar & BOOST_SERIALIZATION_NVP(value);
     }
 };
@@ -51,24 +51,24 @@ private:
 class FloatValueHolder
 {
 public:
-	FloatValueHolder()
-		:	value(0)
-	{}
+    FloatValueHolder()
+        :	value(0)
+    {}
 
-	FloatValueHolder(float newvalue)
-		:	value(newvalue)
-	{}
+    FloatValueHolder(float newvalue)
+        :	value(newvalue)
+    {}
 
-	float GetValue() const { return value; }
+    float GetValue() const { return value; }
 
 private:
-	float value;
+    float value;
 
-	friend class boost::serialization::access;
+    friend class boost::serialization::access;
 
-	template <class ArchiveT>
+    template <class ArchiveT>
     void serialize(ArchiveT& ar, const unsigned int /* file_version */)
-	{
+    {
         ar & BOOST_SERIALIZATION_NVP(value);
     }
 };
@@ -77,24 +77,24 @@ class A
 {
 public:
     A(const IntValueHolder& initialValue)
-		:	value(initialValue), floatValue(new FloatValueHolder(10.0f))
-	{}
+        :	value(initialValue), floatValue(new FloatValueHolder(10.0f))
+    {}
 
-	~A()
-	{
-		delete floatValue;
-	}
+    ~A()
+    {
+        delete floatValue;
+    }
 
-	IntValueHolder value;
-	FloatValueHolder* floatValue;
+    IntValueHolder value;
+    FloatValueHolder* floatValue;
 
 private:
     friend class boost::serialization::access;
 
-	template <class ArchiveT>
+    template <class ArchiveT>
     void serialize(ArchiveT& ar, const unsigned int /* file_version */)
-	{
-		ar & BOOST_SERIALIZATION_NVP(floatValue);
+    {
+        ar & BOOST_SERIALIZATION_NVP(floatValue);
     }
 };
 
@@ -105,16 +105,16 @@ namespace boost { namespace serialization {
 template <class ArchiveT>
 void save_construct_data(ArchiveT& archive, const A* p, unsigned int version)
 {
-	archive & boost::serialization::make_nvp("initialValue", p->value);
+    archive & boost::serialization::make_nvp("initialValue", p->value);
 }
 
 template <class ArchiveT>
 void load_construct_data(ArchiveT& archive, A* p, unsigned int version)
 {
-	IntValueHolder initialValue;
-	archive & boost::serialization::make_nvp("initialValue", initialValue);
+    IntValueHolder initialValue;
+    archive & boost::serialization::make_nvp("initialValue", initialValue);
 
-	::new (p) A(initialValue);
+    ::new (p) A(initialValue);
 }
 
 #if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
@@ -127,20 +127,20 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
     A* a = new A(5);
 
-	{   
+    {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
         oa << BOOST_SERIALIZATION_NVP(a);
     }
 
-	A* a_new;
+    A* a_new;
 
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-		test_iarchive ia(is);
+        test_iarchive ia(is);
         ia >> BOOST_SERIALIZATION_NVP(a_new);
     }
     delete a;
     delete a_new;
-	return boost::exit_success;
+    return boost::exit_success;
 }
