@@ -15,6 +15,13 @@
 // boost::pool
 #include <boost/pool/pool.hpp>
 
+// There are a few places in this file where the expression "this->m" is used.
+// This expression is used to force instantiation-time name lookup, which I am
+//   informed is required for strict Standard compliance.  It's only necessary
+//   if "m" is a member of a base class that is dependent on a template
+//   parameter.
+// Thanks to Jens Maurer for pointing this out!
+
 namespace boost {
 
 // T must have a non-throwing destructor
@@ -27,6 +34,14 @@ class object_pool: protected pool<UserAllocator>
     typedef typename pool<UserAllocator>::size_type size_type;
     typedef typename pool<UserAllocator>::difference_type difference_type;
 
+  protected:
+    pool<UserAllocator> & store() { return *this; }
+    const pool<UserAllocator> & store() const { return *this; }
+
+    // for the sake of code readability :)
+    static void * & nextof(void * const ptr)
+    { return *(static_cast<void **>(ptr)); }
+
   public:
     // This constructor parameter is an extension!
     explicit object_pool(const size_type next_size = 32)
@@ -36,11 +51,11 @@ class object_pool: protected pool<UserAllocator>
 
     // Returns 0 if out-of-memory
     element_type * malloc()
-    { return static_cast<element_type *>(pool<UserAllocator>::ordered_malloc()); }
+    { return static_cast<element_type *>(store().ordered_malloc()); }
     void free(element_type * const chunk)
-    { pool<UserAllocator>::ordered_free(chunk); }
+    { store().ordered_free(chunk); }
     bool is_from(element_type * const chunk) const
-    { return pool<UserAllocator>::is_from(chunk); }
+    { return store().is_from(chunk); }
 
     element_type * construct()
     {
@@ -63,24 +78,24 @@ class object_pool: protected pool<UserAllocator>
     }
 
     // These functions are extensions!
-    size_type get_next_size() const { return pool<UserAllocator>::get_next_size(); }
-    void set_next_size(const size_type x) { pool<UserAllocator>::set_next_size(x); }
+    size_type get_next_size() const { return store().get_next_size(); }
+    void set_next_size(const size_type x) { store().set_next_size(x); }
 };
 
 template <typename T, typename UserAllocator>
 object_pool<T, UserAllocator>::~object_pool()
 {
   // handle trivial case
-  if (!list.valid())
+  if (!this->list.valid())
     return;
 
-  details::PODptr<size_type> iter = list;
+  details::PODptr<size_type> iter = this->list;
   details::PODptr<size_type> next = iter;
 
   // Start 'freed_iter' at beginning of free list
-  void * freed_iter = first;
+  void * freed_iter = this->first;
 
-  const size_type partition_size = alloc_size();
+  const size_type partition_size = this->alloc_size();
 
   do
   {
@@ -116,7 +131,7 @@ object_pool<T, UserAllocator>::~object_pool()
 
   // Make the block list empty so that the inherited destructor doesn't try to
   //  free it again.
-  list.invalidate();
+  this->list.invalidate();
 }
 
 } // namespace boost

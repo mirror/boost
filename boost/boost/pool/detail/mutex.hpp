@@ -39,7 +39,8 @@
 
 #ifdef __WIN32__
   #include <windows.h>
-#elif BOOST_MUTEX_HELPER == BOOST_MUTEX_HELPER_PTHREAD
+#endif
+#ifdef _POSIX_THREADS
   #include <pthread.h>
 #endif
 

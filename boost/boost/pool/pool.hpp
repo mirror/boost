@@ -32,6 +32,13 @@
 // boost::simple_segregated_storage
 #include <boost/pool/simple_segregated_storage.hpp>
 
+// There are a few places in this file where the expression "this->m" is used.
+// This expression is used to force instantiation-time name lookup, which I am
+//   informed is required for strict Standard compliance.  It's only necessary
+//   if "m" is a member of a base class that is dependent on a template
+//   parameter.
+// Thanks to Jens Maurer for pointing this out!
+
 namespace boost {
 
 struct default_user_allocator_new_delete
@@ -171,6 +178,10 @@ class pool: protected simple_segregated_storage<
       return details::pool::lcm<size_type>(requested_size, min_size);
     }
 
+    // for the sake of code readability :)
+    static void * & nextof(void * const ptr)
+    { return *(static_cast<void **>(ptr)); }
+
   public:
     // The second parameter here is an extension!
     // pre: npartition_size != 0 && nnext_size != 0
@@ -274,7 +285,7 @@ bool pool<UserAllocator>::release_memory()
   //  Note that "prev_free" in this case does NOT point to the previous memory
   //  chunk in the free list, but rather the last free memory chunk before the
   //  current block.
-  void * free = first;
+  void * free = this->first;
   void * prev_free = 0;
 
   const size_type partition_size = alloc_size();
@@ -353,7 +364,7 @@ bool pool<UserAllocator>::release_memory()
       if (prev_free != 0)
         nextof(prev_free) = free;
       else
-        first = free;
+        this->first = free;
 
       // And release memory
       UserAllocator::free(ptr.begin());
@@ -388,7 +399,7 @@ bool pool<UserAllocator>::purge_memory()
   } while (iter.valid());
 
   list.invalidate();
-  first = 0;
+  this->first = 0;
 
   return true;
 }
