@@ -307,7 +307,7 @@ catch_exception(const lambda_functor<Arg>& a) {
 }
 
 // catch and do nothing case.
-template <class CatchType, class Arg>
+template <class CatchType>
 inline const 
 tagged_lambda_functor<
   detail::exception_catch_tag<detail::catch_block<CatchType> >, 
@@ -328,7 +328,7 @@ catch_exception() {
           null_type
         > 
       >
-    > (null_type());
+    > ();
 }
 
 // create catch(...) blocks
@@ -349,7 +349,6 @@ catch_all(const lambda_functor<Arg>& a) {
 }
 
 // catch(...) and do nothing case.
-template <class CatchType, class Arg>
 inline const 
 tagged_lambda_functor<
   detail::exception_catch_tag<detail::catch_all_block>, 
@@ -370,7 +369,7 @@ catch_all() {
           null_type
         > 
       > 
-    > (null_type());
+    > ();
 }
 
 // try_catch functions --------------------------------
