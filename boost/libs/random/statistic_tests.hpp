@@ -341,7 +341,7 @@ public:
       std::generate_n(v.begin(), t, f);
       int x = 0;
       for(int r = t-1; r > 0; r--) {
-        std::vector<result_type>::iterator it = 
+        typename std::vector<result_type>::iterator it = 
           std::max_element(v.begin(), v.begin()+r+1);
         x = (r+1)*x + (it-v.begin());
         std::iter_swap(it, v.begin()+r);
