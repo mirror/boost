@@ -22,7 +22,7 @@ width="277" height="86" BORDER=0> </A>
                 <td valign="top">
                     <h1 align="center"><a href="index.html">boost::variant</A></h1>
                     <h2 align="center">Miscellaneous</h2>
-				</td>	
+				</td>
 </tr>
 </table>
 <hr>
@@ -37,22 +37,24 @@ width="277" height="86" BORDER=0> </A>
 <li><a href="../../../boost/variant.hpp">boost/variant.hpp</a> - Defines
 <code><a href="reference.html#Synopsis">boost::variant</a></code>
 <li><a href="../../../boost/incomplete.hpp">boost/incomplete.hpp</a>
-- Defines template class <code><a href="reference.html#Incomplete">boost::incomplete</a></code>.
-<li><a href="../../../boost/apply_visitor.hpp">boost/apply_visitor.hpp</a> -
-Defines the overloaded template function <code>
+- Defines class template <code><a href="reference.html#Incomplete">boost::incomplete</a></code>.
+<li><a href="../../../boost/variant/apply_visitor.hpp">boost/apply_visitor.hpp</a> -
+Defines the function templates <code>
 <a href="reference.html#Visitation">boost::apply_visitor</a></code>
-<li><a href="../../../boost/static_visitor.hpp">boost/static_visitor.hpp</a>
-- Defines template class <code><a href="reference.html#StaticVisitor">
+<li><a href="../../../boost/variant/static_visitor.hpp">boost/static_visitor.hpp</a>
+- Defines class template <code><a href="reference.html#StaticVisitor">
 boost::static_visitor</a></code>.
-<li><a href="../../../boost/extract.hpp">boost/extract.hpp</a>
-- Defines template class<code>
-<a href="reference.html#ValueExtraction">boost::extract</a></code>.</ul>
+<li><a href="../../../boost/variant/get.hpp">boost/get.hpp</a>
+- Defines function templates<code>
+<a href="reference.html#ValueExtraction">boost::get</a></code>.</li>
+<li><a href="../../../boost/empty.hpp">boost/empty.hpp</a>
+- Defines <code><a href="reference.html#empty">boost::empty</a></code>.</li>
+</ul>
 <hr>
 <h2><a name="Compatibility">Compatibility</a></h2>
         <p>To date the code and test harness have been compiled and tested successfully
 using Microsoft Visual C++ 7.0 and GNU C++ 2.95/3.1.</p>
-The GNU C++ implementation of <a href="reference.html#ValueExtraction">extract</a> offers an 
-implicit type conversion operator, which is not supported by the MSVC7 implementation.<br>
+Instantiation with a <code>boost::mpl</code> sequence is not supported under MSVC.<br>
 <br>
 <hr>
 <h2><a name="Troubleshooting">Troubleshooting</a></h2>
