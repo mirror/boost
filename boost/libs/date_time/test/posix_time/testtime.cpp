@@ -35,6 +35,7 @@ void special_values_tests()
     check("from special value +infinity", to_simple_string(p_sv1) == s);
     ptime result = p_sv1 + dd;
     check("Special value (pos infin) + date_duration = +infinity", to_iso_extended_string(result) == s);
+    check("is_special function - pos infin", result.is_special());
     result = p_sv1 - dd;
     check("Special value (pos infin) - date_duration = +infinity", to_iso_extended_string(result) == s);
     result = p_sv1 - dd_ni;
@@ -45,6 +46,7 @@ void special_values_tests()
     result = p_sv2 - td_pi;
     check("Special value (neg infin) - special time_duration (pos infin) = -infinity", to_iso_extended_string(result) == s);
     ptime p_sv3(not_a_date_time);
+    check("is_special function - not_a_date_time", p_sv3.is_special());
     s = "not-a-date-time";
     check("from special value NADT", to_iso_extended_string(p_sv3) == s);
     result = p_sv3 + td;
@@ -269,8 +271,17 @@ main()
   t18 = from_time_t(tt3); //2032-2-15 18:47:14
   check("time_t conversion of 1960483634", 
         t18 == ptime(date(2032,2,15), time_duration(18,47,14)));
-  
+
   special_values_tests();
+
+  //min and max constructors
+  ptime min_ptime(min_date_time);
+  check("check min time constructor", min_ptime == ptime(date(1400,1,1), time_duration(0,0,0,0)));
+  //  std::cout << min_ptime << std::endl;
+  ptime max_ptime(max_date_time);
+  check("check max time constructor", max_ptime == ptime(date(9999,12,31), 
+                                                         hours(24)-time_duration::unit())); 
+  //  std::cout << max_ptime << std::endl;
   
   return printTestStats();
   
