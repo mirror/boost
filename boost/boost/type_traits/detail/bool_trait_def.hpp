@@ -149,3 +149,32 @@ template< param > struct trait##_impl< sp1,sp2 > \
     BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp,value) \
     /**/
 #endif
+
+#ifndef BOOST_TT_INTEGRAL_CONSTANT
+#define BOOST_TT_INTEGRAL_CONSTANT
+
+//
+// this is not a TR1 conforming integral_constant,
+// but it is a first start:
+//
+
+namespace boost{
+
+template <class T, T val>
+struct integral_constant
+{
+   typedef T value_type;
+   typedef integral_constant<T, val> type;
+   BOOST_STATIC_CONSTANT(value_type, value = val);
+};
+
+BOOST_TT_AUX_BOOL_TRAIT_SPEC2(integral_constant, bool, true, true);
+BOOST_TT_AUX_BOOL_TRAIT_SPEC2(integral_constant, bool, false, false);
+
+typedef integral_constant<bool, true> true_type;
+typedef integral_constant<bool, false> false_type;
+
+
+}
+
+#endif
