@@ -9,6 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  21 Jan 01  Undid a bug I introduced yesterday. numeric_cast<> never
+//             worked with stock GCC; trying to get it to do that broke
+//             vc-stlport.
 //  20 Jan 01  Moved BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS to config.hpp.
 //             Removed unused BOOST_EXPLICIT_TARGET macro. Moved
 //             boost::detail::type to boost/type.hpp. Made it compile with
@@ -288,11 +291,13 @@ namespace boost
     template<typename Target, typename Source>
     inline Target numeric_cast(Source arg BOOST_EXPLICIT_DEFAULT_TARGET)
     {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#ifndef BOOST_NO_LIMITS
         // typedefs abbreviating respective trait classes
         typedef std::numeric_limits<Source> arg_traits;
         typedef detail::fixed_numeric_limits<Target> result_traits;
-
+#endif
+        
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         // typedefs that act as compile time assertions
         // (to be replaced by boost compile time assertions
         // as and when they become available and are stable)
