@@ -33,6 +33,7 @@ namespace std{
 
 // simple test of untracked value
 #include "A.hpp"
+
 void test1(){
     std::stringstream ss;
     A a;
@@ -101,7 +102,6 @@ void test2(){
 }
 
 // check that nested member values are properly moved
-
 class D {
     friend class boost::serialization::access;
     template<class Archive>
@@ -141,7 +141,6 @@ void test3(){
 }
 
 // check that data pointed to by pointer members is NOT moved
-
 class E {
     int m_i;
     friend class boost::serialization::access;
@@ -155,6 +154,9 @@ public:
     }
     E() :
         m_i(std::rand())
+    {}
+    E(const E & rhs) :
+        m_i(rhs.m_i)
     {}
 };
 BOOST_TEST_DONT_PRINT_LOG_VALUE( E )
@@ -170,6 +172,19 @@ class F {
 public:
     bool operator==(const F &rhs) const {
         return *m_eptr == *rhs.m_eptr;
+    }
+    F & operator=(const F & rhs) {
+        * m_eptr = * rhs.m_eptr;
+        return *this;
+    }
+    F(){
+        m_eptr = new E;
+    }
+    F(const F & rhs){
+        *this = rhs;
+    }
+    ~F(){
+        delete m_eptr;
     }
 };
 

@@ -36,7 +36,6 @@ namespace std{
 #include "A.hpp"
 
 #include <boost/serialization/variant.hpp>
-#include <boost/variant/apply_visitor.hpp>
 #include <iostream>
 
 template <class T>
@@ -94,7 +93,6 @@ void do_bad_read()
     BOOST_CHECK(exception_invoked);
   }
 }
-
 
 int test_main( int /* argc */, char* /* argv */[] )
 {
