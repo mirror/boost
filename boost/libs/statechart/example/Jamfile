@@ -74,6 +74,7 @@ stage run
     [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ]
     [ fsm-mt-example-build PingPongMulti2 : PingPong : PingPong : <define>USE_TWO_THREADS ]
     [ fsm-st-example-build StopWatch : StopWatch : StopWatch ]
+    [ fsm-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
   : common-variant-tag
     <target>stage
     <target>all
