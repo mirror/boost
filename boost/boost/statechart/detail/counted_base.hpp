@@ -85,7 +85,6 @@ class counted_base : private count_base< NeedsLocking >
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace detail
 } // namespace fsm
-} // namespace boost
 #endif
 
 
@@ -109,8 +108,11 @@ inline void intrusive_ptr_release(
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace detail
 } // namespace fsm
-} // namespace boost
 #endif
+
+
+
+} // namespace boost
 
 
 
