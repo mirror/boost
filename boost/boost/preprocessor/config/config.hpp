@@ -28,7 +28,7 @@
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_EDG() | BOOST_PP_CONFIG_STRICT())
 #    elif defined(__MWERKS__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_MWCC())
-#    elif defined(__BORLANDC__)
+#    elif defined(__BORLANDC__) || defined(__IBMC__) || defined(__IBMCPP__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_BCC())
 #    elif defined(_MSC_VER)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_MSVC())
