@@ -134,6 +134,10 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
 * |filter|_ (PDF__): an iterator over the subset of elements of some
   sequence which satisfy a given predicate
 
+* |function|_ (PDF__): an output iterator wrapping a unary function
+  object; each time an element is written into the dereferenced
+  iterator, it is passed as a parameter to the function object.
+
 * |indirect|_ (PDF__): an iterator over the objects *pointed-to* by the
   elements of some sequence.
 
@@ -143,6 +147,9 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
 * |reverse|_ (PDF__): an iterator which traverses the elements of some
   bidirectional sequence in reverse.  Corrects many of the
   shortcomings of C++98's ``std::reverse_iterator``.
+
+* |shared|_: an iterator over elements of a container whose
+  lifetime is maintained by a |shared_ptr|_ stored in the iterator.
 
 * |transform|_ (PDF__): an iterator over elements which are the result of
   applying some functional transformation to the elements of an
@@ -160,6 +167,10 @@ __ counting_iterator.pdf
 .. _filter: filter_iterator.html
 __ filter_iterator.pdf
 
+.. |function| replace:: ``function_output_iterator``
+.. _function: function_output_iterator.html
+__ function_output_iterator.pdf
+
 .. |indirect| replace:: ``indirect_iterator``
 .. _indirect: indirect_iterator.html
 __ indirect_iterator.pdf
@@ -172,6 +183,9 @@ __ permutation_iterator.pdf
 .. _reverse: reverse_iterator.html
 __ reverse_iterator.pdf
 
+.. |shared| replace:: ``shared_container_iterator``
+.. _shared: ../../utility/shared_container_iterator.html
+
 .. |transform| replace:: ``transform_iterator``
 .. _transform: transform_iterator.html
 __ transform_iterator.pdf
@@ -179,6 +193,9 @@ __ transform_iterator.pdf
 .. |zip| replace:: ``zip_iterator``
 .. _zip: zip_iterator.html
 __ zip_iterator.pdf
+
+.. |shared_ptr| replace:: ``shared_ptr``
+.. _shared_ptr: ../../smart_ptr/shared_ptr.htm
 
 ====================
  Iterator Utilities
