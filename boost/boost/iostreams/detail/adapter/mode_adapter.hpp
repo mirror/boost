@@ -16,7 +16,9 @@
 // deduced by the metafunction io_mode.
 
 #include <ios>                             // streamsize, streamoff, openmodes.
-#include <boost/iostreams/categories.hpp>  // tags.
+#include <boost/config.hpp>                // BOOST_MSVC.
+#include <boost/detail/workaround.hpp>
+#include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/operations.hpp> 
@@ -36,7 +38,9 @@ public:
           device_tag,
           mpl::if_<is_filter<T>, filter_tag, device_tag>,
           mpl::if_<is_filter<T>, multichar_tag, empty_base>,
-          closable_tag,
+          #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+              closable_tag, // VC6 can't see member close()!
+          #endif
           localizable_tag
         { };
     mode_adapter(const policy_type& t) : t_(t) { }
@@ -48,7 +52,9 @@ public:
     std::streamoff seek( std::streamoff off, std::ios::seekdir way,
                          std::ios::openmode which = 
                              std::ios::in | std::ios::out );
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     void close(std::ios::openmode which = std::ios::in | std::ios::out);
+#endif
 
         // Filter member functions.
 
@@ -99,9 +105,11 @@ std::streamoff mode_adapter<Mode, T>::seek
     (std::streamoff off, std::ios::seekdir way, std::ios::openmode which)
 { return boost::iostreams::seek(t_, off, way, which); }
 
-template<typename Mode, typename T>
-void mode_adapter<Mode, T>::close(std::ios::openmode which) 
-{ iostreams::close(t_, which); }
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    template<typename Mode, typename T>
+    void mode_adapter<Mode, T>::close(std::ios::openmode which) 
+    { iostreams::close(t_, which); }
+#endif
 
 } } } // End namespaces detail, iostreams, boost.
 
