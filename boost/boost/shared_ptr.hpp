@@ -33,7 +33,7 @@
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
-#endif    
+#endif
 
 namespace boost
 {
@@ -144,7 +144,13 @@ public:
 
     void reset(T * p = 0)
     {
+        BOOST_ASSERT(p == 0 || p != px);
         this_type(p).swap(*this);
+    }
+
+    template<typename D> void reset(T * p, D d)
+    {
+        this_type(p, d).swap(*this);
     }
 
     typename detail::shared_ptr_traits<T>::reference operator* () const // never throws

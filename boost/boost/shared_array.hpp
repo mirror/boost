@@ -71,6 +71,7 @@ public:
 
     void reset(T * p = 0)
     {
+        BOOST_ASSERT(p == 0 || p != px);
         this_type(p).swap(*this);
     }
 

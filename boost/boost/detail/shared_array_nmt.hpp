@@ -72,6 +72,7 @@ public:
       
     void reset(T * p = 0)
     {
+        BOOST_ASSERT(p == 0 || p != px);
         shared_array(p).swap(*this);
     }
       
