@@ -20,24 +20,6 @@
 #include "boost/detail/workaround.hpp"
 //#include "boost/static_assert.hpp" // gps
 
-// ---- Configuration stuff -----------------------
-// NOTE: gps
-//  - Should be moved to a configuration file
-//
-#if (defined __BORLANDC__ && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)))  \
-	                         || (defined BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-#define BOOST_DYNAMIC_BITSET_DONT_USE_FRIENDS
-#endif
-
-// if we can't use friends then private members are exposed
-//
-#if defined(BOOST_DYNAMIC_BITSET_DONT_USE_FRIENDS)
-#define BOOST_DYNAMIC_BITSET_PRIVATE public
-#else
-#define BOOST_DYNAMIC_BITSET_PRIVATE private
-#endif
-// --------------------------------------------------
-
 
 namespace boost {
 
