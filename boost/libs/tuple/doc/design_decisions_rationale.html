@@ -12,42 +12,63 @@
 <h2>About namespaces</h2>
 
 <p>
-There was a discussion about whether tuples should be in a separate namespace or directly at the <code>boost</code> namespace.
+There was a discussion about whether tuples should be in a separate namespace or directly in the <code>boost</code> namespace.
 The common principle is that domain libraries (like <i>graph</i>, <i>python</i>) should be on a separate
-sub-namespace, while utility like libraries directly in the <code>boost</code> namespace.
+subnamespace, while utility like libraries directly in the <code>boost</code> namespace.
 Tuples are somewhere in between, as the tuple template is clearly a general utility, but the library introduces quite a lot of names in addition to just the tuple template. 
-As a result of the discussion, tuple definitions are now directly under the <code>boost</code> namespace.
+Tuples were originally under a subnamespace.
+As a result of the discussion, tuple definitions were moved directly under the <code>boost</code> namespace.
+As a result of a continued discussion, the subnamespace was reintroduced.
+The final (I truly hope so) solution is now to have all definitions in namespace <code>::boost::tuples</code>, and the most common names in the <code>::boost</code> namespace as well. 
+This is accomplished with using declarations (suggested by Dave Abrahams):
+<code><pre>namespace boost {
+  namespace tuples {
+      ...      
+    // All library code
+      ...
+  }
+  using tuples::tuple; 
+  using tuples::make_tuple;
+  using tuples::tie;
+  using tuples::get;
+}
+</pre></code>
+With this arrangement, tuple creation with direct constructor calls, <code>make_tuple</code> or <code>tie</code> functions do not need the namespace qualifier.
+Further, all functions that manipulate tuples are found with Koenig-lookup.
+The only exceptions are the <code>get&lt;N&gt;</code> functions, which are always called with an explicitly qualified template argument, and thus Koenig-lookup does not apply.
+Therefore, get is lifted to <code>::boost</code> namespace with a using declaration.
+Hence, the interface for an application programmer is in practice under the namespace <code>::boost</code>.
+</p>
 <p>
+The other names, forming an interface for library writers (cons lists, metafunctions manipulating cons lists, ...) remain in the subnamespace <code>::boost::tuples</code>.
+Note, that the names <code>ignore</code>, <code>set_open</code>, <code>set_close</code> and <code>set_delimiter</code> are considered to be part of the application programmer's interface, but are still not under <code>boost</code> namespace. 
+The reason being the danger for name clashes for these common names.
+Further, the usage of these features is probably not very frequent.
+</p>
 
 <h4>For those who are really interested in namespaces</h4>
 
 <p>
-Note! The following discussion is not relevant for the Tuple library, as the 'no
-sub-namespace' decision was taken, but it may be useful for other library writers.
-</p>
-<p>
-In the original tuple library submission, all names were under the namespace <code>tuples</code>. This brought up the issue of naming
-sub-namespaces.
-The rationale for not using the most natural name 'tuple' was to avoid having an identical name with the tuple template. Namespace names are, however, not generally in plural form in boost libraries. Further, no real trouble was reported for using the same name for a namespace and a class. 
+The subnamespace name <i>tuples</i> raised some discussion.
+The rationale for not using the most natural name 'tuple' is to avoid having an identical name with the tuple template. 
+Namespace names are, however, not generally in plural form in boost libraries. 
+First, no real trouble was reported for using the same name for a namespace and a class and we considered changing the name 'tuples' to 'tuple'.
 But we found some trouble after all.
-One solution proposed to the dilemma of introducing a sub-namespace or not was as follows: use a
-sub-namespace but lift the most common names to the <code>boost</code> namespace with using declarations. 
-Both gcc and edg compilers rejected such using declarations if the namespace and class names were identical:
+Both gcc and edg compilers reject using declarations where the namespace and class names are identical:
 
 <code><pre>namespace boost {
   namespace tuple {
-    class cons;
+    ... tie(...);
     class tuple; 
 &nbsp;     ...
   }
-  using tuple::cons; // ok
+  using tuple::tie; // ok
   using tuple::tuple; // error
     ...
 }
 </pre></code>
 
-
-Note, however, that a corresponding using declaration in the global namespace seemed to be ok: 
+Note, however, that a corresponding using declaration in the global namespace seems to be ok: 
 
 <code><pre>
 using boost::tuple::tuple; // ok;

@@ -12,17 +12,18 @@
   <body>
     <h1>Tuple library advanced features</h1>
 
+The advanced features described in this document are all under namespace <code>::boost::tuples</code>
 
 <h2>Metafunctions for tuple types</h2>
 <p>
 Suppose <code>T</code> is a tuple type, and <code>N</code> is a constant integral expression. 
 
-<code><pre>tuple_element&lt;N, T&gt;::type</pre></code>
+<code><pre>element&lt;N, T&gt;::type</pre></code>
 
 gives the type of the <code>N</code>th element in the tuple type <code>T</code>.
 </p>
 
-<code><pre>tuple_length&lt;T&gt;::value</pre></code>
+<code><pre>length&lt;T&gt;::value</pre></code>
 
 gives the length of the tuple type <code>T</code>.
 </p>
@@ -82,7 +83,7 @@ A cons list can be default constructed provided that all its elements can be def
 </p>
 <p>
 A cons list can be constructed from its head and tail. The prototype of the constructor is:
-<pre><code>cons(typename tuple_access_traits&lt;head_type&gt;::parameter_type h,
+<pre><code>cons(typename access_traits&lt;head_type&gt;::parameter_type h,
      const tail_type&amp; t)
 </code></pre>
 The traits template for the head parameter selects correct parameter types for different kinds of element types (for reference elements the parameter type equals the element type, for non-reference types the parameter type is a reference to const non-volatile element type).
@@ -94,13 +95,13 @@ For a one-element cons list the tail argument (<code>null_type</code>) can be om
 
 <h2>Traits classes for tuple element types</h2>
 
-<h4><code>tuple_access_traits</code></h4>
+<h4><code>access_traits</code></h4>
 <p>
-The template <code>tuple_access_traits</code> defines three type functions. Let <code>T</code> be a type of an element in a tuple:
+The template <code>access_traits</code> defines three type functions. Let <code>T</code> be a type of an element in a tuple:
 <ol>
-<li><code>tuple_access_traits&lt;T&gt;::type</code> maps <code>T</code> to the return type of the non-const access functions (nonmeber and member <code>get</code> functions, and the <code>get_head</code> function).</li>
-<li><code>tuple_access_traits&lt;T&gt;::const_type</code> maps <code>T</code> to the return type of the const access functions.</li>
-<li><code>tuple_access_traits&lt;T&gt;::parameter_type</code> maps <code>T</code> to the parameter type of the tuple constructor.</li>
+<li><code>access_traits&lt;T&gt;::type</code> maps <code>T</code> to the return type of the non-const access functions (nonmeber and member <code>get</code> functions, and the <code>get_head</code> function).</li>
+<li><code>access_traits&lt;T&gt;::const_type</code> maps <code>T</code> to the return type of the const access functions.</li>
+<li><code>access_traits&lt;T&gt;::parameter_type</code> maps <code>T</code> to the parameter type of the tuple constructor.</li>
 </ol>
 <h4><code>make_tuple_traits</code></h4>
 
@@ -120,7 +121,8 @@ The type function call <code>make_tuple_traits&lt;T&gt;::type</code> implements 
 Objects of type <code>reference_wrapper</code> are created with the <code>ref</code> and <code>cref</code> functions (see <A href="tuple_users_guide.html#make_tuple">The <code>make_tuple</code> function</A>.)
 </p>
 
-<p>Note, that the <code>reference_wrapper</code> template and the <code>ref</code> and <code>cref</code> functions are defined in a separate hpp-file <code>reference_wrappers.hpp</code>, which can be included without including the rest of the tuple library.
+<p>Reference wrappers were originally part of the tuple library, but they are now a general utility of boost. 
+The <code>reference_wrapper</code> template and the <code>ref</code> and <code>cref</code> functions are defined in a separate file <code>ref.hpp</code> in the main boost include directory; and directly in the <code>boost</code> namespace.
 </p>
 
 <A href="tuple_users_guide.html">Back to the user's guide</A>

@@ -67,7 +67,7 @@ and add the <code>libs/tuple/src/tuple.hpp</code> file to your project.
 
 Both <code>tuple_io.hpp</code> and <code>tuple_comparison.hpp</code> include <code>tuple.hpp</code>.
 
-<p>All definitions are in namespace <code>boost</code>.
+<p>All definitions are in namespace <code>::boost::tuples</code>, but the most common names are lifted to namespace <code>::boost</code> with using declarations. These names are: <code>tuple</code>, <code>make_tuple</code>, <code>tie</code> and <code>get</code>. Further, <code>ref</code> and <code>cref</code> are defined directly under the <code>::boost</code> namespace.
 
 <h2><a name = "tuple_types">Tuple types</a></h2>
 
@@ -252,6 +252,10 @@ A aa = get&lt;3&gt;(t);     // error: index out of bounds
 ++get&lt;0&gt;(t);  // ok, can be used as any variable
 </code></pre>
 
+Note! The member get functions are not supported with MS Visual C++ compiler.
+Further, the compiler has trouble with finding the non-member get functions without an explicit namespace qualifier. 
+Hence, all <code>get</code> calls should be qualified as: <code>tuples::get&lt;N&gt;(a_tuple)</code> when writing code that shoud compile with MSVC++ 6.0.
+
 <h2><a name = "construction_and_assignment">Copy construction and tuple assignment</a></h2>
 
 <p>
@@ -343,10 +347,10 @@ tie(i, c) = std::make_pair(1, 'a');
 </code></pre>
 <h4>Ignore</h4>
 There is also an object called <code>ignore</code> which allows you to ignore an element assigned by a tuple.
-The idea is that a function may return a tuple, only part of which you are interested in. For example:
+The idea is that a function may return a tuple, only part of which you are interested in. For example (note, that <code>ignore</code> is under the <code>tuples</code> subnamespace):
 
 <pre><code>char c;
-tie(ignore, c) = std::make_pair(1, 'a');
+tie(tuples::ignore, c) = std::make_pair(1, 'a');
 </code></pre>
 
 <h2><a name = "streaming">Streaming</a></h2>
@@ -382,8 +386,9 @@ last element.</li>
 elements.</li>
 </ul>
 
+Note, that these manipulators are defined in the <code>tuples</code> subnamespace. 
 For example:
-<code><pre>cout &lt;&lt; set_open('[') &lt;&lt; set_close(']') &lt;&lt; set_delimiter(',') &lt;&lt; a; 
+<code><pre>cout &lt;&lt; tuples::set_open('[') &lt;&lt; tuples::set_close(']') &lt;&lt; tuples::set_delimiter(',') &lt;&lt; a; 
 </code></pre>
 outputs the same tuple <code>a</code> as: <code>[1.0,2,Howdy folks!]</code>
 
@@ -397,7 +402,7 @@ The code:
 tuple&lt;int, int&gt; j;
 
 cin &gt;&gt; i;
-cin &gt;&gt; set_open('[') &gt;&gt; set_close(']') &gt;&gt; set_delimiter(':');
+cin &gt;&gt; tuples::set_open('[') &gt;&gt; tuples::set_close(']') &gt;&gt; tules::set_delimiter(':');
 cin &gt;&gt; j;
 </code></pre>
 
@@ -506,7 +511,7 @@ J&auml;rvi J.: <i>ML-Style Tuple Assignment in Standard C++ - Extending the Mult
 
 <hr>
 
-<p>Last modified 2001-08-10</p>
+<p>Last modified 2001-09-13</p>
 
 <p>&copy; Copyright <a href="../../../people/jaakko_jarvi.htm"> Jaakko J&auml;rvi</a> 2001. 
 
