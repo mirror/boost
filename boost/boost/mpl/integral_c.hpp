@@ -31,7 +31,7 @@ struct integral_c
 
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
     // while some other don't like 'value + 1' (Borland)
-#if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 241
+#if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
  private:
     BOOST_STATIC_CONSTANT(T, next_value = (N + 1));
     BOOST_STATIC_CONSTANT(T, prior_value = (N - 1));
