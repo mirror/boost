@@ -8,7 +8,7 @@
 
 /*
 
-  This file verifies that the BOOST_FUNCTION_REQUIRES4 macro
+  This file verifies that the BOOST_CLASS_REQUIRES macro
   of the Boost Concept Checking Library catches errors
   when it is suppose to.
 
@@ -16,9 +16,16 @@
 
 struct foo { };
 
+using namespace boost;
+
+class class_requires_test
+{
+  typedef class_requires< EqualityComparableConcept<foo> >::check req;
+};
+
 int
 main()
 {
-  BOOST_FUNCTION_REQUIRES4(foo, foo, foo, foo, BinaryFunctionConcept);
+  class_requires_test x;
   return 0;
 }

@@ -19,6 +19,6 @@ struct foo { };
 int
 main()
 {
-  BOOST_FUNCTION_REQUIRES(foo, EqualityComparableConcept);
+  boost::function_requires< boost::EqualityComparableConcept<foo> >();
   return 0;
 }

@@ -23,69 +23,69 @@ main()
   using namespace boost;
   {
     typedef default_constructible_archetype<> foo;
-    BOOST_FUNCTION_REQUIRES(foo, DefaultConstructibleConcept);
+    function_requires< DefaultConstructibleConcept<foo> >();
   }
   {
     typedef copy_constructible_archetype<> foo;
-    BOOST_FUNCTION_REQUIRES(foo, CopyConstructibleConcept);
+    function_requires< CopyConstructibleConcept<foo> >();
   }
   {
     typedef assignable_archetype<> foo;
-    BOOST_FUNCTION_REQUIRES(foo, AssignableConcept);
+    function_requires< AssignableConcept<foo> >();
   }
   {
     typedef copy_constructible_archetype<> foo;
     typedef convertible_to_archetype<foo> convertible_to_foo;
-    BOOST_FUNCTION_REQUIRES2(convertible_to_foo, foo, ConvertibleConcept);
+    function_requires< ConvertibleConcept<convertible_to_foo, foo> >();
   }
   {
-    BOOST_FUNCTION_REQUIRES2(boolean_archetype, bool, ConvertibleConcept);
+    function_requires< ConvertibleConcept<boolean_archetype, bool> >();
   }
   {
     typedef unary_function_archetype<int, int> F;
-    BOOST_FUNCTION_REQUIRES3(F, int, int, UnaryFunctionConcept);
+    function_requires< UnaryFunctionConcept<F, int, int> >();
   }
   {
     typedef binary_function_archetype<int, int, int> F;
-    BOOST_FUNCTION_REQUIRES4(F, int, int, int, BinaryFunctionConcept);
+    function_requires< BinaryFunctionConcept<F, int, int, int> >();
   }
   {
     typedef unary_predicate_archetype<int> F;
-    BOOST_FUNCTION_REQUIRES2(F, int, UnaryPredicateConcept);
+    function_requires< UnaryPredicateConcept<F, int> >();
   }
   {
     typedef binary_predicate_archetype<int, int> F;
-    BOOST_FUNCTION_REQUIRES3(F, int, int, BinaryPredicateConcept);
+    function_requires< BinaryPredicateConcept<F, int, int> >();
     typedef const_binary_predicate_archetype<int, int> const_F;
-    BOOST_FUNCTION_REQUIRES3(const_F, int, int, Const_BinaryPredicateConcept);
+    function_requires< Const_BinaryPredicateConcept<const_F, int, int> >();
   }
   {
     typedef trivial_iterator_archetype<null_archetype> Iter;
-    BOOST_FUNCTION_REQUIRES(Iter, TrivialIteratorConcept);
+    function_requires< TrivialIteratorConcept<Iter> >();
   }
   {
     typedef mutable_trivial_iterator_archetype<null_archetype> Iter;
-    BOOST_FUNCTION_REQUIRES(Iter, Mutable_TrivialIteratorConcept);
+    function_requires< Mutable_TrivialIteratorConcept<Iter> >();
   }
   {
     typedef input_iterator_archetype<null_archetype> Iter;
-    BOOST_FUNCTION_REQUIRES(Iter, InputIteratorConcept);
+    function_requires< InputIteratorConcept<Iter> >();
   }
   {
     typedef output_iterator_archetype Iter;
-    BOOST_FUNCTION_REQUIRES2(Iter, int, OutputIteratorConcept);
+    function_requires< OutputIteratorConcept<Iter, int> >();
   }
   {
     typedef forward_iterator_archetype<null_archetype> Iter;
-    BOOST_FUNCTION_REQUIRES(Iter, ForwardIteratorConcept);
+    function_requires< ForwardIteratorConcept<Iter> >();
   }
   {
     typedef bidirectional_iterator_archetype<null_archetype> Iter;
-    BOOST_FUNCTION_REQUIRES(Iter, BidirectionalIteratorConcept);
+    function_requires< BidirectionalIteratorConcept<Iter> >();
   }
   {
     typedef random_access_iterator_archetype<null_archetype> Iter;
-    BOOST_FUNCTION_REQUIRES(Iter, RandomAccessIteratorConcept);
+    function_requires< RandomAccessIteratorConcept<Iter> >();
   }
 
   return 0;
