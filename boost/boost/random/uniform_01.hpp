@@ -28,17 +28,23 @@
 namespace boost {
 
 // Because it is so commonly used: uniform distribution on the real [0..1)
-// range.  This allows for specializations to avoid a costly FP division
+// range.  This allows for specializations to avoid a costly int -> float
+// conversion plus float multiplication
 template<class UniformRandomNumberGenerator, class RealType = double>
 class uniform_01
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
+
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-  explicit uniform_01(base_type & rng) : _rng(rng) { 
-
+  explicit uniform_01(base_type & rng)
+    : _rng(rng),
+      _factor(1.0 /
+              (static_cast<result_type>(_rng.max()-_rng.min()) +
+               (std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0)))
+  {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
@@ -46,16 +52,14 @@ public:
   // compiler-generated copy ctor is fine
   // assignment is disallowed because there is a reference member
 
+  result_type min() const { return 0.0; }
+  result_type max() const { return 1.0; }
   base_type& base() const { return _rng; }
   void reset() { }
 
   result_type operator()() {
-    return static_cast<result_type>(_rng() - _rng.min()) /
-      (static_cast<result_type>(_rng.max()-_rng.min()) +
-       (std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0));
+    return static_cast<result_type>(_rng() - _rng.min()) * _factor;
   }
-  result_type min() const { return 0.0; }
-  result_type max() const { return 1.0; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_01& x, const uniform_01& y)
@@ -68,6 +72,7 @@ public:
 private:
   typedef typename base_type::result_type base_result;
   base_type & _rng;
+  result_type _factor;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
