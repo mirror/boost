@@ -17,6 +17,8 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstdlib> // getenv
+#include <cassert>
+
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
 	using ::getenv;
@@ -33,8 +35,10 @@ char * tmpdir(){
         dirname = std::getenv("TMPDIR");
     if(NULL == dirname)
         dirname = std::getenv("TEMP");
-    if(NULL == dirname)
-        dirname = "/tmp";
+    if(NULL == dirname){
+        assert(false); // no temp directory found
+        dirname = ".";
+    }
 	return dirname;
 }
 
