@@ -1661,8 +1661,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V1::value_type value1_type;
         typedef typename V2::value_type value2_type;
 
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef V1::size_type size_type;
+        typedef V1::difference_type difference_type;
         typedef index_pair<self_type> value_type;
         // There is nothing that can be referenced directly. Always return a copy of the index_pair
         typedef value_type reference;
@@ -1847,8 +1847,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V2::value_type value2_type;
         typedef typename V3::value_type value3_type;
 
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef V1::size_type size_type;
+        typedef V1::difference_type difference_type;
         typedef index_triple<self_type> value_type;
         // There is nothing that can be referenced directly. Always return a copy of the index_triple
         typedef value_type reference;
@@ -1927,6 +1927,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
