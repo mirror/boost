@@ -15,18 +15,18 @@ all the necessary functions rounded upward or downward. This class is the
 first parameter of <code>policies</code>, it is also the type named
 <code>rounding</code> in the policy definition of <code>interval</code>.</p>
 
-<p>By default, it is <code>interval_lib::rounded_math&lt;T&gt;</code>.
-The class <code>interval_lib::rounded_math</code> is already
-specialized for the standard floating types (<code>float</code> ,
-<code>double</code> and <code>long double</code>). So if the base type of
-your intervals is not one of these, a good solution would probably be to
-provide a specialization of this class. But if the default specialization of
+<p>By default, it is <code>interval_lib::rounded_math&lt;T&gt;</code>. The
+class <code>interval_lib::rounded_math</code> is already specialized for the
+standard floating types (<code>float</code> , <code>double</code> and
+<code>long double</code>). So if the base type of your intervals is not one
+of these, a good solution would probably be to provide a specialization of
+this class. But if the default specialization of
 <code>rounded_math&lt;T&gt;</code> for <code>float</code>,
 <code>double</code>, or <code>long double</code> is not what you seek, or you
-do not want to specialize
-<code>interval_lib::rounded_math&lt;T&gt;</code> (say because you
-prefer to work in your own namespace) you can also define your own rounding
-policy and pass it directly to <code>interval_lib::policies</code>.</p>
+do not want to specialize <code>interval_lib::rounded_math&lt;T&gt;</code>
+(say because you prefer to work in your own namespace) you can also define
+your own rounding policy and pass it directly to
+<code>interval_lib::policies</code>.</p>
 
 <h2>Requirements</h2>
 
@@ -79,6 +79,9 @@ struct rounding {
   T median(T, T);   // [-&#x221e;;+&#x221e;][-&#x221e;;+&#x221e;]
   T int_down(T);    // [-&#x221e;;+&#x221e;]
   T int_up  (T);    // [-&#x221e;;+&#x221e;]
+  // conversion functions
+  T conv_down(U);
+  T conv_up  (U);
   // unprotected rounding class
   typedef ... unprotected_rounding;
 };</pre>
@@ -99,7 +102,10 @@ upper bound (for <code>_up</code>) on the true mathematical result of the
 corresponding function. The function <code>median</code> computes the average
 of its two arguments rounded to its nearest representable number. The
 functions <code>int_down</code> and <code>int_up</code> compute the nearest
-integer smaller or bigger than their argument.</p>
+integer smaller or bigger than their argument. Finally,
+<code>conv_down</code> and <code>conv_up</code> are responsible of the
+conversions of values of other types to the base number type: the first one
+must round down the value and the second one must round it up.</p>
 
 <p>The type <code>unprotected_rounding</code> allows to remove all controls.
 For reasons why one might to do this, see the <a
@@ -541,7 +547,8 @@ operation is obviously very expensive.</p>
     <code>double</code> types, use the default
     <code>rounded_math&lt;T&gt;</code>;</li>
   <li>for fast wide intervals without any rounding nor precision, use
-    <code>save_state_nothing&lt;rounded_transc_exact&lt;T&gt; &gt;</code>;</li>
+    <code>save_state_nothing&lt;rounded_transc_exact&lt;T&gt;
+  &gt;</code>;</li>
   <li>for an exact type (like int or rational with a little help for infinite
     and NaN values) without support for transcendental functions, the
     solution could be <code>save_state_nothing&lt;rounded_transc_dummy&lt;T,
@@ -552,8 +559,9 @@ operation is obviously very expensive.</p>
 </ul>
 <hr>
 
-<p>Revised: 2003-01-21<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.<br>
-Polytechnic University.</p>
+<p>Revised: 2004-02-17<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
+Polytechnic University.<br>
+Copyright (c) Guillaume Melquiond, 2004. ENS Lyon.</p>
 </body>
 </html>

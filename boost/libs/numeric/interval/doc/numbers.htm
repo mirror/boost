@@ -102,7 +102,7 @@ you are still reading, it is probably because you want to know the basic
 properties the rounding policy should validate.</p>
 
 <p>Whichever operation or function you consider, the following property
-should be present: <code>f_down(x,y) &lt;= f(x,y) &lt;= f_up(x,y)</code>.
+should be respected: <code>f_down(x,y) &lt;= f(x,y) &lt;= f_up(x,y)</code>.
 Here, <code>f</code> denotes the infinitely precise function computed and
 <code>f_down</code> and <code>f_up</code> are functions which return possibly
 inexact values but of the correct type (the base type). If possible, they
@@ -129,12 +129,16 @@ there is an exception: the unary minus need to be defined. Moreover, this
 operator should only provide exact results; it is the reason why the rounding
 policy does not provide some negation functions.</p>
 
-<p>The conversion from <code>int</code> to the base type need to be defined.
-The conversion the other way around is provided by the rounding policy; and
-no other conversion is needed.</p>
+<p>The conversion from <code>int</code> to the base type needs to be defined
+(only a few values need to be available: -1, 0, 1, 2). The conversion the
+other way around is provided by the rounding policy (<code>int_down</code>
+and <code>int_up</code> members); and no other conversion is strictly needed.
+However, it may be valuable to provide as much conversions as possible in the
+rounding policy (<code>conv_down</code> and <code>conv_up</code> members) in
+order to benefit from interval conversions.</p>
 <hr>
 
-<p>Revised: 2004-02-16<br>
+<p>Revised: 2004-02-17<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
 Copyright (c) Guillaume Melquiond, 2004.</p>

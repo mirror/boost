@@ -14,10 +14,10 @@ align="middle">
 
 <center>
 
-<table cols="2" width="80%">
+<table width="80%">
   <tbody>
-    <tr align=TOP>
-      <td align=TOP><b>Contents of this page:</b><br>
+    <tr>
+      <td><b>Contents of this page:</b><br>
         <a href="#intro">Introduction</a><br>
         <a href="#synopsis">Synopsis</a><br>
         <a href="#interval">Template class <code>interval</code></a><br>
@@ -27,7 +27,7 @@ align="middle">
         <a href="#dangers">Common pitfalls and dangers</a><br>
         <a href="#rationale">Rationale</a><br>
         <a href="#acks">History and Acknowledgments</a></td>
-      <td align=TOP><b>Other pages associated with this page:</b><br>
+      <td><b>Other pages associated with this page:</b><br>
         <a href="rounding.htm">Rounding policies</a><br>
         <a href="checking.htm">Checking policies</a><br>
         <a href="policies.htm">Policies manipulation</a><br>
@@ -198,10 +198,10 @@ trigonometric functions (<code>exp</code>, <code>log</code>,
 interval-specific functions (<code>min</code>, <code>max</code>, which have a
 different meaning than <code>std::min</code> and <code>std::max</code>;
 <code>lower</code>, <code>upper</code>, <code>width</code>,
-<code>median</code>, <code>empty</code>, <code>singleton, equal</code>,
-<code>in</code>, <code>in_zero</code>, <code>subset</code>,
-<code>proper_subset</code>, <code>overlap</code>, <code>intersection</code>,
-<code>hull</code>, <code>bisect</code>).</p>
+<code>median</code>, <code>empty</code>, <code>singleton</code>,
+<code>equal</code>, <code>in</code>, <code>in_zero</code>,
+<code>subset</code>, <code>proper_subset</code>, <code>overlap</code>,
+<code>intersection</code>, <code>hull</code>, <code>bisect</code>).</p>
 
 <p>For some functions which take several parameters of type
 <code>interval&lt;T&gt;</code>, all combinations of argument types
@@ -214,11 +214,12 @@ that an argument is a singleton sometimes renders some tests unnecessary).</p>
 <p>A somewhat more advanced usage of this library is to hand-pick the
 policies <code>Rounding</code> and <code>Checking</code> and pass them to
 <code>interval&lt;T, Policies&gt;</code> through the use of <code>Policies :=
-boost::interval_lib::policies&lt;Rounding,Checking&gt;</code>. Appropriate
-policies can be fabricated by using the various classes provided in the
-namespace <code>boost::interval_lib</code> as detailed in section <a
-href="#interval_lib">Interval Support Library</a>. It is also possible to
-choose the comparison scheme by overloading operators through namespaces.</p>
+boost::numeric::interval_lib::policies&lt;Rounding,Checking&gt;</code>.
+Appropriate policies can be fabricated by using the various classes provided
+in the namespace <code>boost::numeric::interval_lib</code> as detailed in
+section <a href="#interval_lib">Interval Support Library</a>. It is also
+possible to choose the comparison scheme by overloading operators through
+namespaces.</p>
 
 <h2><a name="synopsis"></a>Synopsis</h2>
 <pre>namespace boost {
@@ -372,61 +373,70 @@ simplest minimum:
 class interval
 {
   public:
-  typedef T      base_type;
+  typedef T base_type;
   typedef Policies traits_type;
 
-  interval(const T&amp; v = T());
-  interval(const T&amp; l, const T&amp; u);
+  interval();
+  interval(T const &amp;v);
+  template&lt;class T1&gt; interval(T1 const &amp;v);
+  interval(T const &amp;l, T const &amp;u);
+  template&lt;class T1, class T2&gt; interval(T1 const &amp;l, T2 const &amp;u);
+  interval(interval&lt;T, Policies&gt; const &amp;r);
+  template&lt;class Policies1&gt; interval(interval&lt;T, Policies1&gt; const &amp;r);
+  template&lt;class T1, class Policies1&gt; interval(interval&lt;T1, Policies1&gt; const &amp;r);
 
-  template&lt;class Policies2&gt;
-  interval(const interval&lt;T,Policies2&gt;&amp; r);
+  interval &amp;operator=(T const &amp;v);
+  template&lt;class T1&gt; interval &amp;operator=(T1 const &amp;v);
+  interval &amp;operator=(interval&lt;T, Policies&gt; const &amp;r);
+  template&lt;class Policies1&gt; interval &amp;operator=(interval&lt;T, Policies1&gt; const &amp;r);
+  template&lt;class T1, class Policies1&gt; interval &amp;operator=(interval&lt;T1, Policies1&gt; const &amp;r);
 
-  // compiler-generated copy constructor and assignment operator are fine
+  void assign(T const &amp;l, T const &amp;u);
 
-  interval&amp; operator=(const T&amp; x);
-  void assign(const T&amp; l, const T&amp; u);
-
-  const T&amp; lower() const;
-  const T&amp; upper() const;
+  T const &amp;lower() const;
+  T const &amp;upper() const;
 
   static interval empty();
   static interval whole();
-  static interval hull(const T&amp; x, const T&amp; y);
+  static interval hull(T const &amp;x, T const &amp;y);
 
-  interval&amp; operator+= (const T&amp; r);
-  interval&amp; operator+= (const interval&amp; r);
-  interval&amp; operator-= (const T&amp; r);
-  interval&amp; operator-= (const interval&amp; r);
-  interval&amp; operator*= (const T&amp; r);
-  interval&amp; operator*= (const interval&amp; r);
-  interval&amp; operator/= (const T&amp; r);
-  interval&amp; operator/= (const interval&amp; r);
+  interval&amp; operator+= (T const &amp;r);
+  interval&amp; operator-= (T const &amp;r);
+  interval&amp; operator*= (T const &amp;r);
+  interval&amp; operator/= (T const &amp;r);
+  interval&amp; operator+= (interval const &amp;r);
+  interval&amp; operator-= (interval const &amp;r);
+  interval&amp; operator*= (interval const &amp;r);
+  interval&amp; operator/= (interval const &amp;r);
 };</pre>
 
-<p>The two main constructors accept one and two arguments of type T. The
-first one produces a singleton interval [v,v]; and the second one an interval
-[l,u]. The second one will use the checking policy if u&lt;l. If you are not
-sure whether the bounds are inverted or not, it is better to use the function
-call <code>hull(l,u)</code>. This will not create a problem if u&lt;l.</p>
+<p>The constructors create an interval enclosing their arguments. If there
+are two arguments, the first one is assumed to be the left bound and the
+second one is the right bound. Consequently, the arguments need to be
+ordered. If the property !(l &lt;= u) is not respected, the checking policy
+will be used to create an empty interval. If no argument is given, the
+created interval is the singleton zero.</p>
 
-<p>There is a template constructor in order to change the traits parameter of
-an interval. But there is no constructor that changes the base type of an
-interval (it could lead to violating the inclusion property if the old base
-type is not contained in the new one).</p>
+<p>If the type of the arguments is the same as the base number type, the
+values are directly used for the bounds. If it is not the same type, the
+library will use the rounding policy in order to convert the arguments
+(<code>conv_down</code> and <code>conv_up</code>) and create an enclosing
+interval. When the argument is an interval with a different policy, the input
+interval is checked in order to correctly propagate its emptiness (if
+empty).</p>
 
-<p>There is an assign function in order to directly change the bounds of an
-interval. It behaves like the second constructor if the bounds are inverted.
-There is no assign function that directly takes an interval or only one
-number as a parameter; just use the assignment operator in that case.</p>
+<p>The assignment operators behave similarly, except they obviously take one
+argument only. There is also an <code>assign</code> function in order to
+directly change the bounds of an interval. It behaves like the two-arguments
+constructors if the bounds are not ordered. There is no assign function that
+directly takes an interval or only one number as a parameter; just use the
+assignment operators in such a case.</p>
 
-<p>Assignment operator, copy constructor and destructor are the ones the
-compiler automatically generates. There is also an assignment operator for
-the type T.</p>
-
-<p>The static functions <code>empty</code> and <code>whole</code> produces
-the corresponding intervals. They are static member functions rather than
-global functions because they cannot guess their return types. Likewise for
-<code>hull</code>.</p>
+<p>The static functions <code>empty</code> and <code>whole</code> produce the
+corresponding intervals. They are static member functions rather than global
+functions because they cannot guess their return types. Likewise for
+<code>hull</code>. <code>empty</code> and <code>whole</code> involve the
+checking policy in order to get the bounds of the resulting intervals.</p>
 
 <h2><a name="opers"></a>Operations and Functions</h2>
 
@@ -576,7 +586,7 @@ operation, it can result in a better code with poor optimizers.</p>
 
 <h3>Constants</h3>
 
-<p>Some constants are hidden in the <code>boost::interval_lib</code>
+<p>Some constants are hidden in the <code>boost::numeric::interval_lib</code>
 namespace. They need to be explicitely templated by the interval type. The
 functions are <code>pi&lt;I&gt;()</code>, <code>pi_half&lt;I&gt;()</code> and
 <code>pi_twice&lt;I&gt;()</code>, and they return an object of interval type
@@ -835,29 +845,15 @@ and the width of intervals, and so on. The example file io.cpp<code></code>
 shows some possibilities and may serve as a foundation in order for the user
 to define her own operators.</p>
 
-<p><strong>Conversion from <code>interval&lt;T1&gt;</code> to
-<code>interval&lt;T&gt;</code>.</strong> There is no such conversion in the
-library. Specifically, there is no way to change the base number type without
-explicitly casting both the lower and upper bounds from <code>T1</code> to
-<code>T2</code> and using a constructor. We did not want to provide this
-conversion because there is no easy way to make sure the inclusion property
-is guaranteed: a simple casting with loss of precision can lead to invalid or
-empty intervals. Moreover it is not clear who should be responsible for the
-conversion: <code>T2</code> is not required to know about all the possible
-types <code>T1</code>. We also do not want to throw an exception is there is
-a loss of precision (as is done for instance in <code>numeric_cast</code>);
-instead, the result should be correctly rounded to ensure the inclusion
-property. So we decided not to provide the conversion and leave it up to the
-user to do it himself or herself.</p>
-
 <p><strong>Mixed operations with integers.</strong> When using and reusing
 template codes, it is common there are operations like <code>2*x</code>.
 However, the library does not provide them by default because the conversion
-from <code>int</code> to the base number type is not always correct. So the
-functions have been put in a separate header and the user need to include
-them explicitely if she wants to benefit from these mixed operators Another
-point, there is no mixed comparison operators due to the technical way they
-are defined.</p>
+from <code>int</code> to the base number type is not always correct (think
+about the conversion from a 32bit integer to a single precision
+floating-point number). So the functions have been put in a separate header
+and the user needs to include them explicitely if she wants to benefit from
+these mixed operators. Another point, there is no mixed comparison operators
+due to the technical way they are defined.</p>
 
 <h2 id="acks">History and Acknowledgments</h2>
 
@@ -878,9 +874,9 @@ order for this library to be written. Hervé reorganized and wrote chapters of
 the documentation based on Guillaume's great starting point.</p>
 <hr>
 
-<p>Revised: 2003-08-16<br>
+<p>Revised: 2004-02-17<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
-Copyright (c) Guillaume Melquiond, 2003.</p>
+Copyright (c) Guillaume Melquiond, 2003-2004. ENS Lyon.</p>
 </body>
 </html>
