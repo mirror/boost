@@ -111,7 +111,7 @@ namespace boost
     inline bool 
     empty( const C& c )
     {
-        return range_detail::collection_empty<  BOOST_CT_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
+        return range_detail::collection_empty<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
     }
 
 } // namespace 'boost'

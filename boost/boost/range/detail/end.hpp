@@ -20,17 +20,17 @@ namespace boost
     namespace range_detail
     {
         template< typename T >
-        struct collection_end;
+        struct range_end;
 
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_end<std_container_>
+        struct range_end<std_container_>
         {
             template< typename C >
-            static BOOST_CT_DEDUCED_TYPENAME result_iterator_of<C>::type fun( C& c )
+            static BOOST_RANGE_DEDUCED_TYPENAME result_iterator_of<C>::type fun( C& c )
             {
                 return c.end();
             };
@@ -41,10 +41,10 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_end<std_pair_>
+        struct range_end<std_pair_>
         {
             template< typename P >
-            static BOOST_CT_DEDUCED_TYPENAME result_iterator_of<P>::type fun( const P& p )
+            static BOOST_RANGE_DEDUCED_TYPENAME result_iterator_of<P>::type fun( const P& p )
             {
                 return p.second;
             }
@@ -55,10 +55,10 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_end<array_>  
+        struct range_end<array_>  
         {
             template< typename T, std::size_t sz >
-            static T* fun( T BOOST_ARRAY_REF[sz] )
+            static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
                 return boost::range_detail::array_end( array );
             }
@@ -66,20 +66,20 @@ namespace boost
 
                 
         template<>
-        struct collection_end<char_array_>
+        struct range_end<char_array_>
         {
             template< typename T, std::size_t sz >
-            static std::size_t fun( T BOOST_ARRAY_REF[sz] )
+            static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
                 return boost::range_detail::array_end( array );
             }
         };
         
         template<>
-        struct collection_end<wchar_t_array_>
+        struct range_end<wchar_t_array_>
         {
             template< typename T, std::size_t sz >
-            static std::size_t fun( T BOOST_ARRAY_REF[sz] )
+            static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
                 return boost::range_detail::array_end( array );
             }
@@ -90,7 +90,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_end<char_ptr_>
+        struct range_end<char_ptr_>
         {
             static char* fun( char* s )
             {
@@ -99,7 +99,7 @@ namespace boost
         };
 
         template<>
-        struct collection_end<const_char_ptr_>
+        struct range_end<const_char_ptr_>
         {
             static const char* fun( const char* s )
             {
@@ -108,7 +108,7 @@ namespace boost
         };
 
         template<>
-        struct collection_end<wchar_t_ptr_>
+        struct range_end<wchar_t_ptr_>
         {
             static wchar_t* fun( wchar_t* s )
             {
@@ -118,7 +118,7 @@ namespace boost
 
 
         template<>
-        struct collection_end<const_wchar_t_ptr_>
+        struct range_end<const_wchar_t_ptr_>
         {
             static const wchar_t* fun( const wchar_t* s )
             {
@@ -132,7 +132,7 @@ namespace boost
     inline BOOST_DEDUCED_TYPENAME result_iterator_of<C>::type 
     end( C& c )
     {
-        return range_detail::collection_end<  BOOST_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
+        return range_detail::range_end<  BOOST_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
     }
     
 } // namespace 'boost'

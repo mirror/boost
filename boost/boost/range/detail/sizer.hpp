@@ -26,11 +26,11 @@ namespace boost
     
     template< typename T, std::size_t sz >
     char&
-    sizer( const T BOOST_ARRAY_REF[sz] )[sz];
+    sizer( const T BOOST_RANGE_ARRAY_REF()[sz] )[sz];
     
     template< typename T, std::size_t sz >
     char&
-    sizer( T BOOST_ARRAY_REF[sz] )[sz];
+    sizer( T BOOST_RANGE_ARRAY_REF()[sz] )[sz];
 
 } // namespace 'boost'
 

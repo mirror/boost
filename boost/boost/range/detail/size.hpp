@@ -32,7 +32,7 @@ namespace boost
         struct collection_size<std_container_>
         {
             template< typename C >
-            static BOOST_CT_DEDUCED_TYPENAME C::size_type fun( const C& c )
+            static BOOST_RANGE_DEDUCED_TYPENAME C::size_type fun( const C& c )
             {
                 return c.size();
             };
@@ -46,7 +46,7 @@ namespace boost
         struct collection_size<std_pair_>
         {
             template< typename P >
-            static BOOST_CT_DEDUCED_TYPENAME size_type_of<P>::type fun( const P& p )
+            static BOOST_RANGE_DEDUCED_TYPENAME size_type_of<P>::type fun( const P& p )
             {
                 return std::distance( p.first, p.second );
             }
@@ -130,10 +130,10 @@ namespace boost
     
 
     template< typename C >
-    BOOST_CT_DEDUCED_TYPENAME size_type_of<C>::type 
+    BOOST_RANGE_DEDUCED_TYPENAME size_type_of<C>::type 
     size( const C& c )
     {
-        return range_detail::collection_size<  BOOST_CT_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
+        return range_detail::collection_size<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
     }
     
 } // namespace 'boost'

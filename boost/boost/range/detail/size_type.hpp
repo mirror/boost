@@ -55,6 +55,16 @@ namespace boost
         };
 
         template<>
+        struct range_size_type_<char_array_>
+        { 
+            template< typename A >
+            struct pts
+            {
+                typedef std::size_t type;
+            };
+        };
+
+        template<>
         struct range_size_type_<char_ptr_>
         {
             template< typename S >

@@ -58,33 +58,33 @@ namespace boost
         }
         
         template< typename T, std::size_t sz >
-        inline T* array_end( T (&array)[sz], int )
+        inline T* array_end( T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
             return array + sz;
         }
         
         template< typename T, std::size_t sz >
-        inline const T* array_end( const T (&array)[sz], int )
+        inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
             return array + sz;
         }
 
         template< typename T, std::size_t sz >
-        inline T* array_end( T (&array)[sz], char_or_wchar_t_array_tag )
+        inline T* array_end( T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {
             return array + sz - 1;
         }
         
         template< typename T, std::size_t sz >
-        inline const T* array_end( const T (&array)[sz], char_or_wchar_t_array_tag )
+        inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {
             return array + sz - 1;
         }
 
         template< typename T, std::size_t sz >
-        inline T* array_end( T (&array)[sz] )
+        inline T* array_end( T BOOST_RANGE_ARRAY_REF()[sz] )
         {
-            typedef BOOST_CT_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
+            typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
                                                                 char_or_wchar_t_array_tag,
                                                                 int >::type tag;
 
@@ -92,9 +92,9 @@ namespace boost
         }
         
         template< typename T, std::size_t sz >
-        inline const T* array_end( const T (&array)[sz] )
+        inline const T* array_end( const T BOOST_RANGE_ARRAY_REF()[sz] )
         {
-            typedef BOOST_CT_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
+            typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
                                                                 char_or_wchar_t_array_tag,
                                                                 int >::type tag;
         
@@ -112,42 +112,42 @@ namespace boost
         }
          
         template< typename T, std::size_t sz >
-        inline std::size_t array_size( T BOOST_ARRAY_REF[sz], int )
+        inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
             return sz;
         }
         
         template< typename T, std::size_t sz >
-        inline std::size_t array_size( const T BOOST_ARRAY_REF[sz], int )
+        inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
             return sz;
         }
                 
         template< typename T, std::size_t sz >
-        inline std::size_t array_size( T BOOST_ARRAY_REF[sz], char_or_wchar_t_array_tag )
+        inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {
             return sz - 1;
         }
                  
         template< typename T, std::size_t sz >
-        inline std::size_t array_size( const T BOOST_ARRAY_REF[sz], char_or_wchar_t_array_tag )
+        inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {
             return sz - 1;
         }
 
         template< typename T, std::size_t sz >
-        inline std::size_t array_size( T (&array)[sz] )
+        inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz] )
         {
-            typedef BOOST_CT_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
+            typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
                                                                 char_or_wchar_t_array_tag,
                                                                 int >::type tag;
             return array_size<T,sz>( array, tag() );
         }
 
         template< typename T, std::size_t sz >
-        inline std::size_t array_size( const T (&array)[sz] )
+        inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz] )
         {
-            typedef BOOST_CT_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
+            typedef BOOST_RANGE_DEDUCED_TYPENAME boost::mpl::if_c< is_same<char,T>::value || is_same<wchar_t,T>::value,
                                                                 char_or_wchar_t_array_tag,
                                                                 int >::type tag;
             return array_size<T,sz>( array, tag() );

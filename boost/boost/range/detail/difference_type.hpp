@@ -41,13 +41,23 @@ namespace boost
             template< typename P >
             struct pts
             {
-                typedef BOOST_CT_DEDUCED_TYPENAME boost::iterator_difference< BOOST_DEDUCED_TYPENAME P::first_type>::type type;                
+                typedef BOOST_RANGE_DEDUCED_TYPENAME boost::iterator_difference< BOOST_DEDUCED_TYPENAME P::first_type>::type type;                
             };
         };
 
         template<>
         struct range_difference_type_<array_>
         {
+            template< typename A >
+            struct pts
+            {
+                typedef std::ptrdiff_t type;
+            };
+        };
+
+        template<>
+        struct range_difference_type_<char_array_>
+        { 
             template< typename A >
             struct pts
             {
@@ -100,9 +110,9 @@ namespace boost
     template< typename C >
     class difference_type_of
     {
-        typedef BOOST_CT_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
+        typedef BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:
-        typedef BOOST_CT_DEDUCED_TYPENAME range_detail::range_difference_type_<c_type>::BOOST_NESTED_TEMPLATE pts<C>::type type; 
+        typedef BOOST_RANGE_DEDUCED_TYPENAME range_detail::range_difference_type_<c_type>::BOOST_NESTED_TEMPLATE pts<C>::type type; 
     };
 
 }

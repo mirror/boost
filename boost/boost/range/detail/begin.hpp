@@ -30,7 +30,7 @@ namespace boost
         struct range_begin<std_container_>
         {
             template< typename C >
-			static BOOST_CT_DEDUCED_TYPENAME result_iterator_of<C>::type fun( C& c )
+			static BOOST_RANGE_DEDUCED_TYPENAME result_iterator_of<C>::type fun( C& c )
             {
                 return c.begin();
             };
@@ -44,7 +44,7 @@ namespace boost
         struct range_begin<std_pair_>
         {
             template< typename P >
-            static BOOST_CT_DEDUCED_TYPENAME result_iterator_of<P>::type fun( const P& p )
+            static BOOST_RANGE_DEDUCED_TYPENAME result_iterator_of<P>::type fun( const P& p )
             {
                 return p.first;
             }

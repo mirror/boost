@@ -35,7 +35,7 @@ namespace range
         //////////////////////////////////////////////////////////////////////
         
         template< typename C >
-        inline BOOST_CT_DEDUCED_TYPENAME C::size_type
+        inline BOOST_RANGE_DEDUCED_TYPENAME C::size_type
         size( const C& c )
         {
             return c.size(); 

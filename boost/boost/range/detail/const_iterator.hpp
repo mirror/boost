@@ -44,8 +44,26 @@ namespace boost
             };
         };
 
+
         template<>
-        struct range_const_iterator_<array_>; // give up
+        struct range_const_iterator_<array_>
+        { 
+            template< typename T >
+            struct pts
+            {
+                typedef void /*dummy*/ type;
+            };
+        };
+        
+        template<>
+        struct range_const_iterator_<char_array_>
+        { 
+            template< typename T >
+            struct pts
+            {
+                typedef void /*dummy*/ type;
+            };
+        };
 
         template<>
         struct range_const_iterator_<char_ptr_>

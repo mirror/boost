@@ -17,29 +17,29 @@
 
 #include <boost/config.hpp>
 
-#ifdef BOOST_CT_DEDUCED_TYPENAME
+#ifdef BOOST_RANGE_DEDUCED_TYPENAME
 #error "macro already defined!"
 #endif
 
 #ifdef __BORLANDC__
-#define BOOST_CT_DEDUCED_TYPENAME
+#define BOOST_RANGE_DEDUCED_TYPENAME
 #else
-#define BOOST_CT_DEDUCED_TYPENAME BOOST_DEDUCED_TYPENAME
+#define BOOST_RANGE_DEDUCED_TYPENAME BOOST_DEDUCED_TYPENAME
 #endif
 
-#ifdef BOOST_CT_NO_ARRAY_SUPPORT
+#ifdef BOOST_RANGE_NO_ARRAY_SUPPORT
 #error "macro already defined!"
 #endif
 
-#if _MSC_VER <= 1200 && !defined( __COMO__ ) && !defined( _GNUC_ )
-#define BOOST_CT_NO_ARRAY_SUPPORT
+#if _MSC_VER <= 1200 && !defined( __COMO__ ) && !defined( __GNUC__ )
+#define BOOST_RANGE_NO_ARRAY_SUPPORT 1
 #endif
 
-#ifdef BOOST_CT_NO_ARRAY_SUPPORT
-#define BOOST_ARRAY_REF (array)
-#define BOOST_CT_NO_STATIC_ASSERT
+#ifdef BOOST_RANGE_NO_ARRAY_SUPPORT
+#define BOOST_RANGE_ARRAY_REF() (array)
+#define BOOST_RANGE_NO_STATIC_ASSERT
 #else
-#define BOOST_ARRAY_REF (&array)
+#define BOOST_RANGE_ARRAY_REF() (&array)
 #endif
 
 

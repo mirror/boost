@@ -30,7 +30,7 @@ namespace boost
     template< typename C >
     struct result_iterator_of
     {
-        typedef BOOST_CT_DEDUCED_TYPENAME 
+        typedef BOOST_RANGE_DEDUCED_TYPENAME 
             mpl::if_< BOOST_DEDUCED_TYPENAME is_const<C>::type, 
                       BOOST_DEDUCED_TYPENAME const_iterator_of<C>::type,
                       BOOST_DEDUCED_TYPENAME iterator_of<C>::type >::type type;

@@ -41,12 +41,29 @@ namespace boost
             template< typename P >
             struct pts
             {
-                typedef BOOST_DEDUCED_TYPENAME boost::iterator_value< BOOST_CT_DEDUCED_TYPENAME P::first_type >::type type;
+                typedef BOOST_DEDUCED_TYPENAME boost::iterator_value< BOOST_RANGE_DEDUCED_TYPENAME P::first_type >::type type;
             };
         };
 
+		template<>
+        struct range_value_type_<array_>
+        { 
+            template< typename T >
+            struct pts
+            {
+                typedef void /*dummy*/ type;
+            };
+        };
+        
         template<>
-        struct range_value_type_<array_>; // give up
+        struct range_value_type_<char_array_>
+        { 
+            template< typename T >
+            struct pts
+            {
+                typedef char type;
+            };
+        };
 
         template<>
         struct range_value_type_<char_ptr_>
