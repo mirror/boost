@@ -221,6 +221,7 @@ struct nested_test
    }
 };
 
+#ifndef __SUNPRO_CC
 #define NESTED_DECL(what)\
 template <class T> \
 struct BOOST_TT_JOIN(nested_tester_,what){\
@@ -229,6 +230,10 @@ struct BOOST_TT_JOIN(nested_tester_,what){\
 };
 #define NESTED_TEST(what, with)\
 {BOOST_TT_JOIN(nested_tester_,what)<with> check(#what "<" #with ">"); (void)check;}
+#else
+#define NESTED_DECL(what)
+#define NESTED_TEST(what, with)
+#endif
 
 #define BOOST_TT_JOIN( X, Y ) BOOST_DO_TT_JOIN( X, Y )
 #define BOOST_DO_TT_JOIN( X, Y ) X##Y
@@ -366,6 +371,7 @@ struct test_abc2
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
+
 
 
 
