@@ -130,8 +130,8 @@ by adapting other iterators.</td>
 <li><a class="reference" href="#function-output-iterator" id="id66" name="id66">Function output iterator</a><ul>
 <li><a class="reference" href="#class-template-function-output-iterator" id="id67" name="id67">Class template <tt class="literal"><span class="pre">function_output_iterator</span></tt></a></li>
 <li><a class="reference" href="#function-output-iterator-requirements" id="id68" name="id68"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#function-output-iterator-operations" id="id69" name="id69"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#function-output-iterator-output-proxy-operations" id="id70" name="id70"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></li>
+<li><a class="reference" href="#function-output-iterator-models" id="id69" name="id69"><tt class="literal"><span class="pre">function_output_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#function-output-iterator-operations" id="id70" name="id70"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
 </ul>
 </li>
 </ul>
@@ -2212,54 +2212,52 @@ proxy object.</p>
 template &lt;class UnaryFunction&gt;
 class function_output_iterator {
 public:
-  typedef iterator_tag&lt;
-        writable_iterator
-      , incrementable_traversal_tag
-  &gt; iterator_category;
-  typedef void                value_type;
-  typedef void                difference_type;
-  typedef void                pointer;
-  typedef void                reference;
+  typedef std::output_iterator_tag iterator_category;
+  typedef void                     value_type;
+  typedef void                     difference_type;
+  typedef void                     pointer;
+  typedef void                     reference;
 
   explicit function_output_iterator(const UnaryFunction&amp; f = UnaryFunction());
 
-  struct output_proxy {
-    output_proxy(UnaryFunction&amp; f);
-    template &lt;class T&gt; output_proxy&amp; operator=(const T&amp; value);
-  };
-  output_proxy operator*();
+  /* implementation defined */ operator*();
   function_output_iterator&amp; operator++();
   function_output_iterator&amp; operator++(int);
+private:
+  UnaryFunction m_f;     // exposition only
 };
 </pre>
 </div>
 <div class="section" id="function-output-iterator-requirements">
 <h4><a class="toc-backref" href="#id68" name="function-output-iterator-requirements"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h4>
-<p>The <tt class="literal"><span class="pre">UnaryFunction</span></tt> must be Assignable, Copy Constructible, and the
-expression <tt class="literal"><span class="pre">f(x)</span></tt> must be valid, where <tt class="literal"><span class="pre">f</span></tt> is an object of type
-<tt class="literal"><span class="pre">UnaryFunction</span></tt> and <tt class="literal"><span class="pre">x</span></tt> is an object of a type accepted by <tt class="literal"><span class="pre">f</span></tt>.
-The resulting <tt class="literal"><span class="pre">function_output_iterator</span></tt> is a model of the Writable
-and Incrementable Iterator concepts.</p>
+<p>The <tt class="literal"><span class="pre">UnaryFunction</span></tt> must be Assignable, Copy Constructible.</p>
+</div>
+<div class="section" id="function-output-iterator-models">
+<h4><a class="toc-backref" href="#id69" name="function-output-iterator-models"><tt class="literal"><span class="pre">function_output_iterator</span></tt> models</a></h4>
+<p><tt class="literal"><span class="pre">function_output_iterator</span></tt> is a model of the Writable and
+Incrementable Iterator concepts.</p>
 </div>
 <div class="section" id="function-output-iterator-operations">
-<h4><a class="toc-backref" href="#id69" name="function-output-iterator-operations"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id70" name="function-output-iterator-operations"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></h4>
 <p><tt class="literal"><span class="pre">explicit</span> <span class="pre">function_output_iterator(const</span> <span class="pre">UnaryFunction&amp;</span> <span class="pre">f</span> <span class="pre">=</span> <span class="pre">UnaryFunction());</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">function_output_iterator</span></tt> with
-<tt class="literal"><span class="pre">f</span></tt> stored as a data member.</td>
+<tt class="literal"><span class="pre">m_f</span></tt> constructed from <tt class="literal"><span class="pre">f</span></tt>.</td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">output_proxy</span> <span class="pre">operator*();</span></tt></p>
+<p><tt class="literal"><span class="pre">/*</span> <span class="pre">implementation</span> <span class="pre">defined</span> <span class="pre">*/</span> <span class="pre">operator*();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">output_proxy</span></tt> constructed with
-a copy of the unary function <tt class="literal"><span class="pre">f</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An object <tt class="literal"><span class="pre">r</span></tt> of implementation defined type
+such that if <tt class="literal"><span class="pre">f(t)</span></tt> is a valid expression for
+some object <tt class="literal"><span class="pre">t</span></tt> then <tt class="literal"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">t</span></tt> is a valid expression.
+<tt class="literal"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">t</span></tt> will have the same effect as <tt class="literal"><span class="pre">f(t)</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -2281,32 +2279,6 @@ a copy of the unary function <tt class="literal"><span class="pre">f</span></tt>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="function-output-iterator-output-proxy-operations">
-<h4><a class="toc-backref" href="#id70" name="function-output-iterator-output-proxy-operations"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></h4>
-<p><tt class="literal"><span class="pre">output_proxy(UnaryFunction&amp;</span> <span class="pre">f);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">output_proxy</span></tt> with <tt class="literal"><span class="pre">f</span></tt> stored as
-a data member.</td>
-</tr>
-</tbody>
-</table>
-<p><tt class="literal"><span class="pre">template</span> <span class="pre">&lt;class</span> <span class="pre">T&gt;</span> <span class="pre">output_proxy&amp;</span> <span class="pre">operator=(const</span> <span class="pre">T&amp;</span> <span class="pre">value);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
-m_f(value); 
-return *this; 
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
 <!-- LocalWords:  Abrahams Siek Witt istream ostream iter MTL strided interoperate
 LocalWords:  CRTP metafunctions inlining lvalue JGS incrementable BGL LEDA cv
 LocalWords:  GraphBase struct ptrdiff UnaryFunction const int typename bool pp
@@ -2321,7 +2293,7 @@ LocalWords:  OtherIncrementable Coplien -->
 <hr class="footer"/>
 <div class="footer">
 <a class="reference" href="facade-and-adaptor.rst">View document source</a>.
-Generated on: 2004-01-12 19:01 UTC.
+Generated on: 2004-01-12 19:23 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

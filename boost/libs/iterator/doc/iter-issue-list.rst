@@ -679,10 +679,18 @@ with the iterator_adaptor subobject copy constructed from x." The latter is the 
 it does not reach inside the base class for its semantics. So the default constructor shoudl return 
 "An instance of indirect_iterator with a default-constructed iterator_adaptor subobject." 
 
-:Proposed resolution: Change the effects clause to
+:Proposed resolution: Change the specification of the default constructor to
 
-  Effects: Constructs an instance of indirect_iterator with a default
-  constructed iterator_adaptor subobject.
+``indirect_iterator();``
+
+:Requires: ``Iterator`` must be Default Constructible.
+:Returns: An instance of ``indirect_iterator`` with 
+   a default-constructed ``m_iterator``.
+
+
+:Rationale: Inheritance from iterator_adaptor has been removed, so we instead
+  give the semantics in terms of the (exposition only) member
+  ``m_iterator``.
 
 
 9.29 indirect_iterator: unclear specification of template constructor 
@@ -702,14 +710,30 @@ Is that what's meant here?
 constructor like this: the constructor returns "a copy" of the argument without saying what a 
 copy is.) 
 
-:Proposed resolution: Change the effects clause 
-  to 
+:Proposed resolution: Change the specification to
 
-    Effects: Constructs an instance of indirect_iterator whose
-    iterator_adaptor subobject is constructed from y.base().
+::
 
-  Note/DWA: isn't the iterator_adaptor base class an
-  implementation detail?  I'm marking this **Needs Work**
+  template <
+      class Iterator2, class Value2, unsigned Access, class Traversal
+    , class Reference2, class Difference2
+  >
+  indirect_iterator(
+      indirect_iterator<
+           Iterator2, Value2, Access, Traversal, Reference2, Difference2
+      > const& y
+    , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
+  );
+
+:Requires: ``Iterator2`` is implicitly convertible to ``Iterator``.
+:Returns: An instance of ``indirect_iterator`` whose 
+    ``m_iterator`` subobject is constructed from ``y.base()``.
+
+
+:Rationale: Inheritance from iterator_adaptor has been removed, so we
+  instead give the semantics in terms of the (exposition only) member
+  ``m_iterator``.
+
 
 9.30 transform_iterator argument irregularity 
 =============================================
@@ -742,8 +766,16 @@ and to increment such an object. It's only when you try to assign through a dere
 that f(x) has to work, and then only for the particular function object that the iterator holds and 
 for the particular value that is being assigned. 
 
-:Proposed resolution:   **Needs work** (Jeremy)  Agree, need to find wording.
+:Proposed resolution:
+  Remove the part of the sentence after "and". Remove the use of
+  ``output_proxy`` and instead specify ``operator*`` in the following way.
 
+``/* implementation defined */ operator*();``
+
+:Returns: An object ``r`` of implementation defined type
+  such that if ``f(t)`` is a valid expression for
+  some object ``t`` then ``r = t`` is a valid expression.
+  ``r = t`` will have the same effect as ``f(t)``.
 
 
 9.32 Should output_proxy really be a named type? 
@@ -756,7 +788,8 @@ This means someone can store an output_proxy object for later use, whatever that
 constrains output_proxy to hold a copy of the function object, rather than a pointer to the iterator 
 object. Is all this mechanism really necessary? 
 
-:Proposed resolution:   **Needs work** (Jeremy) Agree, need to find wording.
+:Proposed resolution:
+  See issue 9.31.
 
 
 
