@@ -34,9 +34,9 @@ specialization or member templates, no benefit will occur from
 using call_traits: the call_traits defined types will always be
 the same as the existing practice in this case. In addition if
 only member templates and not partial template specialisation is
-support by the compiler (for example Visual C++ 6) then call_traits
-can not be used with array types (although it can be used to
-solve the reference to reference problem).</p>
+support by the compiler (for example Visual C++ 6) then
+call_traits can not be used with array types (although it can be
+used to solve the reference to reference problem).</p>
 
 <table border="0" cellpadding="7" cellspacing="1" width="797">
     <tr>
@@ -79,7 +79,8 @@ solve the reference to reference problem).</p>
         </td>
     </tr>
     <tr>
-        <td valign="top" width="17%"><p align="center">const T&amp;<br>
+        <td valign="top" width="17%"><p align="center">const
+        T&amp;<br>
         (return value)</p>
         </td>
         <td valign="top" width="35%"><p align="center"><code>call_traits&lt;T&gt;::const_reference</code></p>
@@ -91,7 +92,8 @@ solve the reference to reference problem).</p>
         </td>
     </tr>
     <tr>
-        <td valign="top" width="17%"><p align="center">const T&amp;<br>
+        <td valign="top" width="17%"><p align="center">const
+        T&amp;<br>
         (function parameter)</p>
         </td>
         <td valign="top" width="35%"><p align="center"><code>call_traits&lt;T&gt;::param_type</code></p>
@@ -332,8 +334,8 @@ possible:</p>
 <p>The following table shows the effect that call_traits has on
 various types, the table assumes that the compiler supports
 partial specialization: if it doesn't then all types behave in
-the same way as the entry for &quot;myclass&quot;, and call_traits
-can not be used with reference or array types.</p>
+the same way as the entry for &quot;myclass&quot;, and
+call_traits can not be used with reference or array types.</p>
 
 <table border="0" cellpadding="7" cellspacing="1" width="766">
     <tr>
@@ -388,7 +390,8 @@ can not be used with reference or array types.</p>
         </td>
         <td valign="top" width="17%"><p align="center">int&amp;</p>
         </td>
-        <td valign="top" width="17%"><p align="center">const int&amp;</p>
+        <td valign="top" width="17%"><p align="center">const
+        int&amp;</p>
         </td>
         <td valign="top" width="17%"><p align="center">int const</p>
         </td>
@@ -420,7 +423,8 @@ can not be used with reference or array types.</p>
         </td>
         <td valign="top" width="17%"><p align="center">int&amp;</p>
         </td>
-        <td valign="top" width="17%"><p align="center">const int&amp;</p>
+        <td valign="top" width="17%"><p align="center">const
+        int&amp;</p>
         </td>
         <td valign="top" width="17%"><p align="center">int&amp;</p>
         </td>
@@ -432,13 +436,17 @@ can not be used with reference or array types.</p>
         <td valign="top" width="17%" bgcolor="#C0C0C0"><p
         align="center">const int&amp;</p>
         </td>
-        <td valign="top" width="17%"><p align="center">const int&amp;</p>
+        <td valign="top" width="17%"><p align="center">const
+        int&amp;</p>
         </td>
-        <td valign="top" width="17%"><p align="center">const int&amp;</p>
+        <td valign="top" width="17%"><p align="center">const
+        int&amp;</p>
         </td>
-        <td valign="top" width="17%"><p align="center">const int&amp;</p>
+        <td valign="top" width="17%"><p align="center">const
+        int&amp;</p>
         </td>
-        <td valign="top" width="17%"><p align="center">const int&amp;</p>
+        <td valign="top" width="17%"><p align="center">const
+        int&amp;</p>
         </td>
         <td valign="top" width="17%"><p align="center">All
         constant-references.</p>
@@ -486,8 +494,8 @@ can not be used with reference or array types.</p>
 
 <p>The following class is a trivial class that stores some type T
 by value (see the <a href="call_traits_test.cpp">call_traits_test.cpp</a>
-file), the aim is to illustrate how each of the available call_traits
-typedefs may be used:</p>
+file), the aim is to illustrate how each of the available
+call_traits typedefs may be used:</p>
 
 <pre>template &lt;class T&gt;
 struct contained
@@ -523,14 +531,14 @@ problem):</h4>
 
 <pre>template &lt;class Operation&gt; 
 class binder1st : 
-   public unary_function&lt;Operation::second_argument_type, Operation::result_type&gt; 
+   public unary_function&lt;typename Operation::second_argument_type, typename Operation::result_type&gt; 
 { 
 protected: 
    Operation op; 
-   Operation::first_argument_type value; 
+   typename Operation::first_argument_type value; 
 public: 
-   binder1st(const Operation&amp; x, const Operation::first_argument_type&amp; y); 
-   Operation::result_type operator()(const Operation::second_argument_type&amp; x) const; 
+   binder1st(const Operation&amp; x, const typename Operation::first_argument_type&amp; y); 
+   typename Operation::result_type operator()(const typename Operation::second_argument_type&amp; x) const; 
 }; </pre>
 
 <p>Now consider what happens in the relatively common case that
@@ -541,7 +549,7 @@ reference to a reference as an argument, and that is not
 currently legal. The solution here is to modify <code>operator()</code>
 to use call_traits:</p>
 
-<pre>Operation::result_type operator()(call_traits&lt;Operation::second_argument_type&gt;::param_type x) const;</pre>
+<pre>typename Operation::result_type operator()(typename call_traits&lt;typename Operation::second_argument_type&gt;::param_type x) const;</pre>
 
 <p>Now in the case that <code>Operation::second_argument_type</code>
 is a reference type, the argument is passed as a reference, and
@@ -575,9 +583,9 @@ std::pair&lt;
 degraded to pointers if the deduced types are arrays, similar
 situations occur in the standard binders and adapters: in
 principle in any function that &quot;wraps&quot; a temporary
-whose type is deduced. Note that the function arguments to make_pair
-are not expressed in terms of call_traits: doing so would prevent
-template argument deduction from functioning.</p>
+whose type is deduced. Note that the function arguments to
+make_pair are not expressed in terms of call_traits: doing so
+would prevent template argument deduction from functioning.</p>
 
 <h4><a name="ex4"></a>Example 4 (optimising fill):</h4>
 
@@ -666,10 +674,10 @@ be any worse than existing practice.</p>
 <p>Pointers follow the same rational as small built-in types.</p>
 
 <p>For reference types the rational follows <a href="#refs">Example
-2</a> - references to references are not allowed, so the call_traits
-members must be defined such that these problems do not occur.
-There is a proposal to modify the language such that &quot;a
-reference to a reference is a reference&quot; (issue #106,
+2</a> - references to references are not allowed, so the
+call_traits members must be defined such that these problems do
+not occur. There is a proposal to modify the language such that
+&quot;a reference to a reference is a reference&quot; (issue #106,
 submitted by Bjarne Stroustrup), call_traits&lt;T&gt;::value_type
 and call_traits&lt;T&gt;::param_type both provide the same effect
 as that proposal, without the need for a language change (in
@@ -687,11 +695,11 @@ struct A
    void foo(T t);
 };</pre>
 
-<p><font face="Times New Roman">In this case if we instantiate A&lt;int[2]&gt;
-then the declared type of the parameter passed to member function
-foo is int[2], but it's actual type is const int*, if we try to
-use the type T within the function body, then there is a strong
-likelyhood that our code will not compile:</font></p>
+<p><font face="Times New Roman">In this case if we instantiate
+A&lt;int[2]&gt; then the declared type of the parameter passed to
+member function foo is int[2], but it's actual type is const int*,
+if we try to use the type T within the function body, then there
+is a strong likelyhood that our code will not compile:</font></p>
 
 <pre>template &lt;class T&gt;
 void A&lt;T&gt;::foo(T t)
@@ -706,13 +714,13 @@ declared type:</p>
 <pre>template &lt;class T&gt;
 struct A
 {
-   void foo(call_traits&lt;T&gt;::value_type t);
+   void foo(typename call_traits&lt;T&gt;::value_type t);
 };
 
 template &lt;class T&gt;
-void A&lt;T&gt;::foo(call_traits&lt;T&gt;::value_type t)
+void A&lt;T&gt;::foo(typename call_traits&lt;T&gt;::value_type t)
 {
-   call_traits&lt;T&gt;::value_type dup(t); // OK even if T is an array type.
+   typename call_traits&lt;T&gt;::value_type dup(t); // OK even if T is an array type.
 }</pre>
 
 <p>For value_type (return by value), again only a pointer may be
