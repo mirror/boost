@@ -10,7 +10,7 @@
   <anchor id="posix_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    Defines a non-adjusted time system with nano-second resolution and stable calculation properties. This time system uses the Gregorian calendar to implement the date portion of the time representation. 
+    Defines a non-adjusted time system with nano-second/micro-second resolution and stable calculation properties.  The nano-second resolution option uses 96 bits of underlying storage for each ptime while the micro-second resolution uses 64 bits per ptime (see <link linkend="date_time.buildinfo">Build Options</link> for details). This time system uses the Gregorian calendar to implement the date portion of the time representation. 
   </para>
 
   <anchor id="posix_ex" />

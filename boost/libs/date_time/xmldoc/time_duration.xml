@@ -41,9 +41,9 @@
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
     <programlisting>
-      #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
+      #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
       or
-      #include "boost/date_time/gregorian/gregorian_types.hpp" //no i/o just types
+      #include "boost/date_time/posix_time/posix_time_types.hpp" //no i/o just types
     </programlisting>
   </para>
 
@@ -200,8 +200,13 @@
 	  </row>
 	  <row>
 	    <entry>static boost::date_time::time_resolutions resolution()</entry>
-	    <entry>Describes the resolution capability of the time_duration class.</entry>
+            <entry>Describes the resolution capability of the time_duration class. time_resolutions is an enum of resolution possibilities ranging from seconds to nanoseconds.</entry>
 	    <entry>time_duration::resolution() --> nano</entry>
+	  </row>
+	  <row>
+            <entry>static time_duration::num_fractional_digits()</entry>
+            <entry>Returns an unsigned short holding the number of fractional digits the time resolution has.</entry>
+            <entry>time_duration::num_fractional_digits(); // 9 for nano, 6 for micro, etc.</entry>
 	  </row>
 	  <row>
 	    <entry>boost::int64_t ticks()</entry>

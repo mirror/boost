@@ -6,7 +6,7 @@
   <link linkend="ptime_constr">Construction</link> --
   <link linkend="ptime_from_string">Construct from String</link> --
   <link linkend="ptime_from_clock">Construct from Clock</link> --
-  <link linkend="ptime_from_time_t">Construct from time_t</link> --
+  <link linkend="ptime_from_funcs">Construct using Conversion functions</link> --
   <link linkend="ptime_accessors">Accessors</link> --
   <link linkend="ptime_to_string">Conversion To String</link> --
   <link linkend="ptime_operators">Operators</link>
@@ -27,9 +27,9 @@
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
     <programlisting>
-      #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
+      #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
       or
-      #include "boost/date_time/gregorian/gregorian_types.hpp" //no i/o just types
+      #include "boost/date_time/posix_time/posix_time_types.hpp" //no i/o just types
     </programlisting>
   </para>
 
@@ -134,14 +134,19 @@ ptime t(from_iso_string(ts))</entry>
 	    <entry>Get the UTC time.</entry>
 	    <entry>ptime t(second_clock::universal_day())</entry>
 	  </row>
+	  <row>
+	    <entry>static ptime microsec_clock::local_time()</entry>
+	    <entry>Get the local time using a subsecond resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the acheived resolution.</entry>
+	    <entry>ptime t(microsec_clock::local_time())</entry>
+	  </row>
 	</tbody>
       </tgroup>
     </informaltable>
   </para>
 
 
-  <anchor id="ptime_from_time_t" />
-  <bridgehead renderas="sect3">Construct from time_t</bridgehead>
+  <anchor id="ptime_from_funcs" />
+  <bridgehead renderas="sect3">Construct using Conversion Functions</bridgehead>
   <para>
     <informaltable frame="all">
       <tgroup cols="3">
@@ -157,6 +162,11 @@ ptime t(from_iso_string(ts))</entry>
 	    <entry>ptime from_time_t(time_t t);</entry>
 	    <entry>Converts a time_t into a ptime.</entry>
 	    <entry>ptime t = from_time_t(tt);</entry>
+	  </row>
+	  <row>
+            <entry>ptime from_ftime&lt;ptime&gt;(FILETIME ft);</entry>
+            <entry>Creates a ptime object from a FILETIME structure.</entry>
+            <entry>ptime t = from_ftime&lt;ptime&gt;(ft);</entry>
 	  </row>
 	</tbody>
       </tgroup>

@@ -21,7 +21,7 @@
     By default the posix_time system uses a 64 bit integer and a 32 bit integer internally to provide nano-second level resolutions. As an alternative, a single 64 bit integer can be used to provide a microsecond level resolution. This alternative implementation may provide better performance and more compact memory usage for many applications that do not require nano-second resolutions. 
   </para>
   <para>
-    The variable BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG, as defined in build/Jamfile, selects between these options. To select the 64 bit integer implementation simply remove this define from the Jamfile. 
+    To use the alternate resolution (64 bit microsecond) the variable BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG must be defined in the library users project files (ie Makefile, Jamfile, etc). This macro is not used by the gregorian system and therfore has no effect when building the library.
   </para>
 
   <anchor id="portability" />
