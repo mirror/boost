@@ -30,9 +30,7 @@ otherwise.</p>
 */
 #define BOOST_PP_GREATER(X,Y) BOOST_PP_GREATER_D(0,X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_GREATER_D(D,X,Y) BOOST_PP_LESS_D(D,Y,X)
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_GREATER().</p> */
 #define BOOST_PREPROCESSOR_GREATER(X,Y) BOOST_PP_GREATER(X,Y)

@@ -26,7 +26,6 @@ supported.</p>
 */
 #define BOOST_PP_INC(X) BOOST_PP_INC_DELAY(X)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_INC_DELAY(X) BOOST_PP_INC##X
 #define BOOST_PP_INC0 1
 #define BOOST_PP_INC1 2
@@ -157,7 +156,6 @@ supported.</p>
 #define BOOST_PP_INC126 127
 #define BOOST_PP_INC127 128
 #define BOOST_PP_INC128 128
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_INC().</p> */
 #define BOOST_PREPROCESSOR_INC(X) BOOST_PP_INC(X)

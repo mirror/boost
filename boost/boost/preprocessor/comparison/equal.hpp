@@ -31,9 +31,7 @@ otherwise.</p>
 */
 #define BOOST_PP_EQUAL(X,Y) BOOST_PP_EQUAL_D(0,X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_EQUAL_D(D,X,Y) BOOST_PP_NOT(BOOST_PP_NOT_EQUAL_D(D,X,Y))
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_EQUAL().</p> */
 #define BOOST_PREPROCESSOR_EQUAL(X,Y) BOOST_PP_EQUAL(X,Y)

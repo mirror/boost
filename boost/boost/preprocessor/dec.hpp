@@ -25,7 +25,6 @@ supported.</p>
 */
 #define BOOST_PP_DEC(X) BOOST_PP_DEC_DELAY(X)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_DEC_DELAY(X) BOOST_PP_DEC##X
 #define BOOST_PP_DEC0 0
 #define BOOST_PP_DEC1 0
@@ -156,7 +155,6 @@ supported.</p>
 #define BOOST_PP_DEC126 125
 #define BOOST_PP_DEC127 126
 #define BOOST_PP_DEC128 127
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_DEC().</p> */
 #define BOOST_PREPROCESSOR_DEC(X) BOOST_PP_DEC(X)

@@ -32,9 +32,7 @@ otherwise.</p>
 */
 #define BOOST_PP_LESS(X,Y) BOOST_PP_LESS_D(0,X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_LESS_D(D,X,Y) BOOST_PP_AND(BOOST_PP_NOT_EQUAL_D(D,X,Y),BOOST_PP_LESS_EQUAL_D(D,X,Y))
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_LESS().</p> */
 #define BOOST_PREPROCESSOR_LESS(X,Y) BOOST_PP_LESS(X,Y)

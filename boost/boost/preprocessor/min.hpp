@@ -33,9 +33,7 @@ single token).</p>
 */
 #define BOOST_PP_MIN(X,Y) BOOST_PP_MIN_D(0,X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_MIN_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,Y,X),Y,X)
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_MIN().</p> */
 #define BOOST_PREPROCESSOR_MIN(X,Y) BOOST_PP_MIN(X,Y)

@@ -34,7 +34,6 @@ single token).</p>
 */
 #define BOOST_PP_SUB(X,Y) BOOST_PP_SUB_D(0,X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_SUB_D(D,X,Y) BOOST_PP_TUPLE_ELEM(2,0,BOOST_PP_WHILE##D(BOOST_PP_SUB_C,BOOST_PP_SUB_F,(X,Y)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_SUB_C(D,P) BOOST_PP_TUPLE_ELEM(2,1,P)
@@ -42,7 +41,6 @@ single token).</p>
 #else
 #  define BOOST_PP_SUB_C(D,P) BOOST_PP_TUPLE2_ELEM1 P
 #  define BOOST_PP_SUB_F(D,P) (BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM0 P),BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM1 P))
-#endif
 #endif
 
 /** <p>Obsolete. Use BOOST_PP_SUB(X,Y).</p> */

@@ -40,7 +40,6 @@
 */
 #define BOOST_PP_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM_DELAY(N,I,T)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking
  * this workaround invokes undefined behavior, but it works as desired.
@@ -210,7 +209,6 @@
 #define BOOST_PP_TUPLE16_ELEM13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) N
 #define BOOST_PP_TUPLE16_ELEM14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) O
 #define BOOST_PP_TUPLE16_ELEM15(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) P
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_TUPLE_ELEM().</p> */
 #define BOOST_PREPROCESSOR_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM(N,I,T)

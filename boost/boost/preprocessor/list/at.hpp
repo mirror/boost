@@ -38,7 +38,5 @@ first element is at index <code>0</code>.</p>
 */
 #define BOOST_PP_LIST_AT(L,I) BOOST_PP_LIST_AT_D(0,L,I)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_LIST_AT_D(D,L,I) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(D,I,L))
-#endif
 #endif

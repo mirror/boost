@@ -17,7 +17,6 @@
 */
 #define BOOST_PP_BOOL(X) BOOST_PP_BOOL_DELAY(X)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 /* BOOL can be implemented in O(1) tokens using saturated ADD & SUB.
  * Unfortunately, it would result in significantly slower preprocessing.
  */
@@ -151,7 +150,6 @@
 #define BOOST_PP_BOOL126 1
 #define BOOST_PP_BOOL127 1
 #define BOOST_PP_BOOL128 1
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_BOOL().</p> */
 #define BOOST_PREPROCESSOR_BOOL(X) BOOST_PP_BOOL(X)

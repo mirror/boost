@@ -28,10 +28,8 @@ expanded.</p>
 */
 #define BOOST_PP_CAT(X,Y) BOOST_PP_CAT_DELAY(X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_CAT_DELAY(X,Y) BOOST_PP_DO_CAT(X,Y)
 #define BOOST_PP_DO_CAT(X,Y) X##Y
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_CAT().</p> */
 #define BOOST_PREPROCESSOR_CAT(X,Y) BOOST_PP_CAT(X,Y)

@@ -33,9 +33,7 @@ single token).</p>
 */
 #define BOOST_PP_MAX(X,Y) BOOST_PP_MAX_D(0,X,Y)
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_MAX_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,X,Y),Y,X)
-#endif
 
 /** <p>Obsolete. Use BOOST_PP_MAX().</p> */
 #define BOOST_PREPROCESSOR_MAX(X,Y) BOOST_PP_MAX(X,Y)
