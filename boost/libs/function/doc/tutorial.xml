@@ -33,6 +33,7 @@ form to use for your compiler.
               <listitem><simpara>SGI MIPSpro 7.3.0</simpara></listitem>
               <listitem><simpara>Intel C++ 5.0, 6.0</simpara></listitem>
               <listitem><simpara>Compaq's cxx 6.2</simpara></listitem>
+	      <listitem><simpara>Microsoft Visual C++ 7.1</simpara></listitem>
             </itemizedlist>
           </entry>
           <entry>
