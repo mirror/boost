@@ -135,7 +135,7 @@ class pretty:
         self.re_nsl = re.compile(r'^(\s+typedef\s+.*?;|\s*(private|public):\s*|\s*{\s*|\s*(\w|\d|,)+\s*)$')
         self.re_templ_decl = re.compile(r'^(\s*template\s*<\s*.*?|\s*(private|public):\s*)$')
         self.re_type_const = re.compile(r'(const)\s+((unsigned|signed)?(bool|char|short|int|long))')
-        self.re_templ_args = re.compile(r'(\s*)(, | {2})((\s*(\w+)(\s+|::)\w+\s*.*?,?)+)\s*$')
+        self.re_templ_args = re.compile(r'^(\s*)(, | {2})((\s*(\w+)(\s+|::)\w+\s*.*?,?)+)\s*$')
         self.re_inline_templ_args = re.compile(
             r'^(\s+(,|:\s+)?|struct\s+)(\w+)\s*<((\s*(typename\s+)?\w+\s*(=\s*.*|<(\s*\w+\s*,?)+>\s*)?,?)+)\s*>\s+((struct|class).*?)?$'
             )
