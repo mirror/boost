@@ -117,10 +117,13 @@ namespace boost
 //  numeric_cast  ------------------------------------------------------------//
 
 // Move to config.hpp?
-#if defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x400 && __STL_STATIC_CONST_INIT_BUG
+#if defined(_RWSTD_VER) || (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x400 && __STL_STATIC_CONST_INIT_BUG)
 // STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
 // can be used at compile time if the compiler bug indicated by
 // __STL_STATIC_CONST_INIT_BUG is present.
+
+// Rogue wave STL (C++ Builder) also has broken numeric_limits
+// with default template defining members out of line.
 # define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
@@ -157,7 +160,7 @@ namespace boost
        template <class T>
        struct fixed_numeric_limits
            : public numeric_min_select<
-                        std::numeric_limits<T>::is_signed
+                        std::numeric_limits<T>::is_signed 
                     >::template limits<T>
        {
        };
@@ -251,6 +254,8 @@ namespace boost
 #  pragma warning(push)
 #  pragma warning(disable : 4018)
 #  pragma warning(disable : 4146)
+#elif defined(__BORLANDC__)
+#pragma option push -w-8041
 # endif
        // Move to namespace boost in utility.hpp?
        template <class T>
@@ -264,6 +269,8 @@ namespace boost
        };
 # if BOOST_MSVC
 #  pragma warning(pop)
+#elif defined(__BORLANDC__)
+#pragma option pop
 # endif
   }
   
@@ -296,12 +303,16 @@ namespace boost
 # if BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4018)
+#elif defined(__BORLANDC__)
+#pragma option push -w-8012
 # endif
         if ((arg < 0 && !result_traits::is_signed)  // loss of negative range
              || (arg_traits::is_signed && arg < result_traits::min())  // underflow
              || arg > result_traits::max())            // overflow
 # if BOOST_MSVC
 #  pragma warning(pop)
+#elif defined(__BORLANDC__)
+#pragma option pop
 # endif
 #endif
         {
