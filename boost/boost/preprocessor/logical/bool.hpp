@@ -13,7 +13,8 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/detail/cat.hpp>
+// pm:  not necessary if using manual delay
+// #include <boost/preprocessor/detail/cat.hpp>
 
 /** <p>Expands to <code>0</code> if <code>X == 0</code> and <code>1</code> if <code>X != 0</code>.</p>
 
@@ -21,7 +22,8 @@
 
 <p>For example, <code>BOOST_PP_BOOL(3)</code> expands to <code>1</code>.</p>
 */
-#define BOOST_PP_BOOL(X) BOOST_PP_DETAIL_CAT2(BOOST_PP_BOOL,X)
+#define BOOST_PP_BOOL(X) BOOST_PP_BOOL_DELAY(X) // original:  BOOST_PP_DETAIL_CAT2(BOOST_PP_BOOL,X)
+#define BOOST_PP_BOOL_DELAY(X) BOOST_PP_BOOL##X
 
 /* BOOL can be implemented in O(1) tokens using saturated ADD & SUB.
  * Unfortunately, it would result in significantly slower preprocessing.
