@@ -156,7 +156,7 @@ namespace boost { namespace numeric { namespace ublas {
         // public std::exception {
         public std::domain_error {
         BOOST_UBLAS_EXPLICIT
-        non_real (const std::string &s = "exception: non real"): 
+        non_real (const std::string &s = "exception: non real"):
             std::domain_error (s) {}
         // virtual const char *what () const throw () {
         //     return "exception: non real";
@@ -184,6 +184,9 @@ namespace boost { namespace numeric { namespace ublas {
 //        if (! expression)
 //            e.raise ();
 //    }
+// Dan Muller reported problems with COMO in GUI applications
+// So we need a new preprocessor symbol:
+#ifndef BOOST_UBLAS_NO_STD_CERR
 #define BOOST_UBLAS_CHECK(expression, e) \
     if (! (expression)) { \
         std::cerr << "Assertion failed in file " << __FILE__ << " at line " << __LINE__ << ":" << std::endl; \
@@ -196,6 +199,16 @@ namespace boost { namespace numeric { namespace ublas {
         std::cerr << #expression << std::endl; \
         e.raise (); \
     }
+#else
+#define BOOST_UBLAS_CHECK(expression, e) \
+    if (! (expression)) { \
+        e.raise (); \
+    }
+#define BOOST_UBLAS_CHECK_EX(expression, file, line, e) \
+    if (! (expression)) { \
+        e.raise (); \
+    }
+#endif
 #else
 // FIXME: for performance reasons we better use macros
 //    template<class E>
