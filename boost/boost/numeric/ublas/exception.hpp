@@ -17,7 +17,7 @@
 #ifndef BOOST_UBLAS_EXCEPTION_H
 #define BOOST_UBLAS_EXCEPTION_H
 
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
 #include <stdexcept>
 #else
 #include <cstdlib>
@@ -31,7 +31,7 @@
 namespace boost { namespace numeric { namespace ublas {
 
     struct divide_by_zero
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::runtime_error {
         explicit
@@ -56,7 +56,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct internal_logic
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::logic_error {
         explicit
@@ -81,7 +81,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct external_logic
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::logic_error {
         explicit
@@ -109,7 +109,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct bad_argument
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::invalid_argument {
         explicit
@@ -135,7 +135,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct bad_size
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::domain_error {
         explicit
@@ -160,7 +160,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct bad_index
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::out_of_range {
         explicit
@@ -185,7 +185,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct singular
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::runtime_error {
         explicit
@@ -211,7 +211,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     struct non_real
-#if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
+#if ! defined (BOOST_NO_EXCEPTIONS) && ! defined (BOOST_UBLAS_NO_EXCEPTIONS)
         // Inherit from standard exceptions as requested during review.
         : public std::domain_error {
         explicit
