@@ -287,7 +287,7 @@ struct cons {
              typename element<N, cons<HT, TT> >::type
            >::non_const_type
   get() {
-    return boost::get<N>(*this); // delegate to non-member get
+    return boost::tuples::get<N>(*this); // delegate to non-member get
   }
 
   template <int N>
@@ -295,7 +295,7 @@ struct cons {
              typename element<N, cons<HT, TT> >::type
            >::const_type
   get() const {
-    return boost::get<N>(*this); // delegate to non-member get
+    return boost::tuples::get<N>(*this); // delegate to non-member get
   }
 };
 
@@ -345,7 +345,7 @@ struct cons<HT, null_type> {
              typename element<N, cons>::type
             >::non_const_type
   get() {
-    return boost::get<N>(*this);
+    return boost::tuples::get<N>(*this);
   }
 
   template <int N>
@@ -353,7 +353,7 @@ struct cons<HT, null_type> {
              typename element<N, cons>::type
            >::const_type
   get() const {
-    return boost::get<N>(*this);
+    return boost::tuples::get<N>(*this);
   }
 
 };
