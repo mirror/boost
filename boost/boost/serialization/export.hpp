@@ -170,7 +170,7 @@ boost_template_instantiate(T &, ASeq &){
 
 // in my view either of these should be ok 
 // but this one fails with gcc
-#elif defined(BOOST_MSVC) || defined(__BORLANDC__)
+#elif defined(BOOST_MSVC) || defined(__BORLANDC__) || defined(BOOST_INTEL)
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
     namespace boost { namespace archive { namespace detail {     \
     template<>                                                   \
@@ -185,7 +185,7 @@ boost_template_instantiate(T &, ASeq &){
     } } }                                                        \
     /**/
 #else
-// and this one fails with VC and BORLAND
+// and this one fails with VC, BORLAND and INTEL
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
     namespace boost { namespace archive { namespace detail {     \
     template                                                     \
