@@ -132,7 +132,7 @@ namespace boost { namespace program_options {
         }
         std::vector<T>* tv = boost::any_cast< std::vector<T> >(&v);
         assert(tv);
-        for (size_t i = 0; i < s.size(); ++i)
+        for (unsigned i = 0; i < s.size(); ++i)
         {
             try {
                 tv->push_back(boost::lexical_cast<T>(s[i]));
