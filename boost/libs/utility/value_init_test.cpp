@@ -76,23 +76,14 @@ void test ( T const& y, T const& z )
   T& x_c_ref = x_c ;
   x_c_ref = z ;
   BOOST_TEST ( x_c == z ) ;
-  #ifdef PRODUCE_ERROR_1
-  get(x_c) = z ; // this should produce an ERROR
-  #endif
 
   boost::value_initialized<T const> cx ;
   BOOST_TEST ( y == cx ) ;
   BOOST_TEST ( y == get(cx) ) ;
-  #ifdef PRODUCE_ERROR_2
-  get(cx) = z ; // this should produce an ERROR
-  #endif
 
   boost::value_initialized<T const> const cx_c ;
   BOOST_TEST ( y == cx_c ) ;
   BOOST_TEST ( y == get(cx_c) ) ;
-  #ifdef PRODUCE_ERROR_3
-  get(cx_c) = z ; // this should produce an ERROR
-  #endif
 }
 
 int test_main(int, char **)
