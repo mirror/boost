@@ -36,11 +36,6 @@ Tutorial Example
 Reference
 =========
 
-Ref
----
-
-We need to resolve the title levels here.
-
 .. include:: iterator_facade_ref.rst
 
 .. _counting: counting_iterator.html

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
 <title>Iterator Facade</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -76,15 +76,12 @@ and associated types, to be supplied by a derived iterator class.</td>
 </ul>
 </li>
 <li><a class="reference" href="#id14" id="id42" name="id42">Reference</a><ul>
-<li><a class="reference" href="#ref" id="id43" name="id43">Ref</a><ul>
-<li><a class="reference" href="#iterator-facade-usage" id="id44" name="id44"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a><ul>
-<li><a class="reference" href="#iterator-facade-core-operations" id="id45" name="id45"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></li>
+<li><a class="reference" href="#iterator-facade-usage" id="id43" name="id43"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a><ul>
+<li><a class="reference" href="#iterator-facade-core-operations" id="id44" name="id44"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#iterator-facade-iterator-category" id="id46" name="id46"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id47" name="id47"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
-</ul>
-</li>
+<li><a class="reference" href="#iterator-facade-iterator-category" id="id45" name="id45"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id46" name="id46"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
 </ul>
 </li>
 </ul>
@@ -153,7 +150,7 @@ of the derived iterator type.  These member functions are described
 briefly below and in more detail in the iterator facade
 requirements.</p>
 <blockquote>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -396,7 +393,7 @@ must be a <a class="reference" href="new-iter-concepts.html#forward-traversal-it
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id4" name="category">[1]</a></td><td><tt class="literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
-tags, so we could've passed <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
+tags, so we could have passed <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
 either way, the resulting iterator's <tt class="literal"><span class="pre">iterator_category</span></tt> will
 end up being <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
 </tbody>
@@ -751,9 +748,6 @@ even be superior.</p>
 </div>
 <div class="section" id="id14">
 <h1><a class="toc-backref" href="#id42" name="id14">Reference</a></h1>
-<div class="section" id="ref">
-<h2><a class="toc-backref" href="#id43" name="ref">Ref</a></h2>
-<p>We need to resolve the title levels here.</p>
 <!-- Version 1.3 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -865,7 +859,7 @@ struct enable_if_interoperable
 {};
 </pre>
 <div class="section" id="iterator-facade-usage">
-<h3><a class="toc-backref" href="#id44" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h3>
+<h2><a class="toc-backref" href="#id43" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h2>
 <p>The following table describes the typical valid expressions on
 <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
@@ -878,8 +872,8 @@ object of a single pass iterator type interoperable with <tt class="literal"><sp
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
 <a class="target" id="id18" name="id18"></a><div class="section" id="iterator-facade-core-operations">
-<h4><a class="toc-backref" href="#id45" name="iterator-facade-core-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></h4>
-<table border class="table">
+<h3><a class="toc-backref" href="#id44" name="iterator-facade-core-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></h3>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="19%" />
 <col width="21%" />
@@ -946,7 +940,7 @@ Iterator</td>
 <a class="target" id="facade-iterator-category" name="facade-iterator-category"></a></div>
 </div>
 <div class="section" id="iterator-facade-iterator-category">
-<h3><a class="toc-backref" href="#id46" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h3>
+<h2><a class="toc-backref" href="#id45" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h2>
 <p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade&lt;X,V,R,C,D&gt;</span></tt>
 is a type which satisfies the following conditions:</p>
 <blockquote>
@@ -999,7 +993,7 @@ convertible, and not to any more-derived traversal tag type.</p>
 </blockquote>
 </div>
 <div class="section" id="iterator-facade-operations">
-<h3><a class="toc-backref" href="#id47" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h3>
+<h2><a class="toc-backref" href="#id46" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
 <p>The operations in this section are described in terms of operations on
 the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
@@ -1141,6 +1135,11 @@ return tmp -= n;
 </div>
 </div>
 </div>
+<hr class="footer"/>
+<div class="footer">
+<a class="reference" href="iterator_facade.rst">View document source</a>.
+Generated on: 2004-01-12 14:56 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

@@ -121,7 +121,7 @@ were defined to be::
 
 
 ``iterator_facade`` usage
-.........................
+-------------------------
 
 The following table describes the typical valid expressions on
 ``iterator_facade``\ 's ``Derived`` parameter, depending on the
@@ -139,7 +139,7 @@ interoperable with ``X``.
 .. _`core operations`:
 
 ``iterator_facade`` Core Operations
-'''''''''''''''''''''''''''''''''''
+...................................
 
 +--------------------+----------------------+-------------------------------------+---------------------------+
 |Expression          |Return Type           |Assertion/Note                       |Used to implement Iterator |
@@ -171,7 +171,7 @@ interoperable with ``X``.
 .. _facade iterator category:
 
 ``iterator_facade`` iterator category
-.....................................
+-------------------------------------
 
 The ``iterator_category`` member of ``iterator_facade<X,V,R,C,D>``
 is a type which satisfies the following conditions:
@@ -219,7 +219,7 @@ is a type which satisfies the following conditions:
 
 
 ``iterator_facade`` operations
-..............................
+------------------------------
 
 The operations in this section are described in terms of operations on
 the core interface of ``Derived`` which may be inaccessible
