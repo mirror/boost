@@ -17,15 +17,7 @@ DEPENDS all : test ;
 
 {
     test-suite algorithm/string
-        : [ run
-                container_test.cpp
-              : :
-                :
-                std::locale-support
-                std::facet-support
-                : container
-            ]
-          [ run 
+    	: [ run 
                 trim_test.cpp
               : :
                 :

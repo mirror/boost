@@ -10,9 +10,10 @@
 #include <string>
 #include <iostream>
 #include <iterator>
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/algorithm/string/erase.hpp>
-#include <boost/algorithm/string/case_conv.hpp>
+//#include <boost/algorithm/string/replace.hpp>
+//#include <boost/algorithm/string/erase.hpp>
+//#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string.hpp>
 
 //Following two includes contain second-layer function.
 //They are already included by first-layer header
