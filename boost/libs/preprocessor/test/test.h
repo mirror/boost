@@ -26,8 +26,8 @@ namespace std { }
 using namespace std;
 
 int main(void) {
-	printf("pass " __TIME__);
-	return 0;
+    printf("pass " __TIME__);
+    return 0;
 }
 
 # endif

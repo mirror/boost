@@ -23,7 +23,7 @@
 # define NTH(z, n, data) data ## n
 
 int add(BOOST_PP_ENUM_PARAMS(MAX, int x)) {
-	return BOOST_PP_REPEAT(MAX, NTH, + x);
+    return BOOST_PP_REPEAT(MAX, NTH, + x);
 }
 
 const int r = add(BOOST_PP_ENUM_PARAMS(MAX, 1 BOOST_PP_INTERCEPT));
@@ -32,9 +32,9 @@ const int r = add(BOOST_PP_ENUM_PARAMS(MAX, 1 BOOST_PP_INTERCEPT));
 const int BOOST_PP_ENUM(MAX, CONSTANT, default_param_);
 
 # define TEST(n) \
-	void BOOST_PP_CAT(test_enum_params, n)(BOOST_PP_ENUM_PARAMS(n, int x)); \
-	void BOOST_PP_CAT(test_enum_params_with_a_default, n)(BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(n, int x, 0)); \
-	void BOOST_PP_CAT(test_enum_params_with_defaults, n)(BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(n, int x, default_param_));
+    void BOOST_PP_CAT(test_enum_params, n)(BOOST_PP_ENUM_PARAMS(n, int x)); \
+    void BOOST_PP_CAT(test_enum_params_with_a_default, n)(BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(n, int x, 0)); \
+    void BOOST_PP_CAT(test_enum_params_with_defaults, n)(BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(n, int x, default_param_));
 
 TEST(0)
 TEST(MAX)
