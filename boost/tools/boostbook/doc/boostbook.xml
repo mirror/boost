@@ -54,9 +54,9 @@
         <listitem>
           <para><emphasis role="bold">Testsuites</emphasis>:
           Testsuites in Boost are created by writing an appropriate
-          Jamfile and including that Jamfile in the list of Jamfiles
-          including for testing. If the testsuites are documented
-          (<ulink
+          Jamfile and including that Jamfile in
+          <filename>status/Jamfile</filename>. If the testsuites are
+          documented (<ulink
           url="http://www.boost.org/libs/multi_array/doc/test_cases.html">as
           in the MultiArray library</ulink>), the documentation is
           maintained separately from the testcase Jamfile, leading to
@@ -107,8 +107,8 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
     <itemizedlist>
       <listitem>
         <para>On Unix: Build and install <ulink
-        url="http://xmlsoft.org/">libxml2</ulink>) and then <ulink
-        url="http://xmlsoft.org/XSLT/">libxslt</ulink>). Both
+        url="http://xmlsoft.org/">libxml2</ulink> and then <ulink
+        url="http://xmlsoft.org/XSLT/">libxslt</ulink>. Both
         libraries are part of the <ulink
         url="http://www.gnome.org">GNOME</ulink> project.</para>
       </listitem>
@@ -133,40 +133,12 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
       </listitem>
     </itemizedlist>
 
-    <para>There are a few other requirements:
-      <itemizedlist>
-        <listitem><para>A recent checkout of Boost from <ulink
-        url="http://www.boost.org/more/download.html#CVS">CVS</ulink>.</para>
-        </listitem>
-
-        <listitem><para>Norman Walsh's DocBook XSL stylesheets,
-        available at the <ulink
-        url="http://docbook.sourceforge.net">DocBook sourceforge
-        site</ulink>. Extract the DocBook XSL stylesheets to a
-        directory on your hard disk (which we'll refer to as the
-        <code>DOCBOOK_XSL_DIR</code>).</para>
-        </listitem>
-
-        <listitem><para>The DocBook DTD, available as a ZIP archive at
-        the <ulink
-        url="http://www.oasis-open.org/docbook/xml/4.2/index.shtml">OASIS
-        DocBook site</ulink>. Extract the DocBook DTD to a directory
-        on your hard disk (which we'll refer to as the
-        <code>DOCBOOK_DTD_DIR</code>).</para></listitem>
-      </itemizedlist>
-
-      The latter two items aren't strictly required, but they make
-      processing faster. If you have a fast Internet connection and
-      don't mind waiting a bit longer when building BoostBook
-      documentation, don't bother to download the DocBook DTD and XSL
-      stylesheets: the XSLT processor will download them on-the-fly.</para>
-
-    <para>Next we configure Boost.Build with the DocBook DTD and XSL stylesheets. In the directory <code>tools/build/new</code> is a file named <filename>user-config.jam</filename>. Copy it to your home directory (or edit it in-place), and add a directive telling Boost.Build where to find the DocBook DTD and XSL stylesheets, replacing <code>DOCBOOK_XSL_DIR</code> and <code>DOCBOOK_DTD_DIR</code> with the paths of the DocBook XSL stylsheets and DTD, respectively:
-<programlisting>#  BoostBook configuration
-using boostbook : DOCBOOK_XSL_DIR
-                : DOCBOOK_DTD_DIR
-                ;  
-</programlisting></para>   
+    <para>You will also need a recent checkout of Boost from <ulink
+    url="http://www.boost.org/more/download.html#CVS">CVS</ulink>. If
+    you would like to limit your network bandwidth or limit delays in
+    building documentation, now might be a good time to download the
+    DocBook DTD and XSL stylesheets as described in <xref
+    linkend="boostbook.docbook.config"/>.</para>
 
     <para>Now we can build some documentation. Change to the directory
     <code>$BOOST_ROOT/doc</code> and run <code>bjam --v2</code> to
@@ -231,6 +203,53 @@ Cannot find function named 'next'</programlisting>
         </tbody> 
       </tgroup>
     </table>
+
+    <section id="boostbook.docbook.config">
+      <title>Configuring local DocBook XSL and DTD distributions</title>
+ 
+      <para>By default, the DocBook DTD and XSL stylesheets are
+      accessed over a network automatically by the XSLT
+      processor. However, these documents tend to be large and
+      introduce a noticeable delay in the XSLT transformation
+      step. This section describes how to configure Boost.Build to use
+      local copies of the DocBook DTD and XSL stylesheets to improve
+      processing time. There are a few requirements:
+
+      <itemizedlist>
+        <listitem><para>Norman Walsh's DocBook XSL stylesheets,
+        available at the <ulink
+        url="http://docbook.sourceforge.net">DocBook sourceforge
+        site</ulink>. Extract the DocBook XSL stylesheets to a
+        directory on your hard disk (which we'll refer to as the
+        <code>DOCBOOK_XSL_DIR</code>).</para>
+        </listitem>
+
+        <listitem><para>The DocBook DTD, available as a ZIP archive at
+        the <ulink
+        url="http://www.oasis-open.org/docbook/xml/4.2/index.shtml">OASIS
+        DocBook site</ulink>. Extract the DocBook DTD to a directory
+        on your hard disk (which we'll refer to as the
+        <code>DOCBOOK_DTD_DIR</code>).</para></listitem>
+      </itemizedlist>
+      </para>
+
+      <para>In the directory <code>tools/build/new</code> is a file
+      named <filename>user-config.jam</filename>. Copy it to your home
+      directory (or edit it in-place), and add a directive telling
+      Boost.Build where to find the DocBook DTD and XSL stylesheets,
+      replacing <code>DOCBOOK_XSL_DIR</code> and
+      <code>DOCBOOK_DTD_DIR</code> with the paths of the DocBook XSL
+      stylsheets and DTD, respectively:
+
+<programlisting>#  BoostBook configuration
+using boostbook : DOCBOOK_XSL_DIR
+                : DOCBOOK_DTD_DIR
+                ;</programlisting></para>   
+      
+      <para>Future invocations of <command>bjam</command> will use the
+      specified local copies of the DTD and XSL stylesheets in lieu of
+      downloading the same sources over the network.</para>
+    </section>
 
     <section id="boostbook.fop">
       <title>Configuring Apache FOP for PostScript/PDF Output</title>
