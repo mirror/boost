@@ -30,17 +30,26 @@ namespace boost { namespace numeric { namespace ublas {
     namespace detail {
         using namespace boost::numeric::ublas;
 
+	template <class T>
+	struct resize_functor {
+           void operator() (T& a, typename T::size_type size, bool preserve) const {
+              a.resize (size, preserve);
+           }
+	};
+
+        // Specialise for std::vector
+	template <class T>
+	struct resize_functor< std::vector<T> > {
+           void operator() (std::vector<T>& a, typename std::vector<T>::size_type size, bool ) const {
+              a.resize (size);
+           }
+	};
+
         // Resizing helpers, allow preserve parameter to be used where possible
         template<class T>
         BOOST_UBLAS_INLINE
         void resize (T& a, typename T::size_type size, bool preserve) {
-            a.resize (size, preserve);
-        }
-        // Specialise for std::vector
-        template<class T>
-        BOOST_UBLAS_INLINE
-        void resize (std::vector<T> &a, typename std::vector<T>::size_type size, bool /* preserve */) {
-            a.resize (size);
+            resize_functor<T>() (a, size, preserve);
         }
     }
 
