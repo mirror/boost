@@ -15,12 +15,12 @@
 <hr>
 <a href="index.html">Overall Index</a>
 <p>
-<h3>Changes from Boost 1.30 to 1.31 (date_time 1.01 to 1.02)</h3>
+<h3>Changes from Boost 1.30 to 1.31 (date_time 1.01 to 1.02-prerel)</h3>
     <p class="bold">
     <table>
         <tr class="row_title"><td>Type</td><td>Description</td></tr>
         <tr class="content">
-           <td class="nowrap">Bug</td>
+           <td class="nowrap">Bug Fix</td>
            <td>Fixed time_duration_traits calculation bug which was 
                causing time duration to be limited to 32bit range even
                when 64 bits were available.  Thanks to Joe de Guzman
@@ -30,8 +30,23 @@
         <tr class="content">
            <td class="nowrap">Bug Fix</td>
            <td>Provided additional operators for duration types (eg:
-               date_duration, time_duration).  This includes dividable 
-               by integer and fixes to allow +=, -= operators.
+               date_duration, time_duration).  This includes divideable 
+               by integer and fixes to allow +=, -= operators.  Thanks to 
+               Bart Garst for writing this code.  Also, the documentation
+               of <a href="Calculations.html">Calculations</a> has been 
+               improved.
+          </td>
+        </tr>
+        <tr class="content">
+           <td class="nowrap">Bug Fix</td>
+           <td>Added typedefs to boost::gregorian gregorian_types.hpp various
+               date_generator function classes.
+          </td>
+        </tr>
+        <tr class="content">
+           <td class="nowrap">Bug Fix</td>
+           <td>Various documenation fixes.  Thanks to Bart Garst for 
+               updates.
           </td>
         </tr>
     </table>
@@ -49,7 +64,7 @@
     <table>
         <tr class="row_title"><td>Type</td><td>Description</td></tr>
         <tr class="content">
-           <td class="nowrap">Bug</td>
+           <td class="nowrap">Bug Fix</td>
            <td>Added new experimental feature for Daylight Savings Time
                calculations.  This allows traits based specification of
                dst rules.
@@ -123,7 +138,7 @@
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sat Jul 19 13:40:26 MST 2003
+Last modified: Sat Aug  9 12:15:26 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
