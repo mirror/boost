@@ -103,11 +103,14 @@ void in(const char *testfile)
     PAN *pan = NULL;
     PAS *pas = NULL;
     PAA *paa = NULL;
-    ia >> BOOST_SERIALIZATION_NVP(pan) >> BOOST_SERIALIZATION_NVP(pan);
+    ia >> BOOST_SERIALIZATION_NVP(pan);
+    ia >> BOOST_SERIALIZATION_NVP(pan);
     BOOST_CHECK(pan->count == 2);
-    ia >> BOOST_SERIALIZATION_NVP(pas) >> BOOST_SERIALIZATION_NVP(pas);
+    ia >> BOOST_SERIALIZATION_NVP(pas);
+    ia >> BOOST_SERIALIZATION_NVP(pas);
     BOOST_CHECK(pas->count == 1);
-    ia >> BOOST_SERIALIZATION_NVP(paa) >> BOOST_SERIALIZATION_NVP(paa);
+    ia >> BOOST_SERIALIZATION_NVP(paa);
+    ia >> BOOST_SERIALIZATION_NVP(paa);
     BOOST_CHECK(paa->count == 1);
     delete pan;
     delete pas;
