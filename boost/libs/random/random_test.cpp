@@ -128,6 +128,7 @@ void instantiate_dist(const Dist& dist)
   typename Dist::base_type& b = dist.base();
   Dist d = dist;       // copy ctor
   typename Dist::result_type result = d();
+  (void) &result;      // avoid "unused variable" warning
   b();
   BOOST_TEST(d.base() == b);
   d.reset();
