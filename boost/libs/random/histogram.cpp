@@ -120,6 +120,8 @@ void histograms()
 {
   PRNG rng;
   using namespace boost;
+  histogram(uniform_smallint<PRNG>(rng, 0, 5), 100000, -1, 6, "uniform_smallint(0,5)");
+  histogram(uniform_int<PRNG>(rng, 0, 5), 100000, -1, 6, "uniform_int(0,5)");
   histogram(uniform_01<PRNG>(rng), 100000, -0.5, 1.5, "uniform_01(0,1)");
   histogram(bernoulli_distribution<PRNG>(rng, 0.2), 100000, -0.5, 1.5,
             "bernoulli(0.2)");
@@ -155,5 +157,6 @@ void histograms()
 int main()
 {
   histograms<boost::mt19937>();
+  // histograms<boost::lagged_fibonacci607>();
 }
 
