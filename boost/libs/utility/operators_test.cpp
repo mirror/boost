@@ -1,11 +1,9 @@
 //  Demonstrate and test boost/operators.hpp  -------------------------------//
 
-//  (C) Copyright Beman Dawes 1999. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Copyright Beman Dawes 1999.
+//  See accompanying license for terms and conditions of use.
 
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/utility for documentation.
 
 //  Revision History
 //  23 May 03 Added tests for "bool_testable". (Sam Partington/Daniel Frey)

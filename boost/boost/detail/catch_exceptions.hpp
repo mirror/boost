@@ -1,11 +1,9 @@
 //  boost/catch_exceptions.hpp -----------------------------------------------//
 
-//  (C) Copyright Beman Dawes 1995-2001. Permission to copy, use, modify, sell
-//  and distribute this software is granted provided this copyright notice
-//  appears in all copies. This software is provided "as is" without express or
-//  implied warranty, and with no claim as to its suitability for any purpose.
+//  Copyright Beman Dawes 1995-2001.
+//  See accompanying license for terms and conditions of use.
 
-//  See http://www.boost.org for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/test for documentation.
 
 //  Revision History
 //   13 Jun 01 report_exception() made inline. (John Maddock, Jesse Jones)

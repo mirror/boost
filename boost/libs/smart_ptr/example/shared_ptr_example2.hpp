@@ -1,12 +1,9 @@
 //  Boost shared_ptr_example2 header file  -----------------------------------//
 
-//  (C) Copyright Beman Dawes 2001. Permission to copy,
-//  use, modify, sell and distribute this software is granted provided this
-//  copyright notice appears in all copies. This software is provided "as is"
-//  without express or implied warranty, and with no claim as to its
-//  suitability for any purpose.
+//  Copyright Beman Dawes 2001.
+//  See accompanying license for terms and conditions of use.
 
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/smart_ptr for documentation.
 
 #include <boost/shared_ptr.hpp>
 

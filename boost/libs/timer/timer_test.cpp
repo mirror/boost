@@ -1,9 +1,9 @@
 //  timer, job_timer, and progress_display sample program  -------------------//
 
-//  (C) Copyright Beman Dawes 1998. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Copyright Beman Dawes 1998.
+//  See accompanying license for terms and conditions of use.
+
+//  See http://www.boost.org/libs/timer for documentation.
 
 //  Revision History
 //  12 Jan 01  Cut time to 1.0 secs to speed regression tests (Beman Dawes)
