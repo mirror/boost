@@ -1518,19 +1518,44 @@ public: // comparison operators
         return rhs.apply_visitor(visitor);
     }
 
+public: // prevent comparison with foreign types
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+
     template <typename U>
     void operator==(const U&) const
     {
-        // force static assertion failure:
         BOOST_STATIC_ASSERT( false && sizeof(U) );
     }
 
     template <typename U>
     void operator<(const U&) const
     {
-        // force static assertion failure:
         BOOST_STATIC_ASSERT( false && sizeof(U) );
     }
+
+#else // MSVC7
+
+    //
+    // MSVC7 gives error about return types for above being different than
+    // the true comparison operator overloads:
+    //
+
+    template <typename U>
+    bool operator==(const U&) const
+    {
+        BOOST_STATIC_ASSERT( false && sizeof(U) );
+        return false;
+    }
+
+    template <typename U>
+    bool operator<(const U&) const
+    {
+        BOOST_STATIC_ASSERT( false && sizeof(U) );
+        return false;
+    }
+
+#endif // MSVC7 workaround
 
 // helpers, for visitation support (below) -- private when possible
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
