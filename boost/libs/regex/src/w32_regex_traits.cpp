@@ -147,14 +147,14 @@ enum syntax_map_size
 
 #ifndef BOOST_NO_WREGEX
 
-BOOST_REGEX_DECL wchar_t re_zero_w;
-BOOST_REGEX_DECL wchar_t re_ten_w;
+BOOST_REGEX_DECL boost::regex_wchar_type re_zero_w;
+BOOST_REGEX_DECL boost::regex_wchar_type re_ten_w;
 
 bool isPlatformNT = false;
 
 struct syntax_map_t
 {
-   wchar_t c;
+   boost::regex_wchar_type c;
    unsigned int type;
 };
 
@@ -164,14 +164,14 @@ std::list<syntax_map_t>* syntax;
 
 std::size_t BOOST_REGEX_CALL _re_get_message(char* buf, std::size_t len, unsigned id);
 
-std::size_t BOOST_REGEX_CALL get_message(wchar_t* buf, std::size_t len, unsigned id)
+std::size_t BOOST_REGEX_CALL get_message(boost::regex_wchar_type* buf, std::size_t len, unsigned id)
 {
    std::size_t size = _re_get_message(static_cast<char*>(0), 0, id);
    if(len < size)
       return size;
    boost::scoped_array<char> cb(new char[size]);
    _re_get_message(cb.get(), size, id);
-   size = boost::w32_regex_traits<wchar_t>::strwiden(buf, len, cb.get());
+   size = boost::w32_regex_traits<boost::regex_wchar_type>::strwiden(buf, len, cb.get());
    return size;
 }
 
@@ -338,18 +338,18 @@ void BOOST_REGEX_CALL w32_traits_base::do_init()
 #ifndef BOOST_NO_WREGEX
       //
       // wide string data:
-      std::basic_string<wchar_t> ws;
-      const wchar_t* wp = L"zero";
-      if(w32_regex_traits<wchar_t>::lookup_collatename(ws, wp, wp+4))
+      std::basic_string<regex_wchar_type> ws;
+      const regex_wchar_type* wp = (const regex_wchar_type*)L"zero";
+      if(w32_regex_traits<regex_wchar_type>::lookup_collatename(ws, wp, wp+4))
       {
          jm_assert(ws.size() == 1);
          re_zero_w = *ws.c_str();
       }
       else
-         re_zero_w = L'0';
+         re_zero_w = (regex_wchar_type)L'0';
 
-      wp = L"ten";
-      if(w32_regex_traits<wchar_t>::lookup_collatename(ws, wp, wp+3))
+      wp = (const regex_wchar_type*)L"ten";
+      if(w32_regex_traits<regex_wchar_type>::lookup_collatename(ws, wp, wp+3))
       {
          jm_assert(ws.size() == 1);
          re_ten_w = *ws.c_str();
@@ -357,12 +357,12 @@ void BOOST_REGEX_CALL w32_traits_base::do_init()
       else
          re_ten_w = L'a';
 
-      wchar_t wbuf[256];
+      regex_wchar_type wbuf[256];
       syntax_map_t sm;
       syntax->clear();
       for(i = 1; i < syntax_max; ++i)
       {
-         wchar_t* ptr = wbuf;
+         regex_wchar_type* ptr = wbuf;
          get_message(wbuf, 256, i+100);
          for(; *ptr; ++ptr)
          {
@@ -583,10 +583,10 @@ int BOOST_REGEX_CALL w32_regex_traits<char>::toi(const char*& first, const char*
 
 #ifndef BOOST_NO_WREGEX
 
-bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
+bool BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::lookup_collatename(std::basic_string<regex_wchar_type>& out, const regex_wchar_type* first, const regex_wchar_type* last)
 {
    BOOST_RE_GUARD_STACK
-   std::basic_string<wchar_t> s(first, last);
+   std::basic_string<regex_wchar_type> s(first, last);
    std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
@@ -597,18 +597,18 @@ bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_s
    {
       if(t_out[0])
       {
-         len = strwiden(static_cast<wchar_t*>(0), 0, t_out.c_str());
-         scoped_array<wchar_t> wb(new wchar_t[len]);
+         len = strwiden(static_cast<regex_wchar_type*>(0), 0, t_out.c_str());
+         scoped_array<regex_wchar_type> wb(new regex_wchar_type[len]);
          strwiden(wb.get(), len, t_out.c_str());
          out = wb.get();
       }
       else
-         out.append(1,(wchar_t)0);
+         out.append(1,(regex_wchar_type)0);
    }
    return result;
 }
 
-unsigned int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::syntax_type(size_type c)
+unsigned int BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::syntax_type(size_type c)
 {
    BOOST_RE_GUARD_STACK
    std::list<syntax_map_t>::const_iterator first, last;
@@ -623,10 +623,10 @@ unsigned int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::syntax_type(size_type c
    return 0;
 }
 
-bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
+bool BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::do_lookup_collate(std::basic_string<regex_wchar_type>& out, const regex_wchar_type* first, const regex_wchar_type* last)
 {
    BOOST_RE_GUARD_STACK
-   std::basic_string<wchar_t> s(first, last);
+   std::basic_string<regex_wchar_type> s(first, last);
    std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
@@ -634,8 +634,8 @@ bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_st
    bool result =  base_type::do_lookup_collate(t_out, buf.get());
    if(result)
    {
-      len = strwiden(static_cast<wchar_t*>(0), 0, t_out.c_str());
-      scoped_array<wchar_t> wb(new wchar_t[len]);
+      len = strwiden(static_cast<regex_wchar_type*>(0), 0, t_out.c_str());
+      scoped_array<regex_wchar_type> wb(new regex_wchar_type[len]);
       strwiden(wb.get(), len, t_out.c_str());
       out = wb.get();
    }
@@ -643,7 +643,7 @@ bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_st
 }
 
 
-void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::update()
+void BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::update()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_HAS_THREADS
@@ -652,7 +652,7 @@ void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::update()
    do_init();
 }
 
-w32_regex_traits<wchar_t>::w32_regex_traits()
+w32_regex_traits<regex_wchar_type>::w32_regex_traits()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_HAS_THREADS
@@ -662,7 +662,7 @@ w32_regex_traits<wchar_t>::w32_regex_traits()
    ++entry_count;
 }
 
-w32_regex_traits<wchar_t>::~w32_regex_traits()
+w32_regex_traits<regex_wchar_type>::~w32_regex_traits()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_HAS_THREADS
@@ -670,7 +670,7 @@ w32_regex_traits<wchar_t>::~w32_regex_traits()
 #endif
    // add reference to static member here to ensure
    // that the linker includes it in the .exe:
-   if((--entry_count == 0) && (0 != &w32_regex_traits<wchar_t>::init_) && is_init)
+   if((--entry_count == 0) && (0 != &w32_regex_traits<regex_wchar_type>::init_) && is_init)
       do_free();
 #ifdef BOOST_HAS_THREADS
    g.acquire(false);
@@ -678,7 +678,7 @@ w32_regex_traits<wchar_t>::~w32_regex_traits()
 #endif
 }
 
-bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::uint_fast32_t f)
+bool BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::do_iswclass(regex_wchar_type c, boost::uint_fast32_t f)
 {
    BOOST_RE_GUARD_STACK
    if((c & ~0xFF) == 0)
@@ -686,20 +686,20 @@ bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::u
    WORD mask;
    if(f & char_class_unicode)
       return true;
-   else if(isPlatformNT && GetStringTypeW(CT_CTYPE1, &c, 1, &mask))
+   else if(isPlatformNT && GetStringTypeW(CT_CTYPE1, (const wchar_t*)&c, 1, &mask))
       return BOOST_REGEX_MAKE_BOOL(mask & f & char_class_win);
    else if((f & char_class_graph) == char_class_graph)
       return true;  // all wide characters are considered "graphics"
    return false;
 }
 
-void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
+void BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::transform(std::basic_string<regex_wchar_type>& out, const std::basic_string<regex_wchar_type>& in)
 {
    BOOST_RE_GUARD_STACK
    scoped_array<char> alt;
    size_t n;
    if(isPlatformNT)
-      n = LCMapStringW(GetUserDefaultLCID(), LCMAP_SORTKEY, in.c_str(), -1, 0, 0);
+      n = LCMapStringW(GetUserDefaultLCID(), LCMAP_SORTKEY, (const wchar_t*)in.c_str(), -1, 0, 0);
    else
    {
       n = strnarrow(static_cast<char*>(0), 0, in.c_str());
@@ -712,21 +712,21 @@ void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform(std::basic_string<wch
       out = in;
       return;
    }
-   scoped_array<wchar_t> buf(new wchar_t[n+1]);
+   scoped_array<regex_wchar_type> buf(new regex_wchar_type[n+1]);
    // under win32 we get mapped to an array of bytes
    // not characters; since the underlying engine has to
-   // deal with chars we widen the bytes to wchar_t to ensure
+   // deal with chars we widen the bytes to regex_wchar_type to ensure
    // the sort order remains unchanged when we compare.
    scoped_array<char> t(new char[n+1]);
    if(isPlatformNT)
-      n = LCMapStringW(GetUserDefaultLCID(), LCMAP_SORTKEY, in.c_str(), -1, reinterpret_cast<wchar_t*>(t.get()), (int)n);
+      n = LCMapStringW(GetUserDefaultLCID(), LCMAP_SORTKEY, (const wchar_t*)in.c_str(), -1, reinterpret_cast<wchar_t*>(t.get()), (int)n);
    else
       n = LCMapStringA(GetUserDefaultLCID(), LCMAP_SORTKEY, alt.get(), -1, t.get(), (int)n);
    int i = -1;
    do
    {
       ++i;
-      buf[i] = (wchar_t)(unsigned char)t[i];
+      buf[i] = (regex_wchar_type)(unsigned char)t[i];
    } while(t[i]);
    if(n == (size_t)(-1))
    {
@@ -736,7 +736,7 @@ void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform(std::basic_string<wch
    out = buf.get();
 }
 
-void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
+void BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::transform_primary(std::basic_string<regex_wchar_type>& out, const std::basic_string<regex_wchar_type>& in)
 {
    transform(out, in);
    for(unsigned int i = 0; i < out.size(); ++i)
@@ -750,7 +750,7 @@ void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform_primary(std::basic_st
 }
 
 
-int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::toi(wchar_t c)
+int BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::toi(regex_wchar_type c)
 {
    if(is_class(c, char_class_digit))
       return c - re_zero_w;
@@ -759,7 +759,7 @@ int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::toi(wchar_t c)
    return -1; // error!!
 }
 
-int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)
+int BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::toi(const regex_wchar_type*& first, const regex_wchar_type* last, int radix)
 {
    unsigned int maxval;
    if(radix < 0)
@@ -789,9 +789,9 @@ int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const
    return result;
 }
 
-boost::uint_fast32_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
+boost::uint_fast32_t BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::lookup_classname(const regex_wchar_type* first, const regex_wchar_type* last)
 {
-   std::basic_string<wchar_t> s(first, last);
+   std::basic_string<regex_wchar_type> s(first, last);
    std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
@@ -799,7 +799,7 @@ boost::uint_fast32_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::lookup_classnam
    return result;
 }
 
-wchar_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::wtolower(wchar_t c)
+regex_wchar_type BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::wtolower(regex_wchar_type c)
 {
    BOOST_RE_GUARD_STACK
    if(isPlatformNT)
@@ -808,27 +808,27 @@ wchar_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::wtolower(wchar_t c)
 }
 
 
-w32_regex_traits<wchar_t> w32_regex_traits<wchar_t>::init_;
+w32_regex_traits<regex_wchar_type> w32_regex_traits<regex_wchar_type>::init_;
 
-std::size_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::strnarrow(char *s1, std::size_t len, const wchar_t *s2)
+std::size_t BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::strnarrow(char *s1, std::size_t len, const regex_wchar_type *s2)
 {
    BOOST_RE_GUARD_STACK
-   std::size_t size = WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, 0, 0, 0);
+   std::size_t size = WideCharToMultiByte(CP_ACP, 0, (const wchar_t*)s2, -1, s1, 0, 0, 0);
    if(size > len)
       return size;
-   return WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, (int)len, 0, 0);
+   return WideCharToMultiByte(CP_ACP, 0, (const wchar_t*)s2, -1, s1, (int)len, 0, 0);
 }
 
-std::size_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::strwiden(wchar_t *s1, std::size_t len, const char *s2)
+std::size_t BOOST_REGEX_CALL w32_regex_traits<regex_wchar_type>::strwiden(regex_wchar_type *s1, std::size_t len, const char *s2)
 {
    BOOST_RE_GUARD_STACK
-   std::size_t size = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,   s2, -1, s1, 0);
+   std::size_t size = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,   s2, -1, (wchar_t*)s1, 0);
    if(size > len)
       return size;
-   return MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s2, -1, s1, (int)len);
+   return MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s2, -1, (wchar_t*)s1, (int)len);
 }
 
-unsigned short w32_regex_traits<wchar_t>::wide_unicode_classes[] = {
+unsigned short w32_regex_traits<regex_wchar_type>::wide_unicode_classes[] = {
    re_detail::w32_traits_base::char_class_cntrl,        // ''  0
    re_detail::w32_traits_base::char_class_cntrl,        // ''  1
    re_detail::w32_traits_base::char_class_cntrl,        // ''  2

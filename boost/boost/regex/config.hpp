@@ -191,7 +191,7 @@ using std::distance;
  ****************************************************************************/
 
 #ifdef __cplusplus
-#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1300) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_ALL_NO_LIB)
+#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1300) 
 #  define BOOST_REGEX_HAS_SHORT_WCHAR_T
 namespace boost{ typedef __wchar_t regex_wchar_type; }
 #else

@@ -182,28 +182,28 @@ std::size_t BOOST_REGEX_CALL _re_get_message(char* buf, std::size_t len, std::si
 
 #ifndef BOOST_NO_WREGEX
 
-BOOST_REGEX_DECL wchar_t re_zero_w;
-BOOST_REGEX_DECL wchar_t re_ten_w;
+BOOST_REGEX_DECL boost::regex_wchar_type re_zero_w;
+BOOST_REGEX_DECL boost::regex_wchar_type re_ten_w;
 
 unsigned int nlsw_count = 0;
 std::string* wlocale_name = 0;
 
 struct syntax_map_t
 {
-   wchar_t c;
+   boost::regex_wchar_type c;
    unsigned int type;
 };
 
 std::list<syntax_map_t>* syntax;
 
-std::size_t BOOST_REGEX_CALL re_get_message(wchar_t* buf, std::size_t len, std::size_t id)
+std::size_t BOOST_REGEX_CALL re_get_message(boost::regex_wchar_type* buf, std::size_t len, std::size_t id)
 {
    std::size_t size = _re_get_message(static_cast<char*>(0), 0, id);
    if(len < size)
       return size;
    boost::scoped_array<char> cb(new char[size]);
    _re_get_message(cb.get(), size, id);
-   size = boost::c_regex_traits<wchar_t>::strwiden(buf, len, cb.get());
+   size = boost::c_regex_traits<boost::regex_wchar_type>::strwiden(buf, len, cb.get());
    return size;
 }
 #endif
@@ -584,10 +584,10 @@ char c_traits_base::lower_case_map[map_size];
 } // namespace re_detail
 
 #ifndef BOOST_NO_WREGEX
-bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
+bool BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::lookup_collatename(std::basic_string<regex_wchar_type>& out, const regex_wchar_type* first, const regex_wchar_type* last)
 {
    BOOST_RE_GUARD_STACK
-   std::basic_string<wchar_t> s(first, last);
+   std::basic_string<regex_wchar_type> s(first, last);
    std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
@@ -598,13 +598,13 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_str
    {
       if(t_out[0])
       {
-         len = strwiden(static_cast<wchar_t*>(0), 0, t_out.c_str());
-         scoped_array<wchar_t> wb(new wchar_t[len]);
+         len = strwiden(static_cast<regex_wchar_type*>(0), 0, t_out.c_str());
+         scoped_array<regex_wchar_type> wb(new regex_wchar_type[len]);
          strwiden(wb.get(), len, t_out.c_str());
          out = wb.get();
       }
       else
-         out.append(1, (wchar_t)0);
+         out.append(1, (regex_wchar_type)0);
    }
    return result;
 }
@@ -773,7 +773,7 @@ int BOOST_REGEX_CALL c_regex_traits<char>::toi(const char*& first, const char* l
 
 #ifndef BOOST_NO_WREGEX
 
-unsigned int BOOST_REGEX_CALL c_regex_traits<wchar_t>::syntax_type(size_type c)
+unsigned int BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::syntax_type(size_type c)
 {
    BOOST_RE_GUARD_STACK
    std::list<syntax_map_t>::const_iterator first, last;
@@ -788,7 +788,7 @@ unsigned int BOOST_REGEX_CALL c_regex_traits<wchar_t>::syntax_type(size_type c)
    return 0;
 }
 
-void BOOST_REGEX_CALL c_regex_traits<wchar_t>::init()
+void BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::init()
 {
    BOOST_RE_GUARD_STACK
    re_detail::re_init_threads();
@@ -818,10 +818,10 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::init()
    ++nlsw_count;
 }
 
-bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
+bool BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::do_lookup_collate(std::basic_string<regex_wchar_type>& out, const regex_wchar_type* first, const regex_wchar_type* last)
 {
    BOOST_RE_GUARD_STACK
-   std::basic_string<wchar_t> s(first, last);
+   std::basic_string<regex_wchar_type> s(first, last);
    std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
@@ -829,8 +829,8 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_stri
    bool result = base_type::do_lookup_collate(t_out, buf.get());
    if(result)
    {
-      len = strwiden(static_cast<wchar_t*>(0), 0, t_out.c_str());
-      scoped_array<wchar_t> wb(new wchar_t[len]);
+      len = strwiden(static_cast<regex_wchar_type*>(0), 0, t_out.c_str());
+      scoped_array<regex_wchar_type> wb(new regex_wchar_type[len]);
       strwiden(wb.get(), len, t_out.c_str());
       out = wb.get();
    }
@@ -838,7 +838,7 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_stri
 }
 
 
-void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
+void BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::update()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_HAS_THREADS
@@ -851,8 +851,8 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
    if(*wlocale_name != l)
    {
       *wlocale_name = l;
-      std::basic_string<wchar_t> s;
-      const wchar_t* p = L"zero";
+      std::basic_string<regex_wchar_type> s;
+      const regex_wchar_type* p = (const regex_wchar_type*)L"zero";
       if(do_lookup_collate(s, p, p+4))
       {
          jm_assert(s.size() == 1);
@@ -861,7 +861,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
       else
          re_zero_w = L'0';
 
-      p = L"ten";
+      p = (const regex_wchar_type*)L"ten";
       if(do_lookup_collate(s, p, p+3))
       {
          jm_assert(s.size() == 1);
@@ -871,13 +871,13 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
          re_ten_w = L'a';
 
       unsigned int i;
-      wchar_t buf[256];
+      regex_wchar_type buf[256];
       syntax_map_t sm;
       syntax->clear();
       for(i = 1; i < syntax_max; ++i)
       {
-         wchar_t* ptr = buf;
-         re_get_message(static_cast<wchar_t*>(buf), 256, i+100);
+         regex_wchar_type* ptr = buf;
+         re_get_message(static_cast<regex_wchar_type*>(buf), 256, i+100);
          for(; *ptr; ++ptr)
          {
             sm.c = *ptr;
@@ -889,7 +889,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
    }
 }
 
-void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
+void BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::m_free()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_HAS_THREADS
@@ -901,7 +901,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
    re_free_collate();
    // add reference to static member here to ensure
    // that the linker includes it in the .exe:
-   if((nlsw_count == 0) && (0 != &c_regex_traits<wchar_t>::init_))
+   if((nlsw_count == 0) && (0 != &c_regex_traits<regex_wchar_type>::init_))
    {
       // cleanup:
       delete wlocale_name;
@@ -913,7 +913,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
 #endif
 }
 
-bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::uint_fast32_t f)
+bool BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::do_iswclass(regex_wchar_type c, boost::uint_fast32_t f)
 {
    BOOST_RE_GUARD_STACK
    if((c & ~0xFF) == 0)
@@ -939,7 +939,7 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::uin
    return false;
 }
 
-void BOOST_REGEX_CALL c_regex_traits<wchar_t>::transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
+void BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::transform(std::basic_string<regex_wchar_type>& out, const std::basic_string<regex_wchar_type>& in)
 {
    BOOST_RE_GUARD_STACK
 #ifndef BOOST_MSVC
@@ -954,8 +954,8 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::transform(std::basic_string<wchar
       out = in;
       return;
    }
-   scoped_array<wchar_t> buf(new wchar_t[n+1]);
-   n = std::wcsxfrm(buf.get(), in.c_str(), n+1);
+   scoped_array<regex_wchar_type> buf(new regex_wchar_type[n+1]);
+   n = std::wcsxfrm((wchar_t*)buf.get(), (const wchar_t*)in.c_str(), n+1);
    if(n == (std::size_t)(-1))
    {
       out = in;
@@ -964,7 +964,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::transform(std::basic_string<wchar
    out = buf.get();
 }
 
-void BOOST_REGEX_CALL c_regex_traits<wchar_t>::transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
+void BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::transform_primary(std::basic_string<regex_wchar_type>& out, const std::basic_string<regex_wchar_type>& in)
 {
    transform(out, in);
    switch(sort_type)
@@ -988,11 +988,11 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::transform_primary(std::basic_stri
    }
 }
 
-unsigned c_regex_traits<wchar_t>::sort_type;
-wchar_t c_regex_traits<wchar_t>::sort_delim;
+unsigned c_regex_traits<regex_wchar_type>::sort_type;
+regex_wchar_type c_regex_traits<regex_wchar_type>::sort_delim;
 
 
-int BOOST_REGEX_CALL c_regex_traits<wchar_t>::toi(wchar_t c)
+int BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::toi(regex_wchar_type c)
 {
    if(is_class(c, char_class_digit))
       return c - re_zero_w;
@@ -1001,7 +1001,7 @@ int BOOST_REGEX_CALL c_regex_traits<wchar_t>::toi(wchar_t c)
    return -1; // error!!
 }
 
-int BOOST_REGEX_CALL c_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)
+int BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::toi(const regex_wchar_type*& first, const regex_wchar_type* last, int radix)
 {
    unsigned int maxval;
    if(radix < 0)
@@ -1031,9 +1031,9 @@ int BOOST_REGEX_CALL c_regex_traits<wchar_t>::toi(const wchar_t*& first, const w
    return result;
 }
 
-boost::uint_fast32_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
+boost::uint_fast32_t BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::lookup_classname(const regex_wchar_type* first, const regex_wchar_type* last)
 {
-   std::basic_string<wchar_t> s(first, last);
+   std::basic_string<regex_wchar_type> s(first, last);
    std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
@@ -1041,24 +1041,24 @@ boost::uint_fast32_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_classname(
    return result;
 }
 
-c_regex_traits<wchar_t> c_regex_traits<wchar_t>::init_;
+c_regex_traits<regex_wchar_type> c_regex_traits<regex_wchar_type>::init_;
 
-std::size_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::strnarrow(char *s1, std::size_t len, const wchar_t *s2)
+std::size_t BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::strnarrow(char *s1, std::size_t len, const regex_wchar_type *s2)
 {
    BOOST_RE_GUARD_STACK
-   std::size_t size = std::wcslen(s2) + 1;
+   std::size_t size = std::wcslen((const wchar_t*)s2) + 1;
    if(size > len)
       return size;
-   return std::wcstombs(s1, s2, len);
+   return std::wcstombs(s1, (const wchar_t*)s2, len);
 }
 
-std::size_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, std::size_t len, const char *s2)
+std::size_t BOOST_REGEX_CALL c_regex_traits<regex_wchar_type>::strwiden(regex_wchar_type *s1, std::size_t len, const char *s2)
 {
    BOOST_RE_GUARD_STACK
    std::size_t size = std::strlen(s2) + 1;
    if(size > len)
       return size;
-   size = std::mbstowcs(s1, s2, len);
+   size = std::mbstowcs((wchar_t*)s1, s2, len);
    s1[size] = 0;
    return size + 1;
 }
