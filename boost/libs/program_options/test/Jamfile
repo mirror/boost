@@ -9,7 +9,7 @@ rule program-options-test ( name )
       run $(name).cpp <lib>../build/boost_program_options
         <lib>../../test/build/boost_test_exec_monitor : :
         : <include>$(BOOST_ROOT) 
-          std::facet-support std::locale-support ]
+          std::locale-support ]
     ;
 }
 
