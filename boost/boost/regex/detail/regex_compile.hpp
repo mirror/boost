@@ -416,6 +416,17 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_maps()
          record->can_be_null = 0;
          compile_map(record->next.p, static_cast<re_detail::re_jump*>(record)->_map, &(record->can_be_null), re_detail::mask_take, static_cast<re_detail::re_jump*>(record)->alt.p);
          compile_map(static_cast<re_detail::re_jump*>(record)->alt.p, static_cast<re_detail::re_jump*>(record)->_map, &(record->can_be_null), re_detail::mask_skip);
+         if(record->type == re_detail::syntax_element_rep)
+         {
+            re_detail::re_repeat* rep = static_cast<re_detail::re_repeat*>(record);
+            // set whether this is a singleton repeat or not:
+            if(rep->next.p->next.p->next.p == rep->alt.p)
+            {
+               rep->singleton = true;
+            }
+            else
+               rep->singleton = false;
+         }
       }
       else
       {
