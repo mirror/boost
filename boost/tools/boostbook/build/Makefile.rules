@@ -1,0 +1,14 @@
+XSL=XML_CATALOG_FILES=$(BOOSTBOOK_CATALOG) $(XSLTPROC) --xinclude --nonet
+CHECK_DTD=XML_CATALOG_FILES=$(BOOSTBOOK_CATALOG) $(XMLLINT) --xinclude --noout --postvalid
+
+%.docbook: %.xml
+	$(XSL) --stringparam boost.root $(BOOST_ROOT) -o $@ $(BOOSTBOOK_XSL_PATH)/docbook.xsl $<
+
+%.fo: %.docbook
+	$(XSL) -o $@ $(BOOSTBOOK_XSL_PATH)/fo.xsl $<
+
+%.pdf: %.fo
+	JAVA_HOME=$(JAVA_HOME) $(FOP) $< $@
+
+%.html: %.docbook
+	$(XSL) -o $@ $(BOOSTBOOK_XSL_PATH)/html-single.xsl $<

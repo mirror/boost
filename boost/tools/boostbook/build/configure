@@ -1,0 +1,116 @@
+#!/bin/sh
+
+if [ -z $2 ]; then
+  echo "Syntax is ./configure <DocBook XSL path> <DocBook DTD path> [<FOP Path>]"
+  echo "If you do not have the DocBook XSL Stylesheets or DTD, please download"
+  echo "them from http://docbook.sourceforge.net/"
+  exit -1
+fi
+
+DOCBOOK_XSL_PATH=$1
+if [ ! -r $DOCBOOK_XSL_PATH/html/chunk.xsl ]; then
+  echo "The DocBook XSL path given does not seem correct. Please check the"
+  echo "path again and rerun configure. The DocBook XSL path given was: "
+  echo "  $DOCBOOK_XSL_PATH"
+  exit -2
+fi
+
+DOCBOOK_DTD_PATH=$2
+if [ ! -r $DOCBOOK_DTD_PATH/docbookx.dtd ]; then
+  echo "The DocBook DTD patch given does not seem correct. Please check the"
+  echo "path again and rerun configure. The DocBook DTD path given was: "
+  echo "  $DOCBOOK_DTD_PATH"
+  exit -3;
+fi
+
+BOOSTBOOK_XSL_PATH=`pwd`
+BOOSTBOOK_XSL_PATH="${BOOSTBOOK_XSL_PATH%/build*}/xsl"
+if [ ! -r "$BOOSTBOOK_XSL_PATH/docbook.xsl" ]; then
+  echo "Please execute configure from the BoostBook build directory"
+  exit -4;
+fi
+
+BOOSTBOOK_DTD_PATH=`pwd`
+BOOSTBOOK_DTD_PATH="${BOOSTBOOK_DTD_PATH%/build*}/dtd"
+if [ ! -r "$BOOSTBOOK_DTD_PATH/boostbook.dtd" ]; then
+  echo "Please execute configure from the BoostBook build directory"
+  exit -5;
+fi
+
+
+XSLTPROC=${XSLTPROC:-`which xsltproc`}
+if [ ! -x $XSLTPROC ]; then
+  echo "Could not find the program xsltproc in the current PATH. Stopping..."
+  exit -6
+fi
+
+XMLLINT=${XMLLINT:-`which xmllint`}
+if [ ! -x $XMLLINT ]; then
+  echo "Could not find the program xmllint in the current PATH."
+  echo "This is not a problem per se, but you may not be able to validate"
+  echo "XML files against a DTD."
+fi
+
+if [ -z $JAVA_HOME ]; then
+  JAVA=${JAVA:-`which java`}
+  JAVA_BIN_PATH=${JAVA%/*}
+  JAVA_HOME=${JAVA_BIN_PATH%/bin}
+fi
+
+if [ ! -d $JAVA_HOME ]; then
+  echo "Could not find Java. PDF generation will not be available."
+  echo "If you have Java installed, set JAVA_HOME to its path and rerun "
+  echo "configure."
+else
+  FOP=${FOP:-$3}
+  if [ ! -z $FOP ]; then
+    if [ -d $FOP ]; then
+      FOP=${FOP%/}
+      FOP="$FOP/fop.sh"
+    fi
+  fi
+
+  if [ -z $FOP ] || [ ! -x $FOP ]; then
+    echo "Could not find FOP. PDF generation will not be available."
+    echo "If you have FOP installed, pass the installation path as the second"
+    echo "argument to configure, e.g.,"
+    echo "  ./configure $DOCBOOK_XSL_PATH <FOP Path>"
+    echo ""
+    echo "If you do not have FOP and would like support for building PDF"
+    echo "documentations, please download FOP from:"
+    echo "  http://xml.apache.org/fop/"
+  fi
+fi
+
+BOOSTBOOK_CATALOG="`pwd`/catalog.xml"
+
+cat > Makefile.def << .
+XSLTPROC=$XSLTPROC
+XMLLINT=$XMLLINT
+DOCBOOK_XSL_PATH=$DOCBOOK_XSL_PATH
+BOOSTBOOK_XSL_PATH=$BOOSTBOOK_XSL_PATH
+JAVA_HOME=$JAVA_HOME
+FOP=$FOP
+BOOSTBOOK_CATALOG=$BOOSTBOOK_CATALOG
+.
+
+cat > catalog.xml << .
+<?xml version="1.0"?>
+<!DOCTYPE catalog
+   PUBLIC "-//OASIS/DTD Entity Resolution XML Catalog V1.0//EN"
+   "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <rewriteURI
+      uriStartString="http://www.oasis-open.org/docbook/xml/4.2/"
+      rewritePrefix="$DOCBOOK_DTD_PATH/"/>
+    <rewriteURI
+      uriStartString="http://docbook.sourceforge.net/release/xsl/current/"
+      rewritePrefix="$DOCBOOK_XSL_PATH/"/>
+    <rewriteURI
+      uriStartString="http://www.boost.org/tools/boostbook/dtd/"
+      rewritePrefix="$BOOSTBOOK_DTD_PATH/"/>
+</catalog>
+.
+
+echo "BoostBook configuration is complete."
