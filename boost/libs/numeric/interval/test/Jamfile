@@ -1,0 +1,67 @@
+subproject libs/numeric/interval/test ;
+
+unit-test add
+    : add.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test cmp
+    : cmp.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test cmp_exp
+    : cmp_exp.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test cmp_lex
+    : cmp_lex.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test det
+    : det.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test fmod
+    : fmod.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test mul
+    : mul.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test overflow
+    : overflow.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test pi
+    : pi.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test pow
+    : pow.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
+
+unit-test test_float
+    : test_float.cpp
+      <lib>../../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT)
+    ;
