@@ -214,8 +214,10 @@
 //  Metrowerks CodeWarrior  --------------------------------------------------//
 
 # elif defined  __MWERKS__
-#   if __MWERKS__ <= 0x2301
+#   if __MWERKS__ <= 0x4000
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#   endif
+#   if __MWERKS__ <= 0x2301
 #     define BOOST_NO_POINTER_TO_MEMBER_CONST
 #   endif
 #   if __MWERKS__ >= 0x2300
