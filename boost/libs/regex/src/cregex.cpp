@@ -21,7 +21,9 @@
 
 #include <boost/cregex.hpp>
 #include <boost/regex.hpp>
-#include <boost/integer_traits.hpp>
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#  include <boost/integer_traits.hpp>
+#endif
 #if !defined(BOOST_NO_STD_STRING)
 #include <map>
 #include <list>
