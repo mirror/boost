@@ -2,7 +2,7 @@
 #define GREG_MONTH_HPP___
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/constrained_value.hpp"
@@ -48,7 +48,8 @@ namespace gregorian {
   public:
     typedef date_time::months_of_year month_enum;
     //! Construct a month from the months_of_year enumeration
-    greg_month(month_enum theMonth) : greg_month_rep(theMonth) {}
+    greg_month(month_enum theMonth) : 
+      greg_month_rep(static_cast<greg_month_rep::value_type>(theMonth)) {}
     //! Construct from a short value
     greg_month(unsigned short theMonth) : greg_month_rep(theMonth) {}
     //! Convert the value back to a short
