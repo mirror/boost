@@ -22,7 +22,19 @@
 #include <vector>
 #include <limits>
 #include <algorithm>
+#include <cmath>
+
 #include <boost/random.hpp>
+#include <boost/config.hpp>
+
+
+#ifdef BOOST_MSVC
+namespace std
+{
+  inline double pow(double a, double b) { return ::pow(a,b); }
+  inline double ceil(double x) { return ::ceil(x); }
+} // namespace std
+#endif
 
 
 template<class T>
