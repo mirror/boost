@@ -93,19 +93,25 @@ void test_int()
   int_type l = i + int_type::pos_infinity();
   check("is special_value (pos_inf)", l.is_special());
   check("add infinity" ,         l == int_type::pos_infinity());
+  { // limiting the scope for these tests was easier than recalculating l
+    int_type l = i - int_type::pos_infinity();
+    check("value - +infinity",         l == int_type::neg_infinity());
+    l = i + int_type::neg_infinity();
+    check("value + -infinity",         l == int_type::neg_infinity());
+  }
   check("inf - inf = nan",       (l - l) == int_type::not_a_number());
   check("-inf + inf = nan",       (j + l) == int_type::not_a_number());
   check("add 2",                 (i + 2) == 3);
   i = int_type::not_a_number();
   check("+inf * integer", (l * 2) == l);
   check("+inf / integer", (l / 2) == l);
-  check("+inf \% -integer", (l % -2) == j);
-  check("+inf \% integer", (l % 2) == l);
+  check("+inf % -integer", (l % -2) == j);
+  check("+inf % integer", (l % 2) == l);
   check("+inf / -integer", (l / -2) == j);
   check("+inf * -integer", (l * -2) == j);
   check("+inf * -inf", (l * j) == j);
   check("+inf / +inf", (l / l) == i);
-  check("+inf \% +inf", (l % l) == i);
+  check("+inf % +inf", (l % l) == i);
   check("+inf * zero", (l * 0) == i);
   check("is special_value (nan)", i.is_special());
   check("as_special convert", boost::date_time::not_a_date_time == i.as_special() );
