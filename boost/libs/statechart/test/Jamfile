@@ -1,0 +1,33 @@
+##############################################################################
+# (c) Copyright Andreas Huber Doenni 2004
+# Distributed under the Boost Software License, Version 1.0. (See accompany-
+# ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+##############################################################################
+
+subproject libs/fsm/test ;
+
+import testing ; # bring in rules for testing
+
+DEPENDS all : test ; # Make tests run by default.
+
+template fsm-common-options
+  :
+  : <include>$(BOOST_ROOT)
+    # The library ensures that all state destructors are only invoked on
+    # the most-derived type, therefore state destructors do not need to
+    # be virtual
+    <gcc><*><cxxflags>-Wno-non-virtual-dtor
+    <gcc-stlport><*><cxxflags>-Wno-non-virtual-dtor
+    <gcc-nocygwin><*><cxxflags>-Wno-non-virtual-dtor
+    <mingw><*><cxxflags>-Wno-non-virtual-dtor
+    <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
+;
+
+{
+  test-suite fsm
+    : [ run TransitionTest.cpp
+        <lib>../../../libs/test/build/boost_test_exec_monitor
+        <template>fsm-common-options ]
+  ;
+}
+      
