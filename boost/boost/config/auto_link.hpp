@@ -67,9 +67,10 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 ***************************************************************************/
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
-
+#ifdef __cplusplus
 #ifndef BOOST_CONFIG_HPP
 #  include <boost/config.hpp>
+#endif
 #endif
 #ifndef BOOST_VERSION_HPP
 #  include <boost/version.hpp>
@@ -86,6 +87,16 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #  pragma message("Using the /RTC option without specifying a debug runtime will lead to linker errors")
 #  pragma message("Hint: go to the code generation options and switch to one of the debugging runtimes")
 #  error "Incompatible build options"
+#endif
+//
+// C language compatability (no, honestly)
+//
+#ifndef __cplusplus
+#  if defined(_MSC_VER) && !defined(__COMO__) && !defined(__ICL)
+#     define BOOST_MSVC _MSC_VER
+#  endif
+#  define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
+#  define BOOST_DO_STRINGIZE(X) #X
 #endif
 //
 // select toolset:
