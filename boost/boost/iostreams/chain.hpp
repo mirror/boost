@@ -32,6 +32,7 @@
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>           // is_filter.
 #include <boost/iostreams/streambuf_facade.hpp>
+#include <boost/next_prior.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -149,7 +150,7 @@ public:
     {
         if (N >= size())
             throw std::out_of_range("bad chain offset");
-        return std::advance(list().begin(), N)->component_type();
+        return (*boost::next(list().begin(), N))->component_type();
     }
 
     template<int N, typename T>
@@ -157,10 +158,11 @@ public:
     {
         if (N >= size())
             throw std::out_of_range("bad chain offset");
-        streambuf_type* link = 
-            *std::advance(list().begin(), N)->component_type();
+        streambuf_type* link = *boost::next(list().begin(), N);
         if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
             return static_cast<T*>(link->component_impl());
+        else
+            return 0;
     }
 
     //----------Container-like interface--------------------------------------//
