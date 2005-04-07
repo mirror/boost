@@ -117,7 +117,8 @@ boost::wave::util::file_position_type current_position;
         lexer_type end = lexer_type();
 
         while (it != end) {
-            std::cout << *it << std::endl;
+            current_position = (*it).get_position();  // for error reporting
+            std::cout << *it << std::endl;            // dump the tokenf info
             ++it;
         }
     }
