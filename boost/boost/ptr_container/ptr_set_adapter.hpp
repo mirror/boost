@@ -325,7 +325,7 @@ namespace boost
             set_basic_clone_and_insert( first, last );
         }
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else    
         
         template< class Range >
@@ -351,7 +351,7 @@ namespace boost
             return this->single_transfer( first, last, from );
         }
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else    
 
         template< class Range >
@@ -461,7 +461,7 @@ namespace boost
             set_basic_clone_and_insert( first, last );
         }
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else    
         
         template< class Range >
@@ -487,7 +487,7 @@ namespace boost
             return this->multi_transfer( first, last, from );
         }
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else    
         
         template< class Range >

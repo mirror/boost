@@ -370,7 +370,7 @@ namespace boost
                          iterator_category<InputIterator>::type() );
         } 
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else
         template< class Range >
         BOOST_DEDUCED_TYPENAME
@@ -420,7 +420,7 @@ namespace boost
             from.c_private().erase( object.base().base() );      // nothrow
         }
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else
         
         template< class Range >
