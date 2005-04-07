@@ -28,8 +28,8 @@ void read_reversing_filter_test()
 
     {
         filtering_istream first(reverse(tolower_filter()), 0);
-        first.push(file_source(test.name()));
-        ifstream second(lower.name().c_str());
+        first.push(file_source(test.name(), in_mode));
+        ifstream second(lower.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from filtering_istream in chars with a "
@@ -40,8 +40,8 @@ void read_reversing_filter_test()
     {
         test_file src;
         filtering_istream first(reverse(tolower_filter()), 0);
-        first.push(file_source(test.name()));
-        ifstream second(lower.name().c_str());
+        first.push(file_source(test.name(), in_mode));
+        ifstream second(lower.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from filtering_istream in chunks with a "
@@ -52,8 +52,8 @@ void read_reversing_filter_test()
     {
         test_file src;
         filtering_istream first(reverse(tolower_filter()));
-        first.push(file_source(test.name()));
-        ifstream second(lower.name().c_str());
+        first.push(file_source(test.name(), in_mode));
+        ifstream second(lower.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from filtering_istream in chars with a "
@@ -64,8 +64,8 @@ void read_reversing_filter_test()
     {
         test_file src;
         filtering_istream first(reverse(tolower_filter()));
-        first.push(file_source(test.name()));
-        ifstream second(lower.name().c_str());
+        first.push(file_source(test.name(), in_mode));
+        ifstream second(lower.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from filtering_istream in chunks with a "
@@ -81,7 +81,7 @@ void write_reversing_filter_test()
     {
         temp_file dest;
         filtering_ostream out(reverse(toupper_filter()), 0);
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -94,7 +94,7 @@ void write_reversing_filter_test()
     {
         temp_file dest;
         filtering_ostream out(reverse(toupper_filter()), 0);      
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -107,7 +107,7 @@ void write_reversing_filter_test()
     {
         temp_file dest;
         filtering_ostream out(reverse(toupper_filter()));
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -120,7 +120,7 @@ void write_reversing_filter_test()
     {
         temp_file dest;
         filtering_ostream out(reverse(toupper_filter()));
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(

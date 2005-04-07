@@ -42,9 +42,9 @@ void regex_filter_test()
         // Test reading from a regex filter based on a function in chars.
         filtering_istream
             first(boost::iostreams::regex_filter(match_lower, replace_lower()));
-        first.push(file_source(test.name()));
+        first.push(file_source(test.name(), in_mode));
         {
-            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            ifstream second(upper.name().c_str(), in_mode);  
             BOOST_CHECK_MESSAGE(
                 compare_streams_in_chars(first, second),
                 "failed reading from function-based regex_filter in chars"
@@ -54,9 +54,9 @@ void regex_filter_test()
 
         // Test reading from a regex filter based on a function in chunks.
         // (Also tests reusing the regex filter.)
-        first.push(file_source(test.name()));
+        first.push(file_source(test.name(), in_mode));
         {
-            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            ifstream second(upper.name().c_str(), in_mode);
             BOOST_CHECK_MESSAGE(
                 compare_streams_in_chunks(first, second),
                 "failed reading from function-based regex_filter in chunks"
@@ -71,9 +71,9 @@ void regex_filter_test()
         // Test reading from a regex filter based on a format string in chars.
         filtering_istream 
             first(boost::iostreams::regex_filter(match_lower, fmt));
-        first.push(file_source(test.name()));
+        first.push(file_source(test.name(), in_mode));
         {
-            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            ifstream second(upper.name().c_str(), in_mode);
             BOOST_CHECK_MESSAGE(
                 compare_streams_in_chars(first, second),
                 "failed reading from format-string-based regex_filter in chars"
@@ -83,9 +83,9 @@ void regex_filter_test()
 
         // Test reading from a regex filter based on a format string in chunks.
         // (Also tests reusing the regex filter.)
-        first.push(file_source(test.name()));
+        first.push(file_source(test.name(), in_mode));
         {
-            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            ifstream second(upper.name().c_str(), in_mode);
             BOOST_CHECK_MESSAGE(
                 compare_streams_in_chars(first, second),
                 "failed reading from format-string-based regex_filter in chunks"
@@ -100,7 +100,7 @@ void regex_filter_test()
         // Test writing to a regex filter based on a function in chars.
         filtering_ostream 
             out(boost::iostreams::regex_filter(match_lower, replace_lower()));
-        out.push(file_sink(dest1.name()));
+        out.push(file_sink(dest1.name(), out_mode));
         write_data_in_chars(out);
         out.pop();
         BOOST_CHECK_MESSAGE(
@@ -110,7 +110,7 @@ void regex_filter_test()
 
         // Test writing to a regex filter based on a function in chunks.
         // (Also tests reusing the regex filter.)
-        out.push(file_sink(dest2.name()));
+        out.push(file_sink(dest2.name(), out_mode));
         write_data_in_chunks(out);
         out.pop();
         BOOST_CHECK_MESSAGE(
@@ -126,7 +126,7 @@ void regex_filter_test()
         // Test writing to a regex filter based on a format string in chars.
         filtering_ostream  
             out(boost::iostreams::regex_filter(match_lower, fmt));
-        out.push(file_sink(dest1.name()));
+        out.push(file_sink(dest1.name(), out_mode));
         write_data_in_chars(out);
         out.pop();
         BOOST_CHECK_MESSAGE(
@@ -136,7 +136,7 @@ void regex_filter_test()
 
         // Test writing to a regex filter based on a format string in chunks.
         // (Also tests reusing the regex filter.)
-        out.push(file_sink(dest2.name()));
+        out.push(file_sink(dest2.name(), out_mode));
         write_data_in_chunks(out);
         out.pop();
         BOOST_CHECK_MESSAGE(

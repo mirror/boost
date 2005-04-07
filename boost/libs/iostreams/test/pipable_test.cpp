@@ -55,8 +55,8 @@ void pipable_test()
         filtering_istream 
             first( toupper_filter() | 
                    toupper_multichar_filter() | 
-                   file_source(src.name()) );
-        ifstream second(upper.name().c_str());
+                   file_source(src.name(), in_mode) );
+        ifstream second(upper.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from a filtering_istream in chunks with a "
@@ -70,7 +70,7 @@ void pipable_test()
         filtering_ostream  
             out( tolower_filter() |
                  tolower_multichar_filter() |
-                 file_sink(dest.name()) );
+                 file_sink(dest.name(), out_mode) );
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(

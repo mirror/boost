@@ -26,7 +26,7 @@ void write_output_ostream_test()
     {
         temp_file test2;
         {
-            ofstream dest(test2.name().c_str());
+            ofstream dest(test2.name().c_str(), out_mode);
             filtering_ostream out(dest, 0);
             write_data_in_chars(out);
         }
@@ -40,7 +40,7 @@ void write_output_ostream_test()
     {
         temp_file test2;
         {
-            ofstream dest(test2.name().c_str());
+            ofstream dest(test2.name().c_str(), out_mode);
             filtering_ostream out(dest, 0);
             write_data_in_chunks(out);
         }
@@ -54,7 +54,7 @@ void write_output_ostream_test()
     {
         test_file test2;
         {
-            ofstream dest(test2.name().c_str());
+            ofstream dest(test2.name().c_str(), out_mode);
             filtering_ostream out(dest);
             write_data_in_chars(out);
         }
@@ -68,7 +68,7 @@ void write_output_ostream_test()
     {
         temp_file test2;
         {
-            ofstream dest(test2.name().c_str());
+            ofstream dest(test2.name().c_str(), out_mode);
             filtering_ostream out(dest);
             write_data_in_chunks(out);
         }

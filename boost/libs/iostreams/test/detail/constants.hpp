@@ -14,6 +14,11 @@
 
 namespace boost { namespace iostreams { namespace test {
 
+// Note: openmode could be a class type, so this header must be included
+// by just one TU.
+const BOOST_IOS::openmode in_mode = BOOST_IOS::in | BOOST_IOS::binary;
+const BOOST_IOS::openmode out_mode = BOOST_IOS::out | BOOST_IOS::binary;
+
 // Chunk size for reading or writing in chunks.
 const int chunk_size = 59;       
 
@@ -30,7 +35,7 @@ inline const char* data(char*)
 {
     static const char* c =
         "!\"#$%&'()*+,-./0123456879:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n";
     return c;
 }
 
@@ -39,7 +44,7 @@ inline const wchar_t* data(wchar_t*)
 {
     static const wchar_t* c =
         L"!\"#$%&'()*+,-./0123456879:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        L"[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        L"[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n";
     return c;
 }
 

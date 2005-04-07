@@ -26,7 +26,7 @@ void write_bidirectional_streambuf_test()
         temp_file test2;
         {
             filebuf dest;
-            dest.open(test2.name().c_str(), BOOST_IOS::out);
+            dest.open(test2.name().c_str(), out_mode);
             filtering_stream<bidirectional> out(dest, 0);
             write_data_in_chars(out);
         }
@@ -41,7 +41,7 @@ void write_bidirectional_streambuf_test()
         temp_file test2;
         {
             filebuf dest;
-            dest.open(test2.name().c_str(), BOOST_IOS::out);
+            dest.open(test2.name().c_str(), out_mode);
             filtering_stream<bidirectional> out(dest, 0);
             write_data_in_chunks(out);
         }
@@ -56,7 +56,7 @@ void write_bidirectional_streambuf_test()
         temp_file test2;
         {
             filebuf dest;
-            dest.open(test2.name().c_str(), BOOST_IOS::out);
+            dest.open(test2.name().c_str(), out_mode);
             filtering_stream<bidirectional> out(dest);
             write_data_in_chars(out);
         }
@@ -71,7 +71,7 @@ void write_bidirectional_streambuf_test()
         temp_file test2;
         {
             filebuf dest;
-            dest.open(test2.name().c_str(), BOOST_IOS::out);
+            dest.open(test2.name().c_str(), out_mode);
             filtering_stream<bidirectional> out(dest);
             write_data_in_chunks(out);
         }

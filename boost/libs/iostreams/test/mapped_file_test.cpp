@@ -29,46 +29,46 @@ void mapped_file_test()
 {
     BOOST_MESSAGE("about to begin");
 
-    //--------------Reading from a mapped_file_source-------------------------//
+    ////--------------Reading from a mapped_file_source-------------------------//
 
-    {
-        // Note: the ifstream second is placed in a nested scope because 
-        // closing and reopening a single ifstream failed for CW 9.4 on Windows.
+    //{
+    //    // Note: the ifstream second is placed in a nested scope because 
+    //    // closing and reopening a single ifstream failed for CW 9.4 on Windows.
 
-        // Test reading from a stream_facade based on a mapped_file_source,
-        // in chars.
-        test_file test;
-        stream_facade<mapped_file_source> first(test.name());
-        {
-            ifstream second( test.name().c_str(), 
-                            BOOST_IOS::in | BOOST_IOS::binary );
-            BOOST_CHECK_MESSAGE(
-                compare_streams_in_chars(first, second),
-                "failed reading from stream_facade<mapped_file_source> in chars"
-            );
+    //    // Test reading from a stream_facade based on a mapped_file_source,
+    //    // in chars.
+    //    test_file test;
+    //    stream_facade<mapped_file_source> first(test.name());
+    //    {
+    //        ifstream second( test.name().c_str(), 
+    //                         BOOST_IOS::in | BOOST_IOS::binary );
+    //        BOOST_CHECK_MESSAGE(
+    //            compare_streams_in_chars(first, second),
+    //            "failed reading from stream_facade<mapped_file_source> in chars"
+    //        );
 
-            BOOST_MESSAGE(
-                "done reading from stream_facade<mapped_file_source> in chars"
-            );
-        }
-        first.close();
+    //        BOOST_MESSAGE(
+    //            "done reading from stream_facade<mapped_file_source> in chars"
+    //        );
+    //    }
+    //    first.close();
 
-        // Test reading from a stream_facade based on a mapped_file_source,
-        // in chunks. (Also tests reopening the stream_facade.)
-        first.open(mapped_file_source(test.name()));
-        {
-            ifstream second( test.name().c_str(), 
-                             BOOST_IOS::in | BOOST_IOS::binary );
-            BOOST_CHECK_MESSAGE(
-                compare_streams_in_chunks(first, second),
-                "failed reading from stream_facade<mapped_file_source> in chunks"
-            );
+    //    // Test reading from a stream_facade based on a mapped_file_source,
+    //    // in chunks. (Also tests reopening the stream_facade.)
+    //    first.open(mapped_file_source(test.name()));
+    //    {
+    //        ifstream second( test.name().c_str(), 
+    //                         BOOST_IOS::in | BOOST_IOS::binary );
+    //        BOOST_CHECK_MESSAGE(
+    //            compare_streams_in_chunks(first, second),
+    //            "failed reading from stream_facade<mapped_file_source> in chunks"
+    //        );
 
-            BOOST_MESSAGE(
-                "done reading from stream_facade<mapped_file_source> in chunks"
-            );
-        }
-    }
+    //        BOOST_MESSAGE(
+    //            "done reading from stream_facade<mapped_file_source> in chunks"
+    //        );
+    //    }
+    //}
 
     //--------------Writing to a mapped_file_sink-----------------------------//
 
@@ -106,38 +106,38 @@ void mapped_file_test()
         );
     }
 
-    //--------------Random access with a mapped_file--------------------------//
+    ////--------------Random access with a mapped_file--------------------------//
 
-    {
-        // Test reading, writing and seeking within a stream_facade based on a 
-        // mapped_file, in chars.
-        test_file test;
-        stream_facade<mapped_file> 
-            io((mapped_file(test.name()))); // CW workaround.
-        BOOST_CHECK_MESSAGE(
-            test_seekable_in_chars(io),
-            "failed seeking within stream_facade<mapped_file> in chars"
-        );
+    //{
+    //    // Test reading, writing and seeking within a stream_facade based on a 
+    //    // mapped_file, in chars.
+    //    test_file test;
+    //    stream_facade<mapped_file> 
+    //        io((mapped_file(test.name()))); // CW workaround.
+    //    BOOST_CHECK_MESSAGE(
+    //        test_seekable_in_chars(io),
+    //        "failed seeking within stream_facade<mapped_file> in chars"
+    //    );
 
-        BOOST_MESSAGE(
-            "done seeking within stream_facade<mapped_file> in chars"
-        );
+    //    BOOST_MESSAGE(
+    //        "done seeking within stream_facade<mapped_file> in chars"
+    //    );
 
-        io.close();
+    //    io.close();
 
-        // Test reading, writing and seeking within a stream_facade based on a 
-        // mapped_file, in chunks. (Also tests reopening the 
-        // stream_facade.)
-        io.open(mapped_file(test.name()));
-        BOOST_CHECK_MESSAGE(
-            test_seekable_in_chunks(io),
-            "failed seeking within stream_facade<mapped_file> in chunks"
-        );
+    //    // Test reading, writing and seeking within a stream_facade based on a 
+    //    // mapped_file, in chunks. (Also tests reopening the 
+    //    // stream_facade.)
+    //    io.open(mapped_file(test.name()));
+    //    BOOST_CHECK_MESSAGE(
+    //        test_seekable_in_chunks(io),
+    //        "failed seeking within stream_facade<mapped_file> in chunks"
+    //    );
 
-        BOOST_MESSAGE(
-            "done seeking within stream_facade<mapped_file> in chunks"
-        );
-    }
+    //    BOOST_MESSAGE(
+    //        "done seeking within stream_facade<mapped_file> in chunks"
+    //    );
+    //}
 }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)

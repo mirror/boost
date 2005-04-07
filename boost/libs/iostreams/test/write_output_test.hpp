@@ -26,7 +26,7 @@ void write_output_test()
 
     {
         temp_file          test2;
-        filtering_ostream  out(file_sink(test2.name()), 0);
+        filtering_ostream  out(file_sink(test2.name(), out_mode), 0);
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -37,7 +37,7 @@ void write_output_test()
 
     {
         temp_file          test2;
-        filtering_ostream  out(file_sink(test2.name()), 0);
+        filtering_ostream  out(file_sink(test2.name(), out_mode), 0);
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -48,7 +48,7 @@ void write_output_test()
 
     {
         temp_file          test2;
-        filtering_ostream  out(file_sink(test2.name()));
+        filtering_ostream  out(file_sink(test2.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -59,7 +59,7 @@ void write_output_test()
 
     {
         temp_file          test2;
-        filtering_ostream  out(file_sink(test2.name()));
+        filtering_ostream  out(file_sink(test2.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(

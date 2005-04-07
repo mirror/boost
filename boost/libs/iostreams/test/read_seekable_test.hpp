@@ -25,8 +25,8 @@ void read_seekable_test()
     test_file test2;  
 
     {
-        filtering_stream<seekable> first(file(test1.name()), 0);
-        ifstream second(test2.name().c_str());
+        filtering_stream<seekable> first(file(test1.name(), in_mode), 0);
+        ifstream second(test2.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from filtering_stream<seekable>"
@@ -35,8 +35,8 @@ void read_seekable_test()
     }
 
     {
-        filtering_stream<seekable> first(file(test1.name()), 0);
-        ifstream second(test2.name().c_str());
+        filtering_stream<seekable> first(file(test1.name(), in_mode), 0);
+        ifstream second(test2.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from filtering_stream<seekable>"
@@ -45,8 +45,8 @@ void read_seekable_test()
     }
 
     {
-        filtering_stream<seekable> first(file(test1.name()));
-        ifstream second(test2.name().c_str());
+        filtering_stream<seekable> first(file(test1.name(), in_mode));
+        ifstream second(test2.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from filtering_stream<seekable>"
@@ -55,8 +55,8 @@ void read_seekable_test()
     }
 
     {
-        filtering_stream<seekable> first(file(test1.name()));
-        ifstream second(test2.name().c_str());
+        filtering_stream<seekable> first(file(test1.name(), in_mode));
+        ifstream second(test2.name().c_str(), in_mode);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from filtering_stream<seekable>"

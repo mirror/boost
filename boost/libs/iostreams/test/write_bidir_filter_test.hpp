@@ -24,12 +24,13 @@ void write_bidirectional_filter_test()
     using namespace boost::iostreams::test;
 
     lowercase_file lower;
+    BOOST_IOS::openmode mode = out_mode | BOOST_IOS::trunc;
 
     {
         temp_file                        lower2;
         filebuf                          dest;
         filtering_stream<bidirectional>  out;
-        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        dest.open(lower2.name().c_str(), mode);
         out.push(combine(toupper_filter(), tolower_filter()));
         out.push(dest);
         write_data_in_chars(out);
@@ -48,7 +49,7 @@ void write_bidirectional_filter_test()
         filebuf                          dest;
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_filter()));
-        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        dest.open(lower2.name().c_str(), mode);
         out.push(dest);
         write_data_in_chunks(out);
         out.reset();
@@ -65,7 +66,7 @@ void write_bidirectional_filter_test()
         filebuf                          dest;
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_multichar_filter()), 0);
-        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        dest.open(lower2.name().c_str(), mode);
         out.push(dest);
         write_data_in_chars(out);
         out.reset();
@@ -82,7 +83,7 @@ void write_bidirectional_filter_test()
         filebuf                          dest;
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_multichar_filter()), 0);
-        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        dest.open(lower2.name().c_str(), mode);
         out.push(dest);
         write_data_in_chunks(out);
         out.reset();
@@ -99,7 +100,7 @@ void write_bidirectional_filter_test()
         filebuf                          dest;
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_multichar_filter()));
-        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        dest.open(lower2.name().c_str(), mode);
         out.push(dest);
         write_data_in_chars(out);
         out.reset();
@@ -116,7 +117,7 @@ void write_bidirectional_filter_test()
         filebuf                          dest;
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_multichar_filter()));
-        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        dest.open(lower2.name().c_str(), mode);
         out.push(dest);
         write_data_in_chunks(out);
         out.reset();

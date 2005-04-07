@@ -74,7 +74,9 @@ private:
 struct test_file : public temp_file {
     test_file()
         {
-            ::std::ofstream f(name().c_str());
+            BOOST_IOS::openmode mode = 
+                BOOST_IOS::out | BOOST_IOS::binary;
+            ::std::ofstream f(name().c_str(), mode);
             const ::std::string n(name());
             const char* buf = narrow_data();
             for (int z = 0; z < data_reps; ++z)
@@ -86,7 +88,9 @@ struct test_file : public temp_file {
 struct uppercase_file : public temp_file {
     uppercase_file()
         {
-            ::std::ofstream f(name().c_str());
+            BOOST_IOS::openmode mode = 
+                BOOST_IOS::out | BOOST_IOS::binary;
+            ::std::ofstream f(name().c_str(), mode);
             const char* buf = narrow_data();
             for (int z = 0; z < data_reps; ++z)
                 for (int w = 0; w < data_length(); ++w)
@@ -97,7 +101,9 @@ struct uppercase_file : public temp_file {
 struct lowercase_file : public temp_file {
     lowercase_file()
         {
-            ::std::ofstream f(name().c_str());
+            BOOST_IOS::openmode mode = 
+                BOOST_IOS::out | BOOST_IOS::binary;
+            ::std::ofstream f(name().c_str(), mode);
             const char* buf = narrow_data();
             for (int z = 0; z < data_reps; ++z)
                 for (int w = 0; w < data_length(); ++w)

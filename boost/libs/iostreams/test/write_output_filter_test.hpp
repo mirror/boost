@@ -29,7 +29,7 @@ void write_output_filter_test()
         temp_file          dest;
         filtering_ostream  out;
         out.push(tolower_filter());
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -43,7 +43,7 @@ void write_output_filter_test()
         temp_file          dest;
         filtering_ostream  out;
         out.push(tolower_filter());
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -57,7 +57,7 @@ void write_output_filter_test()
         temp_file          dest;
         filtering_ostream  out;
         out.push(tolower_multichar_filter(), 0);
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -71,7 +71,7 @@ void write_output_filter_test()
         temp_file          dest;
         filtering_ostream  out;
         out.push(tolower_multichar_filter(), 0);
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -85,7 +85,7 @@ void write_output_filter_test()
         temp_file          dest;
         filtering_ostream  out;
         out.push(tolower_multichar_filter());
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -99,7 +99,7 @@ void write_output_filter_test()
         temp_file          dest;
         filtering_ostream  out;
         out.push(tolower_multichar_filter());
-        out.push(file_sink(dest.name()));
+        out.push(file_sink(dest.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(

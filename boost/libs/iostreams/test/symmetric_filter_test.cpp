@@ -35,9 +35,9 @@ void symmetric_filter_test()
         filtering_istream  first(filter_type(new impl_type, 4));
 
         // Test reading from a symmetric filter in chars.
-        first.push(file_source(src.name()));
+        first.push(file_source(src.name(), in_mode));
         {
-            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            ifstream second(upper.name().c_str(), in_mode);
             BOOST_CHECK_MESSAGE(
                 compare_streams_in_chars(first, second),
                 "failed reading from symmetric filter in chars"
@@ -47,9 +47,9 @@ void symmetric_filter_test()
 
         // Test reading from a symmetric filter in chunks.
         // (Also tests reusing the symmetric filter.)
-        first.push(file_source(src.name()));
+        first.push(file_source(src.name(), in_mode));
         {
-            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            ifstream second(upper.name().c_str(), in_mode);
             BOOST_CHECK_MESSAGE(
                 compare_streams_in_chunks(first, second),
                 "failed reading from symmetric filter in chunks"
@@ -63,7 +63,7 @@ void symmetric_filter_test()
         filtering_ostream  out(filter_type(new impl_type));
 
         // Test writing to a symmetric filter in chars.
-        out.push(file_sink(dest1.name()));
+        out.push(file_sink(dest1.name(), out_mode));
         write_data_in_chars(out);
         out.pop();
         BOOST_CHECK_MESSAGE(
@@ -73,7 +73,7 @@ void symmetric_filter_test()
         
         // Test writing to a symmetric filter in chunks.
         // (Also tests reusing the symmetric filter.)
-        out.push(file_sink(dest2.name()));
+        out.push(file_sink(dest2.name(), out_mode));
         write_data_in_chunks(out);
         out.pop();
         BOOST_CHECK_MESSAGE(

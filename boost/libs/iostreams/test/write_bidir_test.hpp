@@ -28,7 +28,7 @@ void write_bidirectional_test()
         temp_file                        dest;
         temp_file                        src; // Dummy;
         filtering_stream<bidirectional>  out(
-            combine(file_source(src.name()), file_sink(dest.name())), 0
+           combine(file_source(src.name()), file_sink(dest.name(), out_mode)), 0
         );
         write_data_in_chars(out);
         out.reset();
@@ -43,7 +43,7 @@ void write_bidirectional_test()
         temp_file                        dest;
         temp_file                        src; // Dummy;
         filtering_stream<bidirectional>  out(
-            combine(file_source(src.name()), file_sink(dest.name())), 0
+           combine(file_source(src.name()), file_sink(dest.name(), out_mode)), 0
         );
         write_data_in_chunks(out);
         out.reset();
@@ -58,7 +58,7 @@ void write_bidirectional_test()
         temp_file                        dest;
         temp_file                        src; // Dummy;
         filtering_stream<bidirectional>  out(
-            combine(file_source(src.name()), file_sink(dest.name()))
+           combine(file_source(src.name()), file_sink(dest.name(), out_mode))
         );
         write_data_in_chars(out);
         out.reset();
@@ -73,7 +73,7 @@ void write_bidirectional_test()
         temp_file                        dest;
         temp_file                        src; // Dummy;
         filtering_stream<bidirectional>  out(
-            combine(file_source(src.name()), file_sink(dest.name()))
+           combine(file_source(src.name()), file_sink(dest.name(), out_mode))
         );
         write_data_in_chunks(out);
         out.reset();

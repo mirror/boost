@@ -20,12 +20,12 @@ using boost::unit_test::test_suite;
 
 void copy_test()
 {
-    test_file test;          
+    test_file test;         
 
     {
         temp_file  dest;
-        ifstream   first(test.name().c_str());
-        ofstream   second(dest.name().c_str());
+        ifstream   first(test.name().c_str(), in_mode);
+        ofstream   second(dest.name().c_str(), out_mode);
         boost::iostreams::copy(first, second);
         first.close();
         second.close();
@@ -37,8 +37,8 @@ void copy_test()
 
     {
         temp_file  dest;
-        ifstream   first(test.name().c_str());
-        boost::iostreams::copy(first, file_sink(dest.name()));
+        ifstream   first(test.name().c_str(), in_mode);
+        boost::iostreams::copy(first, file_sink(dest.name(), out_mode));
         first.close();
         BOOST_CHECK_MESSAGE(
             compare_files(test.name(), dest.name()),
@@ -48,8 +48,8 @@ void copy_test()
 
     {
         temp_file  dest;
-        ofstream   second(dest.name().c_str());
-        boost::iostreams::copy(file_source(test.name()), second);
+        ofstream   second(dest.name().c_str(), out_mode);
+        boost::iostreams::copy(file_source(test.name(), in_mode), second);
         second.close();
         BOOST_CHECK_MESSAGE(
             compare_files(test.name(), dest.name()),
@@ -59,8 +59,8 @@ void copy_test()
 
     {
         temp_file dest;
-        boost::iostreams::copy( file_source(test.name()),
-                         file_sink(dest.name()) );
+        boost::iostreams::copy( file_source(test.name(), in_mode),
+                                file_sink(dest.name(), out_mode) );
         BOOST_CHECK_MESSAGE(
             compare_files(test.name(), dest.name()),
             "failed copying from file_source to file_sink"
