@@ -42,7 +42,7 @@ namespace detail {
 struct custom_tag { };
 
 template<typename T>
-struct is_custom 
+struct is_custom
     : mpl::not_<
           is_base_and_derived< custom_tag, operations<T> >
       >
@@ -62,7 +62,7 @@ template<typename T> struct optimal_buffer_size_impl;
 
 } // End namespace detail.
 
-template<typename T> 
+template<typename T>
 struct operations : detail::custom_tag { };
 
 template<typename T>
@@ -103,16 +103,16 @@ seek( T& t, std::streamoff off, BOOST_IOS::seekdir way,
 
 template<typename T>
 inline std::pair<
-    BOOST_DEDUCED_TYPENAME io_char<T>::type*, 
+    BOOST_DEDUCED_TYPENAME io_char<T>::type*,
     BOOST_DEDUCED_TYPENAME io_char<T>::type*
-> 
+>
 input_sequence(T& t) { return detail::direct_impl<T>::input_sequence(t); }
 
 template<typename T>
 inline std::pair<
-    BOOST_DEDUCED_TYPENAME io_char<T>::type*, 
+    BOOST_DEDUCED_TYPENAME io_char<T>::type*,
     BOOST_DEDUCED_TYPENAME io_char<T>::type*
-> 
+>
 output_sequence(T& t) { return detail::direct_impl<T>::output_sequence(t); }
 
 template<typename T>
@@ -136,25 +136,25 @@ void imbue(T& t, const Locale& loc)
 { detail::imbue_impl<T>::imbue(detail::unwrap(t), loc); }
 
 template<typename T>
-std::streamsize optimal_buffer_size(T& t)
-{ 
+std::streamsize optimal_buffer_size(const T& t)
+{
     typedef detail::optimal_buffer_size_impl<T> impl;
-    return impl::optimal_buffer_size(detail::unwrap(t)); 
+    return impl::optimal_buffer_size(detail::unwrap(t));
 }
 
 //----------------------------------------------------------------------------//
 
 namespace detail {
-                    
+
 //------------------Definition of read_impl-----------------------------------//
 
 template<typename T>
-struct read_impl 
+struct read_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           read_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, istream_tag, streambuf_tag, input
               >::type
@@ -214,9 +214,9 @@ struct read_impl<input> {
 
     template<typename T>
     static void putback(T& t, typename io_char<T>::type c)
-    { 
+    {
         typedef typename io_category<T>::type category;
-        BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value)); 
+        BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value));
         t.putback(c);
     }
 };
@@ -224,12 +224,12 @@ struct read_impl<input> {
 //------------------Definition of write_impl----------------------------------//
 
 template<typename T>
-struct write_impl 
+struct write_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           write_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, ostream_tag, streambuf_tag, output
               >::type
@@ -276,12 +276,12 @@ struct write_impl<output> {
 //------------------Definition of filter_impl---------------------------------//
 
 template<typename T>
-struct filter_impl 
+struct filter_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           filter_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, multichar_tag, any_tag
               >::type
@@ -328,7 +328,7 @@ struct filter_impl<any_tag> {
 //------------------Definition of direct_impl-------------------------------//
 
 template<typename T>
-struct direct_impl 
+struct direct_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
@@ -340,28 +340,28 @@ template<>
 struct direct_impl<direct_tag> {
     template<typename U>
     static std::pair<
-        BOOST_DEDUCED_TYPENAME io_char<U>::type*, 
+        BOOST_DEDUCED_TYPENAME io_char<U>::type*,
         BOOST_DEDUCED_TYPENAME io_char<U>::type*
-    > 
+    >
     input_sequence(U& u) { return u.input_sequence(); }
 
     template<typename U>
     static std::pair<
-        BOOST_DEDUCED_TYPENAME io_char<U>::type*, 
+        BOOST_DEDUCED_TYPENAME io_char<U>::type*,
         BOOST_DEDUCED_TYPENAME io_char<U>::type*
-    > 
+    >
     output_sequence(U& u) { return u.output_sequence(); }
 };
 
 //------------------Definition of seek_impl-----------------------------------//
 
 template<typename T>
-struct seek_impl 
+struct seek_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           seek_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, iostream_tag, istream_tag, ostream_tag,
                   streambuf_tag, detail::two_head, any_tag
@@ -372,7 +372,7 @@ struct seek_impl
 
 struct seek_impl_basic_ios {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
+    static std::streamoff seek( T& t, std::streamoff off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
     { return t.rdbuf()->pubseekoff(off, way, which); }
@@ -390,7 +390,7 @@ struct seek_impl<ostream_tag> : seek_impl_basic_ios { };
 template<>
 struct seek_impl<streambuf_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
+    static std::streamoff seek( T& t, std::streamoff off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
     { return t.pubseekoff(off, way, which); }
@@ -399,7 +399,7 @@ struct seek_impl<streambuf_tag> {
 template<>
 struct seek_impl<two_head> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
+    static std::streamoff seek( T& t, std::streamoff off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
     { return static_cast<std::streamoff>(t.seek(off, way, which)); }
@@ -408,7 +408,7 @@ struct seek_impl<two_head> {
 template<>
 struct seek_impl<any_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
+    static std::streamoff seek( T& t, std::streamoff off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode )
     { return static_cast<std::streamoff>(t.seek(off, way)); }
@@ -419,7 +419,7 @@ struct seek_impl<any_tag> {
 template<typename T>
 struct close_tag {
     typedef typename io_category<T>::type category;
-    typedef typename 
+    typedef typename
             mpl::eval_if<
                 is_convertible<category, closable_tag>,
                 mpl::if_<
@@ -435,7 +435,7 @@ struct close_tag {
 };
 
 template<typename T>
-struct close_impl 
+struct close_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
@@ -446,16 +446,16 @@ struct close_impl
 template<>
 struct close_impl<any_tag> {
     template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which) 
-    { 
+    static void close(T& t, BOOST_IOS::openmode which)
+    {
         if ((which & BOOST_IOS::out) != 0)
-            iostreams::flush(t); 
+            iostreams::flush(t);
     }
     template<typename T, typename Sink>
     static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-    { 
+    {
         if ((which & BOOST_IOS::out) != 0)
-            iostreams::flush(t, snk); 
+            iostreams::flush(t, snk);
     }
 };
 
@@ -495,12 +495,12 @@ struct close_impl<two_sequence> {
 //------------------Definition of flush_device_impl---------------------------//
 
 template<typename T>
-struct flush_device_impl 
+struct flush_device_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           flush_device_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, ostream_tag, streambuf_tag, flushable_tag, any_tag
               >::type
@@ -518,7 +518,7 @@ struct flush_device_impl<ostream_tag> {
 template<>
 struct flush_device_impl<streambuf_tag> {
     template<typename T>
-    static bool flush(T& t) 
+    static bool flush(T& t)
     { return t.BOOST_IOSTREAMS_PUBSYNC() == 0; }
 };
 
@@ -537,12 +537,12 @@ struct flush_device_impl<any_tag> {
 //------------------Definition of flush_filter_impl---------------------------//
 
 template<typename T>
-struct flush_filter_impl 
+struct flush_filter_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           flush_filter_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, flushable_tag, any_tag
               >::type
@@ -565,12 +565,12 @@ struct flush_filter_impl<any_tag> {
 //------------------Definition of imbue_impl----------------------------------//
 
 template<typename T>
-struct imbue_impl 
+struct imbue_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           imbue_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, streambuf_tag, localizable_tag, any_tag
               >::type
@@ -599,12 +599,12 @@ struct imbue_impl<localizable_tag> {
 //------------------Definition of optimal_buffer_size_impl--------------------//
 
 template<typename T>
-struct optimal_buffer_size_impl 
+struct optimal_buffer_size_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           optimal_buffer_size_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, optimally_buffered_tag, device_tag, filter_tag
               >::type
@@ -615,21 +615,21 @@ struct optimal_buffer_size_impl
 template<>
 struct optimal_buffer_size_impl<optimally_buffered_tag> {
     template<typename T>
-    static std::streamsize optimal_buffer_size(T& t) 
+    static std::streamsize optimal_buffer_size(const T& t)
     { return t.optimal_buffer_size(); }
 };
 
 template<>
 struct optimal_buffer_size_impl<device_tag> {
     template<typename T>
-    static std::streamsize optimal_buffer_size(T& t)
+    static std::streamsize optimal_buffer_size(const T& t)
     { return default_device_buffer_size; }
 };
 
 template<>
 struct optimal_buffer_size_impl<filter_tag> {
     template<typename T>
-    static std::streamsize optimal_buffer_size(T& t)
+    static std::streamsize optimal_buffer_size(const T& t)
     { return default_filter_buffer_size; }
 };
 
