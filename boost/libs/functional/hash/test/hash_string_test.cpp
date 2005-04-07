@@ -22,7 +22,7 @@
 
 BOOST_AUTO_UNIT_TEST(string_tests)
 {
-    BOOST_CHECK(compile_time_tests<std::string>::success);
+    compile_time_tests((std::string*) 0);
 
     HASH_NAMESPACE::hash<std::string> x1;
     HASH_NAMESPACE::hash<std::string> x2;
@@ -34,7 +34,7 @@ BOOST_AUTO_UNIT_TEST(string_tests)
 #if !defined(BOOST_NO_STD_WSTRING)
 BOOST_AUTO_UNIT_TEST(wstring_tests)
 {
-    BOOST_CHECK(compile_time_tests<std::wstring>::success);
+    compile_time_tests((std::wstring*) 0);
 
     HASH_NAMESPACE::hash<std::wstring> x1;
     HASH_NAMESPACE::hash<std::wstring> x2;

@@ -24,7 +24,7 @@
 template <class T>
 void numeric_test()
 {
-    BOOST_CHECK(compile_time_tests<T>::success);
+    compile_time_tests((T*) 0);
 
     HASH_NAMESPACE::hash<T> x1;
     HASH_NAMESPACE::hash<T> x2;

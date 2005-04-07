@@ -8,10 +8,9 @@
 #include <boost/mpl/assert.hpp>
 
 template <class T>
-struct compile_time_tests
+void compile_time_tests(T*)
 {
     BOOST_MPL_ASSERT((boost::is_base_and_derived<
         std::unary_function<T, std::size_t>, HASH_NAMESPACE::hash<T> >));
-    BOOST_STATIC_CONSTANT(bool, success = true);
 };
 

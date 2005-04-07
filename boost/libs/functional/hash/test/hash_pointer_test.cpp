@@ -23,8 +23,8 @@
 
 BOOST_AUTO_UNIT_TEST(pointer_tests)
 {
-    BOOST_CHECK(compile_time_tests<int*>::success);
-    BOOST_CHECK(compile_time_tests<void*>::success);
+    compile_time_tests((int**) 0);
+    compile_time_tests((void**) 0);
 
     HASH_NAMESPACE::hash<int*> x1;
     HASH_NAMESPACE::hash<int*> x2;
