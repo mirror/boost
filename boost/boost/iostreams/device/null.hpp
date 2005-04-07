@@ -38,6 +38,8 @@ public:
 
 template<typename Ch>
 struct basic_null_source : private basic_null_device<Ch, input> {
+    typedef Ch          char_type;
+    typedef source_tag  io_category;
     using basic_null_device<Ch, input>::read;
     using basic_null_device<Ch, input>::close;
 };
@@ -47,6 +49,8 @@ typedef basic_null_source<wchar_t>  wnull_source;
 
 template<typename Ch>
 struct basic_null_sink : private basic_null_device<Ch, output> {
+    typedef Ch        char_type;
+    typedef sink_tag  io_category;
     using basic_null_device<Ch, output>::write;
     using basic_null_device<Ch, output>::close;
 };
