@@ -14,6 +14,7 @@
 #include <cctype>                               // to_upper, to_lower.
 #include <cstdlib>                              // to_upper, to_lower (VC6).
 #include <cstddef>                              // ptrdiff_t.
+#include <vector>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
@@ -36,31 +37,53 @@ BOOST_IOSTREAMS_PIPABLE(toupper_filter, 0)
 
 struct tolower_filter : public output_filter {
     template<typename Sink>
-    void put(Sink& s, char c) { boost::iostreams::put(s, (char) std::tolower(c)); }
+    void put(Sink& s, char c)
+    { 
+        boost::iostreams::put(s, (char) std::tolower(c)); 
+    }
 };
 BOOST_IOSTREAMS_PIPABLE(tolower_filter, 0)
 
 struct toupper_multichar_filter : public multichar_input_filter {
     template<typename Source>
     std::streamsize read(Source& s, char* buf, std::streamsize n)
-        {
-            std::streamsize result = boost::iostreams::read(s, buf, n);
-            for (int z = 0; z < result; ++z)
-                buf[z] = (char) std::toupper(buf[z]);
-            return result;
-        }
+    {
+        std::streamsize result = boost::iostreams::read(s, buf, n);
+        for (int z = 0; z < result; ++z)
+            buf[z] = (char) std::toupper(buf[z]);
+        return result;
+    }
 };
 BOOST_IOSTREAMS_PIPABLE(toupper_multichar_filter, 0)
 
 struct tolower_multichar_filter : public multichar_output_filter {
     template<typename Sink>
     void write(Sink& s, const char* buf, std::streamsize n)
-        {
-            for (std::streamsize z = 0; z < n; ++z)
-                boost::iostreams::put(s, (char) std::tolower(buf[z]));
-        }
+    {
+        for (std::streamsize z = 0; z < n; ++z)
+            boost::iostreams::put(s, (char) std::tolower(buf[z]));
+    }
 };
 BOOST_IOSTREAMS_PIPABLE(tolower_multichar_filter, 0)
+
+struct flushable_output_filter {
+    typedef char char_type;
+    struct category 
+        : output_filter_tag, 
+          flushable_tag
+        { };
+    template<typename Sink>
+    void put(Sink& s, char c) { buf_.push_back(c); }
+    template<typename Sink>
+    bool flush(Sink& s) 
+    { 
+        boost::iostreams::write(s, &buf_[0], (std::streamsize) buf_.size());
+        buf_.clear();
+        return true;
+    }
+    std::vector<char> buf_;
+};
+BOOST_IOSTREAMS_PIPABLE(flushable_output_filter, 0)
 
 // Note: The filter is given an internal buffer, unnecessary in this simple
 // case, to test symmetric_filter_adapter.
