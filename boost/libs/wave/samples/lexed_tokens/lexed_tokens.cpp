@@ -121,8 +121,8 @@ boost::wave::util::file_position_type current_position;
             ++it;
         }
     }
-    catch (boost::wave::cpp_exception &e) {
-    // some preprocessing error
+    catch (boost::wave::cpplexer::lexing_exception &e) {
+    // some lexing error
         std::cerr 
             << e.file_name() << "(" << e.line_no() << "): "
             << e.description() << std::endl;
