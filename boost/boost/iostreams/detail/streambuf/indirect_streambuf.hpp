@@ -13,6 +13,7 @@
 #include <algorithm>                             // min, max.
 #include <cassert>
 #include <exception>
+#include <typeinfo>
 #include <boost/config.hpp>                      // Member template friends.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
@@ -63,10 +64,8 @@ public:
     bool auto_close() const;
     void set_auto_close(bool close);
 
-    //----------Direct filter or device access--------------------------------//
-
-    T& operator*() { return *obj(); }
-    T* operator->() { return &*obj(); }
+    // Declared in linked_streambuf.
+    T* component() { return &*obj(); }
 protected:
 #if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
@@ -86,8 +85,12 @@ protected:
     pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
                       BOOST_IOS::openmode which );
     pos_type seekpos(pos_type sp, BOOST_IOS::openmode which);
-    void close(BOOST_IOS::openmode m); // Declared in linked_streambuf.
-    void set_next(streambuf_type* next); // Declared in linked_streambuf.
+
+    // Declared in linked_streambuf.
+    void set_next(streambuf_type* next); 
+    void close(BOOST_IOS::openmode m);
+    const std::type_info& component_type() const { return typeid(T); }
+    void* component_impl() { return component(); } 
 private:
 
     //----------Accessor functions--------------------------------------------//
@@ -103,6 +106,7 @@ private:
     void set_flags(int f) { flags_ = f; }
 
     //----------State changing functions--------------------------------------//
+
     virtual void init_get_area();
     virtual void init_put_area();
 

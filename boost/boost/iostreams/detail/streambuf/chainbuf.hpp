@@ -84,9 +84,10 @@ private:
     typedef typename Chain::traits_type                      chain_traits;
     typename chain_traits::int_type 
     static translate(typename std_traits::int_type c)
-    { return translate_int_type<std_traits, chain_traits>(c); }
+        { return translate_int_type<std_traits, chain_traits>(c); }
 
-    delegate_type& delegate() { return static_cast<delegate_type&>(*chain_); }
+    delegate_type& delegate() 
+        { return static_cast<delegate_type&>(chain_.front()); }
     void get_pointers()
         {
             setg(delegate().eback(), delegate().gptr(), delegate().egptr());

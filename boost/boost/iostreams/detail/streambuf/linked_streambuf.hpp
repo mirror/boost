@@ -11,6 +11,7 @@
 # pragma once
 #endif              
  
+#include <typeinfo>
 #include <boost/config.hpp>                        // member template friends.
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/ios.hpp>          // openmode.
@@ -55,8 +56,10 @@ public:
 #endif
     virtual void set_next(link* /* next */) { }
     virtual void close(BOOST_IOS::openmode) = 0;
+    virtual const std::type_info& component_type() const = 0;
+    virtual void* component_impl() = 0;
 };
-                                    
+
 } } } // End namespaces detail, iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC.

@@ -15,9 +15,11 @@
 #include <cassert>
 #include <exception>
 #include <functional>                           // unary_function.
+#include <iterator>                             // advance.
 #include <list>
 #include <memory>                               // allocator, auto_ptr.
-#include <stdexcept>                            // logic_error.
+#include <typeinfo>
+#include <stdexcept>                            // logic_error, out_of_range.
 #include <boost/checked_delete.hpp>
 #include <boost/config.hpp>                     // BOOST_MSVC, template friends.
 #include <boost/detail/workaround.hpp>
@@ -33,6 +35,20 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+
+// Sometimes type_info objects must be compared by name. Borrowed from 
+// Boost.Python and Boost.Function. 
+#if (defined(__GNUC__) && __GNUC__ >= 3) || \
+     defined(_AIX) || \
+    (defined(__sgi) && defined(__host_mips)) || \
+    (defined(linux) && defined(__INTEL_COMPILER) && defined(__ICC)) \
+    /**/
+# include <cstring>
+# define BOOST_IOSTREAMS_COMPARE_TYPE_ID(X,Y) \
+     (std::strcmp((X).name(),(Y).name()) == 0)
+#else
+# define BOOST_IOSTREAMS_COMPARE_TYPE_ID(X,Y) ((X)==(Y))
+#endif
 
 namespace boost { namespace iostreams {
 
@@ -126,12 +142,31 @@ public:
     void write(const char_type* s, std::streamsize n);
     std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
 
-    //----------Direct stream buffer access-----------------------------------//
+    //----------Direct component access---------------------------------------//
 
-    streambuf_type& operator*() { return *list().front(); }
-    streambuf_type* operator->() { return list().front(); }
-public:
+    template<int N>
+    const std::type_info& component_type() const
+    {
+        if (N >= size())
+            throw std::out_of_range("bad chain offset");
+        return std::advance(list().begin(), N)->component_type();
+    }
+
+    template<int N, typename T>
+    T* component() const
+    {
+        if (N >= size())
+            throw std::out_of_range("bad chain offset");
+        streambuf_type* link = 
+            *std::advance(list().begin(), N)->component_type();
+        if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
+            return static_cast<T*>(link->component_impl());
+    }
+
+    //----------Container-like interface--------------------------------------//
+
     typedef typename list_type::size_type size_type;
+    streambuf_type& front() { return *list().front(); }
     BOOST_IOSTREAMS_DEFINE_PUSH(push, mode, char_type, push_impl)
     void pop();
     bool empty() const { return list().empty(); }
@@ -146,35 +181,35 @@ public:
 private:
     template<typename T>
     void push_impl(const T& t, int buffer_size = -1, int pback_size = -1)
-        {
-            typedef typename iostreams::io_category<T>::type  category;
-            typedef typename unwrap_ios<T>::type              policy_type;
-            typedef streambuf_facade<
-                        policy_type, 
-                        BOOST_IOSTREAMS_CHAR_TRAITS(char_type),
-                        Alloc, Mode
-                    >                                         facade_type;
-            BOOST_STATIC_ASSERT((is_convertible<category, Mode>::value));
-            if (is_complete()) 
-                throw std::logic_error("chain complete");
-            streambuf_type* prev = !empty() ? list().back() : 0;
-            buffer_size = 
-                buffer_size != -1 ? 
-                    buffer_size : 
-                    iostreams::optimal_buffer_size(t);
-            pback_size = 
-                pback_size != -1 ? 
-                    pback_size : 
-                    pimpl_->pback_size_;
-            std::auto_ptr<facade_type>
-                buf(new facade_type(t, buffer_size, pback_size));
-            list().push_back(buf.get());
-            buf.release();
-            if (is_device<policy_type>::value)
-                pimpl_->flags_ |= f_complete;
-            if (prev) prev->set_next(list().back());
-            notify();
-        }
+    {
+        typedef typename iostreams::io_category<T>::type  category;
+        typedef typename unwrap_ios<T>::type              policy_type;
+        typedef streambuf_facade<
+                    policy_type, 
+                    BOOST_IOSTREAMS_CHAR_TRAITS(char_type),
+                    Alloc, Mode
+                >                                         facade_type;
+        BOOST_STATIC_ASSERT((is_convertible<category, Mode>::value));
+        if (is_complete()) 
+            throw std::logic_error("chain complete");
+        streambuf_type* prev = !empty() ? list().back() : 0;
+        buffer_size = 
+            buffer_size != -1 ? 
+                buffer_size : 
+                iostreams::optimal_buffer_size(t);
+        pback_size = 
+            pback_size != -1 ? 
+                pback_size : 
+                pimpl_->pback_size_;
+        std::auto_ptr<facade_type>
+            buf(new facade_type(t, buffer_size, pback_size));
+        list().push_back(buf.get());
+        buf.release();
+        if (is_device<policy_type>::value)
+            pimpl_->flags_ |= f_complete;
+        if (prev) prev->set_next(list().back());
+        notify();
+    }
 
     list_type& list() { return pimpl_->links_; }
     const list_type& list() const { return pimpl_->links_; }
@@ -317,9 +352,13 @@ public:
     chain_client(chain_client* client) : chain_(client->chain_) { }
     virtual ~chain_client() { }
 
-        // Returns a copy of the underlying chain.
-    chain_type filters() { return *chain_; }
-    chain_type filters() const { return *chain_; }
+    template<int N>
+    const std::type_info& component_type() const 
+    { return chain_->component_type<N>(); }
+
+    template<int N, typename T>
+    T* component() const 
+    { return chain_->component<N, T>(); }
 
     bool is_complete() const { return chain_->is_complete(); }
     bool auto_close() const { return chain_->auto_close(); }
@@ -334,6 +373,10 @@ public:
     bool empty() const { return chain_->empty(); }
     size_type size() { return chain_->size(); }
     void reset() { chain_->reset(); }
+
+    // Returns a copy of the underlying chain.
+    chain_type filters() { return *chain_; }
+    chain_type filters() const { return *chain_; }
 protected:
     template<typename T>
     void push_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())

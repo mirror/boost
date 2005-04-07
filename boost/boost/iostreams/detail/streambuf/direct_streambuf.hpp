@@ -13,6 +13,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <typeinfo>
 #include <utility>                              // pair.
 #include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/detail/char_traits.hpp>
@@ -47,13 +48,14 @@ private:
                 char_type, traits_type
             )                                             streambuf_type;
 public: // stream_facade needs access.
-    void open( const T& t,
-               int /* buffer_size */,
-               int /* pback_size */ );
+    void open(const T& t, int buffer_size, int pback_size);
     bool is_open();
     void close();
     bool auto_close() const { return auto_close_; }
     void set_auto_close(bool close) { auto_close_ = close; }
+
+    // Declared in linked_streambuf.
+    T* component() { return storage_.get_ptr(); } 
 protected:
 #if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
@@ -68,7 +70,11 @@ protected:
     pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
                       BOOST_IOS::openmode which );
     pos_type seekpos(pos_type sp, BOOST_IOS::openmode which);
+
+    // Declared in linked_streambuf.
     void close(BOOST_IOS::openmode m);
+    const std::type_info& component_type() const { return typeid(T); }
+    void* component_impl() { return component(); } 
 private:
     pos_type seek_impl( off_type off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which );
@@ -82,7 +88,7 @@ private:
     bool two_head() const;
     optional<T>  storage_;
     char_type   *ibeg_, *iend_, *obeg_, *oend_;
-    bool        auto_close_;
+    bool         auto_close_;
 };
                     
 //------------------Implementation of direct_streambuf------------------------//
