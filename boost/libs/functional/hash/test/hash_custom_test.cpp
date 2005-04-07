@@ -39,9 +39,9 @@ namespace boost
 BOOST_AUTO_UNIT_TEST(custom_tests)
 {
     boost::hash<test::custom> custom_hasher;
-    BOOST_CHECK_EQUAL(custom_hasher(10), 100u);
+    BOOST_CHECK(custom_hasher(10) == 100u);
     test::custom x(55);
-    BOOST_CHECK_EQUAL(custom_hasher(x), 550u);
+    BOOST_CHECK(custom_hasher(x) == 550u);
 
     std::vector<test::custom> custom_vector;
     custom_vector.push_back(5);
@@ -53,7 +53,7 @@ BOOST_AUTO_UNIT_TEST(custom_tests)
     boost::hash_combine(seed, test::custom(25));
     boost::hash_combine(seed, test::custom(35));
 
-    BOOST_CHECK_EQUAL(seed,
+    BOOST_CHECK(seed ==
             boost::hash_range(custom_vector.begin(), custom_vector.end()));
 }
 

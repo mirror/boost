@@ -25,22 +25,22 @@ BOOST_AUTO_UNIT_TEST(hash_range_tests)
     push_back(values5)(10)(20)(15)(75)(10)(20);
 
     std::vector<int> x;
-    BOOST_CHECK_EQUAL(boost::hash_range(empty), boost::hash_range(x));
-    BOOST_CHECK_EQUAL(boost::hash_range(empty), boost::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(boost::hash_range(empty) == boost::hash_range(x));
+    BOOST_CHECK(boost::hash_range(empty) == boost::hash_range(x.begin(), x.end()));
     BOOST_CHECK(boost::hash_range(empty) != boost::hash_range(values1));
 
     x.push_back(10);
     BOOST_CHECK(boost::hash_range(empty) != boost::hash_range(x));
-    BOOST_CHECK_EQUAL(boost::hash_range(values2), boost::hash_range(x));
-    BOOST_CHECK_EQUAL(boost::hash_range(values2), boost::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(boost::hash_range(values2) == boost::hash_range(x));
+    BOOST_CHECk(boost::hash_range(values2) == boost::hash_range(x.begin(), x.end()));
 
     x.push_back(20);
     BOOST_CHECK(boost::hash_range(empty) != boost::hash_range(x));
     BOOST_CHECK(boost::hash_range(values2) != boost::hash_range(x));
-    BOOST_CHECK_EQUAL(boost::hash_range(values3), boost::hash_range(x));
+    BOOST_CHECK(boost::hash_range(values3) == boost::hash_range(x));
 
     std::size_t seed = boost::hash_range(values3);
     boost::hash_range(seed, boost::const_begin(values4), boost::const_end(values4));
     boost::hash_range(seed, x);
-    BOOST_CHECK_EQUAL(seed, boost::hash_range(values5));
+    BOOST_CHECK(seed == boost::hash_range(values5));
 }

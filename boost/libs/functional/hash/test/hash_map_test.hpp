@@ -17,23 +17,24 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
     {
         const int number_of_containers = 10;
         T containers[number_of_containers];
+        typedef typename T::value_type pair;
 
         for(int i = 0; i < 5; ++i) {
             for(int j = 0; j < i; ++j)
-                containers[i].insert(std::make_pair(0, 0));
+                containers[i].insert(pair(0, 0));
         }
 
-        containers[6].insert(std::make_pair(1,0));
-        containers[7].insert(std::make_pair(1,0));
-        containers[7].insert(std::make_pair(1,0));
-        containers[8].insert(std::make_pair(-1,1));
-        containers[9].insert(std::make_pair(-1,3));
-        containers[9].insert(std::make_pair(-1,3));
+        containers[6].insert(pair(1,0));
+        containers[7].insert(pair(1,0));
+        containers[7].insert(pair(1,0));
+        containers[8].insert(pair(-1,1));
+        containers[9].insert(pair(-1,3));
+        containers[9].insert(pair(-1,3));
 
         boost::hash<T> hasher;
 
         for(int i2 = 0; i2 < number_of_containers; ++i2) {
-            BOOST_CHECK_EQUAL(hasher(containers[i2]), hasher(containers[i2]));
+            BOOST_CHECK(hasher(containers[i2]) == hasher(containers[i2]));
 
             for(int j2 = i2 + 1; j2 < number_of_containers; ++j2) {
                 BOOST_CHECK(

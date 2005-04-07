@@ -23,19 +23,19 @@ void numeric_test()
     boost::hash<T> x1;
     boost::hash<T> x2;
 
-    BOOST_CHECK_EQUAL(x1(T(0)), x2(T(0)));
+    BOOST_CHECK(x1(T(0)) == x2(T(0)));
 
-    BOOST_CHECK_EQUAL(x1(T(10)), x2(T(10)));
-    BOOST_CHECK_EQUAL(x1(T(25)), x2(T(25)));
+    BOOST_CHECK(x1(T(10)) == x2(T(10)));
+    BOOST_CHECK(x1(T(25)) == x2(T(25)));
 
-    BOOST_CHECK_EQUAL(x1(T(5) - T(5)), x2(T(0)));
-    BOOST_CHECK_EQUAL(x1(T(6) + T(4)), x2(T(10)));
+    BOOST_CHECK(x1(T(5) - T(5)) == x2(T(0)));
+    BOOST_CHECK(x1(T(6) + T(4)) == x2(T(10)));
 
     typedef std::numeric_limits<T> limits;
     BOOST_CHECK(limits::is_specialized);
 
-    BOOST_CHECK_EQUAL(x1((limits::min)()), x2((limits::min)()));
-    BOOST_CHECK_EQUAL(x1((limits::max)()), x2((limits::max)()));
+    BOOST_CHECK(x1((limits::min)()) == x2((limits::min)()));
+    BOOST_CHECK(x1((limits::max)()) == x2((limits::max)()));
 
     // A hash function can legally fail these tests, but it'll not be a good
     // sign.

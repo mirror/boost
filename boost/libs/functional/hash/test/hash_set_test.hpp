@@ -35,7 +35,7 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
         boost::hash<T> hasher;
 
         for(int i2 = 0; i2 < number_of_containers; ++i2) {
-            BOOST_CHECK_EQUAL(hasher(containers[i2]), hasher(containers[i2]));
+            BOOST_CHECK(hasher(containers[i2]) == hasher(containers[i2]));
 
             for(int j2 = i2 + 1; j2 < number_of_containers; ++j2) {
                 BOOST_CHECK(

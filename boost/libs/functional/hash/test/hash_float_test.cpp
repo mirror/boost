@@ -19,11 +19,16 @@ void float_tests(T* = 0)
     T zero = 0;
     T minus_zero = (T) -1 * zero;
 
-    BOOST_CHECK_EQUAL(zero, minus_zero);
-    BOOST_CHECK_EQUAL(x1(zero), x1(minus_zero));
+    BOOST_CHECK(zero == minus_zero);
+    BOOST_CHECK(x1(zero) == x1(minus_zero));
 
     using namespace std;
 
+    // The tests cause Borland to crash horribly.
+#if defined(__BORLANDC__)
+    BOOST_REQUIRE(false);
+#endif
+    
     if(std::numeric_limits<T>::has_infinity) {
         T infinity = (T) 1. / zero;
         T infinity2 = -log(zero);
@@ -34,17 +39,17 @@ void float_tests(T* = 0)
         T minus_infinity2 = log(zero);
         T minus_infinity3 = (T) 1. / minus_zero;
 
-        BOOST_CHECK_EQUAL(infinity, infinity2);
-        BOOST_CHECK_EQUAL(infinity, infinity3);
-        BOOST_CHECK_EQUAL(infinity, infinity4);
-        BOOST_CHECK_EQUAL(x1(infinity), x1(infinity2));
-        BOOST_CHECK_EQUAL(x1(infinity), x1(infinity3));
-        BOOST_CHECK_EQUAL(x1(infinity), x1(infinity4));
+        BOOST_CHECK(infinity == infinity2);
+        BOOST_CHECK(infinity == infinity3);
+        BOOST_CHECK(infinity == infinity4);
+        BOOST_CHECK(x1(infinity) == x1(infinity2));
+        BOOST_CHECK(x1(infinity) == x1(infinity3));
+        BOOST_CHECK(x1(infinity) == x1(infinity4));
 
-        BOOST_CHECK_EQUAL(minus_infinity, minus_infinity2);
-        BOOST_CHECK_EQUAL(x1(minus_infinity), x1(minus_infinity2));
-        BOOST_CHECK_EQUAL(minus_infinity, minus_infinity3);
-        BOOST_CHECK_EQUAL(x1(minus_infinity), x1(minus_infinity3));
+        BOOST_CHECK(minus_infinity == minus_infinity2);
+        BOOST_CHECK(x1(minus_infinity) == x1(minus_infinity2));
+        BOOST_CHECK(minus_infinity == minus_infinity3);
+        BOOST_CHECK(x1(minus_infinity) == x1(minus_infinity3));
 
         BOOST_CHECK(infinity != minus_infinity);
 
@@ -69,21 +74,21 @@ void float_tests(T* = 0)
     T half_max = max / 2;
     T quater_max = max / 4;
     T three_quater_max = max - quater_max;
-    BOOST_CHECK_EQUAL(x1(max), x1(max));
+    BOOST_CHECK(x1(max) == x1(max));
     BOOST_CHECK(x1(max) != x1(quater_max));
     BOOST_CHECK(x1(max) != x1(half_max));
     BOOST_CHECK(x1(max) != x1(three_quater_max));
-    BOOST_CHECK_EQUAL(x1(quater_max), x1(quater_max));
+    BOOST_CHECK(x1(quater_max) == x1(quater_max));
     BOOST_CHECK(x1(quater_max) != x1(half_max));
     BOOST_CHECK(x1(quater_max) != x1(three_quater_max));
-    BOOST_CHECK_EQUAL(x1(half_max), x1(half_max));
+    BOOST_CHECK(x1(half_max) == x1(half_max));
     BOOST_CHECK(x1(half_max) != x1(three_quater_max));
     BOOST_CHECK(x1(three_quater_max) == x1(three_quater_max));
 
     T v1 = asin((T) 1);
     T v2 = acos((T) 0);
-    BOOST_CHECK_EQUAL(v1, v2);
-    BOOST_CHECK_EQUAL(x1(v1), x1(v2));
+    BOOST_CHECK(v1 == v2);
+    BOOST_CHECK(x1(v1) == x1(v2));
 
     BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) != x1((T) 0));
 
