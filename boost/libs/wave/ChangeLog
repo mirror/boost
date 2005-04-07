@@ -22,7 +22,9 @@ TODO (known issues):
 -------------------------------------------------------------------------------
 
 CHANGELOG
-
+  
+Thu Apr  7 10:07:45 WEDT 2005
+Version 1.1.16
 - Fixed a bug in the white space eating component, which prevented a C++ 
   comment to be suppressed if it followed after another whitespace.
 - Fixed the inconsistencies between the documentation and the behaviour wrt the 
@@ -31,7 +33,7 @@ CHANGELOG
 - Allowed to specify more than one config file ('@' syntax) on the command line
   of the wave driver executable.
 - Changed copyrights in all files to reflect the acceptance of Wave into Boost.
-- Unknown preprocessing directives were not recognised anymore.
+- Unknown preprocessing directives were not recognised as such anymore.
 - If comments shouldn't be preserved all C++ comments are replaced by newline
   tokens (instead of beeing igored completely).
 - Fixed a bug in the white space eater component.
@@ -64,7 +66,14 @@ CHANGELOG
 - Renamed files to comply with the Boost rules.
 - Added the first part of the MCPP validation suite to the Wave unit tests.
 - Added even more missing "using namespace std;" staements for functions from
-  the C runtime library.
+  the C runtime library. The Wave test suite now contains more than 100 unit
+  tests.
+- Added the $P/$P(basename) replacement string to the testwave application 
+  which expands to the full path of the current file ($P) or to the current 
+  directory/basename ($P(basename)).
+- Fixed a bunch of portability problmes revealed by the regression tests on
+  different platforms. Thanks to Stefan Slapeda for his support to make it work
+  on the cw-9_4 toolset (win32).
   
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
@@ -166,7 +175,7 @@ Version 1.1.12 (Boost review candidate)
   functions, 10% is spent for memory allocation but only 1% of the time is 
   spent in the re2c lexer.
 - Identified a performance problem, where the token_cache was instantiated
-  for every created lexer object, but needed to be initialsed only once.
+  for every created lexer object, but needed to be initialised only once.
 - Added #include <wave_version.hpp> to wave_config.hpp
 - Fixed problems reported by the gcc 3.4.1 compiler.
 - Adjusted Jamfiles for the new toolset names introduced in Boost V1.32.
