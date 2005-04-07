@@ -142,7 +142,7 @@ struct io_category {
     typedef typename  
             mpl::eval_if<
                 is_std_io<U>,
-                select<
+                iostreams::select<  // Disambiguation for Tru64
                     is_iostream<U>,   iostream_tag, 
                     is_istream<U>,    istream_tag, 
                     is_ostream<U>,    ostream_tag,

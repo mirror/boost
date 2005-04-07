@@ -49,7 +49,7 @@ template<typename T, typename Access>
 struct access_control_base {
     typedef int                                 bad_access_specifier;
     typedef typename 
-            select<
+            iostreams::select<  // Disambiguation for Tru64
                 ::boost::is_same<
                     Access, protected_
                 >,                              prot_<T>,

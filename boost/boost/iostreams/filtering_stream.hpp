@@ -35,7 +35,7 @@ namespace detail {
 template<typename Mode, typename Ch, typename Tr>
 struct filtering_stream_traits {
     typedef typename 
-            select<                 
+            select<  // Disambiguation for Tru64  
                 mpl::and_< 
                     is_convertible<Mode, input>, 
                     is_convertible<Mode, output> 
