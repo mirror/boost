@@ -3,7 +3,13 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/functional/hash/hash.hpp>
+#include "./config.hpp"
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash/hash.hpp>
+#endif
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -18,8 +24,8 @@ BOOST_AUTO_UNIT_TEST(string_tests)
 {
     BOOST_CHECK(compile_time_tests<std::string>::success);
 
-    boost::hash<std::string> x1;
-    boost::hash<std::string> x2;
+    HASH_NAMESPACE::hash<std::string> x1;
+    HASH_NAMESPACE::hash<std::string> x2;
 
     BOOST_CHECK(x1("Hello") == x2(std::string("Hel") + "lo"));
     BOOST_CHECK(x1("") == x2(std::string()));
@@ -30,8 +36,8 @@ BOOST_AUTO_UNIT_TEST(wstring_tests)
 {
     BOOST_CHECK(compile_time_tests<std::wstring>::success);
 
-    boost::hash<std::wstring> x1;
-    boost::hash<std::wstring> x2;
+    HASH_NAMESPACE::hash<std::wstring> x1;
+    HASH_NAMESPACE::hash<std::wstring> x2;
 
     BOOST_CHECK(x1(L"Hello") == x2(std::wstring(L"Hel") + L"lo"));
     BOOST_CHECK(x1(L"") == x2(std::wstring()));

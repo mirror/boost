@@ -8,7 +8,7 @@ subproject libs/functional/hash/test ;
 
 import testing ;
 
-DEPENDS all : functional/hash ;
+DEPENDS all : test ;
 
 rule hash-test ( name )
 {

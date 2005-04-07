@@ -3,7 +3,13 @@
 //  subject to the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/functional/hash/hash.hpp>
+#include "./config.hpp"
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash/hash.hpp>
+#endif
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -20,8 +26,8 @@ void numeric_test()
 {
     BOOST_CHECK(compile_time_tests<T>::success);
 
-    boost::hash<T> x1;
-    boost::hash<T> x2;
+    HASH_NAMESPACE::hash<T> x1;
+    HASH_NAMESPACE::hash<T> x2;
 
     BOOST_CHECK(x1(T(0)) == x2(T(0)));
 

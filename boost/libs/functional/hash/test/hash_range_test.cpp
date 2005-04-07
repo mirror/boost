@@ -3,10 +3,20 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/functional/hash/hash.hpp>
+#include "./config.hpp"
+
+#ifdef TEST_EXTENSIONS
+#  ifdef TEST_STD_INCLUDES
+#    include <functional>
+#  else
+#    include <boost/functional/hash/hash.hpp>
+#  endif
+#endif
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
+
+#ifdef TEST_EXTENSIONS
 
 #include <boost/limits.hpp>
 #include <boost/mpl/assert.hpp>
@@ -29,27 +39,29 @@ BOOST_AUTO_UNIT_TEST(hash_range_tests)
     values5.push_back(20);
 
     std::vector<int> x;
-    BOOST_CHECK(boost::hash_range(empty.begin(), empty.end())
-        == boost::hash_range(x.begin(), x.end()));
-    BOOST_CHECK(boost::hash_range(empty.begin(), empty.end())
-        != boost::hash_range(values1.begin(), values1.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
+        == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
+        != HASH_NAMESPACE::hash_range(values1.begin(), values1.end()));
 
     x.push_back(10);
-    BOOST_CHECK(boost::hash_range(empty.begin(), empty.end())
-        != boost::hash_range(x.begin(), x.end()));
-    BOOST_CHECK(boost::hash_range(values2.begin(), values2.end())
-        == boost::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
+        != HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(values2.begin(), values2.end())
+        == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
 
     x.push_back(20);
-    BOOST_CHECK(boost::hash_range(empty.begin(), empty.end())
-        != boost::hash_range(x.begin(), x.end()));
-    BOOST_CHECK(boost::hash_range(values2.begin(), values2.end())
-        != boost::hash_range(x.begin(), x.end()));
-    BOOST_CHECK(boost::hash_range(values3.begin(), values3.end())
-        == boost::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
+        != HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(values2.begin(), values2.end())
+        != HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+    BOOST_CHECK(HASH_NAMESPACE::hash_range(values3.begin(), values3.end())
+        == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
 
-    std::size_t seed = boost::hash_range(values3.begin(), values3.end());
-    boost::hash_range(seed, values4.begin(), values4.end());
-    boost::hash_range(seed, x.begin(), x.end());
-    BOOST_CHECK(seed == boost::hash_range(values5.begin(), values5.end()));
+    std::size_t seed = HASH_NAMESPACE::hash_range(values3.begin(), values3.end());
+    HASH_NAMESPACE::hash_range(seed, values4.begin(), values4.end());
+    HASH_NAMESPACE::hash_range(seed, x.begin(), x.end());
+    BOOST_CHECK(seed == HASH_NAMESPACE::hash_range(values5.begin(), values5.end()));
 }
+
+#endif

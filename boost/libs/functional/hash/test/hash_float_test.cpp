@@ -3,7 +3,13 @@
 //  subject to the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/functional/hash/hash.hpp>
+#include "./config.hpp"
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash/hash.hpp>
+#endif
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -14,7 +20,7 @@
 template <class T>
 void float_tests(T* = 0)
 {
-    boost::hash<T> x1;
+    HASH_NAMESPACE::hash<T> x1;
 
     T zero = 0;
     T minus_zero = (T) -1 * zero;

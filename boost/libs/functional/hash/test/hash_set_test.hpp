@@ -32,7 +32,7 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
         containers[10].insert(-1);
         containers[10].insert(1);
 
-        boost::hash<T> hasher;
+        HASH_NAMESPACE::hash<T> hasher;
 
         for(int i2 = 0; i2 < number_of_containers; ++i2) {
             BOOST_CHECK(hasher(containers[i2]) == hasher(containers[i2]));

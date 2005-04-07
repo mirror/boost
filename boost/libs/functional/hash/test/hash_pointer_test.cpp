@@ -1,9 +1,16 @@
+
 //  (C) Copyright Daniel James 2005.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/functional/hash/hash.hpp>
+#include "./config.hpp"
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash/hash.hpp>
+#endif
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -19,8 +26,8 @@ BOOST_AUTO_UNIT_TEST(pointer_tests)
     BOOST_CHECK(compile_time_tests<int*>::success);
     BOOST_CHECK(compile_time_tests<void*>::success);
 
-    boost::hash<int*> x1;
-    boost::hash<int*> x2;
+    HASH_NAMESPACE::hash<int*> x1;
+    HASH_NAMESPACE::hash<int*> x2;
 
     int int1;
     int int2;
