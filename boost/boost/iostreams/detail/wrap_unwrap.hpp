@@ -11,7 +11,8 @@
 # pragma once
 #endif              
 
-#include <boost/config.hpp>                             // SFINAE.
+#include <boost/config.hpp>                             // SFINAE, MSVC.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
 #include <boost/iostreams/traits_fwd.hpp>               // is_std_io.
 #include <boost/mpl/bool.hpp>
@@ -82,6 +83,11 @@ unwrap(const reference_wrapper<T>& ref) { return ref.get(); }
 
 template<typename T>
 typename unwrapped_type<T>::type& unwrap(T& t) { return t; }
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    template<typename T>
+    const typename unwrapped_type<T>::type& unwrap(const T& t) { return t; }
+#endif
 
 } } } // End namespaces detail, iostreams, boost.
 
