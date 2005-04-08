@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>                            // for_each.
 #include <cassert>
@@ -37,8 +37,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-// Sometimes type_info objects must be compared by name. Borrowed from 
-// Boost.Python and Boost.Function. 
+// Sometimes type_info objects must be compared by name. Borrowed from
+// Boost.Python and Boost.Function.
 #if (defined(__GNUC__) && __GNUC__ >= 3) || \
      defined(_AIX) || \
     (defined(__sgi) && defined(__host_mips)) || \
@@ -61,8 +61,8 @@ template<typename Chain> class chain_client;
 
 //
 // Concept name: Chain.
-// Description: Represents a chain of stream buffers which provides access 
-//     to the first buffer in the chain and send notifications when the 
+// Description: Represents a chain of stream buffers which provides access
+//     to the first buffer in the chain and send notifications when the
 //     streambufs are added to or removed from chain.
 // Refines: Closable device with mode equal to typename Chain::mode.
 // Models: chain, converting_chain.
@@ -76,7 +76,7 @@ template<typename Chain> class chain_client;
 //        bool is_complete() const;                  // Ready for i/o.
 //        template<typename T>
 //        void push( const T& t,                     // Adds a stream buffer to
-//                   streamsize,                     // chain, based on t, with 
+//                   streamsize,                     // chain, based on t, with
 //                   streamsize );                   // given buffer and putback
 //                                                   // buffer sizes. Pass -1 to
 //                                                   // request default size.
@@ -84,7 +84,7 @@ template<typename Chain> class chain_client;
 //        void register_client(client_type* client); // Associate client.
 //        void notify();                             // Notify client.
 //    };
-// 
+//
 
 //
 // Description: Represents a chain of filters with an optional device at the
@@ -107,7 +107,7 @@ public:
     struct io_category
         : Mode,
           device_tag,
-          closable_tag 
+          closable_tag
         { };
     typedef chain_client<Self>                     client_type;
     friend class chain_client<Self>;
@@ -187,21 +187,21 @@ private:
         typedef typename iostreams::io_category<T>::type  category;
         typedef typename unwrap_ios<T>::type              policy_type;
         typedef streambuf_facade<
-                    policy_type, 
+                    policy_type,
                     BOOST_IOSTREAMS_CHAR_TRAITS(char_type),
                     Alloc, Mode
                 >                                         facade_type;
         BOOST_STATIC_ASSERT((is_convertible<category, Mode>::value));
-        if (is_complete()) 
+        if (is_complete())
             throw std::logic_error("chain complete");
         streambuf_type* prev = !empty() ? list().back() : 0;
-        buffer_size = 
-            buffer_size != -1 ? 
-                buffer_size : 
+        buffer_size =
+            buffer_size != -1 ?
+                buffer_size :
                 iostreams::optimal_buffer_size(t);
-        pback_size = 
-            pback_size != -1 ? 
-                pback_size : 
+        pback_size =
+            pback_size != -1 ?
+                pback_size :
                 pimpl_->pback_size_;
         std::auto_ptr<facade_type>
             buf(new facade_type(t, buffer_size, pback_size));
@@ -225,10 +225,10 @@ private:
     // VC6 and Borland.
 
     static void close(streambuf_type* b, BOOST_IOS::openmode m)
-    { 
-        if (m & BOOST_IOS::out) 
-            b->BOOST_IOSTREAMS_PUBSYNC(); 
-        b->close(m); 
+    {
+        if (m & BOOST_IOS::out)
+            b->BOOST_IOSTREAMS_PUBSYNC();
+        b->close(m);
     }
 
     struct closer  : public std::unary_function<streambuf_type*, void>  {
@@ -238,8 +238,8 @@ private:
     };
     friend struct closer;
 
-    enum { 
-        f_complete = 1, 
+    enum {
+        f_complete = 1,
         f_auto_close = 2
     };
 
@@ -252,23 +252,23 @@ private:
             { }
         ~chain_impl()
             {
-                try { 
+                try {
                     if ((flags_ & f_auto_close) != 0)
-                        close(); 
+                        close();
                 } catch (std::exception&) { }
                 std::for_each( links_.begin(), links_.end(),
                                checked_deleter<streambuf_type>() );
             }
         void close()
             {
-                if ((flags_ & f_complete) == 0) 
+                if ((flags_ & f_complete) == 0)
                     return;
                 links_.front()->BOOST_IOSTREAMS_PUBSYNC();
                 if (is_convertible<Mode, input>::value)
-                    std::for_each( links_.rbegin(), links_.rend(), 
+                    std::for_each( links_.rbegin(), links_.rend(),
                                    closer(BOOST_IOS::in) );
                 if (is_convertible<Mode, output>::value)
-                    std::for_each( links_.begin(), links_.end(), 
+                    std::for_each( links_.begin(), links_.end(),
                                    closer(BOOST_IOS::out) );
             }
         list_type     links_;
@@ -355,17 +355,17 @@ public:
     virtual ~chain_client() { }
 
     template<int N>
-    const std::type_info& component_type() const 
+    const std::type_info& component_type() const
     { return chain_->component_type<N>(); }
 
     template<int N, typename T>
-    T* component() const 
+    T* component() const
     { return chain_->component<N, T>(); }
 
     bool is_complete() const { return chain_->is_complete(); }
     bool auto_close() const { return chain_->auto_close(); }
     void set_auto_close(bool close) { chain_->set_auto_close(close); }
-    void set_device_buffer_size(std::streamsize n) 
+    void set_device_buffer_size(std::streamsize n)
         { chain_->set_device_buffer_size(n); }
     void set_filter_buffer_size(std::streamsize n)
         { chain_->set_filter_buffer_size(n); }
@@ -384,7 +384,7 @@ protected:
     void push_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())
     { chain_->push(t BOOST_IOSTREAMS_PUSH_ARGS()); }
     chain_type& ref() { return *chain_; }
-    void set_chain(chain_type* c) 
+    void set_chain(chain_type* c)
     { chain_ = c; chain_->register_client(this); }
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && \
     (!BOOST_WORKAROUND(__BORLANDC__, < 0x600))
@@ -426,21 +426,21 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::reset()
 }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
-bool chain_base<Self, Ch, Tr, Alloc, Mode>::is_complete() const 
-{ 
+bool chain_base<Self, Ch, Tr, Alloc, Mode>::is_complete() const
+{
     return (pimpl_->flags_ & f_complete) != 0;
 }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
-bool chain_base<Self, Ch, Tr, Alloc, Mode>::auto_close() const 
-{ 
+bool chain_base<Self, Ch, Tr, Alloc, Mode>::auto_close() const
+{
     return (pimpl_->flags_ & f_auto_close) != 0;
 }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
-void chain_base<Self, Ch, Tr, Alloc, Mode>::set_auto_close(bool close) 
-{ 
-    pimpl_->flags_ = 
+void chain_base<Self, Ch, Tr, Alloc, Mode>::set_auto_close(bool close)
+{
+    pimpl_->flags_ =
         (pimpl_->flags_ & ~f_auto_close) |
         (close ? f_auto_close : 0);
 }
