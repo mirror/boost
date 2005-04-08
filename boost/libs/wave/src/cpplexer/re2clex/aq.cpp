@@ -29,7 +29,7 @@ int aq_grow(aq_queue q)
     aq_stdelement* new_queue = (aq_stdelement*)realloc(q->queue,
             new_size * sizeof(aq_stdelement));
 
-    BOOST_ASSERT(q);
+    BOOST_ASSERT(NULL != q);
     BOOST_ASSERT(q->max_size < 100000);
     BOOST_ASSERT(q->size <= q->max_size);
 
@@ -67,7 +67,7 @@ int aq_grow(aq_queue q)
 
 int aq_enqueue(aq_queue q, aq_stdelement e)
 {
-    BOOST_ASSERT(q);
+    BOOST_ASSERT(NULL != q);
     BOOST_ASSERT(q->size <= q->max_size);
     ASSERT_SIZE;
     BOOST_ASSERT(q->head <= q->max_size);
@@ -95,7 +95,7 @@ int aq_enqueue(aq_queue q, aq_stdelement e)
 
 int aq_enqueue_front(aq_queue q, aq_stdelement e)
 {
-    BOOST_ASSERT(q);
+    BOOST_ASSERT(NULL != q);
 
     BOOST_ASSERT(q->size <= q->max_size);
     ASSERT_SIZE;
@@ -126,7 +126,7 @@ int aq_enqueue_front(aq_queue q, aq_stdelement e)
 int aq_serve(aq_queue q, aq_stdelement *e)
 {
 
-    BOOST_ASSERT(q);
+    BOOST_ASSERT(NULL != q);
     BOOST_ASSERT(q->size <= q->max_size);
     ASSERT_SIZE;
     BOOST_ASSERT(q->head <= q->max_size);
@@ -143,7 +143,7 @@ int aq_serve(aq_queue q, aq_stdelement *e)
 int aq_pop(aq_queue q)
 {
 
-    BOOST_ASSERT(q);
+    BOOST_ASSERT(NULL != q);
     BOOST_ASSERT(q->size <= q->max_size);
     ASSERT_SIZE;
     BOOST_ASSERT(q->head <= q->max_size);
@@ -203,7 +203,7 @@ void aq_terminate(aq_queue q)
 {
     using namespace std;        // some systems have free in std
 
-    BOOST_ASSERT(q);
+    BOOST_ASSERT(NULL != q);
     BOOST_ASSERT(q->size <= q->max_size);
     ASSERT_SIZE;
     BOOST_ASSERT(q->head <= q->max_size);
