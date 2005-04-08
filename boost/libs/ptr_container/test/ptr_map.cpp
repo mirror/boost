@@ -112,7 +112,7 @@ void ptr_map_test()
     c3.transfer( c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else
     c.transfer( make_iterator_range(c3), c3 );
     BOOST_CHECK( !c.empty() );

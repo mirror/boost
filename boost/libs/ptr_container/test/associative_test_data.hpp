@@ -75,7 +75,7 @@ void ptr_set_test()
     c3.insert( new T );
     c3.insert( new T );
     BOOST_CHECK_EQUAL( c3.size(), 2u );
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else            
     c3.insert( make_iterator_range( c3 ) );
 //    BOOST_CHECK_EQUAL( c3.size(), 4u );
@@ -88,7 +88,7 @@ void ptr_set_test()
     c3.transfer( c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else        
     c.transfer( make_iterator_range( c3 ), c3 );
     BOOST_CHECK( !c.empty() );
@@ -114,21 +114,6 @@ void ptr_set_test()
     sub  = c.equal_range( T() );
     csub = c2.equal_range( T() );         
 
-    try
-    {
-        c.at( T() );
-    }
-    catch( const bad_ptr_container_operation& )
-    { }
-
-    try
-    {
-        c2.at( T() );
-    }
-    catch( const bad_ptr_container_operation& )
-    { }
-
-    
     BOOST_MESSAGE( "finished algorithms interface test" );         
 }
 

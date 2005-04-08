@@ -1,6 +1,17 @@
  
 #include <boost/ptr_container/ptr_vector.hpp>
 
+template< class Cont >
+void test_conversion()
+{
+    Cont c;
+    // implicit conversion
+    typedef typename Cont::iterator iter;
+    iter i = c.ptr_begin();
+    c.push_back( new int(4) );
+    c.erase( iter( c.ptr_begin() ) );
+}
+
 void test_iterator()
 {
     using namespace boost;
@@ -13,6 +24,8 @@ void test_iterator()
     const ptr_vector<int>& rvec               = vec;
     const_i                                   = rvec.begin();
     const_ptr                                 = rvec.ptr_begin();
+
+    test_conversion< ptr_vector<int> >();
     
 }
 

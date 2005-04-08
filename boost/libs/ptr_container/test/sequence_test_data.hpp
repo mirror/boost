@@ -75,7 +75,7 @@ void reversible_container_test()
     c.pop_back(); 
     c.insert( c.end(), new T );
 
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else
     c.insert( c.end(), c3 );
 #endif    
@@ -107,7 +107,7 @@ void reversible_container_test()
     c3.push_back( new T );
     c.transfer( c.begin(), c3.begin(), c3 );
     c.transfer( c.end(), c3.begin(), c3.end(), c3 );
-#if BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE
 #else    
     c.transfer( c.end(), boost::make_iterator_range( c3 ), c3 );    
     BOOST_CHECK( c3.empty() );
