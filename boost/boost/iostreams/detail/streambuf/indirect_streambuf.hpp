@@ -87,10 +87,10 @@ protected:
     pos_type seekpos(pos_type sp, BOOST_IOS::openmode which);
 
     // Declared in linked_streambuf.
-    void set_next(streambuf_type* next); 
+    void set_next(streambuf_type* next);
     void close(BOOST_IOS::openmode m);
     const std::type_info& component_type() const { return typeid(T); }
-    void* component_impl() { return component(); } 
+    void* component_impl() { return component(); }
 private:
 
     //----------Accessor functions--------------------------------------------//
