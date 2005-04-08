@@ -64,13 +64,14 @@ loop:
 
     lwarx   r4, 0, r3
     cmpwi   r4, 0
-    beq     done
+    beq     store
 
     addi    r4, r4, 1
+
+store:
+
     stwcx.  r4, 0, r3
     bne-    loop
-
-done:
 
     mr      r3, r4
 }

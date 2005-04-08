@@ -90,9 +90,9 @@ inline long atomic_conditional_increment( long * pw )
         "cmpwi %1, 0\n\t"
         "beq 1f\n\t"
         "addi %1, %1, 1\n\t"
+        "1:\n\t"
         "stwcx. %1, 0, %2\n\t"
-        "bne- 0b\n\t"
-        "1:":
+        "bne- 0b":
 
         "=m"( *pw ), "=&b"( rv ):
         "r"( pw ):
