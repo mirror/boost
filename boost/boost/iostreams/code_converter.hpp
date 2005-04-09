@@ -28,6 +28,7 @@
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
+#include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/codecvt_holder.hpp>
 #include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
