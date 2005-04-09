@@ -19,7 +19,9 @@
 // do something sensible on most compilers.
 
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#  if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+#  if defined(__GNUC__) && __GNUC__ < 3 && (defined(linux) || defined(__linux) || defined(__linux__))
+#    define BOOST_HASH_USE_C99_FLOAT_FUNCS
+#  elif defined(BOOST_MSVC) && BOOST_MSVC <= 1200
 #    define BOOST_HASH_USE_C99_FLOAT_FUNCS
 #  else
 #    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
