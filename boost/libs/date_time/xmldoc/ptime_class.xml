@@ -172,7 +172,7 @@ ptime t(from_iso_string(ts))</screen></entry>
 	    <entry>Get the UTC time.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>ptime t(second_clock::universal_day())</screen></entry>
+	    <entry><screen>ptime t(second_clock::universal_time())</screen></entry>
           </row>
           
           <row>
