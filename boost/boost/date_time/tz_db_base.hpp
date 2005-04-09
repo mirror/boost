@@ -279,9 +279,9 @@ namespace boost {
         tokenizer tokens(rule, sep); // 3 fields
         
         typename tokenizer::iterator tok_iter = tokens.begin(); 
-        nth = atoi(tok_iter->c_str()); ++tok_iter;
-        d   = atoi(tok_iter->c_str()); ++tok_iter;
-        m   = atoi(tok_iter->c_str());
+        nth = std::atoi(tok_iter->c_str()); ++tok_iter;
+        d   = std::atoi(tok_iter->c_str()); ++tok_iter;
+        m   = std::atoi(tok_iter->c_str());
       }
 
      
