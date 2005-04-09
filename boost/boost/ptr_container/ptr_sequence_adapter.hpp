@@ -21,7 +21,7 @@
 
 
 #include <boost/ptr_container/detail/reversible_ptr_container.hpp>
-#include <boost/ptr_container/ptr_predicate.hpp>
+#include <boost/ptr_container/indirect_fun.hpp>
 #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
 #include <boost/range/reverse_iterator.hpp>
 #include <boost/range/const_reverse_iterator.hpp>
@@ -268,7 +268,8 @@ namespace boost
         {
             this->c_private().reserve( n ); 
         }
-          
+
+        /*
     public: // list interface
         
         void splice( iterator before, ptr_sequence_adapter& x )                    
@@ -319,7 +320,7 @@ namespace boost
         void sort( Compare comp )                             
         {
             this->c_private().sort( indirected2<Compare>( comp ) );
-        }
+        }*/
 
         void reverse()
         {
@@ -451,6 +452,160 @@ namespace boost
             BOOST_ASSERT( idx < this->size() );
             return this->c_private()[idx] == 0;
         }
+
+    public: // algorithms
+
+        void sort( iterator first, iterator last )
+        {
+            sort( first, last, void_ptr_indirect_fun< std::less<T>,T >() );
+        }
+        
+        void sort()
+        {
+            sort( this->begin(), this->end() );
+        }
+
+        template< class Compare >
+        void sort( iterator first, iterator last, Compare comp )
+        {
+            BOOST_ASSERT( first <= last && "out of range sort()" );
+            BOOST_ASSERT( this->begin() <= first && "out of range sort()" );
+            BOOST_ASSERT( last <= this->end() && "out of range sort()" ); 
+            // some static assert on the arguments of the comparison
+            std::sort( first.base(), last.base(), 
+                       void_ptr_indirect_fun< Compare, T >(comp) );
+        }
+        
+        template< class Compare >
+        void sort( Compare comp )
+        {
+            sort( this->begin(), this->end(), comp );
+        }
+        
+        void unique( iterator first, iterator last )
+        {
+            unique( first, last, std::equal<T>() );
+        }
+        
+        void unique()
+        {
+            unique( this->begin(), this->end() );
+        }
+
+    private:
+        struct is_zero_functor
+        {
+            template< class U >
+            bool operator()( const U* r ) const
+            {
+                return r == 0;
+            }
+        };
+
+        void compact_and_erase_nulls( iterator first, iterator last ) // nothrow
+        {
+            typename base_type::ptr_iterator p = std::stable_partition( 
+                                                    first.base(), 
+                                                    last.base(), 
+                                                    is_zero_functor() );
+            this->c_private().erase( p, this->end().base() );
+        }
+        
+    public:
+        
+        template< class Compare >
+        void unique( iterator first, iterator last, Compare comp )
+        {
+            BOOST_ASSERT( first <= last && "out of range unique()" );
+            BOOST_ASSERT( this->begin() <= first && "out of range unique()" );
+            BOOST_ASSERT( last <= this->end() && "out of range unique()" ); 
+
+            iterator prev = first;
+            iterator next = first + 1; 
+            for( ; next != last; ++next )
+            {
+                if( comp( *prev, *next ) )
+                {
+                    this->remove( next ); // delete object
+                    *next.base() = 0;     // mark pointer as deleted
+                }
+                else
+                {
+                    prev = next;
+                }
+                // ++next
+            }
+
+            compact_and_erase_nulls( first, last );
+        }
+        
+        template< class Compare >
+        void unique( Compare comp )
+        {
+            unique( this->begin(), this->end(), comp );
+        }
+
+        template< class Pred >
+        void erase_if( iterator first, iterator last, Pred pred )
+        {
+            BOOST_ASSERT( first <= last && "out of range unique()" );
+            BOOST_ASSERT( this->begin() <= first && "out of range unique()" );
+            BOOST_ASSERT( last <= this->end() && "out of range unique()" ); 
+
+            iterator next = first; 
+            for( ; next != last; ++next )
+            {
+                if( pred( *next ) )
+                {
+                    this->remove( next ); // delete object
+                    *next.base() = 0;     // mark pointer as deleted
+                }
+            }
+
+            compact_and_erase_nulls( first, last );
+        }
+        
+        template< class Pred >
+        void erase_if( Pred pred )
+        {
+            erase_if( this->begin(), this->end(), pred );
+        }
+
+
+        void merge( iterator first, iterator last, 
+                    ptr_sequence_adapter& from )
+        {
+             merge( first, last, from, std::less<T>() );
+        }
+        
+        template< class BinPred >
+        void merge( iterator first, iterator last, 
+                    ptr_sequence_adapter& from, BinPred pred )
+        {
+            void_ptr_indirect_fun<BinPred,T>  bin_pred(pred);
+            size_type                       current_size = this->size(); 
+            this->transfer( this->end(), first, last, from );
+            typename base_type::ptr_iterator middle = this->begin().base();
+            std::advance(middle,current_size); 
+            std::inplace_merge( this->begin().base(),
+                                middle,
+                                this->end().base(),
+                                bin_pred );
+        }
+        
+        void merge( ptr_sequence_adapter& r )
+        {
+            merge( r, std::less<T>() );
+            BOOST_ASSERT( r.empty() );
+        }
+        
+        template< class BinPred >
+        void merge( ptr_sequence_adapter& r, BinPred pred )
+        {
+            merge( r.begin(), r.end(), r, pred );
+            BOOST_ASSERT( r.empty() );    
+        }
+
     };
 
 } // namespace 'boost'  

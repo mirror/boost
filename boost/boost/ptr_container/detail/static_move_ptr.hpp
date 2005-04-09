@@ -66,7 +66,7 @@ public:
         { 
             const_cast<static_move_ptr&>(p).release();
         }
-
+/*
     template<typename TT, typename DD>
     static_move_ptr( const static_move_ptr<TT, DD>& p,
                      typename 
@@ -77,7 +77,14 @@ public:
             check(p);
             const_cast<static_move_ptr<TT, DD>&>(p).release();
         }
+*/
 
+    static_move_ptr( move_ptrs::move_source<static_move_ptr> src )
+            : impl_(src.ptr().get(), src.ptr().get_deleter())
+            {
+                src.ptr().release();
+            }
+/*
     template<typename TT, typename DD>
     static_move_ptr(move_ptrs::move_source< static_move_ptr<TT, DD> > src)
         : impl_(src.ptr().get(), src.ptr().get_deleter())
@@ -86,17 +93,19 @@ public:
             BOOST_STATIC_ASSERT(convertible::value);
             src.ptr().release();
         }
-
+*/
+    
     template<typename TT>
     explicit static_move_ptr(TT* tt) 
         : impl_(tt, Deleter()) 
         { }
 
+    /*
     template<typename TT, typename DD>
     static_move_ptr(TT* tt, DD dd) 
         : impl_(tt, dd) 
         { }
-
+*/
         // Destructor
 
     ~static_move_ptr() { if (ptr()) get_deleter()(ptr()); }
@@ -109,6 +118,7 @@ public:
             return *this;
         }
 
+    /*
     template<typename TT, typename DD>    
     typename move_ptrs::enable_if_convertible<TT, T, static_move_ptr&>::type
     operator=(static_move_ptr<TT, DD> rhs)
@@ -117,7 +127,7 @@ public:
             this->swap(tmp);
             return *this;
         }
-
+    */
         // Smart pointer interface
 
     element_type* get() const { return ptr(); }

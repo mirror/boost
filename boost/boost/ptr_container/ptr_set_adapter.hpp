@@ -201,23 +201,6 @@ namespace boost
                                         const_iterator( p.second ) );    
         }                                                                            
                                                                                      
-        key_type& at( const key_type& key )                                              
-        {                                                                            
-           iterator i = this->find( key );                                           
-           if( i != this->end() )                                                    
-               return *i;                                                            
-           else                                                                      
-               throw bad_ptr_container_operation( "'at()' could not find key" ); 
-        }                                                                            
-                                                                                     
-        const key_type& at( const key_type& key ) const                                  
-        {                                                                            
-           const_iterator i = this->find( key );                                           
-           if( i != this->end() )                                                    
-               return *i;                                                            
-           else                                                                      
-               throw bad_ptr_container_operation( "'at()' could not find key" ); 
-        }
     };
     
     /////////////////////////////////////////////////////////////////////////
