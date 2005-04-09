@@ -37,7 +37,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-// Sometimes type_info objects must be compared by name. Borrowed from
+// Sometimes type_info objects must be compared by name. Borrowed from 
 // Boost.Python and Boost.Function.
 #if (defined(__GNUC__) && __GNUC__ >= 3) || \
      defined(_AIX) || \
