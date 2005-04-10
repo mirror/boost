@@ -29,7 +29,6 @@ rule hash-test ( name )
             [ hash-test hash_range_test ]
             [ hash-test hash_custom_test ]
             [ hash-test hash_built_in_array_test ]
-            [ hash-test hash_built_in_array_empty_test ]
             [ hash-test hash_vector_test ]
             [ hash-test hash_list_test ]
             [ hash-test hash_deque_test ]
