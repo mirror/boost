@@ -23,6 +23,7 @@
 #include <boost/limits.hpp>
 #include <boost/functional/detail/float_functions.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/call_traits.hpp>
 
 namespace boost
 {
@@ -95,6 +96,7 @@ namespace boost
 
     namespace hash_detail
     {
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         // This allows boost::hash to be specialised for classes in the
         // standard namespace. It appears that a strict two phase template
         // implementation only finds overloads that are in the current
@@ -110,6 +112,65 @@ namespace boost
                 return hash_value(v);
             }
         };
+
+        template <class T, std::size_t Size>
+        struct call_hash<T[Size]>
+        {
+            static std::size_t call(T const* val)
+            {
+                return boost::hash_range(val, val + Size);
+            }
+        };
+
+#if !defined(__BORLANDC__)
+        template <class T>
+        struct call_hash<T[0u]>
+        {
+            static std::size_t call(T const*)
+            {
+                return 0;
+            }
+        };
+#endif
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template <bool IsArray>
+        struct call_hash_impl
+        {
+            template <class T>
+            struct inner
+            {
+                static std::size_t call(T const& v)
+                {
+                    using namespace boost;
+                    return hash_value(v);
+                }
+            };
+        };
+
+        template <>
+        struct call_hash_impl<true>
+        {
+            template <class Array>
+            struct inner
+            {
+                template <class T>
+                static T array_member(T* array);
+
+                static std::size_t call(Array const& v)
+                {
+                    const int size = sizeof(v) / sizeof(array_member(v));
+                    return boost::hash_range(v, v + size);
+                }
+            };
+        };
+
+        template <class T>
+        struct call_hash
+            : public call_hash_impl<boost::is_array<T>::value>
+                ::BOOST_NESTED_TEMPLATE inner<T>
+        {
+        };
+#endif
     }
 
     template <class T>
@@ -206,6 +267,19 @@ namespace boost
             return hash_detail::call_hash<T>::call(val);
         }
     };
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+    && !defined(__BORLANDC__)
+
+    template <class T> struct hash<T[0]>
+        : std::unary_function<T[0], std::size_t>
+    {
+        std::size_t operator()(T const*) const
+        {
+            return 0;
+        }
+    };
+#endif
 }
 
 #endif
