@@ -77,7 +77,7 @@ void ptr_set_test()
     BOOST_CHECK_EQUAL( c3.size(), 2u );
 #ifdef BOOST_NO_SFINAE
 #else            
-    c3.insert( make_iterator_range( c3 ) );
+    c3.insert( make_iterator_range( c ) );
 //    BOOST_CHECK_EQUAL( c3.size(), 4u );
 #endif    
     c.transfer( c3.begin(), c3 );
@@ -115,5 +115,6 @@ void ptr_set_test()
     csub = c2.equal_range( *t );         
 
     BOOST_MESSAGE( "finished algorithms interface test" );         
+    
 }
 
