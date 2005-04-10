@@ -99,6 +99,7 @@ test-suite date_time_gregorian_dll
     : : :  $(DATE_TIME_PROPERTIES) ]
  ;
 
+
    test-suite date_time_wide_streaming
     :
    [ run gregorian/testgreg_wstream.cpp
@@ -145,6 +146,49 @@ test-suite date_time_gregorian_dll
    [ run local_time/testclocks.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
+ ;
+
+
+ local DATE_TIME_PROPERTIES =  <define>BOOST_DATE_TIME_STATIC_LINK <define>BOOST_ALL_NO_LIB  <define>USE_DATE_TIME_PRE_1_33_FACET_IO ;
+
+ test-suite date_time_serialization
+   :
+ # xml archive tests
+ [ run gregorian/testgreg_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_PROPERTIES)  <define>DATE_TIME_XML_SERIALIZE
+   : testgreg_serialize_xml ]
+ [ run posix_time/testtime_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_PROPERTIES)
+<define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+<define>DATE_TIME_XML_SERIALIZE
+   : testtime_serialize_xml_std_config ]
+ [ run posix_time/testtime_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_PROPERTIES)  <define>DATE_TIME_XML_SERIALIZE
+   : testtime_serialize_xml ]
+
+ # text archive tests
+ [ run gregorian/testgreg_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_PROPERTIES)
+   : testgreg_serialize ]
+ [ run posix_time/testtime_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_PROPERTIES)
+<define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+   : testtime_serialize_std_config ]
+ [ run posix_time/testtime_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_PROPERTIES)
+   : testtime_serialize ]
  ;
 
 
