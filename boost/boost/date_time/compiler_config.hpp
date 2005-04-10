@@ -15,8 +15,7 @@
 // compilers. They must define this macro to use the legacy IO.
 #if ((defined(__GNUC__) && (__GNUC__ < 3))                    || \
      (defined(_MSC_VER) && (_MSC_VER <= 1300) )               || \
-     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564) )     || \
-     defined(__MWERKS__) )                                    && \
+     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564) ) )   && \
     !defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 #define USE_DATE_TIME_PRE_1_33_FACET_IO
 #endif
