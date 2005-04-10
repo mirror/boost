@@ -26,10 +26,10 @@ namespace util {
 template <typename IterationContextT>
 class iteration_context_stack 
 {
-    typedef std::stack<IterationContextT> base_t;
+    typedef std::stack<IterationContextT> base_type;
     
 public:
-    typedef typename base_t::size_type size_type;
+    typedef typename base_type::size_type size_type;
     
     iteration_context_stack()
     :   max_include_nesting_depth(BOOST_WAVE_MAX_INCLUDE_LEVEL_DEPTH)
@@ -40,12 +40,12 @@ public:
     size_type get_max_include_nesting_depth() const
         { return max_include_nesting_depth; }
 
-    typename base_t::size_type size() const { return iter_ctx.size(); }
-    typename base_t::value_type &top() { return iter_ctx.top(); }
+    typename base_type::size_type size() const { return iter_ctx.size(); }
+    typename base_type::value_type &top() { return iter_ctx.top(); }
     void pop() { iter_ctx.pop(); }
     
     template <typename PositionT>
-    void push(PositionT const &pos, typename base_t::value_type const &val)
+    void push(PositionT const &pos, typename base_type::value_type const &val)
     { 
         if (iter_ctx.size() == max_include_nesting_depth) {
         char buffer[22];    // 21 bytes holds all NUL-terminated unsigned 64-bit numbers
@@ -60,7 +60,7 @@ public:
         
 private:
     size_type max_include_nesting_depth;
-    base_t iter_ctx;
+    base_type iter_ctx;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

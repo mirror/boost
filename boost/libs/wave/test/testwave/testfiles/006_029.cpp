@@ -16,7 +16,7 @@
 // Tests error reporting: ill-formed group in a source file. 
 
 // 17.5: Errorneous #endif without #if in an included file.
-//E
+//E 006_029.hpp(47): warning: unbalanced #if/#endif in include file: $P(006_029.hpp)
 #if 1
 #include  "006_029.hpp"
 

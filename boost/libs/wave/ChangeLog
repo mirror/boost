@@ -11,7 +11,6 @@ TODO (known issues):
   macro expansion.
 - Fix the re2c lexer for iterators others then string::iterator (or more 
   generally for iterators, which aren't random access iterators)
-- Enforce, that #if/#endif are balanced file wise
 - Try to remove the second parameter from the pp_iterator<>::force_include
   function.
 - Fix the trigraph backslash problem in the re2c (C/C++ and IDL) scanners, if 
@@ -28,7 +27,9 @@ CHANGELOG
   expressions.
 - Fixed a bug in the testwave application which prevented the correct 
   recognition of expected errors under certain circumstances.
-  
+- Fixed a portability problem (for gcc 3.3.x) in the testwave application.
+- Enforced that #if/#endif are balanced file wise.
+
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16
 - Fixed a bug in the white space eating component, which prevented a C++ 

@@ -45,11 +45,11 @@ namespace iteration_context_policies {
     //      the beginning and the end of the loaded string.
     //
     ///////////////////////////////////////////////////////////////////////////
-    struct load_file_to_string {
-    
+    struct load_file_to_string 
+    {
         template <typename IterContextT>
-        class inner {
-        
+        class inner 
+        {
         public:
             template <typename PositionT>
             static 
@@ -95,8 +95,8 @@ namespace iteration_context_policies {
 //      istreambuf_iterators.
 //
 ///////////////////////////////////////////////////////////////////////////////
-    struct load_file {
-            
+    struct load_file 
+    {
         template <typename IterContextT>
         class inner {
 
@@ -136,25 +136,28 @@ namespace iteration_context_policies {
 ///////////////////////////////////////////////////////////////////////////////
 //  
 template <typename IteratorT>
-struct base_iteration_context {
-
+struct base_iteration_context 
+{
 public:
-    base_iteration_context(BOOST_WAVE_STRINGTYPE const &fname)   
-    :   real_filename(fname), filename(fname), line(1), emitted_lines(1)
+    base_iteration_context(
+            BOOST_WAVE_STRINGTYPE const &fname, std::size_t if_block_depth = 0)   
+    :   real_filename(fname), filename(fname), line(1), emitted_lines(1),
+        if_block_depth(if_block_depth)
     {}
     base_iteration_context(IteratorT const &first_, IteratorT const &last_, 
-            BOOST_WAVE_STRINGTYPE const &fname)
+            BOOST_WAVE_STRINGTYPE const &fname, std::size_t if_block_depth = 0)
     :   first(first_), last(last_), real_filename(fname), filename(fname), 
-        line(1), emitted_lines(1)
+        line(1), emitted_lines(1), if_block_depth(if_block_depth)
     {}
 
 // the actual input stream
     IteratorT first;            // actual input stream position 
     IteratorT last;             // end of input stream
     BOOST_WAVE_STRINGTYPE real_filename;    // real name of the current file
-    BOOST_WAVE_STRINGTYPE filename;   // actual processed file
+    BOOST_WAVE_STRINGTYPE filename;         // actual processed file
     int line;                   // line counter of underlying stream
     int emitted_lines;          // count of emitted newlines
+    std::size_t if_block_depth; // depth of #if block recursion
 };
 
 ///////////////////////////////////////////////////////////////////////////////

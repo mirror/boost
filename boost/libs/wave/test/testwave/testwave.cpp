@@ -34,9 +34,9 @@ namespace fs = boost::filesystem;
 //              equal to the number of failed tests
 //  level 1:    prints a short summary only
 //  level 2:    prints the names of the failed tests only
-//  level 3:    prints the outcome of every test
-//  level 4:    prints the expected and real result for failed tests
-//  level 5:    prints the real result for succeeded tests
+//  level 3:    prints the expected and real result for failed tests
+//  level 4:    prints the outcome of every test
+//  level 5:    prints the real result even for succeeded tests
 //
 //  The default debug level is 1.
 //

@@ -267,7 +267,7 @@ testwave_app::test_a_file(std::string filename)
                 !got_expected_result(filename, error, expected_error))
             {
             // we expected an error but got none (or a different one)
-                if (debuglevel > 3) {
+                if (debuglevel > 2) {
                     std::cerr 
                         << filename << ": failed" << std::endl
                         << "result: " << std::endl << result << std::endl
@@ -280,7 +280,7 @@ testwave_app::test_a_file(std::string filename)
             }
             else if (!got_expected_result(filename, result, expected)) {
             //  no preprocessing error encountered
-                if (debuglevel > 3) {
+                if (debuglevel > 2) {
                     std::cerr 
                         << filename << ": failed" << std::endl
                         << "result: " << std::endl << result << std::endl
@@ -296,7 +296,7 @@ testwave_app::test_a_file(std::string filename)
                     << filename << ": succeeded" << std::endl
                     << "result: " << std::endl << result << std::endl;
             }
-            else if (debuglevel > 2) {
+            else if (debuglevel > 3) {
                 std::cerr << filename << ": succeeded" << std::endl;
             }
         }
@@ -309,7 +309,7 @@ testwave_app::test_a_file(std::string filename)
                 
             if (!got_expected_result(filename, error, expected_error)) {
             // the error was unexpected
-                if (debuglevel > 3) {
+                if (debuglevel > 2) {
                     std::cerr 
                         << filename << ": failed" << std::endl;
 
@@ -333,7 +333,7 @@ testwave_app::test_a_file(std::string filename)
                     << filename << ": succeeded" << std::endl
                     << "result: " << std::endl << error << std::endl;
             }
-            else if (debuglevel > 2) {
+            else if (debuglevel > 3) {
             // caught the expected error message
                 std::cerr << filename << ": succeeded" << std::endl;
             }

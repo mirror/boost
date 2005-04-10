@@ -224,7 +224,7 @@ private:
     typedef base_iteration_context<lexer_type>    base_iteration_context_type;
     typedef 
         iteration_context<lexer_type, typename ContextT::input_policy_type>
-        iteration_context_t;
+        iteration_context_type;
 
 // parse tree related types
     typedef 
@@ -361,7 +361,16 @@ pp_iterator_functor<ContextT>::returned_from_include()
         
     // restore the previous iteration context after finishing the preprocessing 
     // of the included file
+        BOOST_WAVE_STRINGTYPE oldfile = iter_ctx->real_filename;
+        
         iter_ctx = ctx.pop_iteration_context();
+
+    // ensure the itegrity of the #if/#endif stack
+        if (iter_ctx->if_block_depth != ctx.get_if_block_depth()) {
+            using boost::wave::util::impl::escape_lit;
+            BOOST_WAVE_THROW(preprocess_exception, unbalanced_if_endif, 
+                escape_lit(oldfile).c_str(), act_pos);
+        }
         
         must_emit_line_directive = true;
         seen_newline = true;
@@ -1009,7 +1018,7 @@ fs::path native_path(file_path, fs::native);
         
     // preprocess the opened file
     boost::shared_ptr<base_iteration_context_type> new_iter_ctx (
-        new iteration_context_t(native_path.native_file_string().c_str(), 
+        new iteration_context_type(native_path.native_file_string().c_str(), 
             act_pos, ctx.get_language()));
 
     // call the include policy trace function
@@ -1019,6 +1028,7 @@ fs::path native_path(file_path, fs::native);
     // store current file position
         iter_ctx->filename = act_pos.get_file();
         iter_ctx->line = act_pos.get_line();
+        iter_ctx->if_block_depth = ctx.get_if_block_depth();
         
     // push the old iteration context onto the stack and continue with the new
         ctx.push_iteration_context(act_pos, iter_ctx);
@@ -1721,7 +1731,7 @@ public:
 private:
     typedef 
         boost::spirit::multi_pass<input_policy_type, boost::wave::util::functor_input>
-        base_t;
+        base_type;
     typedef pp_iterator<ContextT> self_type;
     typedef boost::wave::util::functor_input functor_input_type;
     
@@ -1733,7 +1743,7 @@ public:
     pp_iterator(ContextT &ctx, IteratorT const &first, IteratorT const &last,
         typename ContextT::position_type const &pos, 
         boost::wave::language_support language)
-    :   base_t(input_policy_type(ctx, first, last, pos, language))
+    :   base_type(input_policy_type(ctx, first, last, pos, language))
     {}
     
     void force_include(char const *path_, bool is_last)
