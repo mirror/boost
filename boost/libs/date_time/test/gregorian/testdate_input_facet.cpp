@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#ifndef USE_DATE_TIME_PRE_1_33_FACET_IO
 // for tests that are expected to fail
 template<class temporal_type, class exception_type>
 bool failure_test(temporal_type component,
@@ -37,7 +38,10 @@ bool failure_test(temporal_type component,
   return result;
 }
 
+#endif
+
 int main(){
+#ifndef  USE_DATE_TIME_PRE_1_33_FACET_IO
   using namespace boost::gregorian;
  
   // set up initial objects
@@ -366,7 +370,10 @@ int main(){
     check("German names, first_day_of_the_week_after", 
         fka.get_date(date(2005,Apr,5)) == date(2005,Apr,12));
   }
-
+#else
+    check("This test is a nop for platforms with USE_DATE_TIME_PRE_1_33_FACET_IO", 
+          true);
+#endif
   return printTestStats();
 }
                       
