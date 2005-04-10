@@ -118,7 +118,6 @@ struct intlit_grammar :
                         [
                             self.val = arg1
                         ]
-                           
                     )
                 ;
                 
@@ -142,7 +141,7 @@ struct intlit_grammar :
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  The following function is defined here, to allow the separation of 
-//  the compilation of the intlit_grammap from the function using it.
+//  the compilation of the intlit_grammar from the function using it.
 //  
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -167,7 +166,7 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
     parse(token_val.begin(), token_val.end(), g[spirit_assign_actor(result)]);
 
     if (!hit.hit) {
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
+        BOOST_WAVE_THROW(preprocess_exception, ill_formed_integer_literal, 
             token_val.c_str(), token.get_position());
     }
     return result;

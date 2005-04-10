@@ -22,6 +22,12 @@ TODO (known issues):
 -------------------------------------------------------------------------------
 
 CHANGELOG
+
+- Added ill_formed_character_literal and ill_formed_integer_literal errors.
+- Improved error handling and diagnostics for overflow in #if/#elif
+  expressions.
+- Fixed a bug in the testwave application which prevented the correct 
+  recognition of expected errors under certain circumstances.
   
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

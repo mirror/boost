@@ -52,6 +52,7 @@
 #include <utility> // for pair
 #include <iostream>
 #include <fstream>
+#include <boost/assert.hpp>
 #include <boost/limits.hpp>
 
 #if SPIRIT_VERSION < 0x1700 && defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
@@ -886,8 +887,8 @@ ccl_node::ccl_node(const uchar c1, const uchar c2)
     , m_match(256, 0)
     , m_node_num(0)
 {
-    BOOST_SPIRIT_ASSERT(c1 < c2);
-    for (size_t i = c1; i <= size_t(c2); ++i)
+    BOOST_ASSERT(c1 < c2);
+    for (std::size_t i = c1; i <= size_t(c2); ++i)
     {
         m_match[i] = 1;
     }
@@ -958,7 +959,7 @@ inline void
 ccl_node::dump(std::ostream& out) const
 {
     out << "\nccl_node m_match = ";
-    for (size_t i = 0; i < m_match.size(); ++i)
+    for (std::size_t i = 0; i < m_match.size(); ++i)
     {
         if (m_match[i])
             out << i << ", ";
@@ -1010,7 +1011,7 @@ struct get_byte_aux<1>
     template <typename CharT>
     unsigned char operator()(CharT c, unsigned int byte)
     {
-        BOOST_SPIRIT_ASSERT(byte == 0);
+        BOOST_ASSERT(byte == 0);
         return c;
     }
 };
@@ -1027,7 +1028,7 @@ struct get_byte_aux<2>
             0x00FF
         };
 
-        BOOST_SPIRIT_ASSERT(byte < 2);
+        BOOST_ASSERT(byte < 2);
         return (c & mask[byte]) >> ((sizeof(c) - 1 - byte) * 8);
     }
 };
@@ -1046,7 +1047,7 @@ struct get_byte_aux<4>
             0x000000FF
         };
 
-        BOOST_SPIRIT_ASSERT(byte < 4);
+        BOOST_ASSERT(byte < 4);
         return (c & mask[byte]) >> ((sizeof(c) - 1 - byte) * 8);
     }
 };
@@ -1244,7 +1245,7 @@ namespace ccl_utils
             {
                 for (int i = iter->first; i <= iter->last; ++i)
                 {
-                    BOOST_SPIRIT_ASSERT(uchar(i) < 256 && ccl.size() == 256);
+                    BOOST_ASSERT(uchar(i) < 256 && ccl.size() == 256);
                     ccl[uchar(i)] = 1;
                 }
             }
@@ -1275,7 +1276,7 @@ namespace ccl_utils
     inline size_t
     compute_differing_byte(char_t c1, char_t c2)
     {
-        size_t rval = 0;
+        std::size_t rval = 0;
         while (rval < sizeof(c1) && 
                get_byte(c1, (unsigned int)rval) == get_byte(c2, (unsigned int)rval))
         {
@@ -1286,9 +1287,10 @@ namespace ccl_utils
 
     template <typename char_t>
     inline node*
-    create_mb_node_type1(size_t j, char_t c1, char_t c2)
+    create_mb_node_type1(std::size_t j, char_t c1, char_t c2)
     {
-        size_t diff = get_byte(c2, (unsigned int)j) - get_byte(c1, (unsigned int)j);
+        std::size_t diff = get_byte(c2, (unsigned int)j) - 
+            get_byte(c1, (unsigned int)j);
         if (diff == 1) {
             return 0;
         }
@@ -1303,8 +1305,8 @@ namespace ccl_utils
 
     template <typename char_t>
     inline node *
-    create_mb_node_for_byte(size_t i, size_t j, size_t sizem1,
-            size_t differing_byte, char_t c1, char_t c2, node* newnode)
+    create_mb_node_for_byte(std::size_t i, size_t j, size_t sizem1,
+            std::size_t differing_byte, char_t c1, char_t c2, node* newnode)
     {
         node* cnode;
         if (i == sizem1 && j == differing_byte && j != sizem1)
@@ -1387,13 +1389,13 @@ namespace ccl_utils
         //if (c1 < 0)
         //    c1 = 0;
 
-        BOOST_SPIRIT_ASSERT(c1 < c2);
+        BOOST_ASSERT(c1 < c2);
         node* newnode = 0;
         node* savednode = 0;
-        const size_t differing_byte = compute_differing_byte(c1, c2);
-        const size_t sizem1 = sizeof(c1) - 1;
-        const size_t ndb = sizem1 - differing_byte;
-        for (size_t i = differing_byte; i < sizeof(c1); ++i)
+        const std::size_t differing_byte = compute_differing_byte(c1, c2);
+        const std::size_t sizem1 = sizeof(c1) - 1;
+        const std::size_t ndb = sizem1 - differing_byte;
+        for (std::size_t i = differing_byte; i < sizeof(c1); ++i)
         {
             // generate node for the first byte
             if (differing_byte == 0 && i == ndb)
@@ -1408,7 +1410,7 @@ namespace ccl_utils
             {
                 newnode = new char_node(get_byte(c1, 0));
             }
-            for (size_t j = 1; j < sizeof(c1); ++j)
+            for (std::size_t j = 1; j < sizeof(c1); ++j)
             {
                 newnode = create_mb_node_for_byte(i, j, sizem1, differing_byte,
                         c1, c2, newnode);
@@ -1430,10 +1432,10 @@ end_outer_for:
             continue;
         }
 
-        for (size_t k = 0; k < ndb; ++k)
+        for (std::size_t k = 0; k < ndb; ++k)
         {
             newnode = new char_node(get_byte(c2, 0));
-            for (size_t j = 1; j < sizeof(c2); ++j)
+            for (std::size_t j = 1; j < sizeof(c2); ++j)
             {
                 node* cnode;
                 if (k == differing_byte && j == sizem1 && k != sizem1)
@@ -1549,7 +1551,7 @@ public:
 
     void operator()(iterator_type const& first_, iterator_type const& last) const
     {
-        BOOST_SPIRIT_ASSERT(*first_ == '[');
+        BOOST_ASSERT(*first_ == '[');
 
         iterator_type first = first_;
         ++first; // skip over '['
@@ -1621,7 +1623,7 @@ public:
                 // Advance past the character class expression
                 while (first != last &&*first != ']')
                     ++first;
-                BOOST_SPIRIT_ASSERT(*first == ']');
+                BOOST_ASSERT(*first == ']');
                 ++first;
             }
             else {
@@ -1636,7 +1638,7 @@ public:
                     ++scan.first;
                     char_t c2;
                     lex_escape_ch[assign(c2)].parse(scan);
-                    BOOST_SPIRIT_ASSERT(c1 < c2); // Throw exception?
+                    BOOST_ASSERT(c1 < c2); // Throw exception?
                     rr.set(utility::impl::range<char_t>(c1, c2));
                 }
                 else // insert 1 char
@@ -1675,7 +1677,7 @@ public:
 
     void operator()(const char_t c) const
     {
-        BOOST_SPIRIT_ASSERT(c == '.');
+        BOOST_ASSERT(c == '.');
         do_any_char();
     }
 
@@ -1708,7 +1710,7 @@ public:
 
     void operator()(iterator_type const& first, iterator_type const& last) const
     {
-        BOOST_SPIRIT_ASSERT(*first == '"');
+        BOOST_ASSERT(*first == '"');
 
         iterator_type first_ = first;
         ScannerT scan(first_, last);
@@ -1772,7 +1774,7 @@ public:
 
     void operator()(iterator_type const& first, iterator_type const& last) const
     {
-        BOOST_SPIRIT_ASSERT(*first == '{');
+        BOOST_ASSERT(*first == '{');
 
         iterator_type first_ = first;
         ScannerT scan(first_, last);
@@ -1808,7 +1810,7 @@ public:
 
     void operator()(iterator_type const& first, iterator_type const& last) const
     {
-        BOOST_SPIRIT_ASSERT(*first == '{');
+        BOOST_ASSERT(*first == '{');
 
         iterator_type first_ = first;
         ScannerT scan (first_, last);
@@ -1846,7 +1848,7 @@ public:
 
     void operator()(iterator_type const& first, iterator_type const& last) const
     {
-        BOOST_SPIRIT_ASSERT(*first == '{');
+        BOOST_ASSERT(*first == '{');
 
         iterator_type first_ = first;
         ScannerT scan(first_, last);
@@ -2063,7 +2065,7 @@ parse(lexer_grammar& g, StringT const& str)
         return 0;
     }
 
-    BOOST_SPIRIT_ASSERT(g.node_stack.size() == 1);
+    BOOST_ASSERT(g.node_stack.size() == 1);
     node* rval = g.node_stack.top();
     g.node_stack.pop();
     node* an_eof_node = new eof_node();
@@ -2503,7 +2505,7 @@ lexer<IteratorT, TokenT, CallbackT>::create_dfa_for_state(int state)
     {
        *i = 1;
         node_id_t T = node_id_t(std::distance(marked.begin(), i));
-        BOOST_SPIRIT_ASSERT(T < dstates2.size());
+        BOOST_ASSERT(T < dstates2.size());
         node_set Tstates = dstates2[T];
         for (node_id_t j = 0; j < 256; ++j)
         {
@@ -2512,8 +2514,8 @@ lexer<IteratorT, TokenT, CallbackT>::create_dfa_for_state(int state)
                     k != Tstates.end(); ++k)
             {
                 node_id_t p =*k;
-                BOOST_SPIRIT_ASSERT(p < state_match.size());
-                BOOST_SPIRIT_ASSERT(j < state_match[p].size());
+                BOOST_ASSERT(p < state_match.size());
+                BOOST_ASSERT(j < state_match[p].size());
                 if (state_match[p][j])
                 {
                     node_set fpp = followpos[p];
@@ -2546,8 +2548,8 @@ lexer<IteratorT, TokenT, CallbackT>::create_dfa_for_state(int state)
                     target_state = dstates1[U];
                 }
 
-                BOOST_SPIRIT_ASSERT(T < m_dfa[state].transition_table.size());
-                BOOST_SPIRIT_ASSERT(j < m_dfa[state].transition_table[T].size());
+                BOOST_ASSERT(T < m_dfa[state].transition_table.size());
+                BOOST_ASSERT(j < m_dfa[state].transition_table[T].size());
                 m_dfa[state].transition_table[T][j] = target_state;
             }
 
@@ -2631,38 +2633,38 @@ int num_states = 0;
 
 // load the dfa tables
 dfa_t in_dfa;
-size_t dfa_size = 0;
+std::size_t dfa_size = 0;
 
     slex_in (in, dfa_size);
     in_dfa.resize(dfa_size);
-    for (size_t dfa = 0; dfa < dfa_size; ++dfa)
+    for (std::size_t dfa = 0; dfa < dfa_size; ++dfa)
     {
     // load the transition tables
-    size_t tt_size = 0;
+    std::size_t tt_size = 0;
     transition_table_t &tt_table = in_dfa[dfa].transition_table;
 
         slex_in (in, tt_size);
         tt_table.resize(tt_size);
-        for (size_t tt = 0; tt < tt_size; ++tt)
+        for (std::size_t tt = 0; tt < tt_size; ++tt)
         {
-        size_t nt_size = 0;
+        std::size_t nt_size = 0;
         node_table_t &nt_table = tt_table[tt];
 
             slex_in (in, nt_size);
             nt_table.resize(nt_size);
-            for (size_t nt = 0; nt < nt_size; ++nt)
+            for (std::size_t nt = 0; nt < nt_size; ++nt)
             {
                 slex_in (in, nt_table[nt]);
             }
         }
 
     // load the acceptance index table
-    size_t ai_size = 0;
+    std::size_t ai_size = 0;
     node_table_t &ai_table = in_dfa[dfa].acceptance_index;
 
         slex_in (in, ai_size);
         ai_table.resize(ai_size);
-        for (size_t ai = 0; ai < ai_size; ++ai)
+        for (std::size_t ai = 0; ai < ai_size; ++ai)
         {
             slex_in (in, ai_table[ai]);
         }
@@ -2703,7 +2705,7 @@ long out_long = SLEX_SIGNATURE;
     typedef transition_table_t::const_iterator transition_table_iter_t;
     typedef node_table_t::const_iterator node_table_iter_t;
 
-    size_t out_size_t = m_dfa.size();
+    std::size_t out_size_t = m_dfa.size();
     slex_out(out, out_size_t);
 
     dfa_iter_t end = m_dfa.end();

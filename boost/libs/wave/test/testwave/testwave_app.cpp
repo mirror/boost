@@ -16,6 +16,7 @@
 #include <boost/config.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/detail/workaround.hpp>
 
 //  include Wave 
 #include <boost/wave.hpp>
@@ -257,8 +258,28 @@ testwave_app::test_a_file(std::string filename)
         std::string result, error;
         bool pp_result = preprocess_file(filename, instr, result, error);
         if (pp_result || !result.empty()) {
-        //  no preprocessing error encountered
-            if (!got_expected_result(filename, result, expected)) {
+        // did we expect an error?
+            std::string expected_error;
+            if (!extract_special_information(filename, instr, 'E', expected_error))
+                return false;
+
+            if (!expected_error.empty() && 
+                !got_expected_result(filename, error, expected_error))
+            {
+            // we expected an error but got none (or a different one)
+                if (debuglevel > 3) {
+                    std::cerr 
+                        << filename << ": failed" << std::endl
+                        << "result: " << std::endl << result << std::endl
+                        << "expected error: " << std::endl << expected << std::endl;
+                }
+                else if (debuglevel > 1) {
+                    std::cerr << filename << ": failed" << std::endl;
+                }
+                retval = false;
+            }
+            else if (!got_expected_result(filename, result, expected)) {
+            //  no preprocessing error encountered
                 if (debuglevel > 3) {
                     std::cerr 
                         << filename << ": failed" << std::endl
@@ -295,7 +316,7 @@ testwave_app::test_a_file(std::string filename)
                     if (!expected_error.empty()) {
                         std::cerr 
                             << "result: " << std::endl << error << std::endl
-                            << "expected: " << std::endl
+                            << "expected error: " << std::endl
                             << expected_error << std::endl;
                     }
                     else {
@@ -527,6 +548,24 @@ testwave_app::extract_options(std::string const& filename,
     return true;
 }
 
+namespace {
+
+    template <typename T>
+    inline T const&
+    variables_map_as(po::variable_value const& v, T*)
+    {
+#if __GNUC__ == 3 && __GNUC_MINOR__ == 3  
+// gcc 3.3.x chokes on vm[...].as<...>()
+        T const* r = boost::any_cast<T>(&v.value());
+        if (!r)
+            throw boost::bad_any_cast();
+        return *r;
+#else
+        return v.as<T>();
+#endif
+    }
+}
+
 template <typename Context>
 bool 
 testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
@@ -550,7 +589,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 //  add include directories to the system include search paths
     if (vm.count("sysinclude")) {
     std::vector<std::string> const& syspaths = 
-        vm["sysinclude"].as<std::vector<std::string> >();
+        variables_map_as(vm["sysinclude"], (std::vector<std::string> *)NULL);
     
         std::vector<std::string>::const_iterator end = syspaths.end();
         for (std::vector<std::string>::const_iterator cit = syspaths.begin(); 
@@ -563,7 +602,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 //  add include directories to the user include search paths
     if (vm.count("include")) {
         cmd_line_utils::include_paths const &ip = 
-            vm["include"].as<cmd_line_utils::include_paths>();
+            variables_map_as(vm["include"], (cmd_line_utils::include_paths*)NULL);
         std::vector<std::string>::const_iterator end = ip.paths.end();
 
         for (std::vector<std::string>::const_iterator cit = ip.paths.begin(); 
@@ -588,7 +627,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 //  add additional defined macros 
     if (vm.count("define")) {
         std::vector<std::string> const &macros = 
-            vm["define"].as<std::vector<std::string> >();
+            variables_map_as(vm["define"], (std::vector<std::string>*)NULL);
         std::vector<std::string>::const_iterator end = macros.end();
         for (std::vector<std::string>::const_iterator cit = macros.begin(); 
               cit != end; ++cit)
@@ -600,7 +639,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 //  add additional predefined macros 
     if (vm.count("predefine")) {
         std::vector<std::string> const &predefmacros = 
-            vm["predefine"].as<std::vector<std::string> >();
+            variables_map_as(vm["predefine"], (std::vector<std::string>*)NULL);
         std::vector<std::string>::const_iterator end = predefmacros.end();
         for (std::vector<std::string>::const_iterator cit = predefmacros.begin(); 
               cit != end; ++cit)
@@ -612,7 +651,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 //  undefine specified macros
     if (vm.count("undefine")) {
         std::vector<std::string> const &undefmacros = 
-            vm["undefine"].as<std::vector<std::string> >();
+            variables_map_as(vm["undefine"], (std::vector<std::string>*)NULL);
         std::vector<std::string>::const_iterator end = undefmacros.end();
         for (std::vector<std::string>::const_iterator cit = undefmacros.begin(); 
               cit != end; ++cit)
@@ -623,7 +662,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 
 //  maximal include nesting depth
     if (vm.count("nesting")) {
-        int max_depth = vm["nesting"].as<int>();
+        int max_depth = variables_map_as(vm["nesting"], (int*)NULL);
         if (max_depth < 1 || max_depth > 100000) {
             std::cerr << "testwave: bogus maximal include nesting depth: " 
                 << max_depth << std::endl;

@@ -27,6 +27,7 @@
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/util/time_conversion_helper.hpp>
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
+#include <boost/wave/cpplexer/convert_trigraphs.hpp>
 
 #include "../slex_interface.hpp"
 #include "../slex_token.hpp"
@@ -315,6 +316,7 @@ lexer<IteratorT, PositionT>::init_data[] =
     TOKEN_DATA(POUND_ALT, Q("%:")),
     TOKEN_DATA(POUND_TRIGRAPH, TRI("=")),
     TOKEN_DATA(ANY, "."),
+    TOKEN_DATA(ANY_TRIGRAPH, TRI("/")),
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     TOKEN_DATA(MSEXT_INT8, "__int8"),
     TOKEN_DATA(MSEXT_INT16, "__int16"),
@@ -523,6 +525,11 @@ public:
                     case T_CHARLIT:
                     // test literal characters for validity (throws if invalid 
                     // chars found)
+                        if (language & support_option_convert_trigraphs) {
+                            using boost::wave::cpplexer::impl::convert_trigraphs;
+                            token_val = convert_trigraphs(token_val, 
+                                pos.get_line(), pos.get_column(), pos.get_file()); 
+                        }
                         if (!(language & support_option_no_character_validation)) {
                             using boost::wave::cpplexer::impl::validate_literal;
                             validate_literal(token_val, 
@@ -544,6 +551,24 @@ public:
                     // T_EOF is returned as a valid token, the next call will 
                     // return T_EOI, i.e. the actual end of input
                         at_eof = true;
+                        break;
+                        
+                    case T_OR_TRIGRAPH:
+                    case T_XOR_TRIGRAPH:
+                    case T_LEFTBRACE_TRIGRAPH:
+                    case T_RIGHTBRACE_TRIGRAPH:
+                    case T_LEFTBRACKET_TRIGRAPH:
+                    case T_RIGHTBRACKET_TRIGRAPH:
+                    case T_COMPL_TRIGRAPH:
+                    case T_POUND_TRIGRAPH:
+                    case T_ANY_TRIGRAPH:
+                        if (language & support_option_convert_trigraphs)
+                        {
+                            using boost::wave::cpplexer::impl::convert_trigraph;
+                            token_val = convert_trigraph(
+                                token_val, pos.get_line(), pos.get_column(), 
+                                pos.get_file());
+                        }
                         break;
                     }
                     return token_type(id, token_val, pos);

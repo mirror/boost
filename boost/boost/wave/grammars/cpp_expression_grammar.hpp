@@ -402,9 +402,7 @@ struct expression_grammar :
                         |   ch_p(T_PERCENT)
                             >>  unary_exp
                                 [
-                                    multiply_exp.val = 
-                                          static_cast_<int>(multiply_exp.val)
-                                      %   static_cast_<int>(arg1)
+                                    multiply_exp.val %= arg1
                                 ]
                         )
                 ;
@@ -413,19 +411,19 @@ struct expression_grammar :
                 =   primary_exp[unary_exp.val = arg1]
                 |   ch_p(T_PLUS) >> unary_exp
                     [
-                        unary_exp.val = static_cast_<int>(arg1)
+                        unary_exp.val = arg1
                     ]
                 |   ch_p(T_MINUS) >> unary_exp
                     [
-                        unary_exp.val = -static_cast_<int>(arg1)
+                        unary_exp.val = -arg1
                     ]
                 |   pattern_p(T_COMPL, MainTokenMask) >> unary_exp
                     [
-                        unary_exp.val = ~static_cast_<unsigned int>(arg1)
+                        unary_exp.val = ~arg1
                     ]
                 |   pattern_p(T_NOT, MainTokenMask) >> unary_exp
                     [
-                        unary_exp.val = !static_cast_<bool>(arg1)
+                        unary_exp.val = !arg1
                     ]
                 ;
 
@@ -630,24 +628,30 @@ expression_grammar_gen<TokenT>::evaluate(
 {
     using namespace boost::spirit;
     using namespace boost::wave;
+    using namespace boost::wave::grammars::closures;
+    
+    using boost::wave::util::impl::as_string;
     
     typedef typename token_sequence_type::const_iterator iterator_type;
+    typedef typename token_sequence_type::value_type::string_type string_type;
     
-static expression_grammar g;                        // expression grammar
-boost::wave::grammars::closures::closure_value result;     // expression result
-parse_info<iterator_type> hit = parse (first, last, g[spirit_assign_actor(result)], 
-    ch_p(T_SPACE) | ch_p(T_CCOMMENT) | ch_p(T_CPPCOMMENT));
+static expression_grammar g;      // expression grammar
+closure_value result;             // expression result
+parse_info<iterator_type> hit = 
+    parse (first, last, g[spirit_assign_actor(result)], 
+        ch_p(T_SPACE) | ch_p(T_CCOMMENT) | ch_p(T_CPPCOMMENT));
 
     if (!hit.hit) {
     // expression is illformed
         if (if_block_status) {
-            typedef typename token_sequence_type::value_type::string_type string_type;
+            string_type expression = as_string<string_type>(first, last);
+            if (0 == expression.size()) 
+                expression = "empty expression";
             BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
-                boost::wave::util::impl::as_string<string_type>(first, last).c_str(), 
-                act_pos);
+                expression.c_str(), act_pos);
         }
         else {
-        //  as the if_block_status is false any errors will not be reported
+        //  as the if_block_status is false no errors will not reported
             return false;
         }
     }
@@ -673,15 +677,14 @@ parse_info<iterator_type> hit = parse (first, last, g[spirit_assign_actor(result
             default:
             // expression is illformed
                 if (if_block_status) {
-                    typedef typename token_sequence_type::value_type::string_type 
-                        string_type;
+                    string_type expression = as_string<string_type>(first, last);
+                    if (0 == expression.size()) 
+                        expression = "empty expression";
                     BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
-                        boost::wave::util::impl::as_string<string_type>(first, last).c_str(), 
-                        act_pos);
+                        expression.c_str(), act_pos);
                 }
                 else {
-                //  as the if_block_status is false any errors will not be 
-                //  reported
+                //  as the if_block_status is false no errors will be reported
                     return false;
                 }
             }
@@ -689,12 +692,20 @@ parse_info<iterator_type> hit = parse (first, last, g[spirit_assign_actor(result
         }
     }
 
-    if (!result.is_valid()) {
+    if (closure_value::error_noerror != result.is_valid()) {
     // division by zero occured
-        typedef typename token_sequence_type::value_type::string_type string_type;
-        BOOST_WAVE_THROW(preprocess_exception, division_by_zero, 
-            boost::wave::util::impl::as_string<string_type>(first, last).c_str(), 
-            act_pos);
+        string_type expression = as_string<string_type>(first, last);
+        if (0 == expression.size()) 
+            expression = "empty expression";
+            
+        if (closure_value::error_division_by_zero == result.is_valid()) {
+            BOOST_WAVE_THROW(preprocess_exception, division_by_zero, 
+                expression.c_str(), act_pos);
+        }
+        else if (closure_value::error_overflow == result.is_valid()) {
+            BOOST_WAVE_THROW(preprocess_exception, integer_overflow,
+                expression.c_str(), act_pos);
+        }
     }
     
 // token sequence is a valid expression

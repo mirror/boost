@@ -97,6 +97,7 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
         boost::wave::language_support language) 
 :   filename(pos.get_file()), at_eof(false), language(language)
 {
+    using namespace std;        // some systems have memset in std
     using namespace boost::wave::cpplexer::re2clex;
     
     memset(&scanner, '\0', sizeof(scanner_t));

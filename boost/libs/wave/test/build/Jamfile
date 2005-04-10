@@ -62,13 +62,20 @@ test-suite wave
     : 
         [   
             run
+            # sources
                 <template>wave-test 
-                ../testwave/$(SOURCES).cpp                   # sources
-            :   $(TESTWAVE_ARGUMENTS) 
-                @../testwave/testfiles/$(TESTWAVE_FILES)     # arguments
-            :                                                # input files
-            :                                                # requirements
-            :   testwave                                     # name
+                ../testwave/$(SOURCES).cpp
+            :
+            # arguments
+                $(TESTWAVE_ARGUMENTS) 
+                --config-file ../testwave/testfiles/$(TESTWAVE_FILES)
+            :
+            # input files
+            :
+            # requirements
+            :
+            # name
+                testwave
         ]
     ;
 

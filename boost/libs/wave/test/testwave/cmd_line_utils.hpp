@@ -146,7 +146,7 @@ namespace cmd_line_utils {
                 continue;
 
         // skip comment lines
-            if ('#' != line[pos])
+            if ('#' != line[pos]) 
                 options.push_back(line);
         }
 

@@ -154,7 +154,10 @@ public:
         invalid_macroname,
         unexpected_qualified_name,
         division_by_zero,
-        illegal_operator_redefinition
+        integer_overflow,
+        illegal_operator_redefinition,
+        ill_formed_integer_literal,
+        ill_formed_character_literal
     };
 
     preprocess_exception(char const *what_, error_code code, int line_, 
@@ -221,10 +224,13 @@ public:
             "ill formed macro name",                    // invalid_macroname
             "qualified names are supported in C++0x mode only",  // unexpected_qualified_name
             "division by zero in preprocessor expression",       // division_by_zero
-            "this macro name cannot be used as a as it is an operator in C++"  // illegal_operator_redefinition
+            "integer overflow in preprocessor expression",       // integer_overflow
+            "this macro name cannot be used as a as it is an operator in C++",  // illegal_operator_redefinition
+            "ill formed integer literal or integer constant too large",   // ill_formed_integer_literal
+            "ill formed character literal",             // ill_formed_character_literal
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= illegal_operator_redefinition);
+            code <= ill_formed_character_literal);
         return preprocess_exception_errors[code];
     }
 
@@ -262,10 +268,13 @@ public:
             util::severity_error,              // invalid_macroname
             util::severity_error,              // unexpected_qualified_name
             util::severity_fatal,              // division_by_zero
-            util::severity_error               // illegal_operator_redefinition
+            util::severity_error,              // integer_overflow
+            util::severity_error,              // illegal_operator_redefinition
+            util::severity_error,              // ill_formed_integer_literal
+            util::severity_error               // ill_formed_character_literal
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= illegal_operator_redefinition);
+            code <= ill_formed_character_literal);
         return preprocess_exception_severity[code];
     }
     static char const *severity_text(int code)

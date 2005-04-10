@@ -213,7 +213,7 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
     parse(token_val.begin(), token_val.end(), g[spirit_assign_actor(result)]);
 
     if (!hit.hit) {
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
+        BOOST_WAVE_THROW(preprocess_exception, ill_formed_character_literal, 
             token_val.c_str(), token.get_position());
     }
     return result;
