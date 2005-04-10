@@ -38,7 +38,17 @@ namespace boost
     std::size_t hash_value(long);
     std::size_t hash_value(unsigned long);
 
+// Hopefully, I'll be able to remove this workaround soon.
+#if BOOST_WORKAROUND(__GNUC__, == 4)
     template <class T> std::size_t hash_value(T*);
+#else
+    template <class T> std::size_t hash_value(T* const&);
+#endif
+
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+    template< class T, unsigned N >
+    std::size_t hash_value(const T (&array)[N]);
+#endif
 
     std::size_t hash_value(float v);
     std::size_t hash_value(double v);
@@ -87,7 +97,11 @@ namespace boost
     }
 
     // Implementation by Alberto Barbati and Dave Harris.
-    template <class T> inline std::size_t hash_value(T* v)
+#if BOOST_WORKAROUND(__GNUC__, == 4)
+    template <class T> std::size_t hash_value(T* v)
+#else
+    template <class T> std::size_t hash_value(T* const& v)
+#endif
     {
         std::size_t x = static_cast<std::size_t>(
            reinterpret_cast<std::ptrdiff_t>(v));
@@ -96,7 +110,7 @@ namespace boost
 
     namespace hash_detail
     {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
         // This allows boost::hash to be specialised for classes in the
         // standard namespace. It appears that a strict two phase template
         // implementation only finds overloads that are in the current
@@ -112,27 +126,7 @@ namespace boost
                 return hash_value(v);
             }
         };
-
-        template <class T, std::size_t Size>
-        struct call_hash<T[Size]>
-        {
-            static std::size_t call(T const* val)
-            {
-                return boost::hash_range(val, val + Size);
-            }
-        };
-
-#if !defined(__BORLANDC__)
-        template <class T>
-        struct call_hash<T[0u]>
-        {
-            static std::size_t call(T const*)
-            {
-                return 0;
-            }
-        };
-#endif
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#else // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
         template <bool IsArray>
         struct call_hash_impl
         {
@@ -202,6 +196,14 @@ namespace boost
         }
     }
 
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+    template< class T, unsigned N >
+    inline std::size_t hash_value(const T (&array)[N])
+    {
+        return hash_range(array, array+N);
+    }
+#endif
+
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
     template <class Ch, class A>
     inline std::size_t hash_value(std::basic_string<Ch, std::string_char_traits<Ch>, A> const& v)
@@ -267,19 +269,6 @@ namespace boost
             return hash_detail::call_hash<T>::call(val);
         }
     };
-
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && !defined(__BORLANDC__)
-
-    template <class T> struct hash<T[0]>
-        : std::unary_function<T[0], std::size_t>
-    {
-        std::size_t operator()(T const*) const
-        {
-            return 0;
-        }
-    };
-#endif
 }
 
 #endif
