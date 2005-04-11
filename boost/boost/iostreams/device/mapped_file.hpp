@@ -198,39 +198,25 @@ struct mapped_file_sink : private mapped_file {
 
 namespace detail {
 
-// Local macros, undef'd below.
-//#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-//# define BOOST_BEGIN_IMPL template<typename T> struct inner {
-//# define BOOST_END_IMPL };
-//#else
-# define BOOST_BEGIN_IMPL
-# define BOOST_END_IMPL
-//#endif
-
 template<>
 struct direct_impl<boost::iostreams::mapped_file_source> {
-  BOOST_BEGIN_IMPL
     static std::pair<char*, char*> 
     input_sequence(boost::iostreams::mapped_file_source& src)
     { 
         return std::make_pair( const_cast<char*>(src.begin()), 
                                const_cast<char*>(src.end()) ); 
     }
-  BOOST_END_IMPL
 };
 
 template<>
 struct direct_impl<boost::iostreams::mapped_file_sink> {
-  BOOST_BEGIN_IMPL
     static std::pair<char*, char*> 
     output_sequence(boost::iostreams::mapped_file_sink& sink)
     { return std::make_pair(sink.begin(), sink.end()); }
-  BOOST_END_IMPL
 };
 
 template<>
 struct direct_impl<boost::iostreams::mapped_file> {
-  BOOST_BEGIN_IMPL
     static std::pair<char*, char*> 
     input_sequence(boost::iostreams::mapped_file& file)
     { return std::make_pair(file.begin(), file.end()); }
@@ -238,11 +224,7 @@ struct direct_impl<boost::iostreams::mapped_file> {
     static std::pair<char*, char*> 
     output_sequence(boost::iostreams::mapped_file& file)
     { return std::make_pair(file.begin(), file.end()); }
-  BOOST_END_IMPL
 };
-
-#undef BOOST_BEGIN_IMPL
-#undef BOOST_END_IMPL
 
 } // End namespace detail.
 
