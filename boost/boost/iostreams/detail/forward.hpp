@@ -12,7 +12,6 @@
 #endif                  
  
 #include <boost/iostreams/detail/config/limits.hpp>
-#include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/push_params.hpp>
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
