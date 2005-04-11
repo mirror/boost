@@ -105,7 +105,7 @@ int bcp_implementation::run()
    if (fs::exists(blanket_permission)) {
      fs::ifstream in(blanket_permission);
      std::string line;
-     while (getline(in, line)) {
+     while (std::getline(in, line)) {
        boost::regex e("([^(]+)\\(");
        boost::smatch result;
        if (boost::regex_search(line, result, e))
