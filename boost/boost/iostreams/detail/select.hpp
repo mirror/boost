@@ -36,6 +36,8 @@
 
 namespace boost { namespace iostreams { 
 
+typedef mpl::true_ else_;
+
 template< typename Case1 = mpl::true_,
           typename Type1 = mpl::void_,
           typename Case2 = mpl::true_,
