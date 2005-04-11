@@ -118,7 +118,10 @@ void write_data_in_chunks(BOOST_OSTREAM& os)
 
 bool test_seekable_in_chars(std::iostream& io)
 {
-    for (int i = 0; i < data_reps; ++i) {
+    int i;  // old 'for' scope workaround.
+
+    // Test seeking with ios::cur
+    for (i = 0; i < data_reps; ++i) {
         int j;
         for (j = 0; j < chunk_size; ++j)
             io.put(narrow_data()[j]);
@@ -130,12 +133,48 @@ bool test_seekable_in_chars(std::iostream& io)
         for (j = 0; j < chunk_size; ++j)
             io.put(narrow_data()[j]);
     }
+
+    // Test seeking with ios::beg
+    std::streamoff off = 0;
+    io.seekp(0, BOOST_IOS::beg);
+    for (i = 0; i < data_reps; ++i, off+= chunk_size) {
+        int j;
+        for (j = 0; j < chunk_size; ++j)
+            io.put(narrow_data()[j]);
+        io.seekp(off, BOOST_IOS::beg);
+        for (j = 0; j < chunk_size; ++j)
+            if (io.get() != narrow_data()[j])
+               return false;
+        io.seekp(off, BOOST_IOS::beg);
+        for (j = 0; j < chunk_size; ++j)
+            io.put(narrow_data()[j]);
+    }
+
+    // Test seeking with ios::end
+    io.seekp(0, BOOST_IOS::end);
+    off = io.tellp();
+    io.seekp(-off, BOOST_IOS::end);
+    for (i = 0; i < data_reps; ++i, off -= chunk_size) {
+        int j;
+        for (j = 0; j < chunk_size; ++j)
+            io.put(narrow_data()[j]);
+        io.seekp(-off, BOOST_IOS::end);
+        for (j = 0; j < chunk_size; ++j)
+            if (io.get() != narrow_data()[j])
+               return false;
+        io.seekp(-off, BOOST_IOS::end);
+        for (j = 0; j < chunk_size; ++j)
+            io.put(narrow_data()[j]);
+    }
     return true;
 }
 
 bool test_seekable_in_chunks(std::iostream& io)
 {
-    for (int i = 0; i < data_reps; ++i) {
+    int i;  // old 'for' scope workaround.
+
+    // Test seeking with ios::cu
+    for (i = 0; i < data_reps; ++i) {
         io.write(narrow_data(), chunk_size);
         io.seekp(-chunk_size, BOOST_IOS::cur);
         char buf[chunk_size];
@@ -143,6 +182,35 @@ bool test_seekable_in_chunks(std::iostream& io)
         if (strncmp(buf, narrow_data(), chunk_size) != 0)
             return false;
         io.seekp(-chunk_size, BOOST_IOS::cur);
+        io.write(narrow_data(), chunk_size);
+    }
+
+    // Test seeking with ios::beg
+    std::streamoff off = 0;
+    io.seekp(0, BOOST_IOS::beg);
+    for (i = 0; i < data_reps; ++i) {
+        io.write(narrow_data(), chunk_size);
+        io.seekp(off, BOOST_IOS::beg);
+        char buf[chunk_size];
+        io.read(buf, chunk_size);
+        if (strncmp(buf, narrow_data(), chunk_size) != 0)
+            return false;
+        io.seekp(off, BOOST_IOS::beg);
+        io.write(narrow_data(), chunk_size);
+    }
+    
+    // Test seeking with ios::end
+    io.seekp(0, BOOST_IOS::end);
+    off = io.tellp();
+    io.seekp(-off, BOOST_IOS::end);
+    for (i = 0; i < data_reps; ++i) {
+        io.write(narrow_data(), chunk_size);
+        io.seekp(-off, BOOST_IOS::end);
+        char buf[chunk_size];
+        io.read(buf, chunk_size);
+        if (strncmp(buf, narrow_data(), chunk_size) != 0)
+            return false;
+        io.seekp(-off, BOOST_IOS::end);
         io.write(narrow_data(), chunk_size);
     }
     return true;

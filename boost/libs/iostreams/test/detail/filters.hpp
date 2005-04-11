@@ -21,7 +21,8 @@
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/iostream.hpp>  // seekdir, streamsize.
 #include <boost/iostreams/detail/streambuf.hpp>
-#include <boost/iostreams/pipable.hpp>
+#include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/pipeline.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std { using ::toupper; using ::tolower; }
@@ -66,9 +67,40 @@ struct tolower_multichar_filter : public multichar_output_filter {
 };
 BOOST_IOSTREAMS_PIPABLE(tolower_multichar_filter, 0)
 
+struct padding_filter : dual_use_filter {
+    explicit padding_filter(char pad_char) 
+        : pad_char_(pad_char), use_pad_char_(false), eof_(false)
+        { }
+
+    template<typename Source>
+    int get(Source& src) 
+    { 
+        int result;
+        if (use_pad_char_) {
+            result = eof_ ? EOF : pad_char_;
+        } else {
+            eof_ = (result = boost::iostreams::get(src)) == EOF;
+        }
+        use_pad_char_ = !use_pad_char_;
+        return result;
+    }
+
+    template<typename Sink>
+    void put(Sink& s, char c) 
+    { 
+        boost::iostreams::put(s, c);
+        boost::iostreams::put(s, pad_char_);
+    }
+
+    char  pad_char_;
+    bool  use_pad_char_;
+    bool  eof_;
+};
+BOOST_IOSTREAMS_PIPABLE(padding_filter, 0)
+
 struct flushable_output_filter {
     typedef char char_type;
-    struct category 
+    struct io_category 
         : output_filter_tag, 
           flushable_tag
         { };

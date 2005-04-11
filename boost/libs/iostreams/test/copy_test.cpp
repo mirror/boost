@@ -5,6 +5,8 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <fstream>
+#include <boost/config.hpp>  // MSVC.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/test/test_tools.hpp>
@@ -66,6 +68,8 @@ void copy_test()
             "failed copying from file_source to file_sink"
         );
     }
+
+
 }
 
 test_suite* init_unit_test_suite(int, char* []) 

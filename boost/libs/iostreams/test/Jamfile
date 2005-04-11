@@ -59,22 +59,27 @@ DEPENDS all : test ;
 
     test-suite "iostreams"
         : [ test-iostreams libs/iostreams/test/array_test.cpp ]
+        : [ test-iostreams libs/iostreams/test/buffer_size_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/code_converter_test.cpp    
                 libs/iostreams/src/file_descriptor.cpp    
                 libs/iostreams/test/detail/utf8_codecvt_facet.cpp 
               : # build requirements 
                 std::locale-support ]   
+          [ test-iostreams libs/iostreams/test/component_type_test.cpp ]
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
+          [ test-iostreams libs/iostreams/test/counter_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/file_descriptor_test.cpp 
                 libs/iostreams/src/file_descriptor.cpp ]
           [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
+          [ test-iostreams libs/iostreams/test/line_filter_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/mapped_file_test.cpp 
                 libs/iostreams/src/mapped_file.cpp ]
           [ test-iostreams libs/iostreams/test/newline_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/null_test.cpp ]
           [ test-iostreams libs/iostreams/test/pipable_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/regex_filter_test.cpp     
@@ -82,7 +87,9 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/reverse_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_file_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/stdio_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/tee_test.cpp ]
           [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/bzip2_test.cpp 
