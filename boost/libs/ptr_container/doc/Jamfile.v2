@@ -1,0 +1,9 @@
+project boost/ptr_container/doc ;
+
+import boostbook : boostbook ;
+import doxygen ;
+		
+boostbook doc : ptr_container.xml ;
+
+
+
