@@ -21,6 +21,7 @@
 #include <algorithm>                        // copy.
 #include <utility>                          // pair.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>       
 #include <boost/iostreams/detail/closer.hpp>    
@@ -29,8 +30,9 @@
 #include <boost/iostreams/detail/resolve.hpp>                   
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations.hpp>  // read, write, close.
+#include <boost/iostreams/pipeline.hpp>
 #include <boost/static_assert.hpp>  
-#include <boost/type_traits/is_same.hpp>  
+#include <boost/type_traits/is_same.hpp> 
 
 namespace boost { namespace iostreams {
 
@@ -143,6 +145,16 @@ copy( const Source& src, const Sink& snk,
 }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
+
+template<typename Pipeline, typename Component>
+std::streamsize
+copy( const pipeline<Pipeline, Component>& p,
+      std::streamsize buffer_size = default_device_buffer_size )
+{ 
+    chain<output> chn(static_cast<const Pipeline&>(p));
+    return iostreams::copy(p.component_, chn);
+}
+
 template<typename Source, typename Sink>
 std::streamsize
 copy( Source& src, const Sink& snk,
