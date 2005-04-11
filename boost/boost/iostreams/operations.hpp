@@ -559,7 +559,7 @@ struct flush_filter_impl<flushable_tag> {
 template<>
 struct flush_filter_impl<any_tag> {
     template<typename T, typename Sink>
-    static bool flush(T& t, Sink& snk) { return false; }
+    static bool flush(T& t, Sink& snk) { return true; }
 };
 
 //------------------Definition of imbue_impl----------------------------------//
