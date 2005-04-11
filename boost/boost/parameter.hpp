@@ -6,7 +6,8 @@
 #ifndef BOOST_PARAMETER_050401_HPP
 #define BOOST_PARAMETER_050401_HPP
 
-#include <boost/parameter/parameter.hpp>
+#include <boost/parameter/parameters.hpp>
+#include <boost/parameter/keyword.hpp>
 
 #endif // BOOST_PARAMETER_050401_HPP
 

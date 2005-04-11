@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_PARAMETER_031014_HPP
-#define BOOST_PARAMETER_031014_HPP
+#ifndef BOOST_PARAMETERS_031014_HPP
+#define BOOST_PARAMETERS_031014_HPP
 
 #include <boost/mpl/lambda.hpp>
 #include <boost/mpl/apply.hpp>
@@ -37,7 +37,6 @@
 #include <boost/parameter/aux_/default.hpp>
 #include <boost/parameter/aux_/unwrap_cv_reference.hpp>
 #include <boost/parameter/aux_/tagged_argument.hpp>
-#include <boost/parameter/keyword.hpp>
 #include <boost/parameter/config.hpp>
 
 namespace boost {
@@ -257,16 +256,15 @@ namespace aux
 
 } // namespace aux
 
-#define BOOST_PARAMETERS_TEMPLATE_ARGS(z, n, text) class BOOST_PP_CAT(PS, n) = aux::void_
+#define BOOST_PARAMETER_TEMPLATE_ARGS(z, n, text) class BOOST_PP_CAT(PS, n) = aux::void_
 
 template<
      class PS0
-   , BOOST_PP_ENUM_SHIFTED(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETERS_TEMPLATE_ARGS, _)
+   , BOOST_PP_ENUM_SHIFTED(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_TEMPLATE_ARGS, _)
 >
 struct parameters
 {
-    typedef parameters self;
-#undef BOOST_PARAMETERS_TEMPLATE_ARGS
+#undef BOOST_PARAMETER_TEMPLATE_ARGS
 
     // if the elements of NamedList match the criteria of overload
     // resolution, returns a type which can be constructed from
@@ -445,5 +443,5 @@ struct parameters
 
 #include <boost/iterator/detail/config_undef.hpp>
  
-#endif // BOOST_PARAMETER_031014_HPP
+#endif // BOOST_PARAMETERS_031014_HPP
 
