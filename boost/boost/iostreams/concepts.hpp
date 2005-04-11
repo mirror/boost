@@ -50,8 +50,8 @@ template<typename Mode, typename Ch = wchar_t>
 struct wdevice : device<Mode, Ch> { };
 
 typedef device<input>    source;
-typedef device<output>   sink;
 typedef wdevice<input>   wsource;
+typedef device<output>   sink;
 typedef wdevice<output>  wsink;
 
 //--------------Definitions of helper templates for simple filter concepts----//
@@ -71,13 +71,17 @@ struct filter {
     {
         using namespace detail;
         BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
+        BOOST_STATIC_ASSERT((!is_convertible<Mode, dual_use>::value));
     }
 
     template<typename Device>
     void close(Device&, BOOST_IOS::openmode)
     {
         using namespace detail;
-        BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
+        BOOST_STATIC_ASSERT(
+            (is_convertible<Mode, two_sequence>::value) ||
+            (is_convertible<Mode, dual_use>::value)
+        );
     }
 
     template<typename Locale>
@@ -87,10 +91,14 @@ struct filter {
 template<typename Mode, typename Ch = wchar_t>
 struct wfilter : filter<Mode, Ch> { };
 
-typedef filter<input>    input_filter;
-typedef filter<output>   output_filter;
-typedef wfilter<input>   input_wfilter;
-typedef wfilter<output>  output_wfilter;
+typedef filter<input>      input_filter;
+typedef wfilter<input>     input_wfilter;
+typedef filter<output>     output_filter;
+typedef wfilter<output>    output_wfilter;
+typedef filter<seekable>   seekable_filter;
+typedef wfilter<seekable>  seekable_wfilter;
+typedef filter<dual_use>   dual_use_filter;
+typedef wfilter<dual_use>  dual_use_wfilter;
         
 //------Definitions of helper templates for multi-character filter cncepts----//
 
@@ -102,10 +110,12 @@ struct multichar_filter : filter<Mode, Ch> {
 template<typename Mode, typename Ch = wchar_t>
 struct multichar_wfilter : multichar_filter<Mode, Ch> { };
 
-typedef multichar_filter<input>    multichar_input_filter;
-typedef multichar_filter<output>   multichar_output_filter;
-typedef multichar_wfilter<input>   multichar_input_wfilter;
-typedef multichar_wfilter<output>  multichar_output_wfilter;
+typedef multichar_filter<input>     multichar_input_filter;
+typedef multichar_filter<input>     multichar_input_wfilter;
+typedef multichar_filter<output>    multichar_output_filter;
+typedef multichar_filter<output>    multichar_output_wfilter;
+typedef multichar_filter<dual_use>  multichar_dual_use_filter;
+typedef multichar_filter<dual_use>  multichar_dual_use_wfilter;
 
 //----------------------------------------------------------------------------//
 
