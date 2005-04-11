@@ -17,7 +17,6 @@
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
-#include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/streambuf/direct_streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/indirect_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
