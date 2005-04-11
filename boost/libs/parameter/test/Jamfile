@@ -1,0 +1,14 @@
+# Boost Parameter Library test Jamfile
+
+subproject libs/parameter/test ;
+
+# bring in rules for testing
+import testing ;
+
+{
+    test-suite "parameter"
+      :  [ run basics.cpp ]
+         [ run sfinae.cpp ]
+      ;
+
+}
