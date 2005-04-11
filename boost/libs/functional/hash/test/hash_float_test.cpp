@@ -17,6 +17,8 @@
 #include <cmath>
 #include <boost/limits.hpp>
 
+#include <iostream>
+
 template <class T>
 void float_tests(T* = 0)
 {
@@ -110,7 +112,19 @@ void float_tests(T* = 0)
 
 BOOST_AUTO_UNIT_TEST(hash_float_tests)
 {
+    std::cout<<"Compiler: "<<BOOST_COMPILER<<"\n";
+    std::cout<<"Platform: "<<BOOST_PLATFORM<<"\n";
+    std::cout<<"Library: "<<BOOST_STDLIB<<"\n\n";
+
     float_tests((float*) 0);
+}
+
+BOOST_AUTO_UNIT_TEST(hash_double_tests)
+{
     float_tests((double*) 0);
+}
+
+BOOST_AUTO_UNIT_TEST(hash_long_double_tests)
+{
     float_tests((long double*) 0);
 }
