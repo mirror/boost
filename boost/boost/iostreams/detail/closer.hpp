@@ -9,11 +9,13 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <exception>                       // exception.
 #include <boost/iostreams/detail/ios.hpp>  // openmode.
-#include <boost/iostreams/operations.hpp>  // close.
+#include <boost/iostreams/operations.hpp>  // close
+#include <boost/iostreams/traits.hpp>      // is_device.
+#include <boost/mpl/if.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -24,19 +26,62 @@ struct closer {
     T* t_;
 };
 
-template<typename T>
-struct external_closer {
-    external_closer(T& t, BOOST_IOS::openmode mode) 
-        : t_(&t), mode_(mode) 
+template<typename Device>
+struct external_device_closer {
+    external_device_closer(Device& dev, BOOST_IOS::openmode which)
+        : device_(&dev), which_(which) 
         { }
-    ~external_closer() 
+    ~external_device_closer() 
     { 
         try { 
-            boost::iostreams::close(*t_, mode_); 
+            boost::iostreams::close(*device_, which_); 
         } catch (std::exception&) { } 
     }
-    T* t_;
-    BOOST_IOS::openmode  mode_;
+    Device*               device_;
+    BOOST_IOS::openmode   which_;
+};
+
+template<typename Filter, typename Device>
+struct external_filter_closer {
+    external_filter_closer(Filter& flt, Device& dev, BOOST_IOS::openmode which)
+        : device_(&dev), which_(which) 
+        { }
+    ~external_filter_closer() 
+    { 
+        try { 
+            boost::iostreams::close(*filter_, *device_, which_); 
+        } catch (std::exception&) { } 
+    }
+    Filter*               filter_;
+    Device*               device_;
+    BOOST_IOS::openmode   which_;
+};
+
+template<typename FilterOrDevice, typename DeviceOrDummy = int>
+struct external_closer_traits {
+    typedef typename 
+            mpl::if_<
+                is_device<FilterOrDevice>,
+                external_device_closer<FilterOrDevice>,
+                external_filter_closer<FilterOrDevice, DeviceOrDummy>
+            >::type type;
+};
+
+template<typename FilterOrDevice, typename DeviceOrDummy = int>
+struct external_closer 
+    : external_closer_traits<FilterOrDevice, DeviceOrDummy>::type
+{ 
+    typedef typename 
+            external_closer_traits<
+                FilterOrDevice, DeviceOrDummy
+            >::type base_type;
+    external_closer(FilterOrDevice& dev, BOOST_IOS::openmode which)
+        : base_type(dev, which)
+    { BOOST_STATIC_ASSERT(is_device<FilterOrDevice>::value); };
+    external_closer( FilterOrDevice& flt, DeviceOrDummy& dev,
+                     BOOST_IOS::openmode which )
+        : base_type(flt, dev, which)
+    { BOOST_STATIC_ASSERT(is_filter<FilterOrDevice>::value); };
 };
 
 } } } // End namespaces detail, iostreams, boost.
