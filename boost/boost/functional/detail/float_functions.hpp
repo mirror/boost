@@ -14,10 +14,14 @@
 // for float, double and long double in the std namespace, but some of the older
 // library implementations don't support this. On some that don't, the C99
 // float functions (frexpf, frexpl, etc.) are available.
+//
+// Some of this is based on guess work. If I don't know any better I assume that
+// the standard C++ overloaded functions are available. If they're not then this
+// means that the argument is cast to a double and back, which is inefficient
+// and will give pretty bad results for long doubles - so if you know better
+// let me know.
 
-// This is just based on the compilers I've got access to, but it should
-// do something sensible on most compilers.
-
+// STLport:
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 #  if defined(__GNUC__) && __GNUC__ < 3 && (defined(linux) || defined(__linux) || defined(__linux__))
 #    define BOOST_HASH_USE_C99_FLOAT_FUNCS
@@ -26,24 +30,48 @@
 #  else
 #    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
 #  endif
-#elif defined(_RWSTD_VER) && defined(__BORLANDC__)
-#  define BOOST_HASH_USE_C99_FLOAT_FUNCS
-#  define BOOST_HASH_C99_NO_FLOAT_FUNCS
+
+// Roguewave:
+//
+// On borland 5.51, with roguewave 2.1.1 the standard C++ overloads aren't
+// defined, but for the same version of roguewave on sunpro they are.
+#elif defined(_RWSTD_VER)
+#  if defined(__BORLANDC__)
+#    define BOOST_HASH_USE_C99_FLOAT_FUNCS
+#    define BOOST_HASH_C99_NO_FLOAT_FUNCS
+#  elif defined(__DECCXX)
+#    define BOOST_HASH_USE_C99_FLOAT_FUNCS
+#  else
+#    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
+#  endif
+
+// libstdc++ (gcc 3.0 onwards, I think)
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 #  define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
+
+// SGI:
 #elif defined(__STL_CONFIG_H)
-// This might just be for gcc-2.95
-// And cygwin might not have the C99 functions
-#  define BOOST_HASH_USE_C99_FLOAT_FUNCS
+#  if defined(linux) || defined(__linux) || defined(__linux__)
+#    define BOOST_HASH_USE_C99_FLOAT_FUNCS
+#  else
+#    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
+#  endif
+
+// Dinkumware.
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-// Overloaded float functions were probably introduced at an earlier version.
+// Overloaded float functions were probably introduced in an earlier version
+// than this.
 #  if defined(_CPPLIB_VER) && (_CPPLIB_VER >= 402)
 #    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
 #  else
 #    define BOOST_HASH_USE_C99_FLOAT_FUNCS
 #  endif
+
+// Digital Mars
 #elif defined(__DMC__)
 #  define BOOST_HASH_USE_C99_FLOAT_FUNCS
+
+// Use overloaded float functions by default.
 #else
 #  define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
 #endif
