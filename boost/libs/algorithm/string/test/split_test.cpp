@@ -38,7 +38,7 @@ void deep_compare( const T1& X, const T2& Y )
 void iterator_test()
 {
     string str1("xx-abc--xx-abb");
-    string str2("Xx-abc--xX-abb");
+    string str2("Xx-abc--xX-abb-xx");
     string str3("xx");
     char* pch1="xx-abc--xx-abb";
     vector<string> tokens;
@@ -59,9 +59,10 @@ void iterator_test()
         str2,
         "xx" );
 
-    BOOST_REQUIRE( tokens.size()==2 );
+    BOOST_REQUIRE( tokens.size()==3 );
     BOOST_CHECK( tokens[0]==string("Xx") );
     BOOST_CHECK( tokens[1]==string("xX") );
+    BOOST_CHECK( tokens[2]==string("xx") );
 
     find_all(
         tokens,
@@ -81,14 +82,15 @@ void iterator_test()
     // split tests
     split(
         tokens,
-        str1,
-        is_any_of("x"),
+        str2,
+        is_any_of("xX"),
         token_compress_on );
 
-    BOOST_REQUIRE( tokens.size()==3 );
+    BOOST_REQUIRE( tokens.size()==4 );
     BOOST_CHECK( tokens[0]==string("") );
     BOOST_CHECK( tokens[1]==string("-abc--") );
-    BOOST_CHECK( tokens[2]==string("-abb") );
+    BOOST_CHECK( tokens[2]==string("-abb-") );
+    BOOST_CHECK( tokens[3]==string("") );
 
     split(
         tokens,
