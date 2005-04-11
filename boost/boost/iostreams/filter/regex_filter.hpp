@@ -16,7 +16,7 @@
 #include <string>                         // char_traits.
 #include <boost/function.hpp>        
 #include <boost/iostreams/filter/one_step_filter.hpp>              
-#include <boost/iostreams/pipable.hpp>                
+#include <boost/iostreams/pipeline.hpp>                
 #include <boost/regex.hpp>
 
 namespace boost { namespace iostreams {

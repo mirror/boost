@@ -26,7 +26,7 @@
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>               
-#include <boost/iostreams/pipable.hpp>       
+#include <boost/iostreams/pipeline.hpp>       
 #include <boost/type_traits/is_same.hpp>     
 
 // Must come last.

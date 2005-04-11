@@ -28,7 +28,7 @@
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/pipable.hpp>      
+#include <boost/iostreams/pipeline.hpp>      
 #include <boost/iostreams/streambuf_facade.hpp>      
 
 // Must come last.

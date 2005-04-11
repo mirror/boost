@@ -12,7 +12,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <cassert>     
 #include <cstdio>                            
@@ -20,7 +20,7 @@
 #include <boost/config.hpp>                // BOOST_STATIC_CONSTANT.
 #include <boost/iostreams/categories.hpp> 
 #include <boost/iostreams/detail/char_traits.hpp> 
-#include <boost/iostreams/pipable.hpp>      
+#include <boost/iostreams/pipeline.hpp>      
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
