@@ -50,7 +50,7 @@ public:
             >::type                                  tag;
     typedef range_adapter_impl<tag>                  impl;
 
-    range_adapter(const Range& rng);
+    explicit range_adapter(const Range& rng);
     range_adapter(iterator first, iterator last);
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);

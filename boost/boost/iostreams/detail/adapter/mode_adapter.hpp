@@ -42,7 +42,7 @@ public:
           #endif
           localizable_tag
         { };
-    mode_adapter(const policy_type& t) : t_(t) { }
+    explicit mode_adapter(const policy_type& t) : t_(t) { }
 
         // Device member functions.
 

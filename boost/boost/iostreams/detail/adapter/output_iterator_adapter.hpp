@@ -25,7 +25,7 @@ public:
     BOOST_STATIC_ASSERT((is_convertible<Mode, output>::value));
     typedef Ch        char_type;
     typedef sink_tag  io_category;
-    output_iterator_adapter(OutIt out) : out_(out) { }
+    explicit output_iterator_adapter(OutIt out) : out_(out) { }
     void write(const char_type* s, std::streamsize n) 
     { std::copy(s, s + n, out_); }
 private:
