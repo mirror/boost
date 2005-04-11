@@ -132,9 +132,9 @@ void imbue(T& t, const Locale& loc)
 
 template<typename T>
 std::streamsize optimal_buffer_size(const T& t)
-{ 
+{
     typedef detail::optimal_buffer_size_impl<T> impl;
-    return impl::optimal_buffer_size(detail::unwrap(t)); 
+    return impl::optimal_buffer_size(detail::unwrap(t));
 }
 
 //----------------------------------------------------------------------------//
@@ -582,31 +582,31 @@ struct imbue_impl
 
 template<>
 struct imbue_impl<any_tag> {
-template<typename T, typename Locale>
+    template<typename T, typename Locale>
     static void imbue(T&, const Locale&) { }
 };
 
 template<>
 struct imbue_impl<streambuf_tag> {
-template<typename T, typename Locale>
+    template<typename T, typename Locale>
     static void imbue(T& t, const Locale& loc) { t.pubimbue(loc); }
 };
 
 template<>
 struct imbue_impl<localizable_tag> {
-template<typename T, typename Locale>
+    template<typename T, typename Locale>
     static void imbue(T& t, const Locale& loc) { t.imbue(loc); }
 };
 
 //------------------Definition of optimal_buffer_size_impl--------------------//
 
 template<typename T>
-struct optimal_buffer_size_impl 
+struct optimal_buffer_size_impl
     : mpl::if_<
           detail::is_custom<T>,
           operations<T>,
           optimal_buffer_size_impl<
-              BOOST_DEDUCED_TYPENAME 
+              BOOST_DEDUCED_TYPENAME
               detail::dispatch<
                   T, optimally_buffered_tag, device_tag, filter_tag
               >::type
@@ -617,7 +617,7 @@ struct optimal_buffer_size_impl
 template<>
 struct optimal_buffer_size_impl<optimally_buffered_tag> {
     template<typename T>
-    static std::streamsize optimal_buffer_size(const T& t) 
+    static std::streamsize optimal_buffer_size(const T& t)
     { return t.optimal_buffer_size(); }
 };
 
