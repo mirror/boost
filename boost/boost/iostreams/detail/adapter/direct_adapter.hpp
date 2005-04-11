@@ -49,7 +49,7 @@ public:
           #endif
         { };
 protected:
-    direct_adapter_base(const Direct& d);
+    explicit direct_adapter_base(const Direct& d);
     typedef is_convertible<io_category, two_sequence> is_double;
     struct pointers {
         char_type *beg, *ptr, *end;
