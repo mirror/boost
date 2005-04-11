@@ -135,7 +135,7 @@ struct code_converter_impl {
             buf_.second().resize(buffer_size);
             buf_.second().set(0, buffer_size);
         }
-        dev_ = dev;
+        dev_ = concept_adapter<policy_type>(dev);
         flags_ |= f_open;
     }
 
@@ -254,13 +254,13 @@ public:
 public:
     code_converter() { }
     // BEGIN DEBUG
-    code_converter( typename detail::param_type<Device>::type t, 
-                    int buffer_size = -1 ) 
+    explicit code_converter( typename detail::param_type<Device>::type t, 
+                             int buffer_size = -1 ) 
     {
         this->open_impl(detail::wrap(t), buffer_size);
     }
-    code_converter( const reference_wrapper<Device>& ref, 
-                    int buffer_size = -1 ) 
+    explicit code_converter( const reference_wrapper<Device>& ref, 
+                             int buffer_size = -1 ) 
     {
         this->open_impl(ref , buffer_size);
     }
