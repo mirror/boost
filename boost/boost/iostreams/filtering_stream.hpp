@@ -35,7 +35,7 @@ namespace detail {
 template<typename Mode, typename Ch, typename Tr>
 struct filtering_stream_traits {
     typedef typename 
-            select<  // Disambiguation for Tru64  
+            iostreams::select<  // Disambiguation for Tru64  
                 mpl::and_< 
                     is_convertible<Mode, input>, 
                     is_convertible<Mode, output> 
@@ -43,7 +43,7 @@ struct filtering_stream_traits {
                 BOOST_IOSTREAMS_BASIC_IOSTREAM(Ch, Tr),
                 is_convertible<Mode, input>, 
                 BOOST_IOSTREAMS_BASIC_ISTREAM(Ch, Tr),
-                mpl::true_,        
+                else_,        
                 BOOST_IOSTREAMS_BASIC_OSTREAM(Ch, Tr)
             >::type type;
 };
