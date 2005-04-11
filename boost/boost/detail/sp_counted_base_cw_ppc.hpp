@@ -32,18 +32,23 @@ namespace boost
 namespace detail
 {
 
-asm void atomic_increment( register long * pw )
+inline void atomic_increment( register long * pw )
 {
+    asm
+    {
 loop:
 
     lwarx   r4, 0, r3
     addi    r4, r4, 1
     stwcx.  r4, 0, r3
     bne-    loop
+    }
 }
 
-asm long atomic_decrement( register long * pw )
+inline long atomic_decrement( register long * pw )
 {
+    asm
+    {
     sync
 
 loop:
@@ -56,10 +61,13 @@ loop:
     mr      r3, r4
 
     isync
+    }
 }
 
-asm long atomic_conditional_increment( register long * pw )
+inline long atomic_conditional_increment( register long * pw )
 {
+    asm
+    {
 loop:
 
     lwarx   r4, 0, r3
@@ -74,6 +82,7 @@ store:
     bne-    loop
 
     mr      r3, r4
+    }
 }
 
 class sp_counted_base
