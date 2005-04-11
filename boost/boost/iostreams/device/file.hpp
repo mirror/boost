@@ -17,7 +17,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif        
+#endif
 
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
@@ -74,10 +74,12 @@ template<typename Ch>
 struct basic_file_source : private basic_file<Ch> {
     typedef Ch char_type;
     struct io_category
-        : public source_tag,
-          public closable_tag
+        : input_seekable,
+          device_tag,
+          closable_tag
         { };
     using basic_file<Ch>::read;
+    using basic_file<Ch>::seek;
     using basic_file<Ch>::close;
     basic_file_source( const std::string& path,
                        BOOST_IOS::openmode mode = 
@@ -93,10 +95,12 @@ template<typename Ch>
 struct basic_file_sink : private basic_file<Ch> {
     typedef Ch char_type;
     struct io_category
-        : public sink_tag,
-          public closable_tag
+        : output_seekable,
+          device_tag,
+          closable_tag
         { };
     using basic_file<Ch>::write;
+    using basic_file<Ch>::seek;
     using basic_file<Ch>::close;
     basic_file_sink( const std::string& path,
                      BOOST_IOS::openmode mode = BOOST_IOS::out )
