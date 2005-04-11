@@ -10,6 +10,7 @@
 #include <boost/config.hpp>                             // SFINAE.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/error.hpp>
@@ -30,10 +31,7 @@ template<typename Category> struct flt_wrapper_impl;
 template<typename T>
 class concept_adapter {
 private:
-    typedef typename
-            mpl::if_<
-                is_std_io<T>, T&, T
-            >::type                                    storage_type;
+    typedef typename detail::value_type<T>::type       value_type;
     typedef typename dispatch<T, input, output>::type  input_tag;
     typedef typename dispatch<T, output, input>::type  output_tag;
     typedef typename
@@ -58,9 +56,9 @@ public:
     typedef typename io_char<T>::type                  char_type;
     typedef typename io_category<T>::type              io_category;
 
-    concept_adapter(const reference_wrapper<T>& ref) : t_(ref.get())
+    explicit concept_adapter(const reference_wrapper<T>& ref) : t_(ref.get())
     { BOOST_STATIC_ASSERT(is_std_io<T>::value); }
-    concept_adapter(const T& t) : t_(t)
+    explicit concept_adapter(const T& t) : t_(t)
     { BOOST_STATIC_ASSERT(!is_std_io<T>::value); }
 
     T& operator*() { return t_; }
@@ -103,15 +101,18 @@ public:
                 BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
     { 
         bool result = any_impl::flush(t_, sb);
-        if (sb && !sb->BOOST_IOSTREAMS_PUBSYNC())
+        if (sb && sb->BOOST_IOSTREAMS_PUBSYNC() == -1)
             result = false;
         return result;
     }
 
     template<typename Locale> // Avoid dependency on <locale>
     void imbue(const Locale& loc) { iostreams::imbue(t_, loc); }
+
+    std::streamsize optimal_buffer_size() const
+    { return iostreams::optimal_buffer_size(t_); }
 public:
-    storage_type t_;
+    value_type t_;
 };
 
 //------------------Specializations of device_wrapper_impl--------------------//
