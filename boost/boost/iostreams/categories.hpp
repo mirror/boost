@@ -70,6 +70,7 @@ struct input_filter_tag : filter_tag, input { };
 struct output_filter_tag : filter_tag, output { };
 struct bidirectional_filter_tag : filter_tag, bidirectional { };
 struct seekable_filter_tag : filter_tag, seekable { };
+struct dual_use_filter_tag : filter_tag, dual_use { };
 
 struct multichar_input_filter_tag
     : multichar_tag,
@@ -86,6 +87,10 @@ struct multichar_bidirectional_filter_tag
 struct multichar_seekable_filter_tag
     : multichar_tag,
       seekable_filter_tag
+    { };
+struct multichar_dual_use_filter_tag 
+    : filter_tag, 
+      dual_use
     { };
 
     //
