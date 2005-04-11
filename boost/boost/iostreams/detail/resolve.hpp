@@ -170,7 +170,7 @@ struct resolve_traits {
                 output_iterator_adapter<Mode, Ch, T>,
                 is_array<T>,
                 array_adapter<Mode, T>,
-                mpl::true_,
+                else_,
                 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
                     const T&
                 #else
@@ -183,7 +183,8 @@ template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type 
 resolve(const T& t, mpl::true_)
 {   // Bad overload resolution.
-    return wrap(const_cast<T&>(t));
+    typedef typename resolve_traits<Mode, Ch, T>::type return_type;
+    return return_type(wrap(const_cast<T&>(t)));
 }
 
 template<typename Mode, typename Ch, typename T>
