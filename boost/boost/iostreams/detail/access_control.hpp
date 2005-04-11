@@ -56,7 +56,7 @@ struct access_control_base {
                 ::boost::is_same<
                     Access, public_
                 >,                              pub_<T>,
-                mpl::true_,                     bad_access_specifier
+                else_,                          bad_access_specifier
             >::type                             type;
 };
 

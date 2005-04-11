@@ -37,7 +37,7 @@ struct stream_facade_traits {
                 BOOST_IOSTREAMS_BASIC_IOSTREAM(char_type, traits_type),
                 is_convertible<mode, input>,
                 BOOST_IOSTREAMS_BASIC_ISTREAM(char_type, traits_type),
-                mpl::true_,
+                else_,
                 BOOST_IOSTREAMS_BASIC_OSTREAM(char_type, traits_type)
             >::type type;
 };
