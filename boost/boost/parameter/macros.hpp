@@ -24,7 +24,7 @@
                                                                                         \
     BOOST_PP_TUPLE_ELEM(3, 0, params)                                                   \
         BOOST_PP_TUPLE_ELEM(3, 1, params)(                                              \
-            BOOST_PP_ENUM_BINARY_PARAMS(n, T const, &p)                                 \
+            BOOST_PP_ENUM_BINARY_PARAMS(n, T, const& p)                                 \
             BOOST_PP_COMMA_IF(n)                                                        \
             BOOST_PP_EXPR_IF(n, typename) BOOST_PP_TUPLE_ELEM(3, 2, params)::restrict   \
             <                                                                           \
@@ -54,6 +54,9 @@
 // {
 //     return name ## _with_named_params(kw(p0, ..., pN));
 // }
+//
+// template<class Params>
+// ret name ## _with_named_params(Params const&)
 //
 // lo and hi determines the min and max arity of the generated functions.
 

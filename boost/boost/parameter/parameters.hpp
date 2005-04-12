@@ -319,7 +319,11 @@ struct parameters
         >::type
     {};
 #else
-    { typedef parameters type; };
+    { 
+        typedef parameters<
+            BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, PS)
+        > type; 
+    };
 #endif
 
     //
