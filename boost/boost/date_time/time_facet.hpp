@@ -153,6 +153,10 @@ namespace date_time {
     static const char_type* default_time_duration_format;
     static std::locale::id id;
 
+#if defined (__SUNPRO_CC) && defined (_RWSTD_VER)
+      std::locale::id& __get_id (void) const { return id; }
+#endif
+
     //! sets default formats for ptime, local_date_time, and time_duration
     explicit time_facet(::size_t a_ref = 0) 
       //: base_type(standard_format),

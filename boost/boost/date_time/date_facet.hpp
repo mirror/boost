@@ -73,6 +73,10 @@ namespace boost { namespace date_time {
     static const char_type iso_format_extended_specifier[9];
     static const char_type default_date_format[9]; // YYYY-Mon-DD
     static std::locale::id id;
+
+#if defined (__SUNPRO_CC) && defined (_RWSTD_VER)
+      std::locale::id& __get_id (void) const { return id; }
+#endif
     
     explicit date_facet(::size_t a_ref = 0) 
       : std::locale::facet(a_ref), 
