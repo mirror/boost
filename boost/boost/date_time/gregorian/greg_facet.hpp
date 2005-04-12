@@ -295,8 +295,9 @@ namespace gregorian {
                                   (greg_month::max)(), s); 
       delete(f);
     }
-   
-    m = greg_month(num +1); // months numbered 1-12
+    
+    num += 1; // months numbered 1-12
+    m = greg_month(num); 
 
     return is;
   }
