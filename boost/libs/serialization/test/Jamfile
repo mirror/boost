@@ -63,7 +63,7 @@ rule run-template ( test-name : sources * : requirements * ) {
 # each of the following tests is run with each type of archive
 rule run-invoke ( test-name : sources * : defns * )
 {    
-    Echo $(test-name) ;
+    if [ in-invocation-subdir ] { Echo $(test-name) ; }
     local tests ;
     tests += [ 
         run-template $(test-name)
@@ -76,7 +76,7 @@ rule run-invoke ( test-name : sources * : defns * )
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
     ] ;
-    Echo $(test-name)_dll ;
+    if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
     tests += [ 
         run-template $(test-name)_dll
         : # sources
@@ -95,7 +95,7 @@ rule run-invoke ( test-name : sources * : defns * )
 # each of the following tests is run with each type of archive
 rule run-winvoke ( test-name : sources * : defns * )
 {
-    Echo $(test-name) ;
+    if [ in-invocation-subdir ] { Echo $(test-name) ; }
     local tests ;
     tests += [ 
         run-template $(test-name)
@@ -112,7 +112,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             # both stlport and msvc6 define iswspace
             <msvc-stlport><*><linkflags>"-force:multiple"
     ] ;
-    Echo $(test-name)_dll ;
+    if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
     tests += [ 
         run-template $(test-name)_dll
         : # sources
@@ -133,7 +133,7 @@ rule run-winvoke ( test-name : sources * : defns * )
 # for tests which don't use library code - usually just headers
 rule test-bsl-run-no-lib  ( test-name : sources * )
 {
-    Echo $(test-name) ;
+    if [ in-invocation-subdir ] { Echo $(test-name) ; }
     local tests ;
     tests += [ 
         run-template $(test-name)
