@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -48,6 +48,25 @@ main()
   typedef boost::date_time::all_date_names_put<facet_config> date_facet;
   typedef boost::date_time::date_names_put<facet_config> date_facet_base;
   typedef boost::date_time::ostream_month_formatter<date_facet_base> month_formatter;
+
+  {
+    // special_values tests
+    std::stringstream ss;
+    date_facet_base* f = new date_facet_base();
+    std::locale loc(std::locale::classic(), f);
+    ss.imbue(loc);
+    date d(not_a_date_time);
+    ss << d;
+    check("Special value, stream out nadt" , ss.str() == std::string("not-a-date-time"));
+    ss.str("");
+    d = date(neg_infin);
+    ss << d;
+    check("Special value, stream out neg_infin" , ss.str() == std::string("-infinity"));
+    ss.str("");
+    d = date(pos_infin);
+    ss << d;
+    check("Special value, stream out pos_infin" , ss.str() == std::string("+infinity"));
+  }
 
   date_facet gdnp(de_short_month_names, de_long_month_names, 
                   de_special_value_names, de_long_weekday_names,
