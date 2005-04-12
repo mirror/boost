@@ -40,11 +40,11 @@ namespace boost {
             \param Format A predefined value used as a result for formating
             \return An instance of the \c const_formatter object.
         */
-        template<typename CollectionT>
-        inline detail::const_formatF<CollectionT>
-        const_formatter(const CollectionT& Format)
+        template<typename RangeT>
+        inline detail::const_formatF<RangeT>
+        const_formatter(const RangeT& Format)
         {
-            return detail::const_formatF<CollectionT>(Format);
+            return detail::const_formatF<RangeT>(Format);
         }
 
         //! Identity formatter
@@ -54,11 +54,11 @@ namespace boost {
 
             \return An instance of the \c identity_formatter object.
         */
-        template<typename CollectionT>
-        inline detail::identity_formatF<CollectionT>
+        template<typename RangeT>
+        inline detail::identity_formatF<RangeT>
         identity_formatter()
         {
-            return detail::identity_formatF<CollectionT>();
+            return detail::identity_formatF<RangeT>();
         }
 
         //! Empty formatter
@@ -70,13 +70,13 @@ namespace boost {
                          resulting empty_container<>.
             \return An instance of the \c empty_formatter object.
         */
-        template<typename CollectionT>
+        template<typename RangeT>
         inline detail::empty_formatF< 
-            BOOST_STRING_TYPENAME range_value<CollectionT>::type>
-        empty_formatter(const CollectionT&)
+            BOOST_STRING_TYPENAME range_value<RangeT>::type>
+        empty_formatter(const RangeT&)
         {
             return detail::empty_formatF<
-                BOOST_STRING_TYPENAME range_value<CollectionT>::type>();
+                BOOST_STRING_TYPENAME range_value<RangeT>::type>();
         }
 
 

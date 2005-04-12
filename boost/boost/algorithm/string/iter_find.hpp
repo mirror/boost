@@ -64,20 +64,20 @@ namespace boost {
         */
         template< 
             typename SequenceSequenceT,
-            typename CollectionT,
+            typename RangeT,
             typename FinderT >
         inline SequenceSequenceT&
         iter_find(
             SequenceSequenceT& Result,
-            CollectionT& Input,
+            RangeT& Input,
             FinderT Finder )
         {
             function_requires< 
                 FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type> >();
+                BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type> >();
 
             typedef BOOST_STRING_TYPENAME 
-                range_result_iterator<CollectionT>::type input_iterator_type;
+                range_result_iterator<RangeT>::type input_iterator_type;
             typedef find_iterator<input_iterator_type> find_iterator_type;
             typedef detail::copy_iterator_rangeF<
                 BOOST_STRING_TYPENAME 
@@ -131,20 +131,20 @@ namespace boost {
         */
         template< 
             typename SequenceSequenceT,
-            typename CollectionT,
+            typename RangeT,
             typename FinderT >
         inline SequenceSequenceT&
         iter_split(
             SequenceSequenceT& Result,
-            CollectionT& Input,
+            RangeT& Input,
             FinderT Finder )
         {
             function_requires< 
                 FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type> >();
+                BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type> >();
 
             typedef BOOST_STRING_TYPENAME 
-                range_result_iterator<CollectionT>::type input_iterator_type;
+                range_result_iterator<RangeT>::type input_iterator_type;
             typedef split_iterator<input_iterator_type> find_iterator_type;
             typedef detail::copy_iterator_rangeF<
                 BOOST_STRING_TYPENAME 

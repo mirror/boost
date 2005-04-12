@@ -54,10 +54,10 @@ namespace boost {
 
                \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
+        template<typename OutputIteratorT, typename RangeT, typename PredicateT>
         inline OutputIteratorT trim_left_copy_if( 
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             PredicateT IsSpace)
         {
             std::copy( 
@@ -160,10 +160,10 @@ namespace boost {
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
+        template<typename OutputIteratorT, typename RangeT, typename PredicateT>
         inline OutputIteratorT trim_right_copy_if( 
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             PredicateT IsSpace )
         {
             std::copy( 
@@ -270,14 +270,14 @@ namespace boost {
 
              \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
+        template<typename OutputIteratorT, typename RangeT, typename PredicateT>
         inline OutputIteratorT trim_copy_if( 
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             PredicateT IsSpace)
         {
             BOOST_STRING_TYPENAME 
-                range_const_iterator<CollectionT>::type TrimEnd=
+                range_const_iterator<RangeT>::type TrimEnd=
                 detail::trim_end( 
                     begin(Input), 
                     end(Input), 

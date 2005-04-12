@@ -45,13 +45,13 @@ namespace boost {
 
             \note The second variant of this function provides the strong exception-safety guarantee
         */
-        template<typename OutputIteratorT, typename CollectionT>
+        template<typename OutputIteratorT, typename RangeT>
         inline OutputIteratorT erase_range_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    range_const_iterator<CollectionT>::type>& SearchRange )
+                    range_const_iterator<RangeT>::type>& SearchRange )
         {
             return find_format_copy(
                 Output,
@@ -116,12 +116,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT erase_first_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search )
+            const Range1T& Input,
+            const Range2T& Search )
         {
             return find_format_copy(
                 Output,
@@ -134,10 +134,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT erase_first_copy( 
             const SequenceT& Input,
-            const CollectionT& Search )
+            const RangeT& Search )
         {
             return find_format_copy( 
                 Input, 
@@ -153,10 +153,10 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for. 
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void erase_first( 
             SequenceT& Input,
-            const CollectionT& Search )
+            const RangeT& Search )
         {
             find_format( 
                 Input, 
@@ -184,12 +184,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT ierase_first_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy(
@@ -203,10 +203,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT ierase_first_copy( 
             const SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy( 
@@ -224,10 +224,10 @@ namespace boost {
             \param Search A substring to be searched for
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void ierase_first( 
             SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             const std::locale& Loc=std::locale() )
         {
             find_format( 
@@ -254,12 +254,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT erase_last_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search )
+            const Range1T& Input,
+            const Range2T& Search )
         {
             return find_format_copy(
                 Output,
@@ -272,10 +272,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT erase_last_copy( 
             const SequenceT& Input,
-            const CollectionT& Search )
+            const RangeT& Search )
         {
             return find_format_copy( 
                 Input, 
@@ -291,10 +291,10 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for 
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void erase_last( 
             SequenceT& Input,
-            const CollectionT& Search )
+            const RangeT& Search )
         {
             find_format( 
                 Input, 
@@ -322,12 +322,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT ierase_last_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy(
@@ -341,10 +341,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT ierase_last_copy( 
             const SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy( 
@@ -362,10 +362,10 @@ namespace boost {
             \param Search A substring to be searched for
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void ierase_last( 
             SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             const std::locale& Loc=std::locale() )
         {
             find_format( 
@@ -394,12 +394,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT erase_nth_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             unsigned int Nth )
         {
             return find_format_copy(
@@ -413,10 +413,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT erase_nth_copy( 
             const SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             unsigned int Nth )
         {
             return find_format_copy( 
@@ -434,10 +434,10 @@ namespace boost {
             \param Search A substring to be searched for. 
             \param Nth An index of the match to be replaced. The index is 0-based.
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void erase_nth( 
             SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             unsigned int Nth )
         {
             find_format( 
@@ -467,12 +467,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT ierase_nth_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             unsigned int Nth,
             const std::locale& Loc=std::locale() )
         {
@@ -487,10 +487,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT ierase_nth_copy( 
             const SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             unsigned int Nth,
             const std::locale& Loc=std::locale() )
         {
@@ -510,10 +510,10 @@ namespace boost {
             \param Nth An index of the match to be replaced. The index is 0-based.
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void ierase_nth( 
             SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             unsigned int Nth,
             const std::locale& Loc=std::locale() )
         {
@@ -543,12 +543,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT erase_all_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search )
+            const Range1T& Input,
+            const Range2T& Search )
         {
             return find_format_all_copy(
                 Output,
@@ -561,10 +561,10 @@ namespace boost {
         /*!
             \overload
         */  
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT erase_all_copy( 
             const SequenceT& Input,
-            const CollectionT& Search )
+            const RangeT& Search )
         {
             return find_format_all_copy( 
                 Input, 
@@ -580,10 +580,10 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for. 
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void erase_all( 
             SequenceT& Input,
-            const CollectionT& Search )
+            const RangeT& Search )
         {
             find_format_all( 
                 Input, 
@@ -611,12 +611,12 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT ierase_all_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             const std::locale& Loc=std::locale() )
         {
             return find_format_all_copy(
@@ -630,10 +630,10 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT ierase_all_copy( 
             const SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             const std::locale& Loc=std::locale() )
         {
             return find_format_all_copy( 
@@ -651,10 +651,10 @@ namespace boost {
             \param Search A substring to be searched for. 
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void ierase_all( 
             SequenceT& Input,
-            const CollectionT& Search,
+            const RangeT& Search,
             const std::locale& Loc=std::locale() )
         {
             find_format_all( 
@@ -683,10 +683,10 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename CollectionT>
+            typename RangeT>
         inline OutputIteratorT erase_head_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             unsigned int N )
         {
             return find_format_copy(
@@ -751,10 +751,10 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename CollectionT>
+            typename RangeT>
         inline OutputIteratorT erase_tail_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             unsigned int N )
         {
             return find_format_copy(

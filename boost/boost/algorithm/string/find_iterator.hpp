@@ -110,9 +110,9 @@ namespace boost {
                 Construct new find_iterator for a given finder
                 and a collection.
             */
-            template<typename FinderT, typename CollectionT>
+            template<typename FinderT, typename RangeT>
             find_iterator(
-                    CollectionT& Col,
+                    RangeT& Col,
                     FinderT Finder ) :
                 detail::find_iterator_base<IteratorT>(Finder,0),
                 m_Match(begin(Col),begin(Col)),
@@ -178,14 +178,14 @@ namespace boost {
         /*!
          *    Construct a find iterator to iterate through the specified string
          */
-        template<typename CollectionT, typename FinderT>
+        template<typename RangeT, typename FinderT>
         inline find_iterator< 
-            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
         make_find_iterator(
-            CollectionT& Collection,
+            RangeT& Collection,
             FinderT Finder)
         {
-            return find_iterator<BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>(
+            return find_iterator<BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>(
                 begin(Collection), end(Collection), Finder);
         }
 
@@ -273,9 +273,9 @@ namespace boost {
                 Construct new split_iterator for a given finder
                 and a collection.
             */
-            template<typename FinderT, typename CollectionT>
+            template<typename FinderT, typename RangeT>
             split_iterator(
-                    CollectionT& Col,
+                    RangeT& Col,
                     FinderT Finder ) :
                 detail::find_iterator_base<IteratorT>(Finder,0),
                 m_Match(begin(Col),begin(Col)),
@@ -354,14 +354,14 @@ namespace boost {
         /*!
          *    Construct a split iterator to iterate through the specified collection
          */
-        template<typename CollectionT, typename FinderT>
+        template<typename RangeT, typename FinderT>
         inline split_iterator< 
-            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
         make_split_iterator(
-            CollectionT& Collection,
+            RangeT& Collection,
             FinderT Finder)
         {
-            return split_iterator<BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>(
+            return split_iterator<BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>(
                 begin(Collection), end(Collection), Finder);
         }
 

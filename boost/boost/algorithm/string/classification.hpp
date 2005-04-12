@@ -194,13 +194,13 @@ namespace boost {
             \param Set A set of characters to be recognized
             \return An instance of the \c is_any_of predicate 
         */
-        template<typename ContainerT>
+        template<typename RangeT>
         inline detail::is_any_ofF<
-            BOOST_STRING_TYPENAME range_value<ContainerT>::type> 
-        is_any_of( const ContainerT& Set )
+            BOOST_STRING_TYPENAME range_value<RangeT>::type> 
+        is_any_of( const RangeT& Set )
         {
             return detail::is_any_ofF<
-                BOOST_STRING_TYPENAME range_value<ContainerT>::type>(Set); 
+                BOOST_STRING_TYPENAME range_value<RangeT>::type>(Set); 
         }
 
         //! is_from_range predicate

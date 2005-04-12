@@ -27,22 +27,22 @@ namespace boost {
 //  const format functor ----------------------------------------------------//
 
             // constant format functor
-            template<typename CollectionT>
+            template<typename RangeT>
             struct const_formatF
             {
             private:
                 typedef BOOST_STRING_TYPENAME
-                    range_const_iterator<CollectionT>::type format_iterator;
+                    range_const_iterator<RangeT>::type format_iterator;
                 typedef iterator_range<format_iterator> result_type;
             
             public:
                 // Construction
-                const_formatF(const CollectionT& Format) :
+                const_formatF(const RangeT& Format) :
                     m_Format(begin(Format), end(Format)) {}
 
                 // Operation
-                template<typename Collection2T>
-                const result_type& operator()(const Collection2T&) const
+                template<typename Range2T>
+                const result_type& operator()(const Range2T&) const
                 {
                     return m_Format;
                 }
@@ -54,14 +54,14 @@ namespace boost {
 //  identity format functor ----------------------------------------------------//
 
             // identity format functor
-            template<typename CollectionT>
+            template<typename RangeT>
             struct identity_formatF
             {
                 // Operation
-                template< typename Collection2T >
-                const CollectionT& operator()(const Collection2T& Replace) const
+                template< typename Range2T >
+                const RangeT& operator()(const Range2T& Replace) const
                 {
-                    return CollectionT(begin(Replace), end(Replace));
+                    return RangeT(begin(Replace), end(Replace));
                 }
             };
 

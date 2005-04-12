@@ -50,23 +50,23 @@ namespace boost {
         */
         template< 
             typename OutputIteratorT,
-            typename CollectionT,
+            typename RangeT,
             typename FinderT,
             typename FormatterT>
         inline OutputIteratorT find_format_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             FinderT Finder,
             FormatterT Formatter )
         {
             // Concept check
             function_requires< 
                 FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_const_iterator<CollectionT>::type> >();
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
             function_requires< 
                 FormatterConcept<
                     FormatterT,
-                    FinderT,BOOST_STRING_TYPENAME range_const_iterator<CollectionT>::type> >();
+                    FinderT,BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
 
             return detail::find_format_copy_impl(
                 Output,
@@ -161,23 +161,23 @@ namespace boost {
         */
         template< 
             typename OutputIteratorT,
-            typename CollectionT,
+            typename RangeT,
             typename FinderT,
             typename FormatterT>
         inline OutputIteratorT find_format_all_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             FinderT Finder,
             FormatterT Formatter)
         {
             // Concept check
             function_requires< 
                 FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_const_iterator<CollectionT>::type> >();
+                BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
             function_requires< 
                 FormatterConcept<
                     FormatterT,
-                    FinderT,BOOST_STRING_TYPENAME range_const_iterator<CollectionT>::type> >();
+                    FinderT,BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
 
             return detail::find_format_all_copy_impl(
                 Output,

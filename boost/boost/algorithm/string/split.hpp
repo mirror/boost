@@ -57,11 +57,11 @@ namespace boost {
 
                \note This function provides the strong exception-safety guarantee
         */
-        template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
+        template< typename SequenceSequenceT, typename Range1T, typename Range2T >
         inline SequenceSequenceT& find_all(
             SequenceSequenceT& Result,
-            Collection1T& Input,
-            const Collection2T& Search)
+            Range1T& Input,
+            const Range2T& Search)
         {
             return iter_find(
                 Result,
@@ -92,11 +92,11 @@ namespace boost {
 
               \note This function provides the strong exception-safety guarantee
         */
-        template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
+        template< typename SequenceSequenceT, typename Range1T, typename Range2T >
         inline SequenceSequenceT& ifind_all(
             SequenceSequenceT& Result,
-            Collection1T& Input,
-            const Collection2T& Search,
+            Range1T& Input,
+            const Range2T& Search,
             const std::locale& Loc=std::locale() )
         {
             return iter_find(
@@ -135,10 +135,10 @@ namespace boost {
 
             \note This function provides the strong exception-safety guarantee
         */
-        template< typename SequenceSequenceT, typename CollectionT, typename PredicateT >
+        template< typename SequenceSequenceT, typename RangeT, typename PredicateT >
         inline SequenceSequenceT& split(
             SequenceSequenceT& Result,
-            CollectionT& Input,
+            RangeT& Input,
             PredicateT Pred,
             token_compress_mode_type eCompress=token_compress_off )
         {

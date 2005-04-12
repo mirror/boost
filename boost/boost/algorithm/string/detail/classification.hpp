@@ -63,9 +63,9 @@ namespace boost {
                 template <class Args> struct sig { typedef bool type; };
 
                 // Constructor 
-                template< typename SeqT >
-                is_any_ofF( const SeqT& Seq ) : 
-                    m_Set( begin(Seq), end(Seq) ) {}
+                template<typename RangeT>
+                is_any_ofF( const RangeT& Range ) : 
+                    m_Set( begin(Range), end(Range) ) {}
                 
                 // Operation
                 template<typename Char2T>

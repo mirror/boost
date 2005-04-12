@@ -41,20 +41,20 @@ namespace boost {
             \param Flags Regex options
             \return 
                 An \c iterator_range delimiting the match. 
-                Returned iterator is either \c InputContainerT::iterator or 
-                \c InputContainerT::const_iterator, depending on the constness of 
+                Returned iterator is either \c RangeT::iterator or 
+                \c RangeT::const_iterator, depending on the constness of 
                 the input parameter.
 
               \note This function provides the strong exception-safety guarantee
         */
         template< 
-            typename CollectionT, 
+            typename RangeT, 
             typename CharT, 
             typename RegexTraitsT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type >
+            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type >
         find_regex( 
-            CollectionT& Input, 
+            RangeT& Input, 
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -83,13 +83,13 @@ namespace boost {
         */
         template< 
             typename OutputIteratorT,
-            typename CollectionT, 
+            typename RangeT, 
             typename CharT, 
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
         inline OutputIteratorT replace_regex_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
@@ -169,13 +169,13 @@ namespace boost {
         */
         template< 
             typename OutputIteratorT,
-            typename CollectionT, 
+            typename RangeT, 
             typename CharT, 
             typename RegexTraitsT,
             typename FormatStringTraitsT, typename FormatStringAllocatorT >
         inline OutputIteratorT replace_all_regex_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             const std::basic_string<CharT, FormatStringTraitsT, FormatStringAllocatorT>& Format,
             match_flag_type Flags=match_default | format_default )
@@ -254,12 +254,12 @@ namespace boost {
        */
         template< 
             typename OutputIteratorT,
-            typename CollectionT, 
+            typename RangeT, 
             typename CharT, 
             typename RegexTraitsT >
         inline OutputIteratorT erase_regex_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -333,12 +333,12 @@ namespace boost {
         */
         template< 
             typename OutputIteratorT,
-            typename CollectionT, 
+            typename RangeT, 
             typename CharT, 
             typename RegexTraitsT >
         inline OutputIteratorT erase_all_regex_copy(
             OutputIteratorT Output,
-            const CollectionT& Input,
+            const RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -418,12 +418,12 @@ namespace boost {
         */
         template< 
             typename SequenceSequenceT, 
-            typename CollectionT,         
+            typename RangeT,         
             typename CharT, 
             typename RegexTraitsT >
         inline SequenceSequenceT& find_all_regex(
             SequenceSequenceT& Result,
-            const CollectionT& Input,
+            const RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -459,12 +459,12 @@ namespace boost {
         */
         template< 
             typename SequenceSequenceT, 
-            typename CollectionT,         
+            typename RangeT,         
             typename CharT, 
             typename RegexTraitsT >
         inline SequenceSequenceT& split_regex(
             SequenceSequenceT& Result,
-            const CollectionT& Input,
+            const RangeT& Input,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {

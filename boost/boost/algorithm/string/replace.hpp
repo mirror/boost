@@ -50,15 +50,15 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT replace_range_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
+            const Range1T& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    range_const_iterator<Collection1T>::type>& SearchRange,
-            const Collection2T& Format)
+                    range_const_iterator<Range1T>::type>& SearchRange,
+            const Range2T& Format)
         {
             return find_format_copy(
                 Output,
@@ -71,13 +71,13 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT replace_range_copy( 
             const SequenceT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
                     range_const_iterator<SequenceT>::type>& SearchRange,
-            const CollectionT& Format)
+            const RangeT& Format)
         {
             return find_format_copy(
                 Input,
@@ -94,13 +94,13 @@ namespace boost {
             \param SearchRange A range in the input to be substituted
             \param Format A substitute string
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void replace_range( 
             SequenceT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
                     range_iterator<SequenceT>::type>& SearchRange,
-            const CollectionT& Format)
+            const RangeT& Format)
         {
             find_format(
                 Input,
@@ -128,14 +128,14 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT replace_first_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
-            const Collection3T& Format)
+            const Range1T& Input,
+            const Range2T& Search,
+            const Range3T& Format)
         {
             return find_format_copy(
                 Output,
@@ -148,11 +148,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT replace_first_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format )
+            const Range1T& Search,
+            const Range2T& Format )
         {
             return find_format_copy( 
                 Input,
@@ -169,11 +169,11 @@ namespace boost {
             \param Search A substring to be searched for 
             \param Format A substitute string
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void replace_first( 
             SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format )
+            const Range1T& Search,
+            const Range2T& Format )
         {
             find_format( 
                 Input, 
@@ -203,14 +203,14 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT ireplace_first_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
-            const Collection3T& Format,
+            const Range1T& Input,
+            const Range2T& Search,
+            const Range3T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy(
@@ -224,11 +224,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection2T, typename Collection1T>
+        template<typename SequenceT, typename Range2T, typename Range1T>
         inline SequenceT ireplace_first_copy( 
             const SequenceT& Input,
-            const Collection2T& Search,
-            const Collection1T& Format,
+            const Range2T& Search,
+            const Range1T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy( 
@@ -248,11 +248,11 @@ namespace boost {
             \param Format A substitute string
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void ireplace_first( 
             SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format,
+            const Range1T& Search,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             find_format( 
@@ -281,14 +281,14 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT replace_last_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
-            const Collection3T& Format )
+            const Range1T& Input,
+            const Range2T& Search,
+            const Range3T& Format )
         {
             return find_format_copy(
                 Output,
@@ -301,11 +301,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT replace_last_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format )
+            const Range1T& Search,
+            const Range2T& Format )
         {
             return find_format_copy( 
                 Input,
@@ -322,11 +322,11 @@ namespace boost {
             \param Search A substring to be searched for 
             \param Format A substitute string
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void replace_last( 
             SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format )
+            const Range1T& Search,
+            const Range2T& Format )
         {
             find_format( 
                 Input, 
@@ -356,14 +356,14 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT ireplace_last_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
-            const Collection3T& Format,
+            const Range1T& Input,
+            const Range2T& Search,
+            const Range3T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy(
@@ -377,11 +377,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT ireplace_last_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format,
+            const Range1T& Search,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy( 
@@ -402,11 +402,11 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
             \return A reference to the modified input
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void ireplace_last( 
             SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format,
+            const Range1T& Search,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             find_format( 
@@ -436,15 +436,15 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT replace_nth_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             unsigned int Nth,
-            const Collection3T& Format )
+            const Range3T& Format )
         {
             return find_format_copy(
                 Output,
@@ -457,12 +457,12 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT replace_nth_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
+            const Range1T& Search,
             unsigned int Nth,
-            const Collection2T& Format )
+            const Range2T& Format )
         {
             return find_format_copy( 
                 Input,
@@ -480,12 +480,12 @@ namespace boost {
             \param Nth An index of the match to be replaced. The index is 0-based.
             \param Format A substitute string
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void replace_nth( 
             SequenceT& Input,
-            const Collection1T& Search,
+            const Range1T& Search,
             unsigned int Nth,
-            const Collection2T& Format )
+            const Range2T& Format )
         {
             find_format( 
                 Input, 
@@ -516,15 +516,15 @@ namespace boost {
        */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT ireplace_nth_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
+            const Range1T& Input,
+            const Range2T& Search,
             unsigned int Nth,
-            const Collection3T& Format,
+            const Range3T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy(
@@ -538,12 +538,12 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT ireplace_nth_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
+            const Range1T& Search,
             unsigned int Nth,
-            const Collection2T& Format,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy( 
@@ -564,12 +564,12 @@ namespace boost {
             \param Format A substitute string
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void ireplace_nth( 
             SequenceT& Input,
-            const Collection1T& Search,
+            const Range1T& Search,
             unsigned int Nth,
-            const Collection2T& Format,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             find_format( 
@@ -598,14 +598,14 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT replace_all_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
-            const Collection3T& Format )
+            const Range1T& Input,
+            const Range2T& Search,
+            const Range3T& Format )
         {
             return find_format_all_copy(
                 Output,
@@ -618,11 +618,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT replace_all_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format )
+            const Range1T& Search,
+            const Range2T& Format )
         {
             return find_format_all_copy( 
                 Input,
@@ -640,11 +640,11 @@ namespace boost {
             \param Format A substitute string
             \return A reference to the modified input
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void replace_all( 
             SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format )
+            const Range1T& Search,
+            const Range2T& Format )
         {
             find_format_all( 
                 Input, 
@@ -674,14 +674,14 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T,
-            typename Collection3T>
+            typename Range1T, 
+            typename Range2T,
+            typename Range3T>
         inline OutputIteratorT ireplace_all_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
-            const Collection2T& Search,
-            const Collection3T& Format,
+            const Range1T& Input,
+            const Range2T& Search,
+            const Range3T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_all_copy(
@@ -695,11 +695,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline SequenceT ireplace_all_copy( 
             const SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format,
+            const Range1T& Search,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             return find_format_all_copy( 
@@ -719,11 +719,11 @@ namespace boost {
             \param Format A substitute string
             \param Loc A locale used for case insensitive comparison
         */
-        template<typename SequenceT, typename Collection1T, typename Collection2T>
+        template<typename SequenceT, typename Range1T, typename Range2T>
         inline void ireplace_all( 
             SequenceT& Input,
-            const Collection1T& Search,
-            const Collection2T& Format,
+            const Range1T& Search,
+            const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
             find_format_all( 
@@ -754,13 +754,13 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT replace_head_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
+            const Range1T& Input,
             unsigned int N,
-            const Collection2T& Format )
+            const Range2T& Format )
         {
             return find_format_copy(
                 Output,
@@ -773,11 +773,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT replace_head_copy( 
             const SequenceT& Input,
             unsigned int N,
-            const CollectionT& Format )
+            const RangeT& Format )
         {
             return find_format_copy( 
                 Input,
@@ -796,11 +796,11 @@ namespace boost {
             \param N Length of the head
             \param Format A substitute string
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void replace_head( 
             SequenceT& Input,
             unsigned int N,
-            const CollectionT& Format )
+            const RangeT& Format )
         {
             find_format( 
                 Input, 
@@ -830,13 +830,13 @@ namespace boost {
         */
         template<
             typename OutputIteratorT,
-            typename Collection1T, 
-            typename Collection2T>
+            typename Range1T, 
+            typename Range2T>
         inline OutputIteratorT replace_tail_copy(
             OutputIteratorT Output,
-            const Collection1T& Input,
+            const Range1T& Input,
             unsigned int N,
-            const Collection2T& Format )
+            const Range2T& Format )
         {
             return find_format_copy(
                 Output,
@@ -849,11 +849,11 @@ namespace boost {
         /*!
             \overload
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline SequenceT replace_tail_copy( 
             const SequenceT& Input,
             unsigned int N,
-            const CollectionT& Format )
+            const RangeT& Format )
         {
             return find_format_copy( 
                 Input,
@@ -872,11 +872,11 @@ namespace boost {
             \param N Length of the tail
             \param Format A substitute string
         */
-        template<typename SequenceT, typename CollectionT>
+        template<typename SequenceT, typename RangeT>
         inline void replace_tail( 
             SequenceT& Input,
             unsigned int N,
-            const CollectionT& Format )
+            const RangeT& Format )
         {
             find_format( 
                 Input, 
