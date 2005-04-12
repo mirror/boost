@@ -22,7 +22,7 @@ void read_null_source()
 {
     stream_facade<null_source> in;
     in.open(null_source());
-    int c = in.get();
+    in.get();
     BOOST_CHECK(in.eof());
 }
 
