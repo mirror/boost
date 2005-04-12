@@ -12,7 +12,6 @@
 
 
 #include "boost/lexical_cast.hpp"
-#include "boost/algorithm/string.hpp"
 #include "boost/date_time/string_parse_tree.hpp"
 #include "boost/date_time/strings_from_facet.hpp"
 #include "boost/date_time/special_values_parser.hpp"

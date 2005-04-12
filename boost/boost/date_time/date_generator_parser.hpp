@@ -11,7 +11,6 @@
  */
 
 
-#include "boost/algorithm/string.hpp" //todo narrow this
 #include "boost/date_time/string_parse_tree.hpp"
 #include "boost/date_time/date_generators.hpp"
 #include "boost/date_time/format_date_parser.hpp"

@@ -10,7 +10,7 @@
  */
 
 
-#include "boost/algorithm/string.hpp"
+#include "boost/algorithm/string/replace.hpp"
 #include "boost/date_time/period.hpp"
 #include "boost/date_time/special_values_formatter.hpp"
 #include "boost/date_time/period_formatter.hpp"

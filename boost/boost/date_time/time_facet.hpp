@@ -11,6 +11,7 @@
  */
 
 #include "boost/date_time/date_facet.hpp"
+#include "boost/algorithm/string/erase.hpp"
 #include <sstream>
 #include <iomanip>
 #include <exception>
