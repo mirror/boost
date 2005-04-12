@@ -27,21 +27,6 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
-
-template<typename Chain>
-struct pusher {
-    pusher(Chain& chn) : chn_(chn) { }
-    template<typename Component>
-    void operator() (const Component& cmp) const { chn_.push(cmp); }
-    Chain& chn_;
-};
-
-template<typename Chain, typename Pipeline>
-void push(Chain& chn, Pipeline& p) { p.for_each(pusher<Chain>(chn)); }
-
-} } } // End namspaces detail, iostreams, boost.
-
 //
 // Macro: BOOST_IOSTREAMS_DEFINE_PUSH_CONSTRUCTOR(mode, name, helper).
 // Description: Defines overloads with name 'name' which forward to a function
@@ -101,7 +86,7 @@ void push(Chain& chn, Pipeline& p) { p.for_each(pusher<Chain>(chn)); }
     template<typename Pipeline, typename Concept> \
     BOOST_PP_IIF(has_return, result, explicit) \
     name(const ::boost::iostreams::pipeline<Pipeline, Concept>& p) \
-    { ::boost::iostreams::detail::push(*this, p); } \
+    { p.push(*this); } \
     template<typename T> \
     BOOST_PP_IIF(has_return, result, explicit) \
     name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS() BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) \
@@ -135,7 +120,7 @@ void push(Chain& chn, Pipeline& p) { p.for_each(pusher<Chain>(chn)); }
     template<typename Pipeline, typename Concept> \
     BOOST_PP_IF(has_return, result, explicit) \
     name(const ::boost::iostreams::pipeline<Pipeline, Concept>& p) \
-    { ::boost::iostreams::detail::push(*this, p); } \
+    { p.push(*this); } \
     template<typename T> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS() BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) \
@@ -148,7 +133,7 @@ void push(Chain& chn, Pipeline& p) { p.for_each(pusher<Chain>(chn)); }
     template<typename T> \
     void BOOST_PP_CAT(name, _msvc_impl) \
     ( ::boost::mpl::true_, const T& t BOOST_IOSTREAMS_PUSH_PARAMS() ) \
-    { ::boost::iostreams::detail::push(*this, t); } \
+    { t.push(*this); } \
     template<typename T> \
     void BOOST_PP_CAT(name, _msvc_impl) \
     ( ::boost::mpl::false_, const T& t BOOST_IOSTREAMS_PUSH_PARAMS() ) \
