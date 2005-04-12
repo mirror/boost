@@ -79,7 +79,8 @@ namespace ptr_container_detail
         BOOST_STATIC_CONSTANT( bool, allow_null = Config::allow_null );
         
         typedef BOOST_DEDUCED_TYPENAME Config::value_type Ty_;
-        
+
+        template< bool allow_null_values >
         struct null_clone_allocator
         {
             template< class Iter >
@@ -90,7 +91,7 @@ namespace ptr_container_detail
             
             static Ty_* allocate_clone( const Ty_* x )
             {
-                if( allow_null )
+                if( allow_null_values )
                 {
                     if( x == 0 )
                         return 0;
@@ -105,7 +106,7 @@ namespace ptr_container_detail
             
             static void deallocate_clone( const Ty_* x )
             {
-                if( allow_null )
+                if( allow_null_values )
                 {
                     if( x == 0 )
                         return;
@@ -115,8 +116,9 @@ namespace ptr_container_detail
             }
         };
 
-        typedef BOOST_DEDUCED_TYPENAME Config::void_container_type Cont;
-        typedef clone_deleter<null_clone_allocator>                Deleter;
+        typedef BOOST_DEDUCED_TYPENAME Config::void_container_type  Cont;
+        typedef null_clone_allocator<allow_null>                    null_cloner_type;
+        typedef clone_deleter<null_cloner_type>                     Deleter;
 
         Cont      c_;
 
@@ -161,7 +163,7 @@ namespace ptr_container_detail
             
     protected: // implementation
             
-        typedef ptr_container_detail::scoped_deleter<Ty_,null_clone_allocator>
+        typedef ptr_container_detail::scoped_deleter<Ty_,null_cloner_type>
                                    scoped_deleter;
     private:
 
@@ -214,40 +216,6 @@ namespace ptr_container_detail
             scoped_deleter sd( first, last );
             insert_clones_and_release( sd, end() );
         }
-        
-        /*
-        void clone_assign( size_type n, const_reference x ) // strong
-        {
-            BOOST_ASSERT( n != 0 );
-            scoped_deleter sd( n, deleter_ ); // strong     
-            make_clones( sd, n, x );          // strong
-            copy_clones_and_release( sd );    // nothrow
-        }
-        */
-
-        /*
-        void strong_resize_and_remove( size_type n )
-        {
-            const size_type old_size = c_.size();
-            if( n > old_size ) // if resize won't throw
-            {
-                remove_all();
-                c_.resize( n );
-            }
-            else if( n < old_size ) // if rezise might throw
-            {
-                size_undoer su( c_ );
-                c_.resize( n );
-                su.release();
-                remove_all();
-            }
-            else 
-            {
-                BOOST_ASSERT( n == old_size );
-                remove_all();
-            }
-        }
-        */
         
         void remove_all() 
         {
@@ -316,12 +284,12 @@ namespace ptr_container_detail
 
         static Ty_* null_policy_allocate_clone( const Ty_* x )
         {
-            return null_clone_allocator::allocate_clone( x );
+            return null_cloner_type::allocate_clone( x );
         }
 
         static void null_policy_deallocate_clone( const Ty_* x )
         {
-            null_clone_allocator::deallocate_clone( x );
+            null_cloner_type::deallocate_clone( x );
         }
 
     private:
@@ -355,7 +323,7 @@ namespace ptr_container_detail
         {
             while( first != last )
             {
-                insert( end(), null_clone_allocator::allocate_clone_from_iterator(first) );
+                insert( end(), null_cloner_type::allocate_clone_from_iterator(first) );
                 ++first;
             }
         }
@@ -401,19 +369,6 @@ namespace ptr_container_detail
 
     public:
         
-        /*
-        // overhead: 1 heap allocation (very cheap compared to cloning)
-        void assign( size_type n, const_reference x ) // strong         
-        {
-            if( n == 0 )
-                return;
-            scoped_deleter sd( n, deleter_ ); // strong
-            make_clones( sd, n, x );          // strong
-            strong_resize_and_remove( n );    // strong
-            copy_clones_and_release( sd );    // nothrow
-        }
-        */
-               
         allocator_type get_allocator() const                   
         {
             return c_.get_allocator(); 
@@ -447,30 +402,6 @@ namespace ptr_container_detail
             return c_.size();
         }
 
-        /*
-        void resize( size_type sz, const_reference x )  // strong     
-        {
-            size_type old_size = size();
-            if( sz > old_size )
-            {
-                size_type n = sz - old_size;
-                BOOST_ASSERT( n > 0 );
-                scoped_deleter sd( n, deleter_ ); // strong
-                make_clones( sd, n, x );          // strong
-                size_undoer su( c_ );             // strong
-                c_.resize( n );                   // strong or nothrow, commit
-                su.release();                     // nothrow
-                copy_clones_and_release( sd, advance( c_.begin(), old_size ) ); // nothrow
-            }
-            else if( sz < old_size )
-            {
-                erase( advance( begin(), sz ), end() ); // nothrow
-            }
-            else
-                ;
-        }
-        */
-        
         size_type max_size() const // nothrow
         {
             return c_.max_size(); 
@@ -498,13 +429,6 @@ namespace ptr_container_detail
         
     public: // modifiers
 
-        /*
-        iterator insert_range_impl( iterator before, int x )
-        {
-            return insert_range_impl( before, (Ty_*)0 );
-        };
-        */
-
         iterator insert( iterator before, Ty_* x )
         {
             enforce_null_policy( x, "Null pointer in 'insert()'" );
@@ -514,38 +438,6 @@ namespace ptr_container_detail
             ptr.release();                                        // nothrow
             return res;
         }
-
-        /*
-        template< class T >
-        iterator insert_range_impl( iterator before, T x, is_pointer_or_integral_tag )
-        {
-            return insert_range_impl( before, x );
-        };
-
-        template< class U >
-        BOOST_DEDUCED_TYPENAME mpl::if_< ptr_container_detail::is_pointer_or_integral<U>,
-                                         iterator, void >::type
-        insert( iterator i, const U& r )
-        {
-            typedef BOOST_DEDUCED_TYPENAME mpl::if_< ptr_container_detail::is_pointer_or_integral<U>,
-                                                     ptr_container_detail::is_pointer_or_integral_tag,
-                                                     ptr_container_detail::is_range_tag >::type tag;                                  
-      //      typedef BOOST_DEDUCED_TYPENAME mpl::if_< is_pointer_or_integral<T>,
-      //                                               Ty_*,
-      //                                               T >::type cast_type;
-            return this->insert_range_impl( i, r, tag() );
-        }*/
-                                             
-        /*
-        void insert( iterator before, size_type n, const_reference x ) // strong 
-        {
-            if( n == 0 )
-                return;
-            scoped_deleter sd( n, deleter_ );        // strong
-            make_clones( sd, n, x );                 // strong 
-            insert_clones_and_release( sd, before ); // strong, commit
-        }
-        */
 
         iterator erase( iterator x ) // nothrow 
         { 
@@ -605,13 +497,6 @@ namespace ptr_container_detail
             return boost::ptr_container_detail::move( old );
         }
 
-        /*
-        auto_type replace( iterator where, auto_type ptr ) // strong  
-        { 
-            // hm.... move ptr problem..
-        }
-        */
-        
         auto_type replace( size_type idx, Ty_* x ) // strong
         {
             enforce_null_policy( x, "Null pointer in 'replace()'" );

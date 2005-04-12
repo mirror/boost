@@ -27,6 +27,8 @@
 #include <boost/cast.hpp>
 #include <boost/assert.hpp>
 #include <boost/pointee.hpp>
+#include <functional>
+
 
 namespace boost
 {

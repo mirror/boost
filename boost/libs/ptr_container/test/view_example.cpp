@@ -13,11 +13,12 @@
 // the Clone Managers.
 // 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_predicate.hpp>
+#include <boost/ptr_container/indirect_fun.hpp>
 
-#include <cstdlib>   // For 'rand()'
-#include <algorithm> // For 'std::sort()'
-#include <iostream>  // For 'std::cout'
+#include <functional> // For 'binary_fnuction'
+#include <cstdlib>    // For 'rand()'
+#include <algorithm>  // For 'std::sort()'
+#include <iostream>   // For 'std::cout'
 
 
 //
@@ -54,7 +55,7 @@ typedef boost::ptr_vector<photon,boost::view_clone_allocator> view_type;
 //
 // Our first sort criterium
 //
-struct sort_by_color
+struct sort_by_color : std::binary_function<photon,photon,bool>
 {
     bool operator()( const photon& l, const photon& r ) const
     {
@@ -65,7 +66,7 @@ struct sort_by_color
 //
 // Our second sort criterium
 //
-struct sort_by_direction
+struct sort_by_direction : std::binary_function<photon,photon,bool>
 {
     bool operator()( const photon& l, const photon& r ) const
     {
@@ -77,7 +78,7 @@ struct sort_by_direction
 //
 // Our third sort criterium
 //
-struct sort_by_power
+struct sort_by_power : std::binary_function<photon,photon,bool>
 {
     bool operator()( const photon& l, const photon& r ) const
     {
@@ -150,11 +151,9 @@ int main()
     // And now we can sort the views themselves. Notice how
     // we switch to different iterators and different predicates:
     //
-    std::sort( color_view.ptr_begin(), color_view.ptr_end(),
-               boost::indirected2<sort_by_color>() );
+    color_view.sort( sort_by_color() );
 
-    std::sort( direction_view.ptr_begin(), direction_view.ptr_end(),
-               boost::indirected2<sort_by_direction>() );
+    direction_view.sort( sort_by_direction() );
 
     return 0;
 }

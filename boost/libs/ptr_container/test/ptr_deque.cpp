@@ -8,6 +8,8 @@ void test_ptr_deque()
     reversible_container_test< ptr_deque<Value>, Value, Value >();
     reversible_container_test< ptr_deque< nullable<Base> >, Base, Derived >();
     reversible_container_test< ptr_deque< nullable<Value> >, Value, Value >();
+
+    random_access_algorithms_test< ptr_deque<int> >();
 }
 
 #include <boost/test/unit_test.hpp>

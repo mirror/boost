@@ -29,6 +29,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
+#include <iostream>
 
 namespace boost
 {   
@@ -269,59 +270,6 @@ namespace boost
             this->c_private().reserve( n ); 
         }
 
-        /*
-    public: // list interface
-        
-        void splice( iterator before, ptr_sequence_adapter& x )                    
-        {
-            BOOST_ASSERT( &x != this );
-            this->c_private().splice( before.base(), x.c_private() );
-        }
-
-        void splice( iterator before, ptr_sequence_adapter& x, iterator i ) 
-        {
-            BOOST_ASSERT( &x != this );
-            this->c_private().splice( before.base(), x.c_private(), 
-                                      i.base() );
-        }
-
-        void splice( iterator before, ptr_sequence_adapter& x, 
-                     iterator first, iterator last )
-        {
-            BOOST_ASSERT( &x != this );
-            this->c_private().splice( before.base(), x.c_private(), 
-                                      first.base(), last.base() );
-        }
-
-        template< class Range >
-        void splice( iterator before, ptr_sequence_adapter& x,
-                     const Range& r )
-        {
-            splice( before, x, begin(r), end(r) );
-        }
-
-        void merge( ptr_sequence_adapter& x )                                 
-        {
-            merge( x, indirected2< std::less<value_type> >() );
-        }
-
-        template< typename Compare > 
-        void merge( ptr_sequence_adapter& x, Compare comp )                   
-        {
-            this->c_private().merge( x.c_private(), comp );
-        }
-
-        void sort()                                                    
-        { 
-            sort( std::less<value_type>() ); 
-        };
-
-        template< typename Compare > 
-        void sort( Compare comp )                             
-        {
-            this->c_private().sort( indirected2<Compare>( comp ) );
-        }*/
-
         void reverse()
         {
             this->c_private().reverse(); 
@@ -457,7 +405,7 @@ namespace boost
 
         void sort( iterator first, iterator last )
         {
-            sort( first, last, void_ptr_indirect_fun< std::less<T>,T >() );
+            sort( first, last, std::less<T>() );
         }
         
         void sort()
@@ -484,7 +432,7 @@ namespace boost
         
         void unique( iterator first, iterator last )
         {
-            unique( first, last, std::equal<T>() );
+            unique( first, last, std::equal_to<T>() );
         }
         
         void unique()
@@ -493,22 +441,24 @@ namespace boost
         }
 
     private:
-        struct is_zero_functor
+        struct is_not_zero_ptr
         {
             template< class U >
             bool operator()( const U* r ) const
             {
-                return r == 0;
+                return r != 0;
             }
         };
 
         void compact_and_erase_nulls( iterator first, iterator last ) // nothrow
         {
+            
             typename base_type::ptr_iterator p = std::stable_partition( 
                                                     first.base(), 
                                                     last.base(), 
-                                                    is_zero_functor() );
-            this->c_private().erase( p, this->end().base() );
+                                                    is_not_zero_ptr() );
+            this->c_private().erase( p.base(), this->end().base().base() );
+            
         }
         
     public:
@@ -559,6 +509,7 @@ namespace boost
                 {
                     this->remove( next ); // delete object
                     *next.base() = 0;     // mark pointer as deleted
+                    std::cout << " deleting "; 
                 }
             }
 

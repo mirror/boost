@@ -1,3 +1,4 @@
+// (C) Copyright Thorsten Ottosen 2005.
 // (C) Copyright Jonathan Turkanis 2004.
 // (C) Copyright Daniel Wallin 2004.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying

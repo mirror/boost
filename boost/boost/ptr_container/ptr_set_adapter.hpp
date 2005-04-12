@@ -11,6 +11,7 @@
 #include <boost/range/reverse_iterator.hpp>
 #include <boost/range/const_reverse_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <iostream>
 
 namespace boost
 {
@@ -247,6 +248,8 @@ namespace boost
                 if( this->find( *first ) == this->end() )
                     insert( CloneAllocator::allocate_clone( *first ) ); // strong, commit
                 ++first;                                                      
+                //static int i = 0;
+                //std::cout << "\n " << i++ << std::endl; 
             }                                                                 
         }                         
 
@@ -316,6 +319,7 @@ namespace boost
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( const Range& r )
         {
+            //std::cout << "starting" ;
             insert( this->adl_begin(r), this->adl_end(r) );
         }
 
@@ -389,11 +393,16 @@ namespace boost
     private:
         template< typename II >                                               
         void set_basic_clone_and_insert( II first, II last ) // basic                 
-        {                                                                     
+        {               
+            //BOOST_ASSERT( first != this->begin() );
+            //BOOST_ASSERT( last != this->end() );
+                                                                  
             while( first != last )                                            
             {           
                 insert( CloneAllocator::allocate_clone( *first ) ); // strong, commit                              
-                ++first;                                                      
+                ++first;                                                     
+                //static int i = 0;
+                //std::cout << "\n multi: " << i++ << std::endl; 
             }                                                                 
         }                         
     
@@ -452,6 +461,7 @@ namespace boost
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( const Range& r )
         {
+            //std::cout <<"starting multiset";
             insert( this->adl_begin(r), this->adl_end(r) );
         }
 

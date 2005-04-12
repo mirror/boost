@@ -43,6 +43,12 @@ void test_fun()
                make_indirect_fun( &lesser_than ) );
     BOOST_CHECK( vec[1] == "aa" );
     BOOST_CHECK( vec[2] == "bb" );    
+
+    void* iptr1 = new int(2);
+    void* iptr2 = new int(3);
+
+    void_ptr_indirect_fun<std::less<int>, int> int_cast_fun;
+    BOOST_CHECK( int_cast_fun(iptr1,iptr2) );
     
 }
 

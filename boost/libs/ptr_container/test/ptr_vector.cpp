@@ -10,6 +10,7 @@ void test_ptr_vector()
     reversible_container_test< ptr_vector<Value>, Value, Value >();
     reversible_container_test< ptr_vector< nullable<Base> >, Base, Derived >();
     reversible_container_test< ptr_vector< nullable<Value> >, Value, Value >();
+    random_access_algorithms_test< ptr_vector<int> >();
 
     ptr_vector<int> vec( 100u );
     BOOST_CHECK( vec.capacity() >= 100u );

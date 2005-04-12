@@ -44,8 +44,83 @@ namespace boost
     public:
         BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
                                                             base_class );
-     
-   
+    public:
+        /*
+        void splice( iterator before, ptr_list& x )                    
+        {
+            BOOST_ASSERT( &x != this );
+            this->c_private().splice( before.base(), x.c_private() );
+        }
+
+        void splice( iterator before, ptr_list& x, iterator i ) 
+        {
+            BOOST_ASSERT( &x != this );
+            this->c_private().splice( before.base(), x.c_private(), 
+                                      i.base() );
+        }
+
+        void splice( iterator before, ptr_list& x, 
+                     iterator first, iterator last )
+        {
+            BOOST_ASSERT( &x != this );
+            this->c_private().splice( before.base(), x.c_private(), 
+                                      first.base(), last.base() );
+        }
+
+        template< class Range >
+        void splice( iterator before, ptr_list& x,
+                     const Range& r )
+        {
+            splice( before, x, begin(r), end(r) );
+        }
+        */
+
+        void unique( iterator first, iterator last )
+        {
+            base_class::unique( first, last );
+        }
+
+        template< class BinPred >
+        void unique( iterator first, iterator last, BinPred pred )
+        {
+            base_class::unique( first, last, pred );
+        }
+
+        void unique()
+        {
+            unique( std::equal_to<T>() );
+        }
+
+        template< class BinPred >
+        void unique( BinPred pred )
+        {
+            this->c_private().unique( void_ptr_indirect_fun<BinPred,T>( pred ) );
+        }
+
+        using base_class::merge;
+        
+        void merge( ptr_list& x )                                 
+        {
+            merge( x, std::less<T>() );
+        }
+
+        template< typename Compare > 
+        void merge( ptr_list& x, Compare comp )                   
+        {
+            this->c_private().merge( x.c_private(), void_ptr_indirect_fun<Compare,T>( comp ) );
+        }
+
+        void sort()                                                    
+        { 
+            sort( std::less<T>() ); 
+        };
+
+        template< typename Compare > 
+        void sort( Compare comp )                             
+        {
+            this->c_private().sort( void_ptr_indirect_fun<Compare,T>( comp ) );
+        }
+
     }; // class 'ptr_list'
 
     //////////////////////////////////////////////////////////////////////////////

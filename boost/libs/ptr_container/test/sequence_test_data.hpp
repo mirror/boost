@@ -1,11 +1,24 @@
+
+template< class C >
+void dump( const C& c )
+{
+    typename C::const_iterator i = c.begin(),
+                               e = c.end();
+
+    for( ; i != e; ++i )
+        std::cout << " " << *i;
+    
+}
  
 #include "test_data.hpp"
 #include <boost/range/iterator_range.hpp>
-#include <boost/ptr_container/ptr_predicate.hpp>
 #include <boost/bind.hpp>
 
 template< typename C, typename B, typename T >
 void reversible_container_test();
+
+template< class IntContainer >
+void algorithms_test();
 
 template< typename C, typename B, typename T >
 void reversible_container_test()
@@ -118,5 +131,112 @@ void reversible_container_test()
     BOOST_CHECK( c.empty() );
     BOOST_MESSAGE( "finished transfer test" ); 
 
+}
+
+
+#include <boost/assign/list_inserter.hpp>
+#include <iostream>
+
+template< class Compare, class C >
+bool is_sorted( const C& c )
+{
+    if( c.size() < 2 )
+        return true;
+    
+    typename C::const_iterator prev = c.begin(),
+                               e = c.end(),
+                               next = prev;
+    Compare pred;
+    for( ; next != e ; )
+    {
+        prev = next;
+        ++next;
+
+        if( next == c.end() )
+            return true;
+        
+        if( !pred(*prev,*next) )
+            return false;
+    }
+    return true;
+}
+
+
+
+
+struct equal_to_int
+{
+    int i_;
+    
+    equal_to_int( int i ) : i_(i)
+    { }
+    
+    bool operator()( int i ) const
+    {
+        return i_ == i; 
+    }
+};
+
+
+template< class IntContainer >
+void random_access_algorithms_test()
+{
+    IntContainer c;
+    assign::push_back( c )
+                    ( new int(1) )
+                    ( new int(3) )
+                    ( new int(6) )
+                    ( new int(7) )
+                    ( new int(2) )
+                    ( new int(2) )
+                    ( new int(0) )
+                    ( new int(6) )
+                    ( new int(3) );
+    c.sort();
+    BOOST_CHECK( is_sorted< std::less_equal<int> >( c ) );
+    BOOST_CHECK_EQUAL( c.size(), 9u );
+    
+    c.unique();
+    BOOST_CHECK_EQUAL( c.size(), 6u );
+#ifdef PTR_LIST_TEST
+    BOOST_CHECK( c.front() == 0 );
+    BOOST_CHECK( c.back() == 7 );
+#else
+    BOOST_CHECK( c[0] == 0 );
+    BOOST_CHECK( c[1] == 1 );
+    BOOST_CHECK( c[2] == 2 );
+    BOOST_CHECK( c[3] == 3 );
+    BOOST_CHECK( c[4] == 6 );
+    BOOST_CHECK( c[5] == 7 );
+#endif    
+/*    
+    c.erase_if( equal_to_int(1) );
+    BOOST_CHECK_EQUAL( c.size(), 5u );
+#ifdef PTR_LIST_TEST
+    BOOST_CHECK_EQUAL( c.front(), 0 );
+#else
+    BOOST_CHECK_EQUAL( c[0], 0 );
+    BOOST_CHECK_EQUAL( c[1], 2 );
+#endif    
+
+    c.erase_if( equal_to_int(7) );
+    BOOST_CHECK_EQUAL( c.size(), 4u );
+    BOOST_CHECK_EQUAL( c.back(), 6 );
+
+    // C = [0,2,3,6]
+
+    IntContainer c2;
+    assign::push_back( c2 )
+                   ( new int(-1) )
+                   ( new int(1) )
+                   ( new int(4) )
+                   ( new int(5) )
+                   ( new int(7) );
+    BOOST_CHECK( c2.size() == 5u );
+    c.merge( c2 );
+    BOOST_CHECK( c2.empty() );
+    BOOST_CHECK( c.size() == 9u );
+    BOOST_CHECK( is_sorted< std::less_equal<int> >( c ) );
+*/    
 }
 
