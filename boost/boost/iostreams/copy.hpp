@@ -146,15 +146,6 @@ copy( const Source& src, const Sink& snk,
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
 
-template<typename Pipeline, typename Component>
-std::streamsize
-copy( const pipeline<Pipeline, Component>& p,
-      std::streamsize buffer_size = default_device_buffer_size )
-{ 
-    chain<output> chn(static_cast<const Pipeline&>(p));
-    return iostreams::copy(p.component_, chn);
-}
-
 template<typename Source, typename Sink>
 std::streamsize
 copy( Source& src, const Sink& snk,
