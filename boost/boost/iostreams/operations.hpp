@@ -531,7 +531,7 @@ struct flush_device_impl<flushable_tag> {
 template<>
 struct flush_device_impl<any_tag> {
     template<typename T>
-    static bool flush(T& t) { return true; }
+    static bool flush(T&) { return true; }
 };
 
 //------------------Definition of flush_filter_impl---------------------------//
@@ -559,7 +559,7 @@ struct flush_filter_impl<flushable_tag> {
 template<>
 struct flush_filter_impl<any_tag> {
     template<typename T, typename Sink>
-    static bool flush(T& t, Sink& snk) { return true; }
+    static bool flush(T&, Sink&) { return true; }
 };
 
 //------------------Definition of imbue_impl----------------------------------//
@@ -622,14 +622,14 @@ struct optimal_buffer_size_impl<optimally_buffered_tag> {
 template<>
 struct optimal_buffer_size_impl<device_tag> {
     template<typename T>
-    static std::streamsize optimal_buffer_size(const T& t)
+    static std::streamsize optimal_buffer_size(const T&)
     { return default_device_buffer_size; }
 };
 
 template<>
 struct optimal_buffer_size_impl<filter_tag> {
     template<typename T>
-    static std::streamsize optimal_buffer_size(const T& t)
+    static std::streamsize optimal_buffer_size(const T&)
     { return default_filter_buffer_size; }
 };
 
