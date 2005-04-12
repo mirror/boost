@@ -21,14 +21,15 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
-using namespace std;
-using namespace boost;
-using namespace boost::iostreams;
-using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;   
 
 void read_wide_input_test()
 {
+    using namespace std;
+    using namespace boost;
+    using namespace boost::iostreams;
+    using namespace boost::iostreams::test;
+
     test_sequence<wchar_t> seq;
 
     {
@@ -78,6 +79,11 @@ void read_wide_input_test()
 
 void write_wide_output_test()
 {
+    using namespace std;
+    using namespace boost;
+    using namespace boost::iostreams;
+    using namespace boost::iostreams::test;
+
     {
         vector<wchar_t>         first;
         test_sequence<wchar_t>  second;

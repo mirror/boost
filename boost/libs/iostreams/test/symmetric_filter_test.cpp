@@ -14,14 +14,15 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
-using namespace std;
-using namespace boost;
-using namespace boost::iostreams;
-using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;   
 
 void symmetric_filter_test()
 {
+    using namespace std;
+    using namespace boost;
+    using namespace boost::iostreams;
+    using namespace boost::iostreams::test;
+
     typedef toupper_symmetric_filter             impl_type;
     typedef symmetric_filter_adapter<impl_type>  filter_type;
 
