@@ -15,14 +15,14 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
-using namespace std;
-using namespace boost;
-using namespace boost::iostreams;
-using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;  
 
 void read_reversing_filter_test()
 {
+    using namespace std;
+    using namespace boost::iostreams;
+    using namespace boost::iostreams::test;
+
     test_file       test;
     lowercase_file  lower;
 
@@ -76,6 +76,10 @@ void read_reversing_filter_test()
 
 void write_reversing_filter_test()
 {
+    using namespace std;
+    using namespace boost::iostreams;
+    using namespace boost::iostreams::test;
+
     uppercase_file upper;
 
     {

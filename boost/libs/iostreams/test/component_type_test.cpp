@@ -14,16 +14,16 @@
 #include "detail/filters.hpp"
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
-
-using namespace std;
-using namespace boost::iostreams;
-using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;
 
 #define COMPARE_TYPE_ID(x, y) BOOST_IOSTREAMS_COMPARE_TYPE_ID(x, y)
 
 void component_type_test()
 {
+    using namespace std;
+    using namespace boost::iostreams;
+    using namespace boost::iostreams::test;
+
     temp_file       dest;
     lowercase_file  lower;
 

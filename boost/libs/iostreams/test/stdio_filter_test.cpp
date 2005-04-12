@@ -14,10 +14,7 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
-using namespace std;
-using namespace boost;
 using namespace boost::iostreams;
-using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;    
 
 struct toupper_stdio_filter : stdio_filter {
@@ -53,6 +50,8 @@ struct padding_stdio_filter : stdio_filter {
 
 void read_stdio_filter()
 {
+    using namespace boost::iostreams::test;
+
     test_file          src1, src2;
     filtering_istream  first, second;
 
@@ -83,6 +82,9 @@ void read_stdio_filter()
 
 void write_stdio_filter() 
 {
+    using namespace std;
+    using namespace boost::iostreams::test;
+
     temp_file          dest1, dest2;
     filtering_ostream  out1, out2;
 
