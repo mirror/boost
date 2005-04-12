@@ -220,6 +220,15 @@ namespace boost
         template <class T>
         inline std::size_t float_hash_value(T v)
         {
+#if defined(__BORLAND__)
+            if(v == std::numeric_limits<double>::quiet_NaN())
+                return 0;
+            if(v == std::numeric_limits<double>::infinity())
+                return 1;
+            if(v == -std::numeric_limits<double>::infinity())
+                return 2;
+#endif
+
             int exp;
             v = boost::hash_detail::call_frexp(v, &exp);
 
