@@ -420,7 +420,8 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::reset()
 {
     using namespace std;
     pimpl_->close();
-    for_each(list().begin(), list().end(), checked_deleter<streambuf_type>());
+    std::for_each( list().begin(), list().end(), 
+                   checked_deleter<streambuf_type>() );
     list().clear();
     pimpl_->flags_ &= ~f_complete;
 }
