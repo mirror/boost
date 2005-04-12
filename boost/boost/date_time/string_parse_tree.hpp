@@ -43,6 +43,9 @@ struct parse_match_result
   {
     return cache[cache.size()-1];
   }
+  //! Returns true if more characters were parsed than was necessary
+  /*! Should be used in conjunction with last_char() 
+   * to get the remaining character. */
   bool has_remaining() const
   {
     return (cache.size() > match_depth);
@@ -144,13 +147,18 @@ struct string_parse_tree
     }
   }
  
-  /* A parse_match_result that has been returned from a failed match 
+  
+  //! Recursive function that finds a matching string in the tree.
+  /*! Must check match_results::has_remaining() after match() is 
+   * called. This is required so the user can determine if 
+   * stream iterator is already pointing to the expected 
+   * character or not (match() might advance sitr to next char in stream).
+   *
+   * A parse_match_result that has been returned from a failed match 
    * attempt can be sent in to the match function of a different 
    * string_parse_tree to attempt a match there. Use the iterators 
    * for the partially consumed stream, the parse_match_result object, 
    * and '0' for the level parameter. */
-  
-  //! Recursive function that finds a matching string in the tree.
   short
   match(std::istreambuf_iterator<charT>& sitr, 
         std::istreambuf_iterator<charT>& stream_end,
@@ -193,6 +201,11 @@ struct string_parse_tree
 
   }
 
+  /*! Must check match_results::has_remaining() after match() is 
+   * called. This is required so the user can determine if 
+   * stream iterator is already pointing to the expected 
+   * character or not (match() might advance sitr to next char in stream).
+   */
   parse_match_result_type
   match(std::istreambuf_iterator<charT>& sitr, 
         std::istreambuf_iterator<charT>& stream_end) const

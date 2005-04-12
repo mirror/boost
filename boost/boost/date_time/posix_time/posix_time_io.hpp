@@ -24,6 +24,9 @@ namespace posix_time {
   typedef boost::date_time::time_facet<ptime, wchar_t> wptime_facet;
   typedef boost::date_time::time_facet<ptime, char>     ptime_facet;
 
+  typedef boost::date_time::time_input_facet<ptime,wchar_t> wptime_input_facet;
+  typedef boost::date_time::time_input_facet<ptime,char>     ptime_input_facet;
+
 
   template <class CharT, class TraitsT>
   inline 
@@ -49,6 +52,27 @@ namespace posix_time {
     }
     return os;
   }
+
+  //! input operator for ptime
+  template <class CharT, class traits>
+  inline
+  std::basic_istream<CharT, traits>&
+  operator>>(std::basic_istream<CharT, traits>& is, ptime& pt)
+  {
+    typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
+    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
+    if(std::has_facet<time_input_facet>(is.getloc())) {
+      std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, pt);
+    }
+    else {
+      time_input_facet* f = new time_input_facet();
+      std::locale l = std::locale(is.getloc(), f);
+      is.imbue(l);
+      f->get(sit, str_end, is, pt);
+    }
+    return is;
+  }
+  
 
   template <class CharT, class TraitsT>
   inline 
@@ -76,6 +100,26 @@ namespace posix_time {
     return os;
   }
 
+  //! input operator for time_period
+  template <class CharT, class traits>
+  inline
+  std::basic_istream<CharT, traits>&
+  operator>>(std::basic_istream<CharT, traits>& is, time_period& tp)
+  {
+    typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
+    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
+    if(std::has_facet<time_input_facet>(is.getloc())) {
+      std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, tp);
+    }
+    else {
+      time_input_facet* f = new time_input_facet();
+      std::locale l = std::locale(is.getloc(), f);
+      is.imbue(l);
+      f->get(sit, str_end, is, tp);
+    }
+    return is;
+  }
+  
 
   //! ostream operator for posix_time::time_duration 
   //  todo fix to use facet --  place holder for now...
@@ -111,7 +155,25 @@ namespace posix_time {
     */
   }
 
-  
+  //! input operator for time_duration
+  template <class CharT, class traits>
+  inline
+  std::basic_istream<CharT, traits>&
+  operator>>(std::basic_istream<CharT, traits>& is, time_duration& td)
+  {
+    typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
+    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
+    if(std::has_facet<time_input_facet>(is.getloc())) {
+      std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, td);
+    }
+    else {
+      time_input_facet* f = new time_input_facet();
+      std::locale l = std::locale(is.getloc(), f);
+      is.imbue(l);
+      f->get(sit, str_end, is, td);
+    }
+    return is;
+  }
   
 } } // namespaces
 #endif // DATE_TIME_POSIX_TIME_IO_HPP__

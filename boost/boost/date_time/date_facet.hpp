@@ -23,7 +23,7 @@
 
 namespace boost { namespace date_time {
 
-
+  
   /*! Class that provides format based I/O facet for date types.
    *
    * This class allows the formatting of dates by using format string.
@@ -436,6 +436,17 @@ namespace boost { namespace date_time {
     explicit date_input_facet(::size_t a_ref = 0) 
       : std::locale::facet(a_ref), 
         m_format(default_date_format),
+        m_month_format(short_month_format),
+        m_weekday_format(short_weekday_format),
+        m_year_format(four_digit_year_format),
+        m_parser(m_format, std::locale::classic())
+        // default period_parser & special_values_parser used
+    {}
+
+    explicit date_input_facet(const string_type& format,
+                              ::size_t a_ref = 0) 
+      : std::locale::facet(a_ref), 
+        m_format(format),
         m_month_format(short_month_format),
         m_weekday_format(short_weekday_format),
         m_year_format(four_digit_year_format),

@@ -25,7 +25,8 @@ namespace boost { namespace date_time {
 //! Helper function for parsing fixed length strings into integers
 /*! Will consume 'length' number of characters from stream. Consumed 
  * character are transfered to parse_match_result struct. 
- * Returns '-1' if no number can be parsed. */
+ * Returns '-1' if no number can be parsed or incorrect number of 
+ * digits in stream. */
 template<typename int_type, typename charT>
 inline
 int_type
@@ -37,7 +38,7 @@ fixed_string_to_int(std::istreambuf_iterator<charT>& itr,
   //typedef std::basic_string<charT>  string_type;
   unsigned int j = 0;
   //string_type s;
-  while (j < length && itr != stream_end) {
+  while (j < length && itr != stream_end && std::isdigit(*itr)) {
     mr.cache += (*itr);
     itr++;
     j++;
@@ -411,6 +412,17 @@ class format_date_parser
              std::istreambuf_iterator<charT>& stream_end,
              string_type format) const
   {
+    match_results mr;
+    return parse_month(sitr, stream_end, format, mr);
+  }
+ 
+  //! Throws bad_month if unable to parse
+  month_type
+  parse_month(std::istreambuf_iterator<charT>& sitr, 
+             std::istreambuf_iterator<charT>& stream_end,
+             string_type format,
+             match_results& mr) const
+  {
     bool use_current_char = false;
     
     // skip leading whitespace
@@ -427,7 +439,7 @@ class format_date_parser
           switch(*itr) {
           case 'b': 
             {
-              match_results mr = m_month_short_names.match(sitr, stream_end);
+              mr = m_month_short_names.match(sitr, stream_end);
               month = mr.current_match;
               if (mr.has_remaining()) {
                 current_char = mr.last_char();
@@ -437,7 +449,7 @@ class format_date_parser
             }
           case 'B': 
             {
-              match_results mr = m_month_long_names.match(sitr, stream_end);
+              mr = m_month_long_names.match(sitr, stream_end);
               month = mr.current_match;
               if (mr.has_remaining()) {
                 current_char = mr.last_char();
@@ -571,6 +583,17 @@ class format_date_parser
              std::istreambuf_iterator<charT>& stream_end,
              string_type format) const
   {
+    match_results mr;
+    return parse_year(sitr, stream_end, format, mr);
+  }
+
+  //! throws bad_year if unable to parse
+  year_type
+  parse_year(std::istreambuf_iterator<charT>& sitr, 
+             std::istreambuf_iterator<charT>& stream_end,
+             string_type format,
+             match_results& mr) const
+  {
     bool use_current_char = false;
     
     // skip leading whitespace
@@ -584,7 +607,7 @@ class format_date_parser
       if (*itr == '%') {
         itr++;
         if (*itr != '%') { //ignore '%%'
-          match_results mr;
+          //match_results mr;
           switch(*itr) {
           case 'Y':
             {
