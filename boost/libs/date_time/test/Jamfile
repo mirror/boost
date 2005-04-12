@@ -97,6 +97,10 @@ test-suite date_time_gregorian_dll
    [ run posix_time/testgreg_duration_operators.cpp
      <lib>../build/boost_date_time
     : : :  $(DATE_TIME_PROPERTIES) ]
+   [ run posix_time/testtime_input_facet.cpp
+     <lib>../build/boost_date_time
+    : : :  $(DATE_TIME_PROPERTIES) ]
+
  ;
 
 
