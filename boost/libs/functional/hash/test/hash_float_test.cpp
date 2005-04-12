@@ -32,11 +32,6 @@ void float_tests(T* = 0)
 
     using namespace std;
 
-    // The tests cause Borland to crash horribly.
-#if defined(__BORLANDC__)
-    BOOST_REQUIRE(false);
-#endif
-    
     if(std::numeric_limits<T>::has_infinity) {
         T infinity = (T) 1. / zero;
         T infinity2 = -log(zero);
