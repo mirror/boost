@@ -98,6 +98,9 @@ public:
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     bool is_open() const { return this->member.is_open(); }
     void close() { this->member.close(); }
+    bool auto_close() const { return this->member.auto_close(); }
+    void set_auto_close(bool close) { this->member.set_auto_close(close); }
+    bool strict_sync() { return this->member.strict_sync(); }
     Device& operator*() { return *this->member; }
     Device* operator->() { return &*this->member; }
 private:

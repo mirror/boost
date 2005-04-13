@@ -56,6 +56,9 @@ public:
 #endif
     virtual void set_next(link* /* next */) { }
     virtual void close(BOOST_IOS::openmode) = 0;
+    virtual bool auto_close() const = 0;
+    virtual void set_auto_close(bool) = 0;
+    virtual bool strict_sync() = 0;
     virtual const std::type_info& component_type() const = 0;
     virtual void* component_impl() = 0;
 };
