@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif         
+#endif
 
 #include <algorithm>  // count.
 #include <boost/iostreams/categories.hpp>
@@ -36,8 +36,8 @@ public:
           multichar_tag,
           optimally_buffered_tag
         { };
-    basic_counter(int first_line = 0, int first_char = 0) 
-        : lines_(first_line), chars_(first_char) 
+    basic_counter(int first_line = 0, int first_char = 0)
+        : lines_(first_line), chars_(first_char)
         { }
     int lines() const { return lines_; }
     int characters() const { return chars_; }

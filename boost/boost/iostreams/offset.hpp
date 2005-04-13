@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>          // min.
 #include <utility>            // pair.
@@ -23,10 +23,10 @@
 #include <boost/iostreams/detail/ios.hpp>     // failure.
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/operations.hpp>
-#include <boost/iostreams/skip.hpp> 
+#include <boost/iostreams/skip.hpp>
 #include <boost/iostreams/traits.hpp>         // io_mode, is_direct.
 #include <boost/mpl/bool.hpp>
-#include <boost/static_assert.hpp>  
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
@@ -79,7 +79,7 @@ public:
     struct io_category
         : io_mode<Device>::type,
           device_tag,
-          direct_tag, 
+          direct_tag,
           closable_tag,
           localizable_tag
         { };
@@ -115,25 +115,25 @@ public:
 
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
-    { 
+    {
         using namespace std;
         if (!open_)
             open(src);
-        streamsize amt = 
+        streamsize amt =
             (std::min) (n, static_cast<streamsize>(end_ - pos_));
-        streamsize result = iostreams::read(this->component(), src, s, amt); 
+        streamsize result = iostreams::read(this->component(), src, s, amt);
         pos_ += result;
         return result;
     }
 
     template<typename Sink>
     void write(Sink& snk, const char_type* s, std::streamsize n)
-    { 
+    {
         if (!open_)
             open(snk);
         if (pos_ + n >= end_)
             bad_write();
-        iostreams::write(this->component(), snk, s, n); 
+        iostreams::write(this->component(), snk, s, n);
         pos_ += n;
     }
 
@@ -156,16 +156,16 @@ public:
 private:
     template<typename Device>
     void open(Device& dev)
-    { 
+    {
         open_ = true;
-        pos_ = iostreams::skip(this->component(), dev, beg_); 
+        pos_ = iostreams::skip(this->component(), dev, beg_);
     }
     stream_offset  beg_, pos_, end_;
     bool           open_;
 };
 
 template<typename T>
-struct offset_traits 
+struct offset_traits
     : select<
           is_filter<T>,  offset_filter<T>,
           is_direct<T>,  offset_direct_device<T>,
@@ -179,7 +179,7 @@ template<typename T>
 struct offset_view : public detail::offset_traits<T>::type {
     typedef typename detail::param_type<T>::type param_type;
     offset_view(param_type t, stream_offset off, stream_offset len)
-        : detail::offset_traits<T>::type(t, off, len) 
+        : detail::offset_traits<T>::type(t, off, len)
         { }
 };
 
@@ -197,22 +197,22 @@ offset_view<T> offset( const T& t, stream_offset off, stream_offset len
 { return offset_view<T>(t, off, len); }
 
 template<typename Ch, typename Tr>
-offset_view< std::basic_streambuf<Ch, Tr> > 
+offset_view< std::basic_streambuf<Ch, Tr> >
 offset(std::basic_streambuf<Ch, Tr>& sb)
 { return offset_view< std::basic_streambuf<Ch, Tr> >(sb); }
 
 template<typename Ch, typename Tr>
-offset_view< std::basic_istream<Ch, Tr> > 
+offset_view< std::basic_istream<Ch, Tr> >
 offset(std::basic_istream<Ch, Tr>& is)
 { return offset_view< std::basic_istream<Ch, Tr> >(is); }
 
 template<typename Ch, typename Tr>
-offset_view< std::basic_ostream<Ch, Tr> > 
+offset_view< std::basic_ostream<Ch, Tr> >
 offset(std::basic_ostream<Ch, Tr>& os)
 { return offset_view< std::basic_ostream<Ch, Tr> >(os); }
 
 template<typename Ch, typename Tr>
-offset_view< std::basic_iostream<Ch, Tr> > 
+offset_view< std::basic_iostream<Ch, Tr> >
 offset(std::basic_iostream<Ch, Tr>& io)
 { return offset_view< std::basic_iostream<Ch, Tr> >(io); }
 
@@ -269,22 +269,22 @@ namespace detail {
 
 template<typename Device>
 offset_indirect_device<Device>::offset_indirect_device
-    (param_type dev, stream_offset off, stream_offset len) 
+    (param_type dev, stream_offset off, stream_offset len)
     : basic_adapter<Device>(dev), beg_(off), pos_(off), end_(off + len)
-{ 
+{
     if (len < 0 || off < 0)
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
-    pos_ = iostreams::skip(this->component(), off); 
+    pos_ = iostreams::skip(this->component(), off);
 }
 
 template<typename Device>
 inline std::streamsize offset_indirect_device<Device>::read
     (char_type* s, std::streamsize n)
-{ 
+{
     using namespace std;
-    streamsize amt = 
+    streamsize amt =
         (std::min) (n, static_cast<streamsize>(end_ - pos_));
-    streamsize result = iostreams::read(this->component(), s, amt); 
+    streamsize result = iostreams::read(this->component(), s, amt);
     pos_ += result;
     return result;
 }
@@ -292,10 +292,10 @@ inline std::streamsize offset_indirect_device<Device>::read
 template<typename Device>
 inline void offset_indirect_device<Device>::write
     (const char_type* s, std::streamsize n)
-{ 
+{
     if (pos_ + n >= end_)
         bad_write();
-    iostreams::write(this->component(), s, n); 
+    iostreams::write(this->component(), s, n);
     pos_ += n;
 }
 
@@ -321,9 +321,9 @@ stream_offset offset_indirect_device<Device>::seek
 
 template<typename Device>
 offset_direct_device<Device>::offset_direct_device
-    (const Device& dev, stream_offset off, stream_offset len)  
+    (const Device& dev, stream_offset off, stream_offset len)
     : basic_adapter<Device>(dev), beg_(0), end_(0)
-{ 
+{
     std::pair<char_type*, char_type*> seq =
         sequence(is_convertible<io_category, input>());
     if (off < 0 || len < 0 || off + len > seq.second - seq.first)
@@ -333,28 +333,28 @@ offset_direct_device<Device>::offset_direct_device
 }
 
 template<typename Device>
-typename offset_direct_device<Device>::pair_type 
+typename offset_direct_device<Device>::pair_type
 offset_direct_device<Device>::input_sequence()
-{ 
+{
     BOOST_STATIC_ASSERT((is_convertible<io_category, input>::value));
-    return std::make_pair(beg_, end_); 
+    return std::make_pair(beg_, end_);
 }
 
 template<typename Device>
-typename offset_direct_device<Device>::pair_type 
-offset_direct_device<Device>::output_sequence() 
-{ 
+typename offset_direct_device<Device>::pair_type
+offset_direct_device<Device>::output_sequence()
+{
     BOOST_STATIC_ASSERT((is_convertible<io_category, output>::value));
-    return std::make_pair(beg_, end_); 
+    return std::make_pair(beg_, end_);
 }
 
 template<typename Device>
-typename offset_direct_device<Device>::pair_type 
+typename offset_direct_device<Device>::pair_type
 offset_direct_device<Device>::sequence(mpl::true_)
 { return iostreams::input_sequence(this->component()); }
 
 template<typename Device>
-typename offset_direct_device<Device>::pair_type 
+typename offset_direct_device<Device>::pair_type
 offset_direct_device<Device>::sequence(mpl::false_)
 { return iostreams::output_sequence(this->component()); }
 
@@ -362,10 +362,10 @@ offset_direct_device<Device>::sequence(mpl::false_)
 
 template<typename Filter>
 offset_filter<Filter>::offset_filter
-    (const Filter& flt, stream_offset off, stream_offset len) 
-    : basic_adapter<Filter>(flt), beg_(off), 
+    (const Filter& flt, stream_offset off, stream_offset len)
+    : basic_adapter<Filter>(flt), beg_(off),
       pos_(off), end_(off + len), open_(false)
-{ 
+{
     if (len < 0 || off < 0)
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
 }

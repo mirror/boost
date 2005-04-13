@@ -17,7 +17,7 @@
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/static_assert.hpp>  
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace iostreams {
@@ -58,8 +58,8 @@ public:
     }
 
     template<typename Next>
-    void close( Next&, 
-                BOOST_IOS::openmode which = 
+    void close( Next&,
+                BOOST_IOS::openmode which =
                     BOOST_IOS::in | BOOST_IOS::out )
     { iostreams::close(this->component(), which); }
 

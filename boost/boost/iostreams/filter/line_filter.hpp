@@ -88,14 +88,14 @@ public:
             }
         }
     }
-    
+
     typedef basic_line_filter<Ch, Alloc> self;
     friend struct detail::closer<self>;
 
     template<typename Sink>
     void close(Sink& snk, BOOST_IOS::openmode which)
     {
-        if ((state_ & f_read) && (which & BOOST_IOS::in)) 
+        if ((state_ & f_read) && (which & BOOST_IOS::in))
             close();
 
         if ((state_ & f_write) && (which & BOOST_IOS::out)) {
@@ -140,8 +140,8 @@ private:
     }
 
     bool is_eof(typename traits_type::int_type c)
-    { 
-        return traits_type::eq_int_type(c, traits_type::eof()); 
+    {
+        return traits_type::eq_int_type(c, traits_type::eof());
     }
 
     Ch newline() const { return detail::newline<Ch>::value; }
