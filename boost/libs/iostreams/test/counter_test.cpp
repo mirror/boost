@@ -32,8 +32,8 @@ void read_counter()
     in.push(counter());
     in.push(file_source(src.name(), in_mode));
 
-    counter*  first_counter = in.component<0, counter>();
-    counter*  second_counter = in.component<2, counter>();
+    counter*  first_counter = BOOST_IOSTREAMS_COMPONENT(in, 0, counter);
+    counter*  second_counter = BOOST_IOSTREAMS_COMPONENT(in, 2, counter);
     int       first_count = 0;
     int       second_count = 0;
     int       line_count = 0;
@@ -65,8 +65,8 @@ void write_counter()
     out.push(counter());
     out.push(null_sink());
 
-    counter*  first_counter = out.component<0, counter>();
-    counter*  second_counter = out.component<2, counter>();
+    counter*  first_counter = BOOST_IOSTREAMS_COMPONENT(out, 0, counter);
+    counter*  second_counter = BOOST_IOSTREAMS_COMPONENT(out, 2, counter);
     int       first_count = 0;
     int       second_count = 0;
     int       line_count = 0;
