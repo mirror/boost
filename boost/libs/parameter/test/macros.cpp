@@ -9,6 +9,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/ref.hpp>
 #include <cassert>
+#include <string.h>
 
 namespace test
 {
