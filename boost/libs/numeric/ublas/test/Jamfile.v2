@@ -88,14 +88,15 @@ test-suite numeric/uBLAS
         : : :
             <define>$(UBLAS_TESTSET)
       ]
-      [ run test7/test7.cpp
-            test7/test71.cpp
-            test7/test72.cpp
-            test7/test73.cpp
-        : : :
-            <define>BOOST_UBLAS_USE_INTERVAL
-            <define>$(UBLAS_TESTSET)
-      ]
+# Test commented out, just like in V1 Jamfile
+#      [ run test7/test7.cpp
+#            test7/test71.cpp
+#            test7/test72.cpp
+#            test7/test73.cpp
+#        : : :
+#            <define>BOOST_UBLAS_USE_INTERVAL
+#            <define>$(UBLAS_TESTSET)
+#      ]
 
       [ run placement_new.cpp
       ]
