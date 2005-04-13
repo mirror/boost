@@ -7,7 +7,6 @@
 #include <cstdio>  // EOF.
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/stream_facade.hpp>
-#include <boost/ref.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
@@ -33,20 +32,19 @@ private:
 
 class closable_input_filter : public input_filter {
 public:
-    closable_input_filter() : open_(true) { }
+    closable_input_filter() : open_(new bool(true)) { }
 
     template<typename Source> 
     int get(Source&) { return EOF; }
 
-    void open() { open_ = true; }
+    void open() { *open_ = true; }
 
     template<typename Source> 
-    void close(Source&) { open_ = false; }
+    void close(Source&) { *open_ = false; }
 
-    bool is_open() const { return open_; }
+    bool is_open() const { return *open_; }
 private:
-    // No need for shared_ptr, as filter will be stored by reference.
-    bool open_;
+    boost::shared_ptr<bool> open_;
 };
 
 void auto_close_source()
@@ -54,7 +52,7 @@ void auto_close_source()
     // Rely on auto_close to close source.
     closable_source src;
     {
-        stream_facade<closable_source> in(boost::ref(src));
+        stream_facade<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         BOOST_CHECK(in.auto_close());
     }
@@ -63,7 +61,7 @@ void auto_close_source()
     // Use close() to close components.
     src.open();
     {
-        stream_facade<closable_source> in(boost::ref(src));
+        stream_facade<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         BOOST_CHECK(in.auto_close());
         in.close();
@@ -73,7 +71,7 @@ void auto_close_source()
     // Use close() to close components, with auto_close disabled.
     src.open();
     {
-        stream_facade<closable_source> in(boost::ref(src));
+        stream_facade<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
         in.close();
@@ -83,7 +81,7 @@ void auto_close_source()
     // Disable auto_close.
     src.open();
     {
-        stream_facade<closable_source> in(boost::ref(src));
+        stream_facade<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
         BOOST_CHECK(!in.auto_close());
@@ -99,8 +97,8 @@ void auto_close_filter()
     // Rely on auto_close to close components.
     {
         filtering_istream in;
-        in.push(boost::ref(flt));
-        in.push(boost::ref(src));
+        in.push(flt);
+        in.push(src);
         BOOST_CHECK(flt.is_open());
         BOOST_CHECK(src.is_open());
         BOOST_CHECK(in.auto_close());
@@ -113,8 +111,8 @@ void auto_close_filter()
     src.open();
     {
         filtering_istream in;
-        in.push(boost::ref(flt));
-        in.push(boost::ref(src));
+        in.push(flt);
+        in.push(src);
         BOOST_CHECK(flt.is_open());
         BOOST_CHECK(src.is_open());
         BOOST_CHECK(in.auto_close());
@@ -128,8 +126,8 @@ void auto_close_filter()
     src.open();
     {
         filtering_istream in;
-        in.push(boost::ref(flt));
-        in.push(boost::ref(src));
+        in.push(flt);
+        in.push(src);
         BOOST_CHECK(flt.is_open());
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
@@ -143,8 +141,8 @@ void auto_close_filter()
     src.open();
     {
         filtering_istream in;
-        in.push(boost::ref(flt));
-        in.push(boost::ref(src));
+        in.push(flt);
+        in.push(src);
         BOOST_CHECK(flt.is_open());
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
@@ -161,8 +159,8 @@ void auto_close_filter()
     src.open();
     {
         filtering_istream in;
-        in.push(boost::ref(flt));
-        in.push(boost::ref(src));
+        in.push(flt);
+        in.push(src);
         BOOST_CHECK(flt.is_open());
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
@@ -170,7 +168,7 @@ void auto_close_filter()
         in.pop();
         BOOST_CHECK(flt.is_open());
         BOOST_CHECK(src.is_open());
-        in.push(boost::ref(src));
+        in.push(src);
     }
     BOOST_CHECK(!flt.is_open());
     BOOST_CHECK(!src.is_open());
