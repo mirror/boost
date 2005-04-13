@@ -4,13 +4,19 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+#include <algorithm>  // equal.
 #include <fstream>
+#include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/device/file.hpp>
+#include <boost/iostreams/device/null.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/operations.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
 #include "detail/filters.hpp"
 #include "detail/temp_file.hpp"
+#include "detail/verification.hpp"
 
 using namespace std;
 using namespace boost;
@@ -21,9 +27,112 @@ using boost::unit_test::test_suite;
 void flush_test()
 {
     {
-        temp_file tmp;
-        stream_facade<file_sink> out(tmp.name());
-        BOOST_CHECK(!out.flush());
+        streambuf_facade<null_sink> null;
+        null.open(null_sink());
+        BOOST_CHECK_MESSAGE( 
+            iostreams::flush(null), 
+            "failed flushing streambuf_facade"
+        );
+        BOOST_CHECK_MESSAGE( 
+            null.strict_sync(), 
+            "failed strict-syncing streambuf_facade with "
+            "non-flushable resource"
+        );
+    }
+
+    {
+        stream_facade<null_sink> null;
+        null.open(null_sink());
+        BOOST_CHECK_MESSAGE( 
+            iostreams::flush(null), 
+            "failed flushing stream_facade"
+        );
+        BOOST_CHECK_MESSAGE( 
+            null.strict_sync(), 
+            "failed strict-syncing stream_facade with "
+            "non-flushable resource"
+        );
+    }
+
+    {
+        filtering_ostream null;
+        null.push(null_sink());
+        BOOST_CHECK_MESSAGE( 
+            iostreams::flush(null), 
+            "failed flushing filtering_ostream"
+        );
+        BOOST_CHECK_MESSAGE( 
+            null.strict_sync(), 
+            "failed strict-syncing filtering_ostream with "
+            "non-flushable resource"
+        );
+    }
+
+    {
+        filtering_ostream null;
+        null.push(tolower_filter());
+        null.push(null_sink());
+        BOOST_CHECK_MESSAGE( 
+            iostreams::flush(null), 
+            "failed flushing filtering_ostream with non-flushable filter"
+        );
+        BOOST_CHECK_MESSAGE( 
+            !null.strict_sync(), 
+            "strict-syncing filtering_ostream with "
+            "non-flushable filter succeeded"
+        );
+    }
+
+    {
+        vector<char> dest1;
+        vector<char> dest2;
+        filtering_ostream out;
+        out.set_auto_close(false);
+        out.push(flushable_output_filter());
+
+        // Write to dest1.
+        out.push(iostreams::back_inserter(dest1));
+        write_data_in_chunks(out);
+        out.flush();
+
+        // Write to dest2.
+        out.pop();
+        out.push(iostreams::back_inserter(dest2));
+        write_data_in_chunks(out);
+        out.flush();
+
+        BOOST_CHECK_MESSAGE(
+            dest1.size() == dest2.size() && 
+            std::equal(dest1.begin(), dest1.end(), dest2.begin()),
+            "failed flush filtering_ostream with auto_close disabled"
+        );
+    }
+
+    {
+        vector<char> dest1;
+        vector<char> dest2;
+        filtering_ostream out;
+        out.set_auto_close(false);
+        out.push(flushable_output_filter());
+        out.push(flushable_output_filter());
+
+        // Write to dest1.
+        out.push(iostreams::back_inserter(dest1));
+        write_data_in_chunks(out);
+        out.flush();
+
+        // Write to dest2.
+        out.pop();
+        out.push(iostreams::back_inserter(dest2));
+        write_data_in_chunks(out);
+        out.flush();
+
+        BOOST_CHECK_MESSAGE(
+            dest1.size() == dest2.size() && 
+            std::equal(dest1.begin(), dest1.end(), dest2.begin()),
+            "failed flush filtering_ostream with two flushable filters "
+            "with auto_close disabled"
+        );
     }
 }
 
