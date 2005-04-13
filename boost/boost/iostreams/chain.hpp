@@ -30,12 +30,17 @@
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf.hpp> // pubsync.
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
+#include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/traits.hpp>           // is_filter.
 #include <boost/iostreams/streambuf_facade.hpp>
 #include <boost/next_prior.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+# include <boost/type.hpp>
+# include <boost/mpl/int.hpp>
+#endif
 
 // Sometimes type_info objects must be compared by name. Borrowed from 
 // Boost.Python and Boost.Function.
@@ -49,6 +54,22 @@
      (std::strcmp((X).name(),(Y).name()) == 0)
 #else
 # define BOOST_IOSTREAMS_COMPARE_TYPE_ID(X,Y) ((X)==(Y))
+#endif
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+# define BOOST_IOSTREAMS_COMPONENT_TYPE(chain, index) \
+    chain.component_type< index >() \
+    /**/
+# define BOOST_IOSTREAMS_COMPONENT(chain, index, target) \
+    chain.component< index, target >() \
+    /**/
+#else
+# define BOOST_IOSTREAMS_COMPONENT_TYPE(chain, index) \
+    chain.component_type( ::boost::mpl::int_< index >() ) \
+    /**/
+# define BOOST_IOSTREAMS_COMPONENT(chain, index, target) \
+    chain.component( ::boost::mpl::int_< index >(), ::boost::type< target >() ) \
+    /**/
 #endif
 
 namespace boost { namespace iostreams {
@@ -145,6 +166,7 @@ public:
 
     //----------Direct component access---------------------------------------//
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
     template<int N>
     const std::type_info& component_type() const
     {
@@ -164,6 +186,27 @@ public:
         else
             return 0;
     }
+#else
+    template<int N>
+    const std::type_info& component_type(mpl::int_<N>) const
+    {
+        if (N >= size())
+            throw std::out_of_range("bad chain offset");
+        return (*boost::next(list().begin(), N))->component_type();
+    }
+
+    template<int N, typename T>
+    T* component(mpl::int_<N>, boost::type<T>) const
+    {
+        if (N >= size())
+            throw std::out_of_range("bad chain offset");
+        streambuf_type* link = *boost::next(list().begin(), N);
+        if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
+            return static_cast<T*>(link->component_impl());
+        else
+            return 0;
+    }
+#endif
 
     //----------Container-like interface--------------------------------------//
 
@@ -180,6 +223,7 @@ public:
     bool is_complete() const;
     bool auto_close() const;
     void set_auto_close(bool close);
+    bool strict_sync();
 private:
     template<typename T>
     void push_impl(const T& t, int buffer_size = -1, int pback_size = -1)
@@ -208,7 +252,7 @@ private:
         list().push_back(buf.get());
         buf.release();
         if (is_device<policy_type>::value)
-            pimpl_->flags_ |= f_complete;
+            pimpl_->flags_ |= f_complete | f_open;
         if (prev) prev->set_next(list().back());
         notify();
     }
@@ -220,16 +264,18 @@ private:
 
     //----------Nested classes------------------------------------------------//
 
-    // The static member close and the structs closer are used by
-    // chain_impl::close. A more elegant solution using boost::bind failed on
-    // VC6 and Borland.
-
     static void close(streambuf_type* b, BOOST_IOS::openmode m)
     {
         if (m & BOOST_IOS::out)
             b->BOOST_IOSTREAMS_PUBSYNC();
         b->close(m);
     }
+
+    static void set_next(streambuf_type* b, streambuf_type* next) 
+    { b->set_next(next); }
+
+    static void set_auto_close(streambuf_type* b, bool close) 
+    { b->set_auto_close(close); }
 
     struct closer  : public std::unary_function<streambuf_type*, void>  {
         closer(BOOST_IOS::openmode m) : mode_(m) { }
@@ -240,7 +286,8 @@ private:
 
     enum {
         f_complete = 1,
-        f_auto_close = 2
+        f_open = 2,
+        f_auto_close = 4
     };
 
     struct chain_impl {
@@ -250,26 +297,45 @@ private:
               pback_size_(default_pback_buffer_size),
               flags_(f_auto_close)
             { }
-        ~chain_impl()
-            {
-                try {
-                    if ((flags_ & f_auto_close) != 0)
-                        close();
-                } catch (std::exception&) { }
-                std::for_each( links_.begin(), links_.end(),
-                               checked_deleter<streambuf_type>() );
-            }
+        ~chain_impl() { try { close(); reset(); } catch (std::exception&) { } }
         void close()
             {
-                if ((flags_ & f_complete) == 0)
-                    return;
-                links_.front()->BOOST_IOSTREAMS_PUBSYNC();
-                if (is_convertible<Mode, input>::value)
-                    std::for_each( links_.rbegin(), links_.rend(),
-                                   closer(BOOST_IOS::in) );
-                if (is_convertible<Mode, output>::value)
-                    std::for_each( links_.begin(), links_.end(),
-                                   closer(BOOST_IOS::out) );
+                if ((flags_ & f_open) != 0) {
+                    streambuf_facade< basic_null_device<Ch, Mode> > null;
+                    if ((flags_ & f_complete) == 0) {
+                        null.open(basic_null_device<Ch, Mode>());
+                        set_next(links_.back(), &null);
+                    }
+                    links_.front()->BOOST_IOSTREAMS_PUBSYNC();
+                    if (is_convertible<Mode, input>::value)
+                        std::for_each( links_.rbegin(), links_.rend(),
+                                       closer(BOOST_IOS::in) );
+                    if (is_convertible<Mode, output>::value)
+                        std::for_each( links_.begin(), links_.end(),
+                                       closer(BOOST_IOS::out) );
+                    flags_ &= ~f_open;
+                }
+            }
+        void reset()
+            {
+                typedef typename list_type::iterator iterator;
+                for ( iterator first = links_.begin(),
+                               last = links_.end();
+                      first != last;
+                      ++first )
+                {
+                    if ( (flags_ & f_complete) == 0 ||
+                         (flags_ & f_auto_close) == 0 )
+                    {
+                        set_auto_close(*first, false);
+                    }
+                    streambuf_type* buf = 0;
+                    std::swap(buf, *first);
+                    delete buf;
+                } 
+                links_.clear();
+                flags_ &= ~f_complete;
+                flags_ &= ~f_open;
             }
         list_type     links_;
         client_type*  client_;
@@ -354,6 +420,7 @@ public:
     chain_client(chain_client* client) : chain_(client->chain_) { }
     virtual ~chain_client() { }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
     template<int N>
     const std::type_info& component_type() const
     { return chain_->component_type<N>(); }
@@ -361,10 +428,20 @@ public:
     template<int N, typename T>
     T* component() const
     { return chain_->component<N, T>(); }
+#else
+    template<int N>
+    const std::type_info& component_type(mpl::int_<N> i) const
+    { return chain_->component_type(i); }
+
+    template<int N, typename T>
+    T* component(mpl::int_<N> i, boost::type<T> t) const
+    { return chain_->component(i, t); }
+#endif
 
     bool is_complete() const { return chain_->is_complete(); }
     bool auto_close() const { return chain_->auto_close(); }
     void set_auto_close(bool close) { chain_->set_auto_close(close); }
+    bool strict_sync() { return chain_->strict_sync(); }
     void set_device_buffer_size(std::streamsize n)
         { chain_->set_device_buffer_size(n); }
     void set_filter_buffer_size(std::streamsize n)
@@ -420,10 +497,7 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::reset()
 {
     using namespace std;
     pimpl_->close();
-    std::for_each( list().begin(), list().end(), 
-                   checked_deleter<streambuf_type>() );
-    list().clear();
-    pimpl_->flags_ &= ~f_complete;
+    pimpl_->reset();
 }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
@@ -447,13 +521,35 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::set_auto_close(bool close)
 }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+bool chain_base<Self, Ch, Tr, Alloc, Mode>::strict_sync()
+{
+    typedef typename list_type::iterator iterator;
+    bool result = true;
+    for ( iterator first = list().begin(),
+                   last = list().end();
+          first != last;
+          ++first )
+    {
+        bool s = (*first)->strict_sync();
+        result = result && s;
+    }
+    return result;
+}
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
 void chain_base<Self, Ch, Tr, Alloc, Mode>::pop()
 {
     assert(!empty());
-    pimpl_->close();
-    delete list().back();
+    if (auto_close())
+        pimpl_->close();
+    streambuf_type* buf = 0;
+    std::swap(buf, list().back());
+    buf->set_auto_close(auto_close());
+    delete buf;
     list().pop_back();
     pimpl_->flags_ &= ~f_complete;
+    if (auto_close() || list().empty())
+        pimpl_->flags_ &= ~f_open;
 }
 
 } // End namespace detail.
