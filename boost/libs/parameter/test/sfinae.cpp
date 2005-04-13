@@ -37,7 +37,6 @@ namespace test
       std::string s = p[name | "bar"];
       float v = p[value | 3.f];
 
-      std::cout << "s is " << s << std::endl;
       assert(s == "foo");
       assert(v == 3.f);
   }
