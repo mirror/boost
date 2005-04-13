@@ -42,26 +42,32 @@
     } \
     /**/
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
+
+template<typename Pipeline, typename Component>
+struct pipeline;
     
 namespace detail {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
-    BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
-    /**/
-struct pipeline_base { };
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) 
+    struct pipeline_base { };
 
-template<typename T>
-struct is_pipeline 
-    : is_base_and_derived<pipeline_base, T>
-    { };
+    template<typename T>
+    struct is_pipeline 
+        : is_base_and_derived<pipeline_base, T>
+        { };
+#endif 
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+    template<typename T>
+    struct is_pipeline : mpl::false_ { };
+
+    template<typename Pipeline, typename Component>
+    struct is_pipeline< pipeline<Pipeline, Component> > : mpl::true_ { };
 #endif
 
 template<typename Component>
 class pipeline_segment 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
-    BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
-    /**/
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     : pipeline_base 
 #endif 
 {
