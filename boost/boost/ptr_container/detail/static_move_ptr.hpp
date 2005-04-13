@@ -213,8 +213,10 @@ private:
 
 #endif
 
+public:
     static_move_ptr(static_move_ptr&);
 
+private:
     template<typename TT, typename DD>
     static_move_ptr( static_move_ptr<TT, DD>&,
                      typename 
