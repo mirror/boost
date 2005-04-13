@@ -197,11 +197,31 @@ namespace boost
     }
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(__BORLANDC__)
     template< class T, unsigned N >
     inline std::size_t hash_value(const T (&array)[N])
     {
         return hash_range(array, array+N);
     }
+#else
+    // On Borland some type information was lost in the call to hash_combine
+    // from hash_range, so inline everything here so that doesn't happen.
+    template< class T, unsigned N >
+    inline std::size_t hash_value(const T (&array)[N])
+    {
+        std::size_t seed = 0;
+        T const* first = array;
+        T const* last = array + N;
+
+        for(; first != last; ++first)
+        {
+            seed ^= hash_detail::call_hash<T>::call(*first)
+                + 0x9e3779b9 + (seed<<6) + (seed>>2);
+        }
+        
+        return seed;
+    }
+#endif
 #endif
 
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
