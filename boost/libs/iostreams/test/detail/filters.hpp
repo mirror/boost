@@ -109,8 +109,10 @@ struct flushable_output_filter {
     template<typename Sink>
     bool flush(Sink& s) 
     { 
-        boost::iostreams::write(s, &buf_[0], (std::streamsize) buf_.size());
-        buf_.clear();
+        if (!buf_.empty()) {
+            boost::iostreams::write(s, &buf_[0], (std::streamsize) buf_.size());
+            buf_.clear();
+        }
         return true;
     }
     std::vector<char> buf_;
