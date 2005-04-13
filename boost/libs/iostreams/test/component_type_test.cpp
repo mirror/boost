@@ -35,25 +35,28 @@ void component_type_test()
     // Check component types.
 
     BOOST_CHECK(COMPARE_TYPE_ID(
-        out.component_type<0>(), 
+        BOOST_IOSTREAMS_COMPONENT_TYPE(out, 0), 
         typeid(tolower_filter)
     ));
     BOOST_CHECK(COMPARE_TYPE_ID(
-        out.component_type<1>(), 
+        BOOST_IOSTREAMS_COMPONENT_TYPE(out, 1), 
         typeid(tolower_multichar_filter)
     ));
     BOOST_CHECK(COMPARE_TYPE_ID(
-        out.component_type<2>(), 
+        BOOST_IOSTREAMS_COMPONENT_TYPE(out, 2), 
         typeid(file_sink)
     ));
-    BOOST_CHECK_THROW(out.component_type<3>(), std::out_of_range);
+    BOOST_CHECK_THROW(
+        BOOST_IOSTREAMS_COMPONENT_TYPE(out, 3),
+        std::out_of_range
+    );
 
     // Check components.
 
     filtering_ostream out2;
-    out2.push(*(out.component<0, tolower_filter>()));
-    out2.push(*(out.component<1, tolower_multichar_filter>()));
-    out2.push(*(out.component<2, file_sink>()));
+    out2.push(*(BOOST_IOSTREAMS_COMPONENT(out, 0, tolower_filter)));
+    out2.push(*(BOOST_IOSTREAMS_COMPONENT(out, 1, tolower_multichar_filter)));
+    out2.push(*(BOOST_IOSTREAMS_COMPONENT(out, 2, file_sink)));
     write_data_in_chunks(out);
     out.reset();
     BOOST_CHECK_MESSAGE(
