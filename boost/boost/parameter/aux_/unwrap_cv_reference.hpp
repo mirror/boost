@@ -40,6 +40,14 @@ struct is_cv_reference_wrapper
     typedef mpl::bool_<value> type;
 };
 
+// Needed for unwrap_cv_reference below. T might be const, so
+// eval_if might fail because of deriving from T const on EDG.
+template <class T>
+struct get_type
+{
+    typedef typename T::type type;
+};
+
 // Produces the unwrapped type to hold a reference to in named<>
 // Can't use boost::unwrap_reference<> here because it
 // doesn't handle the case where T = reference_wrapper<U> cv
@@ -48,7 +56,7 @@ struct unwrap_cv_reference
 {
     typedef typename mpl::eval_if<
         is_cv_reference_wrapper<T>
-      , T
+      , get_type<T>
       , mpl::identity<T>
     >::type type;
 };
