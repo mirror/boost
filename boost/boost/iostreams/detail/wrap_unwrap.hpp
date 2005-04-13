@@ -23,6 +23,8 @@
 #include <boost/type_traits/remove_cv.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
+                    
+//------------------Definition of wrap/unwrap traits--------------------------//
 
 template<typename T>
 struct wrapped_type 
@@ -43,7 +45,9 @@ struct unwrap_ios
       >
     { };
 
-#ifndef BOOST_NO_SFINAE
+//------------------Definition of wrap----------------------------------------//
+
+#ifndef BOOST_NO_SFINAE //----------------------------------------------------//
     template<typename T>
     inline T wrap(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) 
     { return t; }
@@ -51,7 +55,7 @@ struct unwrap_ios
     template<typename T>
     inline typename wrapped_type<T>::type
     wrap(T& t BOOST_IOSTREAMS_ENABLE_IF_STREAM(T)) { return boost::ref(t); }
-#else
+#else // #ifndef BOOST_NO_SFINAE //-------------------------------------------//
     template<typename T>
     inline typename wrapped_type<T>::type // BCC 5.x needs namespace qualification.
     wrap_impl(const T& t, mpl::true_) { return boost::ref(const_cast<T&>(t)); }
@@ -77,6 +81,10 @@ struct unwrap_ios
     wrap(T& t) { return wrap_impl(t, is_std_io<T>()); }
 #endif // #ifndef BOOST_NO_SFINAE //------------------------------------------//
 
+//------------------Definition of unwrap--------------------------------------//
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310) //----------------------------------//
+
 template<typename T>
 typename unwrapped_type<T>::type& 
 unwrap(const reference_wrapper<T>& ref) { return ref.get(); }
@@ -84,11 +92,36 @@ unwrap(const reference_wrapper<T>& ref) { return ref.get(); }
 template<typename T>
 typename unwrapped_type<T>::type& unwrap(T& t) { return t; }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+template<typename T>
+const typename unwrapped_type<T>::type& unwrap(const T& t) { return t; }
+
+#else // #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310) //-------------------------//
+
+// Since unwrap is a potential bottleneck, we avoid runtime tag dispatch.
+template<bool IsRefWrap>
+struct unwrap_impl;
+
+template<>
+struct unwrap_impl<true> {
     template<typename T>
-    const typename unwrapped_type<T>::type& unwrap(const T& t) { return t; }
-#endif
+    static typename unwrapped_type<T>::type& unwrap(const T& t) 
+    { return t.get(); }
+};
+
+template<>
+struct unwrap_impl<false> {
+    template<typename T>
+    static typename unwrapped_type<T>::type& unwrap(const T& t) 
+    { return const_cast<T&>(t); }
+};
+
+template<typename T>
+typename unwrapped_type<T>::type& 
+unwrap(const T& t) 
+{ return unwrap_impl<is_reference_wrapper<T>::value>::unwrap(t); }
+
+#endif // #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310) //------------------------//
 
 } } } // End namespaces detail, iostreams, boost.
 
-#endif // #ifndef BOOST_IOSTREAMS_DETAIL_WRAP_UNWRAP_HPP_INCLUDED //-----------------//
+#endif // #ifndef BOOST_IOSTREAMS_DETAIL_WRAP_UNWRAP_HPP_INCLUDED
