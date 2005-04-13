@@ -63,6 +63,7 @@ public:
     void close();
     bool auto_close() const;
     void set_auto_close(bool close);
+    bool strict_sync();
 
     // Declared in linked_streambuf.
     T* component() { return &*obj(); }
@@ -356,8 +357,18 @@ int indirect_streambuf<T, Tr, Alloc, Mode>::sync()
 {
     try { // sync() is no-throw.
         sync_impl();
-        return obj().flush(next_) ? 0 : -1;
+        obj().flush(next_);
+        return 0;
     } catch (std::exception&) { return -1; }
+}
+
+template<typename T, typename Tr, typename Alloc, typename Mode>
+bool indirect_streambuf<T, Tr, Alloc, Mode>::strict_sync()
+{
+    try { // sync() is no-throw.
+        sync_impl();
+        return obj().flush(next_);
+    } catch (std::exception&) { return false; }
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>

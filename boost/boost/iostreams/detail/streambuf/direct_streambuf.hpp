@@ -53,6 +53,7 @@ public: // stream_facade needs access.
     void close();
     bool auto_close() const { return auto_close_; }
     void set_auto_close(bool close) { auto_close_ = close; }
+    bool strict_sync() { return true; }
 
     // Declared in linked_streambuf.
     T* component() { return storage_.get_ptr(); } 
