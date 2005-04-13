@@ -49,7 +49,7 @@ test-suite regex
       [ run regress/$(R_SOURCE) ../../test/build//boost_prg_exec_monitor ../build//boost_regex ]
       #[ run c_compiler_checks/posix_api_check.c ../../test/build//boost_prg_exec_monitor ../build//boost_regex ]
       #[ compile c_compiler_checks/wide_posix_api_check.c  ]
-      [ run c_compiler_checks/posix_api_check.cpp ../../test/build//boost_prg_exec_monitor ../build//boost_regex ]
+      [ run c_compiler_checks/posix_api_check.cpp ../build//boost_regex ]
       [ run c_compiler_checks/wide_posix_api_check.cpp ../build//boost_regex ]
 
       [ run pathology/bad_expression_test.cpp
