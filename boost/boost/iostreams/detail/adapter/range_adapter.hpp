@@ -17,6 +17,7 @@
 #include <iosfwd>                                // streamsize, streamoff.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/error.hpp>
+#include <boost/iostreams/positioning.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -54,7 +55,7 @@ public:
     range_adapter(iterator first, iterator last);
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
+    stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
 private:
     iterator first_, cur_, last_;
 };
@@ -81,11 +82,11 @@ void range_adapter<Mode, Range>::write
 
 
 template<typename Mode, typename Range>
-std::streamoff range_adapter<Mode, Range>::seek
-    (std::streamoff off, BOOST_IOS::seekdir way)
+stream_offset range_adapter<Mode, Range>::seek
+    (stream_offset off, BOOST_IOS::seekdir way)
 { 
     impl::seek(first_, cur_, last_, off, way); 
-    return static_cast<std::streamoff>(cur_ - first_);
+    return static_cast<stream_offset>(cur_ - first_);
 }
 
 //------------------Implementation of range_adapter_impl----------------------//
@@ -140,7 +141,7 @@ struct range_adapter_impl<random_access_traversal_tag> {
 
     template<typename Iter>
     static void seek
-        ( Iter& first, Iter& cur, Iter& last, std::streamoff off,
+        ( Iter& first, Iter& cur, Iter& last, stream_offset off,
           BOOST_IOS::seekdir way )
     {
         using namespace std;

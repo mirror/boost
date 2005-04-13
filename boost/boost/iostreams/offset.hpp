@@ -56,13 +56,13 @@ public:
           localizable_tag,
           optimally_buffered_tag
         { };
-    offset_indirect_device( param_type dev, std::streamoff off,
-                            std::streamoff len );
+    offset_indirect_device( param_type dev, stream_offset off,
+                            stream_offset len );
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
+    stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
 private:
-    std::streamoff beg_, pos_, end_;
+    stream_offset beg_, pos_, end_;
 };
 
 //
@@ -83,8 +83,8 @@ public:
           closable_tag,
           localizable_tag
         { };
-    offset_direct_device( const Device& dev, std::streamoff off,
-                          std::streamoff len );
+    offset_direct_device( const Device& dev, stream_offset off,
+                          stream_offset len );
     pair_type input_sequence();
     pair_type output_sequence();
 private:
@@ -111,7 +111,7 @@ public:
           localizable_tag,
           optimally_buffered_tag
         { };
-    offset_filter(const Filter& flt, std::streamoff off, std::streamoff len);
+    offset_filter(const Filter& flt, stream_offset off, stream_offset len);
 
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
@@ -138,9 +138,9 @@ public:
     }
 
     template<typename Device>
-    std::streamoff seek(Device& dev, std::streamoff off, BOOST_IOS::seekdir way)
+    stream_offset seek(Device& dev, stream_offset off, BOOST_IOS::seekdir way)
     {
-        std::streamoff next;
+        stream_offset next;
         if (way == BOOST_IOS::beg) {
             next = beg_ + off;
         } else if (way == BOOST_IOS::cur) {
@@ -160,8 +160,8 @@ private:
         open_ = true;
         pos_ = iostreams::skip(this->component(), dev, beg_); 
     }
-    std::streamoff beg_, pos_, end_;
-    bool open_;
+    stream_offset  beg_, pos_, end_;
+    bool           open_;
 };
 
 template<typename T>
@@ -178,7 +178,7 @@ struct offset_traits
 template<typename T>
 struct offset_view : public detail::offset_traits<T>::type {
     typedef typename detail::param_type<T>::type param_type;
-    offset_view(param_type t, std::streamoff off, std::streamoff len)
+    offset_view(param_type t, stream_offset off, stream_offset len)
         : detail::offset_traits<T>::type(t, off, len) 
         { }
 };
@@ -192,7 +192,7 @@ struct offset_view : public detail::offset_traits<T>::type {
 # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-------------------------------//
 
 template<typename T>
-offset_view<T> offset( const T& t, std::streamoff off, std::streamoff len
+offset_view<T> offset( const T& t, stream_offset off, stream_offset len
                        BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
 { return offset_view<T>(t, off, len); }
 
@@ -219,7 +219,7 @@ offset(std::basic_iostream<Ch, Tr>& io)
 # else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //---------------------//
 
 template<typename T>
-offset_view<T> offset( const T& t, std::streamoff off, std::streamoff len
+offset_view<T> offset( const T& t, stream_offset off, stream_offset len
                        BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
 { return offset_view<T>(t, off, len); }
 
@@ -269,7 +269,7 @@ namespace detail {
 
 template<typename Device>
 offset_indirect_device<Device>::offset_indirect_device
-    (param_type dev, std::streamoff off, std::streamoff len) 
+    (param_type dev, stream_offset off, stream_offset len) 
     : basic_adapter<Device>(dev), beg_(off), pos_(off), end_(off + len)
 { 
     if (len < 0 || off < 0)
@@ -300,10 +300,10 @@ inline void offset_indirect_device<Device>::write
 }
 
 template<typename Device>
-std::streamoff offset_indirect_device<Device>::seek
-    (std::streamoff off, BOOST_IOS::seekdir way)
+stream_offset offset_indirect_device<Device>::seek
+    (stream_offset off, BOOST_IOS::seekdir way)
 {
-    std::streamoff next;
+    stream_offset next;
     if (way == BOOST_IOS::beg) {
         next = beg_ + off;
     } else if (way == BOOST_IOS::cur) {
@@ -321,7 +321,7 @@ std::streamoff offset_indirect_device<Device>::seek
 
 template<typename Device>
 offset_direct_device<Device>::offset_direct_device
-    (const Device& dev, std::streamoff off, std::streamoff len)  
+    (const Device& dev, stream_offset off, stream_offset len)  
     : basic_adapter<Device>(dev), beg_(0), end_(0)
 { 
     std::pair<char_type*, char_type*> seq =
@@ -362,7 +362,7 @@ offset_direct_device<Device>::sequence(mpl::false_)
 
 template<typename Filter>
 offset_filter<Filter>::offset_filter
-    (const Filter& flt, std::streamoff off, std::streamoff len) 
+    (const Filter& flt, stream_offset off, stream_offset len) 
     : basic_adapter<Filter>(flt), beg_(off), 
       pos_(off), end_(off + len), open_(false)
 { 

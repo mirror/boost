@@ -27,7 +27,7 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/ios.hpp>       // openmode, seekdir, int types.
 #include <boost/iostreams/detail/fstream.hpp>
-#include <boost/iostreams/detail/streambuf.hpp> // pubseekoff.
+#include <boost/iostreams/operations.hpp>       // seek.
 #include <boost/shared_ptr.hpp>      
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
@@ -50,9 +50,9 @@ public:
                     BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek( std::streamoff off, BOOST_IOS::seekdir way, 
-                         BOOST_IOS::openmode which = 
-                             BOOST_IOS::in | BOOST_IOS::out );
+    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way, 
+                        BOOST_IOS::openmode which = 
+                            BOOST_IOS::in | BOOST_IOS::out );
     void close();
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
     void imbue(const std::locale& loc) { pimpl_->file_.pubimbue(loc);  }
@@ -130,10 +130,10 @@ inline void basic_file<Ch>::write
 { pimpl_->file_.sputn(s, n); }
 
 template<typename Ch>
-std::streamoff basic_file<Ch>::seek
-    ( std::streamoff off, BOOST_IOS::seekdir way, 
+stream_offset basic_file<Ch>::seek
+    ( stream_offset off, BOOST_IOS::seekdir way, 
       BOOST_IOS::openmode )
-{ return pimpl_->file_.BOOST_IOSTREAMS_PUBSEEKOFF(off, way); }
+{ return iostreams::seek(pimpl_->file_, off, way); }
 
 template<typename Ch>
 void basic_file<Ch>::close() { pimpl_->file_.close(); }

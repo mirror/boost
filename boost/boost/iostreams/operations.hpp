@@ -19,13 +19,17 @@
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
+#include <boost/iostreams/positioning.hpp>
 #include <boost/iostreams/traits.hpp>
+#include <boost/integer_traits.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
 # include <boost/iostreams/detail/vc6/operations.hpp>
@@ -92,12 +96,13 @@ inline void write(T& t, const typename io_char<T>::type* s, std::streamsize n)
 { detail::write_impl<T>::write(detail::unwrap(t), s, n); }
 
 template<typename T, typename Sink>
-void write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize n)
+void write( T& t, Sink& snk, const typename io_char<T>::type* s, 
+            std::streamsize n )
 { detail::filter_impl<T>::write(detail::unwrap(t), snk, s, n); }
 
 template<typename T>
-inline std::streamoff
-seek( T& t, std::streamoff off, BOOST_IOS::seekdir way,
+inline std::streampos
+seek( T& t, stream_offset off, BOOST_IOS::seekdir way,
       BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
@@ -372,10 +377,19 @@ struct seek_impl
 
 struct seek_impl_basic_ios {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off,
+    static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
-    { return t.rdbuf()->pubseekoff(off, way, which); }
+    { 
+        if ( way == BOOST_IOS::beg && 
+             ( off < integer_traits<std::streamoff>::const_min ||
+               off > integer_traits<std::streamoff>::const_max ) )
+        {
+            return t.rdbuf()->pubseekpos(offset_to_position(off));
+        } else {
+            return t.rdbuf()->pubseekoff(off, way, which); 
+        }
+    }
 };
 
 template<>
@@ -390,28 +404,37 @@ struct seek_impl<ostream_tag> : seek_impl_basic_ios { };
 template<>
 struct seek_impl<streambuf_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off,
+    static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
-    { return t.pubseekoff(off, way, which); }
+    { 
+        if ( way == BOOST_IOS::beg && 
+             ( off < integer_traits<std::streamoff>::const_min ||
+               off > integer_traits<std::streamoff>::const_max ) )
+        {
+            return t.pubseekpos(offset_to_position(off));
+        } else {
+            return t.pubseekoff(off, way, which); 
+        }
+    }
 };
 
 template<>
 struct seek_impl<two_head> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off,
+    static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
-    { return static_cast<std::streamoff>(t.seek(off, way, which)); }
+    { return t.seek(off, way, which); }
 };
 
 template<>
 struct seek_impl<any_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off,
+    static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode )
-    { return static_cast<std::streamoff>(t.seek(off, way)); }
+    { return t.seek(off, way); }
 };
 
 //------------------Definition of close_impl----------------------------------//
@@ -638,6 +661,8 @@ struct optimal_buffer_size_impl<filter_tag> {
 //----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
 #endif // #ifndef BOOST_IOSTREAMS_OPERATIONS_HPP_INCLUDED //------------------//

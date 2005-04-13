@@ -319,8 +319,6 @@ public:
 
     std::streamsize read(char_type*, std::streamsize);
     void write(const char_type*, std::streamsize);
-    std::streamoff seek( std::streamoff, BOOST_IOS::seekdir,
-                         BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
     void imbue(const std::locale& loc) { impl().cvt_.imbue(loc); }
 
         // Direct device access.

@@ -48,9 +48,9 @@ public:
 
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek( std::streamoff off, BOOST_IOS::seekdir way,
-                         BOOST_IOS::openmode which = 
-                             BOOST_IOS::in | BOOST_IOS::out );
+    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
+                        BOOST_IOS::openmode which = 
+                            BOOST_IOS::in | BOOST_IOS::out );
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out);
 #endif
@@ -66,12 +66,12 @@ public:
     { iostreams::write(t_, snk, s, n); }
 
     template<typename Device>
-    std::streamoff seek(Device& dev, std::streamoff off, BOOST_IOS::seekdir way)
+    stream_offset seek(Device& dev, stream_offset off, BOOST_IOS::seekdir way)
     { return iostreams::seek(t_, dev, off, way); }
 
     template<typename Device>
-    std::streamoff seek( Device& dev, std::streamoff off, 
-                         BOOST_IOS::seekdir way, BOOST_IOS::openmode which  )
+    stream_offset seek( Device& dev, stream_offset off, 
+                        BOOST_IOS::seekdir way, BOOST_IOS::openmode which  )
     { return iostreams::seek(t_, dev, off, way, which); }
 
     template<typename Device>
@@ -100,8 +100,8 @@ void mode_adapter<Mode, T>::write(const char_type* s, std::streamsize n)
 { boost::iostreams::write(t_, s, n); }
 
 template<typename Mode, typename T>
-std::streamoff mode_adapter<Mode, T>::seek
-    (std::streamoff off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
+stream_offset mode_adapter<Mode, T>::seek
+    (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 { return boost::iostreams::seek(t_, off, way, which); }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)

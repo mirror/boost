@@ -175,7 +175,7 @@ struct identity_seekable_filter : filter<seekable> {
     void put(Sink& s, char c) { boost::iostreams::put(s, c); }
 
     template<typename Device>
-    std::streamoff seek(Device& d, std::streamoff off, BOOST_IOS::seekdir way)
+    stream_offset seek(Device& d, stream_offset off, BOOST_IOS::seekdir way)
     { return boost::iostreams::seek(d, off, way); }
 };
 BOOST_IOSTREAMS_PIPABLE(identity_seekable_filter, 0)
@@ -188,7 +188,7 @@ struct identity_seekable_multichar_filter : multichar_filter<seekable> {
     void write(Sink& s, const char* buf, std::streamsize n)
     { boost::iostreams::write(s, buf, n); }
     template<typename Device>
-    std::streamoff seek(Device& d, std::streamoff off, BOOST_IOS::seekdir way)
+    stream_offset seek(Device& d, stream_offset off, BOOST_IOS::seekdir way)
     { return boost::iostreams::seek(d, off, way); }
 };
 BOOST_IOSTREAMS_PIPABLE(identity_seekable_multichar_filter, 0)

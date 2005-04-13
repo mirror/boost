@@ -85,8 +85,8 @@ void write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize 
 }
 
 template<typename T>
-inline std::streamoff
-seek( T& t, std::streamoff off, BOOST_IOS::seekdir way,
+inline stream_offset
+seek( T& t, stream_offset off, BOOST_IOS::seekdir way,
       BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
@@ -371,26 +371,35 @@ struct seek_impl
 template<>
 struct seek_impl<any_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
-                                BOOST_IOS::seekdir way, BOOST_IOS::openmode )
+    static stream_offset seek( T& t, stream_offset off, 
+                               BOOST_IOS::seekdir way, BOOST_IOS::openmode )
     { return t.seek(off, way); }
 };
 
 template<>
 struct seek_impl<two_head> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
-                                BOOST_IOS::seekdir way, 
-                                BOOST_IOS::openmode which )
+    static stream_offset seek( T& t, stream_offset off, 
+                               BOOST_IOS::seekdir way, 
+                               BOOST_IOS::openmode which )
     { return t.seek(off, way, which); }
 };
 
 struct seek_impl_basic_ios {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
-                                BOOST_IOS::seekdir way,
-                                BOOST_IOS::openmode which )
-    { return t.rdbuf()->pubseekoff(off, way, which); }
+    static stream_offset seek( T& t, stream_offset off, 
+                               BOOST_IOS::seekdir way,
+                               BOOST_IOS::openmode which )
+    { 
+        if ( way == BOOST_IOS::beg && 
+             ( off < integer_traits<std::streamoff>::const_min ||
+               off > integer_traits<std::streamoff>::const_max ) )
+        {
+            return t.rdbuf()->pubseekpos(offset_to_position(off));
+        } else {
+            return t.rdbuf()->pubseekoff(off, way, which); 
+        }
+    }
 };
 
 template<>
@@ -405,10 +414,19 @@ struct seek_impl<iostream_tag> : seek_impl_basic_ios { };
 template<>
 struct seek_impl<streambuf_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
-                                BOOST_IOS::seekdir way,
-                                BOOST_IOS::openmode which )
-    { return t.pubseekoff(off, way, which); }
+    static stream_offset seek( T& t, stream_offset off, 
+                               BOOST_IOS::seekdir way,
+                               BOOST_IOS::openmode which )
+    {
+        if ( way == BOOST_IOS::beg && 
+             ( off < integer_traits<std::streamoff>::const_min ||
+               off > integer_traits<std::streamoff>::const_max ) )
+        {
+            return t.pubseekpos(offset_to_position(off));
+        } else {
+            return t.pubseekoff(off, way, which); 
+        }
+    }
 };
 
 //------------------Definition of close_impl----------------------------------//

@@ -21,6 +21,7 @@
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types.
+#include <boost/iostreams/positioning.hpp>
 #include <boost/shared_ptr.hpp>
 
 // Must come last.
@@ -61,7 +62,7 @@ public:
                    BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    boost::intmax_t seek(boost::intmax_t off, BOOST_IOS::seekdir way);
+    stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
     void close();
 private:
     struct impl {

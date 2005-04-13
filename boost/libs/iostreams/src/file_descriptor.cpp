@@ -18,7 +18,7 @@
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmodes, failure.
 #include <boost/iostreams/device/file_descriptor.hpp>
-#include <boost/limits.hpp>
+#include <boost/integer_traits.hpp>
 
     // OS-specific headers for low-level i/o.
 
@@ -174,8 +174,8 @@ void file_descriptor::write(const char_type* s, std::streamsize n)
         throw detail::bad_write();
 }
 
-boost::intmax_t file_descriptor::seek
-    (boost::intmax_t off, BOOST_IOS::seekdir way)
+stream_offset file_descriptor::seek
+    (stream_offset off, BOOST_IOS::seekdir way)
 {
     using namespace std;
 #ifdef BOOST_IOSTREAMS_WINDOWS
@@ -201,20 +201,26 @@ boost::intmax_t file_descriptor::seek
                    dwResultLow;
         }
     }
-#endif
-    if ( off > (numeric_limits<long>::max)() ||
-         off < (numeric_limits<long>::min)() )
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS
+# ifndef BOOST_IOSTREAMS_HAS_LSEEK64
+    if ( off > integer_traits<long>::const_max ||
+         off < integer_traits<long>::const_min )
     {
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
     }
-    std::streamoff result =
-        #if !defined(__BORLANDC__)
-            BOOST_RTL(lseek)
+# endif
+    stream_offset result =
+        #ifdef BOOST_IOSTREAMS_HAS_LSEEK64
+            lseek64
         #else
             lseek
         #endif
             ( pimpl_->fd_,
-              static_cast<long>(off),
+              #ifdef BOOST_IOSTREAMS_HAS_LSEEK64
+                  off,
+              #else
+                  static_cast<long>(off),
+              #endif
               way == BOOST_IOS::beg ?
                   SEEK_SET :
                       way == BOOST_IOS::cur ?
@@ -223,6 +229,7 @@ boost::intmax_t file_descriptor::seek
     if (result == -1)
         throw detail::bad_seek();
     return result;
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
 void file_descriptor::close() { close_impl(*pimpl_); }

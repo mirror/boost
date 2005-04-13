@@ -15,12 +15,24 @@
 #endif
 
 #include <boost/cstdint.hpp>
+#include <boost/integer_traits.hpp>
 #include <boost/iostreams/detail/config/codecvt.hpp> // mbstate_t.
 #include <boost/iostreams/detail/ios.hpp> // streamoff, streampos.
 
 namespace boost { namespace iostreams {
 
 typedef boost::intmax_t stream_offset;
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1.
+
+inline std::streamoff stream_offset_to_streamoff(stream_offset off)
+{ return static_cast<stream_offset>(off); }
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
+
+template<typename PosType> // Hande custom pos_type's.
+inline stream_offset position_to_offset(PosType pos)
+{ return std::streamoff(pos); }
 
 #if ((defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)) && \
      !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) \

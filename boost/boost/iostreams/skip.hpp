@@ -24,26 +24,26 @@ namespace boost { namespace iostreams {
 namespace detail {
 
 template<typename Device>
-std::streamoff skip(Device& dev, std::streamoff off, mpl::true_)
+stream_offset skip(Device& dev, stream_offset off, mpl::true_)
 { return iostreams::seek(dev, off, BOOST_IOS::cur); }
 
 template<typename Device>
-std::streamoff skip(Device& dev, std::streamoff off, mpl::false_)
+stream_offset skip(Device& dev, stream_offset off, mpl::false_)
 { 
-    for (std::streamoff z = 0; z < off; ++z)
+    for (stream_offset z = 0; z < off; ++z)
         iostreams::get(dev);
     return off;
 }
 
 template<typename Filter, typename Device>
-std::streamoff skip(Filter& flt, Device& dev, std::streamoff off, mpl::true_)
+stream_offset skip(Filter& flt, Device& dev, stream_offset off, mpl::true_)
 { return flt.seek(dev, off, BOOST_IOS::cur); }
 
 template<typename Filter, typename Device>
-std::streamoff skip(Filter& flt, Device& dev, std::streamoff off, mpl::false_)
+stream_offset skip(Filter& flt, Device& dev, stream_offset off, mpl::false_)
 { 
     char c;
-    for (std::streamoff z = 0; z < off; ++z)
+    for (stream_offset z = 0; z < off; ++z)
         iostreams::read(flt, dev, &c, 1);
     return off;
 }
@@ -51,14 +51,14 @@ std::streamoff skip(Filter& flt, Device& dev, std::streamoff off, mpl::false_)
 } // End namespace detail.
 
 template<typename Device>
-std::streamoff skip(Device& dev, std::streamoff off)
+stream_offset skip(Device& dev, stream_offset off)
 { 
     typedef typename io_mode<Device>::type mode;
     return detail::skip(dev, off, is_convertible<mode, seekable>());
 }
 
 template<typename Filter, typename Device>
-std::streamoff skip(Filter& flt, Device& dev, std::streamoff off)
+stream_offset skip(Filter& flt, Device& dev, stream_offset off)
 { 
     typedef typename io_mode<Filter>::type                     filter_mode;
     typedef typename io_mode<Device>::type                     device_mode;

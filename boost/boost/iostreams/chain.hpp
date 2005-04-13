@@ -24,13 +24,13 @@
 #include <boost/config.hpp>                     // BOOST_MSVC, template friends.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
-#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf.hpp> // pubsync.
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/device/null.hpp>
+#include <boost/iostreams/positioning.hpp>
 #include <boost/iostreams/traits.hpp>           // is_filter.
 #include <boost/iostreams/streambuf_facade.hpp>
 #include <boost/next_prior.hpp>
@@ -162,7 +162,7 @@ public:
 
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
+    stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
 
     //----------Direct component access---------------------------------------//
 
@@ -488,9 +488,9 @@ inline void chain_base<Self, Ch, Tr, Alloc, Mode>::write
 { list().front()->sputn(s, n); }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
-inline std::streamoff chain_base<Self, Ch, Tr, Alloc, Mode>::seek
-    (std::streamoff off, BOOST_IOS::seekdir way)
-{ return list().front()->pubseekoff(off, way); }
+inline stream_offset chain_base<Self, Ch, Tr, Alloc, Mode>::seek
+    (stream_offset off, BOOST_IOS::seekdir way)
+{ return iostreams::seek(*list().front(), off, way); }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
 void chain_base<Self, Ch, Tr, Alloc, Mode>::reset()

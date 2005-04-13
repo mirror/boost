@@ -24,6 +24,7 @@
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
+#include <boost/iostreams/positioning.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
@@ -113,7 +114,7 @@ private:
 
     //----------Utility function----------------------------------------------//
 
-    pos_type seek_impl( off_type off, BOOST_IOS::seekdir way,
+    pos_type seek_impl( stream_offset off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which );
     void sync_impl();
     void close_impl(BOOST_IOS::openmode);
@@ -386,7 +387,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::seekpos
 template<typename T, typename Tr, typename Alloc, typename Mode>
 typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seek_impl
-    (off_type off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
+    (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
     if (pptr() != 0) sync();
     if (way == BOOST_IOS::cur && gptr())

@@ -111,7 +111,7 @@ struct tolower_seekable_filter : public seekable_filter {
     }
 
     template<typename Sink>
-    std::streamoff seek(Sink& s, std::streamoff off, BOOST_IOS::seekdir way)
+    stream_offset seek(Sink& s, stream_offset off, BOOST_IOS::seekdir way)
     { 
         return boost::iostreams::seek(s, off, way);
     }
@@ -122,7 +122,7 @@ void read_device()
     {
         offset_test_file   src1(small_padding);
         test_file          src2;
-        streamoff          off = small_padding,
+        stream_offset      off = small_padding,
                            len = data_reps * data_length();
         filtering_istream  first(offset(file_source(src1.name(), in_mode), off, len));
         ifstream           second(src2.name().c_str(), in_mode);
@@ -135,7 +135,7 @@ void read_device()
     {
         offset_test_file   src1(large_padding);
         test_file          src2;
-        streamoff          off = large_padding,
+        stream_offset      off = large_padding,
                            len = data_reps * data_length();
         filtering_istream  first(offset(file_source(src1.name(), in_mode), off, len));
         ifstream           second(src2.name().c_str(), in_mode);
@@ -152,7 +152,7 @@ void read_direct_device()
     test_sequence<char>   first;
     offset_test_sequence  src(small_padding);
     array_source          array_src(&src[0], &src[0] + src.size());
-    streamoff             off = small_padding,
+    stream_offset         off = small_padding,
                           len = data_reps * data_length();
     filtering_istream     second(offset(array_src, off, len));
     BOOST_CHECK_MESSAGE(
@@ -166,7 +166,7 @@ void read_filter()
     {
         offset_test_file   src1(small_padding);
         uppercase_file     src2;
-        streamoff          off = small_padding,
+        stream_offset      off = small_padding,
                            len = data_reps * data_length();
         filtering_istream  first;
         first.push(offset(toupper_filter(), off, len));
@@ -181,7 +181,7 @@ void read_filter()
     {
         offset_test_file   src1(large_padding);
         uppercase_file     src2;
-        streamoff          off = large_padding,
+        stream_offset      off = large_padding,
                            len = data_reps * data_length();
         filtering_istream  first;
         first.push(offset(toupper_filter(), off, len));
@@ -199,7 +199,7 @@ void write_device()
     {
         offset_uppercase_file  dest1(small_padding);
         offset_test_file       dest2(small_padding);
-        streamoff              off = small_padding,
+        stream_offset          off = small_padding,
                                len = data_reps * data_length();
         filtering_ostream      out(offset(file(dest1.name(), BOOST_IOS::binary), off, len));
         write_data_in_chunks(out);
@@ -215,7 +215,7 @@ void write_device()
     {
         offset_uppercase_file  dest1(large_padding);
         offset_test_file       dest2(large_padding);
-        streamoff              off = large_padding,
+        stream_offset          off = large_padding,
                                len = data_reps * data_length();
         filtering_ostream      out(offset(file(dest1.name(), BOOST_IOS::binary), off, len));
         write_data_in_chunks(out);
@@ -233,7 +233,7 @@ void write_direct_device()
 {
     vector<char>          dest1(data_reps * data_length() + 2 * small_padding, '\n');
     offset_test_sequence  dest2(small_padding);
-    streamoff             off = small_padding,
+    stream_offset         off = small_padding,
                           len = data_reps * data_length();
     array_sink            array(&dest1[0], &dest1[0] + dest1.size());
     filtering_ostream     out(offset(array, off, len));
@@ -250,7 +250,7 @@ void write_filter()
     {
         offset_test_file       dest1(small_padding);
         offset_lowercase_file  dest2(small_padding);
-        streamoff              off = small_padding,
+        stream_offset          off = small_padding,
                                len = data_reps * data_length();
         filtering_ostream      out;
         out.push(offset(tolower_seekable_filter(), off, len));
@@ -268,7 +268,7 @@ void write_filter()
     {
         offset_test_file       dest1(large_padding);
         offset_lowercase_file  dest2(large_padding);
-        streamoff              off = large_padding,
+        stream_offset          off = large_padding,
                                len = data_reps * data_length();
         filtering_ostream      out;
         out.push(offset(tolower_seekable_filter(), off, len));
@@ -287,7 +287,7 @@ void write_filter()
 void seek_device()
 {
     offset_test_file           src(small_padding);
-    streamoff                  off = large_padding,
+    stream_offset              off = large_padding,
                                len = data_reps * data_length();
     filtering_stream<seekable> io(offset(file(src.name(), BOOST_IOS::binary), off, len));
     BOOST_CHECK_MESSAGE(
@@ -299,7 +299,7 @@ void seek_device()
 void seek_direct_device()
 {
     vector<char>               src(data_reps * data_length() + 2 * small_padding, '\n');
-    streamoff                  off = small_padding,
+    stream_offset              off = small_padding,
                                len = data_reps * data_length();
     array                      ar(&src[0], &src[0] + src.size());
     filtering_stream<seekable> io(offset(ar, off, len));
@@ -312,7 +312,7 @@ void seek_direct_device()
 void seek_filter()
 {
     offset_test_file           src(small_padding);
-    streamoff                  off = large_padding,
+    stream_offset              off = large_padding,
                                len = data_reps * data_length();
     filtering_stream<seekable> io;
     io.push(offset(identity_seekable_filter(), off, len));

@@ -14,7 +14,8 @@
 #endif
 
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/ios.hpp> // openmode, streamsize, streamoff.
+#include <boost/iostreams/detail/ios.hpp> // openmode, streamsize.
+#include <boost/iostreams/positioning.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -29,9 +30,9 @@ public:
         { };
     std::streamsize read(Ch*, std::streamsize) { return 0; }
     void write(const Ch*, std::streamsize) { }
-    std::streamoff seek( std::streamoff, BOOST_IOS::seekdir,
-                         BOOST_IOS::openmode = 
-                             BOOST_IOS::in | BOOST_IOS::out ) 
+    stream_offset seek( stream_offset, BOOST_IOS::seekdir,
+                        BOOST_IOS::openmode = 
+                            BOOST_IOS::in | BOOST_IOS::out ) 
     { return -1; }
     void close(BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out) { }
 };
