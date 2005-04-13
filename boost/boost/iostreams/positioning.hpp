@@ -22,20 +22,20 @@ namespace boost { namespace iostreams {
 
 typedef boost::intmax_t stream_offset;
 
-#if (defined(_YVALS) && !defined(__IBMCPP__)) //------------------------------//
+#if ((defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)) && \
+     !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) \
+   /**/
+
+        /* Dinkumware */
 
 inline std::streampos offset_to_position(stream_offset off)
 {
-    // use implementation-specific constructor
+    // Use implementation-specific constructor.
     return std::streampos(std::mbstate_t(), off);
 }
 
-#if defined(_POSIX_)
-#error
-#endif
-
 inline stream_offset fpos_t_to_offset(fpos_t pos)
-{
+{ // Helper function.
 #if defined(_POSIX_) || (_INTEGRAL_MAX_BITS >= 64)
     return pos;
 #else
@@ -43,28 +43,34 @@ inline stream_offset fpos_t_to_offset(fpos_t pos)
 #endif
 }
 
-# if defined(_CPPLIB_VER) // Recent Dinkumware.
+# if defined(_CPPLIB_VER) //--------------------------------------------------//
+
+        /* Recent Dinkumware */
 
 inline stream_offset position_to_offset(std::streampos pos)
 {
-    // use implementation-specific member function seekpos()
+    // Use implementation-specific member function seekpos().
     return fpos_t_to_offset(pos.seekpos()) +
            stream_offset(std::streamoff(pos)) -
            stream_offset(std::streamoff(pos.seekpos()));
 }
 
-# else // Old Dinkumware.
+# else // # if defined(_CPPLIB_VER) //----------------------------------------//
+
+        /* Old Dinkumware */
 
 inline stream_offset position_to_offset(std::streampos pos)
 {
-    // use implementation-specific member function seekpos()
+    // use implementation-specific member function get_fpos_t().
     return fpos_t_to_offset(pos.get_fpos_t()) +
            stream_offset(std::streamoff(pos)) -
            stream_offset(std::streamoff(pos.get_fpos_t()));
 }
 
-# endif
+# endif // # if defined(_CPPLIB_VER) //---------------------------------------//
 #else // Dinkumware //--------------------------------------------------------//
+
+        /* Non-Dinkumware */
 
 inline std::streampos offset_to_position(stream_offset off) { return off; }
 
