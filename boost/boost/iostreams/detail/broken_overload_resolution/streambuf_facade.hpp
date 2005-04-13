@@ -39,6 +39,13 @@ public:
     typedef typename io_char<T>::type         char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
     streambuf_facade() { }
+    ~streambuf_facade()
+    { 
+        try { 
+            if (this->is_open() && this->auto_close()) 
+                this->close(); 
+        } catch (std::exception&) { } 
+    }
     template<typename U0>
     streambuf_facade(const U0& u0)
     {
