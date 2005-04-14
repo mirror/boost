@@ -13,6 +13,7 @@
 
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmode.
+#include <boost/iostreams/positioning.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
