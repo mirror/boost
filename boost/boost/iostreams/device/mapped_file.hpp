@@ -7,18 +7,18 @@
 
 //
 // This header and its accompanying source file libs/iostreams/memmap.cpp are
-// an adaptation of Craig Henderson's memmory mapped file library. The 
+// an adaptation of Craig Henderson's memmory mapped file library. The
 // interface has been revised significantly, but the underlying OS-specific
 // code is essentially the same, with some code from Boost.Filesystem
 // mixed in. (See notations in source.)
 //
 // The following changes have been made:
-//  
+//
 // 1. OS-specific code put in a .cpp file.
 // 2. Name of main class changed to mapped_file.
 // 3. mapped_file given an interface similar to std::fstream (open(),
 //    is_open(), close()) and std::string (data(), size(), begin(), end()).
-// 4. An additional class readonly_mapped_file has been provided as a 
+// 4. An additional class readonly_mapped_file has been provided as a
 //    convenience.
 // 5. [Obsolete: Error states are reported using filesystem::error_code.]
 // 6. Read-only or read-write states are specified using ios_base::openmode.
@@ -31,13 +31,12 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif  
+#endif
 
 #include <boost/config.hpp>                   // make sure size_t is in std.
 #include <cstddef>                            // size_t.
 #include <string>                             // pathnames.
 #include <utility>                            // pair.
-#include <boost/cstdint.hpp>                  // intmax_t.
 #include <boost/config.hpp>                   // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/concepts.hpp>
@@ -45,20 +44,34 @@
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/ios.hpp>     // openmode.
 #include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/positioning.hpp>
 #include <boost/shared_ptr.hpp>
 
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
-#include <boost/config/abi_prefix.hpp>        
+#include <boost/config/abi_prefix.hpp>
 
 namespace boost { namespace iostreams {
 
 namespace detail {
 
-class mapped_file; 
-struct mapped_file_impl; 
+struct mapped_file_impl;
 
 } // End namespace detail.
+
+struct mapped_file_params {
+    explicit mapped_file_params(const std::string& path)
+        : path(path), mode(), offset(0),
+          length(static_cast<std::size_t>(-1)),
+          size(0), hint(0)
+        { }
+    std::string          path;
+    BOOST_IOS::openmode  mode;
+    stream_offset        offset;
+    std::size_t          length;
+    stream_offset        size;
+    const char*          hint;
+};
 
 //------------------Definition of mapped_file_source--------------------------//
 
@@ -79,22 +92,24 @@ public:
     BOOST_STATIC_CONSTANT(size_type, max_length = static_cast<size_type>(-1));
 
     mapped_file_source() { }
-    mapped_file_source( const std::string& path, 
+    mapped_file_source(mapped_file_params);
+    mapped_file_source( const std::string& path,
                         size_type length = max_length,
                         boost::intmax_t offset = 0 );
 
     //--------------Stream interface------------------------------------------//
 
-    void open( const std::string& path, 
+    void open(mapped_file_params params);
+    void open( const std::string& path,
                size_type length = max_length,
                boost::intmax_t offset = 0 );
-    bool is_open() const; 
+    bool is_open() const;
     void close();
 
     operator safe_bool() const;
     bool operator!() const;
     BOOST_IOS::openmode mode() const;
-                    
+
     //--------------Container interface---------------------------------------//
 
     size_type size() const;
@@ -110,9 +125,7 @@ public:
 private:
     friend class mapped_file;
     typedef detail::mapped_file_impl impl_type;
-    void open( const std::string& pathname, 
-               BOOST_IOS::openmode,
-               size_type length, boost::intmax_t offset );
+    void open_impl(mapped_file_params);
 
     boost::shared_ptr<impl_type> pimpl_;
 };
@@ -136,12 +149,12 @@ public:
     typedef const char*                    const_iterator;
     BOOST_STATIC_CONSTANT(size_type, max_length = delegate_type::max_length);
     mapped_file() { }
-    mapped_file( const std::string& path, 
-                 BOOST_IOS::openmode mode = 
-                    BOOST_IOS::in | BOOST_IOS::out,
+    mapped_file(mapped_file_params p);
+    mapped_file( const std::string& path,
+                 BOOST_IOS::openmode mode =
+                     BOOST_IOS::in | BOOST_IOS::out,
                  size_type length = max_length,
-                 boost::intmax_t offset = 0 ) 
-    { delegate_.open(path, mode, length, offset); }
+                 stream_offset offset = 0 );
 
     //--------------Conversion to readonly_mapped_file------------------------//
 
@@ -150,12 +163,12 @@ public:
 
     //--------------Stream interface------------------------------------------//
 
-    void open( const std::string& path, 
-               BOOST_IOS::openmode mode = 
+    void open(mapped_file_params p);
+    void open( const std::string& path,
+               BOOST_IOS::openmode mode =
                    BOOST_IOS::in | BOOST_IOS::out,
                size_type length = max_length,
-               boost::intmax_t offset = 0 )
-    { delegate_.open(path, mode, length, offset); }
+               stream_offset offset = 0 );
     bool is_open() const { return delegate_.is_open(); }
     void close() { delegate_.close(); }
     operator delegate_type::safe_bool() const { return delegate_; }
@@ -167,10 +180,10 @@ public:
     size_type size() const { return delegate_.size(); }
     char* data() const { return const_cast<char*>(delegate_.data()); }
     const char* const_data() const { return delegate_.data(); }
-    iterator begin() const { return data(); } 
-    const_iterator const_begin() const { return data(); } 
-    iterator end() const { return data() + size(); } 
-    const_iterator const_end() const { return data() + size(); } 
+    iterator begin() const { return data(); }
+    const_iterator const_begin() const { return data(); }
+    iterator end() const { return data() + size(); }
+    const_iterator const_end() const { return data() + size(); }
 
     //--------------Query admissible offsets----------------------------------//
 
@@ -188,40 +201,44 @@ struct mapped_file_sink : private mapped_file {
           public closable_tag
         { };
     using mapped_file::close;
-    mapped_file_sink( const std::string& path, 
+    mapped_file_sink(mapped_file_params p);
+    mapped_file_sink( const std::string& path,
                       size_type length = max_length,
-                      boost::intmax_t offset = 0 ) 
-        : mapped_file(path, BOOST_IOS::out | BOOST_IOS::trunc) { }
+                      boost::intmax_t offset = 0 );
+    void open(mapped_file_params p);
+    void open( const std::string& path,
+               size_type length = max_length,
+               boost::intmax_t offset = 0 );
 };
-                    
+
 //------------------Specialization of direct_impl-----------------------------//
 
 namespace detail {
 
 template<>
 struct direct_impl<boost::iostreams::mapped_file_source> {
-    static std::pair<char*, char*> 
+    static std::pair<char*, char*>
     input_sequence(boost::iostreams::mapped_file_source& src)
-    { 
-        return std::make_pair( const_cast<char*>(src.begin()), 
-                               const_cast<char*>(src.end()) ); 
+    {
+        return std::make_pair( const_cast<char*>(src.begin()),
+                               const_cast<char*>(src.end()) );
     }
 };
 
 template<>
 struct direct_impl<boost::iostreams::mapped_file_sink> {
-    static std::pair<char*, char*> 
+    static std::pair<char*, char*>
     output_sequence(boost::iostreams::mapped_file_sink& sink)
     { return std::make_pair(sink.begin(), sink.end()); }
 };
 
 template<>
 struct direct_impl<boost::iostreams::mapped_file> {
-    static std::pair<char*, char*> 
+    static std::pair<char*, char*>
     input_sequence(boost::iostreams::mapped_file& file)
     { return std::make_pair(file.begin(), file.end()); }
 
-    static std::pair<char*, char*> 
+    static std::pair<char*, char*>
     output_sequence(boost::iostreams::mapped_file& file)
     { return std::make_pair(file.begin(), file.end()); }
 };
