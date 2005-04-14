@@ -89,7 +89,7 @@ struct mapped_file_impl {
 };
 
 } // End namespace detail.
-                    
+
 //------------------Definition of mapped_file_source--------------------------//
 
 mapped_file_source::mapped_file_source(mapped_file_params p) { open(p); }
@@ -100,14 +100,14 @@ mapped_file_source::mapped_file_source( const std::string& path,
 { open(path, length, offset); }
 
 void mapped_file_source::open(mapped_file_params p)
-{ 
+{
     p.mode &= ~BOOST_IOS::out;
-    open_impl(p); 
+    open_impl(p);
 }
 
 void mapped_file_source::open( const std::string& path, size_type length,
                                boost::intmax_t offset )
-{ 
+{
     mapped_file_params p(path);
     p.mode = BOOST_IOS::in;
     p.length = length;
@@ -367,12 +367,12 @@ mapped_file::mapped_file( const std::string& path, BOOST_IOS::openmode mode,
                           size_type length, stream_offset offset )
 { open(path, mode, length, offset); }
 
-void mapped_file::open(mapped_file_params p) 
+void mapped_file::open(mapped_file_params p)
 { delegate_.open_impl(p); }
 
 void mapped_file::open( const std::string& path, BOOST_IOS::openmode mode,
                         size_type length, stream_offset offset )
-{ 
+{
     mapped_file_params p(path);
     p.mode = mode;
     p.length = length;
@@ -389,15 +389,15 @@ mapped_file_sink::mapped_file_sink( const std::string& path,
 { open(path, length, offset); }
 
 void mapped_file_sink::open(mapped_file_params p)
-{ 
+{
     p.mode |= BOOST_IOS::out;
     p.mode &= ~BOOST_IOS::in;
-    mapped_file::open(p); 
+    mapped_file::open(p);
 }
 
-void mapped_file_sink::open( const std::string& path, size_type length, 
+void mapped_file_sink::open( const std::string& path, size_type length,
                              stream_offset offset )
-{ 
+{
     mapped_file_params p(path);
     p.mode = BOOST_IOS::out;
     p.length = length;
