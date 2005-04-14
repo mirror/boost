@@ -35,7 +35,7 @@ template <class KW, class DefaultComputer>
 struct lazy_default_base
 {
     lazy_default_base(DefaultComputer const& x)
-      : default_(x)
+      : compute_default(x)
     {}
     DefaultComputer const& compute_default;
 };
@@ -46,7 +46,7 @@ struct lazy_default
   {
       lazy_default(DefaultComputer const & x)
         : lazy_default_base<KW,DefaultComputer>(x)
-        {}
+      {}
   };
 # define BOOST_PARAMETER_lazy_default_fallback lazy_default_base
 #else 

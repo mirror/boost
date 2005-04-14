@@ -6,28 +6,26 @@
 // This file generates overloads in this format:
 //
 //     template<class A0, class A1>
-//     detail::arg_list<
-//         BOOST_DEDUCED_TYPENAME aux::as_tagged_argument<PS0, A0>::type
-//       , detail::arg_list<
-//             BOOST_DEDUCED_TYPENAME aux::as_tagged_argument<PS1, A1>::type
+//     typename aux::make_arg_list<
+//         PS0,A0
+//       , aux::make_arg_list<
+//             PS1,A1
+//           , mpl::identity<aux::empty_arg_list>
 //         >
-//     >
-//     operator()(const A0& a0, const A1& a1) const
+//     >::type
+//     operator()(A0 const& a0, A1 const& a1) const
 //     {
-//         typedef arg_list<
-//             BOOST_DEDUCED_TYPENAME aux::as_tagged_argument<PS0, A0>::type
-//           , arg_list<
-//                 BOOST_DEDUCED_TYPENAME aux::as_tagged_argument<PS1, A1>::type
-//                 ...
+//         typedef typename aux::make_arg_list<
+//             PS0,A0
+//           , aux::make_arg_list<
+//                 PS1,A1
+//               , mpl::identity<aux::empty_arg_list>
 //             >
-//         > arg_tuple;
+//         >::type arg_tuple;
 //
-//         typename aux::as_tagged_argument<PS0, A0>::type tagged0(a0);
-//         typename aux::as_tagged_argument<PS1, A1>::type tagged1(a1);
-// 
 //         return arg_tuple(
-//             tagged0
-//           , tagged1
+//             a0
+//           , a1
 //           , aux::void_()
 //             ...
 //         );
@@ -41,32 +39,24 @@
 #define N BOOST_PP_ITERATION()
 
 #define BOOST_PARAMETER_open_list(z, n, text) \
-    aux::arg_list< \
-        BOOST_DEDUCED_TYPENAME aux::as_tagged_argument< \
-            BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n) \
-        >::type
+    aux::make_arg_list< \
+        BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n) \
 
 #define BOOST_PARAMETER_close_list(z, n, text) > 
 
-#define BOOST_PARAMETER_tagged_argument(z, n, text) \
-    typename aux::as_tagged_argument< \
-        BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n) \
-    >::type BOOST_PP_CAT(tagged, n)(BOOST_PP_CAT(a, n));
-
 #define BOOST_PARAMETER_arg_list(n) \
     BOOST_PP_ENUM(N, BOOST_PARAMETER_open_list, _) \
-    BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _)
+  , mpl::identity<aux::empty_arg_list> \
+    BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _) 
 
 template<BOOST_PP_ENUM_PARAMS(N, class A)>
-BOOST_PARAMETER_arg_list(N)
+typename BOOST_PARAMETER_arg_list(N)::type
 operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const& a)) const
 {
-    typedef BOOST_PARAMETER_arg_list(N) arg_tuple;
-
-    BOOST_PP_REPEAT(N, BOOST_PARAMETER_tagged_argument, _)
+    typedef typename BOOST_PARAMETER_arg_list(N)::type arg_tuple;
 
     return arg_tuple(
-        BOOST_PP_ENUM_PARAMS(N, tagged)
+        BOOST_PP_ENUM_PARAMS(N, a)
         BOOST_PP_ENUM_TRAILING_PARAMS(
             BOOST_PP_SUB(BOOST_PARAMETER_MAX_ARITY, N)
           , aux::void_() BOOST_PP_INTERCEPT
@@ -76,6 +66,5 @@ operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const& a)) const
 #undef BOOST_PARAMETER_arg_list
 #undef BOOST_PARAMETER_open_list
 #undef BOOST_PARAMETER_close_list
-#undef BOOST_PARAMETER_tagged_argument
 #undef N
 
