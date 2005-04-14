@@ -554,7 +554,7 @@ namespace {
     inline T const&
     variables_map_as(po::variable_value const& v, T*)
     {
-#if __GNUC__ == 3 && __GNUC_MINOR__ == 3  
+#if __GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)
 // gcc 3.3.x chokes on vm[...].as<...>()
         T const* r = boost::any_cast<T>(&v.value());
         if (!r)
