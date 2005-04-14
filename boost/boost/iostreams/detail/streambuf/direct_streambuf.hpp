@@ -117,7 +117,7 @@ void direct_streambuf<T, Tr>::close()
     using namespace std;
     if (ibeg_ != 0)
         try { close(BOOST_IOS::in); } catch (std::exception&) { }
-    if (obeg_ != 0)
+    if (obeg_ != 0 && obeg_ != ibeg_)
         try { close(BOOST_IOS::out); } catch (std::exception&) { }
     storage_.reset();
 }
