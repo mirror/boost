@@ -40,7 +40,7 @@ void iterator_test()
     string str1("xx-abc--xx-abb");
     string str2("Xx-abc--xX-abb-xx");
     string str3("xx");
-    char* pch1="xx-abc--xx-abb";
+    const char* pch1="xx-abc--xx-abb";
     vector<string> tokens;
     vector< vector<int> > vtokens;
 

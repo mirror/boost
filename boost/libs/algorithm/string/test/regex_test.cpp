@@ -25,7 +25,7 @@ using namespace boost;
 static void find_test()
 {
     string str1("123a1cxxxa23cXXXa456c321");
-    char* pch1="123a1cxxxa23cXXXa456c321";
+    const char* pch1="123a1cxxxa23cXXXa456c321";
     regex rx("a[0-9]+c");
     vector<int> vec1( str1.begin(), str1.end() );
     vector<string> tokens;
