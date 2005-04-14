@@ -23,6 +23,8 @@
 #  include BOOST_ABI_PREFIX
 #endif
 
+#include <algorithm>               // std::swap
+
 namespace boost{
 #ifdef BOOST_MSVC
 #pragma warning(push)
