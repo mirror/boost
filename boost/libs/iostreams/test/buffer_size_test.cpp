@@ -10,7 +10,7 @@
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test.hpp>  
+#include <boost/test/unit_test.hpp>
 
 using namespace std;
 using namespace boost::iostreams;
@@ -23,7 +23,7 @@ struct optimally_buffered_filter {
         : input_filter_tag,
           optimally_buffered_tag
         { };
-    std::streamsize optimal_buffer_size() const 
+    std::streamsize optimal_buffer_size() const
     { return default_filter_buffer_size + 1; }
 };
 
@@ -39,7 +39,7 @@ void buffer_size_test()
       optimal_buffer_size(null_sink()) == default_device_buffer_size,
       "wrong buffer size for sink"
     );
-    
+
     // Test   filter buffer sizes.
 
     BOOST_CHECK_MESSAGE(
@@ -51,14 +51,14 @@ void buffer_size_test()
       "wrong buffer size for output filter"
     );
     BOOST_CHECK_MESSAGE(
-      optimal_buffer_size(toupper_multichar_filter()) 
-          == 
+      optimal_buffer_size(toupper_multichar_filter())
+          ==
       default_filter_buffer_size,
       "wrong buffer size for multi-character input filter"
     );
     BOOST_CHECK_MESSAGE(
-      optimal_buffer_size(tolower_multichar_filter()) 
-          == 
+      optimal_buffer_size(tolower_multichar_filter())
+          ==
       default_filter_buffer_size,
       "wrong buffer size for multi-character output filter"
     );
@@ -66,14 +66,14 @@ void buffer_size_test()
     // Test   custom buffer size.
 
     BOOST_CHECK_MESSAGE(
-      optimal_buffer_size(optimally_buffered_filter()) 
-          == 
+      optimal_buffer_size(optimally_buffered_filter())
+          ==
       optimally_buffered_filter().optimal_buffer_size(),
       "wrong buffer size for multi-character output filter"
     );
 }
 
-test_suite* init_unit_test_suite(int, char* []) 
+test_suite* init_unit_test_suite(int, char* [])
 {
     test_suite* test = BOOST_TEST_SUITE("buffer_size test");
     test->add(BOOST_TEST_CASE(&buffer_size_test));
