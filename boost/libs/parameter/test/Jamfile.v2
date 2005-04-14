@@ -1,0 +1,6 @@
+# Boost Parameter Library test Jamfile
+
+    test-suite "parameter"
+      :  [ run basics.cpp ]
+         [ run sfinae.cpp ]
+      ;
