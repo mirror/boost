@@ -38,7 +38,7 @@ For a very quick start, here's an example:
                                       // see pseudo-random number generators
   boost::uniform_int&lt;> six(1,6)       // distribution that maps to 1..6
                                       // see random number distributions
-  boost::variate_generator&lt;boost::mt19937, boost::uniform_int&lt;> >
+  boost::variate_generator&lt;boost::mt19937&amp;, boost::uniform_int&lt;> >
            die(rng, six);             // glues randomness with mapping
   int x = die();                      // simulate rolling a die
 </pre>
