@@ -44,10 +44,10 @@
  */
 
 // own run
-bool check(unsigned long x, const boost::mt11213b&) { return x == 0xa37d3c92; }
+bool check(unsigned long x, const boost::mt11213b&) { return x == 3809585648U; }
 
 // validation by experiment from mt19937.c
-bool check(unsigned long x, const boost::mt19937&) { return x == 3346425566U; }
+bool check(unsigned long x, const boost::mt19937&) { return x == 4123659995U; }
 
 // validation values from the publications
 bool check(int x, const boost::minstd_rand0&) { return x == 1043618065; }

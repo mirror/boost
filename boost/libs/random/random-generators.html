@@ -827,6 +827,10 @@ pp. 3-30.
 and does not derive from or use mt19937.c provided on the above WWW
 site. However, it was verified that both produce identical output.
 <br>
+The seeding from an integer was changed in April 2005 to address a
+<a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html">weakness</a>.
+
+<br>
 The quality of the generator crucially depends on the choice of the
 parameters.  User code should employ one of the sensibly parameterized
 generators such as <code>mt19937</code> instead.
@@ -864,14 +868,15 @@ to invoke the copy constructor.
 
 <pre>void seed()</pre>
 
-<strong>Effects:</strong> Calls <code>seed(result_type(4357))</code>.
+<strong>Effects:</strong> Calls <code>seed(result_type(5489))</code>.
 
 <pre>void seed(result_type value)</pre>
 
-<strong>Effects:</strong> Constructs a
-<code>linear_congruential&lt;uint32_t, 69069, 0, 0, 0&gt;</code>
-generator with the constructor parameter
-<code>value</code> and calls <code>seed</code> with it.
+<strong>Effects:</strong> 
+Sets the state x(0) to v mod 2<sup>w</sup>.  Then,
+iteratively,<br> sets x(i) to (i + 1812433253 * (x(i-1) <em>xor</em>
+(x(i-1) <em>rshift</em> w-2))) mod 2<sup>w</sup> for i = 1 .. n-1.
+x(n) is the first value to be returned by operator().
 
 <pre>template&lt;class Generator&gt; void seed(Generator &amp; gen)</pre>
 
