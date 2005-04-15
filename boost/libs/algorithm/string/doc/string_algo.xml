@@ -33,6 +33,7 @@
 
     <title>Boost String Algorithms Library</title>  
     <xi:include href="intro.xml"/>
+    <xi:include href="release_notes.xml"/>
     <xi:include href="usage.xml"/>
     <xi:include href="quickref.xml"/>
     <xi:include href="design.xml"/>

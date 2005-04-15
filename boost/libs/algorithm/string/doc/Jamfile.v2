@@ -21,7 +21,6 @@ doxygen autodoc
     [ glob ../../../../boost/algorithm/string/iterator_range.hpp ]       
     [ glob ../../../../boost/algorithm/string/sequence_traits.hpp ]
     [ glob ../../../../boost/algorithm/string/std_containers_traits.hpp ]
-    [ glob ../../../../boost/algorithm/string/collection_traits.hpp ]
     [ glob ../../../../boost/algorithm/string/concept.hpp ]
     [ glob ../../../../boost/algorithm/string/compare.hpp ]
     [ glob ../../../../boost/algorithm/string/constants.hpp ]
