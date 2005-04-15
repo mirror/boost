@@ -1,15 +1,4 @@
 
-template< class C >
-void dump( const C& c )
-{
-    typename C::const_iterator i = c.begin(),
-                               e = c.end();
-
-    for( ; i != e; ++i )
-        std::cout << " " << *i;
-    
-}
- 
 #include "test_data.hpp"
 #include <boost/range/iterator_range.hpp>
 #include <boost/bind.hpp>
