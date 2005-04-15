@@ -28,6 +28,7 @@
 #include <string>
 #include <stdexcept>
 #include <iterator>
+#include <algorithm>
 #include <iosfwd>
 #include <vector>
 #include <map>
