@@ -76,6 +76,6 @@ BOOST_TT_AUX_SIZE_T_TRAIT_DEF1(rank,T,(::boost::detail::rank_imp<T,0>::value))
 
 } // namespace boost
 
-#include "boost/type_traits/detail/bool_trait_undef.hpp"
+#include "boost/type_traits/detail/size_t_trait_undef.hpp"
 
 #endif // BOOST_TT_IS_MEMBER_FUNCTION_POINTER_HPP_INCLUDED
