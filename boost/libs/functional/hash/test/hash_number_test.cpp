@@ -22,26 +22,78 @@
 #include "./compile_time.hpp"
 
 template <class T>
-void numeric_test()
+void numeric_test(T*)
 {
+    typedef std::numeric_limits<T> limits;
+
     compile_time_tests((T*) 0);
 
     HASH_NAMESPACE::hash<T> x1;
     HASH_NAMESPACE::hash<T> x2;
 
+    T v1 = -5;
+    BOOST_CHECK(x1(v1) == x2(v1));
+    BOOST_CHECK(x1(T(-5)) == x2(T(-5)));
     BOOST_CHECK(x1(T(0)) == x2(T(0)));
-
     BOOST_CHECK(x1(T(10)) == x2(T(10)));
     BOOST_CHECK(x1(T(25)) == x2(T(25)));
-
     BOOST_CHECK(x1(T(5) - T(5)) == x2(T(0)));
     BOOST_CHECK(x1(T(6) + T(4)) == x2(T(10)));
 
-    typedef std::numeric_limits<T> limits;
-    BOOST_CHECK(limits::is_specialized);
+#if defined(TEST_EXTENSIONS)
+    BOOST_CHECK(x1(T(-5)) == HASH_NAMESPACE::hash_value(T(-5)));
+    BOOST_CHECK(x1(T(0)) == HASH_NAMESPACE::hash_value(T(0)));
+    BOOST_CHECK(x1(T(10)) == HASH_NAMESPACE::hash_value(T(10)));
+    BOOST_CHECK(x1(T(25)) == HASH_NAMESPACE::hash_value(T(25)));
 
-    BOOST_CHECK(x1((limits::min)()) == x2((limits::min)()));
-    BOOST_CHECK(x1((limits::max)()) == x2((limits::max)()));
+    if (limits::is_integer)
+    {
+        BOOST_CHECK(HASH_NAMESPACE::hash_value(T(-5)) == (std::size_t)T(-5));
+        BOOST_CHECK(HASH_NAMESPACE::hash_value(T(0)) == (std::size_t)T(0u));
+        BOOST_CHECK(HASH_NAMESPACE::hash_value(T(10)) == (std::size_t)T(10u));
+        BOOST_CHECK(HASH_NAMESPACE::hash_value(T(25)) == (std::size_t)T(25u));
+    }
+#endif
+}
+
+template <class T>
+void limits_test(T*)
+{
+    typedef std::numeric_limits<T> limits;
+
+    if(limits::is_specialized)
+    {
+        HASH_NAMESPACE::hash<T> x1;
+        HASH_NAMESPACE::hash<T> x2;
+
+        T min_value = (limits::min)();
+        T max_value = (limits::max)();
+
+        BOOST_CHECK(x1(min_value) == x2((limits::min)()));
+        BOOST_CHECK(x1(max_value) == x2((limits::max)()));
+
+#if defined(TEST_EXTENSIONS)
+        BOOST_CHECK(x1(min_value) == HASH_NAMESPACE::hash_value(min_value));
+        BOOST_CHECK(x1(max_value) == HASH_NAMESPACE::hash_value(max_value));
+
+        if (limits::is_integer)
+        {
+            BOOST_CHECK(HASH_NAMESPACE::hash_value(min_value)
+                    == std::size_t(min_value));
+            BOOST_CHECK(HASH_NAMESPACE::hash_value(max_value)
+                    == std::size_t(max_value));
+        }
+#endif
+    }
+}
+
+template <class T>
+void poor_quality_tests(T*)
+{
+    typedef std::numeric_limits<T> limits;
+
+    HASH_NAMESPACE::hash<T> x1;
+    HASH_NAMESPACE::hash<T> x2;
 
     // A hash function can legally fail these tests, but it'll not be a good
     // sign.
@@ -55,7 +107,9 @@ void numeric_test()
 
 #define NUMERIC_TEST(type, name) \
     BOOST_AUTO_UNIT_TEST(BOOST_PP_CAT(test_, name)) { \
-        numeric_test<type>(); \
+        numeric_test((type*) 0); \
+        limits_test((type*) 0); \
+        poor_quality_tests((type*) 0); \
     }
 
 NUMERIC_TEST(bool, bool)
@@ -71,6 +125,7 @@ NUMERIC_TEST(int, int)
 NUMERIC_TEST(unsigned int, uint)
 NUMERIC_TEST(long, hash_long)
 NUMERIC_TEST(unsigned long, ulong)
+
 NUMERIC_TEST(float, float)
 NUMERIC_TEST(double, double)
 NUMERIC_TEST(long double, ldouble)

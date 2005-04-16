@@ -29,36 +29,40 @@ BOOST_AUTO_UNIT_TEST(array_int_test)
         8, -12, 23, 65, 45,
         -1, 93, -54, 987, 3
     };
-    boost::hash<int[25]> hasher1;
+    HASH_NAMESPACE::hash<int[25]> hasher1;
 
     const int length2 = 1;
     int array2[1] = {3};
-    boost::hash<int[1]> hasher2;
+    HASH_NAMESPACE::hash<int[1]> hasher2;
 
     const int length3 = 2;
     int array3[2] = {2, 3};
-    boost::hash<int[2]> hasher3;
+    HASH_NAMESPACE::hash<int[2]> hasher3;
 
-    BOOST_CHECK(hasher1(array1) == boost::hash_range(array1, array1 + length1));
-    BOOST_CHECK(hasher2(array2) == boost::hash_range(array2, array2 + length2));
-    BOOST_CHECK(hasher3(array3) == boost::hash_range(array3, array3 + length3));
+    BOOST_CHECK(hasher1(array1)
+            == HASH_NAMESPACE::hash_range(array1, array1 + length1));
+    BOOST_CHECK(hasher2(array2)
+            == HASH_NAMESPACE::hash_range(array2, array2 + length2));
+    BOOST_CHECK(hasher3(array3)
+            == HASH_NAMESPACE::hash_range(array3, array3 + length3));
 }
 
 BOOST_AUTO_UNIT_TEST(two_dimensional_array_test)
 {
-    int array4[3][2] = {{-5, 6}, {7, -3}, {26, 1}};
-    boost::hash<int[3][2]> hasher4;
+    int array[3][2] = {{-5, 6}, {7, -3}, {26, 1}};
+    HASH_NAMESPACE::hash<int[3][2]> hasher;
 
     std::size_t seed1 = 0;
     for(int i = 0; i < 3; ++i)
     {
         std::size_t seed2 = 0;
         for(int j = 0; j < 2; ++j)
-            boost::hash_combine(seed2, array4[i][j]);
-        boost::hash_combine(seed1, seed2);
+            HASH_NAMESPACE::hash_combine(seed2, array[i][j]);
+        HASH_NAMESPACE::hash_combine(seed1, seed2);
     }
 
-    BOOST_CHECK(hasher4(array4) == seed1);
+    BOOST_CHECK(hasher(array) == seed1);
+    BOOST_CHECK(hasher(array) == HASH_NAMESPACE::hash_range(array, array + 3));
 }
 
 #endif // TEST_EXTENSIONS

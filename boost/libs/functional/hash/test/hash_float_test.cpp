@@ -30,6 +30,9 @@ void float_tests(T* = 0)
     BOOST_CHECK(zero == minus_zero);
     BOOST_CHECK(x1(zero) == x1(minus_zero));
 
+    BOOST_CHECK(x1(zero) == HASH_NAMESPACE::hash_value(zero));
+    BOOST_CHECK(x1(minus_zero) == HASH_NAMESPACE::hash_value(minus_zero));
+
     using namespace std;
 
     if(std::numeric_limits<T>::has_infinity) {
@@ -41,6 +44,10 @@ void float_tests(T* = 0)
         T minus_infinity = (T) -1. / zero;
         T minus_infinity2 = log(zero);
         T minus_infinity3 = (T) 1. / minus_zero;
+
+        BOOST_CHECK(x1(infinity) == HASH_NAMESPACE::hash_value(infinity));
+        BOOST_CHECK(x1(minus_infinity)
+                == HASH_NAMESPACE::hash_value(minus_infinity));
 
         BOOST_CHECK(infinity == infinity2);
         BOOST_CHECK(infinity == infinity3);
@@ -75,33 +82,47 @@ void float_tests(T* = 0)
 
     T max = (std::numeric_limits<T>::max)();
     T half_max = max / 2;
-    T quater_max = max / 4;
-    T three_quater_max = max - quater_max;
+    T quarter_max = max / 4;
+    T three_quarter_max = max - quarter_max;
+
+    BOOST_CHECK(x1(max) == HASH_NAMESPACE::hash_value(max));
+    BOOST_CHECK(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
+    BOOST_CHECK(x1(quarter_max) == HASH_NAMESPACE::hash_value(quarter_max));
+    BOOST_CHECK(x1(three_quarter_max) == HASH_NAMESPACE::hash_value(three_quarter_max));
+    
     BOOST_CHECK(x1(max) == x1(max));
-    BOOST_CHECK(x1(max) != x1(quater_max));
+    BOOST_CHECK(x1(max) != x1(quarter_max));
     BOOST_CHECK(x1(max) != x1(half_max));
-    BOOST_CHECK(x1(max) != x1(three_quater_max));
-    BOOST_CHECK(x1(quater_max) == x1(quater_max));
-    BOOST_CHECK(x1(quater_max) != x1(half_max));
-    BOOST_CHECK(x1(quater_max) != x1(three_quater_max));
+    BOOST_CHECK(x1(max) != x1(three_quarter_max));
+    BOOST_CHECK(x1(quarter_max) == x1(quarter_max));
+    BOOST_CHECK(x1(quarter_max) != x1(half_max));
+    BOOST_CHECK(x1(quarter_max) != x1(three_quarter_max));
     BOOST_CHECK(x1(half_max) == x1(half_max));
-    BOOST_CHECK(x1(half_max) != x1(three_quater_max));
-    BOOST_CHECK(x1(three_quater_max) == x1(three_quater_max));
+    BOOST_CHECK(x1(half_max) != x1(three_quarter_max));
+    BOOST_CHECK(x1(three_quarter_max) == x1(three_quarter_max));
 
     T v1 = asin((T) 1);
     T v2 = acos((T) 0);
     BOOST_CHECK(v1 == v2);
     BOOST_CHECK(x1(v1) == x1(v2));
+    BOOST_CHECK(x1(v1) == HASH_NAMESPACE::hash_value(v1));
+    BOOST_CHECK(x1(v2) == HASH_NAMESPACE::hash_value(v2));
 
     BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) != x1((T) 0));
+    BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) ==
+            HASH_NAMESPACE::hash_value(std::numeric_limits<T>::epsilon()));
 
     // As before.
     if(std::numeric_limits<T>::has_denorm) {
         BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) != x1(zero));
+        BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) ==
+            HASH_NAMESPACE::hash_value(std::numeric_limits<T>::denorm_min()));
     }
 
     if(std::numeric_limits<T>::has_quiet_NaN) {
         BOOST_CHECK(x1(std::numeric_limits<T>::quiet_NaN()) != x1(zero));
+        BOOST_CHECK(x1(std::numeric_limits<T>::quiet_NaN()) ==
+            HASH_NAMESPACE::hash_value(std::numeric_limits<T>::quiet_NaN()));
     }
 }
 

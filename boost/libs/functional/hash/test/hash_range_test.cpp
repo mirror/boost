@@ -39,18 +39,28 @@ BOOST_AUTO_UNIT_TEST(hash_range_tests)
     values5.push_back(20);
 
     std::vector<int> x;
+
+    std::size_t x_seed = 0;
+    BOOST_CHECK(x_seed == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+
     BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
         == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
     BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
         != HASH_NAMESPACE::hash_range(values1.begin(), values1.end()));
 
     x.push_back(10);
+    HASH_NAMESPACE::hash_combine(x_seed, 10);
+    BOOST_CHECK(x_seed == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+
     BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
         != HASH_NAMESPACE::hash_range(x.begin(), x.end()));
     BOOST_CHECK(HASH_NAMESPACE::hash_range(values2.begin(), values2.end())
         == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
 
     x.push_back(20);
+    HASH_NAMESPACE::hash_combine(x_seed, 20);
+    BOOST_CHECK(x_seed == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
+
     BOOST_CHECK(HASH_NAMESPACE::hash_range(empty.begin(), empty.end())
         != HASH_NAMESPACE::hash_range(x.begin(), x.end()));
     BOOST_CHECK(HASH_NAMESPACE::hash_range(values2.begin(), values2.end())

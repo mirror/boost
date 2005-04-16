@@ -53,6 +53,11 @@ BOOST_AUTO_UNIT_TEST(custom_tests)
     test::custom x(55);
     BOOST_CHECK(custom_hasher(x) == 550u);
 
+    {
+        using namespace HASH_NAMESPACE;
+        BOOST_CHECK(custom_hasher(x) == hash_value(x));
+    }
+
     std::vector<test::custom> custom_vector;
     custom_vector.push_back(5);
     custom_vector.push_back(25);
