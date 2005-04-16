@@ -24,6 +24,10 @@
 #include <boost/functional/detail/float_functions.hpp>
 #include <boost/detail/workaround.hpp>
 
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#include <boost/type_traits/is_array.hpp>
+#endif
+
 namespace boost
 {
 #if defined(__BORLANDC__)
@@ -37,12 +41,7 @@ namespace boost
     std::size_t hash_value(long);
     std::size_t hash_value(unsigned long);
 
-// Hopefully, I'll be able to remove this workaround soon.
-#if BOOST_WORKAROUND(__GNUC__, == 4)
-    template <class T> std::size_t hash_value(T*);
-#else
     template <class T> std::size_t hash_value(T* const&);
-#endif
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     template< class T, unsigned N >
@@ -103,11 +102,7 @@ namespace boost
     }
 
     // Implementation by Alberto Barbati and Dave Harris.
-#if BOOST_WORKAROUND(__GNUC__, == 4)
-    template <class T> std::size_t hash_value(T* v)
-#else
     template <class T> std::size_t hash_value(T* const& v)
-#endif
     {
         std::size_t x = static_cast<std::size_t>(
            reinterpret_cast<std::ptrdiff_t>(v));
@@ -171,7 +166,7 @@ namespace boost
                 ::BOOST_NESTED_TEMPLATE inner<T>
         {
         };
-#endif
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     }
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
@@ -332,3 +327,4 @@ namespace boost
 }
 
 #endif
+
