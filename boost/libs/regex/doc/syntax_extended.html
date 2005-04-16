@@ -130,10 +130,11 @@ aaaa</PRE>
          <P>For example [a-c] will match any single character in the range 'a' to 
             'c'.&nbsp; By default, for POSIX-Extended regular expressions, a character <EM>x</EM>
             is within the range <EM>y</EM> to <EM>z</EM>, if it collates within that 
-            range;&nbsp;this results in locale specific behavior.&nbsp; This behavior can 
-            be turned off by unsetting the <EM><A href="syntax_option_type.html#extended">collate</A></EM>
-            option flag - in which case whether a character appears within a range is 
-            determined by comparing the code points of the characters only</P>
+            range;&nbsp;<EM><STRONG>this results in locale specific behavior</STRONG></EM> .&nbsp; 
+            This behavior can be turned off by unsetting the <EM><A href="syntax_option_type.html#extended">
+                  collate</A></EM> option flag - in which case whether a character appears 
+            within a range is determined by comparing the code points of the characters 
+            only.</P>
          <H5>Negation:</H5>
          <P>If the bracket-expression begins with the ^ character, then it matches the 
             complement of the characters it contains, for example [^a-c] matches any 
@@ -149,13 +150,16 @@ aaaa</PRE>
             point of a range, for example: [[.ae.]-c] matches the character sequence "ae", 
             plus any single character in the range "ae"-c, assuming that "ae" is treated as 
             a single collating element in the current locale.</P>
+         <P>Collating elements may be used in place of escapes (which are not normally 
+            allowed inside character sets), for example [[.^.]abc] would match either one 
+            of the characters 'abc^'.</P>
          <P>As an extension, a collating element may also be specified via its <A href="collating_names.html">
                symbolic name</A>, for example:</P>
          <P>[[.NUL.]]</P>
          <P>matches a NUL character.</P>
          <H5>Equivalence classes:</H5>
          <P>
-            An expression of theform[[=col=]], matches any character or collating element 
+            An expression oftheform[[=col=]], matches any character or collating element 
             whose primary sort key is the same as that for collating element <EM>col</EM>, 
             as with colating elements the name <EM>col</EM> may be a <A href="collating_names.html">
                symbolic name</A>.&nbsp; A primary sort key is one that ignores case, 
@@ -177,9 +181,9 @@ aaaa</PRE>
          <LI>
          The effect of any ordinary character being preceded by an escape is undefined.
          <LI>
-            An escape inside a character class declaration shall match itself (in other 
+            An escape inside a character class declaration shall match itself: in other 
             words the escape character is not "special" inside a character class 
-            declaration).</LI></UL>
+            declaration; so [\^] will match either a literal '\' or a '^'.</LI></UL>
       <P>However, that's rather restrictive, so the following standard-compatible 
          extensions are also supported by Boost.Regex:</P>
       <BLOCKQUOTE dir="ltr" style="MARGIN-RIGHT: 0px">
