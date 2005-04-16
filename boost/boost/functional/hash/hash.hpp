@@ -23,7 +23,6 @@
 #include <boost/limits.hpp>
 #include <boost/functional/detail/float_functions.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/call_traits.hpp>
 
 namespace boost
 {
@@ -48,6 +47,9 @@ namespace boost
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     template< class T, unsigned N >
     std::size_t hash_value(const T (&array)[N]);
+
+    template< class T, unsigned N >
+    std::size_t hash_value(T (&array)[N]);
 #endif
 
     std::size_t hash_value(float v);
@@ -235,6 +237,12 @@ namespace boost
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     template< class T, unsigned N >
     inline std::size_t hash_value(const T (&array)[N])
+    {
+        return hash_range(array, array+N);
+    }
+
+    template< class T, unsigned N >
+    inline std::size_t hash_value(T (&array)[N])
     {
         return hash_range(array, array+N);
     }
