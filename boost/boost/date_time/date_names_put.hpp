@@ -1,7 +1,7 @@
 #ifndef DATE_TIME_DATE_NAMES_PUT_HPP___
 #define DATE_TIME_DATE_NAMES_PUT_HPP___
 
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -52,7 +52,7 @@ namespace date_time {
       typedef std::basic_string<charT> string_type;
       typedef charT char_type;
       static const char_type default_special_value_names[3][17];
-      static const char_type separator[1];
+      static const char_type separator[2];
 
       static std::locale::id id;
 
@@ -196,8 +196,8 @@ namespace date_time {
 
     template<class Config, class charT, class OutputIterator>
     const typename date_names_put<Config, charT, OutputIterator>::char_type 
-    date_names_put<Config, charT, OutputIterator>::separator[1] = 
-      {'-'} ;
+    date_names_put<Config, charT, OutputIterator>::separator[2] = 
+      {'-', '\0'} ;
     
 
     //! Generate storage location for a std::locale::id 
