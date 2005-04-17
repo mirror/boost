@@ -18,10 +18,10 @@
 
 #ifndef BOOST_REGEX_CONFIG_HPP
 #define BOOST_REGEX_CONFIG_HPP
-//
-// Borland C++ Fix/error check
-// this has to go *before* we include any std lib headers:
-//
+/*
+ * Borland C++ Fix/error check
+ * this has to go *before* we include any std lib headers:
+ */
 #if defined(__BORLANDC__)
 #  include <boost/regex/config/borland.hpp>
 #endif
@@ -43,11 +43,11 @@
 #  include <boost/config.hpp>
 
 #else
-   //
-   // C build,
-   // don't include <boost/config.hpp> because that may
-   // do C++ specific things in future...
-   //
+   /*
+    * C build,
+    * don't include <boost/config.hpp> because that may
+    * do C++ specific things in future...
+    */
 #  include <stdlib.h>
 #  include <stddef.h>
 #  ifdef _MSC_VER
@@ -64,34 +64,34 @@
 /* Obsolete macro, use BOOST_VERSION instead: */
 #define BOOST_RE_VERSION 320
 
-// fix:
+/* fix: */
 #if defined(_UNICODE) && !defined(UNICODE)
 #define UNICODE
 #endif
 
-//
-// Fix for gcc prior to 3.4: std::ctype<wchar_t> doesn't allow
-// masks to be combined, for example:
-// std::use_facet<std::ctype<wchar_t> >.is(std::ctype_base::lower|std::ctype_base::upper, L'a');
-// returns *false*.
-//
+/*
+ * Fix for gcc prior to 3.4: std::ctype<wchar_t> doesn't allow
+ * masks to be combined, for example:
+ * std::use_facet<std::ctype<wchar_t> >.is(std::ctype_base::lower|std::ctype_base::upper, L'a');
+ * returns *false*.
+ */
 #ifdef __GLIBCPP__
 #  define BOOST_REGEX_BUGGY_CTYPE_FACET
 #endif
 
-//
-// If there isn't good enough wide character support then there will
-// be no wide character regular expressions:
-//
+/*
+ * If there isn't good enough wide character support then there will
+ * be no wide character regular expressions:
+ */
 #if (defined(BOOST_NO_CWCHAR) || defined(BOOST_NO_CWCTYPE) || defined(BOOST_NO_STD_WSTRING))
 #  if !defined(BOOST_NO_WREGEX)
 #     define BOOST_NO_WREGEX
 #  endif
 #else
 #  if defined(__sgi) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
-      // STLPort on IRIX is misconfigured: <cwctype> does not compile
-      // as a temporary fix include <wctype.h> instead and prevent inclusion
-      // of STLPort version of <cwctype>
+      /* STLPort on IRIX is misconfigured: <cwctype> does not compile
+       * as a temporary fix include <wctype.h> instead and prevent inclusion
+       * of STLPort version of <cwctype> */
 #     include <wctype.h>
 #     define __STLPORT_CWCTYPE
 #     define _STLP_CWCTYPE
@@ -103,28 +103,28 @@
 
 #endif
 
-//
-// If Win32 support has been disabled for boost in general, then
-// it is for regex in particular:
-//
+/*
+ * If Win32 support has been disabled for boost in general, then
+ * it is for regex in particular:
+ */
 #if defined(BOOST_DISABLE_WIN32) && !defined(BOOST_REGEX_NO_W32)
 #  define BOOST_REGEX_NO_W32
 #endif
 
-// disable our own file-iterators and mapfiles if we can't
-// support them:
+/* disable our own file-iterators and mapfiles if we can't
+ * support them: */
 #if !defined(BOOST_HAS_DIRENT_H) && !(defined(_WIN32) && !defined(BOOST_REGEX_NO_W32))
 #  define BOOST_REGEX_NO_FILEITER
 #endif
 
-// backwards compatibitity:
+/* backwards compatibitity: */
 #if defined(BOOST_RE_NO_LIB)
 #  define BOOST_REGEX_NO_LIB
 #endif
 
 #if defined(__GNUC__) && (defined(_WIN32) || defined(__CYGWIN__))
-// gcc on win32 has problems if you include <windows.h>
-// (sporadically generates bad code).
+/* gcc on win32 has problems if you include <windows.h>
+   (sporadically generates bad code). */
 #  define BOOST_REGEX_NO_W32
 #endif
 #if defined(__COMO__) && !defined(BOOST_REGEX_NO_W32) && !defined(_MSC_EXTENSIONS)
@@ -137,13 +137,13 @@
  *
  ****************************************************************************/
 
-//
-// define BOOST_REGEX_HAS_OTHER_WCHAR_T when wchar_t is a native type, but the users
-// code may be built with wchar_t as unsigned short: basically when we're building
-// with MSVC and the /Zc:wchar_t option we place some extra unsigned short versions
-// of the non-inline functions in the library, so that users can still link to the lib,
-// irrespective of whether their own code is built with /Zc:wchar_t.
-//
+/*
+ * define BOOST_REGEX_HAS_OTHER_WCHAR_T when wchar_t is a native type, but the users
+ * code may be built with wchar_t as unsigned short: basically when we're building
+ * with MSVC and the /Zc:wchar_t option we place some extra unsigned short versions
+ * of the non-inline functions in the library, so that users can still link to the lib,
+ * irrespective of whether their own code is built with /Zc:wchar_t.
+ */
 #if defined(__cplusplus) && (defined(BOOST_MSVC) || defined(__ICL)) && !defined(BOOST_NO_INTRINSIC_WCHAR_T) && defined(BOOST_WINDOWS)
 #  define BOOST_REGEX_HAS_OTHER_WCHAR_T
 #  ifdef BOOST_MSVC
@@ -223,7 +223,7 @@
  *
  ****************************************************************************/
 
-// backwards compatibility:
+/* backwards compatibility: */
 #ifdef BOOST_RE_LOCALE_C
 #  define BOOST_REGEX_USE_C_LOCALE
 #endif
@@ -232,15 +232,15 @@
 #  define BOOST_REGEX_USE_CPP_LOCALE
 #endif
 
-// Win32 defaults to native Win32 locale:
+/* Win32 defaults to native Win32 locale: */
 #if defined(_WIN32) && !defined(BOOST_REGEX_USE_WIN32_LOCALE) && !defined(BOOST_REGEX_USE_C_LOCALE) && !defined(BOOST_REGEX_USE_CPP_LOCALE) && !defined(BOOST_REGEX_NO_W32)
 #  define BOOST_REGEX_USE_WIN32_LOCALE
 #endif
-// otherwise use C++ locale if supported:
+/* otherwise use C++ locale if supported: */
 #if !defined(BOOST_REGEX_USE_WIN32_LOCALE) && !defined(BOOST_REGEX_USE_C_LOCALE) && !defined(BOOST_REGEX_USE_CPP_LOCALE) && !defined(BOOST_NO_STD_LOCALE)
 #  define BOOST_REGEX_USE_CPP_LOCALE
 #endif
-// otherwise use C+ locale:
+/* otherwise use C+ locale: */
 #if !defined(BOOST_REGEX_USE_WIN32_LOCALE) && !defined(BOOST_REGEX_USE_C_LOCALE) && !defined(BOOST_REGEX_USE_CPP_LOCALE)
 #  define BOOST_REGEX_USE_C_LOCALE
 #endif
@@ -257,10 +257,10 @@
  ****************************************************************************/
 
 #ifdef BOOST_NO_EXCEPTIONS
-//
-// If there are no exceptions then we must report critical-errors
-// the only way we know how; by terminating.
-//
+/*
+ * If there are no exceptions then we must report critical-errors
+ * the only way we know how; by terminating.
+ */
 #include <stdexcept>
 #include <string>
 #include <boost/throw_exception.hpp>
@@ -274,10 +274,10 @@ if(0 == (x))\
    boost::throw_exception(e);\
 }
 #else
-//
-// With exceptions then error handling is taken care of and
-// there is no need for these checks:
-//
+/*
+ * With exceptions then error handling is taken care of and
+ * there is no need for these checks:
+ */
 #  define BOOST_REGEX_NOEH_ASSERT(x)
 #endif
 
@@ -360,7 +360,7 @@ namespace boost{ namespace re_detail{
 BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block();
 BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
 
-}} // namespaces
+}} /* namespaces */
 #endif
 
 /*****************************************************************************
