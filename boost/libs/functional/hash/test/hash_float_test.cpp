@@ -35,14 +35,16 @@ void float_tests(T* = 0)
 
     using namespace std;
 
+// Doing anything with infinity causes borland to crash.
+#if !defined(__BORLANDC__)
     if(std::numeric_limits<T>::has_infinity) {
-        T infinity = (T) 1. / zero;
-        T infinity2 = -log(zero);
+        T infinity = -log(zero);
+        T infinity2 = (T) 1. / zero;
         T infinity3 = (T) -1. / minus_zero;
         T infinity4 = std::numeric_limits<T>::infinity();
-        
-        T minus_infinity = (T) -1. / zero;
-        T minus_infinity2 = log(zero);
+
+        T minus_infinity = log(zero);
+        T minus_infinity2 = (T) -1. / zero;
         T minus_infinity3 = (T) 1. / minus_zero;
 
         BOOST_CHECK(x1(infinity) == HASH_NAMESPACE::hash_value(infinity));
@@ -79,6 +81,7 @@ void float_tests(T* = 0)
             BOOST_WARN(x1(std::numeric_limits<T>::quiet_NaN()) != x1(minus_infinity));
         }
     }
+#endif
 
     T max = (std::numeric_limits<T>::max)();
     T half_max = max / 2;
@@ -119,11 +122,14 @@ void float_tests(T* = 0)
             HASH_NAMESPACE::hash_value(std::numeric_limits<T>::denorm_min()));
     }
 
+// NaN also causes borland to crash.
+#if !defined(__BORLANDC__)
     if(std::numeric_limits<T>::has_quiet_NaN) {
         BOOST_CHECK(x1(std::numeric_limits<T>::quiet_NaN()) != x1(zero));
         BOOST_CHECK(x1(std::numeric_limits<T>::quiet_NaN()) ==
             HASH_NAMESPACE::hash_value(std::numeric_limits<T>::quiet_NaN()));
     }
+#endif
 }
 
 BOOST_AUTO_UNIT_TEST(hash_float_tests)

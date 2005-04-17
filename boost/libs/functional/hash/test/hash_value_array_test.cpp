@@ -24,7 +24,6 @@
 
 BOOST_AUTO_UNIT_TEST(array_int_test)
 {
-    const int length1 = 25;
     const int array1[25] = {
         26, -43, 32, 65, 45,
         12, 67, 32, 12, 23,
@@ -34,11 +33,9 @@ BOOST_AUTO_UNIT_TEST(array_int_test)
     };
     HASH_NAMESPACE::hash<int[25]> hasher1;
 
-    const int length2 = 1;
     int array2[1] = {3};
     HASH_NAMESPACE::hash<int[1]> hasher2;
 
-    const int length3 = 2;
     int array3[2] = {2, 3};
     HASH_NAMESPACE::hash<int[2]> hasher3;
 
