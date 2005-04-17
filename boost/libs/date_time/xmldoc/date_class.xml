@@ -232,7 +232,17 @@ date::ymd_type ymd = d.year_month_day();
 date d(2002,Jan,10);
 d.day(); // --> Thursday</screen></entry>
         </row>
-        
+
+	<row>
+	  <entry valign="top" morerows="1"><screen>greg_day_of_year day_of_year() const</screen></entry>
+	  <entry>Get the day of the year. Number from 1 to 366 </entry>
+	</row>
+	<row>
+	  <entry><screen>
+date d(2000,Jan,10);
+d.day_of_year(); // --> 10</screen></entry>
+        </row>
+                
 	<row>
 	  <entry valign="top" morerows="1"><screen>bool is_infinity() const</screen></entry>
 	  <entry>Returns true if date is either positive or negative infinity</entry>
