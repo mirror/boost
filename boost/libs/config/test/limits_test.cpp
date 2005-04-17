@@ -64,10 +64,10 @@ void test_integral_limits(const T &, const char * msg)
             << ", max: " << make_char_numeric_for_streaming((lim::max)())
             << std::endl;
 
-  BOOST_CHECK(lim::is_specialized);
-  BOOST_CHECK(lim::is_integer);
+  BOOST_CHECK(static_cast<bool>(lim::is_specialized));
+  BOOST_CHECK(static_cast<bool>(lim::is_integer));
   // BOOST_CHECK(lim::is_modulo);
-  BOOST_CHECK((lim::min)() < (lim::max)());
+  BOOST_CHECK(static_cast<bool>((lim::min)() < (lim::max)()));
 }
 
 template <class T>
@@ -89,10 +89,10 @@ void test_float_limits(const T &, const char * msg)
   std::cout << "\nTesting " << msg << std::endl;
   typedef std::numeric_limits<T> lim;
 
-  BOOST_CHECK(lim::is_specialized);
-  BOOST_CHECK(!lim::is_modulo);
-  BOOST_CHECK(!lim::is_integer);
-  BOOST_CHECK(lim::is_signed);
+  BOOST_CHECK(static_cast<bool>(lim::is_specialized));
+  BOOST_CHECK(static_cast<bool>(!lim::is_modulo));
+  BOOST_CHECK(static_cast<bool>(!lim::is_integer));
+  BOOST_CHECK(static_cast<bool>(lim::is_signed));
 
   const T infinity = lim::infinity();
   const T qnan = lim::quiet_NaN();
@@ -115,9 +115,9 @@ void test_float_limits(const T &, const char * msg)
   BOOST_CHECK(lim::epsilon() > 0);
 
   if(lim::is_iec559) {
-    BOOST_CHECK(lim::has_infinity);
-    BOOST_CHECK(lim::has_quiet_NaN);
-    BOOST_CHECK(lim::has_signaling_NaN);
+    BOOST_CHECK(static_cast<bool>(lim::has_infinity));
+    BOOST_CHECK(static_cast<bool>(lim::has_quiet_NaN));
+    BOOST_CHECK(static_cast<bool>(lim::has_signaling_NaN));
   } else {
     std::cout << "Does not claim IEEE conformance" << std::endl;
   }
