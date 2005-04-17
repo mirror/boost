@@ -70,13 +70,13 @@ void test(const std::vector< ::boost::uint32_t>& v)
    typedef std::vector< ::boost::uint8_t>  vector8_type;
    typedef boost::u32_to_u16_iterator<vector32_type::const_iterator, ::boost::uint16_t> u32to16type;
    typedef boost::u16_to_u32_iterator<vector16_type::const_iterator, ::boost::uint32_t> u16to32type;
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR) && !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
    typedef std::reverse_iterator<u32to16type> ru32to16type;
    typedef std::reverse_iterator<u16to32type> ru16to32type;
 #endif
    typedef boost::u32_to_u8_iterator<vector32_type::const_iterator, ::boost::uint8_t> u32to8type;
    typedef boost::u8_to_u32_iterator<vector8_type::const_iterator, ::boost::uint32_t> u8to32type;
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR) && !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
    typedef std::reverse_iterator<u32to8type> ru32to8type;
    typedef std::reverse_iterator<u8to32type> ru8to32type;
 #endif
@@ -114,7 +114,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    //
    // test backward iteration, of 32-16 bit interconversions:
    //
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR) && !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
    v16.assign(ru32to16type(u32to16type(v.end())), ru32to16type(u32to16type(v.begin())));
 #ifndef BOOST_NO_STD_DISTANCE
    BOOST_CHECK_EQUAL(std::distance(ru32to16type(u32to16type(v.end())), ru32to16type(u32to16type(v.begin()))), v16.size());
@@ -162,7 +162,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    //
    // test backward iteration, of 32-8 bit interconversions:
    //
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR) && !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
    v8.assign(ru32to8type(u32to8type(v.end())), ru32to8type(u32to8type(v.begin())));
 #ifndef BOOST_NO_STD_DISTANCE
    BOOST_CHECK_EQUAL(std::distance(ru32to8type(u32to8type(v.end())), ru32to8type(u32to8type(v.begin()))), v8.size());
