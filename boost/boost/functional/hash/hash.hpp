@@ -211,8 +211,7 @@ namespace boost
 
         for(; first != last; ++first)
         {
-            T& x = *first;
-            hash_combine(seed, x);
+            hash_combine(seed, first[0]);
         }
 
         return seed;
@@ -223,8 +222,7 @@ namespace boost
     {
         for(; first != last; ++first)
         {
-            T const& x = *first;
-            hash_combine(seed, x);
+            hash_combine(seed, first[0]);
         }
     }
 #endif
@@ -259,15 +257,6 @@ namespace boost
         template <class T>
         inline std::size_t float_hash_value(T v)
         {
-#if defined(__BORLAND__)
-            if(v == std::numeric_limits<double>::quiet_NaN())
-                return 0;
-            if(v == std::numeric_limits<double>::infinity())
-                return 1;
-            if(v == -std::numeric_limits<double>::infinity())
-                return 2;
-#endif
-
             int exp;
             v = boost::hash_detail::call_frexp(v, &exp);
 
