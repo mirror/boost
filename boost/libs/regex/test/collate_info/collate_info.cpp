@@ -11,6 +11,7 @@
 
 // most of the workarounds and headers we need are already in here:
 #include <boost/regex.hpp> 
+#include <boost/regex/v4/primary_transform.hpp>
 #include <assert.h>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
