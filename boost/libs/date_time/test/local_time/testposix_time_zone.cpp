@@ -19,7 +19,7 @@ int main(){
   using namespace boost::local_time;
   using namespace boost::posix_time;
   using namespace boost::gregorian;
-  std::string specs[] = {"MST-07", "MST-07:00:00","EST-05EDT,M4.1.0,M10.5.0", "EST-05:00:00EDT+01:00:00,M4.1.0/02:00:00,M10.5.0/02:00:00","PST-08PDT,J124/1:30,J310","PST-08PDT,124,310/0:30:00"};
+  std::string specs[] = {"MST-07", "MST-07:00:00","EST-05EDT,M4.1.0,M10.5.0", "EST-05:00:00EDT+01:00:00,M4.1.0/02:00:00,M10.5.0/02:00:00","PST-08PDT,J46/1:30,J310","PST-08PDT,45,310/0:30:00"};
 
   posix_time_zone nyc1(specs[2]);
   posix_time_zone nyc2(specs[3]);
@@ -48,6 +48,10 @@ int main(){
       ptime(date(2003,Oct,26),time_duration(2,0,0)));
   check("dst ends match", nyc1.dst_local_end_time(2003) == 
       nyc2.dst_local_end_time(2003)); 
+  check("to posix string", 
+        nyc1.to_posix_string() == std::string("EST-05EDT+01,M4.1.0/02:00,M10.5.0/02:00"));
+  check("to posix string", 
+        nyc2.to_posix_string() == std::string("EST-05EDT+01,M4.1.0/02:00,M10.5.0/02:00"));
   
 
   posix_time_zone az1(specs[0]);
@@ -57,6 +61,10 @@ int main(){
   check("Has DST", !az1.has_dst() && !az2.has_dst());
   check("UTC offset", az1.base_utc_offset() == td);
   check("UTC offsets match", az1.base_utc_offset() == az2.base_utc_offset());
+  check("dst start in non-dst zone", 
+        az1.dst_local_start_time(2005) == ptime(not_a_date_time));
+  check("dst end in non-dst zone", 
+        az2.dst_local_end_time(2005) == ptime(not_a_date_time));
   check("Abbrevs", az1.std_zone_abbrev() == std::string("MST"));
   check("Abbrevs", az2.std_zone_abbrev() == std::string("MST"));
   // non-dst zones default to empty strings for dst names & abbrevs
@@ -66,6 +74,10 @@ int main(){
   check("Names", az2.std_zone_name() == std::string("MST"));
   check("Names", az1.dst_zone_name() == std::string(""));
   check("Names", az2.dst_zone_name() == std::string(""));
+  check("to posix string", 
+        az1.to_posix_string() == std::string("MST-07"));
+  check("to posix string", 
+        az2.to_posix_string() == std::string("MST-07"));
  
 
   // bizzar time zone spec to fully test parsing
@@ -84,19 +96,31 @@ int main(){
   // only checking start & end rules w/ 'J' notation
   std::cout << "\n'J' notation Start/End rule tests..." << std::endl;
   posix_time_zone la1(specs[4]); // "PST-08PDT,J124,J310"
+  //posix_time_zone la1("PST-08PDT,J1,J365");// Jan1/Dec31 
   check("dst start", la1.dst_local_start_time(2003) == 
-      ptime(date(2003,May,4),time_duration(1,30,0)));
+      ptime(date(2003,Feb,15),time_duration(1,30,0)));
   check("dst end", la1.dst_local_end_time(2003) == 
       ptime(date(2003,Nov,6),time_duration(2,0,0)));
+  /* NOTE: la1 was created from a 'J' notation string but to_posix_string
+   * returns an 'n' notation string. The difference between the two 
+   * is Feb-29 is always counted in an 'n' notation string and numbering 
+   * starts at zero ('J' notation starts at one). 
+   * Every possible date spec that can be written in 'J' notation can also
+   * be written in 'n' notation. The reverse is not true so 'n' notation 
+   * is used as the output for to_posix_string(). */
+  check("to posix string", 
+        la1.to_posix_string() == std::string("PST-08PDT+01,45/01:30,310/02:00"));
   
   // only checking start & end rules w/ 'n' notation
   std::cout << "\n'n' notation Start/End rule tests..." << std::endl;
   posix_time_zone la2(specs[5]); // "PST-08PDT,124,310"
   //posix_time_zone la2("PST-08PDT,0,365");// Jan1/Dec31 
   check("dst start", la2.dst_local_start_time(2003) == 
-      ptime(date(2003,May,4),time_duration(2,0,0)));
+      ptime(date(2003,Feb,15),time_duration(2,0,0)));
   check("dst end", la2.dst_local_end_time(2003) == 
       ptime(date(2003,Nov,6),time_duration(0,30,0)));
+  check("to posix string", 
+        la2.to_posix_string() == std::string("PST-08PDT+01,45/02:00,310/00:30"));
 
   // bad posix time zone strings tests
   std::cout << "\nInvalid time zone string tests..." << std::endl;

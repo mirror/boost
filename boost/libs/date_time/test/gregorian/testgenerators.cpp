@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -19,10 +19,12 @@ main()
 
   partial_date pd1(1,Jan);
   date d = pd1.get_date(2000);
+  check("Partial date to_string()", pd1.to_string() == std::string("0"));
   check("Partial date getdate",     date(2000,1,1) == d);
   d = pd1.get_date(2001);
   check("Partial date getdate",     date(2001,1,1) == d);
   partial_date pd2(1,Feb);
+  check("Partial date to_string()", pd2.to_string() == std::string("31"));
   check("Partial date operator==",  pd1 == pd1);
   check("Partial date operator==",  !(pd1 == pd2));
   check("Partial date operator==",  !(pd2 == pd1));
@@ -36,20 +38,26 @@ main()
   lastkday lsif(Sunday, Feb);
   std::cout << to_simple_string(lsif.get_date(2002)) << std::endl; //24th
   check("Last kday",     date(2002,Feb,24) == lsif.get_date(2002));
+  check("Last kday to_string()", lsif.to_string() == std::string("M2.5.0"));
   lastkday ltif(Thursday, Feb);
   check("Last kday",     date(2002,Feb,28) == ltif.get_date(2002));
+  check("Last kday to_string()", ltif.to_string() == std::string("M2.5.4"));
   lastkday lfif(Friday, Feb);
   check("Last kday",     date(2002,Feb,22) == lfif.get_date(2002));
+  check("Last kday to_string()", lfif.to_string() == std::string("M2.5.5"));
 
   typedef first_day_of_the_week_in_month firstkday;
 
   firstkday fsif(Sunday, Feb);
   std::cout << to_simple_string(fsif.get_date(2002)) << std::endl; //24th
   check("First kday",     date(2002,Feb,3) == fsif.get_date(2002));
+  check("First kday to_string()", fsif.to_string() == std::string("M2.1.0"));
   firstkday ftif(Thursday, Feb);
   check("First kday",     date(2002,Feb,7) == ftif.get_date(2002));
+  check("First kday to_string()", ftif.to_string() == std::string("M2.1.4"));
   firstkday ffif(Friday, Feb);
   check("First kday",     date(2002,Feb,1) == ffif.get_date(2002));
+  check("First kday to_string()", ffif.to_string() == std::string("M2.1.5"));
   
   typedef first_day_of_the_week_after firstkdayafter;
   firstkdayafter fkaf(Monday);
@@ -72,14 +80,18 @@ main()
   typedef nth_day_of_the_week_in_month nthkdayofmonth;
   nthkdayofmonth nkd1(nthkdayofmonth::third, Sunday, Jul);
   check("nth_kday 1", date(1969, Jul, 20) == nkd1.get_date(1969));
+  check("Nth kday to_string()", nkd1.to_string() == std::string("M7.3.0"));
   nthkdayofmonth nkd2(nthkdayofmonth::second, Monday, Dec);
   check("nth_kday 2", date(1980, Dec, 8) == nkd2.get_date(1980));
+  check("Nth kday to_string()", nkd2.to_string() == std::string("M12.2.1"));
   nthkdayofmonth nkd3(nthkdayofmonth::fifth, Wednesday, Jan);
   check("nth_kday fifth wed jan 2003 2003-Jan-29", 
         date(2003, Jan, 29) == nkd3.get_date(2003));
+  check("Nth kday to_string()", nkd3.to_string() == std::string("M1.5.3"));
   nthkdayofmonth nkd4(nthkdayofmonth::fifth, Monday, Jan);
   check("nth_kday fifth mon jan 2003 (actaully 4th) 2003-Jan-27", 
         date(2003, Jan, 27) == nkd4.get_date(2003));
+  check("Nth kday to_string()", nkd4.to_string() == std::string("M1.5.1"));
 
   // greg date_generator functions tests
   {

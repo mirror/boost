@@ -64,6 +64,9 @@ namespace local_time{
   public:
     typedef boost::posix_time::time_duration time_duration_type;
     typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    typedef time_zone_base base_type;
+    typedef base_type::string_type string_type;
+    typedef base_type::stringstream_type stringstream_type;
 
     //! Construct from a POSIX time zone string
     posix_time_zone(const std::string& s) : 
@@ -114,20 +117,20 @@ namespace local_time{
     {
       return has_dst_;
     }
-    //! Local time that DST starts -- undefined if has_dst is false
+    //! Local time that DST starts -- NADT if has_dst is false
     virtual posix_time::ptime dst_local_start_time(gregorian::greg_year y)const
     {
-      gregorian::date d(1900,1,1);
+      gregorian::date d(gregorian::not_a_date_time);
       if(has_dst_)
       {
         d = dst_calc_rules_->start_day(y);
       }
       return posix_time::ptime(d, dst_offsets_.dst_start_offset_);
     }
-    //! Local time that DST ends -- undefined if has_dst is false
+    //! Local time that DST ends -- NADT if has_dst is false
     virtual posix_time::ptime dst_local_end_time(gregorian::greg_year y)const
     {
-      gregorian::date d(1900,1,1);
+      gregorian::date d(gregorian::not_a_date_time);
       if(has_dst_)
       {
         d = dst_calc_rules_->end_day(y);
@@ -145,6 +148,64 @@ namespace local_time{
       return dst_offsets_.dst_adjust_;
     }
 
+    //! Returns a POSIX time_zone string for this object
+    virtual string_type to_posix_string() const
+    {
+      // std offset dst [offset],start[/time],end[/time] - w/o spaces
+      stringstream_type ss;
+      ss.fill('0');
+      boost::shared_ptr<dst_calc_rule> no_rules;
+      // std
+      ss << std_zone_abbrev();
+      // offset
+      if(base_utc_offset().is_negative()) {
+        // inverting the sign guarantees we get two digits
+        ss << '-' << std::setw(2) << base_utc_offset().invert_sign().hours();
+      }
+      else {
+        ss << '+' << std::setw(2) << base_utc_offset().hours();
+      }
+      if(base_utc_offset().minutes() != 0 || base_utc_offset().seconds() != 0) {
+        ss << ':' << std::setw(2) << base_utc_offset().minutes();
+        if(base_utc_offset().seconds() != 0) {
+          ss << ':' << std::setw(2) << base_utc_offset().seconds();
+        }
+      }
+      if(dst_calc_rules_ != no_rules) {
+        // dst
+        ss << dst_zone_abbrev();
+        // dst offset
+        if(dst_offset().is_negative()) {
+        // inverting the sign guarantees we get two digits
+          ss << '-' << std::setw(2) << dst_offset().invert_sign().hours();
+        }
+        else {
+          ss << '+' << std::setw(2) << dst_offset().hours();
+        }
+        if(dst_offset().minutes() != 0 || dst_offset().seconds() != 0) {
+          ss << ':' << std::setw(2) << dst_offset().minutes();
+          if(dst_offset().seconds() != 0) {
+            ss << ':' << std::setw(2) << dst_offset().seconds();
+          }
+        }
+        // start/time
+        ss << ',' << dst_calc_rules_->start_rule_as_string() << '/'
+           << std::setw(2) << dst_offsets_.dst_start_offset_.hours() << ':'
+           << std::setw(2) << dst_offsets_.dst_start_offset_.minutes();
+        if(dst_offsets_.dst_start_offset_.seconds() != 0) {
+          ss << ':' << std::setw(2) << dst_offsets_.dst_start_offset_.seconds();
+        }
+        // end/time
+        ss << ',' << dst_calc_rules_->end_rule_as_string() << '/'
+           << std::setw(2) << dst_offsets_.dst_end_offset_.hours() << ':'
+           << std::setw(2) << dst_offsets_.dst_end_offset_.minutes();
+        if(dst_offsets_.dst_end_offset_.seconds() != 0) {
+          ss << ':' << std::setw(2) << dst_offsets_.dst_end_offset_.seconds();
+        }
+      }
+
+      return ss.str();
+    }
   private:
     time_zone_names zone_names_;
     bool has_dst_;
