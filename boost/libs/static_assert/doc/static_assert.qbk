@@ -8,9 +8,10 @@
             http://www.boost.org/LICENSE_1_0.txt
         </ulink>)
     ]
+    [authors [Maddock, John], [Cleary, Steve]]
     [category template]
-    [category generic]
     [category testing]
+    [category generic]
     [last-revision $Date$]
 ]
 

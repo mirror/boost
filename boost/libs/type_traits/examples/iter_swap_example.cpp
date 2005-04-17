@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright John Maddock 1999. 
+ * (C) Copyright John Maddock 1999-2005. 
  * Use, modification and distribution are subject to the 
  * Boost Software License, Version 1.0. (See accompanying file 
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -22,6 +22,7 @@
 #include <vector>
 #include <memory>
 
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/type_traits.hpp>
 
 using std::cout;
@@ -37,47 +38,39 @@ namespace opt{
 //
 namespace detail{
 
-template <bool b>
-struct swapper
+template <typename I>
+static void do_swap(I one, I two, const boost::false_type&)
 {
-   template <typename I>
-   static void do_swap(I one, I two)
-   {
-      typedef typename std::iterator_traits<I>::value_type v_t;
-      v_t v = *one;
-      *one = *two;
-      *two = v;
-   }
-};
-
-#ifdef __GNUC__
-using std::swap;
-#endif
-
-template <>
-struct swapper<true>
+   typedef typename std::iterator_traits<I>::value_type v_t;
+   v_t v = *one;
+   *one = *two;
+   *two = v;
+}
+template <typename I>
+static void do_swap(I one, I two, const boost::true_type&)
 {
-   template <typename I>
-   static void do_swap(I one, I two)
-   {
-      using std::swap;
-      swap(*one, *two);
-   }
-};
+   using std::swap;
+   swap(*one, *two);
+}
 
 }
 
 template <typename I1, typename I2>
 inline void iter_swap(I1 one, I2 two)
 {
+   //
+   // See is both arguments are non-proxying iterators, 
+   // and if both iterator the same type:
+   //
    typedef typename std::iterator_traits<I1>::reference r1_t;
    typedef typename std::iterator_traits<I2>::reference r2_t;
-   detail::swapper<
-      ::boost::type_traits::ice_and<
-         ::boost::is_reference<r1_t>::value, 
-         ::boost::is_reference<r2_t>::value,
-         ::boost::is_same<r1_t, r2_t>::value
-      >::value>::do_swap(one, two);
+
+   typedef boost::integral_constant<bool,
+      ::boost::is_reference<r1_t>::value
+      && ::boost::is_reference<r2_t>::value
+      && ::boost::is_same<r1_t, r2_t>::value> truth_type;
+
+   detail::do_swap(one, two, truth_type());
 }
 
 

@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright John Maddock 1999. 
+ * (C) Copyright John Maddock 1999-2005. 
  * Use, modification and distribution are subject to the 
  * Boost Software License, Version 1.0. (See accompanying file 
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -19,6 +19,7 @@
 #include <iterator>
 #include <memory>
 
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/timer.hpp>
 #include <boost/type_traits.hpp>
 
@@ -36,8 +37,8 @@ namespace opt{
 
 namespace detail{
 
-template<typename I1, typename I2>
-I2 copy_imp(I1 first, I1 last, I2 out)
+template<typename I1, typename I2, bool b>
+I2 copy_imp(I1 first, I1 last, I2 out, const boost::integral_constant<bool, b>&)
 {
    while(first != last)
    {
@@ -48,78 +49,27 @@ I2 copy_imp(I1 first, I1 last, I2 out)
    return out;
 }
 
-template <bool b>
-struct copier
-{
-   template<typename I1, typename I2>
-   static I2 do_copy(I1 first, I1 last, I2 out)
-   { return copy_imp(first, last, out); }
-};
-
-template <>
-struct copier<true>
-{
-   template<typename I1, typename I2>
-   static I2* do_copy(I1* first, I1* last, I2* out)
-   {
-      memcpy(out, first, (last-first)*sizeof(I2));
-      return out+(last-first);
-   }
-};
-
-
-}
-
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-
-template<typename I1, typename I2>
-inline I2 copy(I1 first, I1 last, I2 out)
-{
-   typedef typename boost::remove_cv<typename std::iterator_traits<I1>::value_type>::type v1_t;
-   typedef typename boost::remove_cv<typename std::iterator_traits<I2>::value_type>::type v2_t;
-   return detail::copier<
-      ::boost::type_traits::ice_and<
-         ::boost::is_same<v1_t, v2_t>::value,
-         ::boost::is_pointer<I1>::value,
-         ::boost::is_pointer<I2>::value,
-         ::boost::has_trivial_assign<v1_t>::value
-      >::value>::do_copy(first, last, out);
-}
-
-#else // BOOST_NO_STD_ITERATOR_TRAITS
-
-//
-// If there is no standard iterator_traits then we have to
-// use overloading rather than iterator_traits to detect
-// when we have T*'s to copy.  Note that we cannot overload
-// copy directly as that will cause some standard conforming
-// code to fail to build:
-
-namespace detail{
-
-template<typename I1, typename I2>
-inline I2 copy_(const I1& first, const I1& last, const I2& out)
-{
-   return detail::copier<false>::do_copy(first, last, out);
-}
-
 template<typename T>
-inline T* copy_(const T*& first, const T*& last, T*& out)
+T* copy_imp(const T* first, const T* last, T* out, const boost::true_type&)
 {
-   return detail::copier< 
-      ::boost::has_trivial_assign<T>::value
-   >::do_copy(first, last, out);
+   memcpy(out, first, (last-first)*sizeof(T));
+   return out+(last-first);
 }
 
-} // namespace detail
+
+}
 
 template<typename I1, typename I2>
 inline I2 copy(I1 first, I1 last, I2 out)
 {
-   return detail::copy_(first, last, out);
+   //
+   // We can copy with memcpy if T has a trivial assignment operator,
+   // and if the iterator arguments are actually pointers (this last
+   // requirement we detect with overload resolution):
+   //
+   typedef typename std::iterator_traits<I1>::value_type value_type;
+   return detail::copy_imp(first, last, out, boost::has_trivial_assign<value_type>());
 }
-
-#endif // BOOST_NO_STD_ITERATOR_TRAITS
 
 };   // namespace opt
 
@@ -177,18 +127,6 @@ int cpp_main(int argc, char* argv[])
    cout << "std::copy<const int*, int*>: " << result << endl;
 
    // cache load:
-   opt::detail::copier<false>::do_copy(ci_array, ci_array + array_size, i_array);
-
-   // time unoptimised version:
-   t.restart();
-   for(i = 0; i < iter_count; ++i)
-   {
-      opt::detail::copier<false>::do_copy(ci_array, ci_array + array_size, i_array);
-   }
-   result = t.elapsed();
-   cout << "standard \"unoptimised\" copy: " << result << endl << endl;
-
-   // cache load:
    opt::copy(cc_array, cc_array + array_size, c_array);
 
    // time optimised version:
@@ -211,18 +149,6 @@ int cpp_main(int argc, char* argv[])
    }
    result = t.elapsed();
    cout << "std::copy<const char*, char*>: " << result << endl;
-
-   // cache load:
-   opt::detail::copier<false>::do_copy(cc_array, cc_array + array_size, c_array);
-
-   // time unoptimised version:
-   t.restart();
-   for(i = 0; i < iter_count; ++i)
-   {
-      opt::detail::copier<false>::do_copy(cc_array, cc_array + array_size, c_array);
-   }
-   result = t.elapsed();
-   cout << "standard \"unoptimised\" copy: " << result << endl << endl;
 
    return 0;
 }

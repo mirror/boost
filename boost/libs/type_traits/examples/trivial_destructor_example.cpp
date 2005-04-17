@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright John Maddock 1999. 
+ * (C) Copyright John Maddock 1999-2005. 
  * Use, modification and distribution are subject to the 
  * Boost Software License, Version 1.0. (See accompanying file 
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +15,7 @@
 
 
 #include <iostream>
-
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/timer.hpp>
 #include <boost/type_traits.hpp>
 
@@ -33,22 +33,8 @@ namespace opt{
 
 namespace detail{
 
-template <bool>
-struct array_destroyer
-{
-   template <class T>
-   static void destroy_array(T* i, T* j){ do_destroy_array(i, j); }
-};
-
-template <>
-struct array_destroyer<true>
-{
-   template <class T>
-   static void destroy_array(T*, T*){}
-};
-
 template <class T>
-void do_destroy_array(T* first, T* last)
+void do_destroy_array(T* first, T* last, const boost::false_type&)
 {
    while(first != last)
    {
@@ -57,12 +43,17 @@ void do_destroy_array(T* first, T* last)
    }
 }
 
+template <class T>
+inline void do_destroy_array(T* first, T* last, const boost::true_type&)
+{
+}
+
 } // namespace detail
 
 template <class T>
 inline void destroy_array(T* p1, T* p2)
 {
-   detail::array_destroyer<boost::has_trivial_destructor<T>::value>::destroy_array(p1, p2);
+   detail::do_destroy_array(p1, p2, ::boost::has_trivial_destructor<T>());
 }
 
 //
