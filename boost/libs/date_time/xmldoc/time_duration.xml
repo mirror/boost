@@ -38,8 +38,8 @@ time_duration td(1,2,3,4); //01:02:03.000004 when resolution is micro seconds</p
     <programlisting>using namespace boost::posix_time;
       
 time_duration td = hours(1) + seconds(10); //01:00:01
-td = hours(1) + nanosec(5); //01:00:00.000000005</programlisting>
-    Note that the existence of the higher resolution classes (eg: nanosec) depends on the installation of the library. See <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information. 
+td = hours(1) + nanoseconds(5); //01:00:00.000000005</programlisting>
+    Note that the existence of the higher resolution classes (eg: nanoseconds) depends on the installation of the library. See <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information. 
   </para>
 
   <anchor id="time_duration_header" />
@@ -127,27 +127,27 @@ time_duration(hours,
           </row>
           
 	  <row>
-	    <entry valign="top" morerows="1"><screen>millisec(long)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>milliseconds(long)</screen></entry>
 	    <entry>Number of milliseconds.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>time_duration td = millisec(3);</screen></entry>
+	    <entry><screen>time_duration td = milliseconds(3);</screen></entry>
           </row>
           
 	  <row>
-	    <entry valign="top" morerows="1"><screen>microsec(long)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>microseconds(long)</screen></entry>
 	    <entry>Number of microseconds.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>time_duration td = microsec(3);</screen></entry>
+	    <entry><screen>time_duration td = microseconds(3);</screen></entry>
           </row>
           
           <row>
-	    <entry valign="top" morerows="1"><screen>nanosec(long)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>nanoseconds(long)</screen></entry>
 	    <entry>Number of nanoseconds.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>time_duration td = nanosec(3);</screen></entry>
+	    <entry><screen>time_duration td = nanoseconds(3);</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -413,7 +413,7 @@ time_duration td3 = td1 + td2;</screen>
 	  </row>
 	  <row>
 	    <entry><screen>
-time_duration td1(hours(1)+nanosec(2));
+time_duration td1(hours(1)+nanoseconds(2));
 time_duration td2 = td1 - minutes(1);</screen>
 	    </entry>
           </row>
@@ -425,7 +425,7 @@ time_duration td2 = td1 - minutes(1);</screen>
 	  <row>
 	    <entry><screen>
 hours(3)/2 == time_duration(1,30,0);
-nanosec(3)/2 == nanosec(1);</screen>
+nanosecond(3)/2 == nanosecond(1);</screen>
 	    </entry>
           </row>
           
