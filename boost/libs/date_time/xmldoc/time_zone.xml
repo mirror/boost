@@ -131,7 +131,7 @@ phx_zone_sh_ptr-&gt;has_dst(); // false</screen>
           
           <row>
             <entry valign="top" morerows="1"><screen>ptime dst_local_start_time(greg_year)</screen></entry>
-            <entry>The date and time daylight savings time begins in given year.</entry>
+            <entry>The date and time daylight savings time begins in given year. Returns not_a_date_time if this zone has no daylight savings.</entry>
           </row>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_local_start_time(2004);
@@ -140,7 +140,7 @@ phx_zone_sh_ptr-&gt;has_dst(); // false</screen>
           
           <row>
             <entry valign="top" morerows="1"><screen>ptime dst_local_end_time(greg_year)</screen></entry>
-            <entry>The date and time daylight savings time ends in given year.</entry>
+            <entry>The date and time daylight savings time ends in given year. Returns not_a_date_time if this zone has no daylight savings.</entry>
           </row>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_local_end_time(2004);
@@ -161,6 +161,19 @@ phx_zone_sh_ptr-&gt;has_dst(); // false</screen>
           </row>
           <row>
             <entry><screen>nyc_zone_sh_ptr-&gt;dst_offset(); // 01:00</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>std::string to_posix_string()</screen></entry>
+            <entry>Returns a posix time zone string representation of this time_zone_base object. Depending on how the time_zone object was created, the date-spec format of the string will be in either 'M' notation or 'n' notation. Every possible date-spec that can be represented in 'J' notation can also be represented in 'n' notation. The reverse is not true so only 'n' notation is used for these types of date-specs. For a detailed description of a posix time zone string see <link linkend="date_time.local_time.posix_time_zone">posix_time_zone</link>.</entry>
+          </row>
+          <row>
+            <entry><screen>
+nyc_zone_sh_ptr-&gt;to_posix_string();
+// "EST-05EDT+01,M4.1.0/02:00,M10.5.0/02:00"
+phx_zone_sh_ptr-&gt;to_posix_string();
+// "MST-07"
+            </screen></entry>
           </row>
         </tbody>
       </tgroup>

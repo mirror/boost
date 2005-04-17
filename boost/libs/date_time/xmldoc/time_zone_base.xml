@@ -99,6 +99,11 @@ time_duration_type base_utc_offset();</screen></entry>
 time_duration_type dst_offset();</screen></entry>
             <entry>The amount of time shifted during daylight savings.</entry>
           </row>
+          <row>
+            <entry valign="top"><screen>
+std::string to_posix_string();</screen></entry>
+            <entry>Returns a posix time zone string representation of this time_zone_base object. For a detailed description of a posix time zone string see <link linkend="date_time.local_time.posix_time_zone">posix_time_zone</link>.</entry>
+          </row>
         </tbody>
       </tgroup>
     </informaltable>
