@@ -16,7 +16,6 @@
   *   DESCRIPTION: entry point for test program.
   */
 
-#define BOOST_REGEX_TEST_INSTANCES
 #include "test.hpp"
 #include "test_locale.hpp"
 #include <stdarg.h>
@@ -103,3 +102,30 @@ void throw_exception(std::exception const & e)
 
 #endif
 
+void test(const char& c, const test_regex_replace_tag& tag)
+{
+   do_test(c, tag);
+}
+void test(const char& c, const test_regex_search_tag& tag)
+{
+   do_test(c, tag);
+}
+void test(const char& c, const test_invalid_regex_tag& tag)
+{
+   do_test(c, tag);
+}
+
+#ifndef BOOST_NO_WREGEX
+void test(const wchar_t& c, const test_regex_replace_tag& tag)
+{
+   do_test(c, tag);
+}
+void test(const wchar_t& c, const test_regex_search_tag& tag)
+{
+   do_test(c, tag);
+}
+void test(const wchar_t& c, const test_invalid_regex_tag& tag)
+{
+   do_test(c, tag);
+}
+#endif

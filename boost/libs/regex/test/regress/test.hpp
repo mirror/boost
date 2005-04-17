@@ -34,7 +34,28 @@
 // real test:
 //
 template <class charT, class tagT>
+void do_test(const charT& c, const tagT& tag);
+
+template <class charT, class tagT>
 void test(const charT& c, const tagT& tag)
+{
+   do_test(c, tag);
+}
+// 
+// make these non-templates to speed up compilation times:
+//
+void test(const char&, const test_regex_replace_tag&);
+void test(const char&, const test_regex_search_tag&);
+void test(const char&, const test_invalid_regex_tag&);
+
+#ifndef BOOST_NO_WREGEX
+void test(const wchar_t&, const test_regex_replace_tag&);
+void test(const wchar_t&, const test_regex_search_tag&);
+void test(const wchar_t&, const test_invalid_regex_tag&);
+#endif
+
+template <class charT, class tagT>
+void do_test(const charT& c, const tagT& tag)
 {
 #ifndef BOOST_NO_STD_LOCALE
    test_info<charT>::set_typename(typeid(boost::basic_regex<charT, boost::cpp_regex_traits<charT> >).name());
@@ -217,30 +238,5 @@ void test_operators();
 void test_overloads();
 void test_unicode();
 
-//
-// template instances:
-// we pretty much have to instantiate these separately
-// otherwise compilation times are really excessive...
-// Unfortunately this doesn't work with SunPro:
-//
-#ifndef __SUNPRO_CC
-#ifndef BOOST_REGEX_TEST_INSTANCES
-#define template template<>
-#endif
-
-template void test<char, test_regex_replace_tag>(const char&, const test_regex_replace_tag&);
-template void test<char, test_regex_search_tag>(const char&, const test_regex_search_tag&);
-template void test<char, test_invalid_regex_tag>(const char&, const test_invalid_regex_tag&);
-
-#ifndef BOOST_NO_WREGEX
-template void test<wchar_t, test_regex_replace_tag>(const wchar_t&, const test_regex_replace_tag&);
-template void test<wchar_t, test_regex_search_tag>(const wchar_t&, const test_regex_search_tag&);
-template void test<wchar_t, test_invalid_regex_tag>(const wchar_t&, const test_invalid_regex_tag&);
-#endif
-
-#ifndef BOOST_REGEX_TEST_INSTANCES
-#undef template
-#endif
-#endif
 
 #endif
