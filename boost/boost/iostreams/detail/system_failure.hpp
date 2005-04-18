@@ -1,0 +1,72 @@
+// (C) Copyright Jonathan Graehl 2004.
+// (C) Copyright Jonathan Turkanis 2005.
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
+
+// See http://www.boost.org/libs/iostreams for documentation.
+
+// Used by mapped_file.cpp.
+
+#ifndef BOOST_IOSTREAMS_DETAIL_SYSTEM_FAILURE_HPP_INCLUDED
+#define BOOST_IOSTREAMS_DETAIL_SYSTEM_FAILURE_HPP_INCLUDED
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
+#include <cstring>
+#include <string>
+#include <boost/config.hpp>
+#include <boost/iostreams/detail/config/windows_posix.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure.
+
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std { using ::strlen; }
+#endif
+
+#ifdef BOOST_IOSTREAMS_WINDOWS
+# define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
+# include <windows.h>
+#else
+# include <errno.h>
+# include <string.h>
+#endif
+                       
+namespace boost { namespace iostreams { namespace detail {
+
+void throw_system_failure(const char* msg)
+{
+    std::string result;
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    DWORD err = ::GetLastError();
+    LPVOID lpMsgBuf;
+    if ( ::FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                           FORMAT_MESSAGE_FROM_SYSTEM,
+                           NULL,
+                           err,
+                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                           (LPSTR) &lpMsgBuf,
+                           0, 
+                           NULL ) != 0 )
+    {
+        result.reserve(std::strlen(msg) + 2 + std::strlen((LPSTR)lpMsgBuf));
+        result.append(msg);
+        result.append(": ");
+        result.append((LPSTR) lpMsgBuf);
+        ::LocalFree(lpMsgBuf);
+    } else {
+        result += msg;
+    }
+#else
+    char* system_msg = strerror(errno);
+    result.reserve(std::strlen(msg) + 2 + std::strlen(system_msg));
+    result.append(msg);
+    result.append(": ");
+    result.append(system_msg);
+#endif
+    throw BOOST_IOSTREAMS_FAILURE(result);
+}
+
+} } } // End namespaces detail, iostreams, boost.
+
+#endif // #ifndef BOOST_IOSTREAMS_DETAIL_SYSTEM_FAILURE_HPP_INCLUDED
