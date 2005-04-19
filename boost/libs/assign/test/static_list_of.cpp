@@ -70,8 +70,7 @@ void check_static_list_of()
     const int& const_max = *max_element( cref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     BOOST_CHECK_EQUAL( max, const_max );
 
- //   print( list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
-    sort( ref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
+    print( ref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     print( cref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     print( cref_list_of<5>( "foo" )( "bar" )( "foobar" ) );
 

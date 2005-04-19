@@ -395,9 +395,6 @@ namespace assign_detail
     {
     private:
         typedef converter< static_generic_list<T,N> >  base_class;
-        //typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
-        //typedef BOOST_DEDUCED_TYPENAME 
-        //    remove_reference<Ty>::type                internal_value_type; 
         typedef T                                      internal_value_type;
 
     public:

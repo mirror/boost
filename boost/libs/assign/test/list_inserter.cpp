@@ -34,8 +34,7 @@
 
 namespace ba = boost::assign;
 
-template< class T >
-void function_ptr( T )
+void function_ptr( int )
 {
     // do nothing
 }
@@ -61,7 +60,7 @@ void check_list_inserter()
     //
     // @note: cast only necessary on CodeWarrior
     //
-    make_list_inserter( (void (*)(int))&function_ptr<int> )( 5 ),3;
+    make_list_inserter( (void (*)(int))&function_ptr )( 5 ),3;
     make_list_inserter( functor() )( 4 ),2;
     
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
