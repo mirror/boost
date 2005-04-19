@@ -188,7 +188,7 @@ namespace assign
         }
         
         template< class T >
-        list_inserter& operator=( T r )
+        list_inserter& operator=( const T& r )
         {
             insert_( r );
             return *this;
@@ -211,7 +211,7 @@ namespace assign
         }
         
         template< class T >
-        list_inserter& operator,( T r )
+        list_inserter& operator,( const T& r )
         {
             insert_( r  );
             return *this;
@@ -262,14 +262,8 @@ namespace assign
             return range( boost::begin(r), boost::end(r) );
         }
         
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-
         template< class T >
         list_inserter& operator()( const T& t )
-#else        
-        template< class T >
-        list_inserter& operator()( T t )
-#endif       
         {
             insert_( t );
             return *this;
@@ -280,7 +274,7 @@ namespace assign
 #endif
 #define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1)
 #define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class T)
-#define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, T, t)
+#define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, T, const& t)
 #define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, t)
         
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
@@ -299,7 +293,7 @@ namespace assign
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class T, BOOST_ASSIGN_PARAMS1(n) > \
-    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T t, BOOST_ASSIGN_PARAMS2(n), single_arg_type) \
+    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T const& t, BOOST_ASSIGN_PARAMS2(n), single_arg_type) \
     { \
         insert_( Argument(t, BOOST_ASSIGN_PARAMS3(n) )); \
     } \
@@ -310,7 +304,7 @@ namespace assign
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class T, BOOST_ASSIGN_PARAMS1(n) > \
-    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T t, BOOST_ASSIGN_PARAMS2(n), n_arg_type) \
+    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T const& t, BOOST_ASSIGN_PARAMS2(n), n_arg_type) \
     { \
         insert_(t, BOOST_ASSIGN_PARAMS3(n) ); \
     } \

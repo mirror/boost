@@ -189,11 +189,9 @@ namespace assign
 } // namespace 'boost'
 
 
-#undef BOOST_ASSIGN_MAX_PARAMS         
-#undef BOOST_ASSIGN_MAX_PARAMETERS         
 #undef BOOST_ASSIGN_PARAMS1
 #undef BOOST_ASSIGN_PARAMS2
 #undef BOOST_ASSIGN_PARAMS3
-
+#undef BOOST_ASSIGN_MAX_PARAMETERS
 
 #endif
