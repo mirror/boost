@@ -25,6 +25,25 @@ typedef slot_container_type::const_iterator const_group_iterator;
 
 named_slot_map_iterator::named_slot_map_iterator() : slot_assigned(false) {}
 
+named_slot_map_iterator::
+named_slot_map_iterator(const named_slot_map_iterator& other)
+  : group(other.group), last_group(other.last_group), 
+    slot_assigned(other.slot_assigned)
+{
+  if (slot_assigned) slot_ = other.slot_;
+}
+
+named_slot_map_iterator& 
+named_slot_map_iterator::operator=(const named_slot_map_iterator& other)
+{
+  slot_assigned = other.slot_assigned;
+  group = other.group;
+  last_group = other.last_group;
+  if (slot_assigned) slot_ = other.slot_;
+  return *this;
+}
+
+
 connection_slot_pair& named_slot_map_iterator::dereference() const
 { return *slot_; }
 

@@ -82,6 +82,9 @@ class BOOST_SIGNALS_DECL named_slot_map_iterator :
                           forward_traversal_tag> inherited;
 public:
   named_slot_map_iterator();
+  named_slot_map_iterator(const named_slot_map_iterator&);
+  named_slot_map_iterator& operator=(const named_slot_map_iterator&);
+
   connection_slot_pair& dereference() const;
   void increment();
   bool equal(const named_slot_map_iterator& other) const;
