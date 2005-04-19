@@ -51,10 +51,6 @@ namespace ptr_container_detail
                                 iterator; 
         typedef BOOST_DEDUCED_TYPENAME Config::const_iterator
                                 const_iterator; 
-        typedef BOOST_DEDUCED_TYPENAME Config::ptr_iterator
-                                ptr_iterator; 
-        typedef BOOST_DEDUCED_TYPENAME Config::ptr_const_iterator
-                                ptr_const_iterator; 
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                                 size_type;
 
@@ -103,9 +99,8 @@ namespace ptr_container_detail
             this->remove( before );                      // nothrow
             iterator res( before );                      // nothrow   
             ++res;                                       // nothrow
-            this->c_private().erase( Config::get_base( before.base() ) );
-                                                        // nothrow
-            return res;                                 // nothrow
+            this->c_private().erase( before.base() );    // nothrow
+            return res;                                  // nothrow
         }
         
         size_type erase( const key_type& x ) // nothrow
@@ -115,8 +110,7 @@ namespace ptr_container_detail
             if( i == this->end() )                      // nothrow
                 return 0;                               // nothrow
             this->remove( i );                          // nothrow
-            return this->c_private().erase( Config::get_base( i.base() ) ); 
-                                                        // nothrow
+            return this->c_private().erase( i.base() ); // nothrow
         }
         
         iterator erase( iterator first, 
@@ -129,9 +123,7 @@ namespace ptr_container_detail
                 ++res;                                           // nothrow
 
             this->remove( first, last );                         // nothrow
-            this->c_private().erase( Config::get_base( first.base() ), 
-                                     Config::get_base( last.base() ) );
-                                                                 // nothrow
+            this->c_private().erase( first.base(), last.base() );// nothrow
             return res;                                          // nothrow
         }
 
@@ -144,7 +136,7 @@ namespace ptr_container_detail
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
             this->c_private().insert( *object.base() );     // strong
-            from.c_private().erase( Config::get_base( object.base() ) ); // nothrow
+            from.c_private().erase( object.base() );        // nothrow
         }
 
         size_type multi_transfer( iterator first, 
@@ -161,7 +153,7 @@ namespace ptr_container_detail
                 this->c_private().insert( *first.base() );     // strong
                 iterator to_delete( first );
                 ++first;
-                from.c_private().erase( Config::get_base( to_delete.base() ) ); // nothrow
+                from.c_private().erase( to_delete.base() );    // nothrow
                 ++res;
             }
 
@@ -174,10 +166,10 @@ namespace ptr_container_detail
             BOOST_ASSERT( &from != this );
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
-            std::pair<ptr_iterator,bool> p = 
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p = 
                 this->c_private().insert( *object.base() );     // strong
             if( p.second )
-                from.c_private().erase( Config::get_base( object.base() ) ); // nothrow
+                from.c_private().erase( object.base() );        // nothrow
 
             return p.second;
         }
@@ -193,13 +185,13 @@ namespace ptr_container_detail
             for( ; first != last; )
             {
                 BOOST_ASSERT( first != from.end() );
-                std::pair<ptr_iterator,bool> p = 
+                std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p = 
                     this->c_private().insert( *first.base() );     // strong
                 iterator to_delete( first );
                 ++first;
                 if( p.second )
                 {
-                    from.c_private().erase( Config::get_base( to_delete.base() ) ); // nothrow
+                    from.c_private().erase( to_delete.base() );   // nothrow
                     ++res;
                 }
             }

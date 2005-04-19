@@ -26,6 +26,7 @@ void test_fun()
     
     void*       vptr1  = ptr1;
     void*       vptr2  = ptr2;
+    
     void_ptr_indirect_fun< std::less<std::string>, std::string> cast_fun;
     BOOST_CHECK( cast_fun( vptr1, vptr2 ) == true );
     
@@ -35,12 +36,12 @@ void test_fun()
                             ( new std::string("cc") )
                             ( new std::string("a") );
                               
-    std::sort( vec.ptr_begin(), vec.ptr_end(), fun );
+    std::sort( vec.begin().base(), vec.end().base(), cast_fun );
     BOOST_CHECK( vec[0] == "a" );
     BOOST_CHECK( vec[4] == "dd" );
 
-    std::sort( vec.ptr_begin(), vec.ptr_end(), 
-               make_indirect_fun( &lesser_than ) );
+    std::sort( vec.begin().base(), vec.end().base(), 
+               make_void_ptr_indirect_fun<std::string>( &lesser_than ) );
     BOOST_CHECK( vec[1] == "aa" );
     BOOST_CHECK( vec[2] == "bb" );    
 

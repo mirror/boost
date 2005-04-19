@@ -33,15 +33,6 @@ void ptr_set_test()
     BOOST_DEDUCED_TYPENAME C::reverse_iterator rv2        = c.rend();
     BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cvr2 = c2.rend();
                              
-    BOOST_DEDUCED_TYPENAME C::ptr_iterator ptr_i                  = c.ptr_begin();
-    BOOST_DEDUCED_TYPENAME C::ptr_const_iterator ptr_ci           = c2.ptr_begin();
-    BOOST_DEDUCED_TYPENAME C::ptr_iterator ptr_i2                 = c.ptr_end();
-    BOOST_DEDUCED_TYPENAME C::ptr_const_iterator ptr_ci2          = c2.ptr_begin();
-    BOOST_DEDUCED_TYPENAME C::ptr_reverse_iterator ptr_ri         = c.ptr_rbegin();
-    BOOST_DEDUCED_TYPENAME C::ptr_const_reverse_iterator ptr_cri  = c2.ptr_rbegin();
-    BOOST_DEDUCED_TYPENAME C::ptr_reverse_iterator ptr_rv2        = c.ptr_rend();
-    BOOST_DEDUCED_TYPENAME C::ptr_const_reverse_iterator ptr_cvr2 = c2.ptr_rend();
-        
     BOOST_MESSAGE( "finished iterator test" ); 
    
     BOOST_DEDUCED_TYPENAME C::size_type s                 = c.size();

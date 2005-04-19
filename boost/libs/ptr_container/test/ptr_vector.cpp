@@ -21,6 +21,7 @@ void test_ptr_vector()
     vec.push_back( new int(0) );
     BOOST_CHECK_THROW( (vec.replace(10u, new int(0))), bad_ptr_container_operation );
     BOOST_CHECK_THROW( (vec.replace(0u, 0)), bad_ptr_container_operation ); 
+    BOOST_CHECK_THROW( (vec.replace(vec.begin(), 0 )), bad_ptr_container_operation );
 
     assign::push_back( vec )( new int(2) )
                             ( new int(4) )

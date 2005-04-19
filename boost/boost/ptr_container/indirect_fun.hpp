@@ -20,13 +20,14 @@
 #endif
 
 #include <boost/config.hpp>
+
+#ifdef BOOST_NO_SFINAE
+#else
 #include <boost/utility/result_of.hpp>
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/cast.hpp>
-#include <boost/assert.hpp>
 #include <boost/pointee.hpp>
+#endif // BOOST_NO_SFINAE
+
+#include <boost/assert.hpp>
 #include <functional>
 
 
@@ -34,7 +35,13 @@ namespace boost
 {
 
 
-    template< class Fun >
+    template
+    < 
+              class Fun
+#ifdef BOOST_NO_SFINAE
+            , class Result = bool
+#endif        
+    >
     class indirect_fun
     {
         Fun fun;
@@ -46,15 +53,23 @@ namespace boost
         { }
     
         template< class T >
+#ifdef BOOST_NO_SFINAE
+        Result    
+#else            
         BOOST_DEDUCED_TYPENAME result_of< Fun( BOOST_DEDUCED_TYPENAME pointee<T>::type ) >::type 
+#endif            
         operator()( const T& r ) const
         { 
             return fun( *r );
         }
     
         template< class T, class U >
+#ifdef BOOST_NO_SFINAE
+        Result    
+#else                        
         BOOST_DEDUCED_TYPENAME result_of< Fun( BOOST_DEDUCED_TYPENAME pointee<T>::type, 
                                                BOOST_DEDUCED_TYPENAME pointee<U>::type ) >::type
+#endif            
         operator()( const T& r, const U& r2 ) const
         { 
             return fun( *r, *r2 ); 
@@ -68,7 +83,15 @@ namespace boost
     }
 
 
-    template< class Fun, class Arg1, class Arg2 = Arg1 >
+    template
+    < 
+        class Fun, 
+        class Arg1, 
+        class Arg2 = Arg1 
+#ifdef BOOST_NO_SFINAE
+      , class Result = bool   
+#endif           
+    >
     class void_ptr_indirect_fun
     {
         Fun fun;
@@ -79,21 +102,30 @@ namespace boost
 
         void_ptr_indirect_fun( Fun f ) : fun(f)
         { }
-
+#ifdef BOOST_NO_SFINAE
+        Result    
+#else            
         BOOST_DEDUCED_TYPENAME result_of< Fun( Arg1 ) >::type 
+#endif            
         operator()( const void* r ) const
         { 
+            BOOST_ASSERT( r != 0 );
             return fun( * static_cast<const Arg1*>( r ) );
         }
 
+#ifdef BOOST_NO_SFINAE
+        Result    
+#else                    
         BOOST_DEDUCED_TYPENAME result_of< Fun( Arg1, Arg2 ) >::type 
+#endif            
         operator()( const void* l, const void* r ) const
         { 
+            BOOST_ASSERT( l != 0 && r != 0 );
             return fun( * static_cast<const Arg1*>( l ), * static_cast<const Arg2*>( r ) );
         }
     };
 
-    template< class Fun, class Arg >
+    template< class Arg, class Fun >
     inline void_ptr_indirect_fun<Fun,Arg> make_void_ptr_indirect_fun( Fun f )
     {
         return void_ptr_indirect_fun<Fun,Arg>( f );

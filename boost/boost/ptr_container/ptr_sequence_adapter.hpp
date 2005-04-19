@@ -33,6 +33,9 @@
 
 namespace boost
 {   
+namespace ptr_container_detail
+{
+        
     template
     < 
         class T, 
@@ -50,45 +53,27 @@ namespace boost
         
         typedef U   value_type;
 
-        typedef ptr_container_detail::void_ptr_iterator<
+        typedef void_ptr_iterator<
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::iterator, U > 
-                    ptr_iterator;
-       
-        typedef boost::indirect_iterator<ptr_iterator> 
                     iterator;
-        
-        typedef ptr_container_detail::void_ptr_iterator<
+       
+        typedef void_ptr_iterator<
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_iterator, const U >
-                    ptr_const_iterator;
-        
-        typedef boost::indirect_iterator<ptr_const_iterator>
                     const_iterator;
         
-        typedef ptr_container_detail::void_ptr_iterator<
+        typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSeq::reverse_iterator, U >
-                   ptr_reverse_iterator;
-        
-        typedef boost::indirect_iterator<ptr_reverse_iterator>
                    reverse_iterator;
         
-        typedef ptr_container_detail::void_ptr_iterator<
+        typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_reverse_iterator, const U >
-                   ptr_const_reverse_iterator;
-        
-        typedef boost::indirect_iterator<ptr_const_reverse_iterator>
                    const_reverse_iterator;
-
+        
         typedef value_type 
-                    object_type;
+                   object_type;
 
         template< class Iter >
-        static BOOST_DEDUCED_TYPENAME Iter::wrapped_type get_base( Iter i )
-        {
-            return i.base();
-        }
-
-        template< class Iter >
-        static U* get_pointer( boost::indirect_iterator<Iter> i )
+        static U* get_pointer( void_ptr_iterator<Iter,U> i )
         {
             return static_cast<U*>( *i.base() );
         }
@@ -100,7 +85,7 @@ namespace boost
         }
 
         template< class Iter >
-        static const U* get_const_pointer( boost::indirect_iterator<Iter> i )
+        static const U* get_const_pointer( void_ptr_iterator<Iter,const U> i )
         {
             return static_cast<const U*>( *i.base() );
         }
@@ -111,9 +96,10 @@ namespace boost
             return &*i;
         }
 
-        BOOST_STATIC_CONSTANT(bool, allow_null = is_nullable<T>::value );
+        BOOST_STATIC_CONSTANT(bool, allow_null = boost::is_nullable<T>::value );
     };
-
+    
+} // ptr_container_detail
 
     
     template
@@ -123,10 +109,10 @@ namespace boost
         class CloneAllocator = heap_clone_allocator
     >
     class ptr_sequence_adapter : public 
-        ptr_container_detail::reversible_ptr_container< sequence_config<T,VoidPtrSeq>, 
+        ptr_container_detail::reversible_ptr_container< ptr_container_detail::sequence_config<T,VoidPtrSeq>, 
                                             CloneAllocator >
     {
-        typedef ptr_container_detail::reversible_ptr_container< sequence_config<T,VoidPtrSeq>,
+        typedef ptr_container_detail::reversible_ptr_container< ptr_container_detail::sequence_config<T,VoidPtrSeq>,
                                                     CloneAllocator >
              base_type;
         
@@ -350,10 +336,10 @@ namespace boost
             if( from.empty() )
                 return;
             this->c_private().
-                insert( before.base().base(), 
-                        first.base().base(), last.base().base() ); // strong
-            from.c_private().erase( first.base().base(),
-                                    last.base().base() ); // nothrow
+                insert( before.base(), 
+                        first.base(), last.base() ); // strong
+            from.c_private().erase( first.base(),
+                                    last.base() );   // nothrow
         }
 
         void transfer( iterator before, 
@@ -364,9 +350,9 @@ namespace boost
             if( from.empty() )
                 return;
             this->c_private().
-                insert( before.base().base(),
-                        *object.base().base() );                 // strong
-            from.c_private().erase( object.base().base() );      // nothrow
+                insert( before.base(),
+                        *object.base() );                 // strong
+            from.c_private().erase( object.base() );      // nothrow
         }
 
 #ifdef BOOST_NO_SFINAE
@@ -388,8 +374,8 @@ namespace boost
             if( from.empty() )
                 return;
             this->c_private().
-                insert( before.base().base(),
-                        from.ptr_begin(), from.ptr_end() ); // strong
+                insert( before.base(),
+                        from.begin().base(), from.end().base() ); // strong
             from.c_private().clear();                       // nothrow
         }
 
@@ -421,7 +407,7 @@ namespace boost
             BOOST_ASSERT( last <= this->end() && "out of range sort()" ); 
             // some static assert on the arguments of the comparison
             std::sort( first.base(), last.base(), 
-                       void_ptr_indirect_fun< Compare, T >(comp) );
+                       void_ptr_indirect_fun<Compare,T>(comp) );
         }
         
         template< class Compare >
@@ -457,7 +443,7 @@ namespace boost
                                                     first.base(), 
                                                     last.base(), 
                                                     is_not_zero_ptr() );
-            this->c_private().erase( p.base(), this->end().base().base() );
+            this->c_private().erase( p, this->end().base() );
             
         }
         
@@ -534,7 +520,7 @@ namespace boost
                     ptr_sequence_adapter& from, BinPred pred )
         {
             void_ptr_indirect_fun<BinPred,T>  bin_pred(pred);
-            size_type                       current_size = this->size(); 
+            size_type                         current_size = this->size(); 
             this->transfer( this->end(), first, last, from );
             typename base_type::ptr_iterator middle = this->begin().base();
             std::advance(middle,current_size); 
@@ -558,6 +544,12 @@ namespace boost
         }
 
     };
+
+    template< class Iterator, class T >
+    inline bool is_null( ptr_container_detail::void_ptr_iterator<Iterator,T> i )
+    {
+        return *i.base() == 0;
+    }
 
 } // namespace 'boost'  
 

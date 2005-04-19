@@ -26,8 +26,9 @@
 
 namespace boost
 {
-        
-    
+namespace ptr_container_detail
+{
+
     template
     < 
         class T,
@@ -54,54 +55,33 @@ namespace boost
         
         typedef U    value_type;
 
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator
-                     ptr_iterator; 
-
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator
-                     ptr_const_iterator;
-        
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::reverse_iterator
-                     ptr_reverse_iterator;
-        
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reverse_iterator
-                     ptr_const_reverse_iterator;
-        
-        typedef BOOST_DEDUCED_TYPENAME 
-                  ptr_container::ptr_container_detail::map_iterator< 
-                       ptr_iterator,
+        typedef map_iterator< 
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, value_type>
                      iterator;
         
-        typedef BOOST_DEDUCED_TYPENAME 
-            ptr_container::ptr_container_detail::map_iterator<
-                       ptr_const_iterator,
+        typedef
+            map_iterator<
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
                        const value_type>
                      const_iterator;
 
-        typedef BOOST_DEDUCED_TYPENAME 
-            ptr_container::ptr_container_detail::map_iterator<
-                       ptr_reverse_iterator,
+        typedef
+            map_iterator<
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::reverse_iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, value_type>
                      reverse_iterator;
 
-        typedef BOOST_DEDUCED_TYPENAME 
-            ptr_container::ptr_container_detail::map_iterator<
-                       ptr_const_reverse_iterator,
+        typedef
+            map_iterator<
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reverse_iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
                        const value_type>
                      const_reverse_iterator;
 
         typedef std::pair<const key_type, void*>
                      object_type;
-
-        template< class Iter >
-        static Iter get_base( Iter i )
-        {
-            // the map_iterator has no indirect iterator underneith
-            // and so should not unwrap anymore
-            return i;
-        }
 
         template< class Iter >
         static U* get_pointer( Iter i )
@@ -115,7 +95,7 @@ namespace boost
             return static_cast<const U*>( i.base()->second );
         }
 
-        BOOST_STATIC_CONSTANT( bool, allow_null = is_nullable<T>::value );
+        BOOST_STATIC_CONSTANT( bool, allow_null = boost::is_nullable<T>::value );
     };
     
     
@@ -138,10 +118,6 @@ namespace boost
 
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator
                     const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                    ptr_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator
-                    ptr_const_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::key_type
                     key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::reference
@@ -258,13 +234,17 @@ namespace boost
                                                                                      
         iterator_range<iterator> equal_range( const key_type& x )                    
         {                                                                            
-            std::pair<ptr_iterator,ptr_iterator> p = this->c_private().equal_range( x );   
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,
+                      BOOST_DEDUCED_TYPENAME base_type::ptr_iterator>
+                 p = this->c_private().equal_range( x );   
             return make_iterator_range( iterator( p.first ), iterator( p.second ) );      
         }                                                                            
                                                                                      
         iterator_range<const_iterator> equal_range( const key_type& x ) const  
         {                                                                            
-            std::pair<ptr_const_iterator,ptr_const_iterator> p = this->c_private().equal_range( x ); 
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
+                      BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
+                p = this->c_private().equal_range( x ); 
             return make_iterator_range( const_iterator( p.first ), const_iterator( p.second ) );    
         }                                                                            
                                                                                      
@@ -298,10 +278,11 @@ namespace boost
             where.base()->second = ptr.release();   // nothrow, commit
             return move( old );
         }
-
                                                                                      
     };
     
+} // ptr_container_detail
+
     /////////////////////////////////////////////////////////////////////////
     // ptr_map_adapter
     /////////////////////////////////////////////////////////////////////////
@@ -313,9 +294,9 @@ namespace boost
         class CloneAllocator = heap_clone_allocator
     >
     class ptr_map_adapter : 
-        public ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>
+        public ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>
     {
-        typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> 
+        typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> 
             base_type;
     
     public:    
@@ -323,10 +304,6 @@ namespace boost
                      iterator;       
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator
                      const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                     ptr_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator
-                     ptr_const_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::object_type
                     object_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
@@ -347,7 +324,8 @@ namespace boost
 
         void safe_insert( const key_type& key, auto_type ptr ) // strong
         {
-            std::pair<ptr_iterator,bool> res = 
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
+                res = 
                 this->c_private().insert( std::make_pair( key, ptr.get() ) ); // strong, commit      
             if( res.second )                                                  // nothrow     
                 ptr.release();                                                // nothrow
@@ -415,7 +393,8 @@ namespace boost
             this->enforce_null_policy( x, "Null pointer in ptr_map_adapter::insert()" );
             auto_type ptr( x );                                                 // nothrow
     
-            std::pair<ptr_iterator,bool> res = this->c_private().insert( std::make_pair( key, x ) );       // strong, commit      
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
+                 res = this->c_private().insert( std::make_pair( key, x ) );       // strong, commit      
             if( res.second )                                                                               // nothrow     
                 ptr.release();                                                                             // nothrow
             return std::make_pair( iterator( res.first ), res.second );  // nothrow   
@@ -466,9 +445,9 @@ namespace boost
         class CloneAllocator = heap_clone_allocator
     >
     class ptr_multimap_adapter : 
-        public ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
+        public ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
     {
-        typedef ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
+        typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
              base_type;
         
     public: // typedefs
@@ -476,10 +455,6 @@ namespace boost
                        iterator;                 
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator     
                        const_iterator;           
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_iterator       
-                       ptr_iterator;         
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator 
-                       ptr_const_iterator;         
         typedef BOOST_DEDUCED_TYPENAME base_type::object_type
                        object_type;         
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
@@ -564,7 +539,8 @@ namespace boost
             this->enforce_null_policy( x, "Null pointer in 'ptr_multimap_adapter::insert()'" );
 
             auto_type ptr( x );         // nothrow
-            ptr_iterator res = this->c_private().insert( std::make_pair( key, x ) );
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
+                res = this->c_private().insert( std::make_pair( key, x ) );
                                         // strong, commit        
             ptr.release();              // notrow
             return iterator( res );           
@@ -606,7 +582,7 @@ namespace boost
     };
 
     template< class I, class K, class V >
-    inline bool is_null( ptr_container::ptr_container_detail::map_iterator<I,K,V> i )
+    inline bool is_null( ptr_container_detail::map_iterator<I,K,V> i )
     {
         return i.base()->second == 0;
     }

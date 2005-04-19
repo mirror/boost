@@ -147,11 +147,11 @@ void test_incomplete()
     Composite c;
     c.add( new ConcreteComposite1 );
     c.add( new ConcreteComposite2 ); 
-    BOOST_CHECK_EQUAL( c.size(), 3 );
+    BOOST_CHECK_EQUAL( c.size(), 3u );
     c.add( new_clone( c ) ); // add c to itself
-    BOOST_CHECK_EQUAL( c.size(), 6 );
+    BOOST_CHECK_EQUAL( c.size(), 6u );
     c.add( c );              // add c to itself
-    BOOST_CHECK_EQUAL( c.size(), 12 );
+    BOOST_CHECK_EQUAL( c.size(), 12u );
     c.foo();     
 }
 

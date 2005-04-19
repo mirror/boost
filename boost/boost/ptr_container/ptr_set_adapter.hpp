@@ -15,6 +15,8 @@
 
 namespace boost
 {
+namespace ptr_container_detail
+{
     template
     < 
         class Key,
@@ -39,41 +41,23 @@ namespace boost
        typedef value_compare 
                     key_compare;
 
-       typedef ptr_container_detail::void_ptr_iterator<
+       typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSet::iterator, Key > 
-                    ptr_iterator;
-       
-       typedef boost::indirect_iterator<ptr_iterator> 
                     iterator;
 
-       typedef ptr_container_detail::void_ptr_iterator<
+       typedef void_ptr_iterator<
                         BOOST_DEDUCED_TYPENAME VoidPtrSet::const_iterator, const Key >
-                    ptr_const_iterator;
-
-       typedef boost::indirect_iterator<ptr_const_iterator>
                     const_iterator;
 
-       typedef ptr_container_detail::void_ptr_iterator<
+       typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSet::reverse_iterator, Key >
-                   ptr_reverse_iterator;
-        
-       typedef boost::indirect_iterator<ptr_reverse_iterator>
                    reverse_iterator;
-
-       typedef ptr_container_detail::void_ptr_iterator<
+        
+       typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSet::const_reverse_iterator, const Key >
-                   ptr_const_reverse_iterator;
-
-       typedef boost::indirect_iterator<ptr_const_reverse_iterator>
                    const_reverse_iterator;
-       
-       typedef Key object_type;
 
-       template< class Iter >
-       static BOOST_DEDUCED_TYPENAME Iter::wrapped_type get_base( Iter i )
-       {
-           return i.base();
-       }
+       typedef Key object_type;
 
        template< class Iter >
        static Key* get_pointer( Iter i )
@@ -110,13 +94,8 @@ namespace boost
                       iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator 
                       const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_iterator 
-                      ptr_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator 
-                      ptr_const_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::object_type 
                       key_type;
-
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                       size_type;
         
@@ -188,7 +167,9 @@ namespace boost
                                                                                      
         iterator_range<iterator> equal_range( const key_type& x )                    
         {                                                                            
-            std::pair<ptr_iterator,ptr_iterator> p = this->c_private().
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,
+                      BOOST_DEDUCED_TYPENAME base_type::ptr_iterator> 
+                p = this->c_private().
                 equal_range( const_cast<key_type*>(&x) );   
             return make_iterator_range( iterator( p.first ), 
                                         iterator( p.second ) );      
@@ -196,14 +177,18 @@ namespace boost
                                                                                      
         iterator_range<const_iterator> equal_range( const key_type& x ) const  
         {                                                                            
-            std::pair<ptr_const_iterator,ptr_const_iterator> p = this->c_private().
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
+                      BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
+                p = this->c_private().
                 equal_range( const_cast<key_type*>(&x) ); 
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
         }                                                                            
                                                                                      
     };
-    
+
+} // ptr_container_detail
+
     /////////////////////////////////////////////////////////////////////////
     // ptr_set_adapter
     /////////////////////////////////////////////////////////////////////////
@@ -215,9 +200,9 @@ namespace boost
         class CloneAllocator = heap_clone_allocator
     >
     class ptr_set_adapter : 
-        public ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator>
+        public ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator>
     {
-        typedef ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator> 
+        typedef ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator> 
             base_type;
     
     public: // typedefs
@@ -226,8 +211,6 @@ namespace boost
                      iterator;                 
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator
                      const_iterator;                 
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                     ptr_iterator;   
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                      size_type;    
         typedef BOOST_DEDUCED_TYPENAME base_type::object_type
@@ -287,7 +270,8 @@ namespace boost
             this->enforce_null_policy( x, "Null pointer in 'ptr_set::insert()'" );
             
             auto_type ptr( x );                                
-            std::pair<ptr_iterator,bool> res = this->c_private().insert( x );       
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
+                 res = this->c_private().insert( x );       
             if( res.second )                                                 
                 ptr.release();                                                  
             return std::make_pair( iterator( res.first ), res.second );     
@@ -299,7 +283,8 @@ namespace boost
             this->enforce_null_policy( x, "Null pointer in 'ptr_set::insert()'" );
 
             auto_type ptr( x );                                
-            ptr_iterator res = this->c_private().insert( where.base().base(), x );
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator 
+                res = this->c_private().insert( where.base(), x );
             if( *res == x )                                                 
                 ptr.release();                                                  
             return iterator( res);
@@ -370,16 +355,14 @@ namespace boost
         class CloneAllocator = heap_clone_allocator 
     >
     class ptr_multiset_adapter : 
-        public ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator>
+        public ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator>
     {
-         typedef ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator> base_type;
+         typedef ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator> base_type;
     
     public: // typedefs
     
         typedef BOOST_DEDUCED_TYPENAME base_type::iterator   
                        iterator;          
-        typedef BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                       ptr_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                        size_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::object_type
@@ -442,7 +425,8 @@ namespace boost
             this->enforce_null_policy( x, "Null pointer in 'ptr_multiset::insert()'" );
     
             auto_type ptr( x );                                
-            ptr_iterator res = this->c_private().insert( x );                         
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
+                 res = this->c_private().insert( x );                         
             ptr.release();                                                      
             return iterator( res );                                             
         }

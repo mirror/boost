@@ -27,8 +27,6 @@
 #include <boost/range/functions.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/iterator/indirect_iterator.hpp>
-#include <boost/iterator/iterator_categories.hpp>
 #include <boost/operators.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -149,22 +147,17 @@ namespace ptr_container_detail
         typedef  BOOST_DEDUCED_TYPENAME Config::allocator_type
                                    allocator_type;
 
-        typedef BOOST_DEDUCED_TYPENAME Config::ptr_iterator
-                                   ptr_iterator; 
-        typedef BOOST_DEDUCED_TYPENAME Config::ptr_const_iterator
-                                   ptr_const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME Config::ptr_reverse_iterator
-                                   ptr_reverse_iterator; 
-        typedef BOOST_DEDUCED_TYPENAME Config::ptr_const_reverse_iterator
-                                   ptr_const_reverse_iterator;
-
         typedef ptr_container_detail::static_move_ptr<Ty_,Deleter> 
                                    auto_type;
             
-    protected: // implementation
+    protected: 
             
         typedef ptr_container_detail::scoped_deleter<Ty_,null_cloner_type>
                                    scoped_deleter;
+        typedef BOOST_DEDUCED_TYPENAME Cont::iterator
+                                   ptr_iterator; 
+        typedef BOOST_DEDUCED_TYPENAME Cont::const_iterator
+                                   ptr_const_iterator; 
     private:
 
         template< class InputIterator >  
@@ -231,7 +224,7 @@ namespace ptr_container_detail
             // 'c_.insert' always provides the strong guarantee for T* elements
             // since a copy constructor of a pointer cannot throw
             //
-            c_.insert( where.base().base(), 
+            c_.insert( where.base(), 
                        sd.begin(), sd.end() ); 
             sd.release();
         }
@@ -383,15 +376,7 @@ namespace ptr_container_detail
         const_reverse_iterator     rbegin() const     { return const_reverse_iterator( c_.rbegin() ); } 
         reverse_iterator           rend()             { return reverse_iterator( c_.rend() ); } 
         const_reverse_iterator     rend() const       { return const_reverse_iterator( c_.rend() ); } 
-        ptr_iterator               ptr_begin()        { return c_.begin(); }
-        ptr_const_iterator         ptr_begin() const  { return c_.begin(); }
-        ptr_iterator               ptr_end()          { return c_.end(); }
-        ptr_const_iterator         ptr_end() const    { return c_.end(); }
-        ptr_reverse_iterator       ptr_rbegin()       { return c_.rbegin(); }
-        ptr_const_reverse_iterator ptr_rbegin() const { return c_.rbegin(); }
-        ptr_reverse_iterator       ptr_rend()         { return c_.rend(); }
-        ptr_const_reverse_iterator ptr_rend() const   { return c_.rend(); }
-
+ 
         void swap( reversible_ptr_container& r ) // notrow
         { 
             c_.swap( r.c_ );
@@ -433,9 +418,9 @@ namespace ptr_container_detail
         {
             enforce_null_policy( x, "Null pointer in 'insert()'" );
 
-            auto_type ptr( x );                                   // nothrow
-            iterator res( c_.insert( before.base().base(), x ) ); // strong, commit
-            ptr.release();                                        // nothrow
+            auto_type ptr( x );                            // nothrow
+            iterator res( c_.insert( before.base(), x ) ); // strong, commit
+            ptr.release();                                 // nothrow
             return res;
         }
 
@@ -445,15 +430,15 @@ namespace ptr_container_detail
             BOOST_ASSERT( x != end() );
             
             remove( x ); 
-            return iterator( c_.erase( x.base().base() ) );
+            return iterator( c_.erase( x.base() ) );
         }
         
         iterator erase( iterator first, iterator last ) // notrow 
         {
             BOOST_ASSERT( !empty() );
             remove( first, last ); 
-            return iterator( c_.erase( first.base().base(), 
-                                       last.base().base() ) );
+            return iterator( c_.erase( first.base(), 
+                                       last.base() ) );
         }
 
         template< class Range >
@@ -477,7 +462,7 @@ namespace ptr_container_detail
                 throw bad_ptr_container_operation( "'release()' on empty container" ); 
             
             auto_type ptr( Config::get_pointer( where ) );  // nothrow
-            c_.erase( Config::get_base( where.base() ) );   // nothrow
+            c_.erase( where.base() );                       // nothrow
             return boost::ptr_container_detail::move( ptr ); 
         }
 
@@ -493,7 +478,12 @@ namespace ptr_container_detail
                 throw bad_ptr_container_operation( "'replace()' on empty container" );
 
             auto_type old( Config::get_pointer( where ) );  // nothrow
-            *where.base() = ptr.release();                  // nothrow, commit
+            
+#ifdef __GNUC__
+            const_cast<void*&>(*where.base()) = ptr.release();                
+#else
+            *where.base() = ptr.release(); // nothrow, commit
+#endif            
             return boost::ptr_container_detail::move( old );
         }
 
@@ -559,12 +549,6 @@ namespace ptr_container_detail
    BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type )
     
     } // namespace 'ptr_container_detail'
-
-    template< class Iterator >
-    inline bool is_null( Iterator i )
-    {
-        return *i.base() == 0;
-    }
 
 } // namespace 'boost'  
 

@@ -142,9 +142,6 @@ int main()
     // the objects are scatered all around 'sz' different vectors;
     // the view makes them act as one big vector.
     //
-    // Notice how we simple use
-    // '.begin()/end()' instead of '.ptr_begin()/ptr_end()':
-    //
     std::sort( color_view.begin(), color_view.end(), sort_by_power() );
     
     //
