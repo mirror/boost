@@ -3,36 +3,15 @@
 //  subject to the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "./books.hpp"
 #include <boost/functional/hash.hpp>
-// If we had std::unordered_set.
-//#include <unordered_set>
 #include <cassert>
+
+// If std::unordered_set was available:
+//#include <unordered_set>
 
 // This example illustrates how to use boost::hash with a custom hash function.
 // For full details, see the tutorial.
-
-namespace library
-{
-    struct book
-    {
-        int id;
-        std::string author;
-        std::string title;
-
-        book(int i, std::string const& a, std::string const& t)
-            : id(i), author(a), title(t) {}
-    };
-
-    bool operator==(book const& a, book const& b)
-    {
-        return a.id == b.id;
-    }
-
-    std::size_t hash_value(book const& b)
-    {
-        return boost::hash_value(b.id);
-    }
-}
 
 int main()
 {
@@ -42,7 +21,7 @@ int main()
     boost::hash<library::book> book_hasher;
     std::size_t knife_hash_value = book_hasher(knife);
 
-    // If we had std::unordered_set:
+    // If std::unordered_set was available:
     //
     //std::unordered_set<library::book, boost::hash<library::book> > books;
     //books.insert(knife);
@@ -52,4 +31,18 @@ int main()
 
     //assert(books.find(knife) != books.end());
     //assert(books.find(dandelion) == books.end());
+}
+
+namespace library
+{
+    bool operator==(book const& a, book const& b)
+    {
+        return a.id == b.id;
+    }
+
+    std::size_t hash_value(book const& b)
+    {
+        boost::hash<int> hasher;
+        return hasher(b.id);
+    }
 }
