@@ -18,6 +18,7 @@ include testing.jam ;
 
 DEPENDS all : test ;
 
+import ../../../libs/serialization/build/serialization ;
 {
     test-suite "multi_index"
         : [ run test_basic.cpp            test_basic_main.cpp            ]
@@ -40,7 +41,7 @@ DEPENDS all : test ;
                 <lib>../../serialization/build/boost_serialization           
             : # args
             : # input files
-            : std::locale-support                                        ]
+            : std::locale-support toolset::require-boost-spirit-support ]
         : [ run test_set_ops.cpp          test_set_ops_main.cpp          ]
         : [ run test_special_list_ops.cpp test_special_list_ops_main.cpp ]
         : [ run test_special_set_ops.cpp  test_special_set_ops_main.cpp  ]
