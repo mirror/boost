@@ -47,24 +47,23 @@ As it is compliant with the __tr1-short__, it will work with:
 It also implements the extension proposed by Peter Dimov in issue 6.18 of the
 __issues__, this adds support for:
 
+* arrays
 * `std::pair`
 * the standard containers.
-
-The extension also allows the user to customise the hash function for
-user-defined types. Which means that you don't need to use a custom hash
-function object with a container that uses [classref boost::hash] by default.
+* extending [classref boost::hash] for custom types.
 
 [endsect]
 
 [section:tutorial Tutorial]
 
-When using __multi-index-short__, you don't need to do anything, as it uses
-[classref boost::hash] by default. To find out how to use a user-defined type,
-read the [link section.tutorial.custom section on Extending Boost.Hash].
+When using a hash index with __multi-index-short__, you don't need to do
+anything to use [classref boost::hash] as it uses it by default.
+To find out how to use a user-defined type, read the
+[link boost_hash.custom section on extending Boost.Hash].
 
 If your standard library supplies its own implementation of the unordered
 associative containers and you wish to use
-[classref boost::hash] you just supply the extra template parameter:
+[classref boost::hash], just use an extra template parameter:
 
     std::unordered_multiset<std::vector<int>, boost::hash<int> >
             set_of_ints;
@@ -113,6 +112,8 @@ containing the hashes of the elements of a container:
         return hashes;
     }
 
+[endsect]
+
 [section:custom Extending Boost.Hash for a custom data type]
 
 [classref boost::hash] is implemented by calling the function
@@ -147,7 +148,8 @@ Then all you would need to do is write the function `library::hash_value`:
     {
         std::size_t hash_value(book const& b)
         {
-            return boost::hash_value(b.id);
+            boost::hash<int> hasher;
+            return hasher(b.id);
         }
     }
 
@@ -160,7 +162,8 @@ And you can now use [classref boost::hash] with book:
     boost::hash<library::book> book_hasher;
     std::size_t knife_hash_value = book_hasher(knife);
 
-    boost::unordered_set<library::book> books;
+    // If std::unordered_set is available:
+    std::unordered_set<library::book, boost::hash<library::book> > books;
     books.insert(knife);
     books.insert(library::book(2443, "Lindgren, Torgny", "Hash"));
     books.insert(library::book(1953, "Snyder, Bernadette M.",
@@ -169,9 +172,10 @@ And you can now use [classref boost::hash] with book:
     assert(books.find(knife) != books.end());
     assert(books.find(dandelion) == books.end());
 
-Full code for this example is at
+The full example can be found in:
+[@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.hpp]
+and
 [@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.cpp].
-
 [blurb
 When writing a hash function, first look at how the equality function works.
 Objects that are equal must generate the same hash value.
@@ -257,8 +261,6 @@ To calculate the hash of an iterator range you can use
 
     std::vector<std::string> some_strings;
     std::size_t hash = boost::hash_range(some_strings.begin(), some_strings.end());
-
-[endsect]
 
 [endsect]
 
@@ -378,7 +380,7 @@ but there you go. ]
           </para></returns>
           <notes><para>
             The call to <code><functionname>hash_value</functionname></code>
-            is always unqualified, so that custom overloads can be
+            is unqualified, so that custom overloads can be
             found via argument dependent lookup.
           </para></notes>
           <throws><para>
@@ -387,108 +389,6 @@ but there you go. ]
           </para></throws>
         </method>
       </struct>
-
-      <!--
-        boost::hash_value
-        -->
-
-      <overloaded-function name="hash_value">
-
-        <purpose>
-            Implementation of a hash function for various types.
-        </purpose>
-
-        <description><para>
-          Should never be called directly by users, instead they should use
-          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
-          or <functionname>boost::hash_combine</functionname> which
-          call hash_value without namespace qualification so that overloads
-          for custom types are found via ADL.
-        </para></description>
-        <notes>
-          <para>Overloads for other types supplied in other headers.</para>
-          <para>This is an extension to TR1</para>
-        </notes>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>int</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>unsigned int</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>long</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>unsigned long</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>float</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>double</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>long double</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template><template-type-parameter name="T"/></template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>T*</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="Ch"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val">
-              <paramtype>std::basic_string&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</paramtype>
-          </parameter>
-        </signature>
-
-        <returns>
-          <para>
-            <informaltable>
-              <tgroup cols="2">
-                <tbody>
-                <row>
-                    <entry>int, unsigned int, long, unsigned long</entry>
-                    <entry>v</entry>
-                </row>
-                <row>
-                    <entry>float, double, long double, T*</entry>
-                    <entry>
-                        An unspecified value, except that equal arguments shall yield the same
-                        result
-                    </entry>
-                </row>
-                <row>
-                    <entry>std::basic_string&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</entry>
-                    <entry>hash_range(v.begin(), v.end());</entry>
-                </row>
-                </tbody>
-              </tgroup>
-            </informaltable>
-          </para>
-        </returns>
-
-      </overloaded-function>
 
       <!--
         boost::hash_combine
@@ -546,7 +446,9 @@ but there you go. ]
             Calculate the combined hash value of the elements of an iterator
             range.
         </purpose>
-        <effects><programlisting>
+        <effects>
+          <para>For the two argument overload:
+<programlisting>
 size_t seed = 0;
 
 for(; first != last; ++first)
@@ -555,7 +457,17 @@ for(; first != last; ++first)
 }
 
 return seed;
-        </programlisting></effects>
+</programlisting>
+          </para>For the three arguments overload:
+<programlisting>
+for(; first != last; ++first)
+{
+    <functionname>hash_combine</functionname>(seed, *first);
+}
+</programlisting>
+          <para>
+          </para>
+        </effects>
         <notes>
           <para>
             <code>hash_range</code> is sensitive to the order of the elements
@@ -570,6 +482,208 @@ return seed;
           <code><functionname>hash_value</functionname>(std::iterator_traits&lt;It&gt;::value_type)</code>
           has basic exception safety.
         </para></throws>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - integers
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for integers.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>int</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned int</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>long</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned long</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <code>val</code>
+        </returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - floating point
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for floating point values.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>float</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>double</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>long double</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <para>
+            An unspecified value, except that equal arguments shall yield the same
+            result
+          </para>
+        </returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - pointers
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for pointers.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <template><template-type-parameter name="T"/></template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>T* const&amp;</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <para>
+            An unspecified value, except that equal arguments shall yield the same
+            result
+          </para>
+        </returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - arrays
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for built in arrays.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+        
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-nontype-parameter name="N"><type>unsigned</type></template-nontype-parameter>
+          </template>
+          <type>std::size_t</type>
+          <parameter><paramtype>T (&amp;val)[N]</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-nontype-parameter name="N"><type>unsigned</type></template-nontype-parameter>
+          </template>
+          <type>std::size_t</type>
+          <parameter><paramtype>const T (&amp;val)[N]</paramtype></parameter>
+        </signature>
+
+        <returns><code>hash_range(val, val+N)</code></returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - string
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for <code>std::basic_string</code>.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <template>
+            <template-type-parameter name="Ch"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val">
+              <paramtype>std::basic_string&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</paramtype>
+          </parameter>
+        </signature>
+
+        <returns><code>hash_range(val.begin(), val.end())</code></returns>
       </overloaded-function>
     </namespace>
   </header>
