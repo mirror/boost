@@ -4,6 +4,41 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/config.hpp>
+#include <cstddef>
+
+namespace test
+{
+    struct custom
+    {
+        int value_;
+
+        std::size_t hash() const
+        {
+            return value_ * 10;
+        }
+
+#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+        friend std::size_t hash_value(custom const& x )
+        {
+            return x.hash();
+        }
+#endif
+
+        custom(int x) : value_(x) {}
+    };
+}
+
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+namespace boost
+{
+    std::size_t hash_value(test::custom x)
+    {
+        return x.hash();
+    }
+}
+#endif
+
 #include "./config.hpp"
 
 #ifdef TEST_EXTENSIONS
@@ -22,29 +57,6 @@
 #include <vector>
 #include <string>
 #include <cctype>
-
-namespace test
-{
-    struct custom
-    {
-        int value_;
-
-        custom(int x) : value_(x) {}
-        std::size_t hash() const { return value_ * 10; }
-    };
-}
-
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-namespace test
-#else
-namespace boost
-#endif
-{
-    std::size_t hash_value(test::custom x)
-    {
-        return x.hash();
-    }
-}
 
 BOOST_AUTO_UNIT_TEST(custom_tests)
 {
@@ -68,8 +80,14 @@ BOOST_AUTO_UNIT_TEST(custom_tests)
     HASH_NAMESPACE::hash_combine(seed, test::custom(25));
     HASH_NAMESPACE::hash_combine(seed, test::custom(35));
 
+    std::size_t seed2 = 0;
+    HASH_NAMESPACE::hash_combine(seed2, 50u);
+    HASH_NAMESPACE::hash_combine(seed2, 250u);
+    HASH_NAMESPACE::hash_combine(seed2, 350u);
+
     BOOST_CHECK(seed ==
             HASH_NAMESPACE::hash_range(custom_vector.begin(), custom_vector.end()));
+    BOOST_CHECK(seed == seed2);
 }
 
 #endif // TEST_EXTENSIONS
