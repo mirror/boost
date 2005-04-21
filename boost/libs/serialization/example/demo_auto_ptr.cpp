@@ -40,7 +40,8 @@ inline void save(
 ){
     // only the raw pointer has to be saved
     // the ref count is rebuilt automatically on load
-    ar << t.get();
+	const T * const tx = t.get();
+	ar << tx;
 }
 
 template<class Archive, class T>
@@ -90,14 +91,14 @@ public:
     ~A(){}   // default destructor
 };
 
-void save(std::auto_ptr<A> &spa, const char *filename)
+void save(const std::auto_ptr<A> & spa, const char *filename)
 {
     std::ofstream ofs(filename);
     boost::archive::text_oarchive oa(ofs);
     oa << spa;
 }
 
-void load(std::auto_ptr<A> &spa, const char *filename)
+void load(std::auto_ptr<A> & spa, const char *filename)
 {
     // open the archive
     std::ifstream ifs(filename);

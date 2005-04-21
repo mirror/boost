@@ -50,7 +50,7 @@ public:
 //        using binary_oarchive_impl<derived_t>::load_override;
     // so we use the sure-fire method below.  This failed to work as well
     template<class T>
-    void save_override(const T & t, BOOST_PFTO int){
+    void save_override(T & t, BOOST_PFTO int){
         binary_oarchive_impl<fast_binary_oarchive>::save_override(t, 0);
         // verify that this program is in fact working by making sure
         // that arrays are getting passed here
@@ -127,7 +127,7 @@ public:
 
 int main( int argc, char* argv[] )
 {
-    int a[3] = {1, 2, 3};
+    const int a[3] = {1, 2, 3};
     int a1[3] = {4, 5, 6};
 
     std::stringstream ss;

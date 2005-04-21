@@ -34,7 +34,7 @@ class A
         ar & i & ui & l & ul ;
     }
 public:
-    bool operator==(A & rhs){
+    bool operator==(const A & rhs) const {
         return
             i == rhs.i && ui == rhs.ui && l == rhs.l && ul == rhs.ul
         ;
@@ -49,7 +49,8 @@ public:
 
 int main( int /* argc */, char* /* argv */[] )
 {
-    A a, a1;
+    const A a;
+	A a1;
 
     std::stringstream ss;
     {   

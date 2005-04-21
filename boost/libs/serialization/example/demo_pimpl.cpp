@@ -19,12 +19,12 @@ int main(int argc, char* argv[])
 {
     std::stringstream ss;
 
-    A a, a1;
-
+    const A a;
     {
         boost::archive::text_oarchive oa(ss);
         oa << a;
     }
+	A a1;
     {
         boost::archive::text_iarchive ia(ss);
         ia >> a1;
