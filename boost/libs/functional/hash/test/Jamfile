@@ -19,13 +19,22 @@ rule hash-test ( name )
         ] ;
 }
 
+rule hash-test-output ( name )
+{
+    return [
+        run $(name).cpp
+        <lib>../../../test/build/boost_unit_test_framework
+        : : : <include>$(BOOST_ROOT) <test-info>always_show_run_output
+        ] ;
+}
+
 {
     test-suite functional/hash
         :
             [ hash-test hash_number_test ]
             [ hash-test hash_pointer_test ]
             [ hash-test hash_function_pointer_test ]
-            [ hash-test hash_float_test ]
+            [ hash-test-output hash_float_test ]
             [ hash-test hash_string_test ]
             [ hash-test hash_range_test ]
             [ hash-test hash_custom_test ]

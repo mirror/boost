@@ -20,8 +20,12 @@
 #include <iostream>
 
 template <class T>
-void float_tests(T* = 0)
+void float_tests(T* = 0, char const* name)
 {
+    std::cout<<"\n"
+        "Testing " BOOST_STRINGIZE(HASH_NAMESPACE) "::hash<"<<name<<">\n"
+        "\n";
+
     HASH_NAMESPACE::hash<T> x1;
 
     T zero = 0;
@@ -36,7 +40,9 @@ void float_tests(T* = 0)
     using namespace std;
 
 // Doing anything with infinity causes borland to crash.
-#if !defined(__BORLANDC__)
+#if defined(__BORLANDC__)
+    std::cout<<"Not running infinity checks on Borland, as it causes it to crash.\n";
+#else
     if(std::numeric_limits<T>::has_infinity) {
         T infinity = -log(zero);
         T infinity2 = (T) 1. / zero;
@@ -66,19 +72,28 @@ void float_tests(T* = 0)
         BOOST_CHECK(infinity != minus_infinity);
 
         // My hash fails this one, I guess it's not that bad.
-        BOOST_WARN(x1(infinity) != x1(minus_infinity));
+        if(x1(infinity) == x1(minus_infinity)) {
+            std::cout<<"x1(infinity) == x1(-infinity) == "<<x1(infinity)<<"\n";
+        }
 
         // This should really be 'has_denorm == denorm_present' but some
-        // compilers don't have 'denorm_present'. See also a leter use.
+        // compilers don't have 'denorm_present'. See also a later use.
         if(std::numeric_limits<T>::has_denorm) {
-            BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) != x1(infinity));
-            BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) != x1(minus_infinity));
+            if(x1(std::numeric_limits<T>::denorm_min()) == x1(infinity)) {
+                std::cout<<"x1(denorm_min) == x1(infinity) == "<<x1(infinity)<<"\n";
+            }
+            if(x1(std::numeric_limits<T>::denorm_min()) == x1(minus_infinity)) {
+                std::cout<<"x1(denorm_min) == x1(-infinity) == "<<x1(minus_infinity)<<"\n";
+            }
         }
 
         if(std::numeric_limits<T>::has_quiet_NaN) {
-            // Another two failures, should I work around this?
-            BOOST_WARN(x1(std::numeric_limits<T>::quiet_NaN()) != x1(infinity));
-            BOOST_WARN(x1(std::numeric_limits<T>::quiet_NaN()) != x1(minus_infinity));
+            if(x1(std::numeric_limits<T>::quiet_NaN()) == x1(infinity)) {
+                std::cout<<"x1(quiet_NaN) == x1(infinity) == "<<x1(infinity)<<"\n";
+            }
+            if(x1(std::numeric_limits<T>::quiet_NaN()) == x1(minus_infinity)) {
+                std::cout<<"x1(quiet_NaN) == x1(-infinity) == "<<x1(minus_infinity)<<"\n";
+            }
         }
     }
 #endif
@@ -92,7 +107,8 @@ void float_tests(T* = 0)
     BOOST_CHECK(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
     BOOST_CHECK(x1(quarter_max) == HASH_NAMESPACE::hash_value(quarter_max));
     BOOST_CHECK(x1(three_quarter_max) == HASH_NAMESPACE::hash_value(three_quarter_max));
-    
+
+    // The '!=' tests could legitimately fail, but with my hash it indicates a bug.
     BOOST_CHECK(x1(max) == x1(max));
     BOOST_CHECK(x1(max) != x1(quarter_max));
     BOOST_CHECK(x1(max) != x1(half_max));
@@ -117,7 +133,9 @@ void float_tests(T* = 0)
 
     // As before.
     if(std::numeric_limits<T>::has_denorm) {
-        BOOST_WARN(x1(std::numeric_limits<T>::denorm_min()) != x1(zero));
+        if(x1(std::numeric_limits<T>::denorm_min()) == x1(zero)) {
+            std::cout<<"x1(denorm_min) == x1(zero) == "<<x1(zero)<<"\n";
+        }
         BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) ==
             HASH_NAMESPACE::hash_value(std::numeric_limits<T>::denorm_min()));
     }
@@ -125,7 +143,9 @@ void float_tests(T* = 0)
 // NaN also causes borland to crash.
 #if !defined(__BORLANDC__)
     if(std::numeric_limits<T>::has_quiet_NaN) {
-        BOOST_WARN(x1(std::numeric_limits<T>::quiet_NaN()) != x1(1.0));
+        if(x1(std::numeric_limits<T>::quiet_NaN()) == x1(1.0)) {
+            std::cout<<"x1(quiet_NaN) == x1(1.0) == "<<x1(1.0)<<"\n";
+        }
         BOOST_CHECK(x1(std::numeric_limits<T>::quiet_NaN()) ==
             HASH_NAMESPACE::hash_value(std::numeric_limits<T>::quiet_NaN()));
     }
@@ -138,15 +158,15 @@ BOOST_AUTO_UNIT_TEST(hash_float_tests)
     std::cout<<"Platform: "<<BOOST_PLATFORM<<"\n";
     std::cout<<"Library: "<<BOOST_STDLIB<<"\n\n";
 
-    float_tests((float*) 0);
+    float_tests((float*) 0, "float");
 }
 
 BOOST_AUTO_UNIT_TEST(hash_double_tests)
 {
-    float_tests((double*) 0);
+    float_tests((double*) 0, "double");
 }
 
 BOOST_AUTO_UNIT_TEST(hash_long_double_tests)
 {
-    float_tests((long double*) 0);
+    float_tests((long double*) 0, "long double");
 }
