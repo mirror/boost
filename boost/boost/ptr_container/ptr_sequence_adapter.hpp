@@ -101,6 +101,14 @@ namespace ptr_container_detail
     
 } // ptr_container_detail
 
+
+    template< class Iterator, class T >
+    inline bool is_null( ptr_container_detail::void_ptr_iterator<Iterator,T> i )
+    {
+        return *i.base() == 0;
+    }
+
+
     
     template
     < 
@@ -545,11 +553,6 @@ namespace ptr_container_detail
 
     };
 
-    template< class Iterator, class T >
-    inline bool is_null( ptr_container_detail::void_ptr_iterator<Iterator,T> i )
-    {
-        return *i.base() == 0;
-    }
 
 } // namespace 'boost'  
 

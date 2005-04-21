@@ -271,7 +271,7 @@ namespace ptr_container_detail
 
             auto_type ptr( x );
 
-            if( empty() )
+            if( this->empty() )
                 throw bad_ptr_container_operation( "'replace()' on empty container" );
 
             auto_type old( &*where );               // nothrow
