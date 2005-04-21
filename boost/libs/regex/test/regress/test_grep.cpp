@@ -50,5 +50,8 @@ void test_grep()
    TEST_REGEX_SEARCH("\\<abc", perl|icase|nosubs, "Abcabc aBc\n\nabc", match_default, make_array(0, 3, -2, 7, 10, -2, 12, 15, -2, -2));
    TEST_REGEX_SEARCH("ABC", perl|icase|nosubs, "abc", match_default, make_array(0, 3, -2, -2));
    TEST_REGEX_SEARCH("abc", perl|icase|nosubs, " ABC ABCABC ", match_default, make_array(1, 4, -2, 5, 8, -2, 8, 11, -2, -2));
+   TEST_REGEX_SEARCH("a|\\Ab", perl, "b ab", match_default, make_array(0, 1, -2, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a|^b", perl, "b ab\nb", match_default, make_array(0, 1, -2, 2, 3, -2, 5, 6, -2, -2));
+   TEST_REGEX_SEARCH("a|\\<b", perl, "b ab\nb", match_default, make_array(0, 1, -2, 2, 3, -2, 5, 6, -2, -2));
 }
 
