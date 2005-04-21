@@ -48,7 +48,7 @@ namespace quickbook { namespace detail
     {
         if (!std::isalnum(ch))
             ch = '_';
-        return tolower(ch);
+        return std::tolower(ch);
     }
 
     template <typename Iterator>
