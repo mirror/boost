@@ -24,6 +24,7 @@ rule hash-test ( name )
         :
             [ hash-test hash_number_test ]
             [ hash-test hash_pointer_test ]
+            [ hash-test hash_function_pointer_test ]
             [ hash-test hash_float_test ]
             [ hash-test hash_string_test ]
             [ hash-test hash_range_test ]

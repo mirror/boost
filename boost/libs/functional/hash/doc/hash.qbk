@@ -336,6 +336,8 @@ On Visual C++ versions 6.5 and 7.0, `hash_value` isn't overloaded for built in
 arrays. __boost_hash, __hash_combine and __hash_range all use a workaround to
 support built in arrays so this shouldn't be a problem in most cases.
 
+On Visual C++ versions 6.5 and 7.0, function pointers aren't currently supported.
+
 `boost::hash_value(long double)` on GCC on Solaris appears to treat
 `long double`s as doubles - so the hash function doesn't take into account the
 full range of values.

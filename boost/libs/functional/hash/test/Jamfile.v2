@@ -12,6 +12,7 @@ test-suite functional/hash
     :
         [ run hash_number_test.cpp framework ]
         [ run hash_pointer_test.cpp framework ]
+        [ run hash_function_pointer_test.cpp framework ]
         [ run hash_float_test.cpp framework ]
         [ run hash_string_test.cpp framework ]
         [ run hash_range_test.cpp framework ]
