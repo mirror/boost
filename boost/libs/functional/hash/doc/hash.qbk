@@ -1,7 +1,10 @@
-[library Boost.Hash
+[library Boost.Functional/Hash
     [authors [James, Daniel]]
     [copyright 2005 Daniel James]
-    [purpose std::tr1 compliant hash function object]
+    [purpose Extendible hash function object]
+    [category higher-order]
+    [id hash]
+    [dirname hash]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -17,6 +20,10 @@
 [def __note__       [$images/note.png]]
 [def __alert__      [$images/alert.png]]
 [def __tip__        [$images/tip.png]]
+[def __boost_hash   [classref boost::hash]]
+[def __hash_value   [funcref boost::hash_value hash_value]]
+[def __hash_combine [funcref boost::hash_combine]]
+[def __hash_range   [funcref boost::hash_range]]
 
 [section:intro Introduction]
 
@@ -33,8 +40,8 @@
 [def __hash-function__ [@http://en.wikipedia.org/wiki/Hash_function hash function]]
 [def __hash-table__ [@http://en.wikipedia.org/wiki/Hash_table hash table]]
 
-[classref boost::hash] is an implementation of the __hash-function__ object
-specified by the __tr1__. It is intended for use as the default hash function
+__boost_hash is an implementation of the __hash-function__ object
+specified by the __tr1-short__. It is intended for use as the default hash function
 for unordered associative containers, and the __multi-index__'s hash indexes.
 
 As it is compliant with the __tr1-short__, it will work with:
@@ -50,36 +57,36 @@ __issues__, this adds support for:
 * arrays
 * `std::pair`
 * the standard containers.
-* extending [classref boost::hash] for custom types.
+* extending __boost_hash for custom types.
 
 [endsect]
 
 [section:tutorial Tutorial]
 
 When using a hash index with __multi-index-short__, you don't need to do
-anything to use [classref boost::hash] as it uses it by default.
+anything to use __boost_hash as it uses it by default.
 To find out how to use a user-defined type, read the
-[link boost_hash.custom section on extending Boost.Hash].
+[link hash.custom section on extending boost::hash].
 
 If your standard library supplies its own implementation of the unordered
 associative containers and you wish to use
-[classref boost::hash], just use an extra template parameter:
+__boost_hash, just use an extra template parameter:
 
-    std::unordered_multiset<std::vector<int>, boost::hash<int> >
+    std::unordered_multiset<std::vector<int>, __boost_hash<int> >
             set_of_ints;
 
-    std::unordered_set<std::pair<int, int>, boost::hash<std::pair<int, int> >
+    std::unordered_set<std::pair<int, int>, __boost_hash<std::pair<int, int> >
             set_of_pairs;
 
-    std::unordered_map<int, std::string, boost::hash<int> > map_int_to_string;
+    std::unordered_map<int, std::string, __boost_hash<int> > map_int_to_string;
 
-To use [classref boost::hash] directly, create an instance and call it as a function:
+To use __boost_hash directly, create an instance and call it as a function:
 
     #include <boost/hash/hash.hpp>
 
     int main()
     {
-        boost::hash<std::string> string_hash;
+        __boost_hash<std::string> string_hash;
 
         std::size_t h = string_hash("Hash me");
     }
@@ -92,7 +99,7 @@ appropriate header (see the
 
     int main()
     {
-        boost::hash<std::pair<int, int> > pair_hash;
+        __boost_hash<std::pair<int, int> > pair_hash;
 
         std::size_t h = pair_hash(std::make_pair(1, 2));
     }
@@ -107,17 +114,16 @@ containing the hashes of the elements of a container:
     {
         std::vector<std::size_t> hashes;
         std::transform(x.begin(), x.end(), std::insert_iterator(hashes),
-            boost::hash<typename Container::value_type>());
+            __boost_hash<typename Container::value_type>());
 
         return hashes;
     }
 
 [endsect]
 
-[section:custom Extending Boost.Hash for a custom data type]
+[section:custom Extending boost::hash for a custom data type]
 
-[classref boost::hash] is implemented by calling the function
-[funcref boost::hash_value hash_value].
+__boost_hash is implemented by calling the function __hash_value.
 The namespace isn't specified so that it can detect overloads via argument
 dependant lookup. So if there is a free function `hash_value` in the same
 namespace as a custom type, it will get called.
@@ -148,22 +154,22 @@ Then all you would need to do is write the function `library::hash_value`:
     {
         std::size_t hash_value(book const& b)
         {
-            boost::hash<int> hasher;
+            __boost_hash<int> hasher;
             return hasher(b.id);
         }
     }
 
-And you can now use [classref boost::hash] with book:
+And you can now use __boost_hash with book:
 
     library::book knife(3458, "Zane Grey", "The Hash Knife Outfit");
     library::book dandelion(1354, "Paul J. Shanley",
         "Hash & Dandelion Greens");
 
-    boost::hash<library::book> book_hasher;
+    __boost_hash<library::book> book_hasher;
     std::size_t knife_hash_value = book_hasher(knife);
 
     // If std::unordered_set is available:
-    std::unordered_set<library::book, boost::hash<library::book> > books;
+    std::unordered_set<library::book, __boost_hash<library::book> > books;
     books.insert(knife);
     books.insert(library::book(2443, "Lindgren, Torgny", "Hash"));
     books.insert(library::book(1953, "Snyder, Bernadette M.",
@@ -184,7 +190,6 @@ In this object equality was based just on the id, if it was based
 on the objects name and author the hash function should take them into account
 (how to do this is discussed in the next section).
 ]
-
 
 [endsect]
 
@@ -208,8 +213,8 @@ Say you have a point class, representing a two dimensional location:
 
 and you wish to use it as the key for an `unordered_map`. You need to
 customise the hash for this structure. To do this we need to combine
-the hash values for `x` and `y`. Boost.Hash supplies the function
-[funcref boost::hash_combine] for this purpose:
+the hash values for `x` and `y`. The function
+__hash_combine is supplied for this purpose:
 
     class point
     {
@@ -218,8 +223,8 @@ the hash values for `x` and `y`. Boost.Hash supplies the function
         friend std::size_t hash_value(point const& p)
         {
             std::size_t seed = 0;
-            boost::hash_combine(seed, p.x);
-            boost::hash_combine(seed, p.y);
+            __hash_combine(seed, p.x);
+            __hash_combine(seed, p.y);
 
             return seed;
         }
@@ -229,26 +234,25 @@ the hash values for `x` and `y`. Boost.Hash supplies the function
 
 Calls to hash_combine incrementally build the hash from the different members
 of point, it can be repeatedly called for any number of elements. It calls
-[funcref boost::hash_value hash_value] on the supplied element, and combines
-it with the seed.
+__hash_value on the supplied element, and combines it with the seed.
 
 Full code for this example is at
 [@../../libs/functional/hash/examples/point.cpp /libs/functional/hash/examples/point.cpp].
 
 [blurb
 '''
-When using <functionname>boost::hash_combine</functionname> the order of the
+When using __hash_combine the order of the
 calls matters.
 <programlisting>
     std::size_t seed = 0;
-    boost::hash_combine(seed, 1);
-    boost::hash_combine(seed, 2);
+    __hash_combine(seed, 1);
+    __hash_combine(seed, 2);
 </programlisting>
 results in a different seed to:
 <programlisting>
     std::size_t seed = 0;
-    boost::hash_combine(seed, 2);
-    boost::hash_combine(seed, 1);
+    __hash_combine(seed, 2);
+    __hash_combine(seed, 1);
 </programlisting>
 If you are calculating a hash value for data where the order of the data
 doesn't matter in comparisons (e.g. a set) you will have to ensure that the
@@ -256,23 +260,22 @@ data is always supplied in the same order.
 '''
 ]
 
-To calculate the hash of an iterator range you can use
-[funcref boost::hash_range]:
+To calculate the hash of an iterator range you can use __hash_range:
 
     std::vector<std::string> some_strings;
-    std::size_t hash = boost::hash_range(some_strings.begin(), some_strings.end());
+    std::size_t hash = __hash_range(some_strings.begin(), some_strings.end());
 
 [endsect]
 
 [section:portability Portability]
 
-Boost.Hash is written to be as portable as possible, but unfortunately, several
+__boost_hash is written to be as portable as possible, but unfortunately, several
 older compilers don't support argument dependent lookup (ADL) - the mechanism
 used for customization.  On those compilers custom overloads for hash_value
 need to be declared in the boost namespace.
 
 On a strictly standards compliant compiler, an overload defined in the
-boost namespace won't be found when [classref boost::hash] is instantiated,
+boost namespace won't be found when __boost_hash is instantiated,
 so for these compilers the overload should only be declared in the same
 namespace as the class.
 
@@ -286,7 +289,7 @@ Let's say we have a simple custom type:
 
             friend inline std::size_t hash_value(custom_type x)
             {
-                boost::hash<int> hasher;
+                __boost_hash<int> hasher;
                 return hasher(x.value);
             }
         };
@@ -301,13 +304,13 @@ So on these compilers define a member function:
     #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
             friend inline std::size_t hash_value(custom_type x)
             {
-                boost::hash<int> hasher;
+                __boost_hash<int> hasher;
                 return hasher(x.value);
             }
     #else
             std::size_t hash() const
             {
-                boost::hash<int> hasher;
+                __boost_hash<int> hasher;
                 return hasher(value);
             }
     #endif
@@ -326,6 +329,16 @@ which will be called from the `boost` namespace:
 
 Full code for this example is at
 [@../../libs/functional/hash/examples/portable.cpp /libs/functional/hash/examples/portable.cpp].
+
+[h2 Other Issues]
+
+On Visual C++ versions 6.5 and 7.0, `hash_value` isn't overloaded for built in
+arrays. __boost_hash, __hash_combine and __hash_range all use a workaround to
+support built in arrays so this shouldn't be a problem in most cases.
+
+`boost::hash_value(long double)` on GCC on Solaris appears to treat
+`long double`s as doubles - so the hash function doesn't take into account the
+full range of values.
 
 [endsect]
 
