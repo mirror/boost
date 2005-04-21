@@ -390,12 +390,12 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\demo_polymorphic.cpp">
-              </File>
-              <File
-                     RelativePath="..\test\../example/demo_polymorphic_A.cpp">
-              </File>
+		<File
+			RelativePath="..\test\../example/demo_polymorphic_A.cpp">
+		</File>
+		<File
+			RelativePath="..\example\demo_polymorphic.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

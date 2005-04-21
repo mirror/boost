@@ -390,12 +390,15 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\demo_pimpl.cpp">
-              </File>
-              <File
-                     RelativePath="..\test\../example/demo_pimpl_A">
-              </File>
+		<File
+			RelativePath="..\example\demo_pimpl.cpp">
+		</File>
+		<File
+			RelativePath="..\example\demo_pimpl_A.cpp">
+		</File>
+		<File
+			RelativePath="..\example\demo_pimpl_A.hpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

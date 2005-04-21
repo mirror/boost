@@ -1695,12 +1695,12 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\list_ptrs.cpp">
-              </File>
-              <File
-                     RelativePath="..\test\A.hpp">
-              </File>
+		<File
+			RelativePath="..\test\A.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_list_ptrs.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

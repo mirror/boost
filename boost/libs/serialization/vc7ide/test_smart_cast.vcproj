@@ -39,7 +39,7 @@
 				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/boost_serialization.dll/vc-7_1/debug/threading-multi&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool

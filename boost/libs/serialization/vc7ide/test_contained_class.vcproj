@@ -1695,9 +1695,15 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\test_contained_class.cpp">
-              </File>
+		<File
+			RelativePath="..\test\A.hpp">
+		</File>
+		<File
+			RelativePath="..\test\B.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_contained_class.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

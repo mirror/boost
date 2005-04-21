@@ -390,9 +390,9 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\demo_exception.cpp">
-              </File>
+		<File
+			RelativePath="..\example\demo_exception.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

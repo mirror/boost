@@ -390,9 +390,12 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\demo_axml.cpp">
-              </File>
+		<File
+			RelativePath="..\example\demo_xml.cpp">
+		</File>
+		<File
+			RelativePath="..\example\demo_xml.hpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

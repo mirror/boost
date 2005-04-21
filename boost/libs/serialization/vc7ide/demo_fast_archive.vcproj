@@ -390,9 +390,9 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\demo_fast_archive.cpp">
-              </File>
+		<File
+			RelativePath="..\example\demo_fast_archive.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

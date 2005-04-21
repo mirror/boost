@@ -21,7 +21,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -75,7 +75,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -129,7 +129,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -187,7 +187,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -245,7 +245,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				RuntimeLibrary="4"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -303,7 +303,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -357,7 +357,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -411,7 +411,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
 				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -465,7 +465,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -523,7 +523,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -581,7 +581,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
 				RuntimeLibrary="4"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -639,7 +639,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -693,7 +693,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -747,7 +747,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp"
 				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -801,7 +801,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -859,7 +859,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -917,7 +917,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp"
 				RuntimeLibrary="4"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -975,7 +975,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1029,7 +1029,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1083,7 +1083,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
 				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1137,7 +1137,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1195,7 +1195,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1253,7 +1253,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
 				RuntimeLibrary="4"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1311,7 +1311,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_xml_warchive.hpp"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1365,7 +1365,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=binary_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_binary_archive.hpp"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1419,7 +1419,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=binary_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_binary_archive.hpp"
 				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1473,7 +1473,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=binary_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_binary_archive.hpp"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1531,7 +1531,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=binary_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_binary_archive.hpp"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1589,7 +1589,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=binary_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_binary_archive.hpp"
 				RuntimeLibrary="4"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1647,7 +1647,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=binary_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_binary_archive.hpp"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1695,21 +1695,21 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\test_polymorphic.hpp">
-              </File>
-              <File
-                     RelativePath="..\test\test_polymorphic.cpp">
-              </File>
-              <File
-                     RelativePath="..\test\test_polymorphic_A.cpp">
-              </File>
-              <File
-                     RelativePath="..\test\test_polymorphic_A.hpp">
-              </File>
-              <File
-                     RelativePath="..\test\A.hpp">
-              </File>
+		<File
+			RelativePath="..\test\A.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_polymorphic.cpp">
+		</File>
+		<File
+			RelativePath="..\test\test_polymorphic.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_polymorphic_A.cpp">
+		</File>
+		<File
+			RelativePath="..\test\test_polymorphic_A.hpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

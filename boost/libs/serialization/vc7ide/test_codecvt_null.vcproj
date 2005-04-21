@@ -351,12 +351,12 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\test_codecvt_null.cpp">
-              </File>
-              <File
-                     RelativePath="..\test\../src/codecvt_null.cpp">
-              </File>
+		<File
+			RelativePath="..\test\../src/codecvt_null.cpp">
+		</File>
+		<File
+			RelativePath="..\test\test_codecvt_null.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
