@@ -13,6 +13,16 @@
 #  include <boost/type_traits/is_base_and_derived.hpp>
 #endif
 
+//
+// Additional tests added for VC7.1 bug, 2005/04/21
+//
+struct marker{};
+struct foo{ int x; };
+
+template<class Class,typename Type,Type Class::*PtrToMember>
+struct class_member{};
+template<class Class,typename Type,Type Class::*PtrToMember>
+struct class_member2 : public marker{};
 
 
 TT_TEST_BEGIN(is_base_and_derived)
@@ -36,6 +46,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<VB,VD>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<VD,VB>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<test_abc1,test_abc3>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<test_abc3,test_abc1>::value), false);
+
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<marker, class_member<foo,int,&foo::x> >::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<marker, class_member2<foo,int,&foo::x> >::value), true);
 
 TT_TEST_END
 
