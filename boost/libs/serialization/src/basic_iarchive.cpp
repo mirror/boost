@@ -53,6 +53,10 @@ class basic_pointer_iserializer;
 class basic_iarchive_impl 
 {
     friend class basic_iarchive;
+
+    version_type m_archive_library_version;
+    unsigned int m_flags;
+
     //////////////////////////////////////////////////////////////////////
     // information about each serialized object loaded
     // indexed on object_id
@@ -185,12 +189,17 @@ class basic_iarchive_impl
     const basic_iserializer * pending_bis;
     version_type pending_version;
 
-    basic_iarchive_impl() :
+    basic_iarchive_impl(unsigned int flags) :
+        m_archive_library_version(ARCHIVE_VERSION()),
+        m_flags(flags),
         moveable_object_position(0),
         pending_object(NULL),
         pending_bis(NULL),
         pending_version(0)
     {}
+    void set_library_version(unsigned int archive_library_version){
+        m_archive_library_version = archive_library_version;
+    }
     bool
     track(
         basic_iarchive & ar,
@@ -311,7 +320,7 @@ basic_iarchive_impl::load_preamble(
         }
         else{
             // override tracking with indicator from class information
-            co.tracking_level = co.bis_ptr->tracking();
+            co.tracking_level = co.bis_ptr->tracking(m_flags);
             co.file_version = version_type(
                 co.bis_ptr->version()
             );
@@ -493,21 +502,20 @@ basic_iarchive::next_object_pointer(void *t){
 }
 
 BOOST_DECL_ARCHIVE
-basic_iarchive::basic_iarchive() : 
-    pimpl(new basic_iarchive_impl),
-    archive_library_version(ARCHIVE_VERSION())
+basic_iarchive::basic_iarchive(unsigned int flags) : 
+    pimpl(new basic_iarchive_impl(flags))
 {}
-
-void 
-BOOST_DECL_ARCHIVE
-basic_iarchive::init(unsigned int archive_library_version_){
-    archive_library_version = archive_library_version_;
-}
 
 BOOST_DECL_ARCHIVE
 basic_iarchive::~basic_iarchive()
 {
     delete pimpl;
+}
+
+void
+BOOST_DECL_ARCHIVE
+basic_iarchive::set_library_version(unsigned int archive_library_version){
+    pimpl->set_library_version(archive_library_version);
 }
 
 void
@@ -556,8 +564,14 @@ basic_iarchive::delete_created_pointers()
 
 unsigned int 
 BOOST_DECL_ARCHIVE 
-basic_iarchive::library_version() const{
-    return archive_library_version;
+basic_iarchive::get_library_version() const{
+    return pimpl->m_archive_library_version;
+}
+
+unsigned int 
+BOOST_DECL_ARCHIVE 
+basic_iarchive::get_flags() const{
+    return pimpl->m_flags;
 }
 
 } // namespace detail

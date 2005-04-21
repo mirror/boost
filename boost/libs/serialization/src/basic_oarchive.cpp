@@ -47,6 +47,9 @@ class basic_pointer_oserializer;
 class basic_oarchive_impl
 {
     friend class basic_oarchive;
+
+    unsigned int m_flags;
+
     //////////////////////////////////////////////////////////////////////
     // information about each serialized object saved
     // keyed on address, class_id
@@ -135,7 +138,8 @@ class basic_oarchive_impl
     // whose data itself is now pending serialization
     const void * pending_object;
     const basic_oserializer * pending_bos;
-    basic_oarchive_impl() :
+    basic_oarchive_impl(unsigned int flags) :
+        m_flags(flags),
         pending_object(NULL),
         pending_bos(NULL)
     {}
@@ -144,7 +148,8 @@ class basic_oarchive_impl
     find(const basic_oserializer & bos);
     const basic_oserializer *  
     find(const serialization::extended_type_info &ti) const;
-public:
+
+//public:
     const cobject_type &
     register_type(const basic_oserializer & bos);
     void save_object(
@@ -174,7 +179,7 @@ basic_oarchive_impl::find(const serialization::extended_type_info & ti) const {
             return false;
         }
         // returns true if objects should be tracked
-        bool tracking() const {
+        bool tracking(const unsigned int) const {
             assert(false);
             return false;
         }
@@ -249,14 +254,14 @@ basic_oarchive_impl::save_object(
     if(bos.class_info()){
         if( ! co.initialized){
             ar.vsave(class_id_optional_type(co.class_id));
-            ar.vsave(tracking_type(bos.tracking()));
+            ar.vsave(tracking_type(bos.tracking(m_flags)));
             ar.vsave(version_type(bos.version()));
             (const_cast<cobject_type &>(co)).initialized = true;
         }
     }
 
     // we're not tracking this type of object
-    if(! bos.tracking()){
+    if(! bos.tracking(m_flags)){
         // just windup the preamble - no object id to write
         ar.end_preamble();
         // and save the data
@@ -332,7 +337,7 @@ basic_oarchive_impl::save_pointer(
             }
         }
         if(bos.class_info()){
-            ar.vsave(tracking_type(bos.tracking()));
+            ar.vsave(tracking_type(bos.tracking(m_flags)));
             ar.vsave(version_type(bos.version()));
         }
         (const_cast<cobject_type &>(co)).initialized = true;
@@ -342,7 +347,7 @@ basic_oarchive_impl::save_pointer(
     }
 
     // if we're not tracking
-    if(! bos.tracking()){
+    if(! bos.tracking(m_flags)){
         // just save the data itself
         ar.end_preamble();
         state_saver<const void *> x(pending_object);
@@ -386,8 +391,8 @@ basic_oarchive_impl::save_pointer(
 // implementation of basic_oarchive functions
 
 BOOST_DECL_ARCHIVE 
-basic_oarchive::basic_oarchive()
-    : pimpl(new basic_oarchive_impl)
+basic_oarchive::basic_oarchive(unsigned int flags)
+    : pimpl(new basic_oarchive_impl(flags))
 {}
 
 BOOST_DECL_ARCHIVE 
@@ -422,8 +427,14 @@ basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
 
 unsigned int
 BOOST_DECL_ARCHIVE 
-basic_oarchive::library_version() const{
+basic_oarchive::get_library_version() const{
     return ARCHIVE_VERSION();
+}
+
+unsigned int
+BOOST_DECL_ARCHIVE 
+basic_oarchive::get_flags() const{
+    return pimpl->m_flags;
 }
 
 void 
