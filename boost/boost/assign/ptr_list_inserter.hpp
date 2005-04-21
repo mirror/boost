@@ -37,11 +37,11 @@ namespace assign
         {}
         
         template< class Function2, class Obj2 >
-        ptr_list_inserter( const list_inserter<Function2,Obj2>& r ) 
+        ptr_list_inserter( const ptr_list_inserter<Function2,Obj2>& r ) 
         : insert_( r.fun_private() ) 
         {}
 
-        ptr_list_inserter( const list_inserter& r ) : insert_( r.insert_ )
+        ptr_list_inserter( const ptr_list_inserter& r ) : insert_( r.insert_ )
         {}
 
         ptr_list_inserter& operator()()
