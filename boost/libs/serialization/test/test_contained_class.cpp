@@ -48,8 +48,8 @@ int test_main( int /* argc */, char* /* argv */[] )
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    C c, c1;
-
+    const C c;
+	C c1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);

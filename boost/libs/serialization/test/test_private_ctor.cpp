@@ -29,14 +29,16 @@ class V {
 int test_main(int /* argc */, char * /* argv */[])
 {
     std::stringstream ss;
-    std::vector<V> v;
+    const std::vector<V> v;
     {
         boost::archive::text_oarchive oa(ss);
         oa << v;
     }
+	std::vector<V> v1;
     {
         boost::archive::text_iarchive ia(ss);
-        ia >> v;
+        ia >> v1;
     }
+	//BOOST_CHECK(v == v1);
     return EXIT_SUCCESS;
 }

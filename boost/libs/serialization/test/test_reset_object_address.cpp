@@ -36,7 +36,7 @@ namespace std{
 
 void test1(){
     std::stringstream ss;
-    A a;
+    const A a;
     {
         boost::archive::text_oarchive oa(ss);
         oa << a;
@@ -76,8 +76,8 @@ BOOST_TEST_DONT_PRINT_LOG_VALUE( B )
 
 void test2(){
     std::stringstream ss;
-    B b;
-    B * b_ptr = & b;
+    B const b;
+    B const * const b_ptr = & b;
     BOOST_CHECK_EQUAL(& b, b_ptr);
     {
         boost::archive::text_oarchive oa(ss);
@@ -119,8 +119,8 @@ BOOST_TEST_DONT_PRINT_LOG_VALUE( D )
 
 void test3(){
     std::stringstream ss;
-    D d;
-    B * b_ptr = & d.m_b;
+    D const d;
+    B const * const b_ptr = & d.m_b;
     {
         boost::archive::text_oarchive oa(ss);
         oa << d;
@@ -192,7 +192,7 @@ BOOST_TEST_DONT_PRINT_LOG_VALUE( F )
 
 void test4(){
     std::stringstream ss;
-    F f;
+    const F f;
     {
         boost::archive::text_oarchive oa(ss);
         oa << f;
