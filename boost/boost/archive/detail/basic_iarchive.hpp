@@ -51,30 +51,36 @@ class BOOST_DECL_ARCHIVE basic_iarchive
     virtual void vload(class_id_optional_type &t) = 0;
     virtual void vload(class_name_type &t) = 0;
     virtual void vload(tracking_type &t) = 0;
-    version_type archive_library_version;
-public: // note: not part of the public API.
-    void
-    next_object_pointer(void *t);
-protected:
-    void init(unsigned int archive_library_version_);
-    basic_iarchive();
-    virtual ~basic_iarchive();
 public:
-    unsigned int library_version() const;
+    // note: NOT part of the public API.
+    void next_object_pointer(void *t);
+    void register_basic_serializer(const basic_iserializer & bis);
     void load_object(
         void *t, 
         const basic_iserializer & bis
     );
-    const basic_pointer_iserializer * load_pointer(
+    const basic_pointer_iserializer * 
+    load_pointer(
         void * & t, 
         const basic_pointer_iserializer * bpis_ptr,
         const basic_pointer_iserializer * (*finder)(
             const boost::serialization::extended_type_info & type
         )
     );
-    void register_basic_serializer(const basic_iserializer & bis);
-    void reset_object_address(const void * new_address, const void * old_address);
-    void delete_created_pointers();
+protected:
+    basic_iarchive(unsigned int flags);
+    virtual ~basic_iarchive();
+public:
+    void 
+    set_library_version(unsigned int archive_library_version);
+    unsigned int 
+    get_library_version() const;
+    unsigned int
+    get_flags() const;
+    void 
+    reset_object_address(const void * new_address, const void * old_address);
+    void 
+    delete_created_pointers();
 };
 
 } // namespace detail

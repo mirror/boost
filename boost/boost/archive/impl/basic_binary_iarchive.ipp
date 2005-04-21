@@ -68,7 +68,7 @@ basic_binary_iarchive<Archive>::init(){
     #if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     detail::
     #endif
-    basic_iarchive::init(input_library_version);
+    basic_iarchive::set_library_version(input_library_version);
     
     // extra little .t is to get around borland quirk
     if(ARCHIVE_VERSION() < input_library_version.t)

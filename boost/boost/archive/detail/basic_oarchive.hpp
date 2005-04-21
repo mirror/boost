@@ -36,7 +36,7 @@ class BOOST_DECL_ARCHIVE basic_oserializer;
 class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_oarchive - write serialized objects to an output stream
-class BOOST_DECL_ARCHIVE basic_oarchive
+class BOOST_DECL_ARCHIVE_OR_WARCHIVE basic_oarchive
 {
     friend class basic_oarchive_impl;
     // hide implementation of this class to minimize header conclusion
@@ -54,13 +54,9 @@ class BOOST_DECL_ARCHIVE basic_oarchive
     virtual void vsave(const class_id_reference_type t) =  0;
     virtual void vsave(const class_name_type & t) = 0;
     virtual void vsave(const tracking_type t) = 0;
-
-protected:
-    basic_oarchive();
-    virtual ~basic_oarchive();
-
 public:
-    unsigned int library_version() const;
+    // note: NOT part of the public interface
+    void register_basic_serializer(const basic_oserializer & bos);
     void save_object(
         const void *x, 
         const basic_oserializer & bos
@@ -69,11 +65,16 @@ public:
         const void * t, 
         const basic_pointer_oserializer * bpos_ptr
     );
-    void register_basic_serializer(const basic_oserializer & bos);
     void save_null_pointer(){
         vsave(NULL_POINTER_TAG);
     }
     void end_preamble(); // default implementation does nothing
+protected:
+    basic_oarchive(unsigned int flags);
+    virtual ~basic_oarchive();
+public:
+    unsigned int get_library_version() const;
+    unsigned int get_flags() const;
 };
 
 } // namespace detail

@@ -67,6 +67,19 @@ public:
         archive::load(* this->This(), t);
     }
 
+    template<class T>
+    Archive & operator>>(T & t){
+        this->This()->load_override(t, 0);
+        return * this->This();
+    }
+
+    // the & operator 
+    template<class T>
+    Archive & operator&(T & t){
+		return *(this->This()) >> t;
+    }
+
+#if 0
     // define operators for non-const arguments.  Don't depend one the const
     // ones below because the compiler MAY make a temporary copy to
     // create the const parameter (Though I havn't seen this happen). 
@@ -90,10 +103,15 @@ public:
         this->This()->load_override(t, 0);
         return * this->This();
     }
-
     // define the following pair in order to permit passing of const and non_const
     // temporary objects. These are needed to properly implement serialization
     // wrappers.
+        // trap >> nvp<const T> as an error
+        template<class T>
+        Archive & operator>>(const boost::serialization::nvp<const T> & n){
+            BOOST_STATIC_ASSERT(0 == sizeof(T));
+            return * this->This();
+        }
 
     #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     // the >> operator
@@ -109,6 +127,7 @@ public:
         return * this >> t;
     }
     #endif
+#endif
 };
 
 } // namespace detail

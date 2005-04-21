@@ -37,7 +37,8 @@ basic_binary_oarchive<Archive>::init(){
     const std::string file_signature(ARCHIVE_SIGNATURE());
     * this->This() << file_signature;
     // write library version
-    * this->This() << version_type(ARCHIVE_VERSION());
+    const version_type v(ARCHIVE_VERSION());
+    * this->This() << v;
 }
 
 } // namespace archive

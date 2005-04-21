@@ -77,9 +77,6 @@ struct known_archive_types<false> {
                     #endif
                     , boost::archive::binary_woarchive
                 #endif
-                    #if ! defined(BOOST_ARCHIVE_EXPORT)
-                        #define BOOST_ARCHIVE_EXPORT
-                    #endif
                 #if defined(BOOST_ARCHIVE_BINARY_WIARCHIVE_HPP)
                     #if ! defined(BOOST_ARCHIVE_EXPORT)
                         #define BOOST_ARCHIVE_EXPORT

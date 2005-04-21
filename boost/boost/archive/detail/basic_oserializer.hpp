@@ -61,7 +61,7 @@ public:
     // returns true if class_info should be saved
     virtual bool class_info() const = 0;
     // returns true if objects should be tracked
-    virtual bool tracking() const = 0;
+    virtual bool tracking(const unsigned int flags) const = 0;
     // returns class version
     virtual unsigned int version() const = 0;
     // returns true if this class is polymorphic

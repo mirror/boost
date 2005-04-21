@@ -176,6 +176,7 @@ xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
         is_, 
         true // don't change the codecvt - use the one below
     ),
+    basic_xml_iarchive<Archive>(flags),
     gimpl(new xml_wgrammar())
 {
     if(0 == (flags & no_codecvt)){
@@ -196,7 +197,7 @@ template<class Archive>
 BOOST_DECL_WARCHIVE
 #endif
 xml_wiarchive_impl<Archive>::~xml_wiarchive_impl(){
-    if(this->header)
+    if(0 == (get_flags() & no_header))
         gimpl->windup(is);
     delete gimpl;
 }

@@ -67,8 +67,8 @@ private:
     virtual void delete_created_pointers(){
         ArchiveImplementation::delete_created_pointers();
     }
-    virtual unsigned int library_version() const{
-        return ArchiveImplementation::library_version();
+    virtual unsigned int get_library_version() const{
+        return ArchiveImplementation::get_library_version();
     }
     // primitive types the only ones permitted by polymorphic archives
     virtual void load(bool & t){
@@ -146,6 +146,22 @@ private:
         ArchiveImplementation::register_basic_serializer(bis);
     }
 public:
+    template<class T>
+    polymorphic_iarchive & operator>>(T & t){
+        // if this assertion trips. It means we're trying to load a
+        // const object with a compiler that doesn't have correct
+        // funtion template ordering.  On other compilers, this is
+        // handled below.
+        BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
+        return polymorphic_iarchive::operator>>(t);
+    }
+
+    // the & operator 
+    template<class T>
+    polymorphic_iarchive & operator&(T & t){
+        return polymorphic_iarchive::operator&(t);
+    }
+#if 0
     // define operators for non-const arguments.  Don't depend one the const
     // ones below because the compiler MAY make a temporary copy to
     // create the const parameter (Though I havn't seen this happen). 
@@ -183,6 +199,7 @@ public:
         return polymorphic_iarchive::operator&(t);
     }
     #endif
+#endif
     // all current archives take a stream as constructor argument
     template <class _Elem, class _Tr>
     polymorphic_iarchive_impl(

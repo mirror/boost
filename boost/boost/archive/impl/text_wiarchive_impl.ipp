@@ -100,6 +100,24 @@ text_wiarchive_impl<Archive>::load(std::wstring &ws)
 }
 #endif
 
+template<class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DECL_WARCHIVE 
+#endif
+text_wiarchive_impl<Archive>::text_wiarchive_impl(
+    std::wistream & is, 
+    unsigned int flags
+) :
+    basic_text_iprimitive<std::wistream>(
+        is, 
+        0 != (flags & no_codecvt)
+    ),
+    basic_text_iarchive<Archive>(flags)
+{
+    if(0 == (flags & no_header))
+        basic_text_iarchive<Archive>::init();
+}
+
 } // archive
 } // boost
 

@@ -36,7 +36,6 @@
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_volatile.hpp>
 #include <boost/type_traits/is_const.hpp>
-#include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/serialization/is_abstract.hpp>
 
@@ -116,7 +115,9 @@ public:
         return boost::serialization::implementation_level<T>::value 
             >= boost::serialization::object_class_info;
     }
-    virtual bool tracking() const {
+    virtual bool tracking(const unsigned int flags) const {
+        if(0 != (flags &  no_tracking))
+            return false;
         return boost::serialization::tracking_level<T>::value == boost::serialization::track_always
             || boost::serialization::tracking_level<T>::value == boost::serialization::track_selectivly
             && serialized_as_pointer();
@@ -212,13 +213,13 @@ struct save_non_pointer_type {
     // note this bounces the call right back to the archive
     // with no runtime overhead
     struct save_primitive {
-        static void invokex(Archive & ar, const T & t){
+        static void invoke(Archive & ar, const T & t){
             save_access::save_primitive(ar, t);
         }
     };
     // same as above but passes through serialization
     struct save_only {
-        static void invokex(Archive & ar, const T & t){
+        static void invoke(Archive & ar, const T & t){
             // make sure call is routed through the highest interface that might
             // be specialized by the user.
             boost::serialization::serialize_adl(
@@ -230,11 +231,54 @@ struct save_non_pointer_type {
     };
     // adds class information to the archive. This includes
     // serialization level and class version
-    struct save {
-        static void invokex(Archive &ar, const T & t){
+    struct save_standard {
+        static void invoke(Archive &ar, const T & t){
             ar.save_object(& t, oserializer<Archive, T>::instantiate());
         }
     };
+
+    // adds class information to the archive. This includes
+    // serialization level and class version
+    struct save_conditional {
+        static void invoke(Archive &ar, const T &t){
+            if(0 == (ar.get_flags() & no_tracking))
+                save_standard::invoke(ar, t);
+            else
+                save_only::invoke(ar, t);
+        }
+    };
+
+    typedef 
+		BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            // if its primitive
+                mpl::equal_to<
+                    boost::serialization::implementation_level<T>,
+                    mpl::int_<boost::serialization::primitive_type>
+                >,
+                mpl::identity<save_primitive>,
+            // else
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
+				// class info / version
+				mpl::greater_equal<
+                    boost::serialization::implementation_level<T>,
+                    mpl::int_<boost::serialization::object_class_info>
+                >,
+				// do standard save
+				mpl::identity<save_standard>,
+            // else
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
+	           // no tracking
+                mpl::equal_to<
+                    boost::serialization::tracking_level<T>,
+                    mpl::int_<boost::serialization::track_never>
+                >,
+                // do a fast save
+                mpl::identity<save_only>,
+            // else
+				// do a fast save only tracking is turned off
+				mpl::identity<save_conditional>
+        > > >::type typex; 
+
     static void invoke(Archive & ar, const T & t){
         // check that we're not trying to serialize something that
         // has been marked not to be serialized.  If this your program
@@ -247,69 +291,8 @@ struct save_non_pointer_type {
                 mpl::int_<boost::serialization::primitive_type>
             >::value
         ));
-        #if defined(__BORLANDC__)
-            return mpl::eval_if<
-                    // if its primitive
-                    mpl::equal_to<
-                        boost::serialization::implementation_level<T>,
-                        mpl::int_<boost::serialization::primitive_type>
-                    >,
-                    mpl::identity<save_primitive>,
-                // else
-                BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                    mpl::and_<
-                        // no class info / version
-                        mpl::less<
-                            boost::serialization::implementation_level<T>,
-                            mpl::int_<boost::serialization::object_class_info>
-                        >,
-                        // and no tracking
-                        mpl::equal_to<
-                            boost::serialization::tracking_level<T>,
-                            mpl::int_<boost::serialization::track_never>
-                        >
-                    >,
-                    // do a fast save
-                    mpl::identity<save_only>,
-                // else
-                    // do standard save
-                    mpl::identity<save>
-                >
-            >::type::invokex(ar, t);
-        #else
-            typedef 
-                BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                    // if its primitive
-                    mpl::equal_to<
-                        boost::serialization::implementation_level<T>,
-                        mpl::int_<boost::serialization::primitive_type>
-                    >,
-                    mpl::identity<save_primitive>,
-                // else
-                BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                    mpl::and_<
-                        // no class info / version
-                        mpl::less<
-                            boost::serialization::implementation_level<T>,
-                            mpl::int_<boost::serialization::object_class_info>
-                        >,
-                        // and no tracking
-                        mpl::equal_to<
-                            boost::serialization::tracking_level<T>,
-                            mpl::int_<boost::serialization::track_never>
-                        >
-                    >,
-                    // do a fast save
-                    mpl::identity<save_only>,
-                // else
-                    // do standard save
-                    mpl::identity<save>
-                >
-            >::type typex; 
-            // note: the invokeX keeps borland from getting confused
-            typex::invokex(ar, t);
-        #endif
-    }
+        typex::invoke(ar, t);
+    };
 };
 
 template<class Archive, class TPtr>
@@ -340,12 +323,11 @@ struct save_pointer_type {
         // class pointer.  Inhibiting code generation for this
         // permits abstract base classes to be used - note: exception
         // virtual serialize functions used for plug-ins
-        typedef BOOST_DEDUCED_TYPENAME remove_const<T>::type type;
         typedef 
             BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 is_abstract<T>,
-                mpl::identity<abstract<type> >,
-                mpl::identity<non_abstract<type> >       
+                mpl::identity<abstract<T> >,
+                mpl::identity<non_abstract<T> >       
             >::type typex;
         return typex::register_type(ar);
     }
@@ -445,14 +427,13 @@ struct save_pointer_type {
         const T &t,
         const basic_pointer_oserializer * bpos_ptr
     ){
-        typedef BOOST_DEDUCED_TYPENAME remove_const<T>::type typex;
         typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
             BOOST_DEDUCED_TYPENAME boost::serialization::
                 type_info_implementation<T>::type::is_polymorphic,
-            mpl::identity<polymorphic<typex> >,
-            mpl::identity<non_polymorphic<typex> >
+            mpl::identity<polymorphic<T> >,
+            mpl::identity<non_polymorphic<T> >
         >::type typey;
-        typey::save(ar, const_cast<typex &>(t), bpos_ptr);
+        typey::save(ar, const_cast<T &>(t), bpos_ptr);
     }
 
     template<class T>
@@ -469,7 +450,7 @@ struct save_pointer_type {
             //     oa << a;
             // }
             // with a compiler which doesn't support remove_const
-            const_check(* t);
+            // const_check(* t);
         #else
             // otherwise remove the const
         #endif
@@ -531,6 +512,7 @@ instantiate_pointer_oserializer(
     return pointer_oserializer<T, Archive>::instance;
 }
 
+
 } // detail
 
 template<class Archive, class T>
@@ -551,6 +533,25 @@ inline void save(Archive & ar, const T &t){
         >::type typex;
     typex::invoke(ar, t);
 }
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+template<class Archive, class T>
+inline void save(Archive & ar, T &t){
+    // if we trap here, we're saving a tracked non-const
+    // value - this could be a stack variable with the same
+    // address for multiple items. This would be the source of very
+    // subtle errors and should be double checked
+    typedef BOOST_DEDUCED_TYPENAME mpl::or_<
+        is_const<T>,
+        mpl::equal_to<
+            mpl::int_<serialization::track_never>,
+            serialization::tracking_level<T>
+        >
+    >::type type;
+    BOOST_STATIC_ASSERT(type::value);
+	save(ar, const_cast<const T &>(t));
+}
+#endif
 
 } // namespace archive
 } // namespace boost

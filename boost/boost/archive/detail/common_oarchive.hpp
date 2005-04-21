@@ -57,8 +57,8 @@ private:
 protected:
     void save_start(const char *name){}
     void save_end(const char *name){}
-    common_oarchive() : 
-        basic_oarchive(),
+    common_oarchive(unsigned int flags) : 
+        basic_oarchive(flags),
         interface_oarchive<Archive>()
     {}
 };

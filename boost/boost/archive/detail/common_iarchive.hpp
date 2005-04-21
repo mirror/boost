@@ -57,8 +57,8 @@ protected:
     void load_start(const char *name){}
     void load_end(const char *name){}
     // default archive initialization
-    common_iarchive() : 
-        basic_iarchive(),
+    common_iarchive(unsigned int flags) : 
+        basic_iarchive(flags),
         interface_iarchive<Archive>()
     {}
 };

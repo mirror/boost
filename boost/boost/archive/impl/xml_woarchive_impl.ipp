@@ -128,7 +128,7 @@ xml_woarchive_impl<Archive>::xml_woarchive_impl(
         os_,
         true // don't change the codecvt - use the one below
     ),
-    basic_xml_oarchive<Archive>()
+    basic_xml_oarchive<Archive>(flags)
 {
     // Standard behavior is that imbue can be called
     // a) before output is invoked or

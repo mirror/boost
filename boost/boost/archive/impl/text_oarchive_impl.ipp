@@ -44,7 +44,7 @@ BOOST_DECL_ARCHIVE
 #endif
 text_oarchive_impl<Archive>::save(const char * s)
 {
-    std::size_t len = std::ostream::traits_type::length(s);
+    const std::size_t len = std::ostream::traits_type::length(s);
     *this->This() << len;
     this->This()->newtoken();
     os << s;
@@ -57,7 +57,7 @@ BOOST_DECL_ARCHIVE
 #endif
 text_oarchive_impl<Archive>::save(const std::string &s)
 {
-    std::size_t size = s.size();
+    const std::size_t size = s.size();
     *this->This() << size;
     this->This()->newtoken();
     os << s;
@@ -72,7 +72,7 @@ BOOST_DECL_ARCHIVE
 #endif
 text_oarchive_impl<Archive>::save(const wchar_t * ws)
 {
-    std::size_t l = std::wcslen(ws);
+    const std::size_t l = std::wcslen(ws);
     * this->This() << l;
     this->This()->newtoken();
     os.write((const char *)ws, l * sizeof(wchar_t)/sizeof(char));
@@ -87,7 +87,7 @@ BOOST_DECL_ARCHIVE
 #endif
 text_oarchive_impl<Archive>::save(const std::wstring &ws)
 {
-    std::size_t l = ws.size();
+    const std::size_t l = ws.size();
     * this->This() << l;
     this->This()->newtoken();
     os.write((const char *)(ws.data()), l * sizeof(wchar_t)/sizeof(char));
@@ -99,12 +99,19 @@ template<class Archive>
 #if !defined(__BORLANDC__)
 BOOST_DECL_ARCHIVE 
 #endif
-text_oarchive_impl<Archive>::text_oarchive_impl(std::ostream & os, unsigned int flags) :
+text_oarchive_impl<Archive>::text_oarchive_impl(
+    std::ostream & os, 
+    unsigned int flags
+) :
     basic_text_oprimitive<std::ostream>(
         os, 
         0 != (flags & no_codecvt)
     ),
-    basic_text_oarchive<Archive>()
+    #if defined(__MWERKS__)
+        basic_text_oarchive(flags)
+    #else
+        basic_text_oarchive<Archive>(flags)
+    #endif
 {
     if(0 == (flags & no_header))
         this->basic_text_oarchive<Archive>::init();

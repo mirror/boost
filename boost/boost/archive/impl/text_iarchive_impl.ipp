@@ -107,12 +107,19 @@ template<class Archive>
 #if !defined(__BORLANDC__)
 BOOST_DECL_ARCHIVE 
 #endif
-text_iarchive_impl<Archive>::text_iarchive_impl(std::istream & is, unsigned int flags) :
+text_iarchive_impl<Archive>::text_iarchive_impl(
+    std::istream & is, 
+    unsigned int flags
+) :
     basic_text_iprimitive<std::istream>(
         is, 
         0 != (flags & no_codecvt)
     ),
-    basic_text_iarchive<Archive>()
+    #if defined(__MWERKS__)
+        basic_text_iarchive(flags)
+    #else
+        basic_text_iarchive<Archive>(flags)
+    #endif
 {
     if(0 == (flags & no_header))
         this->basic_text_iarchive<Archive>::init();

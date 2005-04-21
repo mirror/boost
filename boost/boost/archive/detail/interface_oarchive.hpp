@@ -16,12 +16,11 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 #include <string>
-#include <boost/detail/workaround.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/static_warning.hpp>
+//#include <boost/static_warning.hpp>
 
-#include <boost/serialization/level.hpp>
+//#include <boost/serialization/level.hpp>
 #include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -56,7 +55,7 @@ public:
     }
 
     template<class T>
-    const basic_pointer_oserializer * register_type(T * t = NULL){
+    const basic_pointer_oserializer * register_type(const T * t = NULL){
         const basic_pointer_oserializer & bpos =
             instantiate_pointer_oserializer(
                 static_cast<Archive *>(NULL),
@@ -72,25 +71,43 @@ public:
         archive::save(* this->This(), t);
     }
 
-    // note: we presume that older compilers will never create a const
-    // argument from a non-const by copyiing
     template<class T>
-    Archive & operator<<(const T & t){
+    Archive & operator<<(T & t){
         this->This()->save_override(t, 0);
         return * this->This();
     }
 
     // the & operator 
     template<class T>
-    Archive & operator&(const T & t){
-        this->This()->save_override(t, 0);
-        return * this->This();
+    Archive & operator&(T & t){
+		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+			return * this->This() << const_cast<const T &>(t);
+		#else
+			return * this->This() << t;
+		#endif
     }
 
+#if 0
     // define operators for non-const arguments.  Don't depend one the const
     // ones below because the compiler MAY make a temporary copy to
     // create the const parameter (Though I havn't seen this happen). 
     #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+    struct const_error_check{
+        // if we trap here, we're saving a tracked non-const
+        // value - this could be a stack variable with the same
+        // address for multiple items. This would be the source of very
+        // subtle errors and should be double checked
+        typedef BOOST_DEDUCED_TYPENAME mpl::or_<
+            is_const<T>,
+            mpl::equal_to<
+                mpl::int_<serialization::track_never>,
+                serialization::tracking_level<T>
+            >
+        >::type type;
+        BOOST_STATIC_ASSERT(type::value);
+    };
+
         // the << operator
         template<class T>
         Archive & operator<<(T & t){
@@ -101,14 +118,16 @@ public:
             // BOOST_STATIC_WARNING(
             //     serialization::tracking_level == serialization::track_never
             // );
-            return *this << const_cast<const T &>(t);
+			BOOST_STATIC_ERROR(0 == sizeof(T));
+           return *this << const_cast<const T &>(t);
         }
         // the & operator
         template<class T>
         Archive & operator&(T & t){
-            return *this << t;
+            return *this << const_cast<const T &>(t);
         }
     #endif
+#endif
 };
 
 } // namespace detail

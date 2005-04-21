@@ -124,8 +124,8 @@ private:
         ArchiveImplementation::save(t);
     }
     #endif
-    virtual unsigned int library_version() const{
-        return ArchiveImplementation::library_version();
+    virtual unsigned int get_library_version() const{
+        return ArchiveImplementation::get_library_version();
     }
     virtual void save_binary(const void * t, std::size_t size){
         ArchiveImplementation::save_binary(t, size);
@@ -145,6 +145,17 @@ private:
         ArchiveImplementation::register_basic_serializer(bos);
     }
 public:
+    // the << operator
+    template<class T>
+    polymorphic_oarchive & operator<<(T & t){
+        return polymorphic_oarchive::operator<<(t);
+    }
+    // the & operator 
+    template<class T>
+    polymorphic_oarchive & operator&(T & t){
+        return polymorphic_oarchive::operator&(t);
+    }
+#if 0
     // to avoie ambiguities when using this class directly, trap an pass one
     // to the implemenation these operations.
     // note: we presume that older compilers will never create a const
@@ -182,7 +193,7 @@ public:
             return polymorphic_oarchive::operator&(t);
         }
     #endif
-
+#endif
     // all current archives take a stream as constructor argument
     template <class _Elem, class _Tr>
     polymorphic_oarchive_impl(

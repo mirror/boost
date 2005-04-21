@@ -171,7 +171,6 @@ BOOST_DECL_ARCHIVE
 #endif
 xml_iarchive_impl<Archive>::init(){
     gimpl->init(is);
-    header = true;
 }
 
 template<class Archive>
@@ -191,8 +190,6 @@ xml_iarchive_impl<Archive>::xml_iarchive_impl(
 {
     if(0 == (flags & no_header))
         init();
-    if(0 != (flags & no_xml_tag_checking))
-        this->no_checking = true;
 }
 
 template<class Archive>
@@ -200,7 +197,7 @@ template<class Archive>
 BOOST_DECL_ARCHIVE
 #endif
 xml_iarchive_impl<Archive>::~xml_iarchive_impl(){
-    if(header)
+    if(0 != (get_flags() & no_header))
         gimpl->windup(is);
     delete gimpl;
 }
