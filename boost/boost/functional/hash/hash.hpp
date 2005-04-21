@@ -65,6 +65,10 @@ namespace boost
 
     template <class It> std::size_t hash_range(It first, It last);
     template <class It> void hash_range(std::size_t&, It first, It last);
+#if defined(__BORLANDC__)
+    template <class T> inline std::size_t hash_range(T*, T*);
+    template <class T> inline void hash_range(std::size_t&, T*, T*);
+#endif
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
     template <class T> void hash_combine(std::size_t& seed, T& v);
@@ -211,7 +215,8 @@ namespace boost
 
         for(; first != last; ++first)
         {
-            hash_combine(seed, first[0]);
+            seed ^= hash_detail::call_hash<T>::call(*first)
+                + 0x9e3779b9 + (seed<<6) + (seed>>2);
         }
 
         return seed;
@@ -222,7 +227,8 @@ namespace boost
     {
         for(; first != last; ++first)
         {
-            hash_combine(seed, first[0]);
+            seed ^= hash_detail::call_hash<T>::call(*first)
+                + 0x9e3779b9 + (seed<<6) + (seed>>2);
         }
     }
 #endif
@@ -231,13 +237,13 @@ namespace boost
     template< class T, unsigned N >
     inline std::size_t hash_value(const T (&array)[N])
     {
-        return hash_range(array, array+N);
+        return hash_range(array, array + N);
     }
 
     template< class T, unsigned N >
     inline std::size_t hash_value(T (&array)[N])
     {
-        return hash_range(array, array+N);
+        return hash_range(array, array + N);
     }
 #endif
 
