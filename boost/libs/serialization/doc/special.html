@@ -26,13 +26,6 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#derivedpointers">Pointers to Objects of Derived Classes</a>
-  <dl class="page-index">
-    <dt><a href="#registration">Registration</a>
-    <dt><a href="#instantiation">Instantiation</a>
-    <dt><a href="#selectivetracking">Selective Tracking</a>
-    <dt><a href="#runtimecasting">Runtime Casting</a>
-  </dl>
   <dt><a href="#objecttracking">Object Tracking</a>
   <dt><a href="#classinfo">Class Information</a>
   <dt><a href="#portability">Archive Portability</a>
@@ -45,232 +38,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="exceptions.html">Archive Exceptions</a>
   <dt><a href="exception_safety.html">Exception Safety</a>
 </dl>
-<h3><a name="derivedpointers">Pointers to Objects of Derived Classes</a></h3>
-<h4><a name="registration">Registration</a></h4>
-Consider the following:
-<pre><code>
-class base {
-    ...
-};
-class derived_one : public base {
-    ...
-};
-class derived_two : public base {
-    ...
-};
-main(){
-    ...
-    base *b;
-    ar &amp; b; 
-}
-</code></pre>
-When loading <code style="white-space: normal">b</code> what kind of object should be created? 
-An object of class <code style="white-space: normal">derived_one</code>,
-<code style="white-space: normal">derived_two</code>, or maybe <code style="white-space: normal">base</code>?
-<p>
-If this situation is not addressed by one of the methods described below,
-an <a target="detail" href="exceptions.html#unregistered_class">
-<code style="white-space: normal">unregistered_class</code></a> exception will be thrown when serialization is
-invoked.
-<p>Many times this situation is resolved automatically by the serialization
-library.
-<p>
-The system "registers" each class in an archive the first time an object of that
-class it is serialized and assigns a sequential number to it.  Next time an
-object of that class is serialized in that same archive, this number is written
-in the archive.  So every class is identified uniquely within the archive.  
-When the archive is read back in, each new sequence number is re-associated with 
-the class being read.  Note that this implies that "registration" has to occur
-during both save and load so that the class-integer table built on load
-is identical to the class-integer table built on save. In fact, the key to
-whole serialization system is that things are always saved and loaded in
-the same sequence.  This includes "registration"
-<p>
-In many situations the problem never comes up. Consider:
-<pre><code>
-main(){
-    derived_one d1;
-    derived_two d2:
-    ...
-    ar &gt;&gt; d1;
-    ar &gt;&gt; d2;
-    // A side effect of serialization of objects d1 and d2 is that
-    // the classes derived_one and derived_two become known to the archive.
-    // So subsequent serialization of those classes by base pointer works
-    // without any special considerations.
-    base *b;
-    ar &amp; b; 
-}
-</code></pre>
-Here, the problem doesn't present itself. When <code style="white-space: normal">b</code> is read it is
-preceded by a unique (to the archive) class identifier which
-has previously been related to class <code style="white-space: normal">derived_one</code> or
-<code style="white-space: normal">derived_two</code>.
-<p>
-If a derived class hasn't been automatically "registered" as described
-above, we have the option of registering it explicitly.  All archives are
-derived from a base class which implements the following template:
-<pre><code>
-template&lt;class T&gt;
-register_type();
-</code></pre>
-So our problem could just as well be addressed by writing:
-<pre><code>
-main(){
-    ...
-    ar.template register_type&lt;derived_one&gt;();
-    ar.template register_type&lt;derived_two&gt;();
-    base *b;
-    ar &amp; b; 
-}
-</code></pre>
-Note that if the serialization function is split between save and load, both
-functions must include the registration.  This is required to keep the save
-and corresponding load in syncronization.
-<p>
-This will work but may be inconvenient.  We don't always know which derived
-classes we are going to serialize when we write the code to serialize through
-a base class pointer.  Every time a new derived class is written we have to
-go back to all the places where the base class is serialized and update the
-code.
-<p>
-So we have another method:
-<pre><code>
-#include &lt;boost/serialization/export.hpp&gt;
-...
-BOOST_CLASS_EXPORT_GUID(derived_one, "derived_one")
-BOOST_CLASS_EXPORT_GUID(derived_two, "derived_two")
 
-main(){
-    ...
-    base *b;
-    ar &amp; b; 
-}
-</code></pre>
-The macro <code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> associates a string literal
-with a class. In the above example we've used a string rendering
-of the class name. If a object of such an "exported" class is serialized
-through a pointer and is otherwise unregistered, the "export" string is 
-included in the archive. When the archive 
-is later read, the string literal is used to find the class which 
-should be created by the serialization library.
-This permits each class to be in a separate header file along with its 
-string identifier. There is no need to maintain a separate "pre-registration" 
-of derived classes that might be serialized.  This method of
-registration is referred to as "key export".  More information on this
-topic is found in the section Class Traits - 
-<a target="detail" href="traits.html#export">Export Key</a>.
-<p>
-<h4><a name="instantiation">Instantiation</a></h4>
-Registration by means of any of the above methods fulfill another role 
-whose importance might not be obvious.  This system relies on templated
-functions of the form <code style="white-space: normal">template&lt;class Archive, class T&gt;</code>.
-This means that serialization code must be instantiated for each
-combination of archive and data type that is serialized in the program.
-<p>
-Polymorphic pointers of derived classes may never be referred to 
-explictly by the program so normally code to serialize such classes
-would never be instantiated.  So in addition to including export key
-strings in an archive, <code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> explicitly
-instantiates the class serialization code for all archive classes used 
-by the program.  
-<p>
-In order to do this, 
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-includes meta programming code to build a <code style="white-space: normal">mpl::list</code>  
-of all the file types used by the module by checking for definition of the header 
-inclusion guards.
-
-Using this list,  
-<code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> will explicitly instantiate serialization
-code for all exported classes.
-For this implementaton to function, the header file 
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-has to come after all the archive header files.  This is enforced
-by code at the end of the header file:
-<a href="../../../boost/archive/basic_archive.hpp" target="basic_archive_hpp">basic_archive.hpp</a>
-which will trip a STATIC_ASSERT if this requirement is violated.
-
-<h4><a name="selectivetracking">Selective Tracking</a></h4>
-Whether or not an object is tracked is determined by its
-<a target="detail" href="traits.html#tracking">object tracking trait</a>.
-The default setting for user defined types is <code style="white-space: normal">track_selectively</code>.
-That is, track objects if and only if they are serialized through pointers anywhere
-in the program. Any  objects that are "registered" by any of the above means are presumed
-to be serialized through pointers somewhere in the program and therefore
-would be tracked. In certain situations this could lead to an inefficiency.
-Suppose we have a class module used by multiple programs.  Because
-some programs serializes polymorphic pointers to objects of this class, we 
-<a target="detail" href="traits.html#export">export</a> a class
-identifier by specifying <code style="white-space: normal">BOOST_CLASS_EXPORT</code> in the
-class header.  When this module is included by another program,
-objects of this class will always be tracked even though it
-may not be necessary.  This situation could be addressed by using 
-<a target="detail" href="traits.html#tracking"><code style="white-space: normal">track_never</code></a>  
-in those programs.
-<p>
-It could also occur that even though a program serializes through 
-a pointer, we are more concerned with efficiency than avoiding the
-the possibility of creating duplicate objects.  It could be
-that we happen to know that there will be no duplicates.  It could
-also be that the creation of a few duplicates is benign and not
-worth avoiding given the runtime cost of tracking duplicates.
-Again, <a target="detail" href="traits.html#tracking"><code style="white-space: normal">track_never</code></a>  
-can be used.
-<h4><a name="runtimecasting">Runtime Casting</a></h4>
-In order to properly translate between base and derived pointers
-at runtime, the system requires each base/derived pair be found
-in a table.  A side effect of serializing a base object with
-<code style="white-space: normal">boost::serialization::base_object&lt;Base&gt;(Derived &)</code>
-is to ensure that the base/derived pair is added to the table
-before the <code style="white-space: normal">main</code> function is entered.
-This is very convenient and results in a clean syntax.  The only
-problem is that it can occur where a derived class serialized
-through a pointer has no need to invoke the serialization of
-its base class.  In such a case, there are two choices.  The obvious
-one is to invoke the base class serialization with <code style="white-space: normal">base_object</code>
-and specify an empty function for the base class serialization.
-The alternative is to "register" the Base/Derived relationship
-explicitly by invoking the template 
-<code style="white-space: normal">void_cast_register&lt;Base, Derived&gt;();</code>.
-Note that this usage of the term "register" is not related
-to its usage in the previous section.  Here is an example of how this is done:
-<pre><code>
-#include &lt;sstream&gt;
-#include &lt;boost/serialization/serialization.hpp&gt;
-#include &lt;boost/archive/text_iarchive.hpp&gt;
-#include &lt;boost/serialization/export.hpp&gt;
-
-class base {
-    friend class boost::serialization::access;
-    //...
-    // only required when using method 1 below
-    // no real serialization required - specify a vestigial one
-    template&lt;class Archive&gt;
-    void serialize(Archive &amp; ar, const unsigned int file_version){}
-};
-
-class derived : public base {
-    friend class boost::serialization::access;
-    template&lt;class Archive&gt;
-    void serialize(Archive &amp; ar, const unsigned int file_version){
-        // method 1 : invoke base class serialization
-        boost::serialization::base_object&lt;base&gt;(*this);
-        // method 2 : explicitly register base/derived relationship
-        boost::serialization::void_cast_register&lt;base, derived&gt;();
-    }
-};
-
-BOOST_CLASS_EXPORT_GUID(derived, "derived")
-
-main(){
-    //...
-    std::stringstream ss;
-    boost::archive::text_iarchive ar(ss);
-    base *b;
-    ar &gt;&gt; b; 
-}
-</code></pre>
 
 <h3><a name="objecttracking">Object Tracking</a></h3>
 Depending on how the class is used and other factors, serialized objects
@@ -318,13 +86,16 @@ will ensure that the process of serialization doesn't
 change the state of the objects being serialized.  An attempt to do this
 would constitute augmentation of the concept of saving of state with
 some sort of non-obvious side effect. This would almost surely be a mistake 
-and a likely source of very subtle bugs.  
+and a likely source of very subtle bugs.
+<p>
+Unfortunately, implementation issues currently prevent the detection of this kind of
+error when the data item is wrapped as a name-value pair.
 <p>
 A similar problem can occur when different objects are loaded to and address
 which is different from the final location:
 <pre><code>
 template&lt;class Archive&gt;
-void save(boost::basic_oarchive  &amp; ar, const unsigned int version) const
+void load(boost::basic_oarchive  &amp; ar, const unsigned int version) const
 {
     for(int i = 0; i &lt; 10; ++i){
         A x;
@@ -341,7 +112,7 @@ addressed by altering the above code thusly:
 
 <pre><code>
 template&lt;class Archive&gt;
-void save(boost::basic_iarchive  &amp; ar, const unsigned int version) const
+void load(boost::basic_iarchive  &amp; ar, const unsigned int version) const
 {
     for(int i = 0; i &lt; 10; ++i){
         A x;

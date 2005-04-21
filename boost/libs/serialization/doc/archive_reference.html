@@ -32,21 +32,26 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#polymorphic">Polymorphic Archives</a>
 </dl>
 <h3><a name="implementation">Implementation</a></h3>
+The <a href="archives.html"><strong>Archive</strong></a> concept specifies the functions that a
+class must implement to in order to be used to serialize 
+<a href="serialization.html"><strong>Serializable</strong></a> types. 
+The library implements a family of archives appropriate for different purposes.  
+This section describes how they have been implemented and how one can implement his own archive class.
+Our discussion will focus on archives used for loading as the hierarchy is exactly analogous
+for archives used for saving data.
+<p>
+Our archives have been factored in to a tree of classes in order to minimize
+repetition of code.  This is shown in the accompanying 
+<a target="class_diagram" href="class_diagram.html">class diagram</a>.
 All input archives should be derived from the following template:
 <pre><code>
 template&lt;class Archive&gt;
 detail::common_iarchive;
 </code></pre>
-
-This class uses the "Curiously Recurring Template Pattern" (CRTP)
-to implement static (I.E. compile time) polymorphism.  It traps common
-functions and invokes functionality in the most derived class.  
-In order to do the latter, the class is a template with the class
-name of the most derived class as an argument.  
-
 <h4>Minimum Requirments</h4>
-A new archive class derived from the above <strong>must</strong> contain
-the following declarations:
+An instance of the this template handles all the "bookkeeping" associated
+with serialization. In order to be a functional only the following additional
+functions <strong>must</strong> be defined:
 <dl>
 <dt><h4><code>void load(T &t);</code></h4></dt>
 <dd>
@@ -105,7 +110,8 @@ The simplest possible output archive class is exactly analogous to the above.
 In the following discussion, only input archives will be addressed.
 Output archives are exactly symmetrical to input archives.
 <p>
-Given a suitable definition of <code style="white-space: normal">load</code>, 
+Given a suitable definitions of <code style="white-space: normal">load</code>
+and <code style="white-space: normal">load_binary</code>, 
 any program using serialization with a conforming C++ compiler should compile 
 and run with this archive class.
 
@@ -114,7 +120,6 @@ and run with this archive class.
 The <code style="white-space: normal">detail::common_iarchive</code> class contains
 a number of functions that are used by various parts of the serialization library
 to help render the archive in a particular form.
-
 
 <dl>
 
@@ -265,12 +270,14 @@ In addition, there are 22 other tests which aren't related to any particular arc
 class.
 <p>
 The default <code style="white-space: normal">bjam</code> testing setup will run all
-the above described tests.  This will result in as many as 36 archive tests * 5 
-standard archives + 22 general tests = 202 tests.
+the above described tests.  This will result in as many as 39 archive tests * 5 
+standard archives + 25 general tests = 220 tests. Note that a complete test of the
+library would include DLL vs static library, release vs debug so the actual total 
+would be closer to 880 tests.
 <p>
 For each archive there is a header file in the test directory similar to the one below.
 The name of this archive is passed to the test program by setting the
-environmental variable <code style="white-space: normal">BOOST_TEST_ARCHIVE</code>
+environmental variable <code style="white-space: normal">BOOST_ARCHIVE_TEST</code>
 to the name of the header.  Here is the header file 
 <code style="white-space: normal">test_archive.hpp</code> . Test header files for
 other archives are similar.

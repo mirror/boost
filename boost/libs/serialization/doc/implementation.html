@@ -218,6 +218,12 @@ instantiations have the same specification - even though they have different
 template arguments. The example <code style="white-space: normal">
 demo_portable_iarchive.cpp</code> would have to reformulated as a library or dll
 similar to the pre-defined archives in order to function.
+<p>
+This compiler does not have RTTI or exception handling turned on by default.  Although
+they are not strictly necessary to use the serialization package, the example and test
+program presume that they are enabled.  So be sure your command line or IDE settings 
+enable these features if you want
+these switches are enabled if you want to build and run these programs.
 
 <h5>Using the Visual C++ IDE</h5>
 The library includes a VC++ 7.1 "Solution" - <code style="white-space: normal">BoostSerializationLibrary</code>

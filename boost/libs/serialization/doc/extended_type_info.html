@@ -1,0 +1,109 @@
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--
+(C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
+Use, modification and distribution is subject to the Boost Software
+License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt)
+-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Serialization - extended_type_info</title>
+</head>
+<body link="#0000ff" vlink="#800080">
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary="header">
+  <tr> 
+    <td valign="top" width="300"> 
+      <h3><a href="../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../boost.png" border="0"></a></h3>
+    </td>
+    <td valign="top"> 
+      <h1 align="center">Serialization</h1>
+      <h2 align="center"><code style="white-space: normal">extended_type_info</code></h2>
+    </td>
+  </tr>
+</table>
+<hr>
+<h3>Motivation</h3>
+The serialization library needs a system like 
+<code style="white-space: normal">type_info/typeid()</code> to perform
+the following functions
+<ol>
+  <li>
+     given a pointer to a type T discover the true type pointed to.
+  <li>
+     given an "external" key - determine what type of object to create.
+</ol>
+<h3>The problem with <code style="white-space: normal">std::type_info</code></h3>
+<ul>
+  <li>
+    The main function we require - <code style="white-space: normal">std::typeid()</code>
+    is not available in all environments. Support for this function depends upon
+    runtime typing(RTTI) support from the compiler.  This may be non-existent
+    or not enabled for reasons such as a percieved inefficiency.
+  <li>
+    <code style="white-space: normal">std::type_info</code> includes a string
+    containing type name.  This would seem to satisfy 2) above.
+    But the format of this string is not consistent accross compilers, libraries, 
+    and operating systems. This makes it unusable for support of portable archives.
+  <li>
+    Even if the type name string could somehow be made portable, there is no 
+    guarentee that class headers would be included in the same name space accross 
+    different applications. In fact, including different headers in different
+    name spaces is an accepted method used to avoid name space conflicts.
+    Thus the namespace::class_name can't be used as a key.
+  <li>
+    We may want the ability to serialize objects through a base class even though
+    they have no <code style="white-space: normal">virtual</code> function.  That
+    is, objects of classes which are not polymorphic in the strict C++ sense.  This
+    is not supported by the standard system.
+  <li>
+    There exists the possibility that different classes use different type id 
+    mechanism.  The class header might include this information. If we want to 
+    import class headers accross applications, its convenient that the type id
+    mechanism support inter-operability accross different type id systems.
+</ul>
+<h3>Features</h3>
+<code style="white-space: normal">extended_type_info</code> is and implementation
+of <code style="white-space: normal">std::type_info</code> with the following features:
+<ul>
+  <li>
+    Maintains a global table of extended_type_info records - one for each type known
+    to the program.
+  <li>
+    Permits several different type id systems to inter-operate.
+  <li>
+    permits association of an arbitrary key with a type.  Often this key would
+    be the class name - but it doesn't have to be.  This key is referred to as
+    a GUID - Globally Unique IDentifier.  Presumably it should be unique in the universe.
+    Typically this GUID would be in header files and be used to match type accross
+    applications.
+  <li>
+    permits the "mixing" of type info systems.  For example, one class might use 
+    <code style="white-space: normal">typeid()</code> to find the external identifier 
+    of a class while another might not.
+</ul>
+This library includes two different type id systems:
+<ul>
+  <li>
+    <code style="white-space: normal">extended_type_info_typeid</code>
+    which is implemented in terms of the standard
+    <code style="white-space: normal">typeid()</code>.
+  <li>
+    <code style="white-space: normal">extended_type_info_no_rtti</code>
+    which is implemented in a way that doesn't rely on the existence
+    RTTI.  However, it does require that all classes for which type id is to be used
+    be explictly assigned an external key - which otherwise would be optional.
+</ul>
+
+<h3>Usage</h3>
+<h3>Implemenation</h3>
+
+<hr>
+<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2005. 
+Distributed under the Boost Software License, Version 1.0. (See
+accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+</i></p>
+</body>
+</html>

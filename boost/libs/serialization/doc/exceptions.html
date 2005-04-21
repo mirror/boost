@@ -37,12 +37,14 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#unregistered_class"><code style="white-space: normal">unregistered_class</code></a>
   <dt><a href="#xml_archive_parsing_error"><code style="white-space: normal">xml_archive_parsing_error</code></a>
   <dt><a href="#xml_archive_tag_mismatch"><code style="white-space: normal">xml_archive_tag_mismatch</code></a>
+  <dt><a href="#xml_archive_tag_name_error"><code style="white-space: normal">xml_archive_tag_name_error</code></a>
 </dl>
 
 Archive operators can throw a <code style="white-space: normal">boost::archive_exception</code>
 object which can be caught by an application program.  These exceptions are defined
 in the files <a target="archive_exception_hpp" href="../../../boost/archive/archive_exception.hpp">
-boost/archive/archive_exception.hpp</a>.
+boost/archive/archive_exception.hpp</a> and <a target="archive_xml_exception_hpp" href="../../../boost/archive/archive_exception.hpp">
+boost/archive/archive_xml_exception.hpp</a>.
 <pre><code>
 namespace boost {
 namespace archive {
@@ -66,6 +68,11 @@ public:
                                 // on incompatible platform
         array_size_too_short,   // array being loaded doesn't fit in array allocated
         stream_error            // i/o error on stream
+        invalid_class_name,     // class name greater than the maximum permitted.
+                                // most likely a corrupted archive or an attempt
+                                // to insert virus via buffer overrun method.
+        unregistered_cast       // base - derived relationship not registered with 
+                                // void_cast_register
     } exception_code;
     exception_code code;
     archive_exception(exception_code c) : code(c) {}
@@ -77,24 +84,12 @@ class xml_archive_exception : public virtual archive_exception
 public:
     typedef enum {
         xml_archive_parsing_error,  // archive doesn't contain expected data 
-		xml_archive_tag_mismatch    // start/end tag in archive doesn't match program
+	xml_archive_tag_mismatch,   // start/end tag in archive doesn't match program
+        xml_archive_tag_name_error  // tag name contains invalid characters
+
     } exception_code;
     xml_archive_exception(exception_code c){}
-    virtual const char *what( ) const throw( )
-    {
-        const char *msg;
-        switch(code){
-        case xml_archive_parsing_error:
-            msg = "unrecognized XML syntax";
-			break;
-        case xml_archive_tag_mismatch:
-            msg = "XML start/end tag mismatch";
-			break;
-        default:
-            archive_exception::what();
-        }
-        return msg;
-    }
+    virtual const char *what( ) const throw();
 };
 
 } // archive
@@ -226,8 +221,13 @@ properly deserialize previously created archives.
 </ul>
 
 <h3><a name="xml_archive_tag_mismatch"><code style="white-space: normal">xml_archive_tag_mismatch</code></a></h3>
-This exception will be thrown if he start or end tag of and XML element doesn't match
+This exception will be thrown if the start or end tag of and XML element doesn't match
 the name specified for the object in the program.
+
+<h3><a name="xml_archive_tag_name_error"><code style="white-space: normal">xml_archive_tag_name_error</code></a></h3>
+This exception will be thrown if the tag name contains invalid characters.  Valid characters
+for an XML tag are: upper and lower case letters, digits, and the following punctuation: .(period),
+_(underscore), :(colon), and -(hyphen).
 
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 
