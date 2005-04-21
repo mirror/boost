@@ -64,7 +64,7 @@ protected:
     void BOOST_DECL_ARCHIVE save(const std::wstring &ws);
     #endif
     BOOST_DECL_ARCHIVE 
-    xml_oarchive_impl(std::ostream & os, unsigned int flags = 0);
+    xml_oarchive_impl(std::ostream & os, unsigned int flags);
     ~xml_oarchive_impl(){}
 public:
     void save_binary(const void *address, std::size_t count){

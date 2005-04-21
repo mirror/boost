@@ -63,15 +63,9 @@ protected:
     void load_override(T & t, BOOST_PFTO int){
         basic_text_iarchive<Archive>::load_override(t, 0);
     }
-    text_wiarchive_impl(std::wistream & is, unsigned int flags = 0) :
-        basic_text_iprimitive<std::wistream>(
-            is, 
-            0 != (flags & no_codecvt)
-        )
-    {
-        if(0 == (flags & no_header))
-            basic_text_iarchive<Archive>::init();
-    }
+    BOOST_DECL_WARCHIVE 
+    text_wiarchive_impl(std::wistream & is, unsigned int flags);
+    ~text_wiarchive_impl(){};
 };
 
 // do not derive from this class.  If you want to extend this functionality

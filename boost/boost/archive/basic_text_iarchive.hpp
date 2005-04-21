@@ -73,8 +73,8 @@ protected:
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     init(void);
 
-    basic_text_iarchive() : 
-        detail::common_iarchive<Archive>()
+    basic_text_iarchive(unsigned int flags) : 
+        detail::common_iarchive<Archive>(flags)
     {}
 
     ~basic_text_iarchive(){}

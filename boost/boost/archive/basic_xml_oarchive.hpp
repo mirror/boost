@@ -17,7 +17,6 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
 
 #include <boost/archive/detail/common_oarchive.hpp>
 
@@ -51,7 +50,6 @@ protected:
     unsigned int depth;
     bool indent_next;
     bool pending_preamble;
-    bool header;
     void 
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     indent();
@@ -85,7 +83,7 @@ protected:
     // Anything not an attribute and not a name-value pair is an
     // error and should be trapped here.
     template<class T>
-    void save_override(const T & t, BOOST_PFTO int)
+    void save_override(T & t, BOOST_PFTO int)
     {
         // If your program fails to compile here, its most likely due to
         // not specifying an nvp wrapper around the variable to
@@ -95,10 +93,15 @@ protected:
 
    // special treatment for name-value pairs.
     template<class T>
-    void save_override(const ::boost::serialization::nvp<T> & t, int)
-    {
+    void save_override(
+		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+		const
+		#endif
+		::boost::serialization::nvp<T> & t, 
+		int
+	){
         this->This()->save_start(t.name());
-        archive::save(* this->This(), t.value()); 
+        archive::save(* this->This(), t.const_value()); 
         this->This()->save_end(t.name());
     }
 
@@ -130,7 +133,7 @@ protected:
     save_override(const tracking_type & t, int);
 
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
-    basic_xml_oarchive(unsigned int flags = 0);
+    basic_xml_oarchive(unsigned int flags);
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     ~basic_xml_oarchive();
 };

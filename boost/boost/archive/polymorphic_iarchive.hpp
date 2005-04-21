@@ -104,15 +104,20 @@ public:
     }
     // special treatment for name-value pairs.
     template<class T>
-    void load_override(boost::serialization::nvp<T> & t, int)
-    {
+    void load_override(
+		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+		const
+		#endif
+		boost::serialization::nvp<T> & t, 
+		int
+	){
         load_start(t.name());
         archive::load(* this, t.value());
         load_end(t.name());
     }
 public:
     // utility function implemented by all legal archives
-    virtual unsigned int library_version() const = 0;
+    virtual unsigned int get_library_version() const = 0;
     virtual void load_binary(void * t, std::size_t size) = 0;
 
     // these are used by the serialization library implementation.

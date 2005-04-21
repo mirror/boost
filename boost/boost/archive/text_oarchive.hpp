@@ -71,7 +71,7 @@ protected:
     #endif
 protected:
     BOOST_DECL_ARCHIVE 
-    text_oarchive_impl(std::ostream & os, unsigned int flags = 0);
+    text_oarchive_impl(std::ostream & os, unsigned int flags);
     BOOST_DECL_ARCHIVE 
     ~text_oarchive_impl(){};
 public:

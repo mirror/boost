@@ -48,11 +48,12 @@ protected:
         basic_binary_oarchive<Archive>::init();
         basic_binary_oprimitive<Archive, std::wostream>::init();
     }
-    binary_woarchive_impl(std::wostream & os, unsigned int flags = 0) :
+    binary_woarchive_impl(std::wostream & os, unsigned int flags) :
         basic_binary_oprimitive<Archive, std::wostream>(
             os, 
             0 != (flags & no_codecvt)
-        )
+        ),
+        basic_binary_oarchive<Archive>(flags)
     {
        if(0 == (flags & no_header))
            init();

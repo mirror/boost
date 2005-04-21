@@ -84,13 +84,15 @@ struct class_name_type : private boost::noncopyable {
 enum archive_flags {
     no_header = 1,  // suppress archive header info
     no_codecvt = 2,  // suppress alteration of codecvt facet
-    no_xml_tag_checking = 4 // suppress checking of xml tags
+    no_xml_tag_checking = 4,   // suppress checking of xml tags
+    no_tracking = 8           // suppress ALL tracking
+//    no_object_creation = 16    // don't create any new objects
 };
 
 #define NULL_POINTER_TAG class_id_type(-1)
 
 BOOST_DECL_ARCHIVE const char * ARCHIVE_SIGNATURE();
-BOOST_DECL_ARCHIVE unsigned int ARCHIVE_VERSION();
+BOOST_DECL_ARCHIVE unsigned char ARCHIVE_VERSION();
 
 }// namespace archive
 }// namespace boost

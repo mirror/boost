@@ -73,10 +73,16 @@ protected:
     void load_override(T & t, BOOST_PFTO int){
         basic_xml_iarchive<Archive>::load_override(t, 0);
     }
-    void BOOST_DECL_WARCHIVE load_override(class_name_type & t, int);
-    void BOOST_DECL_WARCHIVE init();
-    BOOST_DECL_WARCHIVE xml_wiarchive_impl(std::wistream & is, unsigned int flags = 0) ;
-    BOOST_DECL_WARCHIVE ~xml_wiarchive_impl();
+    void 
+    BOOST_DECL_WARCHIVE 
+    load_override(class_name_type & t, int);
+    void 
+    BOOST_DECL_WARCHIVE 
+    init();
+    BOOST_DECL_WARCHIVE 
+    xml_wiarchive_impl(std::wistream & is, unsigned int flags) ;
+    BOOST_DECL_WARCHIVE 
+    ~xml_wiarchive_impl();
 };
 
 // we use the following because we can't use

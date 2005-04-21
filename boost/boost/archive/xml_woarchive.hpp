@@ -76,7 +76,7 @@ protected:
     void BOOST_DECL_WARCHIVE save(const std::wstring &ws);
     #endif
     BOOST_DECL_WARCHIVE 
-    xml_woarchive_impl(std::wostream & os, unsigned int flags = 0);
+    xml_woarchive_impl(std::wostream & os, unsigned int flags);
     ~xml_woarchive_impl(){}
 public:
     void save_binary(const void *address, std::size_t count){

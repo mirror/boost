@@ -116,7 +116,9 @@ protected:
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     init();
    
-    basic_binary_iarchive(){}
+    basic_binary_iarchive(unsigned int flags) :
+        detail::common_iarchive<Archive>(flags)
+    {}
 };
 
 } // namespace archive

@@ -73,7 +73,7 @@ protected:
 
     // default processing - invoke serialization library
     template<class T>
-    void save_override(const T & t, BOOST_PFTO int)
+    void save_override(T & t, BOOST_PFTO int)
     {
         archive::save(* this->This(), t);
     }
@@ -95,15 +95,16 @@ protected:
     void save_override(const class_id_optional_type & /* t */, int){}
 
     void save_override(const class_name_type & t, int){
-        this->This()->save(std::string(static_cast<const char *>(t)));
+		const std::string s(t);
+		* this->This() << s;
     }
 
     void 
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     init();
 
-    basic_text_oarchive() :
-        detail::common_oarchive<Archive>(),
+    basic_text_oarchive(unsigned int flags) :
+        detail::common_oarchive<Archive>(flags),
         delimiter(none)
     {}
 

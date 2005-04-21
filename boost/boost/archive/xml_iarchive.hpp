@@ -45,8 +45,6 @@ public:
     friend class load_access;
 protected:
 #endif
-    // flag indicationing whether or not a header was used
-    bool header;
     // instances of micro xml parser to parse start preambles
     // scoped_ptr doesn't play nice with borland - so use a naked pointer
     // scoped_ptr<xml_grammar> gimpl;
@@ -78,7 +76,7 @@ protected:
     BOOST_DECL_ARCHIVE 
     init();
     BOOST_DECL_ARCHIVE 
-    xml_iarchive_impl(std::istream & is, unsigned int flags = 0);
+    xml_iarchive_impl(std::istream & is, unsigned int flags);
     BOOST_DECL_ARCHIVE
     ~xml_iarchive_impl();
 };

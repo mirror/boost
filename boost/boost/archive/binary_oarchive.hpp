@@ -43,7 +43,7 @@ protected:
     // fails to compile one test (test_shared_ptr) without it !!!
     // make this protected so it can be called from a derived archive
     template<class T>
-    void save_override(const T & t, BOOST_PFTO int){
+    void save_override(T & t, BOOST_PFTO int){
         basic_binary_oarchive<Archive>::save_override(t, 0);
     }
     void init() {
@@ -55,14 +55,15 @@ protected:
             basic_binary_oprimitive<Archive, std::ostream>::init();
         #endif
     }
-    binary_oarchive_impl(std::ostream & os, unsigned int flags = 0) :
+    binary_oarchive_impl(std::ostream & os, unsigned int flags) :
         basic_binary_oprimitive<Archive, std::ostream>(
             os, 
-            0 != (flags & no_codecvt))
+            0 != (flags & no_codecvt)
+        ),
+        basic_binary_oarchive<Archive>(flags)
     {
-        if(0 == (flags & no_header)){
+        if(0 == (flags & no_header))
             init();
-        }
     }
 };
 

@@ -55,11 +55,12 @@ protected:
             basic_binary_iprimitive<Archive, std::istream>::init();
         #endif
     }
-    binary_iarchive_impl(std::istream & is, unsigned int flags = 0) :
+    binary_iarchive_impl(std::istream & is, unsigned int flags) :
         basic_binary_iprimitive<Archive, std::istream>(
             is, 
             0 != (flags & no_codecvt)
-        )
+        ),
+        basic_binary_iarchive<Archive>(flags)
     {
         if(0 == (flags & no_header)){
             init();

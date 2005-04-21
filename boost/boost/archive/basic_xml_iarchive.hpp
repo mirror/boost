@@ -48,8 +48,6 @@ protected:
     friend class detail::interface_iarchive<Archive>;
 protected:
 #endif
-    bool header;
-    bool no_checking;
     unsigned int depth;
     void
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
@@ -72,8 +70,13 @@ protected:
     // Anything not an attribute - see below - should be a name value
     // pair and be processed here
     template<class T>
-    void load_override(boost::serialization::nvp<T> & t, int)
-    {
+    void load_override(
+		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+		const
+		#endif
+		boost::serialization::nvp<T> & t, 
+		int
+	){
         load_start(t.name());
         archive::load(* this->This(), t.value());
         load_end(t.name());
@@ -91,7 +94,6 @@ protected:
     void
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     load_override(object_id_type & t, int);
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     void
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     load_override(version_type & t, int);
@@ -107,7 +109,7 @@ protected:
     // void load_override(class_name_type & t, int);
 
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
-    basic_xml_iarchive(unsigned int flags = 0);
+    basic_xml_iarchive(unsigned int flags);
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     ~basic_xml_iarchive();
 };

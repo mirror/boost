@@ -54,12 +54,12 @@ protected:
         basic_binary_iarchive<Archive>::init();
         basic_binary_iprimitive<Archive, std::wistream>::init();
     }
-    binary_wiarchive_impl(std::wistream & is, unsigned int flags = 0) :
+    binary_wiarchive_impl(std::wistream & is, unsigned int flags) :
         basic_binary_iprimitive<Archive, std::wistream>(
             is, 
             0 != (flags & no_codecvt)
         ),
-        basic_binary_iarchive<Archive>()
+        basic_binary_iarchive<Archive>(flags)
     {
         if(0 == (flags & no_header))
             init();

@@ -64,7 +64,7 @@ protected:
     // any datatype not specifed below will be handled
     // by this function
     template<class T>
-    void save_override(const T & t, BOOST_PFTO int)
+    void save_override(T & t, BOOST_PFTO int)
     {
         archive::save(* this->This(), t);
     }
@@ -104,14 +104,17 @@ protected:
 
     // explicitly convert to char * to avoid compile ambiguities
     void save_override(const class_name_type & t, int){
-        * this->This() << std::string(static_cast<const char *>(t));
+		const std::string s(t);
+		* this->This() << s;
     }
 
     void 
     BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     init();
 
-    basic_binary_oarchive(){}
+    basic_binary_oarchive(unsigned int flags) :
+        detail::common_oarchive<Archive>(flags)
+    {}
 };
 
 } // namespace archive

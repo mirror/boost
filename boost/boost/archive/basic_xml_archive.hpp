@@ -33,7 +33,8 @@ class xml_archive_exception :
 public:
     typedef enum {
         xml_archive_parsing_error,    // see save_register
-        xml_archive_tag_mismatch
+        xml_archive_tag_mismatch,
+        xml_archive_tag_name_error
     } exception_code;
     xml_archive_exception(exception_code c)
     {}
@@ -46,6 +47,9 @@ public:
             break;
         case xml_archive_tag_mismatch:
             msg = "XML start/end tag mismatch";
+            break;
+        case xml_archive_tag_name_error:
+            msg = "Invalid XML tag name";
             break;
         default:
             msg = archive_exception::what();

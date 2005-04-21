@@ -68,7 +68,7 @@ protected:
         basic_text_iarchive<Archive>::load_override(t, 0);
     }
     BOOST_DECL_ARCHIVE 
-    text_iarchive_impl(std::istream & is, unsigned int flags = 0);
+    text_iarchive_impl(std::istream & is, unsigned int flags);
     BOOST_DECL_ARCHIVE 
     ~text_iarchive_impl(){};
 };

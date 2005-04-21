@@ -66,11 +66,12 @@ protected:
     #ifndef BOOST_NO_STD_WSTRING
     void BOOST_DECL_WARCHIVE save(const std::wstring &ws);
     #endif
-    text_woarchive_impl(std::wostream & os, unsigned int flags = 0) :
+    text_woarchive_impl(std::wostream & os, unsigned int flags) :
         basic_text_oprimitive<std::wostream>(
             os, 
             0 != (flags & no_codecvt)
-        )
+        ),
+        basic_text_oarchive<Archive>(flags)
     {
         if(0 == (flags & no_header))
             basic_text_oarchive<Archive>::init();

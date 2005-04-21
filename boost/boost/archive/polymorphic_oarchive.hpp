@@ -93,22 +93,26 @@ public:
     virtual void save_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_oserializer & bos) = 0;
 
-    virtual unsigned int library_version() const = 0;
+    virtual unsigned int get_library_version() const = 0;
     virtual void end_preamble() = 0;
 
     // msvc and borland won't automatically pass these to the base class so
     // make it explicit here
     template<class T>
-    void save_override(const T & t, BOOST_PFTO int)
+    void save_override(T & t, BOOST_PFTO int)
     {
         archive::save(* this, t);
     }
     // special treatment for name-value pairs.
     template<class T>
-    void save_override(const ::boost::serialization::nvp<T> & t, int)
-    {
+    void save_override(
+		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+		const
+		#endif
+		::boost::serialization::nvp<T> & t, int
+	){
         save_start(t.name());
-        archive::save(* this, t.value());
+        archive::save(* this, t.const_value());
         save_end(t.name());
     }
 public:
