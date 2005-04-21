@@ -32,7 +32,7 @@ namespace serialization {
         const boost::optional<T> & t, 
         const unsigned int /*version*/
     ){
-        bool tflag = t;
+        const bool tflag = t;
         ar << boost::serialization::make_nvp("initialized", tflag);
         if (tflag)
            ar << boost::serialization::make_nvp("value", *t);

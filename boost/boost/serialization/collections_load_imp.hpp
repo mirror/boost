@@ -25,6 +25,7 @@
 #include <cassert>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/archive/basic_archive.hpp>
 
 #include <boost/aligned_storage.hpp>
 
@@ -194,7 +195,7 @@ public:
 };
 
 template<class Archive, class Container, class InputFunction, class R>
-inline void load_collection(Archive & ar, Container &s)
+inline void rebuild_collection(Archive & ar, Container &s)
 {
     s.clear();
     // retrieve number of elements
@@ -207,6 +208,28 @@ inline void load_collection(Archive & ar, Container &s)
         ifunc(ar, s);
     }
 }
+
+template<class Archive, class Container>
+inline void copy_collection(Archive & ar, Container &s)
+{
+    // retrieve number of elements
+    unsigned int count;
+    ar >> BOOST_SERIALIZATION_NVP(count);
+    assert(count == s.size());
+    BOOST_DEDUCED_TYPENAME Container::iterator it = s.begin();
+    while(count-- > 0){
+        ar >> boost::serialization::make_nvp("item", *it++);
+    }
+}
+
+template<class Archive, class Container, class InputFunction, class R>
+inline void load_collection(Archive & ar, Container &s){
+//    if(0 != (ar.get_flags() & boost::archive::no_object_creation))
+//        copy_collection<Archive, Container>(ar, s);
+//    else
+        rebuild_collection<Archive, Container, InputFunction, R>(ar, s);
+}
+
 
 } // namespace stl 
 } // namespace serialization

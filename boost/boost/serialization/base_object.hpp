@@ -20,10 +20,11 @@
 #include <boost/detail/workaround.hpp>
 
 #include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/identity.hpp>
+#include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_const.hpp>
+
 #include <boost/static_assert.hpp>
 
 #include <boost/serialization/extended_type_info.hpp>
@@ -65,24 +66,50 @@ namespace detail {
     
     // get the base type for a given derived type
     // preserving the const-ness
-    template<class Base, class Derived>
+    template<class B, class D>
     struct base_cast
     {
         typedef BOOST_DEDUCED_TYPENAME
             mpl::if_<
-                is_const<Derived>,
-                const Base,
-                Base
-            >::type type;
-        BOOST_STATIC_ASSERT(
-            is_const<type>::value && is_const<Derived>::value
-            || ! is_const<type>::value && ! is_const<Derived>::value
-        );
+				is_const<D>,
+				const B,
+				B
+			>::type type;
+        BOOST_STATIC_ASSERT(is_const<type>::value == is_const<D>::value);
     };
 } // namespace detail
 
+#if 0 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+	template<class Base, class Derived>
+	inline const Base & 
+	base_object(const Derived & d){
+		BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+		detail::base_register<Base, Derived>::invoke();
+		return d;
+	}
+	template<class Base, class Derived>
+	inline Base & 
+	base_object(Derived & d){
+		BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+		detail::base_register<Base, Derived>::invoke();
+		return d;
+	}
+#else
+	template<class Base, class Derived>
+	inline BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
+	base_object(Derived & d)
+	{
+		BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));
+		BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+		detail::base_register<Base, Derived>::invoke();
+		return d;
+	}
+#endif
+#endif
+
 // BORLAND
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<class Base, class Derived>
 const Base & 
 base_object(const Derived & d)

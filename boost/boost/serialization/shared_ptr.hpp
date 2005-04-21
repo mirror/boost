@@ -39,11 +39,11 @@
 // mark base class as an (uncreatable) base class
 BOOST_IS_ABSTRACT(boost::detail::sp_counted_base)
 
-namespace boost { 
-namespace serialization {
-
 /////////////////////////////////////////////////////////////
 // sp_counted_base_impl serialization
+
+namespace boost { 
+namespace serialization {
 
 template<class Archive, class P, class D>
 inline void serialize(
@@ -88,8 +88,14 @@ inline void load_construct_data(
     t->use_count_ = 0;
 }
 
+} // serialization
+} // namespace boost
+
 /////////////////////////////////////////////////////////////
 // shared_count serialization
+
+namespace boost { 
+namespace serialization {
 
 template<class Archive>
 inline void save(
@@ -111,23 +117,52 @@ inline void load(
         t.pi_->add_ref_copy();
 }
 
-template<class Archive>
-inline void serialize(
-    Archive & ar,
-    boost::detail::shared_count &t,
-    const unsigned int file_version
-){
-    boost::serialization::split_free(ar, t, file_version);
-}
+} // serialization
+} // namespace boost
+
+BOOST_SERIALIZATION_SPLIT_FREE(boost::detail::shared_count)
 
 /////////////////////////////////////////////////////////////
 // implement serialization for shared_ptr<T>
+
+namespace boost { 
+namespace serialization {
+
+template<class Archive, class T>
+inline void save(
+    Archive & ar,
+    const boost::shared_ptr<T> &t,
+    const unsigned int /* file_version */
+){
+    // only the raw pointer has to be saved
+    // the ref count is maintained automatically as shared pointers are loaded
+    ar.register_type(static_cast<
+        boost::detail::sp_counted_base_impl<T *, boost::checked_deleter<T> > *
+    >(NULL));
+    ar << boost::serialization::make_nvp("px", t.px);
+    ar << boost::serialization::make_nvp("pn", t.pn);
+}
+
+template<class Archive, class T>
+inline void load(
+    Archive & ar,
+    boost::shared_ptr<T> &t,
+    const unsigned int /* file_version */
+){
+    // only the raw pointer has to be saved
+    // the ref count is maintained automatically as shared pointers are loaded
+    ar.register_type(static_cast<
+        boost::detail::sp_counted_base_impl<T *, boost::checked_deleter<T> > *
+    >(NULL));
+    ar >> boost::serialization::make_nvp("px", t.px);
+    ar >> boost::serialization::make_nvp("pn", t.pn);
+}
 
 template<class Archive, class T>
 inline void serialize(
     Archive & ar,
     boost::shared_ptr<T> &t,
-    const unsigned int /* file_version */
+    const unsigned int file_version
 ){
     // correct shared_ptr serialization depends upon object tracking
     // being used.
@@ -135,13 +170,7 @@ inline void serialize(
         boost::serialization::tracking_level<T>::value
         != boost::serialization::track_never
     );
-    // only the raw pointer has to be saved
-    // the ref count is maintained automatically as shared pointers are loaded
-    ar.register_type(static_cast<
-        boost::detail::sp_counted_base_impl<T *, boost::checked_deleter<T> > *
-    >(NULL));
-    ar & boost::serialization::make_nvp("px", t.px);
-    ar & boost::serialization::make_nvp("pn", t.pn);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
 } // serialization

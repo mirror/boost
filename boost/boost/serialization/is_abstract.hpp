@@ -22,7 +22,7 @@
 #include <boost/mpl/bool_fwd.hpp>
 
 #ifndef BOOST_TT_IS_ABSTRACT_CLASS_HPP
-#if    defined(__GNUC__) && (34 <= _GNUC__ * 10 + __GNU_MINOR)  \
+#if    defined(__GNUC__) && (34 <= __GNUC__ * 10 + __GNU_MINOR__)  \
     || defined(_MSC_VER) && (1310 <= _MSC_VER)                  \
     || defined(__EDG_VERSION__)                                 \
     /**/

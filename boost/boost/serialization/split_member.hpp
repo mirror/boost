@@ -60,10 +60,10 @@ template<class Archive, class T>
 inline void split_member(
     Archive & ar, T & t, const unsigned int file_version
 ){
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_<
+    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
         BOOST_DEDUCED_TYPENAME Archive::is_saving,
-        detail::member_saver<Archive, T>, 
-        detail::member_loader<Archive, T>
+        mpl::identity<detail::member_saver<Archive, T> >, 
+        mpl::identity<detail::member_loader<Archive, T> >
     >::type typex;
     typex::invoke(ar, t, file_version);
 }
