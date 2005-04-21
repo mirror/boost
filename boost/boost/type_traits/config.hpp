@@ -41,7 +41,7 @@
 // when we want to test __stdcall etc function types with is_function etc
 // (Note, does not work with Borland, even though it does support __stdcall etc):
 //
-#if defined(_MSC_VER) && !defined(__BORLANDC__)
+#if defined(_MSC_EXTENSIONS) && !defined(__BORLANDC__)
 #  define BOOST_TT_TEST_MS_FUNC_SIGS
 #endif
 
