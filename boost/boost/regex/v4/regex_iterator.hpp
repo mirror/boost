@@ -63,6 +63,8 @@ public:
       match_flag_type f(flags);
       if(!what.length())
          f |= regex_constants::match_not_initial_null;
+      if(base != next_start)
+         f |= regex_constants::match_not_bob;
       bool result = regex_search(next_start, end, what, re, f);
       if(result)
          what.set_base(base);
