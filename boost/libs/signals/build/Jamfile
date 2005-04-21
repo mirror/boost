@@ -18,7 +18,6 @@ template signals-options
    : # sources
    : # requirements
      <define>BOOST_SIGNALS_NO_LIB=1        
-     <define>_GLIBCXX_DEBUG
      <sysinclude>$(BOOST_ROOT)
    ;
 
