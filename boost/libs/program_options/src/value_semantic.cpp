@@ -71,6 +71,25 @@ namespace boost { namespace program_options {
     {
         return arg;
     }
+    
+    unsigned 
+    untyped_value::min_tokens() const
+    {
+        if (m_zero_tokens)
+            return 0;
+        else
+            return 1;
+    }
+
+    unsigned 
+    untyped_value::max_tokens() const
+    {
+        if (m_zero_tokens)
+            return 0;
+        else
+            return 1;
+    }
+
 
     void 
     untyped_value::xparse(boost::any& value_store,

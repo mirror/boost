@@ -45,8 +45,8 @@ void test_variable_map()
     options_description desc;
     desc.add_options()
         ("foo,f", new untyped_value)
-        ("bar,b", po::value<string>()->implicit())
-        ("biz,z", po::value<string>()->implicit())
+        ("bar,b", po::value<string>())
+        ("biz,z", po::value<string>())
         ("baz", new untyped_value())
         ("output,o", new untyped_value(), "")
         ;

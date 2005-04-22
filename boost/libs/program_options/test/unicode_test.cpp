@@ -107,19 +107,19 @@ void test_command_line()
     desc.add_options()
         ("foo,f", new untyped_value(), "")
         // Explicit qualification is a workaround for vc6
-        ("bar,b", po::value<std::string>()->implicit(), "")
+        ("bar,b", po::value<std::string>(), "")
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
         ;
 
-    wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11", L"--bar", 
-                             L"-b4", L"-b", L"--plug3=10"};
+    wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11",
+                             L"-b4", L"--plug3=10"};
     vector<wstring> cmdline4 = sv(cmdline4_,
                                   sizeof(cmdline4_)/sizeof(cmdline4_[0]));
     vector<woption> a4 = 
         wcommand_line_parser(cmdline4).options(desc).run().options;
 
-    BOOST_REQUIRE(a4.size() == 7);
+    BOOST_REQUIRE(a4.size() == 5);
 
     check_value(a4[0], "foo", L"1\u0FF52");
     check_value(a4[1], "foo", L"4");

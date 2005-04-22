@@ -36,7 +36,7 @@ namespace boost { namespace program_options {
                        const value_semantic* s)
     : m_value_semantic(s)
     {
-        this->name(name);
+        this->set_name(name);
     }
                                            
 
@@ -46,38 +46,82 @@ namespace boost { namespace program_options {
                        const char* description)
     : m_description(description), m_value_semantic(s)
     {
-        this->name(name);
+        this->set_name(name);
     }
 
     option_description::~option_description()
     {
     }
 
-    option_description&
-    option_description::name(const char* _name)
+    bool 
+    option_description::match(const std::string& option, bool approx) const
     {
-        std::string name(_name);
-        string::size_type n = name.find(',');
-        if (n != string::npos) {
-            assert(n == name.size()-2);
-            m_long_name = name.substr(0, n);
-            m_short_name = name.substr(n+1,1);
-        } else {
-            m_long_name = name;
+        bool result = false;
+        if (!m_long_name.empty()) {
+
+            if (*m_long_name.rbegin() == '*')
+            {
+                // The name ends with '*'. Any specified name with the given
+                // prefix is OK.
+                if (option.find(m_long_name.substr(0, m_long_name.length()-1))
+                    == 0)
+                    result = true;
+            }
+
+            if (approx)
+            {
+                if (m_long_name.find(option) == 0)
+                    result = true;
+            }
+            else
+            {
+                if (m_long_name == option)
+                    result = true;
+            }
         }
-        return *this;
+         
+        if (m_short_name == option)
+            result = true;
+
+        return result;        
     }
 
-    const std::string&
-    option_description::short_name() const
-    {
-        return m_short_name;
+    const std::string& 
+    option_description::key(const std::string& option) const
+    {        
+        if (!m_long_name.empty()) 
+            if (m_long_name.find('*') != string::npos)
+                // The '*' character means we're long_name
+                // matches only part of the input. So, returning
+                // long name will remove some of the information,
+                // and we have to return the option as specified
+                // in the source.
+                return option;
+            else
+                return m_long_name;
+        else
+            return m_short_name;
     }
 
     const std::string&
     option_description::long_name() const
     {
         return m_long_name;
+    }
+
+    option_description&
+    option_description::set_name(const char* _name)
+    {
+        std::string name(_name);
+        string::size_type n = name.find(',');
+        if (n != string::npos) {
+            assert(n == name.size()-2);
+            m_long_name = name.substr(0, n);
+            m_short_name = '-' + name.substr(n+1,1);
+        } else {
+            m_long_name = name;
+        }
+        return *this;
     }
 
     const std::string&
@@ -95,17 +139,17 @@ namespace boost { namespace program_options {
     std::string 
     option_description::format_name() const
     {
-        if (!short_name().empty())
-            return string("-").append(short_name()).append(" [ --").
-            append(long_name()).append(" ]");
+        if (!m_short_name.empty())
+            return string(m_short_name).append(" [ --").
+            append(m_long_name).append(" ]");
         else
-            return string("--").append(long_name());
+            return string("--").append(m_long_name);
     }
 
     std::string 
     option_description::format_parameter() const
     {
-        if (!m_value_semantic->is_zero_tokens())
+        if (m_value_semantic->max_tokens() != 0)
             return m_value_semantic->name();
         else
             return "";
@@ -165,24 +209,7 @@ namespace boost { namespace program_options {
     void
     options_description::add(shared_ptr<option_description> desc)
     {
-        const string& s = desc->short_name();
-        const string& l = desc->long_name();
-        assert(!s.empty() || !l.empty());
-        if (!s.empty())
-            if (name2index.count("-" + s) != 0)
-                throw_exception(
-                    duplicate_option_error(
-                        "Short name '" + s + "' is already present"));
-            else
-                name2index["-" + s] = options.size();
-        if (!l.empty())
-            if (name2index.count(s) != 0)
-                throw_exception(
-                    duplicate_option_error(
-                        "Long name '" + s + "' is already present"));
-            else
-                name2index[l] = options.size();
-        options.push_back(desc);
+        m_options.push_back(desc);
         belong_to_group.push_back(false);
     }
 
@@ -192,8 +219,8 @@ namespace boost { namespace program_options {
         shared_ptr<options_description> d(new options_description(desc));
         groups.push_back(d);
 
-        for (size_t i = 0; i < desc.options.size(); ++i) {
-            add(desc.options[i]);
+        for (size_t i = 0; i < desc.m_options.size(); ++i) {
+            add(desc.m_options[i]);
             belong_to_group.back() = true;
         }
 
@@ -206,75 +233,54 @@ namespace boost { namespace program_options {
         return options_description_easy_init(this);
     }
 
-    unsigned
-    options_description::count(const std::string& name) const
-    {
-        return name2index.count(name);
-    }
-
-    unsigned
-    options_description::count_approx(const std::string& prefix) const
-    {
-        approximation_range er = find_approximation(prefix);
-        return distance(er.first, er.second);
-    }
-
     const option_description&
-    options_description::find(const std::string& name) const
+    options_description::find(const std::string& name, bool approx) const
     {
-        assert(this->count(name) != 0);
-        return *options[name2index.find(name)->second];
+        const option_description* d = find_nothrow(name, approx);
+        if (!d)
+            throw_exception(unknown_option(name));
+        return *d;
     }
 
-    const option_description&
-    options_description::find_approx(const std::string& prefix) const
+    const std::vector< shared_ptr<option_description> >& 
+    options_description::options() const
     {
-        approximation_range er = find_approximation(prefix);
-        assert(distance(er.first, er.second) == 1);
-        return *options[er.first->second];
+        return m_options;
     }
 
-    std::set<std::string>
-    options_description::keys() const
+    const option_description* 
+    options_description::find_nothrow(const std::string& name, 
+                                      bool approx) const
     {
-        set<string> result;
-        for (map<string, int>::const_iterator i = name2index.begin();
-             i != name2index.end();
-             ++i)
-            result.insert(i->first);
-        return result;
+        int found = -1;
+        // We use linear search because matching specified option
+        // name with the declared option name need to take care about
+        // case sensitivity and trailing '*' and so we can't use simple map.
+        for(unsigned i = 0; i < m_options.size(); ++i)
+        {
+            if (m_options[i]->match(name, approx))
+            {
+                if (found != -1)
+                {
+                    vector<string> alts;
+                    // FIXME: the use of 'key' here might not
+                    // be the best approach.
+                    alts.push_back(m_options[found]->key(name));
+                    alts.push_back(m_options[i]->key(name));
+                    throw_exception(ambiguous_option(name, alts));
+                }
+                else
+                {
+                    found = i;
+                }
+            }
+        }
+        if (found != -1) {
+            return m_options[found].get();
+        } else {
+            return 0;
+        }
     }
-
-    std::set<std::string>
-    options_description::primary_keys() const
-    {
-        set<string> result;
-        for (size_t i = 0; i < options.size(); ++i)
-            if (options[i]->long_name().empty())
-                result.insert("-" + options[i]->short_name());
-            else
-                result.insert(options[i]->long_name());
-        return result;
-    }
-
-    std::set<std::string>
-    options_description::approximations(const std::string& prefix) const
-    {
-        approximation_range er = find_approximation(prefix);
-        set<string> result;
-        for (name2index_iterator i = er.first; i != er.second; ++i)
-            result.insert(i->first);
-        return result;
-    }
-
-    options_description::approximation_range
-    options_description::find_approximation(const std::string& prefix) const
-    {
-        name2index_iterator b = name2index.lower_bound(prefix);
-        name2index_iterator e = name2index.upper_bound(prefix + char(CHAR_MAX));
-        return make_pair(b, e);
-    }
-
 
     BOOST_PROGRAM_OPTIONS_DECL
     std::ostream& operator<<(std::ostream& os, const options_description& desc)
@@ -494,9 +500,9 @@ namespace boost { namespace program_options {
         /* Find the maximum width of the option column */
         unsigned width(23);
         unsigned i; // vc6 has broken for loop scoping
-        for (i = 0; i < options.size(); ++i)
+        for (i = 0; i < m_options.size(); ++i)
         {
-            const option_description& opt = *options[i];
+            const option_description& opt = *m_options[i];
             stringstream ss;
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
             width = max(width, static_cast<unsigned>(ss.str().size()));            
@@ -506,12 +512,12 @@ namespace boost { namespace program_options {
         ++width;
             
         /* The options formatting style is stolen from Subversion. */
-        for (i = 0; i < options.size(); ++i)
+        for (i = 0; i < m_options.size(); ++i)
         {
             if (belong_to_group[i])
                 continue;
 
-            const option_description& opt = *options[i];
+            const option_description& opt = *m_options[i];
 
             format_one(os, opt, width, m_line_length);
 

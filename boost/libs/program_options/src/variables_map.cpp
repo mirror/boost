@@ -40,8 +40,8 @@ namespace boost { namespace program_options {
                 // TODO: what if we have different definition
                 // for the same option name during different calls
                 // 'store'.
-                bool composing = desc.count(k->first)
-                    && desc.find(k->first).semantic()->is_composing();
+                // FIXME: consider the 'false'.
+                bool composing = desc.find(k->first, false).semantic()->is_composing();
 
                 if (!composing)
                     final.insert(k->first);
@@ -61,10 +61,11 @@ namespace boost { namespace program_options {
                 continue;
 
             // Ignore options which are not described
-            if (desc.count(name) == 0)
-                continue;
+            //TODO: consider this.
+            //if (desc.count(name) == 0)
+            //    continue;
 
-            const option_description& d = desc.find(name);
+            const option_description& d = desc.find(name, false);
 
             variable_value& v = m[name];            
             if (v.defaulted()) {
@@ -83,17 +84,29 @@ namespace boost { namespace program_options {
         }
         
         // Second, apply default values.
-        set<string> keys = desc.primary_keys();
-        for (set<string>::const_iterator j = keys.begin(); j != keys.end(); ++j)
-            if (m.count(*j) == 0) {
-                const option_description& d = desc.find(*j);
-
+        const vector<shared_ptr<option_description> >& all = desc.options();
+        for(unsigned i = 0; i < all.size(); ++i)
+        {
+            const option_description& d = *all[i];
+            string key = d.key("");
+            // FIXME: this logic relies on knowledge of option_description
+            // internals.
+            // The 'key' is empty if options description contains '*'. 
+            // In that 
+            // case, default value makes no sense at all.
+            if (key.empty())
+            {
+                continue;
+            }
+            if (m.count(key) == 0) {
+            
                 boost::any def;
                 if (d.semantic()->apply_default(def)) {
-                    m[*j] = variable_value(def, true);
-                    m[*j].m_value_semantic = d.semantic();
+                    m[key] = variable_value(def, true);
+                    m[key].m_value_semantic = d.semantic();
                 }
             }        
+        }
     }
 
     BOOST_PROGRAM_OPTIONS_DECL 

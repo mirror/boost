@@ -99,32 +99,24 @@ void test_command_line()
     desc.add_options()
         ("foo,f", new untyped_value(), "")
         // Explicit qualification is a workaround for vc6
-        ("bar,b", po::value<std::string>()->implicit(), "")
+        ("bar,b", po::value<std::string>(), "")
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
         ;
-    char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "--bar", "-b4", "-b",
-                         "--plug3=10"};
+    char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "-b4",
+                          "--plug3=10"};
     vector<string> cmdline3 = sv(cmdline3_,
                                  sizeof(cmdline3_)/sizeof(cmdline3_[0]));
     vector<option> a3 = 
         command_line_parser(cmdline3).options(desc).run().options;
                        
-    BOOST_REQUIRE(a3.size() == 7);
+    BOOST_CHECK_EQUAL(a3.size(), 5u);
 
     check_value(a3[0], "foo", "12");
     check_value(a3[1], "foo", "4");
     check_value(a3[2], "bar", "11");
-
-    BOOST_CHECK(a3[3].string_key == "bar");
-    BOOST_REQUIRE(a3[3].value.size() == 0);
-
-    check_value(a3[4], "bar", "4");
-
-    BOOST_CHECK(a3[5].string_key == "bar");
-    BOOST_REQUIRE(a3[5].value.size() == 0);
-
-    check_value(a3[6], "plug3", "10");
+    check_value(a3[3], "bar", "4");
+    check_value(a3[4], "plug3", "10");
 }
 
 void test_config_file()
