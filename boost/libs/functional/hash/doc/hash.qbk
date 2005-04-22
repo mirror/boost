@@ -1,7 +1,7 @@
 [library Boost.Functional/Hash
     [authors [James, Daniel]]
     [copyright 2005 Daniel James]
-    [purpose Extendible hash function object]
+    [purpose Extendible TR1 hash function object]
     [category higher-order]
     [id hash]
     [dirname hash]
@@ -66,7 +66,7 @@ __issues__, this adds support for:
 When using a hash index with __multi-index-short__, you don't need to do
 anything to use __boost_hash as it uses it by default.
 To find out how to use a user-defined type, read the
-[link hash.custom section on extending boost::hash].
+[link hash.custom section on extending boost::hash for a custom data type].
 
 If your standard library supplies its own implementation of the unordered
 associative containers and you wish to use
@@ -182,6 +182,7 @@ The full example can be found in:
 [@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.hpp]
 and
 [@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.cpp].
+
 [blurb
 When writing a hash function, first look at how the equality function works.
 Objects that are equal must generate the same hash value.
@@ -245,14 +246,14 @@ When using __hash_combine the order of the
 calls matters.
 <programlisting>
     std::size_t seed = 0;
-    __hash_combine(seed, 1);
-    __hash_combine(seed, 2);
+    boost::hash_combine(seed, 1);
+    boost::hash_combine(seed, 2);
 </programlisting>
 results in a different seed to:
 <programlisting>
     std::size_t seed = 0;
-    __hash_combine(seed, 2);
-    __hash_combine(seed, 1);
+    boost::hash_combine(seed, 2);
+    boost::hash_combine(seed, 1);
 </programlisting>
 If you are calculating a hash value for data where the order of the data
 doesn't matter in comparisons (e.g. a set) you will have to ensure that the
@@ -887,10 +888,41 @@ return seed;
 [/ Remove this comment and everything goes wrong! ;) ]
 [endsect]
 
+[section:links Links]
+
+[*A Proposal to Add Hash Tables to the Standard Library]\n
+[@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1456.html]\n
+The hash table proposal explains much of the design. The hash function object
+is discussed in Section D.
+
+[*The C++ Standard Library Technical Report.]\n
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf]\n
+Contains the hash function specification in section 6.3.2.
+
+[*Library Extension Technical Report Issues List.]\n
+[@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf]\n
+The library implements the extension described in Issue 6.18.
+
+[*Methods for Identifying Versioned and Plagiarised Documents]\n
+Timothy C. Hoad, Justin Zobel\n
+[@http://www.cs.rmit.edu.au/~jz/fulltext/jasist-tch.pdf]\n
+Contains the hash function that __hash_combine is based on.
+
+[endsect]
+
 [section:acknowledgements Acknowledgements]
 
 This library is based on the design by Peter Dimov. During the inital development
 Joaquín M López Muñoz made many useful suggestions and contributed fixes.
+
+The review was managed by Thorsten Ottosen, and the library reviewed by:
+David Abrahams, Alberto Barbati, Topher Cooper, Caleb Epstein, Dave Harris,
+Chris Jefferson, Bronek Kozicki, John Maddock, Tobias Swinger,Jaap Suter
+and Rob Stewart.
+
+The implementation of the hash function for pointers is based on suggestions
+made by Alberto Barbati and Dave Harris. Dave Harris also suggested an
+important improvement to __hash_combine that was taken up.
 
 The original implementation came from Jeremy B. Maitin-Shepard's hash table
 library, although this is a complete rewrite.
