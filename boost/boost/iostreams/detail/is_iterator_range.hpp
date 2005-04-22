@@ -8,12 +8,19 @@
 #define BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED       
  
 #include <boost/iostreams/detail/bool_trait_def.hpp>
-#include <boost/range/iterator_range.hpp>         
 
-namespace boost { namespace iostreams {
+namespace boost { 
+
+// We avoid dependence on Boost.Range by using a forward declaration.
+template<typename Iterator>
+class iterator_range;
+    
+namespace iostreams {
 
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iterator_range, boost::iterator_range, 1)
 
-} } // End namespaces iostreams, boost.
+} // End namespace iostreams.
+
+} // End namespace boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED

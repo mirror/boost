@@ -15,13 +15,10 @@
 #include <cassert>
 #include <cstddef>                               // ptrdiff_t.
 #include <iosfwd>                                // streamsize, streamoff.
+#include <boost/detail/iterator.hpp>             // boost::iterator_traits.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/positioning.hpp>
-#include <boost/iterator/iterator_categories.hpp>
-#include <boost/iterator/iterator_traits.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <boost/range/iterator.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -33,28 +30,37 @@ namespace boost { namespace iostreams { namespace detail {
 // Used for simulated tag dispatch.
 template<typename Traversal> struct range_adapter_impl;
 
+//
+// Template name: range_adapter
+// Description: Device based on an instance of boost::iterator_range.
+// Template paramters:
+//     Mode - A mode tag.
+//     Range - An instance of iterator_range.
+//
 template<typename Mode, typename Range>
 class range_adapter {
+private:
+    typedef typename Range::iterator                  iterator;
+    typedef boost::detail::iterator_traits<iterator>  iter_traits;
+    typedef typename iter_traits::iterator_category   iter_cat;
 public:
-    typedef typename range_iterator<Range>::type         iterator;
-    typedef typename iterator_value<iterator>::type      char_type;
-    typedef typename iterator_traversal<iterator>::type  traversal;
+    typedef typename Range::value_type                char_type;
     struct io_category : Mode, device_tag { };
     typedef typename
             mpl::if_<
                 is_convertible<
-                    traversal,
-                    random_access_traversal_tag
+                    iter_cat,
+                    std::random_access_iterator_tag
                 >,
-                random_access_traversal_tag,
-                single_pass_traversal_tag
-            >::type                                  tag;
-    typedef range_adapter_impl<tag>                  impl;
+                std::random_access_iterator_tag,
+                std::forward_iterator_tag
+            >::type                                   tag;
+    typedef range_adapter_impl<tag>                   impl;
 
     explicit range_adapter(const Range& rng);
     range_adapter(iterator first, iterator last);
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
 private:
     iterator first_, cur_, last_;
@@ -71,14 +77,14 @@ range_adapter<Mode, Range>::range_adapter(iterator first, iterator last)
     : first_(first), cur_(first), last_(last) { }
 
 template<typename Mode, typename Range>
-std::streamsize range_adapter<Mode, Range>::read
+inline std::streamsize range_adapter<Mode, Range>::read
     (char_type* s, std::streamsize n)
 { return impl::read(cur_, last_, s, n); }
 
 template<typename Mode, typename Range>
-void range_adapter<Mode, Range>::write
+inline std::streamsize range_adapter<Mode, Range>::write
     (const char_type* s, std::streamsize n)
-{ impl::write(cur_, last_, s, n); }
+{ return impl::write(cur_, last_, s, n); }
 
 
 template<typename Mode, typename Range>
@@ -92,51 +98,52 @@ stream_offset range_adapter<Mode, Range>::seek
 //------------------Implementation of range_adapter_impl----------------------//
 
 template<>
-struct range_adapter_impl<single_pass_traversal_tag> {
-    template<typename Iter>
+struct range_adapter_impl<std::forward_iterator_tag> {
+    template<typename Iter, typename Ch>
     static std::streamsize read
-        ( Iter& cur, Iter& last, typename iterator_value<Iter>::type* s,
-          std::streamsize n )
+        (Iter& cur, Iter& last, Ch* s,std::streamsize n)
     {
         std::streamsize rem = n; // No. of chars remaining.
         while (cur != last && rem-- > 0) *s++ = *cur++;
-        return n - rem;
+        return n - rem != 0 ? n - rem : -1;
     }
 
-    template<typename Iter>
-    static void write
-        ( Iter& cur, Iter& last,
-          const typename iterator_value<Iter>::type* s, std::streamsize n )
+    template<typename Iter, typename Ch>
+    static std::streamsize write
+        (Iter& cur, Iter& last, const Ch* s, std::streamsize n)
     {
         while (cur != last && n-- > 0) *cur++ = *s++;
         if (cur == last && n > 0)
             throw write_area_exhausted();
+        return n;
     }
 };
 
 template<>
-struct range_adapter_impl<random_access_traversal_tag> {
-    template<typename Iter>
+struct range_adapter_impl<std::random_access_iterator_tag> {
+    template<typename Iter, typename Ch>
     static std::streamsize read
-        ( Iter& cur, Iter& last, typename iterator_value<Iter>::type* s,
-          std::streamsize n )
+        (Iter& cur, Iter& last, Ch* s,std::streamsize n)
     {
-        n = (std::min)(static_cast<std::streamsize>(last - cur), n);
-        std::copy(cur, cur + n, s);
-        cur += n;
-        return n;
+        std::streamsize result = 
+            (std::min)(static_cast<std::streamsize>(last - cur), n);
+        if (result)
+            std::copy(cur, cur + result, s);
+        cur += result;
+        return result != 0 ? result : -1;
     }
 
-    template<typename Iter>
-    static void write
-        ( Iter& cur, Iter& last,
-          const typename iterator_value<Iter>::type* s, std::streamsize n )
+    template<typename Iter, typename Ch>
+    static std::streamsize write
+        (Iter& cur, Iter& last, const Ch* s, std::streamsize n)
     {
         std::streamsize count =
             (std::min)(static_cast<std::streamsize>(last - cur), n);
         std::copy(s, s + count, cur);
         cur += count;
-        if (count < n) throw write_area_exhausted();
+        if (count < n) 
+            throw write_area_exhausted();
+        return n;
     }
 
     template<typename Iter>

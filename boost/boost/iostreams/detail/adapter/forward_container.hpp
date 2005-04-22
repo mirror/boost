@@ -41,9 +41,9 @@ public:
             *s++ = *pimpl_->ptr_++;
             ++result;
         }
-        return result;
+        return result != 0 ? result : -1;
     }
-    void write(const char_type* s, std::streamsize n)
+    std::streamsize write(const char_type* s, std::streamsize n)
     {
         BOOST_STATIC_ASSERT((is_convertible<Mode, output>::value));
         const char_type* s_end = s + n;
@@ -54,6 +54,7 @@ public:
             cnt().insert(cnt().end(), s, s_end);
             pimpl_->ptr_ = cnt().end();
         }
+        return n;
     }
     Container container() const { return *pimpl_->cnt_; }
     void container(const Container& cnt)

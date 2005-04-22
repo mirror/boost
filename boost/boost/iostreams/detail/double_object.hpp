@@ -26,9 +26,9 @@ namespace boost { namespace iostreams { namespace detail {
 template<typename T>
 class single_object_holder {
 public:
-    typedef typename call_traits<T>::param_type       param_type;
-    typedef typename call_traits<T>::reference        reference;
-    typedef typename call_traits<T>::const_reference  const_reference;
+    typedef typename boost::call_traits<T>::param_type       param_type;
+    typedef typename boost::call_traits<T>::reference        reference;
+    typedef typename boost::call_traits<T>::const_reference  const_reference;
     single_object_holder() { }
     single_object_holder(param_type t) : first_(t) { }
     reference first() { return first_; }
@@ -44,9 +44,9 @@ private:
 template<typename T>
 struct double_object_holder {
 public:
-    typedef typename call_traits<T>::param_type       param_type;
-    typedef typename call_traits<T>::reference        reference;
-    typedef typename call_traits<T>::const_reference  const_reference;
+    typedef typename boost::call_traits<T>::param_type       param_type;
+    typedef typename boost::call_traits<T>::reference        reference;
+    typedef typename boost::call_traits<T>::const_reference  const_reference;
     double_object_holder() { }
     double_object_holder(param_type t1, param_type t2)
         : first_(t1), second_(t2) { }

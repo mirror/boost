@@ -23,14 +23,12 @@
 namespace boost { namespace iostreams {
 
 //
-// Template name: line_filter.
+// Template name: tee_filter.
 // Template paramters:
-//      Ch - The character type.
-//      Alloc - The allocator type.
-// Description: Filter which processes data one line at a time.
+//      Device - A blocking Sink.
 //
 template<typename Device>
-class tee : public detail::basic_adapter<Device> {
+class tee_filter : public detail::basic_adapter<Device> {
 public:
     typedef typename detail::param_type<Device>::type  param_type;
     typedef typename io_char<Device>::type             char_type;
@@ -48,13 +46,16 @@ public:
         >::value
     ));
 
-    explicit tee(param_type dev) : detail::basic_adapter<Device>(dev) { }
+    explicit tee_filter(param_type dev) 
+        : detail::basic_adapter<Device>(dev) 
+        { }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
-        iostreams::write(snk, s, n);
-        iostreams::write(this->component(), s, n);
+        std::streamsize result = iostreams::write(snk, s, n);
+        iostreams::write(this->component(), s, result);
+        return result;
     }
 
     template<typename Next>
@@ -73,7 +74,8 @@ public:
 };
 
 template<typename Device>
-tee<Device> make_tee(const Device& dev) { return tee<Device>(dev); }
+tee_filter<Device> tee(const Device& dev) 
+{ return tee_filter<Device>(dev); }
 
 } } // End namespaces iostreams, boost.
 

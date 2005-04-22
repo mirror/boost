@@ -59,6 +59,13 @@ struct is_filter;
 template<typename T>
 struct is_direct;
 
+namespace detail {
+
+template<typename T>
+struct is_linked;
+
+} // End namespace detail.
+
 } } // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_IO_TRAITS_FWD_HPP_INCLUDED

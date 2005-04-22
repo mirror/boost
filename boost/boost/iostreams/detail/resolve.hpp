@@ -33,9 +33,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/type_traits/is_array.hpp>
-#include <boost/type_traits/is_const.hpp>
 
-#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 4224.
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4224.
 
 namespace boost { namespace iostreams { namespace detail {
 

@@ -44,16 +44,16 @@ struct external_device_closer {
 template<typename Filter, typename Device>
 struct external_filter_closer {
     external_filter_closer(Filter& flt, Device& dev, BOOST_IOS::openmode which)
-        : device_(&dev), which_(which) 
+        : filter_(flt), device_(dev), which_(which) 
         { }
     ~external_filter_closer() 
     { 
         try { 
-            boost::iostreams::close(*filter_, *device_, which_); 
+            boost::iostreams::close(filter_, device_, which_); 
         } catch (std::exception&) { } 
     }
-    Filter*               filter_;
-    Device*               device_;
+    Filter&               filter_;
+    Device&               device_;
     BOOST_IOS::openmode   which_;
 };
 

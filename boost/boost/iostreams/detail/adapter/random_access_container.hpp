@@ -63,7 +63,7 @@ public:
         : pimpl_(new impl(cnt, owns)) 
         { }
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek( std::streamoff, BOOST_IOS::seekdir,
                         BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
     Container container() const { return *pimpl_->cnt_; }
@@ -99,11 +99,11 @@ std::streamsize random_access_container<Container, Mode>::read
           cnt().begin() + pimpl_->gptr() + result, 
           s ); 
     pimpl_->gptr() += result;
-    return result;
+    return result != 0 ? result : -1;
 }
 
 template<typename Container, typename Mode>
-void random_access_container<Container, Mode>::write
+std::streamsize random_access_container<Container, Mode>::write
     (const char_type* s, std::streamsize n)
 {
     BOOST_STATIC_ASSERT((is_convertible<Mode, output>::value));
@@ -117,6 +117,7 @@ void random_access_container<Container, Mode>::write
         cnt().insert(cnt().end(), s + amt, s + n);
         pimpl_->pptr() = static_cast<streamoff>(cnt().size());
     }
+    return n;
 }
 
 template<typename Container, typename Mode>

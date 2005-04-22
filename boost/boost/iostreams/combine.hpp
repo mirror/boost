@@ -51,7 +51,7 @@ public:
         { };
     combined_device(const Source& src, const Sink& snk);
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     void close(BOOST_IOS::openmode);
     #ifndef BOOST_NO_STD_LOCALE
         void imbue(const std::locale& loc);
@@ -91,8 +91,8 @@ public:
     { return boost::iostreams::read(in_, src, s, n); }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
-    { boost::iostreams::write(out_, snk, s, n); }
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
+    { return boost::iostreams::write(out_, snk, s, n); }
 
     template<typename Sink>
     void close(Sink& snk, BOOST_IOS::openmode which)
@@ -137,10 +137,6 @@ struct combined_view : detail::combined_traits<In, Out>::type {
     combined_view(const in_type& in, const out_type& out)
         : base_type(in, out) { }
 };
-
-//#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-//template<> struct combined_view<int, int> { };
-//#endif
 
 namespace detail {
 
@@ -189,9 +185,9 @@ combined_device<Source, Sink>::read(char_type* s, std::streamsize n)
 { return iostreams::read(src_, s, n); }
 
 template<typename Source, typename Sink>
-inline void
+inline std::streamsize
 combined_device<Source, Sink>::write(const char_type* s, std::streamsize n)
-{ iostreams::write(sink_, s, n); }
+{ return iostreams::write(sink_, s, n); }
 
 template<typename Source, typename Sink>
 inline void

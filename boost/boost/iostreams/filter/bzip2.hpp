@@ -222,6 +222,7 @@ public:
     void close();
 private:
     void init();
+    bool eof_; // Guard to make sure filter() isn't called after it returns false.
 };
 
 } // End namespace detail.
@@ -332,23 +333,26 @@ inline void bzip2_compressor_impl<Alloc>::init()
 
 template<typename Alloc>
 bzip2_decompressor_impl<Alloc>::bzip2_decompressor_impl(bool small)
-    : bzip2_base(bzip2_params(small)) { }
+    : bzip2_base(bzip2_params(small)), eof_(false) { }
 
 template<typename Alloc>
 bool bzip2_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
       char*& dest_begin, char* dest_end, bool flush )
 {
-    if (!ready()) init();
+    if (!ready()) 
+        init();
+    if (eof_) 
+        return false;
     before(src_begin, src_end, dest_begin, dest_end);
     int result = decompress();
     after(src_begin, dest_begin);
     bzip2_error::check(result);
-    return result != bzip2::stream_end; 
+    return !(eof_ = result == bzip2::stream_end); 
 }
 
 template<typename Alloc>
-void bzip2_decompressor_impl<Alloc>::close() { end(false); }
+void bzip2_decompressor_impl<Alloc>::close() { end(false); eof_ = false; }
 
 template<typename Alloc>
 inline void bzip2_decompressor_impl<Alloc>::init()

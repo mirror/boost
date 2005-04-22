@@ -19,7 +19,7 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
-#include <boost/iostreams/detail/enable_if_streams.hpp>
+#include <boost/iostreams/detail/enable_if_stream.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/traits.hpp>      // io_mode, is_direct.
 #include <boost/mpl/if.hpp>
@@ -30,6 +30,23 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
+template<typename Filter, typename Device>
+struct composite_mode {
+    typedef typename io_mode<Filter>::type               filter_mode;
+    typedef typename io_mode<Device>::type               device_mode;
+    typedef is_convertible<filter_mode, dual_use>        is_dual_use;
+    typedef typename 
+            mpl::eval_if<
+                is_convertible<filter_mode, dual_use>,
+                mpl::if_<
+                    is_convertible<device_mode, input>,
+                    input,
+                    output
+                >,
+                mpl::identity<device_mode>
+            >::type                                      type;
+};
+
 //
 // Template name: composite_device.
 // Description: Provides a Device view of a Filter, Device pair.
@@ -37,7 +54,10 @@ namespace detail {
 //      Filter - A model of Filter.
 //      Device - An indirect model of Device.
 //
-template<typename Filter, typename Device>
+template< typename Filter, 
+          typename Device,
+          typename Mode = 
+              typename composite_mode<Filter, Device>::type >
 class composite_device {
 private:
     typedef typename detail::param_type<Device>::type  param_type;
@@ -45,7 +65,7 @@ private:
 public:
     typedef typename io_char<Filter>::type             char_type;
     struct io_category
-        : io_mode<Filter>::type,
+        : Mode,
           device_tag,
           closable_tag,
           flushable_tag,
@@ -54,7 +74,7 @@ public:
         { };
     composite_device(const Filter& flt, param_type dev);
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which =
                             BOOST_IOS::in | BOOST_IOS::out );
@@ -94,7 +114,7 @@ public:
           optimally_buffered_tag
         { };
     composite_filter(const Filter1& filter1, const Filter2& filter2)
-        : composite_device_base<Filter, Device>(flt, filter2)
+        : filter1_(filter1), filter2_(filter2)
         { }
 
     template<typename Source>
@@ -105,10 +125,10 @@ public:
     }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         composite_device<Filter2, Sink> cmp(filter2_, snk);
-        iostreams::write(filter1_, cmp, s, n);
+        return iostreams::write(filter1_, cmp, s, n);
     }
 
     template<typename Device>
@@ -123,7 +143,11 @@ public:
     template<typename Device>
     void close( Device& dev,
                 BOOST_IOS::openmode which =
-                    BOOST_IOS::in | BOOST_IOS::out );
+                    BOOST_IOS::in | BOOST_IOS::out )
+    {
+        composite_device<Filter2, Device> cmp(filter2_, dev);
+        iostreams::close(filter1_, cmp, which);
+    }
 
     template<typename Device>
     bool flush(Device& dev)
@@ -153,7 +177,7 @@ private:
 template<typename Filter, typename FilterOrDevice>
 struct composite_traits
     : mpl::if_<
-          detail::is_device<FilterOrDevice>,
+          is_device<FilterOrDevice>,
           composite_device<Filter, FilterOrDevice>,
           composite_filter<Filter, FilterOrDevice>
       >
@@ -165,7 +189,7 @@ template<typename Filter, typename FilterOrDevice>
 struct composite_view : detail::composite_traits<Filter, FilterOrDevice>::type {
     typedef typename detail::param_type<FilterOrDevice>::type param_type;
     composite_view(const Filter& flt, param_type dev)
-        : detail::composite_traits<T>::type(flt, dev)
+        : detail::composite_traits<Filter, FilterOrDevice>::type(flt, dev)
         { }
 };
 
@@ -179,7 +203,7 @@ struct composite_view : detail::composite_traits<Filter, FilterOrDevice>::type {
 
 template<typename Filter, typename FilterOrDevice>
 composite_view<Filter, FilterOrDevice>
-compose( const Filter& filter, const FilterOrDevice& fod,
+compose( const Filter& filter, const FilterOrDevice& fod
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(FilterOrDevice) )
 { return composite_view<Filter, FilterOrDevice>(filter, fod); }
 
@@ -207,7 +231,7 @@ compose(const Filter& filter, std::basic_iostream<Ch, Tr>& io)
 
 template<typename Filter, typename FilterOrDevice>
 composite_view<Filter, FilterOrDevice>
-compose( const Filter& filter, const FilterOrDevice& fod,
+compose( const Filter& filter, const FilterOrDevice& fod
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(FilterOrDevice) )
 { return composite_view<Filter, FilterOrDevice>(filter, fod); }
 
@@ -263,51 +287,53 @@ compose (const Filter& filter, FilterOrDevice& fod)
 
 # endif // Borland 5.x, VC6-7.0 or GCC 2.9x //--------------------------------//
 #endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
+
 //----------------------------------------------------------------------------//
 
 namespace detail {
 
 //--------------Implementation of composite_device---------------------------//
 
-template<typename Filter, typename Device>
-composite_device<Filter, Device>::composite_device
+template<typename Filter, typename Device, typename Mode>
+composite_device<Filter, Device, Mode>::composite_device
     (const Filter& flt, param_type dev)
     : filter_(flt), device_(dev)
     { }
 
-template<typename Filter, typename Device>
-inline std::streamsize composite_device<Filter, Device>::read
+template<typename Filter, typename Device, typename Mode>
+inline std::streamsize composite_device<Filter, Device, Mode>::read
     (char_type* s, std::streamsize n)
 { return iostreams::read(filter_, device_, s, n); }
 
-template<typename Filter, typename Device>
-inline void composite_device<Filter, Device>::write
+template<typename Filter, typename Device, typename Mode>
+inline std::streamsize composite_device<Filter, Device, Mode>::write
     (const char_type* s, std::streamsize n)
 { return iostreams::write(filter_, device_, s, n); }
 
-template<typename Filter, typename Device>
-stream_offset composite_device<Filter, Device>::seek
+template<typename Filter, typename Device, typename Mode>
+stream_offset composite_device<Filter, Device, Mode>::seek
     (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 { return iostreams::seek(filter_, device_, off, way, which); }
 
-template<typename Filter, typename Device>
-void composite_device<Filter, Device>::close
+template<typename Filter, typename Device, typename Mode>
+void composite_device<Filter, Device, Mode>::close
     (BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
 {
-    external_closer<Filter, Device>  close_filter(filter_, device_);
-    external_closer<Device>          close_device(device_);
+    external_closer<Device>          close_device(device_, which);
+    external_closer<Filter, Device>  close_filter(filter_, device_, which);
 }
 
-template<typename Filter, typename Device>
-bool composite_device<Filter, Device>::flush()
+template<typename Filter, typename Device, typename Mode>
+bool composite_device<Filter, Device, Mode>::flush()
 {   // To do: consider using RAII.
     bool r1 = iostreams::flush(filter_, device_);
     bool r2 = iostreams::flush(device_);
     return r1 && r2;
 }
 
-template<typename Filter, typename Device>
-std::streamsize composite_device<Filter, Device>::optimal_buffer_size() const
+template<typename Filter, typename Device, typename Mode>
+std::streamsize 
+composite_device<Filter, Device, Mode>::optimal_buffer_size() const
 { return iostreams::optimal_buffer_size(device_); }
 
 } // End namespace detail.

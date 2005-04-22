@@ -26,8 +26,11 @@ public:
     typedef Ch        char_type;
     typedef sink_tag  io_category;
     explicit output_iterator_adapter(OutIt out) : out_(out) { }
-    void write(const char_type* s, std::streamsize n) 
-    { std::copy(s, s + n, out_); }
+    std::streamsize write(const char_type* s, std::streamsize n) 
+    { 
+        std::copy(s, s + n, out_); 
+        return n; 
+    }
 private:
     OutIt out_;
 };

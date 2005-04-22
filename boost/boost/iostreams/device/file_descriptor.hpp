@@ -61,7 +61,7 @@ public:
                BOOST_IOS::openmode base_mode =
                    BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
     void close();
 private:

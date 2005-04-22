@@ -61,15 +61,16 @@ public:
             BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy(s, &data_[ptr_], amt);
             ptr_ += amt;
         }
-        return amt;
+        return detail::check_eof(amt);
     }
 
     template<typename Sink>
-    void write(Sink&, const char_type* s, std::streamsize n)
+    std::streamsize write(Sink&, const char_type* s, std::streamsize n)
     {
         assert(!(state_ & f_read));
         state_ |= f_write;
         data_.insert(data_.end(), s, s + n);
+        return n;
     }
     
     typedef one_step_filter<Ch, Alloc> self;
@@ -100,14 +101,15 @@ private:
     template<typename Source>
     void do_read(Source& src)
     {
-        Ch buf[default_device_buffer_size];
+        using std::streamsize;
         vector_type data;
         while (true) {
-            std::streamsize n = 
-                boost::iostreams::read(src, buf, default_device_buffer_size);
-            data.insert(data.end(), buf, buf + n);
-            if (n < default_device_buffer_size)
+            const streamsize  size = default_device_buffer_size;
+            Ch                buf[size];
+            streamsize        amt;
+            if ((amt = boost::iostreams::read(src, buf, size)) == -1)
                 break;
+            data.insert(data.end(), buf, buf + amt);
         }
         do_filter(data, data_);
         state_ |= f_eof;

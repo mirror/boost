@@ -29,7 +29,7 @@ public:
           public closable_tag
         { };
     std::streamsize read(Ch*, std::streamsize) { return 0; }
-    void write(const Ch*, std::streamsize) { }
+    std::streamsize write(const Ch*, std::streamsize n) { return n; }
     stream_offset seek( stream_offset, BOOST_IOS::seekdir,
                         BOOST_IOS::openmode = 
                             BOOST_IOS::in | BOOST_IOS::out ) 

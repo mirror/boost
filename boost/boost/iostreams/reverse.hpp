@@ -14,7 +14,8 @@
 #include <algorithm>                             // copy, min.  
 #include <deque>                               
 #include <memory>                                // allocator.
-#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.
+#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.       
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/device/array.hpp>
@@ -99,7 +100,13 @@ protected:
         {
             chain<input, char_type> in;
             in.push(filter_);
+        #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+            iterator_range< std::vector<char>::iterator >
+                range(make_iterator_range(src));
+            in.push(range);
+        #else                 
             in.push(make_iterator_range(src));
+        #endif
             copy(in, iostreams::back_inserter(dest));
         }
 private:

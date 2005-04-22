@@ -28,14 +28,14 @@
               BOOST_PP_COMMA_IF(arity) typename Component> \
     ::boost::iostreams::pipeline< \
         ::boost::iostreams::detail::pipeline_segment< \
-            filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity) \
+            filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity, T) \
         >, \
         Component \
-    > operator|( const filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity)& f, \
+    > operator|( const filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity, T)& f, \
                  const Component& c ) \
     { \
         typedef ::boost::iostreams::detail::pipeline_segment< \
-                    filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity) \
+                    filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity, T) \
                 > segment; \
         return ::boost::iostreams::pipeline<segment, Component> \
                    (segment(f), c); \

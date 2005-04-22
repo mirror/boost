@@ -23,6 +23,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/constants.hpp>
+#include <boost/iostreams/detail/adapter/non_blocking_adapter.hpp>        
 #include <boost/iostreams/detail/buffer.hpp>       
 #include <boost/iostreams/detail/closer.hpp>    
 #include <boost/iostreams/detail/enable_if_stream.hpp>  
@@ -64,9 +65,16 @@ std::streamsize copy_impl( Source& src, Sink& snk,
     using namespace std;
     typedef typename io_char<Source>::type  char_type;
     typedef pair<char_type*, char_type*>    pair_type;
-    pair_type p = iostreams::input_sequence(src);
-    iostreams::write(snk, p.first, static_cast<streamsize>(p.second - p.first));
-    return static_cast<streamsize>(p.second - p.first);
+    pair_type                               p = iostreams::input_sequence(src);
+    std::streamsize size, total;
+    for ( total = 0, size = static_cast<streamsize>(p.second - p.first);
+          total < size; )
+    {
+        std::streamsize amt = 
+            iostreams::write(snk, p.first + total, size - total); 
+        total += amt;
+    }
+    return size;
 }
 
 template<typename Source, typename Sink>
@@ -77,17 +85,16 @@ std::streamsize copy_impl( Source& src, Sink& snk,
     using namespace std;
     typedef typename io_char<Source>::type  char_type;
     typedef pair<char_type*, char_type*>    pair_type;
-    detail::basic_buffer<char_type> buf(buffer_size);
-    pair_type p = snk.output_sequence();
+    detail::basic_buffer<char_type>         buf(buffer_size);
+    pair_type                               p = snk.output_sequence();
     streamsize total = 0;
     bool done  = false;
     while (!done) {
         streamsize amt;
-        done = (amt = iostreams::read(src, buf.data(), buffer_size)) 
-                    != 
-                buffer_size;
+        done = (amt = iostreams::read(src, buf.data(), buffer_size)) == -1;
         std::copy(buf.data(), buf.data() + amt, p.first + total);
-        total += amt;
+        if (amt != -1)
+            total += amt;
     }
     return total;
 }
@@ -96,18 +103,19 @@ template<typename Source, typename Sink>
 std::streamsize copy_impl( Source& src, Sink& snk, 
                            std::streamsize buffer_size,
                            mpl::false_, mpl::false_ )
-{   // Copy from an indirect Source to a indirect Sink.
+{   // Copy from an indirect Source to a indirect Sink. This algorithm
+    // can be improved by eliminating the non_blocking_adapter.
     typedef typename io_char<Source>::type char_type;
-    detail::basic_buffer<char_type> buf(buffer_size);
-    std::streamsize total = 0;
-    bool done  = false;
+    detail::basic_buffer<char_type>  buf(buffer_size);
+    non_blocking_adapter<Sink>       nb(snk);
+    std::streamsize                  total = 0;
+    bool                             done = false;
     while (!done) {
         std::streamsize amt;
-        done = (amt = iostreams::read(src, buf.data(), buffer_size)) 
-                    != 
-                buffer_size;
-        iostreams::write(snk, buf.data(), amt);
-        total += amt;
+        done = (amt = iostreams::read(src, buf.data(), buffer_size)) == -1;
+        iostreams::write(nb, buf.data(), amt);
+        if (amt != -1)
+            total += amt;
     }
     return total;
 }
@@ -119,11 +127,11 @@ std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
     typedef typename io_char<Source>::type  src_char;
     typedef typename io_char<Sink>::type    snk_char;
     BOOST_STATIC_ASSERT((is_same<src_char, snk_char>::value));
-    external_closer<Source> close_source(src, BOOST_IOS::in | BOOST_IOS::out);
-    external_closer<Sink> close_sink(snk, BOOST_IOS::in | BOOST_IOS::out);
+    external_closer<Source>  close_source(src, BOOST_IOS::in);
+    external_closer<Sink>    close_sink(snk, BOOST_IOS::out);
     streamsize result =
         copy_impl( src, snk, buffer_size, 
-                    is_direct<Source>(), is_direct<Sink>() );
+                   is_direct<Source>(), is_direct<Sink>() );
     return result; 
 }
 

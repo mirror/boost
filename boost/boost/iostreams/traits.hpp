@@ -63,6 +63,15 @@ template<typename T>
 struct is_std_io
     : mpl::or_< is_istream<T>, is_ostream<T>, is_streambuf<T> >
     { };
+
+namespace detail {
+
+template<typename T, typename Tr>
+class linked_streambuf;
+
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_linked, linked_streambuf, 2)
+
+} // End namespace detail.
                     
 //------------------Definitions of io_char------------------------------------//
 

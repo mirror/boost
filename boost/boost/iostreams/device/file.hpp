@@ -49,7 +49,7 @@ public:
                 BOOST_IOS::openmode base_mode =
                     BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek( stream_offset off, BOOST_IOS::seekdir way, 
                         BOOST_IOS::openmode which = 
                             BOOST_IOS::in | BOOST_IOS::out );
@@ -122,12 +122,15 @@ basic_file<Ch>::basic_file
 template<typename Ch>
 inline std::streamsize basic_file<Ch>::read
     (char_type* s, std::streamsize n)
-{ return pimpl_->file_.sgetn(s, n); }
+{ 
+    std::streamsize result = pimpl_->file_.sgetn(s, n); 
+    return result != 0 ? result : -1;
+}
 
 template<typename Ch>
-inline void basic_file<Ch>::write
+inline std::streamsize basic_file<Ch>::write
     (const char_type* s, std::streamsize n)
-{ pimpl_->file_.sputn(s, n); }
+{ return pimpl_->file_.sputn(s, n); }
 
 template<typename Ch>
 stream_offset basic_file<Ch>::seek

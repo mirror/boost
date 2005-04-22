@@ -47,7 +47,7 @@ public:
         // Device member functions.
 
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which = 
                             BOOST_IOS::in | BOOST_IOS::out );
@@ -62,8 +62,8 @@ public:
     { return iostreams::read(t_, src, s, n); }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
-    { iostreams::write(t_, snk, s, n); }
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
+    { return iostreams::write(t_, snk, s, n); }
 
     template<typename Device>
     stream_offset seek(Device& dev, stream_offset off, BOOST_IOS::seekdir way)
@@ -92,12 +92,14 @@ private:
 //------------------Implementation of mode_adapter----------------------------//
 
 template<typename Mode, typename T>
-std::streamsize mode_adapter<Mode, T>::read(char_type* s, std::streamsize n)
+std::streamsize mode_adapter<Mode, T>::read
+    (char_type* s, std::streamsize n)
 { return boost::iostreams::read(t_, s, n); }
 
 template<typename Mode, typename T>
-void mode_adapter<Mode, T>::write(const char_type* s, std::streamsize n)
-{ boost::iostreams::write(t_, s, n); }
+std::streamsize mode_adapter<Mode, T>::write
+    (const char_type* s, std::streamsize n)
+{ return boost::iostreams::write(t_, s, n); }
 
 template<typename Mode, typename T>
 stream_offset mode_adapter<Mode, T>::seek

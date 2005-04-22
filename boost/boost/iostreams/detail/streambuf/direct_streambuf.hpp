@@ -28,7 +28,9 @@
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // MSVC.
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost { namespace iostreams { 
+    
+namespace detail {
 
 template< typename T,
           typename Tr = 
@@ -96,7 +98,8 @@ private:
 
 template<typename T, typename Tr>
 direct_streambuf<T, Tr>::direct_streambuf() 
-    : ibeg_(0), iend_(0), obeg_(0), oend_(0), auto_close_(true) { }
+    : ibeg_(0), iend_(0), obeg_(0), oend_(0), auto_close_(true) 
+{ this->set_true_eof(true); }
 
 template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::open(const T& t, int, int)
@@ -284,7 +287,12 @@ inline bool direct_streambuf<T, Tr>::two_head() const
 
 //----------------------------------------------------------------------------//
 
-} } } // End namespaces detail, iostreams, boost.
+} // End namespace detail.
+
+
+
+
+} } // End namespaces iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp> // MSVC
 

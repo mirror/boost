@@ -9,7 +9,6 @@
 
 #include <boost/config.hpp>                     // BOOST_STATIC_CONSANT.
 #include <boost/mpl/bool.hpp>
-#include <boost/type_traits/detail/bool_trait_def.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace iostreams { namespace detail {

@@ -24,6 +24,7 @@
 #include <cstring>                         // memcpy.
 #include <exception>
 #include <boost/config.hpp>                // DEDUCED_TYPENAME.
+#include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/constants.hpp>   // default_filter_buffer_size.
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
@@ -42,6 +43,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_same.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
 
 namespace boost { namespace iostreams {
 
@@ -89,6 +92,7 @@ private:
 // Contains member data, open/is_open/close and buffer management functions.
 template<typename Device, typename Codecvt, typename Alloc>
 struct code_converter_impl {
+    typedef typename codecvt_extern<Codecvt>::type          extern_type;
     typedef typename io_category<Device>::type              device_category;
     typedef is_convertible<device_category, input>          can_read;
     typedef is_convertible<device_category, output>         can_write;
@@ -118,7 +122,6 @@ struct code_converter_impl {
         } catch (std::exception&) { /* */ } 
     }
 
-#include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
     void open(const Device& dev, int buffer_size)
     {
         if (flags_ & f_open)
@@ -160,34 +163,42 @@ struct code_converter_impl {
             flags_ = 0;
         }
     }
-#include <boost/iostreams/detail/config/enable_warnings.hpp> // Borland 5.x
-
     bool is_open() const { return (flags_ & f_open) != 0;}
 
-    void flush() { flush(is_convertible<device_category, output>()); }
-    void flush(mpl::false_) { }
-    void flush(mpl::true_)
+    bool flush() { return flush(is_convertible<device_category, output>()); }
+    bool flush(mpl::false_) { return true; }
+    bool flush(mpl::true_)
     {
         buffer_type& out = buf_.second();
         std::streamsize amt =
             static_cast<std::streamsize>(out.ptr() - out.data());
-        dev_->write(out.data(), amt);
-        out.set(0, out.size());
+        std::streamsize result = dev_->write(out.data(), amt);
+        if (result < amt) {
+            char_traits<extern_type>::move( out.data(),
+                                            out.data() + result, 
+                                            amt - result );
+        }
+        out.set(amt - result, out.size() - amt + result);
+        return result != 0;
     }
 
-    bool fill() // Returns true for eof.
+    int fill() // Returns an int as a status code.
     {
-        using namespace std;
-        typedef typename codecvt_extern<Codecvt>::type extern_type;
+        using std::streamsize;
         buffer_type& in = buf_.first();
-        streamsize off =
-            static_cast<streamsize>(in.eptr() - in.ptr());
+        streamsize off = static_cast<streamsize>(in.eptr() - in.ptr());
         if (off)
             char_traits<extern_type>::move(in.data(), in.ptr(), off);
+        in.set(0, off);
         streamsize amt =
             dev_->read(in.data() + off, in.size() - off);
-        in.set(0, off + amt);
-        return amt < in.size() - off;
+        if (amt != -1)
+            in.set(0, off + amt);
+        return amt == in.size() - off ?
+            '\n' :
+            amt == -1 ?
+                EOF :
+                WOULD_BLOCK;
     }
 
     policy_type& get() { return *dev_.get(); }
@@ -318,7 +329,7 @@ public:
         // Device interface.
 
     std::streamsize read(char_type*, std::streamsize);
-    void write(const char_type*, std::streamsize);
+    std::streamsize write(const char_type*, std::streamsize);
     void imbue(const std::locale& loc) { impl().cvt_.imbue(loc); }
 
         // Direct device access.
@@ -331,8 +342,8 @@ private:
     { 
         impl().open(t BOOST_IOSTREAMS_CONVERTER_ARGS()); 
     }
-    bool fill() { return impl().fill(); }
-    void flush() { impl().flush(); }
+    int fill() { return impl().fill(); }
+    bool flush() { return impl().flush(); }
 
     const codecvt_type& cvt() { return impl().cvt_.get(); }
     policy_type& dev() { return impl().get(); }
@@ -350,18 +361,18 @@ std::streamsize code_converter<Device, Codevt, Alloc>::read
     (char_type* s, std::streamsize n)
 {
     using namespace std;
-    const extern_type*  next;        // Next external char.
-    intern_type*        nint;        // Next internal char.
-    streamsize          total = 0;   // Characters read.
-    bool                eof = false;
-    bool                partial = false;
-    buffer_type&        buf = in();
+    const extern_type*   next;        // Next external char.
+    intern_type*         nint;        // Next internal char.
+    streamsize           total = 0;   // Characters read.
+    int                  status;
+    bool                 partial = false;
+    buffer_type&         buf = in();
 
     do {
 
         // Fill buffer.
         if (buf.ptr() == buf.eptr() || partial) {
-            eof = fill();
+            status = fill();
             if (buf.ptr() == buf.eptr())
                 break;
             partial = false;
@@ -393,13 +404,13 @@ std::streamsize code_converter<Device, Codevt, Alloc>::read
             break;
         }
 
-    } while (total < n || (eof && buf.ptr() == buf.eptr()));
+    } while (total < n && status != EOF && status != WOULD_BLOCK);
 
-    return total;
+    return total == 0 && status == EOF ? -1 : total;
 }
 
 template<typename Device, typename Codevt, typename Alloc>
-void code_converter<Device, Codevt, Alloc>::write
+std::streamsize code_converter<Device, Codevt, Alloc>::write
     (const char_type* s, std::streamsize n)
 {
     using namespace std;
@@ -413,7 +424,8 @@ void code_converter<Device, Codevt, Alloc>::write
 
         // Empty buffer.
         if (buf.ptr() == buf.eptr() || partial) {
-            flush();
+            if (!flush())
+                break;
             partial = false;
         }
        
@@ -451,10 +463,13 @@ void code_converter<Device, Codevt, Alloc>::write
             }
         }
     }
+    return total;
 }
 
 //----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // Borland 5.x
 
 #endif // #ifndef BOOST_IOSTREAMS_CODE_CONVERTER_HPP_INCLUDED

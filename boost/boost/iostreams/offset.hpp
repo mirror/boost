@@ -16,6 +16,7 @@
 #include <boost/cstdint.hpp>  // intmax_t.
 #include <boost/config.hpp>   // DEDUCED_TYPENAME.
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/detail/adapter/basic_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
@@ -59,7 +60,7 @@ public:
     offset_indirect_device( param_type dev, stream_offset off,
                             stream_offset len );
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
 private:
     stream_offset beg_, pos_, end_;
@@ -122,19 +123,22 @@ public:
         streamsize amt =
             (std::min) (n, static_cast<streamsize>(end_ - pos_));
         streamsize result = iostreams::read(this->component(), src, s, amt);
-        pos_ += result;
+        if (result != -1)
+            pos_ += result;
         return result;
     }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         if (!open_)
             open(snk);
         if (pos_ + n >= end_)
             bad_write();
-        iostreams::write(this->component(), snk, s, n);
-        pos_ += n;
+        std::streamsize result = 
+            iostreams::write(this->component(), snk, s, n);
+        pos_ += result;
+        return result;
     }
 
     template<typename Device>
@@ -158,7 +162,7 @@ private:
     void open(Device& dev)
     {
         open_ = true;
-        pos_ = iostreams::skip(this->component(), dev, beg_);
+        iostreams::skip(this->component(), dev, beg_);
     }
     stream_offset  beg_, pos_, end_;
     bool           open_;
@@ -274,7 +278,7 @@ offset_indirect_device<Device>::offset_indirect_device
 {
     if (len < 0 || off < 0)
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
-    pos_ = iostreams::skip(this->component(), off);
+    iostreams::skip(this->component(), off);
 }
 
 template<typename Device>
@@ -285,18 +289,20 @@ inline std::streamsize offset_indirect_device<Device>::read
     streamsize amt =
         (std::min) (n, static_cast<streamsize>(end_ - pos_));
     streamsize result = iostreams::read(this->component(), s, amt);
-    pos_ += result;
+    if (result != -1)
+        pos_ += result;
     return result;
 }
 
 template<typename Device>
-inline void offset_indirect_device<Device>::write
+inline std::streamsize offset_indirect_device<Device>::write
     (const char_type* s, std::streamsize n)
 {
     if (pos_ + n >= end_)
         bad_write();
-    iostreams::write(this->component(), s, n);
-    pos_ += n;
+    streamsize result = iostreams::write(this->component(), s, n);
+    pos_ += result;
+    return result;
 }
 
 template<typename Device>

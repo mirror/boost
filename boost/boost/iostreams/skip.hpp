@@ -6,15 +6,17 @@
 
 // To do: handle bidirection streams and output-seekable components.
 
-#ifndef BOOST_IOSTREAMS_OPERATIONS_HPP_INCLUDED
-#define BOOST_IOSTREAMS_OPERATIONS_HPP_INCLUDED
+#ifndef BOOST_IOSTREAMS_SKIP_HPP_INCLUDED
+#define BOOST_IOSTREAMS_SKIP_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
 
-#include <boost/iostreams/detail/ios.hpp> // streamoff, seekdir constants.
+#include <boost/iostreams/char_traits.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure.
 #include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -24,41 +26,52 @@ namespace boost { namespace iostreams {
 namespace detail {
 
 template<typename Device>
-stream_offset skip(Device& dev, stream_offset off, mpl::true_)
-{ return iostreams::seek(dev, off, BOOST_IOS::cur); }
+void skip(Device& dev, stream_offset off, mpl::true_)
+{ iostreams::seek(dev, off, BOOST_IOS::cur); }
 
 template<typename Device>
-stream_offset skip(Device& dev, stream_offset off, mpl::false_)
+void skip(Device& dev, stream_offset off, mpl::false_)
 { 
-    for (stream_offset z = 0; z < off; ++z)
-        iostreams::get(dev);
-    return off;
+    typedef typename io_char<Device>::type  char_type;
+    typedef char_traits<char_type>          traits_type;
+    for (stream_offset z = 0; z < off; ) {
+        typename traits_type::int_type c;
+        if (traits_type::is_eof(c = iostreams::get(dev)))
+            throw BOOST_IOSTREAMS_FAILURE("bad skip offset");
+        if (!traits_type::would_block(c))
+            ++z;
+    }
 }
 
 template<typename Filter, typename Device>
-stream_offset skip(Filter& flt, Device& dev, stream_offset off, mpl::true_)
-{ return flt.seek(dev, off, BOOST_IOS::cur); }
+void skip(Filter& flt, Device& dev, stream_offset off, mpl::true_)
+{ flt.seek(dev, off, BOOST_IOS::cur); }
 
 template<typename Filter, typename Device>
-stream_offset skip(Filter& flt, Device& dev, stream_offset off, mpl::false_)
+void skip(Filter& flt, Device& dev, stream_offset off, mpl::false_)
 { 
-    char c;
-    for (stream_offset z = 0; z < off; ++z)
-        iostreams::read(flt, dev, &c, 1);
-    return off;
+    typedef typename io_char<Device>::type char_type;
+    char_type c;
+    for (stream_offset z = 0; z < off; ) {
+        std::streamsize amt;
+        if ((amt = iostreams::read(flt, dev, &c, 1)) == -1)
+            throw BOOST_IOSTREAMS_FAILURE("bad skip offset");
+        if (amt == 1)
+            ++z;
+    }
 }
 
 } // End namespace detail.
 
 template<typename Device>
-stream_offset skip(Device& dev, stream_offset off)
+void skip(Device& dev, stream_offset off)
 { 
     typedef typename io_mode<Device>::type mode;
     return detail::skip(dev, off, is_convertible<mode, seekable>());
 }
 
 template<typename Filter, typename Device>
-stream_offset skip(Filter& flt, Device& dev, stream_offset off)
+void skip(Filter& flt, Device& dev, stream_offset off)
 { 
     typedef typename io_mode<Filter>::type                     filter_mode;
     typedef typename io_mode<Device>::type                     device_mode;

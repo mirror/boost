@@ -20,7 +20,6 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/ref.hpp>
-#include <boost/type_traits/remove_cv.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
                     

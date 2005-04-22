@@ -47,17 +47,20 @@ public:
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
     {
         std::streamsize result = iostreams::read(src, s, n);
+        if (result == -1)
+            return -1;
         lines_ += std::count(s, s + result, newline());
         chars_ += result;
         return result;
     }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
-        iostreams::write(snk, s, n);
-        lines_ += std::count(s, s + n, newline());
-        chars_ += n;
+        std::streamsize result = iostreams::write(snk, s, n);
+        lines_ += std::count(s, s + result, newline());
+        chars_ += result;
+        return result;
     }
 private:
     Ch newline() const { return detail::newline<Ch>::value; }

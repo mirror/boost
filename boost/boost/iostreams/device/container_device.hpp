@@ -7,8 +7,8 @@
 #ifndef BOOST_IOSTREAMS_CONTAINER_DEVICE_HPP_INCLUDED
 #define BOOST_IOSTREAMS_CONTAINER_DEVICE_HPP_INCLUDED
 
-#include <boost/iostreams/detail/adapters/forward_container_adapter.hpp>
-#include <boost/iostreams/detail/adapters/random_access_container_adapter.hpp>
+#include <boost/iostreams/detail/adapters/forward_container.hpp>
+#include <boost/iostreams/detail/adapters/random_access_container.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_traits.hpp> 
 #include <boost/mpl/if.hpp>
@@ -20,7 +20,7 @@ namespace boost { namespace iostreams {
 namespace detail {
 
 template<typename Container, typename Mode>
-struct container_device_traits {
+struct container_traits {
     typedef typename Container::iterator                           iterator;
     typedef typename iterator_traversal<iterator>::type            trav;
     typedef typename 
@@ -38,14 +38,14 @@ struct container_device_traits {
 
 template<typename Container, typename Mode>
 class container_device 
-    : public detail::container_device_traits<Container, Mode>::type
+    : public detail::container_traits<Container, Mode>::type
 {
 private:
-    typedef detail::container_device_traits<Container, Mode>  my_traits;
-    typedef typename my_traits::type                          base_type;
+    typedef detail::container_traits<Container, Mode>  my_traits;
+    typedef typename my_traits::type                   base_type;
 public:    
-    typedef Container                                         container_type;
-    typedef typename Container::value_type                    char_type;
+    typedef Container                                  container_type;
+    typedef typename Container::value_type             char_type;
     struct io_category 
         : device_tag,
           Mode

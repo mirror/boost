@@ -24,6 +24,7 @@
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
+#include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/positioning.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -51,11 +52,7 @@ private:
     typedef detail::basic_buffer<char_type, Alloc>            buffer_type;
     typedef indirect_streambuf<T, Tr, Alloc, Mode>            my_type;
     typedef detail::linked_streambuf<char_type, traits_type>  base_type;
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
-    typedef std::basic_streambuf<char_type, traits_type>      streambuf_type;
-#else
-    typedef std::streambuf                                    streambuf_type;
-#endif
+    typedef linked_streambuf<char_type, Tr>                   streambuf_type;
 public:
     indirect_streambuf();
 
@@ -80,9 +77,7 @@ protected:
 #endif
     int_type underflow();
     int_type pbackfail(int_type c);
-    std::streamsize xsgetn(char_type* s, std::streamsize n);
     int_type overflow(int_type c);
-    std::streamsize xsputn(const char_type* s, std::streamsize n);
     int sync();
     pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
                       BOOST_IOS::openmode which );
@@ -184,8 +179,9 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
 
     storage_ = wrapper(t);
     flags_ |= f_open;
-    if (can_write() && buffer_size)
+    if (can_write() && buffer_size > 1)
         flags_ |= f_output_buffered;
+    this->set_true_eof(false);
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -250,46 +246,14 @@ indirect_streambuf<T, Tr, Alloc, Mode>::underflow()
     // Read from source.
     streamsize chars =
         obj().read(buf.data() + pback_size_, buf.size() - pback_size_, next_);
+    if (chars == -1) {
+        this->set_true_eof(true);
+        chars = 0;
+    }
     setg(eback(), gptr(), buf.data() + pback_size_ + chars);
     return chars != 0 ?
         traits_type::to_int_type(*gptr()) :
         traits_type::eof();
-}
-
-template<typename T, typename Tr, typename Alloc, typename Mode>
-std::streamsize indirect_streambuf<T, Tr, Alloc, Mode>::xsgetn
-    (char_type* s, std::streamsize n)
-{
-    using namespace std;
-    if (!gptr()) init_get_area();
-    buffer_type& buf = in();
-    streamsize avail =
-        (std::min)(n, static_cast<streamsize>(egptr() - gptr()));
-
-    // Fill request from buffer.
-    if (avail) {
-        traits_type::copy(s, gptr(), avail);
-        gbump((int) avail);
-        if (avail == n) return avail;
-    }
-
-    // Read from source.
-    streamsize amt = obj().read(s + avail, n - avail, next_);
-
-    // Fill putback buffer:
-    streamsize keep = (std::min)(avail + amt, pback_size_);
-    streamsize overflow = (std::max)((streamsize) 0, keep - amt);
-    if (overflow > 0)
-        traits_type::move( buf.data() + pback_size_ - keep,
-                           gptr() - overflow, overflow );
-    if (keep)
-        traits_type::copy( buf.data() + pback_size_ - keep + overflow,
-                           s + avail + amt - keep + overflow,
-                           (keep - overflow) );
-    setg( buf.data() + pback_size_ - keep,
-          buf.data() + pback_size_,
-          buf.data() + pback_size_ );
-    return avail + amt;
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -317,40 +281,20 @@ indirect_streambuf<T, Tr, Alloc, Mode>::overflow(int_type c)
     }
     if (!traits_type::eq_int_type(c, traits_type::eof())) {
         if (output_buffered()) {
-            if (pptr() == epptr())
+            if (pptr() == epptr()) {
                 sync_impl();
+                if (pptr() == epptr())
+                    return traits_type::eof();
+            }
             *pptr() = traits_type::to_char_type(c);
             pbump(1);
         } else {
             char_type d = traits_type::to_char_type(c);
-            obj().write(&d, 1, next_);
-            return c;
+            if (obj().write(&d, 1, next_) != 1)
+                return traits_type::eof();
         }
     }
     return traits_type::not_eof(c);
-}
-
-template<typename T, typename Tr, typename Alloc, typename Mode>
-std::streamsize indirect_streambuf<T, Tr, Alloc, Mode>::xsputn
-    (const char_type* s, std::streamsize n)
-{
-    if ( output_buffered() && pptr() == 0 ||
-         shared_buffer() && gptr() != 0 )
-    {
-        init_put_area();
-    }
-    if (output_buffered()) {
-        if (n < epptr() - pptr()) {
-            traits_type::copy(pptr(), s, n);
-            pbump((int) n);
-        } else {
-            sync_impl();
-            obj().write(s, n, next_);
-        }
-    } else {
-        obj().write(s, n, next_);
-    }
-    return n;
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -430,10 +374,15 @@ inline void indirect_streambuf<T, Tr, Alloc, Mode>::close_impl
 template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::sync_impl()
 {
-    std::streamsize amt;
-    if ((amt = static_cast<std::streamsize>(pptr() - pbase())) > 0) {
-        obj().write(pbase(), amt, next());
-        setp(out().begin(), out().end());
+    std::streamsize avail, amt;
+    if ((avail = static_cast<std::streamsize>(pptr() - pbase())) > 0) {
+        if ((amt = obj().write(pbase(), avail, next())) == avail)
+            setp(out().begin(), out().end());
+        else {
+            const char_type* ptr = pptr();
+            setp(out().begin() + amt, out().end());
+            pbump(ptr - pptr());
+        }
     }
 }
 

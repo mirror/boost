@@ -14,6 +14,7 @@
 #include <utility>           // pair.
 #include <boost/config.hpp>  // NO_STD_LOCALE, DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/constants.hpp>  // constants.
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
@@ -84,21 +85,22 @@ read(T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
 { return detail::filter_impl<T>::read(detail::unwrap(t), src, s, n); }
 
 template<typename T>
-void putback(T& t, typename io_char<T>::type c)
-{ detail::read_impl<T>::putback(detail::unwrap(t), c); }
+bool putback(T& t, typename io_char<T>::type c)
+{ return detail::read_impl<T>::putback(detail::unwrap(t), c); }
 
 template<typename T>
-void put(T& t, typename io_char<T>::type c)
-{ detail::write_impl<T>::put(detail::unwrap(t), c); }
+bool put(T& t, typename io_char<T>::type c)
+{ return detail::write_impl<T>::put(detail::unwrap(t), c); }
 
 template<typename T>
-inline void write(T& t, const typename io_char<T>::type* s, std::streamsize n)
-{ detail::write_impl<T>::write(detail::unwrap(t), s, n); }
+inline std::streamsize write
+    (T& t, const typename io_char<T>::type* s, std::streamsize n)
+{ return detail::write_impl<T>::write(detail::unwrap(t), s, n); }
 
 template<typename T, typename Sink>
-void write( T& t, Sink& snk, const typename io_char<T>::type* s, 
-            std::streamsize n )
-{ detail::filter_impl<T>::write(detail::unwrap(t), snk, s, n); }
+inline std::streamsize
+write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize n)
+{ return detail::filter_impl<T>::write(detail::unwrap(t), snk, s, n); }
 
 template<typename T>
 inline std::streampos
@@ -153,6 +155,32 @@ namespace detail {
 
 //------------------Definition of read_impl-----------------------------------//
 
+// Helper function for adding -1 as EOF indicator.
+inline std::streamsize check_eof(std::streamsize n) { return n != 0 ? n : -1; }
+
+// Helper templates for reading from streambufs.
+template<bool IsLinked>
+struct true_eof_impl;
+
+template<>
+struct true_eof_impl<true> {
+    template<typename T>
+    static bool true_eof(T& t) { return t.true_eof(); }
+};
+
+template<>
+struct true_eof_impl<false> {
+    template<typename T>
+    static bool true_eof(T& t) { return true; }
+};
+
+template<typename T>
+inline bool true_eof(T& t)
+{
+    const bool linked = is_linked<T>::value;
+    return true_eof_impl<linked>::true_eof(t);
+}
+
 template<typename T>
 struct read_impl
     : mpl::if_<
@@ -176,40 +204,69 @@ struct read_impl<istream_tag> {
     template<typename T>
     static std::streamsize
     read(T& t, typename io_char<T>::type* s, std::streamsize n)
-    { t.read(s, n); return t.gcount(); }
+    { return check_eof(t.rdbuf()->sgetn(s, n)); }
 
     template<typename T>
-    static void putback(T& t, typename io_char<T>::type c)
-    { t.putback(c); }
+    static bool putback(T& t, typename io_char<T>::type c)
+    {
+        typedef typename io_char<T>::type               char_type;
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+        return !traits_type::eq_int_type( t.rdbuf()->putback(c),
+                                          traits_type::eof() );
+    }
 };
 
 template<>
 struct read_impl<streambuf_tag> {
     template<typename T>
-    static typename io_int<T>::type get(T& t)
-    { return t.sbumpc(); }
+    static typename io_int<T>::type
+    get(T& t)
+    {
+        typedef typename io_char<T>::type  char_type;
+        typedef char_traits<char_type>     traits_type;
+        typename io_int<T>::type c;
+        return !traits_type::is_eof(c = t.sbumpc()) ||
+                detail::true_eof(t)
+                    ?
+                c : traits_type::would_block();
+    }
 
     template<typename T>
     static std::streamsize
     read(T& t, typename io_char<T>::type* s, std::streamsize n)
-    { return t.sgetn(s, n); }
+    {
+        std::streamsize amt;
+        return (amt = t.sgetn(s, n)) != 0 ?
+            amt :
+            detail::true_eof(t) ?
+                -1 :
+                0;
+    }
 
     template<typename T>
-    static void putback(T& t, typename io_char<T>::type c)
-    { t.sputbackc(c); }
+    static bool putback(T& t, typename io_char<T>::type c)
+    {
+        typedef typename io_char<T>::type  char_type;
+        typedef char_traits<char_type>     traits_type;
+        return !traits_type::is_eof(t.sputbackc());
+    }
 };
 
 template<>
 struct read_impl<input> {
     template<typename T>
-    static typename io_int<T>::type get(T& t)
+    static typename io_int<T>::type
+    get(T& t)
     {
-        typedef typename io_char<T>::type               char_type;
-        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+        typedef typename io_char<T>::type  char_type;
+        typedef char_traits<char_type>     traits_type;
         char_type c;
-        return t.read(&c, 1) == 1 ?
+        std::streamsize amt;
+        return (amt = t.read(&c, 1)) == 1 ?
             traits_type::to_int_type(c) :
-            traits_type::eof();
+            amt == -1 ?
+                traits_type::eof() :
+                traits_type::would_block();
     }
 
     template<typename T>
@@ -218,11 +275,11 @@ struct read_impl<input> {
     { return t.read(s, n); }
 
     template<typename T>
-    static void putback(T& t, typename io_char<T>::type c)
+    static bool putback(T& t, typename io_char<T>::type c)
     {
         typedef typename io_category<T>::type category;
         BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value));
-        t.putback(c);
+        return t.putback(c);
     }
 };
 
@@ -245,37 +302,46 @@ struct write_impl
 template<>
 struct write_impl<ostream_tag> {
     template<typename T>
-    static void put(T& t, typename io_char<T>::type c)
-    { t.put(c); }
+    static bool put(T& t, typename io_char<T>::type c)
+    {
+        typedef typename io_char<T>::type               char_type;
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+        return !traits_type::eq_int_type( t.rdbuf()->s.sputc(),
+                                          traits_type::eof() );
+    }
 
     template<typename T>
-    static void write
+    static std::streamsize write
         (T& t, const typename io_char<T>::type* s, std::streamsize n)
-    { t.write(s, n); }
+    { return t.rdbuf()->sputn(s, n); }
 };
 
 template<>
 struct write_impl<streambuf_tag> {
     template<typename T>
-    static void put(T& t, typename io_char<T>::type c)
-    { t.sputc(c); }
+    static bool put(T& t, typename io_char<T>::type c)
+    {
+        typedef typename io_char<T>::type               char_type;
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+        return !traits_type::eq_int_type(t.sputc(c), traits_type::eof());
+    }
 
     template<typename T>
-    static void write
+    static std::streamsize write
         (T& t, const typename io_char<T>::type* s, std::streamsize n)
-    { t.sputn(s, n); }
+    { return t.sputn(s, n); }
 };
 
 template<>
 struct write_impl<output> {
     template<typename T>
-    static void put(T& t, typename io_char<T>::type c)
-    { t.write(&c, 1); }
+    static bool put(T& t, typename io_char<T>::type c)
+    { return t.write(&c, 1) == 1; }
 
     template<typename T>
-    static void
+    static std::streamsize
     write(T& t, const typename io_char<T>::type* s, std::streamsize n)
-    { t.write(s, n); }
+    { return t.write(s, n); }
 };
 
 //------------------Definition of filter_impl---------------------------------//
@@ -302,9 +368,10 @@ struct filter_impl<multichar_tag> {
     { return t.read(src, s, n); }
 
     template<typename T, typename Sink>
-    static void write( T& t, Sink& snk, const typename io_char<T>::type* s,
-                       std::streamsize n )
-    { t.write(snk, s, n); }
+    static std::streamsize
+    write( T& t, Sink& snk, const typename io_char<T>::type* s,
+           std::streamsize n )
+    { return t.write(snk, s, n); }
 };
 
 template<>
@@ -313,21 +380,28 @@ struct filter_impl<any_tag> {
     static std::streamsize read
         (T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
     {
-        typedef typename io_char<T>::type               char_type;
-        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
-        std::streamsize result;
-        for (result = 0; result < n; ++result) {
-            typename io_int<T>::type c = t.get(src);
-            if (traits_type::eq_int_type(c, traits_type::eof()))
-                break;
-            s[result] = traits_type::to_char_type(c);
+        typedef typename io_char<T>::type  char_type;
+        typedef char_traits<char_type>     traits_type;
+        for (std::streamsize off = 0; off < n; ++off) {
+            typename traits_type::int_type c = t.get(src);
+            if (traits_type::is_eof(c))
+                return check_eof(off);
+            if (traits_type::would_block(c))
+                return off;
+            s[off] = traits_type::to_char_type(c);
         }
-        return result;
+        return n;
     }
     template<typename T, typename Sink>
-    static void write( T& t, Sink& snk, const typename io_char<T>::type* s,
-                       std::streamsize n )
-    { for (std::streamsize off = 0; off < n; ++off) t.put(snk, s[off]); }
+    static std::streamsize
+    write( T& t, Sink& snk, const typename io_char<T>::type* s,
+           std::streamsize n )
+    {
+        for (std::streamsize off = 0; off < n; ++off)
+            if (!t.put(snk, s[off]))
+                return off;
+        return n;
+    }
 };
 
 //------------------Definition of direct_impl-------------------------------//
@@ -380,14 +454,14 @@ struct seek_impl_basic_ios {
     static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
-    { 
-        if ( way == BOOST_IOS::beg && 
+    {
+        if ( way == BOOST_IOS::beg &&
              ( off < integer_traits<std::streamoff>::const_min ||
                off > integer_traits<std::streamoff>::const_max ) )
         {
             return t.rdbuf()->pubseekpos(offset_to_position(off));
         } else {
-            return t.rdbuf()->pubseekoff(off, way, which); 
+            return t.rdbuf()->pubseekoff(off, way, which);
         }
     }
 };
@@ -407,14 +481,14 @@ struct seek_impl<streambuf_tag> {
     static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode which )
-    { 
-        if ( way == BOOST_IOS::beg && 
+    {
+        if ( way == BOOST_IOS::beg &&
              ( off < integer_traits<std::streamoff>::const_min ||
                off > integer_traits<std::streamoff>::const_max ) )
         {
             return t.pubseekpos(offset_to_position(off));
         } else {
-            return t.pubseekoff(off, way, which); 
+            return t.pubseekoff(off, way, which);
         }
     }
 };

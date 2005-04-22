@@ -60,6 +60,10 @@ struct mapped_file_impl;
 } // End namespace detail.
 
 struct mapped_file_params {
+    explicit mapped_file_params()
+        : mode(), offset(0), length(static_cast<std::size_t>(-1)),
+          size(0), hint(0)
+        { }
     explicit mapped_file_params(const std::string& path)
         : path(path), mode(), offset(0),
           length(static_cast<std::size_t>(-1)),

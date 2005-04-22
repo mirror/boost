@@ -31,6 +31,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1
+
 namespace boost { namespace iostreams { namespace detail {
                     
 //------------------Definition of direct_adapter_base-------------------------//
@@ -107,7 +109,7 @@ public:
         // Device interface.
 
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek( stream_offset, BOOST_IOS::seekdir,
                         BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
     void close();
@@ -194,20 +196,20 @@ inline std::streamsize direct_adapter<Direct>::read
     streamsize result = (std::min)(n, avail);
     std::copy(get.ptr, get.ptr + result, s);
     get.ptr += result;
-    return result;
+    return result != 0 ? result : -1;
 }
 
 template<typename Direct>
-inline void direct_adapter<Direct>::write
+inline std::streamsize direct_adapter<Direct>::write
     (const char_type* s, std::streamsize n)
 {
     using namespace std;
     pointers& put = ptrs_.second();
-    streamsize capacity = 
-        static_cast<streamsize>(put.end - put.ptr);
-    streamsize amt = (std::min)(n, capacity);
-    std::copy(s, s + amt, put.ptr);
-    put.ptr += amt;
+    if (n > static_cast<streamsize>(put.end - put.ptr))
+        throw write_area_exhausted();
+    std::copy(s, s + n, put.ptr);
+    put.ptr += n;
+    return n;
 }
 
 template<typename Direct>
@@ -269,5 +271,7 @@ void direct_adapter<Direct>::close(BOOST_IOS::openmode which)
 #endif
 
 } } } // End namespaces detail, iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_DIRECT_ADAPTER_HPP_INCLUDED

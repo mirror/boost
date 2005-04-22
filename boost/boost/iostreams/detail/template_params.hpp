@@ -10,15 +10,15 @@
 #include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
-#define BOOST_IOSTREAMS_TEMPLATE_PARAMS(arity) \
+#define BOOST_IOSTREAMS_TEMPLATE_PARAMS(arity, param) \
     BOOST_PP_EXPR_IF(arity, template<) \
-    BOOST_PP_ENUM_PARAMS(arity, typename T) \
+    BOOST_PP_ENUM_PARAMS(arity, typename param) \
     BOOST_PP_EXPR_IF(arity, >) \
     /**/
 
-#define BOOST_IOSTREAMS_TEMPLATE_ARGS(arity) \
+#define BOOST_IOSTREAMS_TEMPLATE_ARGS(arity, param) \
     BOOST_PP_EXPR_IF(arity, <) \
-    BOOST_PP_ENUM_PARAMS(arity, T) \
+    BOOST_PP_ENUM_PARAMS(arity, param) \
     BOOST_PP_EXPR_IF(arity, >) \
     /**/
 

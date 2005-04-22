@@ -22,9 +22,9 @@
 //
 #define BOOST_IOSTREAMS_BOOL_TRAIT_DEF(trait, type, arity) \
     namespace BOOST_PP_CAT(trait, _impl_) { \
-      BOOST_IOSTREAMS_TEMPLATE_PARAMS(arity) \
+      BOOST_IOSTREAMS_TEMPLATE_PARAMS(arity, T) \
       type_traits::yes_type helper \
-          (const volatile type BOOST_IOSTREAMS_TEMPLATE_ARGS(arity)*); \
+          (const volatile type BOOST_IOSTREAMS_TEMPLATE_ARGS(arity, T)*); \
       type_traits::no_type helper(...); \
       template<typename T> \
       struct impl { \

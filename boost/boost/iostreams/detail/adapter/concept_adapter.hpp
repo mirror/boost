@@ -10,6 +10,7 @@
 #include <boost/config.hpp>                             // SFINAE.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/adapter/non_blocking_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
@@ -71,12 +72,12 @@ public:
     std::streamsize read(char_type* s, std::streamsize n, Source* src)
     { return input_impl::read(t_, src, s, n); }
 
-    void write(const char_type* s, std::streamsize n)
-    { this->write(s, n, (basic_null_sink<char_type>*) 0); }
+    std::streamsize write(const char_type* s, std::streamsize n)
+    { return this->write(s, n, (basic_null_sink<char_type>*) 0); }
 
     template<typename Sink>
-    void write(const char_type* s, std::streamsize n, Sink* snk)
-    { output_impl::write(t_, snk, s, n); }
+    std::streamsize write(const char_type* s, std::streamsize n, Sink* snk)
+    { return output_impl::write(t_, snk, s, n); }
 
     stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which )
@@ -95,9 +96,12 @@ public:
 
     template<typename Device>
     void close(BOOST_IOS::openmode which, Device* dev)
-    { any_impl::close(t_, dev, which); }
+    { 
+        non_blocking_adapter<Device> nb(*dev);
+        any_impl::close(t_, &nb, which); 
+    }
 
-    bool flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,                
+    bool flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,
                 BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
     { 
         bool result = any_impl::flush(t_, sb);
@@ -164,8 +168,9 @@ struct device_wrapper_impl<input> : device_wrapper_impl<any_tag>  {
     { return iostreams::read(dev, s, n); }
 
     template<typename Device, typename Dummy>
-    static void write( Device&, Dummy*, const typename io_char<Device>::type*,
-                       std::streamsize )
+    static std::streamsize 
+    write( Device&, Dummy*, const typename io_char<Device>::type*,
+           std::streamsize )
     { throw cant_write(); }
 };
 
@@ -177,10 +182,10 @@ struct device_wrapper_impl<output> {
     { throw cant_read(); }
 
     template<typename Device, typename Dummy>
-    static void write( Device& dev, Dummy*,
-                       const typename io_char<Device>::type* s,
-                       std::streamsize n )
-    { iostreams::write(dev, s, n); }
+    static std::streamsize 
+    write( Device& dev, Dummy*, const typename io_char<Device>::type* s,
+           std::streamsize n )
+    { return iostreams::write(dev, s, n); }
 };
 
 //------------------Specializations of flt_wrapper_impl--------------------//
@@ -244,8 +249,9 @@ struct flt_wrapper_impl<input> {
     { return iostreams::read(f, *src, s, n); }
 
     template<typename Filter, typename Sink>
-    static void write( Filter&, Sink*, const typename io_char<Filter>::type*,
-                       std::streamsize)
+    static std::streamsize 
+    write( Filter&, Sink*, const typename io_char<Filter>::type*, 
+           std::streamsize )
     { throw cant_write(); }
 };
 
@@ -257,10 +263,10 @@ struct flt_wrapper_impl<output> {
     { throw cant_read(); }
 
     template<typename Filter, typename Sink>
-    static void write( Filter& f, Sink* snk,
-                       const typename io_char<Filter>::type* s,
-                       std::streamsize n )
-    { iostreams::write(f, *snk, s, n); }
+    static std::streamsize 
+    write( Filter& f, Sink* snk, const typename io_char<Filter>::type* s,
+           std::streamsize n )
+    { return iostreams::write(f, *snk, s, n); }
 };
 
 //----------------------------------------------------------------------------//

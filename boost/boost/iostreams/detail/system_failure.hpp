@@ -34,13 +34,14 @@ namespace std { using ::strlen; }
                        
 namespace boost { namespace iostreams { namespace detail {
 
-void throw_system_failure(const char* msg)
+inline BOOST_IOS::failure system_failure(const char* msg)
 {
     std::string result;
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    DWORD err = ::GetLastError();
+    DWORD err;
     LPVOID lpMsgBuf;
-    if ( ::FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER |
+    if ( (err = ::GetLastError()) != NO_ERROR && 
+         ::FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                            FORMAT_MESSAGE_FROM_SYSTEM,
                            NULL,
                            err,
@@ -58,14 +59,17 @@ void throw_system_failure(const char* msg)
         result += msg;
     }
 #else
-    char* system_msg = strerror(errno);
+    const char* system_msg = errno ? strerror(errno) : "";
     result.reserve(std::strlen(msg) + 2 + std::strlen(system_msg));
     result.append(msg);
     result.append(": ");
     result.append(system_msg);
 #endif
-    throw BOOST_IOSTREAMS_FAILURE(result);
+    return BOOST_IOSTREAMS_FAILURE(result);
 }
+
+inline void throw_system_failure(const char* msg)
+{ throw system_failure(msg); }
 
 } } } // End namespaces detail, iostreams, boost.
 

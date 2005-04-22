@@ -131,6 +131,12 @@ struct stringbuf_tag
       std_io_tag
     { };
 
+namespace detail {
+
+struct linked_tag : streambuf_tag { };
+
+} // End namespace detail.
+
 } } // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_CATEGORIES_HPP_INCLUDED

@@ -20,7 +20,6 @@
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/ios.hpp>          // openmode, streamsize.
-#include <boost/iostreams/detail/newline.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
 
@@ -36,16 +35,20 @@ namespace boost { namespace iostreams {
 template<typename Ch, typename Alloc = std::allocator<Ch> >
 class basic_line_filter  {
 public:
-    typedef Ch                                         char_type;
-    typedef BOOST_IOSTREAMS_CHAR_TRAITS(Ch)            traits_type;
-    typedef std::basic_string<Ch, traits_type, Alloc>  string_type;
+    typedef Ch                                           char_type;
+    typedef char_traits<char_type>                       traits_type;
+    typedef std::basic_string<
+                Ch, 
+                BOOST_IOSTREAMS_CHAR_TRAITS(char_type),   
+                Alloc
+            >                                            string_type;
     struct io_category
         : dual_use,
           filter_tag,
           multichar_tag,
           closable_tag
         { };
-    basic_line_filter() : state_(0) { }
+    basic_line_filter() : pos_(string_type::npos), state_(0) { }
     virtual ~basic_line_filter() { }
 
     template<typename Source>
@@ -55,36 +58,49 @@ public:
         assert(!(state_ & f_write));
         state_ |= f_read;
 
+        // Handle unfinished business.
         streamsize result = 0;
         if (!cur_line_.empty() && (result = read_line(s, n)) == n)
             return n;
 
-        bool not_done = true;
-        while (result < n && not_done) {
-            not_done = next_line(src);
+        typename traits_type::int_type status = traits_type::good();
+        while (result < n && !traits_type::is_eof(status)) {
+
+            // Call next_line() to retrieve a line of filtered test, and
+            // read_line() to copy it into buffer s.
+            if (traits_type::would_block(status = next_line(src)))
+                return result;
             result += read_line(s + result, n - result);
         }
 
-        return result;
+        return detail::check_eof(result);
     }
 
     template<typename Sink>
-    void write(Sink& snk, const char_type* s, std::streamsize n)
+    std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         using namespace std;
         assert(!(state_ & f_read));
         state_ |= f_write;
 
+        // Handle unfinished business.
+        if (pos_ != string_type::npos && !write_line(snk))
+            return 0;
+
         const char_type *cur = s, *next;
         while (true) {
+
+            // Search for the next full line in [cur, s + n), filter it
+            // and write it to snk.
             typename string_type::size_type rest = n - (cur - s);
-            if ((next = traits_type::find(cur, rest, newline()))) {
+            if ((next = traits_type::find(cur, rest, traits_type::newline()))) {
                 cur_line_.append(cur, next - cur);
                 cur = next + 1;
-                write_line(snk);
+                if (!write_line(snk))
+                    return static_cast<std::streamsize>(cur - s);
             } else {
                 cur_line_.append(cur, rest);
-                return;
+                return n;
             }
         }
     }
@@ -107,6 +123,8 @@ public:
 private:
     virtual string_type do_filter(const string_type& line) = 0;
 
+    // Copies filtered characters fron the current line into 
+    // the given buffer.
     std::streamsize read_line(char_type* s, std::streamsize n)
     {
         using namespace std;
@@ -117,34 +135,39 @@ private:
         return result;
     }
 
+    // Attempts to retrieve a line of text from the given source; returns
+    // an int_type as a good/eof/would_block status code.
     template<typename Source>
-    bool next_line(Source& src)
+    typename traits_type::int_type next_line(Source& src)
     {
         using namespace std;
         typename traits_type::int_type c;
-        while (!is_eof(c = iostreams::get(src)) && c != newline())
+        while ( traits_type::is_good(c = iostreams::get(src)) && 
+                c != traits_type::newline() )
+        {
             cur_line_ += traits_type::to_int_type(c);
-        cur_line_ = do_filter(cur_line_);
-        if (c == newline())
-            cur_line_ += newline();
-        return c == newline();
+        }
+        if (!traits_type::would_block(c)) {
+            if (!cur_line_.empty() || c == traits_type::newline())
+                cur_line_ = do_filter(cur_line_);
+            if (c == traits_type::newline())
+                cur_line_ += c;
+        }
+        return c; // status indicator.
     }
 
+    // Filters the current line and attemps to write it to the given sink.
+    // Returns true for success.
     template<typename Sink>
-    void write_line(Sink& snk)
+    bool write_line(Sink& snk)
     {
-        using namespace std;
-        string_type line = do_filter(cur_line_) + newline();
-        iostreams::write(snk, line.data(), static_cast<streamsize>(line.size()));
-        clear();
+        string_type line = do_filter(cur_line_) + traits_type::newline();
+        std::streamsize amt = static_cast<std::streamsize>(line.size());
+        bool result = iostreams::write(snk, line.data(), amt) == amt;
+        if (result)
+            clear();
+        return result;
     }
-
-    bool is_eof(typename traits_type::int_type c)
-    {
-        return traits_type::eq_int_type(c, traits_type::eof());
-    }
-
-    Ch newline() const { return detail::newline<Ch>::value; }
 
     void close()
     {
@@ -159,6 +182,7 @@ private:
     #else
         cur_line_.clear();
     #endif
+        pos_ = string_type::npos;
     }
 
     enum {
@@ -166,8 +190,9 @@ private:
         f_write  = f_read << 1
     };
 
-    string_type  cur_line_;
-    int          state_;
+    string_type                      cur_line_;
+    typename string_type::size_type  pos_;
+    int                              state_;
 };
 
 typedef basic_line_filter<char>     line_filter;

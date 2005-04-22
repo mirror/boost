@@ -161,7 +161,7 @@ public:
     //----------Device interface----------------------------------------------//
 
     std::streamsize read(char_type* s, std::streamsize n);
-    void write(const char_type* s, std::streamsize n);
+    std::streamsize write(const char_type* s, std::streamsize n);
     stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
 
     //----------Direct component access---------------------------------------//
@@ -279,7 +279,10 @@ private:
 
     struct closer  : public std::unary_function<streambuf_type*, void>  {
         closer(BOOST_IOS::openmode m) : mode_(m) { }
-        void operator() (streambuf_type* b) { close(b, mode_); }
+        void operator() (streambuf_type* b)
+        {
+            close(b, mode_);
+        }
         BOOST_IOS::openmode mode_;
     };
     friend struct closer;
@@ -480,12 +483,12 @@ private:
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
 inline std::streamsize chain_base<Self, Ch, Tr, Alloc, Mode>::read
     (char_type* s, std::streamsize n)
-{ return list().front()->sgetn(s, n); }
+{ return iostreams::read(*list().front(), s, n); }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
-inline void chain_base<Self, Ch, Tr, Alloc, Mode>::write
+inline std::streamsize chain_base<Self, Ch, Tr, Alloc, Mode>::write
     (const char_type* s, std::streamsize n)
-{ list().front()->sputn(s, n); }
+{ return iostreams::write(*list().front(), s, n); }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
 inline stream_offset chain_base<Self, Ch, Tr, Alloc, Mode>::seek
