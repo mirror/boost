@@ -269,10 +269,10 @@ template<class Archive>
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
 basic_xml_oarchive<Archive>::basic_xml_oarchive(unsigned int flags) :
+    detail::common_oarchive<Archive>(flags),
     depth(0),
     indent_next(false),
-    pending_preamble(false),
-    detail::common_oarchive<Archive>(flags)
+    pending_preamble(false)
 {
 }
 
@@ -281,7 +281,7 @@ template<class Archive>
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
 basic_xml_oarchive<Archive>::~basic_xml_oarchive(){
-    if(0 == (get_flags() & no_header))
+    if(0 == (this->get_flags() & no_header))
         return;
     this->This()->put("</boost_serialization>\n");
 }

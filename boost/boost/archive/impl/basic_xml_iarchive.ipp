@@ -62,7 +62,7 @@ basic_xml_iarchive<Archive>::load_end(const char *name){
     if(0 == --depth)
         return;
         
-    if(0 != (get_flags() & no_xml_tag_checking)){
+    if(0 != (this->get_flags() & no_xml_tag_checking)){
         // double check that the tag matches what is expected - useful for debug
         if(0 != name[this->This()->gimpl->rv.object_name.size()]
         || ! std::equal(
@@ -119,8 +119,8 @@ template<class Archive>
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
 basic_xml_iarchive<Archive>::basic_xml_iarchive(unsigned int flags) :
-    depth(0),
-    detail::common_iarchive<Archive>(flags)
+    detail::common_iarchive<Archive>(flags),
+    depth(0)
 {}
 template<class Archive>
 #if !defined(__BORLANDC__)

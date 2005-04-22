@@ -197,7 +197,7 @@ template<class Archive>
 BOOST_DECL_WARCHIVE
 #endif
 xml_wiarchive_impl<Archive>::~xml_wiarchive_impl(){
-    if(0 == (get_flags() & no_header))
+    if(0 == (this->get_flags() & no_header))
         gimpl->windup(is);
     delete gimpl;
 }
