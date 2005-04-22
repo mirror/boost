@@ -45,6 +45,8 @@ template<class T> class reference_wrapper;
 
 namespace parameter {
 
+namespace aux { struct use_default {}; }
+
 // These templates can be used to describe the treatment of particular
 // named parameters for the purposes of overload elimination with
 // SFINAE, by placing specializations in the parameters<...> list.  In
@@ -60,18 +62,24 @@ namespace parameter {
 // required<...>, wrapper, it is treated as though optional<k> were
 // specified.
 //
-template <class Tag, class Predicate = mpl::always<mpl::true_> >
+template <class Tag, class Predicate = aux::use_default>
 struct required
 {
     typedef Tag key_type;
     typedef Predicate predicate;
 };
 
-template <class Tag, class Predicate = mpl::always<mpl::true_> >
+template <class Tag, class Predicate = aux::use_default>
 struct optional
 {
     typedef Tag key_type;
     typedef Predicate predicate;
+};
+
+template <class Tag>
+struct unnamed
+{
+    typedef Tag key_type;
 };
 
 namespace aux
@@ -117,11 +125,26 @@ namespace aux
   {
   };
 
+  // helper for get_predicate<...>, below
+  template <class T>
+  struct get_predicate_or_default
+  {
+      typedef T type;
+  };
+
+  template <>
+  struct get_predicate_or_default<use_default>
+  {
+      typedef mpl::always<mpl::true_> type;
+  };
+
   // helper for predicate<...>, below
   template <class T>
   struct get_predicate
   {
-      typedef typename T::predicate type;
+      typedef typename
+          get_predicate_or_default<typename T::predicate>::type
+      type;
   };
 
   template <class T>
@@ -295,7 +318,7 @@ struct parameters
             BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_right_angle, _)
 
 # undef BOOST_PARAMETER_satisfies
-                                                                                    
+
           , mpl::identity<parameters>
           , aux::void_
         >
