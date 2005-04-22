@@ -175,19 +175,13 @@ namespace boost { namespace program_options {
     template<class T>
     const T&
     variable_value::as() const {
-        const T* r = boost::any_cast<T>(&v);
-        if (!r)
-            throw boost::bad_any_cast();
-        return *r;
+        return boost::any_cast<const T&>(v);
     }
 
     template<class T>
     T&
     variable_value::as() {
-        T* r = boost::any_cast<T>(&v);
-        if (!r)
-            throw boost::bad_any_cast();
-        return *r;
+        return boost::any_cast<T&>(v);
     }
 }}
 
