@@ -85,42 +85,6 @@ namespace boost { namespace program_options {
     }
 #endif
 
-    common_command_line_parser::
-    common_command_line_parser(const std::vector<std::string>& args)
-    : m_style(0), m_desc(0), m_positional(0), m_args(args)
-    {}
-
-    parsed_options
-    common_command_line_parser::run() const
-    {
-        parsed_options result(m_desc);
-        detail::cmdline cmd(m_args, m_style);
-        //TODO: restore!
-        //cmd.set_additional_parser(m_ext);
-        cmd.set_options_description(*m_desc);
-
-        result.options = cmd.run();
-        
-        if (m_positional)
-        {
-            unsigned position = 0;
-            for (unsigned i = 0; i < result.options.size(); ++i) {
-                option& opt = result.options[i];
-                if (opt.position_key != -1) {
-                    if (position >= m_positional->max_total_count())
-                    {
-                        throw_exception(too_many_positional_options_error(
-                            "too many positional options"));
-                    }
-                    opt.string_key = m_positional->name_for_position(position);
-                    ++position;
-                }
-            }
-        }
-
-        return result;        
-    }
-
     template<class charT>
     basic_parsed_options<charT>
     parse_config_file(std::basic_istream<charT>& is, 

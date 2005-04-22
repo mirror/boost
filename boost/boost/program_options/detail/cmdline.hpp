@@ -10,8 +10,10 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/cmdline.hpp>
+#include <boost/program_options/option.hpp>
 #include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
+#include <boost/program_options/positional_options.hpp>
+
 
 #include <boost/detail/workaround.hpp>
 
@@ -68,14 +70,19 @@ namespace boost { namespace program_options { namespace detail {
             unregistered options. They will be assigned index 1 and are
             assumed to have optional parameter.
         */
-        cmdline(const std::vector<std::string>& args, int style,
-                bool allow_unregistered = false);
+        cmdline(const std::vector<std::string>& args, 
+                int style = command_line_style::default_style);
 
         /** @overload */
-        cmdline(int argc, const char*const * argv, int style, 
-                bool allow_unregistered = false);
+        cmdline(int argc, const char*const * argv, 
+                int style = command_line_style::default_style);
+
+        void style(int style);
+        void allow_unregistered();
 
         void set_options_description(const options_description& desc);
+        void set_positional_options(
+            const positional_options_description& m_positional);
 
         std::vector<option> run();
 
@@ -97,11 +104,12 @@ namespace boost { namespace program_options { namespace detail {
         */
         void set_additional_parser(additional_parser p);
 
+        void extra_style_parser(style_parser s);
+
         void check_style(int style) const;
 
 
-        void init(const std::vector<std::string>& args, int style,
-                  bool allow_unregistered);
+        void init(const std::vector<std::string>& args, int style);
 
         std::vector<option> 
         cmdline::parse_option(const std::string& name,
@@ -110,12 +118,14 @@ namespace boost { namespace program_options { namespace detail {
 
         // Copies of input.
         std::vector<std::string> args;
-        style_t style;
-        bool allow_unregistered;
+        style_t m_style;
+        bool m_allow_unregistered;
 
         const options_description* m_desc;
+        const positional_options_description* m_positional;
 
         additional_parser m_additional_parser;
+        style_parser m_style_parser;
     };
     
     void test_cmdline_detail();

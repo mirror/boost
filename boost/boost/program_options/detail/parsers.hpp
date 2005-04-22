@@ -28,14 +28,14 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>::
     basic_command_line_parser(const std::vector<
                               std::basic_string<charT> >& args)
-    : common_command_line_parser(to_internal(args))
+    : cmdline(to_internal(args))
     {}
 
 
     template<class charT>
     basic_command_line_parser<charT>::
     basic_command_line_parser(int argc, const charT* const argv[])
-    : common_command_line_parser(
+    : cmdline(
         // Explicit template arguments are required by gcc 3.3.1 
         // (at least mingw version), and do no harm on other compilers.
         to_internal(detail::make_vector<charT, const charT* const*>(argv+1, argv+argc)))
@@ -46,6 +46,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::options(const options_description& desc)
     {
+        cmdline::set_options_description(desc);
         m_desc = &desc;
         return *this;
     }
@@ -55,7 +56,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>::positional(
         const positional_options_description& desc)
     {
-        m_positional = &desc;
+        cmdline::set_positional_options(desc);
         return *this;
     }
 
@@ -63,7 +64,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::style(int style)
     {
-        m_style = style;
+        cmdline::style(style);
         return *this;
     }
 
@@ -71,18 +72,20 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::extra_parser(ext_parser ext)
     {
-        m_ext = ext;
+        cmdline::set_additional_parser(ext);
         return *this;
     }
 
     template<class charT>    
     basic_parsed_options<charT>
-    basic_command_line_parser<charT>::run() const
+    basic_command_line_parser<charT>::run()
     {
+        parsed_options result(m_desc);
+        result.options = cmdline::run();
+
         // Presense of parsed_options -> wparsed_options conversion
         // does the trick.
-        return basic_parsed_options<charT>(
-            common_command_line_parser::run());
+        return basic_parsed_options<charT>(result);
     }
 
 

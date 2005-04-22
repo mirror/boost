@@ -11,6 +11,8 @@
 #include <boost/program_options/detail/cmdline.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/value_semantic.hpp>
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/positional_options.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <boost/bind.hpp>
@@ -87,38 +89,48 @@ namespace boost { namespace program_options { namespace detail {
 #endif
 
 
-    cmdline::cmdline(const std::vector<std::string>& args, int style,
-                     bool allow_unregistered)
+    cmdline::cmdline(const std::vector<std::string>& args, int style)
     {
-        init(args, style, allow_unregistered);
+        init(args, style);
     }
 
-    cmdline::cmdline(int argc, const char*const * argv, int style,
-                     bool allow_unregistered)
+    cmdline::cmdline(int argc, const char*const * argv, int style)
     {
 #if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
         vector<string> args;
         copy(argv+1, argv+argc, inserter(args, args.end()));
         init(args, style, allow_unregistered);
 #else
-        init(vector<string>(argv+1, argv+argc), style, allow_unregistered);
+        init(vector<string>(argv+1, argv+argc), style);
 #endif
     }
 
     void
-    cmdline::init(const std::vector<std::string>& args, int style,
-                  bool allow_unregistered)
+    cmdline::init(const std::vector<std::string>& args, int style)
     {
         if (style == 0) 
-            style = default_style;        
+            m_style = default_style;        
 
         check_style(style);
 
         this->args = args;        
-        this->style = style_t(style);
-        this->allow_unregistered = allow_unregistered,
+        this->m_style = style_t(style);
 
         m_desc = 0;
+        m_positional = 0;
+    }
+
+    void 
+    cmdline::style(int style)
+    {
+        check_style(style);
+        this->m_style = style_t(style);
+    }
+    
+    void 
+    cmdline::allow_unregistered()
+    {
+        this->m_allow_unregistered = true;
     }
 
     void 
@@ -153,6 +165,14 @@ namespace boost { namespace program_options { namespace detail {
         m_desc = &desc;
     }
 
+    void 
+    cmdline::set_positional_options(
+        const positional_options_description& positional)
+    {
+        m_positional = &positional;
+    }
+
+
     vector<option>
     cmdline::run()
     {
@@ -166,19 +186,23 @@ namespace boost { namespace program_options { namespace detail {
         assert(m_desc);
 
         vector<style_parser> style_parsers;      
-        if (style & allow_long)
+
+        if (m_style_parser)
+            style_parsers.push_back(m_style_parser);
+
+        if (m_style & allow_long)
             style_parsers.push_back(
                 bind(&cmdline::parse_long_option, this, _1));
 
-        if ((style & allow_long_disguise))
+        if ((m_style & allow_long_disguise))
             style_parsers.push_back(
                 bind(&cmdline::parse_disguised_long_option, this, _1));
 
-        if ((style & allow_short) && (style & allow_dash_for_short))
+        if ((m_style & allow_short) && (m_style & allow_dash_for_short))
             style_parsers.push_back(
                 bind(&cmdline::parse_short_option, this, _1));
 
-        if ((style & allow_short) && (style & allow_slash_for_short))
+        if ((m_style & allow_short) && (m_style & allow_slash_for_short))
             style_parsers.push_back(bind(&cmdline::parse_dos_option, this, _1));
 
         style_parsers.push_back(bind(&cmdline::parse_terminator, this, _1));
@@ -219,6 +243,24 @@ namespace boost { namespace program_options { namespace detail {
                 args.erase(args.begin());
             }
         }
+
+        if (m_positional)
+        {
+            unsigned position = 0;
+            for (unsigned i = 0; i < result.size(); ++i) {
+                option& opt = result[i];
+                if (opt.position_key != -1) {
+                    if (position >= m_positional->max_total_count())
+                    {
+                        throw_exception(too_many_positional_options_error(
+                            "too many positional options"));
+                    }
+                    opt.string_key = m_positional->name_for_position(position);
+                    ++position;
+                }
+            }
+        }
+
         // Assign position keys to positional options.
         int position_key = 0;
         for(unsigned i = 0; i < result.size(); ++i) {
@@ -231,14 +273,14 @@ namespace boost { namespace program_options { namespace detail {
 
     std::vector<option> 
     cmdline::parse_option(const std::string& name,
-                          const std::string& adjacent_value,                         
+                          const std::string& adjacent_value,
                           vector<string>& other_tokens)
     {                                    
         std::vector<option> result;
 
         // TODO: case-sensitivity.
         const option_description& d = 
-            m_desc->find(name, (style & allow_guessing));
+            m_desc->find(name, (m_style & allow_guessing));
 
         option opt;
         opt.string_key = d.key(name);
@@ -343,7 +385,7 @@ namespace boost { namespace program_options { namespace detail {
                 const option_description& d = m_desc->find(name, false);
 
                 // FIXME: check for 'allow_sticky'.
-                if ((style & allow_sticky) &&
+                if ((m_style & allow_sticky) &&
                     d.semantic()->max_tokens() == 0 && !adjacent.empty()) {
                     // 'adjacent' is in fact further option.
                     vector<std::string> dummy;
@@ -401,10 +443,10 @@ namespace boost { namespace program_options { namespace detail {
         const std::string& tok = args[0];
         if (tok.size() >= 2 && 
             ((tok[0] == '-' && tok[1] != '-') ||
-             ((style & allow_slash_for_short) && tok[0] == '/')))            
+             ((m_style & allow_slash_for_short) && tok[0] == '/')))            
         {
             if (m_desc->find_nothrow(tok.substr(1, tok.find('=')-1), 
-                                     style & allow_guessing)) {
+                                     m_style & allow_guessing)) {
                 args[0].insert(0, "-");
                 if (args[0][1] == '/')
                     args[0][1] = '-';
@@ -437,6 +479,13 @@ namespace boost { namespace program_options { namespace detail {
     {
         m_additional_parser = p;
     }
+
+    void 
+    cmdline::extra_style_parser(style_parser s)
+    {
+        m_style_parser = s;
+    }
+
 
 
 }}}

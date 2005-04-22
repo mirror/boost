@@ -466,6 +466,44 @@ void test_additional_parser()
     BOOST_CHECK_EQUAL(result[1].value[0], "1");    
 }
 
+vector<option> at_option_parser2(vector<string>& args)
+{
+    vector<option> result;
+    if ('@' == args[0][0]) {
+        // Simulate reading the response file.
+        result.push_back(option("foo", vector<string>(1, "1")));
+        result.push_back(option("bar", vector<string>(1, "1")));
+        args.erase(args.begin());
+    }
+    return result;
+}
+
+
+void test_style_parser()
+{
+    options_description desc;
+    desc.add_options()
+        ("foo", value<int>(), "foo")
+        ("bar", value<int>(), "bar")
+        ;
+
+    vector<string> input;
+    input.push_back("@config");
+
+    detail::cmdline cmd(input, command_line_style::default_style);
+    cmd.set_options_description(desc);
+    cmd.extra_style_parser(at_option_parser2);
+
+    vector<option> result = cmd.run();
+
+    BOOST_REQUIRE(result.size() == 2);
+    BOOST_CHECK_EQUAL(result[0].string_key, "foo");
+    BOOST_CHECK_EQUAL(result[0].value[0], "1");    
+    BOOST_CHECK_EQUAL(result[1].string_key, "bar");
+    BOOST_CHECK_EQUAL(result[1].value[0], "1");    
+}
+
+
 int test_main(int ac, char* av[])
 {
     test_long_options();
@@ -476,6 +514,7 @@ int test_main(int ac, char* av[])
     test_arguments();
     test_prefix();
     test_additional_parser();
+    test_style_parser();
 
     return 0;
 }
