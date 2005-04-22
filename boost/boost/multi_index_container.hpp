@@ -543,7 +543,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   template<class Archive>
   void save(Archive& ar,const unsigned int version)const
   {
-    std::size_t s=size_();
+    const std::size_t s=size_();
     ar<<serialization::make_nvp("count",s);
     index_saver_type sm(bfm_allocator::member,s);
 
