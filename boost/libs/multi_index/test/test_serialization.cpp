@@ -23,6 +23,7 @@
 #include <boost/test/test_tools.hpp>
 #include <sstream>
 #include <string>
+#include <vector>
 #include "pair_of_ints.hpp"
 
 using namespace boost::multi_index;
@@ -74,11 +75,13 @@ void test_serialization(const MultiIndexContainer& m)
     boost::archive::text_oarchive oa(oss);
     oa<<m;
 
-    const_iterator it_end=m.end();
+    std::vector<const_iterator> its(m.size());
+    const_iterator              it_end=m.end();
     for(const_iterator it=m.begin();it!=it_end;++it){
-      oa<<it;
+      its.push_back(it);
+      oa<<const_cast<const const_iterator&>(its.back());
     }
-    oa<<it_end;
+    oa<<const_cast<const const_iterator&>(it_end);
   }
 
   MultiIndexContainer m2;
@@ -123,6 +126,9 @@ void test_hashed_index_serialization()
     >
   > hashed_set;
 
+  typedef hashed_set::iterator       iterator;
+  typedef hashed_set::local_iterator local_iterator;
+
   hashed_set hs;
 
   for(int i=0;i<N;++i){
@@ -132,23 +138,28 @@ void test_hashed_index_serialization()
   std::ostringstream oss;
   {
     boost::archive::text_oarchive oa(oss);
-    oa<<hs;
+    oa<<const_cast<hashed_set&>(hs);
 
+    std::vector<iterator> its(N);
     for(int i=0;i<N;++i){
-      hashed_set::iterator it=hs.find(i*SHUFFLE);
-      oa<<it;
+      iterator it=hs.find(i*SHUFFLE);
+      its.push_back(it);
+      oa<<const_cast<const iterator&>(its.back());
     }
-    hashed_set::iterator it=hs.end();
-    oa<<it;
+    iterator it=hs.end();
+    oa<<const_cast<const iterator&>(it);
 
+    std::vector<local_iterator> lits(2*N);
     for(std::size_t buc=0;buc<hs.bucket_count();++buc){
-      for(hashed_set::local_iterator it=hs.begin(buc),it_end=hs.end(buc);
-          it!=it_end;++it){
-        oa<<*it;
-        oa<<it;
+      for(local_iterator lit=hs.begin(buc),lit_end=hs.end(buc);
+          lit!=lit_end;++lit){
+        oa<<*lit;
+        lits.push_back(lit);
+        oa<<const_cast<const local_iterator&>(lits.back());
       }
-      hashed_set::local_iterator it2=hs.end(buc);
-      oa<<it2;
+      local_iterator lit2=hs.end(buc);
+      lits.push_back(lit2);
+      oa<<const_cast<const local_iterator&>(lits.back());
     }
   }
 
@@ -159,23 +170,23 @@ void test_hashed_index_serialization()
   BOOST_CHECK(get<1>(hs)==get<1>(hs2));
 
   for(int j=0;j<N;++j){
-    hashed_set::iterator it;
+    iterator it;
     ia>>it;
     BOOST_CHECK(*it==j*SHUFFLE);
   }
-  hashed_set::iterator it;
+  iterator it;
   ia>>it;
   BOOST_CHECK(it==hs2.end());
 
   for(std::size_t buc=0;buc<hs2.bucket_count();++buc){
     for(std::size_t k=0;k<hs2.bucket_size(buc);++k){
       int n;
-      hashed_set::local_iterator it;
+      local_iterator it;
       ia>>n;
       ia>>it;
       BOOST_CHECK(*it==n);
     }
-    hashed_set::local_iterator it2;
+    local_iterator it2;
     ia>>it2;
     BOOST_CHECK(it2==hs2.end(buc));
   }
