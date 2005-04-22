@@ -26,7 +26,7 @@ void tee_test()
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
-        out.push(make_tee(file_sink(dest1.name(), out_mode)));
+        out.push(tee(file_sink(dest1.name(), out_mode)));
         out.push(file_sink(dest2.name(), out_mode));
         write_data_in_chars(out);
         out.reset();
@@ -40,7 +40,7 @@ void tee_test()
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
-        out.push(make_tee(file_sink(dest1.name(), out_mode)));
+        out.push(tee(file_sink(dest1.name(), out_mode)));
         out.push(file_sink(dest2.name(), out_mode));
         write_data_in_chunks(out);
         out.reset();

@@ -28,7 +28,7 @@ void read_counter()
     test_file          src;
     filtering_istream  in;
     in.push(counter());
-    in.push(padding_filter('a'));
+    in.push(padding_filter('a'), 0);
     in.push(counter());
     in.push(file_source(src.name(), in_mode));
 

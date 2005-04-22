@@ -18,7 +18,7 @@
 using namespace std;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
-using boost::unit_test::test_suite;    
+using boost::unit_test::test_suite;
 
 void direct_adapter_test()
 {

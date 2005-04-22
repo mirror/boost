@@ -151,10 +151,10 @@ std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
     std::streamsize result = BOOST_RTL(read)(pimpl_->fd_, s, n);
     if (errno != 0)
         throw detail::bad_read();
-    return result;
+    return result == 0 ? -1 : result;
 }
 
-void file_descriptor::write(const char_type* s, std::streamsize n)
+std::streamsize file_descriptor::write(const char_type* s, std::streamsize n)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     if (pimpl_->flags_ & impl::has_handle) {
@@ -166,12 +166,13 @@ void file_descriptor::write(const char_type* s, std::streamsize n)
         DWORD ignore;
         if (!::WriteFile(pimpl_->handle_, s, n, &ignore, NULL))
             throw detail::bad_write();
-        return;
+        return n;
     }
 #endif
-    int result = BOOST_RTL(write)(pimpl_->fd_, s, n);
-    if (result < n)
-        throw detail::bad_write();
+    int amt = BOOST_RTL(write)(pimpl_->fd_, s, n);
+    if (amt < n)
+        throw detail::bad_write(); // Handles blocking fd's only.
+    return n;
 }
 
 stream_offset file_descriptor::seek

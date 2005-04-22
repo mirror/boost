@@ -15,10 +15,10 @@
 #include <cstdlib>                              // to_upper, to_lower (VC6).
 #include <cstddef>                              // ptrdiff_t.
 #include <vector>
+#include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
-#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/iostream.hpp>  // seekdir, streamsize.
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -28,19 +28,29 @@
 namespace std { using ::toupper; using ::tolower; }
 #endif
 
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
+
 namespace boost { namespace iostreams { namespace test {
 
 struct toupper_filter : public input_filter {
     template<typename Source>
-    int get(Source& s) { return std::toupper(boost::iostreams::get(s)); }
+    int get(Source& s) 
+    { 
+        int c = boost::iostreams::get(s);
+        return c != EOF && c != WOULD_BLOCK ?
+            std::toupper((unsigned char) c) :
+            c;
+    }
 };
 BOOST_IOSTREAMS_PIPABLE(toupper_filter, 0)
 
 struct tolower_filter : public output_filter {
     template<typename Sink>
-    void put(Sink& s, char c)
+    bool put(Sink& s, char c)
     { 
-        boost::iostreams::put(s, (char) std::tolower(c)); 
+        return boost::iostreams::put(
+                   s, (char) std::tolower((unsigned char) c)
+               ); 
     }
 };
 BOOST_IOSTREAMS_PIPABLE(tolower_filter, 0)
@@ -50,8 +60,10 @@ struct toupper_multichar_filter : public multichar_input_filter {
     std::streamsize read(Source& s, char* buf, std::streamsize n)
     {
         std::streamsize result = boost::iostreams::read(s, buf, n);
+        if (result == -1)
+            return -1;
         for (int z = 0; z < result; ++z)
-            buf[z] = (char) std::toupper(buf[z]);
+            buf[z] = (char) std::toupper((unsigned char) buf[z]);
         return result;
     }
 };
@@ -59,10 +71,15 @@ BOOST_IOSTREAMS_PIPABLE(toupper_multichar_filter, 0)
 
 struct tolower_multichar_filter : public multichar_output_filter {
     template<typename Sink>
-    void write(Sink& s, const char* buf, std::streamsize n)
+    std::streamsize write(Sink& s, const char* buf, std::streamsize n)
     {
-        for (std::streamsize z = 0; z < n; ++z)
-            boost::iostreams::put(s, (char) std::tolower(buf[z]));
+        std::streamsize result;
+        for (result = 0; result < n; ++result) {
+            char c = (char) std::tolower((unsigned char) buf[result]);
+            if (!boost::iostreams::put(s, c))
+                break;
+        }
+        return result;
     }
 };
 BOOST_IOSTREAMS_PIPABLE(tolower_multichar_filter, 0)
@@ -78,18 +95,29 @@ struct padding_filter : dual_use_filter {
         int result;
         if (use_pad_char_) {
             result = eof_ ? EOF : pad_char_;
+            use_pad_char_ = false;
         } else {
-            eof_ = (result = boost::iostreams::get(src)) == EOF;
+            result = boost::iostreams::get(src);
+            if (result != EOF && result != WOULD_BLOCK)
+                use_pad_char_ = true;
+            eof_ = result == EOF;
         }
-        use_pad_char_ = !use_pad_char_;
         return result;
     }
 
     template<typename Sink>
-    void put(Sink& s, char c) 
+    bool put(Sink& s, char c) 
     { 
-        boost::iostreams::put(s, c);
-        boost::iostreams::put(s, pad_char_);
+        if (use_pad_char_) {
+            if (!boost::iostreams::put(s, pad_char_))
+                return false;
+            use_pad_char_ = false;
+        } 
+        if (!boost::iostreams::put(s, c))
+            return false;
+        if (!boost::iostreams::put(s, pad_char_))
+            use_pad_char_ = true;
+        return true;
     }
 
     char  pad_char_;
@@ -105,7 +133,11 @@ struct flushable_output_filter {
           flushable_tag
         { };
     template<typename Sink>
-    void put(Sink& s, char c) { buf_.push_back(c); }
+    bool put(Sink& s, char c) 
+    { 
+        buf_.push_back(c); 
+        return true; 
+    }
     template<typename Sink>
     bool flush(Sink& s) 
     { 
@@ -119,60 +151,12 @@ struct flushable_output_filter {
 };
 BOOST_IOSTREAMS_PIPABLE(flushable_output_filter, 0)
 
-// Note: The filter is given an internal buffer, unnecessary in this simple
-// case, to test symmetric_filter_adapter.
-struct toupper_symmetric_filter {
-    typedef char char_type;
-    toupper_symmetric_filter() : buf_(default_filter_buffer_size) 
-    { 
-        buf_.set(0, 0);
-    }
-    bool filter( const char*& src_begin, const char* src_end,
-                 char*& dest_begin, char* dest_end, bool /* flush */ )
-    {
-        while ( can_read(src_begin, src_end) || 
-                can_write(dest_begin, dest_end) ) 
-        {
-            if (can_read(src_begin, src_end)) read(src_begin, src_end);
-            if (can_write(dest_begin, dest_end)) 
-                write(dest_begin, dest_end);
-        }
-        return buf_.ptr() != buf_.eptr();
-    }
-    void close() { buf_.set(0, 0); }
-    void read(const char*& src_begin, const char* src_end)
-    {
-        std::ptrdiff_t count =
-            std::min<std::ptrdiff_t>( src_end - src_begin,
-                                      buf_.size() - 
-                                          (buf_.eptr() - buf_.data()) );
-        while (count-- > 0)
-            *buf_.eptr()++ = std::toupper(*src_begin++);
-    }
-    void write(char*& dest_begin, char* dest_end)
-    {
-        std::ptrdiff_t count =
-            std::min<std::ptrdiff_t>( dest_end - dest_begin,
-                                      buf_.eptr() - buf_.ptr() );
-        while (count-- > 0)
-            *dest_begin++ = *buf_.ptr()++;
-        if (buf_.ptr() == buf_.eptr())
-            buf_.set(0, 0);
-    }
-    bool can_read(const char*& src_begin, const char* src_end)
-    { return src_begin != src_end && buf_.eptr() != buf_.end(); }
-    bool can_write(char*& dest_begin, char* dest_end)
-    { return dest_begin != dest_end && buf_.ptr() != buf_.eptr(); }
-    iostreams::detail::buffer<char> buf_;
-};
-BOOST_IOSTREAMS_PIPABLE(toupper_symmetric_filter, 0)
-
 struct identity_seekable_filter : filter<seekable> {
     template<typename Source>
     int get(Source& s) { return boost::iostreams::get(s); }
 
     template<typename Sink>
-    void put(Sink& s, char c) { boost::iostreams::put(s, c); }
+    bool put(Sink& s, char c) { return boost::iostreams::put(s, c); }
 
     template<typename Device>
     stream_offset seek(Device& d, stream_offset off, BOOST_IOS::seekdir way)
@@ -185,8 +169,8 @@ struct identity_seekable_multichar_filter : multichar_filter<seekable> {
     std::streamsize read(Source& s, char* buf, std::streamsize n)
     { return boost::iostreams::read(s, buf, n); }
     template<typename Sink>
-    void write(Sink& s, const char* buf, std::streamsize n)
-    { boost::iostreams::write(s, buf, n); }
+    std::streamsize write(Sink& s, const char* buf, std::streamsize n)
+    { return boost::iostreams::write(s, buf, n); }
     template<typename Device>
     stream_offset seek(Device& d, stream_offset off, BOOST_IOS::seekdir way)
     { return boost::iostreams::seek(d, off, way); }
@@ -194,5 +178,7 @@ struct identity_seekable_multichar_filter : multichar_filter<seekable> {
 BOOST_IOSTREAMS_PIPABLE(identity_seekable_multichar_filter, 0)
 
 } } } // End namespaces detail, iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_TEST_FILTERS_HPP_INCLUDED

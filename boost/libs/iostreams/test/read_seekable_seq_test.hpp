@@ -12,6 +12,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
+#include "detail/sequence.hpp"
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 

@@ -1,5 +1,6 @@
 // (C) Copyright Craig Henderson 2002 'boost/memmap.hpp' from sandbox
 // (C) Copyright Jonathan Turkanis 2004.
+// (C) Copyright Jonathan Graehl 2004.
 
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
@@ -89,7 +90,7 @@ struct mapped_file_impl {
 };
 
 } // End namespace detail.
-
+                    
 //------------------Definition of mapped_file_source--------------------------//
 
 mapped_file_source::mapped_file_source(mapped_file_params p) { open(p); }
@@ -100,18 +101,14 @@ mapped_file_source::mapped_file_source( const std::string& path,
 { open(path, length, offset); }
 
 void mapped_file_source::open(mapped_file_params p)
-{
+{ 
     p.mode &= ~BOOST_IOS::out;
-    open_impl(p);
+    open_impl(p); 
 }
 
 void mapped_file_source::open( const std::string& path, size_type length,
                                boost::intmax_t offset )
-{
-    mapped_file_params p(path);
-    p.mode = BOOST_IOS::in;
-    p.length = length;
-    p.offset = offset;
+{ 
     open_impl(p);
 }
 
@@ -140,7 +137,7 @@ const char* mapped_file_source::begin() const { return data(); }
 
 const char* mapped_file_source::end() const { return data() + size(); }
 
-#ifdef BOOST_IOSTREAMS_WINDOWS //----------------------------------------------------//
+#ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
 
 namespace detail {
 
@@ -357,7 +354,7 @@ void mapped_file_source::open_impl(mapped_file_params p)
 int mapped_file_source::alignment()
 { return static_cast<int>(sysconf(_SC_PAGESIZE)); }
 
-#endif // #ifdef BOOST_IOSTREAMS_WINDOWS //------------------------------------------//
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS //-----------------------------------//
 
 //------------------Implementation of mapped_file-----------------------------//
 
@@ -405,7 +402,7 @@ void mapped_file_sink::open( const std::string& path, size_type length,
     open(p);
 }
 
-//-----------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>
 

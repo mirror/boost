@@ -105,16 +105,12 @@ struct tolower_seekable_filter : public seekable_filter {
           filter_tag
         { };
     template<typename Sink>
-    void put(Sink& s, char c)
-    { 
-        boost::iostreams::put(s, (char) std::tolower(c)); 
-    }
+    bool put(Sink& s, char c)
+    { return boost::iostreams::put(s, (char) std::tolower(c)); }
 
     template<typename Sink>
     stream_offset seek(Sink& s, stream_offset off, BOOST_IOS::seekdir way)
-    { 
-        return boost::iostreams::seek(s, off, way);
-    }
+    { return boost::iostreams::seek(s, off, way); }
 };
 
 void read_device()
