@@ -20,7 +20,7 @@
 #include <iostream>
 
 template <class T>
-void float_tests(T* = 0, char const* name)
+void float_tests(char const* name, T* = 0)
 {
     std::cout<<"\n"
         "Testing " BOOST_STRINGIZE(HASH_NAMESPACE) "::hash<"<<name<<">\n"
@@ -158,15 +158,15 @@ BOOST_AUTO_UNIT_TEST(hash_float_tests)
     std::cout<<"Platform: "<<BOOST_PLATFORM<<"\n";
     std::cout<<"Library: "<<BOOST_STDLIB<<"\n\n";
 
-    float_tests((float*) 0, "float");
+    float_tests("float", (float*) 0);
 }
 
 BOOST_AUTO_UNIT_TEST(hash_double_tests)
 {
-    float_tests((double*) 0, "double");
+    float_tests("double", (double*) 0);
 }
 
 BOOST_AUTO_UNIT_TEST(hash_long_double_tests)
 {
-    float_tests((long double*) 0, "long double");
+    float_tests("long double", (long double*) 0);
 }
