@@ -47,8 +47,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<VD,VB>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<test_abc1,test_abc3>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<test_abc3,test_abc1>::value), false);
 
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<marker, class_member<foo,int,&foo::x> >::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<marker, class_member2<foo,int,&foo::x> >::value), true);
+typedef class_member<foo,int,&foo::x> mem_type;
+typedef class_member2<foo,int,&foo::x> mem2_type;
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<marker, mem_type>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<marker, mem2_type>::value), true);
 
 TT_TEST_END
 
