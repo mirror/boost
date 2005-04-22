@@ -163,6 +163,7 @@ namespace boost { namespace program_options { namespace detail {
         //
         // When some 'style parser' consumes some input 
         // we start with the first style parser. 
+        assert(m_desc);
 
         vector<style_parser> style_parsers;      
         if (style & allow_long)
@@ -185,6 +186,18 @@ namespace boost { namespace program_options { namespace detail {
         vector<option> result;
         while(!args.empty())
         {
+            if (m_additional_parser) {
+                pair<string, string> r = m_additional_parser(args[0]);
+                if (!r.first.empty()) {
+                    option next;
+                    next.string_key = r.first;
+                    next.value.push_back(r.second);
+                    result.push_back(next);
+                    args.erase(args.begin());
+                    continue;
+                }
+            }
+
             bool ok = false;
             for(unsigned i = 0; i < style_parsers.size(); ++i)
             {
@@ -419,17 +432,11 @@ namespace boost { namespace program_options { namespace detail {
         return result;
     }
 
-
-
-
-#if 0
-
     void 
     cmdline::set_additional_parser(additional_parser p)
     {
         m_additional_parser = p;
     }
-#endif
 
 
 }}}

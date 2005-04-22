@@ -87,9 +87,6 @@ namespace boost { namespace program_options { namespace detail {
         std::vector<option> parse_terminator(
             std::vector<std::string>& args);
 
-
-#if 0
-
         /** Set additional parser. This will be called for each token
             of command line. If first string in pair is not empty,
             then the token is considered matched by this parser,
@@ -99,8 +96,6 @@ namespace boost { namespace program_options { namespace detail {
             Note that additional parser can match only one token.
         */
         void set_additional_parser(additional_parser p);
-
-#endif
 
         void check_style(int style) const;
 

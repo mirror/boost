@@ -431,6 +431,41 @@ void test_prefix()
     test_cmdline("foo*=", style, test_cases1);
 }
 
+
+pair<string, string> at_option_parser(string const&s)
+{
+    if ('@' == s[0])
+        return std::make_pair(string("response-file"), s.substr(1));
+    else
+        return pair<string, string>();
+}
+
+
+void test_additional_parser()
+{
+    options_description desc;
+    desc.add_options()
+        ("response-file", value<string>(), "response file")
+        ("foo", value<int>(), "foo")
+        ;
+
+    vector<string> input;
+    input.push_back("@config");
+    input.push_back("--foo=1");
+
+    detail::cmdline cmd(input, command_line_style::default_style);
+    cmd.set_options_description(desc);
+    cmd.set_additional_parser(at_option_parser);
+
+    vector<option> result = cmd.run();
+
+    BOOST_REQUIRE(result.size() == 2);
+    BOOST_CHECK_EQUAL(result[0].string_key, "response-file");
+    BOOST_CHECK_EQUAL(result[0].value[0], "config");
+    BOOST_CHECK_EQUAL(result[1].string_key, "foo");
+    BOOST_CHECK_EQUAL(result[1].value[0], "1");    
+}
+
 int test_main(int ac, char* av[])
 {
     test_long_options();
@@ -440,6 +475,7 @@ int test_main(int ac, char* av[])
     test_guessing();
     test_arguments();
     test_prefix();
+    test_additional_parser();
 
     return 0;
 }
