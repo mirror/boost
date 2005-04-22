@@ -1,0 +1,23 @@
+#  Copyright Vladimur Prus 2005. Use, modification and
+#  distribution is subject to the Boost Software License, Version
+#  1.0. (See accompanying file LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt)
+#
+# For more information, see http://www.boost.org/libs/any
+#
+
+subproject libs/any/test ;
+
+import testing ;
+
+rule any-test ( sources + )
+{
+    return [ run $(sources) : : : <include>$(BOOST_ROOT) ] ;
+}
+
+test-suite any :
+    [ any-test ../any_test.cpp ]
+    [ any-test any_to_ref_test.cpp <lib>../../test/build/boost_test_exec_monitor ]
+    ;
+
+

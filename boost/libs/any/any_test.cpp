@@ -46,8 +46,7 @@ namespace any_tests // test suite
         { "converting assignment operator", test_converting_assign },
         { "failed custom keyword cast",     test_bad_cast          },
         { "swap member function",           test_swap              },
-        { "copying operations on a null",   test_null_copying      },
-        { "casting to reference",           test_cast_to_reference }
+        { "copying operations on a null",   test_null_copying      }
     };
 
     const test_case_iterator begin = test_cases;
@@ -186,60 +185,6 @@ namespace any_tests // test definitions
         check_true(null.empty(), "empty on null");
         check_true(copied.empty(), "empty on copied");
         check_true(assigned.empty(), "empty on copied");
-    }
-
-    void test_cast_to_reference()
-    {
-        int i = 7;
-        any a(i), b(a);
-	int v = any_cast<int>(a);
-	//VP, 2005/03/17: commented out while I try to figure out why
-	// vc6 crashes on this code.
-#if 0	
-        const any c(i);
-
-        int&                ra1 = any_cast<int&               >(a);
-        int const&          ra2 = any_cast<int const&         >(a);
-        int const volatile& ra3 = any_cast<int const volatile&>(a);
-
-        check_true(
-            &ra1 == &ra2 && &ra2 == &ra3,
-            "references refer to a same object");
-
-        int&                rb1 = any_cast<int&               >(b);
-        int const&          rb2 = any_cast<int const&         >(b);
-        int const volatile& rb3 = any_cast<int const volatile&>(b);
-
-        check_true(
-            &rb1 == &rb2 && &rb2 == &rb3,
-            "references refer to a same object");
-
-        int const&          rc1 = any_cast<int const&         >(c);
-        int const volatile& rc2 = any_cast<int const volatile&>(c);
-
-        check_true(&rc1 == &rc2, "references refer to a same object");
-
-        check_true(
-            &ra1 != &rb1 && &rb1 != &rc1 && &rc1 != &ra1,
-            "references refer to different objects");
-
-        check_true(
-            &ra1 != &i && &rb1 != &i && &rc1 != &i,
-            "references don't refer to original");
-
-        ++ra1;
-
-        check_true((v == i + 1), "modified through reference");
-
-        --rb1;
-	int v2 = any_cast<int>(b);
-        check_true((v2 == i - 1), "modified through reference");
-
-        TEST_CHECK_THROW(
-            any_cast<char&>(a),
-            bad_any_cast,
-            "any_cast to incorrect reference type");
-#endif	    
     }
 }
 
