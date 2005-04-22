@@ -70,7 +70,7 @@ void test_basics( T const* )
   // Implicit construction
   // The first parameter is implicitely converted to optional<T>(a);
   test_implicit_construction(a,a,z);
-  
+
   // Direct initialization.
   // 'oa' state is Initialized with 'a'
   // T::T( T const& x ) is used.
@@ -85,7 +85,7 @@ void test_basics( T const* )
   optional<T> ob ;
 
   // Value-Assignment upon Uninitialized optional.
-  // T::T ( T const& x ) is used.
+  // T::T( T const& x ) is used.
   set_pending_copy( ARG(T) ) ;
   ob = a ;
   check_is_not_pending_copy( ARG(T) ) ;
@@ -93,12 +93,14 @@ void test_basics( T const* )
   check_value(ob,a,z);
 
   // Value-Assignment upon Initialized optional.
-  // T::T ( T const& x ) is used
-  set_pending_dtor( ARG(T) ) ;
-  set_pending_copy( ARG(T) ) ;
+  // T::operator=( T const& x ) is used
+  set_pending_assign( ARG(T) ) ;
+  set_pending_copy  ( ARG(T) ) ;
+  set_pending_dtor  ( ARG(T) ) ;
   ob = b ;
-  check_is_not_pending_dtor( ARG(T) ) ;
-  check_is_not_pending_copy( ARG(T) ) ;
+  check_is_not_pending_assign( ARG(T) ) ;
+  check_is_pending_copy      ( ARG(T) ) ;
+  check_is_pending_dtor      ( ARG(T) ) ;
   check_initialized(ob);
   check_value(ob,b,z);
 
@@ -111,13 +113,14 @@ void test_basics( T const* )
   check_value_const(oa2,a,z);
 
   // Assignment
-  // T::~T() is used to destroy previous value in ob.
-  // T::T ( T const& x ) is used to copy new value.
-  set_pending_dtor( ARG(T) ) ;
-  set_pending_copy( ARG(T) ) ;
+  // T::operator= ( T const& x ) is used to copy new value.
+  set_pending_assign( ARG(T) ) ;
+  set_pending_copy  ( ARG(T) ) ;
+  set_pending_dtor  ( ARG(T) ) ;
   oa = ob ;
-  check_is_not_pending_dtor( ARG(T) ) ;
-  check_is_not_pending_copy( ARG(T) ) ;
+  check_is_not_pending_assign( ARG(T) ) ;
+  check_is_pending_copy      ( ARG(T) ) ;
+  check_is_pending_dtor      ( ARG(T) ) ;
   check_initialized(oa);
   check_value(oa,b,z);
 
@@ -161,7 +164,7 @@ template<class T>
 void test_direct_value_manip( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   T x(3);
 
   optional<T> const c_opt0(x) ;
@@ -169,7 +172,7 @@ void test_direct_value_manip( T const* )
 
   BOOST_CHECK( c_opt0.get().V() == x.V() ) ;
   BOOST_CHECK(   opt0.get().V() == x.V() ) ;
-  
+
   BOOST_CHECK( c_opt0->V() == x.V() ) ;
   BOOST_CHECK(   opt0->V() == x.V() ) ;
 
@@ -212,7 +215,7 @@ void test_uninitialized_access( T const* )
   }
   catch (...) {}
   BOOST_CHECK(!passed);
-  
+
   passed = false ;
   try
   {
@@ -282,6 +285,9 @@ void test_throwing_direct_init( T const* )
   BOOST_CHECK(!passed);
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
+
+  reset_throw_on_copy( ARG(T) ) ;
+
 }
 
 //
@@ -317,6 +323,8 @@ void test_throwing_val_assign_on_uninitialized( T const* )
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
   check_uninitialized(opt);
+
+  reset_throw_on_copy( ARG(T) ) ;
 }
 
 //
@@ -330,10 +338,9 @@ void test_throwing_val_assign_on_initialized( T const* )
   T z(0);
   T a(8);
   T b(9);
+  T x(-1);
 
   int count = get_instance_count( ARG(T) ) ;
-
-  reset_throw_on_copy( ARG(T) ) ;
 
   optional<T> opt ( b ) ;
   ++ count ;
@@ -342,16 +349,16 @@ void test_throwing_val_assign_on_initialized( T const* )
 
   check_value(opt,b,z);
 
-  set_throw_on_copy( ARG(T) ) ;
+  set_throw_on_assign( ARG(T) ) ;
 
   bool passed = false ;
   try
   {
     // This should:
-    //   Attempt to copy construct 'a' and throw.
-    //   opt should be left uninitialized (even though it was initialized)
-    set_pending_dtor( ARG(T) ) ;
-    set_pending_copy( ARG(T) ) ;
+    //   Attempt to assign 'a' and throw.
+    //   opt is kept initialized but its value not neccesarily fully assigned
+    //   (in this test, incompletely assigned is flaged with the value -1 being set)
+    set_pending_assign( ARG(T) ) ;
     opt.reset ( a ) ;
     passed = true ;
   }
@@ -359,12 +366,12 @@ void test_throwing_val_assign_on_initialized( T const* )
 
   BOOST_CHECK(!passed);
 
-  -- count ;
-  
-  check_is_not_pending_dtor( ARG(T) );
-  check_is_not_pending_copy( ARG(T) );
+  check_is_not_pending_assign( ARG(T) );
   check_instance_count(count, ARG(T) );
-  check_uninitialized(opt);
+  check_initialized(opt);
+  check_value(opt,x,z);
+
+  reset_throw_on_assign ( ARG(T) ) ;
 }
 
 //
@@ -377,8 +384,6 @@ void test_throwing_copy_initialization( T const* )
 
   T z(0);
   T a(10);
-
-  reset_throw_on_copy( ARG(T) ) ;
 
   optional<T> opt (a);
 
@@ -406,6 +411,8 @@ void test_throwing_copy_initialization( T const* )
   // Nothing should have happened to the source optional.
   check_initialized(opt);
   check_value(opt,a,z);
+
+  reset_throw_on_copy( ARG(T) ) ;
 }
 
 //
@@ -419,8 +426,6 @@ void test_throwing_assign_to_uninitialized( T const* )
 
   T z(0);
   T a(11);
-
-  reset_throw_on_copy( ARG(T) ) ;
 
   optional<T> opt0 ;
   optional<T> opt1(a) ;
@@ -446,6 +451,8 @@ void test_throwing_assign_to_uninitialized( T const* )
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
   check_uninitialized(opt0);
+
+  reset_throw_on_copy( ARG(T) ) ;
 }
 
 //
@@ -460,24 +467,23 @@ void test_throwing_assign_to_initialized( T const* )
   T z(0);
   T a(12);
   T b(13);
-
-  reset_throw_on_copy( ARG(T) ) ;
+  T x(-1);
 
   optional<T> opt0(a) ;
   optional<T> opt1(b) ;
 
   int count = get_instance_count( ARG(T) ) ;
 
-  set_throw_on_copy( ARG(T) ) ;
+  set_throw_on_assign( ARG(T) ) ;
 
   bool passed = false ;
   try
   {
     // This should:
     //   Attempt to copy construct 'opt1.value()' into opt0 and throw.
-    //   opt0 should be left unmodified or uninitialized
-    set_pending_dtor( ARG(T) ) ;
-    set_pending_copy( ARG(T) ) ;
+    //   opt0 is kept initialized but its value not neccesarily fully assigned
+    //   (in this test, incompletely assigned is flaged with the value -1 being set)
+    set_pending_assign( ARG(T) ) ;
     opt0 = opt1 ;
     passed = true ;
   }
@@ -486,11 +492,12 @@ void test_throwing_assign_to_initialized( T const* )
   BOOST_CHECK(!passed);
 
   // opt0 was left uninitialized
-  -- count ;
-  check_is_not_pending_dtor( ARG(T) );
-  check_is_not_pending_copy( ARG(T) );
+  check_is_not_pending_assign( ARG(T) );
   check_instance_count(count, ARG(T) );
-  check_uninitialized(opt0);
+  check_initialized(opt0);
+  check_value(opt0,x,z);
+
+  reset_throw_on_assign( ARG(T) ) ;
 }
 
 //
@@ -500,12 +507,10 @@ template<class T>
 void test_no_throwing_swap( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   T z(0);
   T a(14);
   T b(15);
-
-  reset_throw_on_copy( ARG(T) ) ;
 
   optional<T> def0 ;
   optional<T> def1 ;
@@ -541,16 +546,15 @@ template<class T>
 void test_throwing_swap( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   T a(16);
   T b(17);
-
-  reset_throw_on_copy( ARG(T) ) ;
+  T x(-1);
 
   optional<T> opt0(a) ;
   optional<T> opt1(b) ;
 
-  set_throw_on_copy( ARG(T) ) ;
+  set_throw_on_assign( ARG(T) ) ;
 
   //
   // Case 1: Both Initialized.
@@ -567,14 +571,18 @@ void test_throwing_swap( T const* )
 
   BOOST_CHECK(!passed);
 
-  // Assuming swap(T&,T&) has at least the basic guarantee, these should hold.
-  BOOST_CHECK( ( !opt0 || ( !!opt0 && ( ( *opt0 == a ) || ( *opt0 == b ) ) ) ) ) ;
-  BOOST_CHECK( ( !opt1 || ( !!opt1 && ( ( *opt1 == a ) || ( *opt1 == b ) ) ) ) ) ;
+  // optional's swap doesn't affect the initialized states of the arguments. Therefore,
+  // the following must hold:
+  check_initialized(opt0);
+  check_initialized(opt1);
+  check_value(opt0,x,a);
+  check_value(opt1,b,x);
+
 
   //
   // Case 2: Only one Initialized.
   //
-  reset_throw_on_copy( ARG(T) ) ;
+  reset_throw_on_assign( ARG(T) ) ;
 
   opt0.reset();
   opt1.reset(a);
@@ -585,7 +593,7 @@ void test_throwing_swap( T const* )
   try
   {
     // This should attempt to swap optionals and fail at opt0.reset(*opt1)
-    // opt0 should be left uninitialized and opt1 unchanged.
+    // Both opt0 and op1 are left unchanged (unswaped)
     swap(opt0,opt1);
 
     passed = true ;
@@ -596,7 +604,9 @@ void test_throwing_swap( T const* )
 
   check_uninitialized(opt0);
   check_initialized(opt1);
-  check_value(opt1,a,b);
+  check_value(opt1,a,x);
+
+  reset_throw_on_copy( ARG(T) ) ;
 }
 
 //
@@ -606,9 +616,7 @@ template<class T>
 void test_relops( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
-  reset_throw_on_copy( ARG(T) ) ;
-  
+
   T v0(18);
   T v1(19);
   T v2(19);
@@ -627,11 +635,11 @@ void test_relops( T const* )
 
   // Check when both are uininitalized.
   BOOST_CHECK (   def0 == def1  ) ; // both uninitialized compare equal
-  BOOST_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized 
+  BOOST_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized
   BOOST_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized
   BOOST_CHECK ( !(def0 != def1) ) ;
-  BOOST_CHECK (   def0 <= def1  ) ; 
-  BOOST_CHECK (   def0 >= def1  ) ; 
+  BOOST_CHECK (   def0 <= def1  ) ;
+  BOOST_CHECK (   def0 >= def1  ) ;
 
   // Check when only lhs is uninitialized.
   BOOST_CHECK (   def0 != opt0  ) ; // uninitialized is never equal to initialized
@@ -664,7 +672,7 @@ void test_none( T const* )
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
   using boost::none ;
-  
+
   optional<T> def0 ;
   optional<T> def1(none) ;
   optional<T> non_def( T(1234) ) ;
@@ -682,7 +690,7 @@ void test_none( T const* )
 void test_with_builtin_types()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   test_basics( ARG(double) );
   test_uninitialized_access( ARG(double) );
   test_no_throwing_swap( ARG(double) );
@@ -763,7 +771,7 @@ void test_conversions1()
   optional<double> opt3 ;
   opt3 = opt2 ;
   BOOST_CHECK(*opt3 == d);
-#endif  
+#endif
 }
 
 void test_conversions2()

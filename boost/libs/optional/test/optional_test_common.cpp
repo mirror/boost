@@ -93,10 +93,22 @@ class X
 
     X& operator= ( X const& rhs )
       {
-        v = rhs.v ;
+        pending_assign = false ;
 
-        TRACE ( "X::operator =( X const& rhs). this=" << this << " rhs.v=" << rhs.v ) ;
+        if ( throw_on_assign )
+        {
+          TRACE ( "throwing exception in X's assignment" ) ;
 
+          v = -1 ;
+
+          throw 0 ;
+        }
+        else
+        {
+          v = rhs.v ;
+
+          TRACE ( "X::operator =( X const& rhs). this=" << this << " rhs.v=" << rhs.v ) ;
+        }
         return *this ;
       }
 
@@ -115,7 +127,9 @@ class X
     static int  count ;
     static bool pending_copy   ;
     static bool pending_dtor   ;
+    static bool pending_assign ;
     static bool throw_on_copy ;
+    static bool throw_on_assign ;
 
   private :
 
@@ -127,32 +141,44 @@ class X
 } ;
 
 
-int  X::count = 0 ;
-bool X::pending_copy = false ;
-bool X::pending_dtor = false ;
-bool X::throw_on_copy = false ;
+int  X::count           = 0 ;
+bool X::pending_copy    = false ;
+bool X::pending_dtor    = false ;
+bool X::pending_assign  = false ;
+bool X::throw_on_copy   = false ;
+bool X::throw_on_assign = false ;
 
-inline void set_pending_copy         ( X const* x ) { X::pending_copy  = true  ; }
-inline void set_pending_dtor         ( X const* x ) { X::pending_dtor  = true  ; }
-inline void set_throw_on_copy        ( X const* x ) { X::throw_on_copy = true  ; }
-inline void reset_throw_on_copy      ( X const* x ) { X::throw_on_copy = false ; }
-inline void check_is_pending_copy    ( X const* x ) { BOOST_CHECK( X::pending_copy ) ; }
-inline void check_is_pending_dtor    ( X const* x ) { BOOST_CHECK( X::pending_dtor ) ; }
-inline void check_is_not_pending_copy( X const* x ) { BOOST_CHECK( !X::pending_copy ) ; }
-inline void check_is_not_pending_dtor( X const* x ) { BOOST_CHECK( !X::pending_dtor ) ; }
-inline void check_instance_count     ( int c, X const* x ) { BOOST_CHECK( X::count == c ) ; }
-inline int  get_instance_count       ( X const* x ) { return X::count ; }
+inline void set_pending_copy           ( X const* x ) { X::pending_copy  = true  ; }
+inline void set_pending_dtor           ( X const* x ) { X::pending_dtor  = true  ; }
+inline void set_pending_assign         ( X const* x ) { X::pending_assign = true  ; }
+inline void set_throw_on_copy          ( X const* x ) { X::throw_on_copy = true  ; }
+inline void set_throw_on_assign        ( X const* x ) { X::throw_on_assign = true  ; }
+inline void reset_throw_on_copy        ( X const* x ) { X::throw_on_copy = false ; }
+inline void reset_throw_on_assign      ( X const* x ) { X::throw_on_assign = false ; }
+inline void check_is_pending_copy      ( X const* x ) { BOOST_CHECK( X::pending_copy ) ; }
+inline void check_is_pending_dtor      ( X const* x ) { BOOST_CHECK( X::pending_dtor ) ; }
+inline void check_is_pending_assign    ( X const* x ) { BOOST_CHECK( X::pending_assign ) ; }
+inline void check_is_not_pending_copy  ( X const* x ) { BOOST_CHECK( !X::pending_copy ) ; }
+inline void check_is_not_pending_dtor  ( X const* x ) { BOOST_CHECK( !X::pending_dtor ) ; }
+inline void check_is_not_pending_assign( X const* x ) { BOOST_CHECK( !X::pending_assign ) ; }
+inline void check_instance_count       ( int c, X const* x ) { BOOST_CHECK( X::count == c ) ; }
+inline int  get_instance_count         ( X const* x ) { return X::count ; }
 
-inline void set_pending_copy         (...) {}
-inline void set_pending_dtor         (...) {}
-inline void set_throw_on_copy        (...) {}
-inline void reset_throw_on_copy      (...) {}
-inline void check_is_pending_copy    (...) {}
-inline void check_is_pending_dtor    (...) {}
-inline void check_is_not_pending_copy(...) {}
-inline void check_is_not_pending_dtor(...) {}
-inline void check_instance_count     (...) {}
-inline int  get_instance_count       (...) { return 0 ; }
+inline void set_pending_copy           (...) {}
+inline void set_pending_dtor           (...) {}
+inline void set_pending_assign         (...) {}
+inline void set_throw_on_copy          (...) {}
+inline void set_throw_on_assign        (...) {}
+inline void reset_throw_on_copy        (...) {}
+inline void reset_throw_on_assign      (...) {}
+inline void check_is_pending_copy      (...) {}
+inline void check_is_pending_dtor      (...) {}
+inline void check_is_pending_assign    (...) {}
+inline void check_is_not_pending_copy  (...) {}
+inline void check_is_not_pending_dtor  (...) {}
+inline void check_is_not_pending_assign(...) {}
+inline void check_instance_count       (...) {}
+inline int  get_instance_count         (...) { return 0 ; }
 
 
 template<class T>
@@ -160,7 +186,7 @@ inline void check_uninitialized_const ( optional<T> const& opt )
 {
 #ifndef BOOST_OPTIONAL_NO_NULL_COMPARE
   BOOST_CHECK( opt == 0 ) ;
-#endif  
+#endif
   BOOST_CHECK( !opt ) ;
   BOOST_CHECK( !get_pointer(opt) ) ;
   BOOST_CHECK( !opt.get_ptr() ) ;

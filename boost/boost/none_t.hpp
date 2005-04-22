@@ -9,21 +9,14 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
-#ifndef BOOST_NONE_17SEP2003_HPP
-#define BOOST_NONE_17SEP2003_HPP
-
-#include "boost/none_t.hpp"
-
-// NOTE: Borland users have to include this header outside any precompiled headers
-// (bcc<=5.64 cannot include instance data in a precompiled header)
+#ifndef BOOST_NONE_T_17SEP2003_HPP
+#define BOOST_NONE_T_17SEP2003_HPP
 
 namespace boost {
 
-namespace {
+namespace detail { struct none_helper{}; }
 
-none_t const none = ((none_t)0) ;
-
-}
+typedef int detail::none_helper::*none_t ;
 
 } // namespace boost
 

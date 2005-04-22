@@ -20,6 +20,7 @@ HREF="../../../boost/optional/optional.hpp">boost/optional/optional.hpp</A>&gt; 
   <DT><A HREF="#semantics">Semantics</A></DT>
   <DT><A HREF="#examples">Examples</A></DT>
   <DT><A HREF="#ref">Optional references</A></DT>
+  <DT><A HREF="#refassign">Rebinding semantics for assignment of optional references</A></DT>
   <DT><A HREF="#inplace">In-Place Factories</A></DT>
   <DT><A HREF="#bool">A note about optional&lt;bool&gt;</A></DT>
   <DT><A HREF="#exsafety">Exception Safety Guarantees</A></DT>
@@ -35,7 +36,7 @@ HREF="../../../boost/optional/optional.hpp">boost/optional/optional.hpp</A>&gt; 
 
 <P>Consider these functions which should return a value but which might not have
   a value to return:</P>
-<pre>(A) double sqrt( double n );
+<pre>(A) double sqrt(double n );
 (B) char get_async_input();
 (C) point polygon::get_any_point_effectively_inside();</pre>
 <P>There are different approaches to the issue of not having a value to return.</P>
@@ -100,11 +101,12 @@ if ( p.second )
   and neither default nor value initialization applies, it is said that the object is
   <i><b>uninitialized</b></i>. Its actual value exist but has an
   <i>indeterminate inital value</i> (c.f. 8.5.9).<br>
-  <code>optional&lt;T&gt;</code> intends to formalize the notion of initialization/no-initialization
+  <code>optional&lt;T&gt;</code> intends to formalize the notion of initialization 
+(or loack of it)
   allowing a program to test whether an object has been initialized and stating that access to
   the value of an uninitialized object is undefined behaviour. That is,
   when a variable is declared as optional&lt;T&gt; and no initial value is given,
-  the variable is formally uninitialized. A formally uninitialized optional object has conceptually
+  the variable is <i>formally</i> uninitialized. A formally uninitialized optional object has conceptually
   no value at all and this situation can be tested at runtime. It is formally <i>undefined behaviour</i>
   to try to access the value of an uninitialized optional. An uninitialized optional can be <i>assigned</i> a      value, in which case its initialization state changes to initialized. Furthermore, given the formal
   treatment of initialization states in optional objects, it is even possible to reset an optional to <i>uninitialized</i>.</P>
@@ -122,8 +124,8 @@ if ( p.second )
   Using the <a href="../../../doc/html/variant.html">Boost.Variant</a> library, this model can be implemented
   in terms of <code>boost::variant&lt;T,nil_t&gt;</code>.<br>
   There is precedence for a discriminated union as a model for an optional value: the
-  <a href="http://www.haskell.org/"><u>Haskell</u></a> <b>Maybe</b> builtin type constructor,
-  thus a discriminated union <code>T+nil_t</code> serves as a conceptual foundation.</p>
+  <a href="http://www.haskell.org/"><u>Haskell</u></a> <b>Maybe</b> builtin type constructor. 
+Thus, a discriminated union <code>T+nil_t</code> serves as a conceptual foundation.</p>
 <p>A <code>variant&lt;T,nil_t&gt;</code> follows naturally from the traditional idiom of extending
 the range of possible values adding an additional sentinel value with the special meaning of <i>Nothing. </i>
 However, this additional <i>Nothing</i> value is largely irrelevant for our purpose
@@ -180,33 +182,31 @@ object.</p>
 <p><b>Direct Value Construction via copy:</b> To introduce a formally
 initialized wrapped object whose value is obtained as a copy of some object.</p>
 
-<p><b>Deep Copy Construction:</b> To obtain a different yet equivalent wrapped
+<p><b>Deep Copy Construction:</b> To obtain a new yet equivalent wrapped
 object.</p>
 
-<p><b>Direct Value Assignment (upon initialized):</b> To assign the wrapped object a value obtained
-as a copy of some object.</p>
+<p><b>Direct Value Assignment (upon initialized):</b> To assign a value to the wrapped object.</p>
 
 <p><b>Direct Value Assignment (upon uninitialized):</b> To initialize the wrapped object
 with a value obtained
 as a copy of some object.</p>
 
-<p><b>Assignnment (upon initialized):</b> To assign the wrapped object a value obtained as a copy
-of another wrapper's object.</p>
+<p><b>Assignnment (upon initialized):</b> To assign to the wrapped object the value 
+of another wrapped object.</p>
 
 <p><b>Assignnment (upon uninitialized):</b> To initialize the wrapped object
-with value obtained as a copy
-of another wrapper's object.</p>
+with value of another wrapped object.</p>
 
 <p><b>Deep Relational Operations (when supported by the type T):</b> To compare
 wrapped object values taking into account the presence of uninitialized
-operands.</p>
+states.</p>
 
 <p><b>Value access:</b> To unwrap the wrapped object.</p>
 
 <p><b>Initialization state query:</b> To determine if the object is formally
 initialized or not.</p>
 
-<p><b>Swap:</b> To exchange wrapper's objects. (with whatever exception safety
+<p><b>Swap:</b> To exchange wrapped objects. (with whatever exception safety
 guarantiees are provided by T's swap).</p>
 
 <p><b>De-initialization:</b> To release the wrapped object (if any) and leave
@@ -313,7 +313,7 @@ class optional
 
     optional () ;
 
-    optional ( detail::none_t ) ;
+    optional ( none_t ) ;
 
     optional ( T const&amp; v ) ;
 
@@ -325,7 +325,7 @@ class optional
 
     template&lt;class TypedInPlaceFactory&gt; explicit optional ( TypedInPlaceFactory const&amp; f ) ;
 
-    optional&amp; operator = ( detail::none_t ) ;
+    optional&amp; operator = ( none_t ) ;
 
     optional&amp; operator = ( T const&amp; v ) ;
 
@@ -427,7 +427,7 @@ assert ( !def ) ;</pre>
 
 <HR>
 
-<pre>optional&lt;T&gt;::optional( detail::none_t );</pre>
+<pre>optional&lt;T&gt;::optional( none_t );</pre>
 <blockquote>
 <p><b>Effect:</b> Constructs an <b>optional </b>uninitialized.</p>
 <p><b>Postconditions:</b> <b>*this</b> is <u>uninitialized</u>.</p>
@@ -436,11 +436,12 @@ assert ( !def ) ;</pre>
 <blockquote>
 <p>T's default constructor <u><i>is not</i></u> called.<br>
 The
-expression <code>boost::none</code> denotes an instance of <code>boost::detail::none_t</code> that can be
+expression <code>boost::none</code> denotes an instance of <code>boost::none_t</code> that can be
 used as the parameter.</p>
 </blockquote>
 <p><b>Example:</b></p>
   <blockquote>
+    <pre>#include &lt;boost/none.hpp&gt;</pre>
     <pre>optional&lt;T&gt; n(none) ;
 assert ( !n ) ;</pre>
 </blockquote>
@@ -468,7 +469,7 @@ assert ( *opt == v ) ;</pre>
 
 <HR>
 
-<pre>optional&lt;T&amp;&gt;::optional( T ref )</pre>
+<pre>optional&lt;T&amp;&gt;::optional( T&amp; ref )</pre>
 <blockquote>
 <p><b>Effect:</b> Directly-Constructs an <b>optional</b>.</p>
 <p><b>Postconditions:</b> <b>*this</b> is <u>initialized</u> and its value is an
@@ -522,12 +523,11 @@ assert ( init2 == init ) ;
 <blockquote>
 <p><b>Effect:</b> Copy-Constructs an <b>optional</b>.</p>
 <p><b>Postconditions:</b> If <b>rhs</b> is initialized, <b>*this</b> is initialized
-and its value is a <i>copy</i> of the internal wrapper holding the references in <b>rhs</b>; else <b>*this</b>
+and its value is another reference to the same object referenced by <b>*rhs</b>; else <b>*this</b>
 is uninitialized.</p>
 <p><b>Throws:</b> Nothing.</p>
-<p><b>Notes:</b> If <b>rhs</b> is initialized, the internal wrapper will be
-copied and just like true references, both <b>*this</b> and <b>rhs</b> will
-referr to the same object<b> </b>(will alias).</p>
+<p><b>Notes:</b> If <b>rhs</b> is initialized, both <b>*this</b> and <b>*rhs</b> will
+refeer to the same object<b> </b>(they alias).</p>
 <p><b>Example:</b></p>
 <blockquote>
         <pre>optional&lt;T&amp;&gt; uninit ;
@@ -542,6 +542,13 @@ assert ( *init == v ) ;
 
 optional&lt;T&gt; init2 ( init ) ;
 assert ( *init2 == v ) ;
+
+v = 3 ;
+
+assert ( *init  == 3 ) ;
+assert ( *init2 == 3 ) ;
+
+
 </pre>
 
 </blockquote>
@@ -615,22 +622,55 @@ assert ( *y == v ) ;
 <p><b>Effect:</b> Assigns the value 'rhs' to an <b>optional</b>.</p>
 <p><b>Postconditions:</b> <b>*this</b> is initialized
 and its value is a <i>copy</i> of <b>rhs.</b></p>
-<p><b>Throws:</b> Whatever T::T( T const& ) throws.</p>
-<p><b>Notes:</b> If <b>*this</b> was initialized, it is first reset to uninitialized
-using T::~T(), then T::T(<b>rhs</b>) is called.</p>
-<p><b>Exception Safety:</b> <u>Basic:</u> Exceptions can only be thrown during T::T( T const& );
-in that case, <b>*this</b> is left <u>uninitialized</u>.
-</p>
+<p><b>Throws:</b> Whatever T::operator=( T const& ) or T::T(T conbst&amp;) throws.</p>
+<p><b>Notes:</b> If <b>*this</b> was initialized, T's assignment operator is 
+used, otherwise, its copy-contructor is used.</p>
+<p><b>Exception Safety:</b> In the event of an exception, the initialization 
+state of <b>*this</b> is unchanged and its value unspecified as far as optional 
+is concerned (it is up to T's operator=()) [If <b>*this</b> is initially 
+uninitialized and T's <i>copy constructor</i> fails, <b>*this</b> is left 
+properly uninitialized]</p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>T x;
+optional&lt;T&gt; def ;
 optional&lt;T&gt; opt(x) ;
 
 T y;
+def = y ;
+assert ( *def == y ) ;
 opt = y ;
-assert ( *opt == y ) ;
-// previous value (copy of 'v') destroyed from within 'opt'.
+assert ( *opt == y ) ;</pre>
+</blockquote>
+</blockquote>
 
+<HR>
+
+<pre>optional&lt;T&amp;&gt;&amp; optional&lt;T&amp;&gt;::operator= ( T&amp; const&amp; rhs ) ;</pre>
+<blockquote>
+<p><b>Effect:</b> (Re)binds thee wrapped reference.</p>
+<p><b>Postconditions:</b> <b>*this</b> is initialized
+and it references the same object referenced by <b>rhs.</b></p>
+<p><b>Notes:</b> If <b>*this</b> was initialized, is is <i>rebound</i> to the 
+new object. See <A HREF="#refassign">here</a> for details on this behaviour.</p>
+<p><b>Example:</b></p>
+<blockquote>
+    <pre>int a = 1 ;
+int b = 2 ;
+T&amp; ra = a ;
+T&amp; rb = b ;
+optional&lt;int&amp;&gt; def ;
+optional&lt;int&amp;&gt; opt(ra) ;
+
+def = rb ; // binds 'def' to 'b' through 'rb'
+assert ( *def == b ) ;
+*def = a ; // changes the value of 'b' to a copy of the value of 'a'
+assert ( b == a ) ;
+int c = 3;
+int&amp; rc = c ;
+opt = rc ; // REBINDS to 'c' through 'rc'
+c = 4 ;
+assert ( *opt == 4 ) ;
 </pre>
 </blockquote>
 </blockquote>
@@ -644,23 +684,61 @@ assert ( *opt == y ) ;
 and its value is a <i>copy</i> of the value of <b>rhs</b>; else <b>*this</b>
 is uninitialized.
 </p>
-<p><b>Throws:</b> Whatever T::T( T const& ) throws.</p>
-<p><b>Notes:</b> If <b>*this</b> was initialized, it is first reset to uninitialized
-using T::~T(), then T::T( T const& ) is called if <b>rhs</b> is initialized.
+<p><b>Throws:</b> Whatever T::operator( T const&amp;) or&nbsp; T::T( T const& ) throws.</p>
+<p><b>Notes:</b> If both<b> *this</b> and <b>rhs</b> are initially initialized, 
+T's <i>assignment</i> <i>operator</i> is used. If <b>*this</b> is initially initialized but <b>
+rhs</b> is uinitialized, T's <i>destructor</i> is called. If <b>*this</b> is initially 
+uninitialized but rhs is initialized, T's <i>copy constructor</i> is called.
 </p>
-<p><b>Exception Safety:</b> <u>Basic:</u> Exceptions can only be thrown during T::T( T const& );
-in that case, <b>*this</b> is left <u>uninitialized</u>.
-</p>
+<p><b>Exception Safety:</b> In the event of an exception, the initialization 
+state of <b>*this</b> is unchanged and its value unspecified as far as optional 
+is concerned (it is up to T's operator=()) [If <b>*this</b> is initially 
+uninitialized and T's <i>copy constructor</i> fails, <b>*this</b> is left 
+properly uninitialized]</p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>T v;
 optional&lt;T&gt; opt(v);
-optional&lt;T&gt; uninit ;
+optional&lt;T&gt; def ;
 
-opt = uninit ;
-assert ( !opt ) ;
+opt = def ;
+assert ( !def ) ;
 // previous value (copy of 'v') destroyed from within 'opt'.
 
+</pre>
+</blockquote>
+</blockquote>
+
+<HR>
+
+<pre>optional&lt;T&amp;&gt; &amp; optional&lt;T&amp;&gt;::operator= ( optional&lt;T&amp;&gt; const&amp; rhs ) ;</pre>
+<blockquote>
+<p><b>Effect:</b> (Re)binds thee wrapped reference.</p>
+<p><b>Postconditions:</b> If <b>*rhs</b> is initialized, *<b>this</b> is initialized
+and it references the same object referenced by <b>*rhs</b>; otherwise, <b>*this</b> 
+is uninitialized (and references no object).</p>
+<p><b>Notes:</b> If <b>*this</b> was initialized and so is <b>*rhs</b>, <b>this</b> 
+is is <i>rebound</i> to the new object. See <A HREF="#refassign">here</a> for details on this behaviour.</p>
+<p><b>Example:</b></p>
+<blockquote>
+    <pre>int a = 1 ;
+int b = 2 ;
+T&amp; ra = a ;
+T&amp; rb = b ;
+optional&lt;int&amp;&gt; def ;
+optional&lt;int&amp;&gt; ora(ra) ;
+optional&lt;int&amp;&gt; orb(rb) ;
+
+def = orb ; // binds 'def' to 'b' through 'rb' wrapped within 'orb'
+assert ( *def == b ) ;
+*def = ora ; // changes the value of 'b' to a copy of the value of 'a'
+assert ( b == a ) ;
+int c = 3;
+int&amp; rc = c ;
+optional&lt;int&amp;&gt; orc(rc) ;
+ora = orc ; // REBINDS ora to 'c' through 'rc'
+c = 4 ;
+assert ( *ora == 4 ) ;
 </pre>
 </blockquote>
 </blockquote>
@@ -674,14 +752,17 @@ assert ( !opt ) ;
 and its value is a <i>copy</i> of the value of <b>rhs</b> <i>converted</i>
 to type T; else <b>*this</b> is uninitialized.
 </p>
-<p><b>Throws:</b> Whatever T::T( U const& ) throws.</p>
-<p><b>Notes:</b> If <b>*this</b> was initialized, it is first reset to uninitialized
-using T::~T(), then T::T( U const& ) is called if <b>rhs</b> is initialized,
-which requires a valid conversion from U to T.
+<p><b>Throws:</b> Whatever T::operator=( U const&amp; ) or T::T( U const& ) throws.</p>
+<p><b>Notes:</b> If both<b> *this</b> and <b>rhs</b> are initially initialized, 
+T's <i>assignment</i> <i>operator</i> (from U) is used. If <b>*this</b> is initially initialized but <b>
+rhs</b> is uinitialized, T's <i>destructor</i> is called. If <b>*this</b> is initially 
+uninitialized but rhs is initialized, T's <i>converting constructor</i> (from U) is called.
 </p>
-<p><b>Exception Safety:</b> <u>Basic:</u> Exceptions can only be thrown during T::T( U const& );
-in that case, <b>*this</b> is left <u>uninitialized</u>.
-</p>
+<p><b>Exception Safety:</b> In the event of an exception, the initialization 
+state of <b>*this</b> is unchanged and its value unspecified as far as optional 
+is concerned (it is up to T's operator=()) [If <b>*this</b> is initially 
+uninitialized and T's <i>converting constructor</i> fails, <b>*this</b> is left 
+properly uninitialized]</p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>T v;
@@ -1118,7 +1199,7 @@ class Fred
 <HR>
 
 <H2><A NAME="ref">Optional references</A></H2>
-<p>This library allow the template parameter T to be of reference type: T&amp;, and
+<p>This library allows the template parameter T to be of reference type: T&amp;, and
 to some extent, T const&amp;.</p>
 
 <p>However, since references are not real objects some restrictions apply and
@@ -1142,6 +1223,85 @@ value, a true real reference is stored so aliasing will ocurr: </p>
 </ul>
 
 <HR>
+<h2><A NAME="refassign">Rebinding semantics for assignment of optional 
+references</a></h2>
+<p>If you assign to an <i>uninitialized</i> optional&lt;T&amp;&gt; the effect is to bind (for the first time) to the object. 
+Clearly, there is no other choice.</p>
+<pre>int x = 1 ;
+int&amp; rx = x ;
+optional&lt;int&amp;&gt; ora ;
+optional&lt;int&amp;&gt; orb(x) ;
+ora = orb ; // now 'ora'&nbsp;is bound to 'x' through 'rx'
+*ora = 2 ; // Changes value of 'x' through 'ora'
+assert(x==2); 
+</pre>
+<p>If you assign to a bare C++ reference, the assignment is forwarded to the 
+referenced object; it's value changes but the reference is never rebound.</p>
+<pre>int a = 1 ;
+int&amp; ra = a ;
+int b = 2 ;
+int&amp; rb = b ;
+ra = rb ; // Changes the value of 'a' to 'b'
+assert(a==b);
+b = 3 ;
+assert(ra!=b); // 'ra' is not rebound to 'b'
+</pre>
+<p>Now, if you assign to an <i>initialized</i> optional&lt;T&amp;&gt;, the effect is to <b>
+rebind</b> to the new object instead of assigning the referee. This is unlike 
+bare C++ references.</p>
+<pre>int a = 1 ;
+int b = 2 ;
+int&amp; ra = a ;
+int&amp; rb = b ;
+optional&lt;int&amp;&gt; ora(ra) ;
+optional&lt;int&amp;&gt; orb(rb) ;
+ora = orb ; // 'ora'&nbsp;is <b>rebound</b> to 'b'
+*ora = 3 ; // Changes value of 'b' (not 'a')
+assert(a==1); 
+assert(b==3); 
+</pre>
+<h3>Rationale:</h3>
+<p>Rebinding semantics for the assignment of <i>initialized</i> optional 
+references has been choosen to provide<b><i> </i>consistency among initialization 
+states<i> </i></b>even at the expense of lack of consistency with the semantics of bare 
+C++ references.<br>
+It is true that optional&lt;U&gt; strives to behave as much as possible as U does 
+whenever it is initialized; but in the case when U is T&amp;, doing so would result 
+in incosistent behaviour w.r.t to the lvalue initialization state.</p>
+<p>Imagine optional&lt;T&amp;&gt; fordwarding assignment to the referenced object (thus 
+changing the referenced object value but not rebinding), and consider the 
+following code :</p>
+<pre>&nbsp; optional&lt;int&amp;&gt; a = get();
+&nbsp; int x = 1 ;
+&nbsp; int&amp; rx = x ;
+&nbsp; optional&lt;int&amp;&gt; b(rx);
+&nbsp; a = b ;
+</pre>
+<p>What does the assignment do?<br>
+If 'a' is <i>uninitialized</i>, the answer is clear: it binds to 'x' (we now have 
+another reference to 'x').<br>
+But what if 'a' is already <i>initiliazed? </i>it would change the value of the 
+referenced object (whatever that is); which is inconsistent with the other 
+possible case.</p>
+<p>If optional&lt;T&amp;&gt; would assign just like T&amp; does, you would never be able to 
+use Optional's assignment without explicitely handling the previous 
+initialization state unless your code is capable of functioning whether after 
+the assignment, 'a' 
+aliases the same object as 'b' or not.</p>
+<p>That is, you would have to discriminate in order to be consistency.<br>
+<br>
+If in your code rebinding to another object is not an option, then is very 
+likely that binding for the fist time isn't either. In such case, assignment to 
+an <i>uninitialized</i> optional&lt;T&amp;&gt; shall be prohibited. It is quite 
+possible that in such scenario the precondition that the lvalue must be already 
+initialized exist. If it doesn't, then binding for the first time is OK while 
+rebinding is not which is IMO 
+very unlikely.<br>
+In such scenario, you can assign the value itself directly, as in:</p>
+<pre>assert(!!opt);
+*opt=value;  </pre>
+
+<HR>
 
 <H2><A NAME="inplace">In-Place Factories</A></H2>
 <p>
@@ -1152,7 +1312,7 @@ type to be <a href="../../utility/CopyConstructible.html">Copy Constructible</a>
 constructed object, often temporary, just to follow the copy from:</p>
 <pre>struct X
 {
-  X ( int, std::string ) ;
+  X ( int, std:::string ) ;
 } ;</pre>
 <pre>class W
 {
@@ -1222,7 +1382,7 @@ public:
 {
   // Wrapped object constructed in-place via a TypedInPlaceFactory.
   // No temporary created.
-  W ( TypedInPlaceFactory2&lt;X,int,std::string&gt;(123,"hello")) ;
+  W ( TypedInPlaceFactory2&lt;X,int,std::string&rt;(123,"hello")) ;
 }
 </pre>
 <p>The factories are divided in two groups:<ul>
@@ -1303,7 +1463,7 @@ of the assignment methods:</p>
   InPlaceFactory const&amp; ) </code></li>
   <li> <code>template&lt;class TypedInPlaceFactory&gt; optional&lt;T&gt;::operator= (
   TypedInPlaceFactory const&amp; ) </code></li>
-  <li> <code>optional&lt;T&gt;::reset ( T const&amp; )</code></li>
+  <li> <code>optional&lt;T&gt;:::reset ( T const&amp;)</code></li>
 </ul>
 <p>Can only <i>guarantee</i> the <u>basic exception safety</u>: The lvalue optional is left <u>uninitialized</u>
 if an exception is thrown (any previous value is <i>first</i> destroyed using T::~T())</p>
@@ -1320,11 +1480,11 @@ for T::T ( T const&amp; ), you know that optional's assignment and reset has the
 // Case 1: Exception thrown during assignment.
 //
 T v0(123);
-optional&lt;T&gt opt0(v0);
+optional&ltT&gt opt0(v0);
 try
 {
 &nbsp; T v1(456);
-&nbsp; optional&lt;T&gt opt1(v1);
+&nbsp; optional&ltT&gt opt1(v1);
 &nbsp; opt0 = opt1 ;
 
 &nbsp; // If no exception was thrown, assignment succeeded.
@@ -1340,7 +1500,7 @@ catch(...)
 // Case 2: Exception thrown during reset(v)
 //
 T v0(123);
-optional&lt;T&gt opt(v0);
+optional&ltT&gt opt(v0);
 try
 {
 &nbsp; T v1(456);
@@ -1432,8 +1592,8 @@ T <u>is not</u> required to be <a href="http://www.sgi.com/tech/stl/DefaultConst
 </blockquote>
 <HR>
 
-<P>Revised Jannuary 30, 2004</P>
-<p>© Copyright Fernando Luis Cacciola Carballal, 2003,2004</p>
+<P>Revised April 21, 2005</P>
+<p>© Copyright Fernando Luis Cacciola Carballal, 2003,2004,2005</p>
 <p> Use, modification, and distribution are subject to the Boost Software
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

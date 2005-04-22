@@ -32,7 +32,7 @@ inline void check_ref_uninitialized_const ( optional<T&> const& opt )
 {
 #ifndef BOOST_OPTIONAL_NO_NULL_COMPARE
   BOOST_CHECK( opt == 0 ) ;
-#endif  
+#endif
   BOOST_CHECK( !opt ) ;
 }
 template<class T>
@@ -104,9 +104,16 @@ void test_basics( T const* )
 
   T z(0);
 
+  T original_a(1);
+
   T a(1);
 
+  T b(2);
+
+  T c(10);
+
   T& aref = a ;
+  T& bref = b ;
 
   // Default construction.
   // 'def' state is Uninitialized.
@@ -115,13 +122,16 @@ void test_basics( T const* )
   check_ref_uninitialized(def);
 
   // Direct initialization.
-  // 'oa' state is Initialized with 'a'
+  // 'oa' state is Initialized and binds to 'a'
   // T::T( T const& x ) is NOT used becasue the optional holds a reference.
   set_pending_copy( ARG(T) ) ;
   optional<T&> oa ( aref ) ;
   check_is_pending_copy( ARG(T) );
   check_ref_initialized(oa);
   check_ref_value(oa,a,z);
+  *oa = b ; // changes the value of 'a' through the reference
+  BOOST_CHECK( a == b ) ;
+
 
   // Copy initialization.
   // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
@@ -130,27 +140,32 @@ void test_basics( T const* )
   check_is_pending_copy( ARG(T) ) ;
   check_ref_initialized_const(oa2);
   check_ref_value_const(oa2,a,z);
+  *oa2 = original_a ; // restores the value of 'a' through the reference
+  BOOST_CHECK( a == original_a ) ;
 
-  T b(2);
   optional<T&> ob ;
 
   // Value-Assignment upon Uninitialized optional.
   // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
   set_pending_copy( ARG(T) ) ;
-  ob = a ;
+  ob = a ; // Binds ob to a temporary non-const refererence to 'a'
   check_is_pending_copy( ARG(T) ) ;
   check_ref_initialized(ob);
   check_ref_value(ob,a,z);
+  a = c;
+  check_ref_value(ob,a,z);
 
   // Value-Assignment upon Initialized optional.
-  // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
-  set_pending_dtor( ARG(T) ) ;
-  set_pending_copy( ARG(T) ) ;
-  ob = b ;
-  check_is_pending_dtor( ARG(T) ) ;
-  check_is_pending_copy( ARG(T) ) ;
+  // T::operator= ( T const& x ) is used.
+  set_pending_assign( ARG(T) ) ;
+  ob = b ; // Rebinds 'ob' to 'b' (without changing 'a')
+  check_is_pending_assign( ARG(T) ) ;
   check_ref_initialized(ob);
   check_ref_value(ob,b,z);
+  BOOST_CHECK(a == c); // From a=c in previous test
+  b = c;
+  check_ref_value(ob,b,z);
+
 
   // Assignment initialization.
   // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
@@ -162,14 +177,12 @@ void test_basics( T const* )
 
 
   // Assignment
-  // T::~T() is used to destroy previous value in ob.
-  // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
-  set_pending_dtor( ARG(T) ) ;
-  set_pending_copy( ARG(T) ) ;
-  oa = ob ;
-  check_is_pending_dtor( ARG(T) ) ;
-  check_is_pending_copy( ARG(T) ) ;
+  // T::operator=( T const& x ) is used.
+  set_pending_assign( ARG(T) ) ;
+  oa = ob ; // Rebinds 'a' to 'b'
+  check_is_pending_assign( ARG(T) ) ;
   check_ref_initialized(oa);
+  a = original_a ;
   check_ref_value(oa,b,z);
 
   // Uninitializing Assignment upon Initialized Optional
@@ -189,6 +202,7 @@ void test_basics( T const* )
   check_is_pending_dtor( ARG(T) ) ;
   check_is_pending_copy( ARG(T) ) ;
   check_ref_uninitialized(oa);
+
 
   // Deinitialization of Initialized Optional
   // T::~T() is NOT used becasue the optional holds a reference.
@@ -212,9 +226,9 @@ template<class T>
 void test_relops( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   reset_throw_on_copy( ARG(T) ) ;
-  
+
   T v0(18);
   T v1(19);
   T v2(19);
@@ -233,11 +247,11 @@ void test_relops( T const* )
 
   // Check when both are uininitalized.
   BOOST_CHECK (   def0 == def1  ) ; // both uninitialized compare equal
-  BOOST_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized 
-  BOOST_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized  
+  BOOST_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized
+  BOOST_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized
   BOOST_CHECK ( !(def0 != def1) ) ;
-  BOOST_CHECK (   def0 <= def1  ) ; 
-  BOOST_CHECK (   def0 >= def1  ) ; 
+  BOOST_CHECK (   def0 <= def1  ) ;
+  BOOST_CHECK (   def0 >= def1  ) ;
 
   // Check when only lhs is uninitialized.
   BOOST_CHECK (   def0 != opt0  ) ; // uninitialized is never equal to initialized
@@ -254,7 +268,7 @@ void test_relops( T const* )
   BOOST_CHECK (   opt0 >  def0  ) ;
   BOOST_CHECK ( !(opt0 <= def0) ) ;
   BOOST_CHECK (   opt0 >= opt0  ) ;
-  
+
   // If both are initialized, values are compared
   BOOST_CHECK ( opt0 != opt1 ) ;
   BOOST_CHECK ( opt1 == opt2 ) ;
@@ -270,7 +284,7 @@ void test_none( T const* )
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
   using boost::none ;
-  
+
   T a(1234);
 
   optional<T&> def0 ;
