@@ -118,26 +118,6 @@ namespace test
   {
       return values_t<Name,Value,Index>(n,v,i);
   }
-
-  typedef f_parameters g_parameters;
-  
-  template<class Args>
-  int g_impl(Args const& args)
-  {
-      return f(args);
-  }
-  
-  template<class A0>
-  int g(A0 const& a0)
-  {
-      return g_impl(g_parameters(a0));
-  }
-
-  template<class A0, class A1>
-  int g(A0 const& a0, A1 const& a1)
-  {
-      return g_impl(g_parameters(a0, a1));
-  }
 }
 
 // GCC2 has a problem with char (&)[] deduction, so we'll cast string
