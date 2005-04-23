@@ -40,6 +40,8 @@ bool failure_test(temporal_type component,
 
 #endif
 
+
+
 int main(){
 #ifndef  USE_DATE_TIME_PRE_1_33_FACET_IO
   using namespace boost::gregorian;
@@ -369,6 +371,64 @@ int main(){
     iss >> fka; 
     check("German names, first_day_of_the_week_after", 
         fka.get_date(date(2005,Apr,5)) == date(2005,Apr,12));
+  }
+
+  {
+    // test name replacement functions
+
+    // collections for adding to facet
+    const char* const month_short_names[]={"*jan*","*feb*","*mar*",
+                                           "*apr*","*may*","*jun*",
+                                           "*jul*","*aug*","*sep*",
+                                           "*oct*","*nov*","*dec*"};
+    const char* const month_long_names[]={"**January**","**February**","**March**",
+                                          "**April**","**May**","**June**",
+                                          "**July**","**August**","**September**",
+                                          "**October**","**November**","**December**"};
+    const char* const weekday_short_names[]={"day1", "day2","day3","day4",
+                                             "day5","day6","day7"};
+    const char* const weekday_long_names[]= {"Sun-0", "Mon-1", "Tue-2", 
+                                             "Wed-3", "Thu-4", 
+                                             "Fri-5", "Sat-6"};
+
+    std::vector<std::basic_string<char> > short_weekday_names;
+    std::vector<std::basic_string<char> > long_weekday_names;
+    std::vector<std::basic_string<char> > short_month_names;
+    std::vector<std::basic_string<char> > long_month_names;
+    
+    std::copy(&weekday_short_names[0], 
+              &weekday_short_names[7],
+              std::back_inserter(short_weekday_names));
+    std::copy(&weekday_long_names[0], 
+              &weekday_long_names[7],
+              std::back_inserter(long_weekday_names));
+    std::copy(&month_short_names[0], 
+              &month_short_names[12],
+              std::back_inserter(short_month_names));
+    std::copy(&month_long_names[0], 
+              &month_long_names[12],
+              std::back_inserter(long_month_names));
+
+    date d(not_a_date_time);
+    date_input_facet* facet = new date_input_facet();
+    std::stringstream ss;
+    ss.imbue(std::locale(std::locale::classic(), facet));
+    facet->short_month_names(short_month_names);
+    facet->short_weekday_names(short_weekday_names);
+    facet->long_month_names(long_month_names);
+    facet->long_weekday_names(long_weekday_names);
+    facet->format("%a %b %d, %Y");
+    ss.str("day7 *apr* 23, 2005");
+    ss >> d;
+    check("Short custom names, set via accessor function", d.day_of_week() == greg_weekday(6));
+    check("Short custom names, set via accessor function", d.month() == greg_month(4));
+    ss.str("");
+    ss.str("Sun-0 **April** 24, 2005");
+    facet->format("%A %B %d, %Y");
+    ss >> d;
+    check("Long custom names, set via accessor function", d.day_of_week() == greg_weekday(0));
+    check("Long custom names, set via accessor function", d.month() == greg_month(4));
+
   }
 #else
     check("This test is a nop for platforms with USE_DATE_TIME_PRE_1_33_FACET_IO", 
