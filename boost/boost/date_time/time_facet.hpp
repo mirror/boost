@@ -11,6 +11,7 @@
  */
 
 #include "boost/date_time/date_facet.hpp"
+#include "boost/date_time/string_convert.hpp"
 #include "boost/algorithm/string/erase.hpp"
 #include <sstream>
 #include <iomanip>
@@ -32,11 +33,14 @@ namespace date_time {
       static const char_type zone_name_format[3];                        // Z
       static const char_type zone_iso_format[3];                         // q
       static const char_type zone_iso_extended_format[3];                // Q
+      static const char_type posix_zone_string_format[4];                // ZP
       static const char_type duration_seperator[2];
       static const char_type iso_time_format_specifier[18];
       static const char_type iso_time_format_extended_specifier[22];
       //default ptime format is YYYY-Mon-DD HH:MM:SS[.fff...][ zzz]
       static const char_type default_time_format[23]; 
+      // default_time_input_format uses a posix_time_zone_string instead of a time zone abbrev
+      static const char_type default_time_input_format[24]; 
       //default time_duration format is HH:MM:SS[.fff...]
       static const char_type default_time_duration_format[11];
   };
@@ -81,6 +85,10 @@ namespace date_time {
 
   template <class CharT>  
   const typename time_formats<CharT>::char_type 
+  time_formats<CharT>::posix_zone_string_format[4] ={'%','Z','P'};
+
+  template <class CharT>  
+  const typename time_formats<CharT>::char_type 
   time_formats<CharT>::duration_seperator[2] =  {':'};
 
   template <class CharT>  
@@ -100,6 +108,12 @@ namespace date_time {
   time_formats<CharT>::default_time_format[23] = 
     {'%','Y','-','%','b','-','%','d',' ',
       '%','H',':','%','M',':','%','S','%','F',' ','%','z'};
+
+  template <class CharT>  
+  const typename time_formats<CharT>::char_type 
+  time_formats<CharT>::default_time_input_format[24] = 
+    {'%','Y','-','%','b','-','%','d',' ',
+      '%','H',':','%','M',':','%','S','%','F',' ','%','Z','P'};
 
   template <class CharT>  
   const typename time_formats<CharT>::char_type 
@@ -143,6 +157,7 @@ namespace date_time {
     static const char_type* zone_name_format;                         // Z
     static const char_type* zone_iso_format;                          // q
     static const char_type* zone_iso_extended_format;                 // Q
+    static const char_type* posix_zone_string_format;                 // ZP
     static const char_type* duration_seperator;
     static const char_type* iso_time_format_specifier;
     static const char_type* iso_time_format_extended_specifier;
@@ -222,6 +237,23 @@ namespace date_time {
                                       seconds_with_fractional_seconds_format, 
                                       replace_string);
       }
+      /* NOTE: replacing posix_zone_string_format must be done BEFORE
+       * zone_name_format: "%ZP" & "%Z", if Z is checked first it will 
+       * incorrectly replace a zone_name where a posix_string should go */
+      if (format.find(posix_zone_string_format)) {
+        if(a_time.zone_abbrev().empty()) {
+          // if zone_abbrev() returns an empty string, we want to
+          // erase posix_zone_string_format from format
+          boost::algorithm::replace_all(format,
+                                        posix_zone_string_format,
+                                        "");
+        }
+        else{
+          boost::algorithm::replace_all(format,
+                                        posix_zone_string_format,
+                                        a_time.zone_as_posix_string());
+        }
+      }
       if (format.find(zone_name_format)) {
         if(a_time.zone_name().empty()) {
           /* TODO: this'll probably create problems if a user places 
@@ -280,6 +312,7 @@ namespace date_time {
                                         a_time.zone_name(true));
         }
       }
+
       if (format.find(zone_iso_format)) {
         if(a_time.zone_abbrev(true).empty()) {
           /* TODO: this'll probably create problems if a user places 
@@ -471,6 +504,10 @@ namespace date_time {
 
   template <class time_type, class CharT, class OutItrT>  
   const typename time_facet<time_type, CharT, OutItrT>::char_type*
+  time_facet<time_type, CharT, OutItrT>::posix_zone_string_format =time_formats<CharT>::posix_zone_string_format;
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type*
   time_facet<time_type, CharT, OutItrT>::zone_iso_format =  time_formats<CharT>::zone_iso_format;
 
   template <class time_type, class CharT, class OutItrT>  
@@ -543,7 +580,7 @@ namespace date_time {
       static const char_type* duration_seperator;
       static const char_type* iso_time_format_specifier;
       static const char_type* iso_time_format_extended_specifier;
-      static const char_type* default_time_format; 
+      static const char_type* default_time_input_format; 
       static const char_type* default_time_duration_format;
       static std::locale::id id;
 
@@ -572,7 +609,7 @@ namespace date_time {
 
       //! sets default formats for ptime, local_date_time, and time_duration
       explicit time_input_facet(::size_t a_ref = 0) 
-        : base_type(default_time_format, a_ref), 
+        : base_type(default_time_input_format, a_ref), 
           m_time_duration_format(default_time_duration_format),
           m_time_duration_seperator(duration_seperator)
       { }
@@ -723,18 +760,39 @@ namespace date_time {
       }
     
 
+      //! Parses a time object from the input stream
       InItrT get(InItrT& sitr, 
                  InItrT& stream_end, 
                  std::ios_base& a_ios, 
                  time_type& t) const
       {
+        string_type tz_str;
+        return get(sitr, stream_end, a_ios, t, tz_str, false);
+      }
+      //! Expects a time_zone in the input stream
+      InItrT get_local_time(InItrT& sitr, 
+                            InItrT& stream_end, 
+                            std::ios_base& a_ios, 
+                            time_type& t,
+                            string_type& tz_str) const
+      {
+        return get(sitr, stream_end, a_ios, t, tz_str, true);
+      }
+
+    protected:
+
+      InItrT get(InItrT& sitr, 
+                 InItrT& stream_end, 
+                 std::ios_base& a_ios, 
+                 time_type& t,
+                 string_type& tz_str,
+                 bool time_is_local) const
+      {
         // skip leading whitespace
         while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; }
         
-        // num_get should consume the sign & HH, then stop.
-        // use technique for iterating format in format_date_parser(while loop)
-
         bool use_current_char = false;
+        bool use_current_format_char = false; // used whith two character flags
         
         // num_get will consume the +/-, we may need a copy if special_value
         char_type c = '\0';
@@ -748,7 +806,7 @@ namespace date_time {
         long sec = 0; 
         typename time_duration_type::fractional_seconds_type frac(0);
         // date elements
-        short /*year(0), month(0), day(0),*/ day_of_year(0);
+        short day_of_year(0);
         /* Initialized the following to their minimum values. These intermediate 
          * objects are used so we get specific exceptions when part of the input 
          * is unparsable. 
@@ -916,12 +974,47 @@ namespace date_time {
                     }
                     break;
                   }
+                  // time_zone flags
+                //case 'q':
+                //case 'Q':
+                //case 'z':
+                case 'Z':
+                  {
+                    if(time_is_local) { // skip if 't' is a ptime
+                      ++itr;
+                      if(*itr == 'P') {
+                        // skip leading whitespace
+                        while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; }
+                        // parse zone
+                        while(!std::isspace(*sitr) && sitr != stream_end) {
+                          tz_str += *sitr;
+                          ++sitr;
+                        }
+                      }
+                      else {
+                        use_current_format_char = true;
+                      }
+                    
+                    }
+                    else {
+                      // nothing was parsed so we don't want to advance sitr
+                      use_current_char = true;
+                    }
+                   
+                    break;
+                  }
                 default:
                 {} // ignore what we don't understand?
               }// switch
             }
-        
-            itr++; //advance past format specifier
+       
+            if(use_current_format_char) {
+              use_current_format_char = false;
+            }
+            else {
+              itr++; //advance past format specifier
+            }
+             
           }
           else {  //skip past chars in format and in buffer
             itr++;
@@ -949,8 +1042,6 @@ namespace date_time {
         return sitr;
       }
 
-    protected:
-
       //! Helper function to check for special_value
       /*! First character may have been consumed during original parse 
        * attempt. Parameter 'c' should be a copy of that character. 
@@ -965,7 +1056,8 @@ namespace date_time {
         }
         this->m_sv_parser.match(sitr, stream_end, mr);
         if(mr.current_match == match_results::PARSE_ERROR) {
-          throw std::ios_base::failure("Parse failed. No match found for '" + mr.cache + "'");
+          std::string tmp = convert_string_type<char_type, char>(mr.cache);
+          throw std::ios_base::failure("Parse failed. No match found for '" + tmp + "'");
         }
         tt = temporal_type(static_cast<special_values>(mr.current_match)); 
         return sitr;
@@ -1066,7 +1158,7 @@ template <class time_type, class CharT, class InItrT>
 
   template <class time_type, class CharT, class InItrT>  
   const typename time_input_facet<time_type, CharT, InItrT>::char_type* 
-  time_input_facet<time_type, CharT, InItrT>::default_time_format = time_formats<CharT>::default_time_format;
+  time_input_facet<time_type, CharT, InItrT>::default_time_input_format = time_formats<CharT>::default_time_input_format;
 
   template <class time_type, class CharT, class InItrT>  
   const typename time_input_facet<time_type, CharT, InItrT>::char_type* 
@@ -1077,3 +1169,4 @@ template <class time_type, class CharT, class InItrT>
 
 
 #endif
+

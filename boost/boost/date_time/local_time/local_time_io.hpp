@@ -10,10 +10,19 @@
 
 #include <iostream>
 #include "boost/date_time/local_time/local_date_time.hpp"
+#include "boost/date_time/local_time/posix_time_zone.hpp"
 #include "boost/date_time/time_facet.hpp"
+#include "boost/date_time/string_convert.hpp"
 
 namespace boost {
 namespace local_time {
+
+  typedef boost::date_time::time_facet<local_date_time, wchar_t> wlocal_time_facet;
+  typedef boost::date_time::time_facet<local_date_time, char>     local_time_facet;
+
+  typedef boost::date_time::time_input_facet<local_date_time::utc_time_type,wchar_t> wlocal_time_input_facet;
+  typedef boost::date_time::time_input_facet<local_date_time::utc_time_type,char>     local_time_input_facet;
+  
   //! operator<< for local_date_time - see local_time docs for formatting details
   template<class CharT, class TraitsT>
   inline
@@ -39,6 +48,43 @@ namespace local_time {
     }
 
     return os;
+  }
+
+
+  //! input operator for local_date_time
+  template <class CharT, class traits>
+  inline
+  std::basic_istream<CharT, traits>&
+  operator>>(std::basic_istream<CharT, traits>& is, local_date_time& ldt)
+  {
+    typedef typename local_date_time::utc_time_type utc_time_type;
+    typedef typename date_time::time_input_facet<utc_time_type, CharT> time_input_facet;
+    // intermediate objects
+    std::basic_string<CharT> tz_str;
+    utc_time_type pt(not_a_date_time); 
+    
+    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
+    if(std::has_facet<time_input_facet>(is.getloc())) {
+      std::use_facet<time_input_facet>(is.getloc()).get_local_time(sit, str_end, is, pt, tz_str);
+    }
+    else {
+      time_input_facet* f = new time_input_facet();
+      std::locale l = std::locale(is.getloc(), f);
+      is.imbue(l);
+      f->get_local_time(sit, str_end, is, pt, tz_str);
+    }
+    if(tz_str.empty()) {
+      time_zone_ptr null_ptr;
+      // a null time_zone_ptr creates a local_date_time that is UTC
+      ldt = local_date_time(pt, null_ptr);
+    }
+    else {
+      time_zone_ptr tz_ptr(new posix_time_zone(date_time::convert_string_type<CharT,char>(tz_str)));
+      // the "date & time" constructor expects the time label to *not* be utc.
+      // a posix_tz_string also expects the time label to *not* be utc.
+      ldt = local_date_time(pt.date(), pt.time_of_day(), tz_ptr, local_date_time::EXCEPTION_ON_ERROR);
+    }
+    return is;
   }
 
   

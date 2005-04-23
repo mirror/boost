@@ -379,6 +379,15 @@ namespace local_time {
         }
       }
     }
+
+    //! returns a posix_time_zone string for the associated time_zone. If no time_zone, "UTC+00" is returned.
+    std::string zone_as_posix_string() const
+    {
+      if(zone_ == shared_ptr<tz_type>()) {
+        return std::string("UTC+00");
+      }
+      return zone_->to_posix_string();
+    }
       
     //! Equality comparison operator
     /*bool operator==(const date_time::base_time<boost::posix_time::ptime,boost::posix_time::posix_time_system>& rhs) const
