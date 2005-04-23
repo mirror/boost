@@ -172,11 +172,11 @@ class format_date_parser
 
   void short_month_names(const input_collection_type& month_names)
   {
-    m_month_short_names = parse_tree_type(month_names);
+    m_month_short_names = parse_tree_type(month_names, 1);
   }
   void long_month_names(const input_collection_type& month_names)
   {
-    m_month_long_names = parse_tree_type(month_names);
+    m_month_long_names = parse_tree_type(month_names, 1);
   }
   void short_weekday_names(const input_collection_type& weekday_names)
   {
