@@ -169,7 +169,7 @@ int main(){
   // time_period tests - the time_period_parser is thoroughly tested in gregorian tests
   // default period format is closed range so last ptime is included in peiod
   iss.str("[2005-Jan-01 00:00:00/2005-Dec-31 23:59:59]");
-  facet->format(ptime_input_facet::default_time_format); // reset format
+  facet->format(ptime_input_facet::default_time_input_format); // reset format
   iss >> tp;
   check("Time period, default formats", 
       (tp.begin() == ptime(date(2005,1,1),hours(0))) &&
