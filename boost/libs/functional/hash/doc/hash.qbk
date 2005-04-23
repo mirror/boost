@@ -1,7 +1,8 @@
 [library Boost.Functional/Hash
     [authors [James, Daniel]]
     [copyright 2005 Daniel James]
-    [purpose Extendible TR1 hash function object]
+    [purpose A TR1 hash function object that can be extended to hash user
+        defined types]
     [category higher-order]
     [id hash]
     [dirname hash]
