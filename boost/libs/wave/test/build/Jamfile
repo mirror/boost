@@ -23,11 +23,17 @@ SOURCES = testwave testwave_app
     ;
 
 #
+# This is the directory where the test files reside
+#
+TESTWAVE_DIR = $(BOOST_ROOT)/libs/wave/test/testwave/testfiles
+    ;
+
+#
 # This are the arguments for the testwave executable
 #
 TESTWAVE_ARGUMENTS = 
         -d3                              # use -d4 for verbose results 
-        -S../testwave/testfiles 
+        -S$(TESTWAVE_DIR) 
         -S$(BOOST_ROOT) -I$(BOOST_ROOT)
     ;
 
@@ -68,7 +74,7 @@ test-suite wave
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
-                --config-file ../testwave/testfiles/$(TESTWAVE_FILES)
+                --config-file $(TESTWAVE_DIR)/$(TESTWAVE_FILES)
             :
             # input files
             :
