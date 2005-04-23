@@ -47,6 +47,7 @@ int
 main(int argc, char *argv[])
 {
     int error_count = 0;
+    int config_file_error_count = 0;
     try {
     // analyze the command line options and arguments
         po::options_description desc_cmdline ("Options allowed on the command line");
@@ -129,7 +130,8 @@ main(int argc, char *argv[])
             // parse a single config file and store the results, config files
             // may only contain --input and positional arguments 
                 po::variables_map cvm;
-                cmd_line_utils::read_config_file(*cit, desc_hidden, cvm);
+                if (!cmd_line_utils::read_config_file(*cit, desc_hidden, cvm))
+                    ++config_file_error_count;
 
             // correct the paths parsed into this variables_map
                 if (cvm.count("input")) {
@@ -198,5 +200,5 @@ main(int argc, char *argv[])
         return (std::numeric_limits<int>::max)() - 2;
     }
 
-    return error_count;
+    return error_count + config_file_error_count;
 }

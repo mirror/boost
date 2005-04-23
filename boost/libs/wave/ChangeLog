@@ -29,7 +29,11 @@ CHANGELOG
   recognition of expected errors under certain circumstances.
 - Fixed a portability problem (for gcc 3.3.x) in the testwave application.
 - Enforced that #if/#endif are balanced file wise.
-
+- Changed the command line arguments for the Wave testrun to use absolute 
+  directories.
+- Changed the test application to return a value != zero if one of the given 
+  config files were not found.
+  
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16
 - Fixed a bug in the white space eating component, which prevented a C++ 
