@@ -8,5 +8,7 @@ SOURCES = cmdline config_file options_description parsers variables_map
           convert winmain
       ;
 
-lib program_options : $(SOURCES).cpp ;
+lib program_options : $(SOURCES).cpp :
+    <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
+    ;
 
