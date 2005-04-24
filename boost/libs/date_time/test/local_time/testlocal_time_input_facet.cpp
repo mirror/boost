@@ -59,6 +59,7 @@ int main() {
     ws.imbue(loc);
     ws.str(L"10/31/04 PST-08PDT,M4.1.0,M10.5.0"); // midnight on end transition day, still in dst
     ws >> ldt1;
+    std::wcout << ldt1.local_time() << std::endl;
     check("Wide stream, Eastern US, daylight savings, winter, custom format",
           ldt1.local_time() == ptime(date(2004,10,31), time_duration(0,0,0)));
     check("Wide stream, Eastern US, daylight savings, winter, custom format",

@@ -1,21 +1,28 @@
-/* Copyright (c) 2002,2003,2004 CrystalClear Software, Inc.
+/* Copyright (c) 2002-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  */
  
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/gregorian/greg_serialize.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
+
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/gregorian/greg_serialize.hpp>
 #include <boost/date_time/testfrmwk.hpp>
 #include <fstream>
 
 using namespace boost;
 using namespace gregorian;
+
+template<class archive_type, class temporal_type>
+void save_to(archive_type& ar, const temporal_type& tt)
+{
+  ar << tt;
+}
 
 int main(){
   std::ofstream ofs("tmp_file");
@@ -46,19 +53,18 @@ int main(){
   // load up the archive
 #if defined(DATE_TIME_XML_SERIALIZE)
   try{
-    oa << BOOST_SERIALIZATION_NVP(d);
-    oa << BOOST_SERIALIZATION_NVP(dd);
-    oa << BOOST_SERIALIZATION_NVP(dp);
-    oa << BOOST_SERIALIZATION_NVP(gm);
-    oa << BOOST_SERIALIZATION_NVP(gd);
-    oa << BOOST_SERIALIZATION_NVP(gwd);
-    oa << BOOST_SERIALIZATION_NVP(pd);
-    oa << BOOST_SERIALIZATION_NVP(nkd);
-    oa << BOOST_SERIALIZATION_NVP(fkd);
-    oa << BOOST_SERIALIZATION_NVP(lkd);
-    oa << BOOST_SERIALIZATION_NVP(fkdb);
-    oa << BOOST_SERIALIZATION_NVP(fkda);
-
+    save_to(oa, BOOST_SERIALIZATION_NVP(d));
+    save_to(oa, BOOST_SERIALIZATION_NVP(dd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(dp));
+    save_to(oa, BOOST_SERIALIZATION_NVP(gm));
+    save_to(oa, BOOST_SERIALIZATION_NVP(gd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(gwd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(pd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(nkd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(fkd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(lkd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(fkdb));
+    save_to(oa, BOOST_SERIALIZATION_NVP(fkda));
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
     check("Error writing to archive: " + s, false);
@@ -67,18 +73,18 @@ int main(){
   }
 #else
   try{
-    oa << d;
-    oa << dd;
-    oa << dp;
-    oa << gm;
-    oa << gd;
-    oa << gwd;
-    oa << pd;
-    oa << nkd;
-    oa << fkd;
-    oa << lkd;
-    oa << fkdb;
-    oa << fkda;
+    save_to(oa, d);
+    save_to(oa, dd);
+    save_to(oa, dp);
+    save_to(oa, gm);
+    save_to(oa, gd);
+    save_to(oa, gwd);
+    save_to(oa, pd);
+    save_to(oa, nkd);
+    save_to(oa, fkd);
+    save_to(oa, lkd);
+    save_to(oa, fkdb);
+    save_to(oa, fkda);
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
     check("Error writing to archive: " + s, false);
@@ -122,7 +128,6 @@ int main(){
     ia >> BOOST_SERIALIZATION_NVP(lkd2);
     ia >> BOOST_SERIALIZATION_NVP(fkdb2);
     ia >> BOOST_SERIALIZATION_NVP(fkda2);
- 
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
     check("Error reading from archive: " + s, false);
@@ -164,7 +169,6 @@ int main(){
   check("date_generator: last_kday_of_month", lkd.get_date(2002) == lkd2.get_date(2002)); // no operator== for last_kday_of_week - yet
   check("date_generator: first_kday_before", fkdb.get_date(d) == fkdb2.get_date(d)); // no operator== for first_kday_before - yet
   check("date_generator: first_kday_after", fkda.get_date(d) == fkda2.get_date(d)); // no operator== for first_kday_after - yet
-  
 
   return printTestStats();
 }

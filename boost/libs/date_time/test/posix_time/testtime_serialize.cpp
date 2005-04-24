@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003,2004 CrystalClear Software, Inc.
+/* Copyright (c) 2002-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -17,6 +17,12 @@
 using namespace boost;
 using namespace posix_time;
 using namespace gregorian;
+
+template<class archive_type, class temporal_type>
+void save_to(archive_type& ar, const temporal_type& tt)
+{
+  ar << tt;
+}
 
 int main(){
   // originals
@@ -49,13 +55,13 @@ int main(){
 
   try{
 #if defined(DATE_TIME_XML_SERIALIZE)
-    oa << BOOST_SERIALIZATION_NVP(pt);
-    oa << BOOST_SERIALIZATION_NVP(tp);
-    oa << BOOST_SERIALIZATION_NVP(td);
+    save_to(oa, BOOST_SERIALIZATION_NVP(pt));
+    save_to(oa, BOOST_SERIALIZATION_NVP(tp));
+    save_to(oa, BOOST_SERIALIZATION_NVP(td));
 #else
-    oa << pt;
-    oa << tp;
-    oa << td;
+    save_to(oa, pt);
+    save_to(oa, tp);
+    save_to(oa, td);
 #endif // DATE_TIME_XML_SERIALIZE
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
