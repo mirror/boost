@@ -547,8 +547,8 @@ inline void save(Archive & ar, T &t){
             mpl::int_<serialization::track_never>,
             serialization::tracking_level<T>
         >
-    >::type type;
-    BOOST_STATIC_ASSERT(type::value);
+    >::type typex;
+    BOOST_STATIC_ASSERT(typex::value);
 	save(ar, const_cast<const T &>(t));
 }
 #endif
