@@ -9,7 +9,7 @@
 # building this library needs a working version of spirit
 rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path properties * )
 {
-    local requires-spirit ;
+    local requires-spirit = false ;
     switch $(toolset) {
     case "borland*" :
         requires-spirit = true ;
@@ -24,7 +24,7 @@ rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path p
     case "gcc-2*" :
         requires-spirit = true ;
     }
-    if $(requires-spirit) {
+    if $(requires-spirit) = true {
         if  $(SPIRIT_ROOT) # && ( exist $(SPIRIT_ROOT) )
         {
             properties += <include>$(SPIRIT_ROOT) ;
@@ -40,15 +40,12 @@ rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path p
 # certain tool sets are known apriori not to support wide char i/o
 rule toolset::require-wide-char-io-support ( toolset variant : subvariant-path properties * )
 {
-    local requires-wchar ;
     switch $(toolset) {
     case "como*" :
-        requires-wchar = true ;
+        echo **** wide char i/o not supported by libcomo standard library **** ;
+        properties = [ impose-requirements $(properties) : <build>no ] ;
     case "mingw*" :
-        requires-wchar = true ;
-    }
-    if $(requires_wchar) {
-        echo **** wide char i/o not supported by this standard library **** ;
+        echo **** wide char i/o not supported by the mingw standard library **** ;
         properties = [ impose-requirements $(properties) : <build>no ] ;
     }
     return $(subvariant-path) $(properties) ;
