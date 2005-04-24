@@ -61,6 +61,12 @@ at the front of the list of include paths.
     namespaces.
     <li>Enhanced documentation to help explain usage of the above.
     <li>Adjustments to improve support for less conformant compilers.
+    <li>Improved <code>const</code> correctness for save/load operators.  Note that this may
+    produce compile time errors in code which compiled without problem in earlier boost releases.
+    In most cases the fix is trivial.  In other cases, code should be scrutinized to be
+    sure that it doesn't use the serializaton system in a way which may introduce subtle bugs in
+    to the program.  A fuller explanation of this issue can be found
+    <a target="detail" href="traits.html#tracking">here</a>.
     <li>Miscelleanous bug fixes.
 </ul>
 

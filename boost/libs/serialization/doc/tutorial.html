@@ -36,6 +36,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#versioning">Class Versioning</a>
   <dt><a href="#splitting">Splitting <code style="white-space: normal">serialize</code> into <code style="white-space: normal">save/load</code></a>
   <dt><a href="#archives">Archives</a>
+  <dt><a href="#examples">List of examples</a>
 </dl>
 An output archive is similar to an output data stream. Data can be saved to the archive
 with either the &lt;&lt; or the &amp; operator:
@@ -479,39 +480,73 @@ to be usable with any archive.
 <p>
 In this tutorial, we have used a particular
 archive class - <code style="white-space: normal">text_oarchive</code> for saving and
-<code style="white-space: normal">text_iarchive</code> for loading.  There other archives
-included in with the library and their interfaces are identical
-(with one exception).  Once serialization has been defined for
-a class, that class can be serialized to any type of archive.
+<code style="white-space: normal">text_iarchive</code> for loading.
+text archives render data as text and are portable across platforms.  In addition
+to text archives, the library includes archive class for native binary data
+and xml formatted data.  Interfaces to all archive classes are all identical.
+Once serialization has been defined for a class, that class can be serialized to 
+any type of archive.
 <p>
 If the current set of archive classes doesn't provide the
 attributes, format, or behavior needed for a particular application,
 one can either make a new archive class or derive from an existing one.
 This is described later in the manual.
+
+<h3><a name="examples">List of Examples</h3>
+<dl>
+    <dt><a href="../example/demo.cpp" target="demo_cpp">demo.cpp</a>
+    <dd>This is the completed example used in this tutorial.
+    It does the following:
+    <ol>
+        <li>Creates a structure of differing kinds of stops, routes and schedules
+        <li>Displays it
+        <li>Serializes it to a file named "testfile.txt" with one
+        statement
+        <li>Restores to another structure
+        <li>Displays the restored structure
+    </ol>
+    <a href="../example/demo_output.txt" target="demo_output">Output of
+    this program</a> is sufficient to verify that all the
+    originally stated requirements for a serialization system
+    are met with this system. The <a href="../example/demofile.txt"
+    target="test_file">contents of the archive file</a> can
+    also be displayed as serialization files are ASCII text.
+
+    <dt><a href="../example/demo_xml.cpp" target="demo_xml_cpp">demo_xml.cpp</a>
+    <dd>This is a variation the original demo which supports xml archives in addition
+    to the others.  The extra wrapping macros are needed to associate a data
+    item name with the correspoding xml tag. For more information see
+    <a target="detail" href="wrappers.html#nvp">Name-Value Pairs</a>.
+    <a href="../example/demo_save.xml" target="demo_save_xml">Here</a>
+    is what an xml archive looks like.
+
+    <dt><a href="../example/demo_xml_save.cpp" target="demo_xml_save_cpp">demo_xml_save.cpp</a>
+    and <a href="../example/demo_xml_load.cpp" target="demo_xml_load_cpp">demo_xml_load.cpp</a>
+    <dd>Note also that though our examples save and load the program data
+    to an archive within the same program, this merely a convenience
+    for purposes of illustration.  In general, the archive may or may
+    not be loaded by the same program that created it.
+</dl>
 <p>
-Note also that though our examples save and load the program data
-to an archive within the same program, this merely a convenience
-for purposes of illustration.  In general, the archive may or may
-not be loaded by the same program that created it.
+The astute reader might notice that these examples contain a subtle but important flaw.
+They leak memory. The bus stops are created in the <code style="white-space: normal">
+main</code> function.  The bus schedules may refer to these bus stops
+any number of times.  At the end of the main function after the bus schedules are destroyed,
+the bus stops are destroyed.  This seems fine.  But what about the structure
+<code style="white-space: normal">new_schedule</code> data item created by the
+process of loading from an archive? This contains its own separate set of bus stops
+that are not referenced outside of the bus schedule.  These won't be destroyed
+anywhere in the program - a memory leak.
 <p>
-The complete demo program - <a href="../example/demo.cpp" target="demo_cpp">demo.cpp</a>
-does the following:
-<ol>
-    <li>Creates a structure of differing kinds of stops, routes
-     and schedules
-    <li>Displays it
-    <li>Serializes it to a file named "testfile.txt" with one
-    statement
-    <li>Restores to another structure
-    <li>Displays the restored structure
-</ol>
-<p>
-<a href="../example/demo_output.txt" target="demo_output">Output of
-this program</a> is sufficient to verify that all the
-originally stated requirements for a serialization system
-are met with this system. The <a href="../example/demofile.txt"
-target="test_file">contents of the archive file</a> can
-also be displayed as serialization files are ASCII text.
+There are couple of ways of fixing this.  One way is to explicitly manage the bus stops.
+However, a more robust and transparent is to use 
+<code style="white-space: normal">shared_ptr</code> rather than raw pointers. Along
+with serialization implemenations for the Standard Library, the serialization library
+includes implementation of serialization for 
+<code style="white-space: normal">boost::shared ptr</code>.  Given this, it should be
+easy to alter any of these examples to eliminate the memory leak. This is left 
+as an excercise for the reader.
+
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 
 Distributed under the Boost Software License, Version 1.0. (See
