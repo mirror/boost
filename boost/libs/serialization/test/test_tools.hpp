@@ -83,6 +83,7 @@ namespace archive {
 
 #endif // defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 
+#if 0
 #if defined(BOOST_MSVC)
 
 /////////////////////////////////////////////////
@@ -103,6 +104,7 @@ struct leak_reporter {
 leak_reporter leak_reporter::instance;
 
 #endif // defined(BOOST_MSVC)
+#endif
 
 /////////////////////////////////////////////
 // invoke header for a custom archive test.
