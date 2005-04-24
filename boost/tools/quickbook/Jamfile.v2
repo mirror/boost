@@ -9,7 +9,28 @@
 #==============================================================================
 
 exe quickbook
-    :   detail/quickbook.cpp /boost/program_options//program_options
-    :   <include>$(BOOST_ROOT)
+    :
+    detail/quickbook.cpp
+    /boost/program_options//boost_program_options
+    :
     ;
 
+install dist-bin
+    :
+    quickbook
+    :
+    <install-type>EXE
+    <location>../../dist/bin
+    :
+    release
+    ;
+
+install dist-lib
+    :
+    quickbook
+    :
+    <install-type>LIB
+    <location>../../dist/lib
+    :
+    release
+    ;
