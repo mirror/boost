@@ -147,6 +147,9 @@ test-suite date_time_gregorian_dll
    [ run local_time/testlocal_time_facet.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testlocal_time_input_facet.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
    [ run local_time/testclocks.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
