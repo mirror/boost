@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -137,6 +137,7 @@ main()
   ptime t1(d, td);     //2001-Dec-1 05:04:03
   check("date part check", t1.date() == d);
   check("time part check", t1.time_of_day() == td);
+  check("ptime with more than 24 hours", ptime(date(2005,10,30), hours(25)) == ptime(date(2005,10,31),hours(1)));
   ptime t2(t1); //copy constructor
   ptime t3 = t2; //assignment
   check("date part check", t3.date() == d);
@@ -176,6 +177,12 @@ main()
     t6b -= hours(6);
     check("operator -=(time_duration)", t6b ==
           ptime(date(2003,Oct,31), time_duration(10,0,0,0)));
+    t6b += hours(25);
+    check("operator +=(time_duration, more than 24 hours)", t6b ==
+          ptime(date(2003,Nov,1), time_duration(11,0,0,0)));
+    t6b -= hours(49);
+    check("operator -=(time_duration, more than 48 hours)", t6b ==
+          ptime(date(2003,Oct,30), time_duration(10,0,0,0)));
   }
   time_duration td2(1,2,3); 
   ptime t8(date(2001,Dec,1)); //midnight
