@@ -116,7 +116,7 @@ test_main( int /* argc */, char* /* argv */[] )
             ia.delete_created_pointers();
             vec.clear();
         }
-	    BOOST_CATCH_END
+        BOOST_CATCH_END
     }
 
     //delete the objects

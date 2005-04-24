@@ -71,7 +71,7 @@ void save_unregistered1(const char *testfile)
     BOOST_CATCH(boost::archive::archive_exception aex){
         except = true;
     }
-	BOOST_CATCH_END
+    BOOST_CATCH_END
     BOOST_CHECK_MESSAGE(except, "lack of registration not detected !");
 
     delete rb1;
@@ -102,7 +102,7 @@ void load_unregistered1(const char *testfile)
             "failed load resulted in a non-null pointer"
         );
     }
-	BOOST_CATCH_END
+    BOOST_CATCH_END
     BOOST_CHECK_MESSAGE(except, "lack of registration not detected !");
 
     delete rb1;
@@ -126,7 +126,7 @@ void save_unregistered2(const char *testfile)
     BOOST_CATCH(boost::archive::archive_exception aex){
         except = true;
     }
-	BOOST_CATCH_END
+    BOOST_CATCH_END
     BOOST_CHECK_MESSAGE(! except, "registration not detected !");
 
     delete rd1;
@@ -156,7 +156,7 @@ void load_unregistered2(const char *testfile)
             "failed load resulted in a non-null pointer"
         );
     }
-	BOOST_CATCH_END
+    BOOST_CATCH_END
     BOOST_CHECK_MESSAGE(! except, "registration not detected !");
 
     delete rd1;

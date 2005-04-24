@@ -41,7 +41,7 @@ class tkmap {
         bool
         operator()(const extended_type_info * lhs, const extended_type_info * rhs) const
         {
-        	return *lhs < *rhs;
+            return *lhs < *rhs;
         }
     };
     typedef std::multiset<const extended_type_info *, type_info_compare> type;
@@ -56,31 +56,31 @@ public:
     insert(const extended_type_info * eti){
         if(NULL == m_self){
             static tkmap instance;
-        	m_self = & instance;
+            m_self = & instance;
         }
         m_self->m_map.insert(eti);
     }
     static const extended_type_info * 
     find(const extended_type_info * t){
         if(NULL == m_self)
-        	return NULL;
+            return NULL;
         tkmap::type::const_iterator it;
         it = m_self->m_map.find(t);
         if(it == m_self->m_map.end())
-        	return NULL;
+            return NULL;
         return *it;
     }
     static void 
     purge(const extended_type_info * eti){
         if(NULL == m_self)
-        	return;
+            return;
         tkmap::type::iterator i = m_self->m_map.begin();
         tkmap::type::iterator k = m_self->m_map.end();
         while(i != k){
-        	// note that the erase might invalidate i so save it here
-        	tkmap::type::iterator j = i++;
-        	if(*j == eti)
-        		m_self->m_map.erase(j);
+            // note that the erase might invalidate i so save it here
+            tkmap::type::iterator j = i++;
+            if(*j == eti)
+            	m_self->m_map.erase(j);
         }
     }
 };
@@ -115,14 +115,14 @@ public:
     insert(const extended_type_info * eti){
         if(NULL == m_self){
             static ktmap instance;
-        	m_self = & instance;
+            m_self = & instance;
         }
         m_self->m_map.insert(eti);
     }
     static void 
     purge(const extended_type_info * eti){
         if(NULL == m_self)
-        	return;
+            return;
         ktmap::type::iterator i = m_self->m_map.begin();
         ktmap::type::iterator k = m_self->m_map.end();
         while(i == k){
@@ -161,7 +161,7 @@ public:
     find(const char *key)
     {
         if(NULL == m_self)
-        	return NULL;
+            return NULL;
         extended_type_info_arg arg(key);
         ktmap::type::const_iterator it;
         it = m_self->m_map.find(&arg);

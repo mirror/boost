@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
         boost::archive::text_oarchive oa(ss);
         oa << a;
     }
-	A a1;
+    A a1;
     {
         boost::archive::text_iarchive ia(ss);
         ia >> a1;

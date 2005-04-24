@@ -88,11 +88,11 @@ int test_main( int /* argc */, char* /* argv */[] )
                 );
                 exception_invoked = true;
             }
-	        BOOST_CATCH_END
+            BOOST_CATCH_END
             BOOST_CHECK(exception_invoked);
         }
         BOOST_CATCH (boost::archive::archive_exception ae){}
-	    BOOST_CATCH_END
+        BOOST_CATCH_END
     }
     std::remove(testfile);
     return EXIT_SUCCESS;

@@ -50,7 +50,7 @@ public:
 int main( int /* argc */, char* /* argv */[] )
 {
     const A a;
-	A a1;
+    A a1;
 
     std::stringstream ss;
     {   

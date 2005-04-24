@@ -26,6 +26,9 @@ struct A {
     bool operator==(const A & rhs) const {
         return data == rhs.data;
     }
+    A() :
+        data(0)
+    {}
 };
 
 #endif // BOOST_SERIALIZATION_EXAMPLE_DEMO_POLYMORPHIC_A_HPP

@@ -35,8 +35,8 @@ codecvt_null<wchar_t>::do_out(
             next2 = first2;
             return std::codecvt_base::partial;
         }
-		* reinterpret_cast<wchar_t *>(first2) = * first1++;
-		first2 += sizeof(wchar_t);
+        * reinterpret_cast<wchar_t *>(first2) = * first1++;
+        first2 += sizeof(wchar_t);
 
     }
     next1 = first1;
@@ -70,8 +70,8 @@ codecvt_null<wchar_t>::do_in(
             next2 = first2;
             return std::codecvt_base::partial; 
         }
-		*first2++ = * reinterpret_cast<const wchar_t *>(first1);
-		first1 += sizeof(wchar_t);
+        *first2++ = * reinterpret_cast<const wchar_t *>(first1);
+        first1 += sizeof(wchar_t);
     }
     next1 = first1;
     next2 = first2;

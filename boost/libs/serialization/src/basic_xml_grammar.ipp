@@ -236,9 +236,9 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         +(Sch)
     ;
 
-	// refactoring to workaround template depth on darwin
-	NameHead = (Letter | '_' | ':');
-	NameTail = *NameChar ;
+    // refactoring to workaround template depth on darwin
+    NameHead = (Letter | '_' | ':');
+    NameTail = *NameChar ;
     Name =
       NameHead >> NameTail
     ;
@@ -248,7 +248,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     AttributeList = 
-    	*(S >> Attribute)
+        *(S >> Attribute)
     ;
     
     STag =
@@ -268,7 +268,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> '>'
     ;
 
-	// refactoring to workaround template depth on darwin
+    // refactoring to workaround template depth on darwin
     CharDataChars = *(anychar_p - chset_p(L"&<"));
     CharData =  
         CharDataChars [
@@ -309,23 +309,23 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     ClassIDAttribute = 
-		str_p(CLASS_ID()) >> NameTail
-		>> Eq 
-		>> L'"'
-		>> int_p [assign_object(rv.class_id.t)]
-		>> L'"'
+        str_p(CLASS_ID()) >> NameTail
+        >> Eq 
+        >> L'"'
+        >> int_p [assign_object(rv.class_id.t)]
+        >> L'"'
       ;
 
     ObjectIDAttribute = 
-		(str_p(OBJECT_ID()) | str_p(OBJECT_REFERENCE()) )
-		>> NameTail
-		>> Eq 
-		>> L'"'
-		>> L'_'
-		>> uint_p [assign_object(rv.object_id.t)]
-		>> L'"'
-	;
-	    
+        (str_p(OBJECT_ID()) | str_p(OBJECT_REFERENCE()) )
+        >> NameTail
+        >> Eq 
+        >> L'"'
+        >> L'_'
+        >> uint_p [assign_object(rv.object_id.t)]
+        >> L'"'
+    ;
+        
     AmpName = str_p(L"&amp;")[append_lit<StringType, L'&'>(rv.class_name)];
     LTName = str_p(L"&lt;")[append_lit<StringType, L'<'>(rv.class_name)];
     GTName = str_p(L"&gt;")[append_lit<StringType, L'>'>(rv.class_name)];
@@ -398,7 +398,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     DocTypeDecl =
         !S
         >> str_p(L"<!DOCTYPE")
-		>> DocTypeDeclChars
+        >> DocTypeDeclChars
         >> L'>'
     ;
 

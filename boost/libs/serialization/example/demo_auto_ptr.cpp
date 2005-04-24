@@ -40,8 +40,8 @@ inline void save(
 ){
     // only the raw pointer has to be saved
     // the ref count is rebuilt automatically on load
-	const T * const tx = t.get();
-	ar << tx;
+    const T * const tx = t.get();
+    ar << tx;
 }
 
 template<class Archive, class T>

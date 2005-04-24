@@ -71,40 +71,40 @@ namespace detail {
     {
         typedef BOOST_DEDUCED_TYPENAME
             mpl::if_<
-				is_const<D>,
-				const B,
-				B
-			>::type type;
+        		is_const<D>,
+        		const B,
+        		B
+        	>::type type;
         BOOST_STATIC_ASSERT(is_const<type>::value == is_const<D>::value);
     };
 } // namespace detail
 
 #if 0 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-	template<class Base, class Derived>
-	inline const Base & 
-	base_object(const Derived & d){
-		BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-		detail::base_register<Base, Derived>::invoke();
-		return d;
-	}
-	template<class Base, class Derived>
-	inline Base & 
-	base_object(Derived & d){
-		BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-		detail::base_register<Base, Derived>::invoke();
-		return d;
-	}
+    template<class Base, class Derived>
+    inline const Base & 
+    base_object(const Derived & d){
+        BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+        detail::base_register<Base, Derived>::invoke();
+        return d;
+    }
+    template<class Base, class Derived>
+    inline Base & 
+    base_object(Derived & d){
+        BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+        detail::base_register<Base, Derived>::invoke();
+        return d;
+    }
 #else
-	template<class Base, class Derived>
-	inline BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
-	base_object(Derived & d)
-	{
-		BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));
-		BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-		detail::base_register<Base, Derived>::invoke();
-		return d;
-	}
+    template<class Base, class Derived>
+    inline BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
+    base_object(Derived & d)
+    {
+        BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));
+        BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+        detail::base_register<Base, Derived>::invoke();
+        return d;
+    }
 #endif
 #endif
 

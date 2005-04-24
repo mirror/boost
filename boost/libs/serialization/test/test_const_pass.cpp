@@ -20,7 +20,7 @@ struct A {
 
 // should compile w/o problem
 void f1(boost::archive::text_oarchive & oa, const A & a){
-	oa & a;
+    oa & a;
     oa & BOOST_SERIALIZATION_NVP(a);
     oa << a;
     oa << BOOST_SERIALIZATION_NVP(a);

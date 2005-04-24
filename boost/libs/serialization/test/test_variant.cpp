@@ -139,7 +139,7 @@ void do_bad_read()
                 BOOST_CHECK(boost::archive::archive_exception::unsupported_version == e.code);
                 exception_invoked = true;
             }
-	        BOOST_CATCH_END
+            BOOST_CATCH_END
             BOOST_CHECK(exception_invoked);
         }
     #endif

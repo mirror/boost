@@ -40,17 +40,17 @@ struct nvp :
     public traits<nvp<T>, object_serializable, track_never>
 {
     explicit nvp(const char * name, T & t) :
-		// note: rudundant cast works around borland issue
-		std::pair<const char *, T *>(name, (T*)(& t))
-    {}
-#if 0
-	// borland needs this
-	#if BOOST_WORKAROUND(__BORLANDC__,  <= 0x564 )
-	explicit nvp(const char * name, const T & t) :
         // note: rudundant cast works around borland issue
         std::pair<const char *, T *>(name, (T*)(& t))
     {}
-	#endif
+#if 0
+    // borland needs this
+    #if BOOST_WORKAROUND(__BORLANDC__,  <= 0x564 )
+    explicit nvp(const char * name, const T & t) :
+        // note: rudundant cast works around borland issue
+        std::pair<const char *, T *>(name, (T*)(& t))
+    {}
+    #endif
 #endif
     nvp(const nvp & rhs) : 
         // note: rudundant cast works around borland issue
@@ -64,7 +64,7 @@ struct nvp :
         return *(this->second);
     }
 
-	const T & const_value() const {
+    const T & const_value() const {
         return *(this->second);
     }
 
@@ -82,9 +82,9 @@ struct nvp :
         Archive & ar, 
         const unsigned int /* file_version */
     ){
-		ar >> value();
+        ar >> value();
     }
-	BOOST_SERIALIZATION_SPLIT_MEMBER()
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 template<class T>

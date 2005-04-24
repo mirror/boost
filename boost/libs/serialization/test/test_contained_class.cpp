@@ -49,7 +49,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     const C c;
-	C c1;
+    C c1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);

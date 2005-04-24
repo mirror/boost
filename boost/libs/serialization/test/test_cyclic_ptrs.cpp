@@ -121,7 +121,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         BOOST_CATCH (boost::archive::archive_exception ae){
             exception = ae;
         }
-	    BOOST_CATCH_END
+        BOOST_CATCH_END
         BOOST_CHECK(
             exception.code == boost::archive::archive_exception::pointer_conflict
         );
@@ -140,7 +140,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         BOOST_CATCH (boost::archive::archive_exception ae){
             exception = ae;
         }
-	    BOOST_CATCH_END
+        BOOST_CATCH_END
         BOOST_CHECK(
             exception.code == boost::archive::archive_exception::pointer_conflict
         );
