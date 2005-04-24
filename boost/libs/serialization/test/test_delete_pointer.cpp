@@ -20,7 +20,7 @@ namespace std{
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
-#include "throw_exception.hpp"
+#include <boost/detail/no_exceptions_support.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -116,6 +116,7 @@ test_main( int /* argc */, char* /* argv */[] )
             ia.delete_created_pointers();
             vec.clear();
         }
+	    BOOST_CATCH_END
     }
 
     //delete the objects

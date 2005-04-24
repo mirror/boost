@@ -29,7 +29,6 @@ namespace std{
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
-#include "throw_exception.hpp"
 
 ///////////////////////////////////////////////////////
 // simple class test - using non-intrusive syntax

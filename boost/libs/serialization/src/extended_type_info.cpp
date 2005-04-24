@@ -9,6 +9,10 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 
+#include <algorithm>
+#include <set>
+#include <cassert>
+
 #include <boost/config.hpp> // msvc needs this to suppress warning
 
 #include <cstring>
@@ -16,10 +20,7 @@
 namespace std{ using ::strcmp; }
 #endif
 
-#include <algorithm>
-#include <set>
-#include <cassert>
-
+#include <boost/detail/no_exceptions_support.hpp>
 #define BOOST_SERIALIZATION_SOURCE
 #include <boost/serialization/extended_type_info.hpp>
 
@@ -204,9 +205,13 @@ extended_type_info::extended_type_info(const char * type_info_key_) :
 BOOST_SERIALIZATION_DECL 
 extended_type_info::~extended_type_info(){
     // remove entries in maps which correspond to this type
-    tkmap::purge(this);
-    ktmap::purge(this);
-    unregister_void_casts(this);
+    BOOST_TRY{
+        tkmap::purge(this);
+        ktmap::purge(this);
+        unregister_void_casts(this);
+    }
+    BOOST_CATCH(...){}
+    BOOST_CATCH_END
 }
 
 

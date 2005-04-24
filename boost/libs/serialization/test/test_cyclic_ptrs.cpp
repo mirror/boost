@@ -23,7 +23,7 @@ namespace std{
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
-#include "throw_exception.hpp"
+#include <boost/detail/no_exceptions_support.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/version.hpp>
@@ -121,6 +121,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         BOOST_CATCH (boost::archive::archive_exception ae){
             exception = ae;
         }
+	    BOOST_CATCH_END
         BOOST_CHECK(
             exception.code == boost::archive::archive_exception::pointer_conflict
         );
@@ -139,6 +140,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         BOOST_CATCH (boost::archive::archive_exception ae){
             exception = ae;
         }
+	    BOOST_CATCH_END
         BOOST_CHECK(
             exception.code == boost::archive::archive_exception::pointer_conflict
         );
