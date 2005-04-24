@@ -30,7 +30,7 @@ namespace std{
 #include <boost/archive/dinkumware.hpp>
 #endif
 
-#include <boost/throw_exception.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/iterators/dataflow_exception.hpp>
@@ -197,8 +197,13 @@ template<class Archive>
 BOOST_DECL_ARCHIVE
 #endif
 xml_iarchive_impl<Archive>::~xml_iarchive_impl(){
-    if(0 != (this->get_flags() & no_header))
-        gimpl->windup(is);
+    if(0 != (this->get_flags() & no_header)){
+		BOOST_TRY{
+			gimpl->windup(is);
+		}
+		BOOST_CATCH(...){}
+	    BOOST_CATCH_END
+	}
     delete gimpl;
 }
 } // namespace archive

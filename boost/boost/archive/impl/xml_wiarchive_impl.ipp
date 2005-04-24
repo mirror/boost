@@ -29,7 +29,7 @@ namespace std{
 #endif
 
 #include <boost/io/ios_state.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 #include <boost/pfto.hpp>
 
 #include <boost/serialization/string.hpp>
@@ -197,8 +197,13 @@ template<class Archive>
 BOOST_DECL_WARCHIVE
 #endif
 xml_wiarchive_impl<Archive>::~xml_wiarchive_impl(){
-    if(0 == (this->get_flags() & no_header))
-        gimpl->windup(is);
+    if(0 == (this->get_flags() & no_header)){
+		BOOST_TRY{
+			gimpl->windup(is);
+		}
+		BOOST_CATCH(...){}
+	    BOOST_CATCH_END
+	}
     delete gimpl;
 }
 

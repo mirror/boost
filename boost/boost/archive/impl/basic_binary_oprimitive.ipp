@@ -30,6 +30,7 @@ namespace std{ using ::wcslen; }
 #endif
 #include <boost/archive/codecvt_null.hpp>
 #include <boost/archive/add_facet.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost {
 namespace archive {
@@ -139,7 +140,11 @@ template<class Archive, class OStream>
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
 basic_binary_oprimitive<Archive, OStream>::~basic_binary_oprimitive(){
-    os.flush();
+    BOOST_TRY {
+        os.flush();
+	}
+    BOOST_CATCH(...){}
+	BOOST_CATCH_END
 }
 
 } // namespace archive

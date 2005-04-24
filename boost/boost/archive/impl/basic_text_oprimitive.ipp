@@ -18,6 +18,7 @@
 #include <boost/archive/iterators/insert_linebreaks.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
 #include <boost/archive/iterators/ostream_iterator.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost {
 namespace archive {
@@ -103,7 +104,11 @@ template<class OStream>
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
 basic_text_oprimitive<OStream>::~basic_text_oprimitive(){
-    os.flush();
+	BOOST_TRY{
+		os.flush();
+	}
+	BOOST_CATCH(...){}
+	BOOST_CATCH_END
 }
 
 } //namespace boost 

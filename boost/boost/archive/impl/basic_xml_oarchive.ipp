@@ -18,6 +18,7 @@ namespace std{
 
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/basic_xml_oarchive.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost {
 namespace archive {
@@ -283,7 +284,11 @@ BOOST_DECL_ARCHIVE_OR_WARCHIVE
 basic_xml_oarchive<Archive>::~basic_xml_oarchive(){
     if(0 == (this->get_flags() & no_header))
         return;
-    this->This()->put("</boost_serialization>\n");
+    BOOST_TRY{
+		this->This()->put("</boost_serialization>\n");
+	}
+	BOOST_CATCH(...){}
+	BOOST_CATCH_END
 }
 
 } // namespace archive
