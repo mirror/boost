@@ -42,6 +42,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <boost/iterator/zip_iterator.hpp>
+#include <boost/iterator/zip_iterator.hpp> // 2nd #include tests #include guard.
 #include <iostream>
 #include <vector>
 #include <list>
