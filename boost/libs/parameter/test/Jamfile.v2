@@ -3,4 +3,5 @@
     test-suite "parameter"
       :  [ run basics.cpp ]
          [ run sfinae.cpp ]
+         [ run macros.cpp ]
       ;
