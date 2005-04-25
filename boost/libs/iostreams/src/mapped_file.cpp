@@ -90,7 +90,7 @@ struct mapped_file_impl {
 };
 
 } // End namespace detail.
-                    
+
 //------------------Definition of mapped_file_source--------------------------//
 
 mapped_file_source::mapped_file_source(mapped_file_params p) { open(p); }
@@ -101,14 +101,14 @@ mapped_file_source::mapped_file_source( const std::string& path,
 { open(path, length, offset); }
 
 void mapped_file_source::open(mapped_file_params p)
-{ 
+{
     p.mode &= ~BOOST_IOS::out;
-    open_impl(p); 
+    open_impl(p);
 }
 
 void mapped_file_source::open( const std::string& path, size_type length,
                                boost::intmax_t offset )
-{ 
+{
     open_impl(p);
 }
 
