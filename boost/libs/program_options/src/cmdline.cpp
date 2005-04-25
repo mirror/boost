@@ -244,6 +244,13 @@ namespace boost { namespace program_options { namespace detail {
             }
         }
 
+        // Assign position keys to positional options.
+        int position_key = 0;
+        for(unsigned i = 0; i < result.size(); ++i) {
+            if (result[i].string_key.empty())
+                result[i].position_key = position_key++;
+        }
+
         if (m_positional)
         {
             unsigned position = 0;
@@ -259,13 +266,6 @@ namespace boost { namespace program_options { namespace detail {
                     ++position;
                 }
             }
-        }
-
-        // Assign position keys to positional options.
-        int position_key = 0;
-        for(unsigned i = 0; i < result.size(); ++i) {
-            if (result[i].string_key.empty())
-                result[i].position_key = position_key++;
         }
 
         return result;
