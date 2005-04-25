@@ -15,9 +15,25 @@
 #endif
 
 template <class T>
+union must_be_pod
+{
+   int i;
+   T t;
+};
+
+template <class T>
+void no_unused_warning(const volatile T&)
+{
+}
+
+template <class T>
 void check(const T&)
 {
    typedef typename tt::aligned_storage<T::value,T::value>::type t1;
+   t1 as1 = { 0, };
+   must_be_pod<t1> pod1;
+   no_unused_warning(as1);
+   no_unused_warning(pod1);
    BOOST_MESSAGE(typeid(t1).name());
    BOOST_CHECK(::tt::alignment_of<t1>::value == T::value);
    BOOST_CHECK(sizeof(t1) == T::value);
@@ -25,6 +41,10 @@ void check(const T&)
    BOOST_CHECK(::tt::is_pod<t1>::value == true);
 #endif
    typedef typename tt::aligned_storage<T::value*2,T::value>::type t2;
+   t2 as2 = { 0, };
+   must_be_pod<t2> pod2;
+   no_unused_warning(as2);
+   no_unused_warning(pod2);
    BOOST_MESSAGE(typeid(t2).name());
    BOOST_CHECK(::tt::alignment_of<t2>::value == T::value);
    BOOST_CHECK(sizeof(t2) == T::value*2);
@@ -33,6 +53,10 @@ void check(const T&)
 #endif
 
    typedef typename tt::aligned_storage<T::value,-1L>::type t3;
+   t3 as3 = { 0, };
+   must_be_pod<t3> pod3;
+   no_unused_warning(as3);
+   no_unused_warning(pod3);
    BOOST_MESSAGE(typeid(t3).name());
    BOOST_CHECK(::tt::alignment_of<t3>::value == ::boost::alignment_of< ::boost::detail::max_align>::value);
    BOOST_CHECK((sizeof(t3) % T::value) == 0);
