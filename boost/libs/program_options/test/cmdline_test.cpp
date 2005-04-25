@@ -440,6 +440,15 @@ pair<string, string> at_option_parser(string const&s)
         return pair<string, string>();
 }
 
+pair<string, string> at_option_parser_broken(string const&s)
+{
+    if ('@' == s[0])
+        return std::make_pair(string("some garbage"), s.substr(1));
+    else
+        return pair<string, string>();
+}
+
+
 
 void test_additional_parser()
 {
@@ -464,6 +473,15 @@ void test_additional_parser()
     BOOST_CHECK_EQUAL(result[0].value[0], "config");
     BOOST_CHECK_EQUAL(result[1].string_key, "foo");
     BOOST_CHECK_EQUAL(result[1].value[0], "1");    
+
+    // Test that invalid options returned by additional style
+    // parser are detected.
+    detail::cmdline cmd2(input, command_line_style::default_style);
+    cmd2.set_options_description(desc);
+    cmd2.set_additional_parser(at_option_parser_broken);
+
+    BOOST_CHECK_THROW(cmd2.run(), unknown_option);
+
 }
 
 vector<option> at_option_parser2(vector<string>& args)
@@ -502,7 +520,6 @@ void test_style_parser()
     BOOST_CHECK_EQUAL(result[1].string_key, "bar");
     BOOST_CHECK_EQUAL(result[1].value[0], "1");    
 }
-
 
 int test_main(int ac, char* av[])
 {

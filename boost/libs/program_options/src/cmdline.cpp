@@ -177,18 +177,27 @@ namespace boost { namespace program_options { namespace detail {
     cmdline::run()
     {
         // The parsing is done by having a set of 'style parsers'
-        // and trying then in order. Each 'style parser' can:
-        // - return a vector<option>
-        // - consume some input
+        // and trying then in order. Each parser is passed a vector
+        // of unparsed tokens and can consume some of them (by
+        // removing elements on front) and return a vector of options.
         //
-        // When some 'style parser' consumes some input 
-        // we start with the first style parser. 
+        // We try each style parser in turn, untill some input
+        // is consumed. The returned vector of option may contain the
+        // result of just syntactic parsing of token, say --foo will
+        // be parsed as option with name 'foo', and the style parser
+        // is not required to care if that option is defined, and how
+        // many tokens the value may take.
+        // So, after vector is returned, we validate them.
         assert(m_desc);
 
         vector<style_parser> style_parsers;      
 
         if (m_style_parser)
             style_parsers.push_back(m_style_parser);
+
+        if (m_additional_parser)
+            style_parsers.push_back(
+                bind(&cmdline::handle_additional_parser, this, _1));
 
         if (m_style & allow_long)
             style_parsers.push_back(
@@ -210,30 +219,32 @@ namespace boost { namespace program_options { namespace detail {
         vector<option> result;
         while(!args.empty())
         {
-            if (m_additional_parser) {
-                pair<string, string> r = m_additional_parser(args[0]);
-                if (!r.first.empty()) {
-                    option next;
-                    next.string_key = r.first;
-                    next.value.push_back(r.second);
-                    result.push_back(next);
-                    args.erase(args.begin());
-                    continue;
-                }
-            }
-
             bool ok = false;
             for(unsigned i = 0; i < style_parsers.size(); ++i)
             {
                 unsigned current_size = args.size();
                 vector<option> next = style_parsers[i](args);
-                for (unsigned j = 0; j < next.size(); ++j)
-                    result.push_back(next[j]);
 
+                // Check that option names
+                // are valid, and that all values are in place.
+                if (!next.empty())
+                {
+                    vector<string> e;
+                    for(unsigned k = 0; k < next.size()-1; ++k) {
+                        finish_option(next[k], e);
+                    }
+                    // For the last option, pass the unparsed tokens
+                    // so that they can be added to next.back()'s values
+                    // if appropriate.
+                    finish_option(next.back(), args);
+                    for (unsigned j = 0; j < next.size(); ++j)
+                        result.push_back(next[j]);                    
+                }
+                                
                 if (args.size() != current_size) {
                     ok = true;
                     break;                
-                }
+                } 
             }
             
             if (!ok) {
@@ -271,19 +282,20 @@ namespace boost { namespace program_options { namespace detail {
         return result;
     }
 
-    std::vector<option> 
-    cmdline::parse_option(const std::string& name,
-                          const std::string& adjacent_value,
-                          vector<string>& other_tokens)
+    void
+    cmdline::finish_option(option& opt,
+                           vector<string>& other_tokens)
     {                                    
-        std::vector<option> result;
+        if (opt.string_key.empty())
+            return;
 
+        // First check that the option is valid, and get its description.
         // TODO: case-sensitivity.
         const option_description& d = 
-            m_desc->find(name, (m_style & allow_guessing));
+            m_desc->find(opt.string_key, (m_style & allow_guessing));
 
-        option opt;
-        opt.string_key = d.key(name);
+        // Canonize the name
+        opt.string_key = d.key(opt.string_key);
 
         // We check that the min/max number of tokens for the option
         // agrees with the number of tokens we have. The 'adjacent_value'
@@ -296,30 +308,18 @@ namespace boost { namespace program_options { namespace detail {
         unsigned min_tokens = d.semantic()->min_tokens();
         unsigned max_tokens = d.semantic()->max_tokens();
         
-        unsigned present_tokens = other_tokens.size() 
-            + int(!adjacent_value.empty());
+        unsigned present_tokens = opt.value.size() + other_tokens.size();
         
         if (present_tokens >= min_tokens)
         {
-            if (!adjacent_value.empty() && max_tokens == 0) {
-                throw_exception(invalid_command_line_syntax(name,
+            if (!opt.value.empty() && max_tokens == 0) {
+                throw_exception(invalid_command_line_syntax(opt.string_key,
                     invalid_command_line_syntax::extra_parameter));                                                                
             }
-
-            // Everything's OK, move the values to the result.
-            if (!adjacent_value.empty())
-            {
-                opt.value.push_back(adjacent_value);
-                --min_tokens;
-                --max_tokens;
-            }
-            else if (min_tokens == 0 && max_tokens == 1)
-            {
-                // hack to handle implicit options.
-                max_tokens = 0;
-            }
-
             
+            max_tokens -= opt.value.size();
+
+            // Everything's OK, move the values to the result.            
             for(;!other_tokens.empty() && max_tokens--; ) {
                 opt.value.push_back(other_tokens[0]);
                 other_tokens.erase(other_tokens.begin());
@@ -327,17 +327,16 @@ namespace boost { namespace program_options { namespace detail {
         }
         else
         {
-            throw_exception(invalid_command_line_syntax(name,
+            throw_exception(invalid_command_line_syntax(opt.string_key,
                 invalid_command_line_syntax::missing_parameter));                                                                
 
         }
-        result.push_back(opt);
-        return result;
     }
 
     std::vector<option> 
     cmdline::parse_long_option(std::vector<string>& args)
     {
+        vector<option> result;
         const std::string& tok = args[0];
         if (tok.size() >= 3 && tok[0] == '-' && tok[1] == '-')
         {   
@@ -356,11 +355,14 @@ namespace boost { namespace program_options { namespace detail {
             {
                 name = tok.substr(2);
             }
+            option opt;
+            opt.string_key = name;
+            if (!adjacent.empty())
+                opt.value.push_back(adjacent);
+            result.push_back(opt);
             args.erase(args.begin());
-            return parse_option(name, adjacent, args);
-
         }
-        return vector<option>();
+        return result;
     }
 
 
@@ -388,10 +390,9 @@ namespace boost { namespace program_options { namespace detail {
                 if ((m_style & allow_sticky) &&
                     d.semantic()->max_tokens() == 0 && !adjacent.empty()) {
                     // 'adjacent' is in fact further option.
-                    vector<std::string> dummy;
-                    vector<option> n = parse_option(name, std::string(), dummy);
-                    for (unsigned i = 0; i < n.size(); ++i)
-                        result.push_back(n[i]);
+                    option opt;
+                    opt.string_key = name;
+                    result.push_back(opt);
 
                     if (adjacent.empty())
                     {
@@ -402,17 +403,14 @@ namespace boost { namespace program_options { namespace detail {
                     name = string("-") + adjacent[0];
                     adjacent.erase(adjacent.begin());
                 } else {
-
+                    
+                    option opt;
+                    opt.string_key = name;
+                    if (!adjacent.empty())
+                        opt.value.push_back(adjacent);
+                    result.push_back(opt);
                     args.erase(args.begin());                    
-                    // The current option accepts some tokens for value,
-                    // parse it in a regular way.
-                    vector<option> n = parse_option(name, adjacent,
-                                                    args);
-                    for (unsigned i = 0; i < n.size(); ++i)
-                        result.push_back(n[i]);
-
                     break;
-
                 }
             }
             return result;
@@ -423,18 +421,21 @@ namespace boost { namespace program_options { namespace detail {
     std::vector<option> 
     cmdline::parse_dos_option(std::vector<string>& args)
     {
+        vector<option> result;
         const std::string& tok = args[0];
         if (tok.size() >= 2 && tok[0] == '/')
         {   
-            vector<option> result;
-
             string name = "-" + tok.substr(1,1);
             string adjacent = tok.substr(2);
 
+            option opt;
+            opt.string_key = name;
+            if (!adjacent.empty())
+                opt.value.push_back(adjacent);
+            result.push_back(opt);
             args.erase(args.begin());
-            return parse_option(name, adjacent, args);
         }
-        return std::vector<option>();
+        return result;
     }
 
     std::vector<option> 
@@ -470,6 +471,21 @@ namespace boost { namespace program_options { namespace detail {
                 result.push_back(opt);
             }
             args.clear();
+        }
+        return result;
+    }
+
+    std::vector<option> 
+    cmdline::handle_additional_parser(std::vector<std::string>& args)
+    {
+        vector<option> result;
+        pair<string, string> r = m_additional_parser(args[0]);
+        if (!r.first.empty()) {
+            option next;
+            next.string_key = r.first;
+            next.value.push_back(r.second);
+            result.push_back(next);
+            args.erase(args.begin());
         }
         return result;
     }

@@ -93,6 +93,9 @@ namespace boost { namespace program_options { namespace detail {
             std::vector<std::string>& args);
         std::vector<option> parse_terminator(
             std::vector<std::string>& args);
+        std::vector<option> handle_additional_parser(
+            std::vector<std::string>& args);
+
 
         /** Set additional parser. This will be called for each token
             of command line. If first string in pair is not empty,
@@ -111,10 +114,9 @@ namespace boost { namespace program_options { namespace detail {
 
         void init(const std::vector<std::string>& args, int style);
 
-        std::vector<option> 
-        cmdline::parse_option(const std::string& name,
-                              const std::string& adjacent_value,
-                              std::vector<std::string>& other_tokens);
+        void
+        finish_option(option& opt,
+                      std::vector<std::string>& other_tokens);
 
         // Copies of input.
         std::vector<std::string> args;
