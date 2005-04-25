@@ -35,16 +35,15 @@ BOOST_STATIC_CONSTANT(
     , alignment_of_max_align = ::boost::alignment_of<max_align>::value
     );
 
-}} // namespace detail::aligned_storage
-
+//
+// To be TR1 conforming this must be a POD type:
+//
 template <
       std::size_t size_
-    , std::size_t alignment_ = std::size_t(-1)
+    , std::size_t alignment_
 >
-class aligned_storage
+struct aligned_storage_imp
 {
-private: // representation
-
     union data_t
     {
         char buf[size_];
@@ -55,10 +54,23 @@ private: // representation
             , type_with_alignment<alignment_>
             >::type align_;
     } data_;
+};
+
+}} // namespace detail::aligned_storage
+
+template <
+      std::size_t size_
+    , std::size_t alignment_ = std::size_t(-1)
+>
+class aligned_storage
+{
+private: // representation
+
+   detail::aligned_storage::aligned_storage_imp<size_, alignment_> data_;
 
 public: // constants
 
-    typedef aligned_storage<size_, alignment_> type;
+    typedef detail::aligned_storage::aligned_storage_imp<size_, alignment_> type;
 
     BOOST_STATIC_CONSTANT(
           std::size_t
@@ -106,14 +118,14 @@ public: // accessors
 
     void* address()
     {
-        return &data_.buf[0];
+        return this;
     }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
     const void* address() const
     {
-        return &data_.buf[0];
+        return this;
     }
 
 #else // MSVC6
@@ -138,8 +150,12 @@ const void* aligned_storage<S,A>::address() const
 #endif // MSVC6 workaround
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+//
+// Make sure that is_pod recognises aligned_storage<>::type
+// as a POD (Note that aligned_storage<> itself is not a POD):
+//
 template <std::size_t size_, std::size_t alignment_>
-struct is_pod<boost::aligned_storage<size_,alignment_> >
+struct is_pod<boost::detail::aligned_storage::aligned_storage_imp<size_,alignment_> >
    BOOST_TT_AUX_BOOL_C_BASE(true)
 { 
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(true)
