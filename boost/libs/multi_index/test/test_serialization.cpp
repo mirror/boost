@@ -138,7 +138,7 @@ void test_hashed_index_serialization()
   std::ostringstream oss;
   {
     boost::archive::text_oarchive oa(oss);
-    oa<<const_cast<hashed_set&>(hs);
+    oa<<const_cast<const hashed_set&>(hs);
 
     std::vector<iterator> its(N);
     for(int i=0;i<N;++i){
