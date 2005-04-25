@@ -10,7 +10,7 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
- 
+
 #include <typeinfo>
 #include <boost/config.hpp>                        // member template friends.
 #include <boost/iostreams/detail/char_traits.hpp>
@@ -38,7 +38,7 @@ template<typename Chain, typename Access, typename Mode> class chainbuf;
 
 template<typename Ch, typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch) >
 class linked_streambuf : public BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) {
-protected:    
+protected:
     linked_streambuf() : true_eof_(false) { }
     void set_true_eof(bool eof) { true_eof_ = eof; }
 public:
@@ -57,12 +57,12 @@ protected:
     template<typename Chain, typename Mode, typename Access>
     friend class chainbuf;
 #else
-public:    
+public:
     typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) base;
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base)
 #endif
     virtual void set_next(linked_streambuf<Ch, Tr>* /* next */) { }
-    virtual void close(BOOST_IOS::openmode) = 0;    
+    virtual void close(BOOST_IOS::openmode) = 0;
     virtual bool auto_close() const = 0;
     virtual void set_auto_close(bool) = 0;
     virtual bool strict_sync() = 0;

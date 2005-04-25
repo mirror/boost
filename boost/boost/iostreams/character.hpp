@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif 
+#endif
 
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
@@ -23,8 +23,8 @@ private:
     struct eof_t { };
     struct would_block_t { };
     basic_character(eof_t) : val_(), flags_(f_eof) { }
-    basic_character(would_block_t) 
-        : val_(), flags_(f_would_block) 
+    basic_character(would_block_t)
+        : val_(), flags_(f_would_block)
         { }
 public:
     basic_character() : val_() { }
@@ -53,7 +53,7 @@ inline wcharacter wwould_block() { return wcharacter::would_block(); }
 template<typename Ch>
 basic_character<Ch>
 int_type_to_character(typename BOOST_IOSTREAMS_CHAR_TRAITS(Ch)::int_type i)
-{ 
+{
     typedef basic_character<char_type>              return_type;
     typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
     return !traits_type::eq_int_type(i, traits_type::eof()) ?

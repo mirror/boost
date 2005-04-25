@@ -31,7 +31,7 @@ namespace std { using ::strlen; }
 # include <errno.h>
 # include <string.h>
 #endif
-                       
+
 namespace boost { namespace iostreams { namespace detail {
 
 inline BOOST_IOS::failure system_failure(const char* msg)
@@ -40,14 +40,14 @@ inline BOOST_IOS::failure system_failure(const char* msg)
 #ifdef BOOST_IOSTREAMS_WINDOWS
     DWORD err;
     LPVOID lpMsgBuf;
-    if ( (err = ::GetLastError()) != NO_ERROR && 
+    if ( (err = ::GetLastError()) != NO_ERROR &&
          ::FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                            FORMAT_MESSAGE_FROM_SYSTEM,
                            NULL,
                            err,
                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                            (LPSTR) &lpMsgBuf,
-                           0, 
+                           0,
                            NULL ) != 0 )
     {
         result.reserve(std::strlen(msg) + 2 + std::strlen((LPSTR)lpMsgBuf));

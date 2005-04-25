@@ -33,7 +33,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <cassert>
 #include <memory>                               // allocator, auto_ptr.
@@ -57,7 +57,7 @@
 
 namespace boost { namespace iostreams {
 
-template< typename SymmetricFilter, 
+template< typename SymmetricFilter,
           typename Alloc =
               std::allocator<
                   BOOST_DEDUCED_TYPENAME io_char<SymmetricFilter>::type
@@ -74,24 +74,24 @@ public:
         { };
 
     // BEGIN DEBUG
-    explicit symmetric_filter_adapter(int buffer_size) 
-        : pimpl_(new impl(buffer_size))    
+    explicit symmetric_filter_adapter(int buffer_size)
+        : pimpl_(new impl(buffer_size))
         { }
 
-    template<typename T0> 
-    symmetric_filter_adapter(int buffer_size, const T0& t0) 
-        : pimpl_(new impl(buffer_size, t0)) 
+    template<typename T0>
+    symmetric_filter_adapter(int buffer_size, const T0& t0)
+        : pimpl_(new impl(buffer_size, t0))
         { }
 
-    template<typename T0, typename T1> 
-    symmetric_filter_adapter(int buffer_size, const T0& t0, const T1& t1) 
-        : pimpl_(new impl(buffer_size, t0, t1)) 
+    template<typename T0, typename T1>
+    symmetric_filter_adapter(int buffer_size, const T0& t0, const T1& t1)
+        : pimpl_(new impl(buffer_size, t0, t1))
         { }
 
-    template<typename T0, typename T1, typename T2> 
-    symmetric_filter_adapter( int buffer_size, const T0& t0, 
-                              const T1& t1, const T2& t2 ) 
-        : pimpl_(new impl(buffer_size, t0, t1, t2)) 
+    template<typename T0, typename T1, typename T2>
+    symmetric_filter_adapter( int buffer_size, const T0& t0,
+                              const T1& t1, const T2& t2 )
+        : pimpl_(new impl(buffer_size, t0, t1, t2))
         { }
     // END DEBUG
 
@@ -118,8 +118,8 @@ public:
 
         buffer_type&  buf = pimpl_->buf_;
         int           status = (state() & f_eof) != 0 ? f_eof : f_good;
-        char_type    *next_s = s, 
-                     *end_s = s + n; 
+        char_type    *next_s = s,
+                     *end_s = s + n;
         while (true)
         {
             // Invoke filter if there are unconsumed characters in buffer or if
@@ -129,7 +129,7 @@ public:
                 const char_type* next = buf.ptr();
                 bool done =
                     !filter().filter(next, buf.eptr(), next_s, end_s, flush)
-                        && 
+                        &&
                      flush;
                 buf.ptr() = buf.data() + (next - buf.data());
                 if (done)
@@ -166,7 +166,7 @@ public:
         return static_cast<std::streamsize>(next_s - s);
     }
 
-    // Give detail::closer<> permission to call close(). 
+    // Give detail::closer<> permission to call close().
     typedef symmetric_filter_adapter<SymmetricFilter, Alloc> self;
     friend struct detail::closer<self>;
 
@@ -203,7 +203,7 @@ private:
     void begin_read();
     void begin_write();
 
-    template<typename Source> 
+    template<typename Source>
     int fill(Source& src)
     {
         std::streamsize amt = iostreams::read(src, buf().data(), buf().size());
@@ -217,7 +217,7 @@ private:
 
     // Attempts to write the contents of the buffer the given Sink.
     // Returns true if at least on character was written.
-    template<typename Sink> 
+    template<typename Sink>
     bool flush(Sink& snk)
     {
         typedef typename iostreams::io_category<Sink>::type  category;
@@ -225,21 +225,21 @@ private:
         return flush(snk, can_write());
     }
 
-    template<typename Sink> 
+    template<typename Sink>
     bool flush(Sink& snk, mpl::true_)
     {
         typedef char_traits<char_type> traits_type;
-        std::streamsize amt = 
+        std::streamsize amt =
             static_cast<std::streamsize>(buf().ptr() - buf().data());
-        std::streamsize result = 
+        std::streamsize result =
             boost::iostreams::write(snk, buf().data(), amt);
-        if (result < amt && result > 0) 
+        if (result < amt && result > 0)
             traits_type::move(buf().data(), buf().data() + result, amt - result);
         buf().set(amt - result, buf().size());
         return result != 0;
     }
 
-    template<typename Sink> 
+    template<typename Sink>
     bool flush(Sink& snk, mpl::false_) { return true;}
 
     void close();
@@ -255,22 +255,22 @@ private:
     struct impl : SymmetricFilter {
 
         // BEGIN DEBUG
-        explicit impl(int buffer_size) 
+        explicit impl(int buffer_size)
             : SymmetricFilter(), buf_(buffer_size), state_(0) { }
 
-        template<typename T0> 
-        impl(int buffer_size, const T0 &t0) 
-            : SymmetricFilter(t0), buf_(buffer_size), state_(0) 
+        template<typename T0>
+        impl(int buffer_size, const T0 &t0)
+            : SymmetricFilter(t0), buf_(buffer_size), state_(0)
             { }
 
-        template<typename T0, typename T1> 
-        impl(int buffer_size, const T0 &t0, const T1 &t1) 
-            : SymmetricFilter(t0, t1), buf_(buffer_size), state_(0) 
+        template<typename T0, typename T1>
+        impl(int buffer_size, const T0 &t0, const T1 &t1)
+            : SymmetricFilter(t0, t1), buf_(buffer_size), state_(0)
             { }
 
-        template<typename T0, typename T1, typename T2> 
-        impl(int buffer_size, const T0 &t0, const T1 &t1, const T2& t2) 
-            : SymmetricFilter(t0, t1, t2), buf_(buffer_size), state_(0) 
+        template<typename T0, typename T1, typename T2>
+        impl(int buffer_size, const T0 &t0, const T1 &t1, const T2& t2)
+            : SymmetricFilter(t0, t1, t2), buf_(buffer_size), state_(0)
             { }
         // END DEBUG
 
@@ -299,7 +299,7 @@ private:
 template<typename SymmetricFilter, typename Alloc>
 symmetric_filter_adapter<SymmetricFilter, Alloc>::
     symmetric_filter_adapter_impl(SymmetricFilter* filter, int buffer_size)
-    : filter_(filter), buf_(buffer_size), state_(0) 
+    : filter_(filter), buf_(buffer_size), state_(0)
     { }
 
 template<typename SymmetricFilter, typename Alloc>
