@@ -21,6 +21,7 @@ test-suite "bind"
       [ run bind_not_test.cpp ]
       [ run bind_rel_test.cpp ]
       [ run bind_function_test.cpp ]
+      [ run bind_lookup_problem_test.cpp ]
       [ run mem_fn_test.cpp ]
       [ run mem_fn_void_test.cpp ]
       [ run mem_fn_derived_test.cpp ]
