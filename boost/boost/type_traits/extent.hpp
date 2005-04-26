@@ -71,7 +71,7 @@ struct extent_imp<T const volatile[R], 0>
    BOOST_STATIC_CONSTANT(std::size_t, value = R);
 };
 
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && !defined(__IBMCPP__) &&  !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && !defined(__IBMCPP__) &&  !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840)) && !defined(__MWERKS__)
 template <class T, std::size_t N>
 struct extent_imp<T[], N>
 {
