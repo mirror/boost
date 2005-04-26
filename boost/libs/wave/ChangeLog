@@ -33,6 +33,8 @@ CHANGELOG
   directories.
 - Changed the test application to return a value != zero if one of the given 
   config files were not found.
+- Fixed a command line parsing problem caused by a change in the parameter
+  handling inside in the program_options library.
   
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

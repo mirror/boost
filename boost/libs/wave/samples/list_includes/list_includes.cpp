@@ -68,6 +68,7 @@ namespace cmd_line_util {
           return (opt.position_key == -1) ? true : false;
         }
     };
+    
 ///////////////////////////////////////////////////////////////////////////////
 }
 
@@ -257,7 +258,9 @@ main (int argc, char *argv[])
                 "specify additional system include directory")
         ;
 
-    po::parsed_options opts = po::parse_command_line(argc, argv, desc);
+        using namespace boost::program_options::command_line_style;
+
+    po::parsed_options opts = po::parse_command_line(argc, argv, desc, unix_style);
     po::variables_map vm;
     
         po::store(opts, vm);

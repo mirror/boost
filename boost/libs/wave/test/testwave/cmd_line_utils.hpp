@@ -113,7 +113,9 @@ namespace cmd_line_utils {
         }
 
         if (options.size() > 0) {
-            po::store(po::command_line_parser(options).options(desc).run(), vm);
+            using namespace boost::program_options::command_line_style;
+            po::store(po::command_line_parser(options)
+                .options(desc).style(unix_style).run(), vm);
             po::notify(vm);
         }
     }
@@ -157,8 +159,9 @@ namespace cmd_line_utils {
 
         // parse the vector of lines and store the results into the given
         // variables map
+            using namespace boost::program_options::command_line_style;
             po::store(po::command_line_parser(options)
-                .options(desc).positional(p).run(), vm);
+                .options(desc).positional(p).style(unix_style).run(), vm);
             po::notify(vm);
         }
         return true;

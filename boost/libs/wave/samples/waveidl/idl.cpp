@@ -184,7 +184,9 @@ namespace cmd_line_util {
         }
 
         if (options.size() > 0) {
-            po::store(po::command_line_parser(options).options(desc).run(), vm);
+            using namespace boost::program_options::command_line_style;
+            po::store(po::command_line_parser(options)
+                .options(desc).style(unix_style).run(), vm);
             po::notify(vm);
         }
     }
@@ -457,8 +459,10 @@ main (int argc, char *argv[])
         desc_overall_cfgfile.add(desc_generic);
         
     // parse command line and store results
+        using namespace boost::program_options::command_line_style;
+
     po::parsed_options opts = po::parse_command_line(argc, argv, 
-        desc_overall_cmdline, 0, cmd_line_util::at_option_parser);
+        desc_overall_cmdline, unix_style, cmd_line_util::at_option_parser);
     po::variables_map vm;
     
         po::store(opts, vm);

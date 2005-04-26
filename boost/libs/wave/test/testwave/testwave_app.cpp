@@ -555,7 +555,7 @@ namespace {
     variables_map_as(po::variable_value const& v, T*)
     {
 #if __GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)
-// gcc 3.3.x chokes on vm[...].as<...>()
+// gcc 3.2.x and  3.3.x choke on vm[...].as<...>()
         T const* r = boost::any_cast<T>(&v.value());
         if (!r)
             throw boost::bad_any_cast();

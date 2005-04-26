@@ -77,8 +77,9 @@ main(int argc, char *argv[])
         cmdline_options.add(desc_cmdline).add(app.common_options());
 
     // parse command line
+        using namespace boost::program_options::command_line_style;
         po::parsed_options opts(po::parse_command_line(argc, argv, 
-            cmdline_options, 0, cmd_line_utils::at_option_parser));
+            cmdline_options, unix_style, cmd_line_utils::at_option_parser));
         
         po::store(opts, vm);
         po::notify(vm);
@@ -179,6 +180,7 @@ main(int argc, char *argv[])
                 << "testwave: no input file specified, " 
                 << "try --help to get a hint." 
                 << std::endl;
+            return (std::numeric_limits<int>::max)() - 3;
         }
         else if (app.get_debuglevel() > 0) {
             std::cout 
