@@ -154,9 +154,9 @@ public:
 
     list0() {}
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -261,9 +261,9 @@ public:
     A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
     A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -322,9 +322,9 @@ public:
     A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
     A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -387,9 +387,9 @@ public:
     A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
     A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -458,9 +458,9 @@ public:
     A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
     A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -533,9 +533,9 @@ public:
     A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
     A6 operator[] (boost::arg<6> (*) ()) const { return a6_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -612,9 +612,9 @@ public:
     A6 operator[] (boost::arg<6> (*) ()) const { return a6_; }
     A7 operator[] (boost::arg<7> (*) ()) const { return a7_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -696,9 +696,9 @@ public:
     A7 operator[] (boost::arg<7> (*) ()) const { return a7_; }
     A8 operator[] (boost::arg<8> (*) ()) const { return a8_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -784,9 +784,9 @@ public:
     A8 operator[] (boost::arg<8> (*) ()) const { return a8_; }
     A9 operator[] (boost::arg<9> (*) ()) const { return a9_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -975,12 +975,12 @@ namespace _bi
 
 template<class T> struct add_value
 {
-    typedef value<T> type;
+    typedef _bi::value<T> type;
 };
 
 template<class T> struct add_value< value<T> >
 {
-    typedef value<T> type;
+    typedef _bi::value<T> type;
 };
 
 template<class T> struct add_value< reference_wrapper<T> >
