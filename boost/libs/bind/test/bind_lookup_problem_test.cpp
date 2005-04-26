@@ -12,29 +12,29 @@
 
 template<class T> void value();
 
-void foo() { }
-void foo(int) { }
-void foo(int, int) { }
-void foo(int, int, int) { }
-void foo(int, int, int, int) { }
-void foo(int, int, int, int, int) { }
-void foo(int, int, int, int, int, int) { }
-void foo(int, int, int, int, int, int, int) { }
-void foo(int, int, int, int, int, int, int, int) { }
-void foo(int, int, int, int, int, int, int, int, int) { }
+void f0() { }
+void f1(int) { }
+void f2(int, int) { }
+void f3(int, int, int) { }
+void f4(int, int, int, int) { }
+void f5(int, int, int, int, int) { }
+void f6(int, int, int, int, int, int) { }
+void f7(int, int, int, int, int, int, int) { }
+void f8(int, int, int, int, int, int, int, int) { }
+void f9(int, int, int, int, int, int, int, int, int) { }
 
 int main()
 {
-  boost::bind(foo);
-  boost::bind(foo, 0);
-  boost::bind(foo, 0, 0);
-  boost::bind(foo, 0, 0, 0);
-  boost::bind(foo, 0, 0, 0, 0);
-  boost::bind(foo, 0, 0, 0, 0, 0);
-  boost::bind(foo, 0, 0, 0, 0, 0, 0);
-  boost::bind(foo, 0, 0, 0, 0, 0, 0, 0);
-  boost::bind(foo, 0, 0, 0, 0, 0, 0, 0, 0);
-  boost::bind(foo, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  boost::bind(f0);
+  boost::bind(f1, 0);
+  boost::bind(f2, 0, 0);
+  boost::bind(f3, 0, 0, 0);
+  boost::bind(f4, 0, 0, 0, 0);
+  boost::bind(f5, 0, 0, 0, 0, 0);
+  boost::bind(f6, 0, 0, 0, 0, 0, 0);
+  boost::bind(f7, 0, 0, 0, 0, 0, 0, 0);
+  boost::bind(f8, 0, 0, 0, 0, 0, 0, 0, 0);
+  boost::bind(f9, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   return 0;
 }
