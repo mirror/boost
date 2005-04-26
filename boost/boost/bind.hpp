@@ -1178,6 +1178,27 @@ BOOST_BIND_OPERATOR( >=, greater_equal )
 
 #undef BOOST_BIND_OPERATOR
 
+#if defined(__GNUC__) && BOOST_WORKAROUND(__GNUC__, < 3)
+
+// resolve ambiguity with rel_ops
+
+#define BOOST_BIND_OPERATOR( op, name ) \
+\
+template<class R, class F, class L> \
+    bind_t< bool, name, list2< bind_t<R, F, L>, bind_t<R, F, L> > > \
+    operator op (bind_t<R, F, L> const & f, bind_t<R, F, L> const & g) \
+{ \
+    typedef list2< bind_t<R, F, L>, bind_t<R, F, L> > list_type; \
+    return bind_t<bool, name, list_type> ( name(), list_type(f, g) ); \
+}
+
+BOOST_BIND_OPERATOR( !=, not_equal )
+BOOST_BIND_OPERATOR( <=, less_equal )
+BOOST_BIND_OPERATOR( >, greater )
+BOOST_BIND_OPERATOR( >=, greater_equal )
+
+#endif
+
 } // namespace _bi
 
 // visit_each
