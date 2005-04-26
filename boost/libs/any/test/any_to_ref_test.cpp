@@ -49,7 +49,7 @@ void test_cast_to_reference()
         bad_any_cast);
 }
 
-int test_main(int, char**)
+int test_main(int, char* av[])
 {
     test_cast_to_reference();
     return 0;
