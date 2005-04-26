@@ -35,7 +35,8 @@ CHANGELOG
   config files were not found.
 - Fixed a command line parsing problem caused by a change in the parameter
   handling inside in the program_options library.
-  
+- Switched to the most recent version of re2c (V0.9.7.dev).
+
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16
 - Fixed a bug in the white space eating component, which prevented a C++ 

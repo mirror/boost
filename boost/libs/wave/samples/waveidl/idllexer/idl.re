@@ -521,7 +521,6 @@ ccomment:
     "\000"
     {
         using namespace std;      // some systems have printf in std
-        yyaccept = 0;   /* avoid warning about unreferenced variable */
         if(cursor == s->eof) 
         {
             if (s->error_proc)
@@ -559,7 +558,6 @@ cppcomment:
     "\000"
     {
         using namespace std;      // some systems have printf in std
-        yyaccept = 0;   /* avoid warning about unreferenced variable */
         if(cursor != s->eof) 
         {
             if (s->error_proc)
