@@ -37,6 +37,7 @@ CHANGELOG
   handling inside in the program_options library.
 - Switched to the most recent version of re2c (V0.9.7.dev).
 - Fixed a como compilation error and several como --a warnings.
+- The T_EOF token doesn't carry the value of the previous token anymore.
 
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

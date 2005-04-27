@@ -157,6 +157,7 @@ lexer<IteratorT, PositionT>::get()
     // T_EOF is returned as a valid token, the next call will return T_EOI,
     // i.e. the actual end of input
         at_eof = true;
+        value.clear();
     }
     return boost::wave::cpplexer::lex_token<PositionT>(id, value, 
         PositionT(filename, scanner.line, -1));

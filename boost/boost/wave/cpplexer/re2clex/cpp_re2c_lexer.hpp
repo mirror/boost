@@ -188,6 +188,7 @@ lexer<IteratorT, PositionT>::get()
     // T_EOF is returned as a valid token, the next call will return T_EOI,
     // i.e. the actual end of input
         at_eof = true;
+        value.clear();
         break;
         
     case T_OR_TRIGRAPH:
