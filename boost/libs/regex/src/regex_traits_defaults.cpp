@@ -262,12 +262,12 @@ BOOST_REGEX_DECL std::string BOOST_REGEX_CALL lookup_default_collate_name(const 
 
 BOOST_REGEX_DECL char BOOST_REGEX_CALL global_lower(char c)
 {
-   return static_cast<char>((std::tolower)(c));
+   return static_cast<char>((std::tolower)((unsigned char)c));
 }
 
 BOOST_REGEX_DECL char BOOST_REGEX_CALL global_upper(char c)
 {
-   return static_cast<char>((std::toupper)(c));
+   return static_cast<char>((std::toupper)((unsigned char)c));
 }
 #ifndef BOOST_NO_WREGEX
 BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_lower(wchar_t c)
