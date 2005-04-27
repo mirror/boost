@@ -110,7 +110,11 @@ void mapped_file_source::open( const std::string& path,
                                mapped_file_source::size_type length,
                                boost::intmax_t offset )
 {
-    open(path, length, offset);
+    mapped_file_params p(path);
+    p.mode = BOOST_IOS::in;
+    p.length = length;
+    p.offset = offset;
+    open_impl(p);
 }
 
 mapped_file_source::size_type mapped_file_source::size() const
