@@ -60,6 +60,11 @@ vector<string> sv(char* array[], unsigned size)
     return r;
 }
 
+pair<string, string> additional_parser(const std::string&)
+{
+    return pair<string, string>();
+}
+
 void test_command_line()
 {
     // The following commented out blocks used to test parsing
@@ -117,6 +122,17 @@ void test_command_line()
     check_value(a3[2], "bar", "11");
     check_value(a3[3], "bar", "4");
     check_value(a3[4], "plug3", "10");
+
+    // Regression test: check that '0' as style is interpreted as 
+    // 'default_style'
+    vector<option> a4 = 
+        parse_command_line(5, cmdline3_, desc, 0, additional_parser).options;
+
+    BOOST_CHECK_EQUAL(a4.size(), 4u);
+    check_value(a4[0], "foo", "4");
+    check_value(a4[1], "bar", "11");
+
+
 }
 
 void test_config_file()

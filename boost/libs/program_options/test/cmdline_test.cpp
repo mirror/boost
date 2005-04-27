@@ -114,7 +114,8 @@ void test_cmdline(const char* syntax,
         options_description desc;
         apply_syntax(desc, syntax);
 
-        cmdline cmd(xinput, style);
+        cmdline cmd(xinput);
+        cmd.style(style);
         cmd.set_options_description(desc);
 
 
@@ -462,7 +463,7 @@ void test_additional_parser()
     input.push_back("@config");
     input.push_back("--foo=1");
 
-    detail::cmdline cmd(input, command_line_style::default_style);
+    detail::cmdline cmd(input);
     cmd.set_options_description(desc);
     cmd.set_additional_parser(at_option_parser);
 
@@ -476,7 +477,7 @@ void test_additional_parser()
 
     // Test that invalid options returned by additional style
     // parser are detected.
-    detail::cmdline cmd2(input, command_line_style::default_style);
+    detail::cmdline cmd2(input);
     cmd2.set_options_description(desc);
     cmd2.set_additional_parser(at_option_parser_broken);
 
@@ -508,7 +509,7 @@ void test_style_parser()
     vector<string> input;
     input.push_back("@config");
 
-    detail::cmdline cmd(input, command_line_style::default_style);
+    detail::cmdline cmd(input);
     cmd.set_options_description(desc);
     cmd.extra_style_parser(at_option_parser2);
 

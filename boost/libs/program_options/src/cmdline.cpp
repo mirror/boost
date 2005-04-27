@@ -89,33 +89,27 @@ namespace boost { namespace program_options { namespace detail {
 #endif
 
 
-    cmdline::cmdline(const std::vector<std::string>& args, int style)
+    cmdline::cmdline(const std::vector<std::string>& args)
     {
-        init(args, style);
+        init(args);
     }
 
-    cmdline::cmdline(int argc, const char*const * argv, int style)
+    cmdline::cmdline(int argc, const char*const * argv)
     {
 #if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
         vector<string> args;
         copy(argv+1, argv+argc, inserter(args, args.end()));
-        init(args, style, allow_unregistered);
+        init(args);
 #else
-        init(vector<string>(argv+1, argv+argc), style);
+        init(vector<string>(argv+1, argv+argc));
 #endif
     }
 
     void
-    cmdline::init(const std::vector<std::string>& args, int style)
+    cmdline::init(const std::vector<std::string>& args)
     {
-        if (style == 0) 
-            m_style = default_style;        
-
-        check_style(style);
-
         this->args = args;        
-        this->m_style = style_t(style);
-
+        m_style = command_line_style::default_style;
         m_desc = 0;
         m_positional = 0;
     }
@@ -123,6 +117,9 @@ namespace boost { namespace program_options { namespace detail {
     void 
     cmdline::style(int style)
     {
+        if (style == 0) 
+            style = default_style;        
+
         check_style(style);
         this->m_style = style_t(style);
     }

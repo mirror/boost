@@ -70,12 +70,10 @@ namespace boost { namespace program_options { namespace detail {
             unregistered options. They will be assigned index 1 and are
             assumed to have optional parameter.
         */
-        cmdline(const std::vector<std::string>& args, 
-                int style = command_line_style::default_style);
+        cmdline(const std::vector<std::string>& args);
 
         /** @overload */
-        cmdline(int argc, const char*const * argv, 
-                int style = command_line_style::default_style);
+        cmdline(int argc, const char*const * argv);
 
         void style(int style);
         void allow_unregistered();
@@ -112,7 +110,7 @@ namespace boost { namespace program_options { namespace detail {
         void check_style(int style) const;
 
 
-        void init(const std::vector<std::string>& args, int style);
+        void init(const std::vector<std::string>& args);
 
         void
         finish_option(option& opt,
