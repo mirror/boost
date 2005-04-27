@@ -106,10 +106,11 @@ void mapped_file_source::open(mapped_file_params p)
     open_impl(p);
 }
 
-void mapped_file_source::open( const std::string& path, size_type length,
+void mapped_file_source::open( const std::string& path,
+                               mapped_file_source::size_type length,
                                boost::intmax_t offset )
 {
-    open_impl(p);
+    open(path, length, offset);
 }
 
 mapped_file_source::size_type mapped_file_source::size() const
