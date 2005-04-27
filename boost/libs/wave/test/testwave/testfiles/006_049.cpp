@@ -13,20 +13,20 @@
     license reproduced at the end of this file.
 =============================================================================*/
 
-// Tests error reporting: #define syntax errors.
+// Tests error reporting: Macro arguments are pre-expanded separately.
 
-// 18.9:    No space between macro name and replacement text.
-//    C90 (Corrigendum 1) forbids this if and only if the replacement text 
-//        begins with a non-basic-character.
-//    C99 forbids this even when the replacement text begins with basic-
-//        character.
+// 25.6:
+#define SUB(x, y)       (x - y)
+#define HEAD            SUB(
+#define BODY(x,y)       x,y
+#define TAIL            )
+#define HEAD_BODY_TAIL(a, b, c)    a b c
 
-//  From ISO 9899:1990 / Corrigendum 1. 
-//E 006_038.cpp(26): error: ill formed preprocessor directive: #define
-#define THIS$AND$THAT(a, b)     ((a) + (b))
-
-// Note: the following definition is legal (object-like macro).
-//       #define THIS $AND$THAT(a, b)    ((a) + (b))
+// "HEAD" is once expanded to "SUB(", then rescanning of "SUB(" causes an
+// uncompleted macro call.  Expansion of an argument should complete
+// within the argument.
+//E 006_049.cpp(29): error: improperly terminated macro invocation or replacement-list terminates in partial macro expansion (not supported yet): missing ')'
+HEAD_BODY_TAIL(HEAD, BODY(a,b), TAIL)
 
 /*-
  * Copyright (c) 1998, 2002-2005 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>

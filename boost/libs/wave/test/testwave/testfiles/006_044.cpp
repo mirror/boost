@@ -13,20 +13,15 @@
     license reproduced at the end of this file.
 =============================================================================*/
 
-// Tests error reporting: #define syntax errors.
+// Tests error reporting: The ## operator shall not occur at the beginning or at 
+//                        the end of replacement list for either form of macro 
+//                        definition.
 
-// 18.9:    No space between macro name and replacement text.
-//    C90 (Corrigendum 1) forbids this if and only if the replacement text 
-//        begins with a non-basic-character.
-//    C99 forbids this even when the replacement text begins with basic-
-//        character.
+// 23.3: In object-like macro (left).
+#define CON     ## name
 
-//  From ISO 9899:1990 / Corrigendum 1. 
-//E 006_038.cpp(26): error: ill formed preprocessor directive: #define
-#define THIS$AND$THAT(a, b)     ((a) + (b))
-
-// Note: the following definition is legal (object-like macro).
-//       #define THIS $AND$THAT(a, b)    ((a) + (b))
+//E 006_044.cpp(24): error: ill formed preprocessing operator: concat ('##')
+CON
 
 /*-
  * Copyright (c) 1998, 2002-2005 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>

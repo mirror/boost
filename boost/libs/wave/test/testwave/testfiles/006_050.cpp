@@ -13,20 +13,18 @@
     license reproduced at the end of this file.
 =============================================================================*/
 
-// Tests error reporting: #define syntax errors.
+// Tests error reporting: Error of rescanning. 
 
-// 18.9:    No space between macro name and replacement text.
-//    C90 (Corrigendum 1) forbids this if and only if the replacement text 
-//        begins with a non-basic-character.
-//    C99 forbids this even when the replacement text begins with basic-
-//        character.
+// 27.7
+#define SUB1(x, y)      (x - y)
+#define TWO_TOKENS      a,b
+#define SUB(x, y)       SUB1(x, y)
 
-//  From ISO 9899:1990 / Corrigendum 1. 
-//E 006_038.cpp(26): error: ill formed preprocessor directive: #define
-#define THIS$AND$THAT(a, b)     ((a) + (b))
+// Too many arguments error while rescanning after once replaced to: 
+// SUB(a, b, 1)
 
-// Note: the following definition is legal (object-like macro).
-//       #define THIS $AND$THAT(a, b)    ((a) + (b))
+//E 006_050.cpp(27): warning: too many macro arguments: SUB1
+SUB(TWO_TOKENS, 1)
 
 /*-
  * Copyright (c) 1998, 2002-2005 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>
