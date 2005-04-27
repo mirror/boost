@@ -212,6 +212,15 @@ void print_ctype_info(charT, const char* name)
 }
 #endif
 
+void print_format_info()
+{
+   std::cout << "Checking case conversion for regex_replace formatting." << std::endl;
+   boost::regex_traits_wrapper<boost::c_regex_traits<char> > wrap;
+   std::cout << (wrap.tolower)('A') << " " << (wrap.toupper)('a') << std::endl;
+   std::cout << boost::re_detail::global_lower('A') << " " << boost::re_detail::global_upper('a') << std::endl;
+   std::cout << (char)(std::tolower)('A') << " " << (char)(std::toupper)('a') << std::endl;
+}
+
 int cpp_main(int /*argc*/, char * /*argv*/[])
 {
    print_c_info(char(0), "char");
@@ -241,5 +250,6 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
    print_ctype_info(wchar_t(0), "wchar_t");
 #endif
 #endif
+   print_format_info();
    return 0;
 }
