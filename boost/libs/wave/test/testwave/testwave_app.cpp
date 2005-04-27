@@ -363,7 +363,8 @@ boost::wave::util::time_conversion_helper compilation_time(__DATE__ " " __TIME__
 // (the day the testwave project was started)
 std::tm first_day;
 
-    std::memset (&first_day, 0, sizeof(std::tm));
+    using namespace std;      // some platforms have memset in namespace std
+    memset (&first_day, 0, sizeof(std::tm));
     first_day.tm_mon = 1;           // Feb
     first_day.tm_mday = 12;         // 12
     first_day.tm_year = 105;        // 2005

@@ -252,9 +252,9 @@ lexer<IteratorT, PositionT>::report_error(Scanner *s, char *msg, ...)
     vsprintf(buffer, msg, params);
     va_end(params);
     
-    BOOST_WAVE_LEXER_THROW(lexing_exception, generic_lexing_error, buffer, s->line, -1, 
-        s->file_name);
-    return 0;   // unreachable code;
+    BOOST_WAVE_LEXER_THROW(lexing_exception, generic_lexing_error, buffer, 
+        s->line, -1, s->file_name);
+    BOOST_UNREACHABLE_RETURN(0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

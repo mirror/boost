@@ -314,31 +314,28 @@ inline bool
 macromap<ContextT>::is_defined(IteratorT const &begin, 
     IteratorT const &end) 
 {
+// in normal mode the name under inspection should consist of an identifier
+// only
+token_id id = token_id(*begin);
+
+    if (T_IDENTIFIER != id && 
+        !IS_CATEGORY(id, KeywordTokenType) &&
+        !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
     {
-    // in normal mode the name under inspection should consist of an identifier
-    // only
-    token_id id = token_id(*begin);
-
-        if (T_IDENTIFIER != id && 
-            !IS_CATEGORY(id, KeywordTokenType) &&
-            !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
-        {
-            BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
-                impl::get_full_name(begin, end).c_str(), main_pos);
-        }
-
-    IteratorT it = begin;
-    string_type name ((*it).get_value());
-    typename defined_macros_type::iterator cit(current_macros -> find(name));
-
-        if (++it != end) {
-        // there should be only one token as the inspected name
-            BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
-                impl::get_full_name(begin, end).c_str(), main_pos);
-        }
-        return cit != current_macros -> end();
+        BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
+            impl::get_full_name(begin, end).c_str(), main_pos);
     }
-    return false;       // not defined
+
+IteratorT it = begin;
+string_type name ((*it).get_value());
+typename defined_macros_type::iterator cit(current_macros -> find(name));
+
+    if (++it != end) {
+    // there should be only one token as the inspected name
+        BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
+            impl::get_full_name(begin, end).c_str(), main_pos);
+    }
+    return cit != current_macros -> end();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

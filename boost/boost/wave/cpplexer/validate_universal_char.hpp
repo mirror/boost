@@ -27,7 +27,7 @@ enum universal_char_type {
     universal_char_type_valid = 0,
     universal_char_type_invalid = 1,
     universal_char_type_base_charset = 2,
-    universal_char_type_not_allowed_for_identifiers = 3,
+    universal_char_type_not_allowed_for_identifiers = 3
 };
 
 namespace {

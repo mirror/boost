@@ -36,6 +36,7 @@ CHANGELOG
 - Fixed a command line parsing problem caused by a change in the parameter
   handling inside in the program_options library.
 - Switched to the most recent version of re2c (V0.9.7.dev).
+- Fixed a como compilation error and several como --a warnings.
 
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

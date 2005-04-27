@@ -137,7 +137,7 @@ namespace impl {
         using namespace boost::wave;
         typedef typename ContainerT::value_type::string_type string_type;
         
-        BOOST_ASSERT(0 <= i && i < arguments.size());
+        BOOST_ASSERT(i < arguments.size());
         
         string_type result("\"");
         bool was_whitespace = false;
