@@ -180,10 +180,11 @@ static const match_flag_type format_all;
          </TR>
          <TR>
             <TD vAlign="top" width="50%">match_single_line</TD>
-            <TD vAlign="top" width="50%">Equivalent to Perl's s/ modifier; prevents ^ from 
-               matching after an embedded newline character (so that it only matches at the 
-               start of the text being matched), and $ from matching before an embedded 
-               newline (so that it only matches at the end of the text being matched).</TD>
+            <TD vAlign="top" width="50%">Equivalent to the inverse of Perl's m/ modifier; 
+               prevents ^ from matching after an embedded newline character (so that it only 
+               matches at the start of the text being matched), and $ from matching before an 
+               embedded newline (so that it only matches at the end of the text being 
+               matched).</TD>
          </TR>
          <tr>
             <td valign="top" width="50%">
@@ -198,7 +199,7 @@ static const match_flag_type format_all;
          <tr>
             <td valign="top" width="50%">match_not_dot_newline</td>
             <td valign="top" width="50%">Specifies that the expression "." does not match a 
-               newline character.</td>
+               newline character.&nbsp; This is the inverse of Perl's s/ modifier.</td>
          </tr>
          <tr>
             <td valign="top" width="50%">match_not_dot_null</td>
@@ -283,4 +284,3 @@ static const match_flag_type format_all;
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-
