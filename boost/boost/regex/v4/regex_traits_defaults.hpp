@@ -220,12 +220,18 @@ inline std::ptrdiff_t global_length(const wchar_t* p)
 }
 #endif
 template <class charT>
-inline charT BOOST_REGEX_CALL global_lower(charT c)
+#if !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
+inline 
+#endif
+charT BOOST_REGEX_CALL global_lower(charT c)
 {
    return c;
 }
 template <class charT>
-inline charT BOOST_REGEX_CALL global_upper(charT c)
+#if !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
+inline 
+#endif
+charT BOOST_REGEX_CALL global_upper(charT c)
 {
    return c;
 }
