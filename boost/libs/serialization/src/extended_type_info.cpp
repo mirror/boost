@@ -30,7 +30,7 @@ namespace serialization {
 // remove all registrations corresponding to a given type
 void unregister_void_casts(extended_type_info *eti);
 
-namespace { // anonymous
+namespace detail {
 
 // it turns out that at least one compiler (msvc 6.0) doesn't guarentee
 // to destroy static objects in exactly the reverse sequence that they
@@ -174,18 +174,18 @@ public:
 
 ktmap * ktmap::m_self = NULL;
 
-} // anonymous
+} // namespace detail
 
 BOOST_SERIALIZATION_DECL const extended_type_info * 
 extended_type_info::find(const char *key)
 {
-    return ktmap::find(key);
+    return detail::ktmap::find(key);
 }
 
 BOOST_SERIALIZATION_DECL void 
 extended_type_info::self_register()
 {
-    tkmap::insert(this);
+    detail::tkmap::insert(this);
 }
 
 BOOST_SERIALIZATION_DECL void  
@@ -193,7 +193,7 @@ extended_type_info::key_register(const char *key_) {
     if(NULL == key_)
         return;
     key = key_;
-    ktmap::insert(this);
+    detail::ktmap::insert(this);
 }
 
 BOOST_SERIALIZATION_DECL 
@@ -206,8 +206,8 @@ BOOST_SERIALIZATION_DECL
 extended_type_info::~extended_type_info(){
     // remove entries in maps which correspond to this type
     BOOST_TRY{
-        tkmap::purge(this);
-        ktmap::purge(this);
+        detail::tkmap::purge(this);
+        detail::ktmap::purge(this);
         unregister_void_casts(this);
     }
     BOOST_CATCH(...){}
@@ -228,7 +228,7 @@ extended_type_info::type_info_key_cmp(const extended_type_info & rhs) const {
 BOOST_SERIALIZATION_DECL const extended_type_info * 
 extended_type_info::find(const extended_type_info * t)
 {
-    return tkmap::find(t);
+    return detail::tkmap::find(t);
 }
 
 bool BOOST_SERIALIZATION_DECL 
