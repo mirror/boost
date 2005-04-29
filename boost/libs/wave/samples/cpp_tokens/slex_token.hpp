@@ -61,9 +61,9 @@ public:
 
     friend bool operator== (slex_token const& lhs, slex_token const& rhs)
     {
-        return (lhs.id == rhs.id && 
-                lhs.value == rhs.value && 
-                lhs.pos == rhs.pos) ? true : false;
+        //  two tokens are considered equal even if they contain different 
+        //  positions
+        return (lhs.id == rhs.id && lhs.value == rhs.value) ? true : false;
     }
 
 // debug support    

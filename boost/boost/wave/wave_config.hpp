@@ -132,8 +132,10 @@
 //
 #if !defined(BOOST_WAVE_STRINGTYPE)
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
+    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
 // VC7 isn't able to compile the flex_string class, fallback to std::string 
+// CW upto 8.3 chokes as well *sigh*
 #define BOOST_WAVE_STRINGTYPE std::string
 
 #else
