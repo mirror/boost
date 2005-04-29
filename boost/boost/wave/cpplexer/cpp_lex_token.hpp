@@ -57,6 +57,13 @@ public:
     void set_value (string_type const &newval) { value = newval; }
     void set_position (position_type const &pos_) { pos = pos_; }
 
+    friend bool operator== (lex_token const& lhs, lex_token const& rhs)
+    {
+        return (lhs.id == rhs.id && 
+                lhs.value == rhs.value && 
+                lhs.pos == rhs.pos) ? true : false;
+    }
+    
 // debug support    
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
 // access functions for the tree_to_xml functionality
