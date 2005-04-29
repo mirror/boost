@@ -138,6 +138,7 @@ public:
         bad_define_statement,
         too_few_macroarguments,
         too_many_macroarguments,
+        empty_macroarguments,
         improperly_terminated_macro,
         bad_line_statement,
         bad_undefine_statement,
@@ -205,6 +206,8 @@ public:
             "ill formed #define directive",             // bad_define_statement
             "too few macro arguments",                  // too_few_macroarguments
             "too many macro arguments",                 // too_many_macroarguments
+            "empty macro arguments are not supported in pure C++ mode, "
+            "use variadics mode to allow these",        // empty_macroarguments
             "improperly terminated macro invocation "
             "or replacement-list terminates in partial "
             "macro expansion (not supported yet)",      // improperly_terminated_macro
@@ -254,6 +257,7 @@ public:
             util::severity_error,              // bad_define_statement
             util::severity_warning,            // too_few_macroarguments
             util::severity_warning,            // too_many_macroarguments
+            util::severity_warning,            // empty_macroarguments
             util::severity_error,              // improperly_terminated_macro
             util::severity_warning,            // bad_line_statement
             util::severity_warning,            // bad_undefine_statement

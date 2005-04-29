@@ -40,7 +40,8 @@ CHANGELOG
 - The T_EOF token doesn't carry the value of the previous token anymore.
 - Added operator==() to the token classes to fix the ambiguity error reported
   by the True64 compiler.
-  
+- Improved the error message, when empty arguments are used in pure C++ mode.
+
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16
 - Fixed a bug in the white space eating component, which prevented a C++ 

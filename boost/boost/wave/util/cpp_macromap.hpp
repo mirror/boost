@@ -1066,9 +1066,18 @@ ContainerT replacement_list;
             if (count_args < macro_def.macroparameters.size() ||
                 arguments.size() < macro_def.macroparameters.size()) 
             {
-            // too few macro arguments
-                BOOST_WAVE_THROW(preprocess_exception, too_few_macroarguments, 
-                    curr_token.get_value().c_str(), main_pos);
+                if (count_args != arguments.size()) {
+                // must been at least one empty argument in C++ mode
+                    BOOST_WAVE_THROW(preprocess_exception, 
+                        empty_macroarguments, curr_token.get_value().c_str(), 
+                        main_pos);
+                }
+                else {
+                // too few macro arguments
+                    BOOST_WAVE_THROW(preprocess_exception, 
+                        too_few_macroarguments, curr_token.get_value().c_str(), 
+                        main_pos);
+                }
             }
             
             if (count_args > macro_def.macroparameters.size() ||
