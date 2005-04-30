@@ -160,7 +160,7 @@ namespace {
                             fs::current_path());
                         if ('(' == expected[pos1+2]) {
                         // the $P(basename) syntax is used
-                            size_t p = expected.find_first_of(")", pos1+1);
+                            std::size_t p = expected.find_first_of(")", pos1+1);
                             if (std::string::npos == p) {
                                 std::cerr 
                                     << "testwave: unmatched parenthesis in $P"
@@ -555,8 +555,10 @@ namespace {
     inline T const&
     variables_map_as(po::variable_value const& v, T*)
     {
-#if __GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)
+#if (__GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)) || \
+    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
 // gcc 3.2.x and  3.3.x choke on vm[...].as<...>()
+// CW 8.3 has problems with the v.as<T>() below
         T const* r = boost::any_cast<T>(&v.value());
         if (!r)
             throw boost::bad_any_cast();
