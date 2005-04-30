@@ -169,8 +169,9 @@ namespace quickbook
         raw_char_action         raw_char;
         image_action            image;
 
+        typedef std::pair<char, int> mark_type;
         std::stringstream       list_buffer;
-        std::stack<char>        list_marks;
+        std::stack<mark_type>   list_marks;
         int                     indent;
         list_action             list;
         list_format_action      list_format;

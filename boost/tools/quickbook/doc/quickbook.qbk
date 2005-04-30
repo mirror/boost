@@ -437,6 +437,8 @@ will generate:
 # Two
 # Three
 
+[h3 List Hierarchies]
+
 List hierarchies are supported. Example:
 
 [pre
@@ -450,7 +452,7 @@ List hierarchies are supported. Example:
     # Four.a
         # Four.a.i
         # Four.a.ii
-    # Four.b
+# Five
 ]
 
 will generate:
@@ -465,7 +467,9 @@ will generate:
     # Four.a
         # Four.a.i
         # Four.a.ii
-    # Four.b
+# Five
+
+[h3 Long List Lines]
 
 Long lines will be wrapped appropriately. Example:
 
@@ -501,6 +505,8 @@ will generate:
 * Second
 * Third
 
+[h3 Mixed lists]
+
 Mixed lists (ordered and unordered) are supported. Example:
 
 [pre'''
@@ -510,6 +516,7 @@ Mixed lists (ordered and unordered) are supported. Example:
     * Three.a
     * Three.b
     * Three.c
+# Four
 ''']
 
 will generate:
@@ -520,6 +527,39 @@ will generate:
     * Three.a
     * Three.b
     * Three.c
+# Four
+
+And...
+
+[pre'''
+# 1
+    * 1.a
+        # 1.a.1
+        # 1.a.2
+    * 1.b
+# 2
+    * 2.a
+    * 2.b
+        # 2.b.1
+        # 2.b.2
+            * 2.b.2.a
+            * 2.b.2.b
+''']
+
+will generate:
+
+# 1
+    * 1.a
+        # 1.a.1
+        # 1.a.2
+    * 1.b
+# 2
+    * 2.a
+    * 2.b
+        # 2.b.1
+        # 2.b.2
+            * 2.b.2.a
+            * 2.b.2.b
 
 [h3 Code]
 

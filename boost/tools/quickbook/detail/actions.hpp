@@ -114,11 +114,12 @@ namespace quickbook
     {
         //  Handles lists
 
+        typedef std::pair<char, int> mark_type;
         list_action(
             std::ostream& out
           , std::stringstream& list_buffer
           , int& indent
-          , std::stack<char>& list_marks)
+          , std::stack<mark_type>& list_marks)
         : out(out)
         , list_buffer(list_buffer)
         , indent(indent)
@@ -134,7 +135,7 @@ namespace quickbook
 
             while (!list_marks.empty())
             {
-                char mark = list_marks.top();
+                char mark = list_marks.top().first;
                 list_marks.pop();
                 out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
                 if (list_marks.size() >= 1)
@@ -147,17 +148,18 @@ namespace quickbook
         std::ostream& out;
         std::stringstream& list_buffer;
         int& indent;
-        std::stack<char>& list_marks;
+        std::stack<mark_type>& list_marks;
     };
 
     struct list_format_action
     {
         //  Handles list formatting and hierarchy
 
+        typedef std::pair<char, int> mark_type;
         list_format_action(
             std::stringstream& out
           , int& indent
-          , std::stack<char>& list_marks)
+          , std::stack<mark_type>& list_marks)
         : out(out)
         , indent(indent)
         , list_marks(list_marks) {}
@@ -191,8 +193,11 @@ namespace quickbook
 
             if (new_indent > indent)
             {
+                //~ char parent_mark = 0;
+                //~ if (list_marks.size() >= 1)
+                    //~ parent_mark = list_marks.top().first;
                 indent = new_indent;
-                list_marks.push(mark);
+                list_marks.push(mark_type(mark, indent));
                 if (list_marks.size() > 1)
                 {
                     // Make this new list a child of the previous list.
@@ -206,21 +211,34 @@ namespace quickbook
                     str.erase(str.begin()+pos, str.end());
                     out.str(std::string());
                     out << str;
+                    //~ out << std::string((parent_mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
                 }
-                out << std::string((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
+                //~ else
+                //~ {
+                    out << std::string((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
+                //~ }
             }
 
             else if (new_indent < indent)
             {
                 assert(!list_marks.empty());
                 indent = new_indent;
-                list_marks.pop();
-                out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
-                if (list_marks.size() >= 1)
-                    out << std::string("\n</listitem>");
+                //~ list_marks.pop();
+                //~ out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
+                //~ if (list_marks.size() >= 1)
+                    //~ out << std::string("\n</listitem>");
+
+                while (!list_marks.empty() && (indent < list_marks.top().second))
+                {
+                    char mark = list_marks.top().first;
+                    list_marks.pop();
+                    out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
+                    if (list_marks.size() >= 1)
+                        out << std::string("\n</listitem>");
+                }
             }
 
-            else if (mark != list_marks.top()) // new_indent == indent
+            if (mark != list_marks.top().first) // new_indent == indent
             {
                 boost::spirit::file_position const pos = first.get_position();
                 std::cerr
@@ -233,7 +251,7 @@ namespace quickbook
 
         std::stringstream& out;
         int& indent;
-        std::stack<char>& list_marks;
+        std::stack<mark_type>& list_marks;
     };
 
     struct span
