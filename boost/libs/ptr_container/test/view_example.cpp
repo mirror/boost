@@ -20,6 +20,7 @@
 #include <algorithm>  // For 'std::sort()'
 #include <iostream>   // For 'std::cout'
 
+using namespace std;
 
 //
 // This is our simple example data-structure. It can

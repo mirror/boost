@@ -37,6 +37,8 @@ void test_ptr_vector()
     BOOST_CHECK( vec != vec2 );
     BOOST_CHECK( !(vec == vec2 ) );
     BOOST_CHECK( vec2 > vec );
+    BOOST_CHECK( vec <= vec2 );
+    BOOST_CHECK( vec2 >= vec );
 
 }
 

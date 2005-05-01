@@ -12,7 +12,8 @@ void algorithms_test();
 template< typename C, typename B, typename T >
 void reversible_container_test()
 {
-
+    using namespace boost;
+    
     BOOST_MESSAGE( "starting reversible container test" ); 
     enum { max_cnt = 10, size = 100 };
     C  c;

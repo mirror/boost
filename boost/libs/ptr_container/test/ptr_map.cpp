@@ -29,6 +29,8 @@ std::string get_next_key<std::string>( const std::string& )
 template< typename C, typename B, typename T >
 void ptr_map_test()
 {   
+    using namespace boost;
+    
     BOOST_MESSAGE( "starting associative container test" ); 
     enum { max_cnt = 10, size = 100 };
     C  c;
