@@ -46,7 +46,11 @@ void check_ptr_list_of()
     using namespace boost::assign;
 
     ptr_deque<Foo> deq;
-    deq = ptr_list_of<Foo>( 42 )()()( 3, 3 )( "foo", 2, 1 );
+    //
+    // Many compilers (gcc, cw, ...) need the trailing
+    // '.to_container( a_container )' to work 
+    // 
+    deq = ptr_list_of<Foo>( 42 )()()( 3, 3 )( "foo", 2, 1 ).to_container( deq );
     BOOST_CHECK( deq.size() == 5 );
     
 }

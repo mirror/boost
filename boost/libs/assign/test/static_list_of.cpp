@@ -72,8 +72,10 @@ void check_static_list_of()
 
     print( ref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     print( cref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
-    print( cref_list_of<5>( "foo" )( "bar" )( "foobar" ) );
 
+    //
+    //print( cref_list_of<5>( "foo" )( "bar" )( "foobar" ) );
+    //
 }
 
 #include <boost/test/unit_test.hpp>
