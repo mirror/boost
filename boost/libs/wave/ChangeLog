@@ -41,6 +41,8 @@ CHANGELOG
 - Added operator==() to the token classes to fix the ambiguity error reported
   by the True64 compiler.
 - Improved the error message, when empty arguments are used in pure C++ mode.
+- Added character literal out of range testing and an additional corresponding 
+  error message.
 
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

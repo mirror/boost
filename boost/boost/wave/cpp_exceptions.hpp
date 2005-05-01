@@ -159,7 +159,8 @@ public:
         illegal_operator_redefinition,
         ill_formed_integer_literal,
         ill_formed_character_literal,
-        unbalanced_if_endif
+        unbalanced_if_endif,
+        character_literal_out_of_range
     };
 
     preprocess_exception(char const *what_, error_code code, int line_, 
@@ -232,10 +233,11 @@ public:
             "this macro name cannot be used as a as it is an operator in C++",  // illegal_operator_redefinition
             "ill formed integer literal or integer constant too large",   // ill_formed_integer_literal
             "ill formed character literal",             // ill_formed_character_literal
-            "unbalanced #if/#endif in include file"     // unbalanced_if_endif
+            "unbalanced #if/#endif in include file",    // unbalanced_if_endif
+            "character literal out of range"            // character_literal_out_of_range
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= unbalanced_if_endif);
+            code <= character_literal_out_of_range);
         return preprocess_exception_errors[code];
     }
 
@@ -278,10 +280,11 @@ public:
             util::severity_error,              // illegal_operator_redefinition
             util::severity_error,              // ill_formed_integer_literal
             util::severity_error,              // ill_formed_character_literal
-            util::severity_warning             // unbalanced_if_endif
+            util::severity_warning,            // unbalanced_if_endif
+            util::severity_warning             // character_literal_out_of_range
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= unbalanced_if_endif);
+            code <= character_literal_out_of_range);
         return preprocess_exception_severity[code];
     }
     static char const *severity_text(int code)

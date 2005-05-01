@@ -11,6 +11,8 @@
 #if !defined(CPP_CHLIT_GRAMMAR_HPP_9527D349_6592_449A_A409_42A001E6C64C_INCLUDED)
 #define CPP_CHLIT_GRAMMAR_HPP_9527D349_6592_449A_A409_42A001E6C64C_INCLUDED
 
+#include <limits>     // sid::numeric_limits
+
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
 
@@ -215,6 +217,27 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
     if (!hit.hit) {
         BOOST_WAVE_THROW(preprocess_exception, ill_formed_character_literal, 
             token_val.c_str(), token.get_position());
+    }
+    else {
+    // range check
+        if ('L' == token_val[0]) {
+        // recognised wide character
+            if (result > (std::numeric_limits<wchar_t>::max)()) {
+            // out of range
+                BOOST_WAVE_THROW(preprocess_exception, 
+                    character_literal_out_of_range, 
+                    token_val.c_str(), token.get_position());
+            }
+        }
+        else {
+        // recognised narrow ('normal') character
+            if (result > (std::numeric_limits<unsigned char>::max)()) {
+            // out of range
+                BOOST_WAVE_THROW(preprocess_exception, 
+                    character_literal_out_of_range, 
+                    token_val.c_str(), token.get_position());
+            }
+        }
     }
     return result;
 }
