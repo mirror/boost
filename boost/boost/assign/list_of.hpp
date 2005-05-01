@@ -328,7 +328,7 @@ namespace assign_detail
         template< class SinglePassRange >
         generic_list& range( const SinglePassRange& r )
         {
-            return range( boost::begin(r), boost::end(r) );
+            return range( begin(r), end(r) );
         }
 
         template< class Container >
