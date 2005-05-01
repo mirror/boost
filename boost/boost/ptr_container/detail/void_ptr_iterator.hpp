@@ -26,8 +26,8 @@
 
 namespace boost
 {
-    namespace ptr_container_detail
-    {
+    //namespace ptr_container_detail
+    //{
         template
         < 
             class VoidIter, 
@@ -179,7 +179,7 @@ namespace boost
 
         }; // class 'void_ptr_iterator'
 
-    } // nameespace 'ptr_container_detail'
+    //} // nameespace 'ptr_container_detail'
     
 }
 

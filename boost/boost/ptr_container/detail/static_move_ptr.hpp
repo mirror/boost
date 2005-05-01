@@ -39,21 +39,19 @@ namespace boost { namespace ptr_container_detail {
 template< typename T, 
           typename Deleter = 
               move_ptrs::default_deleter<T> >
-class static_move_ptr {
+class static_move_ptr 
+{
 public:
+
     typedef typename remove_bounds<T>::type             element_type;
     typedef Deleter                                     deleter_type;
+
 private:
-    //BOOST_STATIC_CONSTANT(bool, is_array = boost::is_array<T>::value);
-    //BOOST_STATIC_ASSERT(!is_array);
-    //
-    // Reamrk: won't compile when element_type is abstract base
-    //  (is_same<T, element_type[]>::value*/
-    //
     
     struct safe_bool_helper { int x; };
     typedef int safe_bool_helper::* safe_bool;
     typedef boost::compressed_pair<element_type*, Deleter> impl_type;
+
 public:
     typedef typename impl_type::second_reference        deleter_reference;
     typedef typename impl_type::second_const_reference  deleter_const_reference;
@@ -67,46 +65,19 @@ public:
         { 
             const_cast<static_move_ptr&>(p).release();
         }
-/*
-    template<typename TT, typename DD>
-    static_move_ptr( const static_move_ptr<TT, DD>& p,
-                     typename 
-                     move_ptrs::enable_if_convertible<TT, T>::type* = 0 )
-        : impl_( p.get(), 
-                 const_cast<typename add_reference<DD>::type>(p.get_deleter()) )
-        { 
-            check(p);
-            const_cast<static_move_ptr<TT, DD>&>(p).release();
-        }
-*/
+
 
     static_move_ptr( move_ptrs::move_source<static_move_ptr> src )
             : impl_(src.ptr().get(), src.ptr().get_deleter())
             {
                 src.ptr().release();
             }
-/*
-    template<typename TT, typename DD>
-    static_move_ptr(move_ptrs::move_source< static_move_ptr<TT, DD> > src)
-        : impl_(src.ptr().get(), src.ptr().get_deleter())
-        {
-            typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
-            BOOST_STATIC_ASSERT(convertible::value);
-            src.ptr().release();
-        }
-*/
     
     template<typename TT>
     explicit static_move_ptr(TT* tt) 
         : impl_(tt, Deleter()) 
         { }
 
-    /*
-    template<typename TT, typename DD>
-    static_move_ptr(TT* tt, DD dd) 
-        : impl_(tt, dd) 
-        { }
-*/
         // Destructor
 
     ~static_move_ptr() { if (ptr()) get_deleter()(ptr()); }
@@ -119,16 +90,6 @@ public:
             return *this;
         }
 
-    /*
-    template<typename TT, typename DD>    
-    typename move_ptrs::enable_if_convertible<TT, T, static_move_ptr&>::type
-    operator=(static_move_ptr<TT, DD> rhs)
-        {
-            static_move_ptr<T, Deleter> tmp(move(rhs));
-            this->swap(tmp);
-            return *this;
-        }
-    */
         // Smart pointer interface
 
     element_type* get() const { return ptr(); }
@@ -194,12 +155,9 @@ private:
             BOOST_STATIC_ASSERT(convertible::value);
         }   
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-    template<typename Ptr> 
-    static_move_ptr(Ptr&);
-    
-#else // BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
+#else 
 
     template<typename Ptr> struct cant_move_from_const;
 
@@ -211,11 +169,12 @@ private:
     template<typename Ptr> 
     static_move_ptr(Ptr&, typename cant_move_from_const<Ptr>::type = 0);
 
-#endif
 
 public:
     static_move_ptr(static_move_ptr&);
 
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    
 private:
     template<typename TT, typename DD>
     static_move_ptr( static_move_ptr<TT, DD>&,

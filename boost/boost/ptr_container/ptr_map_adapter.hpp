@@ -55,26 +55,26 @@ namespace ptr_container_detail
         
         typedef U    value_type;
 
-        typedef map_iterator< 
+        typedef ptr_map_iterator< 
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, value_type>
                      iterator;
         
         typedef
-            map_iterator<
+            ptr_map_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
                        const value_type>
                      const_iterator;
 
         typedef
-            map_iterator<
+            ptr_map_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::reverse_iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, value_type>
                      reverse_iterator;
 
         typedef
-            map_iterator<
+            ptr_map_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reverse_iterator,
                        BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
                        const value_type>
@@ -265,7 +265,7 @@ namespace ptr_container_detail
 
         auto_type replace( iterator where, value_type x ) // strong  
         { 
-            BOOST_ASSERT( where != end() );
+            BOOST_ASSERT( where != this->end() );
 
             this->enforce_null_policy( x, "Null pointer in 'replace()'" );
 
@@ -582,7 +582,7 @@ namespace ptr_container_detail
     };
 
     template< class I, class K, class V >
-    inline bool is_null( ptr_container_detail::map_iterator<I,K,V> i )
+    inline bool is_null( ptr_map_iterator<I,K,V> i )
     {
         return i.base()->second == 0;
     }

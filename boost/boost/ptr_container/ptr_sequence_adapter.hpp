@@ -103,7 +103,7 @@ namespace ptr_container_detail
 
 
     template< class Iterator, class T >
-    inline bool is_null( ptr_container_detail::void_ptr_iterator<Iterator,T> i )
+    inline bool is_null( void_ptr_iterator<Iterator,T> i )
     {
         return *i.base() == 0;
     }
@@ -132,7 +132,7 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type; 
             
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
-                                                   base_type );
+                                                   base_type )
     
         template< class PtrContainer >
         ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )

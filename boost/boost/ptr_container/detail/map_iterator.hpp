@@ -25,15 +25,15 @@
 
 namespace boost
 {
-    namespace ptr_container_detail
-    {
+    //namespace ptr_container_detail
+    //{
         template
         < 
             typename I, // original iterator 
             typename K, // key type
             typename V  // return value type of operator*()
         > 
-        class map_iterator
+        class ptr_map_iterator
         {
             I iter_;
             typedef K              key_type;
@@ -46,11 +46,11 @@ namespace boost
             typedef                std::bidirectional_iterator_tag  iterator_category;        
             
         public:
-            map_iterator()                                  {}
-            map_iterator( const I& i ) : iter_( i )         {}
+            ptr_map_iterator()                                  {}
+            ptr_map_iterator( const I& i ) : iter_( i )         {}
             
             template< class MutableIterator, class K2, class V2 >
-            map_iterator( const map_iterator<MutableIterator,K2,V2>& r ) 
+            ptr_map_iterator( const ptr_map_iterator<MutableIterator,K2,V2>& r ) 
              : iter_(r.base())
             { }
             
@@ -64,28 +64,28 @@ namespace boost
                 return static_cast<V*>( iter_->second );
             }
             
-            map_iterator& operator++()
+            ptr_map_iterator& operator++()
             {
                 ++iter_;
                 return *this;
             }
 
-            map_iterator operator++(int)
+            ptr_map_iterator operator++(int)
             {
-                map_iterator res = *this;
+                ptr_map_iterator res = *this;
                 ++iter_;
                 return res;
             }
 
-            map_iterator& operator--()
+            ptr_map_iterator& operator--()
             {
                 --iter_;
                 return *this;
             }
 
-            map_iterator operator--(int)
+            ptr_map_iterator operator--(int)
             {
-                map_iterator res = *this;
+                ptr_map_iterator res = *this;
                 --iter_;
                 return res;
 
@@ -101,18 +101,18 @@ namespace boost
                 return iter_->first;
             }
 
-            friend inline bool operator==( map_iterator l, map_iterator r )
+            friend inline bool operator==( ptr_map_iterator l, ptr_map_iterator r )
             {
                 return l.iter_ == r.iter_;
             }
 
-            friend inline bool operator!=( map_iterator l, map_iterator r )
+            friend inline bool operator!=( ptr_map_iterator l, ptr_map_iterator r )
             {
                 return l.iter_ != r.iter_;
             }
             
-       }; // class 'map_iterator'
-    } // namespace 'ptr_container_detail'
+       }; // class 'ptr_map_iterator'
+    //} // namespace 'ptr_container_detail'
 }
 
 #endif

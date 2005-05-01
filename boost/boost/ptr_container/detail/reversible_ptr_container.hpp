@@ -24,7 +24,12 @@
 #include <boost/ptr_container/exception.hpp>
 #include <boost/ptr_container/clone_allocator.hpp>
 #include <boost/ptr_container/nullable.hpp>
+
+#ifdef BOOST_NO_SFINAE
+#else
 #include <boost/range/functions.hpp>
+#endif
+
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/operators.hpp>
@@ -176,14 +181,6 @@ namespace ptr_container_detail
             BOOST_ASSERT( size_type( std::distance( sd.begin(), sd.end() ) ) == c_.size() );
             std::copy( sd.begin(), sd.end(), c_.begin() );
             sd.release(); 
-        }
-        
-        template< class OutputIterator >
-        void copy_clones_and_release( scoped_deleter& sd, 
-                                      OutputIterator where ) // nothrow
-        {
-            std::copy( sd.begin(), sd.end(), where );
-            sd.release();
         }
         
         void insert_clones_and_release( scoped_deleter& sd ) // strong
@@ -479,7 +476,7 @@ namespace ptr_container_detail
 
             auto_type old( Config::get_pointer( where ) );  // nothrow
             
-#ifdef __GNUC__
+#if defined( __GNUC__ ) || defined( __MWERKS__ ) || defined( __COMO__ )
             const_cast<void*&>(*where.base()) = ptr.release();                
 #else
             *where.base() = ptr.release(); // nothrow, commit
