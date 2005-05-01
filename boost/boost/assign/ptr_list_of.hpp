@@ -109,8 +109,14 @@ namespace assign_detail
             std::auto_ptr<PtrContainer> res( new PtrContainer() );
             while( !empty() )
                 res->insert( res->end(), 
-                             values_.release( --values_.end() ).release() );
+                             values_.pop_back().release() );
             return res;
+        }
+
+        template< class PtrContainer >
+        std::auto_ptr<PtrContainer> to_container( const PtrContainer& c ) const
+        {
+            return convert( &c ); 
         }
         
     protected:
