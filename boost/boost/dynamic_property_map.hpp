@@ -262,7 +262,6 @@ public:
     } else {
       return generate_fn(name,key,value);
     }
-    return std::auto_ptr<dynamic_property_map>();
   }
 
 private:
