@@ -3,6 +3,10 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef NDEBUG
+#  undef NDEBUG
+#endif
+
 #include <boost/concept_check.hpp>
 
 /*
