@@ -48,16 +48,16 @@ namespace test
   
   template<class A0>
   void f(A0 const& a0
-      , typename f_parameters::restrict<A0>::type = f_parameters())
+      , typename f_parameters::restrict<A0>::type args = f_parameters())
   {
-      f_impl(f_parameters()(a0));
+      f_impl(args(a0));
   }
 
   template<class A0, class A1>
   void f(A0 const& a0, A1 const& a1
-      , typename f_parameters::restrict<A0, A1>::type = f_parameters())
+      , typename f_parameters::restrict<A0, A1>::type args = f_parameters())
   {
-      f_impl(f_parameters()(a0, a1));
+      f_impl(args(a0, a1));
   }
 
 } // namespace test
