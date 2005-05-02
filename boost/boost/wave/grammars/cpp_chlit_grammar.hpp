@@ -103,12 +103,10 @@ struct chlit_grammar :
             
             // special parsers for '\x..' and L'\x....'
             typedef uint_parser<
-                        unsigned int, 16, 
-                        2 * sizeof(char), 2 * sizeof(char)
+                        unsigned int, 16, 1, 2 * sizeof(char)
                     > hex_char_parser_type;
             typedef uint_parser<
-                        unsigned int, 16, 
-                        2 * sizeof(wchar_t), 2 * sizeof(wchar_t)
+                        unsigned int, 16, 1, 2 * sizeof(wchar_t)
                     > hex_wchar_parser_type;
 
             // the rule for a character literal
