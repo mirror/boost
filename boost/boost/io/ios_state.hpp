@@ -12,7 +12,9 @@
 #include <boost/io_fwd.hpp>  // self include
 
 #include <ios>        // for std::ios_base, std::basic_ios, etc.
+#ifndef BOOST_NO_STD_LOCALE
 #include <locale>     // for std::locale
+#endif
 #include <ostream>    // for std::basic_ostream
 #include <streambuf>  // for std::basic_streambuf
 #include <string>     // for std::char_traits
@@ -218,6 +220,7 @@ private:
     aspect_type const  a_save_;
 };
 
+#ifndef BOOST_NO_STD_LOCALE
 template < typename Ch, class Tr >
 class basic_ios_locale_saver
 {
@@ -241,6 +244,7 @@ private:
     state_type &       s_save_;
     aspect_type const  a_save_;
 };
+#endif
 
 
 //  User-defined stream state saver class declarations  ----------------------//
@@ -335,7 +339,10 @@ public:
         : s_save_( s ), a1_save_( s.flags() ), a2_save_( s.precision() )
         , a3_save_( s.width() ), a4_save_( s.rdstate() )
         , a5_save_( s.exceptions() ), a6_save_( s.tie() )
-        , a7_save_( s.rdbuf() ), a8_save_( s.fill() ), a9_save_( s.getloc() )
+        , a7_save_( s.rdbuf() ), a8_save_( s.fill() )
+        #ifndef BOOST_NO_STD_LOCALE
+        , a9_save_( s.getloc() )
+        #endif
         {}
 
     ~basic_ios_all_saver()
@@ -343,7 +350,9 @@ public:
 
     void  restore()
     {
+        #ifndef BOOST_NO_STD_LOCALE
         s_save_.imbue( a9_save_ );
+        #endif
         s_save_.fill( a8_save_ );
         s_save_.rdbuf( a7_save_ );
         s_save_.tie( a6_save_ );
@@ -364,7 +373,9 @@ private:
     ::std::basic_ostream<Ch, Tr> * const    a6_save_;
     ::std::basic_streambuf<Ch, Tr> * const  a7_save_;
     typename state_type::char_type const    a8_save_;
+    #ifndef BOOST_NO_STD_LOCALE
     ::std::locale const                     a9_save_;
+    #endif
 };
 
 class ios_all_word_saver
