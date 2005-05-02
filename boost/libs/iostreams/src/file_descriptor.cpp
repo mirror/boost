@@ -202,14 +202,16 @@ stream_offset file_descriptor::seek
                    dwResultLow;
         }
     }
-#else // #ifdef BOOST_IOSTREAMS_WINDOWS
-# ifndef BOOST_IOSTREAMS_HAS_LSEEK64
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
+
+#ifndef BOOST_IOSTREAMS_HAS_LSEEK64
     if ( off > integer_traits<long>::const_max ||
          off < integer_traits<long>::const_min )
     {
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
     }
-# endif
+#endif
+
     stream_offset result =
         #ifdef BOOST_IOSTREAMS_HAS_LSEEK64
             lseek64
@@ -230,7 +232,6 @@ stream_offset file_descriptor::seek
     if (result == -1)
         throw detail::bad_seek();
     return result;
-#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
 void file_descriptor::close() { close_impl(*pimpl_); }
