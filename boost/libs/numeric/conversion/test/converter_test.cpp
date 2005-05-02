@@ -6,7 +6,7 @@
 //  See library home page at http://www.boost.org/libs/numeric/conversion
 //
 // Contact the author at: fernando_cacciola@hotmail.com
-// 
+//
 #include<cstdlib>
 #include<iostream>
 #include<iomanip>
@@ -78,7 +78,7 @@ void test_conversions()
   boost::uint16_t uv16 ;
   boost::int32_t v32 ;
   boost::uint32_t uv32 ;
-  
+
   volatile float  fv ; // avoid this to be cached internally in some fpu register
   volatile double dv ; // avoid this to be cached internally in some fpu register
 
@@ -365,6 +365,31 @@ void test_round_style( MATCH_FNTPL_ARG(T), MATCH_FNTPL_ARG(S) )
 
 }
 
+void test_round_even( double n, double x )
+{
+  double r = boost::numeric::RoundEven<double>::nearbyint(n);
+  BOOST_CHECK( r == x ) ;
+}
+
+void test_round_even()
+{
+  cout << "Testing 'RoundEven' tie-breaking\n";
+
+  double min = boost::numeric::bounds<double>::lowest();
+  double max = boost::numeric::bounds<double>::highest();
+
+  test_round_even(min, floor(min));
+  test_round_even(max, ceil (max));
+  test_round_even(2.0, 2.0);
+  test_round_even(2.3, 2.0);
+  test_round_even(2.5, 2.0);
+  test_round_even(2.7, 3.0);
+  test_round_even(3.0, 3.0);
+  test_round_even(3.3, 3.0);
+  test_round_even(3.5, 4.0);
+  test_round_even(3.7, 4.0);
+}
+
 int double_to_int ( double n ) { return static_cast<int>(n) ; }
 
 void test_converter_as_function_object()
@@ -518,7 +543,8 @@ int test_main( int, char* argv[] )
 
   test_conversions();
   test_overflow_handlers( SET_FNTPL_ARG(boost::int16_t), SET_FNTPL_ARG(boost::int32_t));
-  test_round_style (SET_FNTPL_ARG(boost::int32_t), SET_FNTPL_ARG(double) ) ;
+  test_round_style(SET_FNTPL_ARG(boost::int32_t), SET_FNTPL_ARG(double) ) ;
+  test_round_even() ;
   test_converter_as_function_object();
   test_optimizations() ;
 
