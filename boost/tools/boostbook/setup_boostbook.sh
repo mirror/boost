@@ -4,7 +4,7 @@
 DOCBOOK_XSL_VERSION=1.67.2
 DOCBOOK_DTD_VERSION=4.2
 FOP_VERSION=0.20.5
-FOP_MIRROR=http://www.ibiblio.org/pub/mirrors/apache/xml/fop/
+FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xml/fop/
 SOURCEFORGE_MIRROR=http://dl.sourceforge.net
 HTTP_GET_CMD="curl -O"
 
