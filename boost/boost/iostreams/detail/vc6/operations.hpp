@@ -23,7 +23,6 @@ struct is_custom
       >
     { };
 
-
 // Implementation templates for simulated tag dispatch.
 template<typename T> struct read_impl;
 template<typename T> struct write_impl;
@@ -107,7 +106,7 @@ write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize n)
 
 template<typename T>
 inline stream_offset
-seek( T& t, stream_offset off, BOOST_IOS::seekdir way,
+seek( T& t, stream_offset off, BOOST_IOS::seekdir way, 
       BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
@@ -158,6 +157,47 @@ std::streamsize optimal_buffer_size(const T& t)
     return impl::optimal_buffer_size(detail::unwrap(t));
 }
 
+//--------------definition of non_blocking_adapter----------------------------//
+
+// This can be be moved to its own header once the fundamental i/o operations
+// are split into separate headers.
+template<typename Device>
+class non_blocking_adapter {
+public:
+    typedef typename io_char<Device>::type             char_type;
+    struct io_category
+        : io_mode<Device>::type, device_tag
+        { };
+    explicit non_blocking_adapter(Device& dev) : device_(dev) { }
+    std::streamsize read(char_type* s, std::streamsize n)
+    { 
+        std::streamsize result = 0;
+        while (result < n) {
+            std::streamsize amt = iostreams::read(device_, s, n);
+            if (amt == -1)
+                break;
+            result += amt;
+        }
+        return result != 0 ? result : -1;
+    }
+    std::streamsize write(const char_type* s, std::streamsize n)
+    { 
+        std::streamsize result = 0;
+        while (result < n) {
+            std::streamsize amt = 
+                iostreams::write(device_, s + result, n - result);
+            result += amt;
+        }
+        return result;    
+    }
+    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
+                        BOOST_IOS::openmode which = 
+                            BOOST_IOS::in | BOOST_IOS::out )
+    { return iostreams::seek(device_, off, way, which); }
+public:
+    Device& device_;
+};
+
 //----------------------------------------------------------------------------//
 
 namespace detail {
@@ -196,8 +236,8 @@ struct read_impl
           detail::is_custom<T>,
           operations<T>,
           read_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, istream_tag, streambuf_tag, input
               >::type
           >
@@ -301,8 +341,8 @@ struct write_impl
           detail::is_custom<T>,
           operations<T>,
           write_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, ostream_tag, streambuf_tag, output
               >::type
           >
@@ -365,8 +405,8 @@ struct filter_impl
           detail::is_custom<T>,
           operations<T>,
           filter_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, multichar_tag, any_tag
               >::type
           >
@@ -459,10 +499,10 @@ struct seek_impl
           detail::is_custom<T>,
           operations<T>,
           seek_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, iostream_tag, istream_tag, ostream_tag,
-                  streambuf_tag, detail::two_head, any_tag
+                  streambuf_tag, two_head, any_tag
               >::type
           >
       >::type
@@ -539,10 +579,10 @@ struct close_tag {
                 is_convertible<category, closable_tag>,
                 mpl::if_<
                     mpl::or_<
-                        is_convertible<category, detail::two_sequence>,
+                        is_convertible<category, two_sequence>,
                         is_convertible<category, dual_use>
                     >,
-                    detail::two_sequence,
+                    two_sequence,
                     closable_tag
                 >,
                 mpl::identity<any_tag>
@@ -620,8 +660,8 @@ struct flush_device_impl
           detail::is_custom<T>,
           operations<T>,
           flush_device_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, ostream_tag, streambuf_tag, flushable_tag, any_tag
               >::type
           >
@@ -662,8 +702,8 @@ struct flush_filter_impl
           detail::is_custom<T>,
           operations<T>,
           flush_filter_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, flushable_tag, any_tag
               >::type
           >
@@ -690,8 +730,8 @@ struct imbue_impl
           detail::is_custom<T>,
           operations<T>,
           imbue_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              BOOST_DEDUCED_TYPENAME 
+              dispatch<
                   T, streambuf_tag, localizable_tag, any_tag
               >::type
           >
@@ -725,7 +765,7 @@ struct optimal_buffer_size_impl
           operations<T>,
           optimal_buffer_size_impl<
               BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
+              dispatch<
                   T, optimally_buffered_tag, device_tag, filter_tag
               >::type
           >
