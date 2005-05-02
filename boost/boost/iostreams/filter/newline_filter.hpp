@@ -22,6 +22,7 @@
 #include <boost/iostreams/detail/char_traits.hpp> 
 #include <boost/iostreams/pipeline.hpp>      
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
 #define BOOST_IOSTREAMS_ASSERT_UNREACHABLE(val)   \
