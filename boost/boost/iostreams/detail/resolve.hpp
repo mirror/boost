@@ -34,6 +34,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/type_traits/is_array.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4224.
 
 namespace boost { namespace iostreams { namespace detail {
