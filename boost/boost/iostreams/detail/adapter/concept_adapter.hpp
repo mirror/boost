@@ -22,6 +22,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/static_assert.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams { namespace detail {
@@ -96,10 +97,7 @@ public:
 
     template<typename Device>
     void close(BOOST_IOS::openmode which, Device* dev)
-    { 
-        non_blocking_adapter<Device> nb(*dev);
-        any_impl::close(t_, &nb, which); 
-    }
+    { any_impl::close(t_, dev, which); }
 
     bool flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,
                 BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
