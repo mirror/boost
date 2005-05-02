@@ -30,7 +30,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/operators.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
@@ -70,11 +69,7 @@ namespace ptr_container_detail
         class Config, 
         class CloneAllocator
     >
-    class reversible_ptr_container : 
-        less_than_comparable< reversible_ptr_container< Config, 
-                                                          CloneAllocator >, 
-        equality_comparable< reversible_ptr_container< Config, 
-                                                         CloneAllocator > > >
+    class reversible_ptr_container 
     {
     private:
         BOOST_STATIC_CONSTANT( bool, allow_null = Config::allow_null );
@@ -401,12 +396,32 @@ namespace ptr_container_detail
             else
                 return std::equal( begin(), end(), r.begin() );
         }
+
+        bool operator!=( const reversible_ptr_container& r ) const // nothrow
+        {
+            return !(*this == r);
+        }
         
         bool operator<( const reversible_ptr_container& r ) const // nothrow 
         {
              return std::lexicographical_compare( begin(), end(), r.begin(), r.end() );
         }
-        
+
+        bool operator<=( const reversible_ptr_container& r ) const // nothrow 
+        {
+            return !(r < *this);
+        }
+
+        bool operator>( const reversible_ptr_container& r ) const // nothrow 
+        {
+            return r < *this;
+        }
+
+        bool operator>=( const reversible_ptr_container& r ) const // nothrow 
+        {
+            return !(*this < r);
+        }
+
     public: // modifiers
 
         iterator insert( iterator before, Ty_* x )
