@@ -24,6 +24,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
