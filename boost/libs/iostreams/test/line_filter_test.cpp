@@ -16,6 +16,9 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
+// Must come last.
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // BCC 5.x.
+
 using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
@@ -90,3 +93,6 @@ test_suite* init_unit_test_suite(int, char* [])
     test->add(BOOST_TEST_CASE(&write_line_filter));
     return test;
 }
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // BCC 5.x.
+

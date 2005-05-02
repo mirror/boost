@@ -37,12 +37,50 @@ const char* upper =
     "COMPRESSION AND DECOMPRESSION IN THE ZLIB, GZIP AND "
     "BZIP2 FORMATS.";
 
+struct toupper_dual_use_filter : public dual_use_filter {
+    template<typename Source>
+    int get(Source& s) 
+    { 
+        int c = boost::iostreams::get(s);
+        return c != EOF && c != WOULD_BLOCK ?
+            std::toupper((unsigned char) c) :
+            c;
+    }
+    template<typename Sink>
+    bool put(Sink& s, char c)
+    { 
+        return boost::iostreams::put(
+                   s, (char) std::toupper((unsigned char) c)
+               ); 
+    }
+};
+
+struct tolower_dual_use_filter : public dual_use_filter {
+    template<typename Source>
+    int get(Source& s) 
+    { 
+        int c = boost::iostreams::get(s);
+        return c != EOF && c != WOULD_BLOCK ?
+            std::tolower((unsigned char) c) :
+            c;
+    }
+    template<typename Sink>
+    bool put(Sink& s, char c)
+    { 
+        return boost::iostreams::put(
+                   s, (char) std::tolower((unsigned char) c)
+               ); 
+    }
+};
+
 void filter_test()
 {
     BOOST_CHECK(test_input_filter(toupper_filter(), lower, upper));
     BOOST_CHECK(test_input_filter(toupper_multichar_filter(), lower, upper));
+    BOOST_CHECK(test_input_filter(toupper_dual_use_filter(), lower, upper));
     BOOST_CHECK(test_output_filter(tolower_filter(), upper, lower));
     BOOST_CHECK(test_output_filter(tolower_multichar_filter(), upper, lower));
+    BOOST_CHECK(test_output_filter(tolower_dual_use_filter(), upper, lower));
     BOOST_CHECK(test_filter_pair(tolower_filter(), toupper_filter(), upper));
     BOOST_CHECK(
         test_filter_pair( tolower_multichar_filter(), 

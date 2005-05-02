@@ -93,23 +93,23 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/seekable_file_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/stdio_filter_test.cpp ]
-          [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
+          #[ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/tee_test.cpp ]
           [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
-          [ test-iostreams 
-                libs/iostreams/test/bzip2_test.cpp 
-                <template>bzip2 
-              : # build requirements
-                <define>BOOST_IOSTREAMS_NO_LIB ]   
-          [ test-iostreams 
-                libs/iostreams/test/gzip_test.cpp 
-                <template>zlib
-              : # build requirements
-                <define>BOOST_IOSTREAMS_NO_LIB ]   
-          [ test-iostreams 
-                libs/iostreams/test/zlib_test.cpp 
-                <template>zlib
-              : # build requirements
-                <define>BOOST_IOSTREAMS_NO_LIB ]   
+          #[ test-iostreams 
+          #      libs/iostreams/test/bzip2_test.cpp 
+          #      <template>bzip2 
+          #    : # build requirements
+          #      <define>BOOST_IOSTREAMS_NO_LIB ]   
+          #[ test-iostreams 
+          #      libs/iostreams/test/gzip_test.cpp 
+          #      <template>zlib
+          #    : # build requirements
+          #      <define>BOOST_IOSTREAMS_NO_LIB ]   
+          #[ test-iostreams 
+          #      libs/iostreams/test/zlib_test.cpp 
+          #      <template>zlib
+          #    : # build requirements
+          #      <define>BOOST_IOSTREAMS_NO_LIB ]   
        ;
 }
