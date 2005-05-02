@@ -17,6 +17,7 @@
 #include <boost/iostreams/detail/ios.hpp>          // openmode.
 #include <boost/iostreams/detail/streambuf.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // MSVC.
 
 namespace boost { namespace iostreams { namespace detail {

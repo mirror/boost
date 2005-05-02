@@ -19,13 +19,15 @@
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/ios.hpp>
+#include <boost/iostreams/detail/optional.hpp>
+//#include <boost/optional.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/optional.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // MSVC.
 
 namespace boost { namespace iostreams { 
@@ -58,7 +60,7 @@ public: // stream_facade needs access.
     bool strict_sync() { return true; }
 
     // Declared in linked_streambuf.
-    T* component() { return storage_.get_ptr(); } 
+    T* component() { return storage_.get(); }
 protected:
 #if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
@@ -104,7 +106,7 @@ direct_streambuf<T, Tr>::direct_streambuf()
 template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::open(const T& t, int, int)
 {
-    storage_ = t;
+    storage_.reset(t);
     init_input(io_category());
     init_output(io_category());
     setg(0, 0, 0);
@@ -194,7 +196,7 @@ void direct_streambuf<T, Tr>::close(BOOST_IOS::openmode which)
         obeg_ = oend_ = 0;
     }
     try { 
-        boost::iostreams::close(storage_.get(), which);
+        boost::iostreams::close(*storage_, which);
     } catch (std::exception&) { }
 }
 
