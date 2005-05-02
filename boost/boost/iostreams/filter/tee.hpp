@@ -16,6 +16,7 @@
 #include <boost/iostreams/detail/adapter/basic_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/pipeline.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -72,6 +73,7 @@ public:
         return r1 && r2;
     }
 };
+BOOST_IOSTREAMS_PIPABLE(tee_filter, 1)
 
 template<typename Device>
 tee_filter<Device> tee(const Device& dev) 

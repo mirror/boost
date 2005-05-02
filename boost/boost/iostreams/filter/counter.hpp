@@ -15,7 +15,9 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/newline.hpp>
 #include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/pipeline.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
 
 namespace boost { namespace iostreams {
@@ -67,6 +69,8 @@ private:
     int lines_;
     int chars_;
 };
+BOOST_IOSTREAMS_PIPABLE(basic_counter, 1)
+
 
 typedef basic_counter<char>     counter;
 typedef basic_counter<wchar_t>  wcounter;

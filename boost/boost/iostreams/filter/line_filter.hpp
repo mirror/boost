@@ -21,6 +21,7 @@
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/ios.hpp>          // openmode, streamsize.
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
 
 namespace boost { namespace iostreams {
@@ -194,6 +195,7 @@ private:
     typename string_type::size_type  pos_;
     int                              state_;
 };
+BOOST_IOSTREAMS_PIPABLE(basic_line_filter, 2)
 
 typedef basic_line_filter<char>     line_filter;
 typedef basic_line_filter<wchar_t>  wline_filter;
