@@ -11,7 +11,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
                        
 #include <iostream>
 #include <memory>    // allocator.
@@ -67,7 +67,7 @@ private:
         do_filter();
     }
 };
-BOOST_IOSTREAMS_PIPABLE(basic_stdio_filter, 1)
+BOOST_IOSTREAMS_PIPABLE(basic_stdio_filter, 2)
 
 typedef basic_stdio_filter<char>     stdio_filter;
 typedef basic_stdio_filter<wchar_t>  wstdio_wfilter;
