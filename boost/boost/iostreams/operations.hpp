@@ -16,6 +16,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/constants.hpp>  // constants.
+#include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
@@ -30,15 +31,61 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
+
+namespace boost { namespace iostreams {
+
+////--------------definition of non_blocking_adapter----------------------------//
+//
+//// This can be be moved to its own header once the fundamental i/o operations
+//// are split into separate headers.
+//template<typename Device>
+//class non_blocking_adapter {
+//public:
+//    typedef typename io_char<Device>::type             char_type;
+//    struct io_category
+//        : io_mode<Device>::type, device_tag
+//        { };
+//    explicit non_blocking_adapter(Device& dev) : device_(dev) { }
+//    std::streamsize read(char_type* s, std::streamsize n)
+//    { 
+//        std::streamsize result = 0;
+//        while (result < n) {
+//            std::streamsize amt = iostreams::read(device_, s, n);
+//            if (amt == -1)
+//                break;
+//            result += amt;
+//        }
+//        return result != 0 ? result : -1;
+//    }
+//    std::streamsize write(const char_type* s, std::streamsize n)
+//    { 
+//        std::streamsize result = 0;
+//        while (result < n) {
+//            std::streamsize amt = 
+//                iostreams::write(device_, s + result, n - result);
+//            result += amt;
+//        }
+//        return result;    
+//    }
+//    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
+//                        BOOST_IOS::openmode which = 
+//                            BOOST_IOS::in | BOOST_IOS::out )
+//    { return iostreams::seek(device_, off, way, which); }
+//public:
+//    Device& device_;
+//};
+
+} } // End namespaces iostreams, boost.
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
 # include <boost/iostreams/detail/vc6/operations.hpp>
 #else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
 
-namespace boost { namespace iostreams {
-
 //--------------Fundamental i/o operations------------------------------------//
+
+namespace boost { namespace iostreams {
 
 template<typename T> struct operations;
 
@@ -104,7 +151,7 @@ write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize n)
 
 template<typename T>
 inline std::streampos
-seek( T& t, stream_offset off, BOOST_IOS::seekdir way,
+seek( T& t, stream_offset off, BOOST_IOS::seekdir way, 
       BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
@@ -148,6 +195,47 @@ std::streamsize optimal_buffer_size(const T& t)
     typedef detail::optimal_buffer_size_impl<T> impl;
     return impl::optimal_buffer_size(detail::unwrap(t));
 }
+
+//--------------definition of non_blocking_adapter----------------------------//
+
+// This can be be moved to its own header once the fundamental i/o operations
+// are split into separate headers.
+template<typename Device>
+class non_blocking_adapter {
+public:
+    typedef typename io_char<Device>::type             char_type;
+    struct io_category
+        : io_mode<Device>::type, device_tag
+        { };
+    explicit non_blocking_adapter(Device& dev) : device_(dev) { }
+    std::streamsize read(char_type* s, std::streamsize n)
+    { 
+        std::streamsize result = 0;
+        while (result < n) {
+            std::streamsize amt = iostreams::read(device_, s, n);
+            if (amt == -1)
+                break;
+            result += amt;
+        }
+        return result != 0 ? result : -1;
+    }
+    std::streamsize write(const char_type* s, std::streamsize n)
+    { 
+        std::streamsize result = 0;
+        while (result < n) {
+            std::streamsize amt = 
+                iostreams::write(device_, s + result, n - result);
+            result += amt;
+        }
+        return result;    
+    }
+    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
+                        BOOST_IOS::openmode which = 
+                            BOOST_IOS::in | BOOST_IOS::out )
+    { return iostreams::seek(device_, off, way, which); }
+public:
+    Device& device_;
+};
 
 //----------------------------------------------------------------------------//
 
@@ -548,11 +636,14 @@ struct close_impl<any_tag> {
         if ((which & BOOST_IOS::out) != 0)
             iostreams::flush(t);
     }
+
     template<typename T, typename Sink>
     static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
     {
-        if ((which & BOOST_IOS::out) != 0)
-            iostreams::flush(t, snk);
+        if ((which & BOOST_IOS::out) != 0) {
+            non_blocking_adapter<Sink> nb(snk);
+            iostreams::flush(t, nb);
+        }
     }
 };
 
@@ -574,11 +665,12 @@ struct close_impl<closable_tag> {
         typedef typename io_category<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
-        if (in == ((which & BOOST_IOS::in) != 0))
-            t.close(snk);
+        if (in == ((which & BOOST_IOS::in) != 0)) {
+            non_blocking_adapter<Sink> nb(snk);
+            t.close(nb);
+        }
     }
 };
-#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 template<>
 struct close_impl<two_sequence> {
@@ -586,7 +678,10 @@ struct close_impl<two_sequence> {
     static void close(T& t, BOOST_IOS::openmode which) { t.close(which); }
     template<typename T, typename Sink>
     static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-    { t.close(snk, which); }
+    { 
+        non_blocking_adapter<Sink> nb(snk);
+        t.close(nb, which); 
+    }
 };
 
 //------------------Definition of flush_device_impl---------------------------//
