@@ -15,6 +15,7 @@
 
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
+#include <boost/spirit/dynamic/if.hpp>
 
 #include <boost/spirit/phoenix/operators.hpp>
 #include <boost/spirit/phoenix/primitives.hpp>
@@ -37,9 +38,10 @@ namespace grammars {
 namespace closures {
 
     struct chlit_closure 
-    :   boost::spirit::closure<chlit_closure, unsigned int> 
+    :   boost::spirit::closure<chlit_closure, unsigned int, bool> 
     {
         member1 value;
+        member2 long_lit;
     };
 }
 
@@ -99,9 +101,21 @@ struct chlit_grammar :
             using namespace boost::spirit;
             using namespace phoenix;
             
+            // special parsers for '\x..' and L'\x....'
+            typedef uint_parser<
+                        unsigned int, 16, 
+                        2 * sizeof(char), 2 * sizeof(char)
+                    > hex_char_parser_type;
+            typedef uint_parser<
+                        unsigned int, 16, 
+                        2 * sizeof(wchar_t), 2 * sizeof(wchar_t)
+                    > hex_wchar_parser_type;
+
+            // the rule for a character literal
             ch_lit
-                =  !ch_p('L') 
-                    >>  ch_p('\'')[self.value = val(0)]
+                =   eps_p[self.value = val(0), self.long_lit = val(false)]
+                    >> !ch_p('L')[self.long_lit = val(true)]
+                    >>  ch_p('\'')
                     >> +(   (
                             ch_p('\\') 
                             >>  (   ch_p('a')    // BEL
@@ -149,10 +163,20 @@ struct chlit_grammar :
                                         self.value = impl::compose(self.value, val('\\'))
                                     ]
                                 |   ch_p('x') 
-                                    >>  uint_parser<unsigned int, 16, 2, 2>()
-                                    [
-                                        self.value = impl::compose(self.value, arg1)
-                                    ]
+                                    >>  if_p(self.long_lit) 
+                                        [
+                                            hex_wchar_parser_type()
+                                            [
+                                                self.value = impl::compose(self.value, arg1)
+                                            ]
+                                        ]
+                                        .else_p
+                                        [
+                                            hex_char_parser_type()
+                                            [
+                                                self.value = impl::compose(self.value, arg1)
+                                            ]
+                                        ]
                                 |   ch_p('u') 
                                     >>  uint_parser<unsigned int, 16, 4, 4>()
                                         [
