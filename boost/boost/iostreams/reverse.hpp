@@ -9,12 +9,12 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif
+#endif              
 
-#include <algorithm>                             // copy, min.
-#include <deque>
+#include <algorithm>                             // copy, min.  
+#include <deque>                               
 #include <memory>                                // allocator.
-#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.
+#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.       
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -27,6 +27,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
@@ -40,7 +41,7 @@ template<typename InputFilter> class reversing_output_filter;
 //      OutputFilter - A model of OutputFilter.
 // Description: An InputFilter implemented in terms of a given
 //      instance of OutputFilter.
-// Note: Implemented using basic_one_step_input_filter for portability; an
+// Note: Implemented using basic_one_step_input_filter for portability; an 
 //      implementation with better memory usage caused an ICE on GCC 3.2.
 //
 template<typename OutputFilter>
@@ -49,7 +50,7 @@ class reversing_input_filter
 {
 private:
     typedef one_step_filter<
-                BOOST_DEDUCED_TYPENAME
+                BOOST_DEDUCED_TYPENAME 
                 io_char<OutputFilter>::type
             >                                                   base_type;
 public:
@@ -86,7 +87,7 @@ class reversing_output_filter
 {
 private:
     typedef one_step_filter<
-                BOOST_DEDUCED_TYPENAME
+                BOOST_DEDUCED_TYPENAME 
                 io_char<InputFilter>::type
             >                                                   base_type;
 public:
@@ -104,7 +105,7 @@ protected:
             iterator_range< std::vector<char>::iterator >
                 range(make_iterator_range(src));
             in.push(range);
-        #else
+        #else                 
             in.push(make_iterator_range(src));
         #endif
             copy(in, iostreams::back_inserter(dest));
@@ -120,7 +121,7 @@ struct reverse_traits {
     typedef typename
             mpl::if_<
                 is_convertible<
-                    BOOST_DEDUCED_TYPENAME io_category<Filter>::type,
+                    BOOST_DEDUCED_TYPENAME io_category<Filter>::type, 
                     input
                 >,
                 reversing_output_filter<Filter>,
@@ -142,7 +143,7 @@ typename detail::reverse_traits<Filter>::type
 reverse(const Filter& f)
 { typedef typename detail::reverse_traits<Filter>::type return_type;
   return return_type(f); }
-
+                    
 //----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
