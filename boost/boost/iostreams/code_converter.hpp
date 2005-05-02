@@ -44,6 +44,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
 
 namespace boost { namespace iostreams {
@@ -138,7 +139,7 @@ struct code_converter_impl {
             buf_.second().resize(buffer_size);
             buf_.second().set(0, buffer_size);
         }
-        dev_ = concept_adapter<policy_type>(dev);
+        dev_.reset(concept_adapter<policy_type>(dev));
         flags_ |= f_open;
     }
 
