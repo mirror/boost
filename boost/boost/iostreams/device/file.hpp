@@ -30,6 +30,7 @@
 #include <boost/iostreams/operations.hpp>       // seek.
 #include <boost/shared_ptr.hpp>      
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {

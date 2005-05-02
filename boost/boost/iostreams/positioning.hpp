@@ -19,16 +19,15 @@
 #include <boost/iostreams/detail/config/codecvt.hpp> // mbstate_t.
 #include <boost/iostreams/detail/ios.hpp> // streamoff, streampos.
 
+// Must come last.
+#include <boost/iostreams/detail/config/disable_warnings.hpp> 
+
 namespace boost { namespace iostreams {
 
 typedef boost::intmax_t stream_offset;
 
-#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1.
-
 inline std::streamoff stream_offset_to_streamoff(stream_offset off)
 { return static_cast<stream_offset>(off); }
-
-#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 template<typename PosType> // Hande custom pos_type's.
 inline stream_offset position_to_offset(PosType pos)
@@ -91,5 +90,7 @@ inline stream_offset position_to_offset(std::streampos pos) { return pos; }
 #endif // Dinkumware //-------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp> 
 
 #endif // #ifndef BOOST_IOSTREAMS_POSITIONING_HPP_INCLUDED

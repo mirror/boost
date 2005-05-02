@@ -20,7 +20,6 @@
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/optional.hpp>
-//#include <boost/optional.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/detail/error.hpp>
