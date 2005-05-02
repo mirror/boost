@@ -118,7 +118,7 @@ namespace time_conversion {
             
         time_conversion_grammar g;
 
-            if (parse (act_time, g, space_p | ch_p(':')).hit) {
+            if (parse (act_time, g, space_p | ch_p(':') | ch_p(',')).hit) {
                 g.correct_year();
                 compile_time = mktime(&g.time_stamp);
             }
