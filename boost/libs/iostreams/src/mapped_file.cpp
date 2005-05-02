@@ -191,7 +191,7 @@ void mapped_file_source::open_impl(mapped_file_params p)
         LONG sizehigh = (p.size >> (sizeof(LONG) * 8));
         LONG sizelow = (p.size & 0xffffffff);
         ::SetFilePointer(pimpl_->handle_, sizelow, &sizehigh, FILE_BEGIN);
-        if (::GetLastError != NO_ERROR || !::SetEndOfFile(pimpl_->handle_))
+        if (::GetLastError() != NO_ERROR || !::SetEndOfFile(pimpl_->handle_))
             detail::cleanup_and_throw(*pimpl_, "failed setting file size");
     }
 
@@ -312,7 +312,7 @@ void mapped_file_source::open_impl(mapped_file_params p)
     if (p.size != 0 && !readonly)
         flags |= (O_CREAT | O_TRUNC);
     errno = 0;
-    pimpl_->handle_ = ::open(p.path.c_str(), flags/*, S_IRWXU*/);
+    pimpl_->handle_ = ::open(p.path.c_str(), flags, S_IRWXU);
     if (errno != 0)
         detail::cleanup_and_throw(*pimpl_, "failed opening file");
 
