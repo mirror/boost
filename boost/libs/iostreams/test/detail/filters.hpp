@@ -28,6 +28,7 @@
 namespace std { using ::toupper; using ::tolower; }
 #endif
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
 namespace boost { namespace iostreams { namespace test {
