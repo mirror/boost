@@ -247,7 +247,6 @@ namespace assign_detail
     public:
         typedef BOOST_DEDUCED_TYPENAME impl_type::iterator         iterator;
         typedef BOOST_DEDUCED_TYPENAME impl_type::const_iterator   const_iterator;
-        //typedef iterator                                           const_iterator;
         typedef BOOST_DEDUCED_TYPENAME impl_type::value_type       value_type;
         typedef BOOST_DEDUCED_TYPENAME impl_type::size_type        size_type;
         typedef BOOST_DEDUCED_TYPENAME impl_type::difference_type  difference_type;
@@ -318,7 +317,7 @@ namespace assign_detail
 
         template< class SinglePassIterator >
         generic_list& range( SinglePassIterator first, 
-                              SinglePassIterator last )
+                             SinglePassIterator last )
         {
             for( ; first != last; ++first )
                 this->push_back( *first );
@@ -328,7 +327,7 @@ namespace assign_detail
         template< class SinglePassRange >
         generic_list& range( const SinglePassRange& r )
         {
-            return range( begin(r), end(r) );
+            return range( boost::begin(r), boost::end(r) );
         }
 
         template< class Container >
