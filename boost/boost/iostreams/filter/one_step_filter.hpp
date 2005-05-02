@@ -19,7 +19,11 @@
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/ios.hpp>     // openmode, streamsize.
+#include <boost/iostreams/pipeline.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
+// Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
 namespace boost { namespace iostreams {
@@ -73,8 +77,10 @@ public:
         return n;
     }
     
+    // Give detail::closer permission to call close().
     typedef one_step_filter<Ch, Alloc> self;
     friend struct detail::closer<self>;
+
     template<typename Sink>
     void close(Sink& sink, BOOST_IOS::openmode which)
     {
@@ -85,7 +91,7 @@ public:
             detail::closer<self> closer(*this);
             vector_type filtered;
             do_filter(data_, filtered);
-            boost::iostreams::write( 
+            do_write( 
                 sink, &filtered[0],
                 static_cast<std::streamsize>(filtered.size())
             );
@@ -97,6 +103,7 @@ protected:
     typedef typename vector_type::size_type  size_type;
 private:
     virtual void do_filter(const vector_type& src, vector_type& dest) = 0;
+    virtual void do_close() { }
 
     template<typename Source>
     void do_read(Source& src)
@@ -115,11 +122,27 @@ private:
         state_ |= f_eof;
     }
 
+    template<typename Sink>
+    void do_write(Sink& sink, const char* s, std::streamsize n) 
+    { 
+        typedef typename iostreams::io_category<Sink>::type  category;
+        typedef is_convertible<category, output>             can_write;
+        do_write(sink, s, n, can_write()); 
+    }
+
+    template<typename Sink>
+    void do_write(Sink& sink, const char* s, std::streamsize n, mpl::true_) 
+    { iostreams::write(sink, s, n); }
+
+    template<typename Sink>
+    void do_write(Sink&, const char*, std::streamsize, mpl::false_) { }
+
     void close()
     {
         data_.clear();
         ptr_ = 0;
         state_ = 0;
+        do_close();
     }
 
     enum {
@@ -133,6 +156,7 @@ private:
     size_type    ptr_;
     int          state_;
 };
+BOOST_IOSTREAMS_PIPABLE(one_step_filter, 1)
 
 } } // End namespaces iostreams, boost.
 
