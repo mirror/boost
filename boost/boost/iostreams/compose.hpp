@@ -79,7 +79,8 @@ public:
                         BOOST_IOS::openmode which =
                             BOOST_IOS::in | BOOST_IOS::out );
 
-    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out);
+    void close();
+    void close(BOOST_IOS::openmode which);
     bool flush();
     std::streamsize optimal_buffer_size() const;
 
@@ -166,8 +167,8 @@ public:
     template<typename Locale> // Avoid dependency on <locale>
     void imbue(const Locale& loc)
     {   // To do: consider using RAII.
-        iostreams::imbue(filter_, loc);
-        iostreams::imbue(device_, loc);
+        iostreams::imbue(filter1_, loc);
+        iostreams::imbue(filter2_, loc);
     }
 private:
     Filter1  filter1_;
@@ -210,22 +211,22 @@ compose( const Filter& filter, const FilterOrDevice& fod
 template<typename Filter, typename Ch, typename Tr>
 composite_view< Filter, std::basic_streambuf<Ch, Tr> >
 compose(const Filter& filter, std::basic_streambuf<Ch, Tr>& sb)
-{ return composite_view< std::basic_streambuf<Ch, Tr> >(filter, sb); }
+{ return composite_view< Filter, std::basic_streambuf<Ch, Tr> >(filter, sb); }
 
 template<typename Filter, typename Ch, typename Tr>
 composite_view< Filter, std::basic_istream<Ch, Tr> >
 compose(const Filter& filter, std::basic_istream<Ch, Tr>& is)
-{ return composite_view< std::basic_istream<Ch, Tr> >(filter, is); }
+{ return composite_view< Filter, std::basic_istream<Ch, Tr> >(filter, is); }
 
 template<typename Filter, typename Ch, typename Tr>
 composite_view< Filter, std::basic_ostream<Ch, Tr> >
 compose(const Filter& filter, std::basic_ostream<Ch, Tr>& os)
-{ return composite_view< std::basic_ostream<Ch, Tr> >(filter, os); }
+{ return composite_view< Filter, std::basic_ostream<Ch, Tr> >(filter, os); }
 
 template<typename Filter, typename Ch, typename Tr>
 composite_view< Filter, std::basic_iostream<Ch, Tr> >
 compose(const Filter& filter, std::basic_iostream<Ch, Tr>& io)
-{ return composite_view< std::basic_iostream<Ch, Tr> >(filter, io); }
+{ return composite_view< Filter, std::basic_iostream<Ch, Tr> >(filter, io); }
 
 # else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //---------------------//
 
@@ -316,8 +317,18 @@ stream_offset composite_device<Filter, Device, Mode>::seek
 { return iostreams::seek(filter_, device_, off, way, which); }
 
 template<typename Filter, typename Device, typename Mode>
-void composite_device<Filter, Device, Mode>::close
-    (BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
+void composite_device<Filter, Device, Mode>::close()
+{
+    typedef typename io_mode<Device>::type device_mode;
+    BOOST_IOS::openmode which =
+        is_convertible<device_mode, input>() ?
+            BOOST_IOS::in :
+            BOOST_IOS::out;
+    close(which);
+}
+
+template<typename Filter, typename Device, typename Mode>
+void composite_device<Filter, Device, Mode>::close(BOOST_IOS::openmode which)
 {
     external_closer<Device>          close_device(device_, which);
     external_closer<Filter, Device>  close_filter(filter_, device_, which);
