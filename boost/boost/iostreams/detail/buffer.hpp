@@ -14,6 +14,7 @@
 #include <algorithm>                           // swap.
 #include <memory>                              // allocator.
 #include <boost/config.hpp>                    // member templates.
+#include <boost/iostreams/detail/ios.hpp>      // streamsize.     
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_same.hpp>     
 #include <boost/utility.hpp>                   // noncopyable.
