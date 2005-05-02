@@ -9,6 +9,7 @@
 #else
 # if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #  pragma warn .8008     // Condition always true/false.
+#  pragma warn .8071     // Conversion may lose significant digits.
 #  pragma warn .8080     // identifier declared but never used.
 # endif
 #endif
