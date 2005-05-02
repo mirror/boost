@@ -18,6 +18,9 @@
 // 4.3: Empty character constant is an error.
 //E 006_061.cpp(20): error: ill formed preprocessor expression: '' == 0
 #if '' == 0
+false
+#else
+true
 #endif
 
 /*-

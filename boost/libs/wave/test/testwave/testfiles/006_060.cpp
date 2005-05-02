@@ -19,6 +19,9 @@
 // 35.2: 
 //E 006_060.cpp(21): warning: character literal out of range: 'abcdefghi'
 #if 'abcdefghi' == '\x61\x62\x63\x64\x65\x66\x67\x68\x69'
+false
+#else
+true
 #endif
 
 /*-

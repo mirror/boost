@@ -19,6 +19,9 @@
 //       be in the range of char.
 //E 006_059.cpp(21): warning: character literal out of range: L'\xabcdef012'
 #if L'\xabcdef012' == 0xbcdef012
+false
+#else
+true
 #endif
 
 /*-
