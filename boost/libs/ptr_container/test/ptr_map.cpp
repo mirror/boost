@@ -180,14 +180,14 @@ using namespace std;
 
 void test_map()
 {
-    ptr_map_test< ptr_map<int, Base>, Base, Derived >();
+    ptr_map_test< ptr_map<int, Base>, Base, Derived_class >();
     ptr_map_test< ptr_map<int, Value>, Value, Value >();
-    ptr_map_test< ptr_map<int, nullable<Base> >, Base, Derived >();
+    ptr_map_test< ptr_map<int, nullable<Base> >, Base, Derived_class >();
     ptr_map_test< ptr_map<int, nullable<Value> >, Value, Value >();
 
-    ptr_map_test< ptr_multimap<int,Base>, Base, Derived >();
+    ptr_map_test< ptr_multimap<int,Base>, Base, Derived_class >();
     ptr_map_test< ptr_multimap<int,Value>, Value, Value >();    
-    ptr_map_test< ptr_multimap<int, nullable<Base> >, Base, Derived >();
+    ptr_map_test< ptr_multimap<int, nullable<Base> >, Base, Derived_class >();
     ptr_map_test< ptr_multimap<int, nullable<Value> >, Value, Value >();
     
     string joe   = "joe";

@@ -15,10 +15,10 @@
 void test_set()
 {    
 
-    ptr_set_test< ptr_set<Base>, Base, Derived >();
+    ptr_set_test< ptr_set<Base>, Base, Derived_class >();
     ptr_set_test< ptr_set<Value>, Value, Value >();
 
-    ptr_set_test< ptr_multiset<Base>, Base, Derived >();
+    ptr_set_test< ptr_multiset<Base>, Base, Derived_class >();
     ptr_set_test< ptr_multiset<Value>, Value, Value >();
 
     ptr_set<int> set;

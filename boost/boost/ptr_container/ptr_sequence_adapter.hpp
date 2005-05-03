@@ -70,7 +70,7 @@ namespace ptr_container_detail
                    object_type;
 
         template< class Iter >
-        static U* get_pointer( void_ptr_iterator<Iter,U> i )
+        static U* get_pointer( const void_ptr_iterator<Iter,U>& i )
         {
             return static_cast<U*>( *i.base() );
         }

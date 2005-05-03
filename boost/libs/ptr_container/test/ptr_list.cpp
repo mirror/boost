@@ -18,9 +18,9 @@ void list_algorithms_test();
 
 void test_list()
 {
-    reversible_container_test< ptr_list<Base>, Base, Derived >();
+    reversible_container_test< ptr_list<Base>, Base, Derived_class >();
     reversible_container_test< ptr_list<Value>, Value, Value >();
-    reversible_container_test< ptr_list< nullable<Base> >, Base, Derived >();
+    reversible_container_test< ptr_list< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_list< nullable<Value> >, Value, Value >();
 
     random_access_algorithms_test< ptr_list<int> >();

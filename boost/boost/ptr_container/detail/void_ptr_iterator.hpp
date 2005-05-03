@@ -18,8 +18,6 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator/iterator_traits.hpp>
-#include <cassert>
-
 
 namespace boost
 {
@@ -36,6 +34,7 @@ namespace boost
             typedef T        value_type;
             typedef T&       reference;
             typedef T*       pointer;
+
             typedef  BOOST_DEDUCED_TYPENAME iterator_difference<VoidIter>::type
                              difference_type;           
             typedef  BOOST_DEDUCED_TYPENAME iterator_category<VoidIter>::type
@@ -56,7 +55,11 @@ namespace boost
             //
             template< class MutableIterator, class MutableT >
             void_ptr_iterator( const void_ptr_iterator<MutableIterator,MutableT>& r )
+#ifdef BOOST_NO_SFINAE
+             : iter_(const_cast<void**>(r.base()))
+#else
              : iter_(r.base())
+#endif
             { }
 
             T& operator*() const
@@ -101,46 +104,17 @@ namespace boost
                 return *this;
             }
 
-            friend inline void_ptr_iterator operator+( void_ptr_iterator l, difference_type n )
-            {
-                l += n;
-                return l;
-            }
-
-            friend inline void_ptr_iterator operator+( difference_type n, void_ptr_iterator r )
-            {
-                r += n;
-                return r;
-            }
-
             void_ptr_iterator& operator-=( difference_type n )
             {
                 iter_ -= n;
                 return *this;
             }
 
-            friend inline void_ptr_iterator operator-( void_ptr_iterator l, difference_type n )
-            {
-                l -= n;
-                return l;
-            }
-
-            friend inline void_ptr_iterator operator-( difference_type n, void_ptr_iterator r )
-            {
-                r -= n;
-                return r;
-            }
-
-            friend inline difference_type operator-( void_ptr_iterator l, void_ptr_iterator r )
-            {
-                return l.iter_ - r.iter_; 
-            }
-
             T& operator[]( difference_type n ) const
             {
-                return iter_[n];
+                return *static_cast<T*>( *(iter_ + n) );
             }
-            
+
             VoidIter base() const
             {
                 return iter_;
@@ -156,25 +130,79 @@ namespace boost
                 return l.iter_ != r.iter_;
             }
 
-            friend inline bool operator<(  void_ptr_iterator l, void_ptr_iterator r )
+            //
+            // Friend functions are always instantiated and so 
+            // will cause problems with a list's iterators;
+            // Therefore we provide these as ordinary members
+            //
+            bool operator<( void_ptr_iterator r ) const
             {
-                return l.iter_ < r.iter_;
+                return iter_ < r.iter_;
             }
 
-            friend inline bool operator<=(  void_ptr_iterator l, void_ptr_iterator r )
+            bool operator<=( void_ptr_iterator r ) const
             {
-                return l.iter_ <= r.iter_;
+                return iter_ <= r.iter_;
             }
-            friend inline bool operator>(  void_ptr_iterator l, void_ptr_iterator r )
+            
+            bool operator>( void_ptr_iterator r ) const
             {
-                return l.iter_ > r.iter_;
+                return iter_ > r.iter_;
             }
-            friend inline bool operator>=(  void_ptr_iterator l, void_ptr_iterator r )
+            
+            bool operator>=( void_ptr_iterator r ) const
             {
-                return l.iter_ >= r.iter_;
+                return iter_ >= r.iter_;
             }
 
         }; // class 'void_ptr_iterator'
+
+        template< class VoidIter, class T >
+        inline void_ptr_iterator<VoidIter,T> 
+        operator+( void_ptr_iterator<VoidIter,T> l, 
+                   BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n )
+        {
+            l += n;
+            return l;
+        }
+
+        template< class VoidIter, class T >
+        inline void_ptr_iterator<VoidIter,T> 
+        operator+( BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n, 
+                   void_ptr_iterator<VoidIter,T> r ) 
+
+        {
+            r += n;
+            return r;
+        }
+
+        template< class VoidIter, class T >
+        inline void_ptr_iterator<VoidIter,T> 
+        operator-( void_ptr_iterator<VoidIter,T> l, 
+                   BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n )
+        {
+            l -= n;
+            return l;
+        }
+
+        template< class VoidIter, class T >
+        inline void_ptr_iterator<VoidIter,T> 
+        operator-( BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n, 
+                   void_ptr_iterator<VoidIter,T> r ) 
+
+        {
+            r -= n;
+            return r;
+        }
+
+        template< class VoidIter, class T >
+        inline BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type
+        operator-( void_ptr_iterator<VoidIter,T> l,
+                   void_ptr_iterator<VoidIter,T> r ) 
+
+        {
+            return l.base() - r.base();
+        }
 
     //} // nameespace 'ptr_container_detail'
     

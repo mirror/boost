@@ -16,10 +16,14 @@
 
 void test_ptr_vector()
 { 
-    reversible_container_test< ptr_vector<Base>, Base, Derived >();
+    reversible_container_test< ptr_vector<Base>, Base, Derived_class >();
     reversible_container_test< ptr_vector<Value>, Value, Value >();
-    reversible_container_test< ptr_vector< nullable<Base> >, Base, Derived >();
+
+#ifdef BOOST_NO_SFINAE
+#else
+    reversible_container_test< ptr_vector< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_vector< nullable<Value> >, Value, Value >();
+#endif    
     random_access_algorithms_test< ptr_vector<int> >();
 
     ptr_vector<int> vec( 100u );

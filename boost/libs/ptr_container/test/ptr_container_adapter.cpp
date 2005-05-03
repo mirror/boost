@@ -38,18 +38,18 @@ void test_container_adapter()
     typedef ptr_container_adapter< my_list<Base*> > base_ptr_list;
     typedef ptr_container_adapter< my_list<Value*> > value_ptr_list;
     
-    typedef_test< base_ptr_list, Derived >();
+    typedef_test< base_ptr_list, Derived_class >();
     typedef_test< value_ptr_list, Value >();
 
-//    reversible_container_test< base_ptr_list, Base, Derived >();
+//    reversible_container_test< base_ptr_list, Base, Derived_class >();
 //    reversible_container_test< value_ptr_list, Value, Value >();
     
     base_ptr_list l;
-    l.push_back( new Derived );
-    l.push_back( new Derived );
+    l.push_back( new Derived_class );
+    l.push_back( new Derived_class );
     
 //    algo_test< ptr_list<Value>, Value >();
-//    algo_test_polymorphic< ptr_list<Base>, Derived >();
+//    algo_test_polymorphic< ptr_list<Base>, Derived_class >();
 }
 
 #include <boost/test/included/unit_test_framework.hpp> 

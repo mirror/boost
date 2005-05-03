@@ -42,36 +42,6 @@ namespace boost
         BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
                                                             base_class );
     public:
-        /*
-        void splice( iterator before, ptr_list& x )                    
-        {
-            BOOST_ASSERT( &x != this );
-            this->c_private().splice( before.base(), x.c_private() );
-        }
-
-        void splice( iterator before, ptr_list& x, iterator i ) 
-        {
-            BOOST_ASSERT( &x != this );
-            this->c_private().splice( before.base(), x.c_private(), 
-                                      i.base() );
-        }
-
-        void splice( iterator before, ptr_list& x, 
-                     iterator first, iterator last )
-        {
-            BOOST_ASSERT( &x != this );
-            this->c_private().splice( before.base(), x.c_private(), 
-                                      first.base(), last.base() );
-        }
-
-        template< class Range >
-        void splice( iterator before, ptr_list& x,
-                     const Range& r )
-        {
-            splice( before, x, begin(r), end(r) );
-        }
-        */
-
         void unique( iterator first, iterator last )
         {
             base_class::unique( first, last );

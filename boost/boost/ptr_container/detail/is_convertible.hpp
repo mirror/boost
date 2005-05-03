@@ -1,5 +1,6 @@
-// (C) Howard Hinnant 2004
-// (C) Jonathan Turkanis 2004
+// (C) Copyright Thorsten Ottosen 2005
+// (C) Copyright Howard Hinnant 2004
+// (C) Copyright Jonathan Turkanis 2004
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -63,7 +64,7 @@ struct is_smart_ptr_convertible
           >
         { };
 #else
-    template<typename Src, typename Tgt, typename T = void>
+    template<typename Src, typename Tgt, class T >
     struct enable_if_convertible : mpl::identity<T> { };
 #endif
 

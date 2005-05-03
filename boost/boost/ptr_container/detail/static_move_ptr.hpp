@@ -173,7 +173,6 @@ private:
 public:
     static_move_ptr(static_move_ptr&);
 
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     
 private:
     template<typename TT, typename DD>
@@ -182,6 +181,9 @@ private:
                      move_ptrs::enable_if_convertible<
                          TT, T, static_move_ptr&
                      >::type::type* = 0 );
+
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
 //#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 //    template<typename TT, typename DD>
 //    friend class static_move_ptr;

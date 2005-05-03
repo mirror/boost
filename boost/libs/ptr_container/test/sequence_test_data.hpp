@@ -44,6 +44,7 @@ void reversible_container_test()
     BOOST_MESSAGE( "finished construction test" ); 
                       
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
+	hide_warning(alloc);
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
     BOOST_DEDUCED_TYPENAME C::const_iterator ci           = c2.begin();
     BOOST_DEDUCED_TYPENAME C::iterator i2                 = c.end();
@@ -93,13 +94,19 @@ void reversible_container_test()
     BOOST_CHECK( c3.empty() );
     C c4;
     c4.swap(c3);
+#ifdef BOOST_NO_SFINAE
+#else
     swap(c4,c3);
+#endif    
     BOOST_MESSAGE( "finished modifiers test" ); 
              
     c.push_back( new T ); c.push_back( new T ); c.push_back( new T ); 
     typedef BOOST_DEDUCED_TYPENAME C::auto_type auto_type;
-    
+
+#ifdef BOOST_NO_SFINAE
+#else
     auto_type ptr       = c.release( c.begin() );
+#endif    
     std::auto_ptr<C> ap = c.release();
     c                   = c2.clone();
     BOOST_CHECK( !c.empty() );

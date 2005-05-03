@@ -14,9 +14,9 @@
 
 void test_ptr_deque()
 {
-    reversible_container_test< ptr_deque<Base>, Base, Derived >();
+    reversible_container_test< ptr_deque<Base>, Base, Derived_class >();
     reversible_container_test< ptr_deque<Value>, Value, Value >();
-    reversible_container_test< ptr_deque< nullable<Base> >, Base, Derived >();
+    reversible_container_test< ptr_deque< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_deque< nullable<Value> >, Value, Value >();
 
     random_access_algorithms_test< ptr_deque<int> >();

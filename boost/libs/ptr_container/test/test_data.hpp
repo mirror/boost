@@ -120,7 +120,7 @@ bool operator!=( const Base& l, const Base& r )
 
 
 
-class Derived : public Base
+class Derived_class : public Base
 {   
     int i_;
         
@@ -132,7 +132,7 @@ class Derived : public Base
     
     virtual Base* do_clone() const
     {
-        return new Derived;
+        return new Derived_class;
     }
     
     virtual void do_foo() 
@@ -141,12 +141,12 @@ class Derived : public Base
     }
     
 public:
-    Derived() : i_( rand() )
+    Derived_class() : i_( rand() )
     { }
 
     virtual bool less_than( const Base& b ) const
     {
-        const Derived& d = dynamic_cast<const Derived&>( b );
+        const Derived_class& d = dynamic_cast<const Derived_class&>( b );
         return i_ < d.i_;
     }
 };

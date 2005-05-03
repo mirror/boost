@@ -237,7 +237,7 @@ namespace ptr_container_detail
         adl_begin( Range& r )
         {
             #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-            return boost::begin( r );
+            return begin( r );
             #else
             using boost::begin;
             return begin( r );
@@ -249,7 +249,7 @@ namespace ptr_container_detail
         adl_end( Range& r )
         {
             #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-            return boost::end( r );
+            return end( r );
             #else
             using boost::end;
             return end( r );
@@ -443,7 +443,7 @@ namespace ptr_container_detail
             return iterator( c_.erase( x.base() ) );
         }
         
-        iterator erase( iterator first, iterator last ) // notrow 
+        iterator erase( iterator first, iterator last ) // nothrow 
         {
             BOOST_ASSERT( !empty() );
             remove( first, last ); 

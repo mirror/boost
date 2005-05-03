@@ -80,8 +80,8 @@ void test_array()
 
     tree.print( std::cout );
 
-    test_array_interface<ptr_array<Base,10>,Base,Derived>();
-    test_array_interface<ptr_array<nullable<Base>,10>,Base,Derived>();
+    test_array_interface<ptr_array<Base,10>,Base,Derived_class>();
+    test_array_interface<ptr_array<nullable<Base>,10>,Base,Derived_class>();
     test_array_interface<ptr_array<Value,10>,Value,Value>();
     test_array_interface<ptr_array<nullable<Value>,10>,Value,Value>();
 
