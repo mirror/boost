@@ -2735,7 +2735,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (filled2_ < capacity_, internal_logic ());
             size_type element1 = layout_type::element1 (i, size1_, j, size2_);
             size_type element2 = layout_type::element2 (i, size1_, j, size2_);
-            while (filled1_ < element1 + 2) {
+            while (filled1_ <= element1 + 1) {
                 index1_data_ [filled1_] = k_based (filled2_);
                 ++ filled1_;
             }
@@ -3773,7 +3773,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (layout_type::size1 (size1_, size2_) + 1 == index1_data_.size (), internal_logic ());
             BOOST_UBLAS_CHECK (capacity_ == index2_data_.size (), internal_logic ());
             BOOST_UBLAS_CHECK (capacity_ == value_data_.size (), internal_logic ());
-            BOOST_UBLAS_CHECK (filled1_ > 0 && filled1_ <= layout_type::size1 (size1_, size2_), internal_logic ());
+            BOOST_UBLAS_CHECK (filled1_ > 0 && filled1_ <= layout_type::size1 (size1_, size2_) + 1, internal_logic ());
             BOOST_UBLAS_CHECK (filled2_ <= capacity_, internal_logic ());
             BOOST_UBLAS_CHECK (index1_data_ [filled1_ - 1] == k_based (filled2_), internal_logic ());
         }
