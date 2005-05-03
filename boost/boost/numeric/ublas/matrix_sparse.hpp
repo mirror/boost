@@ -2668,7 +2668,6 @@ namespace boost { namespace numeric { namespace ublas {
             if (preserve) {
                 index2_data_.resize (capacity_, size_type ());
                 value_data_.resize (capacity_, value_type ());
-                filled1_ = (std::min) (capacity_ + 1, filled1_);
                 filled2_ = (std::min) (capacity_, filled2_);
             }
             else {
@@ -3774,7 +3773,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (layout_type::size1 (size1_, size2_) + 1 == index1_data_.size (), internal_logic ());
             BOOST_UBLAS_CHECK (capacity_ == index2_data_.size (), internal_logic ());
             BOOST_UBLAS_CHECK (capacity_ == value_data_.size (), internal_logic ());
-            BOOST_UBLAS_CHECK (filled1_ > 0 && filled1_ <= capacity_ + 1, internal_logic ());
+            BOOST_UBLAS_CHECK (filled1_ > 0 && filled1_ <= layout_type::size1 (size1_, size2_), internal_logic ());
             BOOST_UBLAS_CHECK (filled2_ <= capacity_, internal_logic ());
             BOOST_UBLAS_CHECK (index1_data_ [filled1_ - 1] == k_based (filled2_), internal_logic ());
         }
