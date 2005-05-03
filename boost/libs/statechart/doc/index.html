@@ -21,11 +21,37 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/02/21<!--webbot bot="Timestamp" endspan i-checksum="12414" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/05/03<!--webbot bot="Timestamp" endspan i-checksum="12608" --></font></td>
   </tr>
 </table>
 <hr>
-<h2>Overview</h2>
+<h2>Contents</h2>
+<dl class="index">
+  <dt><a href="#Overview">Overview</a></dt>
+	<dd><a href="#Supported_platforms">Supported platforms</a></dd>
+	<dd><a href="#Incompatible_compilers">Incompatible compilers</a></dd>
+	<dd><a href="#Getting_started">Getting started</a></dd>
+	<dd><a href="#Audience">Audience</a></dd>
+	<dt>&nbsp;</dt>
+	<dt><a href="tutorial.html">Tutorial</a> [pdf: <a href="tutorial.pdf">
+  English</a>,
+  <a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
+  Japanese</a>]</dt>
+  <dt><a href="uml_mapping.html">UML to boost::fsm mapping summary</a></dt>
+  <dt><a href="faq.html">Frequently Asked Questions (FAQs)</a></dt>
+  <dt><a href="configuration.html">Configuration</a></dt>
+  <dt><a href="definitions.html">Definitions</a></dt>
+  <dt><a href="reference.html">Reference</a> [pdf: <a href="reference.pdf">
+  English</a>]</dt>
+  <dt><a href="rationale.html">Rationale</a> [pdf: <a href="rationale.pdf">
+  English</a>]</dt>
+  <dt><a href="acknowledgments.html">Acknowledgments</a></dt>
+	<dd>&nbsp;</dd>
+	<dt><a href="#To-do_list">To-do list</a></dt>
+	<dt><a href="#Change_history">Change history</a></dt>
+</dl>
+<hr>
+<h2><a name="Overview">Overview</a></h2>
 <p>Welcome to boost::fsm, a C++ library for finite state machines. Features 
 include:</p>
 <ul>
@@ -50,9 +76,10 @@ include:</p>
   <li>Generic design allowing for the customization of memory management, 
   error handling and threading</li>
 </ul>
-<p><b>The formal review starts on 21 February, 2005 and ends 10 days later. 
-All feedback is highly welcome!</b></p>
-<h3>Supported platforms</h3>
+<p><font color="#FF0000"><b>Warning: The interface of this library will change 
+in the near future (see the <a href="#To-do_list">to-do list</a> for more 
+information)!</b></font></p>
+<h3><a name="Supported_platforms">Supported platforms</a></h3>
 <p>All code has been tested on the following platforms using boost 
 distribution 1.32.0:</p>
 <ul>
@@ -77,84 +104,97 @@ been tested yet):</p>
 	boost testing framework. Unfortunately, my evaluation license of the 
 	compiler expired before I managed to pin down the problem</li>
 </ul>
-<h3>Incompatible compilers</h3>
+<h3><a name="Incompatible_compilers">Incompatible compilers</a></h3>
 <p>The following compilers are known to be unable to compile boost::fsm:</p>
 <ul>
 	<li>MSVC 6.0 &amp; 7.0</li>
 	<li>BCB (all versions)</li>
 </ul>
-<h3><font color="#FF0000">Known issues (Reviewers: please read this first)</font></h3>
+<h3><a name="Getting_started">Getting started</a></h3>
+<p>boost::fsm builds on other parts of the boost library. In order to use this 
+library, the fsm directories need to be copied to their respective locations 
+in the tree of the boost distribution 1.32.0. Specifically:</p>
 <ol>
-	<li><b>Library name</b><ul>
-		<li>Obviously boost::fsm is not for everyone. However, to some 
-		(including me) its current name suggests exactly that. HLFSM (High Level 
-		FSM) and UMLFSM (because it implements most of the UML semantics) have 
-		been suggested as alternatives but neither is very appealing to me. If 
-		you have a good idea for a better name (including one that does not hint 
-		at FSMs at all), I'm all ears!</li>
-		<li>The format will change to the one used by most other boost libraries, e.g. Boost.FSM instead of boost::fsm</li>
-	</ul>
-	</li>
-	<li><b>Two libraries in one</b>: The library consists of two parts that 
-	could easily be separated (and probably should be at some point). A bare-bone asynchronous 
-	part (<code>event_processor&lt;&gt;</code> and <code>fifo_scheduler&lt;&gt;</code>) 
-	and a synchronous part (all other classes and class templates). I have decided to include the asynchronous part 
-	into the library for the following reasons:<ul>
-		<li>Boost does not yet have an asynchronous programming library (APL) 
-		that would allow users to easily implement asynchronous state machines</li>
-		<li>It is a very common use-case to run a state machine asynchronously</li>
-		<li>The asynchronous part of boost::fsm is not general enough to make it 
-		a separate library but it documents what features boost::fsm would 
-		require from such a library</li>
-	</ul>
-	<p>It is for these reasons that I think that the asynchronous part should 
-	stay in the library, for now. As soon as Boost offers support for asynchronous 
-	programming, boost::fsm will be refactored to use it</li>
-	<li><b>Exception handling support</b>: Several people have rightly pointed out that 
-	the rationale for the exception handling support is too thin. What 
-	would be necessary is a detailed paper that investigates the pre-boost::fsm 
-	state of the art, explains its shortcomings and then outlines the advantages 
-	of the error handling support offered by this library. In have not yet had 
-	the time to write such a paper but a chapter in the Rationale tries to 
-	explain all this in a <b>very</b> condensed form (so it will probably only 
-	be understood by people who have experience with error handling in state 
-	machines). An out-of-the-box state machine no longer tries to do anything smart 
-	with exceptions (see <a href="rationale.html#Error handling">Error handling</a> 
-	in the Rationale for details)</li>
-	<li>On some compilers (e.g. gcc), the asynchronous part of the library and 
-	most of the tests currently cannot be compiled with RTTI turned off. This 
-	is due to the fact that <code>boost::shared_ptr&lt;&gt;</code> internally uses
-	<code>typeid</code> for deleter support and these compilers issue a 
-	diagnostic even if deleters are not used and the associated code is not 
-	instantiated. The asynchronous part will eventually replace <code>
-	shared_ptr&lt;&gt;</code> with its own optimized facility. In order to make the 
-	tests work, a <code>shared_ptr&lt;&gt;</code> &quot;fix&quot; is necessary</li>
+	<li>Follow the steps 1-3 described
+	at <a href="http://www.boost.org/more/getting_started.html">
+	http://www.boost.org/more/getting_started.html</a>. After 
+	doing so, somewhere on your harddrive you should have a directory 
+	containing the boost distribution (e.g. under <code>D:\Data\boost_1_32_0</code>) 
+	and the bjam executable installed in your <code>PATH</code></li>
+<li>Download <a href="http://boost-sandbox.sf.net/fsm.zip">
+http://boost-sandbox.sf.net/fsm.zip</a> and unpack it somewhere on your harddrive, e.g. under
+<code>D:\Data\fsm</code></li>
+	<li>Copy the directory <code>D:\Data\fsm\boost\fsm</code> and all its 
+	contents to <code>D:\Data\boost_1_32_0\boost\fsm</code></li>
+	<li>Copy the directory <code>D:\Data\fsm\libs\fsm</code> and all its 
+	contents to <code>D:\Data\boost_1_32_0\libs\fsm</code></li>
+	<li>Open a command prompt and change the current directory to
+	<code>D:\Data\boost_1_32_0\libs\fsm\examples</code></li>
+	<li>To compile the examples, invoke bjam with your toolset. For example, 
+	for MSVC7.1, type <code>bjam &quot;-sTOOLS=vc-7_1&quot;</code>. This may 
+	take a few minutes. After the build has finished you will find all 
+	executables in <code>
+	D:\Data\boost_1_32_0\libs\fsm\examples\run</code>. In addition to the 
+	examples discussed in the tutorial, this script also builds the BitMachine executable in different variants, which show the effects of 
+	various choices on runtime performance, executable size, etc. Moreover, 
+	the Handcrafted executable is also built, which serves to compare 
+	performance of a simple boost::fsm machine with its handcrafted equivalent</li>
+	<li>To run the tests, invoke bjam in the directory
+	<code>D:\Data\boost_1_32_0\libs\fsm\test</code></li>
 </ol>
+<h3><a name="Audience">Audience</a></h3>
+<p>Throughout all boost::fsm documentation it is assumed that the reader is 
+familiar with the state machine concept, UML state charts and most of the UML 
+state machine terminology. The following links might be interesting if this is 
+not the case:</p>
+<ul>
+  <li><a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">
+  http://www.objectmentor.com/resources/articles/umlfsm.pdf</a> introduces 
+  state machines and UML state charts</li>
+  <li>
+  <a href="http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">
+  http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a> 
+  explains most of the UML state chart elements and terminology</li>
+  <li>The inventor of state charts, David Harel, presents a thorough but still 
+  very readable discussion in his original paper:
+  <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
+  http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a></li>
+  <li>The UML specifications (formal) can be found here:
+  <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
+  http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
+  3.74)</li>
+</ul>
+<p>Some of the used terminology cannot be found in the UML specifications, 
+please see <a href="definitions.html">Definitions</a> for more information.</p>
 <hr>
-<h2>Contents</h2>
-<dl class="index">
-  <dt><a href="tutorial.html">Tutorial</a> [pdf: <a href="tutorial.pdf">
-  English</a>,
-  <a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
-  Japanese</a>]</dt>
-  <dt><a href="uml_mapping.html">UML to boost::fsm mapping summary</a></dt>
-  <dt><a href="faq.html">Frequently Asked Questions (FAQs)</a></dt>
-  <dt><a href="configuration.html">Configuration</a></dt>
-  <dt><a href="definitions.html">Definitions</a></dt>
-  <dt><a href="reference.html">Reference</a> [pdf: <a href="reference.pdf">
-  English</a>]</dt>
-  <dt><a href="rationale.html">Rationale</a> [pdf: <a href="rationale.pdf">
-  English</a>]</dt>
-  <dt><a href="acknowledgments.html">Acknowledgments</a></dt>
-</dl>
-<hr>
-<h2>To-do list</h2>
-<p>The library is functionally complete. However, there is some work 
-left:</p>
+<h2><a name="To-do_list">To-do list</a></h2>
+<p>The library is mostly complete. However, there is some work 
+left (<font color="#FF0000">red</font> = added as a result of the formal 
+review):</p>
 <ol>
-  <li>Incorporate id_type changes proposed by Robert Geimann (a better 
-	std::type_info class)</li>
+	<li><font color="#FF0000">Change the library namespace from <code>fsm</code> 
+    to <code>statechart</code> (Alexander Nasonov, David Abrahams)</font></li>
+    <li><font color="#FF0000">Change the library name from boost::fsm to 
+    Boost.Statechart (Alexander Nasonov, David Abrahams)</font></li>
+    <li><font color="#FF0000">Change the reaction specification interface so 
+    that reactions can be specified with a <code>reactions</code> member 
+    typedef in a state class declaration (Alexander Nasonov)</font></li>
+    <li>Prepare a release (last separate release). Estimated date: 15 May, 
+    2005</li>
+    <li><font color="#FF0000">Separate performance-related docs from the 
+    rationale into a page of its own (Pavel Vozenilek)</font></li>
+    <li><font color="#FF0000">Investigate how multiple calls to reaction 
+    functions can be detected (and reported to the user) at runtime (Jonathan 
+    Turkanis)</font></li>
+    <li><font color="#FF0000">Add clone functionality to events so that 
+    stack-allocated events can be converted to heap-allocated events if 
+    necessary. This helps making the interface for deferring and posting 
+    events much cleaner (Jonathan Turkanis)</font></li>
+    <li><font color="#FF0000">Implement <code>in_state_reaction</code> (Darryl 
+	Green)</font></li>
 	<li>Review and integrate the v2 Jamfiles supplied by Jürgen Hunold</li>
+    <li><b>Add the library to the main CVS. Estimated date: 15 June, 2005</b></li>
+	<li>Add <code>event_base</code> specializations to all reactions</li>
 	<li>Investigate how a state machine could be serialized. A first glance at 
 	the serialization library revealed that there currently (late 2004) is no 
 	support for types that overload <code>operator new</code>. Such support 
@@ -163,34 +203,71 @@ left:</p>
 	new</code> or not</li>
 	<li>Design a facility allowing to specially handle events that did not 
   trigger a reaction</li>
+	<li><font color="#FF0000">Eliminate need to wrap a single templated inner 
+    initial state into an mpl::list (Jonathan Turkanis)</font></li>
+	<li><font color="#FF0000">Explain better the central role of the Context 
+	parameter (John Spalding)</font></li>
+	<li><font color="#FF0000">Add a trouble-shooting section for compile-time 
+	errors (John Spalding)</font></li>
+	<li><font color="#FF0000">Augment the rationale for state-local storage 
+	with the code for a StopWatch variant that does not use state-local storage 
+	and explain the drawbacks of that approach (Jeff Garland, Rob Steward)</font></li>
+	<li><font color="#FF0000">Put all remarks about code as comments inside 
+	the code (Pavel Vozenilek, Augustus Saunders)</font></li>
+	<li><font color="#FF0000">Implement a switch-like reaction (Simon Gittins, 
+	Darryl Green)</font></li>
 	<li>Add allocator support for broken std libs when the workaround is 
 	available in boost::detail</li>
+	<li><font color="#FF0000">Compare performance for allocator-allocated 
+	states with the one of the best possible hand-written state-specific 
+	operator new implementation. If there is no significant difference change 
+	the implementation to use the allocator to allocate states (Peter Petrov)</font></li>
 	<li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
   	<code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
   no longer make (indirect) calls to global <code>operator new()</code> and
   	<code>operator delete()</code></li>
 	<li>Link incomplete code-snippets in the tutorial to complete example code 
 	where available</li>
+	<li><font color="#FF0000">Add a description of the implementation and 
+	better explain performance trade-offs (Jonathan Turkanis)</font></li>
+	<li><font color="#FF0000">Add links to descriptions of alternate 
+	implementations and discuss performance trade-offs (Jonathan Turkanis)</font></li>
 	<li>Implement <code>priority_scheduler&lt;&gt;</code></li>
-	<li>Improve performance for state machines that use <code>null_exception_translator</code></li>
-	<li>Refactor the <code>state_machine</code> class template to reduce code 
+    <li><font color="#FF0000">Add a list of applications that use boost::fsm 
+	(Paul A. Bristow)</font></li>
+    <li>Improve performance for state machines that use <code>null_exception_translator</code></li>
+    <li>Refactor the <code>state_machine</code> class template to reduce code 
   size in applications with many different state machines</li>
-	<li>Investigate whether and how <code>fifo_worker&lt;&gt;</code> should accept a policy 
+    <li>Investigate whether and how <code>fifo_worker&lt;&gt;</code> should accept a policy 
   parameter defining how to lock and wait</li>
-	<li>Add a diagram that helps to understand what an unstable state machine 
+    <li>Add a diagram that helps to understand what an unstable state machine 
 	is</li>
-	<li>Comment MPL-heavy code</li>
-	<li>Comment <code>processor_holder_ptr_type</code></li>
-	<li>Add examples of often made mistakes</li>
-	<li>Eliminate code-duplication in <code>fifo_scheduler</code> with PP code 
+    <li>Comment MPL-heavy code</li>
+    <li>Comment <code>processor_holder_ptr_type</code></li>
+    <li>Add examples of often made mistakes</li>
+    <li>Eliminate code-duplication in <code>fifo_scheduler</code> with PP code 
 	submitted by Pavel Vozenilek</li>
-	<li>Add number and label to all diagrams in docs</li>
-	<li>Add <code>#pragma once</code> to all headers (speeds up compilation 
+    <li>Add number and label to all diagrams in docs</li>
+    <li>Add <code>#pragma once</code> to all headers (speeds up compilation 
 	with MS-compatible compilers)</li>
-	<li>Issue an error if <code>BOOST_FSM_USE_NATIVE_RTTI</code> is defined 
+    <li>Issue an error if <code>BOOST_FSM_USE_NATIVE_RTTI</code> is defined 
 	when C++ RTTI is turned off</li>
 </ol>
-<h2>Change history</h2>
+<h2><a name="Change_history">Change history</a></h2>
+<p>05 May, 2005</p>
+<ul>
+	<li>Removed the to-do item for the <code>std::type_info</code> replacement. Thanks to 
+	Jody Hagins for taking care of that!</li>
+	<li>Added to-do items for the issues uncovered during the review</li>
+	<li>Fixed documentation bugs in the effects descriptions for <code>
+	state_machine::initiate()</code>, <code>state_machine::terminate()</code> 
+	and <code>state_machine::process_event()</code></li>
+	<li><font color="#FF0000">Moved &quot;Getting started&quot; and &quot;Audience&quot; into index.html 
+	(Augustus Saunders)</font></li>
+	<li><font color="#FF0000">Added Basic topics and Intermediate topics 
+	headings and shortened the &quot;How to read this tutorial&quot; section (Augustus 
+	Saunders)</font></li>
+</ul>
 <p>21 February, 2005</p>
 <p></p>
 <ul>
@@ -409,10 +486,11 @@ left:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40402" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"> <b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
