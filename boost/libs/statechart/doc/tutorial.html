@@ -24,24 +24,23 @@
   </tr>
 </table>
 <hr>
-<p>The Japanese translation of this tutorial can be found at
+<p>A Japanese translation of an earlier version of this tutorial can be found at
 <a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
 http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf</a>. Kindly 
 contributed by Mitsuo Fukasawa.</p>
 <h2>Contents</h2>
 <dl class="page-index">
   <dt><a href="#Introduction">Introduction</a></dt>
-  <dd><a href="#Getting_started">Getting started</a></dd>
-  <dd><a href="#Audience">Audience</a></dd>
   <dd><a href="#How to read this tutorial">How to read this tutorial</a></dd>
   <dt><a href="#Hello World!">Hello World!</a></dt>
-  <dt><a href="#A stop watch">A stop watch</a></dt>
+  <dt><a href="#Basic topics: A stop watch">Basic topics: A stop watch</a></dt>
   <dd><a href="#Defining states and events">Defining states and events</a></dd>
   <dd><a href="#Adding reactions">Adding reactions</a></dd>
   <dd><a href="#State-local storage">State-local storage</a></dd>
   <dd><a href="#Getting state information out of the machine">Getting state 
   information out of the machine</a></dd>
-  <dt><a href="#A digital camera">A digital camera</a></dt>
+  <dt><a href="#Intermediate topics: A digital camera">Intermediate topics: A 
+	digital camera</a></dt>
   <dd><a href="#Spreading a state machine over multiple translation units">
   Spreading a state machine over multiple translation units</a></dd>
   <dd><a href="#Deferring events">Deferring events</a></dd>
@@ -68,76 +67,18 @@ a UML state chart into executable C++ code, <b>without</b> needing to use a
 code generator. Thanks to support for almost all UML features the 
 transformation is straight-forward and the resulting C++ code is a nearly 
 redundancy-free textual description of the state chart.</p>
-<h3><a name="Getting_started">Getting started</a></h3>
-<p>boost::fsm builds on other parts of the boost library. In order to use this 
-library, the fsm directories need to be copied to their respective locations 
-in the tree of the boost distribution 1.32.0. Specifically:</p>
-<ol>
-	<li>Follow the steps 1-3 described
-	at <a href="http://www.boost.org/more/getting_started.html">
-	http://www.boost.org/more/getting_started.html</a>. After 
-	doing so, somewhere on your harddrive you should have a directory 
-	containing the boost distribution (e.g. under <code>D:\Data\boost_1_32_0</code>) 
-	and the bjam executable installed in your <code>PATH</code></li>
-<li>Download <a href="http://boost-sandbox.sf.net/fsm.zip">
-http://boost-sandbox.sf.net/fsm.zip</a> and unpack it somewhere on your harddrive, e.g. under
-<code>D:\Data\fsm</code></li>
-	<li>Copy the directory <code>D:\Data\fsm\boost\fsm</code> and all its 
-	contents to <code>D:\Data\boost_1_32_0\boost\fsm</code></li>
-	<li>Copy the directory <code>D:\Data\fsm\libs\fsm</code> and all its 
-	contents to <code>D:\Data\boost_1_32_0\libs\fsm</code></li>
-	<li>Open a command prompt and change the current directory to
-	<code>D:\Data\boost_1_32_0\libs\fsm\examples</code></li>
-	<li>To compile the examples, invoke bjam with your toolset. For example, 
-	for MSVC7.1, type <code>bjam &quot;-sTOOLS=vc-7_1&quot;</code>. This may 
-	take a few minutes. After the build has finished you will find all 
-	executables in <code>
-	D:\Data\boost_1_32_0\libs\fsm\examples\run</code>. In addition to the 
-	examples discussed in this tutorial, this script also builds the 
-	BitMachine executable in different variants, which show the effects of 
-	various choices on runtime performance, executable size, etc. Moreover, 
-	the Handcrafted executable is also built, which serves to compare 
-	performance of a simple boost::fsm machine with its handcrafted equivalent</li>
-	<li>To run the tests, invoke bjam in the directory
-	<code>D:\Data\boost_1_32_0\libs\fsm\test</code></li>
-</ol>
-<h3><a name="Audience">Audience</a></h3>
-<p>Throughout all boost::fsm documentation it is assumed that the reader is 
-familiar with the state machine concept, UML state charts and most of the UML 
-state machine terminology. The following links might be interesting if this is 
-not the case:</p>
-<ul>
-  <li><a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">
-  http://www.objectmentor.com/resources/articles/umlfsm.pdf</a> introduces 
-  state machines and UML state charts</li>
-  <li>
-  <a href="http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">
-  http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a> 
-  explains most of the UML state chart elements and terminology</li>
-  <li>The inventor of state charts, David Harel, presents a thorough but still 
-  very readable discussion in his original paper:
-  <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
-  http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a></li>
-  <li>The UML specifications (formal) can be found here:
-  <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
-  http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
-  3.74)</li>
-</ul>
-<p>Some of the used terminology cannot be found in the UML specifications, 
-please see <a href="definitions.html">Definitions</a> for more information.</p>
 <h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
 <p>This tutorial was designed to be read linearly. First time users should 
 start reading right at the beginning and stop as soon as they know enough for 
 the task at hand. Specifically:</p>
 <ul>
-  <li>The tutorial starts out with the <a href="#Hello World!">Hello World!</a> 
-  and <a href="#A stop watch">stop watch</a> examples explaining the most 
-  basic features that all users of the library should understand. Small and 
+  <li>Small and 
   simple machines with just a handful of states can be implemented reasonably 
-  well by using just these features</li>
-  <li>Afterwards, the <a href="#A digital camera">digital camera</a> example 
-  explains the intermediate features most of which should be known by anyone 
-  wanting to build larger machines with up to roughly a dozen states</li>
+  well by using the features described under
+	<a href="#Basic topics: A stop watch">Basic topics: A stop watch</a></li>
+  <li>For larger machines with up to roughly a dozen states the features 
+	described under <a href="#Intermediate topics: A digital camera">
+	Intermediate topics: A digital camera</a> are often helpful</li>
   <li>Finally, users wanting to create even more complex machines and project 
   architects evaluating boost::fsm should also read the
   <a href="#Advanced topics">Advanced topics</a> section at the end. Moreover, 
@@ -204,7 +145,7 @@ is destroyed what automatically exits the <code>Greeting</code> state.</p>
   to type <code>public</code>. If you don't mind doing so, you can just as 
   well use <code>class</code></li>
 </ul>
-<h2><a name="A stop watch">A stop watch</a></h2>
+<h2><a name="Basic topics: A stop watch">Basic topics: A stop watch</a></h2>
 <p>Next we will model a simple mechanical stop watch with a state machine. 
 Such watches typically have two buttons:</p>
 <ul>
@@ -451,7 +392,7 @@ int main()
 <p>To actually see time being measured, you might want to single-step through 
 the statements in <code>main()</code>. The StopWatch example extends this 
 program to an interactive console application.</p>
-<h2><a name="A digital camera">A digital camera</a></h2>
+<h2><a name="Intermediate topics: A digital camera">Intermediate topics: A digital camera</a></h2>
 <p>So far so good. However, the approach presented above has a few 
 limitations:</p>
 <ul>
@@ -1104,7 +1045,7 @@ ExceptionTranslator</code> parameter of the <code>state_machine</code> class
 template. Since the out-of-the box behavior is to <b>not</b> translate any 
 exceptions, the default argument for this parameter is <code>
 null_exception_translator</code>. A <code>state_machine&lt;&gt;</code> 
-subclass can be configured for advanced exception handling by specifying the 
+subtype can be configured for advanced exception handling by specifying the 
 library-supplied <code>exception_translator&lt;&gt;</code> instead. This way, the following 
 happens when an exception is propagated from user code:</p>
 <ol>
@@ -1261,7 +1202,7 @@ pass a customized exception translator class to the <code>state_machine</code>
 class template. This will allow you to generate different events depending on 
 the type of the exception.</p>
 <h4><a name="Two_stage_exit">Two stage exit</a></h4>
-<p>If a <code>simple_state&lt;&gt;</code> or <code>state&lt;&gt;</code> subclass declares a 
+<p>If a <code>simple_state&lt;&gt;</code> or <code>state&lt;&gt;</code> subtype declares a 
 public member function with the signature <code>void exit()</code> then this 
 function is called just before the state object is destructed. As explained 
 under
@@ -1346,7 +1287,7 @@ having executed all reactions (including the ones provoked by internal events
 that actions might have posted). This function is strictly non-reentrant (just 
 like all other member functions, so <code>state_machine&lt;&gt;</code> is not 
 thread-safe). This makes it difficult for two <code>state_machine&lt;&gt;</code> 
-subclasses to communicate via events in a bi-directional fashion correctly, <b>
+subtype objects to communicate via events in a bi-directional fashion correctly, <b>
 even in a single-threaded program</b>. For example, state machine <code>A</code> 
 is in the middle of processing an external event. Inside an action, it decides 
 to send a new event to state machine <code>B</code> (by calling <code>
@@ -1361,7 +1302,7 @@ really happens in a single thread, that's why &quot;wait&quot; is in quotes.</p>
 <h4>How it works</h4>
 <p>The <code>asynchronous_state_machine</code> class template has none of the 
 member functions the <code>state_machine</code> class template has. Moreover,
-<code>asynchronous_state_machine&lt;&gt;</code> subclass objects cannot even be 
+<code>asynchronous_state_machine&lt;&gt;</code> subtype objects cannot even be 
 created or destroyed directly. Instead, all these operations must be performed 
 through the <code>Scheduler</code> object each asynchronous state machine is 
 associated with. All these <code>Scheduler</code> member functions only push 
@@ -1372,7 +1313,7 @@ processed.</p>
 object and then call <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and
 <code>fifo_scheduler&lt;&gt;::initiate_processor()</code> to schedule the creation 
 and initiation of one or more <code>asynchronous_state_machine&lt;&gt;</code> 
-subclass objects. Finally, <code>fifo_scheduler&lt;&gt;::operator()()</code> is 
+subtype objects. Finally, <code>fifo_scheduler&lt;&gt;::operator()()</code> is 
 either called directly to let the machine(s) run in the current thread, or, a
 <code>boost::function&lt;&gt;</code> object referencing <code>operator()()</code> is 
 passed to a new <code>boost::thread</code>. Alternatively, the latter could 
@@ -1464,10 +1405,11 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->07 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40412" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"> <b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
