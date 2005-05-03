@@ -75,10 +75,15 @@ options</a></h2>
 	(see <a href="rationale.html#RTTI customization">RTTI 
 	customization</a> in the Rationale for more information). 
     This has the following effects:<ul>
+      <li><code>state_machine::state_base_type</code> becomes a polymorphic 
+		type. That is, when <code>typeid</code> is applied to a <code>
+		state_machine::state_base_type</code> reference, the result refers to 
+		a <code>type_info</code> object representing the the type of the most 
+		derived state type</li>
+		<li><a href="tutorial.html#Custom state type information">Custom state 
+      type information</a> is no longer available</li>
       <li>All states need to store one pointer less, leading to a best-case 
       state machine memory footprint reduction of about 15%</li>
-      <li><a href="tutorial.html#Custom state type information">Custom state 
-      type information</a> is no longer available</li>
       <li>Under most circumstances, dispatch speed degrades. This is because 
       native C++ RTTI values are retrieved through an additional indirection 
       on almost all platforms. See
@@ -114,11 +119,12 @@ must be added to the compiler command line. See
 for more information</p>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->18 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38837" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" -->
 </p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"> <b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
