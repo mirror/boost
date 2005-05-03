@@ -503,6 +503,15 @@ class format_date_parser
              std::istreambuf_iterator<charT>& stream_end,
              string_type format) const
   {
+    match_results mr;
+    return parse_weekday(sitr, stream_end, format, mr);
+  }
+  day_of_week_type
+  parse_weekday(std::istreambuf_iterator<charT>& sitr, 
+             std::istreambuf_iterator<charT>& stream_end,
+             string_type format,
+             match_results& mr) const
+  {
     bool use_current_char = false;
     
     // skip leading whitespace
@@ -523,7 +532,7 @@ class format_date_parser
               //error checking potentially, but it isn't helpful in 
               //actually constructing the date - we just need to get it
               //out of the stream
-              match_results mr = m_weekday_short_names.match(sitr, stream_end);
+              mr = m_weekday_short_names.match(sitr, stream_end);
               wkday = mr.current_match;
               if (mr.has_remaining()) {
                 current_char = mr.last_char();
@@ -537,7 +546,7 @@ class format_date_parser
               //error checking potentially, but it isn't helpful in 
               //actually constructing the date - we just need to get it
               //out of the stream
-              match_results mr = m_weekday_long_names.match(sitr, stream_end);
+              mr = m_weekday_long_names.match(sitr, stream_end);
               wkday = mr.current_match;
               if (mr.has_remaining()) {
                 current_char = mr.last_char();

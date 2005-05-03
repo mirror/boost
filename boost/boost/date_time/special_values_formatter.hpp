@@ -59,6 +59,10 @@ namespace boost { namespace date_time {
     {
       std::copy(begin, end, std::back_inserter(m_special_value_names));
     }
+    special_values_formatter(typename collection_type::iterator beg, typename collection_type::iterator end)
+    {
+      std::copy(beg, end, std::back_inserter(m_special_value_names));
+    }
 
     OutItrT put_special(OutItrT next, 
                         const boost::date_time::special_values& value) const 

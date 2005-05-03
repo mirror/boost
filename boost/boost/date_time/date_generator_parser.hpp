@@ -125,6 +125,11 @@ namespace boost { namespace date_time {
       phrases.push_back(of);
       m_element_strings = parse_tree_type(phrases, this->first); // enum first
     }
+
+    void element_strings(const collection_type& col)
+    {
+      m_element_strings = parse_tree_type(col, this->first); // enum first
+    }
                      
 
     //! returns partial_date parsed from stream

@@ -131,7 +131,7 @@ namespace boost { namespace date_time {
     void period_formatter(period_formatter_type period_formatter) {
       m_period_formatter= period_formatter;
     }
-    void special_value_formatting(const special_values_formatter_type& svf) 
+    void special_values_formatter(const special_values_formatter_type& svf) 
     {
       m_special_values_formatter = svf;
     }
@@ -205,6 +205,7 @@ namespace boost { namespace date_time {
       //}
       //The following line of code required the date to support a to_tm function
       tm dtm;
+      init_tm(dtm);
       dtm.tm_mon = m -1;
       return do_put_tm(next, a_ios, fill_char, dtm, m_month_format);
     }
@@ -216,6 +217,7 @@ namespace boost { namespace date_time {
                 const day_type& day) const 
     {
       tm dtm;
+      init_tm(dtm);
       dtm.tm_mday = day.as_number();
       char_type tmp[3] = {'%','d'};
       string_type temp_format(tmp);
@@ -232,6 +234,7 @@ namespace boost { namespace date_time {
       //}
       //The following line of code required the date to support a to_tm function
       tm dtm;
+      init_tm(dtm);
       dtm.tm_wday = dow;
       return do_put_tm(next, a_ios, fill_char, dtm, m_weekday_format);
     }
@@ -294,6 +297,20 @@ namespace boost { namespace date_time {
     }
     
   protected:
+    //! Helper function to initialize all fields in a tm struct
+    tm init_tm(tm& tm_value) const
+    {
+      tm_value.tm_sec = 0;         /* seconds */
+      tm_value.tm_min = 0;         /* minutes */
+      tm_value.tm_hour = 0;        /* hours */
+      tm_value.tm_mday = 0;        /* day of the month */
+      tm_value.tm_mon = 0;         /* month */
+      tm_value.tm_year = 0;        /* year */
+      tm_value.tm_wday = 0;        /* day of the week */
+      tm_value.tm_yday = 0;        /* day in the year */
+      tm_value.tm_isdst = 0;       /* daylight saving time */
+      return tm_value;
+    }
     virtual OutItrT do_put_special(OutItrT next, 
                                    std::ios_base& a_ios, 
                                    char_type fill_char, 
@@ -519,6 +536,10 @@ namespace boost { namespace date_time {
       m_parser.long_month_names(month_names);
     }
 
+    void date_gen_element_strings(const input_collection_type& col)
+    {
+      m_date_gen_parser.element_strings(col);
+    }
     void date_gen_element_strings(const string_type& first,
                                   const string_type& second,
                                   const string_type& third,

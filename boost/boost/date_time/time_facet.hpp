@@ -876,6 +876,33 @@ namespace date_time {
                     }
                     break;
                   }
+                case 'a':
+                case 'A':
+                case 'w':
+                  {
+                    // weekday is not used in construction but we need to get it out of the stream
+                    char_type cs[3] = { '%', *itr };
+                    string_type s(cs);
+                    match_results mr;
+                    typename date_type::day_of_week_type wd(0);
+                    try {
+                      wd = this->m_parser.parse_weekday(sitr, stream_end, s, mr);
+                    }
+                    catch(std::out_of_range bad_weekday) { // base class for bad_weekday exception
+                      if(this->m_sv_parser.match(sitr, stream_end, mr)) {
+                        t = time_type(static_cast<special_values>(mr.current_match));
+                        return sitr;
+                      }
+                      else {
+                        throw; // rethrow bad_weekday
+                      }
+                    }
+                    // did m_parser already advance sitr to next char?
+                    if(mr.has_remaining()) {
+                      use_current_char = true;
+                    }
+                    break;
+                  }
                 case 'j':
                   {
                     // code that gets julian day (from format_date_parser)

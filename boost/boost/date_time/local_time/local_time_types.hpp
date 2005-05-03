@@ -15,7 +15,7 @@
 #if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
 #include "boost/date_time/local_time/date_duration_operators.hpp"
 #endif //BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
-#include "boost/date_time/local_time/time_zone.hpp"
+#include "boost/date_time/local_time/custom_time_zone.hpp"
 
 namespace boost {
 namespace local_time {
@@ -28,7 +28,7 @@ namespace local_time {
   typedef boost::date_time::second_clock<local_date_time> local_sec_clock; 
   typedef boost::date_time::microsec_clock<local_date_time> local_microsec_clock;
   //! Shared Pointer for time_zone and posix_time_zone objects
-  typedef boost::shared_ptr<time_zone_base> time_zone_ptr;
+  typedef boost::shared_ptr<time_zone> time_zone_ptr;
   
   //bring special enum values into the namespace
   using date_time::special_values;

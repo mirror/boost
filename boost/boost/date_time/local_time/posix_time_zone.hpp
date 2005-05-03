@@ -34,7 +34,7 @@ namespace local_time{
   
   typedef boost::date_time::time_zone_names time_zone_names;
   typedef boost::date_time::dst_adjustment_offsets<boost::posix_time::time_duration> dst_adjustment_offsets;
-  typedef boost::date_time::time_zone_base<boost::posix_time::ptime> time_zone_base;
+  typedef boost::date_time::time_zone_base<boost::posix_time::ptime> time_zone;
 
   //! A time zone class constructed from a POSIX time zone string
   /*! A POSIX time zone string takes the form of:<br>
@@ -60,11 +60,11 @@ namespace local_time{
    * A boost::local_time::bad_adjustment exception will be thrown for:<br>
    * A DST adjustment that is 24 hours or more (positive or negative)<br>
    */
-  class posix_time_zone : public time_zone_base  {
+  class posix_time_zone : public time_zone  {
   public:
     typedef boost::posix_time::time_duration time_duration_type;
     typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-    typedef time_zone_base base_type;
+    typedef time_zone base_type;
     typedef base_type::string_type string_type;
     typedef base_type::stringstream_type stringstream_type;
 

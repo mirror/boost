@@ -26,6 +26,9 @@ namespace gregorian {
   typedef boost::date_time::period_parser<date,char>       period_parser;
   typedef boost::date_time::period_parser<date,wchar_t>    wperiod_parser;
     
+  typedef boost::date_time::special_values_formatter<char> special_values_formatter; 
+  typedef boost::date_time::special_values_formatter<wchar_t> wspecial_values_formatter; 
+  
   typedef boost::date_time::special_values_parser<date,char> special_values_parser; 
   typedef boost::date_time::special_values_parser<date,wchar_t> wspecial_values_parser; 
   

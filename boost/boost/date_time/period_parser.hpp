@@ -11,6 +11,7 @@
  */
 
 #include "boost/date_time/string_parse_tree.hpp"
+#include "boost/date_time/string_convert.hpp"
 
 
 namespace boost { namespace date_time {
@@ -153,6 +154,7 @@ namespace boost { namespace date_time {
     
     enum delim_ids { SEPARATOR, START, OPEN_END, CLOSED_END };
 
+    //! throws ios_base::failure if delimiter and parsed data do not match
     void consume_delim(stream_itr_type& sitr,
                        stream_itr_type& stream_end,
                        const string_type& delim) const
@@ -162,8 +164,13 @@ namespace boost { namespace date_time {
        * Ex [2000. Will not parse out the '[' string without knowing 
        * to process only one character. By using length of the delimiter 
        * string we can safely iterate past it. */
+      string_type s;
       for(unsigned int i = 0; i < delim.length() && sitr != stream_end; ++i) {
+        s += *sitr;
         ++sitr;
+      }
+      if(s != delim) {
+        throw std::ios_base::failure("Parse failed. Expected '" + convert_string_type<char_type,char>(delim) + "' but found '" + convert_string_type<char_type,char>(s) + "'");
       }
     }
   };

@@ -73,6 +73,13 @@ namespace boost { namespace date_time {
       sv_strings(nadt_str, neg_inf_str, pos_inf_str, min_dt_str, max_dt_str);
     }
 
+    special_values_parser(typename collection_type::iterator beg, typename collection_type::iterator end)
+    {
+      collection_type phrases;
+      std::copy(beg, end, std::back_inserter(phrases));
+      m_sv_strings = parse_tree_type(phrases, static_cast<int>(not_a_date_time));
+    }
+
     special_values_parser(const special_values_parser<date_type,charT>& svp)
     {
       this->m_sv_strings = svp.m_sv_strings;
