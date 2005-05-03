@@ -54,17 +54,32 @@ namespace impl {
 ///////////////////////////////////////////////////////////////////////////////
     struct compose_character_literal {
 
-        template <typename ResultT, typename ArgT>
+        template <typename ResultT, typename Arg1T, typename Arg2T>
         struct result { 
         
             typedef unsigned int type; 
         };
 
         unsigned int 
-        operator()(unsigned int res, unsigned int character) const
+        operator()(unsigned int& value, bool long_lit, unsigned int character) const
         { 
-            unsigned int retval = (res << 8) | (character & 0xff);
-            return retval;
+            if (long_lit) {
+                unsigned int mask = 0;
+                for (int i = 0; i < sizeof(wchar_t); ++i) {
+                    value <<= 8;
+                    mask = (mask << 8) | 0xff;
+                }
+                value |= character & mask;
+            }
+            else {
+                unsigned int mask = 0;
+                for (int i = 0; i < sizeof(char); ++i) {
+                    value <<= 8;
+                    mask = (mask << 8) | 0xff;
+                }
+                value |= character & mask;
+            }
+            return value;
         }
     };
     phoenix::function<compose_character_literal> const compose;
@@ -118,82 +133,82 @@ struct chlit_grammar :
                             ch_p('\\') 
                             >>  (   ch_p('a')    // BEL
                                     [
-                                        self.value = impl::compose(self.value, val(0x07))
+                                        impl::compose(self.value, self.long_lit, val(0x07))
                                     ]
                                 |   ch_p('b')    // BS
                                     [
-                                        self.value = impl::compose(self.value, val(0x08))
+                                        impl::compose(self.value, self.long_lit, val(0x08))
                                     ]
                                 |   ch_p('t')    // HT
                                     [
-                                        self.value = impl::compose(self.value, val(0x09))
+                                        impl::compose(self.value, self.long_lit, val(0x09))
                                     ]
                                 |   ch_p('n')    // NL
                                     [
-                                        self.value = impl::compose(self.value, val(0x0a))
+                                        impl::compose(self.value, self.long_lit, val(0x0a))
                                     ]
                                 |   ch_p('v')    // VT
                                     [
-                                        self.value = impl::compose(self.value, val(0x0b))
+                                        impl::compose(self.value, self.long_lit, val(0x0b))
                                     ]
                                 |   ch_p('f')    // FF
                                     [
-                                        self.value = impl::compose(self.value, val(0x0c))
+                                        impl::compose(self.value, self.long_lit, val(0x0c))
                                     ]
                                 |   ch_p('r')    // CR
                                     [
-                                        self.value = impl::compose(self.value, val(0x0d))
+                                        impl::compose(self.value, self.long_lit, val(0x0d))
                                     ]
                                 |   ch_p('?')
                                     [
-                                        self.value = impl::compose(self.value, val('?'))
+                                        impl::compose(self.value, self.long_lit, val('?'))
                                     ]
                                 |   ch_p('\'')
                                     [
-                                        self.value = impl::compose(self.value, val('\''))
+                                        impl::compose(self.value, self.long_lit, val('\''))
                                     ]
                                 |   ch_p('\"')
                                     [
-                                        self.value = impl::compose(self.value, val('\"'))
+                                        impl::compose(self.value, self.long_lit, val('\"'))
                                     ]
                                 |   ch_p('\\')
                                     [
-                                        self.value = impl::compose(self.value, val('\\'))
+                                        impl::compose(self.value, self.long_lit, val('\\'))
                                     ]
                                 |   ch_p('x') 
                                     >>  if_p(self.long_lit) 
                                         [
                                             hex_wchar_parser_type()
                                             [
-                                                self.value = impl::compose(self.value, arg1)
+                                                impl::compose(self.value, self.long_lit, arg1)
                                             ]
                                         ]
                                         .else_p
                                         [
                                             hex_char_parser_type()
                                             [
-                                                self.value = impl::compose(self.value, arg1)
+                                                impl::compose(self.value, self.long_lit, arg1)
                                             ]
                                         ]
                                 |   ch_p('u') 
                                     >>  uint_parser<unsigned int, 16, 4, 4>()
                                         [
-                                            self.value = impl::compose(self.value, arg1)
+                                            impl::compose(self.value, self.long_lit, arg1)
                                         ]
                                 |   ch_p('U')
                                     >>  uint_parser<unsigned int, 16, 8, 8>()
                                         [
-                                            self.value = impl::compose(self.value, arg1)
+                                            impl::compose(self.value, self.long_lit, arg1)
                                         ]
                                 |   uint_parser<unsigned int, 8, 1, 3>()
                                     [
-                                        self.value = impl::compose(self.value, arg1)
+                                        impl::compose(self.value, self.long_lit, arg1)
                                     ]
                                 )
                             )
                         |   ~eps_p(ch_p('\'')) >> anychar_p
                             [
-                                self.value = impl::compose(self.value, arg1)
+                                impl::compose(self.value, self.long_lit, arg1)
                             ]
                         )
                     >>  ch_p('\'')

@@ -270,8 +270,16 @@ testwave_app::test_a_file(std::string filename)
                 if (debuglevel > 2) {
                     std::cerr 
                         << filename << ": failed" << std::endl
-                        << "result: " << std::endl << result << std::endl
-                        << "expected error: " << std::endl << expected << std::endl;
+                        << "result: " << std::endl << result << std::endl;
+
+                    if (!error.empty()) {
+                        std::cerr << "expected result: " << std::endl 
+                                  << expected << std::endl;
+                    }
+                    if (!expected_error.empty()) {
+                        std::cerr << "expected error: " << std::endl 
+                                  << expected_error << std::endl;
+                    }
                 }
                 else if (debuglevel > 1) {
                     std::cerr << filename << ": failed" << std::endl;
