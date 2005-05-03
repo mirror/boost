@@ -132,7 +132,7 @@ test-suite date_time_gregorian_dll
     [ run local_time/testdst_transition_day_rule.cpp
       <lib>../build/boost_date_time
      : : : $(DATE_TIME_PROPERTIES) ]
-   [ run local_time/testtime_zone.cpp
+   [ run local_time/testcustom_time_zone.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
    [ run local_time/testposix_time_zone.cpp

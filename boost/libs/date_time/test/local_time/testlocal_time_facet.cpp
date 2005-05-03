@@ -55,14 +55,14 @@ int main(){
     }
   }
 
-  shared_ptr<time_zone_base> utc;
-  shared_ptr<time_zone_base> chicago = time_zones.time_zone_from_region("America/Chicago");
-  shared_ptr<time_zone_base> denver = time_zones.time_zone_from_region("America/Denver");
-  shared_ptr<time_zone_base> la = time_zones.time_zone_from_region("America/Los_Angeles");
-  shared_ptr<time_zone_base> nyc = time_zones.time_zone_from_region("America/New_York");
-  shared_ptr<time_zone_base> phx = time_zones.time_zone_from_region("America/Phoenix");
+  time_zone_ptr utc;
+  time_zone_ptr chicago = time_zones.time_zone_from_region("America/Chicago");
+  time_zone_ptr denver = time_zones.time_zone_from_region("America/Denver");
+  time_zone_ptr la = time_zones.time_zone_from_region("America/Los_Angeles");
+  time_zone_ptr nyc = time_zones.time_zone_from_region("America/New_York");
+  time_zone_ptr phx = time_zones.time_zone_from_region("America/Phoenix");
   // sydney does not have full time zone names in the tz_database
-  shared_ptr<time_zone_base> sydney = time_zones.time_zone_from_region("Australia/Sydney");
+  time_zone_ptr sydney = time_zones.time_zone_from_region("Australia/Sydney");
 
   ptime a_time(date(2004,Dec,15), hours(12));
   ptime b_time(date(2004,Aug,15), hours(12));
@@ -156,7 +156,8 @@ int main(){
   teststreaming("Sydney in December", ldt1.local_time_in(sydney), 
                 std::string("2004-12-15 23:00:00+11:00"), loc1);
 
-  
+#if !defined(BOOST_NO_STD_WSTRING)
+
   typedef boost::date_time::time_facet<local_date_time, wchar_t> wldt_facet;
   //wldt_facet* wtimefacet = new wldt_facet(L"%c %Z"); // full name
   wldt_facet* wtimefacet = new wldt_facet(L"%a %b %d %H:%M:%S %Y %Z"); // full name
@@ -174,5 +175,7 @@ int main(){
   teststreaming("UTC local_date_time", ldt1, std::wstring(L"Wed Dec 15 12:00:00 2004 UTC"), loc3);
   teststreaming("Phoenix in Summer", ldt6, std::wstring(L"Sun Aug 15 05:00:00 2004 MST"), loc3);
 
+#endif // BOOST_NO_STD_WSTRING
+  
   return printTestStats();
 }

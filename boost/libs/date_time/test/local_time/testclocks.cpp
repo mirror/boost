@@ -19,8 +19,8 @@ main()
   using namespace boost::local_time;
 
 
-  boost::shared_ptr<time_zone_base> az_tz(new posix_time_zone("MST-07"));
-  boost::shared_ptr<time_zone_base> ny_tz(new posix_time_zone("EST-05EDT,M4.1.0,M10.5.0"));
+  boost::shared_ptr<time_zone> az_tz(new posix_time_zone("MST-07"));
+  boost::shared_ptr<time_zone> ny_tz(new posix_time_zone("EST-05EDT,M4.1.0,M10.5.0"));
 
   ptime tl = second_clock::local_time();
   std::cout << to_simple_string(tl) << std::endl;

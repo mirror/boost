@@ -6,7 +6,7 @@
  */
 
 
-#include "boost/date_time/local_time/time_zone.hpp"
+#include "boost/date_time/local_time/custom_time_zone.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/local_time/local_time.hpp"
 // #include "boost/date_time/local_time/posix_time_zone.hpp"
@@ -49,12 +49,11 @@ main()
   // of these operations is done in the posix_time tests
 
   try {
-    boost::shared_ptr<time_zone_base> az_tz(new posix_time_zone("MST-07"));
-    boost::shared_ptr<time_zone_base> ny_tz(new posix_time_zone("EST-05EDT,M4.1.0,M10.5.0"));
+    time_zone_ptr az_tz(new posix_time_zone("MST-07"));
+    time_zone_ptr ny_tz(new posix_time_zone("EST-05EDT,M4.1.0,M10.5.0"));
     // EST & EST for sydney is correct, according to zoneinfo files
-    boost::shared_ptr<time_zone_base> 
-      sydney(new posix_time_zone("EST+10EST,M10.5.0,M3.5.0/03:00"));
-    boost::shared_ptr<time_zone_base> null_tz;
+    time_zone_ptr sydney(new posix_time_zone("EST+10EST,M10.5.0,M3.5.0/03:00"));
+    time_zone_ptr null_tz;
     date d(2003, 12, 20);
     hours h(12);
     ptime t(d,h);

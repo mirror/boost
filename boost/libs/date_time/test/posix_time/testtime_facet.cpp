@@ -30,6 +30,7 @@ teststreaming(std::string testname,
 
 
 
+#if !defined(BOOST_NO_STD_WSTRING) 
 static const wchar_t* long_month_names[] =
   {L"Januar",L"Februar",L"Marz",L"April",L"Mai",L"Juni",L"Juli",L"August",
    L"September",L"Oktober",L"November",L"Dezember"};
@@ -39,6 +40,7 @@ static const wchar_t* short_month_names[]=
 
 std::vector<std::basic_string<wchar_t> > de_short_month_names;
 std::vector<std::basic_string<wchar_t> > de_long_month_names;
+#endif // 
 
 int main() {
   using namespace boost::gregorian;
@@ -74,7 +76,7 @@ int main() {
           to_simple_string(td) == ss.str());
       std::cout << ss.str() << std::endl;
     }
-#if 1
+#if !defined(BOOST_NO_STD_WSTRING) 
     std::copy(&short_month_names[0], 
               &short_month_names[12],
               std::back_inserter(de_short_month_names));

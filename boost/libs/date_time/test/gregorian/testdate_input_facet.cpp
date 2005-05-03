@@ -155,7 +155,7 @@ int main(){
   check("Open range period", dp == date_period(begin,len));
   // custom period delimiters
   pp.delimiter_strings(" to ", "from ", " exclusive", " inclusive");
-  iss.str("from-2002-07-04-to-2002-07-25-exclusive");
+  iss.str("from 2002-07-04 to 2002-07-25 exclusive");
   facet->period_parser(pp);
   iss >> dp;
   check("Open range period - custom delimiters", dp == date_period(begin,len));

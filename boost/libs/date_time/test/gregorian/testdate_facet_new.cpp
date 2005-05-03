@@ -53,6 +53,7 @@ std::vector<std::basic_string<char> > long_weekday_names;
 std::vector<std::basic_string<char> > short_month_names;
 std::vector<std::basic_string<char> > long_month_names;
 
+#if !defined(BOOST_NO_STD_WSTRING)
 // collections of test results
 const std::wstring full_months[]={L"January",L"February",L"March",
                                   L"April",L"May",L"June",
@@ -71,7 +72,7 @@ const std::wstring short_weekdays[]= {L"Sun", L"Mon",L"Tue",
                                       L"Fri", L"Sat"};
 
 //const whcar_t const 
-
+#endif // BOOST_NO_STD_WSTRING
 
 int main() {
   using namespace boost::gregorian;
@@ -109,24 +110,10 @@ int main() {
     date d(2004,Oct, 13);
     date_period dp(d, d + days(7));
     {
-      wdate_facet* wdatefacet = new wdate_facet();
-      wdatefacet->format(wdate_facet::standard_format_specifier);
-      teststreaming("widestream default classic date", d, 
-                    std::wstring(L"10/13/04"),
-                    std::locale(std::locale::classic(), wdatefacet));
-    }
-    {
       date_facet* datefacet = new date_facet();
       datefacet->format(date_facet::standard_format_specifier);
       teststreaming("default classic date", d, std::string("10/13/04"),
                     std::locale(std::locale::classic(), datefacet));
-    }
-    {
-      wdate_facet* wdatefacet = new wdate_facet();
-      wdatefacet->format(wdate_facet::standard_format_specifier);
-      teststreaming("widestream default classic date period", dp, 
-                    std::wstring(L"[10/13/04/10/19/04]"),
-                    std::locale(std::locale::classic(), wdatefacet));
     }
     {
       date_facet* datefacet = new date_facet();
@@ -134,20 +121,6 @@ int main() {
       teststreaming("default classic date period", dp, 
                     std::string("[10/13/04/10/19/04]"),
                     std::locale(std::locale::classic(), datefacet));
-    }
-    {
-      wdate_facet* wdatefacet = new wdate_facet();
-      wdatefacet->format(L"%Y-%d-%b %a");
-      teststreaming("widestream custom date facet", d, 
-                    std::wstring(L"2004-13-Oct Wed"), 
-                    std::locale(std::locale::classic(), wdatefacet));
-    }
-    {
-      wdate_facet* wdatefacet = new wdate_facet();
-      wdatefacet->format(L"%Y-%d-%b %a");
-      teststreaming("widestream custom date facet date period", dp, 
-                    std::wstring(L"[2004-13-Oct Wed/2004-19-Oct Tue]"), 
-                    std::locale(std::locale::classic(), wdatefacet));
     }
 
     {
@@ -201,15 +174,6 @@ int main() {
     }
 
     {
-      wdate_facet* wdatefacet = new wdate_facet();
-      wdatefacet->set_iso_extended_format();
-      wperiod_formatter pf(wperiod_formatter::AS_OPEN_RANGE, L" / ", L"[ ", L" )", L" ]");
-      wdatefacet->period_formatter(pf);
-      teststreaming("custom date facet date period - open range custom delimeters", dp, 
-                    std::wstring(L"[ 2004-10-13 / 2004-10-20 )"), 
-                    std::locale(std::locale::classic(), wdatefacet));
-    }
-    {
       date_facet* datefacet = new date_facet("%A %b %d, %Y");
       datefacet->short_month_names(short_month_names);
       teststreaming("custom date facet -- custom short month names", d, 
@@ -247,8 +211,6 @@ int main() {
 
     date d_not_date(not_a_date_time);
     teststreaming("special value, no special facet", d_not_date, std::string("not-a-date-time"));
-    teststreaming("special value, no special facet wide", d_not_date, 
-                  std::wstring(L"not-a-date-time"));
 
 
 //       std::cout.imbue(std::locale(std::locale::classic(), datefacet));
@@ -257,7 +219,72 @@ int main() {
 
   }
 
-  
+  // date_generator tests
+  {
+    partial_date pd(31,Oct);
+    teststreaming("partial date", pd, std::string("31 Oct"));
+    first_kday_of_month fkd(Tuesday, Sep);
+    teststreaming("first kday", fkd, std::string("first Tue of Sep"));
+    nth_kday_of_month nkd2(nth_kday_of_month::second, Tuesday, Sep);
+    teststreaming("nth kday", nkd2, std::string("second Tue of Sep"));
+    nth_kday_of_month nkd3(nth_kday_of_month::third, Tuesday, Sep);
+    teststreaming("nth kday", nkd3, std::string("third Tue of Sep"));
+    nth_kday_of_month nkd4(nth_kday_of_month::fourth, Tuesday, Sep);
+    teststreaming("nth kday", nkd4, std::string("fourth Tue of Sep"));
+    nth_kday_of_month nkd5(nth_kday_of_month::fifth, Tuesday, Sep);
+    teststreaming("nth kday", nkd5, std::string("fifth Tue of Sep"));
+    last_kday_of_month lkd(Tuesday, Sep);
+    teststreaming("last kday", lkd, std::string("last Tue of Sep"));
+    first_kday_before fkb(Wednesday);
+    teststreaming("First before", fkb, std::string("Wed before"));
+    first_kday_after fka(Thursday);
+    teststreaming("First after", fka, std::string("Thu after"));
+  }
+
+#if !defined(BOOST_NO_STD_WSTRING) 
+    date d(2004,Oct, 13);
+    date_period dp(d, d + days(7));
+    date d_not_date(not_a_date_time);
+    
+    teststreaming("special value, no special facet wide", d_not_date, 
+                  std::wstring(L"not-a-date-time"));
+  {
+    wdate_facet* wdatefacet = new wdate_facet();
+    wdatefacet->format(wdate_facet::standard_format_specifier);
+    teststreaming("widestream default classic date", d, 
+                  std::wstring(L"10/13/04"),
+                  std::locale(std::locale::classic(), wdatefacet));
+  }
+  {
+    wdate_facet* wdatefacet = new wdate_facet();
+    wdatefacet->format(wdate_facet::standard_format_specifier);
+    teststreaming("widestream default classic date period", dp, 
+                  std::wstring(L"[10/13/04/10/19/04]"),
+                  std::locale(std::locale::classic(), wdatefacet));
+  }
+  {
+    wdate_facet* wdatefacet = new wdate_facet();
+    wdatefacet->format(L"%Y-%d-%b %a");
+    teststreaming("widestream custom date facet", d, 
+                  std::wstring(L"2004-13-Oct Wed"), 
+                  std::locale(std::locale::classic(), wdatefacet));
+  }
+  {
+    wdate_facet* wdatefacet = new wdate_facet();
+    wdatefacet->format(L"%Y-%d-%b %a");
+    teststreaming("widestream custom date facet date period", dp, 
+                  std::wstring(L"[2004-13-Oct Wed/2004-19-Oct Tue]"), 
+                  std::locale(std::locale::classic(), wdatefacet));
+  }
+  {
+    wdate_facet* wdatefacet = new wdate_facet();
+    wdatefacet->set_iso_extended_format();
+    wperiod_formatter pf(wperiod_formatter::AS_OPEN_RANGE, L" / ", L"[ ", L" )", L" ]");
+    wdatefacet->period_formatter(pf);
+    teststreaming("custom date facet date period - open range custom delimeters", dp, 
+                  std::wstring(L"[ 2004-10-13 / 2004-10-20 )"), 
+                  std::locale(std::locale::classic(), wdatefacet));
+  }
   /************* small gregorian types tests *************/ 
   wdate_facet* small_types_facet = new wdate_facet();
   std::locale loc = std::locale(std::locale::classic(), small_types_facet);
@@ -291,28 +318,7 @@ int main() {
       teststreaming("greg_weekday full", gw, full_weekdays[i], loc);
     }
   }
-
-  // date_generator tests
-  {
-    partial_date pd(31,Oct);
-    teststreaming("partial date", pd, std::string("31 Oct"));
-    first_kday_of_month fkd(Tuesday, Sep);
-    teststreaming("first kday", fkd, std::string("first Tue of Sep"));
-    nth_kday_of_month nkd2(nth_kday_of_month::second, Tuesday, Sep);
-    teststreaming("nth kday", nkd2, std::string("second Tue of Sep"));
-    nth_kday_of_month nkd3(nth_kday_of_month::third, Tuesday, Sep);
-    teststreaming("nth kday", nkd3, std::string("third Tue of Sep"));
-    nth_kday_of_month nkd4(nth_kday_of_month::fourth, Tuesday, Sep);
-    teststreaming("nth kday", nkd4, std::string("fourth Tue of Sep"));
-    nth_kday_of_month nkd5(nth_kday_of_month::fifth, Tuesday, Sep);
-    teststreaming("nth kday", nkd5, std::string("fifth Tue of Sep"));
-    last_kday_of_month lkd(Tuesday, Sep);
-    teststreaming("last kday", lkd, std::string("last Tue of Sep"));
-    first_kday_before fkb(Wednesday);
-    teststreaming("First before", fkb, std::string("Wed before"));
-    first_kday_after fka(Thursday);
-    teststreaming("First after", fka, std::string("Thu after"));
-  }
+#endif // BOOST_NO_STD_WSTRING
 
   return printTestStats();
 }

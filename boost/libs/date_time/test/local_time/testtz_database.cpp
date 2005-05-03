@@ -9,7 +9,8 @@
 #include "boost/date_time/testfrmwk.hpp"
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/date_time/local_time/time_zone.hpp"
+#include "boost/date_time/local_time/custom_time_zone.hpp"
+#include "boost/date_time/local_time/local_time_types.hpp"
 #include "boost/date_time/local_time/tz_database.hpp"
 #include "boost/date_time/local_time/posix_time_zone.hpp"
 #include <iostream>
@@ -60,11 +61,11 @@ int main(){
     return printTestStats();
   }
     
-  boost::shared_ptr<time_zone_base> bad_tz = tz_db.time_zone_from_region("Invalid/name");
-  check("Expected null pointer return", bad_tz == boost::shared_ptr<time_zone_base>()); 
+  time_zone_ptr bad_tz = tz_db.time_zone_from_region("Invalid/name");
+  check("Expected null pointer return", bad_tz == time_zone_ptr()); 
 
-  boost::shared_ptr<time_zone_base> nyc_test = tz_db.time_zone_from_region("America/New_York");
-  check("nyc Valid pointer", nyc_test != boost::shared_ptr<time_zone_base>() ); 
+  time_zone_ptr nyc_test = tz_db.time_zone_from_region("America/New_York");
+  check("nyc Valid pointer", nyc_test != time_zone_ptr() ); 
   check("nyc Abbreviations",nyc_test->std_zone_abbrev() == std::string("EST")); 
   check("nyc Full Name", nyc_test->std_zone_name() == std::string("Eastern Standard Time")); 
   check("nyc Abbreviations",nyc_test->dst_zone_abbrev() == std::string("EDT")); 
@@ -77,8 +78,8 @@ int main(){
   check("nyc dst end", nyc_test->dst_local_end_time(2004) == ptime(date(2004, Oct, 31), hours(2)));
   check("nyc has dst", nyc_test->has_dst());
   
-  boost::shared_ptr<time_zone_base> phx_test = tz_db.time_zone_from_region("America/Phoenix");
-  check("az Valid pointer", phx_test != boost::shared_ptr<time_zone_base>() ); 
+  time_zone_ptr phx_test = tz_db.time_zone_from_region("America/Phoenix");
+  check("az Valid pointer", phx_test != time_zone_ptr() ); 
   check("az Abbreviations",phx_test->std_zone_abbrev() == std::string("MST"));  
   check("az Full Name", phx_test->std_zone_name() == std::string("Mountain Standard Time"));  
   check("az Abbreviations", phx_test->dst_zone_abbrev() == std::string(""));  
@@ -89,10 +90,10 @@ int main(){
   check("az has dst", phx_test->has_dst() == false);
 
   //Now add and retrieve a Posix tz spec from the database
-  boost::shared_ptr<time_zone_base> eastern(new posix_time_zone("EST-05:00:00EDT+01:00:00,M4.1.0/02:00:00,M10.5.0/02:00:00"));
+  time_zone_ptr eastern(new posix_time_zone("EST-05:00:00EDT+01:00:00,M4.1.0/02:00:00,M10.5.0/02:00:00"));
   tz_db.add_record("United States/Eastern", eastern);
-  boost::shared_ptr<time_zone_base> eastern_test = tz_db.time_zone_from_region("United States/Eastern");
-  check("eastern Valid pointer", eastern_test != boost::shared_ptr<time_zone_base>() );
+  time_zone_ptr eastern_test = tz_db.time_zone_from_region("United States/Eastern");
+  check("eastern Valid pointer", eastern_test != time_zone_ptr() );
   check("eastern Abbreviations", 
       eastern_test->std_zone_abbrev() == std::string("EST"));  
   check("eastern Abbreviations", 
