@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Conventions
 +++++++++++
 
@@ -99,4 +105,6 @@ heap-allocation plus a call to ``swap()`` (see `Example 3 <examples.html>`_).
 
 - `home <ptr_container.html>`_
 - `reference <reference.html>`_
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

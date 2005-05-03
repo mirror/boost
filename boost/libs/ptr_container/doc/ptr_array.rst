@@ -1,3 +1,8 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
 
 Class ``ptr_array``
 -------------------
@@ -234,4 +239,5 @@ Semantics: pointer container requirements
 
     - Exception safety: Nothrow guarantee
 
+:copyright:     Thorsten Ottosen 2004-2005. 
 

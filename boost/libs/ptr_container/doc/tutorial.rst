@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 ======== 
 Tutorial 
 ======== 
@@ -15,6 +21,7 @@ that you read it all from top to bottom.
 * `Null values`_
 * `Clonability`_
 * `New functions`_
+* `Algorithms`_
 
 Basic usage
 -----------
@@ -30,8 +37,8 @@ Let us assume that we have an OO-hierarchy of animals
     class animal : `boost::noncopyable <http://www.boost.org/libs/utility/utility.htm#Class_noncopyable>`_
     {
     public:
-        virtual ~animal() {}
-        void     eat();
+        virtual      ~animal() {}
+        virtual void eat() = 0;
         // ...
     };
     
@@ -120,7 +127,7 @@ random access, so does the pointer container; for example::
          i != deq.size(); ++i )
          deq[i].eat();
 
-The ```ptr_vector`` also allows you to specify the size of
+The ``ptr_vector`` also allows you to specify the size of
 the buffer to allocate; for example ::
 
     boost::ptr_vector<animal> animals( 10u );
@@ -323,11 +330,48 @@ Maps can also be indexed with bounds-checking ::
     {
         // "bobo" not found
     }        
-     
+
+Algorithms
+----------
+
+Unfortunately it is not possible to use pointer containers with
+mutating algorithms from the standard library. However,
+the most useful ones
+are instead provided as member functions::
+
+    boost::ptr_vector<animal> zoo;
+    ...
+    zoo.sort();                               // assume 'bool operator<( const animal&, const animal& )'
+    zoo.sort( std::less<animal>() );          // the same, notice no '*' is present
+    zoo.sort( zoo.begin(), zoo.begin() + 5 ); // sort selected range
+
+Notice that predicates are automatically wrapped in an `indirect_fun`_ object.
+
+..  _`indirect_fun`: indirect_fun.html
+
+You can remove equal and adjacent elements using ``unique()``::
+   
+    zoo.unique();                             // assume 'bool operator==( const animal&, const animal& )'
+    zoo.unique( zoo.begin(), zoo.begin() + 5, my_comparison_predicate() ); 
+
+If you just want to remove certain elements, use ``erase_if``::
+
+    zoo.erase_if( my_predicate() );
+
+Finally you may want to merge together two sorted containers::
+
+    boost::ptr_vector<animal> another_zoo = ...;
+    another_zoo.sort();                      // sorted wrt. to same order as 'zoo'
+    zoo.merge( another_zoo );
+    BOOST_ASSERT( another_zoo.empty() );    
+         
 That is all; now you have learned all the basics!
 
 **Navigate**
 
   - `home <ptr_container.html>`_
   - `examples <examples.html>`_
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

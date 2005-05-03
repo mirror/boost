@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``ptr_map``
 -----------------
 
@@ -51,4 +57,7 @@ to store the pointers.
             }; //  class 'ptr_map'
         
         } // namespace 'boost'  
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

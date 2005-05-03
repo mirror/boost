@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``ptr_multiset``
 ----------------------
 
@@ -53,3 +59,7 @@ to store the pointers.
 **Remarks:**
 
 - Using ``nullable<T>`` as ``Key`` is meaningless and not allowed
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
+

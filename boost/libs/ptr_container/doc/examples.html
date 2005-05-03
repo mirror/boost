@@ -4,12 +4,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
-<title>Examples</title>
+<title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="examples">
-<h1 class="title">Examples</h1>
+<div class="document" id="boost-pointer-container-library">
+<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
+<h2 class="subtitle" id="examples">Examples</h2>
 <p>Some examples are given here and in the accompanying test files:</p>
 <div class="contents topic" id="contents">
 <ul class="simple">
@@ -163,7 +164,7 @@ features at work.</p>
 //
 // First we select which container to use.
 //</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>smart_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
 </span>
 <span class=comment>//
 // we need these later in the example
@@ -178,7 +179,7 @@ features at work.</p>
 // hierarchy.
 // 
 </span>
-<span class=keyword>class </span><span class=identifier>animal</span>
+<span class=keyword>class </span><span class=identifier>animal </span><span class=special>: </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>noncopyable</span>
 <span class=special>{
     </span><span class=keyword>virtual </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>do_speak</span><span class=special>() </span><span class=keyword>const </span><span class=special>= </span><span class=number>0</span><span class=special>;
     </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>name_</span><span class=special>;
@@ -224,7 +225,7 @@ features at work.</p>
 // and return by pointer.
 //
 </span>
-<span class=identifier>animal</span><span class=special>* </span><span class=identifier>allocate_clone</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=identifier>a </span><span class=special>)</span>
+<span class=identifier>animal</span><span class=special>* </span><span class=identifier>new_clone</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=identifier>a </span><span class=special>)</span>
 <span class=special>{
     </span><span class=keyword>return </span><span class=identifier>a</span><span class=special>.</span><span class=identifier>clone</span><span class=special>();</span>
 <span class=special>}
@@ -280,7 +281,7 @@ features at work.</p>
     // This is where the smart containers are handy
     //
     </span><span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>animal</span><span class=special>&gt; </span><span class=identifier>barn_type</span><span class=special>;
-    </span><span class=identifier>barn_type                      </span><span class=identifier>barn</span><span class=special>;
+    </span><span class=identifier>barn_type                        </span><span class=identifier>barn</span><span class=special>;
 
     </span><span class=comment>//
     // An error type
@@ -527,23 +528,25 @@ as view into other containers:</p>
 // All container headers will also include
 // the Clone Managers.
 // </span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>smart_container</span><span class=special>/</span><span class=identifier>ptr_vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>smart_container</span><span class=special>/</span><span class=identifier>ptr_predicate</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>indirect_fun</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
 </span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>cstdlib</span><span class=special>&gt;   </span><span class=comment>// For 'rand()'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>algorithm</span><span class=special>&gt; </span><span class=comment>// For 'std::sort()'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;  </span><span class=comment>// For 'std::cout'
-
-
-//
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>functional</span><span class=special>&gt; </span><span class=comment>// For 'binary_fnuction'</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>cstdlib</span><span class=special>&gt;    </span><span class=comment>// For 'rand()'</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>algorithm</span><span class=special>&gt;  </span><span class=comment>// For 'std::sort()'</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;   </span><span class=comment>// For 'std::cout'
+</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
+</span>
+<span class=comment>//
 // This is our simple example data-structure. It can
 // be ordered in three ways.
 //</span>
 <span class=keyword>struct </span><span class=identifier>photon</span>
 <span class=special>{
-    </span><span class=identifier>photon</span><span class=special>() </span><span class=special>: </span><span class=identifier>color</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>rand</span><span class=special>() </span><span class=special>), 
-               </span><span class=identifier>direction</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>rand</span><span class=special>() </span><span class=special>),
-               </span><span class=identifier>power</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>rand</span><span class=special>() </span><span class=special>)
+    </span><span class=identifier>photon</span><span class=special>() </span><span class=special>: </span><span class=identifier>color</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>), 
+               </span><span class=identifier>direction</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>),
+               </span><span class=identifier>power</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>)
     </span><span class=special>{ </span><span class=special>}
     
     </span><span class=keyword>int </span><span class=identifier>color</span><span class=special>;
@@ -564,12 +567,12 @@ as view into other containers:</p>
 // Notice the first template argument is 'photon' and not
 // 'const photon' to allow the view container write access.
 //</span>
-<span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_vector</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>view_clone_manager</span><span class=special>&gt; </span><span class=identifier>view_type</span><span class=special>;
+<span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_vector</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>view_clone_allocator</span><span class=special>&gt; </span><span class=identifier>view_type</span><span class=special>;
 </span>
 <span class=comment>//
 // Our first sort criterium
 //</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_color</span>
+<span class=keyword>struct </span><span class=identifier>sort_by_color </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
 <span class=special>{
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
     </span><span class=special>{
@@ -580,7 +583,7 @@ as view into other containers:</p>
 <span class=comment>//
 // Our second sort criterium
 //</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_direction</span>
+<span class=keyword>struct </span><span class=identifier>sort_by_direction </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
 <span class=special>{
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
     </span><span class=special>{
@@ -592,7 +595,7 @@ as view into other containers:</p>
 <span class=comment>//
 // Our third sort criterium
 //</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_power</span>
+<span class=keyword>struct </span><span class=identifier>sort_by_power </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
 <span class=special>{
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
     </span><span class=special>{
@@ -656,24 +659,18 @@ as view into other containers:</p>
     // the objects are scatered all around 'sz' different vectors;
     // the view makes them act as one big vector.
     //
-    // Notice how we simple use
-    // '.begin()/end()' instead of '.ptr_begin()/ptr_end()':
-    //
     </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(), </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>end</span><span class=special>(), </span><span class=identifier>sort_by_power</span><span class=special>() </span><span class=special>);
     
     </span><span class=comment>//
     // And now we can sort the views themselves. Notice how
     // we switch to different iterators and different predicates:
     //
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>ptr_begin</span><span class=special>(), </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>ptr_end</span><span class=special>(),
-               </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>indirected2</span><span class=special>&lt;</span><span class=identifier>sort_by_color</span><span class=special>&gt;() </span><span class=special>);
+    </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>sort_by_color</span><span class=special>() </span><span class=special>);
 
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>ptr_begin</span><span class=special>(), </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>ptr_end</span><span class=special>(),
-               </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>indirected2</span><span class=special>&lt;</span><span class=identifier>sort_by_direction</span><span class=special>&gt;() </span><span class=special>);
+    </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>sort_by_direction</span><span class=special>() </span><span class=special>);
 
     </span><span class=keyword>return </span><span class=number>0</span><span class=special>;</span>
 <span class=special>}</span>
-
 </pre>
 </body>
 </html>
@@ -683,6 +680,14 @@ as view into other containers:</p>
 <li><a class="reference" href="ptr_container.html">home</a></li>
 <li><a class="reference" href="reference.html">reference</a></li>
 </ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </body>

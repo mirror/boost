@@ -6,8 +6,8 @@
 <meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <meta name="author" content="Thorsten Ottosen" />
-<meta name="date" content="24th of September" />
-<meta name="copyright" content="Thorsten Ottosen 2004. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt)." />
+<meta name="date" content="3rd of May 2005" />
+<meta name="copyright" content="Thorsten Ottosen 2004-2005. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt)." />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
@@ -24,9 +24,9 @@
 <tr class="field"><th class="docinfo-name">organizations:</th><td class="field-body"><a class="reference" href="http://www.cs.auc.dk">Department of Computer Science</a>, Aalborg University, and <a class="reference" href="http://www.dezide.com">Dezide Aps</a></td>
 </tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>24th of September</td></tr>
+<td>3rd of May 2005</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
-<td>Thorsten Ottosen 2004. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td></tr>
+<td>Thorsten Ottosen 2004-2005. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td></tr>
 </tbody>
 </table>
 <div class="section" id="overview">
@@ -66,7 +66,6 @@ and designs for dealing with OO specific problems</p>
 <li><a class="reference" href="guidelines.html">Usage guidelines</a></li>
 <li><a class="reference" href="examples.html">Examples</a></li>
 <li><a class="reference" href="headers.html">Library headers</a></li>
-<li><a class="reference" href="#portability">Portability</a></li>
 <li><a class="reference" href="faq.html">FAQ</a></li>
 <li><a class="reference" href="#acknowledgements">Acknowledgements</a></li>
 <li><a class="reference" href="#references">References</a></li>
@@ -105,25 +104,11 @@ now it is possible for <tt class="docutils literal"><span class="pre">pop_back()
 <li>Less flexible than containers of pointer pointers</li>
 </ol>
 </div>
-<div class="section" id="portability">
-<h1><a name="portability">Portability</a></h1>
-<p>The review version has been tested with</p>
-<ul class="simple">
-<li>vc7.1</li>
-<li>gcc 3.3.3</li>
-<li>como 4.3.3 (+dinkumware lib)</li>
-</ul>
-<p>and it requires the current boost-cvs to work.</p>
-<p>There is known problems with</p>
-<ul class="simple">
-<li>libcomo: some really irritating concept-checking prohibits <tt class="docutils literal"><span class="pre">vector&lt;T*&gt;</span></tt> if <tt class="docutils literal"><span class="pre">T</span></tt> is abstract.</li>
-</ul>
-</div>
 <div class="section" id="acknowledgements">
 <h1><a name="acknowledgements">Acknowledgements</a></h1>
 <p>The following people have been helpful:</p>
 <ul class="simple">
-<li>Bjørn D. Rasmussen for showing me his crappy code that motivated me to start this library</li>
+<li>Bjørn D. Rasmussen for showing me his cr**** code that motivated me to start this library</li>
 <li>Pavel Vozenilek for asking me to make the adapters</li>
 <li>David Abrahams for the <tt class="docutils literal"><span class="pre">indirect_fun</span></tt> design</li>
 <li>Pavol Droba for being review manager</li>
@@ -132,6 +117,7 @@ now it is possible for <tt class="docutils literal"><span class="pre">pop_back()
 library in production code even before the library was part of boost</li>
 <li>Jonathan Turkanis for supplying his <tt class="docutils literal"><span class="pre">move_ptr</span></tt> framework 
 which is used internally</li>
+<li>Stefan Slapeta and Howard Hinnant for Metrowerks support</li>
 </ul>
 </div>
 <div class="section" id="references">
@@ -203,7 +189,7 @@ Item 226, <a class="reference" href="http://gcc.gnu.org/onlinedocs/libstdc++/ext
 <table class="docutils footnote" frame="void" id="id21" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a name="id21">[11]</a></td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> Boost smart pointer <a class="reference" href="http://www.boost.org/libs/ptr_ptr/smarttests.htm">timings</a></td></tr>
+<tr><td class="label"><a name="id21">[11]</a></td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> Boost smart pointer <a class="reference" href="http://www.boost.org/libs/smart_ptr/smarttests.htm">timings</a></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id23" rules="none">
@@ -216,6 +202,14 @@ Item 226, <a class="reference" href="http://gcc.gnu.org/onlinedocs/libstdc++/ext
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a name="id24">[13]</a></td><td>Kevlin Henney, <a class="reference" href="http://www.two-sdg.demon.co.uk/curbralan/papers/europlop/NullObject.pdf">Null Object</a>, 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+</tr>
 </tbody>
 </table>
 </div>

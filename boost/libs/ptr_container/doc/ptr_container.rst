@@ -10,8 +10,8 @@
 :Authors:       Thorsten Ottosen
 :Contact:       nesotto@cs.auc.dk
 :organizations: `Department of Computer Science`_, Aalborg University, and `Dezide Aps`_
-:date:          24th of September
-:copyright:     Thorsten Ottosen 2004. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+:date:          3rd of May 2005
+:copyright:     Thorsten Ottosen 2004-2005. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
  
@@ -54,7 +54,6 @@ and designs for dealing with OO specific problems
 * `Usage guidelines`_
 * Examples_
 * `Library headers`_
-* Portability_ 
 * FAQ_
 * Acknowledgements_ 
 * References_ 
@@ -110,29 +109,13 @@ The disadvantages are
 
 1. Less flexible than containers of pointer pointers
   
-===========
-Portability
-===========
-
-The review version has been tested with
-
-- vc7.1
-- gcc 3.3.3
-- como 4.3.3 (+dinkumware lib)
-
-and it requires the current boost-cvs to work.
-
-There is known problems with 
-
-- libcomo: some really irritating concept-checking prohibits ``vector<T*>`` if ``T`` is abstract.
-
 ================
 Acknowledgements
 ================
 
 The following people have been helpful:
 
-- Bjørn D. Rasmussen for showing me his crappy code that motivated me to start this library
+- Bjørn D. Rasmussen for showing me his cr**** code that motivated me to start this library
 - Pavel Vozenilek for asking me to make the adapters
 - David Abrahams for the ``indirect_fun`` design
 - Pavol Droba for being review manager
@@ -141,6 +124,7 @@ The following people have been helpful:
   library in production code even before the library was part of boost  
 - Jonathan Turkanis for supplying his ``move_ptr`` framework 
   which is used internally
+- Stefan Slapeta and Howard Hinnant for Metrowerks support
 
 ==========
 References
@@ -178,7 +162,7 @@ __ http://gcc.gnu.org/onlinedocs/libstdc++/ext/lwg-active.html#226
 .. [10] Harald Nowak, "A remove_if for vector", C/C++ Users Journal, July 2001.
 .. [11] Boost smart pointer timings__
 
-__ http://www.boost.org/libs/ptr_ptr/smarttests.htm
+__ http://www.boost.org/libs/smart_ptr/smarttests.htm
  
 .. [12] NTL_: Array vs std::vector and boost::shared_ptr 
 .. [13] Kevlin Henney, `Null Object`__, 2002.
@@ -187,3 +171,7 @@ __ http://www.two-sdg.demon.co.uk/curbralan/papers/europlop/NullObject.pdf
 
 .. _NTL: http://www.ntllib.org/asp.html
 .. _pointainer: http://ootips.org/yonat/4dev/pointainer.h 
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
+

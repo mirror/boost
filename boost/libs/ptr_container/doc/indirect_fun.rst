@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Indirected functions
 --------------------
 
@@ -67,7 +73,7 @@ first operation is expanded inline.
             
                 template< class T, class U >
                 typename result_of< Fun( typename pointee<T>::type, 
-                                                       typename pointee<U>::type ) >::type 
+                                         typename pointee<U>::type ) >::type 
                 operator()( const T& r, const U& r2 ) const
                 { 
                     return fun( *r, *r2 );
@@ -120,4 +126,5 @@ first operation is expanded inline.
         } // namespace 'boost'  
         
 
+:copyright:     Thorsten Ottosen 2004-2005. 
 

@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``ptr_vector``
 --------------------
 
@@ -133,3 +139,7 @@ Semantics: list operations
     - Effects: reverses the underlying sequence
 
     - Throws: nothing
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
+

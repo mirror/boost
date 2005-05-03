@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``ptr_set_adapter``
 -------------------------
 
@@ -112,4 +118,5 @@ Semantics: pointer container requirements
    - Effects: ``return transfer( from.begin(), from.end(), from );``.
 
  
+:copyright:     Thorsten Ottosen 2004-2005. 
 

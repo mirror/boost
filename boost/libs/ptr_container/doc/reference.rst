@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 =========
 Reference
 =========
@@ -74,7 +80,7 @@ the containers does not even require the stored type to be Clonable.
 Default implementation
 ----------------------
 
-In the ``<boost/ptr_container/heap_manager.hpp>`` header a default implementation
+In the ``<boost/ptr_container/clone_allocator.hpp>`` header a default implementation
 of the two functions is given:
 
 .. parsed-literal::
@@ -348,3 +354,7 @@ hierarchy looks as follows::
         }
 
 - `home <ptr_container.html>`_
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
+

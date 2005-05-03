@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 ========
 Examples
 ========
@@ -167,4 +173,6 @@ as view into other containers:
 
 - `home <ptr_container.html>`_
 - `reference <reference.html>`_
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

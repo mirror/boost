@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``ptr_deque``
 --------------------
 
@@ -147,4 +153,7 @@ Semantics: pointer container requirements
     - Effects: returns whether the pointer at index ``idx`` is null
 
     - Exception safety: Nothrow guarantee
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

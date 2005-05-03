@@ -22,7 +22,7 @@
 //
 // First we select which container to use.
 //</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>smart_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
 </span>
 <span class=comment>//
 // we need these later in the example
@@ -37,7 +37,7 @@
 // hierarchy.
 // 
 </span>
-<span class=keyword>class </span><span class=identifier>animal</span>
+<span class=keyword>class </span><span class=identifier>animal </span><span class=special>: </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>noncopyable</span>
 <span class=special>{
     </span><span class=keyword>virtual </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>do_speak</span><span class=special>() </span><span class=keyword>const </span><span class=special>= </span><span class=number>0</span><span class=special>;
     </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>name_</span><span class=special>;
@@ -83,7 +83,7 @@
 // and return by pointer.
 //
 </span>
-<span class=identifier>animal</span><span class=special>* </span><span class=identifier>allocate_clone</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=identifier>a </span><span class=special>)</span>
+<span class=identifier>animal</span><span class=special>* </span><span class=identifier>new_clone</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=identifier>a </span><span class=special>)</span>
 <span class=special>{
     </span><span class=keyword>return </span><span class=identifier>a</span><span class=special>.</span><span class=identifier>clone</span><span class=special>();</span>
 <span class=special>}
@@ -139,7 +139,7 @@
     // This is where the smart containers are handy
     //
     </span><span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>animal</span><span class=special>&gt; </span><span class=identifier>barn_type</span><span class=special>;
-    </span><span class=identifier>barn_type                      </span><span class=identifier>barn</span><span class=special>;
+    </span><span class=identifier>barn_type                        </span><span class=identifier>barn</span><span class=special>;
 
     </span><span class=comment>//
     // An error type

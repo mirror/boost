@@ -1,3 +1,8 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
 
 Class ``reversible_ptr_container``
 ------------------------------------
@@ -35,10 +40,6 @@ Its purpose is to present the general interface of all the pointer containers.
                 typedef  typename VoidPtrContainer::allocator_type    allocator_type;
                 typedef  *implementation defined*                       reverse_iterator;
                 typedef  *implementation defined*                       const_reverse_iterator;
-                typedef  typename VoidPtrContainer::iterator          ptr_iterator;
-                typedef  typename VoidPtrContainer::const_iterator    ptr_const_iterator;
-                typedef  *implementation defined*                       ptr_reverse_iterator;
-                typedef  *implementation defined*                       ptr_const_reverse_iterator;        
                 typedef  *implementation defined*                       auto_type;
             
             public: // `construct/copy/destroy`_
@@ -60,16 +61,6 @@ Its purpose is to present the general interface of all the pointer containers.
                 reverse_iterator        rend();
                 const_reverse_iterator  rend() const;
                 
-                ptr_iterator                ptr_begin();
-                ptr_const_iterator          ptr_begin() const;
-                ptr_iterator                ptr_end();
-                ptr_const_iterator          ptr_end() const;
-                ptr_reverse_iterator        ptr_rbegin();
-                ptr_const_reverse_iterator  ptr_rbegin() const;
-                ptr_reverse_iterator        ptr_rend();
-                ptr_const_reverse_iterator  ptr_rend() const;
-        
-            
             public: // `capacity`_
                 size_type  size() const;
                 size_type  max_size() const;
@@ -161,10 +152,7 @@ Also notice that
 
 - ``typedef ... iterator``
 
-- ``typedef ... ptr_iterator``
-
-allows one to iterate over ``T`` and ``void*`` objects, 
-respectively. 
+allows one to iterate over ``T&`` objects, not ``T*``.
 
 - ``typedef ... auto_type``
 
@@ -262,39 +250,6 @@ Semantics: iterators
     - Effects: Returns a mutable/non-mutable reverse iterator with ``value_type T``
 
     - Throws: Nothing
-
-- ``ptr_iterator ptr_begin();``
-
-- ``ptr_const_iterator ptr_begin() const;``
-
-    - Effects: Returns a mutable/non-mutable iterator with ``value_type void*``
-
-    - Throws: Nothing
-
-- ``ptr_iterator ptr_end();``
-
-- ``ptr_const_iterator ptr_end() const;``
-
-    - Effects: Returns a mutable/non-mutable iterator with ``value_type void*``
-
-    - Throws: Nothing
-
-- ``ptr_reverse_iterator ptr_rbegin();``
-
-- ``ptr_const_reverse_iterator ptr_rbegin() const;``
-
-    - Effects: Returns a mutable/non-mutable reverse iterator with ``value_type void*``
-
-    - Throws: Nothing
-
-- ``ptr_reverse_iterator ptr_rend();``
-
-- ``ptr_const_reverse_iterator ptr_rend() const;``
-
-    - Effects: Returns a mutable/non-mutable iterator with ``value_type void*``
-
-    - Throws: Nothing
-
 
 .. _capacity: 
 
@@ -428,4 +383,6 @@ Semantics: null predicate
 
     - Returns: ``*i.base() == 0;``
 
-  
+
+:copyright:     Thorsten Ottosen 2004-2005. 
+

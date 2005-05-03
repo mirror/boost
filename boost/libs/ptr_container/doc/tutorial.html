@@ -4,12 +4,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
-<title>Tutorial</title>
+<title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="tutorial">
-<h1 class="title">Tutorial</h1>
+<div class="document" id="boost-pointer-container-library">
+<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
+<h2 class="subtitle" id="tutorial">Tutorial</h2>
 <p>The tutorial shows you the most simple usage of the
 library. It is assumed that the reader is familiar
 with the use of standard containers. Although
@@ -23,6 +24,7 @@ that you read it all from top to bottom.</p>
 <li><a class="reference" href="#null-values">Null values</a></li>
 <li><a class="reference" href="#clonability">Clonability</a></li>
 <li><a class="reference" href="#new-functions">New functions</a></li>
+<li><a class="reference" href="#algorithms">Algorithms</a></li>
 </ul>
 <div class="section" id="basic-usage">
 <h1><a name="basic-usage">Basic usage</a></h1>
@@ -34,8 +36,8 @@ about deleting memory.</p>
 class animal : <a class="reference" href="http://www.boost.org/libs/utility/utility.htm#Class_noncopyable">boost::noncopyable</a>
 {
 public:
-    virtual ~animal() {}
-    void     eat();
+    virtual      ~animal() {}
+    virtual void eat() = 0;
     // ...
 };
 
@@ -120,7 +122,7 @@ for( boost::ptr_deque&lt;animal&gt;::size_type i = 0u;
      i != deq.size(); ++i )
      deq[i].eat();
 </pre>
-<p>The <tt class="docutils literal"><span class="pre">`ptr_vector</span></tt> also allows you to specify the size of
+<p>The <tt class="docutils literal"><span class="pre">ptr_vector</span></tt> also allows you to specify the size of
 the buffer to allocate; for example</p>
 <pre class="literal-block">
 boost::ptr_vector&lt;animal&gt; animals( 10u );
@@ -318,6 +320,37 @@ catch( boost::bad_ptr_container_operation&amp; e )
     // &quot;bobo&quot; not found
 }        
 </pre>
+</div>
+<div class="section" id="algorithms">
+<h1><a name="algorithms">Algorithms</a></h1>
+<p>Unfortunately it is not possible to use pointer containers with
+mutating algorithms from the standard library. However,
+the most useful ones
+are instead provided as member functions:</p>
+<pre class="literal-block">
+boost::ptr_vector&lt;animal&gt; zoo;
+...
+zoo.sort();                               // assume 'bool operator&lt;( const animal&amp;, const animal&amp; )'
+zoo.sort( std::less&lt;animal&gt;() );          // the same, notice no '*' is present
+zoo.sort( zoo.begin(), zoo.begin() + 5 ); // sort selected range
+</pre>
+<p>Notice that predicates are automatically wrapped in an <a class="reference" href="indirect_fun.html">indirect_fun</a> object.</p>
+<p>You can remove equal and adjacent elements using <tt class="docutils literal"><span class="pre">unique()</span></tt>:</p>
+<pre class="literal-block">
+zoo.unique();                             // assume 'bool operator==( const animal&amp;, const animal&amp; )'
+zoo.unique( zoo.begin(), zoo.begin() + 5, my_comparison_predicate() ); 
+</pre>
+<p>If you just want to remove certain elements, use <tt class="docutils literal"><span class="pre">erase_if</span></tt>:</p>
+<pre class="literal-block">
+zoo.erase_if( my_predicate() );
+</pre>
+<p>Finally you may want to merge together two sorted containers:</p>
+<pre class="literal-block">
+boost::ptr_vector&lt;animal&gt; another_zoo = ...;
+another_zoo.sort();                      // sorted wrt. to same order as 'zoo'
+zoo.merge( another_zoo );
+BOOST_ASSERT( another_zoo.empty() );    
+</pre>
 <p>That is all; now you have learned all the basics!</p>
 <p><strong>Navigate</strong></p>
 <blockquote>
@@ -326,6 +359,14 @@ catch( boost::bad_ptr_container_operation&amp; e )
 <li><a class="reference" href="examples.html">examples</a></li>
 </ul>
 </blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </body>

@@ -4,11 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
-<title></title>
+<title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document">
+<div class="document" id="boost-pointer-container-library">
+<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
 <div class="section" id="class-reversible-ptr-container">
 <h1><a name="class-reversible-ptr-container">Class <tt class="docutils literal"><span class="pre">reversible_ptr_container</span></tt></a></h1>
 <p>This class is not a real class that can be found in the library. 
@@ -41,10 +42,6 @@ namespace boost
         typedef  typename VoidPtrContainer::allocator_type    allocator_type;
         typedef  <em>implementation defined</em>                       reverse_iterator;
         typedef  <em>implementation defined</em>                       const_reverse_iterator;
-        typedef  typename VoidPtrContainer::iterator          ptr_iterator;
-        typedef  typename VoidPtrContainer::const_iterator    ptr_const_iterator;
-        typedef  <em>implementation defined</em>                       ptr_reverse_iterator;
-        typedef  <em>implementation defined</em>                       ptr_const_reverse_iterator;        
         typedef  <em>implementation defined</em>                       auto_type;
     
     public: // <a class="reference" href="#construct-copy-destroy">construct/copy/destroy</a>
@@ -66,16 +63,6 @@ namespace boost
         reverse_iterator        rend();
         const_reverse_iterator  rend() const;
         
-        ptr_iterator                ptr_begin();
-        ptr_const_iterator          ptr_begin() const;
-        ptr_iterator                ptr_end();
-        ptr_const_iterator          ptr_end() const;
-        ptr_reverse_iterator        ptr_rbegin();
-        ptr_const_reverse_iterator  ptr_rbegin() const;
-        ptr_reverse_iterator        ptr_rend();
-        ptr_const_reverse_iterator  ptr_rend() const;
-
-    
     public: // <a class="reference" href="#capacity">capacity</a>
         size_type  size() const;
         size_type  max_size() const;
@@ -164,10 +151,8 @@ to the container, but to hide the pointers externally.</p>
 <p>Also notice that</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">iterator</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">ptr_iterator</span></tt></li>
 </ul>
-<p>allows one to iterate over <tt class="docutils literal"><span class="pre">T</span></tt> and <tt class="docutils literal"><span class="pre">void*</span></tt> objects, 
-respectively.</p>
+<p>allows one to iterate over <tt class="docutils literal"><span class="pre">T&amp;</span></tt> objects, not <tt class="docutils literal"><span class="pre">T*</span></tt>.</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">auto_type</span></tt></li>
 </ul>
@@ -281,46 +266,6 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 <blockquote>
 <ul class="simple">
 <li>Effects: Returns a mutable/non-mutable reverse iterator with <tt class="docutils literal"><span class="pre">value_type</span> <span class="pre">T</span></tt></li>
-<li>Throws: Nothing</li>
-</ul>
-</blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_iterator</span> <span class="pre">ptr_begin();</span></tt></p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_const_iterator</span> <span class="pre">ptr_begin()</span> <span class="pre">const;</span></tt></p>
-<blockquote>
-<ul class="simple">
-<li>Effects: Returns a mutable/non-mutable iterator with <tt class="docutils literal"><span class="pre">value_type</span> <span class="pre">void*</span></tt></li>
-<li>Throws: Nothing</li>
-</ul>
-</blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_iterator</span> <span class="pre">ptr_end();</span></tt></p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_const_iterator</span> <span class="pre">ptr_end()</span> <span class="pre">const;</span></tt></p>
-<blockquote>
-<ul class="simple">
-<li>Effects: Returns a mutable/non-mutable iterator with <tt class="docutils literal"><span class="pre">value_type</span> <span class="pre">void*</span></tt></li>
-<li>Throws: Nothing</li>
-</ul>
-</blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_reverse_iterator</span> <span class="pre">ptr_rbegin();</span></tt></p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_const_reverse_iterator</span> <span class="pre">ptr_rbegin()</span> <span class="pre">const;</span></tt></p>
-<blockquote>
-<ul class="simple">
-<li>Effects: Returns a mutable/non-mutable reverse iterator with <tt class="docutils literal"><span class="pre">value_type</span> <span class="pre">void*</span></tt></li>
-<li>Throws: Nothing</li>
-</ul>
-</blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_reverse_iterator</span> <span class="pre">ptr_rend();</span></tt></p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_const_reverse_iterator</span> <span class="pre">ptr_rend()</span> <span class="pre">const;</span></tt></p>
-<blockquote>
-<ul class="simple">
-<li>Effects: Returns a mutable/non-mutable iterator with <tt class="docutils literal"><span class="pre">value_type</span> <span class="pre">void*</span></tt></li>
 <li>Throws: Nothing</li>
 </ul>
 </blockquote>
@@ -461,6 +406,14 @@ objects are compared and not the pointers to objects.</p>
 </blockquote>
 </li>
 </ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

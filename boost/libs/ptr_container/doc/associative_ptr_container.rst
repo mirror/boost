@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``associative_ptr_container``
 -------------------------------------
 
@@ -214,4 +220,5 @@ Semantics: algorithms
 .. _`pointer container requirements`:
 
 
+:copyright:     Thorsten Ottosen 2004-2005. 
 

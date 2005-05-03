@@ -4,11 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
-<title></title>
+<title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document">
+<div class="document" id="boost-pointer-container-library">
+<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
 <div class="section" id="class-ptr-sequence-adapter">
 <h1><a name="class-ptr-sequence-adapter">Class <tt class="docutils literal"><span class="pre">ptr_sequence_adapter</span></tt></a></h1>
 <p>This section describes all the common operations for all the pointer
@@ -77,11 +78,39 @@ namespace boost
         void transfer( iterator before, const Range&amp; r, ptr_sequence_adapter&amp; from );
         void transfer( iterator before, ptr_sequence_adapter&amp; from );
 
-     public: // <a class="reference" href="ptr_list.html">ptr_list interface</a>
-     
-     public: // <a class="reference" href="ptr_vector.html">ptr_vector interface</a>
+    public: // <a class="reference" href="#algorithms">algorithms</a>
 
-     public: // <a class="reference" href="ptr_deque.html">ptr_deque interface</a> 
+        void sort();
+        void sort( iterator first, iterator last );
+        template&lt; class Compare &gt;
+        void sort( Compare comp );
+        template&lt; class Compare &gt;
+        void sort( iterator begin, iterator end, Compare comp );
+
+        void unique();
+        void unique( iterator first, iterator last );
+        template&lt; class Compare &gt;
+        void unique( Compare comp );
+        template&lt; class Compare &gt;
+        void unique( iterator begin, iterator end, Compare comp );
+
+        template&lt; class Pred &gt;
+        void erase_if( Pred pred );
+        template&lt; class Pred &gt;
+        void erase_if( iterator begin, iterator end, Pred pred );
+
+        void merge( ptr_sequence_adapter&amp; r );
+        template&lt; class Compare &gt;
+        void merge( ptr_sequence_adapter&amp; r, Compare comp );
+        void merge( iterator first, iterator last, ptr_sequence_adapter&amp; from );
+        template&lt; class Compare &gt;
+        void merge( iterator first, iterator last, ptr_sequence_adapter&amp; from, Compare comp );
+        
+    public: // <a class="reference" href="ptr_list.html">ptr_list interface</a>
+     
+    public: // <a class="reference" href="ptr_vector.html">ptr_vector interface</a>
+
+    public: // <a class="reference" href="ptr_deque.html">ptr_deque interface</a> 
      
     }; //  class 'ptr_sequence_adapter'
 
@@ -321,6 +350,81 @@ takes place before <tt class="docutils literal"><span class="pre">before</span><
 </blockquote>
 </li>
 </ul>
+<a class="target" id="algorithms" name="algorithms"></a></div>
+<div class="section" id="sematics-algorithms">
+<h2><a name="sematics-algorithms">Sematics: algorithms</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">sort();</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">sort(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">sort(</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">sort(</span> <span class="pre">iterator</span> <span class="pre">begin,</span> <span class="pre">iterator</span> <span class="pre">end,</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: (versions without <tt class="docutils literal"><span class="pre">Compare</span></tt>) <tt class="docutils literal"><span class="pre">bool</span> <span class="pre">operator&lt;(</span> <span class="pre">const</span> <span class="pre">T&amp;,</span> <span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">)</span></tt> is defined</li>
+<li>Requirements: (<tt class="docutils literal"><span class="pre">Compare</span></tt> versions) <tt class="docutils literal"><span class="pre">Compare</span></tt> must take <tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span></tt> arguments</li>
+<li>Effects: sorts the entire container or the specified range</li>
+<li>Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)</li>
+<li>Remarks: The versions of <tt class="docutils literal"><span class="pre">sort()</span></tt> that take two iterators are not available for <tt class="docutils literal"><span class="pre">ptr_list</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">unique();</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">unique(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">unique(</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">unique(</span> <span class="pre">iterator</span> <span class="pre">begin,</span> <span class="pre">iterator</span> <span class="pre">end,</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: (versions without <tt class="docutils literal"><span class="pre">Compare</span></tt>) <tt class="docutils literal"><span class="pre">bool</span> <span class="pre">operator==(</span> <span class="pre">const</span> <span class="pre">T&amp;,</span> <span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">)</span></tt> is defined</li>
+<li>Requirements: (<tt class="docutils literal"><span class="pre">Compare</span></tt> versions) <tt class="docutils literal"><span class="pre">Compare</span></tt> must take <tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span></tt> arguments</li>
+<li>Effects: removes adjacent and equal objects from the entire container or the specified range</li>
+<li>Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Pred</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">erase_if(</span> <span class="pre">Pred</span> <span class="pre">pred</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Pred</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">erase_if(</span> <span class="pre">iterator</span> <span class="pre">begin,</span> <span class="pre">iterator</span> <span class="pre">end,</span> <span class="pre">Pred</span> <span class="pre">pred</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">Pred</span></tt> must take an <tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span></tt> argument</li>
+<li>Effects: removes all elements <tt class="docutils literal"><span class="pre">t</span></tt> for which <tt class="docutils literal"><span class="pre">pred(t)</span></tt> returns <tt class="docutils literal"><span class="pre">true</span></tt> from the entire container or the specified range</li>
+<li>Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">merge(</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">merge(</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">r,</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">merge(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">merge(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from,</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: (<tt class="docutils literal"><span class="pre">Compare</span></tt> versions) <tt class="docutils literal"><span class="pre">Compare</span></tt> must take <tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span></tt> arguments</li>
+<li>Requirements: both sequences are sorted wrt. the same predicate</li>
+<li>Effects: transfers the entire container or the specified sequence to the container while
+ensuring the new sequence is also sorted</li>
+<li>Postconditions: (Container versions) <tt class="docutils literal"><span class="pre">r.empty()</span></tt></li>
+<li>Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

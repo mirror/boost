@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 ===
 FAQ
 ===
@@ -91,4 +97,7 @@ When the stored pointers cannot be ``0``, how do I allow this "empty" behavior a
 Storing a null-pointer among a list of pointers does not fit well into the Object Oriented paradigm. 
 The most elegant design is to use the Null-Object Pattern where one basically makes a concrete
 class with dummy implementations of the virtual functions. See `[13] <ptr_container.html#references>`_ for details.
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

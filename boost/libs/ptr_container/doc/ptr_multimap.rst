@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 Class ``ptr_multimap``
 ----------------------
 
@@ -49,4 +55,7 @@ to store the pointers.
             }; //  class 'ptr_multimap'
         
         } // namespace 'boost'  
+
+
+:copyright:     Thorsten Ottosen 2004-2005. 
 

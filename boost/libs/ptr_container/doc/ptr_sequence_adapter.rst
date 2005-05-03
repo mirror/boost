@@ -1,3 +1,8 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
 
 Class ``ptr_sequence_adapter``
 ------------------------------
@@ -79,11 +84,39 @@ __ reversible_ptr_container.html
                 void transfer( iterator before, const Range& r, ptr_sequence_adapter& from );
                 void transfer( iterator before, ptr_sequence_adapter& from );
 
-             public: // `ptr_list interface`_
-             
-             public: // `ptr_vector interface`_
+            public: // `algorithms`_
 
-             public: // `ptr_deque interface`_ 
+                void sort();
+                void sort( iterator first, iterator last );
+                template< class Compare >
+                void sort( Compare comp );
+                template< class Compare >
+                void sort( iterator begin, iterator end, Compare comp );
+
+                void unique();
+                void unique( iterator first, iterator last );
+                template< class Compare >
+                void unique( Compare comp );
+                template< class Compare >
+                void unique( iterator begin, iterator end, Compare comp );
+
+                template< class Pred >
+                void erase_if( Pred pred );
+                template< class Pred >
+                void erase_if( iterator begin, iterator end, Pred pred );
+
+                void merge( ptr_sequence_adapter& r );
+                template< class Compare >
+                void merge( ptr_sequence_adapter& r, Compare comp );
+                void merge( iterator first, iterator last, ptr_sequence_adapter& from );
+                template< class Compare >
+                void merge( iterator first, iterator last, ptr_sequence_adapter& from, Compare comp );
+                
+            public: // `ptr_list interface`_
+             
+            public: // `ptr_vector interface`_
+
+            public: // `ptr_deque interface`_ 
              
             }; //  class 'ptr_sequence_adapter'
         
@@ -318,6 +351,51 @@ Semantics: pointer container requirements
 
     - Exception safety: Strong guarantee
 
+.. _`algorithms`:
 
+Sematics: algorithms
+^^^^^^^^^^^^^^^^^^^^
 
+- ``void sort();``
+- ``void sort( iterator first, iterator last );``
+- ``template< class Compare > void sort( Compare comp );``
+- ``template< class Compare > void sort( iterator begin, iterator end, Compare comp );``
 
+    - Requirements: (versions without ``Compare``) ``bool operator<( const T&, const T& )`` is defined
+    - Requirements: (``Compare`` versions) ``Compare`` must take ``const T&`` arguments
+    - Effects: sorts the entire container or the specified range
+    - Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)
+    - Remarks: The versions of ``sort()`` that take two iterators are not available for ``ptr_list``
+    
+- ``void unique();``
+- ``void unique( iterator first, iterator last );``
+- ``template< class Compare > void unique( Compare comp );``
+- ``template< class Compare > void unique( iterator begin, iterator end, Compare comp );``
+
+    - Requirements: (versions without ``Compare``) ``bool operator==( const T&, const T& )`` is defined
+    - Requirements: (``Compare`` versions) ``Compare`` must take ``const T&`` arguments
+    - Effects: removes adjacent and equal objects from the entire container or the specified range
+    - Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)
+    
+- ``template< class Pred > void erase_if( Pred pred );``
+- ``template< class Pred > void erase_if( iterator begin, iterator end, Pred pred );``
+
+    - Requirements: ``Pred`` must take an ``const T&`` argument
+    - Effects: removes all elements ``t`` for which ``pred(t)`` returns ``true`` from the entire container or the specified range
+    - Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)
+        
+- ``void merge( ptr_sequence_adapter& r );``
+- ``template< class Compare > void merge( ptr_sequence_adapter& r, Compare comp );``
+- ``void merge( iterator first, iterator last, ptr_sequence_adapter& from );``
+- ``template< class Compare > void merge( iterator first, iterator last, ptr_sequence_adapter& from, Compare comp );``
+
+    - Requirements: (``Compare`` versions) ``Compare`` must take ``const T&`` arguments
+    - Requirements: both sequences are sorted wrt. the same predicate
+    - Effects: transfers the entire container or the specified sequence to the container while
+      ensuring the new sequence is also sorted
+    - Postconditions: (Container versions) ``r.empty()``  
+    - Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)
+
+    
+:copyright:     Thorsten Ottosen 2004-2005. 
+    

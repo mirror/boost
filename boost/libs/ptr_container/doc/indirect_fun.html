@@ -4,12 +4,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
-<title>Indirected functions</title>
+<title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="indirected-functions">
-<h1 class="title">Indirected functions</h1>
+<div class="document" id="boost-pointer-container-library">
+<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
+<h2 class="subtitle" id="indirected-functions">Indirected functions</h2>
 <p>It is quite common that we have two pointers and what to compare the
 pointed to objects. Also, we have usually already defined how
 to compare the objects. So to avoid some tedious boiler-plate code
@@ -69,7 +70,7 @@ namespace boost
     
         template&lt; class T, class U &gt;
         typename result_of&lt; Fun( typename pointee&lt;T&gt;::type, 
-                                               typename pointee&lt;U&gt;::type ) &gt;::type 
+                                 typename pointee&lt;U&gt;::type ) &gt;::type 
         operator()( const T&amp; r, const U&amp; r2 ) const
         { 
             return fun( *r, *r2 );
@@ -121,6 +122,14 @@ namespace boost
          
 } // namespace 'boost'  
 </pre>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </body>
 </html>

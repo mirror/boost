@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 ================
 Usage Guidelines
 ================
@@ -26,4 +32,5 @@ support equivalent keys.
 - `home <ptr_container.html>`_
 - `reference <reference.html>`_
 
+:copyright:     Thorsten Ottosen 2004-2005. 
 

@@ -23,23 +23,25 @@
 // All container headers will also include
 // the Clone Managers.
 // </span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>smart_container</span><span class=special>/</span><span class=identifier>ptr_vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>smart_container</span><span class=special>/</span><span class=identifier>ptr_predicate</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>indirect_fun</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
 </span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>cstdlib</span><span class=special>&gt;   </span><span class=comment>// For 'rand()'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>algorithm</span><span class=special>&gt; </span><span class=comment>// For 'std::sort()'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;  </span><span class=comment>// For 'std::cout'
-
-
-//
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>functional</span><span class=special>&gt; </span><span class=comment>// For 'binary_fnuction'</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>cstdlib</span><span class=special>&gt;    </span><span class=comment>// For 'rand()'</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>algorithm</span><span class=special>&gt;  </span><span class=comment>// For 'std::sort()'</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;   </span><span class=comment>// For 'std::cout'
+</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
+</span>
+<span class=comment>//
 // This is our simple example data-structure. It can
 // be ordered in three ways.
 //</span>
 <span class=keyword>struct </span><span class=identifier>photon</span>
 <span class=special>{
-    </span><span class=identifier>photon</span><span class=special>() </span><span class=special>: </span><span class=identifier>color</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>rand</span><span class=special>() </span><span class=special>), 
-               </span><span class=identifier>direction</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>rand</span><span class=special>() </span><span class=special>),
-               </span><span class=identifier>power</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>rand</span><span class=special>() </span><span class=special>)
+    </span><span class=identifier>photon</span><span class=special>() </span><span class=special>: </span><span class=identifier>color</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>), 
+               </span><span class=identifier>direction</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>),
+               </span><span class=identifier>power</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>)
     </span><span class=special>{ </span><span class=special>}
     
     </span><span class=keyword>int </span><span class=identifier>color</span><span class=special>;
@@ -60,12 +62,12 @@
 // Notice the first template argument is 'photon' and not
 // 'const photon' to allow the view container write access.
 //</span>
-<span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_vector</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>view_clone_manager</span><span class=special>&gt; </span><span class=identifier>view_type</span><span class=special>;
+<span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_vector</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>view_clone_allocator</span><span class=special>&gt; </span><span class=identifier>view_type</span><span class=special>;
 </span>
 <span class=comment>//
 // Our first sort criterium
 //</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_color</span>
+<span class=keyword>struct </span><span class=identifier>sort_by_color </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
 <span class=special>{
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
     </span><span class=special>{
@@ -76,7 +78,7 @@
 <span class=comment>//
 // Our second sort criterium
 //</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_direction</span>
+<span class=keyword>struct </span><span class=identifier>sort_by_direction </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
 <span class=special>{
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
     </span><span class=special>{
@@ -88,7 +90,7 @@
 <span class=comment>//
 // Our third sort criterium
 //</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_power</span>
+<span class=keyword>struct </span><span class=identifier>sort_by_power </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
 <span class=special>{
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
     </span><span class=special>{
@@ -152,24 +154,18 @@
     // the objects are scatered all around 'sz' different vectors;
     // the view makes them act as one big vector.
     //
-    // Notice how we simple use
-    // '.begin()/end()' instead of '.ptr_begin()/ptr_end()':
-    //
     </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(), </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>end</span><span class=special>(), </span><span class=identifier>sort_by_power</span><span class=special>() </span><span class=special>);
     
     </span><span class=comment>//
     // And now we can sort the views themselves. Notice how
     // we switch to different iterators and different predicates:
     //
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>ptr_begin</span><span class=special>(), </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>ptr_end</span><span class=special>(),
-               </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>indirected2</span><span class=special>&lt;</span><span class=identifier>sort_by_color</span><span class=special>&gt;() </span><span class=special>);
+    </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>sort_by_color</span><span class=special>() </span><span class=special>);
 
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>ptr_begin</span><span class=special>(), </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>ptr_end</span><span class=special>(),
-               </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>indirected2</span><span class=special>&lt;</span><span class=identifier>sort_by_direction</span><span class=special>&gt;() </span><span class=special>);
+    </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>sort_by_direction</span><span class=special>() </span><span class=special>);
 
     </span><span class=keyword>return </span><span class=number>0</span><span class=special>;</span>
 <span class=special>}</span>
-
 </pre>
 </body>
 </html>

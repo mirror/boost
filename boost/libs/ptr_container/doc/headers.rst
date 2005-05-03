@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++
+ |Boost| Pointer Container Library
+++++++++++++++++++++++++++++++++++
+ 
+.. |Boost| image:: cboost.gif
+
 ===============
 Library headers
 ===============
@@ -6,7 +12,7 @@ Library headers
              **Header**                                    **Includes**
 
 ``<boost/ptr_container/clone_allocator.hpp>``            classes heap_clone_allocator_  and view_clone_allocator_ 
-                                                         and functions ``allocate_clone()`` and ``delete_clone()`` 
+                                                         and functions ``new_clone()`` and ``delete_clone()`` 
                                                          
 ``<boost/ptr_container/ptr_deque.hpp>``                  class `ptr_deque <ptr_deque.html>`_ (and ``std::deque``)
 
@@ -44,4 +50,5 @@ Library headers
 - `reference <reference.html>`_
 
 
+:copyright:     Thorsten Ottosen 2004-2005. 
 
