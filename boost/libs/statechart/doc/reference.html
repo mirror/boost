@@ -396,7 +396,7 @@ second-highest number and so on<br>
   </ol>
   </li>
   <li>Constructs a function object <code>exceptionEventHandler</code> with an
-  <code>operator()()</code> returning <code>bool</code> and accepting an 
+  <code>operator()()</code> returning <code>result</code> and accepting an 
   exception event parameter that processes the passed exception event, with 
   the following differences to the processing of normal events:<ul type="disc">
     <li>From the moment when the exception has been thrown until right after the 
@@ -417,14 +417,13 @@ second-highest number and so on<br>
     ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
     thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
-    machine is not stable after processing the exception event, <code>false</code> 
-    is returned from the <code>exceptionEventHandler</code> function object. 
-    Otherwise, <code>true</code> is returned</li>
+    machine is not stable after processing the exception event, the original 
+	exception is rethrown. Otherwise, a <code><a href="#Enum result">result</a></code> 
+	value is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
   </ul>
   </li>
-  <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
-  <code><a href="#Enum result">result</a></code> value <code>
-  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
+  <li>Passes <code>action</code> and <code>exceptionEventHandler</code> to 
+	<code>ExceptionTranslator::operator()()</code>. 
   If <code>ExceptionTranslator::operator()()</code> throws an exception, the 
 	exception is propagated to the caller. If the caller catches the exception, 
 	the currently active outermost state and all its direct and indirect inner 
@@ -435,7 +434,8 @@ second-highest number and so on<br>
 	with the highest number is always destructed first, then the state in the 
 	region with the second-highest number and so on. 
   Continues with step 5 otherwise (the return value is discarded)</li>
-  <li>Processes all posted events (see <code>process_event()</code>)</li>
+	<li>Processes all posted events (see <code>process_event()</code>). 
+	Returns to the caller if there are no more posted events</li>
 </ol>
 <p><b>Throws</b>: Any exceptions propagated from <code>
 ExceptionTranslator::operator()()</code>. Exceptions never originate in the 
@@ -457,7 +457,7 @@ library itself but only in code supplied through template parameters:</p>
 	outermost state, discards all remaining events and clears all history 
 	information</li>
   <li>Constructs a function object <code>exceptionEventHandler</code> with an
-  <code>operator()()</code> returning <code>bool</code> and accepting an 
+  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> and accepting an 
   exception event parameter that processes the passed exception event, with 
   the following differences to the processing of normal events:<ul type="disc">
     <li>From the moment when the exception has been thrown until right after the 
@@ -478,14 +478,12 @@ library itself but only in code supplied through template parameters:</p>
     ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
     thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
-    machine is not stable after processing the exception event, <code>false</code> 
-    is returned from the <code>exceptionEventHandler</code> function object. 
-    Otherwise, <code>true</code> is returned</li>
+    machine is not stable after processing the exception event, the original 
+	exception is rethrown. Otherwise, a <code><a href="#Enum result">result</a></code> 
+	value is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
   </ul>
   </li>
-  <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
-  <code><a href="#Enum result">result</a></code> value <code>
-  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
+  <li>Passes <code>action</code> and <code>exceptionEventHandler</code> to <code>ExceptionTranslator::operator()()</code>. 
   If <code>ExceptionTranslator::operator()()</code> throws an exception, the 
 	exception is propagated to the caller. If the caller catches the exception, 
 	the currently active outermost state and all its direct and indirect inner 
@@ -494,7 +492,8 @@ library itself but only in code supplied through template parameters:</p>
 	been destructed. The inner states of each state are destructed according to 
 	the number of their orthogonal region. The state in the orthogonal region 
 	with the highest number is always destructed first, then the state in the 
-	region with the second-highest number and so on</li>
+	region with the second-highest number and so on. Otherwise, returns to the 
+	caller</li>
 </ol>
 <p><b>Throws</b>: Any exceptions propagated from <code>
 ExceptionTranslator::operator()</code>. Exceptions never originate in the 
@@ -521,16 +520,16 @@ library itself but only in code supplied through template parameters:</p>
     <li>Searches a reaction suitable for the current event, starting with the 
     current innermost state and moving outward until a state defining a 
     reaction for the event is found. Returns <code>simple_state&lt;&gt;::forward_event()</code> 
-    if no reaction has been found.</li>
+    if no reaction has been found</li>
     <li>Executes the found reaction. If the reaction result is equal to the 
     return value of <code>simple_state&lt;&gt;::forward_event()</code> then resumes 
     the reaction search (step a). Returns the reaction result otherwise</li>
   </ol>
   </li>
-  <li>Constructs a function object <code>exceptionEventHandler</code> with an
-  <code>operator()()</code> accepting an exception event parameter and 
-  returning <code>bool</code> that processes the passed exception event, with 
-  the following differences to the processing of normal events:<ul type="disc">
+  <li>Constructs a function object <code>exceptionEventHandler</code> returning 
+	<code><a href="#Enum result">result</a></code> and accepting an exception 
+	event parameter that processes the passed exception event, with the 
+	following differences to the processing of normal events:<ul type="disc">
     <li>From the moment when the exception has been thrown until right after the 
 	execution of the exception event reaction, states that need to be exited are only 
 	destructed but no <code>exit</code> member functions are called</li>
@@ -553,26 +552,31 @@ library itself but only in code supplied through template parameters:</p>
     or reaction execution then the exception is propagated out of the <code>exceptionEventHandler</code> function object (that is, 
 	<code>ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
     thrown while processing an exception event)</li>
-	<li>If no reaction could be found for the exception event or if the state 
-    machine is not stable after processing the exception event, <code>false</code> 
-    is returned from the <code>exceptionEventHandler</code> function object. 
-    Otherwise, <code>true</code> is returned</li>
+    <li>If no reaction could be found for the exception event or if the state 
+    machine is not stable after processing the exception event, the original 
+	exception is rethrown. Otherwise, a <code><a href="#Enum result">result</a></code> 
+	value is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
   </ul>
   </li>
-  <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
-  <code><a href="#Enum result">result</a></code> value <code>
-  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
-  If <code>ExceptionTranslator::operator()()</code> throws an exception then 
-  calls <code>terminate()</code> and propagates the exception to the caller</li>
+  <li>Passes <code>action</code> and <code>exceptionEventHandler</code> to <code>ExceptionTranslator::operator()()</code>. 
+	If <code>ExceptionTranslator::operator()()</code> throws an exception, the 
+	exception is propagated to the caller. If the caller catches the exception, 
+	the currently active outermost state and all its direct and indirect inner 
+	states are destructed. Innermost states are destructed first. Other states 
+	are destructed as soon as all their direct and indirect inner states have 
+	been destructed. The inner states of each state are destructed according to 
+	the number of their orthogonal region. The state in the orthogonal region 
+	with the highest number is always destructed first, then the state in the 
+	region with the second-highest number and so on. Otherwise continues with 
+	step 7 </li>
   <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
   equal to the one of <code>simple_state&lt;&gt;::forward_event()</code> then 
   continues with step 3</li>
   <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
   equal to the one of <code>simple_state&lt;&gt;::defer_event()</code> then the 
   current event is stored in a state-specific queue. Continues with step 10</li>
-  <li>If <code>ExceptionTranslator::operator()()</code> returns the previously 
-  passed <code>handlerSuccessResult</code> or if the return value is equal to 
-  the one of <code>simple_state&lt;&gt;::discard_event()</code> then continues with 
+  <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
+  equal to the one of <code>simple_state&lt;&gt;::discard_event()</code> then continues with 
   step 10</li>
   <li>If the posted events queue is non-empty then dequeues the first event, 
   selects it as the current event and continues with step 2. Returns to the 
@@ -2101,10 +2105,11 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40417" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"> <b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
