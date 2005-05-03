@@ -84,6 +84,9 @@ category</a> of the underlying iterator type. Therefore
 <a href="../../mpl/doc/index.html#metafunctions">metafunctions</a> and all 
 functions as free-standing functions to allow for a layer of indirection. </p>
 
+<p><i>Notice that these metafunctions must be defined in namespace </i>
+<code>boost</code></p>
+
     <hr>
     <a name="single_pass_range">
     <H2>Single Pass Range</H2>
@@ -225,6 +228,11 @@ otherwise</TD>
             <p>
             <A href="http://www.sgi.com/Technology/STL/Container.html">Container</A>
             </p>
+            <p> <a href="boost_range.html#range_value">implementation of 
+                   metafunctions </a></p>
+
+            <p> <a href="boost_range.html#begin">implementation of 
+                   functions </a></p>
 
     <hr>
     <a  name=forward_range><h2>Forward Range</h2>
@@ -313,9 +321,17 @@ of elements. Note <code>size(a) == 0u</code> is equivalent to
             <TD VAlign="top"><code>size(a)</code> is equal to the distance from <code>begin(a)</code> 
             to <code>end(a)</code>.</TD> </table>
     </p>
+    
+        <h3>See also</h3> 
+            <p> <a href="boost_range.html#range_difference">implementation of 
+                   metafunctions </a></p>
+
+            <p> <a href="boost_range.html#size">implementation of 
+                   functions </a></p>
+
     <hr>
 
-    <a name=bidirectional_range><h2>Bidirectional Range</h2>
+    <a name="bidirectional_range"><h2>Bidirectional Range</h2>
 
     <h3>Notation</h3>
     <Table>
@@ -409,6 +425,13 @@ otherwise.</TD>
         </tr>
     </table>
    </p>
+   
+           <h3>See also</h3> 
+            <p> <a href="boost_range.html#range_reverse_iterator">implementation of metafunctions </a></p>
+
+            <p> <a href="boost_range.html#rbegin">implementation of 
+                   functions </a></p>
+
     <hr>
 
     <a name=random_access_range><h2>Random Access Range</h2> <h3>Description</h3>
