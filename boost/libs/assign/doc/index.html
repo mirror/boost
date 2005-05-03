@@ -36,10 +36,14 @@
             <li>Function <a href="#operator()"><code>operator()()</code></a>
             <li>Function <a href="#list_of"><code>list_of()</code></a>    
             <li>Function <a href="#map_list_of"><code>map_list_of()</code></a> 
+            <li>Function <a href="#tuple_list_of"><code>tuple_list_of()</code></a>
             <li>Functions <a href="#repeat"><code>repeat()</code> and <code>repeat_fun()</code> </a> 
+            <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>    
             <li>A <a href="#complicated">"complicated"</a> example    
-        </ul>
-      <li>          
+            <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code> and <code>ptr_insert()</code></a>
+            <li>Function <a href="#ptr_list_of"><code>ptr_list_of()</code></a>         
+       </ul> <li>          
+                
         <a href="#reference">Reference</a>
       <ul>
         <li><a href="#headers">Headers</a> </li>
@@ -112,8 +116,12 @@ components are explained in these sections:
         <li>Function <a href="#operator()"><code>operator()()</code></a>
         <li>Function <a href="#list_of"><code>list_of()</code></a>    
         <li>Function <a href="#map_list_of"><code>map_list_of()</code></a> 
-            <li>Functions <a href="#repeat"><code>repeat()</code> and <code>repeat_fun()</code> </a> 
-            <li>A <a href="#complicated">"complicated"</a> example    
+        <li>Function <a href="#tuple_list_of"><code>tuple_list_of()</code></a>   
+        <li>Functions <a href="#repeat"><code>repeat()</code> and <code>repeat_fun()</code> </a> 
+        <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>
+        <li>A <a href="#complicated">"complicated"</a> example    
+        <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code> and <code>ptr_insert()</code></a>
+        <li>Function <a href="#ptr_list_of"><code>ptr_list_of()</code></a>         
             
    </ul>
    The two first functions are used for adding elements after a container object
@@ -301,6 +309,32 @@ of <a href="#boost_libs">supported libraries </a>.
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>next</span><span class=special>[ </span><span class=number>8 </span><span class=special>] </span><span class=special>== </span><span class=number>9 </span><span class=special>);      
 </span><span class=special>}   </span></pre></blockquote>
 
+The function <code>pair_list_of()</code> may also be used.
+
+<h3>Function <code>tuple_list_of()</code> <a name="tuple_list_of"></h3>
+
+If you are working with tuples, it might be convenient to use 
+<code>tuple_list_of()</code>:
+
+
+<blockquote>
+    <pre>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>list_of</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>vector</span><span class=special>&gt;
+</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;
+</span>
+<span class=special>{
+    </span><span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>tuple</span><span class=special>;
+
+    </span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>tuple</span><span class=special>&gt; </span><span class=identifier>v </span><span class=special>= </span><span class=identifier>tuple_list_of</span><span class=special>( </span><span class=number>1</span><span class=special>, </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>2 </span><span class=special>)( </span><span class=number>3</span><span class=special>, </span><span class=string>&quot;bar&quot;</span><span class=special>, </span><span class=number>4 </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>v</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>2 </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>get</span><span class=special>&lt;</span><span class=number>0</span><span class=special>&gt;( </span><span class=identifier>v</span><span class=special>[</span><span class=number>1</span><span class=special>] </span><span class=special>) </span><span class=special>==  </span><span class=number>3 </span><span class=special>);</span>
+<span class=special>}</span>
+    </pre>
+</blockquote>
+
 <h3>Functions <code>repeat()</code> and <code>repeat_fun()</code> <a name="repeat"></h3> 
 <p>
 Sometimes it is too irritating to repeat the same value many times. This is 
@@ -371,6 +405,46 @@ A more general list can be constructed with <code>repeat_fun()</code>:
 The only requirement of the second argument to <code>repeat_fun()</code> is that 
 it is a nullary function. </p>
 
+<h3>Functions <code>ref_list_of()</code> and <code>cref_list_of()</code> <a name="ref_list_of"></h3>
+
+When you need to create an anonymous range of values and speed is essential, 
+these two functions provide what you want. <blockquote>
+    <pre>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>list_of</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>algorithm</span><span class=special>&gt;
+</span>
+<span class=comment>//
+// Define Range algorithm
+//</span>
+<span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Range </span><span class=special>&gt;</span>
+<span class=keyword>typename </span><span class=identifier>Range</span><span class=special>::</span><span class=identifier>const_iterator </span><span class=identifier>max_element</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>Range</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)</span>
+<span class=special>{
+    </span><span class=keyword>return </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>max_element</span><span class=special>( </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(), </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>end</span><span class=special>() </span><span class=special>);</span>
+<span class=special>}
+</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;
+</span>
+<span class=special>{
+    </span><span class=keyword>int </span><span class=identifier>a</span><span class=special>=</span><span class=number>1</span><span class=special>,</span><span class=identifier>b</span><span class=special>=</span><span class=number>5</span><span class=special>,</span><span class=identifier>c</span><span class=special>=</span><span class=number>3</span><span class=special>,</span><span class=identifier>d</span><span class=special>=</span><span class=number>4</span><span class=special>,</span><span class=identifier>e</span><span class=special>=</span><span class=number>2</span><span class=special>,</span><span class=identifier>f</span><span class=special>=</span><span class=number>9</span><span class=special>,</span><span class=identifier>g</span><span class=special>=</span><span class=number>0</span><span class=special>,</span><span class=identifier>h</span><span class=special>=</span><span class=number>7</span><span class=special>;
+    </span><span class=keyword>int</span><span class=special>&amp; </span><span class=identifier>max </span><span class=special>= </span><span class=special>*</span><span class=identifier>max_element</span><span class=special>( </span><span class=identifier>ref_list_of</span><span class=special>&lt;</span><span class=number>8</span><span class=special>&gt;(</span><span class=identifier>a</span><span class=special>)(</span><span class=identifier>b</span><span class=special>)(</span><span class=identifier>c</span><span class=special>)(</span><span class=identifier>d</span><span class=special>)(</span><span class=identifier>e</span><span class=special>)(</span><span class=identifier>f</span><span class=special>)(</span><span class=identifier>g</span><span class=special>)(</span><span class=identifier>h</span><span class=special>) </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK_EQUAL</span><span class=special>( </span><span class=identifier>max</span><span class=special>, </span><span class=identifier>f </span><span class=special>);
+    </span><span class=identifier>max </span><span class=special>= </span><span class=number>8</span><span class=special>;
+    </span><span class=identifier>BOOST_CHECK_EQUAL</span><span class=special>( </span><span class=identifier>f</span><span class=special>, </span><span class=number>8 </span><span class=special>);
+    </span><span class=keyword>const </span><span class=keyword>int</span><span 
+class=special>&amp; </span><span class=identifier>const_max </span><span class=special>= </span><span class=special>*</span><span class=identifier>max_element</span><span class=special>(</span><span class=identifier>cref_list_of</span><span class=special>&lt;</span><span class=number>8</span><span class=special>&gt;(</span><span class=identifier>a</span><span class=special>)(</span><span class=identifier>b</span><span class=special>)(</span><span class=identifier>c</span><span class=special>)(</span><span class=identifier>d</span><span class=special>)(</span><span class=identifier>e</span><span class=special>)(</span><span class=identifier>f</span><span class=special>)(</span><span class=identifier>g</span><span class=special>)(</span><span class=identifier>h</span><span class=special>) </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK_EQUAL</span><span class=special>( </span><span class=identifier>max</span><span class=special>, </span><span class=identifier>const_max </span><span class=special>);</span>
+<span class=special>}</span>
+    </pre>
+</blockquote>
+
+You can only use lvalues with <code>ref_list_of()</code> while 
+<code>cref_list_of()</code> accepts rvalues too. Do not worry about not 
+specifying exactly the right size; the extra space used is minimal and there 
+is no runtime overhead associated with it.
+
+You may also use these functions instead of <code>list_of()</code> if speed is 
+essential.
+
 <h3>A "complicated" example <a name="complicated"></h3>
 <p> 
 As a last example, let us assume that we need to keep track of the
@@ -432,7 +506,93 @@ less intelligent since here it needs to be told explicitly what arguments to
 expect. (In the future it might be possible to introduce a more intelligent
 conversion layer in <code>list_of()</code>.)
 </p>
-</p>
+
+<h3>Functions <code>ptr_push_back(), 
+ptr_push_front()</code> and <code>ptr_insert()</code> <a name="ptr_push_back"></h3>
+
+For use with <a href="../../ptr_container/index.html">Boost.Pointer Container</a>
+a few special exception-safe functions are provided. Using these function you
+do not need to call <code>new</code> manually:
+
+
+<blockquote>
+    <pre>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>ptr_list_inserter</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_set</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
+</span>
+<span class=comment>//
+// Example class
+//</span>
+<span class=keyword>struct </span><span class=identifier>Foo</span>
+<span class=special>{
+    </span><span class=keyword>int </span><span class=identifier>i</span><span class=special>;
+    
+    </span><span class=identifier>Foo</span><span class=special>() </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=number>0</span><span class=special>)
+    </span><span class=special>{ </span><span class=special>}
+    </span><span class=identifier>Foo</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>i </span><span class=special>) </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)
+    </span><span class=special>{ </span><span class=special>}
+    </span><span class=identifier>Foo</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>i</span><span class=special>, </span><span class=keyword>int </span><span class=special>) </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)
+    </span><span class=special>{ </span><span class=special>}
+    </span><span class=identifier>Foo</span><span class=special>( </span><span class=keyword>const </span><span class=keyword>char</span><span class=special>*, </span><span class=keyword>int </span><span class=identifier>i</span><span class=special>, </span><span class=keyword>int </span><span class=special>) </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)
+    </span><span class=special>{ </span><span class=special>}</span>
+<span class=special>};
+</span>
+<span class=comment>//
+// Required by ptr_set&lt;Foo&gt;
+//</span>
+<span class=keyword>inline </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>&lt;( </span><span class=identifier>Foo </span><span class=identifier>l</span><span class=special>, </span><span class=identifier>Foo </span><span class=identifier>r </span><span class=special>)</span>
+<span class=special>{
+    </span><span class=keyword>return </span><span class=identifier>l</span><span class=special>.</span><span class=identifier>i </span><span class=special>&lt; </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>i</span><span class=special>;</span>
+<span class=special>}
+</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>;</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;
+</span>
+<span class=special>{
+    </span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt; </span><span class=identifier>deq</span><span class=special>;
+    </span><span class=identifier>ptr_push_back</span><span class=special>( </span><span class=identifier>deq </span><span class=special>)()();
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>2u </span><span class=special>);
+    </span><span class=identifier>ptr_push_front</span><span class=special>( </span><span class=identifier>deq </span><span class=special>)( </span><span class=number>3 </span><span class=special>)( </span><span class=number>42</span><span class=special>, </span><span class=number>42 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>42</span><span class=special>, </span><span class=number>42 </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5 </span><span class=special>);
+
+    </span><span class=identifier>ptr_set</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt; </span><span class=identifier>a_set</span><span class=special>;
+    </span><span class=identifier>ptr_insert</span><span class=special>( </span><span class=identifier>a_set </span><span class=special>)()( </span><span class=number>1 </span><span class=special>)( </span><span class=number>2</span><span class=special>, </span><span class=number>2 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>3</span><span class=special>, </span><span class=number>3 </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>4 </span><span class=special>);
+    </span><span class=identifier>ptr_insert</span><span class=special>( </span><span class=identifier>a_set </span><span class=special>)()()()();
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>4 </span><span class=special>); </span><span class=comment>// duplicates not inserted</span>
+<span class=special>}</span>
+    </pre>
+</blockquote>
+                        
+<h3>Function <code>ptr_list_of()</code> <a name="ptr_list_of"></h3>         
+
+Just like you can use <code>list_of()</code> to initialize containers, you can 
+use <code>ptr_list_of()</code> to initialize a <a href="../../ptr_container/index.html">pointer container</a>.
+Here is a small example:
+
+<blockquote>
+    <pre>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>ptr_list_of</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
+</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>;</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;
+</span>
+<span class=special>{
+    </span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt; </span><span class=identifier>deq</span><span class=special>;
+    </span><span class=identifier>deq </span><span class=special>= </span><span class=identifier>ptr_list_of</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt;( </span><span class=number>42 </span><span class=special>)()()( </span><span class=number>3</span><span class=special>, </span><span class=number>3 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>2</span><span class=special>, </span><span class=number>1 </span><span class=special>).</span><span class=identifier>to_container</span><span class=special>( </span><span class=identifier>deq </span><span class=special>);
+    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5 </span><span class=special>);</span>
+<span class=special>}</span>    
+    </pre>
+</blockquote>
+
+Notice the trailing <code>.to_container(deq)</code> which helps many poor 
+compilers to figure out the conversion (a few get it right). 
+Notice also that pointer maps are 
+not supported.
+
+<p>
 That is all; now you are ready to use this library.
  </p>
 
@@ -474,9 +634,9 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   </p>
   
   <p>
-  All forwarding is done by passing objects by value. Originally
-  <code>const</code> references was used, but it led to many problems
-  with string-literals. One thing to remember is that references 
+  All forwarding is done by passing objects by <code>const</code> reference. 
+Originally arguments were passed by value (and still is in 
+<code>tuple_list_of()</code>). One thing to remember is that references
   can be passed by using <code>boost::<a href=http://www.boost.org/doc/html/ref.html>ref</a></code>.
   </p>
   
@@ -507,11 +667,16 @@ is included for each header that defines <code>operator+=()</code>.</p>
          <th>        Includes              </th> 
      <tr>
          <td> &lt;boost/assign.hpp>               </td>
-         <td>     everything  </td>
+         <td>     everything except support for pointer containers  </td>
      <tr>
          <td> &lt;boost/assign/list_of.hpp>       </td>
          <td> <a href="#list_of"><code>list_of()</a>, <a 
-href="#map_list_of">map_list_of()</code></a> </td> <tr>
+href="#map_list_of">map_list_of()</code></a>, 
+         <a href="#tuple_list_of">tuple_list_of()</code></a>,
+         <a href="#ref_list_of">ref_list_of()</code> and 
+<code>cref_list_of()</code></a>
+                  
+         </td> <tr>
          <td> &lt;boost/assign/std.hpp>       </td>
          <td> <a href="#operator+="><code>operator+=()</code></a> for all 
 standard
@@ -559,6 +724,15 @@ be thrown by the proxy returned by <code>list_of()</code>
                 <code>
                 push()</code> and class <a href="#list_inserter"><code>list_inserter</code></a> 
                 which is the back-bone of this entire library.
+
+            <tr>    
+            <td>  &lt;boost/assign/ptr_list_inserter.hpp> </td>
+            <td>Functions <a href="#ptr_push_back"><code>ptr_push_back()</code></a>,
+                <code>ptr_push_front()</code> and <code>ptr_insert()</code>
+                 
+                            <tr>    
+            <td>  &lt;boost/assign/ptr_list_of.hpp> </td>
+            <td>Function <a href="#ptr_list_of"><code>ptr_list_of()</code></a>
 
     </table>
   
@@ -1032,9 +1206,7 @@ where <code>call_push_back</code> is defined as
   <ol>
       <li> <code>boost::<a href=../../array/index.html>array</a></code>
       <li> <code>boost::<a href=../../multi_index/index.html>multi_index_container</a></code>
-      
-  </ol>
-  <p>
+      <li> <code>Boost.<a href=../../ptr_container/index.html>Pointer Container</code> </ol> <p>
 
   </p>
   
