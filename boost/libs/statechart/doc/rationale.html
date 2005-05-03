@@ -133,7 +133,7 @@ recompilations of the whole state machine.&nbsp;</p>
   Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example 
   (unfortunately not available online).</li>
   <li>On the other side are state machine frameworks which require the layout 
-  to be specified at compile time.</li>
+	to be specified at compile time</li>
 </ul>
 <p>State machines that are built at runtime almost always get away with a 
 simple state model (no hierarchical states, no orthogonal states, no entry and 
@@ -233,7 +233,7 @@ a special event that is dispatched immediately. For more information see the
 <a href="tutorial.html#Exception handling">Exception handling</a> 
 chapter in the Tutorial.</p>
 <h3>Two stage exit</h3>
-<p>In boost::fsm, an exit action can be implemented by adding a 
+<p>An exit action can be implemented by adding a 
 destructor to a state. Due to the nature of destructors, there are two 
 disadvantages to this approach:</p>
 <ul>
@@ -281,12 +281,12 @@ requirements:</p>
   execution</li>
 </ol>
 <h3>Out of the box behavior</h3>
-<p>By default, <code>asynchronous_state_machine&lt;&gt;</code> subclass objects are 
+<p>By default, <code>asynchronous_state_machine&lt;&gt;</code> subtype objects are 
 serviced by a <code>fifo_scheduler&lt;&gt;</code> object. <code>fifo_scheduler&lt;&gt;</code> 
 does not lock or wait in single-threaded applications and uses boost::thread 
 primitives to do so in multi-threaded programs. Moreover, a <code>
 fifo_scheduler&lt;&gt;</code> object can service an arbitrary number of <code>
-asynchronous_state_machine&lt;&gt;</code> subclass objects. Under the hood, <code>
+asynchronous_state_machine&lt;&gt;</code> subtype objects. Under the hood, <code>
 fifo_scheduler&lt;&gt;</code> is just a thin wrapper around an object of its <code>
 FifoWorker</code> template parameter (which manages the queue and ensures 
 thread safety) and a <code>processor_container&lt;&gt;</code> (which manages the 
@@ -294,13 +294,13 @@ lifetime of the state machines).</p>
 <p>The UML standard mandates that an event not triggering a reaction in a 
 state machine should be silently discarded. Since a <code>fifo_scheduler&lt;&gt;</code> 
 object is itself also a state machine, events destined to no longer existing
-<code>asynchronous_state_machine&lt;&gt;</code> subclass objects are also silently 
+<code>asynchronous_state_machine&lt;&gt;</code> subtype objects are also silently 
 discarded. This is enabled by the fact that <code>asynchronous_state_machine&lt;&gt;</code> 
-subclass objects cannot be constructed or destructed directly. Instead, this 
+subtype objects cannot be constructed or destructed directly. Instead, this 
 must be done through <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and
 <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> (<code>processor</code> 
 refers to the fact that <code>fifo_scheduler&lt;&gt;</code> can only host <code>
-event_processor&lt;&gt;</code> subclass objects; <code>asynchronous_state_machine&lt;&gt;</code> 
+event_processor&lt;&gt;</code> subtype objects; <code>asynchronous_state_machine&lt;&gt;</code> 
 is just one way to implement such a processor). Moreover, <code>
 create_processor&lt;&gt;()</code> only returns a <code>processor_handle</code> 
 object. This must henceforth be used to initiate, queue events for, terminate 
@@ -330,11 +330,11 @@ exit- and transition-actions) must be class members. The reasons for this are
 as follows: </p>
 <ul>
   <li>The concept of state-local storage mandates that state-entry and 
-  state-exit actions are implemented 
-  as members.</li>
+	state-exit actions are implemented as members</li>
   <li><code>react</code> member functions and transition actions often access 
-  state-local data. So, it is most natural to implement these functions as 
-  members of the class the data of which the functions will operate on anyway.</li>
+	state-local data. So, it is most natural to implement these functions as 
+	members of the class the data of which the functions will operate on 
+	anyway</li>
 </ul>
 <h2><a name="Speed versus scalability tradeoffs">Speed versus scalability 
 tradeoffs</a></h2>
@@ -495,7 +495,7 @@ supported as follows:</p>
   templates <b>and</b> your preferred small-object/deterministic/constant-time 
   allocator base class</li>
 </ul>
-<p><code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> subclass objects are 
+<p><code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> subtype objects are 
 constructed and destructed only by the state machine. It would therefore be 
 possible to use the <code>state_machine&lt;&gt;</code> allocator instead of forcing 
 the user to overload <code>operator new()</code> and <code>operator delete()</code>. 
@@ -552,13 +552,13 @@ rejected:</p>
   negative effects on executable size. boost::fsm originally employed acyclic 
   visitor and was about 4 times slower than it is now (MSVC7.1 on Intel 
   Pentium M). The dispatch speed might be better on other platforms but the 
-  other negative effects will remain.</li>
+	other negative effects will remain</li>
   <li>
   <a href="http://www.isbiel.ch/~due/courses/c355/slides/patterns/visitor.pdf">
   GOF Visitor</a>: The GOF Visitor pattern inevitably makes the whole machine 
-  depend upon all events. That is, whenever a new event is added there is no 
-  way around recompiling the whole state machine. This is contrary to the 
-  scalability requirements.</li>
+	depend upon all events. That is, whenever a new event is added there is no 
+	way around recompiling the whole state machine. This is contrary to the 
+	scalability requirements</li>
   <li>Two-dimensional array of function pointers: To satisfy requirement 6, it 
   should be possible to spread a single state machine over several translation 
   units. This however means that the dispatch table must be filled at runtime 
@@ -568,7 +568,8 @@ rejected:</p>
   way that a state machine distributed over several translation units could 
   employ table-based double dispatch relies on the user. The programmer(s) 
   would somehow have to <b>manually</b> tie together the various pieces of the 
-  state machine. Not only does this scale badly but is also quite error-prone.</li>
+	state machine. Not only does this scale badly but is also quite 
+	error-prone</li>
 </ul>
 <h2><a name="Resource usage">Resource usage</a></h2>
 <h3>Memory</h3>
@@ -715,10 +716,10 @@ to be applied recursively.</p>
 <h4>Synchronization (join and fork) bars</h4>
 <p><img border="0" src="JoinAndFork.gif" width="541" height="301"></p>
 <p>Synchronization bars are not supported, that is, a transition always 
-originates at exactly one state and always ends at exactly one state. In my 
-experience join bars are sometimes useful but their behavior can easily be 
-emulated with guards. Fork bars are needed only rarely. Their support would 
-complicate the implementation quite a bit.</p>
+originates at exactly one state and always ends at exactly one state. Join 
+bars are sometimes useful but their behavior can easily be emulated with 
+guards. The support of fork bars would make the implementation <b>much</b> 
+more complex and they are only needed rarely.</p>
 <h4>Event dispatch to orthogonal regions</h4>
 <p>The boost::fsm event dispatch algorithm is different to the one specified 
 in
@@ -745,18 +746,18 @@ cases when they do, the UML behavior can easily be emulated as follows:</p>
 <h4>Transitions across orthogonal regions</h4>
 <p>
 <img border="0" src="TransitionsAcrossOrthogonalRegions.gif" width="226" height="271"></p>
-<p>Such transitions are currently flagged with an error at compile time (the 
-UML specifications explicitly allow them while Harel does not mention them at 
+<p>Transitions across orthogonal regions are currently flagged with an error at compile time (the UML specifications explicitly allow them while Harel does not mention them at 
 all). I decided to not support them because I have erroneously tried to 
 implement such a transition several times but have never come across a 
 situation where it would make any sense. If you need to make such transitions, 
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40404" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"> <b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
