@@ -25,10 +25,10 @@
   </tr>
 </table>
 <blockquote> 
-  <p><a href="class_reference_tracepolicy.html#introduction">Introduction</a><br>
-    <a href="class_reference_tracepolicy.html#header_synopsis">Header 'wave/preprocessing_hooks.hpp' 
+  <p><a href="class_reference_ctxpolicy.html#introduction">Introduction</a><br>
+    <a href="class_reference_ctxpolicy.html#header_synopsis">Header 'wave/preprocessing_hooks.hpp' 
     synopsis</a><br>
-    <a href="class_reference_tracepolicy.html#member_functions">Member functions</a></p>
+    <a href="class_reference_ctxpolicy.html#member_functions">Member functions</a></p>
 </blockquote>
 <h2><b><a name="introduction"></a>Introduction</b></h2>
 <p>The context policy is used to provide callback hooks, which are called from inside the library into the user code, whenever</p>
@@ -67,7 +67,7 @@
         <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanded_macro">rescanned_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
 
         <span class="comment">// include file tracing functions</span>
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_include_directive">found_include_directive</a>(std::string <span class="keyword">const</span> &amp;filename);
+        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(std::string <span class="keyword">const</span> &amp;filename);
 
         <span class="keyword">void </span><a href="class_reference_ctxpolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;relname, 
             std::string const&amp; absname,
@@ -205,7 +205,7 @@
 <h3>Interpretation of #pragma's</h3>
 <p><strong><a name="interpret_pragma"></a>interpret_pragma</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Context, <span class="keyword">typename</span> ContainerT&gt;
-    bool <a href="class_reference_tracepolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
+    bool <a href="class_reference_ctxpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
         <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, 
         ContainerT <span class="keyword">const</span> &amp;values, 
         <span class="keyword">typename</span> ContextT::token_type<span class="keyword"> const</span> &amp;pragma_token);
@@ -234,7 +234,7 @@
 <pre>    <span class="keyword">template</span> &lt;
         <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ParametersT, <span class="keyword">typename</span> DefinitionT
     &gt;
-    <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#defined_macro">defined_macro</a>(TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">bool</span> is_functionlike,
+    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#defined_macro">defined_macro</a>(TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">bool</span> is_functionlike,
         ParametersT <span class="keyword">const</span> &amp;parameters, DefinitionT <span class="keyword">const</span> &amp;definition,
         <span class="keyword">bool</span> is_predefined);
 </pre>
@@ -253,7 +253,7 @@
 </blockquote>
 <p><strong><a name="undefined_macro" id="undefined_macro"></a>undefined_macro</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
-    <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#undefined_macro">undefined_macro</a>(TokenT<span class="keyword">const</span> &amp;name);
+    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#undefined_macro">undefined_macro</a>(TokenT<span class="keyword">const</span> &amp;name);
 </pre>
 <blockquote>
   <p>The function <tt>undefined_macro</tt> is called whenever a macro definition
@@ -275,7 +275,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, March 16, 2005  20:35<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, May 4, 2005  8:42<!-- #EndDate -->
 </span></p>
 </body>
 </html>

@@ -44,6 +44,7 @@ CHANGELOG
 - Added character literal out of range testing and an additional corresponding 
   error message.
 - Fixed parsing of long character literals (such as '\x1234').
+- Fixed almost all problems diagnosed by the Boost inspection report.
 
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

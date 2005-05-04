@@ -157,8 +157,8 @@ bool include_paths::find_include_file (std::string &s, std::string &dir,
         fs::path file_path (current_file, fs::native);
         for (/**/; it != include_paths_end; ++it) {
             fs::path currpath ((*it).first.string(), fs::native);
-	          if (std::equal(currpath.begin(), currpath.end(), file_path.begin())) 
-	          {
+            if (std::equal(currpath.begin(), currpath.end(), file_path.begin())) 
+            {
                 ++it;     // start searching with the next directory
                 break;
             }
