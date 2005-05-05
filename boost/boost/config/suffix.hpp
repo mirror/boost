@@ -32,7 +32,7 @@
 //
 #include <limits.h>
 # if !defined(BOOST_HAS_LONG_LONG)                                              \
-   && !(defined(BOOST_MSVC) && BOOST_MSVC <=1300) && !defined(__BORLANDC__)     \
+   && !defined(BOOST_MSVC) && !defined(__BORLANDC__)     \
    && (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #  define BOOST_HAS_LONG_LONG
 #endif
