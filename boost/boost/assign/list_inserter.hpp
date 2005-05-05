@@ -201,7 +201,7 @@ namespace assign
         }
         
         template< class Nullary_function >
-        list_inserter& operator=( assign_detail::fun_repeater<Nullary_function> r )
+        list_inserter& operator=( const assign_detail::fun_repeater<Nullary_function>& r )
         {
             //BOOST_STATIC_ASSERT( function_traits<Nullary_function>::arity == 0 );
             //BOOST_STATIC_ASSERT( is_convertible< BOOST_DEDUCED_TYPENAME function_traits<
@@ -224,7 +224,7 @@ namespace assign
         }
         
         template< class Nullary_function >
-        list_inserter& operator,( assign_detail::fun_repeater<Nullary_function> r )
+        list_inserter& operator,( const assign_detail::fun_repeater<Nullary_function>& r )
         {
             return repeat_fun( r.sz, r.val ); 
         }
