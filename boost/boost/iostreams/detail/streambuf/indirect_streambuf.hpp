@@ -193,10 +193,8 @@ template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::close()
 {
     using namespace std;
-    if ((flags_ & f_input_closed) == 0)
-        try { close(BOOST_IOS::in); } catch (std::exception&) { }
-    if ((flags_ & f_output_closed) == 0)
-        try { close(BOOST_IOS::out); } catch (std::exception&) { }
+    try { close(BOOST_IOS::in); } catch (std::exception&) { }
+    try { close(BOOST_IOS::out); } catch (std::exception&) { }
     storage_.reset();
     flags_ = 0;
 }
@@ -361,11 +359,11 @@ template<typename T, typename Tr, typename Alloc, typename Mode>
 inline void indirect_streambuf<T, Tr, Alloc, Mode>::close_impl
     (BOOST_IOS::openmode which)
 {
-    if (which & BOOST_IOS::in) {
+    if (which == BOOST_IOS::in && (flags_ & f_input_closed) == 0) {
         setg(0, 0, 0);
         flags_ |= f_input_closed;
     }
-    if (which & BOOST_IOS::out) {
+    if (which == BOOST_IOS::out && (flags_ & f_output_closed) == 0) {
         sync();
         setp(0, 0);
         flags_ |= f_output_closed;

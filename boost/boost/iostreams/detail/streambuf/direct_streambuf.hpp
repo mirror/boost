@@ -119,10 +119,8 @@ template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::close() 
 { 
     using namespace std;
-    if (ibeg_ != 0)
-        try { close(BOOST_IOS::in); } catch (std::exception&) { }
-    if (obeg_ != 0 && obeg_ != ibeg_)
-        try { close(BOOST_IOS::out); } catch (std::exception&) { }
+    try { close(BOOST_IOS::in); } catch (std::exception&) { }
+    try { close(BOOST_IOS::out); } catch (std::exception&) { }
     storage_.reset();
 }
 
@@ -185,18 +183,16 @@ direct_streambuf<T, Tr>::seekpos
 template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::close(BOOST_IOS::openmode which)
 {
-    if (which & BOOST_IOS::in) {
+    if (which == BOOST_IOS::in && ibeg_ != 0) {
         setg(0, 0, 0);
         ibeg_ = iend_ = 0;
     }
-    if (which & BOOST_IOS::out) {
+    if (which == BOOST_IOS::out && obeg_ != 0) {
         sync();
         setp(0, 0);
         obeg_ = oend_ = 0;
     }
-    try { 
-        boost::iostreams::close(*storage_, which);
-    } catch (std::exception&) { }
+    boost::iostreams::close(*storage_, which);
 }
 
 template<typename T, typename Tr>
@@ -289,9 +285,6 @@ inline bool direct_streambuf<T, Tr>::two_head() const
 //----------------------------------------------------------------------------//
 
 } // End namespace detail.
-
-
-
 
 } } // End namespaces iostreams, boost.
 
