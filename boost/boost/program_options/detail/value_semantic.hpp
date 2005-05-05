@@ -130,7 +130,7 @@ namespace boost { namespace program_options {
             v = boost::any(std::vector<T>());
         }
         std::vector<T>* tv = boost::any_cast< std::vector<T> >(&v);
-        assert(tv);
+        assert(NULL != tv);
         for (unsigned i = 0; i < s.size(); ++i)
         {
             try {
