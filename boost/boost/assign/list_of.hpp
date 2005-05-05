@@ -345,14 +345,14 @@ namespace assign_detail
     struct assign_reference
     {
         assign_reference()
-        { }
+        { /* intentionally empty */ }
 
         assign_reference( T& r ) : ref_(&r)
         { }
 
-        void operator=( const assign_reference r )
+        void operator=( T& r )
         {
-            ref_ = r.ref_;
+            ref_ = &r;
         }
 
         operator T&() const
@@ -365,28 +365,39 @@ namespace assign_detail
             std::swap( *ref_, *r.ref_ );
         }
 
-        friend inline bool operator<( const assign_reference& l, 
-                                      const assign_reference& r )
+        T& get_ref() const
         {
-            return *l.ref_ < *r.ref_;
-        }
-        
-        friend inline bool operator>( const assign_reference& l,
-                                      const assign_reference& r )
-        {
-            return *l.ref_ > *r.ref_;
-        }
-
-        friend inline void swap( assign_reference& l, 
-                                 assign_reference& r )
-        {
-            l.swap( r );
+            return *ref_;
         }
         
     private:
         T* ref_;
+
     };
 
+    template< class T >
+    inline bool operator<( const assign_reference<T>& l, 
+                           const assign_reference<T>& r )
+    {
+        return l.get_ref() < r.get_ref();
+    }
+
+    template< class T >
+    inline bool operator>( const assign_reference<T>& l,
+                           const assign_reference<T>& r )
+    {
+        return l.get_ref() > r.get_ref();
+    }
+
+    template< class T >
+    inline void swap( assign_reference<T>& l, 
+                      assign_reference<T>& r )
+    {
+        l.swap( r );
+    }
+
+
+    
     template< class T, int N >
     struct static_generic_list : 
         public converter< static_generic_list<T,N> >
