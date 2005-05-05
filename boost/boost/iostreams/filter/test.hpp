@@ -57,33 +57,45 @@ const std::streamsize default_increment = 10;
     }
 #endif
 
-class non_blocking_source : public source {
+class non_blocking_source {
 public:
+    typedef char char_type;
+    struct io_category
+        : source_tag,
+          peekable_tag
+        { };
     explicit non_blocking_source( const char* data, 
                                   std::streamsize inc = default_increment ) 
-        : data_(data), inc_(inc), pos_(0), 
-          len_(static_cast<std::streamsize>(strlen(data)))
+        : data_(data), inc_(inc), pos_(0)
         { }
     explicit non_blocking_source( const char* begin, const char* end,
                                   std::streamsize inc = default_increment )
-        : data_(begin), inc_(inc), pos_(0), 
-          len_(static_cast<std::streamsize>(end - begin))
+        : data_(begin), inc_(inc), pos_(0)
         { }
     std::streamsize read(char* s, std::streamsize n)
     {
-        if (pos_ == len_)
+        if (pos_ == data_.size())
             return -1;
         std::streamsize avail = 
-            (std::min) (n, static_cast<std::streamsize>(len_ - pos_));
+            (std::min) (n, static_cast<std::streamsize>(data_.size() - pos_));
         std::streamsize amt = (std::min) (rand(inc_), avail);
         if (amt)
-            std::memcpy(s, data_ + pos_, amt);
+            std::memcpy(s, data_.c_str() + pos_, amt);
         pos_ += amt;
         return amt;
     }
+
+    bool putback(char c)
+    {
+        if (pos_ > 0) {
+            data_[--pos_] = c;
+            return true;
+        }
+        return false;
+    }
 private:
-    const char*      data_;
-    std::streamsize  inc_, pos_, len_;
+    std::string      data_;
+    std::streamsize  inc_, pos_;
 };
 
 class non_blocking_sink : public sink {
@@ -127,7 +139,7 @@ bool test_input_filter( Filter filter,
                         mpl::true_ )
 {
     for ( int inc = default_increment; 
-          inc < default_increment * 10; 
+          inc < default_increment * 20; 
           inc += default_increment )
     {
         non_blocking_source  src(input, inc);
@@ -180,6 +192,10 @@ bool test_output_filter( Filter filter,
         array_source       src(input, input + std::strlen(input));
         std::vector<char>  dest;
         iostreams::copy(src, compose(filter, non_blocking_sink(dest, inc)));
+        std::string d(dest.begin(), dest.end());
+        const char* c = d.c_str();
+        std::size_t ilen = std::strlen(input);
+        std::size_t olen = std::strlen(output);
         if ( dest.size() != std::strlen(output) ||
              !std::equal(dest.begin(), dest.end(), output) )
         {
@@ -221,7 +237,7 @@ bool test_filter_pair( OutputFilter out,
                        mpl::true_ )
 {
     for ( int inc = default_increment; 
-          inc < default_increment * 10; 
+          inc < default_increment * 20; 
           inc += default_increment )
     {
         array_source       src(data, data + std::strlen(data));
