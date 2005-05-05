@@ -55,7 +55,7 @@ public:
     reference second() { return second_; }
     const_reference second() const { return second_; }
     void swap(double_object_holder& d)
-    { swap(first_, d.first); swap(second_, d.second_); }
+    { swap(first_, d.first_); swap(second_, d.second_); }
 private:
     T first_, second_;
 };
