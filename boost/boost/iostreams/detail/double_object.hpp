@@ -36,7 +36,7 @@ public:
     reference second() { return first_; }
     const_reference second() const { return first_; }
     void swap(single_object_holder& o)
-    { swap(first_, o.first); }
+    { swap(first_, o.first_); }
 private:
     T first_;
 };
