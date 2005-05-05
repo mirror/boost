@@ -34,7 +34,7 @@ namespace std { using ::strlen; }
 
 namespace boost { namespace iostreams { namespace detail {
 
-inline BOOST_IOS::failure system_failure(const char* msg)
+inline BOOST_IOSTREAMS_FAILURE system_failure(const char* msg)
 {
     std::string result;
 #ifdef BOOST_IOSTREAMS_WINDOWS
