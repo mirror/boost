@@ -21,6 +21,10 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std { using ::strlen; }
+#endif
+
 namespace boost { namespace iostreams {
 
 namespace detail {
@@ -37,15 +41,16 @@ public:
         { };
     array_adapter(char_type* begin, char_type* end);
     array_adapter(char_type* begin, std::size_t length);
+    array_adapter(char_type* str);
     array_adapter(const char_type* begin, const char_type* end);
     array_adapter(const char_type* begin, std::size_t length);
-    template<typename T>
-    array_adapter(T& t) // T is an array type (VC6 ETI workaround)
-        : begin_(t), end_(t + sizeof(T) / sizeof(char_type)) 
-    { 
-        const std::size_t n = sizeof(T) / sizeof(char_type);
-        BOOST_STATIC_ASSERT((is_same<T, char_type[n]>::value));
-    }
+    array_adapter(const char_type* str);
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    template<int N>
+    array_adapter(char_type (&ar)[N])
+        : begin_(ar), end_(ar + N) 
+        { }
+#endif
     pair_type input_sequence();
     pair_type output_sequence();
 private:
@@ -77,10 +82,14 @@ private:
             : base_type(begin, end) { } \
         BOOST_PP_CAT(basic_, name)(char_type* begin, std::size_t length) \
             : base_type(begin, length) { } \
+        BOOST_PP_CAT(basic_, name)(char_type* str) \
+            : base_type(str) { } \
         BOOST_PP_CAT(basic_, name)(const char_type* begin, const char_type* end) \
             : base_type(begin, end) { } \
         BOOST_PP_CAT(basic_, name)(const char_type* begin, std::size_t length) \
             : base_type(begin, length) { } \
+        BOOST_PP_CAT(basic_, name)(const char_type* str) \
+            : base_type(str) { } \
         BOOST_IOSTREAMS_ARRAY_CTOR(name, Ch) \
     }; \
     typedef BOOST_PP_CAT(basic_, name)<char>     name; \
@@ -110,6 +119,11 @@ array_adapter<Mode, Ch>::array_adapter
     { }
 
 template<typename Mode, typename Ch>
+array_adapter<Mode, Ch>::array_adapter(char_type* str) 
+    : begin_(str), end_(str + std::strlen(str)) 
+    { }
+
+template<typename Mode, typename Ch>
 array_adapter<Mode, Ch>::array_adapter
     (const char_type* begin, const char_type* end) 
     : begin_(const_cast<char_type*>(begin)),  // Treated as read-only.
@@ -122,6 +136,12 @@ array_adapter<Mode, Ch>::array_adapter
     : begin_(const_cast<char_type*>(begin)),       // Treated as read-only.
       end_(const_cast<char_type*>(begin) + length) // Treated as read-only.
 { BOOST_STATIC_ASSERT((!is_convertible<Mode, output>::value)); }
+
+template<typename Mode, typename Ch>
+array_adapter<Mode, Ch>::array_adapter(const char_type* str) 
+    : begin_(const_cast<char_type*>(str)),                 // Treated as read-only.
+      end_(const_cast<char_type*>(str) + std::strlen(str)) // Treated as read-only.
+    { }
 
 template<typename Mode, typename Ch>
 typename array_adapter<Mode, Ch>::pair_type
