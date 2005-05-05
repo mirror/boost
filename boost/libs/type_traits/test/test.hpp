@@ -55,7 +55,7 @@ class unit_initialiser
 public:
    unit_initialiser(void (*f)(), const char* name)
    {
-      get_master_unit("Type Traits")->add( ::boost::unit_test_framework::create_test_case(f, name) );
+      get_master_unit("Type Traits")->add( BOOST_TEST_CASE(f) );
    }
 };
 
@@ -201,6 +201,8 @@ typedef const r_type cr_type;
 struct POD_UDT { int x; };
 struct empty_UDT
 {
+   empty_UDT(){};
+   empty_UDT(const empty_UDT&){};
    ~empty_UDT(){};
    empty_UDT& operator=(const empty_UDT&){ return *this; }
    bool operator==(const empty_UDT&)const
@@ -208,7 +210,6 @@ struct empty_UDT
 };
 struct empty_POD_UDT
 {
-   empty_POD_UDT& operator=(const empty_POD_UDT&){ return *this; }
    bool operator==(const empty_POD_UDT&)const
    { return true; }
 };
@@ -228,6 +229,36 @@ union empty_union_UDT
    ~empty_union_UDT(){}
 };
 union empty_POD_union_UDT{};
+
+struct nothrow_copy_UDT
+{
+   nothrow_copy_UDT();
+   nothrow_copy_UDT(const nothrow_copy_UDT&)throw();
+   ~nothrow_copy_UDT(){};
+   nothrow_copy_UDT& operator=(const nothrow_copy_UDT&){ return *this; }
+   bool operator==(const nothrow_copy_UDT&)const
+   { return true; }
+};
+
+struct nothrow_assign_UDT
+{
+   nothrow_assign_UDT();
+   nothrow_assign_UDT(const nothrow_assign_UDT&);
+   ~nothrow_assign_UDT(){};
+   nothrow_assign_UDT& operator=(const nothrow_assign_UDT&)throw(){ return *this; }
+   bool operator==(const nothrow_assign_UDT&)const
+   { return true; }
+};
+
+struct nothrow_construct_UDT
+{
+   nothrow_construct_UDT()throw();
+   nothrow_construct_UDT(const nothrow_construct_UDT&);
+   ~nothrow_construct_UDT(){};
+   nothrow_construct_UDT& operator=(const nothrow_construct_UDT&){ return *this; }
+   bool operator==(const nothrow_construct_UDT&)const
+   { return true; }
+};
 
 class Base { };
 
@@ -292,6 +323,9 @@ struct non_empty : private boost::noncopyable
 // abstract base classes:
 struct test_abc1
 {
+   test_abc1();
+   test_abc1(const test_abc1&);
+   test_abc1& operator=(const test_abc1&);
    virtual void foo() = 0;
    virtual void foo2() = 0;
 };

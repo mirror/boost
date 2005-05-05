@@ -36,25 +36,22 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<UDT[2]>::value, false
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<UDT&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<void>::value, false);
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<VB>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<VD>::value, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<VB>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<VD>::value, true, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<test_abc2>::value, false);
 #ifndef BOOST_NO_STD_LOCALE
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::iostream>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_streambuf<char> >::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_ios<char> >::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_istream<char> >::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_streambuf<char> >::value, false);
-// some libraries don't make this one a polymorphic class, since this is a library
-// rather than a type traits issue we won't test this for now...
-//BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::ios_base>::value, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::iostream>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_streambuf<char> >::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_ios<char> >::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_istream<char> >::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_streambuf<char> >::value, true, false);
 #endif
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::exception>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::bad_alloc>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::runtime_error>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::out_of_range>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::range_error>::value, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::exception>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::bad_alloc>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::runtime_error>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::out_of_range>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::range_error>::value, true, false);
 
 TT_TEST_END
 

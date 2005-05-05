@@ -154,6 +154,9 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<empty_POD_UDT>:
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<POD_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<POD_union_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<empty_POD_union_UDT>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<nothrow_construct_UDT>::value, true, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<nothrow_assign_UDT>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<nothrow_copy_UDT>::value, false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<test_abc1>::value, false);
 
