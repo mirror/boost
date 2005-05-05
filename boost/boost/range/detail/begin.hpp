@@ -60,7 +60,7 @@ namespace boost
             template< typename T, std::size_t sz >
             static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
-                return array;
+                return boost_range_array;
             }
         };
 

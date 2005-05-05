@@ -39,10 +39,10 @@
 #endif
 
 #ifdef BOOST_RANGE_NO_ARRAY_SUPPORT
-#define BOOST_RANGE_ARRAY_REF() (array)
+#define BOOST_RANGE_ARRAY_REF() (boost_range_array)
 #define BOOST_RANGE_NO_STATIC_ASSERT
 #else
-#define BOOST_RANGE_ARRAY_REF() (&array)
+#define BOOST_RANGE_ARRAY_REF() (&boost_range_array)
 #endif
 
 

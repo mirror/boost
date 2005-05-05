@@ -73,7 +73,7 @@ namespace boost
             template< typename T, std::size_t sz >
             static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
-                return boost::range_detail::array_size( array );
+                return boost::range_detail::array_size( boost_range_array );
             }
         };
         
@@ -83,7 +83,7 @@ namespace boost
             template< typename T, std::size_t sz >
             static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
-                return boost::range_detail::array_size( array );
+                return boost::range_detail::array_size( boost_range_array );
             }
         };
 

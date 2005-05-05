@@ -62,7 +62,7 @@ namespace boost
             template< typename T, std::size_t sz >
             static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
-                return boost::range_detail::array_end( array );
+                return boost::range_detail::array_end( boost_range_array );
             }
         };
 
@@ -73,7 +73,7 @@ namespace boost
             template< typename T, std::size_t sz >
             static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
-                return boost::range_detail::array_end( array );
+                return boost::range_detail::array_end( boost_range_array );
             }
         };
         
@@ -83,7 +83,7 @@ namespace boost
             template< typename T, std::size_t sz >
             static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
-                return boost::range_detail::array_end( array );
+                return boost::range_detail::array_end( boost_range_array );
             }
         };
 
