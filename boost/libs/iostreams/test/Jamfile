@@ -82,7 +82,7 @@ DEPENDS all : test ;
           [ test-iostreams 
                 libs/iostreams/test/mapped_file_test.cpp 
                 libs/iostreams/src/mapped_file.cpp ]
-          #[ test-iostreams libs/iostreams/test/newline_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/newline_test.cpp ]
           [ test-iostreams libs/iostreams/test/null_test.cpp ]
           [ test-iostreams libs/iostreams/test/pipeline_test.cpp ]
           [ test-iostreams libs/iostreams/test/positioning_test.cpp ]
