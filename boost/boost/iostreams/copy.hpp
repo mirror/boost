@@ -127,8 +127,9 @@ std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
     typedef typename io_char<Source>::type  src_char;
     typedef typename io_char<Sink>::type    snk_char;
     BOOST_STATIC_ASSERT((is_same<src_char, snk_char>::value));
-    external_closer<Source>  close_source(src, BOOST_IOS::in);
-    external_closer<Sink>    close_sink(snk, BOOST_IOS::out);
+    bool                     nothrow = false;
+    external_closer<Source>  close_source(src, BOOST_IOS::in, nothrow);
+    external_closer<Sink>    close_sink(snk, BOOST_IOS::out, nothrow);
     streamsize result =
         copy_impl( src, snk, buffer_size, 
                    is_direct<Source>(), is_direct<Sink>() );

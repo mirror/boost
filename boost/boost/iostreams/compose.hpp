@@ -17,6 +17,7 @@
 #include <utility>            // pair.
 #include <boost/config.hpp>   // DEDUCED_TYPENAME.
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/adapter/direct_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
@@ -60,10 +61,15 @@ template< typename Filter,
               typename composite_mode<Filter, Device>::type >
 class composite_device {
 private:
-    typedef typename detail::param_type<Device>::type  param_type;
-    typedef typename detail::value_type<Device>::type  value_type;
+    typedef typename detail::param_type<Device>::type       param_type;
+    typedef typename
+            select<
+                is_direct<Device>,  direct_adapter<Device>,
+                is_std_io<Device>,  Device&,
+                else_,              Device
+            >::type                                         value_type;
 public:
-    typedef typename io_char<Filter>::type             char_type;
+    typedef typename io_char<Filter>::type                  char_type;
     struct io_category
         : Mode,
           device_tag,
@@ -189,8 +195,9 @@ struct composite_traits
 template<typename Filter, typename FilterOrDevice>
 struct composite_view : detail::composite_traits<Filter, FilterOrDevice>::type {
     typedef typename detail::param_type<FilterOrDevice>::type param_type;
+    typedef typename detail::composite_traits<Filter, FilterOrDevice>::type base;
     composite_view(const Filter& flt, param_type dev)
-        : detail::composite_traits<Filter, FilterOrDevice>::type(flt, dev)
+        : base(flt, dev)
         { }
 };
 
@@ -330,8 +337,9 @@ void composite_device<Filter, Device, Mode>::close()
 template<typename Filter, typename Device, typename Mode>
 void composite_device<Filter, Device, Mode>::close(BOOST_IOS::openmode which)
 {
-    external_closer<Device>          close_device(device_, which);
-    external_closer<Filter, Device>  close_filter(filter_, device_, which);
+    bool                                 nothrow = false;
+    external_closer<value_type>          close_device(device_, which, nothrow);
+    external_closer<Filter, value_type>  close_filter(filter_, device_, which, nothrow);
 }
 
 template<typename Filter, typename Device, typename Mode>
