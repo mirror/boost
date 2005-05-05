@@ -548,6 +548,7 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::pop()
     streambuf_type* buf = 0;
     std::swap(buf, list().back());
     buf->set_auto_close(auto_close());
+    buf->set_next(0);
     delete buf;
     list().pop_back();
     pimpl_->flags_ &= ~f_complete;
