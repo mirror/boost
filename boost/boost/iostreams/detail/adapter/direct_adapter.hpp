@@ -137,10 +137,10 @@ private:
 template<typename Device>
 struct wrap_direct_traits 
     : mpl::if_<
-        is_direct<Device>,
-        direct_adapter<Device>,
-        Device
-        >
+          is_direct<Device>,
+          direct_adapter<Device>,
+          Device
+      >
     { };
 
 template<typename Device>
