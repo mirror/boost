@@ -463,7 +463,7 @@ void test_additional_parser()
     input.push_back("@config");
     input.push_back("--foo=1");
 
-    detail::cmdline cmd(input);
+    cmdline cmd(input);
     cmd.set_options_description(desc);
     cmd.set_additional_parser(at_option_parser);
 
@@ -477,7 +477,7 @@ void test_additional_parser()
 
     // Test that invalid options returned by additional style
     // parser are detected.
-    detail::cmdline cmd2(input);
+    cmdline cmd2(input);
     cmd2.set_options_description(desc);
     cmd2.set_additional_parser(at_option_parser_broken);
 
@@ -509,7 +509,7 @@ void test_style_parser()
     vector<string> input;
     input.push_back("@config");
 
-    detail::cmdline cmd(input);
+    cmdline cmd(input);
     cmd.set_options_description(desc);
     cmd.extra_style_parser(at_option_parser2);
 
@@ -534,7 +534,7 @@ void test_unregistered()
     input.push_back("-b");
     input.push_back("-biz");
 
-    detail::cmdline cmd(input);
+    cmdline cmd(input);
     cmd.set_options_description(desc);
     cmd.allow_unregistered();
     
@@ -575,7 +575,7 @@ void test_unregistered()
     input.push_back("-mc");
 
 
-    detail::cmdline cmd2(input);
+    cmdline cmd2(input);
     cmd2.set_options_description(desc);
     cmd2.allow_unregistered();
     
