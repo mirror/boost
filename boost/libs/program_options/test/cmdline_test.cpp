@@ -522,6 +522,84 @@ void test_style_parser()
     BOOST_CHECK_EQUAL(result[1].value[0], "1");    
 }
 
+void test_unregistered()
+{
+    // Check unregisted option when no options are registed at all.
+    options_description desc;
+
+    vector<string> input;
+    input.push_back("--foo=1");
+    input.push_back("--bar");
+    input.push_back("1");
+    input.push_back("-b");
+    input.push_back("-biz");
+
+    detail::cmdline cmd(input);
+    cmd.set_options_description(desc);
+    cmd.allow_unregistered();
+    
+    vector<option> result = cmd.run();
+    BOOST_REQUIRE(result.size() == 5);
+    // --foo=1
+    BOOST_CHECK_EQUAL(result[0].string_key, "foo");
+    BOOST_CHECK_EQUAL(result[0].unregistered, true);
+    BOOST_CHECK_EQUAL(result[0].value[0], "1");
+    // --bar
+    BOOST_CHECK_EQUAL(result[1].string_key, "bar");
+    BOOST_CHECK_EQUAL(result[1].unregistered, true);
+    BOOST_CHECK(result[1].value.empty());
+    // '1' is considered a positional option, not a value to
+    // --bar
+    BOOST_CHECK(result[2].string_key.empty());
+    BOOST_CHECK(result[2].position_key == 0);
+    BOOST_CHECK_EQUAL(result[2].unregistered, false);
+    BOOST_CHECK_EQUAL(result[2].value[0], "1");
+    // -b
+    BOOST_CHECK_EQUAL(result[3].string_key, "-b");
+    BOOST_CHECK_EQUAL(result[3].unregistered, true);
+    BOOST_CHECK(result[3].value.empty());
+    // -biz
+    BOOST_CHECK_EQUAL(result[4].string_key, "-b");
+    BOOST_CHECK_EQUAL(result[4].unregistered, true);
+    BOOST_CHECK_EQUAL(result[4].value[0], "iz");
+
+    // Check sticky short options together with unregisted options.
+    
+    desc.add_options()
+        ("help,h", "")
+        ("magic,m", value<string>(), "")
+        ;
+
+    input.clear();
+    input.push_back("-hc");
+    input.push_back("-mc");
+
+
+    detail::cmdline cmd2(input);
+    cmd2.set_options_description(desc);
+    cmd2.allow_unregistered();
+    
+    result = cmd2.run();
+
+    BOOST_REQUIRE(result.size() == 3);
+    BOOST_CHECK_EQUAL(result[0].string_key, "help");
+    BOOST_CHECK_EQUAL(result[0].unregistered, false);
+    BOOST_CHECK(result[0].value.empty());
+    BOOST_CHECK_EQUAL(result[1].string_key, "-c");
+    BOOST_CHECK_EQUAL(result[1].unregistered, true);
+    BOOST_CHECK(result[1].value.empty());
+    BOOST_CHECK_EQUAL(result[2].string_key, "magic");
+    BOOST_CHECK_EQUAL(result[2].unregistered, false);
+    BOOST_CHECK_EQUAL(result[2].value[0], "c");
+
+    // CONSIDER:
+    // There's a corner case:
+    //   -foo
+    // when 'allow_long_disguise' is set. Should this be considered
+    // disguised long option 'foo' or short option '-f' with value 'oo'?
+    // It's not clear yet, so I'm leaving the decision till later.
+}
+
 int test_main(int ac, char* av[])
 {
     test_long_options();
@@ -533,6 +611,7 @@ int test_main(int ac, char* av[])
     test_prefix();
     test_additional_parser();
     test_style_parser();
+    test_unregistered();
 
     return 0;
 }
