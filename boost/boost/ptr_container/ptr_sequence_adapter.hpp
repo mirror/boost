@@ -70,16 +70,19 @@ namespace ptr_container_detail
                    object_type;
 
         template< class Iter >
-        static U* get_pointer( const void_ptr_iterator<Iter,U>& i )
+        static U* get_pointer( void_ptr_iterator<Iter,U> i )
         {
             return static_cast<U*>( *i.base() );
         }
-        
+
+#ifdef BOOST_NO_SFINAE
+#else
         template< class Iter >
         static U* get_pointer( Iter i )
         {
             return &*i;
         }
+#endif        
 
         template< class Iter >
         static const U* get_const_pointer( void_ptr_iterator<Iter,const U> i )
@@ -87,11 +90,14 @@ namespace ptr_container_detail
             return static_cast<const U*>( *i.base() );
         }
 
+#ifdef BOOST_NO_SFINAE
+#else
         template< class Iter >
         static const U* get_const_pointer( Iter i )
         {
             return &*i;
         }
+#endif
 
         BOOST_STATIC_CONSTANT(bool, allow_null = boost::is_nullable<T>::value );
     };

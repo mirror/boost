@@ -67,7 +67,7 @@ public:
         }
 
 
-    static_move_ptr( move_ptrs::move_source<static_move_ptr> src )
+    static_move_ptr( const move_ptrs::move_source<static_move_ptr>& src )
             : impl_(src.ptr().get(), src.ptr().get_deleter())
             {
                 src.ptr().release();
@@ -155,8 +155,8 @@ private:
             BOOST_STATIC_ASSERT(convertible::value);
         }   
 
-#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || defined(BOOST_NO_SFINAE)
+// give up on this behavior
 #else 
 
     template<typename Ptr> struct cant_move_from_const;
@@ -182,7 +182,7 @@ private:
                          TT, T, static_move_ptr&
                      >::type::type* = 0 );
 
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING || BOOST_NO_SFINAE
 
 //#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 //    template<typename TT, typename DD>

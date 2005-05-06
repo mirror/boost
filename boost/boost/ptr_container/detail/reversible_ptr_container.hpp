@@ -489,11 +489,11 @@ namespace ptr_container_detail
 
             auto_type old( Config::get_pointer( where ) );  // nothrow
             
-#if defined( __GNUC__ ) || defined( __MWERKS__ ) || defined( __COMO__ )
+//#if defined( __GNUC__ ) || defined( __MWERKS__ ) || defined( __COMO__ )
             const_cast<void*&>(*where.base()) = ptr.release();                
-#else
-            *where.base() = ptr.release(); // nothrow, commit
-#endif            
+//#else
+//            *where.base() = ptr.release(); // nothrow, commit
+//#endif            
             return boost::ptr_container_detail::move( old );
         }
 
