@@ -442,42 +442,43 @@ static char const *tok_names[] = {
     /* 383 */   "DECIMALINT",
     /* 384 */   "HEXAINT",
     /* 385 */   "INTLIT",
-    /* 386 */   "FLOATLIT",
-    /* 387 */   "CCOMMENT",
-    /* 388 */   "CPPCOMMENT",
-    /* 389 */   "CHARLIT",
-    /* 390 */   "STRINGLIT",
-    /* 391 */   "CONTLINE",
-    /* 392 */   "SPACE",
-    /* 393 */   "SPACE2",
-    /* 394 */   "NEWLINE",
-    /* 395 */   "POUND_POUND",
-    /* 396 */   "POUND",
-    /* 397 */   "ANY",
-    /* 398 */   "PP_INCLUDE",
-    /* 399 */   "PP_QHEADER",
-    /* 400 */   "PP_HHEADER",
-    /* 401 */   "EOF",
-    /* 402 */   "EOI",
+    /* 386 */   "LONGINTLIT",
+    /* 387 */   "FLOATLIT",
+    /* 388 */   "CCOMMENT",
+    /* 389 */   "CPPCOMMENT",
+    /* 390 */   "CHARLIT",
+    /* 391 */   "STRINGLIT",
+    /* 392 */   "CONTLINE",
+    /* 393 */   "SPACE",
+    /* 394 */   "SPACE2",
+    /* 395 */   "NEWLINE",
+    /* 396 */   "POUND_POUND",
+    /* 397 */   "POUND",
+    /* 398 */   "ANY",
+    /* 399 */   "PP_INCLUDE",
+    /* 400 */   "PP_QHEADER",
+    /* 401 */   "PP_HHEADER",
+    /* 402 */   "EOF",
+    /* 403 */   "EOI",
 
               // MS extensions
-    /* 403 */   "MSEXT_INT8",
-    /* 404 */   "MSEXT_INT16",
-    /* 405 */   "MSEXT_INT32",
-    /* 406 */   "MSEXT_INT64",
-    /* 407 */   "MSEXT_BASED",
-    /* 408 */   "MSEXT_DECLSPEC",
-    /* 409 */   "MSEXT_CDECL",
-    /* 410 */   "MSEXT_FASTCALL",
-    /* 411 */   "MSEXT_STDCALL",
-    /* 412 */   "MSEXT_TRY",
-    /* 413 */   "MSEXT_EXCEPT",
-    /* 414 */   "MSEXT_FINALLY",
-    /* 415 */   "MSEXT_LEAVE",
-    /* 416 */   "MSEXT_INLINE",
-    /* 417 */   "MSEXT_ASM",
-    /* 418 */   "MSEXT_REGION",
-    /* 419 */   "MSEXT_ENDREGION",
+    /* 404 */   "MSEXT_INT8",
+    /* 405 */   "MSEXT_INT16",
+    /* 406 */   "MSEXT_INT32",
+    /* 407 */   "MSEXT_INT64",
+    /* 408 */   "MSEXT_BASED",
+    /* 409 */   "MSEXT_DECLSPEC",
+    /* 410 */   "MSEXT_CDECL",
+    /* 411 */   "MSEXT_FASTCALL",
+    /* 412 */   "MSEXT_STDCALL",
+    /* 413 */   "MSEXT_TRY",
+    /* 414 */   "MSEXT_EXCEPT",
+    /* 415 */   "MSEXT_FINALLY",
+    /* 416 */   "MSEXT_LEAVE",
+    /* 417 */   "MSEXT_INLINE",
+    /* 418 */   "MSEXT_ASM",
+    /* 419 */   "MSEXT_REGION",
+    /* 420 */   "MSEXT_ENDREGION",
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
@@ -626,42 +627,43 @@ static char const *tok_names[] = {
     /* 383 */   "",   // decimalint
     /* 384 */   "",   // hexlit
     /* 385 */   "",   // intlit
-    /* 386 */   "",   // floatlit
-    /* 387 */   "",   // ccomment
-    /* 388 */   "",   // cppcomment
-    /* 389 */   "",   // charlit
-    /* 390 */   "",   // stringlit
-    /* 391 */   "",   // contline
-    /* 392 */   "",   // space
-    /* 393 */   "",   // space2
-    /* 394 */   "\n",
-    /* 395 */   "##",
-    /* 396 */   "#",
-    /* 397 */   "",   // any
-    /* 398 */   "#include",
+    /* 386 */   "",   // longintlit
+    /* 387 */   "",   // floatlit
+    /* 388 */   "",   // ccomment
+    /* 389 */   "",   // cppcomment
+    /* 390 */   "",   // charlit
+    /* 391 */   "",   // stringlit
+    /* 392 */   "",   // contline
+    /* 393 */   "",   // space
+    /* 394 */   "",   // space2
+    /* 395 */   "\n",
+    /* 396 */   "##",
+    /* 397 */   "#",
+    /* 398 */   "",   // any
     /* 399 */   "#include",
     /* 400 */   "#include",
-    /* 401 */   "",   // eof
-    /* 402 */   "",   // eoi
+    /* 401 */   "#include",
+    /* 402 */   "",   // eof
+    /* 403 */   "",   // eoi
 
               // MS extensions
-    /* 403 */   "__int8",
-    /* 404 */   "__int16",
-    /* 405 */   "__int32",
-    /* 406 */   "__int64",
-    /* 407 */   "__based",
-    /* 408 */   "__declspec",
-    /* 409 */   "__cdecl",
-    /* 410 */   "__fastcall",
-    /* 411 */   "__stdcall",
-    /* 412 */   "__try",
-    /* 413 */   "__except",
-    /* 414 */   "__finally",
-    /* 415 */   "__leave",
-    /* 416 */   "__inline",
-    /* 417 */   "__asm",
-    /* 418 */   "#region",
-    /* 419 */   "#endregion",
+    /* 404 */   "__int8",
+    /* 405 */   "__int16",
+    /* 406 */   "__int32",
+    /* 407 */   "__int64",
+    /* 408 */   "__based",
+    /* 409 */   "__declspec",
+    /* 410 */   "__cdecl",
+    /* 411 */   "__fastcall",
+    /* 412 */   "__stdcall",
+    /* 413 */   "__try",
+    /* 414 */   "__except",
+    /* 415 */   "__finally",
+    /* 416 */   "__leave",
+    /* 417 */   "__inline",
+    /* 418 */   "__asm",
+    /* 419 */   "#region",
+    /* 420 */   "#endregion",
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
