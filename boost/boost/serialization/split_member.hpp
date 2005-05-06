@@ -18,6 +18,7 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/identity.hpp>
 
 #include <boost/serialization/access.hpp>
 
