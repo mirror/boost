@@ -112,6 +112,7 @@ namespace boost { namespace program_options { namespace detail {
         m_style = command_line_style::default_style;
         m_desc = 0;
         m_positional = 0;
+        m_allow_unregistered = false;
     }
 
     void 
@@ -288,8 +289,19 @@ namespace boost { namespace program_options { namespace detail {
 
         // First check that the option is valid, and get its description.
         // TODO: case-sensitivity.
-        const option_description& d = 
-            m_desc->find(opt.string_key, (m_style & allow_guessing));
+        const option_description* xd = 
+            m_desc->find_nothrow(opt.string_key, (m_style & allow_guessing));
+
+        if (!xd)
+        {
+            if (m_allow_unregistered) {
+                opt.unregistered = true;
+                return;
+            } else {
+                throw_exception(unknown_option(opt.string_key));
+            }                
+        }
+        const option_description& d = *xd;
 
         // Canonize the name
         opt.string_key = d.key(opt.string_key);
@@ -381,11 +393,12 @@ namespace boost { namespace program_options { namespace detail {
             // of token is considered to be value, not further grouped
             // option.
             for(;;) {
-                const option_description& d = m_desc->find(name, false);
+                const option_description* d 
+                    = m_desc->find_nothrow(name, false);
 
                 // FIXME: check for 'allow_sticky'.
-                if ((m_style & allow_sticky) &&
-                    d.semantic()->max_tokens() == 0 && !adjacent.empty()) {
+                if (d && (m_style & allow_sticky) &&
+                    d->semantic()->max_tokens() == 0 && !adjacent.empty()) {
                     // 'adjacent' is in fact further option.
                     option opt;
                     opt.string_key = name;
