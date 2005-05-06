@@ -65,7 +65,7 @@ namespace impl {
         { 
             if (long_lit) {
                 unsigned int mask = 0;
-                for (int i = 0; i < sizeof(wchar_t); ++i) {
+                for (unsigned int i = 0; i < sizeof(wchar_t); ++i) {
                     value <<= 8;
                     mask = (mask << 8) | 0xff;
                 }
@@ -73,7 +73,7 @@ namespace impl {
             }
             else {
                 unsigned int mask = 0;
-                for (int i = 0; i < sizeof(char); ++i) {
+                for (unsigned int i = 0; i < sizeof(char); ++i) {
                     value <<= 8;
                     mask = (mask << 8) | 0xff;
                 }
