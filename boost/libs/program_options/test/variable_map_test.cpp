@@ -227,13 +227,54 @@ void test_priority()
     BOOST_CHECK_EQUAL(vm["include"].as< vector<int> >()[1], 7);
 }
 
+void test_multiple_assignments_with_different_option_description()
+{
+    // Test that if we store option twice into the same variable_map,
+    // and some of the options stored the first time are not present
+    // in the options descrription provided the second time, we don't crash.
 
+    options_description desc1("");    
+    desc1.add_options()
+        ("help,h", "")
+        ("includes", value< vector<string> >()->composing(), "");
+        ;
+
+    options_description desc2("");
+    desc2.add_options()
+        ("output,o", "");
+
+    vector<string> input1;
+    input1.push_back("--help");
+    input1.push_back("--includes=a");
+    parsed_options p1 = command_line_parser(input1).options(desc1).run();
+
+    vector<string> input2;
+    input1.push_back("--output");
+    parsed_options p2 = command_line_parser(input2).options(desc2).run();
+
+    vector<string> input3;
+    input3.push_back("--includes=b");
+    parsed_options p3 = command_line_parser(input3).options(desc1).run();
+
+
+    variables_map vm;
+    store(p1, vm);
+    store(p2, vm);
+    store(p3, vm);
+
+    BOOST_REQUIRE(vm.count("help") == 1);
+    BOOST_REQUIRE(vm.count("includes") == 1);
+    BOOST_CHECK_EQUAL(vm["includes"].as< vector<string> >()[0], "a");
+    BOOST_CHECK_EQUAL(vm["includes"].as< vector<string> >()[1], "b");
+
+} 
 
 int test_main(int, char* [])
 {
     test_variable_map();
     test_semantic_values();
     test_priority();
+    test_multiple_assignments_with_different_option_description();
     return 0;
 }
 
