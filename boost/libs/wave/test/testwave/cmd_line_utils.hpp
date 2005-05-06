@@ -70,7 +70,7 @@ namespace cmd_line_utils {
                 v = boost::any(include_paths());
 
             include_paths *p = boost::any_cast<include_paths>(&v);
-            BOOST_ASSERT(p);
+            BOOST_ASSERT(NULL != p);
 
         // Assume only one path per '-I' occurrence.
             std::string const& t = po::validators::get_single_string(tokens);
@@ -113,9 +113,10 @@ namespace cmd_line_utils {
         }
 
         if (options.size() > 0) {
+            // (the (int) cast is to make the True64 compiler happy)
             using namespace boost::program_options::command_line_style;
             po::store(po::command_line_parser(options)
-                .options(desc).style(unix_style).run(), vm);
+                .options(desc).style((int)unix_style).run(), vm);
             po::notify(vm);
         }
     }
@@ -159,9 +160,10 @@ namespace cmd_line_utils {
 
         // parse the vector of lines and store the results into the given
         // variables map
+            // (the (int) cast is to make the True64 compiler happy)
             using namespace boost::program_options::command_line_style;
             po::store(po::command_line_parser(options)
-                .options(desc).positional(p).style(unix_style).run(), vm);
+                .options(desc).positional(p).style((int)unix_style).run(), vm);
             po::notify(vm);
         }
         return true;

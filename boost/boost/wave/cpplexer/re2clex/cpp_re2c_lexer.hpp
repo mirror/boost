@@ -169,6 +169,18 @@ lexer<IteratorT, PositionT>::get()
         break;
 #endif
 
+    case T_LONGINTLIT:  // supported in C99 and variadics mode
+        value = string_type((char const *)scanner.tok, 
+            scanner.cur-scanner.tok);
+#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+        if (!boost::wave::need_variadics(language)) {
+        // syntax error: not allowed in C++ mode
+            BOOST_WAVE_LEXER_THROW(lexing_exception, invalid_long_long_literal, 
+                value.c_str(), scanner.line, -1, filename.c_str());
+        }
+#endif
+        break;
+
     case T_OCTALINT:
     case T_DECIMALINT:
     case T_HEXAINT:

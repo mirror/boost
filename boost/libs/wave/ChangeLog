@@ -45,6 +45,8 @@ CHANGELOG
   error message.
 - Fixed parsing of long character literals (such as '\x1234').
 - Fixed almost all problems diagnosed by the Boost inspection report.
+- Several fixes to make the True64 compiler happy.
+- Added the long long suffix handling to the C99 mode (LL/ll).
 
 Thu Apr  7 10:07:45 WEDT 2005
 Version 1.1.16

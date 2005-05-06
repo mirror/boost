@@ -122,7 +122,8 @@ public:
         universal_char_invalid = 1,
         universal_char_base_charset = 2,
         universal_char_not_allowed = 3,
-        generic_lexing_error = 4
+        invalid_long_long_literal = 4,
+        generic_lexing_error = 5
     };
 
     lexing_exception(char const *what_, error_code code, int line_, 
@@ -160,6 +161,8 @@ public:
             "a universal character name cannot designate a character in the "
                 "basic character set",                  // universal_char_base_charset
             "this universal character is not allowed in an identifier", // universal_char_not_allowed 
+            "long long suffixes are not allowed in pure C++ mode, "
+            "enable variadics to enable these",         // invalid_long_long_literal
             "generic lexing error"                      // generic_lexing_error
         };
         return preprocess_exception_errors[code];
@@ -172,6 +175,7 @@ public:
             util::severity_error,               // universal_char_invalid
             util::severity_error,               // universal_char_base_charset
             util::severity_error,               // universal_char_not_allowed
+            util::severity_warning,             // invalid_long_long_literal
             util::severity_error                // generic_lexing_error                
         };
         return preprocess_exception_severity[code];

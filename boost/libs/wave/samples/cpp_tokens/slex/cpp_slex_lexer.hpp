@@ -28,6 +28,7 @@
 #include <boost/wave/util/time_conversion_helper.hpp>
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
 #include <boost/wave/cpplexer/convert_trigraphs.hpp>
+#include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
 
 #include "../slex_interface.hpp"
 #include "../slex_token.hpp"
@@ -91,42 +92,46 @@ private:
 #define TRI(c)  Q("?") Q("?") c
 
 // definition of some subtoken regexps to simplify the regex definitions
-#define BLANK           "[ \\t]"
-#define CCOMMENT        \
+#define BLANK               "[ \\t]"
+#define CCOMMENT            \
     Q("/") Q("*") "[^*]*" Q("*") "+" "(" "[^/*][^*]*" Q("*") "+" ")*" Q("/")
         
-#define PPSPACE         "(" BLANK OR CCOMMENT ")*"
+#define PPSPACE             "(" BLANK OR CCOMMENT ")*"
 
-#define OCTALDIGIT      "[0-7]"
-#define DIGIT           "[0-9]"
-#define HEXDIGIT        "[0-9a-fA-F]"
-#define SIGN            "[-+]?"
-#define EXPONENT        "(" "[eE]" SIGN "[0-9]+" ")"
+#define OCTALDIGIT          "[0-7]"
+#define DIGIT               "[0-9]"
+#define HEXDIGIT            "[0-9a-fA-F]"
+#define SIGN                "[-+]?"
+#define EXPONENT            "(" "[eE]" SIGN "[0-9]+" ")"
 
-#define INTEGER_SUFFIX  "(" "[uU][lL]?|[lL][uU]?" ")"
-#define FLOAT_SUFFIX    "(" "[fF][lL]?|[lL][fF]?" ")"
-#define CHAR_SPEC       "L?"
+#define INTEGER             \
+    "(" "(0x|0X)" HEXDIGIT "+" OR "0" OCTALDIGIT "*" OR "[1-9]" DIGIT "*" ")"
+            
+#define INTEGER_SUFFIX      "(" "[uU][lL]?|[lL][uU]?" ")"
+#define LONGINTEGER_SUFFIX  "(" "[uU]([ll]|[LL])?|([ll]|[LL])[uU]?" ")"
+#define FLOAT_SUFFIX        "(" "[fF][lL]?|[lL][fF]?" ")"
+#define CHAR_SPEC           "L?"
 
-#define BACKSLASH       "(" Q("\\") OR TRI(Q("/")) ")"
-#define ESCAPESEQ       BACKSLASH "(" \
-                            "[abfnrtv?'\"]" OR \
-                            BACKSLASH OR \
-                            "x" HEXDIGIT "+" OR \
-                            OCTALDIGIT OCTALDIGIT "?" OCTALDIGIT "?" \
-                        ")"
-#define HEXQUAD         HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT 
-#define UNIVERSALCHAR   BACKSLASH "(" \
-                            "u" HEXQUAD OR \
-                            "U" HEXQUAD HEXQUAD \
-                        ")" 
+#define BACKSLASH           "(" Q("\\") OR TRI(Q("/")) ")"
+#define ESCAPESEQ           BACKSLASH "(" \
+                                "[abfnrtv?'\"]" OR \
+                                BACKSLASH OR \
+                                "x" HEXDIGIT "+" OR \
+                                OCTALDIGIT OCTALDIGIT "?" OCTALDIGIT "?" \
+                            ")"
+#define HEXQUAD             HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT 
+#define UNIVERSALCHAR       BACKSLASH "(" \
+                                "u" HEXQUAD OR \
+                                "U" HEXQUAD HEXQUAD \
+                            ")" 
 
-#define POUNDDEF        "(" "#" OR TRI("=") OR Q("%:") ")"
-#define NEWLINEDEF      "(" "\\n" OR "\\r" OR "\\r\\n" ")"
+#define POUNDDEF            "(" "#" OR TRI("=") OR Q("%:") ")"
+#define NEWLINEDEF          "(" "\\n" OR "\\r" OR "\\r\\n" ")"
 
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
-#define INCLUDEDEF      "(include|include_next)"
+#define INCLUDEDEF          "(include|include_next)"
 #else
-#define INCLUDEDEF      "include"
+#define INCLUDEDEF          "include"
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -293,8 +298,8 @@ lexer<IteratorT, PositionT>::init_data[] =
 //  TOKEN_DATA(OCTALINT, "0" OCTALDIGIT "*" INTEGER_SUFFIX "?"),
 //  TOKEN_DATA(DECIMALINT, "[1-9]" DIGIT "*" INTEGER_SUFFIX "?"),
 //  TOKEN_DATA(HEXAINT, "(0x|0X)" HEXDIGIT "+" INTEGER_SUFFIX "?"),
-    TOKEN_DATA(INTLIT, "(" "(0x|0X)" HEXDIGIT "+" OR "0" OCTALDIGIT "*" OR \
-            "[1-9]" DIGIT "*" ")" INTEGER_SUFFIX "?"),
+    TOKEN_DATA(INTLIT, INTEGER INTEGER_SUFFIX "?"),
+    TOKEN_DATA(LONGINTLIT, INTEGER LONGINTEGER_SUFFIX "?"),
     TOKEN_DATA(FLOATLIT, 
         "(" DIGIT "*" Q(".") DIGIT "+" OR DIGIT "+" Q(".") ")" 
         EXPONENT "?" FLOAT_SUFFIX "?" OR
@@ -373,7 +378,9 @@ lexer<IteratorT, PositionT>::init_data_cpp[] =
 #undef HEXDIGIT
 #undef SIGN
 #undef EXPONENT
+#undef LONGINTEGER_SUFFIX
 #undef INTEGER_SUFFIX
+#undef INTEGER
 #undef FLOAT_SUFFIX
 #undef CHAR_SPEC
 #undef BACKSLASH    
@@ -481,7 +488,7 @@ public:
           iterator_type;
     typedef typename std::iterator_traits<IteratorT>::value_type    char_t;
     typedef BOOST_WAVE_STRINGTYPE                                   string_type;
-    typedef typename lexer<IteratorT, PositionT>::token_type           token_type;
+    typedef typename lexer<IteratorT, PositionT>::token_type        token_type;
 
     slex_functor(IteratorT const &first_, IteratorT const &last_, 
             PositionT const &pos_, boost::wave::language_support language)
@@ -537,6 +544,19 @@ public:
                         }
                         break;
                         
+                    case T_LONGINTLIT:  // supported in C99 and variadics mode
+#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+                        if (!boost::wave::need_variadics(language)) {
+                        // syntax error: not allowed in C++ mode
+                            BOOST_WAVE_LEXER_THROW(
+                                boost::wave::cpplexer::lexing_exception, 
+                                invalid_long_long_literal, value.c_str(), 
+                                pos.get_line(), pos.get_column(), 
+                                pos.get_file().c_str());
+                        }
+#endif
+                        break;
+
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
                     case T_PP_HHEADER:
                     case T_PP_QHEADER:
