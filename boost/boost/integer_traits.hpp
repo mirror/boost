@@ -88,7 +88,9 @@ class integer_traits<unsigned char>
 template<>
 class integer_traits<wchar_t>
   : public std::numeric_limits<wchar_t>,
-#if defined(WCHAR_MIN) && defined(WCHAR_MAX)
+    // Don't trust WCHAR_MIN and WCHAR_MAX with Mac OS X's native
+    // library: they are wrong!
+#if defined(WCHAR_MIN) && defined(WCHAR_MAX) && !defined(__APPLE__)
     public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
 #elif defined(__BORLANDC__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__BEOS__) && defined(__GNUC__))
     // No WCHAR_MIN and WCHAR_MAX, whar_t is short and unsigned:
