@@ -125,7 +125,7 @@ test-suite date_time_gregorian_dll
    [ run posix_time/teststreams.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO ]
  ;
 
-   local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_DATE_TIME_STATIC_LINK <define>BOOST_ALL_NO_LIB ;
+local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_DATE_TIME_STATIC_LINK std::locale-support <define>BOOST_ALL_NO_LIB ;
 
    test-suite date_time_localtime
      : 
@@ -158,7 +158,7 @@ test-suite date_time_gregorian_dll
 import ../../../libs/serialization/build/serialization ;
 
  local DATE_TIME_PROPERTIES =  <define>BOOST_DATE_TIME_STATIC_LINK <define>BOOST_ALL_NO_LIB  <define>USE_DATE_TIME_PRE_1_33_FACET_IO
-    toolset::require-boost-spirit-support ;
+    std::locale-support toolset::require-boost-spirit-support ;
 
  test-suite date_time_serialization
    :

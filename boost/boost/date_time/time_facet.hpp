@@ -219,7 +219,7 @@ namespace date_time {
                 const time_type& a_time) const 
     {
       if (a_time.is_special()) { 
-        return do_put_special(a_next, a_ios, a_fill, 
+        return this->do_put_special(a_next, a_ios, a_fill, 
                               a_time.date().as_special());
       }
       string_type format(this->m_format);
@@ -360,7 +360,7 @@ namespace date_time {
         }
       }
 
-      return do_put_tm(a_next, a_ios, a_fill, 
+      return this->do_put_tm(a_next, a_ios, a_fill, 
                        to_tm(a_time), format);
     }
 
@@ -371,7 +371,7 @@ namespace date_time {
                 const time_duration_type& a_time_dur) const 
     {
       if (a_time_dur.is_special()) { 
-        return do_put_special(a_next, a_ios, a_fill, 
+        return this->do_put_special(a_next, a_ios, a_fill, 
                               a_time_dur.get_rep().as_special());
       }
 
@@ -419,7 +419,7 @@ namespace date_time {
         }
       }
 
-      return do_put_tm(a_next, a_ios, a_fill, 
+      return this->do_put_tm(a_next, a_ios, a_fill, 
                        to_tm(a_time_dur), format);
     }
     
