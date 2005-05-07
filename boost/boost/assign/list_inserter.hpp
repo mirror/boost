@@ -217,11 +217,19 @@ namespace assign
             return *this;
         }
 
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+        template< class T >
+        list_inserter& operator,( const assign_detail::repeater<T> & r )
+        {
+            return repeat( r.sz, r.val ); 
+        }
+#else
         template< class T >
         list_inserter& operator,( assign_detail::repeater<T> r )
         {
             return repeat( r.sz, r.val ); 
         }
+#endif
         
         template< class Nullary_function >
         list_inserter& operator,( const assign_detail::fun_repeater<Nullary_function>& r )
