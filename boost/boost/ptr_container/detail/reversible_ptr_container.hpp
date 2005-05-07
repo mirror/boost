@@ -30,6 +30,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/range/result_iterator.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
