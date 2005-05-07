@@ -322,7 +322,7 @@ lexer<IteratorT, PositionT>::init_data[] =
     TOKEN_DATA(POUND_ALT, Q("%:")),
     TOKEN_DATA(POUND_TRIGRAPH, TRI("=")),
     TOKEN_DATA(ANY, "."),
-    TOKEN_DATA(ANY_TRIGRAPH, TRI("/")),
+    TOKEN_DATA(ANY_TRIGRAPH, TRI(Q("/"))),
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     TOKEN_DATA(MSEXT_INT8, "__int8"),
     TOKEN_DATA(MSEXT_INT16, "__int16"),
