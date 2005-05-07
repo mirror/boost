@@ -40,7 +40,7 @@ if ! $(gMFC_CHECK)
    }
 }
 
-rule regex-test-run ( sources + : input * )
+rule regex-test-run ( sources + : input * : requirements * )
 {
         return [ 
            run
@@ -56,6 +56,7 @@ rule regex-test-run ( sources + : input * )
          :  # requirements
          <threading>multi
          $(REGEX_MFC_OPTS)
+         $(requirements)
          :  # test name
         ] ;
 }
@@ -63,7 +64,7 @@ rule regex-test-run ( sources + : input * )
 test-suite regex-examples :
 
 [ regex-test-run timer/regex_timer.cpp <template>../build/msvc-stlport-tricky : $(BOOST_ROOT)/libs/regex/example/timer/input_script.txt ]
-[ regex-test-run grep/grep.cpp <lib>../../program_options/build/boost_program_options : -n -b $(BOOST_ROOT)/boost/regex.hpp $(BOOST_ROOT)/boost/type_traits.hpp ]
+[ regex-test-run grep/grep.cpp <lib>../../program_options/build/boost_program_options : -n -b $(BOOST_ROOT)/boost/regex.hpp $(BOOST_ROOT)/boost/type_traits.hpp : std::locale-support ]
 [ regex-test-run snippets/credit_card_example.cpp ]
 [ regex-test-run snippets/mfc_example.cpp ]
 [ regex-test-run snippets/icu_example.cpp ]
