@@ -49,7 +49,7 @@ basic_text_iprimitive<IStream>::load_binary(
         return;
         
     assert(
-        static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max())
+        static_cast<std::size_t>((std::numeric_limits<std::streamsize>::max)())
         > (count + sizeof(CharType) - 1)/sizeof(CharType)
     );
         
