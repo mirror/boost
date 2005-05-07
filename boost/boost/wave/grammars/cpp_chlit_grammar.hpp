@@ -79,8 +79,10 @@ namespace impl {
                     overflow |= true;
                 }
                 else {
-                // calculate the new value
-                    value <<= 8 * sizeof(wchar_t);
+                // calculate the new value (avoiding a warning regarding 
+                // shifting count >= size of the type)
+                    value <<= 8 * (sizeof(wchar_t)-1);
+                    value <<= 8;  
                     value |= character & masks[sizeof(wchar_t)-1];
                 }
             }
@@ -278,7 +280,9 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
     // range check
         if ('L' == token_val[0]) {
         // recognised wide character
-            if (g.overflow || result > (std::numeric_limits<wchar_t>::max)()) {
+            if (g.overflow || 
+                result > (unsigned long)(std::numeric_limits<wchar_t>::max)()) 
+            {
             // out of range
                 BOOST_WAVE_THROW(preprocess_exception, 
                     character_literal_out_of_range, 
@@ -287,7 +291,9 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
         }
         else {
         // recognised narrow ('normal') character
-            if (g.overflow || result > (std::numeric_limits<unsigned char>::max)()) {
+            if (g.overflow || 
+                result > (unsigned long)(std::numeric_limits<unsigned char>::max)()) 
+            {
             // out of range
                 BOOST_WAVE_THROW(preprocess_exception, 
                     character_literal_out_of_range, 
