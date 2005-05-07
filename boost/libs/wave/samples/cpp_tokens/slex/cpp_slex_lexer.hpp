@@ -108,7 +108,8 @@ private:
     "(" "(0x|0X)" HEXDIGIT "+" OR "0" OCTALDIGIT "*" OR "[1-9]" DIGIT "*" ")"
             
 #define INTEGER_SUFFIX      "(" "[uU][lL]?|[lL][uU]?" ")"
-#define LONGINTEGER_SUFFIX  "(" "[uU]([ll]|[LL])?|([ll]|[LL])[uU]?" ")"
+#define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "ll" OR "LL" ")" OR \
+                            "(" "ll" OR "LL" ")" "[uU]" "?" ")"
 #define FLOAT_SUFFIX        "(" "[fF][lL]?|[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
 
@@ -299,7 +300,7 @@ lexer<IteratorT, PositionT>::init_data[] =
 //  TOKEN_DATA(DECIMALINT, "[1-9]" DIGIT "*" INTEGER_SUFFIX "?"),
 //  TOKEN_DATA(HEXAINT, "(0x|0X)" HEXDIGIT "+" INTEGER_SUFFIX "?"),
     TOKEN_DATA(INTLIT, INTEGER INTEGER_SUFFIX "?"),
-    TOKEN_DATA(LONGINTLIT, INTEGER LONGINTEGER_SUFFIX "?"),
+    TOKEN_DATA(LONGINTLIT, INTEGER LONGINTEGER_SUFFIX),
     TOKEN_DATA(FLOATLIT, 
         "(" DIGIT "*" Q(".") DIGIT "+" OR DIGIT "+" Q(".") ")" 
         EXPONENT "?" FLOAT_SUFFIX "?" OR

@@ -471,7 +471,7 @@ testwave_app::extract_special_information(std::string const& filename,
     typedef token_type::position_type position_type;
     
     boost::wave::language_support const lang_opts = 
-        (boost::wave::language_support)(boost::wave::support_cpp | 
+        (boost::wave::language_support)(boost::wave::support_variadics | 
              boost::wave::support_option_no_character_validation |
              boost::wave::support_option_convert_trigraphs);
     

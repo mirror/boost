@@ -351,12 +351,12 @@ any                = [\t\v\f\r\n\040-\377];
 OctalDigit         = [0-7];
 Digit              = [0-9];
 HexDigit           = [a-fA-F0-9];
-Integer            = ("0" [xX] HexDigit+) | ("0" OctalDigit*) | ([1-9] Digit*);
+Integer            = (("0" [xX] HexDigit+) | ("0" OctalDigit*) | ([1-9] Digit*));
 ExponentPart       = [Ee] [+-]? Digit+;
 FractionalConstant = (Digit* "." Digit+) | (Digit+ ".");
 FloatingSuffix     = [fF] [lL]? | [lL] [fF]?;
 IntegerSuffix      = [uU] [lL]? | [lL] [uU]?;
-LongIntegerSuffix  = [uU] ([ll] | [LL])? | ([ll] | [LL]) [uU]?;
+LongIntegerSuffix  = [uU] ("ll" | "LL") | ("ll" | "LL") [uU]?;
 Backslash          = [\\] | "??/";
 EscapeSequence     = Backslash ([abfnrtv?'"] | Backslash | "x" HexDigit+ | OctalDigit OctalDigit? OctalDigit?);
 HexQuad            = HexDigit HexDigit HexDigit HexDigit;
@@ -566,11 +566,11 @@ Pound              = "#" | "??=" | "%:";
     ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*        
         { RET(T_IDENTIFIER); }
     
+    Integer LongIntegerSuffix
+        { RET(T_LONGINTLIT); }
+
     Integer IntegerSuffix?
         { RET(T_INTLIT); }
-
-    Integer LongIntegerSuffix?
-        { RET(T_LONGINTLIT); }
 
     ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
         { RET(T_FLOATLIT); }

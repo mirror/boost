@@ -13,6 +13,8 @@
 
 #include <limits>     // sid::numeric_limits
 
+#include <boost/static_assert.hpp>
+
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
 #include <boost/spirit/dynamic/if.hpp>
@@ -38,7 +40,7 @@ namespace grammars {
 namespace closures {
 
     struct chlit_closure 
-    :   boost::spirit::closure<chlit_closure, unsigned int, bool> 
+    :   boost::spirit::closure<chlit_closure, unsigned long, bool> 
     {
         member1 value;
         member2 long_lit;
@@ -54,32 +56,45 @@ namespace impl {
 ///////////////////////////////////////////////////////////////////////////////
     struct compose_character_literal {
 
-        template <typename ResultT, typename Arg1T, typename Arg2T>
+        template <typename ResultT, typename A1, typename A2, typename A3>
         struct result { 
         
-            typedef unsigned int type; 
+            typedef void type; 
         };
 
-        unsigned int 
-        operator()(unsigned int& value, bool long_lit, unsigned int character) const
+        void 
+        operator()(unsigned long& value, bool long_lit, bool& overflow,
+            unsigned long character) const
         { 
+            // The following assumes that wchar_t is max. 32 Bit
+            BOOST_STATIC_ASSERT(sizeof(wchar_t) <= 4);
+            
+            static unsigned long masks[] = { 
+                0x000000ff, 0x0000ffff, 0x00ffffff, 0xffffffff
+            };
+            
             if (long_lit) {
-                unsigned int mask = 0;
-                for (unsigned int i = 0; i < sizeof(wchar_t); ++i) {
-                    value <<= 8;
-                    mask = (mask << 8) | 0xff;
+            // make sure no overflow will occur below
+                if ((value / masks[sizeof(wchar_t)-1]) != 0) {
+                    overflow |= true;
                 }
-                value |= character & mask;
+                else {
+                // calculate the new value
+                    value <<= 8 * sizeof(wchar_t);
+                    value |= character & masks[sizeof(wchar_t)-1];
+                }
             }
             else {
-                unsigned int mask = 0;
-                for (unsigned int i = 0; i < sizeof(char); ++i) {
-                    value <<= 8;
-                    mask = (mask << 8) | 0xff;
+            // make sure no overflow will occur below
+                if ((value / masks[sizeof(char)-1]) != 0) {
+                    overflow |= true;
                 }
-                value |= character & mask;
+                else {
+                // calculate the new value
+                    value <<= 8 * sizeof(char);
+                    value |= character & masks[sizeof(char)-1];
+                }
             }
-            return value;
         }
     };
     phoenix::function<compose_character_literal> const compose;
@@ -97,6 +112,7 @@ struct chlit_grammar :
         closures::chlit_closure::context_t>
 {
     chlit_grammar()
+    :   overflow(false)
     {
         BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, "chlit_grammar", 
             TRACE_CHLIT_GRAMMAR);
@@ -133,82 +149,82 @@ struct chlit_grammar :
                             ch_p('\\') 
                             >>  (   ch_p('a')    // BEL
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x07))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x07))
                                     ]
                                 |   ch_p('b')    // BS
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x08))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x08))
                                     ]
                                 |   ch_p('t')    // HT
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x09))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x09))
                                     ]
                                 |   ch_p('n')    // NL
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x0a))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0a))
                                     ]
                                 |   ch_p('v')    // VT
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x0b))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0b))
                                     ]
                                 |   ch_p('f')    // FF
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x0c))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0c))
                                     ]
                                 |   ch_p('r')    // CR
                                     [
-                                        impl::compose(self.value, self.long_lit, val(0x0d))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0d))
                                     ]
                                 |   ch_p('?')
                                     [
-                                        impl::compose(self.value, self.long_lit, val('?'))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('?'))
                                     ]
                                 |   ch_p('\'')
                                     [
-                                        impl::compose(self.value, self.long_lit, val('\''))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('\''))
                                     ]
                                 |   ch_p('\"')
                                     [
-                                        impl::compose(self.value, self.long_lit, val('\"'))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('\"'))
                                     ]
                                 |   ch_p('\\')
                                     [
-                                        impl::compose(self.value, self.long_lit, val('\\'))
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('\\'))
                                     ]
                                 |   ch_p('x') 
                                     >>  if_p(self.long_lit) 
                                         [
                                             hex_wchar_parser_type()
                                             [
-                                                impl::compose(self.value, self.long_lit, arg1)
+                                                impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
                                             ]
                                         ]
                                         .else_p
                                         [
                                             hex_char_parser_type()
                                             [
-                                                impl::compose(self.value, self.long_lit, arg1)
+                                                impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
                                             ]
                                         ]
                                 |   ch_p('u') 
                                     >>  uint_parser<unsigned int, 16, 4, 4>()
                                         [
-                                            impl::compose(self.value, self.long_lit, arg1)
+                                            impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
                                         ]
                                 |   ch_p('U')
                                     >>  uint_parser<unsigned int, 16, 8, 8>()
                                         [
-                                            impl::compose(self.value, self.long_lit, arg1)
+                                            impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
                                         ]
                                 |   uint_parser<unsigned int, 8, 1, 3>()
                                     [
-                                        impl::compose(self.value, self.long_lit, arg1)
+                                        impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
                                     ]
                                 )
                             )
                         |   ~eps_p(ch_p('\'')) >> anychar_p
                             [
-                                impl::compose(self.value, self.long_lit, arg1)
+                                impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
                             ]
                         )
                     >>  ch_p('\'')
@@ -221,6 +237,9 @@ struct chlit_grammar :
         rule_t const& start() const
         { return ch_lit; }
     };
+
+    // flag for signaling integer overflow during value composition
+    mutable bool overflow;
 };
 
 #undef TRACE_CHLIT_GRAMMAR
@@ -246,7 +265,7 @@ chlit_grammar_gen<TokenT>::evaluate(TokenT const &token)
     using namespace boost::spirit;
     
 static chlit_grammar g;
-unsigned int result = 0;
+unsigned long result = 0;
 typename TokenT::string_type const &token_val = token.get_value();
 parse_info<typename TokenT::string_type::const_iterator> hit =
     parse(token_val.begin(), token_val.end(), g[spirit_assign_actor(result)]);
@@ -259,7 +278,7 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
     // range check
         if ('L' == token_val[0]) {
         // recognised wide character
-            if (result > (std::numeric_limits<wchar_t>::max)()) {
+            if (g.overflow || result > (std::numeric_limits<wchar_t>::max)()) {
             // out of range
                 BOOST_WAVE_THROW(preprocess_exception, 
                     character_literal_out_of_range, 
@@ -268,7 +287,7 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
         }
         else {
         // recognised narrow ('normal') character
-            if (result > (std::numeric_limits<unsigned char>::max)()) {
+            if (g.overflow || result > (std::numeric_limits<unsigned char>::max)()) {
             // out of range
                 BOOST_WAVE_THROW(preprocess_exception, 
                     character_literal_out_of_range, 

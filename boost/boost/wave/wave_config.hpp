@@ -273,6 +273,10 @@
 //#endif // !defined(BOOST_DISABLE_THREADS)
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Wave needs at least 4 parameters for phoenix actors
+#define PHOENIX_LIMIT 6
+
+///////////////////////////////////////////////////////////////////////////////
 //  Auto library naming
 #if BOOST_VERSION >= 103100   
 // auto link features work beginning from Boost V1.31.0
