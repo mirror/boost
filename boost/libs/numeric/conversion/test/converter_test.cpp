@@ -378,6 +378,10 @@ void test_round_even()
   double min = boost::numeric::bounds<double>::lowest();
   double max = boost::numeric::bounds<double>::highest();
 
+#if !defined(BOOST_NO_STDC_NAMESPACE)
+  using std::floor ;
+  using std::ceil ;
+#endif
   test_round_even(min, floor(min));
   test_round_even(max, ceil (max));
   test_round_even(2.0, 2.0);
