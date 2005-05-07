@@ -55,7 +55,7 @@ void runtest(const char * type, T)
             << std::endl;
   BOOST_CHECK(traits::is_specialized);
   BOOST_CHECK(traits::is_integer);
-  BOOST_CHECK(traits::is_integral);
+  BOOST_CHECK(traits::is_integral == true);
   BOOST_CHECK(traits::const_min == (traits::min)());
   BOOST_CHECK(traits::const_max == (traits::max)());
 }
