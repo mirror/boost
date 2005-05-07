@@ -308,7 +308,9 @@ namespace boost {
                          DSTADJUST, START_DATE_RULE, START_TIME, END_DATE_RULE,
                          END_TIME, FIELD_COUNT };
 
-        if (result.size() != FIELD_COUNT) { 
+        //take a shot at fixing gcc 4.x error
+        const unsigned int expected_fields = static_cast<unsigned int>(FIELD_COUNT);
+        if (result.size() != expected_fields) { 
           std::stringstream msg;
           msg << "Expecting " << FIELD_COUNT << " fields, got " 
             << result.size() << " fields in line: " << s;
