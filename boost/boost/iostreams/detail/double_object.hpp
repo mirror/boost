@@ -36,7 +36,7 @@ public:
     reference second() { return first_; }
     const_reference second() const { return first_; }
     void swap(single_object_holder& o)
-    { swap(first_, o.first_); }
+    { std::swap(first_, o.first_); }
 private:
     T first_;
 };
@@ -55,7 +55,10 @@ public:
     reference second() { return second_; }
     const_reference second() const { return second_; }
     void swap(double_object_holder& d)
-    { swap(first_, d.first_); swap(second_, d.second_); }
+    { 
+        std::swap(first_, d.first_); 
+        std::swap(second_, d.second_); 
+    }
 private:
     T first_, second_;
 };
