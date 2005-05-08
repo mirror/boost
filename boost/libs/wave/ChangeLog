@@ -22,6 +22,12 @@ TODO (known issues):
 
 CHANGELOG
 
+- Fixed documentation of the different language_support flags.
+- The support for long long suffixes is no longer bound to the variadics mode,
+  it has to be enabled by the new long_long mode (default in C99).
+  
+Sun May  8 17:22:59 WEDT 2005
+Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.
 - Improved error handling and diagnostics for overflow in #if/#elif
   expressions.

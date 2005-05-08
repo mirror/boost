@@ -604,6 +604,7 @@ main (int argc, char *argv[])
             ("traceto,t", po::value<string>(), 
                 "output trace info to a file [arg] or to stderr [-]")
             ("timer", "output overall elapsed computing time to stderr")
+            ("long_long", "enable long long support in C++ mode")
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
             ("variadics", "enable certain C99 extensions in C++ mode")
             ("c99", "enable C99 mode (implies --variadics)")

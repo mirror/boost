@@ -7,7 +7,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-//O --variadics
+//O --long_long
 // Tests 'LL' suffix
 
 //R #line 14 "t_9_014.cpp"

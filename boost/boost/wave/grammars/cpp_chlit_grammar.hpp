@@ -151,82 +151,99 @@ struct chlit_grammar :
                             ch_p('\\') 
                             >>  (   ch_p('a')    // BEL
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x07))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x07))
                                     ]
                                 |   ch_p('b')    // BS
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x08))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x08))
                                     ]
                                 |   ch_p('t')    // HT
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x09))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x09))
                                     ]
                                 |   ch_p('n')    // NL
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0a))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x0a))
                                     ]
                                 |   ch_p('v')    // VT
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0b))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x0b))
                                     ]
                                 |   ch_p('f')    // FF
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0c))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x0c))
                                     ]
                                 |   ch_p('r')    // CR
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val(0x0d))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val(0x0d))
                                     ]
                                 |   ch_p('?')
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('?'))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val('?'))
                                     ]
                                 |   ch_p('\'')
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('\''))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val('\''))
                                     ]
                                 |   ch_p('\"')
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('\"'))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val('\"'))
                                     ]
                                 |   ch_p('\\')
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), val('\\'))
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), val('\\'))
                                     ]
                                 |   ch_p('x') 
                                     >>  if_p(self.long_lit) 
                                         [
                                             hex_wchar_parser_type()
                                             [
-                                                impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
+                                                impl::compose(self.value, self.long_lit, 
+                                                    var(self.overflow), arg1)
                                             ]
                                         ]
                                         .else_p
                                         [
                                             hex_char_parser_type()
                                             [
-                                                impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
+                                                impl::compose(self.value, self.long_lit, 
+                                                    var(self.overflow), arg1)
                                             ]
                                         ]
                                 |   ch_p('u') 
                                     >>  uint_parser<unsigned int, 16, 4, 4>()
                                         [
-                                            impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
+                                            impl::compose(self.value, self.long_lit, 
+                                                var(self.overflow), arg1)
                                         ]
                                 |   ch_p('U')
                                     >>  uint_parser<unsigned int, 16, 8, 8>()
                                         [
-                                            impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
+                                            impl::compose(self.value, self.long_lit, 
+                                                var(self.overflow), arg1)
                                         ]
                                 |   uint_parser<unsigned int, 8, 1, 3>()
                                     [
-                                        impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
+                                        impl::compose(self.value, self.long_lit, 
+                                            var(self.overflow), arg1)
                                     ]
                                 )
                             )
                         |   ~eps_p(ch_p('\'')) >> anychar_p
                             [
-                                impl::compose(self.value, self.long_lit, var(self.overflow), arg1)
+                                impl::compose(self.value, self.long_lit, 
+                                    var(self.overflow), arg1)
                             ]
                         )
                     >>  ch_p('\'')
@@ -240,7 +257,7 @@ struct chlit_grammar :
         { return ch_lit; }
     };
 
-    // flag for signaling integer overflow during value composition
+    // flag signaling integer overflow during value composition
     mutable bool overflow;
 };
 

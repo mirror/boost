@@ -174,7 +174,7 @@
 <p><b><a name="constructor" id="constructor"></a>Constructor</b></p>
 <pre>    context(IteratorT <span class="keyword">const</span> &amp;first, 
         IteratorT <span class="keyword">const</span> &amp;last, 
-        <span class="keyword"><!-- #BeginDate format:fcAm1m -->Monday, April 4, 2005  7:45<!-- #EndDate -->e> 
+        <span class="keyword"><!-- #BeginDate format:fcAm1m -->Sunday, May 8, 2005  17:58<!-- #EndDate -->e> 
   <p>Constructs a context object on top of the input stream given by the pair 
     of auxilliary iterators <tt>[first,&nbsp;last)</tt>. The iterators should 
     be at least <tt>forward_iterator</tt> type iterators. The filename parameter 
@@ -399,13 +399,25 @@
         support_cpp = support_normal,
     
     <span class="comment">// support flags for C99</span>
-        support_variadics = 0x02,
-        support_c99 = support_variadics,
-    };</pre>
+        support_long_long = 0x02,
+        support_variadics = 0x04,
+        support_c99 = support_variadics | 
+                      support_long_long | 0x08,
+
+<span class="comment">    // the mask for the main language settings</span>
+        support_option_mask = 0xFF00,<br>
+<span class="comment">    // additional fine tuning of the general behaviour</span>
+        support_option_preserve_comments = 0x0100,<br>        support_option_no_character_validation = 0x0200,<br>        support_option_convert_trigraphs = 0x0400<br>    };</pre>
   <p>When used with <tt>support_variadics</tt> the support for variadics, placemarkers 
-    and the <tt>operator _Pragma()</tt> is enabled in normal C++ mode. The <tt>support_c99</tt> 
-     switches to the C99 language support.</p>
-  </blockquote>
+    and the <tt>operator _Pragma()</tt> is enabled in normal C++ mode. When used with the <tt>support_long_long</tt> the support for long long suffixes is enabled in C++ mode. </p>
+  <p>The <tt>support_c99</tt> switches to the C99 language support, which enables variadics, placemarkers, the <tt>operator _Pragma</tt> and long long suffixes by default. Additionally it disables the C++ specific tokens such as <tt>'-&gt;*'</tt>, <tt>'.*'</tt>, <tt>'::'</tt> etc. </p>
+  <p>The <tt>support_option_...</tt> values are to be used in conjunction with the main language settings (<tt>support_normal</tt> and <tt>support_c99</tt>) . </p>
+  <ul>
+    <li>If the <tt>support_option_preserve_comments</tt> flag is set, the <tt>Wave</tt> library preserves almost all comments in the source code. The only comments not preserved are those contained inside macro definitions. By default all comments are replaced by a single space. </li>
+    <li>If the <tt>support_option_no_character_validation</tt> flag is set , the <tt>Wave</tt> library doesn't validate universal character literals (given in the form of <tt>'u1234'</tt> or <tt>'U12345678'</tt>) to be in the allowed value range. This flag is merely used for internal purposes by the testing framework and will be rarely used by a user of the library.</li>
+    <li>If the <tt>support_option_convert_trigraphs</tt> flag is set, the <tt>Wave</tt> library replaces all occurences of trigraph characters with their non-trigraph character sequence (i.e. <tt>'??='</tt> is replaced by <tt>'#'</tt> etc.) . By default no replacement is performed. </li>
+  </ul>
+</blockquote>
 <p><strong>Note:</strong> The set_language function internally resets the list of defined macros, so please be careful not to call it after you have defined your own macros already. </p>
 <p><a name="set_max_include_nesting_depth" id="set_max_include_nesting_depth"></a>set_max_include_nesting_depth<br>
   g et_max_include_nesting_depth</p>
@@ -431,7 +443,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Monday, April 4, 2005  7:45<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, May 8, 2005  17:58<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

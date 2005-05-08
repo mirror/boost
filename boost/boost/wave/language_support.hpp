@@ -22,10 +22,12 @@ enum language_support {
     support_normal = 0x01,
     support_cpp = support_normal,
     
+    support_long_long = 0x02,
+
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 //  support flags for C99
-    support_variadics = 0x02,
-    support_c99 = support_variadics | 0x04,
+    support_variadics = 0x04,
+    support_c99 = support_variadics | support_long_long | 0x08,
 #endif 
 
     support_option_mask = 0xFF00,
@@ -45,6 +47,34 @@ inline bool
 need_cpp(language_support language) 
 {
     return (language & ~support_option_mask) == support_cpp;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  need_long_long
+//
+//      Extract, if the language to support needs long long support
+//
+///////////////////////////////////////////////////////////////////////////////
+inline bool 
+need_long_long(language_support language) 
+{
+    return (language & support_long_long) ? true : false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  enable_long_long
+//
+//      Set long long support in the language to support
+//
+///////////////////////////////////////////////////////////////////////////////
+inline language_support
+enable_long_long(language_support language, bool enable = true)
+{
+    if (enable)
+        return static_cast<language_support>(language | support_long_long);
+    return static_cast<language_support>(language & ~support_long_long);
 }
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0

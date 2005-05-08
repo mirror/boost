@@ -229,6 +229,7 @@ testwave_app::testwave_app(po::variables_map const& vm)
             "specify a macro to undefine")
         ("nesting,n", po::value<int>(), 
             "specify a new maximal include nesting depth")
+        ("long_long", "enable long long support in C++ mode")
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
         ("variadics", "enable certain C99 extensions in C++ mode")
         ("c99", "enable C99 mode (implies --variadics)")
@@ -471,9 +472,10 @@ testwave_app::extract_special_information(std::string const& filename,
     typedef token_type::position_type position_type;
     
     boost::wave::language_support const lang_opts = 
-        (boost::wave::language_support)(boost::wave::support_variadics | 
-             boost::wave::support_option_no_character_validation |
-             boost::wave::support_option_convert_trigraphs);
+        (boost::wave::language_support)(
+            boost::wave::support_variadics | boost::wave::support_long_long |
+            boost::wave::support_option_no_character_validation |
+            boost::wave::support_option_convert_trigraphs);
     
     position_type pos(filename.c_str());
     lexer_type it = lexer_type(instr.begin(), instr.end(), pos, lang_opts);
@@ -592,6 +594,10 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
     }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+
+    if (vm.count("long_long")) {
+        ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
+    }
     
 // enable trigraph conversion
     ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 

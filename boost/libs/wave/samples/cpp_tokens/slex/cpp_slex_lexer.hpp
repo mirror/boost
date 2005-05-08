@@ -545,9 +545,8 @@ public:
                         }
                         break;
                         
-                    case T_LONGINTLIT:  // supported in C99 and variadics mode
-#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-                        if (!boost::wave::need_variadics(language)) {
+                    case T_LONGINTLIT:  // supported in C99 and long_long mode
+                        if (!boost::wave::need_long_long(language)) {
                         // syntax error: not allowed in C++ mode
                             BOOST_WAVE_LEXER_THROW(
                                 boost::wave::cpplexer::lexing_exception, 
@@ -555,7 +554,6 @@ public:
                                 pos.get_line(), pos.get_column(), 
                                 pos.get_file().c_str());
                         }
-#endif
                         break;
 
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
