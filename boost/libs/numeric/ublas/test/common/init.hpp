@@ -41,7 +41,7 @@ void initialize_matrix_impl (M &m, ublas::sparse_proxy_tag) {
 
 template<class M>
 void initialize_matrix (M &m) {
-	initialize_matrix_impl (m, typename M::storage_category());
+    initialize_matrix_impl (m, typename M::storage_category());
 }
 
 template<class M>
