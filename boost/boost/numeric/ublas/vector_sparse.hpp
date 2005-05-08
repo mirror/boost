@@ -415,7 +415,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, const_reference t) {
             std::pair<subiterator_type, bool> ii = data ().insert (typename array_type::value_type (i, t));
-            BOOST_UBLAS_CHECK (ii.second, bad_index ());		// duplicate element
+            BOOST_UBLAS_CHECK (ii.second, bad_index ());        // duplicate element
             BOOST_UBLAS_CHECK ((ii.first)->first == i, internal_logic ());   // broken map
             if (!ii.second)     // existing element
                 (ii.first)->second = t;
@@ -740,7 +740,7 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
-		typedef typename IA::difference_type difference_type;
+        typedef typename IA::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
@@ -923,7 +923,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element assignment
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, const_reference t) {
-            BOOST_UBLAS_CHECK (!find_element (i), bad_index ());		// duplicate element
+            BOOST_UBLAS_CHECK (!find_element (i), bad_index ());        // duplicate element
             if (filled_ >= capacity_)
                 reserve (2 * capacity_, true);
             subiterator_type it (detail::lower_bound (index_data_.begin (), index_data_.begin () + filled_, k_based (i), std::less<size_type> ()));
@@ -1313,7 +1313,7 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
-		typedef typename IA::difference_type difference_type;
+        typedef typename IA::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
@@ -1527,8 +1527,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, const_reference t) {
-            BOOST_UBLAS_CHECK (!find_element (i), bad_index ());		// duplicate element
-        	append_element (i, t);
+            BOOST_UBLAS_CHECK (!find_element (i), bad_index ());        // duplicate element
+            append_element (i, t);
             return value_data_ [filled_ - 1];
         }
         BOOST_UBLAS_INLINE

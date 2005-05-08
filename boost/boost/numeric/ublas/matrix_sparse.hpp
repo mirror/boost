@@ -398,7 +398,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element assingment
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, size_type j, const_reference t) {
-            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());		// duplicate element
+            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());        // duplicate element
             const size_type element = layout_type::element (i, size1_, j, size2_);
             std::pair<subiterator_type, bool> ii (data ().insert (typename array_type::value_type (element, t)));
             BOOST_UBLAS_CHECK ((ii.first)->first == element, internal_logic ());   // broken map
@@ -1445,7 +1445,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element assignment
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, size_type j, const_reference t) {
-            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());		// duplicate element
+            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());        // duplicate element
             const size_type element1 = layout_type::element1 (i, size1_, j, size2_);
             const size_type element2 = layout_type::element2 (i, size1_, j, size2_);
 
@@ -2729,7 +2729,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element assignment
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, size_type j, const_reference t) {
-            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());		// duplicate element
+            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());        // duplicate element
             if (filled2_ >= capacity_)
                 reserve (2 * filled2_, true);
             BOOST_UBLAS_CHECK (filled2_ < capacity_, internal_logic ());
@@ -3827,7 +3827,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename IA::value_type size_type;
         // size_type for the data arrays.
         typedef typename IA::size_type  array_size_type;
-		// FIXME difference type for sprase storage iterators should it be in the container?
+        // FIXME difference type for sprase storage iterators should it be in the container?
         typedef typename IA::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
@@ -4046,8 +4046,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         true_reference insert_element (size_type i, size_type j, const_reference t) {
-            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());		// duplicate element
-        	append_element (i, j, t);
+            BOOST_UBLAS_CHECK (!find_element (i, j), bad_index ());        // duplicate element
+            append_element (i, j, t);
             return value_data_ [filled_ - 1];
         }
         BOOST_UBLAS_INLINE

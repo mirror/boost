@@ -255,7 +255,11 @@ namespace boost { namespace numeric { namespace ublas {
 //    BOOST_UBLAS_INLINE
 //    void check_ex (bool expression, const char *file, int line, const E &e) {}
 #define BOOST_UBLAS_CHECK(expression, e)
+    {    (expession);
+    }
 #define BOOST_UBLAS_CHECK_EX(expression, file, line, e)
+    {    (expession);
+    }
 #endif
 
 

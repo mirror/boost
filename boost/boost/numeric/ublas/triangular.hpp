@@ -106,8 +106,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             else {
                 data ().resize (triangular_type::packed_size (layout_type (), size1, size2));
-	            size1_ = size1;
-    	        size2_ = size2;
+                size1_ = size1;
+                size2_ = size2;
             }
         }
         BOOST_UBLAS_INLINE
@@ -884,7 +884,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class TRI, class L, class A>
     const typename triangular_matrix<T, TRI, L, A>::value_type triangular_matrix<T, TRI, L, A>::one_ (1);
 
-	// TODO These traits overloads seem to do no more then generic defition
+    // TODO These traits overloads seem to do no more then generic defition
     template <class T, class TRI, class L, class A>
     struct vector_temporary_traits< triangular_matrix<T, TRI, L, A> > {
        typedef typename triangular_matrix<T, TRI, L, A>::vector_temporary_type type ;

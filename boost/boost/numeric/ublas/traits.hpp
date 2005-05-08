@@ -697,7 +697,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
 
-	// Storage tags -- hierarchical definition of storage characteristics
+    // Storage tags -- hierarchical definition of storage characteristics
 
     struct unknown_storage_tag {};
     struct sparse_proxy_tag: public unknown_storage_tag {};
@@ -766,7 +766,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
 
-	// Iterator tags -- hierarchical definition of storage characteristics
+    // Iterator tags -- hierarchical definition of storage characteristics
 
     struct sparse_bidirectional_iterator_tag : public std::bidirectional_iterator_tag {};
     struct packed_random_access_iterator_tag : public std::random_access_iterator_tag {};

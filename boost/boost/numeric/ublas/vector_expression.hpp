@@ -1721,8 +1721,8 @@ namespace boost { namespace numeric { namespace ublas {
         return expression_type (e ());
     }
 
-    // real: norm_inf v = max (abs (v [i]))
-    // complex: norm_inf v = max (max (abs (real (v [i])), abs (imag (v [i]))))
+    // real: norm_inf v = maximum (abs (v [i]))
+    // complex: norm_inf v = maximum (maximum (abs (real (v [i])), abs (imag (v [i]))))
     template<class E>
     BOOST_UBLAS_INLINE
     typename vector_scalar_unary_traits<E, vector_norm_inf<typename E::value_type> >::result_type
@@ -1731,7 +1731,7 @@ namespace boost { namespace numeric { namespace ublas {
         return expression_type (e ());
     }
 
-    // real: index_norm_inf v = min (i: abs (v [i]) == max (abs (v [i])))
+    // real: index_norm_inf v = minimum (i: abs (v [i]) == maximum (abs (v [i])))
     template<class E>
     BOOST_UBLAS_INLINE
     typename vector_scalar_unary_traits<E, vector_index_norm_inf<typename E::value_type> >::result_type

@@ -77,7 +77,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()),
             lower_ (lower), upper_ (upper),
-            data_ (std::max (size1_, size2_) * (lower_ + 1 + upper_)) {
+            data_ ((std::max) (size1_, size2_) * (lower_ + 1 + upper_)) {
             matrix_assign<scalar_assign> (*this, ae);
         }
 
@@ -116,11 +116,11 @@ namespace boost { namespace numeric { namespace ublas {
             }
             else {
                 data ().resize ((std::max) (size1, size2) * (lower + 1 + upper));
-	            size1_ = size1;
-    	        size2_ = size2;
-        	    lower_ = lower;
-            	upper_ = upper;
-	        }
+                size1_ = size1;
+                size2_ = size2;
+                lower_ = lower;
+                upper_ = upper;
+            }
         }
 
         BOOST_UBLAS_INLINE

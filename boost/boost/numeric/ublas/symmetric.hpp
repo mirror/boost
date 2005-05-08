@@ -127,7 +127,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             else {
                 data ().resize (triangular_type::packed_size (layout_type (), size, size));
-	            size_ = size;
+                size_ = size;
             }
         }
         BOOST_UBLAS_INLINE

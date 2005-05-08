@@ -1138,7 +1138,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     void concept_checks () {
 
-		// Allow tests to be group to keep down compiler storage requirement
+        // Allow tests to be group to keep down compiler storage requirement
 #ifdef INTERAL
 #define INTERNAL_STORAGE
 #define INTERNAL_VECTOR
@@ -1148,8 +1148,8 @@ namespace boost { namespace numeric { namespace ublas {
 #define INTERNAL_EXPRESSION
 #endif
 
-		// Element value type for tests
-		typedef float T;
+        // Element value type for tests
+        typedef float T;
 
         // Storage Array
 #if defined (INTERNAL_STORAGE) || defined (INTERNAL_STORAGE_DENSE)

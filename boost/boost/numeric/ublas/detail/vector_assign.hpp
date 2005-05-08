@@ -25,11 +25,11 @@
 namespace boost { namespace numeric { namespace ublas {
 namespace detail {
 
-	// Weak equality check - useful to compare equality two arbitary vector expression results.
-	// Since the actual expressions are unknown, we check for and arbitary error bound
-	// on the relative error.
-	// For a linear expression the infinity norm makes sense as we do not know how the elements will be
-	// combined in the expression. False positive results are inevitable for arbirary expressions!
+    // Weak equality check - useful to compare equality two arbitary vector expression results.
+    // Since the actual expressions are unknown, we check for and arbitary error bound
+    // on the relative error.
+    // For a linear expression the infinity norm makes sense as we do not know how the elements will be
+    // combined in the expression. False positive results are inevitable for arbirary expressions!
     template<class E1, class E2, class S>
     BOOST_UBLAS_INLINE
     bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2, S epsilon, S min_norm) {
@@ -42,7 +42,7 @@ namespace detail {
     bool expression_type_check (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
         typedef typename type_traits<typename promote_traits<typename E1::value_type,
                                      typename E2::value_type>::promote_type>::real_type real_type;
-    	return equals (e1, e2, BOOST_UBLAS_TYPE_CHECK_EPSILON, BOOST_UBLAS_TYPE_CHECK_MIN);
+        return equals (e1, e2, BOOST_UBLAS_TYPE_CHECK_EPSILON, BOOST_UBLAS_TYPE_CHECK_MIN);
     }
 
 

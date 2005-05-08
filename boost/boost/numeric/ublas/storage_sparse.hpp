@@ -369,11 +369,11 @@ namespace boost { namespace numeric { namespace ublas {
         std::pair<iterator,bool> insert (const value_type &p) {
             iterator it = detail::lower_bound (begin (), end (), p, detail::less_pair<value_type> ());
             if (it->first == p.first)
-            	return std::make_pair (it, false);
+                return std::make_pair (it, false);
             difference_type n = it - begin ();
             BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n), external_logic ());
             resize (size () + 1);
-            it = begin () + n;	// allow for invalidation
+            it = begin () + n;    // allow for invalidation
             std::copy_backward (it, end () - 1, end ());
             *it = p;
             return std::make_pair (it, true);
@@ -381,7 +381,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Form Sorted Associative Container concept
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         iterator insert (iterator hint, const value_type &p) {
-        	return insert (p).first;
+            return insert (p).first;
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         void erase (iterator it) {

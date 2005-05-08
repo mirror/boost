@@ -34,9 +34,9 @@ namespace boost { namespace numeric { namespace ublas {
         void matrix_resize_preserve (M& m, M& temporary) {
             typedef L layout_type;
             typedef typename M::size_type size_type;
-            const size_type msize1 (m.size1 ());		// original size
+            const size_type msize1 (m.size1 ());        // original size
             const size_type msize2 (m.size2 ());
-            const size_type size1 (temporary.size1 ());	// new size is specified by temporary
+            const size_type size1 (temporary.size1 ());    // new size is specified by temporary
             const size_type size2 (temporary.size2 ());
             // Common elements to preserve
             const size_type size1_min = (std::min) (size1, msize1);
@@ -3145,7 +3145,7 @@ namespace boost { namespace numeric { namespace ublas {
             else {
                 size1_ = size1;
                 size2_ = size2;
-	        }
+            }
         }
 
         // Element access
