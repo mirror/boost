@@ -517,7 +517,7 @@ public:
     BOOST_MULTI_INDEX_HASHED_INDEX_CHECK_INVARIANT;
     if(size()<max_load&&n<=bucket_count())return;
 
-    size_type bc =std::numeric_limits<size_type>::max();
+    size_type bc =(std::numeric_limits<size_type>::max)();
     float     fbc=static_cast<float>(1+size()/mlf);
     if(bc>fbc){
       bc=static_cast<size_type>(fbc);
@@ -928,14 +928,14 @@ private:
   void calculate_max_load()
   {
     float fml=static_cast<float>(mlf*bucket_count());
-    max_load=std::numeric_limits<size_type>::max();
+    max_load=(std::numeric_limits<size_type>::max)();
     if(max_load>fml)max_load=static_cast<size_type>(fml);
   }
 
   void reserve(size_type n)
   {
     if(n>max_load){
-      size_type bc =std::numeric_limits<size_type>::max();
+      size_type bc =(std::numeric_limits<size_type>::max)();
       float     fbc=static_cast<float>(1+n/mlf);
       if(bc>fbc)bc =static_cast<size_type>(fbc);
       unchecked_rehash(bc);
