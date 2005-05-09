@@ -115,14 +115,14 @@ text_iarchive_impl<Archive>::text_iarchive_impl(
         is, 
         0 != (flags & no_codecvt)
     ),
-    #if defined(__MWERKS__)
-        basic_text_iarchive(flags)
-    #else
-        basic_text_iarchive<Archive>(flags)
-    #endif
+    basic_text_iarchive<Archive>(flags)
 {
     if(0 == (flags & no_header))
+        #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+        this->init();
+        #else
         this->basic_text_iarchive<Archive>::init();
+        #endif
 }
 
 } // namespace archive
