@@ -338,6 +338,9 @@
 				RelativePath="..\..\..\boost\serialization\base_object.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\basic_helper.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\export.hpp">
 			</File>
 			<File
@@ -430,6 +433,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\vector.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\weak_ptr.hpp">
 			</File>
 		</Filter>
 		<Filter
