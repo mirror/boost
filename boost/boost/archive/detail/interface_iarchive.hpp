@@ -61,6 +61,19 @@ public:
         return & bpis;
     }
 
+    template<class T>
+    T & get_helper(T * t = NULL){
+        boost::serialization::extended_type_info * eti = 
+            boost::serialization::type_info_implementation<T>::type::get_instance();
+        boost::serialization::basic_helper *hptr = 
+            this->This()->basic_iarchive::lookup_helper(eti);
+        if(NULL == hptr){
+            hptr = new T;
+            this->This()->basic_iarchive::insert_helper(hptr, eti);
+        }
+        return static_cast<T &>(* hptr);
+    }
+
     // default processing - invoke serialization library
     template<class T>
     void load_override(T & t, /*BOOST_PFTO*/ int){
@@ -78,56 +91,6 @@ public:
     Archive & operator&(T & t){
 		return *(this->This()) >> t;
     }
-
-#if 0
-    // define operators for non-const arguments.  Don't depend one the const
-    // ones below because the compiler MAY make a temporary copy to
-    // create the const parameter (Though I havn't seen this happen). 
-    // the >> operator
-    template<class T>
-    Archive & operator>>(T & t){
-        // if this assertion trips. It means we're trying to load a
-        // const object with a compiler that doesn't have correct
-        // funtion template ordering.  On other compilers, this is
-        // handled below.
-        BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
-        this->This()->load_override(t, 0);
-        return * this->This();
-    }
-
-    // the & operator 
-    template<class T>
-    Archive & operator&(T & t){
-        // see above
-        BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
-        this->This()->load_override(t, 0);
-        return * this->This();
-    }
-    // define the following pair in order to permit passing of const and non_const
-    // temporary objects. These are needed to properly implement serialization
-    // wrappers.
-        // trap >> nvp<const T> as an error
-        template<class T>
-        Archive & operator>>(const boost::serialization::nvp<const T> & n){
-            BOOST_STATIC_ASSERT(0 == sizeof(T));
-            return * this->This();
-        }
-
-    #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    // the >> operator
-    template<class T>
-    Archive & operator>>(const T & t){
-        // this should only be used for wrappers.  Check that here
-        This()->load_override(const_cast<T &>(t), 0);
-        return * this->This();
-    }
-    // the & operator 
-    template<class T>
-    Archive & operator&(const T & t){
-        return * this >> t;
-    }
-    #endif
-#endif
 };
 
 } // namespace detail

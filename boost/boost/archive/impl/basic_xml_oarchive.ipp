@@ -282,13 +282,13 @@ template<class Archive>
 BOOST_DECL_ARCHIVE_OR_WARCHIVE
 #endif
 basic_xml_oarchive<Archive>::~basic_xml_oarchive(){
-    if(0 == (this->get_flags() & no_header))
-        return;
-    BOOST_TRY{
-		this->This()->put("</boost_serialization>\n");
+    if(0 == (this->get_flags() & no_header)){
+        BOOST_TRY{
+		    this->This()->put("</boost_serialization>\n");
+	    }
+	    BOOST_CATCH(...){}
+	    BOOST_CATCH_END
 	}
-	BOOST_CATCH(...){}
-	BOOST_CATCH_END
 }
 
 } // namespace archive

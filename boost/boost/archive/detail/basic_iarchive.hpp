@@ -26,6 +26,7 @@
 namespace boost {
 
 namespace serialization {
+    class basic_helper;
     class extended_type_info;
 } // namespace serialization
 
@@ -51,6 +52,9 @@ class BOOST_DECL_ARCHIVE basic_iarchive
     virtual void vload(class_id_optional_type &t) = 0;
     virtual void vload(class_name_type &t) = 0;
     virtual void vload(tracking_type &t) = 0;
+protected:
+    basic_iarchive(unsigned int flags);
+    virtual ~basic_iarchive();
 public:
     // note: NOT part of the public API.
     void next_object_pointer(void *t);
@@ -64,13 +68,16 @@ public:
         void * & t, 
         const basic_pointer_iserializer * bpis_ptr,
         const basic_pointer_iserializer * (*finder)(
-            const boost::serialization::extended_type_info & type
+            const boost::serialization::extended_type_info & eti
         )
     );
-protected:
-    basic_iarchive(unsigned int flags);
-    virtual ~basic_iarchive();
-public:
+    boost::serialization::basic_helper * lookup_helper(
+        const boost::serialization::extended_type_info * const eti
+    );
+    boost::serialization::basic_helper * insert_helper(
+        boost::serialization::basic_helper * h,
+        const boost::serialization::extended_type_info * const eti
+    );
     void 
     set_library_version(unsigned int archive_library_version);
     unsigned int 

@@ -28,6 +28,12 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
+
+namespace serialization {
+    class basic_helper;
+    class extended_type_info;
+} // namespace serialization
+
 namespace archive {
 namespace detail {
 
@@ -54,6 +60,9 @@ class BOOST_DECL_ARCHIVE_OR_WARCHIVE basic_oarchive
     virtual void vsave(const class_id_reference_type t) =  0;
     virtual void vsave(const class_name_type & t) = 0;
     virtual void vsave(const tracking_type t) = 0;
+protected:
+    basic_oarchive(unsigned int flags);
+    virtual ~basic_oarchive();
 public:
     // note: NOT part of the public interface
     void register_basic_serializer(const basic_oserializer & bos);
@@ -69,10 +78,13 @@ public:
         vsave(NULL_POINTER_TAG);
     }
     void end_preamble(); // default implementation does nothing
-protected:
-    basic_oarchive(unsigned int flags);
-    virtual ~basic_oarchive();
-public:
+    boost::serialization::basic_helper * lookup_helper(
+        const boost::serialization::extended_type_info * const eti
+    );
+    boost::serialization::basic_helper * insert_helper(
+        boost::serialization::basic_helper * h,
+        const boost::serialization::extended_type_info * const eti
+    );
     unsigned int get_library_version() const;
     unsigned int get_flags() const;
 };

@@ -57,8 +57,8 @@ namespace serialization {                                              \
 template<>                                                             \
 struct version<T >                                                     \
 {                                                                      \
-    typedef mpl::integral_c_tag tag;                                   \
     typedef mpl::int_<N> type;                                         \
+    typedef mpl::integral_c_tag tag;                                   \
     BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value); \
     /* require that class info saved when versioning is used */        \
     /*                                                                 \

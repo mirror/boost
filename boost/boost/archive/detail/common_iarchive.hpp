@@ -22,6 +22,8 @@
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
 
+#include <boost/serialization/type_info_implementation.hpp>
+
 namespace boost {
 namespace archive {
 namespace detail {

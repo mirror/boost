@@ -65,6 +65,19 @@ public:
         return & bpos;
     }
 
+    template<class T>
+    T & get_helper(T & h){
+        typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
+        boost::serialization::extended_type_info * eti = eti_type::get_instance();
+        boost::serialization::basic_helper *hptr = 
+            this->This()->basic_iarchive::lookup_helper(eti);
+        if(NULL == hptr){
+            hptr = new T;
+            this->This()->basic_iarchive::insert_helper(hptr, eti);
+        }
+        return static_cast<T &>(* hptr);
+    }
+
     // default processing - invoke serialization library
     template<class T>
     void save_override(T & t, /*BOOST_PFTO*/ int){
@@ -86,48 +99,6 @@ public:
 			return * this->This() << t;
 		#endif
     }
-
-#if 0
-    // define operators for non-const arguments.  Don't depend one the const
-    // ones below because the compiler MAY make a temporary copy to
-    // create the const parameter (Though I havn't seen this happen). 
-    #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-
-    struct const_error_check{
-        // if we trap here, we're saving a tracked non-const
-        // value - this could be a stack variable with the same
-        // address for multiple items. This would be the source of very
-        // subtle errors and should be double checked
-        typedef BOOST_DEDUCED_TYPENAME mpl::or_<
-            is_const<T>,
-            mpl::equal_to<
-                mpl::int_<serialization::track_never>,
-                serialization::tracking_level<T>
-            >
-        >::type type;
-        BOOST_STATIC_ASSERT(type::value);
-    };
-
-        // the << operator
-        template<class T>
-        Archive & operator<<(T & t){
-            // if trap here, we're saving a tracted non-const
-            // value - this could be a stack variable with the same
-            // address for multiple items. This would be the source of very
-            // subtle errors and should be double checked
-            // BOOST_STATIC_WARNING(
-            //     serialization::tracking_level == serialization::track_never
-            // );
-			BOOST_STATIC_ERROR(0 == sizeof(T));
-           return *this << const_cast<const T &>(t);
-        }
-        // the & operator
-        template<class T>
-        Archive & operator&(T & t){
-            return *this << const_cast<const T &>(t);
-        }
-    #endif
-#endif
 };
 
 } // namespace detail
