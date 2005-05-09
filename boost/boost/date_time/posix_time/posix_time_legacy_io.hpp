@@ -23,6 +23,7 @@
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
 #include "boost/date_time/posix_time/ptime.hpp"
 #include "boost/date_time/posix_time/time_period.hpp"
+#include "boost/date_time/time_parsing.hpp"
 
 namespace boost {
 namespace posix_time {
