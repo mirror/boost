@@ -7,6 +7,7 @@
 #define ARG_LIST_050329_HPP
 
 #include <boost/mpl/apply.hpp>
+#include <boost/mpl/identity.hpp>
 
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
@@ -49,6 +50,18 @@ struct empty_arg_list
         ))
     {}
 
+    // A metafunction class that, given a keyword and a default
+    // type, returns the appropriate result type for a keyword
+    // lookup given that default
+    struct index_result
+    {
+        template<class KW, class Default>
+        struct apply
+        {
+            typedef Default type;
+        };
+    };
+
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, < 3)
     // The overload set technique doesn't work with these older
     // compilers, so they need some explicit handholding.
@@ -65,20 +78,14 @@ struct empty_arg_list
         };
     };
 
-    // A metafunction class that, given a keyword and a default
-    // type, returns the appropriate result type for a keyword
-    // lookup given that default
-    struct key_value_type
-    {
-        template<class KW, class Default>
-        struct apply
-        {
-            typedef Default type;
-        };
-    };
-
     template <class K, class T>
     T& get(default_<K,T> x) const
+    {
+        return x.value;
+    }
+
+    template <class K, class T>
+    T get(default_<K,T> x) const
     {
         return x.value;
     }
@@ -155,6 +162,21 @@ struct arg_list : Next
     {}
 
 
+    // A metafunction class that, given a keyword and a default
+    // type, returns the appropriate result type for a keyword
+    // lookup given that default
+    struct index_result
+    {
+        template <class KW, class Default>
+        struct apply
+          : mpl::eval_if<
+                boost::is_same<KW, key_type>
+              , mpl::identity<value_type>
+              , mpl::apply_wrap2<typename Next::index_result, KW, Default>
+            >
+        {};
+    };
+
     //
     // Begin implementation of indexing operators for looking up
     // specific arguments by name
@@ -180,25 +202,10 @@ struct arg_list : Next
         {};
     };
 
-    // A metafunction class that, given a keyword and a default
-    // type, returns the appropriate result type for a keyword
-    // lookup given that default
-    struct key_value_type
-    {
-        template <class KW, class Default>
-        struct apply
-          : mpl::eval_if<
-                boost::is_same<KW, key_type>
-              , mpl::identity<value_type>
-              , mpl::apply_wrap2<typename Next::key_value_type, KW, Default>
-            >
-        {};
-    };
-
     // Outer indexing operators that dispatch to the right node's
     // get() function.
     template <class KW>
-    typename mpl::apply_wrap2<key_value_type, KW, void_>::type&
+    typename mpl::apply_wrap2<index_result, KW, void_>::type&
     operator[](keyword<KW> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -206,7 +213,7 @@ struct arg_list : Next
     }
 
     template <class KW, class Default>
-    typename mpl::apply_wrap2<key_value_type, KW, Default>::type&
+    typename mpl::apply_wrap2<index_result, KW, Default>::type&
     operator[](default_<KW, Default> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -215,7 +222,7 @@ struct arg_list : Next
 
     template <class KW, class F>
     typename mpl::apply_wrap2<
-        key_value_type,KW
+        index_result,KW
       , typename F::result_type
     >::type
     operator[](lazy_default<KW,F> x) const
