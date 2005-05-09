@@ -14,6 +14,7 @@
 #include <limits>     // sid::numeric_limits
 
 #include <boost/static_assert.hpp>
+#include <boost/cstdint.hpp>
 
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
@@ -40,7 +41,7 @@ namespace grammars {
 namespace closures {
 
     struct chlit_closure 
-    :   boost::spirit::closure<chlit_closure, unsigned long, bool> 
+    :   boost::spirit::closure<chlit_closure, boost::uint32_t, bool> 
     {
         member1 value;
         member2 long_lit;
@@ -63,19 +64,22 @@ namespace impl {
         };
 
         void 
-        operator()(unsigned long& value, bool long_lit, bool& overflow,
-            unsigned long character) const
+        operator()(boost::uint32_t& value, bool long_lit, bool& overflow,
+            boost::uint32_t character) const
         { 
             // The following assumes that wchar_t is max. 32 Bit
             BOOST_STATIC_ASSERT(sizeof(wchar_t) <= 4);
             
-            static unsigned long masks[] = { 
+            static boost::uint32_t masks[] = { 
                 0x000000ff, 0x0000ffff, 0x00ffffff, 0xffffffff
+            };
+            static boost::uint32_t overflow_masks[] = { 
+                0xff000000, 0xffff0000, 0xffffff00, 0xffffffff
             };
             
             if (long_lit) {
             // make sure no overflow will occur below
-                if ((value / masks[sizeof(wchar_t)-1]) != 0) {
+                if ((value & overflow_masks[sizeof(wchar_t)-1]) != 0) {
                     overflow |= true;
                 }
                 else {
@@ -88,7 +92,7 @@ namespace impl {
             }
             else {
             // make sure no overflow will occur below
-                if ((value / masks[sizeof(char)-1]) != 0) {
+                if ((value & overflow_masks[sizeof(char)-1]) != 0) {
                     overflow |= true;
                 }
                 else {
@@ -284,7 +288,7 @@ chlit_grammar_gen<TokenT>::evaluate(TokenT const &token)
     using namespace boost::spirit;
     
 static chlit_grammar g;
-unsigned long result = 0;
+boost::uint32_t result = 0;
 typename TokenT::string_type const &token_val = token.get_value();
 parse_info<typename TokenT::string_type::const_iterator> hit =
     parse(token_val.begin(), token_val.end(), g[spirit_assign_actor(result)]);
