@@ -78,7 +78,7 @@ struct is_abstract_imp2
    // T must be a complete type, further if T is a template then
    // it must be instantiated in order for us to get the right answer:
    //
-   BOOST_STATIC_ASSERT(sizeof(T));
+   BOOST_STATIC_ASSERT(sizeof(T) != 0);
 
    // GCC2 won't even parse this template if we embed the computation
    // of s1 in the computation of value.
