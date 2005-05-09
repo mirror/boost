@@ -16,7 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include "throw_exception.hpp"
+#include <boost/throw_exception.hpp>
 #include <boost/serialization/split_member.hpp>
 
 #include "B.hpp"
