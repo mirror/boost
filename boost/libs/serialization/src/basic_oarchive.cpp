@@ -27,6 +27,8 @@
 #include <boost/archive/detail/basic_oarchive.hpp>
 #include <boost/archive/archive_exception.hpp>
 
+#include <boost/serialization/basic_helper.hpp>
+
 #ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4251 4231 4660 4275)
@@ -134,15 +136,54 @@ class basic_oarchive_impl
     // keyed on object id
     std::set<object_id_type> stored_pointers;
 
+    //////////////////////////////////////////////////////////////////////
+    // list of serialization helpers
+    struct helper_type {
+        boost::serialization::basic_helper * m_helper;
+        const boost::serialization::extended_type_info * const m_eti;
+        helper_type(
+            boost::serialization::basic_helper * h, 
+            const boost::serialization::extended_type_info * const eti
+        ) :
+            m_helper(h),
+            m_eti(eti)
+        {}
+    };
+
+    struct helper_compare {
+        bool operator()(const helper_type & lhs, const helper_type & rhs) const {
+            return * lhs.m_eti < * rhs.m_eti;
+        }
+    };
+
+    typedef std::set<helper_type, helper_compare>::iterator 
+    helper_iterator;
+    typedef std::set<helper_type, helper_compare>::const_iterator 
+    helper_const_iterator;
+
+    std::set<helper_type, helper_compare> m_helpers;
+
     // address of the most recent object serialized as a poiner
     // whose data itself is now pending serialization
     const void * pending_object;
     const basic_oserializer * pending_bos;
+
     basic_oarchive_impl(unsigned int flags) :
         m_flags(flags),
         pending_object(NULL),
         pending_bos(NULL)
     {}
+
+    ~basic_oarchive_impl(){
+        // delete helpers
+        for(
+            helper_iterator it = m_helpers.begin();
+            it !=  m_helpers.end();
+            ++it
+        ){
+            delete it->m_helper;
+        }
+    }
 
     const cobject_type &
     find(const basic_oserializer & bos);
@@ -162,7 +203,23 @@ class basic_oarchive_impl
         const void * t, 
         const basic_pointer_oserializer * bpos
     );
-
+    boost::serialization::basic_helper * lookup_helper(
+        const boost::serialization::extended_type_info * const eti
+    ){
+        helper_iterator it;
+        const helper_type ht(NULL, eti);
+        it = m_helpers.find(ht);
+        return (it == m_helpers.end()) ? NULL : it->m_helper;
+    }
+    basic_helper * insert_helper(
+        boost::serialization::basic_helper * h, 
+        const boost::serialization::extended_type_info * const eti
+    ){
+        std::pair<helper_iterator, bool> result = m_helpers.insert(
+            helper_type(h, eti)
+        );
+        return (*result.first).m_helper;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -440,6 +497,23 @@ basic_oarchive::get_flags() const{
 void 
 BOOST_DECL_ARCHIVE 
 basic_oarchive::end_preamble(){
+}
+
+boost::serialization::basic_helper * 
+BOOST_DECL_ARCHIVE 
+basic_oarchive::lookup_helper(
+    const boost::serialization::extended_type_info * const eti
+){
+    return pimpl->lookup_helper(eti);
+}
+
+boost::serialization::basic_helper* 
+BOOST_DECL_ARCHIVE 
+basic_oarchive::insert_helper(
+    basic_helper * h,
+    const boost::serialization::extended_type_info * const eti
+){
+    return pimpl->insert_helper(h, eti);
 }
 
 } // namespace detail
