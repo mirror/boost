@@ -380,6 +380,12 @@ boost::wave::util::file_position_type current_position;
         }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 
+     // enable long long support, if appropriate
+         if (vm.count("long_long")) {
+             ctx.set_language(
+                boost::wave::enable_long_long(ctx.get_language()));
+         }
+
      // enable preserving comments mode
         if (vm.count("preserve")) {
             ctx.set_language(
