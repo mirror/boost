@@ -20,6 +20,7 @@
 #include <iostream>
 #include <algorithm>     // std::max
 #include <iterator>
+#include <cmath>         // std::pow
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
