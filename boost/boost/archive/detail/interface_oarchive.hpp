@@ -70,10 +70,10 @@ public:
         typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
         boost::serialization::extended_type_info * eti = eti_type::get_instance();
         boost::serialization::basic_helper *hptr = 
-            this->This()->basic_iarchive::lookup_helper(eti);
+            this->This()->basic_oarchive::lookup_helper(eti);
         if(NULL == hptr){
             hptr = new T;
-            this->This()->basic_iarchive::insert_helper(hptr, eti);
+            this->This()->basic_oarchive::insert_helper(hptr, eti);
         }
         return static_cast<T &>(* hptr);
     }
