@@ -130,7 +130,25 @@ namespace boost
 // Test if a constant can fit within a certain type
 #define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < Number > :: Type ( Value ) == Value )
 
-#define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
+#if ULONG_MAX > 0xFFFFFFFFL
+#define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
+ PRIVATE_FIT_TEST(Template, 64, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 63, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 62, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 61, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 60, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 59, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 58, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 57, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 56, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 55, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 54, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 53, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 52, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 51, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 50, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 49, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 48, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 47, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 46, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 45, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 44, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 43, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 42, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 41, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 40, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 39, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 38, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 37, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 36, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 35, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 34, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 33, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 31, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 30, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 29, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 28, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 27, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 26, Type, v); v >>= 1; \
@@ -147,6 +165,26 @@ namespace boost
  PRIVATE_FIT_TEST(Template, 5, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 4, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 3, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 2, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
+#else
+#define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
+ PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 31, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 30, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 29, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 28, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 27, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 26, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 25, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 24, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 23, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 22, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 21, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 20, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 19, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 18, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 17, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 16, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 15, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 14, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 13, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 12, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 11, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 10, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 9, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 8, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 7, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 6, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 5, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 4, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 3, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 2, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
+#endif
 
 #define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (ULONG_MAX >> Number) > :: Type ( Value ) == Value )
 
