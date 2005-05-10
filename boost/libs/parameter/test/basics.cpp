@@ -18,15 +18,14 @@ namespace test
   template<class Params>
   int f_impl(const Params& p)
   {
-      typename boost::parameter::index_result<Params, struct name_>::type&
+      typename boost::parameter::index_result<Params, struct name_>::type
           n = p[name];
 
       typename boost::parameter::index_result<
         Params, struct value_, double
-      >::type const&  v = p[value || boost::bind(&value_default) ];
+      >::type v = p[value || boost::bind(&value_default) ];
           
-      typename boost::parameter::index_result<Params, struct index_, int>::type const&
-          i = p[index | 999];
+      typename boost::parameter::index_result<Params, struct index_, int>::type i = p[index | 999];
           
       p[tester](n,v,i);
 

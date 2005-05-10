@@ -7,7 +7,7 @@
 #define ARG_LIST_050329_HPP
 
 #include <boost/mpl/apply.hpp>
-#include <boost/mpl/identity.hpp>
+#include <boost/type_traits/add_reference.hpp>
 
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
@@ -171,7 +171,7 @@ struct arg_list : Next
         struct apply
           : mpl::eval_if<
                 boost::is_same<KW, key_type>
-              , mpl::identity<value_type>
+              , add_reference<value_type>
               , mpl::apply_wrap2<typename Next::index_result, KW, Default>
             >
         {};
@@ -205,7 +205,7 @@ struct arg_list : Next
     // Outer indexing operators that dispatch to the right node's
     // get() function.
     template <class KW>
-    typename mpl::apply_wrap2<index_result, KW, void_>::type&
+    typename mpl::apply_wrap2<index_result, KW, void_>::type
     operator[](keyword<KW> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -213,7 +213,7 @@ struct arg_list : Next
     }
 
     template <class KW, class Default>
-    typename mpl::apply_wrap2<index_result, KW, Default>::type&
+    typename mpl::apply_wrap2<index_result, KW, Default&>::type
     operator[](default_<KW, Default> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
