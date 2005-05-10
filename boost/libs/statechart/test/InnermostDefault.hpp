@@ -1,26 +1,26 @@
-#ifndef BOOST_FSM_TEST_INNERMOST_DEFAULT_HPP_INCLUDED
-#define BOOST_FSM_TEST_INNERMOST_DEFAULT_HPP_INCLUDED
+#ifndef BOOST_STATECHART_TEST_INNERMOST_DEFAULT_HPP_INCLUDED
+#define BOOST_STATECHART_TEST_INNERMOST_DEFAULT_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004
+// (c) Copyright Andreas Huber Doenni 2004-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/state.hpp>
+#include <boost/statechart/state.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived, class Context, class Reactions = fsm::no_reactions >
-struct InnermostDefault : fsm::state< MostDerived, Context, Reactions >
+template< class MostDerived, class Context, class Reactions = sc::no_reactions >
+struct InnermostDefault : sc::state< MostDerived, Context, Reactions >
 {
-  typedef fsm::state< MostDerived, Context, Reactions > base_type;
+  typedef sc::state< MostDerived, Context, Reactions > base_type;
   typedef typename base_type::my_context my_context;
   typedef InnermostDefault my_base;
 

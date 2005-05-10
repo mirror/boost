@@ -6,7 +6,7 @@
 <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
-<title>The boost::fsm library - Reference</title>
+<title>The Boost Statechart Library - Reference</title>
 </head>
 
 <body link="#0000ff" vlink="#800080">
@@ -18,7 +18,7 @@
     <img alt="C++ Boost" src="../../../boost.png" border="0" width="277" height="86"></a></h3>
     </td>
     <td valign="top">
-    <h1 align="center">The boost::fsm library</h1>
+    <h1 align="center">The Boost Statechart Library</h1>
     <h2 align="center">Reference</h2>
     </td>
   </tr>
@@ -149,7 +149,7 @@ the indicated results:</p>
     If <code>!= 0</code>, <code>Type</code> must match the type of the 
     previously set pointer. This function is only available if
     <a href="configuration.html#Application Defined Macros">
-    BOOST_FSM_USE_NATIVE_RTTI</a> is not defined</td>
+    BOOST_STATECHART_USE_NATIVE_RTTI</a> is not defined</td>
   </tr>
 </table>
 <h2><a name="Scheduler">Scheduler</a> concept</h2>
@@ -282,7 +282,7 @@ well-formed and have the indicated results:</p>
     with <code>n == 0</code> (see above)</td>
   </tr>
 </table>
-<h1>Header &lt;boost/fsm/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template state_machine">Class template <code>state_machine</code></a></h2>
 <p>This is the base class template of all synchronous state machines.</p>
 <h3>Class template <code>state_machine</code> parameters</h3>
@@ -328,7 +328,7 @@ well-formed and have the indicated results:</p>
 <h3>Class template <code>state_machine</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt;
     class MostDerived,
@@ -638,7 +638,7 @@ reference type and none of the active states has a most derived type equal to
 <code>const state_base_type *</code><br>
 <b>Note</b>: The position of a given innermost state in the range is 
 arbitrary. It may change with each call to a modifier function. Moreover, all iterators are invalidated whenever a modifier function is called</p>
-<h1>Header &lt;boost/fsm/<a name="asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template asynchronous_state_machine">Class template <code>
 asynchronous_state_machine</code></a></h2>
 <p>This is the base class template of all asynchronous state machines.</p>
@@ -691,7 +691,7 @@ asynchronous_state_machine</code></a></h2>
 <h3>Class template <code>asynchronous_state_machine</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt;
     class MostDerived,
@@ -724,7 +724,7 @@ subtype objects directly. This can only be done through an object of the
 <b>Note</b>: Users cannot destruct <code>asynchronous_state_machine&lt;&gt;</code> 
 subtype objects directly. This can only be done through an object of the
 <code>Scheduler</code> class</p>
-<h1>Header &lt;boost/fsm/<a name="event_processor.hpp">event_processor.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="event_processor.hpp">event_processor.hpp</a>&gt;</h1>
 <h2><a name="Class template event_processor">Class template <code>
 event_processor</code></a></h2>
 <p>This is the base class template of all types that process events. <code>
@@ -748,7 +748,7 @@ implementation.</p>
 <h3>Class template <code>event_processor</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class Scheduler &gt;
   class event_processor
@@ -813,7 +813,7 @@ constructor</p>
 <pre>processor_handle <a name="my_handle">my_handle</a>() const;</pre>
 <p><b>Returns</b>: The <code>processor_handle</code> object obtained in the 
 constructor</p>
-<h1>Header &lt;boost/fsm/<a name="fifo_scheduler.hpp">fifo_scheduler.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="fifo_scheduler.hpp">fifo_scheduler.hpp</a>&gt;</h1>
 <h2><a name="Class template fifo_scheduler">Class template <code>
 fifo_scheduler</code></a></h2>
 <p>This class template is a model of the <a href="#Scheduler">Scheduler concept</a>.</p>
@@ -841,7 +841,7 @@ fifo_scheduler</code></a></h2>
 <h3>Class template <code>fifo_scheduler</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt;
     class FifoWorker = fifo_worker&lt;&gt;,
@@ -1015,7 +1015,7 @@ objects</p>
 <p><b>Requires</b>: Must only be called from the thread that also calls <code>
 operator()()</code><br>
 <b>Returns</b>: <code>FifoWorker::terminated();</code></p>
-<h1>Header &lt;boost/fsm/<a name="exception_translator.hpp">exception_translator.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="exception_translator.hpp">exception_translator.hpp</a>&gt;</h1>
 <h2><a name="Class template exception_translator">Class template <code>
 exception_translator</code></a></h2>
 <p>This class template is a model of the <a href="#ExceptionTranslator">
@@ -1040,7 +1040,7 @@ ExceptionTranslator concept</a>.</p>
 <h3>Class template <code>exception_translator</code> synopsis &amp; semantics</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   class exception_thrown : public event&lt; exception_thrown &gt; {};
 
@@ -1049,7 +1049,7 @@ namespace fsm
   {
     public:
       template&lt; class Action, class ExceptionEventHandler &gt;
-      fsm::result operator()(
+      result operator()(
         Action action,
         ExceptionEventHandler eventHandler )
       {
@@ -1065,7 +1065,7 @@ namespace fsm
   };
 }
 }</pre>
-<h1>Header &lt;boost/fsm/<a name="null_exception_translator.hpp">null_exception_translator.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="null_exception_translator.hpp">null_exception_translator.hpp</a>&gt;</h1>
 <h2><a name="Class null_exception_translator">Class <code>
 null_exception_translator</code></a></h2>
 <p>This class is a model of the <a href="#ExceptionTranslator">
@@ -1073,13 +1073,13 @@ ExceptionTranslator concept</a>.</p>
 <h3>Class <code>null_exception_translator</code> synopsis &amp; semantics</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   class null_exception_translator
   {
     public:
       template&lt; class Action, class ExceptionEventHandler &gt;
-      fsm::result operator()(
+      result operator()(
         Action action, ExceptionEventHandler )
       {
         return action();
@@ -1087,14 +1087,14 @@ namespace fsm
   };
 }
 }</pre>
-<h1>Header &lt;boost/fsm/<a name="simple_state.hpp">simple_state.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="simple_state.hpp">simple_state.hpp</a>&gt;</h1>
 <h2><a name="Typedef no_reactions">Typedef <code>no_reactions</code></a></h2>
 <p>This is the default value for the <code>Reactions</code> parameter of the
 <code>simple_state</code> class template. Necessary for the rare cases when a 
 state without reactions has inner states.</p>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   typedef <i>implementation-defined</i> no_reactions;
 }
@@ -1103,7 +1103,7 @@ namespace fsm
 <p>Defines the history type of a state.</p>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   enum history_mode
   {
@@ -1215,7 +1215,7 @@ must derive from the <code>state</code> class template.</p>
 <h3>Class template <code>simple_state</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt;
     class MostDerived,
@@ -1631,15 +1631,15 @@ Returns</b>: The pointer to the custom type identifier for <code>MostDerived</co
 or <code>0</code><br>
 <b>Note</b>: This function is not available if
 <a href="configuration.html#Application Defined Macros"><code>
-BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
+BOOST_STATECHART_USE_NATIVE_RTTI</code></a> is defined</p>
 <pre>template&lt; class CustomId &gt;
 static void <a name="custom_static_type_ptr( const CustomId * )">custom_static_type_ptr( const CustomId * )</a>;</pre>
 <p><b>Effects</b>: Sets the pointer to the custom type identifier for <code>
 MostDerived</code><br>
 <b>Note</b>: This function is not available if
 <a href="configuration.html#Application Defined Macros"><code>
-BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
-<h1>Header &lt;boost/fsm/<a name="state.hpp">state.hpp</a>&gt;</h1>
+BOOST_STATECHART_USE_NATIVE_RTTI</code></a> is defined</p>
+<h1>Header &lt;boost/statechart/<a name="state.hpp">state.hpp</a>&gt;</h1>
 <h2><a name="Class template state">Class template <code>state</code></a></h2>
 <p>This is the base class template of all states that need to call any of the 
 following <code><a href="#Class template simple_state">simple_state</a></code> 
@@ -1680,7 +1680,7 @@ what saves the implementation of the forwarding constructor.</p>
 <h3>Class template <code>state</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt;
     class MostDerived,
@@ -1707,7 +1707,7 @@ namespace fsm
 <p>Direct and indirect subtypes of <code>state&lt;&gt;</code> must provide a 
 constructor with the same signature as the <code>state&lt;&gt;</code> constructor, 
 forwarding the context parameter.</p>
-<h1>Header &lt;boost/fsm/<a name="shallow_history.hpp">shallow_history.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="shallow_history.hpp">shallow_history.hpp</a>&gt;</h1>
 <h2><a name="Class template shallow_history">Class template <code>
 shallow_history</code></a></h2>
 <p>This class template is used to specify a shallow history transition target 
@@ -1735,7 +1735,7 @@ or a shallow history inner initial state.</p>
 <h3>Class template <code>shallow_history</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class DefaultState &gt;
   class shallow_history
@@ -1744,7 +1744,7 @@ namespace fsm
   };
 }
 }</pre>
-<h1>Header &lt;boost/fsm/<a name="deep_history.hpp">deep_history.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="deep_history.hpp">deep_history.hpp</a>&gt;</h1>
 <h2><a name="Class template deep_history">Class template <code>deep_history</code></a></h2>
 <p>This class template is used to specify a deep history transition target or 
 a deep history inner initial state. The current deep history implementation 
@@ -1770,7 +1770,7 @@ has some <a href="rationale.html#Limitations">limitations</a>.</p>
 <h3>Class template <code>deep_history</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class DefaultState &gt;
   class deep_history
@@ -1779,13 +1779,13 @@ namespace fsm
   };
 }
 }</pre>
-<h1>Header &lt;boost/fsm/<a name="event_base.hpp">event_base.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="event_base.hpp">event_base.hpp</a>&gt;</h1>
 <h2><a name="Class event_base">Class <code>event_base</code></a></h2>
 <p>This is the common base of all events.</p>
 <h3>Class <code>event_base</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   class event_base
   {
@@ -1828,14 +1828,14 @@ CustomId</code> must match the type of the previously set pointer<b><br>
 Returns</b>: A pointer to the custom type identifier or <code>0</code><br>
 <b>Note</b>: This function is not available if
 <a href="configuration.html#Application Defined Macros"><code>
-BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
-<h1>Header &lt;boost/fsm/<a name="event.hpp">event.hpp</a>&gt;</h1>
+BOOST_STATECHART_USE_NATIVE_RTTI</code></a> is defined</p>
+<h1>Header &lt;boost/statechart/<a name="event.hpp">event.hpp</a>&gt;</h1>
 <h2><a name="Class template event">Class template <code>event</code></a></h2>
 <p>This is the base class template of all events.</p>
 <h3>Class template <code>event</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class MostDerived &gt;
   class event : <i>implementation-defined</i>
@@ -1875,15 +1875,15 @@ Returns</b>: The pointer to the custom type identifier for <code>MostDerived</co
 or <code>0</code><br>
 <b>Note</b>: This function is not available if
 <a href="configuration.html#Application Defined Macros"><code>
-BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
+BOOST_STATECHART_USE_NATIVE_RTTI</code></a> is defined</p>
 <pre>template&lt; class CustomId &gt;
 static void <a name="event::custom_static_type_ptr( const CustomId * )">custom_static_type_ptr( const CustomId * )</a>;</pre>
 <p><b>Effects</b>: Sets the pointer to the custom type identifier for <code>
 MostDerived</code><br>
 <b>Note</b>: This function is not available if
 <a href="configuration.html#Application Defined Macros"><code>
-BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
-<h1>Header &lt;boost/fsm/<a name="transition.hpp">transition.hpp</a>&gt;</h1>
+BOOST_STATECHART_USE_NATIVE_RTTI</code></a> is defined</p>
+<h1>Header &lt;boost/statechart/<a name="transition.hpp">transition.hpp</a>&gt;</h1>
 <h2><a name="Class template transition">Class template <code>transition</code></a></h2>
 <p>This class template is used to specify a transition reaction. 
 Instantiations of this template can be passed to the <code>Reactions</code> 
@@ -1937,7 +1937,7 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
 <h3>Class template <code>transition</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt;
     class Event,
@@ -1960,7 +1960,7 @@ for which the reaction was defined is made:</p>
   <li><code><a href="#transit2">transit&lt; Destination &gt;( pTransitionAction, <i>
   currentEvent</i> )</a></code>, if a transition action was specified</li>
 </ul>
-<h1>Header &lt;boost/fsm/<a name="termination.hpp">termination.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="termination.hpp">termination.hpp</a>&gt;</h1>
 <h2><a name="Class template termination">Class template <code>termination</code></a></h2>
 <p>This class template is used to specify a termination reaction. 
 Instantiations of this template can be passed to the <code>Reactions</code> 
@@ -1983,7 +1983,7 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
 <h3>Class template <code>termination</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class Event &gt;
   class termination
@@ -1996,7 +1996,7 @@ namespace fsm
 <p>When executed, a call is made to the <code>
 <a href="#simple_state::terminate">terminate</a></code> member function of the 
 state for which the reaction was defined.</p>
-<h1>Header &lt;boost/fsm/<a name="deferral.hpp">deferral.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="deferral.hpp">deferral.hpp</a>&gt;</h1>
 <h2><a name="Class template deferral">Class template <code>deferral</code></a></h2>
 <p>This class template is used to specify a deferral reaction. Instantiations 
 of this template can be passed to the <code>Reactions</code> parameter of the
@@ -2019,7 +2019,7 @@ of this template can be passed to the <code>Reactions</code> parameter of the
 <h3>Class template <code>deferral</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class Event &gt;
   class deferral
@@ -2032,7 +2032,7 @@ namespace fsm
 <p>When executed, a call is made to the <a href="#defer_event"><code>
 defer_event</code></a> member function of the state for which the reaction was 
 defined.</p>
-<h1>Header &lt;boost/fsm/<a name="custom_reaction.hpp">custom_reaction.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="custom_reaction.hpp">custom_reaction.hpp</a>&gt;</h1>
 <h2><a name="Class template custom_reaction">Class template <code>
 custom_reaction</code></a></h2>
 <p>This class template is used to specify a custom reaction. Instantiations of 
@@ -2056,7 +2056,7 @@ this template can be passed to the <code>Reactions</code> parameter of the
 <h3>Class template <code>custom_reaction</code> synopsis</h3>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   template&lt; class Event &gt;
   class custom_reaction
@@ -2085,8 +2085,7 @@ template&lt;
   void ( TransitionContext::* )( const Event &amp; ),
   const Event &amp; );
 <a href="#Enum result">result</a> <a href="#simple_state::terminate">terminate</a>();</pre>
-<p>&nbsp;</p>
-<h1>Header &lt;boost/fsm/<a name="result.hpp">result.hpp</a>&gt;</h1>
+<h1>Header &lt;boost/statechart/<a name="result.hpp">result.hpp</a>&gt;</h1>
 <h2><a name="Enum result">Enum <code>result</code></a></h2>
 <p>Defines the nature of the reaction taken in a user-supplied <code>react</code> 
 member function (called when a <code>
@@ -2095,7 +2094,7 @@ executed). Values of this type are always obtained by calling one of the
 reaction functions.</p>
 <pre>namespace boost
 {
-namespace fsm
+namespace statechart
 {
   enum result
   {
@@ -2105,9 +2104,9 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <font color="#FF0000"> <b>The link refers to a
+2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
 to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 

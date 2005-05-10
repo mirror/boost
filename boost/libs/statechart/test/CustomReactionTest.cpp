@@ -6,11 +6,11 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -22,26 +22,26 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvToC : fsm::event< EvToC > {};
-struct EvToD : fsm::event< EvToD > {};
+struct EvToC : sc::event< EvToC > {};
+struct EvToD : sc::event< EvToD > {};
 
-struct EvDiscardNever : fsm::event< EvDiscardNever > {};
-struct EvDiscardInB : fsm::event< EvDiscardInB > {};
-struct EvDiscardInD : fsm::event< EvDiscardInD > {};
+struct EvDiscardNever : sc::event< EvDiscardNever > {};
+struct EvDiscardInB : sc::event< EvDiscardInB > {};
+struct EvDiscardInD : sc::event< EvDiscardInD > {};
 
-struct EvTransit : fsm::event< EvTransit > {};
-struct EvTransitWithAction : fsm::event< EvTransitWithAction > {};
-struct EvDefer : fsm::event< EvDefer > {};
-struct EvTerminate : fsm::event< EvTerminate > {};
+struct EvTransit : sc::event< EvTransit > {};
+struct EvTransitWithAction : sc::event< EvTransitWithAction > {};
+struct EvDefer : sc::event< EvDefer > {};
+struct EvTerminate : sc::event< EvTerminate > {};
 
 
 struct A;
-struct CustomReactionTest : fsm::state_machine< CustomReactionTest, A >
+struct CustomReactionTest : sc::state_machine< CustomReactionTest, A >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -96,28 +96,28 @@ struct CustomReactionTest : fsm::state_machine< CustomReactionTest, A >
 };
 
 struct B;
-struct A : fsm::simple_state< A, CustomReactionTest, mpl::list<
-  fsm::custom_reaction< EvTransit >,
-  fsm::custom_reaction< EvTransitWithAction >,
-  fsm::custom_reaction< EvDefer >,
-  fsm::custom_reaction< EvTerminate >,
-  fsm::custom_reaction< EvDiscardNever >,
-  fsm::custom_reaction< EvDiscardInB >,
-  fsm::custom_reaction< EvDiscardInD > >, B >
+struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
+  sc::custom_reaction< EvTransit >,
+  sc::custom_reaction< EvTransitWithAction >,
+  sc::custom_reaction< EvDefer >,
+  sc::custom_reaction< EvTerminate >,
+  sc::custom_reaction< EvDiscardNever >,
+  sc::custom_reaction< EvDiscardInB >,
+  sc::custom_reaction< EvDiscardInD > >, B >
 {
-  fsm::result react( const EvDiscardNever & )
+  sc::result react( const EvDiscardNever & )
   {
     outermost_context().Visited( *this );
     return forward_event();
   }
 
-  fsm::result react( const EvDiscardInB & )
+  sc::result react( const EvDiscardInB & )
   {
     BOOST_FAIL( "An event discarded in B must never reach A" );
     return discard_event();
   }
 
-  fsm::result react( const EvDiscardInD & )
+  sc::result react( const EvDiscardInD & )
   {
     BOOST_FAIL( "An event discarded in D must never reach B" );
     return discard_event();
@@ -129,46 +129,46 @@ struct A : fsm::simple_state< A, CustomReactionTest, mpl::list<
   // DeferralTest and TerminationTest with appropriate reactions. Internally,
   // these reactions call exactly the same functions as the following custom
   // reactions call.
-  fsm::result react( const EvTransit & )
+  sc::result react( const EvTransit & )
   {
     return transit< A >();
   }
 
-  fsm::result react( const EvTransitWithAction & evt )
+  sc::result react( const EvTransitWithAction & evt )
   {
     return transit< A >( &CustomReactionTest::TransitionAction, evt );
   }
 
-  fsm::result react( const EvDefer & )
+  sc::result react( const EvDefer & )
   {
     return defer_event();
   }
 
-  fsm::result react( const EvTerminate & )
+  sc::result react( const EvTerminate & )
   {
     return terminate();
   }
 };
 
   struct C;
-  struct B : fsm::simple_state< B, A, mpl::list<
-    fsm::custom_reaction< EvDiscardNever >,
-    fsm::custom_reaction< EvDiscardInB >,
-    fsm::custom_reaction< EvDiscardInD > >, C >
+  struct B : sc::simple_state< B, A, mpl::list<
+    sc::custom_reaction< EvDiscardNever >,
+    sc::custom_reaction< EvDiscardInB >,
+    sc::custom_reaction< EvDiscardInD > >, C >
   {
-    fsm::result react( const EvDiscardNever & )
+    sc::result react( const EvDiscardNever & )
     {
       outermost_context().Visited( *this );
       return forward_event();
     }
 
-    fsm::result react( const EvDiscardInB & )
+    sc::result react( const EvDiscardInB & )
     {
       outermost_context().Visited( *this );
       return discard_event();
     }
 
-    fsm::result react( const EvDiscardInD & )
+    sc::result react( const EvDiscardInD & )
     {
       BOOST_FAIL( "An event discarded in D must never reach B" );
       return discard_event();
@@ -177,98 +177,98 @@ struct A : fsm::simple_state< A, CustomReactionTest, mpl::list<
 
     struct E;
     struct F;
-    struct D : fsm::simple_state< D, B, mpl::list<
-      fsm::transition< EvToC, C >,
-      fsm::custom_reaction< EvDiscardNever >,
-      fsm::custom_reaction< EvDiscardInB >,
-      fsm::custom_reaction< EvDiscardInD > >, mpl::list< E, F > >
+    struct D : sc::simple_state< D, B, mpl::list<
+      sc::transition< EvToC, C >,
+      sc::custom_reaction< EvDiscardNever >,
+      sc::custom_reaction< EvDiscardInB >,
+      sc::custom_reaction< EvDiscardInD > >, mpl::list< E, F > >
     {
-      fsm::result react( const EvDiscardNever & )
+      sc::result react( const EvDiscardNever & )
       {
         outermost_context().Visited( *this );
         return forward_event();
       }
 
-      fsm::result react( const EvDiscardInB & )
+      sc::result react( const EvDiscardInB & )
       {
         outermost_context().Visited( *this );
         return forward_event();
       }
 
-      fsm::result react( const EvDiscardInD & )
+      sc::result react( const EvDiscardInD & )
       {
         outermost_context().Visited( *this );
         return discard_event();
       }
     };
 
-      struct E : fsm::simple_state< E, D::orthogonal< 0 >, mpl::list<
-        fsm::custom_reaction< EvDiscardNever >,
-        fsm::custom_reaction< EvDiscardInB >,
-        fsm::custom_reaction< EvDiscardInD > > >
+      struct E : sc::simple_state< E, D::orthogonal< 0 >, mpl::list<
+        sc::custom_reaction< EvDiscardNever >,
+        sc::custom_reaction< EvDiscardInB >,
+        sc::custom_reaction< EvDiscardInD > > >
       {
-        fsm::result react( const EvDiscardNever & )
+        sc::result react( const EvDiscardNever & )
         {
           outermost_context().Visited( *this );
           return forward_event();
         }
 
-        fsm::result react( const EvDiscardInB & )
+        sc::result react( const EvDiscardInB & )
         {
           outermost_context().Visited( *this );
           return forward_event();
         }
 
-        fsm::result react( const EvDiscardInD & )
+        sc::result react( const EvDiscardInD & )
         {
           outermost_context().Visited( *this );
           return forward_event();
         }
       };
 
-      struct F : fsm::simple_state< F, D::orthogonal< 1 >, mpl::list<
-        fsm::custom_reaction< EvDiscardNever >,
-        fsm::custom_reaction< EvDiscardInB >,
-        fsm::custom_reaction< EvDiscardInD > > >
+      struct F : sc::simple_state< F, D::orthogonal< 1 >, mpl::list<
+        sc::custom_reaction< EvDiscardNever >,
+        sc::custom_reaction< EvDiscardInB >,
+        sc::custom_reaction< EvDiscardInD > > >
       {
-        fsm::result react( const EvDiscardNever & )
+        sc::result react( const EvDiscardNever & )
         {
           outermost_context().Visited( *this );
           return forward_event();
         }
 
-        fsm::result react( const EvDiscardInB & )
+        sc::result react( const EvDiscardInB & )
         {
           outermost_context().Visited( *this );
           return forward_event();
         }
 
-        fsm::result react( const EvDiscardInD & )
+        sc::result react( const EvDiscardInD & )
         {
           outermost_context().Visited( *this );
           return forward_event();
         }
       };
 
-    struct C : fsm::simple_state< C, B, mpl::list<
-      fsm::transition< EvToD, D >,
-      fsm::custom_reaction< EvDiscardNever >,
-      fsm::custom_reaction< EvDiscardInB >,
-      fsm::custom_reaction< EvDiscardInD > > >
+    struct C : sc::simple_state< C, B, mpl::list<
+      sc::transition< EvToD, D >,
+      sc::custom_reaction< EvDiscardNever >,
+      sc::custom_reaction< EvDiscardInB >,
+      sc::custom_reaction< EvDiscardInD > > >
     {
-      fsm::result react( const EvDiscardNever & )
+      sc::result react( const EvDiscardNever & )
       {
         outermost_context().Visited( *this );
         return forward_event();
       }
 
-      fsm::result react( const EvDiscardInB & )
+      sc::result react( const EvDiscardInB & )
       {
         outermost_context().Visited( *this );
         return forward_event();
       }
 
-      fsm::result react( const EvDiscardInD & )
+      sc::result react( const EvDiscardInD & )
       {
         outermost_context().Visited( *this );
         return forward_event();
@@ -278,7 +278,7 @@ struct A : fsm::simple_state< A, CustomReactionTest, mpl::list<
 CustomReactionTest::CustomReactionTest()
 {
   // We're not using custom type information to make this test work even when
-  // BOOST_FSM_USE_NATIVE_RTTI is defined
+  // BOOST_STATECHART_USE_NATIVE_RTTI is defined
   stateNamesMap_[ A::static_type() ] = "A";
   stateNamesMap_[ B::static_type() ] = "B";
   stateNamesMap_[ C::static_type() ] = "C";

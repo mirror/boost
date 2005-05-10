@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -11,14 +11,14 @@
 // state_downcast to query the state of orthogonal regions.
 // Moreover, the use of the state type information interface is also shown.
 //////////////////////////////////////////////////////////////////////////////
-// #define BOOST_FSM_USE_NATIVE_RTTI
+// #define BOOST_STATECHART_USE_NATIVE_RTTI
 
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/config.hpp>
@@ -33,54 +33,54 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvNumLockPressed : fsm::event< EvNumLockPressed > {};
-struct EvCapsLockPressed : fsm::event< EvCapsLockPressed > {};
-struct EvScrollLockPressed : fsm::event< EvScrollLockPressed > {};
-struct EvRequestShutdown : fsm::event< EvRequestShutdown > {};
+struct EvNumLockPressed : sc::event< EvNumLockPressed > {};
+struct EvCapsLockPressed : sc::event< EvCapsLockPressed > {};
+struct EvScrollLockPressed : sc::event< EvScrollLockPressed > {};
+struct EvRequestShutdown : sc::event< EvRequestShutdown > {};
 
 struct Active;
-struct Keyboard : fsm::state_machine< Keyboard, Active > {};
+struct Keyboard : sc::state_machine< Keyboard, Active > {};
 
 struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
-struct Active: fsm::simple_state<
-  Active, Keyboard, fsm::custom_reaction< EvRequestShutdown >,
+struct Active: sc::simple_state<
+  Active, Keyboard, sc::custom_reaction< EvRequestShutdown >,
   mpl::list< NumLockOff, CapsLockOff, ScrollLockOff > >
 {
-  fsm::result react( const EvRequestShutdown & );
+  sc::result react( const EvRequestShutdown & );
 };
 
-  struct NumLockOn : fsm::simple_state<
+  struct NumLockOn : sc::simple_state<
     NumLockOn, Active::orthogonal< 0 >,
-    fsm::transition< EvNumLockPressed, NumLockOff > > {};
+    sc::transition< EvNumLockPressed, NumLockOff > > {};
 
-  struct NumLockOff : fsm::simple_state<
+  struct NumLockOff : sc::simple_state<
     NumLockOff, Active::orthogonal< 0 >,
-    fsm::transition< EvNumLockPressed, NumLockOn > > {};
+    sc::transition< EvNumLockPressed, NumLockOn > > {};
 
-  struct CapsLockOn : fsm::simple_state<
+  struct CapsLockOn : sc::simple_state<
     CapsLockOn, Active::orthogonal< 1 >,
-    fsm::transition< EvCapsLockPressed, CapsLockOff > > {};
+    sc::transition< EvCapsLockPressed, CapsLockOff > > {};
 
-  struct CapsLockOff : fsm::simple_state<
+  struct CapsLockOff : sc::simple_state<
     CapsLockOff, Active::orthogonal< 1 >,
-    fsm::transition< EvCapsLockPressed, CapsLockOn > > {};
+    sc::transition< EvCapsLockPressed, CapsLockOn > > {};
 
-  struct ScrollLockOn : fsm::simple_state<
+  struct ScrollLockOn : sc::simple_state<
     ScrollLockOn, Active::orthogonal< 2 >,
-    fsm::transition< EvScrollLockPressed, ScrollLockOff > > {};
+    sc::transition< EvScrollLockPressed, ScrollLockOff > > {};
 
-  struct ScrollLockOff : fsm::simple_state<
+  struct ScrollLockOff : sc::simple_state<
     ScrollLockOff, Active::orthogonal< 2 >,
-    fsm::transition< EvScrollLockPressed, ScrollLockOn > > {};
+    sc::transition< EvScrollLockPressed, ScrollLockOn > > {};
 
-fsm::result Active::react( const EvRequestShutdown & )
+sc::result Active::react( const EvRequestShutdown & )
 {
   if ( ( state_downcast< const NumLockOff * >() != 0 ) &&
         ( state_downcast< const CapsLockOff * >() != 0 ) &&
@@ -117,7 +117,7 @@ namespace
           std::cout << " -> ";
         }
 
-        #ifdef BOOST_FSM_USE_NATIVE_RTTI
+        #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
         std::cout << std::setw( 15 ) << typeid( *pState ).name();
         #else
         std::cout << std::setw( 15 ) <<
@@ -137,7 +137,7 @@ namespace
 
 int main()
 {
-  #ifndef BOOST_FSM_USE_NATIVE_RTTI
+  #ifndef BOOST_STATECHART_USE_NATIVE_RTTI
   Active::custom_static_type_ptr( "Active" );
   NumLockOn::custom_static_type_ptr( "NumLockOn" );
   NumLockOff::custom_static_type_ptr( "NumLockOff" );
@@ -147,7 +147,7 @@ int main()
   ScrollLockOff::custom_static_type_ptr( "ScrollLockOff" );
   #endif
 
-  std::cout << "boost::fsm Keyboard example\n\n";
+  std::cout << "Boost.Statechart Keyboard example\n\n";
   Keyboard keyboard;
   keyboard.initiate();
   DisplayStateConfiguration( keyboard );

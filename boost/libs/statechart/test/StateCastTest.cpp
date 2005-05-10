@@ -6,12 +6,12 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/state.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/state.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -20,17 +20,17 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvToB : fsm::event< EvToB > {};
-struct EvToF : fsm::event< EvToF > {};
-struct EvCheck : fsm::event< EvCheck > {};
+struct EvToB : sc::event< EvToB > {};
+struct EvToF : sc::event< EvToF > {};
+struct EvCheck : sc::event< EvCheck > {};
 
 struct A;
-struct StateCastTest : fsm::state_machine< StateCastTest, A >
+struct StateCastTest : sc::state_machine< StateCastTest, A >
 {
   template< class State >
   void AssertInState()
@@ -76,41 +76,41 @@ void AssertNotInState( const FromState & theState )
 struct B;
 struct C;
 struct D;
-struct A : fsm::simple_state<
-  A, StateCastTest, fsm::transition< EvToB, B >, mpl::list< C, D > > {};
+struct A : sc::simple_state<
+  A, StateCastTest, sc::transition< EvToB, B >, mpl::list< C, D > > {};
 
   struct E;
-  struct C : fsm::simple_state< C, A::orthogonal< 0 >, fsm::no_reactions, E > {};
+  struct C : sc::simple_state< C, A::orthogonal< 0 >, sc::no_reactions, E > {};
 
-    struct E : fsm::state< E, C, fsm::custom_reaction< EvCheck > >
+    struct E : sc::state< E, C, sc::custom_reaction< EvCheck > >
     {
       E( my_context ctx ) : my_base( ctx )
       {
         post_event( boost::intrusive_ptr< EvCheck >( new EvCheck() ) );
       }
 
-      fsm::result react( const EvCheck & );
+      sc::result react( const EvCheck & );
     };
 
-    struct F : fsm::state< F, C, fsm::custom_reaction< EvCheck > >
+    struct F : sc::state< F, C, sc::custom_reaction< EvCheck > >
     {
       F( my_context ctx ) : my_base( ctx )
       {
         post_event( boost::intrusive_ptr< EvCheck >( new EvCheck() ) );
       }
 
-      fsm::result react( const EvCheck & );
+      sc::result react( const EvCheck & );
     };
 
   struct G;
-  struct D : fsm::simple_state< D, A::orthogonal< 1 >, fsm::no_reactions, G > {};
+  struct D : sc::simple_state< D, A::orthogonal< 1 >, sc::no_reactions, G > {};
   
-    struct G : fsm::simple_state< G, D > {};
-    struct H : fsm::simple_state< H, D > {};
+    struct G : sc::simple_state< G, D > {};
+    struct H : sc::simple_state< H, D > {};
 
-struct B : fsm::simple_state< B, StateCastTest, fsm::transition< EvToF, F > > {};
+struct B : sc::simple_state< B, StateCastTest, sc::transition< EvToF, F > > {};
 
-fsm::result E::react( const EvCheck & )
+sc::result E::react( const EvCheck & )
 {
   AssertInState< A >( *this );
   AssertNotInState< B >( *this );
@@ -123,7 +123,7 @@ fsm::result E::react( const EvCheck & )
   return discard_event();
 }
 
-fsm::result F::react( const EvCheck & )
+sc::result F::react( const EvCheck & )
 {
   AssertInState< A >( *this );
   AssertNotInState< B >( *this );

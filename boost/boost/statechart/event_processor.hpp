@@ -1,7 +1,7 @@
-#ifndef BOOST_FSM_EVENT_PROCESSOR_INCLUDED
-#define BOOST_FSM_EVENT_PROCESSOR_INCLUDED
+#ifndef BOOST_STATECHART_EVENT_PROCESSOR_INCLUDED
+#define BOOST_STATECHART_EVENT_PROCESSOR_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -10,7 +10,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 
 
@@ -76,7 +76,7 @@ class event_processor
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

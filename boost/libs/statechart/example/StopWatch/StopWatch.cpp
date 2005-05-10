@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -30,10 +30,10 @@
 
 
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/transition.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/transition.hpp>
 
 #include <boost/config.hpp>
 
@@ -56,12 +56,12 @@ namespace std
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
-struct EvStartStop : fsm::event< EvStartStop > {};
-struct EvReset : fsm::event< EvReset > {};
+struct EvStartStop : sc::event< EvStartStop > {};
+struct EvReset : sc::event< EvReset > {};
 
 
 struct IElapsedTime
@@ -71,12 +71,12 @@ struct IElapsedTime
 
 
 struct Active;
-struct StopWatch : fsm::state_machine< StopWatch, Active > {};
+struct StopWatch : sc::state_machine< StopWatch, Active > {};
 
 
 struct Stopped;
-struct Active : fsm::simple_state< Active, StopWatch,
-  fsm::transition< EvReset, Active >, Stopped >
+struct Active : sc::simple_state< Active, StopWatch,
+  sc::transition< EvReset, Active >, Stopped >
 {
   public:
     Active() : elapsedTime_( 0.0 ) {}
@@ -97,8 +97,8 @@ struct Active : fsm::simple_state< Active, StopWatch,
 
   struct Running :
     IElapsedTime,
-    fsm::simple_state< Running, Active,
-      fsm::transition< EvStartStop, Stopped > >
+    sc::simple_state< Running, Active,
+      sc::transition< EvStartStop, Stopped > >
   {
     public:
       Running() : startTime_( std::time( 0 ) ) {}
@@ -120,8 +120,8 @@ struct Active : fsm::simple_state< Active, StopWatch,
 
   struct Stopped :
     IElapsedTime,
-    fsm::simple_state< Stopped, Active,
-      fsm::transition< EvStartStop, Running > >
+    sc::simple_state< Stopped, Active,
+      sc::transition< EvStartStop, Running > >
   {
     virtual double ElapsedTime() const
     {
@@ -143,7 +143,7 @@ namespace
 
 int main()
 {
-  std::cout << "boost::fsm StopWatch example\n\n";
+  std::cout << "Boost.Statechart StopWatch example\n\n";
   std::cout << "s<CR>: Starts/Stops stop watch\n";
   std::cout << "r<CR>: Resets stop watch\n";
   std::cout << "d<CR>: Displays the elapsed time in seconds\n";

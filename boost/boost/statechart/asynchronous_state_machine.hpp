@@ -1,24 +1,24 @@
-#ifndef BOOST_FSM_ASYNCHRONOUS_STATE_MACHINE_HPP_INCLUDED
-#define BOOST_FSM_ASYNCHRONOUS_STATE_MACHINE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_ASYNCHRONOUS_STATE_MACHINE_HPP_INCLUDED
+#define BOOST_STATECHART_ASYNCHRONOUS_STATE_MACHINE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/fifo_scheduler.hpp>
-#include <boost/fsm/null_exception_translator.hpp>
-#include <boost/fsm/event_processor.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/fifo_scheduler.hpp>
+#include <boost/statechart/null_exception_translator.hpp>
+#include <boost/statechart/event_processor.hpp>
 
 #include <memory>   // std::allocator
 
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 
 
@@ -81,7 +81,7 @@ class asynchronous_state_machine : public state_machine<
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

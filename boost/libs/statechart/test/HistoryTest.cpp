@@ -6,12 +6,12 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/shallow_history.hpp>
-#include <boost/fsm/deep_history.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/shallow_history.hpp>
+#include <boost/statechart/deep_history.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/shared_ptr.hpp>
@@ -19,30 +19,30 @@
 #include <boost/test/test_tools.hpp>
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvToB : fsm::event< EvToB > {};
+struct EvToB : sc::event< EvToB > {};
 
-struct EvToD : fsm::event< EvToD > {};
-struct EvToDShallow : fsm::event< EvToDShallow > {};
-struct EvToDDeep : fsm::event< EvToDDeep > {};
+struct EvToD : sc::event< EvToD > {};
+struct EvToDShallow : sc::event< EvToDShallow > {};
+struct EvToDDeep : sc::event< EvToDDeep > {};
 
-struct EvToF : fsm::event< EvToF > {};
-struct EvToFShallow : fsm::event< EvToFShallow > {};
-struct EvToFDeep : fsm::event< EvToFDeep > {};
+struct EvToF : sc::event< EvToF > {};
+struct EvToFShallow : sc::event< EvToFShallow > {};
+struct EvToFDeep : sc::event< EvToFDeep > {};
 
-struct EvToH : fsm::event< EvToH > {};
-struct EvToI : fsm::event< EvToI > {};
+struct EvToH : sc::event< EvToH > {};
+struct EvToI : sc::event< EvToI > {};
 
-struct EvToM : fsm::event< EvToM > {};
-struct EvToQ : fsm::event< EvToQ > {};
+struct EvToM : sc::event< EvToM > {};
+struct EvToQ : sc::event< EvToQ > {};
 
 
 struct A;
-struct HistoryTest : fsm::state_machine< HistoryTest, A > {};
+struct HistoryTest : sc::state_machine< HistoryTest, A > {};
 
 struct B;
 struct D;
@@ -51,56 +51,56 @@ struct H;
 struct I;
 struct M;
 struct Q;
-struct A : fsm::simple_state< A, HistoryTest, mpl::list<
-  fsm::transition< EvToB, B >,
-  fsm::transition< EvToD, D >,
-  fsm::transition< EvToDShallow, fsm::shallow_history< D > >,
-  fsm::transition< EvToDDeep, fsm::deep_history< D > >,
-  fsm::transition< EvToF, F >,
-  fsm::transition< EvToFShallow, fsm::shallow_history< F > >,
-  fsm::transition< EvToFDeep, fsm::deep_history< F > >,
-  fsm::transition< EvToH, H >,
-  fsm::transition< EvToI, I >,
-  fsm::transition< EvToM, M >,
-  fsm::transition< EvToQ, Q > >, B >
+struct A : sc::simple_state< A, HistoryTest, mpl::list<
+  sc::transition< EvToB, B >,
+  sc::transition< EvToD, D >,
+  sc::transition< EvToDShallow, sc::shallow_history< D > >,
+  sc::transition< EvToDDeep, sc::deep_history< D > >,
+  sc::transition< EvToF, F >,
+  sc::transition< EvToFShallow, sc::shallow_history< F > >,
+  sc::transition< EvToFDeep, sc::deep_history< F > >,
+  sc::transition< EvToH, H >,
+  sc::transition< EvToI, I >,
+  sc::transition< EvToM, M >,
+  sc::transition< EvToQ, Q > >, B >
 {
 };
 
   struct J;
   struct N;
-  struct B : fsm::simple_state<
-    B, A, fsm::no_reactions,
-    mpl::list< fsm::shallow_history< J >, fsm::deep_history< N > >,
-    fsm::has_full_history > {};
+  struct B : sc::simple_state<
+    B, A, sc::no_reactions,
+    mpl::list< sc::shallow_history< J >, sc::deep_history< N > >,
+    sc::has_full_history > {};
 
-    struct J : fsm::simple_state< J, B::orthogonal< 0 > > {};
+    struct J : sc::simple_state< J, B::orthogonal< 0 > > {};
     struct L;
-    struct K : fsm::simple_state<
-      K, B::orthogonal< 0 >, fsm::no_reactions, L > {};
+    struct K : sc::simple_state<
+      K, B::orthogonal< 0 >, sc::no_reactions, L > {};
 
-      struct L : fsm::simple_state< L, K > {};
-      struct M : fsm::simple_state< M, K > {};
+      struct L : sc::simple_state< L, K > {};
+      struct M : sc::simple_state< M, K > {};
 
-    struct N : fsm::simple_state< N, B::orthogonal< 1 > > {};
+    struct N : sc::simple_state< N, B::orthogonal< 1 > > {};
     struct P;
-    struct O : fsm::simple_state<
-      O, B::orthogonal< 1 >, fsm::no_reactions, P > {};
+    struct O : sc::simple_state<
+      O, B::orthogonal< 1 >, sc::no_reactions, P > {};
 
-      struct P : fsm::simple_state< P, O > {};
-      struct Q : fsm::simple_state< Q, O > {};
+      struct P : sc::simple_state< P, O > {};
+      struct Q : sc::simple_state< Q, O > {};
 
-  struct C : fsm::simple_state<
-    C, A, fsm::no_reactions, D, fsm::has_full_history > {};
+  struct C : sc::simple_state<
+    C, A, sc::no_reactions, D, sc::has_full_history > {};
 
-    struct D : fsm::simple_state< D, C > {};
-    struct E : fsm::simple_state<
-      E, C, fsm::no_reactions, F, fsm::has_full_history > {};
+    struct D : sc::simple_state< D, C > {};
+    struct E : sc::simple_state<
+      E, C, sc::no_reactions, F, sc::has_full_history > {};
 
-      struct F : fsm::simple_state< F, E > {};
-      struct G : fsm::simple_state< G, E, fsm::no_reactions, H > {};
+      struct F : sc::simple_state< F, E > {};
+      struct G : sc::simple_state< G, E, sc::no_reactions, H > {};
 
-        struct H : fsm::simple_state< H, G > {};
-        struct I : fsm::simple_state< I, G > {};
+        struct H : sc::simple_state< H, G > {};
+        struct I : sc::simple_state< I, G > {};
 
 
 int test_main( int, char* [] )

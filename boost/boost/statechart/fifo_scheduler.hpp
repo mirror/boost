@@ -1,16 +1,16 @@
-#ifndef BOOST_FSM_FIFO_SCHEDULER_HPP_INCLUDED
-#define BOOST_FSM_FIFO_SCHEDULER_HPP_INCLUDED
+#ifndef BOOST_STATECHART_FIFO_SCHEDULER_HPP_INCLUDED
+#define BOOST_STATECHART_FIFO_SCHEDULER_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/event_base.hpp>
-#include <boost/fsm/fifo_worker.hpp>
-#include <boost/fsm/processor_container.hpp>
+#include <boost/statechart/event_base.hpp>
+#include <boost/statechart/fifo_worker.hpp>
+#include <boost/statechart/processor_container.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
@@ -20,7 +20,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 
 
@@ -195,7 +195,7 @@ class fifo_scheduler : noncopyable
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

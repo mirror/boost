@@ -6,10 +6,10 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/termination.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/termination.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -21,21 +21,21 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvTerminateA : fsm::event< EvTerminateA > {};
-struct EvTerminateB : fsm::event< EvTerminateB > {};
-struct EvTerminateC : fsm::event< EvTerminateC > {};
-struct EvTerminateD : fsm::event< EvTerminateD > {};
-struct EvTerminateE : fsm::event< EvTerminateE > {};
-struct EvTerminateF : fsm::event< EvTerminateF > {};
-struct EvTerminateG : fsm::event< EvTerminateG > {};
+struct EvTerminateA : sc::event< EvTerminateA > {};
+struct EvTerminateB : sc::event< EvTerminateB > {};
+struct EvTerminateC : sc::event< EvTerminateC > {};
+struct EvTerminateD : sc::event< EvTerminateD > {};
+struct EvTerminateE : sc::event< EvTerminateE > {};
+struct EvTerminateF : sc::event< EvTerminateF > {};
+struct EvTerminateG : sc::event< EvTerminateG > {};
 
 struct A;
-struct TerminationTest : fsm::state_machine< TerminationTest, A >
+struct TerminationTest : sc::state_machine< TerminationTest, A >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ template<
   class Context,
   class Reactions,
   class InnerInitial = mpl::list<> >
-struct MyState : fsm::simple_state<
+struct MyState : sc::simple_state<
   MostDerived, Context, Reactions, InnerInitial >
 {
   public:
@@ -120,33 +120,33 @@ struct MyState : fsm::simple_state<
 struct B;
 struct C;
 struct A : MyState< A, TerminationTest,
-  fsm::termination< EvTerminateA >, mpl::list< B, C > > {};
+  sc::termination< EvTerminateA >, mpl::list< B, C > > {};
 
   struct B : MyState< B, A::orthogonal< 0 >,
-    fsm::termination< EvTerminateB > > {};
+    sc::termination< EvTerminateB > > {};
 
   struct D;
   struct E;
   struct C : MyState< C, A::orthogonal< 1 >,
-    fsm::termination< EvTerminateC >, mpl::list< D, E > > {};
+    sc::termination< EvTerminateC >, mpl::list< D, E > > {};
 
     struct D : MyState< D, C::orthogonal< 0 >,
-      fsm::termination< EvTerminateD > > {};
+      sc::termination< EvTerminateD > > {};
 
     struct F;
     struct G;
     struct E : MyState< E, C::orthogonal< 1 >,
-      fsm::termination< EvTerminateE >, mpl::list< F, G > > {};
+      sc::termination< EvTerminateE >, mpl::list< F, G > > {};
 
       struct F : MyState< F, E::orthogonal< 0 >,
-        fsm::termination< EvTerminateF > > {};
+        sc::termination< EvTerminateF > > {};
       struct G : MyState< G, E::orthogonal< 1 >,
-        fsm::termination< EvTerminateG > > {};
+        sc::termination< EvTerminateG > > {};
 
 TerminationTest::TerminationTest()
 {
   // We're not using custom type information to make this test work even when
-  // BOOST_FSM_USE_NATIVE_RTTI is defined
+  // BOOST_STATECHART_USE_NATIVE_RTTI is defined
   stateNamesMap_[ A::static_type() ] = "A";
   stateNamesMap_[ B::static_type() ] = "B";
   stateNamesMap_[ C::static_type() ] = "C";

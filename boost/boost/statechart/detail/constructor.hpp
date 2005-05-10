@@ -1,7 +1,7 @@
-#ifndef BOOST_FSM_DETAIL_CONSTRUCTOR_HPP_INCLUDED
-#define BOOST_FSM_DETAIL_CONSTRUCTOR_HPP_INCLUDED
+#ifndef BOOST_STATECHART_DETAIL_CONSTRUCTOR_HPP_INCLUDED
+#define BOOST_STATECHART_DETAIL_CONSTRUCTOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -131,7 +131,7 @@ struct make_context_list
 
 
 } // namespace detail
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

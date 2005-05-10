@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_DETAIL_NODE_STATE_HPP_INCLUDED
-#define BOOST_FSM_DETAIL_NODE_STATE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_DETAIL_NODE_STATE_HPP_INCLUDED
+#define BOOST_STATECHART_DETAIL_NODE_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -8,7 +8,7 @@
 
 
 
-#include <boost/fsm/detail/state_base.hpp>
+#include <boost/statechart/detail/state_base.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/assert.hpp>  // BOOST_ASSERT
@@ -19,7 +19,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -148,7 +148,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
 
 
 } // namespace detail
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

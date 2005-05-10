@@ -6,24 +6,24 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
 
 #include <boost/test/test_tools.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
 struct A;
-struct TypeInfoTest : fsm::state_machine< TypeInfoTest, A > {};
+struct TypeInfoTest : sc::state_machine< TypeInfoTest, A > {};
 
 struct B;
-struct A : fsm::simple_state< A, TypeInfoTest, fsm::no_reactions, B > {};
+struct A : sc::simple_state< A, TypeInfoTest, sc::no_reactions, B > {};
 
-  struct B : fsm::simple_state< B, A > {};
+  struct B : sc::simple_state< B, A > {};
 
 
 int test_main( int, char* [] )
@@ -43,7 +43,7 @@ int test_main( int, char* [] )
   BOOST_REQUIRE( aType == A::static_type() );
   BOOST_REQUIRE( aType != B::static_type() );
 
-  #ifndef BOOST_FSM_USE_NATIVE_RTTI
+  #ifndef BOOST_STATECHART_USE_NATIVE_RTTI
   // Ensure that a null custom type id pointer can be of any type
   BOOST_REQUIRE( activeState.custom_dynamic_type_ptr< void >() == 0 );
   BOOST_REQUIRE( activeState.custom_dynamic_type_ptr< char >() == 0 );

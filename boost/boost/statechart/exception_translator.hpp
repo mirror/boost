@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_EXCEPTION_TRANSLATOR_HPP_INCLUDED
-#define BOOST_FSM_EXCEPTION_TRANSLATOR_HPP_INCLUDED
+#ifndef BOOST_STATECHART_EXCEPTION_TRANSLATOR_HPP_INCLUDED
+#define BOOST_STATECHART_EXCEPTION_TRANSLATOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -8,14 +8,14 @@
 
 
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/result.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/result.hpp>
 
 
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 
 
@@ -50,7 +50,7 @@ class exception_translator
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

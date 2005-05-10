@@ -4,11 +4,11 @@
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
 
-subproject libs/fsm/example ;
+subproject libs/statechart/example ;
 
 local no-of-bits-list = 1 2 3 4 ;
 
-template fsm-common-options
+template statechart-common-options
   :
   : <include>$(BOOST_ROOT)
     # The library ensures that all state destructors are only invoked on
@@ -21,11 +21,11 @@ template fsm-common-options
     <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
 ;
 
-rule fsm-st-example-build (
+rule statechart-st-example-build (
   target-name : directory : sources + : additional-options * )
 {
   exe $(target-name)
-    : $(directory)/$(sources).cpp <template>fsm-common-options
+    : $(directory)/$(sources).cpp <template>statechart-common-options
     : <threading>single
       # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems with
       # the automatic detection of the threading mode. We therefore manually
@@ -37,13 +37,13 @@ rule fsm-st-example-build (
   return <exe>$(target-name) ;
 }
 
-rule fsm-mt-example-build (
+rule statechart-mt-example-build (
   target-name : directory : sources + : additional-options * )
 {
   exe $(target-name)
     : $(directory)/$(sources).cpp
       <dll>../../thread/build/boost_thread
-      <template>fsm-common-options
+      <template>statechart-common-options
     : <threading>multi
       $(additional-options)
   ;
@@ -51,7 +51,7 @@ rule fsm-mt-example-build (
   return <exe>$(target-name) <dll>../../thread/build/boost_thread ;
 }
 
-rule fsm-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
+rule statechart-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
 {
   local result ;
 
@@ -59,7 +59,7 @@ rule fsm-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
   {
     result +=
     [
-      fsm-st-example-build BitMachine$(tag)$(no-of-bits)
+      statechart-st-example-build BitMachine$(tag)$(no-of-bits)
         : BitMachine : BitMachine
         : <define>NO_OF_BITS=$(no-of-bits)
           $(additional-options)
@@ -70,25 +70,25 @@ rule fsm-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
 }
 
 stage run
-  : [ fsm-bitmachine-build Normal : $(no-of-bits-list) ]
-    [ fsm-bitmachine-build Custom
+  : [ statechart-bitmachine-build Normal : $(no-of-bits-list) ]
+    [ statechart-bitmachine-build Custom
         : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ fsm-bitmachine-build Native
-        : $(no-of-bits-list) : <define>BOOST_FSM_USE_NATIVE_RTTI ]
-    [ fsm-st-example-build Camera
+    [ statechart-bitmachine-build Native
+        : $(no-of-bits-list) : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+    [ statechart-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
-    [ fsm-st-example-build Handcrafted : Handcrafted : Handcrafted ]
-    [ fsm-st-example-build KeyboardNormal : Keyboard : Keyboard ]
-    [ fsm-st-example-build KeyboardNative : Keyboard : Keyboard
-        : <define>BOOST_FSM_USE_NATIVE_RTTI ]
-    [ fsm-st-example-build PingPongSingle : PingPong : PingPong
+    [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]
+    [ statechart-st-example-build KeyboardNormal : Keyboard : Keyboard ]
+    [ statechart-st-example-build KeyboardNative : Keyboard : Keyboard
+        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+    [ statechart-st-example-build PingPongSingle : PingPong : PingPong
         : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong
+    [ statechart-mt-example-build PingPongMulti1 : PingPong : PingPong
         : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ fsm-mt-example-build PingPongMulti2 : PingPong : PingPong
+    [ statechart-mt-example-build PingPongMulti2 : PingPong : PingPong
         : <define>CUSTOMIZE_MEMORY_MANAGEMENT <define>USE_TWO_THREADS ]
-    [ fsm-st-example-build StopWatch : StopWatch : StopWatch ]
-    [ fsm-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
+    [ statechart-st-example-build StopWatch : StopWatch : StopWatch ]
+    [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
   : common-variant-tag
     <target>stage
     <target>all

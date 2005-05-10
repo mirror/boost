@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ NotShooting::~NotShooting()
   std::cout << "Exiting NotShooting\n";
 }
 
-fsm::result NotShooting::react( const EvShutterHalf & )
+sc::result NotShooting::react( const EvShutterHalf & )
 {
   if ( context< Camera >().IsBatteryLow() )
   {
@@ -46,7 +46,7 @@ Idle::~Idle()
   std::cout << "Exiting Idle\n";
 }
 
-fsm::result Idle::react( const EvConfig & )
+sc::result Idle::react( const EvConfig & )
 {
   return transit< Configuring >();
 }

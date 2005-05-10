@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // This is a quick-and-dirty handcrafted state machine with two states and two
 // transitions employing GOF-visitation (two virtual calls per event).
-// It is used to make speed comparisons with boost::fsm machines.
+// It is used to make speed comparisons with Boost.Statechart machines.
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -163,7 +163,7 @@ class BitMachine
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-  std::cout << "boost::fsm Handcrafted example\n";
+  std::cout << "Boost.Statechart Handcrafted example\n";
   std::cout << "Machine configuration: " << noOfStates <<
     " states interconnected with " << noOfTransitions << " transitions.\n\n";
 

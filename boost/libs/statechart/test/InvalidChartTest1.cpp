@@ -6,22 +6,22 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
 struct A;
-struct InvalidChartTest : fsm::state_machine< InvalidChartTest, A > {};
+struct InvalidChartTest : sc::state_machine< InvalidChartTest, A > {};
 
-struct A : fsm::simple_state< A, InvalidChartTest > {};
+struct A : sc::simple_state< A, InvalidChartTest > {};
 
   // A does not have inner states
-  struct B : fsm::simple_state< B, A > {};
+  struct B : sc::simple_state< B, A > {};
 
 
 int main()

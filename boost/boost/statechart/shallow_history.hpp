@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_SHALLOW_HISTORY_HPP_INCLUDED
-#define BOOST_FSM_SHALLOW_HISTORY_HPP_INCLUDED
+#ifndef BOOST_STATECHART_SHALLOW_HISTORY_HPP_INCLUDED
+#define BOOST_STATECHART_SHALLOW_HISTORY_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -15,7 +15,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 
   
@@ -29,8 +29,8 @@ class shallow_history
     // If you receive a 
     // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
     // compiler error here then you forgot to pass either
-    // fsm::has_shallow_history or fsm::has_full_history as the last parameter
-    // of DefaultState's context.
+    // statechart::has_deep_history or statechart::has_full_history as the
+    // last parameter of DefaultState's context.
     BOOST_STATIC_ASSERT( DefaultState::context_type::shallow_history::value );
 
     //////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ class shallow_history
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

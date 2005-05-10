@@ -1,20 +1,20 @@
-#ifndef BOOST_FSM_DETAIL_LEAF_STATE_HPP_INCLUDED
-#define BOOST_FSM_DETAIL_LEAF_STATE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_DETAIL_LEAF_STATE_HPP_INCLUDED
+#define BOOST_STATECHART_DETAIL_LEAF_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/detail/state_base.hpp>
+#include <boost/statechart/detail/state_base.hpp>
 
 
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -76,7 +76,7 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
 
 
 } // namespace detail
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

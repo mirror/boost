@@ -6,33 +6,33 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/deep_history.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/deep_history.hpp>
 
 #include <boost/mpl/list.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
 struct A;
-struct UnsupportedDeepHistoryTest : fsm::state_machine<
+struct UnsupportedDeepHistoryTest : sc::state_machine<
   UnsupportedDeepHistoryTest, A > {};
 
 struct B;
-struct A : fsm::simple_state< A, UnsupportedDeepHistoryTest,
-  fsm::no_reactions, B, fsm::has_deep_history > {};
+struct A : sc::simple_state< A, UnsupportedDeepHistoryTest,
+  sc::no_reactions, B, sc::has_deep_history > {};
 
   struct C;
   struct D;
-  struct B : fsm::simple_state< B, A, fsm::no_reactions, mpl::list< C, D > > {};
+  struct B : sc::simple_state< B, A, sc::no_reactions, mpl::list< C, D > > {};
 
-    struct C : fsm::simple_state< C, B::orthogonal< 0 > > {};
-    struct D : fsm::simple_state< D, B::orthogonal< 1 > > {};
+    struct C : sc::simple_state< C, B::orthogonal< 0 > > {};
+    struct D : sc::simple_state< D, B::orthogonal< 1 > > {};
 
 
 int main()

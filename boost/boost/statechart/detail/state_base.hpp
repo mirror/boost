@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
-#define BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_DETAIL_STATE_BASE_HPP_INCLUDED
+#define BOOST_STATECHART_DETAIL_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -8,10 +8,10 @@
 
 
 
-#include <boost/fsm/result.hpp>
-#include <boost/fsm/event.hpp>
+#include <boost/statechart/result.hpp>
+#include <boost/statechart/event.hpp>
 
-#include <boost/fsm/detail/counted_base.hpp>
+#include <boost/statechart/detail/counted_base.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
@@ -43,7 +43,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -169,21 +169,21 @@ class state_base :
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace detail
-} // namespace fsm
+} // namespace statechart
 #endif
 
 
 
 template< class Allocator, class RttiPolicy >
 inline void intrusive_ptr_add_ref(
-  const ::boost::fsm::detail::state_base< Allocator, RttiPolicy > * pBase )
+  const ::boost::statechart::detail::state_base< Allocator, RttiPolicy > * pBase )
 {
   pBase->add_ref();
 }
 
 template< class Allocator, class RttiPolicy >
 inline void intrusive_ptr_release( 
-  const ::boost::fsm::detail::state_base< Allocator, RttiPolicy > * pBase )
+  const ::boost::statechart::detail::state_base< Allocator, RttiPolicy > * pBase )
 {
   if ( pBase->release() )
   {
@@ -199,7 +199,7 @@ inline void intrusive_ptr_release(
 
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace detail
-} // namespace fsm
+} // namespace statechart
 #endif
 
 

@@ -1,21 +1,21 @@
-#ifndef BOOST_FSM_TEST_OUTER_ORTHOGONAL_HPP_INCLUDED
-#define BOOST_FSM_TEST_OUTER_ORTHOGONAL_HPP_INCLUDED
+#ifndef BOOST_STATECHART_TEST_OUTER_ORTHOGONAL_HPP_INCLUDED
+#define BOOST_STATECHART_TEST_OUTER_ORTHOGONAL_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004
+// (c) Copyright Andreas Huber Doenni 2004-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/state.hpp>
+#include <boost/statechart/state.hpp>
 #include <boost/mpl/list.hpp>
 
 #include "InnermostDefault.hpp"
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
@@ -23,13 +23,13 @@ namespace mpl = boost::mpl;
 //////////////////////////////////////////////////////////////////////////////
 template<
   class MostDerived, class Context, class Reactions, class InitialState0 >
-struct Orthogonal0 : fsm::state< MostDerived, Context, Reactions,
+struct Orthogonal0 : sc::state< MostDerived, Context, Reactions,
   mpl::list<
     InitialState0,
     Default1< MostDerived >,
     Default2< MostDerived > > >
 {
-  typedef fsm::state< 
+  typedef sc::state< 
     MostDerived, Context, Reactions, mpl::list< InitialState0,
       Default1< MostDerived >, Default2< MostDerived > > > base_type;
   typedef typename base_type::my_context my_context;
@@ -54,13 +54,13 @@ struct Orthogonal0 : fsm::state< MostDerived, Context, Reactions,
 //////////////////////////////////////////////////////////////////////////////
 template<
   class MostDerived, class Context, class Reactions, class InitialState1 >
-struct Orthogonal1 : fsm::state< MostDerived, Context, Reactions,
+struct Orthogonal1 : sc::state< MostDerived, Context, Reactions,
   mpl::list<
     Default0< MostDerived >,
     InitialState1,
     Default2< MostDerived > > >
 {
-  typedef fsm::state< 
+  typedef sc::state< 
     MostDerived, Context, Reactions, mpl::list< Default0< MostDerived >,
       InitialState1, Default2< MostDerived > > > base_type;
   typedef typename base_type::my_context my_context;
@@ -85,13 +85,13 @@ struct Orthogonal1 : fsm::state< MostDerived, Context, Reactions,
 //////////////////////////////////////////////////////////////////////////////
 template<
   class MostDerived, class Context, class Reactions, class InitialState2 >
-struct Orthogonal2 : fsm::state< MostDerived, Context, Reactions,
+struct Orthogonal2 : sc::state< MostDerived, Context, Reactions,
   mpl::list<
     Default0< MostDerived >,
     Default1< MostDerived >,
     InitialState2 > >
 {
-  typedef fsm::state< 
+  typedef sc::state< 
     MostDerived, Context, Reactions, mpl::list< Default0< MostDerived >,
       Default1< MostDerived >, InitialState2 > > base_type;
   typedef typename base_type::my_context my_context;

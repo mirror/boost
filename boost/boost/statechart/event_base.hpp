@@ -1,15 +1,15 @@
-#ifndef BOOST_FSM_EVENT_BASE_HPP_INCLUDED
-#define BOOST_FSM_EVENT_BASE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_EVENT_BASE_HPP_INCLUDED
+#define BOOST_STATECHART_EVENT_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/detail/rtti_policy.hpp>
-#include <boost/fsm/detail/counted_base.hpp>
+#include <boost/statechart/detail/rtti_policy.hpp>
+#include <boost/statechart/detail/counted_base.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -19,7 +19,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -70,33 +70,33 @@ class event_base : public detail::rtti_policy::rtti_base_type<
 
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-} // namespace fsm
+} // namespace statechart
 #endif
 
 
 
-inline void intrusive_ptr_add_ref( const ::boost::fsm::event_base * pBase )
+inline void intrusive_ptr_add_ref( const ::boost::statechart::event_base * pBase )
 {
   pBase->add_ref();
 }
 
-inline void intrusive_ptr_release( const ::boost::fsm::event_base * pBase )
+inline void intrusive_ptr_release( const ::boost::statechart::event_base * pBase )
 {
   if ( pBase->release() )
   {
-    ::boost::fsm::detail::delete_helper::delete_object( pBase );
+    ::boost::statechart::detail::delete_helper::delete_object( pBase );
   }
 }
 
 
 
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-} // namespace fsm
+} // namespace statechart
 #endif
 
 
 
-namespace fsm
+namespace statechart
 {
 
 
@@ -110,7 +110,7 @@ inline intrusive_ptr< const event_base >
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

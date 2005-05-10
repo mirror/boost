@@ -6,7 +6,7 @@
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
-<title>The boost::fsm library - Definitions</title>
+<title>The Boost Statechart Library - Definitions</title>
 </head>
 
 <body link="#0000ff" vlink="#800080">
@@ -18,8 +18,8 @@
     <img alt="C++ Boost" src="../../../boost.png" border="0" width="277" height="86"></a></h3>
     </td>
     <td valign="top">
-    <h1 align="center">The boost::fsm library</h1>
-    <h2 align="center">UML to boost::fsm mapping summary</h2>
+    <h1 align="center">The Boost Statechart Library</h1>
+    <h2 align="center">UML to Boost.Statechart mapping summary</h2>
     </td>
   </tr>
 </table>
@@ -86,7 +86,7 @@
 <ul>
   <li>The state that is initially entered is identified by template parameters 
   rather than by a default transition from the initial pseudostate (there is 
-  no such thing in boost::fsm)</li>
+  no such thing in Boost.Statechart)</li>
   <li>For <code><a href="reference.html#Class template state_machine">
   state_machine&lt;&gt;</a></code> and <code>
   <a href="reference.html#Class template asynchronous_state_machine">
@@ -102,7 +102,7 @@
 </ul>
 <h3><a name="Final pseudostate">Final pseudostate</a></h3>
 <ul>
-  <li>There is no such thing as a final pseudostate in boost::fsm</li>
+  <li>There is no such thing as a final pseudostate in Boost.Statechart</li>
   <li>This functionality is implemented with a special reaction (<code><a href="reference.html#Class template termination">termination&lt;&gt;</a></code>) 
   and special reaction function (<code><a href="reference.html#simple_state::terminate">simple_state&lt;&gt;::terminate()</a></code>);
   <a href="tutorial.html#State queries">example</a></li>
@@ -122,17 +122,17 @@
 </ul>
 <h3><a name="Junction point">Junction point</a></h3>
 <ul>
-  <li>Does not exist in boost::fsm; <a href="rationale.html#Limitations">
+  <li>Does not exist in Boost.Statechart; <a href="rationale.html#Limitations">
   rationale</a></li>
 </ul>
 <h3><a name="Dynamic choice point">Dynamic choice point</a></h3>
 <ul>
-  <li>Does not (yet?) exist in boost::fsm;
+  <li>Does not (yet?) exist in Boost.Statechart;
   <a href="rationale.html#Limitations">rationale</a></li>
 </ul>
 <h3><a name="Join and fork bars">Join and fork bars</a></h3>
 <ul>
-  <li>Do not exist in boost::fsm; <a href="rationale.html#Limitations">
+  <li>Do not exist in Boost.Statechart; <a href="rationale.html#Limitations">
   rationale</a></li>
 </ul>
 <h2><a name="Events">Events</a></h2>
@@ -156,7 +156,7 @@
 </ul>
 <h3><a name="Time event">Time event</a></h3>
 <ul>
-  <li>Does not exist in boost::fsm</li>
+  <li>Does not exist in Boost.Statechart</li>
   <li>A time event can be simulated with an external timer that is started in 
   the entry action and stopped in the exit action of a particular state. When 
   starting the timer, it is instructed to call <code>
@@ -165,7 +165,7 @@
 </ul>
 <h3><a name="Change event">Change event</a></h3>
 <ul>
-  <li>Does not exist in boost::fsm</li>
+  <li>Does not exist in Boost.Statechart</li>
   <li>A change event can be simulated by packing to be monitored variables 
   into an external wrapper with <code>get</code> and <code>set</code> methods. 
   Whenever <code>set</code> is called the wrapper posts an appropriate event</li>
@@ -220,17 +220,18 @@
 </ul>
 <h3><a name="Do activity">Do activity</a></h3>
 <ul>
-  <li>Not supported in boost::fsm</li>
+  <li>Not supported in Boost.Statechart</li>
   <li>A do activity can be simulated with a separate thread that is started in 
   the entry action and cancelled (!) in the exit action of a particular state</li>
 </ul>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->24 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39362" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" -->
 </p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"><b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

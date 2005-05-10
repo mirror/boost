@@ -1,17 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004
+// (c) Copyright Andreas Huber Doenni 2004-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/deferral.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/deferral.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -20,7 +20,7 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
@@ -31,13 +31,13 @@ boost::intrusive_ptr< T > MakeIntrusive( T * pT )
   return boost::intrusive_ptr< T >( pT );
 }
 
-struct EvLeafDeferred : fsm::event< EvLeafDeferred > {};
-struct EvNodeDeferred : fsm::event< EvNodeDeferred > {};
-struct EvSwitch : fsm::event< EvSwitch > {};
-struct EvDestroy : fsm::event< EvDestroy > {};
+struct EvLeafDeferred : sc::event< EvLeafDeferred > {};
+struct EvNodeDeferred : sc::event< EvNodeDeferred > {};
+struct EvSwitch : sc::event< EvSwitch > {};
+struct EvDestroy : sc::event< EvDestroy > {};
 
 struct Active;
-struct DeferralTest : fsm::state_machine< DeferralTest, Active >
+struct DeferralTest : sc::state_machine< DeferralTest, Active >
 {
     //////////////////////////////////////////////////////////////////////////
     DeferralTest() : processedCount_( 0 ) {}
@@ -57,10 +57,10 @@ struct DeferralTest : fsm::state_machine< DeferralTest, Active >
     unsigned int processedCount_;
 };
 
-struct Dead : fsm::simple_state<
-  Dead, DeferralTest, fsm::custom_reaction< EvNodeDeferred > >
+struct Dead : sc::simple_state<
+  Dead, DeferralTest, sc::custom_reaction< EvNodeDeferred > >
 {
-  fsm::result react( const EvNodeDeferred & )
+  sc::result react( const EvNodeDeferred & )
   {
     outermost_context().IncrementProcessedCount();
     return discard_event();
@@ -68,26 +68,26 @@ struct Dead : fsm::simple_state<
 };
 
 struct Idle;
-struct Active : fsm::simple_state< Active, DeferralTest, mpl::list<
-  fsm::custom_reaction< EvLeafDeferred >,
-  fsm::deferral< EvNodeDeferred >,
-  fsm::transition< EvDestroy, Dead > >, Idle >
+struct Active : sc::simple_state< Active, DeferralTest, mpl::list<
+  sc::custom_reaction< EvLeafDeferred >,
+  sc::deferral< EvNodeDeferred >,
+  sc::transition< EvDestroy, Dead > >, Idle >
 {
-  fsm::result react( const EvLeafDeferred & )
+  sc::result react( const EvLeafDeferred & )
   {
     outermost_context().IncrementProcessedCount();
     return discard_event();
   }
 };
 
-  struct Running : fsm::simple_state< Running, Active,
-    fsm::transition< EvSwitch, Idle > >
+  struct Running : sc::simple_state< Running, Active,
+    sc::transition< EvSwitch, Idle > >
   {
   };
 
-  struct Idle : fsm::simple_state< Idle, Active, mpl::list<
-    fsm::transition< EvSwitch, Running >,
-    fsm::deferral< EvLeafDeferred > > >
+  struct Idle : sc::simple_state< Idle, Active, mpl::list<
+    sc::transition< EvSwitch, Running >,
+    sc::deferral< EvLeafDeferred > > >
   {
   };
 

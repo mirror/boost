@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_DETAIL_RTTI_POLICY_HPP_INCLUDED
-#define BOOST_FSM_DETAIL_RTTI_POLICY_HPP_INCLUDED
+#ifndef BOOST_STATECHART_DETAIL_RTTI_POLICY_HPP_INCLUDED
+#define BOOST_STATECHART_DETAIL_RTTI_POLICY_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -26,7 +26,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -56,7 +56,7 @@ id_provider id_holder< MostDerived >::idProvider_;
 //////////////////////////////////////////////////////////////////////////////
 struct rtti_policy
 {
-  #ifdef BOOST_FSM_USE_NATIVE_RTTI
+  #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
   class id_type
   {
     public:
@@ -98,14 +98,14 @@ struct rtti_policy
 
       id_type dynamic_type() const
       {
-        #ifdef BOOST_FSM_USE_NATIVE_RTTI
+        #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
         return id_type( typeid( *this ) );
         #else
         return &idProvider_;
         #endif
       }
 
-      #ifndef BOOST_FSM_USE_NATIVE_RTTI
+      #ifndef BOOST_STATECHART_USE_NATIVE_RTTI
       template< typename CustomId >
       const CustomId * custom_dynamic_type_ptr() const
       {
@@ -120,7 +120,7 @@ struct rtti_policy
       ////////////////////////////////////////////////////////////////////////
       ~rtti_base_type() {}
 
-    #ifdef BOOST_FSM_USE_NATIVE_RTTI
+    #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
       rtti_base_type( id_provider_type ) {}
 
     private:
@@ -151,14 +151,14 @@ struct rtti_policy
       ////////////////////////////////////////////////////////////////////////
       static id_type static_type()
       {
-        #ifdef BOOST_FSM_USE_NATIVE_RTTI
+        #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
         return id_type( typeid( const MostDerived ) );
         #else
         return &id_holder< MostDerived >::idProvider_;
         #endif
       }
 
-      #ifndef BOOST_FSM_USE_NATIVE_RTTI
+      #ifndef BOOST_STATECHART_USE_NATIVE_RTTI
       template< class CustomId >
       static const CustomId * custom_static_type_ptr()
       {
@@ -185,7 +185,7 @@ struct rtti_policy
       ////////////////////////////////////////////////////////////////////////
       ~rtti_derived_type() {}
 
-      #ifdef BOOST_FSM_USE_NATIVE_RTTI
+      #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
       rtti_derived_type() : Base( false ) {}
       #else
       rtti_derived_type() : Base( id_holder< MostDerived >::idProvider_ ) {}
@@ -196,7 +196,7 @@ struct rtti_policy
 
 
 } // namespace detail
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

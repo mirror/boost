@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_STATE_HPP_INCLUDED
-#define BOOST_FSM_STATE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_STATE_HPP_INCLUDED
+#define BOOST_STATECHART_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -8,7 +8,7 @@
 
 
 
-#include <boost/fsm/simple_state.hpp>
+#include <boost/statechart/simple_state.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -16,7 +16,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 
 
@@ -94,7 +94,7 @@ class state : public simple_state<
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

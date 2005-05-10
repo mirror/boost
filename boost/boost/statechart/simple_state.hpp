@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_SIMPLE_STATE_HPP_INCLUDED
-#define BOOST_FSM_SIMPLE_STATE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_SIMPLE_STATE_HPP_INCLUDED
+#define BOOST_STATECHART_SIMPLE_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -8,11 +8,11 @@
 
 
 
-#include <boost/fsm/event.hpp>
+#include <boost/statechart/event.hpp>
 
-#include <boost/fsm/detail/leaf_state.hpp>
-#include <boost/fsm/detail/node_state.hpp>
-#include <boost/fsm/detail/constructor.hpp>
+#include <boost/statechart/detail/leaf_state.hpp>
+#include <boost/statechart/detail/node_state.hpp>
+#include <boost/statechart/detail/constructor.hpp>
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
@@ -54,7 +54,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -399,7 +399,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
     // compiler error here then the direct or indirect context of this state
     // has deep history _and_ this state has two or more orthogonal regions.
-    // boost::fsm does not currently support deep history in a state whose
+    // Boost.Statechart does not currently support deep history in a state whose
     // direct or indirect inner states have two or more orthogonal regions.
     // Please consult the documentation on how to work around this limitation.
     BOOST_STATIC_ASSERT( ( mpl::or_<
@@ -701,7 +701,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       outermost_context_base_type & outermostContextBase(
         pCommonContext->outermost_context_base() );
 
-      #ifdef BOOST_FSM_RELAX_TRANSITION_CONTEXT
+      #ifdef BOOST_STATECHART_RELAX_TRANSITION_CONTEXT
       typedef typename mpl::distance<
         typename mpl::begin< possible_transition_contexts >::type,
         typename mpl::find<
@@ -939,14 +939,14 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-} // namespace fsm
+} // namespace statechart
 #endif
 
 
 
 template< class MostDerived, class Context, class Reactions,
           class InnerInitial, history_mode historyMode >
-inline void intrusive_ptr_release( const ::boost::fsm::simple_state<
+inline void intrusive_ptr_release( const ::boost::statechart::simple_state<
   MostDerived, Context, Reactions, InnerInitial, historyMode > * pBase )
 {
   if ( pBase->release() )
@@ -960,7 +960,7 @@ inline void intrusive_ptr_release( const ::boost::fsm::simple_state<
 
 
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-} // namespace fsm
+} // namespace statechart
 #endif
 
 

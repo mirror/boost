@@ -6,7 +6,7 @@
 <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
-<title>The boost::fsm library - Tutorial</title>
+<title>The Boost Statechart Library - Tutorial</title>
 </head>
 
 <body link="#0000ff" vlink="#800080">
@@ -18,7 +18,7 @@
     <img alt="C++ Boost" src="../../../boost.png" border="0" width="277" height="86"></a></h3>
     </td>
     <td valign="top">
-    <h1 align="center">The boost::fsm library</h1>
+    <h1 align="center">The Boost Statechart Library</h1>
     <h2 align="center">Tutorial</h2>
     </td>
   </tr>
@@ -62,7 +62,7 @@ contributed by Mitsuo Fukasawa.</p>
 </dl>
 <hr>
 <h2><a name="Introduction">Introduction</a></h2>
-<p>The boost::fsm library is a framework that allows you to quickly transform 
+<p>The Boost Statechart Library is a framework that allows you to quickly transform 
 a UML state chart into executable C++ code, <b>without</b> needing to use a 
 code generator. Thanks to support for almost all UML features the 
 transformation is straight-forward and the resulting C++ code is a nearly 
@@ -80,7 +80,7 @@ the task at hand. Specifically:</p>
 	described under <a href="#Intermediate topics: A digital camera">
 	Intermediate topics: A digital camera</a> are often helpful</li>
   <li>Finally, users wanting to create even more complex machines and project 
-  architects evaluating boost::fsm should also read the
+  architects evaluating Boost.Statechart should also read the
   <a href="#Advanced topics">Advanced topics</a> section at the end. Moreover, 
   reading the <a href="rationale.html#Limitations">Limitations</a> section in 
   the Rationale is strongly suggested</li>
@@ -90,16 +90,16 @@ the task at hand. Specifically:</p>
 state chart ...</p>
 <p><img border="0" src="HelloWorld.gif" width="379" height="94"></p>
 <p>... is implemented with the following code:</p>
-<pre>#include &lt;boost/fsm/state_machine.hpp&gt;
-#include &lt;boost/fsm/simple_state.hpp&gt;
+<pre>#include &lt;boost/statechart/state_machine.hpp&gt;
+#include &lt;boost/statechart/simple_state.hpp&gt;
 #include &lt;iostream&gt;
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 struct Greeting;
-struct Machine : fsm::state_machine&lt; Machine, Greeting &gt; {};
+struct Machine : sc::state_machine&lt; Machine, Greeting &gt; {};
 
-struct Greeting : fsm::simple_state&lt; Greeting, Machine &gt;
+struct Greeting : sc::simple_state&lt; Greeting, Machine &gt;
 {
   Greeting() { std::cout &lt;&lt; &quot;Hello World!\n&quot;; } // entry
   ~Greeting() { std::cout &lt;&lt; &quot;Bye Bye World!\n&quot;; } // exit
@@ -118,7 +118,7 @@ entered. At the end of <code>main()</code>, the <code>myMachine</code> object
 is destroyed what automatically exits the <code>Greeting</code> state.</p>
 <p>A few remarks:</p>
 <ul>
-  <li>boost::fsm makes heavy use of the
+  <li>Boost.Statechart makes heavy use of the
   <a href="http://www.informit.com/articles/article.asp?p=31473&seqNum=3">
   curiously recurring template pattern</a>. The deriving class must always be 
   passed as the first parameter to all base class templates</li>
@@ -176,23 +176,23 @@ Such watches typically have two buttons:</p>
 <p>The two buttons are modeled by two events. Moreover, we also define the 
 necessary states and the initial state. <b>The following code is our starting 
 point, subsequent code snippets must be inserted</b>:</p>
-<pre>#include &lt;boost/fsm/event.hpp&gt;
-#include &lt;boost/fsm/state_machine.hpp&gt;
-#include &lt;boost/fsm/simple_state.hpp&gt;
+<pre>#include &lt;boost/statechart/event.hpp&gt;
+#include &lt;boost/statechart/state_machine.hpp&gt;
+#include &lt;boost/statechart/simple_state.hpp&gt;
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
-struct EvStartStop : fsm::event&lt; EvStartStop &gt; {};
-struct EvReset : fsm::event&lt; EvReset &gt; {};
+struct EvStartStop : sc::event&lt; EvStartStop &gt; {};
+struct EvReset : sc::event&lt; EvReset &gt; {};
 
 struct Active;
-struct StopWatch : fsm::state_machine&lt; StopWatch, Active &gt; {};
+struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt; {};
 
 struct Stopped;
-struct Active : fsm::simple_state&lt; Active, StopWatch,
-  fsm::no_reactions, Stopped &gt; {};
-struct Running : fsm::simple_state&lt; Running, Active &gt; {};
-struct Stopped : fsm::simple_state&lt; Stopped, Active &gt; {};
+struct Active : sc::simple_state&lt; Active, StopWatch,
+  sc::no_reactions, Stopped &gt; {};
+struct Running : sc::simple_state&lt; Running, Active &gt; {};
+struct Stopped : sc::simple_state&lt; Stopped, Active &gt; {};
 
 int main()
 {
@@ -229,17 +229,17 @@ int main()
 <h3><a name="Adding reactions">Adding reactions</a></h3>
 <p>For the moment we will use only one type of reaction: transitions. We <b>
 insert</b> the bold parts of the following code:</p>
-<pre><b>#include &lt;boost/fsm/transition.hpp&gt;
+<pre><b>#include &lt;boost/statechart/transition.hpp&gt;
 </b>
 // ...
 
 struct Stopped;
-struct Active : fsm::simple_state&lt; Active, StopWatch,
-  <b>fsm::transition&lt; EvReset, Active &gt;</b>, Stopped &gt; {};
-struct Running : fsm::simple_state&lt; Running, Active<b>,
-</b>  <b>fsm::transition&lt; EvStartStop, Stopped &gt;</b> &gt; {};
-struct Stopped : fsm::simple_state&lt; Stopped, Active<b>,
-</b>  <b>fsm::transition&lt; EvStartStop, Running &gt;</b> &gt; {};
+struct Active : sc::simple_state&lt; Active, StopWatch,
+  <b>sc::transition&lt; EvReset, Active &gt;</b>, Stopped &gt; {};
+struct Running : sc::simple_state&lt; Running, Active<b>,
+</b>  <b>sc::transition&lt; EvStartStop, Stopped &gt;</b> &gt; {};
+struct Stopped : sc::simple_state&lt; Stopped, Active<b>,
+</b>  <b>sc::transition&lt; EvStartStop, Running &gt;</b> &gt; {};
 
 int main()
 {
@@ -278,8 +278,8 @@ add the result to the elapsed time.</p>
 // ...
 
 struct Stopped;
-struct Active : fsm::simple_state&lt; Active, StopWatch,
-  fsm::transition&lt; EvReset, Active &gt;, Stopped &gt;
+struct Active : sc::simple_state&lt; Active, StopWatch,
+  sc::transition&lt; EvReset, Active &gt;, Stopped &gt;
 {
   <b>public:
 </b>    <b>Active() : elapsedTime_( 0.0 ) {}
@@ -289,8 +289,8 @@ struct Active : fsm::simple_state&lt; Active, StopWatch,
 </b>    <b>double elapsedTime_;
 </b>};
 
-struct Running : fsm::simple_state&lt; Running, Active,
-  fsm::transition&lt; EvStartStop, Stopped &gt; &gt;
+struct Running : sc::simple_state&lt; Running, Active,
+  sc::transition&lt; EvStartStop, Stopped &gt; &gt;
 {
   <b>public:
 </b>    <b>Running() : startTime_( std::time( 0 ) ) {}
@@ -336,7 +336,7 @@ retrieve the elapsed time:</p>
 };
 
 </b>struct Active;
-struct StopWatch : fsm::state_machine&lt; StopWatch, Active &gt;
+struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt;
 {
   <b>double ElapsedTime() const
 </b>  <b>{
@@ -346,8 +346,8 @@ struct StopWatch : fsm::state_machine&lt; StopWatch, Active &gt;
 <b>
 </b>// ...
 
-struct Running : <b>IElapsedTime,</b> fsm::simple_state&lt;
-  Running, Active, fsm::transition&lt; EvStartStop, Stopped &gt; &gt;
+struct Running : <b>IElapsedTime,</b> sc::simple_state&lt;
+  Running, Active, sc::transition&lt; EvStartStop, Stopped &gt; &gt;
 {
   public:
     Running() : startTime_( std::time( 0 ) ) {}
@@ -365,8 +365,8 @@ struct Running : <b>IElapsedTime,</b> fsm::simple_state&lt;
     std::time_t startTime_;
 };
 
-struct Stopped : <b>IElapsedTime,</b> fsm::simple_state&lt;
-  Stopped, Active, fsm::transition&lt; EvStartStop, Running &gt; &gt;
+struct Stopped : <b>IElapsedTime,</b> sc::simple_state&lt;
+  Stopped, Active, sc::transition&lt; EvStartStop, Running &gt; &gt;
 {
   <b>virtual double ElapsedTime() const
 </b>  <b>{
@@ -456,41 +456,41 @@ outline different options to achieve the same effect. That's why the code is
 often not equal to the Camera example code.</b> Comments mark the parts where 
 this is the case.</p>
 <p>Camera.hpp:</p>
-<pre>#ifndef CAMERA_HPP
-#define CAMERA_HPP
+<pre>#ifndef CAMERA_HPP_INCLUDED
+#define CAMERA_HPP_INCLUDED
 
-#include &lt;boost/fsm/event.hpp&gt;
-#include &lt;boost/fsm/state_machine.hpp&gt;
-#include &lt;boost/fsm/simple_state.hpp&gt;
-#include &lt;boost/fsm/custom_reaction.hpp&gt;
+#include &lt;boost/statechart/event.hpp&gt;
+#include &lt;boost/statechart/state_machine.hpp&gt;
+#include &lt;boost/statechart/simple_state.hpp&gt;
+#include &lt;boost/statechart/custom_reaction.hpp&gt;
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
-struct EvShutterHalf : fsm::event&lt; EvShutterHalf &gt; {};
-struct EvShutterFull : fsm::event&lt; EvShutterFull &gt; {};
-struct EvShutterRelease : fsm::event&lt; EvShutterRelease &gt; {};
-struct EvConfig : fsm::event&lt; EvConfig &gt; {};
+struct EvShutterHalf : sc::event&lt; EvShutterHalf &gt; {};
+struct EvShutterFull : sc::event&lt; EvShutterFull &gt; {};
+struct EvShutterRelease : sc::event&lt; EvShutterRelease &gt; {};
+struct EvConfig : sc::event&lt; EvConfig &gt; {};
 
 struct NotShooting;
-struct Camera : fsm::state_machine&lt; Camera, NotShooting &gt;
+struct Camera : sc::state_machine&lt; Camera, NotShooting &gt;
 {
   bool IsMemoryAvailable() const { return true; }
   bool IsBatteryLow() const { return false; }
 };
 
 struct Idle;
-struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
-  <b>fsm::custom_reaction&lt; EvShutterHalf &gt;</b>, Idle &gt;
+struct NotShooting : sc::simple_state&lt; NotShooting, Camera,
+  <b>sc::custom_reaction&lt; EvShutterHalf &gt;</b>, Idle &gt;
 {
   // ...
-  <b>fsm::result react( const EvShutterHalf &amp; );</b>
+  <b>sc::result react( const EvShutterHalf &amp; );</b>
 };
 
-struct Idle : fsm::simple_state&lt; Idle, NotShooting,
-  <b>fsm::custom_reaction&lt; EvConfig &gt;</b> &gt;
+struct Idle : sc::simple_state&lt; Idle, NotShooting,
+  <b>sc::custom_reaction&lt; EvConfig &gt;</b> &gt;
 {
   // ...
-  <b>fsm::result react( const EvConfig &amp; );</b>
+  <b>sc::result react( const EvConfig &amp; );</b>
 };
 
 #endif</pre>
@@ -506,12 +506,12 @@ can be implemented in the .cpp file.</p>
 // ...
 
 // not part of the Camera example
-fsm::result NotShooting::react( const EvShutterHalf &amp; )
+sc::result NotShooting::react( const EvShutterHalf &amp; )
 {
   return transit&lt; Shooting &gt;();
 }
 
-fsm::result Idle::react( const EvConfig &amp; )
+sc::result Idle::react( const EvConfig &amp; )
 {
   return transit&lt; Configuring &gt;();
 }</pre>
@@ -541,23 +541,23 @@ after the camera has finished focusing. To prevent this, the EvShutterFull
 event is deferred inside the Focusing state. This means that all events of 
 this type are stored in a separate queue, which is emptied into the main queue 
 when the Focusing state is exited.</p>
-<pre>struct Focusing : fsm::state&lt; Focusing, Shooting, mpl::list&lt;
-  fsm::custom_reaction&lt; EvInFocus &gt;,
-  <b>fsm::deferral&lt; EvShutterFull &gt;</b> &gt; &gt;
+<pre>struct Focusing : sc::state&lt; Focusing, Shooting, mpl::list&lt;
+  sc::custom_reaction&lt; EvInFocus &gt;,
+  <b>sc::deferral&lt; EvShutterFull &gt;</b> &gt; &gt;
 {
   Focusing( my_context ctx );
-  fsm::result react( const EvInFocus &amp; );
+  sc::result react( const EvInFocus &amp; );
 };</pre>
 <p>To avoid a number of overheads, event deferral has one limitation: Only 
 events allocated with <code>new</code> <b>and</b> pointed to by a <code>
 boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
 differently allocated event will result in a failing runtime assert. Example:</p>
-<pre>struct Event : fsm::event&lt; Event &gt; {};
+<pre>struct Event : sc::event&lt; Event &gt; {};
 struct Initial;
-struct Machine : fsm::state_machine&lt;
+struct Machine : sc::state_machine&lt;
   Machine, Initial &gt; {};
-struct Initial : fsm::simple_state&lt; Initial, Machine,
-  fsm::deferral&lt; Event &gt; &gt; {};
+struct Initial : sc::simple_state&lt; Initial, Machine,
+  sc::deferral&lt; Event &gt; &gt; {};
 
 int main()
 {
@@ -575,7 +575,7 @@ int main()
 event but they have mutually exclusive guards. Here is an appropriate custom 
 reaction:</p>
 <pre>// not part of the Camera example
-fsm::result Focused::react( const EvShutterFull &amp; )
+sc::result Focused::react( const EvShutterFull &amp; )
 {
   if ( context&lt; Camera &gt;().IsMemoryAvailable() )
   {
@@ -596,7 +596,7 @@ declaration, which is often preferable for easier browsing.</p>
 to the event if the battery is low:</p>
 <p>Camera.cpp:</p>
 <pre>// ...
-fsm::result NotShooting::react( const EvShutterHalf &amp; )
+sc::result NotShooting::react( const EvShutterHalf &amp; )
 {
   if ( context&lt; Camera &gt;().IsBatteryLow() )
   {
@@ -617,7 +617,7 @@ fsm::result NotShooting::react( const EvShutterHalf &amp; )
 the same effect as long as Focused does not have any entry or exit actions:</p>
 <p>Shooting.cpp:</p>
 <pre>// ...
-fsm::result Focused::react( const EvShutterFull &amp; )
+sc::result Focused::react( const EvShutterFull &amp; )
 {
   if ( context&lt; Camera &gt;().IsMemoryAvailable() )
   {
@@ -650,14 +650,14 @@ order:</p>
 The transition action t() is therefore executed in the context of the 
 InnermostCommonOuter state because the source state has already been left 
 (destructed) and the target state has not yet been entered (constructed).</p>
-<p>With boost::fsm, a transition action can be a member of <b>any</b> common 
+<p>With Boost.Statechart, a transition action can be a member of <b>any</b> common 
 outer context. That is, the transition between Focusing and Focused could be 
 implemented as follows:</p>
 <p>Shooting.hpp:</p>
 <pre>// ...
 struct Focusing;
-struct Shooting : fsm::simple_state&lt; Shooting, Camera,
-  fsm::transition&lt; EvShutterRelease, NotShooting &gt;, Focusing &gt;
+struct Shooting : sc::simple_state&lt; Shooting, Camera,
+  sc::transition&lt; EvShutterRelease, NotShooting &gt;, Focusing &gt;
 {
   // ...
   <b>void DisplayFocused( const EvInFocus &amp; );</b>
@@ -666,24 +666,24 @@ struct Shooting : fsm::simple_state&lt; Shooting, Camera,
 // ...
 
 // not part of the Camera example
-struct Focusing : fsm::simple_state&lt; Focusing, Shooting,
-  fsm::transition&lt; EvInFocus, Focused<b>,</b>
+struct Focusing : sc::simple_state&lt; Focusing, Shooting,
+  sc::transition&lt; EvInFocus, Focused<b>,</b>
     <b>Shooting, &amp;Shooting::DisplayFocused</b> &gt; &gt; {};</pre>
 <p><b>Or</b>, the following is also possible (here the state machine itself 
 serves as the outermost context):</p>
 <pre>// not part of the Camera example
-struct Camera : fsm::state_machine&lt; Camera, NotShooting &gt;
+struct Camera : sc::state_machine&lt; Camera, NotShooting &gt;
 {
   <b>void DisplayFocused( const EvInFocus &amp; );</b>
 };</pre>
 <pre>// not part of the Camera example
-struct Focusing : fsm::simple_state&lt; Focusing, Shooting,
-  fsm::transition&lt; EvInFocus, Focused<b>,</b>
+struct Focusing : sc::simple_state&lt; Focusing, Shooting,
+  sc::transition&lt; EvInFocus, Focused<b>,</b>
     <b>Camera, &amp;Camera::DisplayFocused</b> &gt; &gt; {};</pre>
 <p>Naturally, transition actions can also be invoked from custom reactions:</p>
 <p>Shooting.cpp:</p>
 <pre>// ...
-fsm::result Focusing::react( const EvInFocus &amp; evt )
+sc::result Focusing::react( const EvInFocus &amp; evt )
 {
   return transit&lt; Focused &gt;( <b>&amp;Shooting::DisplayFocused</b>, evt );
 }</pre>
@@ -701,10 +701,10 @@ an <code>mpl::list&lt;&gt;</code> must be used as outlined below:</p>
 </b>
 // ...
 
-struct Playing : fsm::simple_state&lt; Playing, Mp3Player,
+struct Playing : sc::simple_state&lt; Playing, Mp3Player,
   <b>mpl::list&lt;</b>
-    fsm::custom_reaction&lt; EvFastForward &gt;,
-    fsm::transition&lt; EvStop, Stopped &gt; <b>&gt;</b> &gt; { /* ... */ };</pre>
+    sc::custom_reaction&lt; EvFastForward &gt;,
+    sc::transition&lt; EvStop, Stopped &gt; <b>&gt;</b> &gt; { /* ... */ };</pre>
 <h3><a name="Posting events">Posting events</a></h3>
 <p>Non-trivial state machines often need to post internal events. Here's an 
 example of how to do this: </p>
@@ -719,7 +719,7 @@ current reaction is completed. Events can be posted from inside <code>react</cod
 functions, entry-, exit- and transition actions. However, posting from inside 
 entry actions is a bit more complicated (see e.g. <code>Focusing::Focusing()</code> 
 in <code>Shooting.cpp</code> in the Camera example): </p>
-<pre>struct Pumping : <b>fsm::state</b>&lt; Pumping, Purifier &gt;
+<pre>struct Pumping : <b>sc::state</b>&lt; Pumping, Purifier &gt;
 {
   <b>Pumping( my_context ctx ) : my_base( ctx )</b>
   {
@@ -768,17 +768,17 @@ state down to the <a href="definitions.html#Innermost state">innermost state</a>
 in Configuring, that's why we use a deep history pseudo state. The associated 
 code looks as follows:</p>
 <pre>// not part of the Camera example
-struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
-  /* ... */, Idle, <b>fsm::has_deep_history</b> &gt; //
+struct NotShooting : sc::simple_state&lt; NotShooting, Camera,
+  /* ... */, Idle, <b>sc::has_deep_history</b> &gt; //
 {
   // ...
 };
 
 // ...
 
-struct Shooting : fsm::simple_state&lt; Shooting, Camera,
-  fsm::transition&lt; EvShutterRelease,
-    <b>fsm::deep_history&lt; Idle &gt;</b> &gt;, Focusing &gt;
+struct Shooting : sc::simple_state&lt; Shooting, Camera,
+  sc::transition&lt; EvShutterRelease,
+    <b>sc::deep_history&lt; Idle &gt;</b> &gt;, Focusing &gt;
 {
   // ...
 };
@@ -808,9 +808,9 @@ when they turn it back on. Here's the implementation:</p>
 <pre>// ...
 
 // not part of the Camera example
-struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
-  /* ... */, <b>mpl::list&lt; fsm::deep_history&lt; Idle &gt; &gt;</b>,
-  <b>fsm::has_deep_history</b> &gt;
+struct NotShooting : sc::simple_state&lt; NotShooting, Camera,
+  /* ... */, <b>mpl::list&lt; sc::deep_history&lt; Idle &gt; &gt;</b>,
+  <b>sc::has_deep_history</b> &gt;
 {
   // ...
 };
@@ -827,40 +827,40 @@ limitations</a>.</p>
 <p>To implement this state chart you simply specify more than one inner 
 initial state (see the Keyboard example):</p>
 <pre>struct Active;
-struct Keyboard : fsm::state_machine&lt; Keyboard, Active &gt; {};
+struct Keyboard : sc::state_machine&lt; Keyboard, Active &gt; {};
 
 struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
-struct Active: fsm::simple_state&lt;
-  Active, Keyboard, fsm::no_reactions,
+struct Active: sc::simple_state&lt;
+  Active, Keyboard, sc::no_reactions,
   <b>mpl::list&lt; NumLockOff, CapsLockOff, ScrollLockOff &gt;</b> &gt; {};</pre>
 <p>Active's inner states must declare which orthogonal region they belong to:</p>
-<pre>struct EvNumLockPressed : fsm::event&lt; EvNumLockPressed &gt; {};
-struct EvCapsLockPressed : fsm::event&lt; EvCapsLockPressed &gt; {};
+<pre>struct EvNumLockPressed : sc::event&lt; EvNumLockPressed &gt; {};
+struct EvCapsLockPressed : sc::event&lt; EvCapsLockPressed &gt; {};
 struct EvScrollLockPressed :
-  fsm::event&lt; EvScrollLockPressed &gt; {};
+  sc::event&lt; EvScrollLockPressed &gt; {};
 
-struct NumLockOn : fsm::simple_state&lt;
+struct NumLockOn : sc::simple_state&lt;
   NumLockOn, Active<b>::orthogonal&lt; 0 &gt;</b>,
-  fsm::transition&lt; EvNumLockPressed, NumLockOff &gt; &gt; {};
-struct NumLockOff : fsm::simple_state&lt;
+  sc::transition&lt; EvNumLockPressed, NumLockOff &gt; &gt; {};
+struct NumLockOff : sc::simple_state&lt;
   NumLockOff, Active<b>::orthogonal&lt; 0 &gt;</b>,
-  fsm::transition&lt; EvNumLockPressed, NumLockOn &gt; &gt; {};
+  sc::transition&lt; EvNumLockPressed, NumLockOn &gt; &gt; {};
 
-struct CapsLockOn : fsm::simple_state&lt;
+struct CapsLockOn : sc::simple_state&lt;
   CapsLockOn, Active<b>::orthogonal&lt; 1 &gt;</b>,
-  fsm::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
-struct CapsLockOff : fsm::simple_state&lt;
+  sc::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
+struct CapsLockOff : sc::simple_state&lt;
   CapsLockOff, Active<b>::orthogonal&lt; 1 &gt;</b>,
-  fsm::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};
+  sc::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};
 
-struct ScrollLockOn : fsm::simple_state&lt;
+struct ScrollLockOn : sc::simple_state&lt;
   ScrollLockOn, Active<b>::orthogonal&lt; 2 &gt;</b>,
-  fsm::transition&lt; EvScrollLockPressed, ScrollLockOff &gt; &gt; {};
-struct ScrollLockOff : fsm::simple_state&lt;
+  sc::transition&lt; EvScrollLockPressed, ScrollLockOff &gt; &gt; {};
+struct ScrollLockOff : sc::simple_state&lt;
   ScrollLockOff, Active<b>::orthogonal&lt; 2 &gt;</b>,
-  fsm::transition&lt; EvScrollLockPressed, ScrollLockOn &gt; &gt; {};</pre>
+  sc::transition&lt; EvScrollLockPressed, ScrollLockOn &gt; &gt; {};</pre>
 <p><code>orthogonal&lt; 0 &gt;</code> is the default, so <code>NumLockOn</code> and
 <code>NumLockOff</code> could just as well pass <code>Active</code> instead of
 <code>Active::orthogonal&lt; 0 &gt;</code> to specify their context. The numbers 
@@ -871,22 +871,22 @@ target state. Any violations of these rules lead to compile time errors.
 Examples:</p>
 <pre>// Example 1: does not compile because Active specifies
 // only 3 orthogonal regions
-struct WhateverLockOn: fsm::simple_state&lt;
+struct WhateverLockOn: sc::simple_state&lt;
   WhateverLockOn, Active<b>::</b>orthogonal&lt; <b>3</b> &gt; &gt; {};
 
 // Example 2: does not compile because Active specifies
 // that NumLockOff is part of the &quot;0th&quot; orthogonal region
-struct NumLockOff : fsm::simple_state&lt;
+struct NumLockOff : sc::simple_state&lt;
   NumLockOff, Active<b>::</b>orthogonal&lt; <b>1</b> &gt; &gt; {};
 
 // Example 3: does not compile because a transition between
 // different orthogonal regions is not permitted
-struct CapsLockOn : fsm::simple_state&lt;
+struct CapsLockOn : sc::simple_state&lt;
   CapsLockOn, Active<b>::</b>orthogonal&lt; <b>1</b> &gt;,
-  fsm::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
-struct CapsLockOff : fsm::simple_state&lt;
+  sc::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
+struct CapsLockOff : sc::simple_state&lt;
   CapsLockOff, Active<b>::</b>orthogonal&lt; <b>2</b> &gt;,
-  fsm::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};</pre>
+  sc::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};</pre>
 <h3><a name="State queries">State queries</a></h3>
 <p>Often reactions in a state machine depend on the active state in one or 
 more orthogonal regions. This is because orthogonal regions are not completely 
@@ -900,16 +900,16 @@ information out of the machine</a> is also available within states.</p>
 events, the reception of which makes the keyboard terminate only if all lock 
 keys are in the off state. We would then modify the Keyboard state machine as 
 follows: </p>
-<pre>struct EvRequestShutdown : fsm::event&lt; EvRequestShutdown &gt; {};
+<pre>struct EvRequestShutdown : sc::event&lt; EvRequestShutdown &gt; {};
 
 struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
-struct Active: fsm::simple_state&lt;
-  Active, Keyboard, fsm::custom_reaction&lt; EvRequestShutdown &gt;,
+struct Active: sc::simple_state&lt;
+  Active, Keyboard, sc::custom_reaction&lt; EvRequestShutdown &gt;,
   mpl::list&lt; NumLockOff, CapsLockOff, ScrollLockOff &gt; &gt;
 {
-  fsm::result react( const EvRequestShutdown &amp; )
+  sc::result react( const EvRequestShutdown &amp; )
   {
     if ( ( state_downcast&lt; const NumLockOff * &gt;() != 0 ) &amp;&amp;
          ( state_downcast&lt; const CapsLockOff * &gt;() != 0 ) &amp;&amp;
@@ -983,7 +983,7 @@ associate the type information values with the state names.</p>
 <h4><a name="Custom state type information">Custom state type information</a></h4>
 <p>That's why the following functions are also provided (only available when
 <a href="configuration.html#Application Defined Macros">
-BOOST_FSM_USE_NATIVE_RTTI</a> is <b>not</b> defined):</p>
+BOOST_STATECHART_USE_NATIVE_RTTI</a> is <b>not</b> defined):</p>
 <ul>
   <li><code>template&lt; class T &gt;<br>
   static void simple_state&lt;&gt;::custom_static_type_ptr( const T * );</code></li>
@@ -1035,7 +1035,7 @@ guard does not attempt to call any <code>exit</code> functions (see
 might define as these could themselves throw other exceptions which would mask 
 the original exception. Consequently, if a state machine should do something 
 more sensible when exceptions are thrown, it has to catch them before they are 
-propagated into the boost::fsm framework.
+propagated into the Boost.Statechart framework.
 This exception handling scheme is often appropriate but it can lead to 
 considerable code duplication in state machines where many actions can trigger 
 exceptions that need to be handled inside the state machine (see
@@ -1154,22 +1154,22 @@ receiving an EvNumLockPressed event:</p>
 <h4><a name="Discriminating exceptions">Discriminating exceptions</a></h4>
 <p>Because the <code>exception_thrown</code> event is dispatched from within 
 the catch block, we can rethrow and catch the exception in a custom reaction:</p>
-<pre>struct Defective : fsm::simple_state&lt;
+<pre>struct Defective : sc::simple_state&lt;
   Defective, Purifier &gt; {};
 
 // Pretend this is a state deeply nested in the Purifier
 // state machine
-struct Idle : fsm::simple_state&lt; Idle, Purifier,
+struct Idle : sc::simple_state&lt; Idle, Purifier,
   mpl::list&lt;
-    fsm::custom_reaction&lt; EvStart &gt;,
-    fsm::custom_reaction&lt; fsm::exception_thrown &gt; &gt; &gt;
+    sc::custom_reaction&lt; EvStart &gt;,
+    sc::custom_reaction&lt; sc::exception_thrown &gt; &gt; &gt;
 {
-  fsm::result react( const EvStart &amp; )
+  sc::result react( const EvStart &amp; )
   {
     throw std::runtime_error( &quot;&quot; );
   }
 
-  fsm::result react( const fsm::exception_thrown &amp; )
+  sc::result react( const sc::exception_thrown &amp; )
   {
     try
     {
@@ -1249,7 +1249,7 @@ functionality. The associated UML notation is not entirely clear to me. It
 seems to be severely limited (e.g. the same submachine cannot appear in 
 different orthogonal regions) and does not seem to account for obvious stuff 
 like e.g. parameters.</p>
-<p>boost::fsm is completely unaware of submachines but they can be implemented 
+<p>Boost.Statechart is completely unaware of submachines but they can be implemented 
 quite nicely with templates. Here, a submachine is used to improve the 
 copy-paste implementation of the keyboard machine discussed under
 <a href="#Orthogonal states">Orthogonal states</a>:</p>
@@ -1262,22 +1262,22 @@ copy-paste implementation of the keyboard machine discussed under
 
 template&lt; LockType lockType &gt;
 struct Off;
-struct Active : fsm::simple_state&lt;
-  Active, Keyboard, fsm::no_reactions, mpl::list&lt;
+struct Active : sc::simple_state&lt;
+  Active, Keyboard, sc::no_reactions, mpl::list&lt;
   Off&lt; NUM_LOCK &gt;, Off&lt; CAPS_LOCK &gt;, Off&lt; SCROLL_LOCK &gt; &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
-struct EvPressed : fsm::event&lt; EvPressed&lt; lockType &gt; &gt; {};
+struct EvPressed : sc::event&lt; EvPressed&lt; lockType &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
-struct On : fsm::simple_state&lt;
+struct On : sc::simple_state&lt;
   On&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
-  fsm::transition&lt; EvPressed&lt; lockType &gt;, Off&lt; lockType &gt; &gt; &gt; {};
+  sc::transition&lt; EvPressed&lt; lockType &gt;, Off&lt; lockType &gt; &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
-struct Off : fsm::simple_state&lt;
+struct Off : sc::simple_state&lt;
   Off&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
-  fsm::transition&lt; EvPressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; &gt; {};</pre>
+  sc::transition&lt; EvPressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; &gt; {};</pre>
 <h3><a name="Asynchronous state machines">Asynchronous state machines</a></h3>
 <h4>Why asynchronous state machines are necessary</h4>
 <p>As the name suggests, a synchronous state machine processes each event 
@@ -1323,7 +1323,7 @@ boost::thread</code> and the other in the main thread (see the PingPong
 example for the full source code):</p>
 <pre>struct Waiting;
 struct Player :
-  fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
+  sc::asynchronous_state_machine&lt; Player, Waiting &gt;
 {
   // ...
 };
@@ -1334,14 +1334,14 @@ int main()
 {
   // Create two schedulers that will wait for new events
   // when their event queue runs empty
-  fsm::fifo_scheduler&lt;&gt; scheduler1( true );
-  fsm::fifo_scheduler&lt;&gt; scheduler2( true );
+  sc::fifo_scheduler&lt;&gt; scheduler1( true );
+  sc::fifo_scheduler&lt;&gt; scheduler2( true );
 
   // Each player is serviced by its own scheduler
-  fsm::fifo_scheduler&lt;&gt;::processor_handle player1 = 
+  sc::fifo_scheduler&lt;&gt;::processor_handle player1 = 
     scheduler1.create_processor&lt; Player &gt;( /* ... */ );
   scheduler1.initiate_processor( player1 );
-  fsm::fifo_scheduler&lt;&gt;::processor_handle player2 = 
+  sc::fifo_scheduler&lt;&gt;::processor_handle player2 = 
     scheduler2.create_processor&lt; Player &gt;( /* ... */ );
   scheduler2.initiate_processor( player2 );
 
@@ -1360,7 +1360,7 @@ int main()
 
   // Run first scheduler in a new thread
   boost::thread otherThread( boost::bind(
-    &amp;fsm::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
+    &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
   scheduler2(); // Run second scheduler in this thread
   otherThread.join();
 
@@ -1372,9 +1372,9 @@ int main()
   // ...
 
   boost::thread thread1(
-    boost::bind( &amp;fsm::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
+    boost::bind( &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
   boost::thread thread2(
-    boost::bind( &amp;fsm::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
+    boost::bind( &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
 
   // do something else ...
 
@@ -1386,11 +1386,11 @@ int main()
 <p>Or, run both machines in the same thread:</p>
 <pre>int main()
 {
-  fsm::fifo_scheduler&lt;&gt; scheduler1( true );
+  sc::fifo_scheduler&lt;&gt; scheduler1( true );
 
-  fsm::fifo_scheduler&lt;&gt;::processor_handle player1 = 
+  sc::fifo_scheduler&lt;&gt;::processor_handle player1 = 
     scheduler1.create_processor&lt; Player &gt;( /* ... */ );
-  fsm::fifo_scheduler&lt;&gt;::processor_handle player2 = 
+  sc::fifo_scheduler&lt;&gt;::processor_handle player2 = 
     scheduler1.create_processor&lt; Player &gt;( /* ... */ );
 
   // ...
@@ -1405,9 +1405,9 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <font color="#FF0000"> <b>The link refers to a
+2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
 to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 

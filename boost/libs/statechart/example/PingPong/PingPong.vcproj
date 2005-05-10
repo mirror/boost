@@ -140,58 +140,58 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="fsm Header Files"
+			Name="Statechart Header Files"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\boost\fsm\asynchronous_state_machine.hpp">
+				RelativePath="..\..\..\..\boost\statechart\asynchronous_state_machine.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\custom_reaction.hpp">
+				RelativePath="..\..\..\..\boost\statechart\custom_reaction.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\deep_history.hpp">
+				RelativePath="..\..\..\..\boost\statechart\deep_history.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\deferral.hpp">
+				RelativePath="..\..\..\..\boost\statechart\deferral.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\event.hpp">
+				RelativePath="..\..\..\..\boost\statechart\event.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
+				RelativePath="..\..\..\..\boost\statechart\event_base.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\event_processor.hpp">
+				RelativePath="..\..\..\..\boost\statechart\event_processor.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">
+				RelativePath="..\..\..\..\boost\statechart\exception_translator.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\fifo_scheduler.hpp">
+				RelativePath="..\..\..\..\boost\statechart\fifo_scheduler.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\null_exception_translator.hpp">
+				RelativePath="..\..\..\..\boost\statechart\null_exception_translator.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\result.hpp">
+				RelativePath="..\..\..\..\boost\statechart\result.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\shallow_history.hpp">
+				RelativePath="..\..\..\..\boost\statechart\shallow_history.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\simple_state.hpp">
+				RelativePath="..\..\..\..\boost\statechart\simple_state.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\state.hpp">
+				RelativePath="..\..\..\..\boost\statechart\state.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\state_machine.hpp">
+				RelativePath="..\..\..\..\boost\statechart\state_machine.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\termination.hpp">
+				RelativePath="..\..\..\..\boost\statechart\termination.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\transition.hpp">
+				RelativePath="..\..\..\..\boost\statechart\transition.hpp">
 			</File>
 		</Filter>
 	</Files>

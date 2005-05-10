@@ -6,10 +6,10 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/transition.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/transition.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -21,18 +21,18 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvToA : fsm::event< EvToA > {};
-struct EvToB : fsm::event< EvToB > {};
-struct EvToD : fsm::event< EvToD > {};
-struct EvToE : fsm::event< EvToE > {};
+struct EvToA : sc::event< EvToA > {};
+struct EvToB : sc::event< EvToB > {};
+struct EvToD : sc::event< EvToD > {};
+struct EvToE : sc::event< EvToE > {};
 
 struct A;
-struct StateIterationTest : fsm::state_machine< StateIterationTest, A >
+struct StateIterationTest : sc::state_machine< StateIterationTest, A >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -74,28 +74,28 @@ struct StateIterationTest : fsm::state_machine< StateIterationTest, A >
 
 struct C;
 struct D;
-struct B : fsm::simple_state< B, StateIterationTest,
-  fsm::transition< EvToA, A >, mpl::list< C, D > > {};
+struct B : sc::simple_state< B, StateIterationTest,
+  sc::transition< EvToA, A >, mpl::list< C, D > > {};
 
-struct A : fsm::simple_state< A, StateIterationTest,
-  fsm::transition< EvToB, B > > {};
+struct A : sc::simple_state< A, StateIterationTest,
+  sc::transition< EvToB, B > > {};
 
   struct F;
   struct G;
-  struct E : fsm::simple_state< E, B::orthogonal< 1 >,
-    fsm::transition< EvToD, D >, mpl::list< F, G > > {};
+  struct E : sc::simple_state< E, B::orthogonal< 1 >,
+    sc::transition< EvToD, D >, mpl::list< F, G > > {};
 
-    struct F : fsm::simple_state< F, E::orthogonal< 0 > > {};
-    struct G : fsm::simple_state< G, E::orthogonal< 1 > > {};
+    struct F : sc::simple_state< F, E::orthogonal< 0 > > {};
+    struct G : sc::simple_state< G, E::orthogonal< 1 > > {};
 
-  struct C : fsm::simple_state< C, B::orthogonal< 0 > > {};
-  struct D : fsm::simple_state< D, B::orthogonal< 1 >,
-    fsm::transition< EvToE, E > > {};
+  struct C : sc::simple_state< C, B::orthogonal< 0 > > {};
+  struct D : sc::simple_state< D, B::orthogonal< 1 >,
+    sc::transition< EvToE, E > > {};
 
 StateIterationTest::StateIterationTest()
 {
   // We're not using custom type information to make this test work even when
-  // BOOST_FSM_USE_NATIVE_RTTI is defined
+  // BOOST_STATECHART_USE_NATIVE_RTTI is defined
   stateNamesMap_[ A::static_type() ] = "A";
   stateNamesMap_[ B::static_type() ] = "B";
   stateNamesMap_[ C::static_type() ] = "C";

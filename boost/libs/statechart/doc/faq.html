@@ -6,7 +6,7 @@
 <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
-<title>The boost::fsm library - FAQ</title>
+<title>The Boost Statechart Library - FAQ</title>
 </head>
 
 <body link="#0000ff" vlink="#800080">
@@ -18,14 +18,14 @@
     <img alt="C++ Boost" src="../../../boost.png" border="0" width="277" height="86"></a></h3>
     </td>
     <td valign="top">
-    <h1 align="center">The boost::fsm library</h1>
+    <h1 align="center">The Boost Statechart Library</h1>
     <h2 align="center">Frequently Asked Questions (FAQs)</h2>
     </td>
   </tr>
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#Does_boost::fsm_support_polymorphic_events">Does boost::fsm 
+  <dt><a href="#Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
   support polymorphic events?</a></dt>
   <dt>
   <a href="#How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
@@ -38,19 +38,19 @@
   <a href="#Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
   Why are exit-actions called in the wrong order when I use multiple 
 	inheritance?</a></dt>
-  <dt><a href="#Is_boost::fsm_suitable_for_embedded_applications">Is boost::fsm suitable for embedded applications?</a></dt>
+  <dt><a href="#Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></dt>
   <dt>
 	<a href="#Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
 	Is your library suitable for applications with hard real-time requirements</a>?</dt>
 </dl>
-<h2><a name="Does_boost::fsm_support_polymorphic_events">Does boost::fsm 
+<h2><a name="Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
 support polymorphic events?</a></h2>
 <p>No. Although events can be derived from each other to write common code 
 only once, <a href="definitions.html#Reaction">reactions</a> can only be 
 defined for most-derived events.</p>
 <p>Example:</p>
 <pre>template&lt; class MostDerived &gt;
-struct EvButtonPressed : fsm::event&lt; MostDerived &gt;
+struct EvButtonPressed : sc::event&lt; MostDerived &gt;
 {
   // common code
 };
@@ -68,13 +68,13 @@ struct EvForwardButtonPressed :
 // press in the Off state. Although we can write the reaction
 // code only once, we must mention all most-derived events in
 // the reaction list.
-struct Off : fsm::simple_state&lt; Off, Mp3Player, mpl::list&lt;
-  fsm::custom_reaction&lt; EvPlayButtonPressed &gt;,
-  fsm::custom_reaction&lt; EvStopButtonPressed &gt;,
-  fsm::custom_reaction&lt; EvForwardButtonPressed &gt; &gt; &gt;
+struct Off : sc::simple_state&lt; Off, Mp3Player, mpl::list&lt;
+  sc::custom_reaction&lt; EvPlayButtonPressed &gt;,
+  sc::custom_reaction&lt; EvStopButtonPressed &gt;,
+  sc::custom_reaction&lt; EvForwardButtonPressed &gt; &gt; &gt;
 {
   template&lt; class MostDerived &gt;
-  fsm::result react( const EvButtonPressed&lt; MostDerived &gt; &amp; )
+  sc::result react( const EvButtonPressed&lt; MostDerived &gt; &amp; )
   {
     // ...
   }
@@ -90,7 +90,7 @@ facts:</p>
   be instantiated and not a single assembly instruction will ever be 
   generated.</li>
   <li>The <code>InitialState</code> template parameter of <code>
-  fsm::state_machine</code> can be an incomplete type (i.e. forward declared).</li>
+  sc::state_machine</code> can be an incomplete type (i.e. forward declared).</li>
 </ul>
 <p>The class template member function <code>state_machine&lt;&gt;::initiate()</code> 
 creates an object of the initial state. So, the definition of this state must 
@@ -104,18 +104,18 @@ the initial state is known.</p>
 <pre>// define events ...
 
 struct Active; // the only visible forward
-struct StopWatch : fsm::state_machine&lt; StopWatch, Active &gt;
+struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt;
 {
   StopWatch();
 };</pre>
 <p>StopWatch.cpp:</p>
 <pre>struct Stopped;
-struct Active : fsm::simple_state&lt; Active, StopWatch,
-  fsm::transition&lt; EvReset, Active &gt;, Stopped &gt; {};
-struct Running : fsm::simple_state&lt; Running, Active,
-  fsm::transition&lt; EvStartStop, Stopped &gt; &gt; {};
-struct Stopped : fsm::simple_state&lt; Stopped, Active,
-  fsm::transition&lt; EvStartStop, Running &gt; &gt; {};
+struct Active : sc::simple_state&lt; Active, StopWatch,
+  sc::transition&lt; EvReset, Active &gt;, Stopped &gt; {};
+struct Running : sc::simple_state&lt; Running, Active,
+  sc::transition&lt; EvStartStop, Stopped &gt; &gt; {};
+struct Stopped : sc::simple_state&lt; Stopped, Active,
+  sc::transition&lt; EvStartStop, Running &gt; &gt; {};
 
 StopWatch::StopWatch()
 {
@@ -129,41 +129,41 @@ StopWatch::StopWatch()
 <a name="Is_it_possible_to_inherit_from_a_given_state_machine_and_modify_its_layout_in_the_subclass">
 Is it possible to inherit from a given state machine and modify its layout in 
 the subclass?</a></h2>
-<p>Yes, but contrary to what some FSM code generators allow, boost::fsm 
+<p>Yes, but contrary to what some FSM code generators allow, Boost.Statechart 
 machines can do so only in a way that was foreseen by the designer of the base 
 state machine: </p>
-<pre>struct EvStart : fsm::event&lt; EvStart &gt; {};
+<pre>struct EvStart : sc::event&lt; EvStart &gt; {};
 
 struct Idle;
-struct PumpBase : fsm::state_machine&lt; PumpBase, Idle &gt;
+struct PumpBase : sc::state_machine&lt; PumpBase, Idle &gt;
 {
-  <b>virtual fsm::result react(
+  <b>virtual sc::result react(
 </b>    <b>Idle &amp; idle, const EvStart &amp; ) const;
 </b>};
 
-struct Idle : fsm::simple_state&lt; Idle, PumpBase,
-  fsm::custom_reaction&lt; EvStart &gt; &gt;
+struct Idle : sc::simple_state&lt; Idle, PumpBase,
+  sc::custom_reaction&lt; EvStart &gt; &gt;
 {
-  fsm::result react( const EvStart &amp; evt )
+  sc::result react( const EvStart &amp; evt )
   {
     <b>return context&lt; PumpBase &gt;().react( *this, evt );</b>
   }
 };
 
-struct Running : fsm::simple_state&lt; Running, PumpBase &gt; {};
+struct Running : sc::simple_state&lt; Running, PumpBase &gt; {};
 
-fsm::result PumpBase::react(
+sc::result PumpBase::react(
   Idle &amp; idle, const EvStart &amp; ) const
 {
   <b>return idle.transit&lt; Running &gt;();
 </b>}
 
 
-struct MyRunning : fsm::simple_state&lt; MyRunning, PumpBase &gt; {};
+struct MyRunning : sc::simple_state&lt; MyRunning, PumpBase &gt; {};
 
 struct MyPump : PumpBase
 {
-  virtual fsm::result react(
+  virtual sc::result react(
     Idle &amp; idle, const EvStart &amp; ) const
   {
     <b>return idle.transit&lt; MyRunning &gt;();
@@ -181,10 +181,10 @@ is still valid and ensures that this behavior will never show up.</p>
 <p>They definitely aren't for the <code>simple_state</code> and <code>state</code> 
 subclasses, but the destructors of additional bases might be called in 
 construction order (rather than the reverse construction order):</p>
-<pre>#include &lt;boost/fsm/state_machine.hpp&gt;
-#include &lt;boost/fsm/simple_state.hpp&gt;
+<pre>#include &lt;boost/statechart/state_machine.hpp&gt;
+#include &lt;boost/statechart/simple_state.hpp&gt;
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 class EntryExitDisplayer
 {
@@ -205,16 +205,16 @@ class EntryExitDisplayer
 };
 
 struct Outer;
-struct Machine : fsm::state_machine&lt; Machine, Outer &gt; {};
+struct Machine : sc::state_machine&lt; Machine, Outer &gt; {};
 struct Inner;
-struct Outer : EntryExitDisplayer, fsm::simple_state&lt;
-  Outer, Machine, fsm::no_reactions, Inner &gt;
+struct Outer : EntryExitDisplayer, sc::simple_state&lt;
+  Outer, Machine, sc::no_reactions, Inner &gt;
 {
   Outer() : EntryExitDisplayer( &quot;Outer&quot; ) {}
 };
 
 struct Inner : EntryExitDisplayer,
-  fsm::simple_state&lt; Inner, Outer &gt;
+  sc::simple_state&lt; Inner, Outer &gt;
 {
   Inner() : EntryExitDisplayer( &quot;Inner&quot; ) {}
 };
@@ -257,7 +257,7 @@ EntryExitDisplayer::~EntryExitDisplayer()</code>.</p>
 and <code>state&lt;&gt;</code> be the first base class of a state. This ensures that 
 destructors of additional bases are called before recursion employed by state 
 base destructors can alter the order of destruction.</p>
-<h2><a name="Is_boost::fsm_suitable_for_embedded_applications">Is boost::fsm suitable for embedded applications?</a></h2>
+<h2><a name="Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></h2>
 <p>It depends. As explained under
 <a href="rationale.html#Speed versus scalability tradeoffs">Speed 
 versus scalability tradeoffs</a> in the Rationale, the virtually limitless scalability 
@@ -304,10 +304,11 @@ operator new</code>. <code>dynamic_cast</code>s can be avoided by not calling th
 deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39362" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
-the email address behind the link</font></b></i></p>
+2003-2005. <font color="#FF0000"><b>The link refers to a
+<a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
+to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

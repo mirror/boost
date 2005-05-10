@@ -6,25 +6,25 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
 struct A;
-struct InconsistentHistoryTest : fsm::state_machine<
+struct InconsistentHistoryTest : sc::state_machine<
   InconsistentHistoryTest, A > {};
 
 struct B;
-struct A : fsm::simple_state<
-  A, InconsistentHistoryTest, fsm::no_reactions, B > {};
+struct A : sc::simple_state<
+  A, InconsistentHistoryTest, sc::no_reactions, B > {};
 
-  struct B : fsm::simple_state< B, A > {};
+  struct B : sc::simple_state< B, A > {};
 
 
 int main()

@@ -6,28 +6,28 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
 
 #include <boost/mpl/list.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
 struct A;
-struct InvalidChartTest : fsm::state_machine< InvalidChartTest, A > {};
+struct InvalidChartTest : sc::state_machine< InvalidChartTest, A > {};
 struct B;
 struct C;
-struct A : fsm::simple_state<
-  A, InvalidChartTest, fsm::no_reactions, mpl::list< B, C > > {};
+struct A : sc::simple_state<
+  A, InvalidChartTest, sc::no_reactions, mpl::list< B, C > > {};
 
 // B resides in the 0th region not the 1st
-struct B : fsm::simple_state< B, A::orthogonal< 1 > > {};
-struct C : fsm::simple_state< C, A::orthogonal< 1 > > {};
+struct B : sc::simple_state< B, A::orthogonal< 1 > > {};
+struct C : sc::simple_state< C, A::orthogonal< 1 > > {};
 
 int main()
 {

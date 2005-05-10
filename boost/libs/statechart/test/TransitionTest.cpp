@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004
+// (c) Copyright Andreas Huber Doenni 2004-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -9,10 +9,10 @@
 #include "OuterOrthogonal.hpp"
 #include "InnermostDefault.hpp"
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -27,7 +27,7 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
@@ -130,18 +130,18 @@ class TransitionTestException : public std::runtime_error
 
 // This test state machine is a beefed-up version of the one presented in
 // "Practical Statecharts in C/C++" by Miro Samek, CMP Books 2002
-struct A : fsm::event< A > {};
-struct B : fsm::event< B > {};
-struct C : fsm::event< C > {};
-struct D : fsm::event< D > {};
-struct E : fsm::event< E > {};
-struct F : fsm::event< F > {};
-struct G : fsm::event< G > {};
-struct H : fsm::event< H > {};
+struct A : sc::event< A > {};
+struct B : sc::event< B > {};
+struct C : sc::event< C > {};
+struct D : sc::event< D > {};
+struct E : sc::event< E > {};
+struct F : sc::event< F > {};
+struct G : sc::event< G > {};
+struct H : sc::event< H > {};
 
 
 struct S0;
-struct TransitionTest : fsm::state_machine< TransitionTest, S0 >
+struct TransitionTest : sc::state_machine< TransitionTest, S0 >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -250,7 +250,7 @@ struct TransitionTest : fsm::state_machine< TransitionTest, S0 >
 
 struct S1;
 struct S211;
-struct S0 : Orthogonal0< S0, TransitionTest, fsm::transition< E, S211 >, S1 >
+struct S0 : Orthogonal0< S0, TransitionTest, sc::transition< E, S211 >, S1 >
 {
   S0( my_context ctx ) : my_base( ctx ) {}
 
@@ -264,43 +264,43 @@ struct S0 : Orthogonal0< S0, TransitionTest, fsm::transition< E, S211 >, S1 >
   struct S11;
   struct S21;
   struct S2 : Orthogonal2< S2, S0, mpl::list<
-    fsm::transition< C, S1, S0, &S0::Transit< C > >,
-    fsm::transition< F, S11, S0, &S0::Transit< F > > >, S21 >
+    sc::transition< C, S1, S0, &S0::Transit< C > >,
+    sc::transition< F, S11, S0, &S0::Transit< F > > >, S21 >
   {
     S2( my_context ctx ) : my_base( ctx ) {}
   };
 
     struct S21 : Orthogonal1< S21, S2::orthogonal< 2 >, mpl::list<
-      fsm::transition< H, S21, S0, &S0::Transit< H > >,
-      fsm::transition< B, S211, S0, &S0::Transit< B > > >, S211 >
+      sc::transition< H, S21, S0, &S0::Transit< H > >,
+      sc::transition< B, S211, S0, &S0::Transit< B > > >, S211 >
     {
       S21( my_context ctx ) : my_base( ctx ) {}
     };
 
       struct S211 : InnermostDefault< S211, S21::orthogonal< 1 >, mpl::list<
-        fsm::transition< D, S21, S0, &S0::Transit< D > >,
-        fsm::transition< G, S0 > > >
+        sc::transition< D, S21, S0, &S0::Transit< D > >,
+        sc::transition< G, S0 > > >
       {
         S211( my_context ctx ) : my_base( ctx ) {}
       };
 
   struct S1 : Orthogonal1< S1, S0, mpl::list<
-    fsm::transition< A, S1, S0, &S0::Transit< A > >,
-    fsm::transition< B, S11, S0, &S0::Transit< B > >,
-    fsm::transition< C, S2, S0, &S0::Transit< C > >,
-    fsm::transition< D, S0 >,
-    fsm::transition< F, S211, S0, &S0::Transit< F > > >, S11 >
+    sc::transition< A, S1, S0, &S0::Transit< A > >,
+    sc::transition< B, S11, S0, &S0::Transit< B > >,
+    sc::transition< C, S2, S0, &S0::Transit< C > >,
+    sc::transition< D, S0 >,
+    sc::transition< F, S211, S0, &S0::Transit< F > > >, S11 >
   {
     S1( my_context ctx ) : my_base( ctx ) {}
   };
 
     struct S11 : InnermostDefault< S11, S1::orthogonal< 1 >, mpl::list<
-      fsm::transition< G, S211, S0, &S0::Transit< G > >,
-      fsm::custom_reaction< H > > >
+      sc::transition< G, S211, S0, &S0::Transit< G > >,
+      sc::custom_reaction< H > > >
     {
       S11( my_context ctx ) : my_base( ctx ) {}
 
-      fsm::result react( const H & )
+      sc::result react( const H & )
       {
         outermost_context().ActualTransition< S11, H >();
         return discard_event();

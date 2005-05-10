@@ -6,31 +6,31 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/shallow_history.hpp>
-#include <boost/fsm/transition.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/shallow_history.hpp>
+#include <boost/statechart/transition.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
-struct EvX : fsm::event< EvX > {};
+struct EvX : sc::event< EvX > {};
 
 struct A;
-struct InconsistentHistoryTest : fsm::state_machine<
+struct InconsistentHistoryTest : sc::state_machine<
   InconsistentHistoryTest, A > {};
 
 struct B;
 // A only has deep history
-struct A : fsm::simple_state< A, InconsistentHistoryTest,
-  fsm::transition< EvX, fsm::shallow_history< B > >,
-  B, fsm::has_deep_history > {};
+struct A : sc::simple_state< A, InconsistentHistoryTest,
+  sc::transition< EvX, sc::shallow_history< B > >,
+  B, sc::has_deep_history > {};
 
-  struct B : fsm::simple_state< B, A > {};
+  struct B : sc::simple_state< B, A > {};
 
 
 int main()

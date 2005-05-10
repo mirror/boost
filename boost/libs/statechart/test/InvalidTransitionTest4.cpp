@@ -6,36 +6,36 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/deep_history.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/deep_history.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
-struct EvX : fsm::event< EvX > {};
+struct EvX : sc::event< EvX > {};
 
 struct Active;
-struct InvalidTransitionTest : fsm::state_machine<
+struct InvalidTransitionTest : sc::state_machine<
   InvalidTransitionTest, Active > {};
 
 struct Idle0;
-struct Active : fsm::simple_state< Active, InvalidTransitionTest,
-  fsm::no_reactions, Idle0, fsm::has_deep_history >
+struct Active : sc::simple_state< Active, InvalidTransitionTest,
+  sc::no_reactions, Idle0, sc::has_deep_history >
 {
 };
 
-  struct Running0 : fsm::simple_state< Running0, Active > {};
+  struct Running0 : sc::simple_state< Running0, Active > {};
 
   // Invalid transition to deep history from a state residing on the same
   // level as the history connector.
-  struct Idle0 : fsm::simple_state< Idle0, Active,
-    fsm::transition< EvX, fsm::deep_history< Running0 > > >
+  struct Idle0 : sc::simple_state< Idle0, Active,
+    sc::transition< EvX, sc::deep_history< Running0 > > >
   {
   };
 

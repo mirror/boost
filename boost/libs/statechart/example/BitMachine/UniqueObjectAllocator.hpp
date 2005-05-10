@@ -1,14 +1,14 @@
-#ifndef BOOST_FSM_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
-#define BOOST_FSM_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
+#ifndef BOOST_STATECHART_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
+#define BOOST_STATECHART_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/detail/avoid_unused_warning.hpp>
+#include <boost/statechart/detail/avoid_unused_warning.hpp>
 
 #include <boost/config.hpp>
 
@@ -39,7 +39,7 @@ class UniqueObjectAllocator
     //////////////////////////////////////////////////////////////////////////
     static void * allocate( size_t size )
     {
-      boost::fsm::detail::avoid_unused_warning( size );
+      boost::statechart::detail::avoid_unused_warning( size );
       BOOST_ASSERT( !constructed_ && ( size == sizeof( T ) ) );
       constructed_ = true;
       return &storage_.data[ 0 ];
@@ -47,8 +47,8 @@ class UniqueObjectAllocator
 
     static void deallocate( void * p, size_t size )
     {
-      boost::fsm::detail::avoid_unused_warning( p );
-      boost::fsm::detail::avoid_unused_warning( size );
+      boost::statechart::detail::avoid_unused_warning( p );
+      boost::statechart::detail::avoid_unused_warning( size );
       BOOST_ASSERT( constructed_ &&
         ( p == &storage_.data[ 0 ] ) && ( size == sizeof( T ) ) );
       constructed_ = false;

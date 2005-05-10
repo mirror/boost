@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ Shooting::~Shooting()
 }
 
 
-struct Storing : fsm::simple_state< Storing, Shooting >
+struct Storing : sc::simple_state< Storing, Shooting >
 {
   Storing()
   {
@@ -38,13 +38,13 @@ struct Storing : fsm::simple_state< Storing, Shooting >
 };
 
 
-struct Focused : fsm::simple_state< Focused, Shooting,
-  fsm::custom_reaction< EvShutterFull > >
+struct Focused : sc::simple_state< Focused, Shooting,
+  sc::custom_reaction< EvShutterFull > >
 {
-  fsm::result react( const EvShutterFull & );
+  sc::result react( const EvShutterFull & );
 };
 
-fsm::result Focused::react( const EvShutterFull & )
+sc::result Focused::react( const EvShutterFull & )
 {
   if ( context< Camera >().IsMemoryAvailable() )
   {
@@ -63,7 +63,7 @@ Focusing::Focusing( my_context ctx ) : my_base( ctx )
   post_event( boost::intrusive_ptr< EvInFocus >( new EvInFocus() ) );
 }
 
-fsm::result Focusing::react( const EvInFocus & evt )
+sc::result Focusing::react( const EvInFocus & evt )
 {
   return transit< Focused >( &Shooting::DisplayFocused, evt );
 }

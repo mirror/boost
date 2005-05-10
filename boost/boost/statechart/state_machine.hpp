@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_STATE_MACHINE_HPP_INCLUDED
-#define BOOST_FSM_STATE_MACHINE_HPP_INCLUDED
+#ifndef BOOST_STATECHART_STATE_MACHINE_HPP_INCLUDED
+#define BOOST_STATECHART_STATE_MACHINE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
@@ -8,16 +8,16 @@
 
 
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/null_exception_translator.hpp>
-#include <boost/fsm/result.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/null_exception_translator.hpp>
+#include <boost/statechart/result.hpp>
 
-#include <boost/fsm/detail/rtti_policy.hpp>
-#include <boost/fsm/detail/state_base.hpp>
-#include <boost/fsm/detail/leaf_state.hpp>
-#include <boost/fsm/detail/node_state.hpp>
-#include <boost/fsm/detail/constructor.hpp>
-#include <boost/fsm/detail/avoid_unused_warning.hpp>
+#include <boost/statechart/detail/rtti_policy.hpp>
+#include <boost/statechart/detail/state_base.hpp>
+#include <boost/statechart/detail/leaf_state.hpp>
+#include <boost/statechart/detail/node_state.hpp>
+#include <boost/statechart/detail/constructor.hpp>
+#include <boost/statechart/detail/avoid_unused_warning.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/clear.hpp>
@@ -67,7 +67,7 @@
 
 namespace boost
 {
-namespace fsm
+namespace statechart
 {
 namespace detail
 {
@@ -607,8 +607,8 @@ class state_machine : noncopyable
       // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
       // similar compiler error here then you tried to clear shallow history
       // for a state that does not have shallow history. That is, the state
-      // does not pass either fsm::has_shallow_history or
-      // fsm::has_full_history to its base class template.
+      // does not pass either statechart::has_shallow_history or
+      // statechart::has_full_history to its base class template.
       BOOST_STATIC_ASSERT( HistoryContext::shallow_history::value );
 
       typedef typename mpl::at_c<
@@ -656,8 +656,8 @@ class state_machine : noncopyable
       // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
       // similar compiler error here then you tried to clear deep history for
       // a state that does not have deep history. That is, the state does not
-      // pass either fsm::has_deep_history or fsm::has_full_history to its
-      // base class template
+      // pass either statechart::has_deep_history or
+      // statechart::has_full_history to its base class template
       BOOST_STATIC_ASSERT( HistoryContext::deep_history::value );
 
       typedef typename mpl::at_c<
@@ -1031,7 +1031,7 @@ class state_machine : noncopyable
 
 
 
-} // namespace fsm
+} // namespace statechart
 } // namespace boost
 
 

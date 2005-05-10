@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -30,13 +30,13 @@
 
 
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/asynchronous_state_machine.hpp>
-#include <boost/fsm/state.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_reaction.hpp>
-#include <boost/fsm/fifo_scheduler.hpp>
-#include <boost/fsm/fifo_worker.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/asynchronous_state_machine.hpp>
+#include <boost/statechart/state.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/custom_reaction.hpp>
+#include <boost/statechart/fifo_scheduler.hpp>
+#include <boost/statechart/fifo_worker.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -93,7 +93,7 @@ namespace std
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
@@ -109,26 +109,26 @@ namespace
   }
 }
 
-struct BallReturned : fsm::event< BallReturned >
+struct BallReturned : sc::event< BallReturned >
 {
   boost::function1< void, const boost::intrusive_ptr< const BallReturned > & >
     returnToOpponent;
   boost::function0< void > abortGame;
 };
 
-struct GameAborted : fsm::event< GameAborted > {};
+struct GameAborted : sc::event< GameAborted > {};
 
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
 typedef boost::fast_pool_allocator< int > MyAllocator;
-typedef fsm::fifo_scheduler< 
-  fsm::fifo_worker< MyAllocator >, MyAllocator > MyScheduler;
+typedef sc::fifo_scheduler< 
+  sc::fifo_worker< MyAllocator >, MyAllocator > MyScheduler;
 #else
 typedef std::allocator< void > MyAllocator;
-typedef fsm::fifo_scheduler<> MyScheduler;
+typedef sc::fifo_scheduler<> MyScheduler;
 #endif
 
 struct Waiting;
-struct Player : fsm::asynchronous_state_machine<
+struct Player : sc::asynchronous_state_machine<
   Player, Waiting, MyScheduler, MyAllocator >
 {
   public:
@@ -159,9 +159,9 @@ struct Player : fsm::asynchronous_state_machine<
 unsigned int Player::totalNoOfProcessedEvents_ = 0;
 
 
-struct Waiting : fsm::state< Waiting, Player, mpl::list<
-  fsm::custom_reaction< BallReturned >,
-  fsm::custom_reaction< GameAborted > > >
+struct Waiting : sc::state< Waiting, Player, mpl::list<
+  sc::custom_reaction< BallReturned >,
+  sc::custom_reaction< GameAborted > > >
 {
     Waiting( my_context ctx ) :
       my_base( ctx ),
@@ -180,12 +180,12 @@ struct Waiting : fsm::state< Waiting, Player, mpl::list<
         MakeIntrusive( new GameAborted() ) );
     }
 
-    fsm::result react( const GameAborted & )
+    sc::result react( const GameAborted & )
     {
       return DestroyMyself();
     }
 
-    fsm::result react( const BallReturned & ballReturned )
+    sc::result react( const BallReturned & ballReturned )
     {
       outermost_context_type & machine = outermost_context();
       ++machine.TotalNoOfProcessedEvents();
@@ -203,7 +203,7 @@ struct Waiting : fsm::state< Waiting, Player, mpl::list<
     }
 
   private:
-    fsm::result DestroyMyself()
+    sc::result DestroyMyself()
     {
       outermost_context_type & machine = outermost_context();
       machine.my_scheduler().destroy_processor( machine.my_handle() );
@@ -230,7 +230,7 @@ namespace
 
 int main()
 {
-  std::cout << "boost::fsm PingPong example\n\n";
+  std::cout << "Boost.Statechart PingPong example\n\n";
   std::cout << "Threading configuration:\n";
   #ifdef BOOST_HAS_THREADS
   std::cout << "Multi-threaded build with ";

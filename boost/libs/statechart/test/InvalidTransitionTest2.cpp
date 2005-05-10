@@ -6,50 +6,50 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/transition.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/transition.hpp>
 
 #include <boost/mpl/list.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvX : fsm::event< EvX > {};
+struct EvX : sc::event< EvX > {};
 
 struct Active;
-struct InvalidTransitionTest : fsm::state_machine<
+struct InvalidTransitionTest : sc::state_machine<
   InvalidTransitionTest, Active > {};
 
 struct Idle0;
 struct Idle1;
-struct Active : fsm::simple_state< Active, InvalidTransitionTest,
-  fsm::no_reactions, mpl::list< Idle0, Idle1 > >
+struct Active : sc::simple_state< Active, InvalidTransitionTest,
+  sc::no_reactions, mpl::list< Idle0, Idle1 > >
 {
 };
 
   struct Idle00;
-  struct Idle0 : fsm::simple_state< Idle0, Active::orthogonal< 0 >,
-    fsm::no_reactions, Idle00 >
+  struct Idle0 : sc::simple_state< Idle0, Active::orthogonal< 0 >,
+    sc::no_reactions, Idle00 >
   {
   };
 
-    struct Idle00 : fsm::simple_state< Idle00, Idle0 > {};
+    struct Idle00 : sc::simple_state< Idle00, Idle0 > {};
 
   struct Idle10;
-  struct Idle1 : fsm::simple_state< Idle1, Active::orthogonal< 1 >,
-    fsm::no_reactions, Idle10 >
+  struct Idle1 : sc::simple_state< Idle1, Active::orthogonal< 1 >,
+    sc::no_reactions, Idle10 >
   {
   };
 
     // Invalid transition between different orthogonal regions.
-    struct Idle10 : fsm::simple_state< Idle10, Idle1,
-      fsm::transition< EvX, Idle00 > >
+    struct Idle10 : sc::simple_state< Idle10, Idle1,
+      sc::transition< EvX, Idle00 > >
     {
     };
 

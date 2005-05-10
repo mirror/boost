@@ -6,7 +6,7 @@
 <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
-<title>The boost::fsm library - Rationale</title>
+<title>The Boost Statechart Library - Rationale</title>
 </head>
 
 <body link="#0000ff" vlink="#800080">
@@ -18,7 +18,7 @@
     <img alt="C++ Boost" src="../../../boost.png" border="0" width="277" height="86"></a></h3>
     </td>
     <td valign="top">
-    <h1 align="center">The boost::fsm library</h1>
+    <h1 align="center">The Boost Statechart Library</h1>
     <h2 align="center">Rationale</h2>
     </td>
   </tr>
@@ -46,7 +46,7 @@
 <h2><a name="Introduction">Introduction</a></h2>
 <p>Most of the design decisions made during the development of this library 
 are the result of the following requirements.</p>
-<p>boost::fsm should ...</p>
+<p>Boost.Statechart should ...</p>
 <ol>
   <li>be fully type-safe. Whenever possible, type mismatches should be flagged 
   with an error at compile-time</li>
@@ -105,7 +105,7 @@ frameworks:</p>
   </a>Fails to satisfy at least the requirements 1, 3, 4, 5 (there is no 
   direct threading support), 6, 8.</li>
 </ul>
-<p>I believe boost::fsm satisfies all requirements.</p>
+<p>I believe Boost.Statechart satisfies all requirements.</p>
 <h2><a name="State-local storage">State-local storage</a></h2>
 <p>This not yet widely known state machine feature is enabled by the fact that 
 every state is represented by a class. Upon state-entry, an object of the 
@@ -153,7 +153,7 @@ However, due to its nature such a framework has a number of disadvantages when
 used to implement static machines:</p>
 <ul>
   <li>No compile-time optimizations and validations can be made. For example, 
-  boost::fsm determines the
+  Boost.Statechart determines the
   <a href="definitions.html#Innermost common context">innermost common 
   context</a> of the transition-source and destination state at compile 
   time. Moreover, compile time checks ensure that the state machine is valid 
@@ -170,7 +170,7 @@ used to implement static machines:</p>
   sort of a generic event with a property map must be used and type-safety is 
   enforced at runtime rather than at compile time.</li>
 </ul>
-<p>It is for these reasons, that boost::fsm was built from ground up to <b>not</b> 
+<p>It is for these reasons, that Boost.Statechart was built from ground up to <b>not</b> 
 support dynamic configurability. However, this does not mean that it's 
 impossible to dynamically shape a machine implemented with this library. For 
 example, guards can be used to make different transitions depending on input 
@@ -225,7 +225,7 @@ but these usually necessitate a change of the state chart layout and thus
 obscure the normal behavior. No matter what approach is used, programmers are 
 normally forced to write a lot of code that deals with errors and most of that 
 code is <b>not</b> devoted to error handling but to error propagation.</p>
-<h3>Error handling support in boost::fsm</h3>
+<h3>Error handling support in Boost.Statechart</h3>
 <p>C++ exceptions may be propagated from any action to signal a failure. 
 Depending on how the state machine is configured, such an exception is either 
 immediately propagated to the state machine client or caught and converted into 
@@ -320,7 +320,7 @@ class, it does not seem to be worthwhile anyway. Applications requiring a less
 or more sophisticated event processor lifetime management can customize the 
 behavior at a more coarse level, by using a custom <code>Scheduler</code> 
 type. This is currently also true for applications requiring non-FIFO queuing 
-schemes. However, boost::fsm will probably provide a <code>priority_scheduler</code> 
+schemes. However, Boost.Statechart will probably provide a <code>priority_scheduler</code> 
 in the future so that custom schedulers need to be implemented only in rare 
 cases.</p>
 <h2><a name="User actions: Member functions vs. function objects">User 
@@ -344,7 +344,7 @@ simple machines <b>and</b> scaleable at the same time (this applies only to
 fifo_scheduler&lt;&gt;</code>, especially for multi-threaded builds). While I 
 believe it should perform reasonably in most applications, the scalability 
 does not come for free. Small, carefully handcrafted state machines will thus 
-easily outperform equivalent boost::fsm machines. To get a picture of how big 
+easily outperform equivalent Boost.Statechart machines. To get a picture of how big 
 the gap is, I implemented a simple benchmark in the BitMachine example. The 
 Handcrafted example is a handcrafted variant of the 1-bit-BitMachine 
 implementing the same benchmark.</p>
@@ -367,7 +367,7 @@ dispatch and transition times per event:</p>
 </ul>
 <p>Although this is a big difference I still think it will not be noticeable 
 in most&nbsp;real-world applications. No matter whether an application uses 
-handcrafted or boost::fsm machines it will...</p>
+handcrafted or Boost.Statechart machines it will...</p>
 <ul>
   <li>almost never run into a situation where a state machine is swamped with 
   as many events as in the benchmarks. Unless a state machine is abused for 
@@ -392,7 +392,7 @@ handcrafted or boost::fsm machines it will...</p>
 	smaller and other operating systems can certainly do better in this area. 
 	However, I strongly believe that on most platforms the threading overhead is 
 	usually larger 
-	than the time that boost::fsm spends for event dispatch and transition. Handcrafted machines will 
+	than the time that Boost.Statechart spends for event dispatch and transition. Handcrafted machines will 
   inevitably have the same overhead, making raw single-threaded dispatch and 
   transition speed much less important</li>
   <li>almost always allocate events with <code>new</code> and destroy them 
@@ -404,7 +404,7 @@ handcrafted or boost::fsm machines it will...</p>
 </ul>
 <p>Therefore, in real-world applications event dispatch and transition not 
 normally constitutes a bottleneck and the relative gap between handcrafted and 
-boost::fsm machines also becomes much smaller than in the worst-case scenario.</p>
+Boost.Statechart machines also becomes much smaller than in the worst-case scenario.</p>
 <p>BitMachine measurements with more states and with different levels of 
 optimization:</p>
 <table border="3" width="100%" id="AutoNumber2" cellpadding="2">
@@ -419,7 +419,7 @@ optimization:</p>
     <td width="25%">Out of the box</td>
     <td width="25%">Same as out of the box but with <code>
     <a href="configuration.html#Application Defined Macros">
-    BOOST_FSM_USE_NATIVE_RTTI</a></code> defined</td>
+    BOOST_STATECHART_USE_NATIVE_RTTI</a></code> defined</td>
     <td width="25%">Same as out of the box but with customized memory 
     management</td>
   </tr>
@@ -482,7 +482,7 @@ are met:</p>
   frameworks</li>
 </ul>
 <p>Should an application not meet these prerequisites customization of 
-all memory management (not just boost::fsm's) should be considered, which is 
+all memory management (not just Boost.Statechart's) should be considered, which is 
 supported as follows:</p>
 <ul>
   <li>By passing a class offering a <code>std::allocator&lt;&gt;</code> interface 
@@ -514,7 +514,7 @@ Currently, there are exactly two options:</p>
   <li>By default, a speed-optimized internal implementation is employed</li>
   <li>The library can be instructed to use native C++ RTTI instead by defining
   <code><a href="configuration.html#Application Defined Macros">
-  BOOST_FSM_USE_NATIVE_RTTI</a></code></li>
+  BOOST_STATECHART_USE_NATIVE_RTTI</a></code></li>
 </ol>
 <p>Just about the only reason to favor 2 is the fact that state and event 
 objects need to store one pointer less, meaning that in the best case the 
@@ -549,7 +549,7 @@ rejected:</p>
   Moreover, a state must store one v-pointer for <b>each</b> reaction what 
   slows down construction and makes memory management customization 
   inefficient. In addition, C++ RTTI must inevitably be turned on, with 
-  negative effects on executable size. boost::fsm originally employed acyclic 
+  negative effects on executable size. Boost.Statechart originally employed acyclic 
   visitor and was about 4 times slower than it is now (MSVC7.1 on Intel 
   Pentium M). The dispatch speed might be better on other platforms but the 
 	other negative effects will remain</li>
@@ -645,15 +645,15 @@ expressions can easily be implemented with <code>custom_reaction&lt;&gt;</code>s
 behavior can often be implemented with <code>custom_reaction&lt;&gt;</code>s. In 
 rare cases this is not possible, namely when a choice point happens to be the 
 initial state. Then, the behavior can easily be implemented as follows:</p>
-<pre>struct make_choice : fsm::event&lt; make_choice &gt; {};
+<pre>struct make_choice : sc::event&lt; make_choice &gt; {};
 
 // universal choice point base class template
 template&lt; class MostDerived, class Context &gt;
-struct choice_point : fsm::state&lt; MostDerived, Context, 
-  fsm::custom_reaction&lt; make_choice &gt; &gt;
+struct choice_point : sc::state&lt; MostDerived, Context, 
+  sc::custom_reaction&lt; make_choice &gt; &gt;
 {
-  typedef fsm::state&lt; MostDerived, Context, 
-    fsm::custom_reaction&lt; make_choice &gt; &gt; base_type;
+  typedef sc::state&lt; MostDerived, Context, 
+    sc::custom_reaction&lt; make_choice &gt; &gt; base_type;
   typedef typename base_type::my_context my_context;
   typedef choice_point my_base;
 
@@ -667,17 +667,17 @@ struct choice_point : fsm::state&lt; MostDerived, Context,
 // ...
 
 struct MyChoicePoint;
-struct Machine : fsm::state_machine&lt; Machine, MyChoicePoint &gt; {};
+struct Machine : sc::state_machine&lt; Machine, MyChoicePoint &gt; {};
 
-struct Dest1 : fsm::simple_state&lt; Dest1, Machine &gt; {};
-struct Dest2 : fsm::simple_state&lt; Dest2, Machine &gt; {};
-struct Dest3 : fsm::simple_state&lt; Dest3, Machine &gt; {};
+struct Dest1 : sc::simple_state&lt; Dest1, Machine &gt; {};
+struct Dest2 : sc::simple_state&lt; Dest2, Machine &gt; {};
+struct Dest3 : sc::simple_state&lt; Dest3, Machine &gt; {};
 
 struct MyChoicePoint : choice_point&lt; MyChoicePoint, Machine &gt;
 {
   MyChoicePoint( my_context ctx ) : my_base( ctx ) {}
 
-  fsm::result react( const make_choice &amp; )
+  sc::result react( const make_choice &amp; )
   {
     if ( /* ... */ )
     {
@@ -693,7 +693,7 @@ struct MyChoicePoint : choice_point&lt; MyChoicePoint, Machine &gt;
     }
   }
 };</pre>
-<p><code>choice_point&lt;&gt;</code> is not currently part of boost::fsm, mainly 
+<p><code>choice_point&lt;&gt;</code> is not currently part of Boost.Statechart, mainly 
 because I fear that beginners could use it in places where they would be 
 better off with <code>custom_reaction&lt;&gt;</code>. If the demand is high enough I 
 will add it to the library.</p>
@@ -721,7 +721,7 @@ bars are sometimes useful but their behavior can easily be emulated with
 guards. The support of fork bars would make the implementation <b>much</b> 
 more complex and they are only needed rarely.</p>
 <h4>Event dispatch to orthogonal regions</h4>
-<p>The boost::fsm event dispatch algorithm is different to the one specified 
+<p>The Boost.Statechart event dispatch algorithm is different to the one specified 
 in
 <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
 David Harel's original paper</a> and in the
@@ -734,7 +734,7 @@ transition from (B,D) to (C,E) when an EvX event is processed. Because of the
 subtleties that Harel describes in chapter 7 of
 <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
 his paper</a>, an implementation of this algorithm is not only quite complex 
-but also much slower than the simplified version employed by boost::fsm, which 
+but also much slower than the simplified version employed by Boost.Statechart, which 
 stops searching for <a href="definitions.html#Reaction">reactions</a> as soon 
 as it has found one suitable for the current event. That is, had the example 
 been implemented with this library, the machine would have transitioned 
@@ -753,9 +753,9 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <font color="#FF0000"> <b>The link refers to a
+2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
 to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 

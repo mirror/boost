@@ -1,17 +1,17 @@
-#ifndef BOOST_FSM_EXAMPLE_CAMERA_HPP
-#define BOOST_FSM_EXAMPLE_CAMERA_HPP
+#ifndef BOOST_STATECHART_EXAMPLE_CAMERA_HPP_INCLUDED
+#define BOOST_STATECHART_EXAMPLE_CAMERA_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/config.hpp>
 
@@ -21,18 +21,18 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
-struct EvShutterHalf : fsm::event< EvShutterHalf > {};
-struct EvShutterFull : fsm::event< EvShutterFull > {};
-struct EvShutterRelease : fsm::event< EvShutterRelease > {};
-struct EvConfig : fsm::event< EvConfig > {};
+struct EvShutterHalf : sc::event< EvShutterHalf > {};
+struct EvShutterFull : sc::event< EvShutterFull > {};
+struct EvShutterRelease : sc::event< EvShutterRelease > {};
+struct EvConfig : sc::event< EvConfig > {};
 
 
 struct NotShooting;
-struct Camera : fsm::state_machine< Camera, NotShooting >
+struct Camera : sc::state_machine< Camera, NotShooting >
 {
     bool IsMemoryAvailable() const { return true; }
     bool IsBatteryLow() const { return false; }
@@ -40,22 +40,22 @@ struct Camera : fsm::state_machine< Camera, NotShooting >
 
 
 struct Idle;
-struct NotShooting : fsm::simple_state< NotShooting, Camera,
-  fsm::custom_reaction< EvShutterHalf >, Idle >
+struct NotShooting : sc::simple_state< NotShooting, Camera,
+  sc::custom_reaction< EvShutterHalf >, Idle >
 {
   NotShooting();
   ~NotShooting();
 
-  fsm::result react( const EvShutterHalf & );
+  sc::result react( const EvShutterHalf & );
 };
 
-  struct Idle : fsm::simple_state< Idle, NotShooting,
-    fsm::custom_reaction< EvConfig > >
+  struct Idle : sc::simple_state< Idle, NotShooting,
+    sc::custom_reaction< EvConfig > >
   {
     Idle();
     ~Idle();
 
-    fsm::result react( const EvConfig & );
+    sc::result react( const EvConfig & );
   };
 
 

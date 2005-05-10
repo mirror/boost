@@ -11,10 +11,10 @@
 #  define NO_OF_BITS 4
 #endif
 // #define CUSTOMIZE_MEMORY_MANAGEMENT
-// #define BOOST_FSM_USE_NATIVE_RTTI
+// #define BOOST_STATECHART_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
 // This program demonstrates the fact that measures must be taken to hide some
-// of the complexity (e.g. in separate .cpp file) of a boost::fsm state
+// of the complexity (e.g. in separate .cpp file) of a Boost.Statechart state
 // machine once a certain size is reached.
 // For this purpose, a state machine with exactly 2^NO_OF_BITS states (i.e.
 // BitState< 0 > .. BitState< 2^NO_OF_BITS - 1 >) is generated. For the events
@@ -27,7 +27,7 @@
 // etc.
 // The maximum size of such a state machine depends on your compiler. The
 // following table gives upper limits for NO_OF_BITS. From this, rough
-// estimates for the maximum size of any "naively" implemented boost::fsm
+// estimates for the maximum size of any "naively" implemented Boost.Statechart
 // machine (i.e. no attempt is made to hide inner state implementation in a
 // .cpp file) can be deduced.
 //
@@ -52,11 +52,11 @@
 #  include "UniqueObject.hpp"
 #endif
 
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/transition.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/push_front.hpp>
@@ -106,7 +106,7 @@ namespace std
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 using namespace mpl::placeholders;
 
@@ -114,16 +114,16 @@ using namespace mpl::placeholders;
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int bitNo >
-struct EvFlipBit : fsm::event< EvFlipBit< bitNo > > {};
+struct EvFlipBit : sc::event< EvFlipBit< bitNo > > {};
 
 template< unsigned int stateNo >
 struct BitState;
 //////////////////////////////////////////////////////////////////////////////
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
-struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 >,
+struct BitMachine : sc::state_machine< BitMachine, BitState< 0 >,
   boost::fast_pool_allocator< int > > {};
 #else
-struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 > > {};
+struct BitMachine : sc::state_machine< BitMachine, BitState< 0 > > {};
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -165,14 +165,14 @@ namespace
   }
 
   ////////////////////////////////////////////////////////////////////////////
-  boost::intrusive_ptr< const fsm::event_base > pFlipBitEvents[ NO_OF_BITS ];
+  boost::intrusive_ptr< const sc::event_base > pFlipBitEvents[ NO_OF_BITS ];
 
   ////////////////////////////////////////////////////////////////////////////
   template< unsigned int arraySize >
   void FillEventArray()
   {
     pFlipBitEvents[ arraySize - 1 ] =
-      boost::intrusive_ptr< const fsm::event_base >(
+      boost::intrusive_ptr< const sc::event_base >(
         new EvFlipBit< arraySize - 1 >() );
     FillEventArray< arraySize - 1 >();
   }
@@ -234,7 +234,7 @@ struct FlipTransition
     unsigned int, nextStateNo=StateNo::value ^ ( 1 << BitNo::value ) );
   BOOST_STATIC_CONSTANT( unsigned int, bitNo=BitNo::value );
 
-  typedef fsm::transition< 
+  typedef sc::transition< 
     EvFlipBit< bitNo >,
     BitState< nextStateNo > > type;
 
@@ -261,7 +261,7 @@ struct FlipTransitionList
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int stateNo >
 struct BitState :
-  fsm::simple_state< BitState< stateNo >, BitMachine,
+  sc::simple_state< BitState< stateNo >, BitMachine,
     typename FlipTransitionList< stateNo >::type >,
   #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
   IDisplay, UniqueObject< BitState< stateNo > >
@@ -282,7 +282,7 @@ int main()
 {
   FillEventArray< NO_OF_BITS >();
 
-  std::cout << "boost::fsm BitMachine example\n";
+  std::cout << "Boost.Statechart BitMachine example\n";
   std::cout << "Machine configuration: " << noOfStates <<
     " states interconnected with " << noOfTransitions << " transitions.\n\n";
 

@@ -6,25 +6,25 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 
 
 
 struct A;
-struct InvalidChartTest : fsm::state_machine< InvalidChartTest, A > {};
+struct InvalidChartTest : sc::state_machine< InvalidChartTest, A > {};
 
 struct B;
-struct A : fsm::simple_state< A, InvalidChartTest, fsm::no_reactions, B > {};
+struct A : sc::simple_state< A, InvalidChartTest, sc::no_reactions, B > {};
 
-  struct B : fsm::simple_state< B, A > {};
+  struct B : sc::simple_state< B, A > {};
 
   // A does not have an orthogonal region with the number 1
-  struct C : fsm::simple_state< C, A::orthogonal< 1 > > {};
+  struct C : sc::simple_state< C, A::orthogonal< 1 > > {};
 
 
 int main()

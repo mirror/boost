@@ -4,13 +4,13 @@
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
 
-subproject libs/fsm/test ;
+subproject libs/statechart/test ;
 
 import testing ; # bring in rules for testing
 
 DEPENDS all : test ; # Make tests run by default.
 
-template fsm-common-options
+template statechart-common-options
   :
   : <include>$(BOOST_ROOT)
     # The library ensures that all state destructors are only invoked on
@@ -25,79 +25,79 @@ template fsm-common-options
 
 local test_monitor = <lib>../../../libs/test/build/boost_test_exec_monitor ;
 
-rule fsm-run ( source : name : additional-options * )
+rule statechart-run ( source : name : additional-options * )
 {
-  return [ run $(source).cpp $(test_monitor) <template>fsm-common-options : :
+  return [ run $(source).cpp $(test_monitor) <template>statechart-common-options : :
     : $(additional-options) : $(name) ] ;
 }
 
-rule fsm-st-run ( source : name : additional-options * )
+rule statechart-st-run ( source : name : additional-options * )
 {
-  return [ fsm-run $(source) : $(name)
+  return [ statechart-run $(source) : $(name)
     : <threading>single
       <define>BOOST_DISABLE_THREADS
       $(additional-options) ] ;
 }
 
-rule fsm-st-run-variants ( source )
+rule statechart-st-run-variants ( source )
 {
   local result ;
-  result += [ fsm-st-run $(source) : $(source)Normal : ] ;
-  result += [ fsm-st-run $(source) : $(source)Native
-    : <define>BOOST_FSM_USE_NATIVE_RTTI ] ;
-  result += [ fsm-st-run $(source) : $(source)Relaxed
-    : <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
-  result += [ fsm-st-run $(source) : $(source)Both
-    : <define>BOOST_FSM_USE_NATIVE_RTTI
-      <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ statechart-st-run $(source) : $(source)Normal : ] ;
+  result += [ statechart-st-run $(source) : $(source)Native
+    : <define>BOOST_STATECHART_USE_NATIVE_RTTI ] ;
+  result += [ statechart-st-run $(source) : $(source)Relaxed
+    : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ statechart-st-run $(source) : $(source)Both
+    : <define>BOOST_STATECHART_USE_NATIVE_RTTI
+      <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
   return result ;
 }
 
-rule fsm-compile-fail ( source : name : additional-options * )
+rule statechart-compile-fail ( source : name : additional-options * )
 {
-  return [ compile-fail $(source).cpp <template>fsm-common-options
+  return [ compile-fail $(source).cpp <template>statechart-common-options
     : $(additional-options) : $(name) ] ;
 }
 
-rule fsm-compile-fail-variants ( source )
+rule statechart-compile-fail-variants ( source )
 {
   local result ;
-  result += [ fsm-compile-fail $(source) : $(source)Normal : ] ;
-  result += [ fsm-compile-fail $(source) : $(source)Native
-    : <define>BOOST_FSM_USE_NATIVE_RTTI ] ;
-  result += [ fsm-compile-fail $(source) : $(source)Relaxed
-    : <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
-  result += [ fsm-compile-fail $(source) : $(source)Both
-    : <define>BOOST_FSM_USE_NATIVE_RTTI
-      <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ statechart-compile-fail $(source) : $(source)Normal : ] ;
+  result += [ statechart-compile-fail $(source) : $(source)Native
+    : <define>BOOST_STATECHART_USE_NATIVE_RTTI ] ;
+  result += [ statechart-compile-fail $(source) : $(source)Relaxed
+    : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ statechart-compile-fail $(source) : $(source)Both
+    : <define>BOOST_STATECHART_USE_NATIVE_RTTI
+      <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
   return result ;
 }
 
-test-suite fsm :
-  [ fsm-compile-fail-variants InvalidChartTest1 ]
-  [ fsm-compile-fail-variants InvalidChartTest2 ]
-  [ fsm-compile-fail-variants InvalidChartTest3 ]
-  [ fsm-st-run-variants TransitionTest ]
-  [ fsm-compile-fail-variants InvalidTransitionTest1 ]
-  [ fsm-compile-fail-variants InvalidTransitionTest2 ]
-  [ fsm-compile-fail-variants InvalidTransitionTest3 ]
-  [ fsm-compile-fail-variants InvalidTransitionTest4 ]
-  [ fsm-st-run-variants DeferralTest ]
-  [ fsm-st-run-variants HistoryTest ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest1 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest2 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest3 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest4 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest5 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest6 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest7 ]
-  [ fsm-compile-fail-variants InconsistentHistoryTest8 ]
-  [ fsm-compile-fail-variants UnsupportedDeepHistoryTest ]
-  [ fsm-st-run-variants StateCastTest ]
-  [ fsm-st-run-variants TypeInfoTest ]
-  [ fsm-st-run-variants StateIterationTest ]
-  [ fsm-st-run-variants CustomReactionTest ]
-  [ fsm-st-run-variants TerminationTest ]
-  [ fsm-st-run-variants FifoSchedulerTest ]
+test-suite statechart :
+  [ statechart-compile-fail-variants InvalidChartTest1 ]
+  [ statechart-compile-fail-variants InvalidChartTest2 ]
+  [ statechart-compile-fail-variants InvalidChartTest3 ]
+  [ statechart-st-run-variants TransitionTest ]
+  [ statechart-compile-fail-variants InvalidTransitionTest1 ]
+  [ statechart-compile-fail-variants InvalidTransitionTest2 ]
+  [ statechart-compile-fail-variants InvalidTransitionTest3 ]
+  [ statechart-compile-fail-variants InvalidTransitionTest4 ]
+  [ statechart-st-run-variants DeferralTest ]
+  [ statechart-st-run-variants HistoryTest ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest1 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest2 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest3 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest4 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest5 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest6 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest7 ]
+  [ statechart-compile-fail-variants InconsistentHistoryTest8 ]
+  [ statechart-compile-fail-variants UnsupportedDeepHistoryTest ]
+  [ statechart-st-run-variants StateCastTest ]
+  [ statechart-st-run-variants TypeInfoTest ]
+  [ statechart-st-run-variants StateIterationTest ]
+  [ statechart-st-run-variants CustomReactionTest ]
+  [ statechart-st-run-variants TerminationTest ]
+  [ statechart-st-run-variants FifoSchedulerTest ]
 ;
       

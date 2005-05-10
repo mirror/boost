@@ -6,12 +6,12 @@
 
 
 
-#include <boost/fsm/asynchronous_state_machine.hpp>
-#include <boost/fsm/fifo_scheduler.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/termination.hpp>
-#include <boost/fsm/custom_reaction.hpp>
+#include <boost/statechart/asynchronous_state_machine.hpp>
+#include <boost/statechart/fifo_scheduler.hpp>
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/termination.hpp>
+#include <boost/statechart/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -24,24 +24,24 @@
 
 
 
-namespace fsm = boost::fsm;
+namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
 
 
 
-struct EvCheckCtorArgs : fsm::event< EvCheckCtorArgs >
+struct EvCheckCtorArgs : sc::event< EvCheckCtorArgs >
 {
   EvCheckCtorArgs( int expectedArgs ) : expectedArgs_( expectedArgs ) {}
   const int expectedArgs_;
 };
 
-struct EvTerminate : fsm::event< EvTerminate > {};
-struct EvFail : fsm::event< EvFail > {};
+struct EvTerminate : sc::event< EvTerminate > {};
+struct EvFail : sc::event< EvFail > {};
 
 
 struct Initial;
 struct FifoSchedulerTest :
-  fsm::asynchronous_state_machine< FifoSchedulerTest, Initial >
+  sc::asynchronous_state_machine< FifoSchedulerTest, Initial >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -108,18 +108,18 @@ struct FifoSchedulerTest :
     const int ctorArgs_;
 };
 
-boost::intrusive_ptr< const fsm::event_base > MakeEvent(
-  const fsm::event_base * pEvent )
+boost::intrusive_ptr< const sc::event_base > MakeEvent(
+  const sc::event_base * pEvent )
 {
-  return boost::intrusive_ptr< const fsm::event_base >( pEvent );
+  return boost::intrusive_ptr< const sc::event_base >( pEvent );
 }
 
-struct Initial : fsm::simple_state< Initial, FifoSchedulerTest, mpl::list<
-  fsm::custom_reaction< EvCheckCtorArgs >,
-  fsm::termination< EvTerminate >,
-  fsm::custom_reaction< EvFail > > >
+struct Initial : sc::simple_state< Initial, FifoSchedulerTest, mpl::list<
+  sc::custom_reaction< EvCheckCtorArgs >,
+  sc::termination< EvTerminate >,
+  sc::custom_reaction< EvFail > > >
 {
-  fsm::result react( const EvCheckCtorArgs & ev )
+  sc::result react( const EvCheckCtorArgs & ev )
   {
     BOOST_REQUIRE( ev.expectedArgs_ == outermost_context().CtorArgs() );
     outermost_context_type & machine = outermost_context();
@@ -128,7 +128,7 @@ struct Initial : fsm::simple_state< Initial, FifoSchedulerTest, mpl::list<
     return discard_event();
   }
 
-  fsm::result react( const EvFail & )
+  sc::result react( const EvFail & )
   {
     BOOST_FAIL( "State machine is unexpectedly still running." );
     return discard_event();
@@ -142,7 +142,7 @@ struct UnexpectedEventCount : public std::runtime_error
 };
 
 void RunScheduler(
-  fsm::fifo_scheduler<> & scheduler, unsigned long expectedEventCount )
+  sc::fifo_scheduler<> & scheduler, unsigned long expectedEventCount )
 {
   // Workaround: For some reason MSVC has a problem with BOOST_REQUIRE here
   // (C1055: compiler limit: out of keys)
@@ -153,8 +153,8 @@ void RunScheduler(
 }
 
 void Check(
-  fsm::fifo_scheduler<> & scheduler,
-  const fsm::fifo_scheduler<>::processor_handle & processor,
+  sc::fifo_scheduler<> & scheduler,
+  const sc::fifo_scheduler<>::processor_handle & processor,
   int ctorArgs )
 {
   // Make sure the processor has been created
@@ -200,32 +200,32 @@ int test_main( int, char* [] )
 {
   try
   {
-    fsm::fifo_scheduler<> scheduler;
-    const fsm::fifo_scheduler<>::processor_handle processor0 =
+    sc::fifo_scheduler<> scheduler;
+    const sc::fifo_scheduler<>::processor_handle processor0 =
       scheduler.create_processor< FifoSchedulerTest >();
     Check( scheduler, processor0, 0 );
 
-    const fsm::fifo_scheduler<>::processor_handle processor1 =
+    const sc::fifo_scheduler<>::processor_handle processor1 =
       scheduler.create_processor< FifoSchedulerTest >( 1 );
     Check( scheduler, processor1, 1 );
 
-    const fsm::fifo_scheduler<>::processor_handle processor2 =
+    const sc::fifo_scheduler<>::processor_handle processor2 =
       scheduler.create_processor< FifoSchedulerTest >( 1, 2 );
     Check( scheduler, processor2, 12 );
 
-    const fsm::fifo_scheduler<>::processor_handle processor3 =
+    const sc::fifo_scheduler<>::processor_handle processor3 =
       scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3 );
     Check( scheduler, processor3, 123 );
 
-    const fsm::fifo_scheduler<>::processor_handle processor4 =
+    const sc::fifo_scheduler<>::processor_handle processor4 =
       scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4 );
     Check( scheduler, processor4, 1234 );
 
-    const fsm::fifo_scheduler<>::processor_handle processor5 =
+    const sc::fifo_scheduler<>::processor_handle processor5 =
       scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4, 5 );
     Check( scheduler, processor5, 12345 );
 
-    const fsm::fifo_scheduler<>::processor_handle processor6 =
+    const sc::fifo_scheduler<>::processor_handle processor6 =
       scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4, 5, 6 );
     Check( scheduler, processor6, 123456 );
 
