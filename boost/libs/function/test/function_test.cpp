@@ -630,70 +630,6 @@ test_ref()
   }
 }
 
-static int alloc_count = 0;
-static int dealloc_count = 0;
-
-template<typename T>
-struct counting_allocator : public allocator<T>
-{
-  template<typename U>
-  struct rebind
-  {
-    typedef counting_allocator<U> other;
-  };
-
-
-  T* allocate(size_t n)
-  {
-    alloc_count++;
-    return allocator<T>::allocate(n);
-  }
-
-  void deallocate(T* p, size_t n)
-  {
-    dealloc_count++;
-    allocator<T>::deallocate(p, n);
-  }
-};
-
-static int do_minus(int x, int y) { return x-y; }
-
-struct DoNothing
-{
-  void operator()() const {}
-};
-
-static void do_nothing() {}
-
-static void test_allocator()
-{
-#ifndef BOOST_NO_STD_ALLOCATOR
-  boost::function<int (int, int), counting_allocator<int> > f;
-  f = plus<int>();
-  f.clear();
-  BOOST_CHECK(alloc_count == 1);
-  BOOST_CHECK(dealloc_count == 1);
-
-  alloc_count = 0;
-  dealloc_count = 0;
-  f = &do_minus;
-  f.clear();
-
-  boost::function<void (), counting_allocator<int> > fv;
-  alloc_count = 0;
-  dealloc_count = 0;
-  fv = DoNothing();
-  fv.clear();
-  BOOST_CHECK(alloc_count == 1);
-  BOOST_CHECK(dealloc_count == 1);
-
-  alloc_count = 0;
-  dealloc_count = 0;
-  fv = &do_nothing;
-  fv.clear();
-#endif // ndef BOOST_NO_STD_ALLOCATOR
-}
-
 static void test_exception()
 {
   boost::function<int (int, int)> f;
@@ -739,7 +675,6 @@ int test_main(int, char* [])
   test_emptiness();
   test_member_functions();
   test_ref();
-  test_allocator();
   test_exception();
   test_implicit();
   test_call();
