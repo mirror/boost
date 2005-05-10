@@ -39,9 +39,13 @@ namespace boost
           base_class;
 
     public:
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+      BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_deque<T,CloneAllocator,Allocator>, 
+                                                        base_class );        
+#else        
       BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_deque, 
-                                                          base_class );
-
+                                                        base_class );
+#endif
     };
 
     //////////////////////////////////////////////////////////////////////////////

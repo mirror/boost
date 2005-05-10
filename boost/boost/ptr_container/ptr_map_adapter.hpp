@@ -174,9 +174,13 @@ namespace ptr_container_detail
           }
         
     public:
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>, 
+                                                 base_type );
+#else        
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
-                                                   base_type );
-
+                                                 base_type );
+#endif
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
                                        const Allocator& a ) 

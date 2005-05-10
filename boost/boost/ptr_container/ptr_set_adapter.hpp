@@ -21,7 +21,6 @@
 #include <boost/range/reverse_iterator.hpp>
 #include <boost/range/const_reverse_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
-#include <iostream>
 
 namespace boost
 {
@@ -241,8 +240,6 @@ namespace ptr_container_detail
                 if( this->find( *first ) == this->end() )
                     insert( CloneAllocator::allocate_clone( *first ) ); // strong, commit
                 ++first;                                                      
-                //static int i = 0;
-                //std::cout << "\n " << i++ << std::endl; 
             }                                                                 
         }                         
 
@@ -314,7 +311,6 @@ namespace ptr_container_detail
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( const Range& r )
         {
-            //std::cout << "starting" ;
             insert( this->adl_begin(r), this->adl_end(r) );
         }
 
@@ -394,8 +390,6 @@ namespace ptr_container_detail
             {           
                 insert( CloneAllocator::allocate_clone( *first ) ); // strong, commit                              
                 ++first;                                                     
-                //static int i = 0;
-                //std::cout << "\n multi: " << i++ << std::endl; 
             }                                                                 
         }                         
     
@@ -455,7 +449,6 @@ namespace ptr_container_detail
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( const Range& r )
         {
-            //std::cout <<"starting multiset";
             insert( this->adl_begin(r), this->adl_end(r) );
         }
 

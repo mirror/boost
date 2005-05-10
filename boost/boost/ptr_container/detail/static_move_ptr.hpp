@@ -66,8 +66,11 @@ public:
             const_cast<static_move_ptr&>(p).release();
         }
 
-
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+    static_move_ptr( const move_ptrs::move_source<static_move_ptr<T,Deleter> >& src )
+#else
     static_move_ptr( const move_ptrs::move_source<static_move_ptr>& src )
+#endif    
             : impl_(src.ptr().get(), src.ptr().get_deleter())
             {
                 src.ptr().release();

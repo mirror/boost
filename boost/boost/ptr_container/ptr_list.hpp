@@ -39,8 +39,15 @@ namespace boost
             base_class;
         
     public:
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list<T,CloneAllocator,Allocator>, 
+                                                          base_class );
+#else        
+
         BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
-                                                            base_class );
+                                                          base_class );
+#endif
+        
     public:
         void unique( iterator first, iterator last )
         {

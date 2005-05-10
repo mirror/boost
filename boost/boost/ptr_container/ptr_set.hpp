@@ -52,9 +52,13 @@ namespace boost
          : base_type( first, last, comp, a )
         { }
 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_set<Key,Compare,CloneAllocator,Allocator>, 
+                                                      base_type );
+#else
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_set, 
-                                                        base_type );
-        
+                                                      base_type );
+#endif        
     };
         
         
@@ -87,9 +91,15 @@ namespace boost
                       const Allocator& a  = Allocator() )
          : base_type( first, last, comp, a ) 
         { }
-        
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset<Key,Compare,CloneAllocator,Allocator>, 
+                                                      base_type );
+#else
+
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset, 
-                                                        base_type );
+                                                      base_type );
+#endif        
                                                                             
     };
 

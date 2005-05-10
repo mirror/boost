@@ -114,7 +114,12 @@ namespace ptr_container_detail
         };
 
         typedef BOOST_DEDUCED_TYPENAME Config::void_container_type  Cont;
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+        typedef  null_clone_allocator<reversible_ptr_container::allow_null> 
+                                                                    null_cloner_type;
+#else
         typedef null_clone_allocator<allow_null>                    null_cloner_type;
+#endif        
         typedef clone_deleter<null_cloner_type>                     Deleter;
 
         Cont      c_;

@@ -69,14 +69,21 @@ namespace ptr_container_detail
         typedef value_type 
                    object_type;
 
+#ifdef BOOST_NO_SFINAE
+
+        template< class Iter >
+        static U* get_pointer( Iter i )
+        {
+            return static_cast<U*>( *i.base() );
+        }
+        
+#else
         template< class Iter >
         static U* get_pointer( void_ptr_iterator<Iter,U> i )
         {
             return static_cast<U*>( *i.base() );
         }
 
-#ifdef BOOST_NO_SFINAE
-#else
         template< class Iter >
         static U* get_pointer( Iter i )
         {
@@ -84,28 +91,36 @@ namespace ptr_container_detail
         }
 #endif        
 
+#ifdef BOOST_NO_SFINAE
+
+        template< class Iter >
+        static const U* get_const_pointer( Iter i )
+        {
+            return static_cast<const U*>( *i.base() );
+        }
+        
+#else // BOOST_NO_SFINAE
+
 #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
         template< class Iter >
         static const U* get_const_pointer( void_ptr_iterator<Iter,U> i )
         {
             return static_cast<const U*>( *i.base() );
         }
-#else
+#else 
         template< class Iter >
         static const U* get_const_pointer( void_ptr_iterator<Iter,const U> i )
         {
             return static_cast<const U*>( *i.base() );
         }
-#endif
+#endif // BOOST_WORKAROUND
 
-#ifdef BOOST_NO_SFINAE
-#else
         template< class Iter >
         static const U* get_const_pointer( Iter i )
         {
             return &*i;
         }
-#endif
+#endif // BOOST_NO_SFINAE
 
         BOOST_STATIC_CONSTANT(bool, allow_null = boost::is_nullable<T>::value );
     };
@@ -142,8 +157,13 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type; 
             
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator>, 
+                                                   base_type )
+#else
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
                                                    base_type )
+#endif        
     
         template< class PtrContainer >
         ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
@@ -335,16 +355,6 @@ namespace ptr_container_detail
         }
 
 #endif
-
-        /*
-        auto_type release( size_type at )
-        {
-            if( at < size() )
-                throw bad_ptr_container_operation( "'release()' out of bounds" ); 
-
-            auto_type ptr( this->c_private()[at] );
-            this->c_private().erase( .... )
-        }*/
 
         void transfer( iterator before, 
                        iterator first, 
