@@ -40,7 +40,7 @@ void experiment(base_generator_type & generator)
   // Define a uniform random number distribution of integer values between
   // 1 and 6 inclusive.
   typedef boost::uniform_int<> distribution_type;
-  typedef boost::variate_generator<base_generator_type, distribution_type> gen_type;
+  typedef boost::variate_generator<base_generator_type&, distribution_type> gen_type;
   gen_type die_gen(generator, distribution_type(1, 6));
 
 #if !defined(__SUNPRO_CC) || (__SUNPRO_CC > 0x530)
