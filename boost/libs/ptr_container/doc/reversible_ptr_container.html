@@ -152,7 +152,15 @@ to the container, but to hide the pointers externally.</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">iterator</span></tt></li>
 </ul>
-<p>allows one to iterate over <tt class="docutils literal"><span class="pre">T&amp;</span></tt> objects, not <tt class="docutils literal"><span class="pre">T*</span></tt>.</p>
+<p>allows one to iterate over <tt class="docutils literal"><span class="pre">T&amp;</span></tt> objects, not <tt class="docutils literal"><span class="pre">T*</span></tt>.
+Note that:</p>
+<pre class="literal-block">
+iterator i = ...;
+i.base();
+</pre>
+<p>returns an iterator that allows one to iterate over <tt class="docutils literal"><span class="pre">void*</span></tt>
+elements (<em>this is very rarely needed and you should not use that
+functionality unless you know what you are doing</em>).</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">auto_type</span></tt></li>
 </ul>

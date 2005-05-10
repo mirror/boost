@@ -8,14 +8,14 @@
 
 
 :Authors:       Thorsten Ottosen
-:Contact:       nesotto@cs.auc.dk
+:Contact:       nesotto@cs.aau.dk
 :organizations: `Department of Computer Science`_, Aalborg University, and `Dezide Aps`_
 :date:          3rd of May 2005
 :copyright:     Thorsten Ottosen 2004-2005. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
  
-.. _`Department of Computer Science`: http://www.cs.auc.dk
+.. _`Department of Computer Science`: http://www.cs.aau.dk
 .. _`Dezide Aps`: http://www.dezide.com
 
 ========
@@ -104,6 +104,7 @@ The advantages of pointer containers are
 6. The interface is slightly changed towards the domain of pointers  
    instead of relying on the normal value-based interface. For example,
    now it is possible for ``pop_back()`` to return the removed element. 
+7. Propagates constness s.t. one cannot modify the objects via a ``const_iterator``
 
 The disadvantages are
 

@@ -153,6 +153,14 @@ Also notice that
 - ``typedef ... iterator``
 
 allows one to iterate over ``T&`` objects, not ``T*``.
+Note that::
+
+    iterator i = ...;
+    i.base();
+
+returns an iterator that allows one to iterate over ``void*``
+elements (*this is very rarely needed and you should not use the
+functionality unless you know what you are doing*).    
 
 - ``typedef ... auto_type``
 

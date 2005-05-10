@@ -20,8 +20,8 @@
 <tr><th class="docinfo-name">Author:</th>
 <td>Thorsten Ottosen</td></tr>
 <tr><th class="docinfo-name">Contact:</th>
-<td><a class="first last reference" href="mailto:nesotto&#64;cs.auc.dk">nesotto&#64;cs.auc.dk</a></td></tr>
-<tr class="field"><th class="docinfo-name">organizations:</th><td class="field-body"><a class="reference" href="http://www.cs.auc.dk">Department of Computer Science</a>, Aalborg University, and <a class="reference" href="http://www.dezide.com">Dezide Aps</a></td>
+<td><a class="first last reference" href="mailto:nesotto&#64;cs.aau.dk">nesotto&#64;cs.aau.dk</a></td></tr>
+<tr class="field"><th class="docinfo-name">organizations:</th><td class="field-body"><a class="reference" href="http://www.cs.aau.dk">Department of Computer Science</a>, Aalborg University, and <a class="reference" href="http://www.dezide.com">Dezide Aps</a></td>
 </tr>
 <tr><th class="docinfo-name">Date:</th>
 <td>3rd of May 2005</td></tr>
@@ -98,6 +98,7 @@ to solve the so-called
 <li>The interface is slightly changed towards the domain of pointers  
 instead of relying on the normal value-based interface. For example,
 now it is possible for <tt class="docutils literal"><span class="pre">pop_back()</span></tt> to return the removed element.</li>
+<li>Propagates constness s.t. one cannot modify the objects via a <tt class="docutils literal"><span class="pre">const_iterator</span></tt></li>
 </ol>
 <p>The disadvantages are</p>
 <ol class="arabic simple">
