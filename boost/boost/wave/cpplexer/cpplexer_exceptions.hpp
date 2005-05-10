@@ -162,7 +162,7 @@ public:
                 "basic character set",                  // universal_char_base_charset
             "this universal character is not allowed in an identifier", // universal_char_not_allowed 
             "long long suffixes are not allowed in pure C++ mode, "
-            "enable variadics to enable these",         // invalid_long_long_literal
+            "enable long_long mode to allow these",     // invalid_long_long_literal
             "generic lexing error"                      // generic_lexing_error
         };
         return preprocess_exception_errors[code];

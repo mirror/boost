@@ -631,7 +631,6 @@ struct cpp_grammar :
                 { self.rule_ids.warning_id, "ppwarning" },
                 { self.rule_ids.pragma_id, "pppragma" },
                 { self.rule_ids.illformed_id, "illformed" },
-                { self.rule_ids.ppsp_id, "ppsp" },
                 { self.rule_ids.ppqualifiedname_id, "ppqualifiedname" },
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
                 { self.rule_ids.region_id, "ppregion" },
@@ -717,8 +716,8 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
     if (hit.match) {
         tree_to_xml (BOOST_WAVE_DUMP_PARSE_TREE_OUT, hit.trees, "", 
-            g.map_rule_id_to_name, &TokenT::get_token_id, 
-            &TokenT::get_token_value);
+            g.map_rule_id_to_name, &token_type::get_token_id, 
+            &token_type::get_token_value);
     }
 #endif
 
