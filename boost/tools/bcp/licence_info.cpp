@@ -35,10 +35,12 @@ std::pair<const license_info*, int> get_licenses()
       "|"
       "Authors:[[:blank:]]+"
          "([[:alpha:]][^\\n\\d]+"
+      "|"
+      "((?:The|This) code is considered to be in the public domain)"
       ")";
 
    static const char* generic_author_format = 
-      "(?1$1)(?2$2)(?3$3)";
+      "(?1$1)(?2$2)(?3$3)(?4Public Domain)";
 
    static const license_info licenses[] = 
    {
@@ -686,6 +688,19 @@ std::pair<const license_info*, int> get_licenses()
          "Bison output file, you may use that output file without restriction."
          "This special exception was added by the Free Software Foundation"
          "in version 1.24 of Bison.</P>"
+       )
+      ,
+      license_info( boost::regex(
+            "(?:The|This)\\W+code\\W+is\\W+considered\\W+to\\W+be\\W+in\\W+the\\W+public\\W+domain", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Public Domain"
+         ,
+         "<P>The code has no license terms, it has been explicity placed in the\n"
+         "public domain by it's author(s).</P>"
        )
       ,
    };
