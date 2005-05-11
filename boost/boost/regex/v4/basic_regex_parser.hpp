@@ -159,6 +159,8 @@ void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_c
       boost::regex_error e(message, error_code, position);
       e.raise();
    }
+#else
+   (void)position; // suppress warnings.
 #endif
 }
 
