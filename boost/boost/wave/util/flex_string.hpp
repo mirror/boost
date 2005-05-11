@@ -1,8 +1,20 @@
+///////////////////////////////////////////////////////////////////////////////
+// flex_string
+// Copyright (c) 2001 by Andrei Alexandrescu
+// Permission to use, copy, modify, distribute and sell this software for any
+//     purpose is hereby granted without fee, provided that the above copyright
+//     notice appear in all copies and that both that copyright notice and this
+//     permission notice appear in supporting documentation.
+// The author makes no representations about the
+//     suitability of this software for any purpose. It is provided "as is"
+//     without express or implied warranty.
+///////////////////////////////////////////////////////////////////////////////
+
 // This code is taken from
 // Generic<Programming>: A Policy-Based basic_string Implementation
 // Copyright(c) Andrei Alexandrescu
-// The code is considered to be in the public domain.
-// http://www.cuj.com/experts/1906/alexandr.htm?topic=experts
+// This code is considered to be in the public domain.
+// http://www.cuj.com/documents/s=7994/cujcexp1906alexandr/
 //
 // #HK030306: 
 //      - Moved into the namespace boost::wave::util 
