@@ -8,7 +8,7 @@
 
 #include <boost/parameter/parameters.hpp>
 #include <boost/parameter/keyword.hpp>
-#include <boost/parameter/index_result.hpp>
+#include <boost/parameter/binding.hpp>
 
 #endif // BOOST_PARAMETER_050401_HPP
 
