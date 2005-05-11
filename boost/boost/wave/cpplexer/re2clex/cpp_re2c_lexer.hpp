@@ -162,11 +162,16 @@ lexer<IteratorT, PositionT>::get()
     case T_PP_QHEADER:
     case T_PP_INCLUDE:
     // convert to the corresponding ..._next token, if appropriate
-        value = string_type((char const *)scanner.tok, 
-            scanner.cur-scanner.tok);
-        if (string_type::npos != value.find("include_"))
-            id = token_id(id | AltTokenType);
-        break;
+      {
+          value = string_type((char const *)scanner.tok, 
+              scanner.cur-scanner.tok);
+
+	    // Skip '#' and whitespace and see whether we find an 'include_next' here.
+	        typename string_type::size_type start = value.find("include");
+	        if (value.compare(start, 12, "include_next", 12) == 0)
+	            id = token_id(id | AltTokenType);
+          break;
+      }
 #endif
 
     case T_LONGINTLIT:  // supported in C99 and long_long mode

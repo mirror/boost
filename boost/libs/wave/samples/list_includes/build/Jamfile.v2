@@ -12,6 +12,7 @@ exe list_includes
     :   ../list_includes.cpp 
         ../../../build//boost_wave
         $(BOOST_ROOT)/boost/program_options//boost_program_options     
+        $(BOOST_ROOT)/boost/filesystem//boost_filesystem     
     :
         <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
     ;

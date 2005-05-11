@@ -27,11 +27,13 @@ CHANGELOG
   it has to be enabled by the new long_long mode (default in C99).
 - Fixed compilation if BOOST_WAVE_DUMP_PARSE_TREE is defined.
 - Fixed lexer error message wrt long_long mode.
-
+- Stefan Seefeld fixed a bug in the lexer, where include_next was assumed for
+  includeed files containg a "include_" in their name.
+  
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.
-- Improved error handling and diagnostics for overflow in #if/#elif
+- Improved error handling and diagnostics for integer overflow in #if/#elif
   expressions.
 - Fixed a bug in the testwave application which prevented the correct 
   recognition of expected errors under certain circumstances.
