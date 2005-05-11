@@ -238,10 +238,8 @@ namespace local_time {
         switch(check_dst(lt.date(), lt.time_of_day(), zone_)){
           case is_not_in_dst:
             return false;
-            break;
           case is_in_dst:
             return true;
-            break;
           case ambiguous: 
             if(lt + zone_->dst_offset() < zone_->dst_local_end_time(lt.date().year())) {
               return true;
