@@ -13,6 +13,7 @@
 #include <boost/preprocessor/facilities/intercept.hpp>
 
 #include <boost/parameter/aux_/void.hpp>
+#include <boost/parameter/aux_/result_of0.hpp>
 #include <boost/parameter/aux_/default.hpp>
 #include <boost/parameter/aux_/parameter_requirements.hpp>
 #include <boost/parameter/config.hpp>
@@ -53,7 +54,7 @@ struct empty_arg_list
     // A metafunction class that, given a keyword and a default
     // type, returns the appropriate result type for a keyword
     // lookup given that default
-    struct index_result
+    struct binding
     {
         template<class KW, class Default>
         struct apply
@@ -91,7 +92,8 @@ struct empty_arg_list
     }
 
     template <class K, class F>
-    typename F::result_type get(lazy_default<K,F> x) const
+    typename result_of0<F>::type
+    get(lazy_default<K,F> x) const
     {
         return x.compute_default();
     }
@@ -110,7 +112,8 @@ struct empty_arg_list
     // in the list that matches the supplied keyword. Just evaluate
     // and return the default value.
     template <class K, class F>
-    typename F::result_type operator[](
+    typename result_of0<F>::type
+    operator[](
         BOOST_PARAMETER_lazy_default_fallback<K,F> x) const
     {
         return x.compute_default();
@@ -165,14 +168,14 @@ struct arg_list : Next
     // A metafunction class that, given a keyword and a default
     // type, returns the appropriate result type for a keyword
     // lookup given that default
-    struct index_result
+    struct binding
     {
         template <class KW, class Default>
         struct apply
           : mpl::eval_if<
                 boost::is_same<KW, key_type>
               , add_reference<value_type>
-              , mpl::apply_wrap2<typename Next::index_result, KW, Default>
+              , mpl::apply_wrap2<typename Next::binding, KW, Default>
             >
         {};
     };
@@ -205,7 +208,7 @@ struct arg_list : Next
     // Outer indexing operators that dispatch to the right node's
     // get() function.
     template <class KW>
-    typename mpl::apply_wrap2<index_result, KW, void_>::type
+    typename mpl::apply_wrap2<binding, KW, void_>::type
     operator[](keyword<KW> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -213,7 +216,7 @@ struct arg_list : Next
     }
 
     template <class KW, class Default>
-    typename mpl::apply_wrap2<index_result, KW, Default&>::type
+    typename mpl::apply_wrap2<binding, KW, Default&>::type
     operator[](default_<KW, Default> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -222,8 +225,8 @@ struct arg_list : Next
 
     template <class KW, class F>
     typename mpl::apply_wrap2<
-        index_result,KW
-      , typename F::result_type
+        binding,KW
+      , typename result_of0<F>::type
     >::type
     operator[](lazy_default<KW,F> x) const
     {
