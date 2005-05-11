@@ -10,7 +10,6 @@
 //
  
 #include "sequence_test_data.hpp"
-#include "concept_check_data.hpp"
 #include <boost/ptr_container/ptr_container_adapter.hpp>
 #include <list>
 

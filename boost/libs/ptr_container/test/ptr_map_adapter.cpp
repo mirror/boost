@@ -9,7 +9,6 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
  
-#include "concept_check_data.hpp"
 #include <boost/ptr_container/ptr_map.hpp>
 #include <string>
 
