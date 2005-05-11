@@ -25,9 +25,9 @@
 namespace boost {
     namespace algorithm {
         namespace detail {
-            
+
 //  classification functors -----------------------------------------------//
-            
+
             // is_classified functor
             struct is_classifiedF :
                 public predicate_facade<is_classifiedF>
@@ -35,7 +35,7 @@ namespace boost {
                 // Boost.Lambda support
                 template <class Args> struct sig { typedef bool type; };
 
-                // Constructor from a locale 
+                // Constructor from a locale
                 is_classifiedF(std::ctype_base::mask Type, std::locale const & Loc = std::locale()) :
                     m_Type(Type), m_Locale(Loc) {}
 
@@ -46,13 +46,21 @@ namespace boost {
                     return std::use_facet< std::ctype<CharT> >(m_Locale).is( m_Type, Ch );
                 }
 
+                #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
+                    template<>
+                    bool operator()( char const Ch ) const
+                    {
+                        return std::use_facet< std::ctype<char> >(m_Locale).is( m_Type, Ch );
+                    }
+                #endif
+
             private:
                 const std::ctype_base::mask m_Type;
                 const std::locale m_Locale;
             };
 
-            // is_any_of functor 
-            /* 
+            // is_any_of functor
+            /*
                 returns true if the value is from the specified set
             */
             template<typename CharT>
@@ -62,26 +70,26 @@ namespace boost {
                 // Boost.Lambda support
                 template <class Args> struct sig { typedef bool type; };
 
-                // Constructor 
+                // Constructor
                 template<typename RangeT>
-                is_any_ofF( const RangeT& Range ) : 
+                is_any_ofF( const RangeT& Range ) :
                     m_Set( begin(Range), end(Range) ) {}
-                
+
                 // Operation
                 template<typename Char2T>
                 bool operator()( Char2T Ch ) const
                 {
                     return m_Set.find(Ch)!=m_Set.end();
                 }
-            
+
             private:
                 // set cannot operate on const value-type
                 typedef typename remove_const<CharT>::type set_value_type;
-                std::set<set_value_type> m_Set;                
+                std::set<set_value_type> m_Set;
             };
 
-            // is_from_range functor 
-            /* 
+            // is_from_range functor
+            /*
                 returns true if the value is from the specified range.
                 (i.e. x>=From && x>=To)
             */
@@ -92,16 +100,16 @@ namespace boost {
                 // Boost.Lambda support
                 template <class Args> struct sig { typedef bool type; };
 
-                // Constructor 
+                // Constructor
                 is_from_rangeF( CharT From, CharT To ) : m_From(From), m_To(To) {}
-                
+
                 // Operation
                 template<typename Char2T>
                 bool operator()( Char2T Ch ) const
                 {
-                    return ( m_From <= Ch ) && ( Ch <= m_To ); 
+                    return ( m_From <= Ch ) && ( Ch <= m_To );
                 }
-            
+
             private:
                 CharT m_From;
                 CharT m_To;
@@ -123,11 +131,11 @@ namespace boost {
 
                 // Operation
                 template<typename CharT>
-                bool operator()( CharT Ch ) const 
+                bool operator()( CharT Ch ) const
                 {
                     return m_Pred1(Ch) && m_Pred2(Ch);
                 }
-            
+
             private:
                 Pred1T m_Pred1;
                 Pred2T m_Pred2;
@@ -148,11 +156,11 @@ namespace boost {
 
                 // Operation
                 template<typename CharT>
-                bool operator()( CharT Ch ) const 
+                bool operator()( CharT Ch ) const
                 {
                     return m_Pred1(Ch) || m_Pred2(Ch);
                 }
-            
+
             private:
                 Pred1T m_Pred1;
                 Pred2T m_Pred2;
@@ -172,11 +180,11 @@ namespace boost {
 
                 // Operation
                 template<typename CharT>
-                bool operator()( CharT Ch ) const 
+                bool operator()( CharT Ch ) const
                 {
                     return !m_Pred(Ch);
                 }
-            
+
             private:
                 PredT m_Pred;
             };
