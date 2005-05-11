@@ -21,10 +21,10 @@
 
 #include "./compile_time.hpp"
 
-void void_func1() {}
-void void_func2() {}
+void void_func1() { static int x = 1; }
+void void_func2() { static int x = 2; }
 int int_func1(int) { return 0; }
-int int_func2(int) { return 0; }
+int int_func2(int) { return 1; }
 
 BOOST_AUTO_UNIT_TEST(function_pointer_tests)
 {
@@ -33,6 +33,9 @@ BOOST_AUTO_UNIT_TEST(function_pointer_tests)
 
     HASH_NAMESPACE::hash<void(*)()> hasher_void;
     HASH_NAMESPACE::hash<int(*)(int)> hasher_int;
+
+    BOOST_CHECK(&void_func1 != &void_func2);
+    BOOST_CHECK(&int_func1 != &int_func2);
 
     BOOST_CHECK(hasher_void(0) == hasher_void(0));
     BOOST_CHECK(hasher_void(&void_func1) == hasher_void(&void_func1));
