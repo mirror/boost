@@ -525,12 +525,12 @@ Pound              = "#" | "??=" | "%:";
     "%="            { RET(T_PERCENTASSIGN); }
     "^="            { RET(T_XORASSIGN); }
     "xor_eq"        { RET(s->act_in_c99_mode ? T_IDENTIFIER : T_XORASSIGN_ALT); }
-    "??'="          { RET(T_XORASSIGN); }
+    "??'="          { RET(T_XORASSIGN_TRIGRAPH); }
     "&="            { RET(T_ANDASSIGN); }
     "and_eq"        { RET(s->act_in_c99_mode ? T_IDENTIFIER : T_ANDASSIGN_ALT); }
     "|="            { RET(T_ORASSIGN); }
     "or_eq"         { RET(s->act_in_c99_mode ? T_IDENTIFIER : T_ORASSIGN_ALT); }
-    "??!="          { RET(T_ORASSIGN); }
+    "??!="          { RET(T_ORASSIGN_TRIGRAPH); }
     "<<"            { RET(T_SHIFTLEFT); }
     ">>"            { RET(T_SHIFTRIGHT); }
     ">>="           { RET(T_SHIFTRIGHTASSIGN); }
@@ -543,10 +543,10 @@ Pound              = "#" | "??=" | "%:";
     "&&"            { RET(T_ANDAND); }
     "and"           { RET(s->act_in_c99_mode ? T_IDENTIFIER : T_ANDAND_ALT); }
     "||"            { RET(T_OROR); }
-    "??!|"          { RET(T_OROR); }
-    "|??!"          { RET(T_OROR); }
+    "??!|"          { RET(T_OROR_TRIGRAPH); }
+    "|??!"          { RET(T_OROR_TRIGRAPH); }
     "or"            { RET(s->act_in_c99_mode ? T_IDENTIFIER : T_OROR_ALT); }
-    "??!??!"        { RET(T_OROR); }
+    "??!??!"        { RET(T_OROR_TRIGRAPH); }
     "++"            { RET(T_PLUSPLUS); }
     "--"            { RET(T_MINUSMINUS); }
     ","             { RET(T_COMMA); }

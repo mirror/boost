@@ -29,7 +29,8 @@ CHANGELOG
 - Fixed lexer error message wrt long_long mode.
 - Stefan Seefeld fixed a bug in the lexer, where include_next was assumed for
   includeed files containg a "include_" in their name.
-  
+- Fixed some trigraph token id's in the lexers.
+
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.
