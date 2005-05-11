@@ -26,7 +26,8 @@
       <p></p>
       <P>The <A href="match_flag_type.html">match-flag</A> <CODE>match_partial</CODE> can 
          be passed to the following algorithms: <A href="regex_match.html">regex_match</A>,
-         <A href="regex_search.html">regex_search</A>, and <A href="regex_grep.html">regex_grep</A>. 
+         <A href="regex_search.html">regex_search</A>, and <A href="regex_grep.html">regex_grep</A>, 
+         and used with the iterator <A href="regex_iterator.html">regex_iterator</A>. 
          When used it indicates that partial as well as full matches should be found. A 
          partial match is one that matched one or more characters at the end of the text 
          input, but did not match all of the regular expression (although it may have 
@@ -71,6 +72,19 @@
             </TR>
          </TABLE>
       </P>
+      <P>Be aware that using partial matches can sometimes result in somewhat imperfect 
+         behavior:</P>
+      <UL>
+         <LI>
+            There are some expressions, such as ".*abc" that will always produce a partial 
+            match.&nbsp; This problem can be reduced by careful construction of the regular 
+            expressions used, or by setting flags like match_not_dot_newline so that 
+            expressions like .* can't match past line boundaries.</LI>
+         <LI>
+            Boost.Regex currently prefers leftmost matches to full matches, so for example 
+            matching "abc|b" against "ab" produces a partial match&nbsp;against the "ab" 
+            rather than a full match against "b".&nbsp; It's more efficient to work this 
+            way, but may not be the behavior you want in all situations.</LI></UL>
       <P>The following <A href="../example/snippets/partial_regex_match.cpp">example</A> 
          tests to see whether the text could be a valid credit card number, as the user 
          presses a key, the character entered would be added to the string being built 
@@ -173,8 +187,7 @@ void search(std::istream&amp; is)
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>

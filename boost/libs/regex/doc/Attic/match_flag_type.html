@@ -166,9 +166,11 @@ static const match_flag_type format_all;
             </td>
             <td valign="top" width="50%">
                <p>Specifies that if no match can be found, then it is acceptable to return a 
-                  match [from, last) where from!=last, if there exists some sequence of 
-                  characters [from,to) of which [from,last) is a prefix, and which would result 
-                  in a full match.</p>
+                  match [from, last) such that from!= last, if there could exist some longer 
+                  sequence of characters [from,to) of which [from,last) is a prefix, and which 
+                  would result in a full match.</p>
+               <P>This flag is used when matching incomplete or very long texts, see the <A href="partial_matches.html">
+                     partial matches documentation</A> for more information.</P>
             </td>
          </tr>
          <TR>
