@@ -9,6 +9,6 @@
 
 // Tests 'LL' suffix
 
-//E t_9_015.cpp(13): warning: long long suffixes are not allowed in pure C++ mode, enable variadics to enable these: 1000LL
+//E t_9_015.cpp(13): warning: long long suffixes are not allowed in pure C++ mode, enable long_long mode to allow these: 1000LL
 1000LL
 
