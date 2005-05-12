@@ -51,22 +51,22 @@
 <span class="keyword">namespace</span> <span class="identifier">wave</span> { 
     
     <span class="keyword">template</span> &lt;
-        <span class="keyword">typename</span> IteratorT, <span class="keyword">typename</span> LexIteratorT, 
-        <span class="keyword">typename</span> InputPolicyT, <span class="keyword">typename</span> TracePolicyT 
+        <span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> LexIterator, 
+        <span class="keyword">typename</span> InputPolicy, <span class="keyword">typename</span> TracePolicy 
     &gt; 
-    <span class="keyword">class</span> context <span class="special">:</span> <span class="keyword">public</span> InputPolicyT 
+    <span class="keyword">class</span> context <span class="special">:</span> <span class="keyword">public</span> InputPolicy 
     {
     <span class="keyword">public</span>: 
 
         <span class="keyword">typedef</span> pp_iterator&lt;context&gt; iterator_type; 
-        <span class="keyword">typedef</span> TokenT token_type;
+        <span class="keyword">typedef</span> Token token_type;
         <span class="keyword">typedef</span> <span class="keyword">typename</span> token_type::position_type position_type;
 
     <span class="comment">// constructor</span>
-        <a href="class_reference_context.html#constructor">context</a>(IteratorT <span class="keyword">const</span> &amp;first_, 
-            IteratorT <span class="keyword">const</span> &amp;last_, 
+        <a href="class_reference_context.html#constructor">context</a>(Iterator<span class="keyword"> const</span> &amp;first_, 
+            Iterator <span class="keyword">const</span> &amp;last_, 
             <span class="keyword">char const</span> *fname = <span class="string">"&lt;Unknown&gt;"</span>,
-            TracePolicyT &amp;trace = TracePolicyT())
+            TracePolicy &amp;trace = TracePolicy())
 
     <span class="comment">// iterator interface</span>
         iterator_type <a href="class_reference_context.html#iterator_interface_begin">begin</a>() <span class="keyword">const</span>;
@@ -90,7 +90,7 @@
     <span class="comment">// other options</span>
         <span class="keyword">void</span> <a href="class_reference_context.html#language_support">set_language</a>(language_support enable);
         language_support <a href="class_reference_context.html#language_support">get_language</a>() <span class="keyword">const</span>;<br>
-        <span class="keyword">void</span> <a href="class_reference_context.html#set_max_include_nesting_depth">set_max_include_nesting_depth</a>(size_t new_depth);<br>        size_t <a href="class_reference_context.html#set_max_include_nesting_depth">get_max_include_nesting_depth</a>() <span class="keyword">const</span>;<br>
+        <span class="keyword">void</span> <a href="class_reference_context.html#set_max_include_nesting_depth">set_max_include_nesting_depth</a>(std::size_t new_depth);<br>        size_t <a href="class_reference_context.html#set_max_include_nesting_depth">get_max_include_nesting_depth</a>() <span class="keyword">const</span>;<br>
     <span class="comment">// get the Wave version information </span>
         <span class="keyword">static std::string</span> <a href="class_reference_context.html#get_version">get_version</a>();
         <span class="keyword">static std::string</span> <a href="class_reference_context.html#get_version">get_version_string</a>();
@@ -108,31 +108,31 @@
       <tt>boost::wave::context</tt> class </b></td>
   </tr>
   <tr> 
-    <td width="32%" class="table_cells"><code>IteratorT</code></td>
+    <td width="32%" class="table_cells"><code>Iterator</code></td>
     <td width="68%" class="table_cells"><p>The type of the underlying iterator, 
         through which the input stream is accessed. <br>
         This should be at least an <tt>forward_iterator</tt> type iterator.</p></td>
   </tr>
   <tr> 
-    <td class="table_cells"><code>LexIteratorT</code></td>
+    <td class="table_cells"><code>LexIterator</code></td>
     <td class="table_cells"><p>The type of the lexer type to be used by the <tt>Wave</tt> 
         library to identify tokens in the input stream.</p></td>
   </tr>
   <tr> 
-    <td class="table_cells"><code>InputPolicyT</code></td>
+    <td class="table_cells"><code>InputPolicy</code></td>
     <td class="table_cells"><p>The type of the input policy class, which allows 
         to customize the behaviour of the Wave library and the type of the iterators 
         to use, when it comes to including and opening an included file.</p></td>
   </tr>
   <tr>
-    <td class="table_cells"><code>TracePolicyT</code></td>
+    <td class="table_cells"><code>TracePolicy</code></td>
     <td class="table_cells"><p>The type of the trace policy class, which allows 
         to customize the trace output generated while expanding macros. </p></td>
   </tr>
 </table>
 <p>For further information about the lexer type to use, please refer to the <a href="class_reference_lexer.html">The 
   Lexer Interface </a>.</p>
-<p>If the template parameter <tt>InputPolicyT</tt> is omitted, the template <tt>wave::iteration_context_policies::load_file_to_string</tt> 
+<p>If the template parameter <tt>InputPolicy</tt> is omitted, the template <tt>wave::iteration_context_policies::load_file_to_string</tt> 
   is used. For further information about the input policy, please refer to the 
   topic <a href="class_reference_inptpolcy.html">The Input Policy</a>.</p>
 <p>If the template parameter TracePolicyT is omitted, the <tt>wave::macro_trace_policies::no_tracing</tt> 
@@ -147,23 +147,23 @@
   </tr>
   <tr>
     <td class="table_cells"><code>iterator_type</code></td>
-    <td class="table_cells"><p>The <tt>IteratorT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+    <td class="table_cells"><p>The <tt>Iterator</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
     <td class="table_cells"><code>lex_type</code></td>
-    <td class="table_cells"><p>The <tt>LexIteratorT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+    <td class="table_cells"><p>The <tt>LexIterator</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
     <td width="32%" class="table_cells"><code>token_type</code></td>
-    <td width="68%" class="table_cells"><p>The token type, which is returned by the <tt>context</tt> generated iterators. This type is taken from the <tt>LexIteratorT</tt> template parameter provided, whicle the <tt>context</tt> class was instantiated.</p></td>
+    <td width="68%" class="table_cells"><p>The token type, which is returned by the <tt>context</tt> generated iterators. This type is taken from the <tt>LexIterator</tt> template parameter provided, whicle the <tt>context</tt> class was instantiated.</p></td>
   </tr>
   <tr>
     <td class="table_cells"><code>input_policy_type</code></td>
-    <td class="table_cells"><p>The <tt>InputPolicyT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+    <td class="table_cells"><p>The <tt>InputPolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
     <td class="table_cells"><code>trace_policy_type</code></td>
-    <td class="table_cells"><p>The <tt>TracePolicyT</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+    <td class="table_cells"><p>The <tt>TracePolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
     <td class="table_cells"><code>position_type</code></td>
@@ -172,26 +172,25 @@
 </table>
 <h2><b><a name="member_functions"></a>Member functions</b></h2>
 <p><b><a name="constructor" id="constructor"></a>Constructor</b></p>
-<pre>    context(IteratorT <span class="keyword">const</span> &amp;first, 
-        IteratorT <span class="keyword">const</span> &amp;last, 
-        <span class="keyword"><!-- #BeginDate format:fcAm1m -->Sunday, May 8, 2005  17:58<!-- #EndDate -->e> 
-  <p>Constructs a context object on top of the input stream given by the pair 
+<pre>    context(Iterator <span class="keyword">const</span> &amp;first, 
+        Iterator <span class="keyword">const</span> &amp;last, <span class="keyword">char</span> <span class="keyword">const</span> *filename, 
+        TracePolicy &amp;trace);</pre> 
+    <p>Constructs a context object on top of the input stream given by the pair 
     of auxilliary iterators <tt>[first,&nbsp;last)</tt>. The iterators should 
     be at least <tt>forward_iterator</tt> type iterators. The filename parameter 
     is to be supplied for informational purposes only. This string is used for 
     indicating the token positions inside the input stream, it is not validated 
     against the file system. If the filename parameter is not given it defaults 
     to <span class="copyright">&quot;&lt;Unknown&gt;&quot;</span>. If the trace 
-    parameter isn't supplied it defaults to a default constructed <tt>TracePolicyT</tt> 
+    parameter isn't supplied it defaults to a default constructed <tt>TracePolicy</tt> 
     object. </p>
-  <p>Additionally the macro symbol table is filled with the predefined macros 
+    <p>Additionally the macro symbol table is filled with the predefined macros 
     and the current reference directory is set to the path of the given filename. 
     If this filename does not reference valid file system item, the current reference 
     directory is set to the current system directory. (The current reference directory 
     is the file system path, which is used as the target directory during the 
-    processing of <tt>#include&nbsp;&quot;...&quot;</tt> directives),</p>
-</blockquote>
-<h3>Iterator interface</h3>
+    processing of <tt>#include&nbsp;&quot;...&quot;</tt> directives).</p>
+  <h3>Iterator interface</h3>
 <p>The pair of iterators returned by the <tt>context::begin</tt> and <tt>context::end</tt> 
   functions is the main interface for accessing the preprocessed tokens from the 
   preprocessor engine. While iterating over the given iterator range <tt>[begin,&nbsp;end)</tt> 
@@ -443,7 +442,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, May 8, 2005  17:58<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:29<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

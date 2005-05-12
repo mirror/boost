@@ -47,17 +47,20 @@
 
 #define YYCTYPE   uchar
 #define YYCURSOR  cursor
-#define YYLIMIT   s->lim
-#define YYMARKER  s->ptr
-#define YYFILL(n) {cursor = fill(s, cursor);}
+#define YYLIMIT   limit
+#define YYMARKER  marker
+#define YYFILL(n) {cursor = uchar_wrapper(fill(s, cursor), cursor.column);}
 
 //#define RET(i)    {s->cur = cursor; return (i);}
-#define RET(i)    \
-    { \
-        s->line += count_backslash_newlines(s, cursor); \
-        s->cur = cursor; \
-        return (i); \
-    } \
+#define RET(i)                                                                \
+    {                                                                         \
+        s->line += count_backslash_newlines(s, cursor);                       \
+        s->curr_column = cursor.column;                                       \
+        s->cur = cursor;                                                      \
+        s->lim = limit;                                                       \
+        s->ptr = marker;                                                      \
+        return (i);                                                           \
+    }                                                                         \
     /**/
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -342,10 +345,49 @@ uchar *fill(Scanner *s, uchar *cursor)
     return cursor;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//  Special wrapper class holding the current cursor position 
+struct uchar_wrapper
+{
+    uchar_wrapper (uchar *base_cursor, unsigned int column = 1)
+    :   base_cursor(base_cursor), column(column)
+    {}
+    
+    uchar_wrapper& operator++() 
+    {
+        ++base_cursor;
+        ++column;
+        return *this;
+    }
+    
+    uchar_wrapper& operator--() 
+    {
+        --base_cursor;
+        --column;
+        return *this;
+    }
+    
+    uchar operator* () const
+    {
+        return *base_cursor;
+    }
+    
+    operator uchar *() const
+    {
+        return base_cursor;
+    }
+    
+    uchar *base_cursor;
+    unsigned int column;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 boost::wave::token_id scan(Scanner *s)
 {
-    uchar *cursor = s->tok = s->cur;
-
+    uchar_wrapper cursor (s->tok = s->cur, s->column = s->curr_column);
+    uchar_wrapper marker (s->ptr);
+    uchar_wrapper limit (s->lim);
+        
 /*!re2c
 any                = [\t\v\f\r\n\040-\377];
 OctalDigit         = [0-7];
@@ -614,6 +656,7 @@ Pound              = "#" | "??=" | "%:";
     Newline
     {
         s->line++;
+        cursor.column = 1;
         RET(T_NEWLINE);
     }
 
@@ -650,6 +693,7 @@ ccomment:
         /*if(cursor == s->eof) RET(T_EOF);*/
         /*s->tok = cursor; */
         s->line += count_backslash_newlines(s, cursor) +1;
+        cursor.column = 1;
         goto ccomment;
     }
 
@@ -687,6 +731,7 @@ cppcomment:
         /*if(cursor == s->eof) RET(T_EOF); */
         /*s->tok = cursor; */
         s->line++;
+        cursor.column = 1;
         RET(T_CPPCOMMENT);
     }
 

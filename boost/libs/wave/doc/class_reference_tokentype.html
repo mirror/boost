@@ -28,6 +28,7 @@
     <a href="class_reference_tokentype.html#header_synopsis">Header 'wave/context.hpp' 
     synopsis</a><br>
     <a href="class_reference_tokentype.html#template_parameters">Template parameters</a><br>
+	<a href="class_reference_tokentype.html#public_typedefs">Public Typedefs </a><br>
     <a href="class_reference_tokentype.html#member_functions">Member functions</a></p>
 </blockquote>
 <h2><a name="Introduction"></a>Introduction</h2>
@@ -55,12 +56,12 @@
 <span class="keyword">namespace</span> wave {
 <span class="keyword">namespace</span> cpplexer {
 
-    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> PositionT&gt;
+    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Position&gt;
     <span class="keyword">class</span> lex_token 
     {
     <span class="keyword">public</span>:
         <span class="keyword">typedef</span> <span class="keyword">std::basic_string</span><char>&lt;char&gt; string_type;
-        <span class="keyword">typedef</span> PositionT               position_type;
+        <span class="keyword">typedef</span> Position                position_type;
     
         <a href="class_reference_tokentype.html#constructor">lex_token</a>();
         <a href="class_reference_tokentype.html#constructor">lex_token</a>(token_id id, string_type <span class="keyword">const</span> &value, 
@@ -80,12 +81,12 @@
 }   <span class="comment">// namespace boost</span>
 </pre>
 <h2><b><a name="template_parameters" id="template_parameters"></a>Template parameters</b></h2>
-<p>The predefined token type uses a template parameter <tt>PositionT</tt>, which 
+<p>The  predefined token type uses a template parameter <tt>Position</tt>, which 
   allows to specify the type to be used to carry the file position information 
-  contained inside the generated tokens. This type should contain at least the 
-  filename, the line number and the column number of the position, where the token 
-  was recognized. It defaults to a simple file_position template class described 
-  <a href="class_reference_filepos.html">here</a>. </p>
+  contained inside the generated tokens. Your own token type do not need to take this <tt>Position</tt> template parameter, but please note, that the token type in any case needs to have an embedded type definition <tt>position_type</tt> (see below) . </p>
+<h2><a name="public_typedefs" id="public_typedefs"></a>Public Typedefs</h2>
+<p>The token type needs to define two embedded types: <tt>string_type</tt> and <tt>position_type</tt>. The <tt>string_type</tt> needs to be a type compatible to the <tt>std::basic_string&lt;&gt;</tt> class. </p>
+<p>This type should contain at least the filename, the line number and the column number of the position, where the token was recognized. For the predefined token type it defaults to a simple file_position template class described <a href="class_reference_filepos.html">here</a>. Note, that your own <tt>position_type</tt> should follow the interface described for the file_position template as well. </p>
 <h2><b><a name="member_functions"></a>Member functions</b></h2>
 <p><b><a name="constructor" id="constructor"></a>Constructors</b></p>
 <pre>    lex_token();
@@ -105,8 +106,7 @@
 <p><a name="operator_tokenid"></a><b>operator token_id</b></p>
 <pre>    <span class="keyword">operator</span> token_id() <span class="keyword">const</span>;</pre>
 <blockquote> 
-  <p>Allows the access to the token id of the token. This access function is implemented 
-    as an implicit conversion function to allow the operation of <tt>Spirit</tt> 
+  <p>Allows the access to the token id of the token. This access <!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:19<!-- #EndDate -->operation of <tt>Spirit</tt> 
     parsers directly on top 
 
 
@@ -116,7 +116,7 @@
   <p>This function does not throw in any case.</p>
 </blockquote>
 <p><a name="get_value"></a><b>get_value</b></p>
-<pre>    string_t <span class="keyword">const</span> &amp;get_value() <span class="keyword">const</span>;</pre>
+<pre>    string_type <span class="keyword">const</span> &amp;get_value() <span class="keyword">const</span>;</pre>
 <blockquote> 
   <p>Returns the value of the token, as it was recognized in the input stream. 
     Even for constant tokens (as keywords or operators etc.) the returned value 
@@ -124,7 +124,7 @@
   <p>This function does not throw in any case.</p>
 </blockquote>
 <p><b><a name="get_position"></a>get_position</b></p>
-<pre>    PositionT <span class="keyword">const</span> &amp;get_position() <span class="keyword">const</span>;</pre>
+<pre>    Position <span class="keyword">const</span> &amp;get_position() <span class="keyword">const</span>;</pre>
 <blockquote> 
   <p>Returns the position of the token in the input stream, where it was recognized. 
     The position contains information about the filename, the line number and 
@@ -143,14 +143,14 @@
   <p>This function does not throw in any case.</p>
 </blockquote>
 <p><a name="set_value"></a><b>set_value</b></p>
-<pre>    void set_value(string_t <span class="keyword">const</span> &amp;newval);</pre>
+<pre>    void set_value(string_type <span class="keyword">const</span> &amp;newval);</pre>
 <blockquote> 
   <p>Changes the value stored inside the token to the new value. Propably this 
     function is of little value for the library user, but it is required under 
     certain circumstances for correct operation of the preprocessing engine.</p>
 </blockquote>
 <p><a name="set_position"></a><b>set_position</b></p>
-<pre>    void set_position(PositionT <span class="keyword">const</span> &amp;newpos);</pre>
+<pre>    void set_position(Position <span class="keyword">const</span> &amp;newpos);</pre>
 <blockquote>
   <p>Changes the position stored inside the token to the new value. This is used 
     for instance for implementing the functionality required for to implement 
@@ -170,7 +170,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Thursday, February 17, 2005  9:34<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:19<!-- #EndDate -->
   </span></p>
 </body>
 </html>

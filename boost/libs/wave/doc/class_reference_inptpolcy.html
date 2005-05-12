@@ -51,18 +51,18 @@
 
     <span class="keyword">struct</span> load_file_to_string {
     
-        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> IterContextT&gt;
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> IterContext&gt;
         <span class="keyword">class</span> inner {
         
         <span class="keyword">public</span>:
             <span class="comment">// expose the begin and end iterators for the</span>
             <span class="comment">// included file</span>
-            <span class="keyword">template</span> &lt;typename PositionT&gt;
+            <span class="keyword">template</span> &lt;typename Position&gt;
             <span class="keyword">static</span> 
-            <span class="keyword">void</span> <a href="class_reference_inptpolcy.html#init_iterators">init_iterators</a>(IterContextT &iter_ctx, 
-                PositionT const &act_pos)
+            <span class="keyword">void</span> <a href="class_reference_inptpolcy.html#init_iterators">init_iterators</a>(IterContext&iter_ctx, 
+                Position const &act_pos)
             {
-                <span class="keyword">typedef typename</span> IterContextT::iterator_type iterator_type;
+                <span class="keyword">typedef typename</span> IterContext::iterator_type iterator_type;
                 
                 <span class="keyword">std::ifstream</span> instream(iter_ctx.filename.c_str());
                 if (!instream.is_open()) {
@@ -102,10 +102,10 @@
   an abritrary iterator type, representing the actual input stream.</p>
 <h3><a name="member_functions"></a>Member Functions</h3>
 <p><a name="init_iterators"></a><b>init_iterators</b></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> PositionT&gt;
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Position&gt;
     <span class="keyword">static void</span> init_iterators(
-        IterContextT iter_ctx, 
-        PositionT const &act_pos);</pre>
+        IterContext iter_ctx, 
+        Position const &act_pos);</pre>
 
     <p>directive was found in the input token stream. The main rationale for this 
     function is to initialize the pair of iterators <tt>iter_ctx.first</tt> and 
@@ -126,7 +126,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, February 12, 2005  9:56<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:21<!-- #EndDate -->
   </span></p>
 </body>
 </html>

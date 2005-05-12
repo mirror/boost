@@ -41,20 +41,20 @@
 <span class="keyword">namespace</span> <span class="identifier">wave</span> {
 <span class="keyword">namespace</span> <span class="identifier">util</span> {
 
-    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StringT = <span class="keyword">std::string</span>&gt;
+    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String = <span class="keyword">std::string</span>&gt;
     <span class="keyword">class</span> file_position {
  
     <span class="keyword">public</span>:
         <a href="class_reference_filepos.html#constructors">file_position</a>();
-        <span class="keyword">explicit</span> <a href="class_reference_filepos.html#constructors">file_position</a>(StringT const &amp;file, 
+        <span class="keyword">explicit</span> <a href="class_reference_filepos.html#constructors">file_position</a>(String const &amp;file, 
             int line_ = 1, int column_ = 1);
 
     // accessors
-        StringT <span class="keyword">const</span> &amp;<a href="class_reference_filepos.html#get_accessors">get_file</a>() <span class="keyword">const</span>;
+        String <span class="keyword">const</span> &amp;<a href="class_reference_filepos.html#get_accessors">get_file</a>() <span class="keyword">const</span>;
         <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_line</a>() <span class="keyword">const</span>;
         <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_column</a>() <span class="keyword">const</span>;
     
-        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_file</a>(StringT <span class="keyword">const</span> &amp;file);
+        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_file</a>(String <span class="keyword">const</span> &amp;file);
         <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_line</a>(<span class="keyword">int</span> line);
         <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_column</a>(<span class="keyword">int</span> column);
     };
@@ -63,15 +63,16 @@
 }   <span class="comment">// namespace wave</span>
 }   <span class="comment">// namespace boost</span></pre>
 <h2><a name="template_parameters"></a>Template parameters</h2>
-<p>The <tt>file_position</tt> template may be instantiatet with one template parameter, 
+<p>The <tt>file_position</tt> template used by the default token type has to be instantiated with one template parameter, 
   which gives the string type to use for storing the file name member of the file 
   position. If this parameter isn't given, it defaults to a <tt>std::string</tt>. 
   Please note, that the type given as the template parameter must be compatible 
   with a <tt>std::string</tt>.</p>
+<p>You may use your own position types if appropriate, but in any case these should implement the same interface as the <tt>file_position</tt> template described here. </p>
 <h2><a name="member_functions"></a>Member functions</h2>
 <h3><a name="constructors"></a>Constructors</h3>
 <pre>        <a href="class_reference_filepos.html#constructors">file_position</a>();
-        <span class="keyword">explicit</span> <a href="class_reference_filepos.html#constructors">file_position</a>(StringT const &amp;file, 
+        <span class="keyword">explicit</span> <a href="class_reference_filepos.html#constructors">file_position</a>(String const &amp;file, 
             int line_ = 1, int column_ = 1);
 </pre>
 <blockquote>
@@ -80,7 +81,7 @@
     filename and the line number and column number set to one.</p>
 </blockquote>
 <p><a name="get_accessors"></a><b>get_file</b>, <b>get_line</b>, <b>get_column</b></p>
-<pre>        StringT <span class="keyword">const</span> &amp;<a href="class_reference_filepos.html#get_accessors">get_file</a>() <span class="keyword">const</span>;
+<pre>        String <span class="keyword">const</span> &amp;<a href="class_reference_filepos.html#get_accessors">get_file</a>() <span class="keyword">const</span>;
         <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_line</a>() <span class="keyword">const</span>;
         <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_column</a>() <span class="keyword">const</span>;
 </pre>
@@ -90,7 +91,7 @@
     and the column number (<tt>get_column</tt>).</p>
 </blockquote>
 <p><a name="set_accessors"></a><b>set_file</b>, <b>set_line</b>, <b>set_column</b></p>
-<pre>        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_file</a>(StringT <span class="keyword">const</span> &amp;file);
+<pre>        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_file</a>(String <span class="keyword">const</span> &amp;file);
         <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_line</a>(<span class="keyword">int</span> line);
         <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_column</a>(<span class="keyword">int</span> column);
 </pre>
@@ -111,9 +112,8 @@
 <p class="copyright">Copyright &copy; 2003-2005 Hartmut Kaiser<br>
   <br>
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
-<span class="updated"></span>
-<p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, March 16, 2005  12:45<!-- #EndDate -->
+<span class="updated"></span><!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:19<!-- #EndDate -->e format:fcAm1m -->Thursday, May 12, 2005  9:14<!-- #EndDate -->
 </span></p>
 </body>
 </html>
+<!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:19<!-- #EndDate -->

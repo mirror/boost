@@ -102,7 +102,7 @@
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
 <P dir="ltr">It is possible to use the <tt>Wave</tt> library while using your own token and/or lexer types. This may be achieved by providing your lexer type as the second template parameter while instantiating the <tt>boost::wave::context&lt;&gt;</tt> object. The token type used by the library is derived from the <tt>token_type</tt> typedef to be provided by the lexer type. If you want to provide your own token type only, you may use the <tt>boost::wave::lex_iterator&lt;&gt;</tt> type contained with the library. This type needs to be parametrized with the token type to use. </P>
-<P dir="ltr">To show, how this may be done, the <tt>Wave</tt> library contains several samples illustrating this possibility. The <tt>cpp_tokens</tt> sample shows the usage of a custom lexer and a custom token types. The lexer type used is functionally fully compatible to the <tt>re2c</tt> <a href="references.html#re2c">[3]</a> based lexer used by default. It is implemented based on the <tt>SLex</tt> <a href="references.html#slex">[5]</a> lexer example written by Dan Nuffer. The used theiring token type is functionally equivalent to the default token type except for an additional <tt>operator&lt;&lt;</tt> used for dumping the information carried bz the token.</P>
+<P dir="ltr">To show, how this may be done, the <tt>Wave</tt> library contains several samples illustrating this possibility. The <tt>cpp_tokens</tt> sample shows the usage of a custom lexer and a custom token types. The lexer type used is functionally fully compatible to the <tt>re2c</tt> <a href="references.html#re2c">[3]</a> based lexer used by default. It is implemented based on the <tt>SLex</tt> <a href="references.html#slex">[5]</a> lexer example written by Dan Nuffer. The token type used therein is functionally equivalent to the default token type except for an additional <tt>operator&lt;&lt;</tt> used for dumping the information carried by the token.</P>
 <P dir="ltr"><b><a name="compilation_models"></a>Separation and inclusion compilation 
   models</b></P>
 <P dir="ltr">The <tt>Wave</tt> C++ preprocessor iterator library is build almost 
@@ -197,7 +197,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Monday, January 17, 2005  16:39<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:31<!-- #EndDate -->
 </span></p>
 </body>
 </html>

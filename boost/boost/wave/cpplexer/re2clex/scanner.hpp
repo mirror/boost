@@ -39,7 +39,9 @@ typedef struct Scanner {
     uchar* lim; /* used for YYLIMIT - points to the end of the buffer */
                 /* (lim == top) except for the last buffer, it points to
                    the end of the input (lim == eof - 1) */
-    unsigned int line; /* current line being lexed */
+    unsigned int line;    /* current line being lexed */
+    unsigned int column;        /* current token start column position */
+    unsigned int curr_column;   /* current column position */
     ReportErrorProc error_proc;     /* if != 0 this function is called to 
                 report an error */
     char const *file_name;  /* name of the lexed file */

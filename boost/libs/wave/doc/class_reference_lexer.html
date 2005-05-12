@@ -46,8 +46,8 @@
 <span class="comment">    // additional requirements
 </span>        <a href="class_reference_lexer.html#member_functions">lex_iterator</a>();
 
-        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> IteratorT&gt;
-        <a href="class_reference_lexer.html#constructor">lex_iterator</a>(IteratorT <span class="keyword">const</span> &amp;first, IteratorT <span class="keyword">const</span> &amp;last
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator&gt;
+        <a href="class_reference_lexer.html#constructor">lex_iterator</a>(Iterator <span class="keyword">const</span> &amp;first, Iterator <span class="keyword">const</span> &amp;last
             <span class="keyword">typename</span> token_type::position_type <span class="keyword">const</span> &amp;pos, 
             boost::wave::language_support language)
     };
@@ -63,7 +63,7 @@
   </tr>
   <tr>
     <td width="32%" class="table_cells"><code>token_type</code></td>
-    <td width="68%" class="table_cells"><p>The <tt>token</tt> type returned by the lexer. This is type is used as the return value of the main iterators provided by the <tt>boost::wave:.context</tt> object too. </p></td>
+    <td width="68%" class="table_cells"><p>The <tt>token</tt> type returned by the lexer. This is type is used as the return value of the main iterators provided by the <tt>boost::wave::context</tt> object too. </p></td>
   </tr>
 </table>
 <h2><a name="member_functions"></a>Member functions</h2>
@@ -74,8 +74,8 @@
   <p>The default constructor should construct a lexer iterator, which may be used as the end iterator of the provided iterator range.</p>
 </blockquote>
 <pre>
-    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> IteratorT&gt;
-    lex_iterator(IteratorT <span class="keyword">const</span> &amp;first, IteratorT <span class="keyword">const</span> &amp;last,
+    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator&gt;
+    lex_iterator(Iterator <span class="keyword">const</span> &amp;first, Iterator <span class="keyword">const</span> &amp;last,
         <span class="keyword">typename</span> token_type::position_type <span class="keyword">const</span> &amp;pos, 
         boost::wave::language_support language);</pre>
 <blockquote>
@@ -99,6 +99,4 @@
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
   <!-- #BeginDate format:fcAm1m -->Thursday, February 17, 2005  9:32<!-- #EndDate -->
-</span></p>
-</body>
-</html>
+<<!-- #BeginDate format:fcAm1m -->Thursday, May 12, 2005  9:21<!-- #EndDate -->
