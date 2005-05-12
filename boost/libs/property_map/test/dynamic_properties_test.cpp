@@ -107,7 +107,7 @@ int test_main(int,char**) {
   {
     boost::dynamic_properties props(string2string_gen);
     put("nada",props,std::string("3.14"),std::string("pi"));
-    BOOST_CHECK(get<std::string>("nada",props,std::string("3.14"))  == "pi");
+    BOOST_CHECK(get("nada",props,std::string("3.14"))  == "pi");
   }
 
   return boost::exit_success;
