@@ -118,7 +118,9 @@ public:
 // version 1 to distinguis from boost 1.32 version
 template<class T>
 struct version<shared_ptr<T> > {                                                                      \
-    BOOST_STATIC_CONSTANT(unsigned int, value = 1);
+    typedef mpl::integral_c_tag tag;
+    typedef mpl::int_<1> type;
+    BOOST_STATIC_CONSTANT(unsigned int, value = type::value);
 };
 
 // don't track shared pointers
@@ -126,7 +128,7 @@ template<class T>
 struct tracking_level<shared_ptr<T> > { 
     typedef mpl::integral_c_tag tag;
     typedef mpl::int_<track_never> type;
-    BOOST_STATIC_CONSTANT( int, value = type::value);                                       \
+    BOOST_STATIC_CONSTANT(int, value = type::value);                                       \
 };
 
 template<class Archive, class T>
