@@ -1,20 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-// flex_string
-// Copyright (c) 2001 by Andrei Alexandrescu
-// Permission to use, copy, modify, distribute and sell this software for any
-//     purpose is hereby granted without fee, provided that the above copyright
-//     notice appear in all copies and that both that copyright notice and this
-//     permission notice appear in supporting documentation.
-// The author makes no representations about the
-//     suitability of this software for any purpose. It is provided "as is"
-//     without express or implied warranty.
-///////////////////////////////////////////////////////////////////////////////
+/*=============================================================================
+    Boost.Wave: A Standard compliant C++ preprocessor library
+    http://www.boost.org/
 
-// This code is taken from
-// Generic<Programming>: A Policy-Based basic_string Implementation
-// Copyright(c) Andrei Alexandrescu
-// This code is considered to be in the public domain.
-// http://www.cuj.com/documents/s=7994/cujcexp1906alexandr/
+    Copyright (c) 2001 by Andrei Alexandrescu. Distributed under the Boost
+    Software License, Version 1.0. (See accompanying file
+    LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+=============================================================================*/
+
+// This code is taken from: 
+// Andrei Alexandrescu, Generic<Programming>: A Policy-Based basic_string 
+// Implementation. http://www.cuj.com/documents/s=7994/cujcexp1906alexandr/
 //
 // #HK030306: 
 //      - Moved into the namespace boost::wave::util 
