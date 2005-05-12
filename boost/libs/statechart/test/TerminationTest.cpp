@@ -91,10 +91,8 @@ struct TerminationTest : sc::state_machine< TerminationTest, A >
 template<
   class MostDerived,
   class Context,
-  class Reactions,
   class InnerInitial = mpl::list<> >
-struct MyState : sc::simple_state<
-  MostDerived, Context, Reactions, InnerInitial >
+struct MyState : sc::simple_state< MostDerived, Context, InnerInitial >
 {
   public:
     MyState() : exitCalled_( false ) {}
@@ -119,29 +117,44 @@ struct MyState : sc::simple_state<
 
 struct B;
 struct C;
-struct A : MyState< A, TerminationTest,
-  sc::termination< EvTerminateA >, mpl::list< B, C > > {};
+struct A : MyState< A, TerminationTest, mpl::list< B, C > >
+{
+  typedef sc::termination< EvTerminateA > reactions;
+};
 
-  struct B : MyState< B, A::orthogonal< 0 >,
-    sc::termination< EvTerminateB > > {};
+  struct B : MyState< B, A::orthogonal< 0 > >
+  {
+    typedef sc::termination< EvTerminateB > reactions;
+  };
 
   struct D;
   struct E;
-  struct C : MyState< C, A::orthogonal< 1 >,
-    sc::termination< EvTerminateC >, mpl::list< D, E > > {};
+  struct C : MyState< C, A::orthogonal< 1 >, mpl::list< D, E > >
+  {
+    typedef sc::termination< EvTerminateC > reactions;
+  };
 
-    struct D : MyState< D, C::orthogonal< 0 >,
-      sc::termination< EvTerminateD > > {};
+    struct D : MyState< D, C::orthogonal< 0 > >
+    {
+      typedef sc::termination< EvTerminateD > reactions;
+    };
 
     struct F;
     struct G;
-    struct E : MyState< E, C::orthogonal< 1 >,
-      sc::termination< EvTerminateE >, mpl::list< F, G > > {};
+    struct E : MyState< E, C::orthogonal< 1 >, mpl::list< F, G > >
+    {
+      typedef sc::termination< EvTerminateE > reactions;
+    };
 
-      struct F : MyState< F, E::orthogonal< 0 >,
-        sc::termination< EvTerminateF > > {};
-      struct G : MyState< G, E::orthogonal< 1 >,
-        sc::termination< EvTerminateG > > {};
+      struct F : MyState< F, E::orthogonal< 0 > >
+      {
+        typedef sc::termination< EvTerminateF > reactions;
+      };
+
+      struct G : MyState< G, E::orthogonal< 1 > >
+      {
+        typedef sc::termination< EvTerminateG > reactions;
+      };
 
 TerminationTest::TerminationTest()
 {

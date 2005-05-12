@@ -25,9 +25,11 @@ struct InconsistentHistoryTest : sc::state_machine<
 
 struct B;
 // A only has deep history
-struct A : sc::simple_state< A, InconsistentHistoryTest,
-  sc::custom_reaction< EvX >, B, sc::has_deep_history >
+struct A : sc::simple_state<
+  A, InconsistentHistoryTest, B, sc::has_deep_history >
 {
+  typedef sc::custom_reaction< EvX > reactions;
+
   sc::result react( const EvX & )
   {
     // A only has deep history

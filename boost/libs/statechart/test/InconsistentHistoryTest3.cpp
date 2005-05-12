@@ -25,8 +25,8 @@ struct InconsistentHistoryTest : sc::state_machine<
 
 struct B;
 // A does not have history
-struct A : sc::simple_state< A, InconsistentHistoryTest,
-  sc::no_reactions, mpl::list< sc::deep_history< B > > > {};
+struct A : sc::simple_state<
+  A, InconsistentHistoryTest, mpl::list< sc::deep_history< B > > > {};
 
   struct B : sc::simple_state< B, A > {};
 

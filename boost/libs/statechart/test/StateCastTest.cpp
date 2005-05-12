@@ -76,14 +76,18 @@ void AssertNotInState( const FromState & theState )
 struct B;
 struct C;
 struct D;
-struct A : sc::simple_state<
-  A, StateCastTest, sc::transition< EvToB, B >, mpl::list< C, D > > {};
+struct A : sc::simple_state< A, StateCastTest, mpl::list< C, D > >
+{
+  typedef sc::transition< EvToB, B > reactions;
+};
 
   struct E;
-  struct C : sc::simple_state< C, A::orthogonal< 0 >, sc::no_reactions, E > {};
+  struct C : sc::simple_state< C, A::orthogonal< 0 >, E > {};
 
-    struct E : sc::state< E, C, sc::custom_reaction< EvCheck > >
+    struct E : sc::state< E, C >
     {
+      typedef sc::custom_reaction< EvCheck > reactions;
+
       E( my_context ctx ) : my_base( ctx )
       {
         post_event( boost::intrusive_ptr< EvCheck >( new EvCheck() ) );
@@ -92,8 +96,10 @@ struct A : sc::simple_state<
       sc::result react( const EvCheck & );
     };
 
-    struct F : sc::state< F, C, sc::custom_reaction< EvCheck > >
+    struct F : sc::state< F, C >
     {
+      typedef sc::custom_reaction< EvCheck > reactions;
+
       F( my_context ctx ) : my_base( ctx )
       {
         post_event( boost::intrusive_ptr< EvCheck >( new EvCheck() ) );
@@ -103,12 +109,15 @@ struct A : sc::simple_state<
     };
 
   struct G;
-  struct D : sc::simple_state< D, A::orthogonal< 1 >, sc::no_reactions, G > {};
+  struct D : sc::simple_state< D, A::orthogonal< 1 >, G > {};
   
     struct G : sc::simple_state< G, D > {};
     struct H : sc::simple_state< H, D > {};
 
-struct B : sc::simple_state< B, StateCastTest, sc::transition< EvToF, F > > {};
+struct B : sc::simple_state< B, StateCastTest >
+{
+  typedef sc::transition< EvToF, F > reactions;
+};
 
 sc::result E::react( const EvCheck & )
 {

@@ -21,7 +21,7 @@ struct A;
 struct TypeInfoTest : sc::state_machine< TypeInfoTest, A > {};
 
 struct B;
-struct A : sc::simple_state< A, TypeInfoTest, sc::no_reactions, B > {};
+struct A : sc::simple_state< A, TypeInfoTest, B > {};
 
   struct B : sc::simple_state< B, A > {};
 

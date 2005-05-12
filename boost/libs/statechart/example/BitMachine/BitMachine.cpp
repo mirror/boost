@@ -260,15 +260,15 @@ struct FlipTransitionList
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int stateNo >
-struct BitState :
-  sc::simple_state< BitState< stateNo >, BitMachine,
-    typename FlipTransitionList< stateNo >::type >,
+struct BitState : sc::simple_state< BitState< stateNo >, BitMachine >,
   #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
   IDisplay, UniqueObject< BitState< stateNo > >
   #else
   IDisplay
   #endif
 {
+  typedef typename FlipTransitionList< stateNo >::type reactions;
+
   virtual void Display() const
   {
     DisplayBits( stateNo );

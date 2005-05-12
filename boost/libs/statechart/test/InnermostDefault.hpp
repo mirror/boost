@@ -17,10 +17,10 @@ namespace sc = boost::statechart;
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived, class Context, class Reactions = sc::no_reactions >
-struct InnermostDefault : sc::state< MostDerived, Context, Reactions >
+template< class MostDerived, class Context >
+struct InnermostDefault : sc::state< MostDerived, Context >
 {
-  typedef sc::state< MostDerived, Context, Reactions > base_type;
+  typedef sc::state< MostDerived, Context > base_type;
   typedef typename base_type::my_context my_context;
   typedef InnermostDefault my_base;
 

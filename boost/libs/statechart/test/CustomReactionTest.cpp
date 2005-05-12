@@ -96,15 +96,18 @@ struct CustomReactionTest : sc::state_machine< CustomReactionTest, A >
 };
 
 struct B;
-struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
-  sc::custom_reaction< EvTransit >,
-  sc::custom_reaction< EvTransitWithAction >,
-  sc::custom_reaction< EvDefer >,
-  sc::custom_reaction< EvTerminate >,
-  sc::custom_reaction< EvDiscardNever >,
-  sc::custom_reaction< EvDiscardInB >,
-  sc::custom_reaction< EvDiscardInD > >, B >
+struct A : sc::simple_state< A, CustomReactionTest, B >
 {
+  typedef mpl::list<
+    sc::custom_reaction< EvTransit >,
+    sc::custom_reaction< EvTransitWithAction >,
+    sc::custom_reaction< EvDefer >,
+    sc::custom_reaction< EvTerminate >,
+    sc::custom_reaction< EvDiscardNever >,
+    sc::custom_reaction< EvDiscardInB >,
+    sc::custom_reaction< EvDiscardInD >
+  > reactions;
+
   sc::result react( const EvDiscardNever & )
   {
     outermost_context().Visited( *this );
@@ -151,11 +154,14 @@ struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
 };
 
   struct C;
-  struct B : sc::simple_state< B, A, mpl::list<
-    sc::custom_reaction< EvDiscardNever >,
-    sc::custom_reaction< EvDiscardInB >,
-    sc::custom_reaction< EvDiscardInD > >, C >
+  struct B : sc::simple_state< B, A, C >
   {
+    typedef mpl::list<
+      sc::custom_reaction< EvDiscardNever >,
+      sc::custom_reaction< EvDiscardInB >,
+      sc::custom_reaction< EvDiscardInD >
+    > reactions;
+
     sc::result react( const EvDiscardNever & )
     {
       outermost_context().Visited( *this );
@@ -177,12 +183,15 @@ struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
 
     struct E;
     struct F;
-    struct D : sc::simple_state< D, B, mpl::list<
-      sc::transition< EvToC, C >,
-      sc::custom_reaction< EvDiscardNever >,
-      sc::custom_reaction< EvDiscardInB >,
-      sc::custom_reaction< EvDiscardInD > >, mpl::list< E, F > >
+    struct D : sc::simple_state< D, B, mpl::list< E, F > >
     {
+      typedef mpl::list<
+        sc::transition< EvToC, C >,
+        sc::custom_reaction< EvDiscardNever >,
+        sc::custom_reaction< EvDiscardInB >,
+        sc::custom_reaction< EvDiscardInD >
+      > reactions;
+
       sc::result react( const EvDiscardNever & )
       {
         outermost_context().Visited( *this );
@@ -202,11 +211,14 @@ struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
       }
     };
 
-      struct E : sc::simple_state< E, D::orthogonal< 0 >, mpl::list<
-        sc::custom_reaction< EvDiscardNever >,
-        sc::custom_reaction< EvDiscardInB >,
-        sc::custom_reaction< EvDiscardInD > > >
+      struct E : sc::simple_state< E, D::orthogonal< 0 >  >
       {
+        typedef mpl::list<
+          sc::custom_reaction< EvDiscardNever >,
+          sc::custom_reaction< EvDiscardInB >,
+          sc::custom_reaction< EvDiscardInD >
+        > reactions;
+
         sc::result react( const EvDiscardNever & )
         {
           outermost_context().Visited( *this );
@@ -226,11 +238,14 @@ struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
         }
       };
 
-      struct F : sc::simple_state< F, D::orthogonal< 1 >, mpl::list<
-        sc::custom_reaction< EvDiscardNever >,
-        sc::custom_reaction< EvDiscardInB >,
-        sc::custom_reaction< EvDiscardInD > > >
+      struct F : sc::simple_state< F, D::orthogonal< 1 > >
       {
+        typedef mpl::list<
+          sc::custom_reaction< EvDiscardNever >,
+          sc::custom_reaction< EvDiscardInB >,
+          sc::custom_reaction< EvDiscardInD >
+        > reactions;
+
         sc::result react( const EvDiscardNever & )
         {
           outermost_context().Visited( *this );
@@ -250,12 +265,15 @@ struct A : sc::simple_state< A, CustomReactionTest, mpl::list<
         }
       };
 
-    struct C : sc::simple_state< C, B, mpl::list<
-      sc::transition< EvToD, D >,
-      sc::custom_reaction< EvDiscardNever >,
-      sc::custom_reaction< EvDiscardInB >,
-      sc::custom_reaction< EvDiscardInD > > >
+    struct C : sc::simple_state< C, B >
     {
+      typedef mpl::list<
+        sc::transition< EvToD, D >,
+        sc::custom_reaction< EvDiscardNever >,
+        sc::custom_reaction< EvDiscardInB >,
+        sc::custom_reaction< EvDiscardInD >
+      > reactions;
+
       sc::result react( const EvDiscardNever & )
       {
         outermost_context().Visited( *this );

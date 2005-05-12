@@ -34,9 +34,10 @@ namespace mpl = boost::mpl;
 struct EvInFocus : sc::event< EvInFocus > {};
 
 struct Focusing;
-struct Shooting : sc::simple_state< Shooting, Camera,
-  sc::transition< EvShutterRelease, NotShooting >, Focusing >
+struct Shooting : sc::simple_state< Shooting, Camera, Focusing >
 {
+  typedef sc::transition< EvShutterRelease, NotShooting > reactions;
+
   Shooting();
   ~Shooting();
 
@@ -46,9 +47,13 @@ struct Shooting : sc::simple_state< Shooting, Camera,
   }
 };
 
-  struct Focusing : sc::state< Focusing, Shooting, mpl::list<
-    sc::custom_reaction< EvInFocus >, sc::deferral< EvShutterFull > > >
+  struct Focusing : sc::state< Focusing, Shooting >
   {
+    typedef mpl::list<
+      sc::custom_reaction< EvInFocus >,
+      sc::deferral< EvShutterFull >
+    > reactions;
+
     Focusing( my_context ctx );
     sc::result react( const EvInFocus & );
   };

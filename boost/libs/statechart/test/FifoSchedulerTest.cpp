@@ -114,11 +114,14 @@ boost::intrusive_ptr< const sc::event_base > MakeEvent(
   return boost::intrusive_ptr< const sc::event_base >( pEvent );
 }
 
-struct Initial : sc::simple_state< Initial, FifoSchedulerTest, mpl::list<
-  sc::custom_reaction< EvCheckCtorArgs >,
-  sc::termination< EvTerminate >,
-  sc::custom_reaction< EvFail > > >
+struct Initial : sc::simple_state< Initial, FifoSchedulerTest >
 {
+  typedef mpl::list<
+    sc::custom_reaction< EvCheckCtorArgs >,
+    sc::termination< EvTerminate >,
+    sc::custom_reaction< EvFail >
+  > reactions;
+
   sc::result react( const EvCheckCtorArgs & ev )
   {
     BOOST_REQUIRE( ev.expectedArgs_ == outermost_context().CtorArgs() );

@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/05/10<!--webbot bot="Timestamp" endspan i-checksum="12603" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/05/12<!--webbot bot="Timestamp" endspan i-checksum="12607" --></font></td>
   </tr>
 </table>
 <hr>
@@ -77,18 +77,11 @@ include:</p>
   <li>Generic design allowing for the customization of memory management, 
   error handling and threading</li>
 </ul>
-<p><font color="#FF0000"><b>Warning: The interface of this library will change 
-in the near future (see the <a href="#To-do_list">to-do list</a> for more 
-information)!</b></font></p>
 <h3><a name="Supported_platforms">Supported platforms</a></h3>
 <p>All code has been tested on the following platforms using boost 
 distribution 1.32.0:</p>
 <ul>
   <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
-  <li>GCC 3.2.3 (MinGW 3.1.0)</li>
-	<li>GCC 3.3.1 (Dev-C++ 4.9.9.0): In release mode HistoryTest compilation 
-	takes forever and compiler memory footprint goes beyond 400MB, most likely 
-	a GCC bug</li>
 	<li>GCC 3.4.2 (MinGW 3.2.0)</li>
 </ul>
 <p>In addition, previous versions of the library have also been tested on 
@@ -96,6 +89,10 @@ the following platforms (I expect the current version to work, but it hasn't
 been tested yet):</p>
 <ul>
   <li>GCC 3.2 (Red Hat Linux)</li>
+  <li>GCC 3.2.3 (MinGW 3.1.0)</li>
+	<li>GCC 3.3.1 (Dev-C++ 4.9.9.0): In release mode HistoryTest compilation 
+	takes forever and compiler memory footprint goes beyond 400MB, most likely 
+	a GCC bug</li>
   <li>
   <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
   Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
@@ -173,9 +170,7 @@ please see <a href="definitions.html">Definitions</a> for more information.</p>
 left (<font color="#FF0000">red</font> = added as a result of the formal 
 review):</p>
 <ol>
-    <li><font color="#FF0000">Change the reaction specification interface so 
-    that reactions can be specified with a <code>reactions</code> member 
-    typedef in a state class declaration (Alexander Nasonov)</font></li>
+    <li>Adapt the documentation to the new reaction specification interface</li>
     <li>Prepare a release (last separate release). Estimated date: 15 May, 
     2005</li>
     <li><font color="#FF0000">Separate performance-related docs from the 
@@ -254,12 +249,15 @@ review):</p>
 	when C++ RTTI is turned off</li>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
-<p>XX May, 2005</p>
+<p>12 May, 2005</p>
 <ul>
-	<li><font color="#FF0000">Changed the library namespace from <code>fsm</code> 
-    to <code>statechart</code> (Alexander Nasonov, David Abrahams)</font></li>
-    <li><font color="#FF0000">Changed the library name from boost::fsm to 
-    Boost.Statechart (Alexander Nasonov, David Abrahams)</font></li>
+	<li><b><font color="#FF0000">Breaking change: Changed the library namespace from <code>fsm</code> 
+    to <code>statechart</code> (Alexander Nasonov, David Abrahams)</font></b></li>
+    <li><b><font color="#FF0000">Breaking change: Changed the library name from boost::fsm to 
+    Boost.Statechart (Alexander Nasonov, David Abrahams)</font></b></li>
+    <li><b><font color="#FF0000">Breaking change (not yet documented, see 
+    examples for details): Reactions are now specified with a <code>reactions</code> member 
+    typedef in a state class declaration instead of a template parameter (Alexander Nasonov)</font></b></li>
 </ul>
 <p></p>
 <p>03 May, 2005</p>
@@ -494,7 +492,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13991" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

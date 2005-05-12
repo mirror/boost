@@ -50,35 +50,42 @@ struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
 struct Active: sc::simple_state<
-  Active, Keyboard, sc::custom_reaction< EvRequestShutdown >,
-  mpl::list< NumLockOff, CapsLockOff, ScrollLockOff > >
+  Active, Keyboard, mpl::list< NumLockOff, CapsLockOff, ScrollLockOff > >
 {
+  typedef sc::custom_reaction< EvRequestShutdown > reactions;
+
   sc::result react( const EvRequestShutdown & );
 };
 
-  struct NumLockOn : sc::simple_state<
-    NumLockOn, Active::orthogonal< 0 >,
-    sc::transition< EvNumLockPressed, NumLockOff > > {};
+  struct NumLockOn : sc::simple_state< NumLockOn, Active::orthogonal< 0 > >
+  {
+    typedef sc::transition< EvNumLockPressed, NumLockOff > reactions;
+  };
 
-  struct NumLockOff : sc::simple_state<
-    NumLockOff, Active::orthogonal< 0 >,
-    sc::transition< EvNumLockPressed, NumLockOn > > {};
+  struct NumLockOff : sc::simple_state< NumLockOff, Active::orthogonal< 0 > >
+  {
+    typedef sc::transition< EvNumLockPressed, NumLockOn > reactions;
+  };
 
-  struct CapsLockOn : sc::simple_state<
-    CapsLockOn, Active::orthogonal< 1 >,
-    sc::transition< EvCapsLockPressed, CapsLockOff > > {};
+  struct CapsLockOn : sc::simple_state< CapsLockOn, Active::orthogonal< 1 > >
+  {
+    typedef sc::transition< EvCapsLockPressed, CapsLockOff > reactions;
+  };
 
-  struct CapsLockOff : sc::simple_state<
-    CapsLockOff, Active::orthogonal< 1 >,
-    sc::transition< EvCapsLockPressed, CapsLockOn > > {};
+  struct CapsLockOff : sc::simple_state< CapsLockOff, Active::orthogonal< 1 > >
+  {
+    typedef sc::transition< EvCapsLockPressed, CapsLockOn > reactions;
+  };
 
-  struct ScrollLockOn : sc::simple_state<
-    ScrollLockOn, Active::orthogonal< 2 >,
-    sc::transition< EvScrollLockPressed, ScrollLockOff > > {};
+  struct ScrollLockOn : sc::simple_state< ScrollLockOn, Active::orthogonal< 2 > >
+  {
+    typedef sc::transition< EvScrollLockPressed, ScrollLockOff > reactions;
+  };
 
-  struct ScrollLockOff : sc::simple_state<
-    ScrollLockOff, Active::orthogonal< 2 >,
-    sc::transition< EvScrollLockPressed, ScrollLockOn > > {};
+  struct ScrollLockOff : sc::simple_state< ScrollLockOff, Active::orthogonal< 2 > >
+  {
+    typedef sc::transition< EvScrollLockPressed, ScrollLockOn > reactions;
+  };
 
 sc::result Active::react( const EvRequestShutdown & )
 {

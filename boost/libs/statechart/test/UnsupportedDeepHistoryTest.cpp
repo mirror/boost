@@ -24,12 +24,12 @@ struct UnsupportedDeepHistoryTest : sc::state_machine<
   UnsupportedDeepHistoryTest, A > {};
 
 struct B;
-struct A : sc::simple_state< A, UnsupportedDeepHistoryTest,
-  sc::no_reactions, B, sc::has_deep_history > {};
+struct A : sc::simple_state<
+  A, UnsupportedDeepHistoryTest, B, sc::has_deep_history > {};
 
   struct C;
   struct D;
-  struct B : sc::simple_state< B, A, sc::no_reactions, mpl::list< C, D > > {};
+  struct B : sc::simple_state< B, A, mpl::list< C, D > > {};
 
     struct C : sc::simple_state< C, B::orthogonal< 0 > > {};
     struct D : sc::simple_state< D, B::orthogonal< 1 > > {};

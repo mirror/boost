@@ -23,14 +23,14 @@ namespace statechart
 
 template< class MostDerived,
           class Context,
-          class Reactions = no_reactions,
           class InnerInitial = mpl::list<>,
           history_mode historyMode = has_no_history >
 class state : public simple_state<
-  MostDerived, Context, Reactions, InnerInitial, historyMode >
+  MostDerived, Context, InnerInitial, historyMode >
 {
-  typedef simple_state<
-    MostDerived, Context, Reactions, InnerInitial, historyMode > base_type;
+  typedef simple_state< MostDerived, Context, InnerInitial, historyMode >
+    base_type;
+
   protected:
     //////////////////////////////////////////////////////////////////////////
     struct my_context

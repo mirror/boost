@@ -159,10 +159,14 @@ struct Player : sc::asynchronous_state_machine<
 unsigned int Player::totalNoOfProcessedEvents_ = 0;
 
 
-struct Waiting : sc::state< Waiting, Player, mpl::list<
-  sc::custom_reaction< BallReturned >,
-  sc::custom_reaction< GameAborted > > >
+struct Waiting : sc::state< Waiting, Player >
 {
+  public:
+    typedef mpl::list<
+      sc::custom_reaction< BallReturned >,
+      sc::custom_reaction< GameAborted >
+    > reactions;
+
     Waiting( my_context ctx ) :
       my_base( ctx ),
       noOfReturns_( 0 ),

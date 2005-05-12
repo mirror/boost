@@ -57,9 +57,10 @@ struct DeferralTest : sc::state_machine< DeferralTest, Active >
     unsigned int processedCount_;
 };
 
-struct Dead : sc::simple_state<
-  Dead, DeferralTest, sc::custom_reaction< EvNodeDeferred > >
+struct Dead : sc::simple_state< Dead, DeferralTest >
 {
+  typedef sc::custom_reaction< EvNodeDeferred > reactions;
+
   sc::result react( const EvNodeDeferred & )
   {
     outermost_context().IncrementProcessedCount();
@@ -68,11 +69,14 @@ struct Dead : sc::simple_state<
 };
 
 struct Idle;
-struct Active : sc::simple_state< Active, DeferralTest, mpl::list<
-  sc::custom_reaction< EvLeafDeferred >,
-  sc::deferral< EvNodeDeferred >,
-  sc::transition< EvDestroy, Dead > >, Idle >
+struct Active : sc::simple_state< Active, DeferralTest, Idle >
 {
+  typedef mpl::list<
+    sc::custom_reaction< EvLeafDeferred >,
+    sc::deferral< EvNodeDeferred >,
+    sc::transition< EvDestroy, Dead >
+  > reactions;
+
   sc::result react( const EvLeafDeferred & )
   {
     outermost_context().IncrementProcessedCount();
@@ -80,15 +84,17 @@ struct Active : sc::simple_state< Active, DeferralTest, mpl::list<
   }
 };
 
-  struct Running : sc::simple_state< Running, Active,
-    sc::transition< EvSwitch, Idle > >
+  struct Running : sc::simple_state< Running, Active >
   {
+    typedef sc::transition< EvSwitch, Idle > reactions;
   };
 
-  struct Idle : sc::simple_state< Idle, Active, mpl::list<
-    sc::transition< EvSwitch, Running >,
-    sc::deferral< EvLeafDeferred > > >
+  struct Idle : sc::simple_state< Idle, Active >
   {
+    typedef mpl::list<
+      sc::transition< EvSwitch, Running >,
+      sc::deferral< EvLeafDeferred >
+    > reactions;
   };
 
 

@@ -21,8 +21,7 @@ struct InconsistentHistoryTest : sc::state_machine<
   InconsistentHistoryTest, A > {};
 
 struct B;
-struct A : sc::simple_state<
-  A, InconsistentHistoryTest, sc::no_reactions, B > {};
+struct A : sc::simple_state< A, InconsistentHistoryTest, B > {};
 
   struct B : sc::simple_state< B, A > {};
 

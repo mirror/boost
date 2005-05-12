@@ -38,9 +38,10 @@ struct Storing : sc::simple_state< Storing, Shooting >
 };
 
 
-struct Focused : sc::simple_state< Focused, Shooting,
-  sc::custom_reaction< EvShutterFull > >
+struct Focused : sc::simple_state< Focused, Shooting >
 {
+  typedef sc::custom_reaction< EvShutterFull > reactions;
+
   sc::result react( const EvShutterFull & );
 };
 

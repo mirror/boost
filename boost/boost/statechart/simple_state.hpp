@@ -166,9 +166,6 @@ struct deep_history_storer< true, true >
 
 
 //////////////////////////////////////////////////////////////////////////////
-typedef mpl::list<> no_reactions;
-
-//////////////////////////////////////////////////////////////////////////////
 enum history_mode
 {
   has_no_history,
@@ -182,7 +179,6 @@ enum history_mode
 //////////////////////////////////////////////////////////////////////////////
 template< class MostDerived,
           class Context,
-          class Reactions = no_reactions,
           class InnerInitial = mpl::list<>,
           history_mode historyMode = has_no_history >
 class simple_state : public detail::simple_state_base_type< MostDerived,
@@ -194,6 +190,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
   public:
     //////////////////////////////////////////////////////////////////////////
+    typedef mpl::list<> reactions;
+
     typedef typename Context::inner_context_type context_type;
 
     template< detail::orthogonal_position_type innerOrthogonalPosition >
@@ -452,7 +450,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       typename rtti_policy_type::id_type eventType )
     {
       this->enable_reaction();
-      typedef typename detail::make_list< Reactions >::type reaction_list;
+      typedef typename detail::make_list< typename MostDerived::reactions >::type reaction_list;
       result reactionResult = local_react< reaction_list >( evt, eventType );
 
       // At this point we can only safely access pContext_ if the handler did
@@ -944,10 +942,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
 
 
-template< class MostDerived, class Context, class Reactions,
+template< class MostDerived, class Context,
           class InnerInitial, history_mode historyMode >
 inline void intrusive_ptr_release( const ::boost::statechart::simple_state<
-  MostDerived, Context, Reactions, InnerInitial, historyMode > * pBase )
+  MostDerived, Context, InnerInitial, historyMode > * pBase )
 {
   if ( pBase->release() )
   {

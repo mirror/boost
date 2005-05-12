@@ -22,8 +22,7 @@ struct A;
 struct InvalidChartTest : sc::state_machine< InvalidChartTest, A > {};
 struct B;
 struct C;
-struct A : sc::simple_state<
-  A, InvalidChartTest, sc::no_reactions, mpl::list< B, C > > {};
+struct A : sc::simple_state< A, InvalidChartTest, mpl::list< B, C > > {};
 
 // B resides in the 0th region not the 1st
 struct B : sc::simple_state< B, A::orthogonal< 1 > > {};

@@ -74,23 +74,31 @@ struct StateIterationTest : sc::state_machine< StateIterationTest, A >
 
 struct C;
 struct D;
-struct B : sc::simple_state< B, StateIterationTest,
-  sc::transition< EvToA, A >, mpl::list< C, D > > {};
+struct B : sc::simple_state< B, StateIterationTest, mpl::list< C, D > >
+{
+  typedef sc::transition< EvToA, A > reactions;
+};
 
-struct A : sc::simple_state< A, StateIterationTest,
-  sc::transition< EvToB, B > > {};
+struct A : sc::simple_state< A, StateIterationTest >
+{
+  typedef sc::transition< EvToB, B > reactions;
+};
 
   struct F;
   struct G;
-  struct E : sc::simple_state< E, B::orthogonal< 1 >,
-    sc::transition< EvToD, D >, mpl::list< F, G > > {};
+  struct E : sc::simple_state< E, B::orthogonal< 1 >, mpl::list< F, G > >
+  {
+    typedef sc::transition< EvToD, D > reactions;
+  };
 
     struct F : sc::simple_state< F, E::orthogonal< 0 > > {};
     struct G : sc::simple_state< G, E::orthogonal< 1 > > {};
 
   struct C : sc::simple_state< C, B::orthogonal< 0 > > {};
-  struct D : sc::simple_state< D, B::orthogonal< 1 >,
-    sc::transition< EvToE, E > > {};
+  struct D : sc::simple_state< D, B::orthogonal< 1 > >
+  {
+    typedef sc::transition< EvToE, E > reactions;
+  };
 
 StateIterationTest::StateIterationTest()
 {

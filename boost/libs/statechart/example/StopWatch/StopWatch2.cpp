@@ -86,10 +86,11 @@ struct StopWatch : sc::state_machine< StopWatch, Active > {};
 
 
 struct Stopped;
-struct Active : sc::simple_state< Active, StopWatch,
-  sc::transition< EvReset, Active >, Stopped >
+struct Active : sc::simple_state< Active, StopWatch, Stopped >
 {
   public:
+    typedef sc::transition< EvReset, Active > reactions;
+
     Active() : elapsedTime_( 0.0 ) {}
 
     double & ElapsedTime()
@@ -106,12 +107,14 @@ struct Active : sc::simple_state< Active, StopWatch,
     double elapsedTime_;
 };
 
-struct Running :
-  sc::simple_state< Running, Active, mpl::list<
-    sc::custom_reaction< EvGetElapsedTime >,
-    sc::transition< EvStartStop, Stopped > > >
+struct Running : sc::simple_state< Running, Active >
 {
   public:
+    typedef mpl::list<
+      sc::custom_reaction< EvGetElapsedTime >,
+      sc::transition< EvStartStop, Stopped >
+    > reactions;
+
     Running() : startTime_( std::time( 0 ) ) {}
 
     ~Running()
@@ -135,11 +138,13 @@ struct Running :
     std::time_t startTime_;
 };
 
-struct Stopped :
-  sc::simple_state< Stopped, Active, mpl::list<
-    sc::custom_reaction< EvGetElapsedTime >,
-    sc::transition< EvStartStop, Running > > >
+struct Stopped : sc::simple_state< Stopped, Active >
 {
+  typedef mpl::list<
+    sc::custom_reaction< EvGetElapsedTime >,
+    sc::transition< EvStartStop, Running >
+  > reactions;
+
   sc::result react( const EvGetElapsedTime & evt )
   {
     evt.Assign( context< Active >().ElapsedTime() );

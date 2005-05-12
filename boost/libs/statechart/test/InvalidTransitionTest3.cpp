@@ -25,16 +25,14 @@ struct InvalidTransitionTest : sc::state_machine<
   InvalidTransitionTest, Active > {};
 
 struct Idle;
-struct Active : sc::simple_state< Active, InvalidTransitionTest,
-  sc::no_reactions, Idle, sc::has_shallow_history >
-{
-};
+struct Active : sc::simple_state<
+  Active, InvalidTransitionTest, Idle, sc::has_shallow_history > {};
 
   // Invalid transition to shallow history from a state residing on the same
   // level as the history connector.
-  struct Idle : sc::simple_state< Idle, Active,
-    sc::transition< EvX, sc::shallow_history< Idle > > >
+  struct Idle : sc::simple_state< Idle, Active >
   {
+    typedef sc::transition< EvX, sc::shallow_history< Idle > > reactions;
   };
 
 

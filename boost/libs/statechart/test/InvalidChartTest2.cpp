@@ -19,7 +19,7 @@ struct A;
 struct InvalidChartTest : sc::state_machine< InvalidChartTest, A > {};
 
 struct B;
-struct A : sc::simple_state< A, InvalidChartTest, sc::no_reactions, B > {};
+struct A : sc::simple_state< A, InvalidChartTest, B > {};
 
   struct B : sc::simple_state< B, A > {};
 

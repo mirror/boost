@@ -40,18 +40,20 @@ struct Camera : sc::state_machine< Camera, NotShooting >
 
 
 struct Idle;
-struct NotShooting : sc::simple_state< NotShooting, Camera,
-  sc::custom_reaction< EvShutterHalf >, Idle >
+struct NotShooting : sc::simple_state< NotShooting, Camera, Idle >
 {
+  typedef sc::custom_reaction< EvShutterHalf > reactions;
+
   NotShooting();
   ~NotShooting();
 
   sc::result react( const EvShutterHalf & );
 };
 
-  struct Idle : sc::simple_state< Idle, NotShooting,
-    sc::custom_reaction< EvConfig > >
+  struct Idle : sc::simple_state< Idle, NotShooting >
   {
+    typedef sc::custom_reaction< EvConfig > reactions;
+
     Idle();
     ~Idle();
 

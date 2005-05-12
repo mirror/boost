@@ -51,53 +51,50 @@ struct H;
 struct I;
 struct M;
 struct Q;
-struct A : sc::simple_state< A, HistoryTest, mpl::list<
-  sc::transition< EvToB, B >,
-  sc::transition< EvToD, D >,
-  sc::transition< EvToDShallow, sc::shallow_history< D > >,
-  sc::transition< EvToDDeep, sc::deep_history< D > >,
-  sc::transition< EvToF, F >,
-  sc::transition< EvToFShallow, sc::shallow_history< F > >,
-  sc::transition< EvToFDeep, sc::deep_history< F > >,
-  sc::transition< EvToH, H >,
-  sc::transition< EvToI, I >,
-  sc::transition< EvToM, M >,
-  sc::transition< EvToQ, Q > >, B >
+struct A : sc::simple_state< A, HistoryTest, B >
 {
+  typedef mpl::list<
+    sc::transition< EvToB, B >,
+    sc::transition< EvToD, D >,
+    sc::transition< EvToDShallow, sc::shallow_history< D > >,
+    sc::transition< EvToDDeep, sc::deep_history< D > >,
+    sc::transition< EvToF, F >,
+    sc::transition< EvToFShallow, sc::shallow_history< F > >,
+    sc::transition< EvToFDeep, sc::deep_history< F > >,
+    sc::transition< EvToH, H >,
+    sc::transition< EvToI, I >,
+    sc::transition< EvToM, M >,
+    sc::transition< EvToQ, Q >
+  > reactions;
 };
 
   struct J;
   struct N;
   struct B : sc::simple_state<
-    B, A, sc::no_reactions,
-    mpl::list< sc::shallow_history< J >, sc::deep_history< N > >,
+    B, A, mpl::list< sc::shallow_history< J >, sc::deep_history< N > >,
     sc::has_full_history > {};
 
     struct J : sc::simple_state< J, B::orthogonal< 0 > > {};
     struct L;
-    struct K : sc::simple_state<
-      K, B::orthogonal< 0 >, sc::no_reactions, L > {};
+    struct K : sc::simple_state< K, B::orthogonal< 0 >, L > {};
 
       struct L : sc::simple_state< L, K > {};
       struct M : sc::simple_state< M, K > {};
 
     struct N : sc::simple_state< N, B::orthogonal< 1 > > {};
     struct P;
-    struct O : sc::simple_state<
-      O, B::orthogonal< 1 >, sc::no_reactions, P > {};
+    struct O : sc::simple_state< O, B::orthogonal< 1 >, P > {};
 
       struct P : sc::simple_state< P, O > {};
       struct Q : sc::simple_state< Q, O > {};
 
-  struct C : sc::simple_state<
-    C, A, sc::no_reactions, D, sc::has_full_history > {};
+  struct C : sc::simple_state< C, A, D, sc::has_full_history > {};
 
     struct D : sc::simple_state< D, C > {};
-    struct E : sc::simple_state<
-      E, C, sc::no_reactions, F, sc::has_full_history > {};
+    struct E : sc::simple_state< E, C, F, sc::has_full_history > {};
 
       struct F : sc::simple_state< F, E > {};
-      struct G : sc::simple_state< G, E, sc::no_reactions, H > {};
+      struct G : sc::simple_state< G, E, H > {};
 
         struct H : sc::simple_state< H, G > {};
         struct I : sc::simple_state< I, G > {};

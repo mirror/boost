@@ -26,9 +26,11 @@ struct InconsistentHistoryTest : sc::state_machine<
 
 struct B;
 // A only has shallow history
-struct A : sc::simple_state< A, InconsistentHistoryTest,
-  sc::transition< EvX, sc::deep_history< B > >,
-  B, sc::has_shallow_history > {};
+struct A : sc::simple_state<
+  A, InconsistentHistoryTest, B, sc::has_shallow_history >
+{
+  typedef sc::transition< EvX, sc::deep_history< B > > reactions;
+};
 
   struct B : sc::simple_state< B, A > {};
 

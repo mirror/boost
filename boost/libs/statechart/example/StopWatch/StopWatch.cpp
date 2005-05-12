@@ -75,10 +75,11 @@ struct StopWatch : sc::state_machine< StopWatch, Active > {};
 
 
 struct Stopped;
-struct Active : sc::simple_state< Active, StopWatch,
-  sc::transition< EvReset, Active >, Stopped >
+struct Active : sc::simple_state< Active, StopWatch, Stopped >
 {
   public:
+    typedef sc::transition< EvReset, Active > reactions;
+
     Active() : elapsedTime_( 0.0 ) {}
 
     double & ElapsedTime()
@@ -95,12 +96,11 @@ struct Active : sc::simple_state< Active, StopWatch,
     double elapsedTime_;
 };
 
-  struct Running :
-    IElapsedTime,
-    sc::simple_state< Running, Active,
-      sc::transition< EvStartStop, Stopped > >
+  struct Running : IElapsedTime, sc::simple_state< Running, Active >
   {
     public:
+      typedef sc::transition< EvStartStop, Stopped > reactions;
+
       Running() : startTime_( std::time( 0 ) ) {}
 
       ~Running()
@@ -118,11 +118,10 @@ struct Active : sc::simple_state< Active, StopWatch,
       std::time_t startTime_;
   };
 
-  struct Stopped :
-    IElapsedTime,
-    sc::simple_state< Stopped, Active,
-      sc::transition< EvStartStop, Running > >
+  struct Stopped : IElapsedTime, sc::simple_state< Stopped, Active >
   {
+    typedef sc::transition< EvStartStop, Running > reactions;
+
     virtual double ElapsedTime() const
     {
       return context< Active >().ElapsedTime();

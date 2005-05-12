@@ -28,14 +28,15 @@ struct InvalidTransitionTest : sc::state_machine<
 
 struct Idle0;
 struct Idle1;
-struct Active : sc::simple_state< Active, InvalidTransitionTest,
-  sc::no_reactions, mpl::list< Idle0, Idle1 > >
-{
-};
+struct Active : sc::simple_state<
+  Active, InvalidTransitionTest, mpl::list< Idle0, Idle1 > > {};
 
   // Invalid transition between different orthogonal regions.
-  struct Idle0 : sc::simple_state< Idle0, Active::orthogonal< 0 >,
-    sc::transition< EvX, Idle1 > > {};
+  struct Idle0 : sc::simple_state< Idle0, Active::orthogonal< 0 > >
+  {
+    typedef sc::transition< EvX, Idle1 > reactions;
+  };
+
   struct Idle1 : sc::simple_state< Idle1, Active::orthogonal< 1 > > {};
 
 
