@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/detail/no_exceptions_support.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/serialization/split_member.hpp>
 
@@ -47,6 +48,7 @@ private:
             b2 = NULL;
             boost::throw_exception();
         }
+        BOOST_CATCH_END
         // check that loading was correct
         BOOST_CHECK(b1 == b2);
     }
