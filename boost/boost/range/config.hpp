@@ -24,9 +24,13 @@
 #endif
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-#define BOOST_RANGE_DEDUCED_TYPENAME
+# define BOOST_RANGE_DEDUCED_TYPENAME typename
 #else
-#define BOOST_RANGE_DEDUCED_TYPENAME BOOST_DEDUCED_TYPENAME
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1300) && !defined(_MSC_EXTENSIONS)
+#  define BOOST_RANGE_DEDUCED_TYPENAME typename
+# else
+#  define BOOST_RANGE_DEDUCED_TYPENAME BOOST_DEDUCED_TYPENAME
+# endif
 #endif
 
 #ifdef BOOST_RANGE_NO_ARRAY_SUPPORT
@@ -34,7 +38,7 @@
 #endif
 
 //#if BOOST_WORKAROUND( BOOST_MSVC, <= 1200 ) || __MWERKS__ <= 0x3003
-#if _MSC_VER <= 1200 && !defined( __COMO__ ) && !defined( __GNUC__ ) && __MWERKS__ <= 0x3003
+#if _MSC_VER <= 1300 && !defined( __COMO__ ) && !defined( __GNUC__ ) && __MWERKS__ <= 0x3003
 #define BOOST_RANGE_NO_ARRAY_SUPPORT 1
 #endif
 
