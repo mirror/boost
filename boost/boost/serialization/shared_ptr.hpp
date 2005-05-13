@@ -24,6 +24,7 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/basic_helper.hpp>
 #include <boost/serialization/version.hpp>
+#include <boost/serialization/tracking.hpp>
 #include <boost/static_assert.hpp>
 
 namespace boost {
@@ -127,7 +128,7 @@ struct version<shared_ptr<T> > {                                                
 template<class T>
 struct tracking_level<shared_ptr<T> > { 
     typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<track_never> type;
+    typedef mpl::int_< ::boost::serialization::track_never> type;
     BOOST_STATIC_CONSTANT(int, value = type::value);                                       \
 };
 
