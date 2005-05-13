@@ -47,7 +47,7 @@ rule check-icu-config ( )
          }
          else if [ GLOB $(dir)/lib : libicui18n.* ]
          {
-            gICU_IN_LIB = icuin ;
+            gICU_IN_LIB = icui18n ;
          }
          else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
          {
