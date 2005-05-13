@@ -26,6 +26,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
+#include <boost/iterator/iterator_categories.hpp>
 #include <iostream>
 
 namespace boost
@@ -151,18 +152,18 @@ namespace ptr_container_detail
              base_type;
         
         typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
-        
+
+        typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator> this_type;
+         
     public:
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
         typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
-        typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type; 
-            
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator>, 
-                                                   base_type )
+        typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type;
+         
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( this_type, base_type )
 #else
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
-                                                   base_type )
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, base_type )
 #endif        
     
         template< class PtrContainer >
@@ -306,6 +307,11 @@ namespace ptr_container_detail
         template< class InputIterator >
         void assign( InputIterator first, InputIterator last ) // strong
         { 
+//#ifdef BOOST_NO_SFINAE
+//#else
+//            BOOST_STATIC_ASSERT(( boost::is_convertible< typename iterator_reference<InputIterator>::type,
+//                                                         reference_type >::value ));
+//#endif            
             base_type temp( first, last );
             this->swap( temp );
         }
@@ -475,16 +481,32 @@ namespace ptr_container_detail
             this->c_private().erase( p, this->end().base() );
             
         }
+
+        void range_check_impl( iterator first, iterator last, 
+                               std::bidirectional_iterator_tag )
+        { /* do nothing */ }
+
+        void range_check_impl( iterator first, iterator last,
+                               std::random_access_iterator_tag )
+        {
+            BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
+            BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
+            BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
+        }
+        
+        void range_check( iterator first, iterator last )
+        {
+            range_check_impl( first, last, 
+                              BOOST_DEDUCED_TYPENAME iterator_category<iterator>::type() );
+        }
         
     public:
         
         template< class Compare >
         void unique( iterator first, iterator last, Compare comp )
         {
-            BOOST_ASSERT( first <= last && "out of range unique()" );
-            BOOST_ASSERT( this->begin() <= first && "out of range unique()" );
-            BOOST_ASSERT( last <= this->end() && "out of range unique()" ); 
-
+            range_check(first,last);
+            
             iterator prev = first;
             iterator next = first + 1; 
             for( ; next != last; ++next )
@@ -513,9 +535,7 @@ namespace ptr_container_detail
         template< class Pred >
         void erase_if( iterator first, iterator last, Pred pred )
         {
-            BOOST_ASSERT( first <= last && "out of range unique()" );
-            BOOST_ASSERT( this->begin() <= first && "out of range unique()" );
-            BOOST_ASSERT( last <= this->end() && "out of range unique()" ); 
+            range_check(first,last);
 
             iterator next = first; 
             for( ; next != last; ++next )
@@ -524,7 +544,6 @@ namespace ptr_container_detail
                 {
                     this->remove( next ); // delete object
                     *next.base() = 0;     // mark pointer as deleted
-                    std::cout << " deleting "; 
                 }
             }
 
