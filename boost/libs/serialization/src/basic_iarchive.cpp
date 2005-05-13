@@ -199,7 +199,7 @@ class basic_iarchive_impl
     // list of serialization helpers
     struct helper_type {
         boost::serialization::basic_helper * m_helper;
-        const boost::serialization::extended_type_info * const m_eti;
+        const boost::serialization::extended_type_info * m_eti;
         helper_type(
             boost::serialization::basic_helper * h, 
             const boost::serialization::extended_type_info * const eti
@@ -214,6 +214,8 @@ class basic_iarchive_impl
             return * lhs.m_eti < * rhs.m_eti;
         }
     };
+    // at least one compiler erroneously doesn't give access to embedded structs
+    friend struct helper_compare;
 
     typedef std::set<helper_type, helper_compare>::iterator helper_iterator;
     typedef std::set<helper_type, helper_compare>::const_iterator 
