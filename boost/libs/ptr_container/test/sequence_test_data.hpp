@@ -207,7 +207,7 @@ void random_access_algorithms_test()
     BOOST_CHECK( c[4] == 6 );
     BOOST_CHECK( c[5] == 7 );
 #endif    
-/*    
+    
     c.erase_if( equal_to_int(1) );
     BOOST_CHECK_EQUAL( c.size(), 5u );
 #ifdef PTR_LIST_TEST
@@ -235,6 +235,6 @@ void random_access_algorithms_test()
     BOOST_CHECK( c2.empty() );
     BOOST_CHECK( c.size() == 9u );
     BOOST_CHECK( is_sorted< std::less_equal<int> >( c ) );
-*/    
+    
 }
 
