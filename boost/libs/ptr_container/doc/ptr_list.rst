@@ -51,10 +51,6 @@ to store the pointers.
                 auto_type           pop_front();
              
             public: // `list operations`_
-                void  merge( ptr_list& x ); 
-                template< typename Compare > 
-                void  merge( ptr_list& x, Compare comp );
-                
                 void  reverse();
 
             }; // class 'ptr_list'
@@ -125,14 +121,14 @@ Semantics: list operations
     
         - Not ready yet
 
-- ``void merge( ptr_list& x );``
-
-    - Not ready yet
-     
-- ``template< typename Compare > 
-  void merge( ptr_list& x, Compare comp );``
-
-    - Not ready yet
+    - ``void merge( ptr_list& x );``
+    
+        - Not ready yet
+         
+    - ``template< typename Compare > 
+      void merge( ptr_list& x, Compare comp );``
+    
+        - Not ready yet
     
 - ``void reverse();``
 
