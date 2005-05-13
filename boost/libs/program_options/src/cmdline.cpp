@@ -351,7 +351,7 @@ namespace boost { namespace program_options { namespace detail {
         {   
             string name, adjacent;
 
-            unsigned p = tok.find('=');
+            string::size_type p = tok.find('=');
             if (p != tok.npos)
             {
                 name = tok.substr(2, p-2);
