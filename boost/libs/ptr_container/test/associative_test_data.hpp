@@ -105,6 +105,7 @@ void ptr_set_test()
     sub_range<C>        sub;
     sub_range<const C> csub;
 
+    t = new T;
     i  = c.find( *t );
     ci = c2.find( *t );
     c2.count( *t );
@@ -114,7 +115,8 @@ void ptr_set_test()
     ci = c2.upper_bound( *t );
     sub  = c.equal_range( *t );
     csub = c2.equal_range( *t );         
-
+    delete t;
+    
     BOOST_MESSAGE( "finished algorithms interface test" );         
     
 }
