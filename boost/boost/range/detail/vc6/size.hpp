@@ -25,15 +25,6 @@ namespace boost
         template< typename T >
         struct range_size_;
 
-        struct range_size_std_container_
-        {
-            template< typename C >
-            static BOOST_RANGE_DEDUCED_TYPENAME C::size_type fun( const C& c )
-            {
-                return c.size();
-            };
-        };
-
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
@@ -45,7 +36,7 @@ namespace boost
             struct inner {
                 static BOOST_RANGE_DEDUCED_TYPENAME C::size_type fun( const C& c )
                 {
-                    return range_size_std_container_::fun(c.size());
+                    return c.size();
                 };
             };
         };
@@ -54,15 +45,6 @@ namespace boost
         // pair
         //////////////////////////////////////////////////////////////////////
         
-        struct range_size_std_pair_ {
-            template< typename P >
-            static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type 
-            fun( const P& p )
-            {
-                return std::distance( p.first, p.second );
-            }
-        };
-
         template<>
         struct range_size_<std_pair_>
         {
@@ -71,7 +53,7 @@ namespace boost
                 static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type 
                 fun( const P& p )
                 {
-                    return range_size_std_pair_::fun( p );
+                    return std::distance( p.first, p.second );
                 }
             };
         };
@@ -79,15 +61,6 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         // array
         //////////////////////////////////////////////////////////////////////
-        
-        struct range_size_array_
-        {
-            template<typename T>
-            static std::size_t fun(T& t)
-            {
-                return remove_extent<T>::size;
-            }
-        };
 
         template<>
         struct range_size_<array_>
@@ -101,15 +74,6 @@ namespace boost
             };
         };
         
-        struct range_size_char_array_
-        {
-            template<typename T>
-            static std::size_t fun(T& t)
-            {
-                return sizeof(T) / sizeof(T[0]);
-            }
-        };
-        
         template<>
         struct range_size_<char_array_>
         {
@@ -117,18 +81,9 @@ namespace boost
             struct inner {
                 static std::size_t fun(T& t)
                 {
-                    range_size_char_array_::fun(t);
+                    return sizeof(T) / sizeof(T[0]);
                 }
             };
-        };
-        
-        struct range_size_wchar_t_array_
-        {
-            template<typename T>
-            static std::size_t fun(T& t)
-            {
-                return sizeof(T) / sizeof(T[0]);
-            }
         };
         
         template<>
@@ -138,7 +93,7 @@ namespace boost
             struct inner {
                 static std::size_t fun(T& t)
                 {
-                    range_size_wchar_t_array_::fun(t);
+                    return sizeof(T) / sizeof(T[0]);
                 }
             };
         };
