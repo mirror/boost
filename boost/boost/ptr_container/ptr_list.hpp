@@ -37,40 +37,19 @@ namespace boost
                                          std::list<void*,Allocator>, 
                                          CloneAllocator >
             base_class;
+
+        typedef ptr_list<T,CloneAllocator,Allocator> this_type;
         
     public:
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list<T,CloneAllocator,Allocator>, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                 
+        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( this_type, 
                                                           base_class );
-#else        
-
+#else
         BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
                                                           base_class );
-#endif
+#endif        
         
     public:
-        void unique( iterator first, iterator last )
-        {
-            base_class::unique( first, last );
-        }
-
-        template< class BinPred >
-        void unique( iterator first, iterator last, BinPred pred )
-        {
-            base_class::unique( first, last, pred );
-        }
-
-        void unique()
-        {
-            unique( std::equal_to<T>() );
-        }
-
-        template< class BinPred >
-        void unique( BinPred pred )
-        {
-            this->c_private().unique( void_ptr_indirect_fun<BinPred,T>( pred ) );
-        }
-
         using base_class::merge;
         
         void merge( ptr_list& x )                                 
@@ -116,7 +95,5 @@ namespace boost
     }
 }
 
-//#undef BOOST_FORWARD_TYPEDEF
-//#undef BOOST_PTR_CONTAINER_RELEASE_AND_CLONE
 
 #endif
