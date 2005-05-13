@@ -9,13 +9,15 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
 
-#define PTR_LIST_TEST
-
+#define PTR_LIST_TEST 1
+#define PTR_CONTAINER_DEBUG 0
+        
 #include "sequence_test_data.hpp"
 #include <boost/ptr_container/ptr_list.hpp>
 
 void test_list()
 {
+    
     reversible_container_test< ptr_list<Base>, Base, Derived_class >();
     reversible_container_test< ptr_list<Value>, Value, Value >();
     reversible_container_test< ptr_list< nullable<Base> >, Base, Derived_class >();
@@ -27,7 +29,6 @@ void test_list()
     list.push_back( new int(2) );
     list.push_back( new int(1) );
     list.reverse();
-    
 
 }
 

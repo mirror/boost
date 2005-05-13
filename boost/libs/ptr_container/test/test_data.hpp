@@ -31,7 +31,12 @@ class Base
 {
     Base( const Base& r ) : data1(r.data1), data2(r.data2), 
         data3(r.data3), data(r.data) 
-    { }
+    { 
+#ifdef PTR_CONTAINER_DEBUG
+        objects++;
+        std::cout <<"+ " << objects << "\n"; 
+#endif
+    }
     
     Base& operator=( const Base& );
     int data1, data2, data3;
@@ -40,8 +45,24 @@ class Base
 public:
     
     Base() : data1(1), data2(2), data3(rand()%256), 
-             data(lexical_cast<string>(rand())) {}
-    virtual ~Base()                       { /** write debug code here */ }
+             data(lexical_cast<string>(rand())) 
+    {
+#ifdef PTR_CONTAINER_DEBUG
+        objects++;
+        std::cout <<"+ " << objects << "\n"; 
+#endif
+    }
+    
+    virtual ~Base()                       
+    {
+#ifdef PTR_CONTAINER_DEBUG
+        objects--;
+        std::cout <<"- " << objects << "\n"; 
+        if( objects < 0 )
+            terminate();
+#endif
+    }
+    
     void     print( ostream& out ) const  { do_print( out); }
     Base*    clone() const                { return do_clone(); }
     void     foo()                        { do_foo(); }
@@ -65,12 +86,20 @@ public:
     {
         return data_less_than(b) && data < b.data;
     }
+
+#ifdef PTR_CONTAINER_DEBUG
+    static int objects;
+#endif    
     
 private:
     virtual void  do_print( ostream& out ) const   { };
     virtual Base* do_clone() const                 { return new Base( *this ); }; 
     virtual void  do_foo()                         { };
 };
+
+#ifdef PTR_CONTAINER_DEBUG
+int Base::objects = 0;
+#endif
 
 
 
@@ -85,35 +114,35 @@ ostream& operator<<( ostream& out, Base& b )
 //  We rely on argument dependent lookup
 //  for this to be found
 //
-Base* new_clone( const Base& b )
+inline Base* new_clone( const Base& b )
 {
     return b.clone();
 }
 
 
 
-bool operator<( const Base& l, const Base& r )
+inline bool operator<( const Base& l, const Base& r )
 {
     return l.less_than( r );
 }
 
 
 
-bool operator>( const Base& l, const Base& r )
+inline bool operator>( const Base& l, const Base& r )
 {
     return !l.less_than( r ) && r.less_than( l );
 }
 
 
 
-bool operator==( const Base& l, const Base& r )
+inline bool operator==( const Base& l, const Base& r )
 {
     return l.equal( r );
 }
 
 
 
-bool operator!=( const Base& l, const Base& r )
+inline bool operator!=( const Base& l, const Base& r )
 {
     return !l.equal( r );
 }
@@ -174,35 +203,35 @@ public:
 
 
 
-bool operator<( const Value& l, const Value& r )
+inline bool operator<( const Value& l, const Value& r )
 {
     return l.name() < r.name();
 }
 
 
 
-bool operator>( const Value& l, const Value& r )
+inline bool operator>( const Value& l, const Value& r )
 {
     return l.name() > r.name();
 }
 
 
 
-bool operator==( const Value& l, const Value& r )
+inline bool operator==( const Value& l, const Value& r )
 {
     return l.name() == r.name();
 }
 
 
 
-bool operator!=( const Value& l, const Value& r )
+inline bool operator!=( const Value& l, const Value& r )
 {
     return l.name() != r.name();
 }
 
 
 
-ostream& operator<<( ostream& out, const Value& v )
+inline ostream& operator<<( ostream& out, const Value& v )
 {
     return out << v.name() << " ";
 }
@@ -211,6 +240,6 @@ ostream& operator<<( ostream& out, const Value& v )
 // used to hide "unused variable" warnings
 //
 template< class T >
-void hide_warning( T& r )
+inline void hide_warning( T& r )
 { }
 
