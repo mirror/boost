@@ -508,7 +508,8 @@ namespace ptr_container_detail
             range_check(first,last);
             
             iterator prev = first;
-            iterator next = first + 1; 
+            iterator next = first;
+            ++next;
             for( ; next != last; ++next )
             {
                 if( comp( *prev, *next ) )
