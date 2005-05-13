@@ -512,6 +512,8 @@ namespace ptr_container_detail
             ++next;
             for( ; next != last; ++next )
             {
+                BOOST_ASSERT( !::boost::is_null(prev) );
+                BOOST_ASSERT( !::boost::is_null(next) );
                 if( comp( *prev, *next ) )
                 {
                     this->remove( next ); // delete object
@@ -541,6 +543,7 @@ namespace ptr_container_detail
             iterator next = first; 
             for( ; next != last; ++next )
             {
+                BOOST_ASSERT( !::boost::is_null(next) );
                 if( pred( *next ) )
                 {
                     this->remove( next ); // delete object

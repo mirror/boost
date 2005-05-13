@@ -38,11 +38,14 @@ namespace boost
                                       CloneAllocator > 
             base_class;
 
+        typedef ptr_vector<T,CloneAllocator,Allocator> this_type;
+        
     public:
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_vector<T,CloneAllocator,Allocator>, 
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
+        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( this_type, 
                                                           base_class );
-#else        
+#else
         BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_vector, 
                                                           base_class );
 #endif        

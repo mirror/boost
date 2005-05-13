@@ -38,7 +38,9 @@ namespace boost
         typedef ptr_set_adapter< Key, std::set<void*,void_ptr_indirect_fun<Compare,Key>,Allocator>,
                                  CloneAllocator >
              base_type;
-                  
+
+        typedef ptr_set<Key,Compare,CloneAllocator,Allocator> this_type;
+        
     public:
         explicit ptr_set( const Compare& comp = Compare(),
                           const Allocator& a = Allocator() ) 
@@ -51,14 +53,14 @@ namespace boost
                  const Allocator& a = Allocator() ) 
          : base_type( first, last, comp, a )
         { }
-
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_set<Key,Compare,CloneAllocator,Allocator>, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( this_type,
                                                       base_type );
 #else
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_set, 
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_set,
                                                       base_type );
-#endif        
+#endif
+
     };
         
         
@@ -79,6 +81,8 @@ namespace boost
                                       std::multiset<void*,void_ptr_indirect_fun<Compare,Key>,Allocator>,
                                       CloneAllocator >
               base_type;
+        typedef ptr_multiset<Key,Compare,CloneAllocator,Allocator> this_type;
+        
     public:
         explicit ptr_multiset( const Compare&   comp = Compare(),
                                const Allocator& a    = Allocator() )
@@ -92,15 +96,14 @@ namespace boost
          : base_type( first, last, comp, a ) 
         { }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset<Key,Compare,CloneAllocator,Allocator>, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( this_type, 
                                                       base_type );
 #else
-
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset, 
-                                                      base_type );
-#endif        
-                                                                            
+                                                      base_type );        
+#endif
+
     };
 
     /////////////////////////////////////////////////////////////////////////

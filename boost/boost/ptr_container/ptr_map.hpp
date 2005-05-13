@@ -35,7 +35,9 @@ namespace boost
     {
         typedef ptr_map_adapter<T,std::map<Key,void*,Compare,Allocator>,CloneAllocator>
             base_type;
-    
+
+        typedef ptr_map<Key,T,Compare,CloneAllocator,Allocator> this_type;
+        
     public:
         explicit ptr_map( const Compare& comp = Compare(),
                           const Allocator& a  = Allocator() ) 
@@ -47,11 +49,10 @@ namespace boost
                  const Allocator& a  = Allocator() )
           : base_type( first, last, comp, a ) 
         { }
-        
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map<Key,T,Compare,CloneAllocator,Allocator>, 
-                                                      base_type );
-#else        
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( this_type, base_type );
+#else
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type );
 #endif        
     };
@@ -71,7 +72,9 @@ namespace boost
     {
         typedef ptr_multimap_adapter<T,std::multimap<Key,void*,Compare,Allocator>,CloneAllocator>
              base_type;
-    
+
+        typedef ptr_multimap<Key,T,Compare,CloneAllocator,Allocator> this_type;
+        
     public:
         explicit ptr_multimap( const Compare& comp = Compare(),
                                const Allocator& a  = Allocator() ) 
@@ -84,14 +87,13 @@ namespace boost
           : base_type( first, last, comp, a ) 
         { }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multimap<Key,T,Compare,CloneAllocator,Allocator>, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                 
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( this_type, 
                                                       base_type );
-#else        
-
+#else
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multimap, 
                                                       base_type );
-#endif
+#endif        
     };
 
     //////////////////////////////////////////////////////////////////////////////

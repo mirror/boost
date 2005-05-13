@@ -110,6 +110,8 @@ namespace ptr_container_detail
         typedef ptr_container_detail::associative_ptr_container< map_config<T,VoidPtrMap>,
                                                      CloneAllocator > 
             base_type;
+
+        typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> this_type;
         
     public:
 
@@ -174,13 +176,14 @@ namespace ptr_container_detail
           }
         
     public:
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                 
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( this_type, 
                                                  base_type );
-#else        
+#else
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
                                                  base_type );
-#endif
+#endif        
+
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
                                        const Allocator& a ) 

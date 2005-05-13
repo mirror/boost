@@ -519,6 +519,18 @@ namespace ptr_container_detail
         
     }; // 'reversible_ptr_container'
 
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+#define BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type ) \
+    typename base_type::auto_type                   \
+    release( typename base_type::iterator i )       \
+    {                                               \
+        return boost::ptr_container_detail::move(base_type::release(i)); \
+    }                                               
+#else
+#define BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type ) \
+    using base_type::release;
+#endif
     
     //
     // two-phase lookup of template functions 
@@ -540,8 +552,7 @@ namespace ptr_container_detail
       this->swap( *ptr );                           \
       return ptr;                                   \
     }                                               \
-                                                    \
-    using base_type::release;                       \
+    BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type ) \
                                                     \
     std::auto_ptr<PC> clone() const                 \
     {                                               \
