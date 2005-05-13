@@ -27,7 +27,6 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/iterator/iterator_categories.hpp>
-#include <iostream>
 
 namespace boost
 {   
