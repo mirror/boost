@@ -76,7 +76,7 @@ namespace boost
                         Case8, mpl::identity<Type8>, mpl::eval_if<
                         Case9, mpl::identity<Type9>, mpl::if_<
                         Case10, Type10, mpl::void_ > > > > > > > > >
-                    >::type temp1;
+                    >::type result1;
             typedef typename
                     mpl::eval_if<
                         Case11, mpl::identity<Type11>, mpl::eval_if<
@@ -89,12 +89,12 @@ namespace boost
                         Case18, mpl::identity<Type18>, mpl::eval_if<
                         Case19, mpl::identity<Type19>, mpl::if_<
                         Case20, Type20, mpl::void_ > > > > > > > > >
-                    > temp2;
+                    > result2;
             typedef typename    
                     mpl::eval_if<
-                        is_same<temp1, mpl::void_>,
-                        temp2,
-                        mpl::identity<temp1>
+                        is_same<result1, mpl::void_>,
+                        result2,
+                        mpl::identity<result1>
                     >::type type;
         };
 
@@ -102,11 +102,13 @@ namespace boost
         struct remove_extent {
             static T* ar;
             BOOST_STATIC_CONSTANT(std::size_t, size = sizeof(*ar) / sizeof((*ar)[0]));
-           
+
             typedef typename
                     select<
                         is_same<T, bool[size]>,                  bool,
                         is_same<T, char[size]>,                  char,
+                        is_same<T, signed char[size]>,           signed char,
+                        is_same<T, unsigned char[size]>,         unsigned char,
                     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
                         is_same<T, wchar_t[size]>,               wchar_t,
                     #endif
@@ -116,8 +118,18 @@ namespace boost
                         is_same<T, unsigned int[size]>,          unsigned int,
                         is_same<T, long[size]>,                  long,
                         is_same<T, unsigned long[size]>,         unsigned long,
+                        is_same<T, float[size]>,                 float,
+                        is_same<T, double[size]>,                double,
+                        is_same<T, long double[size]>,           long double,
+                        is_same<T, long double[size]>,           long double,
+                        is_same<T, long double[size]>,           long double
+                    >::type result1;
+            typedef typename
+                    select<
                         is_same<T, const bool[size]>,            const bool,
                         is_same<T, const char[size]>,            const char,
+                        is_same<T, const signed char[size]>,     const signed char,
+                        is_same<T, const unsigned char[size]>,   const unsigned char,
                     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
                         is_same<T, const wchar_t[size]>,         const wchar_t,
                     #endif
@@ -126,7 +138,18 @@ namespace boost
                         is_same<T, const int[size]>,             const int,
                         is_same<T, const unsigned int[size]>,    const unsigned int,
                         is_same<T, const long[size]>,            const long,
-                        is_same<T, const unsigned long[size]>,   const unsigned long
+                        is_same<T, const unsigned long[size]>,   const unsigned long,
+                        is_same<T, const float[size]>,           const float,
+                        is_same<T, const double[size]>,          const double,
+                        is_same<T, const long double[size]>,     const long double,
+                        is_same<T, const long double[size]>,     const long double,
+                        is_same<T, const long double[size]>,     const long double
+                    > result2;
+            typedef typename
+                    mpl::eval_if<
+                        is_same<result1, mpl::void_>,
+                        result2,
+                        mpl::identity<result1>
                     >::type type;
         };
 
