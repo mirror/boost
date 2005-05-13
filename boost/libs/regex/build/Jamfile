@@ -124,7 +124,8 @@ template regex-options
      <sysinclude>$(BOOST_ROOT)
      # <native-wchar_t>on
      # como requires this:
-     <como-win32><*><define>BOOST_REGEX_NO_W32=1
+     <como-4_3_3-vc7_1><*><define>BOOST_REGEX_NO_W32=1
+     <como-4_3_3-vc7_1><*><define>BOOST_SP_DISABLE_THREADS=1
      $(BOOST_REGEX_ICU_OPTS)
    ;
 template regex-test-options
