@@ -120,8 +120,6 @@ namespace boost
                         is_same<T, unsigned long[size]>,         unsigned long,
                         is_same<T, float[size]>,                 float,
                         is_same<T, double[size]>,                double,
-                        is_same<T, long double[size]>,           long double,
-                        is_same<T, long double[size]>,           long double,
                         is_same<T, long double[size]>,           long double
                     >::type result1;
             typedef typename
@@ -141,8 +139,6 @@ namespace boost
                         is_same<T, const unsigned long[size]>,   const unsigned long,
                         is_same<T, const float[size]>,           const float,
                         is_same<T, const double[size]>,          const double,
-                        is_same<T, const long double[size]>,     const long double,
-                        is_same<T, const long double[size]>,     const long double,
                         is_same<T, const long double[size]>,     const long double
                     > result2;
             typedef typename
