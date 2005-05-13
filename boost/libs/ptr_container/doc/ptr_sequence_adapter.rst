@@ -353,8 +353,8 @@ Semantics: pointer container requirements
 
 .. _`algorithms`:
 
-Sematics: algorithms
-^^^^^^^^^^^^^^^^^^^^
+Semantics: algorithms
+^^^^^^^^^^^^^^^^^^^^^
 
 - ``void sort();``
 - ``void sort( iterator first, iterator last );``
