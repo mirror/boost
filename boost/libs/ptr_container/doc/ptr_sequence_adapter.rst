@@ -356,6 +356,9 @@ Semantics: pointer container requirements
 Semantics: algorithms
 ^^^^^^^^^^^^^^^^^^^^^
 
+The general requirement for these algorithms is that the container *does not
+contain any nulls*.
+
 - ``void sort();``
 - ``void sort( iterator first, iterator last );``
 - ``template< class Compare > void sort( Compare comp );``
