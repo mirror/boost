@@ -20,7 +20,10 @@
 MPL_TEST_CASE()
 {
 #   define WRAPPER(T, i) integral_c<T,i>
+
+#if !(defined(__APPLE_CC__) && defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ <= 3))
     BOOST_PP_REPEAT(10, INTEGRAL_WRAPPER_TEST, char)
+#endif
     BOOST_PP_REPEAT(10, INTEGRAL_WRAPPER_TEST, short)
     BOOST_PP_REPEAT(10, INTEGRAL_WRAPPER_TEST, int)
     BOOST_PP_REPEAT(10, INTEGRAL_WRAPPER_TEST, long)
