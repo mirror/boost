@@ -31,7 +31,10 @@ CHANGELOG
   includeed files containg a "include_" in their name.
 - Fixed some trigraph token id's in the lexers.
 - Added column information to the re2c generated lexer.
-
+- Added tests for the different lexers.
+- Fixed the found_include_directive preprocessing hook to carry the information
+  about #include_next directives as well.
+  
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.

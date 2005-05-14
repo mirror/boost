@@ -994,7 +994,7 @@ char const *current_name = 0;   // never try to match current file name
 #endif
 
 // call the include policy trace function
-    ctx.get_trace_policy().found_include_directive(f);
+    ctx.get_trace_policy().found_include_directive(f, include_next);
 
     if (!ctx.find_include_file (file_path, dir_path, is_system, current_name)) {
         BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 

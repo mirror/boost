@@ -67,7 +67,8 @@
         <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanded_macro">rescanned_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
 
         <span class="comment">// include file tracing functions</span>
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(std::string <span class="keyword">const</span> &amp;filename);
+        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(std::string <span class="keyword">const</span> &amp;filename,
+            <span class="keyword">bool</span> include_next);
 
         <span class="keyword">void </span><a href="class_reference_ctxpolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;relname, 
             std::string const&amp; absname,
@@ -167,7 +168,8 @@
 </blockquote>
 <h3>Include file tracing functions</h3>
 <p><a name="opened_include_file" id="found_include_directive"></a><strong>found_include_directive</strong></p>
-<pre>    <span class="keyword">void</span> found_include_directive(std::string <span class="keyword">const</span> &amp;filename);
+<pre>    <span class="keyword">void</span> found_include_directive(std::string <span class="keyword">const</span> &amp;filename,
+        <span class="keyword">bool</span> include_next);
 </pre>
 <blockquote>
   <p>The function <tt>found_include_directive</tt> is called whenever whenever a #include directive was located..</p>
@@ -176,7 +178,9 @@
     <tt>file</tt>. 
     The formats <tt>&lt;file&gt;</tt> or <tt>&quot;file&quot;</tt> are used for <span class="preprocessor">#include</span> directives found 
     in the preprocessed token stream, the format <tt>file</tt> is used for files
-    specified through the --force_include command line argument.<br>
+  specified through the --force_include command line argument.</p>
+  <p>The parameter <tt>include_next</tt> is set to true if the found directive was
+    a <span class="preprocessor">#include_next</span> directive and the <tt>BOOST_WAVE_SUPPORT_INCLUDE_NEXT</tt>    preprocessing constant was defined to something != 0.<br>
   </p>
 </blockquote>
 <p><a name="opened_include_file" id="opened_include_file"></a><strong>opened_include_file</strong></p>
@@ -275,7 +279,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, May 4, 2005  8:42<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, May 14, 2005  22:50<!-- #EndDate -->
 </span></p>
 </body>
 </html>

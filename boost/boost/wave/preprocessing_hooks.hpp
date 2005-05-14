@@ -106,9 +106,13 @@ struct default_preprocessing_hooks {
     //  in the preprocessed token stream, the format 'file' is used for files
     //  specified through the --force_include command line argument.
     //
+    //  The parameter 'include_next' is set to true if the found directive was
+    //  a #include_next directive and the BOOST_WAVE_SUPPORT_INCLUDE_NEXT
+    //  preprocessing constant was defined to something != 0.
+    //
     ///////////////////////////////////////////////////////////////////////////
     void 
-    found_include_directive(std::string const &filename) 
+    found_include_directive(std::string const &filename, bool include_next) 
     {}
     
     ///////////////////////////////////////////////////////////////////////////
@@ -195,7 +199,7 @@ struct default_preprocessing_hooks {
     //  replacement sequence (definition part) of the newly defined macro.
     //
     //  The parameter 'is_predefined' is set to true for all macros predefined 
-    //  during the initialisation pahase of the library.
+    //  during the initialisation phase of the library.
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename TokenT, typename ParametersT, typename DefinitionT>
