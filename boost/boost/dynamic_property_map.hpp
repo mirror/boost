@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <map>
-
+#include <boost/type.hpp>
 
 namespace boost {
 
@@ -161,18 +161,28 @@ public:
 
   virtual boost::any get(const any& key)
   {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+    return boost::get(property_map, any_cast<key_type>(key));
+#else
     using boost::get;
 
     return get(property_map, any_cast<key_type>(key));
+#endif
   }
 
   virtual std::string get_string(const any& key)
   {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+    std::ostringstream out;
+    out << boost::get(property_map, any_cast<key_type>(key));
+    return out.str();
+#else
     using boost::get;
 
     std::ostringstream out;
     out << get(property_map, any_cast<key_type>(key));
     return out.str();
+#endif
   }
 
   virtual void put(const any& in_key, const any& in_value)
@@ -292,9 +302,24 @@ put(const std::string& name, dynamic_properties& dp, const Key& key,
   }
 }
 
+#ifndef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS 
 template<typename Value, typename Key>
 Value
 get(const std::string& name, const dynamic_properties& dp, const Key& key)
+{
+  for (dynamic_properties::const_iterator i = dp.lower_bound(name);
+       i != dp.end() && i->first == name; ++i) {
+    if (i->second->key() == typeid(key))
+      return any_cast<Value>(i->second->get(key));
+  }
+
+  throw dynamic_get_failure(name);
+}
+#endif
+
+template<typename Value, typename Key>
+Value
+get(const std::string& name, const dynamic_properties& dp, const Key& key, type<Value>)
 {
   for (dynamic_properties::const_iterator i = dp.lower_bound(name);
        i != dp.end() && i->first == name; ++i) {

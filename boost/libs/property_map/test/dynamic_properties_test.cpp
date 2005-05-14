@@ -10,6 +10,12 @@
 //
 
 //  Author: Ronald Garcia
+#include <boost/config.hpp>
+
+// For Borland, act like BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS is defined
+#if defined (__BORLANDC__) && (__BORLANDC__ <= 0x570) && !defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS)
+#  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+#endif
 
 #include <boost/test/minimal.hpp>
 #include <boost/dynamic_property_map.hpp>
@@ -69,11 +75,14 @@ int test_main(int,char**) {
   properties.property("double",dbl_map);
   
   using boost::get;
-
+  using boost::type;
   // Get tests
   {
     BOOST_CHECK(get("int",properties,std::string("one")) == "1");
-    BOOST_CHECK(get<int>("int",properties,std::string("one")) == 1);
+#ifndef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+    BOOST_CHECK(boost::get<int>("int",properties,std::string("one")) == 1);
+#endif
+    BOOST_CHECK(get("int",properties,std::string("one"), type<int>()) == 1);
     BOOST_CHECK(get("double",properties,5.3) == "five point three");
   }
 
@@ -82,12 +91,17 @@ int test_main(int,char**) {
     put("int",properties,std::string("five"),6);
     BOOST_CHECK(get("int",properties,std::string("five")) == "6");
     put("int",properties,std::string("five"),std::string("5"));
+#ifndef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
     BOOST_CHECK(get<int>("int",properties,std::string("five")) == 5);
-
+#endif
+    BOOST_CHECK(get("int",properties,std::string("five"),type<int>()) == 5);
     put("double",properties,3.14,std::string("3.14159"));
     BOOST_CHECK(get("double",properties,3.14) == "3.14159");
     put("double",properties,3.14,std::string("pi"));
+#ifndef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
     BOOST_CHECK(get<std::string>("double",properties,3.14) == "pi");
+#endif
+    BOOST_CHECK(get("double",properties,3.14,type<std::string>()) == "pi");
   }
 
   // Nonexistent property
