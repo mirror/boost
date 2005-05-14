@@ -40,7 +40,7 @@
         </para>
         <para>
             In the reference and also in the code, requirement on the string type is designated by the name of
-            template argument. <code>CollectionT</code> means that the basic collection requirements must hold.
+            template argument. <code>RangeT</code> means that the basic range requirements must hold.
             <code>SequenceT</code> designates extended sequence requirements.
         </para>
     </section>

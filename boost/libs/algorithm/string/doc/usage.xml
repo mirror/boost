@@ -300,7 +300,7 @@
             Note that the find iterators have only one template parameter. It is the base iterator type.
             The Finder is specified at runtime. This allows us to typedef a find iterator for
             common string types and reuse it. Additionally make_*_iterator functions help
-            to construct a find iterator for a particular collection.
+            to construct a find iterator for a particular range.
         </para>
         <para>
             See the reference in <headername>boost/algorithm/string/find_iterator.hpp</headername>.
