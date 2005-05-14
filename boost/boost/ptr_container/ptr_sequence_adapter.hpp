@@ -91,7 +91,7 @@ namespace ptr_container_detail
         }
 #endif        
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
 
         template< class Iter >
         static const U* get_const_pointer( Iter i )
@@ -107,7 +107,7 @@ namespace ptr_container_detail
         {
             return static_cast<const U*>( *i.base() );
         }
-#else 
+#else // BOOST_WORKAROUND
         template< class Iter >
         static const U* get_const_pointer( void_ptr_iterator<Iter,const U> i )
         {
