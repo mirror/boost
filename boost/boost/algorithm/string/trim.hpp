@@ -46,7 +46,7 @@ namespace boost {
             or copied to the output iterator
 
             \param Output An output iterator to which the result will be copied
-            \param Input An input collection
+            \param Input An input range
             \param IsSpace An unary predicate identifying spaces
             \return 
                 An output iterator pointing just after the last inserted character or
@@ -152,7 +152,7 @@ namespace boost {
             or copied to the output iterator
 
             \param Output An output iterator to which the result will be copied
-            \param Input An input collection
+            \param Input An input range
             \param IsSpace An unary predicate identifying spaces
             \return 
                 An output iterator pointing just after the last inserted character or
@@ -262,7 +262,7 @@ namespace boost {
             or copied to the output iterator
 
             \param Output An output iterator to which the result will be copied
-            \param Input An input collection
+            \param Input An input range
             \param IsSpace An unary predicate identifying spaces
             \return 
                 An output iterator pointing just after the last inserted character or

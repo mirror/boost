@@ -108,7 +108,7 @@ namespace boost {
             //! Constructor
             /*!
                 Construct new find_iterator for a given finder
-                and a collection.
+                and a range.
             */
             template<typename FinderT, typename RangeT>
             find_iterator(
