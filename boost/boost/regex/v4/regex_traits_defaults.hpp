@@ -60,7 +60,7 @@ BOOST_REGEX_DECL bool BOOST_REGEX_CALL is_combining_implementation(uint_least16_
 template <class charT>
 inline bool is_combining(charT c)
 {
-   return (c < static_cast<charT>(0)) ? false : ((c > static_cast<charT>((std::numeric_limits<uint_least16_t>::max)())) ? false : is_combining_implementation(static_cast<unsigned short>(c)));
+   return (c <= static_cast<charT>(0)) ? false : ((c >= static_cast<charT>((std::numeric_limits<uint_least16_t>::max)())) ? false : is_combining_implementation(static_cast<unsigned short>(c)));
 }
 template <>
 inline bool is_combining<char>(char)
@@ -83,7 +83,7 @@ inline bool is_combining<wchar_t>(wchar_t c)
 {
    return is_combining_implementation(static_cast<unsigned short>(c));
 }
-#elif !defined(__DECCXX) && defined(WCHAR_MIN) && (WCHAR_MIN == 0) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#elif !defined(__DECCXX) && !defined(__osf__) && !defined(__OSF__) && defined(WCHAR_MIN) && (WCHAR_MIN == 0) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
 #if defined(WCHAR_MAX) && (WCHAR_MAX <= USHRT_MAX)
 template<>
 inline bool is_combining<wchar_t>(wchar_t c)
@@ -94,7 +94,7 @@ inline bool is_combining<wchar_t>(wchar_t c)
 template<>
 inline bool is_combining<wchar_t>(wchar_t c)
 {
-   return (c > (std::numeric_limits<uint_least16_t>::max)()) ? false : is_combining_implementation(static_cast<unsigned short>(c));
+   return (c >= (std::numeric_limits<uint_least16_t>::max)()) ? false : is_combining_implementation(static_cast<unsigned short>(c));
 }
 #endif
 #endif
