@@ -257,7 +257,6 @@ void test_tree()
 
     root.write_tree( cout );
     tree::iterator a_leaf = root.find( "42" );
-    BOOST_CHECK( a_leaf != root.child_end() );
     BOOST_CHECK_EQUAL( a_leaf->description(), "42" );
     leaf<int>& the_leaf = dynamic_cast< leaf<int>& >( *a_leaf );
     the_leaf.set_data( 2*42 );
