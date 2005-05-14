@@ -241,11 +241,18 @@ namespace boost
                 return m_Begin == m_End;
             }
 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+            operator bool() const
+            {
+                return empty();
+            }                                    
+#else            
             typedef iterator (iterator_range::*unspecified_bool_type) () const;
             operator unspecified_bool_type() const
             {
                 return empty() ? 0: &iterator_range::end;
             }
+#endif
 
             bool equal( const iterator_range& r ) const
             {
