@@ -223,7 +223,7 @@ namespace local_time{
       std::string std_zone_abbrev("std_abbrev"), dst_zone_abbrev("");
 
       // get 'std' name/abbrev
-      while(isalpha(*sit)){
+      while(std::isalpha(*sit)){
         ss << *sit++;
       }
       std_zone_abbrev = ss.str(); 
@@ -232,7 +232,7 @@ namespace local_time{
       // get UTC offset
       if(sit != obj.end()){
         // get duration
-        while(sit != obj.end() && !isalpha(*sit)){
+        while(sit != obj.end() && !std::isalpha(*sit)){
         ss << *sit++;
         }
         base_utc_offset_ = posix_time::duration_from_string(ss.str()); 
@@ -251,7 +251,7 @@ namespace local_time{
         has_dst_ = true;
     
         // get 'dst' name/abbrev
-        while(sit != obj.end() && isalpha(*sit)){
+        while(sit != obj.end() && std::isalpha(*sit)){
           ss << *sit++;
         }
         dst_zone_abbrev = ss.str(); 
@@ -260,7 +260,7 @@ namespace local_time{
         // get DST offset if given
         if(sit != obj.end()){
           // get duration
-          while(sit != obj.end() && !isalpha(*sit)){
+          while(sit != obj.end() && !std::isalpha(*sit)){
             ss << *sit++;
           }
           dst_offsets_.dst_adjust_ = 
