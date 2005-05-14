@@ -44,17 +44,17 @@ void check_iterator_range()
     BOOST_CHECK( !r.empty() );
     BOOST_CHECK( !r2.empty() );
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    if( !(bool)r )
-        BOOST_CHECK( false );
-    if( !(bool)r2 )
-        BOOST_CHECK( false );
-#else    
+//#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+//    if( !(bool)r )
+//        BOOST_CHECK( false );
+//    if( !(bool)r2 )
+//        BOOST_CHECK( false );
+//#else    
     if( !r )
         BOOST_CHECK( false );
     if( !r2 )
         BOOST_CHECK( false );
-#endif
+//#endif
 
     BOOST_CHECK_EQUAL( r.size(), size( r ) );
     BOOST_CHECK_EQUAL( r2.size(), size( r2 ) );
