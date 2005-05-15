@@ -57,7 +57,7 @@ namespace local_time {
    * required to be in the form of a boost::shared_ptr<time_zone_base>.
    */
   template<class utc_time_=posix_time::ptime, 
-    class tz_type=date_time::time_zone_base<utc_time_> >
+           class tz_type=date_time::time_zone_base<utc_time_> >
   class local_date_time_base :  public date_time::base_time<utc_time_, 
                                                             boost::posix_time::posix_time_system> { 
   public:
@@ -467,6 +467,11 @@ namespace local_time {
     {
       this->time_ = time_system_type::subtract_time_duration(this->time_,td);
       return *this;
+    }
+    //! local_date_time -= local_date_time --> time_duration_type
+    time_duration_type operator-(const local_date_time_base& rhs) const
+    {
+      return utc_time_type(this->time_) - utc_time_type(rhs.time_);
     }
   private:
     boost::shared_ptr<tz_type> zone_;
