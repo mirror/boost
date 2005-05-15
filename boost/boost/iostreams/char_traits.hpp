@@ -52,7 +52,7 @@ struct char_traits<wchar_t> : std::char_traits<wchar_t> {
     static wchar_t newline() { return L'\n'; }
     static int good() { return L'\n'; }
     static int would_block() { return WWOULD_BLOCK; }
-    static bool is_good(int c) { return c != WEOF && c != WWOULD_BLOCK; }
+    static bool is_good(std::wint_t c) { return c != WEOF && c != WWOULD_BLOCK; }
     static bool is_eof(std::wint_t c) { return c == WEOF; }
     static bool would_block(std::wint_t c) { return c == WWOULD_BLOCK; }
 };
