@@ -516,7 +516,11 @@ namespace boost {
                     ForwardIterator2T,
                     ForwardIterator2T ) const
                 {
+                    #if BOOST_WORKAROUND( __MWERKS__, <= 0x3003 )
+                    return iterator_range<const ForwardIterator2T>(this->m_Range);
+                    #else
                     return m_Range;
+                    #endif
                 }
 
             private:
