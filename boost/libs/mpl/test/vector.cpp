@@ -1,5 +1,5 @@
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2005
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -13,6 +13,7 @@
 
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/vector/vector10.hpp>
+#include <boost/mpl/equal.hpp>
 #include <boost/mpl/push_back.hpp>
 #include <boost/mpl/pop_back.hpp>
 #include <boost/mpl/push_front.hpp>
@@ -31,6 +32,11 @@ MPL_TEST_CASE()
     typedef vector1<char> v1;
     typedef vector2<char,long> v2;
     typedef vector9<char,char,char,char,char,char,char,char,int> v9;
+
+    MPL_ASSERT(( equal< v0,v0::type > ));
+    MPL_ASSERT(( equal< v1,v1::type > ));
+    MPL_ASSERT(( equal< v2,v2::type > ));
+    MPL_ASSERT(( equal< v9,v9::type > ));
 
     MPL_ASSERT_RELATION( size<v0>::value, ==, 0 );
     MPL_ASSERT_RELATION( size<v1>::value, ==, 1 );
@@ -68,15 +74,35 @@ MPL_TEST_CASE()
 {
     typedef vector0<> v0;
 
-    typedef push_back<v0,int>::type v1;
-    MPL_ASSERT(( is_same< back<v1>::type,int > ));
+    typedef push_back<v0,int>::type     v1;
+    typedef push_front<v1,char>::type   v2;
+    typedef push_back<v2,long>::type    v3;
 
-    typedef push_front<v1,char>::type v2;
+    MPL_ASSERT(( is_same< back<v1>::type,int > ));
     MPL_ASSERT(( is_same< back<v2>::type,int > ));
     MPL_ASSERT(( is_same< front<v2>::type,char > ));
-
-    typedef push_back<v2,long>::type v3;
     MPL_ASSERT(( is_same< back<v3>::type,long > ));
+
+    MPL_ASSERT(( equal< v1,v1::type > ));
+    MPL_ASSERT(( equal< v2,v2::type > ));
+    MPL_ASSERT(( equal< v3,v3::type > ));
+}
+
+MPL_TEST_CASE()
+{
+    typedef vector9<char,bool,char,char,char,char,bool,long,int> v9;
+
+    typedef pop_back<v9>::type  v8;
+    typedef pop_front<v8>::type v7;
+
+    MPL_ASSERT(( is_same< back<v9>::type,int > ));
+    MPL_ASSERT(( is_same< back<v8>::type,long > ));
+    MPL_ASSERT(( is_same< back<v7>::type,long > ));
+    MPL_ASSERT(( is_same< front<v7>::type,bool > ));
+
+    MPL_ASSERT(( equal< v9,v9::type > ));
+    MPL_ASSERT(( equal< v8,v8::type > ));
+    MPL_ASSERT(( equal< v7,v7::type > ));
 }
 
 MPL_TEST_CASE()
@@ -85,6 +111,11 @@ MPL_TEST_CASE()
     typedef vector<char> v1;
     typedef vector<char,long> v2;
     typedef vector<char,char,char,char,char,char,char,char,int> v9;
+
+    MPL_ASSERT(( equal< v0,v0::type > ));
+    MPL_ASSERT(( equal< v1,v1::type > ));
+    MPL_ASSERT(( equal< v2,v2::type > ));
+    MPL_ASSERT(( equal< v9,v9::type > ));
 
     MPL_ASSERT_RELATION( size<v0>::value, ==, 0 );
     MPL_ASSERT_RELATION( size<v1>::value, ==, 1 );
