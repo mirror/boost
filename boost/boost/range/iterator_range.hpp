@@ -244,7 +244,7 @@ namespace boost
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
             operator bool() const
             {
-                return empty();
+                return !empty();
             }                                    
 #else            
             typedef iterator (iterator_range::*unspecified_bool_type) () const;
