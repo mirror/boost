@@ -280,6 +280,8 @@ void print_compiler_macros()
   PRINT_MACRO(__COMO__);
   PRINT_MACRO(__COMO_VERSION__);
   PRINT_MACRO(__DM__);
+  PRINT_MACRO(__osf__);
+  PRINT_MACRO(__OSF__);
 }
 
 void print_stdlib_macros()
