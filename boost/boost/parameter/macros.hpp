@@ -3,6 +3,9 @@
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_PARAMETER_MACROS_050412_HPP
+#define BOOST_PARAMETER_MACROS_050412_HPP
+
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
@@ -78,9 +81,6 @@
                                                                                     \
     template<class Params>                                                          \
     ret BOOST_PP_CAT(name, _with_named_params)(Params const& p)
-
-#ifndef BOOST_PARAMETER_MACROS_050412_HPP
-#define BOOST_PARAMETER_MACROS_050412_HPP
 
 #endif // BOOST_PARAMETER_MACROS_050412_HPP
 
