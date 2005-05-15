@@ -56,7 +56,7 @@ void test_sets()
    TEST_REGEX_SEARCH("a[^-3]c", extended, "a-c", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a[^-3]c", extended, "a3c", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a[^-3]c", extended, "axc", match_default, make_array(0, 3, -2, -2));
-   TEST_INVALID_REGEX("a[3-1]c", extended & ~collate);
+   TEST_INVALID_REGEX("a[3-1]c", extended & ~::boost::regex_constants::collate);
    TEST_INVALID_REGEX("a[1-3-5]c", extended);
    TEST_INVALID_REGEX("a[1-", extended);
    TEST_INVALID_REGEX("a[\\9]", perl);

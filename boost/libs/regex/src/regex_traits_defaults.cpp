@@ -260,32 +260,32 @@ BOOST_REGEX_DECL std::string BOOST_REGEX_CALL lookup_default_collate_name(const 
    return std::string();
 }
 
-BOOST_REGEX_DECL char BOOST_REGEX_CALL global_lower(char c)
+BOOST_REGEX_DECL char BOOST_REGEX_CALL do_global_lower(char c)
 {
    return static_cast<char>((std::tolower)((unsigned char)c));
 }
 
-BOOST_REGEX_DECL char BOOST_REGEX_CALL global_upper(char c)
+BOOST_REGEX_DECL char BOOST_REGEX_CALL do_global_upper(char c)
 {
    return static_cast<char>((std::toupper)((unsigned char)c));
 }
 #ifndef BOOST_NO_WREGEX
-BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_lower(wchar_t c)
+BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL do_global_lower(wchar_t c)
 {
    return (std::towlower)(c);
 }
 
-BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_upper(wchar_t c)
+BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL do_global_upper(wchar_t c)
 {
    return (std::towupper)(c);
 }
 #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
-BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL global_lower(unsigned short c)
+BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_lower(unsigned short c)
 {
    return (std::towlower)(c);
 }
 
-BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL global_upper(unsigned short c)
+BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_upper(unsigned short c)
 {
    return (std::towupper)(c);
 }

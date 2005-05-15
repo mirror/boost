@@ -209,41 +209,58 @@ std::ptrdiff_t global_length(const charT* p)
    }
    return n;
 }
-inline std::ptrdiff_t global_length(const char* p)
+template<>
+inline std::ptrdiff_t global_length<char>(const char* p)
 {
    return (std::strlen)(p);
 }
 #ifndef BOOST_NO_WREGEX
-inline std::ptrdiff_t global_length(const wchar_t* p)
+template<>
+inline std::ptrdiff_t global_length<wchar_t>(const wchar_t* p)
 {
    return (std::wcslen)(p);
 }
 #endif
 template <class charT>
-#if !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
-inline 
-#endif
-charT BOOST_REGEX_CALL global_lower(charT c)
+inline charT BOOST_REGEX_CALL global_lower(charT c)
 {
    return c;
 }
 template <class charT>
-#if !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
-inline 
-#endif
-charT BOOST_REGEX_CALL global_upper(charT c)
+inline charT BOOST_REGEX_CALL global_upper(charT c)
 {
    return c;
 }
-BOOST_REGEX_DECL char BOOST_REGEX_CALL global_lower(char c);
-BOOST_REGEX_DECL char BOOST_REGEX_CALL global_upper(char c);
+
+BOOST_REGEX_DECL char BOOST_REGEX_CALL do_global_lower(char c);
+BOOST_REGEX_DECL char BOOST_REGEX_CALL do_global_upper(char c);
 #ifndef BOOST_NO_WREGEX
-BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_lower(wchar_t c);
-BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL global_upper(wchar_t c);
+BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL do_global_lower(wchar_t c);
+BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL do_global_upper(wchar_t c);
 #endif
 #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
-BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL global_lower(unsigned short c);
-BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL global_upper(unsigned short c);
+BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_lower(unsigned short c);
+BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_upper(unsigned short c);
+#endif
+//
+// This sucks: declare template specialisations of global_lower/global_upper
+// that just forward to the non-template implementation functions.  We do
+// this because there is one compiler (Compaq Tru64 C++) that doesn't seem
+// to differentiate between templates and non-template overloads....
+// what's more, the primary template, plus all overloads have to be
+// defined in the same translation unit (if one is inline they all must be)
+// otherwise the "local template instantiation" compiler option can pick
+// the wrong instantiation when linking:
+//
+template<> inline char  global_lower<char>(char c){ return do_global_lower(c); }
+template<> inline char  global_upper<char>(char c){ return do_global_upper(c); }
+#ifndef BOOST_NO_WREGEX
+template<> inline wchar_t  global_lower<wchar_t>(wchar_t c){ return do_global_lower(c); }
+template<> inline wchar_t  global_upper<wchar_t>(wchar_t c){ return do_global_upper(c); }
+#endif
+#ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+template<> inline unsigned short  global_lower<unsigned short>(unsigned short c){ return do_global_lower(c); }
+template<> inline unsigned short  global_upper<unsigned short>(unsigned short c){ return do_global_upper(c); }
 #endif
 
 template <class charT>
