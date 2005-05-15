@@ -14,17 +14,15 @@
 
 namespace test
 {
-
+  
   // A separate function for getting the "value" key, so we can deduce
   // F and use lazy_binding on it.
   template <class Params, class F>
-  typename boost::parameter::lazy_binding<
-      Params, struct value_, F
-  >::type
+  typename boost::parameter::lazy_binding<Params,value_,F>::type
   extract_value(Params const& p, F const& f)
   {
       typename boost::parameter::lazy_binding<
-        Params, struct value_, F
+        Params, value_, F
       >::type v = p[value || f ];
       return v;
   }
@@ -32,15 +30,15 @@ namespace test
   template<class Params>
   int f_impl(Params const& p)
   {
-      typename boost::parameter::binding<Params, struct name_>::type
+      typename boost::parameter::binding<Params, name_>::type
           n = p[name];
 
       typename boost::parameter::binding<
-        Params, struct value_, double
+        Params, value_, double
       >::type v = extract_value(p, boost::bind(&value_default));
           
       typename boost::parameter::binding<
-        Params, struct index_, int
+        Params, index_, int
       >::type i = p[index | 999];
           
       p[tester](n,v,i);

@@ -10,13 +10,18 @@ namespace test {
 
 using namespace boost::parameter;
 
+struct name_;
+struct value_;
+struct index_;
+struct tester_;
+
 namespace
 {
 
-  keyword<struct name_> name;
-  keyword<struct value_> value;
-  keyword<struct index_> index;
-  keyword<struct tester_> tester;
+  keyword<name_> name;
+  keyword<value_> value;
+  keyword<index_> index;
+  keyword<tester_> tester;
 
 } // namespace unnamed
 
@@ -84,6 +89,13 @@ values(Name const& n, Value const& v, Index const& i)
     return values_t<Name,Value,Index>(n,v,i);
 }
   
+#if defined( __DECCXX_VER )
+  && BOOST_WORKAROUND(__EDG_VERSION__, BOOST_TESTED_AT(245))
+  // Some kind of nasty ambiguity arises here -- is there an index in
+  // the global namespace?
+      using test::index;
+#endif 
+
 } // namespace test
 
 // GCC2 has a problem with char (&)[] deduction, so we'll cast string
