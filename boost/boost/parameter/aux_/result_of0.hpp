@@ -19,7 +19,7 @@ struct result_of0 : result_of<F()>
 
 #else
 
-namespace boost { namespace parameter { namespace aux_ { 
+namespace boost { namespace parameter { namespace aux { 
 template <class F>
 struct result_of0
 {
