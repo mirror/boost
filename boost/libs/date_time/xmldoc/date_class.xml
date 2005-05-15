@@ -306,6 +306,16 @@ d.is_not_a_date(); // --> true</screen></entry>
 	<row>
 	  <entry><screen></screen></entry>
 	</row>
+        <row>
+	  <entry valign="top" morerows="1"><screen>date end_of_month_day() const</screen></entry>
+	  <entry>Returns the last day of the month for the date.</entry>
+	</row>
+	<row>
+	  <entry><screen>
+date d(2000,Feb,1);
+//gets Feb 28 -- 2000 was leap year
+date eom = d.end_of_month_day();</screen></entry>
+	</row>
       </tbody>
     </tgroup>
   </informaltable>
