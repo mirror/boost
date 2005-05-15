@@ -35,7 +35,7 @@ namespace boost {
             public:
                 // Construction
                 find_format_store( 
-                        const base_type FindResult,
+                        const base_type& FindResult,
                         const format_result_type& FormatResult,
                         const formatter_type& Formatter ) :
                     base_type(FindResult),
