@@ -185,6 +185,6 @@ namespace boost { namespace program_options {
 
 #undef DECL
 
-#include "detail/parsers.hpp"
+#include "boost/program_options/detail/parsers.hpp"
 
 #endif

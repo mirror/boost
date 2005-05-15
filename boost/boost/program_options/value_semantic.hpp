@@ -308,7 +308,7 @@ namespace boost { namespace program_options {
 
 }}
 
-#include "detail/value_semantic.hpp"
+#include "boost/program_options/detail/value_semantic.hpp"
 
 #endif
 
