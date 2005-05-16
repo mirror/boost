@@ -330,6 +330,8 @@ struct is_reference_to_non_const_helper1
         BOOST_STATIC_CONSTANT(
             bool, value
             = sizeof(reference_to_const_helper(t)) == sizeof(inner_no_type));
+        
+        typedef mpl::bool_<value> type;
     };
 };
 
@@ -343,6 +345,7 @@ template <class T>
 struct is_reference_to_non_const
     : is_reference_to_non_const_helper1<is_reference<T>::value>::template apply<T>
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_non_const,(T))
 };
 
 
@@ -361,6 +364,7 @@ struct is_reference_to_volatile_helper1
         BOOST_STATIC_CONSTANT(
             bool, value
             = sizeof(reference_to_volatile_helper(t)) == sizeof(inner_yes_type));
+        typedef mpl::bool_<value> type;
     };
 };
 
@@ -389,6 +393,10 @@ struct is_reference_to_pointer
         = (is_reference<T>::value
            && sizeof((reference_to_pointer_helper)(t)) == sizeof(inner_yes_type))
         );
+    
+    typedef mpl::bool_<value> type;
+    
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_pointer,(T))
 };
 
 template <class T>
