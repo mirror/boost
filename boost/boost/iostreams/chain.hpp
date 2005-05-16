@@ -42,7 +42,7 @@
 # include <boost/mpl/int.hpp>
 #endif
 
-// Sometimes type_info objects must be compared by name. Borrowed from 
+// Sometimes type_info objects must be compared by name. Borrowed from
 // Boost.Python and Boost.Function.
 #if (defined(__GNUC__) && __GNUC__ >= 3) || \
      defined(_AIX) || \
@@ -271,10 +271,10 @@ private:
         b->close(m);
     }
 
-    static void set_next(streambuf_type* b, streambuf_type* next) 
+    static void set_next(streambuf_type* b, streambuf_type* next)
     { b->set_next(next); }
 
-    static void set_auto_close(streambuf_type* b, bool close) 
+    static void set_auto_close(streambuf_type* b, bool close)
     { b->set_auto_close(close); }
 
     struct closer  : public std::unary_function<streambuf_type*, void>  {
@@ -287,7 +287,7 @@ private:
     };
     friend struct closer;
 
-    enum {
+    enum flags {
         f_complete = 1,
         f_open = 2,
         f_auto_close = 4
@@ -335,7 +335,7 @@ private:
                     streambuf_type* buf = 0;
                     std::swap(buf, *first);
                     delete buf;
-                } 
+                }
                 links_.clear();
                 flags_ &= ~f_complete;
                 flags_ &= ~f_open;
