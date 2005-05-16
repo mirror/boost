@@ -154,13 +154,13 @@ are representable as Target type.</p>
 
 <hr>
 
-<H2><A NAME="nct"><CODE>template class numeric_conversion_traits&lt;&gt;</CODE></A></H2>
+<H2><A NAME="nct"><CODE>template class conversion_traits&lt;&gt;</CODE></A></H2>
 
 <PRE>namespace boost { namespace numeric {
 
 
   template &lt;class T, class S&gt;
-  struct numeric_conversion_traits
+  struct conversion_traits
   {
     mpl::integral_c&lt;int_float_mixture_enum  , ...&gt; int_float_mixture ;
     mpl::integral_c&lt;sign_mixture_enum       , ...&gt; sign_mixture;
@@ -169,8 +169,8 @@ are representable as Target type.</p>
     mpl::bool_&lt;...&gt; subranged ;
     mpl::bool_&lt;...&gt; trivial ;
 
-    typedef ... target_type   ;
-    typedef ... source_type   ;
+    typedef T target_type   ;
+    typedef S source_type   ;
     typedef ... argument_type ;
     typedef ... result_type   ;
     typedef ... supertype     ;
@@ -182,7 +182,7 @@ are representable as Target type.</p>
 <BLOCKQUOTE>
 
   <P>This traits class indicates some properties of a <i>numeric conversion direction</i>:
-    from a source type to a target type. It does not indicate the properties of
+    from a source type <code>S</code> to a target type <code>T</code>. It does not indicate the properties of
     a <i>specific</i> conversion, but of the conversion <i>direction</i>. See
     <A href="definitions.html#subranged">Definitions</A> for details.<br>
   </P>
@@ -324,7 +324,7 @@ int main() {
 <HR>
 <P>Back to <A HREF="index.html">Numeric Conversion library index</A></P>
 <HR>
-<P>Revised 23 June 2004</P>
+<P>Revised 16 May 2005</P>
 <p>© Copyright Fernando Luis Cacciola Carballal, 2004</p>
 <p> Use, modification, and distribution are subject to the Boost Software
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
