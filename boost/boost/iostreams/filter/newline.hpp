@@ -4,7 +4,7 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-// NOTE: I hope to replace the current implementation with a much simpler 
+// NOTE: I hope to replace the current implementation with a much simpler
 // one.
 
 #ifndef BOOST_IOSTREAMS_NEWLINE_FILTER_HPP_INCLUDED
@@ -14,11 +14,11 @@
 # pragma once
 #endif
 
-#include <cassert>     
-#include <cstdio>                            
-#include <stdexcept>                       // logic_error.               
+#include <cassert>
+#include <cstdio>
+#include <stdexcept>                       // logic_error.
 #include <boost/config.hpp>                // BOOST_STATIC_CONSTANT.
-#include <boost/iostreams/categories.hpp> 
+#include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/pipeline.hpp>
 #include <boost/mpl/bool.hpp>
@@ -55,17 +55,17 @@ namespace detail {
 
 class newline_base {
 public:
-    bool is_posix() const 
-    { 
-        return !is_mixed() && (flags_ & newline::posix) != 0; 
+    bool is_posix() const
+    {
+        return !is_mixed() && (flags_ & newline::posix) != 0;
     }
-    bool is_windows() const 
-    { 
-        return !is_mixed() && (flags_ & newline::windows) != 0; 
+    bool is_windows() const
+    {
+        return !is_mixed() && (flags_ & newline::windows) != 0;
     }
-    bool is_mac() const 
-    { 
-        return !is_mixed() && (flags_ & newline::mac) != 0; 
+    bool is_mac() const
+    {
+        return !is_mixed() && (flags_ & newline::mac) != 0;
     }
     bool is_mixed_posix() const { return (flags_ & newline::posix) != 0; }
     bool is_mixed_windows() const { return (flags_ & newline::windows) != 0; }
@@ -82,9 +82,9 @@ public:
                         0;
         return (flags_ & ~platform & newline::platform_mask) != 0;
     }
-    bool has_final_newline() const 
-    { 
-        return (flags_ & newline::final_newline) != 0; 
+    bool has_final_newline() const
+    {
+        return (flags_ & newline::final_newline) != 0;
     }
 protected:
     newline_base(int flags) : flags_(flags) { }
@@ -93,12 +93,12 @@ protected:
 
 } // End namespace detail.
 
-class newline_error 
-    : public BOOST_IOSTREAMS_FAILURE, public detail::newline_base 
+class newline_error
+    : public BOOST_IOSTREAMS_FAILURE, public detail::newline_base
 {
 private:
     friend class newline_checker;
-    newline_error(int flags) 
+    newline_error(int flags)
         : BOOST_IOSTREAMS_FAILURE("bad line endings"),
           detail::newline_base(flags)
         { }
@@ -107,16 +107,16 @@ private:
 class newline_filter {
 public:
     typedef char char_type;
-    struct io_category 
-        : dual_use, 
-          filter_tag, 
-          closable_tag 
+    struct io_category
+        : dual_use,
+          filter_tag,
+          closable_tag
         { };
 
-    explicit newline_filter(int target) : flags_(target) 
-    { 
-        if ( target != newline::posix && 
-             target != newline::windows && 
+    explicit newline_filter(int target) : flags_(target)
+    {
+        if ( target != newline::posix &&
+             target != newline::windows &&
              target != newline::mac )
         {
             throw std::logic_error("bad flags");
@@ -132,11 +132,11 @@ public:
         if (flags_ & (has_LF | has_EOF)) {
             if (flags_ & has_LF)
                 return newline();
-            else 
+            else
                 return EOF;
         }
 
-        int c = 
+        int c =
             (flags_ & has_CR) == 0 ?
                 iostreams::get(src) :
                 CR;
@@ -185,7 +185,7 @@ public:
 
         if (c == LF)
            return newline(dest);
-        
+
         if ((flags_ & has_CR) != 0)
             return newline(dest) ?
                 this->put(dest, c) :
@@ -213,11 +213,11 @@ private:
     void close(Sink& dest, mpl::true_) { newline(dest); }
 
     template<typename Sink>
-    void close(Sink& dest, mpl::false_) { }
+    void close(Sink&, mpl::false_) { }
 
     // Returns the appropriate element of a newline sequence.
-    int newline() 
-    { 
+    int newline()
+    {
         using iostreams::newline::CR;
         using iostreams::newline::LF;
 
@@ -240,17 +240,17 @@ private:
 
     // Writes a newline sequence.
     template<typename Sink>
-    bool newline(Sink& dest) 
-    { 
+    bool newline(Sink& dest)
+    {
         using iostreams::newline::CR;
         using iostreams::newline::LF;
 
         bool success = false;
         switch (flags_ & newline::platform_mask) {
-        case newline::posix: 
+        case newline::posix:
             success = boost::iostreams::put(dest, LF);
             break;
-        case newline::mac: 
+        case newline::mac:
             success = boost::iostreams::put(dest, CR);
             break;
         case newline::windows:
@@ -267,7 +267,7 @@ private:
             flags_ &= ~has_CR;
         return success;
     }
-    enum {
+    enum flags {
         has_LF         = 32768,
         has_CR         = has_LF << 1,
         has_newline    = has_CR << 1,
@@ -280,11 +280,11 @@ BOOST_IOSTREAMS_PIPABLE(newline_filter, 0)
 class newline_checker : public detail::newline_base {
 public:
     typedef char                 char_type;
-    struct io_category 
+    struct io_category
         : dual_use_filter_tag,
-          closable_tag 
+          closable_tag
         { };
-    explicit newline_checker(int target = newline::mixed) 
+    explicit newline_checker(int target = newline::mixed)
         : detail::newline_base(0), target_(target), open_(false)
         { }
     template<typename Source>
@@ -321,7 +321,7 @@ public:
         source() = (source() & ~has_CR) | (c == CR ? has_CR : 0);
 
         // Check for errors.
-        if ( c == EOF && 
+        if ( c == EOF &&
             (target_ & newline::final_newline) != 0 &&
             (source() & line_complete) == 0 )
         {
@@ -332,7 +332,7 @@ public:
         {
             fail();
         }
-        
+
         return c;
     }
 
@@ -376,7 +376,7 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink& dest, BOOST_IOS::openmode which)
+    void close(Sink&, BOOST_IOS::openmode which)
     {
         using iostreams::newline::final_newline;
 
@@ -391,19 +391,19 @@ public:
         source() &= ~(has_CR | line_complete);
 
         // Check for errors.
-        if ( (which & BOOST_IOS::out) && 
+        if ( (which & BOOST_IOS::out) &&
              (target_ & final_newline) != 0 &&
              (source() & final_newline) == 0 )
         {
             fail();
-        }      
+        }
     }
 private:
     void fail() { throw newline_error(source()); }
     int& source() { return flags_; }
     int source() const { return flags_; }
 
-    enum {
+    enum flags {
         has_CR = 32768,
         line_complete = has_CR << 1
     };
