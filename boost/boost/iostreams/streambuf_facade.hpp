@@ -88,6 +88,8 @@ public:
     BOOST_IOSTREAMS_FORWARD( streambuf_facade, open_impl, T,
                              BOOST_IOSTREAMS_PUSH_PARAMS,
                              BOOST_IOSTREAMS_PUSH_ARGS )
+    T& operator*() { return *this->component(); }
+    T* operator->() { return this->component(); }
 private:
     void open_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())
         {   // Used for forwarding.
