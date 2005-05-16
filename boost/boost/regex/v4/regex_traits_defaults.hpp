@@ -252,15 +252,15 @@ BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_upper(unsigned short 
 // otherwise the "local template instantiation" compiler option can pick
 // the wrong instantiation when linking:
 //
-template<> inline char  global_lower<char>(char c){ return do_global_lower(c); }
-template<> inline char  global_upper<char>(char c){ return do_global_upper(c); }
+template<> inline char BOOST_REGEX_CALL global_lower<char>(char c){ return do_global_lower(c); }
+template<> inline char BOOST_REGEX_CALL global_upper<char>(char c){ return do_global_upper(c); }
 #ifndef BOOST_NO_WREGEX
-template<> inline wchar_t  global_lower<wchar_t>(wchar_t c){ return do_global_lower(c); }
-template<> inline wchar_t  global_upper<wchar_t>(wchar_t c){ return do_global_upper(c); }
+template<> inline wchar_t BOOST_REGEX_CALL global_lower<wchar_t>(wchar_t c){ return do_global_lower(c); }
+template<> inline wchar_t BOOST_REGEX_CALL global_upper<wchar_t>(wchar_t c){ return do_global_upper(c); }
 #endif
 #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
-template<> inline unsigned short  global_lower<unsigned short>(unsigned short c){ return do_global_lower(c); }
-template<> inline unsigned short  global_upper<unsigned short>(unsigned short c){ return do_global_upper(c); }
+template<> inline unsigned short BOOST_REGEX_CALL global_lower<unsigned short>(unsigned short c){ return do_global_lower(c); }
+template<> inline unsigned short BOOST_REGEX_CALL global_upper<unsigned short>(unsigned short c){ return do_global_upper(c); }
 #endif
 
 template <class charT>
