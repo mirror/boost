@@ -47,7 +47,11 @@ namespace boost {
                 find_format_store& operator=( FindResultT FindResult )
                 {
                     iterator_range<ForwardIteratorT>::operator=(FindResult);
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                    m_FormatResult=format_result_type(m_Formatter(FindResult));
+#else
                     m_FormatResult=m_Formatter(FindResult);
+#endif
                     
                     return *this;
                 }
