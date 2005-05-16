@@ -79,6 +79,7 @@ BOOST_IOSTREAMS_DECL extern const int buf_error;
 
 BOOST_IOSTREAMS_DECL extern const int finish;
 BOOST_IOSTREAMS_DECL extern const int no_flush;
+BOOST_IOSTREAMS_DECL extern const int sync_flush;
 
                     // Code for current OS
 
@@ -358,13 +359,15 @@ zlib_decompressor_impl<Alloc>::zlib_decompressor_impl(int window_bits)
 template<typename Alloc>
 bool zlib_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
-      char*& dest_begin, char* dest_end, bool /* flush */ )
+      char*& dest_begin, char* dest_end, bool flush )
 {
+    //char* dest_begin_old = dest_begin;
     before(src_begin, src_end, dest_begin, dest_end);
-    int result = inflate(zlib::no_flush);
+    int result = inflate(zlib::sync_flush);
     after(src_begin, dest_begin, false);
     zlib_error::check(result);
-    return result != zlib::stream_end; 
+    return result != zlib::stream_end ; //&& 
+           //(!flush || dest_begin_old != dest_begin);
 }
 
 template<typename Alloc>
@@ -377,19 +380,19 @@ void zlib_decompressor_impl<Alloc>::close() { reset(false); }
 template<typename Alloc>
 basic_zlib_compressor<Alloc>::basic_zlib_compressor
     (const zlib_params& p, int buffer_size) 
-    : base_type(new impl_type(p), buffer_size) { }
+    : base_type(buffer_size, p) { }
 
 //------------------Implementation of zlib_decompressor-----------------------//
 
 template<typename Alloc>
 basic_zlib_decompressor<Alloc>::basic_zlib_decompressor
     (int window_bits, int buffer_size) 
-    : base_type(new impl_type(window_bits), buffer_size) { }
+    : base_type(buffer_size, window_bits) { }
 
 template<typename Alloc>
 basic_zlib_decompressor<Alloc>::basic_zlib_decompressor
     (const zlib_params& p, int buffer_size) 
-    : base_type(new impl_type(p), buffer_size) { }
+    : base_type(buffer_size, p) { }
 
 //----------------------------------------------------------------------------//
 

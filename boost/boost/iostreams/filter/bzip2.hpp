@@ -182,7 +182,7 @@ private:
 
 //
 // Template name: bzip2_compressor_impl
-// Description: Model of C-Style Filte implementing compression by
+// Description: Model of SymmetricFilter implementing compression by
 //      delegating to the libbzip2 function BZ_bzCompress.
 //
 template<typename Alloc = std::allocator<char> >
@@ -204,7 +204,7 @@ private:
 
 //
 // Template name: bzip2_compressor
-// Description: Model of C-Style Filte implementing decompression by
+// Description: Model of SymmetricFilter implementing decompression by
 //      delegating to the libbzip2 function BZ_bzDecompress.
 //
 template<typename Alloc = std::allocator<char> >
@@ -363,15 +363,17 @@ inline void bzip2_decompressor_impl<Alloc>::init()
 
 template<typename Alloc>
 basic_bzip2_compressor<Alloc>::basic_bzip2_compressor
-    (const bzip2_params& p, int buffer_size) 
-    : base_type(new impl_type(p), buffer_size) { }
+        (const bzip2_params& p, int buffer_size) 
+    : base_type(buffer_size, p) 
+    { }
 
 //------------------Implementation of bzip2_decompressor----------------------//
 
 template<typename Alloc>
 basic_bzip2_decompressor<Alloc>::basic_bzip2_decompressor
-    (bool small, int buffer_size) 
-    : base_type(new impl_type(small), buffer_size) { }
+        (bool small, int buffer_size) 
+    : base_type(buffer_size, small)
+    { }
 
 //----------------------------------------------------------------------------//
 
