@@ -11,17 +11,27 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>  // BOOST_MSVC
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmode.
 #include <boost/iostreams/positioning.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Undef'd below.
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# include <boost/mpl/identity.hpp>
+# define BOOST_IOSTREAMS_DEFAULT_ARG(arg) mpl::identity< arg >::type
+#else
+# define BOOST_IOSTREAMS_DEFAULT_ARG(arg) arg
+#endif
+
 namespace boost { namespace iostreams {
 
 //--------------Definitions of helper templates for device concepts-----------//
 
-template<typename Mode, typename Ch = char>
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char)>
 struct device {
     typedef Ch char_type;
     struct io_category
@@ -47,7 +57,7 @@ struct device {
     void imbue(const Locale&) { }
 };
 
-template<typename Mode, typename Ch = wchar_t>
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(wchar_t)>
 struct wdevice : device<Mode, Ch> { };
 
 typedef device<input>    source;
@@ -57,7 +67,7 @@ typedef wdevice<output>  wsink;
 
 //--------------Definitions of helper templates for simple filter concepts----//
 
-template<typename Mode, typename Ch = char>
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char)>
 struct filter {
     typedef Ch char_type;
     struct io_category
@@ -89,7 +99,7 @@ struct filter {
     void imbue(const Locale&) { }
 };
 
-template<typename Mode, typename Ch = wchar_t>
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(wchar_t)>
 struct wfilter : filter<Mode, Ch> { };
 
 typedef filter<input>      input_filter;
@@ -121,5 +131,7 @@ typedef multichar_filter<dual_use>  multichar_dual_use_wfilter;
 //----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
+
+#undef BOOST_IOSTREAMS_DEFAULT_ARG
 
 #endif // #ifndef BOOST_IOSTREAMS_CONCEPTS_HPP_INCLUDED
