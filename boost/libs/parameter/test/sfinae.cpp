@@ -41,7 +41,7 @@ namespace test
       assert(v == 3.f);
   }
 
-  void f(...)
+  void f()
   {
       f_impl(f_parameters()());
   }
