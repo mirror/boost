@@ -39,11 +39,12 @@
 #include <utility>                            // pair.
 #include <boost/config.hpp>                   // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/close.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/ios.hpp>     // openmode.
-#include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/operations_fwd.hpp>
 #include <boost/iostreams/positioning.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -83,7 +84,7 @@ class BOOST_IOSTREAMS_DECL mapped_file_source {
 private:
     struct safe_bool_helper { int x; };         // From Bronek Kozicki.
     typedef int safe_bool_helper::* safe_bool;
-    friend struct detail::direct_impl<mapped_file_source>;
+    friend struct operations<mapped_file_source>;
 public:
     typedef char               char_type;
     struct io_category
@@ -140,7 +141,7 @@ class mapped_file {
 private:
     typedef mapped_file_source delegate_type;
     delegate_type delegate_;
-    friend struct detail::direct_impl<mapped_file>;
+    friend struct operations<mapped_file>;
 public:
     typedef char                           char_type;
     struct io_category
@@ -197,7 +198,7 @@ public:
 };
 
 struct mapped_file_sink : private mapped_file {
-    friend struct detail::direct_impl<mapped_file_sink>;
+    friend struct operations<mapped_file_sink>;
     typedef char char_type;
     struct io_category
         : public sink_tag,
@@ -217,10 +218,10 @@ struct mapped_file_sink : private mapped_file {
 
 //------------------Specialization of direct_impl-----------------------------//
 
-namespace detail {
-
 template<>
-struct direct_impl<boost::iostreams::mapped_file_source> {
+struct operations<boost::iostreams::mapped_file_source>
+    : detail::close_impl<closable_tag>
+{
     static std::pair<char*, char*>
     input_sequence(boost::iostreams::mapped_file_source& src)
     {
@@ -230,24 +231,31 @@ struct direct_impl<boost::iostreams::mapped_file_source> {
 };
 
 template<>
-struct direct_impl<boost::iostreams::mapped_file_sink> {
+struct operations<boost::iostreams::mapped_file_sink>
+    : detail::close_impl<closable_tag>
+{
     static std::pair<char*, char*>
     output_sequence(boost::iostreams::mapped_file_sink& sink)
-    { return std::make_pair(sink.begin(), sink.end()); }
+    { 
+        return std::make_pair(sink.begin(), sink.end()); 
+    }
 };
 
 template<>
-struct direct_impl<boost::iostreams::mapped_file> {
+struct operations<boost::iostreams::mapped_file>
+    : detail::close_impl<closable_tag>
+{
     static std::pair<char*, char*>
     input_sequence(boost::iostreams::mapped_file& file)
-    { return std::make_pair(file.begin(), file.end()); }
-
+    { 
+        return std::make_pair(file.begin(), file.end()); 
+    }
     static std::pair<char*, char*>
     output_sequence(boost::iostreams::mapped_file& file)
-    { return std::make_pair(file.begin(), file.end()); }
+    { 
+        return std::make_pair(file.begin(), file.end()); 
+    }
 };
-
-} // End namespace detail.
 
 } } // End namespaces iostreams, boost.
 
