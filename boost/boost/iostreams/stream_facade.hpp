@@ -117,6 +117,7 @@ public:
     bool strict_sync() { return this->member.strict_sync(); }
     Device& operator*() { return *this->member; }
     Device* operator->() { return &*this->member; }
+    Device* component() { return this->member.component(); }
 private:
     void open_impl(const Device& dev BOOST_IOSTREAMS_PUSH_PARAMS()) // For forwarding.
     { 
