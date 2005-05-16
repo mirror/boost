@@ -76,6 +76,7 @@ class counted_base : private count_base< NeedsLocking >
 
     bool release() const
     {
+      BOOST_ASSERT( base_type::count_ > 0 );
       return --base_type::count_ == 0;
     }
 };
