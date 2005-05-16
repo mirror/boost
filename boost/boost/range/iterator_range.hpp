@@ -142,6 +142,9 @@ namespace boost
                 iterator_difference<IteratorT>::type difference_type;
             //! Size type
             typedef std::size_t size_type; // note: must be unsigned
+
+            //! This type
+            typedef iterator_range<IteratorT> this_type;
             
             //! const_iterator type
             /*! 
@@ -184,7 +187,18 @@ namespace boost
             iterator_range( Range& r, iterator_range_detail::range_tag ) : 
                 m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) ), 
                 singular(false) {}
-            
+
+            this_type& operator=( const this_type& r )    
+            {
+                m_Begin  = r.begin(); 
+                m_End    = r.end();
+                //
+                // remark: this need not necessarily be true, but it does no harm
+                //
+                singular = r.singular;
+                return *this;
+            }
+                
             template< class Iterator >
             iterator_range& operator=( const iterator_range<Iterator>& r )    
             {
