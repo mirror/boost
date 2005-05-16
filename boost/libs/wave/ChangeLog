@@ -34,7 +34,9 @@ CHANGELOG
 - Added tests for the different lexers.
 - Fixed the found_include_directive preprocessing hook to carry the information
   about #include_next directives as well.
-  
+- Separated the different lexer tests.
+- Fixed a bug in the whitespace eater.
+
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.

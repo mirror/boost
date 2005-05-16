@@ -142,7 +142,12 @@ eat_whitespace<TokenT>::newline_2nd(TokenT &token, bool &skipped_newline)
     if (T_CCOMMENT == id) {
         if (ccomment_has_newline(token))
             skipped_newline = true;
-        return !preserve_comments;
+
+        if (preserve_comments) {
+            state = &eat_whitespace::general;
+            return false;
+        }
+        return  true;
     }
     if (T_NEWLINE != id && T_CPPCOMMENT != id) 
         return general(token, skipped_newline);
