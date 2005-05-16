@@ -370,10 +370,18 @@ in most&nbsp;real-world applications. No matter whether an application uses
 handcrafted or Boost.Statechart machines it will...</p>
 <ul>
   <li>almost never run into a situation where a state machine is swamped with 
-  as many events as in the benchmarks. Unless a state machine is abused for 
-  parsing, it will almost always spend a good deal of time waiting for events 
+  as many events as in the benchmarks. A state machine will almost always spend a good deal of time waiting for events 
 	(which typically come from a human operator, from machinery or 
-	from electronic devices over often comparatively slow I/O channels)</li>
+	from electronic devices over often comparatively slow I/O channels). 
+  Parsers are just about the only application of FSMs where this is not the 
+  case. However, parser FSMs are usually not directly specified on the state 
+  machine level but on a higher one that is better suited for the task. 
+  Examples of such higher levels are: Boost.Regex, Boost.Spirit, XML Schemas, 
+  etc. Moreover, the nature of parsers allows for a number of optimizations 
+  that are not possible in a general-purpose FSM framework.<br>
+  Bottom line: While it is possible to implement a parser with this library, 
+  it is almost never advisable to do so because other approaches lead to 
+  better performing and more expressive code</li>
   <li>often run state machines in their own threads. This adds considerable 
   locking and thread-switching overhead. Performance tests with the PingPong 
   example, where two asynchronous state machines exchange events, gave the 
@@ -753,7 +761,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13999" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/05/12<!--webbot bot="Timestamp" endspan i-checksum="12607" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/05/16<!--webbot bot="Timestamp" endspan i-checksum="12615" --></font></td>
   </tr>
 </table>
 <hr>
@@ -57,8 +57,8 @@
 include:</p>
 <ul>
   <li>Straightforward transformation from UML state chart to executable C++ code 
-	and vice versa (currently, this needs to be done manually both ways but it 
-	should not be difficult to automate these tasks)</li>
+	and vice versa. Currently, this needs to be done manually both ways but it 
+  should not be difficult to automate these tasks</li>
   <li>Comprehensive <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
   UML semantics</a> support:<ul>
     <li>Hierarchical (composite, nested) states</li>
@@ -93,9 +93,6 @@ been tested yet):</p>
 	<li>GCC 3.3.1 (Dev-C++ 4.9.9.0): In release mode HistoryTest compilation 
 	takes forever and compiler memory footprint goes beyond 400MB, most likely 
 	a GCC bug</li>
-  <li>
-  <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
-  Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
   <li>Intel 8.0 (Win32, MS Visual Studio 2003 std library)</li>
   <li>Intel 8.1 (Win32, MS Visual Studio 2003 std library). All the examples 
 	worked as expected but some tests failed with an access violation inside the 
@@ -103,10 +100,15 @@ been tested yet):</p>
 	compiler expired before I managed to pin down the problem</li>
 </ul>
 <h3><a name="Incompatible_compilers">Incompatible compilers</a></h3>
-<p>The following compilers are known to be unable to compile Boost.Statechart:</p>
+<p>The following compilers are known to have problems with Boost.Statechart:</p>
 <ul>
-	<li>MSVC 6.0 &amp; 7.0</li>
-	<li>BCB (all versions)</li>
+	<li>MSVC 6.0 &amp; 7.0: Many compiler errors</li>
+  <li>Intel 7.0 (Win32, MS Visual Studio 6 std library). Most of the library, 
+  the examples and the tests can be compiled but the compiler appears to 
+  generate wrong code under certain circumstances, leading to crashes 
+  (currently (2005/05/16) the following tests fail: StateCastTest.cpp and 
+  TransitionTest.cpp)</li>
+  <li>BCB (all versions): Many compiler errors</li>
 </ul>
 <h3><a name="Getting_started">Getting started</a></h3>
 <p>Boost.Statechart builds on other parts of the boost library. In order to use this 
@@ -210,6 +212,8 @@ review):</p>
 	Darryl Green)</font></li>
     <li>Add allocator support for broken std libs when the workaround is 
 	available in boost::detail</li>
+    <li>Ensure that the library can be compiled with exception support turned 
+    off</li>
     <li><font color="#FF0000">Investigate how constant-time dispatch for 
     non-orthogonal state machines can be implemented (David Abrahams, Jonathan Turkanis, 
     Rob Steward, Dave Gomboc)</font></li>
@@ -223,6 +227,7 @@ review):</p>
   	<code>operator delete()</code></li>
     <li>Link incomplete code-snippets in the tutorial to complete example code 
 	where available</li>
+    <li>Where appropriate, link the reference documentation to examples</li>
     <li><font color="#FF0000">Add a description of the implementation and 
 	better explain performance trade-offs (Jonathan Turkanis)</font></li>
     <li><font color="#FF0000">Add links to descriptions of alternate 
@@ -492,7 +497,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13991" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13999" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
