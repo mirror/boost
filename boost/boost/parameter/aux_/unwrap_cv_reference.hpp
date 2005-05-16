@@ -37,7 +37,7 @@ struct is_cv_reference_wrapper
         )
     );
 
-    typedef mpl::bool_<value> type;
+    typedef mpl::bool_<is_cv_reference_wrapper::value> type;
 };
 
 // Needed for unwrap_cv_reference below. T might be const, so

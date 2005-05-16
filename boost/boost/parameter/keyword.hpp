@@ -57,7 +57,7 @@ struct keyword
         return aux::lazy_default<Tag, Default>(default_);
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // avoid partial ordering bugs
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)  // avoid partial ordering bugs
     template <class T>
     aux::tagged_argument<
         Tag
@@ -70,10 +70,15 @@ struct keyword
           , BOOST_DEDUCED_TYPENAME aux::unwrap_cv_reference<T const>::type
         >(x);
     }
+#endif 
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // avoid partial ordering bugs
     template <class Default>
     aux::default_<Tag, const Default>
     operator|(const Default& default_) const
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+        volatile
+#endif 
     {
         return aux::default_<Tag, const Default>(default_);
     }
@@ -81,6 +86,9 @@ struct keyword
     template <class Default>
     aux::lazy_default<Tag, Default>
     operator||(Default const& default_) const
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+        volatile
+#endif 
     {
         return aux::lazy_default<Tag, Default>(default_);
     }

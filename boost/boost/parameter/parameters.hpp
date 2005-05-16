@@ -213,7 +213,7 @@ namespace aux
           )
       );
 
-      typedef mpl::bool_<value> type;
+      typedef mpl::bool_<satisfies::value> type;
   };
 
   // Returns mpl::true_ if the requirements of the given ParameterSpec
@@ -325,6 +325,8 @@ struct parameters
     {};
 #endif
     
+
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     
     // Specializations are to be used as an optional argument to
     // eliminate overloads via SFINAE
@@ -334,19 +336,21 @@ struct parameters
         )       
     >
     struct restrict
-#ifndef BOOST_NO_SFINAE
+# ifndef BOOST_NO_SFINAE
       : restrict_base<
             typename BOOST_PARAMETER_build_arg_list(
                 BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
             )::type
         >::type
     {};
-#else
+# else
     { 
         typedef parameters<
             BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, PS)
         > type; 
     };
+# endif
+
 #endif
 
     //

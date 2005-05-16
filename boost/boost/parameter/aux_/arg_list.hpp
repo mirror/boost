@@ -63,7 +63,10 @@ struct empty_arg_list
         };
     };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, < 3)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+    || (BOOST_WORKAROUND(__GNUC__, < 3)) \
+    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    
     // The overload set technique doesn't work with these older
     // compilers, so they need some explicit handholding.
       
@@ -81,12 +84,6 @@ struct empty_arg_list
 
     template <class K, class T>
     T& get(default_<K,T> x) const
-    {
-        return x.value;
-    }
-
-    template <class K, class T>
-    T get(default_<K,T> x) const
     {
         return x.value;
     }
@@ -172,12 +169,13 @@ struct arg_list : Next
     {
         template <class KW, class Default>
         struct apply
-          : mpl::eval_if<
+        {
+          typedef typename mpl::eval_if<
                 boost::is_same<KW, key_type>
               , add_reference<value_type>
               , mpl::apply_wrap2<typename Next::binding, KW, Default>
-            >
-        {};
+          >::type type;
+        };
     };
 
     //
@@ -185,7 +183,9 @@ struct arg_list : Next
     // specific arguments by name
     //
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, < 3)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+    || BOOST_WORKAROUND(__GNUC__, < 3) \
+    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     // These older compilers don't support the overload set creation
     // idiom well, so we need to do all the return type calculation
     // for the compiler and dispatch through an outer function template
@@ -197,12 +197,13 @@ struct arg_list : Next
     {
         template<class KW>
         struct apply
-          : mpl::eval_if<
+        {
+          typedef typename mpl::eval_if<
                 boost::is_same<KW, key_type>
               , mpl::identity<arg_list<TaggedArg,Next> >
               , mpl::apply_wrap1<typename Next::key_owner,KW>
-            >
-        {};
+          >::type type;
+        };
     };
 
     // Outer indexing operators that dispatch to the right node's
@@ -254,7 +255,9 @@ struct arg_list : Next
     {
         return arg.value;
     }
+    
 #else
+
     value_type& operator[](keyword<key_type> x) const
     {
         return arg.value;
@@ -299,6 +302,7 @@ struct arg_list : Next
     using Next::satisfies;
 #endif
 
+#if !BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x564))
     // Comma operator to compose argument list without using parameters<>.
     // Useful for argument lists with undetermined length.
     template <class KW, class T2>
@@ -307,6 +311,7 @@ struct arg_list : Next
     {
         return arg_list<tagged_argument<KW, T2>, arg_list>(x, *this);
     }
+#endif 
 };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)  // ETI workaround

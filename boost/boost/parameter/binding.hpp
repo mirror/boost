@@ -15,8 +15,11 @@ namespace boost { namespace parameter {
 // parameter has been specified, returns Default
 template <class Parameters, class Keyword, class Default = aux::void_>
 struct binding
-  : mpl::apply_wrap2<typename Parameters::binding,Keyword,Default>
-{};
+{
+    typedef typename mpl::apply_wrap2<
+        typename Parameters::binding,Keyword,Default
+    >::type type;
+};
 
 // A metafunction that, given an argument pack, returns the type of
 // the parameter identified by the given keyword.  If no such
@@ -24,12 +27,13 @@ struct binding
 // DefaultFn
 template <class Parameters, class Keyword, class DefaultFn>
 struct lazy_binding
-  : mpl::apply_wrap2<
-        typename Parameters::binding
-      , Keyword
-      , typename aux::result_of0<DefaultFn>::type
-    >
-{};
+{
+  typedef typename mpl::apply_wrap2<
+      typename Parameters::binding
+    , Keyword
+    , typename aux::result_of0<DefaultFn>::type
+  >::type type;
+};
 
 
 }} // namespace boost::parameter

@@ -93,11 +93,14 @@ int main()
      , index = boost::ref(x), name = "foo"
    );
 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+   // No comma operator available on Borland
    f_list((
        tester = test::values("foo", 666.222, 56)
      , index = boost::ref(x)
      , name = "foo"
    ));
+#endif
    
    //f(index = 56, name = 55); // won't compile
    return 0;
