@@ -36,7 +36,9 @@ CHANGELOG
   about #include_next directives as well.
 - Separated the different lexer tests.
 - Fixed a bug in the whitespace eater.
-
+- Fixed a bug where Wave emitted the found C++ comments in --preserve mode even
+  if these were found inside of disabled #if/#endif blocks.
+  
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.

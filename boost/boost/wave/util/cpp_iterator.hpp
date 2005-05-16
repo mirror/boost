@@ -533,7 +533,12 @@ bool returned_from_include_file = returned_from_include();
             // (the C++ comment token includes the trailing newline)
                 seen_newline = true;
                 ++iter_ctx->first;
-                whitespace.shift_tokens(T_NEWLINE);  // whitespace controller
+                whitespace.shift_tokens(id);  // whitespace controller
+                
+                if (!ctx.get_if_block_status()) {
+                // skip this token because of the disabled #if block
+                    continue;
+                }
                 return act_token; 
             }
             seen_newline = false;

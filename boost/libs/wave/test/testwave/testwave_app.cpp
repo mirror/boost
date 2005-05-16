@@ -230,6 +230,7 @@ testwave_app::testwave_app(po::variables_map const& vm)
         ("nesting,n", po::value<int>(), 
             "specify a new maximal include nesting depth")
         ("long_long", "enable long long support in C++ mode")
+        ("preserve", "preserve comments")
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
         ("variadics", "enable certain C99 extensions in C++ mode")
         ("c99", "enable C99 mode (implies --variadics)")
@@ -457,6 +458,23 @@ testwave_app::read_file(std::string const& filename, std::string& instr)
 template 
 struct boost::wave::cpplexer::new_lexer_gen<std::string::const_iterator>;
 
+namespace {
+
+    void trim_whitespace(std::string& value)
+    {
+        std::string::size_type first = value.find_first_not_of(" \t");
+        std::string::size_type last = std::string::npos;
+        
+        if (std::string::npos == first) 
+            value.clear();
+        else {
+            last = value.find_last_not_of(" \t")+1;
+            assert(std::string::npos != last);
+            value = value.substr(first, last-first);
+        }
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Extract special information from comments marked with the given letter
@@ -488,8 +506,10 @@ testwave_app::extract_special_information(std::string const& filename,
             token_id id = token_id(*it);
             if (T_CCOMMENT == id) {
                 std::string value = (*it).get_value().c_str();
-                if (flag == value[2])
+                if (flag == value[2]) {
                     content += value.substr(3, value.size()-5);
+                    trim_whitespace(content);
+                }
             }
             else if (T_CPPCOMMENT == id) {
                 std::string value = (*it).get_value().c_str();
@@ -595,13 +615,24 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
     }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 
+// enable long_long mode, if appropriate
     if (vm.count("long_long")) {
         ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
     }
     
+// enable preserving comments mode, if appropriate
+    if (vm.count("preserve")) {
+        ctx.set_language(
+            boost::wave::enable_preserve_comments(ctx.get_language()));
+    }
+    
 // enable trigraph conversion
     ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
-        boost::wave::support_option_convert_trigraphs));
+        (boost::wave::language_support)(
+            boost::wave::get_support_options(ctx.get_language()) | 
+            boost::wave::support_option_convert_trigraphs)
+        )
+    );
 
 //  add include directories to the system include search paths
     if (vm.count("sysinclude")) {
