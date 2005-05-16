@@ -6,7 +6,7 @@
 
 subproject libs/statechart/example ;
 
-local no-of-bits-list = 1 2 3 4 ;
+local no-of-bits-list = 1 2 3 ;
 
 template statechart-common-options
   :
