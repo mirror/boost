@@ -7,10 +7,51 @@
 #ifndef BOOST_IOSTREAMS_DETAIL_NON_BLOCKING_ADAPTER_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_NON_BLOCKING_ADAPTER_HPP_INCLUDED
 
-#include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // streamsize, seekdir, openmode.
+#include <boost/iostreams/read.hpp>
+#include <boost/iostreams/seek.hpp>
+#include <boost/iostreams/traits.hpp>
+#include <boost/iostreams/write.hpp>
 
-// Content has been moved to operations.hpp to break a cyclic dependency.
-// A better long-term solution might be to break up operations.hpp into
-// separate headers for each operation.
+namespace boost { namespace iostreams {
+
+template<typename Device>
+class non_blocking_adapter {
+public:
+    typedef typename io_char<Device>::type char_type;
+    struct io_category
+        : io_mode<Device>::type, device_tag
+        { };
+    explicit non_blocking_adapter(Device& dev) : device_(dev) { }
+    std::streamsize read(char_type* s, std::streamsize n)
+    { 
+        std::streamsize result = 0;
+        while (result < n) {
+            std::streamsize amt = iostreams::read(device_, s, n);
+            if (amt == -1)
+                break;
+            result += amt;
+        }
+        return result != 0 ? result : -1;
+    }
+    std::streamsize write(const char_type* s, std::streamsize n)
+    { 
+        std::streamsize result = 0;
+        while (result < n) {
+            std::streamsize amt = 
+                iostreams::write(device_, s + result, n - result);
+            result += amt;
+        }
+        return result;    
+    }
+    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way,
+                        BOOST_IOS::openmode which = 
+                            BOOST_IOS::in | BOOST_IOS::out )
+    { return iostreams::seek(device_, off, way, which); }
+public:
+    Device& device_;
+};
+
+} } // End namespace iostreams.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_NON_BLOCKING_ADAPTER_HPP_INCLUDED
