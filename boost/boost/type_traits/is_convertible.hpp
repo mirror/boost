@@ -279,6 +279,7 @@ struct is_convertible_impl_select<true, false, true>
 template <typename From, typename To>
 struct is_convertible_impl_dispatch_base
 {
+#ifndef __HP_aCC
    typedef is_convertible_impl_select< 
       ::boost::is_arithmetic<From>::value, 
       ::boost::is_arithmetic<To>::value,
@@ -288,6 +289,9 @@ struct is_convertible_impl_dispatch_base
       false
 #endif
    > selector;
+#else
+   typedef is_convertible_impl_select<false, false, false> selector;
+#endif
    typedef typename selector::template rebind<From, To> binder;
    typedef typename binder::type type;
 };
