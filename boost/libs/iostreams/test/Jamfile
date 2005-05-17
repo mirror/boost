@@ -59,7 +59,8 @@ DEPENDS all : test ;
     }
 
     test-suite "iostreams"
-        : [ test-iostreams libs/iostreams/test/array_test.cpp ]
+        : [ test-iostreams libs/iostreams/example/example_test.cpp ]
+          [ test-iostreams libs/iostreams/test/array_test.cpp ]
           [ test-iostreams libs/iostreams/test/auto_close_test.cpp ]
           [ test-iostreams libs/iostreams/test/buffer_size_test.cpp ]
           [ test-iostreams 
