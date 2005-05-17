@@ -4,6 +4,7 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+#include <string>
 #include <boost/iostreams/compose.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
@@ -18,7 +19,7 @@
 namespace io = boost::iostreams;
 using boost::unit_test::test_suite;
 
-const char* posix =
+const std::string posix =
     "When I was one-and-twenty\n"
     "I heard a wise man say,\n"
     "'Give crowns and pounds and guineas\n"
@@ -39,7 +40,7 @@ const char* posix =
     "And I am two-and-twenty,\n"
     "And oh, 'tis true, 'tis true.\n";
 
-const char* windows =
+const std::string windows =
     "When I was one-and-twenty\r\n"
     "I heard a wise man say,\r\n"
     "'Give crowns and pounds and guineas\r\n"
@@ -60,7 +61,7 @@ const char* windows =
     "And I am two-and-twenty,\r\n"
     "And oh, 'tis true, 'tis true.\r\n";
 
-const char* mac =
+const std::string mac =
     "When I was one-and-twenty\r"
     "I heard a wise man say,\r"
     "'Give crowns and pounds and guineas\r"
@@ -81,7 +82,7 @@ const char* mac =
     "And I am two-and-twenty,\r"
     "And oh, 'tis true, 'tis true.\r";
 
-const char* no_final_newline =
+const std::string no_final_newline =
     "When I was one-and-twenty\n"
     "I heard a wise man say,\n"
     "'Give crowns and pounds and guineas\n"
@@ -102,7 +103,7 @@ const char* no_final_newline =
     "And I am two-and-twenty,\n"
     "And oh, 'tis true, 'tis true.";
 
-const char* mixed =
+const std::string mixed =
     "When I was one-and-twenty\n"
     "I heard a wise man say,\r\n"
     "'Give crowns and pounds and guineas\r"
@@ -175,19 +176,19 @@ void write_newline_filter()
     BOOST_CHECK(test_output_filter(newline_filter(newline::mac), mixed, mac));
 }
 
-void test_input_against_flags(int flags, const char* input, bool read)
+void test_input_against_flags(int flags, const std::string& input, bool read)
 {
     if (read) {
         io::copy(
             io::compose(
                 io::newline_checker(flags),
-                io::array_source(input)
+                io::array_source(input.c_str())
             ),
             io::null_sink()
         );
     } else {
         io::copy(
-            io::array_source(input), 
+            io::array_source(input.c_str()),
             io::compose(io::newline_checker(flags), io::null_sink())
         );
     }
@@ -201,7 +202,7 @@ void read_newline_checker()
         // Verify properties of ::posix.
 
     in.push(io::newline_checker(io::newline::posix));
-    in.push(io::array_source(::posix));
+    in.push(io::array_source(::posix.c_str()));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
@@ -215,7 +216,7 @@ void read_newline_checker()
         // Verify properties of ::windows.
 
     in.push(io::newline_checker(io::newline::windows));
-    in.push(io::array_source(::windows));
+    in.push(io::array_source(::windows.c_str()));
     try {
         io::copy(in, io::null_sink());
     } catch (io::newline_error&) {
@@ -235,7 +236,7 @@ void read_newline_checker()
         // Verify properties of ::mac.
 
     in.push(io::newline_checker(io::newline::mac));
-    in.push(io::array_source(::mac));
+    in.push(io::array_source(::mac.c_str()));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
@@ -249,7 +250,7 @@ void read_newline_checker()
         // Verify properties of no_final_newline.
 
     in.push(io::newline_checker(io::newline::posix));
-    in.push(io::array_source(::no_final_newline));
+    in.push(io::array_source(::no_final_newline.c_str()));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
@@ -263,7 +264,7 @@ void read_newline_checker()
         // Verify properties of mixed.
 
     in.push(io::newline_checker());
-    in.push(io::array_source(::mixed));
+    in.push(io::array_source(::mixed.c_str()));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
@@ -280,43 +281,43 @@ void read_newline_checker()
         // Verify exceptions when input does not satisfy target conditions.
 
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::posix, true), 
+        test_input_against_flags(io::newline::windows, ::posix, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::posix, true), 
+        test_input_against_flags(io::newline::mac, ::posix, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::windows, true), 
+        test_input_against_flags(io::newline::posix, ::windows, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::windows, true), 
+        test_input_against_flags(io::newline::mac, ::windows, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::mac, true), 
+        test_input_against_flags(io::newline::posix, ::mac, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mac, true), 
+        test_input_against_flags(io::newline::windows, ::mac, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::final_newline, ::no_final_newline, true), 
+        test_input_against_flags(io::newline::final_newline, ::no_final_newline, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::mixed, true), 
+        test_input_against_flags(io::newline::posix, ::mixed, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mixed, true), 
+        test_input_against_flags(io::newline::windows, ::mixed, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::mixed, true), 
+        test_input_against_flags(io::newline::mac, ::mixed, true),
         io::newline_error
     )
 }
@@ -330,7 +331,7 @@ void write_newline_checker()
 
     out.push(io::newline_checker(io::newline::posix));
     out.push(io::null_sink());
-    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::posix), out))
+    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::posix.c_str()), out))
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
@@ -344,7 +345,7 @@ void write_newline_checker()
 
     out.push(io::newline_checker(io::newline::windows));
     out.push(io::null_sink());
-    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::windows), out))
+    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::windows.c_str()), out))
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
@@ -358,7 +359,7 @@ void write_newline_checker()
 
     out.push(io::newline_checker(io::newline::mac));
     out.push(io::null_sink());
-    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::mac), out))
+    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::mac.c_str()), out))
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
@@ -372,7 +373,7 @@ void write_newline_checker()
 
     out.push(io::newline_checker(io::newline::posix));
     out.push(io::null_sink());
-    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::no_final_newline), out))
+    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::no_final_newline.c_str()), out))
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
@@ -386,7 +387,7 @@ void write_newline_checker()
 
     out.push(io::newline_checker());
     out.push(io::null_sink());
-    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::mixed), out))
+    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::mixed.c_str()), out))
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
@@ -402,48 +403,48 @@ void write_newline_checker()
         // Verify exceptions when input does not satisfy target conditions.
 
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::posix, false), 
+        test_input_against_flags(io::newline::windows, ::posix, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::posix, false), 
+        test_input_against_flags(io::newline::mac, ::posix, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::windows, false), 
+        test_input_against_flags(io::newline::posix, ::windows, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::windows, false), 
+        test_input_against_flags(io::newline::mac, ::windows, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::mac, false), 
+        test_input_against_flags(io::newline::posix, ::mac, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mac, false), 
+        test_input_against_flags(io::newline::windows, ::mac, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::final_newline, ::no_final_newline, false), 
+        test_input_against_flags(io::newline::final_newline, ::no_final_newline, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::mixed, false), 
+        test_input_against_flags(io::newline::posix, ::mixed, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mixed, false), 
+        test_input_against_flags(io::newline::windows, ::mixed, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::mixed, false), 
+        test_input_against_flags(io::newline::mac, ::mixed, false),
         io::newline_error
     )
 }
 
-test_suite* init_unit_test_suite(int, char* []) 
+test_suite* init_unit_test_suite(int, char* [])
 {
     test_suite* test = BOOST_TEST_SUITE("newline_filter test");
     test->add(BOOST_TEST_CASE(&read_newline_filter));
