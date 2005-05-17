@@ -361,13 +361,11 @@ bool zlib_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
       char*& dest_begin, char* dest_end, bool flush )
 {
-    //char* dest_begin_old = dest_begin;
     before(src_begin, src_end, dest_begin, dest_end);
     int result = inflate(zlib::sync_flush);
     after(src_begin, dest_begin, false);
     zlib_error::check(result);
-    return result != zlib::stream_end ; //&& 
-           //(!flush || dest_begin_old != dest_begin);
+    return result != zlib::stream_end;
 }
 
 template<typename Alloc>

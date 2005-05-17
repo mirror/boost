@@ -19,8 +19,13 @@
 //          // Consume as many characters as possible from the interval
 //          // [begin_in, end_in), without exhausting the output range
 //          // [begin_out, end_out). If flush is true, write as mush output
-//          // as possible. Return true to indicate that filter() must be
-//          // called again.
+//          // as possible. 
+//          // A return value of true indicates that filter should be called 
+//          // again. More precisely, if flush is false, a return value of 
+//          // false indicates that the natural end of stream has been reached
+//          // and that all filtered data has been forwarded; if flush is
+//          // true, a return value of false indicates that all filtered data 
+//          // has been forwarded.
 //       }
 //       void close() { /* Reset filter's state. */ }
 //   };
@@ -130,9 +135,7 @@ public:
             if (buf.ptr() != buf.eptr() || flush) {
                 const char_type* next = buf.ptr();
                 bool done =
-                    !filter().filter(next, buf.eptr(), next_s, end_s, flush)
-                        &&
-                     flush;
+                    !filter().filter(next, buf.eptr(), next_s, end_s, flush);
                 buf.ptr() = buf.data() + (next - buf.data());
                 if (done)
                     return detail::check_eof(static_cast<streamsize>(next_s - s));

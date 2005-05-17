@@ -25,13 +25,14 @@
 #include <boost/config.hpp>               // Put size_t in std.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>  // buffer size.
+#include <boost/iostreams/detail/adapter/non_blocking_adapter.hpp>
+#include <boost/iostreams/detail/adapter/range_adapter.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/ios.hpp> // failure.
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/pipeline.hpp>      
-#include <boost/iostreams/streambuf_facade.hpp>      
+#include <boost/iostreams/pipeline.hpp>         
 
 // Must come last.
 #if defined(BOOST_MSVC)
@@ -195,16 +196,23 @@ public:
 
             // Read from basic_zlib_filter.
             streamsize amt = base_type::read(src, s + result, n - result);
-            if (amt < n - result)
+            if (amt != -1) {
+                result += amt;
+                if (amt < n - result) { // Double-check for EOF.
+                    amt = base_type::read(src, s + result, n - result);
+                    if (amt != -1)
+                        result += amt;
+                }
+            }
+            if (amt == -1)
                 prepare_footer();
-            result += amt;
         }
 
         // Read footer.
-        if (flags_ & f_body_done && result < n)
+        if ((flags_ & f_body_done) != 0 && result < n)
             result += read_string(s + result, n - result, footer_);
 
-        return result;
+        return result != 0 ? result : -1;
     }
 
     template<typename Sink>
@@ -213,7 +221,7 @@ public:
         if (!(flags_ & f_header_done)) {
             std::streamsize amt = 
                 static_cast<std::streamsize>(header_.size() - offset_);
-            offset_ += boost::iostreams::write(snk, header_.data(), amt);
+            offset_ += boost::iostreams::write(snk, header_.data() + offset_, amt);
             if (offset_ == header_.size())
                 flags_ |= f_header_done;
             else
@@ -287,17 +295,35 @@ public:
         { };
     basic_gzip_decompressor( int window_bits = gzip::default_window_bits,
                              int buffer_size = default_device_buffer_size );
+
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
     {
-        if (!header_read()) {
-            read_header(src);
+        if ((flags_ & f_header_read) == 0) {
+            non_blocking_adapter<Source> nb(src);
+            read_header(nb);
             flags_ |= f_header_read;
         }
+
+        if ((flags_ & f_footer_read) != 0)
+            return -1;
+        
         try {
-            std::streamsize result = base_type::read(src, s, n);
-            if (result < n)
-                read_footer(src);
+            std::streamsize result = 0;
+            std::streamsize amt;
+            if ((amt = base_type::read(src, s, n)) != -1) {
+                result += amt;
+                if (amt < n) { // Double check for EOF.
+                    amt = base_type::read(src, s + result, n - result);
+                    if (amt != -1)
+                        result += amt;
+                }
+            }
+            if (amt == -1) {
+                non_blocking_adapter<Source> nb(src);
+                read_footer(nb);
+                flags_ |= f_footer_read;
+            }
             return result;
         } catch (const zlib_error& e) {
             throw gzip_error(e);
@@ -315,7 +341,6 @@ public:
         }
     }
 
-    bool header_read() const { return (flags_ & f_header_read) != 0; }
     std::string file_name() const { return file_name_; }
     std::string comment() const { return comment_; }
     bool text() const { return (flags_ & gzip::flags::text) != 0; }
@@ -331,7 +356,7 @@ private:
     static int read_byte(Source& src, int error)
     {
         int c;
-        if (traits_type::eq_int_type(c = boost::iostreams::get(src), EOF))
+        if ((c = boost::iostreams::get(src)) == EOF || c == WOULD_BLOCK)
             throw gzip_error(error);
         return static_cast<unsigned char>(traits_type::to_char_type(c));
     }
@@ -362,7 +387,7 @@ private:
     }
 
     template<typename Source>
-    void read_header(Source& src)
+    void read_header(Source& src) // Source is non-blocking.
     {
         // Reset saved values.
         #if BOOST_WORKAROUND(__GNUC__, == 2) && defined(__STL_CONFIG_H) || \
@@ -381,9 +406,9 @@ private:
 
         // Read header, without checking header crc.
         if ( boost::iostreams::get(src) != gzip::magic::id1 ||   // ID1.
-                boost::iostreams::get(src) != gzip::magic::id2 ||   // ID2.
-            is_eof(boost::iostreams::get(src)) ||                // CM.
-            is_eof(flags = boost::iostreams::get(src)) )         // FLG.
+             boost::iostreams::get(src) != gzip::magic::id2 ||   // ID2.
+             is_eof(boost::iostreams::get(src)) ||               // CM.
+             is_eof(flags = boost::iostreams::get(src)) )        // FLG.
         {
             throw gzip_error(gzip::bad_header);
         }
@@ -420,20 +445,21 @@ private:
         int c;
         while (!is_eof(c = boost::iostreams::get(src)))
             footer += c;
-        streambuf_facade<array_source> 
-            in(footer.c_str(), footer.c_str() + footer.size());
-        if ( static_cast<unsigned long>(read_long(in, gzip::bad_footer))
+        detail::range_adapter<input, std::string> 
+            rng(footer.begin(), footer.end());
+        if ( static_cast<unsigned long>(read_long(rng, gzip::bad_footer))
                 !=
-                this->crc() )
+             this->crc() )
         {
             throw gzip_error(gzip::bad_crc);
         }
-        if (read_long(in, gzip::bad_footer) != this->total_out())
+        if (read_long(rng, gzip::bad_footer) != this->total_out())
             throw gzip_error(gzip::bad_length);
     }
     enum {
-        f_header_read = 1,
-        f_text = f_header_read << 1
+        f_header_read  = 1,
+        f_footer_read  = f_header_read << 1,
+        f_text         = f_footer_read << 1
     };
     std::string  file_name_;
     std::string  comment_;
