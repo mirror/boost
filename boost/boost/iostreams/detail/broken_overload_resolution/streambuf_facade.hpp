@@ -110,6 +110,8 @@ public:
         open_impl(detail::forward<T, U0>(), u0, u1, u2);
     }
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
+    T& operator*() { return *this->component(); }
+    T* operator->() { return this->component(); }
 private:
     template<typename U0>
     void open_impl(mpl::false_, const U0& u0)
