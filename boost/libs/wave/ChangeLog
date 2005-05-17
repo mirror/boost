@@ -41,6 +41,7 @@ CHANGELOG
 - Removed the function local static grammars to avoid possible raise conditions
   and to make CW8.3 happy.
 - Unified lexer interface, adjusted namespaces.
+- Added lexer testcases to the regression tests.
 
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17

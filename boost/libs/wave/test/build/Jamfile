@@ -19,8 +19,7 @@ DEPENDS all : test ;
 #
 # These are the sources to compile for the testwave application
 #
-SOURCES = testwave testwave_app
-    ;
+TESTWAVE_SOURCES = testwave testwave_app    ;
 
 #
 # This is the directory where the test files reside
@@ -41,6 +40,23 @@ TESTWAVE_ARGUMENTS =
 # These are the names of the different unit tests to run
 #
 TESTWAVE_FILES = test.cfg
+    ;
+
+#
+# this template defines the options common to all wave lexer tests:
+#
+template wave-lexer-test 
+    : 
+        <lib>../../build/boost_wave    # sources
+    : 
+        <include>$(BOOST_ROOT) 
+        <sysinclude>$(BOOST_ROOT)
+        <vc-7_1><*><rtti>off           # workaround for compiler bug
+        std::locale-support
+    : 
+        <runtime-link>static
+        <threading>single
+        debug                          # build variants
     ;
 
 #
@@ -66,12 +82,13 @@ template wave-test
 # Wave test suite
 #
 test-suite wave
-    : 
+    :
+        # test the wave preprocessing component
         [   
             run
             # sources
                 <template>wave-test 
-                ../testwave/$(SOURCES).cpp
+                ../testwave/$(TESTWAVE_SOURCES).cpp
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -83,6 +100,37 @@ test-suite wave
             :
             # name
                 testwave
+        ]
+        # test the different wave lexing components 
+        [   
+            run
+            # sources
+                <template>wave-lexer-test 
+                ../testlexers/test_slex_lexer.cpp
+            :
+            # arguments
+            :
+            # input files
+            :
+            # requirements
+            :
+            # name
+                test_slex_lexer
+        ]
+        [   
+            run
+            # sources
+                <template>wave-lexer-test 
+                ../testlexers/test_re2c_lexer.cpp
+            :
+            # arguments
+            :
+            # input files
+            :
+            # requirements
+            :
+            # name
+                test_re2c_lexer
         ]
     ;
 
