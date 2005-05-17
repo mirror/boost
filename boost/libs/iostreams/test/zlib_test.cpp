@@ -4,13 +4,9 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#include <memory>
-#include <vector>
-#include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/device/back_inserter.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
+#include <string>
+#include <boost/iostreams/filter/test.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/sequence.hpp"
@@ -26,67 +22,17 @@ struct zlib_alloc : std::allocator<char> { };
 
 void zlib_test()
 {
-    {
-        // Compress and decompress data, using small buffer.
-        text_sequence      src;
-        vector<char>       compressed;
-
-        zlib_compressor    zc( zlib::default_compression, 
-                               default_filter_buffer_size );
-        filtering_ostream  out(zc);
-        out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(make_iterator_range(src), out);
-        out.pop();
-
-        zlib_decompressor  zd( zlib::default_window_bits, 
-                               default_filter_buffer_size );
-        filtering_istream  in(zd);
-        in.push(make_iterator_range(compressed));
-        BOOST_CHECK_MESSAGE(
-            compare_container_and_stream(src, in),
-            "failed zlib test with small buffer"
-        );
-    }
-
-    {
-        // Compress and decompress data, using default buffer size.
-        text_sequence          src;
-        vector<char>           compressed;
-
-        filtering_ostream out;
-        out.push(zlib_compressor());
-        out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(make_iterator_range(src), out);
-        out.reset();
-
-        filtering_istream in;
-        in.push(zlib_decompressor());
-        in.push(make_iterator_range(compressed));
-        BOOST_CHECK_MESSAGE(
-            compare_container_and_stream(src, in),
-            "failed zlib test with default buffer size"
-        );
-    }
-
-    {
-        // Compress and decompress data, using custom allocation.
-        text_sequence      src;
-        vector<char>       compressed;
-
-        filtering_ostream  out;
-        out.push(basic_zlib_compressor<zlib_alloc>());
-        out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(make_iterator_range(src), out);
-        out.reset();
-
-        filtering_istream  in;
-        in.push(basic_zlib_decompressor<zlib_alloc>());
-        in.push(make_iterator_range(compressed));
-        BOOST_CHECK_MESSAGE(
-            compare_container_and_stream(src, in),
-            "failed zlib test with custom allocation"
-        );
-    }
+    text_sequence data;
+    BOOST_CHECK(
+        test_filter_pair( zlib_compressor(), 
+                          zlib_decompressor(), 
+                          std::string(data.begin(), data.end()) )
+    );
+    BOOST_CHECK(
+        test_filter_pair( basic_zlib_compressor<zlib_alloc>(), 
+                          basic_zlib_decompressor<zlib_alloc>(), 
+                          std::string(data.begin(), data.end()) )
+    );
 }
 
 test_suite* init_unit_test_suite(int, char* []) 
