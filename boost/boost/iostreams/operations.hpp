@@ -11,6 +11,7 @@
 # pragma once
 #endif
 
+#include <boost/iostreams/operations_fwd.hpp>
 #include <boost/iostreams/close.hpp>
 #include <boost/iostreams/flush.hpp>
 #include <boost/iostreams/imbue.hpp>
