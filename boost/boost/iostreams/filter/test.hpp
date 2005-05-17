@@ -11,11 +11,11 @@
 #endif
 
 #include <boost/config.hpp> // Put size_t in std.
-#include <algorithm>        // equal, min.
+#include <algorithm>        // min.
 #include <cstddef>          // size_t.
 #include <cstdlib>          // rand.
-#include <cstring>          // memcpy, strlen.
 #include <iterator>
+#include <string>
 #include <vector>
 #if defined(__CYGWIN__)
 # include <boost/random/linear_congruential.hpp>
@@ -25,12 +25,17 @@
 #include <boost/iostreams/compose.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/detail/adapter/basic_adapter.hpp>
+#include <boost/iostreams/detail/bool_trait_def.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_same.hpp>
+
+#include <boost/iostreams/device/file.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 # undef rand
@@ -41,7 +46,9 @@ namespace std { using ::rand; using ::memcpy; using ::strlen; }
 
 namespace boost { namespace iostreams {
 
-const std::streamsize default_increment = 10;
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_string, std::basic_string, 3)
+
+const std::streamsize default_increment = 5;
 
 #if defined(__CYGWIN__)
     std::streamsize rand(int inc)
@@ -64,17 +71,13 @@ public:
         : source_tag,
           peekable_tag
         { };
-    explicit non_blocking_source( const char* data, 
+    explicit non_blocking_source( const std::string& data, 
                                   std::streamsize inc = default_increment ) 
         : data_(data), inc_(inc), pos_(0)
         { }
-    explicit non_blocking_source( const char* begin, const char* end,
-                                  std::streamsize inc = default_increment )
-        : data_(begin), inc_(inc), pos_(0)
-        { }
     std::streamsize read(char* s, std::streamsize n)
     {
-        if (pos_ == data_.size())
+        if (pos_ == static_cast<std::streamsize>(data_.size()))
             return -1;
         std::streamsize avail = 
             (std::min) (n, static_cast<std::streamsize>(data_.size() - pos_));
@@ -100,7 +103,7 @@ private:
 
 class non_blocking_sink : public sink {
 public:
-    non_blocking_sink( std::vector<char>& dest,
+    non_blocking_sink( std::string& dest,
                        std::streamsize inc = default_increment ) 
         : dest_(dest), inc_(inc) 
         { }
@@ -111,45 +114,27 @@ public:
         return amt;
     }
 private:
-    std::vector<char>&  dest_;
-    std::streamsize     inc_;
+    std::string&     dest_;
+    std::streamsize  inc_;
 };
                 
 //--------------Definition of test_input_filter-------------------------------//
 
-namespace detail {
-
-// Workaround for bad overload resolution.
-
-template<typename T>
-struct is_string_literal : mpl::false_ { };
-
-template<>
-struct is_string_literal<char*> : mpl::true_ { };
-
-template<>
-struct is_string_literal<const char*> : mpl::true_ { };
-
-} // End namespace detail.
-
 template<typename Filter>
 bool test_input_filter( Filter filter, 
-                        const char* input, 
-                        const char* output,
+                        const std::string& input, 
+                        const std::string& output, 
                         mpl::true_ )
 {
     for ( int inc = default_increment; 
-          inc < default_increment * 20; 
+          inc < default_increment * 40; 
           inc += default_increment )
     {
         non_blocking_source  src(input, inc);
-        std::vector<char>    dest;
+        std::string          dest;
         iostreams::copy(compose(filter, src), iostreams::back_inserter(dest));
-        if ( dest.size() != std::strlen(output) ||
-             !std::equal(dest.begin(), dest.end(), output) )
-        {
+        if (dest != output)
             return false;
-        }
     }
     return true;
 }
@@ -157,14 +142,14 @@ bool test_input_filter( Filter filter,
 template<typename Filter, typename Source1, typename Source2>
 bool test_input_filter( Filter filter, 
                         const Source1& input, 
-                        const Source2& output,
+                        const Source2& output, 
                         mpl::false_ )
 {
     std::string in;
     std::string out;
     iostreams::copy(input, iostreams::back_inserter(in));
     iostreams::copy(output, iostreams::back_inserter(out));
-    return test_input_filter(filter, in.c_str(), out.c_str());
+    return test_input_filter(filter, in, out);
 }
 
 template<typename Filter, typename Source1, typename Source2>
@@ -174,33 +159,26 @@ bool test_input_filter( Filter filter,
 {
     // Use tag dispatch to compensate for bad overload resolution.
     return test_input_filter( filter, input, output,    
-                              detail::is_string_literal<Source1>() );
+                              is_string<Source1>() );
 }
 
 //--------------Definition of test_output_filter------------------------------//
 
 template<typename Filter>
 bool test_output_filter( Filter filter, 
-                         const char* input, 
-                         const char* output,
+                         const std::string& input, 
+                         const std::string& output, 
                          mpl::true_ )
 {
     for ( int inc = default_increment; 
-          inc < default_increment * 20; 
+          inc < default_increment * 40; 
           inc += default_increment )
     {
-        array_source       src(input, input + std::strlen(input));
-        std::vector<char>  dest;
+        array_source  src(input.data(), input.data() + input.size());
+        std::string   dest;
         iostreams::copy(src, compose(filter, non_blocking_sink(dest, inc)));
-        std::string d(dest.begin(), dest.end());
-        const char* c = d.c_str();
-        std::size_t ilen = std::strlen(input);
-        std::size_t olen = std::strlen(output);
-        if ( dest.size() != std::strlen(output) ||
-             !std::equal(dest.begin(), dest.end(), output) )
-        {
+        if (dest != output )
             return false;
-        }
     }
     return true;
 }
@@ -208,14 +186,14 @@ bool test_output_filter( Filter filter,
 template<typename Filter, typename Source1, typename Source2>
 bool test_output_filter( Filter filter, 
                          const Source1& input, 
-                         const Source2& output,
+                         const Source2& output, 
                          mpl::false_ )
 {
     std::string in;
     std::string out;
     iostreams::copy(input, iostreams::back_inserter(in));
     iostreams::copy(output, iostreams::back_inserter(out));
-    return test_output_filter(filter, in.c_str(), out.c_str());
+    return test_output_filter(filter, in, out);
 }
 
 template<typename Filter, typename Source1, typename Source2>
@@ -225,7 +203,7 @@ bool test_output_filter( Filter filter,
 {
     // Use tag dispatch to compensate for bad overload resolution.
     return test_output_filter( filter, input, output,    
-                               detail::is_string_literal<Source1>() );
+                               is_string<Source1>() );
 }
 
 //--------------Definition of test_filter_pair--------------------------------//
@@ -233,26 +211,23 @@ bool test_output_filter( Filter filter,
 template<typename OutputFilter, typename InputFilter>
 bool test_filter_pair( OutputFilter out, 
                        InputFilter in, 
-                       const char* data,
+                       const std::string& data, 
                        mpl::true_ )
 {
     for ( int inc = default_increment; 
-          inc < default_increment * 20; 
+          inc <= default_increment * 40; 
           inc += default_increment )
     {
-        array_source       src(data, data + std::strlen(data));
-        std::vector<char>  temp;
-        std::vector<char>  dest;
+        array_source  src(data.data(), data.data() + data.size());
+        std::string   temp;
+        std::string   dest;
         iostreams::copy(src, compose(out, non_blocking_sink(temp, inc)));
         iostreams::copy( 
-            compose(in, non_blocking_source(&temp[0], &temp[0] + temp.size(), inc)),
+            compose(in, non_blocking_source(temp, inc)),
             iostreams::back_inserter(dest)
         );
-        if ( dest.size() != std::strlen(data) ||
-             !std::equal(dest.begin(), dest.end(), data) )
-        {
+        if (dest != data)
             return false;
-        }
     }
     return true;
 }
@@ -260,22 +235,21 @@ bool test_filter_pair( OutputFilter out,
 template<typename OutputFilter, typename InputFilter, typename Source>
 bool test_filter_pair( OutputFilter out, 
                        InputFilter in, 
-                       const Source& data,
+                       const Source& data, 
                        mpl::false_ )
 {
     std::string str;
     iostreams::copy(data, iostreams::back_inserter(str));
-    return test_filter_pair(out, in, str.c_str());
+    return test_filter_pair(out, in, str);
 }
 
-template<typename Filter, typename Source1, typename Source2>
-bool test_filter_pair( Filter filter, 
-                       const Source1& input, 
-                       const Source2& output )
+template<typename OutputFilter, typename InputFilter, typename Source>
+bool test_filter_pair( OutputFilter out, 
+                       InputFilter in, 
+                       const Source& data )
 {
     // Use tag dispatch to compensate for bad overload resolution.
-    return test_filter_pair( filter, input, output,    
-                             detail::is_string_literal<Source1>() );
+    return test_filter_pair(out, in, data, is_string<Source>());
 }
 
 } } // End namespaces iostreams, boost.
