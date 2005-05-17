@@ -132,7 +132,9 @@ direct_streambuf<T, Tr>::underflow()
         throw cant_read();
     if (!gptr()) 
         init_get_area();
-    return gptr() != iend_ ? *gptr() : traits_type::eof();
+    return gptr() != iend_ ? 
+        traits_type::to_int_type(*gptr()) : 
+        traits_type::eof();
 }
 
 template<typename T, typename Tr>
