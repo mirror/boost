@@ -69,7 +69,7 @@ DEPENDS all : test ;
                 libs/iostreams/test/detail/utf8_codecvt_facet.cpp 
               : # build requirements 
                 std::locale-support ]   
-          [ test-iostreams libs/iostreams/test/component_type_test.cpp ]
+          [ test-iostreams libs/iostreams/test/component_access_test.cpp ]
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
           [ test-iostreams libs/iostreams/test/counter_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
