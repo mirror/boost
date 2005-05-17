@@ -14,7 +14,6 @@
 #include <boost/config.hpp>  // DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
-#include <boost/iostreams/detail/is_custom.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations_fwd.hpp>

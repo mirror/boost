@@ -16,7 +16,6 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/ios.hpp>       // streamsize, seekdir, openmode.
-#include <boost/iostreams/detail/is_custom.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations_fwd.hpp>
@@ -37,7 +36,8 @@ struct seek_impl;
 
 template<typename T>
 inline std::streampos
-seek(T& t, stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
+seek( T& t, stream_offset off, BOOST_IOS::seekdir way, 
+      BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
 namespace detail {

@@ -17,7 +17,6 @@
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // streamsize.
-#include <boost/iostreams/detail/is_custom.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations_fwd.hpp>
