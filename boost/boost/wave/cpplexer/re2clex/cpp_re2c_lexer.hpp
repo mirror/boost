@@ -168,10 +168,10 @@ lexer<IteratorT, PositionT>::get()
           value = string_type((char const *)scanner.tok, 
               scanner.cur-scanner.tok);
 
-	    // Skip '#' and whitespace and see whether we find an 'include_next' here.
-	        typename string_type::size_type start = value.find("include");
-	        if (value.compare(start, 12, "include_next", 12) == 0)
-	            id = token_id(id | AltTokenType);
+      // Skip '#' and whitespace and see whether we find an 'include_next' here.
+          typename string_type::size_type start = value.find("include");
+          if (value.compare(start, 12, "include_next", 12) == 0)
+              id = token_id(id | AltTokenType);
           break;
       }
 #endif

@@ -297,6 +297,25 @@ lexer<IteratorT, PositionT>::init_data[] =
     TOKEN_DATA(PP_PRAGMA, POUNDDEF PPSPACE "pragma"),
     TOKEN_DATA(PP_UNDEF, POUNDDEF PPSPACE "undef"),
     TOKEN_DATA(PP_WARNING, POUNDDEF PPSPACE "warning"),
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+    TOKEN_DATA(MSEXT_INT8, "__int8"),
+    TOKEN_DATA(MSEXT_INT16, "__int16"),
+    TOKEN_DATA(MSEXT_INT32, "__int32"),
+    TOKEN_DATA(MSEXT_INT64, "__int64"),
+    TOKEN_DATA(MSEXT_BASED, "_?" "_based"),
+    TOKEN_DATA(MSEXT_DECLSPEC, "_?" "_declspec"),
+    TOKEN_DATA(MSEXT_CDECL, "_?" "_cdecl"),
+    TOKEN_DATA(MSEXT_FASTCALL, "_?" "_fastcall"),
+    TOKEN_DATA(MSEXT_STDCALL, "_?" "_stdcall"),
+    TOKEN_DATA(MSEXT_TRY , "__try"),
+    TOKEN_DATA(MSEXT_EXCEPT, "__except"),
+    TOKEN_DATA(MSEXT_FINALLY, "__finally"),
+    TOKEN_DATA(MSEXT_LEAVE, "__leave"),
+    TOKEN_DATA(MSEXT_INLINE, "_?" "_inline"),
+    TOKEN_DATA(MSEXT_ASM, "_?" "_asm"),
+    TOKEN_DATA(MSEXT_PP_REGION, POUNDDEF PPSPACE "region"),
+    TOKEN_DATA(MSEXT_PP_ENDREGION, POUNDDEF PPSPACE "endregion"),
+#endif // BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     TOKEN_DATA(IDENTIFIER, "([a-zA-Z_]" OR UNIVERSALCHAR ")([a-zA-Z0-9_]" OR UNIVERSALCHAR ")*"),
 //  TOKEN_DATA(OCTALINT, "0" OCTALDIGIT "*" INTEGER_SUFFIX "?"),
 //  TOKEN_DATA(DECIMALINT, "[1-9]" DIGIT "*" INTEGER_SUFFIX "?"),
@@ -325,25 +344,6 @@ lexer<IteratorT, PositionT>::init_data[] =
     TOKEN_DATA(POUND_TRIGRAPH, TRI("=")),
     TOKEN_DATA(ANY, "."),
     TOKEN_DATA(ANY_TRIGRAPH, TRI(Q("/"))),
-#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-    TOKEN_DATA(MSEXT_INT8, "__int8"),
-    TOKEN_DATA(MSEXT_INT16, "__int16"),
-    TOKEN_DATA(MSEXT_INT32, "__int32"),
-    TOKEN_DATA(MSEXT_INT64, "__int64"),
-    TOKEN_DATA(MSEXT_BASED, "_?" "_based"),
-    TOKEN_DATA(MSEXT_DECLSPEC, "_?" "_declspec"),
-    TOKEN_DATA(MSEXT_CDECL, "_?" "_cdecl"),
-    TOKEN_DATA(MSEXT_FASTCALL, "_?" "_fastcall"),
-    TOKEN_DATA(MSEXT_STDCALL, "_?" "_stdcall"),
-    TOKEN_DATA(MSEXT_TRY , "__try"),
-    TOKEN_DATA(MSEXT_EXCEPT, "__except"),
-    TOKEN_DATA(MSEXT_FINALLY, "__finally"),
-    TOKEN_DATA(MSEXT_LEAVE, "__leave"),
-    TOKEN_DATA(MSEXT_INLINE, "_?" "_inline"),
-    TOKEN_DATA(MSEXT_ASM, "_?" "_asm"),
-    TOKEN_DATA(MSEXT_PP_REGION, POUNDDEF PPSPACE "region"),
-    TOKEN_DATA(MSEXT_PP_ENDREGION, POUNDDEF PPSPACE "endregion"),
-#endif // BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     { token_id(0) }       // this should be the last entry
 };
 
@@ -354,15 +354,15 @@ typename lexer<IteratorT, PositionT>::lexer_data const
 lexer<IteratorT, PositionT>::init_data_cpp[] = 
 {
     TOKEN_DATA(AND_ALT, "bitand"),
-    TOKEN_DATA(ANDAND_ALT, "and"),
     TOKEN_DATA(ANDASSIGN_ALT, "and_eq"),
+    TOKEN_DATA(ANDAND_ALT, "and"),
     TOKEN_DATA(OR_ALT, "bitor"),
     TOKEN_DATA(ORASSIGN_ALT, "or_eq"),
     TOKEN_DATA(OROR_ALT, "or"),
-    TOKEN_DATA(XOR_ALT, "xor"),
     TOKEN_DATA(XORASSIGN_ALT, "xor_eq"),
-    TOKEN_DATA(NOT_ALT, "not"),
+    TOKEN_DATA(XOR_ALT, "xor"),
     TOKEN_DATA(NOTEQUAL_ALT, "not_eq"),
+    TOKEN_DATA(NOT_ALT, "not"),
     TOKEN_DATA(COMPL_ALT, "compl"),
     TOKEN_DATA(ARROWSTAR, Q("->") Q("*")),
     TOKEN_DATA(DOTSTAR, Q(".") Q("*")),
@@ -414,11 +414,6 @@ lexer<IteratorT, PositionT>::init_dfa(boost::wave::language_support lang)
     if (has_compiled_dfa())
         return;
         
-    for (int i = 0; 0 != init_data[i].tokenid; ++i) {
-        this->register_regex(init_data[i].tokenregex, init_data[i].tokenid, 
-            init_data[i].tokencb, init_data[i].lexerstate);
-    }
-
 // if in C99 mode, some of the keywords are not valid    
     if (!boost::wave::need_c99(lang)) {
         for (int j = 0; 0 != init_data_cpp[j].tokenid; ++j) {
@@ -426,6 +421,11 @@ lexer<IteratorT, PositionT>::init_dfa(boost::wave::language_support lang)
                 init_data_cpp[j].tokenid, init_data_cpp[j].tokencb, 
                 init_data_cpp[j].lexerstate);
         }
+    }
+    
+    for (int i = 0; 0 != init_data[i].tokenid; ++i) {
+        this->register_regex(init_data[i].tokenregex, init_data[i].tokenid, 
+            init_data[i].tokencb, init_data[i].lexerstate);
     }
 }
 
@@ -564,11 +564,11 @@ public:
                     case T_PP_INCLUDE:
                     // convert to the corresponding ..._next token, if appropriate
                         {
-	                      // Skip '#' and whitespace and see whether we find an 
-	                      // 'include_next' here.
-	                          typename string_type::size_type start = value.find("include");
-	                          if (0 == value.compare(start, 12, "include_next", 12))
-	                              id = token_id(id | AltTokenType);
+                        // Skip '#' and whitespace and see whether we find an 
+                        // 'include_next' here.
+                            typename string_type::size_type start = value.find("include");
+                            if (0 == value.compare(start, 12, "include_next", 12))
+                                id = token_id(id | AltTokenType);
                             break;
                         }
 #endif // BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
