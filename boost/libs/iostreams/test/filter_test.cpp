@@ -4,6 +4,7 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+#include <string>
 #include <boost/iostreams/filter/test.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
@@ -13,7 +14,7 @@ using namespace boost::iostreams;
 using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;
 
-const char* lower = 
+const std::string lower = 
     "in addition to providing an abstract framework the "
     "library provides a number of concrete filters, sources "
     "and sinks which serve as example applications of the "
@@ -25,7 +26,7 @@ const char* lower =
     "compression and decompression in the zlib, gzip and "
     "bzip2 formats.";
 
-const char* upper = 
+const std::string upper = 
     "IN ADDITION TO PROVIDING AN ABSTRACT FRAMEWORK THE "
     "LIBRARY PROVIDES A NUMBER OF CONCRETE FILTERS, SOURCES "
     "AND SINKS WHICH SERVE AS EXAMPLE APPLICATIONS OF THE "
