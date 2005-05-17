@@ -409,6 +409,6 @@ void mapped_file_sink::open( const std::string& path, size_type length,
 
 //----------------------------------------------------------------------------//
 
-#include <boost/iostreams/detail/config/enable_warnings.hpp>
-
 } } // End namespaces iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
