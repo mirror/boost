@@ -91,7 +91,7 @@ void process_file(const std::string& name)
    process_stream(is);
 }
 
-int main(int argc, char * argv[])
+int main(int argc, const char * argv[])
 {
    try{
       po::options_description opts("Options");
