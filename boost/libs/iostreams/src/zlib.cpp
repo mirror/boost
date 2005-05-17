@@ -40,14 +40,15 @@ const int okay                 = Z_OK;
 const int stream_end           = Z_STREAM_END;
 const int stream_error         = Z_STREAM_ERROR;
 const int version_error        = Z_VERSION_ERROR;
+const int data_error           = Z_DATA_ERROR;
+const int mem_error            = Z_MEM_ERROR;
+const int buf_error            = Z_BUF_ERROR;
 
                     // Flush codes
 
 const int finish               = Z_FINISH;
 const int no_flush             = Z_NO_FLUSH;
-const int data_error           = Z_DATA_ERROR;
-const int mem_error            = Z_MEM_ERROR;
-const int buf_error            = Z_BUF_ERROR;
+const int sync_flush           = Z_SYNC_FLUSH;
 
                     // Code for current OS
 
@@ -66,6 +67,7 @@ void zlib_error::check(int error)
     switch (error) {
     case Z_OK: 
     case Z_STREAM_END: 
+    //case Z_BUF_ERROR: 
         return;
     case Z_MEM_ERROR: 
         throw std::bad_alloc();
