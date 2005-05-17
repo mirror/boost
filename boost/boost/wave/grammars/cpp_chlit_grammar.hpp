@@ -287,7 +287,7 @@ chlit_grammar_gen<TokenT>::evaluate(TokenT const &token)
 {
     using namespace boost::spirit;
     
-static chlit_grammar g;
+chlit_grammar g;
 boost::uint32_t result = 0;
 typename TokenT::string_type const &token_val = token.get_value();
 parse_info<typename TokenT::string_type::const_iterator> hit =

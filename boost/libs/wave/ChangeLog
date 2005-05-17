@@ -38,6 +38,8 @@ CHANGELOG
 - Fixed a bug in the whitespace eater.
 - Fixed a bug where Wave emitted the found C++ comments in --preserve mode even
   if these were found inside of disabled #if/#endif blocks.
+- Removed the function local static grammars to avoid possible raise conditions
+  and to make CW8.3 happy.
   
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17

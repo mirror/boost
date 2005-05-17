@@ -149,7 +149,7 @@ boost::spirit::tree_parse_info<LexIteratorT>
 predefined_macros_grammar_gen<LexIteratorT>::parse_predefined_macro (
     LexIteratorT const &first, LexIteratorT const &last)
 {
-    static predefined_macros_grammar g(rule_ids);
+    predefined_macros_grammar g(rule_ids);
     return boost::spirit::pt_parse (first, last, g);
 }
 

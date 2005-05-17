@@ -635,7 +635,7 @@ expression_grammar_gen<TokenT>::evaluate(
     typedef typename token_sequence_type::const_iterator iterator_type;
     typedef typename token_sequence_type::value_type::string_type string_type;
     
-static expression_grammar g;      // expression grammar
+expression_grammar g;             // expression grammar
 closure_value result;             // expression result
 parse_info<iterator_type> hit = 
     parse (first, last, g[spirit_assign_actor(result)], 

@@ -708,7 +708,7 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     found_eof = false;              // reset flag
     found_directive = T_EOF;        // reset found directive
     
-    static cpp_grammar<position_type> g(
+    cpp_grammar<position_type> g(
         rule_ids, pos_of_newline, found_eof, found_directive);
     
     tree_parse_info<LexIteratorT> hit = pt_parse (first, last, g);
