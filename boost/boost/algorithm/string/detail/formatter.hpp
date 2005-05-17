@@ -41,6 +41,14 @@ namespace boost {
                     m_Format(begin(Format), end(Format)) {}
 
                 // Operation
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                template<typename Range2T>
+                result_type& operator()(const Range2T&)
+                {
+                    return m_Format;
+                }
+#endif
+
                 template<typename Range2T>
                 const result_type& operator()(const Range2T&) const
                 {
