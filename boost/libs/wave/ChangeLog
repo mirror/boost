@@ -40,7 +40,8 @@ CHANGELOG
   if these were found inside of disabled #if/#endif blocks.
 - Removed the function local static grammars to avoid possible raise conditions
   and to make CW8.3 happy.
-  
+- Unified lexer interface, adjusted namespaces.
+
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17
 - Added ill_formed_character_literal and ill_formed_integer_literal errors.

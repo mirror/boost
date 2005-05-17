@@ -41,7 +41,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template struct boost::wave::cpp_token_sample::new_lexer_gen<
+template struct boost::wave::cpplexer::slex::new_lexer_gen<
     std::string::iterator>;
 
 #endif // BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION != 0

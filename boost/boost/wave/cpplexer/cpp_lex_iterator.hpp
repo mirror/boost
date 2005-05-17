@@ -72,9 +72,9 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
-template <typename LexT>
-typename lex_iterator_functor_shim<LexT>::result_type const
-    lex_iterator_functor_shim<LexT>::eof;
+template <typename TokenT>
+typename lex_iterator_functor_shim<TokenT>::result_type const
+    lex_iterator_functor_shim<TokenT>::eof;
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl

@@ -39,8 +39,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
-namespace cpp_token_sample {
+namespace cpplexer {
 namespace slex {
+namespace lexer {
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
@@ -60,7 +61,7 @@ public:
     typedef typename std::iterator_traits<IteratorT>::value_type  char_t;
     typedef boost::spirit::lexer<iterator_type>                      base_t;
 
-    typedef boost::wave::cpp_token_sample::slex_token<PositionT>  token_type;
+    typedef boost::wave::cpplexer::slex_token<PositionT>  token_type;
     
     lexer();
     void init_dfa(boost::wave::language_support language);
@@ -436,10 +437,13 @@ boost::wave::util::time_conversion_helper
     lexer<IteratorT, PositionT>::compilation_time(__DATE__ " " __TIME__);
 
 ///////////////////////////////////////////////////////////////////////////////
+}   // namespace lexer
+
+///////////////////////////////////////////////////////////////////////////////
 //  
 template <typename IteratorT, typename PositionT>
 inline void 
-init_lexer (lexer<IteratorT, PositionT> &lexer, 
+init_lexer (lexer::lexer<IteratorT, PositionT> &lexer, 
     boost::wave::language_support language, bool force_reinit = false)
 {
     if (lexer.has_compiled_dfa())
@@ -483,7 +487,9 @@ ifstream dfa_in("wave_slex_lexer.dfa", ios::in|ios::binary);
 
 template <typename IteratorT, typename PositionT = wave::util::file_position_type>
 class slex_functor 
-:   public slex_input_interface<typename lexer<IteratorT, PositionT>::token_type>
+:   public slex_input_interface<
+        typename lexer::lexer<IteratorT, PositionT>::token_type
+    >
 {
 public:
 
@@ -491,7 +497,7 @@ public:
           iterator_type;
     typedef typename std::iterator_traits<IteratorT>::value_type    char_t;
     typedef BOOST_WAVE_STRINGTYPE                                   string_type;
-    typedef typename lexer<IteratorT, PositionT>::token_type        token_type;
+    typedef typename lexer::lexer<IteratorT, PositionT>::token_type token_type;
 
     slex_functor(IteratorT const &first_, IteratorT const &last_, 
             PositionT const &pos_, boost::wave::language_support language)
@@ -613,15 +619,13 @@ private:
     iterator_type first;
     iterator_type last;
     boost::wave::language_support language;
-    static lexer<IteratorT, PositionT> lexer;   // needed only once
+    static lexer::lexer<IteratorT, PositionT> lexer;   // needed only once
     
     bool at_eof;
 };
 
 template <typename IteratorT, typename PositionT>
-lexer<IteratorT, PositionT> slex_functor<IteratorT, PositionT>::lexer;
-
-}   // namespace slex
+lexer::lexer<IteratorT, PositionT> slex_functor<IteratorT, PositionT>::lexer;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -670,7 +674,8 @@ new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
 #undef BOOST_WAVE_SLEX_NEW_LEXER_INLINE
 
 ///////////////////////////////////////////////////////////////////////////////
-}   // namespace cpp_token_sample
+}   // namespace slex
+}   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost
      

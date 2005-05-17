@@ -34,7 +34,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef boost::wave::cpp_token_sample::slex_token<> token_type;
+typedef boost::wave::cpplexer::slex_token<> token_type;
 
 template struct boost::wave::grammars::expression_grammar_gen<token_type>;
 

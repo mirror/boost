@@ -30,8 +30,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef boost::wave::cpp_token_sample::slex_iterator<
-        boost::wave::cpp_token_sample::slex_token<> >
+typedef boost::wave::cpplexer::slex::slex_iterator<
+        boost::wave::cpplexer::slex_token<> >
     lexer_type;
 template struct boost::wave::grammars::defined_grammar_gen<lexer_type>;
 

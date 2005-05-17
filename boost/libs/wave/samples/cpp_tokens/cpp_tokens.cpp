@@ -74,10 +74,9 @@ main(int argc, char *argv[])
 //  by the Wave library only by defining an additional operator<<(), which is 
 //  used to dump the token information carried by a given token (see loop 
 //  below).
-    typedef boost::wave::cpp_token_sample::slex_token<> token_type;
-    typedef boost::wave::cpp_token_sample::slex_iterator<token_type> 
-        lex_iterator_type;
-    typedef boost::wave::context<std::string::iterator, lex_iterator_type> 
+    typedef boost::wave::cpplexer::slex_token<> token_type;
+    typedef boost::wave::cpplexer::slex::slex_iterator<token_type> lexer_type;
+    typedef boost::wave::context<std::string::iterator, lexer_type> 
         context_type;
 
 // The C++ preprocessor iterator shouldn't be constructed directly. It is to be
