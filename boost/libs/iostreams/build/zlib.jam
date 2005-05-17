@@ -76,6 +76,6 @@ template zlib
       [ cond $(ZLIB_LIBPATH) : <library-path>$(ZLIB_LIBPATH) : ]
       [ unless $(ZLIB_SOURCE) : <find-library>$(ZLIB_BINARY) : ]
     : # build variants
-   ;    
+   ;
 
 # end
