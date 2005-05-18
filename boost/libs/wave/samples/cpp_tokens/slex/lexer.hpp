@@ -1245,7 +1245,8 @@ namespace ccl_utils
             {
                 for (int i = iter->first; i <= iter->last; ++i)
                 {
-                    BOOST_ASSERT(uchar(i) < 256 && ccl.size() == 256);
+//                  this is always true because of the limited datatype
+//                  BOOST_ASSERT(uchar(i) < 256 && ccl.size() == 256);
                     ccl[uchar(i)] = 1;
                 }
             }
@@ -2109,6 +2110,7 @@ struct regex_match_helper<false> // single byte char
         typedef std::basic_string<
             typename BOOST_SPIRIT_IT_NS::iterator_traits<IteratorT>::value_type
         > string_type;
+        typedef typename string_type::size_type size_type;
         
         node_id_t s = 0;
         node_id_t last_accepting_index = invalid_node;
@@ -2119,7 +2121,7 @@ struct regex_match_helper<false> // single byte char
             s = dfa.transition_table[s][(uchar)*p];
             if (s == invalid_node)
                 break;
-            if (token) token->append((typename string_type::size_type)1, *p);
+            if (token) token->append((size_type)1, *p);
             ++p;
             if (dfa.acceptance_index[s] != invalid_node)
             {
@@ -2158,6 +2160,7 @@ struct regex_match_helper<true> // wide char
             typename BOOST_SPIRIT_IT_NS::iterator_traits<IteratorT>::value_type
             char_t;
         typedef std::basic_string<char_t> string_type;
+        typedef typename string_type::size_type size_type;
 
         node_id_t s = 0;
         node_id_t last_accepting_index = invalid_node;
@@ -2174,7 +2177,7 @@ struct regex_match_helper<true> // wide char
                     goto break_while;
                 }
             }
-            if (token) token->append((typename string_type::size_type)1, *wp);
+            if (token) token->append((size_type)1, *wp);
             ++wp;
             if (dfa.acceptance_index[s] != invalid_node)
             {
