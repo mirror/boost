@@ -76,7 +76,7 @@ public:
     void close(Sink&) 
     { 
         col_no_ = 0; 
-        has_next_; 
+        has_next_ = false; 
     }
 private:
     int get_char(int c)
