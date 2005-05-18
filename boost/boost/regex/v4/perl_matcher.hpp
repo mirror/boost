@@ -49,11 +49,13 @@ inline bool can_start(unsigned short c, const unsigned char* map, unsigned char 
 {
    return ((c >= (1 << CHAR_BIT)) ? true : map[c] & mask);
 }
+#if !defined(__HP_aCC)
 #if defined(WCHAR_MIN) && (WCHAR_MIN == 0) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
 inline bool can_start(wchar_t c, const unsigned char* map, unsigned char mask)
 {
    return ((c >= (1 << CHAR_BIT)) ? true : map[c] & mask);
 }
+#endif
 #endif
 
 

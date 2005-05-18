@@ -77,7 +77,8 @@ inline bool is_combining<unsigned char>(unsigned char)
 {
    return false;
 }
-#ifdef _MSC_VER
+#ifndef __HP_aCC
+#ifdef _MSC_VER 
 template<>
 inline bool is_combining<wchar_t>(wchar_t c)
 {
@@ -96,6 +97,7 @@ inline bool is_combining<wchar_t>(wchar_t c)
 {
    return (c >= (std::numeric_limits<uint_least16_t>::max)()) ? false : is_combining_implementation(static_cast<unsigned short>(c));
 }
+#endif
 #endif
 #endif
 
