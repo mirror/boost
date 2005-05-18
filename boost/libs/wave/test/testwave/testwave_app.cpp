@@ -126,89 +126,119 @@ namespace {
         result = result + name.c_str();
         return true;
     }
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  This function compares the real result and the expected one but first 
-    //  replaces all occurences of $F in the expected result to the passed
-    //  full filepath and $V to the current Boost version number.
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    inline bool 
-    got_expected_result(std::string const& filename, 
-        std::string const& result, std::string& expected)
-    {
-        using boost::wave::util::impl::escape_lit;
-        
-        std::string full_result;
-        std::string::size_type pos = 0;
-        std::string::size_type pos1 = expected.find_first_of("$");
-        
-        if (pos1 != std::string::npos) {
-            do {
-                switch(expected[pos1+1]) {
-                case 'F':       // insert base file name
-                    full_result = full_result + 
-                        expected.substr(pos, pos1-pos) + escape_lit(filename);
-                    pos1 = expected.find_first_of ("$", pos = pos1 + 2);
-                    break;
-
-                case 'P':       // insert full path
-                    {
-                        fs::path fullpath = fs::complete(
-                            fs::path(filename, fs::native), 
-                            fs::current_path());
-                        if ('(' == expected[pos1+2]) {
-                        // the $P(basename) syntax is used
-                            std::size_t p = expected.find_first_of(")", pos1+1);
-                            if (std::string::npos == p) {
-                                std::cerr 
-                                    << "testwave: unmatched parenthesis in $P"
-                                       " directive" << std::endl;
-                                return false;
-                            }
-                            std::string base = expected.substr(pos1+3, p-pos1-3);
-                            fullpath = fullpath.branch_path() / 
-                                fs::path(base, fs::native);
-                            full_result = full_result + 
-                                expected.substr(pos, pos1-pos) + 
-                                escape_lit(fullpath.normalize().native_file_string());
-                            pos1 = expected.find_first_of ("$", 
-                                pos = pos1 + 4 + base.size());
+///////////////////////////////////////////////////////////////////////////
+//
+//  This function compares the real result and the expected one but first 
+//  replaces all occurences in the expected result of 
+//      $E: to the result of preprocessing the given expression
+//      $F: to the passed full filepath 
+//      $P: to the full path
+//      $V: to the current Boost version number
+//
+///////////////////////////////////////////////////////////////////////////
+bool 
+testwave_app::got_expected_result(std::string const& filename, 
+    std::string const& result, std::string& expected)
+{
+    using boost::wave::util::impl::escape_lit;
+    
+    std::string full_result;
+    std::string::size_type pos = 0;
+    std::string::size_type pos1 = expected.find_first_of("$");
+    
+    if (pos1 != std::string::npos) {
+        do {
+            switch(expected[pos1+1]) {
+            case 'E':       // preprocess the given token sequence
+                {
+                    if ('(' == expected[pos1+2]) {
+                        std::size_t p = expected.find_first_of(")", pos1+1);
+                        if (std::string::npos == p) {
+                            std::cerr 
+                                << "testwave: unmatched parenthesis in $E"
+                                    " directive" << std::endl;
+                            return false;
                         }
-                        else {
-                        // the $P is used on its own
-                            full_result = full_result + 
-                                expected.substr(pos, pos1-pos) + 
-                                escape_lit(fullpath.native_file_string());
-                            pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                        std::string source = expected.substr(pos1+3, p-pos1-3);
+                        std::string result, error;
+                        bool pp_result = preprocess_file(filename, source, result, error);
+                        if (!pp_result) {
+                            std::cerr 
+                                << "testwave: preprocessing error in $E directive: " 
+                                << error << std::endl;
+                            return false;
                         }
+                        full_result = full_result + 
+                            expected.substr(pos, pos1-pos) + result;
+                        pos1 = expected.find_first_of ("$", 
+                            pos = pos1 + 4 + source.size());
                     }
-                    break;
-                    
-                case 'V':       // insert Boost version
-                    full_result = full_result + 
-                        expected.substr(pos, pos1-pos) + BOOST_LIB_VERSION;
-                    pos1 = expected.find_first_of ("$", pos = pos1 + 2);
-                    break;
-                    
-                default:
-                    full_result = full_result +
-                        expected.substr(pos, pos1-pos);
-                    pos1 = expected.find_first_of ("$", (pos = pos1) + 1);
-                    break;
                 }
+                break;
+                
+            case 'F':       // insert base file name
+                full_result = full_result + 
+                    expected.substr(pos, pos1-pos) + escape_lit(filename);
+                pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                break;
 
-            } while(pos1 != std::string::npos);
-            full_result += expected.substr(pos);
-        }
-        else {
-            full_result = expected;
-        }
-        
-        expected = full_result;
-        return full_result == result;
+            case 'P':       // insert full path
+                {
+                    fs::path fullpath = fs::complete(
+                        fs::path(filename, fs::native), 
+                        fs::current_path());
+                    if ('(' == expected[pos1+2]) {
+                    // the $P(basename) syntax is used
+                        std::size_t p = expected.find_first_of(")", pos1+1);
+                        if (std::string::npos == p) {
+                            std::cerr 
+                                << "testwave: unmatched parenthesis in $P"
+                                    " directive" << std::endl;
+                            return false;
+                        }
+                        std::string base = expected.substr(pos1+3, p-pos1-3);
+                        fullpath = fullpath.branch_path() / 
+                            fs::path(base, fs::native);
+                        full_result = full_result + 
+                            expected.substr(pos, pos1-pos) + 
+                            escape_lit(fullpath.normalize().native_file_string());
+                        pos1 = expected.find_first_of ("$", 
+                            pos = pos1 + 4 + base.size());
+                    }
+                    else {
+                    // the $P is used on its own
+                        full_result = full_result + 
+                            expected.substr(pos, pos1-pos) + 
+                            escape_lit(fullpath.native_file_string());
+                        pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                    }
+                }
+                break;
+                
+            case 'V':       // insert Boost version
+                full_result = full_result + 
+                    expected.substr(pos, pos1-pos) + BOOST_LIB_VERSION;
+                pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                break;
+                
+            default:
+                full_result = full_result +
+                    expected.substr(pos, pos1-pos);
+                pos1 = expected.find_first_of ("$", (pos = pos1) + 1);
+                break;
+            }
+
+        } while(pos1 != std::string::npos);
+        full_result += expected.substr(pos);
     }
+    else {
+        full_result = expected;
+    }
+    
+    expected = full_result;
+    return full_result == result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -460,7 +490,7 @@ struct boost::wave::cpplexer::new_lexer_gen<std::string::const_iterator>;
 
 namespace {
 
-    void trim_whitespace(std::string& value)
+    std::string const& trim_whitespace(std::string& value)
     {
         std::string::size_type first = value.find_first_not_of(" \t");
         std::string::size_type last = std::string::npos;
@@ -472,6 +502,7 @@ namespace {
             assert(std::string::npos != last);
             value = value.substr(first, last-first);
         }
+        return value;
     }
 }
 
@@ -630,7 +661,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
     ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
         (boost::wave::language_support)(
             boost::wave::get_support_options(ctx.get_language()) | 
-            boost::wave::support_option_convert_trigraphs)
+            boost::wave::support_option_convert_trigraphs |
+            boost::wave::support_option_single_line)
         )
     );
 
@@ -692,7 +724,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = predefmacros.begin(); 
               cit != end; ++cit)
         {
-            ctx.add_macro_definition(*cit, true);
+            ctx.add_macro_definition(*cit);
         }
     }
 
@@ -704,7 +736,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = undefmacros.begin(); 
               cit != end; ++cit)
         {
-            ctx.remove_macro_definition((*cit).c_str(), true);
+            ctx.remove_macro_definition((*cit).c_str());
         }
     }
 
@@ -717,6 +749,139 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
             return false;
         }
         ctx.set_max_include_nesting_depth(max_depth);
+    }
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+#ifdef BOOST_NO_STRINGSTREAM
+#include <strstream>
+#define BOOST_WAVETEST_OSSTREAM std::ostrstream
+std::string BOOST_WAVETEST_GETSTRING(std::ostrstream& ss)
+{
+    ss << ends;
+    std::string rval = ss.str();
+    ss.freeze(false);
+    return rval;
+}
+#else
+#include <sstream>
+#define BOOST_WAVETEST_GETSTRING(ss) ss.str()
+#define BOOST_WAVETEST_OSSTREAM std::ostringstream
+#endif
+
+namespace {
+
+    //  construct a SIZEOF macro definition string and predefine this macro
+    template <typename Context>
+    inline bool 
+    add_sizeof_definition(Context& ctx, char const *name, int value)
+    {
+        BOOST_WAVETEST_OSSTREAM strm;
+        strm << "__TESTWAVE_SIZEOF_" << name << "__=" << value;
+        return ctx.add_macro_definition(BOOST_WAVETEST_GETSTRING(strm));
+    }
+
+    //  construct a MIN macro definition string and predefine this macro
+    template <typename T, typename Context>
+    inline bool 
+    add_min_definition(Context& ctx, char const *name)
+    {
+        BOOST_WAVETEST_OSSTREAM strm;
+        if (!std::numeric_limits<T>::is_signed) {
+            strm << "__TESTWAVE_" << name << "_MIN__=" 
+                 << "0x" << std::hex 
+                 << (std::numeric_limits<T>::min)() << "U";
+        }
+        else {
+            strm << "__TESTWAVE_" << name << "_MIN__=( " 
+                 << (std::numeric_limits<T>::min)()+1 << "-1)";
+        }
+        return ctx.add_macro_definition(BOOST_WAVETEST_GETSTRING(strm));
+    }
+
+    //  construct a MAX macro definition string and predefine this macro
+    template <typename T, typename Context>
+    inline bool 
+    add_max_definition(Context& ctx, char const *name)
+    {
+        BOOST_WAVETEST_OSSTREAM strm;
+        if (!std::numeric_limits<T>::is_signed) {
+            strm << "__TESTWAVE_" << name << "_MAX__=" 
+                 << "0x" << std::hex 
+                 << (std::numeric_limits<T>::max)() << "U";
+        }
+        else {
+            strm << "__TESTWAVE_" << name << "_MAX__=" 
+                 << (std::numeric_limits<T>::max)();
+        }
+        return ctx.add_macro_definition(BOOST_WAVETEST_GETSTRING(strm));
+    }
+}
+
+#undef BOOST_WAVETEST_GETSTRING
+#undef BOOST_WAVETEST_OSSTREAM
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Add special predefined macros to the context object.
+//
+//  This adds a lot of macros to the test environment, which allows to adjust 
+//  the testcases for different platforms.
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename Context>
+bool 
+testwave_app::add_predefined_macros(Context& ctx)
+{
+    // add the __TESTWAVE_SIZEOF_<type>__ macros
+    if (!add_sizeof_definition(ctx, "CHAR", sizeof(char)) ||
+        !add_sizeof_definition(ctx, "SHORT", sizeof(short)) ||
+        !add_sizeof_definition(ctx, "INT", sizeof(int)) ||
+#if defined(BOOST_HAS_LONG_LONG)
+        !add_sizeof_definition(ctx, "LONGLONG", sizeof(boost::long_long_type)) ||
+#endif
+        !add_sizeof_definition(ctx, "LONG", sizeof(long)))
+    {
+        std::cerr << "testwave: failed to add a predefined macro (SIZEOF)." 
+                  << std::endl;
+        return false;
+    }
+    
+    // add the __TESTWAVE_<type>_MIN__ macros
+    if (/*!add_min_definition<char>(ctx, "CHAR") ||*/
+        /*!add_min_definition<unsigned char>(ctx, "UCHAR") ||*/
+        !add_min_definition<short>(ctx, "SHORT") ||
+        !add_min_definition<unsigned short>(ctx, "USHORT") ||
+        !add_min_definition<int>(ctx, "INT") ||
+        !add_min_definition<unsigned int>(ctx, "UINT") ||
+#if defined(BOOST_HAS_LONG_LONG)
+        !add_min_definition<boost::long_long_type>(ctx, "LONGLONG") ||
+        !add_min_definition<boost::ulong_long_type>(ctx, "ULONGLONG") ||
+#endif
+        !add_min_definition<long>(ctx, "LONG") ||
+        !add_min_definition<unsigned long>(ctx, "ULONG"))
+    {
+        std::cerr << "testwave: failed to add a predefined macro (MIN)." 
+                  << std::endl;
+    }
+    
+    // add the __TESTWAVE_<type>_MAX__ macros
+    if (/*!add_max_definition<char>(ctx, "CHAR") ||*/
+        /*!add_max_definition<unsigned char>(ctx, "UCHAR") ||*/
+        !add_max_definition<short>(ctx, "SHORT") ||
+        !add_max_definition<unsigned short>(ctx, "USHORT") ||
+        !add_max_definition<int>(ctx, "INT") ||
+        !add_max_definition<unsigned int>(ctx, "UINT") ||
+#if defined(BOOST_HAS_LONG_LONG)
+        !add_max_definition<boost::long_long_type>(ctx, "LONGLONG") ||
+        !add_max_definition<boost::ulong_long_type>(ctx, "ULONGLONG") ||
+#endif
+        !add_max_definition<long>(ctx, "LONG") ||
+        !add_max_definition<unsigned long>(ctx, "ULONG"))
+    {
+        std::cerr << "testwave: failed to add a predefined macro (MAX)." 
+                  << std::endl;
     }
     return true;
 }
@@ -750,6 +915,10 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
         if (!extract_options(filename, instr, ctx))
             return false;
 
+    //  add special predefined macros
+        if (!add_predefined_macros(ctx))
+            return false;
+        
     //  preprocess the input, loop over all generated tokens collecting the 
     //  generated text 
         context_type::iterator_type end = ctx.end();

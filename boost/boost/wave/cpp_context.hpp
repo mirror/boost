@@ -98,6 +98,10 @@ private:
             iteration_context_stack_type;
     typedef typename iteration_context_stack_type::size_type iter_size_type;
 
+// the context object should not be copied around
+    context(context const& rhs);
+    context& operator= (context const& rhs);
+    
 public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
             char const *fname = "<Unknown>", TraceT const &trace_ = TraceT())

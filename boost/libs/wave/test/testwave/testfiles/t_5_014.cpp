@@ -15,38 +15,34 @@
 
 // Tests integer preprocessing number token and type of #if expression.
 
-#define LONG_MIN    (-2147483647L - 1)  /* minimum (signed) long value */
-#define LONG_MAX      2147483647L       /* maximum (signed) long value */
-#define ULONG_MAX     0xffffffffUL      /* maximum unsigned long value */
-
 // 12.1:
-//R #line 28 "t_5_014.cpp"
+//R #line 24 "t_5_014.cpp"
 //R true
-#if LONG_MAX <= LONG_MIN
+#if __TESTWAVE_LONG_MAX__ <= __TESTWAVE_LONG_MIN__
     "Bad evaluation of long."
 #else
 true
 #endif
 
-//R #line 36 "t_5_014.cpp"
+//R #line 32 "t_5_014.cpp"
 //R true
-#if LONG_MAX <= 1073741823  /* 0x3FFFFFFF   */
+#if __TESTWAVE_LONG_MAX__ <= (__TESTWAVE_LONG_MAX__ / 2)  /* 0x3FFFFFFF   */
     "Bad evaluation of long."
 #else
 true
 #endif
 
 // 12.2:
-//R #line 45 "t_5_014.cpp"
+//R #line 41 "t_5_014.cpp"
 //R true
-#if ULONG_MAX / 2 < LONG_MAX
+#if __TESTWAVE_ULONG_MAX__ / 2 < __TESTWAVE_LONG_MAX__
     "Bad evaluation of unsigned long."
 #else
 true
 #endif
 
 // 12.3: Octal number.
-//R #line 54 "t_5_014.cpp"
+//R #line 50 "t_5_014.cpp"
 //R true
 #if 0177777 != 65535
     "Bad evaluation of octal number."
@@ -55,7 +51,7 @@ true
 #endif
 
 // 12.4: Hexadecimal number.
-//R #line 63 "t_5_014.cpp"
+//R #line 59 "t_5_014.cpp"
 //R true
 #if 0Xffff != 65535 || 0xFfFf != 65535
     "Bad evaluation of hexadecimal number."
@@ -64,7 +60,7 @@ true
 #endif
 
 // 12.5: Suffix 'L' or 'l'.
-//R #line 72 "t_5_014.cpp"
+//R #line 68 "t_5_014.cpp"
 //R true
 #if 0L != 0 || 0l != 0
     "Bad evaluation of 'L' suffix."
@@ -73,7 +69,7 @@ true
 #endif
 
 // 12.6: Suffix 'U' or 'u'.
-//R #line 81 "t_5_014.cpp"
+//R #line 77 "t_5_014.cpp"
 //R true
 #if 1U != 1 || 1u != 1
     "Bad evaluation of 'U' suffix."
@@ -82,7 +78,7 @@ true
 #endif
 
 // 12.7: Negative integer.
-//R #line 90 "t_5_014.cpp"
+//R #line 86 "t_5_014.cpp"
 //R true
 #if 0 <= -1
     "Bad evaluation of negative number."

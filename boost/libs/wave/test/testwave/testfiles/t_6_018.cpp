@@ -15,11 +15,9 @@
 
 // Tests error reporting: overflow of constant expression in #if directive.  
 
-#define LONG_MAX      2147483647L       /* maximum (signed) long value */
-
 // 14.10: 
-//E t_6_018.cpp(22): error: integer overflow in preprocessor expression: 2147483647L * 2
-#if LONG_MAX * 2
+//E t_6_018.cpp(20): error: integer overflow in preprocessor expression: $E(__TESTWAVE_LONG_MAX__) * 2
+#if __TESTWAVE_LONG_MAX__ * 2
 #endif
 
 /*-

@@ -42,6 +42,7 @@ CHANGELOG
   and to make CW8.3 happy.
 - Unified lexer interface, adjusted namespaces.
 - Added lexer testcases to the regression tests.
+- Fixed test cases to scale to 64 bit platforms.
 
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17

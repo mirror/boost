@@ -517,7 +517,9 @@ bool returned_from_include_file = returned_from_include();
         token_id id = token_id(act_token);
         
             if (T_EOF == id) {
-                if (!seen_newline) {
+                if (!seen_newline && 
+                    !(support_option_single_line & get_support_options(ctx.get_language()))) 
+                {
                 // warn, if this file does not end with a newline
                     BOOST_WAVE_THROW(preprocess_exception, 
                         last_line_not_terminated, "", act_pos);

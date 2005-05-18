@@ -85,6 +85,18 @@ protected:
     bool preprocess_file(std::string filename, std::string const& instr, 
         std::string& result, std::string& error);
 
+    //  Add special predefined macros to the context object
+    template <typename Context>
+    bool add_predefined_macros(Context& ctx);
+
+    //  This function compares the real result and the expected one but first 
+    //  replaces all occurences in the expected result of 
+    //      $E: to the result of preprocessing the given expression
+    //      $F: to the passed full filepath 
+    //      $P: to the full path
+    //      $V: to the current Boost version number
+    bool got_expected_result(std::string const& filename, 
+        std::string const& result, std::string& expected);
 
 private:
     int debuglevel;

@@ -15,11 +15,9 @@
 
 // Tests error reporting: overflow of constant expression in #if directive.  
 
-#define LONG_MIN    (-2147483647L - 1)  /* minimum (signed) long value */
-
 // 14.10: 
-//E t_6_017.cpp(22): error: integer overflow in preprocessor expression: (-2147483647L - 1) - 1
-#if LONG_MIN - 1
+//E t_6_017.cpp(20): error: integer overflow in preprocessor expression: $E(__TESTWAVE_LONG_MIN__) - 1
+#if __TESTWAVE_LONG_MIN__ - 1
 #endif
 
 /*-

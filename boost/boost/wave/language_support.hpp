@@ -33,7 +33,8 @@ enum language_support {
     support_option_mask = 0xFF00,
     support_option_preserve_comments = 0x0100,
     support_option_no_character_validation = 0x0200,
-    support_option_convert_trigraphs = 0x0400
+    support_option_convert_trigraphs = 0x0400,
+    support_option_single_line = 0x0800
 };
 
 ///////////////////////////////////////////////////////////////////////////////
