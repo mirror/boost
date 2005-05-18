@@ -2119,7 +2119,7 @@ struct regex_match_helper<false> // single byte char
             s = dfa.transition_table[s][(uchar)*p];
             if (s == invalid_node)
                 break;
-            if (token) token->append((string_type::size_type)1, *p);
+            if (token) token->append((typename string_type::size_type)1, *p);
             ++p;
             if (dfa.acceptance_index[s] != invalid_node)
             {
@@ -2174,7 +2174,7 @@ struct regex_match_helper<true> // wide char
                     goto break_while;
                 }
             }
-            if (token) token->append((string_type::size_type)1, *wp);
+            if (token) token->append((typename string_type::size_type)1, *wp);
             ++wp;
             if (dfa.acceptance_index[s] != invalid_node)
             {

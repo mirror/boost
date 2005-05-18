@@ -526,7 +526,9 @@ public:
             string_type token_val(value.c_str());
             
                 if (T_CONTLINE != id) {
-                    switch (id) {
+                //  The cast should avoid spurious warning about missing case labels 
+                //  for the other token ids's.
+                    switch ((unsigned int)id) {   
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)
