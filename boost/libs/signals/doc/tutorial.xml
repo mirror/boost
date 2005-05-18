@@ -975,6 +975,143 @@ hidden in an implementation detail file.</para>
 </section>
 
 <section>
+  <title>Example: Document-View</title>
+  
+  <para>Signals can be used to implement flexible Document-View
+  architectures. The document will contain a signal to which each of
+  the views can connect. The following <code>Document</code> class
+  defines a simple text document that supports mulitple views. Note
+  that it stores a single signal to which all of the views will be
+  connected.</para>
+
+  <programlisting>class Document
+{
+public:
+    typedef boost::signal&lt;void (bool)&gt;  signal_t;
+    typedef boost::signals::connection  connection_t;
+
+public:
+    Document()
+    {}
+
+    connection_t connect(signal_t::slot_function_type subscriber)
+    {
+        return m_sig.connect(subscriber);
+    }
+
+    void disconnect(connection_t subscriber)
+    {
+        subscriber.disconnect();
+    }
+
+    void append(const char* s)
+    {
+        m_text += s;
+        m_sig(true);
+    }
+
+    const std::string&amp; getText() const
+    {
+        return m_text;
+    }
+
+private:
+    signal_t    m_sig;
+    std::string m_text;
+};</programlisting>
+
+  <para>Next, we can define a <code>View</code> base class from which
+  views can derive. This isn't strictly required, but it keeps the
+  Document-View logic separate from the logic itself. Note that the
+  constructor just connects the view to the document and the
+  destructor disconnects the view.</para>
+
+  <programlisting>
+class View
+{
+public:
+    View(Document&amp; m)
+        : m_document(m)
+    {
+        m_connection = m_document.connect(boost::bind(&amp;View::refresh, this, _1));
+    }
+
+    virtual ~View()
+    {
+        m_document.disconnect(m_connection);
+    }
+
+    virtual void refresh(bool bExtended) const = 0;
+
+protected:
+    Document&amp;               m_document;
+
+private:
+    Document::connection_t  m_connection;
+};
+  </programlisting>
+
+  <para>Finally, we can begin to define views. The
+  following <code>TextView</code> class provides a simple view of the
+    document text.</para>
+
+  <programlisting>class TextView : public View
+{
+public:
+    TextView(Document&amp; doc)
+        : View(doc)
+    {}
+
+    virtual void refresh(bool bExtended) const
+    {
+        std::cout &lt;&lt; "TextView: " &lt;&lt; m_document.getText() &lt;&lt; std::endl;
+    }
+};</programlisting>
+
+  <para>Alternatively, we can provide a view of the document
+    translated into hex values using the <code>HexView</code>
+    view:</para>
+
+  <programlisting>class HexView : public View
+{
+public:
+    HexView(Document&amp; doc)
+        : View(doc)
+    {}
+
+    virtual void refresh(bool bExtended) const
+    {
+        const std::string&amp;  s = m_document.getText();
+
+        std::cout &lt;&lt; "HexView:";
+
+        for (std::string::const_iterator it = s.begin(); it != s.end(); ++it)
+            std::cout &lt;&lt; ' ' &lt;&lt; std::hex &lt;&lt; static_cast&lt;int&gt;(*it);
+
+        std::cout &lt;&lt; std::endl;
+    }
+};</programlisting>
+
+  <para>To tie the example together, here is a
+  simple <code>main</code> function that sets up two views and then
+    modifies the document:</para>
+
+  <programlisting>int main(int argc, char* argv[])
+{
+    Document    doc;
+    TextView    v1(doc);
+    HexView     v2(doc);
+
+    doc.append(argc == 2 ? argv[1] : "Hello world!");
+    return 0;
+}</programlisting>
+
+  <para>The complete example source, contributed by Keith MacDonald,
+    is available in <ulink
+    url="../../libs/signals/example/doc_view.cpp"><code>libs/signals/example/doc_view.cpp</code></ulink>.</para>
+</section>
+
+<section>
   <title>Linking against the Signals library</title>
 
   <para>Part of the Boost.Signals library is compiled into a binary
