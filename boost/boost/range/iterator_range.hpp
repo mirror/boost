@@ -18,6 +18,7 @@
 # endif
 #endif // #ifndef BOOST_OLD_IOSTREAMS
 
+#include <boost/detail/workaround.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/difference_type.hpp>
@@ -188,6 +189,7 @@ namespace boost
                 m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) ), 
                 singular(false) {}
 
+            #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
             this_type& operator=( const this_type& r )    
             {
                 m_Begin  = r.begin(); 
@@ -198,6 +200,7 @@ namespace boost
                 singular = r.singular;
                 return *this;
             }
+            #endif
                 
             template< class Iterator >
             iterator_range& operator=( const iterator_range<Iterator>& r )    
