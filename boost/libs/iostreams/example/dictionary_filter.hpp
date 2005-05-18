@@ -46,7 +46,7 @@ private:
                 dictionary_.replace(current_word_);
                 cout.write( current_word_.data(), 
                             static_cast<streamsize>(current_word_.size()) );
-                current_word_.clear();
+                current_word_.erase();
                 if (c == EOF)
                     break;
                 cout.put(c);  
@@ -74,7 +74,7 @@ public:
             if (off_ != std::string::npos && off_ < current_word_.size()) 
                 return current_word_[off_++];
             if (off_ == current_word_.size()) { 
-                current_word_.clear();
+                current_word_.erase();
                 off_ = std::string::npos;
             }
 
@@ -103,7 +103,7 @@ public:
     template<typename Source>
     void close(Source&) 
     { 
-        current_word_.clear(); 
+        current_word_.erase(); 
         off_ = std::string::npos;
         eof_ = false;
     }
@@ -143,7 +143,7 @@ public:
             dictionary_.replace(current_word_);
         if (!current_word_.empty())
             write_current_word(dest);
-        current_word_.clear();
+        current_word_.erase();
         off_ = std::string::npos;
     }
 private:
@@ -155,7 +155,7 @@ private:
         streamsize result = 
             iostreams::write(dest, current_word_.data() + off_, amt);
         if (result == amt) {
-            current_word_.clear();
+            current_word_.erase();
             off_ = string::npos;
             return true;
         } else {

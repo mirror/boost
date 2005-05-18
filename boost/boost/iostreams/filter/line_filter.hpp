@@ -178,11 +178,7 @@ private:
 
     void clear()
     {
-    #if (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-        cur_line_ = string_type();
-    #else
-        cur_line_.clear();
-    #endif
+        cur_line_.erase();
         pos_ = string_type::npos;
     }
 
