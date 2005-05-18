@@ -412,7 +412,7 @@ template <typename IteratorT, typename PositionT>
 inline void
 lexer<IteratorT, PositionT>::init_dfa(boost::wave::language_support lang)
 {
-    if (has_compiled_dfa())
+    if (this->has_compiled_dfa())
         return;
         
 // if in C99 mode, some of the keywords are not valid    
@@ -501,7 +501,7 @@ public:
 
     slex_functor(IteratorT const &first_, IteratorT const &last_, 
             PositionT const &pos_, boost::wave::language_support language)
-    :   first(first_, last_, pos_), at_eof(false), language(language)
+    :   first(first_, last_, pos_), language(language), at_eof(false)
     {
         // initialize lexer dfa tables
         init_lexer(lexer, language);  
