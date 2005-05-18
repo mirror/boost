@@ -34,8 +34,8 @@ inline void atomic_increment( long * pw )
     // release barrier associated with it.  We choose release as it should be
     // cheaper.
     __asm__ ("fetchadd8.rel %0=[%2],1" :
-	     "=r"(tmp), "=m"(*pw) :
-	     "r"(pw));
+         "=r"(tmp), "=m"(*pw) :
+         "r"(pw));
 }
 
 inline long atomic_decrement( long * pw )
@@ -62,18 +62,18 @@ inline long atomic_conditional_increment( long * pw )
     long rv, tmp, tmp2;
 
     __asm__ ("0:   ld8          %0=[%4]           ;; \n"
-	     "     cmp.eq       p7,p0=0,%0        ;; \n"
-	     "(p7) br.cond.spnt 1f                \n"
-	     "     mov          ar.ccv=%0         \n"
-	     "     add          %1=1,%0           ;; \n"
-	     "     cmpxchg8.acq %2=[%4],%1,ar.ccv ;; \n"
-	     "     cmp.ne       p7,p0=%0,%2       ;; \n"
-	     "(p7) br.cond.spnt 0b                \n"
-	     "     mov          %0=%1             ;; \n"
-	     "1:" :	
-	     "=&r"(rv), "=&r"(tmp), "=&r"(tmp2), "=m"(*pw) :
-	     "r"(pw) :
-	     "ar.ccv", "p7");
+         "     cmp.eq       p7,p0=0,%0        ;; \n"
+         "(p7) br.cond.spnt 1f                \n"
+         "     mov          ar.ccv=%0         \n"
+         "     add          %1=1,%0           ;; \n"
+         "     cmpxchg8.acq %2=[%4],%1,ar.ccv ;; \n"
+         "     cmp.ne       p7,p0=%0,%2       ;; \n"
+         "(p7) br.cond.spnt 0b                \n"
+         "     mov          %0=%1             ;; \n"
+         "1:" : 
+         "=&r"(rv), "=&r"(tmp), "=&r"(tmp2), "=m"(*pw) :
+         "r"(pw) :
+         "ar.ccv", "p7");
 
     return rv;
 }

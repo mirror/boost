@@ -75,10 +75,10 @@ public:
     void release() // nothrow
     {
         if( --use_count_ == 0 )
-		{
-			dispose();
-			weak_release();
-		}
+        {
+            dispose();
+            weak_release();
+        }
     }
 
     void weak_add_ref() // nothrow
