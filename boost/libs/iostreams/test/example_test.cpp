@@ -11,7 +11,6 @@
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "../example/dictionary_filter.hpp"
-//#include "./finite_state_filter.hpp"
 #include "../example/line_wrapping_filter.hpp"
 #include "../example/shell_comments_filter.hpp"
 #include "../example/tab_expanding_filter.hpp"
@@ -21,12 +20,6 @@ using boost::unit_test::test_suite;
 namespace io = boost::iostreams;
 namespace ex = boost::iostreams::example;
 
-#include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <iostream>
-                    
 //------------------dictionary_filter test------------------------------------//
 
 void dictionary_filter_test()
@@ -95,98 +88,6 @@ void dictionary_filter_test()
     );
 }
 
-//------------------finite_state_filter test----------------------------------//
-
-//struct dos2unix_filter 
-//    : ex::finite_state_filter_base<dos2unix_filter, char>
-//{
-//    typedef dos2unix_filter  self;
-//    typedef char             char_type;
-//
-//    static const int initial_state = 0;
-//    static const int found_cr = 1;
-//
-//    void on_cr(char) { }
-//    void on_any(char c) { push(c); }
-//    void on_error(char) 
-//    { 
-//        throw std::ios_base::failure("bad input");
-//    }
-//
-//    typedef boost::mpl::vector<
-//                rule<initial_state, ex::is< '\r' >, found_cr,      &self::on_cr>,
-//                rule<initial_state, ex::is< '\n' >, initial_state, &self::on_error>,
-//                rule<found_cr,      ex::is< '\n' >, initial_state, &self::on_any>,
-//                rule<found_cr,      ex::is_any,     initial_state, &self::on_error>
-//            > transition_table;
-//};
-//
-//void finite_state_filter_test()
-//{
-//    using namespace std;
-//
-//    const std::string input = 
-//        "When I was one-and-twenty\n"	
-//        "I heard a wise man say,\n"	
-//        "'Give crowns and pounds and guineas\n"	
-//        "But not your heart away;\n"	
-//        "\n"
-//        "Give pearls away and rubies\n"
-//        "But keep your fancy free.'\n"	
-//        "But I was one-and-twenty,\n"	
-//        "No use to talk to me.\n"	
-//        "\n" 
-//        "When I was one-and-twenty\n"	
-//        "I heard him say again,\n"
-//        "'The heart out of the bosom\n"	
-//        "Was never given in vain;\n"	
-//        "'Tis paid with sighs a plenty\n"
-//        "And sold for endless rue.'\n"
-//        "And I am two-and-twenty,\n"
-//        "And oh, 'tis true, 'tis true.";
-//
-//    const std::string output =
-//        "When I was one-and-twenty\r\n"	
-//        "I heard a wise man say,\r\n"	
-//        "'Give crowns and pounds and guineas\r\n"	
-//        "But not your heart away;\r\n"	
-//        "\r\n"
-//        "Give pearls away and rubies\r\n"
-//        "But keep your fancy free.'\r\n"	
-//        "But I was one-and-twenty,\r\n"	
-//        "No use to talk to me.\r\n"	
-//        "\r\n" 
-//        "When I was one-and-twenty\r\n"	
-//        "I heard him say again,\r\n"
-//        "'The heart out of the bosom\r\n"	
-//        "Was never given in vain;\r\n"	
-//        "'Tis paid with sighs a plenty\r\n"
-//        "And sold for endless rue.'\r\n"
-//        "And I am two-and-twenty,\r\n"
-//        "And oh, 'tis true, 'tis true.";
-//
-//    typedef ex::finite_state_stdio_filter<dos2unix_filter> dos2unix_stdio_filter;
-//
-//    BOOST_CHECK(
-//        io::test_input_filter(dos2unix_stdio_filter(), input, output)
-//    );
-//
-//    //BOOST_CHECK(
-//    //    io::test_output_filter( io::example::finite_state_stdio_filter(),
-//    //                            input, output )
-//    //);
-//
-//    //BOOST_CHECK(
-//    //    io::test_input_filter( io::example::finite_state_input_filter(),
-//    //                           input, output )
-//    //);
-//
-//    //BOOST_CHECK(
-//    //    io::test_output_filter( io::example::finite_state_output_filter(),
-//    //                            input, output )
-//    //);
-//}
-                    
 //------------------line_wrapping_filter test---------------------------------//
 
 void line_wrapping_filter_test()
