@@ -75,6 +75,7 @@ int test_main(int,char**) {
   properties.property("double",dbl_map);
   
   using boost::get;
+  using boost::put;
   using boost::type;
   // Get tests
   {
@@ -119,7 +120,7 @@ int test_main(int,char**) {
 
   // Nonexistent property gets generated
   {
-    boost::dynamic_properties props(string2string_gen);
+    boost::dynamic_properties props(&string2string_gen);
     put("nada",props,std::string("3.14"),std::string("pi"));
     BOOST_CHECK(get("nada",props,std::string("3.14"))  == "pi");
   }

@@ -221,8 +221,8 @@ public:
   typedef property_maps_type::iterator iterator;
   typedef property_maps_type::const_iterator const_iterator;
 
-  dynamic_properties(const generate_fn_type& g = generate_fn_type()) :
-    generate_fn(g) {}
+  dynamic_properties() : generate_fn() { }
+  dynamic_properties(const generate_fn_type& g) : generate_fn(g) {}
 
   ~dynamic_properties()
   {
