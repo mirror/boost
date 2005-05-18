@@ -10,12 +10,12 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-#include "./dictionary_filter.hpp"
+#include "../example/dictionary_filter.hpp"
 //#include "./finite_state_filter.hpp"
-#include "./line_wrapping_filter.hpp"
-#include "./shell_comments_filter.hpp"
-#include "./tab_expanding_filter.hpp"
-#include "./unix2dos_filter.hpp"
+#include "../example/line_wrapping_filter.hpp"
+#include "../example/shell_comments_filter.hpp"
+#include "../example/tab_expanding_filter.hpp"
+#include "../example/unix2dos_filter.hpp"
 
 using boost::unit_test::test_suite;
 namespace io = boost::iostreams;
