@@ -888,7 +888,7 @@ ccl_node::ccl_node(const uchar c1, const uchar c2)
     , m_node_num(0)
 {
     BOOST_ASSERT(c1 < c2);
-    for (std::size_t i = c1; i <= size_t(c2); ++i)
+    for (std::size_t i = c1; i <= std::size_t(c2); ++i)
     {
         m_match[i] = 1;
     }
@@ -1273,7 +1273,7 @@ namespace ccl_utils
     }
 
     template <typename char_t>
-    inline size_t
+    inline std::size_t
     compute_differing_byte(char_t c1, char_t c2)
     {
         std::size_t rval = 0;
@@ -1305,7 +1305,7 @@ namespace ccl_utils
 
     template <typename char_t>
     inline node *
-    create_mb_node_for_byte(std::size_t i, size_t j, size_t sizem1,
+    create_mb_node_for_byte(std::size_t i, std::size_t j, std::size_t sizem1,
             std::size_t differing_byte, char_t c1, char_t c2, node* newnode)
     {
         node* cnode;
