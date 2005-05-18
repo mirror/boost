@@ -59,8 +59,7 @@ DEPENDS all : test ;
     }
 
     test-suite "iostreams"
-        : [ test-iostreams libs/iostreams/example/example_test.cpp ]
-          [ test-iostreams libs/iostreams/test/array_test.cpp ]
+        : [ test-iostreams libs/iostreams/test/array_test.cpp ]
           [ test-iostreams libs/iostreams/test/auto_close_test.cpp ]
           [ test-iostreams libs/iostreams/test/buffer_size_test.cpp ]
           [ test-iostreams 
@@ -73,6 +72,7 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
           [ test-iostreams libs/iostreams/test/counter_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/example_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/file_descriptor_test.cpp 
                 libs/iostreams/src/file_descriptor.cpp ]
