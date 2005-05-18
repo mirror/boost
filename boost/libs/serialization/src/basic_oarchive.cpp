@@ -140,10 +140,10 @@ class basic_oarchive_impl
     // list of serialization helpers
     struct helper_type {
         boost::serialization::basic_helper * m_helper;
-        const boost::serialization::extended_type_info * const m_eti;
+        const boost::serialization::extended_type_info * m_eti;
         helper_type(
             boost::serialization::basic_helper * h, 
-            const boost::serialization::extended_type_info * const eti
+            const boost::serialization::extended_type_info * eti
         ) :
             m_helper(h),
             m_eti(eti)
