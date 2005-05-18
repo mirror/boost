@@ -60,7 +60,14 @@ main(int argc, char *argv[])
         std::cerr << boost::wave::get_token_name(data->id) << std::endl;
 #endif
 
-            BOOST_TEST(data->id == boost::wave::token_id(*it));
+            if (data->id != boost::wave::token_id(*it)) {
+                BOOST_TEST(data->id == boost::wave::token_id(*it));
+                std::cerr << "Expected: " 
+                    << boost::wave::get_token_name(data->id);
+                std::cerr << ", found: " 
+                    << boost::wave::get_token_name(boost::wave::token_id(*it)) 
+                    << std::endl;
+            }
             BOOST_TEST(++it != end);
             BOOST_TEST(boost::wave::T_EOF == boost::wave::token_id(*it));
         }
