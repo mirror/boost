@@ -29,7 +29,8 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
-      if ( contents.find( '\t' ) != string::npos )
+      if ( contents.find( '\t' ) != string::npos &&
+           contents.find( "boostinspect:notab" ) == string::npos)
       {
         ++m_files_with_errors;
         error( library_name, full_path, desc() );
