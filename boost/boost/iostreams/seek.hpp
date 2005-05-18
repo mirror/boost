@@ -29,14 +29,14 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct seek_impl;
 
 } // End namespace detail.
 
 template<typename T>
 inline std::streampos
-seek( T& t, stream_offset off, BOOST_IOS::seekdir way, 
+seek( T& t, stream_offset off, BOOST_IOS::seekdir way,
       BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 

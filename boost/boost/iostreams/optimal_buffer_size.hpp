@@ -22,11 +22,11 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct optimal_buffer_size_impl;
 
 } // End namespace detail.

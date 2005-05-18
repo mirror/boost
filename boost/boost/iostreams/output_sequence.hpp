@@ -21,11 +21,11 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct output_sequence_impl;
 
 } // End namespace detail.
@@ -35,7 +35,7 @@ inline std::pair<
     BOOST_DEDUCED_TYPENAME io_char<T>::type*,
     BOOST_DEDUCED_TYPENAME io_char<T>::type*
 >
-output_sequence(T& t) 
+output_sequence(T& t)
 { return detail::output_sequence_impl<T>::output_sequence(t); }
 
 namespace detail {

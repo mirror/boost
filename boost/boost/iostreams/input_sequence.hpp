@@ -25,7 +25,7 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct input_sequence_impl;
 
 } // End namespace detail.
@@ -35,7 +35,7 @@ inline std::pair<
     BOOST_DEDUCED_TYPENAME io_char<T>::type*,
     BOOST_DEDUCED_TYPENAME io_char<T>::type*
 >
-input_sequence(T& t) 
+input_sequence(T& t)
 { return detail::input_sequence_impl<T>::input_sequence(t); }
 
 namespace detail {

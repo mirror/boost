@@ -23,14 +23,14 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct flush_device_impl;
 
-template<typename T> 
+template<typename T>
 struct flush_filter_impl;
 
 } // End namespace detail.

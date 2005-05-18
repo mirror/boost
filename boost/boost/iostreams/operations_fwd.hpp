@@ -14,9 +14,9 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
 
-template<typename T> 
+template<typename T>
 struct operations;
 
 namespace detail {
@@ -32,7 +32,7 @@ struct is_custom
 
 } // End namespace detail.
 
-template<typename T> 
+template<typename T>
 struct operations : detail::custom_tag { };
 
 } } // End namespaces iostreams, boost.

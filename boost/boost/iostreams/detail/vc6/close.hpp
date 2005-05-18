@@ -4,11 +4,11 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-namespace boost { namespace iostreams { 
+namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct close_impl;
 
 } // End namespace detail.
@@ -113,9 +113,9 @@ struct close_impl<two_sequence> {
 
         template<typename Sink>
         static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-        { 
+        {
             non_blocking_adapter<Sink> nb(snk);
-            t.close(nb, which); 
+            t.close(nb, which);
         }
     };
 };
