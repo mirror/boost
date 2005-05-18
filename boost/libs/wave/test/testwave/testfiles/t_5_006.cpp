@@ -13,6 +13,8 @@
     license reproduced at the end of this file.
 =============================================================================*/
 
+// boostinspect:notab    this file needs to contain tabs
+
 // Tests, whether spaces or tabs are allowed at any place in a pp-directive 
 // lines, including between the top of a pp-directive line and '#', and between
 // the '#' and the directive.
@@ -20,7 +22,7 @@
 //  /**/[TAB]# /**/[TAB]define /**/[TAB]MACRO[TAB]/**/ abcde /**/
  /**/	# /**/	define /**/	MACRO	/**/ abcde /**/
 
-//R #line 24 "t_5_006.cpp"
+//R #line 26 "t_5_006.cpp"
 MACRO           //R abcde 
 
 /*-
