@@ -25,8 +25,10 @@
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/random/linear_congruential.hpp>
-#include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/pass_through_engine.hpp>
 
 namespace boost {
@@ -93,7 +95,13 @@ public:
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return wordmask; }
 
   lagged_fibonacci() { init_wordmask(); seed(); }
-  explicit lagged_fibonacci(uint32_t value) { init_wordmask(); seed(value); }
+  explicit lagged_fibonacci(unsigned long value) { init_wordmask(); seed(value); }
+
+  template<class Generator>
+  explicit lagged_fibonacci(Generator& gen,
+                            typename enable_if_c<!is_integral<Generator>::value && !is_same<lagged_fibonacci, Generator>::value, void *>::type = 0)
+  { init_wordmask(); seed(gen); }
+
   template<class It> lagged_fibonacci(It& first, It last)
   { init_wordmask(); seed(first, last); }
   // compiler-generated copy ctor and assignment operator are fine
@@ -107,9 +115,16 @@ private:
   }
 
 public:
-  void seed(uint32_t value = 331u)
+  void seed(unsigned long value = 331u)
   {
     minstd_rand0 gen(value);
+    seed(gen);
+  }
+
+  template<class Generator>
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<lagged_fibonacci, Generator>::value>::type
+  seed(Generator & gen)
+  {
     for(unsigned int j = 0; j < long_lag; ++j)
       x[j] = gen() & wordmask;
     i = long_lag;
@@ -266,9 +281,13 @@ public:
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
   lagged_fibonacci_01() { init_modulus(); seed(); }
-  explicit lagged_fibonacci_01(uint32_t value) { init_modulus(); seed(value); }
+  explicit lagged_fibonacci_01(unsigned long value) { init_modulus(); seed(value); }
+
   template<class Generator>
-  explicit lagged_fibonacci_01(Generator & gen) { init_modulus(); seed(gen); }
+  explicit lagged_fibonacci_01(Generator & gen,
+                               typename enable_if_c<!is_integral<Generator>::value && !is_same<lagged_fibonacci_01, Generator>::value, void *>::type = 0)
+  { init_modulus(); seed(gen); }
+
   template<class It> lagged_fibonacci_01(It& first, It last)
   { init_modulus(); seed(first, last); }
   // compiler-generated copy ctor and assignment operator are fine
@@ -294,15 +313,24 @@ public:
   // reduce overall object code size.  However, MSVC does not grok
   // out-of-line template member functions.
   template<class Generator>
-  void seed(Generator & gen)
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<lagged_fibonacci_01, Generator>::value>::type
+  seed(Generator & gen)
   {
-    // use pass-by-reference, but wrap argument in pass_through_engine
-    typedef detail::pass_through_engine<Generator&> ref_gen;
-    uniform_01<ref_gen, RealType> gen01 =
-      uniform_01<ref_gen, RealType>(ref_gen(gen));
-    // I could have used std::generate_n, but it takes "gen" by value
-    for(unsigned int j = 0; j < long_lag; ++j)
-      x[j] = gen01();
+#ifndef BOOST_NO_STDC_NAMESPACE
+    // allow for Koenig lookup
+    using std::fmod;
+    using std::pow;
+#endif
+    unsigned long mask = ~((~0u) << (w%32));   // now lowest w bits set
+    RealType two32 = pow(RealType(2), 32);
+    unsigned int j;
+    for(j = 0; j < long_lag; ++j) {
+      x[j] = RealType(0);
+      for(int i = 0; i < w/32; ++i)
+        x[j] += gen() / pow(two32,i+1);
+      if(mask != 0)
+        x[j] += fmod((gen() & mask) / _modulus, RealType(1));
+    }
     i = long_lag;
   }
 

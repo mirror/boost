@@ -20,6 +20,9 @@
 #include <cassert>
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/random/detail/const_mod.hpp>
 
 namespace boost {
@@ -45,7 +48,7 @@ public:
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return b == 0 ? 1 : 0; }
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return p-1; }
 
-  explicit inversive_congruential(IntType y0 = 1) : value(y0)
+  explicit inversive_congruential(unsigned long y0 = 1) : value(y0)
   {
     BOOST_STATIC_ASSERT(b >= 0);
     BOOST_STATIC_ASSERT(p > 1);
@@ -53,10 +56,24 @@ public:
     if(b == 0) 
       assert(y0 > 0); 
   }
+
+  template<class Generator>
+  explicit inversive_congruential(Generator & gen,
+                                  typename enable_if_c<!is_integral<Generator>::value && !is_same<inversive_congruential, Generator>::value, void *>::type = 0)
+  { seed(gen); }
+
   template<class It> inversive_congruential(It& first, It last)
   { seed(first, last); }
 
-  void seed(IntType y0 = 1) { value = y0; if(b == 0) assert(y0 > 0); }
+  void seed(unsigned long y0 = 1) { value = y0; if(b == 0) assert(y0 > 0); }
+
+  template<class Generator>
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<inversive_congruential, Generator>::value>::type
+  seed(Generator & gen)
+  {
+    value = gen();
+  }
+
   template<class It> void seed(It& first, It last)
   {
     if(first == last)

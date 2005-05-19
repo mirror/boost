@@ -22,6 +22,9 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/random/detail/const_mod.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -50,10 +53,11 @@ public:
   // BOOST_STATIC_ASSERT(m == 0 || a < m);
   // BOOST_STATIC_ASSERT(m == 0 || c < m);
 
-  explicit linear_congruential(IntType x0 = 1)
-    : _modulus(modulus), _x(_modulus ? (x0 % _modulus) : x0)
+  explicit linear_congruential(unsigned long x0 = 1)
+    : _modulus(modulus)
   { 
-    assert(c || x0); /* if c == 0 and x(0) == 0 then x(n) = 0 for all n */
+    seed(x0);
+    assert(c || _x); /* if c == 0 and x(0) == 0 then x(n) = 0 for all n */
     // overflow check
     // disabled because it gives spurious "divide by zero" gcc warnings
     // assert(m == 0 || (a*(m-1)+c) % m == (c < a ? c-a+m : c-a)); 
@@ -64,14 +68,30 @@ public:
 #endif
   }
 
+  template<class Generator>
+  explicit linear_congruential(Generator & gen,
+                               typename enable_if_c<!is_integral<Generator>::value && !is_same<linear_congruential, Generator>::value, void *>::type = 0)
+    : _modulus(modulus)
+  {
+    seed(gen);
+    assert(c || _x);
+  }
+
   template<class It>
   linear_congruential(It& first, It last) { seed(first, last); }
 
   // compiler-generated copy constructor and assignment operator are fine
-  void seed(IntType x0 = 1)
+  void seed(unsigned long x0 = 1)
   {
-    assert(c || x0);
     _x = (_modulus ? (x0 % _modulus) : x0);
+    assert(c || _x);
+  }
+
+  template<class Generator>
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<linear_congruential, Generator>::value>::type
+  seed(Generator & gen)
+  {
+    seed(gen());
   }
 
   template<class It>
@@ -79,8 +99,7 @@ public:
   {
     if(first == last)
       throw std::invalid_argument("linear_congruential::seed");
-    IntType value = *first++;
-    _x = (_modulus ? (value % _modulus) : value);
+    seed(*first++);
   }
 
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return c == 0 ? 1 : 0; }
@@ -209,10 +228,24 @@ public:
   
   explicit rand48(int32_t x0 = 1) : lcf(cnv(x0)) { }
   explicit rand48(uint64_t x0) : lcf(x0) { }
+
+  template<class Generator>
+  explicit rand48(Generator & gen,
+                  typename enable_if_c<!is_integral<Generator>::value && !is_same<rand48, Generator>::value, void *>::type = 0)
+  { seed(gen); }
+
   template<class It> rand48(It& first, It last) : lcf(first, last) { }
   // compiler-generated copy ctor and assignment operator are fine
   void seed(int32_t x0 = 1) { lcf.seed(cnv(x0)); }
   void seed(uint64_t x0) { lcf.seed(x0); }
+
+  template<class Generator>
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<rand48, Generator>::value>::type
+  seed(Generator & gen)
+  {
+    lcf.seed(gen);
+  }
+
   template<class It> void seed(It& first, It last) { lcf.seed(first,last); }
 
   int32_t operator()() { return static_cast<int32_t>(lcf() >> 17); }
