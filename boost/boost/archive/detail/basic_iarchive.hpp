@@ -71,10 +71,12 @@ public:
             const boost::serialization::extended_type_info & eti
         )
     );
-    boost::serialization::basic_helper * lookup_helper(
+    boost::serialization::basic_helper * 
+    lookup_helper(
         const boost::serialization::extended_type_info * const eti
     );
-    boost::serialization::basic_helper * insert_helper(
+    boost::serialization::basic_helper * 
+    insert_helper(
         boost::serialization::basic_helper * h,
         const boost::serialization::extended_type_info * const eti
     );
