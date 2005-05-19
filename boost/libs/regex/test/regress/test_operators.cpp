@@ -12,7 +12,6 @@
 #include "test.hpp"
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)\
-   && !BOOST_WORKAROUND(BOOST_MSVC, == 1400)\
    && !BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(55500))\
    && !(defined(__GNUC__) && (__GNUC__ < 3) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)))
 
