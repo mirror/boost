@@ -44,6 +44,18 @@ namespace slex {
 namespace lexer {
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+//  The follwoing numbers are the arraysizes of the token regex's which we
+//  need to specify to make the CW compiler happy (at least up to V9.4).
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+#define INIT_DATA_SIZE        176
+#define INIT_DATA_CPP_SIZE    15
+#else
+#define INIT_DATA_SIZE        159
+#define INIT_DATA_CPP_SIZE    15
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 // 
 //  encapsulation of the boost::spirit::slex based cpp lexer
 //
@@ -79,8 +91,8 @@ private:
         unsigned int lexerstate;                // valid for lexer state
     };
     
-    static lexer_data const init_data[];        // common patterns
-    static lexer_data const init_data_cpp[];    // C++ only patterns
+    static lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
+    static lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
 
 // helper for calculation of the time of last compilation
     static boost::wave::util::time_conversion_helper compilation_time;
@@ -154,7 +166,7 @@ private:
 // common C++/C99 token definitions
 template <typename IteratorT, typename PositionT>
 typename lexer<IteratorT, PositionT>::lexer_data const 
-lexer<IteratorT, PositionT>::init_data[] = 
+lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] = 
 {
     TOKEN_DATA(AND, "&"),
     TOKEN_DATA(ANDAND, "&&"),
@@ -352,7 +364,7 @@ lexer<IteratorT, PositionT>::init_data[] =
 // C++ only token definitions
 template <typename IteratorT, typename PositionT>
 typename lexer<IteratorT, PositionT>::lexer_data const 
-lexer<IteratorT, PositionT>::init_data_cpp[] = 
+lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] = 
 {
     TOKEN_DATA(AND_ALT, "bitand"),
     TOKEN_DATA(ANDASSIGN_ALT, "and_eq"),
