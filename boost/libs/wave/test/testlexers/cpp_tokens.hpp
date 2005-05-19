@@ -7,6 +7,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -168,6 +169,7 @@ lexem const lexems[] =
     { "volatile", boost::wave::T_VOLATILE },
     { "wchar_t", boost::wave::T_WCHART },
     { "while", boost::wave::T_WHILE },
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     { "__int8", boost::wave::T_MSEXT_INT8 },
     { "__int16", boost::wave::T_MSEXT_INT16 },
     { "__int32", boost::wave::T_MSEXT_INT32 },
@@ -190,6 +192,7 @@ lexem const lexems[] =
     { "_asm", boost::wave::T_MSEXT_ASM },
     { "#region", boost::wave::T_MSEXT_PP_REGION },
     { "#endregion", boost::wave::T_MSEXT_PP_ENDREGION },
+#endif // BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     { "#define", boost::wave::T_PP_DEFINE },
     { "#ifdef", boost::wave::T_PP_IFDEF },
     { "#ifndef", boost::wave::T_PP_IFNDEF },
