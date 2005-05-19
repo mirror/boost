@@ -24,6 +24,9 @@
 #include <boost/static_assert.hpp>
 #include <boost/integer_traits.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/random/linear_congruential.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/random/detail/ptr_helper.hpp>
@@ -64,7 +67,9 @@ public:
   template<class It> mersenne_twister(It& first, It last) { seed(first,last); }
 
   template<class Generator>
-  explicit mersenne_twister(Generator & gen) { seed(gen); }
+  explicit mersenne_twister(Generator & gen,
+                            typename enable_if_c<!is_integral<Generator>::value && !is_same<mersenne_twister, Generator>::value, void *>::type = 0)
+  { seed(gen); }
 
   // compiler-generated copy ctor and assignment operator are fine
 
@@ -93,7 +98,8 @@ public:
   // reduce overall object code size.  However, MSVC does not grok
   // out-of-line definitions of member function templates.
   template<class Generator>
-  void seed(Generator & gen)
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<mersenne_twister, Generator>::value>::type
+  seed(Generator & gen)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(!std::numeric_limits<result_type>::is_signed);
