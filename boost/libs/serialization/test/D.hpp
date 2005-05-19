@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/test/test_tools.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -46,7 +47,7 @@ private:
             // eliminate invalid pointers
             b1 = NULL;
             b2 = NULL;
-            boost::throw_exception();
+            BOOST_FAIL( "multiple identical pointers failed to load" );
         }
         BOOST_CATCH_END
         // check that loading was correct
