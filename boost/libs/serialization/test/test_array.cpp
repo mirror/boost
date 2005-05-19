@@ -57,7 +57,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects
-    A a_array[10];
+    const A a_array[10];
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
