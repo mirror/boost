@@ -13,14 +13,14 @@
 #include <boost/config.hpp> // Put size_t in std.
 #include <algorithm>        // min.
 #include <cstddef>          // size_t.
-#include <cstdlib>          // rand.
+//#include <cstdlib>          // rand.
 #include <iterator>
 #include <string>
 #include <vector>
-#if defined(__CYGWIN__)
+//#if defined(__CYGWIN__)
 # include <boost/random/linear_congruential.hpp>
 # include <boost/random/uniform_smallint.hpp>
-#endif
+//#endif
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/compose.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -34,14 +34,11 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include <boost/iostreams/device/file.hpp>
-#include <boost/range/iterator_range.hpp>
-
 #ifdef BOOST_NO_STDC_NAMESPACE
 # undef rand
 # undef memcpy
 # undef strlen
-namespace std { using ::rand; using ::memcpy; using ::strlen; }
+namespace std { /*using ::rand; */using ::memcpy; using ::strlen; }
 #endif
 
 namespace boost { namespace iostreams {
@@ -50,19 +47,19 @@ BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_string, std::basic_string, 3)
 
 const std::streamsize default_increment = 5;
 
-#if defined(__CYGWIN__)
+//#if defined(__CYGWIN__)
     std::streamsize rand(int inc)
     {
         static rand48                random_gen;
         static uniform_smallint<int> random_dist(0, inc);
         return random_dist(random_gen);
     }
-#else
-    std::streamsize rand(int inc) 
-    { 
-        return (std::rand() * inc + 1) / RAND_MAX; 
-    }
-#endif
+//#else
+//    std::streamsize rand(int inc) 
+//    { 
+//        return (std::rand() * inc + 1) / RAND_MAX; 
+//    }
+//#endif
 
 class non_blocking_source {
 public:
