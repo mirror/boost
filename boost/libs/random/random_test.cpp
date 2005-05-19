@@ -69,7 +69,7 @@ bool check(int x, const boost::ecuyer1988&) { return x == 2060321752; }
 // validation by experiment from Harry Erwin's generator.h (private e-mail)
 bool check(unsigned int x, const boost::kreutzer1986&) { return x == 139726; }
 
-bool check(double x, const boost::lagged_fibonacci607&) { return std::abs(x-0.401269) < 1e-5; }
+bool check(double x, const boost::lagged_fibonacci607&) { return std::abs(x-0.0309561) < 1e-5; }
 
 // principal operation validated with CLHEP, values by experiment
 bool check(unsigned long x, const boost::ranlux3&) { return x == 5957620; }
@@ -209,11 +209,20 @@ void instantiate_real_dist(URNG& urng, RealType /* ignored */)
                    boost::gamma_distribution<RealType>(1));
 }
 
+static unsigned long simple_generator() { return 1; }
+
 template<class URNG, class ResultType>
 void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 {
   std::cout << "Basic tests for " << s;
-  URNG urng;
+  {
+    int i = 42;
+    URNG u(i);                    // constructor taking integral lvalue
+    URNG u2(simple_generator);    // constructor taking a Generator
+    u.seed(i);                    // seed(integral lvalue)
+    u.seed(simple_generator);     // seed(Generator&)
+  }
+  URNG urng;                                    // default constructor
   urng.seed();                                  // seed() member function
   int a[URNG::has_fixed_range ? 5 : 10];        // compile-time constant
   (void) a;   // avoid "unused" warning
