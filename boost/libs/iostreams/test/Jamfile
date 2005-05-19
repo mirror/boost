@@ -51,7 +51,6 @@ DEPENDS all : test ;
             : # input files
             : # build requirements
                 <msvc-stlport><*><runtime-link>static
-                <cw-9_3-darwin><*><runtime-link>static
                 <define>_MSL_LL_FILE_SUPPORT
                 <define>BOOST_IOSTREAMS_NO_LIB
                 $(requirements)
@@ -72,7 +71,7 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
           [ test-iostreams libs/iostreams/test/counter_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
-          #[ test-iostreams libs/iostreams/test/example_test.cpp ]
+          [ test-iostreams libs/iostreams/test/example_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/file_descriptor_test.cpp 
                 libs/iostreams/src/file_descriptor.cpp ]
@@ -94,23 +93,23 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/seekable_file_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/stdio_filter_test.cpp ]
-          #[ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/tee_test.cpp ]
           [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
-          #[ test-iostreams 
-          #      libs/iostreams/test/bzip2_test.cpp 
-          #      <template>bzip2 
-          #    : # build requirements
-          #      <define>BOOST_IOSTREAMS_NO_LIB ]
-          #[ test-iostreams 
-          #      libs/iostreams/test/gzip_test.cpp 
-          #      <template>zlib
-          #    : # build requirements
-          #      <define>BOOST_IOSTREAMS_NO_LIB ]
-          #[ test-iostreams 
-          #      libs/iostreams/test/zlib_test.cpp 
-          #      <template>zlib
-          #    : # build requirements
-          #      <define>BOOST_IOSTREAMS_NO_LIB ]
+          [ test-iostreams 
+                libs/iostreams/test/bzip2_test.cpp 
+                <template>bzip2 
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]
+          [ test-iostreams 
+                libs/iostreams/test/gzip_test.cpp 
+                <template>zlib
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]
+          [ test-iostreams 
+                libs/iostreams/test/zlib_test.cpp 
+                <template>zlib
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]
        ;
 }
