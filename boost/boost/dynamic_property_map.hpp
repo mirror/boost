@@ -133,19 +133,32 @@ class dynamic_property_map_adaptor : public dynamic_property_map
   //   can be converted to value_type via iostreams.
   void do_put(const any& in_key, const any& in_value, mpl::bool_<true>)
   {
+#if !(defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95))
     using boost::put;
+#endif
 
     key_type key = any_cast<key_type>(in_key);
-    if (in_value.type() == typeid(value_type))
+    if (in_value.type() == typeid(value_type)) {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+      boost::put(property_map, key, any_cast<value_type>(in_value));
+#else
       put(property_map, key, any_cast<value_type>(in_value));
-    else {
+#endif
+    } else {
       //  if in_value is an empty string, put a default constructed value_type.
       std::string v = any_cast<std::string>(in_value);
       if (v.empty()) {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+        boost::put(property_map, key, value_type());
+#else
         put(property_map, key, value_type());
+#endif
       } else {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+        boost::put(property_map, key, detail::read_value<value_type>(v));
+#else
         put(property_map, key, detail::read_value<value_type>(v));
-
+#endif
       }
     }
   }
