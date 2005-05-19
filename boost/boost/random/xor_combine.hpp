@@ -21,6 +21,9 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>     // uint32_t
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 
 namespace boost {
@@ -46,11 +49,23 @@ public:
 
   xor_combine() : _rng1(), _rng2()
   { }
+  explicit xor_combine(unsigned long s) : _rng1(s), _rng2(s) { }
+  template<class Generator>
+  explicit xor_combine(Generator& gen,
+                       typename enable_if_c<!is_integral<Generator>::value && !is_same<xor_combine, Generator>::value, void *>::type = 0)
+    : _rng1(gen), _rng2(gen) { }
   xor_combine(const base1_type & rng1, const base2_type & rng2)
     : _rng1(rng1), _rng2(rng2) { }
   template<class It> xor_combine(It& first, It last)
     : _rng1(first, last), _rng2( /* advanced by other call */ first, last) { }
   void seed() { _rng1.seed(); _rng2.seed(); }
+  void seed(unsigned long s) { _rng1.seed(s); _rng2.seed(s); }
+
+  template<class Generator>
+  typename enable_if_c<!is_integral<Generator>::value && !is_same<xor_combine, Generator>::value>::type
+  seed(Generator& gen)
+  { _rng1.seed(gen); _rng2.seed(gen); }
+
   template<class It> void seed(It& first, It last)
   {
     _rng1.seed(first, last);
