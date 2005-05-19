@@ -10,17 +10,24 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp> // Put size_t in std.
-#include <algorithm>        // min.
-#include <cstddef>          // size_t.
-//#include <cstdlib>          // rand.
+#include <boost/config.hpp>               // BOOST_MSVC,put size_t in std.
+#include <boost/detail/workaround.hpp>
+#include <algorithm>                      // min.
+#include <cstddef>                        // size_t.
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
+    BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
+    /**/
+# include <cstdlib>                       // rand.
+#endif
 #include <iterator>
 #include <string>
 #include <vector>
-//#if defined(__CYGWIN__)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
+    !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
+    /**/
 # include <boost/random/linear_congruential.hpp>
 # include <boost/random/uniform_smallint.hpp>
-//#endif
+#endif
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/compose.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -34,11 +41,20 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#undef memcpy
+#undef rand
+#undef strlen
+
 #ifdef BOOST_NO_STDC_NAMESPACE
-# undef rand
-# undef memcpy
-# undef strlen
-namespace std { /*using ::rand; */using ::memcpy; using ::strlen; }
+namespace std { 
+    using ::memcpy; 
+    using ::strlen; 
+    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
+        BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
+        /**/
+        using ::rand; 
+    #endif
+}
 #endif
 
 namespace boost { namespace iostreams {
@@ -47,19 +63,21 @@ BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_string, std::basic_string, 3)
 
 const std::streamsize default_increment = 5;
 
-//#if defined(__CYGWIN__)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
+    !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
+    /**/
     std::streamsize rand(int inc)
     {
         static rand48                random_gen;
         static uniform_smallint<int> random_dist(0, inc);
         return random_dist(random_gen);
     }
-//#else
-//    std::streamsize rand(int inc) 
-//    { 
-//        return (std::rand() * inc + 1) / RAND_MAX; 
-//    }
-//#endif
+#else
+    std::streamsize rand(int inc) 
+    { 
+        return (std::rand() * inc + 1) / RAND_MAX; 
+    }
+#endif
 
 class non_blocking_source {
 public:
