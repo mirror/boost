@@ -507,10 +507,10 @@ basic_oarchive::lookup_helper(
     return pimpl->lookup_helper(eti);
 }
 
-boost::serialization::basic_helper* 
+boost::serialization::basic_helper * 
 BOOST_DECL_ARCHIVE 
 basic_oarchive::insert_helper(
-    basic_helper * h,
+    boost::serialization::basic_helper * h,
     const boost::serialization::extended_type_info * const eti
 ){
     return pimpl->insert_helper(h, eti);
