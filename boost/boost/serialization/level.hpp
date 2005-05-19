@@ -75,11 +75,11 @@ struct implementation_level {
             //else
             BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 is_enum<T>,
-                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-                    mpl::int_<not_serializable>,
-                #else
-                    mpl::int_<object_serializable>,
-                #endif
+                //#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                //    mpl::int_<not_serializable>,
+                //#else
+                    mpl::int_<primitive_type>,
+                //#endif
             //else
                 mpl::int_<not_serializable>
             >
