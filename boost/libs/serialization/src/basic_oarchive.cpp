@@ -139,6 +139,8 @@ class basic_oarchive_impl
     //////////////////////////////////////////////////////////////////////
     // list of serialization helpers
     struct helper_type {
+        // at least one compiler erroneously doesn't give access to embedded structs
+        friend struct helper_compare;
         boost::serialization::basic_helper * m_helper;
         const boost::serialization::extended_type_info * m_eti;
         helper_type(
