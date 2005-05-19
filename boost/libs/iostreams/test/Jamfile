@@ -72,18 +72,18 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
           [ test-iostreams libs/iostreams/test/counter_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
-          [ test-iostreams libs/iostreams/test/example_test.cpp ]
+          #[ test-iostreams libs/iostreams/test/example_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/file_descriptor_test.cpp 
                 libs/iostreams/src/file_descriptor.cpp ]
           [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
-          [ test-iostreams libs/iostreams/test/finite_state_filter_test.cpp ]
+          #[ test-iostreams libs/iostreams/test/finite_state_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/flush_test.cpp ]
           [ test-iostreams libs/iostreams/test/line_filter_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/mapped_file_test.cpp 
                 libs/iostreams/src/mapped_file.cpp ]
-          #[ test-iostreams libs/iostreams/test/newline_test.cpp ]
+          [ test-iostreams libs/iostreams/test/newline_test.cpp ]
           [ test-iostreams libs/iostreams/test/null_test.cpp ]
           [ test-iostreams libs/iostreams/test/pipeline_test.cpp ]
           [ test-iostreams libs/iostreams/test/positioning_test.cpp ]
