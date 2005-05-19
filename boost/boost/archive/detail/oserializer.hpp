@@ -534,9 +534,10 @@ inline void save(Archive & ar, const T &t){
     typex::invoke(ar, t);
 }
 
+
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-template<class Archive, class T>
-inline void save(Archive & ar, T &t){
+template<class T>
+struct check_constness {
     // if we trap here, we're saving a tracked non-const
     // value - this could be a stack variable with the same
     // address for multiple items. This would be the source of very
@@ -547,8 +548,13 @@ inline void save(Archive & ar, T &t){
             mpl::int_<serialization::track_never>,
             serialization::tracking_level<T>
         >
-    >::type typex;
-    BOOST_STATIC_ASSERT(typex::value);
+    >::type type;
+    BOOST_STATIC_CONSTANT(bool, value = type::value);
+};
+
+template<class Archive, class T>
+inline void save(Archive & ar, T &t){
+    BOOST_STATIC_ASSERT(check_constness<T>::value);
 	save(ar, const_cast<const T &>(t));
 }
 #endif
