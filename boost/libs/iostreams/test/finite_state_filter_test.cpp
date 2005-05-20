@@ -108,9 +108,9 @@ struct dictionary_fsm
 
 
     void append(char c) { current_word_.push_back(c); }
-    void lookup(char c) 
-    { 
-        
+    void lookup(char c)
+    {
+
     }
 
     typedef boost::mpl::vector<
