@@ -227,7 +227,7 @@ struct flt_wrapper_impl<any_tag> {
     seek( Filter& f, Device* dev, stream_offset off,
           BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
           random_access, two_sequence )
-    { return f.seek(*dev, off, way);  }
+    { return f.seek(*dev, off, way, which);  }
 
     template<typename Filter, typename Device>
     static void close(Filter& f, Device* dev, BOOST_IOS::openmode which)
