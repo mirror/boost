@@ -48,7 +48,7 @@ class offset_indirect_device : public basic_adapter<Device> {
 private:
     typedef typename detail::param_type<Device>::type  param_type;
 public:
-    typedef typename io_char<Device>::type             char_type;
+    typedef typename char_type_of<Device>::type        char_type;
     struct category
         : io_mode<Device>::type,
           device_tag,
@@ -75,8 +75,8 @@ private:
 template<typename Device>
 class offset_direct_device : public basic_adapter<Device> {
 public:
-    typedef typename io_char<Device>::type     char_type;
-    typedef std::pair<char_type*, char_type*>  pair_type;
+    typedef typename char_type_of<Device>::type  char_type;
+    typedef std::pair<char_type*, char_type*>    pair_type;
     struct category
         : io_mode<Device>::type,
           device_tag,
@@ -103,7 +103,7 @@ private:
 template<typename Filter>
 class offset_filter : public basic_adapter<Filter> {
 public:
-    typedef typename io_char<Filter>::type char_type;
+    typedef typename char_type_of<Filter>::type char_type;
     struct category
         : io_mode<Filter>::type,
           filter_tag,

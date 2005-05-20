@@ -44,14 +44,14 @@ typename io_int<T>::type get_if(T& t)
 
 template<typename T>
 inline std::streamsize
-read_if(T& t, typename io_char<T>::type* s, std::streamsize n)
+read_if(T& t, typename char_type_of<T>::type* s, std::streamsize n)
 { 
     typedef typename detail::dispatch<T, input, output>::type tag;
     return detail::read_write_if_impl<tag>::read(t, s, n);
 }
 
 template<typename T>
-bool put_if(T& t, typename io_char<T>::type c)
+bool put_if(T& t, typename char_type_of<T>::type c)
 { 
     typedef typename detail::dispatch<T, output, input>::type tag;
     return detail::read_write_if_impl<tag>::put(t, c);
@@ -59,7 +59,7 @@ bool put_if(T& t, typename io_char<T>::type c)
 
 template<typename T>
 inline std::streamsize write_if
-    (T& t, const typename io_char<T>::type* s, std::streamsize n)
+    (T& t, const typename char_type_of<T>::type* s, std::streamsize n)
 { 
     typedef typename detail::dispatch<T, output, input>::type tag;
     return detail::read_write_if_impl<tag>::write(t, s, n);
@@ -87,16 +87,16 @@ struct read_write_if_impl<input> {
 
     template<typename T>
     static std::streamsize
-    read(T& t, typename io_char<T>::type* s, std::streamsize n)
+    read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
     { return iostreams::read(t, s, n); }
 
     template<typename T>
-    static bool put(T&, typename io_char<T>::type)
+    static bool put(T&, typename char_type_of<T>::type)
     { throw cant_write(); }
 
     template<typename T>
     static std::streamsize 
-    write(T&, const typename io_char<T>::type*, std::streamsize)
+    write(T&, const typename char_type_of<T>::type*, std::streamsize)
     { throw cant_write(); }
 };
 
@@ -108,16 +108,16 @@ struct read_write_if_impl<output> {
 
     template<typename T>
     static std::streamsize
-    read(T&, typename io_char<T>::type*, std::streamsize)
+    read(T&, typename char_type_of<T>::type*, std::streamsize)
     { throw cant_read(); }
 
     template<typename T>
-    static bool put(T& t, typename io_char<T>::type c)
+    static bool put(T& t, typename char_type_of<T>::type c)
     { return iostreams::put(t, c); }
 
     template<typename T>
     static std::streamsize 
-    write( T& t, const typename io_char<T>::type* s, 
+    write( T& t, const typename char_type_of<T>::type* s, 
            std::streamsize n )
     { return iostreams::write(t, s, n); }
 };

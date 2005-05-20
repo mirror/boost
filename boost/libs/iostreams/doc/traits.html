@@ -17,7 +17,7 @@
 <DL class="page-index">
   <DT><A href="#overview">Overview</A></DT>
   <DT><A href="#headers">Headers</A></DT>
-  <DT><A href="#char_type_ref">Class template <CODE>io_char</CODE></A></DT>
+  <DT><A href="#char_type_of_ref">Class template <CODE>char_type_of</CODE></A></DT>
   <DT><A href="#category_ref">Class template <CODE>category_of</CODE></A></DT>
   <DT><A href="#category_tags">Category Tags</A></DT>
   </DT>
@@ -29,7 +29,7 @@
 <H2>Overview</H2>
 
 <P>
-    The header <A CLASS="header" HREF="../../../boost/iostreams/categories.hpp"><CODE>&lt;boost/iostreams/categories.hpp&gt;</CODE></A> contains <A href="#category_tags">category tags</A> for classifying models of the various <A HREF="concepts.html#filter_concepts">Filter</A> and <A HREF="concepts.html#device_concepts">Device</A> concepts. The header <A CLASS="header" HREF="../../../boost/iostreams/traits.hpp"><CODE>&lt;boost/iostreams/traits.hpp&gt;</CODE></A> contains the definitions of the metafunctions <A HREF="#io_char_ref"><CODE>io_char</CODE></A> and <A HREF="#category_ref"><CODE>category</CODE></A>, used to associate two fundamental types with each model of one the <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> concepts:
+    The header <A CLASS="header" HREF="../../../boost/iostreams/categories.hpp"><CODE>&lt;boost/iostreams/categories.hpp&gt;</CODE></A> contains <A href="#category_tags">category tags</A> for classifying models of the various <A HREF="concepts.html#filter_concepts">Filter</A> and <A HREF="concepts.html#device_concepts">Device</A> concepts. The header <A CLASS="header" HREF="../../../boost/iostreams/traits.hpp"><CODE>&lt;boost/iostreams/traits.hpp&gt;</CODE></A> contains the definitions of the metafunctions <A HREF="#char_type_of_ref"><CODE>char_type_of</CODE></A> and <A HREF="#category_ref"><CODE>category</CODE></A>, used to associate two fundamental types with each model of one the <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> concepts:
 </P>
 
 <A NAME="char_type"></A>
@@ -60,20 +60,20 @@
   <DT><A CLASS="header" HREF="../../../boost/iostreams/traits.hpp"><CODE>&lt;boost/iostreams/traits.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="io_char_ref"></A>
-<H2>Class Template <CODE>io_char</CODE></H2>
+<A NAME="char_type_of_ref"></A>
+<H2>Class Template <CODE>char_type_of</CODE></H2>
 
 <H4>Description</H4>
 
-<P><A HREF="http://www.boost.org/libs/mpl/doc/refmanual/metafunction.html" TARGET="_top">Metafunction</A> associating a <A HREF="#char_type">character type</A> to each <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> type. Although <CODE>io_char</CODE> is designed to be specialized for new Filter and Device types, the default implementation should be suitable for most purposes.
+<P><A HREF="http://www.boost.org/libs/mpl/doc/refmanual/metafunction.html" TARGET="_top">Metafunction</A> associating a <A HREF="#char_type">character type</A> to each <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> type. Although <CODE>char_type_of</CODE> is designed to be specialized for new Filter and Device types, the default implementation should be suitable for most purposes.
 
 <H4>Synopsis</H4>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
 
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A HREF="#char_type_template_params" CLASS="documented">T</A>&gt;
-<SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#char_type_template_params">io_char</A> {
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> <A HREF="#io_char_type" CLASS="documented">type</A>;
+<SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#char_type_template_params">char_type_of</A> {
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> <A HREF="#char_type_of_type" CLASS="documented">type</A>;
 };
 
 } } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
@@ -88,7 +88,7 @@
     </TR>
 </TABLE>
 
-<A NAME="io_char_type"></A>
+<A NAME="char_type_of_type"></A>
 <H4><CODE>io_traits::type</CODE></H4>
 
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> char_type;</PRE>

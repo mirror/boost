@@ -32,8 +32,8 @@ void skip(Device& dev, stream_offset off, mpl::true_)
 template<typename Device>
 void skip(Device& dev, stream_offset off, mpl::false_)
 { 
-    typedef typename io_char<Device>::type  char_type;
-    typedef char_traits<char_type>          traits_type;
+    typedef typename char_type_of<Device>::type  char_type;
+    typedef char_traits<char_type>               traits_type;
     for (stream_offset z = 0; z < off; ) {
         typename traits_type::int_type c;
         if (traits_type::is_eof(c = iostreams::get(dev)))
@@ -50,7 +50,7 @@ void skip(Filter& flt, Device& dev, stream_offset off, mpl::true_)
 template<typename Filter, typename Device>
 void skip(Filter& flt, Device& dev, stream_offset off, mpl::false_)
 { 
-    typedef typename io_char<Device>::type char_type;
+    typedef typename char_type_of<Device>::type char_type;
     char_type c;
     for (stream_offset z = 0; z < off; ) {
         std::streamsize amt;

@@ -183,7 +183,7 @@ private:
     template<typename First, typename Last>
     struct process_event_impl;
 public:
-    typedef typename io_char<FiniteStateMachine>::type char_type;
+    typedef typename char_type_of<FiniteStateMachine>::type char_type;
 
     finite_state_filter_impl() : state_(FiniteStateMachine::initial_state) { }
 

@@ -67,12 +67,12 @@ namespace boost { namespace iostreams {
 template< typename SymmetricFilter,
           typename Alloc =
               std::allocator<
-                  BOOST_DEDUCED_TYPENAME io_char<SymmetricFilter>::type
+                  BOOST_DEDUCED_TYPENAME char_type_of<SymmetricFilter>::type
               > >
 class symmetric_filter_adapter {
 public:
-    typedef typename io_char<SymmetricFilter>::type  char_type;
-    typedef std::basic_string<char_type>             string_type;
+    typedef typename char_type_of<SymmetricFilter>::type  char_type;
+    typedef std::basic_string<char_type>                  string_type;
     struct category
         : dual_use,
           filter_tag,

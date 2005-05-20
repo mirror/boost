@@ -5,8 +5,8 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 // 
-// Contains metafunctions io_char, category_of and io_mode used for deducing 
-// the i/o category and i/o mode of a model of Filter or Device.
+// Contains metafunctions char_type_of, category_of and io_mode used for
+// deducing the i/o category and i/o mode of a model of Filter or Device.
 //
 // Also contains several utility metafunctions, functions and macros.
 //
@@ -73,7 +73,7 @@ BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_linked, linked_streambuf, 2)
 
 } // End namespace detail.
                     
-//------------------Definitions of io_char------------------------------------//
+//------------------Definitions of char_type_of-------------------------------//
 
 namespace detail {
 
@@ -86,7 +86,7 @@ struct member_char_type { typedef typename T::char_type type; };
 # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-------------------------------//
 
 template<typename T>
-struct io_char 
+struct char_type_of 
     : detail::member_char_type<
           typename detail::unwrapped_type<T>::type
       > 
@@ -95,7 +95,7 @@ struct io_char
 # else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //---------------------//
 
 template<typename T>
-struct io_char {
+struct char_type_of {
     typedef typename detail::unwrapped_type<T>::type U;
     typedef typename 
             mpl::eval_if<
@@ -108,14 +108,14 @@ struct io_char {
 # endif // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------//
 
 template<typename Iter>
-struct io_char< iterator_range<Iter> > {
+struct char_type_of< iterator_range<Iter> > {
     typedef typename iterator_value<Iter>::type type;
 };
 
 #else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //------------------//
 
 template<typename T>
-struct io_char {
+struct char_type_of {
     template<typename U>
     struct get_value_type {
         typedef typename range_value<U>::type type;
@@ -176,7 +176,7 @@ template<typename T>
 struct io_int { 
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
     typedef std::char_traits<
-                BOOST_DEDUCED_TYPENAME io_char<T>::type
+                BOOST_DEDUCED_TYPENAME char_type_of<T>::type
             > traits_type;      
     typedef typename traits_type::int_type type; 
 #else  

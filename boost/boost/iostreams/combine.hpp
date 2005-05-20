@@ -42,7 +42,7 @@ namespace detail {
 template<typename Source, typename Sink>
 class combined_device {
 public:
-    typedef typename io_char<Source>::type char_type;
+    typedef typename char_type_of<Source>::type char_type;
     struct category
         : bidirectional, 
           device_tag, 
@@ -57,7 +57,7 @@ public:
         void imbue(const std::locale& loc);
     #endif
 private:
-    typedef typename io_char<Sink>::type sink_char_type;
+    typedef typename char_type_of<Sink>::type sink_char_type;
     BOOST_STATIC_ASSERT((is_same<char_type, sink_char_type>::value));
     Source  src_;
     Sink    sink_;
@@ -75,10 +75,10 @@ private:
 template<typename InputFilter, typename OutputFilter>
 class combined_filter {
 private:
-    typedef typename category_of<InputFilter>::type   in_category;
-    typedef typename category_of<OutputFilter>::type  out_category;
+    typedef typename category_of<InputFilter>::type    in_category;
+    typedef typename category_of<OutputFilter>::type   out_category;
 public:
-    typedef typename io_char<InputFilter>::type       char_type;
+    typedef typename char_type_of<InputFilter>::type   char_type;
     struct category 
         : multichar_bidirectional_filter_tag,
           closable_tag, 
@@ -106,7 +106,7 @@ public:
         void imbue(const std::locale& loc);
     #endif
 private:
-    typedef typename io_char<OutputFilter>::type output_char_type;
+    typedef typename char_type_of<OutputFilter>::type  output_char_type;
     BOOST_STATIC_ASSERT((is_same<char_type, output_char_type>::value));
     InputFilter   in_;
     OutputFilter  out_;

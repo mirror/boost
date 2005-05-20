@@ -36,13 +36,13 @@ namespace detail {
 template< typename T,
           typename Tr = 
               BOOST_IOSTREAMS_CHAR_TRAITS(
-                 BOOST_DEDUCED_TYPENAME io_char<T>::type 
+                 BOOST_DEDUCED_TYPENAME char_type_of<T>::type 
               ) >
 class direct_streambuf 
-    : public linked_streambuf<BOOST_DEDUCED_TYPENAME io_char<T>::type, Tr>
+    : public linked_streambuf<BOOST_DEDUCED_TYPENAME char_type_of<T>::type, Tr>
 {
 public:
-    typedef typename io_char<T>::type                     char_type;
+    typedef typename char_type_of<T>::type                char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef linked_streambuf<char_type, traits_type>      base_type;

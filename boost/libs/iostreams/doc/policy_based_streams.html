@@ -69,9 +69,9 @@
           <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">Mode</A> = <SPAN CLASS="omitted">...</SPAN> &gt;
 <SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">streambuf_facade</A> : <SPAN CLASS="keyword">public</SPAN> std::basic_streambuf&lt;<SPAN CLASS="omitted">...</SPAN>&gt; {
 <SPAN CLASS="keyword">public</SPAN>:
-    <SPAN CLASS="keyword">typedef</SPAN> T                            policy_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> io_char&lt;T&gt;::type    char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> Tr                  traits_type;
+    <SPAN CLASS="keyword">typedef</SPAN> T                               policy_type;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;T&gt;::type  char_type;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> Tr                     traits_type;
 
     [<SPAN CLASS="omitted">Standard stream buffer typedefs: int_type, off_type, etc.</SPAN>]
 

@@ -55,7 +55,7 @@ private:
                 flt_wrapper_impl<any_tag>
             >::type                                    any_impl;
 public:
-    typedef typename io_char<T>::type                  char_type;
+    typedef typename char_type_of<T>::type             char_type;
     typedef typename category_of<T>::type              category;
 
     explicit concept_adapter(const reference_wrapper<T>& ref) : t_(ref.get())
@@ -161,13 +161,13 @@ template<>
 struct device_wrapper_impl<input> : device_wrapper_impl<any_tag>  {
     template<typename Device, typename Dummy>
     static std::streamsize
-    read( Device& dev, Dummy*, typename io_char<Device>::type* s,
+    read( Device& dev, Dummy*, typename char_type_of<Device>::type* s,
           std::streamsize n )
     { return iostreams::read(dev, s, n); }
 
     template<typename Device, typename Dummy>
     static std::streamsize 
-    write( Device&, Dummy*, const typename io_char<Device>::type*,
+    write( Device&, Dummy*, const typename char_type_of<Device>::type*,
            std::streamsize )
     { throw cant_write(); }
 };
@@ -176,12 +176,12 @@ template<>
 struct device_wrapper_impl<output> {
     template<typename Device, typename Dummy>
     static std::streamsize
-    read(Device&, Dummy*, typename io_char<Device>::type*, std::streamsize)
+    read(Device&, Dummy*, typename char_type_of<Device>::type*, std::streamsize)
     { throw cant_read(); }
 
     template<typename Device, typename Dummy>
     static std::streamsize 
-    write( Device& dev, Dummy*, const typename io_char<Device>::type* s,
+    write( Device& dev, Dummy*, const typename char_type_of<Device>::type* s,
            std::streamsize n )
     { return iostreams::write(dev, s, n); }
 };
@@ -242,13 +242,13 @@ template<>
 struct flt_wrapper_impl<input> {
     template<typename Filter, typename Source>
     static std::streamsize
-    read( Filter& f, Source* src, typename io_char<Filter>::type* s,
+    read( Filter& f, Source* src, typename char_type_of<Filter>::type* s,
           std::streamsize n )
     { return iostreams::read(f, *src, s, n); }
 
     template<typename Filter, typename Sink>
     static std::streamsize 
-    write( Filter&, Sink*, const typename io_char<Filter>::type*, 
+    write( Filter&, Sink*, const typename char_type_of<Filter>::type*, 
            std::streamsize )
     { throw cant_write(); }
 };
@@ -257,12 +257,12 @@ template<>
 struct flt_wrapper_impl<output> {
     template<typename Filter, typename Source>
     static std::streamsize
-    read(Filter&, Source*, typename io_char<Filter>::type*,std::streamsize)
+    read(Filter&, Source*, typename char_type_of<Filter>::type*,std::streamsize)
     { throw cant_read(); }
 
     template<typename Filter, typename Sink>
     static std::streamsize 
-    write( Filter& f, Sink* snk, const typename io_char<Filter>::type* s,
+    write( Filter& f, Sink* snk, const typename char_type_of<Filter>::type* s,
            std::streamsize n )
     { return iostreams::write(f, *snk, s, n); }
 };

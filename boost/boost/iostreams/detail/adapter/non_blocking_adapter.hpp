@@ -18,7 +18,7 @@ namespace boost { namespace iostreams {
 template<typename Device>
 class non_blocking_adapter {
 public:
-    typedef typename io_char<Device>::type char_type;
+    typedef typename char_type_of<Device>::type char_type;
     struct category
         : io_mode<Device>::type, device_tag
         { };

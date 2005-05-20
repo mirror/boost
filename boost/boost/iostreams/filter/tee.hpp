@@ -32,7 +32,7 @@ template<typename Device>
 class tee_filter : public detail::basic_adapter<Device> {
 public:
     typedef typename detail::param_type<Device>::type  param_type;
-    typedef typename io_char<Device>::type             char_type;
+    typedef typename char_type_of<Device>::type        char_type;
     struct category
         : multichar_output_filter_tag,
           closable_tag,

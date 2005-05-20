@@ -260,7 +260,7 @@ public:
     BOOST_STATIC_ASSERT((
         is_same<
             extern_type, 
-            BOOST_DEDUCED_TYPENAME io_char<Device>::type
+            BOOST_DEDUCED_TYPENAME char_type_of<Device>::type
         >::value
     ));
 public:

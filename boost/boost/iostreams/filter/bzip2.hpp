@@ -144,7 +144,7 @@ public:
 
 class BOOST_IOSTREAMS_DECL bzip2_base  { 
 public:
-    typedef char                    char_type;
+    typedef char char_type;
 protected:
     bzip2_base(const bzip2_params& params);
     ~bzip2_base();

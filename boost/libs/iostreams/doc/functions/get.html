@@ -101,14 +101,14 @@
 <H4>Return Type</H4>
 
 <P>An integral type large enough to represent every element of the <A HREF="../traits.html#char_type">character type</A> of <CODE>Source</CODE> plus an end-of-file indicator. Specifically:
-<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typename</SPAN> std::char_traits&lt;<SPAN CLASS="keyword">typename</SPAN> io_char&lt;Source&gt;::type&gt;::int_type</PRE>
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typename</SPAN> std::char_traits&lt;<SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;Source&gt;::type&gt;::int_type</PRE>
 
 
 <A NAME="return_value"></A>
 <H4>Return Value</H4>
 
 <P>The next character in the filtered sequence, or <CODE>traits_type::eof()</CODE>, where <CODE>traits_type</CODE> is</P>
-<PRE CLASS="broken_ie">    std::char_traits&lt;<SPAN CLASS="keyword">typename</SPAN> io_char&lt;Source&gt;::type&gt;</PRE>
+<PRE CLASS="broken_ie">    std::char_traits&lt;<SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;Source&gt;::type&gt;</PRE>
 
 <A NAME="semantics"></A>
 <H4>Semantics</H4>

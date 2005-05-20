@@ -25,7 +25,7 @@ typename io_int<T>::type get(T& t)
 
 template<typename T>
 inline std::streamsize
-read(T& t, typename io_char<T>::type* s, std::streamsize n)
+read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
 {
     typedef typename detail::unwrapped_type<T>::type unwrapped;
     return detail::read_device_impl<T>::inner<unwrapped>::read(detail::unwrap(t), s, n);
@@ -33,14 +33,14 @@ read(T& t, typename io_char<T>::type* s, std::streamsize n)
 
 template<typename T, typename Source>
 std::streamsize
-read(T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
+read(T& t, Source& src, typename char_type_of<T>::type* s, std::streamsize n)
 {
     typedef typename detail::unwrapped_type<T>::type unwrapped;
     return detail::read_filter_impl<T>::inner<unwrapped>::read(detail::unwrap(t), src, s, n);
 }
 
 template<typename T>
-bool putback(T& t, typename io_char<T>::type c)
+bool putback(T& t, typename char_type_of<T>::type c)
 {
     typedef typename detail::unwrapped_type<T>::type unwrapped;
     return detail::read_device_impl<T>::inner<unwrapped>::putback(detail::unwrap(t), c);
@@ -100,12 +100,12 @@ struct read_device_impl<istream_tag> {
         { return t.get(); }
 
         static std::streamsize
-        read(T& t, typename io_char<T>::type* s, std::streamsize n)
+        read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
         { return check_eof(t.rdbuf()->sgetn(s, n)); }
 
-        static bool putback(T& t, typename io_char<T>::type c)
+        static bool putback(T& t, typename char_type_of<T>::type c)
         {
-            typedef typename io_char<T>::type               char_type;
+            typedef typename char_type_of<T>::type          char_type;
             typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
             return !traits_type::eq_int_type( t.rdbuf()->putback(c),
                                             traits_type::eof() );
@@ -120,8 +120,8 @@ struct read_device_impl<streambuf_tag> {
         static typename io_int<T>::type
         get(T& t)
         {
-            typedef typename io_char<T>::type  char_type;
-            typedef char_traits<char_type>     traits_type;
+            typedef typename char_type_of<T>::type  char_type;
+            typedef char_traits<char_type>          traits_type;
             typename io_int<T>::type c;
             return !traits_type::is_eof(c = t.sbumpc()) ||
                     detail::true_eof(t)
@@ -130,7 +130,7 @@ struct read_device_impl<streambuf_tag> {
         }
 
         static std::streamsize
-        read(T& t, typename io_char<T>::type* s, std::streamsize n)
+        read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
         {
             std::streamsize amt;
             return (amt = t.sgetn(s, n)) != 0 ?
@@ -140,10 +140,10 @@ struct read_device_impl<streambuf_tag> {
                     0;
         }
 
-        static bool putback(T& t, typename io_char<T>::type c)
+        static bool putback(T& t, typename char_type_of<T>::type c)
         {
-            typedef typename io_char<T>::type  char_type;
-            typedef char_traits<char_type>     traits_type;
+            typedef typename char_type_of<T>::type  char_type;
+            typedef char_traits<char_type>          traits_type;
             return !traits_type::is_eof(t.sputbackc());
         }
     };
@@ -156,8 +156,8 @@ struct read_device_impl<input> {
         static typename io_int<T>::type
         get(T& t)
         {
-            typedef typename io_char<T>::type  char_type;
-            typedef char_traits<char_type>     traits_type;
+            typedef typename char_type_of<T>::type  char_type;
+            typedef char_traits<char_type>          traits_type;
             char_type c;
             std::streamsize amt;
             return (amt = t.read(&c, 1)) == 1 ?
@@ -169,11 +169,11 @@ struct read_device_impl<input> {
 
         template<typename T>
         static std::streamsize
-        read(T& t, typename io_char<T>::type* s, std::streamsize n)
+        read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
         { return t.read(s, n); }
 
         template<typename T>
-        static bool putback(T& t, typename io_char<T>::type c)
+        static bool putback(T& t, typename char_type_of<T>::type c)
         {   // T must be Peekable.
             return t.putback(c);
         }
@@ -202,7 +202,8 @@ struct read_filter_impl<multichar_tag> {
     struct inner {
         template<typename Source>
         static std::streamsize read
-            (T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
+            ( T& t, Source& src, typename char_type_of<T>::type* s,   
+              std::streamsize n )
         { return t.read(src, s, n); }
     };
 };
@@ -213,10 +214,11 @@ struct read_filter_impl<any_tag> {
     struct inner {
         template<typename Source>
         static std::streamsize read
-            (T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
+            ( T& t, Source& src, typename char_type_of<T>::type* s, 
+              std::streamsize n )
         {
-            typedef typename io_char<T>::type  char_type;
-            typedef char_traits<char_type>     traits_type;
+            typedef typename char_type_of<T>::type  char_type;
+            typedef char_traits<char_type>          traits_type;
             for (std::streamsize off = 0; off < n; ++off) {
                 typename traits_type::int_type c = t.get(src);
                 if (traits_type::is_eof(c))

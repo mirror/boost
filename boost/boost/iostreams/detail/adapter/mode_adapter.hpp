@@ -31,7 +31,7 @@ private:
     struct empty_base { };
 public:
     typedef typename wrapped_type<T>::type  policy_type;
-    typedef typename io_char<T>::type       char_type;
+    typedef typename char_type_of<T>::type  char_type;
     struct category 
         : Mode, 
           device_tag,

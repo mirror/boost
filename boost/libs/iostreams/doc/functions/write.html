@@ -87,10 +87,15 @@ Writes a sequence of characters to a given instance of the template parameter <C
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
               
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>&gt;     
-void <A CLASS="documented" HREF="#write_device">write</A>( T& <A CLASS="documented" HREF="#function_params">t</A>, <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="../traits.html#io_char_ref">io_char</A>&lt;T&gt;::type* <A CLASS="documented" HREF="#function_params">s</A>, std::streamsize <A CLASS="documented" HREF="#function_params">n</A> );
+void <A CLASS="documented" HREF="#write_device">write</A>( T& <A CLASS="documented" HREF="#function_params">t</A>, 
+            <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="../traits.html#char_type_of_ref">char_type_of</A>&lt;T&gt;::type* <A CLASS="documented" HREF="#function_params">s</A>, 
+            std::streamsize <A CLASS="documented" HREF="#function_params">n</A> );
 
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>, <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Sink</A>&gt;
-void <A CLASS="documented" HREF="#write_filter">write</A>( T& <A CLASS="documented" HREF="#function_params">t</A>, Sink& <A CLASS="documented" HREF="#function_params">snk</A>, <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="../traits.html#io_char_ref">io_char</A>&lt;T&gt;::type* <A CLASS="documented" HREF="#function_params">s</A>, std::streamsize <A CLASS="documented" HREF="#function_params">n</A> );
+void <A CLASS="documented" HREF="#write_filter">write</A>( T& <A CLASS="documented" HREF="#function_params">t</A>,
+            Sink& <A CLASS="documented" HREF="#function_params">snk</A>, 
+            <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="../traits.html#char_type_of_ref">char_type_of</A>&lt;T&gt;::type* <A CLASS="documented" HREF="#function_params">s</A>, 
+            std::streamsize <A CLASS="documented" HREF="#function_params">n</A> );
 
 } } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
 
@@ -136,7 +141,9 @@ void <A CLASS="documented" HREF="#write_filter">write</A>( T& <A CLASS="document
 <H4>Semantics &#8212; Device Types</H4>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;     
-void write( T& t, <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> io_char&lt;T&gt;::type* s, std::streamsize n );</PRE>
+void write( T& t, 
+            <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;T&gt;::type* s,
+            std::streamsize n );</PRE>
 
 <P>The semantics of <CODE>write</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
@@ -164,8 +171,10 @@ void write( T& t, <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typen
 <H4>Semantics &#8212; Filter Types</H4>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T, <SPAN CLASS="keyword">typename</SPAN> Sink&gt;
-void write( T& t, Sink& snk, 
-            <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> io_char&lt;T&gt;::type* s, std::streamsize n );</PRE>
+void write( T& t, 
+            Sink& snk, 
+            <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;T&gt;::type* s,
+            std::streamsize n );</PRE>
 
 <P>The semantics of <CODE>read</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 

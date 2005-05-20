@@ -52,11 +52,11 @@ namespace boost { namespace iostreams {
 template< typename T,
           typename Tr =
               BOOST_IOSTREAMS_CHAR_TRAITS(
-                  BOOST_DEDUCED_TYPENAME io_char<T>::type
+                  BOOST_DEDUCED_TYPENAME char_type_of<T>::type
               ),
           typename Alloc =
               std::allocator<
-                  BOOST_DEDUCED_TYPENAME io_char<T>::type
+                  BOOST_DEDUCED_TYPENAME char_type_of<T>::type
               >,
           typename Mode = BOOST_DEDUCED_TYPENAME io_mode<T>::type >
 class streambuf_facade
@@ -74,7 +74,7 @@ private:
             >::type                           base_type;
     typedef T                                 policy_type;
 public:
-    typedef typename io_char<T>::type         char_type;
+    typedef typename char_type_of<T>::type    char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 public:
     streambuf_facade() { }

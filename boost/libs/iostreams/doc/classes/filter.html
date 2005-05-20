@@ -26,7 +26,7 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>filter</CODE>, its subcass <CODE>wfilter</CODE> and their specializations <CODE>input_filter</CODE>, <CODE>output_filter</CODE>, <CODE>input_wfilter</CODE> and <CODE>output_wfilter</CODE> are provided by the Iostreams Library to ease the definitions of new models of the various <A HREF="../concepts.html#filter_concepts">Filter concepts</A>. These templates and <CODE>typedef</CODE>s supply the member types <CODE>io_char</CODE> and <CODE>category</CODE> required by the Iostreams Library; they are inteded to be used as base classes for user-defined Filters.
+    The class template <CODE>filter</CODE>, its subcass <CODE>wfilter</CODE> and their specializations <CODE>input_filter</CODE>, <CODE>output_filter</CODE>, <CODE>input_wfilter</CODE> and <CODE>output_wfilter</CODE> are provided by the Iostreams Library to ease the definitions of new models of the various <A HREF="../concepts.html#filter_concepts">Filter concepts</A>. These templates and <CODE>typedef</CODE>s supply the member types <CODE>char_type</CODE> and <CODE>category</CODE> required by the Iostreams Library; they are inteded to be used as base classes for user-defined Filters.
 </P>
 <P>
     The supplied <CODE>category</CODE> member is convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>localizable_tag</CODE></A>. This allows users to define models of the concepts <A HREF="../concepts/closable.html">Closable</A> and <A HREF="../concepts/closable.html">Localizable</A> simply by providing definitions of member functions <CODE>close</CODE> and <CODE>imbue</CODE>.

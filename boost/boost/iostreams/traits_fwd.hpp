@@ -39,7 +39,7 @@ template<typename T>
 struct is_std_io;
 
 template<typename T>
-struct io_char;
+struct char_type_of;
 
 template<typename T>
 struct category_of;

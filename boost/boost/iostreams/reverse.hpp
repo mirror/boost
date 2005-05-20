@@ -46,12 +46,14 @@ template<typename InputFilter> class reversing_output_filter;
 //
 template<typename OutputFilter>
 class reversing_input_filter
-    : public one_step_filter<BOOST_DEDUCED_TYPENAME io_char<OutputFilter>::type>
+    : public one_step_filter<
+                 BOOST_DEDUCED_TYPENAME char_type_of<OutputFilter>::type
+             >
 {
 private:
     typedef one_step_filter<
                 BOOST_DEDUCED_TYPENAME 
-                io_char<OutputFilter>::type
+                char_type_of<OutputFilter>::type
             >                                                   base_type;
 public:
     typedef typename base_type::char_type                       char_type;
@@ -83,12 +85,14 @@ private:
 //
 template<typename InputFilter>
 class reversing_output_filter
-    : public one_step_filter<BOOST_DEDUCED_TYPENAME io_char<InputFilter>::type>
+    : public one_step_filter<
+                 BOOST_DEDUCED_TYPENAME char_type_of<InputFilter>::type
+             >
 {
 private:
     typedef one_step_filter<
                 BOOST_DEDUCED_TYPENAME 
-                io_char<InputFilter>::type
+                char_type_of<InputFilter>::type
             >                                                   base_type;
 public:
     typedef typename base_type::char_type                       char_type;

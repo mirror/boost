@@ -14,22 +14,22 @@ namespace boost { namespace iostreams {
 template< typename Device,
           typename Tr =
               BOOST_IOSTREAMS_CHAR_TRAITS(
-                  BOOST_DEDUCED_TYPENAME io_char<Device>::type
+                  BOOST_DEDUCED_TYPENAME char_type_of<Device>::type
               ),
           typename Alloc =
               std::allocator<
-                  BOOST_DEDUCED_TYPENAME io_char<Device>::type
+                  BOOST_DEDUCED_TYPENAME char_type_of<Device>::type
               > >
 struct stream_facade : detail::stream_facade_base<Device, Tr, Alloc> {
 public:
-    typedef typename io_char<Device>::type  char_type;
+    typedef typename char_type_of<Device>::type  char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef typename
             detail::stream_facade_traits<
                 Device, Tr
-            >::type                         stream_type;
-    typedef Device                          policy_type;
+            >::type                              stream_type;
+    typedef Device                               policy_type;
 public:
     stream_facade() { }
     template<typename U0>

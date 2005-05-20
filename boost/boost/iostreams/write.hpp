@@ -43,17 +43,18 @@ struct write_filter_impl;
 } // End namespace detail.
 
 template<typename T>
-bool put(T& t, typename io_char<T>::type c)
+bool put(T& t, typename char_type_of<T>::type c)
 { return detail::write_device_impl<T>::put(detail::unwrap(t), c); }
 
 template<typename T>
 inline std::streamsize write
-    (T& t, const typename io_char<T>::type* s, std::streamsize n)
+    (T& t, const typename char_type_of<T>::type* s, std::streamsize n)
 { return detail::write_device_impl<T>::write(detail::unwrap(t), s, n); }
 
 template<typename T, typename Sink>
 inline std::streamsize
-write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize n)
+write( T& t, Sink& snk, const typename char_type_of<T>::type* s, 
+       std::streamsize n )
 { return detail::write_filter_impl<T>::write(detail::unwrap(t), snk, s, n); }
 
 namespace detail {
@@ -77,9 +78,9 @@ struct write_device_impl
 template<>
 struct write_device_impl<ostream_tag> {
     template<typename T>
-    static bool put(T& t, typename io_char<T>::type c)
+    static bool put(T& t, typename char_type_of<T>::type c)
     {
-        typedef typename io_char<T>::type               char_type;
+        typedef typename char_type_of<T>::type          char_type;
         typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
         return !traits_type::eq_int_type( t.rdbuf()->s.sputc(),
                                           traits_type::eof() );
@@ -87,35 +88,35 @@ struct write_device_impl<ostream_tag> {
 
     template<typename T>
     static std::streamsize write
-        (T& t, const typename io_char<T>::type* s, std::streamsize n)
+        (T& t, const typename char_type_of<T>::type* s, std::streamsize n)
     { return t.rdbuf()->sputn(s, n); }
 };
 
 template<>
 struct write_device_impl<streambuf_tag> {
     template<typename T>
-    static bool put(T& t, typename io_char<T>::type c)
+    static bool put(T& t, typename char_type_of<T>::type c)
     {
-        typedef typename io_char<T>::type               char_type;
+        typedef typename char_type_of<T>::type          char_type;
         typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
         return !traits_type::eq_int_type(t.sputc(c), traits_type::eof());
     }
 
     template<typename T>
     static std::streamsize write
-        (T& t, const typename io_char<T>::type* s, std::streamsize n)
+        (T& t, const typename char_type_of<T>::type* s, std::streamsize n)
     { return t.sputn(s, n); }
 };
 
 template<>
 struct write_device_impl<output> {
     template<typename T>
-    static bool put(T& t, typename io_char<T>::type c)
+    static bool put(T& t, typename char_type_of<T>::type c)
     { return t.write(&c, 1) == 1; }
 
     template<typename T>
     static std::streamsize
-    write(T& t, const typename io_char<T>::type* s, std::streamsize n)
+    write(T& t, const typename char_type_of<T>::type* s, std::streamsize n)
     { return t.write(s, n); }
 };
 
@@ -139,7 +140,7 @@ template<>
 struct write_filter_impl<multichar_tag> {
     template<typename T, typename Sink>
     static std::streamsize
-    write( T& t, Sink& snk, const typename io_char<T>::type* s,
+    write( T& t, Sink& snk, const typename char_type_of<T>::type* s,
            std::streamsize n )
     { return t.write(snk, s, n); }
 };
@@ -148,7 +149,7 @@ template<>
 struct write_filter_impl<any_tag> {
     template<typename T, typename Sink>
     static std::streamsize
-    write( T& t, Sink& snk, const typename io_char<T>::type* s,
+    write( T& t, Sink& snk, const typename char_type_of<T>::type* s,
            std::streamsize n )
     {
         for (std::streamsize off = 0; off < n; ++off)

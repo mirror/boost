@@ -32,8 +32,8 @@ struct input_sequence_impl;
 
 template<typename T>
 inline std::pair<
-    BOOST_DEDUCED_TYPENAME io_char<T>::type*,
-    BOOST_DEDUCED_TYPENAME io_char<T>::type*
+    BOOST_DEDUCED_TYPENAME char_type_of<T>::type*,
+    BOOST_DEDUCED_TYPENAME char_type_of<T>::type*
 >
 input_sequence(T& t)
 { return detail::input_sequence_impl<T>::input_sequence(t); }
@@ -55,8 +55,8 @@ template<>
 struct input_sequence_impl<direct_tag> {
     template<typename U>
     static std::pair<
-        BOOST_DEDUCED_TYPENAME io_char<U>::type*,
-        BOOST_DEDUCED_TYPENAME io_char<U>::type*
+        BOOST_DEDUCED_TYPENAME char_type_of<U>::type*,
+        BOOST_DEDUCED_TYPENAME char_type_of<U>::type*
     >
     input_sequence(U& u) { return u.input_sequence(); }
 };
