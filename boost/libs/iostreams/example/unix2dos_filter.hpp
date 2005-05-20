@@ -79,7 +79,7 @@ private:
     bool put_char(Sink& dest, int c) 
     {
         bool result;
-        if (result = iostreams::put(dest, c)) {
+        if ((result = iostreams::put(dest, c)) == true) {
             has_linefeed_ =
                 c == '\r' ?
                     true : 
