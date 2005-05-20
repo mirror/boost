@@ -193,10 +193,10 @@ struct composite_traits
 } // End namespace detail.
 
 template<typename Filter, typename FilterOrDevice>
-struct composite_view : detail::composite_traits<Filter, FilterOrDevice>::type {
+struct composite : detail::composite_traits<Filter, FilterOrDevice>::type {
     typedef typename detail::param_type<FilterOrDevice>::type param_type;
     typedef typename detail::composite_traits<Filter, FilterOrDevice>::type base;
-    composite_view(const Filter& flt, param_type dev)
+    composite(const Filter& flt, param_type dev)
         : base(flt, dev)
         { }
 };
@@ -210,76 +210,76 @@ struct composite_view : detail::composite_traits<Filter, FilterOrDevice>::type {
 # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-------------------------------//
 
 template<typename Filter, typename FilterOrDevice>
-composite_view<Filter, FilterOrDevice>
+composite<Filter, FilterOrDevice>
 compose( const Filter& filter, const FilterOrDevice& fod
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(FilterOrDevice) )
-{ return composite_view<Filter, FilterOrDevice>(filter, fod); }
+{ return composite<Filter, FilterOrDevice>(filter, fod); }
 
 template<typename Filter, typename Ch, typename Tr>
-composite_view< Filter, std::basic_streambuf<Ch, Tr> >
+composite< Filter, std::basic_streambuf<Ch, Tr> >
 compose(const Filter& filter, std::basic_streambuf<Ch, Tr>& sb)
-{ return composite_view< Filter, std::basic_streambuf<Ch, Tr> >(filter, sb); }
+{ return composite< Filter, std::basic_streambuf<Ch, Tr> >(filter, sb); }
 
 template<typename Filter, typename Ch, typename Tr>
-composite_view< Filter, std::basic_istream<Ch, Tr> >
+composite< Filter, std::basic_istream<Ch, Tr> >
 compose(const Filter& filter, std::basic_istream<Ch, Tr>& is)
-{ return composite_view< Filter, std::basic_istream<Ch, Tr> >(filter, is); }
+{ return composite< Filter, std::basic_istream<Ch, Tr> >(filter, is); }
 
 template<typename Filter, typename Ch, typename Tr>
-composite_view< Filter, std::basic_ostream<Ch, Tr> >
+composite< Filter, std::basic_ostream<Ch, Tr> >
 compose(const Filter& filter, std::basic_ostream<Ch, Tr>& os)
-{ return composite_view< Filter, std::basic_ostream<Ch, Tr> >(filter, os); }
+{ return composite< Filter, std::basic_ostream<Ch, Tr> >(filter, os); }
 
 template<typename Filter, typename Ch, typename Tr>
-composite_view< Filter, std::basic_iostream<Ch, Tr> >
+composite< Filter, std::basic_iostream<Ch, Tr> >
 compose(const Filter& filter, std::basic_iostream<Ch, Tr>& io)
-{ return composite_view< Filter, std::basic_iostream<Ch, Tr> >(filter, io); }
+{ return composite< Filter, std::basic_iostream<Ch, Tr> >(filter, io); }
 
 # else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //---------------------//
 
 template<typename Filter, typename FilterOrDevice>
-composite_view<Filter, FilterOrDevice>
+composite<Filter, FilterOrDevice>
 compose( const Filter& filter, const FilterOrDevice& fod
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(FilterOrDevice) )
-{ return composite_view<Filter, FilterOrDevice>(filter, fod); }
+{ return composite<Filter, FilterOrDevice>(filter, fod); }
 
 template<typename Filter>
-composite_view<Filter, std::streambuf>
+composite<Filter, std::streambuf>
 compose(const Filter& filter, std::streambuf& sb)
-{ return composite_view<std::streambuf>(filter, sb); }
+{ return composite<std::streambuf>(filter, sb); }
 
 template<typename Filter>
-composite_view<Filter, std::istream>
+composite<Filter, std::istream>
 compose(const Filter& filter, std::istream& is)
-{ return composite_view<std::istream>(filter, is); }
+{ return composite<std::istream>(filter, is); }
 
 template<typename Filter>
-composite_view<Filter, std::ostream>
+composite<Filter, std::ostream>
 compose(const Filter& filter, std::ostream& os)
-{ return composite_view<std::ostream>(filter, os); }
+{ return composite<std::ostream>(filter, os); }
 
 template<typename Filter>
-composite_view<Filter, std::iostream>
+composite<Filter, std::iostream>
 compose(const Filter& filter, std::iostream& io)
-{ return composite_view<std::iostream>(filter, io); }
+{ return composite<std::iostream>(filter, io); }
 
 # endif // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------//
 #else // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //----------------//
 
 template<typename Filter, typename Stream>
-composite_view<Filter, Stream>
+composite<Filter, Stream>
 compose(const Filter& filter, const Stream& strm, mpl::true_)
 {   // Bad overload resolution.
-    return composite_view<Filter, Stream>(filter, const_cast<Stream&>(strm));
+    return composite<Filter, Stream>(filter, const_cast<Stream&>(strm));
 }
 
 template<typename Filter, typename FilterOrDevice>
-composite_view<Filter, FilterOrDevice>
+composite<Filter, FilterOrDevice>
 compose(const Filter& filter, const FilterOrDevice& fod, mpl::false_)
-{ return composite_view<Filter, FilterOrDevice>(filter, fod); }
+{ return composite<Filter, FilterOrDevice>(filter, fod); }
 
 template<typename Filter, typename FilterOrDevice>
-composite_view<Filter, FilterOrDevice>
+composite<Filter, FilterOrDevice>
 compose( const Filter& filter, const FilterOrDevice& fod
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
 { return compose(filter, fod, is_std_io<FilterOrDevice>()); }
@@ -289,9 +289,9 @@ compose( const Filter& filter, const FilterOrDevice& fod
      !defined(__GNUC__) // ---------------------------------------------------//
 
 template<typename Filter, typename FilterOrDevice>
-composite_view<Filter, FilterOrDevice>
+composite<Filter, FilterOrDevice>
 compose (const Filter& filter, FilterOrDevice& fod)
-{ return composite_view<Filter, FilterOrDevice>(filter, fod); }
+{ return composite<Filter, FilterOrDevice>(filter, fod); }
 
 # endif // Borland 5.x, VC6-7.0 or GCC 2.9x //--------------------------------//
 #endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
