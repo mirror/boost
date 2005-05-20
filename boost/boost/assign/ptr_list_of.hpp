@@ -167,7 +167,7 @@ namespace assign
     inline assign_detail::generic_ptr_list<T>
     ptr_list_of()
     {
-        return assign_detail::generic_ptr_list<T>();
+        return assign_detail::generic_ptr_list<T>()();
     }
     
     template< class T, class U >

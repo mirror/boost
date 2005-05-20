@@ -110,7 +110,7 @@ namespace assign_detail
 
 
     
-    template< class Derived >
+    template< class DerivedTAssign >
     class converter
     {
     public:
@@ -138,9 +138,9 @@ namespace assign_detail
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
 // old Dinkumware doesn't support iterator type as template
             Container result;
-            BOOST_DEDUCED_TYPENAME Derived::iterator 
-                it  = static_cast<const Derived*>(this)->begin(), 
-                end = static_cast<const Derived*>(this)->end();
+            BOOST_DEDUCED_TYPENAME DerivedTAssign::iterator 
+                it  = static_cast<const DerivedTAssign*>(this)->begin(), 
+                end = static_cast<const DerivedTAssign*>(this)->end();
             while( it != end )
             {
                 result.insert( result.end(), *it );
@@ -148,8 +148,8 @@ namespace assign_detail
             }
             return result;
 #else
-            return Container( static_cast<const Derived*>(this)->begin(),
-                              static_cast<const Derived*>(this)->end() );
+            return Container( static_cast<const DerivedTAssign*>(this)->begin(),
+                              static_cast<const DerivedTAssign*>(this)->end() );
 #endif
         }
 
@@ -157,28 +157,28 @@ namespace assign_detail
         Array convert( const Array*, array_type_tag ) const
         {
             typedef BOOST_DEDUCED_TYPENAME Array::value_type value_type;
-            Array array;
-            const std::size_t sz = array.size();
-            if( sz < static_cast<const Derived*>(this)->size() )
+            Array ar;
+            const std::size_t sz = ar.size();
+            if( sz < static_cast<const DerivedTAssign*>(this)->size() )
                 throw assign::assignment_exception( "array initialized with too many elements" );
             std::size_t n = 0; 
-            BOOST_DEDUCED_TYPENAME Derived::iterator 
-                i   = static_cast<const Derived*>(this)->begin(), 
-                end = static_cast<const Derived*>(this)->end();
+            BOOST_DEDUCED_TYPENAME DerivedTAssign::iterator 
+                i   = static_cast<const DerivedTAssign*>(this)->begin(), 
+                end = static_cast<const DerivedTAssign*>(this)->end();
             for( ; i != end; ++i, ++n )
-                array[n] = *i;
+                ar[n] = *i;
             for( ; n < sz; ++n )
-                array[n] = value_type();
-            return array; 
+                ar[n] = value_type();
+            return ar; 
         }
 
         template< class Adapter >
         Adapter convert_to_adapter( const Adapter* = 0 ) const
         {
             Adapter a;
-            BOOST_DEDUCED_TYPENAME Derived::iterator 
-                i = static_cast<const Derived*>(this)->begin(), 
-                end = static_cast<const Derived*>(this)->end();
+            BOOST_DEDUCED_TYPENAME DerivedTAssign::iterator 
+                i = static_cast<const DerivedTAssign*>(this)->begin(), 
+                end = static_cast<const DerivedTAssign*>(this)->end();
             for( ; i != end; ++i )
                 a.push( *i );
             return a;
@@ -488,7 +488,7 @@ namespace assign
     inline assign_detail::generic_list<T>
     list_of()
     {
-        return assign_detail::generic_list<T>();
+        return assign_detail::generic_list<T>(T());
     }
     
     template< class T >
