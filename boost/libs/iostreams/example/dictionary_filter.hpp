@@ -44,12 +44,12 @@ private:
             int c = std::cin.get();
             if (c == EOF || !std::isalpha(c, dictionary_.getloc())) {
                 dictionary_.replace(current_word_);
-                cout.write( current_word_.data(), 
+                cout.write( current_word_.data(),
                             static_cast<streamsize>(current_word_.size()) );
                 current_word_.erase();
                 if (c == EOF)
                     break;
-                cout.put(c);  
+                cout.put(c);
             } else {
                 current_word_ += c;
             }
@@ -61,19 +61,19 @@ private:
 
 class dictionary_input_filter : public input_filter {
 public:
-    dictionary_input_filter(dictionary& d) 
-        : dictionary_(d), off_(std::string::npos), eof_(false) 
+    dictionary_input_filter(dictionary& d)
+        : dictionary_(d), off_(std::string::npos), eof_(false)
         { }
 
     template<typename Source>
     int get(Source& src)
-        {   
+        {
             // Handle unfinished business.
-            if (eof_) 
+            if (eof_)
                 return EOF;
-            if (off_ != std::string::npos && off_ < current_word_.size()) 
+            if (off_ != std::string::npos && off_ < current_word_.size())
                 return current_word_[off_++];
-            if (off_ == current_word_.size()) { 
+            if (off_ == current_word_.size()) {
                 current_word_.erase();
                 off_ = std::string::npos;
             }
@@ -94,16 +94,16 @@ public:
                     break;
                 } else {
                     current_word_ += c;
-                } 
+                }
             }
 
             return this->get(src); // Note: current_word_ is not empty.
         }
 
     template<typename Source>
-    void close(Source&) 
-    { 
-        current_word_.erase(); 
+    void close(Source&)
+    {
+        current_word_.erase();
         off_ = std::string::npos;
         eof_ = false;
     }
@@ -117,28 +117,28 @@ private:
 class dictionary_output_filter : public output_filter {
 public:
     typedef std::map<std::string, std::string> map_type;
-    dictionary_output_filter(dictionary& d) 
+    dictionary_output_filter(dictionary& d)
         : dictionary_(d), off_(std::string::npos)
         { }
 
     template<typename Sink>
     bool put(Sink& dest, int c)
-    {   
+    {
         if (off_ != std::string::npos && !write_current_word(dest))
             return false;
-                
+
         if (!std::isalpha(c, dictionary_.getloc())) {
             dictionary_.replace(current_word_);
             off_ = 0;
         }
-            
+
         current_word_ += c;
         return true;
     }
 
     template<typename Sink>
-    void close(Sink& dest) 
-    { 
+    void close(Sink& dest)
+    {
         if (off_ == std::string::npos)
             dictionary_.replace(current_word_);
         if (!current_word_.empty())
@@ -148,11 +148,11 @@ public:
     }
 private:
     template<typename Sink>
-    bool write_current_word(Sink& dest) 
-    { 
+    bool write_current_word(Sink& dest)
+    {
         using namespace std;
         streamsize amt = static_cast<streamsize>(current_word_.size() - off_);
-        streamsize result = 
+        streamsize result =
             iostreams::write(dest, current_word_.data() + off_, amt);
         if (result == amt) {
             current_word_.erase();
@@ -169,7 +169,7 @@ private:
     std::string::size_type  off_;
     bool                    initialized_;
 };
-                    
+
 //------------------Implementation of dictionary------------------------------//
 
 inline dictionary::dictionary(const std::locale& loc) : loc_(loc) { }
