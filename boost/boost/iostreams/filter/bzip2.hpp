@@ -241,7 +241,7 @@ private:
     typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
-    typedef typename base_type::io_category             io_category;
+    typedef typename base_type::category                category;
     basic_bzip2_compressor( const bzip2_params& = bzip2::default_block_size, 
                             int buffer_size =  default_device_buffer_size );
 };
@@ -263,7 +263,7 @@ private:
     typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
-    typedef typename base_type::io_category             io_category;
+    typedef typename base_type::category                category;
     basic_bzip2_decompressor( bool small = bzip2::default_small,
                               int buffer_size = default_device_buffer_size );
 };

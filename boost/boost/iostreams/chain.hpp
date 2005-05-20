@@ -125,7 +125,7 @@ public:
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
     typedef Alloc                                  allocator_type;
     typedef Mode                                   mode;
-    struct io_category
+    struct category
         : Mode,
           device_tag,
           closable_tag
@@ -228,7 +228,7 @@ private:
     template<typename T>
     void push_impl(const T& t, int buffer_size = -1, int pback_size = -1)
     {
-        typedef typename iostreams::io_category<T>::type  category;
+        typedef typename iostreams::category_of<T>::type  category;
         typedef typename unwrap_ios<T>::type              policy_type;
         typedef streambuf_facade<
                     policy_type,
@@ -378,7 +378,7 @@ private:
                          > \
     { \
     public: \
-        struct io_category : device_tag, Mode { }; \
+        struct category : device_tag, Mode { }; \
         typedef Mode                                   mode; \
     private: \
         typedef boost::iostreams::detail::chain_base< \

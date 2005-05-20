@@ -32,7 +32,7 @@ private:
 public:
     typedef typename wrapped_type<T>::type  policy_type;
     typedef typename io_char<T>::type       char_type;
-    struct io_category 
+    struct category 
         : Mode, 
           device_tag,
           mpl::if_<is_filter<T>, filter_tag, device_tag>,

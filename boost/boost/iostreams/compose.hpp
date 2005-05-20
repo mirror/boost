@@ -70,7 +70,7 @@ private:
             >::type                                         value_type;
 public:
     typedef typename io_char<Filter>::type                  char_type;
-    struct io_category
+    struct category
         : Mode,
           device_tag,
           closable_tag,
@@ -112,7 +112,7 @@ template<typename Filter1, typename Filter2>
 class composite_filter {
 public:
     typedef typename io_char<Filter1>::type char_type;
-    struct io_category
+    struct category
         : io_mode<Filter1>::type,
           filter_tag,
           closable_tag,

@@ -69,7 +69,7 @@
 <SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#array_source_params">array_source</A> { 
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> Ch          char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> source_tag  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> source_tag  category;
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">int</SPAN> N&gt; <A CLASS="documented" HREF="#array_source_constructors">array_source</A>(char_type (&)[N]);
     <A CLASS="documented" HREF="#array_source_constructors">array_source</A>(char_type* begin, char_type* end);
@@ -117,7 +117,7 @@ array_source(<SPAN CLASS="keyword">const</SPAN> char_type* begin, std::size_t le
 <SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#array_sink_params">array_sink</A> { 
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> Ch        char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> sink_tag  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> sink_tag  category;
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">int</SPAN> N&gt; <A CLASS="documented" HREF="#array_sink_constructors">array_sink</A>(char_type (&)[N]);
     <A CLASS="documented" HREF="#array_sink_constructors">array_sink</A>(char_type* begin, char_type* end);
@@ -162,7 +162,7 @@ array_sink(char_type* begin, std::size_t length);</PRE>
 <SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#array_params">array</A> {
 <SPAN CLASS="keyword">public</SPAN>:    
     <SPAN CLASS="keyword">typedef</SPAN> Ch                   char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> seekable_device_tag  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> seekable_device_tag  category;
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">int</SPAN> N&gt; <A CLASS="documented" HREF="#array_constructor">array</A>(char_type (&)[N]);
     <A CLASS="documented" HREF="#array_constructor">array</A>(char_type* begin, char_type* end);

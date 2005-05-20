@@ -103,7 +103,7 @@
 <P>The semantics of <CODE>putback</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>Peekable</CODE> as follows:</P>
 
 <TABLE STYLE="margin:0,0,2em,2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;Peekable&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;Peekable&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../traits.html#category_tags"><CODE>istream_tag</CODE></A></TD>
         <TD>invokes <CODE>peekable.putback(c)</CODE></TD>

@@ -26,10 +26,10 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>device</CODE>, its subcass <CODE>wdevice</CODE> and their specializations <CODE>source</CODE>, <CODE>sink</CODE>, <CODE>wsource</CODE> and <CODE>wsink</CODE> are provided by the Iostreams Library to ease the definitions of new models of the various <A HREF="../concepts.html#device_concepts">Device concepts</A>. These templates and <CODE>typedef</CODE>s supply the member types <CODE>char_type</CODE> and <CODE>io_category</CODE> required by the Iostreams Library; they are inteded to be used as base classes for user-defined Devices.
+    The class template <CODE>device</CODE>, its subcass <CODE>wdevice</CODE> and their specializations <CODE>source</CODE>, <CODE>sink</CODE>, <CODE>wsource</CODE> and <CODE>wsink</CODE> are provided by the Iostreams Library to ease the definitions of new models of the various <A HREF="../concepts.html#device_concepts">Device concepts</A>. These templates and <CODE>typedef</CODE>s supply the member types <CODE>char_type</CODE> and <CODE>category</CODE> required by the Iostreams Library; they are inteded to be used as base classes for user-defined Devices.
 </P>
 <P>
-    The supplied <CODE>io_category</CODE> member is convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>localizable_tag</CODE></A>. This allows users to define models of the concepts <A HREF="../concepts/closable.html">Closable</A> and <A HREF="../concepts/closable.html">Localizable</A> simply by providing definitions of member functions <CODE>close</CODE> and <CODE>imbue</CODE>.
+    The supplied <CODE>category</CODE> member is convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>localizable_tag</CODE></A>. This allows users to define models of the concepts <A HREF="../concepts/closable.html">Closable</A> and <A HREF="../concepts/closable.html">Localizable</A> simply by providing definitions of member functions <CODE>close</CODE> and <CODE>imbue</CODE>.
 </P>
 
 <A NAME="headers">
@@ -61,7 +61,7 @@
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Mode</A>, <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Ch</A> = <SPAN CLASS="keyword">char</SPAN>&gt;
 <SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#description">device</A> {
     <SPAN CLASS="keyword">typedef</SPAN> Ch         char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <A STYLE="text-decoration:none" HREF="#io_category"><SPAN CLASS="omitted">see below</SPAN></A>  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> <A STYLE="text-decoration:none" HREF="#category"><SPAN CLASS="omitted">see below</SPAN></A>  category;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close">close</A>();
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close">close</A>(std::ios_base::openmode);
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#imbue">imbue</A>(<SPAN CLASS="keyword">const</SPAN> std::locale&);
@@ -84,10 +84,10 @@
     </TR>
 </TABLE>
 
-<A NAME="io_category"></A>
-<H4><CODE>device::io_category</CODE></H4>
+<A NAME="category"></A>
+<H4><CODE>device::category</CODE></H4>
 
-<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> io_category;</PRE>
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> category;</PRE>
 
 <P>
     A category tag convertible to <A HREF="#template_params"><CODE>Mode</CODE></A>, <A HREF="../traits.html#category_tags"><CODE>device_tag</CODE></A>, <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and <A HREF="../traits.html#category_tags"><CODE>localizable_tag</CODE></A>.

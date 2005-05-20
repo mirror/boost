@@ -33,7 +33,7 @@ class tee_filter : public detail::basic_adapter<Device> {
 public:
     typedef typename detail::param_type<Device>::type  param_type;
     typedef typename io_char<Device>::type             char_type;
-    struct io_category
+    struct category
         : multichar_output_filter_tag,
           closable_tag,
           flushable_tag,
@@ -43,7 +43,7 @@ public:
 
     BOOST_STATIC_ASSERT((
         is_convertible< // Using io_mode causes failures on VC6-7.0.
-            BOOST_DEDUCED_TYPENAME iostreams::io_category<Device>::type, output
+            BOOST_DEDUCED_TYPENAME iostreams::category_of<Device>::type, output
         >::value
     ));
 

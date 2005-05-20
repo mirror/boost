@@ -107,7 +107,7 @@ private:
 class newline_filter {
 public:
     typedef char char_type;
-    struct io_category
+    struct category
         : dual_use,
           filter_tag,
           closable_tag
@@ -202,7 +202,7 @@ public:
     template<typename Sink>
     void close(Sink& dest, BOOST_IOS::openmode which)
     {
-        typedef typename iostreams::io_category<Sink>::type category;
+        typedef typename iostreams::category_of<Sink>::type category;
         bool unfinished = (flags_ & has_CR) != 0;
         flags_ &= newline::platform_mask;
         if (which == BOOST_IOS::out && unfinished)
@@ -280,7 +280,7 @@ BOOST_IOSTREAMS_PIPABLE(newline_filter, 0)
 class newline_checker : public detail::newline_base {
 public:
     typedef char                 char_type;
-    struct io_category
+    struct category
         : dual_use_filter_tag,
           closable_tag
         { };

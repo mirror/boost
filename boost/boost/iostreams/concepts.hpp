@@ -34,7 +34,7 @@ namespace boost { namespace iostreams {
 template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char)>
 struct device {
     typedef Ch char_type;
-    struct io_category
+    struct category
         : Mode,
           device_tag,
           closable_tag,
@@ -70,7 +70,7 @@ typedef wdevice<output>  wsink;
 template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char)>
 struct filter {
     typedef Ch char_type;
-    struct io_category
+    struct category
         : Mode,
           filter_tag,
           closable_tag,
@@ -115,7 +115,7 @@ typedef wfilter<dual_use>  dual_use_wfilter;
 
 template<typename Mode, typename Ch = char>
 struct multichar_filter : filter<Mode, Ch> {
-    struct io_category : filter<Mode, Ch>::io_category, multichar_tag { };
+    struct category : filter<Mode, Ch>::category, multichar_tag { };
 };
 
 template<typename Mode, typename Ch = wchar_t>

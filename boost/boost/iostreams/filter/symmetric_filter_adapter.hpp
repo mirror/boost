@@ -73,7 +73,7 @@ class symmetric_filter_adapter {
 public:
     typedef typename io_char<SymmetricFilter>::type  char_type;
     typedef std::basic_string<char_type>             string_type;
-    struct io_category
+    struct category
         : dual_use,
           filter_tag,
           multichar_tag,
@@ -224,7 +224,7 @@ private:
     template<typename Sink>
     bool flush(Sink& snk)
     {
-        typedef typename iostreams::io_category<Sink>::type  category;
+        typedef typename iostreams::category_of<Sink>::type  category;
         typedef is_convertible<category, output>             can_write;
         return flush(snk, can_write());
     }

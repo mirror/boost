@@ -43,7 +43,7 @@ template<typename Source, typename Sink>
 class combined_device {
 public:
     typedef typename io_char<Source>::type char_type;
-    struct io_category
+    struct category
         : bidirectional, 
           device_tag, 
           closable_tag, 
@@ -75,11 +75,11 @@ private:
 template<typename InputFilter, typename OutputFilter>
 class combined_filter {
 private:
-    typedef typename io_category<InputFilter>::type   in_category;
-    typedef typename io_category<OutputFilter>::type  out_category;
+    typedef typename category_of<InputFilter>::type   in_category;
+    typedef typename category_of<OutputFilter>::type  out_category;
 public:
     typedef typename io_char<InputFilter>::type       char_type;
-    struct io_category 
+    struct category 
         : multichar_bidirectional_filter_tag,
           closable_tag, 
           localizable_tag

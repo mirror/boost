@@ -32,7 +32,7 @@ template<typename Ch>
 class basic_counter  {
 public:
     typedef Ch char_type;
-    struct io_category
+    struct category
         : dual_use,
           filter_tag,
           multichar_tag,

@@ -30,7 +30,7 @@ struct indirect_source : io::source {
 
 struct direct_source {
     typedef char char_type;
-    struct io_category 
+    struct category 
         : io::input, io::device_tag, io::direct_tag 
         { };
     void foo() { }

@@ -135,7 +135,7 @@ std::streamsize read( T& t, <SPAN CLASS="keyword">typename</SPAN> io_char&lt;T&g
 <P>The semantics of <CODE>read</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../traits.html#category_tags"><CODE>istream_tag</CODE></A></TD>
         <TD>invokes <CODE>t.read(s, n)</CODE> and returns <CODE>t.gcount()</CODE></TD>
@@ -163,7 +163,7 @@ std::streamsize read( T& t, Source& src, <SPAN CLASS="keyword">typename</SPAN> i
 <P>The semantics of <CODE>read</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE="margin-bottom:2em;margin-left:2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../traits.html#category_tags"><CODE>multichar_tag</CODE></A></TD>
         <TD>returns <CODE>t.read(src, s, n)</CODE></TD>

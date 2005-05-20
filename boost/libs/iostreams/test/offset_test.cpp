@@ -100,7 +100,7 @@ struct offset_lowercase_file : public temp_file {
 // Can't have an offset view of a non-seekble output filter.
 struct tolower_seekable_filter : public seekable_filter {
     typedef char char_type;
-    struct io_category 
+    struct category 
         : output_seekable,
           filter_tag
         { };

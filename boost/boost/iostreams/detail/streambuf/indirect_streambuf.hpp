@@ -48,7 +48,7 @@ public:
     typedef typename io_char<T>::type                         char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
-    typedef typename io_category<T>::type                     io_category;
+    typedef typename category_of<T>::type                     category;
     typedef concept_adapter<T>                                wrapper;
     typedef detail::basic_buffer<char_type, Alloc>            buffer_type;
     typedef indirect_streambuf<T, Tr, Alloc, Mode>            my_type;

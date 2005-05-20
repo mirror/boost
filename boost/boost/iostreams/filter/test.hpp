@@ -86,7 +86,7 @@ const std::streamsize default_increment = 5;
 class non_blocking_source {
 public:
     typedef char char_type;
-    struct io_category
+    struct category
         : source_tag,
           peekable_tag
         { };

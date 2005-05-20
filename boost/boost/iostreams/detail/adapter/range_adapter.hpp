@@ -46,7 +46,7 @@ private:
     typedef typename iter_traits::iterator_category   iter_cat;
 public:
     typedef typename Range::value_type                char_type;
-    struct io_category : Mode, device_tag { };
+    struct category : Mode, device_tag { };
     typedef typename
             mpl::if_<
                 is_convertible<

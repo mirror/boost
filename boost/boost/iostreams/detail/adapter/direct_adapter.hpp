@@ -43,7 +43,7 @@ template<typename Direct>
 class direct_adapter_base {
 public:
     typedef typename io_char<Direct>::type char_type;
-    struct io_category 
+    struct category 
         : io_mode<Direct>::type,
           device_tag,
           closable_tag
@@ -53,7 +53,7 @@ public:
         { };
 protected:
     explicit direct_adapter_base(const Direct& d);
-    typedef is_convertible<io_category, two_sequence> is_double;
+    typedef is_convertible<category, two_sequence> is_double;
     struct pointers {
         char_type *beg, *ptr, *end;
     };
@@ -75,7 +75,7 @@ private:
     using base_type::d_;
 public:
     typedef typename base_type::char_type    char_type;
-    typedef typename base_type::io_category  io_category;
+    typedef typename base_type::category     category;
 
         // Constructors
 
@@ -162,8 +162,8 @@ inline Device& unwrap_direct(direct_adapter<Device>& d) { return *d; }
 template<typename Direct>
 direct_adapter_base<Direct>::direct_adapter_base(const Direct& d) : d_(d)
 {
-    init_input(is_convertible<io_category, input>());
-    init_output(is_convertible<io_category, output>());
+    init_input(is_convertible<category, input>());
+    init_output(is_convertible<category, output>());
 }
 
 template<typename Direct>
@@ -254,14 +254,14 @@ inline stream_offset direct_adapter<Direct>::seek
 template<typename Direct>
 void direct_adapter<Direct>::close() 
 { 
-    BOOST_STATIC_ASSERT((!is_convertible<io_category, two_sequence>::value));
+    BOOST_STATIC_ASSERT((!is_convertible<category, two_sequence>::value));
     boost::iostreams::close(d_, BOOST_IOS::in | BOOST_IOS::out);
 }
 
 template<typename Direct>
 void direct_adapter<Direct>::close(BOOST_IOS::openmode which) 
 { 
-    BOOST_STATIC_ASSERT((is_convertible<io_category, two_sequence>::value));
+    BOOST_STATIC_ASSERT((is_convertible<category, two_sequence>::value));
     boost::iostreams::close(d_, which);
 }
 

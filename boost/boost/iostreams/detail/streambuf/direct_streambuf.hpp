@@ -46,7 +46,7 @@ public:
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef linked_streambuf<char_type, traits_type>      base_type;
-    typedef typename io_category<T>::type                 io_category;
+    typedef typename category_of<T>::type                 category;
     typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(
                 char_type, traits_type
             )                                             streambuf_type;
@@ -106,8 +106,8 @@ template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::open(const T& t, int, int)
 {
     storage_.reset(t);
-    init_input(io_category());
-    init_output(io_category());
+    init_input(category());
+    init_output(category());
     setg(0, 0, 0);
     setp(0, 0);
 }

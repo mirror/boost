@@ -45,7 +45,7 @@
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">struct</SPAN> Sink {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>      char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> sink_tag  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> sink_tag  category;
     <SPAN CLASS="keyword">void</SPAN> write(<SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
         {
             <SPAN CLASS="comment">// Writes n characters from the buffer s to the 
@@ -96,9 +96,9 @@
     </TR>
     <TR>
         <TD>
-            <PRE CLASS="plain_code"><CODE>typename <A HREF="../traits.html">io_category</A>&lt;S&gt;::type</CODE></PRE>
+            <PRE CLASS="plain_code"><CODE>typename <A HREF="../traits.html">category_of</A>&lt;S&gt;::type</CODE></PRE>
         </TD>
-        <TD><CODE>typename</CODE> of the io_category</TD>
+        <TD><CODE>typename</CODE> of the category</TD>
         <TD ALIGN="center">-</TD><TD ALIGN="center">-</TD>
     </TR>
     <TR>

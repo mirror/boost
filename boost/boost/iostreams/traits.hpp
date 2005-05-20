@@ -5,7 +5,7 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 // 
-// Contains metafunctions io_char, io_category and io_mode used for deducing 
+// Contains metafunctions io_char, category_of and io_mode used for deducing 
 // the i/o category and i/o mode of a model of Filter or Device.
 //
 // Also contains several utility metafunctions, functions and macros.
@@ -132,20 +132,20 @@ struct io_char {
 
 #endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
 
-//------------------Definitions of io_category--------------------------------//
+//------------------Definitions of category_of--------------------------------//
 
 namespace detail {
 
 template<typename T>
-struct member_io_category { typedef typename T::io_category type; };
+struct member_category { typedef typename T::category type; };
 
 } // End namespace detail.
 
 template<typename T>
-struct io_category {
+struct category_of {
     template<typename U>
-    struct member_io_category { 
-        typedef typename U::io_category type; 
+    struct member_category { 
+        typedef typename U::category type; 
     };
     typedef typename detail::unwrapped_type<T>::type U;
     typedef typename  
@@ -157,18 +157,18 @@ struct io_category {
                     is_ostream<U>,    ostream_tag,
                     is_streambuf<U>,  streambuf_tag
                 >,
-                detail::member_io_category<U>
+                detail::member_category<U>
             >::type type;      
 };
 
 //------------------Definition of get_category--------------------------------//
 
 // 
-// Returns an object of type io_category<T>::type.
+// Returns an object of type category_of<T>::type.
 // 
 template<typename T>
-inline typename io_category<T>::type get_category(const T&) 
-{ typedef typename io_category<T>::type category; return category(); }
+inline typename category_of<T>::type get_category(const T&) 
+{ typedef typename category_of<T>::type category; return category(); }
 
 //------------------Definition of io_int--------------------------------------//
 
@@ -207,7 +207,7 @@ BOOST_IOSTREAMS_MODE_HELPER(dual_use, 9)
 
 template<typename T>
 struct io_mode_id {
-    typedef typename io_category<T>::type category;
+    typedef typename category_of<T>::type category;
     BOOST_SELECT_BY_SIZE(int, value, detail::io_mode_impl_helper(category()));
 };
 
@@ -222,7 +222,7 @@ namespace detail {
 
 template<typename T, typename Tag>
 struct has_trait_impl {
-    typedef typename io_category<T>::type category;
+    typedef typename category_of<T>::type category;
     BOOST_STATIC_CONSTANT(bool, value = (is_convertible<category, Tag>::value));
 };
 

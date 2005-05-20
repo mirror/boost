@@ -141,7 +141,7 @@ void write( T& t, <SPAN CLASS="keyword">const</SPAN> <SPAN CLASS="keyword">typen
 <P>The semantics of <CODE>write</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <CODE>ostream_tag</CODE></TD>
         <TD>invokes <CODE>t.write(s, n)</CODE></TD>
@@ -170,7 +170,7 @@ void write( T& t, Sink& snk,
 <P>The semantics of <CODE>read</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE="margin:0,0,2em,2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <CODE>multichar_tag</CODE></TD>
         <TD>invokes <CODE>t.write(snk, s, n)</CODE></TD>

@@ -35,7 +35,7 @@ public:
     typedef void*  handle_type;
 #endif
     typedef char   char_type;
-    struct io_category
+    struct category
         : seekable_device_tag,
           closable_tag
         { };
@@ -101,7 +101,7 @@ struct file_descriptor_source : private file_descriptor {
     typedef void*  handle_type;
 #endif
     typedef char   char_type;
-    struct io_category : public source_tag, closable_tag { };
+    struct category : public source_tag, closable_tag { };
     using file_descriptor::read;
     using file_descriptor::open;
     using file_descriptor::close;
@@ -126,7 +126,7 @@ struct file_descriptor_sink : private file_descriptor {
     typedef void*  handle_type;
 #endif
     typedef char   char_type;
-    struct io_category : public sink_tag, closable_tag { };
+    struct category : public sink_tag, closable_tag { };
     using file_descriptor::write;
     using file_descriptor::open;
     using file_descriptor::close;

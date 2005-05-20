@@ -33,7 +33,7 @@ struct streambuf_facade_traits {
     typedef typename
             mpl::if_<
                 is_convertible<
-                    BOOST_DEDUCED_TYPENAME io_category<T>::type,
+                    BOOST_DEDUCED_TYPENAME category_of<T>::type,
                     direct_tag
                 >,
                 direct_streambuf<T, Tr>,
@@ -65,7 +65,7 @@ class streambuf_facade
 private:
     BOOST_STATIC_ASSERT((
         is_convertible<
-            BOOST_DEDUCED_TYPENAME iostreams::io_category<T>::type, Mode
+            BOOST_DEDUCED_TYPENAME iostreams::category_of<T>::type, Mode
         >::value
     ));
     typedef typename

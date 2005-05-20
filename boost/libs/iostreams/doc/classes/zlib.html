@@ -249,7 +249,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#basic_zlib_compressor_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="keyword">char</SPAN>&gt; &gt;
 <SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#basic_zlib_compressor_params">basic_zlib_compressor</A> {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                    char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  category;
 
     <A CLASS="documented" HREF="#basic_zlib_compressor_constructors">basic_zlib_compressor</A>( <SPAN CLASS="keyword">const</SPAN> <A CLASS="documented" HREF="#zlib_params">zlib_params</A>& = <SPAN CLASS="omitted">zlib::default_compression</SPAN>, 
                            std::streamsize buffer_size = <SPAN CLASS="omitted">default value</SPAN> );
@@ -290,7 +290,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#basic_zlib_decompressor_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="keyword">char</SPAN>&gt; &gt;
 <SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#basic_zlib_decompressor_params">basic_zlib_decompressor</A> {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                    char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  category;
 
     <A CLASS="documented" HREF="#basic_zlib_decompressor_constructors">basic_zlib_decompressor</A>( <SPAN CLASS="keyword">int</SPAN> window_bits = <SPAN CLASS="omitted">default value</SPAN>, 
                              std::streamsize buffer_size = 

@@ -266,7 +266,7 @@ private:
     typedef detail::finite_state_filter_impl<FiniteStateMachine>  base_type;
 public:
     typedef typename base_type::char_type                         char_type;
-    struct io_category : stdio_filter::io_category, localizable_tag { };
+    struct category : stdio_filter::category, localizable_tag { };
 
     finite_state_stdio_filter() { }
 
@@ -317,7 +317,7 @@ public:
     typedef typename base_type::char_type                         char_type;
     typedef char_traits<char_type>                                traits_type;
     typedef typename base_type::int_type                          int_type;
-    struct io_category
+    struct category
         : dual_use, filter_tag, closable_tag, localizable_tag
         { };
 

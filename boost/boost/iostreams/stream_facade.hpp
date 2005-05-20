@@ -27,7 +27,7 @@ template<typename Device, typename Tr>
 struct stream_facade_traits {
     typedef typename io_char<Device>::type                     char_type;
     typedef Tr                                                 traits_type;
-    typedef typename io_category<Device>::type                 mode;
+    typedef typename category_of<Device>::type                 mode;
     typedef typename
             select<
                 mpl::and_<

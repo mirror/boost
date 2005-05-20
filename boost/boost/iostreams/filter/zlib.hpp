@@ -255,7 +255,7 @@ private:
     typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
-    typedef typename base_type::io_category             io_category;
+    typedef typename base_type::category                category;
     basic_zlib_compressor( const zlib_params& = zlib::default_compression, 
                            int buffer_size = default_device_buffer_size );
     zlib::ulong crc() { return this->filter().crc(); }
@@ -279,7 +279,7 @@ private:
     typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
-    typedef typename base_type::io_category             io_category;
+    typedef typename base_type::category                category;
     basic_zlib_decompressor( int window_bits = zlib::default_window_bits,
                              int buffer_size = default_device_buffer_size );
     basic_zlib_decompressor( const zlib_params& p,

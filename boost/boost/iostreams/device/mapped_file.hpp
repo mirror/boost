@@ -87,7 +87,7 @@ private:
     friend struct operations<mapped_file_source>;
 public:
     typedef char               char_type;
-    struct io_category
+    struct category
         : public source_tag,
           public direct_tag,
           public closable_tag
@@ -144,7 +144,7 @@ private:
     friend struct operations<mapped_file>;
 public:
     typedef char                           char_type;
-    struct io_category
+    struct category
         : public seekable_device_tag,
           public direct_tag,
           public closable_tag
@@ -200,7 +200,7 @@ public:
 struct mapped_file_sink : private mapped_file {
     friend struct operations<mapped_file_sink>;
     typedef char char_type;
-    struct io_category
+    struct category
         : public sink_tag,
           public direct_tag,
           public closable_tag

@@ -99,7 +99,7 @@ std::streamoff <A CLASS="documented" HREF="#semantics">seek</A>( T&, std::stream
 <P>The semantics of <CODE>seek</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <CODE>istream_tag</CODE> or <CODE>ostream_tag</CODE></TD>
         <TD>returns <CODE>t.rdbuf()->pubseekoff(off, way)</CODE></TD>

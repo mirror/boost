@@ -26,10 +26,10 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>filter</CODE>, its subcass <CODE>wfilter</CODE> and their specializations <CODE>input_filter</CODE>, <CODE>output_filter</CODE>, <CODE>input_wfilter</CODE> and <CODE>output_wfilter</CODE> are provided by the Iostreams Library to ease the definitions of new models of the various <A HREF="../concepts.html#filter_concepts">Filter concepts</A>. These templates and <CODE>typedef</CODE>s supply the member types <CODE>io_char</CODE> and <CODE>io_category</CODE> required by the Iostreams Library; they are inteded to be used as base classes for user-defined Filters.
+    The class template <CODE>filter</CODE>, its subcass <CODE>wfilter</CODE> and their specializations <CODE>input_filter</CODE>, <CODE>output_filter</CODE>, <CODE>input_wfilter</CODE> and <CODE>output_wfilter</CODE> are provided by the Iostreams Library to ease the definitions of new models of the various <A HREF="../concepts.html#filter_concepts">Filter concepts</A>. These templates and <CODE>typedef</CODE>s supply the member types <CODE>io_char</CODE> and <CODE>category</CODE> required by the Iostreams Library; they are inteded to be used as base classes for user-defined Filters.
 </P>
 <P>
-    The supplied <CODE>io_category</CODE> member is convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>localizable_tag</CODE></A>. This allows users to define models of the concepts <A HREF="../concepts/closable.html">Closable</A> and <A HREF="../concepts/closable.html">Localizable</A> simply by providing definitions of member functions <CODE>close</CODE> and <CODE>imbue</CODE>.
+    The supplied <CODE>category</CODE> member is convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>localizable_tag</CODE></A>. This allows users to define models of the concepts <A HREF="../concepts/closable.html">Closable</A> and <A HREF="../concepts/closable.html">Localizable</A> simply by providing definitions of member functions <CODE>close</CODE> and <CODE>imbue</CODE>.
 </P>
 
 <A NAME="headers">
@@ -61,7 +61,7 @@
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Mode</A>, <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Ch</A> = <SPAN CLASS="keyword">char</SPAN>&gt;
 <SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#description">filter</A> {
     <SPAN CLASS="keyword">typedef</SPAN> Ch         char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <A STYLE="text-decoration:none" HREF="#io_category"><SPAN CLASS="omitted">see below</SPAN></A>  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> <A STYLE="text-decoration:none" HREF="#category"><SPAN CLASS="omitted">see below</SPAN></A>  category;
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Device&gt;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close">close</A>(Device&);
@@ -89,8 +89,8 @@
     </TR>
 </TABLE>
 
-<A NAME="io_category"></A>
-<H4><CODE>filter::io_category</CODE></H4>
+<A NAME="category"></A>
+<H4><CODE>filter::category</CODE></H4>
 
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> category;</PRE>
 

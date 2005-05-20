@@ -19,7 +19,7 @@ using boost::unit_test::test_suite;
 
 struct optimally_buffered_filter {
     typedef char char_type;
-    struct io_category
+    struct category
         : input_filter_tag,
           optimally_buffered_tag
         { };

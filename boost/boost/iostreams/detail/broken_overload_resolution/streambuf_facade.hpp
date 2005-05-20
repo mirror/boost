@@ -27,7 +27,7 @@ class streambuf_facade
 private:
     BOOST_STATIC_ASSERT((
         is_convertible<
-            BOOST_DEDUCED_TYPENAME iostreams::io_category<T>::type, Mode
+            BOOST_DEDUCED_TYPENAME iostreams::category_of<T>::type, Mode
         >::value
     ));
     typedef typename 

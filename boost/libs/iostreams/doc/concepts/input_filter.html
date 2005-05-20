@@ -62,7 +62,7 @@
 
     <SPAN CLASS="keyword">struct</SPAN> alphabetic_input_filter {
         <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>              char_type;
-        <SPAN CLASS="keyword">typedef</SPAN> input_filter_tag  io_category;
+        <SPAN CLASS="keyword">typedef</SPAN> input_filter_tag  category;
 
         <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
         <SPAN CLASS="keyword">int</SPAN> get(Source& src)
@@ -79,7 +79,7 @@
 </P>
 
 <P>
-    The Iostreams Library defines two convenience classes, <A HREF="../classes/filter.html#synopsis"><CODE>input_filter</CODE></A> and <A HREF="../classes/filter.html#synopsis"><CODE>input_wfilter</CODE></A>, which provide member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>io_category</CODE> as well as default implementations of several member functions.<A CLASS="footnote_ref" NAME="note_3_ref" HREF="#note_3"><SUP>[3]</SUP></A> When defining a new model of InputFilter, it is often sufficient to derive from <CODE>input_filter</CODE> or <CODE>input_wfilter</CODE> and to define a member function <CODE>get</CODE>.
+    The Iostreams Library defines two convenience classes, <A HREF="../classes/filter.html#synopsis"><CODE>input_filter</CODE></A> and <A HREF="../classes/filter.html#synopsis"><CODE>input_wfilter</CODE></A>, which provide member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>category</CODE> as well as default implementations of several member functions.<A CLASS="footnote_ref" NAME="note_3_ref" HREF="#note_3"><SUP>[3]</SUP></A> When defining a new model of InputFilter, it is often sufficient to derive from <CODE>input_filter</CODE> or <CODE>input_wfilter</CODE> and to define a member function <CODE>get</CODE>.
 </P>
 
 <H4>II. Multi-Character InputFilter</H4>
@@ -98,7 +98,7 @@
 
     <SPAN CLASS="keyword">struct</SPAN> alphabetic_input_filter {
         <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                       char_type;
-        <SPAN CLASS="keyword">typedef</SPAN> multichar_input_filter_tag  io_category;
+        <SPAN CLASS="keyword">typedef</SPAN> multichar_input_filter_tag  category;
 
         <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
         streamsize read(Source& src, <SPAN CLASS="keyword">char</SPAN>* s, streamsize n)
@@ -120,7 +120,7 @@
     Here <CODE>multichar_input_filter_tag</CODE> is a <A HREF="../traits.html#category">category tag</A> identifying the Filter as a Multi-Character InputFilter.
 </P>
 <P>
-    The Iostreams Library defines two convenience classes, <A HREF="../classes/filter.html#synopsis"><CODE>multichar_input_filter</CODE></A> and <A HREF="../classes/filter.html#synopsis"><CODE>multichar_input_wfilter</CODE></A>, which provide the member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>io_category</CODE> as well as default implementations of several member functions.<A CLASS="footnote_ref" NAME="note_3_ref" HREF="#note_3"><SUP>[3]</SUP></A> When defining a new Multi-Character InputFilter, it is often sufficient to derive from <CODE>multichar_input_filter</CODE> or <CODE>multichar_input_wfilter</CODE> and to define a member function <CODE>read</CODE>.
+    The Iostreams Library defines two convenience classes, <A HREF="../classes/filter.html#synopsis"><CODE>multichar_input_filter</CODE></A> and <A HREF="../classes/filter.html#synopsis"><CODE>multichar_input_wfilter</CODE></A>, which provide the member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>category</CODE> as well as default implementations of several member functions.<A CLASS="footnote_ref" NAME="note_3_ref" HREF="#note_3"><SUP>[3]</SUP></A> When defining a new Multi-Character InputFilter, it is often sufficient to derive from <CODE>multichar_input_filter</CODE> or <CODE>multichar_input_wfilter</CODE> and to define a member function <CODE>read</CODE>.
 </P>
 
 <A NAME="detailed_specification"></A>
@@ -173,7 +173,7 @@
     </TR>
     <TR>
         <TD>
-            <PRE CLASS="plain_code"><CODE>typename <A HREF="../traits.html">io_category</A>&lt;F&gt;::type</CODE></PRE>
+            <PRE CLASS="plain_code"><CODE>typename <A HREF="../traits.html">category_of</A>&lt;F&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the category</TD>
         <TD ALIGN="center">-</TD><TD ALIGN="center">-</TD>

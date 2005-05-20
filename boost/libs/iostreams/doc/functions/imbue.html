@@ -67,7 +67,7 @@
 <P>The semantics of <CODE>imbue</CODE> for a Filter or Device type <CODE>T</CODE> depends on its <A HREF="../traits.html#category">category</A> as follows:</P>
 
 <TABLE STYLE="margin-left:2em; margin-bottom:2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>category_of&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">Convertible to <A HREF="../traits.html#category_tags"><CODE>streambuf_tag</CODE></A></TD>
         <TD>calls <CODE>t.pubimbue(loc)</CODE></TD>

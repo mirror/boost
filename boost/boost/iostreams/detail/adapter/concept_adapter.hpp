@@ -56,7 +56,7 @@ private:
             >::type                                    any_impl;
 public:
     typedef typename io_char<T>::type                  char_type;
-    typedef typename io_category<T>::type              io_category;
+    typedef typename category_of<T>::type              category;
 
     explicit concept_adapter(const reference_wrapper<T>& ref) : t_(ref.get())
     { BOOST_STATIC_ASSERT(is_std_io<T>::value); }
@@ -126,8 +126,8 @@ struct device_wrapper_impl<any_tag> {
     seek( Device& dev, Dummy*, stream_offset off, 
           BOOST_IOS::seekdir way, BOOST_IOS::openmode which )
     { 
-        typedef typename io_category<Device>::type io_category;
-        return seek(dev, off, way, which, io_category()); 
+        typedef typename category_of<Device>::type category;
+        return seek(dev, off, way, which, category()); 
     }
 
     template<typename Device>
@@ -195,8 +195,8 @@ struct flt_wrapper_impl<any_tag> {
     seek( Filter& f, Device* dev, stream_offset off,
           BOOST_IOS::seekdir way, BOOST_IOS::openmode which )
     {
-        typedef typename io_category<Filter>::type io_category;
-        return seek(f, dev, off, way, which, io_category());
+        typedef typename category_of<Filter>::type category;
+        return seek(f, dev, off, way, which, category());
     }
 
     template<typename Filter, typename Device>
@@ -211,8 +211,8 @@ struct flt_wrapper_impl<any_tag> {
           BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
           random_access tag )
     {
-        typedef typename io_category<Filter>::type io_category;
-        return seek(f, dev, off, way, which, tag, io_category());
+        typedef typename category_of<Filter>::type category;
+        return seek(f, dev, off, way, which, tag, category());
     }
 
     template<typename Filter, typename Device>

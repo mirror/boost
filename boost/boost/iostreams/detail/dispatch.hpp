@@ -13,7 +13,7 @@
 
 #include <boost/config.hpp>                   // BOOST_DEDUCED_TYPENAME. 
 #include <boost/iostreams/detail/select.hpp>
-#include <boost/iostreams/traits.hpp>         // io_category. 
+#include <boost/iostreams/traits.hpp>         // category_of. 
 #include <boost/mpl/void.hpp>          
 #include <boost/type_traits/is_convertible.hpp>         
 
@@ -23,7 +23,7 @@ template< typename T, typename Tag1, typename Tag2,
           typename Tag3 = mpl::void_, typename Tag4 = mpl::void_,
           typename Tag5 = mpl::void_, typename Tag6 = mpl::void_,
           typename Category = 
-              BOOST_DEDUCED_TYPENAME io_category<T>::type >
+              BOOST_DEDUCED_TYPENAME category_of<T>::type >
 struct dispatch 
     : select<  // Disambiguation for Tru64
           is_convertible<Category, Tag1>, Tag1,

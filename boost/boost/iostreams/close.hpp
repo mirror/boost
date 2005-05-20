@@ -53,7 +53,7 @@ namespace detail {
 
 template<typename T>
 struct close_tag {
-    typedef typename io_category<T>::type category;
+    typedef typename category_of<T>::type category;
     typedef typename
             mpl::eval_if<
                 is_convertible<category, closable_tag>,
@@ -103,7 +103,7 @@ struct close_impl<closable_tag> {
     template<typename T>
     static void close(T& t, BOOST_IOS::openmode which)
     {
-        typedef typename io_category<T>::type category;
+        typedef typename category_of<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
         if (in == ((which & BOOST_IOS::in) != 0))
@@ -112,7 +112,7 @@ struct close_impl<closable_tag> {
     template<typename T, typename Sink>
     static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
     {
-        typedef typename io_category<T>::type category;
+        typedef typename category_of<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
         if (in == ((which & BOOST_IOS::in) != 0)) {

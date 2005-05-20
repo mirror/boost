@@ -25,7 +25,7 @@ public:
     BOOST_STATIC_ASSERT((!is_convertible<Mode, random_access>::value));
     typedef Container                       container_type;
     typedef typename Container::value_type  char_type;
-    struct io_category 
+    struct category 
         : device_tag,
           Mode
         { };

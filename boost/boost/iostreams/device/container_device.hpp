@@ -46,7 +46,7 @@ private:
 public:    
     typedef Container                                  container_type;
     typedef typename Container::value_type             char_type;
-    struct io_category 
+    struct category 
         : device_tag,
           Mode
         { };

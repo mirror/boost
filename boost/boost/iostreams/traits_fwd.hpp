@@ -42,7 +42,7 @@ template<typename T>
 struct io_char;
 
 template<typename T>
-struct io_category;
+struct category_of;
 
 template<typename T>
 struct io_int;

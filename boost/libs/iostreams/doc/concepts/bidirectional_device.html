@@ -46,7 +46,7 @@
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">struct</SPAN> BidirectionalDevice {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> bidirectional_device_tag    io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> bidirectional_device_tag    category;
     std::streamsize read(<SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
         {
             <SPAN CLASS="comment">// Reads up to n characters from the input 
@@ -62,7 +62,7 @@
 };</PRE>
 
 <P>
-    Here <CODE>io_category</CODE> is a tag <CODE>struct</CODE> identifying the containing type as a model of BidirectionalDevice. When defining a new BidirectionalDevice, it suffices to use the tag <CODE>bidirectional_device_tag</CODE>. One can also derive from the helper classes <A HREF="../classes/device.html"><CODE>device&lt;bidirectional&gt;</CODE></A> or <A HREF="../classes/device.html#wdevice"><CODE>wdevice&lt;bidirectional&gt;</CODE></A>.
+    Here <CODE>category</CODE> is a tag <CODE>struct</CODE> identifying the containing type as a model of BidirectionalDevice. When defining a new BidirectionalDevice, it suffices to use the tag <CODE>bidirectional_device_tag</CODE>. One can also derive from the helper classes <A HREF="../classes/device.html"><CODE>device&lt;bidirectional&gt;</CODE></A> or <A HREF="../classes/device.html#wdevice"><CODE>wdevice&lt;bidirectional&gt;</CODE></A>.
 </P>
 
 <H2>Refinement of</H2>

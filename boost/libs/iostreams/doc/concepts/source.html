@@ -47,7 +47,7 @@
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">struct</SPAN> Source {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>        char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> source_tag  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> source_tag  category;
     std::streamsize read(<SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
         {
             <SPAN CLASS="comment">// Reads up to n characters from the controlled 
@@ -98,7 +98,7 @@
     </TR>
     <TR>
         <TD>
-            <PRE CLASS="plain_code"><CODE>typename <A HREF="../traits.html">io_category</A>&lt;S&gt;::type</CODE></PRE>
+            <PRE CLASS="plain_code"><CODE>typename <A HREF="../traits.html">category_of</A>&lt;S&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the category</TD>
         <TD ALIGN="center">-</TD><TD ALIGN="center">-</TD>

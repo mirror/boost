@@ -129,7 +129,7 @@ BOOST_IOSTREAMS_PIPABLE(padding_filter, 0)
 
 struct flushable_output_filter {
     typedef char char_type;
-    struct io_category 
+    struct category 
         : output_filter_tag, 
           flushable_tag
         { };

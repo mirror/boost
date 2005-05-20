@@ -182,7 +182,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#basic_bzip2_compressor_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="keyword">char</SPAN>&gt; &gt;
 <SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#basic_bzip2_compressor_params">basic_bzip2_compressor</A> {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                    char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  category;
 
     <A CLASS="documented" HREF="#basic_bzip2_compressor_constructors">basic_bzip2_compressor</A>( <SPAN CLASS="keyword">const</SPAN> <A CLASS="documented" HREF="#bzip2_params">bzip2_params</A>& = <SPAN CLASS="omitted">bzip2::default_block_size</SPAN>, 
                             std::streamsize buffer_size = <SPAN CLASS="omitted">default value</SPAN> );
@@ -221,7 +221,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#basic_bzip2_decompressor_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="keyword">char</SPAN>&gt; &gt;
 <SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#basic_bzip2_decompressor_params">basic_bzip2_decompressor</A> {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                    char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  io_category;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">implementation-defined</SPAN>  category;
 
     <A CLASS="documented" HREF="#basic_bzip2_decompressor_constructors">basic_bzip2_decompressor</A>( <SPAN CLASS="keyword">bool</SPAN> small = <SPAN CLASS="omitted">false</SPAN>, 
                               std::streamsize buffer_size = 

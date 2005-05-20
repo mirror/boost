@@ -42,7 +42,7 @@ template<typename Ch, typename Alloc = std::allocator<Ch> >
 class one_step_filter  {
 public:
     typedef Ch char_type;
-    struct io_category
+    struct category
         : dual_use,
           filter_tag,
           multichar_tag,
@@ -125,7 +125,7 @@ private:
     template<typename Sink>
     void do_write(Sink& sink, const char* s, std::streamsize n) 
     { 
-        typedef typename iostreams::io_category<Sink>::type  category;
+        typedef typename iostreams::category_of<Sink>::type  category;
         typedef is_convertible<category, output>             can_write;
         do_write(sink, s, n, can_write()); 
     }

@@ -19,7 +19,7 @@ template<typename Device>
 class non_blocking_adapter {
 public:
     typedef typename io_char<Device>::type char_type;
-    struct io_category
+    struct category
         : io_mode<Device>::type, device_tag
         { };
     explicit non_blocking_adapter(Device& dev) : device_(dev) { }

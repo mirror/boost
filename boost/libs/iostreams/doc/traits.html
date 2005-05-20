@@ -18,7 +18,7 @@
   <DT><A href="#overview">Overview</A></DT>
   <DT><A href="#headers">Headers</A></DT>
   <DT><A href="#char_type_ref">Class template <CODE>io_char</CODE></A></DT>
-  <DT><A href="#category_ref">Class template <CODE>io_category</CODE></A></DT>
+  <DT><A href="#category_ref">Class template <CODE>category_of</CODE></A></DT>
   <DT><A href="#category_tags">Category Tags</A></DT>
   </DT>
 </DL>
@@ -108,7 +108,7 @@
 </TABLE>
 
 <A NAME="category_ref"></A>
-<H2>Class Template <CODE>io_category</CODE></H2>
+<H2>Class Template <CODE>category_of</CODE></H2>
 
 <H4>Description</H4>
 
@@ -119,7 +119,7 @@
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
 
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A HREF="#category_template_params" CLASS="documented">T</A>&gt;
-<SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#category_template_params">io_category</A> {
+<SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="#category_template_params">category_of</A> {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> <A HREF="#category_type" CLASS="documented">type</A>;
 };
 
@@ -143,7 +143,7 @@
 <P>The value of the nested type <CODE>type</CODE> depends on the template parameter <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>T</CODE></TH><TH><CODE>io_category</CODE></TH></TR>
+    <TR><TH><CODE>T</CODE></TH><TH><CODE>category</CODE></TH></TR>
     <TR>
         <TD VALIGN="top"><A NAME="print_CR"></A>Specialization of <CODE>std::basic_iostream</CODE>, or derived from such a specialization</TD>
         <TD><CODE>iostream_tag</CODE></TD>
@@ -177,7 +177,7 @@
 
 <P>
     In addition to the various <A HREF="modes.html#mode_tags">mode tags</A>, the header <A CLASS="header" HREF="../../../boost/iostreams/categories.hpp"><CODE>&lt;boost/iostreams/categories.hpp&gt;</CODE></A> provides the category tags shown in the following table. To produce a new category tag which combines several existing tags, simply define a <CODE>struct</CODE> extending the existing tags. <I>E.g.</I>, 
-    <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">struct</SPAN> io_category
+    <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">struct</SPAN> category
         : seekable,
           filter_tag, 
           localizable_tag 

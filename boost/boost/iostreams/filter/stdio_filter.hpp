@@ -35,7 +35,7 @@ private:
     typedef one_step_filter<Ch, Alloc>       base_type;
 public:
     typedef typename base_type::char_type    char_type;
-    typedef typename base_type::io_category  io_category;
+    typedef typename base_type::category     category;
     typedef typename base_type::vector_type  vector_type;
 private:
     static std::istream& standard_input(char*) { return std::cin; }

@@ -24,7 +24,7 @@ class output_iterator_adapter {
 public:
     BOOST_STATIC_ASSERT((is_convertible<Mode, output>::value));
     typedef Ch        char_type;
-    typedef sink_tag  io_category;
+    typedef sink_tag  category;
     explicit output_iterator_adapter(OutIt out) : out_(out) { }
     std::streamsize write(const char_type* s, std::streamsize n) 
     { 

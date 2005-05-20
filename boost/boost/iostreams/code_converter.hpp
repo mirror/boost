@@ -94,7 +94,7 @@ private:
 template<typename Device, typename Codecvt, typename Alloc>
 struct code_converter_impl {
     typedef typename codecvt_extern<Codecvt>::type          extern_type;
-    typedef typename io_category<Device>::type              device_category;
+    typedef typename category_of<Device>::type              device_category;
     typedef is_convertible<device_category, input>          can_read;
     typedef is_convertible<device_category, output>         can_write;
     typedef is_convertible<device_category, bidirectional>  is_bidir;
@@ -254,7 +254,7 @@ private:
     typedef typename detail::codecvt_state<Codecvt>::type           state_type;
 public:
     typedef intern_type                                             char_type;    
-    struct io_category 
+    struct category 
         : impl_type::mode, device_tag, closable_tag, localizable_tag
         { };
     BOOST_STATIC_ASSERT((

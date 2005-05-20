@@ -49,7 +49,7 @@ private:
     typedef typename detail::param_type<Device>::type  param_type;
 public:
     typedef typename io_char<Device>::type             char_type;
-    struct io_category
+    struct category
         : io_mode<Device>::type,
           device_tag,
           closable_tag,
@@ -77,7 +77,7 @@ class offset_direct_device : public basic_adapter<Device> {
 public:
     typedef typename io_char<Device>::type     char_type;
     typedef std::pair<char_type*, char_type*>  pair_type;
-    struct io_category
+    struct category
         : io_mode<Device>::type,
           device_tag,
           direct_tag,
@@ -104,7 +104,7 @@ template<typename Filter>
 class offset_filter : public basic_adapter<Filter> {
 public:
     typedef typename io_char<Filter>::type char_type;
-    struct io_category
+    struct category
         : io_mode<Filter>::type,
           filter_tag,
           multichar_tag,
@@ -331,7 +331,7 @@ offset_direct_device<Device>::offset_direct_device
     : basic_adapter<Device>(dev), beg_(0), end_(0)
 {
     std::pair<char_type*, char_type*> seq =
-        sequence(is_convertible<io_category, input>());
+        sequence(is_convertible<category, input>());
     if (off < 0 || len < 0 || off + len > seq.second - seq.first)
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
     beg_ = seq.first + off;
@@ -342,7 +342,7 @@ template<typename Device>
 typename offset_direct_device<Device>::pair_type
 offset_direct_device<Device>::input_sequence()
 {
-    BOOST_STATIC_ASSERT((is_convertible<io_category, input>::value));
+    BOOST_STATIC_ASSERT((is_convertible<category, input>::value));
     return std::make_pair(beg_, end_);
 }
 
@@ -350,7 +350,7 @@ template<typename Device>
 typename offset_direct_device<Device>::pair_type
 offset_direct_device<Device>::output_sequence()
 {
-    BOOST_STATIC_ASSERT((is_convertible<io_category, output>::value));
+    BOOST_STATIC_ASSERT((is_convertible<category, output>::value));
     return std::make_pair(beg_, end_);
 }
 

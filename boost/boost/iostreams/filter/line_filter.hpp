@@ -43,7 +43,7 @@ public:
                 BOOST_IOSTREAMS_CHAR_TRAITS(char_type),   
                 Alloc
             >                                            string_type;
-    struct io_category
+    struct category
         : dual_use,
           filter_tag,
           multichar_tag,

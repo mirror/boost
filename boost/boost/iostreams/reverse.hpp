@@ -55,7 +55,7 @@ private:
             >                                                   base_type;
 public:
     typedef typename base_type::char_type                       char_type;
-    typedef typename base_type::io_category                     io_category;
+    typedef typename base_type::category                        category;
     explicit reversing_input_filter(const OutputFilter& filter)
         : filter_(filter) { }
 protected:
@@ -92,7 +92,7 @@ private:
             >                                                   base_type;
 public:
     typedef typename base_type::char_type                       char_type;
-    typedef typename base_type::io_category                     io_category;
+    typedef typename base_type::category                        category;
     explicit reversing_output_filter(const InputFilter& filter)
         : filter_(filter) { }
 protected:
@@ -121,7 +121,7 @@ struct reverse_traits {
     typedef typename
             mpl::if_<
                 is_convertible<
-                    BOOST_DEDUCED_TYPENAME io_category<Filter>::type, 
+                    BOOST_DEDUCED_TYPENAME category_of<Filter>::type, 
                     input
                 >,
                 reversing_output_filter<Filter>,
