@@ -21,7 +21,7 @@
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types.
-#include <boost/iostreams/traits.hpp>      // io_mode, is_direct.
+#include <boost/iostreams/traits.hpp>      // mode_of, is_direct.
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/bool.hpp> 
 #include <boost/mpl/or.hpp> 
@@ -44,7 +44,7 @@ class direct_adapter_base {
 public:
     typedef typename char_type_of<Direct>::type char_type;
     struct category 
-        : io_mode<Direct>::type,
+        : mode_of<Direct>::type,
           device_tag,
           closable_tag
           #ifndef BOOST_IOSTREAMS_NO_LOCALE

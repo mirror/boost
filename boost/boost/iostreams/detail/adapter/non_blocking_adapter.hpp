@@ -20,7 +20,7 @@ class non_blocking_adapter {
 public:
     typedef typename char_type_of<Device>::type char_type;
     struct category
-        : io_mode<Device>::type, device_tag
+        : mode_of<Device>::type, device_tag
         { };
     explicit non_blocking_adapter(Device& dev) : device_(dev) { }
     std::streamsize read(char_type* s, std::streamsize n)

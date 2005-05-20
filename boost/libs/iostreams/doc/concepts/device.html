@@ -34,42 +34,42 @@
     <TR><TH>Concept</TH><TH>Definition</TH></TR>
     <TR>
         <TD><A href="source.html">Source</A></TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#input"><CODE>input</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="sink.html">Sink</A></TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#output"><CODE>output</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#output"><CODE>output</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="bidirectional_device.html">BidirectionalDevice</A></TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="seekable_device.html">SeekableDevice</A></TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#seekable"><CODE>seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#seekable"><CODE>seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>SeekableSource</TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#input_seekable"><CODE>input_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#input_seekable"><CODE>input_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>SeekableSink</TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#output_seekable"><CODE>output_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#output_seekable"><CODE>output_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>BidirectionalSeekableDevice</TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#bidirectional_seekable"><CODE>bidirectional_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#bidirectional_seekable"><CODE>bidirectional_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>DualSeekableDevice</TD>
-        <TD>Refinement of Device with io_mode convertible to <A HREF="../modes.html#dual_seekable"><CODE>dual_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode_of convertible to <A HREF="../modes.html#dual_seekable"><CODE>dual_seekable</CODE></A></TD>
     </TR>
 </TABLE>
 
 <H2>Standard Streams and Stream Buffers</H2>
 
 <P>
-    Standard streams and stream buffer types are model of Device. It is not possible to tell the exact <A HREF="../modes.html">i/o mode</A> of an arbitrary stream or stream buffer, so the Iostreams Library has to guess. (<I>See</I> <A HREF="../classes/mode.html#mode_type">Class Template <CODE>io_mode</CODE>.</A>) If the i/o mode selected by default does not accurately reflect a particular implementation, the function template <A HREF="../functions/adapt.html"><CODE>adapt</CODE></A> may be used.
+    Standard streams and stream buffer types are model of Device. It is not possible to tell the exact <A HREF="../modes.html">i/o mode</A> of an arbitrary stream or stream buffer, so the Iostreams Library has to guess. (<I>See</I> <A HREF="../classes/mode.html#mode_type">Class Template <CODE>mode_of</CODE>.</A>) If the i/o mode selected by default does not accurately reflect a particular implementation, the function template <A HREF="../functions/adapt.html"><CODE>adapt</CODE></A> may be used.
 </P>
 
 <H2>Refinement of</H2>

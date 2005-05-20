@@ -45,10 +45,10 @@ template<typename T>
 struct category_of;
 
 template<typename T>
-struct io_int;
+struct int_type_of;
 
 template<typename T>
-struct io_mode;
+struct mode_of;
 
 template<typename T>
 struct is_device;

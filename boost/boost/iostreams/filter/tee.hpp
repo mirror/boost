@@ -42,7 +42,7 @@ public:
         { };
 
     BOOST_STATIC_ASSERT((
-        is_convertible< // Using io_mode causes failures on VC6-7.0.
+        is_convertible< // Using mode_of causes failures on VC6-7.0.
             BOOST_DEDUCED_TYPENAME iostreams::category_of<Device>::type, output
         >::value
     ));

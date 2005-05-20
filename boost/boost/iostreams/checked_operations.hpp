@@ -36,7 +36,7 @@ struct seek_if_impl;
 } // End namespace detail.
 
 template<typename T>
-typename io_int<T>::type get_if(T& t)
+typename int_type_of<T>::type get_if(T& t)
 { 
     typedef typename detail::dispatch<T, input, output>::type tag;
     return detail::read_write_if_impl<tag>::get(t);
@@ -82,7 +82,7 @@ namespace detail {
 template<>
 struct read_write_if_impl<input> {
     template<typename T>
-    static typename io_int<T>::type get(T& t)
+    static typename int_type_of<T>::type get(T& t)
     { return iostreams::get(t); }
 
     template<typename T>
@@ -103,7 +103,7 @@ struct read_write_if_impl<input> {
 template<>
 struct read_write_if_impl<output> {
     template<typename T>
-    static typename io_int<T>::type get(T&)
+    static typename int_type_of<T>::type get(T&)
     { throw cant_read(); }
 
     template<typename T>

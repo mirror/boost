@@ -25,7 +25,7 @@
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/skip.hpp>
-#include <boost/iostreams/traits.hpp>         // io_mode, is_direct.
+#include <boost/iostreams/traits.hpp>         // mode_of, is_direct.
 #include <boost/mpl/bool.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -50,7 +50,7 @@ private:
 public:
     typedef typename char_type_of<Device>::type        char_type;
     struct category
-        : io_mode<Device>::type,
+        : mode_of<Device>::type,
           device_tag,
           closable_tag,
           flushable_tag,
@@ -78,7 +78,7 @@ public:
     typedef typename char_type_of<Device>::type  char_type;
     typedef std::pair<char_type*, char_type*>    pair_type;
     struct category
-        : io_mode<Device>::type,
+        : mode_of<Device>::type,
           device_tag,
           direct_tag,
           closable_tag,
@@ -105,7 +105,7 @@ class offset_filter : public basic_adapter<Filter> {
 public:
     typedef typename char_type_of<Filter>::type char_type;
     struct category
-        : io_mode<Filter>::type,
+        : mode_of<Filter>::type,
           filter_tag,
           multichar_tag,
           closable_tag,

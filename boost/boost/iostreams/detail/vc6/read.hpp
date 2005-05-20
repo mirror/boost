@@ -17,7 +17,7 @@ struct read_filter_impl;
 } // End namespace detail.
 
 template<typename T>
-typename io_int<T>::type get(T& t)
+typename int_type_of<T>::type get(T& t)
 {
     typedef typename detail::unwrapped_type<T>::type unwrapped;
     return detail::read_device_impl<T>::inner<unwrapped>::get(detail::unwrap(t));
@@ -96,7 +96,7 @@ template<>
 struct read_device_impl<istream_tag> {
     template<typename T>
     struct inner {
-        static typename io_int<T>::type get(T& t)
+        static typename int_type_of<T>::type get(T& t)
         { return t.get(); }
 
         static std::streamsize
@@ -117,12 +117,12 @@ template<>
 struct read_device_impl<streambuf_tag> {
     template<typename T>
     struct inner {
-        static typename io_int<T>::type
+        static typename int_type_of<T>::type
         get(T& t)
         {
             typedef typename char_type_of<T>::type  char_type;
             typedef char_traits<char_type>          traits_type;
-            typename io_int<T>::type c;
+            typename int_type_of<T>::type c;
             return !traits_type::is_eof(c = t.sbumpc()) ||
                     detail::true_eof(t)
                         ?
@@ -153,7 +153,7 @@ template<>
 struct read_device_impl<input> {
     template<typename T>
     struct inner {
-        static typename io_int<T>::type
+        static typename int_type_of<T>::type
         get(T& t)
         {
             typedef typename char_type_of<T>::type  char_type;

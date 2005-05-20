@@ -13,7 +13,7 @@
 
 // Contains the definition of the class template mode_adapter, which allows
 // a filter or device to function as if it has a different i/o mode than that
-// deduced by the metafunction io_mode.
+// deduced by the metafunction mode_of.
 
 #include <boost/config.hpp>                // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>

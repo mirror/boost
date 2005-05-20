@@ -58,7 +58,7 @@ template< typename T,
               std::allocator<
                   BOOST_DEDUCED_TYPENAME char_type_of<T>::type
               >,
-          typename Mode = BOOST_DEDUCED_TYPENAME io_mode<T>::type >
+          typename Mode = BOOST_DEDUCED_TYPENAME mode_of<T>::type >
 class streambuf_facade
     : public detail::streambuf_facade_traits<T, Tr, Alloc, Mode>::type
 {

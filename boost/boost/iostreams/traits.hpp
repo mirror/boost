@@ -5,7 +5,7 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 // 
-// Contains metafunctions char_type_of, category_of and io_mode used for
+// Contains metafunctions char_type_of, category_of and mode_of used for
 // deducing the i/o category and i/o mode of a model of Filter or Device.
 //
 // Also contains several utility metafunctions, functions and macros.
@@ -170,10 +170,10 @@ template<typename T>
 inline typename category_of<T>::type get_category(const T&) 
 { typedef typename category_of<T>::type category; return category(); }
 
-//------------------Definition of io_int--------------------------------------//
+//------------------Definition of int_type_of---------------------------------//
 
 template<typename T>
-struct io_int { 
+struct int_type_of { 
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
     typedef std::char_traits<
                 BOOST_DEDUCED_TYPENAME char_type_of<T>::type
@@ -214,7 +214,7 @@ struct io_mode_id {
 } // End namespace detail.
 
 template<typename T> // Borland 5.6.4 requires this circumlocution.
-struct io_mode : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
+struct mode_of : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
                     
 //------------------Definition of is_device, is_filter and is_direct----------//
 

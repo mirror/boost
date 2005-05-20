@@ -17,7 +17,7 @@
 <H2>Definition</H2>
 
 <P>
-    A SeekableFilter is a <A HREF="filter.html">Filter</A> whose <A HREF="../modes.html"><CODE>io_mode</CODE></A> refines <A HREF="../modes.html#seekable">seekable</A>. 
+    A SeekableFilter is a <A HREF="filter.html">Filter</A> whose <A HREF="../modes.html"><CODE>mode_of</CODE></A> refines <A HREF="../modes.html#seekable">seekable</A>. 
 </P>
 
 <H2>Description</H2>
@@ -143,7 +143,7 @@
                 <LI STYLE="list-style-type:disc;list-style-image:none">the end of the sequence if <CODE>way</CODE> is <CODE>ios_base::end</CODE>
             </UL>
             <P CLASS="concept">
-                The sequence controlled by <CODE>d</CODE> may be accessed using <A HREF="../functions/read.html"><CODE>boost::iostreams::seek</CODE></A> and using <A HREF="../functions/putback.html"><CODE>boost::iostreams::write</CODE></A> if the <CODE>io_mode</CODE> of <CODE>F</CODE> is convertible to <A HREF="../modes.html#output"><CODE>output</CODE></A>.
+                The sequence controlled by <CODE>d</CODE> may be accessed using <A HREF="../functions/read.html"><CODE>boost::iostreams::seek</CODE></A> and using <A HREF="../functions/putback.html"><CODE>boost::iostreams::write</CODE></A> if the <CODE>mode_of</CODE> of <CODE>F</CODE> is convertible to <A HREF="../modes.html#output"><CODE>output</CODE></A>.
             </P>
         </TD>
     </TR>

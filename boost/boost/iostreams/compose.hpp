@@ -22,7 +22,7 @@
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
 #include <boost/iostreams/operations.hpp>
-#include <boost/iostreams/traits.hpp>      // io_mode, is_direct.
+#include <boost/iostreams/traits.hpp>      // mode_of, is_direct.
 #include <boost/mpl/if.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -33,8 +33,8 @@ namespace detail {
 
 template<typename Filter, typename Device>
 struct composite_mode {
-    typedef typename io_mode<Filter>::type               filter_mode;
-    typedef typename io_mode<Device>::type               device_mode;
+    typedef typename mode_of<Filter>::type               filter_mode;
+    typedef typename mode_of<Device>::type               device_mode;
     typedef is_convertible<filter_mode, dual_use>        is_dual_use;
     typedef typename 
             mpl::eval_if<
@@ -113,7 +113,7 @@ class composite_filter {
 public:
     typedef typename char_type_of<Filter1>::type char_type;
     struct category
-        : io_mode<Filter1>::type,
+        : mode_of<Filter1>::type,
           filter_tag,
           closable_tag,
           flushable_tag,
@@ -326,7 +326,7 @@ stream_offset composite_device<Filter, Device, Mode>::seek
 template<typename Filter, typename Device, typename Mode>
 void composite_device<Filter, Device, Mode>::close()
 {
-    typedef typename io_mode<Device>::type device_mode;
+    typedef typename mode_of<Device>::type device_mode;
     BOOST_IOS::openmode which =
         is_convertible<device_mode, input>() ?
             BOOST_IOS::in :
