@@ -85,7 +85,6 @@ template test
 template regression
     : <template>test                    # sources
       regress/$(R_SOURCE)
-      <lib>../../test/build/boost_prg_exec_monitor
     ;
 
 #
@@ -118,7 +117,6 @@ template test-dll
 template regression-dll
     : <template>test-dll                    # sources
       regress/$(R_SOURCE)
-      <lib>../../test/build/boost_prg_exec_monitor
     ;
 
 test-suite regex
@@ -150,13 +148,13 @@ test-suite regex
       [ regex-test bad_expression_test
           : <template>test                      # sources
             pathology/bad_expression_test.cpp
-            <lib>../../test/build/boost_test_exec_monitor
+            
       ]
 
       [ regex-test recursion_test
           : <template>test                      # sources
             pathology/recursion_test.cpp
-            <lib>../../test/build/boost_test_exec_monitor
+            
       ]
       
       [ run unicode/unicode_iterator_test.cpp ]
@@ -179,7 +177,7 @@ test-suite regex
       : : : <test-info>always_show_run_output
       : regex_dll_config_info ]
 
-      [ run collate_info/collate_info.cpp <template>test <lib>../../test/build/boost_prg_exec_monitor
+      [ run collate_info/collate_info.cpp <template>test
       : : : <test-info>always_show_run_output ]
       
       [ regex-test regex_regress_dll
@@ -199,7 +197,7 @@ test-suite regex
     <template>../build/regex-options
     # dependencies
     <lib>captures/boost_regex_extra
-    <lib>../../test/build/boost_test_exec_monitor
+    
  :  # additional args
  :  # test-files
  :  # requirements

@@ -243,3 +243,5 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
 #endif
    return 0;
 }
+
+#include <boost/test/included/prg_exec_monitor.hpp>

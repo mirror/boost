@@ -129,3 +129,5 @@ void test(const wchar_t& c, const test_invalid_regex_tag& tag)
    do_test(c, tag);
 }
 #endif
+
+#include <boost/test/included/prg_exec_monitor.hpp>

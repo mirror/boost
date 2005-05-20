@@ -58,4 +58,4 @@ int test_main( int , char* [] )
    return 0;
 }
 
-
+#include <boost/test/included/test_exec_monitor.hpp>

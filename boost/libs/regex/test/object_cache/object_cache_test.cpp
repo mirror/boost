@@ -73,3 +73,5 @@ int test_main(int /*argc*/, char * /*argv*/[])
    return 0;
 }
 
+#include <boost/test/included/test_exec_monitor.hpp>
+

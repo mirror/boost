@@ -41,23 +41,22 @@ test_overloads.cpp
 test_operators.cpp
 ;
 
-local regress-sources = regress/$(R_SOURCE)
-                        ../../test/build//boost_prg_exec_monitor ;
+local regress-sources = regress/$(R_SOURCE) ;
 
 test-suite regex
       : 
-      [ run regress/$(R_SOURCE) ../../test/build//boost_prg_exec_monitor ../build//boost_regex ]
-      #[ run c_compiler_checks/posix_api_check.c ../../test/build//boost_prg_exec_monitor ../build//boost_regex ]
+      [ run regress/$(R_SOURCE) ../build//boost_regex ]
+      #[ run c_compiler_checks/posix_api_check.c ../build//boost_regex ]
       #[ compile c_compiler_checks/wide_posix_api_check.c  ]
       [ run c_compiler_checks/posix_api_check.cpp ../build//boost_regex ]
       [ run c_compiler_checks/wide_posix_api_check.cpp ../build//boost_regex ]
 
       [ run pathology/bad_expression_test.cpp
-            ../../test/build//boost_test_exec_monitor ../build//boost_regex
+            ../build//boost_regex
       ]
 
       [ run pathology/recursion_test.cpp
-            ../../test/build//boost_test_exec_monitor ../build//boost_regex
+            ../build//boost_regex
       ]
       
       [ run unicode/unicode_iterator_test.cpp ../build//boost_regex ]
@@ -68,7 +67,7 @@ test-suite regex
       ]
       
       [ run config_info/regex_config_info.cpp ../build//boost_regex ]
-      [ run collate_info/collate_info.cpp ../build//boost_regex ../../test/build//boost_prg_exec_monitor ]
+      [ run collate_info/collate_info.cpp ../build//boost_regex ]
 
       [ compile concepts/concept_check.cpp ../build//boost_regex
       ]
@@ -79,7 +78,6 @@ test-suite regex
     # sources
     captures/captures_test.cpp
     captures//boost_regex_extra
-    ../../test/build//boost_test_exec_monitor
  :  # additional args
  :  # test-files
  :  # requirements
