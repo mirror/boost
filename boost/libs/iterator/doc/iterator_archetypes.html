@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
 <title>Iterator Archetype</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, Zephyr Associates, Inc." />
@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
+<div class="document" id="iterator-archetype">
 <h1 class="title">Iterator Archetype</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
@@ -30,16 +31,15 @@ Lab</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Ass
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2004.</td></tr>
 </tbody>
 </table>
-<div class="document" id="iterator-archetype">
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">abstract:</th><td class="field-body">The <tt class="literal"><span class="pre">iterator_archetype</span></tt> class constructs a minimal implementation of
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body">The <tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> class constructs a minimal implementation of
 one of the iterator access concepts and one of the iterator traversal concepts.
 This is used for doing a compile-time check to see if a the type requirements
 of a template are really enough to cover the implementation of the template.
-For further information see the documentation for the <a class="reference" href="../../concept_check/index.html"><tt class="literal"><span class="pre">boost::concept_check</span></tt></a> library.</td>
+For further information see the documentation for the <a class="reference" href="../../concept_check/index.html"><tt class="docutils literal"><span class="pre">boost::concept_check</span></tt></a> library.</td>
 </tr>
 </tbody>
 </table>
@@ -47,11 +47,11 @@ For further information see the documentation for the <a class="reference" href=
 <p class="topic-title first"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#reference" id="id1" name="id1">Reference</a><ul>
-<li><a class="reference" href="#iterator-archetype-synopsis" id="id2" name="id2"><tt class="literal"><span class="pre">iterator_archetype</span></tt> Synopsis</a></li>
-<li><a class="reference" href="#access-category-tags" id="id3" name="id3"><tt class="literal"><span class="pre">Access</span> <span class="pre">Category</span> <span class="pre">Tags</span></tt></a></li>
-<li><a class="reference" href="#iterator-archetype-requirements" id="id4" name="id4"><tt class="literal"><span class="pre">iterator_archetype</span></tt> Requirements</a></li>
-<li><a class="reference" href="#iterator-archetype-models" id="id5" name="id5"><tt class="literal"><span class="pre">iterator_archetype</span></tt> Models</a></li>
-<li><a class="reference" href="#traits" id="id6" name="id6"><tt class="literal"><span class="pre">Traits</span></tt></a></li>
+<li><a class="reference" href="#iterator-archetype-synopsis" id="id2" name="id2"><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> Synopsis</a></li>
+<li><a class="reference" href="#access-category-tags" id="id3" name="id3"><tt class="docutils literal"><span class="pre">Access</span> <span class="pre">Category</span> <span class="pre">Tags</span></tt></a></li>
+<li><a class="reference" href="#iterator-archetype-requirements" id="id4" name="id4"><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> Requirements</a></li>
+<li><a class="reference" href="#iterator-archetype-models" id="id5" name="id5"><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> Models</a></li>
+<li><a class="reference" href="#traits" id="id6" name="id6"><tt class="docutils literal"><span class="pre">Traits</span></tt></a></li>
 </ul>
 </li>
 </ul>
@@ -59,7 +59,7 @@ For further information see the documentation for the <a class="reference" href=
 <div class="section" id="reference">
 <h1><a class="toc-backref" href="#id1" name="reference">Reference</a></h1>
 <div class="section" id="iterator-archetype-synopsis">
-<h2><a class="toc-backref" href="#id2" name="iterator-archetype-synopsis"><tt class="literal"><span class="pre">iterator_archetype</span></tt> Synopsis</a></h2>
+<h2><a class="toc-backref" href="#id2" name="iterator-archetype-synopsis"><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> Synopsis</a></h2>
 <pre class="literal-block">
 namespace iterator_archetypes
 {
@@ -89,7 +89,7 @@ class iterator_archetype
 </pre>
 </div>
 <div class="section" id="access-category-tags">
-<h2><a class="toc-backref" href="#id3" name="access-category-tags"><tt class="literal"><span class="pre">Access</span> <span class="pre">Category</span> <span class="pre">Tags</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id3" name="access-category-tags"><tt class="docutils literal"><span class="pre">Access</span> <span class="pre">Category</span> <span class="pre">Tags</span></tt></a></h2>
 <p>The access category types provided correspond to the following
 standard iterator access concept combinations:</p>
 <pre class="literal-block">
@@ -115,22 +115,22 @@ writeable_lvalue_iterator_t :=
 </pre>
 </div>
 <div class="section" id="iterator-archetype-requirements">
-<h2><a class="toc-backref" href="#id4" name="iterator-archetype-requirements"><tt class="literal"><span class="pre">iterator_archetype</span></tt> Requirements</a></h2>
-<p>The <tt class="literal"><span class="pre">AccessCategory</span></tt> argument must be one of the predefined access
-category tags. The <tt class="literal"><span class="pre">TraversalCategory</span></tt> must be one of the standard
-traversal tags. The <tt class="literal"><span class="pre">Value</span></tt> type must satisfy the requirements of
-the iterator concept specified by <tt class="literal"><span class="pre">AccessCategory</span></tt> and
-<tt class="literal"><span class="pre">TraversalCategory</span></tt> as implied by the nested traits types.</p>
+<h2><a class="toc-backref" href="#id4" name="iterator-archetype-requirements"><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> Requirements</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">AccessCategory</span></tt> argument must be one of the predefined access
+category tags. The <tt class="docutils literal"><span class="pre">TraversalCategory</span></tt> must be one of the standard
+traversal tags. The <tt class="docutils literal"><span class="pre">Value</span></tt> type must satisfy the requirements of
+the iterator concept specified by <tt class="docutils literal"><span class="pre">AccessCategory</span></tt> and
+<tt class="docutils literal"><span class="pre">TraversalCategory</span></tt> as implied by the nested traits types.</p>
 </div>
 <div class="section" id="iterator-archetype-models">
-<h2><a class="toc-backref" href="#id5" name="iterator-archetype-models"><tt class="literal"><span class="pre">iterator_archetype</span></tt> Models</a></h2>
-<p><tt class="literal"><span class="pre">iterator_archetype</span></tt> models the iterator concepts specified by the
-<tt class="literal"><span class="pre">AccessCategory</span></tt> and <tt class="literal"><span class="pre">TraversalCategory</span></tt>
-arguments. <tt class="literal"><span class="pre">iterator_archetype</span></tt> does not model any other access
+<h2><a class="toc-backref" href="#id5" name="iterator-archetype-models"><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> Models</a></h2>
+<p><tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> models the iterator concepts specified by the
+<tt class="docutils literal"><span class="pre">AccessCategory</span></tt> and <tt class="docutils literal"><span class="pre">TraversalCategory</span></tt>
+arguments. <tt class="docutils literal"><span class="pre">iterator_archetype</span></tt> does not model any other access
 concepts or any more derived traversal concepts.</p>
 </div>
 <div class="section" id="traits">
-<h2><a class="toc-backref" href="#id6" name="traits"><tt class="literal"><span class="pre">Traits</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id6" name="traits"><tt class="docutils literal"><span class="pre">Traits</span></tt></a></h2>
 <p>The nested trait types are defined as follows:</p>
 <pre class="literal-block">
 if (AccessCategory == readable_iterator_t)
@@ -211,7 +211,7 @@ iterator_category :=
 </div>
 </div>
 </div>
-<hr class="footer" />
+<hr class="docutils footer" />
 <div class="footer">
 <a class="reference" href="iterator_archetypes.rst">View document source</a>.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.

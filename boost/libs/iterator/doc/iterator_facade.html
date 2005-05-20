@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
 <title>Iterator Facade</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
+<div class="document" id="iterator-facade">
 <h1 class="title">Iterator Facade</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
@@ -31,12 +32,11 @@ Railway Operation and Construction</a></td></tr>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.</td></tr>
 </tbody>
 </table>
-<div class="document" id="iterator-facade">
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">abstract:</th><td class="field-body"><tt class="literal"><span class="pre">iterator_facade</span></tt> is a base class template that implements the
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> is a base class template that implements the
 interface of standard iterators in terms of a few core functions
 and associated types, to be supplied by a derived iterator class.</td>
 </tr>
@@ -48,31 +48,31 @@ and associated types, to be supplied by a derived iterator class.</td>
 <li><a class="reference" href="#overview" id="id23" name="id23">Overview</a><ul>
 <li><a class="reference" href="#usage" id="id24" name="id24">Usage</a></li>
 <li><a class="reference" href="#iterator-core-access" id="id25" name="id25">Iterator Core Access</a></li>
-<li><a class="reference" href="#operator" id="id26" name="id26"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
-<li><a class="reference" href="#id2" id="id27" name="id27"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
+<li><a class="reference" href="#operator" id="id26" name="id26"><tt class="docutils literal"><span class="pre">operator[]</span></tt></a></li>
+<li><a class="reference" href="#id2" id="id27" name="id27"><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></li>
 </ul>
 </li>
 <li><a class="reference" href="#reference" id="id28" name="id28">Reference</a><ul>
-<li><a class="reference" href="#iterator-facade-requirements" id="id29" name="id29"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id30" name="id30"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference" href="#iterator-facade-requirements" id="id29" name="id29"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id30" name="id30"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
 </ul>
 </li>
 <li><a class="reference" href="#tutorial-example" id="id31" name="id31">Tutorial Example</a><ul>
 <li><a class="reference" href="#the-problem" id="id32" name="id32">The Problem</a></li>
-<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id33" name="id33">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id34" name="id34">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#derived" id="id35" name="id35"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
-<li><a class="reference" href="#value" id="id36" name="id36"><tt class="literal"><span class="pre">Value</span></tt></a></li>
-<li><a class="reference" href="#categoryortraversal" id="id37" name="id37"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
-<li><a class="reference" href="#id12" id="id38" name="id38"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
-<li><a class="reference" href="#difference" id="id39" name="id39"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
+<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id33" name="id33">A Basic Iterator Using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id34" name="id34">Template Arguments for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#derived" id="id35" name="id35"><tt class="docutils literal"><span class="pre">Derived</span></tt></a></li>
+<li><a class="reference" href="#value" id="id36" name="id36"><tt class="docutils literal"><span class="pre">Value</span></tt></a></li>
+<li><a class="reference" href="#categoryortraversal" id="id37" name="id37"><tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
+<li><a class="reference" href="#id12" id="id38" name="id38"><tt class="docutils literal"><span class="pre">Reference</span></tt></a></li>
+<li><a class="reference" href="#difference" id="id39" name="id39"><tt class="docutils literal"><span class="pre">Difference</span></tt></a></li>
 </ul>
 </li>
 <li><a class="reference" href="#constructors-and-data-members" id="id40" name="id40">Constructors and Data Members</a></li>
 <li><a class="reference" href="#implementing-the-core-operations" id="id41" name="id41">Implementing the Core Operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#a-constant-node-iterator" id="id42" name="id42">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
+<li><a class="reference" href="#a-constant-node-iterator" id="id42" name="id42">A constant <tt class="docutils literal"><span class="pre">node_iterator</span></tt></a></li>
 <li><a class="reference" href="#interoperability" id="id43" name="id43">Interoperability</a></li>
 <li><a class="reference" href="#telling-the-truth" id="id44" name="id44">Telling the Truth</a></li>
 <li><a class="reference" href="#wrap-up" id="id45" name="id45">Wrap Up</a></li>
@@ -98,11 +98,11 @@ identified the following core behaviors for iterators:</p>
 </ul>
 <p>In addition to the behaviors listed above, the core interface elements
 include the associated types exposed through iterator traits:
-<tt class="literal"><span class="pre">value_type</span></tt>, <tt class="literal"><span class="pre">reference</span></tt>, <tt class="literal"><span class="pre">difference_type</span></tt>, and
-<tt class="literal"><span class="pre">iterator_category</span></tt>.</p>
+<tt class="docutils literal"><span class="pre">value_type</span></tt>, <tt class="docutils literal"><span class="pre">reference</span></tt>, <tt class="docutils literal"><span class="pre">difference_type</span></tt>, and
+<tt class="docutils literal"><span class="pre">iterator_category</span></tt>.</p>
 <p>Iterator facade uses the Curiously Recurring Template
 Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id1" name="id1">[Cop95]</a> so that the user can specify the behavior
-of <tt class="literal"><span class="pre">iterator_facade</span></tt> in a derived class.  Former designs used
+of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> in a derived class.  Former designs used
 policy objects to specify the behavior, but that approach was
 discarded for several reasons:</p>
 <blockquote>
@@ -111,30 +111,30 @@ discarded for several reasons:</p>
 overhead that can be avoided with the current approach.</li>
 <li>The policy object approach does not allow for custom constructors
 on the created iterator types, an essential feature if
-<tt class="literal"><span class="pre">iterator_facade</span></tt> should be used in other library
+<tt class="docutils literal"><span class="pre">iterator_facade</span></tt> should be used in other library
 implementations.</li>
 <li>Without the use of CRTP, the standard requirement that an
-iterator's <tt class="literal"><span class="pre">operator++</span></tt> returns the iterator type itself
+iterator's <tt class="docutils literal"><span class="pre">operator++</span></tt> returns the iterator type itself
 would mean that all iterators built with the library would
-have to be specializations of <tt class="literal"><span class="pre">iterator_facade&lt;...&gt;</span></tt>, rather
+have to be specializations of <tt class="docutils literal"><span class="pre">iterator_facade&lt;...&gt;</span></tt>, rather
 than something more descriptive like
-<tt class="literal"><span class="pre">indirect_iterator&lt;T*&gt;</span></tt>.  Cumbersome type generator
+<tt class="docutils literal"><span class="pre">indirect_iterator&lt;T*&gt;</span></tt>.  Cumbersome type generator
 metafunctions would be needed to build new parameterized
-iterators, and a separate <tt class="literal"><span class="pre">iterator_adaptor</span></tt> layer would be
+iterators, and a separate <tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> layer would be
 impossible.</li>
 </ol>
 </blockquote>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#id24" name="usage">Usage</a></h2>
-<p>The user of <tt class="literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from a
-specialization of <tt class="literal"><span class="pre">iterator_facade</span></tt> and passes the derived
-iterator class as <tt class="literal"><span class="pre">iterator_facade</span></tt>'s first template parameter.
+<p>The user of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from a
+specialization of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and passes the derived
+iterator class as <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>'s first template parameter.
 The order of the other template parameters have been carefully
 chosen to take advantage of useful defaults.  For example, when
 defining a constant lvalue iterator, the user can pass a
-const-qualified version of the iterator's <tt class="literal"><span class="pre">value_type</span></tt> as
-<tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt> parameter and omit the
-<tt class="literal"><span class="pre">Reference</span></tt> parameter which follows.</p>
+const-qualified version of the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt> as
+<tt class="docutils literal"><span class="pre">iterator_facade</span></tt>'s <tt class="docutils literal"><span class="pre">Value</span></tt> parameter and omit the
+<tt class="docutils literal"><span class="pre">Reference</span></tt> parameter which follows.</p>
 <p>The derived iterator class must define member functions implementing
 the iterator's core behaviors.  The following table describes
 expressions which are required to be valid depending on the category
@@ -142,7 +142,7 @@ of the derived iterator type.  These member functions are described
 briefly below and in more detail in the iterator facade
 requirements.</p>
 <blockquote>
-<table border="1" class="table">
+<table border="1" class="docutils">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -153,23 +153,23 @@ requirements.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="literal"><span class="pre">i.dereference()</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">i.dereference()</span></tt></td>
 <td>Access the value referred to</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">i.equal(j)</span></tt></td>
-<td>Compare for equality with <tt class="literal"><span class="pre">j</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">i.equal(j)</span></tt></td>
+<td>Compare for equality with <tt class="docutils literal"><span class="pre">j</span></tt></td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">i.increment()</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">i.increment()</span></tt></td>
 <td>Advance by one position</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">i.decrement()</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">i.decrement()</span></tt></td>
 <td>Retreat by one position</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">i.advance(n)</span></tt></td>
-<td>Advance by <tt class="literal"><span class="pre">n</span></tt> positions</td>
+<tr><td><tt class="docutils literal"><span class="pre">i.advance(n)</span></tt></td>
+<td>Advance by <tt class="docutils literal"><span class="pre">n</span></tt> positions</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">i.distance_to(j)</span></tt></td>
-<td>Measure the distance to <tt class="literal"><span class="pre">j</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">i.distance_to(j)</span></tt></td>
+<td>Measure the distance to <tt class="docutils literal"><span class="pre">j</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -177,20 +177,20 @@ requirements.</p>
 <!-- Should we add a comment that a zero overhead implementation of iterator_facade
 is possible with proper inlining? -->
 <p>In addition to implementing the core interface functions, an iterator
-derived from <tt class="literal"><span class="pre">iterator_facade</span></tt> typically defines several
+derived from <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> typically defines several
 constructors. To model any of the standard iterator concepts, the
 iterator must at least have a copy constructor. Also, if the iterator
-type <tt class="literal"><span class="pre">X</span></tt> is meant to be automatically interoperate with another
-iterator type <tt class="literal"><span class="pre">Y</span></tt> (as with constant and mutable iterators) then
-there must be an implicit conversion from <tt class="literal"><span class="pre">X</span></tt> to <tt class="literal"><span class="pre">Y</span></tt> or from <tt class="literal"><span class="pre">Y</span></tt>
-to <tt class="literal"><span class="pre">X</span></tt> (but not both), typically implemented as a conversion
+type <tt class="docutils literal"><span class="pre">X</span></tt> is meant to be automatically interoperate with another
+iterator type <tt class="docutils literal"><span class="pre">Y</span></tt> (as with constant and mutable iterators) then
+there must be an implicit conversion from <tt class="docutils literal"><span class="pre">X</span></tt> to <tt class="docutils literal"><span class="pre">Y</span></tt> or from <tt class="docutils literal"><span class="pre">Y</span></tt>
+to <tt class="docutils literal"><span class="pre">X</span></tt> (but not both), typically implemented as a conversion
 constructor. Finally, if the iterator is to model Forward Traversal
 Iterator or a more-refined iterator concept, a default constructor is
 required.</p>
 </div>
 <div class="section" id="iterator-core-access">
 <h2><a class="toc-backref" href="#id25" name="iterator-core-access">Iterator Core Access</a></h2>
-<p><tt class="literal"><span class="pre">iterator_facade</span></tt> and the operator implementations need to be able
+<p><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and the operator implementations need to be able
 to access the core member functions in the derived class.  Making the
 core member functions public would expose an implementation detail to
 the user.  The design used here ensures that implementation details do
@@ -201,64 +201,64 @@ use a member function of the iterator when a member of the value_type
 was intended.  This has been an issue with smart pointer
 implementations in the past.  The second and main advantage is that
 library implementers can freely exchange a hand-rolled iterator
-implementation for one based on <tt class="literal"><span class="pre">iterator_facade</span></tt> without fear of
+implementation for one based on <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> without fear of
 breaking code that was accessing the public core member functions
 directly.</p>
 <p>In a naive implementation, keeping the derived class' core member
 functions private would require it to grant friendship to
-<tt class="literal"><span class="pre">iterator_facade</span></tt> and each of the seven operators.  In order to
-reduce the burden of limiting access, <tt class="literal"><span class="pre">iterator_core_access</span></tt> is
+<tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and each of the seven operators.  In order to
+reduce the burden of limiting access, <tt class="docutils literal"><span class="pre">iterator_core_access</span></tt> is
 provided, a class that acts as a gateway to the core member functions
 in the derived iterator class.  The author of the derived class only
-needs to grant friendship to <tt class="literal"><span class="pre">iterator_core_access</span></tt> to make his core
+needs to grant friendship to <tt class="docutils literal"><span class="pre">iterator_core_access</span></tt> to make his core
 member functions available to the library.</p>
 <!-- This is no long uptodate -thw  -->
 <!-- Yes it is; I made sure of it! -DWA -->
-<p><tt class="literal"><span class="pre">iterator_core_access</span></tt> will be typically implemented as an empty
+<p><tt class="docutils literal"><span class="pre">iterator_core_access</span></tt> will be typically implemented as an empty
 class containing only private static member functions which invoke the
 iterator core member functions. There is, however, no need to
 standardize the gateway protocol.  Note that even if
-<tt class="literal"><span class="pre">iterator_core_access</span></tt> used public member functions it would not
+<tt class="docutils literal"><span class="pre">iterator_core_access</span></tt> used public member functions it would not
 open a safety loophole, as every core member function preserves the
 invariants of the iterator.</p>
 </div>
 <div class="section" id="operator">
-<h2><a class="toc-backref" href="#id26" name="operator"><tt class="literal"><span class="pre">operator[]</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id26" name="operator"><tt class="docutils literal"><span class="pre">operator[]</span></tt></a></h2>
 <p>The indexing operator for a generalized iterator presents special
-challenges.  A random access iterator's <tt class="literal"><span class="pre">operator[]</span></tt> is only
-required to return something convertible to its <tt class="literal"><span class="pre">value_type</span></tt>.
+challenges.  A random access iterator's <tt class="docutils literal"><span class="pre">operator[]</span></tt> is only
+required to return something convertible to its <tt class="docutils literal"><span class="pre">value_type</span></tt>.
 Requiring that it return an lvalue would rule out currently-legal
 random-access iterators which hold the referenced value in a data
-member (e.g. <a class="reference" href="counting_iterator.html"><tt class="literal"><span class="pre">counting_iterator</span></tt></a>), because <tt class="literal"><span class="pre">*(p+n)</span></tt> is a reference
-into the temporary iterator <tt class="literal"><span class="pre">p+n</span></tt>, which is destroyed when
-<tt class="literal"><span class="pre">operator[]</span></tt> returns.</p>
-<p>Writable iterators built with <tt class="literal"><span class="pre">iterator_facade</span></tt> implement the
+member (e.g. <a class="reference" href="counting_iterator.html"><tt class="docutils literal"><span class="pre">counting_iterator</span></tt></a>), because <tt class="docutils literal"><span class="pre">*(p+n)</span></tt> is a reference
+into the temporary iterator <tt class="docutils literal"><span class="pre">p+n</span></tt>, which is destroyed when
+<tt class="docutils literal"><span class="pre">operator[]</span></tt> returns.</p>
+<p>Writable iterators built with <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> implement the
 semantics required by the preferred resolution to <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
-adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="literal"><span class="pre">p[n]</span></tt> is an object
-convertible to the iterator's <tt class="literal"><span class="pre">value_type</span></tt>, and <tt class="literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is
-equivalent to <tt class="literal"><span class="pre">*(p</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt> (Note: This result object may be
-implemented as a proxy containing a copy of <tt class="literal"><span class="pre">p+n</span></tt>).  This approach
+adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
+convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>, and <tt class="docutils literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is
+equivalent to <tt class="docutils literal"><span class="pre">*(p</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt> (Note: This result object may be
+implemented as a proxy containing a copy of <tt class="docutils literal"><span class="pre">p+n</span></tt>).  This approach
 will work properly for any random-access iterator regardless of the
 other details of its implementation.  A user who knows more about
 the implementation of her iterator is free to implement an
-<tt class="literal"><span class="pre">operator[]</span></tt> that returns an lvalue in the derived iterator
-class; it will hide the one supplied by <tt class="literal"><span class="pre">iterator_facade</span></tt> from
+<tt class="docutils literal"><span class="pre">operator[]</span></tt> that returns an lvalue in the derived iterator
+class; it will hide the one supplied by <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> from
 clients of her iterator.</p>
 <a class="target" id="operator-arrow" name="operator-arrow"></a></div>
 <div class="section" id="id2">
-<h2><a class="toc-backref" href="#id27" name="id2"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h2>
-<p>The <tt class="literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
+<h2><a class="toc-backref" href="#id27" name="id2"><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></h2>
+<p>The <tt class="docutils literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
 iterator) need not in fact be a reference, so long as it is
-convertible to the iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  When the <tt class="literal"><span class="pre">value_type</span></tt>
+convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>.  When the <tt class="docutils literal"><span class="pre">value_type</span></tt>
 is a class, however, it must still be possible to access members
-through <tt class="literal"><span class="pre">operator-&gt;</span></tt>.  Therefore, an iterator whose <tt class="literal"><span class="pre">reference</span></tt>
+through <tt class="docutils literal"><span class="pre">operator-&gt;</span></tt>.  Therefore, an iterator whose <tt class="docutils literal"><span class="pre">reference</span></tt>
 type is not in fact a reference must return a proxy containing a copy
-of the referenced value from its <tt class="literal"><span class="pre">operator-&gt;</span></tt>.</p>
-<p>The return types for <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">operator-&gt;</span></tt> and
-<tt class="literal"><span class="pre">operator[]</span></tt> are not explicitly specified. Instead, those types
+of the referenced value from its <tt class="docutils literal"><span class="pre">operator-&gt;</span></tt>.</p>
+<p>The return types for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>'s <tt class="docutils literal"><span class="pre">operator-&gt;</span></tt> and
+<tt class="docutils literal"><span class="pre">operator[]</span></tt> are not explicitly specified. Instead, those types
 are described in terms of a set of requirements, which must be
-satisfied by the <tt class="literal"><span class="pre">iterator_facade</span></tt> implementation.</p>
-<table class="citation" frame="void" id="cop95" rules="none">
+satisfied by the <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> implementation.</p>
+<table class="docutils citation" frame="void" id="cop95" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a name="cop95">[Cop95]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
@@ -355,7 +355,7 @@ template &lt;class Dr, class V, class TC, class R, class D&gt;
 Derived operator+ (typename Derived::difference_type n,
                    iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;);
 </pre>
-<a class="target" id="iterator-category" name="iterator-category"></a><p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade</span></tt> is</p>
+<a class="target" id="iterator-category" name="iterator-category"></a><p>The <tt class="docutils literal"><span class="pre">iterator_category</span></tt> member of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> is</p>
 <pre class="literal-block">
 <em>iterator-category</em>(CategoryOrTraversal, value_type, reference)
 </pre>
@@ -399,19 +399,19 @@ Derived operator+ (typename Derived::difference_type n,
          convertible, and not to any more-derived traversal tag
          type.
 </pre>
-<p>[Note: the intention is to allow <tt class="literal"><span class="pre">iterator_category</span></tt> to be one of
+<p>[Note: the intention is to allow <tt class="docutils literal"><span class="pre">iterator_category</span></tt> to be one of
 the five original category tags when convertibility to one of the
 traversal tags would add no information]</p>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<p>The <tt class="literal"><span class="pre">enable_if_interoperable</span></tt> template used above is for exposition
+<p>The <tt class="docutils literal"><span class="pre">enable_if_interoperable</span></tt> template used above is for exposition
 purposes.  The member operators should only be in an overload set
-provided the derived types <tt class="literal"><span class="pre">Dr1</span></tt> and <tt class="literal"><span class="pre">Dr2</span></tt> are interoperable, 
+provided the derived types <tt class="docutils literal"><span class="pre">Dr1</span></tt> and <tt class="docutils literal"><span class="pre">Dr2</span></tt> are interoperable, 
 meaning that at least one of the types is convertible to the other.  The
-<tt class="literal"><span class="pre">enable_if_interoperable</span></tt> approach uses SFINAE to take the operators
+<tt class="docutils literal"><span class="pre">enable_if_interoperable</span></tt> approach uses SFINAE to take the operators
 out of the overload set when the types are not interoperable.  
-The operators should behave <em>as-if</em> <tt class="literal"><span class="pre">enable_if_interoperable</span></tt>
+The operators should behave <em>as-if</em> <tt class="docutils literal"><span class="pre">enable_if_interoperable</span></tt>
 were defined to be:</p>
 <pre class="literal-block">
 template &lt;bool, typename&gt; enable_if_interoperable_impl
@@ -429,22 +429,22 @@ struct enable_if_interoperable
 {};
 </pre>
 <div class="section" id="iterator-facade-requirements">
-<h2><a class="toc-backref" href="#id29" name="iterator-facade-requirements"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h2>
+<h2><a class="toc-backref" href="#id29" name="iterator-facade-requirements"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h2>
 <p>The following table describes the typical valid expressions on
-<tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Derived</span></tt> parameter, depending on the
+<tt class="docutils literal"><span class="pre">iterator_facade</span></tt>'s <tt class="docutils literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
 column must be made accessible to member functions of class
-<tt class="literal"><span class="pre">iterator_core_access</span></tt>.  In addition,
-<tt class="literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_facade*)</span></tt> shall be well-formed.</p>
-<p>In the table below, <tt class="literal"><span class="pre">F</span></tt> is <tt class="literal"><span class="pre">iterator_facade&lt;X,V,C,R,D&gt;</span></tt>, <tt class="literal"><span class="pre">a</span></tt> is an
-object of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><span class="pre">b</span></tt> and <tt class="literal"><span class="pre">c</span></tt> are objects of type <tt class="literal"><span class="pre">const</span> <span class="pre">X</span></tt>,
-<tt class="literal"><span class="pre">n</span></tt> is an object of <tt class="literal"><span class="pre">F::difference_type</span></tt>, <tt class="literal"><span class="pre">y</span></tt> is a constant
-object of a single pass iterator type interoperable with <tt class="literal"><span class="pre">X</span></tt>, and <tt class="literal"><span class="pre">z</span></tt>
+<tt class="docutils literal"><span class="pre">iterator_core_access</span></tt>.  In addition,
+<tt class="docutils literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_facade*)</span></tt> shall be well-formed.</p>
+<p>In the table below, <tt class="docutils literal"><span class="pre">F</span></tt> is <tt class="docutils literal"><span class="pre">iterator_facade&lt;X,V,C,R,D&gt;</span></tt>, <tt class="docutils literal"><span class="pre">a</span></tt> is an
+object of type <tt class="docutils literal"><span class="pre">X</span></tt>, <tt class="docutils literal"><span class="pre">b</span></tt> and <tt class="docutils literal"><span class="pre">c</span></tt> are objects of type <tt class="docutils literal"><span class="pre">const</span> <span class="pre">X</span></tt>,
+<tt class="docutils literal"><span class="pre">n</span></tt> is an object of <tt class="docutils literal"><span class="pre">F::difference_type</span></tt>, <tt class="docutils literal"><span class="pre">y</span></tt> is a constant
+object of a single pass iterator type interoperable with <tt class="docutils literal"><span class="pre">X</span></tt>, and <tt class="docutils literal"><span class="pre">z</span></tt>
 is a constant object of a random access traversal iterator type
-interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
+interoperable with <tt class="docutils literal"><span class="pre">X</span></tt>.</p>
 <a class="target" id="core-operations" name="core-operations"></a><div class="topic">
-<p class="topic-title first"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
-<table border="1" class="table">
+<p class="topic-title first"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
+<table border="1" class="docutils">
 <colgroup>
 <col width="21%" />
 <col width="23%" />
@@ -460,41 +460,41 @@ Concept(s)</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="literal"><span class="pre">c.dereference()</span></tt></td>
-<td><tt class="literal"><span class="pre">F::reference</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">c.dereference()</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">F::reference</span></tt></td>
 <td>&nbsp;</td>
 <td>Readable Iterator, Writable
 Iterator</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">c.equal(y)</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">c.equal(y)</span></tt></td>
 <td>convertible to bool</td>
-<td>true iff <tt class="literal"><span class="pre">c</span></tt> and <tt class="literal"><span class="pre">y</span></tt>
+<td>true iff <tt class="docutils literal"><span class="pre">c</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt>
 refer to the same
 position.</td>
 <td>Single Pass Iterator</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">a.increment()</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">a.increment()</span></tt></td>
 <td>unused</td>
 <td>&nbsp;</td>
 <td>Incrementable Iterator</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">a.decrement()</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">a.decrement()</span></tt></td>
 <td>unused</td>
 <td>&nbsp;</td>
 <td>Bidirectional Traversal
 Iterator</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">a.advance(n)</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">a.advance(n)</span></tt></td>
 <td>unused</td>
 <td>&nbsp;</td>
 <td>Random Access Traversal
 Iterator</td>
 </tr>
-<tr><td><tt class="literal"><span class="pre">c.distance_to(z)</span></tt></td>
+<tr><td><tt class="docutils literal"><span class="pre">c.distance_to(z)</span></tt></td>
 <td>convertible to
-<tt class="literal"><span class="pre">F::difference_type</span></tt></td>
+<tt class="docutils literal"><span class="pre">F::difference_type</span></tt></td>
 <td>equivalent to
-<tt class="literal"><span class="pre">distance(c,</span> <span class="pre">X(z))</span></tt>.</td>
+<tt class="docutils literal"><span class="pre">distance(c,</span> <span class="pre">X(z))</span></tt>.</td>
 <td>Random Access Traversal
 Iterator</td>
 </tr>
@@ -503,53 +503,53 @@ Iterator</td>
 </div>
 </div>
 <div class="section" id="iterator-facade-operations">
-<h2><a class="toc-backref" href="#id30" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
+<h2><a class="toc-backref" href="#id30" name="iterator-facade-operations"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
 <p>The operations in this section are described in terms of operations on
-the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
+the core interface of <tt class="docutils literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
-through member functions of class <tt class="literal"><span class="pre">iterator_core_access</span></tt>.</p>
-<p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+through member functions of class <tt class="docutils literal"><span class="pre">iterator_core_access</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">static_cast&lt;Derived</span> <span class="pre">const*&gt;(this)-&gt;dereference()</span></tt></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">static_cast&lt;Derived</span> <span class="pre">const*&gt;(this)-&gt;dereference()</span></tt></td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">operator-&gt;()</span> <span class="pre">const;</span></tt> (see <a class="reference" href="#operator-arrow">below</a>)</p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">operator-&gt;()</span> <span class="pre">const;</span></tt> (see <a class="reference" href="#operator-arrow">below</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">If <tt class="literal"><span class="pre">reference</span></tt> is a reference type, an object
-of type <tt class="literal"><span class="pre">pointer</span></tt> equal to:</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">If <tt class="docutils literal"><span class="pre">reference</span></tt> is a reference type, an object
+of type <tt class="docutils literal"><span class="pre">pointer</span></tt> equal to:</p>
 <pre class="literal-block">
 &amp;static_cast&lt;Derived const*&gt;(this)-&gt;dereference()
 </pre>
 <p class="last">Otherwise returns an object of unspecified type such that, 
-<tt class="literal"><span class="pre">(*static_cast&lt;Derived</span> <span class="pre">const*&gt;(this))-&gt;m</span></tt> is equivalent to <tt class="literal"><span class="pre">(w</span> <span class="pre">=</span> <span class="pre">**static_cast&lt;Derived</span> <span class="pre">const*&gt;(this),</span>
-<span class="pre">w.m)</span></tt> for some temporary object <tt class="literal"><span class="pre">w</span></tt> of type <tt class="literal"><span class="pre">value_type</span></tt>.</p>
+<tt class="docutils literal"><span class="pre">(*static_cast&lt;Derived</span> <span class="pre">const*&gt;(this))-&gt;m</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">(w</span> <span class="pre">=</span> <span class="pre">**static_cast&lt;Derived</span> <span class="pre">const*&gt;(this),</span>
+<span class="pre">w.m)</span></tt> for some temporary object <tt class="docutils literal"><span class="pre">w</span></tt> of type <tt class="docutils literal"><span class="pre">value_type</span></tt>.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<a class="target" id="brackets" name="brackets"></a><p><em>unspecified</em> <tt class="literal"><span class="pre">operator[](difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<a class="target" id="brackets" name="brackets"></a><p><em>unspecified</em> <tt class="docutils literal"><span class="pre">operator[](difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an object convertible to <tt class="literal"><span class="pre">value_type</span></tt>. For constant
-objects <tt class="literal"><span class="pre">v</span></tt> of type <tt class="literal"><span class="pre">value_type</span></tt>, and <tt class="literal"><span class="pre">n</span></tt> of type
-<tt class="literal"><span class="pre">difference_type</span></tt>, <tt class="literal"><span class="pre">(*this)[n]</span> <span class="pre">=</span> <span class="pre">v</span></tt> is equivalent to
-<tt class="literal"><span class="pre">*(*this</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">v</span></tt>, and <tt class="literal"><span class="pre">static_cast&lt;value_type</span>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an object convertible to <tt class="docutils literal"><span class="pre">value_type</span></tt>. For constant
+objects <tt class="docutils literal"><span class="pre">v</span></tt> of type <tt class="docutils literal"><span class="pre">value_type</span></tt>, and <tt class="docutils literal"><span class="pre">n</span></tt> of type
+<tt class="docutils literal"><span class="pre">difference_type</span></tt>, <tt class="docutils literal"><span class="pre">(*this)[n]</span> <span class="pre">=</span> <span class="pre">v</span></tt> is equivalent to
+<tt class="docutils literal"><span class="pre">*(*this</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">v</span></tt>, and <tt class="docutils literal"><span class="pre">static_cast&lt;value_type</span>
 <span class="pre">const&amp;&gt;((*this)[n])</span></tt> is equivalent to
-<tt class="literal"><span class="pre">static_cast&lt;value_type</span> <span class="pre">const&amp;&gt;(*(*this</span> <span class="pre">+</span> <span class="pre">n))</span></tt></td>
+<tt class="docutils literal"><span class="pre">static_cast&lt;value_type</span> <span class="pre">const&amp;&gt;(*(*this</span> <span class="pre">+</span> <span class="pre">n))</span></tt></td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator++();</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -561,8 +561,8 @@ return *static_cast&lt;Derived*&gt;(this);
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived</span> <span class="pre">operator++(int);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived</span> <span class="pre">operator++(int);</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -575,8 +575,8 @@ return tmp;
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator--();</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived&amp;</span> <span class="pre">operator--();</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -588,8 +588,8 @@ return *static_cast&lt;Derived*&gt;(this);
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived</span> <span class="pre">operator--(int);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived</span> <span class="pre">operator--(int);</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -602,8 +602,8 @@ return tmp;
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator+=(difference_type</span> <span class="pre">n);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived&amp;</span> <span class="pre">operator+=(difference_type</span> <span class="pre">n);</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -615,8 +615,8 @@ return *static_cast&lt;Derived*&gt;(this);
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator-=(difference_type</span> <span class="pre">n);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived&amp;</span> <span class="pre">operator-=(difference_type</span> <span class="pre">n);</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -628,8 +628,8 @@ return *static_cast&lt;Derived*&gt;(this);
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Derived</span> <span class="pre">operator-(difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Derived</span> <span class="pre">operator-(difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -650,7 +650,7 @@ template &lt;class Dr, class V, class TC, class R, class D&gt;
 Derived operator+ (typename Derived::difference_type n,
                    iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -669,16 +669,16 @@ typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
 operator ==(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
             iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).equal((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).equal((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).equal((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).equal((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -691,16 +691,16 @@ typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
 operator !=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
             iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">!((Dr1</span> <span class="pre">const&amp;)lhs).equal((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">!((Dr1</span> <span class="pre">const&amp;)lhs).equal((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">!((Dr2</span> <span class="pre">const&amp;)rhs).equal((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">!((Dr2</span> <span class="pre">const&amp;)rhs).equal((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -713,16 +713,16 @@ typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
 operator &lt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -735,16 +735,16 @@ typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
 operator &lt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
             iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -757,16 +757,16 @@ typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
 operator &gt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -779,16 +779,16 @@ typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
 operator &gt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
             iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -801,28 +801,28 @@ typename enable_if_interoperable&lt;Dr1,Dr2,difference&gt;::type
 operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return Type:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<tr class="field"><th class="field-name">Return Type:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
 <blockquote class="last">
-<dl>
+<dl class="docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">difference</span></tt> shall be
-<tt class="literal"><span class="pre">iterator_traits&lt;Dr1&gt;::difference_type</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">difference</span></tt> shall be
+<tt class="docutils literal"><span class="pre">iterator_traits&lt;Dr1&gt;::difference_type</span></tt>.</dd>
 <dt>Otherwise </dt>
-<dd><tt class="literal"><span class="pre">difference</span></tt> shall be <tt class="literal"><span class="pre">iterator_traits&lt;Dr2&gt;::difference_type</span></tt></dd>
+<dd><tt class="docutils literal"><span class="pre">difference</span></tt> shall be <tt class="docutils literal"><span class="pre">iterator_traits&lt;Dr2&gt;::difference_type</span></tt></dd>
 </dl>
 </blockquote>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
-<dl class="last">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="docutils literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last docutils">
 <dt>then </dt>
-<dd><tt class="literal"><span class="pre">-((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">-((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
 <dt>Otherwise, </dt>
-<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
 </dl>
 </td>
 </tr>
@@ -836,7 +836,7 @@ operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <p>In this section we'll walk through the implementation of a few
-iterators using <tt class="literal"><span class="pre">iterator_facade</span></tt>, based around the simple
+iterators using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>, based around the simple
 example of a linked list of polymorphic objects.  This example was
 inspired by a <a class="reference" href="http://thread.gmane.org/gmane.comp.lib.boost.user/5100">posting</a> by Keith Macdonald on the <a class="reference" href="../../../more/mailing_lists.htm#users">Boost-Users</a>
 mailing list.</p>
@@ -903,9 +903,9 @@ inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&a
 lists.</p>
 </div>
 <div class="section" id="a-basic-iterator-using-iterator-facade">
-<h2><a class="toc-backref" href="#id33" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
-<p>We will construct a <tt class="literal"><span class="pre">node_iterator</span></tt> class using inheritance from
-<tt class="literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
+<h2><a class="toc-backref" href="#id33" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a></h2>
+<p>We will construct a <tt class="docutils literal"><span class="pre">node_iterator</span></tt> class using inheritance from
+<tt class="docutils literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
 <pre class="literal-block">
 # include &quot;node.hpp&quot;
 # include &lt;boost/iterator/iterator_facade.hpp&gt;
@@ -917,61 +917,61 @@ class node_iterator
 };
 </pre>
 <div class="section" id="template-arguments-for-iterator-facade">
-<h3><a class="toc-backref" href="#id34" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
-<p><tt class="literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
-what types to use for the arguments. The parameters are <tt class="literal"><span class="pre">Derived</span></tt>,
-<tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt>.</p>
+<h3><a class="toc-backref" href="#id34" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a></h3>
+<p><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
+what types to use for the arguments. The parameters are <tt class="docutils literal"><span class="pre">Derived</span></tt>,
+<tt class="docutils literal"><span class="pre">Value</span></tt>, <tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="docutils literal"><span class="pre">Reference</span></tt>, and <tt class="docutils literal"><span class="pre">Difference</span></tt>.</p>
 <div class="section" id="derived">
-<h4><a class="toc-backref" href="#id35" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
-<p>Because <tt class="literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
+<h4><a class="toc-backref" href="#id35" name="derived"><tt class="docutils literal"><span class="pre">Derived</span></tt></a></h4>
+<p>Because <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
 <a class="citation-reference" href="#cop95" id="id10" name="id10">[Cop95]</a> the first parameter is the iterator class name itself,
-<tt class="literal"><span class="pre">node_iterator</span></tt>.</p>
+<tt class="docutils literal"><span class="pre">node_iterator</span></tt>.</p>
 </div>
 <div class="section" id="value">
-<h4><a class="toc-backref" href="#id36" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
-<p>The <tt class="literal"><span class="pre">Value</span></tt> parameter determines the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
-<tt class="literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="literal"><span class="pre">node_base</span></tt>
-objects, so <tt class="literal"><span class="pre">Value</span></tt> will be <tt class="literal"><span class="pre">node_base</span></tt>.</p>
+<h4><a class="toc-backref" href="#id36" name="value"><tt class="docutils literal"><span class="pre">Value</span></tt></a></h4>
+<p>The <tt class="docutils literal"><span class="pre">Value</span></tt> parameter determines the <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s
+<tt class="docutils literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="docutils literal"><span class="pre">node_base</span></tt>
+objects, so <tt class="docutils literal"><span class="pre">Value</span></tt> will be <tt class="docutils literal"><span class="pre">node_base</span></tt>.</p>
 </div>
 <div class="section" id="categoryortraversal">
-<h4><a class="toc-backref" href="#id37" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id37" name="categoryortraversal"><tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
 <p>Now we have to determine which <a class="reference" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
-<tt class="literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
+<tt class="docutils literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
 forward links, so our iterator can't can't be a <a class="reference" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
 traversal iterator</a>.  Our iterator should be able to make multiple
 passes over the same linked list (unlike, say, an
-<tt class="literal"><span class="pre">istream_iterator</span></tt> which consumes the stream it traverses), so it
+<tt class="docutils literal"><span class="pre">istream_iterator</span></tt> which consumes the stream it traverses), so it
 must be a <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a>.  Therefore, we'll pass
-<tt class="literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id11" name="id11"><sup>1</sup></a>.</p>
-<table class="footnote" frame="void" id="category" rules="none">
+<tt class="docutils literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id11" name="id11">[1]</a>.</p>
+<table class="docutils footnote" frame="void" id="category" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id11" name="category">[1]</a></td><td><tt class="literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
-tags, so we could have passed <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
-either way, the resulting iterator's <tt class="literal"><span class="pre">iterator_category</span></tt> will
-end up being <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id11" name="category">[1]</a></td><td><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
+tags, so we could have passed <tt class="docutils literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
+either way, the resulting iterator's <tt class="docutils literal"><span class="pre">iterator_category</span></tt> will
+end up being <tt class="docutils literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="id12">
-<h4><a class="toc-backref" href="#id38" name="id12"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
-<p>The <tt class="literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
-<tt class="literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
-same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
-library's default for this parameter is <tt class="literal"><span class="pre">Value&amp;</span></tt>; since
-<tt class="literal"><span class="pre">node_base&amp;</span></tt> is a good choice for the iterator's <tt class="literal"><span class="pre">reference</span></tt>
-type, we can omit this argument, or pass <tt class="literal"><span class="pre">use_default</span></tt>.</p>
+<h4><a class="toc-backref" href="#id38" name="id12"><tt class="docutils literal"><span class="pre">Reference</span></tt></a></h4>
+<p>The <tt class="docutils literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
+<tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
+same as <tt class="docutils literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
+library's default for this parameter is <tt class="docutils literal"><span class="pre">Value&amp;</span></tt>; since
+<tt class="docutils literal"><span class="pre">node_base&amp;</span></tt> is a good choice for the iterator's <tt class="docutils literal"><span class="pre">reference</span></tt>
+type, we can omit this argument, or pass <tt class="docutils literal"><span class="pre">use_default</span></tt>.</p>
 </div>
 <div class="section" id="difference">
-<h4><a class="toc-backref" href="#id39" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
-<p>The <tt class="literal"><span class="pre">Difference</span></tt> argument determines how the distance between
-two <tt class="literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
-same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
-The library's default for <tt class="literal"><span class="pre">Difference</span></tt> is <tt class="literal"><span class="pre">std::ptrdiff_t</span></tt>, an
+<h4><a class="toc-backref" href="#id39" name="difference"><tt class="docutils literal"><span class="pre">Difference</span></tt></a></h4>
+<p>The <tt class="docutils literal"><span class="pre">Difference</span></tt> argument determines how the distance between
+two <tt class="docutils literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
+same as <tt class="docutils literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
+The library's default for <tt class="docutils literal"><span class="pre">Difference</span></tt> is <tt class="docutils literal"><span class="pre">std::ptrdiff_t</span></tt>, an
 appropriate type for measuring the distance between any two
 addresses in memory, and one that works for almost any iterator,
 so we can omit this argument, too.</p>
-<p>The declaration of <tt class="literal"><span class="pre">node_iterator</span></tt> will therefore look something
+<p>The declaration of <tt class="docutils literal"><span class="pre">node_iterator</span></tt> will therefore look something
 like:</p>
 <pre class="literal-block">
 # include &quot;node.hpp&quot;
@@ -994,11 +994,11 @@ class node_iterator
 <p>Next we need to decide how to represent the iterator's position.
 This representation will take the form of data members, so we'll
 also need to write constructors to initialize them.  The
-<tt class="literal"><span class="pre">node_iterator</span></tt>'s position is quite naturally represented using
-a pointer to a <tt class="literal"><span class="pre">node_base</span></tt>.  We'll need a constructor to build an
-iterator from a <tt class="literal"><span class="pre">node_base*</span></tt>, and a default constructor to
-satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id13" name="id13"><sup>2</sup></a>.
-Our <tt class="literal"><span class="pre">node_iterator</span></tt> then becomes:</p>
+<tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s position is quite naturally represented using
+a pointer to a <tt class="docutils literal"><span class="pre">node_base</span></tt>.  We'll need a constructor to build an
+iterator from a <tt class="docutils literal"><span class="pre">node_base*</span></tt>, and a default constructor to
+satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id13" name="id13">[2]</a>.
+Our <tt class="docutils literal"><span class="pre">node_iterator</span></tt> then becomes:</p>
 <pre class="literal-block">
 # include &quot;node.hpp&quot;
 # include &lt;boost/iterator/iterator_facade.hpp&gt;
@@ -1024,13 +1024,13 @@ class node_iterator
     node_base* m_node;
 };
 </pre>
-<table class="footnote" frame="void" id="default" rules="none">
+<table class="docutils footnote" frame="void" id="default" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id13" name="default">[2]</a></td><td>Technically, the C++ standard places almost no
 requirements on a default-constructed iterator, so if we were
 really concerned with efficiency, we could've written the
-default constructor to leave <tt class="literal"><span class="pre">m_node</span></tt> uninitialized.</td></tr>
+default constructor to leave <tt class="docutils literal"><span class="pre">m_node</span></tt> uninitialized.</td></tr>
 </tbody>
 </table>
 </div>
@@ -1039,15 +1039,15 @@ default constructor to leave <tt class="literal"><span class="pre">m_node</span>
 <p>The last step is to implement the <a class="reference" href="#core-operations">core operations</a> required by
 the concepts we want our iterator to model.  Referring to the
 <a class="reference" href="#core-operations">table</a>, we can see that the first three rows are applicable
-because <tt class="literal"><span class="pre">node_iterator</span></tt> needs to satisfy the requirements for
+because <tt class="docutils literal"><span class="pre">node_iterator</span></tt> needs to satisfy the requirements for
 <a class="reference" href="new-iter-concepts.html#readable-iterators-lib-readable-iterators">readable iterator</a>, <a class="reference" href="new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">single pass iterator</a>, and <a class="reference" href="new-iter-concepts.html#incrementable-iterators-lib-incrementable-iterators">incrementable
 iterator</a>.</p>
-<p>We therefore need to supply <tt class="literal"><span class="pre">dereference</span></tt>,
-<tt class="literal"><span class="pre">equal</span></tt>, and <tt class="literal"><span class="pre">increment</span></tt> members.  We don't want these members
-to become part of <tt class="literal"><span class="pre">node_iterator</span></tt>'s public interface, so we can
+<p>We therefore need to supply <tt class="docutils literal"><span class="pre">dereference</span></tt>,
+<tt class="docutils literal"><span class="pre">equal</span></tt>, and <tt class="docutils literal"><span class="pre">increment</span></tt> members.  We don't want these members
+to become part of <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s public interface, so we can
 make them private and grant friendship to
-<tt class="literal"><span class="pre">boost::iterator_core_access</span></tt>, a &quot;back-door&quot; that
-<tt class="literal"><span class="pre">iterator_facade</span></tt> uses to get access to the core operations:</p>
+<tt class="docutils literal"><span class="pre">boost::iterator_core_access</span></tt>, a &quot;back-door&quot; that
+<tt class="docutils literal"><span class="pre">iterator_facade</span></tt> uses to get access to the core operations:</p>
 <pre class="literal-block">
 # include &quot;node.hpp&quot;
 # include &lt;boost/iterator/iterator_facade.hpp&gt;
@@ -1086,26 +1086,26 @@ iterator!  For a working example of its use, see <a class="reference" href="../e
 </div>
 </div>
 <div class="section" id="a-constant-node-iterator">
-<h2><a class="toc-backref" href="#id42" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id42" name="a-constant-node-iterator">A constant <tt class="docutils literal"><span class="pre">node_iterator</span></tt></a></h2>
 <div class="sidebar">
-<p class="sidebar-title first">Constant and Mutable iterators</p>
+<p class="first sidebar-title">Constant and Mutable iterators</p>
 <p>The term <strong>mutable iterator</strong> means an iterator through which
 the object it references (its &quot;referent&quot;) can be modified.  A
 <strong>constant iterator</strong> is one which doesn't allow modification of
 its referent.</p>
 <p>The words <em>constant</em> and <em>mutable</em> don't refer to the ability to
-modify the iterator itself.  For example, an <tt class="literal"><span class="pre">int</span> <span class="pre">const*</span></tt> is a
-non-<tt class="literal"><span class="pre">const</span></tt> <em>constant iterator</em>, which can be incremented
-but doesn't allow modification of its referent, and <tt class="literal"><span class="pre">int*</span>
-<span class="pre">const</span></tt> is a <tt class="literal"><span class="pre">const</span></tt> <em>mutable iterator</em>, which cannot be
+modify the iterator itself.  For example, an <tt class="docutils literal"><span class="pre">int</span> <span class="pre">const*</span></tt> is a
+non-<tt class="docutils literal"><span class="pre">const</span></tt> <em>constant iterator</em>, which can be incremented
+but doesn't allow modification of its referent, and <tt class="docutils literal"><span class="pre">int*</span>
+<span class="pre">const</span></tt> is a <tt class="docutils literal"><span class="pre">const</span></tt> <em>mutable iterator</em>, which cannot be
 modified but which allows modification of its referent.</p>
-<p>Confusing?  We agree, but those are the standard terms.  It
+<p class="last">Confusing?  We agree, but those are the standard terms.  It
 probably doesn't help much that a container's constant iterator
-is called <tt class="literal"><span class="pre">const_iterator</span></tt>.</p>
+is called <tt class="docutils literal"><span class="pre">const_iterator</span></tt>.</p>
 </div>
-<p>Now, our <tt class="literal"><span class="pre">node_iterator</span></tt> gives clients access to both <tt class="literal"><span class="pre">node</span></tt>'s <tt class="literal"><span class="pre">print(std::ostream&amp;)</span> <span class="pre">const</span></tt> member function, but also its
-mutating <tt class="literal"><span class="pre">double_me()</span></tt> member.  If we wanted to build a
-<em>constant</em> <tt class="literal"><span class="pre">node_iterator</span></tt>, we'd only have to make three
+<p>Now, our <tt class="docutils literal"><span class="pre">node_iterator</span></tt> gives clients access to both <tt class="docutils literal"><span class="pre">node</span></tt>'s <tt class="docutils literal"><span class="pre">print(std::ostream&amp;)</span> <span class="pre">const</span></tt> member function, but also its
+mutating <tt class="docutils literal"><span class="pre">double_me()</span></tt> member.  If we wanted to build a
+<em>constant</em> <tt class="docutils literal"><span class="pre">node_iterator</span></tt>, we'd only have to make three
 changes:</p>
 <pre class="literal-block">
 class const_node_iterator
@@ -1138,16 +1138,16 @@ class const_node_iterator
 };
 </pre>
 <div class="sidebar">
-<p class="sidebar-title first"><tt class="literal"><span class="pre">const</span></tt> and an iterator's <tt class="literal"><span class="pre">value_type</span></tt></p>
-<p>The C++ standard requires an iterator's <tt class="literal"><span class="pre">value_type</span></tt> <em>not</em> be
-<tt class="literal"><span class="pre">const</span></tt>-qualified, so <tt class="literal"><span class="pre">iterator_facade</span></tt> strips the
-<tt class="literal"><span class="pre">const</span></tt> from its <tt class="literal"><span class="pre">Value</span></tt> parameter in order to produce the
-iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  Making the <tt class="literal"><span class="pre">Value</span></tt> argument
-<tt class="literal"><span class="pre">const</span></tt> provides a useful hint to <tt class="literal"><span class="pre">iterator_facade</span></tt> that the
-iterator is a <em>constant iterator</em>, and the default <tt class="literal"><span class="pre">Reference</span></tt>
+<p class="first sidebar-title"><tt class="docutils literal"><span class="pre">const</span></tt> and an iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt></p>
+<p class="last">The C++ standard requires an iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt> <em>not</em> be
+<tt class="docutils literal"><span class="pre">const</span></tt>-qualified, so <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> strips the
+<tt class="docutils literal"><span class="pre">const</span></tt> from its <tt class="docutils literal"><span class="pre">Value</span></tt> parameter in order to produce the
+iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>.  Making the <tt class="docutils literal"><span class="pre">Value</span></tt> argument
+<tt class="docutils literal"><span class="pre">const</span></tt> provides a useful hint to <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> that the
+iterator is a <em>constant iterator</em>, and the default <tt class="docutils literal"><span class="pre">Reference</span></tt>
 argument will be correct for all lvalue iterators.</p>
 </div>
-<p>As a matter of fact, <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">const_node_iterator</span></tt>
+<p>As a matter of fact, <tt class="docutils literal"><span class="pre">node_iterator</span></tt> and <tt class="docutils literal"><span class="pre">const_node_iterator</span></tt>
 are so similar that it makes sense to factor the common code out
 into a template as follows:</p>
 <pre class="literal-block">
@@ -1188,18 +1188,18 @@ typedef node_iter&lt;node_base const&gt; node_const_iterator;
 </div>
 <div class="section" id="interoperability">
 <h2><a class="toc-backref" href="#id43" name="interoperability">Interoperability</a></h2>
-<p>Our <tt class="literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
-taken together with <tt class="literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
+<p>Our <tt class="docutils literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
+taken together with <tt class="docutils literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
 expectations.  For example, we'd like to be able to pass a
-<tt class="literal"><span class="pre">node_iterator</span></tt> where a <tt class="literal"><span class="pre">node_const_iterator</span></tt> was expected,
-just as you can with <tt class="literal"><span class="pre">std::list&lt;int&gt;</span></tt>'s <tt class="literal"><span class="pre">iterator</span></tt> and
-<tt class="literal"><span class="pre">const_iterator</span></tt>.  Furthermore, given a <tt class="literal"><span class="pre">node_iterator</span></tt> and a
-<tt class="literal"><span class="pre">node_const_iterator</span></tt> into the same list, we should be able to
+<tt class="docutils literal"><span class="pre">node_iterator</span></tt> where a <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt> was expected,
+just as you can with <tt class="docutils literal"><span class="pre">std::list&lt;int&gt;</span></tt>'s <tt class="docutils literal"><span class="pre">iterator</span></tt> and
+<tt class="docutils literal"><span class="pre">const_iterator</span></tt>.  Furthermore, given a <tt class="docutils literal"><span class="pre">node_iterator</span></tt> and a
+<tt class="docutils literal"><span class="pre">node_const_iterator</span></tt> into the same list, we should be able to
 compare them for equality.</p>
 <p>This expected ability to use two different iterator types together
 is known as <a class="reference" href="new-iter-concepts.html#interoperable-iterators-lib-interoperable-iterators"><strong>interoperability</strong></a>.  Achieving interoperability in
-our case is as simple as templatizing the <tt class="literal"><span class="pre">equal</span></tt> function and
-adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id16" name="id16"><sup>3</sup></a> <a class="footnote-reference" href="#random" id="id17" name="id17"><sup>4</sup></a>:</p>
+our case is as simple as templatizing the <tt class="docutils literal"><span class="pre">equal</span></tt> function and
+adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id16" name="id16">[3]</a> <a class="footnote-reference" href="#random" id="id17" name="id17">[4]</a>:</p>
 <pre class="literal-block">
 template &lt;class Value&gt;
 class node_iter
@@ -1241,19 +1241,19 @@ class node_iter
 typedef impl::node_iterator&lt;node_base&gt; node_iterator;
 typedef impl::node_iterator&lt;node_base const&gt; node_const_iterator;
 </pre>
-<table class="footnote" frame="void" id="broken" rules="none">
+<table class="docutils footnote" frame="void" id="broken" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id16" name="broken">[3]</a></td><td>If you're using an older compiler and it can't handle
 this example, see the <a class="reference" href="../example/node_iterator2.hpp">example code</a> for workarounds.</td></tr>
 </tbody>
 </table>
-<table class="footnote" frame="void" id="random" rules="none">
+<table class="docutils footnote" frame="void" id="random" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id17" name="random">[4]</a></td><td>If <tt class="literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
+<tr><td class="label"><a class="fn-backref" href="#id17" name="random">[4]</a></td><td>If <tt class="docutils literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
 traversal iterator</a>, we'd have had to templatize its
-<tt class="literal"><span class="pre">distance_to</span></tt> function as well.</td></tr>
+<tt class="docutils literal"><span class="pre">distance_to</span></tt> function as well.</td></tr>
 </tbody>
 </table>
 <p>You can see an example program which exercises our interoperable
@@ -1261,23 +1261,23 @@ iterators <a class="reference" href="../example/node_iterator2.cpp">here</a>.</p
 </div>
 <div class="section" id="telling-the-truth">
 <h2><a class="toc-backref" href="#id44" name="telling-the-truth">Telling the Truth</a></h2>
-<p>Now <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
+<p>Now <tt class="docutils literal"><span class="pre">node_iterator</span></tt> and <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
 you'd expect... almost.  We can compare them and we can convert in
-one direction: from <tt class="literal"><span class="pre">node_iterator</span></tt> to <tt class="literal"><span class="pre">node_const_iterator</span></tt>.
-If we try to convert from <tt class="literal"><span class="pre">node_const_iterator</span></tt> to
-<tt class="literal"><span class="pre">node_iterator</span></tt>, we'll get an error when the converting
-constructor tries to initialize <tt class="literal"><span class="pre">node_iterator</span></tt>'s <tt class="literal"><span class="pre">m_node</span></tt>, a
-<tt class="literal"><span class="pre">node*</span></tt> with a <tt class="literal"><span class="pre">node</span> <span class="pre">const*</span></tt>.  So what's the problem?</p>
+one direction: from <tt class="docutils literal"><span class="pre">node_iterator</span></tt> to <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt>.
+If we try to convert from <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt> to
+<tt class="docutils literal"><span class="pre">node_iterator</span></tt>, we'll get an error when the converting
+constructor tries to initialize <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s <tt class="docutils literal"><span class="pre">m_node</span></tt>, a
+<tt class="docutils literal"><span class="pre">node*</span></tt> with a <tt class="docutils literal"><span class="pre">node</span> <span class="pre">const*</span></tt>.  So what's the problem?</p>
 <p>The problem is that
-<tt class="literal"><span class="pre">boost::</span></tt><a class="reference" href="../../type_traits/index.html#relationships"><tt class="literal"><span class="pre">is_convertible</span></tt></a><tt class="literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
-will be <tt class="literal"><span class="pre">true</span></tt>, but it should be <tt class="literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../type_traits/index.html#relationships"><tt class="literal"><span class="pre">is_convertible</span></tt></a>
+<tt class="docutils literal"><span class="pre">boost::</span></tt><a class="reference" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a><tt class="docutils literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
+will be <tt class="docutils literal"><span class="pre">true</span></tt>, but it should be <tt class="docutils literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a>
 lies because it can only see as far as the <em>declaration</em> of
-<tt class="literal"><span class="pre">node_iter</span></tt>'s converting constructor, but can't look inside at
+<tt class="docutils literal"><span class="pre">node_iter</span></tt>'s converting constructor, but can't look inside at
 the <em>definition</em> to make sure it will compile.  A perfect solution
-would make <tt class="literal"><span class="pre">node_iter</span></tt>'s converting constructor disappear when
-the <tt class="literal"><span class="pre">m_node</span></tt> conversion would fail.</p>
+would make <tt class="docutils literal"><span class="pre">node_iter</span></tt>'s converting constructor disappear when
+the <tt class="docutils literal"><span class="pre">m_node</span></tt> conversion would fail.</p>
 <p>In fact, that sort of magic is possible using
-<a class="reference" href="../../utility/enable_if.html"><tt class="literal"><span class="pre">boost::enable_if</span></tt></a>.  By rewriting the converting constructor as
+<a class="reference" href="../../utility/enable_if.html"><tt class="docutils literal"><span class="pre">boost::enable_if</span></tt></a>.  By rewriting the converting constructor as
 follows, we can remove it from the overload set when it's not
 appropriate:</p>
 <pre class="literal-block">
@@ -1303,14 +1303,14 @@ public:
 </div>
 <div class="section" id="wrap-up">
 <h2><a class="toc-backref" href="#id45" name="wrap-up">Wrap Up</a></h2>
-<p>This concludes our <tt class="literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
-stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a>.
+<p>This concludes our <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
+stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt></a>.
 There's another way to approach writing these iterators which might
 even be superior.</p>
 </div>
 </div>
 </div>
-<hr class="footer" />
+<hr class="docutils footer" />
 <div class="footer">
 <a class="reference" href="iterator_facade.rst">View document source</a>.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.

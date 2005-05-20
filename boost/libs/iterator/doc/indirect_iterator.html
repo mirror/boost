@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
 <title>Indirect Iterator</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
+<div class="document" id="indirect-iterator">
 <h1 class="title">Indirect Iterator</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
@@ -31,18 +32,17 @@ Railway Operation and Construction</a></td></tr>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.</td></tr>
 </tbody>
 </table>
-<div class="document" id="indirect-iterator">
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">abstract:</th><td class="field-body"><tt class="literal"><span class="pre">indirect_iterator</span></tt> adapts an iterator by applying an
-<em>extra</em> dereference inside of <tt class="literal"><span class="pre">operator*()</span></tt>. For example, this
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> adapts an iterator by applying an
+<em>extra</em> dereference inside of <tt class="docutils literal"><span class="pre">operator*()</span></tt>. For example, this
 iterator adaptor makes it possible to view a container of pointers
-(e.g. <tt class="literal"><span class="pre">list&lt;foo*&gt;</span></tt>) as if it were a container of the pointed-to type
-(e.g. <tt class="literal"><span class="pre">list&lt;foo&gt;</span></tt>).  <tt class="literal"><span class="pre">indirect_iterator</span></tt> depends on two
-auxiliary traits, <tt class="literal"><span class="pre">pointee</span></tt> and <tt class="literal"><span class="pre">indirect_reference</span></tt>, to
-provide support for underlying iterators whose <tt class="literal"><span class="pre">value_type</span></tt> is
+(e.g. <tt class="docutils literal"><span class="pre">list&lt;foo*&gt;</span></tt>) as if it were a container of the pointed-to type
+(e.g. <tt class="docutils literal"><span class="pre">list&lt;foo&gt;</span></tt>).  <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> depends on two
+auxiliary traits, <tt class="docutils literal"><span class="pre">pointee</span></tt> and <tt class="docutils literal"><span class="pre">indirect_reference</span></tt>, to
+provide support for underlying iterators whose <tt class="docutils literal"><span class="pre">value_type</span></tt> is
 not an iterator.</td>
 </tr>
 </tbody>
@@ -50,15 +50,15 @@ not an iterator.</td>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#indirect-iterator-synopsis" id="id2" name="id2"><tt class="literal"><span class="pre">indirect_iterator</span></tt> synopsis</a></li>
-<li><a class="reference" href="#indirect-iterator-requirements" id="id3" name="id3"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#indirect-iterator-models" id="id4" name="id4"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#indirect-iterator-operations" id="id5" name="id5"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#indirect-iterator-synopsis" id="id2" name="id2"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> synopsis</a></li>
+<li><a class="reference" href="#indirect-iterator-requirements" id="id3" name="id3"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#indirect-iterator-models" id="id4" name="id4"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#indirect-iterator-operations" id="id5" name="id5"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
 <li><a class="reference" href="#example" id="id6" name="id6">Example</a></li>
 </ul>
 </div>
 <div class="section" id="indirect-iterator-synopsis">
-<h1><a class="toc-backref" href="#id2" name="indirect-iterator-synopsis"><tt class="literal"><span class="pre">indirect_iterator</span></tt> synopsis</a></h1>
+<h1><a class="toc-backref" href="#id2" name="indirect-iterator-synopsis"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> synopsis</a></h1>
 <pre class="literal-block">
 template &lt;
     class Iterator
@@ -98,9 +98,9 @@ private:
    Iterator m_iterator; // exposition
 };
 </pre>
-<p>The member types of <tt class="literal"><span class="pre">indirect_iterator</span></tt> are defined according to
-the following pseudo-code, where <tt class="literal"><span class="pre">V</span></tt> is
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt></p>
+<p>The member types of <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> are defined according to
+the following pseudo-code, where <tt class="docutils literal"><span class="pre">V</span></tt> is
+<tt class="docutils literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt></p>
 <pre class="literal-block">
 if (Value is use_default) then
     typedef remove_const&lt;pointee&lt;V&gt;::type&gt;::type value_type;
@@ -136,64 +136,64 @@ else
 </pre>
 </div>
 <div class="section" id="indirect-iterator-requirements">
-<h1><a class="toc-backref" href="#id3" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h1>
-<p>The expression <tt class="literal"><span class="pre">*v</span></tt>, where <tt class="literal"><span class="pre">v</span></tt> is an object of
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, shall be valid
-expression and convertible to <tt class="literal"><span class="pre">reference</span></tt>.  <tt class="literal"><span class="pre">Iterator</span></tt> shall
-model the traversal concept indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>.
-<tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt> shall be chosen so
-that <tt class="literal"><span class="pre">value_type</span></tt>, <tt class="literal"><span class="pre">reference</span></tt>, and <tt class="literal"><span class="pre">difference_type</span></tt> meet
-the requirements indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>.</p>
+<h1><a class="toc-backref" href="#id3" name="indirect-iterator-requirements"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h1>
+<p>The expression <tt class="docutils literal"><span class="pre">*v</span></tt>, where <tt class="docutils literal"><span class="pre">v</span></tt> is an object of
+<tt class="docutils literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, shall be valid
+expression and convertible to <tt class="docutils literal"><span class="pre">reference</span></tt>.  <tt class="docutils literal"><span class="pre">Iterator</span></tt> shall
+model the traversal concept indicated by <tt class="docutils literal"><span class="pre">iterator_category</span></tt>.
+<tt class="docutils literal"><span class="pre">Value</span></tt>, <tt class="docutils literal"><span class="pre">Reference</span></tt>, and <tt class="docutils literal"><span class="pre">Difference</span></tt> shall be chosen so
+that <tt class="docutils literal"><span class="pre">value_type</span></tt>, <tt class="docutils literal"><span class="pre">reference</span></tt>, and <tt class="docutils literal"><span class="pre">difference_type</span></tt> meet
+the requirements indicated by <tt class="docutils literal"><span class="pre">iterator_category</span></tt>.</p>
 <p>[Note: there are further requirements on the
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="literal"><span class="pre">Value</span></tt>
-parameter is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied by the algorithm for
-deducing the default for the <tt class="literal"><span class="pre">value_type</span></tt> member.]</p>
+<tt class="docutils literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="docutils literal"><span class="pre">Value</span></tt>
+parameter is not <tt class="docutils literal"><span class="pre">use_default</span></tt>, as implied by the algorithm for
+deducing the default for the <tt class="docutils literal"><span class="pre">value_type</span></tt> member.]</p>
 </div>
 <div class="section" id="indirect-iterator-models">
-<h1><a class="toc-backref" href="#id4" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h1>
-<p>In addition to the concepts indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>
-and by <tt class="literal"><span class="pre">iterator_traversal&lt;indirect_iterator&gt;::type</span></tt>, a
-specialization of <tt class="literal"><span class="pre">indirect_iterator</span></tt> models the following
-concepts, Where <tt class="literal"><span class="pre">v</span></tt> is an object of
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>:</p>
+<h1><a class="toc-backref" href="#id4" name="indirect-iterator-models"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> models</a></h1>
+<p>In addition to the concepts indicated by <tt class="docutils literal"><span class="pre">iterator_category</span></tt>
+and by <tt class="docutils literal"><span class="pre">iterator_traversal&lt;indirect_iterator&gt;::type</span></tt>, a
+specialization of <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> models the following
+concepts, Where <tt class="docutils literal"><span class="pre">v</span></tt> is an object of
+<tt class="docutils literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>:</p>
 <blockquote>
 <ul class="simple">
-<li>Readable Iterator if <tt class="literal"><span class="pre">reference(*v)</span></tt> is convertible to
-<tt class="literal"><span class="pre">value_type</span></tt>.</li>
-<li>Writable Iterator if <tt class="literal"><span class="pre">reference(*v)</span> <span class="pre">=</span> <span class="pre">t</span></tt> is a valid
-expression (where <tt class="literal"><span class="pre">t</span></tt> is an object of type
-<tt class="literal"><span class="pre">indirect_iterator::value_type</span></tt>)</li>
-<li>Lvalue Iterator if <tt class="literal"><span class="pre">reference</span></tt> is a reference type.</li>
+<li>Readable Iterator if <tt class="docutils literal"><span class="pre">reference(*v)</span></tt> is convertible to
+<tt class="docutils literal"><span class="pre">value_type</span></tt>.</li>
+<li>Writable Iterator if <tt class="docutils literal"><span class="pre">reference(*v)</span> <span class="pre">=</span> <span class="pre">t</span></tt> is a valid
+expression (where <tt class="docutils literal"><span class="pre">t</span></tt> is an object of type
+<tt class="docutils literal"><span class="pre">indirect_iterator::value_type</span></tt>)</li>
+<li>Lvalue Iterator if <tt class="docutils literal"><span class="pre">reference</span></tt> is a reference type.</li>
 </ul>
 </blockquote>
-<p><tt class="literal"><span class="pre">indirect_iterator&lt;X,V1,C1,R1,D1&gt;</span></tt> is interoperable with
-<tt class="literal"><span class="pre">indirect_iterator&lt;Y,V2,C2,R2,D2&gt;</span></tt> if and only if <tt class="literal"><span class="pre">X</span></tt> is
-interoperable with <tt class="literal"><span class="pre">Y</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">indirect_iterator&lt;X,V1,C1,R1,D1&gt;</span></tt> is interoperable with
+<tt class="docutils literal"><span class="pre">indirect_iterator&lt;Y,V2,C2,R2,D2&gt;</span></tt> if and only if <tt class="docutils literal"><span class="pre">X</span></tt> is
+interoperable with <tt class="docutils literal"><span class="pre">Y</span></tt>.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
-<h1><a class="toc-backref" href="#id5" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id5" name="indirect-iterator-operations"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>
 <p>In addition to the operations required by the concepts described
-above, specializations of <tt class="literal"><span class="pre">indirect_iterator</span></tt> provide the
+above, specializations of <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> provide the
 following operations.</p>
-<p><tt class="literal"><span class="pre">indirect_iterator();</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">indirect_iterator();</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Iterator</span></tt> must be Default Constructible.</td>
+<tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="docutils literal"><span class="pre">Iterator</span></tt> must be Default Constructible.</td>
 </tr>
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs an instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> with 
-a default-constructed <tt class="literal"><span class="pre">m_iterator</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs an instance of <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> with 
+a default-constructed <tt class="docutils literal"><span class="pre">m_iterator</span></tt>.</td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">indirect_iterator(Iterator</span> <span class="pre">x);</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">indirect_iterator(Iterator</span> <span class="pre">x);</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs an instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> with
-<tt class="literal"><span class="pre">m_iterator</span></tt> copy constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs an instance of <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> with
+<tt class="docutils literal"><span class="pre">m_iterator</span></tt> copy constructed from <tt class="docutils literal"><span class="pre">x</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -209,54 +209,54 @@ indirect_iterator(
   , typename enable_if_convertible&lt;Iterator2, Iterator&gt;::type* = 0 // exposition
 );
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Iterator2</span></tt> is implicitly convertible to <tt class="literal"><span class="pre">Iterator</span></tt>.</td>
+<tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="docutils literal"><span class="pre">Iterator2</span></tt> is implicitly convertible to <tt class="docutils literal"><span class="pre">Iterator</span></tt>.</td>
 </tr>
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs an instance of <tt class="literal"><span class="pre">indirect_iterator</span></tt> whose 
-<tt class="literal"><span class="pre">m_iterator</span></tt> subobject is constructed from <tt class="literal"><span class="pre">y.base()</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs an instance of <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> whose 
+<tt class="docutils literal"><span class="pre">m_iterator</span></tt> subobject is constructed from <tt class="docutils literal"><span class="pre">y.base()</span></tt>.</td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">Iterator</span> <span class="pre">const&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">m_iterator</span></tt></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">m_iterator</span></tt></td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">**m_iterator</span></tt></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">**m_iterator</span></tt></td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">indirect_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">indirect_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">++m_iterator</span></tt></td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="docutils literal"><span class="pre">++m_iterator</span></tt></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">*this</span></tt></td>
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">indirect_iterator&amp;</span> <span class="pre">operator--();</span></tt></p>
-<table class="field-list" frame="void" rules="none">
+<p><tt class="docutils literal"><span class="pre">indirect_iterator&amp;</span> <span class="pre">operator--();</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">--m_iterator</span></tt></td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="docutils literal"><span class="pre">--m_iterator</span></tt></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">*this</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -264,13 +264,13 @@ indirect_iterator(
 <div class="section" id="example">
 <h1><a class="toc-backref" href="#id6" name="example">Example</a></h1>
 <p>This example prints an array of characters, using
-<tt class="literal"><span class="pre">indirect_iterator</span></tt> to access the array of characters through an
-array of pointers. Next <tt class="literal"><span class="pre">indirect_iterator</span></tt> is used with the
-<tt class="literal"><span class="pre">transform</span></tt> algorithm to copy the characters (incremented by one) to
+<tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> to access the array of characters through an
+array of pointers. Next <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt> is used with the
+<tt class="docutils literal"><span class="pre">transform</span></tt> algorithm to copy the characters (incremented by one) to
 another array. A constant indirect iterator is used for the source and
 a mutable indirect iterator is used for the destination. The last part
 of the example prints the original array of characters, but this time
-using the <tt class="literal"><span class="pre">make_indirect_iterator</span></tt> helper function.</p>
+using the <tt class="docutils literal"><span class="pre">make_indirect_iterator</span></tt> helper function.</p>
 <pre class="literal-block">
 char characters[] = &quot;abcdefg&quot;;
 const int N = sizeof(characters)/sizeof(char) - 1; // -1 since characters has a null char
@@ -323,7 +323,7 @@ a,b,c,d,e,f,g,
 <p>The source code for this example can be found <a class="reference" href="../example/indirect_iterator_example.cpp">here</a>.</p>
 </div>
 </div>
-<hr class="footer" />
+<hr class="docutils footer" />
 <div class="footer">
 <a class="reference" href="indirect_iterator.rst">View document source</a>.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
