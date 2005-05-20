@@ -13,7 +13,7 @@ import $(BOOST_ROOT)/libs/iostreams/build/zlib.jam ;
 
 template iostreams
     : # sources
-      ../src/$(SOURCES).cpp
+      $(SOURCES).cpp
       <template>bzip2
       <template>zlib
     : # build requirements
