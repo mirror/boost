@@ -113,7 +113,7 @@ private:
 };
 
 template<typename In, typename Out>
-struct combined_traits 
+struct combination_traits 
     : mpl::if_<
           is_device<In>,
           combined_device<
@@ -130,11 +130,11 @@ struct combined_traits
 } // End namespace detail.
 
 template<typename In, typename Out>
-struct combined_view : detail::combined_traits<In, Out>::type {
-    typedef typename detail::combined_traits<In, Out>::type  base_type;
+struct combination : detail::combination_traits<In, Out>::type {
+    typedef typename detail::combination_traits<In, Out>::type  base_type;
     typedef typename detail::wrapped_type<In>::type          in_type;
     typedef typename detail::wrapped_type<Out>::type         out_type;
-    combined_view(const in_type& in, const out_type& out)
+    combination(const in_type& in, const out_type& out)
         : base_type(in, out) { }
 };
 
@@ -143,7 +143,7 @@ namespace detail {
 // Workaround for VC6 ETI bug.
 template<typename In, typename Out>
 struct combine_traits {
-    typedef combined_view<
+    typedef combination<
                 BOOST_DEDUCED_TYPENAME detail::unwrapped_type<In>::type, 
                 BOOST_DEDUCED_TYPENAME detail::unwrapped_type<Out>::type
             > type;
