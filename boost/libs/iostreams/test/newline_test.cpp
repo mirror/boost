@@ -40,7 +40,7 @@ const std::string posix =
     "And I am two-and-twenty,\n"
     "And oh, 'tis true, 'tis true.\n";
 
-const std::string windows =
+const std::string dos =
     "When I was one-and-twenty\r\n"
     "I heard a wise man say,\r\n"
     "'Give crowns and pounds and guineas\r\n"
@@ -131,21 +131,21 @@ void read_newline_filter()
         // Test converting to posix format.
 
     BOOST_CHECK(test_input_filter(newline_filter(newline::posix), posix, posix));
-    BOOST_CHECK(test_input_filter(newline_filter(newline::posix), windows, posix));
+    BOOST_CHECK(test_input_filter(newline_filter(newline::posix), dos, posix));
     BOOST_CHECK(test_input_filter(newline_filter(newline::posix), mac, posix));
     BOOST_CHECK(test_input_filter(newline_filter(newline::posix), mixed, posix));
 
-        // Test converting to windows format.
+        // Test converting to dos format.
 
-    BOOST_CHECK(test_input_filter(newline_filter(newline::windows), posix, windows));
-    BOOST_CHECK(test_input_filter(newline_filter(newline::windows), windows, windows));
-    BOOST_CHECK(test_input_filter(newline_filter(newline::windows), mac, windows));
-    BOOST_CHECK(test_input_filter(newline_filter(newline::windows), mixed, windows));
+    BOOST_CHECK(test_input_filter(newline_filter(newline::dos), posix, dos));
+    BOOST_CHECK(test_input_filter(newline_filter(newline::dos), dos, dos));
+    BOOST_CHECK(test_input_filter(newline_filter(newline::dos), mac, dos));
+    BOOST_CHECK(test_input_filter(newline_filter(newline::dos), mixed, dos));
 
         // Test converting to mac format.
 
     BOOST_CHECK(test_input_filter(newline_filter(newline::mac), posix, mac));
-    BOOST_CHECK(test_input_filter(newline_filter(newline::mac), windows, mac));
+    BOOST_CHECK(test_input_filter(newline_filter(newline::mac), dos, mac));
     BOOST_CHECK(test_input_filter(newline_filter(newline::mac), mac, mac));
     BOOST_CHECK(test_input_filter(newline_filter(newline::mac), mixed, mac));
 }
@@ -157,21 +157,21 @@ void write_newline_filter()
         // Test converting to posix format.
 
     BOOST_CHECK(test_output_filter(newline_filter(newline::posix), posix, posix));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::posix), windows, posix));
+    BOOST_CHECK(test_output_filter(newline_filter(newline::posix), dos, posix));
     BOOST_CHECK(test_output_filter(newline_filter(newline::posix), mac, posix));
     BOOST_CHECK(test_output_filter(newline_filter(newline::posix), mixed, posix));
 
-        // Test converting to windows format.
+        // Test converting to dos format.
 
-    BOOST_CHECK(test_output_filter(newline_filter(newline::windows), posix, windows));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::windows), windows, windows));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::windows), mac, windows));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::windows), mixed, windows));
+    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), posix, dos));
+    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), dos, dos));
+    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), mac, dos));
+    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), mixed, dos));
 
         // Test converting to mac format.
 
     BOOST_CHECK(test_output_filter(newline_filter(newline::mac), posix, mac));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::mac), windows, mac));
+    BOOST_CHECK(test_output_filter(newline_filter(newline::mac), dos, mac));
     BOOST_CHECK(test_output_filter(newline_filter(newline::mac), mac, mac));
     BOOST_CHECK(test_output_filter(newline_filter(newline::mac), mixed, mac));
 }
@@ -207,27 +207,27 @@ void read_newline_checker()
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
     in.pop(); // pop checker.
 
-        // Verify properties of ::windows.
+        // Verify properties of ::dos.
 
-    in.push(io::newline_checker(io::newline::windows));
-    in.push(io::array_source(::windows.c_str()));
+    in.push(io::newline_checker(io::newline::dos));
+    in.push(io::array_source(::dos.c_str()));
     try {
         io::copy(in, io::null_sink());
     } catch (io::newline_error&) {
         BOOST_CHECK_MESSAGE(
-            false, "failed checking for windows line endings"
+            false, "failed checking for dos line endings"
         );
     }
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
-    BOOST_CHECK(checker->is_windows());
+    BOOST_CHECK(checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
@@ -241,7 +241,7 @@ void read_newline_checker()
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
@@ -255,7 +255,7 @@ void read_newline_checker()
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(!checker->has_final_newline());
@@ -269,10 +269,10 @@ void read_newline_checker()
     in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(checker->is_mixed_posix());
-    BOOST_CHECK(checker->is_mixed_windows());
+    BOOST_CHECK(checker->is_mixed_dos());
     BOOST_CHECK(checker->is_mixed_mac());
     BOOST_CHECK(checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
@@ -281,7 +281,7 @@ void read_newline_checker()
         // Verify exceptions when input does not satisfy target conditions.
 
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::posix, true),
+        test_input_against_flags(io::newline::dos, ::posix, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -289,11 +289,11 @@ void read_newline_checker()
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::windows, true),
+        test_input_against_flags(io::newline::posix, ::dos, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::windows, true),
+        test_input_against_flags(io::newline::mac, ::dos, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -301,7 +301,7 @@ void read_newline_checker()
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mac, true),
+        test_input_against_flags(io::newline::dos, ::mac, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -313,7 +313,7 @@ void read_newline_checker()
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mixed, true),
+        test_input_against_flags(io::newline::dos, ::mixed, true),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -335,21 +335,21 @@ void write_newline_checker()
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
     out.pop(); // pop checker.
 
-        // Verify properties of ::windows.
+        // Verify properties of ::dos.
 
-    out.push(io::newline_checker(io::newline::windows));
+    out.push(io::newline_checker(io::newline::dos));
     out.push(io::null_sink());
-    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::windows.c_str()), out))
+    BOOST_CHECK_NO_THROW(io::copy(io::array_source(::dos.c_str()), out))
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
-    BOOST_CHECK(checker->is_windows());
+    BOOST_CHECK(checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
@@ -363,7 +363,7 @@ void write_newline_checker()
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
@@ -377,7 +377,7 @@ void write_newline_checker()
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(!checker->is_mixed());
     BOOST_CHECK(!checker->has_final_newline());
@@ -391,10 +391,10 @@ void write_newline_checker()
     out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
-    BOOST_CHECK(!checker->is_windows());
+    BOOST_CHECK(!checker->is_dos());
     BOOST_CHECK(!checker->is_mac());
     BOOST_CHECK(checker->is_mixed_posix());
-    BOOST_CHECK(checker->is_mixed_windows());
+    BOOST_CHECK(checker->is_mixed_dos());
     BOOST_CHECK(checker->is_mixed_mac());
     BOOST_CHECK(checker->is_mixed());
     BOOST_CHECK(checker->has_final_newline());
@@ -403,7 +403,7 @@ void write_newline_checker()
         // Verify exceptions when input does not satisfy target conditions.
 
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::posix, false),
+        test_input_against_flags(io::newline::dos, ::posix, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -411,11 +411,11 @@ void write_newline_checker()
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::posix, ::windows, false),
+        test_input_against_flags(io::newline::posix, ::dos, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::mac, ::windows, false),
+        test_input_against_flags(io::newline::mac, ::dos, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -423,7 +423,7 @@ void write_newline_checker()
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mac, false),
+        test_input_against_flags(io::newline::dos, ::mac, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(
@@ -435,7 +435,7 @@ void write_newline_checker()
         io::newline_error
     )
     BOOST_CHECK_THROW(
-        test_input_against_flags(io::newline::windows, ::mixed, false),
+        test_input_against_flags(io::newline::dos, ::mixed, false),
         io::newline_error
     )
     BOOST_CHECK_THROW(

@@ -44,10 +44,10 @@ const char LF                   = 0x0A;
 
 const int posix             = 1;    // Use CR as line separator.
 const int mac               = 2;    // Use LF as line separator.
-const int windows           = 4;    // Use CRLF as line separator.
+const int dos               = 4;    // Use CRLF as line separator.
 const int mixed             = 8;    // Mixed line endings.
 const int final_newline     = 16;
-const int platform_mask     = posix | windows | mac;
+const int platform_mask     = posix | dos | mac;
 
 } // End namespace newline.
 
@@ -59,24 +59,24 @@ public:
     {
         return !is_mixed() && (flags_ & newline::posix) != 0;
     }
-    bool is_windows() const
+    bool is_dos() const
     {
-        return !is_mixed() && (flags_ & newline::windows) != 0;
+        return !is_mixed() && (flags_ & newline::dos) != 0;
     }
     bool is_mac() const
     {
         return !is_mixed() && (flags_ & newline::mac) != 0;
     }
     bool is_mixed_posix() const { return (flags_ & newline::posix) != 0; }
-    bool is_mixed_windows() const { return (flags_ & newline::windows) != 0; }
+    bool is_mixed_dos() const { return (flags_ & newline::dos) != 0; }
     bool is_mixed_mac() const { return (flags_ & newline::mac) != 0; }
     bool is_mixed() const
     {
         int platform =
             (flags_ & newline::posix) != 0 ?
                 newline::posix :
-                (flags_ & newline::windows) != 0 ?
-                    newline::windows :
+                (flags_ & newline::dos) != 0 ?
+                    newline::dos :
                     (flags_ & newline::mac) != 0 ?
                         newline::mac :
                         0;
@@ -116,7 +116,7 @@ public:
     explicit newline_filter(int target) : flags_(target)
     {
         if ( target != newline::posix &&
-             target != newline::windows &&
+             target != newline::dos &&
              target != newline::mac )
         {
             throw std::logic_error("bad flags");
@@ -226,7 +226,7 @@ private:
             return LF;
         case newline::mac:
             return CR;
-        case newline::windows:
+        case newline::dos:
             if (flags_ & has_LF) {
                 flags_ &= ~has_LF;
                 return LF;
@@ -253,7 +253,7 @@ private:
         case newline::mac:
             success = boost::iostreams::put(dest, CR);
             break;
-        case newline::windows:
+        case newline::dos:
             if ((flags_ & has_LF) != 0) {
                 if ((success = boost::iostreams::put(dest, LF)))
                     flags_ &= ~has_LF;
@@ -307,7 +307,7 @@ public:
             source() &= ~line_complete;
         if ((source() & has_CR) != 0) {
             if (c == LF) {
-                source() |= newline::windows;
+                source() |= newline::dos;
                 source() |= line_complete;
             } else {
                 source() |= newline::mac;
@@ -354,7 +354,7 @@ public:
         source() &= ~line_complete;
         if ((source() & has_CR) != 0) {
             if (c == LF) {
-                source() |= newline::windows;
+                source() |= newline::dos;
                 source() |= line_complete;
             } else {
                 source() |= newline::mac;
