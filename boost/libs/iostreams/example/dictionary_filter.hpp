@@ -8,28 +8,35 @@
 #define BOOST_IOSTREAMS_DICTIONARY_FILTER_HPP_INCLUDED
 
 #include <cassert>
-#include <cstdio>    // EOF.
-#include <iostream>  // cin, cout.
-#include <locale>
+#include <cstdio>            // EOF.
+#include <iostream>          // cin, cout.
+#include <cctype>
 #include <map>
+#include <boost/config.hpp>  // BOOST_NO_STDC_NAMESPACE.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/filter/stdio_filter.hpp>
 #include <boost/iostreams/operations.hpp>
+
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std { 
+    using ::isalpha; 
+    using ::isupper; 
+    using ::toupper; 
+    using ::tolower; 
+}
+#endif
 
 namespace boost { namespace iostreams { namespace example {
 
 class dictionary {
 public:
-    dictionary(const std::locale& loc = std::locale::classic());
     void add(std::string key, const std::string& value);
     bool replace(std::string& key);
-    const std::locale& getloc() const;
     std::string::size_type max_length() const { return max_length_; }
 private:
     typedef std::map<std::string, std::string> map_type;
     void tolower(std::string& str);
     map_type                map_;
-    std::locale             loc_;
     std::string::size_type  max_length_;
 };
 
@@ -42,7 +49,7 @@ private:
         using namespace std;
         while (true) {
             int c = std::cin.get();
-            if (c == EOF || !std::isalpha(c, dictionary_.getloc())) {
+            if (c == EOF || !std::isalpha((unsigned char) c)) {
                 dictionary_.replace(current_word_);
                 cout.write( current_word_.data(),
                             static_cast<streamsize>(current_word_.size()) );
@@ -84,7 +91,7 @@ public:
                 if ((c = iostreams::get(src)) == WOULD_BLOCK)
                     return WOULD_BLOCK;
 
-                if (c == EOF || !std::isalpha(c, dictionary_.getloc())) {
+                if (c == EOF || !std::isalpha((unsigned char) c)) {
                     dictionary_.replace(current_word_);
                     off_ = 0;
                     if (c == EOF)
@@ -126,8 +133,7 @@ public:
     {
         if (off_ != std::string::npos && !write_current_word(dest))
             return false;
-
-        if (!std::isalpha(c, dictionary_.getloc())) {
+        if (!std::isalpha((unsigned char) c)) {
             dictionary_.replace(current_word_);
             off_ = 0;
         }
@@ -172,8 +178,6 @@ private:
 
 //------------------Implementation of dictionary------------------------------//
 
-inline dictionary::dictionary(const std::locale& loc) : loc_(loc) { }
-
 inline void dictionary::add(std::string key, const std::string& value)
 {
     max_length_ = max_length_ < key.size() ? key.size() : max_length_;
@@ -190,18 +194,16 @@ inline bool dictionary::replace(std::string& key)
     if (it == map_.end())
         return false;
     string& value = it->second;
-    if (!value.empty() && !key.empty() && std::isupper(key[0], loc_))
-        value[0] = std::toupper(value[0], loc_);
+    if (!value.empty() && !key.empty() && std::isupper((unsigned char) key[0]))
+        value[0] = std::toupper((unsigned char) value[0]);
     key = value;
     return true;
 }
 
-inline const std::locale& dictionary::getloc() const { return loc_; }
-
 inline void dictionary::tolower(std::string& str)
 {
     for (std::string::size_type z = 0, len = str.size(); z < len; ++z)
-        str[z] = std::tolower(str[z], loc_);
+        str[z] = std::tolower((unsigned char) str[z]);
 }
 
 } } }       // End namespaces example, iostreams, boost.
