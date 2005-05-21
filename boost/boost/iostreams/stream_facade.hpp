@@ -29,7 +29,7 @@ struct stream_facade_traits {
     typedef Tr                                                 traits_type;
     typedef typename category_of<Device>::type                 mode;
     typedef typename
-            select<
+            iostreams::select< // Dismbiguation required for Tru64.
                 mpl::and_<
                     is_convertible<mode, input>,
                     is_convertible<mode, output>
