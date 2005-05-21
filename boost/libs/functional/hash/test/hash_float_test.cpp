@@ -136,8 +136,14 @@ void float_tests(char const* name, T* = 0)
         if(x1(std::numeric_limits<T>::denorm_min()) == x1(zero)) {
             std::cout<<"x1(denorm_min) == x1(zero) == "<<x1(zero)<<"\n";
         }
-        BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) ==
-            HASH_NAMESPACE::hash_value((T) std::numeric_limits<T>::denorm_min()));
+        BOOST_CHECK_MESSAGE(x1(std::numeric_limits<T>::denorm_min()) ==
+            HASH_NAMESPACE::hash_value(std::numeric_limits<T>::denorm_min()),
+            "x1(std::numeric_limits<T>::denorm_min()) = "
+                << x1(std::numeric_limits<T>::denorm_min())
+                << "\nhash_value(std::numeric_limits<T>::denorm_min()) = "
+                << HASH_NAMESPACE::hash_value(
+                    std::numeric_limits<T>::denorm_min())
+                << "\nx1(0) = "<<x1(0)<<"\n");
     }
 
 // NaN also causes borland to crash.
