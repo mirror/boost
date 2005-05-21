@@ -6,8 +6,8 @@
 
 #include <fstream>
 #include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/filter/tee.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/tee.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/temp_file.hpp"
@@ -21,7 +21,6 @@ using boost::unit_test::test_suite;
 
 void tee_test()
 {
-
     {
         temp_file          dest1;
         temp_file          dest2;
@@ -32,7 +31,7 @@ void tee_test()
         out.reset();
         BOOST_CHECK_MESSAGE(
             compare_files(dest1.name(), dest2.name()),
-            "failed writing to a tee in chars"
+            "failed writing to a tee_filter in chars"
         );
     }
 
@@ -46,7 +45,35 @@ void tee_test()
         out.reset();
         BOOST_CHECK_MESSAGE(
             compare_files(dest1.name(), dest2.name()),
-            "failed writing to a tee in chunks"
+            "failed writing to a tee_filter in chunks"
+        );
+    }
+
+    {
+        temp_file          dest1;
+        temp_file          dest2;
+        filtering_ostream  out;
+        out.push( tee( file_sink(dest1.name(), out_mode),
+                       file_sink(dest2.name(), out_mode) ) );
+        write_data_in_chars(out);
+        out.reset();
+        BOOST_CHECK_MESSAGE(
+            compare_files(dest1.name(), dest2.name()),
+            "failed writing to a tee_device in chars"
+        );
+    }
+
+    {
+        temp_file          dest1;
+        temp_file          dest2;
+        filtering_ostream  out;
+        out.push( tee( file_sink(dest1.name(), out_mode),
+                       file_sink(dest2.name(), out_mode) ) );
+        write_data_in_chunks(out);
+        out.reset();
+        BOOST_CHECK_MESSAGE(
+            compare_files(dest1.name(), dest2.name()),
+            "failed writing to a tee_device in chunks"
         );
     }
 }
