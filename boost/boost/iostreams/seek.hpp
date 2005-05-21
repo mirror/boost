@@ -30,7 +30,10 @@ namespace boost { namespace iostreams {
 namespace detail {
 
 template<typename T>
-struct seek_impl;
+struct seek_device_impl;
+
+template<typename T>
+struct seek_filter_impl;
 
 } // End namespace detail.
 
@@ -38,18 +41,30 @@ template<typename T>
 inline std::streampos
 seek( T& t, stream_offset off, BOOST_IOS::seekdir way,
       BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
-{ return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
+{ 
+    using namespace detail;
+    return seek_device_impl<T>::seek(detail::unwrap(t), off, way, which); 
+}
+
+template<typename T, typename Device>
+inline std::streampos
+seek( T& t, Device& dev, stream_offset off, BOOST_IOS::seekdir way,
+      BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
+{ 
+    using namespace detail;
+    return seek_filter_impl<T>::seek(detail::unwrap(t), dev, off, way, which);
+}
 
 namespace detail {
 
-//------------------Definition of seek_impl-----------------------------------//
+//------------------Definition of seek_device_impl----------------------------//
 
 template<typename T>
-struct seek_impl
+struct seek_device_impl
     : mpl::if_<
           is_custom<T>,
           operations<T>,
-          seek_impl<
+          seek_device_impl<
               BOOST_DEDUCED_TYPENAME
               dispatch<
                   T, iostream_tag, istream_tag, ostream_tag,
@@ -77,16 +92,16 @@ struct seek_impl_basic_ios {
 };
 
 template<>
-struct seek_impl<iostream_tag> : seek_impl_basic_ios { };
+struct seek_device_impl<iostream_tag> : seek_impl_basic_ios { };
 
 template<>
-struct seek_impl<istream_tag> : seek_impl_basic_ios { };
+struct seek_device_impl<istream_tag> : seek_impl_basic_ios { };
 
 template<>
-struct seek_impl<ostream_tag> : seek_impl_basic_ios { };
+struct seek_device_impl<ostream_tag> : seek_impl_basic_ios { };
 
 template<>
-struct seek_impl<streambuf_tag> {
+struct seek_device_impl<streambuf_tag> {
     template<typename T>
     static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
@@ -104,7 +119,7 @@ struct seek_impl<streambuf_tag> {
 };
 
 template<>
-struct seek_impl<two_head> {
+struct seek_device_impl<two_head> {
     template<typename T>
     static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
@@ -113,12 +128,46 @@ struct seek_impl<two_head> {
 };
 
 template<>
-struct seek_impl<any_tag> {
+struct seek_device_impl<any_tag> {
     template<typename T>
     static std::streampos seek( T& t, stream_offset off,
                                 BOOST_IOS::seekdir way,
                                 BOOST_IOS::openmode )
     { return t.seek(off, way); }
+};
+
+//------------------Definition of seek_filter_impl----------------------------//
+
+template<typename T>
+struct seek_filter_impl
+    : mpl::if_<
+          is_custom<T>,
+          operations<T>,
+          seek_filter_impl<
+              BOOST_DEDUCED_TYPENAME
+              dispatch<T, two_head, any_tag>::type
+          >
+      >::type
+    { };
+
+template<>
+struct seek_filter_impl<two_head> {
+    template<typename T, typename Device>
+    static std::streampos seek( T& t, Device& d,
+                                stream_offset off,
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
+    { return t.seek(d, off, way, which); }
+};
+
+template<>
+struct seek_filter_impl<any_tag> {
+    template<typename T, typename Device>
+    static std::streampos seek( T& t, Device& d,
+                                stream_offset off,
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode )
+    { return t.seek(d, off, way); }
 };
 
 } // End namespace detail.
