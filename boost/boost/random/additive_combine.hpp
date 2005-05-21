@@ -21,9 +21,6 @@
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/random/linear_congruential.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 namespace boost {
 namespace random {
@@ -53,17 +50,9 @@ public:
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_mlcg1.max)()-1; }
 
   additive_combine() : _mlcg1(), _mlcg2() { }
-  explicit additive_combine(unsigned long s) : _mlcg1(s), _mlcg2(_mlcg1) { }
-
-  template<class Generator>
-  explicit additive_combine(Generator& gen,
-                            typename enable_if_c<!is_integral<Generator>::value && !is_same<additive_combine, Generator>::value, void *>::type = 0)
-    : _mlcg1(gen), _mlcg2(gen) { }
-
   additive_combine(typename MLCG1::result_type seed1, 
                    typename MLCG2::result_type seed2)
     : _mlcg1(seed1), _mlcg2(seed2) { }
-
   template<class It> additive_combine(It& first, It last)
     : _mlcg1(first, last), _mlcg2(first, last) { }
 
@@ -72,14 +61,6 @@ public:
     _mlcg1.seed();
     _mlcg2.seed();
   }
-
-  void seed(unsigned long s)
-  { _mlcg1.seed(s); _mlcg2.seed(_mlcg1); }
-
-  template<class Generator>
-  typename enable_if_c<!is_integral<Generator>::value && !is_same<additive_combine, Generator>::value>::type
-  seed(Generator & gen)
-  { _mlcg1.seed(gen); _mlcg2.seed(gen); }
 
   void seed(typename MLCG1::result_type seed1,
             typename MLCG2::result_type seed2)

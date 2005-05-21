@@ -26,9 +26,6 @@
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 
@@ -89,17 +86,13 @@ public:
     seed();
   }
   explicit subtract_with_carry(uint32_t value) { seed(value); }
-
   template<class Generator>
-  explicit subtract_with_carry(Generator & gen,
-                               typename enable_if_c<!is_integral<Generator>::value && !is_same<subtract_with_carry, Generator>::value, void *>::type = 0)
-  { seed(gen); }
-
+  explicit subtract_with_carry(Generator & gen) { seed(gen); }
   template<class It> subtract_with_carry(It& first, It last) { seed(first,last); }
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  void seed(unsigned long value = 19780503u)
+  void seed(uint32_t value = 19780503u)
   {
     random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> intgen(value);
     seed(intgen);
@@ -109,8 +102,7 @@ public:
   // reduce overall object code size.  However, MSVC does not grok
   // out-of-line template member functions.
   template<class Generator>
-  typename enable_if_c<!is_integral<Generator>::value && !is_same<subtract_with_carry, Generator>::value>::type
-  seed(Generator & gen)
+  void seed(Generator & gen)
   {
     // I could have used std::generate_n, but it takes "gen" by value
     for(unsigned int j = 0; j < long_lag; ++j)
@@ -268,15 +260,8 @@ public:
 #endif
 
   subtract_with_carry_01() { init_modulus(); seed(); }
-
   explicit subtract_with_carry_01(uint32_t value)
   { init_modulus(); seed(value);   }
-
-  template<class Generator>
-  explicit subtract_with_carry_01(Generator & gen,
-                                  typename enable_if_c<!is_integral<Generator>::value && !is_same<subtract_with_carry_01, Generator>::value, void *>::type = 0)
-  { seed(gen); }
-
   template<class It> subtract_with_carry_01(It& first, It last)
   { init_modulus(); seed(first,last); }
 
@@ -305,30 +290,6 @@ public:
       array[j] = gen();
     unsigned long * start = array;
     seed(start, array + sizeof(array)/sizeof(unsigned long));
-  }
-
-  template<class Generator>
-  typename enable_if_c<!is_integral<Generator>::value && !is_same<subtract_with_carry_01, Generator>::value>::type
-  seed(Generator & gen)
-  {
-#ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::fmod;
-    using std::pow;
-#endif
-    unsigned long mask = ~((~0u) << (w%32));   // now lowest (w%32) bits set
-    RealType two32 = pow(RealType(2), 32);
-    unsigned int j;
-    for(j = 0; j < long_lag; ++j) {
-      x[j] = RealType(0);
-      for(int i = 0; i < w/32; ++i)
-        x[j] += gen() / pow(two32,i+1);
-      if(mask != 0) {
-        x[j] += fmod((gen() & mask) / _modulus, RealType(1));
-      }
-    }
-    carry = (x[long_lag-1] ? 0 : 1 / _modulus);
-    k = 0;
   }
 
   template<class It>

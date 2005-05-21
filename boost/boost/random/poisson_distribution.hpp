@@ -40,7 +40,7 @@ public:
 #endif
 
     assert(mean > RealType(0));
-    _exp_mean = init(_mean);
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -51,13 +51,13 @@ public:
   template<class Engine>
   result_type operator()(Engine& eng)
   {
-    return evaluate(eng, _exp_mean);
-  }
-
-  template<class Engine>
-  result_type operator()(Engine& eng, const RealType& mean)
-  {
-    return evaluate(eng, init(mean));
+    // TODO: This is O(_mean), but it should be O(log(_mean)) for large _mean
+    RealType product = RealType(1);
+    for(result_type m = 0; ; ++m) {
+      product *= eng();
+      if(product <= _exp_mean)
+        return m;
+    }
   }
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
@@ -74,31 +74,19 @@ public:
   operator>>(std::basic_istream<CharT,Traits>& is, poisson_distribution& pd)
   {
     is >> std::ws >> pd._mean;
-    pd._exp_mean = init(pd._mean);
+    pd.init();
     return is;
   }
 #endif
 
 private:
-  static RealType init(const RealType& mean)
+  void init()
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::exp;
 #endif
-    return exp(-mean);
-  }
-
-  template<class Engine>
-  static result_type evaluate(Engine& eng, const RealType& exp_mean)
-  {
-    // TODO: This is O(_mean), but it should be O(log(_mean)) for large _mean
-    RealType product = RealType(1);
-    for(result_type m = 0; ; ++m) {
-      product *= eng();
-      if(product <= exp_mean)
-        return m;
-    }
+    _exp_mean = exp(-_mean);
   }
 
   RealType _mean;

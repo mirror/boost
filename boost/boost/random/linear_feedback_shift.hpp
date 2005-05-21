@@ -20,9 +20,6 @@
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/limits.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 namespace boost {
 namespace random {
@@ -51,7 +48,7 @@ public:
   // BOOST_STATIC_ASSERT(0 < 2*q && 2*q < k);
   // BOOST_STATIC_ASSERT(0 < s && s <= k-q);
 
-  explicit linear_feedback_shift(unsigned long s0 = 341) : wordmask(0)
+  explicit linear_feedback_shift(UIntType s0 = 341) : wordmask(0)
   {
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -63,20 +60,6 @@ public:
     for(int i = 0; i < w; ++i)
       wordmask |= (1u << i);
     seed(s0);
-  }
-
-  template<class Generator>
-  explicit linear_feedback_shift(Generator & gen,
-                                 typename enable_if_c<!is_integral<Generator>::value && !is_same<linear_feedback_shift, Generator>::value, void *>::type = 0)
-  {
-    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<UIntType>::is_integer);
-    BOOST_STATIC_ASSERT(!std::numeric_limits<UIntType>::is_signed);
-#endif
-    for(int i = 0; i < w; ++i)
-      wordmask |= (1u << i);
-    seed(gen);
   }
 
   template<class It> linear_feedback_shift(It& first, It last) : wordmask(0)
@@ -93,25 +76,14 @@ public:
     seed(first, last);
   }
 
-  void seed(unsigned long s0 = 341) { assert(s0 >= (1 << (w-k))); value = s0; }
-
-  template<class Generator>
-  typename enable_if_c<!is_integral<Generator>::value && !is_same<linear_feedback_shift, Generator>::value>::type
-  seed(Generator & gen)
-  {
-    value = gen();
-    while(value < (1 << (w-k)))
-      value = value * 2 + 1;
-  }
-
+  void seed(UIntType s0 = 341) { assert(s0 >= (1 << (w-k))); value = s0; }
   template<class It> void seed(It& first, It last)
   {
     if(first == last)
       throw std::invalid_argument("linear_feedback_shift::seed");
     value = *first++;
-    while(value < (1 << (w-k)))
-      value = value * 2 + 1;
-   }
+    assert(value >= (1 << (w-k)));
+  }
 
   result_type operator()()
   {

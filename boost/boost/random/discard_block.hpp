@@ -20,9 +20,6 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 
 namespace boost {
@@ -44,23 +41,11 @@ public:
 #endif
 
   discard_block() : _rng(), _n(0) { }
-  explicit discard_block(unsigned long s) : _rng(s), _n(0) { }
-
-  template<class Generator>
-  explicit discard_block(Generator& gen,
-                         typename enable_if_c<!is_integral<Generator>::value && !is_same<discard_block, Generator>::value, void *>::type = 0)
-    : _rng(gen), _n(0) { }
+  explicit discard_block(const base_type & rng) : _rng(rng), _n(0) { }
   template<class It> discard_block(It& first, It last)
     : _rng(first, last), _n(0) { }
-  explicit discard_block(const base_type & rng) : _rng(rng), _n(0) { }
   void seed() { _rng.seed(); _n = 0; }
-  void seed(unsigned long s) { _rng.seed(s); _n = 0; }
-
-  template<class Generator>
-  typename enable_if_c<!is_integral<Generator>::value && !is_same<discard_block, Generator>::value>::type
-  seed(Generator& gen)
-  { _rng.seed(gen); _n = 0; }
-
+  template<class T> void seed(T s) { _rng.seed(s); _n = 0; }
   template<class It> void seed(It& first, It last)
   { _n = 0; _rng.seed(first, last); }
 
