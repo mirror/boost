@@ -138,8 +138,10 @@ class basic_oarchive_impl
 
     //////////////////////////////////////////////////////////////////////
     // list of serialization helpers
+    struct helper_compare;
+
     struct helper_type {
-        // at least one compiler erroneously doesn't give access to embedded structs
+        // at least one compiler sunpro 5.3 erroneously doesn't give access to embedded structs
         friend struct helper_compare;
         boost::serialization::basic_helper * m_helper;
         const boost::serialization::extended_type_info * m_eti;
@@ -501,16 +503,16 @@ BOOST_DECL_ARCHIVE
 basic_oarchive::end_preamble(){
 }
 
-boost::serialization::basic_helper * 
 BOOST_DECL_ARCHIVE 
+boost::serialization::basic_helper * 
 basic_oarchive::lookup_helper(
     const boost::serialization::extended_type_info * const eti
 ){
     return pimpl->lookup_helper(eti);
 }
 
-boost::serialization::basic_helper * 
 BOOST_DECL_ARCHIVE 
+boost::serialization::basic_helper * 
 basic_oarchive::insert_helper(
     boost::serialization::basic_helper * h,
     const boost::serialization::extended_type_info * const eti
