@@ -61,9 +61,10 @@ rule toolset::require-shared-libraries-support ( toolset variant : subvariant-pa
     case "msvc-stlport*" :
         echo **** DLLs cannot be built with this compiler and stlport 4.x **** ;
         properties = [ impose-requirements $(properties) : <build>no ] ;
-    case "cw-8*" :
+    case "cw*" :
         local runtime-link = [ get-values <runtime-link> : $(properties) ] ;
         if static in $(runtime-link) {
+            echo **** locale support only exists with static runtime linking **** ;
             echo **** DLLS cannot be built with static runtime linking **** ;
             properties = [ impose-requirements $(properties) : <build>no ] ;
         }
