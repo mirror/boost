@@ -82,8 +82,8 @@ private:
     // Translate from std int_type to chain's int_type.
     typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)           std_traits;
     typedef typename Chain::traits_type                      chain_traits;
-    typename chain_traits::int_type 
-    static translate(typename std_traits::int_type c)
+    static typename chain_traits::int_type 
+    translate(typename std_traits::int_type c)
         { return translate_int_type<std_traits, chain_traits>(c); }
 
     delegate_type& delegate() 
