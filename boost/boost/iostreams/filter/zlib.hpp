@@ -359,7 +359,7 @@ zlib_decompressor_impl<Alloc>::zlib_decompressor_impl(int window_bits)
 template<typename Alloc>
 bool zlib_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
-      char*& dest_begin, char* dest_end, bool flush )
+      char*& dest_begin, char* dest_end, bool /* flush */ )
 {
     before(src_begin, src_end, dest_begin, dest_end);
     int result = inflate(zlib::sync_flush);

@@ -338,7 +338,7 @@ bzip2_decompressor_impl<Alloc>::bzip2_decompressor_impl(bool small)
 template<typename Alloc>
 bool bzip2_decompressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
-      char*& dest_begin, char* dest_end, bool flush )
+      char*& dest_begin, char* dest_end, bool /* flush */ )
 {
     if (!ready()) 
         init();
