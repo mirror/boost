@@ -59,7 +59,7 @@ class composite_device {
 private:
     typedef typename detail::param_type<Device>::type       param_type;
     typedef typename
-            select<
+            iostreams::select<  // Disambiguation for Tru64.
                 is_direct<Device>,  direct_adapter<Device>,
                 is_std_io<Device>,  Device&,
                 else_,              Device

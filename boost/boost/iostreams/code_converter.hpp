@@ -99,7 +99,7 @@ struct code_converter_impl {
     typedef is_convertible<device_category, output>         can_write;
     typedef is_convertible<device_category, bidirectional>  is_bidir;
     typedef typename 
-            select<  // Disambiguation for Tru64
+            iostreams::select<  // Disambiguation for Tru64
                 is_bidir, bidirectional,
                 can_read, input,
                 can_write, output

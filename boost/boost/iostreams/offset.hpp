@@ -170,7 +170,7 @@ private:
 
 template<typename T>
 struct offset_traits
-    : select<
+    : iostreams::select<  // Disambiguation for Tru64.
           is_filter<T>,  offset_filter<T>,
           is_direct<T>,  offset_direct_device<T>,
           else_,         offset_indirect_device<T>

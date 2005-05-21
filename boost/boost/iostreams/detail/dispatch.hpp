@@ -25,7 +25,7 @@ template< typename T, typename Tag1, typename Tag2,
           typename Category = 
               BOOST_DEDUCED_TYPENAME category_of<T>::type >
 struct dispatch 
-    : select<  // Disambiguation for Tru64
+    : iostreams::select<  // Disambiguation for Tru64.
           is_convertible<Category, Tag1>, Tag1,
           is_convertible<Category, Tag2>, Tag2,
           is_convertible<Category, Tag3>, Tag3,
