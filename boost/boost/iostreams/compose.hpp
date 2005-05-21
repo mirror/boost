@@ -33,19 +33,15 @@ namespace detail {
 
 template<typename Filter, typename Device>
 struct composite_mode {
-    typedef typename mode_of<Filter>::type               filter_mode;
-    typedef typename mode_of<Device>::type               device_mode;
-    typedef is_convertible<filter_mode, dual_use>        is_dual_use;
+    typedef typename mode_of<Filter>::type           filter_mode;
+    typedef typename mode_of<Device>::type           device_mode;
+    typedef is_convertible<filter_mode, dual_use>    is_dual_use;
     typedef typename 
-            mpl::eval_if<
-                is_convertible<filter_mode, dual_use>,
-                mpl::if_<
-                    is_convertible<device_mode, input>,
-                    input,
-                    output
-                >,
-                mpl::identity<device_mode>
-            >::type                                      type;
+            mpl::if_<
+                is_convertible<device_mode, input>,
+                input,
+                output
+            >::type                                  type;
 };
 
 //
@@ -58,7 +54,7 @@ struct composite_mode {
 template< typename Filter, 
           typename Device,
           typename Mode = 
-              typename composite_mode<Filter, Device>::type >
+              BOOST_DEDUCED_TYPENAME composite_mode<Filter, Device>::type >
 class composite_device {
 private:
     typedef typename detail::param_type<Device>::type       param_type;
@@ -115,6 +111,7 @@ public:
     struct category
         : mode_of<Filter1>::type,
           filter_tag,
+          multichar_tag,
           closable_tag,
           flushable_tag,
           localizable_tag,
