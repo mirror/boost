@@ -75,14 +75,24 @@ struct nvp :
         Archive & ar, 
         const unsigned int /* file_version */
     ) const {
+        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
+        // CodeWarrior 8.x can't seem to resolve the << op for a rhs of "const T *"
+        ar.operator<<(const_value());
+        #else
         ar << const_value();
+        #endif
     }
     template<class Archive>
     void load(
         Archive & ar, 
         const unsigned int /* file_version */
     ){
+        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
+        // CodeWarrior 8.x can't seem to resolve the >> op for a rhs of "const T *"
+        ar.operator>>(value());
+        #else
         ar >> value();
+        #endif
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
