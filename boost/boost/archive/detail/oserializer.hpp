@@ -548,8 +548,8 @@ struct check_constness {
             mpl::int_<serialization::track_never>,
             serialization::tracking_level<T>
         >
-    >::type type;
-    BOOST_STATIC_CONSTANT(bool, value = type::value);
+    >::type typex;
+    BOOST_STATIC_CONSTANT(bool, value = typex::value);
 };
 
 template<class Archive, class T>
