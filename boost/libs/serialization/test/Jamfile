@@ -48,10 +48,6 @@ rule run-template ( test-name : sources * : requirements * ) {
             toolset::require-boost-spirit-support
             <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-0018 -w-8066"
             <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
-            # inhibit cw linker from removing functions not explicitly referenced
-            <cw-8_3><*><linkflags>"-export dllexport"
-            <cw-9_2><*><linkflags>"-export dllexport"
-            <cw-9_3><*><linkflags>"-export dllexport"
             $(requirements)
         : # test name
             $(test-name)
