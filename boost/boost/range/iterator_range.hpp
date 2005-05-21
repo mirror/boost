@@ -133,7 +133,7 @@ namespace boost
             //! this type
             typedef iterator_range<IteratorT> type;
             //BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(value_type);
-
+        
             //! Encapsulated value type
             typedef BOOST_DEDUCED_TYPENAME 
                 iterator_value<IteratorT>::type value_type;
@@ -141,6 +141,7 @@ namespace boost
             //! Difference type
             typedef BOOST_DEDUCED_TYPENAME 
                 iterator_difference<IteratorT>::type difference_type;
+            
             //! Size type
             typedef std::size_t size_type; // note: must be unsigned
 
@@ -159,6 +160,19 @@ namespace boost
             iterator_range() : m_Begin( iterator() ), m_End( iterator() ), 
                                singular( true )
             { }
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+            iterator_range( this_type r ) :
+            : m_Begin(r.begin()), m_End(r.end())
+            { }
+
+            this_type& operator=( this_type r )
+            {
+                m_Begin = r.begin();
+                m_End   = r.end();
+                return *this;
+            }
+#endif
             
             //! Constructor from a pair of iterators
             template< class Iterator >

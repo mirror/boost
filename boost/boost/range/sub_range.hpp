@@ -39,7 +39,21 @@ namespace boost
     public:
         sub_range() : base() 
         { }
-            
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
+        typedef sub_range<ForwardRange> this_type;
+        
+        sub_range( this_type r ) :
+        : base( r )
+        { }
+
+        this_type& operator=( this_type r )
+        {
+            base::operator=( r );
+            return *this;
+        }
+#endif
+
         template< class ForwardRange2 >
         sub_range( ForwardRange2& r ) : 
             
