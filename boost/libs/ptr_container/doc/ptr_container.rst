@@ -114,7 +114,7 @@ The disadvantages are
 Acknowledgements
 ================
 
-The following people have been helpful:
+The following people have been very helpful:
 
 - Bjørn D. Rasmussen for showing me his cr**** code that motivated me to start this library
 - Pavel Vozenilek for asking me to make the adapters
@@ -126,6 +126,9 @@ The following people have been helpful:
 - Jonathan Turkanis for supplying his ``move_ptr`` framework 
   which is used internally
 - Stefan Slapeta and Howard Hinnant for Metrowerks support
+- Russell Hind for help with Borland compatibility
+- Jonathan Wakely for help with GCC compatibility
+- Pavel Chikulaev for comments and bug-fixes
 
 ==========
 References
