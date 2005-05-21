@@ -84,12 +84,12 @@ BOOST_IOSTREAMS_PIPABLE(tee_filter, 1)
 //      Sink2 - A blocking Sink.
 //
 template<typename Sink1, typename Sink2>
-class tee_device : public detail::basic_adapter<Device> {
+class tee_device {
 public:
     typedef typename detail::param_type<Sink1>::type  param_type1;
     typedef typename detail::param_type<Sink2>::type  param_type2;
-    typedef typename detail::param_type<Sink1>::type  value_type1;
-    typedef typename detail::param_type<Sink2>::type  value_type2;
+    typedef typename detail::value_type<Sink1>::type  value_type1;
+    typedef typename detail::value_type<Sink2>::type  value_type2;
     typedef typename char_type_of<Sink1>::type        char_type;
     BOOST_STATIC_ASSERT((
         is_same<
@@ -109,13 +109,14 @@ public:
     ));
     struct category
         : output,
+          device_tag,
           closable_tag,
           flushable_tag,
           localizable_tag,
           optimally_buffered_tag
         { };
-    explicit tee_filter(param_type dev) 
-        : detail::basic_adapter<Device>(dev) 
+    explicit tee_device(param_type1 sink1, param_type2 sink2) 
+        : sink1_(sink1), sink2_(sink2)
         { }
     std::streamsize write(const char_type* s, std::streamsize n)
     {
@@ -125,8 +126,8 @@ public:
     }
     void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
     { 
-        external_closer<Sink2> close2(sink2_, which);
-        external_closer<Sink1> close1(sink1_, which);
+        detail::external_closer<Sink2> close2(sink2_, which);
+        detail::external_closer<Sink1> close1(sink1_, which);
     }
     bool flush()
     {
@@ -137,8 +138,13 @@ public:
     template<typename Locale>
     void imbue(const Locale& loc)
     {
-        iostreams::imbue(sink1_);
-        iostreams::imbue(sink2_);
+        iostreams::imbue(sink1_, loc);
+        iostreams::imbue(sink2_, loc);
+    }
+    std::streamsize optimal_buffer_size() const 
+    {
+        return (std::max) ( iostreams::optimal_buffer_size(sink1_), 
+                            iostreams::optimal_buffer_size(sink2_) );
     }
 private:
     value_type1 sink1_;
