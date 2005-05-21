@@ -18,6 +18,7 @@
 
 #include <set>
 
+#include <boost/detail/workaround.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <boost/serialization/split_free.hpp>
@@ -107,7 +108,11 @@ public:
                 it !=  m_pointers.end();
                 ++it
             ){
-                delete *it;
+                #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+                    delete const_cast<shared_ptr_holder_base *>(*it);
+                #else
+                    delete *it;
+                #endif
             }
         }
     }
@@ -118,7 +123,7 @@ public:
 // set serialization traits
 // version 1 to distinguis from boost 1.32 version
 template<class T>
-struct version<shared_ptr<T> > {                                                                      \
+struct version< ::boost::shared_ptr<T> > {                                                                      \
     typedef mpl::integral_c_tag tag;
     typedef mpl::int_<1> type;
     BOOST_STATIC_CONSTANT(unsigned int, value = type::value);
@@ -126,7 +131,7 @@ struct version<shared_ptr<T> > {                                                
 
 // don't track shared pointers
 template<class T>
-struct tracking_level<shared_ptr<T> > { 
+struct tracking_level< ::boost::shared_ptr<T> > { 
     typedef mpl::integral_c_tag tag;
     typedef mpl::int_< ::boost::serialization::track_never> type;
     BOOST_STATIC_CONSTANT(int, value = type::value);                                       \
