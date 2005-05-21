@@ -42,13 +42,9 @@ namespace boost
          
     public:
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
-      BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( this_type, 
-                                                        base_class );
-#else
-      BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_deque, 
-                                                        base_class );
-#endif      
+      BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_deque,
+                                                        base_class,
+                                                        this_type );
     };
 
     //////////////////////////////////////////////////////////////////////////////

@@ -67,8 +67,11 @@ namespace boost
 
         typedef BOOST_DEDUCED_TYPENAME remove_nullable<T>::type U;
 
-        ptr_array( const ptr_array& );
-        void operator=( const ptr_array& );
+        typedef ptr_array<T,N,CloneAllocator> 
+                          this_type;
+
+        ptr_array( const this_type& );
+        void operator=( const this_type& );
         
     public:
         typedef U*        value_type;
@@ -82,24 +85,24 @@ namespace boost
         ptr_array() : base_class()
         { }
         
-        ptr_array( std::auto_ptr<ptr_array> r ) 
+        ptr_array( std::auto_ptr<this_type> r ) 
         : base_class( r ) { }            
 
-        void operator=( std::auto_ptr<ptr_array> r )
+        void operator=( std::auto_ptr<this_type> r )
         {
             base_class::operator=(r);
         }
         
-        std::auto_ptr<ptr_array> release()          
+        std::auto_ptr<this_type> release()          
         {                                    
-            std::auto_ptr<ptr_array> ptr( new ptr_array );     
+            std::auto_ptr<this_type> ptr( new this_type );     
             this->swap( *ptr );                  
             return ptr;                          
         }                                    
                 
-        std::auto_ptr<ptr_array> clone() const      
+        std::auto_ptr<this_type> clone() const      
         {                                    
-            std::auto_ptr<ptr_array> pa( new ptr_array );
+            std::auto_ptr<this_type> pa( new this_type );
             for( size_t i = 0; i != N; ++i )
             {
                 if( ! is_null(i) )

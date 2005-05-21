@@ -335,7 +335,11 @@ namespace ptr_container_detail
                                   const allocator_type& a = allocator_type() ) // basic, strong
         : c_( a )
         { 
-            constructor_impl( first, last, BOOST_DEDUCED_TYPENAME
+            constructor_impl( first, last, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#else
+                              BOOST_DEDUCED_TYPENAME
+#endif                              
                               iterator_category<InputIterator>::type() );
         }
 
@@ -343,6 +347,14 @@ namespace ptr_container_detail
         reversible_ptr_container( const Compare& comp,
                                   const allocator_type& a )
         : c_( comp, a ) {}
+
+        template< class PtrContainer, class Compare >
+        reversible_ptr_container( std::auto_ptr<PtrContainer> clone, 
+                                  Compare comp )
+        : c_( comp, allocator_type() )                
+        { 
+            swap( *clone ); 
+        }
 
     public:        
         ~reversible_ptr_container()
@@ -536,30 +548,30 @@ namespace ptr_container_detail
     // two-phase lookup of template functions 
     // is buggy on most compilers, so we use a macro instead
     //
-#define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type ) \
+#define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type ) \
                                                     \
-    PC( std::auto_ptr<PC> r )                       \
+    PC( std::auto_ptr<this_type> r )                \
     : base_type ( r ) { }                           \
                                                     \
-    void operator=( std::auto_ptr<PC> r )           \
+    void operator=( std::auto_ptr<this_type> r )    \
     {                                               \
         base_type::operator=( r );                  \
     }                                               \
                                                     \
-    std::auto_ptr<PC> release()                     \
+    std::auto_ptr<this_type> release()              \
     {                                               \
-      std::auto_ptr<PC> ptr( new PC );              \
+      std::auto_ptr<this_type> ptr( new this_type );\
       this->swap( *ptr );                           \
       return ptr;                                   \
     }                                               \
     BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type ) \
                                                     \
-    std::auto_ptr<PC> clone() const                 \
+    std::auto_ptr<this_type> clone() const          \
     {                                               \
-       return std::auto_ptr<PC>( new PC( this->begin(), this->end() ) ); \
+       return std::auto_ptr<this_type>( new this_type( this->begin(), this->end() ) ); \
     }
 
-#define BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                     \
+#define BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                       \
     typedef BOOST_DEDUCED_TYPENAME base_type::iterator        iterator;                \
     typedef BOOST_DEDUCED_TYPENAME base_type::size_type       size_type;               \
     typedef BOOST_DEDUCED_TYPENAME base_type::const_reference const_reference;         \
@@ -571,9 +583,9 @@ namespace ptr_container_detail
     
 
                  
-#define BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type )           \
-   BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                         \
-   BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type )
+#define BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )           \
+   BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                                    \
+   BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type )
     
     } // namespace 'ptr_container_detail'
 

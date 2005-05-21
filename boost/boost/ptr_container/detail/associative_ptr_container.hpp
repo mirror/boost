@@ -69,7 +69,7 @@ namespace ptr_container_detail
 
        template< class PtrContainer >
        associative_ptr_container( std::auto_ptr<PtrContainer> r ) 
-         : base_type( r )
+         : base_type( r, key_compare() )
        { }
        
        template< class PtrContainer >

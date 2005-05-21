@@ -50,11 +50,9 @@ namespace boost
           : base_type( first, last, comp, a ) 
         { }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( this_type, base_type );
-#else
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type );
-#endif        
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type, 
+                                                      this_type );
+
     };
     
 
@@ -87,13 +85,10 @@ namespace boost
           : base_type( first, last, comp, a ) 
         { }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                 
-        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( this_type, 
-                                                      base_type );
-#else
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multimap, 
-                                                      base_type );
-#endif        
+                                                      base_type,
+                                                      this_type );
+
     };
 
     //////////////////////////////////////////////////////////////////////////////

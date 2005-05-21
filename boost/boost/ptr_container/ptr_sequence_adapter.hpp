@@ -159,11 +159,8 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type;
          
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))         
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( this_type, base_type )
-#else
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, base_type )
-#endif        
+        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
+                                                 base_type )
     
         template< class PtrContainer >
         ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
