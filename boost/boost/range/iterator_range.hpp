@@ -160,7 +160,7 @@ namespace boost
             iterator_range() : m_Begin( iterator() ), m_End( iterator() ), 
                                singular( true )
             { }
-
+/*
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
             iterator_range( this_type r ) :
             : m_Begin(r.begin()), m_End(r.end())
@@ -173,7 +173,7 @@ namespace boost
                 return *this;
             }
 #endif
-            
+*/            
             //! Constructor from a pair of iterators
             template< class Iterator >
             iterator_range( Iterator Begin, Iterator End ) : 
