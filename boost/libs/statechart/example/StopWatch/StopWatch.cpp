@@ -44,6 +44,7 @@
 namespace std
 {
   using ::time;
+  using ::difftime;
   using ::time_t;
 }
 #endif
