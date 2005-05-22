@@ -128,7 +128,6 @@ template <class Derived, class Base>
 class void_caster_primitive : 
     public void_caster
 {
-    static const void_caster_primitive<Derived, Base> instance;
     virtual void const* downcast( void const * t ) const {
         Derived * d = boost::smart_cast<const Derived *, const Base *>(
             static_cast<const Base *>(t)
@@ -143,18 +142,19 @@ class void_caster_primitive :
     }
 
 public:
-    void_caster_primitive() :
-        void_caster( 
-            * type_info_implementation<Derived>::type::get_instance(), 
-            * type_info_implementation<Base>::type::get_instance() 
-        )
-    {
-        this->static_register(& instance);
-    }
-    static const void_caster * instantiate(){
-        return & instance;
-    }
+    static const void_caster_primitive instance;
+    void_caster_primitive() BOOST_USED;
 };
+
+template <class Derived, class Base>
+void_caster_primitive<Derived, Base>::void_caster_primitive() :
+    void_caster( 
+        * type_info_implementation<Derived>::type::get_instance(), 
+        * type_info_implementation<Base>::type::get_instance() 
+    )
+{
+    this->static_register(& instance);
+}
 
 // the purpose of this class is to create to->from and from->to instances
 // of void_caster_primitive for each related pair of types.  This has to be
@@ -170,16 +170,19 @@ const void_caster_primitive<Derived, Base>
 // void pointer from Base to Derived.  Note bogus arguments to workaround
 // bug in msvc 6.0
 template<class Derived, class Base>
-inline BOOST_DLLEXPORT const void *  void_cast_register(
+BOOST_DLLEXPORT const void *  void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ) BOOST_USED;
 template<class Derived, class Base>
-inline BOOST_DLLEXPORT const void * void_cast_register(
+BOOST_DLLEXPORT const void * void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ){
-    return void_cast_detail::void_caster_primitive<const Derived, const Base>::instantiate();
+    return & void_cast_detail::void_caster_primitive<
+        const Derived, 
+        const Base
+    >::instance;
 }
 
 } // namespace serialization
