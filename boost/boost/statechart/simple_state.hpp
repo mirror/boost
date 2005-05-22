@@ -450,7 +450,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       typename rtti_policy_type::id_type eventType )
     {
       this->enable_reaction();
-      typedef typename detail::make_list< typename MostDerived::reactions >::type reaction_list;
+      typedef typename detail::make_list<
+        typename MostDerived::reactions >::type reaction_list;
       result reactionResult = local_react< reaction_list >( evt, eventType );
 
       // At this point we can only safely access pContext_ if the handler did
