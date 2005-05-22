@@ -8,7 +8,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#define _MSL_USING_NAMESPACE 1
+//#define _MSL_USING_NAMESPACE 1
 
 #include <boost/detail/workaround.hpp>
 
