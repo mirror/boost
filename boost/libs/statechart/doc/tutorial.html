@@ -62,7 +62,7 @@ contributed by Mitsuo Fukasawa.</p>
 </dl>
 <hr>
 <h2><a name="Introduction">Introduction</a></h2>
-<p>The Boost Statechart Library is a framework that allows you to quickly transform 
+<p>The Boost Statechart library is a framework that allows you to quickly transform 
 a UML state chart into executable C++ code, <b>without</b> needing to use a 
 code generator. Thanks to support for almost all UML features the 
 transformation is straight-forward and the resulting C++ code is a nearly 
@@ -189,8 +189,8 @@ struct Active;
 struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt; {};
 
 struct Stopped;
-struct Active : sc::simple_state&lt; Active, StopWatch,
-  sc::no_reactions, Stopped &gt; {};
+struct Active : sc::simple_state&lt;
+  Active, StopWatch, Stopped &gt; {};
 struct Running : sc::simple_state&lt; Running, Active &gt; {};
 struct Stopped : sc::simple_state&lt; Stopped, Active &gt; {};
 
@@ -202,15 +202,12 @@ int main()
 }</pre>
 <p>This compiles but doesn't do anything observable yet. A few comments:</p>
 <ul>
-  <li>The <code>simple_state</code> class template accepts up to five 
+  <li>The <code>simple_state</code> class template accepts up to four 
   parameters:<ul>
-    <li>The third parameter specifies <a href="definitions.html#Reaction">
-    reactions</a> (explained in due course). Because there aren't any yet, we 
-    pass <code>no_reactions</code>, which is also the default</li>
-    <li>The fourth parameter specifies the inner initial state, if there is 
+    <li>The third parameter specifies the inner initial state, if there is 
     one. Here, only Active has inner states, which is why it needs to pass its 
     inner initial state Stopped to its base</li>
-    <li>The fifth parameter specifies whether and what kind of history is kept</li>
+    <li>The fourth parameter specifies whether and what kind of history is kept</li>
   </ul>
   </li>
   <li>A state is defined as an inner state simply by passing its outer state 
@@ -234,12 +231,20 @@ insert</b> the bold parts of the following code:</p>
 // ...
 
 struct Stopped;
-struct Active : sc::simple_state&lt; Active, StopWatch,
-  <b>sc::transition&lt; EvReset, Active &gt;</b>, Stopped &gt; {};
-struct Running : sc::simple_state&lt; Running, Active<b>,
-</b>  <b>sc::transition&lt; EvStartStop, Stopped &gt;</b> &gt; {};
-struct Stopped : sc::simple_state&lt; Stopped, Active<b>,
-</b>  <b>sc::transition&lt; EvStartStop, Running &gt;</b> &gt; {};
+struct Active : sc::simple_state&lt; Active, StopWatch, Stopped &gt;
+{
+  <b>typedef sc::transition&lt; EvReset, Active &gt; reactions;</b>
+};
+
+struct Running : sc::simple_state&lt; Running, Active &gt;
+{
+  <b>typedef sc::transition&lt; EvStartStop, Stopped &gt; reactions;</b>
+};
+
+struct Stopped : sc::simple_state&lt; Stopped, Active &gt;
+{
+  <b>typedef sc::transition&lt; EvStartStop, Running &gt; reactions;</b>
+};
 
 int main()
 {
@@ -278,22 +283,24 @@ add the result to the elapsed time.</p>
 // ...
 
 struct Stopped;
-struct Active : sc::simple_state&lt; Active, StopWatch,
-  sc::transition&lt; EvReset, Active &gt;, Stopped &gt;
+struct Active : sc::simple_state&lt; Active, StopWatch, Stopped &gt;
 {
-  <b>public:
-</b>    <b>Active() : elapsedTime_( 0.0 ) {}
+  <b>public:</b>
+    typedef sc::transition&lt; EvReset, Active &gt; reactions;
+
+    <b>Active() : elapsedTime_( 0.0 ) {}
 </b>    <b>double ElapsedTime() const { return elapsedTime_; }
 </b>    <b>double &amp; ElapsedTime() { return elapsedTime_; }
 </b>  <b>private:
 </b>    <b>double elapsedTime_;
 </b>};
 
-struct Running : sc::simple_state&lt; Running, Active,
-  sc::transition&lt; EvStartStop, Stopped &gt; &gt;
+struct Running : sc::simple_state&lt; Running, Active &gt;
 {
-  <b>public:
-</b>    <b>Running() : startTime_( std::time( 0 ) ) {}
+  <b>public:</b>
+    typedef sc::transition&lt; EvStartStop, Stopped &gt; reactions;
+
+    <b>Running() : startTime_( std::time( 0 ) ) {}
 </b>    <b>~Running()
 </b>    <b>{
 </b>      <b>context&lt; Active &gt;().ElapsedTime() +=
@@ -346,10 +353,12 @@ struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt;
 <b>
 </b>// ...
 
-struct Running : <b>IElapsedTime,</b> sc::simple_state&lt;
-  Running, Active, sc::transition&lt; EvStartStop, Stopped &gt; &gt;
+struct Running : <b>IElapsedTime,</b>
+  sc::simple_state&lt; Running, Active &gt;
 {
   public:
+    typedef sc::transition&lt; EvStartStop, Stopped &gt; reactions;
+
     Running() : startTime_( std::time( 0 ) ) {}
     ~Running()
     {
@@ -365,9 +374,11 @@ struct Running : <b>IElapsedTime,</b> sc::simple_state&lt;
     std::time_t startTime_;
 };
 
-struct Stopped : <b>IElapsedTime,</b> sc::simple_state&lt;
-  Stopped, Active, sc::transition&lt; EvStartStop, Running &gt; &gt;
+struct Stopped : <b>IElapsedTime,</b>
+  sc::simple_state&lt; Stopped, Active &gt;
 {
+  typedef sc::transition&lt; EvStartStop, Running &gt; reactions;
+
   <b>virtual double ElapsedTime() const
 </b>  <b>{
 </b>    <b>return context&lt; Active &gt;().ElapsedTime();
@@ -479,16 +490,19 @@ struct Camera : sc::state_machine&lt; Camera, NotShooting &gt;
 };
 
 struct Idle;
-struct NotShooting : sc::simple_state&lt; NotShooting, Camera,
-  <b>sc::custom_reaction&lt; EvShutterHalf &gt;</b>, Idle &gt;
+struct NotShooting : sc::simple_state&lt;
+  NotShooting, Camera, Idle &gt;
 {
+  <b>typedef sc::custom_reaction&lt; EvShutterHalf &gt; reactions;</b>
+
   // ...
   <b>sc::result react( const EvShutterHalf &amp; );</b>
 };
 
-struct Idle : sc::simple_state&lt; Idle, NotShooting,
-  <b>sc::custom_reaction&lt; EvConfig &gt;</b> &gt;
+struct Idle : sc::simple_state&lt; Idle, NotShooting &gt;
 {
+  <b>typedef sc::custom_reaction&lt; EvConfig &gt; reactions;</b>
+
   // ...
   <b>sc::result react( const EvConfig &amp; );</b>
 };
@@ -541,10 +555,13 @@ after the camera has finished focusing. To prevent this, the EvShutterFull
 event is deferred inside the Focusing state. This means that all events of 
 this type are stored in a separate queue, which is emptied into the main queue 
 when the Focusing state is exited.</p>
-<pre>struct Focusing : sc::state&lt; Focusing, Shooting, mpl::list&lt;
-  sc::custom_reaction&lt; EvInFocus &gt;,
-  <b>sc::deferral&lt; EvShutterFull &gt;</b> &gt; &gt;
+<pre>struct Focusing : sc::state&lt; Focusing, Shooting &gt;
 {
+  typedef mpl::list&lt;
+    sc::custom_reaction&lt; EvInFocus &gt;,
+    <b>sc::deferral&lt; EvShutterFull &gt;</b>
+  &gt; reactions;
+
   Focusing( my_context ctx );
   sc::result react( const EvInFocus &amp; );
 };</pre>
@@ -554,10 +571,11 @@ boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a
 differently allocated event will result in a failing runtime assert. Example:</p>
 <pre>struct Event : sc::event&lt; Event &gt; {};
 struct Initial;
-struct Machine : sc::state_machine&lt;
-  Machine, Initial &gt; {};
-struct Initial : sc::simple_state&lt; Initial, Machine,
-  sc::deferral&lt; Event &gt; &gt; {};
+struct Machine : sc::state_machine&lt; Machine, Initial &gt; {};
+struct Initial : sc::simple_state&lt; Initial, Machine &gt;
+{
+  typedef sc::deferral&lt; Event &gt; reactions;
+};
 
 int main()
 {
@@ -656,9 +674,11 @@ implemented as follows:</p>
 <p>Shooting.hpp:</p>
 <pre>// ...
 struct Focusing;
-struct Shooting : sc::simple_state&lt; Shooting, Camera,
-  sc::transition&lt; EvShutterRelease, NotShooting &gt;, Focusing &gt;
+struct Shooting : sc::simple_state&lt; Shooting, Camera, Focusing &gt;
 {
+  typedef sc::transition&lt;
+    EvShutterRelease, NotShooting &gt; reactions; 
+
   // ...
   <b>void DisplayFocused( const EvInFocus &amp; );</b>
 };
@@ -666,9 +686,11 @@ struct Shooting : sc::simple_state&lt; Shooting, Camera,
 // ...
 
 // not part of the Camera example
-struct Focusing : sc::simple_state&lt; Focusing, Shooting,
-  sc::transition&lt; EvInFocus, Focused<b>,</b>
-    <b>Shooting, &amp;Shooting::DisplayFocused</b> &gt; &gt; {};</pre>
+struct Focusing : sc::simple_state&lt; Focusing, Shooting &gt;
+{
+  typedef sc::transition&lt; EvInFocus, Focused<b>,</b>
+    <b>Shooting, &amp;Shooting::DisplayFocused</b> &gt; reactions;
+};</pre>
 <p><b>Or</b>, the following is also possible (here the state machine itself 
 serves as the outermost context):</p>
 <pre>// not part of the Camera example
@@ -677,9 +699,11 @@ struct Camera : sc::state_machine&lt; Camera, NotShooting &gt;
   <b>void DisplayFocused( const EvInFocus &amp; );</b>
 };</pre>
 <pre>// not part of the Camera example
-struct Focusing : sc::simple_state&lt; Focusing, Shooting,
-  sc::transition&lt; EvInFocus, Focused<b>,</b>
-    <b>Camera, &amp;Camera::DisplayFocused</b> &gt; &gt; {};</pre>
+struct Focusing : sc::simple_state&lt; Focusing, Shooting &gt;
+{
+  typedef sc::transition&lt; EvInFocus, Focused<b>,</b>
+    <b>Camera, &amp;Camera::DisplayFocused</b> &gt; reactions;
+};</pre>
 <p>Naturally, transition actions can also be invoked from custom reactions:</p>
 <p>Shooting.cpp:</p>
 <pre>// ...
@@ -701,10 +725,14 @@ an <code>mpl::list&lt;&gt;</code> must be used as outlined below:</p>
 </b>
 // ...
 
-struct Playing : sc::simple_state&lt; Playing, Mp3Player,
-  <b>mpl::list&lt;</b>
+struct Playing : sc::simple_state&lt; Playing, Mp3Player &gt;
+{
+  typdef <b>mpl::list&lt;</b>
     sc::custom_reaction&lt; EvFastForward &gt;,
-    sc::transition&lt; EvStop, Stopped &gt; <b>&gt;</b> &gt; { /* ... */ };</pre>
+    sc::transition&lt; EvStop, Stopped &gt; <b>&gt;</b> reactions;
+
+  /* ... */
+};</pre>
 <h3><a name="Posting events">Posting events</a></h3>
 <p>Non-trivial state machines often need to post internal events. Here's an 
 example of how to do this: </p>
@@ -768,18 +796,19 @@ state down to the <a href="definitions.html#Innermost state">innermost state</a>
 in Configuring, that's why we use a deep history pseudo state. The associated 
 code looks as follows:</p>
 <pre>// not part of the Camera example
-struct NotShooting : sc::simple_state&lt; NotShooting, Camera,
-  /* ... */, Idle, <b>sc::has_deep_history</b> &gt; //
+struct NotShooting : sc::simple_state&lt;
+  NotShooting, Camera, Idle, <b>sc::has_deep_history</b> &gt;
 {
   // ...
 };
 
 // ...
 
-struct Shooting : sc::simple_state&lt; Shooting, Camera,
-  sc::transition&lt; EvShutterRelease,
-    <b>sc::deep_history&lt; Idle &gt;</b> &gt;, Focusing &gt;
+struct Shooting : sc::simple_state&lt; Shooting, Camera, Focusing &gt;
 {
+  typedef sc::transition&lt;
+    EvShutterRelease, <b>sc::deep_history&lt; Idle &gt;</b> &gt; reactions;
+
   // ...
 };
 </pre>
@@ -809,7 +838,7 @@ when they turn it back on. Here's the implementation:</p>
 
 // not part of the Camera example
 struct NotShooting : sc::simple_state&lt; NotShooting, Camera,
-  /* ... */, <b>mpl::list&lt; sc::deep_history&lt; Idle &gt; &gt;</b>,
+  <b>mpl::list&lt; sc::deep_history&lt; Idle &gt; &gt;</b>,
   <b>sc::has_deep_history</b> &gt;
 {
   // ...
@@ -832,8 +861,7 @@ struct Keyboard : sc::state_machine&lt; Keyboard, Active &gt; {};
 struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
-struct Active: sc::simple_state&lt;
-  Active, Keyboard, sc::no_reactions,
+struct Active: sc::simple_state&lt; Active, Keyboard,
   <b>mpl::list&lt; NumLockOff, CapsLockOff, ScrollLockOff &gt;</b> &gt; {};</pre>
 <p>Active's inner states must declare which orthogonal region they belong to:</p>
 <pre>struct EvNumLockPressed : sc::event&lt; EvNumLockPressed &gt; {};
@@ -842,25 +870,46 @@ struct EvScrollLockPressed :
   sc::event&lt; EvScrollLockPressed &gt; {};
 
 struct NumLockOn : sc::simple_state&lt;
-  NumLockOn, Active<b>::orthogonal&lt; 0 &gt;</b>,
-  sc::transition&lt; EvNumLockPressed, NumLockOff &gt; &gt; {};
+  NumLockOn, Active<b>::orthogonal&lt; 0 &gt;</b> &gt;
+{
+  typedef sc::transition&lt;
+    EvNumLockPressed, NumLockOff &gt; reactions;
+};
+
 struct NumLockOff : sc::simple_state&lt;
-  NumLockOff, Active<b>::orthogonal&lt; 0 &gt;</b>,
-  sc::transition&lt; EvNumLockPressed, NumLockOn &gt; &gt; {};
+  NumLockOff, Active<b>::orthogonal&lt; 0 &gt;</b> &gt;
+{
+  typedef sc::transition&lt;
+    EvNumLockPressed, NumLockOn &gt; reactions;
+};
 
 struct CapsLockOn : sc::simple_state&lt;
-  CapsLockOn, Active<b>::orthogonal&lt; 1 &gt;</b>,
-  sc::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
+  CapsLockOn, Active<b>::orthogonal&lt; 1 &gt;</b> &gt;
+{
+  typedef sc::transition&lt;
+    EvCapsLockPressed, CapsLockOff &gt; reactions;
+};
+
 struct CapsLockOff : sc::simple_state&lt;
-  CapsLockOff, Active<b>::orthogonal&lt; 1 &gt;</b>,
-  sc::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};
+  CapsLockOff, Active<b>::orthogonal&lt; 1 &gt;</b> &gt;
+{
+  typedef sc::transition&lt;
+    EvCapsLockPressed, CapsLockOn &gt; reactions;
+};
 
 struct ScrollLockOn : sc::simple_state&lt;
-  ScrollLockOn, Active<b>::orthogonal&lt; 2 &gt;</b>,
-  sc::transition&lt; EvScrollLockPressed, ScrollLockOff &gt; &gt; {};
+  ScrollLockOn, Active<b>::orthogonal&lt; 2 &gt;</b> &gt;
+{
+  typedef sc::transition&lt;
+    EvScrollLockPressed, ScrollLockOff &gt; reactions;
+};
+
 struct ScrollLockOff : sc::simple_state&lt;
-  ScrollLockOff, Active<b>::orthogonal&lt; 2 &gt;</b>,
-  sc::transition&lt; EvScrollLockPressed, ScrollLockOn &gt; &gt; {};</pre>
+  ScrollLockOff, Active<b>::orthogonal&lt; 2 &gt;</b> &gt;
+{
+  typedef sc::transition&lt;
+    EvScrollLockPressed, ScrollLockOn &gt; reactions; 
+};</pre>
 <p><code>orthogonal&lt; 0 &gt;</code> is the default, so <code>NumLockOn</code> and
 <code>NumLockOff</code> could just as well pass <code>Active</code> instead of
 <code>Active::orthogonal&lt; 0 &gt;</code> to specify their context. The numbers 
@@ -882,11 +931,18 @@ struct NumLockOff : sc::simple_state&lt;
 // Example 3: does not compile because a transition between
 // different orthogonal regions is not permitted
 struct CapsLockOn : sc::simple_state&lt;
-  CapsLockOn, Active<b>::</b>orthogonal&lt; <b>1</b> &gt;,
-  sc::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
+  CapsLockOn, Active<b>::</b>orthogonal&lt; <b>1</b> &gt; &gt;
+{
+  typedef sc::transition&lt;
+    EvCapsLockPressed, CapsLockOff &gt; reactions;
+};
+
 struct CapsLockOff : sc::simple_state&lt;
-  CapsLockOff, Active<b>::</b>orthogonal&lt; <b>2</b> &gt;,
-  sc::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};</pre>
+  CapsLockOff, Active<b>::</b>orthogonal&lt; <b>2</b> &gt; &gt;
+{
+  typedef sc::transition&lt;
+    EvCapsLockPressed, CapsLockOn &gt; reactions;
+};</pre>
 <h3><a name="State queries">State queries</a></h3>
 <p>Often reactions in a state machine depend on the active state in one or 
 more orthogonal regions. This is because orthogonal regions are not completely 
@@ -905,10 +961,11 @@ follows: </p>
 struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
-struct Active: sc::simple_state&lt;
-  Active, Keyboard, sc::custom_reaction&lt; EvRequestShutdown &gt;,
+struct Active: sc::simple_state&lt; Active, Keyboard, 
   mpl::list&lt; NumLockOff, CapsLockOff, ScrollLockOff &gt; &gt;
 {
+  typedef sc::custom_reaction&lt; EvRequestShutdown &gt; reactions;
+
   sc::result react( const EvRequestShutdown &amp; )
   {
     if ( ( state_downcast&lt; const NumLockOff * &gt;() != 0 ) &amp;&amp;
@@ -959,6 +1016,8 @@ configuration as follows (see the Keyboard example for the complete code):</p>
     pLeafState != kbd.state_end(); ++pLeafState )
   {
     std::cout &lt;&lt; &quot;Orthogonal region &quot; &lt;&lt; region &lt;&lt; &quot;: &quot;;
+    // The following use of typeid assumes that
+    // BOOST_STATECHART_USE_NATIVE_RTTI is defined
     std::cout &lt;&lt; typeid( *pLeafState ).name() &lt;&lt; &quot;\n&quot;;
     ++region;
   }
@@ -1159,11 +1218,13 @@ the catch block, we can rethrow and catch the exception in a custom reaction:</p
 
 // Pretend this is a state deeply nested in the Purifier
 // state machine
-struct Idle : sc::simple_state&lt; Idle, Purifier,
-  mpl::list&lt;
-    sc::custom_reaction&lt; EvStart &gt;,
-    sc::custom_reaction&lt; sc::exception_thrown &gt; &gt; &gt;
+struct Idle : sc::simple_state&lt; Idle, Purifier &gt;
 {
+  typedef mpl::list&lt;
+    sc::custom_reaction&lt; EvStart &gt;,
+    sc::custom_reaction&lt; sc::exception_thrown &gt;
+  &gt; reactions; 
+
   sc::result react( const EvStart &amp; )
   {
     throw std::runtime_error( &quot;&quot; );
@@ -1263,7 +1324,7 @@ copy-paste implementation of the keyboard machine discussed under
 template&lt; LockType lockType &gt;
 struct Off;
 struct Active : sc::simple_state&lt;
-  Active, Keyboard, sc::no_reactions, mpl::list&lt;
+  Active, Keyboard, mpl::list&lt;
   Off&lt; NUM_LOCK &gt;, Off&lt; CAPS_LOCK &gt;, Off&lt; SCROLL_LOCK &gt; &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
@@ -1271,13 +1332,19 @@ struct EvPressed : sc::event&lt; EvPressed&lt; lockType &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
 struct On : sc::simple_state&lt;
-  On&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
-  sc::transition&lt; EvPressed&lt; lockType &gt;, Off&lt; lockType &gt; &gt; &gt; {};
+  On&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt; &gt;
+{
+  typedef sc::transition&lt;
+    EvPressed&lt; lockType &gt;, Off&lt; lockType &gt; &gt; reactions;
+};
 
 template&lt; LockType lockType &gt;
 struct Off : sc::simple_state&lt;
-  Off&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
-  sc::transition&lt; EvPressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; &gt; {};</pre>
+  Off&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt; &gt;
+{
+  typedef sc::transition&lt;
+    EvPressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; reactions;
+};</pre>
 <h3><a name="Asynchronous state machines">Asynchronous state machines</a></h3>
 <h4>Why asynchronous state machines are necessary</h4>
 <p>As the name suggests, a synchronous state machine processes each event 
@@ -1371,10 +1438,10 @@ int main()
 {
   // ...
 
-  boost::thread thread1(
-    boost::bind( &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
-  boost::thread thread2(
-    boost::bind( &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
+  boost::thread thread1( boost::bind(
+    &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
+  boost::thread thread2( boost::bind(
+    &amp;sc::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
 
   // do something else ...
 
@@ -1405,7 +1472,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
