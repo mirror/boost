@@ -141,11 +141,11 @@ struct guid_initializer {
         eti->key_register(key);
     }
     static const guid_initializer instance;
-    /* BOOST_DLLEXPORT */  guid_initializer(const char *key = NULL) BOOST_USED ;
+    guid_initializer(const char *key = NULL) BOOST_USED ;
 };
 
 template<class T>
-/* BOOST_DLLEXPORT */ guid_initializer<T>::guid_initializer(const char *key){
+guid_initializer<T>::guid_initializer(const char *key){
     if(NULL != key)
         key_register(key);
 }
