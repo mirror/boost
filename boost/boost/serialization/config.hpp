@@ -52,9 +52,7 @@
 
 //  enable automatic library variant selection  ------------------------------// 
 
-#if defined(IMPORT) \
-&& !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SERIALIZATION_NO_LIB)
-#undef IMPORT
+#if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SERIALIZATION_NO_LIB)
 //
 // Set the name of our library, this will get undef'ed by auto_link.hpp
 // once it's done with it:
@@ -63,13 +61,21 @@
 //
 // If we're importing code from a dll, then tell auto_link.hpp about it:
 //
+
+#if defined(IMPORT)
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK)
 #  define BOOST_DYN_LINK
 #endif
+#endif
+
 //
 // And include the header that does the work:
 //
 #include <boost/config/auto_link.hpp>
 #endif  // auto-linking disabled
+
+#if defined(IMPORT)
+#undef IMPORT
+#endif
 
 #endif // BOOST_SERIALIZATION_CONFIG_HPP
