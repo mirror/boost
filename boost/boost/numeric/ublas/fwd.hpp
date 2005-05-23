@@ -145,11 +145,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Triangular matrix parameterisation
     template <class Z = std::size_t>
-    class basic_full;
+    struct basic_full;
     typedef basic_full<> full;
 
     template <class Z = std::size_t>
-    class basic_lower;
+    struct basic_lower;
     typedef basic_lower<> lower;
 
     template <class Z = std::size_t>
