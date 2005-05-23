@@ -884,7 +884,7 @@ ccl_node::ccl_node(const std::vector<uchar>& v)
 inline
 ccl_node::ccl_node(const uchar c1, const uchar c2)
     : node()
-    , m_match(256, 0)
+    , m_match(256, uchar(0))
     , m_node_num(0)
 {
     BOOST_ASSERT(c1 < c2);
