@@ -898,7 +898,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_assign (M &m, const matrix_expression<E> &e, sparse_tag, row_major_tag) {
-        typedef F<typename M::reference, typename E::value_type> functor_type;
+        typedef F<typename M::iterator2::reference, typename E::value_type> functor_type;
         // R unnecessary, make_conformant not required
         BOOST_STATIC_ASSERT ((!functor_type::computed));
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
@@ -930,7 +930,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_assign (M &m, const matrix_expression<E> &e, sparse_tag, column_major_tag) {
-        typedef F<typename M::reference, typename E::value_type> functor_type;
+        typedef F<typename M::iterator1::reference, typename E::value_type> functor_type;
         // R unnecessary, make_conformant not required
         BOOST_STATIC_ASSERT ((!functor_type::computed));
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
@@ -1248,7 +1248,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_swap (M &m, matrix_expression<E> &e, dense_proxy_tag, row_major_tag) {
-        typedef F<typename M::reference, typename E::reference> functor_type;
+        typedef F<typename M::iterator2::reference, typename E::reference> functor_type;
         // R unnecessary, make_conformant not required
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1274,7 +1274,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_swap (M &m, matrix_expression<E> &e, dense_proxy_tag, column_major_tag) {
-        typedef F<typename M::reference, typename E::reference> functor_type;
+        typedef F<typename M::iterator1::reference, typename E::reference> functor_type;
         // R unnecessary, make_conformant not required
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1300,7 +1300,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_swap (M &m, matrix_expression<E> &e, packed_proxy_tag, row_major_tag) {
-        typedef F<typename M::reference, typename E::reference> functor_type;
+        typedef F<typename M::iterator2::reference, typename E::reference> functor_type;
         // R unnecessary, make_conformant not required
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1326,7 +1326,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_swap (M &m, matrix_expression<E> &e, packed_proxy_tag, column_major_tag) {
-        typedef F<typename M::reference, typename E::reference> functor_type;
+        typedef F<typename M::iterator1::reference, typename E::reference> functor_type;
         // R unnecessary, make_conformant not required
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1352,7 +1352,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_swap (M &m, matrix_expression<E> &e, sparse_proxy_tag, row_major_tag) {
-        typedef F<typename M::reference, typename E::reference> functor_type;
+        typedef F<typename M::iterator2::reference, typename E::reference> functor_type;
         typedef R conformant_restrict_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1477,7 +1477,7 @@ namespace detail {
     template<template <class T1, class T2> class F, class R, class M, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
     void matrix_swap (M &m, matrix_expression<E> &e, sparse_proxy_tag, column_major_tag) {
-        typedef F<typename M::reference, typename E::reference> functor_type;
+        typedef F<typename M::iterator1::reference, typename E::reference> functor_type;
         typedef R conformant_restrict_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
