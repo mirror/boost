@@ -1049,7 +1049,7 @@ assert ( optX != optZ ) ;
 <pre>bool operator &gt; ( optional&lt;T&gt; const&amp x, optional&lt;T&gt const&amp y );
 </pre>
 <blockquote>
-  <p><b>Returns:</b> !( y &lt; x );</p>
+  <p><b>Returns:</b> ( y &lt; x );</p>
   <p><b>Throws:</b> Nothing.</p>
 </blockquote>
 
@@ -1428,10 +1428,10 @@ public:
 
 <H2><A NAME="bool">A note about optional&lt;bool&gt;</A></H2>
 <p><code>optional&lt;bool&gt;</code> should be used with special caution and consideration.</p>
-<p>First, it is functionally similar to a tristate boolean (false,maybe,true) &mdash;such as <u>boost::tribool</u> (not yet formally in boost)&mdash;except that in a tristate boolean,
+<p>First, it is functionally similar to a tristate boolean (false,maybe,true) &mdash;such as <a href="http://www.boost.org/doc/html/tribool.html">boost::tribool</a>&mdash;except that in a tristate boolean,
 the <i>maybe</i> state <u>represents a valid value</u>, unlike the corresponding state
 of an uninitialized optional&lt;bool&gt;.<br>
-It should be carefully considered if an optional bool instead of a tribool is really needed</p>
+It should be carefully considered if an optional&lt;bool&gt; instead of a tribool is really needed</p>
 <p>Second, optional&lt;&gt; provides an implicit conversion to bool. This conversion
   refers to the initialization state and not to the contained value.<br>
 Using optional&lt;bool&gt; can lead to subtle errors due to the implicit bool conversion:</p>
