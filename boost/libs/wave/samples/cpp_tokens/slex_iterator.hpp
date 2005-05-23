@@ -54,7 +54,7 @@ public:
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
     typedef TokenT result_type;
 
-    /*static*/ result_type const eof;
+    static result_type const eof;
     
     result_type operator()() 
     { 
@@ -73,10 +73,10 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
-//template <typename TokenT>
-//typename slex_iterator_functor_shim<TokenT>::result_type const
-//    slex_iterator_functor_shim<TokenT>::eof = 
-//        typename slex_iterator_functor_shim<TokenT>::result_type();
+template <typename TokenT>
+typename slex_iterator_functor_shim<TokenT>::result_type const
+    slex_iterator_functor_shim<TokenT>::eof = 
+        typename slex_iterator_functor_shim<TokenT>::result_type();
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl
