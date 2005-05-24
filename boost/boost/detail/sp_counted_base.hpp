@@ -35,7 +35,7 @@
 
 //~ # include <boost/detail/sp_counted_base_cw_x86.hpp>
 
-#elif defined( __GNUC__ ) && defined( __ia64__ )
+#elif defined( __GNUC__ ) && defined( __ia64__ ) && !defined( __INTEL_COMPILER )
 
 # include <boost/detail/sp_counted_base_gcc_ia64.hpp>
 
