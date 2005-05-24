@@ -197,11 +197,11 @@ class basic_iarchive_impl
 
     //////////////////////////////////////////////////////////////////////
     // list of serialization helpers
+    // at least one compiler sunpro 5.3 erroneously doesn't give access to embedded structs
     struct helper_compare;
+    friend struct helper_compare;
 
     struct helper_type {
-        // at least one compiler sunpro 5.3 erroneously doesn't give access to embedded structs
-        friend struct helper_compare;
         boost::serialization::basic_helper * m_helper;
         const boost::serialization::extended_type_info * m_eti;
         helper_type(
