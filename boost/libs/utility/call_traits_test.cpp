@@ -445,7 +445,7 @@ template struct call_traits_test<int[2], true>;
 #endif
 
 #if defined(BOOST_MSVC) && _MSC_VER <= 1300
-unsigned int expected_failures = 14;
+unsigned int expected_failures = 12;
 #elif defined(__SUNPRO_CC)
 #if(__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 18;
