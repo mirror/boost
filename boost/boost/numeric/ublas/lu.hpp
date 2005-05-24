@@ -22,6 +22,7 @@
 #include <boost/numeric/ublas/operation.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/detail/matrix_assign.hpp>
 
 
 namespace boost { namespace numeric { namespace ublas {
@@ -110,8 +111,9 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (singular != 0 ||
-                           equals (prod (triangular_adaptor<matrix_type, unit_lower> (m),
-                                         triangular_adaptor<matrix_type, upper> (m)), cm), internal_logic ());
+                           detail::expression_type_check (prod (triangular_adaptor<matrix_type, unit_lower> (m),
+                                                                triangular_adaptor<matrix_type, upper> (m)), 
+                                                          cm), internal_logic ());
 #endif
         return singular;
     }
@@ -153,8 +155,8 @@ namespace boost { namespace numeric { namespace ublas {
 #if BOOST_UBLAS_TYPE_CHECK
         swap_rows (pm, cm);
         BOOST_UBLAS_CHECK (singular != 0 ||
-                           equals (prod (triangular_adaptor<matrix_type, unit_lower> (m),
-                                         triangular_adaptor<matrix_type, upper> (m)), cm), internal_logic ());
+                           detail::expression_type_check (prod (triangular_adaptor<matrix_type, unit_lower> (m),
+                                                                triangular_adaptor<matrix_type, upper> (m)), cm), internal_logic ());
 #endif
         return singular;
     }
@@ -245,8 +247,8 @@ namespace boost { namespace numeric { namespace ublas {
 #if BOOST_UBLAS_TYPE_CHECK
         swap_rows (pm, cm);
         BOOST_UBLAS_CHECK (singular != 0 ||
-                           equals (prod (triangular_adaptor<matrix_type, unit_lower> (m),
-                                         triangular_adaptor<matrix_type, upper> (m)), cm), internal_logic ());
+                           detail::expression_type_check (prod (triangular_adaptor<matrix_type, unit_lower> (m),
+                                                                triangular_adaptor<matrix_type, upper> (m)), cm), internal_logic ());
 #endif
         return singular;
     }
@@ -262,12 +264,12 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         inplace_solve (m, e, unit_lower_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), e), cv1), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), e), cv1), internal_logic ());
         vector_type cv2 (e);
 #endif
         inplace_solve (m, e, upper_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, upper> (m), e), cv2), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (triangular_adaptor<const_matrix_type, upper> (m), e), cv2), internal_logic ());
 #endif
     }
     template<class M, class E>
@@ -280,12 +282,12 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         inplace_solve (m, e, unit_lower_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), e), cm1), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (triangular_adaptor<const_matrix_type, unit_lower> (m), e), cm1), internal_logic ());
         matrix_type cm2 (e);
 #endif
         inplace_solve (m, e, upper_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (triangular_adaptor<const_matrix_type, upper> (m), e), cm2), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (triangular_adaptor<const_matrix_type, upper> (m), e), cm2), internal_logic ());
 #endif
     }
     template<class M, class PMT, class PMA, class MV>
@@ -303,12 +305,12 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         inplace_solve (e, m, upper_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, upper> (m)), cv1), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (e, triangular_adaptor<const_matrix_type, upper> (m)), cv1), internal_logic ());
         vector_type cv2 (e);
 #endif
         inplace_solve (e, m, unit_lower_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, unit_lower> (m)), cv2), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (e, triangular_adaptor<const_matrix_type, unit_lower> (m)), cv2), internal_logic ());
 #endif
     }
     template<class E, class M>
@@ -321,12 +323,12 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         inplace_solve (e, m, upper_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, upper> (m)), cm1), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (e, triangular_adaptor<const_matrix_type, upper> (m)), cm1), internal_logic ());
         matrix_type cm2 (e);
 #endif
         inplace_solve (e, m, unit_lower_tag ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (prod (e, triangular_adaptor<const_matrix_type, unit_lower> (m)), cm2), internal_logic ());
+        BOOST_UBLAS_CHECK (detail::expression_type_check (prod (e, triangular_adaptor<const_matrix_type, unit_lower> (m)), cm2), internal_logic ());
 #endif
     }
     template<class MV, class M, class PMT, class PMA>
