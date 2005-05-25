@@ -1,4 +1,4 @@
-/* A simple example for using a time_zone and a posix_time_zone.
+/* A simple example for using a custom_time_zone and a posix_time_zone.
  */
 
 #include "boost/date_time/local_time/local_time.hpp"
@@ -12,9 +12,9 @@ main()
   using namespace gregorian;
   using posix_time::time_duration;
 
-  /***** time_zone *****/
+  /***** custom_time_zone *****/
   
-  // create the dependent objects for a time_zone
+  // create the dependent objects for a custom_time_zone
   time_zone_names tzn("Eastern Standard Time", "EST",
                       "Eastern Daylight Time", "EDT");
   time_duration utc_offset(-5,0,0);
@@ -29,7 +29,7 @@ main()
   last_day_of_the_week_in_month    end_rule(Sunday, Oct);
   shared_ptr<dst_calc_rule> nyc_rules(new first_last_dst_rule(start_rule, 
                                                               end_rule));
-  // create more dependent objects for a non-dst time_zone
+  // create more dependent objects for a non-dst custom_time_zone
   time_zone_names tzn2("Mountain Standard Time", "MST",
                        "", ""); // no dst means empty dst strings
   time_duration utc_offset2(-7,0,0);
@@ -39,14 +39,14 @@ main()
   // no dst means we need a null pointer to the rules
   shared_ptr<dst_calc_rule> phx_rules;
 
-  // create the time_zones
-  time_zone_ptr nyc_1(new time_zone(tzn, utc_offset, adj_offsets, nyc_rules));
-  time_zone_ptr phx_1(new time_zone(tzn2, utc_offset2, adj_offsets2, phx_rules));
+  // create the custom_time_zones
+  time_zone_ptr nyc_1(new custom_time_zone(tzn, utc_offset, adj_offsets, nyc_rules));
+  time_zone_ptr phx_1(new custom_time_zone(tzn2, utc_offset2, adj_offsets2, phx_rules));
 
   /***** posix_time_zone *****/
 
   // create posix_time_zones that are the duplicates of the 
-  // time_zones created above. See posix_time_zone documentation 
+  // custom_time_zones created above. See posix_time_zone documentation 
   // for details on full zone names.
   std::string nyc_string, phx_string;
   nyc_string = "EST-05:00:00EDT+01:00:00,M4.1.0/02:00:00,M10.5.0/02:00:00";

@@ -12,7 +12,6 @@ main()
 {
 
   using namespace boost::gregorian;
-  typedef boost::date_time::month_functor<date> add_month;
 
   date d = day_clock::local_day();
   date d2 = d + months(1); 
@@ -44,7 +43,7 @@ main()
   return 0;
 }
 
-/*  Copyright 2001-2004: CrystalClear Software, Inc
+/*  Copyright 2001-2005: CrystalClear Software, Inc
  *  http://www.crystalclearsoftware.com
  *
  *  Subject to the Boost Software License, Version 1.0.

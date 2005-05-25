@@ -23,8 +23,8 @@ exe days_between_new_years : <lib>../build/boost_date_time
                 : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
                 ;
 
-exe end_of_month_day : <lib>../build/boost_date_time
-                  gregorian/end_of_month_day.cpp
+exe find_last_day_of_months : <lib>../build/boost_date_time
+                  gregorian/find_last_day_of_months.cpp
                 : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
                 ;
 
@@ -33,11 +33,8 @@ exe month_add : <lib>../build/boost_date_time
                 : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
                 ;
 
-exe localization : <lib>../build/boost_date_time
-                  gregorian/localization.cpp
-                : <include>$(BOOST_ROOT) 
-#                 <define>USE_DATE_TIME_PRE_1_33_FACET_IO 
-                  $(DATE_TIME_PROPERTIES) 
+exe localization : gregorian/localization.cpp
+                : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
                 ;
 
 exe print_holidays : <lib>../build/boost_date_time
@@ -93,6 +90,10 @@ exe calc_rules : <lib>../build/boost_date_time
 exe seconds_since_epoch : <lib>../build/boost_date_time
                   local_time/seconds_since_epoch.cpp
                 : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
+                ;
+
+exe io_tutorial : tutorial/io_tutorial.cpp
+                : <include>$(BOOST_ROOT)
                 ;
 
 # Copyright (c) 2002-2004

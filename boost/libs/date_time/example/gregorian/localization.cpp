@@ -1,20 +1,15 @@
 /* The following shows the creation of a facet for the output of 
  * dates in German (please forgive me for any errors in my German --
  * I'm not a native speaker).
- * 
- * This program uses the pre 1.33 version of date_time 
- * input/output code. Typically the USE_DATE_TIME_PRE_1_33_FACET_IO
- * macro would be defined in a Jamfile but it was defined in this 
- * file for the sake of the example.
  */
-
-#define USE_DATE_TIME_PRE_1_33_FACET_IO
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include <iostream>
+#include <algorithm>
 
-/* Define a series of char arrays for short and long name strings to be 
- * associated with date output. */
+/* Define a series of char arrays for short and long name strings 
+ * to be associated with German date output (US names will be 
+ * retrieved from the locale). */
 const char* const de_short_month_names[] = 
 {
   "Jan", "Feb", "Mar", "Apr", "Mai", "Jun",
@@ -26,10 +21,6 @@ const char* const de_long_month_names[] =
   "Juni", "Juli", "August", "September", "Oktober",
   "November", "Dezember", "NichtDerMonat"
 };
-const char* const de_special_value_names[] =
-{
-  "NichtDatumzeit", "-unbegrenztheit", "+unbegrenztheit"
-};
 const char* const de_long_weekday_names[] = 
 {
   "Sonntag", "Montag", "Dienstag", "Mittwoch",
@@ -40,113 +31,67 @@ const char* const de_short_weekday_names[] =
   "Son", "Mon", "Die","Mit", "Don", "Fre", "Sam"
 };
 
-const char* const us_short_month_names[] = 
-{
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "NAD"
-};
-const char* const us_long_month_names[] =
-{
-  "January", "February", "March", "April", "May",
-  "June", "July", "August", "September", "October",
-  "November", "December", "Not-A-Date"
-};
-const char* const us_special_value_names[] =
-{ 
-  "Not-A-Date", "-infinity", "+infinity"
-};
-const char* const us_long_weekday_names[] =
-{
-  "Sunday", "Monday", "Tuesday", "Wenesday", 
-  "Thursday", "Friday", "Saturday"
-};
-const char* const us_short_weekday_names[] =
-{
-  "Sun", "Mon", "Tue","Wed", "Thu", "Fri", "Sat"
-};
 
-
-int
-main() 
+int main() 
 {
-
-#ifndef BOOST_DATE_TIME_NO_LOCALE
-
   using namespace boost::gregorian;
-  typedef boost::date_time::all_date_names_put<greg_facet_config> date_facet;
-  
-  //create a new local
-  std::locale default_locale;
-  std::locale german_dates1(default_locale, 
-                            new date_facet(de_short_month_names, 
-                                           de_long_month_names,
-                                           de_special_value_names,
-                                           de_short_weekday_names,
-                                           de_long_weekday_names,
-                                           '.',
-                                           boost::date_time::ymd_order_dmy,
-                                           boost::date_time::month_as_integer));
-  
+ 
+  // create some gregorian objects to output
   date d1(2002, Oct, 1);
-  std::cout.imbue(german_dates1); 
+  greg_month m = d1.month();
+  greg_weekday wd = d1.day_of_week();
+  
+  // create a facet and a locale for German dates
+  date_facet* german_facet = new date_facet();
+  std::cout.imbue(std::locale(std::locale::classic(), german_facet));
+
+  // create the German name collections
+  date_facet::input_collection_type short_months, long_months, 
+                                    short_weekdays, long_weekdays;
+  std::copy(&de_short_month_names[0], &de_short_month_names[11],
+            std::back_inserter(short_months));
+  std::copy(&de_long_month_names[0], &de_long_month_names[11],
+            std::back_inserter(long_months));
+  std::copy(&de_short_weekday_names[0], &de_short_weekday_names[6],
+            std::back_inserter(short_weekdays));
+  std::copy(&de_long_weekday_names[0], &de_long_weekday_names[6],
+            std::back_inserter(long_weekdays));
+
+  // replace the default names with ours
+  // NOTE: date_generators and special_values were not replaced as 
+  // they are not used in this example
+  german_facet->short_month_names(short_months);
+  german_facet->long_month_names(long_months);
+  german_facet->short_weekday_names(short_weekdays);
+  german_facet->long_weekday_names(long_weekdays);
+  
   // output the date in German using short month names
+  german_facet->format("%d.%m.%Y");
   std::cout << d1 << std::endl; //01.10.2002
   
-  std::locale german_dates2(default_locale, 
-                            new date_facet(de_short_month_names, 
-                                           de_long_month_names,
-                                           de_special_value_names,
-                                           de_short_weekday_names,
-                                           de_long_weekday_names,
-                                           '.',
-                                           boost::date_time::ymd_order_dmy,
-                                           boost::date_time::month_as_long_string));
-  
-  std::cout.imbue(german_dates2); 
-  greg_month m = d1.month();
+  german_facet->month_format("%B");
   std::cout << m << std::endl; //Oktober
   
-  greg_weekday wd = d1.day_of_week();
+  german_facet->weekday_format("%A");
   std::cout << wd << std::endl; //Dienstag
 
 
-  //Numeric date format with US month/day/year ordering
-  std::locale usa_dates1(default_locale, 
-                         new date_facet(us_short_month_names, 
-                                        us_long_month_names,
-                                        us_special_value_names,
-                                        us_short_weekday_names,
-                                        us_long_weekday_names,
-                                        '/',
-                                        boost::date_time::ymd_order_us,
-                                        boost::date_time::month_as_integer));
-  
-  std::cout.imbue(usa_dates1); 
-  std::cout << d1 << std::endl; //  10/01/2002
-  //English names, iso order (year-month-day), '-' separator
-  std::locale usa_dates2(default_locale, 
-                         new date_facet(us_short_month_names, 
-                                        us_long_month_names,
-                                        us_special_value_names,
-                                        us_short_weekday_names,
-                                        us_long_weekday_names,
-                                        '-',
-                                        boost::date_time::ymd_order_iso,
-                                        boost::date_time::month_as_short_string));
+  // Output the same gregorian objects using US names
+  date_facet* us_facet = new date_facet();
+  std::cout.imbue(std::locale(std::locale::classic(), us_facet)); 
 
-  std::cout.imbue(usa_dates2); 
+  us_facet->format("%m/%d/%Y");
+  std::cout << d1 << std::endl; //  10/01/2002
+  
+  // English names, iso order (year-month-day), '-' separator
+  us_facet->format("%Y-%b-%d");
   std::cout << d1 << std::endl; //  2002-Oct-01
   
-  
-#else 
-  std::cout << "Sorry, localization is not supported by this compiler/library" 
-            << std::endl;
-#endif
   return 0;
 
 }
 
-/*  Copyright 2001-2004: CrystalClear Software, Inc
+/*  Copyright 2001-2005: CrystalClear Software, Inc
  *  http://www.crystalclearsoftware.com
  *
  *  Subject to the Boost Software License, Version 1.0.
