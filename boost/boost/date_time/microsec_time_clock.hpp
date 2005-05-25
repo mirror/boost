@@ -140,8 +140,8 @@ namespace date_time {
 
       boost::uint32_t sub_sec = (filetime % 10000000) / 10; // microseconds
 
-      time_t t;
-      ::std::time(&t);
+      time_t t = static_cast<time_t>(filetime / 10000000); // seconds since epoch
+      
       std::tm curr, *curr_ptr = 0;
       if (tz == LOCAL) {
         curr_ptr = c_time::localtime(&t, &curr);
