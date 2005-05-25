@@ -24,6 +24,7 @@ rule test-iostreams ( sources * : requirements * ) {
 
     test-suite "iostreams"
         : [ test-iostreams array_test.cpp ]
+          [ test-iostreams auto_close_test.cpp ]
           [ test-iostreams buffer_size_test.cpp ]
           [ test-iostreams 
                 code_converter_test.cpp    
@@ -32,7 +33,8 @@ rule test-iostreams ( sources * : requirements * ) {
                          
               #: # build requirements 
               #  std::locale-support ]   
-          [ test-iostreams component_type_test.cpp ]
+          [ test-iostreams compose_test.cpp ]
+          [ test-iostreams component_access_test.cpp ]
           [ test-iostreams copy_test.cpp ]
           [ test-iostreams counter_test.cpp ]
           [ test-iostreams direct_adapter_test.cpp ]
@@ -40,18 +42,21 @@ rule test-iostreams ( sources * : requirements * ) {
                 file_descriptor_test.cpp 
                 ../src/file_descriptor.cpp ]
           [ test-iostreams filtering_stream_test.cpp ]
+          #[ test-iostreams finite_state_filter_test.cpp ]
+          [ test-iostreams flush_test.cpp ]
+          [ test-iostreams invert_test.cpp ]
           [ test-iostreams line_filter_test.cpp ]
           [ test-iostreams 
                 mapped_file_test.cpp 
                 ../src/mapped_file.cpp ]
-          [ test-iostreams newline_filter_test.cpp ]
+          [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
           [ test-iostreams pipeline_test.cpp ]
           [ test-iostreams positioning_test.cpp ]
           [ test-iostreams 
                 regex_filter_test.cpp     
                 /boost/regex//boost_regex ]
-          [ test-iostreams reverse_test.cpp ]
+          [ test-iostreams restrict_test.cpp ]
           [ test-iostreams seekable_file_test.cpp ]
           [ test-iostreams seekable_filter_test.cpp ]
           [ test-iostreams stdio_filter_test.cpp ]
