@@ -312,8 +312,8 @@ namespace boost { namespace date_time {
       return tm_value;
     }
     virtual OutItrT do_put_special(OutItrT next, 
-                                   std::ios_base& a_ios, 
-                                   char_type fill_char, 
+                                   std::ios_base& /*a_ios*/, 
+                                   char_type /*fill_char*/, 
                                    const boost::date_time::special_values sv) const 
     {
       m_special_values_formatter.put_special(next, sv);
