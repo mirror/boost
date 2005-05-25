@@ -100,7 +100,7 @@ private:
   { init_next_group(); }
   named_slot_map_iterator(group_iterator group, group_iterator last,
 			  slot_pair_iterator slot) :
-    group(group), last_group(group), slot_(slot), slot_assigned(true)
+    group(group), last_group(last), slot_(slot), slot_assigned(true)
   { }
 
   void init_next_group()
