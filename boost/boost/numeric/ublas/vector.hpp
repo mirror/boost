@@ -969,24 +969,24 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Resizing
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize (size_type size, bool /*preserve*/ = true) {
             size_ = size;
         }
 
         // Element support
         BOOST_UBLAS_INLINE
-        const_pointer find_element (size_type i) const {
+        const_pointer find_element (size_type /*i*/) const {
             return & value_;
         }
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i) const {
+        const_reference operator () (size_type /*i*/) const {
             return value_;
         }
 
         BOOST_UBLAS_INLINE
-        const_reference operator [] (size_type i) const {
+        const_reference operator [] (size_type /*i*/) const {
             return value_;
         }
 
