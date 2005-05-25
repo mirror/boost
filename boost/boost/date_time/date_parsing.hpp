@@ -89,7 +89,7 @@ namespace date_time {
           return i;
         }
       }
-      return limit + static_cast<short>(1); // not-found, return a value out of range
+      return static_cast<short>(limit + 1); // not-found, return a value out of range
     }
     
     //! Generic function to parse a delimited date (eg: 2002-02-10)

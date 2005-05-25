@@ -1,7 +1,7 @@
 #ifndef _DATE_TIME_POSIX_TIME_ZONE__
 #define _DATE_TIME_POSIX_TIME_ZONE__ 
 
-/* Copyright (c) 2003-2004 CrystalClear Software, Inc.
+/* Copyright (c) 2003-2005 CrystalClear Software, Inc.
  * Subject to the Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -341,19 +341,19 @@ namespace local_time{
      */
     void M_func(const std::string& s, const std::string& e){
       typedef gregorian::nth_kday_of_month nkday;
-      int sm=0,sw=0,sd=0,em=0,ew=0,ed=0; // start/end month,week,day
+      unsigned short sm=0,sw=0,sd=0,em=0,ew=0,ed=0; // start/end month,week,day
       char_separator<char> sep("M.");
       tokenizer stok(s, sep), etok(e, sep);
       
       tokenizer::iterator it = stok.begin();
-      sm = lexical_cast<int>(*it++);
-      sw = lexical_cast<int>(*it++);
-      sd = lexical_cast<int>(*it);
+      sm = lexical_cast<unsigned short>(*it++);
+      sw = lexical_cast<unsigned short>(*it++);
+      sd = lexical_cast<unsigned short>(*it);
      
       it = etok.begin();
-      em = lexical_cast<int>(*it++);
-      ew = lexical_cast<int>(*it++);
-      ed = lexical_cast<int>(*it);
+      em = lexical_cast<unsigned short>(*it++);
+      ew = lexical_cast<unsigned short>(*it++);
+      ed = lexical_cast<unsigned short>(*it);
 
       dst_calc_rules_ = shared_ptr<dst_calc_rule>(
         new nth_kday_dst_rule(
@@ -370,12 +370,14 @@ namespace local_time{
     void julian_no_leap(const std::string& s, const std::string& e){
       typedef gregorian::gregorian_calendar calendar;
       const unsigned short year = 2001; // Non-leap year
-      int sm=1, sd=0;
+      unsigned short sm=1;
+      int sd=0;
       sd = lexical_cast<int>(s.substr(1)); // skip 'J'
       while(sd >= calendar::end_of_month_day(year,sm)){
         sd -= calendar::end_of_month_day(year,sm++);
       }
-      int em=1, ed=0;
+      unsigned short em=1;
+      int ed=0;
       ed = lexical_cast<int>(e.substr(1)); // skip 'J'
       while(ed > calendar::end_of_month_day(year,em)){
         ed -= calendar::end_of_month_day(year,em++);

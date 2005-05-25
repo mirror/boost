@@ -102,7 +102,7 @@ struct string_parse_tree
     unsigned short index = 0;
     while (index != names.size() ) {
       string_type s = boost::algorithm::to_lower_copy(names[index]);
-      insert(s, index + starting_point);
+      insert(s, static_cast<unsigned short>(index + starting_point));
       index++;
     }
     //set the last tree node = index+1  indicating a value
@@ -170,12 +170,12 @@ struct string_parse_tree
     charT c;
     if (level > result.cache.size()) {
       if (sitr == stream_end) return 0; //bail - input exhausted
-      c = std::tolower(*sitr);
+      c = static_cast<charT>(std::tolower(*sitr));
       result.cache += c;
       sitr++;
     }
     else {
-      c = std::tolower(result.cache[level-1]);
+      c = static_cast<charT>(std::tolower(result.cache[level-1]));
     }
     const_iterator litr = m_next_chars.lower_bound(c);
     const_iterator uitr = m_next_chars.upper_bound(c);
@@ -183,7 +183,7 @@ struct string_parse_tree
       if (litr->second.m_value != -1) { // -1 is default value
         if (result.match_depth < level) {
           result.current_match = litr->second.m_value;
-          result.match_depth = level;
+          result.match_depth = static_cast<unsigned short>(level);
         }
         litr->second.match(sitr, stream_end, 
                            result, level);

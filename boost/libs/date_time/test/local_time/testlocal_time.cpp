@@ -1,4 +1,4 @@
-/* Copyright (c) 2003-2004 CrystalClear Software, Inc.
+/* Copyright (c) 2003-2005 CrystalClear Software, Inc.
  * Subject to the Boost Software License, Version 1.0. 
  * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -128,7 +128,7 @@ main()
       try{
         local_date_time calcop(d, td, ny_tz, local_date_time::EXCEPTION_ON_ERROR);
         check("Did not catch expected exception", false);
-      }catch(time_label_invalid& i){
+      }catch(time_label_invalid& /*i*/){
         check("Caught expected exception", true);
       }catch(...){
         check("Caught unexpected exception", false);
@@ -146,7 +146,7 @@ main()
       try{
         local_date_time calcop(d, td, ny_tz, local_date_time::EXCEPTION_ON_ERROR);
         check("Did not catch expected exception", false);
-      }catch(ambiguous_result& a){
+      }catch(ambiguous_result& /*a*/){
         check("Caught expected exception", true);
       }catch(...){
         check("Caught unexpected exception", false);

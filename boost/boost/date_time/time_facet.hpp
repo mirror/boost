@@ -1058,7 +1058,7 @@ namespace date_time {
         
         date_type d(not_a_date_time);
         if (day_of_year > 0) {
-          d = date_type(t_year-1,12,31) + date_duration_type(day_of_year);
+          d = date_type(static_cast<unsigned short>(t_year-1),12,31) + date_duration_type(day_of_year);
         }
         else {
           d = date_type(t_year, t_month, t_day);
@@ -1105,7 +1105,7 @@ namespace date_time {
           // input may be only the first few decimal places
           if(cache.size() < precision) {
             frac = lexical_cast<fracional_seconds_type>(cache);
-            frac = decimal_adjust(frac, precision - cache.size());
+            frac = decimal_adjust(frac, static_cast<unsigned short>(precision - cache.size()));
           }
           else {
             // if input has too many decimal places, drop excess digits

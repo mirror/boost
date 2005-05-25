@@ -1,7 +1,7 @@
 #ifndef _GREGORIAN__CONVERSION_HPP___
 #define _GREGORIAN__CONVERSION_HPP___
 
-/* Copyright (c) 2004 CrystalClear Software, Inc.
+/* Copyright (c) 2004-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -58,7 +58,9 @@ namespace gregorian {
   inline
   date date_from_tm(const tm& datetm) 
   {
-    return date(datetm.tm_year+1900, datetm.tm_mon+1, datetm.tm_mday);
+    return date(static_cast<unsigned short>(datetm.tm_year+1900), 
+                static_cast<unsigned short>(datetm.tm_mon+1), 
+                static_cast<unsigned short>(datetm.tm_mday));
   }
   
 

@@ -326,7 +326,7 @@ class format_date_parser
           case 'j': 
             {
               match_results mr;
-              day_of_year = fixed_string_to_int<unsigned short, charT>(sitr, stream_end, mr, 3);
+              day_of_year = fixed_string_to_int<short, charT>(sitr, stream_end, mr, 3);
               if(day_of_year == -1) {
                 if(sv_parser.match(sitr, stream_end, mr)) {
                   return date_type(static_cast<special_values>(mr.current_match));
@@ -340,7 +340,7 @@ class format_date_parser
           case 'm': 
             {
               match_results mr;
-              month = fixed_string_to_int<unsigned short, charT>(sitr, stream_end, mr, 2);
+              month = fixed_string_to_int<short, charT>(sitr, stream_end, mr, 2);
               if(month == -1) {
                 if(sv_parser.match(sitr, stream_end, mr)) {
                   return date_type(static_cast<special_values>(mr.current_match));
@@ -352,7 +352,7 @@ class format_date_parser
           case 'Y': 
             {
               match_results mr;
-              year = fixed_string_to_int<unsigned short, charT>(sitr, stream_end, mr, 4);
+              year = fixed_string_to_int<short, charT>(sitr, stream_end, mr, 4);
               if(year == -1) {
                 if(sv_parser.match(sitr, stream_end, mr)) {
                   return date_type(static_cast<special_values>(mr.current_match));
@@ -364,7 +364,7 @@ class format_date_parser
           case 'y': 
             {
               match_results mr;
-              year = fixed_string_to_int<unsigned short, charT>(sitr, stream_end, mr, 2);
+              year = fixed_string_to_int<short, charT>(sitr, stream_end, mr, 2);
               if(year == -1) {
                 match_results mr;
                 if(sv_parser.match(sitr, stream_end, mr)) {
@@ -397,7 +397,7 @@ class format_date_parser
     }
     
     if (day_of_year > 0) {
-      date_type d(year-1,12,31); //end of prior year
+      date_type d(static_cast<unsigned short>(year-1),12,31); //end of prior year
       return d + duration_type(day_of_year);
     }
     
@@ -458,7 +458,7 @@ class format_date_parser
             }
           case 'm': 
             {
-              month = var_string_to_int<unsigned short, charT>(sitr, stream_end, 2);
+              month = var_string_to_int<short, charT>(sitr, stream_end, 2);
               // var_string_to_int returns -1 if parse failed. That will 
               // cause a bad_month exception to be thrown so we do nothing here
               break;
@@ -495,7 +495,7 @@ class format_date_parser
     // skip leading whitespace
     while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; } 
 
-    return day_type(var_string_to_int<unsigned short, charT>(sitr, stream_end, 2));
+    return day_type(var_string_to_int<short, charT>(sitr, stream_end, 2));
   }
 
   day_of_week_type
@@ -557,7 +557,7 @@ class format_date_parser
           case 'w':
             {
               // weekday as number 0-6, Sunday == 0
-              wkday = var_string_to_int<unsigned short, charT>(sitr, stream_end, 2);
+              wkday = var_string_to_int<short, charT>(sitr, stream_end, 2);
               break;
             }
           default:
@@ -620,13 +620,13 @@ class format_date_parser
           case 'Y':
             {
               // year from 4 digit string
-              year = fixed_string_to_int<unsigned short, charT>(sitr, stream_end, mr, 4);
+              year = fixed_string_to_int<short, charT>(sitr, stream_end, mr, 4);
               break;
             }
           case 'y':
             {
               // year from 2 digit string (no century)
-              year = fixed_string_to_int<unsigned short, charT>(sitr, stream_end, mr, 2);
+              year = fixed_string_to_int<short, charT>(sitr, stream_end, mr, 2);
               year += 2000; //make 2 digit years in this century
               break;
             }
