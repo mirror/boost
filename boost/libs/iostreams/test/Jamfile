@@ -68,6 +68,7 @@ DEPENDS all : test ;
               : # build requirements 
                 std::locale-support ]   
           [ test-iostreams libs/iostreams/test/component_access_test.cpp ]
+          [ test-iostreams libs/iostreams/test/compose_test.cpp ]
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
           [ test-iostreams libs/iostreams/test/counter_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
@@ -78,6 +79,7 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
           #[ test-iostreams libs/iostreams/test/finite_state_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/flush_test.cpp ]
+          [ test-iostreams libs/iostreams/test/invert_test.cpp ]
           [ test-iostreams libs/iostreams/test/line_filter_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/mapped_file_test.cpp 
@@ -89,7 +91,7 @@ DEPENDS all : test ;
           [ test-iostreams 
                 libs/iostreams/test/regex_filter_test.cpp     
                 <lib>../../regex/build/boost_regex ]
-          [ test-iostreams libs/iostreams/test/reverse_test.cpp ]
+          [ test-iostreams libs/iostreams/test/restrict_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_file_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/stdio_filter_test.cpp ]
