@@ -137,7 +137,7 @@ struct code_converter_impl {
         }
         if (can_write::value && !is_double::value) {
             buf_.second().resize(buffer_size);
-            buf_.second().set(0, buffer_size);
+            buf_.second().set(0, 0);
         }
         dev_.reset(concept_adapter<policy_type>(dev));
         flags_ |= f_open;
@@ -146,12 +146,12 @@ struct code_converter_impl {
     void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
     {
         if (which & BOOST_IOS::in) {
-            iostreams::close(**dev_, BOOST_IOS::in);
+            iostreams::close(dev(), BOOST_IOS::in);
             flags_ |= f_input_closed;
         }
         if (which & BOOST_IOS::out) {
-            flush();
-            iostreams::close(**dev_, BOOST_IOS::out);
+            buf_.second().flush(dev());
+            iostreams::close(dev(), BOOST_IOS::out);
             flags_ |= f_output_closed;
         }
         if ( !is_double::value || 
@@ -164,46 +164,10 @@ struct code_converter_impl {
             flags_ = 0;
         }
     }
+
     bool is_open() const { return (flags_ & f_open) != 0;}
 
-    bool flush() { return flush(is_convertible<device_category, output>()); }
-    bool flush(mpl::false_) { return true; }
-    bool flush(mpl::true_)
-    {
-        buffer_type& out = buf_.second();
-        std::streamsize amt =
-            static_cast<std::streamsize>(out.ptr() - out.data());
-        std::streamsize result = dev_->write(out.data(), amt);
-        if (result < amt) {
-            char_traits<extern_type>::move( out.data(),
-                                            out.data() + result, 
-                                            amt - result );
-        }
-        out.set(amt - result, out.size() - amt + result);
-        return result != 0;
-    }
-
-    int fill() // Returns an int as a status code.
-    {
-        using std::streamsize;
-        buffer_type& in = buf_.first();
-        streamsize off = static_cast<streamsize>(in.eptr() - in.ptr());
-        if (off)
-            char_traits<extern_type>::move(in.data(), in.ptr(), off);
-        in.set(0, off);
-        streamsize amt =
-            dev_->read(in.data() + off, in.size() - off);
-        if (amt != -1)
-            in.set(0, off + amt);
-        return amt == in.size() - off ?
-            '\n' :
-            amt == -1 ?
-                EOF :
-                WOULD_BLOCK;
-    }
-
-    policy_type& get() { return *dev_.get(); }
-    const policy_type& get() const { return *dev_.get(); }
+    policy_type& dev() { return **dev_; }
 
     enum {
         f_open             = 1,
@@ -343,11 +307,9 @@ private:
     { 
         impl().open(t BOOST_IOSTREAMS_CONVERTER_ARGS()); 
     }
-    int fill() { return impl().fill(); }
-    bool flush() { return impl().flush(); }
 
     const codecvt_type& cvt() { return impl().cvt_.get(); }
-    policy_type& dev() { return impl().get(); }
+    policy_type& dev() { return impl().dev(); }
     buffer_type& in() { return impl().buf_.first(); }
     buffer_type& out() { return impl().buf_.second(); }
     impl_type& impl() { return *this->pimpl_; }
@@ -365,7 +327,7 @@ std::streamsize code_converter<Device, Codevt, Alloc>::read
     const extern_type*   next;        // Next external char.
     intern_type*         nint;        // Next internal char.
     streamsize           total = 0;   // Characters read.
-    int                  status;
+    int                  status = iostreams::char_traits<char>::good();
     bool                 partial = false;
     buffer_type&         buf = in();
 
@@ -373,7 +335,7 @@ std::streamsize code_converter<Device, Codevt, Alloc>::read
 
         // Fill buffer.
         if (buf.ptr() == buf.eptr() || partial) {
-            status = fill();
+            status = buf.fill(dev());
             if (buf.ptr() == buf.eptr())
                 break;
             partial = false;
@@ -424,8 +386,8 @@ std::streamsize code_converter<Device, Codevt, Alloc>::write
     while (total < n) {
 
         // Empty buffer.
-        if (buf.ptr() == buf.eptr() || partial) {
-            if (!flush())
+        if (buf.eptr() == buf.end() || partial) {
+            if (!buf.flush(dev()))
                 break;
             partial = false;
         }
@@ -434,9 +396,9 @@ std::streamsize code_converter<Device, Codevt, Alloc>::write
         codecvt_base::result result =
             cvt().out( buf.state(),
                        s + total, s + n, nint,
-                       buf.ptr(), buf.eptr(), next );
-        int progress = (int) (next - buf.ptr());
-        buf.ptr() += progress;
+                       buf.eptr(), buf.end(), next );
+        int progress = (int) (next - buf.eptr());
+        buf.eptr() += progress;
 
         switch (result) {
         case codecvt_base::partial:
@@ -457,8 +419,8 @@ std::streamsize code_converter<Device, Codevt, Alloc>::write
                       ++buf.ptr() ) 
                 {
                     memcpy(buf.ptr(), c + index, sizeof(extern_type));
-                    if (buf.ptr() == buf.end())
-                        flush();
+                    if (buf.eptr() == buf.end())
+                        buf.flush(dev());
                 }
                 ++total;
             }
