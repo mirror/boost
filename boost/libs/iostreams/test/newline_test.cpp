@@ -12,7 +12,6 @@
 #include <boost/iostreams/filter/newline.hpp>
 #include <boost/iostreams/filter/test.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 
