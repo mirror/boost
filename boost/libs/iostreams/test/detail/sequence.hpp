@@ -9,13 +9,14 @@
 
 #include <algorithm>
 #include <iterator>
-#include <string.h>            // strlen.
+#include <string.h>  // strlen.
 #include <vector>
+#include <boost/iostreams/detail/default_arg.hpp>
 #include "./constants.hpp"
 
 namespace boost { namespace iostreams { namespace test {
 
-template<typename Ch = char>
+template<typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char) >
 struct test_sequence : public std::vector<Ch> {
     test_sequence()
         {
