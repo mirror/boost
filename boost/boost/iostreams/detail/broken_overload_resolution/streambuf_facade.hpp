@@ -116,7 +116,7 @@ private:
     template<typename U0>
     void open_impl(mpl::false_, const U0& u0)
     {
-        base_type::open(u0, -1, -1);
+        base_type::open(const_cast<U0&>(u0), -1, -1);
     }
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
     template<typename U0>
@@ -128,42 +128,49 @@ private:
     template<typename U0>
     void open_impl(mpl::true_, const U0& u0)
     {
+        base_type::open(T(const_cast<U0&>(u0)), -1, -1);
+    }
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
+    template<typename U0>
+    void open_impl(mpl::true_, U0& u0)
+    {
         base_type::open(T(u0), -1, -1);
     }
+#endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     template<typename U0, typename U1>
     void open_impl(mpl::false_, const U0& u0, const U1& u1)
     {
         base_type::open(u0, u1, -1);
     }
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
-    template<typename U0, typename U1>
-    void open_impl(mpl::false_, U0& u0, const U1& u1)
-    {
-        base_type::open(detail::wrap(u0), u1, -1);
-    }
-#endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     template<typename U0, typename U1>
     void open_impl(mpl::true_, const U0& u0, const U1& u1)
     {
+        base_type::open(T(const_cast<U0&>(u0), u1), -1, -1);
+    }
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
+    template<typename U0, typename U1>
+    void open_impl(mpl::true_, U0& u0, const U1& u1)
+    {
         base_type::open(T(u0, u1), -1, -1);
     }
+#endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     template<typename U0, typename U1, typename U2>
     void open_impl(mpl::false_, const U0& u0, const U1& u1, const U2& u2)
     {
         base_type::open(u0, u1, u2);
     }
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
-    template<typename U0, typename U1, typename U2>
-    void open_impl(mpl::false_, U0& u0, const U1& u1, const U2& u2)
-    {
-        base_type::open(detail::wrap(u0), u1, u2);
-    }
-#endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     template<typename U0, typename U1, typename U2>
     void open_impl(mpl::true_, const U0& u0, const U1& u1, const U2& u2)
     {
+        base_type::open(T(const_cast<U0&>(u0), u1, u2), -1, -1);
+    }
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
+    template<typename U0, typename U1, typename U2>
+    void open_impl(mpl::true_, U0& u0, const U1& u1, const U2& u2)
+    {
         base_type::open(T(u0, u1, u2), -1, -1);
     }
+#endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------//
     void check_open()
     {
         if (this->is_open()) 
