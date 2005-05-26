@@ -263,7 +263,7 @@ namespace boost
         template <class T>
         inline std::size_t float_hash_value(T v)
         {
-            int exp;
+            int exp = 0;
             v = boost::hash_detail::call_frexp(v, &exp);
 
             std::size_t seed = 0;
