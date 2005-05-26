@@ -6,19 +6,60 @@
 
 #include <ios>  // failure.
 #include <map>
+#include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/test.hpp>
+#include <boost/iostreams/stream_facade.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
+#include "../example/container_device.hpp"
 #include "../example/dictionary_filter.hpp"
 #include "../example/line_wrapping_filter.hpp"
 #include "../example/shell_comments_filter.hpp"
 #include "../example/tab_expanding_filter.hpp"
 #include "../example/unix2dos_filter.hpp"
+#include "./detail/verification.hpp"
+#include "./detail/sequence.hpp"
+#include "./detail/temp_file.hpp"
 
 using boost::unit_test::test_suite;
 namespace io = boost::iostreams;
 namespace ex = boost::iostreams::example;
+
+//------------------container_device test-------------------------------------//
+
+void container_device_test()
+{
+    using namespace std;
+    using namespace boost::iostreams::test;
+
+    typedef vector<char>                       vector_type;
+    typedef ex::container_source<vector_type>  vector_source;
+    typedef ex::container_sink<vector_type>    vector_sink;
+    typedef ex::container_device<vector_type>  vector_device;
+
+    {
+        test_sequence<>                     seq;
+        test_file                           file;
+        io::stream_facade<vector_source>    first(seq);
+        io::stream_facade<io::file_source>  second(file.name(), in_mode);
+        BOOST_CHECK(compare_streams_in_chunks(first, second));
+    }
+
+    {
+        std::vector<char>              first;
+        test_sequence<>                second;
+        io::stream_facade<vector_sink> out(first);
+        write_data_in_chunks(out);
+        BOOST_CHECK(first == second);
+    }
+
+    {   
+        vector<char>                     v;
+        io::stream_facade<vector_device> io(v);
+        BOOST_CHECK(test_seekable_in_chunks(io));
+    }
+}
 
 //------------------dictionary_filter test------------------------------------//
 
@@ -218,6 +259,26 @@ void shell_comments_filter_test()
         io::test_output_filter( io::example::shell_comments_output_filter(),
                                 input, output )
     );
+
+    BOOST_CHECK(
+        io::test_input_filter( io::example::shell_comments_dual_use_filter(),
+                               input, output )
+    );
+
+    BOOST_CHECK(
+        io::test_output_filter( io::example::shell_comments_dual_use_filter(),
+                                input, output )
+    );
+
+    BOOST_CHECK(
+        io::test_input_filter( io::example::shell_comments_multichar_input_filter(),
+                               input, output )
+    );
+
+    BOOST_CHECK(
+        io::test_output_filter( io::example::shell_comments_multichar_output_filter(),
+                                input, output )
+    );
 }
 
 //------------------tab_expanding_filter test---------------------------------//
@@ -389,6 +450,7 @@ void unix2dos_filter_test()
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("example test");
+    test->add(BOOST_TEST_CASE(&container_device_test));
     test->add(BOOST_TEST_CASE(&dictionary_filter_test));
     test->add(BOOST_TEST_CASE(&tab_expanding_filter_test));
     test->add(BOOST_TEST_CASE(&line_wrapping_filter_test));
