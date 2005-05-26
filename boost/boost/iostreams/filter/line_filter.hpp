@@ -49,7 +49,9 @@ public:
           multichar_tag,
           closable_tag
         { };
+protected:
     basic_line_filter() : pos_(string_type::npos), state_(0) { }
+public:
     virtual ~basic_line_filter() { }
 
     template<typename Source>
