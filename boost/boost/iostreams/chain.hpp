@@ -127,8 +127,7 @@ public:
     typedef Mode                                   mode;
     struct category
         : Mode,
-          device_tag,
-          closable_tag
+          device_tag
         { };
     typedef chain_client<Self>                     client_type;
     friend class chain_client<Self>;
@@ -223,6 +222,7 @@ public:
     bool is_complete() const;
     bool auto_close() const;
     void set_auto_close(bool close);
+    bool sync() { return front().BOOST_IOSTREAMS_PUBSYNC() != -1; }
     bool strict_sync();
 private:
     template<typename T>
