@@ -24,6 +24,7 @@
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/traits.hpp>      // mode_of, is_direct.
 #include <boost/mpl/if.hpp>
+#include <boost/ref.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -92,6 +93,9 @@ public:
         iostreams::imbue(filter_, loc);
         iostreams::imbue(device_, loc);
     }
+
+    Filter& first() { return filter_; }
+    Device& second() { return device_; }
 private:
     Filter      filter_;
     value_type  device_;
@@ -106,8 +110,10 @@ private:
 //
 template<typename Filter1, typename Filter2>
 class composite_filter {
+private:
+     typedef reference_wrapper<Filter2>           filter_ref;
 public:
-    typedef typename char_type_of<Filter1>::type char_type;
+    typedef typename char_type_of<Filter1>::type  char_type;
     struct category
         : mode_of<Filter1>::type,
           filter_tag,
@@ -124,14 +130,14 @@ public:
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
     {
-        composite_device<Filter2, Source> cmp(filter2_, src);
+        composite_device<filter_ref, Source> cmp(boost::ref(filter2_), src);
         return iostreams::read(filter1_, cmp, s, n);
     }
 
     template<typename Sink>
     std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
-        composite_device<Filter2, Sink> cmp(filter2_, snk);
+        composite_device<filter_ref, Sink> cmp(boost::ref(filter2_), snk);
         return iostreams::write(filter1_, cmp, s, n);
     }
 
@@ -140,7 +146,7 @@ public:
                         BOOST_IOS::openmode which =
                             BOOST_IOS::in | BOOST_IOS::out )
     {
-        composite_device<Filter2, Device> cmp(filter2_, dev);
+        composite_device<filter_ref, Device> cmp(boost::ref(filter2_), dev);
         return iostreams::seek(filter1_, cmp, off, way, which);
     }
 
@@ -149,7 +155,7 @@ public:
                 BOOST_IOS::openmode which =
                     BOOST_IOS::in | BOOST_IOS::out )
     {
-        composite_device<Filter2, Device> cmp(filter2_, dev);
+        composite_device<filter_ref, Device> cmp(boost::ref(filter2_), dev);
         iostreams::close(filter1_, cmp, which);
     }
 
@@ -173,6 +179,9 @@ public:
         iostreams::imbue(filter1_, loc);
         iostreams::imbue(filter2_, loc);
     }
+
+    Filter1& first() { return filter1_; }
+    Filter2& second() { return filter2_; }
 private:
     Filter1  filter1_;
     Filter2  filter2_;
@@ -265,21 +274,21 @@ compose(const Filter& filter, std::iostream& io)
 
 template<typename Filter, typename Stream>
 composite<Filter, Stream>
-compose(const Filter& filter, const Stream& strm, mpl::true_)
+compose(const Filter& flt, const Stream& strm, mpl::true_)
 {   // Bad overload resolution.
-    return composite<Filter, Stream>(filter, const_cast<Stream&>(strm));
+    return composite<Filter, Stream>(flt, const_cast<Stream&>(strm));
 }
 
 template<typename Filter, typename FilterOrDevice>
 composite<Filter, FilterOrDevice>
-compose(const Filter& filter, const FilterOrDevice& fod, mpl::false_)
-{ return composite<Filter, FilterOrDevice>(filter, fod); }
+compose(const Filter& flt, const FilterOrDevice& fod, mpl::false_)
+{ return composite<Filter, FilterOrDevice>(flt, fod); }
 
 template<typename Filter, typename FilterOrDevice>
 composite<Filter, FilterOrDevice>
-compose( const Filter& filter, const FilterOrDevice& fod
+compose( const Filter& flt, const FilterOrDevice& fod
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
-{ return compose(filter, fod, is_std_io<FilterOrDevice>()); }
+{ return compose(flt, fod, is_std_io<FilterOrDevice>()); }
 
 # if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && \
      !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
