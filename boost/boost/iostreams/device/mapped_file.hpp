@@ -97,10 +97,10 @@ public:
     BOOST_STATIC_CONSTANT(size_type, max_length = static_cast<size_type>(-1));
 
     mapped_file_source() { }
-    mapped_file_source(mapped_file_params);
-    mapped_file_source( const std::string& path,
-                        size_type length = max_length,
-                        boost::intmax_t offset = 0 );
+    explicit mapped_file_source(mapped_file_params);
+    explicit mapped_file_source( const std::string& path,
+                                 size_type length = max_length,
+                                 boost::intmax_t offset = 0 );
 
     //--------------Stream interface------------------------------------------//
 
@@ -154,12 +154,12 @@ public:
     typedef const char*                    const_iterator;
     BOOST_STATIC_CONSTANT(size_type, max_length = delegate_type::max_length);
     mapped_file() { }
-    mapped_file(mapped_file_params p);
-    mapped_file( const std::string& path,
-                 BOOST_IOS::openmode mode =
-                     BOOST_IOS::in | BOOST_IOS::out,
-                 size_type length = max_length,
-                 stream_offset offset = 0 );
+    explicit mapped_file(mapped_file_params p);
+    explicit mapped_file( const std::string& path,
+                          BOOST_IOS::openmode mode =
+                              BOOST_IOS::in | BOOST_IOS::out,
+                          size_type length = max_length,
+                          stream_offset offset = 0 );
 
     //--------------Conversion to readonly_mapped_file------------------------//
 
@@ -183,7 +183,12 @@ public:
     //--------------Container interface---------------------------------------//
 
     size_type size() const { return delegate_.size(); }
-    char* data() const { return const_cast<char*>(delegate_.data()); }
+    char* data() const 
+    { 
+        return (mode() & BOOST_IOS::out) ?
+            const_cast<char*>(delegate_.data()) :
+            0;
+    }
     const char* const_data() const { return delegate_.data(); }
     iterator begin() const { return data(); }
     const_iterator const_begin() const { return data(); }
@@ -206,10 +211,10 @@ struct mapped_file_sink : private mapped_file {
           public closable_tag
         { };
     using mapped_file::close;
-    mapped_file_sink(mapped_file_params p);
-    mapped_file_sink( const std::string& path,
-                      size_type length = max_length,
-                      boost::intmax_t offset = 0 );
+    explicit mapped_file_sink(mapped_file_params p);
+    explicit mapped_file_sink( const std::string& path,
+                               size_type length = max_length,
+                               boost::intmax_t offset = 0 );
     void open(mapped_file_params p);
     void open( const std::string& path,
                size_type length = max_length,
