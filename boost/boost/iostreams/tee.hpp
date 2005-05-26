@@ -11,6 +11,7 @@
 # pragma once
 #endif
 
+#include <cassert>
 #include <boost/config.hpp>  // BOOST_DEDUCE_TYPENAME.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/adapter/basic_adapter.hpp>
@@ -57,7 +58,9 @@ public:
     std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         std::streamsize result = iostreams::write(snk, s, n);
-        iostreams::write(this->component(), s, result);
+        std::streamsize result2 = iostreams::write(this->component(), s, result);
+        (void) result2; // Suppress 'unused variable' warning.
+        assert(result == result2);
         return result;
     }
 
@@ -115,13 +118,16 @@ public:
           localizable_tag,
           optimally_buffered_tag
         { };
-    explicit tee_device(param_type1 sink1, param_type2 sink2) 
+    tee_device(param_type1 sink1, param_type2 sink2) 
         : sink1_(sink1), sink2_(sink2)
         { }
     std::streamsize write(const char_type* s, std::streamsize n)
     {
-        iostreams::write(sink1_, s, n);
-        iostreams::write(sink2_, s, n);
+        std::streamsize result1 = iostreams::write(sink1_, s, n);
+        std::streamsize result2 = iostreams::write(sink2_, s, n);
+        (void) result1; // Suppress 'unused variable' warning.
+        (void) result2;
+        assert(result1 == n && result2 == n);
         return n;
     }
     void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
