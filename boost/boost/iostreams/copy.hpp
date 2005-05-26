@@ -113,9 +113,10 @@ std::streamsize copy_impl( Source& src, Sink& snk,
     while (!done) {
         std::streamsize amt;
         done = (amt = iostreams::read(src, buf.data(), buffer_size)) == -1;
-        iostreams::write(nb, buf.data(), amt);
-        if (amt != -1)
+        if (amt != -1) {
+            iostreams::write(nb, buf.data(), amt);
             total += amt;
+        }
     }
     return total;
 }
