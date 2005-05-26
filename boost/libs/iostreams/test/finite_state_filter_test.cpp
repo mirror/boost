@@ -102,7 +102,7 @@ struct unix2dos_fsm
 struct dictionary_fsm
     : io::finite_state_machine<dictionary_fsm, char>
 {
-    BOOST_IOSTREAMS_FSM(uncommenting_fsm) // Define skip and push.
+    BOOST_IOSTREAMS_FSM(dictionary_fsm) // Define skip and push.
     typedef dictionary_fsm self;
     typedef std::map<std::string, std::string> dictionary;
 
