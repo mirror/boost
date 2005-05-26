@@ -105,11 +105,16 @@ main()
           sv_time3.to_string() == "9999-Dec-31 18:59:59.999999 EST");
 #endif
 
-    local_date_time sv_time4(min_date_time);
-    check("min_date_time to_string: " + sv_time4.to_string(), 
-          sv_time4.to_string() == "1400-Jan-01 00:00:00 UTC");
+    try {
+      local_date_time sv_time4(min_date_time);
+      check("min_date_time to_string: " + sv_time4.to_string(), 
+            sv_time4.to_string() == "1400-Jan-01 00:00:00 UTC");
+    }
+    catch (std::exception& e) {
+      check("min_date_time to_string -- exception" , false);
+      std::cout << "Exception is : " << e.what() << std::endl;
+    }
 
-    std::cout << sv_time4.to_string() << std::endl;
 /** todo  -- this will cause an out of range when min_date is adjusted for ny_tz
     local_date_time sv_time5(min_date_time, ny_tz);
     std::cout << sv_time5.to_string() << std::endl;
