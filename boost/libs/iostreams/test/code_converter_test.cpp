@@ -112,7 +112,8 @@ using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;     
 
 const int max_length = 30;
-const unsigned int string_length = 100;
+const unsigned int pattern_length = 100;
+const unsigned int pattern_reps = 100;
 
 template<typename Codecvt>
 bool valid_char(typename codecvt_intern<Codecvt>::type c)
@@ -139,10 +140,13 @@ basic_string<
 test_string()
 {
     typedef typename codecvt_intern<Codecvt>::type intern_type;
-    std::basic_string<intern_type> result;
-    for (intern_type c = 0; result.size() < string_length; ++c)
+    std::basic_string<intern_type> pattern, result;
+    for (intern_type c = 255; pattern.size() < pattern_length; --c)
         if (valid_char<Codecvt>(c))
-            result += c;
+            pattern += c;
+    result.reserve(pattern.size() * pattern_reps);
+    for (int w = 0; w < pattern_reps; ++w)
+        result += pattern;
     return result;
 }
 
