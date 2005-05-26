@@ -18,17 +18,27 @@
 #endif              
 
 #include <algorithm>              // swap.
-#include <boost/call_traits.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/mpl/if.hpp>
+#if BOOST_WORKAROUND(__MWERKS__, > 0x3003)
+# include <msl_utility>
+#else
+# include <boost/call_traits.hpp>
+#endif
 
 namespace boost { namespace iostreams { namespace detail {
 
 template<typename T>
 class single_object_holder {
 public:
-    typedef typename boost::call_traits<T>::param_type       param_type;
-    typedef typename boost::call_traits<T>::reference        reference;
-    typedef typename boost::call_traits<T>::const_reference  const_reference;
+#if BOOST_WORKAROUND(__MWERKS__, > 0x3003)
+    typedef Metrowerks::call_traits<T>             traits_type;
+#else
+    typedef boost::call_traits<T>                  traits_type;
+#endif
+    typedef typename traits_type::param_type       param_type;
+    typedef typename traits_type::reference        reference;
+    typedef typename traits_type::const_reference  const_reference;
     single_object_holder() { }
     single_object_holder(param_type t) : first_(t) { }
     reference first() { return first_; }
@@ -44,9 +54,14 @@ private:
 template<typename T>
 struct double_object_holder {
 public:
-    typedef typename boost::call_traits<T>::param_type       param_type;
-    typedef typename boost::call_traits<T>::reference        reference;
-    typedef typename boost::call_traits<T>::const_reference  const_reference;
+#if BOOST_WORKAROUND(__MWERKS__, > 0x3003)
+    typedef Metrowerks::call_traits<T>             traits_type;
+#else
+    typedef boost::call_traits<T>                  traits_type;
+#endif
+    typedef typename traits_type::param_type       param_type;
+    typedef typename traits_type::reference        reference;
+    typedef typename traits_type::const_reference  const_reference;
     double_object_holder() { }
     double_object_holder(param_type t1, param_type t2)
         : first_(t1), second_(t2) { }
@@ -77,11 +92,16 @@ private:
                 IsDouble, 
                 double_object_holder<T>, 
                 single_object_holder<T>
-            >::type                                   base_type;
+            >::type                                base_type;
 public:
-    typedef typename call_traits<T>::param_type       param_type;
-    typedef typename call_traits<T>::reference        reference;
-    typedef typename call_traits<T>::const_reference  const_reference;
+#if BOOST_WORKAROUND(__MWERKS__, > 0x3003)
+    typedef Metrowerks::call_traits<T>             traits_type;
+#else
+    typedef boost::call_traits<T>                  traits_type;
+#endif
+    typedef typename traits_type::param_type       param_type;
+    typedef typename traits_type::reference        reference;
+    typedef typename traits_type::const_reference  const_reference;
     double_object() : base_type() {}
     double_object(param_type t1, param_type t2)
         : base_type(t1, t2) { }
