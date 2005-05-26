@@ -1,4 +1,4 @@
-// (C) Copyright Jonathan Turkanis 2003.
+// (C) Copyright Jonathan Turkanis 2003-5.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -14,10 +14,13 @@
 #include <algorithm>                           // swap.
 #include <memory>                              // allocator.
 #include <boost/config.hpp>                    // member templates.
-#include <boost/iostreams/detail/ios.hpp>      // streamsize.     
+#include <boost/iostreams/char_traits.hpp>
+#include <boost/iostreams/detail/ios.hpp>      // streamsize.
+#include <boost/iostreams/read.hpp>
+#include <boost/iostreams/traits.hpp>          // int_type_of.
+#include <boost/iostreams/checked_operations.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/type_traits/is_same.hpp>     
-#include <boost/utility.hpp>                   // noncopyable.
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -32,7 +35,7 @@ namespace boost { namespace iostreams { namespace detail {
 //
 template< typename Ch,
           typename Alloc = std::allocator<Ch> >
-class basic_buffer : private noncopyable {
+class basic_buffer {
 private:
 #ifndef BOOST_NO_STD_ALLOCATOR
     typedef typename Alloc::template rebind<Ch>::other allocator_type;
@@ -50,6 +53,9 @@ public:
     std::streamsize size() const { return size_; }
     void swap(basic_buffer& rhs);
 private:
+    // Disallow copying and assignment.
+    basic_buffer(const basic_buffer&);
+    basic_buffer& operator=(const basic_buffer&);
     Ch*              buf_;
     std::streamsize  size_;
 };
@@ -71,6 +77,7 @@ class buffer : public basic_buffer<Ch, Alloc> {
 private:
     typedef basic_buffer<Ch, Alloc> base;
 public:
+    typedef iostreams::char_traits<Ch> traits_type;
     using base::resize; 
     using base::data; 
     using base::size;
@@ -82,6 +89,48 @@ public:
     const_pointer& eptr() const { return eptr_; }
     void set(std::streamsize ptr, std::streamsize end);
     void swap(buffer& rhs);
+
+    // Returns an int_type as a status code.
+    template<typename Source>
+    typename int_type_of<Source>::type fill(Source& src) 
+    {
+        using namespace std;
+        streamsize keep;
+        if ((keep = static_cast<streamsize>(eptr_ - ptr_)) > 0)
+            traits_type::move(this->data(), ptr_, keep);
+        set(0, keep);
+        streamsize result = 
+            iostreams::read(src, this->data() + keep, this->size() - keep);
+        if (result != -1)
+            this->set(0, keep + result);
+        //return result == this->size() - keep ?
+        //    traits_type::good() :
+        //    keep == -1 ?
+        //        traits_type::eof() :
+        //        traits_type::would_block();
+        return result == -1 ?
+            traits_type::eof() :
+                result == 0 ?
+                    traits_type::would_block() :
+                    traits_type::good();
+
+    }
+
+    // Returns true if one or more characters were written.
+    template<typename Sink>
+    bool flush(Sink& dest) 
+    {
+        using namespace std;
+        streamsize amt = static_cast<std::streamsize>(eptr_ - ptr_);
+        streamsize result = iostreams::write_if(dest, ptr_, amt);
+        if (result < amt) {
+            traits_type::move( this->data(), 
+                               ptr_ + result, 
+                               amt - result );
+        }
+        this->set(0, amt - result);
+        return result != 0;
+    }
 private:
     Ch *ptr_, *eptr_;
 };
