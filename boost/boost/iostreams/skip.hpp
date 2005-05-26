@@ -67,7 +67,7 @@ template<typename Device>
 void skip(Device& dev, stream_offset off)
 { 
     typedef typename mode_of<Device>::type mode;
-    return detail::skip(dev, off, is_convertible<mode, seekable>());
+    detail::skip(dev, off, is_convertible<mode, seekable>());
 }
 
 template<typename Filter, typename Device>
@@ -79,7 +79,7 @@ void skip(Filter& flt, Device& dev, stream_offset off)
                 is_convertible<filter_mode, output_seekable>,
                 is_convertible<device_mode, output_seekable>
             >                                                  can_seek;
-    return detail::skip(flt, dev, off, can_seek());
+    detail::skip(flt, dev, off, can_seek());
 }
 
 } } // End namespaces iostreams, boost.
