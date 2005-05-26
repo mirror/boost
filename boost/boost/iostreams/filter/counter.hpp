@@ -13,7 +13,7 @@
 
 #include <algorithm>  // count.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/newline.hpp>
+#include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/pipeline.hpp>
 
@@ -38,12 +38,12 @@ public:
           multichar_tag,
           optimally_buffered_tag
         { };
-    basic_counter(int first_line = 0, int first_char = 0)
+    explicit basic_counter(int first_line = 0, int first_char = 0)
         : lines_(first_line), chars_(first_char)
         { }
     int lines() const { return lines_; }
     int characters() const { return chars_; }
-    std::streamsize optimal_buffer_size() const { return 1; }
+    std::streamsize optimal_buffer_size() const { return 0; }
 
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
@@ -51,7 +51,7 @@ public:
         std::streamsize result = iostreams::read(src, s, n);
         if (result == -1)
             return -1;
-        lines_ += std::count(s, s + result, newline());
+        lines_ += std::count(s, s + result, char_traits<Ch>::newline());
         chars_ += result;
         return result;
     }
@@ -60,12 +60,11 @@ public:
     std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         std::streamsize result = iostreams::write(snk, s, n);
-        lines_ += std::count(s, s + result, newline());
+        lines_ += std::count(s, s + result, char_traits<Ch>::newline());
         chars_ += result;
         return result;
     }
 private:
-    Ch newline() const { return detail::newline<Ch>::value; }
     int lines_;
     int chars_;
 };
