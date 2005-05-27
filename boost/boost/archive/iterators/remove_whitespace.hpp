@@ -47,7 +47,8 @@ namespace std{ using ::isspace; }
 #endif
 
 #if defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
-// this is required for the RW STL on Linux:
+// this is required for the RW STL on Linux and Tru64.
+#undef isspace
 #undef iswspace
 #endif
 
