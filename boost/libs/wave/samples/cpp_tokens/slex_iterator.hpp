@@ -26,6 +26,12 @@
 
 #include "slex_interface.hpp"
 
+#if 0 != __COMO_VERSION__
+#define BOOST_WAVE_EOF_PREFIX static
+#else
+#define BOOST_WAVE_EOF_PREFIX 
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -54,7 +60,7 @@ public:
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
     typedef TokenT result_type;
 
-    static result_type const eof;
+    BOOST_WAVE_EOF_PREFIX result_type const eof;
     
     result_type operator()() 
     { 
@@ -71,12 +77,14 @@ private:
     boost::shared_ptr<slex_input_interface<TokenT> > functor_ptr;
 };
 
+#if 0 != __COMO_VERSION__
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
 template <typename TokenT>
 typename slex_iterator_functor_shim<TokenT>::result_type const
     slex_iterator_functor_shim<TokenT>::eof = 
         typename slex_iterator_functor_shim<TokenT>::result_type();
+#endif // 0 != __COMO_VERSION__
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl
@@ -135,5 +143,7 @@ public:
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost
+
+#undef BOOST_WAVE_EOF_PREFIX
 
 #endif // !defined(SLEX_ITERATOR_HPP_AF0C37E3_CBD8_4F33_A225_51CF576FA61F_INCLUDED)

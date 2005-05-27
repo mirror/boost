@@ -45,6 +45,8 @@ CHANGELOG
 - Fixed test cases to scale to 64 bit platforms.
 - Disabled the MS specific extensions in the lexer tests in a platform related
   way.
+- Added special handling of the eof tokens inside the lexer iterator classes
+  for Comeau.
   
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17

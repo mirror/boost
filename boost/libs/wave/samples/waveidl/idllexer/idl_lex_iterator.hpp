@@ -27,6 +27,12 @@
 
 #include "idl_lex_interface.hpp"
 
+#if 0 != __COMO_VERSION__
+#define BOOST_WAVE_EOF_PREFIX static
+#else
+#define BOOST_WAVE_EOF_PREFIX 
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -55,7 +61,7 @@ public:
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
     typedef TokenT result_type;
 
-    static result_type const eof;
+    BOOST_WAVE_EOF_PREFIX result_type const eof;
     
     result_type operator()() 
     { 
@@ -72,11 +78,13 @@ private:
     boost::shared_ptr<lex_input_interface_t> functor_ptr;
 };
 
+#if 0 != __COMO_VERSION__
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
 template <typename LexT>
 typename lex_iterator_functor_shim<LexT>::result_type const
     lex_iterator_functor_shim<LexT>::eof;
+#endif // 0 != __COMO_VERSION__
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl
