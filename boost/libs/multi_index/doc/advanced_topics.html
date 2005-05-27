@@ -977,18 +977,30 @@ differ from any other serializable type. For instance:
 
 <span class=special>...</span>
 
+<span class=keyword>void</span> <span class=identifier>save</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>employee_set</span><span class=special>&amp;</span> <span class=identifier>es</span><span class=special>)</span>
+<span class=special>{</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>ofstream</span> <span class=identifier>ofs</span><span class=special>(</span><span class=string>&quot;data&quot;</span><span class=special>);</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>archive</span><span class=special>::</span><span class=identifier>text_oarchive</span> <span class=identifier>oa</span><span class=special>(</span><span class=identifier>ofs</span><span class=special>);</span>
+  <span class=identifier>oa</span><span class=special>&lt;&lt;</span><span class=identifier>es</span><span class=special>;</span>
+<span class=special>}</span>
+
+<span class=keyword>void</span> <span class=identifier>load</span><span class=special>(</span><span class=identifier>employee_set</span><span class=special>&amp;</span> <span class=identifier>es</span><span class=special>)</span>
+<span class=special>{</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>ifstream</span> <span class=identifier>ifs</span><span class=special>(</span><span class=string>&quot;data&quot;</span><span class=special>);</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>archive</span><span class=special>::</span><span class=identifier>text_iarchive</span> <span class=identifier>ia</span><span class=special>(</span><span class=identifier>ifs</span><span class=special>);</span>
+  <span class=identifier>ia</span><span class=special>&gt;&gt;</span><span class=identifier>es</span><span class=special>;</span>
+<span class=special>}</span>
+
+<span class=special>...</span>
+
 <span class=identifier>employee_set</span> <span class=identifier>es</span><span class=special>;</span>
 <span class=special>...</span> <span class=comment>// fill it with data</span>
-<span class=identifier>std</span><span class=special>::</span><span class=identifier>ofstream</span> <span class=identifier>ofs</span><span class=special>(</span><span class=string>&quot;data&quot;</span><span class=special>);</span>
-<span class=identifier>boost</span><span class=special>::</span><span class=identifier>archive</span><span class=special>::</span><span class=identifier>text_oarchive</span> <span class=identifier>oa</span><span class=special>(</span><span class=identifier>ofs</span><span class=special>);</span>
-<span class=identifier>oa</span><span class=special>&lt;&lt;</span><span class=identifier>es</span><span class=special>;</span>
+<span class=identifier>save</span><span class=special>(</span><span class=identifier>es</span><span class=special>);</span>
 
 <span class=special>...</span>
 
 <span class=identifier>employee_set</span> <span class=identifier>restored_es</span><span class=special>;</span>
-<span class=identifier>std</span><span class=special>::</span><span class=identifier>ifstream</span> <span class=identifier>ifs</span><span class=special>(</span><span class=string>&quot;data&quot;</span><span class=special>);</span>
-<span class=identifier>boost</span><span class=special>::</span><span class=identifier>archive</span><span class=special>::</span><span class=identifier>text_iarchive</span> <span class=identifier>ia</span><span class=special>(</span><span class=identifier>ifs</span><span class=special>);</span>
-<span class=identifier>ia</span><span class=special>&gt;&gt;</span><span class=identifier>restored_es</span><span class=special>;</span>
+<span class=identifier>load</span><span class=special>(</span><span class=identifier>restored_es</span><span class=special>);</span>
 </pre></blockquote>
 
 <p>
@@ -1562,7 +1574,7 @@ Reference
 
 <br>
 
-<p>Revised April 20th 2005</p>
+<p>Revised May 27th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
