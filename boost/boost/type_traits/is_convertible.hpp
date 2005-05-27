@@ -292,8 +292,8 @@ struct is_convertible_impl_dispatch_base
 #else
    typedef is_convertible_impl_select<false, false, false> selector;
 #endif
-   typedef typename selector::template rebind<From, To> binder;
-   typedef typename binder::type type;
+   typedef typename selector::template rebind<From, To> isc_binder;
+   typedef typename isc_binder::type type;
 };
 
 template <typename From, typename To>
