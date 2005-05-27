@@ -1,24 +1,32 @@
 
 project
     : requirements 
-    <library>../build//program_options
+    <library>../build//boost_program_options
     <library>/boost/test//boost_test_exec_monitor
-    <hardcode-dll-paths>true
+    <link>static
     
 #    <define>_GLIBCXX_CONCEPT_CHECKS
 #    <define>_GLIBCXX_DEBUG
     ;
+    
+rule po-test ( source )
+{
+    return
+        [ run $(source) ]
+	[ run $(source) : : : <link>shared : $(source:B)_dll ] 
+    ;	
+}    
 
 test-suite program_options :
 
-    [ run options_description_test.cpp ] 
-    [ run parsers_test.cpp ]
-    [ run variable_map_test.cpp ]
-    [ run cmdline_test.cpp ]
-    [ run positional_options_test.cpp ]
-    [ run unicode_test.cpp ] 
-    [ run winmain.cpp ] 
+    [ po-test options_description_test.cpp ] 
+    [ po-test parsers_test.cpp ]
+    [ po-test variable_map_test.cpp ]
+    [ po-test cmdline_test.cpp ]
+    [ po-test positional_options_test.cpp ]
+    [ po-test unicode_test.cpp ] 
+    [ po-test winmain.cpp ] 
     ;
         
-exe test_convert : test_convert.cpp ../build//program_options ;   
+exe test_convert : test_convert.cpp ;   
 
