@@ -46,9 +46,12 @@
             guide</A> for more information.</P>
       <H3><A name="unicode"></A>Building With Unicode and ICU Support</H3>
       <P>A default build of this library does not enable <A href="unicode.html">Unciode 
-            support</A> via ICU.&nbsp; To do that you need to set the environment 
-         variable ICU_PATH to point to the route directory of your ICU installation, for 
-         example if ICU was installed to /usr/local you might use:</P>
+            support</A> via ICU.&nbsp; There is no need to enable this support if you 
+         don't need it, but if you use ICU for your Unicode support already, and want to 
+         work with Unicode-aware regular expressions then read on.</P>
+      <P>To enable ICU support you need to set the environment variable ICU_PATH to 
+         point to the route directory of your ICU installation, for example if ICU was 
+         installed to /usr/local you might use:</P>
       <PRE>bjam -sICU_PATH=/usr/local -sTOOLS=<A href="../../../more/getting_started.html#Tools" >my-compiler</A></PRE>
       <P>Note that ICU is a C++ library just like Boost is, as such your copy of ICU 
          must have been built with the same C++ compiler (and compiler version) that you 
@@ -243,4 +246,3 @@
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-
