@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
+"../../../tools/boostbook/dtd/boostbook.dtd">
+
+<!-- Copyright (c) 2005 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
+
+<section id="date_time.date_time_io" 
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Date Time Input/Output</title>
+  <using-namespace name="boost"/>
+  <using-namespace name="boost::date_time"/>
+  <bridgehead renderas="sect2">Date Time IO System</bridgehead>
+
+  <para>As of version 1.33, the date_time library utilizes a new IO streaming system. This new system give the user great control over how dates and times can be represented. The customization options can be broken down into two groups: format flags and string elements. Format flags provide flexibility in the order of the date elements as well as the type. Customizing the string elements allows the replacement of built in strings from month names, weekday names, and other strings used in the IO.</para>
+
+  <para>The output system is based on a date_facet (derived from std::facet), while the input system is based on a date_input_facet (also derived from std::facet). The time and local_time facets are derived from these base types. The output system utilizes three formatter objects, whereas the input system uses four parser objects. These formatter and parser objetcs are also customizable.</para>
+
+  <para>A simple example of this new system:</para>
+  <screen>//example to customize output to be "LongWeekday LongMonthname day, year"
+//                                  "%A %b %d, %Y"
+date d(2005,6,25);
+date_facet* facet(new date_facet("%A %B %d, %Y"));
+std::cout.imbue(std::locale(std::cout.getloc(), facet));
+std::cout &lt;&lt; d &lt;&lt; std::endl;
+// "Saturday June 25, 2005"</screen>
+  
+  <para>The following table lists all of these objects.</para>
+
+  <xi:include href="format_flags.xml" />
+  
+  <!-- <anchor id="greg_ex" /> -->
+  <bridgehead renderas="sect3">IO Objects</bridgehead>
+  <para>
+    <informaltable frame="all">
+      <tgroup cols="2">
+	<thead>
+	  <row>
+	    <entry>Output</entry>
+	    <entry>Input</entry>
+	  </row>
+	</thead>
+	<tbody>
+          <row>
+            <entry><classname>date_facet</classname></entry>
+	    <entry><classname>date_input_facet</classname></entry>
+	  </row>
+          <row>
+            <entry><classname>time_facet</classname></entry>
+	    <entry><classname>time_input_facet</classname></entry>
+	  </row>
+          <row>
+            <entry><classname alt="boost::date_time::time_facet">local_time_facet</classname></entry>
+	    <entry><classname alt="boost::date_time::time_input_facet">local_time_input_facet</classname></entry>
+	  </row>
+	</tbody>
+      </tgroup>
+    </informaltable>
+  </para>
+  
+  <bridgehead renderas="sect3">Formatter/Parser Objects</bridgehead>
+  <para>These objects are used by the facets for type specific parsing and formatting. They are typically used when customizing the IO but can also be used apart from the facets.</para>
+  <para>
+    <informaltable frame="all">
+      <tgroup cols="2">
+	<thead>
+	  <row>
+	    <entry>Output</entry>
+	    <entry>Input</entry>
+	  </row>
+	</thead>
+	<tbody>
+          <row>
+            <entry><classname>period_formatter</classname></entry>
+	    <entry><classname>period_parser</classname></entry>
+	  </row>
+          <row>
+            <entry><classname>date_generator_formatter</classname></entry>
+	    <entry><classname>date_generator_parser</classname></entry>
+	  </row>
+          <row>
+            <entry><classname>special_values_formatter</classname></entry>
+	    <entry><classname>special_values_parser</classname></entry>
+	  </row>
+          <row>
+            <entry></entry>
+	    <entry><classname>format_date_parser</classname></entry>
+	  </row>
+	</tbody>
+      </tgroup>
+    </informaltable>
+  </para>
+
+  <xi:include href="date_facet.xml" />
+  <xi:include href="date_input_facet.xml" />
+  <xi:include href="time_facet.xml" />
+  <xi:include href="time_input_facet.xml" />
+  <xi:include href="io_objects.xml" />
+  <xi:include href="io_tutorial.xml" />
+  
+</section>

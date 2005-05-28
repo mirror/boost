@@ -29,7 +29,6 @@
   {
 
     using namespace boost::gregorian;
-    typedef boost::date_time::month_functor<date> add_month;
 
     date d = day_clock::local_day();
     add_month mf(1);

@@ -16,6 +16,7 @@
       libs/date_time/test
       libs/date_time/test/gregorian
       libs/date_time/test/posix_time
+      libs/date_time/test/local_time
     </programlisting>
     directories. Building and executing these tests assures that the installation is correct and that the library is functioning correctly. In addition, these tests facilitate the porting to new compilers. Finally, the tests provide examples of many functions not explicitly described in the usage examples. 
   </para>

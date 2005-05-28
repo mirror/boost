@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -61,6 +61,16 @@
     No extra steps are required to build the date_time library for serialization use.
   </para>
 
+  <para>NOTE: due to a change in the serialization library interface, it is now required that all streamable objects be const prior to writing to the archive. The following template function will allow for this (and is used in the date_time tests). At this time no special steps are necessary to read from an archive.
+    <programlisting>
+      template&lt;class archive_type, class temporal_type>
+      void save_to(archive_type&amp; ar, const temporal_type&amp; tt)
+      {
+        ar &lt;&lt; tt;
+      }
+    </programlisting>
+  </para>
+
   <para>
     Example text_archive usage:
     <programlisting>
@@ -69,7 +79,7 @@
       ptime pt(date(2002, Feb, 14)), hours(10)), pt2(not_a_date_time);
       std::ofstream ofs("tmp_file");
       archive::test_oarchive oa(ofs);
-      oa &lt;&lt; pt;                        // NOTE: no macro
+      save_to(oa, pt);                 // NOTE: no macro
       ofs.close();
       std::ifstream ifs("tmp_file");
       archive::text_iarchive ia(ifs);
@@ -85,11 +95,11 @@
       date d(2002, Feb, 14), d2(not_a_date_time);
       std::ofstream ofs("tmp_file");
       archive::xml_oarchive oa(ofs);
-      oa &lt;&lt; BOOST_SERIALIZATION_NVP(d); // macro required for xml_archive
+      save_to(oa, BOOST_SERIALIZATION_NVP(d)); // macro required for xml_archive
       ofs.close();
       std::ifstream ifs("tmp_file");
       archive::xml_iarchive ia(ifs);
-      ia &gt;&gt; BOOST_SERIALIZATION_NVP(d2); // macro required for xml_archive
+      ia &gt;&gt; BOOST_SERIALIZATION_NVP(d2);       // macro required for xml_archive
       ifs.close();
       d == d2; // true</programlisting>
   </para>
@@ -103,12 +113,4 @@
       boost/date_time/posix_time/time_serialize.hpp</programlisting>
   </para>
 
-  <!-- temporarily removed docs on testing serialization
-  <para>
-    Tests exist for serialization of the above mentioned classes but are not run by default. To run these test suites a global variable must be set on the command line.
-    <programlisting>
-      bjam “-sBOOST_DATE_TIME_SERIALIZATION=true” ...</programlisting>
-    This will run the date_time_serialization suite along with the rest of the date_time tests.
-  </para>
-  -->
 </section>

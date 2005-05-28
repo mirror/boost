@@ -3,7 +3,7 @@
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
-<!-- date source directory processed: 2005-Feb-1 -->
+<!-- date source directory processed: 2005-May-28 -->
 <section id="posix_time_reference">
 <title>Posix Time Reference</title>
   <header name="boost/date_time/posix_time/conversion.hpp">
@@ -427,6 +427,12 @@
         <typedef name="ptime_facet">
           <type>boost::date_time::time_facet&lt; <classname>ptime</classname>, char &gt;</type>
         </typedef>
+        <typedef name="wptime_input_facet">
+          <type>boost::date_time::time_input_facet&lt; <classname>ptime</classname>, wchar_t &gt;</type>
+        </typedef>
+        <typedef name="ptime_input_facet">
+          <type>boost::date_time::time_input_facet&lt; <classname>ptime</classname>, char &gt;</type>
+        </typedef>
         <function name="operator&lt;&lt;">
           <type>std::basic_ostream&lt; CharT, TraitsT &gt; &amp;</type>
           <template>
@@ -439,6 +445,20 @@
           <parameter name="p">
             <paramtype>const <classname>ptime</classname> &amp;</paramtype>
           </parameter>
+        </function>
+        <function name="operator&gt;&gt;">
+          <type>std::basic_istream&lt; CharT, traits &gt; &amp;</type>
+          <template>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="traits"/>
+        </template>
+          <parameter name="is">
+            <paramtype>std::basic_istream&lt; CharT, traits &gt; &amp;</paramtype>
+          </parameter>
+          <parameter name="pt">
+            <paramtype><classname>ptime</classname> &amp;</paramtype>
+          </parameter>
+          <purpose>input operator for ptime </purpose>
         </function>
         <function name="operator&lt;&lt;">
           <type>std::basic_ostream&lt; CharT, TraitsT &gt; &amp;</type>
@@ -453,6 +473,20 @@
             <paramtype>const boost::posix_time::time_period &amp;</paramtype>
           </parameter>
         </function>
+        <function name="operator&gt;&gt;">
+          <type>std::basic_istream&lt; CharT, traits &gt; &amp;</type>
+          <template>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="traits"/>
+        </template>
+          <parameter name="is">
+            <paramtype>std::basic_istream&lt; CharT, traits &gt; &amp;</paramtype>
+          </parameter>
+          <parameter name="tp">
+            <paramtype>time_period &amp;</paramtype>
+          </parameter>
+          <purpose>input operator for time_period </purpose>
+        </function>
         <function name="operator&lt;&lt;">
           <type>std::basic_ostream&lt; CharT, traits &gt; &amp;</type>
           <template>
@@ -466,6 +500,20 @@
             <paramtype>const <classname>time_duration</classname> &amp;</paramtype>
           </parameter>
           <purpose>ostream operator for posix_time::time_duration </purpose>
+        </function>
+        <function name="operator&gt;&gt;">
+          <type>std::basic_istream&lt; CharT, traits &gt; &amp;</type>
+          <template>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="traits"/>
+        </template>
+          <parameter name="is">
+            <paramtype>std::basic_istream&lt; CharT, traits &gt; &amp;</paramtype>
+          </parameter>
+          <parameter name="td">
+            <paramtype><classname>time_duration</classname> &amp;</paramtype>
+          </parameter>
+          <purpose>input operator for time_duration </purpose>
         </function>
       </namespace>
     </namespace>
@@ -555,12 +603,6 @@
           </description>
         </function>
       </namespace>
-    </namespace>
-  </header>
-  <header name="boost/date_time/posix_time/posix_time_pre133_operators.hpp">
-    <para>These input and output operators are for use with the pre 1.33 version of the date_time libraries io facet code. The operators used in version 1.33 and later can be found in posix_time_io.hpp</para>
-    <namespace name="boost">
-      <namespace name="posix_time"/>
     </namespace>
   </header>
   <header name="boost/date_time/posix_time/posix_time_system.hpp">
@@ -877,148 +919,5 @@
       </namespace>
     </namespace>
   </header>
-  <header name="boost/date_time/posix_time/time_serialize.hpp">
-    <namespace name="boost">
-      <namespace name="serialization">
-        <function name="BOOST_SERIALIZATION_SPLIT_FREE">
-          <type/>
-          <parameter name="">
-            <paramtype>
-              <classname>boost::posix_time::ptime</classname>
-            </paramtype>
-          </parameter>
-          <description>
-            <para>time_duration objects are broken down into 4 parts for serialization: types are hour_type, min_type, sec_type, and fractional_seconds_type as defined in the time_duration class </para>
-          </description>
-        </function>
-        <function name="load">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="td">
-            <paramtype><classname>posix_time::time_duration</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>Function to load posix_time::time_duration objects using serialization lib. </purpose>
-          <description>
-            <para>time_duration objects are broken down into 4 parts for serialization: types are hour_type, min_type, sec_type, and fractional_seconds_type as defined in the time_duration class </para>
-          </description>
-        </function>
-        <function name="save">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="pt">
-            <paramtype>const <classname>posix_time::ptime</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>Function to save posix_time::ptime objects using serialization lib. </purpose>
-          <description>
-            <para>ptime objects are broken down into 2 parts for serialization: a date object and a time_duration onject </para>
-          </description>
-        </function>
-        <function name="load">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="pt">
-            <paramtype><classname>posix_time::ptime</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>Function to load posix_time::ptime objects using serialization lib. </purpose>
-          <description>
-            <para>ptime objects are broken down into 2 parts for serialization: a date object and a time_duration onject </para>
-          </description>
-        </function>
-        <function name="load_construct_data">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="pt">
-            <paramtype><classname>posix_time::ptime</classname> *</paramtype>
-          </parameter>
-          <parameter name="file_version">
-            <paramtype>const unsigned int</paramtype>
-          </parameter>
-          <purpose>override needed b/c no default constructor </purpose>
-        </function>
-        <function name="save">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="tp">
-            <paramtype>const posix_time::time_period &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>Function to save posix_time::time_period objects using serialization lib. </purpose>
-          <description>
-            <para>time_period objects are broken down into 2 parts for serialization: a begining ptime object and an ending ptime object </para>
-          </description>
-        </function>
-        <function name="load">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="tp">
-            <paramtype>boost::posix_time::time_period &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>Function to load posix_time::time_period objects using serialization lib. </purpose>
-          <description>
-            <para>time_period objects are broken down into 2 parts for serialization: a begining ptime object and an ending ptime object </para>
-          </description>
-        </function>
-        <function name="load_construct_data">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="tp">
-            <paramtype>boost::posix_time::time_period *</paramtype>
-          </parameter>
-          <parameter name="file_version">
-            <paramtype>const unsigned int</paramtype>
-          </parameter>
-          <purpose>override needed b/c no default constructor </purpose>
-        </function>
-      </namespace>
-    </namespace>
-  </header>
+  <header name="boost/date_time/posix_time/time_serialize.hpp"/>
 </section>

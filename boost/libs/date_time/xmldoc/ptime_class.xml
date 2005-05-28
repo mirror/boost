@@ -2,13 +2,13 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
 
 <section id="date_time.posix_time.ptime_class">
-  <title>Ptime Class</title>
+  <title>Ptime</title>
 
   <link linkend="ptime_intro">Introduction</link> --
   <link linkend="ptime_header">Header</link> --
@@ -45,8 +45,6 @@ or
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -62,9 +60,10 @@ or
 	    <entry>Construct from a date and offset</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-ptime t1(date(2002,Jan,10), time_duration(1,2,3));
-ptime t2(date(2002,Jan,10), hours(1)+nanosec(5));</screen>
+	    <entry><screen>ptime t1(date(2002,Jan,10), 
+         time_duration(1,2,3));
+ptime t2(date(2002,Jan,10), 
+         hours(1)+nanosec(5));</screen>
 	    </entry>
           </row>
 
@@ -81,8 +80,7 @@ ptime t2(date(2002,Jan,10), hours(1)+nanosec(5));</screen>
 	    <entry>Constructor for infinities, not-a-date-time, max_date_time, and min_date_time</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-ptime d1(neg_infin);
+	    <entry><screen>ptime d1(neg_infin);
 ptime d2(pos_infin);
 ptime d3(not_a_date_time);
 ptime d4(max_date_time);
@@ -107,8 +105,6 @@ ptime d5(min_date_time);</screen></entry>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -147,8 +143,6 @@ ptime t(from_iso_string(ts))</screen></entry>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -168,7 +162,7 @@ ptime t(from_iso_string(ts))</screen></entry>
           </row>
 
 	  <row>
-	    <entry valign="top" morerows="1"><screen>static ptime second_clock::universal_time()</screen></entry>
+	    <entry valign="top" morerows="1"><screen>ptime second_clock::universal_time()</screen></entry>
 	    <entry>Get the UTC time.</entry>
 	  </row>
 	  <row>
@@ -193,8 +187,6 @@ ptime t(from_iso_string(ts))</screen></entry>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -231,8 +223,6 @@ ptime t(from_iso_string(ts))</screen></entry>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -248,8 +238,7 @@ ptime t(from_iso_string(ts))</screen></entry>
 	    <entry>Get the date part of a time.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,10);
+	    <entry><screen>date d(2002,Jan,10);
 ptime t(d, hour(1));
 t.date() --> 2002-Jan-10;</screen>
 	    </entry>
@@ -260,8 +249,7 @@ t.date() --> 2002-Jan-10;</screen>
 	    <entry>Get the time offset in the day.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,10);
+	    <entry><screen>date d(2002,Jan,10);
 ptime t(d, hour(1));
 t.time_of_day() --> 01:00:00;</screen>
 	    </entry>
@@ -277,8 +265,6 @@ t.time_of_day() --> 01:00:00;</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -323,8 +309,6 @@ t.time_of_day() --> 01:00:00;</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -336,8 +320,7 @@ t.time_of_day() --> 01:00:00;</screen>
 	</thead>
 	<tbody>
           <row>
-	    <entry valign="top" morerows="1"><screen>
-operator==, operator!=,
+	    <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen>
 	    </entry>
@@ -352,8 +335,7 @@ operator>=, operator&lt;=</screen>
 	    <entry>Return a ptime adding a day offset</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,1);
+	    <entry><screen>date d(2002,Jan,1);
 ptime t(d,minutes(5));
 date_duration dd(1);
 ptime t2 = t + dd;</screen>
@@ -365,8 +347,7 @@ ptime t2 = t + dd;</screen>
 	    <entry>Return a ptime subtracting a day offset</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,1);
+	    <entry><screen>date d(2002,Jan,1);
 ptime t(d,minutes(5));
 date_duration dd(1);
 ptime t2 = t - dd;</screen>
@@ -378,8 +359,7 @@ ptime t2 = t - dd;</screen>
 	    <entry>Return a ptime adding a time duration</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,1);
+	    <entry><screen>date d(2002,Jan,1);
 ptime t(d,minutes(5));
 ptime t2 = t + hours(1) + minutes(2);</screen>
 	    </entry>
@@ -390,8 +370,7 @@ ptime t2 = t + hours(1) + minutes(2);</screen>
 	    <entry>Return a ptime subtracting a time duration</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,1);
+	    <entry><screen>date d(2002,Jan,1);
 ptime t(d,minutes(5));
 ptime t2 = t - minutes(2);</screen>
 	    </entry>
@@ -402,8 +381,7 @@ ptime t2 = t - minutes(2);</screen>
 	    <entry>Take the difference between two times.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,1);
+	    <entry><screen>date d(2002,Jan,1);
 ptime t1(d,minutes(5));
 ptime t2(d,seconds(5));
 time_duration t3 = t2 - t1;//negative result</screen>

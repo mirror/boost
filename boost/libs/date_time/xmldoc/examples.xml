@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -11,13 +11,12 @@
   <title>Examples</title>
 
   <!-- gregorian examples -->
-  <xi:include href="usage_examples.xml"/>
-
   <xi:include href="ex_dates_as_strings.xml"/>
   <xi:include href="ex_days_alive.xml"/>
   <xi:include href="ex_days_between_new_years.xml"/>
-  <xi:include href="ex_end_of_month_day.xml"/>
+  <xi:include href="ex_find_last_day_of_months.xml"/>
   <xi:include href="ex_localization.xml"/>
+  <!-- <xi:include href="ex_legacy_localization.xml"/> -->
   <xi:include href="ex_date_period_calc.xml"/>
   <xi:include href="ex_print_holidays.xml"/>
   <xi:include href="ex_print_month.xml"/>
@@ -30,6 +29,6 @@
   <!-- local_time examples -->
   <xi:include href="ex_simple_time_zone.xml"/>
   <xi:include href="ex_calc_rules.xml"/>
-  <xi:include href="ex_meeting_planner.xml"/>
+  <!-- <xi:include href="ex_meeting_planner.xml"/> -->
   <xi:include href="ex_seconds_since_epoch.xml"/>
 </section>

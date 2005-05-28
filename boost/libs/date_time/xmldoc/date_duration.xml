@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -14,7 +14,8 @@
   <link linkend="duration_header">Header</link> --
   <link linkend="duration_construction">Construction</link> --
   <link linkend="duration_accessors">Accessors</link> --
-  <link linkend="duration_operators">Operators</link>
+  <link linkend="duration_operators">Operators</link> --
+  <link linkend="additional_duration_types">Additional Duration Types</link>
 
   <anchor id="duration_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
@@ -37,8 +38,6 @@ or
   <bridgehead renderas="sect3">Construction</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -64,8 +63,6 @@ or
   <bridgehead renderas="sect3">Accessors</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -107,8 +104,6 @@ or
   <bridgehead renderas="sect3">Operators</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -120,8 +115,7 @@ or
       </thead>
       <tbody>
         <row>
-	  <entry valign="top" morerows="1"><screen>
-operator==, operator!=,
+	  <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen>
 	  </entry>
@@ -136,8 +130,7 @@ operator>=, operator&lt;=</screen>
 	  <entry>Add date durations.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date_duration dd1(3);
+	  <entry><screen>date_duration dd1(3);
 date_duration dd2(5);
 date_duration dd3 = dd1 + dd2;</screen>
 	  </entry>
@@ -148,8 +141,7 @@ date_duration dd3 = dd1 + dd2;</screen>
 	  <entry>Subtract durations.</entry>
 	</row>
         <row>
-	  <entry><screen>
-date_duration dd1(3);
+	  <entry><screen>date_duration dd1(3);
 date_duration dd2(5);
 date_duration dd3 = dd1 - dd2;</screen>
 	  </entry>
@@ -157,5 +149,59 @@ date_duration dd3 = dd1 - dd2;</screen>
       </tbody>
     </tgroup>
   </informaltable>
+
+  <anchor id="additional_duration_types" />
+  <bridgehead renderas="sect3">Additional Duration Types</bridgehead>
+  <para>These additional types are logical representations of spans of days.</para>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
+        </row>
+        <row>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+	<row>
+          <entry valign="top" morerows="1"><screen>months(int num_of_months)</screen></entry>
+          <entry>A logical month representation. Depending on the usage, this <code>months</code> object may cover a span of 28 to 31 days. The objects also use a snap to end-of-month behavior when used in conjunction with a date that is the last day of a given month.</entry>
+        </row>
+        <row>
+          <entry><screen>months single(1);
+date leap_year(2004,1,31);
+date norm_year(2005,1,31);
+leap_year + single; // => 2004-Feb-29
+norm_year + single; // => 2005-Feb-28
+date(2005,1,1) + single; // => 2005-Feb-01
+date(2005,2,1) + single; // => 2005-Mar-01
+date(2005,2,28) + single; // => 2005-Mar-31</screen></entry>
+        </row>
+
+	<row>
+          <entry valign="top" morerows="1"><screen>years(int num_of_years)</screen></entry>
+          <entry>A logical representation of a year. The <code>years</code> object has the same behaviour as the <code>months</code> objects with regards to the end-of-the-month.</entry>
+        </row>
+        <row>
+          <entry><screen>years single(1);
+date(2003,2,28) + single; // => 2004-Feb-29
+date(2004,2,29) + single; // => 2005-Feb-28</screen></entry>
+        </row>
+
+	<row>
+          <entry valign="top" morerows="1"><screen>weeks(int num_of_weeks)</screen></entry>
+          <entry>A duration type representing a number of <code>n * 7</code> days.</entry>
+        </row>
+        <row>
+          <entry><screen>weeks single(1);
+date(2005,1,1) + single; // => 2005-Jan-08</screen></entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+
 
 </section>

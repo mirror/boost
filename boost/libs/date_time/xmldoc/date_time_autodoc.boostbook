@@ -3,7 +3,7 @@
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
-<!-- date source directory processed: 2005-Feb-1 -->
+<!-- date source directory processed: 2005-May-28 -->
 <section id="date_time_reference">
 <title>Date Time Reference</title>
   <header name="boost/date_time/adjust_functors.hpp">
@@ -177,6 +177,58 @@
   <header name="boost/date_time/c_time.hpp">
     <para>Provide workarounds related to the ctime header</para>
     <namespace name="std"/>
+    <namespace name="boost">
+      <namespace name="date_time">
+        <struct name="c_time">
+          <purpose>Provides a uniform interface to some 'ctime' functions. </purpose>
+          <description>
+            <para>Provides a uniform interface to some ctime functions and their '_r' counterparts. The '_r' functions require a pointer to a user created std::tm struct whereas the regular functions use a staticly created struct and return a pointer to that. These wrapper functions require the user to create a std::tm struct and send in a pointer to it. A pointer to the user created struct will be returned. </para>
+          </description>
+          <method-group name="public static functions">
+            <method name="localtime" cv="">
+              <type>std::tm *</type>
+              <parameter name="t">
+                <paramtype>const std::time_t *</paramtype>
+              </parameter>
+              <parameter name="result">
+                <paramtype>std::tm *</paramtype>
+              </parameter>
+              <purpose>requires a pointer to a user created std::tm struct </purpose>
+            </method>
+            <method name="gmtime" cv="">
+              <type>std::tm *</type>
+              <parameter name="t">
+                <paramtype>const std::time_t *</paramtype>
+              </parameter>
+              <parameter name="result">
+                <paramtype>std::tm *</paramtype>
+              </parameter>
+              <purpose>requires a pointer to a user created std::tm struct </purpose>
+            </method>
+            <method name="localtime" cv="">
+              <type>std::tm *</type>
+              <parameter name="t">
+                <paramtype>const std::time_t *</paramtype>
+              </parameter>
+              <parameter name="result">
+                <paramtype>std::tm *</paramtype>
+              </parameter>
+              <purpose>requires a pointer to a user created std::tm struct </purpose>
+            </method>
+            <method name="gmtime" cv="">
+              <type>std::tm *</type>
+              <parameter name="t">
+                <paramtype>const std::time_t *</paramtype>
+              </parameter>
+              <parameter name="result">
+                <paramtype>std::tm *</paramtype>
+              </parameter>
+              <purpose>requires a pointer to a user created std::tm struct </purpose>
+            </method>
+          </method-group>
+        </struct>
+      </namespace>
+    </namespace>
   </header>
   <header name="boost/date_time/compiler_config.hpp">
     <namespace name="std"/>
@@ -475,9 +527,15 @@
           <method-group name="private static functions">
             <method name="get_local_time" cv="">
               <type>::std::tm *</type>
+              <parameter name="result">
+                <paramtype>std::tm &amp;</paramtype>
+              </parameter>
             </method>
             <method name="get_universal_time" cv="">
               <type>::std::tm *</type>
+              <parameter name="result">
+                <paramtype>std::tm &amp;</paramtype>
+              </parameter>
             </method>
           </method-group>
         </class>
@@ -961,8 +1019,11 @@
       <template-type-parameter name="OutItrT"><default>std::ostreambuf_iterator&lt;CharT, std::char_traits&lt;CharT&gt; &gt;</default></template-type-parameter>
     </template>
           <description>
-            <para>TODO: ... Format flags are:</para>
-            <para>A =&gt; long_weekday_format - Full name Ex: Tuesday a =&gt; short_weekday_format - Three letter abbreviation Ex: Tue B =&gt; long_month_format - Full name Ex: October b =&gt; short_month_format - Three letter abbreviation Ex: Oct x =&gt; standard_format_specifier - defined by the locale Y-%b-%d =&gt; default_date_format - YYYY-Mon-dd</para>
+            <para>Class that provides format based I/O facet for date types.</para>
+            <para>This class allows the formatting of dates by using format string. Format strings are:</para>
+            <para><itemizedlist>
+<listitem><para>A =&gt; long_weekday_format - Full name Ex: Tuesday</para></listitem><listitem><para>a =&gt; short_weekday_format - Three letter abbreviation Ex: Tue</para></listitem><listitem><para>B =&gt; long_month_format - Full name Ex: October</para></listitem><listitem><para>b =&gt; short_month_format - Three letter abbreviation Ex: Oct</para></listitem><listitem><para>x =&gt; standard_format_specifier - defined by the locale</para></listitem><listitem><para>Y-%b-%d =&gt; default_date_format - YYYY-Mon-dd</para></listitem></itemizedlist>
+</para>
             <para>Default month format == b Default weekday format == a </para>
           </description>
           <typedef name="duration_type">
@@ -996,7 +1057,7 @@
             <type>std::vector&lt; std::basic_string&lt; CharT &gt; &gt;</type>
           </typedef>
           <typedef name="date_gen_formatter_type">
-            <type>date_generator_formatter&lt; date_type, CharT &gt;</type>
+            <type><classname>date_generator_formatter</classname>&lt; date_type, CharT &gt;</type>
           </typedef>
           <typedef name="partial_date_type">
             <type><classname>partial_date</classname>&lt; date_type &gt;</type>
@@ -1017,6 +1078,12 @@
             <type><classname>first_kday_before</classname>&lt; date_type &gt;</type>
           </typedef>
           <method-group name="public member functions">
+            <method name="__get_id" cv="const">
+              <type>std::locale::id &amp;</type>
+              <parameter name="">
+                <paramtype>void</paramtype>
+              </parameter>
+            </method>
             <method name="format" cv="">
               <type>void</type>
               <parameter name="format">
@@ -1049,7 +1116,7 @@
                 </paramtype>
               </parameter>
             </method>
-            <method name="special_value_formatting" cv="">
+            <method name="special_values_formatter" cv="">
               <type>void</type>
               <parameter name="svf">
                 <paramtype>const <classname>special_values_formatter_type</classname> &amp;</paramtype>
@@ -1102,6 +1169,21 @@
               </parameter>
               <parameter name="d">
                 <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="put" cv="const">
+              <type>OutItrT</type>
+              <parameter name="next">
+                <paramtype>OutItrT</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="fill_char">
+                <paramtype>char_type</paramtype>
+              </parameter>
+              <parameter name="dd">
+                <paramtype>const duration_type &amp;</paramtype>
               </parameter>
             </method>
             <method name="put" cv="const">
@@ -1291,7 +1373,9 @@
               <default>special_values_formatter_type()</default>
             </parameter>
             <parameter name="dg_formatter">
-              <paramtype>date_gen_formatter_type</paramtype>
+              <paramtype>
+                <classname>date_gen_formatter_type</classname>
+              </paramtype>
               <default>date_gen_formatter_type()</default>
             </parameter>
             <parameter name="ref_count">
@@ -1330,15 +1414,22 @@
             <type>std::locale::id</type>
           </data-member>
           <method-group name="protected member functions">
+            <method name="init_tm" cv="const">
+              <type>tm</type>
+              <parameter name="tm_value">
+                <paramtype>tm &amp;</paramtype>
+              </parameter>
+              <purpose>Helper function to initialize all fields in a tm struct. </purpose>
+            </method>
             <method name="do_put_special" cv="const">
               <type>virtual OutItrT</type>
               <parameter name="next">
                 <paramtype>OutItrT</paramtype>
               </parameter>
-              <parameter name="a_ios">
+              <parameter name="">
                 <paramtype>std::ios_base &amp;</paramtype>
               </parameter>
-              <parameter name="fill_char">
+              <parameter name="">
                 <paramtype>char_type</paramtype>
               </parameter>
               <parameter name="sv">
@@ -1364,6 +1455,446 @@
               </parameter>
             </method>
           </method-group>
+        </class>
+        <class name="date_input_facet">
+          <template>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="CharT"/>
+      <template-type-parameter name="InItrT"><default>std::istreambuf_iterator&lt;CharT, std::char_traits&lt;CharT&gt; &gt;</default></template-type-parameter>
+    </template>
+          <purpose>Input facet. </purpose>
+          <typedef name="duration_type">
+            <type>date_type::duration_type</type>
+          </typedef>
+          <typedef name="day_of_week_type">
+            <type>date_type::day_of_week_type</type>
+          </typedef>
+          <typedef name="day_type">
+            <type>date_type::day_type</type>
+          </typedef>
+          <typedef name="month_type">
+            <type>date_type::month_type</type>
+          </typedef>
+          <typedef name="year_type">
+            <type>date_type::year_type</type>
+          </typedef>
+          <typedef name="period_type">
+            <type><classname>boost::date_time::period</classname>&lt; date_type, duration_type &gt;</type>
+          </typedef>
+          <typedef name="string_type">
+            <type>std::basic_string&lt; CharT &gt;</type>
+          </typedef>
+          <typedef name="char_type">
+            <type>CharT</type>
+          </typedef>
+          <typedef name="period_parser_type">
+            <type><classname>boost::date_time::period_parser</classname>&lt; date_type, CharT &gt;</type>
+          </typedef>
+          <typedef name="special_values_parser_type">
+            <type><classname>special_values_parser</classname>&lt; date_type, CharT &gt;</type>
+          </typedef>
+          <typedef name="input_collection_type">
+            <type>std::vector&lt; std::basic_string&lt; CharT &gt; &gt;</type>
+          </typedef>
+          <typedef name="format_date_parser_type">
+            <type><classname>format_date_parser</classname>&lt; date_type, CharT &gt;</type>
+          </typedef>
+          <typedef name="date_gen_parser_type">
+            <type><classname>date_generator_parser</classname>&lt; date_type, CharT &gt;</type>
+          </typedef>
+          <typedef name="partial_date_type">
+            <type><classname>partial_date</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="nth_kday_type">
+            <type><classname>nth_kday_of_month</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="first_kday_type">
+            <type><classname>first_kday_of_month</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="last_kday_type">
+            <type><classname>last_kday_of_month</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="kday_after_type">
+            <type><classname>first_kday_after</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="kday_before_type">
+            <type><classname>first_kday_before</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="format" cv="">
+              <type>void</type>
+              <parameter name="format">
+                <paramtype>const char_type *const</paramtype>
+              </parameter>
+            </method>
+            <method name="set_iso_format" cv="">
+              <type>virtual void</type>
+            </method>
+            <method name="set_iso_extended_format" cv="">
+              <type>virtual void</type>
+            </method>
+            <method name="month_format" cv="">
+              <type>void</type>
+              <parameter name="format">
+                <paramtype>const char_type *const</paramtype>
+              </parameter>
+            </method>
+            <method name="weekday_format" cv="">
+              <type>void</type>
+              <parameter name="format">
+                <paramtype>const char_type *const</paramtype>
+              </parameter>
+            </method>
+            <method name="year_format" cv="">
+              <type>void</type>
+              <parameter name="format">
+                <paramtype>const char_type *const</paramtype>
+              </parameter>
+            </method>
+            <method name="period_parser" cv="">
+              <type>void</type>
+              <parameter name="period_parser">
+                <paramtype>
+                  <classname>period_parser_type</classname>
+                </paramtype>
+              </parameter>
+            </method>
+            <method name="short_weekday_names" cv="">
+              <type>void</type>
+              <parameter name="weekday_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="long_weekday_names" cv="">
+              <type>void</type>
+              <parameter name="weekday_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="short_month_names" cv="">
+              <type>void</type>
+              <parameter name="month_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="long_month_names" cv="">
+              <type>void</type>
+              <parameter name="month_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="date_gen_element_strings" cv="">
+              <type>void</type>
+              <parameter name="col">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="date_gen_element_strings" cv="">
+              <type>void</type>
+              <parameter name="first">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="second">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="third">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="fourth">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="fifth">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="last">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="before">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="after">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="of">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="special_values_parser" cv="">
+              <type>void</type>
+              <parameter name="sv_parser">
+                <paramtype>
+                  <classname>special_values_parser_type</classname>
+                </paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="d">
+                <paramtype>date_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="m">
+                <paramtype>month_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="wd">
+                <paramtype>day_of_week_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="d">
+                <paramtype>day_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>year_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="dd">
+                <paramtype>duration_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="p">
+                <paramtype><classname>period_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="nkd">
+                <paramtype><classname>nth_kday_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="pd">
+                <paramtype><classname>partial_date_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="fkd">
+                <paramtype><classname>first_kday_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="lkd">
+                <paramtype><classname>last_kday_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="fkb">
+                <paramtype><classname>kday_before_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="from">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="to">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="fka">
+                <paramtype><classname>kday_after_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="a_ref">
+              <paramtype>::size_t</paramtype>
+              <default>0</default>
+            </parameter>
+          </constructor>
+          <constructor>
+            <parameter name="format">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="a_ref">
+              <paramtype>::size_t</paramtype>
+              <default>0</default>
+            </parameter>
+          </constructor>
+          <constructor>
+            <parameter name="format">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="date_parser">
+              <paramtype>const <classname>format_date_parser_type</classname> &amp;</paramtype>
+            </parameter>
+            <parameter name="sv_parser">
+              <paramtype>const <classname>special_values_parser_type</classname> &amp;</paramtype>
+            </parameter>
+            <parameter name="per_parser">
+              <paramtype>const <classname>period_parser_type</classname> &amp;</paramtype>
+            </parameter>
+            <parameter name="date_gen_parser">
+              <paramtype>const <classname>date_gen_parser_type</classname> &amp;</paramtype>
+            </parameter>
+            <parameter name="ref_count">
+              <paramtype>::size_t</paramtype>
+              <default>0</default>
+            </parameter>
+          </constructor>
+          <data-member name="long_weekday_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="short_weekday_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="long_month_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="short_month_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="four_digit_year_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="two_digit_year_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_period_separator" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="standard_format_specifier" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="iso_format_specifier" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="iso_format_extended_specifier" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_date_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="id" specifiers="static">
+            <type>std::locale::id</type>
+          </data-member>
         </class>
       </namespace>
     </namespace>
@@ -1742,6 +2273,12 @@
       <template-type-parameter name="CharT"/>
       <template-type-parameter name="OutItrT"><default>std::ostreambuf_iterator&lt;CharT, std::char_traits&lt;CharT&gt; &gt;</default></template-type-parameter>
     </template>
+          <purpose>Formats date_generators for output. </purpose>
+          <description>
+            <para>Formatting of date_generators follows specific orders for the various types of date_generators.<itemizedlist>
+<listitem><para>partial_date =&gt; "dd Month"</para></listitem><listitem><para>nth_day_of_the_week_in_month =&gt; "nth weekday of month"</para></listitem><listitem><para>first_day_of_the_week_in_month =&gt; "first weekday of month"</para></listitem><listitem><para>last_day_of_the_week_in_month =&gt; "last weekday of month"</para></listitem><listitem><para>first_day_of_the_week_after =&gt; "weekday after"</para></listitem><listitem><para>first_day_of_the_week_before =&gt; "weekday before" While the order of the elements in these phrases cannot be changed, the elements themselves can be. Weekday and Month get their formats and names from the date_facet. The remaining elements are stored in the date_generator_formatter and can be customized upon construction or via a member function. The default elements are those shown in the examples above. </para></listitem></itemizedlist>
+</para>
+          </description>
           <typedef name="partial_date_type">
             <type><classname>partial_date</classname>&lt; date_type &gt;</type>
           </typedef>
@@ -1793,6 +2330,16 @@
                 <paramtype>phrase_elements</paramtype>
                 <default>first</default>
               </parameter>
+              <purpose>Replace the set of phrase elements with those contained in new_strings. </purpose>
+              <description>
+                <para>The order of the strings in the given collection is important. They must follow:<itemizedlist>
+<listitem><para>first, second, third, fourth, fifth, last, before, after, of.</para></listitem></itemizedlist>
+</para>
+                <para>It is not necessary to send in a complete set if only a few elements are to be replaced as long as the correct beg_pos is used.</para>
+                <para>Ex: To keep the default first through fifth elements, but replace the rest with a collection of:<itemizedlist>
+<listitem><para>"final", "prior", "following", "in". The beg_pos of date_generator_formatter::last would be used. </para></listitem></itemizedlist>
+</para>
+              </description>
             </method>
             <method name="put_partial_date" cv="const">
               <type>OutItrT</type>
@@ -1814,6 +2361,7 @@
               <parameter name="facet">
                 <paramtype>const facet_type &amp;</paramtype>
               </parameter>
+              <purpose>Put a partial_date =&gt; "dd Month". </purpose>
             </method>
             <method name="put_nth_kday" cv="const">
               <type>OutItrT</type>
@@ -1835,6 +2383,7 @@
               <parameter name="facet">
                 <paramtype>const facet_type &amp;</paramtype>
               </parameter>
+              <purpose>Put an nth_day_of_the_week_in_month =&gt; "nth weekday of month". </purpose>
             </method>
             <method name="put_first_kday" cv="const">
               <type>OutItrT</type>
@@ -1856,6 +2405,7 @@
               <parameter name="facet">
                 <paramtype>const facet_type &amp;</paramtype>
               </parameter>
+              <purpose>Put a first_day_of_the_week_in_month =&gt; "first weekday of month". </purpose>
             </method>
             <method name="put_last_kday" cv="const">
               <type>OutItrT</type>
@@ -1877,6 +2427,7 @@
               <parameter name="facet">
                 <paramtype>const facet_type &amp;</paramtype>
               </parameter>
+              <purpose>Put a last_day_of_the_week_in_month =&gt; "last weekday of month". </purpose>
             </method>
             <method name="put_kday_before" cv="const">
               <type>OutItrT</type>
@@ -1898,6 +2449,7 @@
               <parameter name="facet">
                 <paramtype>const facet_type &amp;</paramtype>
               </parameter>
+              <purpose>Put a first_day_of_the_week_before =&gt; "weekday before". </purpose>
             </method>
             <method name="put_kday_after" cv="const">
               <type>OutItrT</type>
@@ -1919,9 +2471,42 @@
               <parameter name="facet">
                 <paramtype>const facet_type &amp;</paramtype>
               </parameter>
+              <purpose>Put a first_day_of_the_week_after =&gt; "weekday after". </purpose>
             </method>
           </method-group>
-          <constructor/>
+          <constructor>
+            <purpose>Default format elements used. </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="first">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="second">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="third">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="fourth">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="fifth">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="last">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="before">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="after">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="of">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <purpose>Constructor that allows for a custom set of phrase elements. </purpose>
+          </constructor>
           <data-member name="first_string" specifiers="static">
             <type>const char_type</type>
           </data-member>
@@ -1965,6 +2550,330 @@
       </namespace>
     </namespace>
   </header>
+  <header name="boost/date_time/date_generator_parser.hpp">
+    <namespace name="boost">
+      <namespace name="date_time">
+        <class name="date_generator_parser">
+          <template>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="charT"/>
+    </template>
+          <purpose>Class for date_generator parsing. </purpose>
+          <description>
+            <para>The elements of a date_generator "phrase" are parsed from the input stream in a particular order. All elements are required and the order in which they appear cannot change, however, the elements themselves can be changed. The default elements and their order are as follows:<itemizedlist>
+<listitem><para>partial_date =&gt; "dd Month"</para></listitem><listitem><para>nth_day_of_the_week_in_month =&gt; "nth weekday of month"</para></listitem><listitem><para>first_day_of_the_week_in_month =&gt; "first weekday of month"</para></listitem><listitem><para>last_day_of_the_week_in_month =&gt; "last weekday of month"</para></listitem><listitem><para>first_day_of_the_week_after =&gt; "weekday after"</para></listitem><listitem><para>first_day_of_the_week_before =&gt; "weekday before"</para></listitem></itemizedlist>
+</para>
+            <para>Weekday and Month names and formats are handled via the date_input_facet.</para>
+            <para>TODO: add doc-comments for which elements can be changed </para>
+          </description>
+          <typedef name="string_type">
+            <type>std::basic_string&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="stream_itr_type">
+            <type>std::istreambuf_iterator&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="month_type">
+            <type>date_type::month_type</type>
+          </typedef>
+          <typedef name="day_of_week_type">
+            <type>date_type::day_of_week_type</type>
+          </typedef>
+          <typedef name="day_type">
+            <type>date_type::day_type</type>
+          </typedef>
+          <typedef name="parse_tree_type">
+            <type><classname>string_parse_tree</classname>&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="match_results">
+            <type>parse_tree_type::parse_match_result_type</type>
+          </typedef>
+          <typedef name="collection_type">
+            <type>std::vector&lt; std::basic_string&lt; charT &gt; &gt;</type>
+          </typedef>
+          <typedef name="partial_date_type">
+            <type><classname>partial_date</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="nth_kday_type">
+            <type><classname>nth_kday_of_month</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="first_kday_type">
+            <type><classname>first_kday_of_month</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="last_kday_type">
+            <type><classname>last_kday_of_month</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="kday_after_type">
+            <type><classname>first_kday_after</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="kday_before_type">
+            <type><classname>first_kday_before</classname>&lt; date_type &gt;</type>
+          </typedef>
+          <typedef name="char_type">
+            <type>charT</type>
+          </typedef>
+          <enum name="phrase_elements">
+            <enumvalue name="first">
+              <default>0</default>
+            </enumvalue>
+            <enumvalue name="second"/>
+            <enumvalue name="third"/>
+            <enumvalue name="fourth"/>
+            <enumvalue name="fifth"/>
+            <enumvalue name="last"/>
+            <enumvalue name="before"/>
+            <enumvalue name="after"/>
+            <enumvalue name="of"/>
+            <enumvalue name="number_of_phrase_elements"/>
+          </enum>
+          <method-group name="public member functions">
+            <method name="element_strings" cv="">
+              <type>void</type>
+              <parameter name="first">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="second">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="third">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="fourth">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="fifth">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="last">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="before">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="after">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="of">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <purpose>Replace strings that determine nth week for generator. </purpose>
+            </method>
+            <method name="element_strings" cv="">
+              <type>void</type>
+              <parameter name="col">
+                <paramtype>const collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get_partial_date_type" cv="const">
+              <type>
+                <classname>partial_date_type</classname>
+              </type>
+              <template>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>returns partial_date parsed from stream </purpose>
+            </method>
+            <method name="get_nth_kday_type" cv="const">
+              <type>
+                <classname>nth_kday_type</classname>
+              </type>
+              <template>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>returns nth_kday_of_week parsed from stream </purpose>
+            </method>
+            <method name="get_first_kday_type" cv="const">
+              <type>
+                <classname>first_kday_type</classname>
+              </type>
+              <template>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>returns first_kday_of_week parsed from stream </purpose>
+            </method>
+            <method name="get_last_kday_type" cv="const">
+              <type>
+                <classname>last_kday_type</classname>
+              </type>
+              <template>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>returns last_kday_of_week parsed from stream </purpose>
+            </method>
+            <method name="get_kday_before_type" cv="const">
+              <type>
+                <classname>kday_before_type</classname>
+              </type>
+              <template>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>returns first_kday_of_week parsed from stream </purpose>
+            </method>
+            <method name="get_kday_after_type" cv="const">
+              <type>
+                <classname>kday_after_type</classname>
+              </type>
+              <template>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>returns first_kday_of_week parsed from stream </purpose>
+            </method>
+          </method-group>
+          <constructor>
+            <purpose>Creates a date_generator_parser with the default set of "element_strings". </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="first">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="second">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="third">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="fourth">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="fifth">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="last">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="before">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="after">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="of">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <purpose>Creates a date_generator_parser using a user defined set of element strings. </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="dgp">
+              <paramtype>const <classname>date_generator_parser</classname>&lt; date_type, charT &gt; *</paramtype>
+            </parameter>
+          </constructor>
+          <data-member name="first_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="second_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="third_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="fourth_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="fifth_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="last_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="before_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="after_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="of_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <method-group name="private member functions">
+            <method name="extract_element" cv="const">
+              <type>void</type>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="ele">
+                <paramtype>typename date_generator_parser::phrase_elements</paramtype>
+              </parameter>
+              <purpose>Extracts phrase element from input. Throws ios_base::failure on error. </purpose>
+            </method>
+          </method-group>
+        </class>
+      </namespace>
+    </namespace>
+  </header>
   <header name="boost/date_time/date_generators.hpp">
     <para>Definition and implementation of date algorithm templates</para>
     <namespace name="boost">
@@ -1990,6 +2899,10 @@
               <parameter name="y">
                 <paramtype>year_type</paramtype>
               </parameter>
+            </method>
+            <method name="to_string" cv="const">
+              <type>virtual std::string</type>
+              <purpose>Returns a string for use in a POSIX time_zone string. </purpose>
             </method>
           </method-group>
           <constructor/>
@@ -2064,6 +2977,13 @@
             <method name="day" cv="const">
               <type>day_type</type>
             </method>
+            <method name="to_string" cv="const">
+              <type>virtual std::string</type>
+              <purpose>Returns string suitable for use in POSIX time zone string. </purpose>
+              <description>
+                <para>Returns string formatted with up to 3 digits: Jan-01 == "0" Feb-29 == "58" Dec-31 == "365" </para>
+              </description>
+            </method>
           </method-group>
           <constructor>
             <parameter name="d">
@@ -2137,6 +3057,13 @@
             <method name="nth_week_as_str" cv="const">
               <type>const char *</type>
             </method>
+            <method name="to_string" cv="const">
+              <type>virtual std::string</type>
+              <purpose>Returns string suitable for use in POSIX time zone string. </purpose>
+              <description>
+                <para>Returns a string formatted as "M4.3.0" ==&gt; 3rd Sunday in April. </para>
+              </description>
+            </method>
           </method-group>
           <constructor>
             <parameter name="week_no">
@@ -2187,6 +3114,13 @@
             </method>
             <method name="day_of_week" cv="const">
               <type>day_of_week_type</type>
+            </method>
+            <method name="to_string" cv="const">
+              <type>virtual std::string</type>
+              <purpose>Returns string suitable for use in POSIX time zone string. </purpose>
+              <description>
+                <para>Returns a string formatted as "M4.1.0" ==&gt; 1st Sunday in April. </para>
+              </description>
             </method>
           </method-group>
           <constructor>
@@ -2247,6 +3181,13 @@
             </method>
             <method name="day_of_week" cv="const">
               <type>day_of_week_type</type>
+            </method>
+            <method name="to_string" cv="const">
+              <type>virtual std::string</type>
+              <purpose>Returns string suitable for use in POSIX time zone string. </purpose>
+              <description>
+                <para>Returns a string formatted as "M4.5.0" ==&gt; last Sunday in April. </para>
+              </description>
             </method>
           </method-group>
           <constructor>
@@ -2598,6 +3539,9 @@
           <typedef name="string_type">
             <type>std::basic_string&lt; charT &gt;</type>
           </typedef>
+          <typedef name="char_type">
+            <type>charT</type>
+          </typedef>
           <method-group name="public member functions">
             <method name="__get_id" cv="const">
               <type>std::locale::id &amp;</type>
@@ -2683,6 +3627,12 @@
             </method>
           </method-group>
           <constructor/>
+          <data-member name="default_special_value_names" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="separator" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
           <data-member name="id" specifiers="static">
             <type>std::locale::id</type>
             <purpose>Generate storage location for a std::locale::id. </purpose>
@@ -2794,7 +3744,7 @@
       <template-type-parameter name="OutputIterator"><default>std::ostreambuf_iterator&lt;charT&gt;</default></template-type-parameter>
     </template>
           <inherit access="public">boost::date_time::date_names_put&lt; Config, charT, OutputIterator &gt;</inherit>
-          <purpose>An date name output facet that takes an array of char* to define strings. </purpose>
+          <purpose>A date name output facet that takes an array of char* to define strings. </purpose>
           <typedef name="iter_type">
             <type>OutputIterator</type>
           </typedef>
@@ -3296,11 +4246,17 @@
                 <paramtype>year_type</paramtype>
               </parameter>
             </method>
+            <method name="start_rule_as_string" cv="const">
+              <type>virtual std::string</type>
+            </method>
             <method name="end_day" cv="const">
               <type>virtual date_type</type>
               <parameter name="y">
                 <paramtype>year_type</paramtype>
               </parameter>
+            </method>
+            <method name="end_rule_as_string" cv="const">
+              <type>virtual std::string</type>
             </method>
           </method-group>
           <destructor/>
@@ -3335,11 +4291,17 @@
                 <paramtype>year_type</paramtype>
               </parameter>
             </method>
+            <method name="start_rule_as_string" cv="const">
+              <type>virtual std::string</type>
+            </method>
             <method name="end_day" cv="const">
               <type>virtual date_type</type>
               <parameter name="y">
                 <paramtype>year_type</paramtype>
               </parameter>
+            </method>
+            <method name="end_rule_as_string" cv="const">
+              <type>virtual std::string</type>
             </method>
           </method-group>
           <constructor>
@@ -3385,7 +4347,7 @@
           <purpose>Class with generic date parsing using a format string. </purpose>
           <description>
             <para>The following is the set of recognized format specifiers<itemizedlist>
-<listitem><para>a - Short weekday name</para></listitem><listitem><para>A - Long weekday name</para></listitem><listitem><para>b - Abbreviated month name</para></listitem><listitem><para>B - Full month name</para></listitem><listitem><para>d - Day of the month as decimal</para></listitem><listitem><para>j - Day of year as decimal from 1 to 366</para></listitem><listitem><para>m - Month name as a decimal 01 to 12</para></listitem><listitem><para>U - Week number 00 to 53 with first Sunday as the first day of week 1?</para></listitem><listitem><para>w - Weekday as decimal number 0 to 6 where Sunday == 0</para></listitem><listitem><para>W - Week number 00 to 53 where Monday is first day of week 1</para></listitem><listitem><para>x - facet default date representation</para></listitem><listitem><para>y - Year without the century - eg: 04 for 2004</para></listitem><listitem><para>Y - Year with century</para></listitem></itemizedlist>
+<listitem><para>a - Short weekday name</para></listitem><listitem><para>A - Long weekday name</para></listitem><listitem><para>b - Abbreviated month name</para></listitem><listitem><para>B - Full month name</para></listitem><listitem><para>d - Day of the month as decimal 01 to 31</para></listitem><listitem><para>j - Day of year as decimal from 001 to 366</para></listitem><listitem><para>m - Month name as a decimal 01 to 12</para></listitem><listitem><para>U - Week number 00 to 53 with first Sunday as the first day of week 1?</para></listitem><listitem><para>w - Weekday as decimal number 0 to 6 where Sunday == 0</para></listitem><listitem><para>W - Week number 00 to 53 where Monday is first day of week 1</para></listitem><listitem><para>x - facet default date representation</para></listitem><listitem><para>y - Year without the century - eg: 04 for 2004</para></listitem><listitem><para>Y - Year with century</para></listitem></itemizedlist>
 </para>
             <para>The weekday specifiers (a and A) do not add to the date construction, but they provide a way to skip over the weekday names for formats that provide them.</para>
             <para>todo -- Another interesting feature that this approach could provide is an option to fill in any missing fields with the current values from the clock. So if you have m-%d the parser would detect the missing year value and fill it in using the clock.</para>
@@ -3409,8 +4371,17 @@
           <typedef name="month_type">
             <type>date_type::month_type</type>
           </typedef>
+          <typedef name="day_type">
+            <type>date_type::day_type</type>
+          </typedef>
           <typedef name="duration_type">
             <type>date_type::duration_type</type>
+          </typedef>
+          <typedef name="day_of_week_type">
+            <type>date_type::day_of_week_type</type>
+          </typedef>
+          <typedef name="day_of_year_type">
+            <type>date_type::day_of_year_type</type>
           </typedef>
           <typedef name="parse_tree_type">
             <type><classname>string_parse_tree</classname>&lt; charT &gt;</type>
@@ -3431,6 +4402,30 @@
                 <paramtype>string_type</paramtype>
               </parameter>
             </method>
+            <method name="short_month_names" cv="">
+              <type>void</type>
+              <parameter name="month_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="long_month_names" cv="">
+              <type>void</type>
+              <parameter name="month_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="short_weekday_names" cv="">
+              <type>void</type>
+              <parameter name="weekday_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="long_weekday_names" cv="">
+              <type>void</type>
+              <parameter name="weekday_names">
+                <paramtype>const input_collection_type &amp;</paramtype>
+              </parameter>
+            </method>
             <method name="parse_date" cv="const">
               <type>date_type</type>
               <parameter name="value">
@@ -3438,6 +4433,9 @@
               </parameter>
               <parameter name="format">
                 <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="sv_parser">
+                <paramtype>const <classname>special_values_parser</classname>&lt; date_type, charT &gt; &amp;</paramtype>
               </parameter>
             </method>
             <method name="parse_date" cv="const">
@@ -3447,6 +4445,9 @@
               </parameter>
               <parameter name="stream_end">
                 <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="sv_parser">
+                <paramtype>const <classname>special_values_parser</classname>&lt; date_type, charT &gt; &amp;</paramtype>
               </parameter>
             </method>
             <method name="parse_date" cv="const">
@@ -3460,6 +4461,107 @@
               <parameter name="format">
                 <paramtype>string_type</paramtype>
               </parameter>
+              <parameter name="sv_parser">
+                <paramtype>const <classname>special_values_parser</classname>&lt; date_type, charT &gt; &amp;</paramtype>
+              </parameter>
+              <description>
+                <para>Of all the objects that the format_date_parser can parse, only a date can be a special value. Therefore, only parse_date checks for special_values. </para>
+              </description>
+            </method>
+            <method name="parse_month" cv="const">
+              <type>month_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="format">
+                <paramtype>string_type</paramtype>
+              </parameter>
+              <purpose>Throws bad_month if unable to parse. </purpose>
+            </method>
+            <method name="parse_month" cv="const">
+              <type>month_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="format">
+                <paramtype>string_type</paramtype>
+              </parameter>
+              <parameter name="mr">
+                <paramtype>match_results &amp;</paramtype>
+              </parameter>
+              <purpose>Throws bad_month if unable to parse. </purpose>
+            </method>
+            <method name="parse_day_of_month" cv="const">
+              <type>day_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <purpose>throws bad_day_of_month if unable to parse </purpose>
+            </method>
+            <method name="parse_weekday" cv="const">
+              <type>day_of_week_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="format">
+                <paramtype>string_type</paramtype>
+              </parameter>
+            </method>
+            <method name="parse_weekday" cv="const">
+              <type>day_of_week_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="format">
+                <paramtype>string_type</paramtype>
+              </parameter>
+              <parameter name="mr">
+                <paramtype>match_results &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="parse_year" cv="const">
+              <type>year_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="format">
+                <paramtype>string_type</paramtype>
+              </parameter>
+              <purpose>throws bad_year if unable to parse </purpose>
+            </method>
+            <method name="parse_year" cv="const">
+              <type>year_type</type>
+              <parameter name="sitr">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+              </parameter>
+              <parameter name="format">
+                <paramtype>string_type</paramtype>
+              </parameter>
+              <parameter name="mr">
+                <paramtype>match_results &amp;</paramtype>
+              </parameter>
+              <purpose>throws bad_year if unable to parse </purpose>
             </method>
           </method-group>
           <constructor>
@@ -3487,6 +4589,11 @@
               <paramtype>const std::locale &amp;</paramtype>
             </parameter>
           </constructor>
+          <constructor>
+            <parameter name="fdp">
+              <paramtype>const <classname>format_date_parser</classname>&lt; date_type, charT &gt; &amp;</paramtype>
+            </parameter>
+          </constructor>
         </class>
         <function name="fixed_string_to_int">
           <type>int_type</type>
@@ -3497,10 +4604,19 @@
           <parameter name="itr">
             <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
           </parameter>
+          <parameter name="stream_end">
+            <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+          </parameter>
+          <parameter name="mr">
+            <paramtype>parse_match_result&lt; charT &gt; &amp;</paramtype>
+          </parameter>
           <parameter name="length">
             <paramtype>unsigned int</paramtype>
           </parameter>
           <purpose>Helper function for parsing fixed length strings into integers. </purpose>
+          <description>
+            <para>Will consume 'length' number of characters from stream. Consumed character are transfered to parse_match_result struct. Returns '-1' if no number can be parsed or incorrect number of digits in stream. </para>
+          </description>
         </function>
         <function name="var_string_to_int">
           <type>int_type</type>
@@ -3511,10 +4627,16 @@
           <parameter name="itr">
             <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
           </parameter>
+          <parameter name="stream_end">
+            <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
+          </parameter>
           <parameter name="max_length">
             <paramtype>unsigned int</paramtype>
           </parameter>
-          <purpose>Helper function for parsing fixed length strings into integers. </purpose>
+          <purpose>Helper function for parsing varied length strings into integers. </purpose>
+          <description>
+            <para>Will consume 'max_length' characters from stream only if those characters are digits. Returns '-1' if no number can be parsed. Will not parse a number preceeded by a '+' or '-'. </para>
+          </description>
         </function>
       </namespace>
     </namespace>
@@ -4294,35 +5416,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
       </namespace>
     </namespace>
   </header>
-  <header name="boost/date_time/local_time_base.hpp">
-    <namespace name="boost">
-      <namespace name="date_time">
-        <class name="local_time_base">
-          <template>
-      <template-type-parameter name="utc_time_type"/>
-      <template-type-parameter name="tz_type"/>
-    </template>
-          <method-group name="public member functions">
-            <method name="zone" cv="const">
-              <type>boost::shared_ptr&lt; tz_type &gt;</type>
-            </method>
-          </method-group>
-          <constructor>
-            <parameter name="t">
-              <paramtype>utc_time_type</paramtype>
-            </parameter>
-            <parameter name="tz">
-              <paramtype>boost::shared_ptr&lt; tz_type &gt;</paramtype>
-            </parameter>
-            <parameter name="dst_flag">
-              <paramtype>bool</paramtype>
-            </parameter>
-          </constructor>
-          <destructor/>
-        </class>
-      </namespace>
-    </namespace>
-  </header>
   <header name="boost/date_time/local_timezone_defs.hpp">
     <namespace name="boost">
       <namespace name="date_time">
@@ -4771,7 +5864,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <purpose>Not a facet, but a class used to specify and control period formats. </purpose>
           <description>
             <para>Provides settings for the following:<itemizedlist>
-<listitem><para>period_separator -- default '/'</para></listitem><listitem><para>period_open_start_delimeter -- default '['</para></listitem><listitem><para>period_open_range_end_delimeter -- default ')'</para></listitem><listitem><para>period_closed_range_end_delimeter -- default ']'</para></listitem><listitem><para>display_as_open_range, display_as_closed_range -- default open_range</para></listitem></itemizedlist>
+<listitem><para>period_separator -- default '/'</para></listitem><listitem><para>period_open_start_delimeter -- default '['</para></listitem><listitem><para>period_open_range_end_delimeter -- default ')'</para></listitem><listitem><para>period_closed_range_end_delimeter -- default ']'</para></listitem><listitem><para>display_as_open_range, display_as_closed_range -- default closed_range</para></listitem></itemizedlist>
 </para>
             <para>Thus the default formatting for a period is as follows: <programlisting>  [period.start()/period.last()]
    *
@@ -4787,6 +5880,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           </typedef>
           <typedef name="const_itr_type">
             <type>std::basic_string&lt; char_type &gt;::const_iterator</type>
+          </typedef>
+          <typedef name="collection_type">
+            <type>std::vector&lt; std::basic_string&lt; CharT &gt; &gt;</type>
           </typedef>
           <enum name="range_display_options">
             <enumvalue name="AS_OPEN_RANGE"/>
@@ -4823,6 +5919,21 @@ The logic is as follows. Starting with UTC time use the offset to create a label
                 <paramtype>range_display_options</paramtype>
               </parameter>
               <purpose>Reset the range_option control. </purpose>
+            </method>
+            <method name="delimiter_strings" cv="">
+              <type>void</type>
+              <parameter name="separator">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="start_delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="open_end_delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="closed_end_delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
             </method>
             <method name="put_period" cv="const">
               <type>OutItrT</type>
@@ -4898,6 +6009,171 @@ The logic is as follows. Starting with UTC time use the offset to create a label
       </namespace>
     </namespace>
   </header>
+  <header name="boost/date_time/period_parser.hpp">
+    <namespace name="boost">
+      <namespace name="date_time">
+        <class name="period_parser">
+          <template>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="CharT"/>
+    </template>
+          <purpose>Not a facet, but a class used to specify and control period parsing. </purpose>
+          <description>
+            <para>Provides settings for the following:<itemizedlist>
+<listitem><para>period_separator -- default '/'</para></listitem><listitem><para>period_open_start_delimeter -- default '['</para></listitem><listitem><para>period_open_range_end_delimeter -- default ')'</para></listitem><listitem><para>period_closed_range_end_delimeter -- default ']'</para></listitem><listitem><para>display_as_open_range, display_as_closed_range -- default closed_range</para></listitem></itemizedlist>
+</para>
+            <para>For a typical date_period, the contents of the input stream would be <programlisting>  [2004-Jan-04/2004-Feb-01]
+   *
+</programlisting>where the date format is controlled by the date facet </para>
+          </description>
+          <typedef name="string_type">
+            <type>std::basic_string&lt; CharT &gt;</type>
+          </typedef>
+          <typedef name="char_type">
+            <type>CharT</type>
+          </typedef>
+          <typedef name="stream_itr_type">
+            <type>std::istreambuf_iterator&lt; CharT &gt;</type>
+          </typedef>
+          <typedef name="parse_tree_type">
+            <type><classname>string_parse_tree</classname>&lt; CharT &gt;</type>
+          </typedef>
+          <typedef name="match_results">
+            <type>parse_tree_type::parse_match_result_type</type>
+          </typedef>
+          <typedef name="collection_type">
+            <type>std::vector&lt; std::basic_string&lt; CharT &gt; &gt;</type>
+          </typedef>
+          <enum name="period_range_option">
+            <enumvalue name="AS_OPEN_RANGE"/>
+            <enumvalue name="AS_CLOSED_RANGE"/>
+          </enum>
+          <method-group name="public member functions">
+            <method name="range_option" cv="const">
+              <type>period_range_option</type>
+            </method>
+            <method name="range_option" cv="">
+              <type>void</type>
+              <parameter name="option">
+                <paramtype>period_range_option</paramtype>
+              </parameter>
+            </method>
+            <method name="delimiter_strings" cv="const">
+              <type>collection_type</type>
+            </method>
+            <method name="delimiter_strings" cv="">
+              <type>void</type>
+              <parameter name="separator">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="start_delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="open_end_delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="closed_end_delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get_period" cv="const">
+              <type>period_type</type>
+              <template>
+          <template-type-parameter name="period_type"/>
+          <template-type-parameter name="duration_type"/>
+          <template-type-parameter name="facet_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="p">
+                <paramtype>const period_type &amp;</paramtype>
+              </parameter>
+              <parameter name="dur_unit">
+                <paramtype>const duration_type &amp;</paramtype>
+              </parameter>
+              <parameter name="facet">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>Generic code to parse a period -- no matter the period type. </purpose>
+              <description>
+                <para>This generic code will parse any period using a facet to to get the 'elements'. For example, in the case of a date_period the elements will be instances of a date which will be parsed according the to setup in the passed facet parameter.</para>
+                <para>The steps for parsing a period are always the same:<itemizedlist>
+<listitem><para>consume the start delimiter</para></listitem><listitem><para>get start element</para></listitem><listitem><para>consume the separator</para></listitem><listitem><para>get either last or end element depending on range settings</para></listitem><listitem><para>consume the end delimeter depending on range settings</para></listitem></itemizedlist>
+</para>
+                <para>Thus for a typical date period the contents of the input stream might look like this: <programlisting>    [March 01, 2004/June 07, 2004]   &lt;-- closed range
+    [March 01, 2004/June 08, 2004)   &lt;-- open range
+
+     *
+</programlisting></para>
+              </description>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="range_option">
+              <paramtype>period_range_option</paramtype>
+              <default>AS_CLOSED_RANGE</default>
+            </parameter>
+            <parameter name="period_separator">
+              <paramtype>const char_type *const</paramtype>
+              <default>default_period_separator</default>
+            </parameter>
+            <parameter name="period_start_delimeter">
+              <paramtype>const char_type *const</paramtype>
+              <default>default_period_start_delimeter</default>
+            </parameter>
+            <parameter name="period_open_range_end_delimeter">
+              <paramtype>const char_type *const</paramtype>
+              <default>default_period_open_range_end_delimeter</default>
+            </parameter>
+            <parameter name="period_closed_range_end_delimeter">
+              <paramtype>const char_type *const</paramtype>
+              <default>default_period_closed_range_end_delimeter</default>
+            </parameter>
+            <purpose>Constructor that sets up period parser options. </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="p_parser">
+              <paramtype>const <classname>period_parser</classname>&lt; date_type, CharT &gt; &amp;</paramtype>
+            </parameter>
+          </constructor>
+          <data-member name="default_period_separator" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_period_start_delimeter" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_period_open_range_end_delimeter" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_period_closed_range_end_delimeter" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <method-group name="private member functions">
+            <method name="consume_delim" cv="const">
+              <type>void</type>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="delim">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <purpose>throws ios_base::failure if delimiter and parsed data do not match </purpose>
+            </method>
+          </method-group>
+        </class>
+      </namespace>
+    </namespace>
+  </header>
   <header name="boost/date_time/special_defs.hpp">
     <namespace name="boost">
       <namespace name="date_time">
@@ -4942,7 +6218,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
                 <paramtype>OutItrT</paramtype>
               </parameter>
               <parameter name="value">
-                <paramtype>const boost::date_time::special_values</paramtype>
+                <paramtype>const boost::date_time::special_values &amp;</paramtype>
               </parameter>
             </method>
           </method-group>
@@ -4968,11 +6244,161 @@ The logic is as follows. Starting with UTC time use the offset to create a label
 </programlisting></para>
             </description>
           </constructor>
+          <constructor>
+            <parameter name="beg">
+              <paramtype>typename collection_type::iterator</paramtype>
+            </parameter>
+            <parameter name="end">
+              <paramtype>typename collection_type::iterator</paramtype>
+            </parameter>
+          </constructor>
           <data-member name="default_special_value_names" specifiers="static">
             <type>const char_type</type>
             <purpose>Storage for the strings used to indicate special values. </purpose>
           </data-member>
         </class>
+      </namespace>
+    </namespace>
+  </header>
+  <header name="boost/date_time/special_values_parser.hpp">
+    <namespace name="boost">
+      <namespace name="date_time">
+        <class name="special_values_parser">
+          <template>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="charT"/>
+    </template>
+          <purpose>Class for special_value parsing. </purpose>
+          <description>
+            <para>TODO: add doc-comments for which elements can be changed Parses input stream for strings representing special_values. Special values parsed are:<itemizedlist>
+<listitem><para>not_a_date_time</para></listitem><listitem><para>neg_infin</para></listitem><listitem><para>pod_infin</para></listitem><listitem><para>min_date_time</para></listitem><listitem><para>max_date_time </para></listitem></itemizedlist>
+</para>
+          </description>
+          <typedef name="string_type">
+            <type>std::basic_string&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="stream_itr_type">
+            <type>std::istreambuf_iterator&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="duration_type">
+            <type>date_type::duration_type</type>
+          </typedef>
+          <typedef name="parse_tree_type">
+            <type><classname>string_parse_tree</classname>&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="match_results">
+            <type>parse_tree_type::parse_match_result_type</type>
+          </typedef>
+          <typedef name="collection_type">
+            <type>std::vector&lt; std::basic_string&lt; charT &gt; &gt;</type>
+          </typedef>
+          <typedef name="char_type">
+            <type>charT</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="sv_strings" cv="">
+              <type>void</type>
+              <parameter name="nadt_str">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="neg_inf_str">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="pos_inf_str">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="min_dt_str">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="max_dt_str">
+                <paramtype>const string_type &amp;</paramtype>
+              </parameter>
+              <purpose>Replace special value strings. </purpose>
+            </method>
+            <method name="match" cv="const">
+              <type>bool</type>
+              <parameter name="sitr">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="str_end">
+                <paramtype>stream_itr_type &amp;</paramtype>
+              </parameter>
+              <parameter name="mr">
+                <paramtype>match_results &amp;</paramtype>
+              </parameter>
+              <purpose>Sets match_results.current_match to the corresponding special_value or -1. </purpose>
+            </method>
+          </method-group>
+          <constructor>
+            <purpose>Creates a special_values_parser with the default set of "sv_strings". </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="nadt_str">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="neg_inf_str">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="pos_inf_str">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="min_dt_str">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="max_dt_str">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <purpose>Creates a special_values_parser using a user defined set of element strings. </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="beg">
+              <paramtype>typename collection_type::iterator</paramtype>
+            </parameter>
+            <parameter name="end">
+              <paramtype>typename collection_type::iterator</paramtype>
+            </parameter>
+          </constructor>
+          <constructor>
+            <parameter name="svp">
+              <paramtype>const <classname>special_values_parser</classname>&lt; date_type, charT &gt; &amp;</paramtype>
+            </parameter>
+          </constructor>
+          <data-member name="nadt_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="neg_inf_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="pos_inf_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="min_date_time_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="max_date_time_string" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+        </class>
+      </namespace>
+    </namespace>
+  </header>
+  <header name="boost/date_time/string_convert.hpp">
+    <namespace name="boost">
+      <namespace name="date_time">
+        <function name="convert_string_type">
+          <type>std::basic_string&lt; OutputT &gt;</type>
+          <template>
+          <template-type-parameter name="InputT"/>
+          <template-type-parameter name="OutputT"/>
+        </template>
+          <parameter name="inp_str">
+            <paramtype>const std::basic_string&lt; InputT &gt; &amp;</paramtype>
+          </parameter>
+          <purpose>Converts a string from one value_type to another. </purpose>
+          <description>
+            <para>Converts a wstring to a string (or a string to wstring). If both template parameters are of same type, a copy of the input string is returned. </para>
+          </description>
+        </function>
       </namespace>
     </namespace>
   </header>
@@ -4995,6 +6421,10 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
             <method name="has_remaining" cv="const">
               <type>bool</type>
+              <purpose>Returns true if more characters were parsed than was necessary. </purpose>
+              <description>
+                <para>Should be used in conjunction with last_char() to get the remaining character. </para>
+              </description>
             </method>
           </method-group>
           <constructor/>
@@ -5005,7 +6435,10 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <type>unsigned short</type>
           </data-member>
           <data-member name="current_match">
-            <type>unsigned short</type>
+            <type>short</type>
+          </data-member>
+          <data-member name="PARSE_ERROR" specifiers="static">
+            <type>const short</type>
           </data-member>
         </struct>
         <struct name="string_parse_tree">
@@ -5048,7 +6481,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               </parameter>
             </method>
             <method name="match" cv="const">
-              <type>unsigned short</type>
+              <type>short</type>
               <parameter name="sitr">
                 <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
               </parameter>
@@ -5061,6 +6494,11 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <parameter name="level">
                 <paramtype>unsigned int &amp;</paramtype>
               </parameter>
+              <purpose>Recursive function that finds a matching string in the tree. </purpose>
+              <description>
+                <para>Must check match_results::has_remaining() after match() is called. This is required so the user can determine if stream iterator is already pointing to the expected character or not (match() might advance sitr to next char in stream).</para>
+                <para>A parse_match_result that has been returned from a failed match attempt can be sent in to the match function of a different string_parse_tree to attempt a match there. Use the iterators for the partially consumed stream, the parse_match_result object, and '0' for the level parameter. </para>
+              </description>
             </method>
             <method name="match" cv="const">
               <type>parse_match_result_type</type>
@@ -5070,6 +6508,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <parameter name="stream_end">
                 <paramtype>std::istreambuf_iterator&lt; charT &gt; &amp;</paramtype>
               </parameter>
+              <description>
+                <para>Must check match_results::has_remaining() after match() is called. This is required so the user can determine if stream iterator is already pointing to the expected character or not (match() might advance sitr to next char in stream). </para>
+              </description>
             </method>
             <method name="printme" cv="">
               <type>void</type>
@@ -5100,18 +6541,25 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <parameter name="names">
               <paramtype>collection_type</paramtype>
             </parameter>
+            <parameter name="starting_point">
+              <paramtype>unsigned int</paramtype>
+              <default>0</default>
+            </parameter>
+            <description>
+              <para>Parameter "starting_point" desingates where the numbering begins. A starting_point of zero will start the numbering at zero (Sun=0, Mon=1, ...) were a starting_point of one starts the numbering at one (Jan=1, Feb=2, ...). The default is zero, negative vaules are not allowed </para>
+            </description>
           </constructor>
           <constructor>
             <parameter name="value">
-              <paramtype>unsigned short</paramtype>
-              <default>0</default>
+              <paramtype>short</paramtype>
+              <default>-1</default>
             </parameter>
           </constructor>
           <data-member name="m_next_chars">
             <type>ptree_coll</type>
           </data-member>
           <data-member name="m_value">
-            <type>unsigned short</type>
+            <type>short</type>
           </data-member>
         </struct>
         <function name="operator&lt;&lt;">
@@ -5248,6 +6696,10 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <description>
                 <para>Optional bool parameter will return time zone as an offset (ie "+07:00"). Empty string is returned for classes that do not use a time_zone </para>
               </description>
+            </method>
+            <method name="zone_as_posix_string" cv="const">
+              <type>std::string</type>
+              <purpose>An empty string is returned for classes that do not use a time_zone. </purpose>
             </method>
             <method name="is_not_a_date_time" cv="const">
               <type>bool</type>
@@ -5549,7 +7001,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
                 <paramtype>const duration_type &amp;</paramtype>
               </parameter>
             </method>
-            <method name="operator/" cv="">
+            <method name="operator/" cv="const">
               <type>duration_type</type>
               <parameter name="divisor">
                 <paramtype>int</paramtype>
@@ -5687,6 +7139,62 @@ The logic is as follows. Starting with UTC time use the offset to create a label
   <header name="boost/date_time/time_facet.hpp">
     <namespace name="boost">
       <namespace name="date_time">
+        <struct name="time_formats">
+          <template>
+      <template-type-parameter name="CharT"/>
+    </template>
+          <typedef name="char_type">
+            <type>CharT</type>
+          </typedef>
+          <data-member name="fractional_seconds_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="fractional_seconds_or_none_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="seconds_with_fractional_seconds_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="seconds_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="standard_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="zone_abbrev_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="zone_name_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="zone_iso_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="zone_iso_extended_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="posix_zone_string_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="duration_seperator" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="iso_time_format_specifier" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="iso_time_format_extended_specifier" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_time_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_time_input_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="default_time_duration_format" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+        </struct>
         <class name="time_facet">
           <template>
       <template-type-parameter name="time_type"/>
@@ -5695,7 +7203,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
     </template>
           <inherit access="public">boost::date_time::date_facet&lt; time_type::date_type, CharT, OutItrT &gt;</inherit>
           <description>
-            <para>TODO: ... NOTE: whitespace will be trimmed from ends of format string. Ex. (" %H:%M " becomes "01:30") Format flags are: c =&gt; default format - enables addition of more flags to default (ie. "%c %z") f =&gt; fractional seconds ".123456" F =&gt; fractional seconds or none: like frac sec but empty if frac sec == 0 s =&gt; seconds w/ fractional sec "1098631085" TODO what does this one do?? S =&gt; seconds "02" z =&gt; abbreviated time zone "EDT" Z =&gt; full time zone name "Eastern Daylight Time" </para>
+            <para>Facet used for format-based output of time types This class provides for the use of format strings to output times. In addition to the flags for formatting date elements, the following are the allowed format flags:<itemizedlist>
+<listitem><para>x X =&gt; default format - enables addition of more flags to default (ie. "%x %X %z")</para></listitem><listitem><para>f =&gt; fractional seconds ".123456"</para></listitem><listitem><para>F =&gt; fractional seconds or none: like frac sec but empty if frac sec == 0</para></listitem><listitem><para>s =&gt; seconds w/ fractional sec "02.123" (this is the same as "%S%f)</para></listitem><listitem><para>S =&gt; seconds "02"</para></listitem><listitem><para>z =&gt; abbreviated time zone "EDT"</para></listitem><listitem><para>Z =&gt; full time zone name "Eastern Daylight Time" </para></listitem></itemizedlist>
+</para>
           </description>
           <typedef name="date_type">
             <type>time_type::date_type</type>
@@ -5707,7 +7217,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <type><classname>boost::date_time::period</classname>&lt; time_type, time_duration_type &gt;</type>
           </typedef>
           <typedef name="base_type">
-            <type><classname>boost::date_time::date_facet</classname>&lt; boost::gregorian::date, CharT, OutItrT &gt;</type>
+            <type><classname>boost::date_time::date_facet</classname>&lt; typename time_type::date_type, CharT, OutItrT &gt;</type>
           </typedef>
           <typedef name="string_type">
             <type>base_type::string_type</type>
@@ -5725,6 +7235,12 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <type>base_type::date_gen_formatter_type</type>
           </typedef>
           <method-group name="public member functions">
+            <method name="__get_id" cv="const">
+              <type>std::locale::id &amp;</type>
+              <parameter name="">
+                <paramtype>void</paramtype>
+              </parameter>
+            </method>
             <method name="time_duration_format" cv="">
               <type>void</type>
               <parameter name="format">
@@ -5814,46 +7330,49 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </parameter>
           </constructor>
           <data-member name="fractional_seconds_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="fractional_seconds_or_none_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="seconds_with_fractional_seconds_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="seconds_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="standard_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="zone_abbrev_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="zone_name_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="zone_iso_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="zone_iso_extended_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="posix_zone_string_format" specifiers="static">
+            <type>const char_type *</type>
           </data-member>
           <data-member name="duration_seperator" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="iso_time_format_specifier" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="iso_time_format_extended_specifier" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="default_time_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="default_time_duration_format" specifiers="static">
-            <type>const char_type</type>
+            <type>const char_type *</type>
           </data-member>
           <data-member name="id" specifiers="static">
             <type>std::locale::id</type>
@@ -5876,6 +7395,297 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <description>
                 <para>Simple algorithm here -- print as X time and search for non-numeric character. This is assumed to be seperator. Would be better if the standard facet was enhanced. </para>
               </description>
+            </method>
+          </method-group>
+        </class>
+        <class name="time_input_facet">
+          <template>
+      <template-type-parameter name="time_type"/>
+      <template-type-parameter name="CharT"/>
+      <template-type-parameter name="InItrT"><default>std::istreambuf_iterator&lt;CharT, std::char_traits&lt;CharT&gt; &gt;</default></template-type-parameter>
+    </template>
+          <inherit access="public">boost::date_time::date_input_facet&lt; time_type::date_type, CharT, InItrT &gt;</inherit>
+          <purpose>Facet for format-based input. </purpose>
+          <typedef name="date_type">
+            <type>time_type::date_type</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>time_type::time_duration_type</type>
+          </typedef>
+          <typedef name="fracional_seconds_type">
+            <type>time_duration_type::fractional_seconds_type</type>
+          </typedef>
+          <typedef name="period_type">
+            <type><classname>boost::date_time::period</classname>&lt; time_type, time_duration_type &gt;</type>
+          </typedef>
+          <typedef name="base_type">
+            <type><classname>boost::date_time::date_input_facet</classname>&lt; typename time_type::date_type, CharT, InItrT &gt;</type>
+          </typedef>
+          <typedef name="date_duration_type">
+            <type>base_type::duration_type</type>
+          </typedef>
+          <typedef name="year_type">
+            <type>base_type::year_type</type>
+          </typedef>
+          <typedef name="month_type">
+            <type>base_type::month_type</type>
+          </typedef>
+          <typedef name="day_type">
+            <type>base_type::day_type</type>
+          </typedef>
+          <typedef name="string_type">
+            <type>base_type::string_type</type>
+          </typedef>
+          <typedef name="const_itr">
+            <type>string_type::const_iterator</type>
+          </typedef>
+          <typedef name="char_type">
+            <type>base_type::char_type</type>
+          </typedef>
+          <typedef name="format_date_parser_type">
+            <type>base_type::format_date_parser_type</type>
+          </typedef>
+          <typedef name="period_parser_type">
+            <type>base_type::period_parser_type</type>
+          </typedef>
+          <typedef name="special_values_parser_type">
+            <type>base_type::special_values_parser_type</type>
+          </typedef>
+          <typedef name="date_gen_parser_type">
+            <type>base_type::date_gen_parser_type</type>
+          </typedef>
+          <typedef name="match_results">
+            <type>base_type::special_values_parser_type::match_results</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="time_duration_format" cv="">
+              <type>void</type>
+              <parameter name="format">
+                <paramtype>const char_type *const</paramtype>
+              </parameter>
+              <purpose>Set the format for time_duration. </purpose>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="p">
+                <paramtype><classname>period_type</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="td">
+                <paramtype>time_duration_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="t">
+                <paramtype>time_type &amp;</paramtype>
+              </parameter>
+              <purpose>Parses a time object from the input stream. </purpose>
+            </method>
+            <method name="get_local_time" cv="const">
+              <type>InItrT</type>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="t">
+                <paramtype>time_type &amp;</paramtype>
+              </parameter>
+              <parameter name="tz_str">
+                <paramtype>string_type &amp;</paramtype>
+              </parameter>
+              <purpose>Expects a time_zone in the input stream. </purpose>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="format">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="a_ref">
+              <paramtype>::size_t</paramtype>
+              <default>0</default>
+            </parameter>
+            <purpose>Constructor that takes a format string for a ptime. </purpose>
+          </constructor>
+          <constructor>
+            <parameter name="format">
+              <paramtype>const string_type &amp;</paramtype>
+            </parameter>
+            <parameter name="date_parser">
+              <paramtype>const format_date_parser_type &amp;</paramtype>
+            </parameter>
+            <parameter name="sv_parser">
+              <paramtype>const special_values_parser_type &amp;</paramtype>
+            </parameter>
+            <parameter name="per_parser">
+              <paramtype>const period_parser_type &amp;</paramtype>
+            </parameter>
+            <parameter name="date_gen_parser">
+              <paramtype>const date_gen_parser_type &amp;</paramtype>
+            </parameter>
+            <parameter name="a_ref">
+              <paramtype>::size_t</paramtype>
+              <default>0</default>
+            </parameter>
+          </constructor>
+          <constructor>
+            <parameter name="a_ref">
+              <paramtype>::size_t</paramtype>
+              <default>0</default>
+            </parameter>
+            <purpose>sets default formats for ptime, local_date_time, and time_duration </purpose>
+          </constructor>
+          <data-member name="fractional_seconds_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="fractional_seconds_or_none_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="seconds_with_fractional_seconds_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="seconds_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="standard_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="zone_abbrev_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="zone_name_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="zone_iso_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="zone_iso_extended_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="duration_seperator" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="iso_time_format_specifier" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="iso_time_format_extended_specifier" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="default_time_input_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="default_time_duration_format" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="id" specifiers="static">
+            <type>std::locale::id</type>
+          </data-member>
+          <method-group name="protected member functions">
+            <method name="get" cv="const">
+              <type>InItrT</type>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="a_ios">
+                <paramtype>std::ios_base &amp;</paramtype>
+              </parameter>
+              <parameter name="t">
+                <paramtype>time_type &amp;</paramtype>
+              </parameter>
+              <parameter name="tz_str">
+                <paramtype>string_type &amp;</paramtype>
+              </parameter>
+              <parameter name="time_is_local">
+                <paramtype>bool</paramtype>
+              </parameter>
+            </method>
+            <method name="check_special_value" cv="const">
+              <type>InItrT</type>
+              <template>
+          <template-type-parameter name="temporal_type"/>
+        </template>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="tt">
+                <paramtype>temporal_type &amp;</paramtype>
+              </parameter>
+              <parameter name="c">
+                <paramtype>char_type</paramtype>
+                <default>'\0'</default>
+              </parameter>
+              <purpose>Helper function to check for special_value. </purpose>
+              <description>
+                <para>First character may have been consumed during original parse attempt. Parameter 'c' should be a copy of that character. Throws ios_base::failure if parse fails. </para>
+              </description>
+            </method>
+            <method name="parse_frac_type" cv="const">
+              <type>void</type>
+              <parameter name="sitr">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="stream_end">
+                <paramtype>InItrT &amp;</paramtype>
+              </parameter>
+              <parameter name="frac">
+                <paramtype>fracional_seconds_type &amp;</paramtype>
+              </parameter>
+              <purpose>Helper function for parsing a fractional second type from the stream. </purpose>
+            </method>
+          </method-group>
+          <method-group name="private member functions">
+            <method name="decimal_adjust" cv="const">
+              <type>int_type</type>
+              <template>
+          <template-type-parameter name="int_type"/>
+        </template>
+              <parameter name="val">
+                <paramtype>int_type</paramtype>
+              </parameter>
+              <parameter name="places">
+                <paramtype>const unsigned short</paramtype>
+              </parameter>
+              <purpose>Helper function to adjust trailing zeros when parsing fractional digits. </purpose>
             </method>
           </method-group>
         </class>
@@ -6073,7 +7883,8 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           </parameter>
           <purpose>Creates a time_duration object from a delimited string. </purpose>
           <description>
-            <para>Expected format for string is "[-]h[h][:mm][:ss][.fff]". A negative duration will be created if the first character in string is a '-', all other '-' will be treated as delimiters. Accepted delimiters are "-:,.". </para>
+            <para>Expected format for string is "[-]h[h][:mm][:ss][.fff]". If the number of fractional digits provided is greater than the precision of the time duration type then the extra digits are truncated.</para>
+            <para>A negative duration will be created if the first character in string is a '-', all other '-' will be treated as delimiters. Accepted delimiters are "-:,.". </para>
           </description>
         </function>
         <function name="split">
@@ -6714,6 +8525,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <typedef name="string_type">
             <type>std::basic_string&lt; CharT &gt;</type>
           </typedef>
+          <typedef name="stringstream_type">
+            <type>std::basic_stringstream&lt; CharT &gt;</type>
+          </typedef>
           <typedef name="year_type">
             <type>time_type::date_type::year_type</type>
           </typedef>
@@ -6762,6 +8576,10 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <method name="dst_offset" cv="const">
               <type>virtual time_duration_type</type>
               <purpose>Adjustment forward or back made while DST is in effect. </purpose>
+            </method>
+            <method name="to_posix_string" cv="const">
+              <type>virtual string_type</type>
+              <purpose>Returns a POSIX time_zone string for this object. </purpose>
             </method>
           </method-group>
           <constructor/>

@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -39,8 +39,6 @@ or
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -52,22 +50,19 @@ or
 	</thead>
 	<tbody>
           <row>
-            <entry valign="top" morerows="1"><screen>
-time_period(ptime,
+            <entry valign="top" morerows="1"><screen>time_period(ptime,
             ptime)</screen></entry>
 	    <entry> Create a period as [begin, end). If last is &lt;= begin then the period will be defined as null.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,01);
+	    <entry><screen>date d(2002,Jan,01);
 ptime t(d, seconds(10)); //10 sec after midnight
 time_period tp(t, hours(3));</screen>
 	    </entry>
           </row>
 
 	  <row>
-            <entry valign="top" morerows="1"><screen>
-time_period(ptime, 
+            <entry valign="top" morerows="1"><screen>time_period(ptime, 
             time_duration)</screen></entry>
 	    <entry> Create a period as [begin, begin+len). If len is &lt;= zero then the period will be defined as null.</entry>
 	  </row>
@@ -97,8 +92,6 @@ time_period tp(t1, t2);</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -114,8 +107,7 @@ time_period tp(t1, t2);</screen>
 	    <entry>Return first time of period.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,01);
+	    <entry><screen>date d(2002,Jan,01);
 ptime t1(d, seconds(10)); //10 sec after midnight
 ptime t2(d, hours(10)); //10 hours after midnight
 time_period tp(t1, t2);
@@ -128,12 +120,11 @@ tp.begin(); // --> 2002-Jan-01 00:00:10</screen>
 	    <entry>Return last time in the period</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,01);
+	    <entry><screen>date d(2002,Jan,01);
 ptime t1(d, seconds(10)); //10 sec after midnight
 ptime t2(d, hours(10)); //10 hours after midnight
 time_period tp(t1, t2);
-tp.last(); // --> 2002-Jan-01 09:59:59.999999999</screen>
+tp.last();// --> 2002-Jan-01 09:59:59.999999999</screen>
 	    </entry>
           </row>
           
@@ -142,8 +133,7 @@ tp.last(); // --> 2002-Jan-01 09:59:59.999999999</screen>
 	    <entry> Return one past the last in period</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,01);
+	    <entry><screen>date d(2002,Jan,01);
 ptime t1(d, seconds(10)); //10 sec after midnight
 ptime t2(d, hours(10)); //10 hours after midnight
 time_period tp(t1, t2);
@@ -156,8 +146,7 @@ tp.last(); // --> 2002-Jan-01 10:00:00</screen>
 	    <entry>Return the length of the time period.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,01);
+	    <entry><screen>date d(2002,Jan,01);
 ptime t1(d); //midnight
 time_period tp(t1, hours(1));
 tp.length() --> 1 hour</screen>
@@ -177,8 +166,7 @@ tp.length() --> 1 hour</screen>
 	    <entry>True if ptime is within the period</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,01);
+	    <entry><screen>date d(2002,Jan,01);
 ptime t1(d, seconds(10)); //10 sec after midnight
 ptime t2(d, hours(10)); //10 hours after midnight
 ptime t3(d, hours(2)); //2 hours after midnight
@@ -191,8 +179,7 @@ time_period tp(t1, t2); tp.contains(t3) --> true</screen>
 	    <entry>True if period is within the period</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-time_period tp1(ptime(d,hours(1)), 
+	    <entry><screen>time_period tp1(ptime(d,hours(1)), 
                 ptime(d,hours(12)));
 time_period tp2(ptime(d,hours(2)), 
                 ptime(d,hours(4)));
@@ -206,8 +193,7 @@ tp2.contains(tp1); // --> false</screen>
 	    <entry> True if periods overlap</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-time_period tp1(ptime(d,hours(1)),
+	    <entry><screen>time_period tp1(ptime(d,hours(1)),
                 ptime(d,hours(12)));
 time_period tp2(ptime(d,hours(2)), 
                 ptime(d,hours(4)));
@@ -257,8 +243,6 @@ tp2.intersects(tp1); // --> true</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -270,14 +254,12 @@ tp2.intersects(tp1); // --> true</screen>
 	</thead>
 	<tbody>
           <row>
-            <entry valign="top" morerows="1"><screen>
-std::string 
+            <entry valign="top" morerows="1"><screen>std::string 
   to_simple_string(time_period dp)</screen></entry>
             <entry>To <code>[YYYY-mmm-DD hh:mm:ss.fffffffff/YYYY-mmm-DD hh:mm:ss.fffffffff]</code> string where <code>mmm</code> is 3 char month name.</entry>
           </row>
           <row>
-            <entry><screen>
-[2002-Jan-01 01:25:10.000000001/
+            <entry><screen>[2002-Jan-01 01:25:10.000000001/
                 2002-Jan-31 01:25:10.123456789]
 // string occupies one line</screen></entry>
 	  </row>
@@ -292,8 +274,6 @@ std::string
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -306,10 +286,20 @@ std::string
 	<tbody>
           <row>
 	    <entry valign="top" morerows="1"><screen>operator&lt;&lt;</screen></entry>
-            <entry>Output streaming operator for time duration. Uses facet to output [date time_of_day/date time_of_day]. The default is format is <code>[YYYY-mmm-DD hh:mm:ss.fffffffff/YYYY-mmm-DD hh:mm:ss.fffffffff]</code> string where <code>mmm</code> is 3 char month name.</entry>
+            <entry>Output streaming operator for time duration. Uses facet to output [date time_of_day/date time_of_day]. The default is format is <code>[YYYY-mmm-DD hh:mm:ss.fffffffff/YYYY-mmm-DD hh:mm:ss.fffffffff]</code> string where <code>mmm</code> is 3 char month name and the fractional seconds are left out when zero.</entry>
 	  </row>
 	  <row>
-            <entry><screen>[2002-Jan-01 01:25:10.000000001/2002-Jan-31 01:25:10.123456789]</screen></entry>
+            <entry><screen>[2002-Jan-01 01:25:10.000000001/ \
+    2002-Jan-31 01:25:10.123456789]</screen></entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>operator&gt;&gt;</screen></entry>
+            <entry>Input streaming operator for time duration. Uses facet to read [date time_of_day/date time_of_day]. The default is format is <code>[YYYY-mmm-DD hh:mm:ss.fffffffff/YYYY-mmm-DD hh:mm:ss.fffffffff]</code> string where <code>mmm</code> is 3 char month name and the fractional seconds are left out when zero.</entry>
+	  </row>
+	  <row>
+            <entry><screen>[2002-Jan-01 01:25:10.000000001/ \
+    2002-Jan-31 01:25:10.123456789]</screen></entry>
           </row>
 
 	  <row>

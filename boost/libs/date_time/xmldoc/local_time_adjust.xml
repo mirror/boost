@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -14,6 +14,10 @@
   <link linkend="local_utc_header">Header</link> --
   <link linkend="local_utc_overview">Overview</link>
 
+  <bridgehead renderas="sect3">Introduction</bridgehead>
+  <para>
+    The <code>c_local_adjustor</code> has been depricated and may be removed from future versions. Use <link linkend="date_time.local_time.local_date_time">local_date_time</link> instead.
+  </para>
   <anchor id="local_utc_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
@@ -39,8 +43,6 @@ or
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Class</entry>

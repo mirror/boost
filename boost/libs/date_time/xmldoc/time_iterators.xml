@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -65,8 +65,6 @@ or
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Class</entry>
@@ -95,8 +93,6 @@ or
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -108,8 +104,7 @@ or
 	</thead>
 	<tbody>
           <row>
-	    <entry valign="top" morerows="1"><screen>
-operator==(const ptime&amp; rhs),
+	    <entry valign="top" morerows="1"><screen>operator==(const ptime&amp; rhs),
 operator!=(const ptime&amp; rhs),
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen>
@@ -117,8 +112,7 @@ operator>=, operator&lt;=</screen>
 	    <entry>A full complement of comparison operators</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-date d(2002,Jan,1);
+	    <entry><screen>date d(2002,Jan,1);
 ptime start_time(d, hours(1));
 //increment by 10 minutes
 time_iterator titr(start_time, minutes(10));
@@ -135,8 +129,7 @@ if (titr &lt;= end_time) // true</screen>
 	    <entry>Increment the iterator by the specified duration.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-//increment by 10 milli seconds
+	    <entry><screen>//increment by 10 milli seconds
 time_iterator titr(start_time, milliseconds(10));
 ++titr; // == start_time + 10 milliseconds</screen>
 	    </entry>
@@ -147,8 +140,9 @@ time_iterator titr(start_time, milliseconds(10));
 	    <entry>Decrement the iterator by the specified time duration.</entry>
 	  </row>
           <row>
-	    <entry><screen>time_iterator titr(start_time, time_duration(1,2,3));
---titr; // == start_time - 1 hour, 2 minutes, and 3 seconds</screen></entry>
+            <entry><screen>time_duration td(1,2,3);
+time_iterator titr(start_time, td);
+--titr; // == start_time - 01:02:03</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>

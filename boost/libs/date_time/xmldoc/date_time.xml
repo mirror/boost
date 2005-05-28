@@ -32,18 +32,21 @@
 </libraryinfo>
 
 <title>Boost.Date_Time</title>
-<section id="date_time.intro">
+<!-- <section id="date_time.intro"> -->
   <bridgehead renderas="sect3">Introduction</bridgehead>
 	 
   <para>
    A set of date-time libraries based on generic programming concepts.
   </para>
-</section>
+  <!-- </section> -->
 
    <xi:include href="conceptual.xml"/> 
+   <xi:include href="usage_examples.xml"/> 
    <xi:include href="gregorian.xml"/> 
    <xi:include href="posix_time.xml"/> 
    <xi:include href="local_time.xml"/> 
+   <xi:include href="date_time_io.xml"/> 
+   <xi:include href="serialization.xml" />
    <xi:include href="details.xml"/> 
    <xi:include href="examples.xml"/> 
    <xi:include href="doxy.xml"/>

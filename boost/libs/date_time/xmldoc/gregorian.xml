@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -32,8 +32,6 @@
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry>Example</entry>
@@ -44,7 +42,7 @@
           <row>
             <entry valign="top"><literallayout>
 <link linkend="date_time.examples.days_alive">Days Alive</link> &nbsp; 
-<link linkend="date_time.examples.days_till_new_year">Days Till New Year</link></literallayout></entry>
+<link linkend="date_time.examples.days_between_new_year">Days Between New Years</link></literallayout></entry>
 	    <entry>Simple date arithmetic. Retrieve current day from clock.</entry>
 	  </row>
 	  <row>

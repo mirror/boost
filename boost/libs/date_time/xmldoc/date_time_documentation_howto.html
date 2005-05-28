@@ -34,7 +34,7 @@
   <hr>
   <a name="exclusive_pdf"><h3>Building Exclusive Date Time PDF</h3></a>
   <p><strong>Prerequisite:</strong> bjam must be able to build documentation for 'fo' output (necessary aditions must have been added to <font class="fname">user-config.jam</font>).</p>
-	<p><strong>BUILD ERRORS:</strong> During the fo->pdf step, an error stating that an id already exists may appear. This error appears to be introduced during the xml->fo step. It is possible to work around this error by changing one of the anchor names in one of the xml file. <strong>Note:</strong> This does not mean there is an error in the xml. The anchor and link that is known to have an effect is <font class="fname">date_input_facet_intro</font> (change the 'd' to a 'f', or back, should do the trick).</p>
+
   <p>Necessary modifications to build the date time pdf are:
   <ol>
     <li>Add the new stylesheet to <font class="fname">boostbook.jam</font>.<div class="screen">
@@ -52,6 +52,7 @@ rule docbook-to-fo ( target : source : properties * )
     <li>Build the pdf.<div class="screen">fop ../../../bin.v2/libs/date_time/.../exclusive_date_time.fo date_time.pdf</div></li>
   </ol>
   </p>
+					<p><strong>BUILD ERRORS:</strong> During the fo->pdf step, an error stating that an id already exists may appear. This error appears to be introduced during the xml->fo step. There are two possible workarounds for this (depending on where the duplicated id apears). If the duplicate id appears in the reference section, find the offending id and change it manually (ex: "id2534038" -> "id2534039"). If the id appears in the documentation generated from the xml, change one of the anchor names in one of the xml files. <strong>Note:</strong> This does not mean there is an error in the xml. The anchor and link that is known to have an effect is <font class="fname">date_input_facet_intro</font> (change the 'd' to a 'f', or back, should do the trick).</p>
   <hr>
   <a name="doxy_ref"><h3>Generating Date Time Doxygen Reference</h3></a>
   <p>Each doxygen reference file must be built, copied, and modified seperately. The steps to build all four <font class="fname">*.boostbook</font> reference files are:

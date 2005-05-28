@@ -22,9 +22,6 @@
   <para>
     A local_date_time object is a point in time and an associated time zone. The time is represented internally as UTC.
   </para>
-  <para>
-    An example of using local_date_time is provided in the <link linkend="date_time.examples.meeting_planner">Teleconference Scheduler</link>.
-  </para>
 
   <anchor id="local_date_time_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
@@ -44,8 +41,6 @@ functions, and IO operators.
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>
@@ -54,18 +49,25 @@ functions, and IO operators.
         </thead>
         <tbody>
           <row>
-            <entry valign="top"><screen>local_date_time 
-  local_microsec_clock(time_zone_ptr);</screen></entry>
+            <entry valign="top"><screen>local_microsec_clock(...)
+  Return Type:
+    local_date_time
+  Parameter:
+    time_zone_ptr</screen></entry>
             <entry><screen>time_zone_ptr zone(
   new posix_time_zone("MST-07")
 );
 local_date_time ldt = 
-  local_microsec_clock::local_time(zone);</screen>
+  local_microsec_clock::local_time(
+    zone);</screen>
             </entry>
           </row>
           <row>
-            <entry valign="top"><screen>local_date_time 
-  local_sec_clock(time_zone_ptr);</screen></entry>
+            <entry valign="top"><screen>local_sec_clock(...)
+  Return Type:
+    local_date_time 
+  Parameter:
+    time_zone_ptr</screen></entry>
             <entry><screen>time_zone_ptr zone(
   new posix_time_zone("MST-07")
 );
@@ -95,8 +97,6 @@ local_date_time ldt =
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>
@@ -105,38 +105,49 @@ local_date_time ldt =
         </thead>
         <tbody>
           <row>
-            <entry valign="top"><screen>local_date_time(posix_time::ptime, 
-                time_zone_ptr);</screen></entry>
+            <entry valign="top"><screen>local_date_time(...)
+  Parameters:
+    posix_time::ptime
+    time_zone_ptr</screen></entry>
             <entry><screen>
 // 3am, 2004-Nov-05 local time
-ptime pt(date(2004,Nov,5), hours(10));
-time_zone_ptr zone(new posix_time_zone("MST-07"));
+ptime pt(date(2004,Nov,5), 
+         hours(10));
+time_zone_ptr zone(
+  new posix_time_zone("MST-07"));
 local_date_time az(pt, zone);</screen>
             </entry>
           </row>
           <row>
-            <entry valign="top"><screen>local_date_time(date, time_duration, 
-                time_zone_ptr, bool);</screen></entry>
+            <entry valign="top"><screen>local_date_time(...)
+  Parameters:
+    date
+    time_duration 
+    time_zone_ptr
+    bool</screen></entry>
             <entry><screen>date d(2004,Nov,5);
 time_duration td(5,0,0,0);
+string z("PST-8PDT,M4.1.0,M10.1.0")
 time_zone_ptr zone(
-  new posix_time_zone("PST-8PDT,M4.1.0,M10.1.0")
-);
-local_date_time nyc(d, td, zone, false);</screen>
+  new posix_time_zone(z));
+local_date_time nyc(d, td, 
+                    zone, false);</screen>
             </entry>
           </row>
           <row>
-            <entry valign="top"><screen>local_date_time(date, 
-                time_duration, 
-                time_zone_ptr, 
-                DST_CALC_OPTIONS);</screen></entry>
+            <entry valign="top"><screen>local_date_time(...)
+  Parameters:
+    date
+    time_duration
+    time_zone_ptr
+    DST_CALC_OPTIONS</screen></entry>
             <entry><screen>date d(2004,Nov,5);
 time_duration td(5,0,0,0);
+string z("PST-8PDT,M4.1.0,M10.1.0")
 time_zone_ptr zone(
-  new posix_time_zone("PST-8PDT,M4.1.0,M10.1.0")
-);
+  new posix_time_zone(z));
 local_date_time nyc(d, td, zone, 
-                    NOT_DATE_TIME_ON_ERROR);</screen>
+  NOT_DATE_TIME_ON_ERROR);</screen>
             </entry>
           </row>
           <row>
@@ -144,12 +155,15 @@ local_date_time nyc(d, td, zone,
             <entry><screen>local_date_time az_2(az);</screen></entry>
           </row>
           <row>
-            <entry valign="top"><screen>local_date_time(special_values, 
-                time_zone_ptr);</screen></entry>
+            <entry valign="top"><screen>local_date_time(...)
+  Parameters:
+    special_values
+    time_zone_ptr</screen></entry>
             <entry><screen>time_zone_ptr zone(
   new posix_time_zone("MST-07")
 );
-local_date_time nadt(not_a_date_time, zone);
+local_date_time nadt(not_a_date_time, 
+                     zone);
 // default NULL time_zone_ptr
 local_date_time nadt(pos_infin);</screen>
             </entry>
@@ -164,8 +178,6 @@ local_date_time nadt(pos_infin);</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry valign="top" morerows="1">Syntax</entry>
@@ -181,7 +193,7 @@ local_date_time nadt(pos_infin);</screen>
             <entry>Returns associated time_zone object via a time_zone_ptr</entry>
           </row>
           <row>
-            <entry><screen>the example...</screen></entry>
+            <entry><screen></screen></entry>
           </row>
 
           <row>
@@ -197,8 +209,10 @@ local_date_time nadt(pos_infin);</screen>
             <entry>Returns the UTC time for this object.</entry>
           </row>
           <row>
-            <entry><screen>ptime pt(date(2004,Nov,5), hours(10));
-time_zone_ptr zone(new posix_time_zone("MST-07"));
+            <entry><screen>ptime pt(date(2004,Nov,5), 
+         hours(10));
+time_zone_ptr zone(
+  new posix_time_zone("MST-07"));
 local_date_time az(pt, zone);
 az.utc_time(); // 10am 2004-Nov-5</screen>
             </entry>
@@ -213,14 +227,18 @@ az.utc_time(); // 10am 2004-Nov-5</screen>
           </row>
           
           <row>
-            <entry valign="top" morerows="1"><screen>local_date_time 
-local_time_in(time_zone_ptr, 
-              time_duration);</screen></entry>
+            <entry valign="top" morerows="1"><screen>local_time_in(...)
+  Return Type:
+    local_date_time 
+  Parameters:
+    time_zone_ptr
+    time_duration</screen></entry>
             <entry>Returns a local_date_time representing the same UTC time as calling object, plus optional time_duration, with given time zone.</entry>
           </row>
           <row>
             <entry><screen>local_date_time nyc = 
-        az.local_time_in(nyc_zone, hours(2));
+  az.local_time_in(nyc_zone, 
+                   hours(2));
 // nyc == 7am 2004-Nov-5</screen>
             </entry>
           </row>

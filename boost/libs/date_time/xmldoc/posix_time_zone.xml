@@ -19,7 +19,7 @@
   <anchor id="posix_time_zone_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    A posix_time_zone object, much like a <link linkend="date_time.local_time.time_zone">time_zone</link> object, is a set of data and rules that provide information about a time zone. Information such as the offset from UTC, it's name and abbreviation, as well as daylight savings rules, called <link linkend="date_time.local_time.dst_calc_rules">dst_calc_rules</link>. These rules are stored as a boost::shared_ptr&lt;dst_calc_rules&gt;.
+    A posix_time_zone object is a set of data and rules that provide information about a time zone. Information such as the offset from UTC, it's name and abbreviation, as well as daylight savings rules, called <link linkend="date_time.local_time.dst_calc_rules">dst_calc_rules</link>. These rules are stored as a boost::shared_ptr&lt;dst_calc_rules&gt;.
   </para>
   <para>
     As a convenience, a typedef for shared_ptr&lt;dst_calc_rules&gt; is provided.
@@ -93,8 +93,6 @@ leap_day.dst_local_start_time(2003); // Exception thrown</programlisting>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>
@@ -104,8 +102,8 @@ leap_day.dst_local_start_time(2003); // Exception thrown</programlisting>
         <tbody>
           <row>
             <entry valign="top"><screen>posix_time_zone(std::string)</screen></entry>
-            <entry><screen>std::string nyc_spec("EST-5EDT,M4.1.0,M10.5.0");
-time_zone_ptr zone(new posix_time_zone(nyc_spec));</screen>
+            <entry><screen>std::string nyc("EST-5EDT,M4.1.0,M10.5.0");
+time_zone_ptr zone(new posix_time_zone(nyc));</screen>
             </entry>
           </row>
         </tbody>
@@ -118,8 +116,6 @@ time_zone_ptr zone(new posix_time_zone(nyc_spec));</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry valign="top" morerows="1">Syntax</entry>
@@ -214,8 +210,7 @@ time_duration base_utc_offset()</screen></entry>
             <entry>Returns a posix time zone string representation of this time_zone_base object. Depending on how the time_zone object was created, the date-spec format of the string will be in either 'M' notation or 'n' notation. Every possible date-spec that can be represented in 'J' notation can also be represented in 'n' notation. The reverse is not true so only 'n' notation is used for these types of date-specs. For a detailed description of a posix time zone string see <link linkend="date_time.local_time.posix_time_zone">posix_time_zone</link>.</entry>
           </row>
           <row>
-            <entry><screen>
-nyc_zone_sh_ptr-&gt;to_posix_string();
+            <entry><screen>nyc_zone_sh_ptr-&gt;to_posix_string();
 // "EST-05EDT+01,M4.1.0/02:00,M10.5.0/02:00"
 phx_zone_sh_ptr-&gt;to_posix_string();
 // "MST-07"

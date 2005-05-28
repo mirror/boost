@@ -19,10 +19,7 @@
   <anchor id="tz_database_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    The local_time system depends on the ability to store time zone information. Our Time Zone Database (tz_database) is a means of permanently storing that data. The specifications for many time zones (377 at this time) are provided. These specifications are based on data found in the <ulink url="http://www.twinsun.com/tz/tz-link.htm">zoneinfo datebase</ulink>. The specifications are stored in the file:<screen>libs/date_time/data/date_time_zonespec.csv</screen>
-  </para>
-  <para>
-    An example of using the tz_database is provided in the <link linkend="date_time.examples.meeting_planner">Teleconference Scheduler</link>.
+    The local_time system depends on the ability to store time zone information. Our Time Zone Database (tz_database) is a means of permanently storing that data. The specifications for many time zones (377 at this time) are provided. These specifications are based on data found in the <ulink url="http://www.twinsun.com/tz/tz-link.htm">zoneinfo datebase</ulink>. The specifications are stored in the file:<screen>libs/date_time/data/date_time_zonespec.csv</screen>. While this file already contains specifications for many time zones, it's real intent is for the user to modify it by adding (or removing) time zones to fit their application. See <link linkend="tz_database_datafile">Data File Details</link> to learn how this is accomplished.
   </para>
 
   <anchor id="tz_database_header" />
@@ -41,8 +38,6 @@
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>
@@ -52,8 +47,7 @@
         <tbody>
           <row>
             <entry valign="top"><screen>tz_database();</screen></entry>
-            <entry><screen>
-tz_database tz_db();
+            <entry><screen>tz_database tz_db();
 tz_db.load_from_file("./date_time_zonespec.csv");</screen>
             </entry>
           </row>
@@ -67,8 +61,6 @@ tz_db.load_from_file("./date_time_zonespec.csv");</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry valign="top" morerows="1">Syntax</entry>
@@ -80,14 +72,12 @@ tz_db.load_from_file("./date_time_zonespec.csv");</screen>
         </thead>
         <tbody>
           <row>
-            <entry valign="top" morerows="1"><screen>
-bool tz_db.add_record(std::string id, 
-                      <link linkend="date_time.local_time.time_zone_ptr">time_zone_ptr</link> tz);</screen></entry>
+            <entry valign="top" morerows="1"><screen>bool tz_db.add_record(std::string id, 
+                      <link linkend="date_time.local_time.custom_time_zone_ptr">time_zone_ptr</link> tz);</screen></entry>
             <entry>Adds a time_zone, or a posix_time_zone, to the database. ID is the region name for this zone (Ex: "America/Phoenix").</entry>
           </row>
           <row>
-            <entry><screen>
-time_zone_ptr zone(
+            <entry><screen>time_zone_ptr zone(
   new posix_time_zone("PST-8PDT,M4.1.0,M10.1.0")
 );
 std::string id("America/West_Coast");
@@ -96,27 +86,23 @@ tz_db.add_record(id, zone);</screen>
           </row>
             
           <row>
-            <entry valign="top" morerows="1"><screen>
-time_zone_ptr 
+            <entry valign="top" morerows="1"><screen>time_zone_ptr 
   tz_db.time_zone_from_region(string id);</screen></entry>
             <entry>Returns a time_zone, via a time_zone_ptr, that matches the region listed in the data file. A null pointer is returned if no match is found.
             </entry>
           </row>
           <row>
-            <entry><screen>
-time_zone_ptr nyc =
+            <entry><screen>time_zone_ptr nyc =
   tz_db.time_zone_from_region("America/New_York");</screen>
             </entry>
           </row>
           
           <row>
-            <entry valign="top" morerows="1"><screen>
-vector&lt;string&gt; tz_db.region_list();</screen></entry>
+            <entry valign="top" morerows="1"><screen>vector&lt;string&gt; tz_db.region_list();</screen></entry>
             <entry>Returns a vector of strings that holds all the region ID strings from the database.</entry>
           </row>
           <row>
-            <entry><screen>
-std::vector&lt;std::string&gt; regions;
+            <entry><screen>std::vector&lt;std::string&gt; regions;
 regions = tz_db.region_list();</screen>
             </entry>
           </row>

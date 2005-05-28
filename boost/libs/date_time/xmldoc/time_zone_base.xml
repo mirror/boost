@@ -8,7 +8,7 @@
 -->
 
 <section id="date_time.local_time.time_zone_base">
-  <title>Time Zone Base (abstract)</title>
+  <title>Time Zone (abstract)</title>
 
   <link linkend="time_zone_base_intro">Introduction</link> --
   <link linkend="time_zone_base_header">Header</link> --
@@ -18,7 +18,10 @@
   <anchor id="time_zone_base_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    The time_zone_base class is an abstract base class template for representing time zones. Time zones are a set of data and rules that provide information about a time zone. The date_time library handles time_zones by means of a boost::shared_ptr&lt;time_zone_base&gt;. A user's custom time zone rep will work in the date_time library by means of this shared_ptr.
+    The time_zone_base class is an abstract base class template for representing time zones. Time zones are a set of data and rules that provide information about a time zone. The date_time library handles time_zones by means of a boost::shared_ptr&lt;time_zone_base&gt;. A user's custom time zone class will work in the date_time library by means of this shared_ptr.
+  </para>
+  <para>
+    For convienience, the time_zone_base class is typedef'd as time_zone. All references in the documentation to time_zone, are referring to this typedef.
   </para>
 
   <anchor id="time_zone_base_header" />
@@ -46,8 +49,6 @@
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>

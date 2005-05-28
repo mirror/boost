@@ -2,13 +2,13 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
 
 <section id="date_time.gregorian.date_class">
-  <title>Date Class</title>
+  <title>Date</title>
 
   <link linkend="date_intro">Introduction</link> --
   <link linkend="date_header">Header</link> --
@@ -40,8 +40,6 @@ or
   <bridgehead renderas="sect3">Construction</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -73,8 +71,7 @@ or
 	  <entry>Constructor for infinities, not-a-date-time, max_date_time, and min_date_time</entry>
 	</row>
         <row>
-	  <entry><screen>
-date d1(neg_infin);
+	  <entry><screen>date d1(neg_infin);
 date d2(pos_infin);
 date d3(not_a_date_time);
 date d4(max_date_time);
@@ -86,7 +83,7 @@ date d5(min_date_time);</screen></entry>
 	  <entry>Default constructor. Creates a date object initialized to not_a_date_time. NOTE: this constructor can be disabled by defining DATE_TIME_NO_DEFAULT_CONSTRUCTOR (see compiler_config.hpp)</entry>
 	</row>
 	<row>
-	  <entry>date d; // d =&gt; not_a_date_time</entry>
+          <entry><screen>date d; // d =&gt; not_a_date_time</screen></entry>
 	</row>
       </tbody>
     </tgroup>
@@ -96,8 +93,6 @@ date d5(min_date_time);</screen></entry>
   <bridgehead renderas="sect3">Construct from String</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -113,8 +108,7 @@ date d5(min_date_time);</screen></entry>
 	  <entry>From delimited date string where with order year-month-day eg: 2002-1-25</entry>
 	</row>
 	<row>
-	  <entry><screen>
-std::string ds("2002/1/25");
+	  <entry><screen>std::string ds("2002/1/25");
 date d(from_string(ds));</screen></entry>
         </row>
 
@@ -123,8 +117,7 @@ date d(from_string(ds));</screen></entry>
 	  <entry>From iso type date string where with order year-month-day eg: 20020125</entry>
 	</row>
 	<row>
-	  <entry><screen>
-std::string ds("20020125");
+	  <entry><screen>std::string ds("20020125");
 date d(from_undelimited_string(ds));</screen></entry>
 	</row>
       </tbody>
@@ -135,8 +128,6 @@ date d(from_undelimited_string(ds));</screen></entry>
   <bridgehead renderas="sect3">Construct from Clock</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -170,8 +161,6 @@ date d(from_undelimited_string(ds));</screen></entry>
   <bridgehead renderas="sect3">Accessors</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -187,8 +176,7 @@ date d(from_undelimited_string(ds));</screen></entry>
 	  <entry>Get the year part of the date.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,10); 
+	  <entry><screen>date d(2002,Jan,10); 
 d.year(); // --> 2002</screen></entry>
         </row>
 
@@ -197,8 +185,7 @@ d.year(); // --> 2002</screen></entry>
 	  <entry>Get the month part of the date.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,10); 
+	  <entry><screen>date d(2002,Jan,10); 
 d.month(); // --> 1</screen></entry>
         </row>
         
@@ -207,8 +194,7 @@ d.month(); // --> 1</screen></entry>
 	  <entry> Get the day part of the date.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,10); 
+	  <entry><screen>date d(2002,Jan,10); 
 d.day(); // --> 10</screen></entry>
         </row>
         
@@ -217,10 +203,11 @@ d.day(); // --> 10</screen></entry>
 	  <entry>Return a year_month_day struct. More efficient when all 3 parts of the date are needed.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,10);
+	  <entry><screen>date d(2002,Jan,10);
 date::ymd_type ymd = d.year_month_day();
-// ymd.year --> 2002, ymd.month --> 1, ymd.day --> 10</screen></entry>
+// ymd.year  --> 2002, 
+// ymd.month --> 1, 
+// ymd.day   --> 10</screen></entry>
         </row>
         
 	<row>
@@ -228,8 +215,7 @@ date::ymd_type ymd = d.year_month_day();
 	  <entry>Get the day of the week (eg: Sunday, Monday, etc.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,10);
+	  <entry><screen>date d(2002,Jan,10);
 d.day(); // --> Thursday</screen></entry>
         </row>
 
@@ -238,9 +224,17 @@ d.day(); // --> Thursday</screen></entry>
 	  <entry>Get the day of the year. Number from 1 to 366 </entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2000,Jan,10);
+	  <entry><screen>date d(2000,Jan,10);
 d.day_of_year(); // --> 10</screen></entry>
+        </row>
+                
+	<row>
+	  <entry valign="top" morerows="1"><screen>date end_of_month() const</screen></entry>
+          <entry>Returns a <code>date</code> object set to the last day of the calling objects current month.</entry>
+	</row>
+	<row>
+	  <entry><screen>date d(2000,Jan,10);
+d.day_of_year(); // --> 2000-Jan-31</screen></entry>
         </row>
                 
 	<row>
@@ -248,8 +242,7 @@ d.day_of_year(); // --> 10</screen></entry>
 	  <entry>Returns true if date is either positive or negative infinity</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(pos_infin); 
+	  <entry><screen>date d(pos_infin); 
 d.is_infinity(); // --> true</screen></entry>
         </row>
         
@@ -258,8 +251,7 @@ d.is_infinity(); // --> true</screen></entry>
 	  <entry>Returns true if date is negative infinity</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(neg_infin);
+	  <entry><screen>date d(neg_infin);
 d.is_neg_infinity(); // --> true</screen></entry>
         </row>
         
@@ -268,8 +260,7 @@ d.is_neg_infinity(); // --> true</screen></entry>
 	  <entry>Returns true if date is positive infinity</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(neg_infin); 
+	  <entry><screen>date d(neg_infin); 
 d.is_pos_infinity(); // --> true</screen></entry>
         </row>
         
@@ -278,9 +269,29 @@ d.is_pos_infinity(); // --> true</screen></entry>
 	  <entry>Returns true if value is not a date</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(not_a_date_time);
+	  <entry><screen>date d(not_a_date_time);
 d.is_not_a_date(); // --> true</screen></entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>bool is_special() const</screen></entry>
+          <entry>Returns true if date is any <code>special_value</code></entry>
+	</row>
+	<row>
+          <entry><screen>date d(pos_infin); 
+date d2(not_a_date_time); 
+date d3(2005,3,1);
+d.is_special(); // --> true
+d2.is_special(); // --> true
+d3.is_special(); // --> false</screen></entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>special_value as_special() const</screen></entry>
+          <entry>Returns represented <code>special_value</code> or <code>not_special</code> if the represented date is a normal date.</entry>
+	</row>
+	<row>
+	  <entry><screen></screen></entry>
         </row>
         
 	<row>
@@ -311,8 +322,7 @@ d.is_not_a_date(); // --> true</screen></entry>
 	  <entry>Returns the last day of the month for the date.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2000,Feb,1);
+	  <entry><screen>date d(2000,Feb,1);
 //gets Feb 28 -- 2000 was leap year
 date eom = d.end_of_month_day();</screen></entry>
 	</row>
@@ -324,8 +334,6 @@ date eom = d.end_of_month_day();</screen></entry>
   <bridgehead renderas="sect3">Convert to String</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -367,8 +375,6 @@ date eom = d.end_of_month_day();</screen></entry>
   <bridgehead renderas="sect3">Operators</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Syntax</entry>
@@ -384,15 +390,13 @@ date eom = d.end_of_month_day();</screen></entry>
 	  <entry>Stream output operator</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,1);
+	  <entry><screen>date d(2002,Jan,1);
 std::cout &lt;&lt; d &lt;&lt; std::endl;</screen>
 	  </entry>
         </row>
 
 	<row>
-	  <entry valign="top" morerows="1"><screen> 
-operator==, operator!=,
+	  <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen></entry>
 	  <entry>A full complement of comparison operators</entry>
@@ -406,8 +410,7 @@ operator>=, operator&lt;=</screen></entry>
 	  <entry>Return a date adding a day offset</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,1);
+	  <entry><screen>date d(2002,Jan,1);
 date_duration dd(1);
 date d2 = d + dd;</screen>
 	  </entry>
@@ -418,8 +421,7 @@ date d2 = d + dd;</screen>
 	  <entry>Return a date by adding a day offset</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2002,Jan,1);
+	  <entry><screen>date d(2002,Jan,1);
 date_duration dd(1);
 date d2 = d - dd;</screen>
 	  </entry>
@@ -430,8 +432,7 @@ date d2 = d - dd;</screen>
 	  <entry>Return a date_duration by subtracting two dates</entry>
 	</row>
         <row>
-	  <entry><screen>
-date d1(2002,Jan,1);
+	  <entry><screen>date d1(2002,Jan,1);
 date d2(2002,Jan,2);
 date_duration dd = d2-d1;</screen>
 	  </entry>

@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -55,8 +55,6 @@ or
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -68,8 +66,7 @@ or
 	</thead>
 	<tbody>
           <row>
-            <entry valign="top" morerows="1"><screen>
-time_duration(hours,
+            <entry valign="top" morerows="1"><screen>time_duration(hours,
               minutes,
               seconds,
               fractional_seconds)</screen></entry>
@@ -90,8 +87,6 @@ time_duration(hours,
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -160,8 +155,6 @@ time_duration(hours,
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -177,8 +170,7 @@ time_duration(hours,
             <entry>From delimited string. NOTE: Excess digits in fractional seconds will be dropped. Ex: "1:02:03.123456999" =&gt; 1:02:03.123456. This behavior is affected by the precision the library is compiled with (see <link linkend="date_time.buildinfo">Build-Compiler Information</link>.</entry>
           </row>
           <row>
-            <entry><screen>
-std::string ts("23:59:59.000");
+            <entry><screen>std::string ts("23:59:59.000");
 time_duration td(duration_from_string(ts));</screen>
 	    </entry>
 	  </row>
@@ -193,8 +185,6 @@ time_duration td(duration_from_string(ts));</screen>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -232,8 +222,7 @@ neg_td.minutes(); // --> -2</screen></entry>
             <entry>Get the normalized number of second +/-(0..59).</entry>
 	  </row>
 	  <row>
-            <entry><screen>
-time_duration td(1,2,3); 
+            <entry><screen>time_duration td(1,2,3); 
 time_duration neg_td(-1,2,3);
 td.seconds(); // --> 3
 neg_td.seconds(); // --> -3</screen></entry>
@@ -244,8 +233,7 @@ neg_td.seconds(); // --> -3</screen></entry>
 	    <entry>Get the total number of seconds truncating any fractional seconds.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-time_duration td(1,2,3,10);
+	    <entry><screen>time_duration td(1,2,3,10);
 td.total_seconds(); 
 // --> (1*3600) + (2*60) + 3 == 3723</screen>
 	    </entry>
@@ -291,20 +279,17 @@ td.invert_sign(); // --> 01:00:00</screen></entry>
             <entry>Returns an unsigned short holding the number of fractional digits the time resolution has.</entry>
 	  </row>
 	  <row>
-            <entry><screen>
-unsigned short secs;
+            <entry><screen>unsigned short secs;
 secs = time_duration::num_fractional_digits();
 // 9 for nano, 6 for micro, etc.</screen></entry>
           </row>
           
 	  <row>
             <entry valign="top" morerows="1"><screen>time_duration::ticks_per_second()</screen></entry>
-            <entry>Return the number of ticks in a second.  For example, if the duration
-                   supports nanoseconds then the returned result will be 1000000.
-            </entry>
+            <entry>Return the number of ticks in a second.  For example, if the duration supports nanoseconds then the returned result will be 1000000.</entry>
 	  </row>
 	  <row>
-            <entry><screen>std::cout &lt;&lt; time_duration::ticks_per_second()  &lt;&lt; std::endl; </screen></entry>
+            <entry><screen>std::cout &lt;&lt; time_duration::ticks_per_second();</screen></entry>
           </row>
           
 	  <row>
@@ -312,7 +297,8 @@ secs = time_duration::num_fractional_digits();
 	    <entry>Return the raw count of the duration type.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>time_duration td(0,0,0, 1000); td.ticks() --> 1000</screen></entry>
+            <entry><screen>time_duration td(0,0,0, 1000);
+td.ticks() // --> 1000</screen></entry>
           </row>
           
           <row>
@@ -333,8 +319,6 @@ secs = time_duration::num_fractional_digits();
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -371,8 +355,6 @@ secs = time_duration::num_fractional_digits();
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry valign="top" morerows="1">Syntax</entry>
@@ -384,8 +366,7 @@ secs = time_duration::num_fractional_digits();
 	</thead>
 	<tbody>
           <row>
-	    <entry valign="top" morerows="1"><screen>
-operator==, operator!=,
+	    <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen>
 	    </entry>
@@ -400,8 +381,7 @@ operator>=, operator&lt;=</screen>
 	    <entry>Add durations.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-time_duration td1(hours(1)+minutes(2));
+	    <entry><screen>time_duration td1(hours(1)+minutes(2));
 time_duration td2(seconds(10));
 time_duration td3 = td1 + td2;</screen>
 	    </entry>
@@ -412,8 +392,7 @@ time_duration td3 = td1 + td2;</screen>
 	    <entry>Subtract durations.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-time_duration td1(hours(1)+nanoseconds(2));
+	    <entry><screen>time_duration td1(hours(1)+nanoseconds(2));
 time_duration td2 = td1 - minutes(1);</screen>
 	    </entry>
           </row>
@@ -423,8 +402,7 @@ time_duration td2 = td1 - minutes(1);</screen>
 	    <entry>Divide the length of a duration by an integer value. Discards any remainder.</entry>
 	  </row>
 	  <row>
-	    <entry><screen>
-hours(3)/2 == time_duration(1,30,0);
+	    <entry><screen>hours(3)/2 == time_duration(1,30,0);
 nanosecond(3)/2 == nanosecond(1);</screen>
 	    </entry>
           </row>

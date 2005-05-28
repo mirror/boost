@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -31,15 +31,13 @@
 
   <anchor id="algo_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
-  <para><programlisting>#include "boost/date_time/gregorian/gregorian.hpp.hpp"</programlisting>
+  <para><programlisting>#include "boost/date_time/gregorian/gregorian.hpp"</programlisting>
   </para>
 
   <anchor id="algo_overview" />
   <bridgehead renderas="sect3">Overview</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
           <entry valign="top" morerows="1">Class and get_date Parameter</entry>
@@ -51,8 +49,7 @@
       </thead>
       <tbody>
         <row>
-          <entry valign="top" morerows="1"><screen>
-year_based_generator
+          <entry valign="top" morerows="1"><screen>year_based_generator
 date get_date(greg_year year)</screen></entry>
           <entry>A unifying (abstract) date_generator base type for: <code>partial_date</code>, <code>nth_day_of_the_week_in_month</code>, <code>first_day_of_the_week_in_month</code>, and <code>last_day_of_the_week_in_month</code>.</entry>
 	</row>
@@ -61,46 +58,40 @@ date get_date(greg_year year)</screen></entry>
         </row>
 
         <row>
-          <entry valign="top" morerows="1"><screen>
-last_day_of_the_week_in_month(greg_weekday, 
+          <entry valign="top" morerows="1"><screen>last_day_of_the_week_in_month(greg_weekday, 
                               greg_month)
 date get_date(greg_year year)</screen></entry>
 	  <entry>Calculate something like last Monday of January</entry>
 	</row>
 	<row>
-	  <entry><screen>
-last_day_of_the_week_in_month lwdm(Monday,Jan);
+	  <entry><screen>last_day_of_the_week_in_month lwdm(Monday,Jan);
 date d = lwdm.get_date(2002);
 //2002-Jan-28</screen>
 	  </entry>
         </row>
         
 	<row>
-          <entry valign="top" morerows="1"><screen>
-first_day_of_the_week_in_month(greg_weekday,
+          <entry valign="top" morerows="1"><screen>first_day_of_the_week_in_month(greg_weekday,
                                greg_month)
 date get_date(greg_year year)</screen></entry>
 	  <entry>Calculate something like first Monday of January</entry>
 	</row>
 	<row>
-	  <entry><screen>
-first_day_of_the_week_in_month fdm(Monday,Jan);
+	  <entry><screen>first_day_of_the_week_in_month fdm(Monday,Jan);
 date d = fdm.get_date(2002);
 //2002-Jan-07</screen>
 	  </entry>
         </row>
         
 	<row>
-          <entry valign="top" morerows="1"><screen>
-nth_day_of_the_week_in_month(week_num, 
+          <entry valign="top" morerows="1"><screen>nth_day_of_the_week_in_month(week_num, 
                              greg_weekday,
                              greg_month)
 date get_date(greg_year year)</screen></entry>
           <entry><code>week_num</code> is a public enum member of <code>nth_day_of_the_week_in_month</code>. Calculate something like first Monday of January, second Tuesday of March, Third Sunday of December, etc. (first through fifth are provided, fifth is the equivalent of last)</entry>
 	</row>
 	<row>
-          <entry><screen>
-typedef nth_day_of_the_week_in_month nth_dow;
+          <entry><screen>typedef nth_day_of_the_week_in_month nth_dow;
 nth_dow ndm(nth_dow::third, Monday,Jan);
 date d = ndm.get_date(2002);
 //2002-Jan-21</screen>
@@ -108,42 +99,36 @@ date d = ndm.get_date(2002);
         </row>
         
 	<row>
-          <entry valign="top" morerows="1"><screen>
-partial_date(greg_day, greg_month)
+          <entry valign="top" morerows="1"><screen>partial_date(greg_day, greg_month)
 date get_date(greg_year year)</screen></entry>
 	  <entry>Generates a date by applying the year to the given month and day.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-partial_date pd(1,Jan);
+	  <entry><screen>partial_date pd(1,Jan);
 date d = pd.get_date(2002);
 //2002-Jan-01</screen>
 	  </entry>
         </row>
         
 	<row>
-          <entry valign="top" morerows="1"><screen>
-first_day_of_the_week_after(greg_weekday)
+          <entry valign="top" morerows="1"><screen>first_day_of_the_week_after(greg_weekday)
 date get_date(date d)</screen></entry>
 	  <entry>Calculate something like First Sunday after Jan 1,2002</entry>
 	</row>
 	<row>
-	  <entry><screen>
-first_day_of_the_week_after fdaf(Monday);
+	  <entry><screen>first_day_of_the_week_after fdaf(Monday);
 date d = fdaf.get_date(date(2002,Jan,1));
 //2002-Jan-07</screen>
 	  </entry>
         </row>
         
 	<row>
-          <entry valign="top" morerows="1"><screen>
-first_day_of_the_week_before(greg_weekday)
+          <entry valign="top" morerows="1"><screen>first_day_of_the_week_before(greg_weekday)
 date get_date(date d)</screen></entry>
 	  <entry>Calculate something like First Monday before Feb 1,2002</entry>
 	</row>
 	<row>
-          <entry><screen>
-first_day_of_the_week_before fdbf(Monday);
+          <entry><screen>first_day_of_the_week_before fdbf(Monday);
 date d = fdbf.get_date(date(2002,Feb,1));
 //2002-Jan-28</screen>
 	  </entry>
@@ -157,8 +142,6 @@ date d = fdbf.get_date(date(2002,Feb,1));
   <bridgehead renderas="sect3">Function Overview</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
 	  <entry valign="top" morerows="1">Function Prototype</entry>
@@ -174,8 +157,7 @@ date d = fdbf.get_date(date(2002,Feb,1));
 	  <entry> Calculates the number of days from given date until given weekday.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2004,Jun,1); // Tuesday
+	  <entry><screen>date d(2004,Jun,1); // Tuesday
 greg_weekday gw(Friday);
 days_until_weekday(d, gw); // 3 days</screen>
 	  </entry>
@@ -186,8 +168,7 @@ days_until_weekday(d, gw); // 3 days</screen>
 	  <entry> Calculates the number of day from given date to previous given weekday.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2004,Jun,1); // Tuesday
+	  <entry><screen>date d(2004,Jun,1); // Tuesday
 greg_weekday gw(Friday);
 days_before_weekday(d, gw); // 4 days</screen>
 	  </entry>
@@ -198,8 +179,7 @@ days_before_weekday(d, gw); // 4 days</screen>
 	  <entry> Generates a date object representing the date of the following weekday from the given date.</entry>
 	</row>
 	<row>
-	  <entry><screen>
-date d(2004,Jun,1); // Tuesday
+	  <entry><screen>date d(2004,Jun,1); // Tuesday
 greg_weekday gw(Friday);
 next_weekday(d, gw); // 2004-Jun-4</screen>
 	  </entry>
@@ -210,8 +190,7 @@ next_weekday(d, gw); // 2004-Jun-4</screen>
 	  <entry> Generates a date object representing the date of the previous weekday from the given date.</entry>
 	</row>
 	<row>
-          <entry><screen>
-date d(2004,Jun,1); // Tuesday
+          <entry><screen>date d(2004,Jun,1); // Tuesday
 greg_weekday gw(Friday);
 previous_weekday(d, gw); // 2004-May-28</screen>
 	  </entry>

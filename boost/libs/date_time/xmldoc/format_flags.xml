@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
+"../../../tools/boostbook/dtd/boostbook.dtd">
+
+<!-- Copyright (c) 2005 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
+
+
+<para>
+  <anchor id="date_time_io.date_format_flags" />
+  Date Facet Format Flags
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+        <row>
+          <entry valign="top" morerows="1">Format Specifyer</entry>
+          <entry>Description</entry>
+        </row>
+        <row>
+            <entry>Example</entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry valign="top" morerows="1"><screen>%a</screen></entry>
+          <entry>Abbreviated weekday name</entry>
+        </row>
+        <row>
+          <entry><screen>"Mon" => Monday</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%A</screen></entry>
+          <entry>Long weekday name</entry>
+        </row>
+        <row>
+          <entry><screen>"Monday"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%b</screen></entry>
+          <entry>Abbreviated month name</entry>
+        </row>
+        <row>
+          <entry><screen>"Feb" => February</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%B</screen></entry>
+          <entry>Full month name</entry>
+        </row>
+        <row>
+          <entry><screen>"February"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%d</screen></entry>
+          <entry>Day of the month as decimal 01 to 31</entry>
+        </row>
+        <row>
+          <entry><screen></screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%j</screen></entry>
+          <entry>Day of year as decimal from 001 to 366. Note Feb-29 is not valid in non-leap years. For those years, "060" is skipped.</entry>
+        </row>
+        <row>
+          <entry><screen>"060" => Feb-29</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%m</screen></entry>
+          <entry>Month name as a decimal 01 to 12</entry>
+        </row>
+        <row>
+          <entry><screen>"01" => January</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%U</screen></entry>
+          <entry>Week number 00 to 53 with first Sunday as the first day of week 1</entry>
+        </row>
+        <row>
+          <entry><screen>date d(2005, Jan, 1); // Saturday
+// with format %U
+ss &lt;&lt; d; // "00"
+d += day(1); // Sunday
+ss &lt;&lt; d; // "01" begining of week 1</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%w</screen></entry>
+          <entry>Weekday as decimal number 0 to 6</entry>
+        </row>
+        <row>
+          <entry><screen>"0" => Sunday</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%W</screen></entry>
+          <entry>Week number 00 to 53 where Monday is first day of week 1</entry>
+        </row>
+        <row>
+          <entry><screen>date d(2005, Jan, 2); // Sunday
+// with format %W
+ss &lt;&lt; d; // "00"
+d += day(1); // Monday
+ss &lt;&lt; d; // "01" begining of week 1</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%x</screen></entry>
+          <entry>Implementation defined date format from the locale</entry>
+        </row>
+        <row>
+          <entry><screen>04/01/05</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%y</screen></entry>
+          <entry>Two digit year</entry>
+        </row>
+        <row>
+          <entry><screen>"05" => 2005</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y</screen></entry>
+          <entry>Four digit year</entry>
+        </row>
+        <row>
+          <entry><screen>"2005"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y-%b-%d</screen></entry>
+          <entry>Default date format</entry>
+        </row>
+        <row>
+          <entry><screen>"2005-Apr-01"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y%m%d</screen></entry>
+          <entry>ISO format</entry>
+        </row>
+        <row>
+          <entry><screen>"20050401"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y-%m-%d</screen></entry>
+          <entry>ISO extended format</entry>
+        </row>
+        <row>
+          <entry><screen>"2005-04-01"</screen></entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+
+
+  <anchor id="date_time_io.time_format_flags" />
+  Time Facet Format Flags
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+        <row>
+          <entry valign="top" morerows="1">Format Specifyer</entry>
+          <entry>Description</entry>
+        </row>
+        <row>
+            <entry>Example</entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry valign="top" morerows="1"><screen>%f</screen></entry>
+          <entry>Fractional seconds are always used, even when their value is zero</entry>
+        </row>
+        <row>
+          <entry><screen>"13:15:16.000000"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%F</screen></entry>
+          <entry>Fractional seconds are used only when their value is not zero.</entry>
+        </row>
+        <row>
+          <entry><screen>"13:15:16"
+"05:04:03.001234"
+          </screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%s</screen></entry>
+          <entry>Seconds with fractional seconds.</entry>
+        </row>
+        <row>
+          <entry><screen>"59.000000"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%S</screen></entry>
+          <entry>Seconds only</entry>
+        </row>
+        <row>
+          <entry><screen>"59"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%q</screen></entry>
+          <entry>ISO time zone (output only). This flag is ignored when using the time_facet with a ptime.</entry>
+        </row>
+        <row>
+          <entry><screen>"-0700" // Mountain Standard Time</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Q</screen></entry>
+          <entry>ISO extended time zone (output only). This flag is ignored when using the time_facet with a ptime.</entry>
+        </row>
+        <row>
+          <entry><screen>"-05:00" // Eastern Standard Time</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%z</screen></entry>
+          <entry>Abbreviated time zone (output only). This flag is ignored when using the time_facet with a ptime.</entry>
+        </row>
+        <row>
+          <entry><screen>"MST" // Mountain Standard Time</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Z</screen></entry>
+          <entry>Full time zone name (output only). This flag is ignored when using the time_facet with a ptime.</entry>
+        </row>
+        <row>
+          <entry><screen>"EDT" // Eastern Daylight Time</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%ZP</screen></entry>
+          <entry>Posix time zone string (available to both input and output). This flag is ignored when using the time_facet with a ptime. For complete details on posix time zone strings, see <link linkend="date_time.local_time.posix_time_zone">posix_time_zone class</link>.</entry>
+        </row>
+        <row>
+          <entry><screen>"EST-05EDT+01,M4.1.0/02:00,M10.5.0/02:00"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%x %X</screen></entry>
+          <entry>Implementation defined date/time format from the locale</entry>
+        </row>
+        <row>
+          <entry><screen>10/15/05 13:12:11</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y%m%dT%H%M%S%F%q</screen></entry>
+          <entry>ISO format</entry>
+        </row>
+        <row>
+          <entry><screen>"20051015T131211-0700"
+// Oct 15, 2005 13:12:11 MST
+          </screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y-%m-%d %H:%M:%S%F%Q</screen></entry>
+          <entry>Extended IOS format</entry>
+        </row>
+        <row>
+          <entry><screen>"2005-10-15 13:12:11 -07:00"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y-%b-%d %H:%M:%S%F %z</screen></entry>
+          <entry>Default format used when outputting ptime and local_date_time.</entry>
+        </row>
+        <row>
+          <entry><screen>"2005-Oct-15 13:12:11 MST"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%Y-%b-%d %H:%M:%S%F %ZP</screen></entry>
+          <entry>Default format used when inputting ptime and local_date_time.</entry>
+        </row>
+        <row>
+          <entry><screen>"2005-Oct-15 13:12:11 MST-07"</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>%H:%M:%S%F</screen></entry>
+          <entry>Default time_duration format.</entry>
+        </row>
+        <row>
+          <entry><screen>"13:14:15.003400"</screen></entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+</para>

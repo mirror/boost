@@ -45,7 +45,7 @@
     </itemizedlist>
   </para>
   <para>
-    In particular, a lack of support for standard locales limits the ability of the library to support iostream based input output. For these compilers a set of more limited string based input-output is provided. The compilers/standard libraries with this limitation include: 
+    In particular, a lack of support for standard locales limits the ability of the library to support iostream based input output. For these compilers a set of more limited string based input-output is provided. Some compilers/standard libraries with this limitation include: 
     <itemizedlist mark="bullet">
       <listitem>GCC 2.9x on Linux</listitem>
       <listitem>Borland 5.1.1 and 5.6</listitem>
@@ -55,24 +55,37 @@
   <para>
     Other compilers such as Comeau and Metroworks have been tested successfully with earlier versions of the library.
   </para>
+  <bridgehead renderas="sect5">Visual Studio &amp; STLPort</bridgehead>
+  <para>There is a known issue with Visual Studio (7.0 &amp; 7.1) and STLPort. The build errors typically make reference to a type issue or 'no acceptable conversion' and are attempting to instantiate a template with <code>wchar_t</code>. The default build of STLPort does not support <code>wchar_t</code>. There are two possible workarounds for this issue. The simplest is the user can build date_time withno wide stream/string etc. The other is to rebuild STLPort with wchar_t support.
+  </para>
+  <para>To build date_time with no wide stream/string etc, execute the following command from <code>$BOOST_ROOT</code>:
+    <screen>bjam -a "-sTOOLS=vc-7_1-stlport" "-sSTLPORT_PATH=..." \
+     "-sBUILD=&lt;define>BOOST_NO_STD_WSTRING"           \
+     --stagedir=... --with-date_time stage</screen>
+    (replace the elipses with the correct paths for the build system and adjust the <code>TOOLS</code> to the proper toolset if necessary)
+  </para>
+  <para>Rebuilding STLPort with <code>wchar_t</code> support involves placing <code>/Zc:wchar_t</code> in the STLPort makefile. Date_time should then be built with the following command from <code>$BOOST_ROOT</code>:
+    <screen>bjam -a "-sTOOLS=vc-7_1-stlport" "-sSTLPORT_PATH=..." \
+     "-sBUILD=&amp;native-wchar_t>on"                     \
+     --stagedir=... --with-date_time stage</screen>
+    (replace the elipses with the correct paths for the build system and adjust the <code>TOOLS</code> to the proper toolset if necessary)
+  </para>
   
   <anchor id="dir_structure" />
   <bridgehead renderas="sect3">Directory Structure</bridgehead>
   <para>
     The directory tree has the following structure:
-    <programlisting>
-      /boost/date_time                    -- common headers and template code
-      /boost/date_time/gregoran           -- Gregorian calendar system header files
-      /boost/date_time/posix_time         -- posix time system headers
-      /libs/date_time/build               -- build files and output directory
-      /libs/date_time/test                -- test battery for generic code
-      /libs/date_time/test/gregorian      -- test battery for the Gregorian system
-      /libs/date_time/test/posix_time     -- test battery for the posix_time system
-      /libs/date_time/examples/posix_time -- time example programs
-      /libs/date_time/examples/gregorian  -- nifty example programs
-      /libs/date_time/src/gregorian       -- cpp files for libboost_date_time
-      /libs/date_time/src/posix_time      -- empty (one file, but no source code...)
-    </programlisting>
+    <programlisting>/boost/date_time                    -- common headers and template code
+/boost/date_time/gregoran           -- Gregorian calendar system header files
+/boost/date_time/posix_time         -- posix time system headers
+/libs/date_time/build               -- build files and output directory
+/libs/date_time/test                -- test battery for generic code
+/libs/date_time/test/gregorian      -- test battery for the Gregorian system
+/libs/date_time/test/posix_time     -- test battery for the posix_time system
+/libs/date_time/examples/posix_time -- time example programs
+/libs/date_time/examples/gregorian  -- nifty example programs
+/libs/date_time/src/gregorian       -- cpp files for libboost_date_time
+/libs/date_time/src/posix_time      -- empty (one file, but no source code...)</programlisting>
   </para>
   
   <anchor id="other_boost_libs" />

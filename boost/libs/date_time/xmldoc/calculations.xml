@@ -50,9 +50,12 @@
   <para>
     Interval logic is extremely useful for simplifying many 'calculations' for dates and times. The following describes the operations provided by periods which are based on half-open range. The following operations calculate new time periods based on two input time periods: 
     <programlisting>
-  Timeperiod intersection Timeperiod --> Timeperiod (null interval if no intersection)
-  Timeperiod merge Timeperiod        --> Timeperiod (null interval if no intersection)
-  Timeperiod shift Duration          --> Timeperiod (shift start and end by duration amount)
+Timeperiod intersection Timeperiod --> Timeperiod 
+  (null interval if no intersection)
+Timeperiod merge Timeperiod        --> Timeperiod 
+  (null interval if no intersection)
+Timeperiod shift Duration          --> Timeperiod 
+  (shift start and end by duration amount)
     </programlisting>
     In addition, periods support various queries that calculate boolean results. The first set is caluculations with other time periods:
     <programlisting>

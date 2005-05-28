@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -13,22 +13,6 @@
   <xi:include href="motivation.xml"/>
   <xi:include href="domain_concepts.xml"/>
   <xi:include href="design_concepts.xml"/>
-  <section id="date_time.conceptual.more_info">
-    <title>More Information</title>
-
-    <para>
-      The design of the library is currently being evolved using 
-      Wiki and email discussions. You can find more information at:
-      <itemizedlist mark="bullet">
-	<listitem>
-	  <ulink url="http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?GDTL">Boost Wiki GDTL Start Page</ulink>
-	</listitem>
-	<listitem>
-	  <ulink url="http://www.crystalclearsoftware.com/libraries/gdtl/gdtl_ref_guide/index.html">Full Doxygen Reference Manual</ulink>
-	</listitem>
-      </itemizedlist>
-    </para>
-  </section>
 
 
 </section>

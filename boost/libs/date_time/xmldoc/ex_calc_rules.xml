@@ -48,7 +48,8 @@
     dst_calc_rule_ptr flr(new first_last_dst_rule(fd_start, ld_end));
     dst_calc_rule_ptr llr(new last_last_dst_rule(ld_start, ld_end));
     dst_calc_rule_ptr nlr(new nth_last_dst_rule(nkd_start, ld_end));
-    dst_calc_rule_ptr ndr(new nth_day_of_the_week_in_month_dst_rule(nkd_start, nkd_end));
+    dst_calc_rule_ptr ndr(new nth_day_of_the_week_in_month_dst_rule(nkd_start, 
+                                                                    nkd_end));
 
     return 0;
   }

@@ -13,7 +13,6 @@
   <xi:include href="calculations.xml" />
   <xi:include href="design_goals.xml" />
   <xi:include href="tradeoffs.xml" />
-  <xi:include href="serialization.xml" />
   <xi:include href="terminology.xml" />
   <xi:include href="references.xml" />
   <xi:include href="buildinfo.xml" />

@@ -47,8 +47,6 @@
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>
@@ -72,8 +70,6 @@ time_zone(<link linkend="time_zone_names">names</link>, <link linkend="date_time
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry valign="top" morerows="1">Syntax</entry>
@@ -184,7 +180,7 @@ phx_zone_sh_ptr-&gt;to_posix_string();
   <bridgehead renderas="sect3">Dependent Types</bridgehead>
   <link linkend="time_zone_names">Time Zone Names</link> --
   <link linkend="dst_adjustment_offsets">Dst Adjustment Offsets</link> --
-  <link linkend="dst_calc_rules">Daylight Savings Calc Rules</link>
+  <link linkend="date_time.local_time.dst_calc_rules">Daylight Savings Calc Rules</link>
   <anchor id="time_zone_names" />
   <bridgehead renderas="sect3">Time Zone Names</bridgehead>
   <para>
@@ -193,8 +189,6 @@ phx_zone_sh_ptr-&gt;to_posix_string();
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry valign="top" morerows="1">Syntax</entry>
@@ -270,8 +264,6 @@ time_zone_names nyc_names(std_name, std_abbr,
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry valign="top" morerows="1">Syntax</entry>
@@ -300,7 +292,7 @@ dst_adjustment_offsets(hours(1),
     </informaltable>
   </para>
 
-  <anchor id="dst_calc_rules" />
+  <anchor id="date_time.local_time.dst_calc_rules" />
   <bridgehead renderas="sect3">Daylight Savings Calc Rules</bridgehead>
   <para>
     Daylight savings calc rules, named dst_calc_rules, are a series of objects that group appropriate <link linkend="date_time.gregorian.date_algorithms">date_generators</link> together to form rule sets. The individual rules objects are used via dst_calc_rule_ptr.
@@ -311,8 +303,6 @@ dst_adjustment_offsets(hours(1),
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
-        <colspec colwidth="33%" />
-        <colspec colwidth="66%" />
         <thead>
           <row>
             <entry>Syntax</entry>

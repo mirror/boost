@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -35,58 +35,75 @@ or
   <bridgehead renderas="sect3">Overview</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
-      <colspec colwidth="33%" />
-      <colspec colwidth="66%" />
       <thead>
 	<row>
-	  <entry valign="top" morerows="1">Class</entry>
-	  <entry>Construction Parameters</entry>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
 	</row>
 	<row>
-	  <entry>Description</entry>
+	  <entry>Example</entry>
 	</row>
       </thead>
       <tbody>
         <row>
 	  <entry valign="top" morerows="1"><screen>date_iterator</screen></entry>
-	  <entry><screen></screen></entry>
+	  <entry>Common (abstract) base class for all day level iterators.</entry>
 	</row>
 	<row>
-	  <entry>Common base class for all day level iterators.</entry>
+	  <entry><screen></screen></entry>
         </row>
 
 	<row>
-	  <entry valign="top" morerows="1"><screen>day_iterator</screen></entry>
-	  <entry><screen>day_iterator(date start_date, int day_count=1)</screen></entry>
+	  <entry valign="top" morerows="1"><screen>day_iterator(date start_date, int day_count=1)</screen></entry>
+          <entry>Iterate <code>day_count</code> days at a time. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-	  <entry>Iterate day_count days at a time.</entry>
+          <entry><screen>day_iterator day_itr(date(2005,1,1));
+++d_itr; // 2005-Jan-02
+day_iterator 2day_itr(date(2005,2,1),2);
+++2d_itr; // 2005-Feb-03</screen></entry>
         </row>
         
 	<row>
-	  <entry valign="top" morerows="1"><screen>week_iterator</screen></entry>
-	  <entry><screen>week_iterator(date start_date, int week_offset=1)</screen></entry>
+          <entry valign="top" morerows="1"><screen>week_iterator(...)
+  Parameters:
+    date start_date
+    int week_offset (defaults to 1)</screen></entry>
+          <entry>Iterate <code>week_offset</code> weeks at a time. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-	  <entry>Iterate week_offset weeks at a time.</entry>
+          <entry><screen>week_iterator wk_itr(date(2005,1,1));
+++wk_itr; // 2005-Jan-08
+week_iterator 2wk_itr(date(2005,2,1),2);
+++2wk_itr; // 2005-Feb-15</screen></entry>
         </row>
         
 	<row>
-	  <entry valign="top" morerows="1"><screen>month_iterator</screen></entry>
-	  <entry><screen>month_iterator(date start_date, int month_offset=1)</screen></entry>
+          <entry valign="top" morerows="1"><screen>month_iterator(...)
+  Parameters:
+    date start_date
+    int month_offset (defaults to 1)</screen></entry>
+          <entry>Iterate <code>month_offset</code> months. There are special rules for handling the end of the month. These are: if start date is last day of the month, always adjust to last day of the month. If date is beyond the end of the month (eg: jan 31 + 1 month) adjust back to end of month. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-	  <entry>
-	    Iterate month_offset months. There are special rules for handling the end of the month. These are: if start date is last day of the month, always adjust to last day of the month. If date is beyond the end of the month (eg: jan 31 + 1 month) adjust back to end of month.
-	  </entry>
+          <entry><screen>month_iterator m_itr(date(2005,1,1));
+++m_itr; // 2005-Feb-01
+month_iterator 2m_itr(date(2005,2,1),2);
+++2m_itr; // 2005-Apr-01</screen></entry>
         </row>
         
         <row>
-	  <entry valign="top" morerows="1"><screen>year_iterator</screen></entry>
-	  <entry><screen>year_iterator(date start_date, int year_offset=1)</screen></entry>
+          <entry valign="top" morerows="1"><screen>year_iterator(...)
+  Parameters:
+    date start_date
+    int year_offset (defaults to 1)</screen></entry>
+	  <entry>Iterate year_offset years. The year_iterator will always land on the day of the date parameter except when date is Feb 28 in a non-leap year. In this case the iterator will return Feb 29 for leap years (eg: 2003-Feb-28, 2004-Feb-29, 2005-Feb-28). This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-	  <entry>Iterate year_offset years. The year_iterator will always land on the day of the date parameter except when date is Feb 28 in a non-leap year. In this case the iterator will return Feb 29 for leap years (eg: 2003-Feb-28, 2004-Feb-29, 2005-Feb-28).</entry>
+          <entry><screen>year_iterator y_itr(date(2005,1,1));
+++y_itr; // 2006-Jan-01
+year_iterator 2y_itr(date(2005,2,1),2);
+++2y_itr; // 2007-Feb-01</screen></entry>
 	</row>
       </tbody>
     </tgroup>
