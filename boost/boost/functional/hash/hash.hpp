@@ -20,6 +20,7 @@
 #include <cmath>
 #include <string>
 #include <functional>
+#include <errno.h>
 #include <boost/limits.hpp>
 #include <boost/functional/detail/float_functions.hpp>
 #include <boost/detail/workaround.hpp>
@@ -264,7 +265,9 @@ namespace boost
         inline std::size_t float_hash_value(T v)
         {
             int exp = 0;
+            errno = 0;
             v = boost::hash_detail::call_frexp(v, &exp);
+            if(errno) return 0;
 
             std::size_t seed = 0;
 
