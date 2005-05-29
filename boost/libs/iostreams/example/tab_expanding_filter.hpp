@@ -136,15 +136,13 @@ private:
     template<typename Sink>
     bool put_char(Sink& dest, int c)
     {
-        if (boost::iostreams::put(dest, c)) {
-            if (c == '\n') {
-                col_no_ = 0;
-            } else {
-                ++col_no_;
-            }
-            return true;
-        }
-        return false;
+        if (!iostreams::put(dest, c))
+            return false;
+        if (c != '\n')
+            ++col_no_;
+        else
+            col_no_ = 0;
+        return true;
     }
     int  tab_size_;
     int  col_no_;
