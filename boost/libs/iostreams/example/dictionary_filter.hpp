@@ -7,6 +7,7 @@
 #ifndef BOOST_IOSTREAMS_DICTIONARY_FILTER_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DICTIONARY_FILTER_HPP_INCLUDED
 
+#include <algorithm>         // swap.
 #include <cassert>
 #include <cstdio>            // EOF.
 #include <iostream>          // cin, cout.
@@ -31,13 +32,11 @@ namespace boost { namespace iostreams { namespace example {
 class dictionary {
 public:
     void add(std::string key, const std::string& value);
-    bool replace(std::string& key);
-    std::string::size_type max_length() const { return max_length_; }
+    void replace(std::string& key);
 private:
     typedef std::map<std::string, std::string> map_type;
     void tolower(std::string& str);
-    map_type                map_;
-    std::string::size_type  max_length_;
+    map_type map_;
 };
 
 class dictionary_stdio_filter : public stdio_filter {
@@ -76,14 +75,14 @@ public:
     int get(Source& src)
         {
             // Handle unfinished business.
-            if (eof_)
-                return EOF;
             if (off_ != std::string::npos && off_ < current_word_.size())
                 return current_word_[off_++];
             if (off_ == current_word_.size()) {
                 current_word_.erase();
                 off_ = std::string::npos;
             }
+            if (eof_)
+                return EOF;
 
             // Compute curent word.
             while (true) {
@@ -145,12 +144,23 @@ public:
     template<typename Sink>
     void close(Sink& dest)
     {
-        if (off_ == std::string::npos)
-            dictionary_.replace(current_word_);
-        if (!current_word_.empty())
-            write_current_word(dest);
-        current_word_.erase();
-        off_ = std::string::npos;
+        // Reset current_word_ and off_, saving old values.
+        std::string             current_word;
+        std::string::size_type  off = 0;
+        current_word.swap(current_word_);
+        std::swap(off, off_);
+
+        // Write remaining characters to dest.
+        if (off == std::string::npos) {
+            dictionary_.replace(current_word);
+            off = 0;
+        }
+        if (!current_word.empty())
+            iostreams::write( 
+                dest,
+                current_word.data() + off, 
+                static_cast<std::streamsize>(current_word.size() - off) 
+            );
     }
 private:
     template<typename Sink>
@@ -180,24 +190,23 @@ private:
 
 inline void dictionary::add(std::string key, const std::string& value)
 {
-    max_length_ = max_length_ < key.size() ? key.size() : max_length_;
     tolower(key);
     map_[key] = value;
 }
 
-inline bool dictionary::replace(std::string& key)
+inline void dictionary::replace(std::string& key)
 {
     using namespace std;
     string copy(key);
     tolower(copy);
     map_type::iterator it = map_.find(key);
     if (it == map_.end())
-        return false;
+        return;
     string& value = it->second;
     if (!value.empty() && !key.empty() && std::isupper((unsigned char) key[0]))
         value[0] = std::toupper((unsigned char) value[0]);
     key = value;
-    return true;
+    return;
 }
 
 inline void dictionary::tolower(std::string& str)
