@@ -14,6 +14,7 @@
 #include <cstdio>    // EOF.
 #include <iostream>  // cin, cout.
 #include <boost/iostreams/concepts.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // BOOST_IOS.
 #include <boost/iostreams/filter/stdio_filter.hpp>
 #include <boost/iostreams/operations.hpp>
 
@@ -92,6 +93,120 @@ public:
             return true;
 
         return iostreams::put(dest, c);
+    }
+
+    template<typename Source>
+    void close(Source&) { skip_ = false; }
+private:
+    char comment_char_;
+    bool skip_;
+};
+
+class shell_comments_dual_use_filter : public dual_use_filter {
+public:
+    explicit shell_comments_dual_use_filter(char comment_char = '#')
+        : comment_char_(comment_char), skip_(false)
+        { }
+
+    template<typename Source>
+    int get(Source& src)
+    {
+        int c;
+        while (true) {
+            if ((c = boost::iostreams::get(src)) == EOF || c == WOULD_BLOCK)
+                break;
+            skip_ = c == comment_char_ ?
+                true :
+                c == '\n' ?
+                    false :
+                    skip_;
+            if (!skip_)
+                break;
+        }
+        return c;
+    }
+
+    template<typename Sink>
+    bool put(Sink& dest, int c)
+    {
+        skip_ = c == comment_char_ ?
+            true :
+            c == '\n' ?
+                false :
+                skip_;
+
+        if (skip_)
+            return true;
+
+        return iostreams::put(dest, c);
+    }
+
+    template<typename Source>
+    void close(Source&, BOOST_IOS::openmode) { skip_ = false; }
+private:
+    char comment_char_;
+    bool skip_;
+};
+
+class shell_comments_multichar_input_filter : public multichar_input_filter {
+public:
+    explicit shell_comments_multichar_input_filter(char comment_char = '#')
+        : comment_char_(comment_char), skip_(false)
+        { }
+
+    template<typename Source>
+    std::streamsize read(Source& src, char* s, std::streamsize n)
+    {
+        for (std::streamsize z = 0; z < n; ++z) {
+            int c;
+            while (true) {
+                if ((c = boost::iostreams::get(src)) == EOF)
+                    return z != 0 ? z : -1;
+                else if (c == WOULD_BLOCK)
+                    return z;
+                skip_ = c == comment_char_ ?
+                    true :
+                    c == '\n' ?
+                        false :
+                        skip_;
+                if (!skip_)
+                    break;
+            }
+            s[z] = c;
+        }
+        return n;
+    }
+
+    template<typename Source>
+    void close(Source&) { skip_ = false; }
+private:
+    char comment_char_;
+    bool skip_;
+};
+
+class shell_comments_multichar_output_filter : public multichar_output_filter {
+public:
+    explicit shell_comments_multichar_output_filter(char comment_char = '#')
+        : comment_char_(comment_char), skip_(false)
+        { }
+
+    template<typename Sink>
+    std::streamsize write(Sink& dest, const char* s, std::streamsize n)
+    {
+        std::streamsize z;
+        for (z = 0; z < n; ++z) {
+            int c = s[z];
+            skip_ = c == comment_char_ ?
+                true :
+                c == '\n' ?
+                    false :
+                    skip_;
+            if (skip_)
+                continue;
+            if (!iostreams::put(dest, c))
+                break;
+        }
+        return z;
     }
 
     template<typename Source>
