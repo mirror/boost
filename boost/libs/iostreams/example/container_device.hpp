@@ -7,9 +7,9 @@
 #ifndef BOOST_IOSTREAMS_CONTAINTER_DEVICE_HPP_INCLUDED
 #define BOOST_IOSTREAMS_CONTAINTER_DEVICE_HPP_INCLUDED
 
-#include <algorithm>         // min.
+#include <algorithm>         // copy, min.
 #include <boost/config.hpp>  // BOOST_NO_STDC_NAMESPACE.
-#include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure.
 
 namespace boost { namespace iostreams { namespace example {
@@ -131,7 +131,7 @@ public:
             throw BOOST_IOSTREAMS_FAILURE("bad seek offset");
 
         pos_ = next;
-        return next;
+        return pos_;
     }
 
     Container& container() { return container_; }
