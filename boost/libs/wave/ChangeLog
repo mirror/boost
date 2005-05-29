@@ -47,6 +47,8 @@ CHANGELOG
   way.
 - Added special handling of the eof tokens inside the lexer iterator classes
   for Comeau.
+- Applied a workaround proposed by David Abrahams to make the slex lexer work 
+  on the CodeWarrior platforms.
   
 Sun May  8 17:22:59 WEDT 2005
 Version 1.1.17

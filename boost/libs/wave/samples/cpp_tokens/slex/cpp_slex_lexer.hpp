@@ -61,38 +61,48 @@ namespace lexer {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
+//  The following lexer_base class was necessary to workaround a CodeWarrior 
+//  bug.
 template <typename IteratorT, typename PositionT>
-class lexer 
+class lexer_base 
 :   public boost::spirit::lexer<
         boost::wave::util::position_iterator<IteratorT, PositionT> >
 {
-public:
-
+protected:
     typedef boost::wave::util::position_iterator<IteratorT, PositionT> 
         iterator_type;
-    typedef typename std::iterator_traits<IteratorT>::value_type  char_t;
-    typedef boost::spirit::lexer<iterator_type>                      base_t;
+    typedef typename std::iterator_traits<IteratorT>::value_type  char_type;
+    typedef boost::spirit::lexer<iterator_type>                   base_type;
 
-    typedef boost::wave::cpplexer::slex_token<PositionT>  token_type;
+    lexer_base();
     
-    lexer();
-    void init_dfa(boost::wave::language_support language);
-
-// get time of last compilation
-    static std::time_t get_compilation_time() 
-        { return compilation_time.get_time(); }
-
-private:
 // initialization data (regular expressions for the token definitions)
     struct lexer_data {
         token_id tokenid;                       // token data
-        char_t const *tokenregex;               // associated token to match
-        typename base_t::callback_t tokencb;    // associated callback function
+        char_type const *tokenregex;            // associated token to match
+        typename base_type::callback_t tokencb; // associated callback function
         unsigned int lexerstate;                // valid for lexer state
     };
     
     static lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
     static lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
+};
+
+///////////////////////////////////////////////////////////////////////////////
+template <typename IteratorT, typename PositionT>
+class lexer 
+:   public lexer_base<IteratorT, PositionT>
+{
+public:
+
+    typedef boost::wave::cpplexer::slex_token<PositionT>  token_type;
+    
+    void init_dfa(boost::wave::language_support language);
+
+// get time of last compilation
+    static std::time_t get_compilation_time() 
+        { return compilation_time.get_time(); }
 
 // helper for calculation of the time of last compilation
     static boost::wave::util::time_conversion_helper compilation_time;
@@ -165,7 +175,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // common C++/C99 token definitions
 template <typename IteratorT, typename PositionT>
-typename lexer<IteratorT, PositionT>::lexer_data const 
+typename lexer_base<IteratorT, PositionT>::lexer_data const 
 lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] = 
 {
     TOKEN_DATA(AND, "&"),
@@ -363,7 +373,7 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
 ///////////////////////////////////////////////////////////////////////////////
 // C++ only token definitions
 template <typename IteratorT, typename PositionT>
-typename lexer<IteratorT, PositionT>::lexer_data const 
+typename lexer_base<IteratorT, PositionT>::lexer_data const 
 lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] = 
 {
     TOKEN_DATA(AND_ALT, "bitand"),
@@ -415,8 +425,8 @@ lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] =
 // initialize cpp lexer with token data
 template <typename IteratorT, typename PositionT>
 inline
-lexer<IteratorT, PositionT>::lexer() 
-:   base_t(NUM_LEXER_STATES)
+lexer_base<IteratorT, PositionT>::lexer_base() 
+:   base_type(NUM_LEXER_STATES)
 {
 }
 
