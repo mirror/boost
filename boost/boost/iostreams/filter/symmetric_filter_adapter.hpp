@@ -81,25 +81,25 @@ public:
         { };
 
     // BEGIN DEBUG
-    explicit symmetric_filter_adapter(int buffer_size)
-        : pimpl_(new impl(buffer_size))
-        { }
+    //explicit symmetric_filter_adapter(int buffer_size)
+    //    : pimpl_(new impl(buffer_size))
+    //    { }
 
-    template<typename T0>
-    symmetric_filter_adapter(int buffer_size, const T0& t0)
-        : pimpl_(new impl(buffer_size, t0))
-        { }
+    //template<typename T0>
+    //symmetric_filter_adapter(int buffer_size, const T0& t0)
+    //    : pimpl_(new impl(buffer_size, t0))
+    //    { }
 
-    template<typename T0, typename T1>
-    symmetric_filter_adapter(int buffer_size, const T0& t0, const T1& t1)
-        : pimpl_(new impl(buffer_size, t0, t1))
-        { }
+    //template<typename T0, typename T1>
+    //symmetric_filter_adapter(int buffer_size, const T0& t0, const T1& t1)
+    //    : pimpl_(new impl(buffer_size, t0, t1))
+    //    { }
 
-    template<typename T0, typename T1, typename T2>
-    symmetric_filter_adapter( int buffer_size, const T0& t0,
-                              const T1& t1, const T2& t2 )
-        : pimpl_(new impl(buffer_size, t0, t1, t2))
-        { }
+    //template<typename T0, typename T1, typename T2>
+    //symmetric_filter_adapter( int buffer_size, const T0& t0,
+    //                          const T1& t1, const T2& t2 )
+    //    : pimpl_(new impl(buffer_size, t0, t1, t2))
+    //    { }
     // END DEBUG
 
     // Expands to a sequence of ctors which forward to impl.
@@ -112,8 +112,8 @@ public:
                      BOOST_PP_ENUM_PARAMS(n, t))) \
             { } \
         /**/
-    //#define BOOST_PP_LOCAL_LIMITS (0, BOOST_IOSTREAMS_MAX_FORWARDING_ARITY)
-    //#include BOOST_PP_LOCAL_ITERATE()
+    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_IOSTREAMS_MAX_FORWARDING_ARITY)
+    #include BOOST_PP_LOCAL_ITERATE()
     #undef BOOST_PP_LOCAL_MACRO
 
     template<typename Source>
