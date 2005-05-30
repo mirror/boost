@@ -84,9 +84,6 @@ protected:
         typename base_type::callback_t tokencb; // associated callback function
         unsigned int lexerstate;                // valid for lexer state
     };
-    
-    static lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
-    static lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,7 +92,6 @@ class lexer
 :   public lexer_base<IteratorT, PositionT>
 {
 public:
-
     typedef boost::wave::cpplexer::slex_token<PositionT>  token_type;
     
     void init_dfa(boost::wave::language_support language);
@@ -106,6 +102,12 @@ public:
 
 // helper for calculation of the time of last compilation
     static boost::wave::util::time_conversion_helper compilation_time;
+
+private:
+    typedef lexer_base<IteratorT, PositionT> base_type;
+
+    static base_type::lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
+    static base_type::lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
 };
 
 ///////////////////////////////////////////////////////////////////////////////
