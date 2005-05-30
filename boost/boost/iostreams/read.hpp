@@ -33,10 +33,10 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename T> 
+template<typename T>
 struct read_device_impl;
 
-template<typename T> 
+template<typename T>
 struct read_filter_impl;
 
 } // End namespace detail.
@@ -88,7 +88,7 @@ inline bool true_eof(T& t)
     const bool linked = is_linked<T>::value;
     return true_eof_impl<linked>::true_eof(t);
 }
-                    
+
 //------------------Definition of read_device_impl----------------------------//
 
 template<typename T>
@@ -131,9 +131,9 @@ struct read_device_impl<streambuf_tag> {
     template<typename T>
     static typename int_type_of<T>::type
     get(T& t)
-    {
-        typedef typename char_type_of<T>::type  char_type;
-        typedef char_traits<char_type>          traits_type;
+    {   // gcc 2.95 needs namespace qualification for char_traits.
+        typedef typename char_type_of<T>::type     char_type;
+        typedef iostreams::char_traits<char_type>  traits_type;
         typename int_type_of<T>::type c;
         return !traits_type::is_eof(c = t.sbumpc()) ||
                 detail::true_eof(t)
@@ -155,9 +155,9 @@ struct read_device_impl<streambuf_tag> {
 
     template<typename T>
     static bool putback(T& t, typename char_type_of<T>::type c)
-    {
-        typedef typename char_type_of<T>::type  char_type;
-        typedef char_traits<char_type>          traits_type;
+    {   // gcc 2.95 needs namespace qualification for char_traits.
+        typedef typename char_type_of<T>::type     char_type;
+        typedef iostreams::char_traits<char_type>  traits_type;
         return !traits_type::is_eof(t.sputbackc());
     }
 };
@@ -167,9 +167,9 @@ struct read_device_impl<input> {
     template<typename T>
     static typename int_type_of<T>::type
     get(T& t)
-    {
-        typedef typename char_type_of<T>::type  char_type;
-        typedef char_traits<char_type>          traits_type;
+    {   // gcc 2.95 needs namespace qualification for char_traits.
+        typedef typename char_type_of<T>::type     char_type;
+        typedef iostreams::char_traits<char_type>  traits_type;
         char_type c;
         std::streamsize amt;
         return (amt = t.read(&c, 1)) == 1 ?
@@ -220,9 +220,9 @@ struct read_filter_impl<any_tag> {
     template<typename T, typename Source>
     static std::streamsize read
        (T& t, Source& src, typename char_type_of<T>::type* s, std::streamsize n)
-    {
-        typedef typename char_type_of<T>::type  char_type;
-        typedef char_traits<char_type>          traits_type;
+    {   // gcc 2.95 needs namespace qualification for char_traits.
+        typedef typename char_type_of<T>::type     char_type;
+        typedef iostreams::char_traits<char_type>  traits_type;
         for (std::streamsize off = 0; off < n; ++off) {
             typename traits_type::int_type c = t.get(src);
             if (traits_type::is_eof(c))
