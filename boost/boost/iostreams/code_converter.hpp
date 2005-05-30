@@ -229,65 +229,13 @@ public:
     ));
 public:
     code_converter() { }
-    // BEGIN DEBUG
-    explicit code_converter( typename detail::param_type<Device>::type t, 
-                             int buffer_size = -1 ) 
-    {
-        this->open_impl(detail::wrap(t), buffer_size);
-    }
-    explicit code_converter( const reference_wrapper<Device>& ref, 
-                             int buffer_size = -1 ) 
-    {
-        this->open_impl(ref , buffer_size);
-    }
-    void open( typename detail::param_type<Device>::type t, 
-               int buffer_size = -1 ) 
-    {
-        this->open_impl(detail::wrap(t), buffer_size);
-    }
-    void open( const reference_wrapper<Device>& ref, 
-               int buffer_size = -1 ) 
-    {
-        this->open_impl(ref, buffer_size);
-    }
-    template< typename U0> 
-    code_converter(const U0& u0) 
-    {
-        this->open_impl(Device(u0));
-    }
-    template<typename U0, typename U1> 
-    code_converter(const U0& u0, const U1& u1) 
-    {
-        this->open_impl(Device(u0, u1));
-    }
-    template<typename U0, typename U1, typename U2> 
-    code_converter(const U0& u0, const U1&u1, const U2& u2) 
-    {
-        this->open_impl(Device(u0, u1, u2));
-    }
-    template<typename U0> 
-    void open(const U0& u0) 
-    {
-        this->open_impl(Device(u0));
-    }
-    template<typename U0, typename U1> 
-    void open(const U0& u0, const U1& u1) 
-    {
-        this->open_impl(Device(u0, u1));
-    }
-    template<typename U0, typename U1, typename U2> 
-    void open(const U0& u0, const U1& u1, const U2& u2) 
-    {
-        this->open_impl(Device(u0, u1, u2));
-    }
-    // BEGIN END
-    //BOOST_IOSTREAMS_FORWARD( code_converter, open_impl, Device,
-    //                         BOOST_IOSTREAMS_CONVERTER_PARAMS, 
-    //                         BOOST_IOSTREAMS_CONVERTER_ARGS )
+    BOOST_IOSTREAMS_FORWARD( code_converter, open_impl, Device,
+                             BOOST_IOSTREAMS_CONVERTER_PARAMS, 
+                             BOOST_IOSTREAMS_CONVERTER_ARGS )
 
         // fstream-like interface.
 
-    bool is_open() const { return impl().is_open(); }
+    bool is_open() const { return this->pimpl_->is_open(); }
     void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
     { impl().close(which); }
 
