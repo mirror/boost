@@ -48,7 +48,7 @@ void array_test()
     //--------------stream_facade<array_sink>---------------------------------//
 
     {
-        vector<char> first(data_reps * data_length(), 0);
+        vector<char> first(data_reps * data_length(), '?');
         stream_facade<array_sink> out(&first[0], &first[0] + first.size());
         write_data_in_chars(out);
         ifstream second(test.name().c_str(), BOOST_IOS::in | BOOST_IOS::binary);
@@ -59,7 +59,7 @@ void array_test()
     }
 
     {
-        vector<char> first(data_reps * data_length(), 0);
+        vector<char> first(data_reps * data_length(), '?');
         stream_facade<array_sink> out(&first[0], &first[0] + first.size());
         write_data_in_chunks(out);
         ifstream second(test.name().c_str(), BOOST_IOS::in | BOOST_IOS::binary);
@@ -72,7 +72,7 @@ void array_test()
     //--------------random access---------------------------------------------//
 
     {
-        vector<char> first(data_reps * data_length(), 0);
+        vector<char> first(data_reps * data_length(), '?');
         stream_facade<array> io(&first[0], &first[0] + first.size());
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
@@ -81,7 +81,7 @@ void array_test()
     }
 
     {
-        vector<char> first(data_reps * data_length(), 0);
+        vector<char> first(data_reps * data_length(), '?');
         stream_facade<array> io(&first[0], &first[0] + first.size());
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),

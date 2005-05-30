@@ -26,7 +26,7 @@ void write_output_sequence_test()
     test_file test;
 
     {
-        vector<char>       first(data_reps * data_length(), 0);
+        vector<char>       first(data_reps * data_length(), '?');
         filtering_ostream  out(make_iterator_range(first), 0);
         write_data_in_chars(out);
         ifstream second(test.name().c_str());
@@ -38,7 +38,7 @@ void write_output_sequence_test()
     }
 
     {
-        vector<char>       first(data_reps * data_length(), 0);
+        vector<char>       first(data_reps * data_length(), '?');
         filtering_ostream  out(make_iterator_range(first), 0);
         write_data_in_chunks(out);
         ifstream second(test.name().c_str());
@@ -50,7 +50,7 @@ void write_output_sequence_test()
     }
 
     {
-        vector<char>       first(data_reps * data_length(), 0);
+        vector<char>       first(data_reps * data_length(), '?');
         filtering_ostream  out(make_iterator_range(first));
         write_data_in_chars(out);
         ifstream second(test.name().c_str());
@@ -62,7 +62,7 @@ void write_output_sequence_test()
     }
 
     {
-        vector<char>       first(data_reps * data_length(), 0);
+        vector<char>       first(data_reps * data_length(), '?');
         filtering_ostream  out(make_iterator_range(first));
         write_data_in_chunks(out);
         ifstream second(test.name().c_str());
