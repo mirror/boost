@@ -21,15 +21,6 @@
 
 namespace boost { namespace iostreams {
 
-//
-// Template name: basic_regex_filter.
-// Template paramters:
-//      Ch - The character type.
-//      Tr - The regular expression traits type.
-//      Alloc - The allocator type.
-// Description: InputFilter which filters using an instance of
-//      a speciailization of boost::reg_expression.
-//
 template< typename Ch,
           typename Tr = regex_traits<Ch>,
           typename Alloc = std::allocator<Ch> >
