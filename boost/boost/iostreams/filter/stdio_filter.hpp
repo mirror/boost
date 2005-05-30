@@ -12,15 +12,17 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
-                       
+
 #include <iostream>
 #include <memory>    // allocator.
-#include <vector> 
+#include <vector>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/one_step_filter.hpp>
-#include <boost/iostreams/pipeline.hpp>      
+#include <boost/iostreams/pipeline.hpp>
 #include <boost/iostreams/streambuf_facade.hpp>
 
 namespace boost { namespace iostreams {
@@ -46,21 +48,24 @@ private:
 #endif // BOOST_IOSTREAMS_NO_WIDE_STREAMS
 
     struct scoped_redirector { // Thanks to Maxim Egorushkin.
-        scoped_redirector( std::basic_ios<Ch>& ios,
-                           std::basic_streambuf<Ch>* newbuf )
-            : ios_(ios), old_(ios.rdbuf(newbuf)) 
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(Ch)                  traits_type;
+        typedef BOOST_IOSTREAMS_BASIC_IOS(Ch, traits_type)       ios_type;
+        typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, traits_type) streambuf_type;
+        scoped_redirector( ios_type& ios,
+                           streambuf_type* newbuf )
+            : ios_(ios), old_(ios.rdbuf(newbuf))
             { }
         ~scoped_redirector() { ios_.rdbuf(old_); }
-        std::basic_ios<Ch>&        ios_;
-        std::basic_streambuf<Ch>*  old_;
+        ios_type&  ios_;
+        streambuf_type*                 old_;
     };
 
     virtual void do_filter() = 0;
     virtual void do_filter(const vector_type& src, vector_type& dest)
     {
-        streambuf_facade< basic_array_source<Ch> >           
+        streambuf_facade< basic_array_source<Ch> >
                           srcbuf(&src[0], &src[0] + src.size());
-        streambuf_facade< back_insert_device<vector_type> >  
+        streambuf_facade< back_insert_device<vector_type> >
                           destbuf(iostreams::back_inserter(dest));
         scoped_redirector redirect_input(standard_input((Ch*)0), &srcbuf);
         scoped_redirector redirect_output(standard_output((Ch*)0), &destbuf);
