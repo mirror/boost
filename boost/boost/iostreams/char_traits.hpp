@@ -50,8 +50,8 @@ struct char_traits<char> : BOOST_IOSTREAMS_CHAR_TRAITS(char) {
 template<>
 struct char_traits<wchar_t> : std::char_traits<wchar_t> {
     static wchar_t newline() { return L'\n'; }
-    static int good() { return L'\n'; }
-    static int would_block() { return WWOULD_BLOCK; }
+    static std::wint_t good() { return L'\n'; }
+    static std::wint_t would_block() { return WWOULD_BLOCK; }
     static bool is_good(std::wint_t c) { return c != WEOF && c != WWOULD_BLOCK; }
     static bool is_eof(std::wint_t c) { return c == WEOF; }
     static bool would_block(std::wint_t c) { return c == WWOULD_BLOCK; }
