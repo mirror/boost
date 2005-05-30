@@ -4,13 +4,18 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#include <ios>  // failure.
-#include <map>
-#include <boost/iostreams/filter/test.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test.hpp>
-#include "../example/finite_state_filter.hpp"
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STD_LOCALE
+# error std::locale not supported on this platform
+#else
+
+# include <map>
+# include <boost/iostreams/detail/ios.hpp>  // failure.
+# include <boost/iostreams/filter/test.hpp>
+# include <boost/mpl/vector.hpp>
+# include <boost/test/test_tools.hpp>
+# include <boost/test/unit_test.hpp>
+# include "../example/finite_state_filter.hpp"
 
 using boost::unit_test::test_suite;
 namespace io = boost::iostreams;
@@ -99,30 +104,6 @@ struct unix2dos_fsm
             > transition_table;
 };
 
-struct dictionary_fsm
-    : io::finite_state_machine<dictionary_fsm, char>
-{
-    BOOST_IOSTREAMS_FSM(dictionary_fsm) // Define skip and push.
-    typedef dictionary_fsm self;
-    typedef std::map<std::string, std::string> dictionary;
-
-
-    void append(char c) { current_word_.push_back(c); }
-    void lookup(char c)
-    {
-
-    }
-
-    typedef boost::mpl::vector<
-                row<initial_state, is_alpha, initial_state,  &self::append>,
-                row<initial_state, is_any,   initial_state,  &self::lookup>
-            > transition_table;
-
-    dictionary&        dictionary_;
-    std::vector<int>   marks_;
-    std::string        current_word_;
-};
-
 struct uncommenting_fsm
     : io::finite_state_machine<uncommenting_fsm, char>
 {
@@ -202,3 +183,5 @@ test_suite* init_unit_test_suite(int, char* [])
     test->add(BOOST_TEST_CASE(&finite_state_filter_test));
     return test;
 }
+
+#endif // #ifdef BOOST_NO_STD_LOCALE //---------------------------------------//
