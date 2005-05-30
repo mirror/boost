@@ -24,65 +24,67 @@
 #include <boost/range/iterator.hpp>
 #include <boost/range/const_iterator.hpp>
 
-namespace boost 
+namespace boost
 {
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
-namespace range_detail 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/
+namespace range_detail
 {
 #endif
-    
+
     //////////////////////////////////////////////////////////////////////
     // primary template
     //////////////////////////////////////////////////////////////////////
-    
+
     template< typename C >
     inline BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type
     boost_range_begin( const C& c )
     {
-        return c.begin(); 
+        return c.begin();
     }
-    
+
     template< typename C >
     inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
     boost_range_begin( C& c )
     {
-        return c.begin(); 
+        return c.begin();
     }
-    
+
     //////////////////////////////////////////////////////////////////////
     // pair
     //////////////////////////////////////////////////////////////////////
-    
+
     template< typename Iterator >
     inline Iterator boost_range_begin( const std::pair<Iterator,Iterator>& p )
     {
         return p.first;
     }
-    
+
     template< typename Iterator >
     inline Iterator boost_range_begin( std::pair<Iterator,Iterator>& p )
     {
         return p.first;
     }
-    
+
     //////////////////////////////////////////////////////////////////////
     // array
     //////////////////////////////////////////////////////////////////////
-    
+
     template< typename T, std::size_t sz >
     inline const T* boost_range_begin( const T (&array)[sz] )
     {
         return array;
     }
-    
+
     template< typename T, std::size_t sz >
     inline T* boost_range_begin( T (&array)[sz] )
     {
         return array;
     }
-    
-    
+
+
     //////////////////////////////////////////////////////////////////////
     // string
     //////////////////////////////////////////////////////////////////////
@@ -113,24 +115,26 @@ namespace range_detail
     {
         return s;
     }
-    
+
     inline char* boost_range_begin( char*& s )
     {
         return s;
     }
-    
+
     inline const wchar_t* boost_range_begin( const wchar_t*& s )
     {
         return s;
     }
-    
+
     inline wchar_t* boost_range_begin( wchar_t*& s )
     {
         return s;
     }
-#endif    
+#endif
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/
 } // namespace 'range_detail'
 #endif
 
@@ -138,18 +142,22 @@ namespace range_detail
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type begin( T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    using namespace range_detail; 
-#endif    
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/
+    using namespace range_detail;
+#endif
     return boost_range_begin( r );
 }
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type begin( const T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
-    using namespace range_detail; 
-#endif    
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/
+    using namespace range_detail;
+#endif
     return boost_range_begin( r );
 }
 
@@ -171,7 +179,7 @@ inline range_const_iterator<const wchar_t*>::type begin<const wchar_t*>( const w
 
 } // namespace boost
 
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING    
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 namespace boost
 {

@@ -28,7 +28,9 @@
 namespace boost 
 {
     
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))     
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/ 
 namespace range_detail
 {
 #endif   
@@ -130,14 +132,18 @@ namespace range_detail
         }
 #endif
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/  
 } // namespace 'range_detail'
 #endif
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type end( T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/
     using namespace range_detail;
 #endif        
     return boost_range_end( r );
@@ -146,7 +152,9 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type end( T& r )
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type end( const T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && \
+    !BOOST_WORKAROUND(__GNUC__, < 3) \
+    /**/
     using namespace range_detail;
 #endif        
     return boost_range_end( r );

@@ -76,6 +76,9 @@ protected:
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
     void imbue(const std::locale& loc);
 #endif
+#ifdef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+    public:
+#endif
     int_type underflow();
     int_type pbackfail(int_type c);
     int_type overflow(int_type c);

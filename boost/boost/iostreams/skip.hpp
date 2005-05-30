@@ -31,9 +31,9 @@ void skip(Device& dev, stream_offset off, mpl::true_)
 
 template<typename Device>
 void skip(Device& dev, stream_offset off, mpl::false_)
-{ 
+{   // gcc 2.95 needs namespace qualification for char_traits.
     typedef typename char_type_of<Device>::type  char_type;
-    typedef char_traits<char_type>               traits_type;
+    typedef iostreams::char_traits<char_type>    traits_type;
     for (stream_offset z = 0; z < off; ) {
         typename traits_type::int_type c;
         if (traits_type::is_eof(c = iostreams::get(dev)))

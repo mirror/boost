@@ -68,17 +68,22 @@ protected:
 
     //--------------Virtual functions-----------------------------------------//
 
+    // Declared in linked_streambuf.
+    void close(BOOST_IOS::openmode m);
+    const std::type_info& component_type() const { return typeid(T); }
+    void* component_impl() { return component(); } 
+
+#ifdef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+    public:
+#endif
+
+    // Declared in basic_streambuf.
     int_type underflow();
     int_type pbackfail(int_type c);
     int_type overflow(int_type c);
     pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
                       BOOST_IOS::openmode which );
     pos_type seekpos(pos_type sp, BOOST_IOS::openmode which);
-
-    // Declared in linked_streambuf.
-    void close(BOOST_IOS::openmode m);
-    const std::type_info& component_type() const { return typeid(T); }
-    void* component_impl() { return component(); } 
 private:
     pos_type seek_impl( off_type off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which );

@@ -17,9 +17,9 @@
 #include <string>
 #include <boost/config.hpp>                        // BOOST_STATIC_CONSTANT.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/ios.hpp>          // openmode, streamsize.
+#include <boost/iostreams/pipeline.hpp>
 
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
@@ -33,14 +33,23 @@ namespace boost { namespace iostreams {
 //      Alloc - The allocator type.
 // Description: Filter which processes data one line at a time.
 //
-template<typename Ch, typename Alloc = std::allocator<Ch> >
-class basic_line_filter  {
+template< typename Ch,
+          typename Alloc =
+          #if BOOST_WORKAROUND(__GNUC__, < 3)
+              typename std::basic_string<Ch>::allocator_type
+          #else
+              std::allocator<Ch>
+          #endif
+          >
+class basic_line_filter {
+private:
+    typedef typename std::basic_string<Ch>::traits_type  string_traits;
 public:
     typedef Ch                                           char_type;
     typedef char_traits<char_type>                       traits_type;
     typedef std::basic_string<
-                Ch, 
-                BOOST_IOSTREAMS_CHAR_TRAITS(char_type),   
+                Ch,
+                string_traits,
                 Alloc
             >                                            string_type;
     struct category
@@ -126,7 +135,7 @@ public:
 private:
     virtual string_type do_filter(const string_type& line) = 0;
 
-    // Copies filtered characters fron the current line into 
+    // Copies filtered characters fron the current line into
     // the given buffer.
     std::streamsize read_line(char_type* s, std::streamsize n)
     {
@@ -145,7 +154,7 @@ private:
     {
         using namespace std;
         typename traits_type::int_type c;
-        while ( traits_type::is_good(c = iostreams::get(src)) && 
+        while ( traits_type::is_good(c = iostreams::get(src)) &&
                 c != traits_type::newline() )
         {
             cur_line_ += traits_type::to_int_type(c);
