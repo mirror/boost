@@ -40,13 +40,10 @@
 //------------------Locale support--------------------------------------------//
 
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
-# if defined(BOOST_NO_STD_LOCALE) || defined(__CYGWIN__)
-#  define BOOST_IOSTREAMS_NO_LOCALE
-# endif
-#endif // #ifndef BOOST_IOSTREAMS_NO_LOCALE
-
-#ifndef BOOST_IOSTREAMS_NO_LOCALE
-# if defined(BOOST_NO_STD_LOCALE) || defined(__CYGWIN__)
+# if defined(BOOST_NO_STD_LOCALE) || \
+     defined(__CYGWIN__) && \
+     ( !defined(__MSL_CPP__) || defined(_MSL_NO_WCHART_CPP_SUPPORT) ) \
+     /**/
 #  define BOOST_IOSTREAMS_NO_LOCALE
 # endif
 #endif // #ifndef BOOST_IOSTREAMS_NO_LOCALE
