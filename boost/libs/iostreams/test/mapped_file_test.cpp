@@ -114,7 +114,7 @@ void mapped_file_test()
         test_file  test;
 
         mapped_file_params p(first.name());
-        p.size = data_reps * data_length();
+        p.new_file_size = data_reps * data_length();
         stream_facade<mapped_file_sink> out;
         out.open(mapped_file_sink(p));
         write_data_in_chars(out);
