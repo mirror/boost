@@ -11,9 +11,12 @@
 #ifndef BOOST_RANGE_ITERATOR_RANGE_HPP
 #define BOOST_RANGE_ITERATOR_RANGE_HPP
 
+// From boost/dynamic_bitset.hpp; thanks to Matthias Troyer for Cray X1 patch.
 #include <boost/config.hpp> // Define __STL_CONFIG_H, if appropriate.
-#ifndef BOOST_OLD_IOSTREAMS // From boost/dynamic_bitset.hpp.
-# if defined(__STL_CONFIG_H) && !defined (__STL_USE_NEW_IOSTREAMS)
+#ifndef BOOST_OLD_IOSTREAMS 
+# if defined(__STL_CONFIG_H) && \
+    !defined (__STL_USE_NEW_IOSTREAMS) && !defined(__crayx1) \
+    /**/
 #  define BOOST_OLD_IOSTREAMS
 # endif
 #endif // #ifndef BOOST_OLD_IOSTREAMS
