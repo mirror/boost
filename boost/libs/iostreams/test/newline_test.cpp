@@ -127,11 +127,11 @@ const std::string mixed =
 struct string_source : boost::base_from_member<std::string>, io::array_source {
     typedef io::array_source                      base_type;
     typedef boost::base_from_member<std::string>  pbase_type;
-    string_source(const std::string& src) 
+    string_source(const std::string& src)
         : pbase_type(src), base_type(member.data(), member.size())
         { }
 
-    string_source(const string_source& src) 
+    string_source(const string_source& src)
         : pbase_type(src.member), base_type(member.data(), member.size())
         { }
 };
