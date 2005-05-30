@@ -11,6 +11,8 @@
 # pragma once
 #endif                  
  
+#include <boost/config.hpp> // BOOST_MSVC
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/config/limits.hpp>
 #include <boost/iostreams/detail/push_params.hpp>
 #include <boost/preprocessor/arithmetic/dec.hpp>
@@ -52,13 +54,8 @@
         BOOST_IOSTREAMS_FORWARDING_FN, (class, impl, policy) \
     ) \
     /**/
-#define BOOST_IOSTREAMS_FORWARDING_CTOR(z, n, tuple) \
-    template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
-    BOOST_PP_TUPLE_ELEM(3, 0, tuple) \
-    (BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, const U, &u)) \
-    { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
-      ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
-        (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# define BOOST_IOSTREAMS_FORWARDING_CTOR_I(z, n, tuple) \
     template< typename U100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
               BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), typename U) > \
     BOOST_PP_TUPLE_ELEM(3, 0, tuple) \
@@ -69,12 +66,7 @@
         ( u100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
           BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), u)) ); } \
     /**/
-#define BOOST_IOSTREAMS_FORWARDING_FN(z, n, tuple) \
-    template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
-    void open(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, const U, &u)) \
-    { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
-      ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
-        (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
+# define BOOST_IOSTREAMS_FORWARDING_FN_I(z, n, tuple) \
     template< typename U100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
               BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), typename U) > \
     void open \
@@ -83,6 +75,27 @@
     { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
       ( u100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
         BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), u) ); } \
+    /**/
+#else
+# define BOOST_IOSTREAMS_FORWARDING_CTOR_I(z, n, tuple)
+# define BOOST_IOSTREAMS_FORWARDING_FN_I(z, n, tuple)
+#endif
+#define BOOST_IOSTREAMS_FORWARDING_CTOR(z, n, tuple) \
+    template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
+    BOOST_PP_TUPLE_ELEM(3, 0, tuple) \
+    (BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, const U, &u)) \
+    { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
+      ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
+        (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
+    BOOST_IOSTREAMS_FORWARDING_CTOR_I(z, n, tuple) \
+    /**/
+#define BOOST_IOSTREAMS_FORWARDING_FN(z, n, tuple) \
+    template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
+    void open(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, const U, &u)) \
+    { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
+      ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
+        (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
+    BOOST_IOSTREAMS_FORWARDING_FN_I(z, n, tuple) \
     /**/
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED
