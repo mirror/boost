@@ -37,24 +37,24 @@ Compiler specifics
   <li><a href="#identity_synopsis">Header
     <code>"boost/multi_index/identity.hpp"</code> synopsis</a>
     <ul>
-      <li><a href="#identity">Template class <code>identity</code></a></li>
+      <li><a href="#identity">Class template <code>identity</code></a></li>
     </ul>
   </li>
   <li><a href="#member_synopsis">Header
     <code>"boost/multi_index/member.hpp"</code> synopsis</a>
     <ul>
-      <li><a href="#member">Template class <code>member</code></a></li>
-      <li><a href="#member_offset">Template class <code>member_offset</code></a></li>
+      <li><a href="#member">Class template <code>member</code></a></li>
+      <li><a href="#member_offset">Class template <code>member_offset</code></a></li>
       <li><a href="#boost_multi_index_member">Macro <code>BOOST_MULTI_INDEX_MEMBER</code></a></li>
     </ul>
   </li>
   <li><a href="#mem_fun_synopsis">Header
     <code>"boost/multi_index/mem_fun.hpp"</code> synopsis</a>
     <ul>
-      <li><a href="#const_mem_fun">Template class <code>const_mem_fun</code></a></li>
-      <li><a href="#mem_fun">Template class <code>mem_fun</code></a></li>
-      <li><a href="#const_mem_fun_explicit">Template class <code>const_mem_fun_explicit</code></a></li>
-      <li><a href="#mem_fun_explicit">Template class <code>mem_fun_explicit</code></a></li>
+      <li><a href="#const_mem_fun">Class template <code>const_mem_fun</code></a></li>
+      <li><a href="#mem_fun">Class template <code>mem_fun</code></a></li>
+      <li><a href="#const_mem_fun_explicit">Class template <code>const_mem_fun_explicit</code></a></li>
+      <li><a href="#mem_fun_explicit">Class template <code>mem_fun_explicit</code></a></li>
       <li><a href="#boost_multi_index_const_mem_fun">Macro <code>BOOST_MULTI_INDEX_CONST_MEM_FUN</code></a></li>
       <li><a href="#boost_multi_index_mem_fun">Macro <code>BOOST_MULTI_INDEX_MEM_FUN</code></a></li>
     </ul>
@@ -62,28 +62,28 @@ Compiler specifics
   <li><a href="#composite_key_synopsis">Header
     <code>"boost/multi_index/composite_key.hpp"</code> synopsis</a>
     <ul>
-      <li><a href="#composite_key">Template class <code>composite_key</code></a></li>
-      <li><a href="#composite_key_result">Template class <code>composite_key_result</code></a></li>
+      <li><a href="#composite_key">Class template <code>composite_key</code></a></li>
+      <li><a href="#composite_key_result">Class template <code>composite_key_result</code></a></li>
       <li><a href="#ckey_result_equality">Equality</a>
         <ul>
-          <li><a href="#composite_key_equal_to">Template class <code>composite_key_equal_to</code></a></li>
-          <li><a href="#composite_key_result_equal_to">Template class <code>composite_key_result_equal_to</code></a></li>
+          <li><a href="#composite_key_equal_to">Class template <code>composite_key_equal_to</code></a></li>
+          <li><a href="#composite_key_result_equal_to">Class template <code>composite_key_result_equal_to</code></a></li>
           <li><a href="#equal_to_composite_key_result">Specialization of <code>std::equal_to</code> for <code>composite_key</code> results</a></li>
         </ul>
       </li>
       <li><a href="#ckey_result_comparison">Comparison</a>
         <ul>
-          <li><a href="#composite_key_compare">Template class <code>composite_key_compare</code></a></li>
-          <li><a href="#composite_key_result_less">Template class <code>composite_key_result_less</code></a></li>
-          <li><a href="#composite_key_result_greater">Template class <code>composite_key_result_greater</code></a></li>
+          <li><a href="#composite_key_compare">Class template <code>composite_key_compare</code></a></li>
+          <li><a href="#composite_key_result_less">Class template <code>composite_key_result_less</code></a></li>
+          <li><a href="#composite_key_result_greater">Class template <code>composite_key_result_greater</code></a></li>
           <li><a href="#less_composite_key_result">Specialization of <code>std::less</code> for <code>composite_key</code> results</a></li>
           <li><a href="#greater_composite_key_result">Specialization of <code>std::greater</code> for <code>composite_key</code> results</a></li>
         </ul>
       </li>
       <li><a href="#ckey_result_hashing">Hashing</a>
         <ul>
-          <li><a href="#composite_key_hash">Template class <code>composite_key_hash</code></a></li>
-          <li><a href="#composite_key_result_hash">Template class <code>composite_key_result_hash</code></a></li>
+          <li><a href="#composite_key_hash">Class template <code>composite_key_hash</code></a></li>
+          <li><a href="#composite_key_result_hash">Class template <code>composite_key_result_hash</code></a></li>
           <li><a href="#hash_composite_key_result">Specialization of <code>boost::hash</code> for <code>composite_key</code> results</a></li>
         </ul>
       </li>
@@ -198,7 +198,7 @@ This header includes all the key extractors provided by Boost.MultiIndex.
 <span class=special>}</span> <span class=comment>// namespace boost</span>
 </pre></blockquote>
 
-<h3><a name="identity">Template class <code>identity</code></a></h3>
+<h3><a name="identity">Class template <code>identity</code></a></h3>
 
 <p>
 <code>identity</code> is a <a href="#key_extractors"><code>Key Extractor</code></a>
@@ -305,7 +305,7 @@ type to <code>Type</code>.<br>
 <span class=special>}</span> <span class=comment>// namespace boost</span>
 </pre></blockquote>
 
-<h3><a name="member">Template class <code>member</code></a></h3>
+<h3><a name="member">Class template <code>member</code></a></h3>
 
 <p>
 <code>member</code> is a <a href="#key_extractors"><code>Key Extractor</code></a>
@@ -380,7 +380,7 @@ type to <code>Type</code>.<br>
 <b>Returns:</b> <code>x.get().*PtrToMember</code>.
 </blockquote>
 
-<h3><a name="member_offset">Template class <code>member_offset</code></a></h3>
+<h3><a name="member_offset">Class template <code>member_offset</code></a></h3>
 
 <p>
 Some compilers do not properly support pointers to members as non-type
@@ -498,7 +498,7 @@ is defined.
 <span class=special>}</span> <span class=comment>// namespace boost</span>
 </pre></blockquote>
 
-<h3><a name="const_mem_fun">Template class <code>const_mem_fun</code></a></h3>
+<h3><a name="const_mem_fun">Class template <code>const_mem_fun</code></a></h3>
 
 <p>
 <code>const_mem_fun</code> is a <a href="#key_extractors"><code>Key Extractor</code></a>
@@ -568,7 +568,7 @@ object chained-pointed to by <code>x</code>.
 <b>Returns:</b> <code>(x.get().*PtrToMemberFunction)()</code>.
 </blockquote>
 
-<h3><a name="mem_fun">Template class <code>mem_fun</code></a></h3>
+<h3><a name="mem_fun">Class template <code>mem_fun</code></a></h3>
 
 <p>
 <code>mem_fun</code> is a <a href="#key_extractors"><code>Key Extractor</code></a>
@@ -624,7 +624,7 @@ object chained-pointed to by <code>x</code>.
 <b>Returns:</b> <code>(x.get().*PtrToMemberFunction)()</code>.
 </blockquote>
 
-<h3><a name="const_mem_fun_explicit">Template class <code>const_mem_fun_explicit</code></a></h3>
+<h3><a name="const_mem_fun_explicit">Class template <code>const_mem_fun_explicit</code></a></h3>
 
 <p>
 MSVC++ 6.0 do not properly support pointers to constant member functions as non-type
@@ -666,7 +666,7 @@ the extractor <code>const_mem_fun&lt;A,int,&amp;A::f></code> can be replaced by
 <code>const_mem_fun_explicit&lt;A,int,int (A::*)()const,&amp;A::f></code>.
 </p>
 
-<h3><a name="mem_fun_explicit">Template class <code>mem_fun_explicit</code></a></h3>
+<h3><a name="mem_fun_explicit">Class template <code>mem_fun_explicit</code></a></h3>
 
 <p>
 For analogy with <a href="#const_mem_fun_explicit"><code>const_mem_fun_explicit</code></a>,
@@ -840,7 +840,7 @@ for MSVC++ 6.0 or lower.
 <span class=special>}</span> <span class=comment>// namespace boost</span>
 </pre></blockquote>
 
-<h3><a name="composite_key">Template class <code>composite_key</code></a></h3>
+<h3><a name="composite_key">Class template <code>composite_key</code></a></h3>
 
 <p>
 <code>composite_key</code> is a <a href="#key_extractors"><code>Key Extractor</code></a>
@@ -969,7 +969,7 @@ object chained-pointed to by <code>x</code>.
 <code>*this</code> and <code>x.get()</code>.
 </blockquote>
 
-<h3><a name="composite_key_result">Template class
+<h3><a name="composite_key_result">Class template
 <code>composite_key_result</code></a></h3>
 
 <p>
@@ -1138,7 +1138,7 @@ bool operator <b><i>OP</i></b>(<br>
 
 <h3><a name="ckey_result_equality">Equality</a></h3>
 
-<h4><a name="composite_key_equal_to">Template class
+<h4><a name="composite_key_equal_to">Class template
 <code>composite_key_equal_to</code></a></h4>
 
 <p>
@@ -1279,7 +1279,7 @@ starting at <code>i==0</code>. The evaluation is short-circuited as soon as
 the result is determined to be <code>false</code>.
 </blockquote>
 
-<h4><a name="composite_key_result_equal_to">Template class
+<h4><a name="composite_key_result_equal_to">Class template
 <code>composite_key_result_equal_to</code></a></h4>
 
 <p>
@@ -1378,7 +1378,7 @@ and functionality as <code>composite_key_result_equal_to&lt;CompositeKeyResult><
 
 <h3><a name="ckey_result_comparison">Comparison</a></h3>
 
-<h4><a name="composite_key_compare">Template class
+<h4><a name="composite_key_compare">Class template
 <code>composite_key_compare</code></a></h4>
 
 <p>
@@ -1522,7 +1522,7 @@ starting at <code>i==0</code>. The evaluation is short-circuited as soon as
 the result is determined to be <code>false</code>.
 </blockquote>
 
-<h4><a name="composite_key_result_less">Template class
+<h4><a name="composite_key_result_less">Class template
 <code>composite_key_result_less</code></a></h4>
 
 <p>
@@ -1579,7 +1579,7 @@ is <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
 <a href="http://www.sgi.com/tech/stl/Assignable.html"><code>Assignable</code></a>.
 </p>
 
-<h4><a name="composite_key_result_greater">Template class
+<h4><a name="composite_key_result_greater">Class template
 <code>composite_key_result_greater</code></a></h4>
 
 <p>
@@ -1718,7 +1718,7 @@ and functionality as <code>composite_key_result_greater&lt;CompositeKeyResult></
 
 <h3><a name="ckey_result_hashing">Hashing</a></h3>
 
-<h4><a name="composite_key_hash">Template class
+<h4><a name="composite_key_hash">Class template
 <code>composite_key_hash</code></a></h4>
 
 <p>
@@ -1839,7 +1839,7 @@ with <code>N=length(x)-1</code>.
 </blockquote>
 </blockquote>
 
-<h4><a name="composite_key_result_hash">Template class
+<h4><a name="composite_key_result_hash">Class template
 <code>composite_key_result_hash</code></a></h4>
 
 <p>
@@ -2012,7 +2012,7 @@ Compiler specifics
 
 <br>
 
-<p>Revised April 20th 2005</p>
+<p>Revised May 30th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
