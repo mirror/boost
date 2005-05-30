@@ -112,7 +112,7 @@ private:
         while (next1 != last1 && next2 != last2) {
             while (next2 != last2) {
                 if (state == 0) {
-                    if (*next1 >= integer_traits<unsigned char>::const_max)
+                    if (*next1 > integer_traits<unsigned char>::const_max)
                         return codecvt_base::noconv;
                     state = *next1 % 3 + 1;
                     *next2++ = static_cast<char>(state);
@@ -217,7 +217,7 @@ class stateless_null_padded_codecvt
         for ( next1 = first1, next2 = first2; 
               next1 != last1 && next2 != last2; ) 
         {
-            if (*next1 >= integer_traits<unsigned char>::const_max)
+            if (*next1 > integer_traits<unsigned char>::const_max)
                 return codecvt_base::noconv;
             int skip = *next1 % 3 + 2;
             if (last2 - next2 < skip)
