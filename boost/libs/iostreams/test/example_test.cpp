@@ -4,8 +4,8 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#include <ios>  // failure.
 #include <map>
+#include <boost/iostreams/detail/ios.hpp>  // failure.
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/test.hpp>
 #include <boost/iostreams/stream_facade.hpp>
@@ -54,7 +54,7 @@ void container_device_test()
         BOOST_CHECK(first == second);
     }
 
-    {   
+    {
         vector<char>                     v;
         io::stream_facade<vector_device> io(v);
         BOOST_CHECK(test_seekable_in_chunks(io));
@@ -83,7 +83,7 @@ void dictionary_filter_test()
     d.add("waistcoat",    "vest");
     d.add("windscreen",   "windshield");
 
-    const std::string input =
+    const std::string input = // Note: last character is non-alphabetic.
         "I had a message on my answerphone from the bloke at the car "
         "dealership that the windscreen and tyre on my lorry were replaced. "
         "However, the gearbox would not be ready until tomorrow since the "
@@ -94,9 +94,9 @@ void dictionary_filter_test()
         "and watched the telly and drank my wine. I also worked on a "
         "crossword puzzle. Fortunately I had a pencil with a new rubber. "
         "During that evening I made frequent trips to the loo due to my "
-        "excessive drinking.";
+        "excessive drinking";
 
-    const std::string output =
+    const std::string output = // Note: last character is non-alphabetic.
         "I had a message on my answering machine from the guy at the car "
         "dealership that the windshield and tire on my truck were replaced. "
         "However, the transmission would not be ready until tomorrow since "
@@ -106,7 +106,7 @@ void dictionary_filter_test()
         "at the liquor store to buy some wine. I came home and watched the TV "
         "and drank my wine. I also worked on a crossword puzzle. Fortunately I "
         "had a pencil with a new eraser. During that evening I made frequent "
-        "trips to the restroom due to my excessive drinking.";
+        "trips to the restroom due to my excessive drinking";
 
     BOOST_CHECK(
         io::test_input_filter( io::example::dictionary_stdio_filter(d),
@@ -386,41 +386,41 @@ void unix2dos_filter_test()
 {
     using namespace std;
 
-    const std::string input = 
-        "When I was one-and-twenty\n"	
-        "I heard a wise man say,\n"	
-        "'Give crowns and pounds and guineas\n"	
-        "But not your heart away;\n"	
+    const std::string input =
+        "When I was one-and-twenty\n"
+        "I heard a wise man say,\n"
+        "'Give crowns and pounds and guineas\n"
+        "But not your heart away;\n"
         "\n"
         "Give pearls away and rubies\n"
-        "But keep your fancy free.'\n"	
-        "But I was one-and-twenty,\n"	
-        "No use to talk to me.\n"	
-        "\n" 
-        "When I was one-and-twenty\n"	
+        "But keep your fancy free.'\n"
+        "But I was one-and-twenty,\n"
+        "No use to talk to me.\n"
+        "\n"
+        "When I was one-and-twenty\n"
         "I heard him say again,\n"
-        "'The heart out of the bosom\n"	
-        "Was never given in vain;\n"	
+        "'The heart out of the bosom\n"
+        "Was never given in vain;\n"
         "'Tis paid with sighs a plenty\n"
         "And sold for endless rue.'\n"
         "And I am two-and-twenty,\n"
         "And oh, 'tis true, 'tis true.";
 
     const std::string output =
-        "When I was one-and-twenty\r\n"	
-        "I heard a wise man say,\r\n"	
-        "'Give crowns and pounds and guineas\r\n"	
-        "But not your heart away;\r\n"	
+        "When I was one-and-twenty\r\n"
+        "I heard a wise man say,\r\n"
+        "'Give crowns and pounds and guineas\r\n"
+        "But not your heart away;\r\n"
         "\r\n"
         "Give pearls away and rubies\r\n"
-        "But keep your fancy free.'\r\n"	
-        "But I was one-and-twenty,\r\n"	
-        "No use to talk to me.\r\n"	
-        "\r\n" 
-        "When I was one-and-twenty\r\n"	
+        "But keep your fancy free.'\r\n"
+        "But I was one-and-twenty,\r\n"
+        "No use to talk to me.\r\n"
+        "\r\n"
+        "When I was one-and-twenty\r\n"
         "I heard him say again,\r\n"
-        "'The heart out of the bosom\r\n"	
-        "Was never given in vain;\r\n"	
+        "'The heart out of the bosom\r\n"
+        "Was never given in vain;\r\n"
         "'Tis paid with sighs a plenty\r\n"
         "And sold for endless rue.'\r\n"
         "And I am two-and-twenty,\r\n"
@@ -447,7 +447,7 @@ void unix2dos_filter_test()
     );
 }
 
-test_suite* init_unit_test_suite(int, char* []) 
+test_suite* init_unit_test_suite(int, char* [])
 {
     test_suite* test = BOOST_TEST_SUITE("example test");
     test->add(BOOST_TEST_CASE(&container_device_test));
