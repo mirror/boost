@@ -54,23 +54,15 @@ namespace boost
             template< class ForwardRange >
             static IteratorT adl_begin( ForwardRange& r )
             {
-                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-                return begin( r );
-                #else
                 using boost::begin;
                 return IteratorT( begin( r ) );
-                #endif
             }
             
             template< class ForwardRange >
             static IteratorT adl_end( ForwardRange& r )
             {
-                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-                return end( r );
-                #else
                 using boost::end;
                 return IteratorT( end( r ) );
-                #endif
             }
         };
  
