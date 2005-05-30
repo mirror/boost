@@ -62,7 +62,7 @@ void direct_adapter_test()
     //--------------indirect_array_ostream------------------------------------//
 
     {
-        vector<char>            dest(data_reps * data_length(), 0);
+        vector<char>            dest(data_reps * data_length(), '?');
         indirect_array_ostream  out(&dest[0], &dest[0] + dest.size());
         write_data_in_chars(out);
         BOOST_CHECK_MESSAGE(
@@ -72,7 +72,7 @@ void direct_adapter_test()
     }
 
     {
-        vector<char>            dest(data_reps * data_length(), 0);
+        vector<char>            dest(data_reps * data_length(), '?');
         indirect_array_ostream  out(&dest[0], &dest[0] + dest.size());
         write_data_in_chunks(out);
         BOOST_CHECK_MESSAGE(
@@ -84,7 +84,7 @@ void direct_adapter_test()
     //--------------indirect_array_stream-------------------------------------//
 
     {
-        vector<char> test(data_reps * data_length(), 0);
+        vector<char> test(data_reps * data_length(), '?');
         indirect_array_stream io(&test[0], &test[0] + test.size());
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
@@ -93,7 +93,7 @@ void direct_adapter_test()
     }
 
     {
-        vector<char> test(data_reps * data_length(), 0);
+        vector<char> test(data_reps * data_length(), '?');
         indirect_array_stream io(&test[0], &test[0] + test.size());
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),
