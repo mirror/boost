@@ -178,7 +178,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
                        readonly ? GENERIC_READ : GENERIC_ALL,
                        FILE_SHARE_READ,
                        NULL,
-                       (p.size != 0 && !readonly) ? CREATE_ALWAYS : OPEN_EXISTING,
+                       (p.new_file_size != 0 && !readonly) ? 
+                           CREATE_ALWAYS : 
+                           OPEN_EXISTING,
                        FILE_ATTRIBUTE_TEMPORARY,
                        NULL );
 
@@ -187,9 +189,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
 
     //--------------Set file size---------------------------------------------//
 
-    if (p.size != 0 && !readonly) {
-        LONG sizehigh = (p.size >> (sizeof(LONG) * 8));
-        LONG sizelow = (p.size & 0xffffffff);
+    if (p.new_file_size != 0 && !readonly) {
+        LONG sizehigh = (p.new_file_size >> (sizeof(LONG) * 8));
+        LONG sizelow = (p.new_file_size & 0xffffffff);
         ::SetFilePointer(pimpl_->handle_, sizelow, &sizehigh, FILE_BEGIN);
         if (::GetLastError() != NO_ERROR || !::SetEndOfFile(pimpl_->handle_))
             detail::cleanup_and_throw(*pimpl_, "failed setting file size");
@@ -309,7 +311,7 @@ void mapped_file_source::open_impl(mapped_file_params p)
     //--------------Open underlying file--------------------------------------//
 
     int flags = (readonly ? O_RDONLY : O_RDWR);
-    if (p.size != 0 && !readonly)
+    if (p.new_file_size != 0 && !readonly)
         flags |= (O_CREAT | O_TRUNC);
     errno = 0;
     pimpl_->handle_ = ::open(p.path.c_str(), flags, S_IRWXU);
@@ -318,8 +320,8 @@ void mapped_file_source::open_impl(mapped_file_params p)
 
     //--------------Set file size---------------------------------------------//
 
-    if (p.size != 0 && !readonly)
-        if (ftruncate(pimpl_->handle_, p.size) == -1)
+    if (p.new_file_size != 0 && !readonly)
+        if (ftruncate(pimpl_->handle_, p.new_file_size) == -1)
             detail::cleanup_and_throw(*pimpl_, "failed setting file size");
 
     //--------------Determine file size---------------------------------------//
