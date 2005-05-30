@@ -37,7 +37,7 @@ struct composite_mode {
     typedef typename mode_of<Filter>::type           filter_mode;
     typedef typename mode_of<Device>::type           device_mode;
     typedef is_convertible<filter_mode, dual_use>    is_dual_use;
-    typedef typename 
+    typedef typename
             mpl::if_<
                 is_convertible<device_mode, input>,
                 input,
@@ -52,9 +52,9 @@ struct composite_mode {
 //      Filter - A model of Filter.
 //      Device - An indirect model of Device.
 //
-template< typename Filter, 
+template< typename Filter,
           typename Device,
-          typename Mode = 
+          typename Mode =
               BOOST_DEDUCED_TYPENAME composite_mode<Filter, Device>::type >
 class composite_device {
 private:
@@ -252,22 +252,22 @@ compose( const Filter& filter, const FilterOrDevice& fod
 template<typename Filter>
 composite<Filter, std::streambuf>
 compose(const Filter& filter, std::streambuf& sb)
-{ return composite<std::streambuf>(filter, sb); }
+{ return composite<Filter, std::streambuf>(filter, sb); }
 
 template<typename Filter>
 composite<Filter, std::istream>
 compose(const Filter& filter, std::istream& is)
-{ return composite<std::istream>(filter, is); }
+{ return composite<Filter, std::istream>(filter, is); }
 
 template<typename Filter>
 composite<Filter, std::ostream>
 compose(const Filter& filter, std::ostream& os)
-{ return composite<std::ostream>(filter, os); }
+{ return composite<Filter, std::ostream>(filter, os); }
 
 template<typename Filter>
 composite<Filter, std::iostream>
 compose(const Filter& filter, std::iostream& io)
-{ return composite<std::iostream>(filter, io); }
+{ return composite<Filter, std::iostream>(filter, io); }
 
 # endif // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------//
 #else // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //----------------//
@@ -357,7 +357,7 @@ bool composite_device<Filter, Device, Mode>::flush()
 }
 
 template<typename Filter, typename Device, typename Mode>
-std::streamsize 
+std::streamsize
 composite_device<Filter, Device, Mode>::optimal_buffer_size() const
 { return iostreams::optimal_buffer_size(device_); }
 
