@@ -1546,7 +1546,7 @@ public:
         for (int i = 0; i < 256; ++i)
         {
             if (parser.test(static_cast<char_t>(uchar(i))))
-                rr.set(utility::impl::range<char_t>(i, i));
+                rr.set(utility::impl::range<char_t>(char_t(i), char_t(i)));
         }
     }
 
@@ -2088,7 +2088,7 @@ void make_case_insensitive(state_match_t& state_match)
         for (i = 'A', j = 'a'; i <= 'Z'; ++i, ++j)
         {
             // if either is set, turn them both on
-            (*iter)[i] = (*iter)[j] = (*iter)[i] | (*iter)[j];
+            (*iter)[i] = (*iter)[j] = uchar((*iter)[i] | (*iter)[j]);
         }
     }
 }
