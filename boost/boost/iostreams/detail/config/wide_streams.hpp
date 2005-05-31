@@ -21,7 +21,7 @@
 //------------------Templated stream support----------------------------------//
 
 // From boost/dynamic_bitset.hpp; thanks to Matthias Troyer for cray patch.
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES 
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # if defined(__STL_CONFIG_H) && \
     !defined (__STL_USE_NEW_IOSTREAMS) && !defined(__crayx1) \
     /**/
