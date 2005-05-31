@@ -122,6 +122,11 @@ namespace time_conversion {
                 g.correct_year();
                 compile_time = mktime(&g.time_stamp);
             }
+// # The following is for testing purposes only, will be removed shortly
+            if (0 == compile_time) {
+                std::cerr << "Parsing failed: >" << act_time << "<" << std::endl;
+            } 
+// #
             BOOST_ASSERT(0 != compile_time);        
         }
 
