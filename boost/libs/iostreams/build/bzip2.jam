@@ -13,8 +13,21 @@
   
 rule bzip2_config 
 {
-    local SOURCES = blocksort bzlib compress crctable decompress huffman 
-                    mk251 randtable ; 
+    if $(NT) && ! $(BZIP2_SOURCE) && ! $(BZIP2_INCLUDE)
+    { 
+         ECHO ****************************************************** ;
+         ECHO ;
+         ECHO Building Boost.Iostreams with bzip2 support disabled. ;
+         ECHO HINT: define the environment variable BZIP2_SOURCE to point to ;
+         ECHO the root directy of your bzip2 installation if you have one. ;
+         ECHO For more options, consult the Boost.Iostreams documentation ;
+         ECHO ****************************************************** ;   
+         NO_BZIP2 = 1 ;
+         return ;
+    }
+
+    local SOURCES = blocksort bzlib compress crctable 
+					decompress huffman randtable ; 
     BZIP2_INCLUDE = [ unless $(BZIP2_INCLUDE) : $(BZIP2_SOURCE) ] ;
     local WINDOWS = ;
 
