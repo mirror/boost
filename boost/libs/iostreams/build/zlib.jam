@@ -13,7 +13,21 @@
          
 rule zlib_config 
 {
-    local SOURCES = adler32 compress crc32 deflate gzio infback inffast 
+    if $(NT) && ! $(ZLIB_SOURCE) && ! $(ZLIB_INCLUDE)
+    {
+         ECHO ****************************************************** ;
+         ECHO ;
+         ECHO Building Boost.Iostreams with zlib and gzip support disabled. ;
+         ECHO HINT: define the environment variable BZIP2_SOURCE to point to ;
+         ECHO the root directy of your zlib installation if you have one. ;
+         ECHO For more options, consult the Boost.Iostreams documentation ;
+         ECHO ;
+         ECHO ****************************************************** ;    
+         NO_ZLIB = 1 ;
+         return ;
+    }
+
+    local SOURCES = adler32 compress crc32 deflate inffast  
                     inflate inftrees trees uncompr zutil ; 
     ZLIB_INCLUDE = [ unless $(ZLIB_INCLUDE) : $(ZLIB_SOURCE) ] ;
 
