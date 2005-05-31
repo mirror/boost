@@ -70,10 +70,10 @@ template <class T>
 void print_byte_order(const char* what, T /* t */ )
 {
    T val = 0;
-   T i;
+   unsigned i;
    for(i = 1; i < sizeof(T); ++i)
    {
-      val |= (CHAR_BIT * i) << (CHAR_BIT * i);
+      val |= (CHAR_BIT * static_cast<T>(i)) << (CHAR_BIT * static_cast<T>(i));
    }
    const char* p = reinterpret_cast<const char*>(&val);
 
