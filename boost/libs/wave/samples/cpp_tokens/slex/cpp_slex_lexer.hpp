@@ -106,8 +106,8 @@ public:
 private:
     typedef lexer_base<IteratorT, PositionT> base_type;
 
-    static base_type::lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
-    static base_type::lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
+    static typename base_type::lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
+    static typename base_type::lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
 };
 
 ///////////////////////////////////////////////////////////////////////////////
