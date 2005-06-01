@@ -129,10 +129,14 @@ int zlib_base::inflate(int flush)
     return ::inflate(static_cast<z_stream*>(stream_), flush);
 }
 
-void zlib_base::reset(bool compress)
+void zlib_base::reset(bool compress, bool realloc)
 {
     z_stream* s = static_cast<z_stream*>(stream_);
-    zlib_error::check(compress ? deflateReset(s) : inflateReset(s));
+    zlib_error::check(
+        realloc ?
+            (compress ? deflateReset(s) : inflateReset(s)) :
+            (compress ? deflateEnd(s) : inflateEnd(s))
+    );
 }
 
 void zlib_base::do_init
