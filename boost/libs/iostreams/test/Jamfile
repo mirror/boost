@@ -56,9 +56,10 @@ DEPENDS all : test ;
                 $(requirements)
         ] ;
     }
-
-    test-suite "iostreams"
-        : [ test-iostreams libs/iostreams/test/array_test.cpp ]
+    
+	rule intialize_suite {
+		TEST_SUITE = 
+		  [ test-iostreams libs/iostreams/test/array_test.cpp ]
           [ test-iostreams libs/iostreams/test/auto_close_test.cpp ]
           [ test-iostreams libs/iostreams/test/buffer_size_test.cpp ]
           [ test-iostreams 
@@ -77,7 +78,7 @@ DEPENDS all : test ;
                 libs/iostreams/test/file_descriptor_test.cpp 
                 libs/iostreams/src/file_descriptor.cpp ]
           [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
-          #[ test-iostreams libs/iostreams/test/finite_state_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/finite_state_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/flush_test.cpp ]
           [ test-iostreams libs/iostreams/test/invert_test.cpp ]
           [ test-iostreams libs/iostreams/test/line_filter_test.cpp ]
@@ -97,21 +98,37 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/stdio_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/tee_test.cpp ]
-          [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
-          [ test-iostreams 
-                libs/iostreams/test/bzip2_test.cpp 
-                <template>bzip2 
-              : # build requirements
-                <define>BOOST_IOSTREAMS_NO_LIB ]
-          [ test-iostreams 
-                libs/iostreams/test/gzip_test.cpp 
-                <template>zlib
-              : # build requirements
-                <define>BOOST_IOSTREAMS_NO_LIB ]
-          [ test-iostreams 
-                libs/iostreams/test/zlib_test.cpp 
-                <template>zlib
-              : # build requirements
-                <define>BOOST_IOSTREAMS_NO_LIB ]
+          [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ] ;
+          
+		if ! $(NO_BZIP2) 
+		{
+			TEST_SUITE += 
+				[ test-iostreams 
+				      libs/iostreams/test/bzip2_test.cpp 
+					  <template>bzip2 
+					: # build requirements
+				      <define>BOOST_IOSTREAMS_NO_LIB ] ;
+		}
+		
+		if ! $(NO_ZLIB) 
+		{
+			TEST_SUITE += 
+				[ test-iostreams 
+					  libs/iostreams/test/gzip_test.cpp 
+					  <template>zlib
+					: # build requirements
+					  <define>BOOST_IOSTREAMS_NO_LIB ]
+				[ test-iostreams 
+					  libs/iostreams/test/zlib_test.cpp 
+					  <template>zlib
+					: # build requirements
+					  <define>BOOST_IOSTREAMS_NO_LIB ] ;
+		}
+    }
+    
+    intialize_suite ;
+
+    test-suite "iostreams"
+        : $(IOSTREAMS_TEST_SUITE)
        ;
 }
