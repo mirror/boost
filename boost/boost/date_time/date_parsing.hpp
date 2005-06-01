@@ -259,7 +259,7 @@ namespace date_time {
       typedef typename boost::char_separator<charT> char_separator;
       typedef typename boost::tokenizer<char_separator, typename std::basic_string<charT>::const_iterator, 
                                           std::basic_string<charT> > tokenizer;
-      const charT sep_list[] = {'[','/',']','\0'};
+      const charT sep_list[4] = {'[','/',']','\0'};
       char_separator sep(sep_list);
       tokenizer tokens(s, sep);
       typename tokenizer::iterator tok_it = tokens.begin(); 
