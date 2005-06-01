@@ -16,6 +16,7 @@
 #include <locale>
 #include <string>
 #include <boost/config.hpp>                         // JOIN.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/checked_operations.hpp>   // put_if.
@@ -32,14 +33,6 @@
 namespace boost { namespace iostreams {
 
 //------------------Definition of basic character classes---------------------//
-
-#define BOOST_IOSTREAMS_CHARACTER_CLASS(class) \
-    struct BOOST_JOIN(is_, class) { \
-        template<typename Ch> \
-        static bool test(Ch event, const std::locale& loc) \
-        { return std::BOOST_JOIN(is, class)(event, loc); } \
-    }; \
-    /**/
 
 struct finite_state_machine_base {
 
@@ -97,7 +90,7 @@ class finite_state_filter_impl;
 
 } // End namespace detail.
 
-template<typename Derived, typename Ch>
+template<typename Derived, typename Ch = char>
 class finite_state_machine : public finite_state_machine_base_ex<Ch> {
 public:
     typedef Ch                                  char_type;
@@ -149,7 +142,12 @@ protected:
     void on_eof() { }
     void skip(char_type) { }
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FREINDS
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3205)
+    template<typename Ch>
+    void _push_impl(Ch c) { push(c); }
+#endif
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<typename FiniteStateFilter>
     friend class detail::finite_state_filter_impl;
 #else
@@ -164,13 +162,22 @@ private:
     size_type    off_;
 };
 
-#define BOOST_IOSTREAMS_FSM(fsm) \
+#if !BOOST_WORKAROUND(__MWERKS__, <= 0x3205)
+# define BOOST_IOSTREAMS_FSM(fsm) \
     template<typename Ch> \
     void push(Ch c) \
     { ::boost::iostreams::finite_state_machine<fsm, Ch>::push(c); } \
     template<typename Ch> \
     void skip(Ch c) { (void) c; } \
     /**/
+#else // #ifndef __MWERKS__
+# define BOOST_IOSTREAMS_FSM(fsm) \
+    void push(char c) { this->_push_impl(c); } \
+    void push(wchar_t c) { this->_push_impl(c); } \
+    void skip(char c) { (void) c; } \
+    void skip(wchar_t c) { (void) c; } \
+    /**/
+#endif
 
 //------------------Definition of finite_state_filter_impl--------------------//
 
