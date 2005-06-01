@@ -14,6 +14,7 @@
   This file contains a high resolution time clock implementation.
 */
 
+#include <boost/detail/workaround.hpp>
 #include "boost/date_time/c_time.hpp"
 #include "boost/cstdint.hpp"
 #include "boost/shared_ptr.hpp"
@@ -113,14 +114,28 @@ namespace date_time {
     //! Return the local time based on computer clock settings
     static time_type local_time() {
       FILETIME ft;
+      #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+      // Some runtime library implementations expect local times as the norm for ctime.
+      FILETIME ft_utc;
+      GetSystemTimeAsFileTime(&ft_utc);
+      FileTimeToLocalFileTime(&ft_utc,&ft);
+      #else
       GetSystemTimeAsFileTime(&ft);
+      #endif
       return create_time(ft, LOCAL);
     }
     
     //! Return the UTC time based on computer settings
     static time_type universal_time() {
       FILETIME ft;
+      #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+      // Some runtime library implementations expect local times as the norm for ctime.
+      FILETIME ft_utc;
+      GetSystemTimeAsFileTime(&ft_utc);
+      FileTimeToLocalFileTime(&ft_utc,&ft);
+      #else
       GetSystemTimeAsFileTime(&ft);
+      #endif
       return create_time(ft, GMT);
     }
 
