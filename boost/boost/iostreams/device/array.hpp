@@ -21,10 +21,6 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#if defined(BOOST_NO_STDC_NAMESPACE) || defined(__LIBCOMO__)
-namespace std { using ::strlen; }
-#endif
-
 namespace boost { namespace iostreams {
 
 namespace detail {
