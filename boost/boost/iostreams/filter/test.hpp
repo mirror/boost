@@ -20,6 +20,7 @@
     /**/
 # include <cstdlib>                       // rand.
 #endif
+#include <cstring>                        // memcpy, strlen.
 #include <iterator>
 #include <string>
 #include <vector>
