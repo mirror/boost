@@ -79,9 +79,7 @@ struct identity_fsm
     typedef boost::mpl::vector0<> transition_table;
 };
 
-struct dos2unix_fsm
-    : io::finite_state_machine<dos2unix_fsm, char>
-{
+struct dos2unix_fsm : io::finite_state_machine<dos2unix_fsm> {
     BOOST_IOSTREAMS_FSM(dos2unix_fsm) // Define skip and push.
     typedef dos2unix_fsm self;
     typedef boost::mpl::vector<
@@ -90,9 +88,7 @@ struct dos2unix_fsm
             > transition_table;
 };
 
-struct unix2dos_fsm
-    : io::finite_state_machine<unix2dos_fsm, char>
-{
+struct unix2dos_fsm : io::finite_state_machine<unix2dos_fsm> {
     BOOST_IOSTREAMS_FSM(unix2dos_fsm) // Define skip and push.
     typedef unix2dos_fsm self;
 
@@ -104,9 +100,7 @@ struct unix2dos_fsm
             > transition_table;
 };
 
-struct uncommenting_fsm
-    : io::finite_state_machine<uncommenting_fsm, char>
-{
+struct uncommenting_fsm : io::finite_state_machine<uncommenting_fsm> {
     BOOST_IOSTREAMS_FSM(uncommenting_fsm) // Define skip and push.
     typedef uncommenting_fsm self;
 
