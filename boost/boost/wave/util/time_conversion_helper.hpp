@@ -117,14 +117,19 @@ namespace time_conversion {
             using namespace boost::spirit;
             
         time_conversion_grammar g;
-
-            if (parse (act_time, g, space_p | ch_p(':') | ch_p(',')).hit) {
+        parse_info<> pi = parse (act_time, g, space_p | ch_p(':') | ch_p(','));
+        
+            if (pi.hit) {
                 g.correct_year();
                 compile_time = mktime(&g.time_stamp);
             }
-// # The following is for testing purposes only, will be removed shortly
+// # The following is for testing purposes only and will be removed shortly
             if (0 == compile_time) {
-                std::cerr << "Parsing failed: >" << act_time << "<" << std::endl;
+                std::cerr << "Parsing of >" << act_time << "< failed!" << std::endl;
+                std::cerr << "pi.hit:     " << pi.hit << std::endl;
+                std::cerr << "pi.full:    " << pi.full << std::endl;
+                std::cerr << "pi.length:  " << (unsigned int)pi.length << std::endl;
+                std::cerr << "pi.stop:    " << pi.stop << std::endl;
             } 
 // #
             BOOST_ASSERT(0 != compile_time);        
