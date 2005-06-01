@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for composite_key.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -626,4 +626,13 @@ void test_composite_key()
     ch1(ck6(xystr(0,0,"hello")))==ch1(make_tuple(std::string("hello"),0,0)));
   BOOST_CHECK(
     ch1(ck6(xystr(4,5,"world")))==ch1(make_tuple(std::string("world"),4,5)));
+
+  typedef boost::hash<composite_key_result<ckey_t3> > ckeyres_hash_t;
+
+  ckeyres_hash_t crh;
+
+  BOOST_CHECK(
+    ch1(ck6(xystr(0,0,"hello")))==crh(ck6(xystr(0,0,"hello"))));
+  BOOST_CHECK(
+    ch1(ck6(xystr(4,5,"world")))==crh(ck6(xystr(4,5,"world"))));
 }

@@ -1232,6 +1232,33 @@ struct hash<boost::multi_index::composite_key_result<CompositeKey> >:
 };
 
 } /* namespace boost */
+#else
+/* Lacking template partial specialization, std::equal_to, std::less and
+ * std::greater will still work for composite_key_results although without
+ * tuple interoperability. To achieve the same graceful degrading with
+ * boost::hash, we define the appropriate hash_value overload.
+ */
+
+namespace boost{
+
+#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+namespace multi_index{
+#endif
+
+template<typename CompositeKey>
+inline std::size_t hash_value(
+  const boost::multi_index::composite_key_result<CompositeKey>& x)
+{
+  boost::multi_index::composite_key_result_hash<
+    boost::multi_index::composite_key_result<CompositeKey> > h;
+  return h(x);
+}
+
+#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+} /* namespace multi_index */
+#endif
+
+} /* namespace boost */
 #endif
 
 #undef BOOST_MULTI_INDEX_CK_RESULT_HASH_SUPER
