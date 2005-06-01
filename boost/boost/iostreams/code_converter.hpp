@@ -229,6 +229,11 @@ public:
     ));
 public:
     code_converter() { }
+#if BOOST_WORKAROUND(__GNUC__, < 3)
+    code_converter(const code_converter& rhs) 
+        : code_converter_base<Device, Codecvt, Alloc>(rhs)
+        { }
+#endif
     BOOST_IOSTREAMS_FORWARD( code_converter, open_impl, Device,
                              BOOST_IOSTREAMS_CONVERTER_PARAMS, 
                              BOOST_IOSTREAMS_CONVERTER_ARGS )
