@@ -8,8 +8,8 @@
 
 subproject libs/iostreams/build ;
 
-import $(BOOST_ROOT)/libs/iostreams/build/bzip2 ;
-import $(BOOST_ROOT)/libs/iostreams/build/zlib ;
+import ./bzip2 ;
+import ./zlib ;
 
 template iostreams
     : # sources
@@ -17,7 +17,7 @@ template iostreams
       [ unless $(NO_ZLIB)$(NO_COMPRESSION) : <template>zlib ]
     : # build requirements
     : # build variants
-   ;    
+    ;
 
 lib boost_iostreams
     : # sources
