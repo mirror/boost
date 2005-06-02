@@ -138,27 +138,27 @@ namespace ptr_container_detail
                                                     " not find key" );
         }
 
+        struct eraser // scope guard
+        {
+            bool            released_;
+            VoidPtrMap*     m_;
+            const key_type& key_;
+
+            eraser( VoidPtrMap* m, const key_type& key ) 
+              : released_(false), m_(m), key_(key)
+            {}
+
+            ~eraser() 
+            {
+                if( !released_ )
+                    m_->erase(key_);
+            }
+
+            void release() { released_ = true; }
+        };
+
         reference insert_lookup( const key_type& key )
         {
-            struct eraser // scope guard
-            {
-                bool            released_;
-                VoidPtrMap*     m_;
-                const key_type& key_;
-
-                eraser( VoidPtrMap* m, const key_type& key ) 
-                  : released_(false), m_(m), key_(key)
-                {}
-                
-                ~eraser() 
-                {
-                    if( !released_ )
-                        m_->erase(key_);
-                }
-                
-                void release() { released_ = true; }
-            };
-
             void*& ref = this->c_private()[key];
             if( ref )
             {
