@@ -142,7 +142,7 @@ protected:
     void on_eof() { }
     void skip(char_type) { }
 
-#if BOOST_WORKAROUND(__MWERKS__, <= 0x3205)
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3206)
     template<typename Ch>
     void _push_impl(Ch c) { push(c); }
 #endif
@@ -162,7 +162,7 @@ private:
     size_type    off_;
 };
 
-#if !BOOST_WORKAROUND(__MWERKS__, <= 0x3205)
+#if !BOOST_WORKAROUND(__MWERKS__, <= 0x3206)
 # define BOOST_IOSTREAMS_FSM(fsm) \
     template<typename Ch> \
     void push(Ch c) \
