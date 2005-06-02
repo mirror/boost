@@ -79,8 +79,8 @@ namespace time_conversion {
                     =   month[spirit_assign_actor(self.time_stamp.tm_mon)]  
                     >>  int_p[spirit_assign_actor(self.time_stamp.tm_mday)]    
                     >>  int_p[spirit_assign_actor(self.time_stamp.tm_year)]
-                    >>  int_p[spirit_assign_actor(self.time_stamp.tm_hour)]  
-                    >>  int_p[spirit_assign_actor(self.time_stamp.tm_min)]
+                    >>  int_p[spirit_assign_actor(self.time_stamp.tm_hour)] >> ':' 
+                    >>  int_p[spirit_assign_actor(self.time_stamp.tm_min)] >> ':'
                     >>  int_p[spirit_assign_actor(self.time_stamp.tm_sec)]
                     ;
                     
@@ -117,7 +117,7 @@ namespace time_conversion {
             using namespace boost::spirit;
             
         time_conversion_grammar g;
-        parse_info<> pi = parse (act_time, g, space_p | ch_p(':') | ch_p(','));
+        parse_info<> pi = parse (act_time, g, space_p);
         
             if (pi.hit) {
                 g.correct_year();
