@@ -48,7 +48,7 @@
 #undef rand
 #undef strlen
 
-#if defined(BOOST_NO_STDC_NAMESPACE) || defined(__LIBCOMO__)
+#if defined(BOOST_NO_STDC_NAMESPACE) && !defined(__LIBCOMO__)
 namespace std { 
     using ::memcpy; 
     using ::strlen; 

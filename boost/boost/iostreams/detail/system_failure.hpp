@@ -20,7 +20,7 @@
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure.
 
-#ifdef BOOST_NO_STDC_NAMESPACE
+#ifdef BOOST_NO_STDC_NAMESPACE && !defined(__LIBCOMO__)
 namespace std { using ::strlen; }
 #endif
 
