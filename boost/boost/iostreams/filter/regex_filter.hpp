@@ -11,9 +11,7 @@
 # pragma once
 #endif              
 
-#include <iterator>                       // back_inserter.
 #include <memory>                         // allocator.
-#include <string>                         // char_traits.
 #include <boost/function.hpp>        
 #include <boost/iostreams/filter/one_step_filter.hpp>              
 #include <boost/iostreams/pipeline.hpp>                
