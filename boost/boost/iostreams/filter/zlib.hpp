@@ -191,7 +191,7 @@ protected:
                 bool compress );
     int deflate(int flush);
     int inflate(int flush);
-    void reset(bool compress);
+    void reset(bool compress, bool realloc);
 public:
     zlib::ulong crc() const { return crc_; }
     int total_in() const { return total_in_; }
@@ -219,6 +219,7 @@ template<typename Alloc = std::allocator<char> >
 class zlib_compressor_impl : public zlib_base, public zlib_allocator<Alloc> { 
 public: 
     zlib_compressor_impl(const zlib_params& = zlib::default_compression);
+    ~zlib_compressor_impl();
     bool filter( const char*& src_begin, const char* src_end,
                  char*& dest_begin, char* dest_end, bool flush );
     void close();
@@ -234,6 +235,7 @@ class zlib_decompressor_impl : public zlib_base, public zlib_allocator<Alloc> {
 public:
     zlib_decompressor_impl(const zlib_params&);
     zlib_decompressor_impl(int window_bits = zlib::default_window_bits);
+    ~zlib_decompressor_impl();
     bool filter( const char*& begin_in, const char* end_in,
                  char*& begin_out, char* end_out, bool flush );
     void close();
@@ -328,6 +330,10 @@ zlib_compressor_impl<Alloc>::zlib_compressor_impl(const zlib_params& p)
 { init(p, true, static_cast<zlib_allocator<Alloc>&>(*this)); }
 
 template<typename Alloc>
+zlib_compressor_impl<Alloc>::~zlib_compressor_impl()
+{ /*reset(true, false);*/ }
+
+template<typename Alloc>
 bool zlib_compressor_impl<Alloc>::filter
     ( const char*& src_begin, const char* src_end,
       char*& dest_begin, char* dest_end, bool flush )
@@ -340,13 +346,17 @@ bool zlib_compressor_impl<Alloc>::filter
 }
 
 template<typename Alloc>
-void zlib_compressor_impl<Alloc>::close() { reset(true); }
+void zlib_compressor_impl<Alloc>::close() { reset(true, true); }
 
 //------------------Implementation of zlib_decompressor_impl------------------//
 
 template<typename Alloc>
 zlib_decompressor_impl<Alloc>::zlib_decompressor_impl(const zlib_params& p)
 { init(p, false, static_cast<zlib_allocator<Alloc>&>(*this)); }
+
+template<typename Alloc>
+zlib_decompressor_impl<Alloc>::~zlib_decompressor_impl()
+{ /*reset(false, false);*/ }
 
 template<typename Alloc>
 zlib_decompressor_impl<Alloc>::zlib_decompressor_impl(int window_bits)
@@ -369,7 +379,7 @@ bool zlib_decompressor_impl<Alloc>::filter
 }
 
 template<typename Alloc>
-void zlib_decompressor_impl<Alloc>::close() { reset(false); }
+void zlib_decompressor_impl<Alloc>::close() { reset(false, true); }
 
 } // End namespace detail.
 
