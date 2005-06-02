@@ -96,7 +96,7 @@ template <typename IteratorT, typename PositionT>
 struct position_iterator 
 :   boost::spirit::position_iterator<IteratorT, PositionT>
 {
-    typedef boost::spirit::position_iterator<IteratorT, PositionT> base_t;
+    typedef boost::spirit::position_iterator<IteratorT, PositionT> base_type;
     
     position_iterator()
     {
@@ -104,7 +104,7 @@ struct position_iterator
     
     position_iterator(IteratorT const &begin, IteratorT const &end,
             PositionT const &pos)
-    :   base_t(begin, end, pos)
+    :   base_type(begin, end, pos)
     {
     }
 };
