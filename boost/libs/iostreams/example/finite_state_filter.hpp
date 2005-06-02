@@ -84,7 +84,7 @@ struct finite_state_machine_base_ex : finite_state_machine_base {
 //------------------Definition of base class for finite state filters---------//
 
 namespace detail {
-    
+
 template<typename FiniteStateMachine>
 class finite_state_filter_impl;
 

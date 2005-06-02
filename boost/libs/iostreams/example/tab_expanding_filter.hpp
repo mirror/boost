@@ -5,7 +5,7 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 // Adapted from an example of James Kanze, with suggestions from Rob Stewart.
-// See http://www.gabi-soft.fr/codebase-en.html. 
+// See http://www.gabi-soft.fr/codebase-en.html.
 
 #ifndef BOOST_IOSTREAMS_TAB_EXPANDING_FILTER_HPP_INCLUDED
 #define BOOST_IOSTREAMS_TAB_EXPANDING_FILTER_HPP_INCLUDED
@@ -58,8 +58,8 @@ class tab_expanding_input_filter : public input_filter {
 public:
     explicit tab_expanding_input_filter(int tab_size = 8)
         : tab_size_(tab_size), col_no_(0), spaces_(0)
-    { 
-        assert(tab_size > 0); 
+    {
+        assert(tab_size > 0);
     }
 
     template<typename Source>
@@ -107,12 +107,12 @@ class tab_expanding_output_filter : public output_filter {
 public:
     explicit tab_expanding_output_filter(int tab_size = 8)
         : tab_size_(tab_size), col_no_(0), spaces_(0)
-    { 
-        assert(tab_size > 0); 
+    {
+        assert(tab_size > 0);
     }
 
     template<typename Sink>
-    bool put(Sink& dest, int c) 
+    bool put(Sink& dest, int c)
     {
         for (; spaces_ > 0; --spaces_)
             if (!put_char(dest, ' '))
@@ -121,13 +121,13 @@ public:
         if (c == '\t') {
             spaces_ = tab_size_ - (col_no_ % tab_size_) - 1;
             return this->put(dest, ' ');
-        } 
+        }
 
         return put_char(dest, c);
     }
 
     template<typename Sink>
-    void close(Sink&) 
+    void close(Sink&)
     {
         col_no_ = 0;
         spaces_ = 0;

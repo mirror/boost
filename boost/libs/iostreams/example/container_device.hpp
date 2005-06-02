@@ -17,13 +17,13 @@ namespace boost { namespace iostreams { namespace example {
 //
 // Model of Source which reads from an STL-compatible sequence
 // whose iterators are random-access iterators.
-// 
+//
 template<typename Container>
 class container_source {
 public:
     typedef typename Container::value_type  char_type;
     typedef source_tag                      category;
-    container_source(Container& container) 
+    container_source(Container& container)
         : container_(container), pos_(0)
         { }
     std::streamsize read(char_type* s, std::streamsize n)
@@ -32,8 +32,8 @@ public:
         streamsize amt = static_cast<streamsize>(container_.size() - pos_);
         streamsize result = (min)(n, amt);
         if (result != 0) {
-            std::copy( container_.begin() + pos_, 
-                       container_.begin() + pos_ + result, 
+            std::copy( container_.begin() + pos_,
+                       container_.begin() + pos_ + result,
                        s );
             pos_ += result;
             return result;
@@ -50,7 +50,7 @@ private:
 
 //
 // Model of Sink which appends to an STL-compatible sequence.
-// 
+//
 template<typename Container>
 class container_sink {
 public:
@@ -70,13 +70,13 @@ private:
 //
 // Model of SeekableDevice which accessS an TL-compatible sequence
 // whose iterators are random-access iterators.
-// 
+//
 template<typename Container>
 class container_device {
 public:
     typedef typename Container::value_type  char_type;
     typedef seekable_device_tag             category;
-    container_device(Container& container) 
+    container_device(Container& container)
         : container_(container), pos_(0)
         { }
 
@@ -86,8 +86,8 @@ public:
         streamsize amt = static_cast<streamsize>(container_.size() - pos_);
         streamsize result = (min)(n, amt);
         if (result != 0) {
-            std::copy( container_.begin() + pos_, 
-                       container_.begin() + pos_ + result, 
+            std::copy( container_.begin() + pos_,
+                       container_.begin() + pos_ + result,
                        s );
             pos_ += result;
             return result;
@@ -100,7 +100,7 @@ public:
         using namespace std;
         streamsize result = 0;
         if (pos_ != container_.size()) {
-            streamsize amt = 
+            streamsize amt =
                 static_cast<streamsize>(container_.size() - pos_);
             streamsize result = (min)(n, amt);
             std::copy(s, s + result, container_.begin() + pos_);

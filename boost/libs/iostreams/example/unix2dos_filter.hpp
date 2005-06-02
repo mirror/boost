@@ -61,9 +61,9 @@ public:
     unix2dos_output_filter() : has_linefeed_(false) { }
 
     template<typename Sink>
-    bool put(Sink& dest, int c) 
+    bool put(Sink& dest, int c)
     {
-        if (c == '\n') 
+        if (c == '\n')
             return has_linefeed_ ?
                 put_char(dest, '\n') :
                 put_char(dest, '\r') ?
@@ -76,14 +76,14 @@ public:
     void close(Sink&) { has_linefeed_ = false; }
 private:
     template<typename Sink>
-    bool put_char(Sink& dest, int c) 
+    bool put_char(Sink& dest, int c)
     {
         bool result;
         if ((result = iostreams::put(dest, c)) == true) {
             has_linefeed_ =
                 c == '\r' ?
-                    true : 
-                    c == '\n' ? 
+                    true :
+                    c == '\n' ?
                         false :
                         has_linefeed_;
         }

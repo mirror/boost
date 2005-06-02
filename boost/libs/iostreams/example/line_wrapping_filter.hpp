@@ -2,7 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
-// Adapted from an example of James Kanze. See 
+// Adapted from an example of James Kanze. See
 // http://www.gabi-soft.fr/codebase-en.html.
 
 // See http://www.boost.org/libs/iostreams for documentation.
@@ -20,10 +20,10 @@ namespace boost { namespace iostreams { namespace example {
 class line_wrapping_stdio_filter : public stdio_filter {
 public:
     explicit line_wrapping_stdio_filter(int line_length = 80)
-        : line_length_(line_length), col_no_(0) 
+        : line_length_(line_length), col_no_(0)
         { }
 private:
-    void do_filter() 
+    void do_filter()
     {
         int c;
         while ((c = std::cin.get()) != EOF) {
@@ -52,7 +52,7 @@ public:
         { }
 
     template<typename Source>
-    int get(Source& src) 
+    int get(Source& src)
     {
         if (has_next_) {
             has_next_ = false;
@@ -73,10 +73,10 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink&) 
-    { 
-        col_no_ = 0; 
-        has_next_ = false; 
+    void close(Sink&)
+    {
+        col_no_ = 0;
+        has_next_ = false;
     }
 private:
     int get_char(int c)
@@ -96,7 +96,7 @@ private:
 class line_wrapping_output_filter : public output_filter {
 public:
     explicit line_wrapping_output_filter(int line_length = 80)
-        : line_length_(line_length), col_no_(0) 
+        : line_length_(line_length), col_no_(0)
         { }
 
     template<typename Sink>

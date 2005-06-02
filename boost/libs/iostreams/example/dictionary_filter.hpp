@@ -19,11 +19,11 @@
 #include <boost/iostreams/operations.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
-namespace std { 
-    using ::isalpha; 
-    using ::isupper; 
-    using ::toupper; 
-    using ::tolower; 
+namespace std {
+    using ::isalpha;
+    using ::isupper;
+    using ::toupper;
+    using ::tolower;
 }
 #endif
 
@@ -156,10 +156,10 @@ public:
             off = 0;
         }
         if (!current_word.empty())
-            iostreams::write( 
+            iostreams::write(
                 dest,
-                current_word.data() + off, 
-                static_cast<std::streamsize>(current_word.size() - off) 
+                current_word.data() + off,
+                static_cast<std::streamsize>(current_word.size() - off)
             );
     }
 private:

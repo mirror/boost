@@ -5,7 +5,7 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 // Adapted from an example of James Kanze, with suggestions from Peter Dimov.
-// See http://www.gabi-soft.fr/codebase-en.html. 
+// See http://www.gabi-soft.fr/codebase-en.html.
 
 #ifndef BOOST_IOSTREAMS_SHELL_COMMENTS_FILTER_HPP_INCLUDED
 #define BOOST_IOSTREAMS_SHELL_COMMENTS_FILTER_HPP_INCLUDED
@@ -23,7 +23,7 @@ namespace boost { namespace iostreams { namespace example {
 class shell_comments_stdio_filter : public stdio_filter {
 public:
     explicit shell_comments_stdio_filter(char comment_char = '#')
-        : comment_char_(comment_char) 
+        : comment_char_(comment_char)
         { }
 private:
     void do_filter()
