@@ -19,7 +19,7 @@
 // define appropriate specialization of rounding_control for built-in types
 #if defined(__i386__) || defined(_M_IX86) || defined(__BORLANDC__)
 #  include <boost/numeric/interval/detail/x86_rounding_control.hpp>
-#elif defined(powerpc) || defined(__powerpc__) || defined(__ppc__)
+#elif defined(powerpc) || defined(__powerpc__) || defined(__ppc__) || defined(__POWERPC__)
 #  include <boost/numeric/interval/detail/ppc_rounding_control.hpp>
 #elif defined(sparc) || defined(__sparc__)
 #  include <boost/numeric/interval/detail/sparc_rounding_control.hpp>
