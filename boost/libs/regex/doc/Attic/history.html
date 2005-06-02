@@ -45,8 +45,19 @@
          <LI>
             Added <A href="unicode.html">Unicode support; based on ICU</A>.
          <LI>
-            Changed newline support to recognise \f as a line separator (all character 
-            types), and \x85 as a line separator for wide characters / Unicode only.</LI></UL>
+         Changed newline support to recognise \f as a line separator (all character 
+         types), and \x85 as a line separator for wide characters / Unicode only.
+         <LI>
+            Added a new format flag <A href="match_flag_type.html"><code>format_literal</code></A> that 
+            treats the replace string as a literal, rather than a Perl or Sed style <A href="format_syntax.html">
+               format string</A>.
+         <LI>
+            Errors are now reported by throwing exceptions of type <A href="bad_expression.html">
+               <code>regex_error</code></A>.  The types used previously - <code>bad_expression</code> and 
+            <code>bad_pattern</code> - are now just typedefs for <code>regex_error</code>.  Type 
+            <code>regex_error</code> has a couple of new members: <code>code()</code> to report an error code rather 
+            than a string, and <code>position()</code> to report where in the expression the error 
+            occured.</LI></UL>
       <P>Boost 1.32.1.</P>
       <UL>
          <LI>

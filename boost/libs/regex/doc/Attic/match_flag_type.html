@@ -54,6 +54,7 @@ static const match_flag_type match_not_dot_null;
 static const match_flag_type format_default = 0;
 static const match_flag_type format_sed;
 static const match_flag_type format_perl;
+static const match_flag_type format_literal; <BR>
 static const match_flag_type format_no_copy;
 static const match_flag_type format_first_only;
 static const match_flag_type format_all;
@@ -243,6 +244,12 @@ static const match_flag_type format_all;
                   string, that the new string is constructed using the same rules as Perl 5.</p>
             </td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="50%">format_literal</TD>
+            <TD vAlign="top" width="50%">Specified that when a regular expression match is to 
+               be replaced by a new string, that the new string is a literal copy of the 
+               replacement text.</TD>
+         </TR>
          <tr>
             <td valign="top" width="50%" height="32">format_all</td>
             <td valign="top" width="50%" height="32">Specifies that all syntax extensions are 
