@@ -24,6 +24,13 @@
 
 #include <boost/config.hpp>
 
+// if no archive headers have been included this is a no op
+// this is to permit BOOST_EXPORT etc to be included in a 
+// file declaration header
+#if ! defined(BOOST_ARCHIVE_BASIC_ARCHIVE_HPP)
+#define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
+
+#else
 #include <boost/static_assert.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/mpl/eval_if.hpp>
@@ -34,11 +41,10 @@
 #include <boost/mpl/void.hpp>
 #include <boost/mpl/identity.hpp>
 
+#include <boost/archive/detail/known_archive_types.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
-
-#include <boost/archive/detail/known_archive_types.hpp>
 
 namespace boost {
 
@@ -157,38 +163,33 @@ const guid_initializer<T> guid_initializer<T>::instance;
 } // namespace archive
 } // namespace boost
 
-// if no archive headers have been included this is a no op
-// this is to permit BOOST_EXPORT etc to be included in a 
-// file declaration header
-#if ! defined(BOOST_ARCHIVE_EXPORT)
-    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
-#else
-    // only gcc seems to be able to explicitly instantiate a static instance.
-    // all but can instantiate a function that refers to a static instance
-    namespace boost { namespace archive { namespace detail {
-    // note declaration to permit gcc trailing function attribute
-    template<class T, class ASeq>
-    BOOST_DLLEXPORT std::pair<const void *, const void *> 
-    boost_template_instantiate(T &, ASeq &) BOOST_USED;
-    template<class T, class ASeq>
-    BOOST_DLLEXPORT std::pair<const void *, const void *>
-    boost_template_instantiate(T &, ASeq &){
-        return std::pair<const void *, const void *>(
-            & export_generator<T, ASeq>::instance,
-            & guid_initializer<T>::instance
-        );
-    }
-    } } }
-    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
-        namespace boost { namespace archive { namespace detail {     \
-        template<>                                                   \
-        const guid_initializer<T>                                    \
-            guid_initializer<T>::instance(K);                        \
-        template                                                     \
-        BOOST_DLLEXPORT std::pair<const void *, const void *>        \
-        boost_template_instantiate(T &, ASEQ &);                     \
-        } } }                                                        \
-        /**/
+// only gcc seems to be able to explicitly instantiate a static instance.
+// all but can instantiate a function that refers to a static instance
+namespace boost { namespace archive { namespace detail {
+// note declaration to permit gcc trailing function attribute
+template<class T, class ASeq>
+BOOST_DLLEXPORT std::pair<const void *, const void *> 
+boost_template_instantiate(T &, ASeq &) BOOST_USED;
+template<class T, class ASeq>
+BOOST_DLLEXPORT std::pair<const void *, const void *>
+boost_template_instantiate(T &, ASeq &){
+    return std::pair<const void *, const void *>(
+        & export_generator<T, ASeq>::instance,
+        & guid_initializer<T>::instance
+    );
+}
+} } }
+#define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
+    namespace boost { namespace archive { namespace detail {     \
+    template<>                                                   \
+    const guid_initializer<T>                                    \
+        guid_initializer<T>::instance(K);                        \
+    template                                                     \
+    BOOST_DLLEXPORT std::pair<const void *, const void *>        \
+    boost_template_instantiate(T &, ASEQ &);                     \
+    } } }                                                        \
+    /**/
+
 #endif
 
 // check for unnecessary export.  T isn't polymorphic so there is no 
@@ -205,7 +206,7 @@ const guid_initializer<T> guid_initializer<T>::instance;
     BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(                        \
         T,                                                       \
         K,                                                       \
-        boost::archive::detail::known_archive_types<false>::type \
+        boost::archive::detail::known_archive_types::type \
     )                                                            \
     /**/
 
@@ -220,7 +221,7 @@ const guid_initializer<T> guid_initializer<T>::instance;
     BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(                        \
         T,                                                       \
         BOOST_PP_STRINGIZE(T),                                   \
-        boost::archive::detail::known_archive_types<false>::type \
+        boost::archive::detail::known_archive_types::type \
     )                                                            \
     /**/
 

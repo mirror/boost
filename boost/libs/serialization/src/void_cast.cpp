@@ -23,12 +23,17 @@
 
 // BOOST
 #define BOOST_SERIALIZATION_SOURCE
+// specify the default type_info implementation if it hasn't been done already
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
+    #include <boost/serialization/extended_type_info_typeid.hpp>
+#endif
 #include <boost/shared_ptr.hpp>
 #include <boost/serialization/void_cast.hpp>
-#include <boost/serialization/extended_type_info.hpp>
 
 namespace boost { 
 namespace serialization {
+
+class extended_type_info;
 
 namespace void_cast_detail {
 

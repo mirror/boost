@@ -14,7 +14,7 @@
 
 #include <set>
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/basic_serializer.hpp>
 #include <boost/archive/detail/basic_serializer_map.hpp>
 
@@ -29,7 +29,8 @@ BOOST_DECL_ARCHIVE
 basic_serializer_map::basic_serializer_map(){
 }
 
-BOOST_DECL_ARCHIVE bool 
+bool 
+BOOST_DECL_ARCHIVE 
 basic_serializer_map::insert(const basic_serializer * bs){
     return map.insert(bs).second;
 }
@@ -41,7 +42,13 @@ public:
     {}
 };
 
-BOOST_DECL_ARCHIVE const basic_serializer * 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const basic_serializer * 
+#else
+    const basic_serializer * 
+    BOOST_DECL_ARCHIVE 
+#endif
 basic_serializer_map::tfind(
     const boost::serialization::extended_type_info & type_
 ) const {

@@ -16,6 +16,10 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+// if no archive headers have been included this is a no op
+// this is to permit BOOST_EXPORT etc to be included in a 
+// file declaration header
+
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -27,8 +31,20 @@
 
 #include <boost/static_assert.hpp>
 
-#include <boost/serialization/extended_type_info.hpp>
-#include <boost/serialization/void_cast.hpp>
+// if no archive headers have been included
+// skip inclusion of void_cast.hpp .  This is to avoid auto-link when
+// a module doesn't doesn't actually invoke serializaton but rather
+// just declares it.
+
+#if ! defined(BOOST_ARCHIVE_BASIC_ARCHIVE_HPP)
+    template<class Derived, class Base>
+    const void * void_cast_register(
+        const Derived * /* dnull = NULL */, 
+        const Base * /* bnull = NULL */
+    );
+#else
+    #include <boost/serialization/void_cast.hpp>
+#endif
 
 namespace boost {
     namespace archive{
@@ -78,35 +94,6 @@ namespace detail {
         BOOST_STATIC_ASSERT(is_const<type>::value == is_const<D>::value);
     };
 } // namespace detail
-
-#if 0 
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class Base, class Derived>
-    inline const Base & 
-    base_object(const Derived & d){
-        BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-        detail::base_register<Base, Derived>::invoke();
-        return d;
-    }
-    template<class Base, class Derived>
-    inline Base & 
-    base_object(Derived & d){
-        BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-        detail::base_register<Base, Derived>::invoke();
-        return d;
-    }
-#else
-    template<class Base, class Derived>
-    inline BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
-    base_object(Derived & d)
-    {
-        BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));
-        BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-        detail::base_register<Base, Derived>::invoke();
-        return d;
-    }
-#endif
-#endif
 
 // BORLAND
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))

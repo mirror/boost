@@ -34,7 +34,8 @@ namespace detail {
 class BOOST_DECL_ARCHIVE basic_oarchive;
 class BOOST_DECL_ARCHIVE basic_oserializer;
 
-class BOOST_DECL_ARCHIVE basic_pointer_oserializer : public basic_serializer {
+class BOOST_DECL_ARCHIVE basic_pointer_oserializer : 
+    public basic_serializer {
 protected:
     explicit basic_pointer_oserializer(
         const boost::serialization::extended_type_info & type_

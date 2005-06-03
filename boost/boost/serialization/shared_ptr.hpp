@@ -18,6 +18,9 @@
 
 #include <set>
 
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/integral_c_tag.hpp>
+
 #include <boost/detail/workaround.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -155,14 +158,24 @@ template<class Archive, class T>
 inline void load(
     Archive & ar,
     boost::shared_ptr<T> &t,
-    const unsigned int /* file_version */
+    const unsigned int file_version
 ){
     // The most common cause of trapping here would be serializing
     // something like shared_ptr<int>.  This occurs because int
     // is never tracked by default.  Wrap int in a trackable type
     BOOST_STATIC_ASSERT((tracking_level<T>::value != track_never));
 	T* r;
-	ar >> boost::serialization::make_nvp("px", r);
+    #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
+    if(file_version < 1){
+        boost_132::shared_ptr<T> sp;
+        ar >> sp;
+        r = sp.get();
+    }
+    else    
+    #endif
+    {
+	    ar >> boost::serialization::make_nvp("px", r);
+    }
     detail::shared_ptr_helper & sph = ar.get_helper(
         static_cast<detail::shared_ptr_helper *>(NULL)
     );

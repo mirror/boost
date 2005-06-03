@@ -16,17 +16,23 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-///////////////////////////////////////////////////////////////////////////////
-// If no other implementation has been designated as default, 
-// use extended_type_info_typeid.hpp
-
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-#include <boost/serialization/extended_type_info_typeid.hpp>
-#endif
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
+///////////////////////////////////////////////////////////////////////////////
+// If no other implementation has been designated as default, 
+// use extended_type_info_typeid.hpp
+
+#ifdef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
+    #define BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)        \
+        BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
+#else
+    #define BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)        \
+        extended_type_info_null<T>
+#endif
+
+#include <boost/static_assert.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
@@ -34,6 +40,13 @@
 
 namespace boost {
 namespace serialization {
+
+template<class T>
+class extended_type_info_null {
+    #if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+        BOOST_STATIC_ASSERT(0 == sizeof(T));
+    #endif
+};
 
 struct basic_traits;
 
@@ -51,7 +64,7 @@ struct type_info_implementation {
             traits_class_typeinfo_implementation<T>,
         //else
             mpl::identity<
-                BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
+                BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)
             >
         >::type type;
 };

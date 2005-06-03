@@ -24,6 +24,10 @@
 
 namespace boost {
 
+namespace serialization {
+    class extended_type_info;
+} // namespace serialization
+
 // forward declarations
 namespace archive {
 namespace detail {

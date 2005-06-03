@@ -60,14 +60,86 @@ public:
 };
 
 // constant strings used in xml i/o
-extern BOOST_DECL_ARCHIVE const char * OBJECT_ID();
-extern BOOST_DECL_ARCHIVE const char * OBJECT_REFERENCE();
-extern BOOST_DECL_ARCHIVE const char * CLASS_ID();
-extern BOOST_DECL_ARCHIVE const char * CLASS_ID_REFERENCE();
-extern BOOST_DECL_ARCHIVE const char * CLASS_NAME();
-extern BOOST_DECL_ARCHIVE const char * TRACKING();
-extern BOOST_DECL_ARCHIVE const char * VERSION();
-extern BOOST_DECL_ARCHIVE const char * SIGNATURE();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+OBJECT_ID();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+OBJECT_REFERENCE();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+CLASS_ID();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+CLASS_ID_REFERENCE();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+CLASS_NAME();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+TRACKING();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+VERSION();
+
+extern 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const char *
+#else
+    const char *
+    BOOST_DECL_ARCHIVE 
+#endif
+SIGNATURE();
 
 }// namespace archive
 }// namespace boost

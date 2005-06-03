@@ -12,7 +12,7 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 
 // the following works around an issue between spirit 1.61 and borland.
 // it turns out the the certain spirit stuff must be defined before

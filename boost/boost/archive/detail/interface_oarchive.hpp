@@ -18,17 +18,17 @@
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/mpl/bool.hpp>
-//#include <boost/static_warning.hpp>
 
-//#include <boost/serialization/level.hpp>
 #include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost { 
+namespace serialization {
+    class extended_type_info;
+} // namespace serialization
 namespace archive {
 namespace detail {
 
-class BOOST_DECL_ARCHIVE basic_oserializer;
 class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
 
 template<class Archive>

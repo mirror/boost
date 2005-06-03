@@ -123,7 +123,7 @@ xml_oarchive_impl<Archive>::xml_oarchive_impl(
     ),
     basic_xml_oarchive<Archive>(flags)
 {
-    if(0 == flags & no_header)
+    if(0 == (flags & no_header))
         this->init();
 }
 

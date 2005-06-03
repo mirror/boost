@@ -19,7 +19,7 @@
 
 // including this here to work around an ICC in intel 7.0
 // normally this would be part of basic_oarchive.hpp below.
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/basic_archive.hpp>
 
 #include <boost/archive/detail/basic_oserializer.hpp>
@@ -503,16 +503,26 @@ BOOST_DECL_ARCHIVE
 basic_oarchive::end_preamble(){
 }
 
-BOOST_DECL_ARCHIVE 
-boost::serialization::basic_helper * 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    boost::serialization::basic_helper * 
+#else
+    boost::serialization::basic_helper * 
+    BOOST_DECL_ARCHIVE 
+#endif
 basic_oarchive::lookup_helper(
     const boost::serialization::extended_type_info * const eti
 ){
     return pimpl->lookup_helper(eti);
 }
 
-BOOST_DECL_ARCHIVE 
-boost::serialization::basic_helper * 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    boost::serialization::basic_helper * 
+#else
+    boost::serialization::basic_helper * 
+    BOOST_DECL_ARCHIVE 
+#endif
 basic_oarchive::insert_helper(
     boost::serialization::basic_helper * h,
     const boost::serialization::extended_type_info * const eti

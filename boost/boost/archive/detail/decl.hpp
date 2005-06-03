@@ -26,27 +26,28 @@
 #if defined(BOOST_HAS_DECLSPEC) \
 && (defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK))
 
-#if defined(BOOST_ARCHIVE)
+#if defined(BOOST_ARCHIVE_SOURCE)
     #define BOOST_DECL_ARCHIVE __declspec(dllexport)
     #pragma message( "BOOST_DECL_ARCHIVE __declspec(dllexport)" )
     #define BOOST_DECL_ARCHIVE_OR_WARCHIVE __declspec(dllexport)
     #pragma message( "BOOST_DECL_ARCHIVE_OR_WARCHIVE __declspec(dllexport)" )
-#elif defined(BOOST_WARCHIVE)
+#elif defined(BOOST_WARCHIVE_SOURCE)
     #define BOOST_DECL_WARCHIVE __declspec(dllexport)
     #pragma message( "BOOST_DECL_WARCHIVE __declspec(dllexport)" )
     #define BOOST_DECL_ARCHIVE_OR_WARCHIVE __declspec(dllexport)
     #pragma message( "BOOST_DECL_ARCHIVE_OR_WARCHIVE __declspec(dllexport)" )
 #endif
 
-#if !defined(BOOST_DECL_ARCHIVE)
+#if !defined(BOOST_DECL_ARCHIVE) && !defined(BOOST_ARCHIVE_SOURCE)
     #define BOOST_DECL_ARCHIVE __declspec(dllimport)
     #pragma message( "BOOST_DECL_ARCHIVE __declspec(dllimport)" )
 #endif
-#if !defined(BOOST_DECL_WARCHIVE)
+#if !defined(BOOST_DECL_WARCHIVE) && !defined(BOOST_ARCHIVE_SOURCE)
     #define BOOST_DECL_WARCHIVE __declspec(dllimport)
     #pragma message( "BOOST_DECL_WARCHIVE __declspec(dllimport)" )
 #endif
-#if !defined(BOOST_DECL_ARCHIVE_OR_WARCHIVE)
+#if !defined(BOOST_DECL_ARCHIVE_OR_WARCHIVE) \
+&& !defined(BOOST_ARCHIVE_SOURCE) && !defined(BOOST_WARCHIVE_SOURCE)
     #define BOOST_DECL_ARCHIVE_OR_WARCHIVE __declspec(dllimport)
     #pragma message( "BOOST_DECL_WARCHIVE_OR_WARCHIVE __declspec(dllimport)" )
 #endif

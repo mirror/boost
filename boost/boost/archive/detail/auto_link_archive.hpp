@@ -25,7 +25,7 @@
 
 #include <boost/archive/detail/decl.hpp>
 
-#if !defined(BOOST_ARCHIVE) \
+#if !defined(BOOST_ARCHIVE_SOURCE) \
 && !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SERIALIZATION_NO_LIB)
 
 // Set the name of our library, this will get undef'ed by auto_link.hpp

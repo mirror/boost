@@ -38,9 +38,16 @@ archive_pointer_oserializer<Archive>::archive_pointer_oserializer(
 
 template<class Archive>
 #if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
+    #if defined(BOOST_MSVC)
+        BOOST_DECL_ARCHIVE_OR_WARCHIVE
+        const basic_pointer_oserializer * 
+    #else
+        const basic_pointer_oserializer * 
+        BOOST_DECL_ARCHIVE_OR_WARCHIVE
+    #endif
+#else
+    const basic_pointer_oserializer * 
 #endif
-const basic_pointer_oserializer * 
 archive_pointer_oserializer<Archive>::find(
     const boost::serialization::extended_type_info & type
 ){

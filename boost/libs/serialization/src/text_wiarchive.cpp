@@ -14,7 +14,7 @@
 #error "wide char i/o not supported on this platform"
 #else
 
-#define BOOST_WARCHIVE
+#define BOOST_WARCHIVE_SOURCE
 #include <boost/archive/text_wiarchive.hpp>
 
 // explicitly instantiate for this type of text stream

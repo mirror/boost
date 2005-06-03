@@ -13,7 +13,7 @@
 #error "wide char i/o not supported on this platform"
 #else
 
-#define BOOST_WARCHIVE
+#define BOOST_WARCHIVE_SOURCE
 #include <boost/archive/xml_woarchive.hpp>
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8

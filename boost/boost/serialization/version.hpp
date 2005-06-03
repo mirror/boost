@@ -20,6 +20,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
+#include <boost/mpl/integral_c_tag.hpp>
 
 #include <boost/serialization/traits.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>

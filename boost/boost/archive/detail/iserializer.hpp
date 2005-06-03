@@ -4,12 +4,12 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#pragma inline_depth(255)
+#pragma inline_depth(511)
 #pragma inline_recursion(on)
 #endif
 
 #if defined(__MWERKS__)
-#pragma inline_depth(255)
+#pragma inline_depth(511)
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
@@ -33,12 +33,10 @@ namespace std{
     using ::size_t; 
 } // namespace std
 #endif
-
-#include <boost/detail/workaround.hpp>
-
+#include <boost/throw_exception.hpp>
+#include <boost/smart_cast.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/static_warning.hpp>
-#include <boost/smart_cast.hpp>
 
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_fundamental.hpp>
@@ -46,7 +44,6 @@ namespace std{
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_const.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/serialization/is_abstract.hpp>
 
 #include <boost/mpl/eval_if.hpp>
@@ -60,10 +57,9 @@ namespace std{
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/not.hpp>
-// the following is only used with VC for now and it crashes
-// at least one other compiler (Borland)
-#if defined(BOOST_MSVC)
-#include <boost/mpl/find.hpp>
+
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
+    #include <boost/serialization/extended_type_info_typeid.hpp>
 #endif
 
 // the following is need only for dynamic cast of polymorphic pointers
@@ -72,7 +68,6 @@ namespace std{
 #include <boost/archive/detail/archive_pointer_iserializer.hpp>
 
 #include <boost/serialization/force_include.hpp>
-#include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/level.hpp>
@@ -83,9 +78,12 @@ namespace std{
 
 #include <boost/archive/archive_exception.hpp>
 
-#include <boost/archive/detail/known_archive_types_fwd.hpp>
-
 namespace boost {
+
+namespace serialization {
+    class extended_type_info;
+} // namespace serialization
+
 namespace archive {
 
 // an accessor to permit friend access to archives.  Needed because
@@ -411,31 +409,6 @@ struct load_pointer_type {
 
     template<class T>
     static const basic_pointer_iserializer * register_type(Archive &ar, T & /*t*/){
-        #if defined(BOOST_MSVC)
-        // note: if you program traps here its because
-        // a) your serializing through a base class pointer
-        // b) to an archive not in the known list.  
-        // This will usually occur when one makes a custom archive and 
-        // forgets to add it to the list of known archive.  If the derived
-        // class is explictly registered or if no derived pointer is used
-        // there won't be a problem - that's why its a warning.  However
-        // if you export the derived type and the archive used isn't on the
-        // known list it will fail below at execution time and one will have
-        // a hell of time figuring out why.  Hence this warning.
-        BOOST_STATIC_WARNING((
-            mpl::not_<
-                mpl::and_<
-                    BOOST_DEDUCED_TYPENAME serialization::type_info_implementation<T>::type::is_polymorphic,
-                    mpl::not_<mpl::empty<known_archive_types<false>::type > >,
-                    is_same<
-                        mpl::end<known_archive_types<false>::type >::type,
-                        BOOST_DEDUCED_TYPENAME mpl::find<known_archive_types<false>::type, Archive>::type
-                    >
-                >
-            >
-            ::value
-        ));
-        #endif
         // there should never be any need to load an abstract polymorphic 
         // class pointer.  Inhibiting code generation for this
         // permits abstract base classes to be used - note: exception

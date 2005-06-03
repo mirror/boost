@@ -28,9 +28,9 @@ namespace std{
 #include <string>
 #include <boost/cstdint.hpp>
 
+#include <boost/archive/detail/iserializer.hpp>
 #include <boost/pfto.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
 
 // determine if its necessary to handle (u)int64_t specifically

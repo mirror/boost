@@ -32,18 +32,14 @@
 // libraries to be dynamically linked, or BOOST_SERIALIZATION_DYN_LINK
 // if they want just this one to be dynamically liked:
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK)
+#define BOOST_DYN_LINK
 // export if this is our own source, otherwise import:
 #if defined(BOOST_SERIALIZATION_SOURCE)
     #define BOOST_SERIALIZATION_DECL __declspec(dllexport)
-    #pragma message( "BOOST_SERIALIZATION_DECL __declspec(dllexport) (1)" )
-#elif defined(BOOST_ARCHIVE)
-#else
-    #define BOOST_SERIALIZATION_DECL __declspec(dllimport)
-    #pragma message( "BOOST_SERIALIZATION_DECL __declspec(dllimport) (3)" )
-    #define IMPORT
-#endif  // BOOST_SERIALIZATION_SOURCE
-#endif  // DYN_LINK
-#endif  // BOOST_HAS_DECLSPEC
+    #pragma message( "BOOST_SERIALIZATION_DECL __declspec(dllexport)" )
+#endif // defined(BOOST_SERIALIZATION_SOURCE)
+#endif // defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK)
+#endif // BOOST_HAS_DECLSPEC
 
 // if BOOST_SERIALIZATION_DECL isn't defined yet define it now:
 #ifndef BOOST_SERIALIZATION_DECL
@@ -52,30 +48,19 @@
 
 //  enable automatic library variant selection  ------------------------------// 
 
-#if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SERIALIZATION_NO_LIB)
+#if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SERIALIZATION_NO_LIB) \
+&& !defined(BOOST_SERIALIZATION_SOURCE) \
+&& !defined(BOOST_ARCHIVE_SOURCE) && !defined(BOOST_WARCHIVE_SOURCE)
 //
 // Set the name of our library, this will get undef'ed by auto_link.hpp
 // once it's done with it:
 //
 #define BOOST_LIB_NAME boost_serialization
 //
-// If we're importing code from a dll, then tell auto_link.hpp about it:
-//
-
-#if defined(IMPORT)
-#if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK)
-#  define BOOST_DYN_LINK
-#endif
-#endif
-
-//
 // And include the header that does the work:
 //
 #include <boost/config/auto_link.hpp>
-#endif  // auto-linking disabled
 
-#if defined(IMPORT)
-#undef IMPORT
-#endif
+#endif  // !defined(BOOST_SERIALIZATION_SOURCE) && !defined(BOOST_ARCHIVE_SOURCE)
 
 #endif // BOOST_SERIALIZATION_CONFIG_HPP

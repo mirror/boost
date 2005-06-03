@@ -12,7 +12,7 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/text_oarchive.hpp>
 
 // explicitly instantiate for this type of text stream

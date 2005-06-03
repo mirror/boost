@@ -10,7 +10,7 @@
 
 #include <istream>
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/binary_iarchive.hpp>
 
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>

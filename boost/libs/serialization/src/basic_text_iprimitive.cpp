@@ -14,7 +14,7 @@
 
 #include <istream>
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/impl/basic_text_iprimitive.ipp>
 

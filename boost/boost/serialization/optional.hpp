@@ -16,6 +16,9 @@
 
 #include <boost/config.hpp>
 
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/integral_c_tag.hpp>
+
 #include <boost/optional.hpp>
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>

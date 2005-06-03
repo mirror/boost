@@ -20,7 +20,7 @@
 #include <boost/pfto.hpp>
 #include <boost/detail/workaround.hpp>
 
-//#include <boost/archive/detail/interface_iarchive.hpp>
+#include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 
 #include <boost/serialization/nvp.hpp>

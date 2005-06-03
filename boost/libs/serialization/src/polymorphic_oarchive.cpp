@@ -14,7 +14,7 @@
 
 #include <ostream>
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/polymorphic_oarchive.hpp>
 
 // explicitly instantiate for this type of text stream

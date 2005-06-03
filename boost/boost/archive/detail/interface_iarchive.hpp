@@ -22,7 +22,10 @@
 #include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-namespace boost { 
+namespace boost {
+namespace serialization {
+    class extended_type_info;
+} // namespace serialization
 namespace archive {
 namespace detail {
 

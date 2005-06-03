@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/basic_pointer_oserializer.hpp>
 
 namespace boost {

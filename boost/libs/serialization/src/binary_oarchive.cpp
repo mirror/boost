@@ -10,7 +10,7 @@
 
 #include <ostream>
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/binary_oarchive.hpp>
 
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>

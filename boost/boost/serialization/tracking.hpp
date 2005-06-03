@@ -23,6 +23,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/greater.hpp>
+#include <boost/mpl/integral_c_tag.hpp>
 
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/serialization/traits.hpp>

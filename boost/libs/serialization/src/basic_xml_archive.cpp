@@ -8,34 +8,90 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/basic_xml_archive.hpp>
 
 namespace boost {
 namespace archive {
 
-BOOST_DECL_ARCHIVE const char * OBJECT_ID(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+OBJECT_ID(){
     return "object_id";
 }
-BOOST_DECL_ARCHIVE const char * OBJECT_REFERENCE(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+OBJECT_REFERENCE(){
     return "object_id_reference";
 }
-BOOST_DECL_ARCHIVE const char * CLASS_ID(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+CLASS_ID(){
     return "class_id";
 }
-BOOST_DECL_ARCHIVE const char * CLASS_ID_REFERENCE(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+CLASS_ID_REFERENCE(){
     return "class_id_reference";
 }
-BOOST_DECL_ARCHIVE const char * CLASS_NAME(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+CLASS_NAME(){
     return "class_name";
 }
-BOOST_DECL_ARCHIVE const char * TRACKING(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+TRACKING(){
     return "tracking_level";
 }
-BOOST_DECL_ARCHIVE const char * VERSION(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+VERSION(){
     return "version";
 }
-BOOST_DECL_ARCHIVE const char * SIGNATURE(){
+#if defined(BOOST_MSVC)
+BOOST_DECL_ARCHIVE 
+const char *
+#else
+const char *
+BOOST_DECL_ARCHIVE 
+#endif
+SIGNATURE(){
     return "signature";
 }
 

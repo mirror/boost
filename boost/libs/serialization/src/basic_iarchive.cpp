@@ -23,7 +23,7 @@ namespace std{
 } // namespace std
 #endif
 
-#define BOOST_ARCHIVE
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/auto_link_archive.hpp>
 
 #include <boost/limits.hpp>
@@ -42,9 +42,6 @@ namespace std{
 using namespace boost::serialization;
 
 namespace boost {
-namespace serialization {
-    class extended_type_info;
-}
 namespace archive {
 namespace detail {
 
@@ -600,8 +597,13 @@ basic_iarchive::load_object(
 }
 
 // load a pointer object
-BOOST_DECL_ARCHIVE 
-const basic_pointer_iserializer * 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    const basic_pointer_iserializer * 
+#else
+    const basic_pointer_iserializer * 
+    BOOST_DECL_ARCHIVE 
+#endif
 basic_iarchive::load_pointer(
     void * &t, 
     const basic_pointer_iserializer * bpis_ptr,
@@ -637,16 +639,26 @@ basic_iarchive::get_flags() const{
     return pimpl->m_flags;
 }
 
-BOOST_DECL_ARCHIVE 
-boost::serialization::basic_helper * 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    boost::serialization::basic_helper * 
+#else
+    boost::serialization::basic_helper * 
+    BOOST_DECL_ARCHIVE 
+#endif
 basic_iarchive::lookup_helper(
     const boost::serialization::extended_type_info * const eti
 ){
     return pimpl->lookup_helper(eti);
 }
 
-BOOST_DECL_ARCHIVE 
-boost::serialization::basic_helper * 
+#if defined(BOOST_MSVC)
+    BOOST_DECL_ARCHIVE 
+    boost::serialization::basic_helper * 
+#else
+    boost::serialization::basic_helper * 
+    BOOST_DECL_ARCHIVE 
+#endif
 basic_iarchive::insert_helper(
     boost::serialization::basic_helper * h,
     const boost::serialization::extended_type_info * const eti

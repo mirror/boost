@@ -21,8 +21,6 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
-#include <boost/type_traits/is_polymorphic.hpp>
-
 #include <boost/serialization/config.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
@@ -170,12 +168,14 @@ const void_caster_primitive<Derived, Base>
 // void pointer from Base to Derived.  Note bogus arguments to workaround
 // bug in msvc 6.0
 template<class Derived, class Base>
-BOOST_DLLEXPORT const void *  void_cast_register(
+BOOST_DLLEXPORT 
+const void * void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ) BOOST_USED;
 template<class Derived, class Base>
-BOOST_DLLEXPORT const void * void_cast_register(
+BOOST_DLLEXPORT 
+const void * void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ){

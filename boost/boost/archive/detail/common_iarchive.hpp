@@ -16,13 +16,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/throw_exception.hpp>
-
-#include <boost/archive/archive_exception.hpp>
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
-
-#include <boost/serialization/type_info_implementation.hpp>
 
 namespace boost {
 namespace archive {

@@ -25,6 +25,9 @@
 # pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/integral_c_tag.hpp>
+
 #include <boost/serialization/traits.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/tracking.hpp>
@@ -43,15 +46,6 @@ struct nvp :
         // note: rudundant cast works around borland issue
         std::pair<const char *, T *>(name, (T*)(& t))
     {}
-#if 0
-    // borland needs this
-    #if BOOST_WORKAROUND(__BORLANDC__,  <= 0x564 )
-    explicit nvp(const char * name, const T & t) :
-        // note: rudundant cast works around borland issue
-        std::pair<const char *, T *>(name, (T*)(& t))
-    {}
-    #endif
-#endif
     nvp(const nvp & rhs) : 
         // note: rudundant cast works around borland issue
         std::pair<const char *, T *>(rhs.first, (T*)rhs.second)
@@ -75,24 +69,26 @@ struct nvp :
         Archive & ar, 
         const unsigned int /* file_version */
     ) const {
-        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
         // CodeWarrior 8.x can't seem to resolve the << op for a rhs of "const T *"
         ar.operator<<(const_value());
-        #else
-        ar << const_value();
-        #endif
+//        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
+//        ar.operator<<(const_value());
+//        #else
+//        ar << const_value();
+//        #endif
     }
     template<class Archive>
     void load(
         Archive & ar, 
         const unsigned int /* file_version */
     ){
-        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
         // CodeWarrior 8.x can't seem to resolve the >> op for a rhs of "const T *"
         ar.operator>>(value());
-        #else
-        ar >> value();
-        #endif
+//        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
+//        ar.operator>>(value());
+//        #else
+//        ar >> value();
+//        #endif
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
@@ -105,18 +101,6 @@ const
 nvp<T> make_nvp(const char * name, T & t){
     return nvp<T>(name, t);
 }
-
-#if 0
-// It seems that borland compilers add a "const" when invoking nvp.
-// This creates problems when loading data.
-#if BOOST_WORKAROUND(__BORLANDC__,  <= 0x564 )
-template<class T>
-const
-nvp<T> make_nvp(const char * name, const T & t){
-    return nvp<T>(name, t);
-}
-#endif
-#endif
 
 // to maintain efficiency and portability, we want to assign
 // specific serialization traits to all instances of this wrappers.
