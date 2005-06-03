@@ -83,29 +83,6 @@ namespace archive {
 
 #endif // defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 
-#if 0
-#if defined(BOOST_MSVC)
-
-/////////////////////////////////////////////////
-// VC has a really nice free memory leak detector
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-
-struct leak_reporter {
-    static leak_reporter instance;
-    leak_reporter(){
-        _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-    }
-    ~leak_reporter(){
-//        _CrtDumpMemoryLeaks(); // replaced by the above
-    }
-};
-leak_reporter leak_reporter::instance;
-
-#endif // defined(BOOST_MSVC)
-#endif
-
 /////////////////////////////////////////////
 // invoke header for a custom archive test.
 #if ! defined(BOOST_ARCHIVE_TEST)
