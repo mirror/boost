@@ -31,6 +31,8 @@ class BOOST_REGEX_DECL abstract_protected_call
 {
 public:
    bool BOOST_REGEX_CALL execute()const;
+   // this stops gcc-4 from complaining:
+   virtual ~abstract_protected_call(){}
 private:
    virtual bool call()const = 0;
 };
