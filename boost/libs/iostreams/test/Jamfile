@@ -63,8 +63,7 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/auto_close_test.cpp ]
           [ test-iostreams libs/iostreams/test/buffer_size_test.cpp ]
           [ test-iostreams 
-                libs/iostreams/test/code_converter_test.cpp    
-                libs/iostreams/src/file_descriptor.cpp    
+                libs/iostreams/test/code_converter_test.cpp 
                 libs/iostreams/test/detail/utf8_codecvt_facet.cpp 
               : # build requirements 
                 std::locale-support ]   
