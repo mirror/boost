@@ -18,7 +18,6 @@ namespace std{
 }
 #endif
 
-#include "A.hpp"
 
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
@@ -28,6 +27,8 @@ namespace std{
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/base_object.hpp>
+
+#include "A.hpp"
 
 ///////////////////////////////////////////////////////
 // class with a member which refers to itself
