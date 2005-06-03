@@ -23,7 +23,11 @@
     !defined(BOOST_IOSTREAMS_WINDOWS) || \
     !defined(BOOST_COMO_STRICT) \
     /**/
-# include "../src/file_descriptor.cpp"
+# if defined(BOOST_IOSTREAMS_NO_LIB) || defined(BOOST_ALL_NO_LIB)
+#  include "../src/file_descriptor.cpp"
+# else 
+#  include <boost/iostreams/device/file_descriptor.hpp>
+# endif
 #endif
 #include <boost/iostreams/stream_facade.hpp>
 #include <boost/test/test_tools.hpp>
