@@ -236,7 +236,7 @@ void test_multiple_assignments_with_different_option_description()
     options_description desc1("");    
     desc1.add_options()
         ("help,h", "")
-        ("includes", value< vector<string> >()->composing(), "");
+        ("includes", po::value< vector<string> >()->composing(), "");
         ;
 
     options_description desc2("");
