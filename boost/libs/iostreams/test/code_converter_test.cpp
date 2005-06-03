@@ -17,8 +17,14 @@
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/detail/add_facet.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/device/file_descriptor.hpp>
+#if !defined(__COMO__) || \
+    !defined(BOOST_IOSTREAMS_WINDOWS) || \
+    !defined(BOOST_COMO_STRICT) \
+    /**/
+# include "../src/file_descriptor.cpp"
+#endif
 #include <boost/iostreams/stream_facade.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
@@ -110,6 +116,7 @@ using namespace boost::iostreams;
 using namespace boost::iostreams::detail;
 using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;     
+namespace io = boost::iostreams;
 
 const int max_length = 30;
 const unsigned int pattern_length = 100;
@@ -150,29 +157,58 @@ test_string()
     return result;
 }
 
+// Como can't compile file_descriptor.cpp in strict mode; this failure
+// is detected by file_descriptor_test.cpp.
+#if !defined(__COMO__) || \
+    !defined(BOOST_IOSTREAMS_WINDOWS) || \
+    !defined(BOOST_COMO_STRICT) \
+    /**/
+    typedef io::file_descriptor_source  classic_file_source;
+    typedef io::file_descriptor_sink    classic_file_sink;
+#else
+    struct classic_file_source : io::source {
+        classic_file_source(const std::string& path) 
+            : file_(new filebuf)
+        {
+            file_->pubimbue(locale::classic());
+            file_->open(path.c_str(), BOOST_IOS::in | BOOST_IOS::binary);
+        }
+        streamsize read(char* s, streamsize n) { return file_->sgetn(s, n); }
+        boost::shared_ptr<filebuf> file_;
+    };
+
+    struct classic_file_sink : io::sink  {
+        classic_file_sink(const std::string& path) 
+            : file_(new filebuf)
+        {
+            file_->pubimbue(locale::classic());
+            file_->open(path.c_str(), BOOST_IOS::out | BOOST_IOS::binary);
+        }
+        streamsize write(const char* s, streamsize n) { return file_->sputn(s, n); }
+        boost::shared_ptr<filebuf> file_;
+    };
+#endif
+
 template<typename Codecvt>
 bool codecvt_test1()
 {
     typedef basic_string<
                 BOOST_DEDUCED_TYPENAME 
                 codecvt_intern<Codecvt>::type
-            >                                                string_type;
-    typedef code_converter<file_descriptor_source, Codecvt>  wide_file_source;
-    typedef code_converter<file_descriptor_sink, Codecvt>    wide_file_sink;
+            >                                    string_type;
+    typedef code_converter<classic_file_source>  wide_file_source;
+    typedef code_converter<classic_file_sink>    wide_file_sink;
 
-    // Borland needs modes specified separately.
     BOOST_CHECK(Codecvt().max_length() <= max_length);
-    temp_file                       temp;
-    string_type                     test = test_string<Codecvt>();
-    BOOST_IOS::openmode             mode = BOOST_IOS::out | BOOST_IOS::binary;
-    stream_facade<wide_file_sink>   out(temp.name(), mode);
+    temp_file                        temp;
+    string_type                      test = test_string<Codecvt>();
+    stream_facade<wide_file_sink>    out(temp.name());
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    mode = BOOST_IOS::in | BOOST_IOS::binary;
-    stream_facade<wide_file_source> in(temp.name(), mode);
-    string_type                     test2;
-    boost::iostreams::copy(in, boost::iostreams::back_inserter(test2));
+    stream_facade<wide_file_source>  in(temp.name());
+    string_type                      test2;
+    io::copy(in, io::back_inserter(test2));
 
     return test == test2;
 }
@@ -183,26 +219,23 @@ bool codecvt_test2()
     typedef basic_string<
                 BOOST_DEDUCED_TYPENAME 
                 codecvt_intern<Codecvt>::type
-            >                            string_type;
-    typedef code_converter<file_source>  wide_file_source;
-    typedef code_converter<file_sink>    wide_file_sink;
+            >                                    string_type;
+    typedef code_converter<classic_file_source>  wide_file_source;
+    typedef code_converter<classic_file_sink>    wide_file_sink;
 
     // Set global locale.
     locale loc = add_facet(locale(), new Codecvt);
     locale::global(loc);
 
-    // Borland needs modes specified separately.
-    temp_file                       temp;
-    string_type                     test = test_string<Codecvt>();
-    BOOST_IOS::openmode             mode = BOOST_IOS::out | BOOST_IOS::binary;
-    stream_facade<wide_file_sink>   out(temp.name(), mode);
+    temp_file                        temp;
+    string_type                      test = test_string<Codecvt>();
+    stream_facade<wide_file_sink>    out(temp.name());
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    mode = BOOST_IOS::in | BOOST_IOS::binary;
-    stream_facade<wide_file_source> in(temp.name(), mode);
-    string_type                     test2;
-    boost::iostreams::copy(in, boost::iostreams::back_inserter(test2));
+    stream_facade<wide_file_source>  in(temp.name());
+    string_type                      test2;
+    io::copy(in, io::back_inserter(test2));
 
     return test == test2;
 }
@@ -215,9 +248,9 @@ bool codecvt_test()
 
 void code_converter_test()
 {
-    BOOST_CHECK((codecvt_test<utf8_codecvt_facet<wchar_t, char> >()));
-    BOOST_CHECK(codecvt_test<null_padded_codecvt>());
-    BOOST_CHECK(codecvt_test<stateless_null_padded_codecvt>());
+    bool b1 = codecvt_test<utf8_codecvt_facet<wchar_t, char> >();
+    bool b2 = codecvt_test<null_padded_codecvt>();
+    bool b3 = codecvt_test<stateless_null_padded_codecvt>();
 
 #ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
     using namespace Dinkum::conversions;
