@@ -43,7 +43,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-mt-gd-1_32.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-mt-gd-1_33.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -420,6 +420,9 @@
 				RelativePath="..\..\..\boost\serialization\shared_ptr.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\shared_ptr_132.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\slist.hpp">
 			</File>
 			<File
@@ -437,6 +440,16 @@
 			<File
 				RelativePath="..\..\..\boost\serialization\weak_ptr.hpp">
 			</File>
+			<Filter
+				Name="detail"
+				Filter="">
+				<File
+					RelativePath="..\..\..\boost\serialization\detail\shared_count_132.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\boost\serialization\detail\shared_ptr_132.hpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Archive Developer Headers"
@@ -531,9 +544,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\known_archive_types.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\detail\known_archive_types_fwd.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\oserializer.hpp">

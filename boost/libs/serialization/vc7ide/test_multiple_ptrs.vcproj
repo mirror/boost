@@ -1696,6 +1696,12 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\test\A.hpp">
+		</File>
+		<File
+			RelativePath="..\test\B.hpp">
+		</File>
+		<File
 			RelativePath="..\test\D.hpp">
 		</File>
 		<File
