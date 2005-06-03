@@ -230,6 +230,9 @@ public:
 public:
     code_converter() { }
 #if BOOST_WORKAROUND(__GNUC__, < 3)
+    code_converter(code_converter& rhs) 
+        : code_converter_base<Device, Codecvt, Alloc>(rhs)
+        { }
     code_converter(const code_converter& rhs) 
         : code_converter_base<Device, Codecvt, Alloc>(rhs)
         { }
