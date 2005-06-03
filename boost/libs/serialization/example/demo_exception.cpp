@@ -36,11 +36,11 @@ namespace std{
 #include <exception>
 #endif
 
-#include <boost/serialization/list.hpp>
-#include <boost/serialization/split_member.hpp>
-
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+
+#include <boost/serialization/list.hpp>
+#include <boost/serialization/split_member.hpp>
 
 template<class TPTR>
 struct deleter

@@ -22,11 +22,11 @@ namespace std{
 }
 #endif
 
-#include <boost/archive/tmpdir.hpp>
-#include <boost/serialization/shared_ptr.hpp>
-
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/tmpdir.hpp>
+
+#include <boost/serialization/shared_ptr.hpp>
 
 ///////////////////////////
 // test shared_ptr serialization

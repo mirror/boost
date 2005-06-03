@@ -13,12 +13,13 @@
 #include <string>
 
 #include <boost/archive/tmpdir.hpp>
-#include <boost/serialization/utility.hpp>
-#include <boost/serialization/list.hpp>
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+
 #include <boost/serialization/base_object.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/list.hpp>
 
 /////////////////////////////////////////////////////////////
 // The intent of this program is to serve as a tutorial for

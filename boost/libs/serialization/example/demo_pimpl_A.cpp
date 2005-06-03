@@ -6,6 +6,9 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
 #include "demo_pimpl_A.hpp"
 
 // "hidden" definition of class B
@@ -32,9 +35,6 @@ void A::serialize(Archive & ar, const unsigned int /* file_version */){
 // without the explicit instantiations below, the program will
 // fail to link for lack of instantiantiation of the above function
 // note: the following failed to fix link errors for vc 7.0 !
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
 template void A::serialize<boost::archive::text_iarchive>(
     boost::archive::text_iarchive & ar, 
     const unsigned int file_version
