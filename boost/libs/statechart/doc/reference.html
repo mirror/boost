@@ -27,13 +27,12 @@
 <h2>Contents</h2>
 <dl class="page-index">
   <dt><a href="#Concepts">Concepts</a></dt>
+  <dd><a href="#Scheduler">Scheduler</a></dd>
+  <dd><a href="#FifoWorker">FifoWorker</a></dd>
   <dd><a href="#ExceptionTranslator">ExceptionTranslator</a></dd>
   <dd><a href="#StateBase">StateBase</a></dd>
   <dd><a href="#SimpleState">SimpleState</a></dd>
   <dd><a href="#State">State</a></dd>
-  <dd><a href="#Scheduler">Scheduler</a></dd>
-  <dd><a href="#FifoWorker">FifoWorker</a></dd>
-  <dt>&nbsp;</dt>
   <dt><a href="#state_machine.hpp">state_machine.hpp</a></dt>
   <dd><a href="#Class template state_machine">Class template <code>
   state_machine</code></a></dd>
@@ -83,6 +82,136 @@
 </dl>
 <hr>
 <h1><a name="Concepts">Concepts</a></h1>
+<h2><a name="Scheduler">Scheduler</a> concept</h2>
+<p>A Scheduler type defines the following:</p>
+<ul>
+  <li>What is passed to the constructors of <code>
+  <a href="#Class template event_processor">event_processor&lt;&gt;</a></code> 
+  subtypes and how the lifetime of such objects is managed</li>
+  <li>Whether or not multiple <code>event_processor&lt;&gt;</code> subtype objects 
+  can share the same queue and scheduler thread</li>
+  <li>How events are added to the schedulers' queue</li>
+  <li>Whether and how to wait for new events when the schedulers' queue runs 
+  empty</li>
+  <li>Whether and what type of locking is used to ensure thread-safety</li>
+  <li>Whether it is possible to queue events for no longer existing <code>
+  event_processor&lt;&gt;</code> subtype objects and what happens when such an 
+  event is processed</li>
+  <li>What happens when one of the serviced <code>event_processor&lt;&gt;</code> 
+  subtype objects propagates an exception</li>
+</ul>
+<p>For a Scheduler type <code>S</code> and an object <code>
+cpc</code> of type <code>const S::processor_context</code> the following expressions 
+must be well-formed and have the indicated results:</p>
+<table border="3" width="100%" id="table4" cellpadding="2">
+  <tr>
+    <td width="24%"><b>Expression</b></td>
+    <td width="25%"><b>Type</b></td>
+    <td width="48%"><b>Result</b></td>
+  </tr>
+  <tr>
+    <td width="24%"><code>cpc.my_scheduler()</code></td>
+    <td width="25%"><code>S &amp;</code></td>
+    <td width="48%">A reference to the scheduler</td>
+  </tr>
+  <tr>
+    <td width="24%"><code>cpc.my_handle()</code></td>
+    <td width="25%"><code>S::processor_handle</code></td>
+    <td width="48%">The handle identifying the <code>event_processor&lt;&gt;</code> 
+    subtype object</td>
+  </tr>
+</table>
+<p>To protect against abuse, all members of <code>S::processor_context</code> 
+should be declared private. As a result, <code>event_processor&lt;&gt;</code> must 
+be a friend of <code>S::processor_context</code>.</p>
+<h2><a name="FifoWorker">FifoWorker</a> concept</h2>
+<p>A FifoWorker type defines the following:</p>
+<ul>
+  <li>Whether and how to wait for new work items when the internal work queue 
+  runs empty</li>
+  <li>Whether and what type of locking is used to ensure thread-safety</li>
+</ul>
+<p>For a FifoWorker type <code>F</code>, an object <code>f</code> of that 
+type, a <code>const</code> object <code>cf</code> of that type, a 
+parameterless function object <code>w</code> of arbitrary type and an <code>
+unsigned long</code> value <code>n</code> the following expressions/statements must be 
+well-formed and have the indicated results:</p>
+<table border="3" width="100%" id="table5" cellpadding="2">
+  <tr>
+    <td width="36%"><b>Expression/Statement</b></td>
+    <td width="10%"><b>Type</b></td>
+    <td width="52%"><b>Effects/Result</b></td>
+  </tr>
+  <tr>
+    <td width="36%"><code>F::work_item</code></td>
+    <td width="10%"><code>boost::function0&lt;<br>
+&nbsp; void &gt;</code></td>
+    <td width="52%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="36%"><code>F()</code> or <code>F( false )</code></td>
+    <td width="10%"><code>F</code></td>
+    <td width="52%">Constructs a <b>non-blocking</b> (see below) object of the 
+    FifoWorker type. In single-threaded builds the second expression is not 
+    well-formed</td>
+  </tr>
+  <tr>
+    <td width="36%"><code>F( true )</code></td>
+    <td width="10%"><code>F</code></td>
+    <td width="52%">Constructs a <b>blocking</b> (see below) object of the 
+    FifoWorker type. Not well-formed in single-threaded builds</td>
+  </tr>
+  <tr>
+    <td width="36%"><code>f.queue_work_item( w );</code></td>
+    <td width="10%">&nbsp;</td>
+    <td width="52%">Constructs and queues an object of type <code>F::work_item</code>, 
+    passing <code>w</code> as the only argument</td>
+  </tr>
+  <tr>
+    <td width="36%"><code>f.terminate();</code></td>
+    <td width="10%">&nbsp;</td>
+    <td width="52%">Creates and queues an object of type <code>F::work_item</code> 
+    that, when later executed in <code>operator()()</code>, leads to a 
+    modification of internal state so that <code>terminated()</code> 
+    henceforth returns <code>true</code></td>
+  </tr>
+  <tr>
+    <td width="36%"><code>cf.terminated();</code></td>
+    <td width="10%"><code>bool</code></td>
+    <td width="52%"><code>true</code> if <code>terminate()</code> has been 
+    called and the resulting work item has been executed in <code>operator()()</code>. 
+    Returns <code>false</code> otherwise<br>
+    <br>
+    <b>Must only be called from the thread that also calls <code>operator()()</code></b></td>
+  </tr>
+  <tr>
+    <td width="36%"><code>f( n );</code></td>
+    <td width="10%"><code>unsigned long</code></td>
+    <td width="52%">Enters a loop that, with each cycle, dequeues and calls
+    <code>operator()()</code> on the oldest work item in the queue.<p>The loop 
+    is left and the number of executed work items returned if one or more of the 
+    following conditions are met:</p>
+    <ul>
+      <li><code>f.terminated() == true</code></li>
+      <li>The application is single-threaded and the internal queue is empty</li>
+      <li>The application is multi-threaded and the internal queue is empty 
+      and the worker was created as non-blocking</li>
+      <li><code>n != 0</code> and the number of work items that have been 
+      processed since <code>operator()()</code> was called equals <code>n</code></li>
+    </ul>
+    <p>If the queue is empty and none of the above conditions are met then the 
+    thread calling <code>operator()()</code> is put into a wait state until
+    <code>f.queue_work_item()</code> is called from another thread.<br>
+    <br>
+    <b>Must only be called from exactly one thread</b></td>
+  </tr>
+  <tr>
+    <td width="36%"><code>f();</code></td>
+    <td width="10%"><code>unsigned long</code></td>
+    <td width="52%">Has exactly the same semantics as <code>f( n );</code> 
+    with <code>n == 0</code> (see above)</td>
+  </tr>
+</table>
 <h2><a name="ExceptionTranslator">ExceptionTranslator</a> concept</h2>
 <p>An ExceptionTranslator type defines how C++ exceptions occurring during 
 state machine operation are translated to exception events.</p>
@@ -165,80 +294,53 @@ the indicated results:</p>
 </table>
 <h2><a name="SimpleState">SimpleState</a> concept</h2>
 <p>A SimpleState type defines one state of a particular state machine.</p>
-<p>For a SimpleState type <code>S</code> the following expressions/statements must be well-formed:</p>
+<p>For a SimpleState type <code>S</code> and a pointer <code>pS</code> 
+pointing to an object of type <code>S</code> allocated with <code>new</code> the following expressions/statements must be well-formed 
+and have the indicated effects/results:</p>
 <table border="3" width="100%" id="table2" cellpadding="2">
   <tr>
     <td width="28%"><b>Expression/Statement</b></td>
     <td width="29%"><b>Type</b></td>
-    <td width="42%"><b>Notes</b></td>
+    <td width="42%"><b>Effects/Result/Notes</b></td>
   </tr>
   <tr>
     <td width="28%"><code>simple_state&lt;<br>
 &nbsp; S, C, I, h &gt; * pB =<br>
-&nbsp;&nbsp;&nbsp; new S();<br>
-	delete static_cast&lt;<br>
-&nbsp; S * &gt;( pB );</code></td>
+&nbsp;&nbsp;&nbsp; pS;</code></td>
     <td width="29%">&nbsp;</td>
     <td width="42%">
-	<ul>
-		<li><code>simple_state&lt; S, C, I, h &gt;</code> must be an unambiguous 
-		public base of <code>S</code></li>
-		<li><code>S</code> must have a public default constructor</li>
-		<li><code>S</code> must have a public destructor</li>
-		<li>Possibly present <code>operator new</code> overloads must be public</li>
-		<li>Possibly present <code>operator delete</code> overloads must be 
-		public</li>
-		<li>Certain functions must not be called from <code>S::S()</code>, see
-		<a href="#Class template simple_state"><code>simple_state&lt;&gt;</code></a> 
-		documentation for more information</li>
-	</ul>
-	</td>
+	<code>simple_state&lt; S, C, I, h &gt;</code> must be an unambiguous 
+		public base of <code>S</code>. See <code>
+    <a href="#Class template simple_state">simple_state&lt;&gt;</a></code> 
+    documentation for the requirements and semantics of <code>C</code>, <code>
+    I</code> and <code>h</code></td>
    </tr>
   <tr>
-    <td width="28%"><code>S::reactions</code></td>
-    <td width="29%">An <code>mpl::list&lt;&gt;</code> that is either empty or 
-    contains instantiations of 
-    the <code><a href="#Class template custom_reaction">custom_reaction</a></code>,
-    <code><a href="#Class template deferral">deferral</a></code>, <code>
-    <a href="#Class template termination">termination</a></code> or <code>
-    <a href="#Class template transition">transition</a></code> class 
-    templates. If there is only a single reaction then it can also be 
-    <code>typedef</code>ed 
-    directly, without wrapping it into an <code>mpl::list&lt;&gt;</code></td>
-    <td width="42%">The declaration of a <code>reactions</code> member typedef 
-    within models of the SimpleState concept is optional since <code>simple_state&lt;&gt;</code> 
-    already contains the following member: <code>typedef mpl::list&lt;&gt; 
-    reactions;</code>. </td>
-  </tr>
-</table>
-<h2><a name="State">State</a> concept</h2>
-<p>A State type defines one state of a particular state machine.</p>
-<p>For a State type <code>S</code> and an object <code>mc</code> of type
-<code>state&lt; S, C, I, h &gt;</code><code>::my_context</code> the following expressions/statements must be well-formed:</p>
-<table border="3" width="100%" id="table3" cellpadding="2">
+    <td width="28%"><code>new S()</code></td>
+    <td width="29%"><code>S *</code></td>
+    <td width="42%">
+	Enters the state <code>S</code>. Certain functions must not be called from 
+    <code>S::S()</code>, see
+		<a href="#Class template simple_state"><code>simple_state&lt;&gt;</code></a> 
+		documentation for more information</td>
+   </tr>
   <tr>
-    <td width="28%"><b>Expression/Statement</b></td>
-    <td width="29%"><b>Type</b></td>
-    <td width="42%"><b>Notes</b></td>
-  </tr>
-  <tr>
-    <td width="28%"><code>state&lt; S, C, I, h &gt; *<br>
-&nbsp; pB = new S( mc );<br>
-		delete static_cast&lt;<br>
-&nbsp; S * &gt;( pB );</code></td>
+    <td width="28%"><code>pS-&gt;exit();</code></td>
     <td width="29%">&nbsp;</td>
     <td width="42%">
-	<ul>
-		<li><code>state&lt; S, C, I, h &gt;</code> must be an unambiguous 
-		public base of <code>S</code></li>
-		<li><code>S</code> must have a public constructor accepting a <code>
-		my_context</code> object as its only parameter</li>
-		<li><code>S</code> must have a public destructor</li>
-		<li>Possibly present <code>operator new</code> overloads must be public</li>
-		<li>Possibly present <code>operator delete</code> overloads must be 
-		public</li>
-	</ul>
-	</td>
+	Exits the state <code>S</code> (first stage). The definition of an <code>
+    exit</code> member function within models of the SimpleState concept is 
+    optional since <code>simple_state&lt;&gt;</code> already defines the following public member:
+    <code>void exit() {}</code>. <code>exit()</code> is not called when a 
+    state is exited while an exception is pending, see <code>
+    <a href="#simple_state::terminate">simple_state&lt;&gt;::terminate()</a></code> 
+    for more information</td>
+   </tr>
+  <tr>
+    <td width="28%"><code>delete pS;</code></td>
+    <td width="29%">&nbsp;</td>
+    <td width="42%">
+	Exits the state <code>S</code> (second stage)</td>
    </tr>
   <tr>
     <td width="28%"><code>S::reactions</code></td>
@@ -252,141 +354,46 @@ the indicated results:</p>
     <code>typedef</code>ed 
     directly, without wrapping it into an <code>mpl::list&lt;&gt;</code></td>
     <td width="42%">The declaration of a <code>reactions</code> member <code>typedef</code> 
-    within models of the State concept is optional since <code>state&lt;&gt;</code> 
-    already contains the following member: <code>typedef mpl::list&lt;&gt; 
-    reactions;</code>. </td>
+    within models of the SimpleState concept is optional since <code>simple_state&lt;&gt;</code> 
+    already defines the following public member: <code>typedef mpl::list&lt;&gt; 
+    reactions;</code></td>
   </tr>
 </table>
-<h2><a name="Scheduler">Scheduler</a> concept</h2>
-<p>A Scheduler type defines the following:</p>
-<ul>
-  <li>What is passed to the constructors of <code>
-  <a href="#Class template event_processor">event_processor&lt;&gt;</a></code> 
-  subtypes and how the lifetime of such objects is managed</li>
-  <li>Whether or not multiple <code>event_processor&lt;&gt;</code> subtype objects 
-  can share the same queue and scheduler thread</li>
-  <li>How events are added to the schedulers' queue</li>
-  <li>Whether and how to wait for new events when the schedulers' queue runs 
-  empty</li>
-  <li>Whether and what type of locking is used to ensure thread-safety</li>
-  <li>Whether it is possible to queue events for no longer existing <code>
-  event_processor&lt;&gt;</code> subtype objects and what happens when such an 
-  event is processed</li>
-  <li>What happens when one of the serviced <code>event_processor&lt;&gt;</code> 
-  subtype objects propagates an exception</li>
-</ul>
-<p>For a Scheduler type <code>S</code> and a <code>const</code> object <code>
-cpc</code> of type <code>S::processor_context</code> the following expressions 
-must be well-formed and have the indicated results:</p>
-<table border="3" width="100%" id="AutoNumber9" cellpadding="2">
+<h2><a name="State">State</a> concept</h2>
+<p>A State is a <b>refinement</b> of <a href="#SimpleState">SimpleState</a> 
+(that is, except for the default constructor a State type must also satisfy 
+SimpleState requirements). For a State type <code>S</code>, a pointer <code>pS</code> 
+of type <code>S *</code> 
+pointing to an object of type <code>S</code> allocated with <code>new</code>, and an object <code>mc</code> of type
+<code>state&lt; S, C, I, h &gt;</code><code>::my_context</code> the following expressions/statements must be well-formed:</p>
+<table border="3" width="100%" id="table3" cellpadding="2">
   <tr>
-    <td width="24%"><b>Expression</b></td>
-    <td width="25%"><b>Type</b></td>
-    <td width="48%"><b>Result</b></td>
+    <td width="28%"><b>Expression/Statement</b></td>
+    <td width="29%"><b>Type</b></td>
+    <td width="42%"><b>Effects/Result/Notes</b></td>
   </tr>
   <tr>
-    <td width="24%"><code>cpc.my_scheduler()</code></td>
-    <td width="25%"><code>S &amp;</code></td>
-    <td width="48%">A reference to the scheduler</td>
-  </tr>
+    <td width="28%"><code>state&lt; S, C, I, h &gt; *<br>
+&nbsp; pB = pS;</code></td>
+    <td width="29%">&nbsp;</td>
+    <td width="42%">
+	<code>state&lt; S, C, I, h &gt;</code> must be an unambiguous 
+		public base of <code>S</code>. See <code>
+    <a href="#Class template state">state&lt;&gt;</a></code> 
+    documentation for the requirements and semantics of <code>C</code>, <code>
+    I</code> and <code>h</code></td>
+   </tr>
   <tr>
-    <td width="24%"><code>cpc.my_handle()</code></td>
-    <td width="25%"><code>S::processor_handle</code></td>
-    <td width="48%">The handle identifying the <code>event_processor&lt;&gt;</code> 
-    subtype object</td>
-  </tr>
-</table>
-<p>To protect against abuse, all members of <code>S::processor_context</code> 
-should be declared private. As a result, <code>event_processor&lt;&gt;</code> must 
-be a friend of <code>S::processor_context</code>.</p>
-<h2><a name="FifoWorker">FifoWorker</a> concept</h2>
-<p>A FifoWorker type defines the following:</p>
-<ul>
-  <li>Whether and how to wait for new work items when the internal work queue 
-  runs empty</li>
-  <li>Whether and what type of locking is used to ensure thread-safety</li>
-</ul>
-<p>For a FifoWorker type <code>F</code>, an object <code>f</code> of that 
-type, a <code>const</code> object <code>cf</code> of that type, a 
-parameterless function object <code>w</code> of arbitrary type and an <code>
-unsigned long</code> value <code>n</code> the following expressions must be 
-well-formed and have the indicated results:</p>
-<table border="3" width="100%" id="AutoNumber17" cellpadding="2">
-  <tr>
-    <td width="36%"><b>Expression</b></td>
-    <td width="10%"><b>Type</b></td>
-    <td width="52%"><b>Effects/Result</b></td>
-  </tr>
-  <tr>
-    <td width="36%"><code>F::work_item</code></td>
-    <td width="10%"><code>boost::function0&lt;<br>
-&nbsp; void &gt;</code></td>
-    <td width="52%">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="36%"><code>F()</code> or <code>F( false )</code></td>
-    <td width="10%"><code>F</code></td>
-    <td width="52%">Constructs a <b>non-blocking</b> (see below) object of the 
-    FifoWorker type. In single-threaded builds the second expression is not 
-    well-formed</td>
-  </tr>
-  <tr>
-    <td width="36%"><code>F( true )</code></td>
-    <td width="10%"><code>F</code></td>
-    <td width="52%">Constructs a <b>blocking</b> (see below) object of the 
-    FifoWorker type. Not well-formed in single-threaded builds</td>
-  </tr>
-  <tr>
-    <td width="36%"><code>f.queue_work_item( w );</code></td>
-    <td width="10%">&nbsp;</td>
-    <td width="52%">Constructs and queues an object of type <code>F::work_item</code>, 
-    passing <code>w</code> as the only argument</td>
-  </tr>
-  <tr>
-    <td width="36%"><code>f.terminate();</code></td>
-    <td width="10%">&nbsp;</td>
-    <td width="52%">Creates and queues an object of type <code>F::work_item</code> 
-    that, when later executed in <code>operator()()</code>, leads to a 
-    modification of internal state so that <code>terminated()</code> 
-    henceforth returns <code>true</code></td>
-  </tr>
-  <tr>
-    <td width="36%"><code>cf.terminated();</code></td>
-    <td width="10%"><code>bool</code></td>
-    <td width="52%"><code>true</code> if <code>terminate()</code> has been 
-    called and the resulting work item has been executed in <code>operator()()</code>. 
-    Returns <code>false</code> otherwise<br>
-    <br>
-    <b>Must only be called from the thread that also calls <code>operator()()</code></b></td>
-  </tr>
-  <tr>
-    <td width="36%"><code>f( n );</code></td>
-    <td width="10%"><code>unsigned long</code></td>
-    <td width="52%">Enters a loop that, with each cycle, dequeues and calls
-    <code>operator()()</code> on the oldest work item in the queue.<p>The loop 
-    is left and the number of executed work items returned if one or more of the 
-    following conditions are met:</p>
-    <ul>
-      <li><code>f.terminated() == true</code></li>
-      <li>The application is single-threaded and the internal queue is empty</li>
-      <li>The application is multi-threaded and the internal queue is empty 
-      and the worker was created as non-blocking</li>
-      <li><code>n != 0</code> and the number of work items that have been 
-      processed since <code>operator()()</code> was called equals <code>n</code></li>
-    </ul>
-    <p>If the queue is empty and none of the above conditions are met then the 
-    thread calling <code>operator()()</code> is put into a wait state until
-    <code>f.queue_work_item()</code> is called from another thread.<br>
-    <br>
-    <b>Must only be called from exactly one thread</b></td>
-  </tr>
-  <tr>
-    <td width="36%"><code>f();</code></td>
-    <td width="10%"><code>unsigned long</code></td>
-    <td width="52%">Has exactly the same semantics as <code>f( n );</code> 
-    with <code>n == 0</code> (see above)</td>
-  </tr>
-</table>
+    <td width="28%"><code>new S( mc )</code></td>
+    <td width="29%"><code>S *</code></td>
+    <td width="42%">
+	Enters the state <code>S</code>. No restrictions exist regarding the 
+    functions that can be called from <code>S::S()</code> (in contrast to the 
+    constructors of models of the SimpleState concept). <code>mc</code> must 
+    be forwarded to
+<code>state&lt; S, C, I, h &gt;::state()</code></td>
+   </tr>
+  </table>
 <h1>Header &lt;boost/statechart/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template state_machine">Class template <code>state_machine</code></a></h2>
 <p>This is the base class template of all synchronous state machines.</p>
@@ -2212,7 +2219,7 @@ namespace statechart
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="14006" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->04 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19916" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
