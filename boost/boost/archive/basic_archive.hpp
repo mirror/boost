@@ -16,6 +16,11 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#if defined(BOOST_SERIALIZATION_TYPE_INFO_IMPLEMENTATION_HPP) \
+||  defined(BOOST_SERIALIZATION_TRAITS_HPP)
+#error "no serialization headers my precede any archive headers"
+#endif
+
 #include <boost/config.hpp>
 #include <boost/strong_typedef.hpp>
 #include <boost/noncopyable.hpp>
