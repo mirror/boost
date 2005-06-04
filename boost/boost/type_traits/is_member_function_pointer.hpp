@@ -61,7 +61,7 @@ struct is_mem_fun_pointer_select<false>
 {
     template <typename T> struct result_
     {
-        static T& make_t;
+        static T* make_t;
         typedef result_<T> self_type;
 
         BOOST_STATIC_CONSTANT(
@@ -92,7 +92,7 @@ struct is_member_function_pointer_impl<T&> : public false_type{};
 template <typename T>
 struct is_member_function_pointer_impl
 {
-   static T& m_t;
+   static T* m_t;
    BOOST_STATIC_CONSTANT(
               bool, value =
                (1 == sizeof(type_traits::is_mem_fun_pointer_tester(m_t))) );

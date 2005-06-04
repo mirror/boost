@@ -28,6 +28,15 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<foo0_t>::value, false);
 
+#ifdef BOOST_TT_TEST_MS_FUNC_SIGS
+typedef void (__stdcall test_abc1::*scall_proc)();
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<scall_proc>::value, true);
+typedef void (__fastcall test_abc1::*fcall_proc)(int);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<fcall_proc>::value, true);
+typedef void (__cdecl test_abc1::*ccall_proc)(int, long, double);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<ccall_proc>::value, true);
+#endif
+
 TT_TEST_END
 
 

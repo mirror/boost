@@ -28,6 +28,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<foo4_t>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int[]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<test_abc1>::value, false);
