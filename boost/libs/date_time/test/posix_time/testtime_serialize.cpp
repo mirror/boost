@@ -5,12 +5,12 @@
  * Author: Jeff Garland, Bart Garst
  */
  
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/date_time/posix_time/time_serialize.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/posix_time/time_serialize.hpp>
 #include <boost/date_time/testfrmwk.hpp>
 #include <fstream>
 
