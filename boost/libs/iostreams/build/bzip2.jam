@@ -27,7 +27,7 @@ rule bzip2_config
     }
 
     local SOURCES = blocksort bzlib compress crctable 
-					decompress huffman randtable ; 
+                    decompress huffman randtable ; 
     BZIP2_INCLUDE = [ unless $(BZIP2_INCLUDE) : $(BZIP2_SOURCE) ] ;
     local WINDOWS = ;
 
