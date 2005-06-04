@@ -21,6 +21,7 @@
 // http://www.boost.org/more/separate_compilation.html
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 // note: this version incorporates the related code into the the 
 // the same library as BOOST_ARCHIVE.  This could change some day in the
@@ -62,5 +63,11 @@
 #include <boost/config/auto_link.hpp>
 
 #endif  // !defined(BOOST_SERIALIZATION_SOURCE) && !defined(BOOST_ARCHIVE_SOURCE)
+
+//----------------------------------------------------------------------------// 
+
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
+#   define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND 1
+#endif
 
 #endif // BOOST_SERIALIZATION_CONFIG_HPP

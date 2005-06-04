@@ -154,6 +154,9 @@ template<class T>
 guid_initializer<T>::guid_initializer(const char *key){
     if(NULL != key)
         key_register(key);
+    #if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
+    boost::serialization::access::static_data_registration_workaround<T>();
+    #endif
 }
 
 template<class T>
@@ -179,6 +182,15 @@ boost_template_instantiate(T &, ASeq &){
     );
 }
 } } }
+#if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
+#define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T) \
+    namespace boost { namespace serialization { namespace static_data_registration_workaround_noop_archive { namespace { \
+    void ( * export_ ## T )() = &boost::serialization::access::static_data_registration_workaround<T>; \
+    } } } } \
+    /**/
+#else
+#define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T)
+#endif
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
     namespace boost { namespace archive { namespace detail {     \
     template<>                                                   \
@@ -188,6 +200,7 @@ boost_template_instantiate(T &, ASeq &){
     BOOST_DLLEXPORT std::pair<const void *, const void *>        \
     boost_template_instantiate(T &, ASEQ &);                     \
     } } }                                                        \
+    BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T)
     /**/
 
 #endif

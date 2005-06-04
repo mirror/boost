@@ -280,21 +280,21 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ test-bsl-run test_demo_xml_save ]
 
         # should fail compilation
-        [ compile-fail test_not_serializable.cpp ]
-        [ compile-fail test_traits_fail.cpp ]
-        [ compile-fail test_const_save_fail1.cpp ]
-        [ compile-fail test_const_save_fail2.cpp ]
-        [ compile-fail test_const_save_fail3.cpp ]
+        [ compile-fail test_not_serializable.cpp : std::locale-support ]
+        [ compile-fail test_traits_fail.cpp : std::locale-support ]
+        [ compile-fail test_const_save_fail1.cpp : std::locale-support ]
+        [ compile-fail test_const_save_fail2.cpp : std::locale-support ]
+        [ compile-fail test_const_save_fail3.cpp : std::locale-support ]
         # note - library unable to detect there errors for now
         #[ compile-fail test_const_save_fail1_nvp.cpp ]
         #[ compile-fail test_const_save_fail2_nvp.cpp ]
         #[ compile-fail test_const_save_fail3_nvp.cpp ]
-        [ compile-fail test_const_load_fail1.cpp ]
-        [ compile-fail test_const_load_fail2.cpp ]
-        [ compile-fail test_const_load_fail3.cpp ]
-        [ compile-fail test_const_load_fail1_nvp.cpp ]
-        [ compile-fail test_const_load_fail2_nvp.cpp ]
-        [ compile-fail test_const_load_fail3_nvp.cpp ]
+        [ compile-fail test_const_load_fail1.cpp : std::locale-support ]
+        [ compile-fail test_const_load_fail2.cpp : std::locale-support ]
+        [ compile-fail test_const_load_fail3.cpp : std::locale-support ]
+        [ compile-fail test_const_load_fail1_nvp.cpp : std::locale-support ]
+        [ compile-fail test_const_load_fail2_nvp.cpp : std::locale-support ]
+        [ compile-fail test_const_load_fail3_nvp.cpp : std::locale-support ]
 
         # should compile
         [ compile test_traits_pass.cpp : std::locale-support ]

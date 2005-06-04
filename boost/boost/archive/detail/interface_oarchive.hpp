@@ -56,6 +56,9 @@ public:
 
     template<class T>
     const basic_pointer_oserializer * register_type(const T * t = NULL){
+        #if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
+        boost::serialization::access::static_data_registration_workaround<T>();
+        #endif
         const basic_pointer_oserializer & bpos =
             instantiate_pointer_oserializer(
                 static_cast<Archive *>(NULL),
@@ -89,15 +92,15 @@ public:
         this->This()->save_override(t, 0);
         return * this->This();
     }
-
+    
     // the & operator 
     template<class T>
     Archive & operator&(T & t){
-		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-			return * this->This() << const_cast<const T &>(t);
-		#else
-			return * this->This() << t;
-		#endif
+        #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+            return * this->This() << const_cast<const T &>(t);
+        #else
+            return * this->This() << t;
+        #endif
     }
 };
 
