@@ -34,6 +34,8 @@ namespace detail {
 namespace serialization {
 
 // forward declarations
+template<class Archive, class T>
+inline void serialize_adl(Archive &, T &, const unsigned int);
 namespace detail {
     template<class Archive, class T>
     struct member_saver;
