@@ -28,7 +28,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<foo4_t>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int>::value, false);
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int&>::value, false);
+#else
+std::cout << 
+"<note>is_function will fail with some types (references for example)"
+"if the compiler doesn't support partial specialisation of class templates."
+"These are *not* tested here</note>" << std::endl;
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int[]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<test_abc1>::value, false);
