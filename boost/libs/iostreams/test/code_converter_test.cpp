@@ -19,10 +19,7 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/device/file.hpp>
-#if !defined(__COMO__) || \
-    !defined(BOOST_IOSTREAMS_WINDOWS) || \
-    !defined(BOOST_COMO_STRICT) \
-    /**/
+#if !defined(__COMO__) || !defined(BOOST_COMO_STRICT)
 # if defined(BOOST_IOSTREAMS_NO_LIB) || defined(BOOST_ALL_NO_LIB)
 #  include "../src/file_descriptor.cpp"
 # else 
@@ -113,7 +110,9 @@
 # include <codecvt/utf8>
 # include <codecvt/utf8_utf16>
 # include <codecvt/xjis>
-#endif // #ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
+#endif // #ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX]
+
+#include <iostream>
 
 using namespace std;
 using namespace boost::iostreams;
@@ -155,6 +154,7 @@ test_string()
     for (intern_type c = 255; pattern.size() < pattern_length; --c)
         if (valid_char<Codecvt>(c))
             pattern += c;
+    std::cout << "last char = " << pattern[pattern.size() - 1] << "\n";
     result.reserve(pattern.size() * pattern_reps);
     for (int w = 0; w < pattern_reps; ++w)
         result += pattern;
@@ -163,10 +163,7 @@ test_string()
 
 // Como can't compile file_descriptor.cpp in strict mode; this failure
 // is detected by file_descriptor_test.cpp.
-#if !defined(__COMO__) || \
-    !defined(BOOST_IOSTREAMS_WINDOWS) || \
-    !defined(BOOST_COMO_STRICT) \
-    /**/
+#if !defined(__COMO__) || !defined(BOOST_COMO_STRICT)
     typedef io::file_descriptor_source  classic_file_source;
     typedef io::file_descriptor_sink    classic_file_sink;
 #else
@@ -199,9 +196,9 @@ bool codecvt_test1()
     typedef basic_string<
                 BOOST_DEDUCED_TYPENAME 
                 codecvt_intern<Codecvt>::type
-            >                                    string_type;
-    typedef code_converter<classic_file_source>  wide_file_source;
-    typedef code_converter<classic_file_sink>    wide_file_sink;
+            >                                             string_type;
+    typedef code_converter<classic_file_source, Codecvt>  wide_file_source;
+    typedef code_converter<classic_file_sink, Codecvt>    wide_file_sink;
 
     BOOST_CHECK(Codecvt().max_length() <= max_length);
     temp_file                        temp;
@@ -252,10 +249,9 @@ bool codecvt_test()
 
 void code_converter_test()
 {
-    bool b1 = codecvt_test<utf8_codecvt_facet<wchar_t, char> >();
-    bool b2 = codecvt_test<null_padded_codecvt>();
-    bool b3 = codecvt_test<stateless_null_padded_codecvt>();
-
+    BOOST_CHECK((codecvt_test<utf8_codecvt_facet<wchar_t, char> >()));
+    BOOST_CHECK(codecvt_test<null_padded_codecvt>());
+    BOOST_CHECK(codecvt_test<stateless_null_padded_codecvt>());
 #ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
     using namespace Dinkum::conversions;
     BOOST_CHECK(codecvt_test< codecvt_8859_1<wchar_t> >());  
