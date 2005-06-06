@@ -59,7 +59,7 @@ namespace boost {
                 begin(Input), 
                 end(Input), 
                 Output,
-                detail::to_lowerF<
+                ::boost::algorithm::detail::to_lowerF<
                     typename range_value<RangeT>::type >(Loc));
         }
 
@@ -75,11 +75,11 @@ namespace boost {
             return SequenceT(
                 make_transform_iterator(
                     begin(Input),
-                    detail::to_lowerF<
+                    ::boost::algorithm::detail::to_lowerF<
                         typename range_value<SequenceT>::type >(Loc)),
                 make_transform_iterator(
                     end(Input), 
-                    detail::to_lowerF<
+                    ::boost::algorithm::detail::to_lowerF<
                         typename range_value<SequenceT>::type >(Loc)));
         }
 
@@ -100,7 +100,7 @@ namespace boost {
                 begin(Input), 
                 end(Input), 
                 begin(Input), 
-                detail::to_lowerF<
+                ::boost::algorithm::detail::to_lowerF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }
         
@@ -132,7 +132,7 @@ namespace boost {
                 begin(Input), 
                 end(Input), 
                 Output,
-                detail::to_upperF<
+                ::boost::algorithm::detail::to_upperF<
                     typename range_value<RangeT>::type >(Loc));
         }
 
@@ -148,11 +148,11 @@ namespace boost {
             return SequenceT(
                 make_transform_iterator(
                     begin(Input),
-                    detail::to_upperF<
+                    ::boost::algorithm::detail::to_upperF<
                         typename range_value<SequenceT>::type >(Loc)),
                 make_transform_iterator(
                     end(Input), 
-                    detail::to_upperF<
+                    ::boost::algorithm::detail::to_upperF<
                         typename range_value<SequenceT>::type >(Loc)));
 
         }
@@ -174,7 +174,7 @@ namespace boost {
                 begin(Input), 
                 end(Input), 
                 begin(Input), 
-                detail::to_upperF<
+                ::boost::algorithm::detail::to_upperF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }
 

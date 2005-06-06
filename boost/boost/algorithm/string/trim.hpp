@@ -61,7 +61,7 @@ namespace boost {
             PredicateT IsSpace)
         {
             std::copy( 
-                detail::trim_begin( 
+                ::boost::algorithm::detail::trim_begin( 
                     begin(Input), 
                     end(Input), 
                     IsSpace ),
@@ -79,7 +79,7 @@ namespace boost {
         inline SequenceT trim_left_copy_if(const SequenceT& Input, PredicateT IsSpace)
         {
             return SequenceT( 
-                detail::trim_begin( 
+                ::boost::algorithm::detail::trim_begin( 
                     begin(Input), 
                     end(Input), 
                     IsSpace ),
@@ -120,7 +120,7 @@ namespace boost {
         {
             Input.erase( 
                 begin(Input),
-                detail::trim_begin( 
+                ::boost::algorithm::detail::trim_begin( 
                     begin(Input), 
                     end(Input), 
                     IsSpace));
@@ -168,7 +168,7 @@ namespace boost {
         {
             std::copy( 
                 begin(Input),
-                detail::trim_end( 
+                ::boost::algorithm::detail::trim_end( 
                     begin(Input), 
                     end(Input), 
                     IsSpace ),
@@ -186,7 +186,7 @@ namespace boost {
         {
             return SequenceT( 
                 begin(Input),
-                detail::trim_end( 
+                ::boost::algorithm::detail::trim_end( 
                     begin(Input), 
                     end(Input), 
                     IsSpace)
@@ -227,7 +227,7 @@ namespace boost {
         inline void trim_right_if(SequenceT& Input, PredicateT IsSpace)
         {
             Input.erase(
-                detail::trim_end( 
+                ::boost::algorithm::detail::trim_end( 
                     begin(Input), 
                     end(Input), 
                     IsSpace ),
@@ -278,7 +278,7 @@ namespace boost {
         {
             BOOST_STRING_TYPENAME 
                 range_const_iterator<RangeT>::type TrimEnd=
-                detail::trim_end( 
+                ::boost::algorithm::detail::trim_end( 
                     begin(Input), 
                     end(Input), 
                     IsSpace);
@@ -302,7 +302,7 @@ namespace boost {
         {
             BOOST_STRING_TYPENAME 
                 range_const_iterator<SequenceT>::type TrimEnd=
-                    detail::trim_end( 
+                    ::boost::algorithm::detail::trim_end( 
                         begin(Input), 
                         end(Input), 
                         IsSpace);
