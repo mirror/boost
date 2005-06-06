@@ -66,13 +66,13 @@
         </thead>
         <tbody>
           <row>
-            <entry valign="top" morerows="1"><screen>void set_time_duration_format(...)
+            <entry valign="top" morerows="1"><screen>void time_duration_format(...)
   Parameter:
     char_type*</screen></entry>
             <entry>Sets the time_duration format.</entry>
           </row>
           <row>
-            <entry><screen>f->set_time_duration_format("%H:%M");
+            <entry><screen>f->time_duration_format("%H:%M");
 // hours and minutes only</screen></entry>
           </row>
 
