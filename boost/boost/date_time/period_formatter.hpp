@@ -21,7 +21,7 @@ namespace boost { namespace date_time {
    *   - period_open_start_delimeter -- default '['
    *   - period_open_range_end_delimeter -- default ')' 
    *   - period_closed_range_end_delimeter -- default ']' 
-   *   - display_as_open_range, display_as_closed_range -- default open_range
+   *   - display_as_open_range, display_as_closed_range -- default closed_range
    *
    *  Thus the default formatting for a period is as follows:
    *@code

@@ -23,7 +23,7 @@ namespace boost { namespace date_time {
    *   - period_open_start_delimeter -- default '['
    *   - period_open_range_end_delimeter -- default ')' 
    *   - period_closed_range_end_delimeter -- default ']' 
-   *   - display_as_open_range, display_as_closed_range -- default open_range
+   *   - display_as_open_range, display_as_closed_range -- default closed_range
    *
    *  For a typical date_period, the contents of the input stream would be
    *@code
