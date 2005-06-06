@@ -21,7 +21,11 @@ namespace test
       p[tester](
           p[name]
         , p[value || boost::bind(&value_default) ]
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+        , p[test::index | 999 ]
+#else
         , p[index | 999 ]
+#endif
       );
 
       return 1;

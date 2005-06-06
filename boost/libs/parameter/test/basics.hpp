@@ -88,13 +88,6 @@ values(Name const& n, Value const& v, Index const& i)
 {
     return values_t<Name,Value,Index>(n,v,i);
 }
-  
-#if defined( __DECCXX_VER )
-  && BOOST_WORKAROUND(__EDG_VERSION__, BOOST_TESTED_AT(245))
-  // Some kind of nasty ambiguity arises here -- is there an index in
-  // the global namespace?
-      using test::index;
-#endif 
 
 } // namespace test
 

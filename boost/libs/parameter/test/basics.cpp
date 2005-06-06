@@ -14,7 +14,6 @@
 
 namespace test
 {
-  
   // A separate function for getting the "value" key, so we can deduce
   // F and use lazy_binding on it.
   template <class Params, class F>
@@ -39,8 +38,13 @@ namespace test
           
       typename boost::parameter::binding<
         Params, index_, int
-      >::type i = p[index | 999];
-          
+      >::type i =
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+        p[test::index | 999];
+#else
+        p[index | 999];
+#endif
+
       p[tester](n,v,i);
 
       return 1;
