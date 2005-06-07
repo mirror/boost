@@ -98,6 +98,18 @@ protected:
     bool got_expected_result(std::string const& filename, 
         std::string const& result, std::string& expected);
 
+    //  construct a SIZEOF macro definition string and predefine this macro
+    template <typename Context>
+    bool add_sizeof_definition(Context& ctx, char const *name, int value);
+    
+    //  construct a MIN macro definition string and predefine this macro
+    template <typename T, typename Context>
+    bool add_min_definition(Context& ctx, char const *name);
+    
+    //  construct a MAX macro definition string and predefine this macro
+    template <typename T, typename Context>
+    bool add_max_definition(Context& ctx, char const *name);
+
 private:
     int debuglevel;
     boost::program_options::options_description desc_options;

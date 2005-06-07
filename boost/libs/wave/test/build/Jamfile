@@ -31,7 +31,7 @@ TESTWAVE_DIR = $(BOOST_ROOT)/libs/wave/test/testwave/testfiles
 # This are the arguments for the testwave executable
 #
 TESTWAVE_ARGUMENTS = 
-        -d3                              # use -d4 for verbose results 
+        -d9                              # use -d4 for verbose results 
         -S$(TESTWAVE_DIR) 
         -S$(BOOST_ROOT) -I$(BOOST_ROOT)
     ;

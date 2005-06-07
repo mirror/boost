@@ -461,6 +461,10 @@ testwave_app::read_file(std::string const& filename, std::string& instr)
                   << filename << std::endl;
         return false;
     }
+    else if (9 == debuglevel) {
+        std::cerr << "succeeded to open input file: " 
+                  << filename << std::endl;
+    }
     instream.unsetf(std::ios::skipws);
 
 // read the input file into a string
@@ -475,6 +479,10 @@ testwave_app::read_file(std::string const& filename, std::string& instr)
         std::istreambuf_iterator<char>());
 #endif 
     
+    if (9 == debuglevel) {
+        std::cerr << "succeeded to read input file: " 
+                  << filename << std::endl;
+    }
     return true;
 }
 
@@ -515,6 +523,11 @@ bool
 testwave_app::extract_special_information(std::string const& filename, 
     std::string const& instr, char flag, std::string& content)
 {
+    if (9 == debuglevel) {
+        std::cerr << "extracting special information ('" << flag 
+                  << "') from input file: " << filename << std::endl;
+    }
+
 // tokenize the input data into C++ tokens using the C++ lexer
     typedef boost::wave::cpplexer::lex_token<> token_type;
     typedef boost::wave::cpplexer::lex_iterator<token_type> lexer_type;
@@ -538,14 +551,27 @@ testwave_app::extract_special_information(std::string const& filename,
             if (T_CCOMMENT == id) {
                 std::string value = (*it).get_value().c_str();
                 if (flag == value[2]) {
-                    content += value.substr(3, value.size()-5);
-                    trim_whitespace(content);
+                    std::string thiscontent(value.substr(3, value.size()-5));
+                    
+                    if (9 == debuglevel) {
+                        std::cerr << "extracted: " << thiscontent
+                                  << std::endl;
+                    }
+                    trim_whitespace(thiscontent);
+                    content += thiscontent;
                 }
             }
             else if (T_CPPCOMMENT == id) {
                 std::string value = (*it).get_value().c_str();
-                if (flag == value[2])
-                    content += value.substr((' ' == value[3]) ? 4 : 3);
+                if (flag == value[2]) {
+                    std::string thiscontent(value.substr((' ' == value[3]) ? 4 : 3));
+
+                    if (9 == debuglevel) {
+                        std::cerr << "extracted: " << thiscontent;
+                    }
+                    trim_whitespace(content);
+                    content += thiscontent;
+                }
             }
         }
     }
@@ -555,6 +581,11 @@ testwave_app::extract_special_information(std::string const& filename,
             << e.file_name() << "(" << e.line_no() << "): "
             << e.description() << std::endl;
         return false;
+    }
+
+    if (9 == debuglevel) {
+        std::cerr << "succeeded extracting special information ('" << flag 
+                  << "')" << std::endl;
     }
     return true;
 }
@@ -638,21 +669,33 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 // enable C99 mode, if appropriate (implies variadics)
     if (vm.count("c99")) {
+        if (9 == debuglevel) {
+            std::cerr << "option: c99" << std::endl;
+        }
         ctx.set_language(boost::wave::support_c99);
     }
     else if (vm.count("variadics")) {
     // enable variadics and placemarkers, if appropriate
+        if (9 == debuglevel) {
+            std::cerr << "option: variadics" << std::endl;
+        }
         ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
     }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 
 // enable long_long mode, if appropriate
     if (vm.count("long_long")) {
+        if (9 == debuglevel) {
+            std::cerr << "option: long_long" << std::endl;
+        }
         ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
     }
     
 // enable preserving comments mode, if appropriate
     if (vm.count("preserve")) {
+        if (9 == debuglevel) {
+            std::cerr << "option: preserve" << std::endl;
+        }
         ctx.set_language(
             boost::wave::enable_preserve_comments(ctx.get_language()));
     }
@@ -675,6 +718,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = syspaths.begin(); 
               cit != end; ++cit)
         {
+            if (9 == debuglevel) {
+                std::cerr << "option: -S" << *cit << std::endl;
+            }
             ctx.add_sysinclude_path((*cit).c_str());
         }
     }
@@ -688,18 +734,28 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = ip.paths.begin(); 
               cit != end; ++cit)
         {
+            if (9 == debuglevel) {
+                std::cerr << "option: -I" << *cit << std::endl;
+            }
             ctx.add_include_path((*cit).c_str());
         }
 
     // if on the command line was given -I- , this has to be propagated
-        if (ip.seen_separator) 
+        if (ip.seen_separator) {
+            if (9 == debuglevel) {
+                std::cerr << "option: -I-" << std::endl;
+            }
             ctx.set_sysinclude_delimiter();
-              
+        }
+        
     // add system include directories to the include path
         std::vector<std::string>::const_iterator sysend = ip.syspaths.end();
         for (std::vector<std::string>::const_iterator syscit = ip.syspaths.begin(); 
               syscit != sysend; ++syscit)
         {
+            if (9 == debuglevel) {
+                std::cerr << "option: -S" << *syscit << std::endl;
+            }
             ctx.add_sysinclude_path((*syscit).c_str());
         }
     }
@@ -712,6 +768,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = macros.begin(); 
               cit != end; ++cit)
         {
+            if (9 == debuglevel) {
+                std::cerr << "option: -D" << *cit << std::endl;
+            }
             ctx.add_macro_definition(*cit);
         }
     }
@@ -724,6 +783,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = predefmacros.begin(); 
               cit != end; ++cit)
         {
+            if (9 == debuglevel) {
+                std::cerr << "option: -P" << *cit << std::endl;
+            }
             ctx.add_macro_definition(*cit);
         }
     }
@@ -736,6 +798,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         for (std::vector<std::string>::const_iterator cit = undefmacros.begin(); 
               cit != end; ++cit)
         {
+            if (9 == debuglevel) {
+                std::cerr << "option: -U" << *cit << std::endl;
+            }
             ctx.remove_macro_definition((*cit).c_str());
         }
     }
@@ -747,6 +812,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
             std::cerr << "testwave: bogus maximal include nesting depth: " 
                 << max_depth << std::endl;
             return false;
+        }
+        else if (9 == debuglevel) {
+            std::cerr << "option: -n" << max_depth << std::endl;
         }
         ctx.set_max_include_nesting_depth(max_depth);
     }
@@ -770,53 +838,80 @@ std::string BOOST_WAVETEST_GETSTRING(std::ostrstream& ss)
 #define BOOST_WAVETEST_OSSTREAM std::ostringstream
 #endif
 
-namespace {
+//  construct a SIZEOF macro definition string and predefine this macro
+template <typename Context>
+inline bool 
+testwave_app::add_sizeof_definition(Context& ctx, char const *name, int value)
+{
+    BOOST_WAVETEST_OSSTREAM strm;
+    strm << "__TESTWAVE_SIZEOF_" << name << "__=" << value;
 
-    //  construct a SIZEOF macro definition string and predefine this macro
-    template <typename Context>
-    inline bool 
-    add_sizeof_definition(Context& ctx, char const *name, int value)
-    {
-        BOOST_WAVETEST_OSSTREAM strm;
-        strm << "__TESTWAVE_SIZEOF_" << name << "__=" << value;
-        return ctx.add_macro_definition(BOOST_WAVETEST_GETSTRING(strm));
+    std::string macro(BOOST_WAVETEST_GETSTRING(strm));
+    if (!ctx.add_macro_definition(macro)) {
+        std::cerr << "testwave: failed to predefine macro: " << macro 
+                  << std::endl;
+        return false;
     }
+    else if (9 == debuglevel) {
+        std::cerr << "predefined macro: " << macro << std::endl;
+    }
+    return true;
+}
 
-    //  construct a MIN macro definition string and predefine this macro
-    template <typename T, typename Context>
-    inline bool 
-    add_min_definition(Context& ctx, char const *name)
-    {
-        BOOST_WAVETEST_OSSTREAM strm;
-        if (!std::numeric_limits<T>::is_signed) {
-            strm << "__TESTWAVE_" << name << "_MIN__=" 
-                 << "0x" << std::hex 
-                 << (std::numeric_limits<T>::min)() << "U";
-        }
-        else {
-            strm << "__TESTWAVE_" << name << "_MIN__=( " 
-                 << (std::numeric_limits<T>::min)()+1 << "-1)";
-        }
-        return ctx.add_macro_definition(BOOST_WAVETEST_GETSTRING(strm));
+//  construct a MIN macro definition string and predefine this macro
+template <typename T, typename Context>
+inline bool 
+testwave_app::add_min_definition(Context& ctx, char const *name)
+{
+    BOOST_WAVETEST_OSSTREAM strm;
+    if (!std::numeric_limits<T>::is_signed) {
+        strm << "__TESTWAVE_" << name << "_MIN__=" 
+              << "0x" << std::hex 
+              << (std::numeric_limits<T>::min)() << "U";
     }
+    else {
+        strm << "__TESTWAVE_" << name << "_MIN__=( " 
+              << (std::numeric_limits<T>::min)()+1 << "-1)";
+    }
+    
+    std::string macro(BOOST_WAVETEST_GETSTRING(strm));
+    if (!ctx.add_macro_definition(macro)) {
+        std::cerr << "testwave: failed to predefine macro: " << macro 
+                  << std::endl;
+        return false;
+    }
+    else if (9 == debuglevel) {
+        std::cerr << "predefined macro: " << macro << std::endl;
+    }
+    return true;
+}
 
-    //  construct a MAX macro definition string and predefine this macro
-    template <typename T, typename Context>
-    inline bool 
-    add_max_definition(Context& ctx, char const *name)
-    {
-        BOOST_WAVETEST_OSSTREAM strm;
-        if (!std::numeric_limits<T>::is_signed) {
-            strm << "__TESTWAVE_" << name << "_MAX__=" 
-                 << "0x" << std::hex 
-                 << (std::numeric_limits<T>::max)() << "U";
-        }
-        else {
-            strm << "__TESTWAVE_" << name << "_MAX__=" 
-                 << (std::numeric_limits<T>::max)();
-        }
-        return ctx.add_macro_definition(BOOST_WAVETEST_GETSTRING(strm));
+//  construct a MAX macro definition string and predefine this macro
+template <typename T, typename Context>
+inline bool 
+testwave_app::add_max_definition(Context& ctx, char const *name)
+{
+    BOOST_WAVETEST_OSSTREAM strm;
+    if (!std::numeric_limits<T>::is_signed) {
+        strm << "__TESTWAVE_" << name << "_MAX__=" 
+              << "0x" << std::hex 
+              << (std::numeric_limits<T>::max)() << "U";
     }
+    else {
+        strm << "__TESTWAVE_" << name << "_MAX__=" 
+              << (std::numeric_limits<T>::max)();
+    }
+    
+    std::string macro(BOOST_WAVETEST_GETSTRING(strm));
+    if (!ctx.add_macro_definition(macro)) {
+        std::cerr << "testwave: failed to predefine macro: " << macro 
+                  << std::endl;
+        return false;
+    }
+    else if (9 == debuglevel) {
+        std::cerr << "predefined macro: " << macro << std::endl;
+    }
+    return true;
 }
 
 #undef BOOST_WAVETEST_GETSTRING
@@ -903,6 +998,10 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
     typedef boost::wave::context<std::string::const_iterator, lexer_type> 
         context_type;
 
+    if (9 == debuglevel) {
+        std::cerr << "preprocessing input file: " << filename << std::endl;
+    }
+
     try {    
     //  create preprocesing context
         context_type ctx(instr.begin(), instr.end(), filename.c_str());
@@ -937,7 +1036,6 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
                 result = result + (*it).get_value().c_str();  
             }
         }
-        
         error.clear();
     }
     catch (boost::wave::cpplexer::lexing_exception const& e) {
@@ -963,6 +1061,11 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
         return false;
     }
     
+    if (9 == debuglevel) {
+        std::cerr << "succeeded to preprocess input file: " << filename 
+                  << std::endl;
+    }
+
     return true;
 }
 

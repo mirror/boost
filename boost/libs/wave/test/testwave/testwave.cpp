@@ -38,6 +38,8 @@ namespace fs = boost::filesystem;
 //  level 4:    prints the outcome of every test
 //  level 5:    prints the real result even for succeeded tests
 //
+//  level 9:    prints information about almost everything
+//
 //  The default debug level is 1.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,21 +126,45 @@ main(int argc, char *argv[])
         if (vm.count("config-file")) {
             std::vector<std::string> const &cfg_files = 
                 vm["config-file"].as<std::vector<std::string> >();
-                
+
+            if (9 == app.get_debuglevel()) {
+                std::cerr << "found " << (unsigned)cfg_files.size() 
+                          << " config-file arguments" << std::endl;
+            }
+            
             std::vector<std::string>::const_iterator end = cfg_files.end();
             for (std::vector<std::string>::const_iterator cit = cfg_files.begin(); 
                  cit != end; ++cit)
             {
+                if (9 == app.get_debuglevel()) {
+                    std::cerr << "reading config_file: " << *cit << std::endl;
+                }
+                
             // parse a single config file and store the results, config files
             // may only contain --input and positional arguments 
                 po::variables_map cvm;
-                if (!cmd_line_utils::read_config_file(*cit, desc_hidden, cvm))
+                if (!cmd_line_utils::read_config_file(*cit, desc_hidden, cvm)) {
+                    if (9 == app.get_debuglevel()) {
+                        std::cerr << "failed to read config_file: " << *cit 
+                                  << std::endl;
+                    }
                     ++config_file_error_count;
-
+                }
+                
+                if (9 == app.get_debuglevel()) {
+                    std::cerr << "succeeded to read config_file: " << *cit 
+                              << std::endl;
+                }
+                
             // correct the paths parsed into this variables_map
                 if (cvm.count("input")) {
                     std::vector<std::string> const &infiles = 
                         cvm["input"].as<std::vector<std::string> >();
+                    
+                    if (9 == app.get_debuglevel()) {
+                        std::cerr << "found " << (unsigned)infiles.size() 
+                                  << " entries" << std::endl;
+                    }
                     
                     std::vector<std::string>::const_iterator iend = infiles.end();
                     for (std::vector<std::string>::const_iterator iit = infiles.begin(); 
@@ -150,11 +176,36 @@ main(int argc, char *argv[])
                         fs::path filepath = 
                             cfgpath.branch_path() / fs::path(*iit, fs::native);
                         
+                        if (9 == app.get_debuglevel()) {
+                            std::cerr << std::string(79, '-') << std::endl;
+                            std::cerr << "executing test: " 
+                                      << filepath.native_file_string()
+                                      << std::endl;
+                        }
+                    
                     // execute this unit test case
-                        if (!app.test_a_file(filepath.native_file_string()))
+                        if (!app.test_a_file(filepath.native_file_string())) {
+                            if (9 == app.get_debuglevel()) {
+                                std::cerr << "failed to execute test: " 
+                                          << filepath.native_file_string()
+                                          << std::endl;
+                            }
                             ++error_count;
+                        }
+                        else if (9 == app.get_debuglevel()) {
+                            std::cerr << "succeeded to execute test: " 
+                                      << filepath.native_file_string()
+                                      << std::endl;
+                        }
                         ++input_count;
+                        
+                        if (9 == app.get_debuglevel()) {
+                            std::cerr << std::string(79, '-') << std::endl;
+                        }
                     }
+                }
+                else if (9 == app.get_debuglevel()) {
+                    std::cerr << "no entries found" << std::endl;
                 }
             }
         }
@@ -164,14 +215,42 @@ main(int argc, char *argv[])
         std::remove_copy_if(opts.options.begin(), opts.options.end(), 
             std::back_inserter(arguments), cmd_line_utils::is_argument());
 
+        if (9 == app.get_debuglevel()) {
+            std::cerr << "found " << (unsigned)arguments.size() 
+                      << " arguments" << std::endl;
+        }
+        
     // iterate over remaining arguments
         std::vector<po::option>::const_iterator arg_end = arguments.end();
         for (std::vector<po::option>::const_iterator arg = arguments.begin();
              arg != arg_end; ++arg)
         {
             fs::path filepath((*arg).value[0], fs::native);
-            if (!app.test_a_file(filepath.native_file_string()))
+
+            if (9 == app.get_debuglevel()) {
+                std::cerr << std::string(79, '-') << std::endl;
+                std::cerr << "executing test: " 
+                          << filepath.native_file_string()
+                          << std::endl;
+            }
+                    
+            if (!app.test_a_file(filepath.native_file_string())) {
+                if (9 == app.get_debuglevel()) {
+                    std::cerr << "failed to execute test: " 
+                              << filepath.native_file_string()
+                              << std::endl;
+                }
                 ++error_count;
+            }
+            else if (9 == app.get_debuglevel()) {
+                std::cerr << "succeeded to execute test: " 
+                          << filepath.native_file_string()
+                          << std::endl;
+            }
+
+            if (9 == app.get_debuglevel()) {
+                std::cerr << std::string(79, '-') << std::endl;
+            }
             ++input_count;
         }
 
