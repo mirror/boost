@@ -20,6 +20,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/test/test_tools.hpp>
+#include <boost/test/unit_test.hpp>
 #include <iostream>
 
 using namespace boost;
@@ -63,7 +64,6 @@ void check_array()
 
 }
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

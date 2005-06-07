@@ -9,6 +9,7 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
 
+#include <boost/test/unit_test.hpp>
 #include "test_data.hpp"
 #include <boost/ptr_container/ptr_array.hpp>
 #include <boost/utility.hpp>
@@ -144,7 +145,6 @@ void test_array_interface()
 
 }
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

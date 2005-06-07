@@ -20,6 +20,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/test/test_tools.hpp>
+#include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <string>
 
@@ -93,7 +94,6 @@ void check_iterator_range()
 }
 
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

@@ -9,6 +9,7 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
 
+#include <boost/test/unit_test.hpp>
 #include "sequence_test_data.hpp"
 #include <boost/ptr_container/ptr_deque.hpp>
 
@@ -22,7 +23,6 @@ void test_ptr_deque()
     random_access_algorithms_test< ptr_deque<int> >();
 }
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

@@ -12,6 +12,7 @@
 #define PTR_LIST_TEST 1
 #define PTR_CONTAINER_DEBUG 0
         
+#include <boost/test/unit_test.hpp>
 #include "sequence_test_data.hpp"
 #include <boost/ptr_container/ptr_list.hpp>
 
@@ -34,7 +35,6 @@ void test_list()
 
 
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

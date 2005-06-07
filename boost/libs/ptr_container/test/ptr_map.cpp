@@ -9,6 +9,7 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
 
+#include <boost/test/unit_test.hpp>
 #include "test_data.hpp"
 #include <boost/ptr_container/exception.hpp>
 #include <boost/range/sub_range.hpp>
@@ -219,7 +220,6 @@ void test_map()
     }
 }
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

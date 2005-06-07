@@ -9,6 +9,7 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
  
+#include <boost/test/unit_test.hpp>
 #include "sequence_test_data.hpp"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/assign/list_inserter.hpp>
@@ -55,7 +56,6 @@ void test_ptr_vector()
 
 }
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )

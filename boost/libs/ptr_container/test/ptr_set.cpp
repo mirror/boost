@@ -9,6 +9,7 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
  
+#include <boost/test/unit_test.hpp>
 #include "associative_test_data.hpp"
 #include <boost/ptr_container/ptr_set.hpp>
 
@@ -28,7 +29,6 @@ void test_set()
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
 }
 
-#include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
