@@ -123,15 +123,6 @@ namespace time_conversion {
                 g.correct_year();
                 compile_time = mktime(&g.time_stamp);
             }
-// # The following is for testing purposes only and will be removed shortly
-            if (0 == compile_time) {
-                std::cerr << "Parsing of >" << act_time << "< failed!" << std::endl;
-                std::cerr << "pi.hit:     " << pi.hit << std::endl;
-                std::cerr << "pi.full:    " << pi.full << std::endl;
-                std::cerr << "pi.length:  " << (unsigned int)pi.length << std::endl;
-                std::cerr << "pi.stop:    " << pi.stop << std::endl;
-            } 
-// #
             BOOST_ASSERT(0 != compile_time);        
         }
 
