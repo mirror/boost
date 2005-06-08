@@ -21,12 +21,8 @@ rule zlib_config
     if $(NT) && ! $(ZLIB_SOURCE) && ! $(ZLIB_INCLUDE)
     {
          ECHO ****************************************************** ;
-         ECHO ;
          ECHO Building Boost.Iostreams with zlib and gzip support disabled. ;
-         ECHO HINT: define the environment variable ZLIB_SOURCE to point to ;
-         ECHO the root directory of your zlib installation if you have one. ;
-         ECHO For more options, consult the Boost.Iostreams documentation ;
-         ECHO ;
+         ECHO To enable zlib and gzip, consult the Boost.Iostreams documentation ;
          ECHO ****************************************************** ;    
          NO_ZLIB = 1 ;
     }
