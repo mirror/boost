@@ -72,7 +72,7 @@ public:
             char * first = static_cast<char *>(static_cast<void *>(& l));
             char * last = first + sizeof(l) - 1;
             for(;first < last;++first, --last){
-                char x = *first;
+                char x = *last;
                 *last = *first;
                 *first = x;
             }
