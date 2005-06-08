@@ -24,6 +24,7 @@
 #include <memory>                         // allocator.
 #include <boost/config.hpp>               // Put size_t in std.
 #include <boost/detail/workaround.hpp>
+#include <boost/cstdint.hpp>              // uint8_t, uint32_t.
 #include <boost/iostreams/constants.hpp>  // buffer size.
 #include <boost/iostreams/detail/adapter/non_blocking_adapter.hpp>
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
@@ -353,21 +354,21 @@ private:
     static gzip_params make_params(int window_bits);
 
     template<typename Source>
-    static int read_byte(Source& src, int error)
-    {
+    static uint8_t read_uint8(Source& src, int error)
+     {
         int c;
         if ((c = boost::iostreams::get(src)) == EOF || c == WOULD_BLOCK)
             throw gzip_error(error);
-        return static_cast<unsigned char>(traits_type::to_char_type(c));
+        return static_cast<uint8_t>(traits_type::to_char_type(c));
     }
 
     template<typename Source>
-    static long read_long(Source& src, int error)
+    static uint32_t read_uint32(Source& src, int error)
     {
-        int b1 = read_byte(src, error);
-        int b2 = read_byte(src, error);
-        int b3 = read_byte(src, error);
-        int b4 = read_byte(src, error);
+        uint8_t b1 = read_uint8(src, error);
+        uint8_t b2 = read_uint8(src, error);
+        uint8_t b3 = read_uint8(src, error);
+        uint8_t b4 = read_uint8(src, error);
         return b1 + (b2 << 8) + (b3 << 16) + (b4 << 24);
     }
 
@@ -412,16 +413,19 @@ private:
         {
             throw gzip_error(gzip::bad_header);
         }
-        mtime_ = read_long(src, gzip::bad_header);        // MTIME.
-        read_byte(src, gzip::bad_header);                 // XFL.
-        os_ = read_byte(src, gzip::bad_header);           // OS.
+        mtime_ = read_uint32(src, gzip::bad_header);        // MTIME.
+        read_uint8(src, gzip::bad_header);                 // XFL.
+        os_ = read_uint8(src, gzip::bad_header);          // OS.
         if (flags & boost::iostreams::gzip::flags::text)
             flags_ |= f_text;
 
         // Skip extra field. (From J. Halleaux; see note at top.)
         if (flags & gzip::flags::extra) {
-            int length = read_byte(src, gzip::bad_header) +
-                        (read_byte(src, gzip::bad_header) << 8);
+            int length = 
+                static_cast<int>(
+                    read_uint8(src, gzip::bad_header) +
+                    (read_uint8(src, gzip::bad_header) << 8)
+                );
             // length is garbage if EOF but the loop below will quit anyway.
             do { }
             while (length-- != 0 && !is_eof(boost::iostreams::get(src)));
@@ -432,8 +436,8 @@ private:
         if (flags & gzip::flags::comment)       // Read comment.
             comment_ = read_string(src);
         if (flags & gzip::flags::header_crc) {  // Skip header crc.
-            read_byte(src, gzip::bad_header);
-            read_byte(src, gzip::bad_header);
+            read_uint8(src, gzip::bad_header);
+            read_uint8(src, gzip::bad_header);
         }
     }
 
@@ -447,13 +451,9 @@ private:
             footer += c;
         detail::range_adapter<input, std::string> 
             rng(footer.begin(), footer.end());
-        if ( static_cast<unsigned long>(read_long(rng, gzip::bad_footer))
-                !=
-             this->crc() )
-        {
+        if (read_uint32(rng, gzip::bad_footer) != this->crc())
             throw gzip_error(gzip::bad_crc);
-        }
-        if (read_long(rng, gzip::bad_footer) != this->total_out())
+        if (static_cast<int>(read_uint32(rng, gzip::bad_footer)) != this->total_out())
             throw gzip_error(gzip::bad_length);
     }
     enum {
