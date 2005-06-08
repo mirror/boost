@@ -41,7 +41,7 @@ namespace archive {
 // constants used in archive signature
 //This should never ever change. note that is not an std::string
 // string.
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char * 
 #else

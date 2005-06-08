@@ -37,7 +37,7 @@ archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
 
 template<class Archive>
 #if !defined(__BORLANDC__)
-    #if defined(BOOST_MSVC)
+    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
         BOOST_DECL_ARCHIVE_OR_WARCHIVE
         const basic_pointer_iserializer * 
     #else

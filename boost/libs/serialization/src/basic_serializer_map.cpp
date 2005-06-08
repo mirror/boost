@@ -42,7 +42,7 @@ public:
     {}
 };
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const basic_serializer * 
 #else

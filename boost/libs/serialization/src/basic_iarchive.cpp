@@ -597,7 +597,7 @@ basic_iarchive::load_object(
 }
 
 // load a pointer object
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const basic_pointer_iserializer * 
 #else
@@ -639,7 +639,7 @@ basic_iarchive::get_flags() const{
     return pimpl->m_flags;
 }
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     boost::serialization::basic_helper * 
 #else
@@ -652,7 +652,7 @@ basic_iarchive::lookup_helper(
     return pimpl->lookup_helper(eti);
 }
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     boost::serialization::basic_helper * 
 #else

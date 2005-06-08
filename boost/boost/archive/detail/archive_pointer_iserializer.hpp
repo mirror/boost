@@ -70,7 +70,7 @@ public:
     // type_info.  returns NULL if there is no such instance. This
     // would indicate that the no object of the specified type was loaded
     // any where in the code.
-    #if defined(BOOST_MSVC)
+    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
         BOOST_DECL_ARCHIVE_OR_WARCHIVE
         static const basic_pointer_iserializer * 
     #else

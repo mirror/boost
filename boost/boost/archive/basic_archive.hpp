@@ -98,7 +98,7 @@ enum archive_flags {
 #define NULL_POINTER_TAG class_id_type(-1)
 
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else

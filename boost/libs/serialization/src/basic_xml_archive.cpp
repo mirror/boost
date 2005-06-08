@@ -14,7 +14,7 @@
 namespace boost {
 namespace archive {
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -24,7 +24,7 @@ BOOST_DECL_ARCHIVE
 OBJECT_ID(){
     return "object_id";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -34,7 +34,7 @@ BOOST_DECL_ARCHIVE
 OBJECT_REFERENCE(){
     return "object_id_reference";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -44,7 +44,7 @@ BOOST_DECL_ARCHIVE
 CLASS_ID(){
     return "class_id";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -54,7 +54,7 @@ BOOST_DECL_ARCHIVE
 CLASS_ID_REFERENCE(){
     return "class_id_reference";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -64,7 +64,7 @@ BOOST_DECL_ARCHIVE
 CLASS_NAME(){
     return "class_name";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -74,7 +74,7 @@ BOOST_DECL_ARCHIVE
 TRACKING(){
     return "tracking_level";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else
@@ -84,7 +84,7 @@ BOOST_DECL_ARCHIVE
 VERSION(){
     return "version";
 }
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
 BOOST_DECL_ARCHIVE 
 const char *
 #else

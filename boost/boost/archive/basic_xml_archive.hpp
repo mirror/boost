@@ -62,7 +62,7 @@ public:
 // constant strings used in xml i/o
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -72,7 +72,7 @@ extern
 OBJECT_ID();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -82,7 +82,7 @@ extern
 OBJECT_REFERENCE();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -92,7 +92,7 @@ extern
 CLASS_ID();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -102,7 +102,7 @@ extern
 CLASS_ID_REFERENCE();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -112,7 +112,7 @@ extern
 CLASS_NAME();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -122,7 +122,7 @@ extern
 TRACKING();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else
@@ -132,7 +132,7 @@ extern
 VERSION();
 
 extern 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     const char *
 #else

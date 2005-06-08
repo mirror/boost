@@ -503,7 +503,7 @@ BOOST_DECL_ARCHIVE
 basic_oarchive::end_preamble(){
 }
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     boost::serialization::basic_helper * 
 #else
@@ -516,7 +516,7 @@ basic_oarchive::lookup_helper(
     return pimpl->lookup_helper(eti);
 }
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
     BOOST_DECL_ARCHIVE 
     boost::serialization::basic_helper * 
 #else
