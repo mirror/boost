@@ -45,8 +45,12 @@ namespace bzip2 {
 
                     // Typedefs.
 
-typedef void* alloc_func(void*, int, int);
-typedef void free_func(void*, void*);
+extern "C" {
+
+typedef void* (*alloc_func)(void*, int, int);
+typedef void (*free_func)(void*, void*);
+
+} // End extern "C".
 
                     // Status codes
 

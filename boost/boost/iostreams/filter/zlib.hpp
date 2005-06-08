@@ -42,11 +42,16 @@ namespace boost { namespace iostreams {
 namespace zlib {
                     // Typedefs
 
-typedef unsigned uint;
+typedef unsigned int uint;
 typedef unsigned char byte;
 typedef unsigned long ulong;
-typedef void* alloc_func(void*, zlib::uint, zlib::uint);
-typedef void free_func(void*, void*);
+
+extern "C" {
+
+typedef void* (*alloc_func)(void*, zlib::uint, zlib::uint);
+typedef void (*free_func)(void*, void*);
+
+} // End extern "C".
 
                     // Compression levels
 
