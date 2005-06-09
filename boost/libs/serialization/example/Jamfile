@@ -22,7 +22,8 @@ rule demo-bsl-build ( demo-name )
             <borland><*><cxxflags>-w-8080
             <msvc><release><cxxflags>-Gy
             <vc7><release><cxxflags>-Gy
-            <vc7.1><release><cxxflags>-Gy
+            <vc-7_0><release><cxxflags>-Gy
+            <vc-7_1><release><cxxflags>-Gy
         : # default build
             debug
     ;

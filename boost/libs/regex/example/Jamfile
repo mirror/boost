@@ -27,6 +27,9 @@ if ! $(gMFC_CHECK)
       {
          ECHO MFC/ATL regex wrappers will be tested when building with VC7 ;
          REGEX_MFC_OPTS += "<vc7><*><define>TEST_MFC=1" ;
+         REGEX_MFC_OPTS += "<vc7-stlport><*><define>TEST_MFC=1" ;
+         REGEX_MFC_OPTS += "<vc-7_0><*><define>TEST_MFC=1" ;
+         REGEX_MFC_OPTS += "<vc-7_0-stlport><*><define>TEST_MFC=1" ;
       }
    }
    if $(VS80COMNTOOLS)

@@ -17,9 +17,11 @@ rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path p
         requires-spirit = true ;
     case "iw*" :
         requires-spirit = true ;
-    case "vc7" :
+    case "vc-6_5*" :
         requires-spirit = true ;
-    case "vc7-stlport" :
+    case "vc7*" :
+        requires-spirit = true ;
+    case "vc-7_0*" :
         requires-spirit = true ;
     case "gcc-2*" :
         requires-spirit = true ;
