@@ -224,7 +224,7 @@ namespace date_time {
       }
       string_type format(this->m_format);
       string_type frac_str;
-      if (format.find(seconds_with_fractional_seconds_format)) {
+      if (format.find(seconds_with_fractional_seconds_format) != string_type::npos) {
         // replace %s with %S.nnn 
         frac_str = 
           fractional_seconds_as_string(a_time.time_of_day(), false);
@@ -240,7 +240,7 @@ namespace date_time {
       /* NOTE: replacing posix_zone_string_format must be done BEFORE
        * zone_name_format: "%ZP" & "%Z", if Z is checked first it will 
        * incorrectly replace a zone_name where a posix_string should go */
-      if (format.find(posix_zone_string_format)) {
+      if (format.find(posix_zone_string_format) != string_type::npos) {
         if(a_time.zone_abbrev().empty()) {
           // if zone_abbrev() returns an empty string, we want to
           // erase posix_zone_string_format from format
@@ -254,7 +254,7 @@ namespace date_time {
                                         a_time.zone_as_posix_string());
         }
       }
-      if (format.find(zone_name_format)) {
+      if (format.find(zone_name_format) != string_type::npos) {
         if(a_time.zone_name().empty()) {
           /* TODO: this'll probably create problems if a user places 
            * the zone_*_format flag in the format with a ptime. This 
@@ -274,7 +274,7 @@ namespace date_time {
                                         a_time.zone_name());
         }
       }
-      if (format.find(zone_abbrev_format)) {
+      if (format.find(zone_abbrev_format) != string_type::npos) {
         if(a_time.zone_abbrev(false).empty()) {
           /* TODO: this'll probably create problems if a user places 
            * the zone_*_format flag in the format with a ptime. This 
@@ -294,7 +294,7 @@ namespace date_time {
                                         a_time.zone_abbrev(false));
         }
       }
-      if (format.find(zone_iso_extended_format)) {
+      if (format.find(zone_iso_extended_format) != string_type::npos) {
         if(a_time.zone_name(true).empty()) {
           /* TODO: this'll probably create problems if a user places 
            * the zone_*_format flag in the format with a ptime. This 
@@ -313,7 +313,7 @@ namespace date_time {
         }
       }
 
-      if (format.find(zone_iso_format)) {
+      if (format.find(zone_iso_format) != string_type::npos) {
         if(a_time.zone_abbrev(true).empty()) {
           /* TODO: this'll probably create problems if a user places 
            * the zone_*_format flag in the format with a ptime. This 
@@ -331,7 +331,7 @@ namespace date_time {
                                         a_time.zone_abbrev(true));
         }
       }
-      if (format.find(fractional_seconds_format)) {
+      if (format.find(fractional_seconds_format) != string_type::npos) {
         // replace %f with nnnnnnn
         if (!frac_str.size()) {
           frac_str = fractional_seconds_as_string(a_time.time_of_day(), false);
@@ -341,7 +341,7 @@ namespace date_time {
                                       frac_str);
       }
 
-      if (format.find(fractional_seconds_or_none_format)) {
+      if (format.find(fractional_seconds_or_none_format) != string_type::npos) {
         // replace %F with nnnnnnn or nothing if fs == 0
         frac_str = 
           fractional_seconds_as_string(a_time.time_of_day(), true);
@@ -377,7 +377,7 @@ namespace date_time {
 
       string_type format(m_time_duration_format);
       string_type frac_str;
-      if (format.find(seconds_with_fractional_seconds_format)) {
+      if (format.find(seconds_with_fractional_seconds_format) != string_type::npos) {
         // replace %s with %S.nnn 
         frac_str = 
           fractional_seconds_as_string(a_time_dur, false);
@@ -390,7 +390,7 @@ namespace date_time {
                                       seconds_with_fractional_seconds_format, 
                                       replace_string);
       }
-      if (format.find(fractional_seconds_format)) {
+      if (format.find(fractional_seconds_format) != string_type::npos) {
         // replace %f with nnnnnnn
         if (!frac_str.size()) {
           frac_str = fractional_seconds_as_string(a_time_dur, false);
@@ -400,7 +400,7 @@ namespace date_time {
                                       frac_str);
       }
 
-      if (format.find(fractional_seconds_or_none_format)) {
+      if (format.find(fractional_seconds_or_none_format) != string_type::npos) {
         // replace %F with nnnnnnn or nothing if fs == 0
         frac_str = 
           fractional_seconds_as_string(a_time_dur, true);
