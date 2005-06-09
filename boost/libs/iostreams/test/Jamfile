@@ -50,7 +50,7 @@ DEPENDS all : test ;
             : # command
             : # input files
             : # build requirements
-                <msvc-stlport><*><runtime-link>static
+                <vc-6_5-stlport><*><runtime-link>static
                 <define>_MSL_LL_FILE_SUPPORT
                 <define>BOOST_IOSTREAMS_NO_LIB
                 $(requirements)
@@ -108,7 +108,7 @@ DEPENDS all : test ;
                     : # build requirements
                       <define>BOOST_IOSTREAMS_NO_LIB ] ;
         }
-        
+
         if ! $(NO_ZLIB) 
         {
             TEST_SUITE += 
