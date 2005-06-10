@@ -31,7 +31,7 @@
     Together, these extensions define a time system adjusted for recording times related to a specific earth location. This time system utilizes all the features and benefits of the posix_time system (see <link linkend="date_time.posix_time">posix_time</link> for full details). It uses a time_zone object which contains all the necessary data/rules to enable adjustments to and from various time zones. The time_zone objects used in date_time are handled via a boost::shared_ptr&lt;boost::local_time::time_zone&gt;.
   </para>
   <para>
-    The phrase "wall-clock" refers to the time that would be shown on a wall clock in a particular time zone at any point in time. Local_time uses a time zone object to account for differences in time zones and daylight savings adjustments. For example: While 5:00 pm, October 10, 2004 in Sydney Australia occurs at exactly the same instance as 3:00 am, October 10, 2004 in New York USA, it is a 14 hour difference in wall-clock times. However, a point in time just one day later will result in a 16 hour difference in wall-clock time due to daylight savings adjustments in both time zones. The local_time system tracks these by means of a time point, stored as UTC, and time_zone objects that contain all the necessary data to correctly calculate wall-clock times.
+    The phrase "wall-clock" refers to the time that would be shown on a wall clock in a particular time zone at any point in time. Local_time uses a time zone object to account for differences in time zones and daylight savings adjustments. For example: While 5:00 pm, October 10, 2004 in Sydney Australia occurs at exactly the same instant as 3:00 am, October 10, 2004 in New York USA, it is a 14 hour difference in wall-clock times. However, a point in time just one day later will result in a 16 hour difference in wall-clock time due to daylight savings adjustments in both time zones. The local_time system tracks these by means of a time point, stored as UTC, and time_zone objects that contain all the necessary data to correctly calculate wall-clock times.
   </para>
 
   <anchor id="local_ex" />
@@ -69,6 +69,7 @@
   <xi:include href="tz_database.xml" />
   <xi:include href="custom_time_zone.xml" />
   <xi:include href="local_date_time.xml" />
+  <xi:include href="local_time_period.xml" />
   <!--<xi:include href=".xml" /> for serialization -->
   <!-- includes here -->
   

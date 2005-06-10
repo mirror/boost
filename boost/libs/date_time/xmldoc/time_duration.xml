@@ -17,7 +17,8 @@
   <link linkend="time_duration_from_string">Construct from String</link> --
   <link linkend="time_duration_accessors">Accessors</link> --
   <link linkend="time_duration_to_string">Conversion To String</link> --
-  <link linkend="time_duration_operators">Operators</link>
+  <link linkend="time_duration_operators">Operators</link> --
+  <link linkend="time_duration_struct_tm">Struct tm Functions</link>
 
   <anchor id="time_duration_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
@@ -70,11 +71,19 @@ or
               minutes,
               seconds,
               fractional_seconds)</screen></entry>
-	    <entry>Construct ad duration from the counts</entry>
+          <entry>Construct a duration from the counts. The fractional_second parameter is a number of units and is therefore affected by the resolution the application is compiled with (see <link linkend="compile_options">Build-Compiler Information</link>). If the fractional_seconds argument exceeds the limit of the compiled precision, the excess value will be "carried over" into the seconds field.</entry>
           </row>
           <row>
             <entry><screen>time_duration td(1,2,3,9);
-//1 hr 2 min 3 sec 9 nanoseconds</screen></entry>
+//1 hr 2 min 3 sec 9 nanoseconds
+time_duration td2(1,2,3,123456789);
+time_duration td3(1,2,3,1000);
+// with microsecond resolution (6 digits)
+// td2 => "01:04:06.456789"
+// td3 => "01:02:03.001000"
+// with nanosecond resolution (9 digits)
+// td2 => "01:02:03.123456789"
+// td3 => "01:02:03.000001000"</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -236,6 +245,46 @@ neg_td.seconds(); // --> -3</screen></entry>
 	    <entry><screen>time_duration td(1,2,3,10);
 td.total_seconds(); 
 // --> (1*3600) + (2*60) + 3 == 3723</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>long total_milliseconds()</screen></entry>
+	    <entry>Get the total number of milliseconds truncating any remaining digits.</entry>
+	  </row>
+	  <row>
+	    <entry><screen>time_duration td(1,2,3,123456789);
+td.total_miliseconds(); 
+// HMS --> (1*3600) + (2*60) + 3 == 3723 seconds
+// milliseconds is 3 decimal places
+// (3723 * 1000) + 123 == 3723123</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>long total_microseconds()</screen></entry>
+	    <entry>Get the total number of microseconds truncating any remaining digits.</entry>
+	  </row>
+	  <row>
+	    <entry><screen>time_duration td(1,2,3,123456789);
+td.total_microseconds(); 
+// HMS --> (1*3600) + (2*60) + 3 == 3723 seconds
+// microseconds is 6 decimal places
+// (3723 * 1000000) + 123456 == 3723123456</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>long total_nanoseconds()</screen></entry>
+	    <entry>Get the total number of nanoseconds truncating any remaining digits.</entry>
+	  </row>
+	  <row>
+	    <entry><screen>time_duration td(1,2,3,123456789);
+td.total_nanoseconds(); 
+// HMS --> (1*3600) + (2*60) + 3 == 3723 seconds
+// nanoseconds is 9 decimal places
+// (3723 * 1000000000) + 123456789
+//                              == 3723123456789</screen>
 	    </entry>
           </row>
           
@@ -419,4 +468,42 @@ nanosecond(3)/2 == nanosecond(1);</screen>
     </informaltable>
   </para>
 
+  <anchor id="time_duration_struct_tm" />
+  <bridgehead renderas="sect3">Struct tm, time_t, and FILETIME Functions</bridgehead>
+  <para>Function for converting a time_duration to a <code>tm</code> struct is provided.</para>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
+	</row>
+	<row>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+        <row>
+	  <entry valign="top" morerows="1"><screen>tm to_tm(time_duration)</screen></entry>
+          <entry>A function for converting a <code>time_duration</code> object to a <code>tm</code> struct. The fields: <code>tm_year</code>, <code>tm_mon</code>, <code>tm_mday</code>, <code>tm_wday</code>, <code>tm_yday</code> are set to zero. The <code>tm_isdst</code> field is set to -1.</entry>
+	</row>
+	<row>
+          <entry><screen>time_duration td(1,2,3);
+tm td_tm = to_tm(td);
+/* tm_year => 0
+   tm_mon  => 0
+   tm_mday => 0
+   tm_wday => 0
+   tm_yday => 0
+   tm_hour => 1
+   tm_min  => 2
+   tm_sec  => 3
+   tm_isddst => -1 */</screen>
+	  </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+  
 </section>

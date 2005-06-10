@@ -59,7 +59,6 @@
   <xi:include href="time_duration.xml" />
   <xi:include href="time_period.xml" />
   <xi:include href="time_iterators.xml" />
-  <xi:include href="local_time_adjust.xml" />
   <!-- includes here -->
   
 </section>

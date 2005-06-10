@@ -226,7 +226,7 @@ tp2.intersects(tp1); // --> true</screen>
           </row>
           
           <row>
-	    <entry valign="top" morerows="1"><screen>time_period shift(date_duration)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>time_period shift(days)</screen></entry>
 	    <entry>Add duration to both start and end.</entry>
 	  </row>
 	  <row>

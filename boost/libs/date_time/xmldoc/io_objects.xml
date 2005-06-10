@@ -677,7 +677,7 @@ formatter.elements(col, dgf::last);
         </thead>
         <tbody>
           <row>
-            <entry valign="top" morerows="1"><screen>special_values_formatter()</screen></entry>
+            <entry valign="top"><screen>special_values_formatter()</screen></entry>
             <entry>Constructor uses defaults for special value strings.</entry>
           </row>
           <row>

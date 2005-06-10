@@ -29,7 +29,7 @@
         </row>
         <row>
           <entry>Feature</entry>
-          <entry>Major new features related to managment of local times.
+          <entry>Major new features related to management of local times.
                  This includes the introduction of a series of new classes to
                  represent time zones and local times (see <link linkend="date_time.local_time">Date Time Local Time</link> for complete details).
           </entry>
@@ -37,7 +37,17 @@
         <row>
           <entry>Feature</entry>
           <entry>Input and output facets have been re-written to support format-based 
-            redefintion of formats (see <link linkend="date_time.date_time_io">Date Time IO</link> for complete details).
+            redefinition of formats (see <link linkend="date_time.date_time_io">Date Time IO</link> for complete details).
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Functions have been added to facilitate conversions between <code>tm</code> structs for <code>date</code>, <code>ptime</code>, <code>time_duration</code>, and <code>local_date_time</code>. Functions for converting <code>FILETIME</code>, and <code>time_t</code> to <code>ptime</code> are also provided. See the individual sections for details.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>A <code>universal_time</code> function has been added to the <code>microsec_time_clock</code> (full details of this function can be found <link linkend="ptime_from_clock">here</link>).
           </entry>
         </row>
         <row>
@@ -48,7 +58,7 @@
         </row>
         <row>
           <entry>Bug Fix</entry>
-          <entry>Fixed multiple warings generated with various platforms/compilers.
+          <entry>Fixed multiple warnings generated with various platforms/compilers.
           </entry>
         </row>
         <row>

@@ -33,21 +33,32 @@
   <anchor id="tz_database_constr" />
   <bridgehead renderas="sect3">Construction</bridgehead>
   <para>
-    The only constructor takes no arguments. It is up to the user to load the desired datafile. A local_time::data_not_accessible exception will be thrown if given zonespec file cannot be found. local_time::bad_field_count exception will be thrown if the number of fields in given zonespec file is incorrect.
+    The only constructor takes no arguments and creates an empty database. It is up to the user to populate the database. This is typically achieved by loading the desired datafile, but can also be accomplished by means of the <code>add_record(...)</code> function (see the <link linkend="tz_database_accessors">Accessors table</link>). A <code>local_time::data_not_accessible</code> exception will be thrown if given zonespec file cannot be found. <code>local_time::bad_field_count</code> exception will be thrown if the number of fields in given zonespec file is incorrect.
   </para>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
         <thead>
           <row>
-            <entry>Syntax</entry>
-            <entry>Example</entry>
+            <entry valign="top" morerows="1">Syntax</entry>
+            <entry>Description</entry>
           </row>
         </thead>
         <tbody>
           <row>
-            <entry valign="top"><screen>tz_database();</screen></entry>
-            <entry><screen>tz_database tz_db();
+            <entry valign="top" morerows="1"><screen>tz_database()</screen></entry>
+            <entry>Constructor creates an empty database.</entry>
+          </row>
+          <row>
+            <entry><screen>tz_database tz_db;</screen></entry>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>bool load_from_file(std::string)</screen></entry>
+            <entry>Parameter is path to a time zone spec csv file (see <link linkend="tz_database_datafile">Data File Details</link> for details on the contents of this file). This function populates the database with time zone records found in the zone spec file. A <code>local_time::data_not_accessible</code> exception will be thrown if given zonespec file cannot be found. <code>local_time::bad_field_count</code> exception will be thrown if the number of fields in given zonespec file is incorrect.</entry>
+          </row>
+          <row>
+            <entry><screen>tz_database tz_db;
 tz_db.load_from_file("./date_time_zonespec.csv");</screen>
             </entry>
           </row>

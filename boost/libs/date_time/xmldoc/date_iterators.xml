@@ -58,9 +58,9 @@ or
           <entry>Iterate <code>day_count</code> days at a time. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-          <entry><screen>day_iterator day_itr(date(2005,1,1));
+          <entry><screen>day_iterator day_itr(date(2005,Jan,1));
 ++d_itr; // 2005-Jan-02
-day_iterator 2day_itr(date(2005,2,1),2);
+day_iterator 2day_itr(date(2005,Feb,1),2);
 ++2d_itr; // 2005-Feb-03</screen></entry>
         </row>
         
@@ -72,9 +72,9 @@ day_iterator 2day_itr(date(2005,2,1),2);
           <entry>Iterate <code>week_offset</code> weeks at a time. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-          <entry><screen>week_iterator wk_itr(date(2005,1,1));
+          <entry><screen>week_iterator wk_itr(date(2005,Jan,1));
 ++wk_itr; // 2005-Jan-08
-week_iterator 2wk_itr(date(2005,2,1),2);
+week_iterator 2wk_itr(date(2005,Jan,1),2);
 ++2wk_itr; // 2005-Feb-15</screen></entry>
         </row>
         
@@ -86,9 +86,9 @@ week_iterator 2wk_itr(date(2005,2,1),2);
           <entry>Iterate <code>month_offset</code> months. There are special rules for handling the end of the month. These are: if start date is last day of the month, always adjust to last day of the month. If date is beyond the end of the month (eg: jan 31 + 1 month) adjust back to end of month. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-          <entry><screen>month_iterator m_itr(date(2005,1,1));
+          <entry><screen>month_iterator m_itr(date(2005,Jan,1));
 ++m_itr; // 2005-Feb-01
-month_iterator 2m_itr(date(2005,2,1),2);
+month_iterator 2m_itr(date(2005,Feb,1),2);
 ++2m_itr; // 2005-Apr-01</screen></entry>
         </row>
         
@@ -100,9 +100,9 @@ month_iterator 2m_itr(date(2005,2,1),2);
 	  <entry>Iterate year_offset years. The year_iterator will always land on the day of the date parameter except when date is Feb 28 in a non-leap year. In this case the iterator will return Feb 29 for leap years (eg: 2003-Feb-28, 2004-Feb-29, 2005-Feb-28). This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
-          <entry><screen>year_iterator y_itr(date(2005,1,1));
+          <entry><screen>year_iterator y_itr(date(2005,Jan,1));
 ++y_itr; // 2006-Jan-01
-year_iterator 2y_itr(date(2005,2,1),2);
+year_iterator 2y_itr(date(2005,Feb,1),2);
 ++2y_itr; // 2007-Feb-01</screen></entry>
 	</row>
       </tbody>

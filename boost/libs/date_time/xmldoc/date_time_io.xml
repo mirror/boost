@@ -14,14 +14,18 @@
   <using-namespace name="boost::date_time"/>
   <bridgehead renderas="sect2">Date Time IO System</bridgehead>
 
-  <para>As of version 1.33, the date_time library utilizes a new IO streaming system. This new system give the user great control over how dates and times can be represented. The customization options can be broken down into two groups: format flags and string elements. Format flags provide flexibility in the order of the date elements as well as the type. Customizing the string elements allows the replacement of built in strings from month names, weekday names, and other strings used in the IO.</para>
+  <para>As of version 1.33, the date_time library utilizes a new IO streaming system. This new system gives the user great control over how dates and times can be represented. The customization options can be broken down into two groups: format flags and string elements. Format flags provide flexibility in the order of the date elements as well as the type. Customizing the string elements allows the replacement of built in strings from month names, weekday names, and other strings used in the IO.</para>
 
   <para>The output system is based on a date_facet (derived from std::facet), while the input system is based on a date_input_facet (also derived from std::facet). The time and local_time facets are derived from these base types. The output system utilizes three formatter objects, whereas the input system uses four parser objects. These formatter and parser objetcs are also customizable.</para>
+
+  <para>It is important to note, that while all the examples shown here use narrow streams, there are wide stream facets available as well (see <link linkend="io_objects_table">IO Objects</link> for a complete list).</para>
+
+  <para>It should be further noted that not all compilers are capable of using this IO system. For those compilers the IO system used in previous <code>date_time</code> versions is still available. The "legacy IO" is automatically selected for these compilers, however, the legacy IO system can be manually selected by defining <code>USE_DATE_TIME_PRE_1_33_FACET_IO</code>. See the <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information.</para>
 
   <para>A simple example of this new system:</para>
   <screen>//example to customize output to be "LongWeekday LongMonthname day, year"
 //                                  "%A %b %d, %Y"
-date d(2005,6,25);
+date d(2005,Jun,25);
 date_facet* facet(new date_facet("%A %B %d, %Y"));
 std::cout.imbue(std::locale(std::cout.getloc(), facet));
 std::cout &lt;&lt; d &lt;&lt; std::endl;
@@ -31,7 +35,7 @@ std::cout &lt;&lt; d &lt;&lt; std::endl;
 
   <xi:include href="format_flags.xml" />
   
-  <!-- <anchor id="greg_ex" /> -->
+  <anchor id="io_objects_table" />
   <bridgehead renderas="sect3">IO Objects</bridgehead>
   <para>
     <informaltable frame="all">
@@ -48,20 +52,33 @@ std::cout &lt;&lt; d &lt;&lt; std::endl;
 	    <entry><classname>date_input_facet</classname></entry>
 	  </row>
           <row>
+            <entry><classname alt="boost::date_time::date_facet">wdate_facet</classname></entry>
+	    <entry><classname alt="boost::date_time::date_input_facet">wdate_input_facet</classname></entry>
+	  </row>
+          <row>
             <entry><classname>time_facet</classname></entry>
 	    <entry><classname>time_input_facet</classname></entry>
 	  </row>
           <row>
-            <entry><classname alt="boost::date_time::time_facet">local_time_facet</classname></entry>
-	    <entry><classname alt="boost::date_time::time_input_facet">local_time_input_facet</classname></entry>
+            <entry><classname alt="boost::date_time::time_facet">wtime_facet</classname></entry>
+	    <entry><classname alt="boost::date_time::time_input_facet">wtime_input_facet</classname></entry>
+	  </row>
+          <row>
+            <entry><classname alt="boost::date_time::time_facet">local_time_facet</classname>*</entry>
+	    <entry><classname alt="boost::date_time::time_input_facet">local_time_input_facet</classname>*</entry>
+	  </row>
+          <row>
+            <entry><classname alt="boost::date_time::time_facet">wlocal_time_facet</classname>*</entry>
+	    <entry><classname alt="boost::date_time::time_input_facet">wlocal_time_input_facet</classname>*</entry>
 	  </row>
 	</tbody>
       </tgroup>
     </informaltable>
+    * These links lead to the <code>time_facet</code> and <code>time_input_facet</code> reference sections. They are not actual classes but typedefs.
   </para>
   
   <bridgehead renderas="sect3">Formatter/Parser Objects</bridgehead>
-  <para>These objects are used by the facets for type specific parsing and formatting. They are typically used when customizing the IO but can also be used apart from the facets.</para>
+  <para>To implement the new i/o facets the date-time library uses a number of new parsers and formatters. These classes are available for users that want to implement specialized input/output routines.</para>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">

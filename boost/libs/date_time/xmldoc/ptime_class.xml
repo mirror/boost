@@ -18,7 +18,8 @@
   <link linkend="ptime_from_funcs">Construct using Conversion functions</link> --
   <link linkend="ptime_accessors">Accessors</link> --
   <link linkend="ptime_to_string">Conversion To String</link> --
-  <link linkend="ptime_operators">Operators</link>
+  <link linkend="ptime_operators">Operators</link> --
+  <link linkend="ptime_struct_tm">Struct tm, time_t, and FILETIME Functions</link>
 
   <anchor id="ptime_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
@@ -176,6 +177,14 @@ ptime t(from_iso_string(ts))</screen></entry>
 	  <row>
 	    <entry><screen>ptime t(microsec_clock::local_time());</screen></entry>
 	  </row>
+          
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime microsec_clock::universal_time()</screen></entry>
+	    <entry>Get the UTC time using a subsecond resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the acheived resolution.</entry>
+	  </row>
+	  <row>
+	    <entry><screen>ptime t(microsec_clock::universal_time());</screen></entry>
+	  </row>
 	</tbody>
       </tgroup>
     </informaltable>
@@ -331,25 +340,25 @@ operator>=, operator&lt;=</screen>
           </row>
 
 	  <row>
-	    <entry valign="top" morerows="1"><screen>ptime operator+(date_duration)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>ptime operator+(days)</screen></entry>
 	    <entry>Return a ptime adding a day offset</entry>
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,1);
 ptime t(d,minutes(5));
-date_duration dd(1);
+days dd(1);
 ptime t2 = t + dd;</screen>
 	    </entry>
           </row>
           
 	  <row>
-	    <entry valign="top" morerows="1"><screen>ptime operator-(date_duration)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>ptime operator-(days)</screen></entry>
 	    <entry>Return a ptime subtracting a day offset</entry>
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,1);
 ptime t(d,minutes(5));
-date_duration dd(1);
+days dd(1);
 ptime t2 = t - dd;</screen>
 	    </entry>
           </row>
@@ -392,4 +401,102 @@ time_duration t3 = t2 - t1;//negative result</screen>
     </informaltable>
   </para>
 
+  <anchor id="ptime_struct_tm" />
+  <bridgehead renderas="sect3">Struct tm, time_t, and FILETIME Functions</bridgehead>
+  <para>Functions for converting posix_time objects to, and from, <code>tm</code> structs are provided as well as conversion from <code>time_t</code> and <code>FILETIME</code>.</para>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
+	</row>
+	<row>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+        <row>
+	  <entry valign="top" morerows="1"><screen>tm to_tm(ptime)</screen></entry>
+          <entry>A function for converting a <code>ptime</code> object to a <code>tm</code> struct. The <code>tm_isdst</code> field is set to -1.</entry>
+	</row>
+	<row>
+          <entry><screen>ptime pt(date(2005,Jan,1), time_duration(1,2,3));
+tm pt_tm = to_tm(pt);
+/* tm_year => 105
+   tm_mon  => 0
+   tm_mday => 1
+   tm_wday => 6 (Saturday)
+   tm_yday => 0
+   tm_hour => 1
+   tm_min  => 2
+   tm_sec  => 3
+   tm_isddst => -1 */</screen>
+	  </entry>
+        </row>
+
+        <row>
+	  <entry valign="top" morerows="1"><screen>date date_from_tm(tm datetm)</screen></entry>
+          <entry>A function for converting a <code>tm</code> struct to a <code>date</code> object. The fields: <code>tm_wday </code>, <code>tm_yday </code>, and <code>tm_isdst</code> are ignored.</entry>
+	</row>
+	<row>
+          <entry><screen>tm pt_tm;
+pt_tm.tm_year = 105;
+pt_tm.tm_mon  = 0;
+pt_tm.tm_mday = 1;
+pt_tm.tm_hour = 1;
+pt_tm.tm_min  = 2;
+pt_tm.tm_sec  = 3;
+ptime pt = ptime_from_tm(pt_tm);
+// pt => 2005-Jan-01 01:02:03</screen>
+          </entry>
+        </row>
+        
+        <row>
+	  <entry valign="top" morerows="1"><screen>tm to_tm(time_duration)</screen></entry>
+          <entry>A function for converting a <code>time_duration</code> object to a <code>tm</code> struct. The fields: <code>tm_year</code>, <code>tm_mon</code>, <code>tm_mday</code>, <code>tm_wday</code>, <code>tm_yday</code> are set to zero. The <code>tm_isdst</code> field is set to -1.</entry>
+	</row>
+	<row>
+          <entry><screen>time_duration td(1,2,3);
+tm td_tm = to_tm(td);
+/* tm_year => 0
+   tm_mon  => 0
+   tm_mday => 0
+   tm_wday => 0
+   tm_yday => 0
+   tm_hour => 1
+   tm_min  => 2
+   tm_sec  => 3
+   tm_isddst => -1 */</screen>
+	  </entry>
+        </row>
+
+        <row>
+	  <entry valign="top" morerows="1"><screen>ptime from_time_t(std::time_t)</screen></entry>
+          <entry>Creates a <code>ptime</code> from the time_t parameter. The seconds held in the time_t are added to a time point of 1970-Jan-01.</entry>
+	</row>
+	<row>
+          <entry><screen>ptime pt(not_a_date_time);
+std::time_t t;
+t = 1118158776;
+pt = from_time_t(t);
+// pt => 2005-Jun-07 15:39:36</screen></entry>
+        </row>
+
+        <row>
+          <entry valign="top" morerows="1"><screen>ptime from_ftime&lt;ptime>(FILETIME)</screen></entry>
+          <entry>A template function that constructs a <code>ptime</code> from a FILETIME struct.</entry>
+	</row>
+	<row>
+          <entry><screen>FILETIME ft;
+ft.dwHighDateTime = 29715317;
+ft.dwLowDateTime = 3865122988UL;
+ptime pt = from_ftime&lt;ptime>(ft);
+// pt => 2005-Jun-07 15:30:57.039582000</screen></entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+  
 </section>

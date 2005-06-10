@@ -72,6 +72,5 @@
   <xi:include href="date_iterators.xml" />
   <xi:include href="date_algorithms.xml" />
   <xi:include href="gregorian_calendar.xml" />
-  <xi:include href="day_clock_class.xml" />
   
 </section>

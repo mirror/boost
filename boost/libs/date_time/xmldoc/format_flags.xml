@@ -65,7 +65,7 @@
 
         <row>
           <entry valign="top" morerows="1"><screen>%j</screen></entry>
-          <entry>Day of year as decimal from 001 to 366. Note Feb-29 is not valid in non-leap years. For those years, "060" is skipped.</entry>
+          <entry>Day of year as decimal from 001 to 366 for leap years, 001 - 365 for non-leap years.</entry>
         </row>
         <row>
           <entry><screen>"060" => Feb-29</screen></entry>
@@ -81,7 +81,7 @@
 
         <row>
           <entry valign="top" morerows="1"><screen>%U</screen></entry>
-          <entry>Week number 00 to 53 with first Sunday as the first day of week 1</entry>
+          <entry>The week number of the current year as a decimal number, range 00 to 53, starting with the first Sunday as the first day of week 01. In 2005, Jan 1st falls on a Saturday, so therfore it falls within week 00 of 2005 (week 00 spans 2004-Dec-26 to 2005-Jan-01. This also happens to be week 53 of 2004).</entry> 
         </row>
         <row>
           <entry><screen>date d(2005, Jan, 1); // Saturday
@@ -113,10 +113,19 @@ ss &lt;&lt; d; // "01" begining of week 1</screen></entry>
 
         <row>
           <entry valign="top" morerows="1"><screen>%x</screen></entry>
-          <entry>Implementation defined date format from the locale</entry>
+          <entry>Implementation defined date format from the locale.</entry>
         </row>
         <row>
-          <entry><screen>04/01/05</screen></entry>
+          <entry><screen>date d(2005,Oct,31);
+date_facet* f = new date_facet("%x");
+ 
+locale loc = locale(locale("en_US"), f);
+cout.imbue(loc);
+cout &lt;&lt; d; // "10/31/2005"
+  
+loc = locale(locale("de_DE"), f);
+cout.imbue(loc);
+cout &lt;&lt; d; // "31.10.2005"</screen></entry>
         </row>
 
         <row>
@@ -254,10 +263,20 @@ ss &lt;&lt; d; // "01" begining of week 1</screen></entry>
 
         <row>
           <entry valign="top" morerows="1"><screen>%x %X</screen></entry>
-          <entry>Implementation defined date/time format from the locale</entry>
+          <entry>Implementation defined date/time format from the locale.</entry>
         </row>
         <row>
-          <entry><screen>10/15/05 13:12:11</screen></entry>
+          <entry><screen>date d(2005,Oct,31);
+ptime pt(d, hours(20));
+ptime_facet* f = new ptime_facet("%x %X");
+ 
+locale loc = locale(locale("en_US"), f);
+cout.imbue(loc);
+cout &lt;&lt; pt; // "10/31/2005 08:00:00 PM"
+  
+loc = locale(locale("de_DE"), f);
+cout.imbue(loc);
+cout &lt;&lt; pt; // "31.10.2005 20:00:00"</screen></entry>
         </row>
 
         <row>

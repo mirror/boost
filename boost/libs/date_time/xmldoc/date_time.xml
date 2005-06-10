@@ -36,7 +36,21 @@
   <bridgehead renderas="sect3">Introduction</bridgehead>
 	 
   <para>
-   A set of date-time libraries based on generic programming concepts.
+    A set of date-time libraries based on generic programming concepts.
+  </para>
+
+  <para>This documentation is also available in PDF format. It can be found at:
+    <simplelist type="horiz" columns="1">
+      <member><ulink url="http://www.crystalclearsoftware.com/libraries/date_time/date_time.pdf" /></member>
+    </simplelist>
+    In addition, a full doxygen reference can be found at:
+    <simplelist type="horiz" columns="1">
+      <member><ulink url="http://www.crystalclearsoftware.com/libraries/date_time/ref_guide/index.html" /></member>
+    </simplelist>
+    The most current version of the documentation can be found at:
+    <simplelist type="horiz" columns="1">
+      <member><ulink url="http://www.crystalclearsoftware.com/libraries/date_time/index.html" /></member>
+    </simplelist>
   </para>
   <!-- </section> -->
 

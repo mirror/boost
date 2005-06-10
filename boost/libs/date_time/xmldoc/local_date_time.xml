@@ -15,7 +15,8 @@
   <link linkend="local_date_time_clock_constr">Construct From Clock</link> --
   <link linkend="local_date_time_constr">Construction</link> --
   <link linkend="local_date_time_accessors">Accessors</link> --
-  <link linkend="local_date_time_operators">Operators</link>
+  <link linkend="local_date_time_operators">Operators</link> --
+  <link linkend="local_date_time_tm_func">Struct tm Functions</link>
 
   <anchor id="local_date_time_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
@@ -89,26 +90,32 @@ local_date_time ldt =
     Construction from a wall-clock rep may result in differing shifts for a particular time zone, depending on daylight savings rules for that zone. This means it is also possible to create a local_date_time with a non-existent, or duplicated, UTC representation. These cases occur during the forward shift in time that is the transition into daylight savings and during the backward shift that is the transition out of daylight savings. The user has two options for handling these cases: a bool flag that states if the time is daylight savings, or an enum that states what to do when either of these cases are encountered.
   </para>
   <para>
-    The bool flag is ignored when the given time_zone has no daylight savings specification. When the daylight savings status of a given time label is calculated and it does not match the flag, a local_time::dst_not_valid exception is thrown. If a time label is invalid (does not exist), a local_time::time_label_invalid exception is thrown.
+    The bool flag is ignored when the given time_zone has no daylight savings specification. When the daylight savings status of a given time label is calculated and it does not match the flag, a <code>local_time::dst_not_valid</code> exception is thrown. If a time label is invalid (does not exist), a <code>local_time::time_label_invalid</code> exception is thrown.
   </para>
   <para>
-    There are two elements in the local_date_time::DST_CALC_OPTIONS enum: EXCEPTION_ON_ERROR and NOT_DATE_TIME_ON_ERROR. The possible exceptions thrown are a local_time::ambiguous_result or a local_time::time_label_invalid. The NOT_DATE_TIME_ON_ERROR sets the time value to the special value local_time::not_a_date_time in the event of either a invalid or an ambiguous time label.
+    There are two elements in the <code>local_date_time::DST_CALC_OPTIONS</code> enum: <code>EXCEPTION_ON_ERROR</code> and <code>NOT_DATE_TIME_ON_ERROR</code>. The possible exceptions thrown are a <code>local_time::ambiguous_result</code> or a <code>local_time::time_label_invalid</code>. The <code>NOT_DATE_TIME_ON_ERROR</code> sets the time value to the special value <code>local_time::not_a_date_time</code> in the event of either a invalid or an ambiguous time label.
   </para>
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
         <thead>
           <row>
-            <entry>Syntax</entry>
+            <entry morerows="1">Syntax</entry>
+            <entry>Description</entry>
+          </row>
+          <row>
             <entry>Example</entry>
           </row>
         </thead>
         <tbody>
           <row>
-            <entry valign="top"><screen>local_date_time(...)
+            <entry valign="top" morerows="1"><screen>local_date_time(...)
   Parameters:
     posix_time::ptime
     time_zone_ptr</screen></entry>
+            <entry>The given time is expected to be UTC. Therefore, the given time will be adjusted according to the offset described in the time zone.</entry>
+          </row>
+          <row>
             <entry><screen>
 // 3am, 2004-Nov-05 local time
 ptime pt(date(2004,Nov,5), 
@@ -118,13 +125,17 @@ time_zone_ptr zone(
 local_date_time az(pt, zone);</screen>
             </entry>
           </row>
+          
           <row>
-            <entry valign="top"><screen>local_date_time(...)
+            <entry valign="top" morerows="1"><screen>local_date_time(...)
   Parameters:
     date
     time_duration 
     time_zone_ptr
     bool</screen></entry>
+<entry>The passed time information understood to be in the passed tz. The DST flag must be passed to indicate whether the time is in daylight savings or not. May throw a <code>dst_not_valid</code> or <code>time_label_invalid</code> exception.</entry>
+          </row>
+          <row>
             <entry><screen>date d(2004,Nov,5);
 time_duration td(5,0,0,0);
 string z("PST-8PDT,M4.1.0,M10.1.0")
@@ -134,13 +145,17 @@ local_date_time nyc(d, td,
                     zone, false);</screen>
             </entry>
           </row>
+          
           <row>
-            <entry valign="top"><screen>local_date_time(...)
+            <entry valign="top" morerows="1"><screen>local_date_time(...)
   Parameters:
     date
     time_duration
     time_zone_ptr
     DST_CALC_OPTIONS</screen></entry>
+            <entry>The passed time information understood to be in the passed tz. The DST flag is calculated according to the specified rule. May throw a <code>ambiguous_result</code> or <code>time_label_invalid</code> exception.</entry>
+          </row>
+          <row>
             <entry><screen>date d(2004,Nov,5);
 time_duration td(5,0,0,0);
 string z("PST-8PDT,M4.1.0,M10.1.0")
@@ -150,15 +165,23 @@ local_date_time nyc(d, td, zone,
   NOT_DATE_TIME_ON_ERROR);</screen>
             </entry>
           </row>
+          
           <row>
-            <entry valign="top"><screen>local_date_time(local_date_time);</screen></entry>
-            <entry><screen>local_date_time az_2(az);</screen></entry>
+            <entry valign="top" morerows="1"><screen>local_date_time(local_date_time);</screen></entry>
+            <entry>Copy Constructor.</entry>
           </row>
           <row>
-            <entry valign="top"><screen>local_date_time(...)
+            <entry><screen>local_date_time az_2(az);</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>local_date_time(...)
   Parameters:
     special_values
     time_zone_ptr</screen></entry>
+            <entry>Special Values constructor.</entry>
+          </row>
+          <row>
             <entry><screen>time_zone_ptr zone(
   new posix_time_zone("MST-07")
 );
@@ -168,6 +191,7 @@ local_date_time nadt(not_a_date_time,
 local_date_time nadt(pos_infin);</screen>
             </entry>
           </row>
+          
         </tbody>
       </tgroup>
     </informaltable>
@@ -198,7 +222,7 @@ local_date_time nadt(pos_infin);</screen>
 
           <row>
             <entry valign="top" morerows="1"><screen>bool is_dst()</screen></entry>
-            <entry>Determines if time rep is in DST for associated zone.</entry>
+            <entry>Determines if time value is in DST for associated zone.</entry>
           </row>
           <row>
             <entry></entry>
@@ -206,7 +230,7 @@ local_date_time nadt(pos_infin);</screen>
           
           <row>
             <entry valign="top" morerows="1"><screen>ptime utc_time()</screen></entry>
-            <entry>Returns the UTC time for this object.</entry>
+            <entry>Converts the local time value to a UTC value.</entry>
           </row>
           <row>
             <entry><screen>ptime pt(date(2004,Nov,5), 
@@ -223,7 +247,13 @@ az.utc_time(); // 10am 2004-Nov-5</screen>
             <entry>Returns the local time for this object (Wall-clock).</entry>
           </row>
           <row>
-            <entry><screen>az.local_time(); // 3am 2004-Nov-5</screen></entry>
+            <entry><screen>ptime pt(date(2004,Nov,5), 
+         hours(10));
+time_zone_ptr zone(
+  new posix_time_zone("MST-07"));
+local_date_time az(pt, zone);
+az.utc_time(); // 10am 2004-Nov-5
+az.local_time(); // 3am 2004-Nov-5</screen></entry>
           </row>
           
           <row>
@@ -236,13 +266,11 @@ az.utc_time(); // 10am 2004-Nov-5</screen>
             <entry>Returns a local_date_time representing the same UTC time as calling object, plus optional time_duration, with given time zone.</entry>
           </row>
           <row>
-            <entry><screen>local_date_time nyc = 
-  az.local_time_in(nyc_zone, 
-                   hours(2));
+            <entry><screen>local_date_time nyc = az.local_time_in(nyc_zone);
 // nyc == 7am 2004-Nov-5</screen>
             </entry>
           </row>
-          
+          <!-- 
           <row>
             <entry valign="top" morerows="1"><screen>std::string zone_name()</screen></entry>
             <entry>Returns full zone name from associated time zone or "Coordinated Universal Time" if time_zone_ptr is NULL.</entry>
@@ -260,6 +288,7 @@ az.utc_time(); // 10am 2004-Nov-5</screen>
             <entry>
             </entry>
           </row>
+          -->
         </tbody>
       </tgroup>
     </informaltable>
@@ -267,11 +296,116 @@ az.utc_time(); // 10am 2004-Nov-5</screen>
 
   <anchor id="local_date_time_operators" />
   <bridgehead renderas="sect3">Operators</bridgehead>
-  <para>
-    Full comparison operations to another local_date_time are provided.
-  </para>
-  <para>
-    Addition, subtraction, and shortcut operators provided for date_duration, and time_duration.
-  </para>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
+	</row>
+	<row>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+	<row>
+          <entry valign="top" morerows="1"><screen>operator&lt;&lt;</screen></entry>
+          <entry>Output streaming operator. This operator is part of the v1.33 IO addition to date_time. For complete details on this feature see <link linkend="date_time.date_time_io">Date Time IO</link>. The default output is shown in this example.</entry>
+	</row>
+	<row>
+          <entry><screen>
+time_zone_ptr zone(new posix_time_zone("MST-07");
+local_date_time ldt(date(2005,Jul,4),
+                    hours(20), 
+                    false);
+std::cout &lt;&lt; ldt &lt;&lt; std::endl;
+// "2005-Jul-04 20:00:00 MST"
+          </screen></entry>
+        </row>
+        
+	<row>
+          <entry valign="top" morerows="1"><screen>operator>></screen></entry>
+          <entry>Input streaming operator. This operator is part of the v1.33 IO addition to date_time. For complete details on this feature see <link linkend="date_time.date_time_io">Date Time IO</link>. At this time, <code>local_date_time</code> objects can only be streamed in with a Posix Time Zone string. A comlpete description of a Posix Time Zone string can be found in the documentation for the <link linkend="posix_time_zone_intro">posix_time_zone</link> class.</entry>
+	</row>
+	<row>
+          <entry><screen>stringstream ss;
+ss.str("2005-Jul-04 20:00:00 MST-07");
+ss >> ldt;
+          </screen></entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>operator==, operator!=,
+operator>, operator&lt;,
+operator>=, operator&lt;=</screen></entry>
+	  <entry>A full complement of comparison operators</entry>
+	</row>
+	<row>
+	  <entry><screen>ldt1 == ldt2, etc</screen></entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>operator+, operator+=,
+operator-, operator-=</screen></entry>
+          <entry>Addition, subtraction, and shortcut operators for <code>local_date_time</code> and date duration types. These include: <code>days</code>, <code>months</code>, and <code>years</code>.</entry>
+	</row>
+	<row>
+	  <entry><screen>ldt + days(5), etc</screen></entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>operator+, operator+=,
+operator-, operator-=</screen></entry>
+          <entry>Addition, subtraction, and shortcut operators for <code>local_date_time</code> and <code>time_duration</code>.</entry>
+	</row>
+	<row>
+	  <entry><screen>ldt + hours(5), etc</screen></entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
 
+  <anchor id="local_date_time_tm_func" />
+  <bridgehead renderas="sect3">Struct tm Functions</bridgehead>
+  <para>Function for converting a <code>local_date_time</code> object to a <code>tm</code> struct is provided.</para>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
+	</row>
+	<row>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+        <row>
+	  <entry valign="top" morerows="1"><screen>tm to_tm(local_date_time)</screen></entry>
+          <entry>A function for converting a <code>local_date_time</code> object to a <code>tm</code> struct.</entry>
+	</row>
+	<row>
+          <entry><screen>
+// 6am, 2005-Jul-05 local time
+std::string z("EST-05EDT,M4.1.0,M10.1.0");
+ptime pt(date(2005,Jul,5), 
+         hours(10));
+time_zone_ptr zone( new posix_time_zone(z));
+local_date_time ldt(pt, zone);
+tm ldt_tm = to_tm(ldt);
+/* tm_year => 105
+   tm_mon  => 6
+   tm_mday => 5
+   tm_wday => 2 (Tuesday)
+   tm_yday => 185
+   tm_hour => 6
+   tm_min  => 0
+   tm_sec  => 0
+   tm_isddst => 1 */</screen>
+	  </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
 </section>

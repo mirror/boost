@@ -171,13 +171,13 @@ date_duration dd3 = dd1 - dd2;</screen>
         </row>
         <row>
           <entry><screen>months single(1);
-date leap_year(2004,1,31);
-date norm_year(2005,1,31);
+date leap_year(2004,Jan,31);
+date norm_year(2005,Jan,31);
 leap_year + single; // => 2004-Feb-29
 norm_year + single; // => 2005-Feb-28
-date(2005,1,1) + single; // => 2005-Feb-01
-date(2005,2,1) + single; // => 2005-Mar-01
-date(2005,2,28) + single; // => 2005-Mar-31</screen></entry>
+date(2005,Jan,1) + single; // => 2005-Feb-01
+date(2005,Feb,1) + single; // => 2005-Mar-01
+date(2005,Feb,28) + single; // => 2005-Mar-31</screen></entry>
         </row>
 
 	<row>
@@ -186,8 +186,8 @@ date(2005,2,28) + single; // => 2005-Mar-31</screen></entry>
         </row>
         <row>
           <entry><screen>years single(1);
-date(2003,2,28) + single; // => 2004-Feb-29
-date(2004,2,29) + single; // => 2005-Feb-28</screen></entry>
+date(2003,Feb,28) + single; // => 2004-Feb-29
+date(2004,Feb,29) + single; // => 2005-Feb-28</screen></entry>
         </row>
 
 	<row>
@@ -196,7 +196,7 @@ date(2004,2,29) + single; // => 2005-Feb-28</screen></entry>
         </row>
         <row>
           <entry><screen>weeks single(1);
-date(2005,1,1) + single; // => 2005-Jan-08</screen></entry>
+date(2005,Jan,1) + single; // => 2005-Jan-08</screen></entry>
         </row>
 
       </tbody>

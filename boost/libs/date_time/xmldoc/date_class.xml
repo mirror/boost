@@ -17,7 +17,8 @@
   <link linkend="date_construct_from_clock">Construct from Clock</link> --
   <link linkend="date_accessors">Accessors</link> --
   <link linkend="date_convert_to_string">Convert to String</link> --
-  <link linkend="date_operators">Operators</link>
+  <link linkend="date_operators">Operators</link> --
+  <link linkend="date_tm_funcs">Struct tm Functions</link>
 
   <anchor id="date_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
@@ -79,7 +80,7 @@ date d5(min_date_time);</screen></entry>
         </row>
 
 	<row>
-	  <entry valign="top" morerows="1"><screen>date;</screen></entry>
+	  <entry valign="top" morerows="1"><screen>date()</screen></entry>
 	  <entry>Default constructor. Creates a date object initialized to not_a_date_time. NOTE: this constructor can be disabled by defining DATE_TIME_NO_DEFAULT_CONSTRUCTOR (see compiler_config.hpp)</entry>
 	</row>
 	<row>
@@ -280,7 +281,7 @@ d.is_not_a_date(); // --> true</screen></entry>
 	<row>
           <entry><screen>date d(pos_infin); 
 date d2(not_a_date_time); 
-date d3(2005,3,1);
+date d3(2005,Mar,1);
 d.is_special(); // --> true
 d2.is_special(); // --> true
 d3.is_special(); // --> false</screen></entry>
@@ -437,6 +438,57 @@ date d2(2002,Jan,2);
 date_duration dd = d2-d1;</screen>
 	  </entry>
 	</row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+  
+  <anchor id="date_tm_funcs" />
+  <bridgehead renderas="sect3">Struct tm Functions</bridgehead>
+  <para>Functions for converting a <code>date</code> object to, and from, a <code>tm</code> struct are provided.</para>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry valign="top" morerows="1">Syntax</entry>
+	  <entry>Description</entry>
+	</row>
+	<row>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+        <row>
+	  <entry valign="top" morerows="1"><screen>tm to_tm(date)</screen></entry>
+          <entry>A function for converting a <code>date</code> object to a <code>tm</code> struct. The fields: <code>tm_hour</code>, <code>tm_min</code>, and <code>tm_sec</code> are set to zero. The <code>tm_isdst</code> field is set to -1.</entry>
+	</row>
+	<row>
+          <entry><screen>date d(2005,Jan,1);
+tm d_tm = to_tm(d);
+/* tm_year => 105
+   tm_mon  => 0
+   tm_mday => 1
+   tm_wday => 6 (Saturday)
+   tm_yday => 0
+   tm_hour => 0
+   tm_min  => 0
+   tm_sec  => 0
+   tm_isddst => -1 */</screen>
+	  </entry>
+        </row>
+
+        <row>
+	  <entry valign="top" morerows="1"><screen>date date_from_tm(tm datetm)</screen></entry>
+          <entry>A function for converting a <code>tm</code> struct to a <code>date</code> object. The fields: <code>tm_wday </code>, <code>tm_yday </code>, <code>tm_hour</code>, <code>tm_min</code>, <code>tm_sec</code>, and <code>tm_isdst</code> are ignored.</entry>
+	</row>
+	<row>
+          <entry><screen>tm d_tm;
+d_tm.tm_year = 105;
+d_tm.tm_mon  = 0;
+d_tm.tm_mday = 1;
+date d = date_from_tm(d_tm);
+// d => 2005-Jan-01</screen>
+          </entry>
+        </row>
       </tbody>
     </tgroup>
   </informaltable>
