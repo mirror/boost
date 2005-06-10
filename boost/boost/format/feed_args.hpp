@@ -68,7 +68,8 @@ namespace detail {
     } // -mk_str(..) 
 
 
-#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) 
+#if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) || \
+    BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
 // MSVC needs to be tricked to disambiguate this simple overload..
 // the trick is in "boost/format/msvc_disambiguater.hpp"
   
