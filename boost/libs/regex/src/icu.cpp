@@ -37,11 +37,11 @@ icu_regex_traits_implementation::string_type icu_regex_traits_implementation::do
    {
       scoped_array< ::uint8_t> presult(new ::uint8_t[len+1]);
       len = pcoll->getSortKey(&*t.begin(), static_cast< ::int32_t>(t.size()), presult.get(), len+1);
-      if(0 == presult[len-1])
+      if((0 == presult[len-1]) && (len > 1))
          --len;
       return string_type(presult.get(), presult.get()+len);
    }
-   if(0 == result[len-1])
+   if((0 == result[len-1]) && (len > 1))
       --len;
    return string_type(result, result+len);
 }
