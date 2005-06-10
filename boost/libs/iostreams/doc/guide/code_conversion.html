@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>Code Conversion</TITLE>
+    <LINK REL="stylesheet" href="../../../../boost.css">
+    <LINK REL="stylesheet" href="../theme/iostreams.css">
+</HEAD>
+<BODY>
+
+<!-- Begin Banner -->
+
+    <H1 CLASS="title">Code Conversion</H1>
+    <HR CLASS="banner">
+
+<!-- End Banner -->
+
+<DL class="page-index">
+  <DT><A href="#overview">Overview</A></DT>
+  <DT><A href="#headers">Headers</A></DT>
+  <DT>Reference
+    <DL>
+      <DT><A href="../classes/code_converter.html">Class template <CODE>converter</CODE></A></DT>
+      <DT><BROKEN_LINK href="../classes/converting_streambuf.html">Class template <CODE>converting_streambuf</CODE></BROKEN_LINK></DT>
+      <DT><BROKEN_LINK href="../classes/converting_stream.html">Class template <CODE>converting_stream</CODE></BROKEN_LINK></DT>
+    </DL>
+  </DT>
+</DL>
+
+<A NAME="overview">
+<H2>Overview</H2>
+
+<P>
+    The Boost Iostreams library provides the following components for code conversion:
+    <UL>
+        <LI CLASS="square">
+            <B><CODE>converter:</CODE></B> A Device adapter which which takes a Device with a narrow character type and produces a Device with wide character type by introducing a layer of code conversion performed using a <CODE>std::codecvt</CODE>.
+        </LI>
+        <LI CLASS="square">
+            <B><CODE>converting_streambuf:</CODE></B> A wide-character stream buffer template having an interface essentially identical to <A href="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>, with the following additional property: after zero or more wide-character Filters have been added to the chain, a sequence of zero or more narrow-character Filters and a narrow character Device may be added. A <CODE>converter</CODE> is inserted automatically between the final wide-character Filter and the first narrow-character Filter or Device. [<I>Not implemented</I>]
+        </LI>
+        <LI CLASS="square">
+            <B><CODE>converting_stream</CODE>:</B> A wide-character stream template having an interface essentially identical to <A href="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, with the following additional property: after zero or more wide-character Filters have been added to the chain, a sequence of zero or more narrow-character Filters and a narrow character Device may be added. A <CODE>converter</CODE> is inserted automatically between the final wide-character Filter and the first narrow-character Filter or Device. [<I>Not implemented</I>]
+        </LI>
+    </UL>
+</P>
+
+<A NAME="headers">
+<H2>Headers</H2>
+
+<DL>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/converter.hpp"><CODE>&lt;boost/iostreams/converter.hpp&gt;</CODE></A></DT>
+  <DT><BROKEN_LINK CLASS="header" href="../../../../boost/iostreams/converting_streambuf.hpp"><CODE>&lt;boost/iostreams/converting_streambuf.hpp&gt;</CODE></A></DT>
+  <DT><BROKEN_LINK CLASS="header" href="../../../../boost/iostreams/converting_stream.hpp"><CODE>&lt;boost/iostreams/converting_stream.hpp&gt;</CODE></A></DT>
+</DL>
+
+<!-- Begin Footer -->
+
+<HR>
+<P CLASS="copyright">Revised
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+20 May, 2004
+<!--webbot bot="Timestamp" endspan i-checksum="38504" -->
+</P>
+
+<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright"> 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+</P>
+
+<!-- End Footer -->
+
+</BODY>

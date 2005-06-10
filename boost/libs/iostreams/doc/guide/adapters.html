@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>STL Sequence Adapters</TITLE>
+    <LINK REL="stylesheet" href="../../../../boost.css">
+    <LINK REL="stylesheet" href="../theme/iostreams.css">
+</HEAD>
+<BODY>
+
+<!-- Begin Banner -->
+
+    <H1 CLASS="title">STL Sequence Adapters</H1>
+    <HR CLASS="banner">
+
+<!-- End Banner -->
+
+<DL class="page-index">
+  <DT><A href="#overview">Overview</A></DT>
+  <DT><A href="#headers">Headers</A></DT>
+  <DT><A href="#examples">Examples</A></DT>
+  <DT><A href="#acknowledgments">Acknowledgments</A></DT>
+</DL>
+
+<A NAME="overview"></A>
+<H2>Overview</H2>
+ 
+<P>
+    The Iostreams library provides the following mechanisms for streams and stream buffers to access standard library sequences:
+    <OL>
+        <LI CLASS="square">The overloaded function template <A href="../functions/adapt.html"><CODE>adapt</CODE></A> returns a Device when passed a single <A HREF="http://www.sgi.com/tech/stl/OutputIterator.html" target="_top">OutputIterator</A> or two <A HREF="http://www.sgi.com/tech/stl/ForwardIterator.html" target="_top">ForwardIterators</A>. (<I>See</I> <A HREF="#example_i">Example I</A> and <A HREF="#example_ii">Example II</A>, below.)
+        <LI CLASS="square">Filtering stream and stream buffer constructors, as well as their member functions <CODE>push</CODE>, are overloaded to accept iterator pairs wherever a Filter or Device is permitted.<SUP><A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A></SUP> (<I>See</I> <A HREF="#example_i">Example I</A> and <A HREF="#example_ii">Example II</A>, below.)
+        <LI CLASS="square">The standard library template <CODE>back_insert_iterator</CODE> is recognized as a full-fledged model of <A href="../concepts/sink.html">Sink</A>.
+        <LI CLASS="square">The class template <A href="../classes/back_inserter.html"><CODE>back_insert_device</CODE></A>, and the associated object generator <A href="../classes/back_inserter.html#back_inserter"><CODE>boost::iostreams::back_inserter</CODE></A>, provide efficient insertion at the end of a sequence.<SUP><A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A></SUP> (<I>See</I> <A HREF="#example_iii">Example III</A>, below.)
+    </OL>
+</P>
+
+<P>
+    In addition, the Iostreams library will provide a generic component <CODE>container_device</CODE> for accessing an arbitrary STL sequence in a manner similar to <CODE>std::stringstream</CODE>. This differs from a Device based on an iterator range, since the underlying sequence expands automatically as characters are written past its end. The component will be flexible enough to store either a reference to or a copy of a provided sequence.<SUP><A CLASS="footnote_ref" NAME="note_3_ref" HREF="#note_3">[3]</A></SUP>
+</P>
+
+<A NAME="headers">
+<H2>Headers</H2>
+
+<DL class="page-index">
+  <DT><A CLASS="header" href="../../../../boost/iostreams/adapt.hpp"><CODE>&lt;boost/iostreams/adapt.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/device/back_inserter.hpp"><CODE>&lt;boost/iostreams/device/back_inserter.hpp&gt;</CODE></A></DT>
+</DL>
+
+<A NAME="examples"></A>
+<H2>Examples</H2>
+
+<A NAME="example_i"></A>
+<H4>I. Reading from an STL Sequence</H4>
+
+<P>One can read existing data from a sequence as follows:</P>
+
+<PRE CLASS="broken_ie">    std::string s = <SPAN CLASS="literal">"A shade of sadness, a blush of shame,"</SPAN>
+                    <SPAN CLASS="literal">"Over the face of the leader came"</SPAN>;
+    filtering_istream in(adapt(s.begin(), s.end()));</PRE>
+
+<P>Or equivalently, since filtering stream constuctors are overloaded to accept iterator pairs:</P>
+
+<PRE CLASS="broken_ie">    filtering_istream in(s.begin(), s.end());</PRE>
+
+<A NAME="example_ii"></A>
+<H4>II. Overwriting an STL Sequence</H4>
+
+<P>One can overwrite the contents of a sequence as follows:</P>
+
+<PRE CLASS="broken_ie">    std::string s = <SPAN CLASS="literal">"We till shadowed days are done,"</SPAN>
+                    <SPAN CLASS="literal">"We must weep and sing"</SPAN>;
+    filtering_ostream  out(adapt(s.begin(), s.end())); </PRE>
+
+<P>Or equivalently, since filtering stream constuctors are overloaded to accept iterator pairs:</P>
+
+<PRE CLASS="broken_ie">    filtering_ostream  out(s.begin(), s.end()); </PRE>
+
+<A NAME="example_iii"></A>
+<H4>III. Appending to an STL Sequence</H4>
+
+<P>A stream which appends characters to a sequence, say <CODE>std::vector</CODE>,
+can be defined as follows:</P>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> back_insert_device&lt; vector&lt;<SPAN CLASS="keyword">char</SPAN>&gt; &gt; vector_sink;
+    <SPAN CLASS="keyword">typedef</SPAN> stream_facade&lt;vector_sink&gt;           appending_ostream;
+
+    vector&lt;<SPAN CLASS="keyword">char</SPAN>&gt;       v;
+    appending_ostream  out(boost::iostreams::back_inserter(v));</PRE>
+
+<P>Or one can leave the type of Device implicit:</P>
+
+<PRE CLASS="broken_ie">    vector&lt;<SPAN CLASS="keyword">char</SPAN>&gt;       v;
+    filtering_ostream  out(boost::iostreams::back_inserter(v));</PRE>
+
+<A NAME="acknowledgments"></A>
+<H2>Acknowledgments</H2>
+
+<P>The sequence adapters were inspired by the work of Maxim Egorushkin (<A CLASS="bib_ref" href="../bibliography.html#egorushkin">[Egorushkin]</A>).</P>
+
+<!-- Begin Footnotes -->
+
+<HR>
+
+<P>
+    <SUP><A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref">[1]</A></SUP>Item 2 is syntactic sugar, since iterator ranges may be added to filtering streams and stream buffers using the function <A href="../functions/adapt.html"><CODE>adapt</CODE></A> from item 1. Item 1 is more general, since the return value of <CODE>adapt</CODE> may be passed to a function such as <A href="../functions/copy.html"><CODE>copy</CODE></A> instead of added to a filtering stream or stream buffer. Items 1 and 2 together could be replaced by allowing instances of <CODE>iterator_range</CODE> from the new library Boost.Range to be treated as full-fledged Devices &#8212; more precisely, as <SPAN CLASS="term">smart adapters</SPAN> which have their mode supplied at the context of use.
+</P>
+
+<P>
+    <SUP><A CLASS="footnote_ref" NAME="note_2" HREF="#note_2_ref">[2]</A></SUP>It is probably unnecessary to support both item 3 and item 4, so one will likely be dropped.
+</P>
+
+<P>
+    <SUP><A CLASS="footnote_ref" NAME="note_3" HREF="#note_3_ref">[3]</A></SUP>This component has been implemented, but not fully tested. (See <A CLASS="header" href="../../../../boost/iostreams/device/container_device.hpp">&lt;<CODE>boost/iostreams/device/container_device.hpp</CODE>&gt;</A>.)
+</P>
+
+<!-- End Footnotes -->
+
+<!-- Begin Footer -->
+
+<HR>
+<P CLASS="copyright">Revised
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+20 May, 2004
+<!--webbot bot="Timestamp" endspan i-checksum="38504" -->
+</P>
+
+<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright"> 
+    Use, modification, and distribution are subject to the Boost Software License, Version 1.0. (See accompanying file <A href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+</P>
+
+<!-- End Footer -->
+
+</BODY>

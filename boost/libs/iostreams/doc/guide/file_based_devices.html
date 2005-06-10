@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>File-Based Devices</TITLE>
+    <LINK REL="stylesheet" href="../../../../boost.css">
+    <LINK REL="stylesheet" href="../theme/iostreams.css">
+</HEAD>
+<BODY>
+
+<!-- Begin Banner -->
+
+    <H1 CLASS="title">File-Based Devices</H1>
+    <HR CLASS="banner">
+
+<!-- End Banner -->
+
+<DL class="page-index">
+  <DT><A href="#overview">Overview</A></DT>
+  <DT><A href="#headers">Headers</A></DT>
+  <DT><A href="#reference">Reference</A></DT>
+  <DT><A href="#acknowledgements">Acknowledgments</A></DT>
+</DL>
+
+<A NAME="overview">
+<H2>Overview</H2>
+
+<P>The Iostreams library provides three families of <A HREF="concepts.html#device_concepts">Devices</A> for file access. The class templates <A href="../classes/file.html#file_source"><CODE>file_source</CODE></A>, <A href="../classes/file.html#file_sink"><CODE>file_sink</CODE></A> and <A href="../classes/file.html#file"><CODE>file</CODE></A> are wrappers for <CODE>std::basic_filebuf</CODE> which are <A HREF="http://www.boost.org/libs/utility/CopyConstructible.html">CopyConstructible</A> and <A HREF="http://www.boost.org/libs/utility/Assignable.html">Assignable</A>. The class templates <A href="../classes/file.html#mapped_file_source"><CODE>mapped_file_source</CODE></A>, <A href="../classes/file.html#mapped_file_sink"><CODE>mapped_file_sink</CODE></A> and <A href="../classes/file.html#mapped_file"><CODE>mapped_file</CODE></A> provide access to memory-mapped files on Windows an POSIX. The class templates <A href="../classes/file.html#file_descriptor_source"><CODE>file_descriptor_source</CODE></A>, <A href="../classes/file.html#file_descriptor_sink"><CODE>file_descriptor_sink</CODE></A> and <A href="../classes/file.html#file_descriptor"><CODE>file_descriptor</CODE></A> implement Devices based on native operating system file descriptors.
+
+<A NAME="headers">
+<H2>Headers</H2>
+
+<DL>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/device/file.hpp"><CODE>&lt;boost/iostreams/device/file.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/device/mapped_file.hpp"><CODE>&lt;boost/iostreams/device/mapped_file.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/device/file_descriptor.hpp"><CODE>&lt;boost/iostreams/device/file_descriptor.hpp&gt;</CODE></A></DT>
+</DL>
+
+<A NAME="reference">
+<H2>Reference</H2>
+
+<DL>
+  <DT><A href="../classes/file.html">File Wrappers</A></DT>
+  <DT><A href="../classes/mapped_file.html">Memory-Mapped File Devices</A></DT>
+  <DT><A href="../classes/file_descriptor.html">File Descriptor Devices</A></DT>
+</DL>
+
+<A NAME="acknowledgments">
+<H2>Acknowledgments</H2>
+
+<P>
+The memory-mapped file Devices are based on work of Craig Henderson (<A CLASS="bib_ref" href="../bibliography.html#henderson">[Henderson]</A>). The file descriptor Devices are based on work of Nicolai Josuttis (<A CLASS="bib_ref" href="../bibliography.html#josuttis1">[Josuttis1]</A> <I>pp.</I> 672-3 and <A CLASS="bib_ref" href="../bibliography.html#josuttis2">[Josuttis2]</A>).
+</P>
+
+<!-- Begin Footer -->
+
+<HR>
+<P CLASS="copyright">Revised
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+20 May, 2004
+<!--webbot bot="Timestamp" endspan i-checksum="38504" -->
+</P>
+
+<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright"> 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+</P>
+
+<!-- End Footer -->
+
+</BODY>

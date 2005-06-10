@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>Rationale</TITLE>
+    <LINK REL="stylesheet" HREF="../../../boost.css">
+    <LINK REL="stylesheet" HREF="theme/iostreams.css">
+    <STYLE>
+        OL OL { list-style-type:lower-alpha }
+    </STYLE>
+</HEAD>
+<BODY>
+
+<!-- Begin Banner -->
+
+    <H1 CLASS="title">Rationale</H1>
+    <HR CLASS="banner">
+
+<!-- End Banner -->
+
+<H3>Contents</H3>
+
+<DL CLASS="page-index">
+  <DT><A href="#goals">Design Goals</A></DT>
+  <DT><A href="#decisions">Design Decisions</A>
+    <DL CLASS="page-index">
+      <DT><A href="#generic">Generic Design</A></DT>
+      <DT><A href="#modes">Modes</A></DT>
+      <DT><A href="#chain">Chain Interface</A></DT>
+      <DT><A href="#write">Return Type of <CODE>write</CODE></A></DT>
+      <DT><A href="#positioning">Stream Positioning</A></DT>
+    </DL>
+  </DT>
+  <DT><A href="#changes">Planned Changes</A></DT>
+  <DT><A href="#future">Future Directions</A></DT>
+</DL>
+
+<HR>
+
+<A NAME="goals"></A>
+<H2>Design Goals</H2>
+
+The Boost Iostreams library was designed with the following criteria in mind:
+
+<OL>
+    <LI>The library should be easy to learn, use and extend. 
+    <LI>The library should be flexible enough to produce streams and stream buffers with almost any desired characteristics. 
+    <LI>Streams and stream buffers produced using the library should be as efficient as hand-written components, in most cases.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
+    <LI>The library should fit easily within the framework of the C++ standard library, in the following two ways:
+    <OL>
+        <LI>Streams and stream buffers constructed using the library should not, to the extent possible, require a richer interface than standard library streams and stream buffers in order to expose their full functionality.
+        <LI>The components used to construct streams and stream buffers &#8212; Source, Sinks, InputFilters and OutputFilters &#8212; should not, to the extent possible, requirer a richer interface than standard library streams and stream buffers.
+    </OL>
+</OL>
+
+<P>
+    Roughly, item 4a. says that streams and stream buffers should be usable wherever standard library streams and stream buffers are usable; item 4b. says that standard library streams and stream buffers should be usable wherever Source and Sinks are usable.
+</P>
+
+<A NAME="decisions"></A>
+<H2>Design Decisions</H2>
+
+<A NAME="generic"></A>
+<H4>Generic Design</H4>
+
+<P>
+     The benefits of generic design are well-known. As it relates to the current library, the main benefits are these: 
+</P>
+<OL>
+    <LI>Existing components &#8212; such as streams, stream buffers and iterators &#8212; can be integrated easily into the library.
+    <LI>The library can be easily extended to handle new Filter and Device concepts with additional functionality.
+    <LI>The internals of the library, such as the implementation of Filter chains as lists of standard stream buffers, can be redesigned without requiring user code to change. 
+</OL>
+<P>
+     One benefit of generic design which is often cited but which has minimal impact on the current library is the performance boost that comes when virtual function calls are replaced by inline code. Because <CODE>std::basic_streambuf</CODE> is implemented in terms of virtual functions we cannot resonably expect to eliminate virtual function calls. The cost of these calls, however, is largely mitigated by buffering. In fact, because of buffering, we might reduce code bloat by internally  wrapping Filters and Devices in polymorphic classes with virtual function <CODE>read</CODE>, <CODE>write</CODE>, <I>etc.</I> without a noticable performance impact.
+</P>
+
+<A NAME="modes"></A>
+<H4>Modes</H4>
+
+<P>
+    The large number of supported modes probably adds more than anything else to the complexity of the library. Unfortunately, all the modes seem to be necessary for a comprehesive iostreams extension framework. The examples <A HREF="guide/modes.html#definition">here</A> indicate that all but one of the modes have important use cases. The exception is bidirectional_seekable; this mode, however, essentially comes for free once the others are implemented.
+</P>
+
+<P>
+    I/O libraries tend to handle this situation in one of two ways:
+</P>
+<OL>
+    <LI>Only allow for input and output.
+    <LI>Allow for components with other modes but don't provide direct library support. Users must consult the documentation for individual components to determine whether they are compatible.
+</OL>
+
+<P>
+    Clearly the second alternative is unacceptable. The first alternative is attractive for its simplicity, but leaves out crucial use cases. It was judged that the library could achieve the best of both worlds simply by recommending that new users ignore all modes but input and output.
+</P>
+
+<A NAME="chain"></A>
+<H4>Chain Interface</H4>
+
+<P>
+    In earlier versions of this library, the chain interface was much richer. Chains had iterators and could be manipulated much like <CODE>std::lists</CODE>. The class <CODE>detail::chain</CODE> was part of the public interface of the library so that one could prepare a chain of Filters and use it with several streams in succession. 
+</P>
+
+<P>
+    This functionality was removed simply to make the library easier to learn. If there is a need for it, it can easily be restored.
+</P>
+
+<A NAME="write"></A>
+<H4>Return Type of <CODE>write</CODE></H4>
+
+<P>
+    Originally, the function <CODE>boost::iostreams::write</CODE> was specified to return a <CODE>std::streamsize</CODE> value indicating how many characters were successfully written. The current specification, that write should throw an exception if the requested number of characters cannot be written, was adopter for these reasons:
+</P>
+<OL>
+    <LI>Writing fewer than the requested number of characters almost always represents an error;
+    <LI>There is typically not much that can be done to address the error locally; and
+    <LI>Making Filter and Device authors repeat the <CODE>std::streamsize</CODE> function argument in a return statement is tedious and error-prone.
+</OL>
+<P>
+    This is being reconsidered in the context of alternative models. See <A href="#changes">Planned Changes</A> and <A href="#future">Future Directions</A>.
+</P>
+
+<A NAME="positioning"></A>
+<H4>Stream Positioning</H4>
+
+<P>
+    For simplicity the library does not support stream positioning which is sensitive to code conversion state or streams and stream buffers which are repositional but not arbitrarily repositional in the sense of <A CLASS="bib_ref" HREF="bibliography.html#ios">[I<SPAN STYLE="font-size:80%">SO</SPAN>]</A> 17.1.1 and 17.1.16. It should be straightforward to add this functionality if it is desired.
+</P>
+
+<A NAME="changes"></A>
+<H2>Planned Changes</H2>
+
+<P>The following changes are planned, but are on hold pending review:
+<OL>
+    <LI>The mode <A HREF="guide/modes.html#dual_seekable">dual_seekable</A> will be made to refine <A HREF="guide/modes.html#seekable">seekable</A>
+    <LI>On conformant compilers, the need for the function <A HREF="functions/adapt.html"><CODE>adapt</CODE></A> will be eliminated as follows. The concept of a <SPAN CLASS="term">smart Devices</SPAN>, which already exists internally, will be made public. Smart Devices adjust their character type and mode as they are added to a stream or stream buffer. This allows, e.g., output iterators to be treated as sinks even though their character type is not known in advance. Iterator ranges from Boost.Range, output iterators (identified using <CODE>boost::detail::is_incrementable</CODE>) and standard streams and stream buffers will then be recognized as smart Devices, with no need for explicit adaptation.
+    <LI>Filters will be given some means to indicate that the number of characters written or read was fewer than requested, although end-of-sequence has not been reached and no error has occurred. This is necessary to accommodate models just as non-blocking, asynchronous and multiplexed.
+</OL>
+
+<A NAME="future"></A>
+<H2>Future Directions</H2>
+
+<P>
+    There are a number of small additions to the library which might be beneficial:
+</P>
+
+<OL>
+    <LI>Give Filters and Devices a way to specify an optimal buffer size. The implementation is trivial; the principle difficulty is finding good names.
+    <LI>Add generic functions for binary i/o. E.g.,
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Sink&gt;
+    <SPAN CLASS="keyword">void</SPAN> write_int32(Sink& sink, <SPAN CLASS="keyword">int</SPAN>);</PRE>
+    <LI>Change the definition of <A HREF="concepts/direct.html">Direct</A> Devices so that in addition to allowing for efficient direct access to in-memory arrays they can also be used with the functions <CODE>read</CODE>, <CODE>write</CODE>, <CODE>putback</CODE>, etc.
+</OL>
+
+<P>
+    A more ambitious extension would be to add new Device concepts for non-blocking, asynchronous and multiplexed i/o, and provide appropriate abstractions for accessing these Devices, directly and with Filter chains. In order to make this work, it is necessary to ensure that the <I>current</I> Filter concepts can support these alternative models, since it would be wasteful to require several versions of each Filter to accommodate the various models. The main impediment is that Filters must be able to indicate that the number of characters written or read was fewer than requested, although end-of-sequence has not been reached and no error has occurred. There are several ways this could be achieved:
+</P>
+<OL>
+    <LI>Adopt the convention that reads and writes always block until at least one character is written. Let <CODE>read</CODE> return 0 to indicate end-of-sequence and let all other return values for <CODE>read</CODE> and <CODE>write</CODE> indicate the actual number of characters processed. <CODE>get</CODE> and <CODE>put</CODE> will always block.
+    <LI>Let <CODE>read</CODE> return -1 to indicate end-of-sequence, and let all other return values, including 0, indicate the actual number of characters read or written. Let <CODE>put</CODE> return a <CODE>bool</CODE> indicating whether a character was written. Let the return type of <CODE>get</CODE> be a class type which can store a character, an end-of-sequence indicator or a 'try back later' indicator. E.g., 
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Ch&gt;
+    <SPAN CLASS="keyword">struct</SPAN> basic_character {
+        <SPAN CLASS="keyword">enum</SPAN> nochar { eof, unavail };
+
+        basic_character(Ch c);
+        basic_character(nochar type);
+        <SPAN CLASS="keyword">operator</SPAN> Ch () <SPAN CLASS="keyword">const</SPAN>;
+
+        <SPAN CLASS="comment">// Tests whether value represents a character.</SPAN>
+        <SPAN CLASS="keyword">operator</SPAN> safe_bool() <SPAN CLASS="keyword">const</SPAN>;
+        <SPAN CLASS="keyword">bool</SPAN> <SPAN CLASS="keyword">operator</SPAN>!() <SPAN CLASS="keyword">const</SPAN>;
+
+        <SPAN CLASS="keyword">bool</SPAN> eof() <SPAN CLASS="keyword">const</SPAN>;
+        <SPAN CLASS="keyword">bool</SPAN> unavail() <SPAN CLASS="keyword">const</SPAN>;
+
+        <SPAN CLASS="omitted">...</SPAN>
+    };
+    typedef basic_character&lt;char&gt;    character;
+    typedef basic_character&lt;wchar_t&gt; wcharacter;
+
+    character eof() { return character(character::eof); }
+    wcharacter weof() { return wcharacter(character::eof); }
+
+    character unavail() { return character(character::unavail); }
+    wcharacter wunavail() { return wcharacter(character::unavail); }</PRE>
+    Using <CODE>basic_character</CODE>, writing InputFilters would be almost the same as it is currently.
+    <LI>Designate an exception type to indicate 'try back later'.
+</OL>
+
+<P>
+    None of these is entirely satisfactory. Item 1 allows performace to suffer &#8212; especially if Filters are involved &#8212; just to accommodate an insufficiently expressive interface. Item 2 makes writing Filters for ordinary blocking i/o slightly more complex, and may have an abstraction penalty. Item 3 is obviously unworkable. 
+</P>
+
+<!-- Begin Footnotes -->
+
+<HR>
+
+<P>
+    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A>Informal tests conducted by the author showed <CODE>stream_facade&lt;file_descriptor_sink&gt;</CODE> to be slightly faster than the Dinkumware implementation of std::ofstream which ships with Microsoft Visual Studio .NET 2003. Note, however, that a <CODE>file_descriptor_sink</CODE> performs no locking. Similarly, an <CODE>ostringstream</CODE> constructed with the Boost Iostreams library performed comparably to the Dinkumware implementation of std::stringstream. No tests of input or random access have been performed yet.
+</P>
+
+<!-- End Footnotes -->
+
+
+<!-- Begin Footer -->
+
+<HR>
+
+<P CLASS="copyright">Revised
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+20 May, 2004
+<!--webbot bot="Timestamp" endspan i-checksum="38504" -->
+</P>
+
+<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright"> 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+</P>
+<!-- End Footer -->
+
+</BODY>
