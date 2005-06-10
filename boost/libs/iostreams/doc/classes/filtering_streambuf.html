@@ -169,7 +169,7 @@
 <TR>
     <TR>
         <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A <A HREF="http://www.boost.org/doc/html/CopyConstructible.html">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
+        <TD>A <A HREF="../../../../doc/html/CopyConstructible.html">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -186,10 +186,10 @@
 </TABLE>
 
 <P>
-    A <CODE>filtering_streambuf</CODE> may be constructed from an instance of a Filter or Device type <CODE>T</CODE> which is not <A HREF="http://www.boost.org/doc/html/CopyConstructible.html">CopyConstructible</A> in one of two ways:
+    A <CODE>filtering_streambuf</CODE> may be constructed from an instance of a Filter or Device type <CODE>T</CODE> which is not <A HREF="../../../../doc/html/CopyConstructible.html">CopyConstructible</A> in one of two ways:
 </P>
 <UL>
-    <LI>by using a <A HREF="http://www.boost.org/doc/html/ref.html" TARGET="_top">reference wrapper</A>, or 
+    <LI>by using a <A HREF="../../../../doc/html/ref.html" TARGET="_top">reference wrapper</A>, or 
     <LI>if <CODE>T</CODE> is a standard stream or stream buffer type, by using the constructor taking a non-<CODE>const</CODE> reference.
 </UL>
 <P>
@@ -274,7 +274,7 @@
 <TR>
     <TR>
         <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A <A HREF="http://www.boost.org/doc/html/CopyConstructible.html">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
+        <TD>A <A HREF="../../../../doc/html/CopyConstructible.html">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -291,10 +291,10 @@
 </TABLE>
 
 <P>
-    An instance of a Filter or Device type <CODE>T</CODE> which is not <A HREF="http://www.boost.org/doc/html/CopyConstructible.html">CopyConstructible</A> may be appended to the chain in one of two ways:
+    An instance of a Filter or Device type <CODE>T</CODE> which is not <A HREF="../../../../doc/html/CopyConstructible.html">CopyConstructible</A> may be appended to the chain in one of two ways:
 </P>
 <UL>
-    <LI>by using a <A HREF="http://www.boost.org/doc/html/ref.html" TARGET="_top">reference wrapper</A>, or 
+    <LI>by using a <A HREF="../../../../doc/html/ref.html" TARGET="_top">reference wrapper</A>, or 
     <LI>if <CODE>T</CODE> is a standard stream or stream buffer type, by using the templated overload of <A HREF="#stream_push"><CODE>push</CODE></A> taking a non-<CODE>const</CODE> reference.
 </UL>
 <P>
