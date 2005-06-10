@@ -120,7 +120,7 @@ struct zlib_params {
                  bool calculate_crc  = zlib::default_crc )
         : level(level), method(method), window_bits(window_bits),
           mem_level(mem_level), strategy(strategy),  
-          noheader(noheader), calculate_crc(zlib::default_crc)
+          noheader(noheader), calculate_crc(calculate_crc)
         { }
     int level;
     int method;
