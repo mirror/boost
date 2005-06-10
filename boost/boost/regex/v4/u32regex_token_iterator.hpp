@@ -130,7 +130,7 @@ public:
          return true;
       }
       if(what.prefix().first != what[0].second)
-         flags |= match_prev_avail;
+         flags |= match_prev_avail | regex_constants::match_not_bob;
       BidirectionalIterator last_end(what[0].second);
       if(u32regex_search(last_end, end, what, re, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
       {
