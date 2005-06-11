@@ -6,6 +6,32 @@
 # it is not generally applicable.
 #
 
+R_SOURCE = 
+basic_tests.cpp
+main.cpp
+test_alt.cpp
+test_anchors.cpp
+test_asserts.cpp
+test_backrefs.cpp
+test_deprecated.cpp
+test_emacs.cpp
+test_escapes.cpp
+test_grep.cpp
+test_locale.cpp
+test_mfc.cpp
+test_non_greedy_repeats.cpp
+test_perl_ex.cpp
+test_replace.cpp
+test_sets.cpp
+test_simple_repeats.cpp
+test_tricky_cases.cpp
+test_icu.cpp
+test_unicode.cpp
+test_overloads.cpp
+test_operators.cpp
+;
+
+
 subproject libs/regex/test/auto-link-test ;
 
 # bring in the rules for testing
@@ -14,10 +40,8 @@ import testing ;
 run 
    # sources
    <template>../../build/regex-options
-   ../regress/parse.cpp
-   ../regress/regress.cpp 
-   ../regress/tests.cpp
-   <lib>../../../test/build/boost_prg_exec_monitor
+   <template>../../build/regex-test-options
+   ../regress/$(R_SOURCE)
 :
 :  # input files
    ../regress/tests.txt
@@ -26,26 +50,6 @@ run
    <define>BOOST_LIB_DIAGNOSTIC=1
 :  # program name
    regex_regress
-          
-;
-
-run 
-   # sources
-   <template>../../build/regex-options
-   ../regress/parse.cpp
-   ../regress/regress.cpp 
-   ../regress/tests.cpp
-   <lib>../../../test/build/boost_prg_exec_monitor
-:
-:  # input files
-   ../regress/tests.txt
-:  # requirements
-   <library-path>../../../../stage/lib
-   <define>TEST_UNICODE=1
-   <define>BOOST_LIB_DIAGNOSTIC=1
-:  # program name
-   wide_regex_regress
-          
 ;
 
 # and now the dll versions:
@@ -53,10 +57,8 @@ run
 run 
    # sources
    <template>../../build/regex-options
-   ../regress/parse.cpp
-   ../regress/regress.cpp 
-   ../regress/tests.cpp
-   <lib>../../../test/build/boost_prg_exec_monitor
+   <template>../../build/regex-test-options
+   ../regress/$(R_SOURCE)
 :
 :  # input files
    ../regress/tests.txt
@@ -67,28 +69,9 @@ run
    <define>BOOST_LIB_DIAGNOSTIC=1
 :  # program name
    regex_regress_dll
-          
 ;
 
-run 
-   # sources
-   <template>../../build/regex-options
-   ../regress/parse.cpp
-   ../regress/regress.cpp 
-   ../regress/tests.cpp
-   <lib>../../../test/build/boost_prg_exec_monitor
-:
-:  # input files
-   ../regress/tests.txt
-:  # requirements
-   <define>BOOST_ALL_DYN_LINK=1
-   <runtime-link>dynamic
-   <library-path>../../../../stage/lib
-   <define>TEST_UNICODE=1
-   <define>BOOST_LIB_DIAGNOSTIC=1
-:  # program name
-   wide_regex_regress_dll
-          
-;
+
+
 
 

@@ -30,10 +30,18 @@ rule check-icu-config ( )
          else if [ GLOB $(dir)$(SLASH)lib : icuuc.* ]
          {
             gICU_LIBS += <find-library>icuuc ;
+            if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+            {
+               gICU_LIBS += <library-path>$(ICU_PATH)/lib ;
+            }
          }
          else if [ GLOB $(dir)$(SLASH)lib : libicuuc.* ]
          {
             gICU_LIBS += <find-library>icuuc ;
+            if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+            {
+               gICU_LIBS += <library-path>$(ICU_PATH)/lib ;
+            }
          }
          else if [ GLOB $(ICU_PATH)/lib : cygicuuc.dll ]
          {
@@ -45,9 +53,12 @@ rule check-icu-config ( )
          }
          else
          {
-            ECHO ICU shared common library not found. ;
-            ECHO HINT: Set the environment variable ICU_LINK to contain ;
-            ECHO       the linker options required to link to ICU. ;
+            ECHO WARNING: ICU shared common library not found in path. ;
+            ECHO HINT:    If the regex library fails to link then try again ;
+            ECHO          with the environment variable ICU_LINK set to contain ;
+            ECHO          the linker options required to link to ICU. ;
+            ECHO          Defaulting to look for libicuuc ... ;
+            gICU_LIBS += <find-library>icuuc ;
          }
          
          if $(ICU_LINK)
@@ -57,10 +68,18 @@ rule check-icu-config ( )
          else if [ GLOB $(dir)$(SLASH)lib : icuin.* ]
          {
             gICU_LIBS += <find-library>icuin ;
+            if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+            {
+               gICU_LIBS += <library-path>$(ICU_PATH)/lib ;
+            }
          }
          else if [ GLOB $(dir)$(SLASH)lib : libicui18n.* ]
          {
             gICU_LIBS += <find-library>icui18n ;
+            if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+            {
+               gICU_LIBS += <library-path>$(ICU_PATH)/lib ;
+            }
          }
          else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
          {
@@ -75,6 +94,13 @@ rule check-icu-config ( )
             ECHO ICU shared i18n library not found. ;
             ECHO HINT: Set the environment variable ICU_LINK to contain ;
             ECHO       the linker options required to link to ICU. ;
+            
+            ECHO WARNING: ICU shared i18n library not found in path. ;
+            ECHO HINT:    If the regex library fails to link then try again ;
+            ECHO          with the environment variable ICU_LINK set to contain ;
+            ECHO          the linker options required to link to ICU. ;
+            ECHO          Defaulting to look for libicui18n ... ;
+            gICU_LIBS += <find-library>icui18n ;
          }
       }
       else
@@ -106,8 +132,11 @@ if [ check-icu-config ]
    }
    if $(ICU_PATH)
    {
-      BOOST_REGEX_ICU_OPTS += "<sysinclude>$(ICU_PATH)/include" ;
-      BOOST_REGEX_ICU_OPTS += "<library-path>$(ICU_PATH)/lib" ;
+      if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+      {
+         BOOST_REGEX_ICU_OPTS += "<sysinclude>$(ICU_PATH)/include" ;
+      }
+      #BOOST_REGEX_ICU_OPTS += "<library-path>$(ICU_PATH)/lib" ;
    }
    # ECHO "BOOST_REGEX_ICU_OPTS =" $(BOOST_REGEX_ICU_OPTS) ;
 }
