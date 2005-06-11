@@ -21,23 +21,35 @@
 
 #define BOOST_PARAMETER_FUN_TEMPLATE_HEAD0(n)
 
-#define BOOST_PARAMETER_FUN_DECL(z, n, params)                                          \
-                                                                                        \
-    BOOST_PP_CAT(BOOST_PARAMETER_FUN_TEMPLATE_HEAD, BOOST_PP_BOOL(n))(n)                \
-                                                                                        \
-    BOOST_PP_TUPLE_ELEM(3, 0, params)                                                   \
-        BOOST_PP_TUPLE_ELEM(3, 1, params)(                                              \
-            BOOST_PP_ENUM_BINARY_PARAMS(n, T, const& p)                                 \
-            BOOST_PP_COMMA_IF(n)                                                        \
-            BOOST_PP_EXPR_IF(n, typename) BOOST_PP_TUPLE_ELEM(3, 2, params)::restrict   \
-            <                                                                           \
-                BOOST_PP_ENUM_PARAMS(n, T)                                              \
-            >::type kw = BOOST_PP_TUPLE_ELEM(3, 2, params)()                            \
-        )                                                                               \
-    {                                                                                   \
-        return BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 1, params), _with_named_params)(     \
-            kw(BOOST_PP_ENUM_PARAMS(n, p))                                              \
-        );                                                                              \
+#ifndef BOOST_NO_SFINAE
+
+# define BOOST_PARAMETER_RESTRICT_TYPE(n, param)            \
+            BOOST_PP_EXPR_IF(n, typename) param::restrict   \
+            <                                               \
+                BOOST_PP_ENUM_PARAMS(n, T)                  \
+            >::type 
+
+#else
+
+# define BOOST_PARAMETER_RESTRICT_TYPE(n, param) param
+
+#endif
+
+#define BOOST_PARAMETER_FUN_DECL(z, n, params)                                      \
+                                                                                    \
+    BOOST_PP_CAT(BOOST_PARAMETER_FUN_TEMPLATE_HEAD, BOOST_PP_BOOL(n))(n)            \
+                                                                                    \
+    BOOST_PP_TUPLE_ELEM(3, 0, params)                                               \
+        BOOST_PP_TUPLE_ELEM(3, 1, params)(                                          \
+            BOOST_PP_ENUM_BINARY_PARAMS(n, T, const& p)                             \
+            BOOST_PP_COMMA_IF(n)                                                    \
+            BOOST_PARAMETER_RESTRICT_TYPE(n,BOOST_PP_TUPLE_ELEM(3, 2, params))      \
+            kw = BOOST_PP_TUPLE_ELEM(3, 2, params)()                                \
+        )                                                                           \
+    {                                                                               \
+        return BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 1, params), _with_named_params)( \
+            kw(BOOST_PP_ENUM_PARAMS(n, p))                                          \
+        );                                                                          \
     }
 
 // Generates:

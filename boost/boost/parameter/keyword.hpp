@@ -7,7 +7,7 @@
 #define KEYWORD_050328_HPP
 
 #include <boost/parameter/aux_/unwrap_cv_reference.hpp>
-#include <boost/parameter/aux_/tagged_argument.hpp>
+#include <boost/parameter/aux_/tag.hpp>
 #include <boost/parameter/aux_/default.hpp>
 
 namespace boost { namespace parameter {
@@ -31,16 +31,11 @@ template <class Tag>
 struct keyword
 {
     template <class T>
-    aux::tagged_argument<
-        Tag
-      , typename aux::unwrap_cv_reference<T>::type
-    > 
+    typename aux::tag<Tag, T>::type
     operator=(T& x) const
     {
-        return aux::tagged_argument<
-            Tag
-          , BOOST_DEDUCED_TYPENAME aux::unwrap_cv_reference<T>::type
-        >(x);
+        typedef typename aux::tag<Tag, T>::type result;
+        return result(x);
     }
 
     template <class Default>
@@ -59,16 +54,11 @@ struct keyword
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)  // avoid partial ordering bugs
     template <class T>
-    aux::tagged_argument<
-        Tag
-      , typename aux::unwrap_cv_reference<T const>::type
-    > 
+    typename aux::tag<Tag, T const>::type
     operator=(T const& x) const
     {
-        return aux::tagged_argument<
-            Tag
-          , BOOST_DEDUCED_TYPENAME aux::unwrap_cv_reference<T const>::type
-        >(x);
+        typedef typename aux::tag<Tag, T const>::type result;
+        return result(x);
     }
 #endif 
 
@@ -92,7 +82,7 @@ struct keyword
     {
         return aux::lazy_default<Tag, Default>(default_);
     }
-#endif 
+#endif
 };
 
 }} // namespace boost::parameter

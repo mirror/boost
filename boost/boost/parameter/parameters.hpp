@@ -15,7 +15,9 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/eval_if.hpp>
+
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/iterator/detail/config_def.hpp>
 #include <boost/python/detail/is_xxx.hpp>
 
@@ -37,6 +39,7 @@
 #include <boost/parameter/aux_/default.hpp>
 #include <boost/parameter/aux_/unwrap_cv_reference.hpp>
 #include <boost/parameter/aux_/tagged_argument.hpp>
+#include <boost/parameter/aux_/tag.hpp>
 #include <boost/parameter/config.hpp>
 
 namespace boost {
@@ -179,17 +182,13 @@ namespace aux
   // already a tagged_argument
   template <class DefaultTag, class Arg>
   struct as_tagged_argument
-  {
-      typedef typename mpl::if_<
+    : mpl::eval_if<
           is_tagged_argument<Arg>
-        , Arg
-        , tagged_argument<
-              typename key_type<DefaultTag>::type
-            , typename unwrap_cv_reference<Arg const>::type
-          >
-      >::type type;
-  };
-
+        , mpl::identity<Arg>
+        , tag<typename key_type<DefaultTag>::type, Arg const>
+      >
+  {};
+  
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // ETI workaround
   template <>
   struct as_tagged_argument<int,int>
@@ -325,15 +324,19 @@ struct parameters
     {};
 #endif
     
-
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    
     // Specializations are to be used as an optional argument to
     // eliminate overloads via SFINAE
     template<
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+        // Borland simply can't handle default arguments in member
+        // class templates.  People wishing to write portable code can
+        // explicitly specify BOOST_PARAMETER_MAX_ARITY arguments
+        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
+#else 
         BOOST_PP_ENUM_BINARY_PARAMS(
             BOOST_PARAMETER_MAX_ARITY, class A, = aux::void_ BOOST_PP_INTERCEPT
-        )       
+        )
+#endif            
     >
     struct restrict
 # ifndef BOOST_NO_SFINAE
@@ -350,8 +353,6 @@ struct parameters
         > type; 
     };
 # endif
-
-#endif
 
     //
     // The function call operator is used to build an arg_list that

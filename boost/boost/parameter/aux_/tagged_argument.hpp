@@ -19,8 +19,9 @@ struct tagged_argument
 {
     typedef Keyword key_type;
     typedef Arg value_type;
+    typedef Arg& reference;
 
-    tagged_argument(Arg& x) : value(x) {}
+    tagged_argument(reference x) : value(x) {}
 
     // Comma operator to compose argument list without using parameters<>.
     // Useful for argument lists with undetermined length.
@@ -39,8 +40,8 @@ struct tagged_argument
           , arg_list<tagged_argument<Keyword2, Arg2> >(x, empty_arg_list())
         );
     }
-
-    Arg& value;
+    
+    reference value;
 };
 
 // Defines a metafunction, is_tagged_argument, that identifies

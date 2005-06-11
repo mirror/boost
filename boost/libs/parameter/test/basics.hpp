@@ -6,6 +6,8 @@
 #ifndef BASICS_050424_HPP
 #define BASICS_050424_HPP
 
+#include <boost/static_assert.hpp>
+
 namespace test {
 
 using namespace boost::parameter;
@@ -50,6 +52,13 @@ inline bool equal(char const* s1, char const* s2)
     return !strcmp(s1,s2);
 }
 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+inline bool equal(char* s1, char* s2)
+{
+    return !strcmp(s1,s2);
+}
+#endif 
+
 template <class Name, class Value, class Index>
 struct values_t
 {
@@ -64,9 +73,10 @@ struct values_t
         // Only VC and its emulators fail this; they seem to have
         // problems with deducing the constness of string literal
         // arrays.
-#if defined(_MSC_VER)                                      \
-        && (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700)  \
-            || BOOST_WORKAROUND(BOOST_MSVC, < 1310))
+#if defined(_MSC_VER)                                                   \
+        && (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700)           \
+            || BOOST_WORKAROUND(BOOST_MSVC, < 1310))                    \
+            || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # else 
         BOOST_STATIC_ASSERT((boost::is_same<Index,Index_>::value));
         BOOST_STATIC_ASSERT((boost::is_same<Value,Value_>::value));
@@ -94,7 +104,7 @@ values(Name const& n, Value const& v, Index const& i)
 // GCC2 has a problem with char (&)[] deduction, so we'll cast string
 // literals there.
 #undef S
-#if BOOST_WORKAROUND(__GNUC__, == 2)
+#if BOOST_WORKAROUND(__GNUC__, == 2) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # define S(s) (char const*)s
 #else
 # define S(s) s

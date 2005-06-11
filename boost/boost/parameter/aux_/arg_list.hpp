@@ -136,6 +136,7 @@ struct arg_list : Next
 {
     typedef typename TaggedArg::key_type key_type;
     typedef typename TaggedArg::value_type value_type;
+    typedef typename TaggedArg::reference reference;
 
     TaggedArg arg;      // Stores the argument
 
@@ -172,7 +173,7 @@ struct arg_list : Next
         {
           typedef typename mpl::eval_if<
                 boost::is_same<KW, key_type>
-              , add_reference<value_type>
+              , mpl::identity<reference>
               , mpl::apply_wrap2<typename Next::binding, KW, Default>
           >::type type;
         };
@@ -239,38 +240,38 @@ struct arg_list : Next
     // reached, indicating no matching argument was passed, the
     // default is returned, or if no default_ or lazy_default was
     // passed, compilation fails.
-    value_type& get(keyword<key_type> x) const
+    reference get(keyword<key_type> x) const
     {
         return arg.value;
     }
 
     template <class Default>
-    value_type& get(default_<key_type,Default> x) const
+    reference get(default_<key_type,Default> x) const
     {
         return arg.value;
     }
 
     template <class Default>
-    value_type& get(lazy_default<key_type, Default> x) const
+    reference get(lazy_default<key_type, Default> x) const
     {
         return arg.value;
     }
     
 #else
 
-    value_type& operator[](keyword<key_type> x) const
+    reference operator[](keyword<key_type> x) const
     {
         return arg.value;
     }
 
     template <class Default>
-    value_type& operator[](default_<key_type, Default> x) const
+    reference operator[](default_<key_type, Default> x) const
     {
         return arg.value;
     }
 
     template <class Default>
-    value_type& operator[](lazy_default<key_type, Default> x) const
+    reference operator[](lazy_default<key_type, Default> x) const
     {
         return arg.value;
     }

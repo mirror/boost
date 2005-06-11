@@ -1,7 +1,8 @@
 # Boost Parameter Library test Jamfile
 
-    test-suite "parameter"
-      :  [ run basics.cpp ]
-         [ run sfinae.cpp ]
-         [ run macros.cpp ]
-      ;
+test-suite "parameter"
+  :  [ run basics.cpp ]
+     [ run sfinae.cpp ]
+     [ run macros.cpp ]
+     [ compile unwrap_cv_reference.cpp ]
+  ;

@@ -8,9 +8,9 @@
 #include <string.h>
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
-#include <boost/static_assert.hpp>
 
 #include "basics.hpp"
+
 
 namespace test
 {
