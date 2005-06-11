@@ -81,8 +81,15 @@ public:
     }
     void reset() 
     {
-        if (initialized_) {
-            static_cast<T*>(address())->element_type::~element_type();
+        if (initialized_) { 
+        #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) || \
+            BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600)) \
+            /**/
+            T* t = static_cast<T*>(address());
+            t->~T();
+        #else
+            static_cast<T*>(address())->T::~T();
+        #endif
             initialized_ = false;
         }
     }
