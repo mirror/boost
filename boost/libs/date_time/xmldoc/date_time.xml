@@ -33,7 +33,7 @@
 
 <title>Boost.Date_Time</title>
 <!-- <section id="date_time.intro"> -->
-  <bridgehead renderas="sect3">Introduction</bridgehead>
+  <bridgehead renderas="sect2">Introduction</bridgehead>
 	 
   <para>
     A set of date-time libraries based on generic programming concepts.

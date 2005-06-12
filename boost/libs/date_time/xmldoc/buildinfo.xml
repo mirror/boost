@@ -30,9 +30,13 @@
     By default the posix_time system uses a single 64 bit integer internally to provide a microsecond level resolution. As an alternative, a combination of a 64 bit integer and a 32 bit integer (96 bit resolution) can be used to provide nano-second level resolutions. The default implementation may provide better performance and more compact memory usage for many applications that do not require nano-second resolutions. 
   </para>
   <para>
-    To use the alternate resolution (96 bit nanosecond) the variable BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG must be defined in the library users project files (ie Makefile, Jamfile, etc). This macro is not used by the Gregorian system and therefore has no effect when building the library.
+    To use the alternate resolution (96 bit nanosecond) the variable <code>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG</code> must be defined in the library users project files (ie Makefile, Jamfile, etc). This macro is not used by the Gregorian system and therefore has no effect when building the library.
   </para>
   <para>As of version 1.33, the date_time library introduced a new IO streaming system. Some compilers are not capable of utilizing this new system. For those compilers the earlier ("legacy") IO system is still available. Non-supported compilers will select the legacy system automatically but the user can force the usage of the legacy system by defining <code>USE_DATE_TIME_PRE_1_33_FACET_IO</code>.</para>
+
+  <para>As a convenience, <code>date_time</code> has provided some <link linkend="additional_duration_types">additional duration types</link>. Use of these types may have unexpected results due to the snap-to-end-of-month behavior (see <link linkend="snap_to_details">Reversibility of Operations Pitfall</link> for complete details and examples). These types are enabled by default. To disable these types, simply undefine <code>BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES</code> in your project file.</para>
+
+  <para>Another convenience is the default constructors for <code><link linkend="date_time.gregorian.date_class">date</link></code>, and <code><link linkend="date_time.posix_time.ptime_class">ptime</link></code>. These constructors are enabled by default. To disable them, simply define <code>DATE_TIME_NO_DEFAULT_CONSTRUCTOR</code> in your project file.</para>
 
   <anchor id="portability" />
   <bridgehead renderas="sect3">Compiler/Portability Notes</bridgehead>
@@ -63,19 +67,19 @@
   fully supported.
   </para>
   <bridgehead renderas="sect5">Visual Studio &amp; STLPort</bridgehead>
-  <para>There is a known issue with Visual Studio (7.0 &amp; 7.1) and STLPort. The build errors typically make reference to a type issue or 'no acceptable conversion' and are attempting to instantiate a template with <code>wchar_t</code>. The default build of STLPort does not support <code>wchar_t</code>. There are two possible workarounds for this issue. The simplest is the user can build date_time withno wide stream/string etc. The other is to rebuild STLPort with wchar_t support.
+  <para>There is a known issue with Visual Studio (7.0 &amp; 7.1) and STLPort. The build errors typically make reference to a type issue or 'no acceptable conversion' and are attempting to instantiate a template with <code>wchar_t</code>. The default build of STLPort does not support <code>wchar_t</code>. There are two possible workarounds for this issue. The simplest is the user can build date_time with no wide stream/string etc. The other is to rebuild STLPort with wchar_t support.
   </para>
   <para>To build date_time with no wide stream/string etc, execute the following command from <code>$BOOST_ROOT</code>:
     <screen>bjam -a "-sTOOLS=vc-7_1-stlport" "-sSTLPORT_PATH=..." \
      "-sBUILD=&lt;define>BOOST_NO_STD_WSTRING"           \
      --stagedir=... --with-date_time stage</screen>
-    (replace the elipses with the correct paths for the build system and adjust the <code>TOOLS</code> to the proper toolset if necessary)
+    (replace the ellipsis with the correct paths for the build system and adjust the <code>TOOLS</code> to the proper toolset if necessary)
   </para>
   <para>Rebuilding STLPort with <code>wchar_t</code> support involves placing <code>/Zc:wchar_t</code> in the STLPort makefile. Date_time should then be built with the following command from <code>$BOOST_ROOT</code>:
     <screen>bjam -a "-sTOOLS=vc-7_1-stlport" "-sSTLPORT_PATH=..." \
      "-sBUILD=&amp;native-wchar_t>on"                     \
      --stagedir=... --with-date_time stage</screen>
-    (replace the elipses with the correct paths for the build system and adjust the <code>TOOLS</code> to the proper toolset if necessary)
+    (replace the ellipsis with the correct paths for the build system and adjust the <code>TOOLS</code> to the proper toolset if necessary)
   </para>
   
   <anchor id="dir_structure" />

@@ -17,7 +17,7 @@
   <anchor id="iterators_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    Date iterators provide a standard mechanism for iteration through dates. Date iterators are a model of <ulink url="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</ulink> and can be used to populate collections with dates and other date generation tasks. For example, the <link linkend="date_time.examples.print_month">print month</link> example iterates through all the days in a month and prints them. 
+    Date iterators provide a standard mechanism for iteration through dates. Date iterators are a model of <ulink url="http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional Iterator</ulink> and can be used to populate collections with dates and other date generation tasks. For example, the <link linkend="date_time.examples.print_month">print month</link> example iterates through all the days in a month and prints them.  
   </para>
   <para>
     All of the iterators here derive from boost::gregorian::date_iterator. 
@@ -83,7 +83,7 @@ week_iterator 2wk_itr(date(2005,Jan,1),2);
   Parameters:
     date start_date
     int month_offset (defaults to 1)</screen></entry>
-          <entry>Iterate <code>month_offset</code> months. There are special rules for handling the end of the month. These are: if start date is last day of the month, always adjust to last day of the month. If date is beyond the end of the month (eg: jan 31 + 1 month) adjust back to end of month. This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
+<entry>Iterate <code>month_offset</code> months. There are special rules for handling the end of the month. These are: if start date is last day of the month, always adjust to last day of the month. If date is beyond the end of the month (e.g. Jan 31 + 1 month) adjust back to end of month (for more details and examples of this, see <link linkend="snap_to_details">Reversibility of Operations Pitfall</link>. <emphasis role="strong">NOTE:</emphasis> the <code>month_iterator</code> is not effected by this pitfall.) This iterator does not provide postfix increment/decrement operators. Only prefix operators are provided.</entry>
 	</row>
 	<row>
           <entry><screen>month_iterator m_itr(date(2005,Jan,1));

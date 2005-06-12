@@ -7,7 +7,7 @@
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
 
-<section id="date_time.gregorian.date_duration">
+<section xmlns:xi="http://www.w3.org/2001/XInclude" id="date_time.gregorian.date_duration">
   <title>Date Duration (aka Days)</title>
 
   <link linkend="duration_intro">Introduction</link> --
@@ -20,10 +20,10 @@
   <anchor id="duration_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    As of version 1_32 the date_duration class has been typdefed as days in the boost::gregorian namespace. Throughout the examples you will find days used instead of date_duration.
+    The class boost::gregorian::date_duration is a simple day count used for arithmetic with <link linkend="date_time.gregorian.date_class">gregorian::date</link>. A duration can be either positive or negative. 
   </para>
   <para>
-    The class boost::gregorian::date_duration is a simple day count used for arithmetic with <link linkend="date_time.gregorian.date_class">gregorian::date</link>. A duration can be either positive or negative. 
+    As of version 1_32 the date_duration class has been typedef'd as days in the boost::gregorian namespace. Throughout the examples you will find days used instead of date_duration.
   </para>
 
   <anchor id="duration_header" />
@@ -167,7 +167,7 @@ date_duration dd3 = dd1 - dd2;</screen>
       <tbody>
 	<row>
           <entry valign="top" morerows="1"><screen>months(int num_of_months)</screen></entry>
-          <entry>A logical month representation. Depending on the usage, this <code>months</code> object may cover a span of 28 to 31 days. The objects also use a snap to end-of-month behavior when used in conjunction with a date that is the last day of a given month.</entry>
+          <entry>A logical month representation. Depending on the usage, this <code>months</code> object may cover a span of 28 to 31 days. The objects also use a snap to end-of-month behavior when used in conjunction with a date that is the last day of a given month. <emphasis role="strong">WARNING: this behavior may lead to unexpected results.</emphasis> See: <link linkend="snap_to_details">Reversibility of Operations Pitfall</link> for complete details and alternatives.</entry>
         </row>
         <row>
           <entry><screen>months single(1);
@@ -182,12 +182,14 @@ date(2005,Feb,28) + single; // => 2005-Mar-31</screen></entry>
 
 	<row>
           <entry valign="top" morerows="1"><screen>years(int num_of_years)</screen></entry>
-          <entry>A logical representation of a year. The <code>years</code> object has the same behaviour as the <code>months</code> objects with regards to the end-of-the-month.</entry>
+          <entry>A logical representation of a year. The <code>years</code> object has the same behavior as the <code>months</code> objects with regards to the end-of-the-month.</entry>
         </row>
         <row>
           <entry><screen>years single(1);
-date(2003,Feb,28) + single; // => 2004-Feb-29
-date(2004,Feb,29) + single; // => 2005-Feb-28</screen></entry>
+date(2003,Feb,28) + single;
+// results in => 2004-Feb-29
+date(2004,Feb,29) + single;
+// results in => 2005-Feb-28</screen></entry>
         </row>
 
 	<row>
@@ -203,5 +205,6 @@ date(2005,Jan,1) + single; // => 2005-Jan-08</screen></entry>
     </tgroup>
   </informaltable>
 
+  <xi:include href="snap_to_details.xml"/> 
 
 </section>

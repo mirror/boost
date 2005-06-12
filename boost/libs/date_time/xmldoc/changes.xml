@@ -52,6 +52,16 @@
         </row>
         <row>
           <entry>Feature</entry>
+          <entry>Functions have been added to facilitate conversions between <code>tm</code> structs for <code>date</code>, <code>ptime</code>, <code>time_duration</code>, and <code>local_date_time</code>. Functions for converting <code>FILETIME</code>, and <code>time_t</code> to <code>ptime</code> are also provided. See the individual sections for details.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>A <code>universal_time</code> function has been added to the <code>microsec_time_clock</code> (full details of this function can be found <link linkend="ptime_from_clock">here</link>).
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
           <entry>Date-time now uses reentrant POSIX functions on those platforms that
                  support them when BOOST_HAS_THREADS is defined. 
           </entry>

@@ -23,10 +23,27 @@
   <anchor id="date_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    The class boost::gregorian::date is the primary interface for date programming. In general, the date class is immutable once constructed although it does allow assignment. 
+    The class boost::gregorian::date is the primary interface for date programming. In general, 
+    the date class is immutable once constructed although it does allow assignment from another 
+    date.  
+    Techniques for creating dates include reading the 
+    <link linkend="date_construct_from_clock">current date from the clock</link>, 
+    using <link linkend="date_time.gregorian.date_iterators">date iterators</link>, and 
+    <link linkend="date_time.gregorian.date_algorithms">date algorithms or generators</link>.  
   </para>
+
   <para>
-    Other techniques for creating dates include <link linkend="date_time.gregorian.date_iterators">date iterators</link> and <link linkend="date_time.gregorian.date_algorithms">date algorithms or generators</link>. 
+    Internally boost::gregorian::date is stored as a 32 bit integer type.  The class is specifically
+    designed to NOT contain virtual functions. This design allows for efficient
+    calculation and memory usage with large collections of dates.
+  </para>
+
+  <para>
+    The construction of a date ensures validates all input such that it is not possible to
+    construct and 'invalid' date.  That is 2001-Feb-29 cannot be constructed as a date. 
+    Various exceptions derived from std::out_of_range are thrown to indicate which aspect 
+    of the date input is invalid.  Note that the
+    special value not-a-date-time can be used as 'invalid' or 'null' date if so desired.
   </para>
 
   <anchor id="date_header" />

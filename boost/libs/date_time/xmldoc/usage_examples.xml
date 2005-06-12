@@ -15,9 +15,10 @@
     See <link linkend="date_time.gregorian">Date Programming</link> 
     for more details.
 
-    <programlisting>using namespace boost::gregorian; 
+    <programlisting>
+    using namespace boost::gregorian; 
     date weekstart(2002,Feb,1);
-    date weekend  = weekstart + week(1);
+    date weekend  = weekstart + weeks(1);
     date d2 = d1 + days(5);
     date today = day_clock::local_day();
     if (d2 &gt;= today) {} //date comparison operators
@@ -38,12 +39,9 @@
     //date generator functions
     date d5 = next_weekday(d4, Sunday); //calculate sunday following d4
 
-    //define a shorthand for the 
-    // nth_day_of_the_week_in_month function object
-    typedef nth_day_of_the_week_in_month nth_dow;
     //US labor day is first Monday in Sept
-    nth_dow labor_day(nth_dow::first,Monday, Sep); 
-    //calculate a specific date from functor
+    nth_day_of_the_week_in_month labor_day(nth_dow::first,Monday, Sep); 
+    //calculate a specific date for 2004 from functor
     date d6 = labor_day.get_date(2004); 
     </programlisting>    
 
@@ -51,13 +49,14 @@
       See <link linkend="date_time.posix_time">Time Programming</link> 
       for more details.
 
-    <programlisting>use namespace boost::posix_time; 
+    <programlisting>
+    use namespace boost::posix_time; 
     date d(2002,Feb,1); //an arbitrary date
-    ptime t1(d, hours(5)+nanosec(100)); //date + time of day offset
+    ptime t1(d, hours(5)+nanoseconds(100)); //date + time of day offset
     ptime t2 = t1 - minutes(4)+seconds(2);
     ptime now = second_clock::local_time(); //use the clock
     date today = now.date(); //Get the date part out of the time
-    date tommorrow = today + date_duration(1);
+    date tommorrow = today + days(1);
     ptime tommorrow_start(tommorrow); //midnight 
 
     //input streaming
@@ -71,5 +70,34 @@
     }
     </programlisting>    
   </para>
+
+      The following provides some example code using times.
+      See <link linkend="date_time.local_time">Local Time Programming</link> 
+      for more details.
+
+    <programlisting>
+    use namespace boost::local_time; 
+    //setup some timezones for creating and adjusting times
+    //first time zone uses the time zone file for regional timezone definitions
+    tz_database tz_db;
+    tz_db.load_from_file("date_time_zonespec.csv");
+    time_zone_ptr nyc_tz = tz_db.time_zone_from_region("America/New_York");
+    //This timezone uses a posix time zone string definition to create a time zone
+    time_zone_ptr phx_tz(new posix_time_zone("MST-07:00:00"));
+
+    //local departure time in phoenix is 11 pm on april 2 2005 
+    // Note that New York changes to daylight savings on apr 3 at 2 am)
+    local_date_time phx_departure(date(2005, Apr, 2), hours(23), phx_tz, 
+                                  local_date_time::NOT_DATE_TIME_ON_ERROR);
+
+    time_duration flight_length = hours(4) + minutes(30);
+    local_date_time phx_arrival = phx_departure + flight_length;
+    //convert the phx time to a nyz time
+    local_date_time nyc_arrival = phx_arrival.local_time_in(nyc_tz);
+
+    //2005-Apr-03 06:30:00 EDT
+    std::cout &lt;&lt; nyc_arrival &lt;&lt; std::endl;
+    </programlisting>    
+
   
 </section>
