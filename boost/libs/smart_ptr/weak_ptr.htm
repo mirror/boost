@@ -145,9 +145,9 @@ template&lt;class Y&gt; weak_ptr &amp; operator=(shared_ptr&lt;Y&gt; const &amp;
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const;</pre>
 		<blockquote>
-			<p><b>Returns:</b> if <STRONG>*this</STRONG> is <EM>empty</EM>, an unspecified 
-				nonnegative value; otherwise, the number of <b>shared_ptr</b> objects that <EM>share 
-					ownership</EM> with <STRONG>*this</STRONG>.</p>
+			<p><b>Returns:</b> 0 if <STRONG>*this</STRONG> is <EM>empty</EM>; otherwise,
+				the number of <b>shared_ptr</b> objects that <EM>share ownership</EM>
+				with <STRONG>*this</STRONG>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> <code>use_count()</code> is not necessarily efficient. Use only 
 				for debugging and testing purposes, not for production code.</P>
@@ -236,7 +236,7 @@ public:
 		<hr>
 		<p>$Date$</p>
 		<p><small>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
-				Copyright 2002, 2003 Peter Dimov. Permission to copy, use, modify, sell and 
+				Copyright 2002-2005 Peter Dimov. Permission to copy, use, modify, sell and 
 				distribute this document is granted provided this copyright notice appears in 
 				all copies. This document is provided "as is" without express or implied 
 				warranty, and with no claim as to its suitability for any purpose.</small></p>

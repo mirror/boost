@@ -20,7 +20,7 @@
 			<A href="sp_techniques.html">Programming Techniques</A></p>
 		<h2><a name="Introduction">Introduction</a></h2>
 		<p>The <b>shared_ptr</b> class template stores a pointer to a dynamically allocated 
-			object, typically with a C++ <EM>new-expression</EM> . The object pointed to is 
+			object, typically with a C++ <EM>new-expression</EM>. The object pointed to is 
 			guaranteed to be deleted when the last <b>shared_ptr</b> pointing to it is 
 			destroyed or reset. See the <A href="#example">example</A>.</p>
 		<p>Every <b>shared_ptr</b> meets the <b>CopyConstructible</b> and <b>Assignable</b> 
@@ -47,6 +47,13 @@
 			to <STRONG>shared_ptr&lt;T const&gt;</STRONG>, to <STRONG>shared_ptr&lt;U&gt;</STRONG>
 			where <STRONG>U</STRONG> is an accessible base of <STRONG>T</STRONG>, and to <STRONG>
 				shared_ptr&lt;void&gt;</STRONG>.</P>
+		<P><STRONG>shared_ptr</STRONG> is now part of <STRONG>TR1</STRONG>, the first C++ 
+			Library Technical Report. The latest draft of <STRONG>TR1</STRONG> is available 
+			at the following location:</P>
+		<P><A href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1745.pdf">http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1745.pdf</A> (1.36Mb 
+			PDF)</P>
+		<P>This implementation conforms to the TR1 specification, with the only exception 
+			that it resides in namespace <code>boost</code> instead of <code>std::tr1</code>.</P>
 		<h2><a name="BestPractices">Best Practices</a></h2>
 		<P>A simple guideline that nearly eliminates the possibility of memory leaks is: 
 			always use a named smart pointer variable to hold the result of <STRONG>new. </STRONG>
@@ -154,15 +161,6 @@ void bad()
   template&lt;class D, class T&gt;
     D * <A href="#get_deleter">get_deleter</A>(shared_ptr&lt;T&gt; const &amp; p);
 }</pre>
-		<P><EM>[It might be convenient to relax the requirements on <STRONG>shared_ptr</STRONG>'s 
-				signature, allowing an additional, defaulted, template parameter; the parameter 
-				can encode the threading model, for example. This would help in detecting 
-				possible ODR violations.</EM></P>
-		<P><EM>On the other hand, using <STRONG>shared_ptr</STRONG> as an argument to a 
-				template template parameter requires an exact signature match. </EM><EM>Metaprogramming 
-				experts tend to deemphasize template template parameters as they are too 
-				inflexible, but the alternative is typically an std::allocator::rebind-type 
-				"hack".]</EM></P>
 		<h2><a name="Members">Members</a></h2>
 		<h3><a name="element_type">element_type</a></h3>
 		<pre>typedef T element_type;</pre>
@@ -174,22 +172,12 @@ void bad()
 		<blockquote>
 			<p><b>Effects:</b> Constructs an <EM>empty</EM> <b>shared_ptr</b>. <EM>Empty</EM> <STRONG>
 					shared_ptr</STRONG> objects have an unspecified <A href="#use_count">use_count</A>.</p>
-			<p><b>Postconditions:</b> <code>get() == 0</code>.</p>
+			<p><b>Postconditions:</b> <code>use_count() == 0 &amp;&amp; get() == 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
 		<P><EM>[The nothrow guarantee is important, since <STRONG>reset()</STRONG> is specified 
 				in terms of the default constructor; this implies that the constructor must not 
-				allocate memory.</EM></P>
-		<P><EM>There are two possible implementations, one stores 0 as a pointer to the 
-				reference count, the other uses a single statically allocated count for all 
-				default-constructed <STRONG>shared_ptr</STRONG>s. The second option is 
-				difficult to achieve in the current header-only reference implementation due to 
-				thread safety issues and initialization order, but it should not be precluded 
-				by the specification. That's why the use_count() has been left unspecified.</EM></P>
-		<P><EM>A future release may enable <STRONG>shared_ptr</STRONG> construction from a 
-				literal zero, for consistency with built-in pointers. It is not clear yet 
-				whether this constructor should be left implicit, enabling <STRONG>0</STRONG> to 
-				be used as a shorthand for <STRONG>shared_ptr&lt;T&gt;().</STRONG>]</EM></P>
+				allocate memory.]</EM></P>
 		<pre>template&lt;class Y&gt; explicit shared_ptr(Y * p);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <b>p</b> must be convertible to <b>T *</b>. <STRONG>Y</STRONG>
@@ -198,8 +186,8 @@ void bad()
 			</p>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>owns</EM> the pointer <b>p</b>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
-			<p><b>Throws:</b> <b>std::bad_alloc</b> or an implementation-defined exception when 
-				a resource other than memory could not be obtained.</p>
+			<p><b>Throws:</b> <STRONG>std::bad_alloc</STRONG>, or an implementation-defined 
+				exception when a resource other than memory could not be obtained.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, <code>delete p</code> is 
 				called.</p>
 			<P><STRONG>Notes:</STRONG> <B>p</B> must be a pointer to an object that was 
@@ -226,8 +214,8 @@ void bad()
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>owns</EM> the pointer <STRONG>
 					p</STRONG> and the deleter <b>d</b>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
-			<p><b>Throws:</b> <b>std::bad_alloc</b> or an implementation-defined exception when 
-				a resource other than memory could not be obtained.</p>
+			<p><b>Throws:</b> <STRONG>std::bad_alloc</STRONG>, or an implementation-defined 
+				exception when a resource other than memory could not be obtained.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, <code>d(p)</code> is called.</p>
 			<p><b>Notes:</b> When the the time comes to delete the object pointed to by <b>p</b>, 
 				the stored copy of <STRONG>d</STRONG> is invoked with the stored copy of <STRONG>p</STRONG>
@@ -245,17 +233,10 @@ void bad()
 		<P><EM>The requirement that the copy constructor of <b>D</b> does not throw comes from 
 				the pass by value. If the copy constructor throws, the pointer is leaked. 
 				Removing the requirement requires a pass by (const) reference.</EM></P>
-		<P><EM>Pass by reference is problematic since (1) pass by value conveniently changes 
-				functions (function references) to function pointers (this has to be performed 
-				manually otherwise and some compilers may not be able to do it) and (2) const 
-				references don't currently (per the standard) bind to functions. This can be 
-				solved (I think) but it requires an overload set that breaks on many compilers 
-				due to 14.5.5.2 problems (and of course it will break on compilers that don't 
-				do partial ordering at all.)</EM></P>
-		<P><EM>The main problem with pass by reference, though, lies in its interaction with 
-				rvalues. A const reference may still cause a copy, and will require a const 
-				operator(). A non-const reference won't bind to an rvalue at all. A good 
-				solution to this problem is the rvalue reference proposed in <A href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1377.htm">
+		<P><EM>The main problem with pass by reference lies in its interaction with rvalues. A 
+				const reference may still cause a copy, and will require a const operator(). A 
+				non-const reference won't bind to an rvalue at all. A good solution to this 
+				problem is the rvalue reference proposed in <A href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1377.htm">
 					N1377</A>/<A href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm">N1385</A>.]</EM></P>
 		<pre>shared_ptr(shared_ptr const &amp; r); // never throws
 template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
@@ -280,8 +261,8 @@ template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never 
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Constructs a <B>shared_ptr</B>, as if by storing a copy of <STRONG>r.release()</STRONG>.</P>
 			<p><b>Postconditions:</b> <code>use_count() == 1</code>.</p>
-			<p><b>Throws:</b> <b>std::bad_alloc</b> or an implementation-defined exception when 
-				a resource other than memory could not be obtained.</p>
+			<p><b>Throws:</b> <STRONG>std::bad_alloc</STRONG>, or an implementation-defined 
+				exception when a resource other than memory could not be obtained.</p>
 			<P><B>Exception safety:</B> If an exception is thrown, the constructor has no 
 				effect.</P>
 		</BLOCKQUOTE>
@@ -325,12 +306,6 @@ q = p;
 </pre>
 			<p>both assignments may be no-ops.</p>
 		</BLOCKQUOTE>
-		<P><EM>[Some experts consider the note to be redundant, as it appears to essentially 
-				mirror the "as if" rule. However, experience suggests that when C++ code is 
-				used to describe effects, it is often misinterpreted as required 
-				implementation. In addition, it is not entirely clear whether the "as if" rule 
-				actually applies here, so it's better to be explicit about the possible 
-				optimizations.]</EM></P>
 		<h3><a name="reset">reset</a></h3>
 		<pre>void reset(); // never throws</pre>
 		<BLOCKQUOTE>
@@ -602,11 +577,32 @@ p3.reset(new int(1));
 // thread B
 p3.reset(new int(2)); // undefined, multiple writes
 </pre>
-		<p><STRONG>shared_ptr</STRONG> uses <A href="../config/config.htm">Boost.Config</A> 
-			to detect whether the implementation supports threads. If your program is 
-			single-threaded, but your platform is autodetected by <STRONG>Boost.Config</STRONG>
-			as supporting multiple threads, <STRONG>#define BOOST_DISABLE_THREADS</STRONG> to 
-			eliminate the thread safety overhead.</p>
+		<p>&nbsp;</p>
+		<P>Starting with Boost release 1.33.0, <STRONG>shared_ptr</STRONG> uses a lock-free 
+			implementation on the following platforms:</P>
+		<UL>
+			<LI>
+				GNU GCC on x86 or x86-64;</LI>
+			<LI>
+				GNU GCC on IA64;</LI>
+			<LI>
+				Metrowerks CodeWarrior on PowerPC;</LI>
+			<LI>
+				GNU GCC on PowerPC;</LI>
+			<LI>
+				Windows.</LI></UL>
+		<P>If your program is single-threaded and does not link to any libraries that might 
+			have used <STRONG>shared_ptr</STRONG> in its default configuration, you can <STRONG>
+				#define</STRONG> the macro <STRONG>BOOST_SP_DISABLE_THREADS</STRONG> on a 
+			project-wide basis to switch to ordinary non-atomic reference count updates.</P>
+		<P>(Defining <STRONG>BOOST_SP_DISABLE_THREADS</STRONG> in some, but not 
+			all, translation units is technically a violation of the One Definition 
+			Rule and undefined behavior. Nevertheless, the implementation attempts to do 
+			its best to accommodate the request to use non-atomic updates in those 
+			translation units. No guarantees, though.)</P>
+		<P>You can define the macro <STRONG>BOOST_SP_USE_PTHREADS</STRONG> to turn off the 
+			lock-free platform-specific implementation and fall back to the generic <STRONG>
+				pthread_mutex_t</STRONG>-based code.</P>
 		<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 		<P><B>Q.</B> There are several variations of shared pointers, with different 
 			tradeoffs; why does the smart pointer library supply only a single 
@@ -691,7 +687,7 @@ int * p = a.release();
 		<p>
 			$Date$</p>
 		<p><small>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
-				Copyright 2002, 2003 Peter Dimov. Permission to copy, use, modify, sell and 
+				Copyright 2002-2005 Peter Dimov. Permission to copy, use, modify, sell and 
 				distribute this document is granted provided this copyright notice appears in 
 				all copies. This document is provided "as is" without express or implied 
 				warranty, and with no claim as to its suitability for any purpose.</small></p>
