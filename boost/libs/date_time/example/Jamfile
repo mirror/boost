@@ -92,11 +92,16 @@ exe seconds_since_epoch : <lib>../build/boost_date_time
                 : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
                 ;
 
+exe flight : <lib>../build/boost_date_time
+                  local_time/flight.cpp
+                : <include>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
+                ;
+
 exe io_tutorial : tutorial/io_tutorial.cpp
                 : <include>$(BOOST_ROOT)
                 ;
 
-# Copyright (c) 2002-2004
+# Copyright (c) 2002-2005
 # CrystalClear Software, Inc.
 # Subject to the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE-1.0 or 
