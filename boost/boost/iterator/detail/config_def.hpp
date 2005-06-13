@@ -48,7 +48,8 @@
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                       \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x531))                   \
-    || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))
+    || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER)) \
+    || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
 # define BOOST_NO_LVALUE_RETURN_DETECTION
 
 # if 0 // test code
