@@ -65,7 +65,7 @@ look at the section "storage layout".</td></tr>
 <td>a dense vector of values of type <code>T</code> of variable
 size. A storage type <code>A</code> can be specified
 which defaults to <code>unbounded_array</code>.
-Elements are zeroed by default.</td>
+Elements are constructed by <code>A</code>, which need not initialise their value.</td>
 
 </tr>
 <tr>
@@ -73,7 +73,7 @@ Elements are zeroed by default.</td>
 <td>a dense vector of values of type <code>T</code> of variable size but with maximum
 <code>N</code>. The default constructor creates <code>v</code>
 with size <code>N</code>.
-Elements are zeroed by default.</td>
+Elements are constructed by the storage type <code>bounded_array</code>, which need not initialise their value.</td>
 </tr>
 <tr>
 <td><code>c_vector&lt;T, M&gt;<br />&nbsp;&nbsp; v(size);</code></td>
@@ -171,14 +171,14 @@ size.  A storage type <code>A</code> can be specified
 which defaults to <code>unbounded_array</code>.
 The orientation functor <code>F</code> defaults to
 <code>row_major</code>.
-Elements are zeroed by default.</td>
+Elements are constructed by <code>A</code>, which need not initialise their value.</td>
 </tr>
 <tr>
 <td><code>bounded_matrix&lt;T, M, N [, F]&gt;<br />&nbsp;&nbsp; m;</code></td>
 <td>a dense matrix of type <code>T</code> with variable size with maximum <code>M</code>-by-<code>N</code>. The orientation functor <code>F</code>
 defaults to <code>row_major</code>. The default constructor creates
 <code>m</code> with size <code>M</code>-by-<code>N</code>.
-Elements are zeroed by default.</td>
+Elements are constructed by the storage type <code>bounded_array</code>, which need not initialise their value.</td>
 </tr>
 <tr>
 <td><code>c_matrix&lt;T, M, N&gt;<br />&nbsp;&nbsp; m(size1, size2);</code></td>
