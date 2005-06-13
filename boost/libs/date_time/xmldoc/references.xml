@@ -65,27 +65,27 @@
       <listitem><ulink url="http://www.twinsun.com/tz/tz-link.htm">Time Zone Database</ulink> C library for managing timezones/places</listitem>
       <listitem>International Components for Unicode by IBM (open source)
 	<itemizedlist override="opencircle">
-	  <listitem><ulink url="http://oss.software.ibm.com/icu/userguide/dateCalendar.html">Calendar Class</ulink></listitem>
-	  <listitem><ulink url="http://oss.software.ibm.com/icu/userguide/dateTime.html">Date Time Services</ulink></listitem>
-	  <listitem><ulink url="http://oss.software.ibm.com/icu/userguide/dateTimezone.html">Time Zone Class</ulink></listitem>
-	  <listitem><ulink url="http://oss.software.ibm.com/icu/userguide/formatDateTime.html">Date-Time Formatting</ulink></listitem>
+	  <listitem><ulink url="http://icu.sourceforge.net/userguide/dateCalendar.html">Calendar Class</ulink></listitem>
+	  <listitem><ulink url="http://icu.sourceforge.net/userguide/dateTime.html">Date Time Services</ulink></listitem>
+	  <listitem><ulink url="http://oss.software.ibm.com/userguide/dateTimezone.html">Time Zone Class</ulink></listitem>
+	  <listitem><ulink url="http://oss.software.ibm.com/userguide/formatDateTime.html">Date-Time Formatting</ulink></listitem>
 	</itemizedlist>
       </listitem>
-      <listitem><ulink url="http://ringside.arc.nasa.gov/www/toolkits/julian_13/aareadme.html">Julian Library in C by Mark Showalter -- NASA</ulink></listitem>
+      <listitem><ulink url="http://pds-rings.seti.org/toolkits/julian_133_html/aareadme.html">Julian Library in C by Mark Showalter -- NASA</ulink></listitem>
     </itemizedlist>
   </para>
   <anchor id="java_libs" />
   <bridgehead renderas="sect3">JAVA Date &amp; Time Library Quick Reference</bridgehead>
   <para>
     <itemizedlist mark="bullet">
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.util.Calendar.html#_top_">Calendar class</ulink></listitem>
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.util.GregorianCalendar.html#_top_">Gregorian calendar</ulink></listitem>
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.util.Date.html">Date class</ulink></listitem>
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.sql.Time.html#_top_">sql.time class</ulink></listitem>
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.text.DateFormatSymbols.html#_top_">Date format symbols</ulink></listitem>
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.text.DateFormat.html#_top_">Date format</ulink></listitem>
-      <listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.text.SimpleDateFormat.html#_top_">Simple Date Format</ulink></listitem>
-<listitem><ulink url="http://java.sun.com/products/jdk/1.1/docs/api/java.util.SimpleTimeZone.html#_top_">Simple Time Zone</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Calendar.html">Calendar class</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/GregorianCalendar.html">Gregorian calendar</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Date.html">Date class</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Time.html">sql.time class</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/DateFormatSymbols.html#_top_">Date format symbols</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/DateFormat.html">Date format</ulink></listitem>
+      <listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/SimpleDateFormat.html">Simple Date Format</ulink></listitem>
+<listitem><ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/SimpleTimeZone.html">Simple Time Zone</ulink></listitem>
       </itemizedlist>
   </para>
   <anchor id="script_libs" />
@@ -95,18 +95,18 @@
       <listitem>A python date library <ulink url="http://www.lemburg.com/files/python/mxDateTime.html">MX Date Time</ulink></listitem>
       <listitem>Perl date-time
 	<itemizedlist override="opencircle">
-	  <listitem><ulink url="http://search.cpan.org/Catalog/Data_and_Data_Type/Date">Date-Time packages at CPAN</ulink></listitem>
-	  <listitem><ulink url="http://search.cpan.org/doc/TWEGNER/Date-Calc-4.3-bin56Mac/Calc.pm">Date::Calc</ulink> at CPAN</listitem>
+	  <listitem><ulink url="http://search-dev.develooper.com/search?m=module&q=date&s=11">Date-Time packages at CPAN</ulink></listitem>
+	  <listitem><ulink url="http://search-dev.develooper.com/~stbey/Date-Calc-5.4/Calc.pod">Date::Calc</ulink> at CPAN</listitem>
 	  <listitem><ulink url="http://search.cpan.org/doc/MORTY/DateConvert-0.16/Convert.pm">Date::Convert</ulink> calendar conversions at CPAN</listitem>
 	</itemizedlist>
       </listitem>
-      <listitem>A PHP library <ulink url="http://vlib.activefish.com/docs/vlibDate.html">Vlib Date Library</ulink></listitem>
     </itemizedlist>
   </para>
   <anchor id="related" />
   <bridgehead renderas="sect3">Related Commercial and Fanciful Pages</bridgehead>
   <para>
     <itemizedlist mark="bullet">
+      <listitem><ulink url="http://www.craphound.com/est/">Eastern Standard Tribe</ulink> -- Cory Doctorow science fiction novel with time themes.</listitem>
       <listitem><ulink url="http://www.leapsecond.com/java/gpsclock.htm">Leapsecond.com time</ulink> page</listitem>
       <listitem><ulink url="http://www.worldtimeserver.com">World Time Server / TZ database</ulink></listitem>
       <listitem><ulink url="http://www.longnow.org/10kclock/clock.htm">10000 year clock</ulink> at Long Now Foundation</listitem>
@@ -118,9 +118,7 @@
   <para>
     <itemizedlist mark="bullet">
       <listitem>Definitions with pictures from <ulink url="http://metrologyforum.tm.agilent.com/specs.shtml">Agilent Technologies</ulink></listitem>
-      <listitem>Another set of pictures from <ulink url="http://www.teamlabs.com/catalog/performance.asp">Team Labs</ulink></listitem>
       <listitem>Definitions from <ulink url="http://www.solent.ac.uk/hydrography/notes/errorthe/accuracy.htm">Southampton Institute</ulink></listitem>
-      <listitem>Definitions from <ulink url="http://www.newport.com/Support/Tutorials/OptoMech/om4a.asp">Newport Corporation</ulink> in the context of instrumentation</listitem>
     </itemizedlist>
   </para>
 </section>
