@@ -35,7 +35,7 @@ namespace detail{
 
 /* bucket structure for use by hashed indices */
 
-class bucket_array_base:noncopyable
+class bucket_array_base:private noncopyable
 {
 protected:
   inline static std::size_t next_prime(std::size_t n)
