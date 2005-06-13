@@ -43,6 +43,26 @@ td = hours(1) + nanoseconds(5); //01:00:00.000000005</programlisting>
     Note that the existence of the higher resolution classes (eg: nanoseconds) depends on the installation of the library. See <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information. 
   </para>
 
+  <para>
+     Another way to handle this is to utilize the ticks_per_second() method of time_duration to
+     write code that is portable no matter how the library is compiled.   The general equation
+     for calculating a resolution independent count is as follows:
+
+    <programlisting>
+count*(time_duration_ticks_per_second / count_ticks_per_second)
+    </programlisting>
+
+     For example, let's suppose we want to construct using a count that represents tenths 
+     of a second.  That is, each tick is 0.1 second. 
+    <programlisting>
+int number_of_tenths = 5;
+//create a resolution independent count -- divide by 10 since there are 
+//10 tenths in a second.  
+int count = number_of_tenths*(time_duration::ticks_per_second()/10);
+time_duration td(1,2,3,count); //01:02:03.5 //no matter the resolution settings
+    </programlisting>
+  </para>
+
   <anchor id="time_duration_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
@@ -71,7 +91,7 @@ or
               minutes,
               seconds,
               fractional_seconds)</screen></entry>
-          <entry>Construct a duration from the counts. The fractional_second parameter is a number of units and is therefore affected by the resolution the application is compiled with (see <link linkend="compile_options">Build-Compiler Information</link>). If the fractional_seconds argument exceeds the limit of the compiled precision, the excess value will be "carried over" into the seconds field.</entry>
+          <entry>Construct a duration from the counts. The fractional_second parameter is a number of units and is therefore affected by the resolution the application is compiled with (see <link linkend="compile_options">Build-Compiler Information</link>). If the fractional_seconds argument exceeds the limit of the compiled precision, the excess value will be "carried over" into the seconds field.  See above for techniques to creating a resolution independent count.</entry>
           </row>
           <row>
             <entry><screen>time_duration td(1,2,3,9);
