@@ -18,6 +18,7 @@
 
 #include <ostream>
 #include <boost/archive/binary_iarchive.hpp>
+#include <boost/detail/endian.hpp>
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // exception to be thrown if integer read from archive doesn't fit

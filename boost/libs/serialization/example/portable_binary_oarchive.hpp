@@ -19,6 +19,7 @@
 #include <ostream>
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include <boost/detail/endian.hpp>
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // "Portable" output binary archive.  This is a variation of the native binary 
