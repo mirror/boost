@@ -14,7 +14,7 @@
 #include <cassert>
 
 #include <boost/compressed_pair.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_tools.hpp>
 
 using namespace boost;
 
