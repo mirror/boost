@@ -121,41 +121,6 @@ namespace boost
                 return iter_;
             }
 
-            friend inline bool operator==( void_ptr_iterator l, void_ptr_iterator r )
-            {
-                return l.iter_ == r.iter_;
-            }
-
-            friend inline bool operator!=( void_ptr_iterator l, void_ptr_iterator r )
-            {
-                return l.iter_ != r.iter_;
-            }
-
-            //
-            // Friend functions are always instantiated and so 
-            // will cause problems with a list's iterators;
-            // Therefore we provide these as ordinary members
-            //
-            bool operator<( void_ptr_iterator r ) const
-            {
-                return iter_ < r.iter_;
-            }
-
-            bool operator<=( void_ptr_iterator r ) const
-            {
-                return iter_ <= r.iter_;
-            }
-            
-            bool operator>( void_ptr_iterator r ) const
-            {
-                return iter_ > r.iter_;
-            }
-            
-            bool operator>=( void_ptr_iterator r ) const
-            {
-                return iter_ >= r.iter_;
-            }
-
         }; // class 'void_ptr_iterator'
 
         template< class VoidIter, class T >
@@ -205,8 +170,60 @@ namespace boost
             return l.base() - r.base();
         }
 
-    //} // nameespace 'ptr_container_detail'
-    
+
+
+        template< class VoidIterT, class T, class VoidIterU, class U >
+        inline bool operator==( const void_ptr_iterator<VoidIterT,T>& l,
+                                const void_ptr_iterator<VoidIterU,U>& r )
+        {
+            return l.base() == r.base();
+        }
+
+
+        
+        template< class VoidIterT, class T, class VoidIterU, class U >
+        inline bool operator!=( const void_ptr_iterator<VoidIterT,T>& l,
+                                const void_ptr_iterator<VoidIterU,U>& r )
+        {
+            return l.base() != r.base();
+        }
+
+
+
+        template< class VoidIterT, class T, class VoidIterU, class U >
+        inline bool operator<( const void_ptr_iterator<VoidIterT,T>& l,
+                               const void_ptr_iterator<VoidIterU,U>& r )
+        {
+            return l.base() < r.base();
+        }
+
+
+        
+        template< class VoidIterT, class T, class VoidIterU, class U >
+        inline bool operator<=( const void_ptr_iterator<VoidIterT,T>& l,
+                               const void_ptr_iterator<VoidIterU,U>& r )
+        {
+            return l.base() <= r.base();
+        }
+
+
+        
+        template< class VoidIterT, class T, class VoidIterU, class U >
+        inline bool operator>( const void_ptr_iterator<VoidIterT,T>& l,
+                               const void_ptr_iterator<VoidIterU,U>& r )
+        {
+            return l.base() > r.base();
+        }
+
+
+        
+        template< class VoidIterT, class T, class VoidIterU, class U >
+        inline bool operator>=( const void_ptr_iterator<VoidIterT,T>& l,
+                               const void_ptr_iterator<VoidIterU,U>& r )
+        {
+            return l.base() >= r.base();
+        }
+
 }
 
 #endif

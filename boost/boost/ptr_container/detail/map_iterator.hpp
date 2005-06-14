@@ -98,18 +98,25 @@ namespace boost
                 return iter_->first;
             }
 
-            friend inline bool operator==( ptr_map_iterator l, ptr_map_iterator r )
-            {
-                return l.iter_ == r.iter_;
-            }
-
-            friend inline bool operator!=( ptr_map_iterator l, ptr_map_iterator r )
-            {
-                return l.iter_ != r.iter_;
-            }
-            
        }; // class 'ptr_map_iterator'
-    //} // namespace 'ptr_container_detail'
+
+
+       
+       template< class I, class K, class V, class I2, class K2, class V2 >
+       inline bool operator==( const ptr_map_iterator<I,K,V>& l, 
+                               const ptr_map_iterator<I2,K2,V2>& r )
+       {
+           return l.base() == r.base();
+       }
+
+
+       
+       template< class I, class K, class V, class I2, class K2, class V2 >
+       inline bool operator!=( const ptr_map_iterator<I,K,V>& l, 
+                               const ptr_map_iterator<I2,K2,V2>& r )
+       {
+           return l.base() != r.base();
+       }
 }
 
 #endif
