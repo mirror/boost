@@ -239,7 +239,7 @@ namespace boost { namespace numeric { namespace ublas {
                     const matrix<value_type, row_major> e1_range (project (e1 (), range (i_begin, i_end), range (k_begin, k_end)));
                     const matrix<value_type, column_major> e2_range (project (e2 (), range (k_begin, k_end), range (j_begin, j_end)));
 #endif
-                    m_range.plus (prod (e1_range, e2_range));
+                    m_range.plus_assign (prod (e1_range, e2_range));
                 }
 #ifndef BOOST_UBLAS_NO_CACHE
                 project (m, range (i_begin, i_end), range (j_begin, j_end)).assign (m_range);
