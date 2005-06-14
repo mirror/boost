@@ -17,6 +17,8 @@
 #ifndef BOOST_UBLAS_VECTOR_OF_VECTOR_H
 #define BOOST_UBLAS_VECTOR_OF_VECTOR_H
 
+#include <boost/type_traits.hpp>
+
 #include <boost/numeric/ublas/storage_sparse.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 
@@ -122,14 +124,27 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool preserve = true) {
+            const size_type oldM = layout_type::size1 (size1_, size2_);
             size1_ = size1;
             size2_ = size2;
             const size_type sizeM = layout_type::size1 (size1_, size2_);
             const size_type sizem = layout_type::size2 (size1_, size2_);
             data ().resize (sizeM + 1, preserve);
-            for (size_type i = 0; i < sizeM; ++ i)
-                ref (data () [i]).resize (sizem, preserve);
-            ref (data () [sizeM]).resize (0, false);
+            if (preserve) {
+                for (size_type i = 0; (i <= oldM) && (i < sizeM); ++ i)
+                    ref (data () [i]).resize (sizem, preserve);
+                for (size_type i = oldM+1; i < sizeM; ++ i) // create new vector elements
+                    data_.insert_element (i, vector_data_value_type ()) .resize (sizem, false);
+                if (sizeM > oldM) {
+                    data_.insert_element (sizeM, vector_data_value_type ());
+                } else {
+                    ref (data () [sizeM]).resize (0, false);
+                }
+            } else {
+                for (size_type i = 0; i < sizeM; ++ i) 
+                    data_.insert_element (i, vector_data_value_type ()) .resize (sizem, false);
+                data_.insert_element (sizeM, vector_data_value_type ());
+            }
             storage_invariants ();
         }
 
@@ -277,6 +292,14 @@ namespace boost { namespace numeric { namespace ublas {
             vector_data_value_type& vd (ref (data () [elementM]));
             storage_invariants ();
             return vd.insert_element (elementm, t);
+        }
+        BOOST_UBLAS_INLINE
+        void append_element (size_type i, size_type j, const_reference t) {
+            const size_type elementM = layout_type::element1 (i, size1_, j, size2_);
+            const size_type elementm = layout_type::element2 (i, size1_, j, size2_);
+            vector_data_value_type& vd (ref (data () [elementM]));
+            storage_invariants ();
+            return vd.append_element (elementm, t);
         }
         BOOST_UBLAS_INLINE
         void erase_element (size_type i, size_type j) {
