@@ -211,20 +211,25 @@ languages. The principle of this approach is to evaluate a complex
 expression element wise and to assign it directly to the
 target.</p>
 <p>Two interesting and dangerous facts result.</p>
+<h4>Aliases</h4>
 <p>First one may get serious side effects using element wise
 evaluation on vectors or matrices. Consider the matrix vector
 product <em>x = A x</em>. Evaluation of
 <em>A</em><sub><em>1</em></sub><em>x</em> and assignment to
 <em>x</em><sub><em>1</em></sub> changes the right hand side, so
 that the evaluation of <em>A</em><sub><em>2</em></sub><em>x</em>
-returns a wrong result. Our solution for this problem is to
+returns a wrong result. In this case there are <strong>aliases</strong> of the elements 
+<em>x</em><sub><em>n</em></sub> on both the left and right hand side of the assignment.</p>
+<p>Our solution for this problem is to
 evaluate the right hand side of an assignment into a temporary and
 then to assign this temporary to the left hand side. To allow
 further optimizations, we provide a corresponding member function
-for every assignment operator. By using this member function a
-programmer can confirm, that the left and right hand sides of an
+for every assignment operator and also a 
+<a href="operations_overview.htm#noalias"> <code>noalias</code> syntax.</a>
+By using this syntax a programmer can confirm, that the left and right hand sides of an
 assignment are independent, so that element wise evaluation and
 direct assignment to the target is safe.</p>
+<h4>Complexity</h4>
 <p>Next one can get worse computational complexity under certain
 cirumstances. Consider the chained matrix vector product <em>A (B
 x)</em>. Conventional evaluation of <em>A (B x)</em> is quadratic.
@@ -590,23 +595,8 @@ FORTAN compatible data.
 </p>
 
 <h2>Compatibility</h2>
-<p>For compatibility reasons we provide array like indexing for
-vectors and matrices, although this could be expensive for matrices
-due to the needed temporary proxy objects.</p>
-<p>To support the most widely used C++ compilers our design and
-implementation do not depend on partial template specialization
-essentially.</p>
-<p>The library presumes standard compliant allocation through
-<code>operator new</code> and <code>operator delete</code>. So
-programs which are intended to run under MSVC 6.0 should set a
-correct new handler throwing a <code>std::bad_alloc</code>
-exception via <code>_set_new_handler</code> to detect out of memory
-conditions.</p>
-<p>To get the most performance out of the box with MSVC 6.0, you
-should change the preprocessor definition of
-<code>BOOST_UBLAS_INLINE</code> to <code>__forceinline</code> in
-the header file config.hpp. But we suspect this optimization to be
-fragile.</p>
+<p>For compatibility reasons we provide array like indexing for vectors and matrices. For some types (hermitian, sparse etc) this can be expensive for matrices due to the needed temporary proxy objects.</p>
+<p>uBLAS uses STL compatible allocators for the allocation of the storage required for it's containers.</p>
 <h2>Benchmark Results</h2>
 <p>The following tables contain results of one of our benchmarks.
 This benchmark compares a native C implementation ('C array') and
@@ -624,10 +614,6 @@ respectively.</p>
 <table border="1" summary="1st benchmark">
 <tbody>
 <tr>
-<th align="left">Operation</th>
-<th align="left">Implementation</th>
-<th align="left">Elapsed [s]</th>
-<th align="left">MFLOP/s</th>
 <th align="left">Comment</th>
 </tr>
 <tr>

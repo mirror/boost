@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content=
 "text/html; charset=us-ascii" />
 <link href="ublas.css" type="text/css" />
-<title>uBLAS functions overview</title>
+<title>uBLAS operations overview</title>
 </head>
 <body>
 <h1><img src="../../../../boost.png" align="middle" />
@@ -160,7 +160,8 @@ slice(0,0,2));
 </code></p>
 
 <h2><a name="speed">Speed improvements</a></h2>
-<h3>Matrix / Vector assignment</h3>
+<a name='noalias'>
+<h3>Matrix / Vector assignment</h3></a>
 <p>If you know for sure that the left hand expression and the right
 hand expression have no common storage, then assignment has
 no <em>aliasing</em>. A more efficient assignment can be specified
