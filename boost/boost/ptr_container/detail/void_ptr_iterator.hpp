@@ -161,10 +161,10 @@ namespace boost
             return r;
         }
 
-        template< class VoidIter, class T >
+        template< class VoidIter, class T, class VoidIterU, class U >
         inline BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type
         operator-( void_ptr_iterator<VoidIter,T> l,
-                   void_ptr_iterator<VoidIter,T> r ) 
+                   void_ptr_iterator<VoidIterU,U> r ) 
 
         {
             return l.base() - r.base();
