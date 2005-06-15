@@ -210,9 +210,9 @@ to use lazy evaluation as known from modern functional programming
 languages. The principle of this approach is to evaluate a complex
 expression element wise and to assign it directly to the
 target.</p>
-<p>Two interesting and dangerous facts result.</p>
+<p>Two interesting and dangerous facts result:</p>
 <h4>Aliases</h4>
-<p>First one may get serious side effects using element wise
+<p>One may get serious side effects using element wise
 evaluation on vectors or matrices. Consider the matrix vector
 product <em>x = A x</em>. Evaluation of
 <em>A</em><sub><em>1</em></sub><em>x</em> and assignment to
@@ -230,7 +230,7 @@ By using this syntax a programmer can confirm, that the left and right hand side
 assignment are independent, so that element wise evaluation and
 direct assignment to the target is safe.</p>
 <h4>Complexity</h4>
-<p>Next one can get worse computational complexity under certain
+<p>The computational complexity may be unexpectedly large under certain
 cirumstances. Consider the chained matrix vector product <em>A (B
 x)</em>. Conventional evaluation of <em>A (B x)</em> is quadratic.
 Deferred evaluation of <em>B x</em><sub><em>i</em></sub> is linear.
