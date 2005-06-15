@@ -30,11 +30,12 @@ date_facet* facet(new date_facet("%A %B %d, %Y"));
 std::cout.imbue(std::locale(std::cout.getloc(), facet));
 std::cout &lt;&lt; d &lt;&lt; std::endl;
 // "Saturday June 25, 2005"</screen>
-  
-  <para>The following table lists all of these objects.</para>
 
+  <para>Many of the format flags used by this new system are those used by <code>strftime(...)</code>, but not all. Some new flags have been added, and others overridden, in the new date time IO system. The following table lists the most significant flags the library uses for <code>gregorian</code> objects, followed by a second table for <code>posix_time</code> and <code>local_time</code> objects. If a flag is not listed here, but is available for <code>strftime</code>, it's behavior will be that of <code>strftime</code>.</para>
   <xi:include href="format_flags.xml" />
   
+  <para>The following table lists the available facets.</para>
+
   <anchor id="io_objects_table" />
   <bridgehead renderas="sect3">IO Objects</bridgehead>
   <para>

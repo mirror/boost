@@ -29,6 +29,6 @@
   <!-- local_time examples -->
   <xi:include href="ex_simple_time_zone.xml"/>
   <xi:include href="ex_calc_rules.xml"/>
-  <!-- <xi:include href="ex_meeting_planner.xml"/> -->
+  <xi:include href="ex_flight.xml"/>
   <xi:include href="ex_seconds_since_epoch.xml"/>
 </section>

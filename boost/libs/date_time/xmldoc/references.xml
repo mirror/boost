@@ -95,7 +95,7 @@
       <listitem>A python date library <ulink url="http://www.lemburg.com/files/python/mxDateTime.html">MX Date Time</ulink></listitem>
       <listitem>Perl date-time
 	<itemizedlist override="opencircle">
-	  <listitem><ulink url="http://search-dev.develooper.com/search?m=module&q=date&s=11">Date-Time packages at CPAN</ulink></listitem>
+	  <listitem><ulink url="http://search-dev.develooper.com/search?m=module&amp;q=date&amp;s=11">Date-Time packages at CPAN</ulink></listitem>
 	  <listitem><ulink url="http://search-dev.develooper.com/~stbey/Date-Calc-5.4/Calc.pod">Date::Calc</ulink> at CPAN</listitem>
 	  <listitem><ulink url="http://search.cpan.org/doc/MORTY/DateConvert-0.16/Convert.pm">Date::Convert</ulink> calendar conversions at CPAN</listitem>
 	</itemizedlist>
