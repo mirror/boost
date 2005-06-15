@@ -275,21 +275,18 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     result discard_event()
     {
-      this->reaction_initiated();
-      return do_discard_event;
+      return detail::result_utility::make_result( detail::do_discard_event );
     }
 
     result forward_event()
     {
-      this->reaction_initiated();
-      return do_forward_event;
+      return detail::result_utility::make_result( detail::do_forward_event );
     }
 
     result defer_event()
     {
-      this->reaction_initiated();
       this->state_base_type::defer_event();
-      return do_defer_event;
+      return detail::result_utility::make_result( detail::do_defer_event );
     }
 
     template< class DestinationState >
@@ -311,9 +308,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     result terminate()
     {
-      this->reaction_initiated();
       outermost_context_base().terminate_as_reaction( *this );
-      return do_discard_event;
+      return detail::result_utility::make_result( detail::do_discard_event );
     }
 
     template<
@@ -445,26 +441,26 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return impl::outer_state_ptr_impl( *this );
     }
 
-    virtual result react_impl(
+    virtual detail::reaction_result react_impl(
       const event_base_type & evt,
       typename rtti_policy_type::id_type eventType )
     {
-      this->enable_reaction();
       typedef typename detail::make_list<
         typename MostDerived::reactions >::type reaction_list;
-      result reactionResult = local_react< reaction_list >( evt, eventType );
+      detail::reaction_result reactionResult =
+        local_react< reaction_list >( evt, eventType );
 
       // At this point we can only safely access pContext_ if the handler did
       // not return do_discard_event!
       switch ( reactionResult )
       {
-        case do_forward_event:
+        case detail::do_forward_event:
           // TODO: The following call to react_impl of our outer state should
           // be made with a context_type:: prefix to call directly instead of
           // virtually. For some reason the compiler complains...
           reactionResult = pContext_->react_impl( evt, eventType );
           break;
-        case do_defer_event:
+        case detail::do_defer_event:
           outermost_context_base().defer_event( evt, this );
           break;
         default:
@@ -661,8 +657,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
               class TransitionAction >
     result transit_impl( const TransitionAction & transitionAction )
     {
-      base_type::reaction_initiated();
-
       typedef typename mpl::find_if<
         context_type_list,
         mpl::contains<
@@ -775,24 +769,27 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         context_list_type, outermost_context_base_type >::construct(
           pCommonContext, outermostContextBase );
 
-      return do_discard_event;
+      return detail::result_utility::make_result( detail::do_discard_event );
     }
 
     struct local_react_impl_non_empty
     {
       template< class ReactionList, class State >
-      static result local_react_impl(
+      static detail::reaction_result local_react_impl(
         State & stt,
         const event_base_type & evt,
         typename rtti_policy_type::id_type eventType )
       {
-        result reactionResult = mpl::front< ReactionList >::type::react(
-          *polymorphic_downcast< MostDerived * >( &stt ), evt, eventType );
+        detail::reaction_result reactionResult =
+          mpl::front< ReactionList >::type::react(
+            *polymorphic_downcast< MostDerived * >( &stt ),
+            evt, eventType );
 
-        if ( reactionResult == no_reaction )
+        if ( reactionResult == detail::no_reaction )
         {
           reactionResult = stt.template local_react<
-            typename mpl::pop_front< ReactionList >::type >( evt, eventType );
+            typename mpl::pop_front< ReactionList >::type >(
+              evt, eventType );
         }
 
         return reactionResult;
@@ -803,15 +800,15 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     struct local_react_impl_empty
     {
       template< class ReactionList, class State >
-      static result local_react_impl(
+      static detail::reaction_result local_react_impl(
         State &, const event_base_type &, typename rtti_policy_type::id_type )
       {
-        return do_forward_event;
+        return detail::do_forward_event;
       }
     };
 
     template< class ReactionList >
-    result local_react(
+    detail::reaction_result local_react(
       const event_base_type & evt,
       typename rtti_policy_type::id_type eventType )
     {

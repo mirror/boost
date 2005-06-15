@@ -51,19 +51,22 @@ class transition
     struct react_with_transition_action_impl
     {
       template< class State, class EventBase >
-      static result react( State & stt, const EventBase & toEvent )
+      static detail::reaction_result react( State & stt, const EventBase & toEvent )
       {
-        return stt.template transit< Destination >( pTransitionAction,
-          *polymorphic_downcast< const Event * >( &toEvent ) );
+        return detail::result_utility::get_result(
+          stt.template transit< Destination >(
+            pTransitionAction,
+            *polymorphic_downcast< const Event * >( &toEvent ) ) );
       }
     };
 
     struct react_without_transition_action_impl
     {
       template< class State, class EventBase >
-      static result react( State & stt, const EventBase & )
+      static detail::reaction_result react( State & stt, const EventBase & )
       {
-        return stt.template transit< Destination >();
+        return detail::result_utility::get_result(
+          stt.template transit< Destination >() );
       }
     };
 
@@ -73,7 +76,7 @@ class transition
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     template< class State, class EventBase, class IdType >
-    static result react(
+    static detail::reaction_result react(
       State & stt, const EventBase & evt, const IdType & eventType )
     {
       if ( eventType == Event::static_type() )
@@ -87,7 +90,7 @@ class transition
       }
       else
       {
-        return no_reaction;
+        return detail::no_reaction;
       }
     }
 };

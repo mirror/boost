@@ -29,16 +29,16 @@ class deferral
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     template< class State, class EventBase, class IdType >
-    static result react(
+    static detail::reaction_result react(
       State & stt, const EventBase &, const IdType & eventType )
     {
       if ( eventType == Event::static_type() )
       {
-        return stt.defer_event();
+        return detail::result_utility::get_result( stt.defer_event() );
       }
       else
       {
-        return no_reaction;
+        return detail::no_reaction;
       }
     }
 };

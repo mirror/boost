@@ -91,7 +91,8 @@ class send_function
 
     result operator()()
     {
-      return toState_.react_impl( evt_, eventType_ );
+      return detail::result_utility::make_result(
+        toState_.react_impl( evt_, eventType_ ) );
     }
 
   private:
@@ -248,9 +249,9 @@ class state_machine : noncopyable
 
       {
         terminator guard( *this );
-        translator_(
+        detail::result_utility::get_result( translator_(
           initial_construct_function( *this ),
-          exception_event_handler( *this ) );
+          exception_event_handler( *this ) ) );
         guard.dismiss();
       }
 
@@ -260,9 +261,9 @@ class state_machine : noncopyable
     void terminate()
     {
       terminator guard( *this );
-      translator_(
+      detail::result_utility::get_result( translator_(
         terminate_function( *this ),
-        exception_event_handler( *this ) );
+        exception_event_handler( *this ) ) );
       guard.dismiss();
     }
 
@@ -444,11 +445,11 @@ class state_machine : noncopyable
     typedef mpl::bool_< false > deep_history;
     typedef mpl::bool_< false > inherited_deep_history;
 
-    result react_impl(
+    detail::reaction_result react_impl(
       const event_base_type &,
       typename rtti_policy_type::id_type )
     {
-      return do_forward_event;
+      return detail::do_forward_event;
     }
 
     void exit_impl(
@@ -698,7 +699,8 @@ class state_machine : noncopyable
         result operator()()
         {
           machine_.initial_construct();
-          return do_discard_event; // there is nothing to be consumed
+          return detail::result_utility::make_result(
+            detail::do_discard_event ); // there is nothing to be consumed
         }
 
       private:
@@ -716,7 +718,8 @@ class state_machine : noncopyable
         result operator()()
         {
           machine_.terminate_impl( true );
-          return do_discard_event; // there is nothing to be consumed
+          return detail::result_utility::make_result(
+            detail::do_discard_event ); // there is nothing to be consumed
         }
 
       private:
@@ -726,7 +729,7 @@ class state_machine : noncopyable
     friend class terminate_function;
 
     template< class ExceptionEvent >
-    result handle_exception_event(
+    detail::reaction_result handle_exception_event(
       const ExceptionEvent & exceptionEvent,
       state_base_type * pCurrentState )
     {
@@ -756,20 +759,20 @@ class state_machine : noncopyable
       // below could result in a call to user code where passing through an
       // additional bool parameter is not acceptable.
       performFullExit_ = false;
-      const result reactionResult = pHandlingState->react_impl(
+      const detail::reaction_result reactionResult = pHandlingState->react_impl(
         exceptionEvent, exceptionEvent.dynamic_type() );
       // If the above call throws then performFullExit_ will obviously not be
       // set back to true. In this case the termination triggered by the
       // scope guard further up in the call stack will take care of this.
       performFullExit_ = true;
 
-      if ( ( reactionResult != do_discard_event ) ||
+      if ( ( reactionResult != detail::do_discard_event ) ||
         ( get_pointer( pOutermostUnstableState_ ) != 0 ) )
       {
         throw;
       }
 
-      return do_discard_event;
+      return detail::do_discard_event;
     }
 
     class exception_event_handler
@@ -786,7 +789,8 @@ class state_machine : noncopyable
         }
 
         template< class ExceptionEvent >
-        result operator()( const ExceptionEvent & exceptionEvent )
+        detail::reaction_result operator()(
+          const ExceptionEvent & exceptionEvent )
         {
           return machine_.handle_exception_event(
             exceptionEvent, pCurrentState_ );
@@ -822,20 +826,21 @@ class state_machine : noncopyable
       terminator guard( *this );
       BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
       const typename rtti_policy_type::id_type eventType = evt.dynamic_type();
-      result reactionResult = do_forward_event;
+      detail::reaction_result reactionResult = detail::do_forward_event;
       
       for (
         typename state_list_type::iterator pState = currentStates_.begin();
-        ( reactionResult == do_forward_event ) &&
+        ( reactionResult == detail::do_forward_event ) &&
           ( pState != currentStatesEnd_ );
         ++pState )
       {
         // CAUTION: The following statement could modify our state list!
         // We must not continue iterating if the event was consumed
-        reactionResult = translator_( detail::send_function<
-          state_base_type, event_base_type, rtti_policy_type::id_type >(
-            **pState, evt, eventType ),
-          exception_event_handler( *this, get_pointer( *pState ) ) );
+        reactionResult = detail::result_utility::get_result( translator_(
+          detail::send_function<
+            state_base_type, event_base_type, rtti_policy_type::id_type >(
+              **pState, evt, eventType ),
+          exception_event_handler( *this, get_pointer( *pState ) ) ) );
       }
 
       guard.dismiss();

@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/06/04<!--webbot bot="Timestamp" endspan i-checksum="12674" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/06/15<!--webbot bot="Timestamp" endspan i-checksum="12677" --></font></td>
   </tr>
 </table>
 <hr>
@@ -173,9 +173,6 @@ please see <a href="definitions.html">Definitions</a> for more information.</p>
 left (<font color="#FF0000">red</font> = added as a result of the formal 
 review):</p>
 <ol>
-    <li><font color="#FF0000">Investigate how multiple calls to reaction 
-    functions can be detected (and reported to the user) at runtime (Jonathan 
-    Turkanis)</font></li>
     <li><font color="#FF0000">Add clone functionality to events so that 
     stack-allocated events can be converted to heap-allocated events if 
     necessary. This helps making the interface for deferring and posting 
@@ -250,6 +247,20 @@ review):</p>
 	when C++ RTTI is turned off</li>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
+<p>XX July, 2005</p>
+<ul>
+	<li><font color="#FF0000">Updated the documentation for the new reaction 
+    specification interface</font></li>
+    <li><font color="#FF0000">Invalid calls to reaction functions now always 
+    lead to a failing runtime assert (Jonathan Turkanis). In debug mode the
+    <code>result</code> type is a class 
+    with destructive copy semantics, enabling the detection of a wider range 
+    of reaction function abuses. Added appropriate tests and updated the 
+    documentation</font></li>
+    <li><font color="#FF0000">Separated performance-related docs from the 
+    rationale into a page of its own (Pavel Vozenilek)</font></li>
+</ul>
+<p></p>
 <p>12 May, 2005</p>
 <ul>
 	<li><b><font color="#FF0000">Breaking change: Changed the library namespace from <code>fsm</code> 
@@ -257,11 +268,9 @@ review):</p>
     <li><b><font color="#FF0000">Breaking change: Changed the library name from boost::fsm to 
     Boost.Statechart (Alexander Nasonov, David Abrahams)</font></b></li>
     <li><b><font color="#FF0000">Breaking change: Reactions are now specified with a <code>reactions</code> member 
-    typedef in a state class declaration instead of a template parameter (Alexander Nasonov)</font></b></li>
-    <li><font color="#FF0000">Separated performance-related docs from the 
-    rationale into a page of its own (Pavel Vozenilek)</font></li>
+    typedef in a state class declaration instead of a template parameter (Alexander Nasonov), 
+    not yet documented.</font></b></li>
 </ul>
-<p></p>
 <p>03 May, 2005</p>
 <ul>
 	<li>Removed the to-do item for the <code>std::type_info</code> replacement. Thanks to 
@@ -494,7 +503,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->04 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19916" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19919" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

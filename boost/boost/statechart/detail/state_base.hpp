@@ -83,7 +83,6 @@ class state_base :
     //////////////////////////////////////////////////////////////////////////
     state_base( typename RttiPolicy::id_provider_type idProvider ) :
       base_type( idProvider ),
-      reactionEnabled_( false ),
       deferredEvents_( false )
     {
     }
@@ -98,23 +97,6 @@ class state_base :
     // The following declarations should be private.
     // They are only protected because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    void enable_reaction()
-    {
-      reactionEnabled_ = true;
-    }
-
-    void reaction_initiated()
-    {
-      // This assert fails when you try to call a reaction function outside
-      // an event handler or when you try to call two reaction functions
-      // inside an event handler.
-      // Every event handler must return the result of exactly one reaction
-      // function call (forward_event, discard_event, defer_event, transit,
-      // terminate)
-      BOOST_ASSERT( reactionEnabled_ );
-      reactionEnabled_ = false;
-    }
-
     void defer_event()
     {
       deferredEvents_ = true;
@@ -136,7 +118,7 @@ class state_base :
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    virtual result react_impl(
+    virtual detail::reaction_result react_impl(
       const event_base & evt,
       typename RttiPolicy::id_type eventType ) = 0;
 
@@ -161,7 +143,6 @@ class state_base :
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    bool reactionEnabled_;
     bool deferredEvents_;
 };
 

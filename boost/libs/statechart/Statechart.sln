@@ -123,6 +123,22 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FifoSchedulerTest", "test\F
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InvalidResultAssignTest", "test\InvalidResultAssignTest.vcproj", "{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InvalidResultDefCtorTest", "test\InvalidResultDefCtorTest.vcproj", "{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InvalidResultCopyTest", "test\InvalidResultCopyTest.vcproj", "{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnconsumedResultTest", "test\UnconsumedResultTest.vcproj", "{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -253,6 +269,26 @@ Global
 		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.Build.0 = Debug|Win32
 		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.ActiveCfg = Release|Win32
 		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.Build.0 = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.ActiveCfg = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.Build.0 = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.ActiveCfg = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.Build.0 = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.ActiveCfg = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.Build.0 = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.ActiveCfg = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.Build.0 = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.ActiveCfg = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.Build.0 = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.ActiveCfg = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.Build.0 = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.ActiveCfg = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Debug.Build.0 = Debug|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.ActiveCfg = Release|Win32
+		{D9103E3E-640D-4AB7-910C-ACA96709ED0A}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		example\Jamfile = example\Jamfile
+		test\Jamfile = test\Jamfile
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

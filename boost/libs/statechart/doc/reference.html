@@ -78,7 +78,7 @@
   <dd><a href="#Class template custom_reaction">Class template <code>
   custom_reaction</code></a></dd>
   <dt><a href="#result.hpp">result.hpp</a></dt>
-  <dd><a href="#Enum result">Enum <code>result</code></a></dd>
+  <dd><a href="#Class result">Class <code>result</code></a></dd>
 </dl>
 <hr>
 <h1><a name="Concepts">Concepts</a></h1>
@@ -217,10 +217,10 @@ well-formed and have the indicated results:</p>
 state machine operation are translated to exception events.</p>
 <p>For an ExceptionTranslator object <code>et</code>, a parameterless function 
 object <code>a</code> of arbitrary type returning <code>
-<a href="#Enum result">result</a></code> and a function object <code>eh</code> of 
+<a href="#Class result">result</a></code> and a function object <code>eh</code> of 
 arbitrary type taking a <code>const <a href="#Class event_base">event_base</a> 
 &amp;</code> parameter and returning <code>
-<a href="#Enum result">result</a></code> the following expression must be well-formed and have 
+<a href="#Class result">result</a></code> the following expression must be well-formed and have 
 the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber1" cellpadding="2">
   <tr>
@@ -433,8 +433,8 @@ pointing to an object of type <code>S</code> allocated with <code>new</code>, an
   <tr>
     <td width="15%"><code>ExceptionTranslator</code></td>
     <td width="51%">A model of the ExceptionTranslator concept</td>
-    <td width="18%">see <a href="#ExceptionTranslator">ExceptionTranslator 
-    concept </a></td>
+    <td width="18%">see <a href="#ExceptionTranslator">ExceptionTranslator</a> 
+    concept</td>
     <td width="19%"><code>null_exception_translator</code></td>
   </tr>
 </table>
@@ -497,7 +497,7 @@ second-highest number and so on<br>
 <ol>
   <li>Calls <code>terminate()</code></li>
   <li>Constructs a function object <code>action</code> with a parameter-less
-  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> 
+  <code>operator()()</code> returning <code><a href="#Class result">result</a></code> 
   that<ol type="a">
     <li>enters (constructs) the state specified with the <code>InitialState</code> 
     template parameter</li>
@@ -531,8 +531,8 @@ second-highest number and so on<br>
     thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
     machine is not stable after processing the exception event, the original 
-	exception is rethrown. Otherwise, a <code><a href="#Enum result">result</a></code> 
-	value is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
+	exception is rethrown. Otherwise, a <code><a href="#Class result">result</a></code> 
+	object is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
   </ul>
   </li>
   <li>Passes <code>action</code> and <code>exceptionEventHandler</code> to 
@@ -565,12 +565,12 @@ library itself but only in code supplied through template parameters:</p>
 <p><b>Effects</b>:</p>
 <ol>
   <li>Constructs a function object <code>action</code> with a parameter-less
-  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> 
+  <code>operator()()</code> returning <code><a href="#Class result">result</a></code> 
   that <a href="#simple_state::terminate">terminates</a> the currently active 
 	outermost state, discards all remaining events and clears all history 
 	information</li>
   <li>Constructs a function object <code>exceptionEventHandler</code> with an
-  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> and accepting an 
+  <code>operator()()</code> returning <code><a href="#Class result">result</a></code> and accepting an 
   exception event parameter that processes the passed exception event, with 
   the following differences to the processing of normal events:<ul type="disc">
     <li>From the moment when the exception has been thrown until right after the 
@@ -592,8 +592,8 @@ library itself but only in code supplied through template parameters:</p>
     thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
     machine is not stable after processing the exception event, the original 
-	exception is rethrown. Otherwise, a <code><a href="#Enum result">result</a></code> 
-	value is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
+	exception is rethrown. Otherwise, a <code><a href="#Class result">result</a></code> 
+	object is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
   </ul>
   </li>
   <li>Passes <code>action</code> and <code>exceptionEventHandler</code> to <code>ExceptionTranslator::operator()()</code>. 
@@ -628,7 +628,7 @@ library itself but only in code supplied through template parameters:</p>
   from all the currently active <a href="definitions.html#Innermost state">
   innermost states</a>. If no such state exists then continues with step 10</li>
   <li>Constructs a function object <code>action</code> with a parameter-less
-  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> 
+  <code>operator()()</code> returning <code><a href="#Class result">result</a></code> 
   that does the following:<ol type="a">
     <li>Searches a reaction suitable for the current event, starting with the 
     current innermost state and moving outward until a state defining a 
@@ -640,7 +640,7 @@ library itself but only in code supplied through template parameters:</p>
   </ol>
   </li>
   <li>Constructs a function object <code>exceptionEventHandler</code> returning 
-	<code><a href="#Enum result">result</a></code> and accepting an exception 
+	<code><a href="#Class result">result</a></code> and accepting an exception 
 	event parameter that processes the passed exception event, with the 
 	following differences to the processing of normal events:<ul type="disc">
     <li>From the moment when the exception has been thrown until right after the 
@@ -667,8 +667,8 @@ library itself but only in code supplied through template parameters:</p>
     thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
     machine is not stable after processing the exception event, the original 
-	exception is rethrown. Otherwise, a <code><a href="#Enum result">result</a></code> 
-	value is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
+	exception is rethrown. Otherwise, a <code><a href="#Class result">result</a></code> 
+	object is returned equal to the one returned by <code>simple_state&lt;&gt;::discard_event()</code></li>
   </ul>
   </li>
   <li>Passes <code>action</code> and <code>exceptionEventHandler</code> to <code>ExceptionTranslator::operator()()</code>. 
@@ -856,7 +856,7 @@ implementation.</p>
   <tr>
     <td width="15%"><code>Scheduler</code></td>
     <td width="51%">A model of the Scheduler concept</td>
-    <td width="18%">see <a href="#Scheduler">Scheduler concept </a></td>
+    <td width="18%">see <a href="#Scheduler">Scheduler</a> concept</td>
     <td width="19%">&nbsp;</td>
   </tr>
 </table>
@@ -931,7 +931,7 @@ constructor</p>
 <h1>Header &lt;boost/statechart/<a name="fifo_scheduler.hpp">fifo_scheduler.hpp</a>&gt;</h1>
 <h2><a name="Class template fifo_scheduler">Class template <code>
 fifo_scheduler</code></a></h2>
-<p>This class template is a model of the <a href="#Scheduler">Scheduler concept</a>.</p>
+<p>This class template is a model of the <a href="#Scheduler">Scheduler</a> concept.</p>
 <h3>Class template <code>fifo_scheduler</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber16">
   <tr>
@@ -943,7 +943,7 @@ fifo_scheduler</code></a></h2>
   <tr>
     <td width="15%"><code>FifoWorker</code></td>
     <td width="28%">A model of the FifoWorker concept</td>
-    <td width="26%">see <a href="#FifoWorker">FifoWorker concept</a></td>
+    <td width="26%">see <a href="#FifoWorker">FifoWorker</a> concept</td>
     <td width="29%"><code>fifo_worker&lt;&gt;</code></td>
   </tr>
   <tr>
@@ -1134,7 +1134,7 @@ operator()()</code><br>
 <h2><a name="Class template exception_translator">Class template <code>
 exception_translator</code></a></h2>
 <p>This class template is a model of the <a href="#ExceptionTranslator">
-ExceptionTranslator concept</a>.</p>
+ExceptionTranslator</a> concept.</p>
 <h3>Class template <code>exception_translator</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="table1">
   <tr>
@@ -1185,7 +1185,7 @@ namespace statechart
 <h2><a name="Class null_exception_translator">Class <code>
 null_exception_translator</code></a></h2>
 <p>This class is a model of the <a href="#ExceptionTranslator">
-ExceptionTranslator concept</a>.</p>
+ExceptionTranslator</a> concept.</p>
 <h3>Class <code>null_exception_translator</code> synopsis &amp; semantics</h3>
 <pre>namespace boost
 {
@@ -1363,19 +1363,19 @@ namespace statechart
       void <a href="#post_event">post_event</a>(
         const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );
 
-      <a href="#Enum result">result</a> <a href="#discard_event">discard_event</a>();
-      <a href="#Enum result">result</a> <a href="#forward_event">forward_event</a>();
-      <a href="#Enum result">result</a> <a href="#defer_event">defer_event</a>();
+      <a href="#Class result">result</a> <a href="#discard_event">discard_event</a>();
+      <a href="#Class result">result</a> <a href="#forward_event">forward_event</a>();
+      <a href="#Class result">result</a> <a href="#defer_event">defer_event</a>();
       template&lt; class DestinationState &gt;
-      <a href="#Enum result">result</a> <a href="#transit1">transit</a>();
+      <a href="#Class result">result</a> <a href="#transit1">transit</a>();
       template&lt;
         class DestinationState,
         class TransitionContext,
         class Event &gt;
-      <a href="#Enum result">result</a> <a href="#transit2">transit</a>(
+      <a href="#Class result">result</a> <a href="#transit2">transit</a>(
         void ( TransitionContext::* )( const Event &amp; ),
         const Event &amp; );
-      <a href="#Enum result">result</a> <a href="#simple_state::terminate">terminate</a>();
+      <a href="#Class result">result</a> <a href="#simple_state::terminate">terminate</a>();
 
       template&lt;
         class HistoryContext,
@@ -1427,7 +1427,7 @@ queue<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
-<pre><a href="#Enum result">result</a> <a name="discard_event">discard_event</a>();</pre>
+<pre><a href="#Class result">result</a> <a name="discard_event">discard_event</a>();</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
@@ -1436,10 +1436,10 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
 to continue with the processing of the remaining events (see <code>
 <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
 details)<br>
-<b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
-result</a></code> enumeration. The user-supplied <code>react</code> member 
-function must return this value to its caller</p>
-<pre><a href="#Enum result">result</a> <a name="forward_event">forward_event</a>();</pre>
+<b>Returns</b>: A <code><a href="#Class result">
+result</a></code> object. The user-supplied <code>react</code> member 
+function must return this object to its caller</p>
+<pre><a href="#Class result">result</a> <a name="forward_event">forward_event</a>();</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
@@ -1447,10 +1447,10 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>: Instructs the state machine to forward the current event to 
 the next state (see <code><a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> 
 for details)<br>
-<b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
-result</a></code> enumeration. The user-supplied <code>react</code> member 
-function must return this value to its caller</p>
-<pre><a href="#Enum result">result</a> <a name="defer_event">defer_event</a>();</pre>
+<b>Returns</b>: A <code><a href="#Class result">
+result</a></code> object. The user-supplied <code>react</code> member 
+function must return this object to its caller</p>
+<pre><a href="#Class result">result</a> <a name="defer_event">defer_event</a>();</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
@@ -1461,14 +1461,14 @@ direct and indirect callers must be exception-neutral<br>
 continue with the processing of the remaining events (see <code>
 <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
 details)<br>
-<b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
-result</a></code> enumeration. The user-supplied <code>react</code> member 
-function must return this value to its caller<br>
+<b>Returns</b>: A <code><a href="#Class result">
+result</a></code> object. The user-supplied <code>react</code> member 
+function must return this object to its caller<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
 <pre>template&lt; class DestinationState &gt;
-<a href="#Enum result">result</a> <a name="transit1">transit</a>();</pre>
+<a href="#Class result">result</a> <a name="transit1">transit</a>();</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
@@ -1508,9 +1508,9 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
   details)</li>
 </ol>
-<p><b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
-result</a></code> enumeration. The user-supplied <code>react</code> member 
-function must return this value to its caller<br>
+<p><b>Returns</b>: A <code><a href="#Class result">
+result</a></code> object. The user-supplied <code>react</code> member 
+function must return this object to its caller<br>
 <b>Throws</b>: Any exceptions propagated from:</p>
 <ul>
   <li><code>operator new()</code> (used to allocate states)</li>
@@ -1526,7 +1526,7 @@ attempt to access anything except stack objects before returning to its caller</
   class DestinationState,
   class TransitionContext,
   class Event &gt;
-<a href="#Enum result">result</a> <a name="transit2">transit</a>(
+<a href="#Class result">result</a> <a name="transit2">transit</a>(
   void ( TransitionContext::* )( const Event &amp; ),
   const Event &amp; );</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
@@ -1569,9 +1569,9 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
   details)</li>
 </ol>
-<p><b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
-result</a></code> enumeration. The user-supplied <code>react</code> member 
-function must return this value to its caller<br>
+<p><b>Returns</b>: A <code><a href="#Class result">
+result</a></code> object. The user-supplied <code>react</code> member 
+function must return this object to its caller<br>
 <b>Throws</b>: Any exceptions propagated from:</p>
 <ul>
   <li><code>operator new()</code> (used to allocate states)</li>
@@ -1584,7 +1584,7 @@ parameter passed to the base class of <code>outermost_context_type</code>)</li>
 <p><b>Caution</b>: Inevitably destructs this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
-<pre><a href="#Enum result">result</a> <a name="simple_state::terminate">terminate</a>();</pre>
+<pre><a href="#Class result">result</a> <a name="simple_state::terminate">terminate</a>();</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
@@ -1612,9 +1612,9 @@ The process of exiting a state consists of the following steps:</p>
 continue with the processing of the remaining events (see <code>
 <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
 details)<br>
-<b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
-result</a></code> enumeration. The user-supplied <code>react</code> member 
-function must return this value to its caller<br>
+<b>Returns</b>: A <code><a href="#Class result">
+result</a></code> object. The user-supplied <code>react</code> member 
+function must return this object to its caller<br>
 <b>Throws</b>: Any exceptions propagated from:</p>
 <ul>
   <li><code>Allocator::allocate()</code> (the template 
@@ -2034,7 +2034,7 @@ member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState<
   </tr>
   <tr>
     <td width="15%"><code>TransitionContext</code></td>
-    <td width="45%">A common outer context of the source and <code>Destination</code> 
+    <td width="45%">A common context of the source and <code>Destination</code> 
     state</td>
     <td width="24%">The state of which the transition action is a member</td>
     <td width="19%"><i><code>unspecified</code></i></td>
@@ -2184,42 +2184,58 @@ namespace statechart
 <p>When executed, a call is made to the user-supplied <code>react</code> 
 member function of the state for which the reaction was defined. The <code>
 react</code> member function must have the following signature:</p>
-<pre><a href="#Enum result">result</a> react( const Event &amp; );</pre>
+<pre><a href="#Class result">result</a> react( const Event &amp; );</pre>
 <p>and must call exactly one of the following reaction functions and return 
-the obtained <code><a href="#Enum result">result</a></code> object:</p>
-<pre><a href="#Enum result">result</a> <a href="#discard_event">discard_event</a>();
-<a href="#Enum result">result</a> <a href="#forward_event">forward_event</a>();
-<a href="#Enum result">result</a> <a href="#defer_event">defer_event</a>();
+the obtained <code><a href="#Class result">result</a></code> object:</p>
+<pre><a href="#Class result">result</a> <a href="#discard_event">discard_event</a>();
+<a href="#Class result">result</a> <a href="#forward_event">forward_event</a>();
+<a href="#Class result">result</a> <a href="#defer_event">defer_event</a>();
 template&lt; class DestinationState &gt;
-<a href="#Enum result">result</a> <a href="#transit1">transit</a>();
+<a href="#Class result">result</a> <a href="#transit1">transit</a>();
 template&lt;
   class DestinationState,
   class TransitionContext,
   class Event &gt;
-<a href="#Enum result">result</a> <a href="#transit2">transit</a>(
+<a href="#Class result">result</a> <a href="#transit2">transit</a>(
   void ( TransitionContext::* )( const Event &amp; ),
   const Event &amp; );
-<a href="#Enum result">result</a> <a href="#simple_state::terminate">terminate</a>();</pre>
+<a href="#Class result">result</a> <a href="#simple_state::terminate">terminate</a>();</pre>
 <h1>Header &lt;boost/statechart/<a name="result.hpp">result.hpp</a>&gt;</h1>
-<h2><a name="Enum result">Enum <code>result</code></a></h2>
+<h2><a name="Class result">Class <code>result</code></a></h2>
 <p>Defines the nature of the reaction taken in a user-supplied <code>react</code> 
 member function (called when a <code>
 <a href="#Class template custom_reaction">custom_reaction</a></code> is 
-executed). Values of this type are always obtained by calling one of the 
-reaction functions.</p>
+executed). Objects of this type are always obtained by calling one of the 
+reaction functions and must be returned from the <code>react</code> member 
+function immediately.</p>
 <pre>namespace boost
 {
 namespace statechart
 {
-  enum result
+  class result
   {
-    // <i>implementation-defined</i>
+    public:
+      <a href="#result0">result</a>( const result &amp; other );
+      <a href="#~result0">~result</a>();
+
+    private:
+      // Result objects are not assignable
+      result &amp; operator=( const result &amp; other );
   };
 }
 }</pre>
+<h3>Class <code>result</code> constructor and destructor</h3>
+<pre><a name="result0">result</a>( const result &amp; other );</pre>
+<p><b>Requires</b>: <code>other</code> is <b>not</b> consumed<br>
+<b>Effects</b>: Copy-constructs a new <code>result</code> object and marks
+<code>other</code> as consumed. That is, <code>result</code> has destructive 
+copy semantics</p>
+<pre><a name="~result0">~result</a>();</pre>
+<p><b>Requires</b>: <code>this</code> is marked as consumed<br>
+<b>Effects</b>: Destructs the result object</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->04 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19916" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19919" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
