@@ -17,6 +17,7 @@ void test_iterator()
 {
     using namespace boost;
     ptr_vector<int> vec;
+    vec.push_back( new int(0) );
     ptr_vector<int>::iterator           mutable_i   = vec.begin();
     ptr_vector<int>::const_iterator     const_i     = vec.begin();
 
@@ -34,10 +35,15 @@ void test_iterator()
     BOOST_CHECK( ! ( const_i > mutable_i ) );
     BOOST_CHECK( const_i >= mutable_i );
     
+    BOOST_CHECK( const_i - mutable_i == 0 );
+    BOOST_CHECK( mutable_i - const_i == 0 );
+    
     const ptr_vector<int>& rvec               = vec;
     const_i                                   = rvec.begin();
 
     ptr_map<int,int> map;
+    int i = 0;
+    map.insert( i, new int(0) );
     ptr_map<int,int>::iterator map_mutable_i     = map.begin();
     ptr_map<int,int>::const_iterator map_const_i = map.begin();
 
