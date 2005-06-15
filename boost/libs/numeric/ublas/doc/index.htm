@@ -207,15 +207,23 @@ Map</a></li>
 </li>
 </ul>
 <h2>Supported Platforms</h2>
-<p>The original development platform for uBLAS we used MSVC 6.0
-with Dinkumware STL. Other compilers known to accept the library
-are</p>
+<p>The current version of uBLAS expects a modern (ISO standard compliant) compiler. Compilers with little or no problems with uBLAS are:</p>
+<ul>
+<li>GCC 3.2.3 or greater</li>
+<li>MSVC 7.1 or greater</li>
+<li>ICC 8.08.1</li>
+<li>Visual age 6</li>
+<li>Codewarrior 9.4</li>
+</ul>
+<p>The version of uBLAS in Boost 1.32.0 (and earlier) support many older compilers. If you are 
+using such a compiler please use this version of uBLAS. Compilers known to accept this older library
+are:</p>
 <ul>
 <li>MSVC 6.0 with STLPort-4.5.3, 7.0, 7.1</li>
 <li>GCC 2.95.x, 3.0.x, 3.1.x, 3.2.x, 3.3.x, 3.4.x</li>
 <li>ICC 7.0, 7.1 8.0</li>
 <li>Comeau 4.2.x</li>
-<li>MWCW</li>
+<li>Codewarrior 8.3</li>
 </ul>
 <p>For possible problems please consider to consult the Boost
 regression tests.</p>
