@@ -24,3 +24,5 @@ install dist-lib
     <install-type>LIB
     <location>../../../dist/lib
     ;
+
+explicit dist-lib ;
