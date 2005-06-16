@@ -30,7 +30,7 @@ namespace boost { namespace program_options {
             }
             xparse(value_store, local_tokens);
 #else
-            throw_exception(
+            boost::throw_exception(
                 std::runtime_error("UTF-8 conversion not supported."));
 #endif
         } else {
@@ -96,9 +96,10 @@ namespace boost { namespace program_options {
                           const std::vector<std::string>& new_tokens) const
     {
         if (!value_store.empty()) 
-            throw_exception(multiple_occurrences("multiple_occurrences"));
+            boost::throw_exception(
+                multiple_occurrences("multiple_occurrences"));
         if (new_tokens.size() > 1)
-            throw_exception(multiple_values("multiple_values"));
+            boost::throw_exception(multiple_values("multiple_values"));
         value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
     }
 
@@ -138,7 +139,7 @@ namespace boost { namespace program_options {
         else if (s == "off" || s == "no" || s == "0" || s == "false")
             v = any(false);
         else
-            throw_exception(validation_error(
+            boost::throw_exception(validation_error(
                                 "'" + s + "' doesn't look like a bool value."));
     }
 
@@ -161,7 +162,7 @@ namespace boost { namespace program_options {
         else if (s == L"off" || s == L"no" || s == L"0" || s == L"false")
             v = any(false);
         else
-            throw_exception(validation_error("invalid bool value"));
+            boost::throw_exception(validation_error("invalid bool value"));
     }
 #endif
     BOOST_PROGRAM_OPTIONS_DECL 
@@ -196,7 +197,8 @@ namespace boost { namespace program_options {
         void check_first_occurrence(const boost::any& value)
         {
             if (!value.empty())
-                throw_exception(multiple_occurrences("multiple_occurrences"));
+                boost::throw_exception(
+                    multiple_occurrences("multiple_occurrences"));
         }
     }
 

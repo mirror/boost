@@ -83,7 +83,7 @@ namespace boost { namespace program_options {
             v = any(lexical_cast<T>(s));
         }
         catch(const bad_lexical_cast&) {
-            throw_exception(invalid_option_value(s));
+            boost::throw_exception(invalid_option_value(s));
         }
     }
 
@@ -137,7 +137,7 @@ namespace boost { namespace program_options {
                 tv->push_back(boost::lexical_cast<T>(s[i]));
             }
             catch(const bad_lexical_cast& /*e*/) {
-                throw_exception(invalid_option_value(s[i]));
+                boost::throw_exception(invalid_option_value(s[i]));
             }
         }
     }

@@ -63,14 +63,16 @@ namespace boost { namespace detail {
                 fun(state, from, from_end, from, buffer, to_end, to_next);
             
             if (r == std::codecvt_base::error)
-                throw_exception(std::logic_error("character conversion failed"));
+                boost::throw_exception(
+                    std::logic_error("character conversion failed"));
             // 'partial' is not an error, it just means not all source
             // characters were converted. However, we need to check that at
             // least one new target character was produced. If not, it means
             // the source data is incomplete, and since we don't have extra
             // data to add to source, it's error.
             if (to_next == buffer)
-                throw_exception(std::logic_error("character conversion failed"));
+                boost::throw_exception(
+                    std::logic_error("character conversion failed"));
             
             // Add converted characters
             result.append(buffer, to_next);

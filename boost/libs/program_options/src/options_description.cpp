@@ -238,7 +238,7 @@ namespace boost { namespace program_options {
     {
         const option_description* d = find_nothrow(name, approx);
         if (!d)
-            throw_exception(unknown_option(name));
+            boost::throw_exception(unknown_option(name));
         return *d;
     }
 
@@ -267,7 +267,7 @@ namespace boost { namespace program_options {
                     // be the best approach.
                     alts.push_back(m_options[found]->key(name));
                     alts.push_back(m_options[i]->key(name));
-                    throw_exception(ambiguous_option(name, alts));
+                    boost::throw_exception(ambiguous_option(name, alts));
                 }
                 else
                 {
@@ -310,7 +310,7 @@ namespace boost { namespace program_options {
                 // only one tab per paragraph allowed
                 if (count(par.begin(), par.end(), '\t') > 1)
                 {
-                    throw_exception(program_options::error(
+                    boost::throw_exception(program_options::error(
                         "Only one tab per paragraph is allowed"));
                 }
           

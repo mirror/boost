@@ -55,7 +55,7 @@ namespace boost { namespace program_options { namespace detail {
                     bad_prefixes = true;
             }
             if (bad_prefixes)
-                throw_exception(error("bad prefixes"));
+                boost::throw_exception(error("bad prefixes"));
             allowed_prefixes.insert(s);
         }
     }
@@ -101,10 +101,10 @@ namespace boost { namespace program_options { namespace detail {
                     string value = trim_ws(s.substr(n+1));
 
                     if (!allowed_option(name))
-                        throw_exception(unknown_option(name));
+                        boost::throw_exception(unknown_option(name));
                                         
                     if (value.empty())
-                        throw_exception(invalid_syntax(s, "no value given"));
+                        boost::throw_exception(invalid_syntax(s, "no value given"));
                     
                     found = true;
                     this->value().string_key = name;
@@ -113,7 +113,7 @@ namespace boost { namespace program_options { namespace detail {
                     break;
 
                 } else {
-                    throw_exception(invalid_syntax(s, "unrecognized line"));
+                    boost::throw_exception(invalid_syntax(s, "unrecognized line"));
                 }
             }
         }

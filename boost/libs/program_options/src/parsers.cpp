@@ -98,7 +98,8 @@ namespace boost { namespace program_options {
             const option_description& d = *options[i];
 
             if (d.long_name().empty())
-                throw_exception(error("long name required for config file"));
+                boost::throw_exception(
+                    error("long name required for config file"));
 
             allowed_options.insert(d.long_name());
         }

@@ -151,7 +151,7 @@ namespace boost { namespace program_options { namespace detail {
             error = "style disallows all characters for short options";
 
         if (error)
-            throw_exception(invalid_command_line_style(error));
+            throw invalid_command_line_style(error);
 
         // Need to check that if guessing and long disguise are enabled
         // -f will mean the same as -foo
@@ -268,8 +268,8 @@ namespace boost { namespace program_options { namespace detail {
                 if (opt.position_key != -1) {
                     if (position >= m_positional->max_total_count())
                     {
-                        throw_exception(too_many_positional_options_error(
-                            "too many positional options"));
+                        throw too_many_positional_options_error(
+                            "too many positional options");
                     }
                     opt.string_key = m_positional->name_for_position(position);
                     ++position;
@@ -298,7 +298,7 @@ namespace boost { namespace program_options { namespace detail {
                 opt.unregistered = true;
                 return;
             } else {
-                throw_exception(unknown_option(opt.string_key));
+                boost::throw_exception(unknown_option(opt.string_key));
             }                
         }
         const option_description& d = *xd;
@@ -322,8 +322,8 @@ namespace boost { namespace program_options { namespace detail {
         if (present_tokens >= min_tokens)
         {
             if (!opt.value.empty() && max_tokens == 0) {
-                throw_exception(invalid_command_line_syntax(opt.string_key,
-                    invalid_command_line_syntax::extra_parameter));                                                                
+                throw invalid_command_line_syntax(opt.string_key,
+                    invalid_command_line_syntax::extra_parameter);                                                                
             }
             
             max_tokens -= opt.value.size();
@@ -336,8 +336,8 @@ namespace boost { namespace program_options { namespace detail {
         }
         else
         {
-            throw_exception(invalid_command_line_syntax(opt.string_key,
-                invalid_command_line_syntax::missing_parameter));                                                                
+            throw invalid_command_line_syntax(opt.string_key,
+                invalid_command_line_syntax::missing_parameter); 
 
         }
     }
@@ -357,8 +357,8 @@ namespace boost { namespace program_options { namespace detail {
                 name = tok.substr(2, p-2);
                 adjacent = tok.substr(p+1);
                 if (adjacent.empty())
-                    throw_exception(invalid_command_line_syntax(name,
-                      invalid_command_line_syntax::empty_adjacent_parameter));
+                    throw invalid_command_line_syntax(name,
+                      invalid_command_line_syntax::empty_adjacent_parameter);
             }
             else
             {
