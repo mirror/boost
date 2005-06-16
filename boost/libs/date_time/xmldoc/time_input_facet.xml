@@ -16,7 +16,7 @@
 
   <anchor id="time_input_facet_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
-  <para>The <code>boost::date_time::time_input_facet</code> is an extension of the <code>date_input_facet</code>. It is typedef'ed in the <code>boost::posix_time</code> namespace as <code>ptime_input_facet</code> and <code>wptime_input_facet</code>. It is typedef'ed in the <code>boost::local_time</code> namespace as <code>local_time_input_facet</code> and <code>wlocal_time_input_facet</code>.
+  <para>The <code>boost::date_time::time_input_facet</code> is an extension of the <code>date_input_facet</code>. It is typedef'ed in the <code>boost::posix_time</code> namespace as <code>time_input_facet</code> and <code>wtime_input_facet</code>. It is typedef'ed in the <code>boost::local_time</code> namespace as <code>local_time_input_facet</code> and <code>wlocal_time_input_facet</code>.
   </para>
 
   <anchor id="time_input_facet_constr" />

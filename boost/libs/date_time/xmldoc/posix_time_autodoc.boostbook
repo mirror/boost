@@ -3,7 +3,7 @@
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
-<!-- date source directory processed: 2005-May-28 -->
+<!-- date source directory processed: 2005-Jun-15 -->
 <section id="posix_time_reference">
 <title>Posix Time Reference</title>
   <header name="boost/date_time/posix_time/conversion.hpp">
@@ -421,16 +421,17 @@
   <header name="boost/date_time/posix_time/posix_time_io.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <typedef name="wptime_facet">
+        <typedef name="wtime_facet">
+          <purpose>ptime_input_facet is depricated and will be phased out. use time_input_facet instead </purpose>
           <type>boost::date_time::time_facet&lt; <classname>ptime</classname>, wchar_t &gt;</type>
         </typedef>
-        <typedef name="ptime_facet">
+        <typedef name="time_facet">
           <type>boost::date_time::time_facet&lt; <classname>ptime</classname>, char &gt;</type>
         </typedef>
-        <typedef name="wptime_input_facet">
+        <typedef name="wtime_input_facet">
           <type>boost::date_time::time_input_facet&lt; <classname>ptime</classname>, wchar_t &gt;</type>
         </typedef>
-        <typedef name="ptime_input_facet">
+        <typedef name="time_input_facet">
           <type>boost::date_time::time_input_facet&lt; <classname>ptime</classname>, char &gt;</type>
         </typedef>
         <function name="operator&lt;&lt;">

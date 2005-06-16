@@ -16,7 +16,7 @@
 
   <anchor id="time_facet_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
-  <para>The <code>boost::date_time::time_facet</code> is an extension of the <code>boost::date_time::date_facet</code>. The time_facet is typedef'ed in the <code>posix_time</code> namespace as <code>ptime_facet</code> and <code>wptime_facet</code>. It is typedef'd in the <code>local_time</code> namespace as <code>local_time_facet</code> and <code>wlocal_time_facet</code>.
+  <para>The <code>boost::date_time::time_facet</code> is an extension of the <code>boost::date_time::date_facet</code>. The time_facet is typedef'ed in the <code>posix_time</code> namespace as <code>time_facet</code> and <code>wtime_facet</code>. It is typedef'd in the <code>local_time</code> namespace as <code>local_time_facet</code> and <code>wlocal_time_facet</code>.
   </para>
 
   <anchor id="time_facet_constr" />
