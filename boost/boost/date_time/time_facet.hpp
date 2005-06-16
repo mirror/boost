@@ -668,7 +668,7 @@ namespace date_time {
         while (itr != m_time_duration_format.end() && (sitr != stream_end)) {
           if (*itr == '%') {
             itr++;
-            if (*itr != '%') { //ignore '%%'
+            if (*itr != '%') {
               std::ios_base::iostate err = std::ios_base::goodbit;
               switch(*itr) {
               case 'H': 
@@ -738,6 +738,9 @@ namespace date_time {
               default:
                 {} // ignore what we don't understand?
               }// switch
+            }
+            else { // itr == '%', second consecutive
+              sitr++;
             }
         
             itr++; //advance past format specifier
@@ -826,7 +829,7 @@ namespace date_time {
         while (itr != this->m_format.end() && (sitr != stream_end)) {
           if (*itr == '%') {
             itr++;
-            if (*itr != '%') { //ignore '%%'
+            if (*itr != '%') {
               std::ios_base::iostate err = std::ios_base::goodbit;
               // the cases are grouped by date & time flags - not alphabetical order
               switch(*itr) {
@@ -1033,6 +1036,9 @@ namespace date_time {
                 default:
                 {} // ignore what we don't understand?
               }// switch
+            } 
+            else { // itr == '%', second consecutive
+              sitr++;
             }
        
             if(use_current_format_char) {
