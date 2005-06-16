@@ -207,6 +207,47 @@ int main() {
                     std::locale(std::locale::classic(), datefacet));
     }
 
+    {//date
+      date_facet* datefacet = new date_facet("%Y-%b-%d %%d");
+      teststreaming("Literal '%' in date format", d, 
+                    std::string("2004-Oct-13 %d"), 
+                    std::locale(std::locale::classic(), datefacet));
+    }
+    {
+      date_facet* datefacet = new date_facet("%Y-%b-%d %%%d");
+      teststreaming("Multiple literal '%'s in date format", d, 
+                    std::string("2004-Oct-13 %13"), 
+                    std::locale(std::locale::classic(), datefacet));
+    }
+    {//month
+      date_facet* datefacet = new date_facet();
+      datefacet->month_format("%b %%b");
+      teststreaming("Literal '%' in month format", d.month(), 
+                    std::string("Oct %b"), 
+                    std::locale(std::locale::classic(), datefacet));
+    }
+    {
+      date_facet* datefacet = new date_facet();
+      datefacet->month_format("%b %%%b");
+      teststreaming("Multiple literal '%'s in month format", d.month(), 
+                    std::string("Oct %Oct"), 
+                    std::locale(std::locale::classic(), datefacet));
+    }
+    {//weekday
+      date_facet* datefacet = new date_facet();
+      datefacet->weekday_format("%a %%a");
+      teststreaming("Literal '%' in weekday format", d.day_of_week(), 
+                    std::string("Wed %a"), 
+                    std::locale(std::locale::classic(), datefacet));
+    }
+    {
+      date_facet* datefacet = new date_facet();
+      datefacet->weekday_format("%a %%%a");
+      teststreaming("Multiple literal '%'s in weekday format", d.day_of_week(), 
+                    std::string("Wed %Wed"), 
+                    std::locale(std::locale::classic(), datefacet));
+    }
+
 
 
     date d_not_date(not_a_date_time);

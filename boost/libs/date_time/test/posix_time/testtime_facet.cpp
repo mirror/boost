@@ -75,6 +75,27 @@ int main() {
       check("Stream and to_string formats match (time_duration)", 
           to_simple_string(td) == ss.str());
       std::cout << ss.str() << std::endl;
+
+      time_facet* f = new time_facet();
+      ss.imbue(std::locale(ss.getloc(), f));
+      ss.str("");
+
+      f->format("%Y-%b-%d %H:%M:%S %%d");
+      f->time_duration_format("%H:%M:%S %%S");
+      ss << t;
+      check("Literal '%' in format", ss.str() == std::string("2004-Oct-13 18:01:56 %d"));
+      ss.str("");
+      ss << td;
+      check("Literal '%' in time_duration format", ss.str() == std::string("03:02:01 %S"));
+      ss.str("");
+      f->format("%Y-%b-%d %H:%M:%S %%%d");
+      f->time_duration_format("%H:%M:%S %%%S");
+      ss << t;
+      check("Multiple literal '%'s in format", ss.str() == std::string("2004-Oct-13 18:01:56 %13"));
+      ss.str("");
+      ss << td;
+      check("Multiple literal '%'s in time_duration format", ss.str() == std::string("03:02:01 %01"));
+      ss.str("");
     }
 #if !defined(BOOST_NO_STD_WSTRING) 
     std::copy(&short_month_names[0], 
@@ -87,28 +108,34 @@ int main() {
     
 
     {
-      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      wtime_facet *timefacet = new wtime_facet(wtime_facet::standard_format);
       teststreaming("widestream default classic time", t, 
                     //std::wstring(L"Wed Oct 13 18:01:56 2004"),
                     std::wstring(L"10/13/04 18:01:56"),
                     std::locale(std::locale::classic(), timefacet));
     }
     {
-      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      wtime_facet *timefacet = new wtime_facet(wtime_facet::standard_format);
       teststreaming("widestream default classic time with fractional seconds truncated", t, 
                     //std::wstring(L"Wed Oct 13 18:01:56 2004"),
                     std::wstring(L"10/13/04 18:01:56"),
                     std::locale(std::locale::classic(), timefacet));
     }
     {
-      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      wtime_facet *timefacet = new wtime_facet(wtime_facet::standard_format);
       teststreaming("widestream default time period with fractional seconds truncated", tp, 
                     //std::wstring(L"[Wed Oct 13 18:01:56 2004/Wed Oct 20 19:02:57 2004]"),
                     std::wstring(L"[10/13/04 18:01:56/10/20/04 19:02:57]"),
                     std::locale(std::locale::classic(), timefacet));
     }
     {
-      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      wtime_facet *timefacet = new wtime_facet(L"%Y-%b-%d %I:%M:%S %p");
+      teststreaming("widestream time in 12 hours format w/ (AM/PM)", tp.begin(), 
+                    std::wstring(L"2004-Oct-13 06:01:56 PM"),
+                    std::locale(std::locale::classic(), timefacet));
+    }
+    {
+      wtime_facet *timefacet = new wtime_facet(wtime_facet::standard_format);
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream time duration", td, 
                     std::wstring(L"03:02:01.009000000"),
@@ -128,7 +155,7 @@ int main() {
                   std::wstring(L"03:02:01.009000"));
 #endif // BOOST_DATE_TIME_HAS_NANOSECONDS
 
-    //wptime_facet *timefacet = new wptime_facet();
+    //wtime_facet *timefacet = new wtime_facet();
     //std::locale cloc = std::locale(std::locale::classic(), timefacet);
     //ss.imbue(cloc);
 //     ss << L"classic date:               " << d << std::endl;
@@ -138,7 +165,7 @@ int main() {
     //ss << L"classic timeperiod:         " << tp << std::endl;
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"day: %j date: %Y-%b-%d weekday: %A time: %H:%M:%s");
+      wtime_facet* wtimefacet = new wtime_facet(L"day: %j date: %Y-%b-%d weekday: %A time: %H:%M:%s");
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time facet narly format", t, 
                     std::wstring(L"day: 287 date: 2004-Oct-13 weekday: Wednesday time: 18:01:56.000000000"), 
@@ -150,7 +177,7 @@ int main() {
 #endif
     }
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S,%f");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S,%f");
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time fractional seconds: %Y-%b-%d %H:%M:%S,%f", t, 
                     std::wstring(L"2004-Oct-13 18:01:56,000000000"), 
@@ -163,14 +190,14 @@ int main() {
     }
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S");
       teststreaming("widestream custom time no frac seconds: %Y-%b-%d %H:%M:%S", t, 
                     std::wstring(L"2004-Oct-13 18:01:56"), 
                     std::locale(std::locale::classic(), wtimefacet));
     }
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S");
       wtimefacet->short_month_names(de_short_month_names);
       teststreaming("widestream custom time no frac seconds, german months: %Y-%b-%d %H:%M:%S", t, 
                     std::wstring(L"2004-Okt-13 18:01:56"), 
@@ -178,7 +205,7 @@ int main() {
     }
 
     {
-      wptime_facet* wtimefacet = new wptime_facet();
+      wtime_facet* wtimefacet = new wtime_facet();
       wtimefacet->format(L"%B %b %Y");
       wtimefacet->short_month_names(de_short_month_names);
       wtimefacet->long_month_names(de_long_month_names);
@@ -188,14 +215,14 @@ int main() {
     }
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S%F");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S%F");
       teststreaming("widestream custom time no frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", t, 
                     std::wstring(L"2004-Oct-13 18:01:56"), 
                     std::locale(std::locale::classic(), wtimefacet));
     }
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S%F");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S%F");
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tf, 
                     std::wstring(L"2004-Oct-13 18:01:56.000003000"), 
@@ -207,7 +234,7 @@ int main() {
 #endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
     {
-      wptime_facet* wtimefacet = new wptime_facet();
+      wtime_facet* wtimefacet = new wtime_facet();
       wtimefacet->set_iso_format();
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time iso format", tf, 
@@ -220,7 +247,7 @@ int main() {
 #endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
     {
-      wptime_facet* wtimefacet = new wptime_facet();
+      wtime_facet* wtimefacet = new wtime_facet();
       wtimefacet->set_iso_extended_format();
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time iso extended format", tf, 
@@ -235,7 +262,7 @@ int main() {
 
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S%F");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%S%F");
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tp, 
                     std::wstring(L"[2004-Oct-13 18:01:56/2004-Oct-20 19:02:57.000002999]"), 
@@ -248,7 +275,7 @@ int main() {
     }
 
     {
-      wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%s");
+      wtime_facet* wtimefacet = new wtime_facet(L"%Y-%b-%d %H:%M:%s");
       wperiod_formatter pf(wperiod_formatter::AS_OPEN_RANGE, L" / ", L"[ ", L" )", L" ]");
       wtimefacet->period_formatter(pf);
 

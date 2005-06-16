@@ -19,7 +19,7 @@ template<class temporal_type, class exception_type>
 bool failure_test(temporal_type component,
                   const std::string& input,
                   exception_type /*except*/,
-                  boost::posix_time::ptime_input_facet* facet)
+                  boost::posix_time::time_input_facet* facet)
 {
   using namespace boost::posix_time;
   bool result = false;
@@ -73,7 +73,7 @@ int main(){
   check("Default format ptime", pt == ptime(date(2005,01,15),time_duration(10,15,3,123456)));
 #endif
 
-  // test all flags that appear in ptime_input_facet
+  // test all flags that appear in time_input_facet
   iss.str("12:34:56 2005-Jan-15 12:34:56");
   iss >> td;
   iss >> pt;
@@ -85,7 +85,7 @@ int main(){
   iss >> td;
   check("Default frac_sec format time_duration", td == time_duration(14,13,12));
   
-  ptime_input_facet* facet = new ptime_input_facet();
+  time_input_facet* facet = new time_input_facet();
   std::locale loc(std::locale::classic(), facet);
   facet->time_duration_format("%H:%M:%S%f");
   iss.imbue(loc);
@@ -123,6 +123,30 @@ int main(){
   iss >> pt;
   check("Extended Ordinal format", pt == ptime(date(2005,4,15),time_duration(23,59,0)));
 
+  /* this is not implemented yet. The flags: %I & %p are not parsed
+  iss.str("2005-Jun-14 03:15:00 PM");
+  facet->format("%Y-%b-%d %I:%M:%S %p");
+  iss >> pt;
+  check("12 hour time format (AM/PM)", pt == ptime(date(2005,6,14),time_duration(15,15,0)));
+  */
+
+  iss.str("2005-Jun-14 15:15:00 %d");
+  facet->format("%Y-%b-%d %H:%M:%S %%d");
+  iss >> pt;
+  check("Literal '%' in format", pt == ptime(date(2005,6,14),time_duration(15,15,0)));
+  iss.str("15:15:00 %d");
+  facet->time_duration_format("%H:%M:%S %%d");
+  iss >> td;
+  check("Literal '%' in time_duration format", td == time_duration(15,15,0));
+  iss.str("2005-Jun-14 15:15:00 %14");
+  facet->format("%Y-%b-%d %H:%M:%S %%%d"); // %% => % & %d => day_of_month
+  iss >> pt;
+  check("Multiple literal '%'s in format", pt == ptime(date(2005,6,14),time_duration(15,15,0)));
+  iss.str("15:15:00 %15");
+  facet->time_duration_format("%H:%M:%S %%%M");
+  iss >> td;
+  check("Multiple literal '%'s in time_duration format", td == time_duration(15,15,0));
+  
   // special_values tests. prove the individual flags catch special_values
   // NOTE: these flags all by themselves will not parse a complete ptime,
   // these are *specific* special_values tests
@@ -169,7 +193,7 @@ int main(){
   // time_period tests - the time_period_parser is thoroughly tested in gregorian tests
   // default period format is closed range so last ptime is included in peiod
   iss.str("[2005-Jan-01 00:00:00/2005-Dec-31 23:59:59]");
-  facet->format(ptime_input_facet::default_time_input_format); // reset format
+  facet->format(time_input_facet::default_time_input_format); // reset format
   iss >> tp;
   check("Time period, default formats", 
       (tp.begin() == ptime(date(2005,1,1),hours(0))) &&
@@ -178,7 +202,7 @@ int main(){
 
   // Failure tests
   // faliure tests for date elements tested in gregorian tests
-  ptime_input_facet* facet2 = new ptime_input_facet();
+  time_input_facet* facet2 = new time_input_facet();
   facet2->time_duration_format("%H:%M:%S%f");
   check("Failure test: Missing frac_sec with %f flag", 
         failure_test(td, "14:13:12 extra stuff", e_failure, facet2));
@@ -186,8 +210,8 @@ int main(){
   // Reversable format tests
   time_duration td_io(10,11,12,1234567);
   ptime pt_io(date(2004,03,15), td_io);
-  ptime_facet* otp_facet = new ptime_facet();
-  ptime_input_facet* inp_facet = new ptime_input_facet();
+  time_facet* otp_facet = new time_facet();
+  time_input_facet* inp_facet = new time_input_facet();
   std::stringstream ss;
   std::locale loc2(std::locale::classic(), otp_facet);
   ss.imbue(std::locale(loc2, inp_facet)); // imbue locale containing both facets
@@ -234,7 +258,7 @@ int main(){
     special_values_parser svp; // default constructor
     period_parser pp; // default constructor
     boost::date_time::date_generator_parser<date, char> dgp; // default constructor
-    ptime_input_facet tif("%Y-%m-%d %H:%M:%s", fdp, svp, pp, dgp);
+    time_input_facet tif("%Y-%m-%d %H:%M:%s", fdp, svp, pp, dgp);
   }
 #endif // USE_DATE_TIME_PRE_1_33_FACET_IO 
   return printTestStats();

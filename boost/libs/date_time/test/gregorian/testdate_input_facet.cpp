@@ -111,6 +111,51 @@ int main(){
   iss >> gy;
   check("2 digit format year", gy == greg_year(2002));
 
+  { // literal % in format tests
+    date d(not_a_date_time);
+    greg_month m(1);
+    greg_weekday gw(0);
+    greg_year y(1400);
+    date_input_facet* f = new date_input_facet("%%d %Y-%b-%d");
+    std::stringstream ss;
+    ss.imbue(std::locale(ss.getloc(), f));
+    
+    ss.str("%d 2005-Jun-14");
+    ss >> d;
+    check("Literal '%' in date format", d == date(2005,Jun,14));
+    f->format("%%%d %Y-%b-%d");
+    ss.str("%14 2005-Jun-14");
+    ss >> d;
+    check("Multiple literal '%'s in date format", d == date(2005,Jun,14));
+   
+    f->month_format("%%b %b");
+    ss.str("%b Jun");
+    ss >> m;
+    check("Literal '%' in month format", m == greg_month(6));
+    f->month_format("%%%b");
+    ss.str("%Jun");
+    ss >> m;
+    check("Multiple literal '%'s in month format", m == greg_month(6));
+   
+    f->weekday_format("%%a %a");
+    ss.str("%a Tue");
+    ss >> gw;
+    check("Literal '%' in weekday format", gw == greg_weekday(2));
+    f->weekday_format("%%%a");
+    ss.str("%Tue");
+    ss >> gw;
+    check("Multiple literal '%'s in weekday format", gw == greg_weekday(2));
+   
+    f->year_format("%%Y %Y");
+    ss.str("%Y 2005");
+    ss >> y;
+    check("Literal '%' in year format", y == greg_year(2005));
+    f->year_format("%%%Y");
+    ss.str("%2005");
+    ss >> y;
+    check("Multiple literal '%'s in year format", y == greg_year(2005));
+  }
+
   // All days, month, weekday, day, and year formats have been tested
   // begin testing other date formats
   facet->set_iso_extended_format();
