@@ -11,6 +11,10 @@
 #include <string>
 #include <set>
 
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+#include <istream> // std::getline
+#endif
+
 #include <boost/noncopyable.hpp>
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/option.hpp>
