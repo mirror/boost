@@ -129,6 +129,9 @@ void validate_all()
  * Check function signatures
  */
 
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x570) )
+#pragma warn -par
+#endif
 template<class URNG, class Dist>
 void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
 {
