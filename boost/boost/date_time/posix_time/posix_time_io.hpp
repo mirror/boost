@@ -21,12 +21,21 @@ namespace boost {
 namespace posix_time {
 
 
-  typedef boost::date_time::time_facet<ptime, wchar_t> wptime_facet;
-  typedef boost::date_time::time_facet<ptime, char>     ptime_facet;
+  //! wptime_facet is depricated and will be phased out. use wtime_facet instead
+  //typedef boost::date_time::time_facet<ptime, wchar_t> wptime_facet;
+  //! ptime_facet is depricated and will be phased out. use time_facet instead
+  //typedef boost::date_time::time_facet<ptime, char>     ptime_facet;
 
-  typedef boost::date_time::time_input_facet<ptime,wchar_t> wptime_input_facet;
-  typedef boost::date_time::time_input_facet<ptime,char>     ptime_input_facet;
+  //! wptime_input_facet is depricated and will be phased out. use wtime_input_facet instead
+  //typedef boost::date_time::time_input_facet<ptime,wchar_t> wptime_input_facet;
+  //! ptime_input_facet is depricated and will be phased out. use time_input_facet instead
+  //typedef boost::date_time::time_input_facet<ptime,char>     ptime_input_facet;
 
+  typedef boost::date_time::time_facet<ptime, wchar_t>     wtime_facet;
+  typedef boost::date_time::time_facet<ptime, char>         time_facet;
+
+  typedef boost::date_time::time_input_facet<ptime, wchar_t>     wtime_input_facet;
+  typedef boost::date_time::time_input_facet<ptime, char>         time_input_facet;
 
   template <class CharT, class TraitsT>
   inline 

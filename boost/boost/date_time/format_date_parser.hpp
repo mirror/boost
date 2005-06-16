@@ -237,7 +237,7 @@ class format_date_parser
     while (itr != format.end() && (sitr != stream_end)) {
       if (*itr == '%') {
         itr++;
-        if (*itr != '%') { //ignore '%%'
+        if (*itr != '%') {
           switch(*itr) {
           case 'a': 
             {
@@ -381,6 +381,9 @@ class format_date_parser
           }//switch
           
         }
+        else { // itr == '%', second consecutive
+          sitr++;
+        }
         
         itr++; //advance past format specifier
       }
@@ -434,7 +437,7 @@ class format_date_parser
     while (itr != format.end() && (sitr != stream_end)) {
       if (*itr == '%') {
         itr++;
-        if (*itr != '%') { //ignore '%%'
+        if (*itr != '%') {
           switch(*itr) {
           case 'b': 
             {
@@ -468,6 +471,9 @@ class format_date_parser
             
           }//switch
           
+        }
+        else { // itr == '%', second consecutive
+          sitr++;
         }
         
         itr++; //advance past format specifier
@@ -524,7 +530,7 @@ class format_date_parser
     while (itr != format.end() && (sitr != stream_end)) {
       if (*itr == '%') {
         itr++;
-        if (*itr != '%') { //ignore '%%'
+        if (*itr != '%') {
           switch(*itr) {
           case 'a': 
             {
@@ -565,6 +571,9 @@ class format_date_parser
             
           }//switch
           
+        }
+        else { // itr == '%', second consecutive
+          sitr++;
         }
         
         itr++; //advance past format specifier
@@ -614,7 +623,7 @@ class format_date_parser
     while (itr != format.end() && (sitr != stream_end)) {
       if (*itr == '%') {
         itr++;
-        if (*itr != '%') { //ignore '%%'
+        if (*itr != '%') {
           //match_results mr;
           switch(*itr) {
           case 'Y':
@@ -635,6 +644,9 @@ class format_date_parser
             
           }//switch
           
+        }
+        else { // itr == '%', second consecutive
+          sitr++;
         }
         
         itr++; //advance past format specifier
