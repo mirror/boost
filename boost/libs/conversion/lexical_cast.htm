@@ -196,28 +196,44 @@ public:
 			</blockquote>Exception used to indicate runtime <a href="#lexical_cast"><code>lexical_cast</code></a>
 		failure.
 			<hr>
-		<h2><a name="changes">Changes</a></h2>
-	<ul type="square">
-	<li>The previous version of <code>lexical_cast</code> used the default stream precision for reading
-	and writing floating-point numbers. For numerics that have a corresponding specialization of
-	<code>std::numeric_limits</code>, the current version now chooses a precision to match.
-	<li>The previous version of <code>lexical_cast</code> did not support conversion to or from any
-	wide-character-based types. For compilers with full language and library support for wide characters,
-	<code>lexical_cast</code> now supports conversions from <code>wchar_t</code>, <code>wchar_t *</code>,
-	and <code>std::wstring</code> and to <code>wchar_t</code> and <code>std::wstring</code>.
-	<li>The previous version of <code>lexical_cast</code> assumed that the conventional stream extractor
-	operators were sufficient for reading values. However, string I/O is asymmetric, with the result
-	that spaces play the role of I/O separators rather than string content. The current version fixes
-	this error for <code>std::string</code> and, where supported, <code>std::wstring</code>:
-	<code>lexical_cast&lt;std::string&gt;("Hello, World")</code> succeeds instead of failing with
-	a <code>bad_lexical_cast</code> exception.
-	<li>The previous version of <code>lexical_cast</code> allowed unsafe and meaningless conversions to
-	pointers. The current version now throws a <code>bad_lexical_cast</code> for conversions to pointers:
-	<code>lexical_cast&lt;char *&gt;("Goodbye, World")</code> now throws an exception instead of
-	causing undefined behavior.
-	</ul>
+		
+<h2><a name="changes">Changes</a></h2>
+<h3>June 2005:</h3>
+<ul type="square">
+  <li>Call-by-const reference for the parameters. This requires partial specialization 
+    of class templates, so it doesn't work for MSVC 6, and it uses the original 
+    pass by value there.<br>
+  </li>
+  <li>The MSVC 6 support is deprecated, and will be removed in a future Boost 
+    version. </li>
+</ul>
+<h3>Earlier:</h3>
+	
+<ul type="square">
+  <li>The previous version of <code>lexical_cast</code> used the default stream 
+    precision for reading and writing floating-point numbers. For numerics that 
+    have a corresponding specialization of <code>std::numeric_limits</code>, the 
+    current version now chooses a precision to match. <br>
+  <li>The previous version of <code>lexical_cast</code> did not support conversion 
+    to or from any wide-character-based types. For compilers with full language 
+    and library support for wide characters, <code>lexical_cast</code> now supports 
+    conversions from <code>wchar_t</code>, <code>wchar_t *</code>, and <code>std::wstring</code> 
+    and to <code>wchar_t</code> and <code>std::wstring</code>. <br>
+  <li>The previous version of <code>lexical_cast</code> assumed that the conventional 
+    stream extractor operators were sufficient for reading values. However, string 
+    I/O is asymmetric, with the result that spaces play the role of I/O separators 
+    rather than string content. The current version fixes this error for <code>std::string</code> 
+    and, where supported, <code>std::wstring</code>: <code>lexical_cast&lt;std::string&gt;("Hello, 
+    World")</code> succeeds instead of failing with a <code>bad_lexical_cast</code> 
+    exception. <br>
+  <li>The previous version of <code>lexical_cast</code> allowed unsafe and meaningless 
+    conversions to pointers. The current version now throws a <code>bad_lexical_cast</code> 
+    for conversions to pointers: <code>lexical_cast&lt;char *&gt;("Goodbye, World")</code> 
+    now throws an exception instead of causing undefined behavior. 
+</ul>
 	<p>
 			<hr>
-			<div align="right"><small><i>&copy; Copyright Kevlin Henney, 2000&#150;2003</i></small></div>
+			
+<div align="right"><small><i>&copy; Copyright Kevlin Henney, 2000&#150;2005</i></small></div>
 	</body>
 </html>
