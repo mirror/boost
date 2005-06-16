@@ -92,7 +92,7 @@ namespace boost { namespace program_options {
         /** Creates a command line parser for the specified arguments
             list. The parameter should be the same as passes to 'main'.
         */
-        basic_command_line_parser(int argc, const charT* const argv[]);
+        basic_command_line_parser(int argc, charT* argv[]);
 
         /** Sets options descriptions to use. */
         basic_command_line_parser& options(const options_description& desc);
@@ -118,7 +118,7 @@ namespace boost { namespace program_options {
      */
     template<class charT>
     basic_parsed_options<charT>
-    parse_command_line(int argc, const charT* const argv[],
+    parse_command_line(int argc, charT* argv[],
                        const options_description&,
                        int style = 0,
                        function1<std::pair<std::string, std::string>, 
