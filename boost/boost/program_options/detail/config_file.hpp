@@ -11,10 +11,6 @@
 #include <string>
 #include <set>
 
-#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
-#include <istream> // std::getline
-#endif
-
 #include <boost/noncopyable.hpp>
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/option.hpp>
@@ -23,6 +19,10 @@
 #include <boost/detail/workaround.hpp>
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
 #include <boost/program_options/detail/convert.hpp>
+#endif
+
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+#include <istream> // std::getline
 #endif
 
 #include <boost/static_assert.hpp>
