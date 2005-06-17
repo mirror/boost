@@ -23,6 +23,8 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost { 
+template<class T>
+class shared_ptr;
 namespace serialization {
     class extended_type_info;
 } // namespace serialization
@@ -68,17 +70,18 @@ public:
         return & bpos;
     }
 
-    template<class T>
-    T & get_helper(T & h){
-        typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
-        boost::serialization::extended_type_info * eti = eti_type::get_instance();
-        boost::serialization::basic_helper *hptr = 
-            this->This()->basic_oarchive::lookup_helper(eti);
-        if(NULL == hptr){
-            hptr = new T;
-            this->This()->basic_oarchive::insert_helper(hptr, eti);
-        }
-        return static_cast<T &>(* hptr);
+    void lookup_helper(
+        const boost::serialization::extended_type_info * const eti,
+        shared_ptr<void> & sph
+    ){
+        this->This()->basic_oarchive::lookup_basic_helper(eti, sph);
+    }
+
+    void insert_helper(
+        const boost::serialization::extended_type_info * const eti,
+        shared_ptr<void> & sph
+    ){
+        this->This()->basic_oarchive::insert_basic_helper(eti, sph);
     }
 
     // default processing - invoke serialization library

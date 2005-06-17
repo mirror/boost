@@ -28,9 +28,10 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
+template<class T>
+class shared_ptr;
 
 namespace serialization {
-    class basic_helper;
     class extended_type_info;
 } // namespace serialization
 
@@ -66,6 +67,16 @@ protected:
 public:
     // note: NOT part of the public interface
     void register_basic_serializer(const basic_oserializer & bos);
+    void
+    lookup_basic_helper(
+        const boost::serialization::extended_type_info * const eti,
+        shared_ptr<void> & sph
+    );
+    void 
+    insert_basic_helper(
+        const boost::serialization::extended_type_info * const eti,
+        shared_ptr<void> & sph
+    );
     void save_object(
         const void *x, 
         const basic_oserializer & bos
@@ -77,14 +88,8 @@ public:
     void save_null_pointer(){
         vsave(NULL_POINTER_TAG);
     }
+    // real public interface starts here
     void end_preamble(); // default implementation does nothing
-    boost::serialization::basic_helper * lookup_helper(
-        const boost::serialization::extended_type_info * const eti
-    );
-    boost::serialization::basic_helper * insert_helper(
-        boost::serialization::basic_helper * h,
-        const boost::serialization::extended_type_info * const eti
-    );
     unsigned int get_library_version() const;
     unsigned int get_flags() const;
 };
