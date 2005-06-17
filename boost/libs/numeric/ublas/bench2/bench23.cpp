@@ -42,9 +42,6 @@ struct bench_c_matrix_prod {
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
         }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
 };
 template<class M1, class M2, int N>
@@ -67,9 +64,6 @@ struct bench_my_matrix_prod {
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
         }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
     void operator () (int runs, fast_tag) const {
         try {
@@ -86,9 +80,6 @@ struct bench_my_matrix_prod {
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -116,9 +107,6 @@ struct bench_cpp_matrix_prod {
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -210,5 +198,3 @@ template struct bench_3<std::complex<double>, 30>;
 template struct bench_3<std::complex<double>, 100>;
 #endif
 #endif
-
-

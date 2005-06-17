@@ -18,7 +18,6 @@
 
 void header (std::string text) {
     std::cout << text << std::endl;
-    std::cerr << text << std::endl;
 }
 
 template<class T>
@@ -37,9 +36,6 @@ struct peak_c_plus {
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -60,9 +56,6 @@ struct peak_c_multiplies {
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
         }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
 };
 
@@ -77,163 +70,57 @@ void peak<T>::operator () (int runs) {
     peak_c_multiplies<T> () (runs);
 }
 
-template struct peak<float>;
-template struct peak<double>;
-template struct peak<std::complex<float> >;
-template struct peak<std::complex<double> >;
 
-#ifdef BOOST_MSVC
-// Standard new handler is not standard compliant.
-#include <new.h>
-int __cdecl std_new_handler (unsigned) {
-    throw std::bad_alloc ();
+template <typename scalar> 
+void do_bench (std::string type_string, int scale)
+{
+    header (type_string);
+    peak<scalar> () (1000000 * scale);
+
+    header (type_string + ", 3");
+    bench_1<scalar, 3> () (1000000 * scale);
+    bench_2<scalar, 3> () (300000 * scale);
+    bench_3<scalar, 3> () (100000 * scale);
+
+    header (type_string + ", 10");
+    bench_1<scalar, 10> () (300000 * scale);
+    bench_2<scalar, 10> () (30000 * scale);
+    bench_3<scalar, 10> () (3000 * scale);
+
+    header (type_string + ", 30");
+    bench_1<scalar, 30> () (100000 * scale);
+    bench_2<scalar, 30> () (3000 * scale);
+    bench_3<scalar, 30> () (100 * scale);
+
+    header (type_string + ", 100");
+    bench_1<scalar, 100> () (30000 * scale);
+    bench_2<scalar, 100> () (300 * scale);
+    bench_3<scalar, 100> () (3 * scale);
 }
-#endif
 
 int main (int argc, char *argv []) {
-#ifdef BOOST_MSVC
-    _set_new_handler (std_new_handler);
-#endif
-
-#ifdef USE_FLOAT
-    header ("float");
-    peak<float> () (100000000);
-#endif
-
-#ifdef USE_DOUBLE
-    header ("double");
-    peak<double> () (100000000);
-#endif
-
-#ifdef USE_STD_COMPLEX
-#ifdef USE_FLOAT
-    header ("std:complex<float>");
-    peak<std::complex<float> > () (100000000);
-#endif
-
-#ifdef USE_DOUBLE
-    header ("std:complex<double>");
-    peak<std::complex<double> > () (100000000);
-#endif
-#endif
 
     int scale = 1;
     if (argc > 1)
-#ifndef BOOST_NO_STDC_NAMESPACE
         scale = std::atoi (argv [1]);
-#else
-        scale = ::atoi (argv [1]);
-#endif
 
 #ifdef USE_FLOAT
-    header ("float, 3");
-
-    bench_1<float, 3> () (1000000 * scale);
-    bench_2<float, 3> () (300000 * scale);
-    bench_3<float, 3> () (100000 * scale);
-
-    header ("float, 10");
-
-    bench_1<float, 10> () (300000 * scale);
-    bench_2<float, 10> () (30000 * scale);
-    bench_3<float, 10> () (3000 * scale);
-
-    header ("float, 30");
-
-    bench_1<float, 30> () (100000 * scale);
-    bench_2<float, 30> () (3000 * scale);
-    bench_3<float, 30> () (100 * scale);
-
-    header ("float, 100");
-
-    bench_1<float, 100> () (30000 * scale);
-    bench_2<float, 100> () (300 * scale);
-    bench_3<float, 100> () (3 * scale);
+    do_bench<float> ("FLOAT", scale);
 #endif
 
 #ifdef USE_DOUBLE
-    header ("double, 3");
-
-    bench_1<double, 3> () (1000000 * scale);
-    bench_2<double, 3> () (300000 * scale);
-    bench_3<double, 3> () (100000 * scale);
-
-    header ("double, 10");
-
-    bench_1<double, 10> () (300000 * scale);
-    bench_2<double, 10> () (30000 * scale);
-    bench_3<double, 10> () (3000 * scale);
-
-    header ("double, 30");
-
-    bench_1<double, 30> () (100000 * scale);
-    bench_2<double, 30> () (3000 * scale);
-    bench_3<double, 30> () (100 * scale);
-
-    header ("double, 100");
-
-    bench_1<double, 100> () (30000 * scale);
-    bench_2<double, 100> () (300 * scale);
-    bench_3<double, 100> () (3 * scale);
+    do_bench<double> ("DOUBLE", scale);
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    header ("std::complex<float>, 3");
-
-    bench_1<std::complex<float>, 3> () (1000000 * scale);
-    bench_2<std::complex<float>, 3> () (300000 * scale);
-    bench_3<std::complex<float>, 3> () (100000 * scale);
-
-    header ("std::complex<float>, 10");
-
-    bench_1<std::complex<float>, 10> () (300000 * scale);
-    bench_2<std::complex<float>, 10> () (30000 * scale);
-    bench_3<std::complex<float>, 10> () (3000 * scale);
-
-    header ("std::complex<float>, 30");
-
-    bench_1<std::complex<float>, 30> () (100000 * scale);
-    bench_2<std::complex<float>, 30> () (3000 * scale);
-    bench_3<std::complex<float>, 30> () (100 * scale);
-
-    header ("std::complex<float>, 100");
-
-    bench_1<std::complex<float>, 100> () (30000 * scale);
-    bench_2<std::complex<float>, 100> () (300 * scale);
-    bench_3<std::complex<float>, 100> () (3 * scale);
+    do_bench<std::complex<float> > ("COMPLEX<FLOAT>", scale);
 #endif
 
 #ifdef USE_DOUBLE
-    header ("std::complex<double>, 3");
-
-    bench_1<std::complex<double>, 3> () (1000000 * scale);
-    bench_2<std::complex<double>, 3> () (300000 * scale);
-    bench_3<std::complex<double>, 3> () (100000 * scale);
-
-    header ("std::complex<double>, 10");
-
-    bench_1<std::complex<double>, 10> () (300000 * scale);
-    bench_2<std::complex<double>, 10> () (30000 * scale);
-    bench_3<std::complex<double>, 10> () (3000 * scale);
-
-    header ("std::complex<double>, 30");
-
-    bench_1<std::complex<double>, 30> () (100000 * scale);
-    bench_2<std::complex<double>, 30> () (3000 * scale);
-    bench_3<std::complex<double>, 30> () (100 * scale);
-
-    header ("std::complex<double>, 100");
-
-    bench_1<std::complex<double>, 100> () (30000 * scale);
-    bench_2<std::complex<double>, 100> () (300 * scale);
-    bench_3<std::complex<double>, 100> () (3 * scale);
+    do_bench<std::complex<double> > ("COMPLEX<DOUBLE>", scale);
 #endif
 #endif
 
     return 0;
 }
-
-
-
-

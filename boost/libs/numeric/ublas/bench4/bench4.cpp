@@ -14,11 +14,12 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#include "bench4.hpp"
+#include <boost/numeric/interval.hpp>
+#include <boost/numeric/interval/io.hpp>
+#include "../bench1/bench1.hpp"
 
 void header (std::string text) {
     std::cout << text << std::endl;
-    std::cerr << text << std::endl;
 }
 
 template<class T>
@@ -38,9 +39,6 @@ struct peak_c_plus {
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
         }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
-        }
     }
 };
 template<class T>
@@ -59,9 +57,6 @@ struct peak_c_multiplies {
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
-        }
-        catch (...) {
-            std::cout << "unknown exception" << std::endl;
         }
     }
 };
@@ -87,155 +82,58 @@ template struct peak<boost::complex<boost::numeric::interval<double> > >;
 
 #endif
 
-#ifdef BOOST_MSVC
-// Standard new handler is not standard compliant.
-#include <new.h>
-int __cdecl std_new_handler (unsigned) {
-    throw std::bad_alloc ();
+
+
+template <typename scalar> 
+void do_bench (std::string type_string, int scale)
+{
+    header (type_string);
+    peak<scalar> () (1000000 * scale);
+
+    header (type_string + ", 3");
+    bench_1<scalar, 3> () (1000000 * scale);
+    bench_2<scalar, 3> () (300000 * scale);
+    bench_3<scalar, 3> () (100000 * scale);
+
+    header (type_string + ", 10");
+    bench_1<scalar, 10> () (300000 * scale);
+    bench_2<scalar, 10> () (30000 * scale);
+    bench_3<scalar, 10> () (3000 * scale);
+
+    header (type_string + ", 30");
+    bench_1<scalar, 30> () (100000 * scale);
+    bench_2<scalar, 30> () (3000 * scale);
+    bench_3<scalar, 30> () (100 * scale);
+
+    header (type_string + ", 100");
+    bench_1<scalar, 100> () (30000 * scale);
+    bench_2<scalar, 100> () (300 * scale);
+    bench_3<scalar, 100> () (3 * scale);
 }
-#endif
 
 int main (int argc, char *argv []) {
-#ifdef BOOST_MSVC
-    _set_new_handler (std_new_handler);
-#endif
+
+    int scale = 1;
+    if (argc > 1)
+        scale = std::atoi (argv [1]);
 
 #ifdef USE_FLOAT
-    header ("boost::numeric::interval<float>");
-    peak<boost::numeric::interval<float> > () (100000000);
+    do_bench<boost::numeric::interval<float> > ("boost::numeric::interval<FLOAT>", scale);
 #endif
 
 #ifdef USE_DOUBLE
-    header ("boost::numeric::interval<double>");
-    peak<boost::numeric::interval<double> > () (100000000);
+    do_bench<boost::numeric::interval<double> > ("boost::numeric::interval<DOUBLE>", scale);
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    header ("std:complex<boost::numeric::interval<float> >");
-    peak<boost::complex<boost::numeric::interval<float> > > () (100000000);
+    do_bench<std::complex<boost::numeric::interval<float> > > ("boost::numeric::interval<COMPLEX<FLOAT>>", scale);
 #endif
 
 #ifdef USE_DOUBLE
-    header ("std:complex<boost::numeric::interval<double> >");
-    peak<boost::complex<boost::numeric::interval<double> > > () (100000000);
-#endif
-#endif
-
-    int scale = 1;
-    if (argc > 1)
-#ifndef BOOST_NO_STDC_NAMESPACE
-        scale = std::atoi (argv [1]);
-#else
-        scale = ::atoi (argv [1]);
-#endif
-
-#ifdef USE_FLOAT
-    header ("boost::numeric::interval<float>, 3");
-
-    bench_1<boost::numeric::interval<float>, 3> () (1000000 * scale);
-    bench_2<boost::numeric::interval<float>, 3> () (300000 * scale);
-    bench_3<boost::numeric::interval<float>, 3> () (100000 * scale);
-
-    header ("boost::numeric::interval<float>, 10");
-
-    bench_1<boost::numeric::interval<float>, 10> () (300000 * scale);
-    bench_2<boost::numeric::interval<float>, 10> () (30000 * scale);
-    bench_3<boost::numeric::interval<float>, 10> () (3000 * scale);
-
-    header ("boost::numeric::interval<float>, 30");
-
-    bench_1<boost::numeric::interval<float>, 30> () (100000 * scale);
-    bench_2<boost::numeric::interval<float>, 30> () (3000 * scale);
-    bench_3<boost::numeric::interval<float>, 30> () (100 * scale);
-
-    header ("boost::numeric::interval<float>, 100");
-
-    bench_1<boost::numeric::interval<float>, 100> () (30000 * scale);
-    bench_2<boost::numeric::interval<float>, 100> () (300 * scale);
-    bench_3<boost::numeric::interval<float>, 100> () (3 * scale);
-#endif
-
-#ifdef USE_DOUBLE
-    header ("boost::numeric::interval<double>, 3");
-
-    bench_1<boost::numeric::interval<double>, 3> () (1000000 * scale);
-    bench_2<boost::numeric::interval<double>, 3> () (300000 * scale);
-    bench_3<boost::numeric::interval<double>, 3> () (100000 * scale);
-
-    header ("boost::numeric::interval<double>, 10");
-
-    bench_1<boost::numeric::interval<double>, 10> () (300000 * scale);
-    bench_2<boost::numeric::interval<double>, 10> () (30000 * scale);
-    bench_3<boost::numeric::interval<double>, 10> () (3000 * scale);
-
-    header ("boost::numeric::interval<double>, 30");
-
-    bench_1<boost::numeric::interval<double>, 30> () (100000 * scale);
-    bench_2<boost::numeric::interval<double>, 30> () (3000 * scale);
-    bench_3<boost::numeric::interval<double>, 30> () (100 * scale);
-
-    header ("boost::numeric::interval<double>, 100");
-
-    bench_1<boost::numeric::interval<double>, 100> () (30000 * scale);
-    bench_2<boost::numeric::interval<double>, 100> () (300 * scale);
-    bench_3<boost::numeric::interval<double>, 100> () (3 * scale);
-#endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    header ("boost::complex<boost::numeric::interval<float> >, 3");
-
-    bench_1<boost::complex<boost::numeric::interval<float> >, 3> () (1000000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<float> >, 3> () (300000 * scale);
-    bench_3<boost::complex<boost::numeric::interval<float> >, 3> () (100000 * scale);
-
-    header ("boost::complex<boost::numeric::interval<float> >, 10");
-
-    bench_1<boost::complex<boost::numeric::interval<float> >, 10> () (300000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<float> >, 10> () (30000 * scale);
-    bench_3<boost::complex<boost::numeric::interval<float> >, 10> () (3000 * scale);
-
-    header ("boost::complex<boost::numeric::interval<float> >, 30");
-
-    bench_1<boost::complex<boost::numeric::interval<float> >, 30> () (100000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<float> >, 30> () (3000 * scale);
-    bench_3<boost::complex<boost::numeric::interval<float> >, 30> () (100 * scale);
-
-    header ("boost::complex<boost::numeric::interval<float> >, 100");
-
-    bench_1<boost::complex<boost::numeric::interval<float> >, 100> () (30000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<float> >, 100> () (300 * scale);
-    bench_3<boost::complex<boost::numeric::interval<float> >, 100> () (3 * scale);
-#endif
-
-#ifdef USE_DOUBLE
-    header ("boost::complex<boost::numeric::interval<double> >, 3");
-
-    bench_1<boost::complex<boost::numeric::interval<double> >, 3> () (1000000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<double> >, 3> () (300000 * scale);
-    bench_3<boost::complex<boost::numeric::interval<double> >, 3> () (100000 * scale);
-
-    header ("boost::complex<boost::numeric::interval<double> >, 10");
-
-    bench_1<boost::complex<boost::numeric::interval<double> >, 10> () (300000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<double> >, 10> () (30000 * scale);
-    bench_3<boost::complex<boost::numeric::interval<double> >, 10> () (3000 * scale);
-
-    header ("boost::complex<boost::numeric::interval<double> >, 30");
-
-    bench_1<boost::complex<boost::numeric::interval<double> >, 30> () (100000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<double> >, 30> () (3000 * scale);
-    bench_3<boost::complex<boost::numeric::interval<double> >, 30> () (100 * scale);
-
-    header ("boost::complex<boost::numeric::interval<double> >, 100");
-
-    bench_1<boost::complex<boost::numeric::interval<double> >, 100> () (30000 * scale);
-    bench_2<boost::complex<boost::numeric::interval<double> >, 100> () (300 * scale);
-    bench_3<boost::complex<boost::numeric::interval<double> >, 100> () (3 * scale);
+    do_bench<std::complex<doublboost::numeric::interval<double> > > ("boost::numeric::interval<COMPLEX<DOUBLE>>", scale);
 #endif
 #endif
 
     return 0;
 }
-
