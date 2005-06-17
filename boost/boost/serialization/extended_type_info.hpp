@@ -18,8 +18,8 @@
 
 // for now, extended type info is part of the serialization libraries
 // this could change in the future.
-#include <boost/serialization/config.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/serialization/config.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
 #ifdef BOOST_MSVC

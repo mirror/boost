@@ -77,7 +77,7 @@ inline bool operator>=(tracking_level<T> t, enum tracking_type l)
 namespace boost {                            \
 namespace serialization {                    \
 template<>                                   \
-struct tracking_level<T >                    \
+struct tracking_level< T >                   \
 {                                            \
     typedef mpl::integral_c_tag tag;         \
     typedef mpl::int_< E> type;              \
@@ -89,7 +89,7 @@ struct tracking_level<T >                    \
     BOOST_STATIC_ASSERT((                    \
         mpl::greater<                        \
             /* that is a prmitive */         \
-            implementation_level<T >,        \
+            implementation_level< T >,       \
             mpl::int_<primitive_type>        \
         >::value                             \
     ));                                      \

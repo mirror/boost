@@ -42,11 +42,17 @@ class BOOST_SERIALIZATION_DECL extended_type_info;
 // Return the altered pointer. If there exists no sequence of casts that
 // can transform from_type to to_type, return a NULL.  
 
-BOOST_SERIALIZATION_DECL void const *  
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+BOOST_SERIALIZATION_DECL 
+void const *  
+#else
+void const *  
+BOOST_SERIALIZATION_DECL 
+#endif
 void_upcast(
     extended_type_info const & derived_type,  
     extended_type_info const & base_type, 
-    void const * t,
+    void const * const t,
     bool top = true
 );
 
@@ -54,7 +60,7 @@ inline void *
 void_upcast(
     extended_type_info const & derived_type_,
     extended_type_info const & base_type_,
-    void * t 
+    void * const t 
 ){
     return const_cast<void*>(void_upcast(
         derived_type_, 
@@ -63,11 +69,17 @@ void_upcast(
     ));
 }
 
-BOOST_SERIALIZATION_DECL void const *  
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+BOOST_SERIALIZATION_DECL 
+void const *  
+#else
+void const *  
+BOOST_SERIALIZATION_DECL 
+#endif
 void_downcast(
     extended_type_info const & derived_type,  
     extended_type_info const & base_type, 
-    void const * t,
+    void const * const t,
     bool top = true
 );
 
@@ -75,7 +87,7 @@ inline void *
 void_downcast(
     extended_type_info const & derived_type_,
     extended_type_info const & base_type_,
-    void * t 
+    void * const t 
 ){
     return const_cast<void*>(void_downcast(
         derived_type_, 
@@ -90,13 +102,29 @@ namespace void_cast_detail {
 class BOOST_SERIALIZATION_DECL void_caster
 {
     friend struct void_caster_compare ;
-    friend const void * boost::serialization::void_upcast(
+    friend 
+    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+    BOOST_SERIALIZATION_DECL 
+    void const *  
+    #else
+    void const *  
+    BOOST_SERIALIZATION_DECL 
+    #endif
+    boost::serialization::void_upcast(
         const extended_type_info & derived_type,
         const extended_type_info & base_type,
         const void * t,
         bool top
     );
-    friend const void * boost::serialization::void_downcast(
+    friend 
+    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+    BOOST_SERIALIZATION_DECL 
+    void const *  
+    #else
+    void const *  
+    BOOST_SERIALIZATION_DECL 
+    #endif
+    boost::serialization::void_downcast(
         const extended_type_info & derived_type,
         const extended_type_info & base_type,
         const void * t,

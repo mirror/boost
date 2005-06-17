@@ -162,12 +162,21 @@ guid_initializer<T>::guid_initializer(const char *key){
 template<class T>
 const guid_initializer<T> guid_initializer<T>::instance;
 
+struct static_data_registration_workaround_noop_archive {
+    struct is_loading { typedef mpl::bool_<false> type; BOOST_STATIC_CONSTANT(bool, value=false); };
+    struct is_saving { typedef mpl::bool_<false> type; BOOST_STATIC_CONSTANT(bool, value=false); };
+    template<class T> inline const void * register_type(const T * t = NULL) { return NULL; }
+    template<class T> inline static_data_registration_workaround_noop_archive & operator<<(T &) { return *this; }
+    template<class T> inline static_data_registration_workaround_noop_archive & operator>>(T &) { return *this; }
+    template<class T> inline static_data_registration_workaround_noop_archive & operator&(T &) { return *this; }
+};
+
 } // namespace detail
 } // namespace archive
 } // namespace boost
 
 // only gcc seems to be able to explicitly instantiate a static instance.
-// all but can instantiate a function that refers to a static instance
+// but all can instantiate a function that refers to a static instance
 namespace boost { namespace archive { namespace detail {
 // note declaration to permit gcc trailing function attribute
 template<class T, class ASeq>
@@ -182,17 +191,25 @@ boost_template_instantiate(T &, ASeq &){
     );
 }
 } } }
+
 #if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
 #define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T) \
-    namespace boost { namespace serialization { namespace static_data_registration_workaround_noop_archive { namespace { \
-    void ( * export_ ## T )() = &boost::serialization::access::static_data_registration_workaround<T>; \
-    } } } } \
+    namespace boost {                                                     \
+    namespace serialization {                                             \
+    namespace detail {                                                    \
+    namespace {                                                           \
+        void ( * export_ ## T )()                                         \ 
+            = & static_data_registration_workaround<T>;                   \
+    } } } }                                                               \
     /**/
 #else
 #define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T)
 #endif
+
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
-    namespace boost { namespace archive { namespace detail {     \
+    namespace boost {                                            \
+    namespace archive {                                          \
+    namespace detail {                                           \
     template<>                                                   \
     const guid_initializer<T>                                    \
         guid_initializer<T>::instance(K);                        \
