@@ -207,11 +207,17 @@ unregister_void_casts(extended_type_info *eti)
 // and alter it so that it would point to an instance of a related type.
 // Return the altered pointer. If there exists no sequence of casts that
 // can transform from_type to to_type, return a NULL.  
-BOOST_SERIALIZATION_DECL const void * 
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+BOOST_SERIALIZATION_DECL 
+void const *  
+#else
+void const *  
+BOOST_SERIALIZATION_DECL 
+#endif
 void_upcast(
-    const extended_type_info & derived_type,
-    const extended_type_info & base_type,
-    const void * t,
+    extended_type_info const & derived_type,
+    extended_type_info const & base_type,
+    void const * const t,
     bool top
 ){
     // same types - trivial case
@@ -269,11 +275,17 @@ void_upcast(
     return t_new;
 }
 
-BOOST_SERIALIZATION_DECL const void * 
+#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+BOOST_SERIALIZATION_DECL 
+void const *  
+#else
+void const *  
+BOOST_SERIALIZATION_DECL 
+#endif
 void_downcast(
     const extended_type_info & derived_type,
     const extended_type_info & base_type,
-    const void * t,
+    const void * const t,
     bool top
 ){
     // same types - trivial case
