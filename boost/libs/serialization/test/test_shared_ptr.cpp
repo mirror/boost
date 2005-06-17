@@ -49,6 +49,7 @@ public:
 };
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(A)
+BOOST_SERIALIZATION_SHARED_PTR(A)
 
 // B is a subclass of A
 class B : public A
@@ -68,6 +69,7 @@ public:
 
 // B needs to be exported because its serialized via a base class pointer
 BOOST_CLASS_EXPORT(B)
+BOOST_SERIALIZATION_SHARED_PTR(B)
 
 int A::count = 0;
 
