@@ -69,6 +69,7 @@ rule run-invoke ( test-name : sources * : defns * )
         : # requirements
             # msvc stlport 4.5.3 only works with static lib
             <msvc-stlport><*><runtime-link>static
+            <como><*><linkflags>"-force:multiple"
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
     ] ;
@@ -237,6 +238,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_vector ]
      [ test-bsl-run_files test_optional ]
      [ test-bsl-run_files test_shared_ptr ]
+     [ test-bsl-run_files test_shared_ptr_132 ]
      [ test-bsl-run_polymorphic_archive test_polymorphic : test_polymorphic_A ]
 ;
 
