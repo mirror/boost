@@ -105,12 +105,33 @@ rule check-icu-config ( )
       }
       else
       {
-         ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
-         ECHO Please refer to the Boost.Regex documentation for more information ;
-         ECHO (and if you don't know what ICU is then you probably don't need it). ;
-         if $(ICU_PATH)
+         if $(HAVE_ICU)
          {
-            ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")$(SLASH)include$(SLASH)unicode ;
+            gHAS_ICU = true ;
+            gICU_CONFIG_CHECKED = true ;
+            if $(ICU_LINK)
+            {
+               gICU_LIBS += <linkflags>$(ICU_LINK) ;
+            }
+            else
+            {
+               gICU_LIBS += <find-library>icui18n ;
+               gICU_LIBS += <find-library>icuuc ;
+            }
+            ECHO Building Boost.Regex with Unicode/ICU support enabled ;
+            ECHO ICU must be installed in your compilers search paths for this ;
+            ECHO "option to work: define ICU_PATH to point to ICU's true location" ;
+            ECHO "if it's installed elsewhere" ;
+         }
+         else
+         {
+            ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
+            ECHO Please refer to the Boost.Regex documentation for more information ;
+            ECHO (and if you don't know what ICU is then you probably don't need it). ;
+            if $(ICU_PATH)
+            {
+               ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")$(SLASH)include$(SLASH)unicode ;
+            }
          }
       }
       gICU_CONFIG_CHECKED = true ;

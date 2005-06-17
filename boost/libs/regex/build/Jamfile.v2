@@ -79,20 +79,27 @@ rule check-icu-config ( )
 if [ check-icu-config ]
 {
    BOOST_REGEX_ICU_OPTS = "<define>BOOST_HAS_ICU=1" ;
+   if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+   {
+      ICU_SEARCH_OPTS = <search>/$(ICU_PATH)/lib ;
+   }
+   
    if $(gICU_CORE_LIB)
    {
-      lib icucore : : <name>$(gICU_CORE_LIB) <search>/$(ICU_PATH)/lib ;
+      lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) ;
       ICU_EXTRA_SOURCE = icucore ;
    }
    if $(gICU_IN_LIB)
    {
-      lib icuin : : <name>$(gICU_IN_LIB) <search>/$(ICU_PATH)/lib ;
+      lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) ;
       ICU_EXTRA_SOURCE += icuin ;
    }
    if $(ICU_PATH)
    {
-      BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
-      #BOOST_REGEX_ICU_OPTS += "<library-path>$(ICU_PATH)/lib" ;
+      if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+      {
+         BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
+      }
    }
 }
 
