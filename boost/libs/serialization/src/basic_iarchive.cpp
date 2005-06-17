@@ -33,11 +33,11 @@ namespace std{
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/basic_iarchive.hpp>
+#include <boost/archive/detail/basic_archive_impl.hpp>
 #include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/extended_type_info.hpp>
-#include <boost/serialization/basic_helper.hpp>
 
 using namespace boost::serialization;
 
@@ -48,7 +48,8 @@ namespace detail {
 class basic_iserializer;
 class basic_pointer_iserializer;
 
-class basic_iarchive_impl 
+class basic_iarchive_impl :
+    public basic_archive_impl
 {
     friend class basic_iarchive;
 
@@ -192,36 +193,6 @@ class basic_iarchive_impl
     const basic_iserializer * pending_bis;
     version_type pending_version;
 
-    //////////////////////////////////////////////////////////////////////
-    // list of serialization helpers
-    // at least one compiler sunpro 5.3 erroneously doesn't give access to embedded structs
-    struct helper_compare;
-    friend struct helper_compare;
-
-    struct helper_type {
-        boost::serialization::basic_helper * m_helper;
-        const boost::serialization::extended_type_info * m_eti;
-        helper_type(
-            boost::serialization::basic_helper * h, 
-            const boost::serialization::extended_type_info * const eti
-        ) :
-            m_helper(h),
-            m_eti(eti)
-        {}
-    };
-
-    struct helper_compare {
-        bool operator()(const helper_type & lhs, const helper_type & rhs) const {
-            return * lhs.m_eti < * rhs.m_eti;
-        }
-    };
-
-    typedef std::set<helper_type, helper_compare>::iterator helper_iterator;
-    typedef std::set<helper_type, helper_compare>::const_iterator 
-        helper_const_iterator;
-
-    std::set<helper_type, helper_compare> m_helpers;
-
     basic_iarchive_impl(unsigned int flags) :
         m_archive_library_version(ARCHIVE_VERSION()),
         m_flags(flags),
@@ -230,16 +201,7 @@ class basic_iarchive_impl
         pending_bis(NULL),
         pending_version(0)
     {}
-    ~basic_iarchive_impl(){
-        // delete helpers
-        for(
-            helper_iterator it = m_helpers.begin();
-            it !=  m_helpers.end();
-            ++it
-        ){
-            delete it->m_helper;
-        }
-    }
+    ~basic_iarchive_impl(){}
     void set_library_version(unsigned int archive_library_version){
         m_archive_library_version = archive_library_version;
     }
@@ -285,23 +247,6 @@ class basic_iarchive_impl
             const boost::serialization::extended_type_info & type
         )
     );
-    boost::serialization::basic_helper * lookup_helper(
-        const boost::serialization::extended_type_info * const eti
-    ){
-        helper_iterator it;
-        const helper_type ht(NULL, eti);
-        it = m_helpers.find(ht);
-        return (it == m_helpers.end()) ? NULL : it->m_helper;
-    }
-    boost::serialization::basic_helper* insert_helper(
-        boost::serialization::basic_helper * h, 
-        const boost::serialization::extended_type_info * const eti
-    ){
-        std::pair<helper_iterator, bool> result = m_helpers.insert(
-            helper_type(h, eti)
-        );
-        return (*result.first).m_helper;
-    }
 };
 
 inline void 
@@ -622,6 +567,24 @@ basic_iarchive::register_basic_serializer(const basic_iserializer & bis){
 
 void
 BOOST_DECL_ARCHIVE 
+basic_iarchive::lookup_basic_helper(
+    const boost::serialization::extended_type_info * const eti,
+    shared_ptr<void> & sph
+){
+    pimpl->lookup_helper(eti, sph);
+}
+
+void
+BOOST_DECL_ARCHIVE 
+basic_iarchive::insert_basic_helper(
+    const boost::serialization::extended_type_info * const eti,
+    shared_ptr<void> & sph
+){
+    pimpl->insert_helper(eti, sph);
+}
+
+void
+BOOST_DECL_ARCHIVE 
 basic_iarchive::delete_created_pointers()
 {
     pimpl->delete_created_pointers();
@@ -637,33 +600,6 @@ unsigned int
 BOOST_DECL_ARCHIVE 
 basic_iarchive::get_flags() const{
     return pimpl->m_flags;
-}
-
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    boost::serialization::basic_helper * 
-#else
-    boost::serialization::basic_helper * 
-    BOOST_DECL_ARCHIVE 
-#endif
-basic_iarchive::lookup_helper(
-    const boost::serialization::extended_type_info * const eti
-){
-    return pimpl->lookup_helper(eti);
-}
-
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    boost::serialization::basic_helper * 
-#else
-    boost::serialization::basic_helper * 
-    BOOST_DECL_ARCHIVE 
-#endif
-basic_iarchive::insert_helper(
-    boost::serialization::basic_helper * h,
-    const boost::serialization::extended_type_info * const eti
-){
-    return pimpl->insert_helper(h, eti);
 }
 
 } // namespace detail
