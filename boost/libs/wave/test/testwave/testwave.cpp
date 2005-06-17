@@ -81,7 +81,7 @@ main(int argc, char *argv[])
     // parse command line
         // (the (int) cast is to make the True64 compiler happy)
         using namespace boost::program_options::command_line_style;
-        po::parsed_options opts(po::parse_command_line(argc, (char const**)argv, 
+        po::parsed_options opts(po::parse_command_line(argc, argv, 
             cmdline_options, (int)unix_style, cmd_line_utils::at_option_parser));
         
         po::store(opts, vm);
