@@ -173,18 +173,23 @@ struct cpp_regex_traits_base
    {
       if(m_pctype == b.m_pctype)
       {
+#ifndef BOOST_NO_STD_MESSAGES
          if(m_pmessages == b.m_pmessages)
          {
-            return m_pcollate < b.m_pcollate;
          }
          return m_pmessages < b.m_pmessages;
+#else
+         return m_pcollate < b.m_pcollate;
+#endif
       }
       return m_pctype < b.m_pctype;
    }
    bool operator==(const cpp_regex_traits_base& b)const
    {
       return (m_pctype == b.m_pctype) 
+#ifndef BOOST_NO_STD_MESSAGES
          && (m_pmessages == b.m_pmessages) 
+#endif
          && (m_pcollate == b.m_pcollate);
    }
 };
