@@ -83,12 +83,12 @@ void cpp_regex_traits_char_layer<char>::init()
    else
    {
 #endif
-      for(regex_constants::syntax_type i = 1; i < regex_constants::syntax_max; ++i)
+      for(regex_constants::syntax_type j = 1; j < regex_constants::syntax_max; ++j)
       {
-         const char* ptr = get_default_syntax(i);
+         const char* ptr = get_default_syntax(j);
          while(ptr && *ptr)
          {
-            m_char_map[static_cast<unsigned char>(*ptr)] = i;
+            m_char_map[static_cast<unsigned char>(*ptr)] = j;
             ++ptr;
          }
       }
