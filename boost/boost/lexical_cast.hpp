@@ -14,6 +14,7 @@
 //        and other Boosters
 // when:  November 2000, March 2003, June 2005
 
+#include <cstddef>
 #include <string>
 #include <typeinfo>
 #include <boost/config.hpp>
@@ -193,7 +194,7 @@ namespace boost
             typedef T type;
         };
 
-        template<class T, size_t N>
+        template<class T, std::size_t N>
         struct array_to_pointer_decay<T[N]>
         {
             typedef const T * type;
