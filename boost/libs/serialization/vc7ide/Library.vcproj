@@ -504,6 +504,9 @@
 				RelativePath="..\..\..\boost\archive\detail\auto_link_archive.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\detail\basic_archive_impl.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\detail\basic_iarchive.hpp">
 			</File>
 			<File
@@ -725,6 +728,9 @@
 			Filter="">
 			<File
 				RelativePath="..\src\basic_archive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_archive_impl.cpp">
 			</File>
 			<File
 				RelativePath="..\src\basic_iarchive.cpp">

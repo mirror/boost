@@ -393,6 +393,12 @@
 		<File
 			RelativePath="..\example\demo_portable_archive.cpp">
 		</File>
+		<File
+			RelativePath="..\example\portable_binary_iarchive.hpp">
+		</File>
+		<File
+			RelativePath="..\example\portable_binary_oarchive.hpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
