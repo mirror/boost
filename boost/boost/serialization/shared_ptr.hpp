@@ -18,72 +18,104 @@
 
 #include <set>
 
+#include <boost/config.hpp>
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/integral_c_tag.hpp>
 
 #include <boost/detail/workaround.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/throw_exception.hpp>
+
+#include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/basic_helper.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/tracking.hpp>
 #include <boost/static_assert.hpp>
+
+#include <boost/serialization/extended_type_info.hpp>
+#include <boost/serialization/type_info_implementation.hpp>
+#include <boost/serialization/void_cast.hpp>
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// shared_ptr serialization traits
+// version 1 to distinguish from boost 1.32 version. Note: we can only do this
+// for a template when the compiler supports partial template specialization
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    namespace boost {
+    namespace serialization{
+        template<class T>
+        struct version< ::boost::shared_ptr<T> > {                                                                      \
+            typedef mpl::integral_c_tag tag;
+            typedef mpl::int_<1> type;
+            BOOST_STATIC_CONSTANT(unsigned int, value = type::value);
+        };
+        // don't track shared pointers
+        template<class T>
+        struct tracking_level< ::boost::shared_ptr<T> > { 
+            typedef mpl::integral_c_tag tag;
+            typedef mpl::int_< ::boost::serialization::track_never> type;
+            BOOST_STATIC_CONSTANT(int, value = type::value);
+        };
+    }}
+    #define BOOST_SERIALIZATION_SHARED_PTR(T)
+#else
+    // define macro to let users of these compilers do this
+    #define BOOST_SERIALIZATION_SHARED_PTR(T)                         \
+    BOOST_CLASS_VERSION(                                              \
+        ::boost::shared_ptr< T >,                                     \
+        1                                                             \
+    )                                                                 \
+    BOOST_CLASS_TRACKING(                                             \
+        ::boost::shared_ptr< T >,                                     \
+        ::boost::serialization::track_never                           \
+    )                                                                 \
+    /**/
+#endif
 
 namespace boost {
 namespace serialization{
 namespace detail {
 
-class shared_ptr_holder_base {
-public:
-    virtual const void * get_raw_pointer() const = 0;
-    virtual const void * get_shared_pointer() const = 0;
-    bool operator<(const shared_ptr_holder_base & rhs) const {
-        return get_raw_pointer() < rhs.get_raw_pointer();
-    }
+struct null_deleter {
+    void operator()(void const *) const {}
 };
 
-class shared_ptr_holder_arg : public shared_ptr_holder_base {
-    const void * const m_p;
-    const void * get_raw_pointer() const {
-        return m_p;
-    }
-    const void * get_shared_pointer() const {
-        return NULL;
-    }
-public:
-    shared_ptr_holder_arg(const void * const p) :
-        m_p(p)
-    {}
-};
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// a common class for holding various types of shared pointers
 
-template<class T>
-class shared_ptr_holder : public shared_ptr_holder_base {
-    boost::shared_ptr<T> m_sp;
-    const void * get_raw_pointer() const {
-        return static_cast<const void *>(m_sp.get());
-    }
-    const void * get_shared_pointer() const {
-        return & m_sp;
-    }
-public:
-    shared_ptr_holder(const boost::shared_ptr<T> & sp) :
-    m_sp(sp)
-    {}
-};
-
-class shared_ptr_helper : public basic_helper {
-    typedef const shared_ptr_holder_base * value_type;
-    typedef std::set<value_type> collection_type;
+class shared_ptr_helper {
+    typedef std::pair<void *, shared_ptr<void> > value_type;
+    struct less {
+        bool operator()(const value_type & lhs, const value_type & rhs) const {
+            return lhs.first < rhs.first;
+        }
+    };
+    typedef std::set<value_type, less > collection_type;
     typedef collection_type::const_iterator iterator_type;
+    // list of shared_pointers create accessable by raw pointer. This
+    // is used to "match up" shared pointers loaded at diferent
+    // points in the archive
     collection_type m_pointers;
-    const shared_ptr_holder_base * find(const void * const raw_ptr) const {
-        const shared_ptr_holder_arg spha(raw_ptr);
-        iterator_type it = m_pointers.find(& spha);
-        if(it == m_pointers.end())
-            return NULL;
-        return *it;
+    // return a void pointer to the most derived type
+    template<class T>
+    void * object_identifier(T * t) const {
+        const extended_type_info * true_type 
+            = type_info_implementation<T>::type::get_derived_extended_type_info(*t);
+        // note:if this exception is thrown, be sure that derived pointer
+        // is either regsitered or exported.
+        if(NULL == true_type)
+            boost::throw_exception(
+                boost::archive::archive_exception(
+                    boost::archive::archive_exception::unregistered_class
+                )
+            );
+        const boost::serialization::extended_type_info * this_type
+            = boost::serialization::type_info_implementation<T>::type::get_instance();
+        void * vp = void_downcast(*true_type, *this_type, t);
+        return vp;
     }
 public:
     template<class T>
@@ -92,53 +124,48 @@ public:
             s.reset();
             return;
         }
-        // sp_arg can only used as a search argument
-        const shared_ptr_holder_base * psphb = find(r);
-        if(NULL == psphb){
-            // uh - oh doesn't look good to me. but I see no alternative
+        // get pointer to the most derived object.  This is effectively
+        // the object identifer
+        void * od = object_identifier(r);
+        value_type arg(od, shared_ptr<void>(r, null_deleter()));
+
+        iterator_type it = m_pointers.find(arg);
+
+        if(it == m_pointers.end()){
             s.reset(r);
-            psphb = new shared_ptr_holder<T>(s);
-            m_pointers.insert(psphb);
+            m_pointers.insert(value_type(od, s));
         }
-        else
-            s = * static_cast<const shared_ptr<T> *>(psphb->get_shared_pointer());
-    }
-    virtual ~shared_ptr_helper(){
-        if(! m_pointers.empty()){
-            // delete shared pointer holders
-            for(
-                iterator_type it = m_pointers.begin();
-                it !=  m_pointers.end();
-                ++it
-            ){
-                #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-                    delete const_cast<shared_ptr_holder_base *>(*it);
-                #else
-                    delete *it;
-                #endif
-            }
+        else{
+            s = static_pointer_cast<T>((*it).second);
         }
     }
+    virtual ~shared_ptr_helper(){}
 };
 
 } // namespace detail
 
-// set serialization traits
-// version 1 to distinguis from boost 1.32 version
-template<class T>
-struct version< ::boost::shared_ptr<T> > {                                                                      \
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<1> type;
-    BOOST_STATIC_CONSTANT(unsigned int, value = type::value);
-};
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// utility function for creating/getting a helper - could be useful in general
+// but shared_ptr is the only class (so far that needs it) and I don't have a
+// convenient header to place it into.
+template<class Archive, class T>
+T &
+get_helper(Archive & ar){
+    typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<
+        T
+    >::type eti_type;
+    boost::serialization::extended_type_info * eti = eti_type::get_instance();
+    shared_ptr<void> sph;
+    ar.lookup_helper(eti, sph);
+    if(NULL == sph.get()){
+        sph = shared_ptr<T>(new T);
+        ar.insert_helper(eti, sph);
+    }
+    return * static_cast<T *>(sph.get());
+}
 
-// don't track shared pointers
-template<class T>
-struct tracking_level< ::boost::shared_ptr<T> > { 
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_< ::boost::serialization::track_never> type;
-    BOOST_STATIC_CONSTANT(int, value = type::value);                                       \
-};
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+// serialization for shared_ptr
 
 template<class Archive, class T>
 inline void save(
@@ -167,8 +194,14 @@ inline void load(
 	T* r;
     #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
     if(file_version < 1){
+        ar.register_type(static_cast<
+            boost_132::detail::sp_counted_base_impl<T *, boost::checked_deleter<T> > *
+        >(NULL));
         boost_132::shared_ptr<T> sp;
-        ar >> sp;
+        ar >> boost::serialization::make_nvp("px", sp.px);
+        ar >> boost::serialization::make_nvp("pn", sp.pn);
+        // got to keep the sps around so the sp.pns don't disappear
+        get_helper<Archive, boost_132::serialization::detail::shared_ptr_helper>(ar).append(sp);
         r = sp.get();
     }
     else    
@@ -176,10 +209,7 @@ inline void load(
     {
 	    ar >> boost::serialization::make_nvp("px", r);
     }
-    detail::shared_ptr_helper & sph = ar.get_helper(
-        static_cast<detail::shared_ptr_helper *>(NULL)
-    );
-    sph.reset(t,r);
+    get_helper<Archive, detail::shared_ptr_helper>(ar).reset(t,r);
 }
 
 template<class Archive, class T>
@@ -188,6 +218,12 @@ inline void serialize(
     boost::shared_ptr<T> &t,
     const unsigned int file_version
 ){
+    // correct shared_ptr serialization depends upon object tracking
+    // being used.
+    BOOST_STATIC_ASSERT(
+        boost::serialization::tracking_level<T>::value
+        != boost::serialization::track_never
+    );
     boost::serialization::split_free(ar, t, file_version);
 }
 
