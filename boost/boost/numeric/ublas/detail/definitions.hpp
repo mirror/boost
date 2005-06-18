@@ -88,6 +88,19 @@ namespace boost { namespace numeric { namespace ublas {
         return noalias_proxy<const C> (lvalue);
     }
 
+    // Future compatible syntax where lvalue is known to have an alias on the RHS
+    //  alias(lhs) = rhs_expression
+    template <class C>
+    BOOST_UBLAS_INLINE
+    C& alias (C& lvalue) {
+        return lvalue;
+    }
+    template <class C>
+    BOOST_UBLAS_INLINE
+    const C& alias (const C& lvalue) {
+        return lvalue;
+    }
+
 
     // Dimension accessors
     namespace dimension {
