@@ -53,7 +53,17 @@ class event_base : public detail::rtti_policy::rtti_base_type<
     detail::counted_base<> > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
-    intrusive_ptr< const event_base > intrusive_from_this() const;
+    intrusive_ptr< const event_base > intrusive_from_this() const
+    {
+      if ( base_type::ref_counted() )
+      {
+        return intrusive_ptr< const event_base >( this );
+      }
+      else
+      {
+        return clone();
+      }
+    }
 
   protected:
     //////////////////////////////////////////////////////////////////////////
@@ -63,6 +73,10 @@ class event_base : public detail::rtti_policy::rtti_base_type<
     }
 
     virtual ~event_base() {}
+
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    virtual intrusive_ptr< const event_base > clone() const = 0;
 
     friend class detail::delete_helper;
 };
@@ -93,24 +107,6 @@ inline void intrusive_ptr_release( const ::boost::statechart::event_base * pBase
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace statechart
 #endif
-
-
-
-namespace statechart
-{
-
-
-
-inline intrusive_ptr< const event_base >
-  event_base::intrusive_from_this() const
-{
-  BOOST_ASSERT( base_type::ref_counted() );
-  return intrusive_ptr< const event_base >( this );
-}
-
-
-
-} // namespace statechart
 } // namespace boost
 
 

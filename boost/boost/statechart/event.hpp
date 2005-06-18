@@ -10,6 +10,7 @@
 
 #include <boost/statechart/event_base.hpp>
 #include <boost/statechart/detail/rtti_policy.hpp>
+#include <boost/cast.hpp> // boost::polymorphic_downcast
 
 
 
@@ -25,15 +26,19 @@ template< class MostDerived >
 class event : public detail::rtti_policy::rtti_derived_type<
   MostDerived, event_base >
 {
-  // Events need to be copyable so that they can be reposted in a transition
-  // action (happens very rarely). This is because a transition action is only
-  // passed a reference to the (possibly stack-allocated) event but the
-  // post_event function requests an event allocated with new (and pointed to
-  // by an intrusive_ptr).
+  // Compiler-generated copy constructor and copy assignment operator are fine
   protected:
     //////////////////////////////////////////////////////////////////////////
     event() {}
     virtual ~event() {}
+
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    virtual intrusive_ptr< const event_base > clone() const
+    {
+      return intrusive_ptr< const event_base >( new MostDerived(
+        *polymorphic_downcast< const MostDerived * >( this ) ) );
+    }
 };
 
 

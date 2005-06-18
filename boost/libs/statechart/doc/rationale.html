@@ -335,23 +335,6 @@ as follows: </p>
 triggered a reaction (and would thus be silently discarded). However, a 
 facility allowing this will probably be added in the 
 not-too-distant future.</p>
-<h4>Deferring and posting events</h4>
-<p>For performance reasons and because synchronous state machines often do not 
-need to queue events, it is possible to operate such machines entirely with 
-stack-allocated events. However, as soon as events need to be deferred and/or 
-posted there is no way around queuing and allocation with <code>new</code>. 
-The interface of <code>simple_state&lt;&gt;::post_event</code> enforces the use of
-<code>boost::intrusive_ptr&lt;&gt;</code> at compile time. But there is no way to do 
-the same for deferred events because allocation and deferral happen in 
-completely unrelated places. Of course, a &quot;wrongly&quot; allocated event could 
-easily be transformed into one allocated with <code>new</code> and pointed to 
-by <code>boost::intrusive_ptr&lt;&gt;</code> with a virtual <code>clone()</code> 
-function. However, in my experience, event deferral is needed only very rarely 
-in synchronous state machines and the asynchronous variant enforces the use of
-<code>boost::intrusive_ptr&lt;&gt;</code> anyway. So, most users won't run into this 
-limitation and I rejected the <code>clone()</code> idea because it could cause 
-inefficiencies casual users wouldn't be aware of. In addition, users not 
-needing event deferral would nevertheless pay with increased code size.</p>
 <h4>Junction points</h4>
 <p>UML junction points are not supported because arbitrarily complex guard 
 expressions can easily be implemented with <code>custom_reaction&lt;&gt;</code>s.</p>
@@ -468,7 +451,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->04 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19916" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19925" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

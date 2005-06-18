@@ -273,6 +273,11 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       outermost_context_base().post_event( pEvent );
     }
 
+    void post_event( const event_base & evt )
+    {
+      post_event( evt.intrusive_from_this() );
+    }
+
     result discard_event()
     {
       return detail::result_utility::make_result( detail::do_discard_event );

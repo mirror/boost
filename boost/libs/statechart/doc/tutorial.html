@@ -565,29 +565,6 @@ when the Focusing state is exited.</p>
   Focusing( my_context ctx );
   sc::result react( const EvInFocus &amp; );
 };</pre>
-<p>To avoid a number of overheads, event deferral has one limitation: Only 
-events allocated with <code>new</code> <b>and</b> pointed to by a <code>
-boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
-differently allocated event will result in a failing runtime assert. Example:</p>
-<pre>struct Event : sc::event&lt; Event &gt; {};
-struct Initial;
-struct Machine : sc::state_machine&lt; Machine, Initial &gt; {};
-struct Initial : sc::simple_state&lt; Initial, Machine &gt;
-{
-  typedef sc::deferral&lt; Event &gt; reactions;
-};
-
-int main()
-{
-  Machine myMachine;
-  myMachine.initiate();
-  myMachine.process_event( Event() ); // error
-  myMachine.process_event(
-    *boost::shared_ptr&lt; Event &gt;( new Event() ) ); // error
-  myMachine.process_event(
-    *<b>boost::intrusive_ptr&lt; Event &gt;( new Event() )</b> ); // fine
-  return 0;
-}</pre>
 <h3><a name="Guards">Guards</a></h3>
 <p>Both transitions originating at the Focused state are triggered by the same 
 event but they have mutually exclusive guards. Here is an appropriate custom 
@@ -1472,7 +1449,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13992" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19925" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

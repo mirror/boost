@@ -112,7 +112,8 @@ int test_main( int, char* [] )
   BOOST_REQUIRE( machine.ProcessedCount() == 1 );
   machine.process_event( *MakeIntrusive( new EvSwitch() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 1 );
-  machine.process_event( *MakeIntrusive( new EvLeafDeferred() ) );
+  // Deferral must work with heap-allocated and stack-allocated events
+  machine.process_event( EvLeafDeferred() );
   machine.process_event( *MakeIntrusive( new EvLeafDeferred() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 1 );
   machine.process_event( *MakeIntrusive( new EvSwitch() ) );
@@ -123,7 +124,7 @@ int test_main( int, char* [] )
   BOOST_REQUIRE( machine.ProcessedCount() == 3 );
   machine.process_event( *MakeIntrusive( new EvSwitch() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 3 );
-  machine.process_event( *MakeIntrusive( new EvNodeDeferred() ) );
+  machine.process_event( EvNodeDeferred() );
   BOOST_REQUIRE( machine.ProcessedCount() == 3 );
   machine.process_event( *MakeIntrusive( new EvDestroy() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 5 );
