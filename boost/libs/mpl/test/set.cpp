@@ -25,6 +25,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/find.hpp>
 
 #include <boost/mpl/aux_/test.hpp>
 
@@ -167,24 +168,23 @@ MPL_TEST_CASE()
 template <class S>
 struct test
 {
-    typedef typename mpl::begin<S>::type i0;
-    typedef typename mpl::deref<i0>::type t0;
-    BOOST_MPL_ASSERT((boost::is_same<t0,int>));
-      
-    typedef typename mpl::next<i0>::type i1;
-    typedef typename mpl::deref<i1>::type t1;
-    BOOST_MPL_ASSERT((boost::is_same<t1,long>));
+    MPL_ASSERT_RELATION( size<S>::value, ==, 3 );
 
-    typedef typename mpl::next<i1>::type i2;
-    typedef typename mpl::deref<i2>::type t2;
-    BOOST_MPL_ASSERT((boost::is_same<t2,char>));
-
-    typedef typename mpl::next<i2>::type i3;
-    BOOST_MPL_ASSERT((boost::is_same<i3,typename mpl::end<S>::type>));
+    typedef typename end<S>::type not_found;
+    BOOST_MPL_ASSERT_NOT(( is_same<typename find<S,int>::type,not_found> ));
+    BOOST_MPL_ASSERT_NOT(( is_same<typename find<S,long>::type,not_found> ));
+    BOOST_MPL_ASSERT_NOT(( is_same<typename find<S,char>::type,not_found> ));
+    BOOST_MPL_ASSERT(( is_same<typename find<S,char*>::type,not_found> ));
 };
 
 MPL_TEST_CASE()
 {
-  typedef mpl::set<int,long,char> myset;
-  test<myset> y;
+    typedef mpl::set<int> set_of_1_int;
+    typedef mpl::begin<set_of_1_int>::type iter_to_1_int;
+    BOOST_MPL_ASSERT(( is_same< deref<iter_to_1_int>::type, int > ));
+    
+    typedef mpl::set<int,long,char> myset;
+    
+    test<myset> x;
+    test<myset::type> y;
 }
