@@ -13,6 +13,8 @@
 // $Revision$
 
 #include <boost/mpl/set.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/next.hpp>
 #include <boost/mpl/insert.hpp>
 #include <boost/mpl/erase.hpp>
 #include <boost/mpl/erase_key.hpp>
@@ -159,4 +161,30 @@ MPL_TEST_CASE()
     MPL_ASSERT_NOT(( has_key<s,abstract volatile> ));
     MPL_ASSERT_NOT(( has_key<s,incomplete&> ));
     MPL_ASSERT_NOT(( has_key<s,abstract&> ));
+}
+
+// Use a template for testing so that GCC will show us the actual types involved
+template <class S>
+struct test
+{
+    typedef typename mpl::begin<S>::type i0;
+    typedef typename mpl::deref<i0>::type t0;
+    BOOST_MPL_ASSERT((boost::is_same<t0,int>));
+      
+    typedef typename mpl::next<i0>::type i1;
+    typedef typename mpl::deref<i1>::type t1;
+    BOOST_MPL_ASSERT((boost::is_same<t1,long>));
+
+    typedef typename mpl::next<i1>::type i2;
+    typedef typename mpl::deref<i2>::type t2;
+    BOOST_MPL_ASSERT((boost::is_same<t2,char>));
+
+    typedef typename mpl::next<i2>::type i3;
+    BOOST_MPL_ASSERT((boost::is_same<i3,typename mpl::end<S>::type>));
+};
+
+MPL_TEST_CASE()
+{
+  typedef mpl::set<int,long,char> myset;
+  test<myset> y;
 }
