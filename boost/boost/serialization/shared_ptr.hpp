@@ -151,10 +151,7 @@ public:
 template<class Archive, class T>
 T &
 get_helper(Archive & ar){
-    typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<
-        T
-    >::type eti_type;
-    boost::serialization::extended_type_info * eti = eti_type::get_instance();
+    extended_type_info * eti = type_info_implementation<T>::type::get_instance();
     shared_ptr<void> sph;
     ar.lookup_helper(eti, sph);
     if(NULL == sph.get()){
@@ -209,7 +206,7 @@ inline void load(
     {
 	    ar >> boost::serialization::make_nvp("px", r);
     }
-    get_helper<Archive, detail::shared_ptr_helper>(ar).reset(t,r);
+    get_helper<Archive, detail::shared_ptr_helper >(ar).reset(t,r);
 }
 
 template<class Archive, class T>
