@@ -97,7 +97,7 @@ void save_and_load(boost::shared_ptr<A>& spa)
     load(testfile, spa1);
 
     BOOST_CHECK(
-        spa == NULL && spa1 == NULL
+        spa.get() == NULL && spa1.get() == NULL
         || * spa == * spa1
     );
     std::remove(testfile);
