@@ -107,7 +107,6 @@ inline void sp_enable_shared_from_this( shared_count const & /*pn*/, ... )
 template<class T> class shared_ptr
 {
 private:
-    friend class boost::serialization::access;
     // Borland 5.5.1 specific workaround
     typedef shared_ptr<T> this_type;
 
@@ -334,7 +333,7 @@ private:
 
 
 #endif
-
+public: // for serialization
     T * px;                     // contained pointer
     detail::shared_count pn;    // reference counter
 

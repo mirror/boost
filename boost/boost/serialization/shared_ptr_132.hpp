@@ -24,7 +24,7 @@
 
 #include <list>
 
-#include "detail/shared_ptr_132.hpp"
+#include <boost/serialization/detail/shared_ptr_132.hpp>
 
 #include <boost/serialization/is_abstract.hpp>
 #include <boost/serialization/split_free.hpp>
@@ -43,7 +43,9 @@ namespace boost_132 {
 namespace serialization {
 namespace detail {
 
-struct null_deleter;
+struct null_deleter {
+    void operator()(void const *) const {}
+};
 
 class shared_ptr_helper{
     typedef std::list<shared_ptr<void> > collection_type;
@@ -115,8 +117,11 @@ inline void load_construct_data(
     // is finished loading and the shared_ptrs are destroyed - the underlying
     // raw pointers are NOT deleted.  This is necessary as they are used by the 
     // new system as well.
-    ::new(t)boost_132::detail::sp_counted_base_impl<P, detail::null_deleter>(
-        ptr_,  detail::null_deleter()
+    ::new(t)boost_132::detail::sp_counted_base_impl<
+        P, 
+        boost_132::serialization::detail::null_deleter
+    >(
+        ptr_,  boost_132::serialization::detail::null_deleter()
     ); // placement new
     // compensate for that fact that a new shared count always is 
     // initialized with one. the add_ref_copy below will increment it
