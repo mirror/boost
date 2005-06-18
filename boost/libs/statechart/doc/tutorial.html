@@ -63,10 +63,10 @@ contributed by Mitsuo Fukasawa.</p>
 <hr>
 <h2><a name="Introduction">Introduction</a></h2>
 <p>The Boost Statechart library is a framework that allows you to quickly transform 
-a UML state chart into executable C++ code, <b>without</b> needing to use a 
+a UML statechart into executable C++ code, <b>without</b> needing to use a 
 code generator. Thanks to support for almost all UML features the 
 transformation is straight-forward and the resulting C++ code is a nearly 
-redundancy-free textual description of the state chart.</p>
+redundancy-free textual description of the statechart.</p>
 <h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
 <p>This tutorial was designed to be read linearly. First time users should 
 start reading right at the beginning and stop as soon as they know enough for 
@@ -87,7 +87,7 @@ the task at hand. Specifically:</p>
 </ul>
 <h2><a name="Hello World!">Hello World!</a></h2>
 <p>We will use the simplest possible program to make our first steps. The 
-state chart ...</p>
+statechart ...</p>
 <p><img border="0" src="HelloWorld.gif" width="379" height="94"></p>
 <p>... is implemented with the following code:</p>
 <pre>#include &lt;boost/statechart/state_machine.hpp&gt;
@@ -127,7 +127,7 @@ is destroyed what automatically exits the <code>Greeting</code> state.</p>
   second template parameter of <code>Machine</code>'s base. We have to forward 
   declare <code>Greeting</code> for this purpose</li>
   <li>For each state we need to define which state machine it belongs to and 
-  where it is located in the state chart. Both is specified with <code>Context</code> 
+  where it is located in the statechart. Both is specified with <code>Context</code> 
   argument that is passed to <code>simple_state&lt;&gt;</code>. For a flat state 
   machine as we have it here, the context is always the state machine. 
   Consequently, <code>Machine</code> must be passed as the second template 
@@ -450,7 +450,7 @@ has the following controls:</p>
 </ul>
 <p>One use case for the camera says that the photographer can half-press the 
 shutter <b>anywhere</b> in the configuration mode and the camera will 
-immediately go into shooting mode. The following state chart is one way to 
+immediately go into shooting mode. The following statechart is one way to 
 achieve this behavior:</p>
 <p><img border="0" src="Camera.gif" width="544" height="317"></p>
 <p>The Configuring and Shooting states will contain numerous nested states 
@@ -830,7 +830,7 @@ history implementation has some <a href="rationale.html#Limitations">
 limitations</a>.</p>
 <h3><a name="Orthogonal states">Orthogonal states</a></h3>
 <p><img border="0" src="OrthogonalStates.gif" width="633" height="393"></p>
-<p>To implement this state chart you simply specify more than one inner 
+<p>To implement this statechart you simply specify more than one inner 
 initial state (see the Keyboard example):</p>
 <pre>struct Active;
 struct Keyboard : sc::state_machine&lt; Keyboard, Active &gt; {};
@@ -1149,7 +1149,7 @@ first tried for a reaction.</p>
     direct or indirect outer states that are unstable. This more complex rule 
     is necessary because only reactions associated with the outermost unstable 
     state (or any of its direct or indirect outer states) are able to bring 
-    the machine back into a stable state. Consider the following state chart:<br>
+    the machine back into a stable state. Consider the following statechart:<br>
     <br>
     <img border="0" src="OutermostUnstableState.gif" width="467" height="572"><br>
     <br>

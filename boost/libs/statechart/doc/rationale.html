@@ -214,7 +214,7 @@ to the execution of the remedy action. Please note that it is not sufficient to
 simply queue the error event as other events could still be pending. Instead, 
 the error event has absolute priority and has to be dealt with 
 immediately. There are slightly less cumbersome approaches to FSM error handling 
-but these usually necessitate a change of the state chart layout and thus 
+but these usually necessitate a change of the statechart layout and thus 
 obscure the normal behavior. No matter what approach is used, programmers are 
 normally forced to write a lot of code that deals with errors and most of that 
 code is <b>not</b> devoted to error handling but to error propagation.</p>
@@ -398,7 +398,7 @@ will add it to the library.</p>
 <h4>Deep history of orthogonal regions</h4>
 <p>Deep history of states with orthogonal regions is currently not supported:</p>
 <p><img border="0" src="DeepHistoryLimitation1.gif" width="331" height="346"></p>
-<p>Attempts to implement this state chart will lead to a compile-time error 
+<p>Attempts to implement this statechart will lead to a compile-time error 
 because B has orthogonal regions and its direct or indirect outer state 
 contains a deep history pseudo state. In other words, a state containing a 
 deep history pseudo state must not have any direct or indirect inner states 
