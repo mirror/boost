@@ -12,7 +12,7 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/map/map10.hpp>
+#include <boost/mpl/map.hpp>
 #include <boost/mpl/insert.hpp>
 #include <boost/mpl/erase_key.hpp>
 #include <boost/mpl/erase_key.hpp>
@@ -24,6 +24,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/begin_end.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <boost/mpl/aux_/test.hpp>
 
@@ -157,4 +158,39 @@ MPL_TEST_CASE()
     typedef erase_key<m,char>::type m0_1;
     MPL_ASSERT_RELATION( size<m0_1>::type::value, ==, 0 );
     MPL_ASSERT(( is_same< at<m0_1,char>::type,void_ > ));
+}
+
+// Use a template for testing so that GCC will show us the actual types involved
+template <class M>
+void test()
+{
+    MPL_ASSERT_RELATION( size<M>::value, ==, 3 );
+
+    typedef typename end<M>::type not_found;
+    BOOST_MPL_ASSERT_NOT(( is_same<BOOST_DEDUCED_TYPENAME find<M,mpl::pair<int,int*> >::type,not_found> ));
+    BOOST_MPL_ASSERT_NOT(( is_same<BOOST_DEDUCED_TYPENAME find<M,mpl::pair<long,long*> >::type,not_found> ));
+    BOOST_MPL_ASSERT_NOT(( is_same<BOOST_DEDUCED_TYPENAME find<M,mpl::pair<char,char*> >::type,not_found> ));
+    BOOST_MPL_ASSERT(( is_same<BOOST_DEDUCED_TYPENAME find<M,int>::type,not_found> ));
+};
+
+MPL_TEST_CASE()
+{
+    typedef map< mpl::pair<int,int*> > map_of_1_pair;
+    typedef begin<map_of_1_pair>::type iter_to_1_pair;
+    
+    BOOST_MPL_ASSERT((
+        is_same<
+             deref<iter_to_1_pair>::type
+           , mpl::pair<int,int*>
+        >
+    ));
+    
+    typedef map<
+        mpl::pair<int,int*>
+      , mpl::pair<long,long*>
+      , mpl::pair<char,char*>
+    > mymap;
+    
+    test<mymap>();
+    test<mymap::type>();
 }
