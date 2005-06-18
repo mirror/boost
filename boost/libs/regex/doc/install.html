@@ -49,14 +49,22 @@
             support</A> via ICU.&nbsp; There is no need to enable this support if you 
          don't need it, but if you use ICU for your Unicode support already, and want to 
          work with Unicode-aware regular expressions then read on.</P>
-      <P>To enable ICU support you need to set the environment variable ICU_PATH to 
-         point to the route directory of your ICU installation, for example if ICU was 
-         installed to /usr/local you might use:</P>
-      <PRE>bjam -sICU_PATH=/usr/local -sTOOLS=<A href="../../../more/getting_started.html#Tools" >my-compiler</A></PRE>
+      <P>If you're building on a Unix-like platform, and ICU is already installed in 
+         you're compilers search path (with an install&nbsp;prefix of /usr or /usr/local 
+         for example), then set the environment variable HAVE_ICU to enable ICU 
+         support.&nbsp; For example you might build with the command line:</P>
+      <PRE>bjam -sHAVE_ICU=1 -sTOOLS=<A href="../../../more/getting_started.html#Tools">my-compiler</A></PRE>
+      <P>If ICU is not already in your compilers path then you need to set the 
+         environment variable ICU_PATH to point to the route directory of your ICU 
+         installation, for example if ICU was installed to /usr/local/icu/3.3 you might 
+         use:</P>
+      <PRE>bjam -sICU_PATH=/usr/local/icu/3.3 -sTOOLS=<A href="../../../more/getting_started.html#Tools" >my-compiler</A></PRE>
       <P>Note that ICU is a C++ library just like Boost is, as such your copy of ICU 
          must have been built with the same C++ compiler (and compiler version) that you 
          are using to build Boost.&nbsp; <STRONG>Boost.Regex will not work correctly unless 
-            you ensure that this is the case</STRONG>.</P>
+            you ensure that this is the case:</STRONG> it is up to you to ensure that 
+         the version of ICU you are using is binary compatible with the toolset you use 
+         to build Boost.</P>
       <H2><A name="make"></A>Building via makefiles</H2>
       <H3><A name="bcb"></A>Borland C++ Builder:
       </H3>
@@ -111,7 +119,7 @@
          if this causes problems for you, then try defining BOOST_NO_STD_LOCALE when 
          building, this will disable some features throughout boost, but may save you a 
          lot in compile times!</P>
-      <H3><A name="vc"></A>Microsoft Visual C++ 6 and 7</H3>
+      <H3><A name="vc"></A>Microsoft Visual C++ 6, 7, 7.1 and 8</H3>
       <P>You need version 6 of MSVC to build this library. If you are using VC5 then you 
          may want to look at one of the previous releases of this <A href="http://ourworld.compuserve.com/homepages/john_maddock/regexpp.htm">
             library</A>

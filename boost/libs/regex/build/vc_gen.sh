@@ -443,7 +443,7 @@ debug_extra="$EH_OPTS"
 is_stlport="no"
 out="vc8.mak"
 no_single="no"
-subdir="vc8"
+subdir="vc80"
 vc6_gen
 
 

@@ -11,7 +11,7 @@ BCROOT=$(MAKEDIR)\..
 #
 # sources to compile for each test:
 #
-SOURCES=*.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
+SOURCES=*.cpp 
 
 BCC32   = $(BCROOT)\bin\Bcc32.exe 
 TLINK32 = $(BCROOT)\bin\ILink32.exe
@@ -184,6 +184,7 @@ r5lv.exe : $(SOURCES)
 
 r6lv.exe : $(SOURCES)
 	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPI)
+
 
 
 
