@@ -44,7 +44,7 @@ class BOOST_DECL_ARCHIVE basic_archive_impl
 
     struct helper_type {
         shared_ptr<void> m_helper;
-        const boost::serialization::extended_type_info * const m_eti;
+        const boost::serialization::extended_type_info * m_eti;
         helper_type(
             shared_ptr<void> h, 
             const boost::serialization::extended_type_info * const eti
