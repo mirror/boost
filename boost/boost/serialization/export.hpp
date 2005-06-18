@@ -198,7 +198,7 @@ boost_template_instantiate(T &, ASeq &){
     namespace serialization {                                             \
     namespace detail {                                                    \
     namespace {                                                           \
-        void ( * export_ ## T )()                                         \ 
+        void ( * export_ ## T )()                                         \
             = & static_data_registration_workaround<T>;                   \
     } } } }                                                               \
     /**/
