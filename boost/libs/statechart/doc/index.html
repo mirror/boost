@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/06/18<!--webbot bot="Timestamp" endspan i-checksum="12683" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/06/19<!--webbot bot="Timestamp" endspan i-checksum="12685" --></font></td>
   </tr>
 </table>
 <hr>
@@ -188,8 +188,6 @@ review):</p>
   trigger a reaction</li>
 	<li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
     initial state into an mpl::list (Jonathan Turkanis)</font></li>
-    <li><font color="#FF0000">Explain better the central role of the Context 
-	parameter (John Spalding)</font></li>
     <li><font color="#FF0000">Add a trouble-shooting section for compile-time 
 	errors (John Spalding)</font></li>
     <li><font color="#FF0000">Augment the rationale for state-local storage 
@@ -245,8 +243,8 @@ review):</p>
 <h2><a name="Change_history">Change history</a></h2>
 <p>XX July, 2005</p>
 <ul>
-	<li><font color="#FF0000">Updated the documentation for the new reaction 
-    specification interface</font></li>
+	<li>Updated the documentation for the new reaction 
+    specification interface</li>
     <li><font color="#FF0000">Invalid calls to reaction functions now always 
     lead to a failing runtime assert (Jonathan Turkanis). In debug mode the
     <code>result</code> type is a class 
@@ -258,6 +256,7 @@ review):</p>
     <li><font color="#FF0000">Added clone functionality to events so that 
     stack-allocated events can now be deferred and posted. Updated the 
     documentation and tests accordingly (Jonathan Turkanis)</font></li>
+    <li><font color="#FF0000">Clarified the definition of context (John Spalding)</font></li>
 </ul>
 <p></p>
 <p>12 May, 2005</p>
@@ -502,7 +501,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19925" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

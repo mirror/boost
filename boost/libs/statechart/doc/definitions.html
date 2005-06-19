@@ -45,12 +45,27 @@ here</a>.</p>
   <dt><a href="#Unstable state machine">Unstable state machine</a></dt>
 </dl>
 <h3><a name="Context">Context</a></h3>
-<p>The context of a state is either its direct outer state or the state 
-machine. In the latter case the state is an outermost state. A states' context 
+<p>The contexts of a state define its location in the state hierarchy. A 
+state's <b>direct</b> context 
 is defined by what is passed as the <code>Context</code> template parameter of 
 the <code><a href="reference.html#Class template simple_state">simple_state</a></code> 
 and <code><a href="reference.html#Class template state">state</a></code> class 
-templates.</p>
+templates. This can either be the state machine (which makes the state an
+<a href="#Outermost state">outermost state</a>) or its direct outer state. A 
+state's <b>indirect</b> contexts follow from the direct context of its direct 
+context and the direct context of the direct context of its direct context and 
+so on. Examples:</p>
+<p><img border="0" src="OutermostUnstableState.gif" width="467" height="572"></p>
+<ul>
+ <li>A's <b>direct</b> context is the state machine (not visible in this 
+ picture). A does not have any indirect contexts</li>
+ <li>B's <b>direct</b> context is A. B's <b>indirect</b> context is the state 
+ machine (not visible in this picture)</li>
+ <li>C's <b>direct</b> context is B. C's <b>indirect</b> contexts are B, A and 
+ the state machine (not visible in this picture)</li>
+ <li>D's <b>direct</b> context is A. D's <b>indirect</b> context is the state 
+ machine (not visible in this picture)</li>
+</ul>
 <h3><a name="Innermost common context">Innermost common context</a></h3>
 <p>The innermost common context of two states is the first direct or 
 indirect context that both states have in common. Also known as Least 
@@ -134,7 +149,7 @@ client (see <code><a href="reference.html#process_event">state_machine&lt;&gt;::
 for details).</p>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" -->
 </p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
