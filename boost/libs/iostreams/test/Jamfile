@@ -51,7 +51,6 @@ DEPENDS all : test ;
             : # input files
             : # build requirements
                 <vc-6_5-stlport><*><runtime-link>static
-                <define>_MSL_LL_FILE_SUPPORT
                 <define>BOOST_IOSTREAMS_NO_LIB
                 $(requirements)
         ] ;
@@ -77,7 +76,10 @@ DEPENDS all : test ;
                 libs/iostreams/test/file_descriptor_test.cpp 
                 libs/iostreams/src/file_descriptor.cpp ]
           [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
-          [ test-iostreams libs/iostreams/test/finite_state_filter_test.cpp : std::locale-support ]
+          [ test-iostreams 
+				libs/iostreams/test/finite_state_filter_test.cpp 
+			  : # build requirements 
+                std::locale-support ]
           [ test-iostreams libs/iostreams/test/flush_test.cpp ]
           [ test-iostreams libs/iostreams/test/invert_test.cpp ]
           [ test-iostreams libs/iostreams/test/line_filter_test.cpp ]

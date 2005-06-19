@@ -216,44 +216,6 @@ bool test_seekable_in_chunks(std::iostream& io)
     return true;
 }
 
-bool unbuffered_putback_test(std::istream& is)
-{
-    try {
-        do {
-            char buf[chunk_size];
-            is.read(buf, chunk_size);
-            if (is.gcount() < static_cast<std::streamsize>(chunk_size))
-                break;
-            is.putback('a');
-            if (is.get() != 'a')
-                return false;
-        } while (!is.eof());
-        return true;
-    } catch (std::exception&) { return false; }
-}
-
-bool buffered_putback_test(std::istream& is)
-{
-    try {
-        do {
-            char buf[chunk_size];
-            is.read(buf, chunk_size);
-            if (is.gcount() < static_cast<std::streamsize>(chunk_size))
-                break;
-            is.putback('a');
-            is.putback('b');
-            is.putback('c');
-            is.putback('d');
-            if ( is.get() != 'd' || is.get() != 'c' ||
-                 is.get() != 'b' || is.get() != 'a' )
-            {
-                return false;
-            }
-        } while (!is.eof());
-        return true;
-    } catch (std::exception&) { return false; }
-}
-
 } } } // End namespaces test, iostreams, boost.
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
