@@ -165,6 +165,9 @@
 				RelativePath="..\..\..\..\boost\statechart\fifo_scheduler.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\boost\statechart\in_state_reaction.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\boost\statechart\null_exception_translator.hpp">
 			</File>
 			<File

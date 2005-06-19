@@ -33,6 +33,7 @@
   <dd><a href="#StateBase">StateBase</a></dd>
   <dd><a href="#SimpleState">SimpleState</a></dd>
   <dd><a href="#State">State</a></dd>
+  <dd><a href="#Event">Event</a></dd>
   <dt><a href="#state_machine.hpp">state_machine.hpp</a></dt>
   <dd><a href="#Class template state_machine">Class template <code>
   state_machine</code></a></dd>
@@ -70,6 +71,9 @@
   <dt>&nbsp;</dt>
   <dt><a href="#transition.hpp">transition.hpp</a></dt>
   <dd><a href="#Class template transition">Class template <code>transition</code></a></dd>
+  <dt><a href="#in_state_reaction.hpp">in_state_reaction.hpp</a></dt>
+  <dd><a href="#Class template in_state_reaction">Class template 
+  in_state_reaction</a></dd>
   <dt><a href="#termination.hpp">termination.hpp</a></dt>
   <dd><a href="#Class template termination">Class template <code>termination</code></a></dd>
   <dt><a href="#deferral.hpp">deferral.hpp</a></dt>
@@ -346,6 +350,7 @@ and have the indicated effects/results:</p>
     <td width="29%">An <code>mpl::list&lt;&gt;</code> that is either empty or 
     contains instantiations of 
     the <code><a href="#Class template custom_reaction">custom_reaction</a></code>,
+    <code><a href="#Class template in_state_reaction">in_state_reaction</a></code>,
     <code><a href="#Class template deferral">deferral</a></code>, <code>
     <a href="#Class template termination">termination</a></code> or <code>
     <a href="#Class template transition">transition</a></code> class 
@@ -419,14 +424,6 @@ and have the indicated effects/results:</p>
     <td width="29%"><code>E *</code></td>
     <td width="42%">
 	Makes a copy of <code>pE</code></td>
-   </tr>
-  <tr>
-    <td width="28%"><code>delete static_cast&lt;<br>
-&nbsp; const <a href="#Class event_base">event_base</a> * &gt;(<br>
-&nbsp;&nbsp;&nbsp; pCE );</code></td>
-    <td width="29%">&nbsp;</td>
-    <td width="42%">
-	Destroys <code>pE</code></td>
    </tr>
   </table>
 <h1>Header &lt;boost/statechart/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
@@ -1978,7 +1975,7 @@ namespace statechart
 <p><b>Returns</b>: If <code>this</code> is already referenced by an <code>
 intrusive_ptr&lt;&gt;</code>, returns another <code>intrusive_ptr&lt; const event_base &gt;</code> 
 referencing <code>this</code>. Otherwise, returns an <code>intrusive_ptr&lt; 
-const event_base &gt;</code> referencing a copy of the most-derived object</p>
+const event_base &gt;</code> referencing a newly created copy of the most-derived object</p>
 <pre>id_type <a name="event_base::dynamic_type">dynamic_type</a>() const;</pre>
 <p><b>Returns</b>: A value unambiguously identifying the most-derived type<br>
 <b>Note</b>: <code>id_type</code> values are comparable with <code>
@@ -2122,6 +2119,57 @@ for which the reaction was defined is made:</p>
   <li><code><a href="#transit2">transit&lt; Destination &gt;( pTransitionAction, <i>
   currentEvent</i> )</a></code>, if a transition action was specified</li>
 </ul>
+<h1>Header &lt;boost/statechart/<a name="in_state_reaction.hpp">in_state_reaction.hpp</a>&gt;</h1>
+<h2><a name="Class template in_state_reaction">Class template <code>in_state_reaction</code></a></h2>
+<p>This class template is used to specify an in-state reaction. 
+Instantiations of this template can appear in the <code>reactions</code> 
+member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState</a> 
+	and <a href="#State">State</a> concepts.</p>
+<h3>Class template <code>in_state_reaction</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="table7">
+  <tr>
+    <td width="15%"><b>Template parameter</b></td>
+    <td width="45%"><b>Requirements</b></td>
+    <td width="24%"><b>Semantics</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Event</code></td>
+    <td width="45%">A model of the <a href="#Event">Event</a> concept</td>
+    <td width="24%">The event triggering the in-state reaction</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>ReactionContext</code></td>
+    <td width="45%">Either the state defining the in-state reaction itself or 
+    one of it direct or indirect contexts</td>
+    <td width="24%">The state of which the action is a member</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>pAction</code></td>
+    <td width="45%">A pointer to a member function of <code>ReactionContext</code>. 
+    The member function must accept a <code>const Event &amp;</code> parameter and 
+    return <code>void</code></td>
+    <td width="24%">The action that is executed during the 
+    in-state reaction</td>
+  </tr>
+</table>
+<h3>Class template <code>in_state_reaction</code> synopsis</h3>
+<pre>namespace boost
+{
+namespace statechart
+{
+  template&lt;
+    class Event,
+    class ReactionContext,
+    void ( ReactionContext::*pAction )( const Event &amp; ) &gt;
+  class in_state_reaction
+  {
+    // <i>implementation-defined</i>
+  };
+}
+}</pre>
+<h3>Class template <code>in_state_reaction</code> semantics</h3>
+<p>When executed, <code>pAction</code> is called, passing the triggering event 
+as the only argument.</p>
 <h1>Header &lt;boost/statechart/<a name="termination.hpp">termination.hpp</a>&gt;</h1>
 <h2><a name="Class template termination">Class template <code>termination</code></a></h2>
 <p>This class template is used to specify a termination reaction. Instantiations 
@@ -2279,7 +2327,7 @@ copy semantics</p>
 <b>Effects</b>: Destructs the result object</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19925" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

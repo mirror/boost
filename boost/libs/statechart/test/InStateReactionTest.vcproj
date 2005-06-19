@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="BitMachine"
-	ProjectGUID="{CF66596F-7DEA-4BB6-A728-F7FEF2889855}"
+	Name="InStateReactionTest"
+	ProjectGUID="{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -18,31 +18,30 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm300"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\.."
+				AdditionalIncludeDirectories="..\..\..\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				BufferSecurityCheck="TRUE"
+				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
-				WarnAsError="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/BitMachine.exe"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
+				OutputFile="$(OutDir)/InStateReactionTest.exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\..\..\bin\boost\libs\test\build\libboost_test_exec_monitor.lib\vc-7_1\debug\threading-multi"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/BitMachine.pdb"
+				ProgramDatabaseFile="$(OutDir)/InStateReactionTest.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -74,33 +73,26 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm300"
-				Optimization="3"
-				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="..\..\..\.."
+				AdditionalIncludeDirectories="..\..\..\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				StringPooling="TRUE"
-				ExceptionHandling="TRUE"
-				RuntimeLibrary="4"
-				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="TRUE"
+				RuntimeLibrary="2"
 				DisableLanguageExtensions="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
-				WarnAsError="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="0"/>
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/BitMachine.exe"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
+				OutputFile="$(OutDir)/InStateReactionTest.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="FALSE"
+				AdditionalLibraryDirectories="..\..\..\bin\boost\libs\test\build\libboost_test_exec_monitor.lib\vc-7_1\release\threading-multi"
+				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -132,77 +124,10 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="BitMachine.cpp">
-			</File>
-		</Filter>
-		<Filter
-			Name="Statechart Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
-			<File
-				RelativePath="..\..\..\..\boost\statechart\asynchronous_state_machine.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\custom_reaction.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\deep_history.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\deferral.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\event.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\event_base.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\event_processor.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\exception_translator.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\fifo_scheduler.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\in_state_reaction.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\null_exception_translator.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\result.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\shallow_history.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\simple_state.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\state.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\state_machine.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\termination.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\statechart\transition.hpp">
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="">
-			<File
-				RelativePath=".\UniqueObject.hpp">
-			</File>
-			<File
-				RelativePath=".\UniqueObjectAllocator.hpp">
+				RelativePath=".\InStateReactionTest.cpp">
 			</File>
 		</Filter>
 	</Files>

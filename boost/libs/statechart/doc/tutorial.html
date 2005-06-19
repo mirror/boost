@@ -431,8 +431,6 @@ limitations:</p>
   reactions have mutually exclusive guards. The interface we used above only 
   allows for at most one unguarded reaction for each event. Moreover, the UML 
   concepts junction and choice point are not directly supported</li>
-  <li>There is no way to specify <a href="definitions.html#In-state reaction">
-  in-state reactions</a></li>
 </ul>
 <p>All these limitations can be overcome with custom reactions. <b>Warning: It 
 is easy to abuse custom reactions up to the point of invoking undefined 
@@ -628,6 +626,10 @@ sc::result Focused::react( const EvShutterFull &amp; )
   }
 }
 // ...</pre>
+<p>Because the in-state reaction is guarded, we need to employ a <code>
+custom_reaction&lt;&gt;</code> here. For unguarded in-state reactions <code>
+<a href="reference.html#Class template in_state_reaction">in_state_reaction</a>&lt;&gt;</code> 
+should be used for better code-readability.</p>
 <h3><a name="Transition actions">Transition actions</a></h3>
 <p>As an effect of every transition, actions are executed in the following 
 order:</p>
@@ -1125,8 +1127,8 @@ first tried for a reaction.</p>
 <p>Longer answer: There are three scenarios:</p>
 <ol>
   <li>A <code>react</code> member function propagates an exception <b>before</b> 
-  calling any of the reaction functions (that is, an in-state reaction 
-  propagates an exception). The state that caused the exception is first tried 
+  calling any of the reaction functions or the action executed during an in-state reaction 
+  propagates an exception. The state that caused the exception is first tried 
   for a reaction, so the following machine will transit to Defective after 
   receiving an EvStart event:<br>
   <br>
@@ -1449,7 +1451,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19925" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
