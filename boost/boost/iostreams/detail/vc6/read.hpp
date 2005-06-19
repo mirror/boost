@@ -144,7 +144,7 @@ struct read_device_impl<streambuf_tag> {
         {
             typedef typename char_type_of<T>::type  char_type;
             typedef char_traits<char_type>          traits_type;
-            return !traits_type::is_eof(t.sputbackc());
+            return !traits_type::is_eof(t.sputbackc(c));
         }
     };
 };

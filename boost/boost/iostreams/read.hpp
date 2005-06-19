@@ -158,7 +158,7 @@ struct read_device_impl<streambuf_tag> {
     {   // gcc 2.95 needs namespace qualification for char_traits.
         typedef typename char_type_of<T>::type     char_type;
         typedef iostreams::char_traits<char_type>  traits_type;
-        return !traits_type::is_eof(t.sputbackc());
+        return !traits_type::is_eof(t.sputbackc(c));
     }
 };
 
