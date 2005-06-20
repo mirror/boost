@@ -57,9 +57,6 @@ public:
 
     template<class T>
     const basic_pointer_iserializer * register_type(T * t = NULL){
-        #if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
-        boost::serialization::access::static_data_registration_workaround<T>();
-        #endif
         const basic_pointer_iserializer & bpis =
             archive::detail::instantiate_pointer_iserializer(
                 static_cast<Archive *>(NULL),

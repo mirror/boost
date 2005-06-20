@@ -138,7 +138,7 @@ public:
 };
 
 template<class Archive, class T>
-inline BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
+BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
     basic_oarchive & ar,    
     const void *x
 ) const {
@@ -167,13 +167,25 @@ private:
     ) const BOOST_USED ;
 public:
     static const pointer_oserializer instance;
+    // at least one compiler (CW) seems to require that serialize_adl
+    // be explicitly instantiated.
+    #if !defined(__BORLANDC__)
+    void (* const m)(Archive &, T &, const unsigned);
+    explicit pointer_oserializer() :
+        archive_pointer_oserializer<Archive>(
+            * boost::serialization::type_info_implementation<T>::type::get_instance()
+        ),
+        m(boost::serialization::serialize_adl<Archive, T>)
+    #else
     explicit pointer_oserializer() :
         archive_pointer_oserializer<Archive>(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
+    #endif
     {
         // make sure appropriate member function is instantiated
-        basic_oserializer & bos = oserializer<Archive, T>::instantiate();
+        oserializer<Archive, T> & bos =
+            oserializer<Archive, T>::instantiate();
         bos.set_bpos(this);
     }
     //static const pointer_oserializer BOOST_FORCE_INCLUDE_DECL(& instantiate());

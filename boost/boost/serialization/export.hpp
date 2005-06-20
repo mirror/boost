@@ -154,22 +154,10 @@ template<class T>
 guid_initializer<T>::guid_initializer(const char *key){
     if(NULL != key)
         key_register(key);
-    #if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
-    boost::serialization::access::static_data_registration_workaround<T>();
-    #endif
 }
 
 template<class T>
 const guid_initializer<T> guid_initializer<T>::instance;
-
-struct static_data_registration_workaround_noop_archive {
-    struct is_loading { typedef mpl::bool_<false> type; BOOST_STATIC_CONSTANT(bool, value=false); };
-    struct is_saving { typedef mpl::bool_<false> type; BOOST_STATIC_CONSTANT(bool, value=false); };
-    template<class T> inline const void * register_type(const T * t = NULL) { return NULL; }
-    template<class T> inline static_data_registration_workaround_noop_archive & operator<<(T &) { return *this; }
-    template<class T> inline static_data_registration_workaround_noop_archive & operator>>(T &) { return *this; }
-    template<class T> inline static_data_registration_workaround_noop_archive & operator&(T &) { return *this; }
-};
 
 } // namespace detail
 } // namespace archive
@@ -192,20 +180,6 @@ boost_template_instantiate(T &, ASeq &){
 }
 } } }
 
-#if BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND
-#define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T) \
-    namespace boost {                                                     \
-    namespace serialization {                                             \
-    namespace detail {                                                    \
-    namespace {                                                           \
-        void ( * export_ ## T )()                                         \
-            = & static_data_registration_workaround<T>;                   \
-    } } } }                                                               \
-    /**/
-#else
-#define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T)
-#endif
-
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
     namespace boost {                                            \
     namespace archive {                                          \
@@ -217,7 +191,6 @@ boost_template_instantiate(T &, ASeq &){
     BOOST_DLLEXPORT std::pair<const void *, const void *>        \
     boost_template_instantiate(T &, ASEQ &);                     \
     } } }                                                        \
-    BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_EXPORT_WORKAROUND(T)
     /**/
 
 #endif

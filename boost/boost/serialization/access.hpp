@@ -43,18 +43,6 @@ namespace detail {
     struct member_loader;
 } // namespace detail
 
-namespace detail {
-    struct static_data_registration_workaround_noop_archive
-    {
-        struct is_loading { typedef mpl::bool_<false> type; BOOST_STATIC_CONSTANT(bool, value=false); };
-        struct is_saving { typedef mpl::bool_<false> type; BOOST_STATIC_CONSTANT(bool, value=false); };
-        template<class T> inline const void * register_type(const T * t = NULL) { return NULL; }
-        template<class T> inline static_data_registration_workaround_noop_archive & operator<<(T &) { return *this; }
-        template<class T> inline static_data_registration_workaround_noop_archive & operator>>(T &) { return *this; }
-        template<class T> inline static_data_registration_workaround_noop_archive & operator&(T &) { return *this; }
-    };
-}
-
 // use an "accessor class so that we can use: 
 // "friend class boost::serialization::access;" 
 // in any serialized class to permit clean, safe access to private class members
@@ -133,13 +121,6 @@ public:
         // Note the :: before the placement new. Required if the
         // class doesn't have a class-specific placement new defined.
         ::new(t)T;
-    }
-    
-    template<class T>
-    static inline void static_data_registration_workaround()
-    {
-        static void (* M)(detail::static_data_registration_workaround_noop_archive &, T &, const unsigned int)
-            = &boost::serialization::serialize_adl;
     }
 };
 

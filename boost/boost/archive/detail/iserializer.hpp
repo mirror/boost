@@ -178,12 +178,24 @@ private:
     ) const BOOST_USED;
 public:
     static const pointer_iserializer instance;
+    // at least one compiler (CW) seems to require that serialize_adl
+    // be explicitly instantiated. Still under investigation. 
+    #if !defined(__BORLANDC__)
+    void (* const m)(Archive &, T &, const unsigned);
+    explicit pointer_iserializer() :
+        archive_pointer_iserializer<Archive>(
+            * boost::serialization::type_info_implementation<T>::type::get_instance()
+        ),
+        m(boost::serialization::serialize_adl<Archive, T>)
+    #else
     explicit pointer_iserializer() :
         archive_pointer_iserializer<Archive>(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
+    #endif
     {
-        basic_iserializer & bis = iserializer<Archive, T>::instantiate();
+        iserializer<Archive, T> & bis =
+            iserializer<Archive, T>::instantiate();
         bis.set_bpis(this);
     }
     static BOOST_DLLEXPORT const pointer_iserializer & instantiate() BOOST_USED;
