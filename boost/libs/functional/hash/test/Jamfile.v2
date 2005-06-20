@@ -24,4 +24,5 @@ test-suite functional/hash
         [ run hash_deque_test.cpp framework ]
         [ run hash_set_test.cpp framework ]
         [ run hash_map_test.cpp framework ]
+        [ run link_test.cpp link_test_2.cpp ]
     ;
