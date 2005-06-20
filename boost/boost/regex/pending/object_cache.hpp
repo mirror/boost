@@ -34,13 +34,13 @@ namespace boost{
 template <class Key, class Object>
 class object_cache
 {
+public:
    typedef std::pair< ::boost::shared_ptr<Object>, Key const*> value_type;
    typedef std::list<value_type> list_type;
    typedef typename list_type::iterator list_iterator;
    typedef std::map<Key, list_iterator> map_type;
    typedef typename map_type::iterator map_iterator;
    typedef typename list_type::size_type size_type;
-public:
    static boost::shared_ptr<Object> get(const Key& k, size_type max_cache_size);
 
 private:
