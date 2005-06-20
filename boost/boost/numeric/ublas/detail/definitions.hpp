@@ -88,16 +88,16 @@ namespace boost { namespace numeric { namespace ublas {
         return noalias_proxy<const C> (lvalue);
     }
 
-    // Future compatible syntax where lvalue is known to have an alias on the RHS
-    //  alias(lhs) = rhs_expression
+    // Possible future compatible syntax where lvalue possible has an unsafe alias on the RHS
+    //  safe(lhs) = rhs_expression
     template <class C>
     BOOST_UBLAS_INLINE
-    C& alias (C& lvalue) {
+    C& safe (C& lvalue) {
         return lvalue;
     }
     template <class C>
     BOOST_UBLAS_INLINE
-    const C& alias (const C& lvalue) {
+    const C& safe (const C& lvalue) {
         return lvalue;
     }
 
