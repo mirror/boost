@@ -21,7 +21,7 @@
 #ifndef BOOST_UBLAS_OPERATION_H
 #define BOOST_UBLAS_OPERATION_H
 
-#include <boost/numeric/ublas/traits.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
 
 // axpy-based products
 // Alexei Novakov had a lot of ideas to improve these. Thanks.
