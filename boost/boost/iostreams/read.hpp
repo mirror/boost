@@ -121,7 +121,7 @@ struct read_device_impl<istream_tag> {
     {
         typedef typename char_type_of<T>::type          char_type;
         typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
-        return !traits_type::eq_int_type( t.rdbuf()->putback(c),
+        return !traits_type::eq_int_type( t.rdbuf()->sputbackc(c),
                                           traits_type::eof() );
     }
 };
