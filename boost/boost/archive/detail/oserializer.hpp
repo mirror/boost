@@ -166,28 +166,12 @@ private:
         const void * x
     ) const BOOST_USED ;
 public:
-    static const pointer_oserializer instance;
-    // at least one compiler (CW) seems to require that serialize_adl
-    // be explicitly instantiated.
     #if !defined(__BORLANDC__)
     void (* const m)(Archive &, T &, const unsigned);
-    explicit pointer_oserializer() :
-        archive_pointer_oserializer<Archive>(
-            * boost::serialization::type_info_implementation<T>::type::get_instance()
-        ),
-        m(boost::serialization::serialize_adl<Archive, T>)
-    #else
-    explicit pointer_oserializer() :
-        archive_pointer_oserializer<Archive>(
-            * boost::serialization::type_info_implementation<T>::type::get_instance()
-        )
+    boost::serialization::extended_type_info * (* e)();
     #endif
-    {
-        // make sure appropriate member function is instantiated
-        oserializer<Archive, T> & bos =
-            oserializer<Archive, T>::instantiate();
-        bos.set_bpos(this);
-    }
+    explicit BOOST_DLLEXPORT pointer_oserializer() BOOST_USED;
+    static const pointer_oserializer instance;
     //static const pointer_oserializer BOOST_FORCE_INCLUDE_DECL(& instantiate());
     static BOOST_DLLEXPORT const pointer_oserializer & instantiate() BOOST_USED;
     virtual ~pointer_oserializer(){}
@@ -217,6 +201,27 @@ BOOST_DLLEXPORT void pointer_oserializer<T, Archive>::save_object_ptr(
         file_version
     );
     ar_impl << boost::serialization::make_nvp(NULL, * t);
+}
+
+template<class T, class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DLLEXPORT pointer_oserializer<T, Archive>::pointer_oserializer() :
+    archive_pointer_oserializer<Archive>(
+        * boost::serialization::type_info_implementation<T>::type::get_instance()
+    ),
+    m(boost::serialization::serialize_adl<Archive, T>),
+    e(boost::serialization::type_info_implementation<T>::type::get_instance)
+#else
+pointer_oserializer<T, Archive>::pointer_oserializer() :
+    archive_pointer_oserializer<Archive>(
+        * boost::serialization::type_info_implementation<T>::type::get_instance()
+    )
+#endif
+{
+    // make sure appropriate member function is instantiated
+    oserializer<Archive, T> & bos =
+        oserializer<Archive, T>::instantiate();
+    bos.set_bpos(this);
 }
 
 template<class Archive, class T>

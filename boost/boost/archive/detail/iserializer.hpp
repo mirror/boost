@@ -182,22 +182,9 @@ public:
     // be explicitly instantiated. Still under investigation. 
     #if !defined(__BORLANDC__)
     void (* const m)(Archive &, T &, const unsigned);
-    explicit pointer_iserializer() :
-        archive_pointer_iserializer<Archive>(
-            * boost::serialization::type_info_implementation<T>::type::get_instance()
-        ),
-        m(boost::serialization::serialize_adl<Archive, T>)
-    #else
-    explicit pointer_iserializer() :
-        archive_pointer_iserializer<Archive>(
-            * boost::serialization::type_info_implementation<T>::type::get_instance()
-        )
+    boost::serialization::extended_type_info * (* e)();
     #endif
-    {
-        iserializer<Archive, T> & bis =
-            iserializer<Archive, T>::instantiate();
-        bis.set_bpis(this);
-    }
+    explicit BOOST_DLLEXPORT pointer_iserializer() BOOST_USED;
     static BOOST_DLLEXPORT const pointer_iserializer & instantiate() BOOST_USED;
     virtual ~pointer_iserializer(){};
 };
@@ -308,6 +295,26 @@ BOOST_DLLEXPORT void pointer_iserializer<T, Archive>::load_object_ptr(
     );
     ar_impl >> boost::serialization::make_nvp(NULL, * t);
     ap.release();
+}
+
+template<class T, class Archive>
+#if !defined(__BORLANDC__)
+BOOST_DLLEXPORT pointer_iserializer<T, Archive>::pointer_iserializer() :
+    archive_pointer_iserializer<Archive>(
+        * boost::serialization::type_info_implementation<T>::type::get_instance()
+    ),
+    m(boost::serialization::serialize_adl<Archive, T>),
+    e(boost::serialization::type_info_implementation<T>::type::get_instance)
+#else
+pointer_iserializer<T, Archive>::pointer_iserializer() :
+    archive_pointer_iserializer<Archive>(
+        * boost::serialization::type_info_implementation<T>::type::get_instance()
+    )
+#endif
+{
+    iserializer<Archive, T> & bis =
+        iserializer<Archive, T>::instantiate();
+    bis.set_bpis(this);
 }
 
 template<class Archive, class T>
