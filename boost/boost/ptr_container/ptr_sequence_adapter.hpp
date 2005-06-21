@@ -218,33 +218,33 @@ namespace ptr_container_detail
         
         reference front()        
         { 
-            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
+            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             return *this->begin(); 
         }
 
         const_reference front() const  
         {
-            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
+            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             return *this->begin(); 
         }
 
         reference back()
         {
-            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'back()' on empty container" );
+            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             return *--this->end(); 
         }
 
         const_reference back() const
         {
-            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             if( this->empty() )
                 throw bad_ptr_container_operation( "accessing 'back()' on empty container" );
+            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             return *--this->end(); 
         }
 
