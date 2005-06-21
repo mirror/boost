@@ -45,6 +45,7 @@ public:
     virtual A::~A(){--count;}   // default destructor
 };
 
+BOOST_SERIALIZATION_SHARED_PTR(A)
 
 /////////////////
 // ADDITION BY DT
@@ -62,6 +63,8 @@ public:
     B::B() : A() {};
     virtual B::~B() {};
 };
+
+BOOST_SERIALIZATION_SHARED_PTR(B)
 
 /////////////////
 
