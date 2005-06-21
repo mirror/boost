@@ -68,6 +68,17 @@
         </row>
         <row>
           <entry>Bug Fix</entry>
+          <entry>Fixed a bug in serialization code where special values 
+                (not-a-date-time, infinities, etc) for
+                ptime, time_duration would not read back correctly from an archive.  
+                The output serialization code wrote subfields such
+                as time_duration.seconds() which are invalid for special values and 
+                thus undefined values.  Thus when read back the values could cause
+                strange behavior including execeptions on construction.
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
           <entry>Fixed multiple warnings generated with various platforms/compilers.
           </entry>
         </row>
