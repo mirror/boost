@@ -54,13 +54,13 @@ namespace detail {
 // forward template declarations
 class basic_pointer_iserializer;
 template<class Archive, class T>
-const basic_pointer_iserializer &
-instantiate_pointer_iserializer(Archive * ar, T *);
+BOOST_DLLEXPORT const basic_pointer_iserializer &
+instantiate_pointer_iserializer(Archive * ar, T *) BOOST_USED;
 
 class basic_pointer_oserializer;
 template<class Archive, class T>
-const basic_pointer_oserializer &
-instantiate_pointer_oserializer(Archive * ar, T *);
+BOOST_DLLEXPORT const basic_pointer_oserializer &
+instantiate_pointer_oserializer(Archive * ar, T *) BOOST_USED;
 
 namespace export_impl
 {
@@ -185,8 +185,8 @@ boost_template_instantiate(T &, ASeq &){
     namespace archive {                                          \
     namespace detail {                                           \
     template<>                                                   \
-    const guid_initializer<T>                                    \
-        guid_initializer<T>::instance(K);                        \
+    const guid_initializer< T >                                  \
+        guid_initializer< T >::instance(K);                      \
     template                                                     \
     BOOST_DLLEXPORT std::pair<const void *, const void *>        \
     boost_template_instantiate(T &, ASEQ &);                     \
@@ -199,7 +199,7 @@ boost_template_instantiate(T &, ASeq &){
 // need to export it.
 #define BOOST_CLASS_EXPORT_CHECK(T)                              \
     BOOST_STATIC_WARNING(                                        \
-        boost::serialization::type_info_implementation<T>        \
+        boost::serialization::type_info_implementation< T >      \
             ::type::is_polymorphic::value                        \
     );                                                           \
     /**/
@@ -224,7 +224,7 @@ boost_template_instantiate(T &, ASeq &){
     BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(                        \
         T,                                                       \
         BOOST_PP_STRINGIZE(T),                                   \
-        boost::archive::detail::known_archive_types::type \
+        boost::archive::detail::known_archive_types::type        \
     )                                                            \
     /**/
 

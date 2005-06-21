@@ -29,7 +29,7 @@
         BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
 #else
     #define BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)        \
-        extended_type_info_null<T>
+        extended_type_info_null< T >
 #endif
 
 #include <boost/static_assert.hpp>

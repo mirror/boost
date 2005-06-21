@@ -100,7 +100,7 @@ inline bool operator>=(implementation_level<T> t, enum level_type l)
     namespace boost {                                    \
     namespace serialization {                            \
     template <>                                          \
-    struct implementation_level<T>                       \
+    struct implementation_level< T >                     \
     {                                                    \
         typedef mpl::integral_c_tag tag;                 \
         typedef mpl::int_< E > type;                     \

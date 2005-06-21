@@ -47,7 +47,7 @@
 #define BOOST_IS_ABSTRACT(T)                   \
 namespace boost {                              \
 template<>                                     \
-struct is_abstract<T> {                        \
+struct is_abstract< T > {                      \
     BOOST_STATIC_CONSTANT(bool, value = true); \
 };                                             \
 } // namespace boost

@@ -31,7 +31,7 @@
 
 #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(T, C)          \
 template<>                                                          \
-struct implementation_level<C<T> > {                                \
+struct implementation_level< C < T > > {                            \
     typedef mpl::integral_c_tag tag;                                \
     typedef mpl::int_<object_serializable> type;                    \
     BOOST_STATIC_CONSTANT(int, value = object_serializable);        \
