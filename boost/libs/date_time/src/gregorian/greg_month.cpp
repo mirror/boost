@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2004 CrystalClear Software, Inc.
+/* Copyright (c) 2002-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -21,6 +21,7 @@
 #include "boost/date_time/gregorian/formatters.hpp"
 #endif
 #include "boost/date_time/date_parsing.hpp"
+#include "boost/date_time/gregorian/parsers.hpp"
 
 #include "greg_names.hpp"
 namespace boost {
@@ -63,6 +64,23 @@ namespace gregorian {
   greg_month::as_long_string()  const 
   {
     return long_month_names[value_-1];
+  }
+ 
+  //! Return special_value from string argument
+  /*! Return special_value from string argument. If argument is 
+   * not one of the special value names (defined in names.hpp), 
+   * return 'not_special' */
+  special_values special_value_from_string(const std::string& s) {
+    short i = date_time::find_match(special_value_names,
+                                    special_value_names,
+                                    date_time::NumSpecialValues,
+                                    s);
+    if(i > date_time::NumSpecialValues) { // match not found
+      return not_special;
+    }
+    else {
+      return static_cast<special_values>(i);
+    }
   }
 
 

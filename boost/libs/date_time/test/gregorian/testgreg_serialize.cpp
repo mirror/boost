@@ -38,7 +38,10 @@ int main(){
 #endif
   
   date d(2002,Feb,12);
+  date sv_d1(not_a_date_time);
+  date sv_d2(pos_infin);
   date_duration dd(11);
+  date_duration sv_dd(neg_infin);
   date_period dp(d,dd);
   greg_month gm(Feb);
   greg_day gd(14);
@@ -54,7 +57,10 @@ int main(){
 #if defined(DATE_TIME_XML_SERIALIZE)
   try{
     save_to(oa, BOOST_SERIALIZATION_NVP(d));
+    save_to(oa, BOOST_SERIALIZATION_NVP(sv_d1));
+    save_to(oa, BOOST_SERIALIZATION_NVP(sv_d2));
     save_to(oa, BOOST_SERIALIZATION_NVP(dd));
+    save_to(oa, BOOST_SERIALIZATION_NVP(sv_dd));
     save_to(oa, BOOST_SERIALIZATION_NVP(dp));
     save_to(oa, BOOST_SERIALIZATION_NVP(gm));
     save_to(oa, BOOST_SERIALIZATION_NVP(gd));
@@ -74,7 +80,10 @@ int main(){
 #else
   try{
     save_to(oa, d);
+    save_to(oa, sv_d1);
+    save_to(oa, sv_d2);
     save_to(oa, dd);
+    save_to(oa, sv_dd);
     save_to(oa, dp);
     save_to(oa, gm);
     save_to(oa, gd);
@@ -103,7 +112,10 @@ int main(){
   
   // read from the archive
   date d2(not_a_date_time);
+  date sv_d3(min_date_time);
+  date sv_d4(min_date_time);
   date_duration dd2(not_a_date_time);
+  date_duration sv_dd2(0);
   date_period dp2(date(2000,Jan,1),date_duration(1));
   greg_month gm2(Jan);
   greg_day gd2(1);
@@ -117,7 +129,10 @@ int main(){
 #if defined(DATE_TIME_XML_SERIALIZE)
   try{
     ia >> BOOST_SERIALIZATION_NVP(d2);
+    ia >> BOOST_SERIALIZATION_NVP(sv_d3);
+    ia >> BOOST_SERIALIZATION_NVP(sv_d4);
     ia >> BOOST_SERIALIZATION_NVP(dd2);
+    ia >> BOOST_SERIALIZATION_NVP(sv_dd2);
     ia >> BOOST_SERIALIZATION_NVP(dp2);
     ia >> BOOST_SERIALIZATION_NVP(gm2);
     ia >> BOOST_SERIALIZATION_NVP(gd2);
@@ -137,7 +152,10 @@ int main(){
 #else
   try{
     ia >> d2;
+    ia >> sv_d3;
+    ia >> sv_d4;
     ia >> dd2;
+    ia >> sv_dd2;
     ia >> dp2;
     ia >> gm2;
     ia >> gd2;
@@ -158,7 +176,10 @@ int main(){
   ifs.close();
   
   check("date", d == d2);
+  check("special_value date (nadt)", sv_d1 == sv_d3);
+  check("special_value date (pos_infin)", sv_d2 == sv_d4);
   check("date_duration", dd == dd2);
+  check("special_value date_duration (neg_infin)", sv_dd == sv_dd2);
   check("date_period", dp == dp2);
   check("greg_month", gm == gm2);
   check("greg_day", gd == gd2);

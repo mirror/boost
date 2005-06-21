@@ -37,14 +37,23 @@ void save(Archive & ar,
           const posix_time::time_duration& td, 
           unsigned int version)
 {
-  typename posix_time::time_duration::hour_type h = td.hours();
-  typename posix_time::time_duration::min_type m = td.minutes();
-  typename posix_time::time_duration::sec_type s = td.seconds();
-  typename posix_time::time_duration::fractional_seconds_type fs = td.fractional_seconds();
-  ar & make_nvp("time_duration_hours", h);
-  ar & make_nvp("time_duration_minutes", m);
-  ar & make_nvp("time_duration_seconds", s);
-  ar & make_nvp("time_duration_fractional_seconds", fs);
+  // serialize a bool so we know how to read this back in later
+  bool is_special = td.is_special();
+  ar & make_nvp("is_special", is_special);
+  if(is_special) {
+    std::string s = to_simple_string(td);
+    ar & make_nvp("sv_time_duration", s);
+  }
+  else {
+    typename posix_time::time_duration::hour_type h = td.hours();
+    typename posix_time::time_duration::min_type m = td.minutes();
+    typename posix_time::time_duration::sec_type s = td.seconds();
+    typename posix_time::time_duration::fractional_seconds_type fs = td.fractional_seconds();
+    ar & make_nvp("time_duration_hours", h);
+    ar & make_nvp("time_duration_minutes", m);
+    ar & make_nvp("time_duration_seconds", s);
+    ar & make_nvp("time_duration_fractional_seconds", fs);
+  }
 }
 
 //! Function to load posix_time::time_duration objects using serialization lib
@@ -57,15 +66,25 @@ void load(Archive & ar,
           posix_time::time_duration & td, 
           unsigned int version)
 {
-  typename posix_time::time_duration::hour_type h(0);
-  typename posix_time::time_duration::min_type m(0);
-  typename posix_time::time_duration::sec_type s(0);
-  typename posix_time::time_duration::fractional_seconds_type fs(0);
-  ar & make_nvp("time_duration_hours", h);
-  ar & make_nvp("time_duration_minutes", m);
-  ar & make_nvp("time_duration_seconds", s);
-  ar & make_nvp("time_duration_fractional_seconds", fs);
-  td = posix_time::time_duration(h,m,s,fs);
+  bool is_special = false;
+  ar & make_nvp("is_special", is_special);
+  if(is_special) {
+    std::string s;
+    ar & make_nvp("sv_time_duration", s);
+    posix_time::special_values sv = gregorian::special_value_from_string(s);
+    td = posix_time::time_duration(sv);
+  }
+  else {
+    typename posix_time::time_duration::hour_type h(0);
+    typename posix_time::time_duration::min_type m(0);
+    typename posix_time::time_duration::sec_type s(0);
+    typename posix_time::time_duration::fractional_seconds_type fs(0);
+    ar & make_nvp("time_duration_hours", h);
+    ar & make_nvp("time_duration_minutes", m);
+    ar & make_nvp("time_duration_seconds", s);
+    ar & make_nvp("time_duration_fractional_seconds", fs);
+    td = posix_time::time_duration(h,m,s,fs);
+  }
 }
 
 // no load_construct_data function provided as time_duration provides a
@@ -85,9 +104,11 @@ void save(Archive & ar,
   // from_iso_string does not include fractional seconds
   // therefore date and time_duration are used
   typename posix_time::ptime::date_type d = pt.date();
-  typename posix_time::ptime::time_duration_type td = pt.time_of_day();
   ar & make_nvp("ptime_date", d);
-  ar & make_nvp("ptime_time_duration", td);
+  if(!pt.is_special()) {
+    typename posix_time::ptime::time_duration_type td = pt.time_of_day();
+    ar & make_nvp("ptime_time_duration", td);
+  }
 }
 
 //! Function to load posix_time::ptime objects using serialization lib
@@ -104,8 +125,14 @@ void load(Archive & ar,
   typename posix_time::ptime::date_type d(posix_time::not_a_date_time);
   typename posix_time::ptime::time_duration_type td;
   ar & make_nvp("ptime_date", d);
-  ar & make_nvp("ptime_time_duration", td);
-  pt = boost::posix_time::ptime(d,td);
+  if(!d.is_special()) {
+    ar & make_nvp("ptime_time_duration", td);
+    pt = boost::posix_time::ptime(d,td);
+  }
+  else {
+    pt = boost::posix_time::ptime(d.as_special());
+  }
+    
 }
 
 //!override needed b/c no default constructor

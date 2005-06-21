@@ -34,12 +34,18 @@ int main(){
 #endif
   ptime pt(d, td);
   time_period tp(pt, ptime(date(2002, Oct, 31), hours(19)));
+  ptime sv_pt1(not_a_date_time);
+  ptime sv_pt2(pos_infin);
+  time_duration sv_td(neg_infin);
 
   // for loading in from archive
   date d2(not_a_date_time);
   time_duration td2(1,0,0);
   ptime pt2(d2, td2);
   time_period tp2(pt2, hours(1));
+  ptime sv_pt3(min_date_time);
+  ptime sv_pt4(min_date_time);
+  time_duration sv_td2(0,0,0);
   
   std::ofstream ofs("tmp_file");
 
@@ -56,12 +62,18 @@ int main(){
   try{
 #if defined(DATE_TIME_XML_SERIALIZE)
     save_to(oa, BOOST_SERIALIZATION_NVP(pt));
+    save_to(oa, BOOST_SERIALIZATION_NVP(sv_pt1));
+    save_to(oa, BOOST_SERIALIZATION_NVP(sv_pt2));
     save_to(oa, BOOST_SERIALIZATION_NVP(tp));
     save_to(oa, BOOST_SERIALIZATION_NVP(td));
+    save_to(oa, BOOST_SERIALIZATION_NVP(sv_td));
 #else
     save_to(oa, pt);
+    save_to(oa, sv_pt1);
+    save_to(oa, sv_pt2);
     save_to(oa, tp);
     save_to(oa, td);
+    save_to(oa, sv_td);
 #endif // DATE_TIME_XML_SERIALIZE
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
@@ -82,12 +94,18 @@ int main(){
   try{
 #if defined(DATE_TIME_XML_SERIALIZE)
     ia >> BOOST_SERIALIZATION_NVP(pt2);
+    ia >> BOOST_SERIALIZATION_NVP(sv_pt3);
+    ia >> BOOST_SERIALIZATION_NVP(sv_pt4);
     ia >> BOOST_SERIALIZATION_NVP(tp2);
     ia >> BOOST_SERIALIZATION_NVP(td2);
+    ia >> BOOST_SERIALIZATION_NVP(sv_td2);
 #else
     ia >> pt2;
+    ia >> sv_pt3;
+    ia >> sv_pt4;
     ia >> tp2;
     ia >> td2;
+    ia >> sv_td2;
 #endif // DATE_TIME_XML_SERIALIZE
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
@@ -99,8 +117,11 @@ int main(){
   ifs.close();
  
   check("ptime", pt == pt2);
+  check("special_values ptime (nadt)", sv_pt1 == sv_pt3);
+  check("special_values ptime (pos_infin)", sv_pt2 == sv_pt4);
   check("time_period", tp == tp2);
   check("time_duration", td == td2);
+  check("special_values time_duration (neg_infin)", sv_td == sv_td2);
 
   return printTestStats();
 }
