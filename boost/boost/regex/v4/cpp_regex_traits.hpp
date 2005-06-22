@@ -395,9 +395,9 @@ public:
    typedef typename cpp_regex_traits<charT>::char_class_type char_class_type;
    typedef typename std::ctype<charT>::mask                  native_mask_type;
 #ifndef BOOST_REGEX_BUGGY_CTYPE_FACET
-   BOOST_STATIC_CONSTANT(char_class_type, mask_blank = 1u << 16);
-   BOOST_STATIC_CONSTANT(char_class_type, mask_word = 1u << 17);
-   BOOST_STATIC_CONSTANT(char_class_type, mask_unicode = 1u << 18);
+   BOOST_STATIC_CONSTANT(char_class_type, mask_blank = 1u << 24);
+   BOOST_STATIC_CONSTANT(char_class_type, mask_word = 1u << 25);
+   BOOST_STATIC_CONSTANT(char_class_type, mask_unicode = 1u << 26);
 #endif
 
    typedef std::basic_string<charT> string_type;
