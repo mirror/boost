@@ -15,8 +15,8 @@ rule test-iostreams ( sources * : requirements * ) {
             : # command
             : # input files
             : # build requirements
-                <toolset>msvc,<stdlib>stlport:<link-runtime>static
-                <toolset>cw-9.3,<os>darwin:<link-runtime>static
+                <toolset>msvc,<stdlib>stlport:<runtime-link>static
+                <toolset>cw-9.3,<os>darwin:<runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 $(requirements)
         ] ;
