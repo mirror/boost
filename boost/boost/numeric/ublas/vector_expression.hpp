@@ -18,7 +18,6 @@
 #define VECTOR_EXPRESSION_H
 
 #include <boost/numeric/ublas/exception.hpp>
-#include <boost/numeric/ublas/detail/iterator.hpp>
 #include <boost/numeric/ublas/traits.hpp>
 #include <boost/numeric/ublas/functional.hpp>
 
