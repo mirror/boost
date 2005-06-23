@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta name="generator" content=
-    "HTML Tidy for Cygwin (vers 1st April 2002), see www.w3.org">
+    "Microsoft FrontPage 5.0">
     <meta http-equiv="Content-Type" content=
     "text/html; charset=windows-1252">
     <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
@@ -19,10 +19,9 @@
 
     <h2><a name="Cast Functions">Cast Functions</a></h2>
 
-    <p>The header <a href="../../boost/cast.hpp">boost/cast.hpp</a> provides
-    <a href="#Polymorphic_cast"><code>polymorphic_cast</code></a>, <a href=
-    "#Polymorphic_cast"><code>polymorphic_downcast</code></a>, and <a href=
-    "#numeric_cast"><code>numeric_cast</code></a> function templates designed to
+    <p>The header <a href="../../boost/cast.hpp">boost/cast.hpp</a> provides <code>
+    <a href="#Polymorphic_cast">polymorphic_cast</a> and</code> <a href=
+    "#Polymorphic_cast"><code>polymorphic_downcast</code></a> function templates designed to
     complement the C++ built-in casts.</p>
 
     <p>The program <a href="cast_test.cpp">cast_test.cpp</a> can be used to
@@ -62,9 +61,8 @@
     <p>A <code>polymorphic_downcast</code> should be used for
     downcasts that you are certain should succeed.  Error checking is
     only performed in translation units where <code>NDEBUG</code> is
-    not defined, via 
-<pre>
-  assert( dynamic_cast&lt;Derived&gt;(x) == x )
+    not defined, via
+<pre>  assert( dynamic_cast&lt;Derived&gt;(x) == x )
 </pre> where <code>x</code> is the source pointer.  This approach
     ensures that not only is a non-zero pointer returned, but also
     that it is correct in the presence of multiple inheritance.
@@ -86,8 +84,7 @@
     <h3>polymorphic_cast and polymorphic_downcast synopsis</h3>
 
     <blockquote>
-<pre>
-namespace boost {
+<pre>namespace boost {
 
 template &lt;class Derived, class Base&gt;
 inline Derived polymorphic_cast(Base* x);
@@ -106,8 +103,7 @@ inline Derived polymorphic_downcast(Base* x);
     <h3>polymorphic_downcast example</h3>
 
     <blockquote>
-<pre>
-#include &lt;boost/cast.hpp&gt;
+<pre>#include &lt;boost/cast.hpp&gt;
 ...
 class Fruit { public: virtual ~Fruit(){}; ... };
 class Banana : public Fruit { ... };
@@ -119,85 +115,20 @@ void f( Fruit * fruit ) {
 </pre>
     </blockquote>
 
-    <h3><a name="numeric_cast">numeric_cast</a></h3>
-
-    <p>A <code>static_cast</code> or implicit conversion will not detect failure to
-    preserve range for numeric casts. The <code>numeric_cast</code> function
-    templates are similar to <code>static_cast</code> and certain (dubious)
-    implicit conversions in this respect, except that they detect loss of
-    numeric range. An exception is thrown when a runtime value-preservation
-    check fails.</p>
-
-    <p>The requirements on the argument and result types are:</p>
-
-    <blockquote>
-      <ul>
-        <li>Both argument and result types are CopyConstructible [ISO Std
-        20.1.3].</li>
-
-        <li>Both argument and result types are Numeric, defined by
-        <code>std::numeric_limits&lt;&gt;::is_specialized</code> being
-        true.</li>
-
-        <li>The argument can be converted to the result type using
-        <code>static_cast</code>.</li>
-      </ul>
-    </blockquote>
-
-    <h3>numeric_cast synopsis</h3>
-
-    <blockquote>
-<pre>
-namespace boost {
-
-class bad_numeric_cast : public std::bad_cast {...};
-
-template&lt;typename Target, typename Source&gt;
-  inline Target numeric_cast(Source arg);
-    // Throws:  bad_numeric_cast unless, in converting arg from Source to Target,
-    //          there is no loss of negative range, and no underflow, and no
-    //          overflow, as determined by std::numeric_limits
-    // Returns: static_cast&lt;Target&gt;(arg)
-
-}
-</pre>
-    </blockquote>
-
-    <h3>numeric_cast example</h3>
-
-    <blockquote>
-<pre>
-#include &lt;boost/cast.hpp&gt;
-using namespace boost::cast;
-
-void ariane(double vx)
-{
-    ...
-    unsigned short dx = numeric_cast&lt;unsigned short&gt;(vx);
-    ...
-}
-</pre>
-    </blockquote>
-
-    <h3>numeric_cast rationale</h3>
-
-    <p>The form of the throws condition is specified so that != is not a
-    required operation.</p>
-
     <h3>History</h3>
 
     <p><code>polymorphic_cast</code> was suggested by Bjarne Stroustrup in "The C++
     Programming Language".<br>
      <code>polymorphic_downcast</code> was contributed by <a href=
     "../../people/dave_abrahams.htm">Dave Abrahams</a>.<code><br>
-     numeric_cast</code> was contributed by <a href=
-    "../../people/kevlin_henney.htm">Kevlin Henney</a>.</p>
+     An old
+     numeric_cast</code> that was contributed by <a href=
+    "../../people/kevlin_henney.htm">Kevlin Henney</a> is now superseeded by the <a href="../numeric/conversion/doc/index.html">Boost Numeric Conversion Library</a></p>
     <hr>
 
-    <p>Revised 
+    <p>Revised
     <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan
-                    -->06 January, 2001 
-    <!--webbot bot="Timestamp" endspan i-checksum="38320"
+                    -->June 23, 2005<!--webbot bot="Timestamp" endspan i-checksum="30348"
                     --></p>
 
     <p>&copy; Copyright boost.org 1999. Permission to copy, use, modify, sell
@@ -207,4 +138,3 @@ void ariane(double vx)
     purpose.</p>
   </body>
 </html>
-

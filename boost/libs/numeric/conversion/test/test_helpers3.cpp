@@ -29,8 +29,8 @@ struct ConversionInstance
 
   typedef typename Converter::traits traits ;
   typedef typename traits::target_type target_type ;
-  typedef typename traits::source_type source_type ; 
-  
+  typedef typename traits::source_type source_type ;
+
   ConversionInstance ( result_type a_result, argument_type a_source, PostCondition a_post)
     :
     source(a_source),
@@ -62,7 +62,7 @@ void test_conv_base( Instance const& conv )
   typedef typename Instance::argument_type argument_type ;
   typedef typename Instance::result_type   result_type   ;
   typedef typename Instance::converter     converter ;
-  
+
   argument_type source = conv.source ;
 
   try
@@ -104,11 +104,11 @@ void test_conv_base( Instance const& conv )
       BOOST_ERROR( conv.to_string() << printable(source) << ") = positive_overflow. Expected:" <<  printable(conv.result) ) ;
     }
   }
-  catch ( boost::numeric::bad_numeric_conversion const& )
+  catch ( boost::numeric::bad_numeric_cast const& )
   {
     if ( conv.post == c_overflow )
     {
-      BOOST_CHECK_MESSAGE( true, conv.to_string() << printable(source) << ") = bad_numeric_conversion, as expected" ) ;
+      BOOST_CHECK_MESSAGE( true, conv.to_string() << printable(source) << ") = bad_numeric_cast, as expected" ) ;
     }
     else
     {

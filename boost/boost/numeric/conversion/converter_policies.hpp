@@ -131,7 +131,7 @@ enum range_check_result
   cPosOverflow = 2
 } ;
 
-class bad_numeric_conversion : public std::bad_cast
+class bad_numeric_cast : public std::bad_cast
 {
   public:
 
@@ -139,14 +139,14 @@ class bad_numeric_conversion : public std::bad_cast
       {  return "bad numeric conversion: overflow"; }
 };
 
-class negative_overflow : public bad_numeric_conversion
+class negative_overflow : public bad_numeric_cast
 {
   public:
 
     virtual const char * what() const throw()
       {  return "bad numeric conversion: negative overflow"; }
 };
-class positive_overflow : public bad_numeric_conversion
+class positive_overflow : public bad_numeric_cast
 {
   public:
 
@@ -170,11 +170,6 @@ struct silent_overflow_handler
   void operator() ( range_check_result ) {} // throw()
 } ;
 
-
-
-
-
-
 template<class Traits>
 struct raw_converter
 {
@@ -189,4 +184,3 @@ struct UseInternalRangeChecker {} ;
 } } // namespace boost::numeric
 
 #endif
-

@@ -63,32 +63,32 @@ int test_main( int argc, char * argv[] )
 
     bool caught_exception = false;
     try { c = numeric_cast<signed char>( large_value ); }
-    catch ( numeric::bad_numeric_conversion )
+    catch ( numeric::bad_numeric_cast )
         { cout<<"caught bad_numeric_cast #1\n"; caught_exception = true; }
     BOOST_CHECK ( caught_exception );
 
     caught_exception = false;
     try { c = numeric_cast<signed char>( large_negative_value ); }
-    catch ( numeric::bad_numeric_conversion )
+    catch ( numeric::bad_numeric_cast )
         { cout<<"caught bad_numeric_cast #2\n"; caught_exception = true; }
     BOOST_CHECK ( caught_exception );
 
     unsigned long ul;
     caught_exception = false;
     try { ul = numeric_cast<unsigned long>( large_negative_value ); }
-    catch ( numeric::bad_numeric_conversion )
+    catch ( numeric::bad_numeric_cast )
         { cout<<"caught bad_numeric_cast #3\n"; caught_exception = true; }
     BOOST_CHECK ( caught_exception );
 
     caught_exception = false;
     try { ul = numeric_cast<unsigned long>( small_negative_value ); }
-    catch ( numeric::bad_numeric_conversion )
+    catch ( numeric::bad_numeric_cast )
         { cout<<"caught bad_numeric_cast #4\n"; caught_exception = true; }
     BOOST_CHECK ( caught_exception );
 
     caught_exception = false;
     try { numeric_cast<int>( DBL_MAX ); }
-    catch ( numeric::bad_numeric_conversion )
+    catch ( numeric::bad_numeric_cast )
         { cout<<"caught bad_numeric_cast #5\n"; caught_exception = true; }
     BOOST_CHECK ( caught_exception );
 

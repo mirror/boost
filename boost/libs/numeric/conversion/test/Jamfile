@@ -19,5 +19,6 @@ DEPENDS all : test ;
      [ run libs/numeric/conversion/test/converter_test.cpp ]
      [ run libs/numeric/conversion/test/udt_support_test.cpp ]
      [ run libs/numeric/conversion/test/numeric_cast_test.cpp ]
+     [ run libs/numeric/conversion/test/udt_example_0.cpp ]
   ;
 }

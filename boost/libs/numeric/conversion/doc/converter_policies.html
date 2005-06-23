@@ -29,7 +29,7 @@ HREF="../../../../boost/numeric/conversion/converter_policies.hpp">boost/numeric
 <LI>class <A HREF="#oh_silent"><CODE>silent_overflow_handler</CODE></A></LI>
 <LI>class <A HREF="#oh_def"><CODE>def_overflow_handler</CODE></A> (Default Policy)</LI>
 <ul>
-<LI>class <A HREF="#bad_numc"><CODE>bad_numeric_conversion</CODE></A></LI>
+<LI>class <CODE> <A HREF="#bad_numc">bad_numeric_cast</A></CODE> <a href="x-note">(see IMPORTANT note)</a></LI>
 <LI>class <A HREF="#negovr"><CODE>negative_overflow</CODE></A></LI>
 <LI>class <A HREF="#posovr"><CODE>positive_overflow</CODE></A></LI>
 </ul>
@@ -111,11 +111,11 @@ library:</P>
 </PRE>
 
 <P>And these are the Exception Classes thrown by the default
-overflow handler</P>
+overflow handler <a href="x-note">(see IMPORTANT note)</a></P>
 <PRE>namespace boost { namespace numeric {
 
 
-  class <a name="bad_numc">bad_numeric_conversion</a> : public std::bad_cast
+  class <a name="bad_numc">bad_numeric_cast</a> : public std::bad_cast
   {
     public:
 
@@ -139,6 +139,18 @@ overflow handler</P>
   };
 } }
 </PRE>
+
+<a name="x-note"><p><b>IMPORTANT RELEASE NOTE for 1.33</b></p></a>
+<blockquote>
+  <p>Previous to boost version 1.33, the exception class <code>bad_numeric_cast</code> was 
+  named <code>bad_numeric_conversion</code>. However, in 1.33, the old function 
+  <code>numeric_cast&lt;&gt;</code> from <code>boost/cast.hpp</code> was completly replaced by the new 
+  <code>numeric_cast&lt;&gt;</code> in <code>boost/numeric/conversion/cast.hpp</code> 
+  (and <code>boost/cast.hpp</code> is including <code>boost/numeric/conversion/cast.hpp</code> now). That old function which 
+  existed in boost for quite some time used the <code>bad_numeric_cast</code> as its 
+  exception type so I decided to avoid backward compatibility problems by adopting it (guessing 
+  that the user base for the old code is wider than for the new code).</p>
+</blockquote>
 
 <HR>
 <H2><A NAME="f2i">Policy <CODE>FloatToIntRounder</CODE></A></H2>

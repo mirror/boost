@@ -434,7 +434,11 @@ void test_converter_as_function_object()
   BOOST_CHECK_MESSAGE(double_to_double_OK, "converter (double,double) as function object");
 }
 
-#define UNOPTIMIZED volatile
+#if BOOST_WORKAROUND(__IBMCPP__, <= 600 ) // VCAPP6
+#  define UNOPTIMIZED
+#else
+#  define UNOPTIMIZED volatile
+#endif
 
 void test_optimizations()
 {
