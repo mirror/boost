@@ -54,6 +54,9 @@ public:
             boost::wave::language_support language)
     :   functor_ptr(lex_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
+#if 0 != __DECCXX_VER
+      , eof()
+#endif // 0 != __DECCXX_VER
     {}
 
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
