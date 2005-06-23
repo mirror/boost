@@ -14,8 +14,6 @@ exe inspect
     :
     inspect.cpp license_check.cpp link_check.cpp long_name_check.cpp tab_check.cpp crlf_check.cpp
     copyright_check.cpp minmax_check.cpp
-    ../../libs/test/src/cpp_main.cpp
-    ../../libs/test/src/execution_monitor.cpp
     /boost/filesystem//boost_filesystem
     /boost/regex//boost_regex
     :
