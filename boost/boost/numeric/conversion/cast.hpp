@@ -22,7 +22,7 @@
 
 #include <boost/detail/workaround.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) // 1200 = VC6
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) || BOOST_WORKAROUND(__BORLANDC__, == 0x561)
 
 #  include<boost/numeric/conversion/detail/old_numeric_cast.hpp>
 
