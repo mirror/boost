@@ -51,7 +51,6 @@
 # include <typeinfo>
 # include <boost/type.hpp>
 # include <boost/limits.hpp>
-# include <boost/detail/select_type.hpp>
 # include <boost/numeric/conversion/converter_policies.hpp>
 
 //  It has been demonstrated numerous times that MSVC 6.0 fails silently at link
@@ -69,6 +68,7 @@
 
 namespace boost
 {
+  using numeric::bad_numeric_cast;
 
 //  LEGACY numeric_cast [only for some old broken compilers] --------------------------------------//
 
