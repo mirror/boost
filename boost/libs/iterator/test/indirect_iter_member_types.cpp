@@ -20,6 +20,7 @@ struct zow { };
 
 struct my_ptr {
   typedef zow const element_type;
+  zow const& operator*() const;
 //  typedef const zow& reference;
 //  typedef const zow* pointer;
 //  typedef void difference_type;
