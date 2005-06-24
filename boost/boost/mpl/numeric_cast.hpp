@@ -26,8 +26,6 @@
 #else
 #   define BOOST_MPL_AUX_NUMERIC_CAST numeric_cast
 #endif
-test
-test
 
 namespace boost { namespace mpl {
 
