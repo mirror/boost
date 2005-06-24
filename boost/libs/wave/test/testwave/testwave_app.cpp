@@ -629,7 +629,7 @@ testwave_app::extract_options(std::string const& filename,
     //  parse the configuration information into a program_options_description
     //  object
         po::variables_map local_vm;
-        cmd_line_utils::read_config_options(options, desc_options, local_vm);
+        cmd_line_utils::read_config_options(debuglevel, options, desc_options, local_vm);
         initialise_options(ctx, local_vm);
     }
     catch (std::exception &e) {
@@ -665,6 +665,10 @@ template <typename Context>
 bool 
 testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 {
+    if (9 == debuglevel) {
+        std::cerr << "initialising options" << std::endl;
+    }
+
 //  initialise the given context from the parsed options
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 // enable C99 mode, if appropriate (implies variadics)
@@ -817,6 +821,10 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
             std::cerr << "option: -n" << max_depth << std::endl;
         }
         ctx.set_max_include_nesting_depth(max_depth);
+    }
+
+    if (9 == debuglevel) {
+        std::cerr << "succeeded to initialise options" << std::endl;
     }
     return true;
 }
