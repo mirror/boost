@@ -1,6 +1,6 @@
 //  boost cast.hpp header file  ----------------------------------------------//
 
-//  (C) Copyright Kevlin Henney and Dave Abrahams 1999. 
+//  (C) Copyright Kevlin Henney and Dave Abrahams 1999.
 //  Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,9 +8,13 @@
 //  See http://www.boost.org/libs/conversion for Documentation.
 
 //  Revision History
-//  02 Apr 01  Removed BOOST_NO_LIMITS workarounds and included 
-//             <boost/limits.hpp> instead (the workaround did not 
-//             actually compile when BOOST_NO_LIMITS was defined in 
+//  23 JUN 05  Code extracted from /boost/cast.hpp into this new header.
+//             Keeps this legacy version of numeric_cast<> for old compilers
+//             wich can't compile the new version in /boost/numeric/conversion/cast.hpp
+//             (Fernando Cacciola)
+//  02 Apr 01  Removed BOOST_NO_LIMITS workarounds and included
+//             <boost/limits.hpp> instead (the workaround did not
+//             actually compile when BOOST_NO_LIMITS was defined in
 //             any case, so we loose nothing). (John Maddock)
 //  21 Jan 01  Undid a bug I introduced yesterday. numeric_cast<> never
 //             worked with stock GCC; trying to get it to do that broke
@@ -26,14 +30,14 @@
 //             (Dave Abrahams)
 //  30 Jun 00  More MSVC6 wordarounds.  See comments below.  (Dave Abrahams)
 //  28 Jun 00  Removed implicit_cast<>.  See comment below. (Beman Dawes)
-//  27 Jun 00  More MSVC6 workarounds 
+//  27 Jun 00  More MSVC6 workarounds
 //  15 Jun 00  Add workarounds for MSVC6
 //   2 Feb 00  Remove bad_numeric_cast ";" syntax error (Doncho Angelov)
 //  26 Jan 00  Add missing throw() to bad_numeric_cast::what(0 (Adam Levar)
 //  29 Dec 99  Change using declarations so usages in other namespaces work
 //             correctly (Dave Abrahams)
 //  23 Sep 99  Change polymorphic_downcast assert to also detect M.I. errors
-//             as suggested Darin Adler and improved by Valentin Bonnard.  
+//             as suggested Darin Adler and improved by Valentin Bonnard.
 //   2 Sep 99  Remove controversial asserts, simplify, rename.
 //  30 Aug 99  Move to cast.hpp, replace value_cast with numeric_cast,
 //             place in nested namespace.
@@ -43,15 +47,20 @@
 #define BOOST_OLD_NUMERIC_CAST_HPP
 
 # include <boost/config.hpp>
+# include <cassert>
+# include <typeinfo>
 # include <boost/type.hpp>
 # include <boost/limits.hpp>
-# include <typeinfo>
+# include <boost/detail/select_type.hpp>
+# include <boost/numeric/conversion/converter_policies.hpp>
 
 //  It has been demonstrated numerous times that MSVC 6.0 fails silently at link
 //  time if you use a template function which has template parameters that don't
 //  appear in the function's argument list.
 //
 //  TODO: Add this to config.hpp?
+//  FLC: This macro is repeated in boost/cast.hpp but only locally (is undefined at the bottom)
+//       so is OK to reproduce it here.
 # if defined(BOOST_MSVC) && BOOST_MSVC <= 1200 // 1200 = VC6
 #  define BOOST_EXPLICIT_DEFAULT_TARGET , ::boost::type<Target>* = 0
 # else
@@ -60,29 +69,15 @@
 
 namespace boost
 {
-//  numeric_cast and related exception  --------------------------------------//
+
+//  LEGACY numeric_cast [only for some old broken compilers] --------------------------------------//
 
 //  Contributed by Kevlin Henney
-
-//  bad_numeric_cast  --------------------------------------------------------//
-
-    // exception used to indicate runtime numeric_cast failure
-    class bad_numeric_cast : public std::bad_cast
-    {
-    public:
-        // constructors, destructors and assignment operator defaulted
-
-        // function inlined for brevity and consistency with rest of library
-        virtual const char *what() const throw()
-        {
-            return "bad numeric cast: loss of range in numeric_cast";
-        }
-    };
 
 //  numeric_cast  ------------------------------------------------------------//
 
 #if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_SGI_CPP_LIMITS)
-  
+
     namespace detail
     {
       template <class T>
@@ -96,7 +91,7 @@ namespace boost
                      : (std::numeric_limits<T>::min)();
          };
       };
-   
+
       // Move to namespace boost in utility.hpp?
       template <class T, bool specialized>
       struct fixed_numeric_limits_base
@@ -105,7 +100,7 @@ namespace boost
                             std::numeric_limits<T>
                    >::type
       {};
-      
+
       template <class T>
       struct fixed_numeric_limits
           : fixed_numeric_limits_base<T,(std::numeric_limits<T>::is_specialized)>
@@ -126,16 +121,16 @@ namespace boost
               return LONGLONG_MAX;
 #  else
               return 9223372036854775807LL; // hope this is portable
-#  endif 
+#  endif
           }
 
           static  ::boost::long_long_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
           {
 #  ifdef LONGLONG_MIN
               return LONGLONG_MIN;
-#  else  
+#  else
                return -( 9223372036854775807LL )-1; // hope this is portable
-#  endif 
+#  endif
           }
       };
 
@@ -150,14 +145,14 @@ namespace boost
               return ULONGLONG_MAX;
 #  else
               return 0xffffffffffffffffULL; // hope this is portable
-#  endif 
+#  endif
           }
 
           static  ::boost::ulong_long_type min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
       };
-# endif 
+# endif
     } // namespace detail
-  
+
 // less_than_type_min -
   //    x_is_signed should be numeric_limits<X>::is_signed
   //    y_is_signed should be numeric_limits<Y>::is_signed
@@ -182,7 +177,7 @@ namespace boost
         static bool check(X, Y)
             { return false; }
     };
-    
+
     template <>
     struct less_than_type_min<true, false>
     {
@@ -190,7 +185,7 @@ namespace boost
         static bool check(X x, Y)
             { return x < 0; }
     };
-    
+
   // greater_than_type_max -
   //    same_sign should be:
   //            numeric_limits<X>::is_signed == numeric_limits<Y>::is_signed
@@ -219,7 +214,7 @@ namespace boost
         template <class X, class Y>
         static inline bool check(X x, Y)
             { return x >= 0 && static_cast<X>(static_cast<Y>(x)) != x; }
-        
+
 # if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
         // MSVC6 can't static_cast  unsigned __int64 -> floating types
 #  define BOOST_UINT64_CAST(src_type)                                   \
@@ -236,7 +231,7 @@ namespace boost
         BOOST_UINT64_CAST(double);
         BOOST_UINT64_CAST(float);
 #  undef BOOST_UINT64_CAST
-# endif 
+# endif
     };
 
     template<>
@@ -256,7 +251,7 @@ namespace boost
         static inline bool check(X x, Y)
             { return static_cast<X>(static_cast<Y>(x)) != x; }
     };
-  
+
 #else // use #pragma hacks if available
 
   namespace detail
@@ -279,23 +274,23 @@ namespace boost
                    ? T(-(std::numeric_limits<T>::max)()) : (std::numeric_limits<T>::min)();
            }
        };
-  
+
 # if BOOST_MSVC
 #  pragma warning(pop)
 #elif defined(__BORLANDC__)
 #  pragma option pop
 # endif
   } // namespace detail
-  
+
 #endif
-  
+
     template<typename Target, typename Source>
     inline Target numeric_cast(Source arg BOOST_EXPLICIT_DEFAULT_TARGET)
     {
         // typedefs abbreviating respective trait classes
         typedef detail::fixed_numeric_limits<Source> arg_traits;
         typedef detail::fixed_numeric_limits<Target> result_traits;
-        
+
 #if defined(BOOST_STRICT_CONFIG) \
     || (!defined(__HP_aCC) || __HP_aCC > 33900) \
          && (!defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) \
@@ -313,9 +308,9 @@ namespace boost
         if (less_than_type_min<arg_is_signed, result_is_signed>::check(arg, (result_traits::min)())
             || greater_than_type_max<same_sign, arg_is_signed>::check(arg, (result_traits::max)())
             )
-            
+
 #else // We need to use #pragma hacks if available
-            
+
 # if BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4018)
@@ -341,4 +336,4 @@ namespace boost
 
 } // namespace boost
 
-#endif  // BOOST_CAST_HPP
+#endif  // BOOST_OLD_NUMERIC_CAST_HPP
