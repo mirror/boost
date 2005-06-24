@@ -168,7 +168,7 @@ for file in $boost_base/libs/config/test/boost_no*.ipp; do
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef $macroname
+#if !defined($macroname) || defined(BOOST_NO_CONFIG)
 #include "boost_$basename.ipp"
 #else
 namespace ${namespace} = empty_boost;
@@ -415,6 +415,7 @@ cat_conts="$cat_conts"
 )
 
 fi
+
 
 
 
