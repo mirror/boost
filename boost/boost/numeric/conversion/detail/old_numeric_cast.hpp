@@ -45,6 +45,7 @@
 # include <boost/config.hpp>
 # include <boost/type.hpp>
 # include <boost/limits.hpp>
+# include <typeinfo>
 
 //  It has been demonstrated numerous times that MSVC 6.0 fails silently at link
 //  time if you use a template function which has template parameters that don't
