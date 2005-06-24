@@ -118,7 +118,7 @@ namespace cmd_line_utils {
 
         if (options.size() > 0) {
             if (9 == debuglevel) {
-                std::cerr << "options size is: " << options.size() << std::endl;
+                std::cerr << "options size is: " << (int)options.size() << std::endl;
             }
 
             // (the (int) cast is to make the True64 compiler happy)
@@ -137,9 +137,13 @@ namespace cmd_line_utils {
     // Read all options from a given config file, parse and add them to the
     // given variables_map
     inline bool
-    read_config_file(std::string const &filename, 
+    read_config_file(int debuglevel, std::string const &filename, 
         po::options_description const &desc, po::variables_map &vm)
     {
+        if (9 == debuglevel) {
+            std::cerr << "reading config options" << std::endl;
+        }
+
         std::ifstream ifs(filename.c_str());
 
         if (!ifs.is_open()) {
@@ -166,6 +170,10 @@ namespace cmd_line_utils {
         }
 
         if (options.size() > 0) {
+            if (9 == debuglevel) {
+                std::cerr << "options size is: " << (int)options.size() << std::endl;
+            }
+
         // treat positional arguments as --input parameters
             po::positional_options_description p;
             p.add("input", -1);
@@ -177,6 +185,11 @@ namespace cmd_line_utils {
             po::store(po::command_line_parser(options)
                 .options(desc).positional(p).style((int)unix_style).run(), vm);
             po::notify(vm);
+        }
+
+
+        if (9 == debuglevel) {
+            std::cerr << "succeeded to read config options" << std::endl;
         }
         return true;
     }

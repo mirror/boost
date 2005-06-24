@@ -143,7 +143,9 @@ main(int argc, char *argv[])
             // parse a single config file and store the results, config files
             // may only contain --input and positional arguments 
                 po::variables_map cvm;
-                if (!cmd_line_utils::read_config_file(*cit, desc_hidden, cvm)) {
+                if (!cmd_line_utils::read_config_file(app.get_debuglevel(), 
+                    *cit, desc_hidden, cvm)) 
+                {
                     if (9 == app.get_debuglevel()) {
                         std::cerr << "failed to read config_file: " << *cit 
                                   << std::endl;
