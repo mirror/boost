@@ -41,6 +41,8 @@ namespace boost
     return Converter::convert(arg);
   }
 
+  using numeric::bad_numeric_cast;
+
 } // namespace boost
 
 #endif
