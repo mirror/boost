@@ -15,10 +15,11 @@ namespace boost { namespace parameter { namespace aux {
 template <class Keyword, class Predicate, class HasDefault>
 struct parameter_requirements
 {
+    typedef Keyword keyword;
+    typedef Predicate predicate;
     typedef HasDefault has_default;
 };
 
 }}} // namespace boost::parameter::aux
 
 #endif // PARAMETER_REQUIREMENTS_050331_HPP
-

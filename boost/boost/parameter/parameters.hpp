@@ -202,6 +202,24 @@ namespace aux
   template <class ArgList, class ParameterRequirements>
   struct satisfies
   {
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+      // VC7.1 can't handle the sizeof() implementation below,
+      // so we use this instead.
+      typedef typename mpl::apply_wrap2<
+          typename ArgList::binding
+        , typename ParameterRequirements::keyword
+        , void_
+      >::type bound;
+
+      typedef typename mpl::eval_if<
+          is_same<bound, void_>
+        , typename ParameterRequirements::has_default
+        , mpl::apply1<
+              typename ParameterRequirements::predicate
+            , typename remove_reference<bound>::type
+          >
+      >::type type;
+#else
       BOOST_STATIC_CONSTANT(
           bool, value = (
               sizeof(
@@ -213,6 +231,7 @@ namespace aux
       );
 
       typedef mpl::bool_<satisfies::value> type;
+#endif
   };
 
   // Returns mpl::true_ if the requirements of the given ParameterSpec
