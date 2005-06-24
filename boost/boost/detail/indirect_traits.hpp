@@ -11,6 +11,7 @@
 # include <boost/type_traits/is_const.hpp>
 # include <boost/type_traits/is_volatile.hpp>
 # include <boost/type_traits/is_member_function_pointer.hpp>
+# include <boost/type_traits/is_member_pointer.hpp>
 # include <boost/type_traits/remove_cv.hpp>
 # include <boost/type_traits/remove_reference.hpp>
 # include <boost/type_traits/remove_pointer.hpp>
@@ -18,6 +19,7 @@
 # include <boost/type_traits/detail/ice_and.hpp>
 # include <boost/detail/workaround.hpp>
 
+# include <boost/mpl/eval_if.hpp>
 # include <boost/mpl/if.hpp>
 # include <boost/mpl/bool.hpp>
 # include <boost/mpl/and.hpp>
@@ -251,6 +253,7 @@ struct is_reference_to_function_aux
     static T t;
     BOOST_STATIC_CONSTANT(
         bool, value = sizeof(detail::is_function_ref_tester(t,0)) == sizeof(::boost::type_traits::yes_type));
+    typedef mpl::bool_<value> type;
  };
 
 template <class T>
@@ -402,7 +405,7 @@ struct is_reference_to_pointer
 template <class T>
 struct is_reference_to_function_pointer
     : mpl::if_<
-        is_reference<T>
+          is_reference<T>
         , is_pointer_to_function_aux<T>
         , mpl::bool_<false>
      >::type
@@ -471,6 +474,7 @@ struct is_pointer_to_class
         = (is_pointer<T>::value
            && sizeof(pointer_to_class_helper(t)) == sizeof(inner_yes_type))
         );
+    typedef mpl::bool_<value> type;
 };
 #  endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION 
 
