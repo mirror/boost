@@ -8,6 +8,17 @@ subproject libs/iterator/test ;
 
 import testing ;
 
+rule vc6-stlport-debug-inlining ( toolset variant : non-defaults * )
+{
+    if [ MATCH (vc-(6[_0-9]*)-stlport) : $(toolset) ]
+        && ( <inlining>off in $(non-defaults) )
+    {
+        non-defaults = [ difference $(non-defaults) : <inlining>off ] 
+          <inlining>on ;
+    }
+    return $(non-defaults) ;
+}
+  
 test-suite iterator
   : 
     # These first two tests will run last, and are expected to fail
@@ -19,12 +30,12 @@ test-suite iterator
     [ run is_convertible_fail.cpp ]  
 
     [ run zip_iterator_test.cpp
-        : : : 
+        : : : vc6-stlport-debug-inlining
         
         # stlport's debug mode generates long symbols which overwhelm
         # vc6 unless you turn on inlining
-        <msvc-stlport><*><cxxflags>-Ob1
-        <vc-6_5-stlport><*><cxxflags>-Ob1 
+#        <msvc-stlport><*><cxxflags>-Ob1
+#        <vc-6_5-stlport><*><cxxflags>-Ob1 
     ]
       
     # These tests should work for just about everything.
