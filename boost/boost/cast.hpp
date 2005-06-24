@@ -96,15 +96,10 @@ namespace boost
         return static_cast<Target>(x);
     }
 
-//  implicit_cast  -----------------------------------------------------------//
-//
-//  Removed due to uncertain purpose.  Use either numeric_cast (see below)
-//  or static_cast according to the need.
-
-#include <boost/numeric/conversion/cast.hpp>
-
 #  undef BOOST_EXPLICIT_DEFAULT_TARGET
 
 } // namespace boost
+
+#include <boost/numeric/conversion/cast.hpp>
 
 #endif  // BOOST_CAST_HPP
