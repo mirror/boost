@@ -103,13 +103,15 @@ int main( void )
   intset.insert(54);
   //
 
+  typedef
   boost::zip_iterator<
       boost::tuples::tuple<
           std::set<int>::iterator
         , std::vector<double>::iterator
       >
-  >
-  zip_it_mixed(
+  > zit_mixed;
+
+  zit_mixed zip_it_mixed = zit_mixed(
     boost::make_tuple(
         intset.begin()
       , vect1.begin()
