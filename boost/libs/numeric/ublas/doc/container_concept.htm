@@ -77,7 +77,6 @@ vectors.</p>
 <td><code>V</code></td>
 </tr>
 <tr>
-<tr>
 <td>Insert</td>
 <td><code>v.insert_element (i, t)</code></td>
 <td><code>v</code> is mutable.</td>
@@ -139,19 +138,19 @@ from, or is not defined in <a href=
 <tr>
 <td>Insert</td>
 <td><code>v.insert_element (i, t)</code></td>
-<td><code>0 &lt;= i &lt; v.size ()</code> and<br />
-<code>v (i)</code> is equal to <code>value_type (0)</code>.</td>
-<td>A copy of <code>t</code> is inserted in <code>v</code>.</td>
-<td><code>v (i)</code> is a copy of <code>t</code>.</td>
+<td><code>0 &lt;= i &lt; v.size ()</code>.</td>
+<td>Inserts an element at <code>v (i)</code> with value <code>t</code>.
+The storage requirement of the Vector may be increased.</td>
+<td><code>v (i)</code> is equal to <code>t</code>.</td>
 </tr>
 <tr>
 <td>Erase</td>
 <td><code>v.erase_element (i)</code></td>
 <td><code>0 &lt;= i &lt; v.size ()</code></td>
-<td>Destroys the element <code>v (i)</code> and replaces it with
-<code>value_type ()</code>.</td>
-<td><code>v (i)</code> is a copy of <code>value_type
-()</code>.</td>
+<td>Destroys the element as <code>v (i)</code> and replaces it with the default
+<code>value_type ()</code>.
+The storage requirement of the Vector may be decreased.</td>
+<td><code>v (i)</code> is equal to <code>value_type ()</code>.</td>
 </tr>
 <tr>
 <td>Clear</td>
@@ -159,7 +158,7 @@ from, or is not defined in <a href=
 <td>&nbsp;</td>
 <td>Equivalent to<br />
 <code>for (i = 0; i &lt; v.size (); ++ i)</code><br />
-&nbsp; <code>v.erase (i);</code></td>
+&nbsp; <code>v.erase_element (i);</code></td>
 <td>&nbsp;</td>
 </tr>
 <tr>
@@ -186,15 +185,15 @@ When <code>p == false</code> then existing elements are not preserved and elemen
 <p>The run-time complexity of the sizing constructor is linear in
 the vector's size.</p>
 <p>The run-time complexity of insert_element and erase_element is specific for the
-vector.</p>
+Vector model and it depends on increases/decreases in storage requirements.</p>
 <p>The run-time complexity of resize is linear in the vector's
 size.</p>
 <h4>Invariants</h4>
 <h4>Models</h4>
 <ul>
-<li><code>vector&lt;T&gt;</code> , <code>bounded_vector&lt;T, N&gt;</code></li>
-<li><code>unit_vector&lt;T&gt;</code> , <code>zero_vector&lt;T&gt;</code> , <code>scalar_vector&lt;T&gt;</code></li>
-<li><code>mapped_vector&lt;T&gt;</code> , <code>compressed_vector</code> , <code>coordinate_vector</code></li>
+<li><code>vector&lt;T&gt;</code>, <code>bounded_vector&lt;T, N&gt;</code>, <code>c_vector&lt;T, N&gt;</code></li>
+<li><code>unit_vector&lt;T&gt;</code>, <code>zero_vector&lt;T&gt;</code>, <code>scalar_vector&lt;T&gt;</code></li>
+<li><code>mapped_vector&lt;T&gt;</code>, <code>compressed_vector</code>, <code>coordinate_vector</code></li>
 </ul>
 <h4>Notes</h4>
 <p><a name="vector_expression_note">[1]</a>
@@ -327,20 +326,20 @@ n2</code>.</td>
 <td>Insert</td>
 <td><code>m.insert_element (i, j, t)</code></td>
 <td><code>0 &lt;= i &lt; m.size1 ()</code>,<br />
-<code>0 &lt;= j &lt; m.size2 ()</code>and <code><br />
-m (i, j)</code> is equal to <code>value_type (0)</code>.</td>
-<td>A copy of <code>t</code> is inserted in <code>m</code>.</td>
-<td><code>m (i, j)</code> is a copy of <code>t</code>.</td>
+<code>0 &lt;= j &lt; m.size2 ()</code>.</td>
+<td>Inserts an element at <code>m (i, j)</code> with value <code>t</code>.
+The storage requirement of the Matrix may be increased.</td>
+<td><code>m (i, j)</code> is equal to <code>t</code>.</td>
 </tr>
 <tr>
 <td>Erase</td>
-<td><code>m.erase (i, j)</code></td>
+<td><code>m.erase_element (i, j)</code></td>
 <td><code>0 &lt;= i &lt; m.size1 ()</code>and <code><br />
 0 &lt;= j &lt; m.size2</code></td>
-<td>Destroys the element <code>m (i, j)</code> and replaces it with
-<code>value_type ()</code>.</td>
-<td><code>m (i, j)</code> is a copy of <code>value_type
-()</code>.</td>
+<td>Destroys the element as <code>m (i, j)</code> and replaces it with the default
+<code>value_type ()</code>.
+The storage requirement of the Matrix may be decreased.</td>
+<td><code>m (i, j)</code> is equal to <code>value_type ()</code>.</td>
 </tr>
 <tr>
 <td>Clear</td>
@@ -349,7 +348,7 @@ m (i, j)</code> is equal to <code>value_type (0)</code>.</td>
 <td>Equivalent to<br />
 <code>for (i = 0; i &lt; m.size1 (); ++ i)</code><br />
 &nbsp; <code>for (j = 0; j &lt; m.size2 (); ++ j)</code><br />
-&nbsp; &nbsp; <code>m.erase (i, j);</code></td>
+&nbsp; &nbsp; <code>m.erase_element (i, j);</code></td>
 <td>&nbsp;</td>
 </tr>
 <tr>
@@ -379,13 +378,13 @@ When <code>p == false</code> then existing elements are not preserved and elemen
 <p>The run-time complexity of the sizing constructor is quadratic
 in the matrix's size.</p>
 <p>The run-time complexity of insert_element and erase_element is specific for the
-matrix.</p>
+Matrix model and it depends on increases/decreases in storage requirements.</p>
 <p>The run-time complexity of resize is quadratic in the matrix's
 size.</p>
 <h4>Invariants</h4>
 <h4>Models</h4>
 <ul>
-<li><code>matrix&lt;T&gt;</code> , <code>bounded_matrix&lt;T, M, N&gt;</code></li>
+<li><code>matrix&lt;T&gt;</code>, <code>bounded_matrix&lt;T, M, N&gt;</code>, <code>c_matrix&lt;T, M, N&gt;</code></li>
 <li><code>identity_matrix&lt;T&gt;</code> , <code>zero_matrix&lt;T&gt;</code> , <code>scalar_matrix&lt;T&gt;</code></li>
 <li><code>triangular_matrix&lt;T&gt;</code> , <code>symmetric_matrix&lt;T&gt;</code> , <code>banded_matrix&lt;T&gt;</code></li>
 <li><code>mapped_matrix&lt;T&gt;</code> , <code>compressed_matrix</code> , <code>coordinate_matrix</code></li>
