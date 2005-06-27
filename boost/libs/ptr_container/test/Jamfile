@@ -3,12 +3,13 @@ subproject libs/ptr_container/test ;
 
 import testing ;
 
-rule sc-test ( name )
+rule sc-test ( name : requirements * )
 {
     return [ 
       run $(name).cpp 
       <lib>../../test/build/boost_unit_test_framework
       : : :
+      $(requirements)
            ]
     ;
 }
@@ -20,7 +21,7 @@ test-suite ptr_container :
     [ sc-test ptr_deque ]
     [ sc-test ptr_set ]  
     [ sc-test ptr_map ]
-    [ sc-test ptr_array ]
+    [ sc-test ptr_array : <vacpp><*><build>no ]
 #    [ sc-test simple_test ] 
     [ sc-test tree_test ]   
 #    [ sc-test pointainer_speed ]
