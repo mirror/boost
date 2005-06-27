@@ -40,7 +40,6 @@ namespace boost { namespace numeric { namespace ublas {
         // FIXME Template instantiation order problem
         // typedef typename E::size_type size_type;
         typedef std::size_t size_type;
-        typedef noalias_proxy<E> noalias_proxy_type;
         typedef const matrix_row<const E> const_matrix_row_type;
         typedef matrix_row<E> matrix_row_type;
         typedef const matrix_column<const E> const_matrix_column_type;
@@ -61,10 +60,6 @@ namespace boost { namespace numeric { namespace ublas {
             return *static_cast<expression_type *> (this);
         }
 
-        BOOST_UBLAS_INLINE
-        noalias_proxy_type noalias () {
-            return noalias_proxy_type (operator () ());
-        }
         BOOST_UBLAS_INLINE
         const_matrix_row_type operator [] (size_type i) const {
             return const_matrix_row_type (operator () (), i);

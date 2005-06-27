@@ -190,7 +190,6 @@ namespace boost { namespace numeric { namespace ublas {
         // FIXME Template instantiation order problem
         // typedef typename E::size_type size_type;
  
-        typedef noalias_proxy<E> noalias_proxy_type;
         typedef const vector_range<const E> const_vector_range_type;
         typedef vector_range<E> vector_range_type;
         typedef const vector_slice<const E> const_vector_slice_type;
@@ -207,10 +206,6 @@ namespace boost { namespace numeric { namespace ublas {
             return *static_cast<expression_type *> (this);
         }
 
-        BOOST_UBLAS_INLINE
-        noalias_proxy_type noalias () {
-            return noalias_proxy_type (operator () ());
-        }
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const range &r) const {
@@ -238,7 +233,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_indirect_type operator () (const indirect_array<A> &ia) {
             return vector_indirect_type (operator () (), ia);
         }
-#else
+#endif
         BOOST_UBLAS_INLINE
         const_vector_range_type project (const range &r) const {
             return const_vector_range_type (operator () (), r);
@@ -265,7 +260,6 @@ namespace boost { namespace numeric { namespace ublas {
         vector_indirect_type project (const indirect_array<A> &ia) {
             return vector_indirect_type (operator () (), ia);
         }
-#endif
     };
 
     template<class T>
