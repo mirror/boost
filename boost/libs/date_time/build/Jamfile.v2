@@ -15,6 +15,7 @@
 #      Boost.date_time modules
 #
 
+
 project boost/date_time
     : requirements
         <define>DATE_TIME_INLINE
@@ -30,4 +31,5 @@ project boost/date_time
 CPP_SOURCES = greg_month greg_weekday date_generators ;
 
 lib boost_date_time : gregorian/$(CPP_SOURCES).cpp ;
-    
+
+boost-install boost_date_time ;
