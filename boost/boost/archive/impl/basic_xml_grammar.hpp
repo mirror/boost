@@ -85,6 +85,12 @@ namespace archive {
 template<class CharType>
 class basic_xml_grammar : public boost::spirit::grammar<basic_xml_grammar<CharType> >
 {
+public:
+    // The following is not necessary according to DR45, but at least
+    // one compiler (Compaq C++ 6.5 in strict_ansi mode) chokes otherwise.
+    struct return_values;
+    friend struct return_values;
+    
 private:
     typedef BOOST_DEDUCED_TYPENAME std::basic_istream<CharType> IStream;
     typedef BOOST_DEDUCED_TYPENAME std::basic_string<CharType> StringType;
