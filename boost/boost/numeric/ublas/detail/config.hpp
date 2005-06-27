@@ -242,8 +242,8 @@ bool disable_type_check<Dummy>::value = false;
  * General Configuration
  */
 
-// Operator () is alreadly heavily over used. Use project member function for proxies
-//#define BOOST_UBLAS_NO_PROXY_SHORTCUTS
+// Proxy shortcuts overload the alreadly heavily over used operator ()
+//#define BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
 
 // In order to simplify debugging is is possible to simplify expression template
 // so they are restricted to a single operation

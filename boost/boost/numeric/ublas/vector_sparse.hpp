@@ -270,7 +270,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef mapped_vector<T, A> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
@@ -734,7 +734,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef compressed_vector<T, IB, IA, TA> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         // ISSUE require type consistency check
@@ -1307,7 +1307,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef coordinate_vector<T, IB, IA, TA> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         // ISSUE require type consistency check

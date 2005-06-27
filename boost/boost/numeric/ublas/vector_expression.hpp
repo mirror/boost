@@ -211,7 +211,7 @@ namespace boost { namespace numeric { namespace ublas {
         noalias_proxy_type noalias () {
             return noalias_proxy_type (operator () ());
         }
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const range &r) const {
             return const_vector_range_type (operator () (), r);
@@ -274,7 +274,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef vector_reference<T> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<vector_reference<T> >::operator ();
 #endif
         typedef typename T::size_type size_type;
@@ -492,7 +492,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E::closure_type>::type expression_closure_type;
         typedef vector_unary<E, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<vector_unary<E, F> >::operator ();
 #endif
         typedef typename E::size_type size_type;
@@ -776,7 +776,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E2::const_closure_type expression2_closure_type;
         typedef vector_binary<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<vector_binary<E1, E2, F> >::operator ();
 #endif
         typedef typename promote_traits<typename E1::size_type, typename E2::size_type>::promote_type size_type;
@@ -1160,7 +1160,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef vector_binary_scalar1<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<vector_binary_scalar1<E1, E2, F> >::operator ();
 #endif
         typedef typename E2::size_type size_type;
@@ -1384,7 +1384,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const E2& expression2_closure_type;
         typedef vector_binary_scalar2<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<vector_binary_scalar2<E1, E2, F> >::operator ();
 #endif
         typedef typename E1::size_type size_type;

@@ -240,7 +240,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef L layout_type;
         typedef hermitian_matrix<T, TRI, L, A> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
@@ -1122,7 +1122,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef hermitian_adaptor<M, TRI> self_type;
         typedef typename M::value_type &true_reference;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef const M const_matrix_type;

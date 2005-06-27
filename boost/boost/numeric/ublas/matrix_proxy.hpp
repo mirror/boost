@@ -33,7 +33,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_row<M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -490,7 +490,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_column<M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -946,7 +946,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_vector_range<M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -1396,7 +1396,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_vector_slice<M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -1856,7 +1856,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_vector_indirect<M, IA> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -2314,7 +2314,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_range<M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -3187,7 +3187,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_slice<M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;
@@ -4097,7 +4097,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_indirect<M, IA> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef M matrix_type;

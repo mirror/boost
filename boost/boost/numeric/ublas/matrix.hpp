@@ -66,7 +66,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef L layout_type;
         typedef matrix<T, L, A> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
@@ -979,7 +979,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef L layout_type;
         typedef vector_of_vector<T, L, A> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
@@ -1902,7 +1902,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef zero_matrix<T> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
@@ -2260,7 +2260,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef identity_matrix<T> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
@@ -2644,7 +2644,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef scalar_matrix<T> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
@@ -3066,7 +3066,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef c_matrix<T, N, M> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef std::size_t size_type;

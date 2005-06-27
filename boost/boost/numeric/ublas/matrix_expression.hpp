@@ -89,7 +89,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_column_type column (size_type j) {
             return matrix_column_type (operator () (), j);
         }
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_matrix_range_type operator () (const range &r1, const range &r2) const {
             return const_matrix_range_type (operator () (), r1, r2);
@@ -116,7 +116,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_indirect_type operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
             return matrix_indirect_type (operator () (), ia1, ia2);
         }
-#else
+#endif
         BOOST_UBLAS_INLINE
         const_matrix_range_type project (const range &r1, const range &r2) const {
             return const_matrix_range_type (operator () (), r1, r2);
@@ -143,7 +143,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_indirect_type project (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
             return matrix_indirect_type (operator () (), ia1, ia2);
         }
-#endif
     };
 
 #ifdef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -200,7 +199,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef matrix_reference<E> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename E::size_type size_type;
@@ -460,7 +459,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef vector_matrix_binary<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef F functor_type;
@@ -965,7 +964,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_unary1<E, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename E::size_type size_type;
@@ -1407,7 +1406,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_unary2<E, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename E::size_type size_type;
@@ -1854,7 +1853,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_binary<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename promote_traits<typename E1::size_type, typename E2::size_type>::promote_type size_type;
@@ -2582,7 +2581,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E2::const_closure_type expression2_closure_type;
         typedef matrix_binary_scalar1<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename E2::size_type size_type;
@@ -3009,7 +3008,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_binary_scalar2<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         typedef typename E1::size_type size_type;
@@ -3449,7 +3448,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_vector_binary1<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         static const unsigned complexity = 1;
@@ -3836,7 +3835,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_vector_binary2<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         static const unsigned complexity = 1;
@@ -4225,7 +4224,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef matrix_matrix_binary<E1, E2, F> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
 #endif
         static const unsigned complexity = 1;

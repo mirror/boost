@@ -32,7 +32,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef vector_range<V> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef const V const_vector_type;
@@ -514,7 +514,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef vector_slice<V> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef const V const_vector_type;
@@ -1018,7 +1018,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef vector_indirect<V, IA> self_type;
     public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_expression<self_type>::operator ();
 #endif
         typedef const V const_vector_type;
