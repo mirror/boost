@@ -100,6 +100,6 @@ namespace boost
 
 } // namespace boost
 
-#include <boost/numeric/conversion/cast.hpp>
+# include <boost/numeric/conversion/cast.hpp>
 
 #endif  // BOOST_CAST_HPP
