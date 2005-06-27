@@ -384,6 +384,12 @@ namespace boost { namespace numeric { namespace ublas {
                 return (data () [triangular_type::element (layout_type (), j, size_, i, size_)] = type_traits<value_type>::conj (t));
             }
         }
+        BOOST_UBLAS_INLINE
+        void erase_element (size_type i, size_type j) {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_, bad_index ());
+            data () [triangular_type::element (layout_type (), i, size_, j, size_)] = value_type/*zero*/();
+        }
 
         // Zeroing
         BOOST_UBLAS_INLINE

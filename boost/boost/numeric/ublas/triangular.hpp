@@ -153,6 +153,10 @@ namespace boost { namespace numeric { namespace ublas {
         reference insert_element (size_type i, size_type j, const_reference t) {
             return (operator () (i, j) = t);
         }
+        BOOST_UBLAS_INLINE
+        void erase_element (size_type i, size_type j) {
+            return (operator () (i, j) = value_type/*zero*/());
+        }
         
         // Zeroing
         BOOST_UBLAS_INLINE
