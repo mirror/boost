@@ -1397,7 +1397,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
          int i = this->m_traits.toi(m_position, m_end, 16);
          if((m_position == m_end)
             || (i < 0)
-            || ((std::numeric_limits<charT>::is_specialized) && (i > (std::numeric_limits<charT>::max)()))
+            || ((std::numeric_limits<charT>::is_specialized) && (charT(i) > (std::numeric_limits<charT>::max)()))
             || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_brace))
          {
             fail(regex_constants::error_badbrace, m_position - m_base);

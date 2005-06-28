@@ -967,7 +967,7 @@ template <class charT>
 int cpp_regex_traits<charT>::toi(const charT*& first, const charT* last, int radix)const
 {
    // we do NOT want to parse any thousands separators inside the stream:
-   last = std::find(first, last, BOOST_USE_FACET(std::numpunct<char>, m_pimpl->m_is.getloc()).thousands_sep());
+   last = std::find(first, last, BOOST_USE_FACET(std::numpunct<charT>, m_pimpl->m_is.getloc()).thousands_sep());
    m_pimpl->m_sbuf.pubsetbuf(const_cast<charT*>(static_cast<const charT*>(first)), static_cast<std::streamsize>(last-first));
    m_pimpl->m_is.clear();
    if(std::abs(radix) == 16) m_pimpl->m_is >> std::hex;
