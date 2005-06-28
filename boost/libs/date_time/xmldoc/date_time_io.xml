@@ -13,7 +13,10 @@
   <using-namespace name="boost"/>
   <using-namespace name="boost::date_time"/>
   <bridgehead renderas="sect2">Date Time IO System</bridgehead>
-
+  <para>
+    <link linkend="streaming_exceptions">Exception Handling on Streams</link>
+  </para>
+  
   <para>As of version 1.33, the date_time library utilizes a new IO streaming system. This new system gives the user great control over how dates and times can be represented. The customization options can be broken down into two groups: format flags and string elements. Format flags provide flexibility in the order of the date elements as well as the type. Customizing the string elements allows the replacement of built in strings from month names, weekday names, and other strings used in the IO.</para>
 
   <para>The output system is based on a date_facet (derived from std::facet), while the input system is based on a date_input_facet (also derived from std::facet). The time and local_time facets are derived from these base types. The output system utilizes three formatter objects, whereas the input system uses four parser objects. These formatter and parser objetcs are also customizable.</para>
@@ -22,7 +25,17 @@
 
   <para>It should be further noted that not all compilers are capable of using this IO system. For those compilers the IO system used in previous <code>date_time</code> versions is still available. The "legacy IO" is automatically selected for these compilers, however, the legacy IO system can be manually selected by defining <code>USE_DATE_TIME_PRE_1_33_FACET_IO</code>. See the <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information.</para>
 
-  <para>A simple example of this new system:</para>
+  <anchor id="streaming_exceptions" />
+  <bridgehead renderas="sect5">Exception Handling on Streams</bridgehead>
+  <para>When an error occurs during the input streaming process, the <code>std::ios_base::failbit</code> will (always) be set on the stream. It is also possible to have exceptions thrown when an error occurs. To "turn on" these exceptions, call the stream's <code>exceptions</code> function with a parameter of <code>std::ios_base::failbit</code>.</para>
+  <screen>// "Turning on" exceptions
+date d(not_a_date_time);
+std::stringstream ss;
+ss.exceptions(std::ios_base::failbit);
+ss.str("204-Jan-01");
+ss >> d; // throws bad_year exception AND sets failbit on stream</screen>
+  
+  <bridgehead renderas="sect5">A simple example of this new system:</bridgehead>
   <screen>//example to customize output to be "LongWeekday LongMonthname day, year"
 //                                  "%A %b %d, %Y"
 date d(2005,Jun,25);

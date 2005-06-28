@@ -3,7 +3,7 @@
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
-<!-- date source directory processed: 2005-Jun-15 -->
+<!-- date source directory processed: 2005-Jun-27 -->
 <section id="posix_time_reference">
 <title>Posix Time Reference</title>
   <header name="boost/date_time/posix_time/conversion.hpp">
@@ -448,13 +448,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; CharT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
           <template-type-parameter name="CharT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; CharT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="pt">
             <paramtype><classname>ptime</classname> &amp;</paramtype>
@@ -475,13 +475,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; CharT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
           <template-type-parameter name="CharT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; CharT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="tp">
             <paramtype>time_period &amp;</paramtype>
@@ -489,13 +489,13 @@
           <purpose>input operator for time_period </purpose>
         </function>
         <function name="operator&lt;&lt;">
-          <type>std::basic_ostream&lt; CharT, traits &gt; &amp;</type>
+          <type>std::basic_ostream&lt; CharT, Traits &gt; &amp;</type>
           <template>
           <template-type-parameter name="CharT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="os">
-            <paramtype>std::basic_ostream&lt; CharT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_ostream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="td">
             <paramtype>const <classname>time_duration</classname> &amp;</paramtype>
@@ -503,13 +503,13 @@
           <purpose>ostream operator for posix_time::time_duration </purpose>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; CharT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
           <template-type-parameter name="CharT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; CharT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="td">
             <paramtype><classname>time_duration</classname> &amp;</paramtype>

@@ -3,7 +3,7 @@
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
-<!-- date source directory processed: 2005-Jun-15 -->
+<!-- date source directory processed: 2005-Jun-27 -->
 <section id="gregorian_reference">
 <title>Gregorian Reference</title>
   <header name="boost/date_time/gregorian/conversion.hpp">
@@ -962,13 +962,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="d">
             <paramtype><classname>date</classname> &amp;</paramtype>
@@ -989,13 +989,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="dd">
             <paramtype>date_duration &amp;</paramtype>
@@ -1016,13 +1016,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="dp">
             <paramtype>date_period &amp;</paramtype>
@@ -1043,13 +1043,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="m">
             <paramtype><classname>greg_month</classname> &amp;</paramtype>
@@ -1070,13 +1070,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="wd">
             <paramtype><classname>greg_weekday</classname> &amp;</paramtype>
@@ -1084,13 +1084,13 @@
           <purpose>input operator for greg_weekday </purpose>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="gd">
             <paramtype><classname>greg_day</classname> &amp;</paramtype>
@@ -1098,13 +1098,13 @@
           <purpose>input operator for greg_day </purpose>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="gy">
             <paramtype><classname>greg_year</classname> &amp;</paramtype>
@@ -1125,13 +1125,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="pd">
             <paramtype>partial_date &amp;</paramtype>
@@ -1152,13 +1152,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="nday">
             <paramtype>nth_day_of_the_week_in_month &amp;</paramtype>
@@ -1179,13 +1179,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="fkd">
             <paramtype>first_day_of_the_week_in_month &amp;</paramtype>
@@ -1206,13 +1206,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="lkd">
             <paramtype>last_day_of_the_week_in_month &amp;</paramtype>
@@ -1233,13 +1233,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="fka">
             <paramtype>first_day_of_the_week_after &amp;</paramtype>
@@ -1260,13 +1260,13 @@
           </parameter>
         </function>
         <function name="operator&gt;&gt;">
-          <type>std::basic_istream&lt; charT, traits &gt; &amp;</type>
+          <type>std::basic_istream&lt; CharT, Traits &gt; &amp;</type>
           <template>
-          <template-type-parameter name="charT"/>
-          <template-type-parameter name="traits"/>
+          <template-type-parameter name="CharT"/>
+          <template-type-parameter name="Traits"/>
         </template>
           <parameter name="is">
-            <paramtype>std::basic_istream&lt; charT, traits &gt; &amp;</paramtype>
+            <paramtype>std::basic_istream&lt; CharT, Traits &gt; &amp;</paramtype>
           </parameter>
           <parameter name="fkb">
             <paramtype>first_day_of_the_week_before &amp;</paramtype>
@@ -1355,6 +1355,16 @@
   <header name="boost/date_time/gregorian/parsers.hpp">
     <namespace name="boost">
       <namespace name="gregorian">
+        <function name="special_value_from_string">
+          <type>special_values</type>
+          <parameter name="s">
+            <paramtype>const std::string &amp;</paramtype>
+          </parameter>
+          <purpose>Return special_value from string argument. </purpose>
+          <description>
+            <para>Return special_value from string argument. If argument is not one of the special value names (defined in src/gregorian/names.hpp), return 'not_special' </para>
+          </description>
+        </function>
         <function name="from_string">
           <type>
             <classname>date</classname>

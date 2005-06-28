@@ -115,6 +115,19 @@ or
       </thead>
       <tbody>
         <row>
+          <entry valign="top" morerows="1"><screen>operator&lt;&lt;, operator&gt;&gt;</screen></entry>
+          <entry>Streaming operators. <emphasis role="strong">Note:</emphasis> As of version 1.33, streaming operations have been greatly improved. See <link linkend="date_time.date_time_io">Date Time IO System</link> for more details (including exceptions and error conditions).</entry>
+	</row>
+	<row>
+          <entry><screen>date d(not_a_date_time);
+stringstream ss("2002-Jan-01");
+ss &gt;&gt; d; 
+std::cout &lt;&lt; d; // "2002-Jan-01"
+</screen>
+	  </entry>
+        </row>
+
+        <row>
 	  <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen>

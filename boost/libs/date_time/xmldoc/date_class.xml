@@ -413,6 +413,17 @@ std::cout &lt;&lt; d &lt;&lt; std::endl;</screen>
 	  </entry>
         </row>
 
+        <row>
+	  <entry valign="top" morerows="1"><screen>operator&gt;&gt;</screen></entry>
+          <entry>Stream input operator. <emphasis role="strong">Note:</emphasis> As of version 1.33, streaming operations have been greatly improved. See <link linkend="date_time.date_time_io">Date Time IO System</link> for details on exceptions and error conditions.</entry>
+	</row>
+	<row>
+          <entry><screen>date d(not_a_date_time);
+stringstream ss("2002-Jan-01");
+ss &gt;&gt; d;</screen>
+	  </entry>
+        </row>
+
 	<row>
 	  <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,

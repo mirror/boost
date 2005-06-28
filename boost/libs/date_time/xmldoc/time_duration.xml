@@ -104,7 +104,16 @@ time_duration td3(1,2,3,1000);
 // with nanosecond resolution (9 digits)
 // td2 => "01:02:03.123456789"
 // td3 => "01:02:03.000001000"</screen></entry>
-	  </row>
+          </row>
+
+          <row>
+            <entry valign="top"><screen>time_duration(special_value sv)</screen></entry>
+            <entry>Special values constructor. <emphasis role="strong">Important note</emphasis>: When a time_duration is a special value, either by construction or other means, the following accessor functions will give unpredictable results: <screen>hours(), minutes(), seconds(), ticks(), 
+fractional_seconds(), total_nanoseconds(),
+total_microseconds(), total_milliseconds(),
+total_seconds()</screen>The remaining accessor functions will work as expected.</entry>
+          </row>
+
 	</tbody>
       </tgroup>
     </informaltable>
@@ -226,7 +235,7 @@ time_duration td(duration_from_string(ts));</screen>
 	<tbody>
           <row>
 	    <entry valign="top" morerows="1"><screen>long hours()</screen></entry>
-	    <entry>Get the number of normalized hours.</entry>
+            <entry>Get the number of normalized hours (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
             <entry><screen>time_duration td(1,2,3); 
@@ -237,7 +246,7 @@ neg_td.hours(); // --> -1</screen></entry>
 
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long minutes()</screen></entry>
-            <entry>Get the number of minutes normalized +/-(0..59).</entry>
+            <entry>Get the number of minutes normalized +/-(0..59) (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
             <entry><screen>time_duration td(1,2,3);
@@ -248,7 +257,7 @@ neg_td.minutes(); // --> -2</screen></entry>
         
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long seconds()</screen></entry>
-            <entry>Get the normalized number of second +/-(0..59).</entry>
+            <entry>Get the normalized number of second +/-(0..59) (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
             <entry><screen>time_duration td(1,2,3); 
@@ -259,7 +268,7 @@ neg_td.seconds(); // --> -3</screen></entry>
         
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long total_seconds()</screen></entry>
-	    <entry>Get the total number of seconds truncating any fractional seconds.</entry>
+	    <entry>Get the total number of seconds truncating any fractional seconds (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
 	    <entry><screen>time_duration td(1,2,3,10);
@@ -270,7 +279,7 @@ td.total_seconds();
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long total_milliseconds()</screen></entry>
-	    <entry>Get the total number of milliseconds truncating any remaining digits.</entry>
+	    <entry>Get the total number of milliseconds truncating any remaining digits (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
 	    <entry><screen>time_duration td(1,2,3,123456789);
@@ -283,7 +292,7 @@ td.total_miliseconds();
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long total_microseconds()</screen></entry>
-	    <entry>Get the total number of microseconds truncating any remaining digits.</entry>
+	    <entry>Get the total number of microseconds truncating any remaining digits (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
 	    <entry><screen>time_duration td(1,2,3,123456789);
@@ -296,7 +305,7 @@ td.total_microseconds();
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long total_nanoseconds()</screen></entry>
-	    <entry>Get the total number of nanoseconds truncating any remaining digits.</entry>
+	    <entry>Get the total number of nanoseconds truncating any remaining digits (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
 	    <entry><screen>time_duration td(1,2,3,123456789);
@@ -310,7 +319,7 @@ td.total_nanoseconds();
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>long fractional_seconds()</screen></entry>
-	    <entry>Get the number of fractional seconds.</entry>
+	    <entry>Get the number of fractional seconds (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
             <entry><screen>time_duration td(1,2,3, 1000);
@@ -363,7 +372,7 @@ secs = time_duration::num_fractional_digits();
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>boost::int64_t ticks()</screen></entry>
-	    <entry>Return the raw count of the duration type.</entry>
+	    <entry>Return the raw count of the duration type (will give unpredictable results if calling <code>time_duration</code> is a <code>special_value</code>).</entry>
 	  </row>
 	  <row>
             <entry><screen>time_duration td(0,0,0, 1000);
@@ -434,6 +443,19 @@ td.ticks() // --> 1000</screen></entry>
 	  </row>
 	</thead>
 	<tbody>
+          <row>
+            <entry valign="top" morerows="1"><screen>operator&lt;&lt;, operator&gt;&gt;</screen></entry>
+            <entry>Streaming operators. <emphasis role="strong">Note:</emphasis> As of version 1.33, streaming operations have been greatly improved. See <link linkend="date_time.date_time_io">Date Time IO System</link> for more details (including exceptions and error conditions).</entry>
+          </row>
+          <row>
+            <entry><screen>time_duration td(0,0,0);
+stringstream ss("14:23:11.345678");
+ss &gt;&gt; td; 
+std::cout &lt;&lt; td; // "14:23:11.345678"
+  </screen>
+            </entry>
+          </row>
+
           <row>
 	    <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,

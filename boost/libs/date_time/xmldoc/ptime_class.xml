@@ -329,6 +329,19 @@ t.time_of_day() --> 01:00:00;</screen>
 	</thead>
 	<tbody>
           <row>
+            <entry valign="top" morerows="1"><screen>operator&lt;&lt;, operator&gt;&gt;</screen></entry>
+            <entry>Streaming operators. <emphasis role="strong">Note:</emphasis> As of version 1.33, streaming operations have been greatly improved. See <link linkend="date_time.date_time_io">Date Time IO System</link> for more details (including exceptions and error conditions).</entry>
+          </row>
+          <row>
+            <entry><screen>ptime pt(not_a_date_time);
+stringstream ss("2002-Jan-01 14:23:11");
+ss &gt;&gt; pt; 
+std::cout &lt;&lt; pt; // "2002-Jan-01 14:23:11"
+  </screen>
+            </entry>
+          </row>
+
+          <row>
 	    <entry valign="top" morerows="1"><screen>operator==, operator!=,
 operator>, operator&lt;,
 operator>=, operator&lt;=</screen>
