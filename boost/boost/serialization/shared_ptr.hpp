@@ -16,7 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <set>
+#include <map>
 
 #include <boost/config.hpp>
 #include <boost/mpl/integral_c.hpp>
@@ -87,13 +87,7 @@ struct null_deleter {
 // a common class for holding various types of shared pointers
 
 class shared_ptr_helper {
-    typedef std::pair<void *, shared_ptr<void> > value_type;
-    struct less {
-        bool operator()(const value_type & lhs, const value_type & rhs) const {
-            return lhs.first < rhs.first;
-        }
-    };
-    typedef std::set<value_type, less > collection_type;
+    typedef std::map<void*, shared_ptr<void> > collection_type;
     typedef collection_type::const_iterator iterator_type;
     // list of shared_pointers create accessable by raw pointer. This
     // is used to "match up" shared pointers loaded at diferent
@@ -127,13 +121,12 @@ public:
         // get pointer to the most derived object.  This is effectively
         // the object identifer
         void * od = object_identifier(r);
-        value_type arg(od, shared_ptr<void>(r, null_deleter()));
 
-        iterator_type it = m_pointers.find(arg);
+        iterator_type it = m_pointers.find(od);
 
         if(it == m_pointers.end()){
             s.reset(r);
-            m_pointers.insert(value_type(od, s));
+            m_pointers.insert(collection_type::value_type(od,s));
         }
         else{
             s = static_pointer_cast<T>((*it).second);
@@ -160,6 +153,20 @@ get_helper(Archive & ar){
     }
     return * static_cast<T *>(sph.get());
 }
+
+#if 0
+template<class Archive, class H>
+H &
+get_helper(Archive & ar){
+    shared_ptr<H> sph;
+    ar.lookup_helper(sph);
+    if(NULL == sph.get()){
+        sph = shared_ptr<H>(new H);
+        ar.insert_helper(sph);
+    }
+    return * static_cast<T *>(sph.get());
+}
+#endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // serialization for shared_ptr
