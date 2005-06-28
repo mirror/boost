@@ -30,6 +30,7 @@
 #include <boost/type_traits/is_const.hpp>
 
 #include <boost/static_assert.hpp>
+#include <boost/serialization/type_info_implementation.hpp>
 
 // if no archive headers have been included
 // skip inclusion of void_cast.hpp .  This is to avoid auto-link when
@@ -59,24 +60,26 @@ namespace detail {
     struct base_register
     {
         struct nothing {
-            static void invoke(){}
+            static const void * invoke(){
+                return NULL;
+            }
         };
         template<class B, class D>
         struct reg{
-            static void invoke(){
-                void_cast_register<const D, const B>(
+            static const void * invoke(){
+                return void_cast_register<const D, const B>(
                     static_cast<const D *>(NULL),
                     static_cast<const B *>(NULL)
                 );
             }
         };
-        static void invoke(){
+        static const void * invoke(){
             typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
                 mpl::identity<reg<Base, Derived> >,
                 mpl::identity<nothing>
             >::type typex;
-            typex::invoke();
+            return typex::invoke();
         }
     };
     
