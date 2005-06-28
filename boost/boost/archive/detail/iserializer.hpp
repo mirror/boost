@@ -354,10 +354,10 @@ struct load_non_pointer_type {
 
     struct load_conditional {
         static void invoke(Archive &ar, T &t){
-            if(0 == (ar.get_flags() & no_tracking))
+            //if(0 == (ar.get_flags() & no_tracking))
                 load_standard::invoke(ar, t);
-            else
-                load_only::invoke(ar, t);
+            //else
+            //    load_only::invoke(ar, t);
         }
     };
 
