@@ -14,7 +14,7 @@
 #include <vector>
 
 #ifndef USE_DATE_TIME_PRE_1_33_FACET_IO
-// for tests that are expected to fail
+// for tests that are expected to fail and throw exceptions
 template<class temporal_type, class exception_type>
 bool failure_test(temporal_type component,
                   const std::string& input,
@@ -24,18 +24,43 @@ bool failure_test(temporal_type component,
   using namespace boost::gregorian;
   bool result = false;
   std::istringstream iss(input);
+  iss.exceptions(std::ios_base::failbit); // turn on exceptions
   iss.imbue(std::locale(std::locale::classic(), facet));
   try {
     iss >> component;
   }
   catch(exception_type e) {
-    result = true;
+    std::cout << "Expected exception caught: \"" 
+              << e.what() << "\"" << std::endl;
+    result = iss.fail(); // failbit must be set to pass test
   }
   catch(...) {
     result = false;
   }
 
   return result;
+}
+
+// for tests that are expected to fail quietly
+template<class temporal_type>
+bool failure_test(temporal_type component,
+                  const std::string& input,
+                  boost::gregorian::date_input_facet* facet)
+{
+  using namespace boost::gregorian;
+  std::istringstream iss(input);
+  /* leave exceptions turned off
+   * iss.exceptions(std::ios_base::failbit); */
+  iss.imbue(std::locale(std::locale::classic(), facet));
+  try {
+    iss >> component;
+  }
+  catch(...) {
+    std::cout << "Caught unexpected exception" << std::endl;
+    return false;
+  }
+
+  return iss.fail(); // failbit must be set to pass test
 }
 
 #endif
@@ -76,20 +101,34 @@ int main(){
   iss >> gy;
   check("Default format year", gy == greg_year(2002));
   // failure tests
-  check("Input Misspelled in year (date)", 
+  check("Input Misspelled in year (date) w/exceptions", 
       failure_test(d, "205-Jan-15", e_bad_year, new date_input_facet()));
-  check("Input Misspelled in month (date)", 
+  check("Input Misspelled in year (date) no-exceptions", 
+      failure_test(d, "205-Jan-15", new date_input_facet()));
+  check("Input Misspelled in month (date) w/exceptions", 
       failure_test(d, "2005-Jsn-15", e_bad_month, new date_input_facet()));
-  check("Input Misspelled in day (date)", 
+  check("Input Misspelled in month (date) no-exceptions", 
+      failure_test(d, "2005-Jsn-15", new date_input_facet()));
+  check("Input Misspelled in day (date) w/exceptions", 
       failure_test(d, "2005-Jan-51", e_bad_day_of_month, new date_input_facet()));
-  check("Input Misspelled greg_weekday", 
+  check("Input Misspelled in day (date) no-exceptions", 
+      failure_test(d, "2005-Jan-51", new date_input_facet()));
+  check("Input Misspelled greg_weekday w/exceptions", 
       failure_test(gw, "San", e_bad_weekday, new date_input_facet()));
-  check("Input Misspelled month", 
+  check("Input Misspelled greg_weekday no-exceptions", 
+      failure_test(gw, "San", new date_input_facet()));
+  check("Input Misspelled month w/exceptions", 
       failure_test(m, "Jsn", e_bad_month, new date_input_facet()));
-  check("Bad Input greg_day", 
+  check("Input Misspelled month no-exceptions", 
+      failure_test(m, "Jsn", new date_input_facet()));
+  check("Bad Input greg_day w/exceptions", 
       failure_test(gd, "Sun", e_bad_day_of_month, new date_input_facet()));
-  check("Input Misspelled greg_year", 
+  check("Bad Input greg_day no-exceptions", 
+      failure_test(gd, "Sun", new date_input_facet()));
+  check("Input Misspelled greg_year w/exceptions", 
       failure_test(gy, "205", e_bad_year, new date_input_facet()));
+  check("Input Misspelled greg_year no-exceptions", 
+      failure_test(gy, "205", new date_input_facet()));
 
   // change to full length names, iso date format, and 2 digit year
   date_input_facet* facet = new date_input_facet();
@@ -174,8 +213,10 @@ int main(){
   iss >> d;
   check("Custom date format: \"%Y-%j\" => '2006-074'", 
       d == date(2006,Mar,15));
-  check("Bad input Custom date format: \"%Y-%j\" => '2006-74'", 
+  check("Bad input Custom date format: \"%Y-%j\" => '2006-74' (w/exceptions)", 
       failure_test(d, "2006-74", e_bad_day_of_year, facet));
+  check("Bad input Custom date format: \"%Y-%j\" => '2006-74' (no exceptions)", 
+      failure_test(d, "2006-74", facet));
 
   // date_period tests
 
@@ -252,12 +293,18 @@ int main(){
   check("Default strings, first_day_of_the_week_after", 
       fka.get_date(date(2004,Feb,1)) == date(2004,Feb,6));
   // failure tests
-  check("Incorrect elements (date_generator)", // after/before type mixup
+  check("Incorrect elements (date_generator) w/exceptions", // after/before type mixup
       failure_test(fkb, "Fri after", e_failure, new date_input_facet()));
-  check("Incorrect elements (date_generator)", // first/last type mixup
+  check("Incorrect elements (date_generator) no exceptions", // after/before type mixup
+      failure_test(fkb, "Fri after", new date_input_facet()));
+  check("Incorrect elements (date_generator) w/exceptions", // first/last type mixup
       failure_test(lkd, "first Tue of Apr", e_failure, new date_input_facet()));
-  check("Incorrect elements (date_generator)", // 'in' is wrong 
+  check("Incorrect elements (date_generator) no exceptions", // first/last type mixup
+      failure_test(lkd, "first Tue of Apr", new date_input_facet()));
+  check("Incorrect elements (date_generator) w/exceptions", // 'in' is wrong 
       failure_test(nkd, "second Mon in Mar", e_failure, new date_input_facet()));
+  check("Incorrect elements (date_generator) no exceptions", // 'in' is wrong 
+      failure_test(nkd, "second Mon in Mar", new date_input_facet()));
 
   // date_generators - custom element strings
   facet->date_gen_element_strings("1st","2nd","3rd","4th","5th","final","prior to","past","in");
@@ -338,10 +385,14 @@ int main(){
   check("Special values, custom strings, not_a_date_time days",
       dd == days(not_a_date_time));
   // failure test
-  check("Misspelled input, special_value date", 
+  check("Misspelled input, special_value date w/exceptions", 
       failure_test(d, "NSDT", e_bad_year, new date_input_facet()));
-  check("Misspelled input, special_value days", 
+  check("Misspelled input, special_value date no exceptions", 
+      failure_test(d, "NSDT", new date_input_facet()));
+  check("Misspelled input, special_value days w/exceptions", 
       failure_test(dd, "NSDT", e_failure, new date_input_facet()));
+  check("Misspelled input, special_value days no exceptions", 
+      failure_test(dd, "NSDT", new date_input_facet()));
 
   {
     // German names. Please excuse any errors, I don't speak German and 

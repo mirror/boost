@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-// for tests that are expected to fail
+// for tests that are expected to fail and throw exceptions
 template<class temporal_type, class exception_type>
 bool failure_test(temporal_type component,
                   const std::string& input,
@@ -24,18 +24,43 @@ bool failure_test(temporal_type component,
   using namespace boost::posix_time;
   bool result = false;
   std::istringstream iss(input);
+  iss.exceptions(std::ios_base::failbit); // turn on exceptions
   iss.imbue(std::locale(std::locale::classic(), facet));
   try {
     iss >> component;
   }
   catch(exception_type e) {
-    result = true;
+    std::cout << "Expected exception caught: \"" 
+              << e.what() << "\"" << std::endl;
+    result = iss.fail(); // failbit must be set to pass test
   }
   catch(...) {
     result = false;
   }
 
   return result;
+}
+
+// for tests that are expected to fail quietly
+template<class temporal_type>
+bool failure_test(temporal_type component,
+                  const std::string& input,
+                  boost::posix_time::time_input_facet* facet)
+{
+  using namespace boost::posix_time;
+  std::istringstream iss(input);
+  /* leave exceptions turned off
+   * iss.exceptions(std::ios_base::failbit); */
+  iss.imbue(std::locale(std::locale::classic(), facet));
+  try {
+    iss >> component;
+  }
+  catch(...) {
+    std::cout << "Caught unexpected exception" << std::endl;
+    return false;
+  }
+
+  return iss.fail(); // failbit must be set to pass test
 }
 
 int main(){
@@ -204,8 +229,12 @@ int main(){
   // faliure tests for date elements tested in gregorian tests
   time_input_facet* facet2 = new time_input_facet();
   facet2->time_duration_format("%H:%M:%S%f");
-  check("Failure test: Missing frac_sec with %f flag", 
+  check("Failure test: Missing frac_sec with %f flag (w/exceptions)", 
         failure_test(td, "14:13:12 extra stuff", e_failure, facet2));
+  time_input_facet* facet3 = new time_input_facet();
+  facet3->time_duration_format("%H:%M:%S%f");
+  check("Failure test: Missing frac_sec with %f flag (no exceptions)", 
+        failure_test(td, "14:13:12 extra stuff", facet3));
 
   // Reversable format tests
   time_duration td_io(10,11,12,1234567);

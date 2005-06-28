@@ -11,28 +11,53 @@
 #include <sstream>
 #include <string>
 
-// for tests that are expected to fail
+// for tests that are expected to fail and throw exceptions
 template<class temporal_type, class exception_type>
 bool failure_test(temporal_type component,
                   const std::string& input,
                   exception_type /*except*/,
                   boost::local_time::local_time_input_facet* facet)
 {
-  using namespace boost::posix_time;
+  using namespace boost::local_time;
   bool result = false;
   std::istringstream iss(input);
+  iss.exceptions(std::ios_base::failbit); // turn on exceptions
   iss.imbue(std::locale(std::locale::classic(), facet));
   try {
     iss >> component;
   }
   catch(exception_type e) {
-    result = true;
+    std::cout << "Expected exception caught: \"" 
+              << e.what() << "\"" << std::endl;
+    result = iss.fail(); // failbit must be set to pass test
   }
   catch(...) {
     result = false;
   }
 
   return result;
+}
+
+// for tests that are expected to fail quietly
+template<class temporal_type>
+bool failure_test(temporal_type component,
+                  const std::string& input,
+                  boost::local_time::local_time_input_facet* facet)
+{
+  using namespace boost::local_time;
+  std::istringstream iss(input);
+  /* leave exceptions turned off
+   * iss.exceptions(std::ios_base::failbit); */
+  iss.imbue(std::locale(std::locale::classic(), facet));
+  try {
+    iss >> component;
+  }
+  catch(...) {
+    std::cout << "Caught unexpected exception" << std::endl;
+    return false;
+  }
+
+  return iss.fail(); // failbit must be set to pass test
 }
 
 int main() {
@@ -172,25 +197,41 @@ int main() {
   // time/date failures already tested
   ambiguous_result amb_ex("default");
   time_label_invalid inv_ex("default");
-  check("Failure test ambiguous time label", 
+  check("Failure test ambiguous time label (w/exceptions)", 
         failure_test(ldt1,
                      "2005-Oct-30 01:15:00 EST-05EDT,M4.1.0,M10.5.0",
                      amb_ex, 
                      new local_time_input_facet()));
-  check("Failure test ambiguous time label", 
+  check("Failure test ambiguous time label (no exceptions)", 
+        failure_test(ldt1,
+                     "2005-Oct-30 01:15:00 EST-05EDT,M4.1.0,M10.5.0",
+                     new local_time_input_facet()));
+  check("Failure test ambiguous time label (w/exceptions)", 
         failure_test(ldt1,
                      "2005-Oct-30 01:15:00 EST-05EDT,93,303",
                      amb_ex, 
                      new local_time_input_facet()));
-  check("Failure test invalid time label", 
+  check("Failure test ambiguous time label (no exceptions)", 
+        failure_test(ldt1,
+                     "2005-Oct-30 01:15:00 EST-05EDT,93,303",
+                     new local_time_input_facet()));
+  check("Failure test invalid time label (w/exceptions)", 
         failure_test(ldt1,
                      "2005-Apr-03 02:15:00 EST-05EDT,M4.1.0,M10.5.0",
                      inv_ex, 
                      new local_time_input_facet()));
-  check("Failure test invalid time label", 
+  check("Failure test invalid time label (no exceptions)", 
+        failure_test(ldt1,
+                     "2005-Apr-03 02:15:00 EST-05EDT,M4.1.0,M10.5.0",
+                     new local_time_input_facet()));
+  check("Failure test invalid time label (w/exceptions)", 
         failure_test(ldt1,
                      "2005-Apr-03 02:15:00 EST-05EDT,93,303",
                      inv_ex, 
+                     new local_time_input_facet()));
+  check("Failure test invalid time label (no exceptions)", 
+        failure_test(ldt1,
+                     "2005-Apr-03 02:15:00 EST-05EDT,93,303",
                      new local_time_input_facet()));
 
 

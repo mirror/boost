@@ -14,6 +14,7 @@
 #include "boost/date_time/posix_time/time_period.hpp"
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
 //#include "boost/date_time/gregorian/gregorian_io.hpp"
+#include "boost/io/ios_state.hpp"
 #include <iostream>
 #include <locale>
 
@@ -42,6 +43,7 @@ namespace posix_time {
   std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, 
              const ptime& p) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
     typedef std::time_put<CharT>                  std_ptime_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
@@ -63,21 +65,44 @@ namespace posix_time {
   }
 
   //! input operator for ptime
-  template <class CharT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<CharT, traits>&
-  operator>>(std::basic_istream<CharT, traits>& is, ptime& pt)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, ptime& pt)
   {
-    typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
-    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
-    if(std::has_facet<time_input_facet>(is.getloc())) {
-      std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, pt);
-    }
-    else {
-      time_input_facet* f = new time_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, pt);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
+        
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<time_input_facet>(is.getloc())) {
+          std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, pt);
+        }
+        else {
+          time_input_facet* f = new time_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, pt);
+        }
+      }
+      catch(...) { 
+        // mask tells us what exceptions are turned on
+        std::ios_base::iostate exception_mask = is.exceptions();
+        // if the user wants exceptions on failbit, we'll rethrow our 
+        // date_time exception & set the failbit
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {} // ignore this one
+          throw; // rethrow original exception
+        }
+        else {
+          // if the user want's to fail quietly, we simply set the failbit
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -88,6 +113,7 @@ namespace posix_time {
   std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, 
              const boost::posix_time::time_period& p) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
     typedef std::time_put<CharT>                  std_time_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
@@ -110,21 +136,40 @@ namespace posix_time {
   }
 
   //! input operator for time_period
-  template <class CharT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<CharT, traits>&
-  operator>>(std::basic_istream<CharT, traits>& is, time_period& tp)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, time_period& tp)
   {
-    typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
-    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
-    if(std::has_facet<time_input_facet>(is.getloc())) {
-      std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, tp);
-    }
-    else {
-      time_input_facet* f = new time_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, tp);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<time_input_facet>(is.getloc())) {
+          std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, tp);
+        }
+        else {
+          time_input_facet* f = new time_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, tp);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -132,11 +177,12 @@ namespace posix_time {
 
   //! ostream operator for posix_time::time_duration 
   //  todo fix to use facet --  place holder for now...
-  template <class CharT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_ostream<CharT, traits>&
-  operator<<(std::basic_ostream<CharT, traits>& os, const time_duration& td)
+  std::basic_ostream<CharT, Traits>&
+  operator<<(std::basic_ostream<CharT, Traits>& os, const time_duration& td)
   {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
     typedef std::time_put<CharT>                  std_ptime_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
@@ -149,37 +195,49 @@ namespace posix_time {
       //if the locale did not already exist.  Of course this will be overridden
       //if the user imbues as some later point.
       std::ostreambuf_iterator<CharT> oitr(os);
-      // TODO create a default time_duration format
-      //const CharT fmt[] = {'%', 'H', ':', '%', 'M', ':', '%', 's', '\0'};
       custom_ptime_facet* f = new custom_ptime_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
       f->put(oitr, os, os.fill(), td);
     }
     return os;
-    /*
-    typedef boost::date_time::ostream_time_duration_formatter<time_duration, CharT> duration_formatter;
-    duration_formatter::duration_put(td, os);
-    return os;
-    */
   }
 
   //! input operator for time_duration
-  template <class CharT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<CharT, traits>&
-  operator>>(std::basic_istream<CharT, traits>& is, time_duration& td)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, time_duration& td)
   {
-    typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
-    std::istreambuf_iterator<CharT,traits> sit(is), str_end;
-    if(std::has_facet<time_input_facet>(is.getloc())) {
-      std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, td);
-    }
-    else {
-      time_input_facet* f = new time_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, td);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<time_input_facet>(is.getloc())) {
+          std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, td);
+        }
+        else {
+          time_input_facet* f = new time_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, td);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }

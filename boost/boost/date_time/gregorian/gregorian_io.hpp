@@ -10,6 +10,7 @@
  */
 
 #include "boost/date_time/date_facet.hpp"
+#include "boost/io/ios_state.hpp"
 #include <iostream>
 #include <locale>
 
@@ -38,6 +39,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::date& d) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -60,28 +62,52 @@ namespace gregorian {
   }
 
   //! input operator for date
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, date& d)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, date& d)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, d);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, d);
-    }
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+        
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, d);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, d);
+        }
+      }
+      catch(...) { 
+        // mask tells us what exceptions are turned on
+        std::ios_base::iostate exception_mask = is.exceptions();
+        // if the user wants exceptions on failbit, we'll rethrow our 
+        // date_time exception & set the failbit
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {} // ignore this one
+          throw; // rethrow original exception
+        }
+        else {
+          // if the user want's to fail quietly, we simply set the failbit
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
+    }    
     return is;
   }
 
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::date_duration& dd) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -98,21 +124,40 @@ namespace gregorian {
   }
 
   //! input operator for date_duration
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, date_duration& dd)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, date_duration& dd)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, dd);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, dd);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+        
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, dd);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, dd);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -120,6 +165,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::date_period& dp) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -143,21 +189,40 @@ namespace gregorian {
   }
 
   //! input operator for date_period 
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, date_period& dp)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, date_period& dp)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, dp);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, dp);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, dp);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, dp);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -167,6 +232,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::greg_month& gm) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -183,21 +249,40 @@ namespace gregorian {
   }
 
   //! input operator for greg_month
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, greg_month& m)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, greg_month& m)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, m);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, m);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, m);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, m);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -206,6 +291,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::greg_weekday& gw) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -221,21 +307,40 @@ namespace gregorian {
   }
  
   //! input operator for greg_weekday
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, greg_weekday& wd)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, greg_weekday& wd)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, wd);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, wd);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, wd);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, wd);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -243,21 +348,40 @@ namespace gregorian {
   //NOTE: output operator for greg_day was not necessary
 
   //! input operator for greg_day
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, greg_day& gd)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, greg_day& gd)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, gd);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, gd);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, gd);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, gd);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -265,21 +389,40 @@ namespace gregorian {
   //NOTE: output operator for greg_year was not necessary
 
   //! input operator for greg_year
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, greg_year& gy)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, greg_year& gy)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, gy);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, gy);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, gy);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, gy);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -289,6 +432,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::partial_date& pd) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -304,21 +448,40 @@ namespace gregorian {
   }
 
   //! input operator for partial_date
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, partial_date& pd)
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, partial_date& pd)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, pd);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, pd);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, pd);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, pd);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -326,6 +489,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::nth_day_of_the_week_in_month& nkd) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -341,22 +505,41 @@ namespace gregorian {
   }
 
   //! input operator for nth_day_of_the_week_in_month
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, 
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, 
              nth_day_of_the_week_in_month& nday)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, nday);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, nday);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, nday);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, nday);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -365,6 +548,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::first_day_of_the_week_in_month& fkd) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -380,22 +564,41 @@ namespace gregorian {
   }
 
   //! input operator for first_day_of_the_week_in_month
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, 
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, 
              first_day_of_the_week_in_month& fkd)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, fkd);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, fkd);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, fkd);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, fkd);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -404,6 +607,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::last_day_of_the_week_in_month& lkd) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc()))
@@ -419,22 +623,41 @@ namespace gregorian {
   }
 
   //! input operator for last_day_of_the_week_in_month
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, 
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, 
              last_day_of_the_week_in_month& lkd)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, lkd);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, lkd);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, lkd);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, lkd);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -443,6 +666,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::first_day_of_the_week_after& fda) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc())) {
@@ -459,22 +683,41 @@ namespace gregorian {
   }
 
   //! input operator for first_day_of_the_week_after
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, 
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, 
              first_day_of_the_week_after& fka)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, fka);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, fka);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, fka);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, fka);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
@@ -483,6 +726,7 @@ namespace gregorian {
   template <class CharT, class TraitsT>
   inline std::basic_ostream<CharT, TraitsT>&
   operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::first_day_of_the_week_before& fdb) {
+    boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
     if (std::has_facet<custom_date_facet>(os.getloc())) {
@@ -499,22 +743,41 @@ namespace gregorian {
   }
 
   //! input operator for first_day_of_the_week_before
-  template <class charT, class traits>
+  template <class CharT, class Traits>
   inline
-  std::basic_istream<charT, traits>&
-  operator>>(std::basic_istream<charT, traits>& is, 
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, 
              first_day_of_the_week_before& fkb)
   {
-    typedef typename date_time::date_input_facet<date, charT> date_input_facet;
-    std::istreambuf_iterator<charT,traits> sit(is), str_end;
-    if(std::has_facet<date_input_facet>(is.getloc())) {
-      std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, fkb);
-    }
-    else {
-      date_input_facet* f = new date_input_facet();
-      std::locale l = std::locale(is.getloc(), f);
-      is.imbue(l);
-      f->get(sit, str_end, is, fkb);
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::date_input_facet<date, CharT> date_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<date_input_facet>(is.getloc())) {
+          std::use_facet<date_input_facet>(is.getloc()).get(sit, str_end, is, fkb);
+        }
+        else {
+          date_input_facet* f = new date_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, fkb);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+            
+      }
     }
     return is;
   }
