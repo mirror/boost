@@ -116,6 +116,7 @@ public:
         save_end(t.name());
     }
 public:
+    virtual unsigned int get_flags() const = 0;
     // utility function implemented by all legal archives
     virtual void save_binary(const void * t, std::size_t size) = 0;
 

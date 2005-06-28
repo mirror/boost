@@ -70,6 +70,12 @@ private:
     virtual unsigned int get_library_version() const{
         return ArchiveImplementation::get_library_version();
     }
+    virtual unsigned int get_flags() const {
+        return ArchiveImplementation::get_flags();
+    }
+    virtual void load_binary(void * t, std::size_t size){
+        ArchiveImplementation::load_binary(t, size);
+    }
     // primitive types the only ones permitted by polymorphic archives
     virtual void load(bool & t){
         ArchiveImplementation::load(t);
@@ -130,10 +136,6 @@ private:
         ArchiveImplementation::load(t);
     }
     #endif
-    virtual void load_binary(void * t, std::size_t size){
-        ArchiveImplementation::load_binary(t, size);
-    }
-
     // used for xml and other tagged formats default does nothing
     virtual void load_start(const char * name){
         ArchiveImplementation::load_start(name);
@@ -146,33 +148,9 @@ private:
         ArchiveImplementation::register_basic_serializer(bis);
     }
 public:
+    // the >> operator 
     template<class T>
     polymorphic_iarchive & operator>>(T & t){
-        // if this assertion trips. It means we're trying to load a
-        // const object with a compiler that doesn't have correct
-        // funtion template ordering.  On other compilers, this is
-        // handled below.
-        BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
-        return polymorphic_iarchive::operator>>(t);
-    }
-
-    // the & operator 
-    template<class T>
-    polymorphic_iarchive & operator&(T & t){
-        return polymorphic_iarchive::operator&(t);
-    }
-#if 0
-    // define operators for non-const arguments.  Don't depend one the const
-    // ones below because the compiler MAY make a temporary copy to
-    // create the const parameter (Though I havn't seen this happen). 
-    // the >> operator
-    template<class T>
-    polymorphic_iarchive & operator>>(T & t){
-        // if this assertion trips. It means we're trying to load a
-        // const object with a compiler that doesn't have correct
-        // funtion template ordering.  On other compilers, this is
-        // handled below.
-        BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
         return polymorphic_iarchive::operator>>(t);
     }
 
@@ -182,24 +160,6 @@ public:
         return polymorphic_iarchive::operator&(t);
     }
 
-    // define the following pair in order to permit passing of const and non_const
-    // temporary objects. These are needed to properly implement serialization
-    // wrappers.
-
-    #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    // the >> operator
-    template<class T>
-    polymorphic_iarchive & operator>>(const T & t){
-        // this should only be used for wrappers.  Check that here
-        return polymorphic_iarchive::operator>>(t);
-    }
-    // the & operator 
-    template<class T>
-    polymorphic_iarchive & operator&(const T & t){
-        return polymorphic_iarchive::operator&(t);
-    }
-    #endif
-#endif
     // all current archives take a stream as constructor argument
     template <class _Elem, class _Tr>
     polymorphic_iarchive_impl(

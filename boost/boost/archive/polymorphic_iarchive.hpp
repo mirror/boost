@@ -118,6 +118,8 @@ public:
 public:
     // utility function implemented by all legal archives
     virtual unsigned int get_library_version() const = 0;
+    virtual unsigned int get_flags() const = 0;
+
     virtual void load_binary(void * t, std::size_t size) = 0;
 
     // these are used by the serialization library implementation.
