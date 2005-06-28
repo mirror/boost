@@ -257,10 +257,10 @@ struct save_non_pointer_type {
     // serialization level and class version
     struct save_conditional {
         static void invoke(Archive &ar, const T &t){
-            if(0 == (ar.get_flags() & no_tracking))
+            //if(0 == (ar.get_flags() & no_tracking))
                 save_standard::invoke(ar, t);
-            else
-                save_only::invoke(ar, t);
+            //else
+            //   save_only::invoke(ar, t);
         }
     };
 
@@ -525,27 +525,29 @@ inline void save(Archive & ar, const T &t){
     typex::invoke(ar, t);
 }
 
-
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
 template<class T>
-struct check_constness {
-    // if we trap here, we're saving a tracked non-const
-    // value - this could be a stack variable with the same
-    // address for multiple items. This would be the source of very
-    // subtle errors and should be double checked
-    typedef BOOST_DEDUCED_TYPENAME mpl::or_<
-        is_const<T>,
-        mpl::equal_to<
-            mpl::int_<serialization::track_never>,
-            serialization::tracking_level<T>
-        >
+struct check_tracking {
+    typedef BOOST_DEDUCED_TYPENAME mpl::if_<
+        // if its never tracked.
+        BOOST_DEDUCED_TYPENAME mpl::equal_to<
+            serialization::tracking_level<T>,
+            mpl::int_<serialization::track_never>
+        >,
+        // it better not be a pointer
+        mpl::not_<is_pointer<T> >,
+    //else
+        // otherwise if it might be tracked.  So there shouldn't
+        // be any problem making a const
+        is_const<T>
     >::type typex;
     BOOST_STATIC_CONSTANT(bool, value = typex::value);
 };
 
 template<class Archive, class T>
 inline void save(Archive & ar, T &t){
-    BOOST_STATIC_ASSERT(check_constness<T>::value);
+    BOOST_STATIC_ASSERT(check_tracking<T>::value);
 	save(ar, const_cast<const T &>(t));
 }
 #endif
