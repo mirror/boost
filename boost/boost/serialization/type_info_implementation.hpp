@@ -42,12 +42,7 @@ namespace boost {
 namespace serialization {
 
 template<class T>
-class extended_type_info_null {
-    #if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-        // if your code fails to compile here
-        BOOST_STATIC_ASSERT(0 == sizeof(T));
-    #endif
-};
+class extended_type_info_null;
 
 struct basic_traits;
 
