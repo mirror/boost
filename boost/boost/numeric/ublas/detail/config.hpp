@@ -35,20 +35,23 @@
 // Microsoft Visual C++
 #if defined (BOOST_MSVC) && ! defined (BOOST_STRICT_CONFIG)
 
-// Version 6.0 & 7.0
+// Version 6.0 and 7.0
 #if BOOST_MSVC <= 1300
 #define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
 
 // Version 7.1
 #if BOOST_MSVC == 1310
-
-// Seeming still some problems with function templates
-#define BOOST_UBLAS_MSVC71_FUNCTION_TEMPLATE_ORDERING
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
 #if !(defined(BOOST_UBLAS_NO_NESTED_CLASS_RELATION) || defined(BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION))
 #define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
+#endif
+
+// Version 7.1 and 8.0
+#if BOOST_MSVC <= 1400
+// Seeming still some problems with function templates
+#define BOOST_UBLAS_MSVC_FUNCTION_TEMPLATE_ORDERING
 #endif
 
 #endif
