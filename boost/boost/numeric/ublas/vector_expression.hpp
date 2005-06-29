@@ -210,6 +210,7 @@ namespace boost { namespace numeric { namespace ublas {
         const vector_range_type range (std::size_t start, std::size_t stop) const {
             return vector_range_type (operator () (), default_range (start, stop));
         }
+        BOOST_UBLAS_INLINE
         vector_range_type range (std::size_t start, std::size_t stop) {
             return vector_range_type (operator () (), default_range (start, stop));
         }
