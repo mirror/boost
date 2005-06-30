@@ -129,9 +129,11 @@ namespace std {
 
 //  HP aCC C++ compiler
 #if defined (__HP_aCC) && ! defined (BOOST_STRICT_CONFIG)
-// No version specific configuration
-// #if (__HP_aCC <= 53800)
+#  if (__HP_aCC >= 60000 )
+#    define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
+#  endif
 #endif
+
 
 
 //  SGI MIPSpro C++ compiler
