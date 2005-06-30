@@ -18,6 +18,10 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#ifdef __BORLANDC__
+# pragma warn -8027     // Functions containing try are not expanded inline
+#endif
+
 #include <boost/config.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/throw_exception.hpp>
@@ -29,10 +33,6 @@
 #include <functional>       // std::less
 #include <new>              // std::bad_alloc
 #include <typeinfo>         // std::type_info in get_deleter
-
-#ifdef __BORLANDC__
-# pragma warn -8027     // Functions containing try are not expanded inline
-#endif
 
 namespace boost
 {
