@@ -17,8 +17,8 @@
 #ifndef BOOST_UBLAS_VECTOR_SPARSE_H
 #define BOOST_UBLAS_VECTOR_SPARSE_H
 
-#include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/storage_sparse.hpp>
+#include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/detail/vector_assign.hpp>
 
 // Iterators based on ideas of Jeremy Siek
