@@ -43,11 +43,11 @@ struct nvp :
     public traits<nvp<T>, object_serializable, track_never>
 {
     explicit nvp(const char * name, T & t) :
-        // note: rudundant cast works around borland issue
+        // note: redundant cast works around borland issue
         std::pair<const char *, T *>(name, (T*)(& t))
     {}
     nvp(const nvp & rhs) : 
-        // note: rudundant cast works around borland issue
+        // note: redundant cast works around borland issue
         std::pair<const char *, T *>(rhs.first, (T*)rhs.second)
     {}
 
