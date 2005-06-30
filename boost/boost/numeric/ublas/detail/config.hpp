@@ -48,12 +48,6 @@
 #define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
 #endif
 
-// Version 7.1 and 8.0
-#if BOOST_MSVC <= 1400
-// Seeming still some problems with function templates
-#define BOOST_UBLAS_MSVC_FUNCTION_TEMPLATE_ORDERING
-#endif
-
 #endif
 
 #endif

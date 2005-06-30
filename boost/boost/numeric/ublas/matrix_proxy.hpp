@@ -3149,9 +3149,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename matrix_range<M>::matrix_type matrix_range<M>::nil_;
 
     // Projections
-#ifndef BOOST_UBLAS_MSVC_FUNCTION_TEMPLATE_ORDERING
-	// ISSUE MSVC cannot disambiguate the second function template argument
-	// - to work around this we define the project functions later using some helper classes
     template<class M>
     BOOST_UBLAS_INLINE
     matrix_range<M> project (M &data, const typename matrix_range<M>::range_type &r1, const typename matrix_range<M>::range_type &r2) {
@@ -3173,7 +3170,6 @@ namespace boost { namespace numeric { namespace ublas {
     const matrix_range<M> project (const matrix_range<M> &data, const typename matrix_range<M>::range_type &r1, const typename matrix_range<M>::range_type &r2) {
         return data.project (r1, r2);
     }
-#endif
 
     // Specialization of temporary_traits
     template <class M>
@@ -4049,7 +4045,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename matrix_slice<M>::matrix_type matrix_slice<M>::nil_;
 
     // Projections
-#ifndef BOOST_UBLAS_MSVC_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
     matrix_slice<M> project (M &data, const typename matrix_slice<M>::slice_type &s1, const typename matrix_slice<M>::slice_type &s2) {
@@ -4061,14 +4056,15 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE was: return matrix_slice<M> (const_cast<M &> (data), s1, s2);
         return matrix_slice<const M> (data, s1, s2);
     }
+    // ISSUE in the following two functions it would be logical to use matrix_slice<V>::range_type but this confuses VC7.1 and 8.0
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_slice<M> project (matrix_slice<M> &data, const typename matrix_slice<M>::range_type &r1, const typename matrix_slice<M>::range_type &r2) {
+    matrix_slice<M> project (matrix_slice<M> &data, const typename matrix_range<M>::range_type &r1, const typename matrix_range<M>::range_type &r2) {
         return data.project (r1, r2);
     }
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_slice<M> project (const matrix_slice<M> &data, const typename matrix_slice<M>::range_type &r1, const typename matrix_slice<M>::range_type &r2) {
+    const matrix_slice<M> project (const matrix_slice<M> &data, const typename matrix_range<M>::range_type &r1, const typename matrix_range<M>::range_type &r2) {
         return data.project (r1, r2);
     }
     template<class M>
@@ -4081,118 +4077,6 @@ namespace boost { namespace numeric { namespace ublas {
     const matrix_slice<M> project (const matrix_slice<M> &data, const typename matrix_slice<M>::slice_type &s1, const typename matrix_slice<M>::slice_type &s2) {
         return data.project (s1, s2);
     }
-
-#else
-	// ISSUE MSVC cannot disambiguate the second function template argument
-	// - to work around this using some helper classes
-    namespace {
-        template <class M>
-        struct msvc_mproject_helper
-        {
-            typedef typename matrix_range<M>::range_type range_type;
-            typedef typename matrix_slice<M>::slice_type slice_type;
-            template <class RS>
-            struct return_type {
-            };
-            template <>
-            struct return_type<range_type> {
-                typedef matrix_range<M> type;
-            };
-            template <>
-            struct return_type<slice_type> {
-                typedef matrix_slice<M> type;
-            };
-            BOOST_UBLAS_INLINE
-            static matrix_range<M> apply (M &data, const range_type &r1, const range_type &r2) {
-		        return matrix_range<M> (data, r1, r2);
-            }
-            BOOST_UBLAS_INLINE
-            static const matrix_range<M> apply (const M &data, const range_type &r1, const range_type &r2) {
-		        return matrix_range<M> (data, r1, r2);
-            }
-            BOOST_UBLAS_INLINE
-            static matrix_slice<M> apply (M &data, const slice_type &s1, const slice_type &s2) {
-                return matrix_slice<M> (data, s1, s2);
-            }
-            BOOST_UBLAS_INLINE
-            static const matrix_slice<M> apply (const M &data, const slice_type &s1, const slice_type &s2) {
-                return const matrix_slice<M> (data, s1, s2);
-            }
-        };
-        template <class M>
-        struct msvc_mproject_helper< matrix_range<M> >
-        {
-        	typedef typename matrix_range<M> base_type;
-            typedef typename matrix_range<M>::range_type range_type;
-            typedef typename matrix_slice<M>::slice_type slice_type;
-            template <class RS>
-            struct return_type {
-            };
-            template <>
-            struct return_type<range_type> {
-                typedef matrix_range<M> type;
-            };
-            template <>
-            struct return_type<slice_type> {
-                typedef matrix_slice<base_type> type;	// no special proxy created for a slice of a range
-            };
-            BOOST_UBLAS_INLINE
-            static base_type apply (base_type &data, const range_type &r1, const range_type &r2) {
-                return data.project (r1, r2);
-            }
-            BOOST_UBLAS_INLINE
-            static const base_type apply (const base_type &data, const range_type &r1, const range_type &r) {
-                return data.project (r1, r2);
-            }
-            BOOST_UBLAS_INLINE
-            static matrix_slice<base_type> apply (base_type &data, const slice_type &s1, const slice_type &s2) {
-                return matrix_slice<base_type> (data, s1, s2);
-            }
-            BOOST_UBLAS_INLINE
-            static const matrix_slice<base_type> apply (const base_type &data, const slice_type &s1, const slice_type &s2) {
-                return const matrix_slice<const base_type> (data, s1, s2);
-            }
-        };
-        template <class M>
-        struct msvc_mproject_helper< matrix_slice<M> >
-        {
-        	typedef typename matrix_slice<M> base_type;
-            typedef typename matrix_slice<M>::range_type range_type;
-            typedef typename matrix_slice<M>::slice_type slice_type;
-            template <class RS>
-            struct return_type {
-                typedef matrix_slice<M> type;
-            };
-            BOOST_UBLAS_INLINE
-            static matrix_slice<M> apply (base_type &data, const range_type &r1, const range_type &r2) {
-                return data.project (r1, r2);
-            }
-            BOOST_UBLAS_INLINE
-            static const matrix_slice<M> apply (const base_type &data, const range_type &r1, const range_type &r2) {
-                return data.project (r1, r2);
-            }
-            BOOST_UBLAS_INLINE
-            static matrix_slice<M> apply (base_type &data, const slice_type &s1, const slice_type &s2) {
-                return data.project (s1, s2);
-            }
-            BOOST_UBLAS_INLINE
-            static const matrix_slice<M> apply (const base_type &data, const slice_type &s1, const slice_type &s2) {
-                return data.project (s1, s2);
-            }
-        };
-    }
-
-    template<class M, class RS>
-    BOOST_UBLAS_INLINE
-    typename msvc_mproject_helper<M>::template return_type<RS>::type project (M &data, const RS &rs1, const RS &rs2) {
-        return msvc_mproject_helper<M>::apply (data, rs1, rs2);
-    }
-    template<class M, class RS>
-    BOOST_UBLAS_INLINE
-    const typename msvc_mproject_helper<M>::template return_type<RS>::type project (const M &data, const RS &rs1, const RS &rs2) {
-        return msvc_mproject_helper<const M>::apply (data, rs1, rs2);
-    }
-#endif
 
     // Specialization of temporary_traits
     template <class M>

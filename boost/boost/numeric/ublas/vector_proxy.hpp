@@ -479,9 +479,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename vector_range<V>::vector_type vector_range<V>::nil_;
 
     // Projections
-#ifndef BOOST_UBLAS_MSVC_FUNCTION_TEMPLATE_ORDERING
-	// ISSUE MSVC cannot disambiguate the second function template argument
-	// - to work around this we define the project functions later using some helper classes
     template<class V>
     BOOST_UBLAS_INLINE
     vector_range<V> project (V &data, typename vector_range<V>::range_type const &r) {
@@ -503,7 +500,6 @@ namespace boost { namespace numeric { namespace ublas {
     const vector_range<V> project (const vector_range<V> &data, const typename vector_range<V>::range_type &r) {
         return data.project (r);
     }
-#endif
 
     // Specialization of temporary_traits
     template <class V>
@@ -973,7 +969,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename vector_slice<V>::vector_type vector_slice<V>::nil_;
     
     // Projections
-#ifndef BOOST_UBLAS_MSVC_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
     vector_slice<V> project (V &data, const typename vector_slice<V>::slice_type &s) {
@@ -995,128 +990,17 @@ namespace boost { namespace numeric { namespace ublas {
     const vector_slice<V> project (const vector_slice<V> &data, const typename vector_slice<V>::slice_type &s) {
         return data.project (s);
     }
+    // ISSUE in the following two functions it would be logical to use vector_slice<V>::range_type but this confuses VC7.1 and 8.0
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<V> project (vector_slice<V> &data, const typename vector_slice<V>::range_type &r) {
+    vector_slice<V> project (vector_slice<V> &data, const typename vector_range<V>::range_type &r) {
         return data.project (r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_slice<V> project (const vector_slice<V> &data, const typename vector_slice<V>::range_type &r) {
+    const vector_slice<V> project (const vector_slice<V> &data, const typename vector_range<V>::range_type &r) {
         return data.project (r);
     }
-
-#else
-	// ISSUE MSVC cannot disambiguate the second function template argument
-	// - to work around this using some helper classes
-    namespace {
-        template <class V>
-        struct msvc_vproject_helper
-        {
-            typedef typename vector_range<V>::range_type range_type;
-            typedef typename vector_slice<V>::slice_type slice_type;
-            template <class RS>
-            struct return_type {
-            };
-            template <>
-            struct return_type<range_type> {
-                typedef vector_range<V> type;
-            };
-            template <>
-            struct return_type<slice_type> {
-                typedef vector_slice<V> type;
-            };
-            BOOST_UBLAS_INLINE
-            static vector_range<V> apply (V &data, const range_type &r) {
-		        return vector_range<V> (data, r);
-            }
-            BOOST_UBLAS_INLINE
-            static const vector_range<V> apply (const V &data, const range_type &r) {
-		        return vector_range<V> (data, r);
-            }
-            BOOST_UBLAS_INLINE
-            static vector_slice<V> apply (V &data, const slice_type &s) {
-                return vector_slice<V> (data, s);
-            }
-            BOOST_UBLAS_INLINE
-            static const vector_slice<V> apply (const V &data, const slice_type &s) {
-                return const vector_slice<V> (data, s);
-            }
-        };
-        template <class V>
-        struct msvc_vproject_helper< vector_range<V> >
-        {
-        	typedef typename vector_range<V> base_type;
-            typedef typename vector_range<V>::range_type range_type;
-            typedef typename vector_slice<V>::slice_type slice_type;
-            template <class RS>
-            struct return_type {
-            };
-            template <>
-            struct return_type<range_type> {
-                typedef vector_range<V> type;
-            };
-            template <>
-            struct return_type<slice_type> {
-                typedef vector_slice<base_type> type;	// no special proxy created for a slice of a range
-            };
-            BOOST_UBLAS_INLINE
-            static base_type apply (base_type &data, const range_type &r) {
-                return data.project (r);
-            }
-            BOOST_UBLAS_INLINE
-            static const base_type apply (const base_type &data, const range_type &r) {
-                return data.project (r);
-            }
-            BOOST_UBLAS_INLINE
-            static vector_slice<base_type> apply (base_type &data, const slice_type &s) {
-                return vector_slice<base_type> (data, s);
-            }
-            BOOST_UBLAS_INLINE
-            static const vector_slice<base_type> apply (const base_type &data, const slice_type &s) {
-                return const vector_slice<const base_type> (data, s);
-            }
-        };
-        template <class V>
-        struct msvc_vproject_helper< vector_slice<V> >
-        {
-        	typedef typename vector_slice<V> base_type;
-            typedef typename vector_slice<V>::range_type range_type;
-            typedef typename vector_slice<V>::slice_type slice_type;
-            template <class RS>
-            struct return_type {
-                typedef vector_slice<V> type;
-            };
-            BOOST_UBLAS_INLINE
-            static vector_slice<V> apply (base_type &data, const range_type &r) {
-                return data.project (r);
-            }
-            BOOST_UBLAS_INLINE
-            static const vector_slice<V> apply (const base_type &data, const range_type &r) {
-                return data.project (r);
-            }
-            BOOST_UBLAS_INLINE
-            static vector_slice<V> apply (base_type &data, const slice_type &s) {
-                return data.project (s);
-            }
-            BOOST_UBLAS_INLINE
-            static const vector_slice<V> apply (const base_type &data, const slice_type &s) {
-                return data.project (s);
-            }
-        };
-    }
-
-    template<class V, class RS>
-    BOOST_UBLAS_INLINE
-    typename msvc_vproject_helper<V>::template return_type<RS>::type project (V &data, const RS &rs) {
-        return msvc_vproject_helper<V>::apply (data, rs);
-    }
-    template<class V, class RS>
-    BOOST_UBLAS_INLINE
-    const typename msvc_vproject_helper<V>::template return_type<RS>::type project (const V &data, const RS &rs) {
-        return msvc_vproject_helper<const V>::apply (data, rs);
-    }
-#endif
 
     // Specialization of temporary_traits
     template <class V>
