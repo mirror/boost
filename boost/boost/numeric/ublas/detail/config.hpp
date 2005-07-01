@@ -169,7 +169,7 @@ namespace std {
 
 // Cannot continue with an unsupported compiler
 #ifdef BOOST_UBLAS_UNSUPPORTED_COMPILER
-#error Your compiler is unsupported by this verions of uBLAS. Try using Boost 1.31.0 which support many old compilers.
+#error Your compiler is unsupported by this verions of uBLAS. Boost 1.32.0 includes uBLAS with support for many old compilers.
 #endif
 
 
