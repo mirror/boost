@@ -70,6 +70,17 @@ bool failure_test(temporal_type component,
 int main(){
 #ifndef  USE_DATE_TIME_PRE_1_33_FACET_IO
   using namespace boost::gregorian;
+
+  {
+    // verify no extra character are consumed
+    greg_month m(1);
+    std::stringstream ss("Mar.");
+    std::istreambuf_iterator<char> sitr(ss), str_end;
+
+    date_input_facet* f = new date_input_facet();
+    f->get(sitr, str_end, ss, m);
+    check("No extra characters consumed", m = greg_month(Mar) && *sitr == '.');
+  }
  
   // set up initial objects
   date d(not_a_date_time);
@@ -232,6 +243,23 @@ int main(){
   facet->set_iso_extended_format();
   iss >> dp;
   check("Default period (closed range)", dp == date_period(begin,len));
+  {
+    std::stringstream ss;
+    date d(not_a_date_time);
+    date d2 = day_clock::local_day();
+    date d3(neg_infin);
+    date d4(pos_infin);
+    date_period dp(d2, d); // date/nadt
+    date_period dp2(d, d); // nadt/nadt
+    date_period dp3(d3, d4);
+    ss << dp;
+    ss >> dp2;
+    check("Special values period (reversibility test)", dp == dp2);
+    ss.str("[-infinity/+infinity]");
+    ss >> dp2;
+    check("Special values period (infinities)", dp3 == dp2);
+  }
+    
 
   // open range
   period_parser pp(period_parser::AS_OPEN_RANGE);

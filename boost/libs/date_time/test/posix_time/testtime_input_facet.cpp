@@ -224,6 +224,22 @@ int main(){
       (tp.begin() == ptime(date(2005,1,1),hours(0))) &&
       (tp.last() == ptime(date(2005,12,31),time_duration(23,59,59))) &&
       (tp.end() == ptime(date(2005,12,31),time_duration(23,59,59,1))) );
+  {
+    std::stringstream ss;
+    ptime pt(not_a_date_time);
+    ptime pt2 = second_clock::local_time();
+    ptime pt3(neg_infin);
+    ptime pt4(pos_infin);
+    time_period tp(pt2, pt); // ptime/nadt
+    time_period tp2(pt, pt); // nadt/nadt
+    time_period tp3(pt3, pt4);
+    ss << tp;
+    ss >> tp2;
+    check("Special values period (reversibility test)", tp == tp2);
+    ss.str("[-infinity/+infinity]");
+    ss >> tp2;
+    check("Special values period (infinities)", tp3 == tp2);
+  }
 
   // Failure tests
   // faliure tests for date elements tested in gregorian tests
