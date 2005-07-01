@@ -168,18 +168,28 @@ struct string_parse_tree
 
     level++;
     charT c;
+    // if we conditionally advance sitr, we won't have 
+    // to consume the next character past the input
+    bool adv_itr = true;
     if (level > result.cache.size()) {
       if (sitr == stream_end) return 0; //bail - input exhausted
       c = static_cast<charT>(std::tolower(*sitr));
-      result.cache += c;
-      sitr++;
+      //result.cache += c;
+      //sitr++;
     }
     else {
+      // if we're looking for characters from the cache, 
+      // we don't want to increment sitr
+      adv_itr = false; 
       c = static_cast<charT>(std::tolower(result.cache[level-1]));
     }
     const_iterator litr = m_next_chars.lower_bound(c);
     const_iterator uitr = m_next_chars.upper_bound(c);
     while (litr != uitr) { // equal if not found
+      if(adv_itr) {
+        sitr++; 
+        result.cache += c;
+      }
       if (litr->second.m_value != -1) { // -1 is default value
         if (result.match_depth < level) {
           result.current_match = litr->second.m_value;
@@ -194,10 +204,14 @@ struct string_parse_tree
                            result, level);
         level--;
       }
+    
+      if(level <= result.cache.size()) {
+        adv_itr = false;
+      }
+
       litr++;
     }
     return result.current_match;
-
 
   }
 

@@ -278,6 +278,8 @@ namespace boost { namespace date_time {
                          stream_itr_type& stream_end,
                          typename date_generator_parser::phrase_elements ele) const
     {
+      // skip leading whitespace
+      while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; } 
       match_results mr = m_element_strings.match(sitr, stream_end);
       if(mr.current_match != ele) {
         throw std::ios_base::failure("Parse failed. No match found for '" + mr.cache + "'");
