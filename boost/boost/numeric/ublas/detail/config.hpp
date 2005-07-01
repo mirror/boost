@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <algorithm>
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
@@ -131,9 +132,8 @@ namespace std {
 #if defined (__HP_aCC) && ! defined (BOOST_STRICT_CONFIG)
 #  if (__HP_aCC >= 60000 )
 #    define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
-#  endif
 #endif
-
+#endif
 
 
 //  SGI MIPSpro C++ compiler
