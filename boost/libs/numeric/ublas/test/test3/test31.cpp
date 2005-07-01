@@ -31,9 +31,7 @@ struct test_my_vector {
             real_type n;
 
             // Default Construct
-            VP default_constuct;
-            initialize_vector (default_constuct);
-            std::cout << "default construct = " << default_constuct << std::endl;
+            default_construct<VP>::test ();
             
             // Copy and swap
             initialize_vector (v1);
