@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_OPERATION_SPARSE_H
-#define BOOST_UBLAS_OPERATION_SPARSE_H
+#ifndef _BOOST_UBLAS_OPERATION_SPARSE_
+#define _BOOST_UBLAS_OPERATION_SPARSE_
 
 #include <boost/numeric/ublas/traits.hpp>
 

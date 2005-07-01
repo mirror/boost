@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_BANDED_H
-#define BOOST_UBLAS_BANDED_H
+#ifndef _BOOST_UBLAS_BANDED_
+#define _BOOST_UBLAS_BANDED_
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/detail/temporary.hpp>

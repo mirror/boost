@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_FWD_H
-#define BOOST_UBLAS_FWD_H
+#ifndef _BOOST_UBLAS_FWD_
+#define _BOOST_UBLAS_FWD_
 
 #include <memory>
 

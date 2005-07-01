@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_MATRIX_EXPRESSION_H
-#define BOOST_UBLAS_MATRIX_EXPRESSION_H
+#ifndef _BOOST_UBLAS_MATRIX_EXPRESSION_
+#define _BOOST_UBLAS_MATRIX_EXPRESSION_
 
 #include <boost/numeric/ublas/vector_expression.hpp>
 

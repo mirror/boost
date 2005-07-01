@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_VECTOR_OF_VECTOR_H
-#define BOOST_UBLAS_VECTOR_OF_VECTOR_H
+#ifndef _BOOST_UBLAS_VECTOR_OF_VECTOR_
+#define _BOOST_UBLAS_VECTOR_OF_VECTOR_
 
 #include <boost/type_traits.hpp>
 

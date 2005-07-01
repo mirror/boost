@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_VECTOR_H
-#define BOOST_UBLAS_VECTOR_H
+#ifndef _BOOST_UBLAS_VECTOR_
+#define _BOOST_UBLAS_VECTOR_
 
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>

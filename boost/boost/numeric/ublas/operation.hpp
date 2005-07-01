@@ -14,14 +14,14 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
+#ifndef _BOOST_UBLAS_OPERATION_
+#define _BOOST_UBLAS_OPERATION_
+
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+
 /** \file operation.hpp
  *  \brief This file contains some specialized products.
  */
-
-#ifndef BOOST_UBLAS_OPERATION_H
-#define BOOST_UBLAS_OPERATION_H
-
-#include <boost/numeric/ublas/matrix_proxy.hpp>
 
 // axpy-based products
 // Alexei Novakov had a lot of ideas to improve these. Thanks.

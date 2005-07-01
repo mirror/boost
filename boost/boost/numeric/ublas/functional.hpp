@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_FUNCTIONAL_H
-#define BOOST_UBLAS_FUNCTIONAL_H
+#ifndef _BOOST_UBLAS_FUNCTIONAL_
+#define _BOOST_UBLAS_FUNCTIONAL_
 
 #include <functional>
 

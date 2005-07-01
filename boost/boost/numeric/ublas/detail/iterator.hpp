@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_ITERATOR_H
-#define BOOST_UBLAS_ITERATOR_H
+#ifndef _BOOST_UBLAS_ITERATOR_
+#define _BOOST_UBLAS_ITERATOR_
 
 #include <boost/numeric/ublas/exception.hpp>
 #include <iterator>

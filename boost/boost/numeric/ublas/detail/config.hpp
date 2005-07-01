@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_CONFIG_H
-#define BOOST_UBLAS_CONFIG_H
+#ifndef _BOOST_UBLAS_CONFIG_
+#define _BOOST_UBLAS_CONFIG_
 
 #include <cassert>
 #include <cstddef>

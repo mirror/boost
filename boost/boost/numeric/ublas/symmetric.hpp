@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_SYMMETRIC_H
-#define BOOST_UBLAS_SYMMETRIC_H
+#ifndef _BOOST_UBLAS_SYMMETRIC_
+#define _BOOST_UBLAS_SYMMETRIC_
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/detail/temporary.hpp>

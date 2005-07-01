@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_MATRIX_ASSIGN_H
-#define BOOST_UBLAS_MATRIX_ASSIGN_H
+#ifndef _BOOST_UBLAS_MATRIX_ASSIGN_
+#define _BOOST_UBLAS_MATRIX_ASSIGN_
 
 // Required for make_conformant storage
 #include <vector>

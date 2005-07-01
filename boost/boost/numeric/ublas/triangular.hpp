@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_TRIANGULAR_H
-#define BOOST_UBLAS_TRIANGULAR_H
+#ifndef _BOOST_UBLAS_TRIANGULAR_
+#define _BOOST_UBLAS_TRIANGULAR_
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/detail/temporary.hpp>

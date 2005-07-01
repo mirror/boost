@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_HERMITIAN_H
-#define BOOST_UBLAS_HERMITIAN_H
+#ifndef _BOOST_UBLAS_HERMITIAN_
+#define _BOOST_UBLAS_HERMITIAN_
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/detail/temporary.hpp>

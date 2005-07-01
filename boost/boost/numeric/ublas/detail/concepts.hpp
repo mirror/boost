@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_CONCEPTS_H
-#define BOOST_UBLAS_CONCEPTS_H
+#ifndef _BOOST_UBLAS_CONCEPTS_
+#define _BOOST_UBLAS_CONCEPTS_
 
 #include <boost/concept_check.hpp>
 
