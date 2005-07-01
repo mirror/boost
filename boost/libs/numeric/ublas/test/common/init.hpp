@@ -15,7 +15,6 @@ struct default_construct
     static void test ()
     {
         E default_constuct;
-        initialize_vector (default_constuct);
         std::cout << "default construct = " << default_constuct << std::endl;
     }
 }; 
