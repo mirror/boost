@@ -6,6 +6,21 @@
  */
 
 /*
+ * Default construct test when possible
+ */
+
+template <class E>
+struct default_construct
+{
+    static void test ()
+    {
+        VC default_constuct;
+        initialize_vector (default_constuct);
+        std::cout << "default construct = " << default_constuct << std::endl;
+    }
+}; 
+
+/*
  * Initialise test values in vector/matrix
  */
 
