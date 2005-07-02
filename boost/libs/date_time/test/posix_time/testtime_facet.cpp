@@ -97,6 +97,41 @@ int main() {
       check("Multiple literal '%'s in time_duration format", ss.str() == std::string("03:02:01 %01"));
       ss.str("");
     }
+    { // negative time_duration tests
+      std::string result;
+      std::stringstream ss;
+      time_duration td1(2,0,0);
+      time_duration td2(1,0,0);
+      ss << td2 - td1;
+      result = "-01:00:00";
+      check("Negative time_duration", result == ss.str());
+      ss.str("");
+
+      time_duration td3(0,2,0);
+      time_duration td4(0,1,0);
+      ss << td4 - td3;
+      result = "-00:01:00";
+      check("Negative time_duration", result == ss.str());
+      ss.str("");
+
+      time_duration td5(0,0,2);
+      time_duration td6(0,0,1);
+      ss << td6 - td5;
+      result = "-00:00:01";
+      check("Negative time_duration", result == ss.str());
+      ss.str("");
+
+#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+      result = "-00:00:00.000000001";
+#else
+      result = "-00:00:00.000001";
+#endif
+      time_duration td7(0,0,0,123);
+      time_duration td8(0,0,0,122);
+      ss << td8 - td7;
+      check("Negative time_duration", result == ss.str());
+    }
+      
 #if !defined(BOOST_NO_STD_WSTRING) 
     std::copy(&short_month_names[0], 
               &short_month_names[12],
