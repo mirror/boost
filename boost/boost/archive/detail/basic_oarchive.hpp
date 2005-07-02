@@ -38,12 +38,12 @@ namespace serialization {
 namespace archive {
 namespace detail {
 
-class BOOST_DECL_ARCHIVE basic_oarchive_impl;
-class BOOST_DECL_ARCHIVE basic_oserializer;
-class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive_impl;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_oarchive - write serialized objects to an output stream
-class BOOST_DECL_ARCHIVE_OR_WARCHIVE basic_oarchive
+class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive
 {
     friend class basic_oarchive_impl;
     // hide implementation of this class to minimize header conclusion

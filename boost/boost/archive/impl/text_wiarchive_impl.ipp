@@ -29,8 +29,7 @@ namespace archive {
 // implementation of wiprimtives functions
 //
 template<class Archive>
-void
-BOOST_DECL_WARCHIVE
+BOOST_WARCHIVE_DECL(void)
 text_wiarchive_impl<Archive>::load(char *s)
 {
     std::size_t size;
@@ -44,8 +43,7 @@ text_wiarchive_impl<Archive>::load(char *s)
 }
 
 template<class Archive>
-void
-BOOST_DECL_WARCHIVE
+BOOST_WARCHIVE_DECL(void)
 text_wiarchive_impl<Archive>::load(std::string &s)
 {
     std::size_t size;
@@ -65,8 +63,7 @@ text_wiarchive_impl<Archive>::load(std::string &s)
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void
-BOOST_DECL_WARCHIVE
+BOOST_WARCHIVE_DECL(void)
 text_wiarchive_impl<Archive>::load(wchar_t *s)
 {
     std::size_t size;
@@ -81,8 +78,7 @@ text_wiarchive_impl<Archive>::load(wchar_t *s)
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void
-BOOST_DECL_WARCHIVE
+BOOST_WARCHIVE_DECL(void)
 text_wiarchive_impl<Archive>::load(std::wstring &ws)
 {
     std::size_t size;
@@ -101,9 +97,7 @@ text_wiarchive_impl<Archive>::load(std::wstring &ws)
 #endif
 
 template<class Archive>
-#if !defined(__BORLANDC__)
-BOOST_DECL_WARCHIVE 
-#endif
+BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
 text_wiarchive_impl<Archive>::text_wiarchive_impl(
     std::wistream & is, 
     unsigned int flags

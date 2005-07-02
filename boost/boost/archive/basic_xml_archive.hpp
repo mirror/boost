@@ -62,83 +62,35 @@ public:
 // constant strings used in xml i/o
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 OBJECT_ID();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 OBJECT_REFERENCE();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 CLASS_ID();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 CLASS_ID_REFERENCE();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 CLASS_NAME();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 TRACKING();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 VERSION();
 
 extern 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const char *
-#else
-    const char *
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 SIGNATURE();
 
 }// namespace archive

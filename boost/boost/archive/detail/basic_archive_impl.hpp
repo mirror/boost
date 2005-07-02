@@ -34,7 +34,7 @@ namespace detail {
 
 //////////////////////////////////////////////////////////////////////
 // class basic_iarchive - read serialized objects from a input stream
-class BOOST_DECL_ARCHIVE basic_archive_impl
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_archive_impl
 {
     //////////////////////////////////////////////////////////////////////
     // list of serialization helpers

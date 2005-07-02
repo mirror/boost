@@ -18,8 +18,7 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-void
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(void)
 basic_archive_impl::lookup_helper(
     const boost::serialization::extended_type_info * const eti,
     shared_ptr<void> & sph
@@ -33,8 +32,7 @@ basic_archive_impl::lookup_helper(
         sph = it->m_helper;
 }
 
-void
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(void)
 basic_archive_impl::insert_helper(
     const boost::serialization::extended_type_info * const eti,
     shared_ptr<void> & sph

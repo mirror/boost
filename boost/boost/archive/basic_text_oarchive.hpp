@@ -46,7 +46,7 @@ class basic_text_oarchive :
     public detail::common_oarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-|| BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x564))
+|| BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x560))
 public:
 #elif defined(BOOST_MSVC)
     // for some inexplicable reason insertion of "class" generates compile erro
@@ -67,8 +67,7 @@ protected:
         delimiter = eol;
     }
 
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     newtoken();
 
     // default processing - invoke serialization library
@@ -99,8 +98,7 @@ protected:
 		* this->This() << s;
     }
 
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
 
     basic_text_oarchive(unsigned int flags) :

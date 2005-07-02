@@ -26,8 +26,7 @@
 namespace boost {
 namespace archive {
 
-BOOST_DECL_WARCHIVE
-std::wostream &
+BOOST_WARCHIVE_DECL(std::wostream &)
 operator<<(std::wostream &os, const char *t){
     for(;;){
         wchar_t wc;
@@ -47,8 +46,7 @@ operator<<(std::wostream &os, const char *t){
     return os;
 }
 
-BOOST_DECL_WARCHIVE
-std::wostream &
+BOOST_WARCHIVE_DECL(std::wostream &)
 operator<<(std::wostream &os, const char t){
     wchar_t wc;
     std::mbtowc(&wc, &t, 1);

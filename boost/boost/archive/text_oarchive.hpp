@@ -53,30 +53,25 @@ protected:
         this->newtoken();
         basic_text_oprimitive<std::ostream>::save(t);
     }
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     save(const wchar_t * t);
     #endif
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     save(const std::wstring &ws);
     #endif
 protected:
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     text_oarchive_impl(std::ostream & os, unsigned int flags);
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~text_oarchive_impl(){};
 public:
-    void
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     save_binary(const void *address, std::size_t count);
 };
 

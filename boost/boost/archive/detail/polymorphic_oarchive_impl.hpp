@@ -36,8 +36,8 @@ namespace boost {
 namespace archive {
 namespace detail{
 
-class BOOST_DECL_ARCHIVE basic_oserializer;
-class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer;
 
 template<class ArchiveImplementation>
 class polymorphic_oarchive_impl : 

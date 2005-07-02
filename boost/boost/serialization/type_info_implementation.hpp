@@ -70,7 +70,7 @@ struct type_info_implementation {
 
 // define a macro to assign a particular derivation of extended_type_info
 // to a specified a class. 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 #define BOOST_CLASS_TYPE_INFO(T, ETI)              \
 namespace boost {                                  \
 namespace serialization {                          \

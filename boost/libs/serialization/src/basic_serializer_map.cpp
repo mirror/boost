@@ -25,12 +25,11 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_serializer_map::basic_serializer_map(){
 }
 
-bool 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(bool) 
 basic_serializer_map::insert(const basic_serializer * bs){
     return map.insert(bs).second;
 }
@@ -42,13 +41,7 @@ public:
     {}
 };
 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const basic_serializer * 
-#else
-    const basic_serializer * 
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const basic_serializer *) 
 basic_serializer_map::tfind(
     const boost::serialization::extended_type_info & type_
 ) const {

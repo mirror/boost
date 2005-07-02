@@ -38,7 +38,7 @@ template<class Archive>
 class archive_pointer_iserializer : 
     public basic_pointer_iserializer {
 protected:
-    explicit BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    explicit BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     archive_pointer_iserializer(
         const boost::serialization::extended_type_info & type_
     );
@@ -70,13 +70,8 @@ public:
     // type_info.  returns NULL if there is no such instance. This
     // would indicate that the no object of the specified type was loaded
     // any where in the code.
-    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-        BOOST_DECL_ARCHIVE_OR_WARCHIVE
-        static const basic_pointer_iserializer * 
-    #else
-        static const basic_pointer_iserializer * 
-        BOOST_DECL_ARCHIVE_OR_WARCHIVE
-    #endif
+    static
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(const basic_pointer_iserializer *)
     find(
         const boost::serialization::extended_type_info & type_
     );

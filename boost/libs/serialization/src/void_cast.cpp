@@ -128,7 +128,7 @@ void_caster_registry::purge(const extended_type_info * eti){
     }
 }
 
-BOOST_SERIALIZATION_DECL
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 void_caster::void_caster(
     extended_type_info const & derived_type_,
     extended_type_info const & base_type_ 
@@ -137,7 +137,7 @@ void_caster::void_caster(
     m_base_type(base_type_)
 {}
 
-BOOST_SERIALIZATION_DECL
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 void_caster::~void_caster(){}
 
 bool 
@@ -145,7 +145,7 @@ void_caster::includes(const extended_type_info * eti) const {
     return & m_derived_type == eti || & m_base_type == eti;
 }
 
-void BOOST_SERIALIZATION_DECL
+void BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 void_caster::static_register(const void_caster * vcp) 
 {
     void_caster_registry::insert(shared_ptr<const void_caster>(vcp, null_deleter()));
@@ -197,7 +197,7 @@ public:
 
 } // namespace void_cast_detail
 
-void  BOOST_SERIALIZATION_DECL
+void  BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 unregister_void_casts(extended_type_info *eti)
 {
     void_cast_detail::void_caster_registry::purge(eti);
@@ -207,13 +207,8 @@ unregister_void_casts(extended_type_info *eti)
 // and alter it so that it would point to an instance of a related type.
 // Return the altered pointer. If there exists no sequence of casts that
 // can transform from_type to to_type, return a NULL.  
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_SERIALIZATION_DECL 
-void const *  
-#else
-void const *  
-BOOST_SERIALIZATION_DECL 
-#endif
+
+BOOST_SERIALIZATION_DECL(void const *)
 void_upcast(
     extended_type_info const & derived_type,
     extended_type_info const & base_type,
@@ -275,13 +270,7 @@ void_upcast(
     return t_new;
 }
 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_SERIALIZATION_DECL 
-void const *  
-#else
-void const *  
-BOOST_SERIALIZATION_DECL 
-#endif
+BOOST_SERIALIZATION_DECL(void const *)
 void_downcast(
     const extended_type_info & derived_type,
     const extended_type_info & base_type,

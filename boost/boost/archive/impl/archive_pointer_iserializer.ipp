@@ -24,9 +24,7 @@ basic_serializer_map & iserializer_map(){
 }
 
 template<class Archive>
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
     const boost::serialization::extended_type_info & type
 ) :
@@ -36,17 +34,7 @@ archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
 }
 
 template<class Archive>
-#if !defined(__BORLANDC__)
-    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-        BOOST_DECL_ARCHIVE_OR_WARCHIVE
-        const basic_pointer_iserializer * 
-    #else
-        const basic_pointer_iserializer * 
-        BOOST_DECL_ARCHIVE_OR_WARCHIVE
-    #endif
-#else
-    const basic_pointer_iserializer * 
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(const basic_pointer_iserializer *) 
 archive_pointer_iserializer<Archive>::find(
     const boost::serialization::extended_type_info & type
 ){

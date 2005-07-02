@@ -109,11 +109,9 @@ protected:
         t = (0 != x);
     }
 
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(class_name_type & t, int);
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
    
     basic_binary_iarchive(unsigned int flags) :

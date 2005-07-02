@@ -140,13 +140,12 @@ public:
             os.put(*s++);
     }
 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     basic_text_oprimitive(OStream & os, bool no_codecvt);
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~basic_text_oprimitive();
 public:
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void) 
     save_binary(const void *address, std::size_t count);
 };
 

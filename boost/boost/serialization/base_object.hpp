@@ -99,7 +99,7 @@ namespace detail {
 } // namespace detail
 
 // BORLAND
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 template<class Base, class Derived>
 const Base & 
 base_object(const Derived & d)

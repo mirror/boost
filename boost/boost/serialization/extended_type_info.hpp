@@ -32,7 +32,7 @@
 namespace boost { 
 namespace serialization {
 
-class BOOST_SERIALIZATION_DECL extended_type_info : 
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info : 
     private boost::noncopyable 
 {
 private:

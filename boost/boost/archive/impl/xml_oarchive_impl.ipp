@@ -50,10 +50,7 @@ void save_iterator(std::ostream &os, InputIterator begin, InputIterator end){
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_oarchive_impl<Archive>::save(const std::wstring & ws){
 //  at least one library doesn't typedef value_type for strings
 //  so rather than using string directly make a pointer iterator out of it
@@ -64,10 +61,7 @@ xml_oarchive_impl<Archive>::save(const std::wstring & ws){
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_oarchive_impl<Archive>::save(const wchar_t * ws){
     save_iterator(os, ws, ws + std::wcslen(ws));
 }
@@ -76,10 +70,7 @@ xml_oarchive_impl<Archive>::save(const wchar_t * ws){
 #endif // BOOST_NO_CWCHAR
 
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_oarchive_impl<Archive>::save(const std::string & s){
 //  at least one library doesn't typedef value_type for strings
 //  so rather than using string directly make a pointer iterator out of it
@@ -94,10 +85,7 @@ xml_oarchive_impl<Archive>::save(const std::string & s){
 }
 
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_oarchive_impl<Archive>::save(const char * s){
     typedef boost::archive::iterators::xml_escape<
         const char * 
@@ -110,9 +98,7 @@ xml_oarchive_impl<Archive>::save(const char * s){
 }
 
 template<class Archive>
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 xml_oarchive_impl<Archive>::xml_oarchive_impl(
     std::ostream & os_, 
     unsigned int flags

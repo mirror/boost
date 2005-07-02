@@ -500,31 +500,28 @@ basic_iarchive_impl::load_pointer(
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_iarchive functions
 
-void 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::next_object_pointer(void *t){
     pimpl->next_object_pointer(t);
 }
 
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_iarchive::basic_iarchive(unsigned int flags) : 
     pimpl(new basic_iarchive_impl(flags))
 {}
 
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_iarchive::~basic_iarchive()
 {
     delete pimpl;
 }
 
-void
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::set_library_version(unsigned int archive_library_version){
     pimpl->set_library_version(archive_library_version);
 }
 
-void
-BOOST_DECL_ARCHIVE
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::reset_object_address(
     const void * new_address, 
     const void * old_address
@@ -532,8 +529,7 @@ basic_iarchive::reset_object_address(
     pimpl->reset_object_address(new_address, old_address);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::load_object(
     void *t, 
     const basic_iserializer & bis
@@ -542,13 +538,7 @@ basic_iarchive::load_object(
 }
 
 // load a pointer object
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_DECL_ARCHIVE 
-    const basic_pointer_iserializer * 
-#else
-    const basic_pointer_iserializer * 
-    BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const basic_pointer_iserializer *)
 basic_iarchive::load_pointer(
     void * &t, 
     const basic_pointer_iserializer * bpis_ptr,
@@ -559,14 +549,12 @@ basic_iarchive::load_pointer(
     return pimpl->load_pointer(*this, t, bpis_ptr, finder);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::register_basic_serializer(const basic_iserializer & bis){
     pimpl->register_type(bis);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::lookup_basic_helper(
     const boost::serialization::extended_type_info * const eti,
     shared_ptr<void> & sph
@@ -574,8 +562,7 @@ basic_iarchive::lookup_basic_helper(
     pimpl->lookup_helper(eti, sph);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::insert_basic_helper(
     const boost::serialization::extended_type_info * const eti,
     shared_ptr<void> & sph
@@ -583,21 +570,18 @@ basic_iarchive::insert_basic_helper(
     pimpl->insert_helper(eti, sph);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void)
 basic_iarchive::delete_created_pointers()
 {
     pimpl->delete_created_pointers();
 }
 
-unsigned int 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(unsigned int) 
 basic_iarchive::get_library_version() const{
     return pimpl->m_archive_library_version;
 }
 
-unsigned int 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(unsigned int) 
 basic_iarchive::get_flags() const{
     return pimpl->m_flags;
 }

@@ -97,18 +97,10 @@ enum archive_flags {
 
 #define NULL_POINTER_TAG class_id_type(-1)
 
-
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-BOOST_DECL_ARCHIVE 
-const char *
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 ARCHIVE_SIGNATURE();
 
-unsigned char 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(unsigned char)
 ARCHIVE_VERSION();
 
 }// namespace archive

@@ -58,13 +58,17 @@ protected:
         this->newtoken();
         basic_text_oprimitive<std::wostream>::save(t);
     }
-    void BOOST_DECL_WARCHIVE save(const char * t);
+    BOOST_WARCHIVE_DECL(void)
+    save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    void BOOST_DECL_WARCHIVE save(const wchar_t * t);
+    BOOST_WARCHIVE_DECL(void)
+    save(const wchar_t * t);
     #endif
-    void BOOST_DECL_WARCHIVE save(const std::string &s);
+    BOOST_WARCHIVE_DECL(void)
+    save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void BOOST_DECL_WARCHIVE save(const std::wstring &ws);
+    BOOST_WARCHIVE_DECL(void)
+    save(const std::wstring &ws);
     #endif
     text_woarchive_impl(std::wostream & os, unsigned int flags) :
         basic_text_oprimitive<std::wostream>(

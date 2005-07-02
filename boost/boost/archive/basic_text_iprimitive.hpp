@@ -113,13 +113,12 @@ public:
         t = static_cast<wchar_t>(i);
     }
     #endif
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     basic_text_iprimitive(IStream  &is, bool no_codecvt);
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~basic_text_iprimitive();
 public:
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_binary(void *address, std::size_t count);
 };
 

@@ -21,31 +21,31 @@ namespace std{ using ::strcmp; }
 namespace boost { 
 namespace serialization { 
 
-BOOST_SERIALIZATION_DECL  bool
+BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_no_rtti_base::less_than(
     const boost::serialization::extended_type_info &rhs) const 
 {
     return std::strcmp(key, rhs.key) < 0;
 }
-BOOST_SERIALIZATION_DECL  bool
+BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_no_rtti_base::equal_to(
     const boost::serialization::extended_type_info &rhs) const
 {
     return std::strcmp(key, rhs.key) == 0;
 }
-BOOST_SERIALIZATION_DECL  bool
+BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_no_rtti_base::not_equal_to(
     const boost::serialization::extended_type_info &rhs) const 
 {
     return std::strcmp(key, rhs.key) != 0;
 }
 
-BOOST_SERIALIZATION_DECL  
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())  
 extended_type_info_no_rtti_base::extended_type_info_no_rtti_base() :
     boost::serialization::extended_type_info("extended_type_info_no_rtti")
 {}
 
-BOOST_SERIALIZATION_DECL  
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())  
 extended_type_info_no_rtti_base::~extended_type_info_no_rtti_base()
 {}
 

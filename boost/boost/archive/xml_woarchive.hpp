@@ -39,12 +39,10 @@ namespace std{
 namespace boost {
 namespace archive {
 
-BOOST_DECL_WARCHIVE
-std::wostream &
+BOOST_WARCHIVE_DECL(std::wostream &)
 operator<<(std::wostream &os, const char *t);
 
-BOOST_DECL_WARCHIVE
-std::wostream &
+BOOST_WARCHIVE_DECL(std::wostream &)
 operator<<(std::wostream &os, const char t);
 
 template<class Archive>
@@ -64,22 +62,28 @@ protected:
         basic_xml_oarchive<Archive>::end_preamble();
     }
     template<class T>
-    void save(const T & t){
+    void 
+    save(const T & t){
         basic_text_oprimitive<std::wostream>::save(t);
     }
-    void BOOST_DECL_WARCHIVE save(const char * t);
+    BOOST_WARCHIVE_DECL(void)
+    save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    void BOOST_DECL_WARCHIVE save(const wchar_t * t);
+    BOOST_WARCHIVE_DECL(void) 
+    save(const wchar_t * t);
     #endif
-    void BOOST_DECL_WARCHIVE save(const std::string &s);
+    BOOST_WARCHIVE_DECL(void) 
+    save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void BOOST_DECL_WARCHIVE save(const std::wstring &ws);
+    BOOST_WARCHIVE_DECL(void)
+    save(const std::wstring &ws);
     #endif
-    BOOST_DECL_WARCHIVE 
+    BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     xml_woarchive_impl(std::wostream & os, unsigned int flags);
     ~xml_woarchive_impl(){}
 public:
-    void save_binary(const void *address, std::size_t count){
+    void 
+    save_binary(const void *address, std::size_t count){
         this->end_preamble();
         #if ! defined(__MWERKS__)
         this->basic_text_oprimitive<std::wostream>::save_binary(

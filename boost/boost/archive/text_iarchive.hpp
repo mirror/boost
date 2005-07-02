@@ -44,20 +44,16 @@ protected:
     void load(T & t){
         basic_text_iprimitive<std::istream>::load(t);
     }
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     load(char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     load(wchar_t * t);
     #endif
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     load(std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void 
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(void) 
     load(std::wstring &ws);
     #endif
     // note: the following should not needed - but one compiler (vc 7.1)
@@ -67,9 +63,9 @@ protected:
     void load_override(T & t, BOOST_PFTO int){
         basic_text_iarchive<Archive>::load_override(t, 0);
     }
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     text_iarchive_impl(std::istream & is, unsigned int flags);
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~text_iarchive_impl(){};
 };
 

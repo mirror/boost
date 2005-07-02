@@ -547,7 +547,7 @@ inline void load(Archive &ar, T &t){
 }
 
 // BORLAND
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 // borland has a couple fo problems
 // a) if function is partiall specialized - see below
 // const paramters are transformed to non-const ones

@@ -19,7 +19,7 @@
 // certain parts of mpl.  including this here makes sure that happens
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564 )
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x560 )
 #include <boost/archive/impl/basic_xml_grammar.hpp>
 #endif
 

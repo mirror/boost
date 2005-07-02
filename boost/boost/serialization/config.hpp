@@ -22,6 +22,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/preprocessor/facilities/empty.hpp>
 
 // note: this version incorporates the related code into the the 
 // the same library as BOOST_ARCHIVE.  This could change some day in the
@@ -36,7 +37,11 @@
 #define BOOST_DYN_LINK
 // export if this is our own source, otherwise import:
 #if defined(BOOST_SERIALIZATION_SOURCE)
-    #define BOOST_SERIALIZATION_DECL __declspec(dllexport)
+    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
+    #define BOOST_SERIALIZATION_DECL(T) __declspec(dllexport) T
+    #else
+    #define BOOST_SERIALIZATION_DECL(T) T __declspec(dllexport)
+    #endif
     #pragma message( "BOOST_SERIALIZATION_DECL __declspec(dllexport)" )
 #endif // defined(BOOST_SERIALIZATION_SOURCE)
 #endif // defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK)
@@ -44,7 +49,7 @@
 
 // if BOOST_SERIALIZATION_DECL isn't defined yet define it now:
 #ifndef BOOST_SERIALIZATION_DECL
-    #define BOOST_SERIALIZATION_DECL
+    #define BOOST_SERIALIZATION_DECL(T) T
 #endif
 
 //  enable automatic library variant selection  ------------------------------// 
@@ -65,9 +70,5 @@
 #endif  // !defined(BOOST_SERIALIZATION_SOURCE) && !defined(BOOST_ARCHIVE_SOURCE)
 
 //----------------------------------------------------------------------------// 
-
-#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
-#   define BOOST_SERIALIZATION_STATIC_DATA_REGISTRATION_WORKAROUND 1
-#endif
 
 #endif // BOOST_SERIALIZATION_CONFIG_HPP

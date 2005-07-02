@@ -35,10 +35,7 @@ namespace archive {
 // translate base64 text into binary and copy into buffer
 // until buffer is full.
 template<class IStream>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_iprimitive<IStream>::load_binary(
     void *address, 
     std::size_t count
@@ -93,9 +90,7 @@ basic_text_iprimitive<IStream>::load_binary(
 }
 
 template<class IStream>
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_text_iprimitive<IStream>::basic_text_iprimitive(
     IStream  &is_,
     bool no_codecvt
@@ -119,9 +114,7 @@ basic_text_iprimitive<IStream>::basic_text_iprimitive(
 }
 
 template<class IStream>
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_text_iprimitive<IStream>::~basic_text_iprimitive(){
 }
 

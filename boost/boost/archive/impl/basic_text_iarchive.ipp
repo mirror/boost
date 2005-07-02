@@ -29,10 +29,7 @@ namespace archive {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // implementation of text_text_archive
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_iarchive<Archive>::load_override(class_name_type & t, int){
     std::string cn;
     cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);
@@ -47,10 +44,7 @@ basic_text_iarchive<Archive>::load_override(class_name_type & t, int){
 }
 
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_iarchive<Archive>::init(void){
     // read signature in an archive version independent manner
     std::string file_signature;

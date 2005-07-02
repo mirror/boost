@@ -77,27 +77,22 @@ public:
         save_binary(& t, sizeof(T));
     }
 
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     save(const std::wstring &ws);
     #endif
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     save(const char * t);
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     save(const wchar_t * t);
 
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     basic_binary_oprimitive(OStream & os, bool no_codecvt);
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~basic_binary_oprimitive();
 public:
     void save_binary(const void *address, std::size_t count);

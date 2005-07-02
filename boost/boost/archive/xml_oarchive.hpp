@@ -55,15 +55,19 @@ protected:
     void save(const T & t){
         basic_text_oprimitive<std::ostream>::save(t);
     }
-    void BOOST_DECL_ARCHIVE save(const char * t);
+    BOOST_ARCHIVE_DECL(void) 
+    save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    void BOOST_DECL_ARCHIVE save(const wchar_t * t);
+    BOOST_ARCHIVE_DECL(void)
+    save(const wchar_t * t);
     #endif
-    void BOOST_DECL_ARCHIVE save(const std::string &s);
+    BOOST_ARCHIVE_DECL(void)
+    save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void BOOST_DECL_ARCHIVE save(const std::wstring &ws);
+    BOOST_ARCHIVE_DECL(void)
+    save(const std::wstring &ws);
     #endif
-    BOOST_DECL_ARCHIVE 
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     xml_oarchive_impl(std::ostream & os, unsigned int flags);
     ~xml_oarchive_impl(){}
 public:

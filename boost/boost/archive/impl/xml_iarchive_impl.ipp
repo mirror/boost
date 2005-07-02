@@ -50,10 +50,7 @@ namespace archive {
 #ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::load(std::wstring &ws){
     std::string s;
     bool result = gimpl->parse_string(is, s);
@@ -87,10 +84,7 @@ xml_iarchive_impl<Archive>::load(std::wstring &ws){
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::load(wchar_t * ws){
     std::string s;
     bool result = gimpl->parse_string(is, s);
@@ -122,10 +116,7 @@ xml_iarchive_impl<Archive>::load(wchar_t * ws){
 #endif // BOOST_NO_CWCHAR
 
 template<class Archive>
-void
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::load(std::string &s){
     bool result = gimpl->parse_string(is, s);
     if(! result)
@@ -135,10 +126,7 @@ xml_iarchive_impl<Archive>::load(std::string &s){
 }
 
 template<class Archive>
-void
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::load(char * s){
     std::string tstring;
     bool result = gimpl->parse_string(is, tstring);
@@ -151,10 +139,7 @@ xml_iarchive_impl<Archive>::load(char * s){
 }
 
 template<class Archive>
-void
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::load_override(class_name_type & t, int){
     const std::string & s = gimpl->rv.class_name;
     if(s.size() > BOOST_SERIALIZATION_MAX_KEY_SIZE - 1)
@@ -165,18 +150,13 @@ xml_iarchive_impl<Archive>::load_override(class_name_type & t, int){
 }
 
 template<class Archive>
-void
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::init(){
     gimpl->init(is);
 }
 
 template<class Archive>
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 xml_iarchive_impl<Archive>::xml_iarchive_impl(
     std::istream &is_,
     unsigned int flags
@@ -193,9 +173,7 @@ xml_iarchive_impl<Archive>::xml_iarchive_impl(
 }
 
 template<class Archive>
-#if ! defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 xml_iarchive_impl<Archive>::~xml_iarchive_impl(){
     if(0 == (this->get_flags() & no_header)){
 		BOOST_TRY{

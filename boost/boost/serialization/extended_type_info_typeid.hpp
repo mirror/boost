@@ -38,7 +38,7 @@ namespace serialization {
 
 namespace detail {
 
-class BOOST_SERIALIZATION_DECL extended_type_info_typeid_0 : 
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 : 
     public extended_type_info
 {
 private:

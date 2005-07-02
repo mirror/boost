@@ -36,11 +36,11 @@ namespace archive {
 namespace detail {
 
 class basic_iarchive_impl;
-class BOOST_DECL_ARCHIVE basic_iserializer;
-class BOOST_DECL_ARCHIVE basic_pointer_iserializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iserializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_iarchive - read serialized objects from a input stream
-class BOOST_DECL_ARCHIVE basic_iarchive 
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iarchive 
 {
     friend class basic_iarchive_impl;
     // hide implementation of this class to minimize header conclusion

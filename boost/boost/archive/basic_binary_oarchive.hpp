@@ -108,8 +108,7 @@ protected:
 		* this->This() << s;
     }
 
-    void 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
 
     basic_binary_oarchive(unsigned int flags) :

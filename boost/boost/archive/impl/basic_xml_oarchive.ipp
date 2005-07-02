@@ -57,10 +57,7 @@ struct XML_name {
 // implemenations of functions common to both types of xml output
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::write_attribute(
     const char *attribute_name, 
     int t,
@@ -74,10 +71,7 @@ basic_xml_oarchive<Archive>::write_attribute(
 }
     
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::write_attribute(
     const char *attribute_name, 
     const char *key
@@ -90,10 +84,7 @@ basic_xml_oarchive<Archive>::write_attribute(
 }
     
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::indent(){
     int i;
     for(i = depth; i-- > 0;)
@@ -101,10 +92,7 @@ basic_xml_oarchive<Archive>::indent(){
 }
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_start(const char *name)
 {
     if(NULL == name)
@@ -126,10 +114,7 @@ basic_xml_oarchive<Archive>::save_start(const char *name)
 }
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_end(const char *name)
 {
     if(NULL == name)
@@ -153,10 +138,7 @@ basic_xml_oarchive<Archive>::save_end(const char *name)
 }
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::end_preamble(){
     if(pending_preamble){
         this->This()->put('>');
@@ -165,20 +147,14 @@ basic_xml_oarchive<Archive>::end_preamble(){
 }
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const object_id_type & t, int)
 {
     int i = t.t; // extra .t is for borland
     write_attribute(OBJECT_ID(), i, "=\"_"); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(
     const object_reference_type & t,
     int
@@ -187,29 +163,20 @@ basic_xml_oarchive<Archive>::save_override(
     write_attribute(OBJECT_REFERENCE(), i, "=\"_"); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const version_type & t, int)
 {
     int i = t.t; // extra .t is for borland
     write_attribute(VERSION(), i); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const class_id_type & t, int)
 {
     write_attribute(CLASS_ID(), t); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(
     const class_id_reference_type & t,
     int
@@ -217,10 +184,7 @@ basic_xml_oarchive<Archive>::save_override(
     write_attribute(CLASS_ID_REFERENCE(), t); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(
     const class_id_optional_type & t,
     int
@@ -228,10 +192,7 @@ basic_xml_oarchive<Archive>::save_override(
     write_attribute(CLASS_ID(), t); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const class_name_type & t, int)
 {
     const char * key = t;
@@ -240,20 +201,14 @@ basic_xml_oarchive<Archive>::save_override(const class_name_type & t, int)
     write_attribute(CLASS_NAME(), key); 
 }
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const tracking_type & t, int)
 {
     write_attribute(TRACKING(), t.t); // extra .t is for borland 
 }
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::init(){
     // xml header
     this->This()->put("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n");
@@ -266,9 +221,7 @@ basic_xml_oarchive<Archive>::init(){
 }
 
 template<class Archive> 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_xml_oarchive<Archive>::basic_xml_oarchive(unsigned int flags) :
     detail::common_oarchive<Archive>(flags),
     depth(0),
@@ -278,9 +231,7 @@ basic_xml_oarchive<Archive>::basic_xml_oarchive(unsigned int flags) :
 }
 
 template<class Archive> 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_xml_oarchive<Archive>::~basic_xml_oarchive(){
     if(0 == (this->get_flags() & no_header)){
         BOOST_TRY{

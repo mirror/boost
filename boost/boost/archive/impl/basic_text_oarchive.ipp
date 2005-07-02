@@ -27,10 +27,7 @@ namespace archive {
 // implementation of basic_text_oarchive
 
 template<class Archive>
-void  
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_oarchive<Archive>::newtoken()
 {
     switch(delimiter){
@@ -51,10 +48,7 @@ basic_text_oarchive<Archive>::newtoken()
 }
 
 template<class Archive>
-void 
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE_OR_WARCHIVE
-#endif
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_oarchive<Archive>::init(){
     // write signature in an archive version independent manner
     const std::string file_signature(ARCHIVE_SIGNATURE());

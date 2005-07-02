@@ -49,11 +49,9 @@ protected:
 protected:
 #endif
     unsigned int depth;
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_start(const char *name);
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_end(const char *name);
 
     // Anything not an attribute and not a name-value pair is an
@@ -91,26 +89,22 @@ protected:
     // it otherwise it will be loaded as a normal primitive w/o tag and
     // leaving the archive in an undetermined state
     void load_override(class_id_optional_type & /* t */, int){}
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(object_id_type & t, int);
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(version_type & t, int);
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(class_id_type & t, int);
-    void
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(tracking_type & t, int);
     // class_name_type can't be handled here as it depends upon the
     // char type used by the stream.  So require the derived implementation
     // handle this.
     // void load_override(class_name_type & t, int);
 
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     basic_xml_iarchive(unsigned int flags);
-    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~basic_xml_iarchive();
 };
 

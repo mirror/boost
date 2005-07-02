@@ -14,83 +14,35 @@
 namespace boost {
 namespace archive {
 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 OBJECT_ID(){
     return "object_id";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 OBJECT_REFERENCE(){
     return "object_id_reference";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 CLASS_ID(){
     return "class_id";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 CLASS_ID_REFERENCE(){
     return "class_id_reference";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 CLASS_NAME(){
     return "class_name";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 TRACKING(){
     return "tracking_level";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 VERSION(){
     return "version";
 }
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_DECL_ARCHIVE 
-const char *
-#else
-const char *
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(const char *)
 SIGNATURE(){
     return "signature";
 }

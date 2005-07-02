@@ -66,8 +66,7 @@ template boost_serialization_base
         common-variant-tag
         <sysinclude>$(BOOST_ROOT)
         <stlport-iostream>on 
-        <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
-        <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
+        <borland*><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-8001 -w-0018 -w-8066"
         <msvc><*><cxxflags>-Gy
         <vc*><*><cxxflags>-Gy
         <define>BOOST_LIB_DIAGNOSTIC=1

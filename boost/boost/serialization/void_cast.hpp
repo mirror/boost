@@ -35,20 +35,14 @@
 namespace boost { 
 namespace serialization { 
 
-class BOOST_SERIALIZATION_DECL extended_type_info;
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info;
 
 // Given a void *, assume that it really points to an instance of one type
 // and alter it so that it would point to an instance of a related type.
 // Return the altered pointer. If there exists no sequence of casts that
 // can transform from_type to to_type, return a NULL.  
 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_SERIALIZATION_DECL 
-void const *  
-#else
-void const *  
-BOOST_SERIALIZATION_DECL 
-#endif
+BOOST_SERIALIZATION_DECL(void const *)
 void_upcast(
     extended_type_info const & derived_type,  
     extended_type_info const & base_type, 
@@ -69,13 +63,7 @@ void_upcast(
     ));
 }
 
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-BOOST_SERIALIZATION_DECL 
-void const *  
-#else
-void const *  
-BOOST_SERIALIZATION_DECL 
-#endif
+BOOST_SERIALIZATION_DECL(void const *)
 void_downcast(
     extended_type_info const & derived_type,  
     extended_type_info const & base_type, 
@@ -99,17 +87,11 @@ void_downcast(
 namespace void_cast_detail {
 
 // note: can't be abstract because an instance is used as a search argument
-class BOOST_SERIALIZATION_DECL void_caster
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster
 {
     friend struct void_caster_compare ;
     friend 
-    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_SERIALIZATION_DECL 
-    void const *  
-    #else
-    void const *  
-    BOOST_SERIALIZATION_DECL 
-    #endif
+    BOOST_SERIALIZATION_DECL(void const *)  
     boost::serialization::void_upcast(
         const extended_type_info & derived_type,
         const extended_type_info & base_type,
@@ -117,13 +99,7 @@ class BOOST_SERIALIZATION_DECL void_caster
         bool top
     );
     friend 
-    #if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(__MWERKS__)
-    BOOST_SERIALIZATION_DECL 
-    void const *  
-    #else
-    void const *  
-    BOOST_SERIALIZATION_DECL 
-    #endif
+    BOOST_SERIALIZATION_DECL(void const *)  
     boost::serialization::void_downcast(
         const extended_type_info & derived_type,
         const extended_type_info & base_type,

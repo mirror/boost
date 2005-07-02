@@ -24,7 +24,7 @@
 // the following works around an issue between spirit 1.61 and borland.
 // it turns out the the certain spirit stuff must be defined before
 // certain parts of mpl.  including this here makes sure that happens
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564 )
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x560 )
 #include <boost/archive/impl/basic_xml_grammar.hpp>
 #endif
 

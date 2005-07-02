@@ -31,7 +31,7 @@ namespace serialization {
 namespace archive {
 namespace detail  {
 
-class BOOST_DECL_ARCHIVE basic_serializer;
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer;
 
 struct type_info_pointer_compare
 {
@@ -42,7 +42,7 @@ struct type_info_pointer_compare
     }
 };
 
-struct BOOST_DECL_ARCHIVE basic_serializer_map
+struct BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer_map
 {
     typedef std::set<const basic_serializer *, type_info_pointer_compare> map_type;
     map_type map;

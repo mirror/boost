@@ -28,10 +28,7 @@ namespace boost {
 namespace archive {
 
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 text_iarchive_impl<Archive>::load(char *s)
 {
     std::size_t size;
@@ -44,10 +41,7 @@ text_iarchive_impl<Archive>::load(char *s)
 }
 
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 text_iarchive_impl<Archive>::load(std::string &s)
 {
     std::size_t size;
@@ -65,10 +59,7 @@ text_iarchive_impl<Archive>::load(std::string &s)
 #ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 text_iarchive_impl<Archive>::load(wchar_t *ws)
 {
     std::size_t size;
@@ -82,10 +73,7 @@ text_iarchive_impl<Archive>::load(wchar_t *ws)
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
-void
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE
-#endif
+BOOST_ARCHIVE_DECL(void)
 text_iarchive_impl<Archive>::load(std::wstring &ws)
 {
     std::size_t size;
@@ -104,9 +92,7 @@ text_iarchive_impl<Archive>::load(std::wstring &ws)
 #endif // BOOST_NO_CWCHAR
 
 template<class Archive>
-#if !defined(__BORLANDC__)
-BOOST_DECL_ARCHIVE 
-#endif
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
 text_iarchive_impl<Archive>::text_iarchive_impl(
     std::istream & is, 
     unsigned int flags

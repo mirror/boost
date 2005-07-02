@@ -392,19 +392,18 @@ basic_oarchive_impl::save_pointer(
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_oarchive functions
 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
 basic_oarchive::basic_oarchive(unsigned int flags)
     : pimpl(new basic_oarchive_impl(flags))
 {}
 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
 basic_oarchive::~basic_oarchive()
 {
     delete pimpl;
 }
 
-void 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::save_object(
     const void *x, 
     const basic_oserializer & bos
@@ -412,8 +411,7 @@ basic_oarchive::save_object(
     pimpl->save_object(*this, x, bos);
 }
 
-void 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::save_pointer(
     const void * t, 
     const basic_pointer_oserializer * bpos_ptr
@@ -421,14 +419,12 @@ basic_oarchive::save_pointer(
     pimpl->save_pointer(*this, t, bpos_ptr);
 }
 
-void 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
     pimpl->register_type(bos);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::lookup_basic_helper(
     const boost::serialization::extended_type_info * const eti,
     shared_ptr<void> & sph
@@ -436,8 +432,7 @@ basic_oarchive::lookup_basic_helper(
     pimpl->lookup_helper(eti, sph);
 }
 
-void
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::insert_basic_helper(
     const boost::serialization::extended_type_info * const eti,
     shared_ptr<void> & sph
@@ -445,20 +440,17 @@ basic_oarchive::insert_basic_helper(
     pimpl->insert_helper(eti, sph);
 }
 
-unsigned int
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(unsigned int)
 basic_oarchive::get_library_version() const{
     return ARCHIVE_VERSION();
 }
 
-unsigned int
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(unsigned int)
 basic_oarchive::get_flags() const{
     return pimpl->m_flags;
 }
 
-void 
-BOOST_DECL_ARCHIVE 
+BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::end_preamble(){
 }
 

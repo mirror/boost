@@ -176,19 +176,19 @@ ktmap * ktmap::m_self = NULL;
 
 } // namespace detail
 
-BOOST_SERIALIZATION_DECL const extended_type_info * 
+BOOST_SERIALIZATION_DECL(const extended_type_info *) 
 extended_type_info::find(const char *key)
 {
     return detail::ktmap::find(key);
 }
 
-BOOST_SERIALIZATION_DECL void 
+BOOST_SERIALIZATION_DECL(void) 
 extended_type_info::self_register()
 {
     detail::tkmap::insert(this);
 }
 
-BOOST_SERIALIZATION_DECL void  
+BOOST_SERIALIZATION_DECL(void)  
 extended_type_info::key_register(const char *key_) {
     if(NULL == key_)
         return;
@@ -196,13 +196,13 @@ extended_type_info::key_register(const char *key_) {
     detail::ktmap::insert(this);
 }
 
-BOOST_SERIALIZATION_DECL 
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) 
 extended_type_info::extended_type_info(const char * type_info_key_) :
     type_info_key(type_info_key_),
     key(NULL)
 {}
 
-BOOST_SERIALIZATION_DECL 
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) 
 extended_type_info::~extended_type_info(){
     // remove entries in maps which correspond to this type
     BOOST_TRY{
@@ -215,7 +215,7 @@ extended_type_info::~extended_type_info(){
 }
 
 
-int BOOST_SERIALIZATION_DECL 
+BOOST_SERIALIZATION_DECL(int)
 extended_type_info::type_info_key_cmp(const extended_type_info & rhs) const {
     if(type_info_key == rhs.type_info_key)
         return 0;
@@ -225,13 +225,13 @@ extended_type_info::type_info_key_cmp(const extended_type_info & rhs) const {
     return type_info_key < rhs.type_info_key ? -1 : 1;
 }
 
-BOOST_SERIALIZATION_DECL const extended_type_info * 
+BOOST_SERIALIZATION_DECL(const extended_type_info *) 
 extended_type_info::find(const extended_type_info * t)
 {
     return detail::tkmap::find(t);
 }
 
-bool BOOST_SERIALIZATION_DECL 
+BOOST_SERIALIZATION_DECL(bool)
 extended_type_info::operator<(const extended_type_info &rhs) const {
     int i = type_info_key_cmp(rhs);
     if(i < 0)
@@ -241,7 +241,7 @@ extended_type_info::operator<(const extended_type_info &rhs) const {
     return less_than(rhs);
 }
 
-bool BOOST_SERIALIZATION_DECL 
+BOOST_SERIALIZATION_DECL(bool)
 extended_type_info::operator==(const extended_type_info &rhs) const {
     int i = type_info_key_cmp(rhs);
     if(i != 0)
@@ -249,7 +249,7 @@ extended_type_info::operator==(const extended_type_info &rhs) const {
     return equal_to(rhs);
 }
 
-bool BOOST_SERIALIZATION_DECL 
+BOOST_SERIALIZATION_DECL(bool)
 extended_type_info::operator!=(const extended_type_info &rhs) const {
     int i = type_info_key_cmp(rhs);
     if(i != 0)
