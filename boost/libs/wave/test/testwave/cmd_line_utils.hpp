@@ -97,7 +97,8 @@ namespace cmd_line_utils {
         po::options_description const &desc, po::variables_map &vm)
     {
         if (9 == debuglevel) {
-            std::cerr << "reading config options" << std::endl;
+            std::cerr << "read_config_options: reading config options" 
+                      << std::endl;
         }
 
         std::istringstream istrm(indata);
@@ -118,7 +119,8 @@ namespace cmd_line_utils {
 
         if (options.size() > 0) {
             if (9 == debuglevel) {
-                std::cerr << "options size is: " << (int)options.size() << std::endl;
+                std::cerr << "read_config_options: options size is: " 
+                          << (int)options.size() << std::endl;
             }
 
             // (the (int) cast is to make the True64 compiler happy)
@@ -129,7 +131,8 @@ namespace cmd_line_utils {
         }
 
         if (9 == debuglevel) {
-            std::cerr << "succeeded to read config options" << std::endl;
+            std::cerr << "read_config_options: succeeded to read config options" 
+                      << std::endl;
         }
     }
 
@@ -141,7 +144,8 @@ namespace cmd_line_utils {
         po::options_description const &desc, po::variables_map &vm)
     {
         if (9 == debuglevel) {
-            std::cerr << "reading config options" << std::endl;
+            std::cerr << "read_config_file: reading config options" 
+                      << std::endl;
         }
 
         std::ifstream ifs(filename.c_str());
@@ -171,7 +175,8 @@ namespace cmd_line_utils {
 
         if (options.size() > 0) {
             if (9 == debuglevel) {
-                std::cerr << "options size is: " << (int)options.size() << std::endl;
+                std::cerr << "read_config_file: options size is: " 
+                          << (int)options.size() << std::endl;
             }
 
         // treat positional arguments as --input parameters
@@ -189,7 +194,8 @@ namespace cmd_line_utils {
 
 
         if (9 == debuglevel) {
-            std::cerr << "succeeded to read config options" << std::endl;
+            std::cerr << "read_config_file: succeeded to read config options" 
+                      << std::endl;
         }
         return true;
     }

@@ -275,7 +275,7 @@ main(int argc, char *argv[])
             std::cout << "." << std::endl;
         }
     }
-    catch (std::exception &e) {
+    catch (std::exception const &e) {
         std::cerr << "testwave: exception caught: " << e.what() << std::endl;
         return (std::numeric_limits<int>::max)() - 1;
     }

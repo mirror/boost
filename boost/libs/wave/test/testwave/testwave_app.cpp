@@ -462,7 +462,7 @@ testwave_app::read_file(std::string const& filename, std::string& instr)
         return false;
     }
     else if (9 == debuglevel) {
-        std::cerr << "succeeded to open input file: " 
+        std::cerr << "read_file: succeeded to open input file: " 
                   << filename << std::endl;
     }
     instream.unsetf(std::ios::skipws);
@@ -480,7 +480,7 @@ testwave_app::read_file(std::string const& filename, std::string& instr)
 #endif 
     
     if (9 == debuglevel) {
-        std::cerr << "succeeded to read input file: " 
+        std::cerr << "read_file: succeeded to read input file: " 
                   << filename << std::endl;
     }
     return true;
@@ -524,8 +524,8 @@ testwave_app::extract_special_information(std::string const& filename,
     std::string const& instr, char flag, std::string& content)
 {
     if (9 == debuglevel) {
-        std::cerr << "extracting special information ('" << flag 
-                  << "') from input file: " << filename << std::endl;
+        std::cerr << "extract_special_information: extracting special information ('" 
+                  << flag << "') from input file: " << filename << std::endl;
     }
 
 // tokenize the input data into C++ tokens using the C++ lexer
@@ -554,8 +554,8 @@ testwave_app::extract_special_information(std::string const& filename,
                     std::string thiscontent(value.substr(3, value.size()-5));
                     
                     if (9 == debuglevel) {
-                        std::cerr << "extracted: " << thiscontent
-                                  << std::endl;
+                        std::cerr << "extract_special_information: extracted: " 
+                                  << thiscontent << std::endl;
                     }
                     trim_whitespace(thiscontent);
                     content += thiscontent;
@@ -567,7 +567,8 @@ testwave_app::extract_special_information(std::string const& filename,
                     std::string thiscontent(value.substr((' ' == value[3]) ? 4 : 3));
 
                     if (9 == debuglevel) {
-                        std::cerr << "extracted: " << thiscontent;
+                        std::cerr << "extract_special_information: extracted: " 
+                                  << thiscontent;
                     }
                     trim_whitespace(content);
                     content += thiscontent;
@@ -575,7 +576,7 @@ testwave_app::extract_special_information(std::string const& filename,
             }
         }
     }
-    catch (boost::wave::cpplexer::lexing_exception &e) {
+    catch (boost::wave::cpplexer::lexing_exception const &e) {
     // some lexing error
         std::cerr 
             << e.file_name() << "(" << e.line_no() << "): "
@@ -584,8 +585,8 @@ testwave_app::extract_special_information(std::string const& filename,
     }
 
     if (9 == debuglevel) {
-        std::cerr << "succeeded extracting special information ('" << flag 
-                  << "')" << std::endl;
+        std::cerr << "extract_special_information: succeeded extracting special information ('" 
+                  << flag << "')" << std::endl;
     }
     return true;
 }
@@ -619,6 +620,10 @@ bool
 testwave_app::extract_options(std::string const& filename, 
     std::string const& instr, Context& ctx)
 {
+    if (9 == debuglevel) {
+        std::cerr << "extract_options: extracting options: " << thiscontent;
+    }
+
 //  extract the required information from the comments flagged by a 
 //  capital 'O'
     std::string options;
@@ -632,12 +637,17 @@ testwave_app::extract_options(std::string const& filename,
         cmd_line_utils::read_config_options(debuglevel, options, desc_options, local_vm);
         initialise_options(ctx, local_vm);
     }
-    catch (std::exception &e) {
+    catch (std::exception const &e) {
         std::cerr << filename << ": exception caught: " << e.what() 
             << std::endl;
         return false;
     }
     
+    if (9 == debuglevel) {
+        std::cerr << "extract_options: succeeded extract options: " 
+                  << thiscontent;
+    }
+
     return true;
 }
 
@@ -666,7 +676,7 @@ bool
 testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 {
     if (9 == debuglevel) {
-        std::cerr << "initialising options" << std::endl;
+        std::cerr << "initialise_options: initialising options" << std::endl;
     }
 
 //  initialise the given context from the parsed options
@@ -674,14 +684,14 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 // enable C99 mode, if appropriate (implies variadics)
     if (vm.count("c99")) {
         if (9 == debuglevel) {
-            std::cerr << "option: c99" << std::endl;
+            std::cerr << "initialise_options: option: c99" << std::endl;
         }
         ctx.set_language(boost::wave::support_c99);
     }
     else if (vm.count("variadics")) {
     // enable variadics and placemarkers, if appropriate
         if (9 == debuglevel) {
-            std::cerr << "option: variadics" << std::endl;
+            std::cerr << "initialise_options: option: variadics" << std::endl;
         }
         ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
     }
@@ -690,7 +700,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 // enable long_long mode, if appropriate
     if (vm.count("long_long")) {
         if (9 == debuglevel) {
-            std::cerr << "option: long_long" << std::endl;
+            std::cerr << "initialise_options: option: long_long" << std::endl;
         }
         ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
     }
@@ -698,7 +708,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 // enable preserving comments mode, if appropriate
     if (vm.count("preserve")) {
         if (9 == debuglevel) {
-            std::cerr << "option: preserve" << std::endl;
+            std::cerr << "initialise_options: option: preserve" << std::endl;
         }
         ctx.set_language(
             boost::wave::enable_preserve_comments(ctx.get_language()));
@@ -723,7 +733,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
               cit != end; ++cit)
         {
             if (9 == debuglevel) {
-                std::cerr << "option: -S" << *cit << std::endl;
+                std::cerr << "initialise_options: option: -S" << *cit 
+                          << std::endl;
             }
             ctx.add_sysinclude_path((*cit).c_str());
         }
@@ -739,7 +750,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
               cit != end; ++cit)
         {
             if (9 == debuglevel) {
-                std::cerr << "option: -I" << *cit << std::endl;
+                std::cerr << "initialise_options: option: -I" << *cit 
+                          << std::endl;
             }
             ctx.add_include_path((*cit).c_str());
         }
@@ -747,7 +759,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
     // if on the command line was given -I- , this has to be propagated
         if (ip.seen_separator) {
             if (9 == debuglevel) {
-                std::cerr << "option: -I-" << std::endl;
+                std::cerr << "initialise_options: option: -I-" << std::endl;
             }
             ctx.set_sysinclude_delimiter();
         }
@@ -758,7 +770,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
               syscit != sysend; ++syscit)
         {
             if (9 == debuglevel) {
-                std::cerr << "option: -S" << *syscit << std::endl;
+                std::cerr << "initialise_options: option: -S" << *syscit 
+                          << std::endl;
             }
             ctx.add_sysinclude_path((*syscit).c_str());
         }
@@ -773,7 +786,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
               cit != end; ++cit)
         {
             if (9 == debuglevel) {
-                std::cerr << "option: -D" << *cit << std::endl;
+                std::cerr << "initialise_options: option: -D" << *cit 
+                          << std::endl;
             }
             ctx.add_macro_definition(*cit);
         }
@@ -788,7 +802,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
               cit != end; ++cit)
         {
             if (9 == debuglevel) {
-                std::cerr << "option: -P" << *cit << std::endl;
+                std::cerr << "initialise_options: option: -P" << *cit 
+                          << std::endl;
             }
             ctx.add_macro_definition(*cit);
         }
@@ -803,7 +818,8 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
               cit != end; ++cit)
         {
             if (9 == debuglevel) {
-                std::cerr << "option: -U" << *cit << std::endl;
+                std::cerr << "initialise_options: option: -U" << *cit 
+                          << std::endl;
             }
             ctx.remove_macro_definition((*cit).c_str());
         }
@@ -818,13 +834,15 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
             return false;
         }
         else if (9 == debuglevel) {
-            std::cerr << "option: -n" << max_depth << std::endl;
+            std::cerr << "initialise_options: option: -n" << max_depth 
+                      << std::endl;
         }
         ctx.set_max_include_nesting_depth(max_depth);
     }
 
     if (9 == debuglevel) {
-        std::cerr << "succeeded to initialise options" << std::endl;
+        std::cerr << "initialise_options: succeeded to initialise options" 
+                  << std::endl;
     }
     return true;
 }
@@ -861,7 +879,8 @@ testwave_app::add_sizeof_definition(Context& ctx, char const *name, int value)
         return false;
     }
     else if (9 == debuglevel) {
-        std::cerr << "predefined macro: " << macro << std::endl;
+        std::cerr << "add_sizeof_definition: predefined macro: " << macro 
+                  << std::endl;
     }
     return true;
 }
@@ -889,7 +908,8 @@ testwave_app::add_min_definition(Context& ctx, char const *name)
         return false;
     }
     else if (9 == debuglevel) {
-        std::cerr << "predefined macro: " << macro << std::endl;
+        std::cerr << "add_min_definition: predefined macro: " << macro 
+                  << std::endl;
     }
     return true;
 }
@@ -917,7 +937,8 @@ testwave_app::add_max_definition(Context& ctx, char const *name)
         return false;
     }
     else if (9 == debuglevel) {
-        std::cerr << "predefined macro: " << macro << std::endl;
+        std::cerr << "add_max_definition: predefined macro: " << macro 
+                  << std::endl;
     }
     return true;
 }
@@ -1007,7 +1028,8 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
         context_type;
 
     if (9 == debuglevel) {
-        std::cerr << "preprocessing input file: " << filename << std::endl;
+        std::cerr << "preprocess_file: preprocessing input file: " << filename 
+                  << std::endl;
     }
 
     try {    
@@ -1070,8 +1092,8 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
     }
     
     if (9 == debuglevel) {
-        std::cerr << "succeeded to preprocess input file: " << filename 
-                  << std::endl;
+        std::cerr << "preprocess_file: succeeded to preprocess input file: " 
+                  << filename << std::endl;
     }
 
     return true;
