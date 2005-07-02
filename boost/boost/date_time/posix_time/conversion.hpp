@@ -50,8 +50,8 @@ namespace posix_time {
     timetm.tm_yday = 0;
     
     timetm.tm_hour = td.hours(); 
-    timetm.tm_min = td.minutes(); 
-    timetm.tm_sec = td.seconds();
+    timetm.tm_min = date_time::absolute_value(td.minutes());
+    timetm.tm_sec = date_time::absolute_value(td.seconds());
     timetm.tm_isdst = -1; // -1 used when dst info is unknown
     return timetm;
   }
