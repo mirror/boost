@@ -39,21 +39,24 @@ struct functor_input {
 
     template <typename FunctorT>
     class inner {
-    
+    private:
         typedef typename FunctorT::result_type result_type;
 
+    public:
+        typedef result_type value_type;
+
+    private:
         struct Data {
             Data(FunctorT const &ftor_) 
             :   ftor(ftor_), was_initialized(false)
             {}
             
             FunctorT ftor;
-            result_type curtok;
+            value_type curtok;
             bool was_initialized;
         };
         
     public:
-        typedef result_type value_type;
         typedef std::ptrdiff_t difference_type;
         typedef result_type *pointer;
         typedef result_type &reference;
