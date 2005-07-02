@@ -621,7 +621,7 @@ testwave_app::extract_options(std::string const& filename,
     std::string const& instr, Context& ctx)
 {
     if (9 == debuglevel) {
-        std::cerr << "extract_options: extracting options: " << thiscontent;
+        std::cerr << "extract_options: extracting options" << std::endl;
     }
 
 //  extract the required information from the comments flagged by a 
@@ -639,13 +639,13 @@ testwave_app::extract_options(std::string const& filename,
     }
     catch (std::exception const &e) {
         std::cerr << filename << ": exception caught: " << e.what() 
-            << std::endl;
+                  << std::endl;
         return false;
     }
     
     if (9 == debuglevel) {
-        std::cerr << "extract_options: succeeded extract options: " 
-                  << thiscontent;
+        std::cerr << "extract_options: succeeded extracting options" 
+                  << std::endl;
     }
 
     return true;
