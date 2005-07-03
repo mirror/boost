@@ -8,7 +8,6 @@
  */
 
 #include "boost/date_time/posix_time/posix_time.hpp"
-//#include "boost/date_time/time_facet.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include <fstream>
 #include <iostream>
@@ -27,7 +26,6 @@ teststreaming(std::string testname,
   ss << value;
   check(testname, ss.str() == expected_result);
 }
-
 
 
 #if !defined(BOOST_NO_STD_WSTRING) 
@@ -129,7 +127,48 @@ int main() {
       time_duration td7(0,0,0,123);
       time_duration td8(0,0,0,122);
       ss << td8 - td7;
-      check("Negative time_duration", result == ss.str());
+      check("Negative time_duration: " + ss.str(), result == ss.str());
+
+      //reset the sign to always print
+      time_facet* f = new time_facet();
+      ss.imbue(std::locale(ss.getloc(), f));
+      f->time_duration_format("%+%H:%M:%S%F");
+
+      ss.str("");
+      ss << td4 - td3;
+      result = "-00:01:00";
+      check("Negative time_duration sign always: " + ss.str(), result == ss.str());
+
+      ss.str("");
+      ss << td3 - td4;
+      result = "+00:01:00";
+      check("time_duration sign always: " + ss.str(), result == ss.str());
+
+
+#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+      result = "-00:00:00.000000001";
+#else
+      result = "-00:00:00.000001";
+#endif
+      ss.str("");
+      ss << td8 - td7;
+      check("Negative time_duration: " + ss.str(), result == ss.str());
+
+#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+      result = "+00:00:00.000000001";
+#else
+      result = "+00:00:00.000001";
+#endif
+      ss.str("");
+      ss << td7 - td8;
+      check("time_duration sign bit always: " + ss.str(), result == ss.str());
+
+      f->time_duration_format("%-%H hours and %-%M minutes");
+      ss.str("");
+      ss << td4 - td3;
+      result = "-00 hours and -01 minutes";
+      check("Negative time_duration two sign flags" + ss.str(), result == ss.str());
+
     }
       
 #if !defined(BOOST_NO_STD_WSTRING) 
