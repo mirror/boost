@@ -34,7 +34,11 @@ namespace date_time {
       static const char_type zone_iso_format[3];                         // q
       static const char_type zone_iso_extended_format[3];                // Q
       static const char_type posix_zone_string_format[4];                // ZP
+      static const char_type duration_sign_negative_only[3];             // -
+      static const char_type duration_sign_always[3];                    // +
       static const char_type duration_seperator[2];
+      static const char_type negative_sign[2];                           //-
+      static const char_type positive_sign[2];                           //+
       static const char_type iso_time_format_specifier[18];
       static const char_type iso_time_format_extended_specifier[22];
       //default ptime format is YYYY-Mon-DD HH:MM:SS[.fff...][ zzz]
@@ -93,6 +97,22 @@ namespace date_time {
 
   template <class CharT>  
   const typename time_formats<CharT>::char_type 
+  time_formats<CharT>::negative_sign[2] =  {'-'};
+
+  template <class CharT>  
+  const typename time_formats<CharT>::char_type 
+  time_formats<CharT>::positive_sign[2] =  {'+'};
+
+  template <class CharT>  
+  const typename time_formats<CharT>::char_type 
+  time_formats<CharT>::duration_sign_negative_only[3] ={'%','-'};
+
+  template <class CharT>  
+  const typename time_formats<CharT>::char_type 
+  time_formats<CharT>::duration_sign_always[3] ={'%','+'};
+
+  template <class CharT>  
+  const typename time_formats<CharT>::char_type 
   time_formats<CharT>::iso_time_format_specifier[18] =  
     {'%', 'Y', '%', 'm', '%', 'd', 'T', 
      '%', 'H', '%', 'M', '%', 'S', '%', 'F', '%','q' };
@@ -148,17 +168,21 @@ namespace date_time {
     typedef typename base_type::period_formatter_type period_formatter_type;
     typedef typename base_type::special_values_formatter_type special_values_formatter_type;
     typedef typename base_type::date_gen_formatter_type date_gen_formatter_type;
-    static const char_type* fractional_seconds_format;                // f
-    static const char_type* fractional_seconds_or_none_format;        // F
-    static const char_type* seconds_with_fractional_seconds_format;   // s
-    static const char_type* seconds_format;                           // S
-    static const char_type* standard_format;                          // x X
-    static const char_type* zone_abbrev_format;                       // z
-    static const char_type* zone_name_format;                         // Z
-    static const char_type* zone_iso_format;                          // q
-    static const char_type* zone_iso_extended_format;                 // Q
-    static const char_type* posix_zone_string_format;                 // ZP
+    static const char_type* fractional_seconds_format;                // %f
+    static const char_type* fractional_seconds_or_none_format;        // %F
+    static const char_type* seconds_with_fractional_seconds_format;   // %s
+    static const char_type* seconds_format;                           // %S
+    static const char_type* standard_format;                          // %x X
+    static const char_type* zone_abbrev_format;                       // %z
+    static const char_type* zone_name_format;                         // %Z
+    static const char_type* zone_iso_format;                          // %q
+    static const char_type* zone_iso_extended_format;                 // %Q
+    static const char_type* posix_zone_string_format;                 // %ZP
     static const char_type* duration_seperator;
+    static const char_type* duration_sign_always;                     // %+
+    static const char_type* duration_sign_negative_only;              // %-
+    static const char_type* negative_sign;                            //-
+    static const char_type* positive_sign;                            //+
     static const char_type* iso_time_format_specifier;
     static const char_type* iso_time_format_extended_specifier;
 
@@ -176,14 +200,10 @@ namespace date_time {
     explicit time_facet(::size_t a_ref = 0) 
       //: base_type(standard_format),
       : base_type(default_time_format), 
-        m_time_duration_format(default_time_duration_format),
-        m_time_duration_seperator(duration_seperator)
+        m_time_duration_format(string_type(duration_sign_negative_only) + default_time_duration_format)
+    {}
 
-    {
-      set_duration_seperator_from_facet(); //todo fix this
-    }
-
-    //TODO sets time_dur to default - change to a custom?
+    //! Construct the facet with an explicitly specified format
     explicit time_facet(const char_type* a_format,
                         period_formatter_type period_formatter = period_formatter_type(), 
                         const special_values_formatter_type& special_value_formatter = special_values_formatter_type(), 
@@ -194,23 +214,22 @@ namespace date_time {
                   special_value_formatter, 
                   dg_formatter, 
                   a_ref),
-        m_time_duration_format(default_time_duration_format),
-        m_time_duration_seperator(duration_seperator)
+        m_time_duration_format(string_type(duration_sign_negative_only) + default_time_duration_format)
     {}
 
     //! Changes format for time_duration
-    void time_duration_format(const char_type* const format) {
+    void time_duration_format(const char_type* const format) 
+    {
       m_time_duration_format = format;
     }
+
     virtual void set_iso_format()
     {
       this->m_format = iso_time_format_specifier;
-      //TODO: set time_dur format to iso spec too?
     }
     virtual void set_iso_extended_format()
     {
       this->m_format = iso_time_format_extended_specifier;
-      //TODO: set time_dur format to iso_ext spec too?
     }
 
     OutItrT put(OutItrT a_next, 
@@ -376,6 +395,27 @@ namespace date_time {
       }
 
       string_type format(m_time_duration_format);
+      if (a_time_dur.is_negative()) {
+          // replace %- with minus sign.  Should we use the numpunct facet?
+          boost::algorithm::replace_all(format, 
+                                        duration_sign_negative_only, 
+                                        negative_sign);
+          // remove all the %+ in the string with '-'
+          boost::algorithm::replace_all(format, 
+                                        duration_sign_always, 
+                                        negative_sign);
+      }
+      else { //duration is positive
+          // remove all the %- combos from the string
+          boost::algorithm::replace_all(format, 
+                                        duration_sign_negative_only, 
+                                        "");
+          // remove all the %+ in the string with '+'
+          boost::algorithm::replace_all(format, 
+                                        duration_sign_always, 
+                                        positive_sign);
+      }
+
       string_type frac_str;
       if (format.find(seconds_with_fractional_seconds_format) != string_type::npos) {
         // replace %s with %S.nnn 
@@ -444,6 +484,8 @@ namespace date_time {
         return string_type();
       }
 
+      //make sure there is no sign
+      frac_sec = date_time::absolute_value(frac_sec);
       std::basic_ostringstream<char_type> ss;
       ss.imbue(std::locale::classic()); // don't want any formatting
       ss << std::setw(time_duration_type::num_fractional_digits())
@@ -459,17 +501,7 @@ namespace date_time {
     }
 
   private:
-    //! Use the std facet to figure out the seperator
-    /*! Simple algorithm here -- print as %X time and search for 
-     *  non-numeric character.  This is assumed to be seperator. 
-     *  Would be better if the standard facet was enhanced.
-     */
-    void set_duration_seperator_from_facet() 
-    {
-      //TODO write this function
-    }
     string_type m_time_duration_format;
-    string_type m_time_duration_seperator;
 
   };
   
@@ -521,6 +553,22 @@ namespace date_time {
   template <class time_type, class CharT, class OutItrT>  
   const typename time_facet<time_type, CharT, OutItrT>::char_type*
   time_facet<time_type, CharT, OutItrT>::duration_seperator =  time_formats<CharT>::duration_seperator;
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type*
+  time_facet<time_type, CharT, OutItrT>::negative_sign =  time_formats<CharT>::negative_sign;
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type*
+  time_facet<time_type, CharT, OutItrT>::positive_sign =  time_formats<CharT>::positive_sign;
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type*
+  time_facet<time_type, CharT, OutItrT>::duration_sign_negative_only =  time_formats<CharT>::duration_sign_negative_only;
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type*
+  time_facet<time_type, CharT, OutItrT>::duration_sign_always =  time_formats<CharT>::duration_sign_always;
 
   template <class time_type, class CharT, class OutItrT>  
   const typename time_facet<time_type,CharT, OutItrT>::char_type*
@@ -587,8 +635,7 @@ namespace date_time {
       //! Constructor that takes a format string for a ptime
       explicit time_input_facet(const string_type& format, ::size_t a_ref = 0) 
         : base_type(format, a_ref), 
-          m_time_duration_format(default_time_duration_format),
-          m_time_duration_seperator(duration_seperator)
+          m_time_duration_format(default_time_duration_format)
       { }
 
       explicit time_input_facet(const string_type& format,
@@ -603,15 +650,13 @@ namespace date_time {
                     per_parser,
                     date_gen_parser,
                     a_ref), 
-          m_time_duration_format(default_time_duration_format),
-          m_time_duration_seperator(duration_seperator)
+          m_time_duration_format(default_time_duration_format)
       {}
 
       //! sets default formats for ptime, local_date_time, and time_duration
       explicit time_input_facet(::size_t a_ref = 0) 
         : base_type(default_time_input_format, a_ref), 
-          m_time_duration_format(default_time_duration_format),
-          m_time_duration_seperator(duration_seperator)
+          m_time_duration_format(default_time_duration_format)
       { }
       
       //! Set the format for time_duration
@@ -1122,7 +1167,6 @@ namespace date_time {
       
     private:
       string_type m_time_duration_format;
-      string_type m_time_duration_seperator; // TODO is this necessary? Doesn't it just get skipped while parsing the input?
 
       //! Helper function to adjust trailing zeros when parsing fractional digits
       template<class int_type>
