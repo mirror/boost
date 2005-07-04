@@ -38,10 +38,6 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info :
 private:
     virtual bool
     less_than(const extended_type_info &rhs) const = 0;
-    virtual bool
-    equal_to(const extended_type_info &rhs) const = 0;
-    virtual bool
-    not_equal_to(const extended_type_info &rhs) const = 0;
     // used to uniquely identify the type of class derived from this one
     // so that different derivations of this class can be simultaneously
     // included in implementation of sets and maps.
@@ -58,8 +54,12 @@ public:
     static const extended_type_info * find(const char *key);
     static const extended_type_info * find(const extended_type_info * t);
     bool operator<(const extended_type_info &rhs) const;
-    bool operator==(const extended_type_info &rhs) const;
-    bool operator!=(const extended_type_info &rhs) const;
+    bool operator==(const extended_type_info &rhs) const {
+        return this == & rhs;
+    }
+    bool operator!=(const extended_type_info &rhs) const {
+        return this != & rhs;
+    }
 };
 
 } // namespace serialization 

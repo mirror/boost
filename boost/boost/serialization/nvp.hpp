@@ -62,33 +62,27 @@ struct nvp :
         return *(this->second);
     }
 
+    // True64 compiler complains with a warning about the use of
+    // the name "Archive" hiding some higher level usage.  I'm sure this
+    // is an error but I want to accomodated as it generates a long warning
+    // listing and might be related to a lot of test failures.
     // default treatment for name-value pairs. The name is
     // just discarded and only the value is serialized. 
-    template<class Archive>
+    template<class Archivex>
     void save(
-        Archive & ar, 
+        Archivex & ar, 
         const unsigned int /* file_version */
     ) const {
         // CodeWarrior 8.x can't seem to resolve the << op for a rhs of "const T *"
         ar.operator<<(const_value());
-//        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
-//        ar.operator<<(const_value());
-//        #else
-//        ar << const_value();
-//        #endif
     }
-    template<class Archive>
+    template<class Archivex>
     void load(
-        Archive & ar, 
+        Archivex & ar, 
         const unsigned int /* file_version */
     ){
         // CodeWarrior 8.x can't seem to resolve the >> op for a rhs of "const T *"
         ar.operator>>(value());
-//        #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
-//        ar.operator>>(value());
-//        #else
-//        ar >> value();
-//        #endif
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 };

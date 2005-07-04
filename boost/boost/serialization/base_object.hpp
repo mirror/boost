@@ -39,7 +39,7 @@
 
 #if ! defined(BOOST_ARCHIVE_BASIC_ARCHIVE_HPP)
     template<class Derived, class Base>
-    const void * void_cast_register(
+    const void_caster & void_cast_register(
         const Derived * /* dnull = NULL */, 
         const Base * /* bnull = NULL */
     );
@@ -60,20 +60,19 @@ namespace detail {
     struct base_register
     {
         struct nothing {
-            static const void * invoke(){
-                return NULL;
+            static void invoke(){
             }
         };
         template<class B, class D>
         struct reg{
-            static const void * invoke(){
-                return void_cast_register<const D, const B>(
+            static void invoke(){
+                void_cast_register<const D, const B>(
                     static_cast<const D *>(NULL),
                     static_cast<const B *>(NULL)
                 );
             }
         };
-        static const void * invoke(){
+        static const void invoke(){
             typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
                 mpl::identity<reg<Base, Derived> >,

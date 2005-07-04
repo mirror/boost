@@ -146,16 +146,6 @@ public:
             assert(false);
             return false;   // to prevent a syntax error
         }
-        virtual bool
-        equal_to(const extended_type_info &rhs) const{
-            assert(false);
-            return false;   // to prevent a syntax error
-        }
-        virtual bool
-        not_equal_to(const extended_type_info &rhs) const{
-            assert(false);
-            return false;   // to prevent a syntax error
-        }
     };
     static const extended_type_info * 
     find(const char *key)
@@ -239,22 +229,6 @@ extended_type_info::operator<(const extended_type_info &rhs) const {
     if(i > 0)
         return false;
     return less_than(rhs);
-}
-
-BOOST_SERIALIZATION_DECL(bool)
-extended_type_info::operator==(const extended_type_info &rhs) const {
-    int i = type_info_key_cmp(rhs);
-    if(i != 0)
-        return false;
-    return equal_to(rhs);
-}
-
-BOOST_SERIALIZATION_DECL(bool)
-extended_type_info::operator!=(const extended_type_info &rhs) const {
-    int i = type_info_key_cmp(rhs);
-    if(i != 0)
-        return true;
-    return not_equal_to(rhs);
 }
 
 } // namespace serialization

@@ -32,48 +32,46 @@
 
 namespace boost {
 namespace serialization {
-
+namespace detail {
 ///////////////////////////////////////////////////////////////////////
 // define a special type_info that doesn't depend on rtti which is not
 // available in all situations.
 
 // common base class to share type_info_key.  This is used to 
 // identify the method used to keep track of the extended type
-class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_no_rtti_base : 
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_no_rtti_0 : 
     public extended_type_info
 {
 protected:
     virtual bool
     less_than(const boost::serialization::extended_type_info &rhs) const ;
-    virtual bool
-    equal_to(const boost::serialization::extended_type_info &rhs) const;
-    virtual bool
-    not_equal_to(const boost::serialization::extended_type_info &rhs) const;
+    extended_type_info_no_rtti_0();
+    ~extended_type_info_no_rtti_0();
 public:
     struct is_polymorphic
     {
         typedef boost::mpl::bool_<true> type;
         BOOST_STATIC_CONSTANT(bool, value = is_polymorphic::type::value);
     };
-    extended_type_info_no_rtti_base();
-    ~extended_type_info_no_rtti_base();
 };
 
 template<class T>
-class extended_type_info_no_rtti : 
-    public extended_type_info_no_rtti_base
+class extended_type_info_no_rtti_1 : 
+    public extended_type_info_no_rtti_0
 {
-public:
+private:
+    // private constructor to inhibit any existence other than the 
+    // static one
+    extended_type_info_no_rtti_1(){
+        key_register(type_key);
+        self_register();    // add type to type table
+    }
     // Note: this version of extended_type_info
     // relies on the key used for exporting data.  
     // So we have to have the key when the instance is created and
     // can't wait for it be exported as in other cases.
     static const char * type_key;
-
-    extended_type_info_no_rtti(){
-        key_register(type_key);
-        self_register();    // add type to type table
-   }
+public:
     static const boost::serialization::extended_type_info *
     get_derived_extended_type_info(const T & t){
         // find the type that corresponds to the most derived type.
@@ -88,10 +86,16 @@ public:
 
     static boost::serialization::extended_type_info *
     get_instance(){
-        static extended_type_info_no_rtti<const T> instance;
+        static extended_type_info_no_rtti_1<T> instance;
         return & instance;
     }
 };
+} // namespace detail
+
+template<class T>
+class extended_type_info_no_rtti : 
+    public detail::extended_type_info_no_rtti_1<const T>
+{};
 
 } // namespace serialization
 } // namespace boost

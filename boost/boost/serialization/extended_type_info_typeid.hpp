@@ -44,10 +44,6 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 :
 private:
     virtual bool
     less_than(const extended_type_info &rhs) const;
-    virtual bool
-    equal_to(const extended_type_info &rhs) const;
-    virtual bool
-    not_equal_to(const extended_type_info &rhs) const;
 protected:
     static const extended_type_info *
     get_derived_extended_type_info(const std::type_info & ti);
@@ -57,18 +53,20 @@ public:
     virtual const std::type_info & get_type() const = 0;
 };
 
-} // namespace detail
-
 ///////////////////////////////////////////////////////////////////////////////
+// layer to fold T and const T into the same table entry.
 template<class T>
-class extended_type_info_typeid : 
+class extended_type_info_typeid_1 : 
     public detail::extended_type_info_typeid_0
 {
 private:
     virtual const std::type_info & get_type() const {
         return typeid(T);
     }
-    extended_type_info_typeid() :
+protected:
+    // private constructor to inhibit any existence other than the 
+    // static one
+    extended_type_info_typeid_1() :
         detail::extended_type_info_typeid_0()
     {
         self_register();    // add type to type table
@@ -90,10 +88,18 @@ public:
     }
     static extended_type_info *
     get_instance(){
-        static extended_type_info_typeid<T> instance;
+        static extended_type_info_typeid_1<T> instance;
         return & instance;
     }
 };
+
+} // namespace detail
+
+///////////////////////////////////////////////////////////////////////////////
+template<class T>
+class extended_type_info_typeid : 
+    public detail::extended_type_info_typeid_1<const T>
+{};
 
 } // namespace serialization
 } // namespace boost

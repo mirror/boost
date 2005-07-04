@@ -23,20 +23,6 @@ extended_type_info_typeid_0::less_than(const extended_type_info &rhs) const
         static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
     );
 }
-BOOST_SERIALIZATION_DECL(bool)
-extended_type_info_typeid_0::equal_to(const extended_type_info &rhs) const
-{
-    return 0 != get_type().operator==(
-        static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
-    );
-}
-BOOST_SERIALIZATION_DECL(bool)
-extended_type_info_typeid_0::not_equal_to(const extended_type_info &rhs) const
-{
-    return 0 != get_type().operator!=(
-        static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
-    );
-}
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) 
 extended_type_info_typeid_0::extended_type_info_typeid_0() :

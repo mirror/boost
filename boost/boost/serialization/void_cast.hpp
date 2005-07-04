@@ -173,17 +173,19 @@ const void_caster_primitive<Derived, Base>
 // bug in msvc 6.0
 template<class Derived, class Base>
 BOOST_DLLEXPORT 
-const void * void_cast_register(
+inline const void_cast_detail::void_caster &
+void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ) BOOST_USED;
 template<class Derived, class Base>
 BOOST_DLLEXPORT 
-const void * void_cast_register(
+inline const void_cast_detail::void_caster &
+void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ){
-    return & void_cast_detail::void_caster_primitive<
+    return void_cast_detail::void_caster_primitive<
         const Derived, 
         const Base
     >::instance;
