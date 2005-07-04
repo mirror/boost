@@ -3920,9 +3920,13 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void set_filled (const array_size_type &filled) {
+            // Make sure that storage_invariants() succeeds
+            if (sorted_ && filled < filled_)
+                sorted_filled_ = filled_;
+            else
+                sorted_ = (sorted_filled_ == filled_);
             filled_ = filled;
             storage_invariants ();
-            return filled_;
         }
         BOOST_UBLAS_INLINE
         index_array_type &index1_data () {
@@ -4186,8 +4190,8 @@ namespace boost { namespace numeric { namespace ublas {
                 std::inplace_merge (ita.begin (), iunsorted, ita.end ());
                 
                 // sum duplicates with += and remove
-                size_type filled = 0;
-                for (size_type i = 1; i < filled_; ++ i) {
+                array_size_type filled = 0;
+                for (array_size_type i = 1; i < filled_; ++ i) {
                     if (index1_data_ [filled] != index1_data_ [i] ||
                         index2_data_ [filled] != index2_data_ [i]) {
                         ++ filled;
