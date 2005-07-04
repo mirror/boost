@@ -39,7 +39,7 @@
 
 #if ! defined(BOOST_ARCHIVE_BASIC_ARCHIVE_HPP)
     template<class Derived, class Base>
-    const void_caster & void_cast_register(
+    void void_cast_register(
         const Derived * /* dnull = NULL */, 
         const Base * /* bnull = NULL */
     );
