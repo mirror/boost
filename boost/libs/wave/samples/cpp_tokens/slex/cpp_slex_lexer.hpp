@@ -44,9 +44,8 @@ namespace slex {
 namespace lexer {
 
 ///////////////////////////////////////////////////////////////////////////////
-//
-//  The follwoing numbers are the arraysizes of the token regex's which we
-//  need to specify to make the CW compiler happy (at least up to V9.4).
+//  The following numbers are the arraysizes of the token regex's which we
+//  need to specify to make the CW compiler happy (at least up to V9.5).
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
 #define INIT_DATA_SIZE        176
 #define INIT_DATA_CPP_SIZE    15
@@ -63,7 +62,7 @@ namespace lexer {
 
 ///////////////////////////////////////////////////////////////////////////////
 //  The following lexer_base class was necessary to workaround a CodeWarrior 
-//  bug.
+//  bug (at least up to CW V9.5).
 template <typename IteratorT, typename PositionT>
 class lexer_base 
 :   public boost::spirit::lexer<
@@ -168,11 +167,13 @@ private:
 #define NUM_LEXER_STATES    1
 
 //  helper for initializing token data
-#define TOKEN_DATA(id, regex) \
-    { T_##id, regex, 0, LEXER_STATE_NORMAL }
+#define TOKEN_DATA(id, regex)                                                 \
+        { T_##id, regex, 0, LEXER_STATE_NORMAL }                              \
+    /**/
 
-#define TOKEN_DATA_EX(id, regex, callback) \
-    { T_##id, regex, callback, LEXER_STATE_NORMAL }
+#define TOKEN_DATA_EX(id, regex, callback)                                    \
+        { T_##id, regex, callback, LEXER_STATE_NORMAL }                       \
+    /**/
 
 ///////////////////////////////////////////////////////////////////////////////
 // common C++/C99 token definitions
@@ -519,7 +520,7 @@ public:
 
     typedef boost::wave::util::position_iterator<IteratorT, PositionT>
           iterator_type;
-    typedef typename std::iterator_traits<IteratorT>::value_type    char_t;
+    typedef typename std::iterator_traits<IteratorT>::value_type    char_type;
     typedef BOOST_WAVE_STRINGTYPE                                   string_type;
     typedef typename lexer::lexer<IteratorT, PositionT>::token_type token_type;
 
@@ -550,7 +551,7 @@ public:
             string_type token_val(value.c_str());
             
                 if (T_CONTLINE != id) {
-                //  The cast should avoid spurious warning about missing case labels 
+                //  The cast should avoid spurious warnings about missing case labels 
                 //  for the other token ids's.
                     switch ((unsigned int)id) {   
                     case T_IDENTIFIER:
@@ -693,7 +694,7 @@ new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
     IteratorT const &last, PositionT const &pos, 
     boost::wave::language_support language)
 {
-    return new slex::slex_functor<IteratorT, PositionT>(first, last, pos, 
+    return new slex_functor<IteratorT, PositionT>(first, last, pos, 
         language);
 }
 

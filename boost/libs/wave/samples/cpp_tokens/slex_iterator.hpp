@@ -55,6 +55,9 @@ public:
             boost::wave::language_support language)
     :   functor_ptr(slex_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
+#if 0 != __DECCXX_VER
+      , eof()
+#endif // 0 != __DECCXX_VER
     {}
 
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
@@ -121,7 +124,7 @@ class slex_iterator
     typedef 
         boost::spirit::multi_pass<input_policy_type, 
                 boost::wave::util::functor_input>
-        base_t;
+        base_type;
     typedef slex_iterator<TokenT>                    self_type;
     
 public:
@@ -134,7 +137,7 @@ public:
     slex_iterator(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
             boost::wave::language_support language)
-    :   base_t(input_policy_type(first, last, pos, language))
+    :   base_type(input_policy_type(first, last, pos, language))
     {}
 };
 
