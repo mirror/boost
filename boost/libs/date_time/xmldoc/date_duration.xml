@@ -54,7 +54,20 @@ or
         </row>
         <row>
           <entry><screen>date_duration dd(3); //3 days</screen></entry>
+        </row>
+
+	<row>
+	  <entry valign="top" morerows="1"><screen>days(special_values sv)</screen></entry>
+	  <entry>Constructor for infinities, not-a-date-time, max_date_time, and min_date_time</entry>
 	</row>
+        <row>
+	  <entry><screen>days dd1(neg_infin);
+days dd2(pos_infin);
+days dd3(not_a_date_time);
+days dd4(max_date_time);
+days dd5(min_date_time);</screen></entry>
+        </row>
+
       </tbody>
     </tgroup>
   </informaltable>
@@ -95,7 +108,21 @@ or
 	</row>
         <row>
 	  <entry><screen>date_duration::unit() --> date_duration(1)</screen></entry>
+        </row>
+
+	<row>
+	  <entry valign="top" morerows="1"><screen>bool is_special() const</screen></entry>
+          <entry>Returns true if days is any <code>special_value</code></entry>
 	</row>
+	<row>
+          <entry><screen>days dd(pos_infin); 
+days dd2(not_a_date_time); 
+days dd3(25);
+dd.is_special(); // --> true
+dd2.is_special(); // --> true
+dd3.is_special(); // --> false</screen></entry>
+        </row>
+        
       </tbody>
     </tgroup>
   </informaltable>

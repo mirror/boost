@@ -22,7 +22,7 @@
       <tgroup cols="2">
         <thead>
           <row>
-            <entry valign="top" morerows="1">Format Specifyer</entry>
+            <entry valign="top" morerows="1">Format Specifier</entry>
             <entry>Description</entry>
           </row>
           <row>
@@ -152,14 +152,14 @@
 
           <row>
             <entry valign="top" morerows="1"><screen>%U</screen></entry>
-            <entry>The week number of the current year as a decimal number, range 00 to 53, starting with the first Sunday as the first day of week 01. In 2005, Jan 1st falls on a Saturday, so therfore it falls within week 00 of 2005 (week 00 spans 2004-Dec-26 to 2005-Jan-01. This also happens to be week 53 of 2004).</entry> 
+            <entry>The week number of the current year as a decimal number, range 00 to 53, starting with the first Sunday as the first day of week 01. In 2005, Jan 1st falls on a Saturday, so therefore it falls within week 00 of 2005 (week 00 spans 2004-Dec-26 to 2005-Jan-01. This also happens to be week 53 of 2004).</entry> 
           </row>
           <row>
             <entry><screen>date d(2005, Jan, 1); // Saturday
   // with format %U
   ss &lt;&lt; d; // "00"
   d += day(1); // Sunday
-  ss &lt;&lt; d; // "01" begining of week 1</screen></entry>
+  ss &lt;&lt; d; // "01" beginning of week 1</screen></entry>
           </row>
 
           <row>
@@ -187,7 +187,7 @@
   // with format %W
   ss &lt;&lt; d; // "00"
   d += day(1); // Monday
-  ss &lt;&lt; d; // "01" begining of week 1</screen></entry>
+  ss &lt;&lt; d; // "01" beginning of week 1</screen></entry>
           </row>
 
           <row>
@@ -258,7 +258,7 @@
       <tgroup cols="2">
         <thead>
           <row>
-            <entry valign="top" morerows="1">Format Specifyer</entry>
+            <entry valign="top" morerows="1">Format Specifier</entry>
             <entry>Description</entry>
           </row>
           <row>
@@ -266,6 +266,22 @@
           </row>
         </thead>
         <tbody>
+          <row>
+            <entry valign="top" morerows="1"><screen>%- *!</screen></entry>
+            <entry>Placeholder for the sign of a duration. Only displays when the duration is negative.</entry>
+          </row>
+          <row>
+            <entry><screen>"-13:15:16"</screen></entry>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>%+ *!</screen></entry>
+            <entry>Placeholder for the sign of a duration. Always displays for both positive and negative.</entry>
+          </row>
+          <row>
+            <entry><screen>"+13:15:16"</screen></entry>
+          </row>
+
           <row>
             <entry valign="top" morerows="1"><screen>%f</screen></entry>
             <entry>Fractional seconds are always used, even when their value is zero</entry>
@@ -457,8 +473,16 @@
           </row>
 
           <row>
+            <entry valign="top" morerows="1"><screen>%-%H:%M:%S%F !</screen></entry>
+            <entry>Default time_duration format for output. Sign will only be displayed for negative durations.</entry>
+          </row>
+          <row>
+            <entry><screen>"-13:14:15.003400"</screen></entry>
+          </row>
+
+          <row>
             <entry valign="top" morerows="1"><screen>%H:%M:%S%F</screen></entry>
-            <entry>Default time_duration format.</entry>
+            <entry>Default time_duration format for input.</entry>
           </row>
           <row>
             <entry><screen>"13:14:15.003400"</screen></entry>

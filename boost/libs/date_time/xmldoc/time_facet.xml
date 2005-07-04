@@ -69,11 +69,16 @@
             <entry valign="top" morerows="1"><screen>void time_duration_format(...)
   Parameter:
     char_type*</screen></entry>
-            <entry>Sets the time_duration format.</entry>
+            <entry>Sets the time_duration format. The time_duration format has the ability to display the sign of the duration. The <code>'%+'</code> flag will always display the sign. The <code>'%-'</code> will only display if the sign is negative. Currently the '-' and '+' characters are used to denote the sign.</entry>
           </row>
           <row>
-            <entry><screen>f->time_duration_format("%H:%M");
-// hours and minutes only</screen></entry>
+            <entry><screen>f->time_duration_format("%+%H:%M");
+// hours and minutes only w/ sign always displayed
+time_duration td1(3, 15, 56);
+time_duration td2(-12, 25, 32);
+ss &lt;&lt; td1; // "+03:15:56"
+ss &lt;&lt; td2; // "-12:25:56"
+            </screen></entry>
           </row>
 
           <row>

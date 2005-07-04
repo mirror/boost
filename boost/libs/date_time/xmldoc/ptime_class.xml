@@ -172,7 +172,7 @@ ptime t(from_iso_string(ts))</screen></entry>
           
           <row>
 	    <entry valign="top" morerows="1"><screen>ptime microsec_clock::local_time()</screen></entry>
-	    <entry>Get the local time using a subsecond resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the acheived resolution.</entry>
+	    <entry>Get the local time using a sub second resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the achieved resolution.</entry>
 	  </row>
 	  <row>
 	    <entry><screen>ptime t(microsec_clock::local_time());</screen></entry>
@@ -180,7 +180,7 @@ ptime t(from_iso_string(ts))</screen></entry>
           
           <row>
 	    <entry valign="top" morerows="1"><screen>ptime microsec_clock::universal_time()</screen></entry>
-	    <entry>Get the UTC time using a subsecond resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the acheived resolution.</entry>
+	    <entry>Get the UTC time using a sub second resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the achieved resolution.</entry>
 	  </row>
 	  <row>
 	    <entry><screen>ptime t(microsec_clock::universal_time());</screen></entry>
@@ -262,7 +262,57 @@ t.date() --> 2002-Jan-10;</screen>
 ptime t(d, hour(1));
 t.time_of_day() --> 01:00:00;</screen>
 	    </entry>
-	  </row>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_infinity() const</screen></entry>
+            <entry>Returns true if ptime is either positive or negative infinity</entry>
+          </row>
+          <row>
+            <entry><screen>ptime pt(pos_infin); 
+pt.is_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_neg_infinity() const</screen></entry>
+            <entry>Returns true if ptime is negative infinity</entry>
+          </row>
+          <row>
+            <entry><screen>ptime pt(neg_infin);
+pt.is_neg_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_pos_infinity() const</screen></entry>
+            <entry>Returns true if ptime is positive infinity</entry>
+          </row>
+          <row>
+            <entry><screen>ptime pt(neg_infin); 
+pt.is_pos_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_not_a_date_time() const</screen></entry>
+            <entry>Returns true if value is not a ptime</entry>
+          </row>
+          <row>
+            <entry><screen>ptime pt(not_a_date_time);
+pt.is_not_a_date_time(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_special() const</screen></entry>
+            <entry>Returns true if ptime is any <code>special_value</code></entry>
+          </row>
+          <row>
+            <entry><screen>ptime pt(pos_infin); 
+ptime pt2(not_a_date_time); 
+ptime pt3(date(2005,Mar,1), hours(10));
+pt.is_special(); // --> true
+pt2.is_special(); // --> true
+pt3.is_special(); // --> false</screen></entry>
+          </row>
+        
 	</tbody>
       </tgroup>
     </informaltable>

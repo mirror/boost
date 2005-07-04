@@ -289,6 +289,58 @@ az.local_time(); // 3am 2004-Nov-5</screen></entry>
             </entry>
           </row>
           -->
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_infinity() const</screen></entry>
+            <entry>Returns true if local_date_time is either positive or negative infinity</entry>
+          </row>
+          <row>
+            <entry><screen>local_date_time ldt(pos_infin); 
+ldt.is_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_neg_infinity() const</screen></entry>
+            <entry>Returns true if local_date_time is negative infinity</entry>
+          </row>
+          <row>
+            <entry><screen>local_date_time ldt(neg_infin);
+ldt.is_neg_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_pos_infinity() const</screen></entry>
+            <entry>Returns true if local_date_time is positive infinity</entry>
+          </row>
+          <row>
+            <entry><screen>local_date_time ldt(neg_infin); 
+ldt.is_pos_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_not_a_date_time() const</screen></entry>
+            <entry>Returns true if value is not a date</entry>
+          </row>
+          <row>
+            <entry><screen>local_date_time ldt(not_a_date_time);
+ldt.is_not_a_date_time(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_special() const</screen></entry>
+            <entry>Returns true if local_date_time is any <code>special_value</code></entry>
+          </row>
+          <row>
+            <entry><screen>local_date_time ldt(pos_infin); 
+local_date_time ldt2(not_a_date_time);
+time_zone_ptr 
+  mst(new posix_time_zone("MST-07"));
+local_date_time 
+  ldt3(local_sec_clock::local_time(mst));
+ldt.is_special(); // --> true
+ldt2.is_special(); // --> true
+ldt3.is_special(); // --> false</screen></entry>
+          </row>
+        
         </tbody>
       </tgroup>
     </informaltable>
@@ -325,7 +377,7 @@ std::cout &lt;&lt; ldt &lt;&lt; std::endl;
         
 	<row>
           <entry valign="top" morerows="1"><screen>operator>></screen></entry>
-          <entry>Input streaming operator. This operator is part of the v1.33 IO addition to date_time. For complete details on this feature see <link linkend="date_time.date_time_io">Date Time IO</link>. At this time, <code>local_date_time</code> objects can only be streamed in with a Posix Time Zone string. A comlpete description of a Posix Time Zone string can be found in the documentation for the <link linkend="posix_time_zone_intro">posix_time_zone</link> class.</entry>
+          <entry>Input streaming operator. This operator is part of the v1.33 IO addition to date_time. For complete details on this feature see <link linkend="date_time.date_time_io">Date Time IO</link>. At this time, <code>local_date_time</code> objects can only be streamed in with a Posix Time Zone string. A complete description of a Posix Time Zone string can be found in the documentation for the <link linkend="posix_time_zone_intro">posix_time_zone</link> class.</entry>
 	</row>
 	<row>
           <entry><screen>stringstream ss;

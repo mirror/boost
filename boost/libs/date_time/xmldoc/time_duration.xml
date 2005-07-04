@@ -23,7 +23,7 @@
   <anchor id="time_duration_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
   <para>
-    The class boost::posix_time::time_duration the base type responsible for representing a length of time. A duration can be either positive or negative. The general time_duration class provides a constructor that takes a count of the number of hours, minutes, seconds, and fractional seconds count as shown in the code fragment below. The resolution of the time_duration is configureable at compile time. See <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information. 
+    The class boost::posix_time::time_duration the base type responsible for representing a length of time. A duration can be either positive or negative. The general time_duration class provides a constructor that takes a count of the number of hours, minutes, seconds, and fractional seconds count as shown in the code fragment below. The resolution of the time_duration is configure able at compile time. See <link linkend="date_time.buildinfo">Build-Compiler Information</link> for more information. 
   </para>
   <para>
     <programlisting>using namespace boost::posix_time;
@@ -283,7 +283,7 @@ td.total_seconds();
 	  </row>
 	  <row>
 	    <entry><screen>time_duration td(1,2,3,123456789);
-td.total_miliseconds(); 
+td.total_milliseconds(); 
 // HMS --> (1*3600) + (2*60) + 3 == 3723 seconds
 // milliseconds is 3 decimal places
 // (3723 * 1000) + 123 == 3723123</screen>
@@ -385,7 +385,48 @@ td.ticks() // --> 1000</screen></entry>
 	  </row>
 	  <row>
 	    <entry><screen>time_duration::unit() --> time_duration(0,0,0,1)</screen></entry>
-	  </row>
+          </row>
+  
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_neg_infinity() const</screen></entry>
+            <entry>Returns true if time_duration is negative infinity</entry>
+          </row>
+          <row>
+            <entry><screen>time_duration td(neg_infin);
+td.is_neg_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_pos_infinity() const</screen></entry>
+            <entry>Returns true if time_duration is positive infinity</entry>
+          </row>
+          <row>
+            <entry><screen>time_duration td(neg_infin); 
+td.is_pos_infinity(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_not_a_date_time() const</screen></entry>
+            <entry>Returns true if value is not a time</entry>
+          </row>
+          <row>
+            <entry><screen>time_duration td(not_a_date_time);
+td.is_not_a_date_time(); // --> true</screen></entry>
+          </row>
+          
+          <row>
+            <entry valign="top" morerows="1"><screen>bool is_special() const</screen></entry>
+            <entry>Returns true if time_duration is any <code>special_value</code></entry>
+          </row>
+          <row>
+            <entry><screen>time_duration td(pos_infin); 
+time_duration td2(not_a_date_time); 
+time_duration td3(2,5,10);
+td.is_special(); // --> true
+td2.is_special(); // --> true
+td3.is_special(); // --> false</screen></entry>
+          </row>
+        
 	</tbody>
       </tgroup>
     </informaltable>
