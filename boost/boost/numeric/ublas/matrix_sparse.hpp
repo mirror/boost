@@ -3922,9 +3922,9 @@ namespace boost { namespace numeric { namespace ublas {
         void set_filled (const array_size_type &filled) {
             // Make sure that storage_invariants() succeeds
             if (sorted_ && filled < filled_)
-                sorted_filled_ = filled_;
+                sorted_filled_ = filled;
             else
-                sorted_ = (sorted_filled_ == filled_);
+                sorted_ = (sorted_filled_ == filled);
             filled_ = filled;
             storage_invariants ();
         }
