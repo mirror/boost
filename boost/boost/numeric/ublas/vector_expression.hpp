@@ -200,14 +200,16 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         // projection types
         typedef vector_range<E> vector_range_type;
+        typedef const vector_range<const E> const_vector_range_type;
         typedef vector_slice<E> vector_slice_type;
+        typedef const vector_slice<const E> const_vector_slice_type;
         // vector_indirect_type will depend on the A template parameter 
         typedef basic_range<> default_range;
         typedef basic_slice<> default_slice;
    public:
         // projection functions - projects must be constructable from default size_t, range and slice types
         BOOST_UBLAS_INLINE
-        const vector_range_type range (std::size_t start, std::size_t stop) const {
+        const_vector_range_type range (std::size_t start, std::size_t stop) const {
             return vector_range_type (operator () (), default_range (start, stop));
         }
         BOOST_UBLAS_INLINE
@@ -216,7 +218,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
-        const vector_range_type operator () (const default_range &r) const {
+        const_vector_range_type operator () (const default_range &r) const {
             return vector_range_type (operator () (), r);
         }
         BOOST_UBLAS_INLINE
@@ -224,7 +226,7 @@ namespace boost { namespace numeric { namespace ublas {
             return vector_range_type (operator () (), r);
         }
         BOOST_UBLAS_INLINE
-        const vector_slice_type operator () (const default_slice &s) const {
+        const_vector_slice_type operator () (const default_slice &s) const {
             return vector_slice_type (operator () (), s);
         }
         BOOST_UBLAS_INLINE
@@ -243,7 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
         BOOST_UBLAS_INLINE
-        const vector_range_type project (const default_range &r) const {
+        const_vector_range_type project (const default_range &r) const {
             return vector_range_type (operator () (), r);
         }
         BOOST_UBLAS_INLINE
@@ -251,7 +253,7 @@ namespace boost { namespace numeric { namespace ublas {
             return vector_range_type (operator () (), r);
         }
         BOOST_UBLAS_INLINE
-        const vector_slice_type project (const default_slice &s) const {
+        const_vector_slice_type project (const default_slice &s) const {
             return vector_slice_type (operator () (), s);
         }
         BOOST_UBLAS_INLINE
