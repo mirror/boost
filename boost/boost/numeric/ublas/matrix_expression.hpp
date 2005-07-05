@@ -129,7 +129,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class A>
         BOOST_UBLAS_INLINE
-        const_matrix_indirect<const E, A> operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) const {
+        const matrix_indirect<const E, A> operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) const {
             return matrix_indirect<const E, A> (operator () (), ia1, ia2);
         }
         template<class A>
@@ -156,7 +156,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class A>
         BOOST_UBLAS_INLINE
-        const_matrix_indirect<const E, A> project (const indirect_array<A> &ia1, const indirect_array<A> &ia2) const {
+        const matrix_indirect<const E, A> project (const indirect_array<A> &ia1, const indirect_array<A> &ia2) const {
             return matrix_indirect<const E, A> (operator () (), ia1, ia2);
         }
         template<class A>
