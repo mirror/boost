@@ -469,13 +469,8 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_row<const M> row_const (const M &data, typename M::size_type i) {
+    const matrix_row<const M> row (const M &data, typename M::size_type i) {
         return matrix_row<const M> (data, i);
-    }
-    template<class M>
-    BOOST_UBLAS_INLINE
-    matrix_row<M> row (const M &data, typename M::size_type i) {
-        return matrix_row<M> (const_cast<M &> (data), i);
     }
 
     // Specialize temporary
@@ -925,13 +920,8 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_column<const M> column_const (const M &data, typename M::size_type j) {
+    const matrix_column<const M> column (const M &data, typename M::size_type j) {
         return matrix_column<const M> (data, j);
-    }
-    template<class M>
-    BOOST_UBLAS_INLINE
-    matrix_column<M> column (const M &data, typename M::size_type j) {
-        return matrix_column<M> (const_cast<M &> (data), j);
     }
 
     // Specialize temporary
