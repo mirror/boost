@@ -55,11 +55,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_range<E> vector_range_type;
         typedef const vector_range<const E> const_vector_range_type;
         typedef vector_slice<E> vector_slice_type;
-        typedef const vector_slice<const E> const vector_slice_type;
+        typedef const vector_slice<const E> const_vector_slice_type;
         typedef matrix_row<E> matrix_row_type;
         typedef const matrix_row<const E> const_matrix_row_type;
         typedef matrix_column<E> matrix_column_type;
-        typedefconst  matrix_column<const E> const_matrix_column_type;
+        typedef const  matrix_column<const E> const_matrix_column_type;
         typedef matrix_range<E> matrix_range_type;
         typedef const matrix_range<const E> const_matrix_range_type;
         typedef matrix_slice<E> matrix_slice_type;
