@@ -140,6 +140,20 @@ struct test_info<char>
    : public test_info_base<char>
 {};
 
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+
+// Some template instantiation modes (namely local, implicit local, and weak) of
+// this compiler need an explicit instantiation because otherwise we end up with
+// multiple copies of the static variable defined in this method. This explicit
+// instantiation generates the static variable with common linkage, which makes
+// the linker choose only one of the available definitions. For more details,
+// see "man ld".
+
+template test_info_base<wchar_t>::data_type & test_info_base<wchar_t>::data();
+template test_info_base<char>::data_type & test_info_base<char>::data();
+
+#endif
+
 template <class charT>
 std::ostream& operator<<(std::ostream& os, const test_info<charT>&)
 {
