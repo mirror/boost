@@ -996,7 +996,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         basic_range preprocess (size_type size) const {
-            if (*this != &all_)
+            if (this != &all_)
                 return *this;
             return basic_range (0, size);
         }
@@ -1199,13 +1199,13 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         basic_slice preprocess (size_type size) const {
-            if (*this != all_)
+            if (this != &all_)
                 return *this;
             return basic_slice (0, 1, size);
         }
         static
         BOOST_UBLAS_INLINE
-        const basic_slice& all () {
+        const basic_slice &all () {
             return all_;
         }
 
