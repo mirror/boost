@@ -256,9 +256,11 @@ void test_tricky_cases3()
    TEST_REGEX_SEARCH_W(L"[[:unicode:]]+", perl, L"a\x0300\x0400z", match_default, make_array(1, 3, -2, -2));
    TEST_REGEX_SEARCH_W(L"[\x10-\xff]", perl, L"\x0300\x0400", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH_W(L"[\01-\05]{5}", perl, L"\x0300\x0400\x0300\x0400\x0300\x0400", match_default, make_array(-2, -2));
+#if !BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
    TEST_REGEX_SEARCH_W(L"[\x300-\x400]+", perl, L"\x0300\x0400\x0300\x0400\x0300\x0400", match_default, make_array(0, 6, -2, -2));
    TEST_REGEX_SEARCH_W(L"[\\x{300}-\\x{400}]+", perl, L"\x0300\x0400\x0300\x0400\x0300\x0400", match_default, make_array(0, 6, -2, -2));
    TEST_REGEX_SEARCH_W(L"\\x{300}\\x{400}+", perl, L"\x0300\x0400\x0400\x0400\x0400\x0400", match_default, make_array(0, 6, -2, -2));
+#endif
 #endif
    // finally try some case insensitive matches:
    TEST_REGEX_SEARCH("0123456789@abcdefghijklmnopqrstuvwxyz\\[\\\\\\]\\^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ\\{\\|\\}", perl|icase, "0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}", match_default, make_array(0, 72, -2, -2));
