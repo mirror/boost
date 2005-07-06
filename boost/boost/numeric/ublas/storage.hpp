@@ -14,9 +14,10 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef _BOOST_UBLAS_STORAGE_
-#define _BOOST_UBLAS_STORAGE_
+#ifndef BOOST_UBLAS_STORAGE_H
+#define BOOST_UBLAS_STORAGE_H
 
+#include <algorithm>
 #ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
 #include <boost/shared_array.hpp>
 #endif
@@ -995,20 +996,25 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         basic_range preprocess (size_type size) const {
-            if (*this != all ())
+            if (*this != &all_)
                 return *this;
             return basic_range (0, size);
         }
         static
         BOOST_UBLAS_INLINE
-        basic_range all () {
-            return basic_range (0, size_type (-1));
+        const basic_range &all () {
+            return all_;
         }
 
     private:
         size_type start_;
         size_type size_;
+        static const basic_range all_;
     };
+
+    template <class Z, class D>
+    const basic_range<Z,D> basic_range<Z,D>::all_  (0, size_type (-1));
+
 
     // Slice class
     template <class Z, class D>
@@ -1193,21 +1199,26 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         basic_slice preprocess (size_type size) const {
-            if (*this != all ())
+            if (*this != all_)
                 return *this;
             return basic_slice (0, 1, size);
         }
         static
         BOOST_UBLAS_INLINE
-        basic_slice all () {
-            return basic_slice (0, 1, size_type (-1));
+        const basic_slice& all () {
+            return all_;
         }
 
     private:
         size_type start_;
         difference_type stride_;
         size_type size_;
+        static const basic_slice all_;
     };
+
+    template <class Z, class D>
+    const basic_slice<Z,D> basic_slice<Z,D>::all_  (0, 1, size_type (-1));
+
 
     // Indirect array class
     template<class A>
@@ -1432,7 +1443,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         indirect_array preprocess (size_type size) const {
-            if (*this != all ())
+            if (this != &all_)
                 return *this;
             indirect_array ia (size);
             for (size_type i = 0; i < size; ++ i)
