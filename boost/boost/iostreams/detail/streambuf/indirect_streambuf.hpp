@@ -336,7 +336,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::seek_impl
     (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
     if (pptr() != 0) 
-        this->pubsync(); // sync() confuses VisualAge 6.
+        this->BOOST_IOSTREAMS_PUBSYNC(); // sync() confuses VisualAge 6.
     if (way == BOOST_IOS::cur && gptr())
         off -= static_cast<off_type>(egptr() - gptr());
     setg(0, 0, 0);
