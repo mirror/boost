@@ -91,6 +91,10 @@ public:
         static extended_type_info_typeid_1<T> instance;
         return & instance;
     }
+    static void
+    export_register(const char * key){
+        get_instance()->key_register(key);
+    }
 };
 
 } // namespace detail

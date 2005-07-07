@@ -44,15 +44,12 @@ private:
     const char * type_info_key;
     int type_info_key_cmp(const extended_type_info & rhs) const;
 protected:
+    const char * key;
     extended_type_info(const char * type_info_key_);
     virtual ~extended_type_info();
-    void self_register();
 public:
-    // text string used as key for exporting serialized classes
-    const char * key;
+    void self_register();
     void key_register(const char *key);
-    static const extended_type_info * find(const char *key);
-    static const extended_type_info * find(const extended_type_info * t);
     bool operator<(const extended_type_info &rhs) const;
     bool operator==(const extended_type_info &rhs) const {
         return this == & rhs;
@@ -60,6 +57,11 @@ public:
     bool operator!=(const extended_type_info &rhs) const {
         return this != & rhs;
     }
+    const char * get_key() const {
+        return key;
+    }
+    static const extended_type_info * find(const char *key);
+    static const extended_type_info * find(const extended_type_info * t);
 };
 
 } // namespace serialization 

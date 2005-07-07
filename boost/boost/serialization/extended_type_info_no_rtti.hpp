@@ -62,16 +62,13 @@ class extended_type_info_no_rtti_1 :
 private:
     // private constructor to inhibit any existence other than the 
     // static one
-    extended_type_info_no_rtti_1(){
-        key_register(type_key);
-        self_register();    // add type to type table
-    }
+    extended_type_info_no_rtti_1(){}
+public:
     // Note: this version of extended_type_info
     // relies on the key used for exporting data.  
     // So we have to have the key when the instance is created and
     // can't wait for it be exported as in other cases.
-    static const char * type_key;
-public:
+//    static const char * type_key;
     static const boost::serialization::extended_type_info *
     get_derived_extended_type_info(const T & t){
         // find the type that corresponds to the most derived type.
@@ -83,11 +80,17 @@ public:
         assert(NULL != derived_key);
         return boost::serialization::extended_type_info::find(derived_key);
     }
-
     static boost::serialization::extended_type_info *
     get_instance(){
         static extended_type_info_no_rtti_1<T> instance;
         return & instance;
+    }
+    static void
+    export_register(const char * key){
+        boost::serialization::extended_type_info * eti;
+        eti = get_instance();
+        eti->key_register(key);  // initialize key and add to table
+        eti->self_register();    // add type to type table
     }
 };
 } // namespace detail

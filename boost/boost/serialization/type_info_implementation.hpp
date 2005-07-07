@@ -24,6 +24,15 @@
 // If no other implementation has been designated as default, 
 // use extended_type_info_typeid.hpp
 
+namespace boost {
+namespace serialization {
+template<class T>
+class extended_type_info_null;
+struct basic_traits;
+} // namespace serialization
+} // namespace boost
+
+
 #ifdef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
     #define BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)        \
         BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
@@ -40,11 +49,6 @@
 
 namespace boost {
 namespace serialization {
-
-template<class T>
-class extended_type_info_null;
-
-struct basic_traits;
 
 // note that T and const T are folded into const T so that
 // there is only one table entry per type
