@@ -72,7 +72,7 @@ namespace boost { namespace numeric { namespace ublas {
         // projection functions - projects must be constructable from default size_t, range and slice types
         BOOST_UBLAS_INLINE
         const_matrix_row_type operator [] (std::size_t i) const {
-            return matrix_row_type (operator () (), i);
+            return const_matrix_row_type (operator () (), i);
         }
         BOOST_UBLAS_INLINE
         matrix_row_type operator [] (std::size_t i) {
@@ -80,7 +80,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_matrix_row_type row (std::size_t i) const {
-            return matrix_row_type (operator () (), i);
+            return const_matrix_row_type (operator () (), i);
         }
         BOOST_UBLAS_INLINE
         matrix_row_type row (std::size_t i) {
@@ -88,7 +88,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_matrix_column_type column (std::size_t j) const {
-            return matrix_column_type (operator () (), j);
+            return const_matrix_column_type (operator () (), j);
         }
         BOOST_UBLAS_INLINE
         matrix_column_type column (std::size_t j) {
@@ -96,7 +96,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_matrix_range_type range (std::size_t start1, std::size_t stop1, std::size_t start2, std::size_t stop2) const {
-            return matrix_range_type (operator () (), default_range (start1, stop1), default_range (start2, stop2));
+            return const_matrix_range_type (operator () (), default_range (start1, stop1), default_range (start2, stop2));
         }
         BOOST_UBLAS_INLINE
         matrix_range_type range (std::size_t start1, std::size_t stop1, std::size_t start2, std::size_t stop2) {
@@ -104,7 +104,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_matrix_slice_type slice (std::size_t start1, std::ptrdiff_t stride1, std::size_t size1, std::size_t start2, std::ptrdiff_t stride2, std::size_t size2) const {
-            return matrix_slice_type (operator () (), default_slice (start1, stride1, size1), default_slice (start2, stride2, size2));
+            return const_matrix_slice_type (operator () (), default_slice (start1, stride1, size1), default_slice (start2, stride2, size2));
         }
         BOOST_UBLAS_INLINE
         matrix_slice_type slice (std::size_t start1, std::ptrdiff_t stride1, std::size_t size1, std::size_t start2, std::ptrdiff_t stride2, std::size_t size2) {
@@ -113,7 +113,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_matrix_range_type operator () (const default_range &r1, const default_range &r2) const {
-            return matrix_range_type (operator () (), r1, r2);
+            return const_matrix_range_type (operator () (), r1, r2);
         }
         BOOST_UBLAS_INLINE
         matrix_range_type operator () (const default_range &r1, const default_range &r2) {
@@ -121,7 +121,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_matrix_slice_type operator () (const default_slice &s1, const default_slice &s2) const {
-            return matrix_slice_type (operator () (), s1, s2);
+            return const_matrix_slice_type (operator () (), s1, s2);
         }
         BOOST_UBLAS_INLINE
         matrix_slice_type operator () (const default_slice &s1, const default_slice &s2) {
@@ -140,7 +140,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         BOOST_UBLAS_INLINE
         const_matrix_range_type project (const default_range &r1, const default_range &r2) const {
-            return matrix_range_type (operator () (), r1, r2);
+            return const_matrix_range_type (operator () (), r1, r2);
         }
         BOOST_UBLAS_INLINE
         matrix_range_type project (const default_range &r1, const default_range &r2) {
@@ -148,7 +148,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_matrix_slice_type project (const default_slice &s1, const default_slice &s2) const {
-            return matrix_slice_type (operator () (), s1, s2);
+            return const_matrix_slice_type (operator () (), s1, s2);
         }
         BOOST_UBLAS_INLINE
         matrix_slice_type project (const default_slice &s1, const default_slice &s2) {

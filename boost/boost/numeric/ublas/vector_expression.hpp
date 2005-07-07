@@ -210,7 +210,7 @@ namespace boost { namespace numeric { namespace ublas {
         // projection functions - projects must be constructable from default size_t, range and slice types
         BOOST_UBLAS_INLINE
         const_vector_range_type range (std::size_t start, std::size_t stop) const {
-            return vector_range_type (operator () (), default_range (start, stop));
+            return const_vector_range_type (operator () (), default_range (start, stop));
         }
         BOOST_UBLAS_INLINE
         vector_range_type range (std::size_t start, std::size_t stop) {
@@ -219,7 +219,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const default_range &r) const {
-            return vector_range_type (operator () (), r);
+            return const_vector_range_type (operator () (), r);
         }
         BOOST_UBLAS_INLINE
         vector_range_type operator () (const default_range &r) {
@@ -227,7 +227,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_vector_slice_type operator () (const default_slice &s) const {
-            return vector_slice_type (operator () (), s);
+            return const_vector_slice_type (operator () (), s);
         }
         BOOST_UBLAS_INLINE
         vector_slice_type operator () (const default_slice &s) {
@@ -246,7 +246,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         BOOST_UBLAS_INLINE
         const_vector_range_type project (const default_range &r) const {
-            return vector_range_type (operator () (), r);
+            return const_vector_range_type (operator () (), r);
         }
         BOOST_UBLAS_INLINE
         vector_range_type project (const default_range &r) {
@@ -254,7 +254,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_vector_slice_type project (const default_slice &s) const {
-            return vector_slice_type (operator () (), s);
+            return const_vector_slice_type (operator () (), s);
         }
         BOOST_UBLAS_INLINE
         vector_slice_type project (const default_slice &s) {
