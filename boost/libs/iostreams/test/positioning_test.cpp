@@ -29,7 +29,7 @@ using boost::unit_test::test_suite;
 
 void large_file_test()
 {
-    stream_offset  large_file = 100 * 024 * 1024 * 1024; // 100GB.
+    stream_offset  large_file = 100 * 1024 * 1024 * 1024; // 100GB.
     stream_offset  first = -large_file - (-large_file) % 10000000;
     stream_offset  last = large_file - large_file % 10000000;
 
