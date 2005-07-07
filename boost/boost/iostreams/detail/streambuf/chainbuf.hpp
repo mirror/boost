@@ -74,9 +74,9 @@ protected:
                  typename Chain::char_type,
                  typename Chain::traits_type
              )                                               base_type;
-#if !BOOST_WORKAROUND(__GNUC__, == 2)                                 
-    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
-#endif
+//#if !BOOST_WORKAROUND(__GNUC__, == 2)                                 
+//    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
+//#endif
 private:
 
     // Translate from std int_type to chain's int_type.
@@ -90,15 +90,15 @@ private:
         { return static_cast<delegate_type&>(chain_.front()); }
     void get_pointers()
         {
-            setg(delegate().eback(), delegate().gptr(), delegate().egptr());
-            setp(delegate().pbase(), delegate().epptr());
-            pbump((int) (delegate().pptr() - delegate().pbase()));
+            this->setg(delegate().eback(), delegate().gptr(), delegate().egptr());
+            this->setp(delegate().pbase(), delegate().epptr());
+            this->pbump((int) (delegate().pptr() - delegate().pbase()));
         }
     void set_pointers()
         {
-            delegate().setg(eback(), gptr(),egptr());
-            delegate().setp(pbase(), epptr());
-            delegate().pbump((int) (pptr() - pbase()));
+            delegate().setg(this->eback(), this->gptr(), this->egptr());
+            delegate().setp(this->pbase(), this->epptr());
+            delegate().pbump((int) (this->pptr() - this->pbase()));
         }
     struct sentry {
         sentry(chainbuf<Chain, Mode, Access>* buf) : buf_(buf)
