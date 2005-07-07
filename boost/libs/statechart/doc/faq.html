@@ -68,11 +68,14 @@ struct EvForwardButtonPressed :
 // press in the Off state. Although we can write the reaction
 // code only once, we must mention all most-derived events in
 // the reaction list.
-struct Off : sc::simple_state&lt; Off, Mp3Player, mpl::list&lt;
-  sc::custom_reaction&lt; EvPlayButtonPressed &gt;,
-  sc::custom_reaction&lt; EvStopButtonPressed &gt;,
-  sc::custom_reaction&lt; EvForwardButtonPressed &gt; &gt; &gt;
+struct Off : sc::simple_state&lt; Off, Mp3Player &gt;
 {
+  typedef mpl::list&lt;
+    sc::custom_reaction&lt; EvPlayButtonPressed &gt;,
+    sc::custom_reaction&lt; EvStopButtonPressed &gt;,
+    sc::custom_reaction&lt; EvForwardButtonPressed &gt;
+  &gt; reactions;
+
   template&lt; class MostDerived &gt;
   sc::result react( const EvButtonPressed&lt; MostDerived &gt; &amp; )
   {
@@ -110,12 +113,20 @@ struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt;
 };</pre>
 <p>StopWatch.cpp:</p>
 <pre>struct Stopped;
-struct Active : sc::simple_state&lt; Active, StopWatch,
-  sc::transition&lt; EvReset, Active &gt;, Stopped &gt; {};
-struct Running : sc::simple_state&lt; Running, Active,
-  sc::transition&lt; EvStartStop, Stopped &gt; &gt; {};
-struct Stopped : sc::simple_state&lt; Stopped, Active,
-  sc::transition&lt; EvStartStop, Running &gt; &gt; {};
+struct Active : sc::simple_state&lt; Active, StopWatch, Stopped &gt;
+{
+  typedef sc::transition&lt; EvReset, Active &gt; reactions;
+};
+
+  struct Running : sc::simple_state&lt; Running, Active &gt;
+  {
+    typedef sc::transition&lt; EvStartStop, Stopped &gt; reactions;
+  };
+
+  struct Stopped : sc::simple_state&lt; Stopped, Active &gt;
+  {
+    typedef sc::transition&lt; EvStartStop, Running &gt; reactions;
+  };
 
 StopWatch::StopWatch()
 {
@@ -141,9 +152,10 @@ struct PumpBase : sc::state_machine&lt; PumpBase, Idle &gt;
 </b>    <b>Idle &amp; idle, const EvStart &amp; ) const;
 </b>};
 
-struct Idle : sc::simple_state&lt; Idle, PumpBase,
-  sc::custom_reaction&lt; EvStart &gt; &gt;
+struct Idle : sc::simple_state&lt; Idle, PumpBase &gt;
 {
+  typedef sc::custom_reaction&lt; EvStart &gt; reactions;
+
   sc::result react( const EvStart &amp; evt )
   {
     <b>return context&lt; PumpBase &gt;().react( *this, evt );</b>
@@ -208,7 +220,7 @@ struct Outer;
 struct Machine : sc::state_machine&lt; Machine, Outer &gt; {};
 struct Inner;
 struct Outer : EntryExitDisplayer, sc::simple_state&lt;
-  Outer, Machine, sc::no_reactions, Inner &gt;
+  Outer, Machine, Inner &gt;
 {
   Outer() : EntryExitDisplayer( &quot;Outer&quot; ) {}
 };
@@ -259,8 +271,8 @@ destructors of additional bases are called before recursion employed by state
 base destructors can alter the order of destruction.</p>
 <h2><a name="Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></h2>
 <p>It depends. As explained under
-<a href="rationale.html#Speed versus scalability tradeoffs">Speed 
-versus scalability tradeoffs</a> in the Rationale, the virtually limitless scalability 
+<a href="performance.html#Speed versus scalability tradeoffs">Speed versus 
+scalability tradeoffs</a> on the Performance page, the virtually limitless scalability 
 offered by this library does have its 
 price. Especially small and simple FSMs can easily be implemented so that they 
 consume fewer cycles and less memory and occupy less code space in the 
@@ -304,7 +316,7 @@ operator new</code>. <code>dynamic_cast</code>s can be avoided by not calling th
 deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->07 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
