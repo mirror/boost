@@ -38,20 +38,21 @@
 // just declares it.
 
 #if ! defined(BOOST_ARCHIVE_BASIC_ARCHIVE_HPP)
+    namespace boost {
+    namespace serialization {
+    class void_caster;
     template<class Derived, class Base>
     void void_cast_register(
         const Derived * /* dnull = NULL */, 
         const Base * /* bnull = NULL */
     );
+    } // namespace serialization
+    } // namespace boost
 #else
     #include <boost/serialization/void_cast.hpp>
 #endif
 
 namespace boost {
-    namespace archive{
-        class basic_oarchive;
-        class basic_iarchive;
-    } // namespace archive
 namespace serialization {
 
 namespace detail {
@@ -72,13 +73,13 @@ namespace detail {
                 );
             }
         };
-        static const void invoke(){
+        static void invoke(){
             typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
                 mpl::identity<reg<Base, Derived> >,
                 mpl::identity<nothing>
             >::type typex;
-            return typex::invoke();
+            typex::invoke();
         }
     };
     
