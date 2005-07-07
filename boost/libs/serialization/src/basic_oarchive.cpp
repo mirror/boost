@@ -321,7 +321,7 @@ basic_oarchive_impl::save_pointer(
                 const serialization::extended_type_info *eti = & bos.type;
                 const char * key = NULL;
                 if(NULL != eti)
-                    key = eti->key;
+                    key = eti->get_key();
                 if(NULL != key){
                     // the following is required by IBM C++ compiler which
                     // makes a copy when passing a non-const to a const.  This

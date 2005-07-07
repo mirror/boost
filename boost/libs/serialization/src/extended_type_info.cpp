@@ -35,6 +35,8 @@ namespace detail {
 // it turns out that at least one compiler (msvc 6.0) doesn't guarentee
 // to destroy static objects in exactly the reverse sequence that they
 // are constructed.  To guarentee this, use a singleton pattern
+
+// map for finding the unique global extended type entry for a given type
 class tkmap {
     struct type_info_compare
     {
@@ -87,6 +89,7 @@ public:
 
 tkmap * tkmap::m_self = NULL;
 
+// map for finding the unique global extended type info entry given its GUID
 class ktmap {
     struct key_compare
     {
@@ -94,13 +97,13 @@ class ktmap {
         operator()(const extended_type_info * lhs, const extended_type_info * rhs) const
         {
             // shortcut to exploit string pooling
-            if(lhs->key == rhs->key)
+            if(lhs->get_key() == rhs->get_key())
                 return false;
-            if(NULL == lhs->key)
+            if(NULL == lhs->get_key())
                 return true;
-            if(NULL == rhs->key)
+            if(NULL == rhs->get_key())
                 return false;
-            return std::strcmp(lhs->key, rhs->key) < 0; 
+            return std::strcmp(lhs->get_key(), rhs->get_key()) < 0; 
         }
     };
     typedef std::multiset<const extended_type_info *, key_compare> type;

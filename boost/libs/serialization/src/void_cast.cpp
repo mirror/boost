@@ -22,19 +22,13 @@
 #include <cassert>
 
 // BOOST
-#define BOOST_SERIALIZATION_SOURCE
-// specify the default type_info implementation if it hasn't been done already
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-    #include <boost/serialization/extended_type_info_typeid.hpp>
-#endif
 #include <boost/shared_ptr.hpp>
+#define BOOST_SERIALIZATION_SOURCE
+#include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/void_cast.hpp>
 
 namespace boost { 
 namespace serialization {
-
-class extended_type_info;
-
 namespace void_cast_detail {
 
 struct void_caster_compare
