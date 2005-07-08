@@ -3,7 +3,10 @@
 <HTML>
 
 <HEAD>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
 <LINK REL="stylesheet" TYPE="text/css" HREF="../../../boost.css">
 <TITLE>Header </TITLE>
 </HEAD>
@@ -42,7 +45,7 @@ HREF="../../../boost/optional/optional.hpp">boost/optional/optional.hpp</A>&gt; 
 <P>There are different approaches to the issue of not having a value to return.</P>
 <P>A typical approach is to consider the existence of a valid return value as
   a postcondition, so that if the function cannot compute the value to return,
-  it has either undefined behavior (and can use asssert in a debug build)
+  it has either undefined behavior (and can use assert in a debug build)
   or uses a runtime check and throws an exception if the postcondition is violated.
   This is a reasonable choice for example, for function (A), because the
   lack of a proper return value is directly related to an invalid parameter (out
@@ -100,14 +103,15 @@ if ( p.second )
   If the declaration uses an empty initializer (no initial value is given),
   and neither default nor value initialization applies, it is said that the object is
   <i><b>uninitialized</b></i>. Its actual value exist but has an
-  <i>indeterminate inital value</i> (c.f. 8.5.9).<br>
+  <i>indeterminate initial value</i> (c.f. 8.5.9).<br>
   <code>optional&lt;T&gt;</code> intends to formalize the notion of initialization 
-(or loack of it)
+(or lack of it)
   allowing a program to test whether an object has been initialized and stating that access to
-  the value of an uninitialized object is undefined behaviour. That is,
+  the value of an uninitialized object is undefined behavior. That is,
   when a variable is declared as optional&lt;T&gt; and no initial value is given,
   the variable is <i>formally</i> uninitialized. A formally uninitialized optional object has conceptually
-  no value at all and this situation can be tested at runtime. It is formally <i>undefined behaviour</i>
+  no value at all and this situation can be tested at runtime. It is formally <i>
+undefined behavior</i>
   to try to access the value of an uninitialized optional. An uninitialized optional can be <i>assigned</i> a      value, in which case its initialization state changes to initialized. Furthermore, given the formal
   treatment of initialization states in optional objects, it is even possible to reset an optional to <i>uninitialized</i>.</P>
 <P>In C++ there is no formal notion of uninitialized objects, which
@@ -124,17 +128,18 @@ if ( p.second )
   Using the <a href="../../../doc/html/variant.html">Boost.Variant</a> library, this model can be implemented
   in terms of <code>boost::variant&lt;T,nil_t&gt;</code>.<br>
   There is precedence for a discriminated union as a model for an optional value: the
-  <a href="http://www.haskell.org/"><u>Haskell</u></a> <b>Maybe</b> builtin type constructor. 
+  <a href="http://www.haskell.org/"><u>Haskell</u></a> <b>Maybe</b> built-in type constructor. 
 Thus, a discriminated union <code>T+nil_t</code> serves as a conceptual foundation.</p>
 <p>A <code>variant&lt;T,nil_t&gt;</code> follows naturally from the traditional idiom of extending
 the range of possible values adding an additional sentinel value with the special meaning of <i>Nothing. </i>
 However, this additional <i>Nothing</i> value is largely irrelevant for our purpose
- since our goal is to formalize the notion of uninitialized objects and, while a special extended value <i>can</i> be used to convey that meaning, it is not strictly neccesary in order to do so.</p>
+ since our goal is to formalize the notion of uninitialized objects and, while a special extended value <i>can</i> be used to convey that meaning, it is not strictly 
+necessary in order to do so.</p>
 <p>The observation made in the last paragraph about the irrelevant nature of the additional <code>nil_t</code> with respect to
 <u>purpose</u> of optional&lt;T&gt; suggests
 an alternative model: a <i>container</i> that either has a value of T or nothing.
 </p>
-<p>As of this writting I don't know of any precedence for a variable-size fixed-capacity (of 1)
+<p>As of this writing I don't know of any precedence for a variable-size fixed-capacity (of 1)
 stack-based container model for optional values, yet I believe this is the consequence of
 the lack of practical implementations of such a container rather than an inherent shortcoming
 of the container model.</p>
@@ -148,7 +153,8 @@ For instance, these models show the <i>exact</i> semantics required for a wrappe
 <li>If the variant's current type is T, it is modeling an <i>initialized</i> optional.</li>
 <li>If the variant's current type is not T, it is modeling an <i>uninitialized</i> optional.</li>
 <li>Testing if the variant's current type is T models testing if the optional is initialized</li>
-<li>Trying to extract a T from a variant when its current type is not T, models the undefined behaviour
+<li>Trying to extract a T from a variant when its current type is not T, models the undefined 
+behavior
 of trying to access the value of an uninitialized optional</li>
 </blockquote>
 <p>Single-element container:</p>
@@ -158,7 +164,7 @@ of trying to access the value of an uninitialized optional</li>
 <li>If the container is not empty (contains an object of type T), it is modeling an <i>initialized</i> optional.</li>
 <li>If the container is empty, it is modeling an <i>uninitialized</i> optional.</li>
 <li>Testing if the container is empty models testing if the optional is initialized</li>
-<li>Trying to extract a T from an empty container models the undefined behaviour
+<li>Trying to extract a T from an empty container models the undefined behavior
 of trying to access the value of an uninitialized optional</li>
 </blockquote>
 
@@ -171,7 +177,8 @@ plus the additional semantics corresponding to this special state.<br>
 As such, <code>optional&lt;T&gt;</code> could be thought of as a <i>supertype</i> of T. Of course,
 we can't do that in C++, so we need to compose the desired semantics using a different mechanism.<br>
 Doing it the other way around, that is, making <code>optional&lt;T&gt;</code> a <i>subtype</i> of T is not only
-conceptually wrong but also impractical: it is not allowed to derive from a non-class type, such as a builtin type.</p>
+conceptually wrong but also impractical: it is not allowed to derive from a non-class type, such as a 
+built-in type.</p>
 
 <p>We can draw from the purpose of optional&lt;T&gt; the required basic semantics:</p>
 
@@ -191,10 +198,10 @@ object.</p>
 with a value obtained
 as a copy of some object.</p>
 
-<p><b>Assignnment (upon initialized):</b> To assign to the wrapped object the value 
+<p><b>Assignment (upon initialized):</b> To assign to the wrapped object the value 
 of another wrapped object.</p>
 
-<p><b>Assignnment (upon uninitialized):</b> To initialize the wrapped object
+<p><b>Assignment (upon uninitialized):</b> To initialize the wrapped object
 with value of another wrapped object.</p>
 
 <p><b>Deep Relational Operations (when supported by the type T):</b> To compare
@@ -207,7 +214,7 @@ states.</p>
 initialized or not.</p>
 
 <p><b>Swap:</b> To exchange wrapped objects. (with whatever exception safety
-guarantiees are provided by T's swap).</p>
+guarantees are provided by T's swap).</p>
 
 <p><b>De-initialization:</b> To release the wrapped object (if any) and leave
 the wrapper in the uninitialized state.</p>
@@ -234,7 +241,7 @@ those operations which are well defined (w.r.t the type T) even if any of the
 operands are uninitialized. These operations include: construction,
 copy-construction, assignment, swap and relational operations.<br>
 For the value access operations, which are undefined (w.r.t the type T) when the
-operand is uninitialized, a different interface is choosen (which will be
+operand is uninitialized, a different interface is chosen (which will be
 explained next).<br>
 Also, the presence of the possibly uninitialized state requires additional
 operations not provided by T itself which are supported by a special interface.</p>
@@ -259,7 +266,7 @@ optional objects: The operators * and -&gt;</h3>
   the implied pointee actually exist.</P>
 <P>Such a <i>de facto</i> idiom for referring to optional objects can be formalized in the form of a
 concept: the <a href="../../utility/OptionalPointee.html">OptionalPointee</a> concept.<br>
-This concept captures the syntactic usage of operatos *, -> and conversion to bool to convey
+This concept captures the syntactic usage of operators *, -> and conversion to bool to convey
 the notion of optionality.</P>
 <P>However, pointers are good to <u>refer</u> to optional objects, but not particularly good
 to handle the optional objects in all other respects, such as initializing or moving/copying
@@ -273,22 +280,22 @@ them. The problem resides in the shallow-copy of pointer semantics: if you need 
   allocation and use a smart pointer to automatically handle the details of this.
   For example, if a function is to optionally return an object X, it can use shared_ptr&lt;X&gt;
   as the return value. However, this requires dynamic allocation of X. If X is
-  a builtin or small POD, this technique is very poor in terms of required resources.
+  a built-in or small POD, this technique is very poor in terms of required resources.
   Optional objects are essentially values so it is very convenient to be able to use automatic
   storage and deep-copy semantics to manipulate optional values just as we do with ordinary
-  values. Pointers do not have this semantics, so are unappropriate for the initialization and
+  values. Pointers do not have this semantics, so are inappropriate for the initialization and
   transport of optional values, yet are quite convenient for handling the access to the
   possible undefined value because of the idiomatic aid present in the OptionalPointee
   concept incarnated by pointers.
 </p>
 <h4>Optional&lt;T&gt; as a model of OptionalPointee</h4>
 <P>For value access operations optional&lt;&gt; uses operators * and -&gt; to lexically
-warn about the possibliy uninitialized state appealing to the familiar pointer
+warn about the possibly uninitialized state appealing to the familiar pointer
 semantics w.r.t. to null pointers.<br>
 <u><b>However, it is particularly important to note that optional<> objects are not pointers. optional&lt;&gt;
 is not, and does not model, a pointer</b></u><b>.</b>
-<P>For instance, optional&lt;&gt; has not shallow-copy so does not alias: two different optionals
-  never refer to the <i>same</i> value unless T itself is an reference (but my have <i>equivalent</i> values).<br>
+<P>For instance, optional&lt;&gt; does not have shallow-copy so does not alias: two different optionals
+  never refer to the <i>same</i> value unless T itself is a reference (but may have <i>equivalent</i> values).<br>
   The difference between an optional&lt;T&gt; and a pointer must be kept in mind, particularly
   because the semantics of relational operators are different: since optional&lt;T&gt;
   is a value-wrapper, relational operators are deep: they compare optional values;
@@ -527,7 +534,7 @@ and its value is another reference to the same object referenced by <b>*rhs</b>;
 is uninitialized.</p>
 <p><b>Throws:</b> Nothing.</p>
 <p><b>Notes:</b> If <b>rhs</b> is initialized, both <b>*this</b> and <b>*rhs</b> will
-refeer to the same object<b> </b>(they alias).</p>
+reefer to the same object<b> </b>(they alias).</p>
 <p><b>Example:</b></p>
 <blockquote>
         <pre>optional&lt;T&amp;&gt; uninit ;
@@ -591,7 +598,7 @@ assert( *y == 123 ) ;
 <p><b>Effect:</b> Constructs an <b>optional</b> with a value of T obtained from
 the factory.</p>
 <p><b>Postconditions:</b>&nbsp; <b>*this</b> is <u>initialized</u> and its value is
-<i>directly given</i> from the factory 'f' (i.e, the value<u> is not copied</u>).</p>
+<i>directly given</i> from the factory 'f' (i.e., the value<u> is not copied</u>).</p>
 <p><b>Throws:</b> Whatever the T constructor called by the factory throws.</p>
 <p><b>Notes:</b> See <A HREF="#inplace">In-Place Factories</A></p>
 <p><b>Exception Safety:</b> Exceptions can only be thrown during the call to the
@@ -622,9 +629,9 @@ assert ( *y == v ) ;
 <p><b>Effect:</b> Assigns the value 'rhs' to an <b>optional</b>.</p>
 <p><b>Postconditions:</b> <b>*this</b> is initialized
 and its value is a <i>copy</i> of <b>rhs.</b></p>
-<p><b>Throws:</b> Whatever T::operator=( T const& ) or T::T(T conbst&amp;) throws.</p>
+<p><b>Throws:</b> Whatever T::operator=( T const& ) or T::T(T const&amp;) throws.</p>
 <p><b>Notes:</b> If <b>*this</b> was initialized, T's assignment operator is 
-used, otherwise, its copy-contructor is used.</p>
+used, otherwise, its copy-constructor is used.</p>
 <p><b>Exception Safety:</b> In the event of an exception, the initialization 
 state of <b>*this</b> is unchanged and its value unspecified as far as optional 
 is concerned (it is up to T's operator=()) [If <b>*this</b> is initially 
@@ -652,7 +659,7 @@ assert ( *opt == y ) ;</pre>
 <p><b>Postconditions:</b> <b>*this</b> is initialized
 and it references the same object referenced by <b>rhs.</b></p>
 <p><b>Notes:</b> If <b>*this</b> was initialized, is is <i>rebound</i> to the 
-new object. See <A HREF="#refassign">here</a> for details on this behaviour.</p>
+new object. See <A HREF="#refassign">here</a> for details on this behavior.</p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>int a = 1 ;
@@ -687,7 +694,7 @@ is uninitialized.
 <p><b>Throws:</b> Whatever T::operator( T const&amp;) or&nbsp; T::T( T const& ) throws.</p>
 <p><b>Notes:</b> If both<b> *this</b> and <b>rhs</b> are initially initialized, 
 T's <i>assignment</i> <i>operator</i> is used. If <b>*this</b> is initially initialized but <b>
-rhs</b> is uinitialized, T's <i>destructor</i> is called. If <b>*this</b> is initially 
+rhs</b> is uninitialized, T's <i>destructor</i> is called. If <b>*this</b> is initially 
 uninitialized but rhs is initialized, T's <i>copy constructor</i> is called.
 </p>
 <p><b>Exception Safety:</b> In the event of an exception, the initialization 
@@ -718,7 +725,8 @@ assert ( !def ) ;
 and it references the same object referenced by <b>*rhs</b>; otherwise, <b>*this</b> 
 is uninitialized (and references no object).</p>
 <p><b>Notes:</b> If <b>*this</b> was initialized and so is <b>*rhs</b>, <b>this</b> 
-is is <i>rebound</i> to the new object. See <A HREF="#refassign">here</a> for details on this behaviour.</p>
+is is <i>rebound</i> to the new object. See <A HREF="#refassign">here</a> for details on this 
+behavior.</p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>int a = 1 ;
@@ -755,7 +763,7 @@ to type T; else <b>*this</b> is uninitialized.
 <p><b>Throws:</b> Whatever T::operator=( U const&amp; ) or T::T( U const& ) throws.</p>
 <p><b>Notes:</b> If both<b> *this</b> and <b>rhs</b> are initially initialized, 
 T's <i>assignment</i> <i>operator</i> (from U) is used. If <b>*this</b> is initially initialized but <b>
-rhs</b> is uinitialized, T's <i>destructor</i> is called. If <b>*this</b> is initially 
+rhs</b> is uninitialized, T's <i>destructor</i> is called. If <b>*this</b> is initially 
 uninitialized but rhs is initialized, T's <i>converting constructor</i> (from U) is called.
 </p>
 <p><b>Exception Safety:</b> In the event of an exception, the initialization 
@@ -1186,7 +1194,7 @@ else print(&quot;employer's name not found!&quot;);
 
 };
 </pre>
-<h3>Bypassing expensive unnecesary default construction</h3>
+<h3>Bypassing expensive unnecessary default construction</h3>
 <pre>class ExpensiveCtor { ... } ;
 class Fred
 {
@@ -1217,7 +1225,7 @@ value, a true real reference is stored so aliasing will ocurr: </p>
 
 <ul>
   <li>Copies of optional&lt;T&amp;&gt; will copy the references but all these references
-  will nonetheless refeer to the same object.</li>
+  will nonetheless reefer to the same object.</li>
   <li>Value-access will actually provide access to the referenced object rather
   than the reference itself.</li>
 </ul>
@@ -1262,13 +1270,13 @@ assert(b==3);
 </pre>
 <h3>Rationale:</h3>
 <p>Rebinding semantics for the assignment of <i>initialized</i> optional 
-references has been choosen to provide<b><i> </i>consistency among initialization 
+references has been chosen to provide<b><i> </i>consistency among initialization 
 states<i> </i></b>even at the expense of lack of consistency with the semantics of bare 
 C++ references.<br>
 It is true that optional&lt;U&gt; strives to behave as much as possible as U does 
 whenever it is initialized; but in the case when U is T&amp;, doing so would result 
-in incosistent behaviour w.r.t to the lvalue initialization state.</p>
-<p>Imagine optional&lt;T&amp;&gt; fordwarding assignment to the referenced object (thus 
+in inconsistent behavior w.r.t to the lvalue initialization state.</p>
+<p>Imagine optional&lt;T&amp;&gt; forwarding assignment to the referenced object (thus 
 changing the referenced object value but not rebinding), and consider the 
 following code :</p>
 <pre>&nbsp; optional&lt;int&amp;&gt; a = get();
@@ -1280,11 +1288,11 @@ following code :</p>
 <p>What does the assignment do?<br>
 If 'a' is <i>uninitialized</i>, the answer is clear: it binds to 'x' (we now have 
 another reference to 'x').<br>
-But what if 'a' is already <i>initiliazed? </i>it would change the value of the 
+But what if 'a' is already <i>initialized? </i>it would change the value of the 
 referenced object (whatever that is); which is inconsistent with the other 
 possible case.</p>
 <p>If optional&lt;T&amp;&gt; would assign just like T&amp; does, you would never be able to 
-use Optional's assignment without explicitely handling the previous 
+use Optional's assignment without explicitly handling the previous 
 initialization state unless your code is capable of functioning whether after 
 the assignment, 'a' 
 aliases the same object as 'b' or not.</p>
@@ -1330,7 +1338,7 @@ public:
 </pre>
 <p>A solution to this problem is to support direct construction of the contained
 object right in the container's storage.<br>
-In this shceme, the user only needs to supply the arguments to the constructor
+In this scheme, the user only needs to supply the arguments to the constructor
 to use in the wrapped object construction.</p>
 <pre>class W
 {
@@ -1350,12 +1358,12 @@ public:
 </pre>
 <p>A limitation of this method is that it doesn't scale well to wrapped objects with multiple
 constructors nor to generic code were the constructor overloads are unknown.</p>
-<p>The solution presented in this library is the familiy of <b>InPlaceFactories</b> and
+<p>The solution presented in this library is the family of <b>InPlaceFactories</b> and
 <b>TypedInPlaceFactories</b>.<br>
 These factories are a family of classes which encapsulate an increasing number of arbitrary
 constructor parameters and supply a method to construct an object of a given type using those
 parameters at an address specified by the user via placement new.</p>
-<p>&nbsp;For example, one member of this familiy looks like:</p>
+<p>&nbsp;For example, one member of this family looks like:</p>
 <pre>template&lt;class T,class A0, class A1&gt;
 class TypedInPlaceFactory2
 {
