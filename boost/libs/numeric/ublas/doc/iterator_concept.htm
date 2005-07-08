@@ -604,86 +604,86 @@ must be valid.</p>
 </tr>
 <tr>
 <td>Default constructor</td>
-<td><code>I1 it1</code></td>
+<td><code>I1 it</code></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Dereference</td>
-<td><code>*it1</code></td>
+<td><code>*it</code></td>
 <td>&nbsp;</td>
 <td>Convertible to <code>T</code>.</td>
 </tr>
 <tr>
 <td>Dereference assignment</td>
-<td><code>*it1 = t</code></td>
+<td><code>*it = t</code></td>
 <td><code>I1</code> is mutable.</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Member access</td>
-<td><code>it1-&gt;m</code></td>
+<td><code>it-&gt;m</code></td>
 <td><code>T</code> is a type for which <code>t.m</code> is
 defined.</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Preincrement</td>
-<td><code>++ it1</code></td>
+<td><code>++ it</code></td>
 <td>&nbsp;</td>
 <td><code>I1 &amp;</code></td>
 </tr>
 <tr>
 <td>Postincrement</td>
-<td><code>it1 ++</code></td>
+<td><code>it ++</code></td>
 <td>&nbsp;</td>
 <td><code>I1</code></td>
 </tr>
 <tr>
 <td>Predecrement</td>
-<td><code>-- it1</code></td>
+<td><code>-- it</code></td>
 <td>&nbsp;</td>
 <td><code>I1 &amp;</code></td>
 </tr>
 <tr>
 <td>Postdecrement</td>
-<td><code>it1 --</code></td>
+<td><code>it --</code></td>
 <td>&nbsp;</td>
 <td><code>I1</code></td>
 </tr>
 <tr>
 <td>Row Index</td>
-<td><code>it1.index1 ()</code></td>
+<td><code>it.index1 ()</code></td>
 <td>&nbsp;</td>
 <td><code>C::size_type</code></td>
 </tr>
 <tr>
 <td>Column Index</td>
-<td><code>it1.index2 ()</code></td>
+<td><code>it.index2 ()</code></td>
 <td>&nbsp;</td>
 <td><code>C::size_type</code></td>
 </tr>
 <tr>
 <td>Row/Column Begin</td>
-<td><code>it1.begin ()</code></td>
+<td><code>it.begin ()</code></td>
 <td>&nbsp;</td>
 <td><code>I2</code></td>
 </tr>
 <tr>
 <td>Row/Column End</td>
-<td><code>it1.end ()</code></td>
+<td><code>it.end ()</code></td>
 <td>&nbsp;</td>
 <td><code>I2</code></td>
 </tr>
 <tr>
 <td>Reverse Row/Column Begin</td>
-<td><code>it1.rbegin ()</code></td>
+<td><code>it.rbegin ()</code></td>
 <td>&nbsp;</td>
 <td><code>reverse_iterator&lt;I2&gt;</code></td>
 </tr>
 <tr>
 <td>Reverse Row/Column End</td>
-<td><code>it1.rend ()</code></td>
+<td><code>it.rend ()</code></td>
 <td>&nbsp;</td>
 <td><code>reverse_iterator&lt;I2&gt;</code></td>
 </tr>
@@ -704,174 +704,155 @@ Default Constructible.</p>
 </tr>
 <tr>
 <td>Default constructor</td>
-<td><code>I1 it1</code></td>
+<td><code>I1 it</code></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
-<td><code>it1</code> is singular.</td>
+<td><code>it</code> is singular.</td>
 </tr>
 <tr>
 <td>Dereference</td>
-<td><code>*it1</code></td>
-<td><code>it1</code> is dereferenceable.</td>
+<td><code>*it</code></td>
+<td><code>it</code> is dereferenceable.</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Dereference assignment</td>
-<td><code>*it1 = t</code></td>
-<td>Same as for <code>*it1</code>.</td>
+<td><code>*it = t</code></td>
+<td>Same as for <code>*it</code>.</td>
 <td>&nbsp;</td>
-<td><code>*it1</code> is a copy of t.</td>
+<td><code>*it</code> is a copy of t.</td>
 </tr>
 <tr>
 <td>Member access</td>
-<td><code>it1-&gt;m</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td>Equivalent to <code>(*it1).m</code></td>
+<td><code>it-&gt;m</code></td>
+<td><code>it</code> is dereferenceable.</td>
+<td>Equivalent to <code>(*it).m</code></td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Preincrement</td>
-<td><code>++ it1</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td><code>it1</code> is modified to point to the next element of
+<td><code>++ it</code></td>
+<td><code>it</code> is dereferenceable.</td>
+<td><code>it</code> is modified to point to the next element of
 the column/row, i.e. for column iterators holds<br />
-<code>it1.index1 () &lt; (++ it1).index1 ()</code> and<br />
-<code>it1.index2 () == (++ it1).index2 ()</code>,<br />
+<code>it.index1 () &lt; (++ it).index1 ()</code> and<br />
+<code>it.index2 () == (++ it).index2 ()</code>,<br />
 for row iterators holds<br />
-<code>it1.index1 () == (++ it1).index1 ()</code> and<br />
-<code>it1.index2 () &lt; (++ it1).index2 ()</code>.<br /></td>
-<td><code>it1</code> is dereferenceable or past-the-end.
+<code>it.index1 () == (++ it).index1 ()</code> and<br />
+<code>it.index2 () &lt; (++ it).index2 ()</code>.<br /></td>
+<td><code>it</code> is dereferenceable or past-the-end.
 <code><br />
-&amp;it1 == &amp;++ it1</code>.<br />
-If <code>it11 == it12</code>,<br />
-then <code>++ it11 == ++ it12</code>.</td>
+&amp;it == &amp;++ it</code>.<br />
+If <code>it1 == it2</code>,<br />
+then <code>++ it1 == ++ it2</code>.</td>
 </tr>
 <tr>
 <td>Postincrement</td>
-<td><code>it1 ++</code></td>
-<td>Same as for <code>++ it1</code>.</td>
+<td><code>it ++</code></td>
+<td>Same as for <code>++ it</code>.</td>
 <td>Equivalent to<br />
 <code>{<br />
-&nbsp;I1 it1t = it1;<br />
-&nbsp;++ it1;<br />
-&nbsp;return it1t;<br />
+&nbsp;I1 itt = it;<br />
+&nbsp;++ it;<br />
+&nbsp;return itt;<br />
 }</code></td>
-<td><code>it1</code> is dereferenceable or past-the-end.</td>
+<td><code>it</code> is dereferenceable or past-the-end.</td>
 </tr>
 <tr>
 <td>Predecrement</td>
-<td><code>-- it1</code></td>
-<td><code>it1</code> is dereferenceable or past-the-end.<br />
-There exists a dereferenceable iterator <code>it1t</code> such that
-<code>it1 == ++ it1t</code>.</td>
-<td><code>it1</code> is modified to point to the previous&nbsp;
+<td><code>-- it</code></td>
+<td><code>it</code> is dereferenceable or past-the-end.<br />
+There exists a dereferenceable iterator <code>itt</code> such that
+<code>it == ++ itt</code>.</td>
+<td><code>it</code> is modified to point to the previous&nbsp;
 element of the column/row, i.e. for column iterators holds<br />
-<code>it1.index1 () &gt; (-- it1).index1 ()</code> and<br />
-<code>it1.index2 () == (-- it1).index2 ()</code>,<br />
+<code>it.index1 () &gt; (-- it).index1 ()</code> and<br />
+<code>it.index2 () == (-- it).index2 ()</code>,<br />
 for row iterators holds<br />
-<code>it1.index1 () == (-- it1).index1 ()</code> and<br />
-<code>it1.index2 () &gt; (-- it1).index2 ()</code>.</td>
-<td><code>it1</code> is dereferenceable.<br />
-<code>&amp;it1 = &amp;-- it1</code>.<br />
-If <code>it11 == it12</code>,<br />
-then <code>-- it11 == -- it12</code>.</td>
+<code>it.index1 () == (-- it).index1 ()</code> and<br />
+<code>it.index2 () &gt; (-- it).index2 ()</code>.</td>
+<td><code>it</code> is dereferenceable.<br />
+<code>&amp;it = &amp;-- it</code>.<br />
+If <code>it1 == it2</code>,<br />
+then <code>-- it1 == -- it2</code>.</td>
 </tr>
 <tr>
 <td>Postdecrement</td>
-<td><code>it1 --</code></td>
-<td>Same as for -- <code>it1</code>.</td>
+<td><code>it --</code></td>
+<td>Same as for -- <code>it</code>.</td>
 <td>Equivalent to<br />
 <code>{<br />
-&nbsp;I1 it1t = it1;<br />
-&nbsp;-- it1;<br />
-&nbsp;return it1t;<br />
+&nbsp;I1 itt = it;<br />
+&nbsp;-- it;<br />
+&nbsp;return itt;<br />
 }</code></td>
-<td><code>it1</code> is dereferenceable.&nbsp;</td>
+<td><code>it</code> is dereferenceable.&nbsp;</td>
 </tr>
 <tr>
 <td>Row Index</td>
-<td><code>it1.index1 ()</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td><code>it1.index1 () &gt;= 0</code> and<br />
-<code>it1.index1 () &lt; it () .size1 ()</code></td>
-<td>If <code>it11 == it12</code>,<br />
-then <code>it11.index1 () == it12</code>.<code>index1 ()</code>
-.<br />
-If <code>it11</code>, <code>it12</code> are Indexed Bidirectional
-Row Iterators with <code>it11 == it12</code>,<br />
-then <code>it11.index1 () &lt; (++ it12</code>).<code>index1
-()</code>.<br />
-If <code>it11</code>, <code>it12</code> are Indexed Bidirectional
-Row Iterators with <code>it11 == it12</code>,<br />
-then <code>it11.index1 () &gt; (-- it12</code>).<code>index1
-()</code>.</td>
+<td><code>it.index1 ()</code></td>
+<td>If <code>it</code> is a Row iterator then <code>it</code> must be dereferenceable.</td>
+<td><code>it.index1 () &gt;= 0</code> and<br />
+<code>it.index1 () &lt; it () .size1 ()</code></td>
+<td>If <code>it1 == it2</code>,<br />
+then <code>it1.index1 () == 12.index1 ()</code>.<br />
+If <code>it1</code>, <code>it2</code> are Row Iterators with <code>it1 == it2</code>,<br />
+then <code>it1.index1 () &lt; (++ it2</code>).<code>index1 ()</code>.<br />
+and <code>it1.index1 () &gt; (-- it2</code>).<code>index1 ()</code>.</td>
 </tr>
 <tr>
 <td>Column Index</td>
-<td><code>it1.index2 ()</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td><code>it1.index2 () &gt;= 0</code> and<br />
-<code>it1.index2 () &lt; it () .size2 ()</code></td>
-<td>If <code>it11 == it12</code>,<br />
-then <code>it11.index2 () == it12</code>.<code>index2 ()</code>
+<td><code>it.index2 ()</code></td>
+<td>If <code>it</code> is a Column iterator then <code>it</code> must be dereferenceable.</td>
+<td><code>it.index2 () &gt;= 0</code> and<br />
+<code>it.index2 () &lt; it () .size2 ()</code></td>
+<td>If <code>it1 == it2</code>,<br />
+then <code>it1.index2 () == it2</code>.<code>index2 ()</code>
 .<br />
-If <code>it11</code>, <code>it12</code> are Indexed Bidirectional
-Column Iterators with <code>it11 == it12</code>,<br />
-then <code>it11.index2 () &lt; (++ it12</code>).<code>index2
-()</code>.<br />
-If <code>it11</code>, <code>it12</code> are Indexed Bidirectional
-Column Iterators with <code>it11 == it12</code>,<br />
-then <code>it11.index2 () &gt; (-- it12</code>).<code>index2
-()</code>.</td>
+If <code>it1</code>, <code>it2</code> are Column Iterators with <code>it1 == i12</code>,<br />
+then <code>it1.index2 () &lt; (++ it2</code>).<code>index2 ()</code>.<br />
+end <code>it1.index2 () &gt; (-- it2</code>).<code>index2 ()</code>.</td>
 </tr>
 <tr>
 <td>Row/Column Begin</td>
-<td><code>it1.begin ()</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td>If <code>it1</code> is a Indexed Bidirectional Column
-Iterator,<br />
-then <code>it2 = it1.begin ()</code> is a Indexed Bidirectional Row
-Iterator<br />
-with <code>it2.index1 () == it1.index1 ()</code>.
-<p>If <code>it1</code> is a Indexed Bidirectional Row
-Iterator,<br />
-then <code>it2 = it1.begin ()</code> is a Indexed Bidirectional
-Column Iterator<br />
-with <code>it2.index2 () == it1.index2 ()</code>.</p>
+<td><code>it.begin ()</code></td>
+<td><code>it</code> is dereferenceable.</td>
+<td>If <code>it</code> is a Column Iterator,<br />
+then <code>it2 = it.begin ()</code> is a Row Iterator<br />
+with <code>it2.index1 () == it.index1 ()</code>.
+<p>If <code>it</code> is a Row Iterator,<br />
+then <code>it2 = it.begin ()</code> is a Column Iterator<br />
+with <code>it2.index2 () == it.index2 ()</code>.</p>
 </td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Row/Column End</td>
-<td><code>it1.end ()</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td>If <code>it1</code> is a Indexed Bidirectional Column
-Iterator,<br />
-then <code>it2 = it1.end ()</code> is a Indexed Bidirectional Row
-Iterator<br />
-with <code>it2.index1 () == it1.index1 ()</code>.
-<p>If <code>it1</code> is a Indexed Bidirectional Row
-Iterator,<br />
-then <code>it2 = it1.end ()</code> is a Indexed Bidirectional
-Column Iterator<br />
-with <code>it2.index2 () == it1.index2 ()</code>.</p>
+<td><code>it.end ()</code></td>
+<td><code>it</code> is dereferenceable.</td>
+<td>If <code>it</code> is a Column Iterator,<br />
+then <code>it2 = it.end ()</code> is a Row Iterator<br />
+with <code>it2.index1 () == it.index1 ()</code>.
+<p>If <code>it</code> is a Row Iterator,<br />
+then <code>it2 = it.end ()</code> is a Column Iterator<br />
+with <code>it2.index2 () == it.index2 ()</code>.</p>
 </td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Reverse Row/Column Begin</td>
-<td><code>it1.rbegin ()</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td>Equivalent to <code>reverse_iterator&lt;I2&gt; (it1.end
+<td><code>it.rbegin ()</code></td>
+<td><code>it</code> is dereferenceable.</td>
+<td>Equivalent to <code>reverse_iterator&lt;I2&gt; (it.end
 ())</code>.</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td>Reverse Row/Column End</td>
-<td><code>it1.rend ()</code></td>
-<td><code>it1</code> is dereferenceable.</td>
-<td>Equivalent to <code>reverse_iterator&lt;I2&gt; (it1.begin
+<td><code>it.rend ()</code></td>
+<td><code>it</code> is dereferenceable.</td>
+<td>Equivalent to <code>reverse_iterator&lt;I2&gt; (it.begin
 ())</code>.</td>
 <td>&nbsp;</td>
 </tr>
@@ -890,31 +871,31 @@ the first row/first column respectively.</p>
 <tbody>
 <tr>
 <td>Identity</td>
-<td><code>it11 == it12</code> if and only if <code>&amp;*it11 ==
-&amp;*it12</code>.</td>
+<td><code>it1 == it2</code> if and only if <code>&amp;*it1 ==
+&amp;*it2</code>.</td>
 </tr>
 <tr>
 <td>Symmetry of increment and decrement</td>
-<td>If <code>it1</code> is dereferenceable, then <code>++ it1;
---it1;</code> is a null operation. Similarly, <code>-- it1; ++
-it1;</code> is a null operation.</td>
+<td>If <code>it</code> is dereferenceable, then <code>++ it;
+--it;</code> is a null operation. Similarly, <code>-- it; ++
+it;</code> is a null operation.</td>
 </tr>
 <tr>
 <td>Relation between iterator index and container element
 operator</td>
-<td>If <code>it1</code> is dereferenceable, <code>*it1 == it1 ()
-(it1.index1 (), it2.index2 ())</code></td>
+<td>If <code>it</code> is dereferenceable, <code>*it == it ()
+(it.index1 (), it.index2 ())</code></td>
 </tr>
 <tr>
 <td>Relation between iterator column/row begin and iterator
 index</td>
-<td>If <code>it1</code> is a Indexed Bidirectional Column Iterator
-and <code>it2 = it1.begin ()</code> then <code>it2.index2 () &lt;
+<td>If <code>it</code> is a Column Iterator
+and <code>it2 = it.begin ()</code> then <code>it2.index2 () &lt;
 it2t.index2 ()</code> for all <code>it2t</code> with <code>it2t ()
 == it2 ()</code> and <code>it2t ().index1 () == it2 ().index1
 ()</code>.
-<p>If <code>it1</code> is a Indexed Bidirectional Row Iterator and
-<code>it2 = it1.begin ()</code> then <code>it2.index1 () &lt;
+<p>If <code>it</code> is a Row Iterator and
+<code>it2 = it.begin ()</code> then <code>it2.index1 () &lt;
 it2t.index1 ()</code> for all <code>it2t</code> with <code>it2t ()
 == it2 ()</code> and <code>it2t ().index2 () == it2 ().index2
 ()</code>.</p>
@@ -923,13 +904,13 @@ it2t.index1 ()</code> for all <code>it2t</code> with <code>it2t ()
 <tr>
 <td>Relation between iterator column/row end and iterator
 index</td>
-<td>If <code>it1</code> is a Indexed Bidirectional Column Iterator
-and <code>it2 = it1.end ()</code> then <code>it2.index2 () &gt;
+<td>If <code>it</code> is a Column Iterator
+and <code>it2 = it.end ()</code> then <code>it2.index2 () &gt;
 it2t.index2 ()</code> for all <code>it2t</code> with <code>it2t ()
 == it2 ()</code> and <code>it2t ().index1 () == it2 ().index1
 ()</code>.
-<p>If <code>it1</code> is a Indexed Bidirectional Row Iterator and
-<code>it2 = it1.end ()</code> then <code>it2.index1 () &gt;
+<p>If <code>it</code> is a Row Iterator and
+<code>it2 = it.end ()</code> then <code>it2.index1 () &gt;
 it2t.index1 ()</code> for all <code>it2t</code> with <code>it2t ()
 == it2 ()</code> and <code>it2t ().index2 () == it2 ().index2
 ()</code>.</p>
