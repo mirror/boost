@@ -2,10 +2,10 @@
  The Boost Parameter Library |(logo)|__
 +++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. |(logo)| image:: ../../../boost.png
+.. |(logo)| image:: ../../../../boost.png
    :alt: Boost
 
-__ ../../../index.htm
+__ ../../../../index.htm
 
 
 -------------------------------------
@@ -14,24 +14,22 @@ __ ../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2004/11/02 14:31:23 $
+:date:          $Date: 2005/07/08 06:16:22 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin 2005.
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 
 :Abstract: Use this library to write functions that accept
-  arguments in any order as long as the the arguments are
-  appropriately labelled at the call site:
+  arguments by name:
 
   .. parsed-literal::
 
     new_window("alert", **width=10**, **titlebar=false**);
 
   This capability is especially useful when a function has more
-  than one argument with a useful default value: the user need
-  never pass an argument's default value explicitly just because it
-  precedes an argument with a non-default value.
+  than one argument with a useful default value, since named
+  arguments can be passed in any order.
 
 .. _concepts: ../../../more/generic_programming.html#concept
 
@@ -49,44 +47,44 @@ are one or fewer parameters with default values, but when there are
 even a few useful defaults, the positional interface becomes
 burdensome:
 
- * Since an argument's meaning is given by its position,
-   we have to choose some (often arbitrary) order for parameters with
-   default values, making some combinations of defaults unusable:
+* Since an argument's meaning is given by its position, we have to
+  choose an (often arbitrary) order for parameters with default
+  values, making some combinations of defaults unusable:
 
-   .. parsed-literal::
+  .. parsed-literal::
 
-     window* new_window(
-        char const* name, 
-        **int border_width = default_border_width,**
-        bool movable = true,
-        bool initially_visible = true
-        );
+    window* new_window(
+       char const* name, 
+       **int border_width = default_border_width,**
+       bool movable = true,
+       bool initially_visible = true
+       );
 
-     const bool movability = false;
-     window* w = new_window("alert box", movability);
+    const bool movability = false;
+    window* w = new_window("alert box", movability);
 
-   In the example above, we wanted to make an unmoveable window
-   with a default ``border_width``, but instead we got a moveable
-   window with a ``border_width`` of zero.  To get the desired
-   effect, we'd need to write:
+  In the example above we wanted to make an unmoveable window
+  with a default ``border_width``, but instead we got a moveable
+  window with a ``border_width`` of zero.  To get the desired
+  effect, we'd need to write:
 
-   .. parsed-literal::
+  .. parsed-literal::
 
-     window* w = new_window(
-        "alert box", **default_border_width**, movability);
+    window* w = new_window(
+       "alert box", **default_border_width**, movability);
 
 
- * It can become difficult for readers to understand the meaning of
-   arguments at the call site::
+* It can become difficult for readers to understand the meaning of
+  arguments at the call site::
 
-     window* w = new_window("alert", 1, true, false);
+    window* w = new_window("alert", 1, true, false);
 
-   is this window moveable and initially invisible, or unmoveable
-   and initially visible?  The reader needs to remember the order
-   of arguments to be sure.  
+  Is this window moveable and initially invisible, or unmoveable
+  and initially visible?  The reader needs to remember the order
+  of arguments to be sure.  
 
- * The author of the call may not remember the order of the
-   arguments either, leading to hard-to-find bugs.
+* The author of the call may not remember the order of the
+  arguments either, leading to hard-to-find bugs.
 
 This library addresses the problems outlined above by associating
 each parameter with a keyword object.  Now users can identify
@@ -94,39 +92,44 @@ arguments by keyword, rather than by position:
 
 .. parsed-literal::
 
-  window* w = new_window("alert2", **movable=**\ movability); // OK!
+  window* w = new_window("alert box", **movable=**\ false); // OK!
 
-C++ has two other limitations, with respect to default arguments,
-that are unrelated to its positional interface:
+.. I'm inclined to leave this part out.  In particular, the 2nd
+   point is kinda lame because even with the library, we need to
+   introduce overloads -- dwa:
 
- * Default values cannot depend on the values of other function
-   parameters:
+   C++ has two other limitations, with respect to default arguments,
+   that are unrelated to its positional interface:
 
-   .. parsed-literal::
+   * Default values cannot depend on the values of other function
+     parameters:
 
-     // Can we make resize windows to a square shape by default?
-     void resize(
-       window* w,
-       int **width**, 
-       int height **= width** // nope, error!
-     );
+     .. parsed-literal::
 
- * Default values in function templates are useless for any
-   argument whose type should be deduced when the argument is
-   supplied explicitly::
+       // Can we make resize windows to a square shape by default?
+       void resize(
+         window* w,
+         int **width**, 
+         int height **= width** // nope, error!
+       );
 
-      template <class T> 
-      void f(T x = 0);
+   * Default values in function templates are useless for any
+     argument whose type should be deduced when the argument is
+     supplied explicitly::
 
-      f(3.14) // ok: x supplied explicitly; T is double
-      f();    // error: can't deduce T from default argument 0!
+        template <class T> 
+        void f(T x = 0);
 
-As a side effect of using the Boost Parameter library, you may find
-that you circumvent these limitations quite naturally.
+        f(3.14) // ok: x supplied explicitly; T is double
+        f();    // error: can't deduce T from default argument 0!
+
+   As a side effect of using the Boost Parameter library, you may find
+   that you circumvent both of these limitations quite naturally.
 
 ==========
  Tutorial
 ==========
+
 
 Introducing the Example
 =======================
