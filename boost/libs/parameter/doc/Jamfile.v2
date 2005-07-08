@@ -1,0 +1,17 @@
+import docutils ;
+
+path-constant docutils-css : ../../iterator/doc/default.css ;
+
+import path ;
+sources = [ path.glob . : *.rst ] ;
+bases = $(sources:S=) ;
+  
+for local b in $(bases)
+{
+    html $(b) : $(b).rst : 
+      <docutils-html>"-gdt --traceback --trim-footnote-reference-space  --embed-stylesheet --stylesheet-path="$(docutils-css)
+  ;
+}
+
+alias htmls : $(bases) ;
+stage html : $(bases) ;
