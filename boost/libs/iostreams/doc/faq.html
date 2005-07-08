@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>Frequently Asked Questions</TITLE>
+    <LINK REL="stylesheet" HREF="../../../boost.css">
+    <LINK REL="stylesheet" HREF="theme/iostreams.css">
+</HEAD>
+<BODY>
+
+<!-- Begin Banner -->
+
+    <H1 CLASS="title">Frequently Asked Questions</H1>
+    <HR CLASS="banner">
+
+<!-- End Banner -->
+
+<DL class="page-index" style="margin-top:1em">
+  <DT><A href="#flush">Why is data written to a <CODE>filtering_stream</CODE> not being forwarded to the final Sink?</A></DT>
+  <DT><A href="#lifetime">Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
+  <DT><A href="#tee">How do I write to several ostreams at once?</A></DT>
+  <DT><A href="#pipe">Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</A></DT>
+</DL>
+
+<HR style="margin-top:1em">
+
+<A NAME="flush">
+<H4>Why is data written to a <CODE>filtering_stream</CODE> not being forwarded to the final Sink?</H4>
+
+<P>
+     You may need to flush the stream. Note, however, that there is no guarantee that all data written to a <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> will be forwarded to the final Sink until the stream is closed, unless all the Filters in the underlying <A HREF="classes/chain.html"><CODE>chain</CODE></A> are <A HREF="concepts/closable.html">Closable</A>.
+</P>
+<P>
+     It's also possible that a Filter in the chain is modifying data in a way you don't expect.
+</P>
+
+<A NAME="lifetime">
+<H4>Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</H4>
+
+<P>
+     The Iostreams library stores streams and stream buffers by reference; consequently, streams and stream buffers must outlive any filter chain to which they are added. This is not a problem for std::cout, since it is guaranteed to live until the end of the program.
+</P>
+
+<P>
+     Check to make sure that the <CODE>ostream</CODE> is not being destroyed before the <CODE>filtering_stream</CODE>. If both objects are constructed on the stack within the same block, make sure that the <CODE>ostream</CODE> is constructed <I>first</I>.
+</P>
+
+<A NAME="tee">
+<H4>How do I write to several ostreams at once?</H4>
+
+<P>
+     Use a <A HREF="functions/tee.html#tee_filter"><CODE>tee_filter</CODE></A> or <A HREF="functions/tee.html#tee_device"><CODE>tee_device</CODE></A>. <I>See</I> <A HREF="functions/tee.html"><CODE>tee</CODE></A>.
+</P>
+
+<A NAME="pipe">
+<H4>Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</H4>
+
+<P>
+     Your compiler could be considering an implicit conversion to a <A HREF="concepts/pipable.html">Pipable</A> Filter. Make sure that all your Pipable Filters have <CODE>explicit</CODE> constructors. <I>See</I> <A HREF="guide/pipelines.html">Pipelines</A>.
+</P>
+
+<!-- Begin Footer -->
+
+<HR>
+<P CLASS="copyright">Revised
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+20 May, 2004
+<!--webbot bot="Timestamp" endspan i-checksum="38504" -->
+</P>
+
+<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright"> 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+</P>
+
+<!-- End Footer -->
+
+</BODY>

@@ -25,8 +25,108 @@
 <H2>Overview</H2>
 
 <P>
-    The Iostreams library has been tested with several combinations of operating system, compiler and standard library, as shown <A HREF="#platforms">below</A>. Fifteen regression tests, using the <A HREF="http://www.boost.org/libs/test/doc/components/utf/index.html" target="_top">Boost Unit Test Framework</A>, are provided in the directory <A CLASS="header" HREF="../test"><CODE>&lt;libs/iostreams/test&gt;</CODE></A>, together with a coresponding <A HREF="../test/Jamfile">Jamfile</A>.
+    The Iostreams library has been tested with a wide variety of platforms. With a few exceptions, noted in the rightmost column, the library is fully supported on the following platforms:
 </P>
+
+<TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
+<TR>
+    <TH>Compiler</TH><TH>Standard Library</TH><TH>Operating System</TH><TH>Limitations</TH>
+</TR>
+<TR>
+    <TD ROWSPAN='3'>GCC 3.2 - 4.0</TD>
+    <TD ROWSPAN='4'>libstdc++</TD>
+    <TD>Linux and Most UNIX</TD>
+    <TD><I>none</I></TD>
+</TR>
+<TR>
+    <TD>Windows (MinGW and Cygwin)</TD>
+    <TD ROWSPAN='2'><A CLASS='footnote_ref' NAME='note_1_ref' HREF="#note_1">[1]</TD>
+</TR>
+<TR>
+    <TD>OSF1 V5</TD>
+</TR>
+<TR>
+    <TD ROWSPAN='2'>GCC 2.9.3</TD>
+    <TD ROWSPAN='2'>Linux</TD>
+    <TD>
+        <A CLASS='footnote_ref' NAME='note_1_ref' HREF="#note_1">[1]</A>,
+        <A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2">[2]</A>,
+        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_3">[3]</A>
+    </TD>
+</TR>
+<TR>
+    <TD>STLPort</TD>
+    <TD>
+        <A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2">[2]</A>,
+        <A CLASS='footnote_ref' NAME='note_4_ref' HREF="#note_4">[4]</A>
+    </TD>
+</TR>
+
+
+<!--<TR>
+    <TD>GCC, versions 3.2 through 4.0</TD>
+    <TD>libstdc++</TD>
+<TR>
+<TR>
+    <TD>GCC, versions 3.2 through 4.0</TD>
+    <TD>libstdc++</TD>
+<TR>
+<TR>
+    <TD>GCC, versions 3.2 through 4.0</TD>
+    <TD>libstdc++</TD>
+<TR>
+<TR>
+    <TD>GCC 3.2 (MinGW)</TD>
+    <TD>libstdc++</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>GCC 3.3.1 (Cygwin)</TD>
+    <TD>libstdc++</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>Intel 7.1 for Windows</TD>
+    <TD>Dinkumware</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>Intel 8.0 for Windows</TD>
+    <TD>Dinkumware</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>Metrowerks Codewarrior 8.3</TD>
+    <TD>MSL</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>Borland 5.6.4</TD>
+    <TD>STLPort-4.5.x</TD>
+    <TD ALIGN="center">
+        <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>
+    </TD>
+<TR>
+<TR>
+    <TD>Borland 5.6.4</TD>
+    <TD>RogueWave</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>Microsoft Visual C++ 7.1</TD>
+    <TD>Dinkumware</TD>
+    <TD ALIGN=center>100%</TD>
+<TR>
+<TR>
+    <TD>Comeau C++ 4.3.3</TD>
+    <TD>libcomo 30</TD>
+    <TD ALIGN="center">
+        <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>, 
+        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A>
+    </TD>
+<TR>-->
+</TABLE>
+
 
 <P>
     The regression tests have been run on several platforms, with the results displayed in the table <A HREF="#platforms">below</A>. [<I>Note:</I> The table does not currently reflect the tests involving compression Filters, regular expression Filters or wide streams. I will try to update it soon.]
@@ -51,7 +151,7 @@
 
 <TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
 <TR>
-    <TH>Compiler</TH><TH>Standard C++ Library</TH><TH>Passed</TH>
+    <TH>Compiler</TH><TH>Operating System</TH><TH>Standard C++ Library</TH><TH>Passed</TH>
 </TR>
 <TR>
     <TD>GCC 3.2.2 (Linux)</TD>
@@ -105,7 +205,8 @@
     <TD>libcomo 30</TD>
     <TD ALIGN="center">
         <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>, 
-        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A>
+        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A>,
+        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_3">[3]</A>
     </TD>
 <TR>
 </TABLE>
@@ -115,12 +216,22 @@
 <H4>Notes</H4>
 
 <P>
-    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A>Fails <A HREF="../test/seekable_file.cpp"><CODE>seekable_file.cpp</CODE></A>.
+    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A>Wide streams are not supported.
 </P>
 
 <P>
-    <A CLASS="footnote_ref" NAME="note_2" HREF="#note_2_ref"><SUP>[2]</SUP></A>Non-standard buffer sizes cause some regression test failures. This has been traced by the author to a problem with file i/o not related to the Iostreams library. The author has reported this problem to technical support, but (uncharacteristically) received no reply.
+    <A CLASS="footnote_ref" NAME="note_2" HREF="#note_2_ref"><SUP>[2]</SUP></A>Fails <A HREF="../test/finite_state_filter_test.cpp"><CODE>finite_state_filter_test.cpp</CODE></A>. Note that <A HREF="tutorial/finite_state_filters.html"><CODE>finite_state_filter</CODE></A> is part of the library examples and not the core library.
 </P>
+
+<P>
+    <A CLASS="footnote_ref" NAME="note_3" HREF="#note_3_ref"><SUP>[3]</SUP></A>Exhibits several unexplained runtime failures. See the regression reports for details.
+</P>
+
+<P>
+    <A CLASS="footnote_ref" NAME="note_4" HREF="#note_4_ref"><SUP>[4]</SUP></A>Fails <A HREF="../test/seekable_file_test.cpp"><CODE>seekable_file_test.cpp</CODE></A>.
+</P>
+
+
 
 <!-- End Footnotes -->
 
