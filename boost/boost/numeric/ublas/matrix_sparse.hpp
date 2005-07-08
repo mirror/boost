@@ -741,7 +741,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     const self_type &m = (*this) ();
                     BOOST_UBLAS_CHECK (layout_type::index2 ((*it_).first, m.size1 (), m.size2 ()) < (*this) ().size2 (), bad_index ());
@@ -888,7 +887,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     const self_type &m = (*this) ();
                     BOOST_UBLAS_CHECK (layout_type::index2 ((*it_).first, m.size1 (), m.size2 ()) < (*this) ().size2 (), bad_index ());
@@ -1029,7 +1027,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     const self_type &m = (*this) ();
                     BOOST_UBLAS_CHECK (layout_type::index1 ((*it_).first, m.size1 (), m.size2 ()) < (*this) ().size1 (), bad_index ());
@@ -1176,7 +1173,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     const self_type &m = (*this) ();
                     BOOST_UBLAS_CHECK (layout_type::index1 ((*it_).first, m.size1 (), m.size2 ()) < (*this) ().size1 (), bad_index ());
@@ -1858,7 +1854,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index2 ((*itv_).first, (*it_).first) < (*this) ().size2 (), bad_index ());
                     return layout_type::index2 ((*itv_).first, (*it_).first);
@@ -2023,7 +2018,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index2 ((*itv_).first, (*it_).first) < (*this) ().size2 (), bad_index ());
                     return layout_type::index2 ((*itv_).first, (*it_).first);
@@ -2183,7 +2177,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index1 ((*itv_).first, (*it_).first) < (*this) ().size1 (), bad_index ());
                     return layout_type::index1 ((*itv_).first, (*it_).first);
@@ -2348,7 +2341,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index1 ((*itv_).first, (*it_).first) < (*this) ().size1 (), bad_index ());
                     return layout_type::index1 ((*itv_).first, (*it_).first);
@@ -3212,7 +3204,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index2 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_)) < (*this) ().size2 (), bad_index ());
                     return layout_type::index2 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_));
@@ -3365,7 +3356,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index2 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_)) < (*this) ().size2 (), bad_index ());
                     return layout_type::index2 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_));
@@ -3513,7 +3503,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index1 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_)) < (*this) ().size1 (), bad_index ());
                     return layout_type::index1 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_));
@@ -3666,7 +3655,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index1 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_)) < (*this) ().size1 (), bad_index ());
                     return layout_type::index1 (itv_ - (*this) ().index1_data_.begin (), (*this) ().zero_based (*it_));
@@ -4540,7 +4528,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index2 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_)) < (*this) ().size2 (), bad_index ());
                     return layout_type::index2 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_));
@@ -4693,7 +4680,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find1 (0, (*this) ().size1 (), j_), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index2 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_)) < (*this) ().size2 (), bad_index ());
                     return layout_type::index2 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_));
@@ -4841,7 +4827,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index1 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_)) < (*this) ().size1 (), bad_index ());
                     return layout_type::index1 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_));
@@ -4994,7 +4979,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                BOOST_UBLAS_CHECK (*this != (*this) ().find2 (0, i_, (*this) ().size2 ()), bad_index ());
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (layout_type::index1 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_)) < (*this) ().size1 (), bad_index ());
                     return layout_type::index1 ((*this) ().zero_based (*itv_), (*this) ().zero_based (*it_));
