@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
-    <TITLE>Policy-Based Streams and Stream Buffers</TITLE>
+    <TITLE>Generic Streams and Stream Buffers</TITLE>
     <LINK REL="stylesheet" href="../../../../boost.css">
     <LINK REL="stylesheet" href="../theme/iostreams.css">
     <STYLE>PRE { font-size: 80% }</STYLE>
@@ -10,7 +10,7 @@
 
 <!-- Begin Banner -->
 
-    <H1 CLASS="title">Policy-Based Streams and Stream Buffers</H1>
+    <H1 CLASS="title">Generic Streams and Stream Buffers</H1>
     <HR CLASS="banner">
 
 <!-- End Banner -->
@@ -37,7 +37,7 @@
 </P>
 
 <P>
-    The class template <CODE>stream_facade</CODE> is a policy-based stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A href="../modes.html">mode</A> of the policy class. As with <CODE>streambuf_facade</CODE>, instances of the policy class can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
+    The class template <CODE>stream_facade</CODE> is a stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A href="../modes.html">mode</A> of the first template parameter. As with <CODE>streambuf_facade</CODE>, instances of the policy class can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
 </P>
 
 
@@ -57,7 +57,7 @@
 
 <H4>Description</H4>
 
-<P>Policy-based stream buffer template with an interface similar to <CODE>std::basic_filebuf</CODE>.
+<P>Stream buffer template with an interface similar to <CODE>std::basic_filebuf</CODE>.
 
 <H4>Synopsis</H4>
 

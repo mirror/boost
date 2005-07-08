@@ -43,10 +43,12 @@
 {
     io::stream_facade&lt;file_sink&gt; buf(<SPAN CLASS='literal'>"log.txt"</SPAN>);
     std::ostream out(&buf);
-    <SPAN CLASS='comment'>// Write to out</SPAN>
+    <SPAN CLASS='comment'>// out writes to log.txt</SPAN>
 }
 <SPAN CLASS='keyword'>typedef</SPAN> io::stream_facade&lt;my_device&gt;     my_stream;
 <SPAN CLASS='keyword'>typedef</SPAN> io::streambuf_facade&lt;my_device&gt;  my_streambuf;</PRE>
+
+<P>In this example, the <CODE>ostream</CODE> <CODE>out</CODE> uses the stream buffer <CODE>buf</CODE> as its underlying data sink, so that data written to <CODE>out</CODE> goes to the file <I>log.txt</I>. The same effect could be achieved by default constructing <CODE>out</CODE> and telling it to use stream buffer <CODE>buf</CODE> by invoking <CODE>out.rdbuf(&amp;buf)</CODE>.
 
 <P>Another way to define a new stream or stream buffer class using the Boost Iostreams library is to derive from <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> or <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>. 
 <P>The next three items will demonstrate how to write Devices for accessing STL-compatible containers. The source code for the examples can be found in the header <A HREF="../../example/container_device.hpp">&lt;<CODE>libs/iostreams/example/container_device.hpp</CODE>&gt;</A></P>
