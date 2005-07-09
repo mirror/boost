@@ -1,0 +1,85 @@
+##############################################################################
+# (c) Copyright Andreas Huber Doenni 2005
+# Distributed under the Boost Software License, Version 1.0. (See accompany-
+# ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+##############################################################################
+
+project libs/statechart/example ;
+
+local no-of-bits-list = 1 2 3 ;
+
+rule independent-obj-build ( target-name : directory : sources + : options * )
+{
+  local objs ;
+
+  for local source in $(sources)
+  {
+    obj $(target-name)$(source) : $(directory)/$(source).cpp : $(options) ;
+    objs += $(target-name)$(source) ;
+  }
+
+  return $(objs) ;
+}
+
+rule statechart-st-example-build (
+  target-name : directory : sources + : additional-options * )
+{
+  exe $(target-name)
+    : [ independent-obj-build $(target-name) : $(directory) : $(sources)
+          : <threading>single
+            # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems
+            # with the automatic detection of the threading mode. We therefore
+            # manually turn MT off here
+            <define>BOOST_DISABLE_THREADS $(additional-options) ] ;
+
+  return $(target-name) ;
+}
+
+rule statechart-mt-example-build (
+  target-name : directory : sources + : additional-options * )
+{
+  exe $(target-name)
+    : [ independent-obj-build $(target-name) : $(directory) : $(sources)
+          : <threading>multi $(additional-options) ]
+      ../../thread/build//boost_thread ;
+
+  return $(target-name) ;
+}
+
+rule statechart-bitmachine-build (
+  tag : no-of-bits-list + : additional-options * )
+{
+  local result ;
+
+  for local no-of-bits in $(no-of-bits-list)
+  {
+    result += 
+      [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
+        : BitMachine : BitMachine
+        : <define>NO_OF_BITS=$(no-of-bits) $(additional-options) ] ;
+  }
+
+  return $(result) ;
+}
+
+stage run
+  : [ statechart-bitmachine-build Normal : $(no-of-bits-list) ]
+    [ statechart-bitmachine-build Custom
+        : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ statechart-bitmachine-build Native
+        : $(no-of-bits-list) : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+    [ statechart-st-example-build Camera
+        : Camera : Camera Configuring Main Shooting ]
+    [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]
+    [ statechart-st-example-build KeyboardNormal : Keyboard : Keyboard ]
+    [ statechart-st-example-build KeyboardNative : Keyboard : Keyboard
+        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+    [ statechart-st-example-build PingPongSingle : PingPong : PingPong
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ statechart-mt-example-build PingPongMulti1 : PingPong : PingPong
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ statechart-mt-example-build PingPongMulti2 : PingPong : PingPong
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT <define>USE_TWO_THREADS ]
+    [ statechart-st-example-build StopWatch : StopWatch : StopWatch ]
+    [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
+;
