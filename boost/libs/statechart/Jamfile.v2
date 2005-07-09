@@ -8,8 +8,7 @@ project libs/statechart
     # The library ensures that all state destructors are only invoked on
     # the most-derived type, therefore state destructors do not need to
     # be virtual
-  : requirements <toolset>gcc:<cxxflags>-Wno-non-virtual-dtor
-;
+  : requirements <toolset>gcc:<cxxflags>-Wno-non-virtual-dtor ;
 
 build-project example ;
 build-project test ;

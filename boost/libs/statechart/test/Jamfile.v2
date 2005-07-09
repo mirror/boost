@@ -9,36 +9,35 @@ project libs/statechart/test ;
 rule statechart-run ( source : name : additional-options * )
 {
   return
-    [ run
-        $(source).cpp ../../../libs/test/build//boost_test_exec_monitor
+    [ run $(source).cpp ../../../libs/test/build//boost_test_exec_monitor
         : : : $(additional-options) : $(name) ] ;
 }
 
 rule statechart-st-run ( source : name : additional-options * )
 {
   return
-    [ statechart-run $(source) : $(name)
-        : <threading>single
+    [ statechart-run $(source)
+        : $(name)
           # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems
           # with the automatic detection of the threading mode. We therefore
           # manually turn MT off here
-          <define>BOOST_DISABLE_THREADS $(additional-options) ] ;
+        : <threading>single <define>BOOST_DISABLE_THREADS
+          $(additional-options) ] ;
 }
 
 rule statechart-st-run-variants ( source )
 {
   # TODO: For some reason v1 approach doesn't work. This is just a temp
   # workaround
-  test-suite $(source) :
-    [ statechart-st-run $(source) : $(source)Normal : ]
-    [ statechart-st-run $(source) : $(source)Native
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
-    [ statechart-st-run $(source) : $(source)Relaxed
-        : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ]
-    [ statechart-st-run $(source) : $(source)Both
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI
-          <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ]
-  ;
+  test-suite $(source)
+    : [ statechart-st-run $(source) : $(source)Normal : ]
+      [ statechart-st-run $(source) : $(source)Native
+          : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+      [ statechart-st-run $(source) : $(source)Relaxed
+          : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ]
+      [ statechart-st-run $(source) : $(source)Both
+          : <define>BOOST_STATECHART_USE_NATIVE_RTTI
+            <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
 }
 
 rule statechart-compile-fail ( source : name : additional-options * )
@@ -50,48 +49,45 @@ rule statechart-compile-fail-variants ( source )
 {
   # TODO: For some reason v1 approach doesn't work. This is just a temp
   # workaround
-  test-suite $(source) :
-    [ statechart-compile-fail $(source) : $(source)Normal : ]
-    [ statechart-compile-fail $(source) : $(source)Native
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
-    [ statechart-compile-fail $(source) : $(source)Relaxed
-        : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ]
-    [ statechart-compile-fail $(source) : $(source)Both
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI
-          <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ]
-  ;
+  test-suite $(source)
+    : [ statechart-compile-fail $(source) : $(source)Normal : ]
+      [ statechart-compile-fail $(source) : $(source)Native
+          : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+      [ statechart-compile-fail $(source) : $(source)Relaxed
+          : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ]
+      [ statechart-compile-fail $(source) : $(source)Both
+          : <define>BOOST_STATECHART_USE_NATIVE_RTTI
+            <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
 }
 
-test-suite statechart :
-  [ statechart-compile-fail-variants InvalidChartTest1 ]
-  [ statechart-compile-fail-variants InvalidChartTest2 ]
-  [ statechart-compile-fail-variants InvalidChartTest3 ]
-  [ statechart-st-run-variants TransitionTest ]
-  [ statechart-compile-fail-variants InvalidTransitionTest1 ]
-  [ statechart-compile-fail-variants InvalidTransitionTest2 ]
-  [ statechart-compile-fail-variants InvalidTransitionTest3 ]
-  [ statechart-compile-fail-variants InvalidTransitionTest4 ]
-  [ statechart-st-run-variants InStateReactionTest ]
-  [ statechart-st-run-variants TerminationTest ]
-  [ statechart-st-run-variants DeferralTest ]
-  [ statechart-st-run-variants CustomReactionTest ]
-  [ statechart-compile-fail-variants InvalidResultAssignTest ]
-  [ statechart-compile-fail-variants InvalidResultDefCtorTest ]
-  [ statechart-st-run-variants InvalidResultCopyTest ]
-  [ statechart-st-run-variants UnconsumedResultTest ]
-  [ statechart-st-run-variants HistoryTest ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest1 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest2 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest3 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest4 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest5 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest6 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest7 ]
-  [ statechart-compile-fail-variants InconsistentHistoryTest8 ]
-  [ statechart-compile-fail-variants UnsupportedDeepHistoryTest ]
-  [ statechart-st-run-variants StateCastTest ]
-  [ statechart-st-run-variants TypeInfoTest ]
-  [ statechart-st-run-variants StateIterationTest ]
-  [ statechart-st-run-variants FifoSchedulerTest ]
-;
-      
+test-suite statechart
+  : [ statechart-compile-fail-variants InvalidChartTest1 ]
+    [ statechart-compile-fail-variants InvalidChartTest2 ]
+    [ statechart-compile-fail-variants InvalidChartTest3 ]
+    [ statechart-st-run-variants TransitionTest ]
+    [ statechart-compile-fail-variants InvalidTransitionTest1 ]
+    [ statechart-compile-fail-variants InvalidTransitionTest2 ]
+    [ statechart-compile-fail-variants InvalidTransitionTest3 ]
+    [ statechart-compile-fail-variants InvalidTransitionTest4 ]
+    [ statechart-st-run-variants InStateReactionTest ]
+    [ statechart-st-run-variants TerminationTest ]
+    [ statechart-st-run-variants DeferralTest ]
+    [ statechart-st-run-variants CustomReactionTest ]
+    [ statechart-compile-fail-variants InvalidResultAssignTest ]
+    [ statechart-compile-fail-variants InvalidResultDefCtorTest ]
+    [ statechart-st-run-variants InvalidResultCopyTest ]
+    [ statechart-st-run-variants UnconsumedResultTest ]
+    [ statechart-st-run-variants HistoryTest ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest1 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest2 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest3 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest4 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest5 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest6 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest7 ]
+    [ statechart-compile-fail-variants InconsistentHistoryTest8 ]
+    [ statechart-compile-fail-variants UnsupportedDeepHistoryTest ]
+    [ statechart-st-run-variants StateCastTest ]
+    [ statechart-st-run-variants TypeInfoTest ]
+    [ statechart-st-run-variants StateIterationTest ]
+    [ statechart-st-run-variants FifoSchedulerTest ] ;

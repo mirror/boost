@@ -18,21 +18,17 @@ template statechart-common-options
     <gcc-stlport><*><cxxflags>-Wno-non-virtual-dtor
     <gcc-nocygwin><*><cxxflags>-Wno-non-virtual-dtor
     <mingw><*><cxxflags>-Wno-non-virtual-dtor
-    <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
-;
+    <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor ;
 
 rule statechart-st-example-build (
   target-name : directory : sources + : additional-options * )
 {
   exe $(target-name)
     : $(directory)/$(sources).cpp <template>statechart-common-options
-    : <threading>single
       # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems with
       # the automatic detection of the threading mode. We therefore manually
       # turn MT off here
-      <define>BOOST_DISABLE_THREADS
-      $(additional-options)
-  ;
+    : <threading>single <define>BOOST_DISABLE_THREADS $(additional-options) ;
 
   return <exe>$(target-name) ;
 }
@@ -41,29 +37,24 @@ rule statechart-mt-example-build (
   target-name : directory : sources + : additional-options * )
 {
   exe $(target-name)
-    : $(directory)/$(sources).cpp
-      <dll>../../thread/build/boost_thread
+    : $(directory)/$(sources).cpp <dll>../../thread/build/boost_thread
       <template>statechart-common-options
-    : <threading>multi
-      $(additional-options)
-  ;
+    : <threading>multi $(additional-options) ;
 
   return <exe>$(target-name) <dll>../../thread/build/boost_thread ;
 }
 
-rule statechart-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
+rule statechart-bitmachine-build (
+  tag : no-of-bits-list + : additional-options * )
 {
   local result ;
 
   for local no-of-bits in $(no-of-bits-list)
   {
     result +=
-    [
-      statechart-st-example-build BitMachine$(tag)$(no-of-bits)
-        : BitMachine : BitMachine
-        : <define>NO_OF_BITS=$(no-of-bits)
-          $(additional-options)
-    ] ;
+      [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
+          : BitMachine : BitMachine
+          : <define>NO_OF_BITS=$(no-of-bits) $(additional-options) ] ;
   }
 
   return $(result) ;
@@ -91,5 +82,4 @@ stage run
     [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
   : common-variant-tag
     <target>stage
-    <target>all
-;
+    <target>all ;

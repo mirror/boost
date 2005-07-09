@@ -25,12 +25,13 @@ rule statechart-st-example-build (
   target-name : directory : sources + : additional-options * )
 {
   exe $(target-name)
-    : [ independent-obj-build $(target-name) : $(directory) : $(sources)
-          : <threading>single
+    : [ independent-obj-build $(target-name)
+          : $(directory) : $(sources)
             # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems
             # with the automatic detection of the threading mode. We therefore
             # manually turn MT off here
-            <define>BOOST_DISABLE_THREADS $(additional-options) ] ;
+          : <threading>single <define>BOOST_DISABLE_THREADS
+            $(additional-options) ] ;
 
   return $(target-name) ;
 }
@@ -55,8 +56,8 @@ rule statechart-bitmachine-build (
   {
     result += 
       [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
-        : BitMachine : BitMachine
-        : <define>NO_OF_BITS=$(no-of-bits) $(additional-options) ] ;
+          : BitMachine : BitMachine
+          : <define>NO_OF_BITS=$(no-of-bits) $(additional-options) ] ;
   }
 
   return $(result) ;
@@ -81,5 +82,4 @@ stage run
     [ statechart-mt-example-build PingPongMulti2 : PingPong : PingPong
         : <define>CUSTOMIZE_MEMORY_MANAGEMENT <define>USE_TWO_THREADS ]
     [ statechart-st-example-build StopWatch : StopWatch : StopWatch ]
-    [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
-;
+    [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ] ;
