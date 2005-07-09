@@ -14,18 +14,8 @@
 
 <!-- End Banner -->
 
-<DL class="page-index">
-    <DT><A HREF="#overview">Overview</A>
-    <DT><A HREF="#issues">Outstanding Issues</A>
-    <DT><A HREF="#msvc">Microsoft Visual C++</A>
-    <DT><A HREF="#platforms">Supported Platforms</A>
-</DL>
-
-<A NAME="overview"></A>
-<H2>Overview</H2>
-
 <P>
-    The Iostreams library has been tested with a wide variety of platforms. With a few exceptions, noted in the rightmost column, the library is fully supported on the following platforms:
+    The Iostreams library has been tested with a wide variety of platforms. With a few exceptions, noted in the rightmost column below, the library is fully supported on the following platforms:
 </P>
 
 <TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
@@ -61,154 +51,65 @@
         <A CLASS='footnote_ref' NAME='note_4_ref' HREF="#note_4">[4]</A>
     </TD>
 </TR>
-
-
-<!--<TR>
-    <TD>GCC, versions 3.2 through 4.0</TD>
+<TR>
+    <TD ROWSPAN='2'>Intel 7.0 - 9.0</TD>
     <TD>libstdc++</TD>
-<TR>
-<TR>
-    <TD>GCC, versions 3.2 through 4.0</TD>
-    <TD>libstdc++</TD>
-<TR>
-<TR>
-    <TD>GCC, versions 3.2 through 4.0</TD>
-    <TD>libstdc++</TD>
-<TR>
-<TR>
-    <TD>GCC 3.2 (MinGW)</TD>
-    <TD>libstdc++</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>GCC 3.3.1 (Cygwin)</TD>
-    <TD>libstdc++</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Intel 7.1 for Windows</TD>
-    <TD>Dinkumware</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Intel 8.0 for Windows</TD>
-    <TD>Dinkumware</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Metrowerks Codewarrior 8.3</TD>
-    <TD>MSL</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Borland 5.6.4</TD>
-    <TD>STLPort-4.5.x</TD>
-    <TD ALIGN="center">
-        <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>
-    </TD>
-<TR>
-<TR>
-    <TD>Borland 5.6.4</TD>
-    <TD>RogueWave</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Microsoft Visual C++ 7.1</TD>
-    <TD>Dinkumware</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Comeau C++ 4.3.3</TD>
-    <TD>libcomo 30</TD>
-    <TD ALIGN="center">
-        <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>, 
-        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A>
-    </TD>
-<TR>-->
-</TABLE>
-
-
-<P>
-    The regression tests have been run on several platforms, with the results displayed in the table <A HREF="#platforms">below</A>. [<I>Note:</I> The table does not currently reflect the tests involving compression Filters, regular expression Filters or wide streams. I will try to update it soon.]
-</P>
-
-<A NAME="issues"></A>
-<H2>Outstanding Issues</H2>
-
-<P>
-    The test <A HREF="../test/seekable_file.cpp"><CODE>seekable_file.cpp</CODE></A> is failed by two compiler-standard library combinations, and may indicate a problem with the class template <A HREF="classes/file.html"><CODE>basic_file</CODE></A>.
-</P>
-
-<A NAME="msvc"></A>
-<H2>Microsoft Visual C++</H2>
-
-<P>
-    Support for versions Microsoft Visual C++ prior to 7.1 has been dropped for two reasons. First, apparent code generation bugs in versions 6.0 SP5 and 7.0 caused many of the regression tests to crash with global optimization enabled (<CODE>/Og</CODE>), although they executed successfully with optimization disabled and with all optimizations other than <CODE>/Og</CODE> enabled. Second, the addition of the smart adapters described in <A HREF="guide/adapters.html">STL Sequence Adapters</A> proved too much for version 6.0 to handle. Nevertheless, the code still contains many workarounds for these compilers in the hope that support can be restored.
-</P>
-
-<A NAME="platforms"></A>
-<H2>Supported Platforms</H2>
-
-<TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
-<TR>
-    <TH>Compiler</TH><TH>Operating System</TH><TH>Standard C++ Library</TH><TH>Passed</TH>
+    <TD>Linux</TD>
+    <TD ROWSPAN='2'><I>none</I></TD>
 </TR>
 <TR>
-    <TD>GCC 3.2.2 (Linux)</TD>
-    <TD>libstdc++</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>GCC 3.2 (MinGW)</TD>
-    <TD>libstdc++</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>GCC 3.3.1 (Cygwin)</TD>
-    <TD>libstdc++</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Intel 7.1 for Windows</TD>
     <TD>Dinkumware</TD>
-    <TD ALIGN=center>100%</TD>
+    <TD>Windows</TD>
+</TR>
 <TR>
+    <TD>Visual C++ 7.1 - 8.0 (beta 2)</TD>
+    <TD ROWSPAN='2'>Dinkumware</TD>
+    <TD ROWSPAN='2'>Windows</TD>
+    <TD><I>none</I></TD>
+</TR>
 <TR>
-    <TD>Intel 8.0 for Windows</TD>
-    <TD>Dinkumware</TD>
-    <TD ALIGN=center>100%</TD>
+    <TD>Visual C++ 6.0 - 7.0</TD>
+    <TD>
+        <A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2">[2]</A>,
+        <A CLASS='footnote_ref' NAME='note_5_ref' HREF="#note_5">[5]</A>
+    </TD>
+</TR>
 <TR>
+    <TD ROWSPAN='2'>CodeWarrior 8.3 - 9.5</TD>
+    <TD ROWSPAN='2'>MSL</TD>
+    <TD>Windows</TD>
+    <TD ROWSPAN='2'><I>none</I></TD>
+</TR>
 <TR>
-    <TD>Metrowerks Codewarrior 8.3</TD>
-    <TD>MSL</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
+    <TD>Max OS X</TD>
+</TR>
 <TR>
     <TD>Borland 5.6.4</TD>
-    <TD>STLPort-4.5.x</TD>
-    <TD ALIGN="center">
-        <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>
+    <TD>STLPort 4.5.3</TD>
+    <TD>Windows</TD>
+    <TD>
+        <A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2">[2]</A>,
+        <A CLASS='footnote_ref' NAME='note_4_ref' HREF="#note_4">[4]</A>
     </TD>
+</TR>
+<!-- 
+    <TR>
+        <TD>RogueWave</TD>
+        <TD>
+            <A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2">[2]</A>
+        </TD> 
+    </TR>
+-->
 <TR>
-<TR>
-    <TD>Borland 5.6.4</TD>
-    <TD>RogueWave</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Microsoft Visual C++ 7.1</TD>
-    <TD>Dinkumware</TD>
-    <TD ALIGN=center>100%</TD>
-<TR>
-<TR>
-    <TD>Comeau C++ 4.3.3</TD>
-    <TD>libcomo 30</TD>
-    <TD ALIGN="center">
-        <A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A>, 
-        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A>,
-        <A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_3">[3]</A>
+    <TD>Comeau C/C++ 4.3.3</TD>
+    <TD>libcomo 31</TD>
+    <TD>Windows</TD>
+    <TD>
+        <A CLASS='footnote_ref' NAME='note_3_ref' HREF="#note_3">[3]</A>,
+        <A CLASS='footnote_ref' NAME='note_4_ref' HREF="#note_4">[4]</A>
+        <A CLASS='footnote_ref' NAME='note_6_ref' HREF="#note_6">[6]</A>
     </TD>
-<TR>
+</TR>
 </TABLE>
 
 <!-- Begin Footnotes -->
@@ -229,6 +130,14 @@
 
 <P>
     <A CLASS="footnote_ref" NAME="note_4" HREF="#note_4_ref"><SUP>[4]</SUP></A>Fails <A HREF="../test/seekable_file_test.cpp"><CODE>seekable_file_test.cpp</CODE></A>.
+</P>
+
+<P>
+    <A CLASS="footnote_ref" NAME="note_5" HREF="#note_5_ref"><SUP>[5]</SUP></A>Exhibits several unexplained runtime failures when global optimization (<CODE>/Og</CODE>) is enabled.
+</P>
+
+<P>
+    <A CLASS="footnote_ref" NAME="note_6" HREF="#note_6_ref"><SUP>[6]</SUP></A>When run in strict mode, fails to compile those tests which depend on the header <CODE>&lt;windows.h&gt;</CODE>, namely <A HREF="../test/bzip2_test.cpp"><CODE>bzip2_test.cpp</CODE></A>, <A HREF="../test/file_descriptor_test.cpp"><CODE>file_descriptor_test.cpp</CODE></A> and <A HREF="../test/mapped_file_test.cpp"><CODE>mapped_file_test.cpp</CODE></A>.
 </P>
 
 
