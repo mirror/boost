@@ -14,7 +14,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/08 06:44:49 $
+:date:          $Date: 2005/07/10 03:39:35 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -196,7 +196,7 @@ Lazy Default Evaluation
 
 
 .. [#old_interface] As of Boost 1.33.0 the Graph library was still
-   using and `older named parameter mechanism`__, but there were
+   using an `older named parameter mechanism`__, but there were
    plans to change it to use Boost.Parameter (this library) in an
    upcoming release, while keeping the old interface available for
    backward-compatibility.  
