@@ -14,9 +14,12 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/08 06:16:22 $
+:date:          $Date: 2005/07/08 06:44:49 $
 
-:copyright:     Copyright David Abrahams, Daniel Wallin 2005.
+:copyright:     Copyright David Abrahams, Daniel Wallin
+                2005. Distributed under the Boost Software License,
+                Version 1.0. (See accompanying file LICENSE_1_0.txt
+                or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 
@@ -130,9 +133,40 @@ arguments by keyword, rather than by position:
  Tutorial
 ==========
 
+In this section we'll show how the Parameter library can be used to
+build an expressive interface to the `Boost Graph library`__\ 's
+|dfs|_ algorithm. [#old_interface]_ After describing the
+algorithm's abstract interface, we'll show you how to build a basic
+implementation with keyword support; then we'll add support for
+default arguments, and gradually refine the implementation with
+syntax improvements.  Finally we'll show how to streamline the
+implementation of named parameter interfaces, improve their
+participation in overload resolution, and optimize their runtime
+efficiency.
 
-Introducing the Example
-=======================
+__ ../../../graph/index.html
+
+.. _dfs: ../../../graph/doc/depth_first_search.html
+
+.. |dfs| replace:: ``depth_first_search``
+
+The Abstract Interface to |dfs|
+===============================
+
+The Graph library's |dfs| algorithm is a generic function accepting
+between one and four arguments, as shown in the table below:
+
++----------------+--------------+----------------------------------+
+| Parameter Name | Dataflow     | Default Value (if any)           |
++================+==============+==================================+
+|``graph``       | IN           |none - this argument is required. |
++----------------+--------------+----------------------------------+
+|``visitor``     | OUT          |``boost::dfs_visitor<>()``        |
++----------------+--------------+----------------------------------+
+|``index_map``   | IN           |``get(boost::vertex_index,graph)``|
++----------------+--------------+----------------------------------+
+|``color_map``   | IN           |                                  |
++----------------+--------------+----------------------------------+
 
 Defining the Keywords
 =====================
@@ -161,6 +195,10 @@ Lazy Default Evaluation
 -----------------------
 
 
-.. Copyright David Abrahams 2005. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+.. [#old_interface] As of Boost 1.33.0 the Graph library was still
+   using and `older named parameter mechanism`__, but there were
+   plans to change it to use Boost.Parameter (this library) in an
+   upcoming release, while keeping the old interface available for
+   backward-compatibility.  
+
+__ ../../../graph/doc/bgl_named_params.html
