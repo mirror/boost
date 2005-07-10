@@ -27,7 +27,10 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>basic_counter</CODE> is a <A HREF='../concepts/dual_use_filter.html'>DualUseFilter</A> which keeps track of the number of characters and lines it has processed. <CODE>basic_counter</CODE> is <A HREF='../concepts/optimally_buffered.html'>OptimallyBuffered</A> with an optimal buffer size of <CODE>0</CODE> to keep the character and line counts accurate. When a <CODE>basic_counter</CODE> is used for output, the line and character counts should exactly reflect the data which has been passed to downstream fillters. When a <CODE>basic_counter</CODE> is used for input, the character counts may deviate slightly from the number of characters that have been read from downstream the filters because of the putback buffer. The line count should exactly reflect the number of lines that have been read from downstream, except when the first character of a line is being read, in which case the line count may be off by one.
+    The class template <CODE>basic_counter</CODE> is a <A HREF='../concepts/dual_use_filter.html'>DualUseFilter</A> which forwards data unmodified to the next filter in a chain, keeping track of the number of characters and lines it has processed. 
+</P>
+<P>
+    <CODE>basic_counter</CODE> is <A HREF='../concepts/optimally_buffered.html'>OptimallyBuffered</A> with an optimal buffer size of <CODE>0</CODE> to keep the character and line counts accurate. When a <CODE>basic_counter</CODE> is used for output, the line and character counts should exactly reflect the data which has been passed to downstream fillters. When a <CODE>basic_counter</CODE> is used for input, the character counts may deviate slightly from the number of characters that have been read from downstream the filters because of the putback buffer. The line count should exactly reflect the number of lines that have been read from downstream, except when the first character of a line is being read, in which case the line count may be off by one.
 </P>
 
 <A NAME="headers">

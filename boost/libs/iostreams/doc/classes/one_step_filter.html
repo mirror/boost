@@ -27,7 +27,7 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>one_step_filter</CODE> is a <A HREF='../concepts/dual_use_filter.html'>DualUseFilter</A> for use as a base class by Filters which process an entire sequence of data at once. Because a <CODE>one_step_filter</CODE> must read an entire character sequence into memory before it begins to filter, it is not suitable in low-memory situations or for processing character sequences which have no natural end, such as stock tickers. Because of these limitations, <CODE>one_step_filter</CODE> is best used as an aid to those learning to use the Iostreams library.
+    The class template <CODE>one_step_filter</CODE> is a <A HREF='../concepts/dual_use_filter.html'>DualUseFilter</A> for use as a base class by Filters which filter an entire character sequence at once. Because a <CODE>one_step_filter</CODE> must read an entire character sequence into memory before it begins to filter, it is not suitable in low-memory situations or for processing character sequences which have no natural end, such as stock tickers. Because of these limitations, <CODE>one_step_filter</CODE> is best used as an aid to those learning to use the Iostreams library.
 </P>
 <P>
     When used as an <A HREF="../concepts/input_filter.html">InputFilter</A>, an instance of <CODE>one_step_filter</CODE> reads to the end of the stream as soon as input is commenced. The entire contents of the stream are filtered using the <CODE>private virtual</CODE> function <A HREF="#do_filter"><CODE>do_filter</CODE></A>. The filtered data is stored and used to satisfy all future requests for input until the end of the filtered data is reached.

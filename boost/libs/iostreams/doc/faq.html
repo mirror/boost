@@ -15,7 +15,7 @@
 <!-- End Banner -->
 
 <DL class="page-index" style="margin-top:1em">
-  <DT><A href="#flush">Why is data written to a <CODE>filtering_stream</CODE> not being forwarded to the final Sink?</A></DT>
+  <DT><A href="#flush">Why is data written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</A></DT>
   <DT><A href="#lifetime">Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
   <DT><A href="#tee">How do I write to several ostreams at once?</A></DT>
   <DT><A href="#pipe">Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</A></DT>
@@ -24,7 +24,7 @@
 <HR style="margin-top:1em">
 
 <A NAME="flush">
-<H4>Why is data written to a <CODE>filtering_stream</CODE> not being forwarded to the final Sink?</H4>
+<H4>Why is data written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</H4>
 
 <P>
      You may need to flush the stream. Note, however, that there is no guarantee that all data written to a <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> will be forwarded to the final Sink until the stream is closed, unless all the Filters in the underlying <A HREF="classes/chain.html"><CODE>chain</CODE></A> are <A HREF="concepts/closable.html">Closable</A>.

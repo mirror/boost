@@ -27,7 +27,7 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>basic_regex_filter</CODE> Filters data using regular expressions the <A HREF="http://www.boost.org/libs/regex" TARGET="_top">Boost Regular Expression Library</A> (<A CLASS="bib_ref" HREF="../bibliography.html#maddock">[Maddock]</A>).
+    The class template <CODE>basic_regex_filter</CODE> performs text substitutions using regular expressions from the <A HREF="http://www.boost.org/libs/regex" TARGET="_top">Boost Regular Expression Library</A> (<A CLASS="bib_ref" HREF="../bibliography.html#maddock">[Maddock]</A>).
 </P>
 <P>
     Each <CODE>basic_regex_filter</CODE> stores a regular expression and a formatting function. As unfiltered data is scanned for matches, portions of data which fall between regular expression matches are forwarded unchanged. Each time a match is found, the corresponding <A HREF="http://www.boost.org/libs/regex/doc/match_results.html" TARGET="_top"><CODE>match_results</CODE></A> object is passed to the formatting function and the return value is forwarded in place of the matched text.
