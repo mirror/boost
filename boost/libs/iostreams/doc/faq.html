@@ -19,6 +19,7 @@
   <DT><A href="#lifetime">Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
   <DT><A href="#tee">How do I write to several ostreams at once?</A></DT>
   <DT><A href="#pipe">Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</A></DT>
+  <DT><A href="#finite_state">Why do I get errors when compiling the <CODE>finite_state_filer</CODE> examples?</A></DT>
 </DL>
 
 <HR style="margin-top:1em">
@@ -56,6 +57,13 @@
 
 <P>
      Your compiler could be considering an implicit conversion to a <A HREF="concepts/pipable.html">Pipable</A> Filter. Make sure that all your Pipable Filters have <CODE>explicit</CODE> constructors. <I>See</I> <A HREF="guide/pipelines.html">Pipelines</A>.
+</P>
+
+<A NAME="pipe">
+<H4>Why do I get errors when compiling the <CODE>finite_state_filer</CODE> examples?</H4>
+
+<P>
+     The template <CODE>finite_state_filer</CODE> requires a highly standard-conforming compiler. See the regression reports for details.
 </P>
 
 <!-- Begin Footer -->
