@@ -171,6 +171,9 @@ A.menu:visited { color: black; }
     text-decoration:none;
 }
 
+DIV.nav { text-align: right; padding-top: 0.3em }
+.nav A { padding-left: 0.3em }
+
 .title                  { text-align: center; margin:1.5em }
 .literal                { color: #790000; /*#444444; font-style: italic*/}
 .numeric_literal        { color: #990000}
