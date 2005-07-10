@@ -14,11 +14,19 @@
 
 <!-- End Banner -->
 
-        <!-- Shell Comments Filters -->
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+    <A HREF='filter_usage.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev.png'></A>
+    <A HREF='tutorial.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='line_wrapping_filters.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
 
 
 <A NAME="shell_comments"></A>
-<H2>2.3. Shell Comments Filters</H2>
+<H2>2.2.3. Shell Comments Filters</H2>
 
 <P>
     Suppose we want to write a filter to remove shell-style comments. The basic algorithm is as follows: we examine characters one at a time, forwarding them unchanged, until we encounter a comment character, typically <CODE>'#'</CODE>. When we find a comment character, we examine and ignore characters until we encounter a newline character, at which point the algorithm begins again. Note that this algorithm consists of two subalgorithms: one algorithm for reading ordinary text, and one for reading comments.
@@ -275,6 +283,16 @@
 <P>
     The member function <CODE>put</CODE> first examines the given character <CODE>c</CODE> and updates the member variable <CODE>skip_</CODE>; next, unless <CODE>skip_</CODE> is <CODE>true</CODE>, it attempt to write c. The member function <CODE>close</CODE> simply clears the <CODE>skip_</CODE> flag so that the Filter will be ready to be used again.
 </P>
+
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+    <A HREF='filter_usage.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev.png'></A>
+    <A HREF='tutorial.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='line_wrapping_filters.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
 
 <!-- Begin Footer -->
 

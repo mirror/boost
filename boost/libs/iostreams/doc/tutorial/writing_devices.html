@@ -14,8 +14,18 @@
 
 <!-- End Banner -->
 
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+    <A><IMG WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev_disabled.png'></A>
+    <A HREF='tutorial.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='container_source.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
+
 <A NAME="device_overview"></A>
-<H3>1.1. Overview: Devices, <CODE>streambuf_facade</CODE> and <CODE>stream_facade</CODE></H3>
+<H2 CLEAR='right'>2.1.1. Overview: Devices, <CODE>streambuf_facade</CODE> and <CODE>stream_facade</CODE></H2>
 
 <P>Writing a new stream or stream buffer class using the Boost Iostreams library is easy: we simply write a class modeling the <A HREF="../concepts/device.html">Device</A> concept, then use that class as the template argument to <A HREF="../guide/generic_streams.html#stream_facadev><CODE>stream_facade</CODE></A> or <A HREF="../guide/generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A>:
 
@@ -52,6 +62,16 @@
 
 <P>Another way to define a new stream or stream buffer class using the Boost Iostreams library is to derive from <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> or <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>. 
 <P>The next three items will demonstrate how to write Devices for accessing STL-compatible containers. The source code for the examples can be found in the header <A HREF="../../example/container_device.hpp">&lt;<CODE>libs/iostreams/example/container_device.hpp</CODE>&gt;</A></P>
+
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+    <IMG WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev_disabled.png'>
+    <A HREF='tutorial.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='container_source.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
 
 <!-- Begin Footer -->
 

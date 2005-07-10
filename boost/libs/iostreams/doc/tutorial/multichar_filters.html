@@ -14,12 +14,19 @@
 
 <!-- End Banner -->
 
+<!-- Begin Nav -->
 
-        <!-- Multi-Character Filters -->
+<DIV CLASS='nav'>
+    <A HREF='unix2dos_filters.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev.png'></A>
+    <A HREF='tutorial.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='dual_use_filters.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
 
 
 <A NAME="multichar"></A>
-<H2>2.8. Multi-Character Filters</H2>
+<H2>2.2.8. Multi-Character Filters</H2>
 
 <P>
     All the Filters we've seen so far &#8212; except for those that derive from <CODE>stdio_filter</CODE> &#8212; process characters one at a time. If we instead process several characters at once, we can often reduce the number of function calls it takes to filter a character sequence, resulting in more efficient code. This is what <A HREF="../concepts/multi_character.html">Multi-Character Filters</A> allow us to do.
@@ -242,6 +249,16 @@
 <P>
     Note that the implementation of <CODE>write</CODE> is very similar to what we would get if we put the implementation of <A HREF="#shell_comments_output_filter"><CODE>shell_comments_output_filter::put</CODE></A> inside a <CODE>for</CODE> loop iterating from <CODE>0</CODE> to <CODE>n</CODE>. OutputFilters which call themselves recursively, such as <A HREF="#unix2dos_output_filter"><CODE>unix2dos_output_filter</CODE></A>,  are much harder to transform into Multi-Character filters.
 </P>
+
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+    <A HREF='unix2dos_filters.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev.png'></A>
+    <A HREF='tutorial.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='dual_use_filters.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
 
 <!-- Begin Footer -->
 
