@@ -43,9 +43,9 @@ public:
 
 BOOST_ARCHIVE_DECL(const basic_serializer *) 
 basic_serializer_map::tfind(
-    const boost::serialization::extended_type_info & type_
+    const boost::serialization::extended_type_info & eti
 ) const {
-    const basic_serializer_arg bs(type_);
+    const basic_serializer_arg bs(eti);
     map_type::const_iterator it;
     it = map.find(& bs);
     if(it == map.end())

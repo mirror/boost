@@ -19,8 +19,8 @@ namespace detail {
 BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::less_than(const extended_type_info &rhs) const
 {
-    return 0 != get_type().before(
-        static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
+    return 0 != get_eti().before(
+        static_cast<const extended_type_info_typeid_0 &>(rhs).get_eti()
     );
 }
 
@@ -39,7 +39,7 @@ class extended_type_info_typeid_arg :
 {
 private:
     const std::type_info & ti;
-    virtual const std::type_info &get_type() const
+    virtual const std::type_info &get_eti() const
     {
         return ti;
     }
