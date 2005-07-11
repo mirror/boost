@@ -216,6 +216,14 @@ namespace boost { namespace numeric { namespace ublas {
         vector_range_type range (std::size_t start, std::size_t stop) {
             return vector_range_type (operator () (), default_range (start, stop));
         }
+        BOOST_UBLAS_INLINE
+        const_vector_slice_type slice (std::size_t start, std::ptrdiff_t stride, std::size_t size) const {
+            return const_vector_slice_type (operator () (), default_slice (start, stride, size));
+        }
+        BOOST_UBLAS_INLINE
+        vector_slice_type slice (std::size_t start, std::ptrdiff_t stride, std::size_t size) {
+            return vector_slice_type (operator () (), default_slice (start, stride, size));
+        }
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const default_range &r) const {
