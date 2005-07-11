@@ -42,6 +42,7 @@ along with suitable workarounds when available.
       <li><a href="#gcc_4_darwin">Darwin GCC 4.0</a></li>
     </ul>
   </li>
+  <li><a href="#acc_60">HP aC++ A.06.00 for HP-UX</a></li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
   <li><a href="#intel_71_8x_lin">Intel C++ Compiler for Linux 7.1/8.0/8.1</a></li>
   <li><a href="#intel_em64t_81_lin">Intel C++ Compiler Extended Memory 64 Technology 8.1 for Linux</a></li>
@@ -105,10 +106,10 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.3 20030304 (Apple builds 1666 and 1671) under Mac OS,</li>
   <li>GCC 3.3.3 (cygwin special) under Cygwin 1.5.7,</li>
   <li>GCC 3.3.5 under Linux,</li>
-  <li>GCC 3.3.6 under Linux,</li>
+  <li>GCC 3.3.6 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
   <li>GCC 3.4.2 (mingw-special) under Win32,</li>
   <li>GCC 3.4.3 under Linux, Solaris and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
-  <li>GCC 3.4.4 under Linux,</li>
+  <li>GCC 3.4.4 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
   <li>GCC 4.0.0 20041026 (Apple build 4061) under Mac OS 
     (see <a href="#gcc_4_darwin">below</a>),</li>
   <li>GCC 4.0.0 under Linux.</li>
@@ -135,7 +136,7 @@ applicable workarounds.
 The build of GCC 4.0 shipped with Darwin 8.1 and prior (Mac OS X 10.4.1 and
 prior) corresponds to a prerelease version of GNU GCC 4.0.0 which introduces
 a <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=17435">regression bug</a>
-related to binding references to temporary objects. This bug precludes the
+related to binding of references to temporary objects. This bug precludes the
 usage of Boost.MultiIndex
 <a href="advanced_topics.html#invariant_check">invariant-checking mode</a>; other
 than this, Boost.MultiIndex works correctly.
@@ -145,12 +146,13 @@ a newer version of GCC 4.0.
 
 </p>
 
-<h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
+<h2><a name="acc_60">HP aC++ A.06.00 for HP-UX</a></h2>
 
 <p>
-<b>Note:</b> This compiler was last tested against the Boost 1.32 version of
-Boost.MultiIndex, so the following information can be inaccurate.
+No problems have been detected with this compiler.
 </p>
+
+<h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
 
 <p>
 <a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
@@ -169,6 +171,13 @@ by inserting the following preprocessor directive:
 <p>
 This latter pragma, however, may also eliminate other warnings not related
 to the use of <code>offsetof</code>.
+</p>
+
+<blockquote><hr></blockquote>
+
+<p>
+Serialization capabilities are not available as Boost.Serialization is not
+supported on this platform.
 </p>
 
 <h2><a name="intel_71_8x_lin">Intel C++ Compiler for Linux 7.1/8.0/8.1</a></h2>
@@ -918,7 +927,7 @@ Performance
 
 <br>
 
-<p>Revised June 16th 2005</p>
+<p>Revised July 11th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
