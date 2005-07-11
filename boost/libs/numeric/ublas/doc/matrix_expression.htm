@@ -58,8 +58,47 @@ const</code></td>
 <td><code>expression_type &amp;operator () ()</code></td>
 <td>Returns a reference of the expression.</td>
 </tr>
+<tr>
+<td><code>matrix_row&lt;E&gt; operator[] (std::size_t i)</code></td>
+<td>Returns the specified proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_row&lt;E&gt; row (std::size_t i)</code></td>
+<td>Returns the specified proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_column&lt;E&gt; column (std::size_t i)</code></td>
+<td>Returns the specified proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_range&lt;E&gt; range (std::size_t start1, std::size_t stop1, std::size_t start2, std::size_t stop2)</code></td>
+<td>Returns the specified proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_slice&lt;E&gt; slice (std::size_t start1, std::ptrdiff_t stride1, std::size_t size1, std::size_t start2, std::ptrdiff_t stride2, std::size_t size2)</code></td>
+<td>Returns the specified  proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_range&lt;E&gt; project (const range &amp;r1, const range &amp;r2)</code></td>
+<td>Returns the specified  proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_slice&lt;E&gt; project (const slice &amp;s1, const slice &amp;s2)</code></td>
+<td>Returns the specified proxy.</td>
+</tr>
+<tr>
+<td><code>matrix_indirect&lt;E, A&gt; project (const indirect_array&lt;A&gt; &amp;ia1, const indirect_array&lt;A&gt; &amp;ia2)</code></td>
+<td>Returns the specified proxy.</td>
+</tr>
 </tbody>
 </table>
+<h4>Notes</h4>
+<p>The <code>operator[]</code>, <code>row</code>, <code>column</code>, <code>range</code>, <code>slice</code> and <code>project</code> function parameters are the fixed types <code>std::size_t</code>
+and <code>std::ptrdiff_t</code>. This is an implementation issue and the types may change to <code>E::size_type</code>
+and <code>E:difference_type</code> in a future implementation.</p>
+<p>The <code>operator[]</code>, <code>row</code>, <code>column</code>, <code>range</code>, <code>slice</code> and <code>project</code> functions propagate the expression's constantness. Therefore there proxy returned
+for a constant <code>matrix_expression&lt;E&gt;</code> is based on <code>const E</code>.</p>
+
 <h2><a name="matrix_references" id="matrix_references"></a> Matrix
 References</h2>
 <h3>Reference</h3>
