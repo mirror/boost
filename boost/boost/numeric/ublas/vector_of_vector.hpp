@@ -112,6 +112,8 @@ namespace boost { namespace numeric { namespace ublas {
                 non_zeros += (*itv).size ();
             return non_zeros;
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const array_type &data () const {
             return data_;

@@ -82,6 +82,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return r_.size ();
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const vector_closure_type &data () const {
             return data_;
@@ -569,6 +571,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return s_.size ();
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const vector_closure_type &data () const {
             return data_;
@@ -1061,20 +1065,22 @@ namespace boost { namespace numeric { namespace ublas {
             return ia_.size ();
         }
         BOOST_UBLAS_INLINE
-        const vector_closure_type &data () const {
-            return data_;
-        }
-        BOOST_UBLAS_INLINE
-        vector_closure_type &data () {
-            return data_;
-        }
-        BOOST_UBLAS_INLINE
         const_indirect_array_type &indirect () const {
             return ia_;
         }
         BOOST_UBLAS_INLINE
         indirect_array_type &indirect () {
             return ia_;
+        }
+
+        // Storage accessors
+        BOOST_UBLAS_INLINE
+        const vector_closure_type &data () const {
+            return data_;
+        }
+        BOOST_UBLAS_INLINE
+        vector_closure_type &data () {
+            return data_;
         }
 
         // Element access

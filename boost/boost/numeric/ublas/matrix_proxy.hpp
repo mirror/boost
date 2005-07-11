@@ -73,6 +73,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type index () const {
             return i_;
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const matrix_closure_type &data () const {
             return data_;
@@ -525,6 +527,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type index () const {
             return j_;
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const matrix_closure_type &data () const {
             return data_;
@@ -985,6 +989,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return BOOST_UBLAS_SAME (r1_.size (), r2_.size ());
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const matrix_closure_type &data () const {
             return data_;
@@ -1443,6 +1449,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size () const {
             return BOOST_UBLAS_SAME (s1_.size (), s2_.size ());
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const matrix_closure_type &data () const {
             return data_;
@@ -1886,14 +1894,6 @@ namespace boost { namespace numeric { namespace ublas {
             return BOOST_UBLAS_SAME (ia1_.size (), ia2_.size ());
         }
         BOOST_UBLAS_INLINE
-        const matrix_closure_type &data () const {
-            return data_;
-        }
-        BOOST_UBLAS_INLINE
-        matrix_closure_type &data () {
-            return data_;
-        }
-        BOOST_UBLAS_INLINE
         const indirect_array_type &indirect1 () const {
             return ia1_;
         }
@@ -1908,6 +1908,16 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         indirect_array_type &indirect2 () {
             return ia2_;
+        }
+
+        // Storage accessors
+        BOOST_UBLAS_INLINE
+        const matrix_closure_type &data () const {
+            return data_;
+        }
+        BOOST_UBLAS_INLINE
+        matrix_closure_type &data () {
+            return data_;
         }
 
         // Element access
@@ -2366,6 +2376,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size2 () const {
             return r2_.size ();
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const matrix_closure_type &data () const {
             return data_;
@@ -3248,6 +3260,8 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size2 () const {
             return s2_.size ();
         }
+
+        // Storage accessors
         BOOST_UBLAS_INLINE
         const matrix_closure_type &data () const {
             return data_;
@@ -4133,14 +4147,6 @@ namespace boost { namespace numeric { namespace ublas {
             return ia2_.size ();
         }
         BOOST_UBLAS_INLINE
-        const matrix_closure_type &data () const {
-            return data_;
-        }
-        BOOST_UBLAS_INLINE
-        matrix_closure_type &data () {
-            return data_;
-        }
-        BOOST_UBLAS_INLINE
         const indirect_array_type &indirect1 () const {
             return ia1_;
         }
@@ -4155,6 +4161,16 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         indirect_array_type &indirect2 () {
             return ia2_;
+        }
+
+        // Storage accessors
+        BOOST_UBLAS_INLINE
+        const matrix_closure_type &data () const {
+            return data_;
+        }
+        BOOST_UBLAS_INLINE
+        matrix_closure_type &data () {
+            return data_;
         }
 
         // Element access
