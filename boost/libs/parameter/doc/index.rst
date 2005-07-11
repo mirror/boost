@@ -13,7 +13,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/10 03:40:22 $
+:date:          $Date: 2005/07/11 03:29:54 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -203,40 +203,33 @@ we'll give the tag types the same names as the objects.  Assuming
 we're defining our public interface in namespace ``graphs``, the
 tag types should be declared this way::
 
-  namespace graphs
+  namespace graphs { namespace tag
   {
-    namespace tag
-    {
-      class graph;
-      class visitor;
-      class root_vertex;
-      class index_map;
-      class color_mapd_;
-    }
-  } // graphs
+    class graph;
+    class visitor;
+    class root_vertex;
+    class index_map;
+    class color_map;
+  }} // graphs::tag
 
 Because our users never need to name tag types directly, we've put
-them in in a nested namespace.  The keyword objects will actually
-be provided by the library; we'll just declare references to them::
+them in in a nested ``tag`` namespace.  The keyword objects will
+actually be provided by the library; we'll just declare references
+to them::
 
   #include <boost/parameter/keyword.hpp>
   #include <boost/parameter/instance.hpp>
 
-  namespace graphs
+  namespace graphs { namespace // unnamed
   {
-    namespace // unnamed
-    {
-      using namespace boost::parameter;
+    using namespace boost::parameter;
 
-      keyword<tag::graph>& graph = instance();
-      keyword<tag::visitor>& visitor = instance();
-      keyword<tag::root_vertex>& root_vertex = instance();
-      keyword<tag::index_map>& index_map = instance();
-      keyword<tag::color_map>& color_map = instance();
-
-    } // unnamed
-
-  } // graphs
+    keyword<tag::graph>& graph = instance();
+    keyword<tag::visitor>& visitor = instance();
+    keyword<tag::root_vertex>& root_vertex = instance();
+    keyword<tag::index_map>& index_map = instance();
+    keyword<tag::color_map>& color_map = instance();
+  }} // graphs::unnamed
 
 The “fancy dance” here involving the unnamed namespace, references,
 and the ``instance()`` object is all done to avoid violating the
@@ -246,37 +239,34 @@ instantiated in multiple translation units.  Note: if you use an
 older compiler, a slightly more verbose syntax may be required
 [#msvc_keyword]_.
 
-.. Note:: 
-
-   From this point forward you can assume all the code in the
-   examples goes in namespace ``graphs``.
-
 Defining the Implementation Function
 ====================================
 
 Next we can write the skeleton of the function that implements
 the core of ``depth_first_search``::
 
-  namespace core
+  namespace graphs { namespace core
   {
     template <class ArgumentPack>
     void depth_first_search(ArgumentPack const& args)
     {
         // algorithm implementation goes here
     }
-  }
+  }}
 
-``core::depth_first_search`` has an :concept:`ArgumentPack`
+.. |ArgumentPack| replace:: :concept:`ArgumentPack`
+
+``core::depth_first_search`` has an |ArgumentPack|
 parameter: a bundle of references to the arguments that the user
 passes to the algorithm, tagged with their keywords.  To extract
 each parameter, just pass its keyword object to the
-:concept:`ArgumentPack`\ 's index operator.  We'll add some
+|ArgumentPack|\ 's index operator.  We'll add some
 temporary code to print the arguments, just to get a feel for how
 it works:
 
 .. parsed-literal::
 
-  namespace core
+  namespace graphs { namespace core
   {
     template <class ArgumentPack>
     void depth_first_search(ArgumentPack const& args)
@@ -287,23 +277,34 @@ it works:
         std::cout << "index_map:\\t" << **args[index_map]** << std::endl;
         std::cout << "color_map:\\t" << **args[color_map]** << std::endl;
     }
-  }
+  }} // graphs::core
 
 It's unlikely that many of the arguments the user will eventually
-pass to ``depth_first_search`` can be printed, but for now it will
-give us something to work with.  To see the keywords in action, we
-can write a little test driver::
+pass to ``depth_first_search`` can be printed, but for now the code
+above will give us something to experiment with.  To see the
+keywords in action, we can write a little test driver:
+
+.. parsed-literal::
 
   int main()
   {
       using namespace graphs;
 
-      core::depth_first_search((
+      core::depth_first_search(**(**
         graph = 'G', visitor = 2, root_vertex = 3.5, 
-        index_map = "hello, world", color_map = false));
+        index_map = "hello, world", color_map = false\ **)**);
   }
 
-of course, we can pass the arguments in any order::
+The results of assigning into each keyword object are combined
+using an overloaded comma operator (``operator,``) into a single
+|ArgumentPack| object that gets passed on to
+``core::depth_first_search``.  The extra set of parentheses you see
+in the example above are required: without them, each assignment
+would be interpreted as a separate function argument and the comma
+operator wouldn't take effect.  We'll show you how to get rid of
+the extra parentheses in a moment.
+
+Of course, we can pass the arguments in any order::
 
   int main()
   {
@@ -314,7 +315,7 @@ of course, we can pass the arguments in any order::
         index_map = "hello, world", visitor = 2));
   }
 
-either of these programs will print::
+either of the two programs above will print::
 
   graph:       G
   visitor:     2
@@ -324,6 +325,27 @@ either of these programs will print::
 
 Adding Defaults
 ===============
+
+Currently, all the arguments are required, because if any argument
+can't be found, there will be a compilation error when
+``core::depth_first_search`` tries to index it in the
+|ArgumentPack|.  We can make any of the arguments optional by using
+the ``|`` operator within the brackets.
+
+.. parsed-literal::
+
+  namespace graphs { namespace core
+  {
+    template <class ArgumentPack>
+    void depth_first_search(ArgumentPack const& args)
+    {
+        std::cout << "graph:\\t" << args[graph] << std::endl;
+        std::cout << "visitor:\\t" << args[visitor] << std::endl;
+        std::cout << "root_vertex:\\t" << args[root_vertex **| 0**\ ] << std::endl;
+        std::cout << "index_map:\\t" << args[index_map] << std::endl;
+        std::cout << "color_map:\\t" << args[color_map] << std::endl;
+    }
+  }} // graphs::core
 
 Avoiding the Extra Parentheses (Forwarding Functions)
 =====================================================
