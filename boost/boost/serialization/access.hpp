@@ -84,7 +84,7 @@ public:
 
     // pass calls to users's class implementation
     template<class Archive, class T>
-    static inline void member_save(
+    static void member_save(
         Archive & ar, 
         //const T & t,
         T & t,
@@ -93,7 +93,7 @@ public:
         t.save(ar, file_version);
     }
     template<class Archive, class T>
-    static inline void member_load(
+    static void member_load(
         Archive & ar, 
         T & t,
         const unsigned int file_version
@@ -101,7 +101,7 @@ public:
         t.load(ar, file_version);
     }
     template<class Archive, class T>
-    static inline void serialize(
+    static void serialize(
         Archive & ar, 
         T & t, 
         const unsigned int file_version

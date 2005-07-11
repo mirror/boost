@@ -17,9 +17,9 @@ namespace detail {
 
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
 basic_iserializer::basic_iserializer(
-        const boost::serialization::extended_type_info & type_
+        const boost::serialization::extended_type_info & eti
 ) :
-    basic_serializer(type_), 
+    basic_serializer(eti), 
     bpis(NULL)
 {}
 

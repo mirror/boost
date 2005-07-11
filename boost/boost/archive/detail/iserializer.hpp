@@ -66,6 +66,7 @@ namespace std{
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/archive_pointer_iserializer.hpp>
+#include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/serialization.hpp>
@@ -75,8 +76,6 @@ namespace std{
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/binary_object.hpp>
-
-#include <boost/archive/archive_exception.hpp>
 
 namespace boost {
 
@@ -105,12 +104,14 @@ private:
     virtual void destroy(/*const*/ void *address) const {
         boost::serialization::access::destroy(static_cast<T *>(address));
     }
-public:
+    // private constructor to inhibit any existence other than the 
+    // static one
     explicit iserializer() :
         basic_iserializer(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
     {}
+public:
     virtual BOOST_DLLEXPORT void load_object_data(
         basic_iarchive & ar,
         void *x, 
@@ -176,18 +177,29 @@ private:
         void * & x,
         const unsigned int file_version
     ) const BOOST_USED;
+#if defined(__GNUC__) || ( defined(BOOST_MSVC) && (_MSC_VER <= 1300) )
 public:
+#endif
+    // private constructor to inhibit any existence other than the 
+    // static one.  Note GCC doesn't permit constructor to be private
+    explicit BOOST_DLLEXPORT pointer_iserializer() BOOST_USED;
     static const pointer_iserializer instance;
+public:
     // at least one compiler (CW) seems to require that serialize_adl
     // be explicitly instantiated. Still under investigation. 
     #if !defined(__BORLANDC__)
     void (* const m)(Archive &, T &, const unsigned);
     boost::serialization::extended_type_info * (* e)();
     #endif
-    explicit BOOST_DLLEXPORT pointer_iserializer() BOOST_USED;
     static BOOST_DLLEXPORT const pointer_iserializer & instantiate() BOOST_USED;
     virtual ~pointer_iserializer(){};
 };
+
+template<class T, class Archive>
+BOOST_DLLEXPORT const pointer_iserializer<T, Archive> & 
+pointer_iserializer<T, Archive>::instantiate() {
+    return instance;
+}
 
 // note: instances of this template to be constructed before the main
 // is called in order for things to be initialized properly.  For this
@@ -312,8 +324,7 @@ pointer_iserializer<T, Archive>::pointer_iserializer() :
     )
 #endif
 {
-    iserializer<Archive, T> & bis =
-        iserializer<Archive, T>::instantiate();
+    iserializer<Archive, T> & bis = iserializer<Archive, T>::instantiate();
     bis.set_bpis(this);
 }
 
@@ -466,7 +477,7 @@ struct load_pointer_type {
         );
         // if the pointer isn't that of the base class
         if(newbpis_ptr != bpis_ptr){
-            t = pointer_tweak(newbpis_ptr->type, t, *t);
+            t = pointer_tweak(newbpis_ptr->get_eti(), t, *t);
         }
     }
 };
@@ -503,21 +514,23 @@ struct load_array_type {
 
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
-BOOST_DLLEXPORT inline const basic_pointer_iserializer &
+BOOST_DLLEXPORT 
+inline const basic_pointer_iserializer &
 instantiate_pointer_iserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ) BOOST_USED;
 
 template<class Archive, class T>
-BOOST_DLLEXPORT inline const basic_pointer_iserializer &
+BOOST_DLLEXPORT 
+inline const basic_pointer_iserializer &
 instantiate_pointer_iserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ){
     // note: reversal of order of arguments to work around msvc 6.0 bug
     // that manifests itself while trying to link.
-    return pointer_iserializer<T, Archive>::instance;
+    return pointer_iserializer<T, Archive>::instantiate();
 }
 
 } // detail

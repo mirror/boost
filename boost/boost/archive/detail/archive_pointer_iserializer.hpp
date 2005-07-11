@@ -40,7 +40,7 @@ class archive_pointer_iserializer :
 protected:
     explicit BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     archive_pointer_iserializer(
-        const boost::serialization::extended_type_info & type_
+        const boost::serialization::extended_type_info & eti
     );
 public:
     virtual const basic_iserializer & get_basic_serializer() const 
@@ -73,7 +73,7 @@ public:
     static
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(const basic_pointer_iserializer *)
     find(
-        const boost::serialization::extended_type_info & type_
+        const boost::serialization::extended_type_info & eti
     );
     
     virtual ~archive_pointer_iserializer(){}

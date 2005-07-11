@@ -201,8 +201,8 @@ basic_oarchive_impl::find(const serialization::extended_type_info & ti) const {
             assert(false);
         }
     public:
-        bosarg(const serialization::extended_type_info & type_) :
-          boost::archive::detail::basic_oserializer(type_)
+        bosarg(const serialization::extended_type_info & eti) :
+          boost::archive::detail::basic_oserializer(eti)
         {}
     };
     bosarg bos(ti);
@@ -318,7 +318,7 @@ basic_oarchive_impl::save_pointer(
         // if its a previously unregistered class 
         if((cobject_info_set.size() > original_count)){
             if(bos.is_polymorphic()){
-                const serialization::extended_type_info *eti = & bos.type;
+                const serialization::extended_type_info *eti = & bos.get_eti();
                 const char * key = NULL;
                 if(NULL != eti)
                     key = eti->get_key();

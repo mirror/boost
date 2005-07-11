@@ -36,7 +36,7 @@ public:
     virtual ~polymorphic_base(){};
 };
 
-//BOOST_IS_ABSTRACT(polymorphic_base)
+BOOST_IS_ABSTRACT(polymorphic_base)
 
 class polymorphic_derived1 : public polymorphic_base
 {

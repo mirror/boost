@@ -59,9 +59,6 @@
 #include <boost/archive/detail/basic_oserializer.hpp>
 #include <boost/archive/detail/archive_pointer_oserializer.hpp>
 
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-    #include <boost/serialization/extended_type_info_typeid.hpp>
-#endif
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
@@ -100,12 +97,15 @@ namespace detail {
 template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
-public:
+private:
+    // private constructor to inhibit any existence other than the 
+    // static one
     explicit oserializer() :
         basic_oserializer(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
     {}
+public:
     virtual BOOST_DLLEXPORT void save_object_data(
         basic_oarchive & ar,    
         const void *x
@@ -165,17 +165,29 @@ private:
         basic_oarchive & ar,
         const void * x
     ) const BOOST_USED ;
+#if defined(__GNUC__) || ( defined(BOOST_MSVC) && (_MSC_VER <= 1300) )
+public:
+#endif
+    // private constructor to inhibit any existence other than the 
+    // static one.  Note GCC doesn't permit constructor to be private
+    explicit BOOST_DLLEXPORT pointer_oserializer() BOOST_USED;
+    static const pointer_oserializer instance;
 public:
     #if !defined(__BORLANDC__)
+    // at least one compiler (CW) seems to require that serialize_adl
+    // be explicitly instantiated. Still under investigation. 
     void (* const m)(Archive &, T &, const unsigned);
     boost::serialization::extended_type_info * (* e)();
     #endif
-    explicit BOOST_DLLEXPORT pointer_oserializer() BOOST_USED;
-    static const pointer_oserializer instance;
-    //static const pointer_oserializer BOOST_FORCE_INCLUDE_DECL(& instantiate());
     static BOOST_DLLEXPORT const pointer_oserializer & instantiate() BOOST_USED;
     virtual ~pointer_oserializer(){}
 };
+
+template<class T, class Archive>
+BOOST_DLLEXPORT const pointer_oserializer<T, Archive> & 
+pointer_oserializer<T, Archive>::instantiate(){
+    return instance;
+}
 
 // note: instances of this template to be constructed before the main
 // is called in order for things to be initialized properly.  For this
@@ -219,8 +231,7 @@ pointer_oserializer<T, Archive>::pointer_oserializer() :
 #endif
 {
     // make sure appropriate member function is instantiated
-    oserializer<Archive, T> & bos =
-        oserializer<Archive, T>::instantiate();
+    oserializer<Archive, T> & bos = oserializer<Archive, T>::instantiate();
     bos.set_bpos(this);
 }
 
@@ -486,23 +497,22 @@ struct save_array_type
 // note bogus arguments to workaround msvc 6 silent runtime failure
 // declaration to satisfy gcc
 template<class Archive, class T>
-BOOST_DLLEXPORT inline const basic_pointer_oserializer &
+BOOST_DLLEXPORT const basic_pointer_oserializer &
 instantiate_pointer_oserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ) BOOST_USED ;
 // definition
 template<class Archive, class T>
-BOOST_DLLEXPORT inline const basic_pointer_oserializer &
+BOOST_DLLEXPORT const basic_pointer_oserializer &
 instantiate_pointer_oserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ){
     // note: reversal of order of arguments to work around msvc 6.0 bug
     // that manifests itself while trying to link.
-    return pointer_oserializer<T, Archive>::instance;
+    return pointer_oserializer<T, Archive>::instantiate();
 }
-
 
 } // detail
 

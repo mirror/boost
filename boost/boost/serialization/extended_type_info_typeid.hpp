@@ -50,7 +50,7 @@ protected:
     extended_type_info_typeid_0();
     ~extended_type_info_typeid_0();
 public:
-    virtual const std::type_info & get_type() const = 0;
+    virtual const std::type_info & get_eti() const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ class extended_type_info_typeid_1 :
     public detail::extended_type_info_typeid_0
 {
 private:
-    virtual const std::type_info & get_type() const {
+    virtual const std::type_info & get_eti() const {
         return typeid(T);
     }
 protected:

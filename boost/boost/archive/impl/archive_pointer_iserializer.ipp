@@ -26,9 +26,9 @@ basic_serializer_map & iserializer_map(){
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
-    const boost::serialization::extended_type_info & type
+    const boost::serialization::extended_type_info & eti
 ) :
-    basic_pointer_iserializer(type)
+    basic_pointer_iserializer(eti)
 {
     iserializer_map<Archive>().insert(this);
 }
@@ -36,10 +36,10 @@ archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(const basic_pointer_iserializer *) 
 archive_pointer_iserializer<Archive>::find(
-    const boost::serialization::extended_type_info & type
+    const boost::serialization::extended_type_info & eti
 ){
     return static_cast<const basic_pointer_iserializer *>(
-        iserializer_map<Archive>().tfind(type)
+        iserializer_map<Archive>().tfind(eti)
     );
 }
 
