@@ -52,7 +52,7 @@ int main () {
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="Storage.htm">Storage</a></p>
+<p><a href="storage_concept.htm">Storage</a></p>
 <h4>Type requirements</h4>
 <p>None, except for those imposed by the requirements of Random
 Access Container.</p>
@@ -93,17 +93,17 @@ member inside this model of the concept.</li>
 <tr><td><font color="blue"><code>allocator_type</code></code></td><td></td><td>Defined as ALLOC</td></tr>
 <tr>
 <td><code><em>explicit</em> unbounded_array (<em>ALLOC &amp;a = ALLOC()</em>)</code></td>
-<td><a href="Storage.htm">Storage</a></td>
+<td><a href="storage_concept.htm">Storage</a></td>
 <td>Creates an <code>unbounded_array</code> that holds at most zero elements, using a specified allocator.</td> 
 </tr>
 <tr>
 <td><code><em>explicit</em> unbounded_array (size_type size<em>, ALLOC &amp;a = ALLOC()</em>)</code></td>
-<td><a href="Storage.htm">Storage</a></td>
+<td><a href="storage_concept.htm">Storage</a></td>
 <td>Creates a uninitialized <code>unbounded_array</code> that holds at most <code>size</code> elements, using a specified allocator. All the elements are constructed without an initializer. </td>
 </tr>
 <tr>
 <td><code><em>explicit </em>unbounded_array (size_type size, const T&amp; init<em>, ALLOC&amp; a = ALLOC()</em>)</code></td>
-<td><a href="Storage.htm">Storage</a></td>
+<td><a href="storage_concept.htm">Storage</a></td>
 <td>Creates an initialized <code>unbounded_array</code> that holds at most <code>size</code> elements, using a specified allocator. All the elements are constructed from the <code>init</code> value.</td>
 </tr>
 <tr>
@@ -118,12 +118,12 @@ member inside this model of the concept.</li>
 </tr>
 <tr>
 <td><font color="red"><code>void resize (size_type n <em>, bool preserve = true</em>)</code></font></td>
-<td><a href="Storage.htm">Storage</a></td>
+<td><a href="storage_concept.htm">Storage</a></td>
 <td>Reallocates an <code>unbounded_array</code> to hold at most <code>n</code> elements. When <code>preserve == false</code> the elements values after resize are undefined.</td>
 </tr>
 <tr>
 <td><code>void resize(size_type n, const T& t)</code></font></td>
-<td><a href="Storage.htm">Storage</a></td>
+<td><a href="storage_concept.htm">Storage</a></td>
 <td>Reallocates an <code>unbounded_array</code> to hold at most <code>n</code> elements. 
 </tr>
 <tr>
