@@ -211,7 +211,7 @@ struct arg_list : Next
     // get() function.
     template <class KW>
     typename mpl::apply_wrap2<binding, KW, void_>::type
-    operator[](keyword<KW> x) const
+    operator[](keyword<KW> const& x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
         return sublist.get(x);
@@ -240,7 +240,7 @@ struct arg_list : Next
     // reached, indicating no matching argument was passed, the
     // default is returned, or if no default_ or lazy_default was
     // passed, compilation fails.
-    reference get(keyword<key_type> x) const
+    reference get(keyword<key_type> const& x) const
     {
         return arg.value;
     }
@@ -259,7 +259,7 @@ struct arg_list : Next
     
 #else
 
-    reference operator[](keyword<key_type> x) const
+    reference operator[](keyword<key_type> const& x) const
     {
         return arg.value;
     }

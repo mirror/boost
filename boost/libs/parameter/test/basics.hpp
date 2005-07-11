@@ -7,6 +7,8 @@
 #define BASICS_050424_HPP
 
 #include <boost/static_assert.hpp>
+#include <boost/parameter/keyword.hpp>
+#include <boost/parameter/instance.hpp>
 
 namespace test {
 
@@ -20,10 +22,17 @@ struct tester_;
 namespace
 {
 
-  keyword<name_> name;
-  keyword<value_> value;
-  keyword<index_> index;
-  keyword<tester_> tester;
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+  keyword<name_>& name = instance();
+  keyword<value_>& value = instance();
+  keyword<index_>& index = instance();
+  keyword<tester_>& tester = instance();
+#else
+  keyword<name_>& name = keyword<name_>::get();
+  keyword<value_>& value = keyword<value_>::get();
+  keyword<index_>& index = keyword<index_>::get();
+  keyword<tester_>& tester = keyword<tester_>::get();
+#endif 
 
 } // namespace unnamed
 

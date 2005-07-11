@@ -7,14 +7,13 @@
 
 __ ../../../../index.htm
 
-
 -------------------------------------
 
 
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/10 03:39:35 $
+:date:          $Date: 2005/07/10 03:40:22 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -37,6 +36,9 @@ __ ../../../../index.htm
 .. _concepts: ../../../more/generic_programming.html#concept
 
 .. contents:: **Table of Contents**
+
+.. role:: concept
+   :class: interpreted
 
 -------------------------------------
 
@@ -154,27 +156,171 @@ The Abstract Interface to |dfs|
 ===============================
 
 The Graph library's |dfs| algorithm is a generic function accepting
-between one and four arguments, as shown in the table below:
+between one and four arguments by reference, as shown in the table
+below:
 
-+----------------+--------------+----------------------------------+
-| Parameter Name | Dataflow     | Default Value (if any)           |
-+================+==============+==================================+
-|``graph``       | IN           |none - this argument is required. |
-+----------------+--------------+----------------------------------+
-|``visitor``     | OUT          |``boost::dfs_visitor<>()``        |
-+----------------+--------------+----------------------------------+
-|``index_map``   | IN           |``get(boost::vertex_index,graph)``|
-+----------------+--------------+----------------------------------+
-|``color_map``   | IN           |                                  |
-+----------------+--------------+----------------------------------+
++----------------+----------+----------------------------------+
+| Parameter Name | Dataflow | Default Value (if any)           |
++================+==========+==================================+
+|``graph``       | IN       |none - this argument is required. |
++----------------+----------+----------------------------------+
+|``visitor``     | IN       |``boost::dfs_visitor<>()``        |
++----------------+----------+----------------------------------+
+|``root_vertex`` | OUT      |``*vertices(g).first``            |
++----------------+----------+----------------------------------+
+|``index_map``   | IN       |``get(boost::vertex_index,graph)``|
++----------------+----------+----------------------------------+
+|``color_map``   | IN       |an ``iterator_property_map``      |
+|                |          |created from a ``std::vector`` of |
+|                |          |``default_color_type`` of size    |
+|                |          |``num_vertices(g)`` and using the |
+|                |          |``index_map`` for the index map.  |
++----------------+----------+----------------------------------+
+
+Don't be intimidated by the complex default values.  For the
+purposes of this exercise, you don't need to understand what they
+mean. Also, we'll show you how the default for ``color_map`` is
+computed later in the tutorial; trust us when we say that the
+complexity of its default will become valuable.
 
 Defining the Keywords
 =====================
 
+The point of this exercise is to make it possible to call
+``depth_first_search`` with keyword arguments, leaving out any
+arguments for which the default is appropriate:
+
+.. parsed-literal::
+
+  graphs::depth_first_search(g, **color_map = my_color_map**);
+
+To make that syntax legal, there needs to be an object called
+``color_map`` with an assignment operator that can accept a
+``my_color_map`` argument.  In this step we'll create one such
+**keyword object** for each parameter.  Each keyword object should
+be identified by a unique **keyword tag type**.  By convention,
+we'll give the tag types the same names as the objects.  Assuming
+we're defining our public interface in namespace ``graphs``, the
+tag types should be declared this way::
+
+  namespace graphs
+  {
+    namespace tag
+    {
+      class graph;
+      class visitor;
+      class root_vertex;
+      class index_map;
+      class color_mapd_;
+    }
+  } // graphs
+
+Because our users never need to name tag types directly, we've put
+them in in a nested namespace.  The keyword objects will actually
+be provided by the library; we'll just declare references to them::
+
+  #include <boost/parameter/keyword.hpp>
+  #include <boost/parameter/instance.hpp>
+
+  namespace graphs
+  {
+    namespace // unnamed
+    {
+      using namespace boost::parameter;
+
+      keyword<tag::graph>& graph = instance();
+      keyword<tag::visitor>& visitor = instance();
+      keyword<tag::root_vertex>& root_vertex = instance();
+      keyword<tag::index_map>& index_map = instance();
+      keyword<tag::color_map>& color_map = instance();
+
+    } // unnamed
+
+  } // graphs
+
+The “fancy dance” here involving the unnamed namespace, references,
+and the ``instance()`` object is all done to avoid violating the
+C++ One Definition Rule (ODR) [#odr]_ when the named parameter
+interface is used inside of function templates that get
+instantiated in multiple translation units.  Note: if you use an
+older compiler, a slightly more verbose syntax may be required
+[#msvc_keyword]_.
+
+.. Note:: 
+
+   From this point forward you can assume all the code in the
+   examples goes in namespace ``graphs``.
+
 Defining the Implementation Function
 ====================================
 
-* Show Use of the Comma Operator at this point
+Next we can write the skeleton of the function that implements
+the core of ``depth_first_search``::
+
+  namespace core
+  {
+    template <class ArgumentPack>
+    void depth_first_search(ArgumentPack const& args)
+    {
+        // algorithm implementation goes here
+    }
+  }
+
+``core::depth_first_search`` has an :concept:`ArgumentPack`
+parameter: a bundle of references to the arguments that the user
+passes to the algorithm, tagged with their keywords.  To extract
+each parameter, just pass its keyword object to the
+:concept:`ArgumentPack`\ 's index operator.  We'll add some
+temporary code to print the arguments, just to get a feel for how
+it works:
+
+.. parsed-literal::
+
+  namespace core
+  {
+    template <class ArgumentPack>
+    void depth_first_search(ArgumentPack const& args)
+    {
+        std::cout << "graph:\\t" << **args[graph]** << std::endl;
+        std::cout << "visitor:\\t" << **args[visitor]** << std::endl;
+        std::cout << "root_vertex:\\t" << **args[root_vertex]** << std::endl;
+        std::cout << "index_map:\\t" << **args[index_map]** << std::endl;
+        std::cout << "color_map:\\t" << **args[color_map]** << std::endl;
+    }
+  }
+
+It's unlikely that many of the arguments the user will eventually
+pass to ``depth_first_search`` can be printed, but for now it will
+give us something to work with.  To see the keywords in action, we
+can write a little test driver::
+
+  int main()
+  {
+      using namespace graphs;
+
+      core::depth_first_search((
+        graph = 'G', visitor = 2, root_vertex = 3.5, 
+        index_map = "hello, world", color_map = false));
+  }
+
+of course, we can pass the arguments in any order::
+
+  int main()
+  {
+      using namespace graphs;
+
+      core::depth_first_search((
+        root_vertex = 3.14, graph = 'G', color_map = false, 
+        index_map = "hello, world", visitor = 2));
+  }
+
+either of these programs will print::
+
+  graph:       G
+  visitor:     2
+  root_vertex: 3.5
+  index_map:   hello, world
+  color_map:   false
 
 Adding Defaults
 ===============
@@ -200,5 +346,27 @@ Lazy Default Evaluation
    plans to change it to use Boost.Parameter (this library) in an
    upcoming release, while keeping the old interface available for
    backward-compatibility.  
+
+.. [#odr] The **One Definition Rule** says that any entity in a C++
+   program must have the same definition in all translation units
+   (object files) that make up a program.
+
+.. [#msvc_keyword] Microsoft Visual C++ 7.0 and Earlier have bugs
+   that makes the syntax for declaring keywords a bit more verbose.
+   This syntax will also work on all other known compilers.
+
+   .. parsed-literal::
+
+    namespace // unnamed
+    {
+      using namespace boost::parameter;
+
+      keyword<tag::graph>& graph = **keyword<tag::graph>::get()**;
+      keyword<tag::visitor>& visitor = **keyword<tag::visitor>::get()**;
+      keyword<tag::root_vertex>& root_vertex = **keyword<tag::root_vertex>::get()**;
+      keyword<tag::index_map>& index_map = **keyword<tag::index_map>::get()**;
+      keyword<tag::color_map>& color_map = **keyword<tag::color_map>::get()**;
+
+    } // unnamed
 
 __ ../../../graph/doc/bgl_named_params.html

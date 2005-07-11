@@ -9,6 +9,7 @@
 #include <boost/parameter/aux_/unwrap_cv_reference.hpp>
 #include <boost/parameter/aux_/tag.hpp>
 #include <boost/parameter/aux_/default.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace boost { namespace parameter {
 
@@ -28,7 +29,7 @@ namespace boost { namespace parameter {
 //    f(rate = 1, skew = 2.4);
 //
 template <class Tag>
-struct keyword
+struct keyword : noncopyable
 {
     template <class T>
     typename aux::tag<Tag, T>::type
@@ -83,6 +84,23 @@ struct keyword
         return aux::lazy_default<Tag, Default>(default_);
     }
 #endif
+
+ public: // Insurance against ODR violations
+    
+    // People will need to define these keywords in header files.  To
+    // prevent ODR violations, it's important that the keyword used in
+    // every instantiation of a function template is the same object.
+    // We provide a reference to a common instance of each keyword
+    // object and prevent construction by users.
+    
+    static keyword<Tag>& get()
+    {
+        static keyword<Tag> result;
+        return result;
+    }
+    
+ private:
+    keyword() {}
 };
 
 }} // namespace boost::parameter
