@@ -884,7 +884,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class TRI, class L, class A>
-    const typename triangular_matrix<T, TRI, L, A>::value_type triangular_matrix<T, TRI, L, A>::zero_ (0);
+    const typename triangular_matrix<T, TRI, L, A>::value_type triangular_matrix<T, TRI, L, A>::zero_ /*zero*/();
     template<class T, class TRI, class L, class A>
     const typename triangular_matrix<T, TRI, L, A>::value_type triangular_matrix<T, TRI, L, A>::one_ (1);
 
@@ -1756,7 +1756,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class TRI>
     typename triangular_adaptor<M, TRI>::matrix_type triangular_adaptor<M, TRI>::nil_;
     template<class M, class TRI>
-    const typename triangular_adaptor<M, TRI>::value_type triangular_adaptor<M, TRI>::zero_ (0);
+    const typename triangular_adaptor<M, TRI>::value_type triangular_adaptor<M, TRI>::zero_ /*zero*/();
     template<class M, class TRI>
     const typename triangular_adaptor<M, TRI>::value_type triangular_adaptor<M, TRI>::one_ (1);
 

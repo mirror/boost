@@ -1280,7 +1280,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class L, class A>
-    const typename mapped_matrix<T, L, A>::value_type mapped_matrix<T, L, A>::zero_ (0);
+    const typename mapped_matrix<T, L, A>::value_type mapped_matrix<T, L, A>::zero_ /*zero*/();
 
 
     // Vector index map based sparse matrix class
@@ -2448,7 +2448,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class L, class A>
-    const typename mapped_vector_of_mapped_vector<T, L, A>::value_type mapped_vector_of_mapped_vector<T, L, A>::zero_ (0);
+    const typename mapped_vector_of_mapped_vector<T, L, A>::value_type mapped_vector_of_mapped_vector<T, L, A>::zero_ /*zero*/();
 
 
     // Comperssed array based sparse matrix class
@@ -3790,7 +3790,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class L, std::size_t IB, class IA, class TA>
-    const typename compressed_matrix<T, L, IB, IA, TA>::value_type compressed_matrix<T, L, IB, IA, TA>::zero_ (0);
+    const typename compressed_matrix<T, L, IB, IA, TA>::value_type compressed_matrix<T, L, IB, IA, TA>::zero_ /*zero*/();
 
 
     // Coordinate array based sparse matrix class
@@ -5116,7 +5116,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class L, std::size_t IB, class IA, class TA>
-    const typename coordinate_matrix<T, L, IB, IA, TA>::value_type coordinate_matrix<T, L, IB, IA, TA>::zero_ (0);
+    const typename coordinate_matrix<T, L, IB, IA, TA>::value_type coordinate_matrix<T, L, IB, IA, TA>::zero_ /*zero*/();
 
 }}}
 
