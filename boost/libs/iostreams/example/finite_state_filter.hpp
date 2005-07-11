@@ -15,7 +15,7 @@
 #include <iostream>  // cin, cout.
 #include <locale>
 #include <string>
-#include <boost/config.hpp>                         // JOIN.
+#include <boost/config.hpp>                 // JOIN, member template friends.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/char_traits.hpp>
@@ -254,9 +254,16 @@ private:
         }
     };
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+    template<typename First, typename Last>
+    friend struct process_event_impl;
+#else
+    public:
+#endif
+
     template<typename FSM>
     static void on_any(FSM& fsm, char_type c) { fsm.on_any(c); }
-
+private:
     int state_;
 };
 

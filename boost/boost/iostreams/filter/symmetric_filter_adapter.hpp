@@ -259,26 +259,6 @@ private:
 
     struct impl : SymmetricFilter {
 
-        // BEGIN DEBUG
-        //explicit impl(int buffer_size)
-        //    : SymmetricFilter(), buf_(buffer_size), state_(0) { }
-
-        //template<typename T0>
-        //impl(int buffer_size, const T0 &t0)
-        //    : SymmetricFilter(t0), buf_(buffer_size), state_(0)
-        //    { }
-
-        //template<typename T0, typename T1>
-        //impl(int buffer_size, const T0 &t0, const T1 &t1)
-        //    : SymmetricFilter(t0, t1), buf_(buffer_size), state_(0)
-        //    { }
-
-        //template<typename T0, typename T1, typename T2>
-        //impl(int buffer_size, const T0 &t0, const T1 &t1, const T2& t2)
-        //    : SymmetricFilter(t0, t1, t2), buf_(buffer_size), state_(0)
-        //    { }
-        // END DEBUG
-
     // Expands to a sequence of ctors which forward to SymmetricFilter.
     #define BOOST_PP_LOCAL_MACRO(n) \
         BOOST_IOSTREAMS_TEMPLATE_PARAMS(n, T) \
@@ -295,6 +275,7 @@ private:
         buffer_type  buf_;
         int          state_;
     };
+    friend struct impl;
 
     shared_ptr<impl> pimpl_;
 };
