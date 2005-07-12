@@ -48,7 +48,7 @@ namespace boost
       if ( leaf.size() > 31 )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "filename > 31 chars" );
+        error( library_name, full_path, "filename &gt; 31 chars" );
       }
 
       if ( std::count( leaf.begin(), leaf.end(), '.' ) > 1 )
