@@ -253,14 +253,9 @@ private:
             return state;
         }
     };
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-    template<typename First, typename Last>
-    friend struct process_event_impl;
-#else
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042)) // Tru64.
     public:
 #endif
-
     template<typename FSM>
     static void on_any(FSM& fsm, char_type c) { fsm.on_any(c); }
 private:

@@ -198,9 +198,11 @@ public:
     }
     SymmetricFilter& filter() { return *pimpl_; }
     string_type unconsumed_input() const;
-private:
+#if !BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042)) // Tru64.
+    private:
+#endif
     typedef detail::buffer<char_type, Alloc> buffer_type;
-
+private:
     buffer_type& buf() { return pimpl_->buf_; }
     const buffer_type& buf() const { return pimpl_->buf_; }
     int& state() { return pimpl_->state_; }
