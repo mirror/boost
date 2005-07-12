@@ -176,7 +176,9 @@ public:
     }
     SymmetricFilter& filter() { return *pimpl_; }
     string_type unconsumed_input() const;
-#if !BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042)) // Tru64.
+
+// Give impl access to buffer_type on Tru64
+#if !BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042)) 
     private:
 #endif
     typedef detail::buffer<char_type, Alloc> buffer_type;
@@ -255,7 +257,6 @@ private:
         buffer_type  buf_;
         int          state_;
     };
-    friend struct impl;
 
     shared_ptr<impl> pimpl_;
 };
