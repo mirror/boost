@@ -310,11 +310,11 @@ namespace quickbook
 
         if (!info.full)
         {
-    	    file_position const pos = info.stop.get_position();
-    	    cerr
-    		    << "Syntax error at \"" << pos.file
-    		    << "\" line " << pos.line
-    		    << ", column " << pos.column << ".\n";
+            file_position const pos = info.stop.get_position();
+            cerr
+                << "Syntax error at \"" << pos.file
+                << "\" line " << pos.line
+                << ", column " << pos.column << ".\n";
             return 1;
         }
 
