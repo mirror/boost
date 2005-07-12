@@ -99,7 +99,7 @@ private:
     group(group), last_group(last), slot_assigned(false)
   { init_next_group(); }
   named_slot_map_iterator(group_iterator group, group_iterator last,
-			  slot_pair_iterator slot) :
+                          slot_pair_iterator slot) :
     group(group), last_group(last), slot_(slot), slot_assigned(true)
   { }
 
