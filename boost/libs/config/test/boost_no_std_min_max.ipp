@@ -8,7 +8,7 @@
 //  MACRO:         BOOST_NO_STD_MIN_MAX
 //  TITLE:         std::min and std::max
 //  DESCRIPTION:   The C++ standard library does not provide
-//                 the min() and max() template functions that
+//                 the (min)() and (max)() template functions that
 //                 should be in <algorithm>.
 
 #include <algorithm>
