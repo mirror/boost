@@ -15,26 +15,26 @@
 <!-- End Banner -->
 
 <DL class="page-index" style="margin-top:1em">
-  <DT><A href="#flush">Why is data written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</A></DT>
+  <DT><A href="#flush">Why is data I've written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</A></DT>
   <DT><A href="#lifetime">Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
   <DT><A href="#tee">How do I write to several ostreams at once?</A></DT>
   <DT><A href="#pipe">Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</A></DT>
-  <DT><A href="#finite_state">Why do I get errors when compiling the <CODE>finite_state_filer</CODE> examples?</A></DT>
+  <DT><A href="#finite_state">Why do I get errors when compiling the <CODE>finite_state_filter</CODE> examples?</A></DT>
 </DL>
 
 <HR style="margin-top:1em">
 
-<A NAME="flush">
-<H4>Why is data written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</H4>
+<A NAME="flush"></A>
+<H4>Why is data I've written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</H4>
 
 <P>
      You may need to flush the stream. Note, however, that there is no guarantee that all data written to a <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> will be forwarded to the final Sink until the stream is closed, unless all the Filters in the underlying <A HREF="classes/chain.html"><CODE>chain</CODE></A> are <A HREF="concepts/closable.html">Closable</A>.
 </P>
 <P>
-     It's also possible that a Filter in the chain is modifying data in a way you don't expect.
+     It's also possible that a buggy Filter is modifying data in a way you don't expect.
 </P>
 
-<A NAME="lifetime">
+<A NAME="lifetime"></A>
 <H4>Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</H4>
 
 <P>
@@ -45,25 +45,25 @@
      Check to make sure that the <CODE>ostream</CODE> is not being destroyed before the <CODE>filtering_stream</CODE>. If both objects are constructed on the stack within the same block, make sure that the <CODE>ostream</CODE> is constructed <I>first</I>.
 </P>
 
-<A NAME="tee">
+<A NAME="tee"></A>
 <H4>How do I write to several ostreams at once?</H4>
 
 <P>
      Use a <A HREF="functions/tee.html#tee_filter"><CODE>tee_filter</CODE></A> or <A HREF="functions/tee.html#tee_device"><CODE>tee_device</CODE></A>. <I>See</I> <A HREF="functions/tee.html"><CODE>tee</CODE></A>.
 </P>
 
-<A NAME="pipe">
+<A NAME="pipe"></A>
 <H4>Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</H4>
 
 <P>
-     Your compiler could be considering an implicit conversion to a <A HREF="concepts/pipable.html">Pipable</A> Filter. Make sure that all your Pipable Filters have <CODE>explicit</CODE> constructors. <I>See</I> <A HREF="guide/pipelines.html">Pipelines</A>.
+     During overload resolution for an expression involving <CODE>operator|</CODE>, your compiler could be considering an implicit conversion from an intergral type to a <A HREF="concepts/pipable.html">Pipable</A> Filter. Make sure that all your Pipable Filters have <CODE>explicit</CODE> constructors. <I>See</I> <A HREF="guide/pipelines.html">Pipelines</A>.
 </P>
 
-<A NAME="pipe">
-<H4>Why do I get errors when compiling the <CODE>finite_state_filer</CODE> examples?</H4>
+<A NAME="finite_state"></A>
+<H4>Why do I get errors when compiling the <CODE>finite_state_filter</CODE> examples?</H4>
 
 <P>
-     The template <CODE>finite_state_filer</CODE> requires a highly standard-conforming compiler. See the regression reports for details.
+     The template <CODE>finite_state_filter</CODE> requires a highly standard-conforming compiler. See <A HREF="portability.html">Portability</A> and the <A HREF="http://www.boost.org/status/compiler_status.html" TARGET="_top">Compiler Status Tables</A> for details.
 </P>
 
 <!-- Begin Footer -->

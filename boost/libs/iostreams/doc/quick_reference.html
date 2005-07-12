@@ -51,14 +51,14 @@
     <TD><A HREF="guide/generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/streambuf_facade.hpp"><CODE>streambuf_facade.hpp</CODE></A></TD>
     <TD>
-        Stream template which performs i/o using an instance of its first template parameter, which must model the concept <A HREF="concepts/device.html">Device</A>.
+        Stream buffer template which performs i/o using an instance of its first template parameter, which must model the concept <A HREF="concepts/device.html">Device</A>.
     </TD>
 </TR>
 <TR>
     <TD><A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/filtering_stream.hpp"><CODE>filtering_stream.hpp</CODE></A></TD>
     <TD>
-        Stream template which performs filtered i/o using a contained <A HREF="classes/chain.html">filter chain</A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on its template parameters.
+        Stream template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>basic_chain</CODE></A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on its template parameters.
     </TD>
 </TR>
 <TR>
@@ -151,7 +151,7 @@
     </TD>
     <TD><A HREF="../../../boost/iostreams/device/file_descriptor.hpp"><CODE>file_descriptor.hpp</CODE></A></TD>
     <TD>
-        Accesses the filesystem using an operating system or runtime library file descriptor or handle.
+        Accesses the filesystem using an operating system file descriptor or file handle.
     </TD>
 </TR>
 <TR>

@@ -28,7 +28,7 @@
 <H2>2.2.6. Dictionary Filters</H2>
 
 <P>
-    Suppose we want to write a filter which performs word subsitution, in the following manner: It maintains a collection of pairs of strings whose first components are words and whose second components represent replacement text. We'll call such a collection a <SPAN CLASS='term'>dictionary</SPAN>, and refer to such pairs as <SPAN CLASS='term'>definitions</SPAN>.  When it encounters a word which appears as the first component of a definition, it forward the replacement text instead of the word. Other words, whitespace and punctuation are forwarded unchanged. We'll call such a filter a <SPAN CLASS='term'>dictionary filter</SPAN>.
+    A <SPAN CLASS='term'>dictionary filter</SPAN> is a Filter which peforms text substitution in the following manner. It maintains a collection of pairs of strings whose first components are words and whose second components represent replacement text &#8212; we'll call such a collection a <SPAN CLASS='term'>dictionary</SPAN>, and refer to the pairs it contains as <SPAN CLASS='term'>definitions</SPAN>.  When a dictionary filter encounters a word which appears as the first component of a definition, it forwards the replacement text instead of the original word. Other words, whitespace and punctuation are forwarded unchanged. 
 </P>
 
 <P>
@@ -319,7 +319,7 @@
 
 <P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
 <P CLASS="copyright"> 
-    Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_2_0.txt">LICENSE_2_0.txt</A> or copy at <A HREF="../http://www.boost.org/LICENSE_2_0.txt">http://www.boost.org/LICENSE_2_0.txt</A>)
+    Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>
 <!-- End Footer -->
 

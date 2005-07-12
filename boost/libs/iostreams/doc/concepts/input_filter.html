@@ -77,7 +77,7 @@
     };</PRE>
 
 <P>
-    Here <CODE>char_type</CODE> is the <A HREF="../guide/traits.html#char_type">character type</A> of the Filter, <CODE>input_filter_tag</CODE> is a <A HREF="../guide/traits.html#category_tags">category tag</A> identifying the Filter as a model of InputFilter, and the function <A HREF="../functions/get.html"><CODE>boost::iostreams::get</CODE></A> reads a character from an arbitrary Source.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A> The constant <A HREF="../classes/char_guide/traits.html#WOULD_BLOCK"><CODE>WOULD_BLOCK</CODE></A>, defined in the header <A HREF="../../../../boost/iostreams/char_traits.hpp"><CODE>&lt;boost/iostreams/char_traits.hpp&gt;</CODE></A>, is used to indicate that input is temporarily unavilable.
+    Here <CODE>char_type</CODE> is the <A HREF="../guide/traits.html#char_type">character type</A> of the Filter, <CODE>input_filter_tag</CODE> is a <A HREF="../guide/traits.html#category_tags">category tag</A> identifying the Filter as a model of InputFilter, and the function <A HREF="../functions/get.html"><CODE>boost::iostreams::get</CODE></A> reads a character from an arbitrary Source.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A> The constant <A HREF="../classes/char_traits.html#WOULD_BLOCK"><CODE>WOULD_BLOCK</CODE></A>, defined in the header <A HREF="../../../../boost/iostreams/char_traits.hpp"><CODE>&lt;boost/iostreams/char_traits.hpp&gt;</CODE></A>, is used to indicate that input is temporarily unavilable.
 </P>
 
 <P>
@@ -158,7 +158,7 @@
     <TR><TD><CODE>F</CODE></TD><TD>- A type which is a model of InputFilter</TD></TR>
     <TR><TD><CODE>D</CODE></TD><TD>- A type which is a model of <A HREF="device.html">Device</A>, with the same character type as <CODE>F</CODE> and with mode refining the mode of <CODE>F</CODE></TD></TR>
     <TR><TD><CODE>Ch</CODE></TD><TD>- The character type of <CODE>F</CODE></TD></TR>
-    <TR><TD><CODE>Tr</CODE></A></TD><TD>- <A HREF="../classes/char_guide/traits.html"><CODE>boost::iostreams::char_traits&lt;Ch&gt;</CODE></A></TD></TR>
+    <TR><TD><CODE>Tr</CODE></A></TD><TD>- <A HREF="../classes/char_traits.html"><CODE>boost::iostreams::char_traits&lt;Ch&gt;</CODE></A></TD></TR>
     <TR><TD><CODE>f</CODE></TD><TD>- Object of type <CODE>F</CODE></TD></TR>
     <TR><TD><CODE>d</CODE></TD><TD>- Object of type <CODE>D</CODE></TD></TR>
     <TR><TD><CODE>s</CODE></TD><TD>- Object of type <CODE>Ch*</CODE></TD></TR>

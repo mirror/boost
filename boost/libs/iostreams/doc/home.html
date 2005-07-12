@@ -14,39 +14,47 @@
 
 <!-- End Banner -->
 
-<A NAME="overview"></A>
+<A NAME="purpose"></A>
+<H2>Purpose</H2>
+
+<P>
+    The Iostreams library has three aims:
+</P>
+<UL>
+    <LI CLASS="square">
+        To make it easy to create standard C++ streams and stream buffers for accessing new <A HREF="concepts/source.html">Sources</A> and <A HREF="concepts/sink.html">Sinks</A>.
+    </LI>
+    <LI CLASS="square">
+        To provide a framework for defining i/o <A HREF="concepts/filter.html">Filters</A> and attaching them to standard streams and stream buffers.
+    </LI>
+    <LI CLASS="square">
+        To provide a collection of ready-to-use Filters, Sources and Sinks.
+    </LI>
+</UL>
+
+<P>
+    In addition to providing an abstract framework, the library provides a number of concrete Filters, Sources and Sinks.  These include components for accessing <A HREF="classes/mapped_file.html">memory-mapped files</A>, for file access using operating system <A HREF="classes/file_descriptor.html">file descriptors</A>, for <A HREF="guide/code_conversion.html">code conversion</A>, for text filtering with <A HREF="classes/regex_filter.html">regular expressions</A>, for <A HREF="classes/newline_filter.html">line-ending conversion</A> and for <A HREF="guide/compression.html">compression and decompression</A> in the zlib, gzip and bzip2 formats.
+</P>
+
 <H2>Overview</H2>
 
 <P>
-    The Iostreams library serves two main purposes:
-    <UL>
-        <LI CLASS="square">
-            To allow the easy creation of standard C++ stream and stream buffer classes 
-            for new data sources and sinks.
-        </LI>
-        <LI CLASS="square">
-            To provide a convenient interface for defining i/o filters and attaching them to standard streams and stream buffers.
-        </LI>
-    </UL>
-    The library focuses on freeing users from writing boiler plate code and allowing them instead to create highly reusable components.
-</P>
-<P>
-    In addition to providing an abstract framework the library provides a number of concrete filters, sources and sinks which serve as example applications of the library but are also useful in their own right. These include components for accessing <A HREF="classes/mapped_file.html">memory-mapped files</A>, for file access <I>via</I> operating system <A HREF="classes/file_descriptor.html">file descriptors</A>, for <A HREF="guide/code_conversion.html">code conversion</A>, for text filtering with <A HREF="classes/regex_filter.html">regular expressions</A>, for <A HREF="classes/newline_filter.html">line-ending conversion</A> and for <A HREF="guide/compression.html">compression and decompression</A> in the zlib, gzip and bzip2 formats.
+    At the heart of the Boost Iostreams library are a collection of <A HREF="../../../more/generic_programming.html#concept" TARGET="_top">concepts</A> and set of templates which turn models of these concepts into C++ standard library streams and stream buffers.
 </P>
 
-<H5>Concepts</H5>
+<H3>Concepts</H3>
 
 <P>
     The fundamental building blocks of the library are the concepts of a <A HREF="concepts/source.html">Source</A>, which provides read access to a sequence of characters, a <A HREF="concepts/sink.html">Sink</A>, which provides write access to a sequence of characters, an <A HREF="concepts/input_filter.html">InputFilter</A>, which filters input read from a Source, and an <A HREF="concepts/output_filter.html">OutputFilter</A>, which filters output written to a Sink. Sources, Sinks and their refinements are called <SPAN CLASS="term">Devices</SPAN>. InputFilters, OutputFilters and their refinements are called <SPAN CLASS="term">Filters</SPAN>.
 </P>
 
-<H5>Generic Streams and Stream Buffers</H5>
+<H3>Generic Streams and Stream Buffers</H3>
 
 <P>
-    The class templates <A HREF="guide/generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A> and <A HREF="guide/generic_streams.html#stream_facade"><CODE>stream_facade</CODE></A> implement standard stream buffers and streams which perform i/o by delegating to a contained Filter or Device. The Filter or Device is accessed using member functions <CODE>open</CODE>, <CODE>is_open</CODE> and <CODE>close</CODE>, providing an interface similar to the standard file-based streams and stream buffers.
+    The class templates <A HREF="guide/generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A> and <A HREF="guide/generic_streams.html#stream_facade"><CODE>stream_facade</CODE></A> implement standard stream buffers and streams which perform i/o by delegating to a contained Device. The Device is accessed using member functions <CODE>open</CODE>, <CODE>is_open</CODE> and <CODE>close</CODE>, providing an interface similar to the standard file-based streams and stream buffers.
 </P>
 
-<H5>Filtering Streams and Stream Buffers</H5>
+<H3>Filtering Streams and Stream Buffers</H3>
 
 <P>
     For filtering data the Iostreams library provides the templates <A HREF="classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> and <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>. Instances of <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE> contains chains of Filters and Devices accessed with an interface similar to that of <CODE>std::stack</CODE>.
@@ -55,19 +63,30 @@
 <A NAME="conventions"></A>
 <H2>Conventions</H2>
 
-<UL>
+<P> 
+    All classes, functions and templates introduced in the documentation are in the
+    namespace <CODE>boost::io</CODE>. Namespace qualification is usually omitted.
+</P>
+<P> 
+    Specializations of <CODE>std::basic_istream</CODE> will be refered to as 
+    <SPAN CLASS="term">standard input streams</SPAN>, specializations of <CODE>std::basic_ostream</CODE>  
+     as <SPAN CLASS="term">standard output streams</SPAN>, specializations of <CODE>std::basic_iostream</CODE> 
+    as <SPAN CLASS="term">standard i/o streams</SPAN>, and specializations of <CODE>std::basic_streambuf</CODE> 
+    as <SPAN CLASS="term">standard stream buffers</SPAN>. Together, standard input streams, standard output streams and standard i/o streams will be refered to as <SPAN CLASS="term">standard streams</SPAN>. Sometimes the qualifier <I>standard</I> will be omitted for brevity.
+</P>
+
+<!-- <UL>
     <LI CLASS="square"> 
-        All classes, functions and templates introduced in the documentation are in the
-        namespace <CODE>boost::io</CODE>. Namespace qualification is usually omitted.
+        All classes, functions and templates introduced in the documentation are in the namespace <CODE>boost::iostreams</CODE> unless otherwise indicated. Namespace qualification will usually be omitted.
     </LI>
     <LI CLASS="square"> 
         Specializations of <CODE>std::basic_istream</CODE> will be refered to as 
         <SPAN CLASS="term">standard input streams</SPAN>, specializations of <CODE>std::basic_ostream</CODE>  
          as <SPAN CLASS="term">standard output streams</SPAN>, specializations of <CODE>std::basic_iostream</CODE> 
         as <SPAN CLASS="term">standard i/o streams</SPAN>, and specializations of <CODE>std::basic_streambuf</CODE> 
-        as <SPAN CLASS="term">standard stream buffers</SPAN>. Together, standard input streams, standard output streams and standard i/o streams will be refered to as <SPAN CLASS="term">standard streams</SPAN>. Sometimes the qualifier <I>standard</I> will be omitted for brevity.
+        as <SPAN CLASS="term">standard stream buffers</SPAN>. Together, standard input streams, standard output streams and standard i/o streams will be refered to as <SPAN CLASS="term">standard streams</SPAN>. The qualifier <I>standard</I> will usually be omitted.
     </LI>
-</UL>
+</UL> -->
 
 <!-- Begin Footnotes -->
 

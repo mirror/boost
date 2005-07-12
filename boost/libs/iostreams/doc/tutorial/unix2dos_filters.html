@@ -28,7 +28,7 @@
 <H2>2.2.7. UNIX-to-DOS Filters</H2>
 
 <P>Suppose we want to write a Filter to convert <CODE>UNIX</CODE> line endings to <CODE>DOS</CODE> line-endings. The basic idea is simple: we process the characters in a sequence one at a time, and whenever we encounter the character 
-<CODE>'\n'</CODE> we replace it with the two-character sequence <CODE>'\r'</CODE>, <CODE>'\n'</CODE>. In the following sections we'll implement this algorithm as a <CODE>stdio_filter</CODE>, an InputFilter and and OutputFilter. The source code can be found in the header <A HREF="../../example/unix2dos_filter.hpp">&lt;<CODE>libs/iostreams/example/unix2dos_filter.hpp</CODE>&gt;</A></P>
+<CODE>'\n'</CODE> we replace it with the two-character sequence <CODE>'\r'</CODE>, <CODE>'\n'</CODE>. In the following sections we'll implement this algorithm as a <CODE>stdio_filter</CODE>, an InputFilter and an OutputFilter. The source code can be found in the header <A HREF="../../example/unix2dos_filter.hpp">&lt;<CODE>libs/iostreams/example/unix2dos_filter.hpp</CODE>&gt;</A></P>
 
 <A NAME="unix2dos_stdio_filter"></A>
 <H4><CODE>unix2dos_stdio_filter</CODE></H4>
@@ -226,7 +226,7 @@
 
 <P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
 <P CLASS="copyright"> 
-    Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_2_0.txt">LICENSE_2_0.txt</A> or copy at <A HREF="../http://www.boost.org/LICENSE_2_0.txt">http://www.boost.org/LICENSE_2_0.txt</A>)
+    Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>
 <!-- End Footer -->
 

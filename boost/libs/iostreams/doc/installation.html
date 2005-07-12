@@ -16,15 +16,29 @@
 
 <DL class="page-index">
     <DT><A HREF="#overview">Overview</A>
-    <DT><A HREF="#bjam">Building with Bjam</A>
+    <DT><A HREF="#sources">Source Files</A>
+    <DT><A HREF="#bjam">Building with Boost.Build</A>
 </DL>
 
 <A NAME="overview"></A>
 <H2>Overview</H2>
 
 <P>
-    Most components of the Iostreams library are defined entirely in header files. These components can be used without linking to any library, provided the preprocessor symbol <CODE>BOOST_IOSTREAMS_NO_LIB</CODE> is defined.
+    Most components of the Iostreams library are defined entirely in header files, and can be used simply by including the appropriate headers; a few components, however, rely on separate source files. In addition, the compression filters rely on the third-party libraryes zlib and libbz2. 
 </P>
+
+Instructions for obtaining 
+    
+<P>
+    There are two ways to use these components:
+</P>
+<UL>
+    <LI>Build the Iostreams library with Boost.Build, using the Jamfile <A HREF="../build/Jamfile"><CODE>libs/iostreams/build/Jamfile</CODE></A>. <I>See</I> <A HREF="#bjam">Building with Boost.Build</A>, below.
+    <LI>Add one or more of the Iostreams library source files to your makefile or IDE project.
+</UL>
+
+<A NAME="sources"></A>
+<H2>Source Files</H2>
 
 <P>
     In addition:
@@ -47,10 +61,10 @@
     </OL>
 </P>
 
-Once the zlib and libbz2 binaries are obtained, the entire Iostreams library can be built using the <A HREF="../../../tools/build/v1/build_system.htm">Boost Build System</A>.
-
 <A NAME="bjam"></A>
-<H2>Building with Bjam</H2>
+<H2>Building with Boost.Build</H2>
+
+Once the zlib and libbz2 binaries are obtained, the entire Iostreams library can be built using the <A HREF="../../../tools/build/v1/build_system.htm">Boost Build System</A>.
 
 <P>
     The <A HREF="../build/Jamfile">Jamfile</A> included with the Iostreams library is sensitive to the following environment variables.

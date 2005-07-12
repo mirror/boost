@@ -183,7 +183,7 @@ std::streamsize read( T& t,
     <TR>
         <TD VALIGN="top">otherwise</TD>
         <TD>
-            reads up to <CODE>n</CODE> characters into <CODE>s</CODE> by invoking <CODE>t.get(src)</CODE> repeatedly, halting if <CODE>traits_typre::eof</CODE> or <A HREF="../classes/char_guide/traits.html#would_block"><CODE>traits_type::would_block</CODE></A> is returned, where <CODE>traits_type</CODE> is <A HREF="../classes/char_guide/traits.html"><CODE>boost::iostreams::char_traits&lt;Source&gt;</CODE></A></A>. Returns the number of characters read, or <CODE>-1</CODE> to indicate end-of-sequence.
+            reads up to <CODE>n</CODE> characters into <CODE>s</CODE> by invoking <CODE>t.get(src)</CODE> repeatedly, halting if <CODE>traits_typre::eof</CODE> or <A HREF="../classes/char_traits.html#would_block"><CODE>traits_type::would_block</CODE></A> is returned, where <CODE>traits_type</CODE> is <A HREF="../classes/char_traits.html"><CODE>boost::iostreams::char_traits&lt;Source&gt;</CODE></A></A>. Returns the number of characters read, or <CODE>-1</CODE> to indicate end-of-sequence.
         </TD>
     </TR>
 </TABLE>

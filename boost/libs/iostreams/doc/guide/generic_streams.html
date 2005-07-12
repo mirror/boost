@@ -33,11 +33,11 @@
 <H2>Overview</H2>
 
 <P>
-    The fundamental component provided by the Iostreams library is the class template <CODE>streambuf_facade</CODE>, a derived class of <CODE>std::basic_streambuf</CODE> which performs i/o by delegating to a contained instance of a policy class. The policy class must model one of the various <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> concepts. Instances of the policy class can be associated and disassociated with an instance of <CODE>streambuf_facade</CODE> using member functions <CODE><A HREF="#streambuf_facade_open">open</A></CODE> and <CODE><A HREF="#streambuf_facade_close">close</A></CODE>. The interface is patterned after <CODE>std::basic_filebuf</CODE> and <CODE>std::basic_fstream</CODE>.
+    The fundamental component provided by the Iostreams library is the class template <CODE>streambuf_facade</CODE>, a derived class of <CODE>std::basic_streambuf</CODE> which performs i/o by delegating to a contained Device. Instances of the Device can be associated and disassociated with an instance of <CODE>streambuf_facade</CODE> using member functions <CODE><A HREF="#streambuf_facade_open">open</A></CODE> and <CODE><A HREF="#streambuf_facade_close">close</A></CODE>. The interface is patterned after <CODE>std::basic_filebuf</CODE> and <CODE>std::basic_fstream</CODE>.
 </P>
 
 <P>
-    The class template <CODE>stream_facade</CODE> is a stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A href="../modes.html">mode</A> of the first template parameter. As with <CODE>streambuf_facade</CODE>, instances of the policy class can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
+    The class template <CODE>stream_facade</CODE> is a stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A href="../modes.html">mode</A> of the first template parameter. As with <CODE>streambuf_facade</CODE>, instances of the Device can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
 </P>
 
 
