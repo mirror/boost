@@ -320,12 +320,12 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_startmark()
       {
          // independent sub-expression, currently this is always recursive:
          bool old_independent = m_independent;
-		   m_independent = true;
+         m_independent = true;
          const re_syntax_base* next_pstate = static_cast<const re_jump*>(pstate->next.p)->alt.p->next.p;
          pstate = pstate->next.p->next.p;
          bool r = match_all_states();
          pstate = next_pstate;
-		   m_independent = old_independent;
+         m_independent = old_independent;
 #ifdef BOOST_REGEX_MATCH_EXTRA
          if(r && (m_match_flags & match_extra))
          {
@@ -489,7 +489,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_rep()
       return false;
    }
 
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);	
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
    if(greedy)
    {
       // try and take the repeat if we can:
@@ -553,7 +553,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_slow()
          return false;
       ++count;
    }
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);	
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
    if(greedy)
    {
       // repeat for as long as we can:
@@ -593,7 +593,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_fast()
       return match_dot_repeat_slow();
 
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);	
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
    unsigned count = static_cast<unsigned>((std::min)(static_cast<unsigned>(::boost::re_detail::distance(position, last)), static_cast<unsigned>(greedy ? rep->max : rep->min)));
    if(rep->min > count)
    {
@@ -640,7 +640,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat()
    //
    // start by working out how much we can skip:
    //
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);	
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
    std::size_t desired = greedy ? rep->max : rep->min;
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
@@ -708,7 +708,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_set_repeat()
    //
    // start by working out how much we can skip:
    //
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);	
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
    std::size_t desired = greedy ? rep->max : rep->min;
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
@@ -770,14 +770,14 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_long_set_repeat()
 #ifdef __BORLANDC__
 #pragma option push -w-8008 -w-8066 -w-8004
 #endif
-	typedef typename traits::char_class_type mask_type;
+   typedef typename traits::char_class_type mask_type;
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
    const re_set_long<mask_type>* set = static_cast<const re_set_long<mask_type>*>(pstate->next.p);
    std::size_t count = 0;
    //
    // start by working out how much we can skip:
    //
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);	
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
    std::size_t desired = greedy ? rep->max : rep->min;
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {

@@ -74,7 +74,7 @@ private:
    std::ptrdiff_t             m_paren_start;    // where the last seen ')' began (where repeats are inserted).
    std::ptrdiff_t             m_alt_insert_point; // where to insert the next alternative
    bool                       m_has_case_change; // true if somewhere in the current block the case has changed
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && defined(_M_IX86)
    // This is an ugly warning suppression workaround (for warnings *inside* std::vector
    // that can not otherwise be suppressed)...
    BOOST_STATIC_ASSERT(sizeof(long) >= sizeof(void*));

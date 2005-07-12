@@ -396,7 +396,7 @@ typename w32_regex_traits_implementation<charT>::string_type
    std::string name;
    const charT* p0 = p1;
    while(p0 != p2)
-	   name.append(1, char(*p0++));
+      name.append(1, char(*p0++));
 #endif
    name = lookup_default_collate_name(name);
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)\
@@ -407,13 +407,13 @@ typename w32_regex_traits_implementation<charT>::string_type
 #else
    if(name.size())
    {
-	   string_type result;
-	   typedef std::string::const_iterator iter;
-	   iter b = name.begin();
-	   iter e = name.end();
-	   while(b != e)
-		   result.append(1, charT(*b++));
-	   return result;
+      string_type result;
+      typedef std::string::const_iterator iter;
+      iter b = name.begin();
+      iter e = name.end();
+      while(b != e)
+         result.append(1, charT(*b++));
+      return result;
    }
 #endif
    if(p2 - p1 == 1)
