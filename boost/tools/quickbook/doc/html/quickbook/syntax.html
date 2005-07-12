@@ -13,7 +13,7 @@
 <table cellpadding="2" width="100%">
 <td valign="top"><img alt="boost.png (6897 bytes)" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.htm">Home</a></td>
-<td align="center"><a href="../libraries.html">Libraries</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
@@ -40,15 +40,15 @@ Phrases in each block cannot contain a block terminator. This way, syntax errors
 such as un-matched closing brackets do not go haywire and corrupt anything past
 a single block.</p>
 <a name="syntax.comments"></a><h2>
-<a name="id377417"></a>Comments</h2>
+<a name="id372252"></a>Comments</h2>
 <p>
 Can be placed anywhere.</p>
 <pre class="programlisting"><tt class="literal">[/ comment (no output generated) ]
 </tt></pre>
 <a name="syntax.phrase_level_elements"></a><h2>
-<a name="id377436"></a>Phrase Level Elements</h2>
+<a name="id372272"></a>Phrase Level Elements</h2>
 <a name="syntax.font_styles"></a><h3>
-<a name="id377448"></a>Font Styles</h3>
+<a name="id372283"></a>Font Styles</h3>
 <pre class="programlisting"><tt class="literal">['italic], [*bold], [_underline], [^teletype]
 </tt></pre>
 <p>
@@ -62,7 +62,7 @@ Like all non-terminal phrase level elements, this can of course be nested:</p>
 will generate:</p>
 <p><span class="bold"><b><span class="emphasis"><em>bold-italic</em></span></b></span></p>
 <a name="syntax.simple_formatting"></a><h3>
-<a name="id376134"></a>Simple formatting</h3>
+<a name="id374069"></a>Simple formatting</h3>
 <p>
 Simple markup for formatting text, common in many applications, is now supported:</p>
 <pre class="programlisting"><tt class="literal">/italic/, *bold*, _underline_, =teletype=
@@ -100,7 +100,7 @@ A line starting with the star will be interpreted as an unordered list.
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id376324"></a><span class="table-title">More Formatting Samples</span>
+<a name="id374156"></a><span class="table-title">More Formatting Samples</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -181,7 +181,7 @@ and teaching me these obscure formatting rules. I wasn't sure at all if <a href=
 being more or less a formal EBNF parser, can handle the context sensitivity and ambiguity.</td></tr></tbody>
 </table></div>
 <a name="syntax.inline_code"></a><h3>
-<a name="id377064"></a>Inline code</h3>
+<a name="id372807"></a>Inline code</h3>
 <p>
 Inlining code in paragraphs is quite common when writing C++ documentation. We
 provide a very simple markup for this. For example, this:</p>
@@ -202,7 +202,7 @@ single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>. N
 </td></tr></tbody>
 </table></div>
 <a name="syntax.source_mode"></a><h3>
-<a name="id377190"></a>Source Mode</h3>
+<a name="id372933"></a>Source Mode</h3>
 <p>
 If a document contains more than one type of source code then the source mode
 may be changed dynamically as the document is processed. All QuickBook
@@ -223,7 +223,7 @@ C++ comment <tt class="computeroutput"><span class="comment">// looks like this<
 <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.</p>
 <div class="informaltable">
 <h4>
-<a name="id377290"></a><span class="table-title">Supported Source Modes</span>
+<a name="id371813"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -252,7 +252,7 @@ C++ comment <tt class="computeroutput"><span class="comment">// looks like this<
 <span class="inlinemediaobject"><img src="../images/note.png"></span> The source mode strings are lowercase.</td></tr></tbody>
 </table></div>
 <a name="syntax.line_break"></a><h3>
-<a name="id377359"></a>line-break</h3>
+<a name="id371882"></a>line-break</h3>
 <pre class="programlisting"><tt class="literal">[br]
 </tt></pre>
 <div class="informaltable"><table class="table">
@@ -261,7 +261,7 @@ C++ comment <tt class="computeroutput"><span class="comment">// looks like this<
 <span class="inlinemediaobject"><img src="../images/note.png"></span> Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
 </table></div>
 <a name="syntax.anchors"></a><h3>
-<a name="id376554"></a>Anchors</h3>
+<a name="id371956"></a>Anchors</h3>
 <pre class="programlisting"><tt class="literal">[#named_anchor]
 </tt></pre>
 <p>
@@ -270,7 +270,7 @@ document. You can then reference an anchor with <tt class="literal">[link named_
 More on anchors <a href="syntax.html#syntax.anchor_links">here</a>, <a href="syntax.html#syntax.section">here</a> and
 <a href="syntax.html#syntax.headings">here</a>.</p>
 <a name="syntax.links"></a><h3>
-<a name="id446791"></a>Links</h3>
+<a name="id372015"></a>Links</h3>
 <pre class="programlisting"><tt class="literal">[@http://www.boost.org this is [*boost's] website....]
 </tt></pre>
 <p>
@@ -289,7 +289,7 @@ will generate:</p>
 <p>
 see <a href="http://spirit.sourceforge.net/" target="_top">http://spirit.sourceforge.net/</a></p>
 <a name="syntax.anchor_links"></a><h3>
-<a name="id446862"></a>Anchor links</h3>
+<a name="id442470"></a>Anchor links</h3>
 <p>
 You can link within a document using:</p>
 <pre class="programlisting"><tt class="literal">[link section_id.normalized_header_text The link text]
@@ -298,7 +298,7 @@ You can link within a document using:</p>
 See sections <a href="syntax.html#syntax.section">Section</a> and <a href="syntax.html#syntax.headings">Headings</a>
 for more info.</p>
 <a name="syntax.refentry_links"></a><h3>
-<a name="id446905"></a>refentry links</h3>
+<a name="id442512"></a>refentry links</h3>
 <p>
 In addition, you can link internally to an XML refentry like:</p>
 <pre class="programlisting"><tt class="literal">[link xml.refentry The link text]
@@ -313,7 +313,7 @@ automatically be the refentry. Example:</p>
 <p>
 This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</tt>.</p>
 <a name="syntax.function__class__member__enum_or_header_links"></a><h3>
-<a name="id446963"></a>function, class, member, enum or header links</h3>
+<a name="id442571"></a>function, class, member, enum or header links</h3>
 <p>
 If you want to link to a function, class, member, enum or header in the reference
 section, you can use:</p>
@@ -331,7 +331,7 @@ automatically be the function, class, member or enum. Example:</p>
 <p>
 would have "boost::bar::baz" as the link text.</p>
 <a name="syntax.escape"></a><h3>
-<a name="id447009"></a>Escape</h3>
+<a name="id442616"></a>Escape</h3>
 <p>
 The escape mark-up is used when we don't want to do any processing.</p>
 <pre class="programlisting"><tt class="literal">'''
@@ -352,7 +352,7 @@ Escaping allows us to pass XML markup to <a href="http://www.boost.org/doc/html/
 <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
 </table></div>
 <a name="syntax.single_char_escape"></a><h3>
-<a name="id447101"></a>Single char escape</h3>
+<a name="id442708"></a>Single char escape</h3>
 <p>
 The backslash may be used to escape a single punctuation character. The
 punctuation immediately after the backslash is passed without any processing.
@@ -361,13 +361,13 @@ For example, how do you escape the triple quote? Simple: <tt class="literal">\'\
 <p><tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> has a special meaning. It is used to generate line breaks. Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
 is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</p>
 <a name="syntax.images__terminal_"></a><h3>
-<a name="id447193"></a>Images (terminal)</h3>
+<a name="id442801"></a>Images (terminal)</h3>
 <pre class="programlisting"><tt class="literal">[$image.jpg]
 </tt></pre>
 <a name="syntax.block_level_elements"></a><h2>
-<a name="id447211"></a>Block Level Elements</h2>
+<a name="id442819"></a>Block Level Elements</h2>
 <a name="syntax.document"></a><h3>
-<a name="id447222"></a>Document</h3>
+<a name="id442830"></a>Document</h3>
 <p>
 Every document must begin with a Document Info section, which should look
 like this:</p>
@@ -411,7 +411,7 @@ Here <tt class="literal">source-type</tt> is a lowercase string setting the init
 <a href="syntax.html#syntax.source_mode">source mode</a>. If the <tt class="literal">source-mode</tt> field is omitted, a
 default value of <tt class="literal">c++</tt> will be used.</p>
 <a name="syntax.section"></a><h3>
-<a name="id375878"></a>Section</h3>
+<a name="id443250"></a>Section</h3>
 <p>
 Starting a new section is accomplished with:</p>
 <pre class="programlisting"><tt class="literal">[section:id The Section Title]
@@ -429,7 +429,7 @@ End a section with:</p>
 <p>
 Sections can nest, and that results in a hierarchy in the table of contents.</p>
 <a name="syntax.xinclude"></a><h3>
-<a name="id375953"></a>xinclude</h3>
+<a name="id371553"></a>xinclude</h3>
 <p>
 You can include another XML file with:</p>
 <pre class="programlisting"><tt class="literal">[xinclude file.xml]
@@ -438,13 +438,13 @@ You can include another XML file with:</p>
 This is useful when file.xml has been generated by Doxygen and contains your
 reference section.</p>
 <a name="syntax.paragraphs"></a><h3>
-<a name="id375980"></a>Paragraphs</h3>
+<a name="id371580"></a>Paragraphs</h3>
 <p>
 Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
 the context.</p>
 <a name="syntax.ordered_lists"></a><h3>
-<a name="id447624"></a>Ordered lists</h3>
+<a name="id371596"></a>Ordered lists</h3>
 <pre class="programlisting"><tt class="literal"># One
 # Two
 # Three
@@ -463,7 +463,7 @@ Three
 </li>
 </ol></div>
 <a name="syntax.list_hierarchies"></a><h3>
-<a name="id447661"></a>List Hierarchies</h3>
+<a name="id443268"></a>List Hierarchies</h3>
 <p>
 List hierarchies are supported. Example:</p>
 <pre class="programlisting"><tt class="literal"># One
@@ -517,7 +517,7 @@ Five
 </li>
 </ol></div>
 <a name="syntax.long_list_lines"></a><h3>
-<a name="id447743"></a>Long List Lines</h3>
+<a name="id443350"></a>Long List Lines</h3>
 <p>
 Long lines will be wrapped appropriately. Example:</p>
 <pre class="programlisting"><tt class="literal"># A short item.
@@ -544,7 +544,7 @@ A short item.
 </li>
 </ol></div>
 <a name="syntax.unordered_lists"></a><h3>
-<a name="id447785"></a>Unordered lists</h3>
+<a name="id443392"></a>Unordered lists</h3>
 <pre class="programlisting"><tt class="literal">* First
 * Second
 * Third
@@ -563,7 +563,7 @@ Third
 </li>
 </ul></div>
 <a name="syntax.mixed_lists"></a><h3>
-<a name="id447816"></a>Mixed lists</h3>
+<a name="id443424"></a>Mixed lists</h3>
 <p>
 Mixed lists (ordered and unordered) are supported. Example:</p>
 <pre class="programlisting"><tt class="literal"># One
@@ -661,7 +661,7 @@ will generate:</p>
 </li>
 </ol></div>
 <a name="syntax.code"></a><h3>
-<a name="id447939"></a>Code</h3>
+<a name="id443547"></a>Code</h3>
 <p>
 Preformatted code starts with a space or a tab. The code will be
 syntax highlighted according to the current <a href="syntax.html#syntax.source_mode">source mode</a>:</p>
@@ -692,7 +692,7 @@ Macros that are already defined are expanded in source code. Example:</p>
 Generates:</p>
 <pre class="programlisting"><tt class="literal"><span class="identifier">using</span> <a href="../index.html" target="_top">quickbook</a><span class="special">::</span><a href="highlight.html" target="_top">syntax_highlight</a><span class="special">;</span></tt></pre>
 <a name="syntax.preformatted"></a><h3>
-<a name="id448204"></a>Preformatted</h3>
+<a name="id443812"></a>Preformatted</h3>
 <p>
 Sometimes, you don't want some preformatted text to be parsed as C++. In such
 cases, use the <tt class="literal">[pre ... ]</tt> markup block.</p>
@@ -721,12 +721,12 @@ markup above will generate:</p>
 Notice that unlike Code, phrase markup such as font style is still permitted
 inside <tt class="literal">pre</tt> blocks.</p>
 <a name="syntax.blockquote"></a><h3>
-<a name="id448304"></a>Blockquote</h3>
+<a name="id443911"></a>Blockquote</h3>
 <pre class="programlisting"><tt class="literal">[:sometext...]
 </tt></pre>
 <div class="blockquote"><blockquote class="blockquote"><p>Indents the paragraph. This applies to one paragraph only.</p></blockquote></div>
 <a name="syntax.headings"></a><h3>
-<a name="id448328"></a>Headings</h3>
+<a name="id443935"></a>Headings</h3>
 <pre class="programlisting"><tt class="literal">[h1 Heading 1]
 [h2 Heading 2]
 [h3 Heading 3]
@@ -735,17 +735,17 @@ inside <tt class="literal">pre</tt> blocks.</p>
 [h6 Heading 6]
 </tt></pre>
 <a name="syntax.heading_1"></a><h1>
-<a name="id448349"></a>Heading 1</h1>
+<a name="id443956"></a>Heading 1</h1>
 <a name="syntax.heading_2"></a><h2>
-<a name="id448360"></a>Heading 2</h2>
+<a name="id443967"></a>Heading 2</h2>
 <a name="syntax.heading_3"></a><h3>
-<a name="id448371"></a>Heading 3</h3>
+<a name="id443978"></a>Heading 3</h3>
 <a name="syntax.heading_4"></a><h4>
-<a name="id448381"></a>Heading 4</h4>
+<a name="id443989"></a>Heading 4</h4>
 <a name="syntax.heading_5"></a><h5>
-<a name="id448392"></a>Heading 5</h5>
+<a name="id443999"></a>Heading 5</h5>
 <a name="syntax.heading_6"></a><h3>
-<a name="id448403"></a>Heading 6</h3>
+<a name="id444010"></a>Heading 6</h3>
 <p>
 Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
 names with <tt class="literal">name="section_id.normalized_header_text"</tt> (i.e. valid characters are
@@ -758,7 +758,7 @@ and all upper-case are converted to lower-case. For example: Heading
 to link to them. See <a href="syntax.html#syntax.anchor_links">Anchor links</a> and
 <a href="syntax.html#syntax.section">Section</a> for more info.</p>
 <a name="syntax.macros"></a><h3>
-<a name="id448487"></a>Macros</h3>
+<a name="id444094"></a>Macros</h3>
 <pre class="programlisting"><tt class="literal">[def macro_identifier some text]
 </tt></pre>
 <p>
@@ -801,12 +801,12 @@ will generate this:</p>
 <p>
 Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
 <a name="syntax.predefined_macros"></a><h3>
-<a name="id448660"></a>Predefined Macros</h3>
+<a name="id444267"></a>Predefined Macros</h3>
 <p>
 Quickbook has some predefined macros that you can already use.</p>
 <div class="informaltable">
 <h4>
-<a name="id448673"></a><span class="table-title">Predefined Macros</span>
+<a name="id444280"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -823,12 +823,12 @@ Quickbook has some predefined macros that you can already use.</p>
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2005-Apr-30</td>
+<td>2005-Jul-12</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>09:46:51 AM</td>
+<td>03:44:57 PM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
@@ -839,7 +839,7 @@ Quickbook has some predefined macros that you can already use.</p>
 </table>
 </div>
 <a name="syntax.blurbs"></a><h3>
-<a name="id448731"></a>Blurbs</h3>
+<a name="id444338"></a>Blurbs</h3>
 <pre class="programlisting"><tt class="literal">[blurb :-) [*An eye catching advertisement or note...]\n\n
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
@@ -859,7 +859,7 @@ will generate this:</p>
 </td></tr></tbody>
 </table></div>
 <a name="syntax.tables"></a><h3>
-<a name="id448790"></a>Tables</h3>
+<a name="id444397"></a>Tables</h3>
 <pre class="programlisting"><tt class="literal">[table A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
@@ -871,7 +871,7 @@ will generate this:</p>
 will generate:</p>
 <div class="informaltable">
 <h4>
-<a name="id448812"></a><span class="table-title">A Simple Table</span>
+<a name="id444419"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -929,7 +929,7 @@ cells to be formatted nicely. Example:</p>
 and thus:</p>
 <div class="informaltable">
 <h4>
-<a name="id448893"></a><span class="table-title">Table with fat cells</span>
+<a name="id444500"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -958,7 +958,7 @@ and thus:</p>
 </table>
 </div>
 <a name="syntax.variable_lists"></a><h3>
-<a name="id448937"></a>Variable Lists</h3>
+<a name="id444544"></a>Variable Lists</h3>
 <pre class="programlisting"><tt class="literal">[variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
