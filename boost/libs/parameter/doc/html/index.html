@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
+<title>The Boost Parameter Library Boost</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:date: $Date: 2004/01/12 02:49:54 $
+:version: $Revision: 1.2 $
+:copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+*/
+
+.first {
+  margin-top: 0 }
+
+.last {
+  margin-bottom: 0 }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+dd {
+  margin-bottom: 0.5em }
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.attention, div.caution, div.danger, div.error, div.hint,
+div.important, div.note, div.tip, div.warning, div.admonition {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.hint p.admonition-title, div.important p.admonition-title,
+div.note p.admonition-title, div.tip p.admonition-title,
+div.admonition p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em }
+
+div.footer, div.header {
+  font-size: smaller }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 0em 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr {
+  width: 75% }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.line-block {
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.option-argument {
+  font-style: italic }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+table {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.citation {
+  border-left: solid thin gray ;
+  padding-left: 0.5ex }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.footnote {
+  border-left: solid thin black ;
+  padding-left: 0.5ex }
+
+td, th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+th.docinfo-name, th.field-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap }
+
+h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
+  font-size: 100% }
+
+tt {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="the-boost-parameter-library-logo">
+<h1 class="title">The Boost Parameter Library <a class="reference" href="../../../../index.htm"><img alt="Boost" src="../../../../boost.png" /></a></h1>
+<!-- Firefox, at least, seems to need some help lowering
+subscripts. Without the following, subscripts seem not to drop
+at all. -->
+<style type="text/css">
+sub {
+  vertical-align: -20%
+}
+</style><hr class="docutils" />
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Authors:</th><td class="field-body">David Abrahams, Daniel Wallin</td>
+</tr>
+<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:dalwan01&#64;student.umu.se">dalwan01&#64;student.umu.se</a></td>
+</tr>
+<tr class="field"><th class="field-name">organization:</th><td class="field-body"><a class="reference" href="http://www.boost-consulting.com">Boost Consulting</a></td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">$Date: 2005/07/12 01:33:26 $</td>
+</tr>
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin
+2005. Distributed under the Boost Software License,
+Version 1.0. (See accompanying file LICENSE_1_0.txt
+or copy at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Abstract:</th><td class="field-body"><p class="first">Use this library to write functions that accept
+arguments by name:</p>
+<pre class="literal-block">
+new_window(&quot;alert&quot;, <strong>width=10</strong>, <strong>titlebar=false</strong>);
+</pre>
+<p class="last">This capability is especially useful when a function has more
+than one argument with a useful default value, since named
+arguments can be passed in any order.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first"><a name="table-of-contents"><strong>Table of Contents</strong></a></p>
+<ul class="auto-toc simple">
+<li><a class="reference" href="#introduction" id="id7" name="id7">1&nbsp;&nbsp;&nbsp;Introduction</a></li>
+<li><a class="reference" href="#tutorial" id="id8" name="id8">2&nbsp;&nbsp;&nbsp;Tutorial</a><ul class="auto-toc">
+<li><a class="reference" href="#the-abstract-interface-to-dfs" id="id9" name="id9">2.1&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></li>
+<li><a class="reference" href="#defining-the-keywords" id="id10" name="id10">2.2&nbsp;&nbsp;&nbsp;Defining the Keywords</a></li>
+<li><a class="reference" href="#defining-the-implementation-function" id="id11" name="id11">2.3&nbsp;&nbsp;&nbsp;Defining the Implementation Function</a></li>
+<li><a class="reference" href="#adding-defaults" id="id12" name="id12">2.4&nbsp;&nbsp;&nbsp;Adding Defaults</a><ul class="auto-toc">
+<li><a class="reference" href="#syntax" id="id13" name="id13">2.4.1&nbsp;&nbsp;&nbsp;Syntax</a></li>
+<li><a class="reference" href="#getting-more-realistic" id="id14" name="id14">2.4.2&nbsp;&nbsp;&nbsp;Getting More Realistic</a></li>
+<li><a class="reference" href="#the-binding-metafunction" id="id15" name="id15">2.4.3&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <span class="interpreted">Metafunction</span></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#avoiding-the-extra-parentheses-forwarding-functions" id="id16" name="id16">2.5&nbsp;&nbsp;&nbsp;Avoiding the Extra Parentheses (Forwarding Functions)</a><ul class="auto-toc">
+<li><a class="reference" href="#passing-non-const-references-positionally" id="id17" name="id17">2.5.1&nbsp;&nbsp;&nbsp;Passing non-const References positionally</a></li>
+<li><a class="reference" href="#generating-the-forwarding-functions-with-macros" id="id18" name="id18">2.5.2&nbsp;&nbsp;&nbsp;Generating the Forwarding Functions with Macros</a></li>
+<li><a class="reference" href="#controlling-overload-resolution" id="id19" name="id19">2.5.3&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a></li>
+<li><a class="reference" href="#lazy-default-evaluation" id="id20" name="id20">2.5.4&nbsp;&nbsp;&nbsp;Lazy Default Evaluation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id7" name="introduction">1&nbsp;&nbsp;&nbsp;Introduction</a></h1>
+<p>In C++, arguments are normally given meaning by their positions
+with respect to a parameter list.  That protocol is fine when there
+are one or fewer parameters with default values, but when there are
+even a few useful defaults, the positional interface becomes
+burdensome:</p>
+<ul>
+<li><p class="first">Since an argument's meaning is given by its position, we have to
+choose an (often arbitrary) order for parameters with default
+values, making some combinations of defaults unusable:</p>
+<pre class="literal-block">
+window* new_window(
+   char const* name, 
+   <strong>int border_width = default_border_width,</strong>
+   bool movable = true,
+   bool initially_visible = true
+   );
+
+const bool movability = false;
+window* w = new_window(&quot;alert box&quot;, movability);
+</pre>
+<p>In the example above we wanted to make an unmoveable window
+with a default <tt class="docutils literal"><span class="pre">border_width</span></tt>, but instead we got a moveable
+window with a <tt class="docutils literal"><span class="pre">border_width</span></tt> of zero.  To get the desired
+effect, we'd need to write:</p>
+<pre class="literal-block">
+window* w = new_window(
+   &quot;alert box&quot;, <strong>default_border_width</strong>, movability);
+</pre>
+</li>
+<li><p class="first">It can become difficult for readers to understand the meaning of
+arguments at the call site:</p>
+<pre class="literal-block">
+window* w = new_window(&quot;alert&quot;, 1, true, false);
+</pre>
+<p>Is this window moveable and initially invisible, or unmoveable
+and initially visible?  The reader needs to remember the order
+of arguments to be sure.</p>
+</li>
+<li><p class="first">The author of the call may not remember the order of the
+arguments either, leading to hard-to-find bugs.</p>
+</li>
+</ul>
+<p>This library addresses the problems outlined above by associating
+each parameter with a keyword object.  Now users can identify
+arguments by keyword, rather than by position:</p>
+<pre class="literal-block">
+window* w = new_window(&quot;alert box&quot;, <strong>movable=</strong>false); // OK!
+</pre>
+<!-- I'm inclined to leave this part out.  In particular, the 2nd
+point is kinda lame because even with the library, we need to
+introduce overloads - - dwa:
+
+C++ has two other limitations, with respect to default arguments,
+that are unrelated to its positional interface:
+
+* Default values cannot depend on the values of other function
+  parameters:
+
+  .. parsed-literal::
+
+    // Can we make resize windows to a square shape by default?
+    void resize(
+      window* w,
+      int **width**, 
+      int height **= width** // nope, error!
+    );
+
+* Default values in function templates are useless for any
+  argument whose type should be deduced when the argument is
+  supplied explicitly::
+
+     template <class T> 
+     void f(T x = 0);
+
+     f(3.14) // ok: x supplied explicitly; T is double
+     f();    // error: can't deduce T from default argument 0!
+
+As a side effect of using the Boost Parameter library, you may find
+that you circumvent both of these limitations quite naturally. -->
+</div>
+<div class="section" id="tutorial">
+<h1><a class="toc-backref" href="#id8" name="tutorial">2&nbsp;&nbsp;&nbsp;Tutorial</a></h1>
+<p>In this section we'll show how the Parameter library can be used to
+build an expressive interface to the <a class="reference" href="../../../graph/index.html">Boost Graph library</a>'s
+<a class="reference" href="../../../graph/doc/depth_first_search.html"><tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a> algorithm.<a class="footnote-reference" href="#old-interface" id="id2" name="id2"><sup>1</sup></a> After describing the
+algorithm's abstract interface, we'll show you how to build a basic
+implementation with keyword support; then we'll add support for
+default arguments, and gradually refine the implementation with
+syntax improvements.  Finally we'll show how to streamline the
+implementation of named parameter interfaces, improve their
+participation in overload resolution, and optimize their runtime
+efficiency.</p>
+<div class="section" id="the-abstract-interface-to-dfs">
+<h2><a class="toc-backref" href="#id9" name="the-abstract-interface-to-dfs">2.1&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></h2>
+<p>The Graph library's <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> algorithm is a generic function accepting
+between one and four arguments by reference, as shown in the table
+below:</p>
+<a class="target" id="parameter-table" name="parameter-table"></a><table border="1" class="docutils">
+<caption><tt class="docutils literal"><span class="pre">depth_first_search</span></tt> Parameters</caption>
+<colgroup>
+<col width="27%" />
+<col width="17%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Parameter Name</th>
+<th>Dataflow</th>
+<th>Default Value (if any)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">graph</span></tt></td>
+<td>IN</td>
+<td>none - this argument is required.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">visitor</span></tt></td>
+<td>IN</td>
+<td><tt class="docutils literal"><span class="pre">boost::dfs_visitor&lt;&gt;()</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">root_vertex</span></tt></td>
+<td>OUT</td>
+<td><tt class="docutils literal"><span class="pre">*vertices(g).first</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">index_map</span></tt></td>
+<td>IN</td>
+<td><tt class="docutils literal"><span class="pre">get(boost::vertex_index,graph)</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">color_map</span></tt></td>
+<td>IN</td>
+<td>an <tt class="docutils literal"><span class="pre">iterator_property_map</span></tt>
+created from a <tt class="docutils literal"><span class="pre">std::vector</span></tt> of
+<tt class="docutils literal"><span class="pre">default_color_type</span></tt> of size
+<tt class="docutils literal"><span class="pre">num_vertices(g)</span></tt> and using the
+<tt class="docutils literal"><span class="pre">index_map</span></tt> for the index map.</td>
+</tr>
+</tbody>
+</table>
+<p>Don't be intimidated by the complex default values.  For the
+purposes of this exercise, you don't need to understand what they
+mean. Also, we'll show you how the default for <tt class="docutils literal"><span class="pre">color_map</span></tt> is
+computed later in the tutorial; trust us when we say that the
+complexity of its default will become valuable.</p>
+</div>
+<div class="section" id="defining-the-keywords">
+<h2><a class="toc-backref" href="#id10" name="defining-the-keywords">2.2&nbsp;&nbsp;&nbsp;Defining the Keywords</a></h2>
+<p>The point of this exercise is to make it possible to call
+<tt class="docutils literal"><span class="pre">depth_first_search</span></tt> with keyword arguments, leaving out any
+arguments for which the default is appropriate:</p>
+<pre class="literal-block">
+graphs::depth_first_search(g, <strong>color_map = my_color_map</strong>);
+</pre>
+<p>To make that syntax legal, there needs to be an object called
+<tt class="docutils literal"><span class="pre">color_map</span></tt> with an assignment operator that can accept a
+<tt class="docutils literal"><span class="pre">my_color_map</span></tt> argument.  In this step we'll create one such
+<strong>keyword object</strong> for each parameter.  Each keyword object should
+be identified by a unique <strong>keyword tag type</strong>.  By convention,
+we'll give the tag types the same names as the objects.  Assuming
+we're defining our public interface in namespace <tt class="docutils literal"><span class="pre">graphs</span></tt>, the
+tag types should be declared this way:</p>
+<pre class="literal-block">
+namespace graphs { namespace tag
+{
+  class graph;
+  class visitor;
+  class root_vertex;
+  class index_map;
+  class color_map;
+}} // graphs::tag
+</pre>
+<p>Because our users never need to name tag types directly, we've put
+them in in a nested <tt class="docutils literal"><span class="pre">tag</span></tt> namespace.  The keyword objects will
+actually be provided by the library; we'll just declare references
+to them:</p>
+<pre class="literal-block">
+#include &lt;boost/parameter/keyword.hpp&gt;
+#include &lt;boost/parameter/instance.hpp&gt;
+
+namespace graphs { namespace // unnamed
+{
+  using namespace boost::parameter;
+
+  keyword&lt;tag::graph&gt;&amp; graph = instance();
+  keyword&lt;tag::visitor&gt;&amp; visitor = instance();
+  keyword&lt;tag::root_vertex&gt;&amp; root_vertex = instance();
+  keyword&lt;tag::index_map&gt;&amp; index_map = instance();
+  keyword&lt;tag::color_map&gt;&amp; color_map = instance();
+}} // graphs::unnamed
+</pre>
+<p>The “fancy dance” here involving the unnamed namespace, references,
+and the <tt class="docutils literal"><span class="pre">instance()</span></tt> object is all done to avoid violating the
+C++ One Definition Rule (ODR)<a class="footnote-reference" href="#odr" id="id4" name="id4"><sup>2</sup></a> when the named parameter
+interface is used inside of function templates that get
+instantiated in multiple translation units.  Note: if you use an
+older compiler, a slightly more verbose syntax may be required<a class="footnote-reference" href="#msvc-keyword" id="id5" name="id5"><sup>3</sup></a>.</p>
+</div>
+<div class="section" id="defining-the-implementation-function">
+<h2><a class="toc-backref" href="#id11" name="defining-the-implementation-function">2.3&nbsp;&nbsp;&nbsp;Defining the Implementation Function</a></h2>
+<p>Next we can write the skeleton of the function that implements
+the core of <tt class="docutils literal"><span class="pre">depth_first_search</span></tt>:</p>
+<pre class="literal-block">
+namespace graphs { namespace core
+{
+  template &lt;class ArgumentPack&gt;
+  void depth_first_search(ArgumentPack const&amp; args)
+  {
+      // algorithm implementation goes here
+  }
+}}
+</pre>
+<p><tt class="docutils literal"><span class="pre">core::depth_first_search</span></tt> has an <span class="interpreted">ArgumentPack</span>
+parameter: a bundle of references to the arguments that the user
+passes to the algorithm, tagged with their keywords.  To extract
+each parameter, just pass its keyword object to the
+<span class="interpreted">ArgumentPack</span>'s index operator.  We'll add some
+temporary code to print the arguments, just to get a feel for how
+it works:</p>
+<pre class="literal-block">
+namespace graphs { namespace core
+{
+  template &lt;class ArgumentPack&gt;
+  void depth_first_search(ArgumentPack const&amp; args)
+  {
+      std::cout &lt;&lt; &quot;graph:\t&quot; &lt;&lt; <strong>args[graph]</strong> &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;visitor:\t&quot; &lt;&lt; <strong>args[visitor]</strong> &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;root_vertex:\t&quot; &lt;&lt; <strong>args[root_vertex]</strong> &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;index_map:\t&quot; &lt;&lt; <strong>args[index_map]</strong> &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;color_map:\t&quot; &lt;&lt; <strong>args[color_map]</strong> &lt;&lt; std::endl;
+  }
+}} // graphs::core
+</pre>
+<p>It's unlikely that many of the arguments the user will eventually
+pass to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> can be printed, but for now the code
+above will give us something to experiment with.  To see the
+keywords in action, we can write a little test driver:</p>
+<pre class="literal-block">
+int main()
+{
+    using namespace graphs;
+
+    core::depth_first_search(<strong>(</strong>
+      graph = 'G', visitor = 2, root_vertex = 3.5, 
+      index_map = &quot;hello, world&quot;, color_map = false<strong>)</strong>);
+}
+</pre>
+<p>The results of assigning into each keyword object are combined
+using an overloaded comma operator (<tt class="docutils literal"><span class="pre">operator,</span></tt>) into a single
+<span class="interpreted">ArgumentPack</span> object that gets passed on to
+<tt class="docutils literal"><span class="pre">core::depth_first_search</span></tt>.  The extra set of parentheses you see
+in the example above are required: without them, each assignment
+would be interpreted as a separate function argument and the comma
+operator wouldn't take effect.  We'll show you how to get rid of
+the extra parentheses in a moment.</p>
+<p>Of course, we can pass the arguments in any order:</p>
+<pre class="literal-block">
+int main()
+{
+    using namespace graphs;
+
+    core::depth_first_search((
+      root_vertex = 3.14, graph = 'G', color_map = false, 
+      index_map = &quot;hello, world&quot;, visitor = 2));
+}
+</pre>
+<p>either of the two programs above will print:</p>
+<pre class="literal-block">
+graph:       G
+visitor:     2
+root_vertex: 3.5
+index_map:   hello, world
+color_map:   false
+</pre>
+</div>
+<div class="section" id="adding-defaults">
+<h2><a class="toc-backref" href="#id12" name="adding-defaults">2.4&nbsp;&nbsp;&nbsp;Adding Defaults</a></h2>
+<p>Currently, all the arguments to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> are
+required.  If any parameter can't be found, there will be a
+compilation error where we try to extract it from the
+<span class="interpreted">ArgumentPack</span> using the square-brackets operator.  To make it
+legal to omit an argument, we need to give it a default value.</p>
+<div class="section" id="syntax">
+<h3><a class="toc-backref" href="#id13" name="syntax">2.4.1&nbsp;&nbsp;&nbsp;Syntax</a></h3>
+<p>We can make any of the parameters optional by following its keyword
+with the <tt class="docutils literal"><span class="pre">|</span></tt> operator and the parameter's default value within
+the brackets.  In the following example, we've given
+<tt class="docutils literal"><span class="pre">root_vertex</span></tt> a default of <tt class="docutils literal"><span class="pre">2</span></tt> and <tt class="docutils literal"><span class="pre">color_map</span></tt> a default of
+<tt class="docutils literal"><span class="pre">&quot;hello,</span> <span class="pre">world&quot;</span></tt>.</p>
+<pre class="literal-block">
+namespace graphs { namespace core
+{
+  template &lt;class ArgumentPack&gt;
+  void depth_first_search(ArgumentPack const&amp; args)
+  {
+      std::cout &lt;&lt; &quot;graph:\t&quot; &lt;&lt; args[graph] &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;visitor:\t&quot; &lt;&lt; args[visitor] &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;root_vertex:\t&quot; &lt;&lt; args[root_vertex <strong>| 6</strong>] &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;index_map:\t&quot; &lt;&lt; args[index_map] &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;color_map:\t&quot; &lt;&lt; args[color_map <strong>| &quot;hello, world&quot;</strong>] &lt;&lt; std::endl;
+  }
+}} // graphs::core
+</pre>
+<p>Now we can invoke the function without supplying <tt class="docutils literal"><span class="pre">color_map</span></tt> or
+<tt class="docutils literal"><span class="pre">root_vertex</span></tt>:</p>
+<pre class="literal-block">
+core::depth_first_search((
+  graph = 'G', index_map = &quot;index&quot;, visitor = 2));
+</pre>
+<p>The call above would print:</p>
+<pre class="literal-block">
+graph:       G
+visitor:     2
+root_vertex: 6
+index_map:   index
+color_map:   hello, world
+</pre>
+</div>
+<div class="section" id="getting-more-realistic">
+<h3><a class="toc-backref" href="#id14" name="getting-more-realistic">2.4.2&nbsp;&nbsp;&nbsp;Getting More Realistic</a></h3>
+<p>Now it's time to put some more realistic defaults in place.  We'll
+have to give up our print statements—at least if we want to see
+them work—because as we mentioned, the default values of these
+parameters generally aren't printable.</p>
+<p>Instead, we'll connect local variables to the arguments and use
+those in our algorithm:</p>
+<pre class="literal-block">
+namespace graphs { namespace core
+{
+  template &lt;class ArgumentPack&gt;
+  void depth_first_search(ArgumentPack const&amp; args)
+  {
+      <em>Graph</em>   g = args[graph];
+      <em>Visitor</em> v = args[visitor | <em>default-expression</em><sub>1</sub>];
+      <em>Vertex</em>  s = args[root_vertex | <em>default-expression</em><sub>2</sub>];
+      <em>Index</em>   i = args[index_map | <em>default-expression</em><sub>3</sub>];
+      <em>Color</em>   c = args[visitor | <em>default-expression</em><sub>4</sub>];
+
+      <em>…use g, v, s, i, and c to implement the algorithm…</em>
+  }
+}} // graphs::core
+</pre>
+<p>We'll insert the default expressions in a moment (we outlined them
+in the <a class="reference" href="#parameter-table">parameter table</a> above) but first we need to come up with
+the types <em>Graph</em>, <em>Visitor</em>, <em>Vertex</em>, <em>Index</em>, and <em>Color</em>.</p>
+</div>
+<div class="section" id="the-binding-metafunction">
+<h3><a class="toc-backref" href="#id15" name="the-binding-metafunction">2.4.3&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="interpreted">Metafunction</span></a></a></h3>
+<p>For computing the type of a parameter, the library supplies a
+<a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="interpreted">Metafunction</span></a> called <tt class="docutils literal"><span class="pre">binding</span></tt>:</p>
+<pre class="literal-block">
+binding&lt;<span class="interpreted">ArgumentPack</span>, <em>keyword-tag</em>, <em>default-type</em><sub>opt</sub>&gt;
+</pre>
+<p>where <em>default-type</em><sub>opt</sub> is an optional argument describing
+the type of the default argument value, if any.</p>
+<p>For example, to declare the <em>Graph</em> and <em>Visitor</em> types above, we could write:</p>
+<pre class="literal-block">
+using boost::parameter::binding;
+
+<strong>typename binding&lt;
+  ArgumentPack,tag::graph
+&gt;::type</strong> g = args[graph];
+
+<strong>typename binding&lt;
+  ArgumentPack,tag::visitor,boost::dfs_visitor&lt;&gt; 
+&gt;::type</strong> v = args[visitor];
+</pre>
+<p>As shown in the <a class="reference" href="#parameter-table">parameter table</a>, <tt class="docutils literal"><span class="pre">graph</span></tt> has no default, so
+the <tt class="docutils literal"><span class="pre">binding</span></tt> invocation for <em>Graph</em> takes only two arguments.
+The default <tt class="docutils literal"><span class="pre">visitor</span></tt> is <tt class="docutils literal"><span class="pre">boost::dfs_visitor&lt;&gt;()</span></tt>, so the
+<tt class="docutils literal"><span class="pre">binding</span></tt> invocation for <em>Visitor</em> takes three.</p>
+</div>
+</div>
+<div class="section" id="avoiding-the-extra-parentheses-forwarding-functions">
+<h2><a class="toc-backref" href="#id16" name="avoiding-the-extra-parentheses-forwarding-functions">2.5&nbsp;&nbsp;&nbsp;Avoiding the Extra Parentheses (Forwarding Functions)</a></h2>
+<div class="section" id="passing-non-const-references-positionally">
+<h3><a class="toc-backref" href="#id17" name="passing-non-const-references-positionally">2.5.1&nbsp;&nbsp;&nbsp;Passing non-const References positionally</a></h3>
+</div>
+<div class="section" id="generating-the-forwarding-functions-with-macros">
+<h3><a class="toc-backref" href="#id18" name="generating-the-forwarding-functions-with-macros">2.5.2&nbsp;&nbsp;&nbsp;Generating the Forwarding Functions with Macros</a></h3>
+</div>
+<div class="section" id="controlling-overload-resolution">
+<h3><a class="toc-backref" href="#id19" name="controlling-overload-resolution">2.5.3&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a></h3>
+</div>
+<div class="section" id="lazy-default-evaluation">
+<h3><a class="toc-backref" href="#id20" name="lazy-default-evaluation">2.5.4&nbsp;&nbsp;&nbsp;Lazy Default Evaluation</a></h3>
+<table class="docutils footnote" frame="void" id="old-interface" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2" name="old-interface">[1]</a></td><td>As of Boost 1.33.0 the Graph library was still
+using an <a class="reference" href="../../../graph/doc/bgl_named_params.html">older named parameter mechanism</a>, but there were
+plans to change it to use Boost.Parameter (this library) in an
+upcoming release, while keeping the old interface available for
+backward-compatibility.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="odr" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4" name="odr">[2]</a></td><td>The <strong>One Definition Rule</strong> says that any entity in a C++
+program must have the same definition in all translation units
+(object files) that make up a program.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="msvc-keyword" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5" name="msvc-keyword">[3]</a></td><td><p class="first">Microsoft Visual C++ 7.0 and Earlier have bugs
+that makes the syntax for declaring keywords a bit more verbose.
+This syntax will also work on all other known compilers.</p>
+<pre class="last literal-block">
+namespace // unnamed
+{
+  using namespace boost::parameter;
+
+  keyword&lt;tag::graph&gt;&amp; graph = <strong>keyword&lt;tag::graph&gt;::get()</strong>;
+  keyword&lt;tag::visitor&gt;&amp; visitor = <strong>keyword&lt;tag::visitor&gt;::get()</strong>;
+  keyword&lt;tag::root_vertex&gt;&amp; root_vertex = <strong>keyword&lt;tag::root_vertex&gt;::get()</strong>;
+  keyword&lt;tag::index_map&gt;&amp; index_map = <strong>keyword&lt;tag::index_map&gt;::get()</strong>;
+  keyword&lt;tag::color_map&gt;&amp; color_map = <strong>keyword&lt;tag::color_map&gt;::get()</strong>;
+
+} // unnamed
+</pre>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils footer" />
+<div class="footer">
+Generated on: 2005-07-12 01:59 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>

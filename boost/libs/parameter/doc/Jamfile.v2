@@ -9,7 +9,7 @@ bases = $(sources:S=) ;
 for local b in $(bases)
 {
     html $(b) : $(b).rst : 
-      <docutils-html>"-gdt --traceback --trim-footnote-reference-space  --embed-stylesheet --stylesheet-path="$(docutils-css)
+      <docutils-html>"-gdt --traceback --trim-footnote-reference-space --footnote-references=superscript --embed-stylesheet --stylesheet-path="$(docutils-css)
   ;
 }
 

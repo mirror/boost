@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/11 14:31:24 $
+:date:          $Date: 2005/07/12 01:33:26 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -448,8 +448,8 @@ For example, to declare the *Graph* and *Visitor* types above, we could write:
   >::type** v = args[visitor];
 
 As shown in the `parameter table`_, ``graph`` has no default, so
-the ``binding`` invocation for *Graph* takes only two arguments,
-and the default ``visitor`` is ``boost::dfs_visitor<>()``, so the
+the ``binding`` invocation for *Graph* takes only two arguments.
+The default ``visitor`` is ``boost::dfs_visitor<>()``, so the
 ``binding`` invocation for *Visitor* takes three.
   
 .. |Metafunction| replace:: :concept:`Metafunction`
