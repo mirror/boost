@@ -7,13 +7,25 @@
 
 __ ../../../../index.htm
 
+.. Firefox, at least, seems to need some help lowering
+   subscripts. Without the following, subscripts seem not to drop
+   at all.
+
+.. raw:: html
+
+  <style type="text/css">
+  sub {
+    vertical-align: -20%
+  }
+  </style>
+
 -------------------------------------
 
 
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/11 03:29:54 $
+:date:          $Date: 2005/07/11 14:31:24 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -39,6 +51,8 @@ __ ../../../../index.htm
 
 .. role:: concept
    :class: interpreted
+
+.. section-numbering::
 
 -------------------------------------
 
@@ -159,23 +173,27 @@ The Graph library's |dfs| algorithm is a generic function accepting
 between one and four arguments by reference, as shown in the table
 below:
 
-+----------------+----------+----------------------------------+
-| Parameter Name | Dataflow | Default Value (if any)           |
-+================+==========+==================================+
-|``graph``       | IN       |none - this argument is required. |
-+----------------+----------+----------------------------------+
-|``visitor``     | IN       |``boost::dfs_visitor<>()``        |
-+----------------+----------+----------------------------------+
-|``root_vertex`` | OUT      |``*vertices(g).first``            |
-+----------------+----------+----------------------------------+
-|``index_map``   | IN       |``get(boost::vertex_index,graph)``|
-+----------------+----------+----------------------------------+
-|``color_map``   | IN       |an ``iterator_property_map``      |
-|                |          |created from a ``std::vector`` of |
-|                |          |``default_color_type`` of size    |
-|                |          |``num_vertices(g)`` and using the |
-|                |          |``index_map`` for the index map.  |
-+----------------+----------+----------------------------------+
+.. _`parameter table`: 
+
+.. table:: ``depth_first_search`` Parameters
+
+  +----------------+----------+----------------------------------+
+  | Parameter Name | Dataflow | Default Value (if any)           |
+  +================+==========+==================================+
+  |``graph``       | IN       |none - this argument is required. |
+  +----------------+----------+----------------------------------+
+  |``visitor``     | IN       |``boost::dfs_visitor<>()``        |
+  +----------------+----------+----------------------------------+
+  |``root_vertex`` | OUT      |``*vertices(g).first``            |
+  +----------------+----------+----------------------------------+
+  |``index_map``   | IN       |``get(boost::vertex_index,graph)``|
+  +----------------+----------+----------------------------------+
+  |``color_map``   | IN       |an ``iterator_property_map``      |
+  |                |          |created from a ``std::vector`` of |
+  |                |          |``default_color_type`` of size    |
+  |                |          |``num_vertices(g)`` and using the |
+  |                |          |``index_map`` for the index map.  |
+  +----------------+----------+----------------------------------+
 
 Don't be intimidated by the complex default values.  For the
 purposes of this exercise, you don't need to understand what they
@@ -326,11 +344,20 @@ either of the two programs above will print::
 Adding Defaults
 ===============
 
-Currently, all the arguments are required, because if any argument
-can't be found, there will be a compilation error when
-``core::depth_first_search`` tries to index it in the
-|ArgumentPack|.  We can make any of the arguments optional by using
-the ``|`` operator within the brackets.
+Currently, all the arguments to ``depth_first_search`` are
+required.  If any parameter can't be found, there will be a
+compilation error where we try to extract it from the
+|ArgumentPack| using the square-brackets operator.  To make it
+legal to omit an argument, we need to give it a default value.
+
+Syntax
+------
+
+We can make any of the parameters optional by following its keyword
+with the ``|`` operator and the parameter's default value within
+the brackets.  In the following example, we've given
+``root_vertex`` a default of ``2`` and ``color_map`` a default of
+``"hello, world"``.
 
 .. parsed-literal::
 
@@ -341,11 +368,93 @@ the ``|`` operator within the brackets.
     {
         std::cout << "graph:\\t" << args[graph] << std::endl;
         std::cout << "visitor:\\t" << args[visitor] << std::endl;
-        std::cout << "root_vertex:\\t" << args[root_vertex **| 0**\ ] << std::endl;
+        std::cout << "root_vertex:\\t" << args[root_vertex **| 6**\ ] << std::endl;
         std::cout << "index_map:\\t" << args[index_map] << std::endl;
-        std::cout << "color_map:\\t" << args[color_map] << std::endl;
+        std::cout << "color_map:\\t" << args[color_map **| "hello, world"**\ ] << std::endl;
     }
   }} // graphs::core
+
+Now we can invoke the function without supplying ``color_map`` or
+``root_vertex``::
+
+  core::depth_first_search((
+    graph = 'G', index_map = "index", visitor = 2));
+
+The call above would print::
+
+  graph:       G
+  visitor:     2
+  root_vertex: 6
+  index_map:   index
+  color_map:   hello, world
+
+Getting More Realistic
+----------------------
+
+Now it's time to put some more realistic defaults in place.  We'll
+have to give up our print statements—at least if we want to see
+them work—because as we mentioned, the default values of these
+parameters generally aren't printable.
+
+Instead, we'll connect local variables to the arguments and use
+those in our algorithm:
+
+.. parsed-literal::
+
+  namespace graphs { namespace core
+  {
+    template <class ArgumentPack>
+    void depth_first_search(ArgumentPack const& args)
+    {
+        *Graph*   g = args[graph];
+        *Visitor* v = args[visitor | *default-expression*\ :sub:`1`\ ];
+        *Vertex*  s = args[root_vertex | *default-expression*\ :sub:`2`\ ];
+        *Index*   i = args[index_map | *default-expression*\ :sub:`3`\ ];
+        *Color*   c = args[visitor | *default-expression*\ :sub:`4`\ ];
+
+        *…use g, v, s, i, and c to implement the algorithm…*
+    }
+  }} // graphs::core
+
+We'll insert the default expressions in a moment (we outlined them
+in the `parameter table`_ above) but first we need to come up with
+the types *Graph*, *Visitor*, *Vertex*, *Index*, and *Color*.
+
+The ``binding`` |Metafunction|_
+-------------------------------
+
+For computing the type of a parameter, the library supplies a
+|Metafunction|_ called ``binding``:
+
+.. parsed-literal::
+
+  binding<|ArgumentPack|, *keyword-tag*, *default-type*\ :sub:`opt`>
+
+where *default-type*\ :sub:`opt` is an optional argument describing
+the type of the default argument value, if any.  
+
+For example, to declare the *Graph* and *Visitor* types above, we could write:
+
+.. parsed-literal::
+
+  using boost::parameter::binding;
+
+  **typename binding<
+    ArgumentPack,tag::graph
+  >::type** g = args[graph];
+
+  **typename binding<
+    ArgumentPack,tag::visitor,boost::dfs_visitor<> 
+  >::type** v = args[visitor];
+
+As shown in the `parameter table`_, ``graph`` has no default, so
+the ``binding`` invocation for *Graph* takes only two arguments,
+and the default ``visitor`` is ``boost::dfs_visitor<>()``, so the
+``binding`` invocation for *Visitor* takes three.
+  
+.. |Metafunction| replace:: :concept:`Metafunction`
+
+.. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
 
 Avoiding the Extra Parentheses (Forwarding Functions)
 =====================================================
