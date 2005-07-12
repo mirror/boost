@@ -182,7 +182,7 @@ c_regex_traits<wchar_t>::string_type BOOST_REGEX_CALL c_regex_traits<wchar_t>::l
    std::string name;
    const wchar_t* p0 = p1;
    while(p0 != p2)
-	   name.append(1, char(*p0++));
+      name.append(1, char(*p0++));
 #endif
    name = ::boost::re_detail::lookup_default_collate_name(name);
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)\
@@ -193,13 +193,13 @@ c_regex_traits<wchar_t>::string_type BOOST_REGEX_CALL c_regex_traits<wchar_t>::l
 #else
    if(name.size())
    {
-	   string_type result;
-	   typedef std::string::const_iterator iter;
-	   iter b = name.begin();
-	   iter e = name.end();
-	   while(b != e)
-		   result.append(1, wchar_t(*b++));
-	   return result;
+      string_type result;
+      typedef std::string::const_iterator iter;
+      iter b = name.begin();
+      iter e = name.end();
+      while(b != e)
+         result.append(1, wchar_t(*b++));
+      return result;
    }
 #endif
    if(p2 - p1 == 1)

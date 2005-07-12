@@ -240,11 +240,11 @@ void test_tricky_cases2()
 void test_tricky_cases3()
 {
    using namespace boost::regex_constants;
-   TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "0xFF", match_default, make_array(0, 4, 0, 4,	0, 4,	-1, -1, -1, -1, -1, -1, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "0xFF", match_default, make_array(0, 4, 0, 4, 0, 4, -1, -1, -1, -1, -1, -1, -1, -1, -2, -2));
    TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "35", match_default, make_array(0, 2, 0, 2, -1, -1, 0, 2, -1, -1, -1, -1, -1, -1, -2, -2));
    TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "0xFFu", match_default, make_array(0, 5, 0, 4, 0, 4, -1, -1, -1, -1, -1, -1, -1, -1, -2, -2));
    TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "0xFFL", match_default, make_array(0, 5, 0, 4, 0, 4, -1, -1, 4, 5, -1, -1, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "0xFFFFFFFFFFFFFFFFuint64", match_default, make_array(0, 24,	0, 18, 0, 18, -1, -1, 19, 24, 19, 24, 22, 24, -2, -2));
+   TEST_REGEX_SEARCH("((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)?", perl, "0xFFFFFFFFFFFFFFFFuint64", match_default, make_array(0, 24, 0, 18, 0, 18, -1, -1, 19, 24, 19, 24, 22, 24, -2, -2));
    // strings:
    TEST_REGEX_SEARCH("'([^\\\\']|\\\\.)*'", perl, "'\\x3A'", match_default, make_array(0, 6, 4, 5, -2, -2));
    TEST_REGEX_SEARCH("'([^\\\\']|\\\\.)*'", perl, "'\\''", match_default, make_array(0, 4, 1, 3, -2, -2));

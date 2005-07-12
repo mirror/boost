@@ -26,20 +26,20 @@
 #ifdef _DLL_CPPLIB
 namespace std{
 template _CRTIMP2 bool __cdecl operator==(
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
 template _CRTIMP2 bool __cdecl operator==(
-	const unsigned short *,
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
+   const unsigned short *,
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
 template _CRTIMP2 bool __cdecl operator==(
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
-	const unsigned short *);
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
+   const unsigned short *);
 template _CRTIMP2 bool __cdecl operator<(
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
 template _CRTIMP2 bool __cdecl operator>(
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
-	const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&,
+   const basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >&);
 }
 #endif
 

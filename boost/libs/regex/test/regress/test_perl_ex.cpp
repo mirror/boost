@@ -153,7 +153,7 @@ void test_options()
    TEST_REGEX_SEARCH("#rhubarb\r\n  abcd", perl|mod_x, "abcd", match_default, make_array(0, 4, -2, -2));
    TEST_REGEX_SEARCH("^abcd#rhubarb", perl|mod_x, "abcd", match_default, make_array(0, 4, -2, -2));
    TEST_REGEX_SEARCH("^abcd#rhubarb", perl, "abcd#rhubarb", match_default, make_array(0, 12, -2, -2));
-   TEST_REGEX_SEARCH("^a	b\n\n    c", perl|mod_x, "abc", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("^a   b\n\n    c", perl|mod_x, "abc", match_default, make_array(0, 3, -2, -2));
 
    TEST_REGEX_SEARCH("(?(?=[^a-z]+[a-z])  \\d{2}-[a-z]{3}-\\d{2}  |  \\d{2}-\\d{2}-\\d{2} ) ", perl|mod_x, "12-sep-98", match_default, make_array(0, 9, -2, -2));
    TEST_REGEX_SEARCH("(?(?=[^a-z]+[a-z])  \\d{2}-[a-z]{3}-\\d{2}  |  \\d{2}-\\d{2}-\\d{2} ) ", perl|mod_x, "12-09-98", match_default, make_array(0, 8, -2, -2));
