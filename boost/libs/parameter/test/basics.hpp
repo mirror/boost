@@ -22,7 +22,7 @@ struct tester_;
 namespace
 {
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, == 2))
   keyword<name_>& name = instance();
   keyword<value_>& value = instance();
   keyword<index_>& index = instance();

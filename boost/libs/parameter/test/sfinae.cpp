@@ -18,8 +18,19 @@ namespace test
 {
   using namespace boost::parameter;
 
-  keyword<struct name_> name;
-  keyword<struct value_> value;
+  struct name_;
+  struct value_;
+
+  namespace
+  {
+#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, == 2))
+    keyword<name_>& name = instance();
+    keyword<value_>& value = instance();
+#else
+    keyword<name_>& name = keyword<name_>::get();
+    keyword<value_>& value = keyword<value_>::get();
+#endif
+  }
   
   struct f_parameters
     : parameters<

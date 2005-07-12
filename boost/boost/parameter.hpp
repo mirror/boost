@@ -9,6 +9,8 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/parameter/keyword.hpp>
 #include <boost/parameter/binding.hpp>
+#include <boost/parameter/instance.hpp>
+#include <boost/parameter/macros.hpp>
 
 #endif // BOOST_PARAMETER_050401_HPP
 
