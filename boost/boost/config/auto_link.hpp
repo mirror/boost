@@ -242,7 +242,9 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 //
 // figure out whether we want the debug builds or not:
 //
+#if __BORLANDC__ > 0x561
 #pragma defineonoption BOOST_BORLAND_DEBUG -v
+#endif
 //
 // sanity check:
 //
