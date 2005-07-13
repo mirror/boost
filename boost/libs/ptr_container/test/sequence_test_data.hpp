@@ -44,7 +44,7 @@ void reversible_container_test()
     BOOST_MESSAGE( "finished construction test" ); 
                       
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
-	hide_warning(alloc);
+        hide_warning(alloc);
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
     BOOST_DEDUCED_TYPENAME C::const_iterator ci           = c2.begin();
     BOOST_DEDUCED_TYPENAME C::iterator i2                 = c.end();
