@@ -192,7 +192,7 @@ namespace boost {
                 BOOST_ASSERT( item.pad_scheme_ & format_item_t::tabulation);
                 if( static_cast<size_type>(item.fmtstate_.width_) > res.size() )
                     res.append( static_cast<size_type>(item.fmtstate_.width_) - res.size(),
-					item.fmtstate_.fill_ );
+                                        item.fmtstate_.fill_ );
             }
             res += item.appendix_;
         }
@@ -210,7 +210,7 @@ namespace boost {
             sz += item.res_.size();
             if( item.argN_ == format_item_t::argN_tabulation)
                 sz = max BOOST_PREVENT_MACRO_SUBSTITUTION (sz,
-					static_cast<size_type>(item.fmtstate_.width_) );
+                                        static_cast<size_type>(item.fmtstate_.width_) );
             sz += item.appendix_.size();
         }
         return sz;

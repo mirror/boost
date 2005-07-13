@@ -214,8 +214,8 @@ namespace detail {
                     for(; i<sz && tmp_beg[i] == res[i-prefix_space]; ++i) {}
                     if(i>=tmp_size) i=prefix_space;
                     res.assign(tmp_beg, i);
-					std::streamsize d = w - static_cast<std::streamsize>(tmp_size);
-					BOOST_ASSERT(d>0);
+                                        std::streamsize d = w - static_cast<std::streamsize>(tmp_size);
+                                        BOOST_ASSERT(d>0);
                     res.append(static_cast<size_type>( d ), oss2.fill());
                     res.append(tmp_beg+i, tmp_size-i);
                     BOOST_ASSERT(i+(tmp_size-i)+(std::max)(d,(std::streamsize)0) 
