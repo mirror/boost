@@ -84,9 +84,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        scalar_reference ():
-            t_ (nil_) {}
-        BOOST_UBLAS_INLINE
         explicit scalar_reference (reference t):
             t_ (t) {}
 
@@ -117,12 +114,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         reference t_;
-        static value_type nil_;
     };
-
-    template<class T>
-    typename scalar_reference<T>::value_type scalar_reference<T>::nil_
-        = typename scalar_reference<T>::value_type ();
 
     template<class T>
     class scalar_value:
