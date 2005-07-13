@@ -102,7 +102,7 @@ unsigned find_sort_syntax(const traits* pt, charT* delim)
    if((sa.size() == sA.size()) && (sa.size() == sc.size()))
    {
       // note assumes that the fixed width field is less than
-      // numeric_limits<charT>::max(), should be true for all types
+      // (numeric_limits<charT>::max)(), should be true for all types
       // I can't imagine 127 character fields...
       *delim = static_cast<charT>(++pos);
       return sort_fixed;
