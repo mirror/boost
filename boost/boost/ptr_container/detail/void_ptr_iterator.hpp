@@ -56,7 +56,7 @@ namespace boost
             template< class MutableIterator, class MutableT >
             void_ptr_iterator( const void_ptr_iterator<MutableIterator,MutableT>& r )
 #ifdef BOOST_NO_SFINAE
-			 : iter_( VoidIter(const_cast<void**>(&*r.base())) )
+                         : iter_( VoidIter(const_cast<void**>(&*r.base())) )
 #else
 
              : iter_(r.base())
