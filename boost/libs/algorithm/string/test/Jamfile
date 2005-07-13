@@ -17,7 +17,7 @@ DEPENDS all : test ;
 
 {
     test-suite algorithm/string
-    	: [ run 
+        : [ run 
                 trim_test.cpp
               : :
                 :

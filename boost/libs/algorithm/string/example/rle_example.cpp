@@ -24,7 +24,7 @@ using namespace std;
 using namespace boost;
 
 // replace mark specification, specialize for a specific element type
-template< typename T > T repeat_mark() { return std::numeric_limits<T>::max(); };
+template< typename T > T repeat_mark() { return (std::numeric_limits<T>::max)(); };
 
 // Compression  -----------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ struct find_compressF
         {
             input_iterator_type It2=It++;
 
-            if ( It==End || Cnt>=std::numeric_limits<value_type>::max() )
+            if ( It==End || Cnt>=(std::numeric_limits<value_type>)::max() )
             {
                 return result_type( MStart, It );
             }
