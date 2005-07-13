@@ -59,7 +59,7 @@ struct result_of : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
 
 }
 #else
-#  error Your compiler cannot support class template result_of
+#  define BOOST_NO_RESULT_OF 1
 #endif
 
 #endif // BOOST_RESULT_OF_HPP
