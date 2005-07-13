@@ -972,6 +972,9 @@ namespace boost { namespace numeric { namespace ublas {
         diagonal_matrix (size_type size):
             matrix_type (size, size) {}
         BOOST_UBLAS_INLINE
+        diagonal_matrix (size_type size, const array_type& data):
+	    matrix_type (size, size, 0, 0, data) {}
+        BOOST_UBLAS_INLINE
         diagonal_matrix (size_type size1, size_type size2):
             matrix_type (size1, size2) {}
         template<class AE>
