@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/12 01:59:51 $
+:date:          $Date: 2005/07/12 17:41:17 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -174,6 +174,7 @@ between one and four arguments by reference, as shown in the table
 below:
 
 .. _`parameter table`: 
+.. _`default expressions`: 
 
 .. table:: ``depth_first_search`` Parameters
 
@@ -219,7 +220,7 @@ To make that syntax legal, there needs to be an object called
 be identified by a unique **keyword tag type**.  By convention,
 we'll give the tag types the same names as the objects.  Assuming
 we're defining our public interface in namespace ``graphs``, the
-tag types should be declared this way::
+tag types could be declared this way::
 
   namespace graphs { namespace tag
   {
@@ -257,10 +258,10 @@ instantiated in multiple translation units.  Note: if you use an
 older compiler, a slightly more verbose syntax may be required
 [#msvc_keyword]_.
 
-.. Note::
+.. Admonition:: Headers and Namespaces
 
    Most components of the Parameter library are declared in a
-   header named for the component.  For example,
+   header named for the component.  For example, ::
   
      #include <boost/parameter/keyword.hpp>
 
@@ -270,6 +271,14 @@ older compiler, a slightly more verbose syntax may be required
    components.  For the the rest of this tutorial, unless we say
    otherwise, you can use the rule above to figure out which header
    to ``#include`` to access any given component of the library.
+
+   Also, the examples below will also be written as if the
+   namespace alias ::
+
+     namespace parameter = boost::parameter;
+
+   has been declared: we'll write ``parameter::xxx`` instead of
+   ``boost::parameter::xxx``.
 
 Defining the Implementation Function
 ====================================
@@ -289,7 +298,7 @@ the core of ``depth_first_search``::
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 
 ``core::depth_first_search`` has an |ArgumentPack|
-parameter: a bundle of references to the arguments that the user
+parameter: a bundle of references to the arguments that the caller
 passes to the algorithm, tagged with their keywords.  To extract
 each parameter, just pass its keyword object to the
 |ArgumentPack|\ 's index operator.  We'll add some
@@ -311,7 +320,7 @@ it works:
     }
   }} // graphs::core
 
-It's unlikely that many of the arguments the user will eventually
+It's unlikely that many of the arguments the caller will eventually
 pass to ``depth_first_search`` can be printed, but for now the code
 above will give us something to experiment with.  To see the
 keywords in action, we can write a little test driver:
@@ -402,6 +411,13 @@ The call above would print::
   index_map:   index
   color_map:   hello, world
 
+.. Important::
+
+   The index expression ``args[…]`` always yields a *reference*
+   that is bound either to the actual argument passed by the caller
+   or, if no argument is explicitly specified, to the specified
+   default value.
+
 Getting More Realistic
 ----------------------
 
@@ -430,9 +446,9 @@ those in our algorithm:
     }
   }} // graphs::core
 
-We'll insert the default expressions in a moment (we outlined them
-in the `parameter table`_ above) but first we need to come up with
-the types *Graph*, *Visitor*, *Vertex*, *Index*, and *Color*.
+We'll insert the `default expressions`_ in a moment but first we
+need to come up with the types *Graph*, *Visitor*, *Vertex*,
+*Index*, and *Color*.
 
 The ``binding`` |Metafunction|_
 -------------------------------
@@ -442,48 +458,185 @@ called ``binding``:
 
 .. parsed-literal::
 
-  binding<|ArgumentPack|, *keyword-tag*, *default-type*\ :sub:`opt`>
+  binding<ArgumentPack, Keyword, Default = void>
 
-where *default-type*\ :sub:`opt` is an optional argument describing
-the type of the default argument value, if any.  
+where ``Default`` is an optional argument describing the type of
+the default argument value, if any.
 
-For example, to declare the *Graph* and *Visitor* types above, we
-could write:
+For example, to declare and initialize ``g``, ``v``, and ``s``
+above, we could write:
 
 .. parsed-literal::
 
   namespace parameter = boost::parameter;
-  using parameter::binding;
 
-  **typename parameter::binding<
-    ArgumentPack,tag::graph
-  >::type** g = args[graph];
+  typedef typename parameter::binding<
+    ArgumentPack,\ **tag::graph**
+  >::type Graph;
 
-  **typename parameter::binding<
-    ArgumentPack,tag::visitor,boost::dfs_visitor<> 
-  >::type** v = args[visitor|boost::dfs_visitor<>()];
+  Graph g = args[graph];
+
+  typedef typename parameter::binding<
+    ArgumentPack,\ **tag::visitor,boost::dfs_visitor<>**
+  >::type Visitor;
+
+  Visitor v = args[visitor|\ **boost::dfs_visitor<>()**\ ];
+
+  typename **boost::graph_traits<Graph>::vertex_descriptor**
+    s = args[root_vertex|\ ***vertices(g).first**\ ];
 
 As shown in the `parameter table`_, ``graph`` has no default, so
 the ``binding`` invocation for *Graph* takes only two arguments.
 The default ``visitor`` is ``boost::dfs_visitor<>()``, so the
-``binding`` invocation for *Visitor* takes three.
+``binding`` invocation for *Visitor* takes three.  Of course,
+sometimes we know the type we need, and there's no need to use
+``binding`` at all.  Any caller-supplied value for ``root_vertex`` is
+nrequired to be (and the default is) of the graph's
+``vertex_descriptor`` type, [#vertex_descriptor]_ so we can just
+use that type directly.  
+
+.. _dangling:
+
+Note that the default ``visitor`` is supplied as a *temporary*
+instance of ``dfs_visitor``.  Because ``args[…]`` always yields
+a reference, making ``v`` a reference would cause it to bind to
+that temporary, and immediately dangle.  Therefore, it's crucial
+that we passed ``dfs_visitor<>``, and not ``dfs_visitor<>
+const&``, as the last argument to ``binding``.
+
+.. Important:: 
+
+   Never pass ``binding`` a reference type as the default if the
+   default value passed to the |ArgumentPack|\ 's indexing operator
+   is a temporary.
 
 .. |Metafunction| replace:: :concept:`Metafunction`
 
 .. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
 
-  
-.. Note::
+Beyond Ordinary Default Aruments
+--------------------------------
 
-   For the remainder of this tutorial, you can assume that the
-   namespace alias ::
+Here's how you might write the declaration for the ``index_map``
+parameter:
 
-     namespace parameter = boost::parameter;
+.. parsed-literal::
 
-   is in effect.
+  typedef typename parameter::binding<
+      ArgumentPack
+    , tag::index_map
+    , **typename boost::property_map<Graph, vertex_index_t>::const_type**
+  >::type Index;
 
-Avoiding the Extra Parentheses (Forwarding Functions)
-=====================================================
+  Index i = args[index_map|\ **get(boost::vertex_index,g)**\ ];
+
+We'd like you to notice two capabilities we've gained over what
+plain C++ default arguments provide:
+
+1. The default value of the ``index`` parameter depends on the
+   value of the ``graph`` parameter.  That's illegal in plain C++:
+   
+   .. parsed-literal::
+
+     void f(int **graph**, int index = **graph** + 1); // error
+
+2. The ``index`` parameter has a useful default, yet it is
+   templated and its type can be deduced when  an ``index``
+   argument is explicitly specified by the caller.  In plain C++, you
+   can *specify* a default value for a parameter with deduced type,
+   but it's not very useful:
+
+   .. parsed-literal::
+
+     template <class Index>
+     int f(Index index **= 42**);  // OK
+     int y = f();                // **error; can't deduce Index**
+     
+Efficiency Issues
+=================
+
+The extraction and binding of the ``color_map`` parameter gives us a few
+efficiency issues to consider.  Here's a first cut:
+
+.. parsed-literal::
+
+  typedef 
+    vector_property_map<default_color_type, Index>
+  default_color_map;
+
+  typename parameter::binding<
+      ArgumentPack
+    , tag::color_map
+    , default_color_map
+  >::type color = args[color_map|\ **default_color_map(num_vertices(g),i)**\ ];
+
+Eliminating Copies
+------------------
+
+The library has no way to know whether an explicitly-supplied
+argument is expensive to copy (or even if it is copiable at all),
+so ``binding<…,xxx,…>::type`` is always a reference type when the
+*xxx* parameter is supplied by the caller.  Since ``args[…]``
+yields a reference to the actual argument, ``color`` will be bound
+to the actual ``color_map`` argument and no copying will be done.
+
+As described above__, because the default is a temporary, it's
+important that ``color`` be a non-reference when the default is
+used.  In that case, the default value will be *copied* into
+``color``.  If we store the default in a named variable, though,
+``color`` can be a reference, thereby eliminating the copy:
+
+.. parsed-literal::
+
+  default_color_map default_color(num_vertices(g),i);
+
+  typename parameter::binding<
+      ArgumentPack
+    , tag::color_map
+    , **default_color_map&**
+  >::type color = args[color_map|default_color];
+
+__ dangling_
+
+.. Hint:: 
+
+   Pass ``binding`` a *reference* to the type of the default to
+   avoid making needless copies.x
+
+Eliminating Construction
+------------------------
+
+Of course it's nice to avoid copying ``default_color``, but the
+more important cost is that of *constructing* it in the first
+place.
+
+Dispatching Based on the Presence of a Default
+----------------------------------------------
+
+Eliminating Template Instantiation
+----------------------------------
+
+However, 
+and
+``args[visitor…]`` always yields a reference—in this case, a
+reference bound directly to the actual argument passed by the user.
+When no ``visitor`` is explicitly specified, though, we have to use
+the default value, which is supplied as a *temporary* instance of
+``dfs_visitor``.  Because ``args[visitor…]`` yields a reference to
+that temporary, making ``v`` a reference would cause it to dangle
+immediately.  Therefore, it's crucial that we passed
+``dfs_visitor<>``, and not ``dfs_visitor<> const&``, to
+``binding``.
+
+Since a ``dfs_visitor<>`` is cheap to copy, this arrangement is
+non-problematic.
+
+type.  Choosing to make ``Visitor`` a reference in that case
+
+, ``binding`` had better not add
+
+Improving the Syntax
+====================
 
 Passing non-const References positionally
 -----------------------------------------
@@ -492,10 +645,7 @@ Generating the Forwarding Functions with Macros
 -----------------------------------------------
 
 Controlling Overload Resolution
--------------------------------
-
-Lazy Default Evaluation
------------------------
+===============================
 
 
 .. [#old_interface] As of Boost 1.33.0 the Graph library was still
@@ -508,13 +658,14 @@ Lazy Default Evaluation
    program must have the same definition in all translation units
    (object files) that make up a program.
 
-.. [#msvc_keyword] Microsoft Visual C++ 7.0 and Earlier have bugs
-   that makes the syntax for declaring keywords a bit more verbose.
-   This syntax will also work on all other known compilers.
+.. [#msvc_keyword] GCC 2.95.x and Microsoft Visual C++ 6.x and 7.0
+   have bugs that makes the syntax for declaring keywords a bit more
+   verbose.  This syntax works on all supported compilers, including
+   the out-of-date compilers just mentioned:
 
    .. parsed-literal::
 
-    namespace // unnamed
+    namespace graphs { namespace // unnamed
     {
       using namespace boost::parameter;
 
@@ -524,6 +675,26 @@ Lazy Default Evaluation
       keyword<tag::index_map>& index_map = **keyword<tag::index_map>::get()**;
       keyword<tag::color_map>& color_map = **keyword<tag::color_map>::get()**;
 
-    } // unnamed
+    }} // unnamed
+
+   If you use Visual C++ 6.x, you may find you also need the
+   following using declarations (which really should be
+   redundant)::
+
+    namespace graphs
+    {
+      using graphs::graph;
+      using graphs::visitor;
+      using graphs::root_vertex;
+      using graphs::index_map;
+      using graphs::color_map;
+    }
+
+.. [#vertex_descriptor] If you're not familiar with the Boost Graph
+   Library, don't worry about the meaning of any
+   Graph-library-specific details you encounter.  In this case you
+   could replace all mentions of vertex descriptor types with
+   ``int`` in the text, and your understanding of the Parameter
+   library wouldn't suffer.
 
 __ ../../../graph/doc/bgl_named_params.html
