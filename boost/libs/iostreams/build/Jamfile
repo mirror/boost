@@ -15,7 +15,7 @@ SOURCES = file_descriptor mapped_file ;
 
 template iostreams
     : # sources
-	  ../src/$(SOURCES).cpp
+          ../src/$(SOURCES).cpp
       <template>bzip2
       <template>zlib
     : # build requirements
