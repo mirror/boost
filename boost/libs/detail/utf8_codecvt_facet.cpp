@@ -123,7 +123,7 @@ std::codecvt_base::result utf8_codecvt_facet::do_out(
         0x00, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc
     };
 
-    wchar_t max_wchar = std::numeric_limits<wchar_t>::max();
+    wchar_t max_wchar = (std::numeric_limits<wchar_t>::max)();
     while (from != from_end && to != to_end) {
 
         // Check for invalid UCS-4 character
