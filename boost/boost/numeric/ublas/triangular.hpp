@@ -937,10 +937,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        triangular_adaptor ():
-            matrix_expression<self_type> (),
-            data_ (nil_) {}
-        BOOST_UBLAS_INLINE
         triangular_adaptor (matrix_type &data):
             matrix_expression<self_type> (),
             data_ (data) {}
@@ -1752,13 +1748,10 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static matrix_type nil_;
         static const value_type zero_;
         static const value_type one_;
     };
 
-    template<class M, class TRI>
-    typename triangular_adaptor<M, TRI>::matrix_type triangular_adaptor<M, TRI>::nil_;
     template<class M, class TRI>
     const typename triangular_adaptor<M, TRI>::value_type triangular_adaptor<M, TRI>::zero_ = value_type/*zero*/();
     template<class M, class TRI>

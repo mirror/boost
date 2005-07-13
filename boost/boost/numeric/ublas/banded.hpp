@@ -962,6 +962,7 @@ namespace boost { namespace numeric { namespace ublas {
     public:
         typedef typename A::size_type size_type;
         typedef banded_matrix<T, L, A> matrix_type;
+        typedef A array_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1026,10 +1027,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::orientation_category orientation_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        banded_adaptor ():
-            matrix_expression<self_type> (),
-            data_ (nil_), lower_ (0), upper_ (0) {}
         BOOST_UBLAS_INLINE
         banded_adaptor (matrix_type &data, size_type lower = 0, size_type upper = 0):
             matrix_expression<self_type> (),
@@ -1933,7 +1930,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         size_type lower_;
         size_type upper_;
-        static matrix_type nil_;
         typedef const value_type const_value_type;
         static const_value_type zero_;
     };
@@ -1948,8 +1944,6 @@ namespace boost { namespace numeric { namespace ublas {
     : matrix_temporary_traits< M > {} ;
 
 
-    template<class M>
-    typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
     template<class M>
     typename banded_adaptor<M>::const_value_type banded_adaptor<M>::zero_ = value_type/*zero*/();
 

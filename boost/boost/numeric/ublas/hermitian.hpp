@@ -1157,12 +1157,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        hermitian_adaptor ():
-            matrix_expression<self_type> (),
-            data_ (nil_) {
-            BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
-        }
-        BOOST_UBLAS_INLINE
         hermitian_adaptor (matrix_type &data):
             matrix_expression<self_type> (),
             data_ (data) {
@@ -2382,12 +2376,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static matrix_type nil_;
         static value_type conj_;
     };
 
-    template<class M, class TRI>
-    typename hermitian_adaptor<M, TRI>::matrix_type hermitian_adaptor<M, TRI>::nil_;
     template<class M, class TRI>
     typename hermitian_adaptor<M, TRI>::value_type hermitian_adaptor<M, TRI>::conj_;
 
