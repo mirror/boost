@@ -21,16 +21,24 @@ namespace test
   struct name_;
   struct value_;
 
+#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, == 2))
   namespace
   {
-#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, == 2))
     keyword<name_>& name = instance();
     keyword<value_>& value = instance();
+  }
 #else
+  namespace
+  {
     keyword<name_>& name = keyword<name_>::get();
     keyword<value_>& value = keyword<value_>::get();
-#endif
   }
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+  using test::name;  // required for vc6 :(
+  using test::value;
+# endif 
+#endif
+
   
   struct f_parameters
     : parameters<
