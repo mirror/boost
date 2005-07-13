@@ -505,7 +505,7 @@ namespace boost { namespace program_options {
             const option_description& opt = *m_options[i];
             stringstream ss;
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
-            width = max(width, static_cast<unsigned>(ss.str().size()));            
+            width = (max)(width, static_cast<unsigned>(ss.str().size()));            
         }
         
         /* add an additional space to improve readability */

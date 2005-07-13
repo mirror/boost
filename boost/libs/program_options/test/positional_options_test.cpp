@@ -34,7 +34,7 @@ void test_positional_options()
 
     p.add("third", -1);
 
-    BOOST_CHECK_EQUAL(p.max_total_count(), std::numeric_limits<unsigned>::max());
+    BOOST_CHECK_EQUAL(p.max_total_count(), (std::numeric_limits<unsigned>::max)());
     BOOST_CHECK_EQUAL(p.name_for_position(0), "first");
     BOOST_CHECK_EQUAL(p.name_for_position(1), "second");
     BOOST_CHECK_EQUAL(p.name_for_position(2), "second");
