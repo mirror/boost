@@ -518,14 +518,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-    template<class S>
+    template<class SE>
     struct ScalarExpressionConcept {
-        typedef S scalar_type;
-        typedef typename S::value_type value_type;
+        typedef SE scalar_expression_type;
+        typedef typename SE::value_type value_type;
 
         static void constraints () {
-            DefaultConstructibleConcept<scalar_type>::constraints ();
-            scalar_type s = scalar_type ();
+        	scalar_expression_type *sp;
+            scalar_expression_type s = *sp;
             value_type t;
             // Conversion
             t = s;
@@ -533,18 +533,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-    template<class V>
+    template<class VE>
     struct VectorExpressionConcept {
-        typedef V vector_type;
-        typedef typename V::type_category type_category;
-        typedef typename V::size_type size_type;
-        typedef typename V::value_type value_type;
-        typedef typename V::const_iterator const_iterator_type;
-        typedef typename V::const_reverse_iterator const_reverse_iterator_type;
+        typedef VE vector_expression_type;
+        typedef typename VE::type_category type_category;
+        typedef typename VE::size_type size_type;
+        typedef typename VE::value_type value_type;
+        typedef typename VE::const_iterator const_iterator_type;
+        typedef typename VE::const_reverse_iterator const_reverse_iterator_type;
 
         static void constraints () {
-            DefaultConstructibleConcept<vector_type>::constraints ();
-            vector_type v = vector_type ();
+        	vector_expression_type *vp;
+        	const vector_expression_type *cvp;
+            vector_expression_type v = *vp;
+            const vector_expression_type cv = *cvp;
             size_type n (0), i (0);
             value_type t;
             // Find (internal?)
@@ -556,7 +558,6 @@ namespace boost { namespace numeric { namespace ublas {
             // Size
             n = v.size ();
             // Beginning of reverse range
-            const vector_type cv = vector_type ();
             const_reverse_iterator_type crit_begin (cv.rbegin ());
             // End of reverse range
             const_reverse_iterator_type crit_end (cv.rend ());
@@ -572,18 +573,19 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-    template<class V>
+    template<class VE>
     struct MutableVectorExpressionConcept {
-        typedef V vector_type;
-        typedef typename V::size_type size_type;
-        typedef typename V::value_type value_type;
-        typedef typename V::iterator iterator_type;
-        typedef typename V::reverse_iterator reverse_iterator_type;
+        typedef VE vector_expression_type;
+        typedef typename VE::size_type size_type;
+        typedef typename VE::value_type value_type;
+        typedef typename VE::iterator iterator_type;
+        typedef typename VE::reverse_iterator reverse_iterator_type;
 
         static void constraints () {
-            AssignableConcept<vector_type>::constraints (vector_type ());
-            VectorExpressionConcept<vector_type>::constraints ();
-            vector_type v = vector_type (), v1 = vector_type (), v2 = vector_type ();
+        	vector_expression_type *vp;
+            AssignableConcept<vector_expression_type>::constraints (*vp);
+            VectorExpressionConcept<vector_expression_type>::constraints ();
+            vector_expression_type v = *vp, v1 = *vp, v2 = *vp;
             size_type i (0);
             value_type t = value_type ();
             // Find (internal?)
@@ -614,20 +616,22 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-    template<class M>
+    template<class ME>
     struct MatrixExpressionConcept {
-        typedef M matrix_type;
-        typedef typename M::type_category type_category;
-        typedef typename M::size_type size_type;
-        typedef typename M::value_type value_type;
-        typedef typename M::const_iterator1 const_subiterator1_type;
-        typedef typename M::const_iterator2 const_subiterator2_type;
-        typedef typename M::const_reverse_iterator1 const_reverse_subiterator1_type;
-        typedef typename M::const_reverse_iterator2 const_reverse_subiterator2_type;
+        typedef ME matrix_expression_type;
+        typedef typename ME::type_category type_category;
+        typedef typename ME::size_type size_type;
+        typedef typename ME::value_type value_type;
+        typedef typename ME::const_iterator1 const_subiterator1_type;
+        typedef typename ME::const_iterator2 const_subiterator2_type;
+        typedef typename ME::const_reverse_iterator1 const_reverse_subiterator1_type;
+        typedef typename ME::const_reverse_iterator2 const_reverse_subiterator2_type;
 
         static void constraints () {
-            DefaultConstructibleConcept<matrix_type>::constraints ();
-            matrix_type m = matrix_type ();
+        	matrix_expression_type *mp;
+        	const matrix_expression_type *cmp;
+            matrix_expression_type m = *mp;
+            const matrix_expression_type cm = *cmp;
             size_type n (0), i (0), j (0);
             value_type t;
             // Find (internal?)
@@ -643,7 +647,6 @@ namespace boost { namespace numeric { namespace ublas {
             n = m.size1 ();
             n = m.size2 ();
             // Beginning of reverse range
-            const matrix_type cm = matrix_type ();
             const_reverse_subiterator1_type crit1_begin (cm.rbegin1 ());
             const_reverse_subiterator2_type crit2_begin (cm.rbegin2 ());
             // End of reverse range
@@ -666,20 +669,21 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-    template<class M>
+    template<class ME>
     struct MutableMatrixExpressionConcept {
-        typedef M matrix_type;
-        typedef typename M::size_type size_type;
-        typedef typename M::value_type value_type;
-        typedef typename M::iterator1 subiterator1_type;
-        typedef typename M::iterator2 subiterator2_type;
-        typedef typename M::reverse_iterator1 reverse_subiterator1_type;
-        typedef typename M::reverse_iterator2 reverse_subiterator2_type;
+        typedef ME matrix_expression_type;
+        typedef typename ME::size_type size_type;
+        typedef typename ME::value_type value_type;
+        typedef typename ME::iterator1 subiterator1_type;
+        typedef typename ME::iterator2 subiterator2_type;
+        typedef typename ME::reverse_iterator1 reverse_subiterator1_type;
+        typedef typename ME::reverse_iterator2 reverse_subiterator2_type;
 
         static void constraints () {
-            AssignableConcept<matrix_type>::constraints (matrix_type ());
-            MatrixExpressionConcept<matrix_type>::constraints ();
-            matrix_type m = matrix_type (), m1 = matrix_type (), m2 = matrix_type ();
+        	matrix_expression_type *mp;
+            AssignableConcept<matrix_expression_type>::constraints (*mp);
+            MatrixExpressionConcept<matrix_expression_type>::constraints ();
+            matrix_expression_type m = *mp, m1 = *mp, m2 = *mp;
             size_type i (0), j (0);
             value_type t = value_type ();
             // Find (internal?)

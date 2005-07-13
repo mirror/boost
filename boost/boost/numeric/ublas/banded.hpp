@@ -27,14 +27,14 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based banded matrix class
     template<class T, class L, class A>
     class banded_matrix:
-        public matrix_expression<banded_matrix<T, L, A> > {
+        public matrix_container<banded_matrix<T, L, A> > {
 
         typedef T *pointer;
         typedef L layout_type;
         typedef banded_matrix<T, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -52,29 +52,29 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         banded_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0),
             lower_ (0), upper_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         banded_matrix (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2),
             lower_ (lower), upper_ (upper), data_ ((std::max) (size1, size2) * (lower + 1 + upper)) {
         }
         BOOST_UBLAS_INLINE
         banded_matrix (size_type size1, size_type size2, size_type lower, size_type upper, const array_type &data):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2),
             lower_ (lower), upper_ (upper), data_ (data) {}
         BOOST_UBLAS_INLINE
         banded_matrix (const banded_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_),
             lower_ (m.lower_), upper_ (m.upper_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_matrix (const matrix_expression<AE> &ae, size_type lower = 0, size_type upper = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()),
             lower_ (lower), upper_ (upper),
             data_ ((std::max) (size1_, size2_) * (lower_ + 1 + upper_)) {

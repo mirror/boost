@@ -28,14 +28,14 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based vector class
     template<class T, class A>
     class vector:
-        public vector_expression<vector<T, A> > {
+        public vector_container<vector<T, A> > {
 
         typedef T *pointer;
         typedef const T *const_pointer;
         typedef vector<T, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -47,30 +47,29 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_reference<self_type> closure_type;
         typedef self_type vector_temporary_type;
         typedef dense_tag storage_category;
-        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             data_ () {}
         explicit BOOST_UBLAS_INLINE
         vector (size_type size):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             data_ (size) {
         }
         BOOST_UBLAS_INLINE
         vector (size_type size, const array_type &data):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             data_ (data) {}
         BOOST_UBLAS_INLINE
         vector (const vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             data_ (v.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         vector (const vector_expression<AE> &ae):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             data_ (ae ().size ()) {
             vector_assign<scalar_assign> (*this, ae);
         }
@@ -175,11 +174,19 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
             return *this;
         }
+
+        // Computed assignment
         template<class AE>
         BOOST_UBLAS_INLINE
         vector &operator += (const vector_expression<AE> &ae) {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
+        }
+        template<class A2>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        vector &operator += (const vector<T, A2> &v) {
+            plus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -192,6 +199,12 @@ namespace boost { namespace numeric { namespace ublas {
         vector &operator -= (const vector_expression<AE> &ae) {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
+        }
+        template<class A2>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        vector &operator -= (const vector<T, A2> &v) {
+            minus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -534,13 +547,13 @@ namespace boost { namespace numeric { namespace ublas {
     // Zero vector class
     template<class T>
     class zero_vector:
-        public vector_expression<zero_vector<T> > {
+        public vector_container<zero_vector<T> > {
 
         typedef const T *const_pointer;
         typedef zero_vector<T> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -554,15 +567,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         zero_vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (0) {}
         explicit BOOST_UBLAS_INLINE
         zero_vector (size_type size):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (size) {}
         BOOST_UBLAS_INLINE
         zero_vector (const zero_vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (v.size_) {}
 
         // Accessors
@@ -723,13 +736,13 @@ namespace boost { namespace numeric { namespace ublas {
     // Unit vector class
     template<class T>
     class unit_vector:
-        public vector_expression<unit_vector<T> > {
+        public vector_container<unit_vector<T> > {
 
         typedef const T *const_pointer;
         typedef unit_vector<T> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -743,15 +756,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         unit_vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (0), index_ (0) {}
         BOOST_UBLAS_INLINE
         explicit unit_vector (size_type size, size_type index = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (size), index_ (index) {}
         BOOST_UBLAS_INLINE
         unit_vector (const unit_vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (v.size_), index_ (v.index_) {}
 
         // Accessors
@@ -937,13 +950,13 @@ namespace boost { namespace numeric { namespace ublas {
     // Scalar vector class
     template<class T>
     class scalar_vector:
-        public vector_expression<scalar_vector<T> > {
+        public vector_container<scalar_vector<T> > {
 
         typedef const T *const_pointer;
         typedef scalar_vector<T> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -956,15 +969,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         scalar_vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (0), value_ () {}
         BOOST_UBLAS_INLINE
         explicit scalar_vector (size_type size, const value_type &value = value_type(1)):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (size), value_ (value) {}
         BOOST_UBLAS_INLINE
         scalar_vector (const scalar_vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (v.size_), value_ (v.value_) {}
 
         // Accessors
@@ -1158,12 +1171,12 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based vector class
     template<class T, std::size_t N>
     class c_vector:
-        public vector_expression<c_vector<T, N> > {
+        public vector_container<c_vector<T, N> > {
 
         typedef c_vector<T, N> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -1177,7 +1190,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_reference<self_type> closure_type;
         typedef self_type vector_temporary_type;
         typedef dense_tag storage_category;
-        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1300,11 +1312,19 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
             return *this;
         }
+
+        // Computed assignment
         template<class AE>
         BOOST_UBLAS_INLINE
         c_vector &operator += (const vector_expression<AE> &ae) {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
+        }
+        template<std::size_t N2>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        c_vector &operator += (const c_vector<T, N2> &v) {
+            plus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1317,6 +1337,12 @@ namespace boost { namespace numeric { namespace ublas {
         c_vector &operator -= (const vector_expression<AE> &ae) {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
+        }
+        template<std::size_t N2>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        c_vector &operator -= (const c_vector<T, N2> &v) {
+            minus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE

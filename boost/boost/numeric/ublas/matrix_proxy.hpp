@@ -51,12 +51,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
-        typedef abstract_tag simd_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_row ():
-            data_ (nil_), i_ () {}
         BOOST_UBLAS_INLINE
         matrix_row (matrix_type &data, size_type i):
             data_ (data), i_ (i) {
@@ -457,11 +453,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         matrix_closure_type data_;
         size_type i_;
-        static matrix_type nil_;
     };
-
-    template<class M>
-    typename matrix_row<M>::matrix_type matrix_row<M>::nil_;
 
     // Projections
     template<class M>
@@ -505,12 +497,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
-        typedef abstract_tag simd_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_column ():
-            data_ (nil_), j_ () {}
         BOOST_UBLAS_INLINE
         matrix_column (matrix_type &data, size_type j):
             data_ (data), j_ (j) {
@@ -910,11 +898,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         matrix_closure_type data_;
         size_type j_;
-        static matrix_type nil_;
     };
-
-    template<class M>
-    typename matrix_column<M>::matrix_type matrix_column<M>::nil_;
 
     // Projections
     template<class M>
@@ -959,12 +943,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
-        typedef abstract_tag simd_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_vector_range ():
-            data_ (nil_), r1_ (), r2_ () {}
         BOOST_UBLAS_INLINE
         matrix_vector_range (matrix_type &data, const range_type &r1, const range_type &r2):
             data_ (data), r1_ (r1.preprocess (data.size1 ())), r2_ (r2.preprocess (data.size2 ())) {
@@ -1374,11 +1354,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         range_type r1_;
         range_type r2_;
-        static matrix_type nil_;
     };
-
-    template<class M>
-    typename matrix_vector_range<M>::matrix_type matrix_vector_range<M>::nil_;
 
     // Specialize temporary
     template <class M>
@@ -1412,12 +1388,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
-        typedef abstract_tag simd_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_vector_slice ():
-            data_ (nil_), s1_ (), s2_ () {}
         BOOST_UBLAS_INLINE
         matrix_vector_slice (matrix_type &data, const slice_type &s1, const slice_type &s2):
             data_ (data), s1_ (s1.preprocess (data.size1 ())), s2_ (s2.preprocess (data.size2 ())) {
@@ -1836,11 +1808,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         slice_type s1_;
         slice_type s2_;
-        static matrix_type nil_;
     };
-
-    template<class M>
-    typename matrix_vector_slice<M>::matrix_type matrix_vector_slice<M>::nil_;
 
     // Specialize temporary
     template <class M>
@@ -1875,9 +1843,6 @@ namespace boost { namespace numeric { namespace ublas {
                                                  dense_proxy_tag>::storage_category storage_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_vector_indirect ():
-            data_ (nil_), ia1_ (), ia2_ () {}
         BOOST_UBLAS_INLINE
         matrix_vector_indirect (matrix_type &data, size_type size):
             data_ (data), ia1_ (size), ia2_ (size) {}
@@ -2296,11 +2261,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
-        static matrix_type nil_;
     };
-
-    template<class M, class IA>
-    typename matrix_vector_indirect<M, IA>::matrix_type matrix_vector_indirect<M, IA>::nil_;
 
     // Specialize temporary
     template <class M, class IA>
@@ -2334,12 +2295,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
-        typedef typename M::simd_category simd_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_range ():
-            data_ (nil_), r1_ (), r2_ () {}
         BOOST_UBLAS_INLINE
         matrix_range (matrix_type &data, const range_type &r1, const range_type &r2):
             data_ (data), r1_ (r1.preprocess (data.size1 ())), r2_ (r2.preprocess (data.size2 ())) {
@@ -3144,11 +3101,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         range_type r1_;
         range_type r2_;
-        static matrix_type nil_;
     };
-
-    template<class M>
-    typename matrix_range<M>::matrix_type matrix_range<M>::nil_;
 
     // Projections
     template<class M>
@@ -3210,12 +3163,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
-        typedef typename M::simd_category simd_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_slice ():
-            data_ (nil_), s1_ (), s2_ () {}
         BOOST_UBLAS_INLINE
         matrix_slice (matrix_type &data, const slice_type &s1, const slice_type &s2):
             data_ (data), s1_ (s1.preprocess (data.size1 ())), s2_ (s2.preprocess (data.size2 ())) {
@@ -4042,11 +3991,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         slice_type s1_;
         slice_type s2_;
-        static matrix_type nil_;
     };
-
-    template<class M>
-    typename matrix_slice<M>::matrix_type matrix_slice<M>::nil_;
 
     // Projections
     template<class M>
@@ -4124,9 +4069,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::orientation_category orientation_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        matrix_indirect ():
-            data_ (nil_), ia1_ (), ia2_ () {}
         BOOST_UBLAS_INLINE
         matrix_indirect (matrix_type &data, size_type size1, size_type size2):
             data_ (data), ia1_ (size1), ia2_ (size2) {}
@@ -4947,11 +4889,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
-        static matrix_type nil_;
     };
-
-    template<class M, class IA>
-    typename matrix_indirect<M, IA>::matrix_type matrix_indirect<M, IA>::nil_;
 
     // Projections
     template<class M, class A>

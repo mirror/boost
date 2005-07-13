@@ -30,7 +30,7 @@ namespace boost { namespace numeric { namespace ublas {
     // FIXME outer vector can be sparse type but it is completely filled
     template<class T, class L, class A>
     class generalized_vector_of_vector:
-        public matrix_expression<generalized_vector_of_vector<T, L, A> > {
+        public matrix_container<generalized_vector_of_vector<T, L, A> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -39,7 +39,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef generalized_vector_of_vector<T, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -62,6 +62,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector ():
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), data_ (1) {
             const size_type sizeM = layout_type::size1 (size1_, size2_);
              // create size1+1 empty vector elements
@@ -70,6 +71,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector (size_type size1, size_type size2, size_type non_zeros = 0):
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (layout_type::size1 (size1_, size2_) + 1) {
             const size_type sizeM = layout_type::size1 (size1_, size2_);
             const size_type sizem = layout_type::size2 (size1_, size2_);
@@ -80,12 +82,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector (const generalized_vector_of_vector &m):
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {
             storage_invariants ();
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (layout_type::size1 (size1_, size2_) + 1) {
             const size_type sizeM = layout_type::size1 (size1_, size2_);
             const size_type sizem = layout_type::size2 (size1_, size2_);

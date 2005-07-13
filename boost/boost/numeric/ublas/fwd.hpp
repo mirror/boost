@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef _BOOST_UBLAS_FWD_
-#define _BOOST_UBLAS_FWD_
+#ifndef BOOST_UBLAS_FWD_H
+#define BOOST_UBLAS_FWD_H
 
 #include <memory>
 
@@ -45,13 +45,12 @@ namespace boost { namespace numeric { namespace ublas {
     // Expression types
     struct scalar_tag {};
     
-    template<class E>
-    class vector_expression;
-
     struct vector_tag {};
-
     template<class E>
     class vector_expression;
+    template<class C>
+    class vector_container;
+
     template<class E>
     class vector_reference;
 
@@ -59,6 +58,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E>
     class matrix_expression;
+    template<class C>
+    class matrix_container;
+
     template<class E>
     class matrix_reference;
 
@@ -202,10 +204,6 @@ namespace boost { namespace numeric { namespace ublas {
     class compressed_matrix;
     template<class T, class L = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_matrix;
-
-    // Evaluation tags
-    struct concrete_tag {};
-    struct abstract_tag {};
 
 }}}
 

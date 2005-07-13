@@ -250,7 +250,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Index map based sparse matrix class
     template<class T, class L, class A>
     class mapped_matrix:
-        public matrix_expression<mapped_matrix<T, L, A> > {
+        public matrix_container<mapped_matrix<T, L, A> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -259,7 +259,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef mapped_matrix<T, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -281,22 +281,22 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         mapped_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         mapped_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ () {
             detail::map_reserve (data (), restrict_capacity (non_zeros));
         }
         BOOST_UBLAS_INLINE
         mapped_matrix (const mapped_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         mapped_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ () {
             detail::map_reserve (data (), restrict_capacity (non_zeros));
             matrix_assign<scalar_assign> (*this, ae);
@@ -1286,7 +1286,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Vector index map based sparse matrix class
     template<class T, class L, class A>
     class mapped_vector_of_mapped_vector:
-        public matrix_expression<mapped_vector_of_mapped_vector<T, L, A> > {
+        public matrix_container<mapped_vector_of_mapped_vector<T, L, A> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -1297,7 +1297,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef mapped_vector_of_mapped_vector<T, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -1319,24 +1319,24 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         mapped_vector_of_mapped_vector ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), data_ () {
             data_ [layout_type::size1 (size1_, size2_)] = vector_data_value_type ();
         }
         BOOST_UBLAS_INLINE
         mapped_vector_of_mapped_vector (size_type size1, size_type size2, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ () {
             data_ [layout_type::size1 (size1_, size2_)] = vector_data_value_type ();
         }
         BOOST_UBLAS_INLINE
         mapped_vector_of_mapped_vector (const mapped_vector_of_mapped_vector &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         mapped_vector_of_mapped_vector (const matrix_expression<AE> &ae, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ () {
             data_ [layout_type::size1 (size1_, size2_)] = vector_data_value_type ();
             matrix_assign<scalar_assign> (*this, ae);
@@ -2455,7 +2455,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, class L, std::size_t IB, class IA, class TA>
     class compressed_matrix:
-        public matrix_expression<compressed_matrix<T, L, IB, IA, TA> > {
+        public matrix_container<compressed_matrix<T, L, IB, IA, TA> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -2464,7 +2464,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef compressed_matrix<T, L, IB, IA, TA> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
@@ -2492,7 +2492,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         compressed_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), capacity_ (restrict_capacity (0)),
             filled1_ (1), filled2_ (0),
             index1_data_ (layout_type::size1 (size1_, size2_) + 1), index2_data_ (capacity_), value_data_ (capacity_) {
@@ -2501,7 +2501,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         compressed_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), capacity_ (restrict_capacity (non_zeros)),
             filled1_ (1), filled2_ (0),
             index1_data_ (layout_type::size1 (size1_, size2_) + 1), index2_data_ (capacity_), value_data_ (capacity_) {
@@ -2510,7 +2510,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         compressed_matrix (const compressed_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), capacity_ (m.capacity_),
             filled1_ (m.filled1_), filled2_ (m.filled2_),
             index1_data_ (m.index1_data_), index2_data_ (m.index2_data_), value_data_ (m.value_data_) {
@@ -2519,7 +2519,7 @@ namespace boost { namespace numeric { namespace ublas {
          
         BOOST_UBLAS_INLINE
         compressed_matrix (const coordinate_matrix<T, L, IB, IA, TA> &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1()), size2_ (m.size2()),
             index1_data_ (layout_type::size1 (size1_, size2_) + 1)
         {
@@ -2544,7 +2544,7 @@ namespace boost { namespace numeric { namespace ublas {
        template<class AE>
        BOOST_UBLAS_INLINE
        compressed_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), capacity_ (restrict_capacity (non_zeros)),
             filled1_ (1), filled2_ (0),
             index1_data_ (layout_type::size1 (ae ().size1 (), ae ().size2 ()) + 1),
@@ -3797,7 +3797,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, class L, std::size_t IB, class IA, class TA>
     class coordinate_matrix:
-        public matrix_expression<coordinate_matrix<T, L, IB, IA, TA> > {
+        public matrix_container<coordinate_matrix<T, L, IB, IA, TA> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -3806,7 +3806,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef coordinate_matrix<T, L, IB, IA, TA> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
@@ -3834,7 +3834,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         coordinate_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), capacity_ (restrict_capacity (0)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index1_data_ (capacity_), index2_data_ (capacity_), value_data_ (capacity_) {
@@ -3842,7 +3842,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         coordinate_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index1_data_ (capacity_), index2_data_ (capacity_), value_data_ (capacity_) {
@@ -3850,7 +3850,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         coordinate_matrix (const coordinate_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), capacity_ (m.capacity_),
             filled_ (m.filled_), sorted_filled_ (m.sorted_filled_), sorted_ (m.sorted_),
             index1_data_ (m.index1_data_), index2_data_ (m.index2_data_), value_data_ (m.value_data_) {
@@ -3859,7 +3859,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index1_data_ (capacity_), index2_data_ (capacity_), value_data_ (capacity_) {

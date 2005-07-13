@@ -28,7 +28,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based triangular matrix class
     template<class T, class TRI, class L, class A>
     class triangular_matrix:
-        public matrix_expression<triangular_matrix<T, TRI, L, A> > {
+        public matrix_container<triangular_matrix<T, TRI, L, A> > {
 
         typedef T *pointer;
         typedef TRI triangular_type;
@@ -36,7 +36,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef triangular_matrix<T, TRI, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -55,25 +55,25 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         triangular_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         triangular_matrix (size_type size1, size_type size2):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (triangular_type::packed_size (layout_type (), size1, size2)) {
         }
         BOOST_UBLAS_INLINE
         triangular_matrix (size_type size1, size_type size2, const array_type &data):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (data) {}
         BOOST_UBLAS_INLINE
         triangular_matrix (const triangular_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         triangular_matrix (const matrix_expression<AE> &ae):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()),
             data_ (triangular_type::packed_size (layout_type (), size1_, size2_)) {
             matrix_assign<scalar_assign> (*this, ae);

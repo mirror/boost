@@ -12,12 +12,28 @@
 template <class E>
 struct default_construct
 {
+    static void test() {}
+}; 
+template <class VC>
+struct default_construct<boost::numeric::ublas::vector_container<VC> >
+{
     static void test ()
     {
-        E default_constuct;
+        VC default_constuct;
+        initialize_vector (default_constuct);
         std::cout << "default construct = " << default_constuct << std::endl;
     }
-}; 
+};
+template <class MC>
+struct default_construct<boost::numeric::ublas::matrix_container<MC> >
+{
+    static void test ()
+    {
+        MC default_constuct;
+        initialize_vector (default_constuct);
+        std::cout << "default construct = " << default_constuct << std::endl;
+    }
+};
 
 /*
  * Initialise test values in vector/matrix

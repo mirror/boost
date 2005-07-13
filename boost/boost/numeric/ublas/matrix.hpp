@@ -60,14 +60,14 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based matrix class
     template<class T, class L, class A>
     class matrix:
-        public matrix_expression<matrix<T, L, A> > {
+        public matrix_container<matrix<T, L, A> > {
 
         typedef T *pointer;
         typedef L layout_type;
         typedef matrix<T, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -84,30 +84,29 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef typename unknown_orientation_tag orientation_category;
         // but others depend on the orientation information...
         typedef typename L::orientation_category orientation_category;
-        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (layout_type::storage_size (size1, size2)) {
         }
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2, const array_type &data):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (data) {}
         BOOST_UBLAS_INLINE
         matrix (const matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix (const matrix_expression<AE> &ae):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (layout_type::storage_size (size1_, size2_)) {
             matrix_assign<scalar_assign> (*this, ae);
         }
@@ -975,14 +974,14 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based matrix class
     template<class T, class L, class A>
     class vector_of_vector:
-        public matrix_expression<vector_of_vector<T, L, A> > {
+        public matrix_container<vector_of_vector<T, L, A> > {
 
         typedef T *pointer;
         typedef L layout_type;
         typedef vector_of_vector<T, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -999,27 +998,26 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef typename unknown_orientation_tag orientation_category;
         // but others depend on the orientation information...
         typedef typename L::orientation_category orientation_category;
-        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         vector_of_vector ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), data_ (1) {}
         BOOST_UBLAS_INLINE
         vector_of_vector (size_type size1, size_type size2):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (1) {
             resize (size1, size2, true);
         }
         BOOST_UBLAS_INLINE
         vector_of_vector (const vector_of_vector &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_of_vector (const matrix_expression<AE> &ae):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (layout_type::size1 (size1_, size2_) + 1) {
             for (size_type k = 0; k < layout_type::size1 (size1_, size2_); ++ k)
                 data ()[k].resize (layout_type::size2 (size1_, size2_));
@@ -1901,13 +1899,13 @@ namespace boost { namespace numeric { namespace ublas {
     // Zero matrix class
     template<class T>
     class zero_matrix:
-        public matrix_expression<zero_matrix<T> > {
+        public matrix_container<zero_matrix<T> > {
 
         typedef const T *const_pointer;
         typedef zero_matrix<T> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -1922,19 +1920,19 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         zero_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0) {}
         BOOST_UBLAS_INLINE
         zero_matrix (size_type size):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size), size2_ (size) {}
         BOOST_UBLAS_INLINE
         zero_matrix (size_type size1, size_type size2):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2) {}
         BOOST_UBLAS_INLINE
         zero_matrix (const zero_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_) {}
 
         // Accessors
@@ -2259,13 +2257,13 @@ namespace boost { namespace numeric { namespace ublas {
     // Identity matrix class
     template<class T>
     class identity_matrix:
-        public matrix_expression<identity_matrix<T> > {
+        public matrix_container<identity_matrix<T> > {
 
         typedef const T *const_pointer;
         typedef identity_matrix<T> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -2280,19 +2278,19 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         identity_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), size_common_ (0) {}
         BOOST_UBLAS_INLINE
         identity_matrix (size_type size):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size), size2_ (size), size_common_ ((std::min) (size1_, size2_)) {}
         BOOST_UBLAS_INLINE
         identity_matrix (size_type size1, size_type size2):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), size_common_ ((std::min) (size1_, size2_)) {}
         BOOST_UBLAS_INLINE
         identity_matrix (const identity_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), size_common_ ((std::min) (size1_, size2_)) {}
 
         // Accessors
@@ -2643,13 +2641,13 @@ namespace boost { namespace numeric { namespace ublas {
     // Scalar matrix class
     template<class T>
     class scalar_matrix:
-        public matrix_expression<scalar_matrix<T> > {
+        public matrix_container<scalar_matrix<T> > {
 
         typedef const T *const_pointer;
         typedef scalar_matrix<T> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -2663,15 +2661,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         scalar_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (0), size2_ (0), value_ () {}
         BOOST_UBLAS_INLINE
         scalar_matrix (size_type size1, size_type size2, const value_type &value = value_type(1)):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), value_ (value) {}
         BOOST_UBLAS_INLINE
         scalar_matrix (const scalar_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), value_ (m.value_) {}
 
         // Accessors
@@ -3066,12 +3064,12 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based matrix class
     template<class T, std::size_t N, std::size_t M>
     class c_matrix:
-        public matrix_expression<c_matrix<T, N, M> > {
+        public matrix_container<c_matrix<T, N, M> > {
 
         typedef c_matrix<T, N, M> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -3089,7 +3087,6 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef typename unknown_orientation_tag orientation_category;
         // but others depend on the orientation information...
         typedef row_major_tag orientation_category;
-        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE

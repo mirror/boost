@@ -17,300 +17,38 @@
 #ifndef _BOOST_UBLAS_VECTOR_EXPRESSION_
 #define _BOOST_UBLAS_VECTOR_EXPRESSION_
 
-#include <boost/numeric/ublas/exception.hpp>
-#include <boost/numeric/ublas/traits.hpp>
-#include <boost/numeric/ublas/functional.hpp>
+#include <boost/numeric/ublas/expression_types.hpp>
 
 
 // Expression templates based on ideas of Todd Veldhuizen and Geoffrey Furnish
 // Iterators based on ideas of Jeremy Siek
+//
+// Classes that model the Vector Expression concept
 
 namespace boost { namespace numeric { namespace ublas {
 
-    // Base class for uBLAS staticaly derived expressions - see the Barton Nackman trick
-    //  Provides numeric properties for linear algebra
     template<class E>
-    class ublas_expression {
-    public:
-        typedef E expression_type;
-        /* E can be an incomplete type - to define the following we would need more template arguments
-        typedef typename E::type_category type_category;
-        typedef typename E::value_type value_type;
-        */
-        
-        // Directly implement nonassignable - simplifes debugging call trace!
-    protected:
-        ublas_expression () {}
-        ~ublas_expression () {}
-    private:
-        const ublas_expression& operator= (const ublas_expression &);
-    };
-
-
-    // Base class for Scalar Expressions - see the Barton Nackman trick
-    template<class E>
-    class scalar_expression:
-        public ublas_expression<E> {
-    public:
-        typedef E expression_type;
-        typedef scalar_tag type_category;
-
-        BOOST_UBLAS_INLINE
-        const expression_type &operator () () const {
-            return *static_cast<const expression_type *> (this);
-        }
-        BOOST_UBLAS_INLINE
-        expression_type &operator () () {
-            return *static_cast<expression_type *> (this);
-        }
-    };
-
-    template<class T>
-    class scalar_reference:
-        public scalar_expression<scalar_reference<T> > {
-
-        typedef scalar_reference<T> self_type;
-    public:
-        typedef T value_type;
-        typedef const value_type &const_reference;
-        typedef typename boost::mpl::if_<boost::is_const<T>,
-                                          const_reference,
-                                          value_type &>::type reference;
-        typedef const self_type const_closure_type;
-        typedef const_closure_type closure_type;
-
-        // Construction and destruction
-        BOOST_UBLAS_INLINE
-        scalar_reference ():
-            t_ (nil_) {}
-        BOOST_UBLAS_INLINE
-        explicit scalar_reference (reference t):
-            t_ (t) {}
-
-        // Conversion
-        BOOST_UBLAS_INLINE
-        operator value_type () const {
-            return t_;
-        }
-
-        // Assignment
-        BOOST_UBLAS_INLINE
-        scalar_reference &operator = (const scalar_reference &s) {
-            t_ = s.t_;
-            return *this;
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
-        scalar_reference &operator = (const scalar_expression<AE> &ae) {
-            t_ = ae;
-            return *this;
-        }
-
-        // Closure comparison
-        BOOST_UBLAS_INLINE
-        bool same_closure (const scalar_reference &sr) const {
-            return &t_ == &sr.t_;
-        }
-
-    private:
-        reference t_;
-        static value_type nil_;
-    };
-
-    template<class T>
-    typename scalar_reference<T>::value_type scalar_reference<T>::nil_
-        = typename scalar_reference<T>::value_type ();
-
-    template<class T>
-    class scalar_value:
-        public scalar_expression<scalar_value<T> > {
-
-        typedef scalar_value<T> self_type;
-    public:
-        typedef T value_type;
-        typedef const value_type &const_reference;
-        typedef typename boost::mpl::if_<boost::is_const<T>,
-                                          const_reference,
-                                          value_type &>::type reference;
-        typedef const scalar_reference<const self_type> const_closure_type;
-        typedef scalar_reference<self_type> closure_type;
-
-        // Construction and destruction
-        BOOST_UBLAS_INLINE
-        scalar_value ():
-            t_ () {}
-        BOOST_UBLAS_INLINE
-        scalar_value (const value_type &t):
-            t_ (t) {}
-
-        BOOST_UBLAS_INLINE
-        operator value_type () const {
-            return t_;
-        }
-
-        // Assignment
-        BOOST_UBLAS_INLINE
-        scalar_value &operator = (const scalar_value &s) {
-            t_ = s.t_;
-            return *this;
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
-        scalar_value &operator = (const scalar_expression<AE> &ae) {
-            t_ = ae;
-            return *this;
-        }
-
-        // Closure comparison
-        BOOST_UBLAS_INLINE
-        bool same_closure (const scalar_value &sv) const {
-            return this == &sv;    // self closing on instances value
-        }
-
-    private:
-        value_type t_;
-    };
-
-
-    // Base class for Vector Expressions - see the Barton Nackman trick
-    // This class could define an common interface for all
-    // statically derived expression type classes.
-    // We implement the casts to the statically derived type.
-    template<class E>
-    class vector_expression:
-        public ublas_expression<E> {
-    public:
-        static const unsigned complexity = 0;
-        typedef E expression_type;
-        typedef vector_tag type_category;
-        typedef abstract_tag simd_category;
-        /* E can be an incomplete type - to define the following we would need more template arguments
-        typedef typename E::size_type size_type;
-        */
- 
-        BOOST_UBLAS_INLINE
-        const expression_type &operator () () const {
-            return *static_cast<const expression_type *> (this);
-        }
-        BOOST_UBLAS_INLINE
-        expression_type &operator () () {
-            return *static_cast<expression_type *> (this);
-        }
-
-    private:
-        // projection types
-        typedef vector_range<E> vector_range_type;
-        typedef const vector_range<const E> const_vector_range_type;
-        typedef vector_slice<E> vector_slice_type;
-        typedef const vector_slice<const E> const_vector_slice_type;
-        // vector_indirect_type will depend on the A template parameter 
-        typedef basic_range<> default_range;
-        typedef basic_slice<> default_slice;
-   public:
-        // projection functions - projects must be constructable from default size_t, range and slice types
-        BOOST_UBLAS_INLINE
-        const_vector_range_type range (std::size_t start, std::size_t stop) const {
-            return const_vector_range_type (operator () (), default_range (start, stop));
-        }
-        BOOST_UBLAS_INLINE
-        vector_range_type range (std::size_t start, std::size_t stop) {
-            return vector_range_type (operator () (), default_range (start, stop));
-        }
-        BOOST_UBLAS_INLINE
-        const_vector_slice_type slice (std::size_t start, std::ptrdiff_t stride, std::size_t size) const {
-            return const_vector_slice_type (operator () (), default_slice (start, stride, size));
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice_type slice (std::size_t start, std::ptrdiff_t stride, std::size_t size) {
-            return vector_slice_type (operator () (), default_slice (start, stride, size));
-        }
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        BOOST_UBLAS_INLINE
-        const_vector_range_type operator () (const default_range &r) const {
-            return const_vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        vector_range_type operator () (const default_range &r) {
-            return vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        const_vector_slice_type operator () (const default_slice &s) const {
-            return const_vector_slice_type (operator () (), s);
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice_type operator () (const default_slice &s) {
-            return vector_slice_type (operator () (), s);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        const vector_indirect<const E, A> operator () (const indirect_array<A> &ia) const {
-            return vector_indirect<const E, A>  (operator () (), ia);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        vector_indirect<E, A> operator () (const indirect_array<A> &ia) {
-            return vector_indirect<E, A> (operator () (), ia);
-        }
-#endif
-        BOOST_UBLAS_INLINE
-        const_vector_range_type project (const default_range &r) const {
-            return const_vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        vector_range_type project (const default_range &r) {
-            return vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        const_vector_slice_type project (const default_slice &s) const {
-            return const_vector_slice_type (operator () (), s);
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice_type project (const default_slice &s) {
-            return vector_slice_type (operator () (), s);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        const vector_indirect<const E, A> project (const indirect_array<A> &ia) const {
-            return vector_indirect<const E, A> (operator () (), ia);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        vector_indirect<E, A> project (const indirect_array<A> &ia) {
-            return vector_indirect<E, A> (operator () (), ia);
-        }
-    };
-
-
-    /*
-     * All subsequent classes model the Vector Expression concept
-    */
-
-    template<class T>
     class vector_reference:
-        public vector_expression<vector_reference<T> > {
+        public vector_expression<vector_reference<E> > {
 
-        typedef vector_reference<T> self_type;
+        typedef vector_reference<E> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<vector_reference<T> >::operator ();
+        using vector_expression<vector_reference<E> >::operator ();
 #endif
-        typedef typename T::size_type size_type;
-        typedef typename T::difference_type difference_type;
-        typedef typename T::value_type value_type;
-        typedef typename T::const_reference const_reference;
-        typedef typename boost::mpl::if_<boost::is_const<T>,
-                                          typename T::const_reference,
-                                          typename T::reference>::type reference;
-        typedef T refered_type;
+        typedef typename E::size_type size_type;
+        typedef typename E::difference_type difference_type;
+        typedef typename E::value_type value_type;
+        typedef typename E::const_reference const_reference;
+        typedef typename boost::mpl::if_<boost::is_const<E>,
+                                          typename E::const_reference,
+                                          typename E::reference>::type reference;
+        typedef E refered_type;
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
-        typedef typename T::storage_category storage_category;
-        typedef typename T::simd_category simd_category;
+        typedef typename E::storage_category storage_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        vector_reference ():
-            e_ (nil_) {}
         BOOST_UBLAS_INLINE
         explicit vector_reference (refered_type &e):
             e_ (e) {}
@@ -432,10 +170,10 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Iterator types
-        typedef typename T::const_iterator const_iterator;
-        typedef typename boost::mpl::if_<boost::is_const<T>,
-                                          typename T::const_iterator,
-                                          typename T::iterator>::type iterator;
+        typedef typename E::const_iterator const_iterator;
+        typedef typename boost::mpl::if_<boost::is_const<E>,
+                                          typename E::const_iterator,
+                                          typename E::iterator>::type iterator;
 
         // Element lookup
         BOOST_UBLAS_INLINE
@@ -490,11 +228,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         refered_type &e_;
-        static refered_type nil_;
     };
 
-    template<class T>
-    typename vector_reference<T>::refered_type vector_reference<T>::nil_;
 
     template<class E, class F>
     class vector_unary:
@@ -524,9 +259,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        vector_unary ():
-            e_ () {}
         BOOST_UBLAS_INLINE
         // May be used as mutable expression.
         explicit vector_unary (expression_type &e):
@@ -806,9 +538,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        vector_binary ():
-            e1_ (), e2_ () {}
         BOOST_UBLAS_INLINE
         vector_binary (const expression1_type &e1, const expression2_type &e2):
             e1_ (e1), e2_ (e2) {}
@@ -1191,9 +920,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        vector_binary_scalar1 ():
-            e1_ (), e2_ () {}
-        BOOST_UBLAS_INLINE
         vector_binary_scalar1 (const expression1_type &e1, const expression2_type &e2):
             e1_ (e1), e2_ (e2) {}
 
@@ -1414,9 +1140,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        vector_binary_scalar2 ():
-            e1_ (), e2_ () {}
         BOOST_UBLAS_INLINE
         vector_binary_scalar2 (const expression1_type &e1, const expression2_type &e2):
             e1_ (e1), e2_ (e2) {}
@@ -1643,9 +1366,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        vector_scalar_unary ():
-            e_ () {}
-        BOOST_UBLAS_INLINE
         explicit vector_scalar_unary (const expression_type &e):
             e_ (e) {}
 
@@ -1778,9 +1498,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
-        BOOST_UBLAS_INLINE
-        vector_scalar_binary ():
-            e1_ (), e2_ () {}
         BOOST_UBLAS_INLINE
         vector_scalar_binary (const expression1_type &e1, const expression2_type  &e2):
             e1_ (e1), e2_ (e2) {}

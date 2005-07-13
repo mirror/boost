@@ -44,7 +44,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Array based symmetric matrix class
     template<class T, class TRI, class L, class A>
     class symmetric_matrix:
-        public matrix_expression<symmetric_matrix<T, TRI, L, A> > {
+        public matrix_container<symmetric_matrix<T, TRI, L, A> > {
 
         typedef T *pointer;
         typedef TRI triangular_type;
@@ -52,7 +52,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef symmetric_matrix<T, TRI, L, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using matrix_expression<self_type>::operator ();
+        using matrix_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -71,30 +71,30 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         symmetric_matrix ():
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size_ (BOOST_UBLAS_SAME (size, size)), data_ (triangular_type::packed_size (layout_type (), size, size)) {
         }
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size1, size_type size2):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size_ (BOOST_UBLAS_SAME (size1, size2)), data_ (triangular_type::packed_size (layout_type (), size1, size2)) {
         }
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size, const array_type &data):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size_ (size), data_ (data) {}
         BOOST_UBLAS_INLINE
         symmetric_matrix (const symmetric_matrix &m):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size_ (m.size_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_matrix (const matrix_expression<AE> &ae):
-            matrix_expression<self_type> (),
+            matrix_container<self_type> (),
             size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())),
             data_ (triangular_type::packed_size (layout_type (), size_, size_)) {
             matrix_assign<scalar_assign> (*this, ae);

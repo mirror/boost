@@ -263,7 +263,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Index map based sparse vector class
     template<class T, class A>
     class mapped_vector:
-        public vector_expression<mapped_vector<T, A> > {
+        public vector_container<mapped_vector<T, A> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -271,7 +271,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef mapped_vector<T, A> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
@@ -291,22 +291,22 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         mapped_vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         mapped_vector (size_type size, size_type non_zeros = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (size), data_ () {
             detail::map_reserve (data(), restrict_capacity (non_zeros));
         }
         BOOST_UBLAS_INLINE
         mapped_vector (const mapped_vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (v.size_), data_ (v.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         mapped_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (ae ().size ()), data_ () {
             detail::map_reserve (data(), restrict_capacity (non_zeros));
             vector_assign<scalar_assign> (*this, ae);
@@ -461,11 +461,19 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
             return *this;
         }
+
+        // Computed assignment
         template<class AE>
         BOOST_UBLAS_INLINE
         mapped_vector &operator += (const vector_expression<AE> &ae) {
             self_type temporary (*this + ae, detail::map_capacity (data()));
             return assign_temporary (temporary);
+        }
+        template<class C>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        mapped_vector &operator += (const vector_container<C> &v) {
+            plus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -478,6 +486,12 @@ namespace boost { namespace numeric { namespace ublas {
         mapped_vector &operator -= (const vector_expression<AE> &ae) {
             self_type temporary (*this - ae, detail::map_capacity (data()));
             return assign_temporary (temporary);
+        }
+        template<class C>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        mapped_vector &operator -= (const vector_container<C> &v) {
+            minus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -727,7 +741,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, std::size_t IB, class IA, class TA>
     class compressed_vector:
-        public vector_expression<compressed_vector<T, IB, IA, TA> > {
+        public vector_container<compressed_vector<T, IB, IA, TA> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -735,7 +749,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef compressed_vector<T, IB, IA, TA> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
@@ -758,21 +772,21 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         compressed_vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (0), capacity_ (restrict_capacity (0)), filled_ (0),
             index_data_ (capacity_), value_data_ (capacity_) {
             storage_invariants ();
         }
         explicit BOOST_UBLAS_INLINE
         compressed_vector (size_type size, size_type non_zeros = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (size), capacity_ (restrict_capacity (non_zeros)), filled_ (0),
             index_data_ (capacity_), value_data_ (capacity_) {
         storage_invariants ();
         }
         BOOST_UBLAS_INLINE
         compressed_vector (const compressed_vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (v.size_), capacity_ (v.capacity_), filled_ (v.filled_),
             index_data_ (v.index_data_), value_data_ (v.value_data_) {
             storage_invariants ();
@@ -780,7 +794,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (ae ().size ()), capacity_ (restrict_capacity (non_zeros)), filled_ (0),
             index_data_ (capacity_), value_data_ (capacity_) {
             storage_invariants ();
@@ -990,11 +1004,19 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
             return *this;
         }
+
+        // Computed assignment
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_vector &operator += (const vector_expression<AE> &ae) {
             self_type temporary (*this + ae, capacity_);
             return assign_temporary (temporary);
+        }
+        template<class C>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        compressed_vector &operator += (const vector_container<C> &v) {
+            plus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1007,6 +1029,12 @@ namespace boost { namespace numeric { namespace ublas {
         compressed_vector &operator -= (const vector_expression<AE> &ae) {
             self_type temporary (*this - ae, capacity_);
             return assign_temporary (temporary);
+        }
+        template<class C>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        compressed_vector &operator -= (const vector_container<C> &v) {
+            minus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1300,7 +1328,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, std::size_t IB, class IA, class TA>
     class coordinate_vector:
-        public vector_expression<coordinate_vector<T, IB, IA, TA> > {
+        public vector_container<coordinate_vector<T, IB, IA, TA> > {
 
         typedef T &true_reference;
         typedef T *pointer;
@@ -1308,7 +1336,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef coordinate_vector<T, IB, IA, TA> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        using vector_expression<self_type>::operator ();
+        using vector_container<self_type>::operator ();
 #endif
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
@@ -1331,7 +1359,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         coordinate_vector ():
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (0), capacity_ (restrict_capacity (0)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index_data_ (capacity_), value_data_ (capacity_) {
@@ -1339,7 +1367,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         explicit BOOST_UBLAS_INLINE
         coordinate_vector (size_type size, size_type non_zeros = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (size), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index_data_ (capacity_), value_data_ (capacity_) {
@@ -1347,7 +1375,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         coordinate_vector (const coordinate_vector &v):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (v.size_), capacity_ (v.capacity_),
             filled_ (v.filled_), sorted_filled_ (v.sorted_filled_), sorted_ (v.sorted_),
             index_data_ (v.index_data_), value_data_ (v.value_data_) {
@@ -1356,7 +1384,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
-            vector_expression<self_type> (),
+            vector_container<self_type> (),
             size_ (ae ().size ()), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index_data_ (capacity_), value_data_ (capacity_) {
@@ -1587,11 +1615,19 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
             return *this;
         }
+
+        // Computed assignment
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_vector &operator += (const vector_expression<AE> &ae) {
             self_type temporary (*this + ae, capacity_);
             return assign_temporary (temporary);
+        }
+        template<class C>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        coordinate_vector &operator += (const vector_container<C> &v) {
+            plus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1604,6 +1640,12 @@ namespace boost { namespace numeric { namespace ublas {
         coordinate_vector &operator -= (const vector_expression<AE> &ae) {
             self_type temporary (*this - ae, capacity_);
             return assign_temporary (temporary);
+        }
+        template<class C>          // addative assignment without temporary
+        BOOST_UBLAS_INLINE
+        coordinate_vector &operator -= (const vector_container<C> &v) {
+            minus_assign (v);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
