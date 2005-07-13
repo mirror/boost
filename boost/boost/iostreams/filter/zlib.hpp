@@ -46,12 +46,12 @@ typedef unsigned int uint;
 typedef unsigned char byte;
 typedef unsigned long ulong;
 
-extern "C" {
+//extern "C" {
 
 typedef void* (*alloc_func)(void*, zlib::uint, zlib::uint);
 typedef void (*free_func)(void*, void*);
 
-} // End extern "C".
+//} // End extern "C".
 
                     // Compression levels
 
