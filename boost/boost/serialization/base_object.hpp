@@ -90,10 +90,10 @@ namespace detail {
     {
         typedef BOOST_DEDUCED_TYPENAME
             mpl::if_<
-        		is_const<D>,
-        		const B,
-        		B
-        	>::type type;
+                        is_const<D>,
+                        const B,
+                        B
+                >::type type;
         BOOST_STATIC_ASSERT(is_const<type>::value == is_const<D>::value);
     };
 } // namespace detail
