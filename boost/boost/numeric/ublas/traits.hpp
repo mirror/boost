@@ -49,10 +49,10 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
 
-	// Type traits - generic numeric properties and functions
+        // Type traits - generic numeric properties and functions
     template<class T>
     struct type_traits;
-    	
+        
     // Define properties for a generic scalar type
     template<class T>
     struct scalar_traits {
@@ -62,7 +62,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
 
         typedef T real_type;
-        typedef real_type precision_type;	// we do not know what type has more precision then the real_type
+        typedef real_type precision_type;       // we do not know what type has more precision then the real_type
 
         static const unsigned plus_complexity = 1;
         static const unsigned multiplies_complexity = 1;
@@ -172,7 +172,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
 
         typedef typename T::value_type real_type;
-        typedef real_type precision_type;	// we do not know what type has more precision then the real_type
+        typedef real_type precision_type;       // we do not know what type has more precision then the real_type
 
         static const unsigned plus_complexity = 2;
         static const unsigned multiplies_complexity = 6;
@@ -271,7 +271,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const value_type &const_reference;
         typedef value_type &reference;
         typedef value_type real_type;
-        typedef real_type precision_type;	// we do not know what type has more precision then the real_type
+        typedef real_type precision_type;       // we do not know what type has more precision then the real_type
 
         static const unsigned plus_complexity = 1;
         static const unsigned multiplies_complexity = 1;

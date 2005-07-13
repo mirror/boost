@@ -199,7 +199,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_slice<E> vector_slice_type;
         typedef vector_slice<const E> const_vector_slice_type;
         // vector_indirect_type will depend on the A template parameter 
-        typedef basic_range<> default_range;	// required to avoid range/slice name confusion
+        typedef basic_range<> default_range;    // required to avoid range/slice name confusion
         typedef basic_slice<> default_slice;
    public:
         // projection functions - projects must be constructable from default size_t, range and slice types
@@ -343,7 +343,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_slice<E> matrix_slice_type;
         typedef const matrix_slice<const E> const_matrix_slice_type;
         // matrix_indirect_type will depend on the A template parameter 
-        typedef basic_range<> default_range;	// required to avoid range/slice name confusion
+        typedef basic_range<> default_range;    // required to avoid range/slice name confusion
         typedef basic_slice<> default_slice;
 
     public:

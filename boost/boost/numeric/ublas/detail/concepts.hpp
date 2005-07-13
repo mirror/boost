@@ -524,7 +524,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename SE::value_type value_type;
 
         static void constraints () {
-        	scalar_expression_type *sp;
+                scalar_expression_type *sp;
             scalar_expression_type s = *sp;
             value_type t;
             // Conversion
@@ -543,8 +543,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename VE::const_reverse_iterator const_reverse_iterator_type;
 
         static void constraints () {
-        	vector_expression_type *vp;
-        	const vector_expression_type *cvp;
+                vector_expression_type *vp;
+                const vector_expression_type *cvp;
             vector_expression_type v = *vp;
             const vector_expression_type cv = *cvp;
             size_type n (0), i (0);
@@ -582,7 +582,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename VE::reverse_iterator reverse_iterator_type;
 
         static void constraints () {
-        	vector_expression_type *vp;
+                vector_expression_type *vp;
             AssignableConcept<vector_expression_type>::constraints (*vp);
             VectorExpressionConcept<vector_expression_type>::constraints ();
             vector_expression_type v = *vp, v1 = *vp, v2 = *vp;
@@ -628,8 +628,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename ME::const_reverse_iterator2 const_reverse_subiterator2_type;
 
         static void constraints () {
-        	matrix_expression_type *mp;
-        	const matrix_expression_type *cmp;
+                matrix_expression_type *mp;
+                const matrix_expression_type *cmp;
             matrix_expression_type m = *mp;
             const matrix_expression_type cm = *cmp;
             size_type n (0), i (0), j (0);
@@ -680,7 +680,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename ME::reverse_iterator2 reverse_subiterator2_type;
 
         static void constraints () {
-        	matrix_expression_type *mp;
+                matrix_expression_type *mp;
             AssignableConcept<matrix_expression_type>::constraints (*mp);
             MatrixExpressionConcept<matrix_expression_type>::constraints ();
             matrix_expression_type m = *mp, m1 = *mp, m2 = *mp;
