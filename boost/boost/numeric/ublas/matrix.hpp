@@ -182,9 +182,9 @@ namespace boost { namespace numeric { namespace ublas {
             data () = m.data ();
             return *this;
         }
-        template<class L2, class A2>          // Generic matrix assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
-        matrix &operator = (const matrix<T, L2, A2> &m) {
+        matrix &operator = (const matrix_container<C> &m) {
             resize (m.size1 (), m.size2 ());
             assign (m);
             return *this;
@@ -212,6 +212,12 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        matrix &operator += (const matrix_container<C> &m) {
+            plus_assign (m);
+            return *this;
+        }
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix &plus_assign (const matrix_expression<AE> &ae) {
@@ -223,6 +229,12 @@ namespace boost { namespace numeric { namespace ublas {
         matrix& operator -= (const matrix_expression<AE> &ae) {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
+        }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        matrix &operator -= (const matrix_container<C> &m) {
+            minus_assign (m);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -958,7 +970,13 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class L2, class A2>        // Generic matrix assignment
         BOOST_UBLAS_INLINE
-        bounded_matrix &operator = (const matrix<T, L2, L2> &m) {
+        bounded_matrix &operator = (const matrix<T, L2, A2> &m) {
+            matrix_type::operator = (m);
+            return *this;
+        }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        bounded_matrix &operator = (const matrix_container<C> &m) {
             matrix_type::operator = (m);
             return *this;
         }
@@ -1111,6 +1129,13 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (ae);
             return assign_temporary (temporary);
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        vector_of_vector &operator = (const matrix_container<C> &m) {
+            resize (m.size1 (), m.size2 ());
+            assign (m);
+            return *this;
+        }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_of_vector &assign (const matrix_expression<AE> &ae) { 
@@ -1123,6 +1148,12 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        vector_of_vector &operator += (const matrix_container<C> &m) {
+            plus_assign (m);
+            return *this;
+        }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_of_vector &plus_assign (const matrix_expression<AE> &ae) { 
@@ -1134,6 +1165,12 @@ namespace boost { namespace numeric { namespace ublas {
         vector_of_vector& operator -= (const matrix_expression<AE> &ae) {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
+        }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        vector_of_vector &operator -= (const matrix_container<C> &m) {
+            minus_assign (m);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -3196,6 +3233,13 @@ namespace boost { namespace numeric { namespace ublas {
                 std::copy (m.data_ [i], m.data_ [i] + m.size2_, data_ [i]);
             return *this;
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        c_matrix &operator = (const matrix_container<C> &m) {
+            resize (m.size1 (), m.size2 ());
+            assign (m);
+            return *this;
+        }
         BOOST_UBLAS_INLINE
         c_matrix &assign_temporary (c_matrix &m) {
             swap (m);
@@ -3219,6 +3263,12 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        c_matrix &operator += (const matrix_container<C> &m) {
+            plus_assign (m);
+            return *this;
+        }
         template<class AE>
         BOOST_UBLAS_INLINE
         c_matrix &plus_assign (const matrix_expression<AE> &ae) { 
@@ -3230,6 +3280,12 @@ namespace boost { namespace numeric { namespace ublas {
         c_matrix& operator -= (const matrix_expression<AE> &ae) {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
+        }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        c_matrix &operator -= (const matrix_container<C> &m) {
+            minus_assign (m);
+            return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE

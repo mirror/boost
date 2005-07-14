@@ -150,9 +150,9 @@ namespace boost { namespace numeric { namespace ublas {
             data () = v.data ();
             return *this;
         }
-        template<class A2>          // Generic vector assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
-        vector &operator = (const vector<T, A2> &v) {
+        vector &operator = (const vector_container<C> &v) {
             resize (v.size (), false);
             assign (v);
             return *this;
@@ -182,9 +182,9 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
         }
-        template<class A2>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
-        vector &operator += (const vector<T, A2> &v) {
+        vector &operator += (const vector_container<C> &v) {
             plus_assign (v);
             return *this;
         }
@@ -200,9 +200,9 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
         }
-        template<class A2>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
-        vector &operator -= (const vector<T, A2> &v) {
+        vector &operator -= (const vector_container<C> &v) {
             minus_assign (v);
             return *this;
         }
@@ -529,9 +529,15 @@ namespace boost { namespace numeric { namespace ublas {
             vector_type::operator = (v);
             return *this;
         }
-        template<class A2>              // Generic vector assignment
+        template<class A2>         // Generic vector assignment
         BOOST_UBLAS_INLINE
         bounded_vector &operator = (const vector<T, A2> &v) {
+            vector_type::operator = (v);
+            return *this;
+        }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        bounded_vector &operator = (const vector_container<C> &v) {
             vector_type::operator = (v);
             return *this;
         }
@@ -1295,6 +1301,13 @@ namespace boost { namespace numeric { namespace ublas {
             std::copy (v.data_, v.data_ + v.size_, data_);
             return *this;
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        c_vector &operator = (const vector_container<C> &v) {
+            resize (v.size (), false);
+            assign (v);
+            return *this;
+        }
         BOOST_UBLAS_INLINE
         c_vector &assign_temporary (c_vector &v) {
             swap (v);
@@ -1320,9 +1333,9 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae);
             return assign_temporary (temporary);
         }
-        template<std::size_t N2>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
-        c_vector &operator += (const c_vector<T, N2> &v) {
+        c_vector &operator += (const vector_container<C> &v) {
             plus_assign (v);
             return *this;
         }
@@ -1338,9 +1351,9 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this - ae);
             return assign_temporary (temporary);
         }
-        template<std::size_t N2>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
-        c_vector &operator -= (const c_vector<T, N2> &v) {
+        c_vector &operator -= (const vector_container<C> &v) {
             minus_assign (v);
             return *this;
         }

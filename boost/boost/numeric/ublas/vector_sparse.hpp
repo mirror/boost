@@ -444,6 +444,13 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return *this;
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        mapped_vector &operator = (const vector_container<C> &v) {
+            resize (v.size (), false);
+            assign (v);
+            return *this;
+        }
         BOOST_UBLAS_INLINE
         mapped_vector &assign_temporary (mapped_vector &v) {
             swap (v);
@@ -469,7 +476,7 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae, detail::map_capacity (data()));
             return assign_temporary (temporary);
         }
-        template<class C>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         mapped_vector &operator += (const vector_container<C> &v) {
             plus_assign (v);
@@ -487,7 +494,7 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this - ae, detail::map_capacity (data()));
             return assign_temporary (temporary);
         }
-        template<class C>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         mapped_vector &operator -= (const vector_container<C> &v) {
             minus_assign (v);
@@ -987,6 +994,13 @@ namespace boost { namespace numeric { namespace ublas {
             storage_invariants ();
             return *this;
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        compressed_vector &operator = (const vector_container<C> &v) {
+            resize (v.size (), false);
+            assign (v);
+            return *this;
+        }
         BOOST_UBLAS_INLINE
         compressed_vector &assign_temporary (compressed_vector &v) {
             swap (v);
@@ -1012,7 +1026,7 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae, capacity_);
             return assign_temporary (temporary);
         }
-        template<class C>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         compressed_vector &operator += (const vector_container<C> &v) {
             plus_assign (v);
@@ -1030,7 +1044,7 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this - ae, capacity_);
             return assign_temporary (temporary);
         }
-        template<class C>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         compressed_vector &operator -= (const vector_container<C> &v) {
             minus_assign (v);
@@ -1598,6 +1612,13 @@ namespace boost { namespace numeric { namespace ublas {
             storage_invariants ();
             return *this;
         }
+        template<class C>          // Container assignment without temporary
+        BOOST_UBLAS_INLINE
+        coordinate_vector &operator = (const vector_container<C> &v) {
+            resize (v.size (), false);
+            assign (v);
+            return *this;
+        }
         BOOST_UBLAS_INLINE
         coordinate_vector &assign_temporary (coordinate_vector &v) {
             swap (v);
@@ -1623,7 +1644,7 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this + ae, capacity_);
             return assign_temporary (temporary);
         }
-        template<class C>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         coordinate_vector &operator += (const vector_container<C> &v) {
             plus_assign (v);
@@ -1641,7 +1662,7 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (*this - ae, capacity_);
             return assign_temporary (temporary);
         }
-        template<class C>          // addative assignment without temporary
+        template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         coordinate_vector &operator -= (const vector_container<C> &v) {
             minus_assign (v);
