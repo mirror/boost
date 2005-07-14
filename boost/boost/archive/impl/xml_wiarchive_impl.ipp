@@ -176,12 +176,12 @@ template<class Archive>
 BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY())
 xml_wiarchive_impl<Archive>::~xml_wiarchive_impl(){
     if(0 == (this->get_flags() & no_header)){
-		BOOST_TRY{
-			gimpl->windup(is);
-		}
-		BOOST_CATCH(...){}
-	    BOOST_CATCH_END
-	}
+                BOOST_TRY{
+                        gimpl->windup(is);
+                }
+                BOOST_CATCH(...){}
+            BOOST_CATCH_END
+        }
     delete gimpl;
 }
 

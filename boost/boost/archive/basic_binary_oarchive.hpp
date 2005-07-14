@@ -104,8 +104,8 @@ protected:
 
     // explicitly convert to char * to avoid compile ambiguities
     void save_override(const class_name_type & t, int){
-		const std::string s(t);
-		* this->This() << s;
+                const std::string s(t);
+                * this->This() << s;
     }
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)

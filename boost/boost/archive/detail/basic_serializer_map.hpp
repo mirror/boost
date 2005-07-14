@@ -50,7 +50,7 @@ struct BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer_map
     const basic_serializer * tfind(
         const boost::serialization::extended_type_info & type_
     ) const;
-	basic_serializer_map();
+        basic_serializer_map();
 };
 
 } // namespace detail

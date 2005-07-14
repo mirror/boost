@@ -122,9 +122,9 @@ BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_binary_oprimitive<Archive, OStream>::~basic_binary_oprimitive(){
     BOOST_TRY {
         os.flush();
-	}
+        }
     BOOST_CATCH(...){}
-	BOOST_CATCH_END
+        BOOST_CATCH_END
 }
 
 } // namespace archive

@@ -105,12 +105,12 @@ public:
     // special treatment for name-value pairs.
     template<class T>
     void load_override(
-		#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-		const
-		#endif
-		boost::serialization::nvp<T> & t, 
-		int
-	){
+                #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+                const
+                #endif
+                boost::serialization::nvp<T> & t, 
+                int
+        ){
         load_start(t.name());
         archive::load(* this, t.value());
         load_end(t.name());

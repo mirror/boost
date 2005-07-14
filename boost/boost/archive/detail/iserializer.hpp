@@ -354,11 +354,11 @@ struct load_non_pointer_type {
     // and serialization level to the archive
     struct load_standard {
         static void invoke(Archive &ar, T &t){
-			//BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
-			// borland - for some reason T is const here - even though
-			// its not called that way - so fix it her
-			typedef BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type typex;
-			void * x = & const_cast<typex &>(t);
+                        //BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
+                        // borland - for some reason T is const here - even though
+                        // its not called that way - so fix it her
+                        typedef BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type typex;
+                        void * x = & const_cast<typex &>(t);
             ar.load_object(x, iserializer<Archive, T>::instantiate());
         }
     };
@@ -570,7 +570,7 @@ inline void load(Archive &ar, T &t){
 // for loading const objects - but I see no alternative
 template<class Archive, class T>
 inline void load(Archive &ar, const T & t){
-	load(ar, const_cast<T &>(t));
+        load(ar, const_cast<T &>(t));
 }
 #endif
 
@@ -578,16 +578,16 @@ inline void load(Archive &ar, const T & t){
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template<class Archive, class T>
 inline void load(Archive &ar, const serialization::nvp<T> &t){
-	boost::archive::load(ar, const_cast<serialization::nvp<T> &>(t));
+        boost::archive::load(ar, const_cast<serialization::nvp<T> &>(t));
 }
 template<class Archive>
 inline void load(Archive &ar, const serialization::binary_object &t){
-	boost::archive::load(ar, const_cast<serialization::binary_object &>(t));
+        boost::archive::load(ar, const_cast<serialization::binary_object &>(t));
 }
 
 //template<class Archive, class T>
 //inline void load(Archive &ar, const serialization::binary_object &t){
-//	load(ar, const_cast<binary_object &>(t));
+//      load(ar, const_cast<binary_object &>(t));
 //}
 #endif
 
