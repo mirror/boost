@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/13 16:13:11 $
+:date:          $Date: 2005/07/14 20:11:03 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -259,7 +259,7 @@ macro for that purpose: [#msvc_keyword]_ ::
     BOOST_PARAMETER_KEYWORD(tag, root_vertex);
     BOOST_PARAMETER_KEYWORD(tag, index_map);
     BOOST_PARAMETER_KEYWORD(tag, color_map);
-  }} // graphs::tag
+  }
 
 The declaration of the ``visitor`` keyword you see here is
 equivalent to::
@@ -514,8 +514,8 @@ use that knowledge to bypass ``binding`` altogether.
 
 .. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
 
-Beyond Ordinary Default Aruments
---------------------------------
+Beyond Ordinary Default Arguments
+---------------------------------
 
 Here's how you might write the declaration for the ``index_map``
 parameter:
@@ -551,6 +551,21 @@ plain C++ default arguments provide:
      template <class Index>
      int f(Index index **= 42**);  // OK
      int y = f();                // **error; can't deduce Index**
+
+Eliminating the Extra Parentheses
+=================================
+
+
+Generating the Forwarding Functions with Macros
+-----------------------------------------------
+
+
+Passing non-const References positionally
+-----------------------------------------
+
+Controlling Overload Resolution
+===============================
+
      
 Efficiency Issues
 =================
@@ -561,7 +576,7 @@ consider.  Here's a first cut at extraction and binding:
 .. parsed-literal::
 
   typedef 
-    vector_property_map<default_color_type, Index>
+    vector_property_map<boost::default_color_type, Index>
   default_color_map;
 
   typename parameter::binding<
@@ -636,7 +651,8 @@ Boost.Lambda_: [#bind]_
     , tag::color_map
     , default_color_map
   >::type color = args[
-        color_map **|| boost::lambda::construct<default_color_map>(num_vertices(g),i)**
+    color_map
+    **|| boost::lambda::construct<default_color_map>(num_vertices(g),i)**
   ];
 
 .. sidebar:: Memnonics
@@ -644,51 +660,112 @@ Boost.Lambda_: [#bind]_
    To remember the difference between ``|`` and ``||``, recall that
    ``||`` normally uses short-circuit evaluation: its second
    argument is only evaluated if its first argument is ``false``.
-   Similarly, in ``args[param||f]``, ``f`` is only invoked if
-   no ``param`` argument was supplied.
+   Similarly, in ``color_map[param||f]``, ``f`` is only invoked if
+   no ``color_map`` argument was supplied.
+
+Default Forwarding
+------------------
+
+Types that are expensive to construct yet cheap to copy aren't all
+that typical, and even copying the color map is more expensive than
+we might like.  It might be nice to avoid both needless
+construction *and* needless copying of the default color map.  The
+simplest way to achieve that is to avoid naming it altogether, at
+least not in ``core::depth_first_search``.  Instead, we could just
+introduce another function template to implement the actual
+algorithm:
+
+.. parsed-literal::
+
+  namespace graphs { namespace core
+  {
+    template <class G, class V, class S, class I, class C>
+    void **dfs_impl**\ (G& g, V& v, S& s, I& i, C& c)
+    {
+        *…actual algorithm implementation…*
+    }
+  }}
+
+Then, in ``core::depth_first_search``, we'll simply forward the
+result of indexing ``args`` to ``core::dfs_impl``::
+
+  core::dfs_impl( 
+      g,v,s,i
+    , args[
+        color_map
+        || boost::lambda::construct<default_color_map>(num_vertices(g),i)
+      ]);
+
+In real code, after going to the trouble to write ``dfs_impl``,
+we'd probably just forward all the arguments.
 
 Dispatching Based on the Presence of a Default
 ----------------------------------------------
 
+In fact, the Graph library itself constructs a slightly different
+``color_map``, to avoid even the overhead of initializing a
+|shared_ptr|_::
+
+   std::vector<boost::default_color_type> 
+     color_vec(num_vertices(g));
+
+   boost::iterator_property_map<
+       typename std::vector<
+          boost::default_color_type
+       >::iterator
+     , Index
+   > c(color_vec.begin(), i);
+
+To avoid instantiating that code when it isn't needed, we'll have
+to find a way to select different function implementations, at
+compile time, based on whether a ``color_map`` argument was
+supplied.  By using `tag dispatching`_ on the presence of a
+``color_map`` argument, we can do just that:
+
+.. _`tag dispatching`: ../../../../more/generic_programming.html#tag_dispatching
+
+.. parsed-literal::
+
+  #include <boost/type_traits/is_same.hpp>
+  #include <boost/mpl/bool.hpp>
+
+  namespace graphs { namespace core {
+  
+    template <class ArgumentPack>
+    void dfs_dispatch(ArgumentPack& args, **mpl::true_**)
+    {
+        *…use the color map computed in the previous example…*
+    }
+    
+    template <class ArgumentPack>
+    void dfs_dispatch(ArgumentPack& args, **mpl::false_**)
+    {
+        *…use args[color]…*
+    }
+    
+    template <class ArgumentPack>
+    void depth_first_search(ArgumentPack& args)
+    {
+        typedef typename binding<args,tag::color>::type color\_;
+        core::dfs_dispatch(args, **boost::is_same<color\_,void>()**\ );
+    }
+  }}
+
+We've used the fact that the default for ``binding``\ 's third
+argument is ``void``: because specializations of ``is_same`` are
+``bool``-valued MPL |Integral Constant|_, it will be derived either
+from ``mpl::true_`` or ``mpl::false_``, and the appropriate
+``dfs_dispatch`` implementation will be selected.
+
+.. |Integral Constant| replace:: :concept:`Integral Constant`
+
+.. _`Integral Constant`: ../../../mpl/doc/refmanual/integral-constant.html
 
 
-Eliminating Template Instantiation
-----------------------------------
-
-However, 
-and
-``args[visitor…]`` always yields a reference—in this case, a
-reference bound directly to the actual argument passed by the user.
-When no ``visitor`` is explicitly specified, though, we have to use
-the default value, which is supplied as a *temporary* instance of
-``dfs_visitor``.  Because ``args[visitor…]`` yields a reference to
-that temporary, making ``v`` a reference would cause it to dangle
-immediately.  Therefore, it's crucial that we passed
-``dfs_visitor<>``, and not ``dfs_visitor<> const&``, to
-``binding``.
-
-Since a ``dfs_visitor<>`` is cheap to copy, this arrangement is
-non-problematic.
-
-type.  Choosing to make ``Visitor`` a reference in that case
-
-, ``binding`` had better not add
-
-Improving the Syntax
-====================
-
-Passing non-const References positionally
------------------------------------------
-
-Generating the Forwarding Functions with Macros
------------------------------------------------
-
-Controlling Overload Resolution
-===============================
-
+--------------------------
 
 .. [#old_interface] As of Boost 1.33.0 the Graph library was still
-   using an `older named parameter mechanism`__, but there were
+   using an `older named parameter mechanism`__, but there are
    plans to change it to use Boost.Parameter (this library) in an
    upcoming release, while keeping the old interface available for
    backward-compatibility.  
@@ -720,9 +797,9 @@ __ ../../../graph/doc/bgl_named_params.html
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
 
-.. [#bind] The Lambda library is known not to work on some
-   less-conformant compilers.  For those cases you could define::
-
+.. [#bind] The Lambda library is known not to work on `some
+   less-conformant compilers`__.  When using one of those you could
+   define ::
    
       template <class T>
       struct construct2
@@ -736,6 +813,8 @@ __ ../../../graph/doc/bgl_named_params.html
     and use Boost.Bind_ to generate the function object::
 
       boost::bind(construct2<default_color_map>,num_vertices(g),i)
+
+__ http://www.boost.org/regression/release/user/lambda.html
 
 .. _Boost.Bind: ../../../libs/bind/index.html
 
