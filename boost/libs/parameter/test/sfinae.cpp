@@ -21,7 +21,9 @@ namespace test
   struct name_;
   struct value_;
 
-#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__GNUC__, == 2))
+#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+      || BOOST_WORKAROUND(__GNUC__, == 2)   \
+      || defined(__APPLE_CC__) && BOOST_WORKAROUND (__GNUC__, <= 4))
   namespace
   {
     keyword<name_>& name = instance();
