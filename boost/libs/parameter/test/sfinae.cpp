@@ -16,40 +16,19 @@
 
 namespace test
 {
+  BOOST_PARAMETER_KEYWORD(keywords,name);
+  BOOST_PARAMETER_KEYWORD(keywords,value);
+  
   using namespace boost::parameter;
 
-  struct name_;
-  struct value_;
-
-#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-      || BOOST_WORKAROUND(__GNUC__, == 2)   \
-      || defined(__APPLE_CC__) && BOOST_WORKAROUND (__GNUC__, <= 4))
-  namespace
-  {
-    keyword<name_>& name = instance();
-    keyword<value_>& value = instance();
-  }
-#else
-  namespace
-  {
-    keyword<name_>& name = keyword<name_>::get();
-    keyword<value_>& value = keyword<value_>::get();
-  }
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
-  using test::name;  // required for vc6 :(
-  using test::value;
-# endif 
-#endif
-
-  
   struct f_parameters
     : parameters<
           optional<
-              name_
+              keywords::name
             , boost::is_convertible<boost::mpl::_, std::string>
           >
         , optional<
-              value_
+              keywords::value
             , boost::is_convertible<boost::mpl::_, float>
           >
       >
@@ -75,23 +54,17 @@ namespace test
   using boost::parameter::aux::void_;
   
   template<class A0>
-  void f(A0 const& a0
-         , typename f_parameters::restrict<A0
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-         ,void_,void_,void_,void_
-#endif 
-         >::type args = f_parameters())
+  void f(
+      A0 const& a0
+    , typename f_parameters::restrict<A0 BOOST_PARAMETER_MATCH_ARGS(1)>::type args = f_parameters())
   {
       f_impl(args(a0));
   }
 
   template<class A0, class A1>
-  void f(A0 const& a0, A1 const& a1
-      , typename f_parameters::restrict<A0, A1
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-         ,void_,void_,void_
-#endif 
-         >::type args = f_parameters())
+  void f(
+      A0 const& a0, A1 const& a1
+    , typename f_parameters::restrict<A0, A1 BOOST_PARAMETER_MATCH_ARGS(2)>::type args = f_parameters())
   {
       f_impl(args(a0, a1));
   }

@@ -8,42 +8,23 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/parameter/keyword.hpp>
-#include <boost/parameter/instance.hpp>
 
 namespace test {
 
+BOOST_PARAMETER_KEYWORD(tag, name);
+BOOST_PARAMETER_KEYWORD(tag, value);
+BOOST_PARAMETER_KEYWORD(tag, index);
+BOOST_PARAMETER_KEYWORD(tag, tester);
+
 using namespace boost::parameter;
-
-struct name_;
-struct value_;
-struct index_;
-struct tester_;
-
-namespace
-{
-#if !(BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-      || BOOST_WORKAROUND(__GNUC__, == 2)   \
-      || defined(__APPLE_CC__) && BOOST_WORKAROUND (__GNUC__, <= 4))
-  keyword<name_>& name = instance();
-  keyword<value_>& value = instance();
-  keyword<index_>& index = instance();
-  keyword<tester_>& tester = instance();
-#else
-  keyword<name_>& name = keyword<name_>::get();
-  keyword<value_>& value = keyword<value_>::get();
-  keyword<index_>& index = keyword<index_>::get();
-  keyword<tester_>& tester = keyword<tester_>::get();
-#endif 
-
-} // namespace unnamed
 
 struct f_parameters // vc6 is happier with inheritance than with a typedef
   : parameters<
-      tester_
-    , name_
-    , value_
-    , index_
-  >
+        tag::tester
+      , tag::name
+      , tag::value
+      , tag::index
+    >
 {};
 
 inline double value_default()
