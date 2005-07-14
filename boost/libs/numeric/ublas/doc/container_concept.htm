@@ -26,9 +26,15 @@ vectors.</p>
 <table border="1" summary="types">
 <tbody>
 <tr>
-<td>StorageArray</td>
-<td>array_type</td>
-<td>The type of underlying storage used to store the elements</td>
+<td>Public base</td>
+<td>vector_expression&lt;V&gt;</td>
+<td>V must be derived from this public base type. </td>
+</tr>
+<tr>
+<td>Storage array</td>
+<td>V::array_type</td>
+<td>The type of underlying storage array used to store the elements. The array_type must model
+the <a htref="storage_concept.htm"><b>Storage</b></a> concept.</td>
 </tr>
 </tbody>
 </table>
@@ -217,9 +223,15 @@ matrices.</p>
 <table border="1" summary="types">
 <tbody>
 <tr>
-<td>StorageArray</td>
-<td>array_type</td>
-<td>The type of underlying storage used to store the elements</td>
+<td>Public base</td>
+<td>matrix_expression&lt;M&gt;</td>
+<td>M must be derived from this public base type. </td>
+</tr>
+<tr>
+<td>Storage array</td>
+<td>M::array_type</td>
+<td>The type of underlying storage array used to store the elements. The array_type must model
+the <a htref="storage_concept.htm"><b>Storage</b></a> concept.</td>
 </tr>
 </tbody>
 </table>
