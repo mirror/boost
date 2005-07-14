@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/12 17:41:17 $
+:date:          $Date: 2005/07/13 16:13:11 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -151,20 +151,44 @@ arguments by keyword, rather than by position:
 
 In this section we'll show how the Parameter library can be used to
 build an expressive interface to the `Boost Graph library`__\ 's
-|dfs|_ algorithm. [#old_interface]_ After describing the
-algorithm's abstract interface, we'll show you how to build a basic
-implementation with keyword support; then we'll add support for
-default arguments, and gradually refine the implementation with
-syntax improvements.  Finally we'll show how to streamline the
-implementation of named parameter interfaces, improve their
-participation in overload resolution, and optimize their runtime
-efficiency.
+|dfs|_ algorithm. [#old_interface]_ After laying some groundwork
+and describing the algorithm's abstract interface, we'll show you
+how to build a basic implementation with keyword support.  Then
+we'll add support for default arguments and we'll gradually refine the
+implementation with syntax improvements.  Finally we'll show how to
+streamline the implementation of named parameter interfaces,
+improve their participation in overload resolution, and optimize
+their runtime efficiency.
 
 __ ../../../graph/index.html
 
 .. _dfs: ../../../graph/doc/depth_first_search.html
 
 .. |dfs| replace:: ``depth_first_search``
+
+
+Headers And Namespaces
+======================
+
+Most components of the Parameter library are declared in a
+header named for the component.  For example, ::
+
+  #include <boost/parameter/keyword.hpp>
+
+will ensure ``boost::parameter::keyword`` is known to the
+compiler.  There is also a combined header,
+``boost/parameter.hpp``, that includes most of the library's
+components.  For the the rest of this tutorial, unless we say
+otherwise, you can use the rule above to figure out which header
+to ``#include`` to access any given component of the library.
+
+Also, the examples below will also be written as if the
+namespace alias ::
+
+  namespace parameter = boost::parameter;
+
+has been declared: we'll write ``parameter::xxx`` instead of
+``boost::parameter::xxx``.
 
 The Abstract Interface to |dfs|
 ===============================
@@ -216,69 +240,44 @@ arguments for which the default is appropriate:
 To make that syntax legal, there needs to be an object called
 ``color_map`` with an assignment operator that can accept a
 ``my_color_map`` argument.  In this step we'll create one such
-**keyword object** for each parameter.  Each keyword object should
-be identified by a unique **keyword tag type**.  By convention,
-we'll give the tag types the same names as the objects.  Assuming
-we're defining our public interface in namespace ``graphs``, the
-tag types could be declared this way::
+**keyword object** for each parameter.  Each keyword object will be
+identified by a unique **keyword tag type**.  
 
-  namespace graphs { namespace tag
-  {
-    class graph;
-    class visitor;
-    class root_vertex;
-    class index_map;
-    class color_map;
-  }} // graphs::tag
-
-Because our users never need to name tag types directly, we've put
-them in in a nested ``tag`` namespace.  The keyword objects will
-actually be provided by the library; we'll just declare references
-to them::
+We're going to define our interface in namespace ``graphs``.  Since
+users need access to the keyword objects, but not the tag types,
+we'll define the keyword objects so they're acceessible through
+``graphs``, and we'll hide the tag types away in a tested
+namespace, ``graphs::tag``.  The library provides a convenient
+macro for that purpose: [#msvc_keyword]_ ::
 
   #include <boost/parameter/keyword.hpp>
-  #include <boost/parameter/instance.hpp>
 
-  namespace graphs { namespace // unnamed
+  namespace graphs
   {
-    using namespace boost::parameter;
+    BOOST_PARAMETER_KEYWORD(tag, graph);
+    BOOST_PARAMETER_KEYWORD(tag, visitor);
+    BOOST_PARAMETER_KEYWORD(tag, root_vertex);
+    BOOST_PARAMETER_KEYWORD(tag, index_map);
+    BOOST_PARAMETER_KEYWORD(tag, color_map);
+  }} // graphs::tag
 
-    keyword<tag::graph>& graph = instance();
-    keyword<tag::visitor>& visitor = instance();
-    keyword<tag::root_vertex>& root_vertex = instance();
-    keyword<tag::index_map>& index_map = instance();
-    keyword<tag::color_map>& color_map = instance();
-  }} // graphs::unnamed
+The declaration of the ``visitor`` keyword you see here is
+equivalent to::
 
-The “fancy dance” here involving the unnamed namespace, references,
-and the ``instance()`` object is all done to avoid violating the
-C++ One Definition Rule (ODR) [#odr]_ when the named parameter
-interface is used inside of function templates that get
-instantiated in multiple translation units.  Note: if you use an
-older compiler, a slightly more verbose syntax may be required
-[#msvc_keyword]_.
+  namespace graphs 
+  {
+    namespace tag { struct visitor; }
+    namespace { 
+      boost::parameter::keyword<tag::visitor>& visitor
+      = boost::parameter::keyword<tag::visitor>::get();
+    }
+  }
 
-.. Admonition:: Headers and Namespaces
-
-   Most components of the Parameter library are declared in a
-   header named for the component.  For example, ::
-  
-     #include <boost/parameter/keyword.hpp>
-
-   will ensure ``boost::parameter::keyword`` is known to the
-   compiler.  There is also a combined header,
-   ``boost/parameter.hpp``, that includes most of the library's
-   components.  For the the rest of this tutorial, unless we say
-   otherwise, you can use the rule above to figure out which header
-   to ``#include`` to access any given component of the library.
-
-   Also, the examples below will also be written as if the
-   namespace alias ::
-
-     namespace parameter = boost::parameter;
-
-   has been declared: we'll write ``parameter::xxx`` instead of
-   ``boost::parameter::xxx``.
+This “fancy dance” involving the unnamed namespace and references
+is all done to avoid violating the One Definition Rule (ODR)
+[#odr]_ when the named parameter interface is used by function
+templates that are instantiated in multiple translation
+units.
 
 Defining the Implementation Function
 ====================================
@@ -336,14 +335,14 @@ keywords in action, we can write a little test driver:
         index_map = "hello, world", color_map = false\ **)**);
   }
 
-The results of assigning into each keyword object are combined
-using an overloaded comma operator (``operator,``) into a single
-|ArgumentPack| object that gets passed on to
-``core::depth_first_search``.  The extra set of parentheses you see
-in the example above are required: without them, each assignment
-would be interpreted as a separate function argument and the comma
-operator wouldn't take effect.  We'll show you how to get rid of
-the extra parentheses in a moment.
+An overloaded comma operator (``operator,``) combines the results
+of assigning into each keyword object into a single |ArgumentPack|
+object that gets passed on to ``core::depth_first_search``.  The
+extra set of parentheses you see in the example above are required:
+without them, each assignment would be interpreted as a separate
+function argument and the comma operator wouldn't take effect.
+We'll show you how to get rid of the extra parentheses later in
+this tutorial.
 
 Of course, we can pass the arguments in any order::
 
@@ -371,7 +370,7 @@ Currently, all the arguments to ``depth_first_search`` are
 required.  If any parameter can't be found, there will be a
 compilation error where we try to extract it from the
 |ArgumentPack| using the square-brackets operator.  To make it
-legal to omit an argument, we need to give it a default value.
+legal to omit an argument we need to give it a default value.
 
 Syntax
 ------
@@ -446,7 +445,7 @@ those in our algorithm:
     }
   }} // graphs::core
 
-We'll insert the `default expressions`_ in a moment but first we
+We'll insert the `default expressions`_ in a moment, but first we
 need to come up with the types *Graph*, *Visitor*, *Vertex*,
 *Index*, and *Color*.
 
@@ -459,16 +458,13 @@ called ``binding``:
 .. parsed-literal::
 
   binding<ArgumentPack, Keyword, Default = void>
+  { typedef *see text* type; };
 
-where ``Default`` is an optional argument describing the type of
-the default argument value, if any.
+where ``Default`` is the type of the default argument, if any.
 
-For example, to declare and initialize ``g``, ``v``, and ``s``
-above, we could write:
+For example, to declare and initialize ``g`` above, we could write:
 
 .. parsed-literal::
-
-  namespace parameter = boost::parameter;
 
   typedef typename parameter::binding<
     ArgumentPack,\ **tag::graph**
@@ -476,26 +472,18 @@ above, we could write:
 
   Graph g = args[graph];
 
+As shown in the `parameter table`_, ``graph`` has no default, so
+the ``binding`` invocation for *Graph* takes only two arguments.
+The default ``visitor`` is ``boost::dfs_visitor<>()``, so the
+``binding`` invocation for *Visitor* takes three:
+
+.. parsed-literal::
+
   typedef typename parameter::binding<
     ArgumentPack,\ **tag::visitor,boost::dfs_visitor<>**
   >::type Visitor;
 
   Visitor v = args[visitor|\ **boost::dfs_visitor<>()**\ ];
-
-  typename **boost::graph_traits<Graph>::vertex_descriptor**
-    s = args[root_vertex|\ ***vertices(g).first**\ ];
-
-As shown in the `parameter table`_, ``graph`` has no default, so
-the ``binding`` invocation for *Graph* takes only two arguments.
-The default ``visitor`` is ``boost::dfs_visitor<>()``, so the
-``binding`` invocation for *Visitor* takes three.  Of course,
-sometimes we know the type we need, and there's no need to use
-``binding`` at all.  Any caller-supplied value for ``root_vertex`` is
-nrequired to be (and the default is) of the graph's
-``vertex_descriptor`` type, [#vertex_descriptor]_ so we can just
-use that type directly.  
-
-.. _dangling:
 
 Note that the default ``visitor`` is supplied as a *temporary*
 instance of ``dfs_visitor``.  Because ``args[…]`` always yields
@@ -506,9 +494,21 @@ const&``, as the last argument to ``binding``.
 
 .. Important:: 
 
-   Never pass ``binding`` a reference type as the default if the
-   default value passed to the |ArgumentPack|\ 's indexing operator
-   is a temporary.
+   Never pass ``binding`` a reference type as the default unless
+   you know that the default value passed to the |ArgumentPack|\ 's
+   indexing operator will outlive the reference you'll bind to it.
+
+Sometimes there's no need to use ``binding`` at all.  The
+``root_vertex`` argument is required to be of the graph's
+``vertex_descriptor`` type, [#vertex_descriptor]_ so we can just
+use that knowledge to bypass ``binding`` altogether.
+
+.. parsed-literal::
+
+  typename **boost::graph_traits<Graph>::vertex_descriptor**
+    s = args[root_vertex|\ ***vertices(g).first**\ ];
+
+.. _dangling:
 
 .. |Metafunction| replace:: :concept:`Metafunction`
 
@@ -555,8 +555,8 @@ plain C++ default arguments provide:
 Efficiency Issues
 =================
 
-The extraction and binding of the ``color_map`` parameter gives us a few
-efficiency issues to consider.  Here's a first cut:
+The ``color_map`` parameter gives us a few efficiency issues to
+consider.  Here's a first cut at extraction and binding:
 
 .. parsed-literal::
 
@@ -575,8 +575,8 @@ Eliminating Copies
 
 The library has no way to know whether an explicitly-supplied
 argument is expensive to copy (or even if it is copiable at all),
-so ``binding<…,xxx,…>::type`` is always a reference type when the
-*xxx* parameter is supplied by the caller.  Since ``args[…]``
+so ``binding<…,k,…>::type`` is always a reference type when the
+*k* parameter is supplied by the caller.  Since ``args[…]``
 yields a reference to the actual argument, ``color`` will be bound
 to the actual ``color_map`` argument and no copying will be done.
 
@@ -600,18 +600,57 @@ __ dangling_
 
 .. Hint:: 
 
-   Pass ``binding`` a *reference* to the type of the default to
-   avoid making needless copies.x
+   To avoid making needless copies, pass a *reference to the
+   default type* as the third argument to ``binding``.
 
 Eliminating Construction
 ------------------------
 
 Of course it's nice to avoid copying ``default_color``, but the
 more important cost is that of *constructing* it in the first
-place.
+place.  A ``vector_property_map`` is cheap to copy, since it holds
+its elements via a |shared_ptr|_.  On the other hand, construction of
+``default_color`` costs at least two dynamic memory allocations and
+``num_vertices(g)`` copies; it would be better to avoid doing this
+work when the default value won't be needed.
+
+.. |shared_ptr| replace:: ``shared_ptr``
+
+.. _shared_ptr: ../../../smart_ptr/shared_ptr.htm
+
+To that end, the library allows us to supply a callable object
+that—if no argument was supplied by the caller—will be invoked to
+construct the default value.  Instead of following the keyword with
+the ``|`` operator, we'll use ``||`` and follow it with a
+nullary (zero-argument) function object that constructs a
+default_color_map.  The function object is built using
+Boost.Lambda_: [#bind]_
+
+.. _Boost.Lambda: ../../../lambda/index.html
+
+.. parsed-literal::
+
+  // After #include <boost/lambda/construct.hpp>
+  typename parameter::binding<
+      ArgumentPack
+    , tag::color_map
+    , default_color_map
+  >::type color = args[
+        color_map **|| boost::lambda::construct<default_color_map>(num_vertices(g),i)**
+  ];
+
+.. sidebar:: Memnonics
+
+   To remember the difference between ``|`` and ``||``, recall that
+   ``||`` normally uses short-circuit evaluation: its second
+   argument is only evaluated if its first argument is ``false``.
+   Similarly, in ``args[param||f]``, ``f`` is only invoked if
+   no ``param`` argument was supplied.
 
 Dispatching Based on the Presence of a Default
 ----------------------------------------------
+
+
 
 Eliminating Template Instantiation
 ----------------------------------
@@ -654,32 +693,16 @@ Controlling Overload Resolution
    upcoming release, while keeping the old interface available for
    backward-compatibility.  
 
-.. [#odr] The **One Definition Rule** says that any entity in a C++
-   program must have the same definition in all translation units
-   (object files) that make up a program.
+__ ../../../graph/doc/bgl_named_params.html
 
-.. [#msvc_keyword] GCC 2.95.x and Microsoft Visual C++ 6.x and 7.0
-   have bugs that makes the syntax for declaring keywords a bit more
-   verbose.  This syntax works on all supported compilers, including
-   the out-of-date compilers just mentioned:
+.. [#odr] The **One Definition Rule** says that any given entity in
+   a C++ program must have the same definition in all translation
+   units (object files) that make up a program.
 
-   .. parsed-literal::
-
-    namespace graphs { namespace // unnamed
-    {
-      using namespace boost::parameter;
-
-      keyword<tag::graph>& graph = **keyword<tag::graph>::get()**;
-      keyword<tag::visitor>& visitor = **keyword<tag::visitor>::get()**;
-      keyword<tag::root_vertex>& root_vertex = **keyword<tag::root_vertex>::get()**;
-      keyword<tag::index_map>& index_map = **keyword<tag::index_map>::get()**;
-      keyword<tag::color_map>& color_map = **keyword<tag::color_map>::get()**;
-
-    }} // unnamed
-
-   If you use Visual C++ 6.x, you may find you also need the
-   following using declarations (which really should be
-   redundant)::
+.. [#msvc_keyword] If you use Visual C++ 6.x, you may find you also
+   need the following using declarations, which really should be
+   redundant.  This need has been observed, but then it disappeared
+   as the code evolved, so add these only as a last resort::
 
     namespace graphs
     {
@@ -697,4 +720,22 @@ Controlling Overload Resolution
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
 
-__ ../../../graph/doc/bgl_named_params.html
+.. [#bind] The Lambda library is known not to work on some
+   less-conformant compilers.  For those cases you could define::
+
+   
+      template <class T>
+      struct construct2
+      {
+          typedef T result_type;
+
+          template <class A1, class A2>
+          T operator() { return T(a1,a2); }
+      };
+
+    and use Boost.Bind_ to generate the function object::
+
+      boost::bind(construct2<default_color_map>,num_vertices(g),i)
+
+.. _Boost.Bind: ../../../libs/bind/index.html
+
