@@ -30,11 +30,6 @@ and triangular solver. The glue between containers, views and
 expression templated operations is a mostly <a href=
 "http://www.sgi.com/tech/stl">STL</a> conforming iterator
 interface.</p>
-<p>Known limitations:</p>
-<ul type="Disc">
-<li>The implementation assumes a linear memory address model.</li>
-<li>Tuning was focussed on dense matrices.</li>
-</ul>
 <h2>Documentation</h2>
 <ul>
 <li><big><a href="overview.htm">Overview</a></big>
@@ -209,7 +204,8 @@ Access Column/Row Iterator</a></li>
 </li>
 </ul>
 <h2>Supported Platforms</h2>
-<p>The current version of uBLAS expects a modern (ISO standard compliant) compiler. Compilers with little or no problems with uBLAS are:</p>
+<p>The current version of uBLAS expects a modern (ISO standard compliant) compiler. Compilers targeted and tested
+with this release are:</p>
 <ul>
 <li>GCC 3.2.3, 3.3.x, 3.4.x, 4.0.x</li>
 <li>MSVC 7.1, 8.0</li>
@@ -230,6 +226,11 @@ are:</p>
 <p>For possible problems please consider to consult the Boost
 regression tests.</p>
 <a name="further_information"></a>
+<h2>Known limitations:</h2>
+<ul type="Disc">
+<li>The implementation assumes a linear memory address model.</li>
+<li>Tuning was focussed on dense matrices.</li>
+</ul>
 <h2>Further Information</h2>
 <h3>Project Location and Download</h3>
 <p>The latest stable release of uBLAS is part of the <a href=
