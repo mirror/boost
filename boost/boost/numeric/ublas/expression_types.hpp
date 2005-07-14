@@ -192,6 +192,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *static_cast<expression_type *> (this);
         }
 
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
     private:
         // projection types
         typedef vector_range<E> vector_range_type;
@@ -202,24 +203,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_range<> default_range;    // required to avoid range/slice name confusion
         typedef basic_slice<> default_slice;
    public:
-        // projection functions - projects must be constructable from default size_t, range and slice types
-        BOOST_UBLAS_INLINE
-        const_vector_range_type range (std::size_t start, std::size_t stop) const {
-            return const_vector_range_type (operator () (), default_range (start, stop));
-        }
-        BOOST_UBLAS_INLINE
-        vector_range_type range (std::size_t start, std::size_t stop) {
-            return vector_range_type (operator () (), default_range (start, stop));
-        }
-        BOOST_UBLAS_INLINE
-        const_vector_slice_type slice (std::size_t start, std::ptrdiff_t stride, std::size_t size) const {
-            return const_vector_slice_type (operator () (), default_slice (start, stride, size));
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice_type slice (std::size_t start, std::ptrdiff_t stride, std::size_t size) {
-            return vector_slice_type (operator () (), default_slice (start, stride, size));
-        }
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const default_range &r) const {
             return const_vector_range_type (operator () (), r);
@@ -246,7 +229,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_indirect<E, A> operator () (const indirect_array<A> &ia) {
             return vector_indirect<E, A> (operator () (), ia);
         }
-#endif
+
         BOOST_UBLAS_INLINE
         const_vector_range_type project (const default_range &r) const {
             return const_vector_range_type (operator () (), r);
@@ -273,6 +256,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_indirect<E, A> project (const indirect_array<A> &ia) {
             return vector_indirect<E, A> (operator () (), ia);
         }
+#endif
     };
 
     // Base class for Vector container models -
@@ -328,6 +312,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *static_cast<expression_type *> (this);
         }
 
+#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
     private:
         // projection types
         typedef vector_range<E> vector_range_type;
@@ -371,23 +356,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_column_type column (std::size_t j) {
             return matrix_column_type (operator () (), j);
         }
-        BOOST_UBLAS_INLINE
-        const_matrix_range_type range (std::size_t start1, std::size_t stop1, std::size_t start2, std::size_t stop2) const {
-            return const_matrix_range_type (operator () (), default_range (start1, stop1), default_range (start2, stop2));
-        }
-        BOOST_UBLAS_INLINE
-        matrix_range_type range (std::size_t start1, std::size_t stop1, std::size_t start2, std::size_t stop2) {
-            return matrix_range_type (operator () (), default_range (start1, stop1), default_range (start2, stop2));
-        }
-        BOOST_UBLAS_INLINE
-        const_matrix_slice_type slice (std::size_t start1, std::ptrdiff_t stride1, std::size_t size1, std::size_t start2, std::ptrdiff_t stride2, std::size_t size2) const {
-            return const_matrix_slice_type (operator () (), default_slice (start1, stride1, size1), default_slice (start2, stride2, size2));
-        }
-        BOOST_UBLAS_INLINE
-        matrix_slice_type slice (std::size_t start1, std::ptrdiff_t stride1, std::size_t size1, std::size_t start2, std::ptrdiff_t stride2, std::size_t size2) {
-            return matrix_slice_type (operator () (), default_slice (start1, stride1, size1), default_slice (start2, stride2, size2));
-        }
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+
         BOOST_UBLAS_INLINE
         const_matrix_range_type operator () (const default_range &r1, const default_range &r2) const {
             return const_matrix_range_type (operator () (), r1, r2);
@@ -414,7 +383,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_indirect<E, A> operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
             return matrix_indirect<E, A> (operator () (), ia1, ia2);
         }
-#endif
+
         BOOST_UBLAS_INLINE
         const_matrix_range_type project (const default_range &r1, const default_range &r2) const {
             return const_matrix_range_type (operator () (), r1, r2);
@@ -441,6 +410,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_indirect<E, A> project (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
             return matrix_indirect<E, A> (operator () (), ia1, ia2);
         }
+#endif
     };
 
 #ifdef BOOST_UBLAS_NO_NESTED_CLASS_RELATION

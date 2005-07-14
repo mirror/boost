@@ -3103,7 +3103,21 @@ namespace boost { namespace numeric { namespace ublas {
         range_type r2_;
     };
 
-    // Projections
+    // Simple Projections
+    template<class M>
+    BOOST_UBLAS_INLINE
+    matrix_range<M> subrange (M &data, typename M::size_type start1, typename M::size_type stop1, typename M::size_type start2, typename M::size_type stop2) {
+        typedef basic_range<typename M::size_type, typename M::difference_type> range_type;
+        return matrix_range<M> (data, range_type (start1, stop1), range_type (start2, stop2));
+    }
+    template<class M>
+    BOOST_UBLAS_INLINE
+    matrix_range<const M> subrange (const M &data, typename M::size_type start1, typename M::size_type stop1, typename M::size_type start2, typename M::size_type stop2) {
+        typedef basic_range<typename M::size_type, typename M::difference_type> range_type;
+        return matrix_range<const M> (data, range_type (start1, stop1), range_type (start2, stop2));
+    }
+
+    // Generic Projections
     template<class M>
     BOOST_UBLAS_INLINE
     matrix_range<M> project (M &data, const typename matrix_range<M>::range_type &r1, const typename matrix_range<M>::range_type &r2) {
@@ -3993,7 +4007,21 @@ namespace boost { namespace numeric { namespace ublas {
         slice_type s2_;
     };
 
-    // Projections
+    // Simple Projections
+    template<class M>
+    BOOST_UBLAS_INLINE
+    matrix_slice<M> subslice (M &data, typename M::size_type start1, typename M::differenece_type stride1, typename M::size_type size1, typename M::size_type start2, typename M::differenece_type stride2, typename M::size_type size2) {
+        typedef basic_slice<typename M::size_type, typename M::difference_type> slice_type;
+        return matrix_slice<M> (data, slice_type (start1, stride1, size1), slice_type (start2, stride2, size2));
+    }
+    template<class M>
+    BOOST_UBLAS_INLINE
+    matrix_slice<const M> subslice (const M &data, typename M::size_type start1, typename M::differenece_type stride1, typename M::size_type size1, typename M::size_type start2, typename M::differenece_type stride2, typename M::size_type size2) {
+        typedef basic_slice<typename M::size_type, typename M::difference_type> slice_type;
+        return matrix_slice<const M> (data (), slice_type (start1, stride1, size1), slice_type (start2, stride2, size2));
+    }
+
+    // Generic Projections
     template<class M>
     BOOST_UBLAS_INLINE
     matrix_slice<M> project (M &data, const typename matrix_slice<M>::slice_type &s1, const typename matrix_slice<M>::slice_type &s2) {

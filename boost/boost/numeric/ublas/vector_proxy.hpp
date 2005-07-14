@@ -472,7 +472,21 @@ namespace boost { namespace numeric { namespace ublas {
         range_type r_;
     };
 
-    // Projections
+    // Simple Projections
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_range<V> subrange (V &data, typename V::size_type start, typename V::size_type stop) {
+        typedef basic_range<typename V::size_type, typename V::difference_type> range_type;
+        return vector_range<V> (data, range_type (start, stop));
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_range<const V> subrange (const V &data, typename V::size_type start, typename V::size_type stop) {
+        typedef basic_range<typename V::size_type, typename V::difference_type> range_type;
+        return vector_range<const V> (data, range_type (start, stop));
+    }
+
+    // Generic Projections
     template<class V>
     BOOST_UBLAS_INLINE
     vector_range<V> project (V &data, typename vector_range<V>::range_type const &r) {
@@ -956,7 +970,21 @@ namespace boost { namespace numeric { namespace ublas {
         slice_type s_;
     };
 
-    // Projections
+    // Simple Projections
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_slice<V> subslice (V &data, typename V::size_type_t start, typename V::differenece_type stride, typename V::size_type size) {
+        typedef basic_slice<typename V::size_type, typename V::difference_type> slice_type;
+        return vector_slice<V> (data, slice_type (start, stride, size));
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_slice<const V> subslice (const V &data, typename V::size_type start, typename V::differenece_type stride, typename V::size_type size)  {
+        typedef basic_slice<typename V::size_type, typename V::difference_type> slice_type;
+        return vector_slice<const V> (data, slice_type (start, stride, size));
+    }
+
+    // Generic Projections
     template<class V>
     BOOST_UBLAS_INLINE
     vector_slice<V> project (V &data, const typename vector_slice<V>::slice_type &s) {

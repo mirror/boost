@@ -208,10 +208,23 @@ the reversed <code>vector_range</code>.</td>
 </tr>
 </tbody>
 </table>
-<h3>Projections</h3>
+<h3>Simple Projections</h3>
+<h4>Description</h4>
+<p>The free <code>subrange</code> functions support the construction
+of vector ranges.</p>
+<h4>Prototypes</h4>
+<pre><code>
+    template&lt;class V&gt;
+    vector_range&lt;V&gt; subrange (V &amp;data,
+       V::size_type start, V::size_type stop);
+    template&lt;class V&gt;
+    const vector_range&lt;const V&gt; subrange (const V &amp;data,
+       V::size_type start, V::size_type stop);
+</code></pre>
+<h3>Generic Projections</h3>
 <h4>Description</h4>
 <p>The free <code>project</code> functions support the construction
-of vector ranges. Existing <code>matrix_rang</code>'s can be composed with a further range. The resulting range is computed using this existing range's <code>compose</code> function.</p>
+of vector ranges. Existing <code>matrix_range</code>'s can be composed with a further range. The resulting range is computed using this existing range's <code>compose</code> function.</p>
 <h4>Prototypes</h4>
 <pre><code>
     template&lt;class V&gt;
@@ -438,7 +451,20 @@ the reversed <code>vector_slice</code>.</td>
 </tr>
 </tbody>
 </table>
-<h3>Projections</h3>
+<h3>Simple Projections</h3>
+<h4>Description</h4>
+<p>The free <code>subslice</code> functions support the construction
+of vector slices.</p>
+<h4>Prototypes</h4>
+<pre><code>
+    template&lt;class V&gt;
+    vector_slice&lt;V&gt; subslice (V &amp;data,
+       V::size_type start, V::difference_type stride, V::size_type size);
+    template&lt;class V&gt;
+    const vector_slice&lt;const V&gt; subslice (const V &amp;data,
+       V::size_type start, V::difference_type stride, V::size_type size);
+</code></pre>
+<h3>Generic Projections</h3>
 <h4>Description</h4>
 <p>The free <code>project</code> functions support the construction
 of vector slices. Existing <code>vector_slice</code>'s can be composed with a further range or slices. The resulting slice is computed using this existing slices's <code>compose</code> function.</p>
@@ -453,7 +479,7 @@ of vector slices. Existing <code>vector_slice</code>'s can be composed with a fu
     template&lt;class V&gt;
     const vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const range &amp;r);
     template&lt;class V&gt;
-    vector_slice&lt;V&gt; project (vector_slice&lt;V&gt; &amp;data, const slice &amp;s);</code>
+    vector_slice&lt;V&gt; project (vector_slice&lt;V&gt; &amp;data, const slice &amp;s);
     template&lt;class V&gt;
     const vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const slice &amp;s);
 </code></pre>

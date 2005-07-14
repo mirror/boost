@@ -127,7 +127,22 @@ may give a speedup if <code>A</code> has less columns than rows,
 because the product is computed as a sum of outer products.</p>
 
 <h2><a name="sub">Submatrices, Subvectors</a></h2>
-
+<p>Accessing submatrices and subvectors via <b>proxies</b> using <code>project</code> functions:</p>
+<pre><code>
+w = project(u, r);         // the subvector of u specifed by the index range r
+w = project(u, s);         // the subvector of u specifed by the index slice s
+C = project(A, r1, r2);    // the submatrix of A specified by the two index ranges r1 and r2
+C = project(A, s1, s2);    // the submatrix of A specified by the two index slices s1 and s2
+w = row(A, i); w = column(A, j);    // a row or column of matrix as a vector
+</code></pre>
+<p>Assigning to submatrices and subvectors via <b>proxies</b> using <code>project</code> functions:</p>
+<pre><code>
+project(u, r) = w;         // assign the subvector of u specifed by the index range r
+project(u, s) = w;         // assign the subvector of u specifed by the index slice s
+project(A, r1, r2) = C;    // assign the submatrix of A specified by the two index ranges r1 and r2
+project(A, s1, s2) = C;    // assign the submatrix of A specified by the two index slices s1 and s2
+row(A, i) = w; column(A, j) = w;    // a row or column of matrix as a vector
+</code></pre>
 <p><em>Note:</em> A range <code>r = range(start, stop)</code>
 contains all indices <code>i</code> with <code>start &lt;= i &lt;
 stop</code>. A slice is something more general. The slice
@@ -135,12 +150,16 @@ stop</code>. A slice is something more general. The slice
 <code>start, start+stride, ..., start+(size-1)*stride</code>. The
 stride can be 0 or negative! If <code>start >= stop</code> for a range
 or <code>size == 0</code> for a slice then it contains no elements.</p>
+<p>Sub-ranges and sub-slices of vectors and matrices can be created directly with the <code>subrange</code> and <code>sublice</code> functions:</p>
 <pre><code>
-w = project(u, r);         // a subvector of u specifed by the index range r
-w = project(u, s);         // a subvector of u specifed by the index slice s
-C = project(A, r1, r2);    // a submatrix of A specified by the two index ranges r1 and r2
-C = project(A, s1, s2);    // a submatrix of A specified by the two index slices s1 and s2
-w = row(A, i); w = column(A, j);    // a row or column of matrix as a vector
+w = subrange(u, 0, 2);         // the 2 element subvector of u
+w = subslice(u, 0, 1, 2);      // the 2 element subvector of u
+C = subrange(A, 0,2, 0,3);     // the 2x3 element submatrix of A
+C = subslice(A, 0,1,2, 0,1,3); // the 2x3 element submatrix of A
+subrange(u, 0, 2) = w;         // assign the 2 element subvector of u
+subslice(u, 0, 1, 2) = w;      // assign the 2 element subvector of u
+subrange(A, 0,2, 0,3) = C;     // assign the 2x3 element submatrix of A
+subrange(A, 0,1,2, 0,1,3) = C; // assigne the 2x3 element submatrix of A
 </code></pre>
 <p>There are to more ways to access some matrix elements as a
 vector:</p>
@@ -160,8 +179,7 @@ slice(0,0,2));
 </code></p>
 
 <h2><a name="speed">Speed improvements</a></h2>
-<a name='noalias'>
-<h3>Matrix / Vector assignment</h3></a>
+<h3><a name='noalias'>Matrix / Vector assignment</a></h3>
 <p>If you know for sure that the left hand expression and the right
 hand expression have no common storage, then assignment has
 no <em>aliasing</em>. A more efficient assignment can be specified
@@ -182,7 +200,7 @@ Sadly in C++ there is no way to distinguish between an element access on the lef
 an assignment. Most often elements on the right hand side will not be changed and therefore it would
 be better to use the <code>const</code> proxies. We can do this by making the matrix or vector
 <code>const</code> before accessing it's elements. For example:</p>
-<pre><code>value = const_cast&lt;const VEC&&gt;(v)[i];   // VEC is the type of V
+<pre><code>value = const_cast&lt;const VEC&gt;(v)[i];   // VEC is the type of V
 </code></pre>
 <p>If more then one element needs to be accessed <code>const_iterator</code>'s should be used
 in preference to <code>iterator</code>'s for the same reason. For the more daring 'sparse element proxies'

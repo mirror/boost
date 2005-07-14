@@ -63,34 +63,10 @@ const</code></td>
 <td><code>expression_type &amp;operator () ()</code></td>
 <td>Returns a reference of the expression.</td>
 </tr>
-<tr>
-<td><code>vector_range&lt;E&gt; range (std::size_t start, std::size_t stop)</code></td>
-<td>Returns the specified proxy.</td>
-</tr>
-<tr>
-<td><code>vector_slice&lt;E&gt; slice (std::size_t start, std::ptrdiff_t stride, std::size_t size)</code></td>
-<td>Returns the specified  proxy.</td>
-</tr>
-<tr>
-<td><code>vector_range&lt;E&gt; project (const range &amp;r)</code></td>
-<td>Returns the specified  proxy.</td>
-</tr>
-<tr>
-<td><code>vector_slice&lt;E&gt; project (const slice &amp;s)</code></td>
-<td>Returns the specified proxy.</td>
-</tr>
-<tr>
-<td><code>vector_indirect&lt;E, A&gt; project (const indirect_array&lt;A&gt; &amp;ia)</code></td>
-<td>Returns the specified proxy.</td>
-</tr>
 </tbody>
 </table>
 <h4>Notes</h4>
-<p>The <code>range</code>, <code>slice</code> and <code>project</code> function parameters are the fixed types <code>std::size_t</code>
-and <code>std::ptrdiff_t</code>. This is an implementation issue and the types may change to <code>E::size_type</code>
-and <code>E:difference_type</code> in a future implementation.</p>
-<p>The <code>range</code>, <code>slice</code> and <code>project</code> functions propagate the expression's constantness. Therefore there proxy returned
-for a constant <code>vector_expression&lt;E&gt;</code> is based on <code>const E</code>.</p>
+<p>The <code>range</code>, <code>slice</code> and <code>project</code> functions have been removed. Use the free functions defined in <a href="vector_proxy.htm">vector proxy</a> instead.</p>
 
 <h2><a name="vector_references" id="vector_references"></a> Vector
 References</h2>

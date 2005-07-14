@@ -1067,7 +1067,20 @@ reversed the <code>matrix_range</code>.</td>
 </tr>
 </tbody>
 </table>
-<h3>Projections</h3>
+<h3>Simple Projections</h3>
+<h4>Description</h4>
+<p>The free <code>subrange</code> functions support the construction
+of matrix ranges.</p>
+<h4>Prototypes</h4>
+<pre><code>
+    template&lt;class M&gt;
+    matrix_range&lt;M&gt; subrange (M &amp;data,
+       M::size_type start1, M::size_type stop1, M::size_type start2, M::size_type, stop2);
+    template&lt;class M&gt;
+    const matrix_range&lt;const M&gt; subrange (const M &amp;data,
+       M::size_type start1, M::size_type stop1, M::size_type start2, M::size_type, stop2);
+</code></pre>
+<h3>Generic Projections</h3>
 <h4>Description</h4>
 <p>The free <code>project</code> functions support the construction
 of matrix ranges. Existing <code>matrix_range</code>'s can be composed with further ranges. The resulting ranges are computed using this existing ranges' <code>compose</code> function.</p>
@@ -1337,7 +1350,22 @@ the reversed <code>matrix_slice</code>.</td>
 </tr>
 </tbody>
 </table>
-<h3>Projections</h3>
+<h3>Simple Projections</h3>
+<h4>Description</h4>
+<p>The free <code>subslice</code> functions support the construction
+of matrix slices.</p>
+<h4>Prototypes</h4>
+<pre><code>
+    template&lt;class M&gt;
+    matrix_slice&lt;M&gt; subslice (M &amp;data,
+       M::size_type start1, M::difference_type stride1, M::size_type size1,
+       M::size_type start2, M::difference_type stride2, M::size_type size2);
+    template&lt;class M&gt;
+    const matrix_slice&lt;const M&gt; subslice (const M &amp;data,
+       M::size_type start1, M::difference_type stride1, M::size_type size1,
+       M::size_type start2, M::difference_type stride2, M::size_type size2);
+</code></pre>
+<h3>Generic Projections</h3>
 <h4>Description</h4>
 <p>The free <code>project</code> functions support the construction
 of matrix slices. Existing <code>matrix_slice</code>'s can be composed with further ranges or slices. The resulting slices are computed using this existing slices' <code>compose</code> function.</p>
