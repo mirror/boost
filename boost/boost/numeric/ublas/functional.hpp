@@ -691,7 +691,7 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [i1] * data2 [i2];
             }
             return t;
-#elseif defined(BOOST_UBLAS_HAVE_BINDINGS)
+#elif defined(BOOST_UBLAS_HAVE_BINDINGS)
             return boost::numeric::bindings::atlas::dot (c1 (), c2 ());
 #else
             return apply (static_cast<const vector_expression<C1> > (c1), static_cast<const vector_expression<C2> > (c2));
@@ -835,7 +835,7 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [j1] * data2 [j2];
             }
             return t;
-#elseif defined(BOOST_UBLAS_HAVE_BINDINGS)
+#elif defined(BOOST_UBLAS_HAVE_BINDINGS)
             return boost::numeric::bindings::atlas::dot (c1 ().row (i), c2 ());
 #else
             return apply (static_cast<const matrix_expression<C1> > (c1), static_cast<const vector_expression<C2> > (c2, i));
@@ -1003,7 +1003,7 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [j1] * data2 [j2];
             }
             return t;
-#elseif defined(BOOST_UBLAS_HAVE_BINDINGS)
+#elif defined(BOOST_UBLAS_HAVE_BINDINGS)
             return boost::numeric::bindings::atlas::dot (c1 (), c2 ().column (i));
 #else
             return apply (static_cast<const vector_expression<C1> > (c1), static_cast<const matrix_expression<C2> > (c2, i));
@@ -1180,7 +1180,7 @@ namespace boost { namespace numeric { namespace ublas {
                     t += data1 [k1] * data2 [k2];
             }
             return t;
-#elseif defined(BOOST_UBLAS_HAVE_BINDINGS)
+#elif defined(BOOST_UBLAS_HAVE_BINDINGS)
             return boost::numeric::bindings::atlas::dot (c1 ().row (i), c2 ().column (j));
 #else
             return apply (static_cast<const matrix_expression<C1> > (c1), static_cast<const matrix_expression<C2> > (c2, i));
