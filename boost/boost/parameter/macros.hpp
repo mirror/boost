@@ -23,15 +23,15 @@
 
 #ifndef BOOST_NO_SFINAE
 
-# define BOOST_PARAMETER_RESTRICT_TYPE(n, param)            \
-            BOOST_PP_EXPR_IF(n, typename) param::restrict   \
-            <                                               \
-                BOOST_PP_ENUM_PARAMS(n, T)                  \
+# define BOOST_PARAMETER_MATCH_TYPE(n, param)           \
+            BOOST_PP_EXPR_IF(n, typename) param::match  \
+            <                                           \
+                BOOST_PP_ENUM_PARAMS(n, T)              \
             >::type 
 
 #else
 
-# define BOOST_PARAMETER_RESTRICT_TYPE(n, param) param
+# define BOOST_PARAMETER_MATCH_TYPE(n, param) param
 
 #endif
 
@@ -43,7 +43,7 @@
         BOOST_PP_TUPLE_ELEM(3, 1, params)(                                          \
             BOOST_PP_ENUM_BINARY_PARAMS(n, T, const& p)                             \
             BOOST_PP_COMMA_IF(n)                                                    \
-            BOOST_PARAMETER_RESTRICT_TYPE(n,BOOST_PP_TUPLE_ELEM(3, 2, params))      \
+            BOOST_PARAMETER_MATCH_TYPE(n,BOOST_PP_TUPLE_ELEM(3, 2, params))         \
             kw = BOOST_PP_TUPLE_ELEM(3, 2, params)()                                \
         )                                                                           \
     {                                                                               \
@@ -58,14 +58,14 @@
 // ret name ## _with_named_params(Params const&);
 //
 // template<class T0>
-// ret name(T0 const& p0, typename parameters::restrict<T0>::type kw = parameters())
+// ret name(T0 const& p0, typename parameters::match<T0>::type kw = parameters())
 // {
 //     return name ## _with_named_params(kw(p0));
 // }
 //
 // template<class T0, ..., class TN>
 // ret name(T0 const& p0, ..., TN const& PN
-//    , typename parameters::restrict<T0, ..., TN>::type kw = parameters())
+//    , typename parameters::match<T0, ..., TN>::type kw = parameters())
 // {
 //     return name ## _with_named_params(kw(p0, ..., pN));
 // }

@@ -318,7 +318,7 @@ struct parameters
     // metafunction returning parameters.  Otherwise it 
     // has no nested ::type.
     template <class NamedList>
-    struct restrict_base
+    struct match_base
       : mpl::if_<
             // mpl::and_<
             //    aux::satisfies_requirements_of<NamedList,PS0>
@@ -357,9 +357,9 @@ struct parameters
         )
 #endif            
     >
-    struct restrict
+    struct match
 # ifndef BOOST_NO_SFINAE
-      : restrict_base<
+      : match_base<
             typename BOOST_PARAMETER_build_arg_list(
                 BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
             )::type
