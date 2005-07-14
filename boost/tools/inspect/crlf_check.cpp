@@ -22,7 +22,7 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
-
+      bool failed = false;
       // The understanding on line endings, as I remember it, was that
       // either "\n" or "\r\n" is OK, and they can be mixed, but "\r" alone
       // is not acceptable. Mixed line endings are allowed because Boost files
@@ -38,10 +38,21 @@ namespace boost
       {
         if ( *itr == '\r' && ((itr+1) == contents.end() || *(itr+1) != '\n') )
         {
-          ++m_files_with_errors;
-          error( library_name, full_path, desc() );
+          failed = true;
           break;
         }
+      }
+
+      if (failed && full_path.leaf() != "wrong_line_ends_test.cpp")
+      {
+        ++m_files_with_errors;
+        error( library_name, full_path, desc() );
+      }
+
+      if (!failed && full_path.leaf() == "wrong_line_ends_test.cpp")
+      {
+        ++m_files_with_errors;
+        error( library_name, full_path, "should have cr-only line endings" );
       }
 
 /*

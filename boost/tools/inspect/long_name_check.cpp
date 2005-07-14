@@ -91,16 +91,18 @@ namespace boost
         error( library_name, full_path, "file path will be > 100 chars if placed on a CD" );
       }
 
-      try
+      if (relative_path.leaf() != ".cvsignore")
       {
-        path const check_portability( relative_path.string(), &filesystem::portable_name );
+        try
+        {
+          path const check_portability( relative_path.string(), &filesystem::portable_name );
+        }
+        catch ( filesystem::filesystem_error const& )
+        {
+          ++m_long_name_errors;
+          error( library_name, full_path, "nonportable path" );
+        }
       }
-      catch ( filesystem::filesystem_error const& )
-      {
-        ++m_long_name_errors;
-        error( library_name, full_path, "nonportable path" );
-      }
-
     }
 
     long_name_check::~long_name_check()
