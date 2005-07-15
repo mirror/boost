@@ -41,7 +41,7 @@
 
 namespace boost_132 {
 
-#if !BOOST_WORKAROUND( _BORLANDC_, BOOST_TESTED_AT( 0x560) ) 
+#if !BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x560) ) 
 using namespace boost;
 #endif
 
@@ -124,7 +124,7 @@ public:
     {
     }
 
-#if BOOST_WORKAROUND( _BORLANDC_, BOOST_TESTED_AT( 0x564) )
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564) )
     template<class Y>
     explicit shared_ptr(Y * p): px(p), pn(p,boost::checked_deleter<Y>()) // Y must be complete
 #else

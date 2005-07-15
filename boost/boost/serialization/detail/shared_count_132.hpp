@@ -45,7 +45,7 @@
 
 namespace boost_132 {
 
-#if !BOOST_WORKAROUND( _BORLANDC_, BOOST_TESTED_AT( 0x564) ) 
+#if !BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564) ) 
 using namespace boost;
 #endif
 
@@ -87,7 +87,7 @@ public:
 #endif
 
 namespace detail{
-#if !BOOST_WORKAROUND( _BORLANDC_, BOOST_TESTED_AT( 0x564) ) 
+#if !BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564) ) 
 using namespace boost::detail;
 #endif
 
@@ -95,7 +95,7 @@ class sp_counted_base
 {
 //private:
 
-#if BOOST_WORKAROUND( _BORLANDC_, BOOST_TESTED_AT( 0x564) )
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564) )
     typedef boost::detail::lightweight_mutex mutex_type;
 #else
     typedef detail::lightweight_mutex mutex_type;
