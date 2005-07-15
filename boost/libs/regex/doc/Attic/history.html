@@ -30,6 +30,17 @@
          Completely rewritten expression parsing code, and traits class support; now 
          conforms to the standardization proposal.
          <LI>
+            <STRONG>Breaking Change:</STRONG> The <A href="syntax_option_type.html">syntax 
+               options</A> that can be passed to <A href="basic_regex.html">basic_regex 
+               constructors</A> have been rationalized.&nbsp; The default option (perl) now 
+            has a value of zero, and it is now clearly documented which options apply to 
+            which <A href="syntax.html">regular expression syntax styles (perl, 
+               POSIX-extended, POSIX-basic etc)</A>.&nbsp; Some of the more esoteric 
+         options have now been removed, so there is the possibility that existing code 
+         may fail to compile: however equivalent functionality should still be 
+         available.
+         <LI>
+            <STRONG>Breaking Change: </STRONG>
          POSIX-extended and POSIX-basic regular expressions now enforce the letter of 
          the POSIX standard much more closely than before.
          <LI>
@@ -48,16 +59,16 @@
          Changed newline support to recognise \f as a line separator (all character 
          types), and \x85 as a line separator for wide characters / Unicode only.
          <LI>
-            Added a new format flag <A href="match_flag_type.html"><code>format_literal</code></A> that 
-            treats the replace string as a literal, rather than a Perl or Sed style <A href="format_syntax.html">
+            Added a new format flag <A href="match_flag_type.html"><code>format_literal</code></A>
+            that treats the replace string as a literal, rather than a Perl or Sed style <A href="format_syntax.html">
                format string</A>.
          <LI>
             Errors are now reported by throwing exceptions of type <A href="bad_expression.html">
-               <code>regex_error</code></A>.  The types used previously - <code>bad_expression</code> and 
-            <code>bad_pattern</code> - are now just typedefs for <code>regex_error</code>.  Type 
-            <code>regex_error</code> has a couple of new members: <code>code()</code> to report an error code rather 
-            than a string, and <code>position()</code> to report where in the expression the error 
-            occured.</LI></UL>
+               <code>regex_error</code></A>. The types used previously - <code>bad_expression</code>
+            and <code>bad_pattern</code> - are now just typedefs for <code>regex_error</code>. 
+            Type <code>regex_error</code> has a couple of new members: <code>code()</code> to 
+            report an error code rather than a string, and <code>position()</code> to 
+            report where in the expression the error occured.</LI></UL>
       <P>Boost 1.32.1.</P>
       <UL>
          <LI>
