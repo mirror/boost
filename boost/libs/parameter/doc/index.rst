@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/14 20:11:03 $
+:date:          $Date: 2005/07/14 22:41:34 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -552,9 +552,73 @@ plain C++ default arguments provide:
      int f(Index index **= 42**);  // OK
      int y = f();                // **error; can't deduce Index**
 
-Eliminating the Extra Parentheses
-=================================
+Syntactic Refinement
+====================
 
+.. |ParameterSpec| replace:: :concept:`ParameterSpec`
+
+To allow callers to invoke ``depth_first_search`` with just one
+pair of parentheses, and to omit keywords where appropriate, we'll
+need to build a type that describes the allowed parameters and
+their ordering when passed positionally.  This type is known as
+a |ParameterSpec|. [#typedef]_ ::
+
+  namespace graphs
+  {
+    struct dfs_params
+      : parameter::parameters<
+            tag::graph
+          , tag::visitor
+          , tag::root_vertex
+          , tag::index_map
+          , tag::color_map
+        >
+    {};
+  }
+
+The ``parameters`` template supplies a function-call
+operator that groups all its arguments into an |ArgumentPack|.  Any
+arguments passed to it without a keyword label will be associated
+with a parameter according to its position in the |ParameterSpec|.
+So for example, given an object ``p`` of type ``dfs_params``, ::
+
+  p('G', index_map=1)
+
+gives the ``graph`` parameter a value of ``'G'``, and gives the
+``index_map`` parameter a value of ``1``.
+  
+Next we need a family of overloaded ``depth_first_search`` function
+templates that can be called with anywhere from one to five
+arguments.  These “forwarding functions” will invoke an instance of
+``dfs_params`` as a function object, passing their parameters
+to its ``operator()``, and passing the result on to
+``core::depth_first_search``::
+
+  namespace graphs
+  {
+    template <class A0>
+    void depth_first_search(A0 const& a0)
+    {
+       core::depth_first_search(dfs_params()(a0));
+    }
+
+    template <class A0, class A1>
+    void depth_first_search(A0 const& a0, A1 const& a1)
+    {
+       core::depth_first_search(dfs_params()(a0,a1));
+    }
+
+                      ⋮
+
+    template <class A0, class A1>
+    void depth_first_search(A0 const& a0, A1 const& a1, …A4 const& a4)
+    {
+       core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
+    }
+  }
+
+That's it!  We can now call ``graphs::depth_first_search`` with
+from one to five arguments passed positionally or via keyword.
 
 Generating the Forwarding Functions with Macros
 -----------------------------------------------
@@ -796,6 +860,17 @@ __ ../../../graph/doc/bgl_named_params.html
    could replace all mentions of vertex descriptor types with
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
+
+.. [#typedef] In principle you can also declare a
+   |ParameterSpec| as a ``typedef``::
+
+     typedef parameter::parameters<
+           tag::graph, tag::visitor, tag::root_vertex
+         , tag::index_map, tag::color_map
+     > dfs_parameters;
+     
+   Some older compilers seem to be happier with the use of
+   inheritance, though.
 
 .. [#bind] The Lambda library is known not to work on `some
    less-conformant compilers`__.  When using one of those you could
