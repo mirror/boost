@@ -82,7 +82,7 @@ public:
             // note that the erase might invalidate i so save it here
             tkmap::type::iterator j = i++;
             if(*j == eti)
-            	m_self->m_map.erase(j);
+                m_self->m_map.erase(j);
         }
     }
 };

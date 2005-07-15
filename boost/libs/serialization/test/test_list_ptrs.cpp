@@ -74,8 +74,8 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> boost::serialization::make_nvp("alist", alist1);
         ia >> boost::serialization::make_nvp("free_a_ptr", free_a_ptr1);
         BOOST_CHECK(
-        	alist.size() == alist1.size() 
-        	&& std::equal(alist.begin(),alist.end(),alist1.begin(),ptr_equal_to<A *>())
+            alist.size() == alist1.size() 
+            && std::equal(alist.begin(),alist.end(),alist1.begin(),ptr_equal_to<A *>())
         );
         // verify that first element is the same as the free pointer
         BOOST_CHECK((*alist1.begin()) == free_a_ptr1);
@@ -109,7 +109,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("aslist", aslist1);
         BOOST_CHECK(aslist.size() == aslist1.size() &&
-        	std::equal(aslist.begin(),aslist.end(),aslist1.begin(),ptr_equal_to<A *>())
+            std::equal(aslist.begin(),aslist.end(),aslist1.begin(),ptr_equal_to<A *>())
         );
     }
     std::for_each(
