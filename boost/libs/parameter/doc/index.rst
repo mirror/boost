@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/15 15:25:28 $
+:date:          $Date: 2005/07/15 16:16:26 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -563,6 +563,8 @@ omit keywords where appropriate.
 Describing the Positional Argument Order
 ----------------------------------------
 
+.. _ParameterSpec:
+
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
 First, we'll need to build a type that describes the allowed
@@ -710,7 +712,109 @@ address this problem and others, for an upcoming release of Boost.
 Controlling Overload Resolution
 ===============================
 
+The parameters of our templated forwarding functions are completely
+general; in fact, they're a perfect match for any argument type
+whatsoever.  The problems with exposing such general function
+templates have been the subject of much discussion; especially in
+the presence of `unqualified calls`__.  Probably the safest thing
+to do is to isolate the forwarding functions in a namespace
+containing no types [#using]_, but often we'd *like* our functions
+to play nicely with argument-dependent lookup and other function
+overloads.  In that case, it's neccessary to remove the functions
+from the overload set when the passed argument types aren't
+appropriate.
 
+__ http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#225
+
+This sort of overload control can be accomplished in C++ by taking
+advantage of the SFINAE (Substitution Failure Is Not An Error) rule. [#sfinae]_
+The named parameters library provides built-in SFINAE support
+through the following class templates:
+
+.. parsed-literal::
+
+     template< class KeywordTag, class Predicate = *unspecified* >
+     struct required;
+
+     template< class KeywordTag, class Predicate = *unspecified* >
+     struct optional;
+
+Instead of directly using keyword tags in our |ParameterSpec|, we
+can use ``required`` and ``optional`` to indicate which function
+parameters are required, and optionally pass ``Predicate``\ s to
+describe the type requirements for each function parameter.
+The ``Predicate`` argument must be a unary  `MPL
+lambda expression`_  that, when applied to the
+actual type the argument, indicates whether that argument type
+meets the function's requirements for that parameter position.
+
+.. _`MPL lambda expression`: ../../../mpl/doc/refmanual/lambda-expression.html
+
+For example, let's say we want to restrict our ``foo()`` so that
+the ``graph`` parameter is required and the ``root_vertex``
+parameter is convertible to ``int``.  We might write:
+
+.. parsed-literal::
+
+  #include <boost/type_traits/is_convertible.hpp>
+  #include <boost/mpl/placeholders.hpp>
+  namespace graphs
+  {
+    using namespace boost::mpl::placeholders;
+
+    struct dfs_params
+      : parameter::parameters<
+            **parameter::required<tag::graph>**
+          , parameter::optional<tag::visitor>
+          , **parameter::optional<
+                tag::root_vertex, boost::is_convertible<_,int>
+            >**
+          , parameter::optional<tag::index_map>
+          , parameter::optional<tag::color_map>
+        >
+    {};
+  }
+
+Now we can add an additional optional argument to each of our
+``depth_first_search`` overloads:
+
+.. parsed-literal::
+
+  namespace graphs
+  {
+    template <class A0>
+    void depth_first_search(
+        A0 const& a0
+      , typename dfs_params::match<A0>::type p = dfs_params())
+    {
+       core::depth_first_search(**p**\ (a0));
+    }
+
+    template <class A0, class A1>
+    void depth_first_search(
+        A0 const& a0, A1 const& a1
+      , typename dfs_params::match<A0,A1>::type p = dfs_params())
+    {
+       core::depth_first_search(**p**\ (a0,a1));
+    }
+
+                      ⋮
+
+    template <class A0, class A1, …class A4>
+    void depth_first_search(
+        A0 const& a0, A1 const& a1, …A4 const& A4
+      , typename dfs_params::match<A0,A1,A2,A3,A4>::type p = dfs_params())
+    {
+       core::depth_first_search(**p**\ (a0,a1,a2,a3,a4));
+    }
+  }
+
+
+These additional parameters are not intended to be used directly
+by callers; they merely trigger SFINAE by becoming illegal types
+when the ``name`` argument is not convertible to ``const
+char*``. The ``BOOST_PARAMETER_FUN`` macro described earlier
+actually adds these extra function parameters.
 
 Efficiency Issues
 =================
@@ -969,6 +1073,33 @@ __ ../../../graph/doc/bgl_named_params.html
     and use Boost.Bind_ to generate the function object::
 
       boost::bind(construct2<default_color_map>,num_vertices(g),i)
+
+.. [#using] You can always give the illusion that the function
+   lives in an outer namespace by applying a *using-declaration*::
+
+      namespace foo_overloads
+      {
+        // foo declarations here
+        void foo() { ... }
+        ...
+      }
+      using foo_overloads::foo;  
+
+
+.. [#sfinae] If type substitution during the instantiation of a
+   function template results in an invalid type, no compilation
+   error is emitted; instead the overload is removed from the
+   overload set. By producing an invalid type in the function
+   signature depending on the result of some condition, whether or
+   not an overload is considered during overload resolution can be
+   controlled.  The technique is formalized in the |enable_if|_
+   utility.  See
+   http://www.semantics.org/once_weakly/w02_SFINAE.pdf for more
+   information on SFINAE.
+
+.. |enable_if| replace:: ``enable_if``
+.. _enable_if: ../../../utility/enable_if.html
+
 
 __ http://www.boost.org/regression/release/user/lambda.html
 
