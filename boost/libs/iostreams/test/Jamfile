@@ -57,7 +57,7 @@ DEPENDS all : test ;
     }
     
     rule intialize_suite {
-        TEST_SUITE = 
+        TEST_SUITE =
           [ test-iostreams libs/iostreams/test/array_test.cpp ]
           [ test-iostreams libs/iostreams/test/auto_close_test.cpp ]
           [ test-iostreams libs/iostreams/test/buffer_size_test.cpp ]
@@ -77,8 +77,8 @@ DEPENDS all : test ;
                 libs/iostreams/src/file_descriptor.cpp ]
           [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
           [ test-iostreams 
-				libs/iostreams/test/finite_state_filter_test.cpp 
-			  : # build requirements 
+                libs/iostreams/test/finite_state_filter_test.cpp 
+              : # build requirements 
                 std::locale-support ]
           [ test-iostreams libs/iostreams/test/flush_test.cpp ]
           [ test-iostreams libs/iostreams/test/invert_test.cpp ]
