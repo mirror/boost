@@ -51,27 +51,27 @@ rule zlib_config
         {
             template zlib_common
                 : # sources
-                $(ZLIB_SOURCE)/$(SOURCES).c
+                  $(ZLIB_SOURCE)/$(SOURCES).c
                 : # build requirements
-                [ common-names ]  # magic for install and auto-link features
-                <include>$(ZLIB_INCLUDE)
+                  [ common-names ]  # magic for install and auto-link features
+                  <include>$(ZLIB_INCLUDE)
                 : # build variants
-                debug release 
+                  debug release 
             ;       
 
             lib boost_zlib
                 : # sources
-                <template>zlib_common
+                  <template>zlib_common
                 : # build requirements
                 : # build variants
                 ;
 
             dll boost_zlib
                 : # sources
-                <template>zlib_common
+                  <template>zlib_common
                 : # build requirements
-                <define>ZLIB_DLL=1 # tell source we're building dll's
-                <runtime-link>dynamic # build only for dynamic runtimes
+                  <define>ZLIB_DLL=1 # tell source we're building dll's
+                  <runtime-link>dynamic # build only for dynamic runtimes
                 : # build variants
                 ;
                 
