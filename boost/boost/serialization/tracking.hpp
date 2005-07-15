@@ -72,7 +72,13 @@ inline bool operator>=(tracking_level<T> t, enum tracking_type l)
 } // namespace serialization
 } // namespace boost
 
-// specify the current tracking behavior for the class
+
+// The STATIC_ASSERT is prevents one from setting tracking for a primitive type.  
+// This almost HAS to be an error.  Doing this will effect serialization of all 
+// char's in your program which is almost certainly what you don't want to do.  
+// If you want to track all instances of a given primitive type, You'll have to 
+// wrap it in your own type so its not a primitive anymore.  Then it will compile
+// without problem.
 #define BOOST_CLASS_TRACKING(T, E)           \
 namespace boost {                            \
 namespace serialization {                    \
