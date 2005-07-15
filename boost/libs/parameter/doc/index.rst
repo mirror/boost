@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/15 01:59:54 $
+:date:          $Date: 2005/07/15 13:13:18 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -623,17 +623,57 @@ from one to five arguments passed positionally or via keyword.
 “Out” Parameters
 ----------------
 
-Well, that's not *quite* it.  As you may recall from the
+Well, that's not *quite* it.  The overload set above works fine
+when ``color_map`` is passed by keyword, but it breaks down when it
+is passed positionally.  As you may recall from the
 ``depth_first_search`` `parameter table`_, ``color_map`` is an
-“out” parameter.  That means ``depth_first_search`` should 
+“out” parameter.  That means the five-argument
+``depth_first_search`` overload should really take its final
+argument by non-``const`` reference.  On the other hand, assigning
+into a keyword object yields a temporary |ArgumentPack| object, and
+a conforming C++ compiler will refuse to bind a non-``const``
+reference to a temporary.  To support an interface in which the
+last argument is passed by keyword, there must be a
+``depth_first_search`` overload taking its argument by ``const``
+reference.  The simplest solution in this case is to add another
+overload:
 
-Passing non-const References Positionally
------------------------------------------
+.. parsed-literal::
 
-What happens
+   template <class A0, class A1>
+   void depth_first_search(A0 **const**\ & a0, A1 **const**\ & a1, …\ **A4&** a4)
+   {
+       core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
+   }
 
-Generating the Forwarding Functions with Macros
------------------------------------------------
+That works nicely, but only because there is only one “out”
+parameter and it is in the last position.  If ``color_map`` had
+been the first parameter, we would have needed *ten* overloads.  In
+the worst case—where the function has five “out” parameters—2\
+:sup:`5` or 32 overloads would be required.  This “\ `forwarding
+problem`_\ ” is a well-known problem to generic library authors,
+and the C++ standard committee is working on a proposal__ to
+address it.
+
+.. _`forwarding problem`: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm
+
+__ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html
+
+If writing the necessary overloads to pass “out” parameters is
+impractical for you, you still have the option to ask users to pass
+positional “out” arguments through |ref|_, which will ensure
+that its mutability is preserved:
+
+.. parsed-literal::
+
+  depth_first_search(g, v, s, i, **boost::ref(c)**);
+
+.. |ref| replace:: ``boost::ref``
+
+.. _ref: http://www.boost.org/doc/html/reference_wrapper.html
+
+Generating Forwarding Functions with Macros
+-------------------------------------------
 
 
 Controlling Overload Resolution
