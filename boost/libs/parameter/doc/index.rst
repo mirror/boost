@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/14 22:41:34 $
+:date:          $Date: 2005/07/15 01:59:54 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -205,15 +205,15 @@ below:
   +----------------+----------+----------------------------------+
   | Parameter Name | Dataflow | Default Value (if any)           |
   +================+==========+==================================+
-  |``graph``       | IN       |none - this argument is required. |
+  |``graph``       | in       |none - this argument is required. |
   +----------------+----------+----------------------------------+
-  |``visitor``     | IN       |``boost::dfs_visitor<>()``        |
+  |``visitor``     | in       |``boost::dfs_visitor<>()``        |
   +----------------+----------+----------------------------------+
-  |``root_vertex`` | OUT      |``*vertices(g).first``            |
+  |``root_vertex`` | in       |``*vertices(g).first``            |
   +----------------+----------+----------------------------------+
-  |``index_map``   | IN       |``get(boost::vertex_index,graph)``|
+  |``index_map``   | in       |``get(boost::vertex_index,graph)``|
   +----------------+----------+----------------------------------+
-  |``color_map``   | IN       |an ``iterator_property_map``      |
+  |``color_map``   | out      |an ``iterator_property_map``      |
   |                |          |created from a ``std::vector`` of |
   |                |          |``default_color_type`` of size    |
   |                |          |``num_vertices(g)`` and using the |
@@ -584,14 +584,14 @@ So for example, given an object ``p`` of type ``dfs_params``, ::
 
   p('G', index_map=1)
 
-gives the ``graph`` parameter a value of ``'G'``, and gives the
-``index_map`` parameter a value of ``1``.
+yields an |ArgumentPack| whose ``graph`` parameter has a value of
+``'G'``, and whose ``index_map`` parameter has a value of ``1``.
   
 Next we need a family of overloaded ``depth_first_search`` function
 templates that can be called with anywhere from one to five
 arguments.  These “forwarding functions” will invoke an instance of
 ``dfs_params`` as a function object, passing their parameters
-to its ``operator()``, and passing the result on to
+to its ``operator()`` and forwarding the result on to
 ``core::depth_first_search``::
 
   namespace graphs
@@ -620,12 +620,21 @@ to its ``operator()``, and passing the result on to
 That's it!  We can now call ``graphs::depth_first_search`` with
 from one to five arguments passed positionally or via keyword.
 
+“Out” Parameters
+----------------
+
+Well, that's not *quite* it.  As you may recall from the
+``depth_first_search`` `parameter table`_, ``color_map`` is an
+“out” parameter.  That means ``depth_first_search`` should 
+
+Passing non-const References Positionally
+-----------------------------------------
+
+What happens
+
 Generating the Forwarding Functions with Macros
 -----------------------------------------------
 
-
-Passing non-const References positionally
------------------------------------------
 
 Controlling Overload Resolution
 ===============================
