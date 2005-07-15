@@ -25,6 +25,12 @@ namespace boost {
 namespace archive {
 namespace detail {
 
+bool type_info_pointer_compare::operator()(
+    const basic_serializer * lhs, const basic_serializer * rhs
+) const    {
+    return *lhs < *rhs;
+}
+
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_serializer_map::basic_serializer_map(){
 }
