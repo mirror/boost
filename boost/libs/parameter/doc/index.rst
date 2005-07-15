@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/15 13:13:18 $
+:date:          $Date: 2005/07/15 15:25:28 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -555,13 +555,19 @@ plain C++ default arguments provide:
 Syntactic Refinement
 ====================
 
+In this section we'll describe how you can allow callers to invoke
+``depth_first_search`` with just one pair of parentheses, and to
+omit keywords where appropriate.
+
+
+Describing the Positional Argument Order
+----------------------------------------
+
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
-To allow callers to invoke ``depth_first_search`` with just one
-pair of parentheses, and to omit keywords where appropriate, we'll
-need to build a type that describes the allowed parameters and
-their ordering when passed positionally.  This type is known as
-a |ParameterSpec|. [#typedef]_ ::
+First, we'll need to build a type that describes the allowed
+parameters and their ordering when passed positionally.  This type
+is known as a |ParameterSpec|. [#typedef]_ ::
 
   namespace graphs
   {
@@ -586,6 +592,9 @@ So for example, given an object ``p`` of type ``dfs_params``, ::
 
 yields an |ArgumentPack| whose ``graph`` parameter has a value of
 ``'G'``, and whose ``index_map`` parameter has a value of ``1``.
+
+Forwarding Functions
+--------------------
   
 Next we need a family of overloaded ``depth_first_search`` function
 templates that can be called with anywhere from one to five
@@ -610,7 +619,7 @@ to its ``operator()`` and forwarding the result on to
 
                       ⋮
 
-    template <class A0, class A1>
+    template <class A0, class A1, …class A4>
     void depth_first_search(A0 const& a0, A1 const& a1, …A4 const& a4)
     {
        core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
@@ -640,8 +649,8 @@ overload:
 
 .. parsed-literal::
 
-   template <class A0, class A1>
-   void depth_first_search(A0 **const**\ & a0, A1 **const**\ & a1, …\ **A4&** a4)
+   template <class A0, class A1, …class A4>
+   void depth_first_search(A0 **const&** a0, A1 **const&** a1, …\ A4\ **&** a4)
    {
        core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
    }
@@ -651,18 +660,18 @@ parameter and it is in the last position.  If ``color_map`` had
 been the first parameter, we would have needed *ten* overloads.  In
 the worst case—where the function has five “out” parameters—2\
 :sup:`5` or 32 overloads would be required.  This “\ `forwarding
-problem`_\ ” is a well-known problem to generic library authors,
-and the C++ standard committee is working on a proposal__ to
-address it.
+problem`_\ ” is well-known to generic library authors, and the C++
+standard committee is working on a proposal__ to address it.
 
 .. _`forwarding problem`: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm
 
 __ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html
 
-If writing the necessary overloads to pass “out” parameters is
-impractical for you, you still have the option to ask users to pass
-positional “out” arguments through |ref|_, which will ensure
-that its mutability is preserved:
+If it is impractical for you to write the overloads that would be
+required for positional “out” arguments to be passed directly, you
+still have the option to ask users to pass them through |ref|_,
+which will ensure that the algorithm implementation sees a
+non-``const`` reference:
 
 .. parsed-literal::
 
@@ -675,11 +684,34 @@ that its mutability is preserved:
 Generating Forwarding Functions with Macros
 -------------------------------------------
 
+To remove some of the tedium of writing overloaded forwarding
+functions, the library supplies a macro, suitably located in
+``boost/parameter/macros.hpp``, that will generate free function
+overloads for you::
+
+  BOOST_PARAMETER_FUN(void, depth_first_search, 1, 5, dfs_params);
+
+will generate a family of five ``depth_first_search`` overloads, in
+the current scope, that pass their arguments through
+``dfs_params``.  Instead of ``core::depth_first_search``, these
+overloads will forward the |ArgumentPack| on to a function called
+``depth_first_search_with_named_params``, also in the current
+scope.  It's up to you to implement that function.  You could
+simply transplant the body of ``core::depth_first_search`` into
+``depth_first_search_with_named_params`` if you were going to use
+this approach.
+
+Note that ``BOOST_PARAMETER_FUN`` only takes arguments by ``const``
+reference, so you will have to add any additional overloads
+required to handle positional “out” parameters yourself.  We are
+looking into providing a more sophisticated set of macros to
+address this problem and others, for an upcoming release of Boost.
 
 Controlling Overload Resolution
 ===============================
 
-     
+
+
 Efficiency Issues
 =================
 
