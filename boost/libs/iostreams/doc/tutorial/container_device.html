@@ -189,7 +189,7 @@
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cassert&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;ios&gt;</SPAN> <SPAN CLASS='comment'>// ios_base::beg</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;string&gt;</SPAN>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/stream_facade.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream_facade.hpp&gt;</SPAN></A>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/stream.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header"  HREF="../../example/container_device.hpp"><SPAN CLASS='literal'>&lt;libs/iostreams/example/container_device.hpp&gt;</SPAN></A>
 
 <SPAN CLASS="keyword">namespace</SPAN> io = boost::iostreams;
@@ -201,7 +201,7 @@
     <SPAN CLASS="keyword">typedef</SPAN> ex::container_device&lt;string&gt; string_device;
 
     string                            one, two;
-    io::stream_facade&lt;string_device&gt;  io(one);
+    io::stream&lt;string_device&gt;  io(one);
     io &lt;&lt; <SPAN CLASS='literal'>"Hello World!"</SPAN>;
     io.flush();
     io.seekg(0, BOOST_IOS::beg); <SPAN CLASS='comment'>// seek to the beginning</SPAN>

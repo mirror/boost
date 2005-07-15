@@ -106,7 +106,7 @@
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cassert&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;string&gt;</SPAN>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/stream_facade.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream_facade.hpp&gt;</SPAN></A>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/stream.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../example/container_device.hpp"><SPAN CLASS='literal'>&lt;libs/iostreams/example/container_device.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// container_source</SPAN>
 
 <SPAN CLASS='keyword'>namespace</SPAN> io = boost::iostreams;
@@ -118,7 +118,7 @@
     <SPAN CLASS='keyword'>typedef</SPAN> ex::container_sink&lt;string&gt; string_sink;
 
     string                          result;
-    io::stream_facade&lt;string_sink&gt;  out(result);
+    io::stream&lt;string_sink&gt;  out(result);
     out &lt;&lt; <SPAN CLASS='literal'>"Hello World!"</SPAN>;
     out.flush();
     assert(result == <SPAN CLASS='literal'>"Hello World!"</SPAN>);

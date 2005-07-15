@@ -7,7 +7,7 @@
 #include <fstream>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/iostreams/filter/regex_filter.hpp>
+#include <boost/iostreams/filter/regex.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/temp_file.hpp"

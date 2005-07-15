@@ -6,7 +6,7 @@
 
 #include <fstream>
 #include <boost/iostreams/device/file_descriptor.hpp>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/temp_file.hpp"
@@ -21,9 +21,9 @@ using boost::unit_test::test_suite;
 void file_descriptor_test()
 {
 
-    typedef stream_facade<file_descriptor_source> fdistream;
-    typedef stream_facade<file_descriptor_sink>   fdostream;
-    typedef stream_facade<file_descriptor>        fdstream;
+    typedef stream<file_descriptor_source> fdistream;
+    typedef stream<file_descriptor_sink>   fdostream;
+    typedef stream<file_descriptor>        fdstream;
 
     test_file  test1;       
     test_file  test2;       

@@ -6,7 +6,7 @@
 
 #include <cstdio>  // EOF.
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
@@ -52,7 +52,7 @@ void auto_close_source()
     // Rely on auto_close to close source.
     closable_source src;
     {
-        stream_facade<closable_source> in(src);
+        stream<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         BOOST_CHECK(in.auto_close());
     }
@@ -61,7 +61,7 @@ void auto_close_source()
     // Use close() to close components.
     src.open();
     {
-        stream_facade<closable_source> in(src);
+        stream<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         BOOST_CHECK(in.auto_close());
         in.close();
@@ -71,7 +71,7 @@ void auto_close_source()
     // Use close() to close components, with auto_close disabled.
     src.open();
     {
-        stream_facade<closable_source> in(src);
+        stream<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
         in.close();
@@ -81,7 +81,7 @@ void auto_close_source()
     // Disable auto_close.
     src.open();
     {
-        stream_facade<closable_source> in(src);
+        stream<closable_source> in(src);
         BOOST_CHECK(src.is_open());
         in.set_auto_close(false);
         BOOST_CHECK(!in.auto_close());

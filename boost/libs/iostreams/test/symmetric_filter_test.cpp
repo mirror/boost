@@ -6,7 +6,7 @@
 
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/filter/symmetric_filter_adapter.hpp>
+#include <boost/iostreams/filter/symmetric.hpp>
 #include <boost/iostreams/filter/test.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
@@ -22,7 +22,7 @@ using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;   
 
 // Note: The filter is given an internal buffer -- unnecessary in this simple
-// case -- to stress test symmetric_filter_adapter.
+// case -- to stress test symmetric_filter.
 struct toupper_symmetric_filter_impl {
     typedef char char_type;
     explicit toupper_symmetric_filter_impl( 
@@ -74,7 +74,7 @@ struct toupper_symmetric_filter_impl {
     boost::iostreams::detail::buffer<char> buf_;
 };
 
-typedef symmetric_filter_adapter<toupper_symmetric_filter_impl>
+typedef symmetric_filter<toupper_symmetric_filter_impl>
         toupper_symmetric_filter;
 
 void read_symmetric_filter_test()

@@ -11,7 +11,7 @@
 #include <cstdio>    // EOF.
 #include <iostream>  // cin, cout.
 #include <boost/iostreams/concepts.hpp>
-#include <boost/iostreams/filter/stdio_filter.hpp>
+#include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/operations.hpp>
 
 namespace boost { namespace iostreams { namespace example {

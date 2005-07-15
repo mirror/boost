@@ -82,7 +82,7 @@
 can be defined as follows:</P>
 
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> back_insert_device&lt; vector&lt;<SPAN CLASS="keyword">char</SPAN>&gt; &gt; vector_sink;
-    <SPAN CLASS="keyword">typedef</SPAN> stream_facade&lt;vector_sink&gt;           appending_ostream;
+    <SPAN CLASS="keyword">typedef</SPAN> stream&lt;vector_sink&gt;           appending_ostream;
 
     vector&lt;<SPAN CLASS="keyword">char</SPAN>&gt;       v;
     appending_ostream  out(boost::iostreams::back_inserter(v));</PRE>

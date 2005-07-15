@@ -15,7 +15,7 @@
 #include <map>
 #include <boost/config.hpp>  // BOOST_NO_STDC_NAMESPACE.
 #include <boost/iostreams/concepts.hpp>
-#include <boost/iostreams/filter/stdio_filter.hpp>
+#include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/operations.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE

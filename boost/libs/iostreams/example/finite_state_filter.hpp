@@ -22,7 +22,7 @@
 #include <boost/iostreams/checked_operations.hpp>   // put_if.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/detail/ios.hpp>           // openmode.
-#include <boost/iostreams/filter/stdio_filter.hpp>
+#include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/begin_end.hpp>
 #include <boost/mpl/deref.hpp>
@@ -264,57 +264,7 @@ private:
 
 } // End namespace detail.
 
-//------------------Definition of base finite_state_stdio_filter--------------//
-
-template<typename FiniteStateMachine>
-class finite_state_stdio_filter
-    : public basic_stdio_filter<typename FiniteStateMachine::char_type>,
-      public detail::finite_state_filter_impl<FiniteStateMachine>
-{
-private:
-    typedef detail::finite_state_filter_impl<FiniteStateMachine>  base_type;
-public:
-    typedef typename base_type::char_type                         char_type;
-    struct category : stdio_filter::category, localizable_tag { };
-
-    finite_state_stdio_filter() { }
-
-    template<typename T0>
-    explicit finite_state_stdio_filter(const T0& t0)
-        : base_type(t0)
-        { }
-
-    template<typename T0, typename T1>
-    finite_state_stdio_filter(const T0& t0, const T1& t1)
-        : base_type(t0, t1)
-        { }
-
-    template<typename T0, typename T1, typename T2>
-    finite_state_stdio_filter(const T0& t0, const T1& t1, const T2& t2)
-        : base_type(t0, t1, t2)
-        { }
-private:
-    void do_filter()
-    {
-        using namespace std;
-        while (true) {
-            flush();
-
-            int c;
-            if ((c = cin.get()) != EOF)
-                this->process_event((char) c);
-            else {
-                this->on_eof();
-                flush();
-                break;
-            }
-        }
-    }
-    void do_close() { this->reset(); }
-    void flush() { while (!this->empty()) std::cout.put(this->pop()); }
-};
-
-//------------------Definition of base finite_state_filter--------------------//
+//------------------Definition of finite_state_filter-------------------------//
 
 template<typename FiniteStateMachine>
 class finite_state_filter

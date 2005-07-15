@@ -32,7 +32,7 @@
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/positioning.hpp>
 #include <boost/iostreams/traits.hpp>           // is_filter.
-#include <boost/iostreams/streambuf_facade.hpp>
+#include <boost/iostreams/stream_buffer.hpp>
 #include <boost/next_prior.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
@@ -230,7 +230,7 @@ private:
     {
         typedef typename iostreams::category_of<T>::type  category;
         typedef typename unwrap_ios<T>::type              policy_type;
-        typedef streambuf_facade<
+        typedef stream_buffer<
                     policy_type,
                     BOOST_IOSTREAMS_CHAR_TRAITS(char_type),
                     Alloc, Mode
@@ -304,7 +304,7 @@ private:
         void close()
             {
                 if ((flags_ & f_open) != 0) {
-                    streambuf_facade< basic_null_device<Ch, Mode> > null;
+                    stream_buffer< basic_null_device<Ch, Mode> > null;
                     if ((flags_ & f_complete) == 0) {
                         null.open(basic_null_device<Ch, Mode>());
                         set_next(links_.back(), &null);

@@ -6,7 +6,7 @@
 
 #include <cctype>
 #include <boost/iostreams/device/null.hpp>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
 #include "detail/temp_file.hpp"
@@ -20,7 +20,7 @@ using boost::unit_test::test_suite;
 
 void read_null_source()
 {
-    stream_facade<null_source> in;
+    stream<null_source> in;
     in.open(null_source());
     in.get();
     BOOST_CHECK(in.eof());
@@ -28,7 +28,7 @@ void read_null_source()
 
 void write_null_sink() 
 {
-    stream_facade<null_sink> out;
+    stream<null_sink> out;
     out.open(null_sink());
     write_data_in_chunks(out);
     BOOST_CHECK(out.good());

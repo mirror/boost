@@ -121,7 +121,7 @@
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cassert&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;string&gt;</SPAN>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/stream_facade.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream_facade.hpp&gt;</SPAN></A>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/stream.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../example/container_device.hpp"><SPAN CLASS='literal'>&lt;libs/iostreams/example/container_device.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// container_source</SPAN>
 
 <SPAN CLASS='keyword'>namespace</SPAN> io = boost::iostreams;
@@ -134,7 +134,7 @@
 
     string                            input = <SPAN CLASS='literal'>"Hello World!"</SPAN>;
     string                            output;
-    io::stream_facade&lt;string_source&gt;  in(input);
+    io::stream&lt;string_source&gt;  in(input);
     getline(in, output);
     assert(input == output);
 }</PRE>

@@ -48,7 +48,7 @@
 <H5>Policy</H5>
 
 <P>
-    The fundamental stream buffer template in the Boost Iostreams library, <A HREF="generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A>, implements the <CODE>protected virtual</CODE> memeber functions of <CODE>std::basic_streambuf</CODE> by delegating to the i/o functions <A HREF="../functions/read.html"><CODE>read</CODE></A>, <A HREF="../functions/write.html"><CODE>write</CODE></A>, <A HREF="../functions/put.html"><CODE>put</CODE></A>, <A HREF="../functions/get.html"><CODE>get</CODE></A>, <I>etc.</I>, which in turn delegate to member functions of policy classes. <I>These policy class member functions throw exceptions to report errors.</I> The exceptions are propagated by the <CODE>protected virtual</CODE> members of <CODE>streambuf_facade</CODE> and by the public members of <CODE>std::basic_streambuf</CODE>. 
+    The fundamental stream buffer template in the Boost Iostreams library, <A HREF="generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A>, implements the <CODE>protected virtual</CODE> memeber functions of <CODE>std::basic_streambuf</CODE> by delegating to the i/o functions <A HREF="../functions/read.html"><CODE>read</CODE></A>, <A HREF="../functions/write.html"><CODE>write</CODE></A>, <A HREF="../functions/put.html"><CODE>put</CODE></A>, <A HREF="../functions/get.html"><CODE>get</CODE></A>, <I>etc.</I>, which in turn delegate to member functions of policy classes. <I>These policy class member functions throw exceptions to report errors.</I> The exceptions are propagated by the <CODE>protected virtual</CODE> members of <CODE>stream_buffer</CODE> and by the public members of <CODE>std::basic_streambuf</CODE>. 
 </P>
 
 <P>
@@ -63,7 +63,7 @@
 </P>
 
 <P>
-    A third possibility would have been to follow the example of <CODE>std::basic_streambuf</CODE> and allow member functions of policy classes to signal errors either by throwing exceptions or by returning designated error indicators. This was rejected because it would have complicated the specifications of the various <A HREF="concepts.html#filter_concepts">Filter</A> and <A HREF="concepts.html#device_concepts">Device</A> concepts and made the internals of <CODE>streambuf_facade</CODE> more difficult to understand and maintain.<SUP><A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_2">[2]</A></SUP>
+    A third possibility would have been to follow the example of <CODE>std::basic_streambuf</CODE> and allow member functions of policy classes to signal errors either by throwing exceptions or by returning designated error indicators. This was rejected because it would have complicated the specifications of the various <A HREF="concepts.html#filter_concepts">Filter</A> and <A HREF="concepts.html#device_concepts">Device</A> concepts and made the internals of <CODE>stream_buffer</CODE> more difficult to understand and maintain.<SUP><A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_2">[2]</A></SUP>
 </P>
 
 <A NAME="safety">
@@ -79,7 +79,7 @@ The Iostreams library aims to provide to following guarantees if an exception is
     <LI>The invariants specified by the Boost Iostreams library for streams and stream buffers are maintained. Specifically,
         <OL>
             <LI>
-                A <A HREF="generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A> or <A HREF="generic_streams.html#stream_facade"><CODE>stream_facade</CODE></A> can be closed and reopened to perform additional i/o with a new instance of the underlying <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> type.
+                A <A HREF="generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A> or <A HREF="generic_streams.html#stream"><CODE>stream</CODE></A> can be closed and reopened to perform additional i/o with a new instance of the underlying <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> type.
             </LI>
             <LI>
                 A <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>'s or <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>'s chain of Filters and Devices is in a consistent state. If the current Device is removed from the chain and a new one added the user may perform i/o as if the the stream or stream buffer were newly constructed.

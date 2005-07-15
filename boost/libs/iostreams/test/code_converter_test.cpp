@@ -26,7 +26,7 @@
 #  include <boost/iostreams/device/file_descriptor.hpp>
 # endif
 #endif
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/temp_file.hpp"
@@ -203,11 +203,11 @@ bool codecvt_test1()
     BOOST_CHECK(Codecvt().max_length() <= max_length);
     temp_file                        temp;
     string_type                      test = test_string<Codecvt>();
-    stream_facade<wide_file_sink>    out(temp.name());
+    stream<wide_file_sink>    out(temp.name());
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    stream_facade<wide_file_source>  in(temp.name());
+    stream<wide_file_source>  in(temp.name());
     string_type                      test2;
     io::copy(in, io::back_inserter(test2));
 
@@ -230,11 +230,11 @@ bool codecvt_test2()
 
     temp_file                        temp;
     string_type                      test = test_string<Codecvt>();
-    stream_facade<wide_file_sink>    out(temp.name());
+    stream<wide_file_sink>    out(temp.name());
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    stream_facade<wide_file_source>  in(temp.name());
+    stream<wide_file_source>  in(temp.name());
     string_type                      test2;
     io::copy(in, io::back_inserter(test2));
 

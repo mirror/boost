@@ -6,7 +6,7 @@
 
 #include <cctype>
 #include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/filter/stdio_filter.hpp>
+#include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>

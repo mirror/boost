@@ -9,8 +9,8 @@
 #include <utility>    // pair.
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/iostreams/stream_facade.hpp>
-#include <boost/iostreams/streambuf_facade.hpp>
+#include <boost/iostreams/stream.hpp>
+#include <boost/iostreams/stream_buffer.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/constants.hpp"
@@ -44,19 +44,19 @@ void compile_time_test()
 {
     using namespace io;
 
-    streambuf_facade<indirect_source> indirect_buf;
+    stream_buffer<indirect_source> indirect_buf;
     indirect_buf.open(indirect_source());
     indirect_buf->foo();
 
-    streambuf_facade<direct_source> direct_buf;
+    stream_buffer<direct_source> direct_buf;
     direct_buf.open(direct_source());
     direct_buf->foo();
 
-    stream_facade<indirect_source> indirect_stream;
+    stream<indirect_source> indirect_stream;
     indirect_stream.open(indirect_source());
     indirect_stream->foo();
 
-    stream_facade<direct_source> direct_stream;
+    stream<direct_source> direct_stream;
     direct_stream.open(direct_source());
     direct_stream->foo();
 }

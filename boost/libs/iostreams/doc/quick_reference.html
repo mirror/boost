@@ -41,15 +41,15 @@
     <TH>Description</TH>
 </TR>
 <TR>
-    <TD><A HREF="guide/generic_streams.html#stream_facade"><CODE>stream_facade</CODE></A></TD>
-    <TD><A HREF="../../../boost/iostreams/stream_facade.hpp"><CODE>stream_facade.hpp</CODE></A></TD>
+    <TD><A HREF="guide/generic_streams.html#stream"><CODE>stream</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/stream.hpp"><CODE>stream.hpp</CODE></A></TD>
     <TD>
         Stream template which performs i/o using an instance of its first template parameter, which must model the concept <A HREF="concepts/device.html">Device</A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE> depending on whether its first template parameter models <A HREF="source.html">Source</A>, <A HREF="concepts/sink.html">Sink</A> or both.
     </TD>
 </TR>
 <TR>
-    <TD><A HREF="guide/generic_streams.html#streambuf_facade"><CODE>streambuf_facade</CODE></A></TD>
-    <TD><A HREF="../../../boost/iostreams/streambuf_facade.hpp"><CODE>streambuf_facade.hpp</CODE></A></TD>
+    <TD><A HREF="guide/generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/stream_buffer.hpp"><CODE>stream_buffer.hpp</CODE></A></TD>
     <TD>
         Stream buffer template which performs i/o using an instance of its first template parameter, which must model the concept <A HREF="concepts/device.html">Device</A>.
     </TD>
@@ -230,7 +230,7 @@
     <TD>
         <A HREF="classes/regex_filter.html"><CODE>basic_regex_filter</CODE></A>
     </TD>
-    <TD><A HREF="../../../boost/iostreams/filter/regex_filter.hpp"><CODE>regex_filter.hpp</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/filter/regex.hpp"><CODE>regex.hpp</CODE></A></TD>
     <TD>
         Performs text substitutions using regular expressions from the <A HREF="http://www.boost.org/libs/regex" TARGET="_top">Boost Regular Expression Library</A>.
     </TD>
@@ -260,7 +260,7 @@
     <TD>
         <A HREF="classes/line_filter.html"><CODE>basic_line_filter</CODE></A>
     </TD>
-    <TD><A HREF="../../../boost/iostreams/filter/line_filter.hpp"><CODE>line_filter.hpp</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/filter/line.hpp"><CODE>line.hpp</CODE></A></TD>
     <TD>
         Filters a character sequence one line at a time.
     </TD>
@@ -269,25 +269,25 @@
     <TD>
         <A HREF="classes/stdio_filter.html"><CODE>basic_stdio_filter</CODE></A>
     </TD>
-    <TD><A HREF="../../../boost/iostreams/filter/stdio_filter.hpp"><CODE>stdio_filter.hpp</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/filter/stdio.hpp"><CODE>stdio.hpp</CODE></A></TD>
     <TD>
          Filters by reading from standard input and writing to standard output.
     </TD>
 </TR>
 <TR>
     <TD>
-        <A HREF="classes/one_step_filter.html"><CODE>one_step_filter</CODE></A>
+        <A HREF="classes/aggregate.html"><CODE>aggregate_filter</CODE></A>
     </TD>
-    <TD><A HREF="../../../boost/iostreams/filter/one_step_filter.hpp"><CODE>one_step_filter.hpp</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/filter/aggregate.hpp"><CODE>aggregate.hpp</CODE></A></TD>
     <TD>
          Filters an entire character sequence at once.
     </TD>
 </TR>
 <TR>
     <TD>
-        <A HREF="classes/symmetric_filter_adapter.html"><CODE>symmetric_filter_adapter</CODE></A>
+        <A HREF="classes/symmetric_filter.html"><CODE>symmetric_filter</CODE></A>
     </TD>
-    <TD><A HREF="../../../boost/iostreams/filter/symmetric_filter_adapter.hpp"><CODE>symmetric_filter_adapter.hpp</CODE></A></TD>
+    <TD><A HREF="../../../boost/iostreams/filter/symmetric.hpp"><CODE>symmetric.hpp</CODE></A></TD>
     <TD>
          Filters using a model of <A HREF="concepts/symmetric_filter.html">SymmetricFilter</A>.
     </TD>

@@ -8,7 +8,7 @@
 #include <fstream>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/sequence.hpp"
@@ -29,11 +29,11 @@ void direct_adapter_test()
             indirect_array_sink;
     typedef boost::iostreams::detail::direct_adapter<array> 
             indirect_array;
-    typedef stream_facade<indirect_array_source>
+    typedef stream<indirect_array_source>
             indirect_array_istream;
-    typedef stream_facade<indirect_array_sink> 
+    typedef stream<indirect_array_sink> 
             indirect_array_ostream;
-    typedef stream_facade<indirect_array> 
+    typedef stream<indirect_array> 
             indirect_array_stream;
 
     test_file        test;

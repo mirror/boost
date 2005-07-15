@@ -34,9 +34,9 @@
 <A NAME="when">
 <H2>When is <CODE>close</CODE> invoked?</H2>
 
-<H4><CODE>streambuf_facade</CODE> and <CODE>stream_facade</CODE></H4>
+<H4><CODE>stream_buffer</CODE> and <CODE>stream</CODE></H4>
 
-<P>When an instance of <CODE>streambuf_facade</CODE> or <CODE>stream_facade</CODE> based on a Device <CODE>d</CODE> is closed using member function <CODE>close</CODE>, the following sequence of functions calls is made:<P>
+<P>When an instance of <CODE>stream_buffer</CODE> or <CODE>stream</CODE> based on a Device <CODE>d</CODE> is closed using member function <CODE>close</CODE>, the following sequence of functions calls is made:<P>
 <PRE CLASS="broken_ie">    boost::iostreams::close(d, std::ios_base::in);
     boost::iostreams::close(d, std::ios_base::out);</PRE>
 <P>The effect, if <CODE>D</CODE> is <A HREF="../concepts/closable.html">Closable</A> and controls a single sequence, is as follows:</P>

@@ -50,7 +50,7 @@ private:
     typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(
                 char_type, traits_type
             )                                             streambuf_type;
-public: // stream_facade needs access.
+public: // stream needs access.
     void open(const T& t, int buffer_size, int pback_size);
     bool is_open();
     void close();

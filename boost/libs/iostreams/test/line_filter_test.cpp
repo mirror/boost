@@ -7,7 +7,7 @@
 #include <cctype>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/device/file.hpp>
-#include <boost/iostreams/filter/line_filter.hpp>
+#include <boost/iostreams/filter/line.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  

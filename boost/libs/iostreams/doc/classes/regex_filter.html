@@ -36,14 +36,14 @@
     Users may construct instances of <CODE>basic_regex_filter</CODE> either from <A HREF="#formatter">formatting functions</A> or from <A HREF="http://www.boost.org/libs/regex/doc/format_syntax.html" TARGET="_top">format strings</A>.
 </P>
 <P>
-    Since a regular expression may need to look arbitrarily far ahead in a character sequence, <CODE>basic_regex_filter</CODE> derives from <A HREF="one_step_filter.html"><CODE>one_step_filter</CODE></A> and processes an entire sequence of data at once.
+    Since a regular expression may need to look arbitrarily far ahead in a character sequence, <CODE>basic_regex_filter</CODE> derives from <A HREF="aggregate.html"><CODE>aggregate_filter</CODE></A> and processes an entire sequence of data at once.
 </P>
 
 <A NAME="headers">
 <H2>Headers</H2>
 
 <DL class="page-index">
-  <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/regex_filter.hpp"><CODE>&lt;boost/iostreams/filter/regex_filter.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/regex.hpp"><CODE>&lt;boost/iostreams/filter/regex.hpp&gt;</CODE></A></DT>
 </DL>
 
 <A NAME="installation">
@@ -67,7 +67,7 @@
           <SPAN CLASS="keyword">typename</SPAN> <A HREF="#template_params" CLASS="documented">Tr</A> = regex_traits&lt;Ch&gt;,
           <SPAN CLASS="keyword">typename</SPAN> <A HREF="#template_params" CLASS="documented">Alloc</A> = std::allocator&lt;Ch&gt; &gt;
 <SPAN CLASS="keyword">class</SPAN> <A HREF="#template_params" CLASS="documented">basic_regex_filter</A>
-    : <SPAN CLASS="keyword">public</SPAN> <A CLASS="documented" HREF="one_step_filter.html">one_step_filter</A>&lt;Ch, std::char_traits&lt;Ch&gt;, Alloc&gt; // Exposition only
+    : <SPAN CLASS="keyword">public</SPAN> <A CLASS="documented" HREF="aggregate.html">aggregate_filter</A>&lt;Ch, std::char_traits&lt;Ch&gt;, Alloc&gt; // Exposition only
 {   
 <SPAN CLASS="keyword">public:</SPAN>
     <SPAN CLASS="keyword">typedef</SPAN> <A CLASS="documented" HREF="../../../../doc/html/function.html" TARGET="_top">boost::function1&lt;</A>

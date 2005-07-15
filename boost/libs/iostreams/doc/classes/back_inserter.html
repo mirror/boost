@@ -33,11 +33,11 @@
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> io = boost::iostreams;
 
-<SPAN CLASS="keyword">typedef</SPAN> io::stream_facade&lt; io::back_insert_device&lt;std::string&gt; &gt; my_stream</PRE>
+<SPAN CLASS="keyword">typedef</SPAN> io::stream&lt; io::back_insert_device&lt;std::string&gt; &gt; my_stream</PRE>
 
 <P>But not</P>
 
-<PRE CLASS="broken_ie"><SPAN CLASS="keyword">typedef</SPAN> io::stream_facade&lt; std::back_insert_iterator&lt;std::string&gt; &gt; my_stream</PRE>
+<PRE CLASS="broken_ie"><SPAN CLASS="keyword">typedef</SPAN> io::stream&lt; std::back_insert_iterator&lt;std::string&gt; &gt; my_stream</PRE>
 
 <A NAME="headers">
 <H2>Headers</H2>

@@ -26,7 +26,7 @@
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/config/zlib.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
-#include <boost/iostreams/filter/symmetric_filter_adapter.hpp>                
+#include <boost/iostreams/filter/symmetric.hpp>                
 #include <boost/iostreams/pipeline.hpp>                
 #include <boost/type_traits/is_same.hpp>
 
@@ -255,11 +255,11 @@ public:
 //
 template<typename Alloc = std::allocator<char> >
 struct basic_zlib_compressor 
-    : symmetric_filter_adapter<detail::zlib_compressor_impl<Alloc>, Alloc> 
+    : symmetric_filter<detail::zlib_compressor_impl<Alloc>, Alloc> 
 {
 private:
     typedef detail::zlib_compressor_impl<Alloc>         impl_type;
-    typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
+    typedef symmetric_filter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
     typedef typename base_type::category                category;
@@ -279,11 +279,11 @@ typedef basic_zlib_compressor<> zlib_compressor;
 //
 template<typename Alloc = std::allocator<char> >
 struct basic_zlib_decompressor 
-    : symmetric_filter_adapter<detail::zlib_decompressor_impl<Alloc>, Alloc> 
+    : symmetric_filter<detail::zlib_decompressor_impl<Alloc>, Alloc> 
 {
 private:
     typedef detail::zlib_decompressor_impl<Alloc>       impl_type;
-    typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
+    typedef symmetric_filter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
     typedef typename base_type::category                category;

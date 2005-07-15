@@ -10,7 +10,7 @@
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
@@ -27,29 +27,29 @@ using boost::unit_test::test_suite;
 void flush_test()
 {
     {
-        streambuf_facade<null_sink> null;
+        stream_buffer<null_sink> null;
         null.open(null_sink());
         BOOST_CHECK_MESSAGE( 
             iostreams::flush(null), 
-            "failed flushing streambuf_facade"
+            "failed flushing stream_buffer"
         );
         BOOST_CHECK_MESSAGE( 
             null.strict_sync(), 
-            "failed strict-syncing streambuf_facade with "
+            "failed strict-syncing stream_buffer with "
             "non-flushable resource"
         );
     }
 
     {
-        stream_facade<null_sink> null;
+        stream<null_sink> null;
         null.open(null_sink());
         BOOST_CHECK_MESSAGE( 
             iostreams::flush(null), 
-            "failed flushing stream_facade"
+            "failed flushing stream"
         );
         BOOST_CHECK_MESSAGE( 
             null.strict_sync(), 
-            "failed strict-syncing stream_facade with "
+            "failed strict-syncing stream with "
             "non-flushable resource"
         );
     }

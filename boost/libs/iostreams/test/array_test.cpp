@@ -6,7 +6,7 @@
 
 #include <boost/iostreams/detail/fstream.hpp>
 #include <boost/iostreams/device/array.hpp>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/sequence.hpp"
@@ -23,49 +23,49 @@ void array_test()
 
     test_file test;
 
-    //--------------stream_facade<array_source>-------------------------------//
+    //--------------stream<array_source>-------------------------------//
 
     {
         test_sequence<> seq;
-        stream_facade<array_source> first(&seq[0], &seq[0] + seq.size());
+        stream<array_source> first(&seq[0], &seq[0] + seq.size());
         ifstream second(test.name().c_str(), BOOST_IOS::in | BOOST_IOS::binary);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
-            "failed reading from stream_facade<array_source> in chars"
+            "failed reading from stream<array_source> in chars"
         );
     }
 
     {
         test_sequence<> seq;
-        stream_facade<array_source> first(&seq[0], &seq[0] + seq.size());
+        stream<array_source> first(&seq[0], &seq[0] + seq.size());
         ifstream second(test.name().c_str(), BOOST_IOS::in | BOOST_IOS::binary);
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
-            "failed reading from stream_facade<array_source> in chunks"
+            "failed reading from stream<array_source> in chunks"
         );
     }
 
-    //--------------stream_facade<array_sink>---------------------------------//
+    //--------------stream<array_sink>---------------------------------//
 
     {
         vector<char> first(data_reps * data_length(), '?');
-        stream_facade<array_sink> out(&first[0], &first[0] + first.size());
+        stream<array_sink> out(&first[0], &first[0] + first.size());
         write_data_in_chars(out);
         ifstream second(test.name().c_str(), BOOST_IOS::in | BOOST_IOS::binary);
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(first, second),
-            "failed writing to stream_facade<array_sink> in chars"
+            "failed writing to stream<array_sink> in chars"
         );
     }
 
     {
         vector<char> first(data_reps * data_length(), '?');
-        stream_facade<array_sink> out(&first[0], &first[0] + first.size());
+        stream<array_sink> out(&first[0], &first[0] + first.size());
         write_data_in_chunks(out);
         ifstream second(test.name().c_str(), BOOST_IOS::in | BOOST_IOS::binary);
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(first, second),
-            "failed writing to stream_facade<array_sink> in chunks"
+            "failed writing to stream<array_sink> in chunks"
         );
     }
 
@@ -73,19 +73,19 @@ void array_test()
 
     {
         vector<char> first(data_reps * data_length(), '?');
-        stream_facade<array> io(&first[0], &first[0] + first.size());
+        stream<array> io(&first[0], &first[0] + first.size());
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
-            "failed seeking within stream_facade<array>, in chars"
+            "failed seeking within stream<array>, in chars"
         );
     }
 
     {
         vector<char> first(data_reps * data_length(), '?');
-        stream_facade<array> io(&first[0], &first[0] + first.size());
+        stream<array> io(&first[0], &first[0] + first.size());
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
-            "failed seeking within stream_facade<array>, in chunks"
+            "failed seeking within stream<array>, in chunks"
         );
     }
 }

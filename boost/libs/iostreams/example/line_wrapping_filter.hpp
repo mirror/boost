@@ -10,10 +10,10 @@
 #ifndef BOOST_IOSTREAMS_LINE_WRAPPING_FILTER_HPP_INCLUDED
 #define BOOST_IOSTREAMS_LINE_WRAPPING_FILTER_HPP_INCLUDED
 
-#include <cstdio>                                   // EOF.
-#include <boost/iostreams/concepts.hpp>             // output_filter.
-#include <boost/iostreams/filter/stdio_filter.hpp>
-#include <boost/iostreams/operations.hpp>           // boost::iostreams::put.
+#include <cstdio>                            // EOF.
+#include <boost/iostreams/concepts.hpp>      // output_filter.
+#include <boost/iostreams/filter/stdio.hpp>
+#include <boost/iostreams/operations.hpp>    // boost::iostreams::put.
 
 namespace boost { namespace iostreams { namespace example {
 

@@ -20,8 +20,8 @@
   <DT><A href="#headers">Headers</A></DT>
   <DT><A href="#reference">Reference</A>
     <DL>
-      <DT><A href="#streambuf_facade">Class template <CODE>streambuf_facade</CODE></A></DT>
-      <DT><A href="#stream_facade">Class template <CODE>stream_facade</CODE></A></DT>
+      <DT><A href="#stream_buffer">Class template <CODE>stream_buffer</CODE></A></DT>
+      <DT><A href="#stream">Class template <CODE>stream</CODE></A></DT>
     </DL>
   </DT>
   <DT><A href="#examples">Examples</A></DT>
@@ -33,11 +33,11 @@
 <H2>Overview</H2>
 
 <P>
-    The fundamental component provided by the Iostreams library is the class template <CODE>streambuf_facade</CODE>, a derived class of <CODE>std::basic_streambuf</CODE> which performs i/o by delegating to a contained Device. Instances of the Device can be associated and disassociated with an instance of <CODE>streambuf_facade</CODE> using member functions <CODE><A HREF="#streambuf_facade_open">open</A></CODE> and <CODE><A HREF="#streambuf_facade_close">close</A></CODE>. The interface is patterned after <CODE>std::basic_filebuf</CODE> and <CODE>std::basic_fstream</CODE>.
+    The fundamental component provided by the Iostreams library is the class template <CODE>stream_buffer</CODE>, a derived class of <CODE>std::basic_streambuf</CODE> which performs i/o by delegating to a contained Device. Instances of the Device can be associated and disassociated with an instance of <CODE>stream_buffer</CODE> using member functions <CODE><A HREF="#stream_buffer_open">open</A></CODE> and <CODE><A HREF="#stream_buffer_close">close</A></CODE>. The interface is patterned after <CODE>std::basic_filebuf</CODE> and <CODE>std::basic_fstream</CODE>.
 </P>
 
 <P>
-    The class template <CODE>stream_facade</CODE> is a stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A href="../modes.html">mode</A> of the first template parameter. As with <CODE>streambuf_facade</CODE>, instances of the Device can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
+    The class template <CODE>stream</CODE> is a stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A href="../modes.html">mode</A> of the first template parameter. As with <CODE>stream_buffer</CODE>, instances of the Device can by associated and disassociated with an instance of <CODE>stream</CODE> using its member functions <CODE><A HREF="#stream_open">open</A></CODE> and <CODE><A HREF="#stream_close">close</A></CODE>.
 </P>
 
 
@@ -45,15 +45,15 @@
 <H2>Headers</H2>
 
 <DL class="page-index">
-  <DT><A CLASS="header" href="../../../../boost/iostreams/streambuf_facade.hpp"><CODE>&lt;boost/iostreams/streambuf_facade.hpp&gt;</CODE></A></DT>
-  <DT><A CLASS="header" href="../../../../boost/iostreams/stream_facade.hpp"><CODE>&lt;boost/iostreams/stream_facade.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/stream_buffer.hpp"><CODE>&lt;boost/iostreams/stream_buffer.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" href="../../../../boost/iostreams/stream.hpp"><CODE>&lt;boost/iostreams/stream.hpp&gt;</CODE></A></DT>
 </DL>
 
 <A NAME="reference">
 <H2>Reference</H2>
 
-<A NAME="streambuf_facade">
-<H3>Class template <CODE>streambuf_facade</CODE></H3>
+<A NAME="stream_buffer">
+<H3>Class template <CODE>stream_buffer</CODE></H3>
 
 <H4>Description</H4>
 
@@ -63,11 +63,11 @@
 
 <PRE><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
 
-<SPAN CLASS="keyword">template</SPAN>&lt; <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">T</A>, 
-          <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">Tr</A> = std::char_traits&lt;<SPAN CLASS="omitted">...</SPAN>&gt;, 
-          <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="omitted">...</SPAN>&gt;,
-          <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">Mode</A> = <SPAN CLASS="omitted">...</SPAN> &gt;
-<SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">streambuf_facade</A> : <SPAN CLASS="keyword">public</SPAN> std::basic_streambuf&lt;<SPAN CLASS="omitted">...</SPAN>&gt; {
+<SPAN CLASS="keyword">template</SPAN>&lt; <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_buffer_params">T</A>, 
+          <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_buffer_params">Tr</A> = std::char_traits&lt;<SPAN CLASS="omitted">...</SPAN>&gt;, 
+          <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_buffer_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="omitted">...</SPAN>&gt;,
+          <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_buffer_params">Mode</A> = <SPAN CLASS="omitted">...</SPAN> &gt;
+<SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#stream_buffer_params">stream_buffer</A> : <SPAN CLASS="keyword">public</SPAN> std::basic_streambuf&lt;<SPAN CLASS="omitted">...</SPAN>&gt; {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> T                               policy_type;
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;T&gt;::type  char_type;
@@ -75,55 +75,55 @@
 
     [<SPAN CLASS="omitted">Standard stream buffer typedefs: int_type, off_type, etc.</SPAN>]
 
-    <A CLASS="documented" HREF="#streambuf_facade_default_constructor">streambuf_facade</A>();
-    <A CLASS="documented" HREF="#streambuf_facade_policy_constructor">streambuf_facade</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
+    <A CLASS="documented" HREF="#stream_buffer_default_constructor">stream_buffer</A>();
+    <A CLASS="documented" HREF="#stream_buffer_policy_constructor">stream_buffer</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
                       std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
                       std::streamsize pback_size = <SPAN CLASS="omitted">default_value</SPAN> );
 
         <SPAN CLASS="comment">// Forwarding constructors</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <A CLASS="documented" HREF="#streambuf_facade_forwarding_constructors">streambuf_facade</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <A CLASS="documented" HREF="#streambuf_facade_forwarding_constructors">streambuf_facade</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
     template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <A CLASS="documented" HREF="#streambuf_facade_forwarding_constructors">streambuf_facade</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
+    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#streambuf_facade_open">open</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_open">open</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
                std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
                std::streamsize pback_size = <SPAN CLASS="omitted">default_value</SPAN> );
 
         <SPAN CLASS="comment">// Forwarding overloads of open()</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#streambuf_facade_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#streambuf_facade_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
     
         <SPAN CLASS="omitted">...</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#streambuf_facade_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
-    <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#streambuf_facade_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#streambuf_facade_close">close</A>();
+    <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#stream_buffer_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_close">close</A>();
 };
 
 } } <SPAN CLASS="comment">// namespace boost::io</SPAN></PRE>
 
-<A NAME="streambuf_facade_params"></A>
+<A NAME="stream_buffer_params"></A>
 <H4>Template parameters</H4>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
 <TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A model of one of the <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> concepts. Specializations of <CODE>streambuf_facade</CODE> with Filter types are used internally by the Iostreams library to construct chains of Filters and Devices. Users of the library never need to specialize <CODE>streambuf_facade</CODE> with a Filter type.</TD>
+        <TD>A model of one of the <A HREF="concepts.html#filter_concepts">Filter</A> or <A HREF="concepts.html#device_concepts">Device</A> concepts. Specializations of <CODE>stream_buffer</CODE> with Filter types are used internally by the Iostreams library to construct chains of Filters and Devices. Users of the library never need to specialize <CODE>stream_buffer</CODE> with a Filter type.</TD>
     </TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -139,24 +139,24 @@
     </TR>
 </TABLE>
 
-<H4><CODE>streambuf_facade::streambuf_facade</CODE></H4>
+<H4><CODE>stream_buffer::stream_buffer</CODE></H4>
 
-<A NAME="streambuf_facade_default_constructor"></A>
-<PRE>    <B>streambuf_facade</B>();</PRE>
+<A NAME="stream_buffer_default_constructor"></A>
+<PRE>    <B>stream_buffer</B>();</PRE>
     
 <P>
-    Constructs a <CODE>streambuf_facade</CODE> with no associated instance of the policy type <CODE>T</CODE>. Before the instance can be used for i/o, one of its <CODE>open()</CODE> overloads must be invoked. 
+    Constructs a <CODE>stream_buffer</CODE> with no associated instance of the policy type <CODE>T</CODE>. Before the instance can be used for i/o, one of its <CODE>open()</CODE> overloads must be invoked. 
 </P>
 
-<H4><CODE>streambuf_facade::streambuf_facade</CODE></H4>
+<H4><CODE>stream_buffer::stream_buffer</CODE></H4>
 
-<A NAME="streambuf_facade_policy_constructor"></A>
-<PRE>    <B>streambuf_facade</B>( <SPAN CLASS="keyword">const</SPAN> T& t,
+<A NAME="stream_buffer_policy_constructor"></A>
+<PRE>    <B>stream_buffer</B>( <SPAN CLASS="keyword">const</SPAN> T& t,
                       std::streamsize buffer_size, 
                       std::streamsize pback_size );</PRE>
     
 <P>
-    Constructs a <CODE>streambuf_facade</CODE> which is ready to perform i/o, where the parameters have the following interpretations:
+    Constructs a <CODE>stream_buffer</CODE> which is ready to perform i/o, where the parameters have the following interpretations:
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
 <TR>
@@ -174,37 +174,37 @@
     </TR>
 </TABLE>
 
-<A NAME="streambuf_facade_forwarding_constructors"></A>
+<A NAME="stream_buffer_forwarding_constructors"></A>
 <PRE>    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <B>streambuf_facade</B>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <B>stream_buffer</B>(<SPAN CLASS="keyword">const</SPAN> U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <B>streambuf_facade</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <B>stream_buffer</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
     template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <B>streambuf_facade</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
+    <B>stream_buffer</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
-    Each of these members constructs an instance of <CODE>streambuf_facade</CODE> and associates it with an instance of the policy type <CODE>T</CODE> constructed from the given lists of arguments. The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
+    Each of these members constructs an instance of <CODE>stream_buffer</CODE> and associates it with an instance of the policy type <CODE>T</CODE> constructed from the given lists of arguments. The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
 </P>
 <P>
     It is not possible to specify a custom buffer size or putback buffer size using these constructors.
 </P>
 
-<H4><CODE>streambuf_facade::open</CODE></H4>
+<H4><CODE>stream_buffer::open</CODE></H4>
 
-<A NAME="streambuf_facade_open"></A>
+<A NAME="stream_buffer_open"></A>
 <PRE>    void <B>open</B>( <SPAN CLASS="keyword">const</SPAN> T& t,
                std::streamsize buffer_size, 
                std::streamsize pback_size );</PRE>
     
 <P>
-    Assocaites the given instance of <CODE>T</CODE> with <CODE>this</CODE> instance of <CODE>streambuf_facade</CODE>, if there is no such instance currently associated; otherwise, throws <CODE>std::ios_base::failure</CODE>. The second parameter determines the size of any buffers that need to be allocated; a value of zero indicates that i/o should be unbuffered. The third parameter determines the size of the putback buffer; it is relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="modes.html#input"><CODE>input</CODE></A>.
+    Assocaites the given instance of <CODE>T</CODE> with <CODE>this</CODE> instance of <CODE>stream_buffer</CODE>, if there is no such instance currently associated; otherwise, throws <CODE>std::ios_base::failure</CODE>. The second parameter determines the size of any buffers that need to be allocated; a value of zero indicates that i/o should be unbuffered. The third parameter determines the size of the putback buffer; it is relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="modes.html#input"><CODE>input</CODE></A>.
 </P>
 
-<A NAME="streambuf_facade_forwarding_open"></A>
+<A NAME="stream_buffer_forwarding_open"></A>
 <PRE>    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
     <SPAN CLASS="keyword">void</SPAN> <B>open</B>(<SPAN CLASS="keyword">const</SPAN> U& u);
 
@@ -217,31 +217,31 @@
     <SPAN CLASS="keyword">void</SPAN> <B>open</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
-    Each of these members associates with <CODE>this</CODE> instance of <CODE>streambuf_facade</CODE> a newly constructed instance of the policy type <CODE>T</CODE> constructed from the given lists of arguments, if there is no such instance currently associated; otherwise, they throw <CODE>std::ios_base::failure</CODE>.  The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
+    Each of these members associates with <CODE>this</CODE> instance of <CODE>stream_buffer</CODE> a newly constructed instance of the policy type <CODE>T</CODE> constructed from the given lists of arguments, if there is no such instance currently associated; otherwise, they throw <CODE>std::ios_base::failure</CODE>.  The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
 </P>
 <P>
     It is not possible to specify a custom buffer size or putback buffer size using these members.
 </P>
 
-<A NAME="streambuf_facade_is_open"></A>
-<H4><CODE>streambuf_facade::is_open</CODE></H4>
+<A NAME="stream_buffer_is_open"></A>
+<H4><CODE>stream_buffer::is_open</CODE></H4>
 <PRE>    <SPAN CLASS="keyword">bool</SPAN> <B>is_open</B>() <SPAN CLASS="keyword">const</SPAN>;</PRE>
     
-<P>Returns true if there is an instance of the policy type <CODE>T</CODE> associated with <CODE>this</CODE> instance of <CODE>streambuf_facade</CODE>.</P>
+<P>Returns true if there is an instance of the policy type <CODE>T</CODE> associated with <CODE>this</CODE> instance of <CODE>stream_buffer</CODE>.</P>
 
-<A NAME="streambuf_facade_close"></A>
-<H4><CODE>streambuf_facade::close</CODE></H4>
+<A NAME="stream_buffer_close"></A>
+<H4><CODE>stream_buffer::close</CODE></H4>
 <PRE>    <SPAN CLASS="keyword">void</SPAN> <B>close</B>();</PRE>
     
 <P>
-    Disassociates from <CODE>this</CODE> instance of <CODE>streambuf_facade</CODE> any instance of the policy type <CODE>T</CODE> currently associated with it, calling cleanup functions as appropriate and destroying the associated instance of <CODE>T</CODE>.
+    Disassociates from <CODE>this</CODE> instance of <CODE>stream_buffer</CODE> any instance of the policy type <CODE>T</CODE> currently associated with it, calling cleanup functions as appropriate and destroying the associated instance of <CODE>T</CODE>.
 </P>
 
 
-<A NAME="stream_facade">
-<H3>Class template <CODE>stream_facade</CODE></H3>
+<A NAME="stream">
+<H3>Class template <CODE>stream</CODE></H3>
 
-<P>[Copy <CODE>streambuf_facade</CODE> after all errors are corrected]</P>
+<P>[Copy <CODE>stream_buffer</CODE> after all errors are corrected]</P>
 
 <A NAME="examples">
 <H2>Examples</H2>
@@ -251,9 +251,9 @@
 <P>The following example uses a <A HREF="file_based_devices.html">File-Based Device</A> to define a class similar to a <CODE>std::ofstream</CODE>.
 
 <PRE>    <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/device/file.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/device/file.hpp&gt;</SPAN></A>
-    <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/stream_facade.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/stream_facade.hpp&gt;</SPAN></A>
+    <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/stream.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
          
-    <SPAN CLASS="keyword">typedef</SPAN> stream_facade&lt;file_sink&gt; ofstream;
+    <SPAN CLASS="keyword">typedef</SPAN> stream&lt;file_sink&gt; ofstream;
 
     ofstream out(<SPAN CLASS="literal">"HeavyArtillery.txt"</SPAN>); <SPAN CLASS="comment">// Wilfred Owen</SPAN>
     out &lt;&lt; <SPAN CLASS="literal">"Reach at that Arrogance which needs thy harm,\n"</SPAN>
@@ -268,10 +268,10 @@
     <SPAN CLASS="preprocessor">#include</SPAN> <SPAN CLASS="literal">&lt;iostream&gt;</SPAN>
     <SPAN CLASS="preprocessor">#include</SPAN> <SPAN CLASS="literal">&lt;string&gt;</SPAN>
     <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/device/array.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/device/array.hpp&gt;</SPAN></A>
-    <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/stream_facade.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/stream_facade.hpp&gt;</SPAN></A>
+    <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/stream.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
 
     const char*                  h = <SPAN CLASS="literal">"Hello World!"</SPAN>;
-    stream_facade&lt;array_source&gt;  in(h, std::strlen(h));
+    stream&lt;array_source&gt;  in(h, std::strlen(h));
     std::string                  hello;
     std::getline(in, hello);
     std::cout &lt;&lt; hello &lt;&lt; "\n";  // <SPAN CLASS="comment">Prints "Hello World!"</SPAN></PRE>
