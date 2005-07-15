@@ -27,11 +27,9 @@ namespace std{
 #endif
 
 #include <boost/cstdint.hpp>
-
-#include <boost/archive/detail/oserializer.hpp>
 #include <boost/pfto.hpp>
-#include <boost/serialization/nvp.hpp>
 #include <boost/archive/detail/interface_oarchive.hpp>
+#include <boost/serialization/nvp.hpp>
 
 // determine if its necessary to handle (u)int64_t specifically
 // i.e. that its not a synonym for (unsigned) long
@@ -46,6 +44,7 @@ namespace boost {
 namespace archive {
 namespace detail {
     class basic_oarchive;
+    class basic_oserializer;
 }
 
 class polymorphic_oarchive :

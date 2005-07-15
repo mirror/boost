@@ -224,7 +224,7 @@ BOOST_DLLEXPORT pointer_oserializer<T, Archive>::pointer_oserializer() :
     m(boost::serialization::serialize_adl<Archive, T>),
     e(boost::serialization::type_info_implementation<T>::type::get_instance)
 #else
-pointer_oserializer<T, Archive>::pointer_oserializer() :
+BOOST_DLLEXPORT pointer_oserializer<T, Archive>::pointer_oserializer() :
     archive_pointer_oserializer<Archive>(
         * boost::serialization::type_info_implementation<T>::type::get_instance()
     )

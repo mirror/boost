@@ -28,10 +28,9 @@ namespace std{
 #include <string>
 #include <boost/cstdint.hpp>
 
-#include <boost/archive/detail/iserializer.hpp>
 #include <boost/pfto.hpp>
-#include <boost/serialization/nvp.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
+#include <boost/serialization/nvp.hpp>
 
 // determine if its necessary to handle (u)int64_t specifically
 // i.e. that its not a synonym for (unsigned) long
@@ -46,6 +45,7 @@ namespace boost {
 namespace archive {
 namespace detail {
     class basic_iarchive;
+    class basic_iserializer;
 }
 
 class polymorphic_iarchive :
