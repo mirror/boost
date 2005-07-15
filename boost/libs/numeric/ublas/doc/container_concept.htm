@@ -33,8 +33,9 @@ vectors.</p>
 <tr>
 <td>Storage array</td>
 <td>V::array_type</td>
-<td>The type of underlying storage array used to store the elements. The array_type must model
-the <a href="storage_concept.htm"><b>Storage</b></a> concept.</td>
+<td>
+Dense Vector ONLY. The type of underlying storage array used to store the elements. The array_type must model the
+<a href="storage_concept.htm"><b>Storage</b></a> concept.</td>
 </tr>
 </tbody>
 </table>
@@ -182,8 +183,8 @@ When <code>p == false</code> then existing elements are not preserved and elemen
 <tr>
 <td>Storage</td>
 <td><code>v.data()</code></td>
-<td><code>v</code></td>
-<td>Returns a reference to the underlying storage</td>
+<td></td>
+<td>Dense Vector ONLY. Returns a reference to the underlying storage</td>
 <td>&nbsp;</td>
 </tr>
 </table>
@@ -197,9 +198,9 @@ size.</p>
 <h4>Invariants</h4>
 <h4>Models</h4>
 <ul>
-<li><code>vector&lt;T&gt;</code>, <code>bounded_vector&lt;T, N&gt;</code>, <code>c_vector&lt;T, N&gt;</code></li>
-<li><code>unit_vector&lt;T&gt;</code>, <code>zero_vector&lt;T&gt;</code>, <code>scalar_vector&lt;T&gt;</code></li>
-<li><code>mapped_vector&lt;T&gt;</code>, <code>compressed_vector</code>, <code>coordinate_vector</code></li>
+<li><code>vector</code>, <code>bounded_vector</code>, <code>c_vector</code></li>
+<li><code>unit_vector</code>, <code>zero_vector</code>, <code>scalar_vector</code></li>
+<li><code>mapped_vector;</code>, <code>compressed_vector</code>, <code>coordinate_vector</code></li>
 </ul>
 <h4>Notes</h4>
 <p><a name="vector_expression_note">[1]</a>
@@ -230,7 +231,7 @@ matrices.</p>
 <tr>
 <td>Storage array</td>
 <td>M::array_type</td>
-<td>The type of underlying storage array used to store the elements. The array_type must model
+<td>Dense Matrix ONLY. The type of underlying storage array used to store the elements. The array_type must model
 the <a href="storage_concept.htm"><b>Storage</b></a> concept.</td>
 </tr>
 </tbody>
@@ -380,9 +381,9 @@ When <code>p == false</code> then existing elements are not preserved and elemen
 </tr>
 <tr>
 <td>Storage</td>
-<td><code>v.data()</code></td>
-<td><code>v</code></td>
-<td>Returns a reference to the underlying storage</td>
+<td><code>m.data()</code></td>
+<td></td>
+<td>Dense Matrix ONLY. Returns a reference to the underlying storage</td>
 <td>&nbsp;</td>
 </tbody>
 </table>
@@ -396,10 +397,10 @@ size.</p>
 <h4>Invariants</h4>
 <h4>Models</h4>
 <ul>
-<li><code>matrix&lt;T&gt;</code>, <code>bounded_matrix&lt;T, M, N&gt;</code>, <code>c_matrix&lt;T, M, N&gt;</code></li>
-<li><code>identity_matrix&lt;T&gt;</code> , <code>zero_matrix&lt;T&gt;</code> , <code>scalar_matrix&lt;T&gt;</code></li>
-<li><code>triangular_matrix&lt;T&gt;</code> , <code>symmetric_matrix&lt;T&gt;</code> , <code>banded_matrix&lt;T&gt;</code></li>
-<li><code>mapped_matrix&lt;T&gt;</code> , <code>compressed_matrix</code> , <code>coordinate_matrix</code></li>
+<li><code>matrix</code>, <code>bounded_matrix</code>, <code>c_matrix</code></li>
+<li><code>identity_matrix</code> , <code>zero_matrix</code> , <code>scalar_matrix</code></li>
+<li><code>triangular_matrix</code> , <code>symmetric_matrix</code> , <code>banded_matrix</code></li>
+<li><code>mapped_matrix</code> , <code>compressed_matrix</code> , <code>coordinate_matrix</code></li>
 </ul>
 <h4>Notes</h4>
 <p><a name="matrix_expression_note">[1]</a>

@@ -12,14 +12,12 @@
 <body>
 <h1><img src="../../../../boost.png" align="middle" />
 Vector Expressions</h1>
-<h2><a name="vector_expression" id="vector_expression"></a> Vector
-Expression</h2>
+<h2><a name="vector_expression" id="vector_expression"></a>Vector Expression</h2>
 <h4>Description</h4>
 <p>The templated class <code>vector_expression&lt;E&gt;</code>
-forms the base for all static derived vector expression classes
-including class <code>vector</code> itself.</p>
+is required to be a public base of all classes which model the Vector Expression concept.</p>
 <h4>Definition</h4>
-<p>Defined in the header vector_expression.hpp.</p>
+<p>Defined in the header expression_types.hpp.</p>
 <h4>Template parameters</h4>
 <table border="1" summary="parameters">
 <tbody>
@@ -31,11 +29,6 @@ including class <code>vector</code> itself.</p>
 <tr>
 <td><code>E</code></td>
 <td>The type of the vector expression.</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td><code>A</code></td>
-<td>Base type of an indirect_array.</td>
 <td>&nbsp;</td>
 </tr>
 </tbody>
@@ -68,8 +61,55 @@ const</code></td>
 <h4>Notes</h4>
 <p>The <code>range</code>, <code>slice</code> and <code>project</code> functions have been removed. Use the free functions defined in <a href="vector_proxy.htm">vector proxy</a> instead.</p>
 
-<h2><a name="vector_references" id="vector_references"></a> Vector
-References</h2>
+<h2><a name="vector_container" id="vector_container"></a>Vector Container</h2>
+<h4>Description</h4>
+<p>The templated class <code>vector_container&lt;C&gt;</code>
+is required to be a public base of all classes which model the Vector concept.
+This includes the class <code>vector</code> itself.</p>
+<h4>Definition</h4>
+<p>Defined in the header expression_types.hpp.</p>
+<h4>Template parameters</h4>
+<table border="1" summary="parameters">
+<tbody>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>The type of the vector container.</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<h4>Model of</h4>
+<p>None. <u>Not a Vector Expression OR Vector</u>!
+</p>
+<h4>Type requirements</h4>
+<p>None.</p>
+<h4>Public base classes</h4>
+<p><code>vector_expression&lt;C&gt;</code></p>
+<h4>Members</h4>
+<table border="1" summary="members">
+<tbody>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><code>const container_type &amp;operator () ()
+const</code></td>
+<td>Returns a <code>const</code> reference of the container.</td>
+</tr>
+<tr>
+<td><code>container_type &amp;operator () ()</code></td>
+<td>Returns a reference of the container.</td>
+</tr>
+</tbody>
+</table>
+
+<h2><a name="vector_references" id="vector_references"></a>Vector References</h2>
 <h3>Reference</h3>
 <h4>Description</h4>
 <p>The templated class <code>vector_reference&lt;E&gt;</code>
@@ -171,8 +211,7 @@ the reversed expression.</td>
 </tr>
 </tbody>
 </table>
-<h2><a name="vector_operations" id="vector_operations"></a> Vector
-Operations</h2>
+<h2><a name="vector_operations" id="vector_operations"></a>Vector Operations</h2>
 <h3>Unary Operation Description</h3>
 <h4>Description</h4>
 <p>The templated class <code>vector_unary&lt;E, F&gt;</code>
@@ -781,8 +820,7 @@ int main () {
     std::cout &lt;&lt; v * 2.0 &lt;&lt; std::endl;
 }
 </pre>
-<h2><a name="vector_reductions" id="vector_reductions"></a> Vector
-Reductions</h2>
+<h2><a name="vector_reductions" id="vector_reductions"></a>Vector Reductions</h2>
 <h3>Unary Reductions</h3>
 <h4>Prototypes</h4>
 <pre>
