@@ -22,17 +22,13 @@
 #include <boost/mpl/bool_fwd.hpp>
 
 #ifndef BOOST_TT_IS_ABSTRACT_CLASS_HPP
-#if    defined(__GNUC__) && (34 <= __GNUC__ * 10 + __GNU_MINOR__)  \
-    || defined(_MSC_VER) && (1310 <= _MSC_VER)                  \
-    || defined(__EDG_VERSION__)                                 \
-    /**/
+
+#ifndef BOOST_NO_IS_ABSTRACT
     #include <boost/type_traits/is_abstract.hpp>
 #else
-// default to false if not supported
-
-// supplant boost/type_traits/is_abstract.hpp
-#   define BOOST_TT_IS_ABSTRACT_CLASS_HPP
-
+    // default to false if not supported
+    // supplant boost/type_traits/is_abstract.hpp
+    #   define BOOST_TT_IS_ABSTRACT_CLASS_HPP
     namespace boost {
     template<class T>
     struct is_abstract {
