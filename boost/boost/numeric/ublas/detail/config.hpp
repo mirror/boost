@@ -140,7 +140,7 @@ namespace std {
 #if defined (__sgi) && ! defined (BOOST_STRICT_CONFIG)
 
 // Missing std::abs overloads for float types in <cmath> are in <cstdlib>
-// This should should be library version specific.
+// This test should be library version specific.
 #include <cstdlib>
 
 #if __COMPILER_VERSION >=650
