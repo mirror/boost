@@ -13,8 +13,9 @@
 
 #include <boost/throw_exception.hpp>
 
-#include <boost/serialization/tracking.hpp>
 #include <boost/archive/basic_xml_iarchive.hpp>
+#include <boost/serialization/tracking.hpp>
+#include <boost/serialization/extended_type_info.hpp>
 
 namespace boost {
 namespace archive {

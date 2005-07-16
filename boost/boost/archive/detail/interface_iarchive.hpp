@@ -19,7 +19,6 @@
 #include <boost/cstdint.hpp>
 #include <boost/mpl/bool.hpp>
 
-#include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -80,13 +79,6 @@ public:
     ){
         this->This()->basic_iarchive::insert_basic_helper(eti, sph);
     }
-
-    // default processing - invoke serialization library
-    template<class T>
-    void load_override(T & t, /*BOOST_PFTO*/ int){
-        archive::load(* this->This(), t);
-    }
-
     template<class T>
     Archive & operator>>(T & t){
         this->This()->load_override(t, 0);

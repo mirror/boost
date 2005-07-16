@@ -18,6 +18,7 @@
 
 #include <boost/config.hpp>
 
+#include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/interface_oarchive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
 

@@ -28,6 +28,7 @@ namespace std{
 
 #include <boost/cstdint.hpp>
 #include <boost/pfto.hpp>
+#include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/interface_oarchive.hpp>
 #include <boost/serialization/nvp.hpp>
 

@@ -33,6 +33,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/pfto.hpp>
 
+#include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 

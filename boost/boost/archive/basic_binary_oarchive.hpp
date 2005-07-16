@@ -27,6 +27,7 @@
 #include <boost/pfto.hpp>
 
 #include <boost/detail/workaround.hpp>
+#include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/interface_oarchive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
 
