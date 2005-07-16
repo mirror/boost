@@ -663,6 +663,14 @@ namespace date_time {
       void time_duration_format(const char_type* const format) {
         m_time_duration_format = format;
       }
+      virtual void set_iso_format()
+      {
+        this->m_format = iso_time_format_specifier;
+      }
+      virtual void set_iso_extended_format()
+      {
+        this->m_format = iso_time_format_extended_specifier;
+      }
       
       InItrT get(InItrT& sitr,
                  InItrT& stream_end,
@@ -714,37 +722,40 @@ namespace date_time {
           if (*itr == '%') {
             itr++;
             if (*itr != '%') {
-              std::ios_base::iostate err = std::ios_base::goodbit;
               switch(*itr) {
               case 'H': 
                 {
-                  sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, hour);
-                  if(err & std::ios_base::failbit){
-                    return check_special_value(sitr, stream_end, td, c);
+                  match_results mr;
+                  hour = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                  if(hour == -1){
+                     return check_special_value(sitr, stream_end, td, c);
                   }
                   break;
                 }
               case 'M': 
                 {
-                  sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, min);
-                  if(err & std::ios_base::failbit){
-                    return check_special_value(sitr, stream_end, td, c);
+                  match_results mr;
+                  min = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                  if(min == -1){
+                     return check_special_value(sitr, stream_end, td, c);
                   }
                   break;
                 }
               case 'S': 
                 {
-                  sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, sec);
-                  if(err & std::ios_base::failbit){
-                    return check_special_value(sitr, stream_end, td, c);
+                  match_results mr;
+                  sec = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                  if(sec == -1){
+                     return check_special_value(sitr, stream_end, td, c);
                   }
                   break;
                 }
               case 's':
                 {
-                  sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, sec);
-                  if(err & std::ios_base::failbit){
-                    return check_special_value(sitr, stream_end, td, c);
+                  match_results mr;
+                  sec = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                  if(sec == -1){
+                     return check_special_value(sitr, stream_end, td, c);
                   }
                   // %s is the same as %S%f so we drop through into %f
                   //break;
@@ -875,7 +886,6 @@ namespace date_time {
           if (*itr == '%') {
             itr++;
             if (*itr != '%') {
-              std::ios_base::iostate err = std::ios_base::goodbit;
               // the cases are grouped by date & time flags - not alphabetical order
               switch(*itr) {
                 // date flags
@@ -987,33 +997,37 @@ namespace date_time {
                 // time flags
                 case 'H': 
                   {
-                    sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, hour);
-                    if(err & std::ios_base::failbit){
-                      return check_special_value(sitr, stream_end, t, c);
+                    match_results mr;
+                    hour = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                    if(hour == -1){
+                       return check_special_value(sitr, stream_end, t, c);
                     }
                     break;
                   }
                 case 'M': 
                   {
-                    sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, min);
-                    if(err & std::ios_base::failbit){
-                      return check_special_value(sitr, stream_end, t, c);
+                    match_results mr;
+                    min = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                    if(min == -1){
+                       return check_special_value(sitr, stream_end, t, c);
                     }
                     break;
                   }
                 case 'S': 
                   {
-                    sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, sec);
-                    if(err & std::ios_base::failbit){
-                      return check_special_value(sitr, stream_end, t, c);
+                    match_results mr;
+                    sec = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                    if(sec == -1){
+                       return check_special_value(sitr, stream_end, t, c);
                     }
                     break;
                   }
                 case 's':
                   {
-                    sitr = std::use_facet<num_get>(a_ios.getloc()).get(sitr, stream_end, a_ios, err, sec);
-                    if(err & std::ios_base::failbit){
-                      return check_special_value(sitr, stream_end, t, c);
+                    match_results mr;
+                    sec = fixed_string_to_int<short, CharT>(sitr, stream_end, mr, 2);
+                    if(sec == -1){
+                       return check_special_value(sitr, stream_end, t, c);
                     }
                     // %s is the same as %S%f so we drop through into %f
                     //break;
