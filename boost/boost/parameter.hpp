@@ -10,7 +10,7 @@
 #include <boost/parameter/keyword.hpp>
 #include <boost/parameter/binding.hpp>
 #include <boost/parameter/macros.hpp>
-#include <boost/parameter/match_args.hpp>
+#include <boost/parameter/match.hpp>
 
 #endif // BOOST_PARAMETER_050401_HPP
 
