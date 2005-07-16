@@ -450,10 +450,10 @@
 
           <row>
             <entry valign="top" morerows="1"><screen>%Y-%m-%d %H:%M:%S%F%Q</screen></entry>
-            <entry>Extended IOS format</entry>
+            <entry>Extended ISO format</entry>
           </row>
           <row>
-            <entry><screen>"2005-10-15 13:12:11 -07:00"</screen></entry>
+            <entry><screen>"2005-10-15 13:12:11-07:00"</screen></entry>
           </row>
 
           <row>

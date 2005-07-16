@@ -84,13 +84,13 @@ f->format("%m %d %Y");</screen></entry>
             <entry>Sets the date format to ISO</entry>
           </row>
           <row>
-            <entry><screen>f->set_ios_format();
+            <entry><screen>f->set_iso_format();
 // "%Y%m%d"</screen></entry>
           </row>
 
           <row>
             <entry valign="top" morerows="1"><screen>void set_iso_extended_format()</screen></entry>
-            <entry>Sets the date format to IOS Extended</entry>
+            <entry>Sets the date format to ISO Extended</entry>
           </row>
           <row>
             <entry><screen>f->set_iso_extended_format();

@@ -86,13 +86,13 @@ ss &lt;&lt; td2; // "-12:25:56"
             <entry>Sets the date and time format to ISO.</entry>
           </row>
           <row>
-            <entry><screen>f->set_ios_format();
+            <entry><screen>f->set_iso_format();
 // "%Y%m%dT%H%M%S%F%q"</screen></entry>
           </row>
 
           <row>
             <entry valign="top" morerows="1"><screen>void set_iso_extended_format()</screen></entry>
-            <entry>Sets the date and time format to IOS Extended</entry>
+            <entry>Sets the date and time format to ISO Extended</entry>
           </row>
           <row>
             <entry><screen>f->set_iso_extended_format();

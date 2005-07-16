@@ -70,25 +70,27 @@
           </row>
         </thead>
         <tbody>
-          <!-- These functions appear to be missing from the time_input_facet
+
           <row>
             <entry valign="top" morerows="1"><screen>void set_iso_format()</screen></entry>
-            <entry>Sets the date format to ISO</entry>
+            <entry>Sets the time format to ISO</entry>
           </row>
           <row>
-            <entry><screen>f->set_ios_format();
-// "%Y%m%d"</screen></entry>
+            <entry><screen>f->set_iso_format();
+// "%Y%m%dT%H%M%S%F%q"
+"20051225T132536.789-0700"</screen></entry>
           </row>
 
           <row>
             <entry valign="top" morerows="1"><screen>void set_iso_extended_format()</screen></entry>
-            <entry>Sets the date format to IOS Extended</entry>
+            <entry>Sets the date format to ISO Extended</entry>
           </row>
           <row>
             <entry><screen>f->set_iso_extended_format();
-// "%Y-%m-%d"</screen></entry>
+// "%Y-%m-%d %H:%M:%S%F %Q"
+"2005-12-25 13:25:36.789 -07:00"</screen></entry>
           </row>
-          -->
+
           <row>
             <entry valign="top" morerows="1"><screen>void time_duration_format(...)
   Parameter:
