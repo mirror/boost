@@ -56,7 +56,7 @@ namespace test
   template<class A0>
   void f(
       A0 const& a0
-    , typename f_parameters::match<A0 BOOST_PARAMETER_MATCH_ARGS(1)>::type args = f_parameters())
+    , BOOST_PARAMETER_MATCH(f_parameters, (A0), args))
   {
       f_impl(args(a0));
   }
@@ -64,7 +64,7 @@ namespace test
   template<class A0, class A1>
   void f(
       A0 const& a0, A1 const& a1
-    , typename f_parameters::match<A0, A1 BOOST_PARAMETER_MATCH_ARGS(2)>::type args = f_parameters())
+    , BOOST_PARAMETER_MATCH(f_parameters,(A0)(A1), args))
   {
       f_impl(args(a0, a1));
   }
