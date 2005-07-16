@@ -172,7 +172,7 @@ int main(){
   iss >> td;
   check("Multiple literal '%'s in time_duration format", td == time_duration(15,15,0));
  
-  { /******** iso format tests ********/
+  { /****** iso format tests (and custom 'scrunched-together formats) ******/
     time_input_facet *facet = new time_input_facet();
     facet->set_iso_format();
     facet->time_duration_format("%H%M%S%F"); // iso format
@@ -192,6 +192,11 @@ int main(){
     ss >> pt;
     check("iso_format ptime", pt == result);
     ss.str("");
+    facet->set_iso_extended_format();
+    ss.str("2002-10-17 23:12:17.12345");
+    ss >> pt;
+    check("iso_extended_format ptime", pt == result);
+    ss.str("");
     ss.str("231217.12345");
     ss >> td;
     check("iso_format time_duration", td == td2);
@@ -200,6 +205,73 @@ int main(){
     ss >> td;
     check("iso_format time_duration (special_value)", 
         td == time_duration(neg_infin));
+    ss.str("");
+    // the above tests prove correct parsing of time values in these formats.
+    // these tests show they also handle special_values & exceptions properly
+    time_duration nadt(not_a_date_time);
+    ss.exceptions(std::ios_base::failbit); // we need exceptions turned on here
+    int count = 0;
+    try {
+      facet->time_duration_format("%H%M%S%F");
+      ss.str("not-a-date-time");
+      ++count;
+      ss >> td;
+      check("special value w/ hours flag", td == nadt);
+      ss.str("");
+      facet->time_duration_format("%M%S%F");
+      ss.str("not-a-date-time");
+      ++count;
+      ss >> td;
+      check("special value w/ minutes flag", td == nadt);
+      ss.str("");
+      facet->time_duration_format("%S%F");
+      ss.str("not-a-date-time");
+      ++count;
+      ss >> td;
+      check("special value w/ seconds flag", td == nadt);
+      ss.str("");
+      facet->time_duration_format("%s");
+      ss.str("not-a-date-time");
+      ++count;
+      ss >> td;
+      check("special value w/ sec w/frac_sec (always) flag", td == nadt);
+      ss.str("");
+      facet->time_duration_format("%f");
+      ss.str("not-a-date-time");
+      ++count;
+      ss >> td;
+      check("special value w/ frac_sec (always) flag", td == nadt);
+      ss.str("");
+    }
+    catch(...) { 
+      // any exception is a failure
+      std::stringstream msg;
+      msg << "special_values with scrunched formats failed at test" << count;
+      check(msg.str(), false);
+    }
+    // exception tests
+    std::ios_base::failure exc("failure");
+    check("failure test w/ hours flag",
+        failure_test(td, "bad_input", exc, new time_input_facet("%H%M%S%F")));
+    check("silent failure test w/ hours flag",
+        failure_test(td, "bad_input", new time_input_facet("%H%M%S%F")));
+    check("failure test w/ minute flag",
+        failure_test(td, "bad_input", exc, new time_input_facet("%M%S%F")));
+    check("silent failure test w/ minute flag",
+        failure_test(td, "bad_input", new time_input_facet("%M%S%F")));
+    check("failure test w/ second flag",
+        failure_test(td, "bad_input", exc, new time_input_facet("%S%F")));
+    check("silent failure test w/ second flag",
+        failure_test(td, "bad_input", new time_input_facet("%S%F")));
+    check("failure test w/ sec w/frac (always) flag",
+        failure_test(td, "bad_input", exc, new time_input_facet("%s")));
+    check("silent failure test w/ sec w/frac (always) flag",
+        failure_test(td, "bad_input", new time_input_facet("%s")));
+    check("failure test w/ frac_sec flag",
+        failure_test(td, "bad_input", exc, new time_input_facet("%f")));
+    check("silent failure test w/ frac_sec flag",
+        failure_test(td, "bad_input", new time_input_facet("%f")));
+    
   }
   // special_values tests. prove the individual flags catch special_values
   // NOTE: these flags all by themselves will not parse a complete ptime,
