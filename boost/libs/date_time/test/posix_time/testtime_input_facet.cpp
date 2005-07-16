@@ -171,7 +171,36 @@ int main(){
   facet->time_duration_format("%H:%M:%S %%%M");
   iss >> td;
   check("Multiple literal '%'s in time_duration format", td == time_duration(15,15,0));
-  
+ 
+  { /******** iso format tests ********/
+    time_input_facet *facet = new time_input_facet();
+    facet->set_iso_format();
+    facet->time_duration_format("%H%M%S%F"); // iso format
+    std::stringstream ss;
+    ss.imbue(std::locale(std::locale::classic(), facet));
+    ptime pt(not_a_date_time);
+    time_duration td(not_a_date_time);
+    date d(2002,Oct,17);
+#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+    time_duration td2(23,12,17,123450000);
+#else
+    time_duration td2(23,12,17,123450);
+#endif
+    ptime result(d, td2);
+
+    ss.str("20021017T231217.12345");
+    ss >> pt;
+    check("iso_format ptime", pt == result);
+    ss.str("");
+    ss.str("231217.12345");
+    ss >> td;
+    check("iso_format time_duration", td == td2);
+    ss.str("");
+    ss.str("-infinity");
+    ss >> td;
+    check("iso_format time_duration (special_value)", 
+        td == time_duration(neg_infin));
+  }
   // special_values tests. prove the individual flags catch special_values
   // NOTE: these flags all by themselves will not parse a complete ptime,
   // these are *specific* special_values tests
