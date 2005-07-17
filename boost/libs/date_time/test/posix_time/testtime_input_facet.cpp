@@ -63,13 +63,18 @@ bool failure_test(temporal_type component,
   return iss.fail(); // failbit must be set to pass test
 }
 
-int main(){
+using namespace boost::gregorian;
+using namespace boost::posix_time;
+ 
+
+void
+do_all_tests()
+{
+
 #if defined(USE_DATE_TIME_PRE_1_33_FACET_IO) // skip this file
   check("No tests run for this compiler. Incompatible IO", true);
 #else
-  using namespace boost::gregorian;
-  using namespace boost::posix_time;
- 
+
   // set up initial objects
   time_duration td = hours(0);
   ptime pt(not_a_date_time);
@@ -407,6 +412,24 @@ int main(){
     time_input_facet tif("%Y-%m-%d %H:%M:%s", fdp, svp, pp, dgp);
   }
 #endif // USE_DATE_TIME_PRE_1_33_FACET_IO 
+
+}
+
+
+
+int main(){
+
+  try {  //wrap all the tests -- we don't expect an exception
+    do_all_tests();
+  }
+  catch(std::exception& e) {
+    std::string failure("std::exception caught: ");
+    failure += e.what();
+    check(failure, false);
+  }
+  catch(...) {
+    check("Unknown exception caught -- failing", false);
+  }
   return printTestStats();
 }
                       
