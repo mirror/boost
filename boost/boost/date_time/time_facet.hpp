@@ -695,13 +695,13 @@ namespace date_time {
                  time_duration_type& td) const
       {
         // skip leading whitespace
-        while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; }
+        while((sitr != stream_end) && std::isspace(*sitr)) { ++sitr; }
         
         bool use_current_char = false;
         
         // num_get will consume the +/-, we may need a copy if special_value
         char_type c = '\0';
-        if(*sitr == '-' || *sitr == '+') {
+        if((sitr != stream_end) && (*sitr == '-' || *sitr == '+')) {
           c = *sitr;
         }
         
@@ -848,14 +848,14 @@ namespace date_time {
                  bool time_is_local) const
       {
         // skip leading whitespace
-        while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; }
+        while((sitr != stream_end) && std::isspace(*sitr)) { ++sitr; }
         
         bool use_current_char = false;
         bool use_current_format_char = false; // used whith two character flags
         
         // num_get will consume the +/-, we may need a copy if special_value
         char_type c = '\0';
-        if(*sitr == '-' || *sitr == '+') {
+        if((sitr != stream_end) && (*sitr == '-' || *sitr == '+')) {
           c = *sitr;
         }
        
@@ -1073,9 +1073,9 @@ namespace date_time {
                       ++itr;
                       if(*itr == 'P') {
                         // skip leading whitespace
-                        while(std::isspace(*sitr) && sitr != stream_end) { ++sitr; }
+                        while((sitr != stream_end) && std::isspace(*sitr)) { ++sitr; }
                         // parse zone
-                        while(!std::isspace(*sitr) && sitr != stream_end) {
+                        while((sitr != stream_end) && (!std::isspace(*sitr))) {
                           tz_str += *sitr;
                           ++sitr;
                         }
@@ -1161,7 +1161,7 @@ namespace date_time {
                            fracional_seconds_type& frac) const
       {
         string_type cache;
-        while(std::isdigit(*sitr) && sitr != stream_end) {
+        while((sitr != stream_end) && std::isdigit(*sitr)) {
           cache += *sitr;
           ++sitr;
         }
