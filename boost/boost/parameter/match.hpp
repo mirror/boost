@@ -7,6 +7,14 @@
 # include <boost/detail/workaround.hpp>
 # include <boost/preprocessor/seq/enum.hpp>
 
+# if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
+// Temporary version of BOOST_PP_SEQ_ENUM until Paul M. integrates the workaround.
+#  define BOOST_PARAMETER_SEQ_ENUM_I(size,seq) BOOST_PP_CAT(BOOST_PP_SEQ_ENUM_, size) seq
+#  define BOOST_PARAMETER_SEQ_ENUM(seq) BOOST_PARAMETER_SEQ_ENUM_I(BOOST_PP_SEQ_SIZE(seq), seq)
+# else
+#  define BOOST_PARAMETER_SEQ_ENUM(seq) BOOST_PP_SEQ_ENUM(seq)
+# endif 
+
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
 #  include <boost/parameter/config.hpp>
@@ -37,9 +45,10 @@
 //
 // with workarounds for Borland compatibility.
 //
-#  define BOOST_PARAMETER_MATCH(ParameterSpec, ArgTypes, name)  \
+
+# define BOOST_PARAMETER_MATCH(ParameterSpec, ArgTypes, name)   \
     typename ParameterSpec ::match<                             \
-        BOOST_PP_SEQ_ENUM(ArgTypes)                             \
+        BOOST_PARAMETER_SEQ_ENUM(ArgTypes)                      \
         BOOST_PARAMETER_MATCH_DEFAULTS(ArgTypes)                \
     >::type name = ParameterSpec ()
 

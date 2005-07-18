@@ -11,10 +11,10 @@
 
 namespace test {
 
-BOOST_PARAMETER_KEYWORD(tag, name);
-BOOST_PARAMETER_KEYWORD(tag, value);
-BOOST_PARAMETER_KEYWORD(tag, index);
-BOOST_PARAMETER_KEYWORD(tag, tester);
+BOOST_PARAMETER_KEYWORD(tag, name)
+BOOST_PARAMETER_KEYWORD(tag, value)
+BOOST_PARAMETER_KEYWORD(tag, index)
+BOOST_PARAMETER_KEYWORD(tag, tester)
 
 using namespace boost::parameter;
 

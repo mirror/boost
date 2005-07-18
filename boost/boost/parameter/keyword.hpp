@@ -110,7 +110,7 @@ struct keyword : noncopyable
 #define BOOST_PARAMETER_KEYWORD(tag_namespace,name)             \
    namespace tag_namespace { struct name; }                     \
    ::boost::parameter::keyword<tag_namespace::name>& name       \
-   = ::boost::parameter::keyword<tag_namespace::name>::get()
+   = ::boost::parameter::keyword<tag_namespace::name>::get();
 
 
 }} // namespace boost::parameter

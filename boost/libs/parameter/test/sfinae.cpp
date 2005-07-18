@@ -16,8 +16,8 @@
 
 namespace test
 {
-  BOOST_PARAMETER_KEYWORD(keywords,name);
-  BOOST_PARAMETER_KEYWORD(keywords,value);
+  BOOST_PARAMETER_KEYWORD(keywords,name)
+  BOOST_PARAMETER_KEYWORD(keywords,value)
   
   using namespace boost::parameter;
 

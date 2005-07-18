@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/15 16:16:26 $
+:date:          $Date: 2005/07/15 18:43:59 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -194,7 +194,7 @@ The Abstract Interface to |dfs|
 ===============================
 
 The Graph library's |dfs| algorithm is a generic function accepting
-between one and four arguments by reference, as shown in the table
+from one to four arguments by reference, as shown in the table
 below:
 
 .. _`parameter table`: 
@@ -248,18 +248,20 @@ users need access to the keyword objects, but not the tag types,
 we'll define the keyword objects so they're acceessible through
 ``graphs``, and we'll hide the tag types away in a tested
 namespace, ``graphs::tag``.  The library provides a convenient
-macro for that purpose: [#msvc_keyword]_ ::
+macro for that purpose (MSVC6.x users see this note__)::
 
   #include <boost/parameter/keyword.hpp>
 
   namespace graphs
   {
-    BOOST_PARAMETER_KEYWORD(tag, graph);
-    BOOST_PARAMETER_KEYWORD(tag, visitor);
-    BOOST_PARAMETER_KEYWORD(tag, root_vertex);
-    BOOST_PARAMETER_KEYWORD(tag, index_map);
-    BOOST_PARAMETER_KEYWORD(tag, color_map);
+    BOOST_PARAMETER_KEYWORD(tag, graph)    // Note: no semicolon
+    BOOST_PARAMETER_KEYWORD(tag, visitor)
+    BOOST_PARAMETER_KEYWORD(tag, root_vertex)
+    BOOST_PARAMETER_KEYWORD(tag, index_map)
+    BOOST_PARAMETER_KEYWORD(tag, color_map)
   }
+
+__ `Compiler Can't See References In Unnamed Namespace`_
 
 The declaration of the ``visitor`` keyword you see here is
 equivalent to::
@@ -569,20 +571,20 @@ Describing the Positional Argument Order
 
 First, we'll need to build a type that describes the allowed
 parameters and their ordering when passed positionally.  This type
-is known as a |ParameterSpec|. [#typedef]_ ::
+is known as a |ParameterSpec| (MSVC6.x users see this note__)::
 
   namespace graphs
   {
-    struct dfs_params
-      : parameter::parameters<
-            tag::graph
-          , tag::visitor
-          , tag::root_vertex
-          , tag::index_map
-          , tag::color_map
-        >
-    {};
+    typedef parameter::parameters<
+        tag::graph
+      , tag::visitor
+      , tag::root_vertex
+      , tag::index_map
+      , tag::color_map
+    > dfs_params;
   }
+
+__ `Can't Declare ParameterSpec Via typedef`_
 
 The ``parameters`` template supplies a function-call
 operator that groups all its arguments into an |ArgumentPack|.  Any
@@ -726,10 +728,14 @@ appropriate.
 
 __ http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#225
 
+Updating the |ParameterSpec|
+----------------------------
+
 This sort of overload control can be accomplished in C++ by taking
-advantage of the SFINAE (Substitution Failure Is Not An Error) rule. [#sfinae]_
-The named parameters library provides built-in SFINAE support
-through the following class templates:
+advantage of the SFINAE (Substitution Failure Is Not An Error)
+rule. [#sfinae]_ You can take advantage of the Parameter library's
+built-in SFINAE support by using the following class templates in
+your |ParameterSpec|:
 
 .. parsed-literal::
 
@@ -739,14 +745,14 @@ through the following class templates:
      template< class KeywordTag, class Predicate = *unspecified* >
      struct optional;
 
-Instead of directly using keyword tags in our |ParameterSpec|, we
-can use ``required`` and ``optional`` to indicate which function
-parameters are required, and optionally pass ``Predicate``\ s to
-describe the type requirements for each function parameter.
-The ``Predicate`` argument must be a unary  `MPL
-lambda expression`_  that, when applied to the
-actual type the argument, indicates whether that argument type
-meets the function's requirements for that parameter position.
+Instead of using keyword tags directly, we can wrap them in
+``required`` and ``optional`` to indicate which function parameters
+are required, and optionally pass ``Predicate``\ s to describe the
+type requirements for each function parameter.  The ``Predicate``
+argument must be a unary `MPL lambda expression`_ that, when
+applied to the actual type the argument, indicates whether that
+argument type meets the function's requirements for that parameter
+position.
 
 .. _`MPL lambda expression`: ../../../mpl/doc/refmanual/lambda-expression.html
 
@@ -774,6 +780,9 @@ parameter is convertible to ``int``.  We might write:
         >
     {};
   }
+
+Applying SFINAE to the Overload Set
+-----------------------------------
 
 Now we can add an additional optional argument to each of our
 ``depth_first_search`` overloads:
@@ -814,7 +823,56 @@ These additional parameters are not intended to be used directly
 by callers; they merely trigger SFINAE by becoming illegal types
 when the ``name`` argument is not convertible to ``const
 char*``. The ``BOOST_PARAMETER_FUN`` macro described earlier
-actually adds these extra function parameters.
+actually adds these extra function parameters (Borland users see
+this note__).
+
+.. _BOOST_PARAMETER_MATCH:
+
+__ `Default Arguments Unsupported on Nested Templates`_
+
+Reducing BoilerPlate With Macros
+--------------------------------
+
+The library provides a macro you can use to eliminate some of the
+repetetiveness of the declaring the optional parameters.
+``BOOST_PARAMETER_MATCH`` takes three arguments: the
+|ParameterSpec|, a `Boost.Preprocessor sequence`__ of the function
+argument types, and a name for the defaulted function parameter
+(``p``, above).  So we could shorten the overload set definition as
+follows:
+
+__ http://boost-consulting.com/mplbook/preprocessor.html#sequences
+
+.. parsed-literal::
+
+  namespace graphs
+  {
+    template <class A0>
+    void depth_first_search(
+        A0 const& a0
+      , **BOOST_PARAMETER_MATCH(dfs_params, (A0), p)**)
+    {
+       core::depth_first_search(p(a0));
+    }
+
+    template <class A0, class A1>
+    void depth_first_search(
+        A0 const& a0, A1 const& a1
+      , **BOOST_PARAMETER_MATCH(dfs_params, (A0)(A1), p)**)
+    {
+       core::depth_first_search(p(a0,a1));
+    }
+
+                      ⋮
+
+    template <class A0, class A1, …class A4>
+    void depth_first_search(
+        A0 const& a0, A1 const& a1, …A4 const& A4
+      , **BOOST_PARAMETER_MATCH(dfs_params, (A0)(A1)…(A4), p)**)
+    {
+       core::depth_first_search(p(a0,a1,a2,a3,a4));
+    }
+  }
 
 Efficiency Issues
 =================
@@ -867,7 +925,7 @@ __ dangling_
    To avoid making needless copies, pass a *reference to the
    default type* as the third argument to ``binding``.
 
-Eliminating Construction
+Lazy Default Computation
 ------------------------
 
 Of course it's nice to avoid copying ``default_color``, but the
@@ -920,7 +978,7 @@ that typical, and even copying the color map is more expensive than
 we might like.  It might be nice to avoid both needless
 construction *and* needless copying of the default color map.  The
 simplest way to achieve that is to avoid naming it altogether, at
-least not in ``core::depth_first_search``.  Instead, we could just
+least not in ``core::depth_first_search``.  Instead, we'll
 introduce another function template to implement the actual
 algorithm:
 
@@ -1002,14 +1060,98 @@ supplied.  By using `tag dispatching`_ on the presence of a
 
 We've used the fact that the default for ``binding``\ 's third
 argument is ``void``: because specializations of ``is_same`` are
-``bool``-valued MPL |Integral Constant|_, it will be derived either
-from ``mpl::true_`` or ``mpl::false_``, and the appropriate
+``bool``-valued MPL |Integral Constant|_\ s derived either
+from ``mpl::true_`` or ``mpl::false_``, the appropriate
 ``dfs_dispatch`` implementation will be selected.
 
 .. |Integral Constant| replace:: :concept:`Integral Constant`
 
 .. _`Integral Constant`: ../../../mpl/doc/refmanual/integral-constant.html
 
+============================
+ Portability Considerations
+============================
+
+Use the `regression test results`_ for the latest Boost release of
+the Parameter library to see how it fares on your favorite
+compiler.  Additionally, you may need to be aware of the following
+issues and workarounds for particular compilers.
+
+.. _`regression test results`: http://www.boost.org/regression/release/user/parameter.html
+
+No SFINAE Support
+=================
+
+Some older compilers don't support SFINAE.  If your compiler meets
+that criterion, then Boost headers will ``#define`` the preprocessor
+symbol ``BOOST_NO_SFINAE``, and uses of ``parameters<…>::match`` and
+|BOOST_PARAMETER_MATCH| will be harmless, but will have no effect.
+
+No Support for |result_of|_
+===========================
+
+.. |result_of| replace:: ``result_of``
+
+.. _result_of: ../../../utility/utility.htm#result_of
+
+`Lazy default computation`_ relies on the |result_of| class
+template to compute the types of default arguments given the type
+of the function object that constructs them.  On compilers that
+don't support |result_of|, ``BOOST_NO_RESULT_OF`` will be
+``#define``\ d, and the compiler will expect the function object to
+contain a nested type name, ``result_type``, that indicates its
+return type when invoked without arguments.  To use an ordinary
+function as a default generator on those compilers, you'll need to
+wrap it in a class that provides ``result_type`` as a ``typedef``
+and invokes the function via its ``operator()``.
+
+Can't Declare |ParameterSpec| via ``typedef``
+=============================================
+
+In principle you can declare a |ParameterSpec| as a ``typedef``
+for a specialization of ``parameters<…>``, but Microsoft Visual C++
+6.x has been seen to choke on that usage.  The workaround is to use
+inheritance and declare your |ParameterSpec| as a class:
+
+.. parsed-literal::
+
+     **struct dfs_parameters
+       :** parameter::parameters<
+           tag::graph, tag::visitor, tag::root_vertex
+         , tag::index_map, tag::color_map
+     > **{};**
+
+Default Arguments Unsupported on Nested Templates
+=================================================
+
+As of this writing, Borland compilers don't support the use of
+default template arguments on member class templates.  As a result,
+you have to supply ``BOOST_PARAMETER_MAX_ARITY`` arguments to every
+use of ``parameters<…>::match``.  Since the actual defaults used
+are unspecified, the workaround is to use
+|BOOST_PARAMETER_MATCH|_ to declare default arguments for SFINAE.
+
+.. |BOOST_PARAMETER_MATCH| replace:: ``BOOST_PARAMETER_MATCH``
+
+Compiler Can't See References In Unnamed Namespace
+==================================================
+
+If you use Microsoft Visual C++ 6.x, you may find that the compiler
+has trouble finding your keyword objects.  This problem has been
+observed, but only on this one compiler, and it disappeared as the
+test code evolved, so we suggest you use it only as a last resort
+rather than as a preventative measure.  The solution is to add
+*using-declarations* to force the names to be available in the
+enclosing namespace without qualification::
+
+    namespace graphs
+    {
+      using graphs::graph;
+      using graphs::visitor;
+      using graphs::root_vertex;
+      using graphs::index_map;
+      using graphs::color_map;
+    }
 
 --------------------------
 
@@ -1025,37 +1167,12 @@ __ ../../../graph/doc/bgl_named_params.html
    a C++ program must have the same definition in all translation
    units (object files) that make up a program.
 
-.. [#msvc_keyword] If you use Visual C++ 6.x, you may find you also
-   need the following using declarations, which really should be
-   redundant.  This need has been observed, but then it disappeared
-   as the code evolved, so add these only as a last resort::
-
-    namespace graphs
-    {
-      using graphs::graph;
-      using graphs::visitor;
-      using graphs::root_vertex;
-      using graphs::index_map;
-      using graphs::color_map;
-    }
-
 .. [#vertex_descriptor] If you're not familiar with the Boost Graph
    Library, don't worry about the meaning of any
    Graph-library-specific details you encounter.  In this case you
    could replace all mentions of vertex descriptor types with
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
-
-.. [#typedef] In principle you can also declare a
-   |ParameterSpec| as a ``typedef``::
-
-     typedef parameter::parameters<
-           tag::graph, tag::visitor, tag::root_vertex
-         , tag::index_map, tag::color_map
-     > dfs_parameters;
-     
-   Some older compilers seem to be happier with the use of
-   inheritance, though.
 
 .. [#bind] The Lambda library is known not to work on `some
    less-conformant compilers`__.  When using one of those you could
@@ -1073,6 +1190,10 @@ __ ../../../graph/doc/bgl_named_params.html
     and use Boost.Bind_ to generate the function object::
 
       boost::bind(construct2<default_color_map>,num_vertices(g),i)
+
+__ http://www.boost.org/regression/release/user/lambda.html
+.. _Boost.Bind: ../../../libs/bind/index.html
+
 
 .. [#using] You can always give the illusion that the function
    lives in an outer namespace by applying a *using-declaration*::
@@ -1100,8 +1221,4 @@ __ ../../../graph/doc/bgl_named_params.html
 .. |enable_if| replace:: ``enable_if``
 .. _enable_if: ../../../utility/enable_if.html
 
-
-__ http://www.boost.org/regression/release/user/lambda.html
-
-.. _Boost.Bind: ../../../libs/bind/index.html
 
