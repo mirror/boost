@@ -50,8 +50,8 @@
 		<P><STRONG>shared_ptr</STRONG> is now part of <STRONG>TR1</STRONG>, the first C++ 
 			Library Technical Report. The latest draft of <STRONG>TR1</STRONG> is available 
 			at the following location:</P>
-		<P><A href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1745.pdf">http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1745.pdf</A> (1.36Mb 
-			PDF)</P>
+		<P><A href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1745.pdf">http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1745.pdf</A>
+			(1.36Mb PDF)</P>
 		<P>This implementation conforms to the TR1 specification, with the only exception 
 			that it resides in namespace <code>boost</code> instead of <code>std::tr1</code>.</P>
 		<h2><a name="BestPractices">Best Practices</a></h2>
@@ -402,7 +402,7 @@ q = p;
 				<LI>
 					under the equivalence relation defined by <STRONG>operator&lt;</STRONG>, <code>!(a 
 						&lt; b) &amp;&amp; !(b &lt; a)</code>, two <STRONG>shared_ptr</STRONG> instances 
-					are equivalent if and only if they <EM>share ownership</EM>.</LI></UL>
+					are equivalent if and only if they <EM>share ownership</EM> or are both <EM>empty</EM>.</LI></UL>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> Allows <STRONG>shared_ptr</STRONG> objects to be used as keys in 
 				associative containers.</P>
@@ -582,27 +582,27 @@ p3.reset(new int(2)); // undefined, multiple writes
 			implementation on the following platforms:</P>
 		<UL>
 			<LI>
-				GNU GCC on x86 or x86-64;</LI>
+			GNU GCC on x86 or x86-64;
 			<LI>
-				GNU GCC on IA64;</LI>
+			GNU GCC on IA64;
 			<LI>
-				Metrowerks CodeWarrior on PowerPC;</LI>
+			Metrowerks CodeWarrior on PowerPC;
 			<LI>
-				GNU GCC on PowerPC;</LI>
+			GNU GCC on PowerPC;
 			<LI>
 				Windows.</LI></UL>
 		<P>If your program is single-threaded and does not link to any libraries that might 
 			have used <STRONG>shared_ptr</STRONG> in its default configuration, you can <STRONG>
 				#define</STRONG> the macro <STRONG>BOOST_SP_DISABLE_THREADS</STRONG> on a 
 			project-wide basis to switch to ordinary non-atomic reference count updates.</P>
-		<P>(Defining <STRONG>BOOST_SP_DISABLE_THREADS</STRONG> in some, but not 
-			all, translation units is technically a violation of the One Definition 
-			Rule and undefined behavior. Nevertheless, the implementation attempts to do 
-			its best to accommodate the request to use non-atomic updates in those 
-			translation units. No guarantees, though.)</P>
+		<P>(Defining <STRONG>BOOST_SP_DISABLE_THREADS</STRONG> in some, but not all, 
+			translation units is technically a violation of the One Definition Rule and 
+			undefined behavior. Nevertheless, the implementation attempts to do its best to 
+			accommodate the request to use non-atomic updates in those translation units. 
+			No guarantees, though.)</P>
 		<P>You can define the macro <STRONG>BOOST_SP_USE_PTHREADS</STRONG> to turn off the 
-			lock-free platform-specific implementation and fall back to the generic <STRONG>
-				pthread_mutex_t</STRONG>-based code.</P>
+			lock-free platform-specific implementation and fall back to the generic <STRONG>pthread_mutex_t</STRONG>-based 
+			code.</P>
 		<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 		<P><B>Q.</B> There are several variations of shared pointers, with different 
 			tradeoffs; why does the smart pointer library supply only a single 

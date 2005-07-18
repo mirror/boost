@@ -145,9 +145,8 @@ template&lt;class Y&gt; weak_ptr &amp; operator=(shared_ptr&lt;Y&gt; const &amp;
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const;</pre>
 		<blockquote>
-			<p><b>Returns:</b> 0 if <STRONG>*this</STRONG> is <EM>empty</EM>; otherwise,
-				the number of <b>shared_ptr</b> objects that <EM>share ownership</EM>
-				with <STRONG>*this</STRONG>.</p>
+			<p><b>Returns:</b> 0 if <STRONG>*this</STRONG> is <EM>empty</EM>; otherwise, the 
+				number of <b>shared_ptr</b> objects that <EM>share ownership</EM> with <STRONG>*this</STRONG>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> <code>use_count()</code> is not necessarily efficient. Use only 
 				for debugging and testing purposes, not for production code.</P>
@@ -189,7 +188,7 @@ template&lt;class Y&gt; weak_ptr &amp; operator=(shared_ptr&lt;Y&gt; const &amp;
 				<LI>
 					under the equivalence relation defined by <STRONG>operator&lt;</STRONG>, <code>!(a 
 						&lt; b) &amp;&amp; !(b &lt; a)</code>, two <STRONG>weak_ptr</STRONG> instances 
-					are equivalent if and only if they <EM>share ownership</EM>.</LI></UL>
+					are equivalent if and only if they <EM>share ownership</EM> or are both <EM>empty</EM>.</LI></UL>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> Allows <STRONG>weak_ptr</STRONG> objects to be used as keys in 
 				associative containers.</P>
