@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/15 18:43:59 $
+:date:          $Date: 2005/07/18 19:59:22 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -62,7 +62,7 @@ __ ../../../../index.htm
 
 In C++, arguments are normally given meaning by their positions
 with respect to a parameter list.  That protocol is fine when there
-are one or fewer parameters with default values, but when there are
+is at most one parameter with a default value, but when there are
 even a few useful defaults, the positional interface becomes
 burdensome:
 
@@ -197,6 +197,11 @@ The Graph library's |dfs| algorithm is a generic function accepting
 from one to four arguments by reference, as shown in the table
 below:
 
+.. RS -- Seeing the function described via table is harder to
+   grasp.  I suggest showing the function signature first, but omit
+   the defaults for clarity.  That will provide parameter names, in
+   context, which will make the connection to the table simpler.
+
 .. _`parameter table`: 
 .. _`default expressions`: 
 
@@ -209,14 +214,14 @@ below:
   +----------------+----------+----------------------------------+
   |``visitor``     | in       |``boost::dfs_visitor<>()``        |
   +----------------+----------+----------------------------------+
-  |``root_vertex`` | in       |``*vertices(g).first``            |
+  |``root_vertex`` | in       |``*vertices(graph).first``        |
   +----------------+----------+----------------------------------+
   |``index_map``   | in       |``get(boost::vertex_index,graph)``|
   +----------------+----------+----------------------------------+
   |``color_map``   | out      |an ``iterator_property_map``      |
   |                |          |created from a ``std::vector`` of |
   |                |          |``default_color_type`` of size    |
-  |                |          |``num_vertices(g)`` and using the |
+  |                |          |``num_vertices(graph)`` and using |
   |                |          |``index_map`` for the index map.  |
   +----------------+----------+----------------------------------+
 
@@ -302,9 +307,8 @@ the core of ``depth_first_search``::
 parameter: a bundle of references to the arguments that the caller
 passes to the algorithm, tagged with their keywords.  To extract
 each parameter, just pass its keyword object to the
-|ArgumentPack|\ 's index operator.  We'll add some
-temporary code to print the arguments, just to get a feel for how
-it works:
+|ArgumentPack|\ 's subscript operator.  Just to get a feel for how
+things work, let's add some temporary code to print the arguments:
 
 .. parsed-literal::
 
@@ -338,7 +342,7 @@ keywords in action, we can write a little test driver:
   }
 
 An overloaded comma operator (``operator,``) combines the results
-of assigning into each keyword object into a single |ArgumentPack|
+of assigning to each keyword object into a single |ArgumentPack|
 object that gets passed on to ``core::depth_first_search``.  The
 extra set of parentheses you see in the example above are required:
 without them, each assignment would be interpreted as a separate
@@ -371,7 +375,7 @@ Adding Defaults
 Currently, all the arguments to ``depth_first_search`` are
 required.  If any parameter can't be found, there will be a
 compilation error where we try to extract it from the
-|ArgumentPack| using the square-brackets operator.  To make it
+|ArgumentPack| using the subscript operator.  To make it
 legal to omit an argument we need to give it a default value.
 
 Syntax
@@ -379,7 +383,7 @@ Syntax
 
 We can make any of the parameters optional by following its keyword
 with the ``|`` operator and the parameter's default value within
-the brackets.  In the following example, we've given
+the square brackets.  In the following example, we've given
 ``root_vertex`` a default of ``42`` and ``color_map`` a default of
 ``"hello, world"``.
 
@@ -416,7 +420,7 @@ The call above would print::
 
    The index expression ``args[…]`` always yields a *reference*
    that is bound either to the actual argument passed by the caller
-   or, if no argument is explicitly specified, to the specified
+   or, if no argument is passed explicitly, to the specified
    default value.
 
 Getting More Realistic
@@ -424,7 +428,7 @@ Getting More Realistic
 
 Now it's time to put some more realistic defaults in place.  We'll
 have to give up our print statements—at least if we want to see the
-defaults work—because as we mentioned, the default values of these
+defaults work—since, the default values of these
 parameters generally aren't printable.
 
 Instead, we'll connect local variables to the arguments and use
@@ -477,7 +481,7 @@ For example, to declare and initialize ``g`` above, we could write:
 As shown in the `parameter table`_, ``graph`` has no default, so
 the ``binding`` invocation for *Graph* takes only two arguments.
 The default ``visitor`` is ``boost::dfs_visitor<>()``, so the
-``binding`` invocation for *Visitor* takes three:
+``binding`` invocation for *Visitor* takes three arguments:
 
 .. parsed-literal::
 
@@ -532,7 +536,7 @@ parameter:
 
   Index i = args[index_map|\ **get(boost::vertex_index,g)**\ ];
 
-We'd like you to notice two capabilities we've gained over what
+Notice two capabilities we've gained over what
 plain C++ default arguments provide:
 
 1. The default value of the ``index`` parameter depends on the
@@ -602,7 +606,7 @@ Forwarding Functions
   
 Next we need a family of overloaded ``depth_first_search`` function
 templates that can be called with anywhere from one to five
-arguments.  These “forwarding functions” will invoke an instance of
+arguments.  These *forwarding functions* will invoke an instance of
 ``dfs_params`` as a function object, passing their parameters
 to its ``operator()`` and forwarding the result on to
 ``core::depth_first_search``::
@@ -642,8 +646,9 @@ is passed positionally.  As you may recall from the
 ``depth_first_search`` `parameter table`_, ``color_map`` is an
 “out” parameter.  That means the five-argument
 ``depth_first_search`` overload should really take its final
-argument by non-``const`` reference.  On the other hand, assigning
-into a keyword object yields a temporary |ArgumentPack| object, and
+argument by non-``const`` reference.  On the other hand, when
+passing arguments by keyword, the keyword object's assignment
+operator yields a temporary |ArgumentPack| object, and
 a conforming C++ compiler will refuse to bind a non-``const``
 reference to a temporary.  To support an interface in which the
 last argument is passed by keyword, there must be a
@@ -750,13 +755,13 @@ Instead of using keyword tags directly, we can wrap them in
 are required, and optionally pass ``Predicate``\ s to describe the
 type requirements for each function parameter.  The ``Predicate``
 argument must be a unary `MPL lambda expression`_ that, when
-applied to the actual type the argument, indicates whether that
+applied to the actual type of the argument, indicates whether that
 argument type meets the function's requirements for that parameter
 position.
 
 .. _`MPL lambda expression`: ../../../mpl/doc/refmanual/lambda-expression.html
 
-For example, let's say we want to restrict our ``foo()`` so that
+For example, let's say we want to restrict ``depth_first_search()`` so that
 the ``graph`` parameter is required and the ``root_vertex``
 parameter is convertible to ``int``.  We might write:
 
@@ -784,7 +789,7 @@ parameter is convertible to ``int``.  We might write:
 Applying SFINAE to the Overload Set
 -----------------------------------
 
-Now we can add an additional optional argument to each of our
+Now we add a special defaulted argument to each of our
 ``depth_first_search`` overloads:
 
 .. parsed-literal::
@@ -823,7 +828,7 @@ These additional parameters are not intended to be used directly
 by callers; they merely trigger SFINAE by becoming illegal types
 when the ``name`` argument is not convertible to ``const
 char*``. The ``BOOST_PARAMETER_FUN`` macro described earlier
-actually adds these extra function parameters (Borland users see
+adds these extra function parameters for you (Borland users see
 this note__).
 
 .. _BOOST_PARAMETER_MATCH:
@@ -896,7 +901,7 @@ Eliminating Copies
 ------------------
 
 The library has no way to know whether an explicitly-supplied
-argument is expensive to copy (or even if it is copiable at all),
+argument is expensive to copy (or even if it is copyable at all),
 so ``binding<…,k,…>::type`` is always a reference type when the
 *k* parameter is supplied by the caller.  Since ``args[…]``
 yields a reference to the actual argument, ``color`` will be bound
@@ -945,7 +950,7 @@ that—if no argument was supplied by the caller—will be invoked to
 construct the default value.  Instead of following the keyword with
 the ``|`` operator, we'll use ``||`` and follow it with a
 nullary (zero-argument) function object that constructs a
-default_color_map.  The function object is built using
+default_color_map.  Here, we build the function object using
 Boost.Lambda_: [#bind]_
 
 .. _Boost.Lambda: ../../../lambda/index.html
