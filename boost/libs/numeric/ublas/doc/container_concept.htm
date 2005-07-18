@@ -110,8 +110,8 @@ Dense Vector ONLY. The type of underlying storage array used to store the elemen
 </tr>
 <tr>
 <td>Storage</td>
-<td><code>data()</code></td>
-<td>&nbsp;</td>
+<td><code>v.data()</code></td>
+<td><code>v</code> is mutable and Dense.</td>
 <td><code>array_type&amp;</code> if a is mutable, <code>const array_type&amp;</code> otherwise</td>
 </tr>
 </tbody>
@@ -184,7 +184,7 @@ When <code>p == false</code> then existing elements are not preserved and elemen
 <td>Storage</td>
 <td><code>v.data()</code></td>
 <td></td>
-<td>Dense Vector ONLY. Returns a reference to the underlying storage</td>
+<td>Returns a reference to the underlying dense storage.</td>
 <td>&nbsp;</td>
 </tr>
 </table>
@@ -307,8 +307,8 @@ following expressions must be valid.</p>
 </tr>
 <tr>
 <td>Storage</td>
-<td><code>data()</code></td>
-<td>&nbsp;</td>
+<td><code>m.data()</code></td>
+<td><code>m</code> is mutable and Dense.</td>
 <td><code>array_type&amp;</code> if a is mutable, <code>const array_type&amp;</code> otherwise</td>
 </tr>
 </tbody>
@@ -383,7 +383,7 @@ When <code>p == false</code> then existing elements are not preserved and elemen
 <td>Storage</td>
 <td><code>m.data()</code></td>
 <td></td>
-<td>Dense Matrix ONLY. Returns a reference to the underlying storage</td>
+<td>Returns a reference to the underlying dense storage.</td>
 <td>&nbsp;</td>
 </tbody>
 </table>

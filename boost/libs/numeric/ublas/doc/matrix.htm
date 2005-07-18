@@ -12,7 +12,7 @@
 <body>
 <h1><img src="../../../../boost.png" align="middle" />
 Matrix</h1>
-<h2><a name="matrix" id="matrix"></a> Matrix</h2>
+<h2><a name="matrix" id="matrix"></a>Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>matrix&lt;T, F, A&gt;</code> is the
 base container adaptor for dense matrices. For a <em>(m x
@@ -59,7 +59,7 @@ int main () {
 </tr>
 <tr>
 <td><code>A</code></td>
-<td>The type of the adapted array. <a href="#matrix_2">[2]</a></td>
+<td>The type of the <a href="storage_concept.htm">Storage</a> array. <a href="#matrix_2">[2]</a></td>
 <td><code>unbounded_array&lt;T&gt;</code></td>
 </tr>
 </tbody>
@@ -70,7 +70,7 @@ int main () {
 <p>None, except for those imposed by the requirements of <a href=
 "container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Public base classes</h4>
-<p><code>matrix_expression&lt;matrix&lt;T, F, A&gt; &gt;</code></p>
+<p><code>matrix_container&lt;matrix&lt;T, F, A&gt; &gt;</code></p>
 <h4>Members</h4>
 <table border="1" summary="members">
 <tbody>
@@ -111,6 +111,14 @@ rows of <code>size2</code> elements. The existing elements of the
 <tr>
 <td><code>size_type size2 () const</code></td>
 <td>Returns the number of columns.</td>
+</tr>
+<tr>
+<td><code>const array_type&amp; data () const</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>array_type&amp; data ()</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>const_reference operator () (size_type i, size_type j)
@@ -290,12 +298,11 @@ the reversed <code>matrix</code>.</td>
 <p><a name="matrix_1" id="matrix_1">[1]</a> Supported parameters
 for the storage organization are <code>row_major</code> and
 <code>column_major</code>.</p>
-<p><a name="matrix_2" id="matrix_2">[2]</a> Supported parameters
-for the adapted array are <code>unbounded_array&lt;T&gt;</code> ,
+<p><a name="matrix_2" id="matrix_2">[2]</a> Common parameters
+for the storage array are <code>unbounded_array&lt;T&gt;</code> ,
 <code>bounded_array&lt;T&gt;</code> and
 <code>std::vector&lt;T&gt;</code> .</p>
-<h2><a name="identity_matrix" id="identity_matrix"></a> Identity
-Matrix</h2>
+<h2><a name="identity_matrix" id="identity_matrix"></a>Identity Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>identity_matrix&lt;T&gt;</code>
 represents identity matrices. For a <em>(m x n</em>)-dimensional
@@ -327,18 +334,17 @@ int main () {
 <tr>
 <td><code>T</code></td>
 <td>The type of object stored in the matrix.</td>
-<td></td>
+<td><code>int</code></td>
 </tr>
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="expression_concept.htm#matrix_expression">Matrix Expression</a>
-.</p>
+<p><a href="container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Type requirements</h4>
-<p>None, except for those imposed by the requirements of <a href=
-"expression_concept.htm#matrix_expression">Matrix Expression</a> .</p>
+<p>None, except for those imposed by the requirements of
+<a href="container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Public base classes</h4>
-<p><code>matrix_expression&lt;identity_matrix&lt;T&gt;
+<p><code>matrix_container&lt;identity_matrix&lt;T&gt;
 &gt;</code></p>
 <h4>Members</h4>
 <table border="1" summary="members">
@@ -441,7 +447,7 @@ end of the reversed <code>identity_matrix</code>.</td>
 </tr>
 </tbody>
 </table>
-<h2><a name="zero_matrix" id="zero_matrix"></a> Zero Matrix</h2>
+<h2><a name="zero_matrix" id="zero_matrix"></a>Zero Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>zero_matrix&lt;T&gt;</code> represents
 zero matrices. For a <em>(m x n</em>)-dimensional zero matrix and
@@ -471,18 +477,17 @@ int main () {
 <tr>
 <td><code>T</code></td>
 <td>The type of object stored in the matrix.</td>
-<td></td>
+<td><code>int</code></td>
 </tr>
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="expression_concept.htm#matrix_expression">Matrix Expression</a>
-.</p>
+<p><a href="container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Type requirements</h4>
-<p>None, except for those imposed by the requirements of <a href=
-"expression_concept.htm#matrix_expression">Matrix Expression</a> .</p>
+<p>None, except for those imposed by the requirements of
+<a href="container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Public base classes</h4>
-<p><code>matrix_expression&lt;zero_matrix&lt;T&gt; &gt;</code></p>
+<p><code>matrix_container&lt;zero_matrix&lt;T&gt; &gt;</code></p>
 <h4>Members</h4>
 <table border="1" summary="members">
 <tbody>
@@ -583,8 +588,7 @@ end of the reversed <code>zero_matrix</code>.</td>
 </tr>
 </tbody>
 </table>
-<h2><a name="scalar_matrix" id="scalar_matrix"></a> scalar
-Matrix</h2>
+<h2><a name="scalar_matrix" id="scalar_matrix"></a>Scalar Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>scalar_matrix&lt;T&gt;</code>
 represents scalar matrices. For a <em>(m x n</em>)-dimensional
@@ -614,18 +618,17 @@ int main () {
 <tr>
 <td><code>T</code></td>
 <td>The type of object stored in the matrix.</td>
-<td></td>
+<td><code>int</code></td>
 </tr>
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="expression_concept.htm#matrix_expression">Matrix Expression</a>
-.</p>
+<p><a href="container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Type requirements</h4>
-<p>None, except for those imposed by the requirements of <a href=
-"expression_concept.htm#matrix_expression">Matrix Expression</a> .</p>
+<p>None, except for those imposed by the requirements of
+<a href="container_concept.htm#matrix">Matrix</a> .</p>
 <h4>Public base classes</h4>
-<p><code>matrix_expression&lt;scalar_matrix&lt;T&gt;
+<p><code>matrix_container&lt;scalar_matrix&lt;T&gt;
 &gt;</code></p>
 <h4>Members</h4>
 <table border="1" summary="members">
