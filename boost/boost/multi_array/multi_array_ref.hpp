@@ -392,7 +392,7 @@ public:
 
     // Calculate the array size
     num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
-                            1,std::multiplies<index>());
+                            size_type(1),std::multiplies<size_type>());
 
     this->compute_strides(stride_list_,extent_list_,storage_);
 
