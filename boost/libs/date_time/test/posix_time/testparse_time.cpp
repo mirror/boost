@@ -108,6 +108,12 @@ main()
   ptime t2 = time_from_string(ts2);
   check("parse time: " + ts2, 
         t2 == ptime(date(2002,12,31),time_duration(0,0,0)+nanosec(999999999)));
+  {
+    std::string ts2("2002-12-31 00:00:00.");
+    ptime t2 = time_from_string(ts2);
+    check("parse time (decimal but no digits): " + ts2, 
+          t2 == ptime(date(2002,12,31),time_duration(0,0,0)));
+  }
 #endif
 
 
@@ -125,6 +131,12 @@ main()
   ptime t1 = time_from_string(ts1);
   check("parse time: " + ts1, 
         t1 == ptime(date(2002,1,20),time_duration(23,59,59)));
+  {
+    std::string ts1("2002-01-20 23:59:59.");
+    ptime t1 = time_from_string(ts1);
+    check("parse time (decimal but no digits): " + ts1, 
+          t1 == ptime(date(2002,1,20),time_duration(23,59,59)));
+  }
 
   std::string s6("235859");
   time_duration td6= boost::date_time::parse_undelimited_time_duration<time_duration>(s6);
@@ -151,6 +163,49 @@ main()
   ptime t22 = from_iso_string(ts5);
   check("parse iso time: " + ts5, 
         t22 == ptime(date(1900,12,31),time_duration(23,0,0)));
+  {
+#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+    std::string ts3("20020120T235859.123456789");
+    ptime t20 = from_iso_string(ts3);
+    check("parse iso time w/ frac sec: " + ts3, 
+          t20 == ptime(date(2002,1,20),time_duration(23,58,59,123456789)));
+    
+    std::string ts4("19001231T000000.123");
+    ptime t21 = from_iso_string(ts4);
+    check("parse iso time w/ frac sec (too short): " + ts4, 
+          t21 == ptime(date(1900,12,31),time_duration(0,0,0,123000000)));
+
+    std::string ts5("19001231T230000.123456789876");
+    ptime t22 = from_iso_string(ts5);
+    check("parse iso time w/ frac sec (too long): " + ts5, 
+          t22 == ptime(date(1900,12,31),time_duration(23,0,0,123456789)));
+
+    std::string ts6("19001231T230000.");
+    ptime t23 = from_iso_string(ts6);
+    check("parse iso time w/ frac sec (dec only): " + ts6, 
+          t23 == ptime(date(1900,12,31),time_duration(23,0,0,0)));
+#else
+    std::string ts3("20020120T235859.123456");
+    ptime t20 = from_iso_string(ts3);
+    check("parse iso time w/ frac sec: " + ts3, 
+          t20 == ptime(date(2002,1,20),time_duration(23,58,59,123456)));
+    
+    std::string ts4("19001231T000000.123");
+    ptime t21 = from_iso_string(ts4);
+    check("parse iso time w/ frac sec (too short): " + ts4, 
+          t21 == ptime(date(1900,12,31),time_duration(0,0,0,123000)));
+
+    std::string ts5("19001231T230000.123456789876");
+    ptime t22 = from_iso_string(ts5);
+    check("parse iso time w/ frac sec (too long): " + ts5, 
+          t22 == ptime(date(1900,12,31),time_duration(23,0,0,123456)));
+
+    std::string ts6("19001231T230000.");
+    ptime t23 = from_iso_string(ts6);
+    check("parse iso time w/ frac sec (dec only): " + ts6, 
+          t23 == ptime(date(1900,12,31),time_duration(23,0,0,0)));
+#endif // BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+  }
 
   std::string s7("-01:25:00"), s8("-00:40:00"), s9("0:45"), s10("0:-40");
   time_duration tds1 = duration_from_string(s7);
