@@ -211,7 +211,8 @@ namespace ptr_container_detail
             if( this->empty() ) 
                 throw bad_ptr_container_operation( "'pop_front()' on" 
                                                      " empty container" ); 
-            auto_type ptr( this->c_private().front() ); // nothrow 
+            auto_type ptr( static_cast<value_type>(
+                        this->c_private().front() ) ); // nothrow 
             this->c_private().pop_front();              // nothrow
             return ptr_container_detail::move( ptr ); 
         }
