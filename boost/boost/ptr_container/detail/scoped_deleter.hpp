@@ -16,6 +16,7 @@
 # pragma once
 #endif
 
+#include <iterator>
 #include <cstddef>
 #include <boost/scoped_array.hpp>
 
