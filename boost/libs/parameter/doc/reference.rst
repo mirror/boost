@@ -10,7 +10,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/15 18:43:59 $
+:date:          $Date: 2005/07/17 19:53:01 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -52,6 +52,17 @@ __ ../../../../boost/parameter/keyword.hpp
 **Models**
     :concept:`IndexExpression`
 
+.. dwa:
+
+    1. You never defined IndexExpression
+
+    2. You should use cross-linking to the concept definitions,
+       thus, |IndexExpression|_
+
+    3. A class template doesn't model any concept we use other than
+       Metafunction.  Maybe specializations model IndexExpression,
+       or something.
+
 .. parsed-literal::
 
     template <class Tag>
@@ -74,6 +85,13 @@ __ ../../../../boost/parameter/keyword.hpp
     };
 
 
+.. dwa:
+
+   We don't have a convention of using a raw concept name,
+   formatted as a concept, as the return value of a function.  If
+   we're going to start doing this, don't we need to explain it
+   somewhere?
+
 operator=
 ~~~~~~~~~
 
@@ -92,6 +110,18 @@ operator=
     A model of |ArgumentPack|, holding a *cv* reference to ``value``,
     tagged with ``Tag``.
 
+.. dwa:
+
+     1. We don't have a convention of writing "*cv* reference to."
+        I know what you mean, but if we're going to start doing
+        this we need to explain the convention somewhere.
+
+     2. It's not a cv reference to value, since value itself is a
+        reference.  You can only reference an object.  So this
+        should be, perhaps, "holding value" or if you think that's
+        not explicit enough, "holding a reference equivalent to
+        value."  That deals with the cv issue.
+
 
 operator|
 ~~~~~~~~~
@@ -109,6 +139,40 @@ operator|
     an argument to ``ArgumentPack::operator[]`` which doesn't contain
     a parameter specified with ``Tag`` returns a reference to ``default_``.
 
+.. dwa: 
+
+   1. First of all, there is no class called ArgumentPack that has
+   an operator[].  
+
+   2. an operator[] can't contain a parameter
+
+   3. "which" should be "that"
+
+   4. You need a comma after ``Tag``.
+
+   5. It's the *type*, not the object, that models the concept.
+      If we're going to use this convention of using concept names
+      in place of return types, we should document it once at the
+      beginning and then we never have to say what the object's
+      type models.
+
+   6. An object doesn't return anything, even when used as an
+      argument.
+
+   7. "Specified with ``Tag``" is vague.  I don't think any
+      reasonable definition you could come up with could be
+      correct, since the ArgumentPack may hold a reference to an
+      object associated *positionally* with Tag.
+
+   Maybe:
+
+      An object that holds ``default_`` as a default for the
+      keyword tag ``Tag``.
+
+
+   This description would oblige us to explain the
+   terminology "...holds as a default for keyword tag..." in the
+   definition of KeywordDefaultExpression and associated concepts:
 
 operator||
 ~~~~~~~~~~
@@ -123,7 +187,13 @@ operator||
 **Requires**
     ``F`` is a nullary function object.
 
+.. dwa: You have to define "function object."  Plain function
+   pointers are legal where result_of is supported, FYI.
+
     **On compilers that support partial specialization:**
+
+.. dwa: This should be "on compilers that support result_of."
+   Likewise below.  See the result_of docs for the BOOST_NO_RESULT_OF macro 
 
     +---------------------------------+-----------------------------------------------------+
     | Expression                      | Requirement                                         |
@@ -133,7 +203,10 @@ operator||
     | ``fn()``                        | Convertible to ``boost::result_of<F()>::type``      |
     +---------------------------------+-----------------------------------------------------+
 
-    **On compilers that doesn't support partial specialization:**
+.. You have to say what fn is.  The usual way is to say, "in the
+   next two tables, fn is an object of type F."
+
+    **On compilers that don't support partial specialization:**
 
     +------------------------------+-----------------------------------------------------+
     | Expression                   | Requirement                                         |
@@ -143,11 +216,25 @@ operator||
     | ``fn()``                     | Convertible to ``F::result_type``                   |
     +------------------------------+-----------------------------------------------------+
 
+
+.. dwa: I don't think the CopyConstructible requirement is correct.
+   What if the result is a reference?  If it's not a reference, and
+   there are no implicit conversions, it's surely got to be copy
+   constructible so f can return it.  So are you sure you want to
+   require CopyConstructible just so you can handle the actual
+   return type not being an exact match?
+
 **Returns**
     An object that models |KeywordDefaultExpression|, that when used as
     an argument to ``ArgumentPack::operator[]`` which doesn't contain
     a parameter specified with ``Tag`` evaluates and returns ``fn()``.
 
+.. dwa:
+
+      An object that holds a reference to ``fn`` as a lazy default
+      for the keyword tag ``Tag``.
+
+   This description would oblige us to explain "lazy default."
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -167,7 +254,7 @@ __ ../../../../boost/parameter/parameters.hpp
     struct parameters
     {
         template <class T0, class T1, …, class TN>
-        struct `restrict`_
+        struct `match`
         {
             typedef … type;
         };
