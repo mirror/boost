@@ -54,6 +54,24 @@ inline int make_char_numeric_for_streaming(signed char c) { return c; }
 inline int make_char_numeric_for_streaming(unsigned char c) { return c; }
 #endif
 
+#if (defined(_GLIBCPP_VERSION) || defined(_GLIBCXX_VERSION)) \
+   && defined(BOOST_HAS_LONG_LONG) \
+   && !defined(_GLIBCPP_USE_LONG_LONG) \
+   && !defined(_GLIBCXX_USE_LONG_LONG)
+//
+// Some libstdc++ versions have numeric_limits<long long> but no
+// iostream support for long long.  TODO, find a better fix!!
+//
+std::ostream& operator<<(std::ostream& os, long long i )
+{
+    return os << static_cast<long double>(i);
+}
+std::ostream& operator<<(std::ostream& os, unsigned long long i )
+{
+    return os << static_cast<long double>(i);
+}
+#endif
+
 template<class T>
 void test_integral_limits(const T &, const char * msg)
 {
