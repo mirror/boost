@@ -25,7 +25,7 @@ __ ../../../../index.htm
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/18 19:59:22 $
+:date:          $Date: 2005/07/18 20:34:31 $
 
 :copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
@@ -357,7 +357,7 @@ Of course, we can pass the arguments in any order::
       using namespace graphs;
 
       core::depth_first_search((
-        root_vertex = 3.14, graph = 'G', color_map = false, 
+        root_vertex = 3.5, graph = 'G', color_map = false, 
         index_map = "hello, world", visitor = 2));
   }
 
@@ -1157,6 +1157,24 @@ enclosing namespace without qualification::
       using graphs::index_map;
       using graphs::color_map;
     }
+
+=========================
+ Reference (Preliminary)
+=========================
+
+Follow `this link`__ to the preliminary Boost.Parameter reference
+documentation.  We hope it will be more than just preliminary by
+the time Boost 1.33 is released.
+
+__ reference.html
+
+==================
+ Acknowledgements
+==================
+
+The authors would like to thank all the Boosters who participated
+in the review of this library and its documentation, most
+especially our review manager, Doug Gregor.
 
 --------------------------
 
