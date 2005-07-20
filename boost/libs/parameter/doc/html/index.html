@@ -283,54 +283,56 @@ arguments can be passed in any order.</p>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first"><a name="table-of-contents"><strong>Table of Contents</strong></a></p>
 <ul class="auto-toc simple">
-<li><a class="reference" href="#introduction" id="id18" name="id18">1&nbsp;&nbsp;&nbsp;Introduction</a></li>
-<li><a class="reference" href="#tutorial" id="id19" name="id19">2&nbsp;&nbsp;&nbsp;Tutorial</a><ul class="auto-toc">
-<li><a class="reference" href="#headers-and-namespaces" id="id20" name="id20">2.1&nbsp;&nbsp;&nbsp;Headers And Namespaces</a></li>
-<li><a class="reference" href="#the-abstract-interface-to-dfs" id="id21" name="id21">2.2&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></li>
-<li><a class="reference" href="#defining-the-keywords" id="id22" name="id22">2.3&nbsp;&nbsp;&nbsp;Defining the Keywords</a></li>
-<li><a class="reference" href="#defining-the-implementation-function" id="id23" name="id23">2.4&nbsp;&nbsp;&nbsp;Defining the Implementation Function</a></li>
-<li><a class="reference" href="#adding-defaults" id="id24" name="id24">2.5&nbsp;&nbsp;&nbsp;Adding Defaults</a><ul class="auto-toc">
-<li><a class="reference" href="#syntax" id="id25" name="id25">2.5.1&nbsp;&nbsp;&nbsp;Syntax</a></li>
-<li><a class="reference" href="#getting-more-realistic" id="id26" name="id26">2.5.2&nbsp;&nbsp;&nbsp;Getting More Realistic</a></li>
-<li><a class="reference" href="#the-binding-metafunction" id="id27" name="id27">2.5.3&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <span class="interpreted">Metafunction</span></a></li>
-<li><a class="reference" href="#beyond-ordinary-default-arguments" id="id28" name="id28">2.5.4&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></li>
+<li><a class="reference" href="#introduction" id="id19" name="id19">1&nbsp;&nbsp;&nbsp;Introduction</a></li>
+<li><a class="reference" href="#tutorial" id="id20" name="id20">2&nbsp;&nbsp;&nbsp;Tutorial</a><ul class="auto-toc">
+<li><a class="reference" href="#headers-and-namespaces" id="id21" name="id21">2.1&nbsp;&nbsp;&nbsp;Headers And Namespaces</a></li>
+<li><a class="reference" href="#the-abstract-interface-to-dfs" id="id22" name="id22">2.2&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></li>
+<li><a class="reference" href="#defining-the-keywords" id="id23" name="id23">2.3&nbsp;&nbsp;&nbsp;Defining the Keywords</a></li>
+<li><a class="reference" href="#defining-the-implementation-function" id="id24" name="id24">2.4&nbsp;&nbsp;&nbsp;Defining the Implementation Function</a></li>
+<li><a class="reference" href="#adding-defaults" id="id25" name="id25">2.5&nbsp;&nbsp;&nbsp;Adding Defaults</a><ul class="auto-toc">
+<li><a class="reference" href="#syntax" id="id26" name="id26">2.5.1&nbsp;&nbsp;&nbsp;Syntax</a></li>
+<li><a class="reference" href="#getting-more-realistic" id="id27" name="id27">2.5.2&nbsp;&nbsp;&nbsp;Getting More Realistic</a></li>
+<li><a class="reference" href="#the-binding-metafunction" id="id28" name="id28">2.5.3&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <span class="interpreted">Metafunction</span></a></li>
+<li><a class="reference" href="#beyond-ordinary-default-arguments" id="id29" name="id29">2.5.4&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#syntactic-refinement" id="id29" name="id29">2.6&nbsp;&nbsp;&nbsp;Syntactic Refinement</a><ul class="auto-toc">
-<li><a class="reference" href="#describing-the-positional-argument-order" id="id30" name="id30">2.6.1&nbsp;&nbsp;&nbsp;Describing the Positional Argument Order</a></li>
-<li><a class="reference" href="#forwarding-functions" id="id31" name="id31">2.6.2&nbsp;&nbsp;&nbsp;Forwarding Functions</a></li>
-<li><a class="reference" href="#out-parameters" id="id32" name="id32">2.6.3&nbsp;&nbsp;&nbsp;“Out” Parameters</a></li>
-<li><a class="reference" href="#generating-forwarding-functions-with-macros" id="id33" name="id33">2.6.4&nbsp;&nbsp;&nbsp;Generating Forwarding Functions with Macros</a></li>
+<li><a class="reference" href="#syntactic-refinement" id="id30" name="id30">2.6&nbsp;&nbsp;&nbsp;Syntactic Refinement</a><ul class="auto-toc">
+<li><a class="reference" href="#describing-the-positional-argument-order" id="id31" name="id31">2.6.1&nbsp;&nbsp;&nbsp;Describing the Positional Argument Order</a></li>
+<li><a class="reference" href="#forwarding-functions" id="id32" name="id32">2.6.2&nbsp;&nbsp;&nbsp;Forwarding Functions</a></li>
+<li><a class="reference" href="#out-parameters" id="id33" name="id33">2.6.3&nbsp;&nbsp;&nbsp;“Out” Parameters</a></li>
+<li><a class="reference" href="#generating-forwarding-functions-with-macros" id="id34" name="id34">2.6.4&nbsp;&nbsp;&nbsp;Generating Forwarding Functions with Macros</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#controlling-overload-resolution" id="id34" name="id34">2.7&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a><ul class="auto-toc">
-<li><a class="reference" href="#updating-the-parameterspec" id="id35" name="id35">2.7.1&nbsp;&nbsp;&nbsp;Updating the <span class="interpreted">ParameterSpec</span></a></li>
-<li><a class="reference" href="#applying-sfinae-to-the-overload-set" id="id36" name="id36">2.7.2&nbsp;&nbsp;&nbsp;Applying SFINAE to the Overload Set</a></li>
-<li><a class="reference" href="#reducing-boilerplate-with-macros" id="id37" name="id37">2.7.3&nbsp;&nbsp;&nbsp;Reducing BoilerPlate With Macros</a></li>
+<li><a class="reference" href="#controlling-overload-resolution" id="id35" name="id35">2.7&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a><ul class="auto-toc">
+<li><a class="reference" href="#updating-the-parameterspec" id="id36" name="id36">2.7.1&nbsp;&nbsp;&nbsp;Updating the <span class="interpreted">ParameterSpec</span></a></li>
+<li><a class="reference" href="#applying-sfinae-to-the-overload-set" id="id37" name="id37">2.7.2&nbsp;&nbsp;&nbsp;Applying SFINAE to the Overload Set</a></li>
+<li><a class="reference" href="#reducing-boilerplate-with-macros" id="id38" name="id38">2.7.3&nbsp;&nbsp;&nbsp;Reducing BoilerPlate With Macros</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#efficiency-issues" id="id38" name="id38">2.8&nbsp;&nbsp;&nbsp;Efficiency Issues</a><ul class="auto-toc">
-<li><a class="reference" href="#eliminating-copies" id="id39" name="id39">2.8.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></li>
-<li><a class="reference" href="#lazy-default-computation" id="id40" name="id40">2.8.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></li>
-<li><a class="reference" href="#default-forwarding" id="id41" name="id41">2.8.3&nbsp;&nbsp;&nbsp;Default Forwarding</a></li>
-<li><a class="reference" href="#dispatching-based-on-the-presence-of-a-default" id="id42" name="id42">2.8.4&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></li>
+<li><a class="reference" href="#efficiency-issues" id="id39" name="id39">2.8&nbsp;&nbsp;&nbsp;Efficiency Issues</a><ul class="auto-toc">
+<li><a class="reference" href="#eliminating-copies" id="id40" name="id40">2.8.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></li>
+<li><a class="reference" href="#lazy-default-computation" id="id41" name="id41">2.8.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></li>
+<li><a class="reference" href="#default-forwarding" id="id42" name="id42">2.8.3&nbsp;&nbsp;&nbsp;Default Forwarding</a></li>
+<li><a class="reference" href="#dispatching-based-on-the-presence-of-a-default" id="id43" name="id43">2.8.4&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference" href="#portability-considerations" id="id43" name="id43">3&nbsp;&nbsp;&nbsp;Portability Considerations</a><ul class="auto-toc">
-<li><a class="reference" href="#no-sfinae-support" id="id44" name="id44">3.1&nbsp;&nbsp;&nbsp;No SFINAE Support</a></li>
-<li><a class="reference" href="#no-support-for-result-of" id="id45" name="id45">3.2&nbsp;&nbsp;&nbsp;No Support for <tt class="docutils literal"><span class="pre">result_of</span></tt></a></li>
-<li><a class="reference" href="#can-t-declare-parameterspec-via-typedef" id="id46" name="id46">3.3&nbsp;&nbsp;&nbsp;Can't Declare <span class="interpreted">ParameterSpec</span> via <tt class="docutils literal"><span class="pre">typedef</span></tt></a></li>
-<li><a class="reference" href="#default-arguments-unsupported-on-nested-templates" id="id47" name="id47">3.4&nbsp;&nbsp;&nbsp;Default Arguments Unsupported on Nested Templates</a></li>
-<li><a class="reference" href="#compiler-can-t-see-references-in-unnamed-namespace" id="id48" name="id48">3.5&nbsp;&nbsp;&nbsp;Compiler Can't See References In Unnamed Namespace</a></li>
+<li><a class="reference" href="#portability-considerations" id="id44" name="id44">3&nbsp;&nbsp;&nbsp;Portability Considerations</a><ul class="auto-toc">
+<li><a class="reference" href="#no-sfinae-support" id="id45" name="id45">3.1&nbsp;&nbsp;&nbsp;No SFINAE Support</a></li>
+<li><a class="reference" href="#no-support-for-result-of" id="id46" name="id46">3.2&nbsp;&nbsp;&nbsp;No Support for <tt class="docutils literal"><span class="pre">result_of</span></tt></a></li>
+<li><a class="reference" href="#can-t-declare-parameterspec-via-typedef" id="id47" name="id47">3.3&nbsp;&nbsp;&nbsp;Can't Declare <span class="interpreted">ParameterSpec</span> via <tt class="docutils literal"><span class="pre">typedef</span></tt></a></li>
+<li><a class="reference" href="#default-arguments-unsupported-on-nested-templates" id="id48" name="id48">3.4&nbsp;&nbsp;&nbsp;Default Arguments Unsupported on Nested Templates</a></li>
+<li><a class="reference" href="#compiler-can-t-see-references-in-unnamed-namespace" id="id49" name="id49">3.5&nbsp;&nbsp;&nbsp;Compiler Can't See References In Unnamed Namespace</a></li>
 </ul>
 </li>
+<li><a class="reference" href="#reference-preliminary" id="id50" name="id50">4&nbsp;&nbsp;&nbsp;Reference (Preliminary)</a></li>
+<li><a class="reference" href="#acknowledgements" id="id51" name="id51">5&nbsp;&nbsp;&nbsp;Acknowledgements</a></li>
 </ul>
 </div>
 <hr class="docutils" />
 <div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id18" name="introduction">1&nbsp;&nbsp;&nbsp;Introduction</a></h1>
+<h1><a class="toc-backref" href="#id19" name="introduction">1&nbsp;&nbsp;&nbsp;Introduction</a></h1>
 <p>In C++, arguments are normally given meaning by their positions
 with respect to a parameter list.  That protocol is fine when there
 is at most one parameter with a default value, but when there are
@@ -412,7 +414,7 @@ As a side effect of using the Boost Parameter library, you may find
 that you circumvent both of these limitations quite naturally. -->
 </div>
 <div class="section" id="tutorial">
-<h1><a class="toc-backref" href="#id19" name="tutorial">2&nbsp;&nbsp;&nbsp;Tutorial</a></h1>
+<h1><a class="toc-backref" href="#id20" name="tutorial">2&nbsp;&nbsp;&nbsp;Tutorial</a></h1>
 <p>In this section we'll show how the Parameter library can be used to
 build an expressive interface to the <a class="reference" href="../../../graph/index.html">Boost Graph library</a>'s
 <a class="reference" href="../../../graph/doc/depth_first_search.html"><tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a> algorithm.<a class="footnote-reference" href="#old-interface" id="id2" name="id2"><sup>1</sup></a> After laying some groundwork
@@ -424,7 +426,7 @@ streamline the implementation of named parameter interfaces,
 improve their participation in overload resolution, and optimize
 their runtime efficiency.</p>
 <div class="section" id="headers-and-namespaces">
-<h2><a class="toc-backref" href="#id20" name="headers-and-namespaces">2.1&nbsp;&nbsp;&nbsp;Headers And Namespaces</a></h2>
+<h2><a class="toc-backref" href="#id21" name="headers-and-namespaces">2.1&nbsp;&nbsp;&nbsp;Headers And Namespaces</a></h2>
 <p>Most components of the Parameter library are declared in a
 header named for the component.  For example,</p>
 <pre class="literal-block">
@@ -445,7 +447,7 @@ namespace parameter = boost::parameter;
 <tt class="docutils literal"><span class="pre">boost::parameter::xxx</span></tt>.</p>
 </div>
 <div class="section" id="the-abstract-interface-to-dfs">
-<h2><a class="toc-backref" href="#id21" name="the-abstract-interface-to-dfs">2.2&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id22" name="the-abstract-interface-to-dfs">2.2&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></h2>
 <p>The Graph library's <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> algorithm is a generic function accepting
 from one to four arguments by reference, as shown in the table
 below:</p>
@@ -500,7 +502,7 @@ computed later in the tutorial; trust us when we say that the
 complexity of its default will become valuable.</p>
 </div>
 <div class="section" id="defining-the-keywords">
-<h2><a class="toc-backref" href="#id22" name="defining-the-keywords">2.3&nbsp;&nbsp;&nbsp;Defining the Keywords</a></h2>
+<h2><a class="toc-backref" href="#id23" name="defining-the-keywords">2.3&nbsp;&nbsp;&nbsp;Defining the Keywords</a></h2>
 <p>The point of this exercise is to make it possible to call
 <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> with keyword arguments, leaving out any
 arguments for which the default is appropriate:</p>
@@ -548,7 +550,7 @@ templates that are instantiated in multiple translation
 units.</p>
 </div>
 <div class="section" id="defining-the-implementation-function">
-<h2><a class="toc-backref" href="#id23" name="defining-the-implementation-function">2.4&nbsp;&nbsp;&nbsp;Defining the Implementation Function</a></h2>
+<h2><a class="toc-backref" href="#id24" name="defining-the-implementation-function">2.4&nbsp;&nbsp;&nbsp;Defining the Implementation Function</a></h2>
 <p>Next we can write the skeleton of the function that implements
 the core of <tt class="docutils literal"><span class="pre">depth_first_search</span></tt>:</p>
 <pre class="literal-block">
@@ -624,14 +626,14 @@ color_map:   false
 </pre>
 </div>
 <div class="section" id="adding-defaults">
-<h2><a class="toc-backref" href="#id24" name="adding-defaults">2.5&nbsp;&nbsp;&nbsp;Adding Defaults</a></h2>
+<h2><a class="toc-backref" href="#id25" name="adding-defaults">2.5&nbsp;&nbsp;&nbsp;Adding Defaults</a></h2>
 <p>Currently, all the arguments to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> are
 required.  If any parameter can't be found, there will be a
 compilation error where we try to extract it from the
 <span class="interpreted">ArgumentPack</span> using the subscript operator.  To make it
 legal to omit an argument we need to give it a default value.</p>
 <div class="section" id="syntax">
-<h3><a class="toc-backref" href="#id25" name="syntax">2.5.1&nbsp;&nbsp;&nbsp;Syntax</a></h3>
+<h3><a class="toc-backref" href="#id26" name="syntax">2.5.1&nbsp;&nbsp;&nbsp;Syntax</a></h3>
 <p>We can make any of the parameters optional by following its keyword
 with the <tt class="docutils literal"><span class="pre">|</span></tt> operator and the parameter's default value within
 the square brackets.  In the following example, we've given
@@ -674,7 +676,7 @@ default value.</p>
 </div>
 </div>
 <div class="section" id="getting-more-realistic">
-<h3><a class="toc-backref" href="#id26" name="getting-more-realistic">2.5.2&nbsp;&nbsp;&nbsp;Getting More Realistic</a></h3>
+<h3><a class="toc-backref" href="#id27" name="getting-more-realistic">2.5.2&nbsp;&nbsp;&nbsp;Getting More Realistic</a></h3>
 <p>Now it's time to put some more realistic defaults in place.  We'll
 have to give up our print statements—at least if we want to see the
 defaults work—since, the default values of these
@@ -702,7 +704,7 @@ need to come up with the types <em>Graph</em>, <em>Visitor</em>, <em>Vertex</em>
 <em>Index</em>, and <em>Color</em>.</p>
 </div>
 <div class="section" id="the-binding-metafunction">
-<h3><a class="toc-backref" href="#id27" name="the-binding-metafunction">2.5.3&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="interpreted">Metafunction</span></a></a></h3>
+<h3><a class="toc-backref" href="#id28" name="the-binding-metafunction">2.5.3&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="interpreted">Metafunction</span></a></a></h3>
 <p>To compute the type of a parameter we can use a <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="interpreted">Metafunction</span></a>
 called <tt class="docutils literal"><span class="pre">binding</span></tt>:</p>
 <pre class="literal-block">
@@ -751,7 +753,7 @@ typename <strong>boost::graph_traits&lt;Graph&gt;::vertex_descriptor</strong>
 </pre>
 <a class="target" id="dangling" name="dangling"></a></div>
 <div class="section" id="beyond-ordinary-default-arguments">
-<h3><a class="toc-backref" href="#id28" name="beyond-ordinary-default-arguments">2.5.4&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></h3>
+<h3><a class="toc-backref" href="#id29" name="beyond-ordinary-default-arguments">2.5.4&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></h3>
 <p>Here's how you might write the declaration for the <tt class="docutils literal"><span class="pre">index_map</span></tt>
 parameter:</p>
 <pre class="literal-block">
@@ -787,12 +789,12 @@ int y = f();                // <strong>error; can't deduce Index</strong>
 </div>
 </div>
 <div class="section" id="syntactic-refinement">
-<h2><a class="toc-backref" href="#id29" name="syntactic-refinement">2.6&nbsp;&nbsp;&nbsp;Syntactic Refinement</a></h2>
+<h2><a class="toc-backref" href="#id30" name="syntactic-refinement">2.6&nbsp;&nbsp;&nbsp;Syntactic Refinement</a></h2>
 <p>In this section we'll describe how you can allow callers to invoke
 <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> with just one pair of parentheses, and to
 omit keywords where appropriate.</p>
 <div class="section" id="describing-the-positional-argument-order">
-<h3><a class="toc-backref" href="#id30" name="describing-the-positional-argument-order">2.6.1&nbsp;&nbsp;&nbsp;Describing the Positional Argument Order</a></h3>
+<h3><a class="toc-backref" href="#id31" name="describing-the-positional-argument-order">2.6.1&nbsp;&nbsp;&nbsp;Describing the Positional Argument Order</a></h3>
 <a class="target" id="parameterspec" name="parameterspec"></a><p>First, we'll need to build a type that describes the allowed
 parameters and their ordering when passed positionally.  This type
 is known as a <span class="interpreted">ParameterSpec</span> (MSVC6.x users see this <a class="reference" href="#can-t-declare-parameterspec-via-typedef">note</a>):</p>
@@ -820,7 +822,7 @@ p('G', index_map=1)
 <tt class="docutils literal"><span class="pre">'G'</span></tt>, and whose <tt class="docutils literal"><span class="pre">index_map</span></tt> parameter has a value of <tt class="docutils literal"><span class="pre">1</span></tt>.</p>
 </div>
 <div class="section" id="forwarding-functions">
-<h3><a class="toc-backref" href="#id31" name="forwarding-functions">2.6.2&nbsp;&nbsp;&nbsp;Forwarding Functions</a></h3>
+<h3><a class="toc-backref" href="#id32" name="forwarding-functions">2.6.2&nbsp;&nbsp;&nbsp;Forwarding Functions</a></h3>
 <p>Next we need a family of overloaded <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> function
 templates that can be called with anywhere from one to five
 arguments.  These <em>forwarding functions</em> will invoke an instance of
@@ -855,7 +857,7 @@ namespace graphs
 from one to five arguments passed positionally or via keyword.</p>
 </div>
 <div class="section" id="out-parameters">
-<h3><a class="toc-backref" href="#id32" name="out-parameters">2.6.3&nbsp;&nbsp;&nbsp;“Out” Parameters</a></h3>
+<h3><a class="toc-backref" href="#id33" name="out-parameters">2.6.3&nbsp;&nbsp;&nbsp;“Out” Parameters</a></h3>
 <p>Well, that's not <em>quite</em> it.  The overload set above works fine
 when <tt class="docutils literal"><span class="pre">color_map</span></tt> is passed by keyword, but it breaks down when it
 is passed positionally.  As you may recall from the
@@ -894,7 +896,7 @@ depth_first_search(g, v, s, i, <strong>boost::ref(c)</strong>);
 </pre>
 </div>
 <div class="section" id="generating-forwarding-functions-with-macros">
-<h3><a class="toc-backref" href="#id33" name="generating-forwarding-functions-with-macros">2.6.4&nbsp;&nbsp;&nbsp;Generating Forwarding Functions with Macros</a></h3>
+<h3><a class="toc-backref" href="#id34" name="generating-forwarding-functions-with-macros">2.6.4&nbsp;&nbsp;&nbsp;Generating Forwarding Functions with Macros</a></h3>
 <p>To remove some of the tedium of writing overloaded forwarding
 functions, the library supplies a macro, suitably located in
 <tt class="docutils literal"><span class="pre">boost/parameter/macros.hpp</span></tt>, that will generate free function
@@ -919,7 +921,7 @@ address this problem and others, for an upcoming release of Boost.</p>
 </div>
 </div>
 <div class="section" id="controlling-overload-resolution">
-<h2><a class="toc-backref" href="#id34" name="controlling-overload-resolution">2.7&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a></h2>
+<h2><a class="toc-backref" href="#id35" name="controlling-overload-resolution">2.7&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a></h2>
 <p>The parameters of our templated forwarding functions are completely
 general; in fact, they're a perfect match for any argument type
 whatsoever.  The problems with exposing such general function
@@ -932,7 +934,7 @@ overloads.  In that case, it's neccessary to remove the functions
 from the overload set when the passed argument types aren't
 appropriate.</p>
 <div class="section" id="updating-the-parameterspec">
-<h3><a class="toc-backref" href="#id35" name="updating-the-parameterspec">2.7.1&nbsp;&nbsp;&nbsp;Updating the <span class="interpreted">ParameterSpec</span></a></h3>
+<h3><a class="toc-backref" href="#id36" name="updating-the-parameterspec">2.7.1&nbsp;&nbsp;&nbsp;Updating the <span class="interpreted">ParameterSpec</span></a></h3>
 <p>This sort of overload control can be accomplished in C++ by taking
 advantage of the SFINAE (Substitution Failure Is Not An Error)
 rule.<a class="footnote-reference" href="#sfinae" id="id11" name="id11"><sup>6</sup></a> You can take advantage of the Parameter library's
@@ -978,7 +980,7 @@ namespace graphs
 </pre>
 </div>
 <div class="section" id="applying-sfinae-to-the-overload-set">
-<h3><a class="toc-backref" href="#id36" name="applying-sfinae-to-the-overload-set">2.7.2&nbsp;&nbsp;&nbsp;Applying SFINAE to the Overload Set</a></h3>
+<h3><a class="toc-backref" href="#id37" name="applying-sfinae-to-the-overload-set">2.7.2&nbsp;&nbsp;&nbsp;Applying SFINAE to the Overload Set</a></h3>
 <p>Now we add a special defaulted argument to each of our
 <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> overloads:</p>
 <pre class="literal-block">
@@ -1019,7 +1021,7 @@ adds these extra function parameters for you (Borland users see
 this <a class="reference" href="#default-arguments-unsupported-on-nested-templates">note</a>).</p>
 </div>
 <div class="section" id="reducing-boilerplate-with-macros">
-<h3><a class="toc-backref" href="#id37" name="reducing-boilerplate-with-macros">2.7.3&nbsp;&nbsp;&nbsp;Reducing BoilerPlate With Macros</a></h3>
+<h3><a class="toc-backref" href="#id38" name="reducing-boilerplate-with-macros">2.7.3&nbsp;&nbsp;&nbsp;Reducing BoilerPlate With Macros</a></h3>
 <p>The library provides a macro you can use to eliminate some of the
 repetetiveness of the declaring the optional parameters.
 <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_MATCH</span></tt> takes three arguments: the
@@ -1060,7 +1062,7 @@ namespace graphs
 </div>
 </div>
 <div class="section" id="efficiency-issues">
-<h2><a class="toc-backref" href="#id38" name="efficiency-issues">2.8&nbsp;&nbsp;&nbsp;Efficiency Issues</a></h2>
+<h2><a class="toc-backref" href="#id39" name="efficiency-issues">2.8&nbsp;&nbsp;&nbsp;Efficiency Issues</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">color_map</span></tt> parameter gives us a few efficiency issues to
 consider.  Here's a first cut at extraction and binding:</p>
 <pre class="literal-block">
@@ -1075,7 +1077,7 @@ typename parameter::binding&lt;
 &gt;::type color = args[color_map|<strong>default_color_map(num_vertices(g),i)</strong>];
 </pre>
 <div class="section" id="eliminating-copies">
-<h3><a class="toc-backref" href="#id39" name="eliminating-copies">2.8.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></h3>
+<h3><a class="toc-backref" href="#id40" name="eliminating-copies">2.8.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></h3>
 <p>The library has no way to know whether an explicitly-supplied
 argument is expensive to copy (or even if it is copyable at all),
 so <tt class="docutils literal"><span class="pre">binding&lt;…,k,…&gt;::type</span></tt> is always a reference type when the
@@ -1103,7 +1105,7 @@ default type</em> as the third argument to <tt class="docutils literal"><span cl
 </div>
 </div>
 <div class="section" id="lazy-default-computation">
-<h3><a class="toc-backref" href="#id40" name="lazy-default-computation">2.8.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></h3>
+<h3><a class="toc-backref" href="#id41" name="lazy-default-computation">2.8.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></h3>
 <p>Of course it's nice to avoid copying <tt class="docutils literal"><span class="pre">default_color</span></tt>, but the
 more important cost is that of <em>constructing</em> it in the first
 place.  A <tt class="docutils literal"><span class="pre">vector_property_map</span></tt> is cheap to copy, since it holds
@@ -1139,7 +1141,7 @@ no <tt class="docutils literal"><span class="pre">color_map</span></tt> argument
 </div>
 </div>
 <div class="section" id="default-forwarding">
-<h3><a class="toc-backref" href="#id41" name="default-forwarding">2.8.3&nbsp;&nbsp;&nbsp;Default Forwarding</a></h3>
+<h3><a class="toc-backref" href="#id42" name="default-forwarding">2.8.3&nbsp;&nbsp;&nbsp;Default Forwarding</a></h3>
 <p>Types that are expensive to construct yet cheap to copy aren't all
 that typical, and even copying the color map is more expensive than
 we might like.  It might be nice to avoid both needless
@@ -1172,7 +1174,7 @@ core::dfs_impl(
 we'd probably just forward all the arguments.</p>
 </div>
 <div class="section" id="dispatching-based-on-the-presence-of-a-default">
-<h3><a class="toc-backref" href="#id42" name="dispatching-based-on-the-presence-of-a-default">2.8.4&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></h3>
+<h3><a class="toc-backref" href="#id43" name="dispatching-based-on-the-presence-of-a-default">2.8.4&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></h3>
 <p>In fact, the Graph library itself constructs a slightly different
 <tt class="docutils literal"><span class="pre">color_map</span></tt>, to avoid even the overhead of initializing a
 <a class="reference" href="../../../smart_ptr/shared_ptr.htm"><tt class="docutils literal"><span class="pre">shared_ptr</span></tt></a>:</p>
@@ -1227,20 +1229,20 @@ from <tt class="docutils literal"><span class="pre">mpl::true_</span></tt> or <t
 </div>
 </div>
 <div class="section" id="portability-considerations">
-<h1><a class="toc-backref" href="#id43" name="portability-considerations">3&nbsp;&nbsp;&nbsp;Portability Considerations</a></h1>
+<h1><a class="toc-backref" href="#id44" name="portability-considerations">3&nbsp;&nbsp;&nbsp;Portability Considerations</a></h1>
 <p>Use the <a class="reference" href="http://www.boost.org/regression/release/user/parameter.html">regression test results</a> for the latest Boost release of
 the Parameter library to see how it fares on your favorite
 compiler.  Additionally, you may need to be aware of the following
 issues and workarounds for particular compilers.</p>
 <div class="section" id="no-sfinae-support">
-<h2><a class="toc-backref" href="#id44" name="no-sfinae-support">3.1&nbsp;&nbsp;&nbsp;No SFINAE Support</a></h2>
+<h2><a class="toc-backref" href="#id45" name="no-sfinae-support">3.1&nbsp;&nbsp;&nbsp;No SFINAE Support</a></h2>
 <p>Some older compilers don't support SFINAE.  If your compiler meets
 that criterion, then Boost headers will <tt class="docutils literal"><span class="pre">#define</span></tt> the preprocessor
 symbol <tt class="docutils literal"><span class="pre">BOOST_NO_SFINAE</span></tt>, and uses of <tt class="docutils literal"><span class="pre">parameters&lt;…&gt;::match</span></tt> and
 <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_MATCH</span></tt> will be harmless, but will have no effect.</p>
 </div>
 <div class="section" id="no-support-for-result-of">
-<h2><a class="toc-backref" href="#id45" name="no-support-for-result-of">3.2&nbsp;&nbsp;&nbsp;No Support for <a class="reference" href="../../../utility/utility.htm#result_of"><tt class="docutils literal"><span class="pre">result_of</span></tt></a></a></h2>
+<h2><a class="toc-backref" href="#id46" name="no-support-for-result-of">3.2&nbsp;&nbsp;&nbsp;No Support for <a class="reference" href="../../../utility/utility.htm#result_of"><tt class="docutils literal"><span class="pre">result_of</span></tt></a></a></h2>
 <p><a class="reference" href="#lazy-default-computation">Lazy default computation</a> relies on the <tt class="docutils literal"><span class="pre">result_of</span></tt> class
 template to compute the types of default arguments given the type
 of the function object that constructs them.  On compilers that
@@ -1253,7 +1255,7 @@ wrap it in a class that provides <tt class="docutils literal"><span class="pre">
 and invokes the function via its <tt class="docutils literal"><span class="pre">operator()</span></tt>.</p>
 </div>
 <div class="section" id="can-t-declare-parameterspec-via-typedef">
-<h2><a class="toc-backref" href="#id46" name="can-t-declare-parameterspec-via-typedef">3.3&nbsp;&nbsp;&nbsp;Can't Declare <span class="interpreted">ParameterSpec</span> via <tt class="docutils literal"><span class="pre">typedef</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id47" name="can-t-declare-parameterspec-via-typedef">3.3&nbsp;&nbsp;&nbsp;Can't Declare <span class="interpreted">ParameterSpec</span> via <tt class="docutils literal"><span class="pre">typedef</span></tt></a></h2>
 <p>In principle you can declare a <span class="interpreted">ParameterSpec</span> as a <tt class="docutils literal"><span class="pre">typedef</span></tt>
 for a specialization of <tt class="docutils literal"><span class="pre">parameters&lt;…&gt;</span></tt>, but Microsoft Visual C++
 6.x has been seen to choke on that usage.  The workaround is to use
@@ -1267,7 +1269,7 @@ inheritance and declare your <span class="interpreted">ParameterSpec</span> as a
 </pre>
 </div>
 <div class="section" id="default-arguments-unsupported-on-nested-templates">
-<h2><a class="toc-backref" href="#id47" name="default-arguments-unsupported-on-nested-templates">3.4&nbsp;&nbsp;&nbsp;Default Arguments Unsupported on Nested Templates</a></h2>
+<h2><a class="toc-backref" href="#id48" name="default-arguments-unsupported-on-nested-templates">3.4&nbsp;&nbsp;&nbsp;Default Arguments Unsupported on Nested Templates</a></h2>
 <p>As of this writing, Borland compilers don't support the use of
 default template arguments on member class templates.  As a result,
 you have to supply <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_MAX_ARITY</span></tt> arguments to every
@@ -1276,7 +1278,7 @@ are unspecified, the workaround is to use
 <a class="reference" href="#default-arguments-unsupported-on-nested-templates"><tt class="docutils literal"><span class="pre">BOOST_PARAMETER_MATCH</span></tt></a> to declare default arguments for SFINAE.</p>
 </div>
 <div class="section" id="compiler-can-t-see-references-in-unnamed-namespace">
-<h2><a class="toc-backref" href="#id48" name="compiler-can-t-see-references-in-unnamed-namespace">3.5&nbsp;&nbsp;&nbsp;Compiler Can't See References In Unnamed Namespace</a></h2>
+<h2><a class="toc-backref" href="#id49" name="compiler-can-t-see-references-in-unnamed-namespace">3.5&nbsp;&nbsp;&nbsp;Compiler Can't See References In Unnamed Namespace</a></h2>
 <p>If you use Microsoft Visual C++ 6.x, you may find that the compiler
 has trouble finding your keyword objects.  This problem has been
 observed, but only on this one compiler, and it disappeared as the
@@ -1294,6 +1296,19 @@ namespace graphs
   using graphs::color_map;
 }
 </pre>
+</div>
+</div>
+<div class="section" id="reference-preliminary">
+<h1><a class="toc-backref" href="#id50" name="reference-preliminary">4&nbsp;&nbsp;&nbsp;Reference (Preliminary)</a></h1>
+<p>Follow <a class="reference" href="reference.html">this link</a> to the preliminary Boost.Parameter reference
+documentation.  We hope it will be more than just preliminary by
+the time Boost 1.33 is released.</p>
+</div>
+<div class="section" id="acknowledgements">
+<h1><a class="toc-backref" href="#id51" name="acknowledgements">5&nbsp;&nbsp;&nbsp;Acknowledgements</a></h1>
+<p>The authors would like to thank all the Boosters who participated
+in the review of this library and its documentation, most
+especially our review manager, Doug Gregor.</p>
 <hr class="docutils" />
 <table class="docutils footnote" frame="void" id="old-interface" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -1381,10 +1396,9 @@ information on SFINAE.</td></tr>
 </table>
 </div>
 </div>
-</div>
 <hr class="docutils footer" />
 <div class="footer">
-Generated on: 2005-07-19 13:16 UTC.
+Generated on: 2005-07-19 18:42 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
