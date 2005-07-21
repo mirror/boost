@@ -374,7 +374,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     typedef mpl::integral_c< detail::orthogonal_position_type, 0 >
       inner_orthogonal_position;
 
-    typedef typename context_type::state_base_type state_base_type;
     typedef typename context_type::event_base_type event_base_type;
     typedef typename context_type::rtti_policy_type rtti_policy_type;
 
