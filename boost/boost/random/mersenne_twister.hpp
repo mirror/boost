@@ -85,7 +85,7 @@ public:
     x[0] = value & mask;
     for (i = 1; i < n; i++) {
       // See Knuth "The Art of Computer Programming" Vol. 2, 3rd ed., page 106
-      x[i] = (1812433253UL * (x[i-1] ^ (x[i-1] >> 30)) + i) & mask;
+      x[i] = (1812433253UL * (x[i-1] ^ (x[i-1] >> (w-2))) + i) & mask;
     }
   }
 
