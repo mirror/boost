@@ -10,7 +10,10 @@
 
 #include <boost/statechart/result.hpp>
 
+#include <boost/mpl/if.hpp>
+
 #include <boost/cast.hpp> // boost::polymorphic_downcast
+#include <boost/type_traits/is_same.hpp>
 
 
 
@@ -21,12 +24,46 @@ namespace statechart
 
 
 
+class event_base;
+
 //////////////////////////////////////////////////////////////////////////////
 template< class Event, 
           class ReactionContext,
           void ( ReactionContext::*pAction )( const Event & ) >
 class in_state_reaction
 {
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    struct react_base
+    {
+      template< class State, class EventBase, class IdType >
+      static detail::reaction_result react(
+        State & stt, const EventBase & evt, const IdType & )
+      {
+        ( stt.template context< ReactionContext >().*pAction )( evt );
+        return detail::do_discard_event;
+      }
+    };
+
+    struct react_derived
+    {
+      template< class State, class EventBase, class IdType >
+      static detail::reaction_result react(
+        State & stt, const EventBase & evt, const IdType & eventType )
+      {
+        if ( eventType == Event::static_type() )
+        {
+          ( stt.template context< ReactionContext >().*pAction )(
+            *polymorphic_downcast< const Event * >( &evt ) );
+          return detail::do_discard_event;
+        }
+        else
+        {
+          return detail::no_reaction;
+        }
+      }
+    };
+
   public:
     //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.
@@ -36,16 +73,11 @@ class in_state_reaction
     static detail::reaction_result react(
       State & stt, const EventBase & evt, const IdType & eventType )
     {
-      if ( eventType == Event::static_type() )
-      {
-        ( stt.template context< ReactionContext >().*pAction )(
-          *polymorphic_downcast< const Event * >( &evt ) );
-        return detail::do_discard_event;
-      }
-      else
-      {
-        return detail::no_reaction;
-      }
+      typedef typename mpl::if_<
+        is_same< Event, event_base >, react_base, react_derived
+      >::type impl;
+
+      return impl::react( stt, evt, eventType );
     }
 };
 

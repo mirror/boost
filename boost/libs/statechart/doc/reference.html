@@ -1972,9 +1972,9 @@ namespace statechart
 <p><b>Effects</b>: Destructs the common base portion of an event</p>
 <h3>Class <code>event_base</code> observer functions</h3>
 <pre>intrusive_ptr&lt; const event_base &gt; <a name="intrusive_from_this">intrusive_from_this</a>() const;</pre>
-<p><b>Returns</b>: If <code>this</code> is already referenced by an <code>
-intrusive_ptr&lt;&gt;</code>, returns another <code>intrusive_ptr&lt; const event_base &gt;</code> 
-referencing <code>this</code>. Otherwise, returns an <code>intrusive_ptr&lt; 
+<p><b>Returns</b>: Another <code>intrusive_ptr&lt; const event_base &gt;</code> 
+referencing <code>this</code> <b>if</b> <code>this</code> is already referenced by an <code>
+intrusive_ptr&lt;&gt;</code>. Otherwise, returns an <code>intrusive_ptr&lt; 
 const event_base &gt;</code> referencing a newly created copy of the most-derived object</p>
 <pre>id_type <a name="event_base::dynamic_type">dynamic_type</a>() const;</pre>
 <p><b>Returns</b>: A value unambiguously identifying the most-derived type<br>
@@ -2059,8 +2059,12 @@ member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState<
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A model of the <a href="#Event">Event</a> concept</td>
-    <td width="24%">The event triggering the transition</td>
+    <td width="45%">A model of the <a href="#Event">Event</a> concept or the 
+	class <code><a href="#Class event_base">event_base</a></code></td>
+    <td width="24%">The event triggering the transition. If <code>
+	<a href="#Class event_base">event_base</a></code> is specified, the 
+	transition is triggered by all models of the <a href="#Event">Event</a> 
+	concept</td>
     <td width="19%">&nbsp;</td>
   </tr>
   <tr>
@@ -2134,8 +2138,12 @@ member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState<
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A model of the <a href="#Event">Event</a> concept</td>
-    <td width="24%">The event triggering the in-state reaction</td>
+    <td width="45%">A model of the <a href="#Event">Event</a> concept or the 
+	class <code><a href="#Class event_base">event_base</a></code></td>
+    <td width="24%">The event triggering the in-state reaction. If <code>
+	<a href="#Class event_base">event_base</a></code> is specified, the in-state 
+	reaction is triggered by all models of the <a href="#Event">Event</a> 
+	concept</td>
   </tr>
   <tr>
     <td width="15%"><code>ReactionContext</code></td>
@@ -2185,8 +2193,12 @@ member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState<
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A model of the <a href="#Event">Event</a> concept</td>
-    <td width="24%">The event triggering the termination</td>
+    <td width="45%">A model of the <a href="#Event">Event</a> concept or the 
+	class <code><a href="#Class event_base">event_base</a></code></td>
+    <td width="24%">The event triggering the termination. If <code>
+	<a href="#Class event_base">event_base</a></code> is specified, the 
+	termination is triggered by all models of the <a href="#Event">Event</a> 
+	concept</td>
   </tr>
 </table>
 <h3>Class template <code>termination</code> synopsis</h3>
@@ -2220,8 +2232,12 @@ member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState<
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A model of the <a href="#Event">Event</a> concept</td>
-    <td width="24%">The event triggering the deferral</td>
+    <td width="45%">A model of the <a href="#Event">Event</a> concept or the 
+	class <code><a href="#Class event_base">event_base</a></code></td>
+    <td width="24%">The event triggering the deferral. If <code>
+	<a href="#Class event_base">event_base</a></code> is specified, the deferral 
+	is triggered by all models of the <a href="#Event">Event</a> 
+	concept</td>
   </tr>
 </table>
 <h3>Class template <code>deferral</code> synopsis</h3>
@@ -2256,8 +2272,12 @@ member <code>typedef</code> in models of the <a href="#SimpleState">SimpleState<
   </tr>
   <tr>
     <td width="17%"><code>Event</code></td>
-    <td width="56%">A model of the <a href="#Event">Event</a> concept</td>
-    <td width="24%">The event triggering the custom reaction</td>
+    <td width="56%">A model of the <a href="#Event">Event</a> concept or the 
+	class <code><a href="#Class event_base">event_base</a></code></td>
+    <td width="24%">The event triggering the custom reaction. If <code>
+	<a href="#Class event_base">event_base</a></code> is specified, the custom 
+	reaction is triggered by all models of the <a href="#Event">Event</a> 
+	concept</td>
   </tr>
 </table>
 <h3>Class template <code>custom_reaction</code> synopsis</h3>
@@ -2327,7 +2347,7 @@ copy semantics</p>
 <b>Effects</b>: Destructs the result object</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21143" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

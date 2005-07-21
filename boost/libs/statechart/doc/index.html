@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/06/19<!--webbot bot="Timestamp" endspan i-checksum="12685" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/07/21<!--webbot bot="Timestamp" endspan i-checksum="12734" --></font></td>
   </tr>
 </table>
 <hr>
@@ -173,16 +173,7 @@ please see <a href="definitions.html">Definitions</a> for more information.</p>
 left (<font color="#FF0000">red</font> = added as a result of the formal 
 review):</p>
 <ol>
-    <li>Review and integrate the v2 Jamfiles supplied by Jürgen Hunold</li>
-    <li><b>Add the library to the main CVS. Estimated date: 15 July, 2005</b></li>
-	<li>Add <code>event_base</code> specializations to all reactions</li>
-	<li>Investigate how a state machine could be serialized. A first glance at 
-	the serialization library revealed that there currently (late 2004) is no 
-	support for types that overload <code>operator new</code>. Such support 
-	would be essential for Boost.Statechart serialization since there doesn't seem 
-	to be any way to detect whether a state has an overloaded <code>operator 
-	new</code> or not</li>
-	<li>Design a facility allowing to specially handle events that did not 
+    <li>Design a facility allowing to specially handle events that did not 
   trigger a reaction</li>
 	<li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
     initial state into an mpl::list (Jonathan Turkanis)</font></li>
@@ -195,6 +186,12 @@ review):</p>
 	the code (Pavel Vozenilek, Augustus Saunders)</font></li>
     <li><font color="#FF0000">Implement a switch-like reaction (Simon Gittins, 
 	Darryl Green)</font></li>
+	<li>Investigate how a state machine could be serialized. A first glance at 
+    the serialization library revealed that there currently (late 2004) is no 
+    support for types that overload <code>operator new</code>. Such support 
+    would be essential for Boost.Statechart serialization since there doesn't 
+    seem to be any way to detect whether a state has an overloaded <code>
+    operator new</code> or not</li>
     <li>Add allocator support for broken std libs when the workaround is 
 	available in boost::detail</li>
     <li>Ensure that the library can be compiled with exception support turned 
@@ -239,6 +236,13 @@ review):</p>
 	when C++ RTTI is turned off</li>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
+<p>XX August, 2005</p>
+<ul>
+	<li>Added Jamfile.v2 files</li>
+    <li>Added <code>event_base</code> specializations to all reactions and 
+    updated the reference accordingly. This allows to implement reactions 
+    triggered by an event of any type</li>
+</ul>
 <p>19 June, 2005</p>
 <ul>
 	<li>Updated the documentation for the new reaction 
@@ -502,7 +506,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21128" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

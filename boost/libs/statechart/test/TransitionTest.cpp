@@ -325,6 +325,41 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
     };
 
 
+struct X1;
+struct TransitionEventBaseTest : sc::state_machine< TransitionEventBaseTest, X1 >
+{
+  public:
+    TransitionEventBaseTest() : actionCallCounter_( 0 ) {}
+
+    void Transit( const sc::event_base & eventBase )
+    {
+      BOOST_REQUIRE(
+        ( dynamic_cast< const B * >( &eventBase ) != 0 ) ||
+        ( dynamic_cast< const D * >( &eventBase ) != 0 ) );
+      ++actionCallCounter_;
+    }
+
+    unsigned int GetActionCallCounter()
+    {
+      return actionCallCounter_;
+    }
+
+  private:
+    unsigned int actionCallCounter_;
+};
+
+struct X2 : sc::simple_state< X2, TransitionEventBaseTest >
+{
+  typedef sc::transition< sc::event_base, X1,
+    TransitionEventBaseTest, &TransitionEventBaseTest::Transit > reactions;
+};
+
+struct X1 : sc::simple_state< X1, TransitionEventBaseTest >
+{
+  typedef sc::transition< sc::event_base, X2 > reactions;
+};
+
+
 int test_main( int, char* [] )
 {
   TransitionTest machine;
@@ -740,6 +775,23 @@ int test_main( int, char* [] )
   };
   machine.CompareToExpectedActionSequence( c1Throw2 );
   BOOST_REQUIRE( machine.terminated() );
+
+
+  TransitionEventBaseTest eventBaseMachine;
+  eventBaseMachine.initiate();
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  eventBaseMachine.process_event( A() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
+  BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 0 );
+  eventBaseMachine.process_event( B() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 1 );
+  eventBaseMachine.process_event( C() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
+  BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 1 );
+  eventBaseMachine.process_event( D() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 2 );
 
   return 0;
 }

@@ -23,6 +23,7 @@ namespace mpl = boost::mpl;
 struct E : sc::event< E > {};
 struct F : sc::event< F > {};
 struct G : sc::event< G > {};
+struct H : sc::event< H > {};
 
 struct A;
 struct InStateReactionTest :
@@ -39,7 +40,10 @@ struct A : sc::simple_state< A, InStateReactionTest, B >
     ++eventCount_;
   }
 
-  typedef sc::in_state_reaction< E, A, &A::IncrementCount< E > > reactions;
+  typedef mpl::list<
+    sc::in_state_reaction< E, A, &A::IncrementCount< E > >,
+    sc::in_state_reaction< sc::event_base, A, &A::IncrementCount< sc::event_base > >
+  > reactions;
 
   unsigned int eventCount_;
 };
@@ -82,6 +86,9 @@ int test_main( int, char* [] )
   BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 2 );
   machine.process_event( G() );
   BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 3 );
+  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 2 );
+  machine.process_event( H() );
+  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 4 );
   BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 2 );
 
   return 0;

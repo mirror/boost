@@ -99,13 +99,13 @@ struct B;
 struct A : sc::simple_state< A, CustomReactionTest, B >
 {
   typedef mpl::list<
-    sc::custom_reaction< EvTransit >,
-    sc::custom_reaction< EvTransitWithAction >,
-    sc::custom_reaction< EvDefer >,
-    sc::custom_reaction< EvTerminate >,
     sc::custom_reaction< EvDiscardNever >,
     sc::custom_reaction< EvDiscardInB >,
-    sc::custom_reaction< EvDiscardInD >
+    sc::custom_reaction< EvDiscardInD >,
+    sc::custom_reaction< EvDefer >,
+    sc::custom_reaction< EvTerminate >,
+    sc::custom_reaction< EvTransitWithAction >,
+    sc::custom_reaction< EvTransit >
   > reactions;
 
   sc::result react( const EvDiscardNever & )
@@ -132,16 +132,6 @@ struct A : sc::simple_state< A, CustomReactionTest, B >
   // DeferralTest and TerminationTest with appropriate reactions. Internally,
   // these reactions call exactly the same functions as the following custom
   // reactions call.
-  sc::result react( const EvTransit & )
-  {
-    return transit< A >();
-  }
-
-  sc::result react( const EvTransitWithAction & evt )
-  {
-    return transit< A >( &CustomReactionTest::TransitionAction, evt );
-  }
-
   sc::result react( const EvDefer & )
   {
     return defer_event();
@@ -150,6 +140,16 @@ struct A : sc::simple_state< A, CustomReactionTest, B >
   sc::result react( const EvTerminate & )
   {
     return terminate();
+  }
+
+  sc::result react( const EvTransit & )
+  {
+    return transit< A >();
+  }
+
+  sc::result react( const EvTransitWithAction & evt )
+  {
+    return transit< A >( &CustomReactionTest::TransitionAction, evt );
   }
 };
 
@@ -305,6 +305,39 @@ CustomReactionTest::CustomReactionTest()
   stateNamesMap_[ F::static_type() ] = "F";
 }
 
+
+struct X1;
+struct CustomReactionEventBaseTest : sc::state_machine< CustomReactionEventBaseTest, X1 >
+{
+  public:
+    CustomReactionEventBaseTest() : reactionCount_( 0 ) {}
+
+    void IncrementReactionCount()
+    {
+      ++reactionCount_;
+    }
+
+    unsigned int GetReactionCount()
+    {
+      return reactionCount_;
+    }
+
+  private:
+    unsigned int reactionCount_;
+};
+
+struct X1 : sc::simple_state< X1, CustomReactionEventBaseTest >
+{
+  typedef sc::custom_reaction< sc::event_base > reactions;
+
+  sc::result react( const sc::event_base & evt )
+  {
+    outermost_context().IncrementReactionCount();
+    return discard_event();
+  }
+};
+
+
 int test_main( int, char* [] )
 {
   CustomReactionTest machine;
@@ -332,6 +365,15 @@ int test_main( int, char* [] )
   machine.AssertVisitedAll( "BD" );
   machine.AssertVisitedOne( "EF" );
   machine.ClearVisited();
+
+
+  CustomReactionEventBaseTest eventBaseMachine;
+  eventBaseMachine.initiate();
+  BOOST_REQUIRE( eventBaseMachine.GetReactionCount() == 0 );
+  eventBaseMachine.process_event( EvToC() );
+  BOOST_REQUIRE( eventBaseMachine.GetReactionCount() == 1 );
+  eventBaseMachine.process_event( EvToD() );
+  BOOST_REQUIRE( eventBaseMachine.GetReactionCount() == 2 );
 
   return 0;
 }

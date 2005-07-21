@@ -39,6 +39,8 @@ struct no_context
 
 
 
+class event_base;
+
 //////////////////////////////////////////////////////////////////////////////
 template< class Event, class Destination,
           class TransitionContext = detail::no_context,
@@ -48,10 +50,47 @@ class transition
 {
   private:
     //////////////////////////////////////////////////////////////////////////
-    struct react_with_transition_action_impl
+    struct react_without_transition_action_impl
     {
       template< class State, class EventBase >
-      static detail::reaction_result react( State & stt, const EventBase & toEvent )
+      static detail::reaction_result react( State & stt, const EventBase & )
+      {
+        return detail::result_utility::get_result(
+          stt.template transit< Destination >() );
+      }
+    };
+
+    struct react_base_with_transition_action_impl
+    {
+      template< class State, class EventBase >
+      static detail::reaction_result react(
+        State & stt, const EventBase & toEvent )
+      {
+        return detail::result_utility::get_result(
+          stt.template transit< Destination >( pTransitionAction, toEvent ) );
+      }
+    };
+
+    struct react_base
+    {
+      template< class State, class EventBase, class IdType >
+      static detail::reaction_result react(
+        State & stt, const EventBase & evt, const IdType & )
+      {
+        typedef typename mpl::if_<
+          is_same< TransitionContext, detail::no_context >,
+          react_without_transition_action_impl,
+          react_base_with_transition_action_impl
+        >::type impl;
+        return impl::react( stt, evt );
+      }
+    };
+
+    struct react_derived_with_transition_action_impl
+    {
+      template< class State, class EventBase >
+      static detail::reaction_result react(
+        State & stt, const EventBase & toEvent )
       {
         return detail::result_utility::get_result(
           stt.template transit< Destination >(
@@ -60,13 +99,25 @@ class transition
       }
     };
 
-    struct react_without_transition_action_impl
+    struct react_derived
     {
-      template< class State, class EventBase >
-      static detail::reaction_result react( State & stt, const EventBase & )
+      template< class State, class EventBase, class IdType >
+      static detail::reaction_result react(
+        State & stt, const EventBase & evt, const IdType & eventType )
       {
-        return detail::result_utility::get_result(
-          stt.template transit< Destination >() );
+        if ( eventType == Event::static_type() )
+        {
+          typedef typename mpl::if_<
+            is_same< TransitionContext, detail::no_context >,
+            react_without_transition_action_impl,
+            react_derived_with_transition_action_impl
+          >::type impl;
+          return impl::react( stt, evt );
+        }
+        else
+        {
+          return detail::no_reaction;
+        }
       }
     };
 
@@ -79,19 +130,11 @@ class transition
     static detail::reaction_result react(
       State & stt, const EventBase & evt, const IdType & eventType )
     {
-      if ( eventType == Event::static_type() )
-      {
-        typedef typename mpl::if_<
-          is_same< TransitionContext, detail::no_context >,
-          react_without_transition_action_impl,
-          react_with_transition_action_impl
-        >::type impl;
-        return impl::react( stt, evt );
-      }
-      else
-      {
-        return detail::no_reaction;
-      }
+      typedef typename mpl::if_<
+        is_same< Event, event_base >, react_base, react_derived
+      >::type impl;
+
+      return impl::react( stt, evt, eventType );
     }
 };
 

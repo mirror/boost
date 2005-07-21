@@ -98,6 +98,30 @@ struct Active : sc::simple_state< Active, DeferralTest, Idle >
   };
 
 
+struct EvToX2 : sc::event< EvToX2 > {};
+struct EvToX3 : sc::event< EvToX3 > {};
+
+struct X1;
+struct DeferralEventBaseTest : sc::state_machine< DeferralEventBaseTest, X1 >
+{
+};
+
+struct X3 : sc::simple_state< X3, DeferralEventBaseTest > {};
+
+struct X2 : sc::simple_state< X2, DeferralEventBaseTest >
+{
+  typedef sc::transition< EvToX3, X3 > reactions;
+};
+
+struct X1 : sc::simple_state< X1, DeferralEventBaseTest >
+{
+  typedef mpl::list<
+    sc::transition< EvToX2, X2 >,
+    sc::deferral< sc::event_base >
+  > reactions;
+};
+
+
 int test_main( int, char* [] )
 {
   DeferralTest machine;
@@ -112,8 +136,7 @@ int test_main( int, char* [] )
   BOOST_REQUIRE( machine.ProcessedCount() == 1 );
   machine.process_event( *MakeIntrusive( new EvSwitch() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 1 );
-  // Deferral must work with heap-allocated and stack-allocated events
-  machine.process_event( EvLeafDeferred() );
+  machine.process_event( *MakeIntrusive( new EvLeafDeferred() ) );
   machine.process_event( *MakeIntrusive( new EvLeafDeferred() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 1 );
   machine.process_event( *MakeIntrusive( new EvSwitch() ) );
@@ -128,5 +151,22 @@ int test_main( int, char* [] )
   BOOST_REQUIRE( machine.ProcessedCount() == 3 );
   machine.process_event( *MakeIntrusive( new EvDestroy() ) );
   BOOST_REQUIRE( machine.ProcessedCount() == 5 );
+
+
+  DeferralEventBaseTest eventBaseMachine;
+  // state_cast sanity check
+  BOOST_CHECK_THROW( eventBaseMachine.state_cast< const X1 & >(), std::bad_cast );
+  eventBaseMachine.initiate();
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  // Deferral must work with heap-allocated and stack-allocated events
+  eventBaseMachine.process_event( EvToX3() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  eventBaseMachine.process_event( EvToX2() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X3 & >() );
+  eventBaseMachine.initiate();
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  eventBaseMachine.process_event( EvToX2() );
+  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
+
   return 0;
 }

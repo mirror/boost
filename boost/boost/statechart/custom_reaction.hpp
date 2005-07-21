@@ -22,7 +22,7 @@ namespace statechart
 
 
 class event_base;
-  
+
 //////////////////////////////////////////////////////////////////////////////
 template< class Event >
 class custom_reaction
@@ -45,6 +45,22 @@ class custom_reaction
       {
         return detail::no_reaction;
       }
+    }
+};
+
+template<>
+class custom_reaction< event_base >
+{
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    // The following declarations should be private.
+    // They are only public because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    template< class State, class EventBase, class IdType >
+    static detail::reaction_result react(
+      State & stt, const EventBase & evt, const IdType & )
+    {
+      return detail::result_utility::get_result( stt.react( evt ) );
     }
 };
 

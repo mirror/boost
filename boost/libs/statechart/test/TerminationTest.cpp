@@ -170,6 +170,16 @@ TerminationTest::TerminationTest()
 }
 
 
+struct X;
+struct TerminationEventBaseTest :
+  sc::state_machine< TerminationEventBaseTest, X > {};
+
+struct X : sc::simple_state< X, TerminationEventBaseTest >
+{
+  typedef sc::termination< sc::event_base > reactions;
+};
+
+
 int test_main( int, char* [] )
 {
   TerminationTest machine;
@@ -257,6 +267,17 @@ int test_main( int, char* [] )
   machine.AssertInState( "" );
   machine.terminate();
   machine.AssertInState( "" );
+
+
+  TerminationEventBaseTest eventBaseMachine;
+  eventBaseMachine.initiate();
+  BOOST_REQUIRE( !eventBaseMachine.terminated() );
+  eventBaseMachine.process_event( EvTerminateA() );
+  BOOST_REQUIRE( eventBaseMachine.terminated() );
+  eventBaseMachine.initiate();
+  BOOST_REQUIRE( !eventBaseMachine.terminated() );
+  eventBaseMachine.process_event( EvTerminateB() );
+  BOOST_REQUIRE( eventBaseMachine.terminated() );
 
   return 0;
 }
