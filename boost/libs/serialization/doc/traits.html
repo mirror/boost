@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -171,16 +171,22 @@ A corresponding macro is defined so that we can use:
 <pre><code>
 BOOST_CLASS_TRACKING(my_class, boost::serialization::track_never)
 </code></pre>
-The default value for primitive types is <code style="white-space: normal">track_never</code>.
-<p>
-The default value for all other types is <code style="white-space: normal">track_selectivly</code>.
-That is addresses of serialized objects are tracked if and only if
-one or more of the following is true:
+Default tracking traits are:
 <ul>
-<li>an object of this type is anywhere in the program serialized
-through a pointer.
-<li>the class is explicitly "exported" - see below.
-<li>the class is explicitly "registered" in the archive
+  <li>For primitive, <code style="white-space: normal">track_never</code>.
+  <li>For pointers, <code style="white-space: normal">track_never</code>.
+  That is, addresses of addresses are not tracked by default.
+  <li>All current serialization wrappers such as <code style="white-space: normal">boost::serialization::nvp</code>,
+  <code style="white-space: normal">track_never</code>.
+  <li>For all other types, <code style="white-space: normal">track_selectivly</code>.
+  That is addresses of serialized objects are tracked if and only if
+  one or more of the following is true:
+  <ul>
+  <li>an object of this type is anywhere in the program serialized
+  through a pointer.
+  <li>the class is explicitly "exported" - see below.
+  <li>the class is explicitly "registered" in the archive
+  </ul>
 </ul>
 
 <p>
