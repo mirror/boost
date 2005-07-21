@@ -276,35 +276,35 @@ struct save_non_pointer_type {
     };
 
     typedef 
-                BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            // if its primitive
-                mpl::equal_to<
-                    boost::serialization::implementation_level<T>,
-                    mpl::int_<boost::serialization::primitive_type>
-                >,
-                mpl::identity<save_primitive>,
-            // else
-            BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                                // class info / version
-                                mpl::greater_equal<
-                    boost::serialization::implementation_level<T>,
-                    mpl::int_<boost::serialization::object_class_info>
-                >,
-                                // do standard save
-                                mpl::identity<save_standard>,
-            // else
-            BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                   // no tracking
-                mpl::equal_to<
-                    boost::serialization::tracking_level<T>,
-                    mpl::int_<boost::serialization::track_never>
-                >,
-                // do a fast save
-                mpl::identity<save_only>,
-            // else
-                                // do a fast save only tracking is turned off
-                                mpl::identity<save_conditional>
-        > > >::type typex; 
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
+        // if its primitive
+            mpl::equal_to<
+                boost::serialization::implementation_level<T>,
+                mpl::int_<boost::serialization::primitive_type>
+            >,
+            mpl::identity<save_primitive>,
+        // else
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            // class info / version
+            mpl::greater_equal<
+                boost::serialization::implementation_level<T>,
+                mpl::int_<boost::serialization::object_class_info>
+            >,
+            // do standard save
+            mpl::identity<save_standard>,
+        // else
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                // no tracking
+            mpl::equal_to<
+                boost::serialization::tracking_level<T>,
+                mpl::int_<boost::serialization::track_never>
+            >,
+            // do a fast save
+            mpl::identity<save_only>,
+        // else
+            // do a fast save only tracking is turned off
+            mpl::identity<save_conditional>
+    > > >::type typex; 
 
     static void invoke(Archive & ar, const T & t){
         // check that we're not trying to serialize something that
@@ -557,6 +557,12 @@ struct check_tracking {
 
 template<class Archive, class T>
 inline void save(Archive & ar, T &t){
+    // if your program traps here, it indicates taht your doing one of the following:
+    // a) serializing an object of a type marked "track_never" through a pointer.
+    // b) saving an non-const object of a type not markd "track_never)
+    // Either of these conditions may be an indicator of an error usage of the
+    // serialization library and should be double checked.  See documentation on
+    // object tracking.
     BOOST_STATIC_ASSERT(check_tracking<T>::value);
         save(ar, const_cast<const T &>(t));
 }
