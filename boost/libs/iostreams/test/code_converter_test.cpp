@@ -154,7 +154,6 @@ test_string()
     for (intern_type c = 255; pattern.size() < pattern_length; --c)
         if (valid_char<Codecvt>(c))
             pattern += c;
-    std::cout << "last char = " << pattern[pattern.size() - 1] << "\n";
     result.reserve(pattern.size() * pattern_reps);
     for (int w = 0; w < pattern_reps; ++w)
         result += pattern;
