@@ -170,8 +170,7 @@ void bad()
 		<h3><a name="constructors">constructors</a></h3>
 		<pre>shared_ptr(); // never throws</pre>
 		<blockquote>
-			<p><b>Effects:</b> Constructs an <EM>empty</EM> <b>shared_ptr</b>. <EM>Empty</EM> <STRONG>
-					shared_ptr</STRONG> objects have an unspecified <A href="#use_count">use_count</A>.</p>
+			<p><b>Effects:</b> Constructs an <EM>empty</EM> <b>shared_ptr</b>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 0 &amp;&amp; get() == 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
