@@ -115,7 +115,7 @@ template&lt;class Archive, class T&gt;
 inline void serialize(
     Archive &amp; ar, 
     T &amp; t, 
-    const unsigned long int file_version
+    const unsigned int file_version
 ){
     // invoke member function for class T
     t.serialize(ar, file_version);
@@ -167,7 +167,7 @@ template&lt;class Archive&gt;
 inline void serialize(
     Archive &amp; ar, 
     my_class &amp; t, 
-    const unsigned long int file_version
+    const unsigned int file_version
 ){
     ...
 }
@@ -547,7 +547,7 @@ the overrides would be:
 namespace boost { namespace serialization {
 template&lt;class Archive&gt;
 inline void save_construct_data(
-    Archive &amp; ar, const my_class * t, const unsigned long int file_version
+    Archive &amp; ar, const my_class * t, const unsigned int file_version
 ){
     // save data required to construct instance
     ar &lt;&lt; t-&gt;member;
@@ -555,7 +555,7 @@ inline void save_construct_data(
 
 template&lt;class Archive&gt;
 inline void load_construct_data(
-    Archive &amp; ar, my_class * t, const unsigned long int file_version
+    Archive &amp; ar, my_class * t, const unsigned int file_version
 ){
     // retrieve data from archive required to construct new instance
     int m;
@@ -756,7 +756,7 @@ one is to invoke the base class serialization with <code style="white-space: nor
 and specify an empty function for the base class serialization.
 The alternative is to "register" the Base/Derived relationship
 explicitly by invoking the template 
-<code style="white-space: normal">void_cast_register&lt;Base, Derived&gt;();</code>.
+<code style="white-space: normal">void_cast_register&lt;Derived, Base&gt;();</code>.
 Note that this usage of the term "register" is not related
 to its usage in the previous section.  Here is an example of how this is done:
 <pre><code>
@@ -781,7 +781,7 @@ class derived : public base {
         // method 1 : invoke base class serialization
         boost::serialization::base_object&lt;base&gt;(*this);
         // method 2 : explicitly register base/derived relationship
-        boost::serialization::void_cast_register&lt;base, derived&gt;();
+        boost::serialization::void_cast_register&lt;derived, base&gt;();
     }
 };
 

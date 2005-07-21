@@ -67,6 +67,15 @@ at the front of the list of include paths.
     sure that it doesn't use the serializaton system in a way which may introduce subtle bugs in
     to the program.  A fuller explanation of this issue can be found
     <a target="detail" href="traits.html#tracking">here</a>.
+    <li>A new implementation of serialization for <code style="white-space: normal">shared_ptr&lt;T&gt;</code>.  This
+    is compatible with public interface of <code style="white-space: normal">shared_ptr&lt;T&gt;</code>
+    so it should be more robust and not have to change in the future.  The implementation optionally
+    includes code to load <code style="white-space: normal">shared_ptr&lt;T&gt;</code> stored in 
+    archives created with boost 1.32.  This code is stored in the header:
+    <code style="white-space: normal">boost/serialization/shared_ptr_132.hpp</code>. If your application
+    needs to load archives created with boost 1.32 libraries, include the above header
+    before each inclusion of <code style="white-space: normal">boost/serialization/shared_ptr.hpp</code>.
+    <li>More compilers tested and supported.
     <li>Miscelleanous bug fixes.
 </ul>
 
@@ -77,6 +86,10 @@ at the front of the list of include paths.
     eliminate redundancy in virtual base class serialization.
     <li>currently can't serialize through a pointer an object a of class
     that implements its own <code style="white-space: normal">new/delete</code> operators.
+    <li>Its possible that <code style="white-space: normal">std::string</code>
+    and <code style="white-space: normal">std::wstring</code> contain characters such as
+    '\0' which cannot be rendered in XML without an escape mechanism.  Currently there is 
+    no such escape mechanism implemented.
 </ul>
 <p>
 Aside from the above, there are a number of issus related to specific platforms.  

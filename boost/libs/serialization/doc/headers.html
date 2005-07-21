@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -29,9 +29,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 <dl class="page-index">
   <dt><a href="#userincludes">Files Included by User Programs</a>
   <dl class="page-index">
+    <dt><a href="#archiveimplementations">Archive Implementations</a>
     <dt><a href="#serializationdeclarations">Serialization Declarations</a>
     <dt><a href="#serializationimplementations">Serialization Implementations</a>
-    <dt><a href="#archiveimplementations">Archive Implementations</a>
   </dl>
   <dt><a href="#libraryimplementation">Files Which Implement the Library</a>
   <dl class="page-index">
@@ -59,6 +59,70 @@ is included with the following declaration
 <h3>Files Included by User Programs</h3>
 Using this library entails including headers listed in this section.
 It should not be necessary to explictly include any other header files.
+
+<a name="archiveimplementations">
+<h4>Archive Implementations</h4>
+These header files contain declarations used to save and restore data to each type
+of archive. Include the archives according to the facilities the code module requires.
+
+<dl>
+
+<dt><a target="archive_exception" href="../../../boost/archive/archive_exception.hpp">
+boost/archive/archive_exception.hpp
+</a>
+<dd>Exceptions which might be invoked by the library.</dd>
+
+<dt><a target="binary_iarchive" href="../../../boost/archive/binary_iarchive.hpp">
+boost/archive/binary_iarchive.hpp
+</a>
+<dd>native binary input archive used for loading.</dd>
+
+<dt><a target="binary_oarchive" href="../../../boost/archive/binary_oarchive.hpp">
+boost/archive/binary_oarchive.hpp
+</a>
+<dd>native binary output archive used for saving.</dd>
+
+<dt><a target="text_iarchive" href="../../../boost/archive/text_iarchive.hpp">
+boost/archive/text_iarchive.hpp
+</a>
+<dd>text input archive used for loading.</dd>
+
+<dt><a target="text_oarchive" href="../../../boost/archive/text_oarchive.hpp">
+boost/archive/text_oarchive.hpp
+</a>
+<dd>text output archive used for saving.</dd>
+
+<dt><a target="text_wiarchive" href="../../../boost/archive/text_wiarchive.hpp">
+boost/archive/text_wiarchive.hpp
+</a>
+<dd>wide character text input archive used forloading.</dd>
+
+<dt><a target="text_woarchive" href="../../../boost/archive/text_woarchive.hpp">
+boost/archive/text_woarchive.hpp
+</a>
+<dd>wide character text input archive used for saving.</dd>
+
+<dt><a target="xml_iarchive" href="../../../boost/archive/xml_iarchive.hpp">
+boost/archive/xml_iarchive.hpp
+</a>
+<dd>xml input archive used for loading.</dd>
+
+<dt><a target="text_oarchive" href="../../../boost/archive/xml_oarchive.hpp">
+boost/archive/xml_oarchive.hpp
+</a>
+<dd>xml output archive used for saving.</dd>
+
+<dt><a target="text_wiarchive" href="../../../boost/archive/xml_wiarchive.hpp">
+boost/archive/xml_wiarchive.hpp
+</a>
+<dd>wide character xml input archive used for loading.</dd>
+
+<dt><a target="text_woarchive" href="../../../boost/archive/xml_woarchive.hpp">
+boost/archive/xml_woarchive.hpp
+</a>
+<dd>wide character xml output archive used for saving.</dd>
+
+</dl>
 
 <a name="serializationdeclarations">
 <h4>Serialization Declarations</h4>
@@ -169,70 +233,6 @@ as templates for <code style="white-space: normal">boost::optional</code>,
 <code style="white-space: normal">boost::shared_ptr</code>, and 
 <code style="white-space: normal">boost::scoped_ptr</code>.  
 Presumably, this list will expand with the passage of time.
-
-<a name="archiveimplementations">
-<h4>Archive Implementations</h4>
-These header files contain declarations used to save and restore data to each type
-of archive. Include the archives according to the facilities the code module requires.
-
-<dl/>
-
-<dt><a target="archive_exception" href="../../../boost/archive/archive_exception.hpp">
-boost/archive/archive_exception.hpp
-</a>
-<dd>Exceptions which might be invoked by the library.</dd>
-
-<dt><a target="binary_iarchive" href="../../../boost/archive/binary_iarchive.hpp">
-boost/archive/binary_iarchive.hpp
-</a>
-<dd>native binary input archive used for loading.</dd>
-
-<dt><a target="binary_oarchive" href="../../../boost/archive/binary_oarchive.hpp">
-boost/archive/binary_oarchive.hpp
-</a>
-<dd>native binary output archive used for saving.</dd>
-
-<dt><a target="text_iarchive" href="../../../boost/archive/text_iarchive.hpp">
-boost/archive/text_iarchive.hpp
-</a>
-<dd>text input archive used for loading.</dd>
-
-<dt><a target="text_oarchive" href="../../../boost/archive/text_oarchive.hpp">
-boost/archive/text_oarchive.hpp
-</a>
-<dd>text output archive used for saving.</dd>
-
-<dt><a target="text_wiarchive" href="../../../boost/archive/text_wiarchive.hpp">
-boost/archive/text_wiarchive.hpp
-</a>
-<dd>wide character text input archive used forloading.</dd>
-
-<dt><a target="text_woarchive" href="../../../boost/archive/text_woarchive.hpp">
-boost/archive/text_woarchive.hpp
-</a>
-<dd>wide character text input archive used for saving.</dd>
-
-<dt><a target="xml_iarchive" href="../../../boost/archive/xml_iarchive.hpp">
-boost/archive/xml_iarchive.hpp
-</a>
-<dd>xml input archive used for loading.</dd>
-
-<dt><a target="text_oarchive" href="../../../boost/archive/xml_oarchive.hpp">
-boost/archive/xml_oarchive.hpp
-</a>
-<dd>xml output archive used for saving.</dd>
-
-<dt><a target="text_wiarchive" href="../../../boost/archive/xml_wiarchive.hpp">
-boost/archive/xml_wiarchive.hpp
-</a>
-<dd>wide character xml input archive used for loading.</dd>
-
-<dt><a target="text_woarchive" href="../../../boost/archive/xml_woarchive.hpp">
-boost/archive/xml_woarchive.hpp
-</a>
-<dd>wide character xml output archive used for saving.</dd>
-
-</dl>
 
 <a name="libraryimplementation">
 <h3>Files Which Implement the Library</h3>

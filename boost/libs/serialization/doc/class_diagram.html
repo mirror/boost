@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
 Use, modification and distribution is subject to the Boost Software
@@ -34,10 +34,10 @@ basic_iarchive <a href="../../../boost/archive/detail/basic_iarchive.hpp">-></a>
       |
       |      interface_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/interface_iarchive.hpp">-></a>
       |                     /
-      |                    /
-      |     ______________/
+      |                   /
+      |        _________/
+      |      /
       |    /
-      |   /
       |  /
 common_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/common_iarchive.hpp">-></a>
       |
@@ -46,18 +46,18 @@ common_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/comm
       |
       |
       |     <font color="blue">basic_text_iprimitive&lt;basic_istream&gt;</font> <a href="../../../boost/archive/basic_text_iprimitive.hpp">-></a>
+      |                    /
       |                  /
-      |                 /
-      |    ____________/                    interface_iarchive&lt;polymorphic_iarchive&gt; <a href="../../../boost/archive/detail/interface_iarchive.hpp">-></a>
-      |   /                                                      /
-      |  /                                                      /
-      | /                                                      /
+      |       _________/                  interface_iarchive&lt;polymorphic_iarchive&gt; <a href="../../../boost/archive/detail/interface_iarchive.hpp">-></a>
+      |     /                                                |
+      |   /                                                  |
+      | /                                                    |
 <font color="blue">text_iarchive_impl&lt;text_iarchive&gt;</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>                 <font color="red">polymorphic_iarchive</font> <a href="../../../boost/archive/polymorphic_iarchive.hpp">-></a>
-      | \                                                    /
-      |  \                                                  /
-      |   \_________________________________________       /
+      | \                                                    |
+      |   \                                                  |
+      |     \_____________________________________           |
+      |                                           \         /
       |                                             \     /
-      |                                              \   /
       |                                               \ /  
 <font color="red">text_iarchive</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>                 polymorphic_iarchive_impl&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt; <a href="../../../boost/archive/detail/polymorphic_iarchive_impl.hpp">-></a>
                                                        |

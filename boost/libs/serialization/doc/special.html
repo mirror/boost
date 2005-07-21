@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -26,6 +26,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="page-index">
+  <dt><a href="#headersequence">Header Inclusion Sequence</a>
   <dt><a href="#objecttracking">Object Tracking</a>
   <dt><a href="#classinfo">Class Information</a>
   <dt><a href="#portability">Archive Portability</a>
@@ -39,6 +40,16 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="exception_safety.html">Exception Safety</a>
 </dl>
 
+<h3><a name="headersequence">Header Inclusion Sequence</a></h3>
+This library is includes a large number of headers that can be included
+in user code modules.  The section
+<a href="headers.html">Code Structure</a>
+contains a summary of these headers.
+<strong>
+This library requires that all headers that implement archives be included
+before any headers that implement class serialization.
+</strong>
+Violations of this rule will result in cryptic compile time errors.
 
 <h3><a name="objecttracking">Object Tracking</a></h3>
 Depending on how the class is used and other factors, serialized objects
