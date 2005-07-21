@@ -17,11 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <boost/type_traits/detail/yes_no_type.hpp>
-#include <boost/type_traits/is_class.hpp>
-#include <boost/mpl/bool_fwd.hpp>
-
-#ifndef BOOST_TT_IS_ABSTRACT_CLASS_HPP
+#include <boost/mpl/bool.hpp>
 
 #ifndef BOOST_NO_IS_ABSTRACT
     #include <boost/type_traits/is_abstract.hpp>
@@ -33,19 +29,19 @@
     template<class T>
     struct is_abstract {
         typedef mpl::bool_<false> type;
-        BOOST_STATIC_CONSTANT(bool, value = is_abstract::type::value); 
+        BOOST_STATIC_CONSTANT(bool, value = false); 
     };
     } // namespace boost
 #endif
-#endif // BOOST_TT_IS_ABSTRACT_CLASS_HPP
 
 // define a macro to make explicit designation of this more transparent
-#define BOOST_IS_ABSTRACT(T)                   \
-namespace boost {                              \
-template<>                                     \
-struct is_abstract< T > {                      \
-    BOOST_STATIC_CONSTANT(bool, value = true); \
-};                                             \
+#define BOOST_IS_ABSTRACT(T)                          \
+namespace boost {                                     \
+template<>                                            \
+struct is_abstract< T > {                             \
+    typedef mpl::bool_<true> type;                    \
+    BOOST_STATIC_CONSTANT(bool, value = true);        \
+};                                                    \
 } // namespace boost
 /**/
 
