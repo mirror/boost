@@ -46,7 +46,7 @@ private:
 protected:
     const char * key;
     extended_type_info(const char * type_info_key_);
-    virtual ~extended_type_info();
+    virtual ~extended_type_info() = 0;
 public:
     void self_register();
     void key_register(const char *key);

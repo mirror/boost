@@ -64,11 +64,6 @@ private:
     // static one
     extended_type_info_no_rtti_1(){}
 public:
-    // Note: this version of extended_type_info
-    // relies on the key used for exporting data.  
-    // So we have to have the key when the instance is created and
-    // can't wait for it be exported as in other cases.
-//    static const char * type_key;
     static const boost::serialization::extended_type_info *
     get_derived_extended_type_info(const T & t){
         // find the type that corresponds to the most derived type.
