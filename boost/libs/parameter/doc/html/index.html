@@ -244,6 +244,9 @@ at all. -->
 sub {
   vertical-align: -20%
 }
+span.doublesize {
+  font-size: 200%
+}
 </style><hr class="docutils" />
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -306,7 +309,7 @@ arguments can be passed in any order.</p>
 <li><a class="reference" href="#controlling-overload-resolution" id="id35" name="id35">2.7&nbsp;&nbsp;&nbsp;Controlling Overload Resolution</a><ul class="auto-toc">
 <li><a class="reference" href="#updating-the-parameterspec" id="id36" name="id36">2.7.1&nbsp;&nbsp;&nbsp;Updating the <span class="interpreted">ParameterSpec</span></a></li>
 <li><a class="reference" href="#applying-sfinae-to-the-overload-set" id="id37" name="id37">2.7.2&nbsp;&nbsp;&nbsp;Applying SFINAE to the Overload Set</a></li>
-<li><a class="reference" href="#reducing-boilerplate-with-macros" id="id38" name="id38">2.7.3&nbsp;&nbsp;&nbsp;Reducing BoilerPlate With Macros</a></li>
+<li><a class="reference" href="#reducing-boilerplate-with-macros" id="id38" name="id38">2.7.3&nbsp;&nbsp;&nbsp;Reducing Boilerplate With Macros</a></li>
 </ul>
 </li>
 <li><a class="reference" href="#efficiency-issues" id="id39" name="id39">2.8&nbsp;&nbsp;&nbsp;Efficiency Issues</a><ul class="auto-toc">
@@ -449,12 +452,21 @@ namespace parameter = boost::parameter;
 <div class="section" id="the-abstract-interface-to-dfs">
 <h2><a class="toc-backref" href="#id22" name="the-abstract-interface-to-dfs">2.2&nbsp;&nbsp;&nbsp;The Abstract Interface to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt></a></h2>
 <p>The Graph library's <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> algorithm is a generic function accepting
-from one to four arguments by reference, as shown in the table
-below:</p>
-<!-- RS - - Seeing the function described via table is harder to
-grasp.  I suggest showing the function signature first, but omit
-the defaults for clarity.  That will provide parameter names, in
-context, which will make the connection to the table simpler. -->
+from one to four arguments by reference.  If all arguments were
+required, its signature might be as follows:</p>
+<pre class="literal-block">
+template &lt;
+    class Graph, class DFSVisitor, class Index, class ColorMap
+&gt;
+void depth_first_search(
+  , Graph const&amp; graph 
+  , DFSVisitor visitor
+  , typename graph_traits&lt;g&gt;::vertex_descriptor root_vertex
+  , IndexMap index_map
+  , ColorMap&amp; color);
+</pre>
+<p>However, most of the parameters have a useful default value, as
+shown in the table below.</p>
 <a class="target" id="parameter-table" name="parameter-table"></a><a class="target" id="default-expressions" name="default-expressions"></a><table border="1" class="docutils">
 <caption><tt class="docutils literal"><span class="pre">depth_first_search</span></tt> Parameters</caption>
 <colgroup>
@@ -843,9 +855,7 @@ namespace graphs
   {
      core::depth_first_search(dfs_params()(a0,a1));
   }
-
-                    ⋮
-
+                    <span class="doublesize">⋮</span>
   template &lt;class A0, class A1, …class A4&gt;
   void depth_first_search(A0 const&amp; a0, A1 const&amp; a1, …A4 const&amp; a4)
   {
@@ -858,21 +868,23 @@ from one to five arguments passed positionally or via keyword.</p>
 </div>
 <div class="section" id="out-parameters">
 <h3><a class="toc-backref" href="#id33" name="out-parameters">2.6.3&nbsp;&nbsp;&nbsp;“Out” Parameters</a></h3>
-<p>Well, that's not <em>quite</em> it.  The overload set above works fine
-when <tt class="docutils literal"><span class="pre">color_map</span></tt> is passed by keyword, but it breaks down when it
-is passed positionally.  As you may recall from the
-<tt class="docutils literal"><span class="pre">depth_first_search</span></tt> <a class="reference" href="#parameter-table">parameter table</a>, <tt class="docutils literal"><span class="pre">color_map</span></tt> is an
-“out” parameter.  That means the five-argument
-<tt class="docutils literal"><span class="pre">depth_first_search</span></tt> overload should really take its final
-argument by non-<tt class="docutils literal"><span class="pre">const</span></tt> reference.  On the other hand, when
-passing arguments by keyword, the keyword object's assignment
-operator yields a temporary <span class="interpreted">ArgumentPack</span> object, and
-a conforming C++ compiler will refuse to bind a non-<tt class="docutils literal"><span class="pre">const</span></tt>
-reference to a temporary.  To support an interface in which the
-last argument is passed by keyword, there must be a
-<tt class="docutils literal"><span class="pre">depth_first_search</span></tt> overload taking its argument by <tt class="docutils literal"><span class="pre">const</span></tt>
-reference.  The simplest solution in this case is to add another
-overload:</p>
+<p>Well, that's not <em>quite</em> it.  When passing arguments by keyword,
+the keyword object's assignment operator yields a temporary
+<span class="interpreted">ArgumentPack</span> object.  A conforming C++ compiler will refuse to
+bind a non-<tt class="docutils literal"><span class="pre">const</span></tt> reference to a temporary, so to support a
+keyword interface for all arguments, the overload set above <em>must</em>
+take its arguments by <tt class="docutils literal"><span class="pre">const</span></tt> reference.  On the other hand—as
+you may recall from the <a class="reference" href="#parameter-table">parameter table</a>—``color_map`` is an
+“out” parameter, so it really should be passed by <em>non-</em><tt class="docutils literal"><span class="pre">const</span></tt>
+reference.</p>
+<p>A keyword object has a pair of <tt class="docutils literal"><span class="pre">operator=</span></tt> overloads that ensure
+we can pass anything by name, but when an “out” parameter is passed
+positionally, that's no help: in this case,
+<tt class="docutils literal"><span class="pre">core::depth_first_search</span></tt> would end up with a <tt class="docutils literal"><span class="pre">const</span></tt> reference
+to the <tt class="docutils literal"><span class="pre">color_map</span></tt> and compilation will fail when mutating
+operations are used on it.  The simple solution is to add another
+overload that takes a non-<tt class="docutils literal"><span class="pre">const</span></tt> reference in the position of
+the “out” parameter:</p>
 <pre class="literal-block">
 template &lt;class A0, class A1, …class A4&gt;
 void depth_first_search(A0 <strong>const&amp;</strong> a0, A1 <strong>const&amp;</strong> a1, …A4<strong>&amp;</strong> a4)
@@ -880,10 +892,10 @@ void depth_first_search(A0 <strong>const&amp;</strong> a0, A1 <strong>const&amp;
     core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
 }
 </pre>
-<p>That works nicely, but only because there is only one “out”
-parameter and it is in the last position.  If <tt class="docutils literal"><span class="pre">color_map</span></tt> had
-been the first parameter, we would have needed <em>ten</em> overloads.  In
-the worst case—where the function has five “out” parameters—2<sup>5</sup> or 32 overloads would be required.  This “<a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm">forwarding
+<p>That approach works nicely, but only because there is only one
+“out” parameter and it is in the last position.  If <tt class="docutils literal"><span class="pre">color_map</span></tt>
+had been the first parameter, we would have needed <em>ten</em> overloads.
+In the worst case—where the function has five “out” parameters—2<sup>5</sup> or 32 overloads would be required.  This “<a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm">forwarding
 problem</a>” is well-known to generic library authors, and the C++
 standard committee is working on a <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html">proposal</a> to address it.</p>
 <p>If it is impractical for you to write the overloads that would be
@@ -925,7 +937,7 @@ address this problem and others, for an upcoming release of Boost.</p>
 <p>The parameters of our templated forwarding functions are completely
 general; in fact, they're a perfect match for any argument type
 whatsoever.  The problems with exposing such general function
-templates have been the subject of much discussion; especially in
+templates have been the subject of much discussion, especially in
 the presence of <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#225">unqualified calls</a>.  Probably the safest thing
 to do is to isolate the forwarding functions in a namespace
 containing no types<a class="footnote-reference" href="#using" id="id9" name="id9"><sup>5</sup></a>, but often we'd <em>like</em> our functions
@@ -1001,9 +1013,7 @@ namespace graphs
   {
      core::depth_first_search(<strong>p</strong>(a0,a1));
   }
-
-                    ⋮
-
+                    <span class="doublesize">⋮</span>
   template &lt;class A0, class A1, …class A4&gt;
   void depth_first_search(
       A0 const&amp; a0, A1 const&amp; a1, …A4 const&amp; A4
@@ -1021,13 +1031,14 @@ adds these extra function parameters for you (Borland users see
 this <a class="reference" href="#default-arguments-unsupported-on-nested-templates">note</a>).</p>
 </div>
 <div class="section" id="reducing-boilerplate-with-macros">
-<h3><a class="toc-backref" href="#id38" name="reducing-boilerplate-with-macros">2.7.3&nbsp;&nbsp;&nbsp;Reducing BoilerPlate With Macros</a></h3>
+<h3><a class="toc-backref" href="#id38" name="reducing-boilerplate-with-macros">2.7.3&nbsp;&nbsp;&nbsp;Reducing Boilerplate With Macros</a></h3>
 <p>The library provides a macro you can use to eliminate some of the
 repetetiveness of the declaring the optional parameters.
 <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_MATCH</span></tt> takes three arguments: the
 <span class="interpreted">ParameterSpec</span>, a <a class="reference" href="http://boost-consulting.com/mplbook/preprocessor.html#sequences">Boost.Preprocessor sequence</a> of the function
 argument types, and a name for the defaulted function parameter
-(<tt class="docutils literal"><span class="pre">p</span></tt>, above).  So we could shorten the overload set definition as
+(<tt class="docutils literal"><span class="pre">p</span></tt>, above), and it generates the appropriate defaulted
+argument.  So we could shorten the overload set definition as
 follows:</p>
 <pre class="literal-block">
 namespace graphs
@@ -1047,9 +1058,7 @@ namespace graphs
   {
      core::depth_first_search(p(a0,a1));
   }
-
-                    ⋮
-
+                    <span class="doublesize">⋮</span>
   template &lt;class A0, class A1, …class A4&gt;
   void depth_first_search(
       A0 const&amp; a0, A1 const&amp; a1, …A4 const&amp; A4
@@ -1398,7 +1407,7 @@ information on SFINAE.</td></tr>
 </div>
 <hr class="docutils footer" />
 <div class="footer">
-Generated on: 2005-07-19 18:42 UTC.
+Generated on: 2005-07-21 21:20 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

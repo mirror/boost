@@ -17,6 +17,9 @@ __ ../../../../index.htm
   sub {
     vertical-align: -20%
   }
+  span.doublesize {
+    font-size: 200%
+  }
   </style>
 
 -------------------------------------
@@ -51,6 +54,9 @@ __ ../../../../index.htm
 
 .. role:: concept
    :class: interpreted
+
+.. role:: large
+   :class: doublesize
 
 .. section-numbering::
 
@@ -194,13 +200,21 @@ The Abstract Interface to |dfs|
 ===============================
 
 The Graph library's |dfs| algorithm is a generic function accepting
-from one to four arguments by reference, as shown in the table
-below:
+from one to four arguments by reference.  If all arguments were
+required, its signature might be as follows::
 
-.. RS -- Seeing the function described via table is harder to
-   grasp.  I suggest showing the function signature first, but omit
-   the defaults for clarity.  That will provide parameter names, in
-   context, which will make the connection to the table simpler.
+   template <
+       class Graph, class DFSVisitor, class Index, class ColorMap
+   >
+   void depth_first_search(
+     , Graph const& graph 
+     , DFSVisitor visitor
+     , typename graph_traits<g>::vertex_descriptor root_vertex
+     , IndexMap index_map
+     , ColorMap& color);
+
+However, most of the parameters have a useful default value, as
+shown in the table below.
 
 .. _`parameter table`: 
 .. _`default expressions`: 
@@ -609,7 +623,9 @@ templates that can be called with anywhere from one to five
 arguments.  These *forwarding functions* will invoke an instance of
 ``dfs_params`` as a function object, passing their parameters
 to its ``operator()`` and forwarding the result on to
-``core::depth_first_search``::
+``core::depth_first_search``:
+
+.. parsed-literal::
 
   namespace graphs
   {
@@ -624,9 +640,7 @@ to its ``operator()`` and forwarding the result on to
     {
        core::depth_first_search(dfs_params()(a0,a1));
     }
-
-                      ⋮
-
+                      :large:`⋮`
     template <class A0, class A1, …class A4>
     void depth_first_search(A0 const& a0, A1 const& a1, …A4 const& a4)
     {
@@ -640,21 +654,24 @@ from one to five arguments passed positionally or via keyword.
 “Out” Parameters
 ----------------
 
-Well, that's not *quite* it.  The overload set above works fine
-when ``color_map`` is passed by keyword, but it breaks down when it
-is passed positionally.  As you may recall from the
-``depth_first_search`` `parameter table`_, ``color_map`` is an
-“out” parameter.  That means the five-argument
-``depth_first_search`` overload should really take its final
-argument by non-``const`` reference.  On the other hand, when
-passing arguments by keyword, the keyword object's assignment
-operator yields a temporary |ArgumentPack| object, and
-a conforming C++ compiler will refuse to bind a non-``const``
-reference to a temporary.  To support an interface in which the
-last argument is passed by keyword, there must be a
-``depth_first_search`` overload taking its argument by ``const``
-reference.  The simplest solution in this case is to add another
-overload:
+Well, that's not *quite* it.  When passing arguments by keyword,
+the keyword object's assignment operator yields a temporary
+|ArgumentPack| object.  A conforming C++ compiler will refuse to
+bind a non-``const`` reference to a temporary, so to support a
+keyword interface for all arguments, the overload set above *must*
+take its arguments by ``const`` reference.  On the other hand—as
+you may recall from the `parameter table`_\ —``color_map`` is an
+“out” parameter, so it really should be passed by *non-*\ ``const``
+reference.  
+
+A keyword object has a pair of ``operator=`` overloads that ensure
+we can pass anything by name, but when an “out” parameter is passed
+positionally, that's no help: in this case,
+``core::depth_first_search`` would end up with a ``const`` reference
+to the ``color_map`` and compilation will fail when mutating
+operations are used on it.  The simple solution is to add another
+overload that takes a non-``const`` reference in the position of
+the “out” parameter:
 
 .. parsed-literal::
 
@@ -664,10 +681,10 @@ overload:
        core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
    }
 
-That works nicely, but only because there is only one “out”
-parameter and it is in the last position.  If ``color_map`` had
-been the first parameter, we would have needed *ten* overloads.  In
-the worst case—where the function has five “out” parameters—2\
+That approach works nicely, but only because there is only one
+“out” parameter and it is in the last position.  If ``color_map``
+had been the first parameter, we would have needed *ten* overloads.
+In the worst case—where the function has five “out” parameters—2\
 :sup:`5` or 32 overloads would be required.  This “\ `forwarding
 problem`_\ ” is well-known to generic library authors, and the C++
 standard committee is working on a proposal__ to address it.
@@ -722,7 +739,7 @@ Controlling Overload Resolution
 The parameters of our templated forwarding functions are completely
 general; in fact, they're a perfect match for any argument type
 whatsoever.  The problems with exposing such general function
-templates have been the subject of much discussion; especially in
+templates have been the subject of much discussion, especially in
 the presence of `unqualified calls`__.  Probably the safest thing
 to do is to isolate the forwarding functions in a namespace
 containing no types [#using]_, but often we'd *like* our functions
@@ -811,9 +828,7 @@ Now we add a special defaulted argument to each of our
     {
        core::depth_first_search(**p**\ (a0,a1));
     }
-
-                      ⋮
-
+                      :large:`⋮`
     template <class A0, class A1, …class A4>
     void depth_first_search(
         A0 const& a0, A1 const& a1, …A4 const& A4
@@ -835,7 +850,7 @@ this note__).
 
 __ `Default Arguments Unsupported on Nested Templates`_
 
-Reducing BoilerPlate With Macros
+Reducing Boilerplate With Macros
 --------------------------------
 
 The library provides a macro you can use to eliminate some of the
@@ -843,7 +858,8 @@ repetetiveness of the declaring the optional parameters.
 ``BOOST_PARAMETER_MATCH`` takes three arguments: the
 |ParameterSpec|, a `Boost.Preprocessor sequence`__ of the function
 argument types, and a name for the defaulted function parameter
-(``p``, above).  So we could shorten the overload set definition as
+(``p``, above), and it generates the appropriate defaulted
+argument.  So we could shorten the overload set definition as
 follows:
 
 __ http://boost-consulting.com/mplbook/preprocessor.html#sequences
@@ -867,9 +883,7 @@ __ http://boost-consulting.com/mplbook/preprocessor.html#sequences
     {
        core::depth_first_search(p(a0,a1));
     }
-
-                      ⋮
-
+                      :large:`⋮`
     template <class A0, class A1, …class A4>
     void depth_first_search(
         A0 const& a0, A1 const& a1, …A4 const& A4
