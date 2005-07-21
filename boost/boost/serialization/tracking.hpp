@@ -40,12 +40,16 @@ struct tracking_level {
     struct traits_class_tracking {
         typedef BOOST_DEDUCED_TYPENAME U::tracking type;
     };
-    
     typedef mpl::integral_c_tag tag;
     typedef
         BOOST_DEDUCED_TYPENAME mpl::eval_if<
             is_base_and_derived<basic_traits, T>,
             traits_class_tracking<T>,
+        //else
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            is_pointer<T>,
+            // pointers are not tracked by default
+            mpl::int_<track_never>,
         //else
         BOOST_DEDUCED_TYPENAME mpl::eval_if<
             // for primitives
@@ -57,8 +61,7 @@ struct tracking_level {
             mpl::int_<track_never>,
             // otherwise its selective
             mpl::int_<track_selectivly>
-            >
-        >::type type;
+    >  > >::type type;
     BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
 };
 
