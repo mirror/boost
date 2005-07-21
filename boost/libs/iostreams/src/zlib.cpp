@@ -148,13 +148,16 @@ void zlib_base::do_init
 {
     calculate_crc_ = p.calculate_crc;
     z_stream* s = static_cast<z_stream*>(stream_);
-    #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        s->zalloc = alloc;
-        s->zfree = free;
-    #else
+
+    // Current interface for customizing memory management 
+    // is non-conforming and has been disabled:
+    //#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    //    s->zalloc = alloc;
+    //    s->zfree = free;
+    //#else
         s->zalloc = 0;
         s->zfree = 0;
-    #endif
+    //#endif
     s->opaque = derived;
     int window_bits = p.noheader? -p.window_bits : p.window_bits;
     zlib_error::check(

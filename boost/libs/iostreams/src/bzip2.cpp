@@ -120,13 +120,16 @@ void bzip2_base::do_init
       void* derived )
 {
     bz_stream* s = static_cast<bz_stream*>(stream_);
-    #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        s->bzalloc = alloc;
-        s->bzfree = free;
-    #else
+
+    // Current interface for customizing memory management 
+    // is non-conforming and has been disabled:
+    //#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    //    s->bzalloc = alloc;
+    //    s->bzfree = free;
+    //#else
         s->bzalloc = 0;
         s->bzfree = 0;
-    #endif
+    //#endif
     s->opaque = derived;
     bzip2_error::check( 
         compress ?
