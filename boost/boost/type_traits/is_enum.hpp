@@ -105,6 +105,10 @@ template <typename T> struct is_enum_impl
 #if defined(__GNUC__)
 
 #ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
+    
+   // We MUST check for is_class_or_union on conforming compilers in
+   // order to correctly deduce that noncopyable types are not enums
+   // (dwa 2002/04/15)...
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
@@ -114,6 +118,8 @@ template <typename T> struct is_enum_impl
          , is_array<T>::value
       >::value));
 #else
+   // ...however, not checking is_class_or_union on non-conforming
+   // compilers prevents a dependency recursion.
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
@@ -123,16 +129,16 @@ template <typename T> struct is_enum_impl
       >::value));
 #endif // BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 
-#else
+#else // !defined(__GNUC__):
+    
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
          , ::boost::is_reference<T>::value
          , is_class_or_union<T>::value
          , is_array<T>::value
-       // However, not doing this on non-conforming compilers prevents
-       // a dependency recursion.
       >::value));
+    
 #endif
 
 #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
