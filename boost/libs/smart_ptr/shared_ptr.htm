@@ -248,9 +248,8 @@ template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never 
 		</blockquote>
 		<pre>template&lt;class Y&gt; explicit shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A>&lt;Y&gt; const &amp; r);</pre>
 		<blockquote>
-			<p><b>Effects:</b> If <b>r</b> is <EM>empty</EM>, constructs an <EM>empty</EM> <b>shared_ptr</b>; 
-				otherwise, constructs a <b>shared_ptr</b> that <EM>shares ownership</EM> with <b>r</b>
-				and stores a copy of the pointer stored in <STRONG>r</STRONG>.</p>
+			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>shares ownership</EM> with
+				<b>r</b> and stores a copy of the pointer stored in <STRONG>r</STRONG>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == r.use_count()</code>.</p>
 			<p><b>Throws:</b> <b>bad_weak_ptr</b> when <code>r.use_count() == 0</code>.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
