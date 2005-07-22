@@ -173,31 +173,38 @@
 <h2><a name="Reactions">Reactions</a></h2>
 <h3><a name="Guard">Guard</a></h3>
 <ul>
-  <li>A guard can be implemented with <code>
+  <li>A guard can be implemented with a selection statement in a <code>
   <a href="reference.html#Class template custom_reaction">custom_reaction&lt;&gt;</a></code>;
   <a href="tutorial.html#Guards">example</a></li>
 </ul>
 <h3><a name="Transition">Transition</a></h3>
 <ul>
-  <li>A transition is defined with either <code>
+  <li>A transition can be defined with either a <code>
   <a href="reference.html#Class template transition">transition&lt;&gt;</a></code> 
-  or <code><a href="reference.html#transit1">simple_state&lt;&gt;::transit&lt;&gt;</a></code>;
+  or a call to <code><a href="reference.html#transit1">simple_state&lt;&gt;::transit&lt;&gt;</a></code> 
+  in a <code><a href="reference.html#Class template custom_reaction">
+  custom_reaction&lt;&gt;</a></code>;
   <a href="tutorial.html#Adding reactions">example</a></li>
 </ul>
 <h3><a name="Deferral">Deferral</a></h3>
 <ul>
-  <li>A deferral reaction is defined with either <code>
+  <li>A deferral reaction can be defined with either a <code>
   <a href="reference.html#Class template deferral">deferral&lt;&gt;</a></code> or
-  <code><a href="reference.html#defer_event">simple_state&lt;&gt;::defer_event()</a></code>;
+  a call to
+  <code><a href="reference.html#defer_event">simple_state&lt;&gt;::defer_event()</a></code> 
+  in a <code><a href="reference.html#Class template custom_reaction">
+  custom_reaction&lt;&gt;</a></code>;
   <a href="tutorial.html#Deferring events">example</a></li>
 </ul>
 <h3><a name="Internal transition (in-state reaction)">Internal transition 
 (in-state reaction)</a></h3>
 <ul>
-  <li>In-state reactions are not directly supported (there is no separate 
-  reaction) but they can be implemented with <code>
-  <a href="reference.html#Class template custom_reaction">custom_reaction&lt;&gt;</a></code>;
-  <a href="tutorial.html#In-state reactions">example</a></li>
+  <li>An in-state reaction can be defined with either a <code>
+  <a href="reference.html#Class template in_state_reaction">
+  in_state_reaction&lt;&gt;</a></code> or a call to
+  <a href="reference.html#discard_event"><code>simple_state&lt;&gt;::discard_event()</code></a> 
+  in a <code><a href="reference.html#Class template custom_reaction">
+  custom_reaction&lt;&gt;</a></code></li>
 </ul>
 <h2><a name="Actions">Actions</a></h2>
 <h3><a name="Entry action">Entry action</a></h3>
@@ -226,7 +233,7 @@
 </ul>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->23 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21132" -->
 </p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
