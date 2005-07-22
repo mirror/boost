@@ -317,7 +317,7 @@ struct CustomReactionEventBaseTest : sc::state_machine< CustomReactionEventBaseT
       ++reactionCount_;
     }
 
-    unsigned int GetReactionCount()
+    unsigned int GetReactionCount() const
     {
       return reactionCount_;
     }
