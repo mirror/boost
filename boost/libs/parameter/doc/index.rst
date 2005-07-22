@@ -27,10 +27,10 @@ __ ../../../../index.htm
 
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
-:organization:  `Boost Consulting`_
-:date:          $Date: 2005/07/18 20:34:31 $
+:Organization:  `Boost Consulting`_
+:Date:          $Date: 2005/07/18 20:34:31 $
 
-:copyright:     Copyright David Abrahams, Daniel Wallin
+:Copyright:     Copyright David Abrahams, Daniel Wallin
                 2005. Distributed under the Boost Software License,
                 Version 1.0. (See accompanying file LICENSE_1_0.txt
                 or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -640,7 +640,7 @@ to its ``operator()`` and forwarding the result on to
     {
        core::depth_first_search(dfs_params()(a0,a1));
     }
-                      :large:`⋮`
+       :large:`⋮`
     template <class A0, class A1, …class A4>
     void depth_first_search(A0 const& a0, A1 const& a1, …A4 const& a4)
     {
@@ -660,18 +660,28 @@ the keyword object's assignment operator yields a temporary
 bind a non-``const`` reference to a temporary, so to support a
 keyword interface for all arguments, the overload set above *must*
 take its arguments by ``const`` reference.  On the other hand—as
-you may recall from the `parameter table`_\ —``color_map`` is an
+you may recall from the `parameter table`_\ —\ ``color_map`` is an
 “out” parameter, so it really should be passed by *non-*\ ``const``
 reference.  
 
 A keyword object has a pair of ``operator=`` overloads that ensure
-we can pass anything by name, but when an “out” parameter is passed
-positionally, that's no help: in this case,
-``core::depth_first_search`` would end up with a ``const`` reference
-to the ``color_map`` and compilation will fail when mutating
-operations are used on it.  The simple solution is to add another
-overload that takes a non-``const`` reference in the position of
-the “out” parameter:
+we can pass anything—temporary or not, ``const`` or not—by name,
+while preserving the mutability of non-temporaries:
+
+.. parsed-literal::
+
+  template <class A>                  // handles non-const, 
+  |ArgumentPack| operator=(A&);       // non-temporary objects
+
+  template <class A>                  // handles const objects
+  |ArgumentPack| operator=(A const&); // and temporaries
+
+However, when an “out” parameter is passed positionally, there's no
+keyword object involved.  With our ``depth_first_search`` overload
+set above, the ``color_map`` will be passed by ``const`` reference,
+and compilation will fail when mutating operations are used on it.
+The simple solution is to add another overload that takes a
+non-``const`` reference in the position of the “out” parameter:
 
 .. parsed-literal::
 
@@ -681,23 +691,27 @@ the “out” parameter:
        core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
    }
 
-That approach works nicely, but only because there is only one
-“out” parameter and it is in the last position.  If ``color_map``
-had been the first parameter, we would have needed *ten* overloads.
-In the worst case—where the function has five “out” parameters—2\
+That approach works nicely because there is only one “out”
+parameter and it is in the last position.  If ``color_map`` had
+been the first parameter, we would have needed *ten* overloads.  In
+the worst case—where the function has five “out” parameters—2\
 :sup:`5` or 32 overloads would be required.  This “\ `forwarding
 problem`_\ ” is well-known to generic library authors, and the C++
-standard committee is working on a proposal__ to address it.
+standard committee is working on a proposal__ to address it.  In
+the meantime, you might consider using `Boost.Preprocessor`_ to
+generate the overloads you need.
 
 .. _`forwarding problem`: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm
 
 __ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html
 
-If it is impractical for you to write the overloads that would be
-required for positional “out” arguments to be passed directly, you
-still have the option to ask users to pass them through |ref|_,
-which will ensure that the algorithm implementation sees a
-non-``const`` reference:
+.. _`Boost.Preprocessor`: ../../../preprocessor
+
+If it is impractical for you to generate or write the overloads
+that would be required for positional “out” arguments to be passed
+directly, you still have the option to ask users to pass them
+through |ref|_, which will ensure that the algorithm implementation
+sees a non-``const`` reference:
 
 .. parsed-literal::
 
@@ -828,7 +842,7 @@ Now we add a special defaulted argument to each of our
     {
        core::depth_first_search(**p**\ (a0,a1));
     }
-                      :large:`⋮`
+       :large:`⋮`
     template <class A0, class A1, …class A4>
     void depth_first_search(
         A0 const& a0, A1 const& a1, …A4 const& A4
@@ -883,7 +897,7 @@ __ http://boost-consulting.com/mplbook/preprocessor.html#sequences
     {
        core::depth_first_search(p(a0,a1));
     }
-                      :large:`⋮`
+       :large:`⋮`
     template <class A0, class A1, …class A4>
     void depth_first_search(
         A0 const& a0, A1 const& a1, …A4 const& A4

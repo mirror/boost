@@ -256,11 +256,11 @@ span.doublesize {
 </tr>
 <tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:dalwan01&#64;student.umu.se">dalwan01&#64;student.umu.se</a></td>
 </tr>
-<tr class="field"><th class="field-name">organization:</th><td class="field-body"><a class="reference" href="http://www.boost-consulting.com">Boost Consulting</a></td>
+<tr class="field"><th class="field-name">Organization:</th><td class="field-body"><a class="reference" href="http://www.boost-consulting.com">Boost Consulting</a></td>
 </tr>
-<tr class="field"><th class="field-name">date:</th><td class="field-body">$Date: 2005/07/18 20:34:31 $</td>
+<tr class="field"><th class="field-name">Date:</th><td class="field-body">$Date: 2005/07/18 20:34:31 $</td>
 </tr>
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin
 2005. Distributed under the Boost Software License,
 Version 1.0. (See accompanying file LICENSE_1_0.txt
 or copy at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</td>
@@ -855,7 +855,7 @@ namespace graphs
   {
      core::depth_first_search(dfs_params()(a0,a1));
   }
-                    <span class="doublesize">⋮</span>
+     <span class="doublesize">⋮</span>
   template &lt;class A0, class A1, …class A4&gt;
   void depth_first_search(A0 const&amp; a0, A1 const&amp; a1, …A4 const&amp; a4)
   {
@@ -874,17 +874,25 @@ the keyword object's assignment operator yields a temporary
 bind a non-<tt class="docutils literal"><span class="pre">const</span></tt> reference to a temporary, so to support a
 keyword interface for all arguments, the overload set above <em>must</em>
 take its arguments by <tt class="docutils literal"><span class="pre">const</span></tt> reference.  On the other hand—as
-you may recall from the <a class="reference" href="#parameter-table">parameter table</a>—``color_map`` is an
+you may recall from the <a class="reference" href="#parameter-table">parameter table</a>—<tt class="docutils literal"><span class="pre">color_map</span></tt> is an
 “out” parameter, so it really should be passed by <em>non-</em><tt class="docutils literal"><span class="pre">const</span></tt>
 reference.</p>
 <p>A keyword object has a pair of <tt class="docutils literal"><span class="pre">operator=</span></tt> overloads that ensure
-we can pass anything by name, but when an “out” parameter is passed
-positionally, that's no help: in this case,
-<tt class="docutils literal"><span class="pre">core::depth_first_search</span></tt> would end up with a <tt class="docutils literal"><span class="pre">const</span></tt> reference
-to the <tt class="docutils literal"><span class="pre">color_map</span></tt> and compilation will fail when mutating
-operations are used on it.  The simple solution is to add another
-overload that takes a non-<tt class="docutils literal"><span class="pre">const</span></tt> reference in the position of
-the “out” parameter:</p>
+we can pass anything—temporary or not, <tt class="docutils literal"><span class="pre">const</span></tt> or not—by name,
+while preserving the mutability of non-temporaries:</p>
+<pre class="literal-block">
+template &lt;class A&gt;                  // handles non-const, 
+<span class="interpreted">ArgumentPack</span> operator=(A&amp;);       // non-temporary objects
+
+template &lt;class A&gt;                  // handles const objects
+<span class="interpreted">ArgumentPack</span> operator=(A const&amp;); // and temporaries
+</pre>
+<p>However, when an “out” parameter is passed positionally, there's no
+keyword object involved.  With our <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> overload
+set above, the <tt class="docutils literal"><span class="pre">color_map</span></tt> will be passed by <tt class="docutils literal"><span class="pre">const</span></tt> reference,
+and compilation will fail when mutating operations are used on it.
+The simple solution is to add another overload that takes a
+non-<tt class="docutils literal"><span class="pre">const</span></tt> reference in the position of the “out” parameter:</p>
 <pre class="literal-block">
 template &lt;class A0, class A1, …class A4&gt;
 void depth_first_search(A0 <strong>const&amp;</strong> a0, A1 <strong>const&amp;</strong> a1, …A4<strong>&amp;</strong> a4)
@@ -892,17 +900,19 @@ void depth_first_search(A0 <strong>const&amp;</strong> a0, A1 <strong>const&amp;
     core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
 }
 </pre>
-<p>That approach works nicely, but only because there is only one
-“out” parameter and it is in the last position.  If <tt class="docutils literal"><span class="pre">color_map</span></tt>
-had been the first parameter, we would have needed <em>ten</em> overloads.
-In the worst case—where the function has five “out” parameters—2<sup>5</sup> or 32 overloads would be required.  This “<a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm">forwarding
+<p>That approach works nicely because there is only one “out”
+parameter and it is in the last position.  If <tt class="docutils literal"><span class="pre">color_map</span></tt> had
+been the first parameter, we would have needed <em>ten</em> overloads.  In
+the worst case—where the function has five “out” parameters—2<sup>5</sup> or 32 overloads would be required.  This “<a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm">forwarding
 problem</a>” is well-known to generic library authors, and the C++
-standard committee is working on a <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html">proposal</a> to address it.</p>
-<p>If it is impractical for you to write the overloads that would be
-required for positional “out” arguments to be passed directly, you
-still have the option to ask users to pass them through <a class="reference" href="http://www.boost.org/doc/html/reference_wrapper.html"><tt class="docutils literal"><span class="pre">boost::ref</span></tt></a>,
-which will ensure that the algorithm implementation sees a
-non-<tt class="docutils literal"><span class="pre">const</span></tt> reference:</p>
+standard committee is working on a <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html">proposal</a> to address it.  In
+the meantime, you might consider using <a class="reference" href="../../../preprocessor">Boost.Preprocessor</a> to
+generate the overloads you need.</p>
+<p>If it is impractical for you to generate or write the overloads
+that would be required for positional “out” arguments to be passed
+directly, you still have the option to ask users to pass them
+through <a class="reference" href="http://www.boost.org/doc/html/reference_wrapper.html"><tt class="docutils literal"><span class="pre">boost::ref</span></tt></a>, which will ensure that the algorithm implementation
+sees a non-<tt class="docutils literal"><span class="pre">const</span></tt> reference:</p>
 <pre class="literal-block">
 depth_first_search(g, v, s, i, <strong>boost::ref(c)</strong>);
 </pre>
@@ -1013,7 +1023,7 @@ namespace graphs
   {
      core::depth_first_search(<strong>p</strong>(a0,a1));
   }
-                    <span class="doublesize">⋮</span>
+     <span class="doublesize">⋮</span>
   template &lt;class A0, class A1, …class A4&gt;
   void depth_first_search(
       A0 const&amp; a0, A1 const&amp; a1, …A4 const&amp; A4
@@ -1058,7 +1068,7 @@ namespace graphs
   {
      core::depth_first_search(p(a0,a1));
   }
-                    <span class="doublesize">⋮</span>
+     <span class="doublesize">⋮</span>
   template &lt;class A0, class A1, …class A4&gt;
   void depth_first_search(
       A0 const&amp; a0, A1 const&amp; a1, …A4 const&amp; A4
@@ -1407,7 +1417,7 @@ information on SFINAE.</td></tr>
 </div>
 <hr class="docutils footer" />
 <div class="footer">
-Generated on: 2005-07-21 21:20 UTC.
+Generated on: 2005-07-22 15:47 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
