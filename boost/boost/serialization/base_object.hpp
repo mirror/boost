@@ -40,9 +40,11 @@
 #if ! defined(BOOST_ARCHIVE_BASIC_ARCHIVE_HPP)
     namespace boost {
     namespace serialization {
+    namespace void_cast_detail{
     class void_caster;
+    } // namespace void_cast_detail
     template<class Derived, class Base>
-    void void_cast_register(
+    const void_cast_detail::void_caster & void_cast_register(
         const Derived * /* dnull = NULL */, 
         const Base * /* bnull = NULL */
     );
