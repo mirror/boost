@@ -297,6 +297,8 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 		example\Jamfile = example\Jamfile
 		test\Jamfile = test\Jamfile
+		example\Jamfile.v2 = example\Jamfile.v2
+		test\Jamfile.v2 = test\Jamfile.v2
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
