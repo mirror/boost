@@ -302,6 +302,7 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile-fail test_const_load_fail3_nvp.cpp : std::locale-support ]
 
         # should compile
+        [ compile test_inclusion.cpp ]
         [ compile test_traits_pass.cpp : std::locale-support ]
         [ compile test_const_pass.cpp : std::locale-support ]
     ;
