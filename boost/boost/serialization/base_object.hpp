@@ -68,43 +68,44 @@ namespace detail {
                 );
             }
         };
-        template<class B, class D>
+
+        // hold a reference to the void_cast_register and void_caster in the hope of 
+        // ensuring code instantiation for some compilers with over-zealous link time 
+        // optimiser. The compiler that demanded this was CW
         struct reg{
+            const void_cast_detail::void_caster & (* m_vcr)(
+                const Derived *,
+                const Base *
+            );
             static const void_cast_detail::void_caster &  invoke(){
-                return void_cast_register<const D, const B>(
-                    static_cast<const D *>(NULL),
-                    static_cast<const B *>(NULL)
+                return void_cast_register<const Derived, const Base>(
+                    static_cast<const Derived *>(NULL),
+                    static_cast<const Base *>(NULL)
                 );
             }
-        };
+            reg() :
+                m_vcr(void_cast_register<const Derived, const Base>)
+            {}
+        } m_reg;
 
-        // hold a reference to the void_caster in the hope of ensuring code
-        // instantiation for some compilers with over-zealous link time optimiser
-        // The compiler that demanded this was CW
+        static const void_cast_detail::void_caster & invoke(){
+            typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
+                mpl::identity<reg>,
+                mpl::identity<nothing>
+            >::type typex;
+            return typex::invoke();
+        }
+
         const void_cast_detail::void_caster & m_vc;
         Derived & m_d;
 
-        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
-            mpl::identity<reg<Base, Derived> >,
-            mpl::identity<nothing>
-        >::type typex;
-
         base_register(Derived & d) :
-            m_vc(typex::invoke()),
+            m_vc(invoke()),
             m_d(d)
         {}
         Base & get_base() const {
             return m_d;
-        }
-
-        static void invoke(){
-            typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
-                mpl::identity<reg<Base, Derived> >,
-                mpl::identity<nothing>
-            >::type typex;
-            typex::invoke();
         }
     };
     // get the base type for a given derived type
@@ -123,7 +124,7 @@ namespace detail {
 } // namespace detail
 
 // metrowerks CodeWarrior
-#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205)) 
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206)) 
 template<class Base, class Derived>
 BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
 base_object(Derived &d)
