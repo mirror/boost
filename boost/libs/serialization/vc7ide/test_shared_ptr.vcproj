@@ -21,7 +21,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=text_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -1695,9 +1695,12 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\test_shared_ptr.cpp">
-              </File>
+		<File
+			RelativePath="..\..\..\boost\serialization\shared_ptr.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_shared_ptr.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

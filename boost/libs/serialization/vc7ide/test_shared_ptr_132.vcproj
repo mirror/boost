@@ -1702,6 +1702,9 @@
 			RelativePath="..\..\..\boost\serialization\shared_ptr.hpp">
 		</File>
 		<File
+			RelativePath="..\..\..\boost\serialization\detail\shared_ptr_132.hpp">
+		</File>
+		<File
 			RelativePath="..\..\..\boost\serialization\shared_ptr_132.hpp">
 		</File>
 		<File
