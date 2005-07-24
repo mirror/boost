@@ -23,6 +23,9 @@
     The class boost::gregorian::date_period provides direct representation for ranges between two dates. Periods provide the ability to simplify some types of calculations by simplifying the conditional logic of the program. For example, testing if a date is within an irregular schedule such as a weekend or holiday can be accomplished using collections of date periods. This is facilitated by several methods that allow evaluation if a date_period intersects with another date period, and to generate the period resulting from the intersection. The <link linkend="date_time.examples.date_period_calc">date period calculation example</link> provides an example of this.
   </para>
   <para>
+    A period that is created with beginning and end points being equal, or with a duration of zero, is known as a zero length period. Zero length periods are considered invalid (it is perfectly legal to construct an invalid period). For these periods, the <code>last</code> point will always be one unit less that the <code>begin</code> point.
+  </para>
+  <para>
     Date periods used in combination with infinity values have the ability to represent complex concepts such as 'until further notice'. 
   </para>
 
@@ -50,7 +53,7 @@ or
       <tbody>
         <row>
 	  <entry valign="top" morerows="1"><screen>date_period(date, date)</screen></entry>
-	  <entry>Create a period as [begin, end). If last is &lt;= begin then the period will be defined as null.</entry>
+	  <entry>Create a period as [begin, end). If end is &lt;= begin then the period will be invalid.</entry>
 	</row>
 	<row>
           <entry><screen>date_period dp(date(2002,Jan,10),
@@ -59,7 +62,7 @@ or
 
 	<row>
 	  <entry valign="top" morerows="1"><screen>date_period(date, days)</screen></entry>
-	  <entry>Create a period as [begin, begin+len). If len is &lt;= zero then the period will be defined as null.</entry>
+	  <entry>Create a period as [begin, begin+len) where end point would be begin+len. If len is &lt;= zero then the period will be defined as invalid.</entry>
 	</row>
 	<row>
           <entry><screen>date_period dp(date(2002,Jan,10),
@@ -138,7 +141,7 @@ dp.length() --> 2</screen>
         
 	<row>
 	  <entry valign="top" morerows="1"><screen>bool is_null()</screen></entry>
-	  <entry>True if period is not well formed. eg: start less than end</entry>
+	  <entry>True if period is not well formed. eg: end less than or equal to begin.</entry>
 	</row>
 	<row>
           <entry><screen>date_period dp(date(2002,Jan,10),
@@ -149,12 +152,14 @@ dp.begin() --> true</screen>
         
 	<row>
 	  <entry valign="top" morerows="1"><screen>bool contains(date)</screen></entry>
-	  <entry>True if date is within the period</entry>
+	  <entry>True if date is within the period. Zero length periods cannot contain any points</entry>
 	</row>
 	<row>
-          <entry><screen>date_period dp(date(2002,Jan,1),
-               date(2002,Jan,10));
-dp.contains(date(2002,Jan,2));// true</screen>
+          <entry><screen>date d(2002,Jan,1);
+date_period dp(d, date(2002,Jan,10));
+dp.contains(date(2002,Jan,2));// true
+date_period dp2(d, d);
+dp.contains(date(2002,Jan,1));// false</screen>
 	  </entry>
         </row>
         
@@ -251,7 +256,7 @@ dp2.merge(dp1)
         
 	<row>
 	  <entry valign="top" morerows="1"><screen>date_period span(date_period)</screen></entry>
-	  <entry>Combines two periods and any gap between them such that start = min(p1.start, p2.start) and end = max(p1.end , p2.end)</entry>
+	  <entry>Combines two periods and any gap between them such that begin = min(p1.begin, p2.begin) and end = max(p1.end , p2.end)</entry>
 	</row>
 	<row>
           <entry><screen>
@@ -265,7 +270,7 @@ dp2.span(dp1); // 2002-Jan-01/2002-Jan-31</screen>
         
         <row>
 	  <entry valign="top" morerows="1"><screen>date_period shift(days)</screen></entry>
-	  <entry>Add duration to both start and end.</entry>
+	  <entry>Add duration to both begin and end.</entry>
 	</row>
 	<row>
           <entry><screen>date_period dp1(date(2002,Jan,1),

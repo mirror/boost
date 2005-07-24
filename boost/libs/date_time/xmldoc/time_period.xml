@@ -23,6 +23,9 @@
     The class boost::posix_time::time_period provides direct representation for ranges between two times. Periods provide the ability to simplify some types of calculations by simplifying the conditional logic of the program. 
   </para>
   <para>
+    A period that is created with beginning and end points being equal, or with a duration of zero, is known as a zero length period. Zero length periods are considered invalid (it is perfectly legal to construct an invalid period). For these periods, the <code>last</code> point will always be one unit less that the <code>begin</code> point.
+  </para>
+  <para>
     The <link linkend="date_time.examples.time_periods">time periods example</link> provides an example of using time periods. 
   </para>
 
@@ -52,7 +55,7 @@ or
           <row>
             <entry valign="top" morerows="1"><screen>time_period(ptime,
             ptime)</screen></entry>
-	    <entry> Create a period as [begin, end). If last is &lt;= begin then the period will be defined as null.</entry>
+	    <entry> Create a period as [begin, end). If end is &lt;= begin then the period will be defined as invalid.</entry>
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,01);
@@ -64,7 +67,7 @@ time_period tp(t, hours(3));</screen>
 	  <row>
             <entry valign="top" morerows="1"><screen>time_period(ptime, 
             time_duration)</screen></entry>
-	    <entry> Create a period as [begin, begin+len). If len is &lt;= zero then the period will be defined as null.</entry>
+	    <entry> Create a period as [begin, begin+len) where end would be begin+len. If len is &lt;= zero then the period will be defined as invalid.</entry>
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,01);
@@ -155,22 +158,30 @@ tp.length() --> 1 hour</screen>
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>bool is_null()</screen></entry>
-	    <entry>True if period is not well formed. eg: start less than end</entry>
+	    <entry>True if period is not well formed. eg: end is less than or equal to begin.</entry>
 	  </row>
 	  <row>
-	    <entry></entry>
+            <entry><screen>date d(2002,Jan,01);
+ptime t1(d, hours(12)); // noon on Jan 1st
+ptime t2(d, hours(9)); // 9am on Jan 1st
+time_period tp(t1, t2);
+tp.is_null(); // true</screen>
+            </entry>
           </row>
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>bool contains(ptime)</screen></entry>
-	    <entry>True if ptime is within the period</entry>
+	    <entry>True if ptime is within the period. Zero length periods cannot contain any points.</entry>
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,01);
 ptime t1(d, seconds(10)); //10 sec after midnight
 ptime t2(d, hours(10)); //10 hours after midnight
 ptime t3(d, hours(2)); //2 hours after midnight
-time_period tp(t1, t2); tp.contains(t3) --> true</screen>
+time_period tp(t1, t2); 
+tp.contains(t3); // true
+time_period tp2(t1, t1);
+tp2.contains(t1); // false</screen>
 	    </entry>
           </row>
           
@@ -219,7 +230,7 @@ tp2.intersects(tp1); // --> true</screen>
           
 	  <row>
 	    <entry valign="top" morerows="1"><screen>time_period span(time_period)</screen></entry>
-	    <entry>Combines two periods and any gap between them such that start = min(p1.start, p2.start) and end = max(p1.end , p2.end).</entry>
+	    <entry>Combines two periods and any gap between them such that begin = min(p1.begin, p2.begin) and end = max(p1.end , p2.end).</entry>
 	  </row>
 	  <row>
 	    <entry></entry>
@@ -227,7 +238,7 @@ tp2.intersects(tp1); // --> true</screen>
           
           <row>
 	    <entry valign="top" morerows="1"><screen>time_period shift(days)</screen></entry>
-	    <entry>Add duration to both start and end.</entry>
+	    <entry>Add duration to both begin and end.</entry>
 	  </row>
 	  <row>
 	    <entry></entry>

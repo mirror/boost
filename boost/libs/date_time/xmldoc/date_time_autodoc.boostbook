@@ -3,7 +3,7 @@
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
-<!-- date source directory processed: 2005-Jun-27 -->
+<!-- date source directory processed: 2005-Jul-24 -->
 <section id="date_time_reference">
 <title>Date Time Reference</title>
   <header name="boost/date_time/adjust_functors.hpp">
@@ -5694,10 +5694,10 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <purpose>Provides generalized period type useful in date-time systems. </purpose>
           <description>
             <para>This template uses a class to represent a time point within the period and another class to represent a duration. As a result, this class is not appropriate for use when the number and duration representation are the same (eg: in the regular number domain).</para>
-            <para>A period can be specified by providing either the starting point and a duration or the starting point and the end point( end is NOT part of the period but 1 unit past it. A period will be "invalid" if either start_point &gt;= end_point or the given duration is &lt; 0. Any valid period will return false for is_null().</para>
-            <para>Zero length periods are considered valid. In this case the start point is exactly 1 unit less than the end point, in other words start is equal to last.</para>
-            <para>In the case that the begin and last are the same, the period has a length of zero units. For example, suppose this is a period of days. That is, each time-point represents a single day. If the start and the last is the same day then the period is zero length.</para>
-            <para>The best way to handle periods is usually to provide a start point and a duration. So, day1 + 7 days is a week period which includes all of the first day and 6 more days (eg: Sun to Sat). </para>
+            <para>A period can be specified by providing either the begining point and a duration or the begining point and the end point( end is NOT part of the period but 1 unit past it. A period will be "invalid" if either end_point &lt;= begin_point or the given duration is &lt;= 0. Any valid period will return false for is_null().</para>
+            <para>Zero length periods are also considered invalid. Zero length periods are periods where the begining and end points are the same, or, the given duration is zero. For a zero length period, the last point will be one unit less than the begining point.</para>
+            <para>In the case that the begin and last are the same, the period has a length of one unit.</para>
+            <para>The best way to handle periods is usually to provide a begining point and a duration. So, day1 + 7 days is a week period which includes all of the first day and 6 more days (eg: Sun to Sat). </para>
           </description>
           <typedef name="point_type">
             <type>point_rep</type>
@@ -5724,7 +5724,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
             <method name="is_null" cv="const">
               <type>bool</type>
-              <purpose>True if period is ill formed (length less than zero). </purpose>
+              <purpose>True if period is ill formed (length is zero or less). </purpose>
             </method>
             <method name="operator==" cv="const">
               <type>bool</type>
@@ -5752,7 +5752,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <parameter name="point">
                 <paramtype>const point_rep &amp;</paramtype>
               </parameter>
-              <purpose>True if the point is inside the period. </purpose>
+              <purpose>True if the point is inside the period, zero length periods contain no points. </purpose>
             </method>
             <method name="contains" cv="const">
               <type>bool</type>
@@ -5846,7 +5846,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </parameter>
             <purpose>create a period as [begin, begin+len) </purpose>
             <description>
-              <para>If len is &lt; 0 then the period will be invalid </para>
+              <para>If len is &lt;= 0 then the period will be invalid </para>
             </description>
           </constructor>
         </class>
@@ -7176,7 +7176,19 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <data-member name="posix_zone_string_format" specifiers="static">
             <type>const char_type</type>
           </data-member>
+          <data-member name="duration_sign_negative_only" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="duration_sign_always" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
           <data-member name="duration_seperator" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="negative_sign" specifiers="static">
+            <type>const char_type</type>
+          </data-member>
+          <data-member name="positive_sign" specifiers="static">
             <type>const char_type</type>
           </data-member>
           <data-member name="iso_time_format_specifier" specifiers="static">
@@ -7328,6 +7340,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <paramtype>::size_t</paramtype>
               <default>0</default>
             </parameter>
+            <purpose>Construct the facet with an explicitly specified format. </purpose>
           </constructor>
           <data-member name="fractional_seconds_format" specifiers="static">
             <type>const char_type *</type>
@@ -7362,6 +7375,18 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <data-member name="duration_seperator" specifiers="static">
             <type>const char_type *</type>
           </data-member>
+          <data-member name="duration_sign_always" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="duration_sign_negative_only" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="negative_sign" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
+          <data-member name="positive_sign" specifiers="static">
+            <type>const char_type *</type>
+          </data-member>
           <data-member name="iso_time_format_specifier" specifiers="static">
             <type>const char_type *</type>
           </data-member>
@@ -7386,15 +7411,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
               <parameter name="null_when_zero">
                 <paramtype>bool</paramtype>
               </parameter>
-            </method>
-          </method-group>
-          <method-group name="private member functions">
-            <method name="set_duration_seperator_from_facet" cv="">
-              <type>void</type>
-              <purpose>Use the std facet to figure out the seperator. </purpose>
-              <description>
-                <para>Simple algorithm here -- print as X time and search for non-numeric character. This is assumed to be seperator. Would be better if the standard facet was enhanced. </para>
-              </description>
             </method>
           </method-group>
         </class>
@@ -7464,6 +7480,12 @@ The logic is as follows. Starting with UTC time use the offset to create a label
                 <paramtype>const char_type *const</paramtype>
               </parameter>
               <purpose>Set the format for time_duration. </purpose>
+            </method>
+            <method name="set_iso_format" cv="">
+              <type>virtual void</type>
+            </method>
+            <method name="set_iso_extended_format" cv="">
+              <type>virtual void</type>
             </method>
             <method name="get" cv="const">
               <type>InItrT</type>
@@ -7925,7 +7947,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <parameter name="s">
             <paramtype>const std::string &amp;</paramtype>
           </parameter>
-          <purpose>Parse time duration part of an iso time of form: [-]hhmmss (eg: 120259 is 12 hours 2 min 59 seconds). </purpose>
+          <purpose>Parse time duration part of an iso time of form: [-]hhmmss[.fff...] (eg: 120259.123 is 12 hours, 2 min, 59 seconds, 123000 microseconds). </purpose>
         </function>
         <function name="parse_iso_time">
           <type>time_type</type>
