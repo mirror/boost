@@ -62,9 +62,9 @@ namespace detail {
     template<class Base, class Derived>
     struct base_register{
         struct nothing {
-            static const void_cast_detail::void_caster & invoke(){
+            static const void_cast_detail::void_caster * invoke(){
                 return static_cast<const void_cast_detail::void_caster &>(
-                    * static_cast<const void_cast_detail::void_caster *>(NULL)
+                    static_cast<const void_cast_detail::void_caster *>(NULL)
                 );
             }
         };
@@ -77,8 +77,8 @@ namespace detail {
                 const Derived *,
                 const Base *
             );
-            static const void_cast_detail::void_caster &  invoke(){
-                return void_cast_register<const Derived, const Base>(
+            static const void_cast_detail::void_caster * invoke(){
+                return  & void_cast_register<const Derived, const Base>(
                     static_cast<const Derived *>(NULL),
                     static_cast<const Base *>(NULL)
                 );
@@ -94,7 +94,7 @@ namespace detail {
                 mpl::identity<reg>,
                 mpl::identity<nothing>
             >::type typex;
-            return typex::invoke();
+            return * typex::invoke();
         }
 
         const void_cast_detail::void_caster & m_vc;
