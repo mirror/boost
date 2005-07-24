@@ -145,7 +145,7 @@ struct TransitionTest : sc::state_machine< TransitionTest, S0 >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
-    TransitionTest() : pThrowAction_( 0 ) {}
+    TransitionTest() : pThrowAction_( 0 ), unconsumedEventCount_( 0 ) {}
 
     ~TransitionTest()
     {
@@ -227,6 +227,16 @@ struct TransitionTest : sc::state_machine< TransitionTest, S0 >
       StoreActualAction< &::Trans< Context, Event > >();
     }
 
+    void unconsumed_event( const sc::event_base & )
+    {
+      ++unconsumedEventCount_;
+    }
+
+    unsigned int GetUnconsumedEventCount() const
+    {
+      return unconsumedEventCount_;
+    }
+
   private:
     //////////////////////////////////////////////////////////////////////////
     template< ActionPtr pAction >
@@ -246,6 +256,7 @@ struct TransitionTest : sc::state_machine< TransitionTest, S0 >
     ActionPtr pThrowAction_;
     ActionDescriptionSequence actualSequence_;
     ActionDescriptionSequence expectedSequence_;
+    unsigned int unconsumedEventCount_;
 };
 
 struct S1;
@@ -339,7 +350,7 @@ struct TransitionEventBaseTest : sc::state_machine< TransitionEventBaseTest, X1 
       ++actionCallCounter_;
     }
 
-    unsigned int GetActionCallCounter()
+    unsigned int GetActionCallCounter() const
     {
       return actionCallCounter_;
     }
@@ -517,7 +528,9 @@ int test_main( int, char* [] )
   };
   machine.CompareToExpectedActionSequence( h2 );
 
+  BOOST_REQUIRE( machine.GetUnconsumedEventCount() == 0 );
   machine.process_event( A() );
+  BOOST_REQUIRE( machine.GetUnconsumedEventCount() == 1 );
   ActionArray a2 =
   {
   };
@@ -775,6 +788,7 @@ int test_main( int, char* [] )
   };
   machine.CompareToExpectedActionSequence( c1Throw2 );
   BOOST_REQUIRE( machine.terminated() );
+  BOOST_REQUIRE( machine.GetUnconsumedEventCount() == 1 );
 
 
   TransitionEventBaseTest eventBaseMachine;

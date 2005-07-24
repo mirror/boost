@@ -504,6 +504,9 @@ namespace statechart
       state_iterator <a href="#state_begin">state_begin</a>() const;
       state_iterator <a href="#state_end">state_end</a>() const;
 
+      // see <a href="#process_event">process_event</a>() effects, point 10
+      void unconsumed_event( const event_base &amp; ) {}
+
     protected:
       <a href="#state_machine">state_machine</a>();
       <a href="#~state_machine">~state_machine</a>();
@@ -720,15 +723,22 @@ library itself but only in code supplied through template parameters:</p>
   continues with step 3</li>
   <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
   equal to the one of <code>simple_state&lt;&gt;::defer_event()</code> then the 
-  return value of <code>currentEvent.<a href="#intrusive_from_this">intrusive_from_this</a>()</code> is stored in a state-specific queue. Continues with step 10</li>
+  return value of <code>currentEvent.<a href="#intrusive_from_this">intrusive_from_this</a>()</code> 
+  is stored in a state-specific queue. Continues with step 11</li>
   <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
-  equal to the one of <code>simple_state&lt;&gt;::discard_event()</code> then continues with 
-  step 10</li>
+  equal to the one of <code>simple_state&lt;&gt;::discard_event()</code> then 
+  continues with step 11</li>
+  <li>Calls <code>static_cast&lt; MostDerived * &gt;( this )-&gt;unconsumed_event( 
+  currentEvent )</code>. If <code>unconsumed_event()</code> throws an 
+  exception, the exception is propagated to the caller. Such an exception 
+  never leads to the destruction of any states (in contrast to exceptions propagated 
+  from <code>ExceptionTranslator::operator()()</code>)</li>
   <li>If the posted events queue is non-empty then dequeues the first event, 
 	selects it as <code>currentEvent</code> and continues with step 2. Returns to the 
   caller otherwise</li>
 </ol>
 <p><b>Throws</b>: Any exceptions propagated from <code>
+MostDerived::unconsumed_event()</code> or <code>
 ExceptionTranslator::operator()</code>. Exceptions never originate in the 
 library itself but only in code supplied through template parameters:</p>
 <ul>
@@ -738,6 +748,8 @@ library itself but only in code supplied through template parameters:</p>
   <li><code>react</code> member functions</li>
 	<li><code>exit</code> member functions</li>
   <li>transition-actions</li>
+  <li> <code>
+MostDerived::unconsumed_event()</code></li>
 </ul>
 <h3>Class template <code>state_machine</code> observer functions</h3>
 <pre>bool <a name="terminated">terminated</a>() const;</pre>
@@ -848,6 +860,8 @@ namespace statechart
     class Allocator = std::allocator&lt; void &gt;,
     class ExceptionTranslator = null_exception_translator &gt;
   class asynchronous_state_machine :
+    public state_machine&lt;
+      MostDerived, InitialState, Allocator, ExceptionTranslator &gt;,
     public event_processor&lt; Scheduler &gt;
   {
     protected:
@@ -1430,6 +1444,7 @@ namespace statechart
       template&lt; class CustomId &gt;
       static void <a href="#custom_static_type_ptr( const CustomId * )">custom_static_type_ptr</a>( const CustomId * );
 
+      // see <a href="#transit1">transit</a>() or <a href="#simple_state::terminate">terminate</a>() effects
       void exit() {}
 
     protected:
@@ -1528,8 +1543,9 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
 	The process of exiting a state consists of the following steps:<ol>
   <li>If there is an exception pending that has not yet been handled 
 	successfully then only step 5 is executed</li>
-	<li>If present then the user-supplied <code>exit</code> member function is 
-	called. If <code>exit</code> throws then steps 3 and 4 are not executed</li>
+	<li>Calls the <code>exit</code> member function (see
+    <a href="#Class template simple_state">synopsis</a>) of the most-derived 
+    state object. If <code>exit()</code> throws then steps 3 and 4 are not executed</li>
 	<li>If the state has shallow history then shallow history information is 
 	saved</li>
 	<li>If the state is an innermost state then deep history information is 
@@ -1588,13 +1604,14 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
 	The process of exiting a state consists of the following steps:<ol>
   <li>If there is an exception pending that has not yet been handled 
 	successfully then only step 5 is executed</li>
-  <li>If present then the user-supplied <code>exit</code> member function is 
-	called. If <code>exit</code> throws then steps 3 and 4 are not executed</li>
+  <li>Calls the <code>exit</code> member function (see
+  <a href="#Class template simple_state">synopsis</a>) of the most-derived 
+  state object. If <code>exit()</code> throws then steps 3 and 4 are not executed</li>
 	<li>If the state has shallow history then shallow history information is 
 	saved</li>
-	<li>If the state is an innermost state then deep history information is 
+  <li>If the state is an innermost state then deep history information is 
 	saved for all direct and indirect outer states that have deep history</li>
-	<li>The state object is destructed</li>
+  <li>The state object is destructed</li>
 </ol>
 	</li>
   <li>Executes the passed transition action, forwarding the passed event</li>
@@ -1643,8 +1660,9 @@ The process of exiting a state consists of the following steps:</p>
 <ol>
   <li>If there is an exception pending that has not yet been handled 
 	successfully then only step 5 is executed</li>
-  <li>If present then the user-supplied <code>exit</code> member function is 
-	called. If <code>exit</code> throws then steps 3 and 4 are not executed</li>
+  <li>Calls the <code>exit</code> member function (see
+  <a href="#Class template simple_state">synopsis</a>) of the most-derived 
+  state object. If <code>exit()</code> throws then steps 3 and 4 are not executed</li>
 	<li>If the state has shallow history then shallow history information is 
 	saved</li>
 	<li>If the state is an innermost state then deep history information is 
@@ -2177,7 +2195,9 @@ namespace statechart
 }</pre>
 <h3>Class template <code>in_state_reaction</code> semantics</h3>
 <p>When executed, <code>pAction</code> is called, passing the triggering event 
-as the only argument.</p>
+as the only argument. Afterwards, a call is made to the <code>
+<a href="#discard_event">discard_event</a></code> member function of the state 
+for which the reaction was defined.</p>
 <h1>Header &lt;boost/statechart/<a name="termination.hpp">termination.hpp</a>&gt;</h1>
 <h2><a name="Class template termination">Class template <code>termination</code></a></h2>
 <p>This class template is used to specify a termination reaction. Instantiations 
@@ -2347,7 +2367,7 @@ copy semantics</p>
 <b>Effects</b>: Destructs the result object</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21143" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21134" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

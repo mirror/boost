@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/07/21<!--webbot bot="Timestamp" endspan i-checksum="12734" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/07/24<!--webbot bot="Timestamp" endspan i-checksum="12740" --></font></td>
   </tr>
 </table>
 <hr>
@@ -173,9 +173,7 @@ please see <a href="definitions.html">Definitions</a> for more information.</p>
 left (<font color="#FF0000">red</font> = added as a result of the formal 
 review):</p>
 <ol>
-    <li>Design a facility allowing to specially handle events that did not 
-  trigger a reaction</li>
-	<li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
+    <li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
     initial state into an mpl::list (Jonathan Turkanis)</font></li>
     <li><font color="#FF0000">Add a trouble-shooting section for compile-time 
 	errors (John Spalding)</font></li>
@@ -242,6 +240,10 @@ review):</p>
     <li>Added <code>event_base</code> specializations to all reactions and 
     updated the reference accordingly. This allows to implement reactions 
     triggered by an event of any type</li>
+    <li>Added a facility allowing to specially handle events that did not 
+    trigger a reaction. See point 10 of <a href="reference.html#process_event">
+    process_event</a>() effects for more information. Updated tests and docs 
+    accordingly</li>
 </ul>
 <p>19 June, 2005</p>
 <ul>
@@ -506,7 +508,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21128" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21134" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

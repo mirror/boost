@@ -403,6 +403,8 @@ class state_machine : noncopyable
       return state_iterator( currentStatesEnd_ );
     }
 
+    void unconsumed_event( const event_base & ) {}
+
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_machine() :
@@ -844,6 +846,11 @@ class state_machine : noncopyable
       }
 
       guard.dismiss();
+
+      if ( reactionResult == detail::do_forward_event )
+      {
+        polymorphic_downcast< MostDerived * >( this )->unconsumed_event( evt );
+      }
     }
 
 
