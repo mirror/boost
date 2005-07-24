@@ -109,27 +109,27 @@ int main(){
   
   // treat a zero length period as a point
   a_period zero_len(3,duration_type<int>(0));
-  check("Same beg & end != zero_length", 
-      a_period(1,1) != a_period(1, duration_type<int>(0)));
-  check("2 point (zero length) == 1 point zero length",
-      a_period(3,4) == zero_len);
-  
-  check("Is Before zero period", zero_len.is_before(5));
+  check("Same beg & end == zero_length", 
+      a_period(1,1) == a_period(1, duration_type<int>(0)));
+  check("2 point (zero length) == 1 point zero duration",
+      a_period(3,3) == zero_len);
+ 
+  // zero_length period always returns false for is_before & is_after
+  check("Is Before zero period", !zero_len.is_before(5));
   check("Is After zero period (not)", !zero_len.is_after(5));
   check("Is Before zero period (not)", !zero_len.is_before(-5));
-  check("Is After zero period", zero_len.is_after(-5));
+  check("Is After zero period", !zero_len.is_after(-5));
  
-  check("is_null (not)", !zero_len.is_null());
+  check("is_null", zero_len.is_null());
   check("Contains rep (not)", !zero_len.contains(20));
-  check("Contains rep", zero_len.contains(3));
+  // a null_period cannot contain any points
+  check("Contains rep", !zero_len.contains(3));
   check("Contains period (not)", !zero_len.contains(a_period(5,8)));
   check("Contains period", p1.contains(zero_len));
   check("Intersects", zero_len.intersects(p1));
   check("Intersects", p1.intersects(zero_len));
   check("Adjacent", zero_len.is_adjacent(a_period(-10,3)));
-  check("Adjacent", zero_len.is_adjacent(a_period(4,10)));
   check("Adjacent", a_period(-10,3).is_adjacent(zero_len));
-  check("Adjacent", a_period(4,10).is_adjacent(zero_len));
   check("Intersection", (zero_len.intersection(p1) == zero_len));
   check("Span", zero_len.span(p2) == a_period(3,30));
 
@@ -158,10 +158,19 @@ int main(){
 
   {
     std::cout << std::endl;
-    a_period p1(0, duration_type<int>(-1));
+    a_period p1(0, -2);
     check("First", p1.begin() == 0); 
-    check("Last", p1.last() == -1);
-    check("End", p1.end() == 0);
+    check("Last", p1.last() == -3);
+    check("End", p1.end() == -2);
+    check("Length", p1.length() == -2);
+    check("is_null", p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, -1);
+    check("First", p1.begin() == 0); 
+    check("Last", p1.last() == -2);
+    check("End", p1.end() == -1);
     check("Length", p1.length() == -1);
     check("is_null", p1.is_null());
   }
@@ -171,17 +180,82 @@ int main(){
     check("First", p1.begin() == 0); 
     check("Last", p1.last() == -1);
     check("End", p1.end() == 0);
+    check("Length", p1.length() == 0);
+    check("is_null", p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, 1);
+    check("First", p1.begin() == 0); 
+    check("Last", p1.last() == 0);
+    check("End", p1.end() == 1);
+    check("Length", p1.length() == 1);
+    check("is_null", !p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, 2);
+    check("First", p1.begin() == 0); 
+    check("Last", p1.last() == 1);
+    check("End", p1.end() == 2);
+    check("Length", p1.length() == 2);
+    check("is_null", !p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, duration_type<int>(-1));
+    check("First", p1.begin() == 0); 
+    check("Last", p1.last() == -2);
+    check("End", p1.end() == -1);
     check("Length", p1.length() == -1);
+    check("is_null", p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, duration_type<int>(-2));
+    check("First", p1.begin() == 0); 
+    check("Last", p1.last() == -3);
+    check("End", p1.end() == -2);
+    check("Length", p1.length() == -2);
     check("is_null", p1.is_null());
   }
   {
     std::cout << std::endl;
     a_period p1(0, duration_type<int>(0));
     check("First", p1.begin() == 0); 
+    check("Last", p1.last() == -1);
+    check("End", p1.end() == 0);
+    check("Length", p1.length() == 0);
+    check("is_null", p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, duration_type<int>(1));
+    check("First", p1.begin() == 0); 
     check("Last", p1.last() == 0);
     check("End", p1.end() == 1);
-    check("Length", p1.length() == 0);
-    check("is_null (not)", !p1.is_null());
+    check("Length", p1.length() == 1);
+    check("is_null", !p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(0, duration_type<int>(2));
+    check("First", p1.begin() == 0); 
+    check("Last", p1.last() == 1);
+    check("End", p1.end() == 2);
+    check("Length", p1.length() == 2);
+    check("is_null", !p1.is_null());
+  }
+  {
+    std::cout << std::endl;
+    a_period p1(1,1); // length should be 0
+    a_period p2(1,2); // length should be 1
+    a_period p3(1,3); // length should be 2
+    check("Length p1", p1.length() == 0);
+    check("Length p2", p2.length() == 1);
+    check("Length p3", p3.length() == 2);
+    check("is_null p1 (not)", p1.is_null());
+    check("is_null p2 (not)", !p2.is_null());
   }
   return printTestStats();
 }
