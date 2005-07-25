@@ -75,10 +75,11 @@ namespace detail {
             // ensuring code instantiation for some compilers with over-zealous link time 
             // optimiser. The compiler that demanded this was CW
             struct reg{
-                const void_cast_detail::void_caster & (* m_vcr)(
+                typedef const void_cast_detail::void_caster & (* t_vcr)(
                     const Derived *,
                     const Base *
                 );
+                t_vcr m_vcr;
                 static const void_cast_detail::void_caster & invoke(){
                     return  void_cast_register<const Derived, const Base>(
                         static_cast<const Derived *>(NULL),
@@ -86,8 +87,9 @@ namespace detail {
                     );
                 }
                 reg() :
-                    m_vcr(void_cast_register<const Derived, const Base>)
-                {}
+                    m_vcr(static_cast<t_vcr>(void_cast_register))
+                {
+                }
             } m_reg;
 
             static const void_cast_detail::void_caster & invoke(){
