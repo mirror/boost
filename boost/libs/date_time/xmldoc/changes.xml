@@ -24,6 +24,41 @@
       <tbody>
         <row>
           <entry>Bug Fix</entry>
+          <entry>Period lengths, when beginning and end points are the same, or are consecutive, were being incorrectly calculated. The corrected behavior, where end and beginning points are equal, or a period is created with a zero duration, now return a length of zero. A period where beginning and end points are consecutive will return a length of one.
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Time_input_facet was missing functions to set iso formats. It also failed to parse time values that did not use a separator (%H%M%S). Both these bugs have been corrected.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Preliminary names of ptime_facet and ptime_input_facet changed to simply time_facet and time_input_facet. The ptime_* versions have been removed all together.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>The from_iso_string function failed to parse fractional digits. We added code that correctly parses when input has more digits, or too few digits, that the compiled library precision. Ptimes with only a decimal are also correctly parsed.
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>The parsing mechanism in the new IO would consume the next character after a match was made. This bug presented itself when attempting to parse a period that had special value for it's beginning point.
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>The new IO system failed to provide the ability for the user to "turn on" exceptions on the stream. The failbit was also not set when parsing failed. Both of these problems have been fixed.
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Parsing of special values, by means of from_*_string functions, has been fixed. This also effects the libraries ability to serialize special values. Time_duration now serializes as either a string or individual fields (depending on is_special()).
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
           <entry>Previously, output streaming of <code>partial_date</code> would display the day as either a single or double digit integer (ie '1', or '12'). This has been corrected to always display a double digit integer (ie '01').
           </entry>
         </row>
