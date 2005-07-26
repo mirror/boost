@@ -109,10 +109,11 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.3.6 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
   <li>GCC 3.4.2 (mingw-special) under Win32,</li>
   <li>GCC 3.4.3 under Linux, Solaris and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
-  <li>GCC 3.4.4 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
+  <li>GCC 3.4.4 (cygming special) under Cygwin, under Linux,
+    under Tru64 (see <a href="#gcc_tru64">below</a>), (mingw special) under Win32,</li>
   <li>GCC 4.0.0 20041026 (Apple build 4061) under Mac OS 
     (see <a href="#gcc_4_darwin">below</a>),</li>
-  <li>GCC 4.0.0 under Linux,</li>
+  <li>GCC 4.0.0 under Linux, (Apple build 5026) under Mac OS,</li>
   <li>GCC 4.0.1 under Linux.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
@@ -134,17 +135,16 @@ applicable workarounds.
 <h3><a name="gcc_4_darwin">Darwin GCC 4.0</a></h3>
 
 <p>
-The build of GCC 4.0 shipped with Darwin 8.1 and prior (Mac OS X 10.4.1 and
-prior) corresponds to a prerelease version of GNU GCC 4.0.0 which introduces
+Build 4061 of GCC 4.0, shipped with Darwin 8.2 and prior (Mac OS X 10.4.2 and
+prior), corresponds to a prerelease version of GNU GCC 4.0.0 which introduces
 a <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=17435">regression bug</a>
 related to binding of references to temporary objects. This bug precludes the
 usage of Boost.MultiIndex
 <a href="advanced_topics.html#invariant_check">invariant-checking mode</a>; other
 than this, Boost.MultiIndex works correctly.
-The bug is corrected in the official release of GNU GCC 4.0.0, so the
-invariant-checking mode will be available again once Darwin upgrades to
-a newer version of GCC 4.0.
-
+The bug is corrected in GCC 4.0 Apple build 5026, which is in sync with the official
+release of GNU GCC 4.0.0, so the invariant-checking mode is available from this
+upgrade.
 </p>
 
 <h2><a name="acc_60">HP aC++ A.06.00 for HP-UX</a></h2>
@@ -928,7 +928,7 @@ Performance
 
 <br>
 
-<p>Revised July 13th 2005</p>
+<p>Revised July 26th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
