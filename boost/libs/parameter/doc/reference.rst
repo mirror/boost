@@ -453,13 +453,15 @@ Requirements
 |            |                           | in ``x``.                    |                                                      |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
 | ``x[u]``   | binding<X, K, D>::type    | \-                           | Returns the bound argument tagged with ``K``         |
-|            |                           |                              | if such an argument exists. Otherwise returns        |
-|            |                           |                              | the default value of ``u``.                          |
+|            |                           |                              | if such an argument exists.                          |
 |            |                           |                              |                                                      |
-|            |                           |                              | If ``u`` has a lazy default, this may throw          |
-|            |                           |                              | whatever the default value function of ``u`` throws  |
-|            |                           |                              | when ``x`` does not contain an argument tagged with  |
-|            |                           |                              | ``K``.                                               |
+|            |                           |                              | Otherwise returns the default value of ``u``.        |
+|            |                           |                              |                                                      |
+|            |                           |                              | If ``u`` has a lazy default, the default function of |
+|            |                           |                              | ``u`` is called and the result returned. This may    |
+|            |                           |                              | throw whatever the default value function of ``u``   |
+|            |                           |                              | throws  when ``x`` does not contain an argument      |
+|            |                           |                              | tagged with ``K``.                                   |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
 | ``x, z``   | Model of |ArgumentPack|   | \-                           | Returns a composite |ArgumentPack|_ that             |
 |            |                           |                              | contains bindings to all arguments bound in ``x``    |
