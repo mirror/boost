@@ -134,6 +134,10 @@ operator|
     Nothing
 
 **Returns**
+    An object that holds ``default_`` as a default for the
+    keyword tag ``Tag``.
+
+.. daniel:
     A model of |KeywordDefaultExpression|_ that, when used to
     index an |ArgumentPack|_ that does not contain an appropriate
     parameter, gives ``default_``.
@@ -232,6 +236,11 @@ In the next two tables, ``fn`` is an object of type ``F``.
    return type not being an exact match?
 
 **Returns**
+    An object that holds a reference to ``fn`` as a `lazy default`_
+    for the keyword tag ``Tag``.
+
+
+.. daniel:
     A model of |KeywordDefaultExpression|_ that, when used to
     index an |ArgumentPack|_ which does not contain an appropriate
     parameter, gives the result of ``fn``.
@@ -268,7 +277,7 @@ __ ../../../../boost/parameter/parameters.hpp
     struct parameters
     {
         template <class T0, class T1, …, class TN>
-        struct `match`
+        struct `match`_
         {
             typedef … type;
         };
@@ -292,8 +301,8 @@ instance of either ``optional`` or ``required``, it is treated as a
 keyword tag with the same meaning as ``optional<Px>``.
 
 
-restrict
-~~~~~~~~
+match
+~~~~~
 
 Used to remove a function from overload resolution using SFINAE.
 
@@ -303,7 +312,7 @@ Used to remove a function from overload resolution using SFINAE.
 
 **Returns**
     If the supplied argument types ``<T0, …, TN>`` fulfill the requirments of the
-    specified |ParameterSpec|_'s, ``restrict<T0, …, TN>::type`` exists and is constructible
+    specified |ParameterSpec|_'s, ``match<T0, …, TN>::type`` exists and is constructible
     from ``parameters<P0, …, PN>``. Otherwise ``restrict<T0, …, TN>::type`` doesn't exist.
 
 
@@ -427,7 +436,17 @@ that support partial specialization. On less compliant compilers a nested
 concept |KeywordExpression|, |KeywordDefaultExpression|
 ---------------------------------------------------------------------
 
-Models of these concepts are used as indices in a |ArgumentPack|.
+Models of these concepts are used as indices in a |ArgumentPack|. Models
+of |KeywordDefaultExpression| will hold a default value to be used when
+no appropriate argument was passed.
+
+.. _lazy default:
+
+Lazy Defaults
+~~~~~~~~~~~~~
+
+A |KeywordDefaultExpression| may contain a *lazy default*, meaning it's
+default value is only computed when needed.
 
 
 .. class:: reference
@@ -465,7 +484,7 @@ Requirements
 |            |                           |                              | if such an argument exists. Otherwise returns        |
 |            |                           |                              | the default value of ``u``.                          |
 |            |                           |                              |                                                      |
-|            |                           |                              | If ``u`` has a *lazy default*, this may throw        |
+|            |                           |                              | If ``u`` has a `lazy default`_, this may throw       |
 |            |                           |                              | whatever the default value function of ``u`` throws  |
 |            |                           |                              | when ``x`` does not contain an argument tagged with  |
 |            |                           |                              | ``K``.                                               |
@@ -474,7 +493,6 @@ Requirements
 |            |                           |                              | contains bindings to all arguments bound in ``x``    |
 |            |                           |                              | and ``z``.                                           |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
-
 
 
 .. class:: reference
