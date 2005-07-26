@@ -64,10 +64,10 @@ __ ../../../../boost/parameter/keyword.hpp
     struct keyword
     {
         template <class T>
-        |ArgumentPack|_ `operator=`_\(T& value) const;
+        *unspecified model of* |ArgumentPack|_ `operator=`_\(T& value) const;
 
         template <class T>
-        |ArgumentPack|_ `operator=`_\(T const& value) const;
+        *unspecified model of* |ArgumentPack|_ `operator=`_\(T const& value) const;
 
         template <class T>
         *unspecified tagged default* `operator|`_\(T& default\_) const;
@@ -102,8 +102,8 @@ operator=
 
 .. parsed-literal::
 
-    template <class T> |ArgumentPack|_ operator=(T& value) const;
-    template <class T> |ArgumentPack|_ operator=(T const& value) const;
+    template <class T> *unspecified model of* |ArgumentPack|_ operator=(T& value) const;
+    template <class T> *unspecified model of* |ArgumentPack|_ operator=(T const& value) const;
 
 **Requires**
     Nothing.
@@ -290,6 +290,9 @@ Template Parameter Semantics
 instance of either ``optional`` or ``required``, it is treated as a
 keyword tag with the same meaning as ``optional<Px>``.
 
+``<P0, …, PN>`` determine the positional meaning of the parameters,
+and the type requirements for passed arguments.
+
 
 match
 ~~~~~
@@ -304,6 +307,22 @@ Used to remove a function from overload resolution using SFINAE.
     If the supplied argument types ``<T0, …, TN>`` fulfill the requirments of the
     specified |ParameterSpec|_'s, ``match<T0, …, TN>::type`` exists and is constructible
     from ``parameters<P0, …, PN>``. Otherwise ``restrict<T0, …, TN>::type`` doesn't exist.
+
+    The algorithm that determines if the type requirements are fulfilled works
+    like this::
+
+        If Px is optional<K, P>
+            If a bound argument Tx tagged with K exists in <T0, …, TN>
+                return P<Tx>::type
+            Else
+                return mpl::true_
+        Else if Px is required<K, P>
+            If a bound argument Tx tagged with K exists in <T0, …, TN>
+                return P<Tx>::type
+            Else
+                return mpl::false_
+        Else
+            return mpl::true_
 
 
 operator()
@@ -349,6 +368,9 @@ __ ../../../../boost/parameter/parameters.hpp
 
     template <class Tag, class Predicate = *unspecified*>
     struct required;
+
+The default value of ``Predicate`` is an unspecified metafunction that returns
+``mpl::true_`` for any argument.
 
 
 //////////////////////////////////////////////////////////////////////////////
