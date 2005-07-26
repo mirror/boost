@@ -135,7 +135,7 @@ operator|
 
 **Returns**
     A model of |KeywordDefaultExpression|_ that, when used to
-    index an |ArgumentPack|_ which does not contain an appropriate
+    index an |ArgumentPack|_ that does not contain an appropriate
     parameter, gives ``default_``.
 
 .. daniel:
