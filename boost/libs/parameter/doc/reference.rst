@@ -273,13 +273,13 @@ __ ../../../../boost/parameter/parameters.hpp
         };
 
         template <class A0>
-        |ArgumentPack| `operator()`_\(A0 const& a0) const;
+        *unspecified model of* |ArgumentPack| `operator()`_\(A0 const& a0) const;
 
         template <class A0, class A1>
-        |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1) const;
+        *unspecified model of* |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1) const;
 
         template <class A0, class A1, …, class AN>
-        |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1, …, AN const& aN) const;
+        *unspecified model of* |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1, …, AN const& aN) const;
     };
 
 
@@ -330,8 +330,8 @@ operator()
 
 .. parsed-literal::
 
-    template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const;
-    template <class A0, class A1> |ArgumentPack|_ operator()(A0 const& a0, A1 const& a1) const;
+    template <class A0> *unspecified model of* |ArgumentPack|_ operator()(A0 const& a0) const;
+    template <class A0, class A1> *unspecified model of* |ArgumentPack|_ operator()(A0 const& a0, A1 const& a1) const;
     …
 
 **Throws**
