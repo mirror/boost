@@ -87,6 +87,16 @@ __ ../../../../boost/parameter/keyword.hpp
    we're going to start doing this, don't we need to explain it
    somewhere?
 
+
+.. _keyword object:
+
+Keyword objects
+~~~~~~~~~~~~~~~
+
+.. |keyword-object| replace:: `keyword object`_
+
+Keyword objects are instances of a ``keyword<>`` specialization.
+
 operator=
 ~~~~~~~~~
 
@@ -324,7 +334,7 @@ operator()
 class templates :class:`optional`, :class:`required`
 ----------------------------------------------------
 
-**Models**
+**Specializations models**
     |ParameterSpec|_
 
 **Defined in**
@@ -423,14 +433,14 @@ Requirements
 
 * ``x`` and ``z`` are objects that model |ArgumentPack|.
 * ``z`` is a |ArgumentPack|_ containing only one argument, as created by ``keyword::operator=``.
-* ``y`` is a *keyword object* that is associated with a value in the Argument pack.
+* ``y`` is a `keyword object`_ that is associated with a value in the Argument pack.
 * ``u`` is an object produced by an expression of one of the forms::
 
         k | d
     or  
         k || d
 
-  Where ``k`` is a *keyword object*.
+  Where ``k`` is a `keyword object`_.
 * ``X`` is the type of ``x``.
 * ``K`` is the tag type used in ``y`` and ``u``.
 * ``D`` is the type of the default value in ``u``.
@@ -493,7 +503,9 @@ macro ``BOOST_PARAMETER_KEYWORD``
 
 __ ../../../../boost/parameter/keyword.hpp
 
-Macro used to define keyword objects.
+Macro used to define `keyword objects`__.
+
+__ `keyword object`_
 
 .. parsed-literal::
 
