@@ -50,7 +50,7 @@ class template :class:`keyword`
 __ ../../../../boost/parameter/keyword.hpp
 
 **Models**
-    :concept:`IndexExpression`
+    |KeywordExpression|_
 
 .. dwa:
 
@@ -69,19 +69,19 @@ __ ../../../../boost/parameter/keyword.hpp
     struct keyword
     {
         template <class T>
-        |ArgumentPack| `operator=`_\(T& value) const;
+        |ArgumentPack|_ `operator=`_\(T& value) const;
 
         template <class T>
-        |ArgumentPack| `operator=`_\(T const& value) const;
+        |ArgumentPack|_ `operator=`_\(T const& value) const;
 
         template <class T>
-        |ArgumentPack| `operator|`_\(T& default\_) const;
+        |ArgumentPack|_ `operator|`_\(T& default\_) const;
 
         template <class T>
-        |KeywordDefaultExpression| `operator|`_\(T const& default\_) const;
+        |KeywordDefaultExpression|_ `operator|`_\(T const& default\_) const;
 
         template <class F>
-        |KeywordDefaultExpression| `operator||`_\(F const&) const;
+        |KeywordDefaultExpression|_ `operator||`_\(F const&) const;
     };
 
 
@@ -97,8 +97,8 @@ operator=
 
 .. parsed-literal::
 
-    template <class T> |ArgumentPack| operator=(T& value) const;
-    template <class T> |ArgumentPack| operator=(T const& value) const;
+    template <class T> |ArgumentPack|_ operator=(T& value) const;
+    template <class T> |ArgumentPack|_ operator=(T const& value) const;
 
 **Requires**
     Nothing.
@@ -107,8 +107,7 @@ operator=
     Nothing
 
 **Returns**
-    A model of |ArgumentPack|, holding a *cv* reference to ``value``,
-    tagged with ``Tag``.
+    A model of |ArgumentPack|_, holding ``value``, tagged with ``Tag``.
 
 .. dwa:
 
@@ -128,13 +127,19 @@ operator|
 
 .. parsed-literal::
 
-    template <class T> |KeywordDefaultExpression| operator|(T& default\_) const;
-    template <class T> |KeywordDefaultExpression| operator|(T const& default\_) const;
+    template <class T> |KeywordDefaultExpression|_ operator|(T& default\_) const;
+    template <class T> |KeywordDefaultExpression|_ operator|(T const& default\_) const;
 
 **Throws**
     Nothing
 
 **Returns**
+    A model of |KeywordDefaultExpression|_ that, when used to
+    index an |ArgumentPack|_ which does not contain an appropriate
+    parameter, gives ``default_``.
+
+.. daniel:
+
     An object that models KeywordDefaultExpression, that when used as
     an argument to ``ArgumentPack::operator[]`` which doesn't contain
     a parameter specified with ``Tag`` returns a reference to ``default_``.
@@ -142,7 +147,7 @@ operator|
 .. dwa: 
 
    1. First of all, there is no class called ArgumentPack that has
-   an operator[].  
+   an operator[].
 
    2. an operator[] can't contain a parameter
 
@@ -179,7 +184,7 @@ operator||
 
 .. parsed-literal::
 
-    template <class F> |KeywordDefaultExpression| operator||(F const& fn) const;
+    template <class F> |KeywordDefaultExpression|_ operator||(F const& fn) const;
 
 **Throws**
     Nothing
@@ -187,10 +192,12 @@ operator||
 **Requires**
     ``F`` is a nullary function object.
 
+In the next two tables, ``fn`` is an object of type ``F``.
+
 .. dwa: You have to define "function object."  Plain function
    pointers are legal where result_of is supported, FYI.
 
-    **On compilers that support partial specialization:**
+    **On compilers that support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
 
 .. dwa: This should be "on compilers that support result_of."
    Likewise below.  See the result_of docs for the BOOST_NO_RESULT_OF macro 
@@ -198,7 +205,7 @@ operator||
     +---------------------------------+-----------------------------------------------------+
     | Expression                      | Requirement                                         |
     +=================================+=====================================================+
-    | ``boost::result_of<F()>::type`` | :concept:`CopyConstructible`                        |
+    | ``boost::result_of<F()>::type`` | -                                                   |
     +---------------------------------+-----------------------------------------------------+
     | ``fn()``                        | Convertible to ``boost::result_of<F()>::type``      |
     +---------------------------------+-----------------------------------------------------+
@@ -206,12 +213,12 @@ operator||
 .. You have to say what fn is.  The usual way is to say, "in the
    next two tables, fn is an object of type F."
 
-    **On compilers that don't support partial specialization:**
+    **On compilers that don't support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
 
     +------------------------------+-----------------------------------------------------+
     | Expression                   | Requirement                                         |
     +==============================+=====================================================+
-    | ``F::result_type``           | :concept:`CopyConstructible`                        |
+    | ``F::result_type``           | -                                                   |
     +------------------------------+-----------------------------------------------------+
     | ``fn()``                     | Convertible to ``F::result_type``                   |
     +------------------------------+-----------------------------------------------------+
@@ -225,7 +232,12 @@ operator||
    return type not being an exact match?
 
 **Returns**
-    An object that models |KeywordDefaultExpression|, that when used as
+    A model of |KeywordDefaultExpression|_ that, when used to
+    index an |ArgumentPack|_ which does not contain an appropriate
+    parameter, gives the result of ``fn``.
+
+.. daniel:
+    An object that models |KeywordDefaultExpression|_, that when used as
     an argument to ``ArgumentPack::operator[]`` which doesn't contain
     a parameter specified with ``Tag`` evaluates and returns ``fn()``.
 
@@ -239,6 +251,8 @@ operator||
 //////////////////////////////////////////////////////////////////////////////
 
 .. class:: reference
+
+.. _parameters:
 
 class template :class:`parameters`
 ---------------------------------------------------
@@ -273,7 +287,9 @@ __ ../../../../boost/parameter/parameters.hpp
 Template Parameter Semantics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``<P0, …, PN>`` are models of |ParameterSpec|.
+``<P0, …, PN>`` are models of |ParameterSpec|_. If ``Px`` is not an
+instance of either ``optional`` or ``required``, it is treated as a
+keyword tag with the same meaning as ``optional<Px>``.
 
 
 restrict
@@ -287,7 +303,7 @@ Used to remove a function from overload resolution using SFINAE.
 
 **Returns**
     If the supplied argument types ``<T0, …, TN>`` fulfill the requirments of the
-    specified |ParameterSpec|'s, ``restrict<T0, …, TN>::type`` exists and is constructible 
+    specified |ParameterSpec|_'s, ``restrict<T0, …, TN>::type`` exists and is constructible
     from ``parameters<P0, …, PN>``. Otherwise ``restrict<T0, …, TN>::type`` doesn't exist.
 
 
@@ -296,28 +312,31 @@ operator()
 
 .. parsed-literal::
 
-    template <class A0> |ArgumentPack| operator()(A0 const& a0) const;
-    template <class A0, class A1> |ArgumentPack| operator()(A0 const& a0, A1 const& a1) const;
+    template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const;
+    template <class A0, class A1> |ArgumentPack|_ operator()(A0 const& a0, A1 const& a1) const;
     …
 
 **Throws**
     Nothing
 
 **Returns**
-    A composite |ArgumentPack| containing all arguments ``<A0, …, AN>``.
-    If ``Ax`` is not a model of |ArgumentPack|, it is transformed into one
-    by tagging the argument with the |ParameterSpec| ``Px`` in it's position.
+    A composite |ArgumentPack|_ containing all arguments ``<A0, …, AN>``.
+    If ``Ax`` is not a model of |ArgumentPack|_, it is transformed into one
+    by tagging the argument with the |ParameterSpec|_ ``Px`` in it's position.
 
 
 //////////////////////////////////////////////////////////////////////////////
 
 .. class:: reference
 
+.. _optional:
+.. _required:
+
 class templates :class:`optional`, :class:`required`
 ----------------------------------------------------
 
 **Models**
-    |ParameterSpec|
+    |ParameterSpec|_
 
 **Defined in**
     `boost/parameter/parameters.hpp`__
@@ -337,6 +356,8 @@ __ ../../../../boost/parameter/parameters.hpp
 
 .. class:: reference
 
+.. _binding:
+
 class template :class:`binding`
 -------------------------------------------------------------
 
@@ -345,7 +366,7 @@ class template :class:`binding`
 
 __ ../../../../boost/parameter/binding.hpp
 
-A metafunction that, given an :concept:`ArgumentTuple`, returns the reference
+A metafunction that, given an |ArgumentPack|_, returns the reference
 type of the parameter identified by ``Keyword``.  If no such parameter has been
 specified, returns ``Default``.
 
@@ -363,6 +384,9 @@ specified, returns ``Default``.
 
 //////////////////////////////////////////////////////////////////////////////
 
+
+.. _lazy_binding:
+
 class template :class:`lazy_binding`
 ------------------------------------------------------------------
 
@@ -371,7 +395,7 @@ class template :class:`lazy_binding`
 
 __ ../../../../boost/parameter/binding.hpp
 
-A metafunction that, given an |ArgumentPack|, returns the reference
+A metafunction that, given an |ArgumentPack|_, returns the reference
 type of the parameter identified by ``Keyword``.  If no such parameter has been
 specified, returns the type returned by invoking ``DefaultFn``.
 
@@ -397,6 +421,9 @@ that support partial specialization. On less compliant compilers a nested
 
 //////////////////////////////////////////////////////////////////////////////
 
+.. _keyworddefaultexpression:
+.. _keywordexpression:
+
 concept |KeywordExpression|, |KeywordDefaultExpression|
 ---------------------------------------------------------------------
 
@@ -408,10 +435,10 @@ Models of these concepts are used as indices in a |ArgumentPack|.
 
 //////////////////////////////////////////////////////////////////////////////
 
+.. _argumentpack:
+
 concept |ArgumentPack|
 -------------------------------
-
-.. Rename this?
 
 Models of this concept are containers of parameters where each parameter
 is tagged with a keyword.
@@ -420,9 +447,9 @@ Requirements
 ~~~~~~~~~~~~
 
 * ``x`` and ``z`` are objects that model |ArgumentPack|.
-* ``z`` is a *singular* |ArgumentPack| as created by ``keyword::operator``.
-* ``y`` is a model if :concept:`KeywordExpression`.
-* ``u`` is a model if :concept:`KeywordDefaultExpression`.
+* ``z`` is a *singular* |ArgumentPack|_ as created by ``keyword::operator``.
+* ``y`` is a model if |KeywordExpression|_.
+* ``u`` is a model if |KeywordDefaultExpression|_.
 * ``X`` is the type of ``x``.
 * ``K`` is the tag type used in ``y`` and ``u``.
 * ``D`` is the type of the default value in ``u``.
@@ -443,7 +470,7 @@ Requirements
 |            |                           |                              | when ``x`` does not contain an argument tagged with  |
 |            |                           |                              | ``K``.                                               |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
-| ``x, z``   | Model of |ArgumentPack|   | \-                           | Returns a composite |ArgumentPack| that              |
+| ``x, z``   | Model of |ArgumentPack|   | \-                           | Returns a composite |ArgumentPack|_ that             |
 |            |                           |                              | contains bindings to all arguments bound in ``x``    |
 |            |                           |                              | and ``z``.                                           |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
@@ -455,8 +482,13 @@ Requirements
 
 //////////////////////////////////////////////////////////////////////////////
 
+.. _parameterspec:
+
 concept |ParameterSpec|
 -----------------------
+
+Used to describe type restrictions and positional meaning in a parameter
+set.
 
 Models of this concept with special meaning are:
 
@@ -470,6 +502,8 @@ Any other type will be treated as a *keyword Tag*.
 
 
 //////////////////////////////////////////////////////////////////////////////
+
+.. _boost_parameter_keyword:
 
 macro ``BOOST_PARAMETER_KEYWORD``
 ---------------------------------
@@ -497,6 +531,7 @@ Requirements
 
 //////////////////////////////////////////////////////////////////////////////
 
+.. _boost_parameter_fun:
 
 macro ``BOOST_PARAMETER_FUN``
 -----------------------------
