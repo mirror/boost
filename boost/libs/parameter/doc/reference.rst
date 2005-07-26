@@ -507,7 +507,10 @@ Models of this concept with special meaning are:
 * :class:`required`
 * :class:`optional`
 
-Any other type will be treated as a *keyword Tag*.
+
+.. daniel: maybe this shouldn't be here...
+
+  Any other type will be treated as a *keyword Tag*.
 
 
 .. class:: reference
