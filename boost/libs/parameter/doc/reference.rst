@@ -466,7 +466,7 @@ Requirements
 ~~~~~~~~~~~~
 
 * ``x`` and ``z`` are objects that model |ArgumentPack|.
-* ``z`` is a *singular* |ArgumentPack|_ as created by ``keyword::operator``.
+* ``z`` is a |ArgumentPack|_ containing only one argument, as created by ``keyword::operator``.
 * ``y`` is a model if |KeywordExpression|_.
 * ``u`` is a model if |KeywordDefaultExpression|_.
 * ``X`` is the type of ``x``.
