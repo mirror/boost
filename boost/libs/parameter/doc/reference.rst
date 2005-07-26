@@ -313,12 +313,12 @@ Used to remove a function from overload resolution using SFINAE.
 
         If Px is optional<K, P>
             If a bound argument Tx tagged with K exists in <T0, …, TN>
-                return P<Tx>::type
+                return P<type of argument bound in Tx>::type
             Else
                 return mpl::true_
         Else if Px is required<K, P>
             If a bound argument Tx tagged with K exists in <T0, …, TN>
-                return P<Tx>::type
+                return P<type of argument bound in Tx>::type
             Else
                 return mpl::false_
         Else
