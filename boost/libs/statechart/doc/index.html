@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/07/24<!--webbot bot="Timestamp" endspan i-checksum="12740" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/07/25<!--webbot bot="Timestamp" endspan i-checksum="12742" --></font></td>
   </tr>
 </table>
 <hr>
@@ -140,7 +140,7 @@ http://boost-sandbox.sf.net/Statechart.zip</a> and unpack it somewhere on your h
 	various choices on runtime performance, executable size, etc. Moreover, 
 	the Handcrafted executable is also built, which serves to compare 
 	performance of a simple Boost.Statechart machine with its handcrafted equivalent</li>
-	<li>To run the tests, invoke bjam in the directory
+	<li>Optional: To run the tests, invoke bjam in the directory
 	<code>D:\Data\boost_1_32_0\libs\statechart\test</code></li>
 </ol>
 <h3><a name="Audience">Audience</a></h3>
@@ -173,24 +173,24 @@ please see <a href="definitions.html">Definitions</a> for more information.</p>
 left (<font color="#FF0000">red</font> = added as a result of the formal 
 review):</p>
 <ol>
-    <li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
-    initial state into an mpl::list (Jonathan Turkanis)</font></li>
-    <li><font color="#FF0000">Add a trouble-shooting section for compile-time 
-	errors (John Spalding)</font></li>
     <li><font color="#FF0000">Augment the rationale for state-local storage 
 	with the code for a StopWatch variant that does not use state-local storage 
 	and explain the drawbacks of that approach (Jeff Garland, Rob Steward)</font></li>
-    <li><font color="#FF0000">Put all remarks about code as comments inside 
-	the code (Pavel Vozenilek, Augustus Saunders)</font></li>
-    <li><font color="#FF0000">Implement a switch-like reaction (Simon Gittins, 
-	Darryl Green)</font></li>
+    <li>Add a FAQ item explaining the pitfalls of dynamically linked 
+    state-machines</li>
+    <li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
+    initial state into an mpl::list (Jonathan Turkanis)</font></li>
 	<li>Investigate how a state machine could be serialized. A first glance at 
     the serialization library revealed that there currently (late 2004) is no 
     support for types that overload <code>operator new</code>. Such support 
     would be essential for Boost.Statechart serialization since there doesn't 
     seem to be any way to detect whether a state has an overloaded <code>
     operator new</code> or not</li>
-    <li>Add allocator support for broken std libs when the workaround is 
+    <li><font color="#FF0000">Put all remarks about code as comments inside 
+	the code (Pavel Vozenilek, Augustus Saunders)</font></li>
+    <li><font color="#FF0000">Implement a switch-like reaction (Simon Gittins, 
+	Darryl Green)</font></li>
+	<li>Add allocator support for broken std libs when the workaround is 
 	available in boost::detail</li>
     <li>Ensure that the library can be compiled with exception support turned 
     off</li>
@@ -215,7 +215,6 @@ review):</p>
     <li>Implement <code>priority_scheduler&lt;&gt;</code></li>
     <li><font color="#FF0000">Add a list of applications that use Boost.Statechart 
 	(Paul A. Bristow)</font></li>
-    <li>Improve performance for state machines that use <code>null_exception_translator</code></li>
     <li>Refactor the <code>state_machine</code> class template to reduce code 
   size in applications with many different state machines</li>
     <li>Investigate whether and how <code>fifo_worker&lt;&gt;</code> should accept a policy 
@@ -223,7 +222,6 @@ review):</p>
     <li>Add a diagram that helps to understand what an unstable state machine 
 	is</li>
     <li>Comment MPL-heavy code</li>
-    <li>Comment <code>processor_holder_ptr_type</code></li>
     <li>Add examples of often made mistakes</li>
     <li>Eliminate code-duplication in <code>fifo_scheduler</code> with PP code 
 	submitted by Pavel Vozenilek</li>
@@ -244,6 +242,9 @@ review):</p>
     trigger a reaction. See point 10 of <a href="reference.html#process_event">
     process_event</a>() effects for more information. Updated tests and docs 
     accordingly</li>
+    <li><font color="#FF0000">Added a FAQ item explaining how to trouble-shoot compile-time 
+	errors (John Spalding)</font></li>
+    <li></li>
 </ul>
 <p>19 June, 2005</p>
 <ul>
@@ -508,7 +509,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21134" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21136" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

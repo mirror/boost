@@ -25,8 +25,6 @@
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
-  support polymorphic events?</a></dt>
   <dt>
   <a href="#How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
   How can I hide the inner workings of a state machine from its clients?</a></dt>
@@ -34,54 +32,20 @@
   <a href="#Is_it_possible_to_inherit_from_a_given_state_machine_and_modify_its_layout_in_the_subclass">
   Is it possible to inherit from a given state machine and modify its layout 
   in the subclass?</a></dt>
-  <dt>
-  <a href="#Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
-  Why are exit-actions called in the wrong order when I use multiple 
-	inheritance?</a></dt>
   <dt><a href="#Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></dt>
   <dt>
 	<a href="#Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
 	Is your library suitable for applications with hard real-time requirements</a>?</dt>
+  <dt>
+	<a href="#My_compiler_reports_an_error_in_the_library_code._Is_this_a_bug_in_Boost.Statechart">
+	My compiler reports an error in the library code. Is this a bug in Boost.Statechart?</a></dt>
+  <dt><a href="#Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
+  support polymorphic events?</a></dt>
+  <dt>
+  <a href="#Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
+  Why are exit-actions called in the wrong order when I use multiple 
+	inheritance?</a></dt>
 </dl>
-<h2><a name="Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
-support polymorphic events?</a></h2>
-<p>No. Although events can be derived from each other to write common code 
-only once, <a href="definitions.html#Reaction">reactions</a> can only be 
-defined for most-derived events.</p>
-<p>Example:</p>
-<pre>template&lt; class MostDerived &gt;
-struct EvButtonPressed : sc::event&lt; MostDerived &gt;
-{
-  // common code
-};
-
-struct EvPlayButtonPressed :
-  EvButtonPressed&lt; EvPlayButtonPressed &gt; {};
-struct EvStopButtonPressed :
-  EvButtonPressed&lt; EvStopButtonPressed &gt; {};
-struct EvForwardButtonPressed :
-  EvButtonPressed&lt; EvForwardButtonPressed &gt; {};
-
-/* ... */
-
-// We want to turn the player on, no matter what button we
-// press in the Off state. Although we can write the reaction
-// code only once, we must mention all most-derived events in
-// the reaction list.
-struct Off : sc::simple_state&lt; Off, Mp3Player &gt;
-{
-  typedef mpl::list&lt;
-    sc::custom_reaction&lt; EvPlayButtonPressed &gt;,
-    sc::custom_reaction&lt; EvStopButtonPressed &gt;,
-    sc::custom_reaction&lt; EvForwardButtonPressed &gt;
-  &gt; reactions;
-
-  template&lt; class MostDerived &gt;
-  sc::result react( const EvButtonPressed&lt; MostDerived &gt; &amp; )
-  {
-    // ...
-  }
-};</pre>
 <h2>
 <a name="How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
 How can I hide the inner workings of a state machine from its clients?</a></h2>
@@ -181,6 +145,170 @@ struct MyPump : PumpBase
     <b>return idle.transit&lt; MyRunning &gt;();
 </b>  }
 };</pre>
+<h2><a name="Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></h2>
+<p>It depends. As explained under
+<a href="performance.html#Speed versus scalability tradeoffs">Speed versus 
+scalability tradeoffs</a> on the Performance page, the virtually limitless scalability 
+offered by this library does have its 
+price. Especially small and simple FSMs can easily be implemented so that they 
+consume fewer cycles and less memory and occupy less code space in the 
+executable. Here are some obviously <b>very rough</b> estimates:</p>
+<ul>
+	<li>For a state machine with at most one simultaneously active state (that 
+	is, the machine is flat and does not have orthogonal regions) with trivial 
+	actions, customized memory management and compiled with a good optimizing 
+	compiler, a Pentium 4 class CPU should not spend more than 1000 cycles 
+	inside <code>state_machine&lt;&gt;::process_event()</code>. This worst-case 
+	dispatch and transition time scales more or less linearly with the number of 
+	simultaneously active states for more complex state machines, with the 
+	typical average being much lower than that. So, a fairly complex machine 
+	with at most 10 simultaneously active states running on a 100MHz CPU should 
+	be able to process more than 10'000 events per second</li>
+	<li>A single state machine object uses typically less than 1KB of memory, 
+	even if it implements a very complex machine</li>
+	<li>For code size, it is difficult to give a concrete guideline but tests 
+	with the BitMachine example suggest that code size scales more or less 
+	linearly with the number of states (transitions seem to have only little 
+	impact). When compiled with MSVC7.1 on Windows, 32 states and 224 
+	transitions seem to fit in ~108KB executable code (with all optimizations 
+	turned on).<br>
+	Moreover, the library can be compiled with C++ RTTI and exception handling turned off, 
+	resulting in significant savings on most platforms</li>
+</ul>
+<p>As mentioned above, these are very rough estimates derived from the use of 
+the library on a desktop PC, so they should only be used to decide whether there 
+is a point in making your own performance tests on your target platform.</p>
+<h2>
+<a name="Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
+Is your library suitable for applications with hard real-time requirements?</a></h2>
+<p>Yes. Out of the box, the only operations taking potentially non-deterministic 
+time that the library performs are calls to 
+global <code>operator new</code> and <code>dynamic_cast</code>s. Global <code>
+operator new</code> calls can be avoided by passing a custom allocator to&nbsp;
+<code>state_machine&lt;&gt;</code> <b>and</b> by giving all state classes a custom <code>
+operator new</code>. <code>dynamic_cast</code>s can be avoided by not calling the
+<code>state_cast&lt;&gt;</code> member functions of <code>state_machine&lt;&gt;</code>,
+<code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> but using the 
+deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
+<h2>
+<a name="My_compiler_reports_an_error_in_the_library_code._Is_this_a_bug_in_Boost.Statechart">My compiler reports an error in the library code. Is this a bug in 
+Boost.Statechart?</a></h2>
+<p>Probably not. There are several possible reasons for such compile-time 
+errors:</p>
+<ol>
+	<li>Your compiler is listed under
+	<a href="index.html#Incompatible_compilers">Incompatible compilers</a>. 
+	These compilers are known to be incompatible with this library due to 
+	compiler bugs. If you absolutely must use such a compiler for your project, 
+	I'm afraid Boost.Statechart is not for you.</li>
+<li>The error is reported on a line similar to the following:
+<pre>BOOST_STATIC_ASSERT( ( mpl::less&lt;
+  orthogonal_position,
+  typename context_type::no_of_orthogonal_regions &gt;::value ) );</pre>Most 
+	probably, there is an error in your code. The library has many such 
+	compile-time assertions to ensure that invalid state machines cannot be 
+	compiled (for an idea what kinds of errors are reported at compile time, see 
+	the compile-fail tests). Above each of these assertions there is a comment 
+	explaining the problem. On almost all current compilers an error in template 
+	code is accompanied by the current &quot;instantiation stack&quot;. Very much like the 
+	call stack you see in the debugger this allows you to trace the error back 
+	through instantiations of library code until you hit the line of 
+	your code that causes the problem. As an example, here's the MSVC7.1 error 
+	message for the code in InconsistentHistoryTest1.cpp:
+	<pre>...\boost\statechart\shallow_history.hpp(34) : error C2027: use of undefined type 'boost::STATIC_ASSERTION_FAILURE&lt;x&gt;'
+  with
+  [
+    x=false
+  ]
+  ...\boost\statechart\shallow_history.hpp(34) : see reference to class template instantiation 'boost::STATIC_ASSERTION_FAILURE&lt;x&gt;' being compiled
+  with
+  [
+    x=false
+  ]
+  ...\boost\statechart\simple_state.hpp(861) : see reference to class template instantiation 'boost::statechart::shallow_history&lt;DefaultState&gt;' being compiled
+  with
+  [
+    DefaultState=B
+  ]
+  ...\boost\statechart\simple_state.hpp(599) : see reference to function template instantiation 'void boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::deep_construct_inner_impl_non_empty::deep_construct_inner_impl&lt;InnerList&gt;(const boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::inner_context_ptr_type &amp;,boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::outermost_context_base_type &amp;)' being compiled
+  with
+  [
+    MostDerived=A,
+    Context=InconsistentHistoryTest,
+    InnerInitial=boost::mpl::list&lt;boost::statechart::shallow_history&lt;B&gt;&gt;,
+    InnerList=boost::statechart::simple_state&lt;A,InconsistentHistoryTest,boost::mpl::list&lt;boost::statechart::shallow_history&lt;B&gt;&gt;&gt;::inner_initial_list
+  ]
+  ...\boost\statechart\simple_state.hpp(567) : see reference to function template instantiation 'void boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::deep_construct_inner&lt;boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::inner_initial_list&gt;(const boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::inner_context_ptr_type &amp;,boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::outermost_context_base_type &amp;)' being compiled
+  with
+  [
+    MostDerived=A,
+    Context=InconsistentHistoryTest,
+    InnerInitial=boost::mpl::list&lt;boost::statechart::shallow_history&lt;B&gt;&gt;
+  ]
+  ...\boost\statechart\simple_state.hpp(563) : while compiling class-template member function 'void boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::deep_construct(const boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::context_ptr_type &amp; ,boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;::outermost_context_base_type &amp;)'
+  with
+  [
+    MostDerived=A,
+    Context=InconsistentHistoryTest,
+    InnerInitial=boost::mpl::list&lt;boost::statechart::shallow_history&lt;B&gt;&gt;
+  ]
+  ...\libs\statechart\test\InconsistentHistoryTest1.cpp(29) : see reference to class template instantiation 'boost::statechart::simple_state&lt;MostDerived,Context,InnerInitial&gt;' being compiled
+  with
+  [
+    MostDerived=A,
+    Context=InconsistentHistoryTest,
+    InnerInitial=boost::mpl::list&lt;boost::statechart::shallow_history&lt;B&gt;&gt;
+  ]</pre>Depending on the IDE you use, it is possible that you need to switch to 
+another window to see this full error message (e.g. for Visual Studio 2003, you 
+need to switch to the Output window). Starting at the top and going down the 
+list of instantiations you see that each of them is accompanied by a file name 
+and a line number. Ignoring all files belonging to the library, we find the 
+culprit close to the bottom in file InconsistentHistoryTest1.cpp on line 29.</li>
+	<li>The error is reported on a line nowhere near a BOOST_STATIC_ASSERT. 
+	Probably this is still an error in your code. Use the technique described 
+	under point 2 to see what line of your code causes the problem. If your code 
+	is correct then you've found a bug in either the compiler or Boost.Statechart. Please post a small but complete program showing the 
+	problem to the Boost.User or Boost.Developer lists. Thank you!</li>
+</ol>
+<h2><a name="Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
+support polymorphic events?</a></h2>
+<p>No. Although events can be derived from each other to write common code 
+only once, <a href="definitions.html#Reaction">reactions</a> can only be 
+defined for most-derived events.</p>
+<p>Example:</p>
+<pre>template&lt; class MostDerived &gt;
+struct EvButtonPressed : sc::event&lt; MostDerived &gt;
+{
+  // common code
+};
+
+struct EvPlayButtonPressed :
+  EvButtonPressed&lt; EvPlayButtonPressed &gt; {};
+struct EvStopButtonPressed :
+  EvButtonPressed&lt; EvStopButtonPressed &gt; {};
+struct EvForwardButtonPressed :
+  EvButtonPressed&lt; EvForwardButtonPressed &gt; {};
+
+/* ... */
+
+// We want to turn the player on, no matter what button we
+// press in the Off state. Although we can write the reaction
+// code only once, we must mention all most-derived events in
+// the reaction list.
+struct Off : sc::simple_state&lt; Off, Mp3Player &gt;
+{
+  typedef mpl::list&lt;
+    sc::custom_reaction&lt; EvPlayButtonPressed &gt;,
+    sc::custom_reaction&lt; EvStopButtonPressed &gt;,
+    sc::custom_reaction&lt; EvForwardButtonPressed &gt;
+  &gt; reactions;
+
+  template&lt; class MostDerived &gt;
+  sc::result react( const EvButtonPressed&lt; MostDerived &gt; &amp; )
+  {
+    // ...
+  }
+};</pre>
 <h2>
 <a name="Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
 Why are exit-actions called in the wrong order when I use multiple inheritance?</a></h2>
@@ -269,54 +397,9 @@ EntryExitDisplayer::~EntryExitDisplayer()</code>.</p>
 and <code>state&lt;&gt;</code> be the first base class of a state. This ensures that 
 destructors of additional bases are called before recursion employed by state 
 base destructors can alter the order of destruction.</p>
-<h2><a name="Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></h2>
-<p>It depends. As explained under
-<a href="performance.html#Speed versus scalability tradeoffs">Speed versus 
-scalability tradeoffs</a> on the Performance page, the virtually limitless scalability 
-offered by this library does have its 
-price. Especially small and simple FSMs can easily be implemented so that they 
-consume fewer cycles and less memory and occupy less code space in the 
-executable. Here are some obviously <b>very rough</b> estimates:</p>
-<ul>
-	<li>For a state machine with at most one simultaneously active state (that 
-	is, the machine is flat and does not have orthogonal regions) with trivial 
-	actions, customized memory management and compiled with a good optimizing 
-	compiler, a Pentium 4 class CPU should not spend more than 1000 cycles 
-	inside <code>state_machine&lt;&gt;::process_event()</code>. This worst-case 
-	dispatch and transition time scales more or less linearly with the number of 
-	simultaneously active states for more complex state machines, with the 
-	typical average being much lower than that. So, a fairly complex machine 
-	with at most 10 simultaneously active states running on a 100MHz CPU should 
-	be able to process more than 10'000 events per second</li>
-	<li>A single state machine object uses typically less than 1KB of memory, 
-	even if it implements a very complex machine</li>
-	<li>For code size, it is difficult to give a concrete guideline but tests 
-	with the BitMachine example suggest that code size scales more or less 
-	linearly with the number of states (transitions seem to have only little 
-	impact). When compiled with MSVC7.1 on Windows, 32 states and 224 
-	transitions seem to fit in ~108KB executable code (with all optimizations 
-	turned on).<br>
-	Moreover, the library can be compiled with C++ RTTI and exception handling turned off, 
-	resulting in significant savings on most platforms</li>
-</ul>
-<p>As mentioned above, these are very rough estimates derived from the use of 
-the library on a desktop PC, so they should only be used to decide whether there 
-is a point in making your own performance tests on your target platform.</p>
-<h2>
-<a name="Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
-Is your library suitable for applications with hard real-time requirements?</a></h2>
-<p>Yes. Out of the box, the only operations taking potentially non-deterministic 
-time that the library performs are calls to 
-global <code>operator new</code> and <code>dynamic_cast</code>s. Global <code>
-operator new</code> calls can be avoided by passing a custom allocator to&nbsp;
-<code>state_machine&lt;&gt;</code> <b>and</b> by giving all state classes a custom <code>
-operator new</code>. <code>dynamic_cast</code>s can be avoided by not calling the
-<code>state_cast&lt;&gt;</code> member functions of <code>state_machine&lt;&gt;</code>,
-<code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> but using the 
-deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->07 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21136" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
