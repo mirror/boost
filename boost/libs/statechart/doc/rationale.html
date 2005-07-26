@@ -108,13 +108,17 @@ in the state can (and should) thus be a member of the state. This feature
 paired with the ability to spread a state machine over several translation 
 units makes possible virtually unlimited scalability.&nbsp;</p>
 <p>In most existing FSM frameworks the whole state machine runs in one 
-environment (context). That is, all resource handles and variables local to 
-the state machine are stored in one place (normally as members of the class 
-that also derives from some state machine base class). For large state 
-machines this often leads to the class having a huge number of data members 
-most of which are needed only briefly in a tiny part of the machine. The state 
-machine class therefore often becomes a change hotspot what leads to frequent 
-recompilations of the whole state machine.&nbsp;</p>
+environment (context). That is, all resource handles and variables local to the 
+state machine are stored in one place (normally as members of the class that 
+also derives from some state machine base class). For large state machines this 
+often leads to the class having a huge number of data members most of which are 
+needed only briefly in a tiny part of the machine. The state machine class 
+therefore often becomes a change hotspot what leads to frequent recompilations 
+of the whole state machine.</p>
+<p>The FAQ item &quot;<a href="faq.html#Whats_so_cool_about_state-local_storage">What's 
+so cool about state-local storage?</a>&quot; further explains this by comparing the 
+tutorial StopWatch to a behaviorally equivalent version that does not use 
+state-local storage.</p>
 <h2><a name="Dynamic configurability">Dynamic configurability</a></h2>
 <h3>Two types of state machine frameworks</h3>
 <ul>
@@ -451,7 +455,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19925" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

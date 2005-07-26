@@ -317,6 +317,10 @@ context of a state. This can either be a direct or indirect outer state (e.g.
 <code>context&lt; Active &gt;()</code>) or the state machine itself (<code>context&lt; 
 StopWatch &gt;()</code>). The rest should be mostly self-explanatory. The machine 
 now measures the time, but we cannot yet retrieve it from the main program.</p>
+<p>At this point, the advantages of state-local storage (which is still a relatively 
+little-known feature) may not yet have become apparent. The FAQ item &quot;<a href="faq.html#Whats_so_cool_about_state-local_storage">What's so cool about state-local storage?</a>&quot; 
+tries to explain them in more detail by comparing this StopWatch with one that does not make use of 
+state-local storage.</p>
 <h3><a name="Getting state information out of the machine">Getting state 
 information out of the machine</a></h3>
 <p>To retrieve the measured time, we need a mechanism to get state information 
@@ -1451,7 +1455,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19927" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

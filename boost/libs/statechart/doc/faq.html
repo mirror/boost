@@ -25,6 +25,8 @@
 </table>
 <hr>
 <dl class="page-index">
+  <dt><a href="#Whats_so_cool_about_state-local_storage">
+	What's so cool about state-local storage?</a></dt>
   <dt>
   <a href="#How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
   How can I hide the inner workings of a state machine from its clients?</a></dt>
@@ -35,7 +37,7 @@
   <dt><a href="#Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></dt>
   <dt>
 	<a href="#Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
-	Is your library suitable for applications with hard real-time requirements</a>?</dt>
+	Is your library suitable for applications with hard real-time requirements?</a></dt>
   <dt>
 	<a href="#My_compiler_reports_an_error_in_the_library_code._Is_this_a_bug_in_Boost.Statechart">
 	My compiler reports an error in the library code. Is this a bug in Boost.Statechart?</a></dt>
@@ -47,17 +49,121 @@
 	inheritance?</a></dt>
 </dl>
 <h2>
+<a name="Whats_so_cool_about_state-local_storage">What's so cool about state-local storage?</a></h2>
+<p>
+This is best explained with an example:</p>
+<pre>
+struct Active;
+struct Stopped;
+struct Running;
+struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt;
+{
+  // startTime_ remains uninitialized, because there is no reasonable default
+  StopWatch() : elapsedTime_( 0.0 ) {}
+  ~StopWatch()
+  {
+    terminate();
+  }
+
+  double ElapsedTime() const
+  {
+    // Ugly switch over the current state.
+    if ( state_cast&lt; const Stopped * &gt;() != 0 )
+    {
+      return elapsedTime_;
+    }
+    else if ( state_cast&lt; const Running * &gt;() != 0 )
+    {
+      return elapsedTime_ + std::difftime( std::time( 0 ), startTime_ );
+    }
+    else // we're terminated
+    {
+      throw std::bad_cast();
+    }
+  }
+
+  // elapsedTime_ is only meaningful when the machine is not terminated
+  double elapsedTime_;
+  // startTime_ is only meaningful when the machine is in Running
+  std::time_t startTime_;
+};
+
+struct Active : sc::state&lt; Active, StopWatch, Stopped &gt;
+{
+  typedef sc::transition&lt; EvReset, Active &gt; reactions;
+
+  Active( my_context ctx ) : my_base( ctx )
+  {
+    outermost_context().elapsedTime_ = 0.0;
+  }
+};
+
+  struct Running : sc::state&lt; Running, Active &gt;
+  {
+    typedef sc::transition&lt; EvStartStop, Stopped &gt; reactions;
+
+    Running( my_context ctx ) : my_base( ctx )
+    {
+      outermost_context().startTime_ = std::time( 0 );
+    }
+
+    ~Running()
+    {
+      outermost_context().elapsedTime_ +=
+        std::difftime( std::time( 0 ), outermost_context().startTime_ );
+    }
+  };
+
+  struct Stopped : sc::simple_state&lt; Stopped, Active &gt;
+  {
+    typedef sc::transition&lt; EvStartStop, Running &gt; reactions;
+  };</pre>
+<p>
+This StopWatch does not make any use of state-local storage while implementing 
+the same behavior as the <a href="tutorial.html#Basic topics: A stop watch">
+tutorial StopWatch</a>. Even though this 
+code is probably easier to read for the untrained eye, it does have a few 
+problems that are absent in the original:</p>
+<ul>
+	<li>This StopWatch class has data members that have a meaningful value only 
+	if the state machine happens to be in a certain state. That is, the 
+	lifetimes of these variables are not identical with the one of the StopWatch 
+	object containing them. Since the lifetimes are managed by the entry and 
+	exit actions of states, we need to use an ugly switch 
+	over the current state (see <code>StopWatch::ElapsedTime()</code>) if we want to access them from a context where the 
+	current state is unclear. This essentially duplicates some of the state 
+	logic of the FSM. Therefore, whenever we need to change the layout of the 
+	state machine we will likely also need to change the ugly switch. Even 
+	worse, if we forget to change the switch, the code will probably still 
+	compile and maybe even silently do the wrong thing. Note that this is 
+	impossible with the version in the tutorial, which will at least throw an 
+	exception and often just refuse to compile. Moreover, for the tutorial StopWatch 
+	there's a much higher chance that a programmer will get a change correct the 
+	first time since the code that calculates the elapsed time is located close 
+	to the code that updates the variables</li>
+	<li>We need to change the StopWatch class whenever we want to introduce a 
+	new variable or change the type of an already existing variable. That is, 
+	many changes in the FSM will likely lead to a change in the StopWatch class. 
+	In all FSMs that do not employ state-local storage, the <code>state_machine&lt;&gt;</code> 
+	subclass will therefore be a change hotspot, which is a pretty sure 
+	indicator for a bad design</li>
+</ul>
+<p>Both points are not much of a problem in a small example like this, which can 
+easily be implemented in a single translation unit by a single programmer. 
+However, they quickly become a major problem for a big complex machine spread 
+over multiple translation units, which are possibly even maintained by 
+different programmers.</p>
+<h2>
 <a name="How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
 How can I hide the inner workings of a state machine from its clients?</a></h2>
 <p>To see why and how this is possible it is important to recall the following 
 facts:</p>
 <ul>
   <li>Member functions of a C++ class template are instantiated at the point 
-  where they're actually called. If the function is never called, it will not 
-  be instantiated and not a single assembly instruction will ever be 
-  generated.</li>
+	where they're actually called. If the function is never called, it will not 
+	be instantiated and not a single assembly instruction will ever be generated</li>
   <li>The <code>InitialState</code> template parameter of <code>
-  sc::state_machine</code> can be an incomplete type (i.e. forward declared).</li>
+  sc::state_machine</code> can be an incomplete type (i.e. forward declared)</li>
 </ul>
 <p>The class template member function <code>state_machine&lt;&gt;::initiate()</code> 
 creates an object of the initial state. So, the definition of this state must 
@@ -399,7 +505,7 @@ destructors of additional bases are called before recursion employed by state
 base destructors can alter the order of destruction.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21136" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
