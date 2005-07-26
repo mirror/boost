@@ -444,6 +444,9 @@ Requirements
 * ``X`` is the type of ``x``.
 * ``K`` is the tag type used in ``y`` and ``u``.
 * ``D`` is the type of the default value in ``u``.
+* If ``u`` has a lazy default, the *default value* of ``u`` is defined as the
+  the result of invoking the function bound in ``u``. Any exception that
+  is thrown from this function is propagated.
 
 +------------+---------------------------+------------------------------+------------------------------------------------------+
 | Expression | Type                      | Requirements                 | Semantics/Notes                                      |
@@ -452,16 +455,11 @@ Requirements
 |            |                           | with ``K`` exists            |                                                      |
 |            |                           | in ``x``.                    |                                                      |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
-| ``x[u]``   | binding<X, K, D>::type    | \-                           | Returns the bound argument tagged with ``K``         |
-|            |                           |                              | if such an argument exists.                          |
+| ``x[u]``   | binding<X, K, D>::type    | \-                           | If ``x`` contains a bound argument tagged with       |
+|            |                           |                              | ``u``'s keyword, returns a reference to that         |
+|            |                           |                              | argument.                                            |
 |            |                           |                              |                                                      |
 |            |                           |                              | Otherwise returns the default value of ``u``.        |
-|            |                           |                              |                                                      |
-|            |                           |                              | If ``u`` has a lazy default, the default function of |
-|            |                           |                              | ``u`` is called and the result returned. This may    |
-|            |                           |                              | throw whatever the default value function of ``u``   |
-|            |                           |                              | throws  when ``x`` does not contain an argument      |
-|            |                           |                              | tagged with ``K``.                                   |
 +------------+---------------------------+------------------------------+------------------------------------------------------+
 | ``x, z``   | Model of |ArgumentPack|   | \-                           | Returns a composite |ArgumentPack|_ that             |
 |            |                           |                              | contains bindings to all arguments bound in ``x``    |
