@@ -107,7 +107,8 @@ operator=
     Nothing
 
 **Returns**
-    A model of |ArgumentPack|_, holding ``value``, tagged with ``Tag``.
+    A model of |ArgumentPack|_, holding ``value`` (by reference),
+    and tagged with ``Tag``.
 
 .. dwa:
 
@@ -127,20 +128,20 @@ operator|
 
 .. parsed-literal::
 
-    template <class T> |KeywordDefaultExpression|_ operator|(T& default\_) const;
-    template <class T> |KeywordDefaultExpression|_ operator|(T const& default\_) const;
+    template <class T> |KeywordDefaultExpression|_ operator|(T& x) const;
+    template <class T> |KeywordDefaultExpression|_ operator|(T const& x) const;
 
 **Throws**
     Nothing
 
 **Returns**
-    An object that holds ``default_`` as a default for the
+    An object that holds ``x`` as a default for the
     keyword tag ``Tag``.
 
 .. daniel:
     A model of |KeywordDefaultExpression|_ that, when used to
     index an |ArgumentPack|_ that does not contain an appropriate
-    parameter, gives ``default_``.
+    parameter, gives ``x``.
 
 .. daniel:
 
@@ -150,29 +151,6 @@ operator|
 
 .. dwa: 
 
-   1. First of all, there is no class called ArgumentPack that has
-   an operator[].
-
-   2. an operator[] can't contain a parameter
-
-   3. "which" should be "that"
-
-   4. You need a comma after ``Tag``.
-
-   5. It's the *type*, not the object, that models the concept.
-      If we're going to use this convention of using concept names
-      in place of return types, we should document it once at the
-      beginning and then we never have to say what the object's
-      type models.
-
-   6. An object doesn't return anything, even when used as an
-      argument.
-
-   7. "Specified with ``Tag``" is vague.  I don't think any
-      reasonable definition you could come up with could be
-      correct, since the ArgumentPack may hold a reference to an
-      object associated *positionally* with Tag.
-
    Maybe:
 
       An object that holds ``default_`` as a default for the
@@ -181,7 +159,11 @@ operator|
 
    This description would oblige us to explain the
    terminology "...holds as a default for keyword tag..." in the
-   definition of KeywordDefaultExpression and associated concepts:
+   definition of KeywordDefaultExpression and associated concepts.
+
+   I changed ``default_`` to ``x`` because it is difficult to read
+   a sentence that uses the word "default" and the identifier
+   ``default_`` .  We're just using a generic ``T`` anyhow.
 
 operator||
 ~~~~~~~~~~

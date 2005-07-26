@@ -287,33 +287,49 @@ or copy at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http
 </dl>
 <dl class="docutils">
 <dt><strong>Models</strong></dt>
-<dd><span class="concept">IndexExpression</span></dd>
+<dd><a class="reference" href="#keywordexpression"><span class="concept">KeywordExpression</span></a></dd>
 </dl>
+<!-- dwa:
+
+1. You never defined IndexExpression
+
+2. You should use cross-linking to the concept definitions,
+   thus, |IndexExpression|_
+
+3. A class template doesn't model any concept we use other than
+   Metafunction.  Maybe specializations model IndexExpression,
+   or something. -->
 <pre class="literal-block">
 template &lt;class Tag&gt;
 struct keyword
 {
     template &lt;class T&gt;
-    <span class="concept">ArgumentPack</span> <a class="reference" href="#operator">operator=</a>(T&amp; value) const;
+    <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> <a class="reference" href="#operator">operator=</a>(T&amp; value) const;
 
     template &lt;class T&gt;
-    <span class="concept">ArgumentPack</span> <a class="reference" href="#operator">operator=</a>(T const&amp; value) const;
+    <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> <a class="reference" href="#operator">operator=</a>(T const&amp; value) const;
 
     template &lt;class T&gt;
-    <span class="concept">ArgumentPack</span> <a class="reference" href="#id3">operator|</a>(T&amp; default_) const;
+    <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> <a class="reference" href="#id3">operator|</a>(T&amp; default_) const;
 
     template &lt;class T&gt;
-    <span class="concept">KeywordDefaultExpression</span> <a class="reference" href="#id3">operator|</a>(T const&amp; default_) const;
+    <a class="reference" href="#keyworddefaultexpression"><span class="concept">KeywordDefaultExpression</span></a> <a class="reference" href="#id3">operator|</a>(T const&amp; default_) const;
 
     template &lt;class F&gt;
-    <span class="concept">KeywordDefaultExpression</span> <a class="reference" href="#id4">operator||</a>(F const&amp;) const;
+    <a class="reference" href="#keyworddefaultexpression"><span class="concept">KeywordDefaultExpression</span></a> <a class="reference" href="#id4">operator||</a>(F const&amp;) const;
 };
 </pre>
+<!-- dwa:
+
+We don't have a convention of using a raw concept name,
+formatted as a concept, as the return value of a function.  If
+we're going to start doing this, don't we need to explain it
+somewhere? -->
 <div class="section" id="operator">
 <h2><a name="operator">operator=</a></h2>
 <pre class="literal-block">
-template &lt;class T&gt; <span class="concept">ArgumentPack</span> operator=(T&amp; value) const;
-template &lt;class T&gt; <span class="concept">ArgumentPack</span> operator=(T const&amp; value) const;
+template &lt;class T&gt; <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> operator=(T&amp; value) const;
+template &lt;class T&gt; <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> operator=(T const&amp; value) const;
 </pre>
 <dl class="docutils">
 <dt><strong>Requires</strong></dt>
@@ -321,84 +337,125 @@ template &lt;class T&gt; <span class="concept">ArgumentPack</span> operator=(T c
 <dt><strong>Throws</strong></dt>
 <dd>Nothing</dd>
 <dt><strong>Returns</strong></dt>
-<dd>A model of <span class="concept">ArgumentPack</span>, holding a <em>cv</em> reference to <tt class="docutils literal"><span class="pre">value</span></tt>,
-tagged with <tt class="docutils literal"><span class="pre">Tag</span></tt>.</dd>
+<dd>A model of <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a>, holding <tt class="docutils literal"><span class="pre">value</span></tt> (by reference),
+and tagged with <tt class="docutils literal"><span class="pre">Tag</span></tt>.</dd>
 </dl>
+<!-- dwa:
+
+1. We don't have a convention of writing "*cv* reference to."
+   I know what you mean, but if we're going to start doing
+   this we need to explain the convention somewhere.
+
+2. It's not a cv reference to value, since value itself is a
+   reference.  You can only reference an object.  So this
+   should be, perhaps, "holding value" or if you think that's
+   not explicit enough, "holding a reference equivalent to
+   value."  That deals with the cv issue. -->
 </div>
 <div class="section" id="id3">
 <h2><a name="id3">operator|</a></h2>
 <pre class="literal-block">
-template &lt;class T&gt; <span class="concept">KeywordDefaultExpression</span> operator|(T&amp; default_) const;
-template &lt;class T&gt; <span class="concept">KeywordDefaultExpression</span> operator|(T const&amp; default_) const;
+template &lt;class T&gt; <a class="reference" href="#keyworddefaultexpression"><span class="concept">KeywordDefaultExpression</span></a> operator|(T&amp; x) const;
+template &lt;class T&gt; <a class="reference" href="#keyworddefaultexpression"><span class="concept">KeywordDefaultExpression</span></a> operator|(T const&amp; x) const;
 </pre>
 <dl class="docutils">
 <dt><strong>Throws</strong></dt>
 <dd>Nothing</dd>
 <dt><strong>Returns</strong></dt>
-<dd>An object that models KeywordDefaultExpression, that when used as
-an argument to <tt class="docutils literal"><span class="pre">ArgumentPack::operator[]</span></tt> which doesn't contain
-a parameter specified with <tt class="docutils literal"><span class="pre">Tag</span></tt> returns a reference to <tt class="docutils literal"><span class="pre">default_</span></tt>.</dd>
+<dd>An object that holds <tt class="docutils literal"><span class="pre">x</span></tt> as a default for the
+keyword tag <tt class="docutils literal"><span class="pre">Tag</span></tt>.</dd>
 </dl>
+<!-- daniel:
+A model of |KeywordDefaultExpression|_ that, when used to
+index an |ArgumentPack|_ that does not contain an appropriate
+parameter, gives ``x``. -->
+<!-- daniel:
+
+An object that models KeywordDefaultExpression, that when used as
+an argument to ``ArgumentPack::operator[]`` which doesn't contain
+a parameter specified with ``Tag`` returns a reference to ``default_``. -->
+<!-- dwa: 
+
+Maybe:
+
+   An object that holds ``default_`` as a default for the
+   keyword tag ``Tag``.
+
+
+This description would oblige us to explain the
+terminology "...holds as a default for keyword tag..." in the
+definition of KeywordDefaultExpression and associated concepts.
+
+I changed ``default_`` to ``x`` because it is difficult to read
+a sentence that uses the word "default" and the identifier
+``default_`` .  We're just using a generic ``T`` anyhow. -->
 </div>
 <div class="section" id="id4">
 <h2><a name="id4">operator||</a></h2>
 <pre class="literal-block">
-template &lt;class F&gt; <span class="concept">KeywordDefaultExpression</span> operator||(F const&amp; fn) const;
+template &lt;class F&gt; <a class="reference" href="#keyworddefaultexpression"><span class="concept">KeywordDefaultExpression</span></a> operator||(F const&amp; fn) const;
 </pre>
 <dl class="docutils">
 <dt><strong>Throws</strong></dt>
 <dd>Nothing</dd>
 <dt><strong>Requires</strong></dt>
-<dd><p class="first"><tt class="docutils literal"><span class="pre">F</span></tt> is a nullary function object.</p>
-<p><strong>On compilers that support partial specialization:</strong></p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="38%" />
-<col width="62%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th>Expression</th>
-<th>Requirement</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">boost::result_of&lt;F()&gt;::type</span></tt></td>
-<td><span class="concept">CopyConstructible</span></td>
-</tr>
-<tr><td><tt class="docutils literal"><span class="pre">fn()</span></tt></td>
-<td>Convertible to <tt class="docutils literal"><span class="pre">boost::result_of&lt;F()&gt;::type</span></tt></td>
-</tr>
-</tbody>
-</table>
-<p><strong>On compilers that doesn't support partial specialization:</strong></p>
-<table border="1" class="last docutils">
-<colgroup>
-<col width="36%" />
-<col width="64%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th>Expression</th>
-<th>Requirement</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">F::result_type</span></tt></td>
-<td><span class="concept">CopyConstructible</span></td>
-</tr>
-<tr><td><tt class="docutils literal"><span class="pre">fn()</span></tt></td>
-<td>Convertible to <tt class="docutils literal"><span class="pre">F::result_type</span></tt></td>
-</tr>
-</tbody>
-</table>
-</dd>
-<dt><strong>Returns</strong></dt>
-<dd>An object that models <span class="concept">KeywordDefaultExpression</span>, that when used as
-an argument to <tt class="docutils literal"><span class="pre">ArgumentPack::operator[]</span></tt> which doesn't contain
-a parameter specified with <tt class="docutils literal"><span class="pre">Tag</span></tt> evaluates and returns <tt class="docutils literal"><span class="pre">fn()</span></tt>.</dd>
+<dd><tt class="docutils literal"><span class="pre">F</span></tt> is a nullary function object.</dd>
 </dl>
-</div>
-</div>
+<p>In the next two tables, <tt class="docutils literal"><span class="pre">fn</span></tt> is an object of type <tt class="docutils literal"><span class="pre">F</span></tt>.</p>
+<!-- dwa: You have to define "function object."  Plain function
+pointers are legal where result_of is supported, FYI.
+
+ **On compilers that support boost::result_of, as indicated by BOOST_NO_RESULT_OF:** -->
+<!-- dwa: This should be "on compilers that support result_of."
+Likewise below.  See the result_of docs for the BOOST_NO_RESULT_OF macro 
+
+ +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+ | Expression                      | Requirement                                         |
+ +=================================+=====================================================+
+ | ``boost::result_of<F()>::type`` | -                                                   |
+ +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+ | ``fn()``                        | Convertible to ``boost::result_of<F()>::type``      |
+ +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+ -->
+<!-- You have to say what fn is.  The usual way is to say, "in the
+next two tables, fn is an object of type F."
+
+ **On compilers that don't support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
+
+ +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+ | Expression                   | Requirement                                         |
+ +==============================+=====================================================+
+ | ``F::result_type``           | -                                                   |
+ +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+ | ``fn()``                     | Convertible to ``F::result_type``                   |
+ +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+ -->
+<!-- dwa: I don't think the CopyConstructible requirement is correct.
+What if the result is a reference?  If it's not a reference, and
+there are no implicit conversions, it's surely got to be copy
+constructible so f can return it.  So are you sure you want to
+require CopyConstructible just so you can handle the actual
+return type not being an exact match? -->
+<dl class="docutils">
+<dt><strong>Returns</strong></dt>
+<dd>An object that holds a reference to <tt class="docutils literal"><span class="pre">fn</span></tt> as a <a class="reference" href="#lazy-default">lazy default</a>
+for the keyword tag <tt class="docutils literal"><span class="pre">Tag</span></tt>.</dd>
+</dl>
+<!-- daniel:
+A model of |KeywordDefaultExpression|_ that, when used to
+index an |ArgumentPack|_ which does not contain an appropriate
+parameter, gives the result of ``fn``. -->
+<!-- daniel:
+An object that models |KeywordDefaultExpression|_, that when used as
+an argument to ``ArgumentPack::operator[]`` which doesn't contain
+a parameter specified with ``Tag`` evaluates and returns ``fn()``. -->
+<!-- dwa:
+
+   An object that holds a reference to ``fn`` as a lazy default
+   for the keyword tag ``Tag``.
+
+This description would oblige us to explain "lazy default." -->
 <hr class="docutils" />
+<a class="target" id="parameters" name="parameters"></a></div>
+</div>
 <div class="reference section" id="class-template-parameters">
 <h1><a class="toc-backref" href="#id16" name="class-template-parameters">class template <span class="class">parameters</span></a></h1>
 <dl class="docutils">
@@ -410,7 +467,7 @@ template &lt;class P0, class P1, …, class PN&gt;
 struct parameters
 {
     template &lt;class T0, class T1, …, class TN&gt;
-    struct <a class="reference" href="#restrict">restrict</a>
+    struct <a class="reference" href="#match">match</a>
     {
         typedef … type;
     };
@@ -427,10 +484,12 @@ struct parameters
 </pre>
 <div class="section" id="template-parameter-semantics">
 <h2><a name="template-parameter-semantics">Template Parameter Semantics</a></h2>
-<p><tt class="docutils literal"><span class="pre">&lt;P0,</span> <span class="pre">…,</span> <span class="pre">PN&gt;</span></tt> are models of <span class="concept">ParameterSpec</span>.</p>
+<p><tt class="docutils literal"><span class="pre">&lt;P0,</span> <span class="pre">…,</span> <span class="pre">PN&gt;</span></tt> are models of <a class="reference" href="#parameterspec"><span class="concept">ParameterSpec</span></a>. If <tt class="docutils literal"><span class="pre">Px</span></tt> is not an
+instance of either <tt class="docutils literal"><span class="pre">optional</span></tt> or <tt class="docutils literal"><span class="pre">required</span></tt>, it is treated as a
+keyword tag with the same meaning as <tt class="docutils literal"><span class="pre">optional&lt;Px&gt;</span></tt>.</p>
 </div>
-<div class="section" id="restrict">
-<h2><a name="restrict">restrict</a></h2>
+<div class="section" id="match">
+<h2><a name="match">match</a></h2>
 <p>Used to remove a function from overload resolution using SFINAE.</p>
 <pre class="literal-block">
 template &lt;class T0, class T1, …, class TN&gt; struct restrict { typedef … type; };
@@ -438,33 +497,33 @@ template &lt;class T0, class T1, …, class TN&gt; struct restrict { typedef …
 <dl class="docutils">
 <dt><strong>Returns</strong></dt>
 <dd>If the supplied argument types <tt class="docutils literal"><span class="pre">&lt;T0,</span> <span class="pre">…,</span> <span class="pre">TN&gt;</span></tt> fulfill the requirments of the
-specified <span class="concept">ParameterSpec</span>'s, <tt class="docutils literal"><span class="pre">restrict&lt;T0,</span> <span class="pre">…,</span> <span class="pre">TN&gt;::type</span></tt> exists and is constructible 
+specified <a class="reference" href="#parameterspec"><span class="concept">ParameterSpec</span></a>'s, <tt class="docutils literal"><span class="pre">match&lt;T0,</span> <span class="pre">…,</span> <span class="pre">TN&gt;::type</span></tt> exists and is constructible
 from <tt class="docutils literal"><span class="pre">parameters&lt;P0,</span> <span class="pre">…,</span> <span class="pre">PN&gt;</span></tt>. Otherwise <tt class="docutils literal"><span class="pre">restrict&lt;T0,</span> <span class="pre">…,</span> <span class="pre">TN&gt;::type</span></tt> doesn't exist.</dd>
 </dl>
 </div>
 <div class="section" id="id6">
 <h2><a name="id6">operator()</a></h2>
 <pre class="literal-block">
-template &lt;class A0&gt; <span class="concept">ArgumentPack</span> operator()(A0 const&amp; a0) const;
-template &lt;class A0, class A1&gt; <span class="concept">ArgumentPack</span> operator()(A0 const&amp; a0, A1 const&amp; a1) const;
+template &lt;class A0&gt; <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> operator()(A0 const&amp; a0) const;
+template &lt;class A0, class A1&gt; <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> operator()(A0 const&amp; a0, A1 const&amp; a1) const;
 …
 </pre>
 <dl class="docutils">
 <dt><strong>Throws</strong></dt>
 <dd>Nothing</dd>
 <dt><strong>Returns</strong></dt>
-<dd>A composite <span class="concept">ArgumentPack</span> containing all arguments <tt class="docutils literal"><span class="pre">&lt;A0,</span> <span class="pre">…,</span> <span class="pre">AN&gt;</span></tt>.
-If <tt class="docutils literal"><span class="pre">Ax</span></tt> is not a model of <span class="concept">ArgumentPack</span>, it is transformed into one
-by tagging the argument with the <span class="concept">ParameterSpec</span> <tt class="docutils literal"><span class="pre">Px</span></tt> in it's position.</dd>
+<dd>A composite <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> containing all arguments <tt class="docutils literal"><span class="pre">&lt;A0,</span> <span class="pre">…,</span> <span class="pre">AN&gt;</span></tt>.
+If <tt class="docutils literal"><span class="pre">Ax</span></tt> is not a model of <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a>, it is transformed into one
+by tagging the argument with the <a class="reference" href="#parameterspec"><span class="concept">ParameterSpec</span></a> <tt class="docutils literal"><span class="pre">Px</span></tt> in it's position.</dd>
 </dl>
-</div>
-</div>
 <hr class="docutils" />
+<a class="target" id="optional" name="optional"></a><a class="target" id="required" name="required"></a></div>
+</div>
 <div class="reference section" id="class-templates-optional-required">
 <h1><a class="toc-backref" href="#id17" name="class-templates-optional-required">class templates <span class="class">optional</span>, <span class="class">required</span></a></h1>
 <dl class="docutils">
 <dt><strong>Models</strong></dt>
-<dd><span class="concept">ParameterSpec</span></dd>
+<dd><a class="reference" href="#parameterspec"><span class="concept">ParameterSpec</span></a></dd>
 <dt><strong>Defined in</strong></dt>
 <dd><a class="reference" href="../../../../boost/parameter/parameters.hpp">boost/parameter/parameters.hpp</a></dd>
 </dl>
@@ -475,15 +534,15 @@ struct optional;
 template &lt;class Tag, class Predicate = <em>unspecified</em>&gt;
 struct required;
 </pre>
-</div>
 <hr class="docutils" />
+<a class="target" id="binding" name="binding"></a></div>
 <div class="reference section" id="class-template-binding">
 <h1><a class="toc-backref" href="#id18" name="class-template-binding">class template <span class="class">binding</span></a></h1>
 <dl class="docutils">
 <dt><strong>Defined in</strong></dt>
 <dd><a class="reference" href="../../../../boost/parameter/binding.hpp">boost/parameter/binding.hpp</a></dd>
 </dl>
-<p>A metafunction that, given an <span class="concept">ArgumentTuple</span>, returns the reference
+<p>A metafunction that, given an <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a>, returns the reference
 type of the parameter identified by <tt class="docutils literal"><span class="pre">Keyword</span></tt>.  If no such parameter has been
 specified, returns <tt class="docutils literal"><span class="pre">Default</span></tt>.</p>
 <pre class="literal-block">
@@ -493,15 +552,15 @@ struct binding
     typedef … type;
 };
 </pre>
-</div>
 <hr class="reference docutils" />
+<a class="target" id="lazy-binding" name="lazy-binding"></a></div>
 <div class="section" id="class-template-lazy-binding">
 <h1><a class="toc-backref" href="#id19" name="class-template-lazy-binding">class template <span class="class">lazy_binding</span></a></h1>
 <dl class="docutils">
 <dt><strong>Defined in</strong></dt>
 <dd><a class="reference" href="../../../../boost/parameter/binding.hpp">boost/parameter/binding.hpp</a></dd>
 </dl>
-<p>A metafunction that, given an <span class="concept">ArgumentPack</span>, returns the reference
+<p>A metafunction that, given an <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a>, returns the reference
 type of the parameter identified by <tt class="docutils literal"><span class="pre">Keyword</span></tt>.  If no such parameter has been
 specified, returns the type returned by invoking <tt class="docutils literal"><span class="pre">DefaultFn</span></tt>.</p>
 <pre class="literal-block">
@@ -517,26 +576,32 @@ struct lazy_binding
 function is determined by <tt class="docutils literal"><span class="pre">boost::result_of&lt;DefaultFn()&gt;::type</span></tt> on compilers
 that support partial specialization. On less compliant compilers a nested
 <tt class="docutils literal"><span class="pre">DefaultFn::result_type</span></tt> is used instead.</p>
-</div>
-</div>
 <hr class="reference docutils" />
+<a class="target" id="keyworddefaultexpression" name="keyworddefaultexpression"></a><a class="target" id="keywordexpression" name="keywordexpression"></a></div>
+</div>
 <div class="section" id="concept-keywordexpression-keyworddefaultexpression">
 <h1><a class="toc-backref" href="#id20" name="concept-keywordexpression-keyworddefaultexpression">concept <span class="concept">KeywordExpression</span>, <span class="concept">KeywordDefaultExpression</span></a></h1>
-<p>Models of these concepts are used as indices in a <span class="concept">ArgumentPack</span>.</p>
-</div>
+<p>Models of these concepts are used as indices in a <span class="concept">ArgumentPack</span>. Models
+of <span class="concept">KeywordDefaultExpression</span> will hold a default value to be used when
+no appropriate argument was passed.</p>
+<a class="target" id="lazy-default" name="lazy-default"></a><div class="section" id="lazy-defaults">
+<h2><a name="lazy-defaults">Lazy Defaults</a></h2>
+<p>A <span class="concept">KeywordDefaultExpression</span> may contain a <em>lazy default</em>, meaning it's
+default value is only computed when needed.</p>
 <hr class="reference docutils" />
+<a class="target" id="argumentpack" name="argumentpack"></a></div>
+</div>
 <div class="section" id="concept-argumentpack">
 <h1><a class="toc-backref" href="#id21" name="concept-argumentpack">concept <span class="concept">ArgumentPack</span></a></h1>
-<!-- Rename this? -->
 <p>Models of this concept are containers of parameters where each parameter
 is tagged with a keyword.</p>
 <div class="section" id="id10">
 <h2><a name="id10">Requirements</a></h2>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">z</span></tt> are objects that model <span class="concept">ArgumentPack</span>.</li>
-<li><tt class="docutils literal"><span class="pre">z</span></tt> is a <em>singular</em> <span class="concept">ArgumentPack</span> as created by <tt class="docutils literal"><span class="pre">keyword::operator</span></tt>.</li>
-<li><tt class="docutils literal"><span class="pre">y</span></tt> is a model if <span class="concept">KeywordExpression</span>.</li>
-<li><tt class="docutils literal"><span class="pre">u</span></tt> is a model if <span class="concept">KeywordDefaultExpression</span>.</li>
+<li><tt class="docutils literal"><span class="pre">z</span></tt> is a <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> containing only one argument, as created by <tt class="docutils literal"><span class="pre">keyword::operator</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">y</span></tt> is a model if <a class="reference" href="#keywordexpression"><span class="concept">KeywordExpression</span></a>.</li>
+<li><tt class="docutils literal"><span class="pre">u</span></tt> is a model if <a class="reference" href="#keyworddefaultexpression"><span class="concept">KeywordDefaultExpression</span></a>.</li>
 <li><tt class="docutils literal"><span class="pre">X</span></tt> is the type of <tt class="docutils literal"><span class="pre">x</span></tt>.</li>
 <li><tt class="docutils literal"><span class="pre">K</span></tt> is the tag type used in <tt class="docutils literal"><span class="pre">y</span></tt> and <tt class="docutils literal"><span class="pre">u</span></tt>.</li>
 <li><tt class="docutils literal"><span class="pre">D</span></tt> is the type of the default value in <tt class="docutils literal"><span class="pre">u</span></tt>.</li>
@@ -569,7 +634,7 @@ in <tt class="docutils literal"><span class="pre">x</span></tt>.</td>
 <td><p class="first">Returns the bound argument tagged with <tt class="docutils literal"><span class="pre">K</span></tt>
 if such an argument exists. Otherwise returns
 the default value of <tt class="docutils literal"><span class="pre">u</span></tt>.</p>
-<p class="last">If <tt class="docutils literal"><span class="pre">u</span></tt> has a <em>lazy default</em>, this may throw
+<p class="last">If <tt class="docutils literal"><span class="pre">u</span></tt> has a <a class="reference" href="#lazy-default">lazy default</a>, this may throw
 whatever the default value function of <tt class="docutils literal"><span class="pre">u</span></tt> throws
 when <tt class="docutils literal"><span class="pre">x</span></tt> does not contain an argument tagged with
 <tt class="docutils literal"><span class="pre">K</span></tt>.</p>
@@ -578,25 +643,27 @@ when <tt class="docutils literal"><span class="pre">x</span></tt> does not conta
 <tr><td><tt class="docutils literal"><span class="pre">x,</span> <span class="pre">z</span></tt></td>
 <td>Model of <span class="concept">ArgumentPack</span></td>
 <td>-</td>
-<td>Returns a composite <span class="concept">ArgumentPack</span> that
+<td>Returns a composite <a class="reference" href="#argumentpack"><span class="concept">ArgumentPack</span></a> that
 contains bindings to all arguments bound in <tt class="docutils literal"><span class="pre">x</span></tt>
 and <tt class="docutils literal"><span class="pre">z</span></tt>.</td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 <hr class="reference docutils" />
+<a class="target" id="parameterspec" name="parameterspec"></a></div>
+</div>
 <div class="section" id="concept-parameterspec">
 <h1><a class="toc-backref" href="#id22" name="concept-parameterspec">concept <span class="concept">ParameterSpec</span></a></h1>
+<p>Used to describe type restrictions and positional meaning in a parameter
+set.</p>
 <p>Models of this concept with special meaning are:</p>
 <ul class="simple">
 <li><span class="class">required</span></li>
 <li><span class="class">optional</span></li>
 </ul>
 <p>Any other type will be treated as a <em>keyword Tag</em>.</p>
-</div>
 <hr class="reference docutils" />
+<a class="target" id="boost-parameter-keyword" name="boost-parameter-keyword"></a></div>
 <div class="section" id="macro-boost-parameter-keyword">
 <h1><a class="toc-backref" href="#id23" name="macro-boost-parameter-keyword">macro <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_KEYWORD</span></tt></a></h1>
 <dl class="docutils">
@@ -613,9 +680,9 @@ BOOST_PARAMETER_KEYWORD(tag_namespace, name)
 <li><tt class="docutils literal"><span class="pre">tag_namespace</span></tt> is the namespace where the tag-types will be placed.</li>
 <li><tt class="docutils literal"><span class="pre">name</span></tt> is the name that will be used for the keyword.</li>
 </ul>
-</div>
-</div>
 <hr class="reference docutils" />
+<a class="target" id="boost-parameter-fun" name="boost-parameter-fun"></a></div>
+</div>
 <div class="section" id="macro-boost-parameter-fun">
 <h1><a class="toc-backref" href="#id24" name="macro-boost-parameter-fun">macro <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_FUN</span></tt></a></h1>
 <dl class="docutils">
@@ -639,7 +706,7 @@ used for the function.</li>
 </div>
 <hr class="docutils footer" />
 <div class="footer">
-Generated on: 2005-07-18 18:16 UTC.
+Generated on: 2005-07-26 16:59 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
