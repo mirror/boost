@@ -34,8 +34,6 @@ __ ../../../../index.htm
     :class: function
 
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
-.. |KeywordExpression| replace:: :concept:`KeywordExpression`
-.. |KeywordDefaultExpression| replace:: :concept:`KeywordDefaultExpression`
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
 
@@ -48,9 +46,6 @@ class template :class:`keyword`
     `boost/parameter/keyword.hpp`__
 
 __ ../../../../boost/parameter/keyword.hpp
-
-**Models**
-    |KeywordExpression|_
 
 .. dwa:
 
@@ -75,13 +70,13 @@ __ ../../../../boost/parameter/keyword.hpp
         |ArgumentPack|_ `operator=`_\(T const& value) const;
 
         template <class T>
-        |ArgumentPack|_ `operator|`_\(T& default\_) const;
+        *unspecified tagged default* `operator|`_\(T& default\_) const;
 
         template <class T>
-        |KeywordDefaultExpression|_ `operator|`_\(T const& default\_) const;
+        *unspecified tagged default* `operator|`_\(T const& default\_) const;
 
         template <class F>
-        |KeywordDefaultExpression|_ `operator||`_\(F const&) const;
+         *unspecified tagged lazy default* `operator||`_\(F const&) const;
     };
 
 
@@ -128,13 +123,17 @@ operator|
 
 .. parsed-literal::
 
-    template <class T> |KeywordDefaultExpression|_ operator|(T& x) const;
-    template <class T> |KeywordDefaultExpression|_ operator|(T const& x) const;
+    template <class T> *unspecified tagged default* operator|(T& x) const;
+    template <class T> *unspecified tagged default* operator|(T const& x) const;
 
 **Throws**
     Nothing
 
 **Returns**
+    An object holding x (by reference) as a default for keyword ``Tag``,
+    and suitable for use in an ArgumentPack's index operator.
+
+.. old:
     An object that holds ``x`` as a default for the
     keyword tag ``Tag``.
 
@@ -170,41 +169,35 @@ operator||
 
 .. parsed-literal::
 
-    template <class F> |KeywordDefaultExpression|_ operator||(F const& fn) const;
+    template <class F> *unspecified tagged lazy default* operator||(F const& fn) const;
 
 **Throws**
     Nothing
 
-**Requires**
-    ``F`` is a nullary function object.
-
-In the next two tables, ``fn`` is an object of type ``F``.
-
 .. dwa: You have to define "function object."  Plain function
    pointers are legal where result_of is supported, FYI.
 
-    **On compilers that support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
+**Requires**
+    ``F`` is a nullary function object.
 
-.. dwa: This should be "on compilers that support result_of."
-   Likewise below.  See the result_of docs for the BOOST_NO_RESULT_OF macro 
+    In the next two tables, ``fn`` is an object of type ``F``.
+
+    **On compilers that support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
 
     +---------------------------------+-----------------------------------------------------+
     | Expression                      | Requirement                                         |
     +=================================+=====================================================+
-    | ``boost::result_of<F()>::type`` | -                                                   |
+    | ``boost::result_of<F()>::type`` | \-                                                  |
     +---------------------------------+-----------------------------------------------------+
     | ``fn()``                        | Convertible to ``boost::result_of<F()>::type``      |
     +---------------------------------+-----------------------------------------------------+
-
-.. You have to say what fn is.  The usual way is to say, "in the
-   next two tables, fn is an object of type F."
 
     **On compilers that don't support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
 
     +------------------------------+-----------------------------------------------------+
     | Expression                   | Requirement                                         |
     +==============================+=====================================================+
-    | ``F::result_type``           | -                                                   |
+    | ``F::result_type``           | \-                                                  |
     +------------------------------+-----------------------------------------------------+
     | ``fn()``                     | Convertible to ``F::result_type``                   |
     +------------------------------+-----------------------------------------------------+
@@ -218,6 +211,11 @@ In the next two tables, ``fn`` is an object of type ``F``.
    return type not being an exact match?
 
 **Returns**
+    An object holding x (by reference) as a lazy default for keyword
+    ``Tag``, and suitable for use in an ArgumentPack's index operator.
+
+
+.. old:
     An object that holds a reference to ``fn`` as a `lazy default`_
     for the keyword tag ``Tag``.
 
@@ -412,30 +410,6 @@ that support partial specialization. On less compliant compilers a nested
 
 //////////////////////////////////////////////////////////////////////////////
 
-.. _keyworddefaultexpression:
-.. _keywordexpression:
-
-concept |KeywordExpression|, |KeywordDefaultExpression|
----------------------------------------------------------------------
-
-Models of these concepts are used as indices in a |ArgumentPack|. Models
-of |KeywordDefaultExpression| will hold a default value to be used when
-no appropriate argument was passed.
-
-.. _lazy default:
-
-Lazy Defaults
-~~~~~~~~~~~~~
-
-A |KeywordDefaultExpression| may contain a *lazy default*, meaning it's
-default value is only computed when needed.
-
-
-.. class:: reference
-
-
-//////////////////////////////////////////////////////////////////////////////
-
 .. _argumentpack:
 
 concept |ArgumentPack|
@@ -448,9 +422,15 @@ Requirements
 ~~~~~~~~~~~~
 
 * ``x`` and ``z`` are objects that model |ArgumentPack|.
-* ``z`` is a |ArgumentPack|_ containing only one argument, as created by ``keyword::operator``.
-* ``y`` is a model if |KeywordExpression|_.
-* ``u`` is a model if |KeywordDefaultExpression|_.
+* ``z`` is a |ArgumentPack|_ containing only one argument, as created by ``keyword::operator=``.
+* ``y`` is a *keyword object* that is associated with a value in the Argument pack.
+* ``u`` is an object produced by an expression of one of the forms::
+
+        k | d
+    or  
+        k || d
+
+  Where ``k`` is a *keyword object*.
 * ``X`` is the type of ``x``.
 * ``K`` is the tag type used in ``y`` and ``u``.
 * ``D`` is the type of the default value in ``u``.
@@ -466,7 +446,7 @@ Requirements
 |            |                           |                              | if such an argument exists. Otherwise returns        |
 |            |                           |                              | the default value of ``u``.                          |
 |            |                           |                              |                                                      |
-|            |                           |                              | If ``u`` has a `lazy default`_, this may throw       |
+|            |                           |                              | If ``u`` has a lazy default, this may throw          |
 |            |                           |                              | whatever the default value function of ``u`` throws  |
 |            |                           |                              | when ``x`` does not contain an argument tagged with  |
 |            |                           |                              | ``K``.                                               |
