@@ -7,21 +7,6 @@
 
 __ ../../../../index.htm
 
-.. Firefox, at least, seems to need some help lowering
-   subscripts. Without the following, subscripts seem not to drop
-   at all.
-
-.. raw:: html
-
-  <style type="text/css">
-  sub {
-    vertical-align: -20%
-  }
-  span.doublesize {
-    font-size: 200%
-  }
-  </style>
-
 -------------------------------------
 
 
@@ -53,7 +38,7 @@ __ ../../../../index.htm
 .. contents:: **Table of Contents**
 
 .. role:: concept
-   :class: interpreted
+   :class: concept
 
 .. role:: large
    :class: doublesize

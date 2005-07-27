@@ -1,15 +1,19 @@
 import docutils ;
 
-path-constant docutils-css : ../../iterator/doc/default.css ;
-
 import path ;
 sources = [ path.glob . : *.rst ] ;
 bases = $(sources:S=) ;
   
+# This is a path relative to the html/ subdirectory where the
+# generated output will eventually be moved.
+stylesheet = "--stylesheet=../../../../rst.css" ;
+
 for local b in $(bases)
 {
     html $(b) : $(b).rst : 
-      <docutils-html>"-gdt --traceback --trim-footnote-reference-space --footnote-references=superscript --embed-stylesheet --stylesheet-path="$(docutils-css)
+      
+      # 
+      <docutils-html>"-gdt --traceback --trim-footnote-reference-space --footnote-references=superscript "$(stylesheet)
   ;
 }
 
