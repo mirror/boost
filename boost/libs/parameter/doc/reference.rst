@@ -20,7 +20,7 @@ __ ../../../../index.htm
 .. _`Boost Consulting`: http://www.boost-consulting.com
 
 .. contents::
-    :depth: 1
+    :depth: 2
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +38,164 @@ __ ../../../../index.htm
 
 
 .. class:: reference
+
+.. role:: large
+   :class: doublesize
+
+.. section-numbering::
+
+Preliminaries
+=============
+
+In this reference, all identifiers will be written as if the
+namespace alias ::
+
+  namespace parameter = boost::parameter;
+
+is in force: we'll write ``parameter::xxx`` instead of
+``boost::parameter::xxx``.
+
+Terminology
+===========
+
+.. _keyword:
+.. |keyword| replace:: `keyword`_
+
+keyword
+  The name of a function parameter.
+
+.. _keyword tag type:
+.. |keyword tag type| replace:: `keyword tag type`_
+
+keyword tag type
+  A type of the form ``parameter::keyword<K>`` used to uniquely
+  identify a function parameter.   Typically ``K`` will be a type
+  whose name is the same as that of the parameter.
+
+.. _tag type:
+.. |tag type| replace:: `tag type`_
+
+tag type
+  Shorthand for “\ |keyword tag type|.”
+
+.. _keyword object:
+.. |keyword object| replace:: `keyword object`_
+
+keyword object
+  An object whose type is a tag type.
+
+.. _tagged reference:
+.. |tagged reference| replace:: `tagged reference`_
+
+tagged reference
+  An object that 
+  * contains a reference to its *value*, and
+  * whose type is associated with a |keyword tag type|.
+
+  As a shorthand, a “tagged reference to ``x``\ ” means a tagged
+  reference whose *value* is ``x``.
+
+.. _tagged default:
+.. |tagged default| replace:: `tagged default`_
+
+tagged default 
+  A |tagged reference| whose *value* represents the value of a
+  default argument. 
+
+.. _tagged lazy default:
+.. |tagged lazy default| replace:: `tagged lazy default`_
+
+tagged lazy default 
+  A |tagged reference| whose *value* computes a default
+  argument value when invoked with no arguments.
+
+Concepts
+========
+
+|ArgumentPack|
+--------------
+
+An |ArgumentPack| is conceptually a collection of |tagged
+reference|\ s to the actual arguments passed to a function.
+
+Requirements
+~~~~~~~~~~~~
+
+Unless otherwise specified, no use of an |ArgumentPack| throws
+an exceptions.
+
+In the table below, 
+
+* ``A`` is a model of |ArgumentPack|
+* ``x`` is an instance of ``A``
+* ``u`` is a |keyword object| of type ``K``
+* ``v`` is a |tagged default| with |tag type| ``L`` and *value* of type ``D``
+* ``w`` is a |tagged lazy default| with |tag type| ``M`` and *value* of type ``E const``
+* ``z`` is an |ArgumentPack| containing a single element (as created by ``keyword::operator=``)
+
+and no exceptions are thrown other than those propagated from the
+invocation of ``w``\ 's *value*.
+
++----------+-----------------------------+------------------+--------------------------------------+
+|Expression| Type                        |Requirements      |Semantics/Notes                       |
++==========+=============================+==================+======================================+
+|``x[u]``  |``binding<A,K>::type``       |``x`` contains an |Returns *b*\ 's *value* (by           |
+|          |                             |element *b* whose |reference).                           |
+|          |                             |keyword is ``K``  |                                      |
++----------+-----------------------------+------------------+--------------------------------------+
+|``x[u]``  |``binding<A,L,D>::type``     |*none*            |If ``x`` contains an element *b* whose|
+|          |                             |                  |keyword is the same as ``u``\ 's,     |
+|          |                             |                  |returns *b*\ 's *value* (by           |
+|          |                             |                  |reference).  Otherwise, returns ``u``\|
+|          |                             |                  |'s *value*.                           |
++----------+-----------------------------+------------------+--------------------------------------+
+|``x[w]``  |``lazy_binding<A,M,E>::type``|*none*            |If ``x`` contains an element *b* whose|
+|          |                             |                  |keyword is the same as ``w``\ 's,     |
+|          |                             |                  |returns *b*\ 's *value* (by           |
+|          |                             |                  |reference).  Otherwise, invokes ``w``\|
+|          |                             |                  |'s *value* and returns the result.    |
++----------+-----------------------------+------------------+--------------------------------------+
+|``x, z``  |Model of |ArgumentPack|      |*none*            |Returns an |ArgumentPack|_ containing |
+|          |                             |                  |all the elements of both ``x`` and    |
+|          |                             |                  |``z``.                                |
++----------+-----------------------------+------------------+--------------------------------------+
+
+
+.. class:: reference
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+.. _parameterspec:
+
+|ParameterSpec|
+---------------
+
+Used to describe type restrictions and positional meaning in a parameter
+set.
+
+Models of this concept with special meaning are:
+
+* :class:`required`
+* :class:`optional`
+
+
+.. daniel: maybe this shouldn't be here...
+
+  Any other type will be treated as a *keyword Tag*.
+
+
+Other Stuff
+===========
+
+That heading will be replaced by many others.
+
+.. class:: reference
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
 
 class template :class:`keyword`
 ------------------------------------
@@ -88,12 +246,12 @@ __ ../../../../boost/parameter/keyword.hpp
    somewhere?
 
 
-.. _keyword object:
+.. comment .. _keyword object:
 
 Keyword objects
 ~~~~~~~~~~~~~~~
 
-.. |keyword-object| replace:: `keyword object`_
+.. comment .. |keyword-object| replace:: `keyword object`_
 
 Keyword objects are instances of a ``keyword<>`` specialization.
 
@@ -435,82 +593,6 @@ Requirements
 function is determined by ``boost::result_of<DefaultFn()>::type`` on compilers
 that support partial specialization. On less compliant compilers a nested
 ``DefaultFn::result_type`` is used instead.
-
-
-.. class:: reference
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-.. _argumentpack:
-
-concept |ArgumentPack|
--------------------------------
-
-Models of this concept are containers of parameters where each parameter
-is tagged with a keyword.
-
-Requirements
-~~~~~~~~~~~~
-
-* ``x`` and ``z`` are objects that model |ArgumentPack|.
-* ``z`` is a |ArgumentPack|_ containing only one argument, as created by ``keyword::operator=``.
-* ``y`` is a `keyword object`_ that is associated with a value in the Argument pack.
-* ``u`` is an object produced by an expression of one of the forms::
-
-        k | d
-    or  
-        k || d
-
-  Where ``k`` is a `keyword object`_.
-* ``X`` is the type of ``x``.
-* ``K`` is the tag type used in ``y`` and ``u``.
-* ``D`` is the type of the default value in ``u``.
-* If ``u`` has a lazy default, the *default value* of ``u`` is defined as the
-  the result of invoking the function bound in ``u``. Any exception that
-  is thrown from this function is propagated.
-
-+------------+---------------------------+------------------------------+------------------------------------------------------+
-| Expression | Type                      | Requirements                 | Semantics/Notes                                      |
-+============+===========================+==============================+======================================================+
-| ``x[y]``   | binding<X, K>::type       | An argument tagged           | Returns the bound argument tagged with ``K``.        |
-|            |                           | with ``K`` exists            |                                                      |
-|            |                           | in ``x``.                    |                                                      |
-+------------+---------------------------+------------------------------+------------------------------------------------------+
-| ``x[u]``   | binding<X, K, D>::type    | \-                           | If ``x`` contains a bound argument tagged with       |
-|            |                           |                              | ``u``'s keyword, returns a reference to that         |
-|            |                           |                              | argument.                                            |
-|            |                           |                              |                                                      |
-|            |                           |                              | Otherwise returns the default value of ``u``.        |
-+------------+---------------------------+------------------------------+------------------------------------------------------+
-| ``x, z``   | Model of |ArgumentPack|   | \-                           | Returns a composite |ArgumentPack|_ that             |
-|            |                           |                              | contains bindings to all arguments bound in ``x``    |
-|            |                           |                              | and ``z``.                                           |
-+------------+---------------------------+------------------------------+------------------------------------------------------+
-
-
-.. class:: reference
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-.. _parameterspec:
-
-concept |ParameterSpec|
------------------------
-
-Used to describe type restrictions and positional meaning in a parameter
-set.
-
-Models of this concept with special meaning are:
-
-* :class:`required`
-* :class:`optional`
-
-
-.. daniel: maybe this shouldn't be here...
-
-  Any other type will be treated as a *keyword Tag*.
 
 
 .. class:: reference
