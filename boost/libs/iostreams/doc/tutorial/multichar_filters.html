@@ -93,7 +93,7 @@
 <A NAME="shell_comments_multichar_input_filter"></A>
 <H4><CODE>shell_comments_multichar_input_filter</CODE></H4>
 
-<P>We can express a <A HREF="#shell_comments">shell comments Filter</A> as an <A HREF="../concepts/multi_character.html">Multi-Character</A> <A HREF="../concepts/input_filter.html">InputFilter</A> as follows:</P>
+<P>We can express a <A HREF="shell_comments_filters.html">shell comments Filter</A> as an <A HREF="../concepts/multi_character.html">Multi-Character</A> <A HREF="../concepts/input_filter.html">InputFilter</A> as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/char_traits.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/char_traits.hpp&gt;</SPAN></A> <SPAN CLASS="comment">// EOF, WOULD_BLOCK</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>    <SPAN CLASS="comment">// multichar_input_filter</SPAN>
@@ -140,7 +140,7 @@
 } } } <SPAN CLASS="comment">// End namespace boost::iostreams:example</SPAN></PRE>
 
 <P>
-    Note that the implementation of <CODE>read</CODE> is very similar to what we would get if we put the implementation of <A HREF="#shell_comments_input_filter"><CODE>shell_comments_input_filter::get</CODE></A> inside a <CODE>for</CODE> loop iterating from <CODE>0</CODE> to <CODE>n</CODE>. InputFilters which call themselves recursively, such as <A HREF="#tab_expanding_input_filter"><CODE>tab_expanding_input_filter</CODE></A>,  are much harder to transform into Multi-Character filters.
+    Note that the implementation of <CODE>read</CODE> is very similar to what we would get if we put the implementation of <A HREF="shell_comments_filters.html#shell_comments_input_filter"><CODE>shell_comments_input_filter::get</CODE></A> inside a <CODE>for</CODE> loop iterating from <CODE>0</CODE> to <CODE>n</CODE>. InputFilters which call themselves recursively, such as <A HREF="tab_expanding_filters.html#tab_expanding_input_filter"><CODE>tab_expanding_input_filter</CODE></A>,  are much harder to transform into Multi-Character filters.
 </P>
 
 <A NAME="multichar_output_filters"></A>
@@ -204,7 +204,7 @@
 <A NAME="shell_comments_multichar_ouput_filter"></A>
 <H4><CODE>shell_comments_multichar_output_filter</CODE></H4>
 
-<P>We can express a <A HREF="#shell_comments">shell comments Filter</A> as an <A HREF="../concepts/multi_character.html">Multi-Character</A> <A HREF="../concepts/output_filter.html">OutputFilter</A> as follows:</P>
+<P>We can express a <A HREF="shell_comments_filters.html">shell comments Filter</A> as an <A HREF="../concepts/multi_character.html">Multi-Character</A> <A HREF="../concepts/output_filter.html">OutputFilter</A> as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/char_traits.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/char_traits.hpp&gt;</SPAN></A> <SPAN CLASS="comment">// EOF, WOULD_BLOCK</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>    <SPAN CLASS="comment">// multichar_output_filter</SPAN>
@@ -247,7 +247,7 @@
 } } } <SPAN CLASS="comment">// End namespace boost::iostreams:example</SPAN></PRE>
 
 <P>
-    Note that the implementation of <CODE>write</CODE> is very similar to what we would get if we put the implementation of <A HREF="#shell_comments_output_filter"><CODE>shell_comments_output_filter::put</CODE></A> inside a <CODE>for</CODE> loop iterating from <CODE>0</CODE> to <CODE>n</CODE>. OutputFilters which call themselves recursively, such as <A HREF="#unix2dos_output_filter"><CODE>unix2dos_output_filter</CODE></A>,  are much harder to transform into Multi-Character filters.
+    Note that the implementation of <CODE>write</CODE> is very similar to what we would get if we put the implementation of <A HREF="shell_comments_filters.html#shell_comments_output_filter"><CODE>shell_comments_output_filter::put</CODE></A> inside a <CODE>for</CODE> loop iterating from <CODE>0</CODE> to <CODE>n</CODE>. OutputFilters which call themselves recursively, such as <A HREF="unix2dos_filters.html#unix2dos_output_filter"><CODE>unix2dos_output_filter</CODE></A>,  are much harder to transform into Multi-Character filters.
 </P>
 
 <!-- Begin Nav -->

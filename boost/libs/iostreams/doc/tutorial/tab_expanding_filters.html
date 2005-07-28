@@ -61,7 +61,7 @@
 
 } } } <SPAN CLASS="comment">// End namespace boost::iostreams:example</SPAN></PRE>
 
-<P>The helper function <CODE>put_char</CODE> is identical to <A HREF="#line_wrapping_stdio_filter"><CODE>line_wrapping_stdio_filter::put_char</CODE></A>. It writes a character to <CODE>std::cout</CODE> and updates the column count:</P>
+<P>The helper function <CODE>put_char</CODE> is identical to <A HREF="line_wrapping_filters.html#line_wrapping_stdio_filter"><CODE>line_wrapping_stdio_filter::put_char</CODE></A>. It writes a character to <CODE>std::cout</CODE> and updates the column count:</P>
 
 <PRE class="broken_ie">    <SPAN CLASS="keyword">void</SPAN> put_char(<SPAN CLASS="keyword"><SPAN CLASS="keyword">int</SPAN></SPAN> c)
     {
@@ -91,7 +91,7 @@
 
 <P>The <CODE>while</CODE> loop reads a character from <CODE>std::cin</CODE> and writes it to <CODE>std::cout</CODE>, unless it is a tab character, in which case it writes an appropriate number of space characters to <CODE>std::cout</CODE>.</P>
 
-<P>As with <A HREF="#line_wrapping_stdio_filter"><CODE>line_wrapping_stdio_filter</CODE></A>, the <CODE>virtual</CODE> function <CODE>do_close</CODE> resets the Filter's state:</P>
+<P>As with <A HREF="line_wrapping_filters.html#line_wrapping_stdio_filter"><CODE>line_wrapping_stdio_filter</CODE></A>, the <CODE>virtual</CODE> function <CODE>do_close</CODE> resets the Filter's state:</P>
 
 <PRE class="broken_ie">    <SPAN CLASS="keyword">void</SPAN> do_close() { col_no_ = 0; }</PRE>
 
@@ -163,7 +163,7 @@
     }</PRE>
 
 <P>
-    The implementation is similar to that of <A HREF="#line_wrapping_input_filter"><CODE>line_wrapping_input_filter::get</CODE></A>. Since <CODE>get</CODE> can only return a single character at a time, whenever a tab character must be replaced by a sequence of space character, only the first space character can be returned. The rest must be returned by subsequent invocations of <CODE>get</CODE>. The member variable <CODE>spaces_</CODE> is used to store the number of such space characters.
+    The implementation is similar to that of <A HREF="line_wrapping_filters.html#line_wrapping_input_filter"><CODE>line_wrapping_input_filter::get</CODE></A>. Since <CODE>get</CODE> can only return a single character at a time, whenever a tab character must be replaced by a sequence of space character, only the first space character can be returned. The rest must be returned by subsequent invocations of <CODE>get</CODE>. The member variable <CODE>spaces_</CODE> is used to store the number of such space characters.
 </P>
 <P>
     The implementation begins by checking whether any space characters remain to be returned. If so, it decrements <CODE>spaces_</CODE> and returns a space. Otherwise, a character is read from <CODE>src</CODE>. Ordinary characters, as well as the special values <CODE>EOF</CODE> and <CODE>WOULD_BLOCK</CODE>, are returned <I>as-is</I>. When a tab character is encountered, the number of spaces which must be returned by future invocations of get is recorded, and a space character is returned.
