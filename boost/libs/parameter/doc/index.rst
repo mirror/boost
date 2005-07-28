@@ -1,6 +1,8 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++
- The Boost Parameter Library |(logo)|__
+ The Boost Parameter Library 
 +++++++++++++++++++++++++++++++++++++++++++++++++
+
+|(logo)|__
 
 .. |(logo)| image:: ../../../../boost.png
    :alt: Boost
@@ -9,6 +11,18 @@ __ ../../../../index.htm
 
 -------------------------------------
 
+:Abstract: Use this library to write functions that accept
+  arguments by name:
+
+  .. parsed-literal::
+
+    new_window("alert", **width=10**, **titlebar=false**);
+
+  Since named arguments can be passed in any order, they are
+  especially useful when a function has more than one parameter
+  with a useful default value.
+
+-------------------------------------
 
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
@@ -22,18 +36,9 @@ __ ../../../../index.htm
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 
-:Abstract: Use this library to write functions that accept
-  arguments by name:
-
-  .. parsed-literal::
-
-    new_window("alert", **width=10**, **titlebar=false**);
-
-  This capability is especially useful when a function has more
-  than one argument with a useful default value, since named
-  arguments can be passed in any order.
-
 .. _concepts: ../../../more/generic_programming.html#concept
+
+-------------------------------------
 
 .. contents:: **Table of Contents**
 
@@ -1171,13 +1176,14 @@ enclosing namespace without qualification::
       using graphs::color_map;
     }
 
-=========================
- Reference (Preliminary)
-=========================
+===========
+ Reference
+===========
 
-Follow `this link`__ to the preliminary Boost.Parameter reference
-documentation.  We hope it will be more than just preliminary by
-the time Boost 1.33 is released.
+.. _reference: reference.html
+
+Follow `this link`__ to the Boost.Parameter reference
+documentation.  
 
 __ reference.html
 

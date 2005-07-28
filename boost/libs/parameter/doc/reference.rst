@@ -1,6 +1,8 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- The Boost Parameter Library Reference Documentation |(logo)|__
+ The Boost Parameter Library Reference Documentation 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+|(logo)|__
 
 .. |(logo)| image:: ../../../../boost.png
    :alt: Boost
@@ -18,6 +20,8 @@ __ ../../../../index.htm
                 or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
+
+//////////////////////////////////////////////////////////////////////////////
 
 .. contents::
     :depth: 2
@@ -77,6 +81,8 @@ In code blocks, *italic type* represents unspecified text that
 satisfies the requirements given in the detailed description that
 follows the code block.
 
+//////////////////////////////////////////////////////////////////////////////
+
 Terminology
 ===========
 
@@ -131,6 +137,9 @@ tagged lazy default
   A |tagged reference| whose *value*, when invoked with no
   arguments, computes a default argument value.
 
+
+//////////////////////////////////////////////////////////////////////////////
+
 Concepts
 ========
 
@@ -154,7 +163,7 @@ In the table below,
 * ``u`` is a |keyword object| of type ``K``
 * ``v`` is a |tagged default| with |tag type| ``L`` and *value* of type ``D``
 * ``w`` is a |tagged lazy default| with |tag type| ``M`` and *value* of type ``E const``
-* ``z`` is an |ArgumentPack| containing a single element (as created by ``keyword::operator=``)
+* ``z`` is an |ArgumentPack| containing a single element (as created by |keyword|_\ ``<…>::operator=``)
 
 Any exceptions are thrown from the invocation of ``w``\ 's *value*
 will be propagated to the caller.
@@ -187,8 +196,6 @@ will be propagated to the caller.
 .. class:: reference
 
 
-//////////////////////////////////////////////////////////////////////////////
-
 .. _parameterspec:
 
 |ParameterSpec|
@@ -196,20 +203,20 @@ will be propagated to the caller.
 
 A |ParameterSpec| describes the type requirements for arguments
 corresponding to a given |kw|_ and indicates whether the argument
-is optional or required.  It takes one of the following forms:
+is optional or required.  It takes one of the following forms; in
+each case ``T`` is the |ParameterSpec|\ 's  |keyword tag type|:
 
 +------------------------+--------------------------------------+------------------------+
-|Type                    |Requirements on Argument              |Argument is Required?   |
-|                        |Type ``T``                            |                        |
+|Type                    |Requirements on Argument Type ``A``   |Argument is Required?   |
 +========================+======================================+========================+
 |``parameter::``\        |*none*                                |no                      |
-||keyword|_\ ``<K>``     |                                      |                        |
+||keyword|_\ ``<T>``     |                                      |                        |
 +------------------------+--------------------------------------+------------------------+
-|``parameter::``\        |``mpl::apply<F,T>::type::value`` is   |no                      |
-||optional|_\ ``<K,F>``  |``true``.                             |                        |
+|``parameter::``\        |``mpl::apply<F,A>::type::value`` is   |no                      |
+||optional|_\ ``<T,F>``  |``true``.                             |                        |
 +------------------------+--------------------------------------+------------------------+
-|``parameter::``\        |``mpl::apply<F,T>::type::value``      |yes                     |
-||required|_\ ``<K,F>``  |is ``true``.                          |                        |
+|``parameter::``\        |``mpl::apply<F,A>::type::value`` is   |yes                     |
+||required|_\ ``<T,F>``  |``true``.                             |                        |
 +------------------------+--------------------------------------+------------------------+
 
 The information in a |ParameterSpec| is used to `limit`__ the
@@ -220,14 +227,16 @@ __ index.html#controlling-overload-resolution
 .. _forwarding functions: index.html#forwarding-functions
 
 
+//////////////////////////////////////////////////////////////////////////////
+
 Class Templates
 ===============
 
 .. |keyword| replace:: ``keyword``
 .. _keyword:
 
-class template :class:`keyword`
-------------------------------------
+``keyword``
+-----------
 
 **Defined in**
     `boost/parameter/keyword.hpp`__
@@ -264,11 +273,11 @@ __ ../../../../boost/parameter/keyword.hpp
     template <class T> |ArgumentPack|_ operator=(T& value) const;
     template <class T> |ArgumentPack|_ operator=(T const& value) const;
 
-:Requires: Nothing
+:Requires: nothing
 
 :Returns:
-    An |ArgumentPack|_ containing a single |tagged reference| to
-    ``value`` with |keyword| ``Tag``.
+    an |ArgumentPack|_  containing a single |tagged reference| to
+    ``value`` with |kw|_ ``Tag`` 
 
 operator|
 .........
@@ -278,121 +287,32 @@ operator|
     template <class T> *tagged default* operator|(T& x) const;
     template <class T> *tagged default* operator|(T const& x) const;
 
-:Returns: an object holding x (by reference) as a default for keyword ``Tag``,
-    and suitable for use in an ArgumentPack's index operator.
-
-.. old:
-    An object that holds ``x`` as a default for the
-    keyword tag ``Tag``.
-
-.. daniel:
-    A model of |KeywordDefaultExpression|_ that, when used to
-    index an |ArgumentPack|_ that does not contain an appropriate
-    parameter, gives ``x``.
-
-.. daniel:
-
-    An object that models KeywordDefaultExpression, that when used as
-    an argument to ``ArgumentPack::operator[]`` which doesn't contain
-    a parameter specified with ``Tag`` returns a reference to ``default_``.
-
-.. dwa: 
-
-   Maybe:
-
-      An object that holds ``default_`` as a default for the
-      keyword tag ``Tag``.
-
-
-   This description would oblige us to explain the
-   terminology "...holds as a default for keyword tag..." in the
-   definition of KeywordDefaultExpression and associated concepts.
-
-   I changed ``default_`` to ``x`` because it is difficult to read
-   a sentence that uses the word "default" and the identifier
-   ``default_`` .  We're just using a generic ``T`` anyhow.
+:Returns: a |tagged default| with *value* ``x`` and |kw|_ ``Tag``.
 
 operator||
 ..........
 
 .. parsed-literal::
 
-    template <class F> *unspecified tagged lazy default* operator||(F const& fn) const;
+    template <class F> *tagged lazy default* operator||(F const& g) const;
 
-**Throws**
-    Nothing
+:Requires: ``g()`` is well-formed.  If |BOOST_NO_RESULT_OF|_ is
+  not ``#defined``, its type must be
+  ``boost::result_of<F()>::type``.  Otherwise, it must be
+  ``F::result_type``.
 
-.. dwa: You have to define "function object."  Plain function
-   pointers are legal where result_of is supported, FYI.
+.. |BOOST_NO_RESULT_OF| replace:: ``BOOST_NO_RESULT_OF``
+.. _BOOST_NO_RESULT_OF: ../../../utility/utility.htm#BOOST_NO_RESULT_OF
+ 
+:Returns: a |tagged lazy default| with *value* ``g`` and |kw|_ ``Tag``.
 
-**Requires**
-    ``F`` is a nullary function object.
-
-    In the next two tables, ``fn`` is an object of type ``F``.
-
-    **On compilers that support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
-
-    +---------------------------------+-----------------------------------------------------+
-    | Expression                      | Requirement                                         |
-    +=================================+=====================================================+
-    | ``boost::result_of<F()>::type`` | \-                                                  |
-    +---------------------------------+-----------------------------------------------------+
-    | ``fn()``                        | Convertible to ``boost::result_of<F()>::type``      |
-    +---------------------------------+-----------------------------------------------------+
-
-    **On compilers that don't support boost::result_of, as indicated by BOOST_NO_RESULT_OF:**
-
-    +------------------------------+-----------------------------------------------------+
-    | Expression                   | Requirement                                         |
-    +==============================+=====================================================+
-    | ``F::result_type``           | \-                                                  |
-    +------------------------------+-----------------------------------------------------+
-    | ``fn()``                     | Convertible to ``F::result_type``                   |
-    +------------------------------+-----------------------------------------------------+
-
-
-.. dwa: I don't think the CopyConstructible requirement is correct.
-   What if the result is a reference?  If it's not a reference, and
-   there are no implicit conversions, it's surely got to be copy
-   constructible so f can return it.  So are you sure you want to
-   require CopyConstructible just so you can handle the actual
-   return type not being an exact match?
-
-**Returns**
-    An object holding x (by reference) as a lazy default for keyword
-    ``Tag``, and suitable for use in an ArgumentPack's index operator.
-
-
-.. old:
-    An object that holds a reference to ``fn`` as a `lazy default`_
-    for the keyword tag ``Tag``.
-
-
-.. daniel:
-    A model of |KeywordDefaultExpression|_ that, when used to
-    index an |ArgumentPack|_ which does not contain an appropriate
-    parameter, gives the result of ``fn``.
-
-.. daniel:
-    An object that models |KeywordDefaultExpression|_, that when used as
-    an argument to ``ArgumentPack::operator[]`` which doesn't contain
-    a parameter specified with ``Tag`` evaluates and returns ``fn()``.
-
-.. dwa:
-
-      An object that holds a reference to ``fn`` as a lazy default
-      for the keyword tag ``Tag``.
-
-   This description would oblige us to explain "lazy default."
-
-//////////////////////////////////////////////////////////////////////////////
 
 .. class:: reference
 
 .. _parameters:
 
-class template :class:`parameters`
----------------------------------------------------
+``parameters``
+--------------
 
 **Defined in**
     `boost/parameter/parameters.hpp`__
@@ -481,7 +401,6 @@ operator()
     by tagging the argument with the |ParameterSpec|_ ``Px`` in it's position.
 
 
-//////////////////////////////////////////////////////////////////////////////
 
 .. class:: reference
 
@@ -491,8 +410,8 @@ operator()
 .. _optional:
 .. _required:
 
-class templates :class:`optional`, :class:`required`
-----------------------------------------------------
+``optional``, ``required``
+--------------------------
 
 **Specializations models**
     |ParameterSpec|_
@@ -516,8 +435,10 @@ The default value of ``Predicate`` is an unspecified |Metafunction|_ that return
 .. |Metafunction| replace:: :concept:`Metafunction`
 .. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
 
-|Metafunction|_\ s
-==================
+//////////////////////////////////////////////////////////////////////////////
+
+Metafunctions
+=============
 
 
 
@@ -525,15 +446,15 @@ The default value of ``Predicate`` is an unspecified |Metafunction|_ that return
 
 .. _binding:
 
-class template :class:`binding`
--------------------------------------------------------------
+``binding``
+-----------
 
 **Defined in**
     `boost/parameter/binding.hpp`__
 
 __ ../../../../boost/parameter/binding.hpp
 
-A metafunction that, given an |ArgumentPack|_, returns the reference
+A |Metafunction|_ that, given an |ArgumentPack|_, returns the reference
 type of the parameter identified by ``Keyword``.  If no such parameter has been
 specified, returns ``Default``.
 
@@ -549,13 +470,11 @@ specified, returns ``Default``.
 .. class:: reference
 
 
-//////////////////////////////////////////////////////////////////////////////
-
 
 .. _lazy_binding:
 
-class template :class:`lazy_binding`
-------------------------------------------------------------------
+``lazy_binding``
+----------------
 
 **Defined in**
     `boost/parameter/binding.hpp`__
@@ -618,7 +537,6 @@ Requirements
 .. class:: reference
 
 
-//////////////////////////////////////////////////////////////////////////////
 
 ``BOOST_PARAMETER_FUN``
 -----------------------------

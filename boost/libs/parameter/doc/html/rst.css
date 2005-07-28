@@ -13,3 +13,16 @@ img {
   vertical-align: middle
 }
 
+PRE
+{
+    FONT-FAMILY: monospace ;
+}
+
+CODE
+{
+    FONT-FAMILY: monospace;
+}
+.pre
+{
+   FONT-FAMILY: monospace;
+}
