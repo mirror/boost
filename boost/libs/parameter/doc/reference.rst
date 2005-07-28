@@ -21,6 +21,7 @@ __ ../../../../index.htm
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 
+
 //////////////////////////////////////////////////////////////////////////////
 
 .. contents::
@@ -41,8 +42,6 @@ __ ../../../../index.htm
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
 
-.. class:: reference
-
 .. role:: large
    :class: doublesize
 
@@ -58,13 +57,9 @@ order to understand this reference
 Namespaces
 ----------
 
-In this document, all identifiers will be written as if the
-namespace alias ::
-
-  namespace parameter = boost::parameter;
-
-is in force: we'll write ``parameter::xxx`` instead of
-``boost::parameter::xxx``.
+In this document, all unqualified identifiers should be assumed to
+be defined in namespace ``boost::parameter`` unless otherwise
+specified.
 
 Exceptions
 ----------
@@ -80,6 +75,8 @@ Names written in :concept:`sans serif type` represent concepts_.
 In code blocks, *italic type* represents unspecified text that
 satisfies the requirements given in the detailed description that
 follows the code block.
+
+The special character β represents the value of |BOOST_PARAMETER_MAX_ARITY|_.
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -99,6 +96,14 @@ keyword tag type
   A type used to uniquely identify a function parameter.  Typically
   its name will be the same as that of the parameter.
 
+.. _positional:
+.. |positional| replace:: `positional`_
+
+positional argument
+  An argument passed with no explicit |kw|.  Its parameter is
+  determined in the usual C++ way: by position with respect to a
+  parameter list.
+
 .. _tag type:
 .. |tag type| replace:: `tag type`_
 
@@ -109,7 +114,7 @@ tag type
 .. |keyword object| replace:: `keyword object`_
 
 keyword object
-  An instance of ``parameter::``\ |keyword|_ ``<T>`` for some |tag
+  An instance of |keyword|_ ``<T>`` for some |tag
   type| ``T``.
 
 .. _tagged reference:
@@ -118,7 +123,7 @@ keyword object
 tagged reference
   An object whose type is associated with a |keyword tag type| (the
   object's *keyword*), and that holds a reference (to the object's
-  *value*).
+  *value*).  
 
   As a shorthand, a “tagged reference to ``x``\ ” means a tagged
   reference whose *value* is ``x``.
@@ -137,6 +142,20 @@ tagged lazy default
   A |tagged reference| whose *value*, when invoked with no
   arguments, computes a default argument value.
 
+.. _intended argument type:
+.. |intended argument type| replace:: `intended argument type`_
+
+intended argument type
+  The *intended argument type* of a single-element |ArgumentPack|_ is the
+  type of its element's *value*.  The intended argument type of any other
+  type ``X`` is ``X`` itself.
+
+.. Note::
+
+   In this reference, we will use concept names (and other names)
+   to describe both types and objects, depending on context.  So
+   for example, “an |ArgumentPack|_\ ” can refer to a type that
+   models |ArgumentPack|_ *or* an object of such a type. 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -168,32 +187,32 @@ In the table below,
 Any exceptions are thrown from the invocation of ``w``\ 's *value*
 will be propagated to the caller.
 
-+----------+----------------------------------------+------------------+--------------------------------------+
-|Expression| Type                                   |Requirements      |Semantics/Notes                       |
-+==========+========================================+==================+======================================+
-|``x[u]``  |``parameter::binding<A,K>::type``       |``x`` contains an |Returns *b*\ 's *value* (by           |
-|          |                                        |element *b* whose |reference).                           |
-|          |                                        ||kw|_ is ``K``    |                                      |
-+----------+----------------------------------------+------------------+--------------------------------------+
-|``x[u]``  |``prameter::binding<A,L,D>::type``      |*none*            |If ``x`` contains an element *b* whose|
-|          |                                        |                  ||kw|_ is the same as ``u``\ 's,       |
-|          |                                        |                  |returns *b*\ 's *value* (by           |
-|          |                                        |                  |reference).  Otherwise, returns ``u``\|
-|          |                                        |                  |'s *value*.                           |
-+----------+----------------------------------------+------------------+--------------------------------------+
-|``x[w]``  |``parameter::lazy_binding<A,M,E>::type``|*none*            |If ``x`` contains an element *b* whose|
-|          |                                        |                  ||kw|_ is the same as ``w``\ 's,       |
-|          |                                        |                  |returns *b*\ 's *value* (by           |
-|          |                                        |                  |reference).  Otherwise, invokes ``w``\|
-|          |                                        |                  |'s *value* and returns the result.    |
-+----------+----------------------------------------+------------------+--------------------------------------+
-|``x, z``  |Model of |ArgumentPack|                 |*none*            |Returns an |ArgumentPack|_ containing |
-|          |                                        |                  |all the elements of both ``x`` and    |
-|          |                                        |                  |``z``.                                |
-+----------+----------------------------------------+------------------+--------------------------------------+
+.. table:: |ArgumentPack| requirements
 
+   +----------+-----------------------------+------------------+--------------------------------------+
+   |Expression| Type                        |Requirements      |Semantics/Notes                       |
+   +==========+=============================+==================+======================================+
+   |``x[u]``  |``binding<A,K>::type``       |``x`` contains an |Returns *b*\ 's *value* (by           |
+   |          |                             |element *b* whose |reference).                           |
+   |          |                             ||kw|_ is ``K``    |                                      |
+   +----------+-----------------------------+------------------+--------------------------------------+
+   |``x[u]``  |``binding<A,L,D>::type``     |*none*            |If ``x`` contains an element *b* whose|
+   |          |                             |                  ||kw|_ is the same as ``u``\ 's,       |
+   |          |                             |                  |returns *b*\ 's *value* (by           |
+   |          |                             |                  |reference).  Otherwise, returns ``u``\|
+   |          |                             |                  |'s *value*.                           |
+   +----------+-----------------------------+------------------+--------------------------------------+
+   |``x[w]``  |``lazy_binding<A,M,E>::type``|*none*            |If ``x`` contains an element *b* whose|
+   |          |                             |                  ||kw|_ is the same as ``w``\ 's,       |
+   |          |                             |                  |returns *b*\ 's *value* (by           |
+   |          |                             |                  |reference).  Otherwise, invokes ``w``\|
+   |          |                             |                  |'s *value* and returns the result.    |
+   +----------+-----------------------------+------------------+--------------------------------------+
+   |``x, z``  |Model of |ArgumentPack|      |*none*            |Returns an |ArgumentPack|_ containing |
+   |          |                             |                  |all the elements of both ``x`` and    |
+   |          |                             |                  |``z``.                                |
+   +----------+-----------------------------+------------------+--------------------------------------+
 
-.. class:: reference
 
 
 .. _parameterspec:
@@ -203,27 +222,37 @@ will be propagated to the caller.
 
 A |ParameterSpec| describes the type requirements for arguments
 corresponding to a given |kw|_ and indicates whether the argument
-is optional or required.  It takes one of the following forms; in
-each case ``T`` is the |ParameterSpec|\ 's  |keyword tag type|:
+is optional or required.  The table below details the allowed forms
+and describes their condition for satisfaction by an actual
+argument type. In each row,
 
-+------------------------+--------------------------------------+------------------------+
-|Type                    |Requirements on Argument Type ``A``   |Argument is Required?   |
-+========================+======================================+========================+
-|``parameter::``\        |*none*                                |no                      |
-||keyword|_\ ``<T>``     |                                      |                        |
-+------------------------+--------------------------------------+------------------------+
-|``parameter::``\        |``mpl::apply<F,A>::type::value`` is   |no                      |
-||optional|_\ ``<T,F>``  |``true``.                             |                        |
-+------------------------+--------------------------------------+------------------------+
-|``parameter::``\        |``mpl::apply<F,A>::type::value`` is   |yes                     |
-||required|_\ ``<T,F>``  |``true``.                             |                        |
-+------------------------+--------------------------------------+------------------------+
+.. _conditions:
+
+* ``K`` is the |ParameterSpec|\ 's |keyword tag type|
+* ``A`` is an |intended argument type| associated with ``K``, if any
+* ``F`` is a unary `MPL lambda expression`_
+
+.. _`MPL lambda expression`: ../../../mpl/doc/refmanual/lambda-expression.html
+
+.. table:: |ParameterSpec| allowed forms and conditions of satisfaction
+
+   +----------------------+--------------+--------------------------------+
+   |Type                  |``A`` required|Condition ``A`` must satisfy    |
+   +======================+==============+================================+
+   ||keyword|_\ ``<K>``   |no            |*n/a*                           |
+   +----------------------+--------------+--------------------------------+
+   ||optional|_\ ``<K,F>``|no            |``mpl::apply<F,A>::type::value``|
+   |                      |              |is ``true``.                    |
+   +----------------------+--------------+--------------------------------+
+   ||required|_\ ``<K,F>``|yes           |``mpl::apply<F,A>::type::value``|
+   |                      |              |is ``true``.                    |
+   +----------------------+--------------+--------------------------------+
 
 The information in a |ParameterSpec| is used to `limit`__ the
 arguments that will be matched by `forwarding functions`_.  
 
-__ index.html#controlling-overload-resolution
-
+__ overloadcontrol_
+.. _overloadcontrol: index.html#controlling-overload-resolution
 .. _forwarding functions: index.html#forwarding-functions
 
 
@@ -238,8 +267,9 @@ Class Templates
 ``keyword``
 -----------
 
-**Defined in**
-    `boost/parameter/keyword.hpp`__
+The type of every |keyword object| is a specialization of |keyword|.
+
+:Defined in: `boost/parameter/keyword.hpp`__
 
 __ ../../../../boost/parameter/keyword.hpp
 
@@ -248,161 +278,156 @@ __ ../../../../boost/parameter/keyword.hpp
     template <class Tag>
     struct keyword
     {
-        template <class T>
-        |ArgumentPack|_ `operator=`_\(T& value) const;
+        template <class T> |ArgumentPack|_ `operator=`_\(T& value) const;
+        template <class T> |ArgumentPack|_ `operator=`_\(T const& value) const;
 
-        template <class T>
-        |ArgumentPack|_ `operator=`_\(T const& value) const;
+        template <class T> *tagged default* `operator|`_\(T& x) const;
+        template <class T> *tagged default* `operator|`_\(T const& x) const;
 
-        template <class T>
-        *tagged default* `operator|`_\(T& x) const;
-
-        template <class T>
-        *tagged default* `operator|`_\(T const& x) const;
-
-        template <class F>
-        *tagged lazy default* `operator||`_\(F const&) const;
+        template <class F> *tagged lazy default* `operator||`_\(F const&) const;
     };
 
 
+.. |operator=| replace:: ``operator=``
+.. _operator=:
+
 ``operator=``
-.............
+  .. parsed-literal::
 
-.. parsed-literal::
+      template <class T> |ArgumentPack|_ operator=(T& value) const;
+      template <class T> |ArgumentPack|_ operator=(T const& value) const;
 
-    template <class T> |ArgumentPack|_ operator=(T& value) const;
-    template <class T> |ArgumentPack|_ operator=(T const& value) const;
+  :Requires: nothing
 
-:Requires: nothing
+  :Returns:
+      an |ArgumentPack|_  containing a single |tagged reference| to
+      ``value`` with |kw|_ ``Tag`` 
 
-:Returns:
-    an |ArgumentPack|_  containing a single |tagged reference| to
-    ``value`` with |kw|_ ``Tag`` 
+.. _operator|:
 
-operator|
-.........
+``operator|``
+  .. parsed-literal::
 
-.. parsed-literal::
+      template <class T> *tagged default* operator|(T& x) const;
+      template <class T> *tagged default* operator|(T const& x) const;
 
-    template <class T> *tagged default* operator|(T& x) const;
-    template <class T> *tagged default* operator|(T const& x) const;
+  :Returns: a |tagged default| with *value* ``x`` and |kw|_ ``Tag``.
 
-:Returns: a |tagged default| with *value* ``x`` and |kw|_ ``Tag``.
+.. _operator||:
 
 operator||
-..........
+  .. parsed-literal::
 
-.. parsed-literal::
+      template <class F> *tagged lazy default* operator||(F const& g) const;
 
-    template <class F> *tagged lazy default* operator||(F const& g) const;
+  :Requires: ``g()`` is well-formed.  If |BOOST_NO_RESULT_OF|_ is
+    not ``#defined``, its type must be
+    ``boost::result_of<F()>::type``.  Otherwise, it must be
+    ``F::result_type``.
 
-:Requires: ``g()`` is well-formed.  If |BOOST_NO_RESULT_OF|_ is
-  not ``#defined``, its type must be
-  ``boost::result_of<F()>::type``.  Otherwise, it must be
-  ``F::result_type``.
+  .. |BOOST_NO_RESULT_OF| replace:: ``BOOST_NO_RESULT_OF``
+  .. _BOOST_NO_RESULT_OF: ../../../utility/utility.htm#BOOST_NO_RESULT_OF
 
-.. |BOOST_NO_RESULT_OF| replace:: ``BOOST_NO_RESULT_OF``
-.. _BOOST_NO_RESULT_OF: ../../../utility/utility.htm#BOOST_NO_RESULT_OF
- 
-:Returns: a |tagged lazy default| with *value* ``g`` and |kw|_ ``Tag``.
+  :Returns: a |tagged lazy default| with *value* ``g`` and |kw|_ ``Tag``.
 
-
-.. class:: reference
 
 .. _parameters:
 
 ``parameters``
 --------------
 
-**Defined in**
-    `boost/parameter/parameters.hpp`__
+Provides an interface for assembling the actual arguments to a
+`forwarding function` into an |ArgumentPack|, in which any
+|positional| arguments will be tagged according to the
+corresponding template argument to ``parameters``.  
+
+.. _forwarding function: `forwarding functions`_
+
+:Defined in: `boost/parameter/parameters.hpp`__
 
 __ ../../../../boost/parameter/parameters.hpp
 
 .. parsed-literal::
 
-    template <class P0, class P1, …, class PN>
+    template <class P0 = *unspecified*, class P1 = *unspecified*, …class P\ β = *unspecified*>
     struct parameters
     {
-        template <class T0, class T1, …, class TN>
+        template <class A0, class A1 = *unspecified*, …class A\ β = *unspecified*>
         struct `match`_
         {
             typedef … type;
         };
 
         template <class A0>
-        *unspecified model of* |ArgumentPack| `operator()`_\(A0 const& a0) const;
+        |ArgumentPack| `operator()`_\(A0 const& a0) const;
 
         template <class A0, class A1>
-        *unspecified model of* |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1) const;
-
-        template <class A0, class A1, …, class AN>
-        *unspecified model of* |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1, …, AN const& aN) const;
+        |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1) const;
+           :large:`⋮`
+        template <class A0, class A1, …class A\ β>
+        |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1, …A\ β const& a\ β) const;
     };
 
 
-Template Parameter Semantics
-............................
-
-``<P0, …, PN>`` are models of |ParameterSpec|_. If ``Px`` is not an
-instance of either ``optional`` or ``required``, it is treated as a
-keyword tag with the same meaning as ``optional<Px>``.
-
-``<P0, …, PN>`` determine the positional meaning of the parameters,
-and the type requirements for passed arguments.
+:Requires: ``P0``, ``P1``, … ``P``\ β are models of |ParameterSpec|_. 
 
 
-match
-.....
+.. Note::
 
-Used to remove a function from overload resolution using SFINAE.
-
-.. parsed-literal::
-
-        template <class T0, class T1, …, class TN> struct restrict { typedef … type; };
-
-**Returns**
-    If the supplied argument types ``<T0, …, TN>`` fulfill the requirments of the
-    specified |ParameterSpec|_'s, ``match<T0, …, TN>::type`` exists and is constructible
-    from ``parameters<P0, …, PN>``. Otherwise ``restrict<T0, …, TN>::type`` doesn't exist.
-
-    The algorithm that determines if the type requirements are fulfilled works
-    like this::
-
-        If Px is optional<K, P>
-            If a bound argument Tx tagged with K exists in <T0, …, TN>
-                return P<type of argument bound in Tx>::type
-            Else
-                return mpl::true_
-        Else if Px is required<K, P>
-            If a bound argument Tx tagged with K exists in <T0, …, TN>
-                return P<type of argument bound in Tx>::type
-            Else
-                return mpl::false_
-        Else
-            return mpl::true_
+  In this section, ``R``\ *i* and ``K``\ *i* are defined as
+  follows, for any argument type ``A``\ *i*:
 
 
-operator()
-..........
-
-.. parsed-literal::
-
-    template <class A0> *unspecified model of* |ArgumentPack|_ operator()(A0 const& a0) const;
-    template <class A0, class A1> *unspecified model of* |ArgumentPack|_ operator()(A0 const& a0, A1 const& a1) const;
-    …
-
-**Throws**
-    Nothing
-
-**Returns**
-    A composite |ArgumentPack|_ containing all arguments ``<A0, …, AN>``.
-    If ``Ax`` is not a model of |ArgumentPack|_, it is transformed into one
-    by tagging the argument with the |ParameterSpec|_ ``Px`` in it's position.
+     | ``R``\ *i* is ``A``\ *i*\ 's |intended argument type|
+     |
+     |  if ``A``\ *i* is a result type of ``keyword<T>::``\ |operator=|_
+     |  then 
+     |      ``K``\ *i* is ``T``
+     |  else 
+     |      ``K``\ *i* is ``P``\ *i*\ 's |keyword tag type|.
 
 
+.. _match:
 
-.. class:: reference
+``match``
+  A |Metafunction|_ used to remove a `forwarding function`_ from overload resolution.
+
+  :Returns: if ``P0``, ``P1``, …\ ``P``\ β are *satisfied* (see
+    below), then ``parameters<P0,P1,…Pβ>``.  Otherwise,
+    ``match<A0,A1,…Aβ>::type`` is not defined.
+
+  ``P0``, ``P1``, …\ ``P``\ β are **satisfied** if, for
+  every *j* in 0…β, either:
+
+  * ``P``\ *j* is the *unspecified* default
+  * **or**, ``P``\ *j* is a specialization of |keyword|_,
+
+  * **or**, ``P``\ *j* is |optional|_ ``<X,F>`` and either
+
+    - ``X`` is not ``K``\ *i* for any *i*,
+    - **or** ``X`` is some ``K``\ *i*  and ``mpl::apply<F,R``\ *i*\
+      ``>::type::value`` is ``true``
+
+  * **or**, ``P``\ *j* is |required|_ ``<X,F>``, and
+
+    - ``X`` is some ``K``\ *i*, **and**
+    - ``mpl::apply<F,R``\ *i*\ ``>::type::value`` is ``true``
+
+.. _operator():
+
+``operator()``
+  .. parsed-literal::
+
+      template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const;
+         :large:`⋮`
+      template <class A0, …class A\ β> |ArgumentPack| `operator()`_\(A0 const& a0, …A\ β const& a\ β) const;
+
+  :Returns:
+      An |ArgumentPack|_ containing, for each ``a``\ *i*,  
+
+      - if ``a``\ *i*,  is a single-element |ArgumentPack|, its element
+      - Otherwise, a |tagged reference| with |kw|_ ``K``\ *i* and *value* ``a``\ *i*
+
 
 .. |optional| replace:: ``optional``
 .. |required| replace:: ``required``
@@ -442,8 +467,6 @@ Metafunctions
 
 
 
-.. class:: reference
-
 .. _binding:
 
 ``binding``
@@ -465,10 +488,6 @@ specified, returns ``Default``.
     {
         typedef … type;
     };
-
-
-.. class:: reference
-
 
 
 .. _lazy_binding:
@@ -502,8 +521,6 @@ that support partial specialization. On less compliant compilers a nested
 ``DefaultFn::result_type`` is used instead.
 
 
-.. class:: reference
-
 //////////////////////////////////////////////////////////////////////////////
 
 Macros
@@ -534,10 +551,6 @@ Requirements
 * ``name`` is the name that will be used for the keyword.
 
 
-.. class:: reference
-
-
-
 ``BOOST_PARAMETER_FUN``
 -----------------------------
 
@@ -549,6 +562,7 @@ __ ../../../../boost/parameter/macros.hpp
 .. parsed-literal::
 
     BOOST_PARAMETER_FUN(ret, name, lo, hi, parameters)
+
 
 ``BOOST_PARAMETER_MAX_ARITY``
 -----------------------------
@@ -562,3 +576,4 @@ Requirements
 * ``parameters`` is the name of the ``parameters<>`` instance
   used for the function.
 
+.. |BOOST_PARAMETER_MAX_ARITY| replace:: ``BOOST_PARAMETER_MAX_ARITY``
