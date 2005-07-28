@@ -67,6 +67,12 @@ Exceptions
 No operation described in this document
 throws an exception unless otherwise specified.
 
+Thread Safety
+-------------
+
+All components of this library can be used safely from multiple
+threads without synchronization.  [#thread]_
+
 Typography
 ----------
 
@@ -285,6 +291,8 @@ __ ../../../../boost/parameter/keyword.hpp
         template <class T> *tagged default* `operator|`_\(T const& x) const;
 
         template <class F> *tagged lazy default* `operator||`_\(F const&) const;
+
+        static keyword<Tag>& get_\();
     };
 
 
@@ -315,23 +323,29 @@ __ ../../../../boost/parameter/keyword.hpp
 
 .. _operator||:
 
-operator||
+``operator||``
   .. parsed-literal::
 
       template <class F> *tagged lazy default* operator||(F const& g) const;
 
-  :Requires: ``g()`` is well-formed.  If |BOOST_NO_RESULT_OF|_ is
-    not ``#defined``, its type must be
-    ``boost::result_of<F()>::type``.  Otherwise, it must be
-    ``F::result_type``.
+  :Requires: ``g()`` is valid, with type ``boost::``\ |result_of|_\
+    ``<F()>::type``.  [#no_result_of]_
 
-  .. |BOOST_NO_RESULT_OF| replace:: ``BOOST_NO_RESULT_OF``
-  .. _BOOST_NO_RESULT_OF: ../../../utility/utility.htm#BOOST_NO_RESULT_OF
 
   :Returns: a |tagged lazy default| with *value* ``g`` and |kw|_ ``Tag``.
 
+.. _get:
 
-.. _parameters:
+``get``
+  .. parsed-literal::
+
+        static keyword<Tag>& get\();
+
+  :Returns: a “singleton instance”: the same object will be
+    returned on each invocation of ``get()``.
+
+  :Thread Safety: ``get()`` can be called from multiple threads
+    simultaneously.
 
 ``parameters``
 --------------
@@ -359,13 +373,13 @@ __ ../../../../boost/parameter/parameters.hpp
         };
 
         template <class A0>
-        |ArgumentPack| `operator()`_\(A0 const& a0) const;
+        |ArgumentPack|_ `operator()`_\(A0 const& a0) const;
 
         template <class A0, class A1>
-        |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1) const;
+        |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1) const;
            :large:`⋮`
         template <class A0, class A1, …class A\ β>
-        |ArgumentPack| `operator()`_\(A0 const& a0, A1 const& a1, …A\ β const& a\ β) const;
+        |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1, …A\ β const& a\ β) const;
     };
 
 
@@ -420,7 +434,7 @@ __ ../../../../boost/parameter/parameters.hpp
 
       template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const;
          :large:`⋮`
-      template <class A0, …class A\ β> |ArgumentPack| `operator()`_\(A0 const& a0, …A\ β const& a\ β) const;
+      template <class A0, …class A\ β> |ArgumentPack|_ `operator()`_\(A0 const& a0, …A\ β const& a\ β) const;
 
   :Returns:
       An |ArgumentPack|_ containing, for each ``a``\ *i*,  
@@ -438,13 +452,11 @@ __ ../../../../boost/parameter/parameters.hpp
 ``optional``, ``required``
 --------------------------
 
-**Specializations models**
-    |ParameterSpec|_
-
-**Defined in**
-    `boost/parameter/parameters.hpp`__
+:Defined in: `boost/parameter/parameters.hpp`__
 
 __ ../../../../boost/parameter/parameters.hpp
+
+:Specializations model: |ParameterSpec|_
 
 .. parsed-literal::
 
@@ -465,10 +477,6 @@ The default value of ``Predicate`` is an unspecified |Metafunction|_ that return
 Metafunctions
 =============
 
-
-
-.. _binding:
-
 ``binding``
 -----------
 
@@ -477,95 +485,84 @@ Metafunctions
 
 __ ../../../../boost/parameter/binding.hpp
 
-A |Metafunction|_ that, given an |ArgumentPack|_, returns the reference
-type of the parameter identified by ``Keyword``.  If no such parameter has been
-specified, returns ``Default``.
-
 .. parsed-literal::
 
-    template <class Parameters, class Keyword, class Default = *unspecified*>
+    template <class A, class K, class D = void>
     struct binding
     {
         typedef … type;
     };
 
+:Requires: ``A`` is a model of |ArgumentPack|_.
 
-.. _lazy_binding:
+:Returns: the reference type of the |tagged reference| in ``A``
+  having |keyword tag type| ``K``, if any.  If no such |tagged
+  reference| exists, returns ``D``.
 
 ``lazy_binding``
 ----------------
 
-**Defined in**
+:Defined in:
     `boost/parameter/binding.hpp`__
 
 __ ../../../../boost/parameter/binding.hpp
 
-A metafunction that, given an |ArgumentPack|_, returns the reference
-type of the parameter identified by ``Keyword``.  If no such parameter has been
-specified, returns the type returned by invoking ``DefaultFn``.
-
 .. parsed-literal::
 
-    template <class Parameters, class Keyword, class DefaultFn>
+    template <class A, class K, class F>
     struct lazy_binding
     {
         typedef … type;
     };
 
-Requirements 
-............ 
+:Requires: ``A`` is a model of |ArgumentPack|_.
 
-``DefaultFn`` is a nullary function object. The type returned by invoking this
-function is determined by ``boost::result_of<DefaultFn()>::type`` on compilers
-that support partial specialization. On less compliant compilers a nested
-``DefaultFn::result_type`` is used instead.
+:Returns: the reference type of the |tagged reference| in ``A``
+  having |keyword tag type| ``K``, if any.  If no such |tagged
+  reference| exists, returns ``boost::``\ |result_of|_\ ``<F()>::type``. [#no_result_of]_
 
 
 //////////////////////////////////////////////////////////////////////////////
 
-Macros
-======
-
-
+Code Generation Macros
+======================
 
 ``BOOST_PARAMETER_KEYWORD``
----------------------------------
+---------------------------
 
-**Defined in**
-    `boost/parameter/keyword.hpp`__
+:Defined in: `boost/parameter/keyword.hpp`__
 
 __ ../../../../boost/parameter/keyword.hpp
 
-Macro used to define `keyword objects`__.
+Generates a |keyword tag type| declaration and a corresponding
+|keyword object| definition.
 
-__ `keyword object`_
+:Usage:
+  .. parsed-literal::
 
-.. parsed-literal::
+    BOOST_PARAMETER_KEYWORD(*tag-namespace*, *name*)
 
-    BOOST_PARAMETER_KEYWORD(tag_namespace, name)
+:Generates:
+  .. parsed-literal::
 
-Requirements
-............
-
-* ``tag_namespace`` is the namespace where the tag-types will be placed.
-* ``name`` is the name that will be used for the keyword.
-
+      namespace *tag-namespace* { struct *name*; }
+      namespace { 
+        boost::parameter::keyword<*tag-namespace*::*name*>& *name*
+        = boost::parameter::keyword<*tag-namespace*::*name*>::get();
+      }
 
 ``BOOST_PARAMETER_FUN``
------------------------------
+------------------------
 
-**Defined in**
-    `boost/parameter/macros.hpp`__
+:Defined in: `boost/parameter/macros.hpp`__
 
 __ ../../../../boost/parameter/macros.hpp
 
-.. parsed-literal::
+:Usage:
+  .. parsed-literal::
 
     BOOST_PARAMETER_FUN(ret, name, lo, hi, parameters)
 
-
-``BOOST_PARAMETER_MAX_ARITY``
------------------------------
 
 Requirements
 ............
@@ -577,3 +574,37 @@ Requirements
   used for the function.
 
 .. |BOOST_PARAMETER_MAX_ARITY| replace:: ``BOOST_PARAMETER_MAX_ARITY``
+
+
+``BOOST_PARAMETER_MATCH``
+-------------------------
+
+
+Configuration Macros
+====================
+
+``BOOST_PARAMETER_MAX_ARITY``
+-----------------------------
+
+.. comment
+
+
+Footnotes
+=========
+
+.. [#thread] References to tag objects may be initialized multiple
+   times.  This scenario can only occur in the presence of
+   threading.  Because the C++ standard doesn't consider threading,
+   it doesn't explicitly allow or forbid multiple initialization of
+   references.  That said, it's hard to imagine an implementation
+   where it could make a difference. 
+
+.. [#no_result_of] Where |BOOST_NO_RESULT_OF|_ is ``#defined``,
+   ``boost::``\ |result_of|_\ ``<F()>::type`` is replaced by
+   ``F::result_type``.
+
+.. |result_of| replace:: ``result_of``
+.. _result_of: ../../../utility/utility.htm#result_of
+
+.. |BOOST_NO_RESULT_OF| replace:: ``BOOST_NO_RESULT_OF``
+.. _BOOST_NO_RESULT_OF: ../../../utility/utility.htm#BOOST_NO_RESULT_OF
