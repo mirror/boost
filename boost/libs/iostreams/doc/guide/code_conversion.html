@@ -27,38 +27,15 @@
 <A NAME="overview"></A>
 <H2>3.5 Code Conversion</H2>
 
-<DL class="page-index">
-  <DT><A href="#overview">Overview</A></DT>
-</DL>
-
 <HR STYLE="margin-top:1em">
 
-<A NAME="overview">
-<H2>Overview</H2>
-
 <P>
-    The Boost Iostreams library provides the following components for code conversion:
-    <UL>
-        <LI CLASS="square">
-            <B><CODE>converter:</CODE></B> A Device adapter which which takes a Device with a narrow character type and produces a Device with wide character type by introducing a layer of code conversion performed using a <CODE>std::codecvt</CODE>.
-        </LI>
-        <LI CLASS="square">
-            <B><CODE>converting_streambuf:</CODE></B> A wide-character stream buffer template having an interface essentially identical to <A href="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>, with the following additional property: after zero or more wide-character Filters have been added to the chain, a sequence of zero or more narrow-character Filters and a narrow character Device may be added. A <CODE>converter</CODE> is inserted automatically between the final wide-character Filter and the first narrow-character Filter or Device. [<I>Not implemented</I>]
-        </LI>
-        <LI CLASS="square">
-            <B><CODE>converting_stream</CODE>:</B> A wide-character stream template having an interface essentially identical to <A href="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, with the following additional property: after zero or more wide-character Filters have been added to the chain, a sequence of zero or more narrow-character Filters and a narrow character Device may be added. A <CODE>converter</CODE> is inserted automatically between the final wide-character Filter and the first narrow-character Filter or Device. [<I>Not implemented</I>]
-        </LI>
-    </UL>
+    The process of converting between a sequence of wide characters and a sequence of narrow characters is known as <SPAN CLASS='term'>code conversion</SPAN>. The C++ standard library defines a locale facet <CODE>std::codecvt</CODE> that encapulates code conversion. The class template <CODE>codecvt</CODE> has three template arguments, which represent an <SPAN CLASS='term'>internal character type</SPAN>, an <SPAN CLASS='term'>external character type</SPAN>, and a type to keep track of the <SPAN CLASS='term'>code conversion state</SPAN>. The internal character type is so named because it is typically the type used to store wide characters in memory for processing by the application; similarly, the external character type is typically the character type used to store charatcres in external media such as files. Most of the time, the internal character type is <CODE>wchar_t</CODE>, the external character type is <CODE>char</CODE> and the code conversion state is <CODE>std::mbstate_t</CODE> and implementation-defined type specified by the C++ standard.
 </P>
 
-<A NAME="headers">
-<H2>Headers</H2>
-
-<DL>
-  <DT><A CLASS="header" href="../../../../boost/iostreams/code_converter.hpp"><CODE>&lt;boost/iostreams/code_converter.hpp&gt;</CODE></A></DT>
-  <DT><BROKEN_LINK CLASS="header" href="../../../../boost/iostreams/converting_streambuf.hpp"><CODE>&lt;boost/iostreams/converting_streambuf.hpp&gt;</CODE></A></DT>
-  <DT><BROKEN_LINK CLASS="header" href="../../../../boost/iostreams/converting_stream.hpp"><CODE>&lt;boost/iostreams/converting_stream.hpp&gt;</CODE></A></DT>
-</DL>
+<P>
+    Streams and stream buffers do not perform code conversion by default. Of the streams and stream buffers defined in the C++ standard library, only the file-based streams perform code conversion. To write a stream or stream buffer that performs code conversion, use the class template <A HREF="../classes/code_converter.html"><CODE>code_converter</CODE></A>, which performs code conversion using a <CODE>std::codecvt</CODE> facet.
+</P>
 
 <!-- Begin Footer -->
 
