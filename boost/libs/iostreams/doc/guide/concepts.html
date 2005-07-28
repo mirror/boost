@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
-    <TITLE>Pipeline</TITLE>
+    <TITLE>Concepts</TITLE>
     <LINK REL="stylesheet" HREF="../../../../boost.css">
     <LINK REL="stylesheet" HREF="../theme/iostreams.css">
 </HEAD>
@@ -9,10 +9,23 @@
 
 <!-- Begin Banner -->
 
-    <H1 CLASS="title">Concepts</H1>
+    <H1 CLASS="title">User's Guide</H1>
     <HR CLASS="banner">
 
 <!-- End Banner -->
+
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+    <IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev_disabled.png'>
+    <A HREF='guide.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='modes.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
+
+<A NAME="overview"></A>
+<H2>3.1 Concepts</H2>
 
 <DL class="page-index">
   <DT><A href="#overview">Overview</A></DT>
@@ -22,10 +35,7 @@
   <DT><A href="#convenience">Convenience Templates and <CODE>typedef</CODE>s</A></DT>
 </DL>
 
-<HR>
-
-<A NAME="overview"></A>
-<H2>Overview</H2>
+<HR STYLE="margin-top:1em">
 
 <P>
     The fundamental building blocks of the Iostreams library are the concepts of a <A HREF="../concepts/source.html">Source</A>, which provides read access to a sequence of characters, a <A HREF="../concepts/sink.html">Sink</A>, which provides write access to a sequence of characters, an <A HREF="../concepts/input_filter.html">InputFilter</A>, which Filters input read from a Source, and an <A HREF="../concepts/output_filter.html">OutputFilter</A>, which Filters output written to a Sink. Sources, Sinks and their refinements are called <SPAN CLASS="term">Devices</SPAN>. InputFilters, OutputFilter and their refinements are called <SPAN CLASS="term">Filters</SPAN>.

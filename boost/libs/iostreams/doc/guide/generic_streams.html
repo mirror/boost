@@ -10,10 +10,23 @@
 
 <!-- Begin Banner -->
 
-    <H1 CLASS="title">Generic Streams and Stream Buffers</H1>
+    <H1 CLASS="title">User's Guide</H1>
     <HR CLASS="banner">
 
 <!-- End Banner -->
+
+<!-- Begin Nav -->
+
+<DIV CLASS='nav'>
+     <A HREF='modes.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/prev.png'></A>
+    <A HREF='guide.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/up.png'></A>
+    <A HREF='filtering_streams.html'><IMG BORDER=0 WIDTH=19 HEIGHT=19 SRC='../../../../doc/html/images/next.png'></A>
+</DIV>
+
+<!-- End Nav -->
+
+<A NAME="overview"></A>
+<H2>3.3 Generic Streams and Stream Buffers</H2>
 
 <DL class="page-index">
   <DT><A href="#overview">Overview</A></DT>
@@ -27,7 +40,7 @@
   <DT><A href="#examples">Examples</A></DT>
 </DL>
 
-<HR>
+<HR STYLE="margin-top:1em">
 
 <A NAME="overview">
 <H2>Overview</H2>
@@ -76,21 +89,21 @@
 
     <A CLASS="documented" HREF="#stream_buffer_default_constructor">stream_buffer</A>();
     <A CLASS="documented" HREF="#stream_buffer_policy_constructor">stream_buffer</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
-                      std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
-                      std::streamsize pback_size = <SPAN CLASS="omitted">default_value</SPAN> );
+                   std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
+                   std::streamsize pback_size = <SPAN CLASS="omitted">default_value</SPAN> );
 
         <SPAN CLASS="comment">// Forwarding constructors</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
-    template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
+    <A CLASS="documented" HREF="#stream_buffer_forwarding_constructors">stream_buffer</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2 <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_open">open</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
                std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
@@ -99,15 +112,15 @@
         <SPAN CLASS="comment">// Forwarding overloads of open()</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
     
         <SPAN CLASS="omitted">...</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_forwarding_open">open</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#stream_buffer_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_close">close</A>();
@@ -151,8 +164,8 @@
 
 <A NAME="stream_buffer_policy_constructor"></A>
 <PRE>    <B>stream_buffer</B>( <SPAN CLASS="keyword">const</SPAN> T& t,
-                      std::streamsize buffer_size, 
-                      std::streamsize pback_size );</PRE>
+                   std::streamsize buffer_size, 
+                   std::streamsize pback_size );</PRE>
     
 <P>
     Constructs a <CODE>stream_buffer</CODE> which is ready to perform i/o, where the parameters have the following interpretations:
@@ -175,15 +188,15 @@
 
 <A NAME="stream_buffer_forwarding_constructors"></A>
 <PRE>    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <B>stream_buffer</B>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <B>stream_buffer</B>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <B>stream_buffer</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <B>stream_buffer</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
     template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <B>stream_buffer</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
+    <B>stream_buffer</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
     Each of these members constructs an instance of <CODE>stream_buffer</CODE> and associates it with an instance of the Device <CODE>T</CODE> constructed from the given lists of arguments. The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
@@ -260,21 +273,21 @@
 
     <A CLASS="documented" HREF="#stream_default_constructor">stream</A>();
     <A CLASS="documented" HREF="#stream_policy_constructor">stream</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
-                      std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
-                      std::streamsize pback_size = <SPAN CLASS="omitted">default_value</SPAN> );
+            std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
+            std::streamsize pback_size = <SPAN CLASS="omitted">default_value</SPAN> );
 
         <SPAN CLASS="comment">// Forwarding constructors</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
     template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
+    <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_open">open</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
                std::streamsize buffer_size = <SPAN CLASS="omitted">default_value</SPAN>, 
@@ -335,8 +348,8 @@
 
 <A NAME="stream_policy_constructor"></A>
 <PRE>    <B>stream</B>( <SPAN CLASS="keyword">const</SPAN> T& t,
-                      std::streamsize buffer_size, 
-                      std::streamsize pback_size );</PRE>
+            std::streamsize buffer_size, 
+            std::streamsize pback_size );</PRE>
     
 <P>
     Constructs a <CODE>stream</CODE> which is ready to perform i/o, where the parameters have the following interpretations:
@@ -359,15 +372,15 @@
 
 <A NAME="stream_forwarding_constructors"></A>
 <PRE>    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <B>stream</B>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <B>stream</B>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <B>stream</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <B>stream</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
     template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <B>stream</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
+    <B>stream</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
     Each of these members constructs an instance of <CODE>stream</CODE> and associates it with an instance of the Device <CODE>T</CODE> constructed from the given lists of arguments. The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
@@ -389,15 +402,15 @@
 
 <A NAME="stream_forwarding_open"></A>
 <PRE>    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <SPAN CLASS="keyword">void</SPAN> <B>open</B>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <SPAN CLASS="keyword">void</SPAN> <B>open</B>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <SPAN CLASS="keyword">void</SPAN> <B>open</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <SPAN CLASS="keyword">void</SPAN> <B>open</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
 
         <SPAN CLASS="omitted">...</SPAN>
 
     template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <SPAN CLASS="keyword">void</SPAN> <B>open</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
+    <SPAN CLASS="keyword">void</SPAN> <B>open</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
     Each of these members associates with <CODE>this</CODE> instance of <CODE>stream</CODE> a newly constructed instance of the Device <CODE>T</CODE> constructed from the given lists of arguments, if there is no such instance currently associated; otherwise, they throw <CODE>std::ios_base::failure</CODE>.  The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
@@ -447,9 +460,9 @@
     <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/device/array.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/device/array.hpp&gt;</SPAN></A>
     <SPAN CLASS="preprocessor">#include</SPAN> <A STYLE="text-decoration:none" href="../../../../boost/iostreams/stream.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
 
-    const char*                  h = <SPAN CLASS="literal">"Hello World!"</SPAN>;
+    const char*           h = <SPAN CLASS="literal">"Hello World!"</SPAN>;
     stream&lt;array_source&gt;  in(h, std::strlen(h));
-    std::string                  hello;
+    std::string           hello;
     std::getline(in, hello);
     std::cout &lt;&lt; hello &lt;&lt; "\n";  // <SPAN CLASS="comment">Prints "Hello World!"</SPAN></PRE>
 
