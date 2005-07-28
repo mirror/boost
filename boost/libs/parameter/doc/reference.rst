@@ -43,11 +43,18 @@ __ ../../../../index.htm
    :class: doublesize
 
 .. section-numbering::
+    :depth: 2
 
 Preliminaries
 =============
 
-In this reference, all identifiers will be written as if the
+This section covers some basic information you'll need to know in
+order to understand this reference
+
+Namespaces
+----------
+
+In this document, all identifiers will be written as if the
 namespace alias ::
 
   namespace parameter = boost::parameter;
@@ -55,11 +62,26 @@ namespace alias ::
 is in force: we'll write ``parameter::xxx`` instead of
 ``boost::parameter::xxx``.
 
+Exceptions
+----------
+
+No operation described in this document
+throws an exception unless otherwise specified.
+
+Typography
+----------
+
+Names written in :concept:`sans serif type` represent concepts_.
+
+In code blocks, *italic type* represents unspecified text that
+satisfies the requirements given in the detailed description that
+follows the code block.
+
 Terminology
 ===========
 
-.. _keyword:
-.. |keyword| replace:: `keyword`_
+.. |kw| replace:: keyword
+.. _kw:
 
 keyword
   The name of a function parameter.
@@ -68,9 +90,8 @@ keyword
 .. |keyword tag type| replace:: `keyword tag type`_
 
 keyword tag type
-  A type of the form ``parameter::keyword<K>`` used to uniquely
-  identify a function parameter.   Typically ``K`` will be a type
-  whose name is the same as that of the parameter.
+  A type used to uniquely identify a function parameter.  Typically
+  its name will be the same as that of the parameter.
 
 .. _tag type:
 .. |tag type| replace:: `tag type`_
@@ -82,15 +103,16 @@ tag type
 .. |keyword object| replace:: `keyword object`_
 
 keyword object
-  An object whose type is a tag type.
+  An instance of ``parameter::``\ |keyword|_ ``<T>`` for some |tag
+  type| ``T``.
 
 .. _tagged reference:
 .. |tagged reference| replace:: `tagged reference`_
 
 tagged reference
-  An object that 
-  * contains a reference to its *value*, and
-  * whose type is associated with a |keyword tag type|.
+  An object whose type is associated with a |keyword tag type| (the
+  object's *keyword*), and that holds a reference (to the object's
+  *value*).
 
   As a shorthand, a “tagged reference to ``x``\ ” means a tagged
   reference whose *value* is ``x``.
@@ -106,23 +128,24 @@ tagged default
 .. |tagged lazy default| replace:: `tagged lazy default`_
 
 tagged lazy default 
-  A |tagged reference| whose *value* computes a default
-  argument value when invoked with no arguments.
+  A |tagged reference| whose *value*, when invoked with no
+  arguments, computes a default argument value.
 
 Concepts
 ========
 
+This section describes the generic type concepts_ used by the Parameter library. 
+
+.. _concepts: ../../../../more/generic_programming.html#concept
+
 |ArgumentPack|
 --------------
 
-An |ArgumentPack| is conceptually a collection of |tagged
-reference|\ s to the actual arguments passed to a function.
+An |ArgumentPack| is a collection of |tagged reference|\ s to the
+actual arguments passed to a function.
 
 Requirements
-~~~~~~~~~~~~
-
-Unless otherwise specified, no use of an |ArgumentPack| throws
-an exceptions.
+............
 
 In the table below, 
 
@@ -133,32 +156,32 @@ In the table below,
 * ``w`` is a |tagged lazy default| with |tag type| ``M`` and *value* of type ``E const``
 * ``z`` is an |ArgumentPack| containing a single element (as created by ``keyword::operator=``)
 
-and no exceptions are thrown other than those propagated from the
-invocation of ``w``\ 's *value*.
+Any exceptions are thrown from the invocation of ``w``\ 's *value*
+will be propagated to the caller.
 
-+----------+-----------------------------+------------------+--------------------------------------+
-|Expression| Type                        |Requirements      |Semantics/Notes                       |
-+==========+=============================+==================+======================================+
-|``x[u]``  |``binding<A,K>::type``       |``x`` contains an |Returns *b*\ 's *value* (by           |
-|          |                             |element *b* whose |reference).                           |
-|          |                             |keyword is ``K``  |                                      |
-+----------+-----------------------------+------------------+--------------------------------------+
-|``x[u]``  |``binding<A,L,D>::type``     |*none*            |If ``x`` contains an element *b* whose|
-|          |                             |                  |keyword is the same as ``u``\ 's,     |
-|          |                             |                  |returns *b*\ 's *value* (by           |
-|          |                             |                  |reference).  Otherwise, returns ``u``\|
-|          |                             |                  |'s *value*.                           |
-+----------+-----------------------------+------------------+--------------------------------------+
-|``x[w]``  |``lazy_binding<A,M,E>::type``|*none*            |If ``x`` contains an element *b* whose|
-|          |                             |                  |keyword is the same as ``w``\ 's,     |
-|          |                             |                  |returns *b*\ 's *value* (by           |
-|          |                             |                  |reference).  Otherwise, invokes ``w``\|
-|          |                             |                  |'s *value* and returns the result.    |
-+----------+-----------------------------+------------------+--------------------------------------+
-|``x, z``  |Model of |ArgumentPack|      |*none*            |Returns an |ArgumentPack|_ containing |
-|          |                             |                  |all the elements of both ``x`` and    |
-|          |                             |                  |``z``.                                |
-+----------+-----------------------------+------------------+--------------------------------------+
++----------+----------------------------------------+------------------+--------------------------------------+
+|Expression| Type                                   |Requirements      |Semantics/Notes                       |
++==========+========================================+==================+======================================+
+|``x[u]``  |``parameter::binding<A,K>::type``       |``x`` contains an |Returns *b*\ 's *value* (by           |
+|          |                                        |element *b* whose |reference).                           |
+|          |                                        ||kw|_ is ``K``    |                                      |
++----------+----------------------------------------+------------------+--------------------------------------+
+|``x[u]``  |``prameter::binding<A,L,D>::type``      |*none*            |If ``x`` contains an element *b* whose|
+|          |                                        |                  ||kw|_ is the same as ``u``\ 's,       |
+|          |                                        |                  |returns *b*\ 's *value* (by           |
+|          |                                        |                  |reference).  Otherwise, returns ``u``\|
+|          |                                        |                  |'s *value*.                           |
++----------+----------------------------------------+------------------+--------------------------------------+
+|``x[w]``  |``parameter::lazy_binding<A,M,E>::type``|*none*            |If ``x`` contains an element *b* whose|
+|          |                                        |                  ||kw|_ is the same as ``w``\ 's,       |
+|          |                                        |                  |returns *b*\ 's *value* (by           |
+|          |                                        |                  |reference).  Otherwise, invokes ``w``\|
+|          |                                        |                  |'s *value* and returns the result.    |
++----------+----------------------------------------+------------------+--------------------------------------+
+|``x, z``  |Model of |ArgumentPack|                 |*none*            |Returns an |ArgumentPack|_ containing |
+|          |                                        |                  |all the elements of both ``x`` and    |
+|          |                                        |                  |``z``.                                |
++----------+----------------------------------------+------------------+--------------------------------------+
 
 
 .. class:: reference
@@ -171,31 +194,37 @@ invocation of ``w``\ 's *value*.
 |ParameterSpec|
 ---------------
 
-Used to describe type restrictions and positional meaning in a parameter
-set.
+A |ParameterSpec| describes the type requirements for arguments
+corresponding to a given |kw|_ and indicates whether the argument
+is optional or required.  It takes one of the following forms:
 
-Models of this concept with special meaning are:
++------------------------+--------------------------------------+------------------------+
+|Type                    |Requirements on Argument              |Argument is Required?   |
+|                        |Type ``T``                            |                        |
++========================+======================================+========================+
+|``parameter::``\        |*none*                                |no                      |
+||keyword|_\ ``<K>``     |                                      |                        |
++------------------------+--------------------------------------+------------------------+
+|``parameter::``\        |``mpl::apply<F,T>::type::value`` is   |no                      |
+||optional|_\ ``<K,F>``  |``true``.                             |                        |
++------------------------+--------------------------------------+------------------------+
+|``parameter::``\        |``mpl::apply<F,T>::type::value``      |yes                     |
+||required|_\ ``<K,F>``  |is ``true``.                          |                        |
++------------------------+--------------------------------------+------------------------+
 
-* :class:`required`
-* :class:`optional`
+The information in a |ParameterSpec| is used to `limit`__ the
+arguments that will be matched by `forwarding functions`_.  
+
+__ index.html#controlling-overload-resolution
+
+.. _forwarding functions: index.html#forwarding-functions
 
 
-.. daniel: maybe this shouldn't be here...
+Class Templates
+===============
 
-  Any other type will be treated as a *keyword Tag*.
-
-
-Other Stuff
-===========
-
-That heading will be replaced by many others.
-
-.. class:: reference
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-
+.. |keyword| replace:: ``keyword``
+.. _keyword:
 
 class template :class:`keyword`
 ------------------------------------
@@ -205,100 +234,51 @@ class template :class:`keyword`
 
 __ ../../../../boost/parameter/keyword.hpp
 
-.. dwa:
-
-    1. You never defined IndexExpression
-
-    2. You should use cross-linking to the concept definitions,
-       thus, |IndexExpression|_
-
-    3. A class template doesn't model any concept we use other than
-       Metafunction.  Maybe specializations model IndexExpression,
-       or something.
-
 .. parsed-literal::
 
     template <class Tag>
     struct keyword
     {
         template <class T>
-        *unspecified model of* |ArgumentPack|_ `operator=`_\(T& value) const;
+        |ArgumentPack|_ `operator=`_\(T& value) const;
 
         template <class T>
-        *unspecified model of* |ArgumentPack|_ `operator=`_\(T const& value) const;
+        |ArgumentPack|_ `operator=`_\(T const& value) const;
 
         template <class T>
-        *unspecified tagged default* `operator|`_\(T& default\_) const;
+        *tagged default* `operator|`_\(T& x) const;
 
         template <class T>
-        *unspecified tagged default* `operator|`_\(T const& default\_) const;
+        *tagged default* `operator|`_\(T const& x) const;
 
         template <class F>
-         *unspecified tagged lazy default* `operator||`_\(F const&) const;
+        *tagged lazy default* `operator||`_\(F const&) const;
     };
 
 
-.. dwa:
-
-   We don't have a convention of using a raw concept name,
-   formatted as a concept, as the return value of a function.  If
-   we're going to start doing this, don't we need to explain it
-   somewhere?
-
-
-.. comment .. _keyword object:
-
-Keyword objects
-~~~~~~~~~~~~~~~
-
-.. comment .. |keyword-object| replace:: `keyword object`_
-
-Keyword objects are instances of a ``keyword<>`` specialization.
-
-operator=
-~~~~~~~~~
+``operator=``
+.............
 
 .. parsed-literal::
 
-    template <class T> *unspecified model of* |ArgumentPack|_ operator=(T& value) const;
-    template <class T> *unspecified model of* |ArgumentPack|_ operator=(T const& value) const;
+    template <class T> |ArgumentPack|_ operator=(T& value) const;
+    template <class T> |ArgumentPack|_ operator=(T const& value) const;
 
-**Requires**
-    Nothing.
+:Requires: Nothing
 
-**Throws**
-    Nothing
-
-**Returns**
-    A model of |ArgumentPack|_, holding ``value`` (by reference),
-    and tagged with ``Tag``.
-
-.. dwa:
-
-     1. We don't have a convention of writing "*cv* reference to."
-        I know what you mean, but if we're going to start doing
-        this we need to explain the convention somewhere.
-
-     2. It's not a cv reference to value, since value itself is a
-        reference.  You can only reference an object.  So this
-        should be, perhaps, "holding value" or if you think that's
-        not explicit enough, "holding a reference equivalent to
-        value."  That deals with the cv issue.
-
+:Returns:
+    An |ArgumentPack|_ containing a single |tagged reference| to
+    ``value`` with |keyword| ``Tag``.
 
 operator|
-~~~~~~~~~
+.........
 
 .. parsed-literal::
 
-    template <class T> *unspecified tagged default* operator|(T& x) const;
-    template <class T> *unspecified tagged default* operator|(T const& x) const;
+    template <class T> *tagged default* operator|(T& x) const;
+    template <class T> *tagged default* operator|(T const& x) const;
 
-**Throws**
-    Nothing
-
-**Returns**
-    An object holding x (by reference) as a default for keyword ``Tag``,
+:Returns: an object holding x (by reference) as a default for keyword ``Tag``,
     and suitable for use in an ArgumentPack's index operator.
 
 .. old:
@@ -333,7 +313,7 @@ operator|
    ``default_`` .  We're just using a generic ``T`` anyhow.
 
 operator||
-~~~~~~~~~~
+..........
 
 .. parsed-literal::
 
@@ -442,7 +422,7 @@ __ ../../../../boost/parameter/parameters.hpp
 
 
 Template Parameter Semantics
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+............................
 
 ``<P0, …, PN>`` are models of |ParameterSpec|_. If ``Px`` is not an
 instance of either ``optional`` or ``required``, it is treated as a
@@ -453,7 +433,7 @@ and the type requirements for passed arguments.
 
 
 match
-~~~~~
+.....
 
 Used to remove a function from overload resolution using SFINAE.
 
@@ -484,7 +464,7 @@ Used to remove a function from overload resolution using SFINAE.
 
 
 operator()
-~~~~~~~~~~
+..........
 
 .. parsed-literal::
 
@@ -504,6 +484,9 @@ operator()
 //////////////////////////////////////////////////////////////////////////////
 
 .. class:: reference
+
+.. |optional| replace:: ``optional``
+.. |required| replace:: ``required``
 
 .. _optional:
 .. _required:
@@ -527,11 +510,16 @@ __ ../../../../boost/parameter/parameters.hpp
     template <class Tag, class Predicate = *unspecified*>
     struct required;
 
-The default value of ``Predicate`` is an unspecified metafunction that returns
+The default value of ``Predicate`` is an unspecified |Metafunction|_ that returns
 ``mpl::true_`` for any argument.
 
+.. |Metafunction| replace:: :concept:`Metafunction`
+.. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
 
-//////////////////////////////////////////////////////////////////////////////
+|Metafunction|_\ s
+==================
+
+
 
 .. class:: reference
 
@@ -587,7 +575,7 @@ specified, returns the type returned by invoking ``DefaultFn``.
     };
 
 Requirements 
-~~~~~~~~~~~~ 
+............ 
 
 ``DefaultFn`` is a nullary function object. The type returned by invoking this
 function is determined by ``boost::result_of<DefaultFn()>::type`` on compilers
@@ -597,12 +585,14 @@ that support partial specialization. On less compliant compilers a nested
 
 .. class:: reference
 
-
 //////////////////////////////////////////////////////////////////////////////
 
-.. _boost_parameter_keyword:
+Macros
+======
 
-macro ``BOOST_PARAMETER_KEYWORD``
+
+
+``BOOST_PARAMETER_KEYWORD``
 ---------------------------------
 
 **Defined in**
@@ -619,7 +609,7 @@ __ `keyword object`_
     BOOST_PARAMETER_KEYWORD(tag_namespace, name)
 
 Requirements
-~~~~~~~~~~~~
+............
 
 * ``tag_namespace`` is the namespace where the tag-types will be placed.
 * ``name`` is the name that will be used for the keyword.
@@ -630,9 +620,7 @@ Requirements
 
 //////////////////////////////////////////////////////////////////////////////
 
-.. _boost_parameter_fun:
-
-macro ``BOOST_PARAMETER_FUN``
+``BOOST_PARAMETER_FUN``
 -----------------------------
 
 **Defined in**
@@ -644,8 +632,11 @@ __ ../../../../boost/parameter/macros.hpp
 
     BOOST_PARAMETER_FUN(ret, name, lo, hi, parameters)
 
+``BOOST_PARAMETER_MAX_ARITY``
+-----------------------------
+
 Requirements
-~~~~~~~~~~~~
+............
 
 * ``ret`` is the return type of the function.
 * ``name`` is the name of the function.
