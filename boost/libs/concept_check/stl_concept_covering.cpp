@@ -175,7 +175,7 @@ main()
   }
   {
     typedef equal_op_first_archetype<> Left;
-    typedef input_iterator_archetype<Left> InIter;
+    typedef input_iterator_archetype<Left, 0, Left> InIter;
     InIter in;
     function_requires< InputIteratorConcept<InIter> >();
     equal_op_second_archetype<> value(dummy_cons);
