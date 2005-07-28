@@ -141,10 +141,9 @@ main()
       f(dummy_cons);
     std::for_each(in, in, f);
   }
-  // gcc bug
   {
     typedef equality_comparable2_first_archetype<> Left;
-    input_iterator_archetype< Left > in;
+    input_iterator_archetype<Left, 0, Left> in;
     equality_comparable2_second_archetype<> value(dummy_cons);
     in = std::find(in, in, value);
   }
@@ -165,10 +164,9 @@ main()
       pred(dummy_cons);
     fo = std::adjacent_find(fo, fo, pred);
   }
-  // gcc bug
   {
     typedef equal_op_first_archetype<> Left;
-    input_iterator_archetype<Left> in;
+    forward_iterator_archetype<Left> in;
     typedef equal_op_second_archetype<> Right;
     forward_iterator_archetype<Right> fo;
     in = std::find_first_of(in, in, fo, fo);
@@ -191,13 +189,12 @@ main()
       n = std::count_if(in, in, pred);
     ignore_unused_variable_warning(n);
   }
-  // gcc bug
   {
     typedef equal_op_first_archetype<> Left;
-    typedef input_iterator_archetype<Left> InIter1;
+    typedef input_iterator_archetype<Left, 0, Left> InIter1;
     InIter1 in1;
     typedef equal_op_second_archetype<> Right;
-    typedef input_iterator_archetype<Right> InIter2;
+    typedef input_iterator_archetype<Right, 1, Right> InIter2;
     InIter2 in2;
     std::pair<InIter1, InIter2> p = std::mismatch(in1, in1, in2);
     ignore_unused_variable_warning(p);
@@ -210,12 +207,11 @@ main()
     std::pair<InIter, InIter> p = std::mismatch(in1, in1, in2, pred);
     ignore_unused_variable_warning(p);
   }
-  // gcc bug
   {
     typedef equality_comparable2_first_archetype<> Left;
-    input_iterator_archetype<Left> in1;
+    input_iterator_archetype<Left, 0, Left> in1;
     typedef equality_comparable2_second_archetype<> Right;
-    input_iterator_archetype<Right> in2;
+    input_iterator_archetype<Right, 1, Right> in2;
     bool b = std::equal(in1, in1, in2);
     ignore_unused_variable_warning(b);
   }
@@ -356,7 +352,7 @@ main()
     typedef equal_op_first_archetype<> Tin;
     typedef null_archetype<> Tout;
     typedef equal_op_second_archetype< convertible_to_archetype<Tout> > T;
-    input_iterator_archetype<Tin> in;
+    input_iterator_archetype<Tin, 0, Tin> in;
     output_iterator_archetype<Tout> out(dummy_cons);
     T value(dummy_cons);
     out = std::replace_copy(in, in, out, value, value);
@@ -415,13 +411,12 @@ main()
     unary_predicate_archetype<PredArg> pred(dummy_cons);
     fi = std::remove_if(fi, fi, pred);
   }
-  // gcc bug
   {
     typedef null_archetype<> Tout;
     typedef equality_comparable2_first_archetype<
       convertible_to_archetype<Tout> > Tin;
     typedef equality_comparable2_second_archetype<> T;
-    input_iterator_archetype<Tin> in;
+    input_iterator_archetype<Tin, 0, Tin> in;
     output_iterator_archetype<Tout> out(dummy_cons);
     T value(dummy_cons);
     out = std::remove_copy(in, in, out, value);
@@ -448,10 +443,9 @@ main()
     binary_predicate_archetype<Arg1, Arg2> pred(dummy_cons);
     fi = std::unique(fi, fi, pred);
   }
-  // gcc bug
   {
     typedef equality_comparable_archetype< sgi_assignable_archetype<> > T;
-    input_iterator_archetype<T> in;
+    input_iterator_archetype<T, 0, T> in;
     output_iterator_archetype<T> out(dummy_cons);
     out = std::unique_copy(in, in, out);
   }
