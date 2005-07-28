@@ -29,6 +29,9 @@
 
 <DL class="page-index">
   <DT><A href="#overview">Overview</A></DT>
+  <DT><A href="#examples">Examples</A></DT>
+  <DT><A href="#headers">Headers</A></DT>
+  <DT><A href="#reference">Reference</A></DT>
 </DL>
 
 <HR STYLE="margin-top:1em">
@@ -37,12 +40,90 @@
 <H2>Overview</H2>
 
 <P>
-[To be supplied in the next release]
+    A pipeline is an expression of the form 
 </P>
+<PRE CLASS="broken_ie">filter<SUB>1</SUB> | ... | filter<SUB>n</SUB> | filter-or-device</PRE>
+<P>
+consiting of one or more filters and an optional device, joined using <CODE>operator|</CODE>. Pipelines are a convenient way to pass chains of Filters and Devices to the constructor or <CODE>push</CODE> function of a <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> or <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>. 
+</P>
+
+<P>
+    For instances of a model of Filter to appear in a pipeline, it must be declared <A HREF="../concepts/pipable.html">Pipable</A> using the macro <A HREF="#boost_iostreams_pipable"><CODE>BOOST_IOSTREAMS_PIPABLE</CODE></A>.
+</P>
+
+<A NAME="examples">
+<H2>Examples</H2>
+
+<P>The following example defines a <A HREF="../concepts/pipable.html">Pipable</A> InputFilter.</P>
+
+<PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/concepts.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/pipeline.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/pipeline.hpp&gt;</SPAN></A>
+
+<SPAN CLASS="keyword">namespace</SPAN> io = boost::iostreams;
+
+<SPAN CLASS="keyword">class</SPAN> my_filter : <SPAN CLASS="keyword">public</SPAN> io::input_filter {
+<SPAN CLASS="keyword">public:</SPAN>
+    <SPAN CLASS='omitted'>...</SPAN>
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
+    <SPAN CLASS="keyword">int</SPAN> get(Source& src)
+    {
+       <SPAN CLASS='omitted'> ...</SPAN>
+    }
+};
+BOOST_IOSTREAMS_PIPABLE(my_filter, 0)
+</PRE>
+
+<P>The following example shows a <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> constructed from a pipeline</CODE>.</P>
+
+<PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/filtering_stream.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/filtering_stream.hpp&gt;</SPAN></A>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/device/file.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/device/file.hpp&gt;</SPAN></A>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/filter/counter.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/filter/counter.hpp&gt;</SPAN></A>
+
+<SPAN CLASS="keyword">namespace</SPAN> io = boost::iostreams;
+
+<SPAN CLASS="keyword">int</SPAN> main()
+{
+    <SPAN CLASS='comment'>// Write to the file "hello," counting</SPAN>
+    <SPAN CLASS='comment'>// the number of lines and characters</SPAN>
+    io::filtering_ostream out(io::counter() | io::file("hello"));
+    <SPAN CLASS='omitted'>...</SPAN>
+}</PRE>
+
+<A NAME="headers"></A>
+<H2>Headers</H2>
+
+<DL class="page-index">
+  <DT><A CLASS="header" HREF="../../../../boost/iostreams/pipeline.hpp"><CODE>&lt;boost/iostreams/pipeline.hpp&gt;</CODE></A></DT>
+</DL>
+
+<A NAME="boost_iostreams_pipable"></A>
+<A NAME="reference"></A>
+<H2>Reference</H2>
+
+<PRE CLASS="broken_ie">
+
+<SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#pipable">BOOST_IOSTREAMS_PIPABLE</A>(filter, arity) <SPAN CLASS='omitted'>...</SPAN>
+
+</PRE>
+
+<A NAME="macro_params"></A>
+<H4>Macro parameters</H4>
+
+<TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
+<TR>
+    <TR>
+        <TD VALIGN="top"><I>filter</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD>The name of the <A HREF="../concepts/filter.html">Filter</A> to be declared <A HREF="../concepts/pipable.html">Pipable</A></TD>
+    </TR>
+    <TR>
+        <TD VALIGN="top"><I>arity</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD>The <A HREF="../concepts/filter.html">Filter</A>'s template arity, <I>i.e.</I>, the number or its template parameters; a value of <CODE>0</CODE> indicates that it is not a class template</TD>
+    </TR>
+</TABLE>
 
 <!-- Begin Footer -->
 
-<HR>
+<HR STYLE="margin-top:1em">
 <P CLASS="copyright">Revised
 <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
 20 May, 2004
