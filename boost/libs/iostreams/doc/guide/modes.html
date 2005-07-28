@@ -49,27 +49,12 @@
     <LI>Whether the reading or writing heads are repositionable, and if so, whether there are separate heads for reading and writing or a single read/write head.
 </UL>
 <P>
-    The following properties are <I>not</I> related to mode, and so need not be shared in order for a collection of Filters and Devices to work together:
+    The concepts representing <A HREF="concepts.html#optional_behavior">optional behavior</A> are not related to mode, and so need not be shared in order for a collection of Filters and Devices to work together:
 </P>
-<UL> 
-    <LI>Whether a Filter or Device is&nbsp;<A href="../concepts/closable.html">Closable</A>.
-    <LI>Whether a Filter or Device is <A href="../concepts/localizable.html">Localizable</A>.
-    <LI>Whether a Device is <A href="../concepts/direct.html">Direct</A> or <A href="../concepts/peekable.html">Peekable</A>.
-    <LI>Whether a Filter is <A href="../concepts/multi_character.html">Multi-Character</A>.
-</UL>
-
-<!-- <P>
-    <I>Note</I>: There is one important property which must be shared by all Filters and Devices in a chain, but which is <I>not</I> enforced by the library: 
-</P>
-<UL> 
-    <LI>Whether an input or output sequence has a definite begining and end (like an HTML document) rather than being open-ended (like a continuous stock ticker).
-</UL>
-<P>
-    Users must be careful not to combine Filters which require a bounded sequence &#8212; such as the <A href="../classes/regex_filter.html">Regular Expression Filters</A> &#8212; with Devices which provide access to an open-ended character sequence.
-</P> -->
 
 <P>Modes are summarized in the following table:</P>
 
+<A NAME="definitions"></A>
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
 <TR><TH>Mode</TH><TH>Definition/Examples</TH></TR>
     <!-- Input -->
@@ -181,25 +166,25 @@
 <TR>
     <TD VALIGN="top">
         <P CLASS="caption"><B>Figure 1.</B> The four most important modes</P>
-        <IMG SRC="graphics/important_modes.gif">
+        <IMG SRC="../graphics/important_modes.gif">
     </TD>
     <TD WIDTH="30"></TD>
     <TD ALIGN="right" VALIGN="top">
         <TABLE>
-        <TR><TD><IMG SRC="graphics/key_important.gif"></TD><TD CLASS="caption">Most important</TD></TR>
-        <TR><TD><IMG SRC="graphics/key_input_seq.gif"></TD><TD CLASS="caption">Input sequence</TD></TR>
-        <TR><TD><IMG SRC="graphics/key_output_seq.gif"></TD><TD CLASS="caption">Output sequence</TD></TR>
-        <TR><TD><IMG SRC="graphics/key_bidirectional_seq.gif"></TD><TD CLASS="caption">Combined input-output sequence</TD></TR>
-        <TR><TD><IMG SRC="graphics/key_read_head.gif"></TD><TD CLASS="caption">Repositionable file-pointer for reading</TD></TR>
-        <TR><TD><IMG SRC="graphics/key_write_head.gif"></TD><TD CLASS="caption">Repositionable file-pointer for writing</TD></TR>
-        <TR><TD><IMG SRC="graphics/key_read_write_head.gif"></TD><TD CLASS="caption">Combined file-pointer for reading and writing</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_important.gif"></TD><TD CLASS="caption">Most important</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_input_seq.gif"></TD><TD CLASS="caption">Input sequence</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_output_seq.gif"></TD><TD CLASS="caption">Output sequence</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_bidirectional_seq.gif"></TD><TD CLASS="caption">Combined input-output sequence</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_read_head.gif"></TD><TD CLASS="caption">Repositionable file-pointer for reading</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_write_head.gif"></TD><TD CLASS="caption">Repositionable file-pointer for writing</TD></TR>
+        <TR><TD><IMG SRC="../graphics/key_read_write_head.gif"></TD><TD CLASS="caption">Combined file-pointer for reading and writing</TD></TR>
         </TABLE>
     </TD>
 </TR>
 <TR>
     <TD COLSPAN="3">
         <P CLASS="caption"><B>Figure 2.</B> The complete hierarchy of modes</P>
-        <IMG SRC="graphics/modes.gif">
+        <IMG SRC="../graphics/modes.gif">
     </TD>
 </TR>
 </TABLE>
@@ -211,7 +196,7 @@
     Each mode is represented by a <SPAN CLASS="term">mode tag</SPAN>, defined in the header <A href="../../../../boost/iostreams/traits.hpp"><CODE>&lt;boost/iostreams/traits.hpp&gt;</CODE></A>. There are eight tags for the eight modes: <CODE>input</CODE>, <CODE>output</CODE>, <CODE>bidirectional</CODE>, <CODE>input_seekable</CODE>, <CODE>output_seekable</CODE>, <CODE>seekable</CODE>, <CODE>dual_seekable</CODE> and <CODE>bidirectional_seekable</CODE>.<SUP><A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A></SUP> As with standard library iterator category tags, the tag corresponding to a mode is convertible to each of the tags corresponding to modes which the first mode refines.
 </P>
 <P>
-    In addition, there is a <SPAN CLASS="term">pseudo-mode tag</SPAN> <CODE>dual_use</CODE>, which is used to define <A href="../concepts/dual_use_filter.html">DualUseFilters</A> &#8212; which can perform input or output, but not both simultaneously. This is useful to help reduce the number of different of Filter types. The <A href="../classes/regex_filter.html">Regular Expression Filters</A>, <A href="../classes/newline_filter.html">Newline Filters</A> and <A href="../compression.html">Compression/Decompression Filters</A> all have mode <CODE>dual_use</CODE> so that they may be used with either input or output streams.
+    In addition, there is a <SPAN CLASS="term">pseudo-mode tag</SPAN> <CODE>dual_use</CODE>, which is used to define <A href="../concepts/dual_use_filter.html">DualUseFilters</A> &#8212; which can perform input or output, but not both simultaneously. This is useful to help reduce the number of different of Filter types. The <A href="../classes/regex_filter.html">Regular Expression Filters</A>, <A href="../classes/newline_filter.html">Newline Filters</A> and compression and decompression filters all have mode <CODE>dual_use</CODE> so that they may be used with either input or output streams.
 </P>
 
 <A NAME="the_metafunction_mode">

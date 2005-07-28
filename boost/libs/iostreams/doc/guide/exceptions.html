@@ -27,7 +27,7 @@
 
 <!-- See James Kanze post in comp.lang.C++.moderated 2-2-04 11:41 -->
 
-<A NAME="standard_iostreams">
+<A NAME="standard_iostreams"></A>
 <H2>The Standard Iostreams library</H2>
 
 <P>
@@ -42,7 +42,7 @@
     With streams, therefore, the user has a choice whether to enable exceptions; with stream buffers, the implementor has a choice, but the user has none.
 </P>
 
-<A NAME="boost_iostreams">
+<A NAME="boost_iostreams"></A>
 <H2>The Boost Iostreams library</H2>
 
 <H5>Policy</H5>
@@ -63,10 +63,10 @@
 </P>
 
 <P>
-    A third possibility would have been to follow the example of <CODE>std::basic_streambuf</CODE> and allow member functions of policy classes to signal errors either by throwing exceptions or by returning designated error indicators. This was rejected because it would have complicated the specifications of the various <A HREF="concepts.html#filter_concepts">Filter</A> and <A HREF="concepts.html#device_concepts">Device</A> concepts and made the internals of <CODE>stream_buffer</CODE> more difficult to understand and maintain.<SUP><A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_2">[2]</A></SUP>
+    A third possibility would have been to follow the example of <CODE>std::basic_streambuf</CODE> and allow member functions of policy classes to signal errors either by throwing exceptions or by returning designated error indicators. This was rejected because it would have complicated the specifications of the various <A HREF="concepts.html#filter_concepts">Filter</A> and <A HREF="concepts.html#device_concepts">Device</A> concepts and made the internals of <CODE>stream_buffer</CODE> more difficult to understand and maintain.<SUP><A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A></SUP>
 </P>
 
-<A NAME="safety">
+<A NAME="safety"></A>
 <H2>Exception Safety</H2>
 
 The Iostreams library aims to provide to following guarantees if an exception is thrown during an i/o operation:
@@ -96,7 +96,7 @@ The Iostreams library aims to provide to following guarantees if an exception is
     These conditions amount to what is known as the <I>basic guarantee</I> of exception safety (<I>see</I> <A CLASS="bib_ref" HREF="../bibliography.html#abrahams1">[Abrahams1]</A>.)
 </P>
 
-<A NAME="acknowledgments">
+<A NAME="acknowledgments"></A>
 <H2>Acknowledgments</H2>
 
 <P>Thanks to Angelika Langer and John Torjo for discussion of exceptions.</P>

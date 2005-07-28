@@ -36,7 +36,7 @@
     <LI>repeatedly read sequences of characters from the composite Source and write them to <CODE>snk</CODE> until the buffer <CODE>s</CODE> is exhausted.
 </UL>
 
-<P>Similarly, given an <A HREF='../concepts/output_filter.html'>OutputFilter</A> <CODE>f</CODE>, the inverse of <CODE>f</CODE> is <A HREF='../concepts/multi_character.html'>Multi-Character</A> <A HREF='../concepts/input_filter.html'>InputFilter</A> whose member function <CODE>read</CODE> is implemented as follows. Given a <A HREF='../concepts/src.html'>Source</A> <CODE>src</CODE> and a character buffer <CODE>s</CODE> of length <CODE>n</CODE>, we
+<P>Similarly, given an <A HREF='../concepts/output_filter.html'>OutputFilter</A> <CODE>f</CODE>, the inverse of <CODE>f</CODE> is <A HREF='../concepts/multi_character.html'>Multi-Character</A> <A HREF='../concepts/input_filter.html'>InputFilter</A> whose member function <CODE>read</CODE> is implemented as follows. Given a <A HREF='../concepts/source.html'>Source</A> <CODE>src</CODE> and a character buffer <CODE>s</CODE> of length <CODE>n</CODE>, we
 </P>
 <UL>
     <LI>construct a <A HREF='../concepts/sink.html'>Sink</A> based on the buffer <CODE>s</CODE> and <A HREF='compose.html'><CODE>compose</CODE></A> it with <CODE>f</CODE> to form a Sink, then

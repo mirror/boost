@@ -20,7 +20,7 @@
 
 <DL CLASS="page-index">
   <DT><A href="#core">Core Components</A></DT>
-  <DT><A href="#device">Devices</A></DT>
+  <DT><A href="#devices">Devices</A></DT>
   <DT><A href="#filters">Filters</A></DT>
   <DT><A href="#views">Views</A></DT>
 </DL>
@@ -44,7 +44,7 @@
     <TD><A HREF="guide/generic_streams.html#stream"><CODE>stream</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/stream.hpp"><CODE>stream.hpp</CODE></A></TD>
     <TD>
-        Stream template which performs i/o using an instance of its first template parameter, which must model the concept <A HREF="concepts/device.html">Device</A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE> depending on whether its first template parameter models <A HREF="source.html">Source</A>, <A HREF="concepts/sink.html">Sink</A> or both.
+        Stream template which performs i/o using an instance of its first template parameter, which must model the concept <A HREF="concepts/device.html">Device</A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE> depending on whether its first template parameter models <A HREF="concepts/source.html">Source</A>, <A HREF="concepts/sink.html">Sink</A> or both.
     </TD>
 </TR>
 <TR>
@@ -58,28 +58,28 @@
     <TD><A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/filtering_stream.hpp"><CODE>filtering_stream.hpp</CODE></A></TD>
     <TD>
-        Stream template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>basic_chain</CODE></A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on its template parameters.
+        Stream template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>chain</CODE></A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on its template parameters.
     </TD>
 </TR>
 <TR>
     <TD><A HREF="classes/filtering_stream.html"><CODE>filtering_streambuf</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/filtering_streambuf.hpp"><CODE>filtering_streambuf.hpp</CODE></A></TD>
     <TD>
-        Stream buffer template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>basic_chain</CODE></A>.
+        Stream buffer template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>chain</CODE></A>.
     </TD>
 </TR>
 <TR>
-    <TD><A HREF="classes/chain.html"><CODE>basic_chain</CODE></A></TD>
+    <TD><A HREF="classes/chain.html"><CODE>chain</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/chain.hpp"><CODE>chain.hpp</CODE></A></TD>
     <TD>
-        Sequence of zero or more <A HREF="concepts/filters.html">Filters</A>, followed by an optional <A HREF="concepts/device.html">Device</A>, accessed with a stack-like interface. Used by <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> and <A HREF="classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>.
+        Sequence of zero or more <A HREF="concepts/filter.html">Filters</A>, followed by an optional <A HREF="concepts/device.html">Device</A>, accessed with a stack-like interface. Used by <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> and <A HREF="classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A>.
     </TD>
 </TR>
 <TR>
     <TD><A HREF="classes/code_converter.html"><CODE>code_converter</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/code_converter.hpp"><CODE>code_converter.hpp</CODE></A></TD>
     <TD>
-        Device adapter which takes a narrow-character <A HREF="concepts/device.html">Device</A> and produces a wide-character <A HREF="concepts/device.html">Device</A> by introducing a layer of <A HREF="../guide/code_conversion.html">code conversion</A>.
+        Device adapter which takes a narrow-character <A HREF="concepts/device.html">Device</A> and produces a wide-character <A HREF="concepts/device.html">Device</A> by introducing a layer of <A HREF="guide/code_conversion.html">code conversion</A>.
     </TD>
 </TR>
 </TABLE>
@@ -108,7 +108,7 @@
 </TR>
 <TR>
     <TD>
-        <A HREF="classes/back_inserter.html#back_insert_device"><CODE>back_insert_device</CODE></A>
+        <A HREF="classes/back_inserter.html#synopsis"><CODE>back_insert_device</CODE></A>
     </TD>
     <TD><A HREF="../../../boost/iostreams/device/back_inserter.hpp"><CODE>back_inserter.hpp</CODE></A></TD>
     <TD>
@@ -200,7 +200,7 @@
     </TD>
     <TD><A HREF="../../../boost/iostreams/filter/gzip.hpp"><CODE>gzip.hpp</CODE></A></TD>
     <TD>
-        Perform compression and decompression based on the the G<SPAN STYLE="font-size:80%">ZIP</SPAN> format (<A CLASS="bib_ref" HREF="../bibliography.html#deutsch3">[Deutsch3]</A>).
+        Perform compression and decompression based on the the G<SPAN STYLE="font-size:80%">ZIP</SPAN> format (<A CLASS="bib_ref" HREF="bibliography.html#deutsch3">[Deutsch3]</A>).
     </TD>
 </TR>
 <TR>
@@ -349,7 +349,7 @@
     <TD ROWSPAN='2'><A HREF="functions/tee.html"><CODE>tee</CODE></A></TD>
     <TD ROWSPAN='2'><A HREF="../../../boost/iostreams/tee.hpp"><CODE>tee.hpp</CODE></A></TD>
     <TD> 
-        Takes a pair of <A HREF="concepts/sinks.html">Sinks</A> and yields a Sink which sends all incoming data to both of the given Sinks.
+        Takes a pair of <A HREF="concepts/sink.html">Sinks</A> and yields a Sink which sends all incoming data to both of the given Sinks.
     </TD>
 </TR>
 <TR>

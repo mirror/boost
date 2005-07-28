@@ -16,7 +16,7 @@
 
 <DL class="page-index">
     <DT><A HREF="#overview">Overview</A>
-    <DT><A HREF="#sources">Source Files</A>
+    <DT><A HREF="#ide">Building with an IDE or Makefile</A>
     <DT><A HREF="#bjam">Building with Boost.Build</A>
 </DL>
 
@@ -24,50 +24,62 @@
 <H2>Overview</H2>
 
 <P>
-    Most components of the Iostreams library are defined entirely in header files, and can be used simply by including the appropriate headers; a few components, however, rely on separate source files. In addition, the compression filters rely on the third-party libraryes zlib and libbz2. 
+    Most of Boost.Iostreams can be used simply by including appropriate headers. This is true, for instance, of all the <A HREF="quick_reference.html#core">core components</A> &#8212; including <A HREF="guide/generic_streams.html#stream"><CODE>stream</CODE></A>, <A HREF="guide/generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A>, <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> and <A HREF="classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> &#8212; and of about two thirds of the concrete <A HREF="quick_reference.html#filters">Filters</A> and <A HREF="quick_reference.html#devices">Devices</A>. 
+    Some components, however, are implemented in <CODE>.cpp</CODE> files. Furthermore, the <A HREF="classes/regex_filter.html">regular expression filter</A> depend on <A HREF="../../regex/index.html" TARGET="_top">Boost.Regex</A>, and the compressions filters rely on the third-party libraries zlib (<A CLASS='bib_ref' NAME='gailly' HREF="bibliography.html#gailly"'>[Gailly]</A>) and libbz2 (<A CLASS='bib_ref' NAME='seward' HREF="bibliography.html#seward"'>[Seward]</A>).
 </P>
-
-Instructions for obtaining 
-    
-<P>
-    There are two ways to use these components:
-</P>
-<UL>
-    <LI>Build the Iostreams library with Boost.Build, using the Jamfile <A HREF="../build/Jamfile"><CODE>libs/iostreams/build/Jamfile</CODE></A>. <I>See</I> <A HREF="#bjam">Building with Boost.Build</A>, below.
-    <LI>Add one or more of the Iostreams library source files to your makefile or IDE project.
-</UL>
-
-<A NAME="sources"></A>
-<H2>Source Files</H2>
 
 <P>
-    In addition:
-    <OL>
-        <LI STYLE="margin:.5em">
-            The <A HREF="classes/regex_filter.html">regular expression Filters</A> rely on the <A HREF="http://www.boost.org/libs/regex">Boost Regular Expression Library</A> (<A CLASS="bib_ref" HREF="bibliography.html#maddock">[Maddock]</A>), which must be built separately. See <A HREF="http://www.boost.org/libs/regex/doc/install.html">here</A> for details.
-        </LI>
-        <LI STYLE="margin:.5em">
-            The <A HREF="classes/mapped_file.html">memory-mapped file Devices</A> rely on the implementation file <A CLASS="header" HREF="../src/mapped_file.cpp"><CODE>&lt;libs/iostreams/src/memmap.cpp&gt;</CODE></A>.
-        </LI>
-        <LI STYLE="margin:.5em">
-            The <A HREF="classes/file_descriptor.html">file descriptor file Devices</A> rely on the implementation file <A CLASS="header" HREF="../src/file_descriptor.cpp"><CODE>&lt;libs/iostreams/src/file_descriptor.cpp&gt;</CODE></A>.
-        </LI>
-        <LI STYLE="margin:.5em">
-            The <A HREF="classes/zlib.html">zlib</A> and <A HREF="classes/gzip.html">gzip</A> Filters rely on the implementation file <A CLASS="header" HREF="../src/mapped_file.cpp"><CODE>&lt;libs/iostreams/src/zlib.cpp&gt;</CODE></A>, and depend on the non-boost library zlib (<A CLASS="bib_ref" HREF="bibliography.html#gailly">[Gailly]</A>). See <A HREF="classes/zlib.html#installation">here</A> for details on obtaining zlib binaries.
-        </LI>
-        <LI STYLE="margin:.5em">
-            The <A HREF="classes/bzip2.html">bzip2</A> Filters rely on the implementation file <A CLASS="header" HREF="../src/mapped_file.cpp"><CODE>&lt;libs/iostreams/src/bzip2.cpp&gt;</CODE></A>, and and depend on the non-boost library libbz2 (<A CLASS="bib_ref" HREF="bibliography.html#seward">[Seward]</A>). See <A HREF="classes/bzip2.html#installation">here</A> for details on obtaining libbz2 binaries.
-        </LI>
-    </OL>
+    The components which are implemented in <CODE>.cpp</CODE> or which rely on external libraries can be built in two ways: by adding the appropriate <CODE>.cpp</CODE> files to your IDE project or makefile, or by using <A HREF="../../../tools/build/v1/build_system.htm" TARGET="_top">Boost.Build</A>.
 </P>
+
+<A NAME="ide"></A>
+<H2>Building with an IDE or Makefile</H2>
+
+<P>
+    The following table shows which headers contain components defined in <CODE>.cpp</CODE> files. If your application includes one of these headers, you'll need to add the corresponding <CODE>.cpp</CODE> files to you IDE project or makefile, and to define the preprocessor symbol <CODE>BOOST_IOSTREAMS_NO_LIB</CODE>. In addition, if the <CODE>.cpp</CODE> file depends on an external library, you'll have to build it from the source or link to a pre-built binary.
+</P>
+
+<TABLE CELLPADDING=5 BORDER=1>
+<TR><TH>Header</TH><TH>Source File</TH><TH WIDTH=200>External Library</TH></TR>
+<TR>
+    <TD><A HREF="../../../boost/iostreams/device/file_descriptor.hpp"><CODE>boost/iostreams/device/file_descriptor.hpp</CODE></A></TD> <TD><A HREF="../../../libs/iostreams/src/file_descriptor.cpp"><CODE>file_descriptor.cpp</CODE></A></TD>
+    <TD STYLE='padding-left:1.5em'>-</TD>
+</TR>
+<TR>
+    <TD><A HREF="../../../boost/iostreams/device/mapped_file.hpp"><CODE>boost/iostreams/device/mapped_file.hpp</CODE></A></TD> 
+    <TD><A HREF="../../../libs/iostreams/src/mapped_file.cpp"><CODE>mapped_file.cpp</CODE></A></TD>
+    <TD STYLE='padding-left:1.5em'>-</TD>
+</TR>
+<TR>
+    <TD><A HREF="../../../boost/iostreams/filter/bzip2.hpp"><CODE>boost/iostreams/filter/bzip2.hpp</CODE></A></TD> 
+    <TD><A HREF="../../../libs/iostreams/src/bzip2.cpp"><CODE>bzip2.cpp</CODE></A></TD>
+    <TD STYLE='padding-left:1.5em'>libbz2</TD>
+</TR>
+<TR>
+    <TD><A HREF="../../../boost/iostreams/filter/gzip.hpp"><CODE>boost/iostreams/filter/gzip.hpp</CODE></A></TD> 
+    <TD><A HREF="../../../libs/iostreams/src/zlib.cpp"><CODE>zlib.cpp</CODE></A></TD>
+    <TD STYLE='padding-left:1.5em'>zlib</TD>
+</TR>
+<TR>
+    <TD><A HREF="../../../boost/iostreams/filter/regex.hpp"><CODE>boost/iostreams/filter/regex.hpp</CODE></A></TD> 
+    <TD STYLE='padding-left:1em'>-</TD>
+    <TD STYLE='padding-left:1.5em'><A HREF="../../regex/index.html" TARGET="_top">Boost.Regex</A></TD>
+</TR>
+<TR>
+    <TD><A HREF="../../../boost/iostreams/filter/zlib.hpp"><CODE>boost/iostreams/filter/zlib.hpp</CODE></A></TD> 
+    <TD><A HREF="../../../libs/iostreams/src/zlib.cpp"><CODE>zlib.cpp</CODE></A></TD>
+    <TD STYLE='padding-left:1.5em'>zlib</TD>
+</TR>
+</TABLE>
 
 <A NAME="bjam"></A>
 <H2>Building with Boost.Build</H2>
 
-Once the zlib and libbz2 binaries are obtained, the entire Iostreams library can be built using the <A HREF="../../../tools/build/v1/build_system.htm">Boost Build System</A>.
-
 <P>
-    The <A HREF="../build/Jamfile">Jamfile</A> included with the Iostreams library is sensitive to the following environment variables.
+    To build with <A HREF="../../../tools/build/v1/build_system.htm" TARGET="_top">Boost.Build</A>, run <I>bjam</I> from the directory <A HREF="../build"><CODE>libs/iostreams/build</CODE></A>, or from the Boost root directory. If you want to use the compression filters, you'll have to set several Boost.Build variables indicating where the source files or pre-built binaries are located. These variables are summarized in the following table.
+</P>
+<P>
+    On most UNIX systems, it should not be necessary to set any of these variables, since the zlib and bzip2 headers and binaries are already installed in locations where they will be found automatically. On Windows, the zlib and bzip2 filters are disabled by default; to enable support for these filters, you will need to set variables indicating the location of the source files, if build from the source, or the location of the headers and binaries, if using pre-built binaries.
 </P>
 
 <TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
@@ -75,50 +87,79 @@ Once the zlib and libbz2 binaries are obtained, the entire Iostreams library can
     <TH>Variable</TH><TH>Interpretation</TH><TH>Default</TH>
 </TR>
 <TR>
-    <TD><CODE>ZLIB_DYN_LINK</CODE></TD>
+    <TD><CODE>NO_COMPRESSION</CODE></TD>
     <TD>
-        Indicates that the <A HREF="classes/zlib.html">zlib</A> and <A HREF="classes/gzip.html">gzip</A> Filters should link to zlib dynamically.
+        Disable support for compression filters.
     </TD>
     <TD ALIGN="center">-</TD>
 </TR>
 <TR>
-    <TD><CODE>ZLIB_PATH</CODE></TD>
-    <TD>Search path for the zlib library file.</TD>
+    <TD><CODE>NO_BZIP2</CODE></TD>
+    <TD>
+        Disable support for the bzip2 filters.
+    </TD>
+    <TD><CODE>1</CODE> (Windows)</TD>
+</TR>
+<TR>
+    <TD><CODE>BZIP2_BINARY</CODE></TD>
+    <TD>
+        Name of the libbz2 binary, not including the file extension, or the "lib" prefix on UNIX. On Windows, if linking with a dynamic build of libbz2, specify the name of the import library.
+    </TD>
+    <TD><CODE>bz2</CODE>&nbsp;(UNIX)<BR><CODE>libbz2</CODE>&nbsp;(Windows)</TD>
+</TR>
+<TR>
+    <TD><CODE>BZIP2_INCLUDE</CODE></TD>
+    <TD>
+        Path to the libbz2 headers, if they're not in a location where they'll be found automatically.
+    </TD>
+    <TD><CODE>BZIP2_SOURCE</CODE></TD>
+</TR>
+<TR>
+    <TD><CODE>BZIP2_LIBPATH</CODE></TD>
+    <TD>
+        Path to the libbz2 binary, if it's not in a location where it will be found automatically. On Windows, if linking with a dynamic build of libbz2, specify the path to the import library.
+    </TD>
     <TD ALIGN="center">-</TD>
 </TR>
 <TR>
-    <TD><CODE>ZLIB_BINARY</CODE></TD>
-    <TD>Name of the zlib library file, minus file extension.</TD>
-    <TD ALIGN="center"><CODE>zlib</CODE></TD>
-</TR>
-<TR>
-    <TD><CODE>LIBBZ2_PATH</CODE></TD>
-    <TD>Search path for the libbz library file.</TD>
-    <TD ALIGN="center"><CODE>-</CODE></TD>
-</TR>
-<TR>
-    <TD><CODE>LIBBZ2_BINARY</CODE></TD>
-    <TD>Name of the libbz2 library file, minus file extension.</TD>
-    <TD ALIGN="center"><CODE>libbz</CODE></TD>
+    <TD><CODE>BZIP2_SOURCE</CODE></TD>
+    <TD>
+        Path to the libbz2 source files, if they're not in a location where they'll be found automatically.
+    </TD>
+    <TD ALIGN="center">-</TD>
 </TR>
 <TR>
     <TD><CODE>NO_ZLIB</CODE></TD>
     <TD>
-        Set to indicate that the <A HREF="classes/zlib.html">zlib</A> and <A HREF="classes/gzip.html">gzip</A> Filters should not be built.
+        Disable support for the zlib filters.
+    </TD>
+    <TD><CODE>1</CODE> (Windows)</TD>
+</TR>
+<TR>
+    <TD><CODE>ZLIB_BINARY</CODE></TD>
+    <TD>
+        Name of the zlib binary, not including the file extension, or the "lib" prefix on UNIX. On Windows, if linking with a dynamic build of zlib, specify the name of the import library.
+    </TD>
+    <TD><CODE>z</CODE>&nbsp;(UNIX)<BR><CODE>zdll</CODE>&nbsp;(Windows)</TD>
+</TR>
+<TR>
+    <TD><CODE>ZLIB_INCLUDE</CODE></TD>
+    <TD>
+        Path to the zlib headers, if they're not in a location where they'll be found automatically.
+    </TD>
+    <TD><CODE>ZLIB_SOURCE</CODE></TD>
+</TR>
+<TR>
+    <TD><CODE>ZLIB_LIBPATH</CODE></TD>
+    <TD>
+        Path to the zlib binary, if it's not in a location where it will be found automatically. On Windows, if linking with a dynamic build of zlib, specify the path to the import library.
     </TD>
     <TD ALIGN="center">-</TD>
 </TR>
 <TR>
-    <TD><CODE>NO_LIBBZ2</CODE></TD>
+    <TD><CODE>ZLIB_SOURCE</CODE></TD>
     <TD>
-        Set to indicate that the <A HREF="classes/zlib.html">bzip2</A> Filters should not be built.
-    </TD>
-    <TD ALIGN="center">-</TD>
-</TR>
-<TR>
-    <TD><CODE>NO_COMPRESSION</CODE></TD>
-    <TD>
-        Set to indicate that none of the <A HREF="guide/compression.html">compression Filters</A> should be built.
+        Path to the zlib source files, if they're not in a location where they'll be found automatically.
     </TD>
     <TD ALIGN="center">-</TD>
 </TR>

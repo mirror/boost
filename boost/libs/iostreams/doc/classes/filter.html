@@ -121,7 +121,7 @@
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="omitted">see below</SPAN> category;</PRE>
 
 <P>
-    A category tag convertible to <A HREF="#template_params"><CODE>Mode</CODE></A>, <A HREF="../guide/traits.html#category_tags"><CODE>filter_tag</CODE></A>, <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and <A HREF="../guide/traits.html#category_tags"><CODE>localizable_tag</CODE></A>.
+    A category tag convertible to <A HREF="#filter_template_params"><CODE>Mode</CODE></A>, <A HREF="../guide/traits.html#category_tags"><CODE>filter_tag</CODE></A>, <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and <A HREF="../guide/traits.html#category_tags"><CODE>localizable_tag</CODE></A>.
 </P>
     
 <A NAME="close"></A>
@@ -134,7 +134,7 @@
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close">close</A>(std::ios_base::openmode, Device&);</PRE>
 
 <P>
-    Both overloads are implemented as no-ops. The second is available only if <A HREF="#template_params">Mode</A> is convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>bidirectional</CODE></A>. The first is available only if Mode is <I>not</I> convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>bidirectional</CODE></A>.
+    Both overloads are implemented as no-ops. The second is available only if <A HREF="#filter_template_params">Mode</A> is convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>bidirectional</CODE></A>. The first is available only if Mode is <I>not</I> convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>bidirectional</CODE></A>.
 </P>
 <P>
     Required by <A HREF="../concepts/closable.html">Closable</A>.

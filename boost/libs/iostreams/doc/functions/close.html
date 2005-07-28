@@ -68,7 +68,7 @@
     boost::iostreams::close(f<SUB>n-1</SUB>, buf<SUB>n</SUB>,<SPAN STYLE="visibility:hidden"><SUB>n-</SUB></SPAN> ios_base::out);
     boost::iostreams::close(d,<SPAN STYLE="visibility:hidden"><SUB>n-1</SUB>, buf<SUB>n-1</SUB></SPAN> ios_base::out);</PRE>
 </P>
-<P>(It may be helpful to refer to <A CLASS="caption_ref" HREF="../guide/filtering_streams.html#figure_3">Figures 3-6</A>.) The effect is that with input streams, the elements of a chain are closed in reverse order; with output streams, they are closed in forward order; and with streams controlling separate input and output sequences, each element receives two closure notifications, the first with argument <CODE>ios_base::in</CODE> and the second with argument <CODE>ios_base::out</CODE>. (<I>See</I> the semantics of <CODE>close</CODE> for <A HREF="#close_filter">Filter</A> and <A HREF="#close_device">Device</A> types, below.)
+<P>The effect is that with input streams, the elements of a chain are closed in reverse order; with output streams, they are closed in forward order; and with streams controlling separate input and output sequences, each element receives two closure notifications, the first with argument <CODE>ios_base::in</CODE> and the second with argument <CODE>ios_base::out</CODE>. (<I>See</I> the semantics of <CODE>close</CODE> for <A HREF="#close_filter">Filter</A> and <A HREF="#close_device">Device</A> types, below.)
 </P>
 
 <A NAME="headers">

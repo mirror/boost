@@ -16,8 +16,9 @@
 
 <DL class="page-index" style="margin-top:1em">
   <DT><A href="#flush">Why is data I've written to a <CODE>filtering_stream</CODE> not reaching the Sink at the end of the chain?</A></DT>
-  <DT><A href="#lifetime">Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
+  <DT><A href="#lifetime">Why does my filter chain work with <CODE>std::cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
   <DT><A href="#tee">How do I write to several ostreams at once?</A></DT>
+  <DT><A href="#multibyte">How do I write a stream which can read or write multibyte character encodings?</A></DT>
   <DT><A href="#pipe">Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</A></DT>
   <DT><A href="#finite_state">Why do I get errors when compiling the <CODE>finite_state_filter</CODE> examples?</A></DT>
 </DL>
@@ -35,10 +36,10 @@
 </P>
 
 <A NAME="lifetime"></A>
-<H4>Why does my filter chain work with <CODE>cout</CODE> but not with another <CODE>ostream</CODE>?</H4>
+<H4>Why does my filter chain work with <CODE>std::cout</CODE> but not with another <CODE>ostream</CODE>?</H4>
 
 <P>
-     The Iostreams library stores streams and stream buffers by reference; consequently, streams and stream buffers must outlive any filter chain to which they are added. This is not a problem for std::cout, since it is guaranteed to live until the end of the program.
+     The Iostreams library stores streams and stream buffers by reference; consequently, streams and stream buffers must outlive any filter chain to which they are added. This is not a problem for <CODE>std::cout</CODE>, since it is guaranteed to live until the end of the program.
 </P>
 
 <P>
@@ -50,6 +51,13 @@
 
 <P>
      Use a <A HREF="functions/tee.html#tee_filter"><CODE>tee_filter</CODE></A> or <A HREF="functions/tee.html#tee_device"><CODE>tee_device</CODE></A>. <I>See</I> <A HREF="functions/tee.html"><CODE>tee</CODE></A>.
+</P>
+
+<A NAME="multibyte"></A>
+<H4>How do I write a stream which can read or write multibyte character encodings?</H4>
+
+<P>
+     Use a <A HREF="classes/code_converter.html"><CODE>code_converter</CODE></A>. <I>See</I> <A HREF="guide/code_conversion.html"><CODE>Code Conversion</CODE></A>.
 </P>
 
 <A NAME="pipe"></A>
