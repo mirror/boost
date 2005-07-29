@@ -638,14 +638,23 @@ namespace boost { namespace numeric { namespace ublas {
                             const const_subiterator2_type &it2, const const_subiterator2_type &it2_end):
                 container_const_reference<self_type> (vb), i_ (i), it1_ (it1), it1_end_ (it1_end), it2_ (it2), it2_end_ (it2_end) {}
 
+        private: 
             // Dense specializations
             BOOST_UBLAS_INLINE
             void increment (dense_random_access_iterator_tag) {
-                ++ i_, ++ it1_, ++ it2_;
+                ++ i_; ++ it1_; ++ it2_;
             }
             BOOST_UBLAS_INLINE
             void decrement (dense_random_access_iterator_tag) {
-                -- i_, -- it1_, -- it2_;
+                -- i_; -- it1_; -- it2_;
+            }
+            BOOST_UBLAS_INLINE
+            void increment (dense_random_access_iterator_tag, difference_type n) {
+                i_ += n; it1_ += n; it2_ += n;
+            }
+            BOOST_UBLAS_INLINE
+            void decrement (dense_random_access_iterator_tag, difference_type n) {
+                i_ -= n; it1_ -= n; it2_ -= n;
             }
             BOOST_UBLAS_INLINE
             value_type dereference (dense_random_access_iterator_tag) const {
@@ -672,6 +681,28 @@ namespace boost { namespace numeric { namespace ublas {
                     if (i_ <= it2_.index ())
                         -- it2_;
                 -- i_;
+            }
+            BOOST_UBLAS_INLINE
+            void increment (packed_random_access_iterator_tag, difference_type n) {
+            	while (n > 0) {
+            		increment (packed_random_access_iterator_tag ());
+            		--n;
+            	}
+            	while (n < 0) {
+            		decrement (packed_random_access_iterator_tag ());
+            		++n;
+            	}
+            }
+            BOOST_UBLAS_INLINE
+            void decrement (packed_random_access_iterator_tag, difference_type n) {
+            	while (n > 0) {
+            		decrement (packed_random_access_iterator_tag ());
+            		--n;
+            	}
+            	while (n < 0) {
+            		increment (packed_random_access_iterator_tag ());
+            		++n;
+            	}
             }
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
@@ -724,6 +755,28 @@ namespace boost { namespace numeric { namespace ublas {
                 i_ = (std::max) (index1, index2);
             }
             BOOST_UBLAS_INLINE
+            void increment (sparse_bidirectional_iterator_tag, difference_type n) {
+            	while (n > 0) {
+            		increment (sparse_bidirectional_iterator_tag ());
+            		--n;
+            	}
+            	while (n < 0) {
+            		decrement (sparse_bidirectional_iterator_tag ());
+            		++n;
+            	}
+            }
+            BOOST_UBLAS_INLINE
+            void decrement (sparse_bidirectional_iterator_tag, difference_type n) {
+            	while (n > 0) {
+            		decrement (sparse_bidirectional_iterator_tag ());
+            		--n;
+            	}
+            	while (n < 0) {
+            		increment (sparse_bidirectional_iterator_tag ());
+            		++n;
+            	}
+            }
+            BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
                 value_type t1 = value_type/*zero*/();
                 if (it1_ != it1_end_)
@@ -736,6 +789,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return functor_type::apply (t1, t2);
             }
 
+        public: 
             // Arithmetic
             BOOST_UBLAS_INLINE
             const_iterator &operator ++ () {
@@ -749,12 +803,12 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator &operator += (difference_type n) {
-                i_ += n, it1_ += n, it2_ += n;
+                increment (iterator_category (), n);
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator &operator -= (difference_type n) {
-                i_ -= n, it1_ -= n, it2_ -= n;
+                decrement (iterator_category (), n);
                 return *this;
             }
             BOOST_UBLAS_INLINE
