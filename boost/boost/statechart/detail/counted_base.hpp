@@ -62,7 +62,7 @@ class counted_base : private count_base< NeedsLocking >
     // referencing pointers of the source and the destination is not changed
     // through the copy operation)
     counted_base( const counted_base & ) {}
-    counted_base & operator=( const counted_base & ) {}
+    counted_base & operator=( const counted_base & ) { return *this; }
 
   public:
     //////////////////////////////////////////////////////////////////////////
