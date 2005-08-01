@@ -24,69 +24,105 @@ template statechart-common-options
 ;
 
 local test_monitor = <lib>../../../libs/test/build/boost_test_exec_monitor ;
+# Some platforms have either problems with the automatic detection of the
+# threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
+# threaded mode (e.g. vc-8_0). We therefore manually turn MT off here
+local st-requirements = <threading>single <define>BOOST_DISABLE_THREADS ;
+local dll = <define>BOOST_STATECHART_TEST_DYNAMIC_LINK ;
+local dll-export = $(dll) <define>BOOST_STATECHART_TEST_DLL_EXPORT ;
 
-rule statechart-run ( source : name : additional-options * )
+local normal = ;
+local native = <define>BOOST_STATECHART_USE_NATIVE_RTTI ;
+local relaxed = <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ;
+local both = $(native) $(relaxed) ;
+
+rule statechart-st-lib ( name : cpp-sources + : requirements * )
 {
-  return
-    [ run $(source).cpp $(test_monitor) <template>statechart-common-options
-        : : : $(additional-options) : $(name) ] ;
+  lib $(name)
+    : $(cpp-sources).cpp <template>statechart-common-options
+    : $(st-requirements) $(requirements) ;
+  
+  return <lib>$(name) ;
 }
 
-rule statechart-st-run ( source : name : additional-options * )
+rule statechart-st-dll ( name : cpp-sources + : requirements * )
 {
-  return
-    [ statechart-run $(source)
-        : $(name)
-          # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems
-          # with the automatic detection of the threading mode. We therefore
-          # manually turn MT off here
-        : <threading>single <define>BOOST_DISABLE_THREADS
-          $(additional-options) ] ;
+  dll $(name)
+    : $(cpp-sources).cpp <template>statechart-common-options
+    : $(st-requirements) $(dll-export) $(requirements) ;
+  
+  return <dll>$(name) ;
 }
 
-rule statechart-st-run-variants ( source )
+rule statechart-run ( name : sources + : requirements * )
+{
+  return [ run $(sources) $(test_monitor) <template>statechart-common-options
+             : : : $(requirements) : $(name) ] ;
+}
+
+rule statechart-st-run ( name : sources + : requirements * )
+{
+  return [ statechart-run $(name)
+             : $(sources) : $(st-requirements) $(requirements) ] ;
+}
+
+rule statechart-st-run-variants ( cpp-source )
 {
   local result ;
 
-  result += [ statechart-st-run $(source) : $(source)Normal : ] ;
-  result +=
-    [ statechart-st-run $(source) : $(source)Native
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ] ;
-  result +=
-    [ statechart-st-run $(source) : $(source)Relaxed
-        : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
-  result +=
-    [ statechart-st-run $(source) : $(source)Both
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI
-          <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ statechart-st-run $(cpp-source)Normal
+                : $(cpp-source).cpp : $(requirements) $(normal) ] ;
+  result += [ statechart-st-run $(cpp-source)Native
+                : $(cpp-source).cpp : $(requirements) $(native) ] ;
+  result += [ statechart-st-run $(cpp-source)Relaxed
+                : $(cpp-source).cpp : $(requirements) $(relaxed) ] ;
+  result += [ statechart-st-run $(cpp-source)Both
+                : $(cpp-source).cpp : $(requirements) $(both) ] ;
 
   return result ;
 }
 
-rule statechart-compile-fail ( source : name : additional-options * )
+rule statechart-compile-fail ( name : cpp-sources + : requirements * )
 {
   return
-    [ compile-fail $(source).cpp <template>statechart-common-options
-        : $(additional-options) : $(name) ] ;
+    [ compile-fail $(cpp-sources).cpp <template>statechart-common-options
+        : $(requirements) : $(name) ] ;
 }
 
-rule statechart-compile-fail-variants ( source )
+rule statechart-compile-fail-variants ( cpp-source )
 {
   local result ;
 
-  result += [ statechart-compile-fail $(source) : $(source)Normal : ] ;
   result +=
-    [ statechart-compile-fail $(source) : $(source)Native
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ] ;
+    [ statechart-compile-fail $(cpp-source)Normal : $(cpp-source) : $(normal) ] ;
   result +=
-    [ statechart-compile-fail $(source) : $(source)Relaxed
-        : <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
+    [ statechart-compile-fail $(cpp-source)Native : $(cpp-source) : $(native) ] ;
   result +=
-    [ statechart-compile-fail $(source) : $(source)Both
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI
-          <define>BOOST_STATECHART_RELAX_TRANSITION_CONTEXT ] ;
+    [ statechart-compile-fail $(cpp-source)Relaxed : $(cpp-source) : $(relaxed) ] ;
+  result +=
+    [ statechart-compile-fail $(cpp-source)Both : $(cpp-source) : $(both) ] ;
 
   return result ;
+}
+
+rule statechart-st-lib-run (
+  name : exe-cpp-sources + : lib-cpp-sources + : requirements * )
+{
+  return [ statechart-st-run $(name)
+             : $(exe-cpp-sources).cpp
+               [ statechart-st-lib $(name)Lib
+                   : $(lib-cpp-sources) : $(requirements) ]
+             : $(requirements) ] ;
+}
+
+rule statechart-st-dll-run (
+  name : exe-cpp-sources + : dll-cpp-sources + : requirements * )
+{
+  return [ statechart-st-run $(name)
+             : $(exe-cpp-sources).cpp
+               [ statechart-st-dll $(name)Dll
+                   : $(dll-cpp-sources) : $(requirements) ]
+             : $(dll) $(requirements) ] ;
 }
 
 test-suite statechart
@@ -119,4 +155,8 @@ test-suite statechart
     [ statechart-st-run-variants StateCastTest ]
     [ statechart-st-run-variants TypeInfoTest ]
     [ statechart-st-run-variants StateIterationTest ]
-    [ statechart-st-run-variants FifoSchedulerTest ] ;
+    [ statechart-st-run-variants FifoSchedulerTest ] 
+    [ statechart-st-lib-run LibTestNormal : TuTestMain : TuTest : $(normal) ]
+    [ statechart-st-lib-run LibTestNative : TuTestMain : TuTest : $(native) ]
+    [ statechart-st-dll-run DllTestNormal : TuTestMain : TuTest : $(normal) ]
+    [ statechart-st-dll-run DllTestNative : TuTestMain : TuTest : $(native) ] ;

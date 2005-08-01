@@ -8,6 +8,11 @@ subproject libs/statechart/example ;
 
 local no-of-bits-list = 1 2 3 ;
 
+# Some platforms have either problems with the automatic detection of the
+# threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
+# threaded mode (e.g. vc-8_0). We therefore manually turn MT off here
+local st-requirements = <threading>single <define>BOOST_DISABLE_THREADS ;
+
 template statechart-common-options
   :
   : <include>$(BOOST_ROOT)
@@ -21,31 +26,27 @@ template statechart-common-options
     <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor ;
 
 rule statechart-st-example-build (
-  target-name : directory : sources + : additional-options * )
+  name : directory : cpp-sources + : requirements * )
 {
-  exe $(target-name)
-    : $(directory)/$(sources).cpp <template>statechart-common-options
-      # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems with
-      # the automatic detection of the threading mode. We therefore manually
-      # turn MT off here
-    : <threading>single <define>BOOST_DISABLE_THREADS $(additional-options) ;
+  exe $(name)
+    : $(directory)/$(cpp-sources).cpp <template>statechart-common-options
+    : $(st-requirements) $(requirements) ;
 
-  return <exe>$(target-name) ;
+  return <exe>$(name) ;
 }
 
 rule statechart-mt-example-build (
-  target-name : directory : sources + : additional-options * )
+  name : directory : cpp-sources + : requirements * )
 {
-  exe $(target-name)
-    : $(directory)/$(sources).cpp <dll>../../thread/build/boost_thread
+  exe $(name)
+    : $(directory)/$(cpp-sources).cpp <dll>../../thread/build/boost_thread
       <template>statechart-common-options
-    : <threading>multi $(additional-options) ;
+    : <threading>multi $(requirements) ;
 
-  return <exe>$(target-name) <dll>../../thread/build/boost_thread ;
+  return <exe>$(name) <dll>../../thread/build/boost_thread ;
 }
 
-rule statechart-bitmachine-build (
-  tag : no-of-bits-list + : additional-options * )
+rule statechart-bitmachine-build ( tag : requirements * )
 {
   local result ;
 
@@ -54,18 +55,18 @@ rule statechart-bitmachine-build (
     result +=
       [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
           : BitMachine : BitMachine
-          : <define>NO_OF_BITS=$(no-of-bits) $(additional-options) ] ;
+          : <define>NO_OF_BITS=$(no-of-bits) $(requirements) ] ;
   }
 
   return $(result) ;
 }
 
 stage run
-  : [ statechart-bitmachine-build Normal : $(no-of-bits-list) ]
+  : [ statechart-bitmachine-build Normal ]
     [ statechart-bitmachine-build Custom
-        : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
     [ statechart-bitmachine-build Native
-        : $(no-of-bits-list) : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
     [ statechart-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
     [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]

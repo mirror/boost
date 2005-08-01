@@ -8,67 +8,67 @@ project libs/statechart/example ;
 
 local no-of-bits-list = 1 2 3 ;
 
-rule independent-obj-build ( target-name : directory : sources + : options * )
+rule independent-obj-build (
+  name : directory : cpp-sources + : requirements * )
 {
   local objs ;
 
-  for local source in $(sources)
+  for local cpp-source in $(cpp-sources)
   {
-    obj $(target-name)$(source) : $(directory)/$(source).cpp : $(options) ;
-    objs += $(target-name)$(source) ;
+    obj $(name)$(cpp-source)
+      : $(directory)/$(cpp-source).cpp
+        # Some platforms have either problems with the automatic detection of
+        # the threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support
+        # single-threaded mode (e.g. vc-8_0). We therefore manually turn MT
+        # off here
+      : <threading>single:<define>BOOST_DISABLE_THREADS $(requirements) ;
+    objs += $(name)$(cpp-source) ;
   }
 
   return $(objs) ;
 }
 
 rule statechart-st-example-build (
-  target-name : directory : sources + : additional-options * )
+  name : directory : cpp-sources + : requirements * )
 {
-  exe $(target-name)
-    : [ independent-obj-build $(target-name)
-          : $(directory) : $(sources)
-            # Several platforms (so far vc-7_1 & gcc >= 3.4.0) have problems
-            # with the automatic detection of the threading mode. We therefore
-            # manually turn MT off here
-          : <threading>single <define>BOOST_DISABLE_THREADS
-            $(additional-options) ] ;
+  exe $(name) : [ independent-obj-build $(name)
+                    : $(directory) : $(cpp-sources)
+                    : <threading>single $(requirements) ] ;
 
-  return $(target-name) ;
+  return $(name) ;
 }
 
 rule statechart-mt-example-build (
-  target-name : directory : sources + : additional-options * )
+  name : directory : cpp-sources + : requirements * )
 {
-  exe $(target-name)
-    : [ independent-obj-build $(target-name) : $(directory) : $(sources)
-          : <threading>multi $(additional-options) ]
-      ../../thread/build//boost_thread ;
+  exe $(name) : [ independent-obj-build $(name)
+                    : $(directory) : $(cpp-sources)
+                    : <threading>multi $(requirements) ]
+                ../../thread/build//boost_thread ;
 
-  return $(target-name) ;
+  return $(name) ;
 }
 
-rule statechart-bitmachine-build (
-  tag : no-of-bits-list + : additional-options * )
+rule statechart-bitmachine-build ( tag : requirements * )
 {
   local result ;
 
   for local no-of-bits in $(no-of-bits-list)
   {
-    result += 
-      [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
-          : BitMachine : BitMachine
-          : <define>NO_OF_BITS=$(no-of-bits) $(additional-options) ] ;
+    result += [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
+                  : BitMachine : BitMachine
+                  : <define>NO_OF_BITS=$(no-of-bits) $(requirements) ] ;
   }
 
   return $(result) ;
 }
 
 stage run
-  : [ statechart-bitmachine-build Normal : $(no-of-bits-list) ]
+  : [ statechart-bitmachine-build Normal ]
     [ statechart-bitmachine-build Custom
-        : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
     [ statechart-bitmachine-build Native
-        : $(no-of-bits-list) : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
     [ statechart-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
     [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]

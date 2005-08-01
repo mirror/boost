@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/07/26<!--webbot bot="Timestamp" endspan i-checksum="12744" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/01<!--webbot bot="Timestamp" endspan i-checksum="12796" --></font></td>
   </tr>
 </table>
 <hr>
@@ -173,8 +173,6 @@ please see <a href="definitions.html">Definitions</a> for more information.</p>
 left (<font color="#FF0000">red</font> = added as a result of the formal 
 review):</p>
 <ol>
-    <li>Add a FAQ item explaining the pitfalls of dynamically linked 
-    state-machines</li>
     <li><font color="#FF0000">Eliminate the need to wrap a single templated inner 
     initial state into an mpl::list (Jonathan Turkanis)</font></li>
 	<li>Investigate how a state machine could be serialized. A first glance at 
@@ -243,6 +241,9 @@ review):</p>
 	errors (John Spalding)</font></li>
     <li><font color="#FF0000">Added a FAQ item that presents code for a StopWatch variant that does not use state-local storage 
 	and explains the drawbacks of that approach (Jeff Garland, Rob Steward)</font></li>
+    <li>Added a FAQ item explaining the pitfalls of dynamically linked 
+    state-machines. Also added associated tests to find out whether and how 
+    FSMs can be put into DLLs</li>
 </ul>
 <p></p>
 <p>19 June, 2005</p>
@@ -508,7 +509,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->01 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34598" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
