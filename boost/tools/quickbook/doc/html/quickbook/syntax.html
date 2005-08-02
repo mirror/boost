@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> Syntax Summary</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.67.2">
 <link rel="start" href="../index.html" title="Part I. quickbook 1.1">
 <link rel="up" href="../index.html" title="Part I. quickbook 1.1">
 <link rel="prev" href="../index.html" title="Part I. quickbook 1.1">
@@ -40,36 +40,36 @@ Phrases in each block cannot contain a block terminator. This way, syntax errors
 such as un-matched closing brackets do not go haywire and corrupt anything past
 a single block.</p>
 <a name="syntax.comments"></a><h2>
-<a name="id372252"></a>Comments</h2>
+<a name="id2509347"></a>Comments</h2>
 <p>
 Can be placed anywhere.</p>
-<pre class="programlisting"><tt class="literal">[/ comment (no output generated) ]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[/ comment (no output generated) ]
+</code></pre>
 <a name="syntax.phrase_level_elements"></a><h2>
-<a name="id372272"></a>Phrase Level Elements</h2>
+<a name="id2509365"></a>Phrase Level Elements</h2>
 <a name="syntax.font_styles"></a><h3>
-<a name="id372283"></a>Font Styles</h3>
-<pre class="programlisting"><tt class="literal">['italic], [*bold], [_underline], [^teletype]
-</tt></pre>
+<a name="id2509374"></a>Font Styles</h3>
+<pre class="programlisting"><code class="literal">['italic], [*bold], [_underline], [^teletype], [-strikethrough]
+</code></pre>
 <p>
 will generate:</p>
-<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt></p>
+<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><strong>bold</strong></span>, <span class="underline">underline</span>, <code class="literal">teletype</code>, <span class="strikethrough">strikethrough</span></p>
 <p>
 Like all non-terminal phrase level elements, this can of course be nested:</p>
-<pre class="programlisting"><tt class="literal">[*['bold-italic]]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[*['bold-italic]]
+</code></pre>
 <p>
 will generate:</p>
-<p><span class="bold"><b><span class="emphasis"><em>bold-italic</em></span></b></span></p>
+<p><span class="bold"><strong><span class="emphasis"><em>bold-italic</em></span></strong></span></p>
 <a name="syntax.simple_formatting"></a><h3>
-<a name="id374069"></a>Simple formatting</h3>
+<a name="id2509440"></a>Simple formatting</h3>
 <p>
 Simple markup for formatting text, common in many applications, is now supported:</p>
-<pre class="programlisting"><tt class="literal">/italic/, *bold*, _underline_, =teletype=
-</tt></pre>
+<pre class="programlisting"><code class="literal">/italic/, *bold*, _underline_, =teletype=, -strikethrough-
+</code></pre>
 <p>
 will generate:</p>
-<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt></p>
+<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><strong>bold</strong></span>, <span class="underline">underline</span>, <code class="literal">teletype</code>, <span class="strikethrough">strikethrough</span></p>
 <p>
 Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
 are much stricter.</p>
@@ -100,7 +100,7 @@ A line starting with the star will be interpreted as an unordered list.
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id374156"></a><span class="table-title">More Formatting Samples</span>
+<a name="id2509526"></a><span class="table-title">More Formatting Samples</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -113,61 +113,61 @@ A line starting with the star will be interpreted as an unordered list.
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="literal">*Bold*</tt></td>
-<td><span class="bold"><b>Bold</b></span></td>
+<td><code class="literal">*Bold*</code></td>
+<td><span class="bold"><strong>Bold</strong></span></td>
 </tr>
 <tr>
-<td><tt class="literal">*Is bold*</tt></td>
-<td><span class="bold"><b>Is bold</b></span></td>
+<td><code class="literal">*Is bold*</code></td>
+<td><span class="bold"><strong>Is bold</strong></span></td>
 </tr>
 <tr>
-<td><tt class="literal">* Not bold* *Not bold * * Not bold *</tt></td>
+<td><code class="literal">* Not bold* *Not bold * * Not bold *</code></td>
 <td>* Not bold* *Not bold * * Not bold *</td>
 </tr>
 <tr>
-<td><tt class="literal">This*Isn't*Bold (no bold)</tt></td>
+<td><code class="literal">This*Isn't*Bold (no bold)</code></td>
 <td>This*Isn't*Bold (no bold)</td>
 </tr>
 <tr>
-<td><tt class="literal">(*Bold Inside*) (parenthesis not bold)</tt></td>
-<td>(<span class="bold"><b>Bold Inside</b></span>) (parenthesis not bold)</td>
+<td><code class="literal">(*Bold Inside*) (parenthesis not bold)</code></td>
+<td>(<span class="bold"><strong>Bold Inside</strong></span>) (parenthesis not bold)</td>
 </tr>
 <tr>
-<td><tt class="literal">*(Bold Outside)* (parenthesis bold)</tt></td>
+<td><code class="literal">*(Bold Outside)* (parenthesis bold)</code></td>
 <td>
-<span class="bold"><b>(Bold Outside)</b></span> (parenthesis bold)</td>
+<span class="bold"><strong>(Bold Outside)</strong></span> (parenthesis bold)</td>
 </tr>
 <tr>
-<td><tt class="literal">3*4*5 = 60 (no bold)</tt></td>
+<td><code class="literal">3*4*5 = 60 (no bold)</code></td>
 <td>3*4*5 = 60 (no bold)</td>
 </tr>
 <tr>
-<td><tt class="literal">3 * 4 * 5 = 60 (no bold)</tt></td>
+<td><code class="literal">3 * 4 * 5 = 60 (no bold)</code></td>
 <td>3 * 4 * 5 = 60 (no bold)</td>
 </tr>
 <tr>
-<td><tt class="literal">3 *4* 5 = 60 (4 is bold)</tt></td>
-<td>3 <span class="bold"><b>4</b></span> 5 = 60 (4 is bold)</td>
+<td><code class="literal">3 *4* 5 = 60 (4 is bold)</code></td>
+<td>3 <span class="bold"><strong>4</strong></span> 5 = 60 (4 is bold)</td>
 </tr>
 <tr>
-<td><tt class="literal">*This is bold* this is not *but this is*</tt></td>
+<td><code class="literal">*This is bold* this is not *but this is*</code></td>
 <td>
-<span class="bold"><b>This is bold</b></span> this is not <span class="bold"><b>but this is</b></span>
+<span class="bold"><strong>This is bold</strong></span> this is not <span class="bold"><strong>but this is</strong></span>
 </td>
 </tr>
 <tr>
-<td><tt class="literal">*This is bold*.</tt></td>
+<td><code class="literal">*This is bold*.</code></td>
 <td>
-<span class="bold"><b>This is bold</b></span>.</td>
+<span class="bold"><strong>This is bold</strong></span>.</td>
 </tr>
 <tr>
-<td><tt class="literal">*B*. (bold B)</tt></td>
+<td><code class="literal">*B*. (bold B)</code></td>
 <td>
-<span class="bold"><b>B</b></span>. (bold B)</td>
+<span class="bold"><strong>B</strong></span>. (bold B)</td>
 </tr>
 <tr>
-<td><tt class="literal">['*Bold-Italic*]</tt></td>
-<td><span class="emphasis"><em><span class="bold"><b>Bold-Italic</b></span></em></span></td>
+<td><code class="literal">['*Bold-Italic*]</code></td>
+<td><span class="emphasis"><em><span class="bold"><strong>Bold-Italic</strong></span></em></span></td>
 </tr>
 </tbody>
 </table>
@@ -181,49 +181,49 @@ and teaching me these obscure formatting rules. I wasn't sure at all if <a href=
 being more or less a formal EBNF parser, can handle the context sensitivity and ambiguity.</td></tr></tbody>
 </table></div>
 <a name="syntax.inline_code"></a><h3>
-<a name="id372807"></a>Inline code</h3>
+<a name="id2508539"></a>Inline code</h3>
 <p>
 Inlining code in paragraphs is quite common when writing C++ documentation. We
 provide a very simple markup for this. For example, this:</p>
-<pre class="programlisting"><tt class="literal">This text has inlined code `int main() { return 0; }` in it.
-</tt></pre>
+<pre class="programlisting"><code class="literal">This text has inlined code `int main() { return 0; }` in it.
+</code></pre>
 <p>
 will generate:</p>
 <p>
-This text has inlined code <tt class="computeroutput"><span class="keyword">int</span><span class="identifier"> main</span><span class="special">()</span><span class="special"> {</span><span class="keyword"> return</span><span class="number"> 0</span><span class="special">;</span><span class="special"> }</span></tt> in it. The code will be
+This text has inlined code <code class="computeroutput"><span class="keyword">int</span><span class="identifier"> main</span><span class="special">()</span><span class="special"> {</span><span class="keyword"> return</span><span class="number"> 0</span><span class="special">;</span><span class="special"> }</span></code> in it. The code will be
 syntax highlighted.</p>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
 <span class="inlinemediaobject"><img src="../images/note.png"></span>
-Note that we simply enclose the code with the tick: <tt class="literal">"`"</tt>, not the
-single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>. Note too that <tt class="literal">`some code`</tt> is prefered over
-<tt class="literal">[^some code]</tt>.
+Note that we simply enclose the code with the tick: <code class="literal">"`"</code>, not the
+single quote: <code class="computeroutput"><span class="string">"'"</span></code>. Note too that <code class="literal">`some code`</code> is prefered over
+<code class="literal">[^some code]</code>.
 </td></tr></tbody>
 </table></div>
 <a name="syntax.source_mode"></a><h3>
-<a name="id372933"></a>Source Mode</h3>
+<a name="id2508655"></a>Source Mode</h3>
 <p>
 If a document contains more than one type of source code then the source mode
 may be changed dynamically as the document is processed. All QuickBook
 documents are initially in C++ mode by default, though an alternative initial value 
 may be set in the <a href="syntax.html#syntax.document">Document Info</a> section.</p>
 <p>
-To change the source mode, use the <tt class="literal">[source-mode]</tt> markup, where
-<tt class="literal">source-mode</tt> is one of the supported modes. For example, this:</p>
-<pre class="programlisting"><tt class="literal">Python's [python] `import` is rather like C++'s [c++] `#include`. A
+To change the source mode, use the <code class="literal">[source-mode]</code> markup, where
+<code class="literal">source-mode</code> is one of the supported modes. For example, this:</p>
+<pre class="programlisting"><code class="literal">Python's [python] `import` is rather like C++'s [c++] `#include`. A
 C++ comment `// looks like this` whereas a Python comment [python]
 `# looks like this`.
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <p>
-Python's  <tt class="computeroutput"><span class="keyword">import</span></tt> is rather like C++'s  <tt class="computeroutput"><span class="preprocessor">#include</span></tt>. A
-C++ comment <tt class="computeroutput"><span class="comment">// looks like this</span></tt> whereas a Python comment 
-<tt class="computeroutput"><span class="comment">#looks like this</span></tt>.</p>
+Python's  <code class="computeroutput"><span class="keyword">import</span></code> is rather like C++'s  <code class="computeroutput"><span class="preprocessor">#include</span></code>. A
+C++ comment <code class="computeroutput"><span class="comment">// looks like this</span></code> whereas a Python comment 
+<code class="computeroutput"><span class="comment">#looks like this</span></code>.</p>
 <div class="informaltable">
 <h4>
-<a name="id371813"></a><span class="table-title">Supported Source Modes</span>
+<a name="id2508747"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -237,11 +237,11 @@ C++ comment <tt class="computeroutput"><span class="comment">// looks like this<
 <tbody>
 <tr>
 <td>C++</td>
-<td><tt class="literal">[c++]</tt></td>
+<td><code class="literal">[c++]</code></td>
 </tr>
 <tr>
 <td>Python</td>
-<td><tt class="literal">[python]</tt></td>
+<td><code class="literal">[python]</code></td>
 </tr>
 </tbody>
 </table>
@@ -252,99 +252,99 @@ C++ comment <tt class="computeroutput"><span class="comment">// looks like this<
 <span class="inlinemediaobject"><img src="../images/note.png"></span> The source mode strings are lowercase.</td></tr></tbody>
 </table></div>
 <a name="syntax.line_break"></a><h3>
-<a name="id371882"></a>line-break</h3>
-<pre class="programlisting"><tt class="literal">[br]
-</tt></pre>
+<a name="id2508809"></a>line-break</h3>
+<pre class="programlisting"><code class="literal">[br]
+</code></pre>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/note.png"></span> Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
+<span class="inlinemediaobject"><img src="../images/note.png"></span> Note that <code class="computeroutput"><span class="special">\</span><span class="identifier">n</span></code> is now preferred over <code class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></code>.</td></tr></tbody>
 </table></div>
 <a name="syntax.anchors"></a><h3>
-<a name="id371956"></a>Anchors</h3>
-<pre class="programlisting"><tt class="literal">[#named_anchor]
-</tt></pre>
+<a name="id2569712"></a>Anchors</h3>
+<pre class="programlisting"><code class="literal">[#named_anchor]
+</code></pre>
 <p>
 A named anchor is a hook that can be referenced by a link elsewhere in the
-document. You can then reference an anchor with <tt class="literal">[link named_anchor Some link text]</tt>.
+document. You can then reference an anchor with <code class="literal">[link named_anchor Some link text]</code>.
 More on anchors <a href="syntax.html#syntax.anchor_links">here</a>, <a href="syntax.html#syntax.section">here</a> and
 <a href="syntax.html#syntax.headings">here</a>.</p>
 <a name="syntax.links"></a><h3>
-<a name="id372015"></a>Links</h3>
-<pre class="programlisting"><tt class="literal">[@http://www.boost.org this is [*boost's] website....]
-</tt></pre>
+<a name="id2569765"></a>Links</h3>
+<pre class="programlisting"><code class="literal">[@http://www.boost.org this is [*boost's] website....]
+</code></pre>
 <p>
 will generate:</p>
-<p><a href="http://www.boost.org" target="_top">this is <span class="bold"><b>boost's</b></span> website....</a></p>
+<p><a href="http://www.boost.org" target="_top">this is <span class="bold"><strong>boost's</strong></span> website....</a></p>
 <p>
 URL links where the link text is the link itself is common. Example:</p>
-<pre class="programlisting"><tt class="literal">see http://spirit.sourceforge.net/
-</tt></pre>
+<pre class="programlisting"><code class="literal">see http://spirit.sourceforge.net/
+</code></pre>
 <p>
 so, when the text is absent in a link markup, the URL is assumed. Example:</p>
-<pre class="programlisting"><tt class="literal">see [@http://spirit.sourceforge.net/]
-</tt></pre>
+<pre class="programlisting"><code class="literal">see [@http://spirit.sourceforge.net/]
+</code></pre>
 <p>
 will generate:</p>
 <p>
 see <a href="http://spirit.sourceforge.net/" target="_top">http://spirit.sourceforge.net/</a></p>
 <a name="syntax.anchor_links"></a><h3>
-<a name="id442470"></a>Anchor links</h3>
+<a name="id2569832"></a>Anchor links</h3>
 <p>
 You can link within a document using:</p>
-<pre class="programlisting"><tt class="literal">[link section_id.normalized_header_text The link text]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[link section_id.normalized_header_text The link text]
+</code></pre>
 <p>
 See sections <a href="syntax.html#syntax.section">Section</a> and <a href="syntax.html#syntax.headings">Headings</a>
 for more info.</p>
 <a name="syntax.refentry_links"></a><h3>
-<a name="id442512"></a>refentry links</h3>
+<a name="id2569871"></a>refentry links</h3>
 <p>
 In addition, you can link internally to an XML refentry like:</p>
-<pre class="programlisting"><tt class="literal">[link xml.refentry The link text]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[link xml.refentry The link text]
+</code></pre>
 <p>
-This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;The link text&lt;/link&gt;</tt>.</p>
+This gets converted into <code class="literal">&lt;link linkend="xml.refentry"&gt;The link text&lt;/link&gt;</code>.</p>
 <p>
 Like URLs, the link text is optional. If this is not present, the link text will
 automatically be the refentry. Example:</p>
-<pre class="programlisting"><tt class="literal">[link xml.refentry]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[link xml.refentry]
+</code></pre>
 <p>
-This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</tt>.</p>
+This gets converted into <code class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</code>.</p>
 <a name="syntax.function__class__member__enum_or_header_links"></a><h3>
-<a name="id442571"></a>function, class, member, enum or header links</h3>
+<a name="id2569923"></a>function, class, member, enum or header links</h3>
 <p>
 If you want to link to a function, class, member, enum or header in the reference
 section, you can use:</p>
-<pre class="programlisting"><tt class="literal">[funcref fully::qualified::function_name The link text]
+<pre class="programlisting"><code class="literal">[funcref fully::qualified::function_name The link text]
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
 [headerref path/to/header.hpp The link text]
-</tt></pre>
+</code></pre>
 <p>
 Again, the link text is optional. If this is not present, the link text will
 automatically be the function, class, member or enum. Example:</p>
-<pre class="programlisting"><tt class="literal">[classref boost::bar::baz]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[classref boost::bar::baz]
+</code></pre>
 <p>
 would have "boost::bar::baz" as the link text.</p>
 <a name="syntax.escape"></a><h3>
-<a name="id442616"></a>Escape</h3>
+<a name="id2569968"></a>Escape</h3>
 <p>
 The escape mark-up is used when we don't want to do any processing.</p>
-<pre class="programlisting"><tt class="literal">'''
+<pre class="programlisting"><code class="literal">'''
 escape (no processing/formatting)
 '''
-</tt></pre>
+</code></pre>
 <p>
 Escaping allows us to pass XML markup to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a> or <a href="http://www.docbook.org/" target="_top">DocBook</a>. For example:</p>
-<pre class="programlisting"><tt class="literal">'''
+<pre class="programlisting"><code class="literal">'''
 &lt;emphasis role="bold"&gt;This is direct XML markup&lt;/emphasis&gt;
 '''
-</tt></pre>
-<p><span class="bold"><b>This is direct XML markup</b></span></p>
+</code></pre>
+<p><span class="bold"><strong>This is direct XML markup</strong></span></p>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
@@ -352,26 +352,26 @@ Escaping allows us to pass XML markup to <a href="http://www.boost.org/doc/html/
 <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
 </table></div>
 <a name="syntax.single_char_escape"></a><h3>
-<a name="id442708"></a>Single char escape</h3>
+<a name="id2570055"></a>Single char escape</h3>
 <p>
 The backslash may be used to escape a single punctuation character. The
 punctuation immediately after the backslash is passed without any processing.
-This is useful when we need to escape QuickBook punctuations such as <tt class="computeroutput"><span class="special">[</span></tt> and <tt class="computeroutput"><span class="special">]</span></tt>.
-For example, how do you escape the triple quote? Simple: <tt class="literal">\'\'\'</tt></p>
-<p><tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> has a special meaning. It is used to generate line breaks. Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
-is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</p>
+This is useful when we need to escape QuickBook punctuations such as <code class="computeroutput"><span class="special">[</span></code> and <code class="computeroutput"><span class="special">]</span></code>.
+For example, how do you escape the triple quote? Simple: <code class="literal">\'\'\'</code></p>
+<p><code class="computeroutput"><span class="special">\</span><span class="identifier">n</span></code> has a special meaning. It is used to generate line breaks. Note that <code class="computeroutput"><span class="special">\</span><span class="identifier">n</span></code>
+is now preferred over <code class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></code>.</p>
 <a name="syntax.images__terminal_"></a><h3>
-<a name="id442801"></a>Images (terminal)</h3>
-<pre class="programlisting"><tt class="literal">[$image.jpg]
-</tt></pre>
+<a name="id2570141"></a>Images (terminal)</h3>
+<pre class="programlisting"><code class="literal">[$image.jpg]
+</code></pre>
 <a name="syntax.block_level_elements"></a><h2>
-<a name="id442819"></a>Block Level Elements</h2>
+<a name="id2570160"></a>Block Level Elements</h2>
 <a name="syntax.document"></a><h3>
-<a name="id442830"></a>Document</h3>
+<a name="id2570169"></a>Document</h3>
 <p>
 Every document must begin with a Document Info section, which should look
 like this:</p>
-<pre class="programlisting"><tt class="literal">[document-type The Document Title
+<pre class="programlisting"><code class="literal">[document-type The Document Title
     [version 1.0]
     [id the_document_name]
     [dirname the_document_dir]
@@ -383,7 +383,7 @@ like this:</p>
     [last-revision $Date$]
     [source-mode source-type]
 ]
-</tt></pre>
+</code></pre>
 <p>
 Where document-type is one of:</p>
 <div class="itemizedlist"><ul type="disc">
@@ -404,51 +404,51 @@ chapter
 </li>
 </ul></div>
 <p>
-and <tt class="literal">version</tt>, <tt class="literal">id</tt>, <tt class="literal">dirname</tt>, <tt class="literal">copyright</tt>, <tt class="literal">purpose</tt>, <tt class="literal">category</tt>, <tt class="literal">authors</tt>,
-<tt class="literal">license</tt>, <tt class="literal">last-revision</tt> and <tt class="literal">source-mode</tt> are optional information.</p>
+and <code class="literal">version</code>, <code class="literal">id</code>, <code class="literal">dirname</code>, <code class="literal">copyright</code>, <code class="literal">purpose</code>, <code class="literal">category</code>, <code class="literal">authors</code>,
+<code class="literal">license</code>, <code class="literal">last-revision</code> and <code class="literal">source-mode</code> are optional information.</p>
 <p>
-Here <tt class="literal">source-type</tt> is a lowercase string setting the initial 
-<a href="syntax.html#syntax.source_mode">source mode</a>. If the <tt class="literal">source-mode</tt> field is omitted, a
-default value of <tt class="literal">c++</tt> will be used.</p>
+Here <code class="literal">source-type</code> is a lowercase string setting the initial 
+<a href="syntax.html#syntax.source_mode">source mode</a>. If the <code class="literal">source-mode</code> field is omitted, a
+default value of <code class="literal">c++</code> will be used.</p>
 <a name="syntax.section"></a><h3>
-<a name="id443250"></a>Section</h3>
+<a name="id2570304"></a>Section</h3>
 <p>
 Starting a new section is accomplished with:</p>
-<pre class="programlisting"><tt class="literal">[section:id The Section Title]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[section:id The Section Title]
+</code></pre>
 <p>
 where <span class="emphasis"><em>id</em></span> is optional. id will be the filename of the generated section.
 If it is not present, "The Section Title" will be normalized and become the id.
-Valid characters are <tt class="literal">a-Z</tt>, <tt class="literal">A-Z</tt>, <tt class="literal">0-9</tt> and <tt class="literal">_</tt>. All non-valid characters are
+Valid characters are <code class="literal">a-Z</code>, <code class="literal">A-Z</code>, <code class="literal">0-9</code> and <code class="literal">_</code>. All non-valid characters are
 converted to underscore and all upper-case are converted to lower case.
 Thus: "The Section Title" will be normalized to "the_section_title".</p>
 <p>
 End a section with:</p>
-<pre class="programlisting"><tt class="literal">[endsect]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[endsect]
+</code></pre>
 <p>
 Sections can nest, and that results in a hierarchy in the table of contents.</p>
 <a name="syntax.xinclude"></a><h3>
-<a name="id371553"></a>xinclude</h3>
+<a name="id2570373"></a>xinclude</h3>
 <p>
 You can include another XML file with:</p>
-<pre class="programlisting"><tt class="literal">[xinclude file.xml]
-</tt></pre>
+<pre class="programlisting"><code class="literal">[xinclude file.xml]
+</code></pre>
 <p>
 This is useful when file.xml has been generated by Doxygen and contains your
 reference section.</p>
 <a name="syntax.paragraphs"></a><h3>
-<a name="id371580"></a>Paragraphs</h3>
+<a name="id2570398"></a>Paragraphs</h3>
 <p>
 Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
 the context.</p>
 <a name="syntax.ordered_lists"></a><h3>
-<a name="id371596"></a>Ordered lists</h3>
-<pre class="programlisting"><tt class="literal"># One
+<a name="id2570413"></a>Ordered lists</h3>
+<pre class="programlisting"><code class="literal"># One
 # Two
 # Three
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="orderedlist"><ol type="1">
@@ -463,10 +463,10 @@ Three
 </li>
 </ol></div>
 <a name="syntax.list_hierarchies"></a><h3>
-<a name="id443268"></a>List Hierarchies</h3>
+<a name="id2570446"></a>List Hierarchies</h3>
 <p>
 List hierarchies are supported. Example:</p>
-<pre class="programlisting"><tt class="literal"># One
+<pre class="programlisting"><code class="literal"># One
 # Two
 # Three
     # Three.a
@@ -477,7 +477,7 @@ List hierarchies are supported. Example:</p>
         # Four.a.i
         # Four.a.ii
 # Five
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="orderedlist"><ol type="1">
@@ -517,17 +517,17 @@ Five
 </li>
 </ol></div>
 <a name="syntax.long_list_lines"></a><h3>
-<a name="id443350"></a>Long List Lines</h3>
+<a name="id2570521"></a>Long List Lines</h3>
 <p>
 Long lines will be wrapped appropriately. Example:</p>
-<pre class="programlisting"><tt class="literal"># A short item.
+<pre class="programlisting"><code class="literal"># A short item.
 # A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
 # A short item.
-</tt></pre>
+</code></pre>
 <div class="orderedlist"><ol type="1">
 <li>
 A short item.
@@ -544,11 +544,11 @@ A short item.
 </li>
 </ol></div>
 <a name="syntax.unordered_lists"></a><h3>
-<a name="id443392"></a>Unordered lists</h3>
-<pre class="programlisting"><tt class="literal">* First
+<a name="id2570565"></a>Unordered lists</h3>
+<pre class="programlisting"><code class="literal">* First
 * Second
 * Third
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="itemizedlist"><ul type="disc">
@@ -563,17 +563,17 @@ Third
 </li>
 </ul></div>
 <a name="syntax.mixed_lists"></a><h3>
-<a name="id443424"></a>Mixed lists</h3>
+<a name="id2570594"></a>Mixed lists</h3>
 <p>
 Mixed lists (ordered and unordered) are supported. Example:</p>
-<pre class="programlisting"><tt class="literal"># One
+<pre class="programlisting"><code class="literal"># One
 # Two
 # Three
     * Three.a
     * Three.b
     * Three.c
 # Four
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="orderedlist"><ol type="1">
@@ -602,7 +602,7 @@ Four
 </ol></div>
 <p>
 And...</p>
-<pre class="programlisting"><tt class="literal"># 1
+<pre class="programlisting"><code class="literal"># 1
     * 1.a
         # 1.a.1
         # 1.a.2
@@ -614,7 +614,7 @@ And...</p>
         # 2.b.2
             * 2.b.2.a
             * 2.b.2.b
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="orderedlist"><ol type="1">
@@ -661,42 +661,42 @@ will generate:</p>
 </li>
 </ol></div>
 <a name="syntax.code"></a><h3>
-<a name="id443547"></a>Code</h3>
+<a name="id2570705"></a>Code</h3>
 <p>
 Preformatted code starts with a space or a tab. The code will be
 syntax highlighted according to the current <a href="syntax.html#syntax.source_mode">source mode</a>:</p>
 <p></p>
-<pre class="programlisting"><tt class="literal"><span class="preprocessor">#include</span><span class="special"> &lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span><span class="keyword">
+<pre class="programlisting"><code class="literal"><span class="preprocessor">#include</span><span class="special"> &lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span><span class="keyword">
 
 int</span><span class="identifier"> main</span><span class="special">()</span><span class="special">
 {</span><span class="comment">
     // Sample code
 </span><span class="identifier">    std</span><span class="special">::</span><span class="identifier">cout</span><span class="special"> &lt;&lt;</span><span class="string"> "Hello, World\n"</span><span class="special">;</span><span class="keyword">
     return</span><span class="number"> 0</span><span class="special">;</span><span class="special">
-}</span></tt></pre>
+}</span></code></pre>
 <p></p>
-<pre class="programlisting"><tt class="literal"><span class="keyword">import</span><span class="identifier"> cgi</span><span class="keyword">
+<pre class="programlisting"><code class="literal"><span class="keyword">import</span><span class="identifier"> cgi</span><span class="keyword">
 
 def</span><span class="identifier"> cookForHtml</span><span class="special">(</span><span class="identifier">text</span><span class="special">):</span><span class="string">
     '''"Cooks" the input text for HTML.'''</span><span class="keyword">
     
-    return</span><span class="identifier"> cgi</span><span class="special">.</span><span class="identifier">escape</span><span class="special">(</span><span class="identifier">text</span><span class="special">)</span></tt></pre>
+    return</span><span class="identifier"> cgi</span><span class="special">.</span><span class="identifier">escape</span><span class="special">(</span><span class="identifier">text</span><span class="special">)</span></code></pre>
 <p>
 Macros that are already defined are expanded in source code. Example:</p>
-<pre class="programlisting"><tt class="literal">[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
+<pre class="programlisting"><code class="literal">[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
 [def __quickbook__ [@index.html quickbook]]
 
     using __quickbook__::__syntax_highlight__;
-</tt></pre>
+</code></pre>
 <p>
 Generates:</p>
-<pre class="programlisting"><tt class="literal"><span class="identifier">using</span> <a href="../index.html" target="_top">quickbook</a><span class="special">::</span><a href="highlight.html" target="_top">syntax_highlight</a><span class="special">;</span></tt></pre>
+<pre class="programlisting"><code class="literal"><span class="identifier">using</span> <a href="../index.html" target="_top">quickbook</a><span class="special">::</span><a href="highlight.html" target="_top">syntax_highlight</a><span class="special">;</span></code></pre>
 <a name="syntax.preformatted"></a><h3>
-<a name="id443812"></a>Preformatted</h3>
+<a name="id2570946"></a>Preformatted</h3>
 <p>
 Sometimes, you don't want some preformatted text to be parsed as C++. In such
-cases, use the <tt class="literal">[pre ... ]</tt> markup block.</p>
-<pre class="programlisting"><tt class="literal">[pre
+cases, use the <code class="literal">[pre ... ]</code> markup block.</p>
+<pre class="programlisting"><code class="literal">[pre
 
     Some *preformatted* text                    Some *preformatted* text
 
@@ -705,70 +705,70 @@ cases, use the <tt class="literal">[pre ... ]</tt> markup block.</p>
             Some *preformatted* text    Some *preformatted* text
 
 ]
-</tt></pre>
+</code></pre>
 <p>
 Spaces, tabs and newlines are rendered as-is. Unlike all quickbook block level
 markup, pre (and Code) are the only ones that allow multiple newlines. The
 markup above will generate:</p>
-<pre class="programlisting"><tt class="literal">Some <span class="bold"><b>preformatted</b></span> text                    Some <span class="bold"><b>preformatted</b></span> text
+<pre class="programlisting"><code class="literal">Some <span class="bold"><strong>preformatted</strong></span> text                    Some <span class="bold"><strong>preformatted</strong></span> text
 
-    Some <span class="bold"><b>preformatted</b></span> text            Some <span class="bold"><b>preformatted</b></span> text
+    Some <span class="bold"><strong>preformatted</strong></span> text            Some <span class="bold"><strong>preformatted</strong></span> text
 
-        Some <span class="bold"><b>preformatted</b></span> text    Some <span class="bold"><b>preformatted</b></span> text
+        Some <span class="bold"><strong>preformatted</strong></span> text    Some <span class="bold"><strong>preformatted</strong></span> text
 
-</tt></pre>
+</code></pre>
 <p>
 Notice that unlike Code, phrase markup such as font style is still permitted
-inside <tt class="literal">pre</tt> blocks.</p>
+inside <code class="literal">pre</code> blocks.</p>
 <a name="syntax.blockquote"></a><h3>
-<a name="id443911"></a>Blockquote</h3>
-<pre class="programlisting"><tt class="literal">[:sometext...]
-</tt></pre>
+<a name="id2571039"></a>Blockquote</h3>
+<pre class="programlisting"><code class="literal">[:sometext...]
+</code></pre>
 <div class="blockquote"><blockquote class="blockquote"><p>Indents the paragraph. This applies to one paragraph only.</p></blockquote></div>
 <a name="syntax.headings"></a><h3>
-<a name="id443935"></a>Headings</h3>
-<pre class="programlisting"><tt class="literal">[h1 Heading 1]
+<a name="id2571061"></a>Headings</h3>
+<pre class="programlisting"><code class="literal">[h1 Heading 1]
 [h2 Heading 2]
 [h3 Heading 3]
 [h4 Heading 4]
 [h5 Heading 5]
 [h6 Heading 6]
-</tt></pre>
+</code></pre>
 <a name="syntax.heading_1"></a><h1>
-<a name="id443956"></a>Heading 1</h1>
+<a name="id2571080"></a>Heading 1</h1>
 <a name="syntax.heading_2"></a><h2>
-<a name="id443967"></a>Heading 2</h2>
+<a name="id2571090"></a>Heading 2</h2>
 <a name="syntax.heading_3"></a><h3>
-<a name="id443978"></a>Heading 3</h3>
+<a name="id2571099"></a>Heading 3</h3>
 <a name="syntax.heading_4"></a><h4>
-<a name="id443989"></a>Heading 4</h4>
+<a name="id2571108"></a>Heading 4</h4>
 <a name="syntax.heading_5"></a><h5>
-<a name="id443999"></a>Heading 5</h5>
+<a name="id2571118"></a>Heading 5</h5>
 <a name="syntax.heading_6"></a><h3>
-<a name="id444010"></a>Heading 6</h3>
+<a name="id2571127"></a>Heading 6</h3>
 <p>
 Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
-names with <tt class="literal">name="section_id.normalized_header_text"</tt> (i.e. valid characters are
-<tt class="literal">a-z</tt>, <tt class="literal">A-Z</tt>, <tt class="literal">0-9</tt> and <tt class="literal">_</tt>. All non-valid characters are converted to underscore
+names with <code class="literal">name="section_id.normalized_header_text"</code> (i.e. valid characters are
+<code class="literal">a-z</code>, <code class="literal">A-Z</code>, <code class="literal">0-9</code> and <code class="literal">_</code>. All non-valid characters are converted to underscore
 and all upper-case are converted to lower-case. For example: Heading
-1 in section Section 2 will be normalized to <tt class="literal">section_2.heading_1</tt>). You can use:</p>
-<pre class="programlisting"><tt class="literal">[link section_id.normalized_header_text The link text]
-</tt></pre>
+1 in section Section 2 will be normalized to <code class="literal">section_2.heading_1</code>). You can use:</p>
+<pre class="programlisting"><code class="literal">[link section_id.normalized_header_text The link text]
+</code></pre>
 <p>
 to link to them. See <a href="syntax.html#syntax.anchor_links">Anchor links</a> and
 <a href="syntax.html#syntax.section">Section</a> for more info.</p>
 <a name="syntax.macros"></a><h3>
-<a name="id444094"></a>Macros</h3>
-<pre class="programlisting"><tt class="literal">[def macro_identifier some text]
-</tt></pre>
+<a name="id2571205"></a>Macros</h3>
+<pre class="programlisting"><code class="literal">[def macro_identifier some text]
+</code></pre>
 <p>
 When a macro is defined, the identifier replaces the text anywhere in the file,
 in paragraphs, in markups, etc. macro_identifier is a string of non- white space
 characters except ']' while the replacement text can be any phrase (even
 marked up). Example:</p>
-<pre class="programlisting"><tt class="literal">[def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1]]
+<pre class="programlisting"><code class="literal">[def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1]]
 sf_logo
-</tt></pre>
+</code></pre>
 <p>
 Now everywhere the sf_logo is placed, the picture will be inlined.</p>
 <p><span class="inlinemediaobject"><img src="http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1"></span></p>
@@ -777,36 +777,36 @@ Now everywhere the sf_logo is placed, the picture will be inlined.</p>
 <tbody><tr><td class="blurb">
 <span class="inlinemediaobject"><img src="../images/tip.png"></span> It's a good idea to use macro identifiers that are distinguishable.
 For instance, in this document, macro identifiers have two leading and trailing
-underscores (e.g. <tt class="literal">__spirit__</tt>). The reason is to avoid unwanted macro replacement.</td></tr></tbody>
+underscores (e.g. <code class="literal">__spirit__</code>). The reason is to avoid unwanted macro replacement.</td></tr></tbody>
 </table></div>
 <p>
-Links (URLS) and images are good candidates for macros. <span class="bold"><b>1</b></span>) They tend to
+Links (URLS) and images are good candidates for macros. <span class="bold"><strong>1</strong></span>) They tend to
 change a lot. It is a good idea to place all links and images in one place near the top
-to make it easy to make changes. <span class="bold"><b>2</b></span>) The syntax is not pretty. It's easier to read and
-write, e.g. <tt class="literal">__spirit__</tt> than <tt class="literal">[@http://spirit.sourceforge.net Spirit]</tt>.</p>
+to make it easy to make changes. <span class="bold"><strong>2</strong></span>) The syntax is not pretty. It's easier to read and
+write, e.g. <code class="literal">__spirit__</code> than <code class="literal">[@http://spirit.sourceforge.net Spirit]</code>.</p>
 <p>
 Some more examples:</p>
-<pre class="programlisting"><tt class="literal">[def :-)            [$theme/smiley.png]]
+<pre class="programlisting"><code class="literal">[def :-)            [$theme/smiley.png]]
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
-</tt></pre>
+</code></pre>
 <p>
 (See <a href="syntax.html#syntax.images__terminal_">Images</a>
 and <a href="syntax.html#syntax.links">Links</a>)</p>
 <p>
 Invoking these macros:</p>
-<pre class="programlisting"><tt class="literal">Hi __spirit__  :-)
-</tt></pre>
+<pre class="programlisting"><code class="literal">Hi __spirit__  :-)
+</code></pre>
 <p>
 will generate this:</p>
 <p>
 Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
 <a name="syntax.predefined_macros"></a><h3>
-<a name="id444267"></a>Predefined Macros</h3>
+<a name="id2571367"></a>Predefined Macros</h3>
 <p>
 Quickbook has some predefined macros that you can already use.</p>
 <div class="informaltable">
 <h4>
-<a name="id444280"></a><span class="table-title">Predefined Macros</span>
+<a name="id2571379"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -823,55 +823,55 @@ Quickbook has some predefined macros that you can already use.</p>
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2005-Jul-12</td>
+<td>2005-Aug-01</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>03:44:57 PM</td>
+<td>08:34:04 PM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
 <td>Quickbook source filename</td>
-<td>quickbook.qbk</td>
+<td>/home/ericne/boost/cvs/boost/tools/quickbook/doc/quickbook.qbk</td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="syntax.blurbs"></a><h3>
-<a name="id444338"></a>Blurbs</h3>
-<pre class="programlisting"><tt class="literal">[blurb :-) [*An eye catching advertisement or note...]\n\n
+<a name="id2571431"></a>Blurbs</h3>
+<pre class="programlisting"><code class="literal">[blurb :-) [*An eye catching advertisement or note...]\n\n
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
     allow us to approximate the syntax of Extended Backus-Normal Form (EBNF)
     completely in C++.
 ]
-</tt></pre>
+</code></pre>
 <p>
 will generate this:</p>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/smiley.png"></span><span class="bold"><b>An eye catching advertisement or note...</b></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a> is an object- oriented recursive-descent parser generator
+<span class="inlinemediaobject"><img src="../images/smiley.png"></span><span class="bold"><strong>An eye catching advertisement or note...</strong></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a> is an object- oriented recursive-descent parser generator
     framework implemented using template meta-programming techniques. Expression
     templates allow us to approximate the syntax of Extended Backus- Normal Form
     (EBNF) completely in C++.
 </td></tr></tbody>
 </table></div>
 <a name="syntax.tables"></a><h3>
-<a name="id444397"></a>Tables</h3>
-<pre class="programlisting"><tt class="literal">[table A Simple Table
+<a name="id2571492"></a>Tables</h3>
+<pre class="programlisting"><code class="literal">[table A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
     [[R1-C0]     [R1-C1]     [R1-C2]]
     [[R2-C0]     [R2-C1]     [R2-C2]]
 ]
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="informaltable">
 <h4>
-<a name="id444419"></a><span class="table-title">A Simple Table</span>
+<a name="id2571513"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -905,10 +905,10 @@ will generate:</p>
 </div>
 <p>
 The first row of the table is automatically treated as the table header; that is,
-it is wrapped in <tt class="literal">&lt;thead&gt;...&lt;/thead&gt;</tt> XML tags. Note that unlike the original QuickDoc,
+it is wrapped in <code class="literal">&lt;thead&gt;...&lt;/thead&gt;</code> XML tags. Note that unlike the original QuickDoc,
 the columns are nested in [ cells... ]. The syntax is free-format and allows big
 cells to be formatted nicely. Example:</p>
-<pre class="programlisting"><tt class="literal">[table Table with fat cells
+<pre class="programlisting"><code class="literal">[table Table with fat cells
     [[Heading 1] [Heading 2]]
     [
         [Row 0, Col 0: a small cell]
@@ -924,12 +924,12 @@ cells to be formatted nicely. Example:</p>
         [Row 1, Col 1: a small cell]
     ]
 ]
-</tt></pre>
+</code></pre>
 <p>
 and thus:</p>
 <div class="informaltable">
 <h4>
-<a name="id444500"></a><span class="table-title">Table with fat cells</span>
+<a name="id2571593"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -958,13 +958,13 @@ and thus:</p>
 </table>
 </div>
 <a name="syntax.variable_lists"></a><h3>
-<a name="id444544"></a>Variable Lists</h3>
-<pre class="programlisting"><tt class="literal">[variablelist A Variable List
+<a name="id2571635"></a>Variable Lists</h3>
+<pre class="programlisting"><code class="literal">[variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
     [[term 3] [The definition of term 3]]
 ]
-</tt></pre>
+</code></pre>
 <p>
 will generate:</p>
 <div class="variablelist">
@@ -983,6 +983,39 @@ The rules for variable lists are the same as for tables, except that
 only 2 "columns" are allowed. The first column contains the terms, and
 the second column contains the definitions. Those familiar with HTML
 will recognize this as a "definition list".</p>
+<a name="syntax.include"></a><h3>
+<a name="id2571686"></a>Include</h3>
+<p>
+You can include one QuickBook file from another. The syntax is simply:</p>
+<pre class="programlisting"><code class="literal">[include someother.qbk]
+</code></pre>
+<p>
+The included file will be processed as if it had be cut and pasted
+into the current document, with the following exceptions:</p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+The __FILENAME__ predefined macro will reflect the name of the
+  file currently being processed.
+</li>
+<li>
+Any macros defined in the included file are scoped to that file.
+</li>
+</ul></div>
+<p>
+As the number of included QuickBook files grows, so too does the
+likelihood of two sections having the same name. Since QuickBook generates
+an anchor for each section based on the section name, it is possible to
+end up with two identically named anchors, leading to link ambiguities.
+To resolve these ambiguities, the <code class="literal">[include]</code> directive lets you
+specify a document id to use for the included file. You can use it like
+this:</p>
+<pre class="programlisting"><code class="literal">[include:someid someother.qbk]
+</code></pre>
+<p>
+When using this form, all auto-generated anchors will use "someid" as
+a unique prefix. So for instance, if there is a section in someother.qbk
+named "Intro", the named anchor for that section will be "someid.intro",
+and you can link to it with <code class="literal">[link someid.intro The Intro]</code>.</p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> QuickBook Grammar</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.67.2">
 <link rel="start" href="../index.html" title="Part I. quickbook 1.1">
 <link rel="up" href="../index.html" title="Part I. quickbook 1.1">
 <link rel="prev" href="docinfo.html" title=" Library Document Grammar">
@@ -25,7 +25,7 @@
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="quickbook.quickbook"></a> QuickBook Grammar</h2></div></div></div>
-<pre class="programlisting"><tt class="literal"><span class="identifier">library</span><span class="special"> =</span><span class="special">
+<pre class="programlisting"><code class="literal"><span class="identifier">library</span><span class="special"> =</span><span class="special">
     *(</span><span class="identifier">space_p</span><span class="special"> |</span><span class="identifier"> comment</span><span class="special">)</span><span class="special"> &gt;&gt;</span><span class="identifier"> blocks</span><span class="special"> &gt;&gt;</span><span class="identifier"> blank</span><span class="special">
     ;</span><span class="identifier">
 
@@ -85,6 +85,7 @@ block_markup</span><span class="special"> =</span><span class="char">
         |</span><span class="identifier">   table</span><span class="special">
         |</span><span class="identifier">   variablelist</span><span class="special">
         |</span><span class="identifier">   xinclude</span><span class="special">
+        |</span><span class="identifier">   include</span><span class="special">
         )</span><span class="special">
     &gt;&gt;</span><span class="special">  (</span><span class="special">   (</span><span class="char">']'</span><span class="special"> &gt;&gt;</span><span class="special"> +</span><span class="identifier">eol</span><span class="special">)</span><span class="special">
         |</span><span class="identifier">   eps_p</span><span class="special">
@@ -232,6 +233,19 @@ xinclude</span><span class="special"> =</span><span class="string">
             close_bracket</span><span class="special">))</span><span class="special">
     ;</span><span class="identifier">
 
+include</span><span class="special"> =</span><span class="string">
+       "include"</span><span class="special">
+    &gt;&gt;</span><span class="identifier"> hard_space</span><span class="special">
+    &gt;&gt;</span><span class="special"> 
+   !(</span><span class="char">
+        ':'</span><span class="special">
+        &gt;&gt;</span><span class="special"> (*((</span><span class="identifier">alnum_p</span><span class="special"> |</span><span class="char"> '_'</span><span class="special">)</span><span class="special"> -</span><span class="identifier"> space_p</span><span class="special">))</span><span class="special">
+        &gt;&gt;</span><span class="identifier"> space</span><span class="special">
+    )</span><span class="special">
+    &gt;&gt;</span><span class="special"> (*(</span><span class="identifier">anychar_p</span><span class="special"> -</span><span class="identifier">
+            close_bracket</span><span class="special">))</span><span class="special">
+    ;</span><span class="identifier">
+
 identifier</span><span class="special"> =</span><span class="special">
     *(</span><span class="identifier">anychar_p</span><span class="special"> -</span><span class="special"> (</span><span class="identifier">space_p</span><span class="special"> |</span><span class="char"> ']'</span><span class="special">))</span><span class="special">
     ;</span><span class="identifier">
@@ -303,6 +317,7 @@ simple_format</span><span class="special"> =</span><span class="identifier">
     |</span><span class="identifier">   simple_italic</span><span class="special">
     |</span><span class="identifier">   simple_underline</span><span class="special">
     |</span><span class="identifier">   simple_teletype</span><span class="special">
+    |</span><span class="identifier">   simple_strikethrough</span><span class="special">
     ;</span><span class="identifier">
 
 simple_bold</span><span class="special"> =</span><span class="char">
@@ -389,6 +404,27 @@ simple_teletype</span><span class="special"> =</span><span class="char">
     &gt;&gt;</span><span class="char"> '='</span><span class="special">
     ;</span><span class="identifier">
 
+simple_strikethrough</span><span class="special"> =</span><span class="char">
+    '-'</span><span class="special"> &gt;&gt;</span><span class="special">
+    (</span><span class="special">
+        (</span><span class="identifier">   graph_p</span><span class="special"> &gt;&gt;</span><span class="comment">                  // graph_p must follow '-'
+</span><span class="special">            *(</span><span class="identifier">anychar_p</span><span class="special"> -</span><span class="special">
+                (</span><span class="identifier">   eol</span><span class="comment">                 // Make sure that we don't go
+</span><span class="special">                |</span><span class="special">   (</span><span class="identifier">graph_p</span><span class="special"> &gt;&gt;</span><span class="char"> '-'</span><span class="special">)</span><span class="comment">    // past a single line
+</span><span class="special">                )</span><span class="special">
+            )</span><span class="special"> &gt;&gt;</span><span class="identifier"> graph_p</span><span class="comment">                // graph_p must precede '-'
+</span><span class="special">            &gt;&gt;</span><span class="identifier"> eps_p</span><span class="special">(</span><span class="char">'-'</span><span class="special">
+                &gt;&gt;</span><span class="special"> (</span><span class="identifier">space_p</span><span class="special"> |</span><span class="identifier"> punct_p</span><span class="special">))</span><span class="comment"> // space_p or punct_p must
+</span><span class="special">        )</span><span class="comment">                               // follow '-'
+</span><span class="special">    |</span><span class="special">   (</span><span class="identifier">
+            graph_p</span><span class="comment">                     // A single char. e.g. =c=
+</span><span class="special">            &gt;&gt;</span><span class="identifier"> eps_p</span><span class="special">(</span><span class="char">'-'</span><span class="special">
+                &gt;&gt;</span><span class="special"> (</span><span class="identifier">space_p</span><span class="special"> |</span><span class="identifier"> punct_p</span><span class="special">))</span><span class="special">
+        )</span><span class="special">
+    )</span><span class="special">
+    &gt;&gt;</span><span class="char"> '-'</span><span class="special">
+    ;</span><span class="identifier">
+
 paragraph</span><span class="special"> =</span><span class="special">
    *(</span><span class="identifier">   common</span><span class="special">
     |</span><span class="special">   (</span><span class="identifier">anychar_p</span><span class="special"> -</span><span class="comment">                    // Make sure we don't go past
@@ -422,6 +458,7 @@ phrase_markup</span><span class="special"> =</span><span class="char">
         |</span><span class="identifier">   italic</span><span class="special">
         |</span><span class="identifier">   underline</span><span class="special">
         |</span><span class="identifier">   teletype</span><span class="special">
+        |</span><span class="identifier">   strikethrough</span><span class="special">
         |</span><span class="identifier">   str_p</span><span class="special">(</span><span class="string">"br"</span><span class="special">)</span><span class="special">
         )</span><span class="special">
     &gt;&gt;</span><span class="char">  ']'</span><span class="special">
@@ -532,7 +569,12 @@ underline</span><span class="special"> =</span><span class="identifier">
 teletype</span><span class="special"> =</span><span class="identifier">
         ch_p</span><span class="special">(</span><span class="char">'^'</span><span class="special">)</span><span class="special">
     &gt;&gt;</span><span class="identifier">  blank</span><span class="special"> &gt;&gt;</span><span class="identifier"> phrase</span><span class="special">
-    ;</span></tt></pre>
+    ;</span><span class="identifier">
+
+strikethrough</span><span class="special"> =</span><span class="identifier">
+        ch_p</span><span class="special">(</span><span class="char">'-'</span><span class="special">)</span><span class="special">
+    &gt;&gt;</span><span class="identifier">  blank</span><span class="special"> &gt;&gt;</span><span class="identifier"> phrase</span><span class="special">
+    ;</span></code></pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

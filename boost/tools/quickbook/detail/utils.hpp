@@ -33,6 +33,17 @@ namespace quickbook { namespace detail
 
     template <typename Char>
     inline void
+    print_string(std::basic_string<Char> const& str, std::ostream& out)
+    {
+        for(typename std::basic_string<Char>::const_iterator cur = str.begin();
+            cur != str.end(); ++cur)
+        {
+            print_char(*cur, out);
+        }
+    }
+
+    template <typename Char>
+    inline void
     print_space(Char ch, std::ostream& out)
     {
         switch (ch)
@@ -103,8 +114,34 @@ namespace quickbook { namespace detail
     remove_extension(std::string const& filename)
     {
         std::string::size_type const n = filename.find_last_of('.');
-        return std::string(filename.begin(), filename.begin()+n);
+        if(std::string::npos == n)
+        {
+            return filename;
+        }
+        else
+        {
+            return std::string(filename.begin(), filename.begin()+n);
+        }
     }
+
+    inline std::string escape_uri(std::string uri)
+    {
+        for(std::string::size_type n = 0; n < uri.size(); ++n)
+        {
+            static char const mark[] = "-_.!~*'()?\\/";
+            if((!isalnum(uri[n]) || 127 < static_cast<unsigned char>(uri[n]))
+              && 0 == std::strchr(mark, uri[n]))
+            {
+                static char const hex[] = "0123456789abcdef";
+                char escape[] = { hex[uri[n] / 16], hex[uri[n] % 16] };
+                uri.insert(n + 1, escape, 2);
+                uri[n] = '%';
+                n += 2;
+            }
+        }
+        return uri;
+    }
+
 }}
 
 #endif // BOOST_SPIRIT_QUICKBOOK_UTILS_HPP

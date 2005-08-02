@@ -105,11 +105,11 @@ a single block.</para>
 <anchor id="syntax.comments" /><bridgehead renderas="sect2">Comments</bridgehead><para>
 Can be placed anywhere.</para>
 <programlisting><literal>[/ comment (no output generated) ]
-</literal></programlisting><anchor id="syntax.phrase_level_elements" /><bridgehead renderas="sect2">Phrase Level Elements</bridgehead><anchor id="syntax.font_styles" /><bridgehead renderas="sect3">Font Styles</bridgehead><programlisting><literal>['italic], [*bold], [_underline], [^teletype]
+</literal></programlisting><anchor id="syntax.phrase_level_elements" /><bridgehead renderas="sect2">Phrase Level Elements</bridgehead><anchor id="syntax.font_styles" /><bridgehead renderas="sect3">Font Styles</bridgehead><programlisting><literal>['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 </literal></programlisting><para>
 will generate:</para>
 <para>
-<emphasis>italic</emphasis>, <emphasis role="bold">bold</emphasis>, <emphasis role="underline">underline</emphasis>, <literal>teletype</literal></para>
+<emphasis>italic</emphasis>, <emphasis role="bold">bold</emphasis>, <emphasis role="underline">underline</emphasis>, <literal>teletype</literal>, <emphasis role="strikethrough">strikethrough</emphasis></para>
 <para>
 Like all non-terminal phrase level elements, this can of course be nested:</para>
 <programlisting><literal>[*['bold-italic]]
@@ -119,11 +119,11 @@ will generate:</para>
 <emphasis role="bold"><emphasis>bold-italic</emphasis></emphasis></para>
 <anchor id="syntax.simple_formatting" /><bridgehead renderas="sect3">Simple formatting</bridgehead><para>
 Simple markup for formatting text, common in many applications, is now supported:</para>
-<programlisting><literal>/italic/, *bold*, _underline_, =teletype=
+<programlisting><literal>/italic/, *bold*, _underline_, =teletype=, -strikethrough-
 </literal></programlisting><para>
 will generate:</para>
 <para>
-<emphasis>italic</emphasis>, <emphasis role="bold">bold</emphasis>, <emphasis role="underline">underline</emphasis>, <literal>teletype</literal></para>
+<emphasis>italic</emphasis>, <emphasis role="bold">bold</emphasis>, <emphasis role="underline">underline</emphasis>, <literal>teletype</literal>, <emphasis role="strikethrough">strikethrough</emphasis></para>
 <para>
 Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
 are much stricter.</para>
@@ -416,7 +416,7 @@ Two
 </listitem><listitem>
 Three
 </listitem>
-</orderedlist><para>
+</orderedlist><anchor id="syntax.list_hierarchies" /><bridgehead renderas="sect3">List Hierarchies</bridgehead><para>
 List hierarchies are supported. Example:</para>
 <programlisting><literal># One
 # Two
@@ -428,7 +428,7 @@ List hierarchies are supported. Example:</para>
     # Four.a
         # Four.a.i
         # Four.a.ii
-    # Four.b
+# Five
 </literal></programlisting><para>
 will generate:</para>
 <orderedlist>
@@ -456,12 +456,12 @@ Four.a.i
 Four.a.ii
 </listitem>
 </orderedlist>
-</listitem><listitem>
-Four.b
 </listitem>
 </orderedlist>
+</listitem><listitem>
+Five
 </listitem>
-</orderedlist><para>
+</orderedlist><anchor id="syntax.long_list_lines" /><bridgehead renderas="sect3">Long List Lines</bridgehead><para>
 Long lines will be wrapped appropriately. Example:</para>
 <programlisting><literal># A short item.
 # A very long item. A very long item. A very long item.
@@ -495,7 +495,7 @@ Second
 </listitem><listitem>
 Third
 </listitem>
-</itemizedlist><para>
+</itemizedlist><anchor id="syntax.mixed_lists" /><bridgehead renderas="sect3">Mixed lists</bridgehead><para>
 Mixed lists (ordered and unordered) are supported. Example:</para>
 <programlisting><literal># One
 # Two
@@ -503,6 +503,7 @@ Mixed lists (ordered and unordered) are supported. Example:</para>
     * Three.a
     * Three.b
     * Three.c
+# Four
 </literal></programlisting><para>
 will generate:</para>
 <orderedlist>
@@ -518,6 +519,60 @@ Three.a
 Three.b
 </listitem><listitem>
 Three.c
+</listitem>
+</itemizedlist>
+</listitem><listitem>
+Four
+</listitem>
+</orderedlist><para>
+And...</para>
+<programlisting><literal># 1
+    * 1.a
+        # 1.a.1
+        # 1.a.2
+    * 1.b
+# 2
+    * 2.a
+    * 2.b
+        # 2.b.1
+        # 2.b.2
+            * 2.b.2.a
+            * 2.b.2.b
+</literal></programlisting><para>
+will generate:</para>
+<orderedlist>
+<listitem>
+1<itemizedlist>
+<listitem>
+1.a<orderedlist>
+<listitem>
+1.a.1
+</listitem><listitem>
+1.a.2
+</listitem>
+</orderedlist>
+</listitem><listitem>
+1.b
+</listitem>
+</itemizedlist>
+</listitem><listitem>
+2<itemizedlist>
+<listitem>
+2.a
+</listitem><listitem>
+2.b<orderedlist>
+<listitem>
+2.b.1
+</listitem><listitem>
+2.b.2<itemizedlist>
+<listitem>
+2.b.2.a
+</listitem><listitem>
+2.b.2.b
+</listitem>
+</itemizedlist>
+</listitem>
+</orderedlist>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -655,9 +710,9 @@ Quickbook has some predefined macros that you can already use.</para>
 <thead><row><entry>Macro</entry><entry>Meaning</entry><entry>Example</entry></row>
 </thead>
 <tbody>
-<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Feb-14</entry></row>
-<row><entry>__TIME__</entry><entry>The current time</entry><entry>02:30:05 PM</entry></row>
-<row><entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry></row>
+<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Aug-01</entry></row>
+<row><entry>__TIME__</entry><entry>The current time</entry><entry>08:30:50 PM</entry></row>
+<row><entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>/home/ericne/boost/cvs/boost/tools/quickbook/doc/quickbook.qbk</entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -764,6 +819,33 @@ The rules for variable lists are the same as for tables, except that
 only 2 &quot;columns&quot; are allowed. The first column contains the terms, and
 the second column contains the definitions. Those familiar with HTML
 will recognize this as a &quot;definition list&quot;.</para>
+<anchor id="syntax.include" /><bridgehead renderas="sect3">Include</bridgehead><para>
+You can include one QuickBook file from another. The syntax is simply:</para>
+<programlisting><literal>[include someother.qbk]
+</literal></programlisting><para>
+The included file will be processed as if it had be cut and pasted
+into the current document, with the following exceptions:</para>
+<itemizedlist>
+<listitem>
+The __FILENAME__ predefined macro will reflect the name of the
+  file currently being processed.
+</listitem><listitem>
+Any macros defined in the included file are scoped to that file.
+</listitem>
+</itemizedlist><para>
+As the number of included QuickBook files grows, so too does the
+likelihood of two sections having the same name. Since QuickBook generates
+an anchor for each section based on the section name, it is possible to
+end up with two identically named anchors, leading to link ambiguities.
+To resolve these ambiguities, the <literal>[include]</literal> directive lets you
+specify a document id to use for the included file. You can use it like
+this:</para>
+<programlisting><literal>[include:someid someother.qbk]
+</literal></programlisting><para>
+When using this form, all auto-generated anchors will use &quot;someid&quot; as
+a unique prefix. So for instance, if there is a section in someother.qbk
+named &quot;Intro&quot;, the named anchor for that section will be &quot;someid.intro&quot;,
+and you can link to it with <literal>[link someid.intro The Intro]</literal>.</para>
 </section>
 <section id="quickbook.ref">
 <title> Quick Reference</title>
@@ -778,10 +860,10 @@ will recognize this as a &quot;definition list&quot;.</para>
 <row><entry><emphasis role="bold">bold</emphasis></entry><entry><literal>[*bold] or *bold*</literal></entry></row>
 <row><entry><emphasis role="underline">underline</emphasis></entry><entry><literal>[_underline] or _underline_</literal></entry></row>
 <row><entry><literal>teletype</literal></entry><entry><literal>[^teletype] or =teletype=</literal></entry></row>
+<row><entry><emphasis role="strikethrough">strikethrough</emphasis></entry><entry><literal>[-strikethrough] or -strikethrough-</literal></entry></row>
 <row><entry>source mode</entry><entry><literal>[c++]</literal> or <literal>[python]</literal></entry></row>
 <row><entry>inline code</entry><entry><literal>`int main();`</literal></entry></row>
-<row><entry>line break</entry><entry><literal>[br]</literal></entry></row>
-<row><entry>line break</entry><entry><literal>\n</literal></entry></row>
+<row><entry>line break</entry><entry><literal>[br] or \n</literal></entry></row>
 <row><entry>anchor</entry><entry><literal>[#anchor]</literal></entry></row>
 <row><entry>link</entry><entry><literal>[@http://www.boost.org Boost]</literal></entry></row>
 <row><entry>anchor link</entry><entry><literal>[link section.anchor Link text]</literal></entry></row>
@@ -824,6 +906,7 @@ will recognize this as a &quot;definition list&quot;.</para>
  [[a][b]]<sbr/>
     [[a][b]]<sbr/>
 ]</literal></entry></row>
+<row><entry>include</entry><entry><literal>[include someother.qbk]</literal></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -1028,6 +1111,7 @@ block_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         |</phrase><phrase role="identifier">   table</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   variablelist</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   xinclude</phrase><phrase role="special">
+        |</phrase><phrase role="identifier">   include</phrase><phrase role="special">
         )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="special">   (</phrase><phrase role="char">']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">)</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">
@@ -1175,6 +1259,19 @@ xinclude</phrase><phrase role="special"> =</phrase><phrase role="string">
             close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
 
+include</phrase><phrase role="special"> =</phrase><phrase role="string">
+       &quot;include&quot;</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="special"> 
+   !(</phrase><phrase role="char">
+        ':'</phrase><phrase role="special">
+        &gt;&gt;</phrase><phrase role="special"> (*((</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> -</phrase><phrase role="identifier"> space_p</phrase><phrase role="special">))</phrase><phrase role="special">
+        &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
+    )</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
+            close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
+    ;</phrase><phrase role="identifier">
+
 identifier</phrase><phrase role="special"> =</phrase><phrase role="special">
     *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
@@ -1246,6 +1343,7 @@ simple_format</phrase><phrase role="special"> =</phrase><phrase role="identifier
     |</phrase><phrase role="identifier">   simple_italic</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   simple_underline</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   simple_teletype</phrase><phrase role="special">
+    |</phrase><phrase role="identifier">   simple_strikethrough</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
 
 simple_bold</phrase><phrase role="special"> =</phrase><phrase role="char">
@@ -1332,6 +1430,27 @@ simple_teletype</phrase><phrase role="special"> =</phrase><phrase role="char">
     &gt;&gt;</phrase><phrase role="char"> '='</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
 
+simple_strikethrough</phrase><phrase role="special"> =</phrase><phrase role="char">
+    '-'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
+    (</phrase><phrase role="special">
+        (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '-'
+</phrase><phrase role="special">            *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
+                (</phrase><phrase role="identifier">   eol</phrase><phrase role="comment">                 // Make sure that we don't go
+</phrase><phrase role="special">                |</phrase><phrase role="special">   (</phrase><phrase role="identifier">graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '-'</phrase><phrase role="special">)</phrase><phrase role="comment">    // past a single line
+</phrase><phrase role="special">                )</phrase><phrase role="special">
+            )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> graph_p</phrase><phrase role="comment">                // graph_p must precede '-'
+</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">
+                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="comment"> // space_p or punct_p must
+</phrase><phrase role="special">        )</phrase><phrase role="comment">                               // follow '-'
+</phrase><phrase role="special">    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">
+            graph_p</phrase><phrase role="comment">                     // A single char. e.g. =c=
+</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">
+                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="special">
+        )</phrase><phrase role="special">
+    )</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="char"> '-'</phrase><phrase role="special">
+    ;</phrase><phrase role="identifier">
+
 paragraph</phrase><phrase role="special"> =</phrase><phrase role="special">
    *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
     |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="comment">                    // Make sure we don't go past
@@ -1365,6 +1484,7 @@ phrase_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         |</phrase><phrase role="identifier">   italic</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   underline</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   teletype</phrase><phrase role="special">
+        |</phrase><phrase role="identifier">   strikethrough</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;br&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char">  ']'</phrase><phrase role="special">
@@ -1474,6 +1594,11 @@ underline</phrase><phrase role="special"> =</phrase><phrase role="identifier">
 
 teletype</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'^'</phrase><phrase role="special">)</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
+    ;</phrase><phrase role="identifier">
+
+strikethrough</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+        ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase>
 </literal>

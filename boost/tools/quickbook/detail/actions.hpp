@@ -11,17 +11,21 @@
 #define BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP
 
 #include <time.h>
+#include <map>
 #include <string>
 #include <vector>
 #include <stack>
 #include <algorithm>
 #include <sstream>
 #include <boost/spirit/iterator/position_iterator.hpp>
+#include <boost/filesystem/operations.hpp>
 #include "../syntax_highlight.hpp"
 #include "utils.hpp"
 
 namespace quickbook
 {
+    namespace fs = boost::filesystem;
+
     struct error_action
     {
         // Prints an error message to std::cerr
@@ -380,13 +384,15 @@ namespace quickbook
         std::ostream& out;
     };
 
+    typedef symbols<std::string> macros_type;
+
     struct code_action
     {
         // Does the actual syntax highlighing of code
 
         code_action(std::ostream& out,
                     std::string const & source_mode,
-                    symbols<std::string> const& macro)
+                    macros_type const& macro)
         : out(out)
         , source_mode(source_mode)
         , cpp_p(out, macro, do_macro_action(out))
@@ -427,7 +433,7 @@ namespace quickbook
         cpp_highlight<
             span
           , space
-          , symbols<std::string>
+          , macros_type
           , do_macro_action
           , unexpected_char
           , std::ostream>
@@ -436,7 +442,7 @@ namespace quickbook
         python_highlight<
             span
           , space
-          , symbols<std::string>
+          , macros_type
           , do_macro_action
           , unexpected_char
           , std::ostream>
@@ -449,7 +455,7 @@ namespace quickbook
 
         inline_code_action(std::ostream& out,
                            std::string const& source_mode,
-                           symbols<std::string> const& macro)
+                           macros_type const& macro)
         : out(out)
         , source_mode(source_mode)
         , cpp_p(out, macro, do_macro_action(out))
@@ -483,7 +489,7 @@ namespace quickbook
         cpp_highlight<
             span
           , space
-          , symbols<std::string>
+          , macros_type
           , do_macro_action
           , unexpected_char
           , std::ostream>
@@ -492,7 +498,7 @@ namespace quickbook
         python_highlight<
             span
           , space
-          , symbols<std::string>
+          , macros_type
           , do_macro_action
           , unexpected_char
           , std::ostream>
@@ -550,6 +556,8 @@ namespace quickbook
         const char* underline_post_     = "</emphasis>";
         const char* teletype_pre_       = "<literal>";
         const char* teletype_post_      = "</literal>";
+        const char* strikethrough_pre_  = "<emphasis role=\"strikethrough\">";
+        const char* strikethrough_post_ = "</emphasis>";
         const char* break_mark          = "<sbr/>\n";
         const char* url_pre_            = "<ulink url=\"";
         const char* url_post_           = "</ulink>";
@@ -914,12 +922,72 @@ namespace quickbook
         void operator()(Iterator first, Iterator last) const
         {
             out << "\n<xi:include href=\"";
-            while (first != last)
-                detail::print_char(*first++, out);
+            detail::print_string(detail::escape_uri(std::string(first, last)), out);
             out << "\" />\n";
         }
 
         std::ostream& out;
+    };
+
+    template<typename Actions>
+    struct include_action
+    {
+        // Handles QBK includes
+
+        include_action(Actions& actions_)
+            : actions(actions_) {}
+
+        template <typename Iterator>
+        void operator()(Iterator first, Iterator last) const
+        {
+            fs::path filein(std::string(first, last), fs::native);
+            std::string doc_type, doc_id, doc_dirname, doc_last_revision;
+
+            // check to see if the path is complete and if not, make it relative to the current path
+            if(!filein.is_complete())
+            {
+                filein = actions.filename.branch_path() / filein;
+                filein.normalize();
+            }
+
+            // swap the filenames
+            std::swap(actions.filename, filein);
+
+            // save the doc info strings
+            actions.doc_type.swap(doc_type);
+            actions.doc_id.swap(doc_id);
+            actions.doc_dirname.swap(doc_dirname);
+            actions.doc_last_revision.swap(doc_last_revision);
+
+            // scope the macros
+            macros_type macro = actions.macro;
+
+            // if an id is specified in this include (in in [include:id foo.qbk]
+            // then use it as the doc_id.
+            if(!actions.include_doc_id.empty())
+            {
+                actions.doc_id = actions.include_doc_id;
+                actions.include_doc_id.clear();
+            }
+
+            // update the __FILENAME__ macro
+            *boost::spirit::find(actions.macro, "__FILENAME__") = actions.filename.native_file_string();
+
+            // parse the file
+            quickbook::parse(actions.filename.native_file_string().c_str(), actions, true);
+
+            // restore the values
+            std::swap(actions.filename, filein);
+
+            actions.doc_type.swap(doc_type);
+            actions.doc_id.swap(doc_id);
+            actions.doc_dirname.swap(doc_dirname);
+            actions.doc_last_revision.swap(doc_last_revision);
+
+            actions.macro = macro;
+        }
+
+        Actions& actions;
     };
 
     struct xml_author
@@ -956,7 +1024,7 @@ namespace quickbook
     };
 
     template <typename Actions>
-    void pre(std::ostream& out, Actions& actions)
+    void pre(std::ostream& out, Actions& actions, bool ignore_docinfo = false)
     {
         // The quickbook file has been parsed. Now, it's time to
         // generate the output. Here's what we'll do *before* anything else.
@@ -981,6 +1049,12 @@ namespace quickbook
             );
 
             actions.doc_last_revision = strdate;
+        }
+
+        // if we're ignoring the document info, we're done.
+        if (ignore_docinfo)
+        {
+            return;
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -1057,8 +1131,14 @@ namespace quickbook
     }
 
     template <typename Actions>
-    void post(std::ostream& out, Actions& actions)
+    void post(std::ostream& out, Actions& actions, bool ignore_docinfo = false)
     {
+        // if we're ignoring the document info, do nothing.
+        if (ignore_docinfo)
+        {
+            return;
+        }
+
         // We've finished generating our output. Here's what we'll do
         // *after* everything else.
         out << "\n</" << actions.doc_type << ">\n\n";

@@ -96,6 +96,7 @@ namespace quickbook
                         |   table
                         |   variablelist
                         |   xinclude
+                        |   include
                         )
                     >>  (   (']' >> +eol)
                         |   eps_p                       [self.actions.error]
@@ -243,8 +244,21 @@ namespace quickbook
                             close_bracket))             [self.actions.xinclude]
                     ;
 
+                include =
+                       "include"
+                    >> hard_space
+                    >> 
+                   !(
+                        ':'
+                        >> (*((alnum_p | '_') - space_p))[assign_a(self.actions.include_doc_id)]
+                        >> space
+                    )
+                    >> (*(anychar_p -
+                            close_bracket))             [self.actions.include]
+                    ;
+
                 identifier =
-                    *(anychar_p - (space_p | ']'))
+                    +(anychar_p - (space_p | ']'))
                     ;
 
                 source_mode =
@@ -314,6 +328,7 @@ namespace quickbook
                     |   simple_italic
                     |   simple_underline
                     |   simple_teletype
+                    |   simple_strikethrough
                     ;
 
                 simple_bold =
@@ -400,6 +415,27 @@ namespace quickbook
                     >> '='
                     ;
 
+                simple_strikethrough =
+                    '-' >>
+                    (
+                        (   graph_p >>                  // graph_p must follow '-'
+                            *(anychar_p -
+                                (   eol                 // Make sure that we don't go
+                                |   (graph_p >> '-')    // past a single line
+                                )
+                            ) >> graph_p                // graph_p must precede '-'
+                            >> eps_p('-'
+                                >> (space_p | punct_p)) // space_p or punct_p must
+                        )                               // follow '-'
+                    |   (
+                            graph_p                     // A single char. e.g. =c=
+                            >> eps_p('-'
+                                >> (space_p | punct_p))
+                        )
+                    )                                   [self.actions.simple_strikethrough]
+                    >> '-'
+                    ;
+
                 paragraph =
                    *(   common
                     |   (anychar_p -                    // Make sure we don't go past
@@ -433,6 +469,7 @@ namespace quickbook
                         |   italic
                         |   underline
                         |   teletype
+                        |   strikethrough
                         |   str_p("br")                 [self.actions.break_]
                         )
                     >>  ']'
@@ -544,6 +581,11 @@ namespace quickbook
                         ch_p('^')                       [self.actions.teletype_pre]
                     >>  blank >> phrase                 [self.actions.teletype_post]
                     ;
+
+                strikethrough =
+                        ch_p('-')                       [self.actions.strikethrough_pre]
+                    >>  blank >> phrase                 [self.actions.strikethrough_post]
+                    ;
             }
 
             bool is_not_preformatted;
@@ -552,14 +594,14 @@ namespace quickbook
                             code_line, paragraph, space, blank, comment, headings,
                             h1, h2, h3, h4, h5, h6, hr, blurb, blockquote,
                             phrase, phrase_markup, image, list, close_bracket,
-                            ordered_list, bold, italic, underline, teletype,
+                            ordered_list, bold, italic, underline, teletype, strikethrough,
                             escape, def_macro, identifier, url, table, table_row,
                             variablelist, varlistentry, varlistterm, varlistitem,
                             table_cell, preformatted, list_item, common,
                             funcref, classref, memberref, enumref, headerref, anchor, link,
-                            begin_section, end_section, xinclude, hard_space, eol,
+                            begin_section, end_section, xinclude, include, hard_space, eol,
                             inline_code, simple_format, simple_bold, simple_italic,
-                            simple_underline, simple_teletype;
+                            simple_underline, simple_teletype, simple_strikethrough;
 
             rule<Scanner> const&
             start() const { return library; }

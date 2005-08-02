@@ -13,6 +13,8 @@
 #include "actions.hpp"
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/program_options.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/ref.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -27,6 +29,7 @@
 namespace quickbook
 {
     using namespace boost::spirit;
+    namespace fs = boost::filesystem;
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -35,9 +38,9 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
     struct actions
     {
-        actions(char const* filein_, char const* fileout_)
-            : filename(filein_)
-            , out(fileout_)
+        actions(char const* filein_, std::ostream &out_)
+            : filename(fs::complete(fs::path(filein_, fs::native)))
+            , out(out_)
             , table_span(0)
             , table_header()
             , source_mode("c++")
@@ -81,10 +84,13 @@ namespace quickbook
             , underline_post(phrase, underline_post_)
             , teletype_pre(phrase, teletype_pre_)
             , teletype_post(phrase, teletype_post_)
+            , strikethrough_pre(phrase, strikethrough_pre_)
+            , strikethrough_post(phrase, strikethrough_post_)
             , simple_bold(phrase, bold_pre_, bold_post_)
             , simple_italic(phrase, italic_pre_, italic_post_)
             , simple_underline(phrase, underline_pre_, underline_post_)
             , simple_teletype(phrase, teletype_pre_, teletype_post_)
+            , simple_strikethrough(phrase, strikethrough_pre_, strikethrough_post_)
             , variablelist(*this)
             , start_varlistentry(phrase, start_varlistentry_)
             , end_varlistentry(phrase, end_varlistentry_)
@@ -109,16 +115,13 @@ namespace quickbook
             , begin_section(out, doc_id, section_id)
             , end_section(out, "</section>")
             , xinclude(out)
+            , include(*this)
         {
-            std::cout << "Generating Output File: "
-                << fileout_
-                << std::endl;
-
             // add the predefined macros
             macro.add
                 ("__DATE__", std::string(quickbook_get_date))
                 ("__TIME__", std::string(quickbook_get_time))
-                ("__FILENAME__", std::string(filein_))
+                ("__FILENAME__", filename.native_file_string())
             ;
         }
 
@@ -126,13 +129,13 @@ namespace quickbook
         typedef macro_def_action<actions> macro_def_action;
         typedef table_action<actions> table_action;
         typedef variablelist_action<actions> variablelist_action;
+        typedef include_action<actions> include_action;
 
-        char const*             filename;
-        std::string             directory;
+        fs::path                filename;
         std::string             macro_id;
         std::string             phrase_save;
         std::string             table_title;
-        std::ofstream           out;
+        std::ostream&           out;
         error_action            error;
 
         typedef std::vector<std::string> copyright_list;
@@ -150,6 +153,7 @@ namespace quickbook
         author_list             doc_authors;
         std::string             doc_license;
         std::string             doc_last_revision;
+        std::string             include_doc_id;
 
         std::string             page_title;
         std::string             section_id;
@@ -158,7 +162,7 @@ namespace quickbook
         unsigned                table_span;
         std::string             table_header;
 
-        symbols<std::string>    macro;
+        macros_type             macro;
         std::string             source_mode;
         code_action             code;
         inline_code_action      inline_code;
@@ -196,11 +200,14 @@ namespace quickbook
         markup_action           underline_post;
         markup_action           teletype_pre;
         markup_action           teletype_post;
+        markup_action           strikethrough_pre;
+        markup_action           strikethrough_post;
 
         simple_phrase_action    simple_bold;
         simple_phrase_action    simple_italic;
         simple_phrase_action    simple_underline;
         simple_phrase_action    simple_teletype;
+        simple_phrase_action    simple_strikethrough;
 
         variablelist_action     variablelist;
         markup_action           start_varlistentry;
@@ -228,6 +235,7 @@ namespace quickbook
         begin_section_action    begin_section;
         markup_action           end_section;
         xinclude_action         xinclude;
+        include_action          include;
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -275,7 +283,7 @@ namespace quickbook
     //
     ///////////////////////////////////////////////////////////////////////////
     static int
-    parse(char const* filein_, char const* fileout_)
+    parse(char const* filein_, actions& actor, bool ignore_docinfo = false)
     {
         using std::cerr;
         using std::vector;
@@ -290,21 +298,18 @@ namespace quickbook
         iterator_type first(storage.begin(), storage.end(), filein_);
         iterator_type last(storage.end(), storage.end());
 
-        actions actor(filein_, fileout_);
-
         doc_info_grammar<actions> l(actor);
         parse_info<iterator_type> info = parse(first, last, l);
 
-        if (info.hit)
+        if (info.hit || ignore_docinfo)
         {
-            pre(actor.out, actor);
+            pre(actor.out, actor, ignore_docinfo);
 
-            first = info.stop;
             quickbook_grammar<actions> g(actor);
-            info = parse(first, last, g);
+            info = parse(info.hit ? info.stop : first, last, g);
             if (info.full)
             {
-                post(actor.out, actor);
+                post(actor.out, actor, ignore_docinfo);
             }
         }
 
@@ -319,6 +324,20 @@ namespace quickbook
         }
 
         return 0;
+    }
+
+    static int
+    parse(char const* filein_, std::ostream& out, bool ignore_docinfo = false)
+    {
+        actions actor(filein_, out);
+        return parse(filein_, actor);
+    }
+
+    static int
+    parse(char const* filein_, char const* fileout_, bool ignore_docinfo = false)
+    {
+        std::ofstream fileout(fileout_);
+        return parse(filein_, fileout);
     }
 }
 
@@ -372,6 +391,10 @@ main(int argc, char* argv[])
             {
                 fileout = argv[2];
             }
+
+            std::cout << "Generating Output File: "
+                << fileout
+                << std::endl;
     
             return quickbook::parse(argv[1], fileout.c_str());
         }

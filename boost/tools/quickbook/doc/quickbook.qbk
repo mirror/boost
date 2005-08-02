@@ -93,12 +93,12 @@ Can be placed anywhere.
 [h3 Font Styles]
 
 [pre'''
-['italic], [*bold], [_underline], [^teletype]
+['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 ''']
 
 will generate:
 
-['italic], [*bold], [_underline], [^teletype]
+['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 
 Like all non-terminal phrase level elements, this can of course be nested:
 
@@ -115,12 +115,12 @@ will generate:
 Simple markup for formatting text, common in many applications, is now supported:
 
 [pre'''
-/italic/, *bold*, _underline_, =teletype=
+/italic/, *bold*, _underline_, =teletype=, -strikethrough-
 ''']
 
 will generate:
 
-/italic/, *bold*, _underline_, =teletype=
+/italic/, *bold*, _underline_, =teletype=, -strikethrough-
 
 Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
 are much stricter.
@@ -842,6 +842,38 @@ only 2 "columns" are allowed. The first column contains the terms, and
 the second column contains the definitions. Those familiar with HTML
 will recognize this as a "definition list".
 
+[h3 Include]
+
+You can include one QuickBook file from another. The syntax is simply:
+
+[pre'''
+[include someother.qbk]
+''']
+
+The included file will be processed as if it had be cut and pasted
+into the current document, with the following exceptions:
+
+* The '''__FILENAME__''' predefined macro will reflect the name of the
+  file currently being processed.
+* Any macros defined in the included file are scoped to that file.
+
+As the number of included QuickBook files grows, so too does the
+likelihood of two sections having the same name. Since QuickBook generates
+an anchor for each section based on the section name, it is possible to
+end up with two identically named anchors, leading to link ambiguities.
+To resolve these ambiguities, the [^\[include\]] directive lets you
+specify a document id to use for the included file. You can use it like
+this:
+
+[pre'''
+[include:someid someother.qbk]
+''']
+
+When using this form, all auto-generated anchors will use "someid" as
+a unique prefix. So for instance, if there is a section in someother.qbk
+named "Intro", the named anchor for that section will be "someid.intro",
+and you can link to it with [^\[link someid.intro The Intro\]].
+
 [endsect]
 [section:ref Quick Reference]
 
@@ -852,10 +884,10 @@ will recognize this as a "definition list".
     [[[*bold]]              [[^'''[*bold] or *bold*''']]]
     [[[_underline]]         [[^'''[_underline] or _underline_''']]]
     [[[^teletype]]          [[^'''[^teletype] or =teletype=''']]]
+    [[[-strikethrough]]     [[^'''[-strikethrough] or -strikethrough-''']]]
     [[source mode]          [[^\[c++\]] or [^\[python\]]]]
     [[inline code]          [[^'''`int main();`''']]]
-    [[line break]           [[^'''[br]''']]]
-    [[line break]           [[^'''\n''']]]
+    [[line break]           [[^'''[br] or \n''']]]
     [[anchor]               [[^'''[#anchor]''']]]
     [[link]                 [[^'''[@http://www.boost.org Boost]''']]]
     [[anchor link]          [[^'''[link section.anchor Link text]''']]]
@@ -886,6 +918,7 @@ will recognize this as a "definition list".
     [[blurb]                [[^'''[blurb advertisement or note...]''']]]
     [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]]
     [[variablelist]         [[^[variablelist Title\n \[\[a\]\[b\]\]\n    \[\[a\]\[b\]\]\n\]]]]
+    [[include]              [[^'''[include someother.qbk]''']]]
 ]
 
 [endsect]
@@ -1084,6 +1117,7 @@ will recognize this as a "definition list".
             |   table
             |   variablelist
             |   xinclude
+            |   include
             )
         >>  (   (']' >> +eol)
             |   eps_p
@@ -1231,6 +1265,19 @@ will recognize this as a "definition list".
                 close_bracket))
         ;
 
+    include =
+           "include"
+        >> hard_space
+        >> 
+       !(
+            ':'
+            >> (*((alnum_p | '_') - space_p))
+            >> space
+        )
+        >> (*(anychar_p -
+                close_bracket))
+        ;
+
     identifier =
         *(anychar_p - (space_p | ']'))
         ;
@@ -1302,6 +1349,7 @@ will recognize this as a "definition list".
         |   simple_italic
         |   simple_underline
         |   simple_teletype
+        |   simple_strikethrough
         ;
 
     simple_bold =
@@ -1388,6 +1436,27 @@ will recognize this as a "definition list".
         >> '='
         ;
 
+    simple_strikethrough =
+        '-' >>
+        (
+            (   graph_p >>                  // graph_p must follow '-'
+                *(anychar_p -
+                    (   eol                 // Make sure that we don't go
+                    |   (graph_p >> '-')    // past a single line
+                    )
+                ) >> graph_p                // graph_p must precede '-'
+                >> eps_p('-'
+                    >> (space_p | punct_p)) // space_p or punct_p must
+            )                               // follow '-'
+        |   (
+                graph_p                     // A single char. e.g. =c=
+                >> eps_p('-'
+                    >> (space_p | punct_p))
+            )
+        )
+        >> '-'
+        ;
+
     paragraph =
        *(   common
         |   (anychar_p -                    // Make sure we don't go past
@@ -1421,6 +1490,7 @@ will recognize this as a "definition list".
             |   italic
             |   underline
             |   teletype
+            |   strikethrough
             |   str_p("br")
             )
         >>  ']'
@@ -1530,6 +1600,11 @@ will recognize this as a "definition list".
 
     teletype =
             ch_p('^')
+        >>  blank >> phrase
+        ;
+
+    strikethrough =
+            ch_p('-')
         >>  blank >> phrase
         ;
 
