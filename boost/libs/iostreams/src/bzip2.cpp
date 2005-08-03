@@ -4,6 +4,10 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+// To configure Boost to work with libbz2, see the 
+// installation instructions here:
+// http://boost.org/libs/iostreams/doc/index.html?path=7
+
 // Define BOOST_IOSTREAMS_SOURCE so that <boost/iostreams/detail/config.hpp> 
 // knows that we are building the library (possibly exporting code), rather 
 // than using it (possibly importing code).
@@ -11,8 +15,10 @@
 
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/filter/bzip2.hpp> 
-#include "bzlib.h"  // Julian R Seward's header.
-
+#include "bzlib.h"  // To configure Boost to work with libbz2, see the 
+                    // installation instructions here:
+                    // http://boost.org/libs/iostreams/doc/index.html?path=7
+                    
 namespace boost { namespace iostreams {
 
 namespace bzip2 {

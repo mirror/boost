@@ -4,6 +4,10 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+// To configure Boost to work with zlib, see the 
+// installation instructions here:
+// http://boost.org/libs/iostreams/doc/index.html?path=7
+
 // Define BOOST_IOSTREAMS_SOURCE so that <boost/iostreams/detail/config.hpp> 
 // knows that we are building the library (possibly exporting code), rather 
 // than using it (possibly importing code).
@@ -11,7 +15,9 @@
 
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/filter/zlib.hpp> 
-#include "zlib.h"  // Jean-loup Gailly's and Mark Adler's header.
+#include "zlib.h"   // To configure Boost to work with zlib, see the 
+                    // installation instructions here:
+                    // http://boost.org/libs/iostreams/doc/index.html?path=7
 
 namespace boost { namespace iostreams {
 
