@@ -58,17 +58,18 @@ rule statechart-st-run ( name : sources + : requirements * )
 
 rule statechart-st-run-variants ( cpp-source )
 {
-  # TODO: For some reason v1 approach doesn't work. This is just a temp
-  # workaround
-  test-suite $(cpp-source)
-    : [ statechart-st-run $(cpp-source)Normal
-          : $(cpp-source).cpp : $(normal) ]
-      [ statechart-st-run $(cpp-source)Native
-          : $(cpp-source).cpp : $(native) ]
-      [ statechart-st-run $(cpp-source)Relaxed
-          : $(cpp-source).cpp : $(relaxed) ]
-      [ statechart-st-run $(cpp-source)Both
-          : $(cpp-source).cpp : $(both) ] ;
+  local result ;
+
+  result += [ statechart-st-run $(cpp-source)Normal
+                : $(cpp-source).cpp : $(normal) ] ;
+  result += [ statechart-st-run $(cpp-source)Native
+                : $(cpp-source).cpp : $(native) ] ;
+  result += [ statechart-st-run $(cpp-source)Relaxed
+                : $(cpp-source).cpp : $(relaxed) ] ;
+  result += [ statechart-st-run $(cpp-source)Both
+                : $(cpp-source).cpp : $(both) ] ;
+
+  return $(result) ;
 }
 
 rule statechart-compile-fail ( name : cpp-sources + : requirements * )
@@ -78,17 +79,18 @@ rule statechart-compile-fail ( name : cpp-sources + : requirements * )
 
 rule statechart-compile-fail-variants ( cpp-source )
 {
-  # TODO: For some reason v1 approach doesn't work. This is just a temp
-  # workaround
-  test-suite $(cpp-source)
-    : [ statechart-compile-fail $(cpp-source)Normal
-          : $(cpp-source) : $(normal) ]
-      [ statechart-compile-fail $(cpp-source)Native
-          : $(cpp-source) : $(native) ]
-      [ statechart-compile-fail $(cpp-source)Relaxed
-          : $(cpp-source) : $(relaxed) ]
-      [ statechart-compile-fail $(cpp-source)Both
-          : $(cpp-source) : $(both) ] ;
+  local result ;
+
+  result += [ statechart-compile-fail $(cpp-source)Normal
+                : $(cpp-source) : $(normal) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Native
+                : $(cpp-source) : $(native) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Relaxed
+                : $(cpp-source) : $(relaxed) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Both
+                : $(cpp-source) : $(both) ] ;
+
+  return $(result) ;
 }
 
 rule statechart-st-lib-run (
