@@ -13,7 +13,7 @@
          
 rule bzip2_config 
 {
-    if $(NO_COMPESSION)
+    if $(NO_COMPRESSION)
     {
          NO_BZIP2 = 1 ;
     } 

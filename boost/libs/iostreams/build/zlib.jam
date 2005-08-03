@@ -13,7 +13,7 @@
          
 rule zlib_config 
 {
-    if $(NO_COMPESSION)
+    if $(NO_COMPRESSION)
     {
          NO_ZLIB = 1 ;
     } 
