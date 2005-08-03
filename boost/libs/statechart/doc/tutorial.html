@@ -96,41 +96,41 @@ statechart ...</p>
 
 namespace sc = boost::statechart;
 
-// We are declaring all types as <code>struct</code>s only to avoid having 
-  to
-// type <code>public</code>. If you don't mind doing so, you can just as 
-  well
+// We are declaring all types as <code>struct</code>s only to avoid having to
+// type <code>public</code>. If you don't mind doing so, you can just as well
 // use <code>class.</code>
 
 // We need to forward-declare the initial state because it can
-// only be defined at a point where the state machine is defined.
+// only be defined at a point where the state machine is
+// defined.
 struct Greeting;
 
 // Boost.Statechart makes heavy use of the curiously recurring
 // template pattern. The deriving class must always be passed as
 // the first parameter to all base class templates.
 //
-// The state machine must be informed which state it has to enter
-// when the machine is initiated. That's why Greeting is passed as
-// the second template parameter.
+// The state machine must be informed which state it has to
+// enter when the machine is initiated. That's why Greeting is
+// passed as the second template parameter.
 struct Machine : sc::state_machine&lt; Machine, Greeting &gt; {};
 
-// For each state we need to define which state machine it belongs
-// to and where it is located in the statechart. Both is specified
-// with Context argument that is passed to simple_state&lt;&gt;. For a
-// flat state machine as we have it here, the context is always the
-// state machine. Consequently, Machine must be passed as the
-// second template parameter to Greeting's base (the Context
-// parameter is explained in more detail in the next example).
+// For each state we need to define which state machine it
+// belongs to and where it is located in the statechart. Both is
+// specified with Context argument that is passed to
+// simple_state&lt;&gt;. For a flat state machine as we have it here,
+// the context is always the state machine. Consequently,
+// Machine must be passed as the second template parameter to
+// Greeting's base (the Context parameter is explained in more
+// detail in the next example).
 struct Greeting : sc::simple_state&lt; Greeting, Machine &gt;
 {
   // Whenever the state machine enters a state, it creates an
   // object of the corresponding state class. The object is then
   // kept alive as long as the machine remains in the state.
-  // Finally, the object is destroyed when the state machine exits
-  // the state. Therefore, a state entry action can be defined by
-  // adding a constructor and a state exit action can be defined by
-  // adding a destructor.
+  // Finally, the object is destroyed when the state machine
+  // exits the state. Therefore, a state entry action can be
+  // defined by adding a constructor and a state exit action can
+  // be defined by adding a destructor.
   Greeting() { std::cout &lt;&lt; &quot;Hello World!\n&quot;; } // entry
   ~Greeting() { std::cout &lt;&lt; &quot;Bye Bye World!\n&quot;; } // exit
 };
@@ -138,12 +138,12 @@ struct Greeting : sc::simple_state&lt; Greeting, Machine &gt;
 int main()
 {
   Machine myMachine;
-  // The machine is not yet running after construction. We start it
-  // by calling initiate(). This triggers the construction of the
-  // initial state Greeting
+  // The machine is not yet running after construction. We start
+  // it by calling initiate(). This triggers the construction of
+  // the initial state Greeting
   myMachine.initiate();
-  // When we leave main(), myMachine is destructed what leads to the
-  // destruction of all currently active states.
+  // When we leave main(), myMachine is destructed what leads to
+  // the destruction of all currently active states.
   return 0;
 }</pre>
 <p>This prints <code>Hello World!</code> and <code>Bye Bye World!</code> before 
@@ -212,10 +212,10 @@ struct Running : sc::simple_state&lt; Running, Active &gt; {};
 struct Stopped : sc::simple_state&lt; Stopped, Active &gt; {};
 
 // Because the context of a state must be a complete type (i.e.
-// not forward declared), a machine must be defined from &quot;outside
-// to inside&quot;. That is, we always start with the state machine,
-// followed by outermost states, followed by the direct inner
-// states of outermost states and so on. We can do so in a
+// not forward declared), a machine must be defined from
+// &quot;outside to inside&quot;. That is, we always start with the state
+// machine, followed by outermost states, followed by the direct
+// inner states of outermost states and so on. We can do so in a
 // breadth-first or depth-first way or employ a mixture of the
 // two.
 
@@ -526,9 +526,9 @@ struct Idle : sc::simple_state&lt; Idle, NotShooting &gt;
 // The following includes are only made here but not in
 // Camera.hpp
 // The Shooting and Configuring states can themselves apply the
-// same pattern to hide their inner implementation, which ensures
-// that the two teams working on the Camera state machine will
-// never need to disturb each other.
+// same pattern to hide their inner implementation, which
+// ensures that the two teams working on the Camera state
+// machine will never need to disturb each other.
 #include &quot;Configuring.hpp&quot;
 #include &quot;Shooting.hpp&quot;
 
