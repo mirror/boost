@@ -96,11 +96,41 @@ statechart ...</p>
 
 namespace sc = boost::statechart;
 
+// We are declaring all types as <code>struct</code>s only to avoid having 
+  to
+// type <code>public</code>. If you don't mind doing so, you can just as 
+  well
+// use <code>class.</code>
+
+// We need to forward-declare the initial state because it can
+// only be defined at a point where the state machine is defined.
 struct Greeting;
+
+// Boost.Statechart makes heavy use of the curiously recurring
+// template pattern. The deriving class must always be passed as
+// the first parameter to all base class templates.
+//
+// The state machine must be informed which state it has to enter
+// when the machine is initiated. That's why Greeting is passed as
+// the second template parameter.
 struct Machine : sc::state_machine&lt; Machine, Greeting &gt; {};
 
+// For each state we need to define which state machine it belongs
+// to and where it is located in the statechart. Both is specified
+// with Context argument that is passed to simple_state&lt;&gt;. For a
+// flat state machine as we have it here, the context is always the
+// state machine. Consequently, Machine must be passed as the
+// second template parameter to Greeting's base (the Context
+// parameter is explained in more detail in the next example).
 struct Greeting : sc::simple_state&lt; Greeting, Machine &gt;
 {
+  // Whenever the state machine enters a state, it creates an
+  // object of the corresponding state class. The object is then
+  // kept alive as long as the machine remains in the state.
+  // Finally, the object is destroyed when the state machine exits
+  // the state. Therefore, a state entry action can be defined by
+  // adding a constructor and a state exit action can be defined by
+  // adding a destructor.
   Greeting() { std::cout &lt;&lt; &quot;Hello World!\n&quot;; } // entry
   ~Greeting() { std::cout &lt;&lt; &quot;Bye Bye World!\n&quot;; } // exit
 };
@@ -108,43 +138,16 @@ struct Greeting : sc::simple_state&lt; Greeting, Machine &gt;
 int main()
 {
   Machine myMachine;
+  // The machine is not yet running after construction. We start it
+  // by calling initiate(). This triggers the construction of the
+  // initial state Greeting
   myMachine.initiate();
+  // When we leave main(), myMachine is destructed what leads to the
+  // destruction of all currently active states.
   return 0;
 }</pre>
-<p>This prints <code>Hello World!</code> and <code>Bye Bye World!</code> 
-before exiting. The first line is printed as a result of calling <code>
-initiate()</code>, which leads to the <code>Greeting</code> state begin 
-entered. At the end of <code>main()</code>, the <code>myMachine</code> object 
-is destroyed what automatically exits the <code>Greeting</code> state.</p>
-<p>A few remarks:</p>
-<ul>
-  <li>Boost.Statechart makes heavy use of the
-  <a href="http://www.informit.com/articles/article.asp?p=31473&seqNum=3">
-  curiously recurring template pattern</a>. The deriving class must always be 
-  passed as the first parameter to all base class templates</li>
-  <li>The state machine must be informed which state it has to enter when the 
-  machine is initiated. That's why <code>Greeting</code> is passed as the 
-  second template parameter of <code>Machine</code>'s base. We have to forward 
-  declare <code>Greeting</code> for this purpose</li>
-  <li>For each state we need to define which state machine it belongs to and 
-  where it is located in the statechart. Both is specified with <code>Context</code> 
-  argument that is passed to <code>simple_state&lt;&gt;</code>. For a flat state 
-  machine as we have it here, the context is always the state machine. 
-  Consequently, <code>Machine</code> must be passed as the second template 
-  parameter to <code>Greeting</code>'s base (the <code>Context</code> 
-  parameter is explained in more detail in the next example)</li>
-  <li>Whenever the state machine enters a state, it creates an object of the 
-  corresponding state class. The object is then kept alive as long as the 
-  machine remains in the state. Finally, the object is destroyed when the 
-  state machine exits the state. Therefore, a state entry action can be 
-  defined by adding a constructor and a state exit action can be defined by 
-  adding a destructor</li>
-  <li>The machine is not yet running after construction. We start it by 
-  calling <code>initiate()</code></li>
-  <li>We are declaring all types as <code>struct</code>s only to avoid having 
-  to type <code>public</code>. If you don't mind doing so, you can just as 
-  well use <code>class</code></li>
-</ul>
+<p>This prints <code>Hello World!</code> and <code>Bye Bye World!</code> before 
+exiting.</p>
 <h2><a name="Basic topics: A stop watch">Basic topics: A stop watch</a></h2>
 <p>Next we will model a simple mechanical stop watch with a state machine. 
 Such watches typically have two buttons:</p>
@@ -189,10 +192,32 @@ struct Active;
 struct StopWatch : sc::state_machine&lt; StopWatch, Active &gt; {};
 
 struct Stopped;
+
+// The simple_state class template accepts up to four parameters:
+// - The third parameter specifies the inner initial state, if
+//   there is one. Here, only Active has inner states, which is
+//   why it needs to pass its inner initial state Stopped to its
+//   base
+// - The fourth parameter specifies whether and what kind of
+//   history is kept
+
+// Active is the outermost state and therefore needs to pass the
+// state machine class it belongs to
 struct Active : sc::simple_state&lt;
   Active, StopWatch, Stopped &gt; {};
+
+// Stopped and Running both specify Active as their Context,
+// which makes them nested inside Active
 struct Running : sc::simple_state&lt; Running, Active &gt; {};
 struct Stopped : sc::simple_state&lt; Stopped, Active &gt; {};
+
+// Because the context of a state must be a complete type (i.e.
+// not forward declared), a machine must be defined from &quot;outside
+// to inside&quot;. That is, we always start with the state machine,
+// followed by outermost states, followed by the direct inner
+// states of outermost states and so on. We can do so in a
+// breadth-first or depth-first way or employ a mixture of the
+// two.
 
 int main()
 {
@@ -200,29 +225,7 @@ int main()
   myWatch.initiate();
   return 0;
 }</pre>
-<p>This compiles but doesn't do anything observable yet. A few comments:</p>
-<ul>
-  <li>The <code>simple_state</code> class template accepts up to four 
-  parameters:<ul>
-    <li>The third parameter specifies the inner initial state, if there is 
-    one. Here, only Active has inner states, which is why it needs to pass its 
-    inner initial state Stopped to its base</li>
-    <li>The fourth parameter specifies whether and what kind of history is kept</li>
-  </ul>
-  </li>
-  <li>A state is defined as an inner state simply by passing its outer state 
-  as its <code>Context</code> parameter (where
-  <a href="definitions.html#Outermost state">outermost states</a> pass the 
-  state machine). Here, <code>Active</code> is the outermost state and 
-  therefore needs to pass the state machine class it belongs to. <code>Stopped</code> 
-  and <code>Running</code> both specify <code>Active</code> as their <code>
-  Context</code>, which makes them nested inside <code>Active</code></li>
-  <li>Because the context of a state must be a complete type (i.e. not forward 
-  declared), a machine must be defined from &quot;outside to inside&quot;. That is, we 
-  always start with the state machine, followed by outermost states, followed 
-  by the direct inner states of outermost states and so on. We can do so in a 
-  breadth-first or depth-first way or employ a mixture of the two.</li>
-</ul>
+<p>This compiles but doesn't do anything observable yet.</p>
 <h3><a name="Adding reactions">Adding reactions</a></h3>
 <p>For the moment we will use only one type of reaction: transitions. We <b>
 insert</b> the bold parts of the following code:</p>
@@ -246,6 +249,11 @@ struct Stopped : sc::simple_state&lt; Stopped, Active &gt;
   <b>typedef sc::transition&lt; EvStartStop, Running &gt; reactions;</b>
 };
 
+// A state can define an arbitrary number of reactions. That's
+// why we have to put them into an mpl::list&lt;&gt; as soon as there
+// is more than one of them
+// (see <a href="#Specifying multiple reactions for a state">Specifying multiple reactions for a state</a>).
+
 int main()
 {
   StopWatch myWatch;
@@ -256,11 +264,7 @@ int main()
 </b>  <b>myWatch.process_event( EvReset() );
 </b>  return 0;
 }</pre>
-<p>A state can define an arbitrary number of reactions. That's why we have to 
-put them into an <code>mpl::list&lt;&gt;</code> as soon as there is more than one of 
-them (see <a href="#Specifying multiple reactions for a state">Specifying 
-multiple reactions for a state</a>).<br>
-Now we have all the states and all the transitions in place and a number of 
+<p>Now we have all the states and all the transitions in place and a number of 
 events are also sent to the stop watch. The machine dutifully makes the 
 transitions we would expect, but no actions are executed yet.</p>
 <h3><a name="State-local storage">State-local storage</a></h3>
@@ -302,8 +306,14 @@ struct Running : sc::simple_state&lt; Running, Active &gt;
 
     <b>Running() : startTime_( std::time( 0 ) ) {}
 </b>    <b>~Running()
-</b>    <b>{
-</b>      <b>context&lt; Active &gt;().ElapsedTime() +=
+</b>    <b>{</b>
+      // Similar to when a derived class object accesses its
+      // base class portion, context&lt;&gt;() is used to gain
+      // access to the direct or indirect context of a state.
+      // This can either be a direct or indirect outer state
+      // or the state machine itself
+      // (e.g. here: context&lt; StopWatch &gt;()).
+      <b>context&lt; Active &gt;().ElapsedTime() +=
 </b>        <b>std::difftime( std::time( 0 ), startTime_ );
 </b>    <b>}
 </b>  <b>private:
@@ -311,11 +321,7 @@ struct Running : sc::simple_state&lt; Running, Active &gt;
 </b>};
 
 // ...</pre>
-<p>Similar to when a derived class object accesses its base class portion,
-<code>context&lt;&gt;()</code> is used to gain access to the direct or indirect 
-context of a state. This can either be a direct or indirect outer state (e.g.
-<code>context&lt; Active &gt;()</code>) or the state machine itself (<code>context&lt; 
-StopWatch &gt;()</code>). The rest should be mostly self-explanatory. The machine 
+<p>The machine 
 now measures the time, but we cannot yet retrieve it from the main program.</p>
 <p>At this point, the advantages of state-local storage (which is still a relatively 
 little-known feature) may not yet have become apparent. The FAQ item &quot;<a href="faq.html#Whats_so_cool_about_state-local_storage">What's so cool about state-local storage?</a>&quot; 
@@ -495,6 +501,10 @@ struct Idle;
 struct NotShooting : sc::simple_state&lt;
   NotShooting, Camera, Idle &gt;
 {
+  // With a custom reaction we only specify that we <b>might</b> do
+  // something with a particular event, but the actual reaction
+  // is defined in the react member function, which can be
+  // implemented in the .cpp file.
   <b>typedef sc::custom_reaction&lt; EvShutterHalf &gt; reactions;</b>
 
   // ...
@@ -510,12 +520,15 @@ struct Idle : sc::simple_state&lt; Idle, NotShooting &gt;
 };
 
 #endif</pre>
-<p>Please note the bold parts in the code. With a custom reaction we only 
-specify that we <b>might</b> do something with a particular event, but the 
-actual reaction is defined in the <code>react</code> member function, which 
-can be implemented in the .cpp file.</p>
 <p>Camera.cpp:</p>
 <pre>#include &quot;Camera.hpp&quot;
+
+// The following includes are only made here but not in
+// Camera.hpp
+// The Shooting and Configuring states can themselves apply the
+// same pattern to hide their inner implementation, which ensures
+// that the two teams working on the Camera state machine will
+// never need to disturb each other.
 #include &quot;Configuring.hpp&quot;
 #include &quot;Shooting.hpp&quot;
 
@@ -531,11 +544,6 @@ sc::result Idle::react( const EvConfig &amp; )
 {
   return transit&lt; Configuring &gt;();
 }</pre>
-<p>Note that Shooting.hpp and Configuring.hpp are included only in Camera.cpp 
-but not in Camera.hpp. The Shooting and Configuring states can themselves 
-apply the same pattern to hide their inner implementation, which ensures that 
-the two teams working on the Camera state machine will never need to disturb 
-each other.</p>
 <p><b><font color="#FF0000">Caution: Any call to <code>simple_state&lt;&gt;::transit&lt;&gt;()</code> 
 or <code>simple_state&lt;&gt;::terminate()</code> (see
 <a href="reference.html#transit1">reference</a>) will inevitably destruct the 
@@ -692,9 +700,9 @@ struct Focusing : sc::simple_state&lt; Focusing, Shooting &gt;
 <pre>// ...
 sc::result Focusing::react( const EvInFocus &amp; evt )
 {
+  // We have to manually forward evt
   return transit&lt; Focused &gt;( <b>&amp;Shooting::DisplayFocused</b>, evt );
 }</pre>
-<p>Please note that we have to manually forward the event.</p>
 <h2><a name="Advanced topics">Advanced topics</a></h2>
 <h3><a name="Specifying multiple reactions for a state">Specifying multiple 
 reactions for a state</a></h3>
@@ -721,11 +729,9 @@ struct Playing : sc::simple_state&lt; Playing, Mp3Player &gt;
 example of how to do this: </p>
 <pre>Pumping::~Pumping()
 {
-  post_event( boost::intrusive_ptr&lt; EvPumpingFinished &gt;(
-    new EvPumpingFinished() ) );
+  post_event( EvPumpingFinished() );
 }</pre>
-<p>The event is pushed into the main queue, which is why it must be allocated 
-with <code>new</code>. The events in the queue are processed as soon as the 
+<p>The event is pushed into the main queue. The events in the queue are processed as soon as the 
 current reaction is completed. Events can be posted from inside <code>react</code> 
 functions, entry-, exit- and transition actions. However, posting from inside 
 entry actions is a bit more complicated (see e.g. <code>Focusing::Focusing()</code> 
@@ -734,12 +740,11 @@ in <code>Shooting.cpp</code> in the Camera example): </p>
 {
   <b>Pumping( my_context ctx ) : my_base( ctx )</b>
   {
-    post_event( boost::intrusive_ptr&lt; EvPumpingStarted &gt;(
-      new EvPumpingStarted() ) );
+    post_event( EvPumpingStarted() );
   }
   // ...
 };</pre>
-<p>Please note the bold parts. As soon as an entry action of a state needs to 
+<p>As soon as an entry action of a state needs to 
 contact the &quot;outside world&quot; (here: the event queue in the state machine), the 
 state must derive from <code>state&lt;&gt;</code> rather than from <code>
 simple_state&lt;&gt;</code> and must implement a forwarding constructor as outlined 
@@ -1455,7 +1460,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21138" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34602" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
