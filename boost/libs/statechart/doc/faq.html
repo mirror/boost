@@ -205,8 +205,9 @@ StopWatch::StopWatch()
 {
   // For example, we might want to ensure that the state
   // machine is already started after construction.
-  // Alternatively we could also provide the client with
-  // a Start() function...
+  // Alternatively, we could add our own initiate() function
+  // to StopWatch and call the base class initiate() in the
+  // implementation.
   <b>initiate();</b>
 }</pre>
 <h2>
@@ -320,7 +321,7 @@ errors:</p>
 	the compile-fail tests). Above each of these assertions there is a comment 
 	explaining the problem. On almost all current compilers an error in template 
 	code is accompanied by the current &quot;instantiation stack&quot;. Very much like the 
-	call stack you see in the debugger this allows you to trace the error back 
+	call stack you see in the debugger, this &quot;instantiation stack&quot; allows you to trace the error back 
 	through instantiations of library code until you hit the line of 
 	your code that causes the problem. As an example, here's the MSVC7.1 error 
 	message for the code in InconsistentHistoryTest1.cpp:
@@ -398,12 +399,11 @@ illustrate this:</p>
 compatible compilers), on most platforms both binaries (exe &amp; dll) now contain their own 
 instance of the static data member. Since the RTTI mechanism assumes that 
 there is exactly one object of that member at runtime, the mechanism fails 
-spectacularly when the DLL is loaded into the executable. Different platforms 
+spectacularly when the process running the exe also loads the dll. Different platforms 
 deal differently with this problem:</p>
 <ul>
  <li>On some platforms (e.g. MinGW) there simply doesn't seem to be a way to 
- enforce that such member only exists once at runtime. Therefore, the internal 
- RTTI mechanism cannot be used reliably in conjunction with DLLs. Disabling it 
+ enforce that such a member only exists once at runtime. Therefore, the internal RTTI mechanism cannot be used reliably in conjunction with DLLs. Disabling it 
  by defining <a href="configuration.html#Application Defined Macros">
  BOOST_STATECHART_USE_NATIVE_RTTI</a> in all TUs will <b>usually</b> work 
  around the problem</li>
@@ -413,7 +413,9 @@ to be loaded from a DLL (see TuTest for an example how to do this). Therefore,
 the internal RTTI mechanism can be used but care must be taken to correctly 
 export and import all <code>event&lt;&gt;</code> and <code>
 simple_state&lt;&gt;</code> subclasses defined in headers that are compiled 
-into more than one binary</li>
+into more than one binary. Alternatively, of course <a href="configuration.html#Application Defined Macros">
+ BOOST_STATECHART_USE_NATIVE_RTTI</a> can also be used to save the work of 
+importing and exporting</li>
 </ul>
 <h2><a name="Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
 support polymorphic events?</a></h2>
@@ -544,7 +546,7 @@ destructors of additional bases are called before recursion employed by state
 base destructors can alter the order of destruction.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->31 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21129" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34602" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
