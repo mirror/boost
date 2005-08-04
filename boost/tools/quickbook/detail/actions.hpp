@@ -26,6 +26,10 @@ namespace quickbook
 {
     namespace fs = boost::filesystem;
 
+    // forward declarations
+    struct actions;
+    int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
+
     struct error_action
     {
         // Prints an error message to std::cerr

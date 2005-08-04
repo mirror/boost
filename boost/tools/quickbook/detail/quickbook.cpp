@@ -282,8 +282,8 @@ namespace quickbook
     //  Parse a file
     //
     ///////////////////////////////////////////////////////////////////////////
-    static int
-    parse(char const* filein_, actions& actor, bool ignore_docinfo = false)
+    int
+    parse(char const* filein_, actions& actor, bool ignore_docinfo)
     {
         using std::cerr;
         using std::vector;
