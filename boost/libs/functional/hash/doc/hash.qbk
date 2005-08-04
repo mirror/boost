@@ -897,12 +897,12 @@ The hash table proposal explains much of the design. The hash function object
 is discussed in Section D.
 
 [*The C++ Standard Library Technical Report.]\n
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf]\n
-Contains the hash function specification in section 6.3.2.
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf]\n
+Contains the hash function specification in section 6.18.
 
 [*Library Extension Technical Report Issues List.]\n
-[@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf]\n
-The library implements the extension described in Issue 6.18.
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf]\n
+The library implements the extension described in Issue 6.18, pages 63-67.
 
 [*Methods for Identifying Versioned and Plagiarised Documents]\n
 Timothy C. Hoad, Justin Zobel\n
