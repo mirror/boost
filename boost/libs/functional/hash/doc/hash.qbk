@@ -892,7 +892,7 @@ return seed;
 [section:links Links]
 
 [*A Proposal to Add Hash Tables to the Standard Library]\n
-[@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1456.html]\n
+[@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2003/n1456.html]\n
 The hash table proposal explains much of the design. The hash function object
 is discussed in Section D.
 
