@@ -10,6 +10,8 @@
 
 #include <boost/test/test_tools.hpp>
 
+#include <stdexcept>
+
 
 
 int test_main( int, char* [] )
