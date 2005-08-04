@@ -1226,12 +1226,12 @@ __ ../../../graph/doc/bgl_named_params.html
           typedef T result_type;
 
           template <class A1, class A2>
-          T operator() { return T(a1,a2); }
+          T operator()(A1 a1, A2 a2) { return T(a1,a2); }
       };
 
-    and use Boost.Bind_ to generate the function object::
+    and use `Boost.Bind`_ to generate the function object::
 
-      boost::bind(construct2<default_color_map>,num_vertices(g),i)
+      boost::bind(construct2<default_color_map>(),num_vertices(g),i)
 
 __ http://www.boost.org/regression/release/user/lambda.html
 .. _Boost.Bind: ../../../libs/bind/index.html
