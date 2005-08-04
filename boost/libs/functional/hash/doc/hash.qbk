@@ -83,7 +83,7 @@ __boost_hash, just use an extra template parameter:
 
 To use __boost_hash directly, create an instance and call it as a function:
 
-    #include <boost/hash/hash.hpp>
+    #include <boost/functional/hash/hash.hpp>
 
     int main()
     {
@@ -96,7 +96,7 @@ If you wish to make use of the extensions, you will need to include the
 appropriate header (see the
 [link hash.reference.specification reference documentation] for the full list).
 
-    #include <boost/hash/pair.hpp>
+    #include <boost/functional/hash/pair.hpp>
 
     int main()
     {
@@ -105,7 +105,7 @@ appropriate header (see the
         std::size_t h = pair_hash(std::make_pair(1, 2));
     }
 
-Or alternatively, include `<boost/hash.hpp>` for the full library.
+Or alternatively, include `<boost/functional/hash.hpp>` for the full library.
 
 For an example of generic use, here is a function to generate a vector
 containing the hashes of the elements of a container:
