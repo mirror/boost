@@ -898,7 +898,7 @@ is discussed in Section D.
 
 [*The C++ Standard Library Technical Report.]\n
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf]\n
-Contains the hash function specification in section 6.18.
+Contains the hash function specification in section 6.3.2.
 
 [*Library Extension Technical Report Issues List.]\n
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf]\n
