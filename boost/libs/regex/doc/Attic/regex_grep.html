@@ -94,14 +94,14 @@
             <td>&nbsp;</td>
             <td valign="top" width="50%">flags</td>
             <td valign="top" width="50%">The flags that determine how matching is carried out, 
-               one of the <a href="#match_type">match_flags</a> enumerators.</td>
+               one of the <a href="match_flag_type.html">match_flags</a> enumerators.</td>
             <td>&nbsp;</td>
          </tr>
       </table>
       <br>
       <br>
       <p>The algorithm finds all of the non-overlapping matches of the expression e, for 
-         each match it fills a <a href="#reg_match">match_results</a>&lt;iterator&gt; 
+         each match it fills a <a href="match_results.html">match_results</a>&lt;iterator&gt; 
          structure, which contains information on what matched, and calls the predicate 
          foo, passing the match_results&lt;iterator&gt; as a single argument. If the 
          predicate returns true, then the grep operation continues, otherwise it 

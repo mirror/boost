@@ -672,24 +672,25 @@ template &lt;class ST, class SA&gt;
 basic_regex&amp; operator=(const basic_string&lt;charT, ST, SA&gt;&amp; p);
 </pre>
       <p><b>Effects:</b> Returns the result of <code>assign(p)</code>.</p>
+      
       <h4>basic_regex iterators</h4>
-      <pre>
+      <pre><A name=m1>
 const_iterator begin() const;
 </pre>
       <p><b>Effects:</b> Returns a starting iterator to a sequence of characters 
          representing the regular expression.</p>
-      <pre>
+      <pre><A name=m2>
 const_iterator end() const;
 </pre>
       <p><b>Effects:</b> Returns termination iterator to a sequence of characters 
          representing the regular expression.</p>
       <h4>basic_regex capacity</h4>
-      <pre>
+      <pre><A name=m3>
 size_type size() const;
 </pre>
       <p><b>Effects:</b> Returns the length of the sequence of characters representing 
          the regular expression.</p>
-      <pre>
+      <pre><A name=m4>
 size_type max_size() const;
 </pre>
       <p><b>Effects:</b> Returns the maximum length of the sequence of characters 
@@ -818,7 +819,7 @@ locale_type getloc() const;
             traits_inst</code> is a (default initialized) instance of the template 
          parameter <code>traits</code> stored within the object.</p>
       <h4>basic_regex swap</h4>
-      <pre>
+      <pre><A name=m13>
 void swap(basic_regex&amp; e) throw();
 </pre>
       <p><b>Effects:</b> Swaps the contents of the two regular expressions.</p>
