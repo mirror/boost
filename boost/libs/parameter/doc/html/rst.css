@@ -13,6 +13,12 @@ img {
   vertical-align: middle
 }
 
+span.vellipsis {
+  line-height: 30% ;
+  font-size: 200% ;
+}
+
+
 PRE
 {
     FONT-FAMILY: monospace ;

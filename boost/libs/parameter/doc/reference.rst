@@ -41,9 +41,8 @@ __ ../../../../index.htm
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
-
-.. role:: large
-   :class: doublesize
+.. role:: vellipsis
+   :class: vellipsis
 
 .. section-numbering::
     :depth: 2
@@ -380,8 +379,11 @@ __ ../../../../boost/parameter/parameters.hpp
         |ArgumentPack|_ `operator()`_\(A0 const& a0) const;
 
         template <class A0, class A1>
-        |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1) const;
-           :large:`⋮`
+        |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1) const; :vellipsis:`\ 
+       .
+       .
+       .
+     `
         template <class A0, class A1, …class A\ β>
         |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1, …A\ β const& a\ β) const;
     };
@@ -436,8 +438,11 @@ __ ../../../../boost/parameter/parameters.hpp
 ``operator()``
   .. parsed-literal::
 
-      template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const;
-         :large:`⋮`
+      template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const; :vellipsis:`\ 
+        .
+        .
+        .
+       `
       template <class A0, …class A\ β> |ArgumentPack|_ `operator()`_\(A0 const& a0, …A\ β const& a\ β) const;
 
   :Returns:
@@ -577,8 +582,11 @@ Generates
       , typename **p**::match<A1,A2,…A\ **l**,A\ ##\ BOOST_PP_INC_\ (**l**)>::type p = **p**\ ())
     {
        return **name**\ _with_named_params(**p**\ (x1,x2,…x\ **l**,x\ ##\ BOOST_PP_INC_\ (**l**)));
-    }
-       :large:`⋮`
+    } :vellipsis:`\ 
+      .
+      .
+      .
+     `
     template <class A1, class A2, …class A\ **h**>
     r name(
         A1 const& a1, A2 const& a2, …A\ **h** const& x\ **h**

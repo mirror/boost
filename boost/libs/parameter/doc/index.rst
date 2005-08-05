@@ -45,8 +45,8 @@ __ ../../../../index.htm
 .. role:: concept
    :class: concept
 
-.. role:: large
-   :class: doublesize
+.. role:: vellipsis
+   :class: vellipsis
 
 .. section-numbering::
 
@@ -629,8 +629,11 @@ to its ``operator()`` and forwarding the result on to
     void depth_first_search(A0 const& a0, A1 const& a1)
     {
        core::depth_first_search(dfs_params()(a0,a1));
-    }
-       :large:`⋮`
+    } :vellipsis:`\ 
+    .
+    .
+    .
+   `
     template <class A0, class A1, …class A4>
     void depth_first_search(A0 const& a0, A1 const& a1, …A4 const& a4)
     {
@@ -831,8 +834,11 @@ Now we add a special defaulted argument to each of our
       , typename dfs_params::match<A0,A1>::type p = dfs_params())
     {
        core::depth_first_search(**p**\ (a0,a1));
-    }
-       :large:`⋮`
+    } :vellipsis:`\ 
+    .
+    .
+    .
+   `
     template <class A0, class A1, …class A4>
     void depth_first_search(
         A0 const& a0, A1 const& a1, …A4 const& A4
@@ -886,8 +892,11 @@ __ http://boost-consulting.com/mplbook/preprocessor.html#sequences
       , **BOOST_PARAMETER_MATCH(dfs_params, (A0)(A1), p)**)
     {
        core::depth_first_search(p(a0,a1));
-    }
-       :large:`⋮`
+    } :vellipsis:`\ 
+    .
+    .
+    .
+   `
     template <class A0, class A1, …class A4>
     void depth_first_search(
         A0 const& a0, A1 const& a1, …A4 const& A4
