@@ -23,6 +23,10 @@
 #if !defined(BOOST_WAVE_TOKEN_IDS_DEFINED)
 #define BOOST_WAVE_TOKEN_IDS_DEFINED
 
+#if defined (__FreeBSD__) && defined (T_DIVIDE)
+#undef T_DIVIDE
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
