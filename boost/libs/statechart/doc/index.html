@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/03<!--webbot bot="Timestamp" endspan i-checksum="12800" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/08<!--webbot bot="Timestamp" endspan i-checksum="12810" --></font></td>
   </tr>
 </table>
 <hr>
@@ -175,25 +175,29 @@ review):</p>
 <ol>
     <li>Add allocator support for broken std libs when the workaround is 
 	available in boost::detail</li>
-    <li>Ensure that the library can be compiled with exception support turned 
-    off</li>
-	<li>Investigate how a state machine could be serialized. A first glance at 
-    the serialization library revealed that there currently (late 2004) is no 
-    support for types that overload <code>operator new</code>. Such support 
-    would be essential for Boost.Statechart serialization since there doesn't 
-    seem to be any way to detect whether a state has an overloaded <code>
-    operator new</code> or not</li>
-    <li><font color="#FF0000">Investigate how constant-time dispatch for 
-    non-orthogonal state machines can be implemented (David Abrahams, Jonathan Turkanis, 
-    Rob Steward, Dave Gomboc)</font></li>
-    <li><font color="#FF0000">Compare performance for allocator-allocated 
-	states with the one of the best possible hand-written state-specific 
-	operator new implementation. If there is no significant difference change 
-	the implementation to use the allocator to allocate states (Peter Petrov)</font></li>
-    <li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
+    <li>Implement <code>simple_state::triggering_event()</code>, which returns a 
+	pointer to the event that triggered the reaction currently in progress</li>
+	<li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
   	<code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
   no longer make (indirect) calls to global <code>operator new()</code> and
   	<code>operator delete()</code></li>
+	<li>Investigate how a state machine could be serialized. A first glance at 
+    the serialization library revealed that there currently (1.33) is no 
+    support for types that overload <code>operator new</code> (suitable code is 
+	already present in the serialization library but it is currently commented 
+	out due to incompatibilities with certain compilers). Such support 
+    would be essential for Boost.Statechart serialization</li>
+	<li><font color="#FF0000">Investigate how constant-time dispatch for 
+    non-orthogonal state machines can be implemented (David Abrahams, Jonathan Turkanis, 
+    Rob Steward, Dave Gomboc)</font></li>
+	<li><font color="#FF0000">Add <code>simple_state::operator new</code> &amp;
+	<code>simple_state::operator delete</code> forwarding to the allocator 
+	passed to <code>state_machine</code> (existing code using) (Peter Petrov)</font></li>
+	<li>Ensure that everything is compileable with C++ RTTI support is turned 
+	off (this requires currently lacking support in Boost.Config and probably a 
+	patch for <code>shared_ptr</code>)</li>
+	<li>Issue an error if <code>BOOST_STATECHART_USE_NATIVE_RTTI</code> is defined 
+	when C++ RTTI is turned off</li>
 	<li>The current requirement to pass an mpl::list&lt;&gt; to specify inner initial 
 	states and reactions is too strict. Check the requirements on the sequences 
 	and document them accordingly (David Abrahams)</li>
@@ -201,33 +205,31 @@ review):</p>
 	mpl::deque instead of mpl::list to find out which is fastest. Document a 
 	recommendation for the fastest container and change all examples accordingly 
 	(David Abrahams)</li>
-    <li><font color="#FF0000">Implement a switch-like reaction (Simon Gittins, 
+	<li><font color="#FF0000">Implement a switch-like reaction (Simon Gittins, 
 	Darryl Green)</font></li>
-    <li>Link incomplete code-snippets in the tutorial to complete example code 
+	<li>Link incomplete code-snippets in the tutorial to complete example code 
 	where available</li>
-    <li>Where appropriate, link the reference documentation to examples</li>
-    <li><font color="#FF0000">Add a description of the implementation and 
+	<li>Where appropriate, link the reference documentation to examples</li>
+	<li><font color="#FF0000">Add a description of the implementation and 
 	better explain performance trade-offs (Jonathan Turkanis)</font></li>
-    <li><font color="#FF0000">Add links to descriptions of alternate 
+	<li><font color="#FF0000">Add links to descriptions of alternate 
 	implementations and discuss performance trade-offs (Jonathan Turkanis)</font></li>
-    <li>Implement <code>priority_scheduler&lt;&gt;</code></li>
-    <li><font color="#FF0000">Add a list of applications that use Boost.Statechart 
+	<li><font color="#FF0000">Add a list of applications that use Boost.Statechart 
 	(Paul A. Bristow)</font></li>
-    <li>Refactor the <code>state_machine</code> class template to reduce code 
+	<li>Refactor the <code>state_machine</code> class template to reduce code 
   size in applications with many different state machines</li>
-    <li>Investigate whether and how <code>fifo_worker&lt;&gt;</code> should accept a policy 
+	<li>Investigate whether and how <code>fifo_worker&lt;&gt;</code> should accept a policy 
   parameter defining how to lock and wait</li>
-    <li>Add a diagram that helps to understand what an unstable state machine 
+	<li>Add a diagram that helps to understand what an unstable state machine 
 	is</li>
-    <li>Comment MPL-heavy code</li>
-    <li>Add examples of often made mistakes</li>
-    <li>Eliminate code-duplication in <code>fifo_scheduler</code> with PP code 
+	<li>Comment MPL-heavy code</li>
+	<li>Add examples of often made mistakes</li>
+	<li>Implement <code>priority_scheduler&lt;&gt;</code></li>
+	<li>Eliminate code-duplication in <code>fifo_scheduler</code> with PP code 
 	submitted by Pavel Vozenilek</li>
-    <li>Add number and label to all diagrams in docs</li>
-    <li>Add <code>#pragma once</code> to all headers (speeds up compilation 
+	<li>Add number and label to all diagrams in docs</li>
+	<li>Add <code>#pragma once</code> to all headers (speeds up compilation 
 	with MS-compatible compilers)</li>
-    <li>Issue an error if <code>BOOST_STATECHART_USE_NATIVE_RTTI</code> is defined 
-	when C++ RTTI is turned off</li>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
 <p>XX August, 2005</p>
@@ -255,6 +257,8 @@ review):</p>
 	http://thread.gmane.org/gmane.comp.lib.boost.devel/128741</a></font></li>
 	<li><font color="#FF0000">Put all remarks about code as comments inside 
 	the code (Pavel Vozenilek, Augustus Saunders)</font></li>
+    <li>On suitable platforms the library should now be compileable with exception support turned 
+    off (untested due to lacking access to such a platform)</li>
 </ul>
 <p></p>
 <p>19 June, 2005</p>
@@ -520,7 +524,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34602" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34612" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
