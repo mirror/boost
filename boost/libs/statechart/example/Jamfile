@@ -39,11 +39,11 @@ rule statechart-mt-example-build (
   name : directory : cpp-sources + : requirements * )
 {
   exe $(name)
-    : $(directory)/$(cpp-sources).cpp <dll>../../thread/build/boost_thread
+    : $(directory)/$(cpp-sources).cpp <lib>../../thread/build/boost_thread
       <template>statechart-common-options
     : <threading>multi $(requirements) ;
 
-  return <exe>$(name) <dll>../../thread/build/boost_thread ;
+  return <exe>$(name) ;
 }
 
 rule statechart-bitmachine-build ( tag : requirements * )
