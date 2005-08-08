@@ -308,6 +308,8 @@ class state_machine : noncopyable
             }
           }
           #ifndef BOOST_NO_EXCEPTIONS
+          // Intentionally swallow std::bad_cast exceptions. We'll throw one
+          // ourselves when we fail to find a state that can be cast to Target
           catch ( const std::bad_cast & ) {}
           #endif
 
