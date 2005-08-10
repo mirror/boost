@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/08<!--webbot bot="Timestamp" endspan i-checksum="12810" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/09<!--webbot bot="Timestamp" endspan i-checksum="12812" --></font></td>
   </tr>
 </table>
 <hr>
@@ -192,7 +192,9 @@ review):</p>
     Rob Steward, Dave Gomboc)</font></li>
 	<li><font color="#FF0000">Add <code>simple_state::operator new</code> &amp;
 	<code>simple_state::operator delete</code> forwarding to the allocator 
-	passed to <code>state_machine</code> (existing code using) (Peter Petrov)</font></li>
+	passed to <code>state_machine</code> (existing state classes overloading
+	<code>operator new</code> are unaffected because the added <code>operator 
+	new</code> is hidden) (Peter Petrov)</font></li>
 	<li>Ensure that everything is compileable with C++ RTTI support is turned 
 	off (this requires currently lacking support in Boost.Config and probably a 
 	patch for <code>shared_ptr</code>)</li>
@@ -524,7 +526,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34612" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34614" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
