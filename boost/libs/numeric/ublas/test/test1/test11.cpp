@@ -42,6 +42,11 @@ struct test_my_vector {
             std::cout << "v1.assign_temporary (v2) = " << v1 << std::endl;
             v1.swap (v2);
             std::cout << "v1.swap (v2) = " << v1 << " " << v2 << std::endl;
+            
+            // Zero assignment
+            v1 = ublas::zero_vector<> (v1.size ());
+            std::cout << "v1.zero_vector = " << v1 << std::endl;
+            v1 = v2;
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
             // Project range and slice

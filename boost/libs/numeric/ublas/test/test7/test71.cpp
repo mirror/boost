@@ -39,6 +39,11 @@ struct test_my_vector {
             v1.swap (v2);
             std::cout << "v1.swap (v2) = " << v1 << " " << v2 << std::endl;
 
+            // Zero assignment
+            v1 = ublas::zero_vector<> (v1.size ());
+            std::cout << "v1.zero_vector = " << v1 << std::endl;
+            v1 = v2;
+
             // Unary vector operations resulting in a vector
             initialize_vector (v1);
             v2 = - v1;

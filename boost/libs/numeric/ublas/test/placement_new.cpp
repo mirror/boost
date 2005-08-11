@@ -14,8 +14,6 @@
 #include <iostream>
 
 // User defined type to capture base pointer on construction
-class udt;
-udt* base_pointer;
 
 class udt {
 public:
@@ -23,8 +21,11 @@ public:
        base_pointer = this;
     }
     ~udt () {}      // required for GCC prior to 3.4 to generate cookie
+
+	static udt* base_pointer;
 };
 
+udt* udt::base_pointer;
 
 int main ()
 {
@@ -33,9 +34,9 @@ int main ()
 
     // Capture placement new offsets for a udt    
     new (ap) udt;
-    int new_offset = int (base_pointer - ap);
+    int new_offset = int (udt::base_pointer - ap);
     new (ap) udt [1];
-    int array_new_offset = int (base_pointer - ap);
+    int array_new_offset = int (udt::base_pointer - ap);
     
     // Print offsets - we expect 0,0 or 0,sizeof(std::size_t)
     std::cout << new_offset <<','<< array_new_offset << std::endl;

@@ -39,6 +39,11 @@ struct test_my_matrix {
             m1.swap (m2);
             std::cout << "m1.swap (m2) = " << m1 << " " << m2 << std::endl;
 
+            // Zero assignment
+            m1 = ublas::zero_matrix<> (m1.size1 (), m1.size2 ());
+            std::cout << "m1.zero_matrix = " << m1 << std::endl;
+            m1 = m2;
+
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
             // Project range and slice
             initialize_matrix (m1);
