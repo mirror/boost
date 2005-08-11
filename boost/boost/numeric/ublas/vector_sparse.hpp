@@ -447,7 +447,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         mapped_vector &operator = (const vector_container<C> &v) {
-            resize (v.size (), false);
+            resize (v ().size (), false);
             assign (v);
             return *this;
         }
@@ -997,7 +997,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         compressed_vector &operator = (const vector_container<C> &v) {
-            resize (v.size (), false);
+            resize (v ().size (), false);
             assign (v);
             return *this;
         }
@@ -1615,7 +1615,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         coordinate_vector &operator = (const vector_container<C> &v) {
-            resize (v.size (), false);
+            resize (v ().size (), false);
             assign (v);
             return *this;
         }
