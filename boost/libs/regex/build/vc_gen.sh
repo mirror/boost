@@ -134,7 +134,7 @@ function vc6_gen()
 	rm -f $iout
 	stlport_suffix=""
 	
-	if test ${subdir} != "vc8" ; then
+	if test ${subdir} != "vc80" ; then
 	libname="libboost_regex-${subdir}-s-${boost_version}"
 	opts='/c /nologo /ML /W3 '$EH_OPTS' /O2 '$PROC_OPTS' /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD '"$release_extra"' '
 	vc6_gen_lib
@@ -144,7 +144,7 @@ function vc6_gen()
 	opts='/nologo /MT /W3 '$EH_OPTS' /O2 '$PROC_OPTS' /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD '"$release_extra"' /c'
 	vc6_gen_lib
 	
-	if test ${subdir} != "vc8" ; then
+	if test ${subdir} != "vc80" ; then
 	debug="yes"
 	libname="libboost_regex-${subdir}-sgd-${boost_version}"
 	opts='/nologo /MLd /W3 /Gm '$EH_OPTS' /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD '"$debug_extra"' /c '
@@ -173,10 +173,18 @@ function vc6_gen()
 	libname="libboost_regex-${subdir}-mt-gd-${boost_version}"
 	opts='/nologo /MDd /W3 /Gm '$EH_OPTS' /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD '"$debug_extra"' /c'
 	vc6_gen_lib
-
-	if test ${subdir} != "vc8" ; then
-	   VC8_CHECK="MSVCDIR=\$(VS80COMNTOOLS)..\\..\\VC"
-   fi
+	
+	VC8_CHECK=""
+	echo ${subdir}
+	if test ${subdir} = "vc80" ; then
+	   VC8_CHECK='MSVCDIR=$(VS80COMNTOOLS)..\..\VC'
+	   echo setting VC8 setup to: ${VC8_CHECK}
+    else
+	 if test ${subdir} = "vc71" ; then
+	   VC8_CHECK='MSVCDIR=$(VS71COMNTOOLS)..\..\VC7'
+	   echo setting VC71 setup to: ${VC8_CHECK}
+     fi
+    fi
    	
 	cat > $out << EOF
 #
@@ -216,7 +224,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+!IF "\$(MSVCDIR)" == ""
 $VC8_CHECK
+!ENDIF
 
 !IF "\$(MSVCDIR)" == ""
 !ERROR Variable MSVCDIR not set.
@@ -450,6 +460,12 @@ vc6_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
+
+
+
+
+
 
 
 

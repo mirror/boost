@@ -35,7 +35,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+!IF "$(MSVCDIR)" == ""
 MSVCDIR=$(VS80COMNTOOLS)..\..\VC
+!ENDIF
 
 !IF "$(MSVCDIR)" == ""
 !ERROR Variable MSVCDIR not set.
@@ -54,22 +56,17 @@ ICU_LINK_OPTS= /LIBPATH:$(ICU_PATH)\lib icuin.lib icuuc.lib
 !ENDIF
 
 
-ALL_HEADER= ../../../boost/regex/concepts.hpp ../../../boost/regex/config.hpp ../../../boost/regex/icu.hpp ../../../boost/regex/mfc.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v4/basic_regex.hpp ../../../boost/regex/v4/basic_regex_creator.hpp ../../../boost/regex/v4/basic_regex_parser.hpp ../../../boost/regex/v4/c_regex_traits.hpp ../../../boost/regex/v4/char_regex_traits.hpp ../../../boost/regex/v4/cpp_regex_traits.hpp ../../../boost/regex/v4/cregex.hpp ../../../boost/regex/v4/error_type.hpp ../../../boost/regex/v4/fileiter.hpp ../../../boost/regex/v4/instances.hpp ../../../boost/regex/v4/iterator_category.hpp ../../../boost/regex/v4/iterator_traits.hpp ../../../boost/regex/v4/match_flags.hpp ../../../boost/regex/v4/match_results.hpp ../../../boost/regex/v4/mem_block_cache.hpp ../../../boost/regex/v4/perl_matcher.hpp ../../../boost/regex/v4/perl_matcher_common.hpp ../../../boost/regex/v4/perl_matcher_non_recursive.hpp ../../../boost/regex/v4/perl_matcher_recursive.hpp ../../../boost/regex/v4/primary_transform.hpp ../../../boost/regex/v4/protected_call.hpp ../../../boost/regex/v4/regbase.hpp ../../../boost/regex/v4/regex.hpp ../../../boost/regex/v4/regex_cstring.hpp ../../../boost/regex/v4/regex_format.hpp ../../../boost/regex/v4/regex_fwd.hpp ../../../boost/regex/v4/regex_grep.hpp ../../../boost/regex/v4/regex_iterator.hpp ../../../boost/regex/v4/regex_kmp.hpp ../../../boost/regex/v4/regex_match.hpp ../../../boost/regex/v4/regex_merge.hpp ../../../boost/regex/v4/regex_raw_buffer.hpp ../../../boost/regex/v4/regex_replace.hpp ../../../boost/regex/v4/regex_search.hpp ../../../boost/regex/v4/regex_split.hpp ../../../boost/regex/v4/regex_stack.hpp ../../../boost/regex/v4/regex_token_iterator.hpp ../../../boost/regex/v4/regex_traits.hpp ../../../boost/regex/v4/regex_traits_defaults.hpp ../../../boost/regex/v4/regex_workaround.hpp ../../../boost/regex/v4/states.hpp ../../../boost/regex/v4/sub_match.hpp ../../../boost/regex/v4/syntax_type.hpp ../../../boost/regex/v4/u32regex_iterator.hpp ../../../boost/regex/v4/u32regex_token_iterator.hpp ../../../boost/regex/v4/w32_regex_traits.hpp ../../../boost/regex/config/allocator.hpp ../../../boost/regex/config/borland.hpp ../../../boost/regex/config/cwchar.hpp ../../../boost/regex/config/regex_library_include.hpp
+ALL_HEADER= ../../../boost/regex/concepts.hpp ../../../boost/regex/config.hpp ../../../boost/regex/icu.hpp ../../../boost/regex/mfc.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v4/basic_regex.hpp ../../../boost/regex/v4/basic_regex_creator.hpp ../../../boost/regex/v4/basic_regex_parser.hpp ../../../boost/regex/v4/c_regex_traits.hpp ../../../boost/regex/v4/char_regex_traits.hpp ../../../boost/regex/v4/cpp_regex_traits.hpp ../../../boost/regex/v4/cregex.hpp ../../../boost/regex/v4/error_type.hpp ../../../boost/regex/v4/fileiter.hpp ../../../boost/regex/v4/instances.hpp ../../../boost/regex/v4/iterator_category.hpp ../../../boost/regex/v4/iterator_traits.hpp ../../../boost/regex/v4/match_flags.hpp ../../../boost/regex/v4/match_results.hpp ../../../boost/regex/v4/mem_block_cache.hpp ../../../boost/regex/v4/perl_matcher.hpp ../../../boost/regex/v4/perl_matcher_common.hpp ../../../boost/regex/v4/perl_matcher_non_recursive.hpp ../../../boost/regex/v4/perl_matcher_recursive.hpp ../../../boost/regex/v4/primary_transform.hpp ../../../boost/regex/v4/protected_call.hpp ../../../boost/regex/v4/regbase.hpp ../../../boost/regex/v4/regex.hpp ../../../boost/regex/v4/regex_cstring.hpp ../../../boost/regex/v4/regex_format.hpp ../../../boost/regex/v4/regex_fwd.hpp ../../../boost/regex/v4/regex_grep.hpp ../../../boost/regex/v4/regex_iterator.hpp ../../../boost/regex/v4/regex_kmp.hpp ../../../boost/regex/v4/regex_match.hpp ../../../boost/regex/v4/regex_merge.hpp ../../../boost/regex/v4/regex_raw_buffer.hpp ../../../boost/regex/v4/regex_replace.hpp ../../../boost/regex/v4/regex_search.hpp ../../../boost/regex/v4/regex_split.hpp ../../../boost/regex/v4/regex_stack.hpp ../../../boost/regex/v4/regex_token_iterator.hpp ../../../boost/regex/v4/regex_traits.hpp ../../../boost/regex/v4/regex_traits_defaults.hpp ../../../boost/regex/v4/regex_workaround.hpp ../../../boost/regex/v4/states.hpp ../../../boost/regex/v4/sub_match.hpp ../../../boost/regex/v4/syntax_type.hpp ../../../boost/regex/v4/u32regex_iterator.hpp ../../../boost/regex/v4/u32regex_token_iterator.hpp ../../../boost/regex/v4/w32_regex_traits.hpp ../../../boost/regex/config/borland.hpp ../../../boost/regex/config/cwchar.hpp
 
-all : main_dir libboost_regex-vc80-s-1_33_dir ./vc80/libboost_regex-vc80-s-1_33.lib libboost_regex-vc80-mt-s-1_33_dir ./vc80/libboost_regex-vc80-mt-s-1_33.lib libboost_regex-vc80-sgd-1_33_dir ./vc80/libboost_regex-vc80-sgd-1_33.lib libboost_regex-vc80-mt-sgd-1_33_dir ./vc80/libboost_regex-vc80-mt-sgd-1_33.lib boost_regex-vc80-mt-gd-1_33_dir ./vc80/boost_regex-vc80-mt-gd-1_33.lib boost_regex-vc80-mt-1_33_dir ./vc80/boost_regex-vc80-mt-1_33.lib libboost_regex-vc80-mt-1_33_dir ./vc80/libboost_regex-vc80-mt-1_33.lib libboost_regex-vc80-mt-gd-1_33_dir ./vc80/libboost_regex-vc80-mt-gd-1_33.lib
+all : main_dir libboost_regex-vc80-mt-s-1_33_dir ./vc80/libboost_regex-vc80-mt-s-1_33.lib libboost_regex-vc80-mt-sgd-1_33_dir ./vc80/libboost_regex-vc80-mt-sgd-1_33.lib boost_regex-vc80-mt-gd-1_33_dir ./vc80/boost_regex-vc80-mt-gd-1_33.lib boost_regex-vc80-mt-1_33_dir ./vc80/boost_regex-vc80-mt-1_33.lib libboost_regex-vc80-mt-1_33_dir ./vc80/libboost_regex-vc80-mt-1_33.lib libboost_regex-vc80-mt-gd-1_33_dir ./vc80/libboost_regex-vc80-mt-gd-1_33.lib
 
-clean :  libboost_regex-vc80-s-1_33_clean libboost_regex-vc80-mt-s-1_33_clean libboost_regex-vc80-sgd-1_33_clean libboost_regex-vc80-mt-sgd-1_33_clean boost_regex-vc80-mt-gd-1_33_clean boost_regex-vc80-mt-1_33_clean libboost_regex-vc80-mt-1_33_clean libboost_regex-vc80-mt-gd-1_33_clean
+clean :  libboost_regex-vc80-mt-s-1_33_clean libboost_regex-vc80-mt-sgd-1_33_clean boost_regex-vc80-mt-gd-1_33_clean boost_regex-vc80-mt-1_33_clean libboost_regex-vc80-mt-1_33_clean libboost_regex-vc80-mt-gd-1_33_clean
 
 install : all
-	copy vc80\libboost_regex-vc80-s-1_33.lib "$(MSVCDIR)\lib"
 	copy vc80\libboost_regex-vc80-mt-s-1_33.lib "$(MSVCDIR)\lib"
-	copy vc80\libboost_regex-vc80-sgd-1_33.lib "$(MSVCDIR)\lib"
-	copy vc80\libboost_regex-vc80-sgd-1_33.pdb "$(MSVCDIR)\lib"
 	copy vc80\libboost_regex-vc80-mt-sgd-1_33.lib "$(MSVCDIR)\lib"
-	copy vc80\libboost_regex-vc80-mt-sgd-1_33.pdb "$(MSVCDIR)\lib"
 	copy vc80\boost_regex-vc80-mt-gd-1_33.lib "$(MSVCDIR)\lib"
 	copy vc80\boost_regex-vc80-mt-gd-1_33.dll "$(MSVCDIR)\bin"
-	copy vc80\boost_regex-vc80-mt-gd-1_33.pdb "$(MSVCDIR)\lib"
 	copy vc80\boost_regex-vc80-mt-1_33.lib "$(MSVCDIR)\lib"
 	copy vc80\boost_regex-vc80-mt-1_33.dll "$(MSVCDIR)\bin"
 	copy vc80\libboost_regex-vc80-mt-1_33.lib "$(MSVCDIR)\lib"
@@ -79,74 +76,6 @@ install : all
 main_dir :
 	@if not exist "vc80\$(NULL)" mkdir vc80
 
-
-########################################################
-#
-# section for libboost_regex-vc80-s-1_33.lib
-#
-########################################################
-vc80/libboost_regex-vc80-s-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/c_regex_traits.cpp
-
-vc80/libboost_regex-vc80-s-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/cpp_regex_traits.cpp
-
-vc80/libboost_regex-vc80-s-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/cregex.cpp
-
-vc80/libboost_regex-vc80-s-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/fileiter.cpp
-
-vc80/libboost_regex-vc80-s-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/icu.cpp
-
-vc80/libboost_regex-vc80-s-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/instances.cpp
-
-vc80/libboost_regex-vc80-s-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/posix_api.cpp
-
-vc80/libboost_regex-vc80-s-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/regex.cpp
-
-vc80/libboost_regex-vc80-s-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/regex_debug.cpp
-
-vc80/libboost_regex-vc80-s-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/regex_raw_buffer.cpp
-
-vc80/libboost_regex-vc80-s-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/regex_traits_defaults.cpp
-
-vc80/libboost_regex-vc80-s-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/static_mutex.cpp
-
-vc80/libboost_regex-vc80-s-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/usinstances.cpp
-
-vc80/libboost_regex-vc80-s-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/w32_regex_traits.cpp
-
-vc80/libboost_regex-vc80-s-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/wc_regex_traits.cpp
-
-vc80/libboost_regex-vc80-s-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/wide_posix_api.cpp
-
-vc80/libboost_regex-vc80-s-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /EHsc /O2  /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /Zc:wchar_t  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-s-1_33/ -Fdvc80/libboost_regex-vc80-s-1_33.pdb ../src/winstances.cpp
-
-libboost_regex-vc80-s-1_33_dir :
-	@if not exist "vc80\libboost_regex-vc80-s-1_33\$(NULL)" mkdir vc80\libboost_regex-vc80-s-1_33
-
-libboost_regex-vc80-s-1_33_clean :
-	del vc80\libboost_regex-vc80-s-1_33\*.obj
-	del vc80\libboost_regex-vc80-s-1_33\*.idb
-	del vc80\libboost_regex-vc80-s-1_33\*.exp
-	del vc80\libboost_regex-vc80-s-1_33\*.pch
-
-./vc80/libboost_regex-vc80-s-1_33.lib : vc80/libboost_regex-vc80-s-1_33/c_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/cpp_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/cregex.obj vc80/libboost_regex-vc80-s-1_33/fileiter.obj vc80/libboost_regex-vc80-s-1_33/icu.obj vc80/libboost_regex-vc80-s-1_33/instances.obj vc80/libboost_regex-vc80-s-1_33/posix_api.obj vc80/libboost_regex-vc80-s-1_33/regex.obj vc80/libboost_regex-vc80-s-1_33/regex_debug.obj vc80/libboost_regex-vc80-s-1_33/regex_raw_buffer.obj vc80/libboost_regex-vc80-s-1_33/regex_traits_defaults.obj vc80/libboost_regex-vc80-s-1_33/static_mutex.obj vc80/libboost_regex-vc80-s-1_33/usinstances.obj vc80/libboost_regex-vc80-s-1_33/w32_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/wc_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/wide_posix_api.obj vc80/libboost_regex-vc80-s-1_33/winstances.obj
-	link -lib /nologo /out:vc80/libboost_regex-vc80-s-1_33.lib $(XSFLAGS)  vc80/libboost_regex-vc80-s-1_33/c_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/cpp_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/cregex.obj vc80/libboost_regex-vc80-s-1_33/fileiter.obj vc80/libboost_regex-vc80-s-1_33/icu.obj vc80/libboost_regex-vc80-s-1_33/instances.obj vc80/libboost_regex-vc80-s-1_33/posix_api.obj vc80/libboost_regex-vc80-s-1_33/regex.obj vc80/libboost_regex-vc80-s-1_33/regex_debug.obj vc80/libboost_regex-vc80-s-1_33/regex_raw_buffer.obj vc80/libboost_regex-vc80-s-1_33/regex_traits_defaults.obj vc80/libboost_regex-vc80-s-1_33/static_mutex.obj vc80/libboost_regex-vc80-s-1_33/usinstances.obj vc80/libboost_regex-vc80-s-1_33/w32_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/wc_regex_traits.obj vc80/libboost_regex-vc80-s-1_33/wide_posix_api.obj vc80/libboost_regex-vc80-s-1_33/winstances.obj
 
 ########################################################
 #
@@ -215,74 +144,6 @@ libboost_regex-vc80-mt-s-1_33_clean :
 
 ./vc80/libboost_regex-vc80-mt-s-1_33.lib : vc80/libboost_regex-vc80-mt-s-1_33/c_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/cpp_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/cregex.obj vc80/libboost_regex-vc80-mt-s-1_33/fileiter.obj vc80/libboost_regex-vc80-mt-s-1_33/icu.obj vc80/libboost_regex-vc80-mt-s-1_33/instances.obj vc80/libboost_regex-vc80-mt-s-1_33/posix_api.obj vc80/libboost_regex-vc80-mt-s-1_33/regex.obj vc80/libboost_regex-vc80-mt-s-1_33/regex_debug.obj vc80/libboost_regex-vc80-mt-s-1_33/regex_raw_buffer.obj vc80/libboost_regex-vc80-mt-s-1_33/regex_traits_defaults.obj vc80/libboost_regex-vc80-mt-s-1_33/static_mutex.obj vc80/libboost_regex-vc80-mt-s-1_33/usinstances.obj vc80/libboost_regex-vc80-mt-s-1_33/w32_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/wc_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/wide_posix_api.obj vc80/libboost_regex-vc80-mt-s-1_33/winstances.obj
 	link -lib /nologo /out:vc80/libboost_regex-vc80-mt-s-1_33.lib $(XSFLAGS)  vc80/libboost_regex-vc80-mt-s-1_33/c_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/cpp_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/cregex.obj vc80/libboost_regex-vc80-mt-s-1_33/fileiter.obj vc80/libboost_regex-vc80-mt-s-1_33/icu.obj vc80/libboost_regex-vc80-mt-s-1_33/instances.obj vc80/libboost_regex-vc80-mt-s-1_33/posix_api.obj vc80/libboost_regex-vc80-mt-s-1_33/regex.obj vc80/libboost_regex-vc80-mt-s-1_33/regex_debug.obj vc80/libboost_regex-vc80-mt-s-1_33/regex_raw_buffer.obj vc80/libboost_regex-vc80-mt-s-1_33/regex_traits_defaults.obj vc80/libboost_regex-vc80-mt-s-1_33/static_mutex.obj vc80/libboost_regex-vc80-mt-s-1_33/usinstances.obj vc80/libboost_regex-vc80-mt-s-1_33/w32_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/wc_regex_traits.obj vc80/libboost_regex-vc80-mt-s-1_33/wide_posix_api.obj vc80/libboost_regex-vc80-mt-s-1_33/winstances.obj
-
-########################################################
-#
-# section for libboost_regex-vc80-sgd-1_33.lib
-#
-########################################################
-vc80/libboost_regex-vc80-sgd-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/c_regex_traits.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/cpp_regex_traits.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/cregex.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/fileiter.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/icu.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/instances.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/posix_api.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/regex.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/regex_debug.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/regex_raw_buffer.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/regex_traits_defaults.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/static_mutex.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/usinstances.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/w32_regex_traits.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/wc_regex_traits.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/wide_posix_api.cpp
-
-vc80/libboost_regex-vc80-sgd-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /EHsc /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /EHsc /c  $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc80/libboost_regex-vc80-sgd-1_33/ -Fdvc80/libboost_regex-vc80-sgd-1_33.pdb ../src/winstances.cpp
-
-libboost_regex-vc80-sgd-1_33_dir :
-	@if not exist "vc80\libboost_regex-vc80-sgd-1_33\$(NULL)" mkdir vc80\libboost_regex-vc80-sgd-1_33
-
-libboost_regex-vc80-sgd-1_33_clean :
-	del vc80\libboost_regex-vc80-sgd-1_33\*.obj
-	del vc80\libboost_regex-vc80-sgd-1_33\*.idb
-	del vc80\libboost_regex-vc80-sgd-1_33\*.exp
-	del vc80\libboost_regex-vc80-sgd-1_33\*.pch
-
-./vc80/libboost_regex-vc80-sgd-1_33.lib : vc80/libboost_regex-vc80-sgd-1_33/c_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/cpp_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/cregex.obj vc80/libboost_regex-vc80-sgd-1_33/fileiter.obj vc80/libboost_regex-vc80-sgd-1_33/icu.obj vc80/libboost_regex-vc80-sgd-1_33/instances.obj vc80/libboost_regex-vc80-sgd-1_33/posix_api.obj vc80/libboost_regex-vc80-sgd-1_33/regex.obj vc80/libboost_regex-vc80-sgd-1_33/regex_debug.obj vc80/libboost_regex-vc80-sgd-1_33/regex_raw_buffer.obj vc80/libboost_regex-vc80-sgd-1_33/regex_traits_defaults.obj vc80/libboost_regex-vc80-sgd-1_33/static_mutex.obj vc80/libboost_regex-vc80-sgd-1_33/usinstances.obj vc80/libboost_regex-vc80-sgd-1_33/w32_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/wc_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/wide_posix_api.obj vc80/libboost_regex-vc80-sgd-1_33/winstances.obj
-	link -lib /nologo /out:vc80/libboost_regex-vc80-sgd-1_33.lib $(XSFLAGS)  vc80/libboost_regex-vc80-sgd-1_33/c_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/cpp_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/cregex.obj vc80/libboost_regex-vc80-sgd-1_33/fileiter.obj vc80/libboost_regex-vc80-sgd-1_33/icu.obj vc80/libboost_regex-vc80-sgd-1_33/instances.obj vc80/libboost_regex-vc80-sgd-1_33/posix_api.obj vc80/libboost_regex-vc80-sgd-1_33/regex.obj vc80/libboost_regex-vc80-sgd-1_33/regex_debug.obj vc80/libboost_regex-vc80-sgd-1_33/regex_raw_buffer.obj vc80/libboost_regex-vc80-sgd-1_33/regex_traits_defaults.obj vc80/libboost_regex-vc80-sgd-1_33/static_mutex.obj vc80/libboost_regex-vc80-sgd-1_33/usinstances.obj vc80/libboost_regex-vc80-sgd-1_33/w32_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/wc_regex_traits.obj vc80/libboost_regex-vc80-sgd-1_33/wide_posix_api.obj vc80/libboost_regex-vc80-sgd-1_33/winstances.obj
 
 ########################################################
 #
