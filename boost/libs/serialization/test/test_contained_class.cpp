@@ -41,6 +41,7 @@ public:
     {
         return b == rhs.b;
     }
+    C(){}
 };
 
 int test_main( int /* argc */, char* /* argv */[] )
