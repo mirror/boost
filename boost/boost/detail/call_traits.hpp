@@ -76,7 +76,7 @@ public:
    // however compiler bugs prevent this - instead pass three bool's to
    // ct_imp<T,bool,bool,bool> and add an extra partial specialisation
    // of ct_imp to handle the logic. (JM)
-   typedef typename detail::ct_imp<
+   typedef typename boost::detail::ct_imp<
       T,
       ::boost::is_pointer<T>::value,
       ::boost::is_arithmetic<T>::value
