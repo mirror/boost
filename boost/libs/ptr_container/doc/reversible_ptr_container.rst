@@ -103,21 +103,21 @@ Its purpose is to present the general interface of all the pointer containers.
             template < class T,  class CA, class VPC >
             bool operator<=( const reversible_ptr_container<T,CA,VPC>& x,
                              const reversible_ptr_container<T,CA,VPC>& y);
-            
+
             template< class T,  class CA, class VPC  >
-            void swap( reversible_ptr_container<T,CA,VPC>& x, 
+            void swap( reversible_ptr_container<T,CA,VPC>& x,
                        reversible_ptr_container<T,CA,VPC>& y );
 
             // clonability_
             template< class T,  class CA, class VPC >
-            reversible_ptr_container<T,CA,VPC>* 
+            reversible_ptr_container<T,CA,VPC>*
             new_clone( const reversible_ptr_container<T,CA,VPC>& r );
 
             // `null predicate`_
             template< class Iterator >
             bool is_null( Iterator i );
-     
-        } // namespace 'boost'  
+
+        } // namespace 'boost'
 
 
 
@@ -132,7 +132,7 @@ Semantics: typedefs
 Notice how these two types differ:
 
 
-- ``typedef T* value_type;`` 
+- ``typedef T* value_type;``
 
     - notice this has pointer type
 
@@ -143,7 +143,7 @@ Notice how these two types differ:
 This is done to be able to add pointers directly
 to the container, but to hide the pointers externally.
 
-.. 
+..
         - ``typedef *implementation defined* object_type;``
         - this is ``T`` for sequences and sets
         - this is ``std::pair<const Key, void*>`` for maps
@@ -160,7 +160,7 @@ Note that::
 
 returns an iterator that allows one to iterate over ``void*``
 elements (*this is very rarely needed and you should not use the
-functionality unless you know what you are doing*).    
+functionality unless you know what you are doing*).
 
 - ``typedef ... auto_type``
 
@@ -170,7 +170,7 @@ operations::
     T* operator->() const;
     T& operator*() const;
     T* release();
-    ~auto_type();    
+    ~auto_type();
 
 The destructor will delete the stored object. It might help to
 think it is just an ``std::auto_ptr<T>``.
@@ -188,16 +188,16 @@ Semantics: construct/copy/destroy
 
 ..
         - ``reversible_ptr_container( size_type n, const T& x );``
-    
+
         - Effects: Constructs a container with ``n`` clones of ``x``
-    
+
         - Postconditions: ``size() == n``
 
 - ``explicit reversible_ptr_container( std::auto_ptr< reversible_ptr_container > r );``
 
     - Effects: Constructs a container by taking ownership of the supplied pointers
 
- 
+
 - ``template< class InputIterator >``
   ``reversible_ptr_container( InputIterator first, InputIterator last );``
 
@@ -229,6 +229,8 @@ Semantics: construct/copy/destroy
 Semantics: iterators
 ^^^^^^^^^^^^^^^^^^^^
 
+**See also:** `iterator invalidation <conventions.html#iterators-are-invalidated-as-in-the-corresponding-standard-container>`_
+
 - ``iterator begin();``
 - ``const_iterator begin() const;``
 
@@ -248,7 +250,7 @@ Semantics: iterators
 - ``const_reverse_iterator rbegin() const;``
 
     - Effects: Returns a mutable/non-mutable reverse iterator with ``value_type T``
- 
+
     - Throws: Nothing
 
 - ``reverse_iterator rend();``

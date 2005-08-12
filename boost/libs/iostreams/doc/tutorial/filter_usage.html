@@ -29,7 +29,7 @@
 <H2>2.2.2. Filter Usage Examples</H2>
 
 <P>
-    Filters are generally used in conjunction with <A HREF="../guide/filtering_streams.html">filtering streams and stream buffers.</A> For example, suppose we have some text which we want to compress, then Base64 encode, then write to a file. If we have appropriate OutputFilters <CODE>compressor</CODE> and <CODE>base64_encoder</CODE>, we can do this as follows:<A CLASS='footnote_ref' NAME='note_1_ref' HREF="#note_1"><SUP>[1]</SUP></A>
+    Filters are generally used in conjunction with <A HREF="../guide/filtering_streams.html">filtering streams and stream buffers.</A> For example, suppose you have some text which you want to compress, then Base64 encode, then write to a file. If you have appropriate OutputFilters <CODE>compressor</CODE> and <CODE>base64_encoder</CODE>, you can do this as follows:<A CLASS='footnote_ref' NAME='note_1_ref' HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 
 <PRE CLASS="broken_ie">
@@ -52,7 +52,7 @@
 </P>
     
 <P>
-    Now suppose we want to recoved the original data. If we have appropriate InputFilters <CODE>decompressor</CODE> and <CODE>base64_decoder</CODE>, we can accomplish this as follows as follows:<A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2"><SUP>[2]</SUP></A>
+    Now suppose you want to recoved the original data. If you have appropriate InputFilters <CODE>decompressor</CODE> and <CODE>base64_decoder</CODE>, you can accomplish this as follows as follows:<A CLASS='footnote_ref' NAME='note_2_ref' HREF="#note_2"><SUP>[2]</SUP></A>
 </P>
 
 <PRE CLASS="broken_ie">
@@ -71,7 +71,7 @@
 }</PRE>
 
 <P>
-    Here we see another use of a filter chain. When data is read from the chain, it flows through the components in <I>reverse</I> order, beginning with the component pushed last. The last component pushed could be any model of <A HREF="../concepts/source.html">Source</A>, including a <CODE>std::istream</CODE> such as <CODE>std::cin</CODE>.
+    Here you see another use of a filter chain. When data is read from the chain, it flows through the components in <I>reverse</I> order, beginning with the component pushed last. The last component pushed could be any model of <A HREF="../concepts/source.html">Source</A>, including a <CODE>std::istream</CODE> such as <CODE>std::cin</CODE>.
 </P>
 
 <HR>
@@ -106,7 +106,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -105,26 +105,26 @@ namespace boost
     template &lt; class T,  class CA, class VPC &gt;
     bool operator&lt;=( const reversible_ptr_container&lt;T,CA,VPC&gt;&amp; x,
                      const reversible_ptr_container&lt;T,CA,VPC&gt;&amp; y);
-    
+
     template&lt; class T,  class CA, class VPC  &gt;
-    void swap( reversible_ptr_container&lt;T,CA,VPC&gt;&amp; x, 
+    void swap( reversible_ptr_container&lt;T,CA,VPC&gt;&amp; x,
                reversible_ptr_container&lt;T,CA,VPC&gt;&amp; y );
 
     // <a class="reference" href="#clonability">clonability</a>
     template&lt; class T,  class CA, class VPC &gt;
-    reversible_ptr_container&lt;T,CA,VPC&gt;* 
+    reversible_ptr_container&lt;T,CA,VPC&gt;*
     new_clone( const reversible_ptr_container&lt;T,CA,VPC&gt;&amp; r );
 
     // <a class="reference" href="#null-predicate">null predicate</a>
     template&lt; class Iterator &gt;
     bool is_null( Iterator i );
 
-} // namespace 'boost'  
+} // namespace 'boost'
 </pre>
 </div>
 <div class="section" id="semantics">
 <h1><a name="semantics">Semantics</a></h1>
-<a class="target" id="typedefs" name="typedefs"></a><div class="section" id="semantics-typedefs">
+<span id="typedefs"></span><div class="section" id="semantics-typedefs">
 <h2><a name="semantics-typedefs">Semantics: typedefs</a></h2>
 <p>Notice how these two types differ:</p>
 <ul>
@@ -159,7 +159,7 @@ iterator i = ...;
 i.base();
 </pre>
 <p>returns an iterator that allows one to iterate over <tt class="docutils literal"><span class="pre">void*</span></tt>
-elements (<em>this is very rarely needed and you should not use that
+elements (<em>this is very rarely needed and you should not use the
 functionality unless you know what you are doing</em>).</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">auto_type</span></tt></li>
@@ -170,12 +170,12 @@ operations:</p>
 T* operator-&gt;() const;
 T&amp; operator*() const;
 T* release();
-~auto_type();    
+~auto_type();
 </pre>
 <p>The destructor will delete the stored object. It might help to
 think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>.</p>
-<a class="target" id="construct-copy-destroy" name="construct-copy-destroy"></a></div>
-<div class="section" id="semantics-construct-copy-destroy">
+</div>
+<span id="construct-copy-destroy"></span><div class="section" id="semantics-construct-copy-destroy">
 <h2><a name="semantics-construct-copy-destroy">Semantics: construct/copy/destroy</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">reversible_ptr_container();</span></tt></p>
@@ -234,9 +234,10 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </blockquote>
 </li>
 </ul>
-<a class="target" id="iterators" name="iterators"></a></div>
-<div class="section" id="semantics-iterators">
+</div>
+<span id="iterators"></span><div class="section" id="semantics-iterators">
 <h2><a name="semantics-iterators">Semantics: iterators</a></h2>
+<p><strong>See also:</strong> <a class="reference" href="conventions.html#iterators-are-invalidated-as-in-the-corresponding-standard-container">iterator invalidation</a></p>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span> <span class="pre">begin();</span></tt></p>
 </li>
@@ -279,8 +280,8 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </blockquote>
 </li>
 </ul>
-<a class="target" id="capacity" name="capacity"></a></div>
-<div class="section" id="semantics-capacity">
+</div>
+<span id="capacity"></span><div class="section" id="semantics-capacity">
 <h2><a name="semantics-capacity">Semantics: capacity</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">size_type</span> <span class="pre">size()</span> <span class="pre">const;</span></tt></p>
@@ -308,8 +309,8 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </blockquote>
 </li>
 </ul>
-<a class="target" id="modifiers" name="modifiers"></a></div>
-<div class="section" id="semantics-modifiers">
+</div>
+<span id="modifiers"></span><div class="section" id="semantics-modifiers">
 <h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">swap(</span> <span class="pre">reversible_ptr_container&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
@@ -330,8 +331,8 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </blockquote>
 </li>
 </ul>
-<a class="target" id="pointer-container-requirements" name="pointer-container-requirements"></a></div>
-<div class="section" id="semantics-pointer-container-requirements">
+</div>
+<span id="pointer-container-requirements"></span><div class="section" id="semantics-pointer-container-requirements">
 <h2><a name="semantics-pointer-container-requirements">Semantics: pointer container requirements</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">T*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
@@ -375,8 +376,8 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </blockquote>
 </li>
 </ul>
-<a class="target" id="comparison" name="comparison"></a></div>
-<div class="section" id="semantics-comparison">
+</div>
+<span id="comparison"></span><div class="section" id="semantics-comparison">
 <h2><a name="semantics-comparison">Semantics: comparison</a></h2>
 <p>These functions compare the underlying range of objects. 
 So</p>
@@ -385,8 +386,8 @@ operation( const ptr_container&amp; l, const ptr_container&amp; r );
 </pre>
 <p>has the effect one would expect of normal standard containers. Hence
 objects are compared and not the pointers to objects.</p>
-<a class="target" id="clonability" name="clonability"></a></div>
-<div class="section" id="semantics-clonability">
+</div>
+<span id="clonability"></span><div class="section" id="semantics-clonability">
 <h2><a name="semantics-clonability">Semantics: clonability</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">T,</span> <span class="pre">class</span> <span class="pre">CloneAllocator</span> <span class="pre">&gt;</span>
@@ -395,14 +396,14 @@ objects are compared and not the pointers to objects.</p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">r.clone().release();</span></tt></li>
-<li>Remarks: This function is only defined for concrete <a class="reference" href="ptr_container.html#smart-containers">pointer containers</a>, but not for 
-<a class="reference" href="ptr_container.html#smart-container-adapters">pointer container adapters</a>.</li>
+<li>Remarks: This function is only defined for concrete <a class="reference" href="reference.html#pointer-containers">pointer containers</a>, but not for 
+<a class="reference" href="reference.html#pointer-container-adapters">pointer container adapters</a>.</li>
 </ul>
 </blockquote>
 </li>
 </ul>
-<a class="target" id="null-predicate" name="null-predicate"></a></div>
-<div class="section" id="semantics-null-predicate">
+</div>
+<span id="null-predicate"></span><div class="section" id="semantics-null-predicate">
 <h2><a name="semantics-null-predicate">Semantics: null predicate</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Iterator</span> <span class="pre">&gt;</span> <span class="pre">bool</span> <span class="pre">is_null(</span> <span class="pre">Iterator</span> <span class="pre">i</span> <span class="pre">);</span></tt></p>

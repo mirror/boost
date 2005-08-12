@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -26,6 +26,7 @@ and provides almost the same interface.  The new conventions are:</p>
 <li><a class="reference" href="#ownership-can-be-transferred-from-a-container-on-a-per-pointer-basis" id="id10" name="id10">Ownership can be transferred from a container on a per pointer basis</a></li>
 <li><a class="reference" href="#ownership-can-be-transferred-from-a-container-to-another-container-on-a-per-iterator-range-basis" id="id11" name="id11">Ownership can be transferred from a container to another container on a per iterator range basis</a></li>
 <li><a class="reference" href="#a-container-can-be-cheaply-returned-from-functions-either-by-making-a-clone-or-by-giving-up-ownership-of-the-container" id="id12" name="id12">A container can be cheaply returned from functions either by making a clone or by giving up ownership of the container</a></li>
+<li><a class="reference" href="#iterators-are-invalidated-as-in-the-corresponding-standard-container" id="id13" name="id13">Iterators are invalidated as in the corresponding standard container</a></li>
 </ul>
 </div>
 <div class="section" id="null-pointers-are-not-allowed-by-default">
@@ -71,7 +72,7 @@ needed anyway, every container has a <tt class="docutils literal"><span class="p
 (see <a class="reference" href="examples.html">Example 3</a>).</p>
 </div>
 <div class="section" id="stored-elements-are-required-to-be-clonable-for-a-subset-of-the-operations">
-<h1><a class="toc-backref" href="#id7" name="stored-elements-are-required-to-be-clonable-for-a-subset-of-the-operations">Stored elements are required to be <a class="reference" href="reference.html#the-clonable-concept">Clonable</a> for a subset of the operations</a></h1>
+<h1><a name="stored-elements-are-required-to-be-clonable-for-a-subset-of-the-operations">Stored elements are required to be <a class="reference" href="reference.html#the-clonable-concept">Clonable</a> for a subset of the operations</a></h1>
 <p>This is because most polymorphic objects cannot be copied directly, but 
 they can often be so by a use of a member function (see <a class="reference" href="examples.html">Example 4</a>).  Often 
 it does not even make sense to clone an object in which case a large 
@@ -104,6 +105,16 @@ containers without cloning the objects again (see <a class="reference" href="exa
 <tt class="docutils literal"><span class="pre">auto_ptr&lt;SmartContainer&gt;</span></tt> which can be assigned to another pointer container.  This 
 effectively reduces the cost of returning a container to one 
 heap-allocation plus a call to <tt class="docutils literal"><span class="pre">swap()</span></tt> (see <a class="reference" href="examples.html">Example 3</a>).</p>
+</div>
+<div class="section" id="iterators-are-invalidated-as-in-the-corresponding-standard-container">
+<h1><a class="toc-backref" href="#id13" name="iterators-are-invalidated-as-in-the-corresponding-standard-container">Iterators are invalidated as in the corresponding standard container</a></h1>
+<p>Because the containers in this library wrap standard containers, the
+rules for invalidation of iterators are the same as the rules
+of the corresponding standard container.</p>
+<p>For example, for both <tt class="docutils literal"><span class="pre">boost::ptr_vector&lt;T&gt;</span></tt> and <tt class="docutils literal"><span class="pre">std::vector&lt;U&gt;</span></tt>
+insertion and deletion only invalidates the deleted
+element and elements following it; all elements before the inserted/deleted
+element remain valid.</p>
 <p><strong>Navigate:</strong></p>
 <ul class="simple">
 <li><a class="reference" href="ptr_container.html">home</a></li>

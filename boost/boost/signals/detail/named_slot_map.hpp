@@ -89,7 +89,7 @@ public:
   void increment();
   bool equal(const named_slot_map_iterator& other) const;
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1701)
+#if BOOST_WORKAROUND(_MSC_VER, <= 0x1701)
   void decrement();
   void advance(difference_type);
 #endif

@@ -234,7 +234,7 @@ into the temporary iterator <tt class="docutils literal"><span class="pre">p+n</
 <tt class="docutils literal"><span class="pre">operator[]</span></tt> returns.</p>
 <p>Writable iterators built with <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> implement the
 semantics required by the preferred resolution to <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
-adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
+adopted by proposal <a class="reference" href="http://www.open-std.org/jtc1/sc22/WG21/docs/papers/2003/n1550.htm">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
 convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>, and <tt class="docutils literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is
 equivalent to <tt class="docutils literal"><span class="pre">*(p</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt> (Note: This result object may be
 implemented as a proxy containing a copy of <tt class="docutils literal"><span class="pre">p+n</span></tt>).  This approach
@@ -1269,8 +1269,8 @@ If we try to convert from <tt class="docutils literal"><span class="pre">node_co
 constructor tries to initialize <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s <tt class="docutils literal"><span class="pre">m_node</span></tt>, a
 <tt class="docutils literal"><span class="pre">node*</span></tt> with a <tt class="docutils literal"><span class="pre">node</span> <span class="pre">const*</span></tt>.  So what's the problem?</p>
 <p>The problem is that
-<tt class="docutils literal"><span class="pre">boost::</span></tt><a class="reference" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a><tt class="docutils literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
-will be <tt class="docutils literal"><span class="pre">true</span></tt>, but it should be <tt class="docutils literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a>
+<tt class="docutils literal"><span class="pre">boost::</span></tt><a class="reference" href="../../../doc/html/boost_typetraits/category.html#boost_typetraits.relate"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a><tt class="docutils literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
+will be <tt class="docutils literal"><span class="pre">true</span></tt>, but it should be <tt class="docutils literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../../doc/html/boost_typetraits/category.html#boost_typetraits.relate"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a>
 lies because it can only see as far as the <em>declaration</em> of
 <tt class="docutils literal"><span class="pre">node_iter</span></tt>'s converting constructor, but can't look inside at
 the <em>definition</em> to make sure it will compile.  A perfect solution

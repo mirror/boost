@@ -1,7 +1,7 @@
 ++++++++++++++++++++++++++++++++++
  |Boost| Pointer Container Library
 ++++++++++++++++++++++++++++++++++
- 
+
 .. |Boost| image:: cboost.gif
 
 Class ``ptr_sequence_adapter``
@@ -14,9 +14,9 @@ sequences:
 - ptr_list_,
 - ptr_deque_,
 
-.. _ptr_vector : ptr_vector.html 
-.. _ptr_list : ptr_list.html 
-.. _ptr_deque : ptr_deque.html 
+.. _ptr_vector : ptr_vector.html
+.. _ptr_list : ptr_list.html
+.. _ptr_deque : ptr_deque.html
 
 
 The ``ptr_sequence_adapter`` is also a concrete class that you can use to create custom pointer
@@ -26,7 +26,7 @@ containers from.
 
 - reversible_ptr_container__
 
-__ reversible_ptr_container.html  
+__ reversible_ptr_container.html
 
 **Navigate:**
 
@@ -36,51 +36,51 @@ __ reversible_ptr_container.html
 
 **Synopsis:**
 
-.. parsed-literal::  
-           
+.. parsed-literal::
+
         namespace boost
-        {      
-        
+        {
+
             template
-            < 
-                class T, 
+            <
+                class T,
                 class VoidPtrSeq,
                 class CloneAllocator = heap_clone_allocator
             >
-            class ptr_sequence_adapter 
+            class ptr_sequence_adapter
             {
             public: // `construct/copy/destroy`_
                 template< class InputIterator >
                 assign( InputIterator first, InputIterator last );
                 template< class InputRange >
                 assign( const InputRange& e );
-            
+
             public: // `element access`_
                 T&        front();
                 const T&  front() const;
                 T&        back();
                 const T&  back() const;
-            
+
             public: // `modifiers`_
                 void      push_back( T* x );
                 auto_type pop_back();
                 iterator  insert( iterator position, T* x );
                 template< class InputIterator >
-                void      insert( iterator position, InputIterator first, InputIterator last ); 
+                void      insert( iterator position, InputIterator first, InputIterator last );
                 template< class InputRange >
                 void      insert( iterator position, const InputRange& r );
                 iterator  erase( iterator position );
                 iterator  erase( iterator first, iterator last );
                 template< class Range >
                 iterator  erase( const Range& r );
-            
+
             public: // `pointer container requirements`_
-   
-                void  transfer( iterator before, iterator object, 
+
+                void  transfer( iterator before, iterator object,
                                 ptr_sequence_adapter& from );
                 void  transfer( iterator before, iterator first, iterator last,
                                 ptr_sequence_adapter& from );
-                void template< class Range> 
+                void template< class Range>
                 void transfer( iterator before, const Range& r, ptr_sequence_adapter& from );
                 void transfer( iterator before, ptr_sequence_adapter& from );
 
@@ -111,16 +111,16 @@ __ reversible_ptr_container.html
                 void merge( iterator first, iterator last, ptr_sequence_adapter& from );
                 template< class Compare >
                 void merge( iterator first, iterator last, ptr_sequence_adapter& from, Compare comp );
-                
+
             public: // `ptr_list interface`_
-             
+
             public: // `ptr_vector interface`_
 
-            public: // `ptr_deque interface`_ 
-             
+            public: // `ptr_deque interface`_
+
             }; //  class 'ptr_sequence_adapter'
-        
-        } // namespace 'boost'  
+
+        } // namespace 'boost'
 
 .. _`ptr_list interface`: ptr_list.html
 .. _`ptr_vector interface`: ptr_vector.html
@@ -153,27 +153,27 @@ Semantics: construct/copy/destroy
 
 ..
         - ``assign( size_type n, const T& u )``
-    
+
         - Effects: ``clear(); insert( begin(), n, u );``
-    
+
         - Postconditions: ``size() == n``
-    
+
         - Exception safety: Strong guarantee
 
 
-.. 
+..
         void resize( size_type sz, const T& x );
-        Effects: 
-        
+        Effects:
+
         if ( sz > size() )
             insert( end(), sz-size(), x );
             else if ( sz < size() )
             erase( begin()+sz, end() );
             else
-            ; //do nothing 
-        
+            ; //do nothing
+
         Postconditions: size() == sz
-        
+
         Exception safety: Strong guarantee
 
 
@@ -232,9 +232,9 @@ Semantics: modifiers
 
 ..
         - ``void push_back( const T& x );``
-    
+
         - Effects: ``push_back( CloneAllocator::clone( x ) );``
-    
+
         - Exception safety: Strong guarantee
 
 - ``auto_type pop_back();``
@@ -246,16 +246,16 @@ Semantics: modifiers
     - Postconditions: ``size()`` is one less
 
     - Throws: ``bad_ptr_container_operation`` if ``empty() == true``
-    
+
     - Exception safety: Strong guarantee
 
 
 - ``iterator insert( iterator position, T* x );``
 
-    - Requirements: position is a valid iterator from the container and 
+    - Requirements: ``position`` is a valid iterator from the container and
       ``x != 0``
 
-    - Effects: Inserts ``x`` before position and returns an iterator pointing to it
+    - Effects: Inserts ``x`` before ``position`` and returns an iterator pointing to it
 
     - Throws: ``bad_pointer`` if ``x == 0``
 
@@ -263,19 +263,19 @@ Semantics: modifiers
 
 ..
         - ``iterator insert( iterator position, const T& x );``
-    
+
         - Requirements: ``position`` is a valid iterator from the container
-    
+
         - Effects: ``return insert( position, CloneAllocator::clone( x ) );``
-    
+
         - Exception safety: Strong guarantee
 
         - ``void insert( iterator position, size_type n, const T& x );``
-    
+
         - Requirements: ``position`` is a valid iterator from the container
-    
-        - Effects: Inserts ``n`` clones of ``x`` before position into the container 
-    
+
+        - Effects: Inserts ``n`` clones of ``x`` before position into the container
+
         - Exception safety: Strong guarantee
 
 - ``template< class InputIterator >
@@ -318,21 +318,30 @@ Semantics: modifiers
 Semantics: pointer container requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+You cannot use ``transfer()`` to move elements between two
+different types of containers. This is to avoid
+problems with different allocators. The requirement might be
+weakened in the future.
+
+
 - ``void transfer( iterator before, iterator object, ptr_sequence_adapter& from );``
 
     - Requirements: ``not from.empty()``
 
     - Effects: Inserts the object defined by ``object`` into the container and remove it from ``from``.
+      Insertion takes place before ``before``.
 
     - Postconditions: ``size()`` is one more, ``from.size()`` is one less.
 
     - Exception safety: Strong guarantee
+
 
 - ``void transfer( iterator before, iterator first, iterator last, ptr_sequence_adapter& from );``
 
     - Requirements: ``not from.empty()``
 
     - Effects: Inserts the objects defined by the range ``[first,last)`` into the container and remove it from ``from``.
+      Insertion takes place before ``before``.
 
     - Postconditions: Let ``N == std::distance(first,last);`` then ``size()`` is ``N`` more, ``from.size()`` is ``N`` less.
 
@@ -341,7 +350,7 @@ Semantics: pointer container requirements
 - ``template< class Range> void transfer( iterator before, const Range& r, ptr_sequence_adapter& from );``
 
     - Effects: ``transfer(before, boost::begin(r), boost::end(r), from);``
-    
+
 - ``void transfer( iterator before, ptr_sequence_adapter& from );``
 
     - Effects: Transfers all objects from ``from`` into the container. Insertion
@@ -369,7 +378,7 @@ contain any nulls*.
     - Effects: sorts the entire container or the specified range
     - Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)
     - Remarks: The versions of ``sort()`` that take two iterators are not available for ``ptr_list``
-    
+
 - ``void unique();``
 - ``void unique( iterator first, iterator last );``
 - ``template< class Compare > void unique( Compare comp );``

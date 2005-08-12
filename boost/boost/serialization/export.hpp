@@ -45,6 +45,7 @@
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info.hpp>
+#include <boost/serialization/is_abstract.hpp>
 
 namespace boost {
 
@@ -61,7 +62,6 @@ class basic_pointer_oserializer;
 template<class Archive, class T>
 BOOST_DLLEXPORT const basic_pointer_oserializer &
 instantiate_pointer_oserializer(Archive * ar, T *) BOOST_USED;
-
 
 namespace export_impl
 {
@@ -184,7 +184,7 @@ struct export_instance {
     #else
     invoke() {
         typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            is_abstract<T>,
+            serialization::is_abstract<T>,
             mpl::identity<abstract>,
             mpl::identity<not_abstract>
         >::type typex;
@@ -202,12 +202,12 @@ struct export_instance {
     std::pair<const void *, const void *> 
     export_instance<T, ASeq>::invoke() {
         typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            is_abstract<T>,
+            serialization::is_abstract<T>,
             mpl::identity<abstract>,
             mpl::identity<not_abstract>
-        >::type type;
+        >::type typex;
         return std::pair<const void *, const void *>(
-            type::invoke(),
+            typex::invoke(),
             & guid_initializer<T>::instance
         );
     }

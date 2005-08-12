@@ -445,7 +445,7 @@ struct load_pointer_type {
         // virtual serialize functions used for plug-ins
         typedef BOOST_DEDUCED_TYPENAME
             mpl::eval_if<
-                is_abstract<T>,
+                serialization::is_abstract<T>,
                 mpl::identity<abstract<T> >,
                 mpl::identity<non_abstract<T> >    
             >::type typex;

@@ -23,7 +23,7 @@
 
 <HR>
 
-<A NAME="description">
+<A NAME="description"></A>
 <H2>Description</H2>
 
 <P>
@@ -33,13 +33,14 @@
     <CODE>basic_counter</CODE> is <A HREF='../concepts/optimally_buffered.html'>OptimallyBuffered</A> with an optimal buffer size of <CODE>0</CODE> to keep the character and line counts accurate. When a <CODE>basic_counter</CODE> is used for output, the line and character counts should exactly reflect the data which has been passed to downstream fillters. When a <CODE>basic_counter</CODE> is used for input, the character counts may deviate slightly from the number of characters that have been read from downstream the filters because of the putback buffer. The line count should exactly reflect the number of lines that have been read from downstream, except when the first character of a line is being read, in which case the line count may be off by one.
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL class="page-index">
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/counter.hpp"><CODE>&lt;boost/iostreams/filter/counter.hpp&gt;</CODE></A></DT>
 </DL>
-<A NAME="reference">
+
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
 <H4>Synopsis</H4>
@@ -101,7 +102,7 @@
 
 <P>Returns <CODE>0</CODE>.</P>
 
-<A NAME="examples">
+<A NAME="examples"></A>
 <H2>Examples</H2>
 
 <P>The following example illustrates one way of obtaining the line and character counts after a <CODE>basic_counter</CODE> has been added to a filter chain: the <A HREF='filtering_stream.html'><CODE>filtering_stream</CODE></A> member function <A HREF='filtering_stream.html#component'><CODE>component</CODE></A> to obtain a pointer to <CODE>basic_counter</CODE>.</P>
@@ -122,7 +123,7 @@
     <SPAN CLASS='keyword'>int</SPAN> characters = in.component&lt;<SPAN CLASS='literal'>0</SPAN>, counter&gt;()-&gt;characters();
 }</PRE>
 
-<P>The following example illustrates a second way of obtaining the line and character counts: add the <CODE>basic_counter</CODE> to the filter chain by referece, using <A HREF='../../../../doc/html/ref/reference.html'><CODE>boost::ref</CODE></A>, and access the <CODE>basic_counter</CODE> directly.
+<P>The following example illustrates a second way of obtaining the line and character counts: add the <CODE>basic_counter</CODE> to the filter chain by referece, using <A HREF='../../../../doc/html/ref.html'><CODE>boost::ref</CODE></A>, and access the <CODE>basic_counter</CODE> directly.
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/device/file.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/device/file.hpp&gt;</SPAN></A>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/filter/counter.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/filter/counter.hpp&gt;</SPAN></A>
@@ -151,7 +152,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

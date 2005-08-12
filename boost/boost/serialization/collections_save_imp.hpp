@@ -18,8 +18,6 @@
 
 // helper function templates for serialization of collections
 
-#include <boost/archive/basic_archive.hpp>
-
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 

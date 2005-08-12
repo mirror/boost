@@ -26,6 +26,7 @@
 #include <boost/mpl/integral_c_tag.hpp>
 
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 #include <boost/serialization/traits.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/tracking_enum.hpp>

@@ -28,17 +28,17 @@
 <H2>2.2.5. Tab-Expanding Filters</H2>
 
 <P>
-    Suppose we want to write a filter which replaces each tab character with one or more space characters in such a way that the document appears unchanged when displayed. The basic algorithm is as follows: We examine characters one at a time, forwarding them <I>as-is</I> and keeping track of the current column number. When we encounter a tab character, we replace it with a sequence of space characters whose length depends on the current column count. When we encounter a newline character, we forward it and reset the column count.
+    Suppose you want to write a filter which replaces each tab character with one or more space characters in such a way that the document appears unchanged when displayed. The basic algorithm is as follows: You examine characters one at a time, forwarding them <I>as-is</I> and keeping track of the current column number. When you encounter a tab character, you replace it with a sequence of space characters whose length depends on the current column count. When you encounter a newline character, you forward it and reset the column count.
 </P>
 
 <P>
-    In the next three sections, we'll express this algorithm as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A>, an <A HREF="../concepts/input_filter.html">InputFilter</A> and an <A HREF="../concepts/output_filter.html">OutputFilter</A>. The source code can be found in the header <A HREF="../../example/tab_expanding_filter.hpp"><CODE>&lt;libs/iostreams/example/tab_expanding_filter.hpp&gt;</CODE></A>. These examples were inspired by James Kanze's <CODE>ExpandTabsInserter.hh</CODE> (<I>see</I> <A CLASS="bib_ref" HREF="../bibliography.html#kanze">[Kanze]</A>).
+    In the next three sections, I'll express this algorithm as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A>, an <A HREF="../concepts/input_filter.html">InputFilter</A> and an <A HREF="../concepts/output_filter.html">OutputFilter</A>. The source code can be found in the header <A HREF="../../example/tab_expanding_filter.hpp"><CODE>&lt;libs/iostreams/example/tab_expanding_filter.hpp&gt;</CODE></A>. These examples were inspired by James Kanze's <CODE>ExpandTabsInserter.hh</CODE> (<I>see</I> <A CLASS="bib_ref" HREF="../bibliography.html#kanze">[Kanze]</A>).
 </P>
 
 <A NAME="tab_expanding_stdio_filter"></A>
 <H4><CODE>tab_expanding_stdio_filter</CODE></H4>
 
-<P>We can express a tab-expanding Filter as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A> as follows:</P>
+<P>You can express a tab-expanding Filter as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A> as follows:</P>
 
 <PRE class="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS="literal">&lt;cstdio&gt;</SPAN>    <SPAN CLASS="comment">// EOF</SPAN>
 <SPAN CLASS="preprocessor">#include</SPAN> <SPAN CLASS="literal">&lt;iostream&gt;</SPAN>  <SPAN CLASS="comment">// cin, cout</SPAN>
@@ -73,7 +73,7 @@
         }
     }</PRE>
 
-<P>Using <CODE>put_char</CODE> we can implement <CODE>do_filter</CODE> as follows:</P>
+<P>Using <CODE>put_char</CODE> you can implement <CODE>do_filter</CODE> as follows:</P>
 
 <PRE class="broken_ie">    <SPAN CLASS="keyword">void</SPAN> do_filter()
     {
@@ -98,7 +98,7 @@
 <A NAME="tab_expanding_input_filter"></A>
 <H4><CODE>tab_expanding_input_filter</CODE></H4>
 
-<P>We can express a tab-expanding Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A> as follows:</P>
+<P>You can express a tab-expanding Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A> as follows:</P>
 
 <PRE class="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/char_traits.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/char_traits.hpp&gt;</SPAN></A> <SPAN CLASS="comment">// EOF, WOULD_BLOCK</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>    <SPAN CLASS="comment">// input_filter</SPAN>
@@ -140,7 +140,7 @@
         <SPAN CLASS="keyword">return</SPAN> c;
     }</PRE>
 
-<P>This function updates the column count based on the given character <CODE>c</CODE> and returns <CODE>c</CODE>. Using <CODE>get_char</CODE> we can implement <CODE>get</CODE> as follows:</P>
+<P>This function updates the column count based on the given character <CODE>c</CODE> and returns <CODE>c</CODE>. Using <CODE>get_char</CODE> you can implement <CODE>get</CODE> as follows:</P>
 
 <PRE class="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
     <SPAN CLASS="keyword"><SPAN CLASS="keyword">int</SPAN></SPAN> get(Source& src)
@@ -180,7 +180,7 @@
 <A NAME="tab_expanding_output_filter"></A>
 <H4><CODE>tab_expanding_output_filter</CODE></H4>
 
-<P>We can express a tab-expanding Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A> as follows:</P>
+<P>You can express a tab-expanding Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A> as follows:</P>
 
 <PRE class="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>    <SPAN CLASS="comment">// output_filter</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/operations.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/operations.hpp&gt;</SPAN></A>  <SPAN CLASS="comment">// put</SPAN>
@@ -224,7 +224,7 @@
         <SPAN CLASS="keyword">return</SPAN> <SPAN CLASS="keyword">true</SPAN>;
     }</PRE>
 
-<P>Using <CODE>put_char</CODE> we can implement <CODE>put</CODE> as follows:</P>
+<P>Using <CODE>put_char</CODE> you can implement <CODE>put</CODE> as follows:</P>
 
 <PRE class="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Sink&gt;
     <SPAN CLASS="keyword"><SPAN CLASS="keyword">bool</SPAN></SPAN> put(Sink& dest, <SPAN CLASS="keyword"><SPAN CLASS="keyword">int</SPAN></SPAN> c) 
@@ -276,7 +276,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

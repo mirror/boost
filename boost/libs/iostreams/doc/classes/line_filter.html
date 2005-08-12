@@ -23,20 +23,21 @@
 
 <HR>
 
-<A NAME="description">
+<A NAME="description"></A>
 <H2>Description</H2>
 
 <P>
     The class template <CODE>basic_line_filter</CODE> is a <A HREF='../concepts/dual_use_filter.html'>DualUseFilter</A> for use as a base class by Filters which filter a character sequence one line at a time. Derived classes override the <CODE>private</CODE> <CODE>virtual</CODE> function <CODE>do_filter</CODE>, which takes a line of unfiltered text as argument returns the result of filtering the line.
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL class="page-index">
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/line.hpp"><CODE>&lt;boost/iostreams/filter/line.hpp&gt;</CODE></A></DT>
 </DL>
-<A NAME="reference">
+
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
 <H4>Synopsis</H4>
@@ -88,7 +89,7 @@
 
 <P>The argument <CODE>line</CODE> represents a single line of unfiltered text, not including any terminal newline character. Returns the result of filtering <CODE>line</CODE>.</P>
 
-<A NAME="example">
+<A NAME="example"></A>
 <H2>Example</H2>
 
 <P>The following example shows a <CODE>line_filter</CODE> which counts the number of lines which exceed a given length.</P>
@@ -122,7 +123,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

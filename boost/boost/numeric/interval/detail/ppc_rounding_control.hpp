@@ -16,7 +16,7 @@
 #error This header only works on PPC CPUs.
 #endif
 
-#ifdef __GNUC__
+#if defined(__GNUC__ ) || (__IBMCPP__ >= 700)
 
 namespace boost {
 namespace numeric {

@@ -64,14 +64,20 @@ private:
     ){
         return ArchiveImplementation::load_pointer(t, bpis_ptr, finder);
     }
-    virtual void delete_created_pointers(){
-        ArchiveImplementation::delete_created_pointers();
+    virtual void set_library_version(unsigned int archive_library_version){
+        ArchiveImplementation::set_library_version(archive_library_version);
     }
     virtual unsigned int get_library_version() const{
         return ArchiveImplementation::get_library_version();
     }
     virtual unsigned int get_flags() const {
         return ArchiveImplementation::get_flags();
+    }
+    virtual void reset_object_address(const void * new_address, const void * old_address){
+        ArchiveImplementation::reset_object_address(new_address, old_address);
+    }
+    virtual void delete_created_pointers(){
+        ArchiveImplementation::delete_created_pointers();
     }
     virtual void load_binary(void * t, std::size_t size){
         ArchiveImplementation::load_binary(t, size);

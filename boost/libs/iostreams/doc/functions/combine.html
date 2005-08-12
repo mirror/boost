@@ -20,24 +20,21 @@
   <DT><A href="#synopsis">Synopsis</A></DT>
 </DL>
 
-<A NAME="description">
+<A NAME="description"></A>
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>combination</CODE> is an adapter which produces a model of <A HREF="../concepts/bidirectional_device.html">BidirectionalDevice</A> from a model of <A HREF="../concepts/source.html">Source</A> and a model of <A HREF="../concepts/sink.html">Sink</A> pair or from a model of <A HREF="../concepts/input_filter.html">InputFilter</A> and a model of <A HREF="../concepts/output_filter.html">OutputFilter</A>. An instance of <CODE>combination</CODE> is constructed from a pair of instances of its template paratemers; it performs input using the first component and output using the second.
-</P>
-<P>
-    The function template <CODE>combine</CODE> takes a <A HREF="../concepts/source.html">Source</A>/<A HREF="../concepts/sink.html">Sink</A> pair or an <A HREF="../concepts/input_filter.html">InputFilter</A>/<A HREF="../concepts/output_filter.html">OutputFilter</A> pair and returns an appropriate specialization of <CODE>combination</CODE>.
+    The class template <CODE>combination</CODE> takes an <A HREF="../concepts/input_filter.html">InputFilter</A>/<A HREF="../concepts/output_filter.html">OutputFilter</A> pair or a <A HREF="../concepts/source.html">Source</A>/<A HREF="../concepts/sink.html">Sink</A> pair and yields a Filter or Device which performs input using the first component and output using the second. The function template <CODE>combine</CODE> takes an <A HREF="../concepts/input_filter.html">InputFilter</A>/<A HREF="../concepts/output_filter.html">OutputFilter</A> pair or a <A HREF="../concepts/source.html">Source</A>/<A HREF="../concepts/sink.html">Sink</A> pair and returns an appropriate specialization of <CODE>combination</CODE>.
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL>
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/combine.hpp"><CODE>&lt;boost/iostreams/combine.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="synopsis">
+<A NAME="synopsis"></A>
 <H2>Synopsis</H2>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
@@ -59,7 +56,7 @@ combination&lt;In, Out&gt; combine(<SPAN CLASS="keyword">const</SPAN> In& in, <S
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

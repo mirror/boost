@@ -22,7 +22,7 @@
 
 <HR>
 
-<A NAME="description">
+<A NAME="description"></A>
 <H2>Description</H2>
 
 <P>
@@ -33,14 +33,14 @@
     <CODE>filtering_stream</CODE> derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on its <A HREF="#template_params"><CODE>Mode</CODE></A> parameter.
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL class="page-index">
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/filtering_stream.hpp"><CODE>&lt;boost/iostreams/filtering_stream.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="reference">
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
 <A NAME="synopsis"></A>
@@ -387,7 +387,7 @@
 <H4><CODE>filtering_stream::strict_sync</CODE></H4>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">bool</SPAN> strict_sync();</PRE>
 
-<P>Identical to <CODE>sync</CODE> except for the return value, which is <CODE>false</CODE> unless <I>each</I> Filter and Device in the underlying chain is <A HREF='../concepts/flushable.html'>Flushable</A> and <A HREF='../functions/flush.html'><CODE>flush</CODE></A> returns <CODE>true</CODE> when invoked on <I>each</I> component.  A return value of <CODE>true</CODE> guarantees that all buffered data has been successfully forwarded.</P>
+<P>Identical to <CODE>sync</CODE> except for the return value, which is <CODE>false</CODE> unless <I>each</I> Filter in the underlying chain is <A HREF='../concepts/flushable.html'>Flushable</A> and <A HREF='../functions/flush.html'><CODE>flush</CODE></A> returns <CODE>true</CODE> when invoked on <I>each</I> component.  A return value of <CODE>true</CODE> guarantees that all buffered data has been successfully forwarded.</P>
 
 <A NAME="filtering_wstream"></A>
 <H3>Class Template <CODE>filtering_wstream</CODE></H3>
@@ -409,7 +409,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

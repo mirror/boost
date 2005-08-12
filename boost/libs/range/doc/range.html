@@ -44,16 +44,16 @@
 
     <p>
     A Range is a <i>concept</i> similar to the STL <a
-               href="http://www.sgi.com/Technology/STL/Container.html">Container</a> concept. A 
+               href="http://www.sgi.com/Technology/STL/Container.html">Container</a> concept. A
                Range provides iterators for accessing a half-open range
 <code>[first,one_past_last)</code> of elements and provides
-               information about the number of elements in the Range.  However, a Range has 
-               fewer requirements than a Container. 
-              </p> 
+               information about the number of elements in the Range.  However, a Range has
+               fewer requirements than a Container.
+              </p>
               <p>
-               The motivation for the Range concept is 
-               that there are many useful Container-like types that do not meet the full 
-               requirements of Container, and many algorithms that can be written with this 
+               The motivation for the Range concept is
+               that there are many useful Container-like types that do not meet the full
+               requirements of Container, and many algorithms that can be written with this
                reduced set of requirements. In particular, a Range does not necessarily
 
     <ul>
@@ -67,25 +67,25 @@
             -->
     </ul>
 
-    
-    Because of the second requirement, a Range object must be passed by 
+
+    Because of the second requirement, a Range object must be passed by
    (const or non-const) reference in generic code.
 
     </p>
     <p>
-    The operations that can be performed on a Range is dependent on the 
-    <a href="../../iterator/doc/new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">traversal 
+    The operations that can be performed on a Range is dependent on the
+    <a href="../../iterator/doc/new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">traversal
 category</a> of the underlying iterator type. Therefore
-    the range concepts are named to reflect which traversal category its 
+    the range concepts are named to reflect which traversal category its
     iterators support. See also <a href="style.html">terminology and style guidelines.</a>
     for more information about naming of ranges.</p>
-    
+
     <p> The concepts described below specifies associated types as
-<a href="../../mpl/doc/index.html#metafunctions">metafunctions</a> and all 
+<a href="../../mpl/doc/refmanual/metafunction.html">metafunctions</a> and all
 functions as free-standing functions to allow for a layer of indirection. </p>
 
-<p><i>Notice that these metafunctions must be defined in namespace </i>
-<code>boost</code></p>
+<!--<p><i>Notice that these metafunctions must be defined in namespace </i>
+<code>boost</code></p>-->
 
     <hr>
     <a name="single_pass_range">
@@ -103,10 +103,10 @@ functions as free-standing functions to allow for a layer of indirection. </p>
         </TR>
     </table>
 
-    
+
     <h3>Description</h3>
     <p>
-    A range X where <code>range_iterator&lt;X>::type</code> is a model of <a 
+    A range X where <code>boost::range_iterator&lt;X>::type</code> is a model of <a
 href="../../iterator/doc/new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">
 Single Pass Iterator</a>
 
@@ -118,20 +118,20 @@ Single Pass Iterator</a>
     <table border="1" cellpadding="5">
         <TR>
             <TD VAlign="top">Value type</TD>
-            <TD VAlign="top"><code>range_value&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>boost::range_value&lt;X>::type</code></TD>
             <TD VAlign="top">The type of the object stored in a Range.
         </TR>
         <TR>
             <TD VAlign="top">Iterator type</TD>
-            <TD VAlign="top"><code>range_iterator&lt;X>::type</code></TD>
-            <TD VAlign="top">The type of iterator used to iterate through a Range's elements. 
-            The iterator's value type is expected to be the Range's value type.  A 
+            <TD VAlign="top"><code>boost::range_iterator&lt;X>::type</code></TD>
+            <TD VAlign="top">The type of iterator used to iterate through a Range's elements.
+            The iterator's value type is expected to be the Range's value type.  A
             conversion from the iterator type to the const iterator type must exist.
         </TR>
         <TR>
             <TD VAlign="top">Const iterator type</TD>
-            <TD VAlign="top"><code>range_const_iterator&lt;X>::type</code></TD>
-            <TD VAlign="top">A type of iterator that may be used to examine, but not to 
+            <TD VAlign="top"><code>boost::range_const_iterator&lt;X>::type</code></TD>
+            <TD VAlign="top">A type of iterator that may be used to examine, but not to
             modify, a Range's elements.</TD>
         </TR>
         <!--
@@ -157,20 +157,20 @@ Single Pass Iterator</a>
         </TR>
         <TR>
             <TD VAlign="top">Beginning of range</TD>
-            <TD VAlign="top"><code>begin(a)</code></TD>
-            <TD VAlign="top"><code>range_iterator&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>range_const_iterator&lt;X>::type</code> 
+            <TD VAlign="top"><code>boost::begin(a)</code></TD>
+            <TD VAlign="top"><code>boost::range_iterator&lt;X>::type</code> if
+<code>a</code> is mutable, <code>boost::range_const_iterator&lt;X>::type</code>
 otherwise</TD> </TR>
         <TR>
             <TD VAlign="top">End of range</TD>
-            <TD VAlign="top"><code>end(a)</code></TD>
-            <TD VAlign="top"><code>range_iterator&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>range_const_iterator&lt;X>::type</code> 
+            <TD VAlign="top"><code>boost::end(a)</code></TD>
+            <TD VAlign="top"><code>boost::range_iterator&lt;X>::type</code> if
+<code>a</code> is mutable, <code>boost::range_const_iterator&lt;X>::type</code>
 otherwise</TD>
         </TR>
         <tr>
             <TD VAlign="top">Is range empty?</TD>
-            <TD VAlign="top"><code>empty(a)</code></TD>
+            <TD VAlign="top"><code>boost::empty(a)</code></TD>
             <TD VAlign="top">Convertible to <code>bool</code></TD>
         </TR>
     </table>
@@ -183,20 +183,20 @@ otherwise</TD>
             <TH>Postcondition</TH>
         </TR>
         <TR>
-            <TD VAlign="top"><code>begin(a)</code></TD>
+            <TD VAlign="top"><code>boost::begin(a)</code></TD>
             <TD VAlign="top">Returns an iterator pointing to the first element in the Range.</TD>
-            <TD VAlign="top"><code>begin(a)</code> is either dereferenceable or past-the-end. 
-            It is past-the-end if and only if <code>size(a) == 0</code>.</TD>
+            <TD VAlign="top"><code>boost::begin(a)</code> is either dereferenceable or past-the-end. 
+            It is past-the-end if and only if <code>boost::size(a) == 0</code>.</TD>
         </TR>
         <TR>
-            <TD VAlign="top"><code>end(a)</code></TD>
+            <TD VAlign="top"><code>boost::end(a)</code></TD>
             <TD VAlign="top">Returns an iterator pointing one past the last element in the 
             Range.</TD>
-            <TD VAlign="top"><code>end(a)</code> is past-the-end.</TD>
+            <TD VAlign="top"><code>boost::end(a)</code> is past-the-end.</TD>
         </TR>
         <TR>
-            <TD VAlign="top"><code>empty(a)</code></TD>
-            <TD VAlign="top">Equivalent to <code>begin(a) == end(a)</code>. (But possibly 
+            <TD VAlign="top"><code>boost::empty(a)</code></TD>
+            <TD VAlign="top">Equivalent to <code>boost::begin(a) == boost::end(a)</code>. (But possibly 
             faster.)</TD>
             <TD VAlign="top">&nbsp;-&nbsp;</TD>
         </TR>
@@ -205,20 +205,20 @@ otherwise</TD>
     <h3>Complexity guarantees</h3>
 
     All three functions are at most amortized linear time. For most practical 
-    purposes, one can expect <code>begin(a)</code>, <code>end(a)</code> and <code>empty(a)</code> 
+    purposes, one can expect <code>boost::begin(a)</code>, <code>boost::end(a)</code> and <code>boost::empty(a)</code> 
     to be amortized constant time.
 
     <h3>Invariants</h3>
     <Table border>
         <TR>
             <TD VAlign="top">Valid range</TD>
-            <TD VAlign="top">For any Range <code>a</code>, <code>[begin(a),end(a))</code> is 
-            a valid range, that is, <code>end(a)</code> is reachable from <code>begin(a)</code> 
+            <TD VAlign="top">For any Range <code>a</code>, <code>[boost::begin(a),boost::end(a))</code> is 
+            a valid range, that is, <code>boost::end(a)</code> is reachable from <code>boost::begin(a)</code> 
             in a finite number of increments.</TD>
         </TR>
         <TR>
             <TD VAlign="top">Completeness</TD>
-            <TD VAlign="top">An algorithm that iterates through the range <code>[begin(a),end(a))</code> 
+            <TD VAlign="top">An algorithm that iterates through the range <code>[boost::begin(a),boost::end(a))</code> 
             will pass through every element of <code>a</code>.</TD>
         </tr>
     </table>
@@ -228,7 +228,7 @@ otherwise</TD>
             <p>
             <A href="http://www.sgi.com/Technology/STL/Container.html">Container</A>
             </p>
-            <p> <a href="boost_range.html#range_value">implementation of 
+            <p> <a href="boost_range.html#boost::range_value">implementation of
                    metafunctions </a></p>
 
             <p> <a href="boost_range.html#begin">implementation of 
@@ -251,7 +251,7 @@ otherwise</TD>
 
     <h3>Description</h3>
     <p>
-    A range <code>X</code> where <code>range_iterator&lt;X>::type</code> is a model 
+    A range <code>X</code> where <code>boost::range_iterator&lt;X>::type</code> is a model
 of <a 
 href="../../iterator/doc/new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">Forward Traversal Iterator</a>
     </p>
@@ -264,14 +264,14 @@ Range</a>
     <table cellpadding="5" border="1">
         <TR>
             <TD VAlign="top">Distance type</TD>
-            <TD VAlign="top"><code>range_difference&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>boost::range_difference&lt;X>::type</code></TD>
             <TD VAlign="top">A signed integral type used to represent the distance between 
             two of the Range's iterators.  This type must be the same as the iterator's 
             distance type.</TD>
         </TR>
         <TR>
             <TD VAlign="top">Size type</TD>
-            <TD VAlign="top"><code>range_size&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>boost::range_size&lt;X>::type</code></TD>
             <TD VAlign="top">An unsigned integral type that can represent any nonnegative 
             value of the Range's distance type.</TD>
         </tr>
@@ -287,8 +287,8 @@ Range</a>
         </tr>
         <TR>
             <TD VAlign="top">Size of range</TD>
-            <TD VAlign="top"><code>size(a)</code></TD>
-            <TD VAlign="top"><code>range_size&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>boost::size(a)</code></TD>
+            <TD VAlign="top"><code>boost::range_size&lt;X>::type</code></TD>
         </TR>
     </table>
 
@@ -301,29 +301,29 @@ Range</a>
             <TH>Postcondition</TH>
         </TR>
         <tr>
-            <TD VAlign="top"><code>size(a)</code></TD>
+            <TD VAlign="top"><code>boost::size(a)</code></TD>
             <TD VAlign="top">Returns the size of the Range, that is, its number 
-of elements. Note <code>size(a) == 0u</code> is equivalent to 
-<code>empty(a).</code></TD>
-            <TD VAlign="top"><code>size(a) &gt;= 0</TD>
+of elements. Note <code>boost::size(a) == 0u</code> is equivalent to 
+<code>boost::empty(a).</code></TD>
+            <TD VAlign="top"><code>boost::size(a) &gt;= 0</TD>
         </TR>
     </table>
 
    <h3>Complexity guarantees</h3>
 
-    <p><code>size(a)</code> is at most amortized linear time.</p>
+    <p><code>boost::size(a)</code> is at most amortized linear time.</p>
 
     <h3>Invariants</h3>
     <p>
     <Table border="1" cellpadding="5">
         <TR>
             <TD VAlign="top">Range size</TD>
-            <TD VAlign="top"><code>size(a)</code> is equal to the distance from <code>begin(a)</code> 
-            to <code>end(a)</code>.</TD> </table>
+            <TD VAlign="top"><code>boost::size(a)</code> is equal to the distance from <code>boost::begin(a)</code>
+            to <code>boost::end(a)</code>.</TD> </table>
     </p>
     
         <h3>See also</h3> 
-            <p> <a href="boost_range.html#range_difference">implementation of 
+            <p> <a href="boost_range.html#boost::range_difference">implementation of
                    metafunctions </a></p>
 
             <p> <a href="boost_range.html#size">implementation of 
@@ -347,7 +347,7 @@ of elements. Note <code>size(a) == 0u</code> is equivalent to
 
     <h3>Description</h3> This concept provides access to iterators that traverse in 
     both directions (forward and reverse). The 
-<code>range_iterator&lt;X>::type</code> iterator must meet all of the requirements 
+<code>boost::range_iterator&lt;X>::type</code> iterator must meet all of the requirements
 of <a
 href="../../iterator/doc/new-iter-concepts.html#bidirectional-traversal-iterator
 s-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterator.</a>
@@ -359,7 +359,7 @@ s-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterator.</a>
     <Table border>
         <TR>
             <TD VAlign="top">Reverse Iterator type</TD>
-            <TD VAlign="top"><code>range_reverse_iterator&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>boost::range_reverse_iterator&lt;X>::type</code></TD>
             <TD VAlign="top">The type of iterator used to iterate through a Range's elements 
             in reverse order.  The iterator's value type is expected to be the Range's value 
             type.  A conversion from the reverse iterator type to the const reverse iterator 
@@ -368,7 +368,7 @@ s-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterator.</a>
         <TR>
             <TD VAlign="top">Const reverse iterator type</TD>
             <TD 
-VAlign="top"><code>range_const_reverse_iterator&ltX>::type</code></TD>
+VAlign="top"><code>boost::range_const_reverse_iterator&ltX>::type</code></TD>
             <TD VAlign="top">A type of reverse iterator that may be used to examine, but not 
             to modify, a Range's elements.</TD>
         </TR>
@@ -386,27 +386,27 @@ VAlign="top"><code>range_const_reverse_iterator&ltX>::type</code></TD>
         </TR>
         <TR>
             <TD VAlign="top">Beginning of range</TD>
-            <TD VAlign="top"><code>rbegin(a)</code></TD>
-            <TD VAlign="top"><code>range_reverse_iterator&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>range_const_reverse_iterator&lt;X>::type</code> 
+            <TD VAlign="top"><code>rboost::begin(a)</code></TD>
+            <TD VAlign="top"><code>boost::range_reverse_iterator&lt;X>::type</code> if
+<code>a</code> is mutable, <code>boost::range_const_reverse_iterator&lt;X>::type</code>
 otherwise.</TD>
             <TD VAlign="top">Equivalent to 
-<code>range_reverse_iterator&lt;X>::type(end(a))</code>.</TD> </TR>
+<code>boost::range_reverse_iterator&lt;X>::type(boost::end(a))</code>.</TD> </TR>
         <TR>
             <TD VAlign="top">End of range</TD>
-            <TD VAlign="top"><code>rend(a)</code></TD>
-            <TD VAlign="top"><code>range_reverse_iterator&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>range_const_reverse_iterator&lt;X>::type</code> 
+            <TD VAlign="top"><code>rboost::end(a)</code></TD>
+            <TD VAlign="top"><code>boost::range_reverse_iterator&lt;X>::type</code> if
+<code>a</code> is mutable, <code>boost::range_const_reverse_iterator&lt;X>::type</code>
 otherwise.</TD>
             <TD VAlign="top">Equivalent to 
-<code>range_reverse_iterator&lt;X>::type(begin(a))</code>.</TD> </tr>
+<code>boost::range_reverse_iterator&lt;X>::type(boost::begin(a))</code>.</TD> </tr>
 
     </table>
 
     <h3>Complexity guarantees</h3>
 
-    <code>rbegin(a)</code> has the same complexity as <code>end(a)</code> and <code>rend(a)</code> 
-    has the same complexity as <code>begin(a)</code> from <a
+    <code>rboost::begin(a)</code> has the same complexity as <code>boost::end(a)</code> and <code>rboost::end(a)</code> 
+    has the same complexity as <code>boost::begin(a)</code> from <a
          href="#forward_range">Forward Range</a>.
 
     <h3>Invariants</h3>
@@ -414,20 +414,20 @@ otherwise.</TD>
     <Table border="1" cellpadding="5">
         <TR>
             <TD VAlign="top">Valid reverse range</TD>
-            <TD VAlign="top">For any Bidirectional Range <code>a</code>, <code>[rbegin(a),rend(a))</code> 
-            is a valid range, that is, <code>rend(a)</code> is reachable from <code>rbegin(a)</code> 
+            <TD VAlign="top">For any Bidirectional Range <code>a</code>, <code>[rboost::begin(a),rboost::end(a))</code> 
+            is a valid range, that is, <code>rboost::end(a)</code> is reachable from <code>rboost::begin(a)</code> 
             in a finite number of increments.</TD>
         </TR>
         <TR>
             <TD VAlign="top">Completeness</TD>
-            <TD VAlign="top">An algorithm that iterates through the range <code>[rbegin(a),rend(a))</code> 
+            <TD VAlign="top">An algorithm that iterates through the range <code>[rboost::begin(a),rboost::end(a))</code>
             will pass through every element of <code>a</code>.</TD>
         </tr>
     </table>
    </p>
    
            <h3>See also</h3> 
-            <p> <a href="boost_range.html#range_reverse_iterator">implementation of metafunctions </a></p>
+            <p> <a href="boost_range.html#boost::range_reverse_iterator">implementation of metafunctions </a></p>
 
             <p> <a href="boost_range.html#rbegin">implementation of 
                    functions </a></p>
@@ -436,7 +436,7 @@ otherwise.</TD>
 
     <a name=random_access_range><h2>Random Access Range</h2> <h3>Description</h3>
     <p>
-    A range <code>X</code> where <code>range_iterator&lt;X>::type</code> is a model 
+    A range <code>X</code> where <code>boost::range_iterator&lt;X>::type</code> is a model
 of <a
       
 href="../../iterator/doc/new-iter-concepts.html#random-access-traversal-iterators

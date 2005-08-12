@@ -31,7 +31,7 @@
   <DT><A href="#installation">Installation</A></DT>
 </DL>
 
-<A NAME="overview">
+<A NAME="overview"></A>
 <H2>Overview</H2>
 
 <P>
@@ -41,7 +41,7 @@
     The zlib Filters are <A HREF="../concepts/dual_use_filter.html">DualUseFilters</A> so that they may be used for either input or output. Most commonly, however, the compression Filters will be used for output and the decompression Filters for input.
 </P>
 
-<A NAME="acknowledgments">
+<A NAME="acknowledgments"></A>
 <H2>Acknowledgments</H2>
 
 <P>
@@ -50,14 +50,14 @@
 
 Thanks to <A HREF="mailto:jloup@gailly.net">Jean-loup Gailly</A> and <A HREF="mailto:&#109;&#097;&#100;&#108;&#101;&#114;&#064;&#097;&#108;&#117;&#109;&#110;&#105;&#046;&#099;&#097;&#108;&#116;&#101;&#099;&#104;&#046;&#101;&#100;&#117;">Mark Adler</A> for making their excellent library available to the public with a <A HREF="../../../../more/lib_guide.htm#Requirements">Boost-compatible</A> license.
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL>
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/zlib.hpp"><CODE>&lt;boost/iostreams/filter/zlib.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="synopsis">
+<A NAME="synopsis"></A>
 <H2>Synopsis</H2>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
@@ -105,10 +105,10 @@ Thanks to <A HREF="mailto:jloup@gailly.net">Jean-loup Gailly</A> and <A HREF="ma
 
 } } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
 
-<A NAME="reference">
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
-<A NAME="constants">
+<A NAME="constants"></A>
 <H3>Namespace <CODE>boost::iostreams::zlib</CODE></H3>
 
 <P>The namespace <CODE>boost::iostreams::zlib</CODE> contains integral constants used to configure zlib Filters and to report errors. The constants have the following interpretations. (<I>See</I> <A CLASS="bib_ref" HREF="../bibliography.html#gailly">[Gailly]</A> for additional details.)</P>
@@ -169,7 +169,7 @@ Thanks to <A HREF="mailto:jloup@gailly.net">Jean-loup Gailly</A> and <A HREF="ma
     </TR>
 </TABLE>
 
-<A NAME="zlib_params">
+<A NAME="zlib_params"></A>
 <H3>Class <CODE>zlib_params</CODE></H3>
 
 <H4>Description</H4>
@@ -195,7 +195,7 @@ Thanks to <A HREF="mailto:jloup@gailly.net">Jean-loup Gailly</A> and <A HREF="ma
     <SPAN CLASS="keyword">bool</SPAN> noheader;
 };</PRE>
 
-<A NAME="zlib_params_constructors">
+<A NAME="zlib_params_constructors"></A>
 <H4><CODE>zlib_params::zlib_params</CODE></H4>
 
 <PRE CLASS="broken_ie">    zlib_params( <SPAN CLASS="keyword">int</SPAN> level           = zlib::default_compression,
@@ -237,7 +237,7 @@ Thanks to <A HREF="mailto:jloup@gailly.net">Jean-loup Gailly</A> and <A HREF="ma
 
 <P>See <A CLASS="bib_ref" HREF="../bibliography.html#gailly">[Gailly]</A> for additional details.</P>
 
-<A NAME="basic_zlib_compressor">
+<A NAME="basic_zlib_compressor"></A>
 <H3>Class template <CODE>basic_zlib_compressor</CODE></H3>
 
 <H4>Description</H4>
@@ -278,7 +278,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 
 <P>Constructs an instance of <CODE>basic_zlib_compressor</CODE> with the given parameters and buffer size. Since a <A CLASS="documented" HREF="#zlib_params"><CODE>zlib_params</CODE></A> object is implicitly constructible from an <CODE>int</CODE> representing a compression level, an <CODE>int</CODE> may be passed as the first constructor argument.</P>
 
-<A NAME="basic_zlib_decompressor">
+<A NAME="basic_zlib_decompressor"></A>
 <H3>Class template <CODE>basic_zlib_decompressor</CODE></H3>
 
 <H4>Description</H4>
@@ -328,7 +328,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 <P>The first member constructs an instance of <CODE>basic_zlib_decompressor</CODE> with the given parameters and buffer size.
 The second member constructs an instance of <CODE>basic_zlib_decompressor</CODE> with the given <A HREF="#window_bits">window bits</A> value and buffer size. Other parameters affecting decompression are set to default values.</P>
 
-<A NAME="zlib_error">
+<A NAME="zlib_error"></A>
 <H3>Class <CODE>zlib_error</CODE></H3>
 
 <H4>Description</H4>
@@ -357,7 +357,7 @@ Used by the zlib Filters to report errors.
 
 <P>Returns an error code from the namespace <A HREF="#constants"><CODE>boost::iostreams::zlib</CODE></A>.</P>
 
-<A NAME="examples">
+<A NAME="examples"></A>
 <H2>Examples</H2>
 
 The following code decompresses data from a file and writes it to standard output.
@@ -379,7 +379,7 @@ int main()
     boost::iostreams::copy(in, cout);
 }</PRE>
 
-<A NAME="installation">
+<A NAME="installation"></A>
 <H3>Installation</H3>
 
 <P>
@@ -397,7 +397,7 @@ int main()
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

@@ -21,10 +21,10 @@
     A Filter operates on the character sequence or sequences controlled by a <A HREF="device.html">Device</A>, providing access to a filtered input sequence, output sequence or both. Informally, when a Filter <CODE>f</CODE> is used in conjunction with a Device <CODE>d</CODE>, data read from the input sequence of <CODE>d</CODE> is processed by <CODE>f</CODE> before being returned to the user, data written to the output sequence of <CODE>d</CODE> is first processed by <CODE>f</CODE>, and repositioning operations are processed by <CODE>f</CODE> before being conveyed to <CODE>d</CODE>. 
 </P> 
 <P>
-    Filters are class types which define one or more member functions <CODE>get</CODE>, <CODE>put</CODE>, <CODE>read</CODE>, <CODE>write</CODE> and <CODE>seek</CODE> having signatures resembling the functions <CODE>fgetc</CODE>, <CODE>fputc</CODE>, <CODE>fread</CODE>, <CODE>fwrite</CODE> and <CODE>fseek</CODE> from <CODE>&lt;stdio.h&gt;</CODE>. Each function takes a reference to a Device instead of a pointer to a <CODE>FILE</CODE> structure.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A> Whenever a Filter is used to perform an i/o operation, a reference to the Device being filtered is passed to the Filter as a function argument.
+    Filters are class types which define one or more member functions <CODE>get</CODE>, <CODE>put</CODE>, <CODE>read</CODE>, <CODE>write</CODE> and <CODE>seek</CODE>; each function takes a reference to a Device as its first argument. Whenever a Filter is used to perform an i/o operation, a reference to the Device being filtered is passed to the Filter as a function argument.
 </P> 
 <P>
-    Each Filter type has an associated character type and category. The <A HREF="../guide/traits.html#char_type">character type</A> is the type of the characters in the input and output sequences. The <A HREF="../guide/traits.html#category">category</A> is a tag structure which the Iostreams library relies on to determine which operations the Filter type supports. Its function is similar to the <CODE>iterator_category</CODE> member of <CODE>std::iterator_traits</CODE>.<A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2"><SUP>[2]</SUP></A>
+    Each Filter type has an associated character type and category. The <A HREF="../guide/traits.html#char_type">character type</A> is the type of the characters in the input and output sequences. The <A HREF="../guide/traits.html#category">category</A> is a tag structure which the Iostreams library relies on to determine which operations the Filter type supports. Its function is similar to the <CODE>iterator_category</CODE> member of <CODE>std::iterator_traits</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 <P>
     There is one refinement of Filter for each of the eight <A HREF="../guide/modes.html">modes</A>, and each such refinement corresponds to a refinement of <A HREF="device.html">Device</A>. In order to express this corresponce cleanly, it is helpful to include the requirements of the various refinements of Filter in the definition of Filter itself, qualified by category. The various refinements of Filter can then be characterized exactly by the following definitions. For convenience, the requirements of the four most common Filter refinements are also documented individually.
@@ -34,35 +34,35 @@
     <TR><TH>Concept</TH><TH>Definition</TH></TR>
     <TR>
         <TD><A href="input_filter.html">InputFilter</A></TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="output_filter.html">OutputFilter</A></TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="bidirectional_filter.html">BidirectionalFilter</A></TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="seekable_filter.html">SeekableFilter</A></TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#seekable"><CODE>seekable</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#seekable"><CODE>seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>InputSeekableFilter</TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#input_seekable"><CODE>input_seekable</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#input_seekable"><CODE>input_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>OutputSeekableFilter</TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#output_seekable"><CODE>output_seekable</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#output_seekable"><CODE>output_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>BidirectionalSeekableFilter</TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#bidirectional_seekable"><CODE>bidirectional_seekable</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#bidirectional_seekable"><CODE>bidirectional_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>DualSeekableFilter</TD>
-        <TD>Refinement of Filter with <CODE>mode_of</CODE> convertible to <A HREF="../guide/modes.html#dual_seekable"><CODE>dual_seekable</CODE></A></TD>
+        <TD>Refinement of Filter with mode convertible to <A HREF="../guide/modes.html#dual_seekable"><CODE>dual_seekable</CODE></A></TD>
     </TR>
 </TABLE>
 
@@ -100,7 +100,7 @@
     <TR><TD><CODE>s1</CODE></TD><TD>- Object of type <CODE>Ch*</CODE></TD></TR>
     <TR><TD><CODE>s2</CODE></TD><TD>- Object of type <CODE>const Ch*</CODE></TD></TR>
     <TR><TD><CODE>n</CODE></TD><TD>- Object of type <CODE>std::streamsize</CODE></TD></TR>
-    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <CODE>std::streamoff</CODE></TD></TR>
+    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <A HREF="../functions/positioning.html#synopsis"><CODE>stream_offset</CODE></A></TD></TR>
     <TR><TD><CODE>way</CODE></TD><TD>- Object of type <CODE>std::ios_base::seekdir</CODE></TD></TR>
     <TR><TD><CODE>which</CODE></TD><TD>- Object of type <CODE>std::ios_base::openmode</CODE></TD></TR>
     <TR><TD><CODE>io</CODE></TD><TD>- Alias for namespace <CODE>boost::iostreams</CODE></TD></TR>
@@ -113,11 +113,11 @@
 <TABLE CELLPADDING="5" BORDER="1">
     <TR><TH>Expression</TH><TH>Expression Type</TH></TR>
     <TR>
-        <TD><CODE>typename <A HREF="../guide/traits.html#char_type">char_type_of</A>&lt;F&gt;::type</CODE></TD>
+        <TD><CODE>typename <A HREF="../guide/traits.html#char_type_of_ref">char_type_of</A>&lt;F&gt;::type</CODE></TD>
         <TD><CODE>typename</CODE> of the character type</TD>
     </TR>
     <TR>
-        <TD><CODE>typename <A HREF="../guide/traits.html#category">category_of</A>&lt;F&gt;::type</CODE></TD>
+        <TD><CODE>typename <A HREF="../guide/traits.html#category_ref">category_of</A>&lt;F&gt;::type</CODE></TD>
         <TD><CODE>typename</CODE> of the category</TD>
     </TR>
 </TABLE>
@@ -180,7 +180,7 @@
     <TR><TH>Expression</TH><TH>Expression Type</TH><TH>Category Precondition</TH><TH>Semantics</TH></TR>
     <TR>
         <TD><PRE CLASS="plain_code"><CODE>f.seek(d, off, way)</CODE></PRE></TD>
-        <TD><CODE>std::streamoff</CODE></TD>
+        <TD><CODE>std::streampos</CODE></TD>
         <TD>
             Convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>seekable</CODE></A> but not to <A HREF="../guide/traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
@@ -200,13 +200,13 @@
     </TR>
     <TR>
         <TD><PRE CLASS="plain_code"><CODE>f.seek(d, off, way, which)</CODE></PRE></TD>
-        <TD><CODE>std::streamoff</CODE></TD>
+        <TD><CODE>std::streampos</CODE></TD>
         <TD>
             Convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>dual_seekable</CODE></A> or <A HREF="../guide/modes.html#mode_tags"><CODE>bidirectional_seekable</CODE></A> but not to <A HREF="../guide/traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>
             <P CLASS="concept">
-                Repositions the read head (if <CODE>which</CODE> is <CODE>std::ios_base::in</CODE>), the write head (if <CODE>which</CODE> is <CODE>std::ios_base::out</CODE>) or both heads (if <CODE>which</CODE> is <CODE>std::ios_base::in | std::ios_base::out</CODE>) by <CODE>off</CODE> characters, returning the new position, where the offset is calculated from
+                Advances the read head (if <CODE>which</CODE> is <CODE>std::ios_base::in</CODE>), the write head (if <CODE>which</CODE> is <CODE>std::ios_base::out</CODE>) or both heads (if <CODE>which</CODE> is <CODE>std::ios_base::in | std::ios_base::out</CODE>) by <CODE>off</CODE> characters, returning the new position, where the offset is calculated from
             </P>
             <UL STYLE="margin:0,0,0,auto">
                 <LI STYLE="list-style-type:disc;list-style-image:none">the start of the sequence if <CODE>way</CODE> is <CODE>ios_base::beg</CODE>
@@ -251,11 +251,7 @@
 <HR>
 
 <P>
-    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A>No familarity with <CODE>&lt;stdio.h&gt;</CODE> is required to use the Boost Iostream library. There are other differences between the Filter member functions and the corresponding functions from <CODE>&lt;stdio.h&gt;</CODE>; consult the tables, above, for details.
-</P>
-
-<P>
-    <A CLASS="footnote_ref" NAME="note_2" HREF="#note_2_ref"><SUP>[2]</SUP></A><A CLASS="bib_ref" HREF="../bibliography.html#iso">[I<SPAN STYLE="font-size:80%">SO</SPAN>]</A>, 24.3.1. <I>See</I> <A HREF="../../../../more/generic_programming.html#tag_dispatching" TARGET="_top">Tag Dispatching</A> for a discussion.
+    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A><A CLASS="bib_ref" HREF="../bibliography.html#iso">[I<SPAN STYLE="font-size:80%">SO</SPAN>]</A>, 24.3.1. <I>See</I> <A HREF="../../../../more/generic_programming.html#tag_dispatching" TARGET="_top">Tag Dispatching</A> for a discussion.
 </P>
 
 <!-- End Footnotes -->
@@ -269,7 +265,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

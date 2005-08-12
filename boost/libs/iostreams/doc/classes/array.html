@@ -30,31 +30,31 @@
 
 <HR>
 
-<A NAME="overview">
+<A NAME="overview"></A>
 <H2>Overview</H2>
 
 <P>
     The class templates <CODE>basic_array_source</CODE>, <CODE>basic_array_sink</CODE> and <CODE>basic_array</CODE> provide access to a sequence of characters in memory. The array Devices do not manage the lifetimes of the underlying character sequences.
 </P>
 
-<A NAME="implementation">
+<A NAME="implementation"></A>
 <H2>Implementation</H2>
 
 <P>
     The array Devices are implemented as <A HREF="../concepts/direct.html">Direct</A> Devices in order to provide efficient unbuffered access to the underlying character sequences.
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL class="page-index">
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/device/array.hpp"><CODE>&lt;boost/iostreams/device/array.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="reference">
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
-<A NAME="array_source">
+<A NAME="array_source"></A>
 <H3>Class template <CODE>basic_array_source</CODE></H3>
 
 <H4>Description</H4>
@@ -98,7 +98,7 @@ basic_array_source(<SPAN CLASS="keyword">const</SPAN> char_type* begin, std::siz
     
 <P>Constructs a <CODE>basic_array_source</CODE> to read from the indicated character sequence.</P>
 
-<A NAME="array_sink">
+<A NAME="array_sink"></A>
 <H3>Class template <CODE>basic_array_sink</CODE></H3>
 
 <H4>Description</H4>
@@ -143,7 +143,7 @@ basic_array_sink(char_type* begin, std::size_t length);</PRE>
     
 <P>Constructs an <CODE>basic_array_sink</CODE> to write to the indicated character sequence.</P>
 
-<A NAME="array">
+<A NAME="array"></A>
 <H3>Class template <CODE>basic_array</CODE></H3>
 
 <H4>Description</H4>
@@ -182,14 +182,14 @@ basic_array_sink(char_type* begin, std::size_t length);</PRE>
 <A NAME="array_constructor"></A>
 <H4><CODE>array::array</CODE></H4>
 
-<A NAME="array_constructor">
+<A NAME="array_constructor"></A>
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">int</SPAN> N&gt; basic_array(char_type (&)[N]);
 basic_array(char_type* begin, char_type* end);
 basic_array(char_type* begin, std::size_t length);</PRE>
 
 <P>Constructs a <CODE>basic_array</CODE> to access the indicated character sequence.</P>
 
-<A NAME="acknowledgments">
+<A NAME="acknowledgments"></A>
 <H2>Acknowledgments</H2>
 
 <P>
@@ -205,7 +205,7 @@ The concept of Devices which provide unbuffered access to character sequences wa
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

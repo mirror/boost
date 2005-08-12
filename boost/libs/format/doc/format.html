@@ -25,10 +25,11 @@ user-defined types.
 </li>
 <li><a href="#manipulators">Manipulators and the internal stream state</a> </li>
 <li><a href="#user-defined">User-defined types</a> </li>
+<li><a href="#alternatives">Alternatives</a></li>
 <li><a href="#exceptions">Exceptions</a></li>
 <li><a href="#performance">Performance</a></li>
 <li><a href="#extract">Class Interface Extract</a></li>
-<li><a href="#alternatives">Alternatives</a> </li>
+<li><a href="#rationale">Rationale</a> </li>
 </ul>
 <a name="synopsis"></a>
 <hr>
@@ -604,15 +605,16 @@ cout << format("%1$d %2% %1%\n") % group(hex, showbase, 40) % 50;
 </PRE></BLOCKQUOTE>
 
 
+<a name="alternatives"></a>
 <H2>Alternatives</H2> 
 <ul>
 <li>
 <B>printf</B> is the classical alternative, that is not type safe and not extendable to user-defined types.
 <li>
-<a href="http://www.ece.ucdavis.edu/~kenelson/ofrstream.cc">ofrstream.cc</a> 
+ofrstream.cc
 	by Karl Nelson's design was a big source of inspiration to this format class.
 </li>
-<li><a href="http://www.gabi-soft.fr/gabi-lib.tgz">James Kanze's library</a>
+<li>James Kanze's library
 	has a format class (in <i>srcode/Extended/format</i> ) which looks 
 	very well polished. Its design has in common with this class the use of internal stream
 	for the actual conversions, as well as using operators to pass arguments. 
@@ -817,6 +819,8 @@ std::basic_string&lt;charT,Traits&gt;  str(const basic_format&lt;charT,Traits&gt
 <P>
 </P>
 <hr>
+
+<a name="rationale"></a>
 <H2>Rationale</H2>
 <p>This class's goal is to bring a better, C++, type-safe and type-extendable <i>printf</i> 
       equivalent to be used with streams.

@@ -27,13 +27,13 @@
 <A NAME="unix2dos"></A>
 <H2>2.2.7. UNIX-to-DOS Filters</H2>
 
-<P>Suppose we want to write a Filter to convert <CODE>UNIX</CODE> line endings to <CODE>DOS</CODE> line-endings. The basic idea is simple: we process the characters in a sequence one at a time, and whenever we encounter the character 
-<CODE>'\n'</CODE> we replace it with the two-character sequence <CODE>'\r'</CODE>, <CODE>'\n'</CODE>. In the following sections we'll implement this algorithm as a <CODE>stdio_filter</CODE>, an InputFilter and an OutputFilter. The source code can be found in the header <A HREF="../../example/unix2dos_filter.hpp">&lt;<CODE>libs/iostreams/example/unix2dos_filter.hpp</CODE>&gt;</A></P>
+<P>Suppose you want to write a Filter to convert <CODE>UNIX</CODE> line endings to <CODE>DOS</CODE> line-endings. The basic idea is simple: you process the characters in a sequence one at a time, and whenever you encounter the character 
+<CODE>'\n'</CODE> you replace it with the two-character sequence <CODE>'\r'</CODE>, <CODE>'\n'</CODE>. In the following sections I'll implement this algorithm as a <CODE>stdio_filter</CODE>, an InputFilter and an OutputFilter. The source code can be found in the header <A HREF="../../example/unix2dos_filter.hpp">&lt;<CODE>libs/iostreams/example/unix2dos_filter.hpp</CODE>&gt;</A></P>
 
 <A NAME="unix2dos_stdio_filter"></A>
 <H4><CODE>unix2dos_stdio_filter</CODE></H4>
 
-<P>We can express a <CODE>UNIX</CODE>-to-<CODE>DOS</CODE> Filter as a <CODE>stdio_filter</CODE> by deriving from <CODE>stdio_filter</CODE> and overriding the <CODE>private</CODE> <CODE>virtual</CODE> function do_filter as follows:</P>
+<P>You can express a <CODE>UNIX</CODE>-to-<CODE>DOS</CODE> Filter as a <CODE>stdio_filter</CODE> by deriving from <CODE>stdio_filter</CODE> and overriding the <CODE>private</CODE> <CODE>virtual</CODE> function do_filter as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cstdio&gt;</SPAN>    <SPAN CLASS='comment'>// EOF</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;iostream&gt;</SPAN>  <SPAN CLASS='comment'>// cin, cout</SPAN>
@@ -56,12 +56,12 @@
 
 } } } <SPAN CLASS='comment'>// End namespace boost::iostreams:example</SPAN></PRE>
 
-<P>The function <CODE>do_filter</CODE> consists of a straightforward implementation of the algorithm we described above: it reads characters from standard input and writes them to standard output unchanged, except that when it encounters <CODE>'\n'</CODE> it writes <CODE>'\r'</CODE>, <CODE>'\n'</CODE>.
+<P>The function <CODE>do_filter</CODE> consists of a straightforward implementation of the algorithm I described above: it reads characters from standard input and writes them to standard output unchanged, except that when it encounters <CODE>'\n'</CODE> it writes <CODE>'\r'</CODE>, <CODE>'\n'</CODE>.
 
 <A NAME="unix2dos_input_filter"></A>
 <H4><CODE>unix2dos_input_filter</CODE></H4>
 
-<P>Now, we will express a <CODE>UNIX</CODE>-to-<CODE>DOS</CODE> Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A>.
+<P>Now, let's express a <CODE>UNIX</CODE>-to-<CODE>DOS</CODE> Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A>.
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/categories.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/categories.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// input_filter_tag</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/operations.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/operations.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// get</SPAN>
@@ -100,7 +100,7 @@
 
 } } } <SPAN CLASS='comment'>// End namespace boost::iostreams:example</SPAN></PRE>
 
-<P>The implementation of <CODE>get</CODE> can be described as follows. Most of the time, we simply read a character from <CODE>src</CODE> and return it. The special values <CODE>EOF</CODE> and <CODE>WOULD_BLOCK</CODE> are treated the same way: the are simply forwarded <I>as-is</I>. The exception is when <CODE>iostreams::get</CODE> returns <CODE>'\n'</CODE>. In this case, we return <CODE>'\r'</CODE> instead and make a note to return <CODE>'\n'</CODE> the next time get is called.</P>
+<P>The implementation of <CODE>get</CODE> can be described as follows. Most of the time, you simply read a character from <CODE>src</CODE> and return it. The special values <CODE>EOF</CODE> and <CODE>WOULD_BLOCK</CODE> are treated the same way: the are simply forwarded <I>as-is</I>. The exception is when <CODE>iostreams::get</CODE> returns <CODE>'\n'</CODE>. In this case, you return <CODE>'\r'</CODE> instead and make a note to return <CODE>'\n'</CODE> the next time get is called.</P>
 
 <P>As usual, the member function <CODE>close</CODE> reset's the Filter's state:</P>
 
@@ -110,7 +110,7 @@
 <A NAME="unix2dos_output_filter"></A>
 <H4><CODE>unix2dos_output_filter</CODE></H4>
 
-<P>We can express a <CODE>UNIX</CODE>-to-<CODE>DOS</CODE> Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A> as follows:</P>
+<P>You can express a <CODE>UNIX</CODE>-to-<CODE>DOS</CODE> Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A> as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>   <SPAN CLASS='comment'>// output_filter</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/operations.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/operations.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// put</SPAN>
@@ -136,7 +136,7 @@
 } } } <SPAN CLASS='comment'>// End namespace boost::iostreams:example</SPAN></PRE>
 
 <P>
-    Here we've derived from the helper class <A HREF="../classes/filter.html#synopsis"><CODE>output_filter</CODE></A>, which provides a member type <CODE>char_type</CODE> equal to <CODE>char</CODE> and a category tag convertible to <A HREF="../guide/traits.html#category_tags"><CODE>output_filter_tag</CODE></A> and to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A>.
+    Here I've derived from the helper class <A HREF="../classes/filter.html#synopsis"><CODE>output_filter</CODE></A>, which provides a member type <CODE>char_type</CODE> equal to <CODE>char</CODE> and a category tag convertible to <A HREF="../guide/traits.html#category_tags"><CODE>output_filter_tag</CODE></A> and to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A>.
 </P>
 
 <P>Let's look first at the helper function <CODE>put_char</CODE>:</P>
@@ -160,7 +160,7 @@
     This function attempts to write a single character to the Sink dest, returning <CODE>true</CODE> for success. If successful, it updates the flag <CODE>has_linefeed_</CODE>, which indicates that an attempt to write a <CODE>DOS</CODE> line ending sequence failed after the first character was written.  
 </P>
 
-<P>Using put_char we can implement <CODE>put</CODE> as follows:</P>
+<P>Using <CODE>put_char</CODE> you can implement <CODE>put</CODE> as follows:</P>
 
 <PRE CLASS='broken_ie'>    <SPAN CLASS="keyword">bool</SPAN> put(Sink& dest, <SPAN CLASS="keyword">int</SPAN> c) 
     {
@@ -177,22 +177,22 @@
 
 <OL>
 <LI>
-    If we're at the beginning of a <CODE>DOS</CODE> line-ending sequence &#8212; that is, if <CODE>c</CODE> is <CODE>'n'</CODE> and <CODE>has_line_feed_</CODE> is <CODE>false</CODE> &#8212; we attempt to write <CODE>'\r'</CODE> and then <CODE>'\n'</CODE> to <CODE>dest</CODE>.
+    If you're at the beginning of a <CODE>DOS</CODE> line-ending sequence &#8212; that is, if <CODE>c</CODE> is <CODE>'n'</CODE> and <CODE>has_line_feed_</CODE> is <CODE>false</CODE> &#8212; you attempt to write <CODE>'\r'</CODE> and then <CODE>'\n'</CODE> to <CODE>dest</CODE>.
 </LI>
 <LI>
-    If we're in the middle of a <CODE>DOS</CODE> line-ending sequence &#8212; that is, if <CODE>c</CODE> is <CODE>'n'</CODE> and <CODE>has_line_feed_</CODE> is <CODE>true</CODE> &#8212; we attempt to complete it by writing <CODE>'\n'</CODE>.
+    If you're in the middle of a <CODE>DOS</CODE> line-ending sequence &#8212; that is, if <CODE>c</CODE> is <CODE>'n'</CODE> and <CODE>has_line_feed_</CODE> is <CODE>true</CODE> &#8212; you attempt to complete it by writing <CODE>'\n'</CODE>.
 </LI>
 <LI>
-    Otherwise, we attempt to write <CODE>c</CODE> to <CODE>dest</CODE>.
+    Otherwise, you attempt to write <CODE>c</CODE> to <CODE>dest</CODE>.
 </LI>
 </OL>
 
 <P>
-    There are two subtle points. First, why does <CODE>c == 'n'</CODE> and <CODE>has_line_feed_ == true</CODE> mean that we're in the middle of a <CODE>DOS</CODE> line-ending sequence? Because when we attempt to write <CODE>'\r'</CODE>, <CODE>'\n'</CODE> but only the first character succeeds, we set <CODE>has_line_feed_</CODE> and return <CODE>false</CODE>. This causes the user of the Filter to <I>resend</I> the character <CODE>'\n'</CODE> which triggered the line-ending sequence. Second, note that to write the second character of a line-ending sequence we call <CODE>put</CODE> recursively instead of calling <CODE>put_char</CODE>.
+    There are two subtle points. First, why does <CODE>c == 'n'</CODE> and <CODE>has_line_feed_ == true</CODE> mean that you're in the middle of a <CODE>DOS</CODE> line-ending sequence? Because when you attempt to write <CODE>'\r'</CODE>, <CODE>'\n'</CODE> but only the first character succeeds, you set <CODE>has_line_feed_</CODE> and return <CODE>false</CODE>. This causes the user of the Filter to <I>resend</I> the character <CODE>'\n'</CODE> which triggered the line-ending sequence. Second, note that to write the second character of a line-ending sequence you call <CODE>put</CODE> recursively instead of calling <CODE>put_char</CODE>.
 </P>
 
 <P>
-    Comparing the implementations of <CODE>unix2dos_input_filter</CODE> and <CODE>unix2dos_output_filter</CODE>, we this  a case where a filtering algorithm is much easier to express as an Input than as an OutputFilter. If we wanted to avoid the complexity of the above definition, we could use the class template <A HREF="../functions/invert.html#invert"><CODE>inverse</CODE></A> to construct an OutputFilter from <CODE>unix2dos_input_filter</CODE>:
+    Comparing the implementations of <CODE>unix2dos_input_filter</CODE> and <CODE>unix2dos_output_filter</CODE>, you can see that this a case where a filtering algorithm is much easier to express as an Input than as an OutputFilter. If you wanted to avoid the complexity of the above definition, you could use the class template <A HREF="../functions/invert.html#invert"><CODE>inverse</CODE></A> to construct an OutputFilter from <CODE>unix2dos_input_filter</CODE>:
 </P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='literal'>#include</SPAN></SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/invert.hpp&gt;</SPAN></A>   <SPAN CLASS='comment'>// inverse</SPAN>   
@@ -224,7 +224,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

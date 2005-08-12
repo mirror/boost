@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <meta name="author" content="Thorsten Ottosen" />
 <meta name="date" content="3rd of May 2005" />
@@ -32,15 +32,15 @@
 <div class="section" id="overview">
 <h1><a name="overview">Overview</a></h1>
 <p>Boost.Pointer Container provides containers for holding heap-allocated
-objects in an exception-safe manner and with minimal overhead. 
+objects in an exception-safe manner and with minimal overhead.
 The aim of the library is in particular to make OO programming
-easier in C++ by establishing a standard set of classes, methods 
+easier in C++ by establishing a standard set of classes, methods
 and designs for dealing with OO specific problems</p>
 <ul class="simple">
 <li><a class="reference" href="#motivation">Motivation</a></li>
 <li><a class="reference" href="tutorial.html">Tutorial</a></li>
 <li><a class="reference" href="reference.html">Reference</a><ul>
-<li><a class="reference" href="reference.html#conventions">Conventions</a></li>
+<li><a class="reference" href="conventions.html">Conventions</a></li>
 <li><a class="reference" href="reference.html#the-clonable-concept">The Clonable Concept</a></li>
 <li><a class="reference" href="reference.html#the-clone-allocator-concept">The Clone Allocator Concept</a></li>
 <li><a class="reference" href="reference.html#pointer-container-adapters">Pointer container adapters</a></li>
@@ -73,7 +73,7 @@ and designs for dealing with OO specific problems</p>
 </div>
 <div class="section" id="motivation">
 <h1><a name="motivation">Motivation</a></h1>
-<p>Whenever a programmer wants to have a container of pointers to 
+<p>Whenever a programmer wants to have a container of pointers to
 heap-allocated objects, there is usually only one exception-safe way:
 to make a container of pointer pointers like <tt class="docutils literal"><span class="pre">boost::shared_ptr</span></tt>.
 This approach is suboptimal if</p>
@@ -81,12 +81,12 @@ This approach is suboptimal if</p>
 <li>the stored objects are not shared, but owned exclusively, or</li>
 <li>the overhead implied by pointer pointers is inappropriate</li>
 </ol>
-<p>This library therefore provides standard-like containers that are for storing 
-heap-allocated or <a class="reference" href="reference.html#the-clonable-concept">cloned</a> objects (or in case of a map, the mapped object must be 
-a heap-allocated or cloned object). For each of the standard 
-containers there is a pointer container equivalent that takes ownership of 
-the objects in an exception safe manner.  In this respect the library is intended 
-to solve the so-called 
+<p>This library therefore provides standard-like containers that are for storing
+heap-allocated or <a class="reference" href="reference.html#the-clonable-concept">cloned</a> objects (or in case of a map, the mapped object must be
+a heap-allocated or cloned object). For each of the standard
+containers there is a pointer container equivalent that takes ownership of
+the objects in an exception safe manner.  In this respect the library is intended
+to solve the so-called
 <a class="reference" href="faq.html#what-is-the-polymorphic-class-problem">polymorphic class problem</a>.</p>
 <p>The advantages of pointer containers are</p>
 <ol class="arabic simple">
@@ -95,32 +95,32 @@ to solve the so-called
 <li>Can be used for types that are neither Assignable nor Copy Constructible.</li>
 <li>No memory-overhead as containers of pointer pointers can have (see <a class="footnote-reference" href="#id21" id="id2" name="id2">[11]</a> and <a class="footnote-reference" href="#id23" id="id3" name="id3">[12]</a>).</li>
 <li>Usually faster than using containers of pointer pointers (see <a class="footnote-reference" href="#id21" id="id4" name="id4">[11]</a> and <a class="footnote-reference" href="#id23" id="id5" name="id5">[12]</a>).</li>
-<li>The interface is slightly changed towards the domain of pointers  
+<li>The interface is slightly changed towards the domain of pointers
 instead of relying on the normal value-based interface. For example,
 now it is possible for <tt class="docutils literal"><span class="pre">pop_back()</span></tt> to return the removed element.</li>
 <li>Propagates constness s.t. one cannot modify the objects via a <tt class="docutils literal"><span class="pre">const_iterator</span></tt></li>
 </ol>
 <p>The disadvantages are</p>
 <ol class="arabic simple">
-<li>Less flexible than containers of pointer pointers</li>
+<li>Less flexible than containers of smart pointers like <a class="reference" href="../../smart_ptr/shared_ptr.htm">boost::shared_ptr</a></li>
 </ol>
 </div>
 <div class="section" id="acknowledgements">
 <h1><a name="acknowledgements">Acknowledgements</a></h1>
 <p>The following people have been very helpful:</p>
 <ul class="simple">
-<li>Bjørn D. Rasmussen for showing me his cr**** code that motivated me to start this library</li>
+<li>Bjørn D. Rasmussen for unintentionally motivating me to start this library</li>
 <li>Pavel Vozenilek for asking me to make the adapters</li>
 <li>David Abrahams for the <tt class="docutils literal"><span class="pre">indirect_fun</span></tt> design</li>
 <li>Pavol Droba for being review manager</li>
 <li>Ross Boylan for trying out a prototype for real</li>
 <li>Felipe Magno de Almeida for giving fedback based on using the
 library in production code even before the library was part of boost</li>
-<li>Jonathan Turkanis for supplying his <tt class="docutils literal"><span class="pre">move_ptr</span></tt> framework 
+<li>Jonathan Turkanis for supplying his <tt class="docutils literal"><span class="pre">move_ptr</span></tt> framework
 which is used internally</li>
 <li>Stefan Slapeta and Howard Hinnant for Metrowerks support</li>
 <li>Russell Hind for help with Borland compatibility</li>
-<li>Jonathan Wakely for help with GCC compatibility</li>
+<li>Jonathan Wakely for his great help with GCC compatibility and bug fixes</li>
 <li>Pavel Chikulaev for comments and bug-fixes</li>
 </ul>
 </div>

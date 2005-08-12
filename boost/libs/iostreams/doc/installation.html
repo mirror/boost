@@ -25,7 +25,7 @@
 
 <P>
     Most of Boost.Iostreams can be used simply by including appropriate headers. This is true, for instance, of all the <A HREF="quick_reference.html#core">core components</A> &#8212; including <A HREF="guide/generic_streams.html#stream"><CODE>stream</CODE></A>, <A HREF="guide/generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A>, <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> and <A HREF="classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> &#8212; and of about two thirds of the concrete <A HREF="quick_reference.html#filters">Filters</A> and <A HREF="quick_reference.html#devices">Devices</A>. 
-    Some components, however, are implemented in <CODE>.cpp</CODE> files. Furthermore, the <A HREF="classes/regex_filter.html">regular expression filter</A> depend on <A HREF="../../regex/index.html" TARGET="_top">Boost.Regex</A>, and the compressions filters rely on the third-party libraries zlib (<A CLASS='bib_ref' NAME='gailly' HREF="bibliography.html#gailly"'>[Gailly]</A>) and libbz2 (<A CLASS='bib_ref' NAME='seward' HREF="bibliography.html#seward"'>[Seward]</A>).
+    Some components, however, are implemented in <CODE>.cpp</CODE> files; in addition, the <A HREF="classes/regex_filter.html">regular expression filters</A> depend on <A HREF="../../regex/index.html" TARGET="_top">Boost.Regex</A>, and the compressions filters rely on the third-party libraries zlib (<A CLASS='bib_ref' NAME='gailly' HREF="bibliography.html#gailly"'>[Gailly]</A>) and libbz2 (<A CLASS='bib_ref' NAME='seward' HREF="bibliography.html#seward"'>[Seward]</A>). To obatin zlib and libbz2, see the instructions <A HREF="classes/zlib.html#installation">here</A> and <A HREF="classes/bzip2.html#installation">here</A>.
 </P>
 
 <P>
@@ -76,10 +76,10 @@
 <H2>Building with Boost.Build</H2>
 
 <P>
-    To build with <A HREF="../../../tools/build/v1/build_system.htm" TARGET="_top">Boost.Build</A>, run <I>bjam</I> from the directory <A HREF="../build"><CODE>libs/iostreams/build</CODE></A>, or from the Boost root directory. If you want to use the compression filters, you'll have to set several Boost.Build variables indicating where the source files or pre-built binaries are located. These variables are summarized in the following table.
+    To build with <A HREF="../../../tools/build/v1/build_system.htm" TARGET="_top">Boost.Build</A>, run <I>bjam</I> from the directory <A HREF="../build"><CODE>libs/iostreams/build</CODE></A>, or from the Boost root directory. If you want to use the compression filters, you may need to set several Boost.Build variables indicating where the source files or pre-built binaries are located. These variables are summarized in the following table.
 </P>
 <P>
-    On most UNIX systems, it should not be necessary to set any of these variables, since the zlib and bzip2 headers and binaries are already installed in locations where they will be found automatically. On Windows, the zlib and bzip2 filters are disabled by default; to enable support for these filters, you will need to set variables indicating the location of the source files, if build from the source, or the location of the headers and binaries, if using pre-built binaries.
+    On most UNIX systems, it should not be necessary to set any of these variables, since the zlib and libbz2 headers and binaries are already installed in locations where they will be found automatically. On Windows, the zlib and bzip2 filters are disabled by default; to enable support for these filters, you will need to set variables indicating the location of the source files, if building from the source, or the location of the headers and binaries, if using pre-built binaries.
 </P>
 
 <TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
@@ -176,7 +176,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

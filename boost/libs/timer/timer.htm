@@ -101,7 +101,7 @@ abbreviation for seconds.</p>
 <h3>Synopsis</h3>
 <pre>#include &lt;<a href="../../boost/progress.hpp">boost/progress.hpp</a>&gt;
 namespace boost {
-class progress_timer : public <a href="#Class timer">timer</a>, <a href="../utility/utility.htm#noncopyable">noncopyable</a>  {
+class progress_timer : public <a href="#Class timer">timer</a>, <a href="../utility/utility.htm#Class_noncopyable">noncopyable</a>  {
  public:
    progress_timer();
    progress_timer( std::ostream&amp; os ); // os is hint; implementation may ignore
@@ -136,7 +136,7 @@ something like this:</p>
 <h2>Synopsis</h2>
 <pre>#include &lt;boost/progress.hpp&gt;
 namespace boost {
-class progress_display : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
+class progress_display : <a href="../utility/utility.htm#Class_noncopyable">noncopyable</a> {
  public:
    progress_display( unsigned long expected_count );
    // Effects: restart(expected_count)

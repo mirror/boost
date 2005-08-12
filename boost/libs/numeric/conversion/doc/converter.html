@@ -22,7 +22,7 @@ HREF="../../../../boost/numeric/conversion/converter.hpp">boost/numeric/conversi
 </TABLE>
 <HR>
 <H2>Contents</H2>
-<DT><A HREF="#synposis">Synopsis</A></DT>
+<DT><A HREF="#synopsis">Synopsis</A></DT>
 <DT><A HREF="requirements.html">User Defined Types support</A></DT>
 <DT><A HREF="#rchklogic">Range Checking Logic</A></DT>
 <DT><A HREF="#examples">Examples</A></DT>
@@ -114,7 +114,7 @@ encapsulating the code to perform a numeric conversion with the direction and pr
       exposed by the converter.</TD>
   </TR>
   <TR>
-    <TD>&nbsp;<A HREF="converter_policies.html#rangecheck"><CODE>UserRangeChecker</CODE></A>&nbsp;</TD>
+    <TD>&nbsp;<A HREF="converter_policies.html#rc"><CODE>UserRangeChecker</CODE></A>&nbsp;</TD>
     <TD><i>Special and Optional</i> <b>Stateless Policy</b> which can be used to override
       the internal range checking logic.<br>
       If given, supplies alternative code for the out_of_range() and validate_range()
@@ -164,7 +164,7 @@ argument_type s ) ;</CODE></P>
     (i.e: int-&gt;float), requires no range checking, so out_of_range() returns
     cInRange directly. See the following <A HREF="#rchklogic">table</A> for more
     details.<br>
-    If the user supplied a <a href="converter_policies.html#rangecheck">UserRangeChecker</a>
+    If the user supplied a <a href="converter_policies.html#rc">UserRangeChecker</a>
     policy, is this policy which implements this function, so the implementation
     is user defined, although it is expected to perform the same conceptual check
     and return the appropriate result.</P>
@@ -178,7 +178,7 @@ HREF="converter_policies.html#oh"><CODE>OverflowHandler</CODE></A> policy class
     <BR>
     For those Target/Source combinations which don't require range checking, this
     is an <U>empty inline function</U>.<br>
-    If the user supplied a <a href="converter_policies.html#rangecheck">UserRangeChecker</a>
+    If the user supplied a <a href="converter_policies.html#rc">UserRangeChecker</a>
     policy, is this policy which implements this function, so the implementation
     is user defined, although it is expected to perform the same action as the
     default. In particular, it is expected to pass the result of the check to

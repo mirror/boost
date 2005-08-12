@@ -64,7 +64,7 @@ named_slot_map_iterator::equal(const named_slot_map_iterator& other) const
               || slot_ == other.slot_));
 }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1701)
+#if BOOST_WORKAROUND(_MSC_VER, <= 0x1701)
 void named_slot_map_iterator::decrement() { assert(false); }
 void named_slot_map_iterator::advance(difference_type) { assert(false); }
 #endif
@@ -150,7 +150,7 @@ void named_slot_map::erase(iterator pos)
 {
   // Erase the slot
   pos.slot_->first.disconnect();
-  //  pos.impl_->group->second.erase(pos.impl_->slot_); ?
+  pos.group->second.erase(pos.slot_);
 }
 
 void named_slot_map::remove_disconnected_slots()

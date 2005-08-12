@@ -37,7 +37,7 @@
 
 <H2>Note</H2>
 
-<P>To be usable with streams and stream buffers, SeekableDevices should model <A HREF="blocking.html">Blocking</A>.
+<P>To be usable with streams and stream buffers, SeekableDevices must model <A HREF="blocking.html">Blocking</A>.
 
 <H2>Example</H2>
 
@@ -59,7 +59,7 @@
             // s to the output sequence, returning the 
             // number of characters written</SPAN>
         }
-    std::streamoff seek(std::streamoff off, std::ios_base::seekdir way) 
+    std::streampos seek(stream_offset off, std::ios_base::seekdir way) 
         {
             <SPAN CLASS="comment">// Advances the read/write head by off characters, 
             // returning the new position, where the offset is 
@@ -95,7 +95,7 @@
     <TR><TD><CODE>s1</CODE></TD><TD>- Object of type <CODE>Ch*</CODE></SPAN></TD></TR>
     <TR><TD><CODE>s2</CODE></TD><TD>- Object of type <CODE>const Ch*</CODE></SPAN></TD></TR>
     <TR><TD><CODE>n</CODE></TD><TD>- Object of type <CODE>std::streamsize</CODE></TD></TR>
-    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <CODE>std::streamoff</CODE></TD></TR>
+    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <A HREF="../functions/positioning.html#synopsis"><CODE>stream_offset</CODE></A></TD></TR>
     <TR><TD><CODE>way</CODE></TD><TD>- Object of type <CODE>std::ios_base::seekdir</CODE></TD></TR>
     <TR><TD><CODE>io</CODE></TD><TD>- Alias for namespace <CODE>boost::iostreams</CODE></TD></TR>
 </TABLE>
@@ -123,7 +123,7 @@
     </TR>
     <TR>
         <TD><PRE CLASS="plain_code"><CODE><A HREF="../functions/seek.html">io::seek</A>(dev, off, way)</CODE></PRE></TD>
-        <TD><CODE>std::streamoff</CODE></TD>
+        <TD><CODE>std::streampos</CODE></TD>
         <TD>Advances the read/write head by <CODE>off</CODE> characters, returning the new position, where the offset is calculated from:
             <UL STYLE="margin:0,0,0,auto">
                 <LI STYLE="list-style-type:disc;list-style-image:none">the start of the sequence if <CODE>way</CODE> is <CODE>ios_base::beg</CODE>
@@ -178,7 +178,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

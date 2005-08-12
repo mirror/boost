@@ -70,7 +70,7 @@ is so nonintuitive that at least one implementation erroneously assigns
 not return true references: there is the often cited example of disk-based 
 collections. 
 </p><p>Another example is a counting iterator, an iterator the returns a sequence of 
-integers when incremented and dereferenced (see <a href="http://www.boost.org/libs/utility/counting_iterator.htm"><tt>boost::counting_iterator</tt></a>). 
+integers when incremented and dereferenced (see <a href="http://www.boost.org/libs/iterator/doc/counting_iterator.html"><tt>boost::counting_iterator</tt></a>). 
 There are two ways to implement this iterator, 1) make the <tt>reference</tt> 
 type be a true reference (a reference to an integer data member of the counting 
 iterator) or 2) make the <tt>reference</tt> type be the same as the 
@@ -79,7 +79,7 @@ iterator) or 2) make the <tt>reference</tt> type be the same as the
 2) is therefore a better choice, but then we have a counting iterator that 
 cannot be a random access iterator. 
 </p><p>Yet another example is a transform iterator, an iterator adaptor that applies 
-a unary function object to the dereference value of the wrapped iterator (see <a href="http://www.boost.org/libs/utility/transform_iterator.htm"><tt>boost::transform_iterator</tt></a>). 
+a unary function object to the dereference value of the wrapped iterator (see <a href="http://www.boost.org/libs/iterator/doc/transform_iterator.html"><tt>boost::transform_iterator</tt></a>). 
 For unary functions such as <tt>std::times</tt> the return type of 
 <tt>operator*</tt> clearly needs to be the <tt>result_type</tt> of the function 
 object, which is typically not a reference. However, with the current iterator 

@@ -94,8 +94,6 @@ public:
     virtual void load_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_iserializer & bis) = 0;
 
-    virtual void delete_created_pointers() = 0;
-
     // msvc and borland won't automatically pass these to the base class so
     // make it explicit here
     template<class T>
@@ -118,8 +116,11 @@ public:
     }
 public:
     // utility function implemented by all legal archives
+    virtual void set_library_version(unsigned int archive_library_version) = 0;
     virtual unsigned int get_library_version() const = 0;
     virtual unsigned int get_flags() const = 0;
+    virtual void reset_object_address(const void * new_address, const void * old_address) = 0;
+    virtual void delete_created_pointers() = 0;
 
     virtual void load_binary(void * t, std::size_t size) = 0;
 

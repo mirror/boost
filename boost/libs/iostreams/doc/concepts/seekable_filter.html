@@ -70,7 +70,7 @@
     <TR><TD><CODE>s1</CODE></TD><TD>- Object of type <CODE>Ch*</CODE></TD></TR>
     <TR><TD><CODE>s2</CODE></TD><TD>- Object of type <CODE>const Ch*</CODE></TD></TR>
     <TR><TD><CODE>n</CODE></TD><TD>- Object of type <CODE>std::streamsize</CODE></TD></TR>
-    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <CODE>std::streamoff</CODE></TD></TR>
+    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <A HREF="../functions/positioning.html#synopsis"><CODE>stream_offset</CODE></A></TD></TR>
     <TR><TD><CODE>way</CODE></TD><TD>- Object of type <CODE>std::ios_base::seekdir</CODE></TD></TR>
     <TR><TD><CODE>which</CODE></TD><TD>- Object of type <CODE>std::ios_base::openmode</CODE></TD></TR>
     <TR><TD><CODE>io</CODE></TD><TD>- Alias for namespace <CODE>boost::iostreams</CODE></TD></TR>
@@ -82,14 +82,14 @@
     <TR><TH>Expression</TH><TH>Expression Type</TH><TH>Category Precondition</TH><TH>Semantics</TH></TR>
     <TR>
         <TD>
-            <PRE CLASS="plain_code"><CODE>typename <A HREF="../guide/traits.html">char_type_of</A>&lt;F&gt;::type</CODE></PRE>
+            <PRE CLASS="plain_code"><CODE>typename <A HREF="../guide/traits.html#char_type_of_ref">char_type_of</A>&lt;F&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the character type</TD>
         <TD ALIGN="center">-</TD><TD ALIGN="center">-</TD>
     </TR>
     <TR>
         <TD>
-            <PRE CLASS="plain_code"><CODE>typename <A HREF="../guide/traits.html">category_of</A>&lt;F&gt;::type</CODE></PRE>
+            <PRE CLASS="plain_code"><CODE>typename <A HREF="../guide/traits.html#category_ref">category_of</A>&lt;F&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the category</TD>
         <TD ALIGN="center">-</TD><TD ALIGN="center">-</TD>
@@ -132,7 +132,7 @@
     </TR>
     <TR>
         <TD><PRE CLASS="plain_code"><CODE>f.seek(d, off, way)</CODE></PRE></TD>
-        <TD><CODE>std::streamoff</CODE></TD>
+        <TD><CODE>std::streampos</CODE></TD>
         <TD ALIGN="center">-</TD>
         <TD>
             <P CLASS="concept">
@@ -171,7 +171,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

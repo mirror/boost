@@ -29,7 +29,7 @@
 <A NAME="container_source"></A>
 <H2>2.1.2. Writing a <CODE>container_source</CODE></H2>
 
-<P>Suppose we want to write a Device for reading characters from an STL container. A Device which only supports reading is called a <A HREF="../concepts/source.html">Source</A>. A typical narrow-character Source looks like this:
+<P>Suppose you want to write a Device for reading characters from an STL container. A Device which only supports reading is called a <A HREF="../concepts/source.html">Source</A>. A typical narrow-character Source looks like this:
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS="literal">&lt;iosfwd&gt;</SPAN>                          <SPAN CLASS='comment'>// streamsize</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/categories.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/categories.hpp&gt;</SPAN></A>  <SPAN CLASS='comment'>// source_tag
@@ -53,9 +53,9 @@
 
 <P>Here the member type <A HREF="../guide/traits.html#char_type"><CODE>char_type</CODE></A> indicates the type of characters handled by my_source, which will almost always be <CODE>char</CODE> or <CODE>wchar_t</CODE>. The member type <A HREF="../guide/traits.html#char_type">category</A> indicates which of the fundamental i/o operations are supported by the device. The category tag <A HREF="../guide/traits.html#category_tags"><CODE>source_tag</CODE></A> indicates that only <A HREF="../functions/read.html"><CODE>read</CODE></A> is supported.</P>
 
-<P>The member function <CODE>read</CODE> reads up to <CODE>n</CODE> character into the buffer <CODE>s</CODE> and returns the number of character read, unless that number is <CODE>0</CODE> and end-of-stream has been reached, in which case the special value <CODE>-1</CODE> is returned. In general, <CODE>read</CODE> may return fewer characters than requested even though end-of-stream has not been reached. In this case, the Source is call <I>non-blocking</I>. Non-blocking Devices do not interact well with stanard streams and stream buffers, however, so most devices should be <A HREF="../concepts/blocking.html">Blocking</A>. <I>See</I> <A HREF="../guide/asynchronous.html">Non-Blocking and Asynchronous I/o</A>.</P>
+<P>The member function <CODE>read</CODE> reads up to <CODE>n</CODE> character into the buffer <CODE>s</CODE> and returns the number of character read, unless that number is <CODE>0</CODE> and end-of-stream has been reached, in which case the special value <CODE>-1</CODE> is returned. In general, a Source's member function <CODE>read</CODE> may return fewer characters than requested even though end-of-stream has not been reached; such Sources are called <I>non-blocking</I>. Non-blocking Devices do not interact well with standard streams and stream buffers, however, so most devices should be <A HREF="../concepts/blocking.html">Blocking</A>. <I>See</I> <A HREF="../guide/asynchronous.html">Asynchronous and Non-Blocking I/O</A>.</P>
 
-<P> We could also write the above example as follows:</P>
+<P>You could also write the above example as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>  <SPAN CLASS='comment'>// source</SPAN>
 
@@ -68,7 +68,7 @@
 
 <P>Here <A HREF="../classes/device.html#synopsis"><CODE>source</CODE></A> is a convenience base class which provides the member types <CODE>char_type</CODE> and <CODE>category</CODE>, as well as no-op implementations of member functions <CODE>close</CODE> and <CODE>imbue</CODE>, not needed here.
 
-<P>We're now ready to write our <CODE>container_source</CODE>. For simplicity, we will assume that our container's iterators are RandomAccessIterators.</P>
+<P>You're now ready to write your <CODE>container_source</CODE>. For simplicity, let's assume that your container's iterators are RandomAccessIterators.</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;algorithm&gt;</SPAN>                       <SPAN CLASS='comment'>// copy, min</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;iosfwd&gt;</SPAN>                          <SPAN CLASS='comment'>// streamsize</SPAN>
@@ -108,16 +108,16 @@
 
 } } } <SPAN CLASS='comment'>// End namespace boost::iostreams:example</SPAN></PRE>
 
-<P>Here, we see</P>
+<P>Here, note that</P>
 <UL>
 <LI>The member type <CODE>char_type</CODE> is defined to be equal to the containers's <CODE>value_type</CODE>;
 <LI>The member type <CODE>category</CODE> tells the Iostreams library that <CODE>container_source</CODE> is a model of <A HREF="../concepts/source.html">Source</A>; and
 <LI>A <CODE>container_source</CODE> can be constructed from a instance of <CODE>Container</CODE>, which is passed and stored by reference, and accessible <I>via</I> the member function <CODE>container()</CODE>.
 </UL>
 
-<P>The main idea behind the implementation of <CODE>read()</CODE> is simple: First, we calculate the number of characters to be read, which is the minimum of the number of unread characters remaining in the container and the number of characters requested. Second, if the number of characters to be read is non-zero, we copy that number of characters from the container into the provided buffer and update the current read position. If the number of characters is zero, i.e., if all the characters in the container have already been consumed by previous calls to read (or if the container was empty to begin with), we return <CODE>-1</CODE> to indicate end-of-stream.</P>
+<P>The main idea behind the implementation of <CODE>read()</CODE> is simple: First, you calculate the number of characters to be read, which is the minimum of the number of unread characters remaining in the container and the number of characters requested. Second, if the number of characters to be read is non-zero, you copy that number of characters from the container into the provided buffer and update the current read position. If the number of characters is zero, i.e., if all the characters in the container have already been consumed by previous calls to read (or if the container was empty to begin with), you return <CODE>-1</CODE> to indicate end-of-stream.</P>
 
-<P>We can read from a container_source as follows</P>
+<P>You can read from a container_source as follows</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cassert&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;string&gt;</SPAN>
@@ -139,7 +139,7 @@
     assert(input == output);
 }</PRE>
 
-<P>Finally, we sould mention that the Iostremas library provides an easier way to read from an STL container: instances of <A HREF="../../../range/doc/utility_class.html#iter_range" TARGET="_top"><CODE>boost::iterator_range</CODE></A> can be added directly to <A HREF="../guide/filtering_streams.html">filtering streams and stream buffers</A>. So we could write:</P>
+<P>Finally, I sould mention that the Iostremas library provides an easier way to read from an STL container: instances of <A HREF="../../../range/doc/utility_class.html#iter_range" TARGET="_top"><CODE>boost::iterator_range</CODE></A> can be added directly to <A HREF="../guide/filtering_streams.html">filtering streams and stream buffers</A>. So you could write:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cassert&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;string&gt;</SPAN>
@@ -179,7 +179,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

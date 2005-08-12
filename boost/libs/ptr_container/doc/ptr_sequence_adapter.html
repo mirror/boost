@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -33,48 +33,48 @@ containers from.</p>
 <p><strong>Synopsis:</strong></p>
 <pre class="literal-block">
 namespace boost
-{      
+{
 
     template
-    &lt; 
-        class T, 
+    &lt;
+        class T,
         class VoidPtrSeq,
         class CloneAllocator = heap_clone_allocator
     &gt;
-    class ptr_sequence_adapter 
+    class ptr_sequence_adapter
     {
     public: // <a class="reference" href="#construct-copy-destroy">construct/copy/destroy</a>
         template&lt; class InputIterator &gt;
         assign( InputIterator first, InputIterator last );
         template&lt; class InputRange &gt;
         assign( const InputRange&amp; e );
-    
+
     public: // <a class="reference" href="#element-access">element access</a>
         T&amp;        front();
         const T&amp;  front() const;
         T&amp;        back();
         const T&amp;  back() const;
-    
+
     public: // <a class="reference" href="#modifiers">modifiers</a>
         void      push_back( T* x );
         auto_type pop_back();
         iterator  insert( iterator position, T* x );
         template&lt; class InputIterator &gt;
-        void      insert( iterator position, InputIterator first, InputIterator last ); 
+        void      insert( iterator position, InputIterator first, InputIterator last );
         template&lt; class InputRange &gt;
         void      insert( iterator position, const InputRange&amp; r );
         iterator  erase( iterator position );
         iterator  erase( iterator first, iterator last );
         template&lt; class Range &gt;
         iterator  erase( const Range&amp; r );
-    
+
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
 
-        void  transfer( iterator before, iterator object, 
+        void  transfer( iterator before, iterator object,
                         ptr_sequence_adapter&amp; from );
         void  transfer( iterator before, iterator first, iterator last,
                         ptr_sequence_adapter&amp; from );
-        void template&lt; class Range&gt; 
+        void template&lt; class Range&gt;
         void transfer( iterator before, const Range&amp; r, ptr_sequence_adapter&amp; from );
         void transfer( iterator before, ptr_sequence_adapter&amp; from );
 
@@ -105,21 +105,21 @@ namespace boost
         void merge( iterator first, iterator last, ptr_sequence_adapter&amp; from );
         template&lt; class Compare &gt;
         void merge( iterator first, iterator last, ptr_sequence_adapter&amp; from, Compare comp );
-        
+
     public: // <a class="reference" href="ptr_list.html">ptr_list interface</a>
-     
+
     public: // <a class="reference" href="ptr_vector.html">ptr_vector interface</a>
 
-    public: // <a class="reference" href="ptr_deque.html">ptr_deque interface</a> 
-     
+    public: // <a class="reference" href="ptr_deque.html">ptr_deque interface</a>
+
     }; //  class 'ptr_sequence_adapter'
 
-} // namespace 'boost'  
+} // namespace 'boost'
 </pre>
 </div>
 <div class="section" id="semantics">
 <h1><a name="semantics">Semantics</a></h1>
-<a class="target" id="construct-copy-destroy" name="construct-copy-destroy"></a><div class="section" id="semantics-construct-copy-destroy">
+<span id="construct-copy-destroy"></span><div class="section" id="semantics-construct-copy-destroy">
 <h2><a name="semantics-construct-copy-destroy">Semantics: construct/copy/destroy</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">InputIterator</span> <span class="pre">&gt;</span>
@@ -150,20 +150,20 @@ namespace boost
 
 - Exception safety: Strong guarantee -->
 <!-- void resize( size_type sz, const T& x );
-Effects: 
+Effects:
 
 if ( sz > size() )
     insert( end(), sz-size(), x );
     else if ( sz < size() )
     erase( begin()+sz, end() );
     else
-    ; //do nothing 
+    ; //do nothing
 
 Postconditions: size() == sz
 
 Exception safety: Strong guarantee -->
-<a class="target" id="element-access" name="element-access"></a></div>
-<div class="section" id="semantics-element-access">
+</div>
+<span id="element-access"></span><div class="section" id="semantics-element-access">
 <h2><a name="semantics-element-access">Semantics: element access</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span> <span class="pre">front();</span></tt></p>
@@ -203,8 +203,8 @@ Exception safety: Strong guarantee -->
 </blockquote>
 </li>
 </ul>
-<a class="target" id="modifiers" name="modifiers"></a></div>
-<div class="section" id="semantics-modifiers">
+</div>
+<span id="modifiers"></span><div class="section" id="semantics-modifiers">
 <h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">push_back(</span> <span class="pre">T*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
@@ -238,9 +238,9 @@ Exception safety: Strong guarantee -->
 <li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span> <span class="pre">insert(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">T*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Requirements: position is a valid iterator from the container and 
+<li>Requirements: <tt class="docutils literal"><span class="pre">position</span></tt> is a valid iterator from the container and
 <tt class="docutils literal"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
-<li>Effects: Inserts <tt class="docutils literal"><span class="pre">x</span></tt> before position and returns an iterator pointing to it</li>
+<li>Effects: Inserts <tt class="docutils literal"><span class="pre">x</span></tt> before <tt class="docutils literal"><span class="pre">position</span></tt> and returns an iterator pointing to it</li>
 <li>Throws: <tt class="docutils literal"><span class="pre">bad_pointer</span></tt> if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt></li>
 <li>Exception safety: Strong guarantee</li>
 </ul>
@@ -259,7 +259,7 @@ Exception safety: Strong guarantee -->
 
 - Requirements: ``position`` is a valid iterator from the container
 
-- Effects: Inserts ``n`` clones of ``x`` before position into the container 
+- Effects: Inserts ``n`` clones of ``x`` before position into the container
 
 - Exception safety: Strong guarantee -->
 <ul>
@@ -308,15 +308,20 @@ Exception safety: Strong guarantee -->
 </blockquote>
 </li>
 </ul>
-<a class="target" id="pointer-container-requirements" name="pointer-container-requirements"></a></div>
-<div class="section" id="semantics-pointer-container-requirements">
+</div>
+<span id="pointer-container-requirements"></span><div class="section" id="semantics-pointer-container-requirements">
 <h2><a name="semantics-pointer-container-requirements">Semantics: pointer container requirements</a></h2>
+<p>You cannot use <tt class="docutils literal"><span class="pre">transfer()</span></tt> to move elements between two
+different types of containers. This is to avoid
+problems with different allocators. The requirement might be
+weakened in the future.</p>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">iterator</span> <span class="pre">object,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
-<li>Effects: Inserts the object defined by <tt class="docutils literal"><span class="pre">object</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.</li>
+<li>Effects: Inserts the object defined by <tt class="docutils literal"><span class="pre">object</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.
+Insertion takes place before <tt class="docutils literal"><span class="pre">before</span></tt>.</li>
 <li>Postconditions: <tt class="docutils literal"><span class="pre">size()</span></tt> is one more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is one less.</li>
 <li>Exception safety: Strong guarantee</li>
 </ul>
@@ -326,7 +331,8 @@ Exception safety: Strong guarantee -->
 <blockquote>
 <ul class="simple">
 <li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
-<li>Effects: Inserts the objects defined by the range <tt class="docutils literal"><span class="pre">[first,last)</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.</li>
+<li>Effects: Inserts the objects defined by the range <tt class="docutils literal"><span class="pre">[first,last)</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.
+Insertion takes place before <tt class="docutils literal"><span class="pre">before</span></tt>.</li>
 <li>Postconditions: Let <tt class="docutils literal"><span class="pre">N</span> <span class="pre">==</span> <span class="pre">std::distance(first,last);</span></tt> then <tt class="docutils literal"><span class="pre">size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> less.</li>
 <li>Exception safety: Strong guarantee</li>
 </ul>
@@ -350,8 +356,8 @@ takes place before <tt class="docutils literal"><span class="pre">before</span><
 </blockquote>
 </li>
 </ul>
-<a class="target" id="algorithms" name="algorithms"></a></div>
-<div class="section" id="semantics-algorithms">
+</div>
+<span id="algorithms"></span><div class="section" id="semantics-algorithms">
 <h2><a name="semantics-algorithms">Semantics: algorithms</a></h2>
 <p>The general requirement for these algorithms is that the container <em>does not
 contain any nulls</em>.</p>

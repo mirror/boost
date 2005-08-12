@@ -2,9 +2,9 @@
 ++++++++++++++++++++++++++++++++++
  |Boost| Pointer Container Library
 ++++++++++++++++++++++++++++++++++
- 
+
 .. |Boost| image:: cboost.gif
-   
+
 
 
 :Authors:       Thorsten Ottosen
@@ -14,7 +14,7 @@
 :copyright:     Thorsten Ottosen 2004-2005. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
- 
+
 .. _`Department of Computer Science`: http://www.cs.aau.dk
 .. _`Dezide Aps`: http://www.dezide.com
 
@@ -23,19 +23,19 @@ Overview
 ========
 
 Boost.Pointer Container provides containers for holding heap-allocated
-objects in an exception-safe manner and with minimal overhead. 
+objects in an exception-safe manner and with minimal overhead.
 The aim of the library is in particular to make OO programming
-easier in C++ by establishing a standard set of classes, methods 
+easier in C++ by establishing a standard set of classes, methods
 and designs for dealing with OO specific problems
 
 * Motivation_
 * Tutorial_
 * Reference_
 
-  - `Conventions <reference.html#conventions>`_
-  - `The Clonable Concept <reference.html#the-clonable-concept>`_ 
-  - `The Clone Allocator Concept <reference.html#the-clone-allocator-concept>`_ 
-  - `Pointer container adapters <reference.html#pointer-container-adapters>`_ 
+  - `Conventions <conventions.html>`_
+  - `The Clonable Concept <reference.html#the-clonable-concept>`_
+  - `The Clone Allocator Concept <reference.html#the-clone-allocator-concept>`_
+  - `Pointer container adapters <reference.html#pointer-container-adapters>`_
   - `Sequence container classes <reference.html#sequence-containers>`_
 
     - `ptr_vector <ptr_vector.html>`_
@@ -47,16 +47,16 @@ and designs for dealing with OO specific problems
     - `ptr_set <ptr_set.html>`_
     - `ptr_multiset <ptr_multiset.html>`_
     - `ptr_map <ptr_map.html>`_
-    - `ptr_multimap <ptr_multimap.html>`_   
-  - `Indirected functions <indirect_fun.html>`_ 
+    - `ptr_multimap <ptr_multimap.html>`_
+  - `Indirected functions <indirect_fun.html>`_
   - `Class nullable <reference.html#class-nullable>`_
-  - `Exception classes <reference.html#exception-classes>`_         
+  - `Exception classes <reference.html#exception-classes>`_
 * `Usage guidelines`_
 * Examples_
 * `Library headers`_
 * FAQ_
-* Acknowledgements_ 
-* References_ 
+* Acknowledgements_
+* References_
 
 
 .. _Tutorial: tutorial.html
@@ -70,14 +70,14 @@ and designs for dealing with OO specific problems
 
 .. _`Library headers`: headers.html
 
-.. _FAQ: faq.html 
+.. _FAQ: faq.html
 
 
 ==========
 Motivation
 ==========
 
-Whenever a programmer wants to have a container of pointers to 
+Whenever a programmer wants to have a container of pointers to
 heap-allocated objects, there is usually only one exception-safe way:
 to make a container of pointer pointers like ``boost::shared_ptr``.
 This approach is suboptimal if
@@ -85,49 +85,49 @@ This approach is suboptimal if
 1. the stored objects are not shared, but owned exclusively, or
 2. the overhead implied by pointer pointers is inappropriate
 
-This library therefore provides standard-like containers that are for storing 
-heap-allocated or `cloned <reference.html#the-clonable-concept>`_ objects (or in case of a map, the mapped object must be 
-a heap-allocated or cloned object). For each of the standard 
-containers there is a pointer container equivalent that takes ownership of 
-the objects in an exception safe manner.  In this respect the library is intended 
-to solve the so-called 
-`polymorphic class problem <faq.html#what-is-the-polymorphic-class-problem>`_. 
+This library therefore provides standard-like containers that are for storing
+heap-allocated or `cloned <reference.html#the-clonable-concept>`_ objects (or in case of a map, the mapped object must be
+a heap-allocated or cloned object). For each of the standard
+containers there is a pointer container equivalent that takes ownership of
+the objects in an exception safe manner.  In this respect the library is intended
+to solve the so-called
+`polymorphic class problem <faq.html#what-is-the-polymorphic-class-problem>`_.
 
 
 The advantages of pointer containers are
 
 1. Exception-safe pointer storage and manipulation.
 2. Notational convenience compared to the use of containers of pointers.
-3. Can be used for types that are neither Assignable nor Copy Constructible. 
+3. Can be used for types that are neither Assignable nor Copy Constructible.
 4. No memory-overhead as containers of pointer pointers can have (see [11]_ and [12]_).
-5. Usually faster than using containers of pointer pointers (see [11]_ and [12]_). 
-6. The interface is slightly changed towards the domain of pointers  
+5. Usually faster than using containers of pointer pointers (see [11]_ and [12]_).
+6. The interface is slightly changed towards the domain of pointers
    instead of relying on the normal value-based interface. For example,
-   now it is possible for ``pop_back()`` to return the removed element. 
+   now it is possible for ``pop_back()`` to return the removed element.
 7. Propagates constness s.t. one cannot modify the objects via a ``const_iterator``
 
 The disadvantages are
 
-1. Less flexible than containers of pointer pointers
-  
+1. Less flexible than containers of smart pointers like `boost::shared_ptr <../../smart_ptr/shared_ptr.htm>`_
+
 ================
 Acknowledgements
 ================
 
 The following people have been very helpful:
 
-- Bjørn D. Rasmussen for showing me his cr**** code that motivated me to start this library
+- Bjørn D. Rasmussen for unintentionally motivating me to start this library
 - Pavel Vozenilek for asking me to make the adapters
 - David Abrahams for the ``indirect_fun`` design
 - Pavol Droba for being review manager
 - Ross Boylan for trying out a prototype for real
 - Felipe Magno de Almeida for giving fedback based on using the
-  library in production code even before the library was part of boost  
-- Jonathan Turkanis for supplying his ``move_ptr`` framework 
+  library in production code even before the library was part of boost
+- Jonathan Turkanis for supplying his ``move_ptr`` framework
   which is used internally
 - Stefan Slapeta and Howard Hinnant for Metrowerks support
 - Russell Hind for help with Borland compatibility
-- Jonathan Wakely for help with GCC compatibility
+- Jonathan Wakely for his great help with GCC compatibility and bug fixes
 - Pavel Chikulaev for comments and bug-fixes
 
 ==========

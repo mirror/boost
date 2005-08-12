@@ -182,7 +182,7 @@ inline void save(
     // is never tracked by default.  Wrap int in a trackable type
     BOOST_STATIC_ASSERT((tracking_level<T>::value != track_never));
     const T * t_ptr = t.get();
-        ar << boost::serialization::make_nvp("px", t_ptr);
+    ar << boost::serialization::make_nvp("px", t_ptr);
 }
 
 template<class Archive, class T>
@@ -195,7 +195,7 @@ inline void load(
     // something like shared_ptr<int>.  This occurs because int
     // is never tracked by default.  Wrap int in a trackable type
     BOOST_STATIC_ASSERT((tracking_level<T>::value != track_never));
-        T* r;
+    T* r;
     #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
     if(file_version < 1){
         ar.register_type(static_cast<

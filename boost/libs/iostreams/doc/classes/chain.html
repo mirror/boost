@@ -339,7 +339,7 @@
 <H4><CODE>chain::strict_sync</CODE></H4>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">bool</SPAN> strict_sync();</PRE>
 
-<P>Identical to <CODE>sync</CODE> except for the return value, which is <CODE>false</CODE> unless <I>each</I> Filter and Device in this chain is <A HREF='../concepts/flushable.html'>Flushable</A> and <A HREF='../functions/flush.html'><CODE>flush</CODE></A> returns <CODE>true</CODE> when invoked on <I>each</I> component.  A return value of <CODE>true</CODE> guarantees that all buffered data has been successfully forwarded.</P>
+<P>Identical to <CODE>sync</CODE> except for the return value, which is <CODE>false</CODE> unless <I>each</I> Filter in this chain is <A HREF='../concepts/flushable.html'>Flushable</A> and <A HREF='../functions/flush.html'><CODE>flush</CODE></A> returns <CODE>true</CODE> when invoked on <I>each</I> component.  A return value of <CODE>true</CODE> guarantees that all buffered data has been successfully forwarded.</P>
 
 <A NAME="wchain"></A>
 <H2>Class Template <CODE>wchain</CODE></H2>
@@ -361,7 +361,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

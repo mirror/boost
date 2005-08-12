@@ -26,7 +26,7 @@
 <H2>Description</H2>
 
 <P>
-    The class template <CODE>inverse</CODE> is an adapter which transforms an <A HREF='../concepts/input_filter.html'>InputFilter</A> into an <A HREF='../concepts/output_filter.html'>OutputFilter</A> or <I>vice versa</I>. The function template <CODE>invert</CODE> is an <A HREF='../../../../more/generic_programming.html#object_generator' TARGET='top'>object generator</A> which when passed a Filter returns a instance of an appropriate specialization of <CODE>inverse</CODE>.
+    The class template <CODE>inverse</CODE> is an adapter which transforms an <A HREF='../concepts/input_filter.html'>InputFilter</A> into an <A HREF='../concepts/output_filter.html'>OutputFilter</A> or <I>vice versa</I>. The function template <CODE>invert</CODE> is an <A HREF='../../../../more/generic_programming.html#object_generator' TARGET='_top'>object generator</A> which when passed a Filter returns a instance of an appropriate specialization of <CODE>inverse</CODE>.
 </P>
 
 <P>Given an <A HREF='../concepts/input_filter.html'>InputFilter</A> <CODE>f</CODE>, the inverse of <CODE>f</CODE> is <A HREF='../concepts/multi_character.html'>Multi-Character</A> <A HREF='../concepts/output_filter.html'>OutputFilter</A> whose member function <CODE>write</CODE> is implemented as follows. Given a <A HREF='../concepts/sink.html'>Sink</A> <CODE>snk</CODE> and a character buffer <CODE>s</CODE> of length <CODE>n</CODE>, we
@@ -131,7 +131,7 @@ inverse&lt;Filter&gt; invert(<SPAN CLASS='keyword'>const</SPAN> Filter& filter);
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

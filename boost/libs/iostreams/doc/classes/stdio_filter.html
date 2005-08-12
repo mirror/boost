@@ -23,7 +23,7 @@
 
 <HR>
 
-<A NAME="description">
+<A NAME="description"></A>
 <H2>Description</H2>
 
 <P>
@@ -33,13 +33,14 @@
     <CODE>basic_stdio_filter</CODE> is implemented by redirecting <CODE>std::cin</CODE> and <CODE>std::cout</CODE> (or <CODE>std::wcin</CODE> and <CODE>std::wcout</CODE>). Before <CODE>do_filter</CODE> is invoked, the entire stream of unfiltered data is read and stored in memory. As a result, <CODE>basic_stdio_filter</CODE> is unsuitable for use in low-memory environments or in conjunction with streams of data that have no natural end, such as stock tickers. Because of these limitations, <CODE>basic_stdio_filter</CODE> is best used as an aid to those learning to use the Iostreams library.
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL class="page-index">
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/stdio.hpp"><CODE>&lt;boost/iostreams/filter/stdio.hpp&gt;</CODE></A></DT>
 </DL>
-<A NAME="reference">
+
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
 <H4>Synopsis</H4>
@@ -82,7 +83,7 @@
 
 <P>Reads from standard input and writes to standard output until standard input is exhausted. If <CODE>Ch</CODE> is <CODE>char</CODE>, uses <CODE>std::cin</CODE> and <CODE>std::cout</CODE>; if <CODE>Ch</CODE> is <CODE>wchar_t</CODE>, uses <CODE>std::wcin</CODE> and <CODE>std::wcout</CODE>.</P>
 
-<A NAME="example">
+<A NAME="example"></A>
 <H2>Example</H2>
 
 <P>Five examples of <CODE>stdio_filter</CODE>s are presented in the <A HREF="../tutorial/writing_filters.html">Tutorial</A>.</P>
@@ -95,7 +96,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

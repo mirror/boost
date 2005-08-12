@@ -32,7 +32,7 @@
   <DT><A href="#installation">Installation</A></DT>
 </DL>
 
-<A NAME="overview">
+<A NAME="overview"></A>
 <H2>Overview</H2>
 
 <P>
@@ -42,7 +42,7 @@
     The bzip2 Filters are <A HREF="../concepts/dual_use_filter.html">DualUseFilters</A> so that they may be used for either input or output. Most commonly, however, the compression Filters will be used for output and the decompression Filters for input.
 </P>
 
-<A NAME="acknowledgments">
+<A NAME="acknowledgments"></A>
 <H2>Acknowledgments</H2>
 
 <P>
@@ -51,14 +51,14 @@
 
 Thanks to <A HREF="mailto:jseward@acm.org">Julian Seward</A> for making his excellent library available to the public with a <A HREF="../../../../more/lib_guide.htm#Requirements">Boost-compatible</A> license.
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL>
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/filter/bzip2.hpp"><CODE>&lt;boost/iostreams/filter/bzip2.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="synopsis">
+<A NAME="synopsis"></A>
 <H2>Synopsis</H2>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
@@ -88,10 +88,10 @@ Thanks to <A HREF="mailto:jseward@acm.org">Julian Seward</A> for making his exce
 
 } } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
 
-<A NAME="reference">
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
-<A NAME="constants">
+<A NAME="constants"></A>
 <H3>Namespace <CODE>boost::iostreams::bzip2</CODE></H3>
 
 <P>The namespace <CODE>boost::iostreams::bzip2</CODE> contains integral error codes. The constants have the following interpretations. <I>See</I> <A CLASS="bib_ref" HREF="../bibliography.html#seward">[Seward]</A> for additional details.</P>
@@ -112,7 +112,7 @@ Thanks to <A HREF="mailto:jseward@acm.org">Julian Seward</A> for making his exce
     </TR>
 </TABLE>
 
-<A NAME="bzip2_params">
+<A NAME="bzip2_params"></A>
 <H3>Class <CODE>bzip2_params</CODE></H3>
 
 <H4>Description</H4>
@@ -137,7 +137,7 @@ Thanks to <A HREF="mailto:jseward@acm.org">Julian Seward</A> for making his exce
     <SPAN CLASS="keyword">int</SPAN>       <A CLASS="documented" HREF="#work_factor">work_factor</A>;   <SPAN CLASS="comment">// For compression</SPAN>
 };</PRE>
 
-<A NAME="bzip2_params_constructors">
+<A NAME="bzip2_params_constructors"></A>
 <H4><CODE>bzip2_params::bzip2_params</CODE></H4>
 
 <PRE CLASS="broken_ie">    <B>bzip2_params</B>( <SPAN CLASS="keyword">int</SPAN> block_size   = <SPAN CLASS="omitted">default value</SPAN>,
@@ -170,7 +170,7 @@ Thanks to <A HREF="mailto:jseward@acm.org">Julian Seward</A> for making his exce
 
 <P><I>See</I> <A CLASS="bib_ref" HREF="../bibliography.html#seward">[Seward]</A> for additional details.</P>
 
-<A NAME="basic_bzip2_compressor">
+<A NAME="basic_bzip2_compressor"></A>
 <H3>Class template <CODE>basic_bzip2_compressor</CODE></H3>
 
 <H4>Description</H4>
@@ -209,7 +209,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 
 <P>Constructs an instance of <CODE>basic_bzip2_compressor</CODE> with the given parameters and buffer size. Since a <A CLASS="documented" HREF="#bzip2_params"><CODE>bzip2_params</CODE></A> object is implicitly constructible from an <CODE>int</CODE> representing a block size, an <CODE>int</CODE> may be passed as the first constructor argument.</P>
 
-<A NAME="basic_bzip2_decompressor">
+<A NAME="basic_bzip2_decompressor"></A>
 <H3>Class template <CODE>basic_bzip2_decompressor</CODE></H3>
 
 <H4>Description</H4>
@@ -249,7 +249,7 @@ Model of <A HREF="../concepts/dual_use_filter.html">DualUseFilter</A> which perf
 
 <P>Constructs an instance of <CODE>basic_bzip2_decompressor</CODE> with the given value for <A HREF="#small">small</A> and the given buffer size.</P>
 
-<A NAME="bzip2_error">
+<A NAME="bzip2_error"></A>
 <H3>Class <CODE>bzip2_error</CODE></H3>
 
 <H4>Description</H4>
@@ -278,7 +278,7 @@ Used by the bzip2 Filters to report errors.
 
 <P>Returns an error code from the namespace <A HREF="#constants"><CODE>boost::iostreams::bzip2</CODE></A>.</P>
 
-<A NAME="examples">
+<A NAME="examples"></A>
 <H2>Examples</H2>
 
 The following code decompresses data from a file and writes it to standard output.
@@ -300,7 +300,7 @@ int main()
     boost::iostreams::copy(in, cout);
 }</PRE>
 
-<A NAME="installation">
+<A NAME="installation"></A>
 <H3>Installation</H3>
 
 <P>
@@ -318,7 +318,7 @@ int main()
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

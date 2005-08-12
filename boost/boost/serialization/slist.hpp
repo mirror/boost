@@ -60,13 +60,13 @@ inline void load(
     if(0 == count)
         return;
 
-    boost::serialization::stl::stack_construct<Archive, U> u(ar);
+    boost::serialization::stack_construct<Archive, U> u(ar);
     ar >> boost::serialization::make_nvp("item", u.reference());
     t.push_front(u.reference());
     BOOST_DEDUCED_TYPENAME BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator>::iterator last;
     last = t.begin();
     while(--count > 0){
-        boost::serialization::stl::stack_construct<Archive, U> u(ar);
+        boost::serialization::stack_construct<Archive, U> u(ar);
         ar >> boost::serialization::make_nvp("item", u.reference());
         last = t.insert_after(last, u.reference());
         ar.reset_object_address(& (*last), & u);

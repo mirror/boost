@@ -59,7 +59,7 @@
     <TD><A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/filtering_stream.hpp"><CODE>filtering_stream.hpp</CODE></A></TD>
     <TD>
-        Stream template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>chain</CODE></A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on its template parameters.
+        Stream template which performs filtered i/o using a contained <A HREF="classes/chain.html"><CODE>chain</CODE></A>. Derives from <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE> depending on its <A HREF="guide/modes.html">mode</A>, which is specified as its first template parameter.
     </TD>
 </TR>
 <TR>
@@ -323,53 +323,53 @@
 <H2>Views</H2>
 
 <P>
-    Each view consists of one or more class templates together with an <A HREF="../../../more/generic_programming.html#object_generator" TARGTE="_top">object generator</A>.
+    Each view consists of one or more class templates together with an <A HREF="../../../more/generic_programming.html#object_generator" TARGTE="_top">object generator</A>. <I>See</I> <A HREF="guide/views.html">Views</A>.
 <P>
 
 <TABLE STYLE="margin-bottom:1em" BORDER="1" CELLPADDING="6" CELLSPACING="1">
 <TR>
-    <TH>View Template</TH>
     <TH>Object Generator</TH>
+    <TH>View Template</TH>
     <TH>Header<A STYLE='font-weight:normal' CLASS='footnote_ref' NAME='note_1_ref' HREF="#note_1"><SUP>[1]</SUP></A></TH>
     <TH>Description</TH>
 </TR>
 <TR>
-    <TD><A HREF="functions/combine.html#synopsis"><CODE>combination</CODE></A></TD>
     <TD><A HREF="functions/combine.html"><CODE>combine</CODE></A></TD>
+    <TD><A HREF="functions/combine.html#synopsis"><CODE>combination</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/combine.hpp"><CODE>combine.hpp</CODE></A></TD>
     <TD>
         Takes a pair of <A HREF="concepts/filter.html">Filters</A> or <A HREF="concepts/device.html">Devices</A> and yields a filter or device which performs input using the first component and output using the second.
     </TD>
 </TR>
 <TR>
-    <TD><A HREF="functions/compose.html#composite"><CODE>composite</CODE></A></TD>
     <TD><A HREF="functions/compose.html"><CODE>compose</CODE></A></TD>
+    <TD><A HREF="functions/compose.html#composite"><CODE>composite</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/compose.hpp"><CODE>compose.hpp</CODE></A></TD>
     <TD>
         Takes a <A HREF="concepts/filter.html">Filter</A> and either a second <A HREF="concepts/filter.html">Filter</A> or a <A HREF="concepts/device.html">Device</A> and yields a Filter or Device whose output flows through the two components in order and whose input flows flows through the two components in reverse order.
     </TD>
 </TR>
 <TR>
-    <TD><A HREF="functions/invert.html#inverse"><CODE>inverse</CODE></A></TD>
     <TD><A HREF="functions/invert.html"><CODE>invert</CODE></A></TD>
+    <TD><A HREF="functions/invert.html#inverse"><CODE>inverse</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/invert.hpp"><CODE>invert.hpp</CODE></A></TD>
     <TD>
         Takes a <A HREF="concepts/filter.html">Filter</A> and yields a Filter that performs the same filtering algorithm but is an <A HREF="concepts/output_filter.html">OutputFilter</A> if the given component is an <A HREF="concepts/input_filter.html">InputFilter</A>, and an <A HREF="concepts/input_filter.html">InputFilter</A> otherwise.
     </TD>
 </TR>
 <TR>
-    <TD><A HREF="functions/restrict.html#restriction"><CODE>restriction</CODE></A></TD>
     <TD><A HREF="functions/restrict.html"><CODE>restrict</CODE></A></TD>
+    <TD><A HREF="functions/restrict.html#restriction"><CODE>restriction</CODE></A></TD>
     <TD><A HREF="../../../boost/iostreams/restrict.hpp"><CODE>restrict.hpp</CODE></A></TD>
     <TD>
         Takes a <A HREF="concepts/filter.html">Filter</A> or <A HREF="concepts/device.html">Device</A> together with a stream offset and an optional length and yields a <A HREF="concepts/filter.html">Filter</A> or <A HREF="concepts/device.html">Device</A> for accessing the specifed subquence of the given component
     </TD>
 </TR>
 <TR>
+    <TD ROWSPAN='2'><A HREF="functions/tee.html"><CODE>tee</CODE></A></TD>
     <TD>
         <A HREF="functions/tee.html#tee_device"><CODE>tee_device</CODE></A>
     </TD>
-    <TD ROWSPAN='2'><A HREF="functions/tee.html"><CODE>tee</CODE></A></TD>
     <TD ROWSPAN='2'><A HREF="../../../boost/iostreams/tee.hpp"><CODE>tee.hpp</CODE></A></TD>
     <TD> 
         Takes a pair of <A HREF="concepts/sink.html">Sinks</A> and yields a Sink which sends all incoming data to both of the given Sinks.
@@ -411,7 +411,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004. Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004. Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>
 
 <!-- End Footer -->

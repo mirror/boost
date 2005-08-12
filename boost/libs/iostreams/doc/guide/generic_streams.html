@@ -42,7 +42,7 @@
 
 <HR STYLE="margin-top:1em">
 
-<A NAME="overview">
+<A NAME="overview"></A>
 <H2>Overview</H2>
 
 <P>
@@ -70,7 +70,9 @@
 
 <H4>Description</H4>
 
-<P>Stream buffer template with an interface similar to <CODE>std::basic_filebuf</CODE>.
+<P>
+    Stream buffer template which performs i/o by delegating to a contained <A HREF="../concepts/device.html">Device</A>. The Device type is specified as the first template parameter to <CODE>stream_buffer</CODE>. Instances of the the Device type are attached and detached using the member functions <A HREF="#stream_buffer_open"><CODE>open</CODE></A> and <A HREF="#stream_buffer_close"><CODE>close</CODE></A>.
+</P>
 
 <H4>Synopsis</H4>
 
@@ -124,6 +126,11 @@
 
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#stream_buffer_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_buffer_close">close</A>();
+
+        <SPAN CLASS="comment">// Device access</SPAN>
+    
+    T& <A CLASS='documented' HREF="#stream_buffer_operator_star"><SPAN CLASS="documented">operator</SPAN>*</A>();
+    T* <A CLASS='documented' HREF="#stream_buffer_operator_arrow"><SPAN CLASS="documented">operator-&gt;</SPAN></A>();
 };
 
 } } <SPAN CLASS="comment">// namespace boost::io</SPAN></PRE>
@@ -249,12 +256,35 @@
     Disassociates from <CODE>this</CODE> instance of <CODE>stream_buffer</CODE> any instance of the Device <CODE>T</CODE> currently associated with it, calling cleanup functions as appropriate and destroying the associated instance of <CODE>T</CODE>.
 </P>
 
+<A NAME="stream_buffer_operator_star"></A>
+<H4><CODE>stream_buffer::operator*</CODE></H4>
+<PRE>    T& <B>operator*</B>();</PRE>
+    
+<P>
+    Returns a reference to the instance of <CODE>T</CODE> associated with this <CODE>stream_buffer</CODE>, which must be <A HREF="#stream_buffer_is_open"><CODE>open</CODE></A>.
+</P>
+
+<A NAME="stream_buffer_operator_arrow"></A>
+<H4><CODE>stream_buffer::operator-&gt;</CODE></H4>
+<PRE>    T* <B>operator-&gt;</B>();</PRE>
+    
+<P>
+    Returns a pointer to the instance of <CODE>T</CODE> associated with this <CODE>stream_buffer</CODE>, which must be <A HREF="#stream_buffer_is_open"><CODE>open</CODE></A>.
+</P>
+
 <A NAME="stream"></A>
 <H3>Class template <CODE>stream</CODE></H3>
 
 <H4>Description</H4>
 
-<P>Stream buffer template with an interface similar to <CODE>std::basic_filebuf</CODE>.
+<P>
+    Stream template which performs i/o by delegating to a contained <A HREF="../concepts/device.html">Device</A>. The Device type is specified as the first template parameter to <CODE>stream</CODE>. Instances of the the Device type are attached and detached using the member functions <A HREF="#stream_open"><CODE>open</CODE></A> and <A HREF="#stream_close"><CODE>close</CODE></A>.
+</P>
+
+<P>
+    The template <CODE>stream</CODE> derives from a specialization of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> or <CODE>std::basic_iostream</CODE>, depending on whether the underlying <A HREF="../concepts/device.html">Device</A> models <A HREF="../concepts/source.html">Source</A>, <A HREF="../concepts/sink.html">Sink</A> or both..
+</P>
+
 
 <H4>Synopsis</H4>
 
@@ -264,7 +294,7 @@
           <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_params">Tr</A> = std::char_traits&lt;<SPAN CLASS="omitted">...</SPAN>&gt;, 
           <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_params">Alloc</A> = std::allocator&lt;<SPAN CLASS="omitted">...</SPAN>&gt;,
           <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#stream_params">Mode</A> = <SPAN CLASS="omitted">...</SPAN> &gt;
-<SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#stream_params">stream</A> : <SPAN CLASS="keyword">public</SPAN> std::basic_streambuf&lt;<SPAN CLASS="omitted">...</SPAN>&gt; {
+<SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#stream_params">stream</A> : <SPAN CLASS="keyword">public</SPAN> [<SPAN CLASS='omitted'>see Description</SPAN>] {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> char_type_of&lt;T&gt;::type  char_type;
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> Tr                     traits_type;
@@ -286,7 +316,7 @@
 
         <SPAN CLASS="omitted">...</SPAN>
 
-    template&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
     <A CLASS="documented" HREF="#stream_forwarding_constructors">stream</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_open">open</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
@@ -296,18 +326,23 @@
         <SPAN CLASS="comment">// Forwarding overloads of open()</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U& u);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_forwarding_open">open</A>([<SPAN CLASS="keyword">const</SPAN>] U& u);
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="keyword">typename</SPAN> U2&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_forwarding_open">open</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2);
     
         <SPAN CLASS="omitted">...</SPAN>
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> U1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">typename</SPAN> UN&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_forwarding_open">open</A>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_forwarding_open">open</A>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);
 
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#stream_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_close">close</A>();
+
+        <SPAN CLASS="comment">// Device access</SPAN>
+    
+    T& <A CLASS='documented' HREF="#stream_operator_star"><SPAN CLASS="documented">operator</SPAN>*</A>();
+    T* <A CLASS='documented' HREF="#stream_operator_arrow"><SPAN CLASS="documented">operator-&gt;</SPAN></A>();
 };
 
 } } <SPAN CLASS="comment">// namespace boost::io</SPAN></PRE>
@@ -433,7 +468,23 @@
     Disassociates from <CODE>this</CODE> instance of <CODE>stream</CODE> any instance of the Device <CODE>T</CODE> currently associated with it, calling cleanup functions as appropriate and destroying the associated instance of <CODE>T</CODE>.
 </P>
 
-<A NAME="examples">
+<A NAME="stream_operator_star"></A>
+<H4><CODE>stream::operator*</CODE></H4>
+<PRE>    T& <B>operator*</B>();</PRE>
+    
+<P>
+    Returns a reference to the instance of <CODE>T</CODE> associated with this <CODE>stream</CODE>, which must be <A HREF="#stream_is_open"><CODE>open</CODE></A>.
+</P>
+
+<A NAME="stream_operator_arrow"></A>
+<H4><CODE>stream::operator-&gt;</CODE></H4>
+<PRE>    T* <B>operator-&gt;</B>();</PRE>
+    
+<P>
+    Returns a pointer to the instance of <CODE>T</CODE> associated with this <CODE>stream</CODE>, which must be <A HREF="#stream_is_open"><CODE>open</CODE></A>.
+</P>
+
+<A NAME="examples"></A>
 <H2>Examples</H2>
 
 <H4>Defining a simple <CODE>ofstream</CODE></H4>
@@ -475,7 +526,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

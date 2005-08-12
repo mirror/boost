@@ -23,7 +23,7 @@ align="middle">
         <a href="#interval">Template class <code>interval</code></a><br>
         <a href="#opers">Operations and functions</a><br>
         <a href="#interval_lib">Interval support library</a><br>
-        <a href="#compil">Compilation notes</a><br>
+        <!--<a href="#compil">Compilation notes</a><br>-->
         <a href="#dangers">Common pitfalls and dangers</a><br>
         <a href="#rationale">Rationale</a><br>
         <a href="#acks">History and Acknowledgments</a></td>
@@ -235,7 +235,7 @@ template &lt;class T&gt; struct default_policies;
 } // namespace interval_lib
 
 
-/* template interval_policies; class definition can be found <a href="#interval_policies">here</a> */
+/* template interval_policies; class definition can be found <a href="policies.htm">here</a> */
 template&lt;class Rounding, class Checking&gt;
 struct interval_policies;
 
@@ -559,7 +559,7 @@ equal.</p>
 <code>tanh</code>, <code>asinh</code>, <code>acosh</code>, <code>atanh</code>
 are also defined. There is not much to say; these functions extend the
 traditional functions to the intervals and respect the basic property of
-interval arithmetic. They use the <a href="#checking">checking</a> policy to
+interval arithmetic. They use the <a href="checking.htm">checking</a> policy to
 produce empty intervals when the input interval is strictly outside of the
 domain of the function.</p>
 
@@ -882,9 +882,7 @@ than the other".</p>
 
 <p>This library was mostly inspired by previous work from Jens Maurer. Some
 discussions about his work are reproduced <a
-href="http://www.mscs.mu.edu/%7Egeorgec/IFAQ/maurer1.html">here</a> and the
-work itself can be found <a
-href="http://www.rhein-main.de/people/jmaurer/interval.tar.gz">here</a>.
+href="http://www.mscs.mu.edu/%7Egeorgec/IFAQ/maurer1.html">here</a>.
 Jeremy Siek and Maarten Keijzer provided some rounding control for MSVC and
 Sparc platforms.</p>
 

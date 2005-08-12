@@ -29,17 +29,17 @@
 <H2>2.2.3. Shell Comments Filters</H2>
 
 <P>
-    Suppose we want to write a filter to remove shell-style comments. The basic algorithm is as follows: we examine characters one at a time, forwarding them unchanged, until we encounter a comment character, typically <CODE>'#'</CODE>. When we find a comment character, we examine and ignore characters until we encounter a newline character, at which point the algorithm begins again. Note that this algorithm consists of two subalgorithms: one algorithm for reading ordinary text, and one for reading comments.
+    Suppose you want to write a filter to remove shell-style comments. The basic algorithm is as follows: you examine characters one at a time, forwarding them unchanged, until you encounter a comment character, typically <CODE>'#'</CODE>. When you find a comment character, you examine and ignore characters until you encounter a newline character, at which point the algorithm begins again. Note that this algorithm consists of two subalgorithms: one algorithm for reading ordinary text, and one for reading comments.
 </P>
 
 <P>
-    In the next three sections, we'll express this algorithm as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A>, an <A HREF="../concepts/input_filter.html">InputFilter</A> and an <A HREF="../concepts/output_filter.html">OutputFilter</A>. The source code can be found in the header <A HREF="../../example/shell_comments_filter.hpp"><CODE>&lt;libs/iostreams/example/shell_comments_filter.hpp&gt;</CODE></A>. These examples were inspired by James Kanze's <CODE>UncommentExtractor.hh</CODE> (<I>see</I> <A CLASS="bib_ref" HREF="../bibliography.html#kanze">[Kanze]</A>).
+    In the next three sections, I'll express this algorithm as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A>, an <A HREF="../concepts/input_filter.html">InputFilter</A> and an <A HREF="../concepts/output_filter.html">OutputFilter</A>. The source code can be found in the header <A HREF="../../example/shell_comments_filter.hpp"><CODE>&lt;libs/iostreams/example/shell_comments_filter.hpp&gt;</CODE></A>. These examples were inspired by James Kanze's <CODE>UncommentExtractor.hh</CODE> (<I>see</I> <A CLASS="bib_ref" HREF="../bibliography.html#kanze">[Kanze]</A>).
 </P>
 
 <A NAME="shell_comments_stdio_filter"></A>
 <H4><CODE>shell_comments_stdio_filter</CODE></H4>
 
-<P>We can express a shell comments Filter as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A> as follows:</P>
+<P>You can express a shell comments Filter as a <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A> as follows:</P>
 
 <PRE class="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS="literal">&lt;cstdio&gt;</SPAN>    <SPAN CLASS="comment">// EOF</SPAN>
 <SPAN CLASS="preprocessor">#include</SPAN> <SPAN CLASS="literal">&lt;iostream&gt;</SPAN>  <SPAN CLASS="comment">// cin, cout</SPAN>
@@ -71,7 +71,7 @@
 } } } <SPAN CLASS="comment">// End namespace boost::iostreams:example</SPAN></PRE>
 
 <P>
-    The implementation of the <CODE>virtual</CODE> function <CODE>do_filter</CODE> is straightforward: The local variable <CODE>skip</CODE> keeps track of whether we are currently processing a comment; the <CODE>while</CODE> loop reads a character <CODE>c</CODE> from <CODE>std::cin</CODE>, updates <CODE>skip</CODE> and writes <CODE>c</CODE> to <CODE>std::cout</CODE> unless <CODE>skip</CODE> is <CODE>true</CODE>.
+    The implementation of the <CODE>virtual</CODE> function <CODE>do_filter</CODE> is straightforward: The local variable <CODE>skip</CODE> keeps track of whether you are currently processing a comment; the <CODE>while</CODE> loop reads a character <CODE>c</CODE> from <CODE>std::cin</CODE>, updates <CODE>skip</CODE> and writes <CODE>c</CODE> to <CODE>std::cout</CODE> unless <CODE>skip</CODE> is <CODE>true</CODE>.
 </P>
 
 <P>Filters which derive from <CODE>stdio_filter</CODE> are <A HREF="../concepts/dual_use_filter.html">DualUseFilters</A>, which mean they can be used either for output or for input, but not both simultaneously. Therefore <CODE>unix2dos_stdio_filter</CODE> can be used in place of <A HREF="#shell_comments_input_filter"><CODE>shell_comments_input_filter</CODE></A> and <A HREF="#shell_comments_output_filter"><CODE>shell_comments_output_filter</CODE></A>, below.
@@ -79,7 +79,7 @@
 <A NAME="shell_comments_input_filter"></A>
 <H4><CODE>shell_comments_input_filter</CODE></H4>
 
-<P>Next we will express a shell comments Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A>. A typical narrow-character InputFilter looks like this:</P>
+<P>Next you will express a shell comments Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A>. A typical narrow-character InputFilter looks like this:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/categories.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/categories.hpp&gt;</SPAN></A>  <SPAN CLASS='comment'>// input_filter_tag</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/char_traits.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/char_traits.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// EOF, WOULD_BLOCK</SPAN>
@@ -106,7 +106,7 @@
 
 <P>The function <CODE>get</CODE> attempts to produce a single character of filtered output. It accesses the unfiltered character sequence though the provided <A HREF="../concepts/source.html">Source</A> <CODE>src</CODE>, using the fundamental i/o operations <A HREF="../functions/get.html"><CODE>get</CODE></A>, <A HREF="../functions/read.html"><CODE>read</CODE></A> and <A HREF="../functions/putback.html"><CODE>putback</CODE></A>. If a character is produced, <CODE>get</CODE> returns it. Otherwise <CODE>get</CODE> returns one of the status codes <CODE>EOF</CODE> or <CODE>WOULD_BLOCK</CODE>. <CODE>EOF</CODE>, which indicates end-of-stream, is a macro defined in the standard header <CODE>&lt;cstdio&gt;</CODE>. <CODE>WOULD_BLOCK</CODE>, which indicates that input is temporarily unavailable, is a constant defined in the namespace <CODE>boost::iostreams</CODE>, in the header <A HREF="../../../../boost/iostreams/char_traits.hpp"><CODE>&lt;boost/iostreams/char_traits.hpp&gt;</CODE></A></P>
 
-<P> We could also write the above example as follows:</P>
+<P> You could also write the above example as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>  <SPAN CLASS='comment'>// input_filter</SPAN>
 
@@ -118,9 +118,9 @@
     <SPAN CLASS='comment'>/* Other members */</SPAN>
 };</PRE>
 
-<P>Here <A HREF="../classes/filter.html#synopsis"><CODE>input_filter</CODE></A> is a convenience base class which provides the member types <CODE>char_type</CODE> and <CODE>category</CODE>, as well as no-op implementations of member functions <CODE>close</CODE> and <CODE>imbue</CODE>. We will discuss <CODE>close</CODE> shortly.
+<P>Here <A HREF="../classes/filter.html#synopsis"><CODE>input_filter</CODE></A> is a convenience base class which provides the member types <CODE>char_type</CODE> and <CODE>category</CODE>, as well as no-op implementations of member functions <CODE>close</CODE> and <CODE>imbue</CODE>. I will discuss <CODE>close</CODE> shortly.
 
-<P>We're now ready to express a shell Comments Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A>:</P>
+<P>You're now ready to express a shell Comments Filter as an <A HREF="../concepts/input_filter.html">InputFilter</A>:</P>
 
 <PRE class="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/char_traits.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/char_traits.hpp&gt;</SPAN></A> <SPAN CLASS="comment">// EOF, WOULD_BLOCK</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>    <SPAN CLASS="comment">// input_filter</SPAN>
@@ -162,19 +162,19 @@
 } } } <SPAN CLASS="comment">// End namespace boost::iostreams:example</SPAN></PRE>
 
 <P>
-    Here the member variable <CODE>skip_</CODE> plays the same role as the local variable <CODE>skip</CODE> <CODE>shell_comments_stdio_filter::do_filter</CODE>. The implementation of <CODE>get</CODE> is very similar to that of  <CODE>shell_comments_stdio_filter::do_filter</CODE>: the <CODE>while</CODE> loop reads a character <CODE>c</CODE>, updates <CODE>skip_</CODE> and returns <CODE>c</CODE> unless <CODE>skip_</CODE>  is <CODE>true</CODE>. The main difference is that we have to handle the special value <CODE>WOULD_BLOCK</CODE>, which indicates that no input is currently available.
+    Here the member variable <CODE>skip_</CODE> plays the same role as the local variable <CODE>skip</CODE> <CODE>shell_comments_stdio_filter::do_filter</CODE>. The implementation of <CODE>get</CODE> is very similar to that of  <CODE>shell_comments_stdio_filter::do_filter</CODE>: the <CODE>while</CODE> loop reads a character <CODE>c</CODE>, updates <CODE>skip_</CODE> and returns <CODE>c</CODE> unless <CODE>skip_</CODE>  is <CODE>true</CODE>. The main difference is that you have to handle the special value <CODE>WOULD_BLOCK</CODE>, which indicates that no input is currently available.
 </P>
 <P>
-    So we see that implementing an <A HREF="../concepts/input_filter.html"><CODE>InputFilter</CODE></A> from scratch is a bit more involved than deriving from <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A>. When writing an <CODE>InputFilter</CODE> we must be prepared to be interupted at any point in the middle of the algorithm; when this happens, we must record enough information about the current state of the algorithm to allow us to pick up later exactly where we left off. The same is true for <A HREF="../concepts/output_filter.html"><CODE>OutputFilters</CODE></A>. In fact, many Inputfilters and OutputFilters can be seen as finite state machines; we will formalize this idea later. <I>See</I> <A HREF="finite_state_filters.html">Finite State Filters</A>.
+    So you see that implementing an <A HREF="../concepts/input_filter.html"><CODE>InputFilter</CODE></A> from scratch is a bit more involved than deriving from <A HREF="../classes/stdio_filter.html"><CODE>stdio_filter</CODE></A>. When writing an <CODE>InputFilter</CODE> you must be prepared to be interupted at any point in the middle of the algorithm; when this happens, you must record enough information about the current state of the algorithm to allow us to pick up later exactly where you left off. The same is true for <A HREF="../concepts/output_filter.html"><CODE>OutputFilters</CODE></A>. In fact, many Inputfilters and OutputFilters can be seen as finite state machines; I will formalize this idea later. <I>See</I> <A HREF="finite_state_filters.html">Finite State Filters</A>.
 </P>
 <P>
-    There's still one problem with our <CODE>shell_comments_input_filter</CODE>: its instances can only be used once. That's because someone might close a stream while the <CODE>skip_</CODE> flag is set. If the stream were later reopened &#8212; with a fresh sequence of unfiltered data &#8212; the first line of text would be filtered out, regardless of whether it were commented.
+    There's still one problem with <CODE>shell_comments_input_filter</CODE>: its instances can only be used once. That's because someone might close a stream while the <CODE>skip_</CODE> flag is set. If the stream were later reopened &#8212; with a fresh sequence of unfiltered data &#8212; the first line of text would be filtered out, regardless of whether it were commented.
 </P>
 <P>
-    The way to fix this is to make our Filter <A HREF="../concepts/closable.html">Closable</A>. To do this, we must implement a member function <CODE>close</CODE>. We must also give our filter a <A HREF="../guide/traits.html#category_tags">category tag</A> convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A>, to tell the Iostream library that our filter implements <CODE>close</CODE>.
+    The way to fix this is to make your Filter <A HREF="../concepts/closable.html">Closable</A>. To do this, you must implement a member function <CODE>close</CODE>. You must also give your filter a <A HREF="../guide/traits.html#category_tags">category tag</A> convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A>, to tell the Iostream library that your filter implements <CODE>close</CODE>.
 </P>
 
-<P>Our improved Filter looks like this:</P>
+<P>Your improved Filter looks like this:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='keyword'>namespace</SPAN> boost { <SPAN CLASS='keyword'>namespace</SPAN> iostreams { <SPAN CLASS='keyword'>namespace</SPAN> example {
 
@@ -194,14 +194,14 @@
 } } } <SPAN CLASS='comment'>// End namespace boost::iostreams:example</SPAN></PRE>
 
 <P>
-    Here we've derived from the helper class <A HREF="../classes/filter.html#synopsis"><CODE>input_filter</CODE></A>, which provides a member type <CODE>char_type</CODE> equal to <CODE>char</CODE> and a category tag convertible to <A HREF="../guide/traits.html#category_tags"><CODE>input_filter_tag</CODE></A> and to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A>. The implementation of <CODE>close</CODE> simply clears the <CODE>skip_</CODE> flag so that the Filter will be ready to be used again.
+    Here I've derived from the helper class <A HREF="../classes/filter.html#synopsis"><CODE>input_filter</CODE></A>, which provides a member type <CODE>char_type</CODE> equal to <CODE>char</CODE> and a category tag convertible to <A HREF="../guide/traits.html#category_tags"><CODE>input_filter_tag</CODE></A> and to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A>. The implementation of <CODE>close</CODE> simply clears the <CODE>skip_</CODE> flag so that the Filter will be ready to be used again.
 </P>
 
 <A NAME="shell_comments_output_filter"></A>
 <H4><CODE>shell_comments_output_filter</CODE></H4>
 
 <P>
-    Next we will can express a shell comments Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A>. A typical narrow-character OutputFilter looks like this:
+    Next, let's express a shell comments Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A>. A typical narrow-character OutputFilter looks like this:
 </P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/categories.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/categories.hpp&gt;</SPAN></A>  
@@ -229,7 +229,7 @@
     The function <CODE>put</CODE> attempts to filter the single character <CODE>c</CODE>, writing filtered output to the <A HREF="../concepts/sink.html">Sink</A> <CODE>dest</CODE>. It accesses <CODE>dest</CODE> using the fundamental i/o operations <A HREF="../functions/put.html"><CODE>put</CODE></A> and <A HREF="../functions/write.html"><CODE>write</CODE></A>. Both of these functions may fail: <CODE>iostreams::put</CODE> can return <CODE>false</CODE>, and <CODE>iostreams::write</CODE> can consume fewer characters than requested. If this occurs, the member function <CODE>put</CODE> is allowed to return <CODE>false</CODE>, indicating that <CODE>c</CODE> could not be consumed. Otherwise, it must consume <CODE>c</CODE> and return <CODE>true</CODE>.
 </P>
 
-<P> We could also write the above example as follows:</P>
+<P> You could also write the above example as follows:</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>  <SPAN CLASS='comment'>// output_filter</SPAN>
 
@@ -243,7 +243,7 @@
 
 <P>Here <A HREF="../classes/filter.html#synopsis"><CODE>output_filter</CODE></A> is a convenience base class which provides the member types <CODE>char_type</CODE> and <CODE>category</CODE>, as well as no-op implementations of member functions <CODE>close</CODE> and <CODE>imbue</CODE>.</P>
 
-<P>We're now ready to express a shell comments Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A>:</P>
+<P>You're now ready to express a shell comments Filter as an <A HREF="../concepts/output_filter.html">OutputFilter</A>:</P>
 
 <PRE class="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>    <SPAN CLASS="comment">// output_filter</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/operations.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/operations.hpp&gt;</SPAN></A>  <SPAN CLASS="comment">// put</SPAN>
@@ -304,7 +304,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

@@ -25,7 +25,6 @@
 #include <cassert>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/archive/basic_archive.hpp>
 
 #include <boost/aligned_storage.hpp>
 
@@ -35,11 +34,6 @@
 
 namespace boost{
 namespace serialization {
-namespace stl {
-
-//////////////////////////////////////////////////////////////////////
-// implementation of serialization for STL containers
-//
 
 // reserve space on stack for an object of type T without actually
 // construction such an object
@@ -76,6 +70,12 @@ struct stack_construct : public stack_allocate<T>
         this->address()->~T(); // undo load_construct_data above
     }
 };
+
+namespace stl {
+
+//////////////////////////////////////////////////////////////////////
+// implementation of serialization for STL containers
+//
 
 // sequential container input
 template<class Archive, class Container>

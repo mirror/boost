@@ -65,7 +65,7 @@
 <H3>Simplicity</H3>
 
 <P>
-    Many users have reported that the library is easy to learn and use. It has also proved to be relatively easy to extend. The need for flexibility and efficiency has complicated the design, however. A good example is the large number of <A HREF="guide/modes.html">modes</A> required to represent the full range of streams and stream buffers. Another example is the need optimize the treatment of <A HREF="concepts/device.html">Devices</A> representing in-memory character sequences, such as <A HREF="classes/mapped_file.html">memory-mapped files</A>; this lead to the introduction of <A HREF="concepts/direct.html">Direct</A> Devices, which are somewhat harder to use than other Devices.
+    Many users have reported that the library is easy to learn and use. It has also proved to be relatively easy to extend. The need for flexibility and efficiency has complicated the design, however. A good example is the large number of <A HREF="guide/modes.html">modes</A> required to represent the full range of streams and stream buffers. Another example is the need optimize the treatment of <A HREF="concepts/device.html">Devices</A> representing in-memory character sequences, such as <A HREF="classes/mapped_file.html">memory-mapped files</A>; this led to the introduction of <A HREF="concepts/direct.html">Direct</A> Devices, which are somewhat harder to use than other Devices.
 </P>
 
 <A NAME="flexibility"></A>
@@ -100,18 +100,18 @@
 </P>
 <UL>
     <LI>Existing components &#8212; such as streams, stream buffers and iterators &#8212; can be integrated easily into the library.
-    <LI>The library can be easily extended to handle new Filter and Device concepts with additional functionality.
-    <LI>The internals of the library, such as the implementation of <A HREF="classes/chain.html">filter chains</A> as lists of standard stream buffers, can be redesigned without affecting user code. 
+    <LI>The library can be easily extended to handle new Filter and Device concepts.
+    <LI>The internals of the library, such as the implementation of <A HREF="classes/chain.html">filter chains</A> as lists of stream buffers, can be redesigned without affecting user code. 
 </UL>
 <P>
-     One typical benefit of generic design that is neglible in the present case is the performance gain that comes when virtual function calls are replaced by inline code: because <CODE>std::basic_streambuf</CODE> uses virtual functions as customization points, the library cannot resonably expect to eliminate virtual function calls. The cost of these calls, however, is largely mitigated by buffering. In fact, because of buffering, we might reduce code bloat by internally  wrapping Filters and Devices in polymorphic classes with virtual function <CODE>read</CODE>, <CODE>write</CODE>, <I>etc.</I> without a noticable performance impact.
+     One typical benefit of generic design that is neglible in the present case is the performance gain that comes when virtual function calls are replaced by inline code: because <CODE>std::basic_streambuf</CODE> uses virtual functions as customization points, the library cannot resonably expect to eliminate virtual function calls. The cost of these calls, however, is largely mitigated by buffering.
 </P>
 
 <A NAME="modes"></A>
 <H3>Modes</H3>
 
 <P>
-    The number of supported <A HREF="guide/modes.html">modes</A> adds adds greatly to the complexity of the library. Unfortunately, all the modes seem to be necessary to satisfy the flexibility criterion. The examples <A HREF="guide/modes.html#definitions">here</A> indicate that all but one of the modes have important use cases. The exception is <A HREF="guide/modes.html#bidirectional_seekable">bidirectional seekable</A>; this mode, however, essentially comes for free once the others are implemented.
+    The number of supported <A HREF="guide/modes.html">modes</A> adds adds greatly to the complexity of the library. Unfortunately, all the modes seem to be necessary to satisfy the flexibility criterion. The examples <A HREF="guide/modes.html#definitions">here</A> indicate that all but one of the modes have important use cases. The exception is <A HREF="guide/modes.html#bidirectional_seekable">bidirectional seekable</A>; this mode, however, is essentially free once the others are implemented.
 </P>
 
 <P>
@@ -123,7 +123,7 @@
 </UL>
 
 <P>
-    The second alternative is unacceptable. The first alternative is attractive for its simplicity, but leaves out crucial use cases. Boost.Iostreams tries to achieve the best of both worlds by recommending that new users ignore all modes but <A HREF="guide/modes.html#input">input</A> and <A HREF="guide/modes.html#output">output</A>.
+    The second alternative is clearly unacceptable. The first alternative is attractive for its simplicity, but leaves out crucial use cases. Boost.Iostreams tries to achieve the best of both worlds by recommending that new users ignore all modes but <A HREF="guide/modes.html#input">input</A> and <A HREF="guide/modes.html#output">output</A>.
 </P>
 
 <A NAME="lifetime"></A>
@@ -157,7 +157,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

@@ -31,7 +31,7 @@
 <H4>Finite State Machines</H4>
 
 <P>
-    In this section we show how to construct <A HREF="../concepts/dual_use_filter.html">Dual-Use Filters</A> from finite state machines. For our purposes, a finite state machine consists of a collection of <SPAN>states</SPAN>, represented as <CODE>int</CODE>s, a distinguished <SPAN>initial state</SPAN>, a <SPAN>transition table</SPAN>, a collection of <SPAN>event handlers</SPAN> and a stack of characters. These finite state machines were inspired by the finite state machine examples that accompany the <A HREF="../../../mpl/doc/index.html" TARGET="_top"><CODE>Boost Metaprogamming library</CODE></A>. <I>See</I>, <I>e.g.</I>, <A HREF="../../../mpl/example/fsm/player1.cpp" TARGET="top"><CODE>&lt;libs/mpl/example/player1.cpp&gt;</CODE></A>
+    In this section I show how to construct <A HREF="../concepts/dual_use_filter.html">Dual-Use Filters</A> from finite state machines. For purposes of this section, a finite state machine consists of a collection of <SPAN>states</SPAN>, represented as <CODE>int</CODE>s, a distinguished <SPAN>initial state</SPAN>, a <SPAN>transition table</SPAN>, a collection of <SPAN>event handlers</SPAN> and a stack of characters. These finite state machines were inspired by the finite state machine examples that accompany the <A HREF="../../../mpl/doc/index.html" TARGET="_top"><CODE>Boost Metaprogamming library</CODE></A>. <I>See</I>, <I>e.g.</I>, <A HREF="../../../mpl/example/fsm/player1.cpp" TARGET="top"><CODE>&lt;libs/mpl/example/player1.cpp&gt;</CODE></A>
 </P>
 
 <P>
@@ -64,7 +64,7 @@
 </P>
 
 <P>
-    Given a finite state machine <CODE>my_fsm</CODE>, we can define a <A HREF="../concepts/dual_use_filter.html">Dual-Use Filter</A> as follows:
+    Given a finite state machine <CODE>my_fsm</CODE>, you can define a <A HREF="../concepts/dual_use_filter.html">Dual-Use Filter</A> as follows:
 </P>
 
 <PRE class="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> io = boost::iostreams;
@@ -157,7 +157,7 @@
 };</PRE>
 
 <P>
-    This machine has four states and one user-defined event handler. We leave it as an exercise for the reader to discover how it works.
+    This machine has four states and one user-defined event handler. I'll leave it as an exercise to discover how it works.
 </P>
 
 <!-- Begin Nav -->
@@ -180,7 +180,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Use, modification, and distribution are subject to the Boost Software License, Version 2.0. (See accompanying file <A HREF="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

@@ -99,7 +99,20 @@ A container can be cheaply returned from functions either by making a clone or b
 Two special member functions, ``clone()`` and ``release()``, both return an 
 ``auto_ptr<SmartContainer>`` which can be assigned to another pointer container.  This 
 effectively reduces the cost of returning a container to one 
-heap-allocation plus a call to ``swap()`` (see `Example 3 <examples.html>`_).  
+heap-allocation plus a call to ``swap()`` (see `Example 3 <examples.html>`_).
+
+Iterators are invalidated as in the corresponding standard container
+--------------------------------------------------------------------
+
+Because the containers in this library wrap standard containers, the
+rules for invalidation of iterators are the same as the rules
+of the corresponding standard container.
+
+For example, for both ``boost::ptr_vector<T>`` and ``std::vector<U>``
+insertion and deletion only invalidates the deleted
+element and elements following it; all elements before the inserted/deleted
+element remain valid.
+
 
 **Navigate:**
 

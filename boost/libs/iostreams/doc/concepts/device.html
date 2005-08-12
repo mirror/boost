@@ -24,7 +24,7 @@
     Typically, Devices are class types which define one or more member functions <CODE>read</CODE>, <CODE>write</CODE> and <CODE>seek</CODE>. The concept Device is defined a bit more broadly, however, so that pre-existing types, such as standard streams and stream buffers, can be treated as models of Device, and so that Devices managing in-memory sequences can be optimized.
 </P> 
 <P>
-    Each Device type has an associated character type and category. The <A HREF="../guide/traits.html#char_type">character type</A> is the type of the characters in the sequence or sequences controlled by instances of <CODE>D</CODE>. The <A HREF="../guide/traits.html#category">category</A> is a tag structure which the Iostreams library relies on to determine which operations <CODE>D</CODE> supports. Its function is similar to the <CODE>iterator_category</CODE> member of <CODE>std::iterator_traits</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
+    Each Device type has an associated character type and category. The <A HREF="../guide/traits.html#char_type">character type</A> is the type of the characters in the sequence or sequences controlled by instances of the Device. The <A HREF="../guide/traits.html#category">category</A> is a tag structure which the Iostreams library relies on to determine which operations the Device supports. Its function is similar to the <CODE>iterator_category</CODE> member of <CODE>std::iterator_traits</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 <P>
     There is one refinement of Device for each of the eight <A HREF="../guide/modes.html">modes</A>, and for each such refinement there is a corresponding refinement of <A HREF="filter.html">Filter</A>. In order to express this corresponce cleanly, it is helpful to include the requirements of the various refinements of Device in the definition of Device itself, qualified by category. The various refinements of Device can then be characterized exactly by the following definitions. For convenience, the requirements of the four most common Device refinements are also documented individually.
@@ -34,41 +34,41 @@
     <TR><TH>Concept</TH><TH>Definition</TH></TR>
     <TR>
         <TD><A href="source.html">Source</A></TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="sink.html">Sink</A></TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="bidirectional_device.html">BidirectionalDevice</A></TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href="seekable_device.html">SeekableDevice</A></TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#seekable"><CODE>seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#seekable"><CODE>seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>SeekableSource</TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#input_seekable"><CODE>input_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#input_seekable"><CODE>input_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>SeekableSink</TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#output_seekable"><CODE>output_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#output_seekable"><CODE>output_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>BidirectionalSeekableDevice</TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#bidirectional_seekable"><CODE>bidirectional_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#bidirectional_seekable"><CODE>bidirectional_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>DualSeekableDevice</TD>
-        <TD>Refinement of Device with mode_of convertible to <A HREF="../guide/modes.html#dual_seekable"><CODE>dual_seekable</CODE></A></TD>
+        <TD>Refinement of Device with mode convertible to <A HREF="../guide/modes.html#dual_seekable"><CODE>dual_seekable</CODE></A></TD>
     </TR>
 </TABLE>
 
 <H2>Note</H2>
 
-<P>To be usable with the streams and stream buffers provided by the Boost Iostreams library, Devices should model <A HREF="blocking.html">Blocking</A>.
+<P>To be usable with the streams and stream buffers provided by the Boost Iostreams library, Devices must model <A HREF="blocking.html">Blocking</A>.
 
 <H2>Standard Streams and Stream Buffers</H2>
 
@@ -106,7 +106,7 @@
     <TR><TD><CODE>s1</CODE></TD><TD>- Object of type <CODE>Ch*</CODE></TD></TR>
     <TR><TD><CODE>s2</CODE></TD><TD>- Object of type <CODE>const Ch*</CODE></TD></TR>
     <TR><TD><CODE>n</CODE></TD><TD>- Object of type <CODE>std::streamsize</CODE></TD></TR>
-    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <CODE>std::streamoff</CODE></TD></TR>
+    <TR><TD><CODE>off</CODE></TD><TD>- Object of type <A HREF="../functions/positioning.html#synopsis"><CODE>stream_offset</CODE></A></TD></TR>
     <TR><TD><CODE>way</CODE></TD><TD>- Object of type <CODE>std::ios_base::seekdir</CODE></TD></TR>
     <TR><TD><CODE>which</CODE></TD><TD>- Object of type <CODE>std::ios_base::openmode</CODE></TD></TR>
     <TR><TD><CODE>io</CODE></TD><TD>- Alias for namespace <CODE>boost::iostreams</CODE></TD></TR>
@@ -119,11 +119,11 @@
 <TABLE CELLPADDING="5" BORDER="1">
     <TR><TH>Expression</TH><TH>Expression Type</TH></TR>
     <TR>
-        <TD><CODE>typename <A HREF="../guide/traits.html#char_type">char_type_of</A>&lt;D&gt;::type</CODE></TD>
+        <TD><CODE>typename <A HREF="../guide/traits.html#char_type_of_ref">char_type_of</A>&lt;D&gt;::type</CODE></TD>
         <TD><CODE>typename</CODE> of the character type</TD>
     </TR>
     <TR>
-        <TD><CODE>typename <A HREF="../guide/traits.html#category">category_of</A>&lt;D&gt;::type</CODE></TD>
+        <TD><CODE>typename <A HREF="../guide/traits.html#category_ref">category_of</A>&lt;D&gt;::type</CODE></TD>
         <TD><CODE>typename</CODE> of the category</TD>
     </TR>
 </TABLE>
@@ -182,7 +182,7 @@
     <TR><TH>Expression</TH><TH>Expression Type</TH><TH>Category Precondition</TH><TH>Semantics</TH></TR>
     <TR>
         <TD><PRE CLASS="plain_code"><CODE><A HREF="../functions/seek.html">io::seek</A>(dev, off, way)</CODE></PRE></TD>
-        <TD><CODE>std::streamoff</CODE></TD>
+        <TD><CODE>std::streampos</CODE></TD>
         <TD>
             Convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>seekable</CODE></A> but not to <A HREF="../guide/traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
@@ -199,13 +199,13 @@
     </TR>
     <TR>
         <TD><PRE CLASS="plain_code"><CODE><A HREF="../functions/seek.html">io::seek</A>(dev, off, way, which)</CODE></PRE></TD>
-        <TD><CODE>std::streamoff</CODE></TD>
+        <TD><CODE>std::streampos</CODE></TD>
         <TD>
             Convertible to <A HREF="../guide/modes.html#mode_tags"><CODE>dual_seekable</CODE></A> or <A HREF="../guide/modes.html#mode_tags"><CODE>bidirectional_seekable</CODE></A> but not to <A HREF="../guide/traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>
              <P CLASS="concept">
-                Repositions the read head (if <CODE>which</CODE> is <CODE>std::ios_base::in</CODE>), the write head (if <CODE>which</CODE> is <CODE>std::ios_base::out</CODE>) or both heads (if <CODE>which</CODE> is <CODE>std::ios_base::in | std::ios_base::out</CODE>) by <CODE>off</CODE> characters, returning the new position, where the offset is calculated from
+                Advances the read head (if <CODE>which</CODE> is <CODE>std::ios_base::in</CODE>), the write head (if <CODE>which</CODE> is <CODE>std::ios_base::out</CODE>) or both heads (if <CODE>which</CODE> is <CODE>std::ios_base::in | std::ios_base::out</CODE>) by <CODE>off</CODE> characters, returning the new position, where the offset is calculated from
             </P>
             <UL STYLE="margin:0,0,0,auto">
                 <LI STYLE="list-style-type:disc;list-style-image:none">the start of the sequence if <CODE>way</CODE> is <CODE>ios_base::beg</CODE>
@@ -254,7 +254,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

@@ -52,16 +52,6 @@
     </TD>
 </TR>
 <TR>
-    <TD ROWSPAN='2'>Intel 7.0 - 9.0</TD>
-    <TD>libstdc++</TD>
-    <TD>Linux</TD>
-    <TD ROWSPAN='2'><I>none</I></TD>
-</TR>
-<TR>
-    <TD>Dinkumware</TD>
-    <TD>Windows</TD>
-</TR>
-<TR>
     <TD>Visual C++ 7.1, 8.0 (beta 2)</TD>
     <TD ROWSPAN='2'>Dinkumware</TD>
     <TD ROWSPAN='2'>Windows</TD>
@@ -111,6 +101,17 @@
     </TD>
 </TR>
 <TR>
+    <TD ROWSPAN='2'>Intel 7.0 - 9.0</TD>
+    <TD>libstdc++</TD>
+    <TD>Linux</TD>
+    <TD><I>none</I></TD>
+</TR>
+<TR>
+    <TD>Dinkumware</TD>
+    <TD>Windows</TD>
+    <TD><A CLASS='footnote_ref' NAME='note_7_ref' HREF="#note_7">[7]</A></TD>
+</TR>
+<TR>
     <TD>Compaq C++ 6.5-042</TD>
     <TD>RogueWave</TD>
     <TD>Tru64 UNIX</TD>
@@ -146,6 +147,10 @@
     <A CLASS="footnote_ref" NAME="note_6" HREF="#note_6_ref"><SUP>[6]</SUP></A>When run in strict mode, fails to compile those tests which depend on the header <CODE>&lt;windows.h&gt;</CODE>, namely <A HREF="../test/bzip2_test.cpp"><CODE>bzip2_test.cpp</CODE></A>, <A HREF="../test/file_descriptor_test.cpp"><CODE>file_descriptor_test.cpp</CODE></A> and <A HREF="../test/mapped_file_test.cpp"><CODE>mapped_file_test.cpp</CODE></A>.
 </P>
 
+<P>
+    <A CLASS="footnote_ref" NAME="note_7" HREF="#note_7_ref"><SUP>[7]</SUP></A>Intermittently fails the <A HREF="../test/mapped_file_test.cpp"><CODE>mapped_file_test</CODE></A> test cases in which a <A HREF="classes/mapped_file.html"><CODE>mapped_file</CODE></A> is used to create a new file.</A>.
+</P>
+
 <!-- End Footnotes -->
 
 <!-- Begin Footer -->
@@ -157,7 +162,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

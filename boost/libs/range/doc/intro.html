@@ -18,36 +18,36 @@
 
     <h2>Introduction</h2>
     <p>
-    Generic algorithms have so far been specified in terms of two or more 
-    iterators. Two iterators would together form a range of values that the 
+    Generic algorithms have so far been specified in terms of two or more
+    iterators. Two iterators would together form a range of values that the
     algorithm could work on. This leads to a very general interface, but also
     to a somewhat clumsy use of the algorithms with redundant specification
     of container names. Therefore we would like to raise the abstraction level
-    for algorithms so they specify their interface in terms of <a 
+    for algorithms so they specify their interface in terms of <a
     href=range.html>Ranges</a> as much as possible.
     </p>
-    
+
     <p>
-    The most common form of ranges we are used to work with is standard library 
+    The most common form of ranges we are used to work with is standard library
     containers. However, one
-    often finds it desirable to extend that code to work with other types that 
+    often finds it desirable to extend that code to work with other types that
     offer
-    enough functionality to satisfy the needs of the generic code 
-    <i>if a suitable layer of indirection is applied </i>.  For 
+    enough functionality to satisfy the needs of the generic code
+    <i>if a suitable layer of indirection is applied </i>.  For
     example, raw arrays are often suitable for use with generic code that
-    works with containers, provided a suitable adapter is used. Likewise, null 
-    terminated strings can be treated as containers of characters, if suitably 
-    adapted. 
-    </p> 
-    
+    works with containers, provided a suitable adapter is used. Likewise, null
+    terminated strings can be treated as containers of characters, if suitably
+    adapted.
+    </p>
+
     <p>
-     This library therefore provides the means to adapt standard-like 
+     This library therefore provides the means to adapt standard-like
      containers,
-    null terminated strings, <code>std::pairs</code> of iterators, and raw 
-    arrays (and more), such that the same generic code can work with them all. 
-The basic idea is to add another layer of indirection using <a 
-href="../../mpl/doc/index.html#metafunctions">metafunctions</a> and 
-free-standing functions so syntactic and/or semantic differences can be removed. 
+    null terminated strings, <code>std::pairs</code> of iterators, and raw
+    arrays (and more), such that the same generic code can work with them all.
+The basic idea is to add another layer of indirection using <a
+href="../../mpl/doc/refmanual/metafunction.html">metafunctions</a> and
+free-standing functions so syntactic and/or semantic differences can be removed.
 </p>
 
     <p  >
@@ -61,15 +61,19 @@ free-standing functions so syntactic and/or semantic differences can be removed.
         </li>
         <li  >
             correct handling of null-terminated strings
+            <p>
+            <b>Warning:</b><i> support for null-terminated strings is deprecated and will
+              disappear in the next Boost release (1.34). </i>
+             </p>
         </li>
         <li  >
-        safe use of built-in arrays (for legacy code; why else would you use 
+        safe use of built-in arrays (for legacy code; why else would you use
         built-in arrays?) </li>
 
     </ul>
     </p>
     <p  >
-    Below are given a small example (the complete example can be found <a href="../test/algorithm_example.cpp" target="_self" >here</a> 
+    Below are given a small example (the complete example can be found <a href="../test/algorithm_example.cpp" target="_self" >here</a>
     ):
     <blockquote>
         <pre  >
@@ -130,7 +134,7 @@ class=identifier>assign</span><span class=special>( </span><span class=identifie
     </blockquote>
 
     By using the free-standing functions and <a 
-href="../../mpl/doc/index.html#metafunctions">metafunctions</a>, the code automatically 
+href="../../mpl/doc/refmanual/metafunction.html">metafunctions</a>, the code automatically 
     works for all the types supported by this library; now and in the future. 
 Notice that we have to
     provide two version of <code  >find()</code> since we cannot forward a non-const 

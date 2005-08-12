@@ -22,7 +22,7 @@
   <DT><A href="#reference">Reference</A></DT>
 </DL>
 
-<A NAME="description">
+<A NAME="description"></A>
 <H2>Description</H2>
 
 <P>
@@ -31,7 +31,7 @@
 
 <P>The details regarding when and how <CODE>close</CODE> is invoked are a bit messy:</P>
 
-<A NAME="when">
+<A NAME="when"></A>
 <H2>When is <CODE>close</CODE> invoked?</H2>
 
 <H4><CODE>stream_buffer</CODE> and <CODE>stream</CODE></H4>
@@ -71,7 +71,7 @@
 <P>The effect is that with input streams, the elements of a chain are closed in reverse order; with output streams, they are closed in forward order; and with streams controlling separate input and output sequences, each element receives two closure notifications, the first with argument <CODE>ios_base::in</CODE> and the second with argument <CODE>ios_base::out</CODE>. (<I>See</I> the semantics of <CODE>close</CODE> for <A HREF="#close_filter">Filter</A> and <A HREF="#close_device">Device</A> types, below.)
 </P>
 
-<A NAME="headers">
+<A NAME="headers"></A>
 <H2>Headers</H2>
 
 <DL>
@@ -79,10 +79,10 @@
   <DT><A CLASS="header" HREF="../../../../boost/iostreams/operations.hpp"><CODE>&lt;boost/iostreams/operations.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME="reference">
+<A NAME="reference"></A>
 <H2>Reference</H2>
 
-<A NAME="synopsis">
+<A NAME="synopsis"></A>
 <H3>Synopsis</H3>
 
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
@@ -218,7 +218,7 @@
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>
