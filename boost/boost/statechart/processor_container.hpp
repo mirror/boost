@@ -17,7 +17,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/bind.hpp>
-// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
 // BOOST_WORKAROUND, BOOST_TESTED_AT, BOOST_INTEL
 #include <boost/config.hpp>
 

@@ -12,7 +12,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/bind.hpp>
-// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
 // BOOST_HAS_THREADS, BOOST_MSVC
 #include <boost/config.hpp>
 

@@ -34,7 +34,6 @@
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cast.hpp> // boost::polymorphic_downcast
-// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
 // BOOST_NO_EXCEPTIONS, BOOST_MSVC, BOOST_MSVC_STD_ITERATOR
 #include <boost/config.hpp>
 

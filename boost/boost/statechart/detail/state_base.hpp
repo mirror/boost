@@ -16,7 +16,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
-// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR, BOOST_MSVC
+// BOOST_MSVC
 #include <boost/config.hpp>
 
 #include <boost/detail/allocator_utilities.hpp>
