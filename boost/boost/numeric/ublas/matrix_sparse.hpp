@@ -64,7 +64,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         sparse_matrix_element (const sparse_matrix_element &p):
-            container_reference<matrix_type> (p), i_ (p.i_), d_ (p.d_) {}
+            container_reference<matrix_type> (p), i_ (p.i_), j_ (p.j_) {}
         BOOST_UBLAS_INLINE
         ~sparse_matrix_element () {
         }
@@ -4008,6 +4008,7 @@ namespace boost { namespace numeric { namespace ublas {
             value_data_.resize (capacity_);
             filled_ = 0;
             sorted_filled_ = filled_;
+            sorted_ = true;
             storage_invariants ();
         }
 
@@ -4137,6 +4138,7 @@ namespace boost { namespace numeric { namespace ublas {
                 size2_ = m.size2_;
                 capacity_ = m.capacity_;
                 filled_ = m.filled_;
+                sorted_filled_ = m.sorted_filled_;
                 sorted_ = m.sorted_;
                 index1_data_ = m.index1_data_;
                 index2_data_ = m.index2_data_;

@@ -62,7 +62,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element (const sparse_vector_element &p):
-            container_reference<vector_type> (p), i_ (p.i_), d_ (p.d_) {}
+            container_reference<vector_type> (p), i_ (p.i_) {}
         BOOST_UBLAS_INLINE
         ~sparse_vector_element () {
         }
