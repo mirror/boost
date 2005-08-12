@@ -16,6 +16,8 @@
 // BOOST_HAS_THREADS, BOOST_MSVC
 #include <boost/config.hpp>
 
+#include <boost/detail/allocator_utilities.hpp>
+
 #ifdef BOOST_HAS_THREADS
 #  ifdef BOOST_MSVC
 #    pragma warning( push )
@@ -171,13 +173,9 @@ class fifo_worker : noncopyable
 
 
     typedef std::list<
-      work_item
-      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
-        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
-      // TODO: Add allocator support for broken std libs when
-      // the workaround is available in boost::detail
-      , typename Allocator::template rebind< work_item >::other
-      #endif
+      work_item,
+      typename boost::detail::allocator::rebind_to<
+        Allocator, work_item >::type
     > work_queue_type;
 
     work_queue_type workQueue_;

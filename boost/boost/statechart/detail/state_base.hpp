@@ -19,6 +19,8 @@
 // BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR, BOOST_MSVC
 #include <boost/config.hpp>
 
+#include <boost/detail/allocator_utilities.hpp>
+
 #ifdef BOOST_MSVC
 #  pragma warning( push )
 #  pragma warning( disable: 4702 ) // unreachable code (in release mode only)
@@ -127,13 +129,9 @@ class state_base :
     typedef intrusive_ptr< leaf_state< Allocator, RttiPolicy > >
       leaf_state_ptr_type;
     typedef std::list<
-      leaf_state_ptr_type
-      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
-        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
-      // TODO: Add allocator support for broken std libs when
-      // the workaround is available in boost::detail
-      , typename Allocator::template rebind< leaf_state_ptr_type >::other
-      #endif
+      leaf_state_ptr_type,
+      typename boost::detail::allocator::rebind_to<
+        Allocator, leaf_state_ptr_type >::type
     > state_list_type;
 
     virtual void remove_from_state_list(

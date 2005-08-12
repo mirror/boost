@@ -38,6 +38,8 @@
 // BOOST_NO_EXCEPTIONS, BOOST_MSVC, BOOST_MSVC_STD_ITERATOR
 #include <boost/config.hpp>
 
+#include <boost/detail/allocator_utilities.hpp>
+
 #ifdef BOOST_MSVC
 #  pragma warning( push )
 #  pragma warning( disable: 4702 ) // unreachable code (in release mode only)
@@ -960,14 +962,10 @@ class state_machine : noncopyable
 
     typedef std::map<
       history_key_type, void (*)(),
-      std::less< history_key_type >
-      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
-        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
-      // TODO: Add allocator support for broken std libs when
-      // the workaround is available in boost::detail
-      , typename allocator_type::template rebind< 
-          std::pair< const history_key_type, void (*)() > >::other
-      #endif
+      std::less< history_key_type >,
+      typename boost::detail::allocator::rebind_to<
+        allocator_type, std::pair< const history_key_type, void (*)() >
+      >::type
     > history_map_type;
 
     void store_history_impl(
@@ -1008,25 +1006,16 @@ class state_machine : noncopyable
     }
 
     typedef std::list<
-      event_base_ptr_type
-      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
-        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
-      // TODO: Add allocator support for broken std libs when
-      // the workaround is available in boost::detail
-      , typename allocator_type::template rebind< event_base_ptr_type >::other
-      #endif
+      event_base_ptr_type,
+      typename boost::detail::allocator::rebind_to<
+        allocator_type, event_base_ptr_type >::type
     > event_queue_type;
 
     typedef std::map<
       const state_base_type *, event_queue_type,
-      std::less< const state_base_type * >
-      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
-        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
-      // TODO: Add allocator support for broken std libs when
-      // the workaround is available in boost::detail
-      , typename allocator_type::template rebind< std::pair<
-          const state_base_type * const, event_queue_type > >::other
-      #endif
+      std::less< const state_base_type * >,
+      typename boost::detail::allocator::rebind_to<
+        allocator_type, const state_base_type * >::type
     > deferred_map_type;
 
 

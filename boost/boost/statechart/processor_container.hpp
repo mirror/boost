@@ -21,6 +21,8 @@
 // BOOST_WORKAROUND, BOOST_TESTED_AT, BOOST_INTEL
 #include <boost/config.hpp>
 
+#include <boost/detail/allocator_utilities.hpp>
+
 #include <set>
 #include <memory>   // std::allocator, std::auto_ptr
 
@@ -365,14 +367,9 @@ class processor_container : noncopyable
 
     typedef std::set< 
       processor_holder_ptr_type, 
-      std::less< processor_holder_ptr_type >
-      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
-        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
-      // TODO: Add allocator support for broken std libs when
-      // the workaround is available in boost::detail
-      , typename Allocator::template rebind<
-          processor_holder_ptr_type >::other
-      #endif
+      std::less< processor_holder_ptr_type >,
+      typename boost::detail::allocator::rebind_to<
+        Allocator, processor_holder_ptr_type >::type
     > event_processor_set_type;
 
     event_processor_set_type processorSet_;
