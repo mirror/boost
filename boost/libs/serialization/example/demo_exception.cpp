@@ -213,7 +213,7 @@ void init(School *school){
     // carol has no courses
 }
 
-void save(School *school, const char *filename){
+void save(const School * const school, const char *filename){
     std::ofstream ofile(filename);
     boost::archive::text_oarchive ar(ofile);
     ar << school;
