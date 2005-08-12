@@ -47,6 +47,10 @@ rule run-template ( test-name : sources * : requirements * ) {
             std::locale-support
             toolset::require-boost-spirit-support
             <borland*><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-0018 -w-8066"
+            <como*><*><runtime-link>static
+            # msvc stlport 4.5.3 only works with static lib
+            <msvc-stlport><*><runtime-link>static
+            <vc-6_5-stlport><*><runtime-link>static
             $(requirements)
         : # test name
             $(test-name)
@@ -66,10 +70,6 @@ rule run-invoke ( test-name : sources * : defns * )
             $(sources)
             <lib>../build/boost_serialization
         : # requirements
-            # msvc stlport 4.5.3 only works with static lib
-            <msvc-stlport><*><runtime-link>static
-            <vc-6_5-stlport><*><runtime-link>static
-            <como><*><linkflags>"-force:multiple"
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
     ] ;
@@ -104,9 +104,6 @@ rule run-winvoke ( test-name : sources * : defns * )
             toolset::require-wide-char-io-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
-            # msvc stlport 4.5.3 only works with static lib
-            <msvc-stlport><*><runtime-link>static
-            <vc-6_5-stlport><*><runtime-link>static
             # both stlport and msvc6 define iswspace
             <msvc-stlport><*><linkflags>"-force:multiple"
             <vc-6_5-stlport><*><linkflags>"-force:multiple"
@@ -118,7 +115,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             $(sources)
             <dll>../build/boost_serialization
             <dll>../build/boost_wserialization
-        : # requiremens
+        : # requirements
             toolset::require-wide-char-io-support
             toolset::require-shared-libraries-support
             <define>$(defns)
@@ -139,8 +136,6 @@ rule test-bsl-run-no-lib  ( test-name : sources * )
         : # sources
             $(test-name).cpp $(sources).cpp
         : # requirements
-            <msvc-stlport><*><runtime-link>static
-            <vc-6_5-stlport><*><runtime-link>static
     ] ;
 }
 
@@ -214,8 +209,8 @@ test-suite "serialization" :
      [ test-bsl-run_files test_derived_class_ptr ]
      [ test-bsl-run_files test_diamond ]
      [ test-bsl-run_files test_exported ]
-     [ test-bsl-run_files test_class_info_save ]
      [ test-bsl-run_files test_class_info_load ]
+     [ test-bsl-run_files test_class_info_save ]
      [ test-bsl-run_files test_object ]
      [ test-bsl-run_files test_primitive ]
      [ test-bsl-run_files test_list ]
