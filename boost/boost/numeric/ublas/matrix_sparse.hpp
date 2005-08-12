@@ -431,7 +431,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         mapped_matrix &operator = (const matrix_container<C> &m) {
-            resize (m ().size1 (), m ().size2 ());
+            resize (m ().size1 (), m ().size2 (), false);
             assign (m);
             return *this;
         }
@@ -2843,7 +2843,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         compressed_matrix &operator = (const matrix_container<C> &m) {
-            resize (m ().size1 (), m ().size2 ());
+            resize (m ().size1 (), m ().size2 (), false);
             assign (m);
             return *this;
         }
@@ -4151,7 +4151,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         coordinate_matrix &operator = (const matrix_container<C> &m) {
-            resize (m ().size1 (), m ().size2 ());
+            resize (m ().size1 (), m ().size2 (), false);
             assign (m);
             return *this;
         }
