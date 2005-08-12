@@ -592,7 +592,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Resizing
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize (size_type size, bool /*preserve*/ = true) {
             size_ = size;
         }
 
@@ -785,7 +785,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Resizing
         BOOST_UBLAS_INLINE
-        void resize (size_type size, bool preserve = true) {
+        void resize (size_type size, bool /*preserve*/ = true) {
             size_ = size;
         }
 
