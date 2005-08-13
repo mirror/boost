@@ -13,6 +13,7 @@
 #include <boost/statechart/detail/leaf_state.hpp>
 #include <boost/statechart/detail/node_state.hpp>
 #include <boost/statechart/detail/constructor.hpp>
+#include <boost/statechart/detail/memory.hpp>
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
@@ -48,7 +49,9 @@
 #include <boost/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/cast.hpp>   // boost::polymorphic_downcast
+#include <boost/cast.hpp> // boost::polymorphic_downcast
+
+#include <cstddef> // std::size_t
 
 
 
@@ -428,6 +431,18 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       mpl::empty< inner_initial_list > >::type stores_deep_history;
 
     typedef mpl::bool_< false > history_destination;
+
+    void * operator new( std::size_t size )
+    {
+      return detail::allocate< MostDerived,
+        typename outermost_context_type::allocator_type >( size );
+    }
+
+    void operator delete( void * pState )
+    {
+      detail::deallocate< MostDerived,
+        typename outermost_context_type::allocator_type >( pState );
+    }
 
     outermost_context_base_type & outermost_context_base()
     {

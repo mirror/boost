@@ -267,6 +267,18 @@ struct BitState : sc::simple_state< BitState< stateNo >, BitMachine >,
   IDisplay
   #endif
 {
+  #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
+  static void * operator new( size_t size )
+  {
+    return UniqueObject< BitState< stateNo > >::operator new( size );
+  }
+
+  static void operator delete( void * p, size_t size )
+  {
+    UniqueObject< BitState< stateNo > >::operator delete( p, size );
+  }
+  #endif
+
   typedef typename FlipTransitionList< stateNo >::type reactions;
 
   virtual void Display() const
