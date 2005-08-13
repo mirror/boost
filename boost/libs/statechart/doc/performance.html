@@ -198,7 +198,7 @@ rejected:</p>
 	depend upon all events. That is, whenever a new event is added there is no 
 	way around recompiling the whole state machine. This is contrary to the 
 	scalability requirements</li>
-  <li>Two-dimensional array of function pointers: To satisfy requirement 6, it 
+  <li>Single two-dimensional array of function pointers: To satisfy requirement 6, it 
   should be possible to spread a single state machine over several translation 
   units. This however means that the dispatch table must be filled at runtime 
   and the different translation units must somehow make themselves &quot;known&quot;, so 
@@ -211,7 +211,9 @@ rejected:</p>
 	error-prone</li>
 </ul>
 <h2><a name="Memory management customization">Memory management customization</a></h2>
-<p>Out of the box, all internal data is allocated on the normal heap. This 
+<p>Out of the box, everything (event objects, state objects, internal data, etc.) is allocated 
+through <code>std::allocator&lt; void &gt;</code> (the default for the Allocator 
+template parameter). This 
 should be satisfactory for applications meeting the following prerequisites:</p>
 <ul>
   <li>There are no deterministic reaction time (hard real-time) requirements</li>
@@ -221,32 +223,20 @@ should be satisfactory for applications meeting the following prerequisites:</p>
   fragmentation problems could show up earlier than with traditional FSM 
   frameworks</li>
 </ul>
-<p>Should an application not meet these prerequisites customization of 
-all memory management (not just Boost.Statechart's) should be considered, which is 
-supported as follows:</p>
+<p>Should an application not meet these prerequisites, Boost.Statechart's memory 
+management can be customized as follows:</p>
 <ul>
-  <li>By passing a class offering a <code>std::allocator&lt;&gt;</code> interface 
-  for the <code>Allocator</code> parameter of the <code>state_machine</code> 
-  class template</li>
-  <li>By replacing the <code>simple_state</code>, <code>state</code> and <code>
-  event</code> class templates with ones that have a customized <code>operator 
-  new()</code> and <code>operator delete()</code>. This can be as easy as 
-  inheriting your customized class templates from the framework-supplied class 
-  templates <b>and</b> your preferred small-object/deterministic/constant-time 
-  allocator base class</li>
+  <li>By passing a model of the standard Allocator concept to the class 
+	templates that support a corresponding parameter (<code>event&lt;&gt;</code>,
+	<code>state_machine&lt;&gt;</code>,
+	<code>asynchronous_state_machine&lt;&gt;</code>, <code>fifo_scheduler&lt;&gt;</code>,
+	<code>fifo_worker&lt;&gt;</code>). This redirects all allocations to the passed 
+	custom allocator and should satisfy the needs of just about any project</li>
+  <li>Additionally, it is possible to separately customize <b>state</b> memory 
+	management by overloading <code>operator 
+  new()</code> and <code>operator delete()</code> for all state classes but 
+  this is probably only useful in very few cases</li>
 </ul>
-<p><code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> subtype objects are 
-constructed and destructed only by the state machine. It would therefore be 
-possible to use the <code>state_machine&lt;&gt;</code> allocator instead of forcing 
-the user to overload <code>operator new()</code> and <code>operator delete()</code>. 
-However, a lot of systems employ at most one instance of a particular state 
-machine, which means that a) there is at most one object of a particular state 
-and b) this object is always constructed, accessed and destructed by one and 
-the same thread. We can exploit these facts in a much simpler (and faster)
-<code>new</code>/<code>delete</code> implementation (for example, see 
-UniqueObject.hpp in the BitMachine example). However, this is only possible as 
-long as we have the freedom to customize memory management for state classes 
-separately.</p>
 <h2><a name="RTTI customization">RTTI customization</a></h2>
 <p>RTTI is used for event dispatch and <code>state_downcast&lt;&gt;()</code>. 
 Currently, there are exactly two options:</p>
@@ -319,7 +309,7 @@ consume how many cycles:</p>
 </ol>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->04 June, 2005<!--webbot bot="Timestamp" endspan i-checksum="19916" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34603" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
