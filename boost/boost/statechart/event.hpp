@@ -10,7 +10,11 @@
 
 #include <boost/statechart/event_base.hpp>
 #include <boost/statechart/detail/rtti_policy.hpp>
+#include <boost/statechart/detail/memory.hpp>
+
 #include <boost/cast.hpp> // boost::polymorphic_downcast
+
+#include <memory>   // std::allocator
 
 
 
@@ -22,11 +26,25 @@ namespace statechart
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived >
+template< class MostDerived, class Allocator = std::allocator< void > >
 class event : public detail::rtti_policy::rtti_derived_type<
   MostDerived, event_base >
 {
-  // Compiler-generated copy constructor and copy assignment operator are fine
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    // Compiler-generated copy constructor and copy assignment operator are
+    // fine
+
+    void * operator new( std::size_t size )
+    {
+      return detail::allocate< MostDerived, Allocator >( size );
+    }
+
+    void operator delete( void * pEvent )
+    {
+      detail::deallocate< MostDerived, Allocator >( pEvent );
+    }
+
   protected:
     //////////////////////////////////////////////////////////////////////////
     event() {}
