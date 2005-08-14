@@ -148,7 +148,7 @@ problems that are absent in the original:</p>
 	new variable or change the type of an already existing variable. That is, 
 	many changes in the FSM will likely lead to a change in the StopWatch class. 
 	In all FSMs that do not employ state-local storage, the <code>state_machine&lt;&gt;</code> 
-	subclass will therefore be a change hotspot, which is a pretty sure 
+	subtype will therefore be a change hotspot, which is a pretty sure 
 	indicator for a bad design</li>
 </ul>
 <p>Both points are not much of a problem in a small example like this, which can 
@@ -291,12 +291,15 @@ is a point in making your own performance tests on your target platform.</p>
 <h2>
 <a name="Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
 Is your library suitable for applications with hard real-time requirements?</a></h2>
-<p>Yes. Out of the box, the only operations taking potentially non-deterministic 
-time that the library performs are calls to 
-global <code>operator new</code> and <code>dynamic_cast</code>s. Global <code>
-operator new</code> calls can be avoided by passing a custom allocator to&nbsp;
-<code>state_machine&lt;&gt;</code> <b>and</b> by giving all state classes a custom <code>
-operator new</code>. <code>dynamic_cast</code>s can be avoided by not calling the
+<p>Yes. Out of the box, the only operations taking potentially 
+non-deterministic time that the library performs are calls to <code>std::allocator&lt;&gt;</code> 
+member functions and <code>dynamic_cast</code>s.
+<code>std::allocator&lt;&gt;</code> member function calls can be avoided by passing a custom allocator 
+to <code>event&lt;&gt;</code>,
+	<code>state_machine&lt;&gt;</code>,
+	<code>asynchronous_state_machine&lt;&gt;</code>, <code>fifo_scheduler&lt;&gt;</code> 
+and
+	<code>fifo_worker&lt;&gt;</code>. <code>dynamic_cast</code>s can be avoided by not calling the
 <code>state_cast&lt;&gt;</code> member functions of <code>state_machine&lt;&gt;</code>,
 <code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> but using the 
 deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
@@ -384,7 +387,7 @@ culprit close to the bottom in file InconsistentHistoryTest1.cpp on line 29.</li
 <a name="How_can_I_compile_a_state_machine_into_a_dynamic_link_library_(DLL)">How can I compile a state machine into a dynamic link library (DLL)?</a></h2>
 <p>Invisible to the user, the library uses static data members to implement 
 its own speed-optimized RTTI-mechanism for <code>event&lt;&gt;</code> and <code>
-simple_state&lt;&gt;</code> subclasses. Whenever such a subclass is defined in a 
+simple_state&lt;&gt;</code> subtypes. Whenever such a subtype is defined in a 
 header file and then included in multiple TUs, the linker later needs to 
 eliminate the duplicate definitions of static data members. This usually works 
 flawlessly as long as all these TUs are <b>statically</b> linked into the same 
@@ -412,7 +415,7 @@ deal differently with this problem:</p>
 to be loaded from a DLL (see TuTest for an example how to do this). Therefore, 
 the internal RTTI mechanism can be used but care must be taken to correctly 
 export and import all <code>event&lt;&gt;</code> and <code>
-simple_state&lt;&gt;</code> subclasses defined in headers that are compiled 
+simple_state&lt;&gt;</code> subtypes defined in headers that are compiled 
 into more than one binary. Alternatively, of course <a href="configuration.html#Application Defined Macros">
  BOOST_STATECHART_USE_NATIVE_RTTI</a> can also be used to save the work of 
 importing and exporting</li>
@@ -465,8 +468,8 @@ propagates an exception in a state machine with orthogonal regions <b>and</b> if
 the statechart layout satisfies certain conditions), but it can no longer be 
 demonstrated with the example program below. However, the described workaround 
 is still valid and ensures that this behavior will never show up.</p>
-<p>They definitely aren't for the <code>simple_state</code> and <code>state</code> 
-subclasses, but the destructors of additional bases might be called in 
+<p>They definitely aren't for the <code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> 
+subtypes, but the destructors of additional bases might be called in 
 construction order (rather than the reverse construction order):</p>
 <pre>#include &lt;boost/statechart/state_machine.hpp&gt;
 #include &lt;boost/statechart/simple_state.hpp&gt;
@@ -546,7 +549,7 @@ destructors of additional bases are called before recursion employed by state
 base destructors can alter the order of destruction.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34602" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->14 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34605" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
