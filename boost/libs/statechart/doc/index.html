@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/13<!--webbot bot="Timestamp" endspan i-checksum="12801" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/14<!--webbot bot="Timestamp" endspan i-checksum="12803" --></font></td>
   </tr>
 </table>
 <hr>
@@ -80,7 +80,7 @@ include:</p>
 </ul>
 <h3><a name="Supported_platforms">Supported platforms</a></h3>
 <p>All code has been tested on the following platforms using boost 
-distribution 1.32.0:</p>
+distribution 1.33.0:</p>
 <ul>
   <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
 	<li>GCC 3.4.2 (MinGW 3.2.0)</li>
@@ -114,34 +114,34 @@ been tested yet):</p>
 <h3><a name="Getting_started">Getting started</a></h3>
 <p>Boost.Statechart builds on other parts of the boost library. In order to use this 
 library, the statechart directories need to be copied to their respective locations 
-in the tree of the boost distribution 1.32.0. Specifically:</p>
+in the tree of the boost distribution 1.33.0. Specifically:</p>
 <ol>
 	<li>Follow the steps 1-3 described
 	at <a href="http://www.boost.org/more/getting_started.html">
 	http://www.boost.org/more/getting_started.html</a>. After 
 	doing so, somewhere on your harddrive you should have a directory 
-	containing the boost distribution (e.g. under <code>D:\Data\boost_1_32_0</code>) 
+	containing the boost distribution (e.g. under <code>D:\Data\boost_1_33_0</code>) 
 	and the bjam executable installed in your <code>PATH</code></li>
 <li>Download <a href="http://boost-sandbox.sf.net/Statechart.zip">
 http://boost-sandbox.sf.net/Statechart.zip</a> and unpack it somewhere on your harddrive, e.g. under
 <code>D:\Data\Statechart</code></li>
 	<li>Copy the directory <code>D:\Data\Statechart\boost\statechart</code> and all its 
-	contents to <code>D:\Data\boost_1_32_0\boost\statechart</code></li>
+	contents to <code>D:\Data\boost_1_33_0\boost\statechart</code></li>
 	<li>Copy the directory <code>D:\Data\Statechart\libs\statechart</code> and all its 
-	contents to <code>D:\Data\boost_1_32_0\libs\statechart</code></li>
+	contents to <code>D:\Data\boost_1_33_0\libs\statechart</code></li>
 	<li>Open a command prompt and change the current directory to
-	<code>D:\Data\boost_1_32_0\libs\statechart\examples</code></li>
+	<code>D:\Data\boost_1_33_0\libs\statechart\examples</code></li>
 	<li>To compile the examples, invoke bjam with your toolset. For example, 
 	for MSVC7.1, type <code>bjam &quot;-sTOOLS=vc-7_1&quot;</code>. This may 
 	take a few minutes. After the build has finished you will find all 
 	executables in <code>
-	D:\Data\boost_1_32_0\libs\statechart\examples\run</code>. In addition to the 
+	D:\Data\boost_1_33_0\libs\statechart\examples\run</code>. In addition to the 
 	examples discussed in the tutorial, this script also builds the BitMachine executable in different variants, which show the effects of 
 	various choices on runtime performance, executable size, etc. Moreover, 
 	the Handcrafted executable is also built, which serves to compare 
 	performance of a simple Boost.Statechart machine with its handcrafted equivalent</li>
 	<li>Optional: To run the tests, invoke bjam in the directory
-	<code>D:\Data\boost_1_32_0\libs\statechart\test</code></li>
+	<code>D:\Data\boost_1_33_0\libs\statechart\test</code></li>
 </ol>
 <h3><a name="Audience">Audience</a></h3>
 <p>Throughout all Boost.Statechart documentation it is assumed that the reader is 
@@ -174,7 +174,16 @@ left (<font color="#FF0000">red</font> = added as a result of the formal
 review):</p>
 <ol>
     <li>Implement <code>simple_state::triggering_event()</code>, which returns a 
-	pointer to the event that triggered the reaction currently in progress</li>
+	pointer to the event that triggered the action currently being executed. 
+    This is useful for the rare cases when an entry or exit action needs to 
+    access the event that triggered the execution of the action. <code>
+    triggering_event()</code> returns a <code>const event_base *</code> due to 
+    the fact that entry and exit actions can be triggered by events of any 
+    type or no event at all (<code>state_machine&lt;&gt;::initiate()</code> &amp; <code>
+    state_machine::terminate()</code>). The caller thus needs to make a type 
+    check or cast the return value. The use of <code>triggering_event</code>() 
+    therefore often indicates a problem in the state machine design and should 
+    be avoided whenever possible</li>
 	<li><font color="#FF0000">Investigate how constant-time dispatch for 
     non-orthogonal state machines can be implemented (David Abrahams, Jonathan Turkanis, 
     Rob Steward, Dave Gomboc)</font></li>
@@ -227,9 +236,10 @@ review):</p>
   parameter defining how to lock and wait</li>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
-<p>XX August, 2005</p>
+<p>(<font color="#FF0000">red</font> = points raised during formal review)</p>
+<p>14 August, 2005</p>
 <ul>
-    <li><b><font color="#FF0000">Potentially breaking change: </font></b>
+    <li><font color="#FF0000"><b>B</b></font><b><font color="#FF0000">reaking change: </font></b>
 	<font color="#FF0000">Added <code>simple_state&lt;&gt;::operator new</code> &amp;
 	<code>simple_state&lt;&gt;::operator delete</code> forwarding to the allocator 
 	passed to <code>state_machine</code> (Peter Petrov). This considerably 
@@ -244,8 +254,8 @@ review):</p>
 	inherits from an additional base with overloaded <code>operator new</code>/<code>delete</code> 
 	(leading to ambiguous call errors). Forwarding functions need to be added to 
 	such state classes (see BitMachine for an example)</font></li>
-    <li><b>Potentially breaking change</b>: Added an Allocator parameter to 
-    the event class template and added <code>event&lt;&gt;::operator new</code>/<code>delete</code>. 
+    <li><b>Breaking change</b>: Added an Allocator parameter to 
+    the <code>event</code> class template and added <code>event&lt;&gt;::operator new</code>/<code>delete</code>. 
     This makes customizing memory management easier but could also break 
     existing code (see previous point)</li>
 	<li>Added Jamfile.v2 files</li>
@@ -300,13 +310,13 @@ review):</p>
 <p></p>
 <p>12 May, 2005</p>
 <ul>
-	<li><b><font color="#FF0000">Breaking change: Changed the library namespace from <code>fsm</code> 
-    to <code>statechart</code> (Alexander Nasonov, David Abrahams)</font></b></li>
-    <li><b><font color="#FF0000">Breaking change: Changed the library name from boost::fsm to 
-    Boost.Statechart (Alexander Nasonov, David Abrahams)</font></b></li>
-    <li><b><font color="#FF0000">Breaking change: Reactions are now specified with a <code>reactions</code> member 
+	<li><font color="#FF0000"><b>Breaking change</b>: Changed the library namespace from <code>fsm</code> 
+    to <code>statechart</code> (Alexander Nasonov, David Abrahams)</font></li>
+    <li><font color="#FF0000"><b>Breaking change</b>: Changed the library name from boost::fsm to 
+    Boost.Statechart (Alexander Nasonov, David Abrahams)</font></li>
+    <li><font color="#FF0000"><b>Breaking change</b>: Reactions are now specified with a <code>reactions</code> member 
     typedef in a state class declaration instead of a template parameter (Alexander Nasonov), 
-    not yet documented.</font></b></li>
+    not yet documented.</font></li>
 </ul>
 <p>03 May, 2005</p>
 <ul>
@@ -540,7 +550,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34603" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->14 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34605" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
