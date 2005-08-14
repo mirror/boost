@@ -212,7 +212,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     outermost_context_type & outermost_context()
     {
       // This assert fails when an attempt is made to access the state machine
-      // from a constructor of a state that is *not* a subclass of state<>.
+      // from a constructor of a state that is *not* a subtype of state<>.
       // To correct this, derive from state<> instead of simple_state<>.
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
       return pContext_->outermost_context();
@@ -221,7 +221,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     const outermost_context_type & outermost_context() const
     {
       // This assert fails when an attempt is made to access the state machine
-      // from a constructor of a state that is *not* a subclass of state<>.
+      // from a constructor of a state that is *not* a subtype of state<>.
       // To correct this, derive from state<> instead of simple_state<>.
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
       return pContext_->outermost_context();
@@ -447,7 +447,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     outermost_context_base_type & outermost_context_base()
     {
       // This assert fails when an attempt is made to access the state machine
-      // from a constructor of a state that is *not* a subclass of state<>.
+      // from a constructor of a state that is *not* a subtype of state<>.
       // To correct this, derive from state<> instead of simple_state<>.
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
       return pContext_->outermost_context_base();
@@ -456,7 +456,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     const outermost_context_base_type & outermost_context_base() const
     {
       // This assert fails when an attempt is made to access the state machine
-      // from a constructor of a state that is *not* a subclass of state<>.
+      // from a constructor of a state that is *not* a subtype of state<>.
       // To correct this, derive from state<> instead of simple_state<>.
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
       return pContext_->outermost_context_base();

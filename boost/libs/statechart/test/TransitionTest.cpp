@@ -150,7 +150,7 @@ struct TransitionTest : sc::state_machine< TransitionTest, S0 >
     ~TransitionTest()
     {
       // Since state destructors access the state machine object, we need to
-      // make sure that all states are destructed before this subclass
+      // make sure that all states are destructed before this subtype
       // portion is destructed.
       terminate();
     }
