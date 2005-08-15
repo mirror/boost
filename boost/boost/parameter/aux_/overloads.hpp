@@ -40,7 +40,7 @@
 
 #define BOOST_PARAMETER_open_list(z, n, text) \
     aux::make_arg_list< \
-        BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n) \
+        BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n), unnamed_specs \
 
 #define BOOST_PARAMETER_close_list(z, n, text) > 
 
