@@ -54,7 +54,7 @@ namespace boost
         template< class Char >
         inline Char* str_end( Char* s )
         {
-            return (Char*)str_end( s, s );
+            return const_cast<Char*>( str_end( s, s ) );
         }
 
         template< class T, std::size_t sz >
