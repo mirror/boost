@@ -9,7 +9,7 @@
 <body>
 <h1><img src="../../../../boost.png" align="middle" />
 Unbounded Array Storage</h1>
-<h2><a name="unbounded_array" id="unbounded_array"></a>Unbounded Array&lt;T,Alloc&gt;</h2>
+<h2><a name="unbounded_array" id="unbounded_array"></a>Unbounded Array</h2>
 <h4>Description</h4>
 <p>The templated class <code>unbounded_array&lt;T, ALLOC&gt;</code> implements a unbounded storage array using an allocator. 
 The unbounded array is similar to a <code>std::vector</code> in that in can grow in size beyond any fixed bound. 
@@ -54,21 +54,17 @@ int main () {
 <h4>Model of</h4>
 <p><a href="storage_concept.htm">Storage</a></p>
 <h4>Type requirements</h4>
-<p>None, except for those imposed by the requirements of Random
-Access Container.</p>
+<p>None, except for those imposed by the requirements of Storage.</p>
 <h4>Public base classes</h4>
 <p>None.</p>
 <h4>Members</h4>
-Editor's notes: 
 <ul>
 <li>The description does not describe what the member actually does, this can be looked up
 in the corresponding concept documentation, but instead contains a remark on the implementation of the
 member inside this model of the concept.</li>
-<li>Type setting:
+<li>Typography:
 <ul>
-<li>Members that currently lack are <font color="red">in red</font>.</li>
 <li>Members that are not part of the implemented concepts are <font color="blue">in blue</font>.</li>
-<li>Differences compared to the concept are in <em>italics</em>.</li>
 </ul>
 </li>
 </ul>
@@ -80,31 +76,31 @@ member inside this model of the concept.</li>
 <th>Description</th>
 </tr>
 <tr><td><code>value_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td></tr>
-<tr><td><code>pointer</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>value_type*</code></td></tr>
-<tr><td><code>const_pointer</code></td><td></td><td>Currently defined as <code>value_type*</code></td></tr>
-<tr><td><code>reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>value_type&amp;</code></td></tr>
-<tr><td><code>const_reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>const value_type&amp;</code></td></tr>
-<tr><td><code>size_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>Alloc::size_type</code></td></tr>
-<tr><td><code>difference_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>Alloc::difference_type</code></td></tr>
-<tr><td><code>iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>pointer</code></td></tr>
-<tr><td><code>const_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>const_pointer</code></td></tr>
-<tr><td><code>revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>std::reverse_iterator&lt;iterator&gt;</code></td></tr>
-<tr><td><code>const_revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>std::reverse_iterator&lt;const_iterator&gt;</code></td></tr>
-<tr><td><font color="blue"><code>allocator_type</code></code></td><td></td><td>Defined as ALLOC</td></tr>
+<tr><td><code>pointer</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>value_type*</code></td></tr>
+<tr><td><code>const_pointer</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>const value_type*</code></td></tr>
+<tr><td><code>reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>value_type&amp;</code></td></tr>
+<tr><td><code>const_reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>const value_type&amp;</code></td></tr>
+<tr><td><code>size_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>Alloc::size_type</code></td></tr>
+<tr><td><code>difference_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>Alloc::difference_type</code></td></tr>
+<tr><td><code>iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>pointer</code></td></tr>
+<tr><td><code>const_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>const_pointer</code></td></tr>
+<tr><td><code>revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>std::reverse_iterator&lt;iterator&gt;</code></td></tr>
+<tr><td><code>const_revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>std::reverse_iterator&lt;const_iterator&gt;</code></td></tr>
+<tr><td><font color="blue">allocator_type</font></td><td></td><td>Defined as ALLOC</td></tr>
 <tr>
 <td><code><em>explicit</em> unbounded_array (<em>ALLOC &amp;a = ALLOC()</em>)</code></td>
 <td><a href="storage_concept.htm">Storage</a></td>
-<td>Creates an <code>unbounded_array</code> that holds at most zero elements, using a specified allocator.</td> 
+<td>Creates an <code>unbounded_array</code> that holds zero elements, using a specified allocator.</td> 
 </tr>
 <tr>
 <td><code><em>explicit</em> unbounded_array (size_type size<em>, ALLOC &amp;a = ALLOC()</em>)</code></td>
 <td><a href="storage_concept.htm">Storage</a></td>
-<td>Creates a uninitialized <code>unbounded_array</code> that holds at most <code>size</code> elements, using a specified allocator. All the elements are constructed without an initializer. </td>
+<td>Creates a uninitialized <code>unbounded_array</code> that holds <code>size</code> elements, using a specified allocator. All the elements are default constructed.</td>
 </tr>
 <tr>
-<td><code><em>explicit </em>unbounded_array (size_type size, const T&amp; init<em>, ALLOC&amp; a = ALLOC()</em>)</code></td>
+<td><code>unbounded_array (size_type size, const T&amp; init<em>, ALLOC&amp; a = ALLOC()</em>)</code></td>
 <td><a href="storage_concept.htm">Storage</a></td>
-<td>Creates an initialized <code>unbounded_array</code> that holds at most <code>size</code> elements, using a specified allocator. All the elements are constructed from the <code>init</code> value.</td>
+<td>Creates an initialized <code>unbounded_array</code> that holds <code>size</code> elements, using a specified allocator. All the elements are constructed from the <code>init</code> value.</td>
 </tr>
 <tr>
 <td><code>unbounded_array (const unbounded_array &amp;a)</code></td>
@@ -117,14 +113,14 @@ member inside this model of the concept.</li>
 <td>Deallocates the <code>unbounded_array</code> itself.</td>
 </tr>
 <tr>
-<td><font color="red"><code>void resize (size_type n <em>, bool preserve = true</em>)</code></font></td>
+<td><code>void resize (size_type n)</code></td>
 <td><a href="storage_concept.htm">Storage</a></td>
-<td>Reallocates an <code>unbounded_array</code> to hold at most <code>n</code> elements. When <code>preserve == false</code> the elements values after resize are undefined.</td>
+<td>Reallocates an <code>unbounded_array</code> to hold <code>n</code> elements. Values are uninitialised.</td>
 </tr>
 <tr>
-<td><code>void resize(size_type n, const T& t)</code></font></td>
+<td><code>void resize(size_type n, const T&amp; t)</code></td>
 <td><a href="storage_concept.htm">Storage</a></td>
-<td>Reallocates an <code>unbounded_array</code> to hold at most <code>n</code> elements. 
+<td>Reallocates an <code>unbounded_array</code> to hold <code>n</code> elements. Values are copies of <code>t</code> 
 </tr>
 <tr>
 <td><code>size_type size () const</code></td>

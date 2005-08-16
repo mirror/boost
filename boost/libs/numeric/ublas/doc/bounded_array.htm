@@ -9,11 +9,11 @@
 <body>
 <h1><img src="../../../../boost.png" align="middle" />
 Bounded Array Storage</h1>
-<h2><a name="bounded_array" id="bounded_array"></a>Bounded Array&lt;T,N,Alloc&gt;</h2>
+<h2><a name="bounded_array" id="bounded_array"></a>Bounded Array</h2>
 <h4>Description</h4>
-<p>The templated class <code>bounded_array&lt;T, N, ALLOC&gt;</code> implements a bounded storage array. The bounded array is similar to a C++ array type in that its maximum size is bounded by N and is allocated on the stack instead of the heap. Similarly a <code>bounded_array</code> requires no secondary storage and ALLOC is only used to specify<code>size_type</code> and <code>difference_type</code>.
+<p>The templated class <code>bounded_array&lt;T, N, ALLOC&gt;</code> implements a bounded storage array. The bounded array is similar to a C++ array type in that its maximum size is bounded by N and is allocated on the stack instead of the heap. Similarly a <code>bounded_array</code> requires no secondary storage and ALLOC is only used to specify <code>size_type</code> and <code>difference_type</code>.
 </p>
-<p>When resized <code>bounded_array</code> uses the same storage with the same bound!. It is therefore efficient to resize a <code>bounded_array</code></p>
+<p>When resized <code>bounded_array</code> never reallocated the storage. It is therefore always efficient to resize a <code>bounded_array</code> but the size bound N must not be exceeded.</p>
 <h4>Example</h4>
 <pre>
 #include &lt;boost/numeric/ublas/storage.hpp&gt;
@@ -55,22 +55,19 @@ int main () {
 </tbody>
 </table>
 <h4>Model of</h4>
-<p>Random Access Container.</p>
+<p><a href="storage_concept.htm">Storage</a></p>
 <h4>Type requirements</h4>
-<p>None, except for those imposed by the requirements of Random Access Container.</p>
+<p>None, except for those imposed by the requirements of Storage.</p>
 <h4>Public base classes</h4>
 <p>None.</p>
 <h4>Members</h4>
-Editor's notes: 
 <ul>
 <li>The description does not describe what the member actually does, this can be looked up
 in the corresponding concept documentation, but instead contains a remark on the implementation of the
 member inside this model of the concept.</li>
-<li>Type setting:
+<li>Typography:
 <ul>
-<li>Members that currently lack are <font color="red">in red</font>.</li>
 <li>Members that are not part of the implemented concepts are <font color="blue">in blue</font>.</li>
-<li>Differences compared to the concept are in <em>italics</em>.</li>
 </ul>
 </li>
 </ul>
@@ -82,33 +79,30 @@ member inside this model of the concept.</li>
 <th>Description</th>
 </tr>
 <tr><td><code>value_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td></tr>
-<tr><td><code>pointer</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>value_type*</code></td></tr>
-<tr><td><code>const_pointer</code></td><td></td><td>Currently defined as <code>value_type*</code></td></tr>
-<tr><td><code>reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>value_type&amp;</code></td></tr>
-<tr><td><code>const_reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>const value_type&amp;</code></td></tr>
-<tr><td><code>size_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>Alloc::size_type</code></td></tr>
-<tr><td><code>difference_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>Alloc::difference_type</code></td></tr>
-<tr><td><code>iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>pointer</code></td></tr>
-<tr><td><code>const_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>const_pointer</code></td></tr>
-<tr><td><code>revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>std::reverse_iterator&lt;iterator&gt;</code></td></tr>
-<tr><td><code>const_revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Currently defined as <code>std::reverse_iterator&lt;const_iterator&gt;</code></td></tr>
+<tr><td><code>pointer</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>value_type*</code></td></tr>
+<tr><td><code>const_pointer</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>const value_type*</code></td></tr>
+<tr><td><code>reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>value_type&amp;</code></td></tr>
+<tr><td><code>const_reference</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>const value_type&amp;</code></td></tr>
+<tr><td><code>size_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>Alloc::size_type</code></td></tr>
+<tr><td><code>difference_type</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>Alloc::difference_type</code></td></tr>
+<tr><td><code>iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>pointer</code></td></tr>
+<tr><td><code>const_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>const_pointer</code></td></tr>
+<tr><td><code>revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>std::reverse_iterator&lt;iterator&gt;</code></td></tr>
+<tr><td><code>const_revere_iterator</code></td><td><a href="http://www.sgi.com/tech/stl/Container.html">Container</a></td><td>Defined as <code>std::reverse_iterator&lt;const_iterator&gt;</code></td></tr>
 <tr>
 <td><code>bounded_array ()</code></td>
-<td>Creates a <code>bounded_array</code> that holds at most <strong>ZERO</strong> elements.</td>
+<td><a href="storage_concept.htm">Storage</a></td>
+<td>Creates an <code>unbounded_array</code> that holds <strong>zero</strong> elements.</td> 
 </tr>
-<tr>
-<td><code><em>explicit</em> bounded_array (size_type size, const T&amp; = init)</code></td>
-<td><a href="storage_concept.htm">Storage</a>
-<td>Creates an initialized <code>bounded_array</code> that holds at most <code>size</code> elements. All the elements are constructed from the <code>init</code> value.</td> </tr>
 <tr>
 <td><code>bounded_array (size_type size)</code></td>
-<td><a href="storage_concept.htm">Storage</a>
-<td>Creates an uninitialized <code>bounded_array</code> that holds at most <code>size</code> elements. All the elements are default constructed.</td>
+<td><a href="storage_concept.htm">Storage</a></td>
+<td>Creates a uninitialized <code>bounded_array</code> that holds <code>size</code> elements. All the elements are default constructed.</td>
 </tr>
 <tr>
-<td><code>bounded_array (size_type size, const T& init)</code></td>
-<td><a href="storage_concept.htm">Storage</a>
-<td>Creates an <code>bounded_array</code> that holds at most <code>size</code> elements. All the elements are copy-constructed from init.</td>
+<td><code>bounded_array (size_type size, const T&amp; init)</code></td>
+<td><a href="storage_concept.htm">Storage</a></td>
+<td>Creates an initialized <code>bounded_array</code> that holds <code>size</code> elements. All the elements are constructed from the <code>init</code> value.</td>
 </tr>
 <tr>
 <td><code>bounded_array (const bounded_array &amp;c)</code></td>
@@ -123,12 +117,12 @@ member inside this model of the concept.</li>
 <tr>
 <td><code>void resize (size_type size)</code></td>
 <td><a href="storage_concept.htm">Storage</a>
-<td>Reallocates a <code>bounded_array</code> to hold at most <code>size</code> elements.</td>
+<td>Reallocates a <code>bounded_array</code> to hold <code>size</code> elements.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size, const T& t)</code></td>
+<td><code>void resize (size_type size, const T&amp; t)</code></td>
 <td><a href="storage_concept.htm">Storage</a>
-<td>Reallocates a <code>bounded_array</code> to hold at most <code>size</code> elements.</td>
+<td>Reallocates a <code>bounded_array</code> to hold <code>size</code> elements.</td>
 </tr>
 <tr>
 <td><code>size_type size () const</code></td>
