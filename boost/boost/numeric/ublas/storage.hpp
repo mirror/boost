@@ -18,9 +18,6 @@
 #define BOOST_UBLAS_STORAGE_H
 
 #include <algorithm>
-#ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
-#include <boost/shared_array.hpp>
-#endif
 
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/detail/iterator.hpp>
@@ -111,7 +108,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize_internal (size_type size, value_type init, bool preserve) {
             if (size != size_) {
                 pointer data;
-                if  (size) {
+                if (size) {
                     data = alloc_.allocate (size);
                     if (preserve) {
                         const_iterator si = begin ();
@@ -143,17 +140,16 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                     }                    
                 }
-                else
-                    data = 0;
+
                 if (size_) {
                     const iterator i_end = end();
                     for (iterator i = begin(); i != i_end; ++i) {
                         iterator_destroy (i); 
                     }
                     alloc_.deallocate (data_, size_);
+                    data_ = data;
                 }
                 size_ = size;
-                data_ = data;
             }
         }
     public:
@@ -287,20 +283,18 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         bounded_array ():
-            size_ (0), data_ () {   // size 0 - use bounded_vector to default construct with size N
+            size_ (0) /*, data_ ()*/ {   // size 0 - use bounded_vector to default construct with size N
         }
         explicit BOOST_UBLAS_INLINE
         bounded_array (size_type size):
             size_ (size) /*, data_ ()*/ {
-            if (size_ > N)
-                bad_size ().raise ();
+            BOOST_UBLAS_CHECK (size_ <= N, bad_size ());
             // data_ (an array) elements are already default constructed
         }
         BOOST_UBLAS_INLINE
         bounded_array (size_type size, const value_type &init):
             size_ (size) /*, data_ ()*/ {
-            if (size_ > N)
-                bad_size ().raise ();
+            BOOST_UBLAS_CHECK (size_ <= N, bad_size ());
             // ISSUE elements should be value constructed here, but we must fill instead as already default constructed
             std::fill (begin(), end(), init) ;
         }
@@ -315,14 +309,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
-            if (size > N)
-                bad_size ().raise ();
+            BOOST_UBLAS_CHECK (size_ <= N, bad_size ());
             size_ = size;
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, value_type init) {
-            if (size > N)
-                bad_size ().raise ();
+            BOOST_UBLAS_CHECK (size_ <= N, bad_size ());
             if (size > size_)
                 std::fill (data_ + size_, data_ + size, init);
             size_ = size;
@@ -418,12 +410,13 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
 
-    // Array adaptor with normal deep copy semantics of elements
+    // C Array adaptor
+    // As the element storage must be fixed to a C array this class cannot be copy constructed
     template<class T>
-    class array_adaptor:
-        public storage_array<array_adaptor<T> > {
+    class carray_adaptor:
+        public storage_array<carray_adaptor<T> > {
 
-        typedef array_adaptor<T> self_type;
+        typedef carray_adaptor<T> self_type;
     public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -435,76 +428,36 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        array_adaptor ():
-            size_ (0), own_ (true), data_ (new value_type [0]) {
-        }
-        explicit BOOST_UBLAS_INLINE
-        array_adaptor (size_type size):
-            size_ (size), own_ (true), data_ (new value_type [size]) {
+        carray_adaptor ():
+            size_ (0), data_ (0) {
         }
         BOOST_UBLAS_INLINE
-        array_adaptor (size_type size, const value_type &init):
-            size_ (size), own_ (true), data_ (new value_type [size]) {
-            std::fill (data_, data_ + size_, init);
+        carray_adaptor (size_type size, pointer data):
+            size_ (size), data_ (data) {}
+        BOOST_UBLAS_INLINE
+        carray_adaptor (size_type size, pointer data, const value_type &init):
+            size_ (size), data_ (data) {
+            std::fill (begin(), end(), init) ;
         }
         BOOST_UBLAS_INLINE
-        array_adaptor (size_type size, pointer data):
-            size_ (size), own_ (false), data_ (data) {}
-        BOOST_UBLAS_INLINE
-        array_adaptor (const array_adaptor &a):
-            storage_array<self_type> (),
-            size_ (a.size_), own_ (true), data_ (new value_type [a.size_]) {
-            *this = a;
-        }
-        BOOST_UBLAS_INLINE
-        ~array_adaptor () {
-            if (own_) {
-                delete [] data_;
-            }
+        ~carray_adaptor () {
         }
 
-        // Resizing
+       // No copy constructor
     private:
-        BOOST_UBLAS_INLINE
-        void resize_internal (size_type size, value_type init, bool preserve = true) {
-           if (size != size_) {
-                pointer data = new value_type [size];
-                if (preserve) {
-                    std::copy (data_, data_ + (std::min) (size, size_), data);
-                    std::fill (data + (std::min) (size, size_), data + size, init);
-                }
-                if (own_)
-                    delete [] data_;
-                size_ = size;
-                own_ = true;
-                data_ = data;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void resize_internal (size_type size, pointer data, value_type init, bool preserve = true) {
-            if (data != data_) {
-                if (preserve) {
-                    std::copy (data_, data_ + (std::min) (size, size_), data);
-                    std::fill (data + (std::min) (size, size_), data + size, init);
-                }
-                if (own_)
-                    delete [] data_;
-                own_ = false;
-                data_ = data;
-            }
-            else {
-                std::fill (data + (std::min) (size, size_), data + size, init);
-            }
-            size_ = size;
-        }
-    public:
+        carray_adaptor (const carray_adaptor& );
+
+    public:    
+        // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
-            resize_internal (size, value_type (), false);
+            size_ = size;
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, value_type init) {
-            resize_internal (size, init, true);
+            if (size > size_)
+                std::fill (data_ + size_, data_ + size, init);
+            size_ = size;
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, pointer data) {
@@ -534,7 +487,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        array_adaptor &operator = (const array_adaptor &a) {
+        carray_adaptor &operator = (const carray_adaptor &a) {
             if (this != &a) {
                 resize (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
@@ -542,25 +495,21 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        array_adaptor &assign_temporary (array_adaptor &a) {
-            if (own_ && a.own_)
-                swap (a);
-            else
-                *this = a;
+        carray_adaptor &assign_temporary (carray_adaptor &a) {
+            *this = a;
             return *this;
         }
 
         // Swapping
         BOOST_UBLAS_INLINE
-        void swap (array_adaptor &a) {
+        void swap (carray_adaptor &a) {
             if (this != &a) {
                 std::swap (size_, a.size_);
-                std::swap (own_, a.own_);
                 std::swap (data_, a.data_);
             }
         }
         BOOST_UBLAS_INLINE
-        friend void swap (array_adaptor &a1, array_adaptor &a2) {
+        friend void swap (carray_adaptor &a1, carray_adaptor &a2) {
             a1.swap (a2);
         }
 
@@ -611,207 +560,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         size_type size_;
-        bool own_;
         pointer data_;
     };
 
-#ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
-    // Array adaptor with shallow (reference) copy semantics of elements.
-    // shared_array is used to maintain reference counts.
-    // This class breaks the normal copy semantics for a storage container and is very dangerous!
-    template<class T>
-    class shallow_array_adaptor:
-        public storage_array<shallow_array_adaptor<T> > {
-
-        typedef shallow_array_adaptor<T> self_type;
-
-        template<class T>
-        struct leaker {
-            typedef void result_type;
-            typedef T *argument_type;
-
-            BOOST_UBLAS_INLINE
-            result_type operator () (argument_type x) {}
-        };
-
-    public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef const T &const_reference;
-        typedef T &reference;
-        typedef const T *const_pointer;
-        typedef T *pointer;
-
-        // Construction and destruction
-        BOOST_UBLAS_INLINE
-        shallow_array_adaptor ():
-            size_ (0), own_ (true), data_ (new value_type [0]) {
-        }
-        explicit BOOST_UBLAS_INLINE
-        shallow_array_adaptor (size_type size):
-            size_ (size), own_ (true), data_ (new value_type [size]) {
-        }
-        BOOST_UBLAS_INLINE
-        shallow_array_adaptor (size_type size, const value_type &init):
-            size_ (size), own_ (true), data_ (new value_type [size]) {
-            std::fill (data_.get (), data_.get () + size_, init);
-        }
-        BOOST_UBLAS_INLINE
-        shallow_array_adaptor (size_type size, pointer data):
-            size_ (size), own_ (false), data_ (data, leaker<value_type> ()) {}
-
-        BOOST_UBLAS_INLINE
-        shallow_array_adaptor (const shallow_array_adaptor &a):
-            storage_array<self_type> (),
-            size_ (a.size_), own_ (a.own_), data_ (a.data_) {}
-
-        BOOST_UBLAS_INLINE
-        ~shallow_array_adaptor () {
-        }
-
-        // Resizing
-    private:
-        BOOST_UBLAS_INLINE
-        void resize_internal (size_type size, value_type init, bool preserve = true) {
-            if (size != size_) {
-                shared_array<value_type> data (new value_type [size]);
-                if (preserve) {
-                    std::copy (data_.get (), data_.get () + (std::min) (size, size_), data.get ());
-                    std::fill (data.get () + (std::min) (size, size_), data.get () + size, init);
-                }
-                size_ = size;
-                data_ = data;
-            }
-        }
-        BOOST_UBLAS_INLINE
-        void resize_internal (size_type size, pointer data, value_type init, bool preserve = true) {
-            if (preserve) {
-                std::copy (data_.get (), data_.get () + (std::min) (size, size_), data);
-                std::fill (data + (std::min) (size, size_), data + size, init);
-            }
-            size_ = size;
-            data_ = data;
-        }
-    public:
-        BOOST_UBLAS_INLINE
-        void resize (size_type size) {
-            resize_internal (size, value_type (), false);
-        }
-        BOOST_UBLAS_INLINE
-        void resize (size_type size, value_type init) {
-            resize_internal (size, init, true);
-        }
-        BOOST_UBLAS_INLINE
-        void resize (size_type size, pointer data) {
-            resize_internal (size, data, value_type (), false);
-        }
-        BOOST_UBLAS_INLINE
-        void resize (size_type size, pointer data, value_type init) {
-            resize_internal (size, data, init, true);
-        }
-
-        BOOST_UBLAS_INLINE
-        size_type size () const {
-            return size_;
-        }
-
-        // Element access
-        BOOST_UBLAS_INLINE
-        const_reference operator [] (size_type i) const {
-            BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            return data_ [i];
-        }
-        BOOST_UBLAS_INLINE
-        reference operator [] (size_type i) {
-            BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            return data_ [i];
-        }
-
-        // Assignment
-        BOOST_UBLAS_INLINE
-        shallow_array_adaptor &operator = (const shallow_array_adaptor &a) {
-            if (this != &a) {
-                resize (a.size_);
-                std::copy (a.data_.get (), a.data_.get () + a.size_, data_.get ());
-            }
-            return *this;
-        }
-        BOOST_UBLAS_INLINE
-        shallow_array_adaptor &assign_temporary (shallow_array_adaptor &a) {
-            if (own_ && a.own_)
-                swap (a);
-            else
-                *this = a;
-            return *this;
-        }
-
-        // Swapping
-        BOOST_UBLAS_INLINE
-        void swap (shallow_array_adaptor &a) {
-            if (this != &a) {
-                std::swap (size_, a.size_);
-                std::swap (own_, a.own_);
-                std::swap (data_, a.data_);
-            }
-        }
-        BOOST_UBLAS_INLINE
-        friend void swap (shallow_array_adaptor &a1, shallow_array_adaptor &a2) {
-            a1.swap (a2);
-        }
-
-        // Iterators simply are pointers.
-
-        typedef const_pointer const_iterator;
-
-        BOOST_UBLAS_INLINE
-        const_iterator begin () const {
-            return data_.get ();
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator end () const {
-            return data_.get () + size_;
-        }
-
-        typedef pointer iterator;
-
-        BOOST_UBLAS_INLINE
-        iterator begin () {
-            return data_.get ();
-        }
-        BOOST_UBLAS_INLINE
-        iterator end () {
-            return data_.get () + size_;
-        }
-
-        // Reverse iterators
-        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-        typedef std::reverse_iterator<iterator> reverse_iterator;
-
-        BOOST_UBLAS_INLINE
-        const_reverse_iterator rbegin () const {
-            return const_reverse_iterator (end ());
-        }
-        BOOST_UBLAS_INLINE
-        const_reverse_iterator rend () const {
-            return const_reverse_iterator (begin ());
-        }
-        BOOST_UBLAS_INLINE
-        reverse_iterator rbegin () {
-            return reverse_iterator (end ());
-        }
-        BOOST_UBLAS_INLINE
-        reverse_iterator rend () {
-            return reverse_iterator (begin ());
-        }
-
-    private:
-        size_type size_;
-        bool own_;
-        shared_array<value_type> data_;
-    };
-
-#endif
 
     // Range class
     template <class Z, class D>
