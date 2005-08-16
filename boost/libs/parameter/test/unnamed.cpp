@@ -15,16 +15,17 @@ namespace test
 {
   using namespace boost::parameter;
   namespace mpl = boost::mpl;
-  
+
+  BOOST_PARAMETER_KEYWORD(tag, name)
+  BOOST_PARAMETER_KEYWORD(tag, value)
+
   struct g_parameters
     : parameters<
-          unnamed<struct name_, boost::is_convertible<mpl::_, std::string> >
-        , unnamed<struct value_, boost::is_convertible<mpl::_, float> >
+          unnamed<tag::name, boost::is_convertible<mpl::_, std::string> >
+        , unnamed<tag::value, boost::is_convertible<mpl::_, float> >
       >
   {};
 
-  keyword<struct name_> name;
-  keyword<struct value_> value;
   
   template<class Params>
   int g_(Params const& p)
