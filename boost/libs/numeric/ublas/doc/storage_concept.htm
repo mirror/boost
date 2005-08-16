@@ -15,7 +15,7 @@ Storage concept</h1>
 <h2><a name="range" id="range"></a>Storage concept</h2>
 <h4>Description</h4>
 <p>Storage is a variable-size container whose elements are arranged in a strict linear order.
-<p>Storage extends the Container concept with some Sequence-like functionality. The main difference with
+<p>Storage extends the STL Container concept with some STL Sequence-like functionality. The main difference with
 the Sequence concept however is that the Storage concept does not require default-initialisation of its
 elements.
 <h4>Refinement of</h4>
@@ -122,8 +122,8 @@ Existing element values are preserved, additional elements are copies of <code>t
 <TD><tt>a.resize(n)</tt></TD>
 <TD><tt>n &lt;= a.max_size()</tt></TD>
 <TD>Modified the container so that it has exactly <tt>n</tt> elements.<br />
-The container may be reallocated if its size changes. Element values are undefined. That is
-each element value may be a previously assigned value or the value when it was constructed.</TD>
+The container may be reallocated if its size changes. Element values are uninitialised. That is,
+each element value may be a previously assigned value or default construced value for <code>T</code>.</TD>
 <TD><tt>a.size() == n</tt></TD>
 </tr>
 </table>
@@ -133,7 +133,7 @@ each element value may be a previously assigned value or the value when it was c
 <ul>
 <li><a href="unbounded_array.htm">unbounded_array</a>
 <li><a href="bounded_array.htm">bounded_array</a>
-<li><a href="range.htm">range, slice</a>
+<li><a href="array_adaptor.htm">carray_adaptor</a>
 </ul>
 <h4>Notes</h4>
 </body>
