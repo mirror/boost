@@ -39,6 +39,8 @@
 #include <boost/regex/pending/object_cache.hpp>
 #endif
 
+#include <istream>
+
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif

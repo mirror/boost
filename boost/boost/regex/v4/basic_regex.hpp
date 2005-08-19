@@ -49,9 +49,9 @@ struct regex_data
 
    regex_data(const ::boost::shared_ptr<
       ::boost::regex_traits_wrapper<traits> >& t) 
-      : m_ptraits(t) {}
+      : m_ptraits(t), m_expression(0), m_expression_len(0) {}
    regex_data() 
-      : m_ptraits(new ::boost::regex_traits_wrapper<traits>()) {}
+      : m_ptraits(new ::boost::regex_traits_wrapper<traits>()), m_expression(0), m_expression_len(0) {}
 
    ::boost::shared_ptr<
       ::boost::regex_traits_wrapper<traits>
@@ -375,7 +375,7 @@ public:
    // empty:
    bool BOOST_REGEX_CALL empty()const
    { 
-      return (m_pimpl.get() ? 0 != m_pimpl->status() : 0); 
+      return (m_pimpl.get() ? 0 != m_pimpl->status() : true); 
    }
 
    size_type BOOST_REGEX_CALL mark_count()const 

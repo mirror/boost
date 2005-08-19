@@ -517,8 +517,11 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_rep()
       // try and skip the repeat if we can:
       if(take_second)
       {
-         // store position in case we fail:
-         push_non_greedy_repeat(rep->next.p);
+         if((next_count->get_count() < rep->max) && take_first)
+         {
+            // store position in case we fail:
+            push_non_greedy_repeat(rep->next.p);
+         }
          pstate = rep->alt.p;
          return true;
       }
