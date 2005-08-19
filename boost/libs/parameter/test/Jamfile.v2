@@ -4,5 +4,6 @@ test-suite "parameter"
   :  [ run basics.cpp ]
      [ run sfinae.cpp ]
      [ run macros.cpp ]
+     [ run unnamed.cpp ]       
      [ compile unwrap_cv_reference.cpp ]
   ;
