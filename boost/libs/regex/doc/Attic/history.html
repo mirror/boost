@@ -24,6 +24,25 @@
       </P>
       <HR>
       <p></p>
+      <P>Boost 1.33.0 Hotfix</P>
+      <UL>
+         <LI>
+            Fixed broken makefiles.</LI>
+         <LI>
+            Fixed configuration setup to allow building with VC7.1 - STLport-4.6.2 when 
+            using /Zc:wchar_t.</LI>
+         <LI>
+            Moved declarations class-inline in static_mutex.hpp so that SGI Irix compiler 
+            can cope.</LI>
+         <LI>
+            Added missing #includes to fileiter.hpp and cpp_regex_traits.hpp, this is 
+            probably an SGI Irix specific fix.</LI>
+         <LI>
+            Fixed a bug where non-greedy repeats could in certain strange curcumstances 
+            repeat more times than their maximum value.</LI>
+         <LI>
+            Fixed the value returned by basic_regex&lt;&gt;::empty() from a default 
+            constructed object.</LI></UL>
       <P>Boost 1.33.0.</P>
       <UL>
          <LI>

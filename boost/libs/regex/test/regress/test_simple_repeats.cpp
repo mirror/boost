@@ -98,6 +98,20 @@ void test_simple_repeats()
    TEST_REGEX_SEARCH("a{ 2 , }", perl, "aaaaa", match_default, make_array(0, 5, -2, -2));
    TEST_REGEX_SEARCH("a{ 2 }", perl, "aaa", match_default, make_array(0, 2, -2, -2));
    TEST_REGEX_SEARCH("a\\{\\}", perl, "a{}", match_default, make_array(0, 3, -2, -2));
+   
+   TEST_REGEX_SEARCH("a{2,4}?", perl, "a", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?", perl, "aa", match_default, make_array(0, 2, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?", perl, "aaa", match_default, make_array(0, 2, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?", perl, "aaaa", match_default, make_array(0, 2, -2, 2, 4, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?", perl, "aaaaa", match_default, make_array(0, 2, -2, 2, 4, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?$", perl, "aa", match_default, make_array(0, 2, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?$", perl, "aaa", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?$", perl, "aaaa", match_default, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("a{2,4}?$", perl, "aaaaa", match_default, make_array(1, 5, -2, -2));
+   TEST_REGEX_SEARCH("^a{0,1}?$", perl, "aaaaa", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^(?:a){0,1}?$", perl, "aaaaa", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^a(?:bc)?", perl, "abcbc", match_any|match_all, make_array(-2, -2));
+
    TEST_INVALID_REGEX("a{}", perl);
    TEST_INVALID_REGEX("a{", perl);
    TEST_INVALID_REGEX("a{1", perl);

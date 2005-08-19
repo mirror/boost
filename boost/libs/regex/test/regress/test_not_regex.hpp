@@ -26,6 +26,31 @@
 struct test_invalid_regex_tag{};
 
 template<class charT, class traits>
+void test_empty(boost::basic_regex<charT, traits>& r)
+{
+   if(!r.empty())
+   {
+      BOOST_REGEX_TEST_ERROR("Invalid value returned from basic_regex<>::empty().", charT);
+   }
+   if(r.size())
+   {
+      BOOST_REGEX_TEST_ERROR("Invalid value returned from basic_regex<>::size().", charT);
+   }
+   if(r.str().size())
+   {
+      BOOST_REGEX_TEST_ERROR("Invalid value returned from basic_regex<>::str().", charT);
+   }
+   if(r.begin() != r.end())
+   {
+      BOOST_REGEX_TEST_ERROR("Invalid value returned from basic_regex<>::begin().", charT);
+   }
+   if(r.status() == 0)
+   {
+      BOOST_REGEX_TEST_ERROR("Invalid value returned from basic_regex<>::status().", charT);
+   }
+}
+
+template<class charT, class traits>
 void test(boost::basic_regex<charT, traits>& r, const test_invalid_regex_tag&)
 {
    const std::basic_string<charT>& expression = test_info<charT>::expression();
@@ -39,6 +64,7 @@ void test(boost::basic_regex<charT, traits>& r, const test_invalid_regex_tag&)
       {
          BOOST_REGEX_TEST_ERROR("Expression compiled when it should not have done so.", charT);
       }
+      test_empty(r);
    }
    catch(...)
    {
@@ -58,6 +84,7 @@ void test(boost::basic_regex<charT, traits>& r, const test_invalid_regex_tag&)
    catch(const boost::bad_expression&)
    {
       have_catch = true;
+      test_empty(r);
    }
    catch(const std::runtime_error& r)
    {

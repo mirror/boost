@@ -60,6 +60,12 @@ void do_test(const charT& c, const tagT& tag)
 #ifndef BOOST_NO_STD_LOCALE
    test_info<charT>::set_typename(typeid(boost::basic_regex<charT, boost::cpp_regex_traits<charT> >).name());
    boost::basic_regex<charT, boost::cpp_regex_traits<charT> > e1;
+   static bool done_empty_test = false;
+   if(done_empty_test == false)
+   {
+      test_empty(e1);
+      done_empty_test = true;
+   }
    if(test_locale::cpp_locale_state() == test_locale::test_with_locale)
       e1.imbue(test_locale::cpp_locale());
    if(test_locale::cpp_locale_state() != test_locale::no_test)
