@@ -20,7 +20,7 @@ public:
 
     bool operator==(point const& other) const
     {
-        return x = other.x && y == other.y;
+        return x == other.x && y == other.y;
     }
 
     friend std::size_t hash_value(point const& p)
@@ -49,3 +49,4 @@ int main()
     assert(point_hasher(p1) != point_hasher(p2));
     assert(point_hasher(p1) != point_hasher(p3));
 }
+

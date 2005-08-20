@@ -209,7 +209,7 @@ Say you have a point class, representing a two dimensional location:
 
         bool operator==(point const& other) const
         {
-            return x = other.x && y == other.y;
+            return x == other.x && y == other.y;
         }
     };
 
