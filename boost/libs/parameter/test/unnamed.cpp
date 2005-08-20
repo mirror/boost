@@ -26,11 +26,14 @@ namespace test
       >
   {};
 
+
+  // Keeping this out here avoids an ICE with vc-6.x
+  std::string const foo("foo");
   
   template<class Params>
   int g_(Params const& p)
   {
-      assert(p[name] == std::string("foo"));
+      assert(p[name] == foo);
       assert(p[value] == 3.14f);
       return 1;
   }
