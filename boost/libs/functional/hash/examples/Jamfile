@@ -1,0 +1,28 @@
+
+#  (C) Copyright Daniel James 2005.
+#  Use, modification and distribution are subject to the
+#  Boost Software License, Version 1.0. (See accompanying file
+#  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+subproject libs/functional/hash/examples ;
+
+import testing ;
+
+DEPENDS all : test ;
+
+rule hash-example ( name )
+{
+    return [
+        run $(name).cpp
+        : : : <include>$(BOOST_ROOT)
+        ] ;
+}
+
+{
+    test-suite functional/examples
+        :
+            [ hash-example books ]
+            [ hash-example point ]
+            [ hash-example portable ]
+        ;
+}
