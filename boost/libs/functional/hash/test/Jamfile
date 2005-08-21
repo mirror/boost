@@ -48,3 +48,5 @@ rule hash-test-output ( name )
             [ run link_test.cpp link_test_2.cpp : : : <include>$(BOOST_ROOT) ]
         ;
 }
+
+subinclude libs/functional/hash/examples ;

@@ -26,3 +26,5 @@ test-suite functional/hash
         [ run hash_map_test.cpp framework ]
         [ run link_test.cpp link_test_2.cpp ]
     ;
+
+build-project ../examples ;
