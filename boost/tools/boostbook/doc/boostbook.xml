@@ -268,6 +268,18 @@ using fop : FOP_COMMAND
       already set, you don't need to specify it above.
       </para>
     
+      <para>
+        Proper generation of images in PDFs depends on the <ulink
+        url="http://java.sun.com/products/jimi/#">Jimi Image
+        Library</ulink>.  To get FOP to use Jimi, extract the
+        <filename>JimiProClasses.zip</filename> file from the Jimi SDK
+        and rename it—if on Windows, to
+        <filename>jimi-1.0.jar</filename>, or if on *nix, to
+        <filename>JimiProClasses.jar</filename>—and place it in the
+        <filename>lib/</filename> subdirectory of your FOP
+        installation.
+      </para>
+
       <para>To test PDF generation, switch to the directory <filename
       class="directory">$BOOST_ROOT/libs/function/doc</filename> and
       execute the command <command>bjam --v2 pdf</command>. In the
