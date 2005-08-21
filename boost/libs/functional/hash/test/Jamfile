@@ -10,7 +10,7 @@ import testing ;
 
 DEPENDS all : test ;
 
-rule hash-test ( name )
+rule hash-test ( name + )
 {
     return [
         run $(name).cpp
@@ -19,7 +19,7 @@ rule hash-test ( name )
         ] ;
 }
 
-rule hash-test-output ( name )
+rule hash-test-output ( name + )
 {
     return [
         run $(name).cpp
@@ -45,8 +45,9 @@ rule hash-test-output ( name )
             [ hash-test hash_deque_test ]
             [ hash-test hash_set_test ]
             [ hash-test hash_map_test ]
-            [ run link_test.cpp link_test_2.cpp : : : <include>$(BOOST_ROOT) ]
+            [ hash-test link_test link_test_2 ]
         ;
 }
 
 subinclude libs/functional/hash/examples ;
+
