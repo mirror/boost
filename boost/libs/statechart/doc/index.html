@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/14<!--webbot bot="Timestamp" endspan i-checksum="12803" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/23<!--webbot bot="Timestamp" endspan i-checksum="12802" --></font></td>
   </tr>
 </table>
 <hr>
@@ -79,11 +79,17 @@ include:</p>
   error handling and threading</li>
 </ul>
 <h3><a name="Supported_platforms">Supported platforms</a></h3>
-<p>All code has been tested on the following platforms using boost 
-distribution 1.33.0:</p>
+<p>The library was tested on the following platforms (using boost 
+distribution 1.33.0):</p>
 <ul>
-  <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
-	<li>GCC 3.4.2 (MinGW 3.2.0)</li>
+  <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003): All tests 
+  pass</li>
+	<li>GCC 3.4.2 (MinGW 3.2.0): DllTestNormal fails. Therefore, 
+    BOOST_USE_NATIVE_RTTI should be defined if state machine code needs to 
+    reside in DLLs</li>
+  <li>Intel 9.0 (MSVC 7.1 base toolset): DllTestNormal and DllTestNative fail 
+  in <b>release mode only</b>. This compiler should therefore not be used to 
+  compile FSMs into DLLs</li>
 </ul>
 <p>In addition, previous versions of the library have also been tested on 
 the following platforms (I expect the current version to work, but it hasn't 
@@ -94,21 +100,18 @@ been tested yet):</p>
 	<li>GCC 3.3.1 (Dev-C++ 4.9.9.0): In release mode HistoryTest compilation 
 	takes forever and compiler memory footprint goes beyond 400MB, most likely 
 	a GCC bug</li>
-  <li>Intel 8.0 (Win32, MS Visual Studio 2003 std library)</li>
-  <li>Intel 8.1 (Win32, MS Visual Studio 2003 std library). All the examples 
-	worked as expected but some tests failed with an access violation inside the 
-	boost testing framework. Unfortunately, my evaluation license of the 
-	compiler expired before I managed to pin down the problem</li>
 </ul>
 <h3><a name="Incompatible_compilers">Incompatible compilers</a></h3>
 <p>The following compilers are known to have problems with Boost.Statechart:</p>
 <ul>
 	<li>MSVC 6.0 &amp; 7.0: Many compiler errors</li>
-  <li>Intel 7.0 (Win32, MS Visual Studio 6 std library). Most of the library, 
-  the examples and the tests can be compiled but the compiler appears to 
-  generate wrong code under certain circumstances, leading to crashes 
-  (currently (2005/05/16) the following tests fail: StateCastTest.cpp and 
-  TransitionTest.cpp)</li>
+  <li>Intel 7.0 (MSVC 6 base toolset): StateCastTest and 
+  TransitionTest have been reported to fail, probably due to a compiler bug</li>
+  <li>Intel 8.0 (MSVC 7.1 base toolset): TransitionTest has been reported to 
+  fail, probably due to a compiler bug</li>
+    <li>Intel 8.1 (MSVC 7.1 base toolset): Some tests failed with an access violation inside the 
+	boost testing framework. Unfortunately, my evaluation license of the 
+	compiler expired before I managed to pin down the problem</li>
   <li>BCB (all versions): Many compiler errors</li>
 </ul>
 <h3><a name="Getting_started">Getting started</a></h3>
@@ -552,7 +555,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->14 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34605" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->23 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34604" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
