@@ -27,7 +27,7 @@ namespace boost
     {
         template
         <
-            class T, 
+            class T,
             size_t N,
             class Allocator = int // dummy
         >
@@ -35,73 +35,73 @@ namespace boost
         {
         public:
             typedef Allocator allocator_type;
-            
-            ptr_array_impl( Allocator a = Allocator() ) 
+
+            ptr_array_impl( Allocator a = Allocator() )
             {
-                this->assign( 0 ); 
+                this->assign( 0 );
             }
-            
+
             ptr_array_impl( size_t, T*, Allocator a = Allocator() )
             {
-                this->assing( 0 );
+                this->assign( 0 );
             }
         };
     }
-    
+
     template
-    < 
-        class T, 
-        size_t N, 
+    <
+        class T,
+        size_t N,
         class CloneAllocator = heap_clone_allocator
     >
-    class ptr_array : public 
-        ptr_sequence_adapter< T, 
+    class ptr_array : public
+        ptr_sequence_adapter< T,
                               ptr_container_detail::ptr_array_impl<void*,N>,
                               CloneAllocator >
-    {  
+    {
     private:
-        typedef ptr_sequence_adapter< T,   
+        typedef ptr_sequence_adapter< T,
                                       ptr_container_detail::ptr_array_impl<void*,N>,
                                       CloneAllocator >
             base_class;
 
         typedef BOOST_DEDUCED_TYPENAME remove_nullable<T>::type U;
 
-        typedef ptr_array<T,N,CloneAllocator> 
+        typedef ptr_array<T,N,CloneAllocator>
                           this_type;
 
         ptr_array( const this_type& );
         void operator=( const this_type& );
-        
+
     public:
         typedef U*        value_type;
         typedef U*        pointer;
         typedef U&        reference;
         typedef const U&  const_reference;
-        typedef BOOST_DEDUCED_TYPENAME base_class::auto_type 
+        typedef BOOST_DEDUCED_TYPENAME base_class::auto_type
                           auto_type;
-        
+
     public: // constructors
         ptr_array() : base_class()
         { }
-        
-        ptr_array( std::auto_ptr<this_type> r ) 
-        : base_class( r ) { }            
+
+        ptr_array( std::auto_ptr<this_type> r )
+        : base_class( r ) { }
 
         void operator=( std::auto_ptr<this_type> r )
         {
             base_class::operator=(r);
         }
-        
-        std::auto_ptr<this_type> release()          
-        {                                    
-            std::auto_ptr<this_type> ptr( new this_type );     
-            this->swap( *ptr );                  
-            return ptr;                          
-        }                                    
-                
-        std::auto_ptr<this_type> clone() const      
-        {                                    
+
+        std::auto_ptr<this_type> release()
+        {
+            std::auto_ptr<this_type> ptr( new this_type );
+            this->swap( *ptr );
+            return ptr;
+        }
+
+        std::auto_ptr<this_type> clone() const
+        {
             std::auto_ptr<this_type> pa( new this_type );
             for( size_t i = 0; i != N; ++i )
             {
@@ -110,7 +110,7 @@ namespace boost
             }
             return pa;
         }
-        
+
     private: // hide some members
         using base_class::insert;
         using base_class::erase;
@@ -120,7 +120,7 @@ namespace boost
         using base_class::pop_back;
         using base_class::transfer;
         using base_class::get_allocator;
-                
+
     public: // compile-time interface
 
         template< size_t idx >
@@ -129,7 +129,7 @@ namespace boost
             BOOST_STATIC_ASSERT( idx < N );
 
             this->enforce_null_policy( r, "Null pointer in 'ptr_array::replace()'" );
-            
+
             auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
             this->c_private()[idx] = r;                                      // nothrow
             return move(res);                                                // nothrow
@@ -155,21 +155,21 @@ namespace boost
         T& at()
         {
             BOOST_STATIC_ASSERT( idx < N );
-            return (*this)[idx]; 
+            return (*this)[idx];
         }
 
         template< size_t idx >
         const T& at() const
         {
             BOOST_STATIC_ASSERT( idx < N );
-            return (*this)[idx]; 
+            return (*this)[idx];
         }
 
         bool is_null( size_t idx ) const
         {
             return base_class::is_null(idx);
         }
-        
+
         template< size_t idx >
         bool is_null() const
         {
