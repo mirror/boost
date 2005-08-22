@@ -19,7 +19,7 @@
 // implementation helper:
 
 
-#if !(BOOST_WORKAROUND(__GNUC__,== 3) && (__GNUC_MINOR__ <= 2))
+#if !(BOOST_WORKAROUND(__GNUC__,== 3) && BOOST_WORKAROUND(__GNUC_MINOR__, <= 2))
 namespace boost {
 namespace detail {
 #else
