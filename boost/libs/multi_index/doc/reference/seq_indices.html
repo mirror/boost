@@ -145,7 +145,8 @@ like <code>std::list</code>. Elements in a sequenced index are by default
 sorted according to their order of insertion: this means that new elements
 inserted through a different index of the <code>multi_index_container</code> are appended
 to the end of the sequenced index. Additionally, the index allows for free
-reordering of elements in the same vein as <code>std::list</code> does.
+reordering of elements in the same vein as <code>std::list</code> does. Validity
+of iterators and references to elements is preserved in all operations.
 </p>
 
 <p>
@@ -878,7 +879,7 @@ Key extraction
 
 <br>
 
-<p>Revised February 7th 2005</p>
+<p>Revised August 22nd 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
