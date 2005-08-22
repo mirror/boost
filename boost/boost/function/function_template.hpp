@@ -244,7 +244,7 @@ namespace boost {
 #ifndef BOOST_NO_VOID_RETURNS
     typedef R         result_type;
 #else
-    typedef  typename detail::function::function_return_type<R>::type
+    typedef  typename ::boost::detail::function::function_return_type<R>::type
       result_type;
 #endif // BOOST_NO_VOID_RETURNS
 
@@ -386,7 +386,8 @@ namespace boost {
     {
       if (this->manager) {
         function_base::functor =
-          this->manager(this->functor, detail::function::destroy_functor_tag);
+          this->manager(this->functor, 
+                        ::boost::detail::function::destroy_functor_tag);
       }
 
       this->manager = 0;
@@ -419,24 +420,24 @@ namespace boost {
         invoker = f.invoker;
         this->manager = f.manager;
         this->functor =
-          f.manager(f.functor, detail::function::clone_functor_tag);
+          f.manager(f.functor, ::boost::detail::function::clone_functor_tag);
       }
     }
 
     template<typename Functor>
     void assign_to(Functor f)
     {
-      typedef typename detail::function::get_function_tag<Functor>::type tag;
+      typedef typename ::boost::detail::function::get_function_tag<Functor>::type tag;
       this->assign_to(f, tag());
     }
 
     template<typename FunctionPtr>
-    void assign_to(FunctionPtr f, detail::function::function_ptr_tag)
+    void assign_to(FunctionPtr f, ::boost::detail::function::function_ptr_tag)
     {
       clear();
 
       if (f) {
-        typedef typename detail::function::BOOST_FUNCTION_GET_FUNCTION_INVOKER<
+        typedef typename ::boost::detail::function::BOOST_FUNCTION_GET_FUNCTION_INVOKER<
                            FunctionPtr,
                            R BOOST_FUNCTION_COMMA
                            BOOST_FUNCTION_TEMPLATE_ARGS
@@ -445,31 +446,31 @@ namespace boost {
 
         invoker = &actual_invoker_type::invoke;
         this->manager =
-          &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
+          &::boost::detail::function::functor_manager<FunctionPtr, Allocator>::manage;
         this->functor =
-          this->manager(detail::function::make_any_pointer(
+          this->manager(::boost::detail::function::make_any_pointer(
                             // should be a reinterpret cast, but some compilers
                             // insist on giving cv-qualifiers to free functions
                             (void (*)())(f)
                           ),
-                          detail::function::clone_functor_tag);
+                          ::boost::detail::function::clone_functor_tag);
       }
     }
 
 #if BOOST_FUNCTION_NUM_ARGS > 0
     template<typename MemberPtr>
-    void assign_to(MemberPtr f, detail::function::member_ptr_tag)
+    void assign_to(MemberPtr f, ::boost::detail::function::member_ptr_tag)
     {
       this->assign_to(mem_fn(f));
     }
 #endif // BOOST_FUNCTION_NUM_ARGS > 0
 
     template<typename FunctionObj>
-    void assign_to(FunctionObj f, detail::function::function_obj_tag)
+    void assign_to(FunctionObj f, ::boost::detail::function::function_obj_tag)
     {
-      if (!detail::function::has_empty_target(boost::addressof(f))) {
+      if (!::boost::detail::function::has_empty_target(boost::addressof(f))) {
         typedef
-          typename detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
+          typename ::boost::detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
                                        FunctionObj,
                                        R BOOST_FUNCTION_COMMA
                                        BOOST_FUNCTION_TEMPLATE_ARGS
@@ -477,7 +478,7 @@ namespace boost {
           actual_invoker_type;
 
         invoker = &actual_invoker_type::invoke;
-        this->manager = &detail::function::functor_manager<
+        this->manager = &::boost::detail::function::functor_manager<
                                     FunctionObj, Allocator>::manage;
 #ifndef BOOST_NO_STD_ALLOCATOR
         typedef typename Allocator::template rebind<FunctionObj>::other
@@ -493,17 +494,17 @@ namespace boost {
         FunctionObj* new_f = new FunctionObj(f);
 #endif // BOOST_NO_STD_ALLOCATOR
         this->functor =
-          detail::function::make_any_pointer(static_cast<void*>(new_f));
+          ::boost::detail::function::make_any_pointer(static_cast<void*>(new_f));
       }
     }
 
     template<typename FunctionObj>
     void assign_to(const reference_wrapper<FunctionObj>& f,
-                   detail::function::function_obj_ref_tag)
+                   ::boost::detail::function::function_obj_ref_tag)
     {
-      if (!detail::function::has_empty_target(f.get_pointer())) {
+      if (!::boost::detail::function::has_empty_target(f.get_pointer())) {
         typedef
-          typename detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
+          typename ::boost::detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
                                        FunctionObj,
                                        R BOOST_FUNCTION_COMMA
                                        BOOST_FUNCTION_TEMPLATE_ARGS
@@ -511,20 +512,20 @@ namespace boost {
           actual_invoker_type;
 
         invoker = &actual_invoker_type::invoke;
-        this->manager = &detail::function::trivial_manager<FunctionObj>::get;
+        this->manager = &::boost::detail::function::trivial_manager<FunctionObj>::get;
         this->functor =
           this->manager(
-            detail::function::make_any_pointer(
+            ::boost::detail::function::make_any_pointer(
               const_cast<FunctionObj*>(f.get_pointer())),
-            detail::function::clone_functor_tag);
+            ::boost::detail::function::clone_functor_tag);
       }
     }
 
     template<typename FunctionObj>
-    void assign_to(FunctionObj, detail::function::stateless_function_obj_tag)
+    void assign_to(FunctionObj, ::boost::detail::function::stateless_function_obj_tag)
     {
       typedef
-          typename detail::function::
+          typename ::boost::detail::function::
                      BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER<
                        FunctionObj,
                        R BOOST_FUNCTION_COMMA
@@ -532,11 +533,11 @@ namespace boost {
                      >::type
           actual_invoker_type;
       invoker = &actual_invoker_type::invoke;
-      this->manager = &detail::function::trivial_manager<FunctionObj>::get;
-      this->functor = detail::function::make_any_pointer(this);
+      this->manager = &::boost::detail::function::trivial_manager<FunctionObj>::get;
+      this->functor = ::boost::detail::function::make_any_pointer(this);
     }
 
-    typedef result_type (*invoker_type)(detail::function::any_pointer
+    typedef result_type (*invoker_type)(::boost::detail::function::any_pointer
                                         BOOST_FUNCTION_COMMA
                                         BOOST_FUNCTION_TEMPLATE_ARGS);
 
