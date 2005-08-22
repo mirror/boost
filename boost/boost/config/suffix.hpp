@@ -37,13 +37,6 @@
 #  define BOOST_HAS_LONG_LONG
 #endif
 
-// TODO: Remove the following lines after the 1.33 release because the presence
-// of an integral 64 bit type has nothing to do with support for long long.
-
-#if !defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(__DECCXX_VER)
-#  define BOOST_NO_INTEGRAL_INT64_T
-#endif
-
 // GCC 3.x will clean up all of those nasty macro definitions that
 // BOOST_NO_CTYPE_FUNCTIONS is intended to help work around, so undefine
 // it under GCC 3.x.
