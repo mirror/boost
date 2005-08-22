@@ -31,6 +31,8 @@ int main()
 
     //assert(books.find(knife) != books.end());
     //assert(books.find(dandelion) == books.end());
+
+    return 0;
 }
 
 namespace library

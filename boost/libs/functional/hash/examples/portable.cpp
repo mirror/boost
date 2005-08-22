@@ -53,4 +53,6 @@ int main()
     assert(hasher(x) == hasher(x));
     assert(hasher(x) != hasher(y));
     assert(hasher(x) == hasher(z));
+
+    return 0;
 }

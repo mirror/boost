@@ -48,5 +48,7 @@ int main()
     // hash function.
     assert(point_hasher(p1) != point_hasher(p2));
     assert(point_hasher(p1) != point_hasher(p3));
+
+    return 0;
 }
 
