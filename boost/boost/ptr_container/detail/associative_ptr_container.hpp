@@ -114,7 +114,7 @@ namespace ptr_container_detail
         iterator erase( iterator first,
                         iterator last ) // nothrow
         {
-            BOOST_ASSERT( !this->empty() );
+            //BOOST_ASSERT( !this->empty() );
 
             iterator res( last );                                // nothrow
             if( res != this->end() )

@@ -452,20 +452,20 @@ namespace ptr_container_detail
             return res;
         }
 
-        iterator erase( iterator x ) // nothrow 
-        { 
-            BOOST_ASSERT( !empty() );
-            BOOST_ASSERT( x != end() );
-            
-            remove( x ); 
-            return iterator( c_.erase( x.base() ) );
-        }
-        
-        iterator erase( iterator first, iterator last ) // nothrow 
+        iterator erase( iterator x ) // nothrow
         {
             BOOST_ASSERT( !empty() );
-            remove( first, last ); 
-            return iterator( c_.erase( first.base(), 
+            BOOST_ASSERT( x != end() );
+
+            remove( x );
+            return iterator( c_.erase( x.base() ) );
+        }
+
+        iterator erase( iterator first, iterator last ) // nothrow
+        {
+            //BOOST_ASSERT( !empty() );
+            remove( first, last );
+            return iterator( c_.erase( first.base(),
                                        last.base() ) );
         }
 
@@ -474,10 +474,10 @@ namespace ptr_container_detail
         {
             return erase( adl_begin(r), adl_end(r) );
         }
-        
-        void clear()                               
-        { 
-            remove_all(); 
+
+        void clear()
+        {
+            remove_all();
             c_.clear();
         }
         
