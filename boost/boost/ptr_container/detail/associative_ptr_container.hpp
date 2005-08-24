@@ -25,17 +25,17 @@ namespace boost
 namespace ptr_container_detail
 {
     template
-    < 
-        class Config, 
+    <
+        class Config,
         class CloneAllocator
     >
-    class associative_ptr_container : 
+    class associative_ptr_container :
         public reversible_ptr_container<Config,CloneAllocator>
     {
-        typedef reversible_ptr_container<Config,CloneAllocator> 
+        typedef reversible_ptr_container<Config,CloneAllocator>
                                 base_type;
 
-        typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+        typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter
                                 scoped_deleter;
 
     public: // typedefs
@@ -46,32 +46,32 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME Config::value_compare
                                 value_compare;
         typedef BOOST_DEDUCED_TYPENAME Config::iterator
-                                iterator; 
+                                iterator;
         typedef BOOST_DEDUCED_TYPENAME Config::const_iterator
-                                const_iterator; 
+                                const_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                                 size_type;
 
     public: // foundation
-        
+
        template< class Compare, class Allocator >
        associative_ptr_container( const Compare& comp,
                                     const Allocator& a )
-         : base_type( comp, a ) 
+         : base_type( comp, a )
        { }
 
        template< class InputIterator, class Compare, class Allocator >
        associative_ptr_container( InputIterator first, InputIterator last,
                                     const Compare& comp,
-                                    const Allocator& a ) 
-         : base_type( first, last, comp, a ) 
+                                    const Allocator& a )
+         : base_type( first, last, comp, a )
        { }
 
        template< class PtrContainer >
-       associative_ptr_container( std::auto_ptr<PtrContainer> r ) 
+       associative_ptr_container( std::auto_ptr<PtrContainer> r )
          : base_type( r, key_compare() )
        { }
-       
+
        template< class PtrContainer >
        void operator=( std::auto_ptr<PtrContainer> r )
        {
@@ -79,40 +79,40 @@ namespace ptr_container_detail
        }
 
     public: // associative container interface
-        key_compare key_comp() const 
+        key_compare key_comp() const
         {
             return this->c_private().key_comp();
         }
-        
+
         value_compare value_comp() const
         {
             return this->c_private().value_comp();
         }
-        
-        iterator erase( iterator before ) // nothrow 
+
+        iterator erase( iterator before ) // nothrow
         {
-            BOOST_ASSERT( !this->empty() ); 
+            BOOST_ASSERT( !this->empty() );
             BOOST_ASSERT( before != this->end() );
-            
+
             this->remove( before );                      // nothrow
-            iterator res( before );                      // nothrow   
+            iterator res( before );                      // nothrow
             ++res;                                       // nothrow
             this->c_private().erase( before.base() );    // nothrow
             return res;                                  // nothrow
         }
-        
+
         size_type erase( const key_type& x ) // nothrow
         {
-            BOOST_ASSERT( !this->empty() );        
-            iterator i = find( x );                     // nothrow
+            //BOOST_ASSERT( !this->empty() );
+            iterator i( this->c_private().find( x ) );  // nothrow
             if( i == this->end() )                      // nothrow
-                return 0;                               // nothrow
+                return 0u;                              // nothrow
             this->remove( i );                          // nothrow
-            return this->c_private().erase( i.base() ); // nothrow
+            return this->c_private().erase( x );        // nothrow
         }
-        
-        iterator erase( iterator first, 
-                        iterator last ) // nothrow 
+
+        iterator erase( iterator first,
+                        iterator last ) // nothrow
         {
             BOOST_ASSERT( !this->empty() );
 
@@ -127,7 +127,7 @@ namespace ptr_container_detail
 
     protected:
 
-        void multi_transfer( iterator object, 
+        void multi_transfer( iterator object,
                              associative_ptr_container& from ) // strong
         {
             BOOST_ASSERT( &from != this );
@@ -137,8 +137,8 @@ namespace ptr_container_detail
             from.c_private().erase( object.base() );        // nothrow
         }
 
-        size_type multi_transfer( iterator first, 
-                                  iterator last, 
+        size_type multi_transfer( iterator first,
+                                  iterator last,
                                   associative_ptr_container& from ) // basic
         {
             BOOST_ASSERT( &from != this );
@@ -158,13 +158,13 @@ namespace ptr_container_detail
             return res;
         }
 
-        bool single_transfer( iterator object, 
+        bool single_transfer( iterator object,
                               associative_ptr_container& from ) // strong
         {
             BOOST_ASSERT( &from != this );
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
-            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p = 
+            std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p =
                 this->c_private().insert( *object.base() );     // strong
             if( p.second )
                 from.c_private().erase( object.base() );        // nothrow
@@ -172,8 +172,8 @@ namespace ptr_container_detail
             return p.second;
         }
 
-        size_type single_transfer( iterator first, 
-                                   iterator last, 
+        size_type single_transfer( iterator first,
+                                   iterator last,
                                    associative_ptr_container& from ) // basic
         {
             BOOST_ASSERT( &from != this );
@@ -183,7 +183,7 @@ namespace ptr_container_detail
             for( ; first != last; )
             {
                 BOOST_ASSERT( first != from.end() );
-                std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p = 
+                std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p =
                     this->c_private().insert( *first.base() );     // strong
                 iterator to_delete( first );
                 ++first;
@@ -195,7 +195,7 @@ namespace ptr_container_detail
             }
             return res;
         }
-        
+
      }; // class 'associative_ptr_container'
     
 } // namespace 'ptr_container_detail'
