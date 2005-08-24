@@ -39,21 +39,21 @@ std::string get_next_key<std::string>( const std::string& )
 
 template< typename C, typename B, typename T >
 void ptr_map_test()
-{   
+{
     using namespace boost;
-    
-    BOOST_MESSAGE( "starting associative container test" ); 
+
+    BOOST_MESSAGE( "starting associative container test" );
     enum { max_cnt = 10, size = 100 };
     C  c;
     BOOST_CHECK( c.size() == 0 );
-    
+
     const C c2( c.begin(), c.end() );
     BOOST_CHECK( c.size() == c2.size() );
-    
+
     C c3;
-    
-    BOOST_MESSAGE( "finished construction test" ); 
-                 
+
+    BOOST_MESSAGE( "finished construction test" );
+
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
     BOOST_DEDUCED_TYPENAME C::const_iterator ci           = c2.begin();
@@ -63,28 +63,28 @@ void ptr_map_test()
     BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cri  = c2.rbegin();
     BOOST_DEDUCED_TYPENAME C::reverse_iterator rv2        = c.rend();
     BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cvr2 = c2.rend();
-                             
+
     BOOST_DEDUCED_TYPENAME C::key_type a_key;
-    
-    BOOST_MESSAGE( "finished iterator test" ); 
-   
+
+    BOOST_MESSAGE( "finished iterator test" );
+
     BOOST_DEDUCED_TYPENAME C::size_type s                 = c.size();
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
     hide_warning(s2);
     BOOST_CHECK_EQUAL( c.size(), s );
     bool b                                                = c.empty();
     hide_warning(b);
-    BOOST_MESSAGE( "finished accessors test" ); 
+    BOOST_MESSAGE( "finished accessors test" );
 
     a_key = get_next_key( a_key );
     c.insert( a_key, new T );
     a_key = get_next_key( a_key );
     c.insert( a_key, new T );
     c3.insert( c.begin(), c.end() );
-    c.insert( c3 ); 
+    c.insert( c3 );
     c.erase( c.begin() );
     c3.erase( c3.begin(), c3.end() );
-    
+
     BOOST_CHECK( c3.empty() );
     c.swap( c3 );
     swap(c,c3);
@@ -92,7 +92,7 @@ void ptr_map_test()
     BOOST_CHECK( !c3.empty() );
     c3.clear();
     BOOST_CHECK( c3.empty() );
-    BOOST_MESSAGE( "finished modifiers test" ); 
+    BOOST_MESSAGE( "finished modifiers test" );
 
 
     a_key = get_next_key( a_key );
@@ -102,14 +102,14 @@ void ptr_map_test()
     typename C::auto_type ptr2  = c.release( c.begin() );
     std::auto_ptr<C> ap         = c.release();
     c                           = c2.clone();
-    BOOST_MESSAGE( "finished release/clone test" ); 
-  
+    BOOST_MESSAGE( "finished release/clone test" );
+
 
     a_key = get_next_key( a_key );
     c3.insert( a_key, new T );
     a_key = get_next_key( a_key );
     c3.insert( a_key, new T );
-    
+
     c.transfer( c3.begin(), c3 );
     c.transfer( c3.begin(), c3.end(), c3 );
     BOOST_CHECK( c3.empty() );
@@ -123,13 +123,13 @@ void ptr_map_test()
     BOOST_CHECK( !c.empty() );
     BOOST_CHECK( c3.empty() );
     c3.transfer(c);
-#endif    
-    BOOST_MESSAGE( "finished transfer test" );         
+#endif
+    BOOST_MESSAGE( "finished transfer test" );
 
     BOOST_CHECK( !c3.empty() );
-    c3.replace( c3.begin(), new T );   
-    BOOST_MESSAGE( "finished set/map interface test" );         
-    
+    c3.replace( c3.begin(), new T );
+    BOOST_MESSAGE( "finished set/map interface test" );
+
     // @todo: make macro with algorithms so that the right erase() is called.
     //  c.unique();
     //  c.unique( std::not_equal_to<T>() );
@@ -147,7 +147,7 @@ void ptr_map_test()
     i  = c.upper_bound( get_next_key( a_key ) );
     ci = c2.upper_bound( get_next_key( a_key ) );
     sub  = c.equal_range( get_next_key( a_key ) );
-    csub = c2.equal_range( get_next_key( a_key ) );         
+    csub = c2.equal_range( get_next_key( a_key ) );
 
     try
     {
@@ -162,16 +162,21 @@ void ptr_map_test()
     }
     catch( const bad_ptr_container_operation& )
     { }
-    
-    BOOST_MESSAGE( "finished algorithms interface test" );         
+
+    BOOST_MESSAGE( "finished algorithms interface test" );
 
     typename C::iterator it = c.begin(), e = c.end();
     for( ; it != e; ++it )
     {
         std::cout << "\n mapped value = " << *it << " key = " << i.key();
     }
-    
-    BOOST_MESSAGE( "finished iterator test" );         
+
+    BOOST_MESSAGE( "finished iterator test" );
+
+    a_key = get_next_key( a_key );
+    c.insert( a_key, new T );
+    c.erase( a_key );
+    c.erase( a_key );
 }
 
 
