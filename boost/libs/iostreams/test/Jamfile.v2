@@ -38,6 +38,8 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams copy_test.cpp ]
           [ test-iostreams counter_test.cpp ]
           [ test-iostreams direct_adapter_test.cpp ]
+          [ test-iostreams example_test.cpp ]
+          [ test-iostreams file_test.cpp ]
           [ test-iostreams 
                 file_descriptor_test.cpp 
                 ../src/file_descriptor.cpp ]

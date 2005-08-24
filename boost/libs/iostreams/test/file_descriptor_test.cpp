@@ -33,39 +33,51 @@ void file_descriptor_test()
     {
         fdistream  first(file_descriptor_source(test1.name()), 0);
         ifstream   second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from file_descriptor_source in chars with no buffer"
         );
+        first->close();
+        BOOST_CHECK(!first->is_open());
     }
 
     {
         fdistream  first(file_descriptor_source(test1.name()), 0);
         ifstream   second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from file_descriptor_source in chunks with no buffer"
         );
+        first->close();
+        BOOST_CHECK(!first->is_open());
     }
 
     {
         file_descriptor_source  file(test1.name());
         fdistream               first(file);
         ifstream                second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from file_descriptor_source in chars with buffer"
         );
+        first->close();
+        BOOST_CHECK(!first->is_open());
     }
 
     {
         file_descriptor_source  file(test1.name());
         fdistream               first(file);
         ifstream                second(test2.name().c_str());
+        BOOST_CHECK(first->is_open());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from file_descriptor_source in chunks with buffer"
         );
+        first->close();
+        BOOST_CHECK(!first->is_open());
     }
 
     //--------------Test file_descriptor_sink---------------------------------//
@@ -74,48 +86,60 @@ void file_descriptor_test()
         temp_file             temp;
         file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file, 0);
+        BOOST_CHECK(out->is_open());
         write_data_in_chars(out);
         out.close();
         BOOST_CHECK_MESSAGE(
             compare_files(test1.name(), temp.name()),
             "failed writing to file_descriptor_sink in chars with no buffer"
         );
+        file.close();
+        BOOST_CHECK(!file.is_open());
     }
 
     {
         temp_file             temp;
         file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file, 0);
+        BOOST_CHECK(out->is_open());
         write_data_in_chunks(out);
         out.close();
         BOOST_CHECK_MESSAGE(
             compare_files(test1.name(), temp.name()),
             "failed writing to file_descriptor_sink in chunks with no buffer"
         );
+        file.close();
+        BOOST_CHECK(!file.is_open());
     }
 
     {
         temp_file             temp;
         file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file);
+        BOOST_CHECK(out->is_open());
         write_data_in_chars(out);
         out.close();
         BOOST_CHECK_MESSAGE(
             compare_files(test1.name(), temp.name()),
             "failed writing to file_descriptor_sink in chars with buffer"
         );
+        file.close();
+        BOOST_CHECK(!file.is_open());
     }
 
     {
         temp_file             temp;
         file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file);
+        BOOST_CHECK(out->is_open());
         write_data_in_chunks(out);
         out.close();
         BOOST_CHECK_MESSAGE(
             compare_files(test1.name(), temp.name()),
             "failed writing to file_descriptor_sink in chunks with buffer"
         );
+        file.close();
+        BOOST_CHECK(!file.is_open());
     }
 
     //--------------Test file_descriptor--------------------------------------//

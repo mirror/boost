@@ -7,6 +7,8 @@
 #include <stdexcept>  // out_of_range.
 #include <typeinfo>
 #include <utility>    // pair.
+#include <boost/config.hpp>              // BOOST_MSVC.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/stream.hpp>
@@ -75,20 +77,74 @@ void component_type_test()
     out.push(tolower_multichar_filter());
     out.push(file_sink(dest.name(), out_mode));
 
-    // Check component types.
-
+    // Check index 0.
+    BOOST_CHECK(COMPARE_TYPE_ID(
+        out.component_type(0),
+        typeid(tolower_filter)
+    ));
     BOOST_CHECK(COMPARE_TYPE_ID(
         BOOST_IOSTREAMS_COMPONENT_TYPE(out, 0), 
         typeid(tolower_filter)
+    ));
+    BOOST_CHECK_NO_THROW((
+        BOOST_IOSTREAMS_COMPONENT(out, 0, tolower_filter)
+    ));
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    BOOST_CHECK_NO_THROW((
+        out.component<tolower_filter>(0)
+    ));
+    BOOST_CHECK_NO_THROW((
+        out.component<0, tolower_filter>()
+    ));
+#endif
+
+    // Check index 1.
+    BOOST_CHECK(COMPARE_TYPE_ID(
+        out.component_type(1),
+        typeid(tolower_multichar_filter)
     ));
     BOOST_CHECK(COMPARE_TYPE_ID(
         BOOST_IOSTREAMS_COMPONENT_TYPE(out, 1), 
         typeid(tolower_multichar_filter)
     ));
+    BOOST_CHECK_NO_THROW((
+        BOOST_IOSTREAMS_COMPONENT(out, 1, tolower_multichar_filter)
+    ));
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    BOOST_CHECK_NO_THROW((
+        out.component<tolower_multichar_filter>(1)
+    ));
+    BOOST_CHECK_NO_THROW((
+        out.component<1, tolower_multichar_filter>()
+    ));
+#endif
+
+    // Check index 2.
+    BOOST_CHECK(COMPARE_TYPE_ID(
+        out.component_type(2),
+        typeid(file_sink)
+    ));
     BOOST_CHECK(COMPARE_TYPE_ID(
         BOOST_IOSTREAMS_COMPONENT_TYPE(out, 2), 
         typeid(file_sink)
     ));
+    BOOST_CHECK_NO_THROW((
+        BOOST_IOSTREAMS_COMPONENT(out, 2, file_sink)
+    ));
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    BOOST_CHECK_NO_THROW((
+        out.component<file_sink>(2)
+    ));
+    BOOST_CHECK_NO_THROW((
+        out.component<2, file_sink>()
+    ));
+#endif
+
+    // Check index 3.
+    BOOST_CHECK_THROW(
+        out.component_type(3),
+        std::out_of_range
+    );
     BOOST_CHECK_THROW(
         BOOST_IOSTREAMS_COMPONENT_TYPE(out, 3),
         std::out_of_range
