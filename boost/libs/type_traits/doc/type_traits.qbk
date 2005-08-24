@@ -1197,13 +1197,13 @@ __header ` #include <boost/type_traits/add_volatile.hpp>` or ` #include <boost/t
 
 [section:aligned_storage aligned_storage]
 
-   template <std::size_t Align>
+   template <std::size_t Size, std::size_t Align>
    struct aligned_storage
    {
       typedef __below type;
    };
   
-__type a built-in or POD type with an alignment 
+__type a built-in or POD type with size `Size` and an alignment 
 that is a multiple of `Align`.  
 
 __header ` #include <boost/type_traits/aligned_storage.hpp>` or ` #include <boost/type_traits.hpp>`
@@ -2794,13 +2794,13 @@ __header ` #include <boost/type_traits/remove_volatile.hpp>` or ` #include <boos
 
 [section:type_with_alignment type_with_alignment]
 
-   template <std::size_t Size, std::size_t Align>
+   template <std::size_t Align>
    struct type_with_alignment
    {
       typedef __below type;
    };
   
-__type a built-in or POD type with size `Size` and an alignment 
+__type a built-in or POD type with an alignment 
 that is a multiple of `Align`.  
 
 __header ` #include <boost/type_traits/type_with_alignment.hpp>` or ` #include <boost/type_traits.hpp>`
