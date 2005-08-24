@@ -27,25 +27,28 @@
       <P>Boost 1.33.0 Hotfix</P>
       <UL>
          <LI>
-            Fixed broken makefiles.</LI>
+         Fixed broken makefiles.
          <LI>
-            Fixed configuration setup to allow building with VC7.1 - STLport-4.6.2 when 
-            using /Zc:wchar_t.</LI>
+         Fixed configuration setup to allow building with VC7.1 - STLport-4.6.2 when 
+         using /Zc:wchar_t.
          <LI>
-            Moved declarations class-inline in static_mutex.hpp so that SGI Irix compiler 
-            can cope.</LI>
+         Moved declarations class-inline in static_mutex.hpp so that SGI Irix compiler 
+         can cope.
          <LI>
-            Added missing #includes to fileiter.hpp and cpp_regex_traits.hpp, this is 
-            probably an SGI Irix specific fix.</LI>
+         Added missing #includes to fileiter.hpp and cpp_regex_traits.hpp, this is 
+         probably an SGI Irix specific fix.
          <LI>
-            Fixed a bug where non-greedy repeats could in certain strange curcumstances 
-            repeat more times than their maximum value.</LI>
+         Fixed a bug where non-greedy repeats could in certain strange curcumstances 
+         repeat more times than their maximum value.
          <LI>
-            Fixed the value returned by basic_regex&lt;&gt;::empty() from a default 
-            constructed object.</LI>
+         Fixed the value returned by basic_regex&lt;&gt;::empty() from a default 
+         constructed object.
          <LI>
-            Changed the deffinition of regex_error to make it backwards compatible with 
-            Boost-1.32.0.</LI></UL>
+         Changed the deffinition of regex_error to make it backwards compatible with 
+         Boost-1.32.0.
+         <LI>
+            Disabled external templates for Intel C++ 8.0 and earlier - otherwise 
+            unresolved references can occur.</LI></UL>
       <P>Boost 1.33.0.</P>
       <UL>
          <LI>
