@@ -37,8 +37,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/type.hpp>
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1310)
-# include <boost/type.hpp>
 # include <boost/mpl/int.hpp>
 #endif
 
@@ -56,19 +56,18 @@
 # define BOOST_IOSTREAMS_COMPARE_TYPE_ID(X,Y) ((X)==(Y))
 #endif
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
-# define BOOST_IOSTREAMS_COMPONENT_TYPE(chain, index) \
-    chain.component_type< index >() \
+// Deprecated
+#define BOOST_IOSTREAMS_COMPONENT_TYPE(chain, index) \
+    chain.component_type( index ) \
     /**/
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
 # define BOOST_IOSTREAMS_COMPONENT(chain, index, target) \
-    chain.component< index, target >() \
+    chain.component< target >( index ) \
     /**/
 #else
-# define BOOST_IOSTREAMS_COMPONENT_TYPE(chain, index) \
-    chain.component_type( ::boost::mpl::int_< index >() ) \
-    /**/
 # define BOOST_IOSTREAMS_COMPONENT(chain, index, target) \
-    chain.component( ::boost::mpl::int_< index >(), ::boost::type< target >() ) \
+    chain.component( index, ::boost::type< target >() ) \
     /**/
 #endif
 
@@ -165,47 +164,41 @@ public:
 
     //----------Direct component access---------------------------------------//
 
+    const std::type_info& component_type(int n) const
+    {
+        if (n >= size())
+            throw std::out_of_range("bad chain offset");
+        return (*boost::next(list().begin(), n))->component_type();
+    }
+
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    // Deprecated.
     template<int N>
-    const std::type_info& component_type() const
-    {
-        if (N >= size())
-            throw std::out_of_range("bad chain offset");
-        return (*boost::next(list().begin(), N))->component_type();
-    }
+    const std::type_info& component_type() const { return component_type(N); }
 
-    template<int N, typename T>
-    T* component() const
-    {
-        if (N >= size())
-            throw std::out_of_range("bad chain offset");
-        streambuf_type* link = *boost::next(list().begin(), N);
-        if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
-            return static_cast<T*>(link->component_impl());
-        else
-            return 0;
-    }
-#else
-    template<int N>
-    const std::type_info& component_type(mpl::int_<N>) const
-    {
-        if (N >= size())
-            throw std::out_of_range("bad chain offset");
-        return (*boost::next(list().begin(), N))->component_type();
-    }
+    template<typename T>
+    T* component(int n) const { return component(n, boost::type<T>()); }
 
-    template<int N, typename T>
-    T* component(mpl::int_<N>, boost::type<T>) const
-    {
-        if (N >= size())
-            throw std::out_of_range("bad chain offset");
-        streambuf_type* link = *boost::next(list().begin(), N);
-        if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
-            return static_cast<T*>(link->component_impl());
-        else
-            return 0;
-    }
+    // Deprecated.
+    template<int N, typename T> 
+    T* component() const { return component<T>(N); }
 #endif
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    private:
+#endif
+    template<typename T>
+    T* component(int n, boost::type<T>) const
+    {
+        if (n >= size())
+            throw std::out_of_range("bad chain offset");
+        streambuf_type* link = *boost::next(list().begin(), n);
+        if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
+            return static_cast<T*>(link->component_impl());
+        else
+            return 0;
+    }
+public:
 
     //----------Container-like interface--------------------------------------//
 
@@ -423,22 +416,27 @@ public:
     chain_client(chain_client* client) : chain_(client->chain_) { }
     virtual ~chain_client() { }
 
+    const std::type_info& component_type(int n) const
+    { return chain_->component_type(n); }
+
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+    // Deprecated.
     template<int N>
     const std::type_info& component_type() const
     { return chain_->component_type<N>(); }
 
+    template<typename T>
+    T* component(int n) const
+    { return chain_->component<T>(n); }
+
+    // Deprecated.
     template<int N, typename T>
     T* component() const
     { return chain_->component<N, T>(); }
 #else
-    template<int N>
-    const std::type_info& component_type(mpl::int_<N> i) const
-    { return chain_->component_type(i); }
-
-    template<int N, typename T>
-    T* component(mpl::int_<N> i, boost::type<T> t) const
-    { return chain_->component(i, t); }
+    template<typename T>
+    T* component(int n, boost::type<T> t) const
+    { return chain_->component(n, t); }
 #endif
 
     bool is_complete() const { return chain_->is_complete(); }
