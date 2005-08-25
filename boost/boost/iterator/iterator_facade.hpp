@@ -327,7 +327,7 @@ namespace boost
         }
     };
 
-# if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     // Deal with ETI
     template<>
     struct operator_arrow_result<int, int, int>
@@ -410,7 +410,7 @@ namespace boost
           :
 # ifdef BOOST_NO_ONE_WAY_ITERATOR_INTEROP
           iterator_difference<I1>
-# elif BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+# elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
           mpl::if_<
               is_convertible<I2,I1>
             , typename I1::difference_type
@@ -666,7 +666,7 @@ namespace boost
           return this->derived();
       }
 
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
       typename detail::postfix_increment_result<Derived,Value,Reference,CategoryOrTraversal>::type
       operator++(int)
       {
@@ -708,7 +708,7 @@ namespace boost
           return result -= x;
       }
 
-# if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
       // There appears to be a bug which trashes the data of classes
       // derived from iterator_facade when they are assigned unless we
       // define this assignment operator.  This bug is only revealed
@@ -721,7 +721,7 @@ namespace boost
 # endif
   };
 
-# if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
   template <class I, class V, class TC, class R, class D>
   typename detail::postfix_increment_result<I,V,R,TC>::type
   operator++(

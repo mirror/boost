@@ -29,7 +29,7 @@
 #include "boost/none_t.hpp"
 #include "boost/utility/compare_pointees.hpp"
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 // VC6.0 has the following bug:
 //   When a templated assignment operator exist, an implicit conversion
 //   constructing an optional<T> is used when assigment of the form:

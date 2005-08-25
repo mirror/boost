@@ -203,7 +203,7 @@ public:
 
 #endif
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
 
     template<class Y>
     shared_ptr & operator=(shared_ptr<Y> const & r) // never throws
@@ -429,7 +429,7 @@ template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> co
 
 #else
 
-# if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, <= 1200 && __SGI_STL_PORT)
+# if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, < 1300 && __SGI_STL_PORT)
 // MSVC6 has problems finding std::basic_ostream through the using declaration in namespace _STL
 using std::basic_ostream;
 template<class E, class T, class Y> basic_ostream<E, T> & operator<< (basic_ostream<E, T> & os, shared_ptr<Y> const & p)

@@ -73,7 +73,7 @@ template class BOOST_REGEX_DECL basic_regex< BOOST_REGEX_CHAR_T >;
 #  endif
 
 template class BOOST_REGEX_DECL basic_regex< BOOST_REGEX_CHAR_T >;
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 template class BOOST_REGEX_DECL match_results< const BOOST_REGEX_CHAR_T* >;
 #endif
 #ifndef BOOST_NO_STD_ALLOCATOR
@@ -82,7 +82,7 @@ template class BOOST_REGEX_DECL ::boost::re_detail::perl_matcher<BOOST_REGEX_CHA
 #if !(defined(BOOST_DINKUMWARE_STDLIB) && (BOOST_DINKUMWARE_STDLIB <= 1))\
    && !(defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION <= 800))\
    && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 template class BOOST_REGEX_DECL match_results< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator >;
 #endif
 #ifndef BOOST_NO_STD_ALLOCATOR
@@ -104,6 +104,7 @@ template class BOOST_REGEX_DECL ::boost::re_detail::perl_matcher< std::basic_str
 } // namespace boost
 
 #endif // BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+
 
 
 

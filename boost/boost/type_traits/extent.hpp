@@ -120,7 +120,7 @@ template <class T, std::size_t N = 0>
 struct extent
    : public ::boost::integral_constant<std::size_t, ::boost::detail::extent_imp<T,N>::value>
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) 
    typedef ::boost::integral_constant<std::size_t, ::boost::detail::extent_imp<T,N>::value> base_; 
    using base_::value;
 #endif

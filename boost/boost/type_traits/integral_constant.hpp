@@ -59,7 +59,7 @@ public:
 
 template<> struct integral_constant<bool,true> : public mpl::true_ 
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
    typedef mpl::true_ base_;
    using base_::value;
 #endif
@@ -67,7 +67,7 @@ template<> struct integral_constant<bool,true> : public mpl::true_
 };
 template<> struct integral_constant<bool,false> : public mpl::false_ 
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
    typedef mpl::false_ base_;
    using base_::value;
 #endif

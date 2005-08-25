@@ -73,7 +73,7 @@ namespace date_time {
         int digits = static_cast<int>(beg->length());
         //Works around a bug in MSVC 6 library that does not support
         //operator>> thus meaning lexical_cast will fail to compile.
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
         // msvc wouldn't compile 'time_duration::num_fractional_digits()' 
         // (required template argument list) as a workaround a temp 
         // time_duration object was used

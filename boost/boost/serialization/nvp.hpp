@@ -21,7 +21,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 // supress noise
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 # pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 

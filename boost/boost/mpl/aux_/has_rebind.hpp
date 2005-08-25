@@ -20,7 +20,7 @@
 
 #if BOOST_WORKAROUND(__EDG_VERSION__, <= 244) && !defined(BOOST_INTEL_CXX_VERSION)
 #   include <boost/mpl/has_xxx.hpp>
-#elif BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #   include <boost/mpl/has_xxx.hpp>
 #   include <boost/mpl/if.hpp>
 #   include <boost/mpl/bool.hpp>
@@ -43,7 +43,7 @@ namespace boost { namespace mpl { namespace aux {
 
 BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_rebind, rebind, false)
 
-#elif BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
 BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_rebind_impl, rebind, false)
 

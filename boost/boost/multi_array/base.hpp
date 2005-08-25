@@ -201,7 +201,7 @@ struct value_accessor_generator {
   >::type type;
 };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
 struct eti_value_accessor
 {
@@ -251,7 +251,7 @@ struct associated_types
 template <typename T, std::size_t NumDims>
 class multi_array_impl_base
   :
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
       public mpl::aux::msvc_eti_base<
           typename value_accessor_generator<T,mpl::size_t<NumDims> >::type
        >::type

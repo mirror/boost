@@ -312,7 +312,7 @@ namespace boost {
 
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     // MSVC 6.0 and prior require all definitions to be inline, but
     // these definitions can become very costly.
     result_type operator()(BOOST_FUNCTION_PARMS) const
@@ -560,7 +560,7 @@ namespace boost {
     f1.swap(f2);
   }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
            typename Allocator>
   typename BOOST_FUNCTION_FUNCTION<

@@ -38,7 +38,7 @@ template<> struct yes_no_tag<true>
 
 template< BOOST_MPL_AUX_NTTP_DECL(long, n) > struct weighted_tag
 {
-#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     typedef char (&type)[n];
 #else
     char buf[n];

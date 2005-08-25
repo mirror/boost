@@ -448,7 +448,7 @@ void test_uniform_int(Generator & gen)
   check_uniform_int(uint1_4, 100000);
 }
 
-#if defined(BOOST_MSVC) && _MSC_VER <= 1200
+#if defined(BOOST_MSVC) && _MSC_VER < 1300
 
 // These explicit instantiations are necessary, otherwise MSVC does
 // not find the <boost/operators.hpp> inline friends.

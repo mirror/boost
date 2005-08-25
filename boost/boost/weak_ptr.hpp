@@ -69,7 +69,7 @@ public:
     {
     }
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
 
     template<class Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws

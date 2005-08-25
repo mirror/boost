@@ -536,7 +536,7 @@ namespace
 // inherited operator templates at the moment it must, so the following
 // explicit instantiations force it to do that.
 
-#if defined(BOOST_MSVC) && (_MSC_VER <= 1200)
+#if defined(BOOST_MSVC) && (_MSC_VER < 1300)
 template Wrapped1<int>;
 template Wrapped1<long>;
 template Wrapped1<unsigned int>;

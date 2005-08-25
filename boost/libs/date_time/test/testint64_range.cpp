@@ -13,8 +13,9 @@
 int
 main()
 {
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
   //skipping tests here due to lack of operator<< support in msvc6
+  // TODO: this is a bit misleading: using STLport, this should work.
   std::cout << "Skipping tests on MSVC6" << std::endl;
 
 #else

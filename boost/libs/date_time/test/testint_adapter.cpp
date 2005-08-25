@@ -16,7 +16,7 @@ void print()
 {
   //MSVC 6 has problems with this, but it's not really important 
   //so we will just skip them....
-#if (defined(BOOST_DATE_TIME_NO_LOCALE)) || (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_DATE_TIME_NO_LOCALE)) || (defined(BOOST_MSVC) && (_MSC_VER < 1300))
 
 #else
   std::cout << "min:       " << (int_type::min)().as_number() << std::endl;

@@ -71,20 +71,20 @@ namespace gregorian {
   }
 #endif //BOOST_NO_STD_ITERATOR_TRAITS
   
-#if (defined(_MSC_VER) && (_MSC_VER <= 1200))
+#if (defined(_MSC_VER) && (_MSC_VER < 1300))
     // This function cannot be compiled with MSVC 6.0 due to internal compiler shorcomings
 #else
   //! Function to parse a date_period from a string (eg: [2003-Oct-31/2003-Dec-25])
   inline date_period date_period_from_string(const std::string& s){
     return date_time::from_simple_string_type<date,char>(s);
   }
-#if !defined(BOOST_NO_STD_WSTRING)
+#  if !defined(BOOST_NO_STD_WSTRING)
   //! Function to parse a date_period from a wstring (eg: [2003-Oct-31/2003-Dec-25])
   inline date_period date_period_from_wstring(const std::wstring& s){
     return date_time::from_simple_string_type<date,wchar_t>(s);
   }
-#endif // BOOST_NO_STD_WSTRING
-#endif // _MSC_VER <= 1200
+#  endif // BOOST_NO_STD_WSTRING
+#endif
 
 } } //namespace gregorian
 

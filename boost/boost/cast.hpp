@@ -55,7 +55,7 @@
 //  appear in the function's argument list.
 //
 //  TODO: Add this to config.hpp?
-# if defined(BOOST_MSVC) && BOOST_MSVC <= 1200 // 1200 = VC6
+# if defined(BOOST_MSVC) && BOOST_MSVC < 1300
 #  define BOOST_EXPLICIT_DEFAULT_TARGET , ::boost::type<Target>* = 0
 # else
 #  define BOOST_EXPLICIT_DEFAULT_TARGET

@@ -8060,7 +8060,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <template>
       <template-type-parameter name="frac_sec_type"/>
       <template-nontype-parameter name="res"><type>time_resolutions</type></template-nontype-parameter>
-      <template-nontype-parameter name="resolution_adjust"><type>#if(defined(BOOST_MSVC)&amp;&amp;(_MSC_VER&lt;=1200)) boost::int64_t</type></template-nontype-parameter>
+      <template-nontype-parameter name="resolution_adjust"><type>#if(defined(BOOST_MSVC)&amp;&amp;(_MSC_VER&lt;1300)) boost::int64_t</type></template-nontype-parameter>
       <template-nontype-parameter name="resolution_adjust"><type>#else typename frac_sec_type::int_type</type></template-nontype-parameter>
       <template-nontype-parameter name="frac_digits"><type>#endif unsigned short</type></template-nontype-parameter>
       <template-type-parameter name="v_type"><default>boost::int32_t</default></template-type-parameter>

@@ -122,7 +122,7 @@ template< BOOST_MPL_PP_PARAMS(i,typename T) > \
     , name< BOOST_MPL_PP_ENUM(i,::boost::mpl::na) >* \
     ); \
 /**/
-#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#elif !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT_HAS_REBIND(i, name, params) \
 template< BOOST_MPL_PP_PARAMS(i,typename T) > \
 ::boost::mpl::aux::yes_tag operator|( \

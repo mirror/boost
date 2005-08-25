@@ -64,7 +64,7 @@ namespace posix_time {
       ss  << std::setw(2) << std::setfill(fill_char) 
           << date_time::absolute_value(td.seconds());
       //TODO the following is totally non-generic, yelling FIXME
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
       boost::int64_t frac_sec = 
         date_time::absolute_value(td.fractional_seconds());
       // JDG [7/6/02 VC++ compatibility]
@@ -79,7 +79,7 @@ namespace posix_time {
             << std::setfill(fill_char)
           
           // JDG [7/6/02 VC++ compatibility]
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
             << buff;
 #else
         << frac_sec;
@@ -133,7 +133,7 @@ namespace posix_time {
       ss  << std::setw(2) << std::setfill(fill_char) 
           << date_time::absolute_value(td.seconds());
       //TODO the following is totally non-generic, yelling FIXME
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
       boost::int64_t frac_sec = 
         date_time::absolute_value(td.fractional_seconds());
       // JDG [7/6/02 VC++ compatibility]
@@ -148,7 +148,7 @@ namespace posix_time {
             << std::setfill(fill_char)
           
           // JDG [7/6/02 VC++ compatibility]
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
             << buff;
 #else
         << frac_sec;

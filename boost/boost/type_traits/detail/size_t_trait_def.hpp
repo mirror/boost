@@ -18,7 +18,7 @@
 
 #include <cstddef>
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1300
 #   define BOOST_TT_AUX_SIZE_T_BASE(C) ::boost::integral_constant<std::size_t,C>
 #   define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) /**/
 #else

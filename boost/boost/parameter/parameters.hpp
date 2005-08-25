@@ -200,7 +200,7 @@ namespace aux {
       >
   {};
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // ETI workaround
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)  // ETI workaround
   template <>
   struct as_tagged_argument<int,int,int>
   {
@@ -586,4 +586,5 @@ struct parameters
 #include <boost/iterator/detail/config_undef.hpp>
  
 #endif // BOOST_PARAMETERS_031014_HPP
+
 

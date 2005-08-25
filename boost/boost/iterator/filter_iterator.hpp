@@ -122,7 +122,7 @@ namespace boost
         , Iterator
       >::type x
     , Iterator end = Iterator()
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     , Predicate* = 0
 #endif 
   )

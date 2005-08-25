@@ -56,11 +56,11 @@ class array_iterator
       , Reference
     >
     , private
-#if BOOST_WORKAROUND(BOOST_MSVC,==1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
       mpl::aux::msvc_eti_base<typename 
 #endif 
           value_accessor_generator<T,NumDims>::type
-#if BOOST_WORKAROUND(BOOST_MSVC,==1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
       >::type
 #endif 
 {

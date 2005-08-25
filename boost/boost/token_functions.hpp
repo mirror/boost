@@ -212,7 +212,7 @@ namespace boost{
     template<class Iterator, class Token>
     static void assign(Iterator b, Iterator e, Token &t) {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200) &&\
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) &&\
     BOOST_WORKAROUND(__SGI_STL_PORT, < 0x500) &&\
     defined(_STLP_DEBUG) &&\
     (defined(_STLP_USE_DYNAMIC_LIB) || defined(_DLL))

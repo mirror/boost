@@ -181,11 +181,11 @@ namespace boost {
       >
       struct tuple_meta_accumulate
         : mpl::eval_if<
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
               mpl::or_<
 #endif 
                   boost::is_same<Tuple, tuples::null_type>
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
                 , boost::is_same<Tuple,int>
               >
 #endif 
@@ -382,7 +382,7 @@ namespace boost {
       >::type type;
     };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // ETI workaround
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) // ETI workaround
       template <>
       struct minimum_traversal_category_in_iterator_tuple<int>
       {

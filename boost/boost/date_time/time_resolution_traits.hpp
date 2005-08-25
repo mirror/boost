@@ -61,7 +61,7 @@ namespace date_time {
   
   template<typename frac_sec_type, 
            time_resolutions res,
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
              boost::int64_t resolution_adjust,
 #else
              typename frac_sec_type::int_type resolution_adjust,

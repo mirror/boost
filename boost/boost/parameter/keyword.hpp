@@ -53,7 +53,7 @@ struct keyword : noncopyable
         return aux::lazy_default<Tag, Default>(default_);
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)  // avoid partial ordering bugs
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)  // avoid partial ordering bugs
     template <class T>
     typename aux::tag<Tag, T const>::type
     operator=(T const& x) const
@@ -63,7 +63,7 @@ struct keyword : noncopyable
     }
 #endif 
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // avoid partial ordering bugs
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)  // avoid partial ordering bugs
     template <class Default>
     aux::default_<Tag, const Default>
     operator|(const Default& default_) const

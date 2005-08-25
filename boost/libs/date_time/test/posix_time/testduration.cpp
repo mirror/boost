@@ -70,7 +70,7 @@ main()
   
   t_5 = t_2 + t_1;
   //VC6 goes ambiguous on the next line...
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
   //sorry ticks() doesn't work on VC6
 #else
   std::cout << t_5.ticks() << std::endl;  
@@ -138,7 +138,7 @@ main()
     millisec ms(9);
     //  time_duration t_10(0,0,0,); //00:00:00.009
     std::cout << "time_resolution: " << time_duration::resolution() << std::endl;
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
   //sorry res_adjust() doesn't work on VC6
 #else
     std::cout << "res_adjust " << time_res_traits::res_adjust() << std::endl;
@@ -238,7 +238,7 @@ main()
   check("total milliseconds - one year", (t2-t1).total_milliseconds() == tms);
   tms = 3600*365*24*static_cast<boost::int64_t>(1000000000);
   check("total nanoseconds - one year", (t2-t1).total_nanoseconds() == tms);
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
 #else
   std::cout << "tms: " << (t2-t1).total_milliseconds() << std::endl;
   std::cout << "nano per year: " << (t2-t1).total_nanoseconds() << std::endl;

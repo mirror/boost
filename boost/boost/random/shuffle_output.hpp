@@ -46,7 +46,7 @@ public:
   BOOST_STATIC_CONSTANT(int, buffer_size = k);
 
   shuffle_output() : _rng() { init(); }
-#if defined(BOOST_MSVC) && _MSC_VER <= 1200
+#if defined(BOOST_MSVC) && _MSC_VER < 1300
   // MSVC does not implicitly generate the copy constructor here
   shuffle_output(const shuffle_output & x)
     : _rng(x._rng), y(x.y) { std::copy(x.v, x.v+k, v); }

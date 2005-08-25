@@ -44,7 +44,7 @@
 
 // agurt, 15/jan/02: top-level 'apply' template gives an ICE on MSVC
 // (for known reasons)
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #   define BOOST_MPL_CFG_NO_APPLY_TEMPLATE
 #endif
 

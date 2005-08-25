@@ -15,7 +15,7 @@
 
 #include <boost/detail/workaround.hpp>
 
-#if (defined _MSC_VER) && (_MSC_VER == 1200)
+#if (defined _MSC_VER) && (_MSC_VER < 1300)
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 

@@ -76,7 +76,7 @@ namespace std {
 // gcc295, msvc (neither with STLPort), any borland
 // 
 #if (((defined(__GNUC__) && (__GNUC__ < 3)) || \
-      (defined(_MSC_VER) && (_MSC_VER <= 1200)) ) && \
+      (defined(_MSC_VER) && (_MSC_VER < 1300)) ) && \
       !defined(_STLP_OWN_IOSTREAMS) ) || \
        defined(__BORLANDC__)
 #define BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS

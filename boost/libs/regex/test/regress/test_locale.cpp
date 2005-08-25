@@ -156,7 +156,7 @@ void test_en_locale()
    // VC6 seems to have problems with std::setlocale, I've never
    // gotten to the bottem of this as the program runs fine under the
    // debugger, but hangs when run from bjam:
-#if !BOOST_WORKAROUND(BOOST_MSVC, <=1200) && !(defined(__ICL) && defined(_MSC_VER) && (_MSC_VER == 1200))
+#if !BOOST_WORKAROUND(BOOST_MSVC, <1300) && !(defined(__ICL) && defined(_MSC_VER) && (_MSC_VER == 1200))
    test_en_locale("en_US", 0x09 | 0x01 << 10);
    test_en_locale("en_UK", 0x09 | 0x02 << 10);
    test_en_locale("en", 0x09);
