@@ -204,7 +204,7 @@ void mapped_file_source::open_impl(mapped_file_params p)
     pimpl_->mapped_handle_ =
         ::CreateFileMappingA( pimpl_->handle_, NULL,
                               readonly ? PAGE_READONLY : PAGE_READWRITE,
-                              0, 0, p.path.c_str() );
+                              0, 0, NULL );
     if (pimpl_->mapped_handle_ == NULL) {
         detail::cleanup_and_throw(*pimpl_, "couldn't create mapping");
     }
