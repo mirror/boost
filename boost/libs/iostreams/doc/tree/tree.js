@@ -113,13 +113,18 @@ function html_anchor(content, cl, href, target)
 
 //--------------Definition of class tree_node---------------------------------//
 
-function tree_node__add(text_or_node, link) 
+function tree_node__add(text_or_node, link_or_hide, hide) 
 {     
     if (this.state == tree_node.neutral)
         this.state = tree_node.collapsed;
-    var k = text_or_node.length != null ?
-        new tree_node(text_or_node, link) :
-        text_or_node;
+    var k;
+    if (text_or_node.length != null) {
+        k = new tree_node(text_or_node, link_or_hide);
+        k.hide_kids = hide != null ? hide : false;
+    } else {
+        k = text_or_node;
+        k.hide_kids = link_or_hide != null ? link_or_hide : false;
+    }
     k.mom = this;
     if (this.kids == null)
         this.kids = new Array();
@@ -173,7 +178,7 @@ function tree_node__print()
 function tree_node__print_kids(margin) 
 {
     var result = "";
-    if (this.kids) {
+    if (this.kids != null && (!static_display() || !this.hide_kids)) {
         if (margin == null)
             margin = get_tree().indent;
         result += html_list( "list" + this.id,
@@ -240,9 +245,9 @@ if (tree_node.prototype)
                 
 //--------------Definition of class tree_control------------------------------//
 
-function tree_control__add(text, link) 
+function tree_control__add(text, link, hide) 
 { 
-    return this.root.add(text, link); 
+    return this.root.add(text, link, hide); 
 }
 function tree_control__draw() 
 { 
