@@ -448,7 +448,7 @@ namespace boost { namespace numeric { namespace ublas {
                 real_type u (type_traits<value_type>::norm_2 (e () (i)));
                 t +=  u * u;
             }
-            return type_traits<real_type>::sqrt (t);
+            return type_traits<real_type>::type_sqrt (t);
 #else
             real_type scale = real_type ();
             real_type sum_squares (1);
@@ -464,7 +464,7 @@ namespace boost { namespace numeric { namespace ublas {
                     sum_squares += v * v;
                 }
             }
-            return scale * type_traits<real_type>::sqrt (sum_squares);
+            return scale * type_traits<real_type>::type_sqrt (sum_squares);
 #endif
         }
         // Dense case
@@ -478,7 +478,7 @@ namespace boost { namespace numeric { namespace ublas {
                 t +=  u * u;
                 ++ it;
             }
-            return type_traits<real_type>::sqrt (t);
+            return type_traits<real_type>::type_sqrt (t);
 #else
             real_type scale = real_type ();
             real_type sum_squares (1);
@@ -494,7 +494,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 ++ it;
             }
-            return scale * type_traits<real_type>::sqrt (sum_squares);
+            return scale * type_traits<real_type>::type_sqrt (sum_squares);
 #endif
         }
         // Sparse case
@@ -508,7 +508,7 @@ namespace boost { namespace numeric { namespace ublas {
                 t +=  u * u;
                 ++ it;
             }
-            return type_traits<real_type>::sqrt (t);
+            return type_traits<real_type>::type_sqrt (t);
 #else
             real_type scale = real_type ();
             real_type sum_squares (1);
@@ -524,7 +524,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 ++ it;
             }
-            return scale * type_traits<real_type>::sqrt (sum_squares);
+            return scale * type_traits<real_type>::type_sqrt (sum_squares);
 #endif
         }
     };
@@ -1337,7 +1337,7 @@ namespace boost { namespace numeric { namespace ublas {
                     t +=  u * u;
                 }
             }
-            return type_traits<real_type>::sqrt (t); 
+            return type_traits<real_type>::type_sqrt (t); 
         }
     };
     template<class T>

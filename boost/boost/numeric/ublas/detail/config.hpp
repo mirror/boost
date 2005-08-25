@@ -230,10 +230,10 @@ template <class Dummy>
 bool disable_type_check<Dummy>::value = false;
 #endif
 #ifndef BOOST_UBLAS_TYPE_CHECK_EPSILON
-#define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()))
+#define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::type_sqrt (std::numeric_limits<real_type>::epsilon ()))
 #endif
 #ifndef BOOST_UBLAS_TYPE_CHECK_MIN
-#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::sqrt ( (std::numeric_limits<real_type>::min) ()))
+#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::type_sqrt ( (std::numeric_limits<real_type>::min) ()))
 #endif
 
 
