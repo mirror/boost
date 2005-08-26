@@ -18,4 +18,5 @@ test-suite "foreach"
       [ run call_once.cpp ]
       [ run rvalue_const.cpp ]
       [ run rvalue_nonconst.cpp ]
+      [ run dependent_type.cpp ]
     ;
