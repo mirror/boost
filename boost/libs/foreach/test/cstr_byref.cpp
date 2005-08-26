@@ -9,14 +9,17 @@
 */
 
 #include <boost/test/minimal.hpp>
-#include <boost/iterator/counting_iterator.hpp>
 #include "../../../boost/foreach.hpp"
-#include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// int_iterator
-//
-typedef boost::counting_iterator<int> int_iterator;
+// define the container types, used by utility.hpp to generate the helper functions
+typedef char *container_type;
+typedef char const *const_container_type;
+typedef char value_type;
+typedef char &reference_type;
+typedef char const &const_reference_type;
+
+#include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // define come containers
@@ -31,17 +34,16 @@ char const *my_const_ntcs  = my_ntcs;
 int test_main( int, char*[] )
 {
     // non-const containers by reference
-    BOOST_CHECK(to_vector_foreach_byref(my_ntcs)  == to_vector_for(my_ntcs));
+    BOOST_CHECK(sequence_equal_byref(my_ntcs, "\1\2\3\4\5"));
 
     // const containers by reference
-    BOOST_CHECK(to_vector_foreach_byref(my_const_ntcs)  == to_vector_for(my_const_ntcs));
+    BOOST_CHECK(sequence_equal_byref(my_const_ntcs, "\1\2\3\4\5"));
 
     // mutate the mutable collections
     mutate_foreach_byref(my_ntcs);
 
     // compare the mutated collections to the actual results
-    std::pair<int_iterator,int_iterator> results(int_iterator(2),int_iterator(7));
-    BOOST_CHECK(to_vector_foreach_byval(my_ntcs)  == to_vector_for(results));
+    BOOST_CHECK(sequence_equal_byref(my_ntcs, "\2\3\4\5\6"));
 
     return 0;
 }

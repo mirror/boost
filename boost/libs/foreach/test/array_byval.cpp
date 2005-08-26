@@ -10,12 +10,21 @@
 
 #include <boost/test/minimal.hpp>
 #include "../../../boost/foreach.hpp"
+
+///////////////////////////////////////////////////////////////////////////////
+// define the container types, used by utility.hpp to generate the helper functions
+typedef int container_type[5];
+typedef int const const_container_type[5];
+typedef int value_type;
+typedef int &reference_type;
+typedef int const &const_reference_type;
+
 #include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // define come containers
 //
-int my_array[] = { 1,2,3,4,5 };
+int my_array[5] = { 1,2,3,4,5 };
 int const (&my_const_array)[5] = my_array;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,10 +33,10 @@ int const (&my_const_array)[5] = my_array;
 int test_main( int, char*[] )
 {
     // non-const containers by value
-    BOOST_CHECK(to_vector_foreach_byval(my_array) == to_vector_for(my_array));
+    BOOST_CHECK(sequence_equal_byval(my_array, "\1\2\3\4\5"));
 
     // const containers by value
-    BOOST_CHECK(to_vector_foreach_byval(my_const_array) == to_vector_for(my_const_array));
+    BOOST_CHECK(sequence_equal_byval(my_const_array, "\1\2\3\4\5"));
 
     return 0;
 }

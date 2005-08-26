@@ -10,6 +10,15 @@
 
 #include <boost/test/minimal.hpp>
 #include "../../../boost/foreach.hpp"
+
+///////////////////////////////////////////////////////////////////////////////
+// define the container types, used by utility.hpp to generate the helper functions
+typedef std::pair<int*,int*> container_type;
+typedef std::pair<int const*,int const*> const const_container_type;
+typedef int value_type;
+typedef int &reference_type;
+typedef int const &const_reference_type;
+
 #include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,10 +34,10 @@ std::pair<int const*,int const*> const my_const_pair(my_array,my_array+5);
 int test_main( int, char*[] )
 {
     // non-const containers by value
-    BOOST_CHECK(to_vector_foreach_byval(my_pair)  == to_vector_for(my_pair));
+    BOOST_CHECK(sequence_equal_byval(my_pair, "\1\2\3\4\5"));
 
     // const containers by value
-    BOOST_CHECK(to_vector_foreach_byval(my_const_pair)  == to_vector_for(my_const_pair));
+    BOOST_CHECK(sequence_equal_byval(my_const_pair, "\1\2\3\4\5"));
 
     return 0;
 }

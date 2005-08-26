@@ -13,11 +13,20 @@
 #include <list>
 #include <boost/test/minimal.hpp>
 #include "../../../boost/foreach.hpp"
+
+///////////////////////////////////////////////////////////////////////////////
+// define the container types, used by utility.hpp to generate the helper functions
+typedef std::list<int> container_type;
+typedef std::list<int> const const_container_type;
+typedef int value_type;
+typedef int &reference_type;
+typedef int const &const_reference_type;
+
 #include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // initialize a std::list<int>
-std::list<int> get_list()
+std::list<int> make_list()
 {
     std::list<int> l;
     l.push_back(1);
@@ -31,7 +40,7 @@ std::list<int> get_list()
 ///////////////////////////////////////////////////////////////////////////////
 // define come containers
 //
-std::list<int> my_list(get_list());
+std::list<int> my_list = make_list();
 std::list<int> const &my_const_list = my_list;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,10 +49,10 @@ std::list<int> const &my_const_list = my_list;
 int test_main( int, char*[] )
 {
     // non-const containers by value
-    BOOST_CHECK(to_vector_foreach_byval(my_list)  == to_vector_for(my_list));
+    BOOST_CHECK(sequence_equal_byval(my_list, "\1\2\3\4\5"));
 
     // const containers by value
-    BOOST_CHECK(to_vector_foreach_byval(my_const_list)  == to_vector_for(my_const_list));
+    BOOST_CHECK(sequence_equal_byval(my_const_list, "\1\2\3\4\5"));
 
     return 0;
 }

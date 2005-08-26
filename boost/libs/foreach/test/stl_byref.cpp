@@ -9,19 +9,22 @@
 */
 
 #include <list>
-#include <boost/iterator/counting_iterator.hpp>
 #include <boost/test/minimal.hpp>
 #include "../../../boost/foreach.hpp"
+
+///////////////////////////////////////////////////////////////////////////////
+// define the container types, used by utility.hpp to generate the helper functions
+typedef std::list<int> container_type;
+typedef std::list<int> const const_container_type;
+typedef int value_type;
+typedef int &reference_type;
+typedef int const &const_reference_type;
+
 #include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// int_iterator
-//
-typedef boost::counting_iterator<int> int_iterator;
-
-///////////////////////////////////////////////////////////////////////////////
 // initialize a std::list<int>
-std::list<int> get_list()
+std::list<int> make_list()
 {
     std::list<int> l;
     l.push_back(1);
@@ -35,7 +38,7 @@ std::list<int> get_list()
 ///////////////////////////////////////////////////////////////////////////////
 // define come containers
 //
-std::list<int> my_list(get_list());
+std::list<int> my_list = make_list();
 std::list<int> const &my_const_list = my_list;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,17 +47,16 @@ std::list<int> const &my_const_list = my_list;
 int test_main( int, char*[] )
 {
     // non-const containers by reference
-    BOOST_CHECK(to_vector_foreach_byref(my_list)  == to_vector_for(my_list));
+    BOOST_CHECK(sequence_equal_byref(my_list, "\1\2\3\4\5"));
 
     // const containers by reference
-    BOOST_CHECK(to_vector_foreach_byref(my_const_list)  == to_vector_for(my_const_list));
+    BOOST_CHECK(sequence_equal_byref(my_const_list, "\1\2\3\4\5"));
 
     // mutate the mutable collections
     mutate_foreach_byref(my_list);
 
     // compare the mutated collections to the actual results
-    std::pair<int_iterator,int_iterator> results(int_iterator(2),int_iterator(7));
-    BOOST_CHECK(to_vector_foreach_byval(my_list)  == to_vector_for(results));
+    BOOST_CHECK(sequence_equal_byref(my_list, "\2\3\4\5\6"));
 
     return 0;
 }

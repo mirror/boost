@@ -10,71 +10,67 @@
 #ifndef BOOST_FOREACH_TEST_UTILITY_HPP
 #define BOOST_FOREACH_TEST_UTILITY_HPP
 
-#include <vector>
 #include <boost/config.hpp>
-#include <boost/range/end.hpp>
-#include <boost/range/begin.hpp>
-#include <boost/range/result_iterator.hpp>
-#include <boost/iterator/iterator_traits.hpp>
 #include "../../../boost/foreach.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// to_vector_for
-//
-template<typename Range>
-inline std::vector<int> to_vector_for( Range & rng )
+// sequence_equal_byval
+inline bool sequence_equal_byval( container_type & rng, char const * result )
 {
-    std::vector<int> vect;
-    typedef BOOST_DEDUCED_TYPENAME boost::range_result_iterator<Range>::type iterator;
-    for(iterator begin = boost::begin(rng), end = boost::end(rng);
-        begin != end; ++begin)
+    BOOST_FOREACH( value_type i, rng )
     {
-        vect.push_back(*begin);
+        if(0 == *result || i != *result)
+            return false;
+        ++result;
     }
-    return vect;
+    return 0 == *result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// to_vector_foreach_byval
-//
-template<typename Range>
-inline std::vector<int> to_vector_foreach_byval( Range & rng )
+// sequence_equal_byval
+inline bool sequence_equal_byval( const_container_type & rng, char const * result )
 {
-    std::vector<int> vect;
-    typedef BOOST_DEDUCED_TYPENAME boost::range_result_iterator<Range>::type iterator;
-    typedef BOOST_DEDUCED_TYPENAME boost::iterator_value<iterator>::type value;
-    BOOST_FOREACH( value i, rng )
+    BOOST_FOREACH( value_type i, rng )
     {
-        vect.push_back(i);
+        if(0 == *result || i != *result)
+            return false;
+        ++result;
     }
-    return vect;
+    return 0 == *result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// to_vector_foreach_byref
-//
-template<typename Range>
-inline std::vector<int> to_vector_foreach_byref( Range & rng )
+// sequence_equal_byref
+inline bool sequence_equal_byref( container_type & rng, char const * result )
 {
-    std::vector<int> vect;
-    typedef BOOST_DEDUCED_TYPENAME boost::range_result_iterator<Range>::type iterator;
-    typedef BOOST_DEDUCED_TYPENAME boost::iterator_reference<iterator>::type reference;
-    BOOST_FOREACH( reference i, rng )
+    BOOST_FOREACH( reference_type i, rng )
     {
-        vect.push_back(i);
+        if(0 == *result || i != *result)
+            return false;
+        ++result;
     }
-    return vect;
+    return 0 == *result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// sequence_equal_byref
+inline bool sequence_equal_byref( const_container_type & rng, char const * result )
+{
+    BOOST_FOREACH( const_reference_type i, rng )
+    {
+        if(0 == *result || i != *result)
+            return false;
+        ++result;
+    }
+    return 0 == *result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // mutate_foreach_byref
 //
-template<typename Range>
-inline void mutate_foreach_byref( Range & rng )
+inline void mutate_foreach_byref( container_type & rng )
 {
-    typedef BOOST_DEDUCED_TYPENAME boost::range_result_iterator<Range>::type iterator;
-    typedef BOOST_DEDUCED_TYPENAME boost::iterator_reference<iterator>::type reference;
-    BOOST_FOREACH( reference i, rng )
+    BOOST_FOREACH( reference_type i, rng )
     {
         ++i;
     }
