@@ -54,7 +54,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         explicit BOOST_UBLAS_INLINE
         unbounded_array (const ALLOC &a = ALLOC()):
-            alloc_ (a), size_ (0), data_ (0) {
+            alloc_ (a), size_ (0) {
+#ifndef NDEBUG
+            data_ = 0;    // simplify debugging by giving data_ a definate value
+#endif
         }
         explicit BOOST_UBLAS_INLINE
         unbounded_array (size_type size, const ALLOC &a = ALLOC()):
@@ -70,6 +73,10 @@ namespace boost { namespace numeric { namespace ublas {
                     new (d) value_type;
 #endif
             }
+#ifndef NDEBUG            
+            else
+                data_ = 0;    // simplify debugging by giving data_ a definate value
+#endif
         }
         // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
@@ -79,6 +86,10 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = alloc_.allocate (size_);
                 std::uninitialized_fill (begin(), end(), init);
             }
+#ifndef NDEBUG            
+            else
+                data_ = 0;    // simplify debugging by giving data_ a definate value
+#endif
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &c):
@@ -88,8 +99,10 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = alloc_.allocate (size_);
                 std::uninitialized_copy (c.begin(), c.end(), begin());
             }
+#ifndef NDEBUG            
             else
-                data_ = 0;
+                data_ = 0;    // simplify debugging by giving data_ a definate value
+#endif
         }
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
@@ -147,8 +160,16 @@ namespace boost { namespace numeric { namespace ublas {
                         iterator_destroy (i); 
                     }
                     alloc_.deallocate (data_, size_);
-                    data_ = data;
                 }
+#ifdef NDEBUG
+                data_ = data;
+#else
+                // simplify debugging by giving data_ a definate value
+                if (size)
+                    data_ = data;
+                else
+                    data_ = 0; 
+#endif
                 size_ = size;
             }
         }
@@ -455,17 +476,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, value_type init) {
-            if (size > size_)
-                std::fill (data_ + size_, data_ + size, init);
+            std::fill (data_ + size_, data_ + size, init);
             size_ = size;
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, pointer data) {
-            resize_internal (size, data, value_type (), false);
+            size_ = size;
+            data_ = data;
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, pointer data, value_type init) {
-            resize_internal (size, data, init, true);
+        	std::copy (data_, data_ + std::min (size_, size), data);
+            std::fill (data_ + size_, data_ + size, init);
+            size_ = size;
+            data_ = data;
         }
 
         BOOST_UBLAS_INLINE
