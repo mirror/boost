@@ -24,7 +24,7 @@
       </P>
       <HR>
       <p></p>
-      <P>Boost 1.33.0 Hotfix</P>
+      <P>Boost 1.33.1</P>
       <UL>
          <LI>
          Fixed broken makefiles.
@@ -47,8 +47,14 @@
          Changed the deffinition of regex_error to make it backwards compatible with 
          Boost-1.32.0.
          <LI>
-            Disabled external templates for Intel C++ 8.0 and earlier - otherwise 
-            unresolved references can occur.</LI></UL>
+         Disabled external templates for Intel C++ 8.0 and earlier - otherwise 
+         unresolved references can occur.
+         <LI>
+         Initialise all the data members of the unicode_iterators: this keeps gcc from 
+         issuing needless warnings.
+         <LI>
+            Added needed header include to regex_workaround.hpp: appears to be an 
+            MSVC+STLport 5 specific problem.</LI></UL>
       <P>Boost 1.33.0.</P>
       <UL>
          <LI>
@@ -130,7 +136,7 @@
          <HR>
       <P></P>
       <p>Revised&nbsp; 
-         <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
+         <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
          28 June 2004&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
