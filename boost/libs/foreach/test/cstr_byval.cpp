@@ -34,10 +34,10 @@ char const *my_const_ntcs  = my_ntcs;
 int test_main( int, char*[] )
 {
     // non-const containers by value
-    BOOST_CHECK(sequence_equal_byval(my_ntcs, "\1\2\3\4\5"));
+    BOOST_CHECK(sequence_equal_byval_n(my_ntcs, "\1\2\3\4\5"));
 
     // const containers by value
-    BOOST_CHECK(sequence_equal_byval(my_const_ntcs, "\1\2\3\4\5"));
+    BOOST_CHECK(sequence_equal_byval_c(my_const_ntcs, "\1\2\3\4\5"));
 
     return 0;
 }

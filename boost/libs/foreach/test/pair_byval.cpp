@@ -34,10 +34,10 @@ std::pair<int const*,int const*> const my_const_pair(my_array,my_array+5);
 int test_main( int, char*[] )
 {
     // non-const containers by value
-    BOOST_CHECK(sequence_equal_byval(my_pair, "\1\2\3\4\5"));
+    BOOST_CHECK(sequence_equal_byval_n(my_pair, "\1\2\3\4\5"));
 
     // const containers by value
-    BOOST_CHECK(sequence_equal_byval(my_const_pair, "\1\2\3\4\5"));
+    BOOST_CHECK(sequence_equal_byval_c(my_const_pair, "\1\2\3\4\5"));
 
     return 0;
 }

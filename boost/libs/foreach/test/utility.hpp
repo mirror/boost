@@ -14,8 +14,8 @@
 #include "../../../boost/foreach.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// sequence_equal_byval
-inline bool sequence_equal_byval( foreach_container_type & rng, char const * result )
+// sequence_equal_byval_n
+inline bool sequence_equal_byval_n( foreach_container_type & rng, char const * result )
 {
     BOOST_FOREACH( foreach_value_type i, rng )
     {
@@ -27,8 +27,8 @@ inline bool sequence_equal_byval( foreach_container_type & rng, char const * res
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// sequence_equal_byval
-inline bool sequence_equal_byval( foreach_const_container_type & rng, char const * result )
+// sequence_equal_byval_c
+inline bool sequence_equal_byval_c( foreach_const_container_type & rng, char const * result )
 {
     BOOST_FOREACH( foreach_value_type i, rng )
     {
@@ -40,8 +40,8 @@ inline bool sequence_equal_byval( foreach_const_container_type & rng, char const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// sequence_equal_byref
-inline bool sequence_equal_byref( foreach_container_type & rng, char const * result )
+// sequence_equal_byref_n
+inline bool sequence_equal_byref_n( foreach_container_type & rng, char const * result )
 {
     BOOST_FOREACH( foreach_reference_type i, rng )
     {
@@ -53,8 +53,8 @@ inline bool sequence_equal_byref( foreach_container_type & rng, char const * res
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// sequence_equal_byref
-inline bool sequence_equal_byref( foreach_const_container_type & rng, char const * result )
+// sequence_equal_byref_c
+inline bool sequence_equal_byref_c( foreach_const_container_type & rng, char const * result )
 {
     BOOST_FOREACH( foreach_const_reference_type i, rng )
     {
