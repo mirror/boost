@@ -37,7 +37,8 @@
  || BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(800))                                     \
  || BOOST_WORKAROUND(__GNUC__, < 3)                                                             \
  || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 2))                                 \
- || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+ || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))                                          \
+ || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
 # define BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
 #endif
 
