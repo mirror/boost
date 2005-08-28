@@ -32,6 +32,7 @@
 // Some compilers do not correctly implement the L-value/R-value conversion
 // rules of the ternary conditional operator.
 #if defined(BOOST_FOREACH_NO_RVALUE_DETECTION)                                                  \
+ || defined(BOOST_NO_SFINAE)                                                                    \
  || BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))                                         \
  || BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(800))                                     \
  || BOOST_WORKAROUND(__GNUC__, < 3)                                                             \
