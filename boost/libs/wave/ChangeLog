@@ -22,6 +22,12 @@ TODO (known issues):
 
 CHANGELOG
 
+- Fixed bug reported as Sourceforge bug 1274584.
+- Switched to Re2C V0.9.9.
+
+Boost V1.33.0
+Version 1.2
+- Fixed name clash wrt T_DIVIDE on FreeBSD.
 - Fixed documentation of the different language_support flags.
 - The support for long long suffixes is no longer bound to the variadics mode,
   it has to be enabled by the new long_long mode (default in C99).

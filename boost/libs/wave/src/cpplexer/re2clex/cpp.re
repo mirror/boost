@@ -183,6 +183,8 @@ uchar *fill(Scanner *s, uchar *cursor)
         std::ptrdiff_t cnt = s->tok - s->bot;
         if(cnt)
         {
+            if (NULL == s->lim)
+                s->lim = s->top;
             memcpy(s->bot, s->tok, s->lim - s->tok);
             s->tok = s->bot;
             s->ptr -= cnt;
@@ -375,6 +377,11 @@ struct uchar_wrapper
     operator uchar *() const
     {
         return base_cursor;
+    }
+    
+    friend int operator- (uchar_wrapper const& lhs, uchar_wrapper const& rhs)
+    {
+        return lhs.base_cursor - rhs.base_cursor;
     }
     
     uchar *base_cursor;
