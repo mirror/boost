@@ -13,11 +13,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // define the container types, used by utility.hpp to generate the helper functions
-typedef char *container_type;
-typedef char const *const_container_type;
-typedef char value_type;
-typedef char &reference_type;
-typedef char const &const_reference_type;
+typedef char *foreach_container_type;
+typedef char const *foreach_const_container_type;
+typedef char foreach_value_type;
+typedef char &foreach_reference_type;
+typedef char const &foreach_const_reference_type;
 
 #include "./utility.hpp"
 

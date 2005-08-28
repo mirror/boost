@@ -13,11 +13,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // define the container types, used by utility.hpp to generate the helper functions
-typedef int container_type[5];
-typedef int const const_container_type[5];
-typedef int value_type;
-typedef int &reference_type;
-typedef int const &const_reference_type;
+typedef int foreach_container_type[5];
+typedef int const foreach_const_container_type[5];
+typedef int foreach_value_type;
+typedef int &foreach_reference_type;
+typedef int const &foreach_const_reference_type;
 
 #include "./utility.hpp"
 

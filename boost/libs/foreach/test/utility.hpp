@@ -15,9 +15,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // sequence_equal_byval
-inline bool sequence_equal_byval( container_type & rng, char const * result )
+inline bool sequence_equal_byval( foreach_container_type & rng, char const * result )
 {
-    BOOST_FOREACH( value_type i, rng )
+    BOOST_FOREACH( foreach_value_type i, rng )
     {
         if(0 == *result || i != *result)
             return false;
@@ -28,9 +28,9 @@ inline bool sequence_equal_byval( container_type & rng, char const * result )
 
 ///////////////////////////////////////////////////////////////////////////////
 // sequence_equal_byval
-inline bool sequence_equal_byval( const_container_type & rng, char const * result )
+inline bool sequence_equal_byval( foreach_const_container_type & rng, char const * result )
 {
-    BOOST_FOREACH( value_type i, rng )
+    BOOST_FOREACH( foreach_value_type i, rng )
     {
         if(0 == *result || i != *result)
             return false;
@@ -41,9 +41,9 @@ inline bool sequence_equal_byval( const_container_type & rng, char const * resul
 
 ///////////////////////////////////////////////////////////////////////////////
 // sequence_equal_byref
-inline bool sequence_equal_byref( container_type & rng, char const * result )
+inline bool sequence_equal_byref( foreach_container_type & rng, char const * result )
 {
-    BOOST_FOREACH( reference_type i, rng )
+    BOOST_FOREACH( foreach_reference_type i, rng )
     {
         if(0 == *result || i != *result)
             return false;
@@ -54,9 +54,9 @@ inline bool sequence_equal_byref( container_type & rng, char const * result )
 
 ///////////////////////////////////////////////////////////////////////////////
 // sequence_equal_byref
-inline bool sequence_equal_byref( const_container_type & rng, char const * result )
+inline bool sequence_equal_byref( foreach_const_container_type & rng, char const * result )
 {
-    BOOST_FOREACH( const_reference_type i, rng )
+    BOOST_FOREACH( foreach_const_reference_type i, rng )
     {
         if(0 == *result || i != *result)
             return false;
@@ -68,9 +68,9 @@ inline bool sequence_equal_byref( const_container_type & rng, char const * resul
 ///////////////////////////////////////////////////////////////////////////////
 // mutate_foreach_byref
 //
-inline void mutate_foreach_byref( container_type & rng )
+inline void mutate_foreach_byref( foreach_container_type & rng )
 {
-    BOOST_FOREACH( reference_type i, rng )
+    BOOST_FOREACH( foreach_reference_type i, rng )
     {
         ++i;
     }

@@ -15,10 +15,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // use FOREACH to iterate over a sequence with a dependent type
 template<typename Vector>
-void do_test(Vector const & vector)
+void do_test(Vector const & vect)
 {
     typedef BOOST_DEDUCED_TYPENAME Vector::value_type value_type;
-    BOOST_FOREACH( value_type i, vector )
+    BOOST_FOREACH(value_type i, vect)
     {
         // no-op, just make sure this compiles
         ((void)i);
