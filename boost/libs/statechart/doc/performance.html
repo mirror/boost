@@ -54,12 +54,21 @@ scenario:</p>
   are preallocated so that event dispatch &amp; transition amounts to nothing more 
 	than two virtual calls and one pointer assignment</li>
 </ul>
-<p>The Benchmarks - compiled with MSVC7.1 (single threaded), running on 
-3.2GHz Intel Pentium 4 / 1.6GHz Pentium M - produced the following 
+<p>The Benchmarks - running on 
+a 3.2GHz Intel Pentium 4 - produced the following 
 dispatch and transition times per event:</p>
 <ul>
-  <li>Handcrafted: 10 nanoseconds / 10 nanoseconds</li>
-  <li>1-bit-BitMachine with customized memory management: 130ns / 220ns</li>
+  <li>Handcrafted:<ul>
+  <li>MSVC7.1: 10ns</li>
+  <li>GCC3.4.2: 20ns</li>
+  <li>Intel9.0: 20ns</li>
+</ul>
+  </li>
+  <li>1-bit-BitMachine with customized memory management:<ul>
+   <li>MSVC7.1: 150ns</li>
+   <li>GCC3.4.2: 320ns</li>
+   <li>Intel9.0: 170ns</li>
+  </ul></li>
 </ul>
 <p>Although this is a big difference I still think it will not be noticeable 
 in most&nbsp;real-world applications. No matter whether an application uses 
@@ -109,70 +118,62 @@ handcrafted or Boost.Statechart machines it will...</p>
 <p>Therefore, in real-world applications event dispatch and transition not 
 normally constitutes a bottleneck and the relative gap between handcrafted and 
 Boost.Statechart machines also becomes much smaller than in the worst-case scenario.</p>
-<p>BitMachine measurements with more states and with different levels of 
-optimization:</p>
-<table border="3" width="100%" id="AutoNumber2" cellpadding="2">
-  <tr>
-    <td width="25%" rowspan="2"><b>Machine configuration<br>
-    # states / # outgoing transitions per state</b></td>
-    <td width="75%" colspan="3"><b>Event dispatch &amp; transition time [nanoseconds]<br>
-	<font color="#FF0000">MSVC 7.1: 3.2GHz Pentium 4 / 1.6GHz Pentium M</font><br>
-	<font color="#0000FF">GCC 3.4.2: 3.2GHz Pentium 4 / 1.6GHz Pentium M</font></b></td>
-  </tr>
-  <tr>
-    <td width="25%">Out of the box</td>
-    <td width="25%">Same as out of the box but with <code>
+<h3>Detailed performance data</h3>
+<p>In an effort to identify the main performance bottleneck, a special example 
+program &quot;InStateVsTransition&quot; has been written. It measures the time that is 
+spent to process one event in different BitMachine variants. In contrast to 
+the BitMachine example, which uses only transitions, InStateVsTransition uses 
+a varying number of in-state reactions together with transitions. The only 
+difference between in-state-reactions and transitions is that the former 
+neither enter nor exit any states. Apart from that, the same amount of code 
+needs to be run to dispatch an event and execute the resulting action.</p>
+<p>The following diagrams show the average time the library spends to process 
+one event, depending on the percentage of in-state reactions employed. 0% 
+means that all triggered reactions are transitions. 100% means that all 
+triggered reactions are in-state reactions. I draw the following conclusions 
+from these measurements:</p>
+<ul>
+ <li>The fairly linear course of the curves suggests that the measurements 
+ with a 100% in-state reaction ratio are accurate and not merely a product of 
+ optimizations in the compiler. Such optimizations might have been possible 
+ due to the fact that in the 100% case it is known at compile-time that the 
+ current state will never change</li>
+ <li>The data points with 100% in-state reaction ratio and speed optimized 
+ RTTI show that modern compilers seem to inline the computationally 
+ complex-looking dispatch code so aggressively that dispatch is reduced to 
+ little more than it actually is, one virtual function call followed by a 
+ linear search for a suitable reaction. For instance, in the case of the 1-bit 
+ Bitmachine, Intel9.0 seems to produce dispatch code that is equally efficient 
+ like the two virtual function calls in the Handcrafted machine</li>
+ <li>On all compilers and in all variants the time spent in event dispatch is 
+ dwarfed by the time spent to exit the current state and enter the target 
+ state. It is worth noting that BitMachine is a flat and non-orthogonal state 
+ machine, representing a close-to-worst case. Real-world machines will often 
+ exit and enter multiple states during a transition, what further dwarfs pure 
+ dispatch time. This makes the implementation of constant-time dispatch (as 
+ requested by a few people during formal review) an undertaking with little 
+ merit. Instead, the future optimization effort will concentrate on 
+ state-entry and state-exit</li>
+ <li>Intel9.0 seems to have problems to optimize/inline code as soon as the 
+ amount of code grows over a certain threshold. Unlike with the other two 
+ compilers, I needed to compile the tests for the 1, 2, 3 and 4-bit BitMachine 
+ into separate executables to get good performance. Even then was the 
+ performance overly bad for the 4-bit BitMachine. It was much worse when I 
+ compiled all 4 tests into the same executable. This surely looks like a bug 
+ in the compiler</li>
+</ul>
+<h4>Out of the box</h4>
+<p>The library is used as is, without any optimizations/modifications.</p>
+<p><img border="0" src="PerformanceNormal1.gif" width="371" height="284"><img border="0" src="PerformanceNormal2.gif" width="371" height="284"><img border="0" src="PerformanceNormal3.gif" width="371" height="284"><img border="0" src="PerformanceNormal4.gif" width="371" height="284"></p>
+<h4>Native RTTI</h4>
+<p>The library is used with <code>
     <a href="configuration.html#Application Defined Macros">
-    BOOST_STATECHART_USE_NATIVE_RTTI</a></code> defined</td>
-    <td width="25%">Same as out of the box but with customized memory 
-    management</td>
-  </tr>
-  <tr>
-    <td width="25%">2 / 1</td>
-    <td width="25%"><font color="#FF0000">410 / 460</font><br>
-	<font color="#0000FF">540 / 480</font></td>
-    <td width="25%"><font color="#FF0000">490 / 570</font><br>
-<font color="#0000FF">510 / 500</font></td>
-    <td width="25%"><font color="#FF0000">130 / 220</font><br>
-<font color="#0000FF">320 / 230</font></td>
-  </tr>
-  <tr>
-    <td width="25%">4 / 2</td>
-    <td width="25%"><font color="#FF0000">440 / 470</font><br>
-<font color="#0000FF">560 / 480</font></td>
-    <td width="25%"><font color="#FF0000">530 / 640</font><br>
-<font color="#0000FF">570 / 550</font></td>
-    <td width="25%"><font color="#FF0000">160 / 240</font><br>
-<font color="#0000FF">330 / 240</font></td>
-  </tr>
-  <tr>
-    <td width="25%">8 / 3</td>
-    <td width="25%"><font color="#FF0000">450 / 470</font><br>
-<font color="#0000FF">580 / 510</font></td>
-    <td width="25%"><font color="#FF0000">580 / 700</font><br>
-<font color="#0000FF">610 / 630</font></td>
-    <td width="25%"><font color="#FF0000">180 / 250</font><br>
-<font color="#0000FF">340 / 260</font></td>
-  </tr>
-  <tr>
-    <td width="25%">16 / 4</td>
-    <td width="25%"><font color="#FF0000">490 / 480</font><br>
-<font color="#0000FF">710 / 670</font></td>
-    <td width="25%"><font color="#FF0000">720 / 790</font><br>
-<font color="#0000FF">770 / 750</font></td>
-    <td width="25%"><font color="#FF0000">230 / 260</font><br>
-<font color="#0000FF">460 / 360</font></td>
-  </tr>
-  <tr>
-    <td width="25%">32 / 5</td>
-    <td width="25%"><font color="#FF0000">590 / 520</font><br>
-<font color="#0000FF">790 / 690</font></td>
-    <td width="25%"><font color="#FF0000">820 / 880</font><br>
-<font color="#0000FF">920 / 910</font></td>
-    <td width="25%"><font color="#FF0000">340 / 280</font><br>
-<font color="#0000FF">590 / 470</font></td>
-  </tr>
-  </table>
+    BOOST_STATECHART_USE_NATIVE_RTTI</a></code> defined.</p>
+<p><img border="0" src="PerformanceNative1.gif" width="371" height="284"><img border="0" src="PerformanceNative2.gif" width="371" height="284"><img border="0" src="PerformanceNative3.gif" width="371" height="284"><img border="0" src="PerformanceNative4.gif" width="371" height="284"></p>
+<h4>Customized memory-management</h4>
+<p>The library is used with customized memory 
+    management (<code>boost::fast_pool_allocator</code>).</p>
+<p><img border="0" src="PerformanceCustom1.gif" width="371" height="284"><img border="0" src="PerformanceCustom2.gif" width="371" height="284"><img border="0" src="PerformanceCustom3.gif" width="371" height="284"><img border="0" src="PerformanceCustom4.gif" width="371" height="284"></p>
 <h3>Double dispatch</h3>
 <p>At the heart of every state machine lies an implementation of double 
 dispatch. This is due to the fact that the incoming event <b>and</b> the 
@@ -235,7 +236,7 @@ management can be customized as follows:</p>
   <li>Additionally, it is possible to separately customize <b>state</b> memory 
 	management by overloading <code>operator 
   new()</code> and <code>operator delete()</code> for all state classes but 
-  this is probably only useful in very few cases</li>
+  this is probably only useful under rare circumstances</li>
 </ul>
 <h2><a name="RTTI customization">RTTI customization</a></h2>
 <p>RTTI is used for event dispatch and <code>state_downcast&lt;&gt;()</code>. 
@@ -246,24 +247,31 @@ Currently, there are exactly two options:</p>
   <code><a href="configuration.html#Application Defined Macros">
   BOOST_STATECHART_USE_NATIVE_RTTI</a></code></li>
 </ol>
-<p>Just about the only reason to favor 2 is the fact that state and event 
+<p>There are 2 reasons to favor 2:</p>
+<ul>
+ <li>When a state machine (or parts of it) are compiled into a DLL, problems 
+ could arise from the use of the internal RTTI mechanism (see the FAQ item &quot;<a href="faq.html#How_can_I_compile_a_state_machine_into_a_dynamic_link_library_(DLL)">How 
+ can I compile a state machine into a dynamic link library (DLL)?</a>&quot;). Using 
+ option 2 is one way to work around such problems (on some platforms, it seems 
+ to be the only way)</li>
+ <li>State and event 
 objects need to store one pointer less, meaning that in the best case the 
 memory footprint of a state machine object could shrink by 15% (an empty event 
 is typically 30% smaller, what can be an advantage when there are bursts of 
 events rather than a steady flow). However, on most platforms executable size 
 grows when C++ RTTI is turned on. So, given the small per machine object 
-savings, option 2 only makes sense in applications where both of the following 
-conditions hold:</p>
-<ul>
+savings, this only makes sense in applications where both of the following 
+conditions hold:<ul>
   <li>Event dispatch will never become a 
   bottleneck</li>
   <li>There is a need to reduce the memory allocated at runtime (at the cost 
   of a larger executable)</li>
-</ul>
-<p>Obvious candidates are embedded systems where the executable resides in 
+ </ul>
+ <p>Obvious candidates are embedded systems where the executable resides in 
 ROM. Other candidates are applications running a large number of identical 
 state machines where this measure could even reduce the <b>overall</b> memory 
-footprint.</p>
+ footprint</li>
+</ul>
 <h2><a name="Resource usage">Resource usage</a></h2>
 <h3>Memory</h3>
 <p>On a 32-bit box, one empty active state typically needs less than 50 bytes 
@@ -309,7 +317,7 @@ consume how many cycles:</p>
 </ol>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34603" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34616" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

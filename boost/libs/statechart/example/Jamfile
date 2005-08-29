@@ -12,6 +12,8 @@ local no-of-bits-list = 1 2 3 ;
 # threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
 # threaded mode (e.g. vc-8_0). We therefore manually turn MT off here
 local st-requirements = <threading>single <define>BOOST_DISABLE_THREADS ;
+local custom = <define>CUSTOMIZE_MEMORY_MANAGEMENT ;
+local native = <define>BOOST_STATECHART_USE_NATIVE_RTTI ;
 
 template statechart-common-options
   :
@@ -63,24 +65,28 @@ rule statechart-bitmachine-build ( tag : requirements * )
 
 stage run
   : [ statechart-bitmachine-build Normal ]
-    [ statechart-bitmachine-build Custom
-        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ statechart-bitmachine-build Native
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
+    [ statechart-bitmachine-build Custom : $(custom) ]
+    [ statechart-bitmachine-build Native : $(native) ]
     [ statechart-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
     [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]
     [ statechart-st-example-build KeyboardNormal : Keyboard : Keyboard ]
-    [ statechart-st-example-build KeyboardNative : Keyboard : Keyboard
-        : <define>BOOST_STATECHART_USE_NATIVE_RTTI ]
-    [ statechart-st-example-build PingPongSingle : PingPong : PingPong
-        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ statechart-mt-example-build PingPongMulti1 : PingPong : PingPong
-        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ statechart-mt-example-build PingPongMulti2 : PingPong : PingPong
-        : <define>CUSTOMIZE_MEMORY_MANAGEMENT <define>USE_TWO_THREADS ]
+    [ statechart-st-example-build KeyboardNative
+        : Keyboard : Keyboard : $(native) ]
+    [ statechart-st-example-build PingPongSingle
+        : PingPong : PingPong : $(custom) ]
+    [ statechart-mt-example-build PingPongMulti1
+        : PingPong : PingPong : $(custom) ]
+    [ statechart-mt-example-build PingPongMulti2
+        : PingPong : PingPong : $(custom) <define>USE_TWO_THREADS ]
     [ statechart-st-example-build StopWatch : StopWatch : StopWatch ]
     [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
+    [ statechart-st-example-build InStateVsTransitionNormal
+        : InStateVsTransition : InStateVsTransition ]
+    [ statechart-st-example-build InStateVsTransitionCustom
+        : InStateVsTransition : InStateVsTransition : $(custom) ]
+    [ statechart-st-example-build InStateVsTransitionNative
+        : InStateVsTransition : InStateVsTransition : $(native) ]
   : common-variant-tag
     <target>stage
     <target>all ;

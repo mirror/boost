@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/23<!--webbot bot="Timestamp" endspan i-checksum="12802" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/08/29<!--webbot bot="Timestamp" endspan i-checksum="12814" --></font></td>
   </tr>
 </table>
 <hr>
@@ -139,7 +139,8 @@ http://boost-sandbox.sf.net/Statechart.zip</a> and unpack it somewhere on your h
 	take a few minutes. After the build has finished you will find all 
 	executables in <code>
 	D:\Data\boost_1_33_0\libs\statechart\examples\run</code>. In addition to the 
-	examples discussed in the tutorial, this script also builds the BitMachine executable in different variants, which show the effects of 
+	examples discussed in the tutorial, this script also builds the 
+    InStateVsTransition executable in different variants, which show the effects of 
 	various choices on runtime performance, executable size, etc. Moreover, 
 	the Handcrafted executable is also built, which serves to compare 
 	performance of a simple Boost.Statechart machine with its handcrafted equivalent</li>
@@ -187,9 +188,7 @@ review):</p>
     check or cast the return value. The use of <code>triggering_event</code>() 
     therefore often indicates a problem in the state machine design and should 
     be avoided whenever possible</li>
-	<li><font color="#FF0000">Investigate how constant-time dispatch for 
-    non-orthogonal state machines can be implemented (David Abrahams, Jonathan Turkanis, 
-    Rob Steward, Dave Gomboc)</font></li>
+	<li>Optimize state-entry and state-exit</li>
 	<li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
   	<code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
   no longer make (indirect) calls to global <code>operator new()</code> and
@@ -240,10 +239,26 @@ review):</p>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
 <p>(<font color="#FF0000">red</font> = points raised during formal review)</p>
+<p>XX September, 2005</p>
+<ul>
+ <li>Added detailed performance data to the performance document</li>
+ <li>Added the InStateVsTransition &quot;example&quot; and the associated 
+ InStateVsTransitionCharts.xls, which were used to perform the more detailed 
+ measurements and draw the associated charts that can now be found in the 
+ performance document</li>
+ <li><font color="#FF0000">Removed the to-do item &quot;Investigate how constant-time dispatch for 
+    non-orthogonal state machines can be implemented&quot; suggested by David Abrahams, Jonathan Turkanis, 
+    Rob Steward and Dave Gomboc. The more detailed performance measurements 
+ have shown that the time spent for event dispatch is almost always small compared to 
+ the time spent for 
+ state-entry and state-exit. See
+ <a href="Speed%20versus%20scalability%20tradeoffs">Speed versus scalability 
+ tradeoffs</a> in the performance document for more information</font></li>
+</ul>
 <p>14 August, 2005</p>
 <ul>
     <li><b>This release will only work with the 1.33.0 version of the boost 
-    distibution</b></li>
+    distribution</b></li>
     <li><font color="#FF0000"><b>B</b></font><b><font color="#FF0000">reaking change: </font></b>
 	<font color="#FF0000">Added <code>simple_state&lt;&gt;::operator new</code> &amp;
 	<code>simple_state&lt;&gt;::operator delete</code> forwarding to the allocator 
@@ -555,7 +570,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->23 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34604" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34616" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
