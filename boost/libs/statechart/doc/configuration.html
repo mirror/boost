@@ -72,8 +72,8 @@ options</a></h2>
     <td width="226"><code>BOOST_STATECHART_USE_NATIVE_RTTI</code></td>
     <td width="893">When defined, the library no longer uses its own 
     speed-optimized RTTI implementation. Instead, native C++ RTTI is employed 
-	(see <a href="rationale.html#RTTI customization">RTTI 
-	customization</a> in the Rationale for more information). 
+	(see <a href="performance.html#RTTI customization">RTTI 
+    customization</a> in the performance document for more information). 
     This has the following effects:<ul>
       <li><code>state_machine::state_base_type</code> becomes a polymorphic 
 		type. That is, when <code>typeid</code> is applied to a <code>
@@ -87,8 +87,9 @@ options</a></h2>
       <li>Under most circumstances, dispatch speed degrades. This is because 
       native C++ RTTI values are retrieved through an additional indirection 
       on almost all platforms. See
-		<a href="rationale.html#Speed versus scalability tradeoffs">
-		Speed versus scalability tradeoffs</a> in the Rationale for timings</li>
+      <a href="performance.html#Speed versus scalability tradeoffs">
+      Speed versus scalability tradeoffs</a> in the 
+      performance document for timings</li>
     </ul>
     </td>
   </tr>
@@ -119,7 +120,7 @@ must be added to the compiler command line. See
 for more information.</p>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->10 May, 2005<!--webbot bot="Timestamp" endspan i-checksum="13987" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->29 August, 2005<!--webbot bot="Timestamp" endspan i-checksum="34616" -->
 </p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
