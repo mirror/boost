@@ -161,14 +161,12 @@ namespace boost { namespace numeric { namespace ublas {
                     }
                     alloc_.deallocate (data_, size_);
                 }
-#ifdef NDEBUG
-                data_ = data;
-#else
-                // simplify debugging by giving data_ a definate value
+
                 if (size)
                     data_ = data;
+#ifndef NDEBUG            
                 else
-                    data_ = 0; 
+                    data_ = 0;    // simplify debugging by giving data_ a definate value
 #endif
                 size_ = size;
             }
