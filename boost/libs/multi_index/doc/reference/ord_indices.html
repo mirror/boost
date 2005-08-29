@@ -262,9 +262,9 @@ requirements for these types of containers.
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>InputIterator</span><span class=special>&gt;</span>
   <span class=keyword>void</span> <span class=identifier>insert</span><span class=special>(</span><span class=identifier>InputIterator</span> <span class=identifier>first</span><span class=special>,</span><span class=identifier>InputIterator</span> <span class=identifier>last</span><span class=special>);</span>
 
-  <span class=keyword>void</span> <span class=identifier>erase</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>);</span>
+  <span class=identifier>iterator</span>  <span class=identifier>erase</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>);</span>
   <span class=identifier>size_type</span> <span class=identifier>erase</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>key_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
-  <span class=keyword>void</span> <span class=identifier>erase</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>first</span><span class=special>,</span><span class=identifier>iterator</span> <span class=identifier>last</span><span class=special>);</span>
+  <span class=identifier>iterator</span>  <span class=identifier>erase</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>first</span><span class=special>,</span><span class=identifier>iterator</span> <span class=identifier>last</span><span class=special>);</span>
 
   <span class=keyword>bool</span> <span class=identifier>replace</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Modifier</span><span class=special>&gt;</span> <span class=keyword>bool</span> <span class=identifier>modify</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=identifier>Modifier</span> <span class=identifier>mod</span><span class=special>);</span>
@@ -510,12 +510,15 @@ index of the <code>multi_index_container</code> to which this index belongs.
 <b>Exception safety:</b> Basic.<br>
 </blockquote>
 
-<code>void erase(iterator position);</code>
+<code>iterator erase(iterator position);</code>
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid dereferenceable  iterator
 of the index.</br>
 <b>Effects:</b> Deletes the element pointed to by <code>position</code>.<br>
+<b>Returns:</b> An iterator pointing to the element immediately following
+the one that was deleted, or <code>end()</code>
+if no such element exists.<br>
 <b>Complexity:</b> <code>O(D(n))</code>.<br>
 <b>Exception safety:</b> <code>nothrow</code>.<br>
 </blockquote>
@@ -530,12 +533,13 @@ the number of elements deleted.<br>
 <b>Exception safety:</b> Basic.<br>
 </blockquote>
 
-<code>void erase(iterator first,iterator last);</code>
+<code>iterator erase(iterator first,iterator last);</code>
 
 <blockquote>
 <b>Requires:</b> [<code>first</code>,<code>last</code>) is a valid
 range of the index.<br>
 <b>Effects:</b> Deletes the elements in [<code>first</code>,<code>last</code>).<br>
+<b>Returns:</b> <code>last</code>.<br>
 <b>Complexity:</b> <code>O(log(n) + m*D(n))</code>, where <code>m</code> is
 the number of elements in [<code>first</code>,<code>last</code>).<br>
 <b>Exception safety:</b> <code>nothrow</code>.<br>
@@ -946,7 +950,7 @@ Hashed indices
 
 <br>
 
-<p>Revised February 7th 2005</p>
+<p>Revised August 24th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
