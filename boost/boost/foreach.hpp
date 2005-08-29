@@ -63,6 +63,7 @@
 # include <boost/aligned_storage.hpp>
 # include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/is_array.hpp>
+# include <boost/type_traits/remove_const.hpp>
 #endif
 
 namespace boost
@@ -210,7 +211,7 @@ inline boost::is_const<T> *encode_const(T &)
 
 #ifndef BOOST_FOREACH_NO_LVALUE_RETURN_DETECTION
 template<typename T>
-inline mpl::true_ *encode_const(T const &)
+inline boost::mpl::true_ *encode_const(T const &)
 {
     return 0;
 }
@@ -225,7 +226,7 @@ struct rvalue_probe
 {
     template<typename T>
     rvalue_probe(T const &t, bool &b)
-        : ptemp(const_cast<T *>(&t))
+        : ptemp(const_cast<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type *>(&t))
         , rvalue(b)
     {
     }
@@ -301,13 +302,13 @@ private:
 // is_rvalue
 //
 template<typename T>
-inline mpl::false_ *is_rvalue(T &, int)
+inline boost::mpl::false_ *is_rvalue(T &, int)
 {
 	return 0;
 }
 
 template<typename T>
-inline mpl::true_ *is_rvalue(T const &, ...)
+inline boost::mpl::true_ *is_rvalue(T const &, ...)
 {
 	return 0;
 }
@@ -338,22 +339,22 @@ inline T (*to_ptr(T (&t)[N]))[N] { return 0; }
 // cheap_copy
 //   Overload this for user-defined collection types if they are inexpensive to copy.
 //   This tells BOOST_FOREACH it can avoid the r-value/l-value detection stuff.
-inline mpl::false_ *cheap_copy(...) { return 0; }
+inline boost::mpl::false_ *cheap_copy(...) { return 0; }
 
 template<typename T>
-inline mpl::true_ *cheap_copy(std::pair<T, T> *) { return 0; }
+inline boost::mpl::true_ *cheap_copy(std::pair<T, T> *) { return 0; }
 
 template<typename T>
-inline mpl::true_ *cheap_copy(iterator_range<T> *) { return 0; }
+inline boost::mpl::true_ *cheap_copy(iterator_range<T> *) { return 0; }
 
 template<typename T>
-inline mpl::true_ *cheap_copy(sub_range<T> *) { return 0; }
+inline boost::mpl::true_ *cheap_copy(sub_range<T> *) { return 0; }
 
 template<typename T>
-inline mpl::true_ *cheap_copy(T **) { return 0; }
+inline boost::mpl::true_ *cheap_copy(T **) { return 0; }
 
 template<typename T,std::size_t N>
-inline mpl::false_ *cheap_copy(T (*)[N]) { return 0; }
+inline boost::mpl::false_ *cheap_copy(T (*)[N]) { return 0; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // derefof
@@ -388,7 +389,7 @@ inline auto_any<T *> contain(T &t, bool *, boost::mpl::false_ *)
 
 template<typename T>
 inline BOOST_DEDUCED_TYPENAME disable_if<
-    is_array<T>
+    boost::is_array<T>
   , auto_any<simple_variant<T const> >
 >::type
 contain(T const &t, bool *rvalue, boost::mpl::false_ *)
@@ -430,7 +431,7 @@ begin(auto_any_t col, type2type<T, C> *, bool *, boost::mpl::false_ *)
 
 template<typename T>
 inline BOOST_DEDUCED_TYPENAME disable_if<
-    is_array<T>
+    boost::is_array<T>
   , auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
 >::type
 begin(auto_any_t col, type2type<T, const_> *, bool *, boost::mpl::false_ *)
@@ -485,7 +486,7 @@ end(auto_any_t col, type2type<T, C> *, bool *, boost::mpl::false_ *)
 
 template<typename T>
 inline BOOST_DEDUCED_TYPENAME disable_if<
-    is_array<T>
+    boost::is_array<T>
   , auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
 >::type
 end(auto_any_t col, type2type<T, const_> *, bool *, boost::mpl::false_ *)
