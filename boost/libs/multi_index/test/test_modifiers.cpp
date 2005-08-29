@@ -50,22 +50,22 @@ void test_modifiers()
   es.erase(employee(1,"Joe Jr.",5,2563));
   BOOST_CHECK(i2.size()==3&&i3.size()==3);
 
-  i1.erase("Judy");
+  BOOST_CHECK(i1.erase("Judy")==1);
   BOOST_CHECK(es.size()==2&&i2.size()==2);
 
-  i2.erase(it2);
+  BOOST_CHECK(i2.erase(it2)->age==64);
   BOOST_CHECK(es.size()==1&&i1.size()==1);
 
   i3.pop_front();
   BOOST_CHECK(es.size()==0&&i2.size()==0);
 
   es.insert(employee(0,"Joe",31,1123));
-  i1.erase(i1.begin());
+  BOOST_CHECK(i1.erase(i1.begin())==i1.end());
   BOOST_CHECK(i1.size()==0);
 
   es.insert(employee(0,"Joe",31,1123));
   es.insert(employee(1,"Jack",31,5032));
-  i2.erase(31);
+  BOOST_CHECK(i2.erase(31)==2);
   BOOST_CHECK(i2.size()==0);
 
   i3.push_front(employee(1,"Jack",31,5032));
@@ -88,7 +88,7 @@ void test_modifiers()
   i1.insert(ve.begin(),ve.end());
   BOOST_CHECK(i2.size()==3);
 
-  i4.erase(i4.begin(),i4.end());
+  BOOST_CHECK(i4.erase(i4.begin(),i4.end())==i4.end());
   BOOST_CHECK(es.size()==0);
 
   i2.insert(ve.begin(),ve.end());
@@ -101,7 +101,7 @@ void test_modifiers()
   i3.insert(i3.end(),ve.begin(),ve.end());
   BOOST_CHECK(es.size()==3);
 
-  es.erase(es.begin(),es.end());
+  BOOST_CHECK(es.erase(es.begin(),es.end())==es.end());
   BOOST_CHECK(i2.size()==0);
 
   es.insert(employee(0,"Joe",31,1123));
