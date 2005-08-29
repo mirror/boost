@@ -20,6 +20,13 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                                       \
+ || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x531))                                      \
+ || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                    \
+ || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+# define BOOST_FOREACH_NO_LVALUE_RETURN_DETECTION
+#endif
+
 // Some compilers allow temporaries to be bound to non-const references.
 // These compilers make it impossible to for BOOST_FOREACH to detect
 // temporaries and avoid reevaluation of the collection expression.
@@ -164,23 +171,11 @@ struct type2type
 template<typename T, typename C = boost::mpl::false_>
 struct foreach_iterator
 {
-    // If there is no function template ordering, then it may
-    // be impossible to strip cv-modifiers from T, so use
-    // range_result_iterator. Otherwise, use range_const_iterator
-    // and range_iterator.
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     typedef BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<
         C
       , range_const_iterator<T>
       , range_iterator<T>
     >::type type;
-#else
-    typedef BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<
-        C
-      , range_result_iterator<T const>
-      , range_result_iterator<T>
-    >::type type;
-#endif
 };
 
 template<typename T, typename C = boost::mpl::false_>
@@ -193,18 +188,33 @@ struct foreach_reference
 // encode_type
 //
 template<typename T>
-inline type2type<T> *encode_type(T &)
+inline type2type<T> *encode_type(T &, boost::mpl::false_ *)
 {
     return 0;
 }
 
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template<typename T>
-inline type2type<T, const_> *encode_type(T const &)
+inline type2type<T, const_> *encode_type(T const &, boost::mpl::true_ *)
 {
     return 0;
 }
-#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// encode_const
+//
+template<typename T>
+inline boost::is_const<T> *encode_const(T &)
+{
+    return 0;
+}
+
+#ifndef BOOST_FOREACH_NO_LVALUE_RETURN_DETECTION
+template<typename T>
+inline mpl::true_ *encode_const(T const &)
+{
+    return 0;
+}
+#endif 
 
 #ifndef BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
 
@@ -549,7 +559,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
 
 // Evaluate the collection expression, and detect if it is an l-value or and r-value
 # define BOOST_FOREACH_EVAL(COL)                                                                \
@@ -576,7 +586,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVAL(COL)                                                                \
@@ -604,7 +614,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVAL(COL)                                                                \
