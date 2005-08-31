@@ -74,6 +74,24 @@ class iterator_range;
 template<typename T>
 class sub_range;
 
+// SunPro doesn't like casting an array reference to a char reference
+// but these overloads work around the problem.
+// HACKHACK this is temporary. If the fix works, this code will be
+// moved into utility/addressof.hpp
+# if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+template<typename T,std::size_t N>
+T (*addressof(T (&t)[N]))[N]
+{
+    return reinterpret_cast<T(*)[N]>(&t);
+}
+
+template<typename T,std::size_t N>
+const T (*addressof(const T (&t)[N]))[N]
+{
+    return reinterpret_cast<const T(*)[N]>(&t);
+}
+# endif
+
 namespace foreach
 {
 
