@@ -10,13 +10,12 @@
 // #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_STATECHART_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
-// This program measures the performance difference between in-state reactions
-// and transitions. It replaces a varying number of transitions of the
-// BitMachine (see BitMachine example for more information) with in-state
-// reactions and measures the resulting performance.
-// This is done to verify that the data point at one end of the spectrum
-// (100% in-state reactions) is not not the result of some clever
-// optimizations in the compiler or processor.
+// This program measures event processing performance of the BitMachine
+// (see BitMachine example for more information) with a varying number of
+// states. Also, a varying number of transitions are replaced with in-state
+// reactions. This allows us to calculate how much time is spent for state-
+// entry and state-exit during a transition. All measurements are written to
+// comma-separated-values files, one file for each individual BitMachine.
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -28,36 +27,34 @@
 #include <boost/statechart/in_state_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
-#include <boost/mpl/push_front.hpp>
-#include <boost/mpl/transform.hpp>
+#include <boost/mpl/front_inserter.hpp>
 #include <boost/mpl/transform_view.hpp>
-#include <boost/mpl/fold.hpp>
+#include <boost/mpl/copy.hpp>
 #include <boost/mpl/range_c.hpp>
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/shift_left.hpp>
 #include <boost/mpl/bitxor.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/less.hpp>
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/less.hpp>
+#include <boost/mpl/aux_/lambda_support.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 
-#ifdef BOOST_MSVC
-#  pragma warning( push )
-#  pragma warning( disable: 4127 ) // conditional expression is constant
-#  pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
-#endif
-
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
+#  ifdef BOOST_MSVC
+#    pragma warning( push )
+#    pragma warning( disable: 4127 ) // conditional expression is constant
+#    pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
+#  endif
 #  define BOOST_NO_MT
 #  include <boost/pool/pool_alloc.hpp>
-#endif
-
-#ifdef BOOST_MSVC
-#  pragma warning( pop )
+#  ifdef BOOST_MSVC
+#    pragma warning( pop )
+#  endif
 #endif
 
 #include <vector>
@@ -75,8 +72,6 @@ namespace std
   using ::clock;
 }
 #endif
-
-
 
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
@@ -294,36 +289,17 @@ template<
   class StateNo,
   class NoOfBits,
   class FirstTransitionBit >
-struct FlipTransitionList
-{
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    typedef typename mpl::fold<
-      mpl::range_c< unsigned int, 0, NoOfBits::value >,
-      mpl::list<>,
-      mpl::push_front< mpl::placeholders::_, mpl::placeholders::_ >
-    >::type BitNumbers;
-
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    typedef typename mpl::transform<
-      BitNumbers,
-      FlipTransition<
-        mpl::placeholders::_, StateNo, NoOfBits, FirstTransitionBit >
-    >::type type;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-template<
-  class StateNo,
-  class NoOfBits,
-  class FirstTransitionBit >
 struct BitState : sc::simple_state<
   BitState< StateNo, NoOfBits, FirstTransitionBit >,
   BitMachine< NoOfBits, FirstTransitionBit > >
 {
-  typedef typename FlipTransitionList<
-    StateNo, NoOfBits, FirstTransitionBit
+  typedef typename mpl::copy< 
+    typename mpl::transform_view<
+      mpl::range_c< unsigned int, 0, NoOfBits::value >,
+      FlipTransition<
+        mpl::placeholders::_, StateNo, NoOfBits, FirstTransitionBit >
+    >::type,
+    mpl::front_inserter< mpl::list<> >
   >::type reactions;
 };
 
@@ -393,8 +369,6 @@ class PerformanceTester
 {
   public:
     ////////////////////////////////////////////////////////////////////////
-    typedef PerformanceTester type;
-
     static PerfResult Test()
     {
       eventsSent_ = 0;
@@ -403,6 +377,7 @@ class PerformanceTester
       const std::clock_t startTime = std::clock();
 
       const unsigned int laps = eventsToSend_ / ( GetNoOfStates() - 1 );
+
       for ( unsigned int lap = 0; lap < laps; ++lap )
       {
         VisitAllStatesImpl( machine, NoOfBits::value - 1 );
@@ -431,9 +406,6 @@ class PerformanceTester
     {
       return GetNoOfStates() * NoOfBits::value;
     }
-
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(
-      2, PerformanceTester, (NoOfBits, FirstTransitionBit) );
 
   private:
     ////////////////////////////////////////////////////////////////////////
@@ -470,6 +442,7 @@ unsigned int PerformanceTester< NoOfBits, FirstTransitionBit >::eventsSent_;
 //////////////////////////////////////////////////////////////////////////////
 typedef std::vector< PerfResult > PerfResultList;
 
+template< class NoOfBits >
 struct PerfResultBackInserter
 {
   PerfResultBackInserter( PerfResultList & perfResultList ) :
@@ -477,10 +450,11 @@ struct PerfResultBackInserter
   {
   }
 
-  template< class Tester >
-  void operator()( const Tester & )
+  template< class FirstTransitionBit >
+  void operator()( const FirstTransitionBit & )
   {
-    perfResultList_.push_back( Tester::Test() );
+    perfResultList_.push_back(
+      PerformanceTester< NoOfBits, FirstTransitionBit >::Test() );
   }
 
   PerfResultList & perfResultList_;
@@ -489,14 +463,10 @@ struct PerfResultBackInserter
 template< class NoOfBits >
 std::vector< PerfResult > TestMachine()
 {
-  typedef typename mpl::transform_view<
-    mpl::range_c< unsigned int, 0, NoOfBits::value + 1 >,
-    PerformanceTester< NoOfBits, mpl::placeholders::_ >
-  >::type Testers;
-
   PerfResultList result;
 
-  mpl::for_each< Testers >( PerfResultBackInserter( result ) );
+  mpl::for_each< mpl::range_c< unsigned int, 0, NoOfBits::value + 1 > >(
+    PerfResultBackInserter< NoOfBits >( result ) );
 
   return result;
 }
@@ -521,7 +491,7 @@ void TestAndWriteResults()
   for ( PerfResultList::const_iterator pResult = results.begin();
     pResult != results.end(); ++pResult )
   {
-    output << std::fixed << std::setprecision( 1 ) <<
+    output << std::fixed << std::setprecision( 0 ) <<
       std::setw( 8 ) << pResult->inStateRatio_ * 100 << ',' <<
       std::setw( 8 ) << pResult->nanoSecondsPerReaction_ << "\n";
   }
