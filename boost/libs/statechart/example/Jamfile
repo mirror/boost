@@ -81,12 +81,12 @@ stage run
         : PingPong : PingPong : $(custom) <define>USE_TWO_THREADS ]
     [ statechart-st-example-build StopWatch : StopWatch : StopWatch ]
     [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
-    [ statechart-st-example-build InStateVsTransitionNormal
-        : InStateVsTransition : InStateVsTransition ]
-    [ statechart-st-example-build InStateVsTransitionCustom
-        : InStateVsTransition : InStateVsTransition : $(custom) ]
-    [ statechart-st-example-build InStateVsTransitionNative
-        : InStateVsTransition : InStateVsTransition : $(native) ]
+    [ statechart-st-example-build PerformanceNormal
+        : Performance : Performance ]
+    [ statechart-st-example-build PerformanceCustom
+        : Performance : Performance : $(custom) ]
+    [ statechart-st-example-build PerformanceNative
+        : Performance : Performance : $(native) ]
   : common-variant-tag
     <target>stage
     <target>all ;

@@ -350,7 +350,6 @@ template struct BitMachine< uint7, uint6 >;
 template struct BitMachine< uint7, uint7 >;
 
 
-
 ////////////////////////////////////////////////////////////////////////////
 struct PerfResult
 {
@@ -438,7 +437,6 @@ template< class NoOfBits, class FirstTransitionBit >
 unsigned int PerformanceTester< NoOfBits, FirstTransitionBit >::eventsSent_;
 
 
-
 //////////////////////////////////////////////////////////////////////////////
 typedef std::vector< PerfResult > PerfResultList;
 
@@ -498,7 +496,6 @@ void TestAndWriteResults()
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
@@ -514,7 +511,6 @@ int main()
   TestAndWriteResults< uint1 >();
   TestAndWriteResults< uint2 >();
   TestAndWriteResults< uint3 >();
-  TestAndWriteResults< uint4 >();
 
   return 0;
 }
