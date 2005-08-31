@@ -1,0 +1,12 @@
+# Boost Typeof Library test Jamfile
+
+subproject libs/typeof/test ;
+
+# bring in rules for testing
+import testing ;
+
+test-suite "typeof" 
+	:  
+	[ compile type.cpp : <define>BOOST_TYPEOF_NATIVE : type_native ]
+	[ compile type.cpp : <define>BOOST_TYPEOF_COMPLIANT : type_emulation ]
+	;
