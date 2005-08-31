@@ -20,6 +20,10 @@
 #include <boost/multi_index/safe_mode_errors.hpp>
 #include <boost/noncopyable.hpp>
 
+#if defined(BOOST_HAS_THREADS)
+#include <boost/detail/lightweight_mutex.hpp>
+#endif
+
 namespace boost{
 
 namespace multi_index{
@@ -58,6 +62,10 @@ template<typename Iterator>
 inline void detach_equivalent_iterators(Iterator& it)
 {
   if(it.valid()){
+#if defined(BOOST_HAS_THREADS)
+    boost::detail::lightweight_mutex::scoped_lock lock(it.cont->mutex);
+#endif
+
     Iterator *prev_,*next_;
     for(
       prev_=static_cast<Iterator*>(&it.cont->header);
@@ -152,6 +160,10 @@ public:
 
   void detach_all_iterators()
   {
+#if defined(BOOST_HAS_THREADS)
+    boost::detail::lightweight_mutex::scoped_lock lock(mutex);
+#endif
+
     for(safe_iterator_base* it=header.next;it;it=it->next)it->cont=0;
   }
 
@@ -172,12 +184,20 @@ BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
 #endif
 
   safe_iterator_base header;
+
+#if defined(BOOST_HAS_THREADS)
+  boost::detail::lightweight_mutex mutex;
+#endif
 };
 
 void safe_iterator_base::attach(safe_container_base* cont_)
 {
   cont=cont_;
   if(cont){
+#if defined(BOOST_HAS_THREADS)
+    boost::detail::lightweight_mutex::scoped_lock lock(cont->mutex);
+#endif
+
     next=cont->header.next;
     cont->header.next=this;
   }
@@ -186,6 +206,10 @@ void safe_iterator_base::attach(safe_container_base* cont_)
 void safe_iterator_base::detach()
 {
   if(cont){
+#if defined(BOOST_HAS_THREADS)
+    boost::detail::lightweight_mutex::scoped_lock lock(cont->mutex);
+#endif
+
     safe_iterator_base *prev_,*next_;
     for(prev_=&cont->header;(next_=prev_->next)!=this;prev_=next_){}
     prev_->next=next;
