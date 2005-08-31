@@ -20,19 +20,13 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                                       \
- || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x531))                                      \
- || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                    \
- || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
-# define BOOST_FOREACH_NO_LVALUE_RETURN_DETECTION
-#endif
-
 // Some compilers allow temporaries to be bound to non-const references.
 // These compilers make it impossible to for BOOST_FOREACH to detect
 // temporaries and avoid reevaluation of the collection expression.
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                                       \
  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                      \
- || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))
+ || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                    \
+ || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
 # define BOOST_FOREACH_NO_RVALUE_DETECTION
 #endif
 
@@ -212,7 +206,7 @@ inline boost::is_const<T> *encode_const(T &)
     return 0;
 }
 
-#ifndef BOOST_FOREACH_NO_LVALUE_RETURN_DETECTION
+#ifndef BOOST_FOREACH_NO_RVALUE_DETECTION
 template<typename T>
 inline boost::mpl::true_ *encode_const(T const &)
 {
