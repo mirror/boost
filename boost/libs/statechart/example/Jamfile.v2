@@ -6,8 +6,6 @@
 
 project libs/statechart/example ;
 
-local no-of-bits-list = 1 2 3 ;
-
 local custom = <define>CUSTOMIZE_MEMORY_MANAGEMENT ;
 local native = <define>BOOST_STATECHART_USE_NATIVE_RTTI ;
 
@@ -52,24 +50,8 @@ rule statechart-mt-example-build (
   return $(name) ;
 }
 
-rule statechart-bitmachine-build ( tag : requirements * )
-{
-  local result ;
-
-  for local no-of-bits in $(no-of-bits-list)
-  {
-    result += [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
-                  : BitMachine : BitMachine
-                  : <define>NO_OF_BITS=$(no-of-bits) $(requirements) ] ;
-  }
-
-  return $(result) ;
-}
-
 stage run
-  : [ statechart-bitmachine-build Normal ]
-    [ statechart-bitmachine-build Custom : $(custom) ]
-    [ statechart-bitmachine-build Native : $(native) ]
+  : [ statechart-st-example-build BitMachine : BitMachine : BitMachine ]
     [ statechart-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
     [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]

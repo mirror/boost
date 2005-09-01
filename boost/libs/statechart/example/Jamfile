@@ -6,8 +6,6 @@
 
 subproject libs/statechart/example ;
 
-local no-of-bits-list = 1 2 3 ;
-
 # Some platforms have either problems with the automatic detection of the
 # threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
 # threaded mode (e.g. vc-8_0). We therefore manually turn MT off here
@@ -48,25 +46,8 @@ rule statechart-mt-example-build (
   return <exe>$(name) ;
 }
 
-rule statechart-bitmachine-build ( tag : requirements * )
-{
-  local result ;
-
-  for local no-of-bits in $(no-of-bits-list)
-  {
-    result +=
-      [ statechart-st-example-build BitMachine$(tag)$(no-of-bits)
-          : BitMachine : BitMachine
-          : <define>NO_OF_BITS=$(no-of-bits) $(requirements) ] ;
-  }
-
-  return $(result) ;
-}
-
 stage run
-  : [ statechart-bitmachine-build Normal ]
-    [ statechart-bitmachine-build Custom : $(custom) ]
-    [ statechart-bitmachine-build Native : $(native) ]
+  : [ statechart-st-example-build BitMachine : BitMachine : BitMachine ]
     [ statechart-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
     [ statechart-st-example-build Handcrafted : Handcrafted : Handcrafted ]
