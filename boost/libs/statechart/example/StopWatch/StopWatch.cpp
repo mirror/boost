@@ -61,19 +61,17 @@ namespace sc = boost::statechart;
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct EvStartStop : sc::event< EvStartStop > {};
 struct EvReset : sc::event< EvReset > {};
-
 
 struct IElapsedTime
 {
   virtual double ElapsedTime() const = 0;
 };
 
-
 struct Active;
 struct StopWatch : sc::state_machine< StopWatch, Active > {};
-
 
 struct Stopped;
 struct Active : sc::simple_state< Active, StopWatch, Stopped >
@@ -130,17 +128,16 @@ struct Active : sc::simple_state< Active, StopWatch, Stopped >
   };
 
 
-namespace
+//////////////////////////////////////////////////////////////////////////////
+char GetKey()
 {
-  char GetKey()
-  {
-    char key;
-    std::cin >> key;
-    return key;
-  }
+  char key;
+  std::cin >> key;
+  return key;
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
 int main()
 {
   std::cout << "Boost.Statechart StopWatch example\n\n";

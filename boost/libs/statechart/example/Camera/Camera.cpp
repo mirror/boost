@@ -13,6 +13,7 @@
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 NotShooting::NotShooting()
 {
   std::cout << "Entering NotShooting\n";
@@ -35,7 +36,7 @@ sc::result NotShooting::react( const EvShutterHalf & )
   }
 }
 
-
+//////////////////////////////////////////////////////////////////////////////
 Idle::Idle()
 {
   std::cout << "Entering Idle\n";

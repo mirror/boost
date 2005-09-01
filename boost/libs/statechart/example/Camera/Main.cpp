@@ -40,17 +40,16 @@
 
 
 
-namespace
+//////////////////////////////////////////////////////////////////////////////
+char GetKey()
 {
-  char GetKey()
-  {
-    char key;
-    std::cin >> key;
-    return key;
-  }
+  char key;
+  std::cin >> key;
+  return key;
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
 int main()
 {
   std::cout << "Boost.Statechart Camera example\n\n";

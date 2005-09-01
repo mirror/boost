@@ -42,7 +42,7 @@ class UniqueObjectAllocator
       boost::statechart::detail::avoid_unused_warning( size );
       BOOST_ASSERT( !constructed_ && ( size == sizeof( T ) ) );
       constructed_ = true;
-      return &storage_.data[ 0 ];
+      return &storage_.data_[ 0 ];
     }
 
     static void deallocate( void * p, size_t size )
@@ -50,7 +50,7 @@ class UniqueObjectAllocator
       boost::statechart::detail::avoid_unused_warning( p );
       boost::statechart::detail::avoid_unused_warning( size );
       BOOST_ASSERT( constructed_ &&
-        ( p == &storage_.data[ 0 ] ) && ( size == sizeof( T ) ) );
+        ( p == &storage_.data_[ 0 ] ) && ( size == sizeof( T ) ) );
       constructed_ = false;
     }
 
@@ -58,7 +58,7 @@ class UniqueObjectAllocator
     //////////////////////////////////////////////////////////////////////////
     union storage
     {
-      char data[ sizeof( T ) ];
+      char data_[ sizeof( T ) ];
       typename boost::type_with_alignment<
         boost::alignment_of< T >::value >::type aligner_;
     };

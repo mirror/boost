@@ -38,6 +38,7 @@ namespace mpl = boost::mpl;
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct EvNumLockPressed : sc::event< EvNumLockPressed > {};
 struct EvCapsLockPressed : sc::event< EvCapsLockPressed > {};
 struct EvScrollLockPressed : sc::event< EvScrollLockPressed > {};
@@ -104,44 +105,43 @@ sc::result Active::react( const EvRequestShutdown & )
 }
 
 
-namespace
+//////////////////////////////////////////////////////////////////////////////
+void DisplayStateConfiguration( const Keyboard & keyboard )
 {
-  void DisplayStateConfiguration( const Keyboard & keyboard )
+  char orthogonalRegion = 'a';
+
+  for ( Keyboard::state_iterator pLeafState = keyboard.state_begin();
+    pLeafState != keyboard.state_end(); ++pLeafState )
   {
-    char orthogonalRegion = 'a';
+    std::cout << "Orthogonal region " << orthogonalRegion << ": ";
 
-    for ( Keyboard::state_iterator pLeafState = keyboard.state_begin();
-      pLeafState != keyboard.state_end(); ++pLeafState )
+    const Keyboard::state_base_type * pState = &*pLeafState;
+
+    while ( pState != 0 )
     {
-      std::cout << "Orthogonal region " << orthogonalRegion << ": ";
-
-      const Keyboard::state_base_type * pState = &*pLeafState;
-
-      while ( pState != 0 )
+      if ( pState != &*pLeafState )
       {
-        if ( pState != &*pLeafState )
-        {
-          std::cout << " -> ";
-        }
-
-        #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
-        std::cout << std::setw( 15 ) << typeid( *pState ).name();
-        #else
-        std::cout << std::setw( 15 ) <<
-          pState->custom_dynamic_type_ptr< char >();
-        #endif
-        pState = pState->outer_state_ptr();
+        std::cout << " -> ";
       }
 
-      std::cout << "\n";
-      ++orthogonalRegion;
+      #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
+      std::cout << std::setw( 15 ) << typeid( *pState ).name();
+      #else
+      std::cout << std::setw( 15 ) <<
+        pState->custom_dynamic_type_ptr< char >();
+      #endif
+      pState = pState->outer_state_ptr();
     }
 
     std::cout << "\n";
+    ++orthogonalRegion;
   }
+
+  std::cout << "\n";
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
 int main()
 {
   #ifndef BOOST_STATECHART_USE_NATIVE_RTTI

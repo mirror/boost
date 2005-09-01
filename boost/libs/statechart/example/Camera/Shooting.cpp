@@ -18,6 +18,7 @@
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 Shooting::Shooting()
 {
   std::cout << "Entering Shooting\n";
@@ -28,7 +29,7 @@ Shooting::~Shooting()
   std::cout << "Exiting Shooting\n";
 }
 
-
+//////////////////////////////////////////////////////////////////////////////
 struct Storing : sc::simple_state< Storing, Shooting >
 {
   Storing()
@@ -37,7 +38,7 @@ struct Storing : sc::simple_state< Storing, Shooting >
   }
 };
 
-
+//////////////////////////////////////////////////////////////////////////////
 struct Focused : sc::simple_state< Focused, Shooting >
 {
   typedef sc::custom_reaction< EvShutterFull > reactions;
@@ -58,7 +59,7 @@ sc::result Focused::react( const EvShutterFull & )
   }
 }
 
-
+//////////////////////////////////////////////////////////////////////////////
 Focusing::Focusing( my_context ctx ) : my_base( ctx )
 {
   post_event( boost::intrusive_ptr< EvInFocus >( new EvInFocus() ) );

@@ -31,6 +31,7 @@ namespace mpl = boost::mpl;
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct EvInFocus : sc::event< EvInFocus > {};
 
 struct Focusing;

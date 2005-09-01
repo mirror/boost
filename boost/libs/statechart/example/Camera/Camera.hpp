@@ -25,11 +25,11 @@ namespace sc = boost::statechart;
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct EvShutterHalf : sc::event< EvShutterHalf > {};
 struct EvShutterFull : sc::event< EvShutterFull > {};
 struct EvShutterRelease : sc::event< EvShutterRelease > {};
 struct EvConfig : sc::event< EvConfig > {};
-
 
 struct NotShooting;
 struct Camera : sc::state_machine< Camera, NotShooting >
@@ -37,7 +37,6 @@ struct Camera : sc::state_machine< Camera, NotShooting >
     bool IsMemoryAvailable() const { return true; }
     bool IsBatteryLow() const { return false; }
 };
-
 
 struct Idle;
 struct NotShooting : sc::simple_state< NotShooting, Camera, Idle >

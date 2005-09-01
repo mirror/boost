@@ -18,12 +18,12 @@ class UniqueObject
 {
   public:
     //////////////////////////////////////////////////////////////////////////
-    static void * operator new( size_t size )
+    void * operator new( size_t size )
     {
       return UniqueObjectAllocator< Derived >::allocate( size );
     }
 
-    static void operator delete( void * p, size_t size )
+    void operator delete( void * p, size_t size )
     {
       UniqueObjectAllocator< Derived >::deallocate( p, size );
     }

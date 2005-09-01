@@ -25,6 +25,7 @@ namespace sc = boost::statechart;
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct Configuring : sc::simple_state< Configuring, NotShooting >
 {
   typedef sc::transition< EvConfig, Idle > reactions;

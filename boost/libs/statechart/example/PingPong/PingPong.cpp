@@ -98,17 +98,17 @@ namespace mpl = boost::mpl;
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 const unsigned int noOfEvents = 1000000;
 
-namespace
+template< class T >
+boost::intrusive_ptr< T > MakeIntrusive( T * pObject )
 {
-  template< class T >
-  boost::intrusive_ptr< T > MakeIntrusive( T * pObject )
-  {
-    return boost::intrusive_ptr< T >( pObject );
-  }
+  return boost::intrusive_ptr< T >( pObject );
 }
 
+
+//////////////////////////////////////////////////////////////////////////////
 struct BallReturned : sc::event< BallReturned >
 {
   boost::function1< void, const boost::intrusive_ptr< const BallReturned > & >
@@ -162,6 +162,7 @@ unsigned int Player::totalNoOfProcessedEvents_ = 0;
 struct Waiting : sc::state< Waiting, Player >
 {
   public:
+    //////////////////////////////////////////////////////////////////////////
     typedef mpl::list<
       sc::custom_reaction< BallReturned >,
       sc::custom_reaction< GameAborted >
@@ -207,6 +208,7 @@ struct Waiting : sc::state< Waiting, Player >
     }
 
   private:
+    //////////////////////////////////////////////////////////////////////////
     sc::result DestroyMyself()
     {
       outermost_context_type & machine = outermost_context();
@@ -220,18 +222,16 @@ struct Waiting : sc::state< Waiting, Player >
 };
 
 
-
-namespace
+//////////////////////////////////////////////////////////////////////////////
+char GetKey()
 {
-  char GetKey()
-  {
-    char key;
-    std::cin >> key;
-    return key;
-  }
+  char key;
+  std::cin >> key;
+  return key;
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
 int main()
 {
   std::cout << "Boost.Statechart PingPong example\n\n";

@@ -34,41 +34,19 @@ namespace std
 
 
 
-namespace
-{
-  const unsigned int noOfStates = 2;
-  const unsigned int noOfTransitions = 2;
-
-  // common prime factors of 2^n-1 for n in [1,8]
-  const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
-
-  unsigned long eventsSentTotal = 0;
-
-  char GetKey()
-  {
-    char key;
-    std::cin >> key;
-    return key;
-  }
-}
-
-
-class EvFlipBit;
 //////////////////////////////////////////////////////////////////////////////
+class EvFlipBit;
 class state_base
 {
   public:
-    //////////////////////////////////////////////////////////////////////////
     virtual ~state_base() {};
 
     virtual const state_base & react( const EvFlipBit & toEvent ) const = 0;
 
   protected:
-    //////////////////////////////////////////////////////////////////////////
     state_base() {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
 template< class Derived >
 class state : public state_base
 {
@@ -86,33 +64,26 @@ template< class Derived >
 const Derived state< Derived >::instance_;
 
 
-
 //////////////////////////////////////////////////////////////////////////////
 class event_base
 {
   public:
-    //////////////////////////////////////////////////////////////////////////
     virtual ~event_base() {}
 
   protected:
-    //////////////////////////////////////////////////////////////////////////
     event_base() {}
 
   public:
-    //////////////////////////////////////////////////////////////////////////
     virtual const state_base & send( const state_base & toState ) const = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 template< class Derived >
 class event : public event_base
 {
   protected:
-    //////////////////////////////////////////////////////////////////////////
     event() {}
 
   private:
-    //////////////////////////////////////////////////////////////////////////
     virtual const state_base & send( const state_base & toState ) const
     {
       return toState.react( *static_cast< const Derived * >( this ) );
@@ -124,8 +95,6 @@ class event : public event_base
 class EvFlipBit : public event< EvFlipBit > {};
 const EvFlipBit flip;
 
-
-//////////////////////////////////////////////////////////////////////////////
 class BitMachine
 {
   public:
@@ -159,13 +128,25 @@ class BitMachine
 };
 
 
+//////////////////////////////////////////////////////////////////////////////
+char GetKey()
+{
+  char key;
+  std::cin >> key;
+  return key;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
+  // common prime factors of 2^n-1 for n in [1,8]
+  const unsigned int noOfEvents = 3 * 3 * 5 * 7 * 17 * 31 * 127;
+  unsigned long eventsSentTotal = 0;
+
   std::cout << "Boost.Statechart Handcrafted example\n";
-  std::cout << "Machine configuration: " << noOfStates <<
-    " states interconnected with " << noOfTransitions << " transitions.\n\n";
+  std::cout << "Machine configuration: " << 2 <<
+    " states interconnected with " << 2 << " transitions.\n\n";
 
   std::cout << "p<CR>: Performance test\n";
   std::cout << "e<CR>: Exits the program\n\n";
