@@ -513,6 +513,9 @@ namespace boost { namespace numeric { namespace ublas {
     template <class V>
     struct vector_temporary_traits< vector_range<V> >
     : vector_temporary_traits< V > {} ;
+    template <class V>
+    struct vector_temporary_traits< const vector_range<V> >
+    : vector_temporary_traits< V > {} ;
 
 
     // Vector based slice class
@@ -1022,6 +1025,9 @@ namespace boost { namespace numeric { namespace ublas {
     template <class V>
     struct vector_temporary_traits< vector_slice<V> >
     : vector_temporary_traits< V > {} ;
+    template <class V>
+    struct vector_temporary_traits< const vector_slice<V> >
+    : vector_temporary_traits< V > {} ;
 
 
     // Vector based indirection class
@@ -1529,6 +1535,9 @@ return true;
     // Specialization of temporary_traits
     template <class V>
     struct vector_temporary_traits< vector_indirect<V> >
+    : vector_temporary_traits< V > {} ;
+    template <class V>
+    struct vector_temporary_traits< const vector_indirect<V> >
     : vector_temporary_traits< V > {} ;
 
 }}}

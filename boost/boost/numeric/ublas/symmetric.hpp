@@ -2085,9 +2085,15 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M, class TRI>
     struct vector_temporary_traits< symmetric_adaptor<M, TRI> >
     : vector_temporary_traits< M > {} ;
+    template <class M, class TRI>
+    struct vector_temporary_traits< const symmetric_adaptor<M, TRI> >
+    : vector_temporary_traits< M > {} ;
 
     template <class M, class TRI>
     struct matrix_temporary_traits< symmetric_adaptor<M, TRI> >
+    : matrix_temporary_traits< M > {} ;
+    template <class M, class TRI>
+    struct matrix_temporary_traits< const symmetric_adaptor<M, TRI> >
     : matrix_temporary_traits< M > {} ;
 
 }}}

@@ -471,6 +471,9 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct vector_temporary_traits< matrix_row<M> >
     : vector_temporary_traits< M > {} ;
+    template <class M>
+    struct vector_temporary_traits< const matrix_row<M> >
+    : vector_temporary_traits< M > {} ;
 
     // Matrix based column vector class
     template<class M>
@@ -916,6 +919,9 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct vector_temporary_traits< matrix_column<M> >
     : vector_temporary_traits< M > {} ;
+    template <class M>
+    struct vector_temporary_traits< const matrix_column<M> >
+    : vector_temporary_traits< M > {} ;
 
     // Matrix based vector range class
     template<class M>
@@ -1359,6 +1365,9 @@ namespace boost { namespace numeric { namespace ublas {
     // Specialize temporary
     template <class M>
     struct vector_temporary_traits< matrix_vector_range<M> >
+    : vector_temporary_traits< M > {} ;
+    template <class M>
+    struct vector_temporary_traits< const matrix_vector_range<M> >
     : vector_temporary_traits< M > {} ;
 
     // Matrix based vector slice class
@@ -1814,6 +1823,9 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct vector_temporary_traits< matrix_vector_slice<M> >
     : vector_temporary_traits< M > {} ;
+    template <class M>
+    struct vector_temporary_traits< const matrix_vector_slice<M> >
+    : vector_temporary_traits< M > {} ;
 
     // Matrix based vector indirection class
     template<class M, class IA>
@@ -2266,6 +2278,9 @@ namespace boost { namespace numeric { namespace ublas {
     // Specialize temporary
     template <class M, class IA>
     struct vector_temporary_traits< matrix_vector_indirect<M,IA> >
+    : vector_temporary_traits< M > {} ;
+    template <class M, class IA>
+    struct vector_temporary_traits< const matrix_vector_indirect<M,IA> >
     : vector_temporary_traits< M > {} ;
 
     // Matrix based range class
@@ -3144,9 +3159,15 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct matrix_temporary_traits< matrix_range<M> >
     : matrix_temporary_traits< M > {} ;
+    template <class M>
+    struct matrix_temporary_traits< const matrix_range<M> >
+    : matrix_temporary_traits< M > {} ;
 
     template <class M>
     struct vector_temporary_traits< matrix_range<M> >
+    : vector_temporary_traits< M > {} ;
+    template <class M>
+    struct vector_temporary_traits< const matrix_range<M> >
     : vector_temporary_traits< M > {} ;
 
     // Matrix based slice class
@@ -4059,9 +4080,15 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct matrix_temporary_traits< matrix_slice<M> >
     : matrix_temporary_traits< M > {};
+    template <class M>
+    struct matrix_temporary_traits< const matrix_slice<M> >
+    : matrix_temporary_traits< M > {};
 
     template <class M>
     struct vector_temporary_traits< matrix_slice<M> >
+    : vector_temporary_traits< M > {};
+    template <class M>
+    struct vector_temporary_traits< const matrix_slice<M> >
     : vector_temporary_traits< M > {};
 
     // Matrix based indirection class
@@ -4966,9 +4993,15 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct matrix_temporary_traits< matrix_indirect<M> >
     : matrix_temporary_traits< M > {};
+    template <class M>
+    struct matrix_temporary_traits< const matrix_indirect<M> >
+    : matrix_temporary_traits< M > {};
 
     template <class M>
     struct vector_temporary_traits< matrix_indirect<M> >
+    : vector_temporary_traits< M > {};
+    template <class M>
+    struct vector_temporary_traits< const matrix_indirect<M> >
     : vector_temporary_traits< M > {};
 
 }}}

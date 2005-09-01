@@ -890,17 +890,6 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class TRI, class L, class A>
     const typename triangular_matrix<T, TRI, L, A>::value_type triangular_matrix<T, TRI, L, A>::one_ (1);
 
-    // TODO These traits overloads seem to do no more then generic defition
-    template <class T, class TRI, class L, class A>
-    struct vector_temporary_traits< triangular_matrix<T, TRI, L, A> > {
-       typedef typename triangular_matrix<T, TRI, L, A>::vector_temporary_type type ;
-    };
-
-    template <class T, class TRI, class L, class A>
-    struct matrix_temporary_traits< triangular_matrix<T, TRI, L, A> > {
-       typedef typename triangular_matrix<T, TRI, L, A>::matrix_temporary_type type ;
-    };
-
 
     // Triangular matrix adaptor class
     template<class M, class TRI>
@@ -1760,9 +1749,15 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M, class TRI>
     struct vector_temporary_traits< triangular_adaptor<M, TRI> >
     : vector_temporary_traits< typename boost::remove_const<M>::type > {} ;
+    template <class M, class TRI>
+    struct vector_temporary_traits< const triangular_adaptor<M, TRI> >
+    : vector_temporary_traits< typename boost::remove_const<M>::type > {} ;
 
     template <class M, class TRI>
     struct matrix_temporary_traits< triangular_adaptor<M, TRI> >
+    : matrix_temporary_traits< typename boost::remove_const<M>::type > {};
+    template <class M, class TRI>
+    struct matrix_temporary_traits< const triangular_adaptor<M, TRI> >
     : matrix_temporary_traits< typename boost::remove_const<M>::type > {};
 
 

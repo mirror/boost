@@ -1941,9 +1941,15 @@ namespace boost { namespace numeric { namespace ublas {
     template <class M>
     struct vector_temporary_traits< banded_adaptor<M> >
     : vector_temporary_traits< M > {} ;
+    template <class M>
+    struct vector_temporary_traits< const banded_adaptor<M> >
+    : vector_temporary_traits< M > {} ;
 
     template <class M>
     struct matrix_temporary_traits< banded_adaptor<M> >
+    : matrix_temporary_traits< M > {} ;
+    template <class M>
+    struct matrix_temporary_traits< const banded_adaptor<M> >
     : matrix_temporary_traits< M > {} ;
 
 
