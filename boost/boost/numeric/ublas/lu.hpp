@@ -21,6 +21,7 @@
 #include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/triangular.hpp>
 
 // LU factorizations in the spirit of LAPACK and Golub & van Loan
 
