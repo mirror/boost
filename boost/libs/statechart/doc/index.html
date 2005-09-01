@@ -138,12 +138,15 @@ http://boost-sandbox.sf.net/Statechart.zip</a> and unpack it somewhere on your h
 	for MSVC7.1, type <code>bjam &quot;-sTOOLS=vc-7_1&quot;</code>. This may 
 	take a few minutes. After the build has finished you will find all 
 	executables in <code>
-	D:\Data\boost_1_33_0\libs\statechart\examples\run</code>. In addition to the 
-	examples discussed in the tutorial, this script also builds the 
-    InStateVsTransition executable in different variants, which show the effects of 
+	D:\Data\boost_1_33_0\libs\statechart\examples\run</code>. In addition to 
+    the examples discussed in the tutorial, this script also builds the 
+    Performance executable in different variants, which show the effects of 
 	various choices on runtime performance, executable size, etc. Moreover, 
 	the Handcrafted executable is also built, which serves to compare 
-	performance of a simple Boost.Statechart machine with its handcrafted equivalent</li>
+	performance of a simple Boost.Statechart machine with its handcrafted equivalent. 
+    Finally, the BitMachine example shows that limitations of some compilers 
+    lead to a surprisingly low upper bound of the number of states a state 
+    machine implemented in a single translation unit can have</li>
 	<li>Optional: To run the tests, invoke bjam in the directory
 	<code>D:\Data\boost_1_33_0\libs\statechart\test</code></li>
 </ol>
