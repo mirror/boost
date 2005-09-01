@@ -194,7 +194,7 @@ public:
       }
     }
     BOOST_CATCH(...){
-      delete_all_nodes_();
+      clear_();
       BOOST_RETHROW;
     }
     BOOST_CATCH_END
