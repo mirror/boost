@@ -269,7 +269,7 @@ executable. Here are some obviously <b>very rough</b> estimates:</p>
 	actions, customized memory management and compiled with a good optimizing 
 	compiler, a Pentium 4 class CPU should not spend more than 1000 cycles 
 	inside <code>state_machine&lt;&gt;::process_event()</code>. This worst-case 
-	dispatch and transition time scales more or less linearly with the number of 
+	time to process one event scales more or less linearly with the number of 
 	simultaneously active states for more complex state machines, with the 
 	typical average being much lower than that. So, a fairly complex machine 
 	with at most 10 simultaneously active states running on a 100MHz CPU should 
