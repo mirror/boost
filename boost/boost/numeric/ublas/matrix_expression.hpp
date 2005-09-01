@@ -44,7 +44,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E::reference>::type reference;
         typedef E refered_type;
         typedef const self_type const_closure_type;
-        typedef const_closure_type closure_type;
+        typedef self_type closure_type;
         typedef typename E::orientation_category orientation_category;
         typedef typename E::storage_category storage_category;
 
