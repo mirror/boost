@@ -9,7 +9,6 @@ Revision history:
 */
 
 #include <boost/test/minimal.hpp>
-#include "../../../boost/foreach.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // define a user-defined collection type and teach BOOST_FOREACH how to enumerate it
@@ -18,6 +17,16 @@ namespace mine
 {
     struct dummy {};
 }
+
+namespace boost
+{
+    char * boost_range_begin(mine::dummy&) {return 0;}
+    char const * boost_range_begin(mine::dummy const&) {return 0;}
+    char * boost_range_end(mine::dummy&) {return 0;}
+    char const * boost_range_end(mine::dummy const&) {return 0;}
+}
+
+#include "../../../boost/foreach.hpp"
 
 namespace boost
 {
@@ -31,10 +40,6 @@ namespace boost
     {
         typedef char const * type;
     };
-    char * begin(mine::dummy&) {return 0;}
-    char const * begin(mine::dummy const&) {return 0;}
-    char * end(mine::dummy&) {return 0;}
-    char const * end(mine::dummy const&) {return 0;}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

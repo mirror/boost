@@ -92,35 +92,6 @@ namespace foreach_detail_
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// adl_begin/adl_end
-//
-template<typename T>
-inline BOOST_DEDUCED_TYPENAME range_result_iterator<T>::type adl_begin(T &t)
-{
-    #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                  \
-     || BOOST_WORKAROUND(__GNUC__, < 3)
-    return boost::begin(t);
-    #else
-    using boost::begin;
-    typedef BOOST_DEDUCED_TYPENAME range_result_iterator<T>::type type;
-    return type(begin(t));
-    #endif
-}
-
-template<typename T>
-inline BOOST_DEDUCED_TYPENAME range_result_iterator<T>::type adl_end(T &t)
-{
-    #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                  \
-     || BOOST_WORKAROUND(__GNUC__, < 3)
-    return boost::end(t);
-    #else
-    using boost::end;
-    typedef BOOST_DEDUCED_TYPENAME range_result_iterator<T>::type type;
-    return type(end(t));
-    #endif
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // auto_any_t/auto_any
 //
 struct auto_any_base
@@ -419,7 +390,7 @@ template<typename T, typename C>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 begin(auto_any_t col, type2type<T, C> *, void *, boost::mpl::true_ *)
 {
-    return foreach_detail_::adl_begin(auto_any_cast<T, C>(col));
+    return boost::begin(auto_any_cast<T, C>(col));
 }
 
 #ifndef BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
@@ -428,7 +399,7 @@ inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 begin(auto_any_t col, type2type<T, C> *, bool *, boost::mpl::false_ *)
 {
     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
-    return foreach_detail_::adl_begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col)));
+    return boost::begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col)));
 }
 
 template<typename T>
@@ -438,7 +409,7 @@ inline BOOST_DEDUCED_TYPENAME disable_if<
 >::type
 begin(auto_any_t col, type2type<T, const_> *, bool *, boost::mpl::false_ *)
 {
-    return foreach_detail_::adl_begin(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
+    return boost::begin(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
 }
 #else
 template<typename T, typename C>
@@ -447,14 +418,14 @@ begin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *, boost::mpl::false
 {
     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
-    return iterator(foreach_detail_::adl_begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
+    return iterator(boost::begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
 }
 
 template<typename T>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
 begin(auto_any_t col, type2type<T, const_> *, boost::mpl::true_ *, boost::mpl::false_ *) // r-value
 {
-    return foreach_detail_::adl_begin(auto_any_cast<T, boost::mpl::true_>(col));
+    return boost::begin(auto_any_cast<T, boost::mpl::true_>(col));
 }
 #endif
 
@@ -465,7 +436,7 @@ template<typename T, typename C>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 end(auto_any_t col, type2type<T, C> *, void *, boost::mpl::true_ *)
 {
-    return foreach_detail_::adl_end(auto_any_cast<T, C>(col));
+    return boost::end(auto_any_cast<T, C>(col));
 }
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -483,7 +454,7 @@ inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 end(auto_any_t col, type2type<T, C> *, bool *, boost::mpl::false_ *)
 {
     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
-    return foreach_detail_::adl_end(derefof(auto_any_cast<type *, boost::mpl::false_>(col)));
+    return boost::end(derefof(auto_any_cast<type *, boost::mpl::false_>(col)));
 }
 
 template<typename T>
@@ -493,7 +464,7 @@ inline BOOST_DEDUCED_TYPENAME disable_if<
 >::type
 end(auto_any_t col, type2type<T, const_> *, bool *, boost::mpl::false_ *)
 {
-    return foreach_detail_::adl_end(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
+    return boost::end(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
 }
 #else
 template<typename T, typename C>
@@ -502,14 +473,14 @@ end(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *, boost::mpl::false_ 
 {
     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
-    return iterator(foreach_detail_::adl_end(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
+    return iterator(boost::end(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
 }
 
 template<typename T>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
 end(auto_any_t col, type2type<T, const_> *, boost::mpl::true_ *, boost::mpl::false_ *) // r-value
 {
-    return foreach_detail_::adl_end(auto_any_cast<T, boost::mpl::true_>(col));
+    return boost::end(auto_any_cast<T, boost::mpl::true_>(col));
 }
 #endif
 
