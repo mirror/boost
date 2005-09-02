@@ -1239,7 +1239,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        // typedef typename E::orientation_category orientation_category;
         typedef typename boost::mpl::if_<boost::is_same<typename E::orientation_category,
                                                          row_major_tag>,
                                           column_major_tag,
@@ -1247,13 +1246,12 @@ namespace boost { namespace numeric { namespace ublas {
                                                          column_major_tag>,
                                           row_major_tag,
                                           typename E::orientation_category>::type>::type orientation_category;
-        // typedef unknown_storage_tag storage_category;
         typedef typename E::storage_category storage_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        // ISSUE may be used as mutable expression.
-        // matrix_unary2 (const expression_type &e):
+        // matrix_unary2 may be used as mutable expression -
+        // this is the only non const expression constructor
         explicit matrix_unary2 (expression_type &e):
             e_ (e) {}
 
