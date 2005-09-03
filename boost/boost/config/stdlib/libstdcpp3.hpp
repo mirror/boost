@@ -30,7 +30,8 @@
 #endif
 
 #ifdef __GLIBCXX__ // gcc 3.4 and greater:
-#  ifdef _GLIBCXX_HAVE_GTHR_DEFAULT
+#  if defined(_GLIBCXX_HAVE_GTHR_DEFAULT) \
+	|| defined(_GLIBCXX__PTHREADS) 
       // 
       // If the std lib has thread support turned on, then turn it on in Boost
       // as well.  We do this because some gcc-3.4 std lib headers define _REENTANT
@@ -40,7 +41,9 @@
 #  else
 #     define BOOST_DISABLE_THREADS
 #  endif
-#elif defined(__GLIBCPP__) && !defined(_GLIBCPP_HAVE_GTHR_DEFAULT)
+#elif defined(__GLIBCPP__) \
+	&& !defined(_GLIBCPP_HAVE_GTHR_DEFAULT) \
+	&& !defined(_GLIBCPP__PTHREADS)
    // disable thread support if the std lib was built single threaded:
 #  define BOOST_DISABLE_THREADS
 #endif
