@@ -49,7 +49,7 @@ rule regex-test-run ( sources + : input * : requirements * )
            run
              # sources
              $(sources)
-             <template>../build/regex-options
+             <template>../build/regex-test-options
 
              # dependencies
              <lib>../build/boost_regex

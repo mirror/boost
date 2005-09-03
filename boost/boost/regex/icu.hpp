@@ -40,28 +40,28 @@ class BOOST_REGEX_DECL icu_regex_traits_implementation
    typedef UChar32                      char_type;
    typedef std::size_t                  size_type;
    typedef std::vector<char_type>       string_type;
-   typedef ::Locale                     locale_type;
+   typedef U_NAMESPACE_QUALIFIER Locale locale_type;
    typedef boost::uint_least32_t        char_class_type;
 public:
-   icu_regex_traits_implementation(const ::Locale& l)
+   icu_regex_traits_implementation(const U_NAMESPACE_QUALIFIER Locale& l)
       : m_locale(l)
    {
       UErrorCode success = U_ZERO_ERROR;
-      m_collator.reset( ::Collator::createInstance(l, success));
+      m_collator.reset(U_NAMESPACE_QUALIFIER Collator::createInstance(l, success));
       if(U_SUCCESS(success) == 0)
          init_error();
-      m_collator->setStrength(::Collator::IDENTICAL);
+      m_collator->setStrength(U_NAMESPACE_QUALIFIER Collator::IDENTICAL);
       success = U_ZERO_ERROR;
-      m_primary_collator.reset( ::Collator::createInstance(l, success));
+      m_primary_collator.reset(U_NAMESPACE_QUALIFIER Collator::createInstance(l, success));
       if(U_SUCCESS(success) == 0)
          init_error();
-      m_primary_collator->setStrength(::Collator::PRIMARY);
+      m_primary_collator->setStrength(U_NAMESPACE_QUALIFIER Collator::PRIMARY);
    }
-   ::Locale getloc()const
+   U_NAMESPACE_QUALIFIER Locale getloc()const
    {
       return m_locale;
    }
-   string_type do_transform(const char_type* p1, const char_type* p2, const ::Collator* pcoll) const;
+   string_type do_transform(const char_type* p1, const char_type* p2, const U_NAMESPACE_QUALIFIER Collator* pcoll) const;
    string_type transform(const char_type* p1, const char_type* p2) const
    {
       return do_transform(p1, p2, m_collator.get());
@@ -76,12 +76,12 @@ private:
       std::runtime_error e("Could not initialize ICU resources");
       boost::throw_exception(e);
    }
-   ::Locale m_locale;                                  // The ICU locale that we're using
-   boost::scoped_ptr< ::Collator> m_collator;          // The full collation object
-   boost::scoped_ptr< ::Collator> m_primary_collator;  // The primary collation object
+   U_NAMESPACE_QUALIFIER Locale m_locale;                                  // The ICU locale that we're using
+   boost::scoped_ptr< U_NAMESPACE_QUALIFIER Collator> m_collator;          // The full collation object
+   boost::scoped_ptr< U_NAMESPACE_QUALIFIER Collator> m_primary_collator;  // The primary collation object
 };
 
-inline boost::shared_ptr<icu_regex_traits_implementation> get_icu_regex_traits_implementation(const ::Locale& loc)
+inline boost::shared_ptr<icu_regex_traits_implementation> get_icu_regex_traits_implementation(const U_NAMESPACE_QUALIFIER Locale& loc)
 {
    return boost::shared_ptr<icu_regex_traits_implementation>(new icu_regex_traits_implementation(loc));
 }
@@ -94,7 +94,7 @@ public:
    typedef UChar32                      char_type;
    typedef std::size_t                  size_type;
    typedef std::vector<char_type>       string_type;
-   typedef ::Locale                     locale_type;
+   typedef U_NAMESPACE_QUALIFIER Locale locale_type;
 #ifdef BOOST_NO_INT64_T
    typedef std::bitset<64>              char_class_type;
 #else
@@ -104,7 +104,7 @@ public:
    struct boost_extensions_tag{};
 
    icu_regex_traits()
-      : m_pimpl(re_detail::get_icu_regex_traits_implementation(::Locale()))
+      : m_pimpl(re_detail::get_icu_regex_traits_implementation(U_NAMESPACE_QUALIFIER Locale()))
    {
    }
    static size_type length(const char_type* p);
@@ -213,6 +213,7 @@ typedef match_results<const ::UChar*> u16match;
 //
 namespace re_detail{
 
+#if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
 template <class InputIterator>
 inline u32regex do_make_u32regex(InputIterator i, 
                               InputIterator j, 
@@ -241,7 +242,59 @@ inline u32regex do_make_u32regex(InputIterator i,
 {
    return u32regex(i, j, opt);
 }
+#else
+template <class InputIterator>
+inline u32regex do_make_u32regex(InputIterator i, 
+                              InputIterator j, 
+                              boost::regex_constants::syntax_option_type opt, 
+                              const boost::mpl::int_<1>*)
+{
+   typedef boost::u8_to_u32_iterator<InputIterator, UChar32> conv_type;
+   typedef std::vector<UChar32> vector_type;
+   vector_type v;
+   conv_type a(i), b(j);
+   while(a != b)
+   {
+	   v.push_back(*a);
+	   ++a;
+   }
+   return u32regex(&*v.begin(), v.size(), opt);
+}
 
+template <class InputIterator>
+inline u32regex do_make_u32regex(InputIterator i, 
+                              InputIterator j, 
+                              boost::regex_constants::syntax_option_type opt, 
+                              const boost::mpl::int_<2>*)
+{
+   typedef boost::u16_to_u32_iterator<InputIterator, UChar32> conv_type;
+   typedef std::vector<UChar32> vector_type;
+   vector_type v;
+   conv_type a(i), b(j);
+   while(a != b)
+   {
+	   v.push_back(*a);
+	   ++a;
+   }
+   return u32regex(&*v.begin(), v.size(), opt);
+}
+
+template <class InputIterator>
+inline u32regex do_make_u32regex(InputIterator i, 
+                              InputIterator j, 
+                              boost::regex_constants::syntax_option_type opt, 
+                              const boost::mpl::int_<4>*)
+{
+   typedef std::vector<UCHAR32> vector_type;
+   vector_type v;
+   while(i != j)
+   {
+	   v.push_back((UCHAR32)(*i));
+	   ++a;
+   }
+   return u32regex(&*v.begin(), v.size(), opt);
+}
+#endif
 }
 
 //
@@ -721,7 +774,14 @@ OutputIterator do_regex_replace(OutputIterator out,
 {
    // unfortunately we have to copy the format string in order to pass in onward:
    std::vector<UChar32> f;
+#ifndef BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
    f.assign(fmt.first, fmt.second);
+#else
+   f.clear();
+   I2 pos = fmt.first;
+   while(pos != fmt.second)
+      f.push_back(*pos++);
+#endif
    
    regex_iterator<I1, UChar32, icu_regex_traits> i(in.first, in.second, e, flags);
    regex_iterator<I1, UChar32, icu_regex_traits> j;
@@ -773,7 +833,11 @@ inline OutputIterator u32regex_replace(OutputIterator out,
                          const charT* fmt, 
                          match_flag_type flags = match_default)
 {
-   return re_detail::extract_output_base(
+   return re_detail::extract_output_base
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+   <OutputIterator>
+#endif
+	 (
       re_detail::do_regex_replace(
          re_detail::make_utf32_out(out, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
          re_detail::make_utf32_seq(first, last, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
@@ -791,7 +855,11 @@ inline OutputIterator u32regex_replace(OutputIterator out,
                          const std::basic_string<charT>& fmt,
                          match_flag_type flags = match_default)
 {
-   return re_detail::extract_output_base(
+   return re_detail::extract_output_base
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+   <OutputIterator>
+#endif
+	 (
       re_detail::do_regex_replace(
          re_detail::make_utf32_out(out, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
          re_detail::make_utf32_seq(first, last, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
@@ -809,7 +877,11 @@ inline OutputIterator u32regex_replace(OutputIterator out,
                          const UnicodeString& fmt,
                          match_flag_type flags = match_default)
 {
-   return re_detail::extract_output_base(
+   return re_detail::extract_output_base
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+   <OutputIterator>
+#endif
+	(
       re_detail::do_regex_replace(
          re_detail::make_utf32_out(out, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
          re_detail::make_utf32_seq(first, last, static_cast<mpl::int_<sizeof(*first)> const*>(0)),

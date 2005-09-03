@@ -39,6 +39,15 @@ perl_matcher<BidiIterator, Allocator, traits>::perl_matcher(BidiIterator first, 
    :  m_result(what), base(first), last(end), 
       position(first), re(e), traits_inst(e.get_traits()), 
       m_independent(false), next_count(&rep_obj), rep_obj(&next_count)
+{
+   construct_init(first, last, what, e, f);
+}
+
+template <class BidiIterator, class Allocator, class traits>
+void perl_matcher<BidiIterator, Allocator, traits>::construct_init(BidiIterator first, BidiIterator end, 
+   match_results<BidiIterator, Allocator>& what, 
+   const basic_regex<char_type, traits>& e,
+   match_flag_type f)
 { 
    typedef typename regex_iterator_traits<BidiIterator>::iterator_category category;
    

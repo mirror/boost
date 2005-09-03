@@ -35,8 +35,8 @@
          Moved declarations class-inline in static_mutex.hpp so that SGI Irix compiler 
          can cope.
          <LI>
-         Added missing #includes to fileiter.hpp and cpp_regex_traits.hpp, this is 
-         probably an SGI Irix specific fix.
+         Added needed standard library #includes to fileiter.hpp, regex_workaround.hpp 
+         and cpp_regex_traits.hpp.
          <LI>
          Fixed a bug where non-greedy repeats could in certain strange curcumstances 
          repeat more times than their maximum value.
@@ -50,11 +50,14 @@
          Disabled external templates for Intel C++ 8.0 and earlier - otherwise 
          unresolved references can occur.
          <LI>
+         Rewritten extern template code for gcc so that only specific member functions 
+         are exported: otherwise strange unresolved references can occur when linking 
+         and mixing debug and non-debug code.
+         <LI>
          Initialise all the data members of the unicode_iterators: this keeps gcc from 
          issuing needless warnings.
          <LI>
-            Added needed header include to regex_workaround.hpp: appears to be an 
-            MSVC+STLport 5 specific problem.</LI></UL>
+            Ported the ICU integration code to VC6 and VC7.</LI></UL>
       <P>Boost 1.33.0.</P>
       <UL>
          <LI>
@@ -136,7 +139,7 @@
          <HR>
       <P></P>
       <p>Revised&nbsp; 
-         <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+         <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
          28 June 2004&nbsp; 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 

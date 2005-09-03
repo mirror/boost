@@ -242,10 +242,17 @@ public:
    {
       return assign(p, p + len, f);
    }
-
+private:
+   basic_regex& do_assign(const charT* p1,
+                          const charT* p2,
+                          flag_type f);
+public:
    basic_regex& assign(const charT* p1,
                           const charT* p2,
-                          flag_type f = regex_constants::normal);
+                          flag_type f = regex_constants::normal)
+   {
+      return do_assign(p1, p2, f);
+   }
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
 
    template <class ST, class SA>
@@ -493,7 +500,7 @@ private:
 // (in the event of a throw, the state of the object remains unchanged).
 //
 template <class charT, class traits>
-basic_regex<charT, traits>& basic_regex<charT, traits>::assign(const charT* p1,
+basic_regex<charT, traits>& basic_regex<charT, traits>::do_assign(const charT* p1,
                         const charT* p2,
                         flag_type f)
 {
