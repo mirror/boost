@@ -43,7 +43,7 @@ one master:
 Originally named QuickDoc, this funky tool that never dies evolved into a
 funkier tool thanks to Eric Niebler who resurrected the project making it
 generate __boostbook__ instead of HTML. The __boostbook__ documentation format
-is an extension of __docbook__, an SGML- or XML- based format for describing
+is an extension of __docbook__, an SGML or XML based format for describing
 documentation.
 
 QuickBook is a WikiWiki style documentation tool geared towards C++
@@ -73,7 +73,7 @@ grammar (C++ or Python), are composed of one or more phrases. A phrase
 can be a simple contiguous run of characters. Phrases can have special
 mark-ups. Marked up phrases can recursively contain other phrases, but
 cannot contain blocks. A terminal is a self contained block-level or
-phrase- level element that does not nest anything.
+phrase-level element that does not nest anything.
 
 Blocks, in general, are delimited by two end-of-lines (the block terminator).
 Phrases in each block cannot contain a block terminator. This way, syntax errors
@@ -682,7 +682,7 @@ to link to them. See [link syntax.anchor_links Anchor links] and
 ''']
 
 When a macro is defined, the identifier replaces the text anywhere in the file,
-in paragraphs, in markups, etc. macro_identifier is a string of non- white space
+in paragraphs, in markups, etc. macro_identifier is a string of non-white space
 characters except '\]' while the replacement text can be any phrase (even
 marked up). Example:
 
@@ -750,9 +750,9 @@ Quickbook has some predefined macros that you can already use.
 will generate this:
 
 [blurb :-) [*An eye catching advertisement or note...]\n\n
-    __spirit__ is an object- oriented recursive-descent parser generator
+    __spirit__ is an object-oriented recursive-descent parser generator
     framework implemented using template meta-programming techniques. Expression
-    templates allow us to approximate the syntax of Extended Backus- Normal Form
+    templates allow us to approximate the syntax of Extended Backus-Normal Form
     (EBNF) completely in C++.
 ]
 

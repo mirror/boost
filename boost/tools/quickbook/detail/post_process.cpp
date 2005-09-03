@@ -27,7 +27,7 @@ namespace quickbook
                 
         void indent()
         {
-            assert(indent_ > 0); // this should not happen
+            assert(indent_ > 0); // this should not happen!
             for (int i = 0; i < indent_; ++i)
                 out << ' ';
             column = indent_;
@@ -46,16 +46,49 @@ namespace quickbook
                 cr();
         }
 
+        bool break_after(char prev)
+        {
+            switch (prev)
+            {
+                case '>':
+                case '=':
+                case ';':
+                case ',':
+                    // no '.' and '?'. the space algorithm below 
+                    // already does the right thing.
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        bool break_before(char ch)
+        {
+            switch (ch)
+            {
+                case '<':
+                case '(':
+                case '[':
+                case '{':
+                case '&':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         void print(char ch)
         {
+            // $$$ Fix Me. Do the right thing! $$$
             if (ch == '"' && prev != '\\')
-                in_string = !in_string; // don't cut strings! $$$ Fix Me. Do the right thing! $$$
+                in_string = !in_string; // don't break strings!
 
             if (!in_string && std::isspace(ch))
             {
+                // we can break spaces if they are not inside strings
                 if (!std::isspace(prev))
                 {
-                    if (column > linewidth)
+                    if (column >= linewidth)
                     {
                         cr();
                     }
@@ -68,14 +101,17 @@ namespace quickbook
             }
             else
             {
-                if (ch == '<' && column > linewidth)
-                    cr();
-                else if (prev == '>' && column > linewidth)
+                // we can break tag boundaries and stuff after 
+                // delimiters if they are not inside strings
+                if (!in_string 
+                    && column >= linewidth 
+                    && (break_before(ch) || break_after(prev)))
                     cr();
                 out << ch;
                 ++column;
             }
-            
+
+
             prev = ch;
         }
 
@@ -255,7 +291,8 @@ namespace quickbook
 
         tidy_compiler state(out, linewidth);
         tidy_grammar g(state, indent);
-        parse(in.begin(), in.end(), g, space_p);
+        parse_info<iter_type> r = parse(in.begin(), in.end(), g, space_p);
+        assert(r.full); // this should not happen!
     }
 }
 

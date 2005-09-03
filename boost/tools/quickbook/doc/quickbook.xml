@@ -45,19 +45,19 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     </blockquote>
     <para>
       Originally named QuickDoc, this funky tool that never dies evolved into a funkier
-      tool thanks to Eric Niebler who resurrected the project making it generate 
+      tool thanks to Eric Niebler who resurrected the project making it generate
       <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>
       instead of HTML. The <ulink url="http://www.boost.org/doc/html/boostbook.html">
       BoostBook</ulink>documentation format is an extension of <ulink url="http://www.docbook.org/">
-      DocBook</ulink>, an SGML- or XML- based format for describing documentation.
+      DocBook</ulink>, an SGML or XML based format for describing documentation.
     </para>
     <para>
       QuickBook is a WikiWiki style documentation tool geared towards C++ documentation
       using simple rules and markup for simple formatting tasks. QuickBook extends
       the WikiWiki concept. Like the WikiWiki, QuickBook documents are simple text
-      files. A single QuickBook document can generate a fully linked set of nice HTML
-      and PostScript/PDF documents complete with images and syntax- colorized source
-      code.
+      files. A single QuickBook document can generate a fully linked set of nice
+      HTML and PostScript/PDF documents complete with images and syntax- colorized
+      source code.
     </para>
     <para>
       Features include:
@@ -89,18 +89,18 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Syntax Summary</title>
     <para>
       A QuickBook document is composed of one or more blocks. An example of a block
-      is the paragraph or a C++ code snippet. Some blocks have special mark-ups. Blocks,
-      except code snippets which have their own grammar (C++ or Python), are composed
-      of one or more phrases. A phrase can be a simple contiguous run of characters.
-      Phrases can have special mark-ups. Marked up phrases can recursively contain
-      other phrases, but cannot contain blocks. A terminal is a self contained block-level
-      or phrase- level element that does not nest anything.
+      is the paragraph or a C++ code snippet. Some blocks have special mark-ups.
+      Blocks, except code snippets which have their own grammar (C++ or Python),
+      are composed of one or more phrases. A phrase can be a simple contiguous run
+      of characters. Phrases can have special mark-ups. Marked up phrases can recursively
+      contain other phrases, but cannot contain blocks. A terminal is a self contained
+      block-level or phrase-level element that does not nest anything.
     </para>
     <para>
       Blocks, in general, are delimited by two end-of-lines (the block terminator).
       Phrases in each block cannot contain a block terminator. This way, syntax errors
-      such as un-matched closing brackets do not go haywire and corrupt anything past
-      a single block.
+      such as un-matched closing brackets do not go haywire and corrupt anything
+      past a single block.
     </para><anchor id="syntax.comments" /><bridgehead renderas="sect2">Comments</bridgehead>
     <para>
       Can be placed anywhere.
@@ -130,8 +130,8 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     </para>
     <para>
       <emphasis role="bold"><emphasis>bold-italic</emphasis></emphasis>
-    </para><anchor id="syntax.simple_formatting" /><bridgehead renderas="sect3">Simple
-    formatting</bridgehead>
+    </para><anchor id="syntax.simple_formatting" /><bridgehead renderas="sect3">
+    Simple formatting</bridgehead>
     <para>
       Simple markup for formatting text, common in many applications, is now supported:
     </para>
@@ -167,8 +167,8 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
         If the matching markup cannot be found within a line, the formatting will
         not be applied. This is to ensure that un-matched formatting markups, which
         can be a common mistake, does not corrupt anything past a single line. We
-        do not want the rest of the document to be rendered bold just because we forgot
-        a trailing '*'. 
+        do not want the rest of the document to be rendered bold just because we
+        forgot a trailing '*'. 
       </listitem>
       <listitem>
         A line starting with the star will be interpreted as an unordered list. See
@@ -212,12 +212,12 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
             </entry>
           </row>
           <row>
-            <entry><literal>3*4*5 = 60 (no bold)</literal></entry><entry>3*4*5 = 60
-            (no bold)</entry>
+            <entry><literal>3*4*5 = 60 (no bold)</literal></entry><entry>3*4*5 =
+            60 (no bold)</entry>
           </row>
           <row>
-            <entry><literal>3 * 4 * 5 = 60 (no bold)</literal></entry><entry>3 * 4
-            * 5 = 60 (no bold)</entry>
+            <entry><literal>3 * 4 * 5 = 60 (no bold)</literal></entry><entry>3 *
+            4 * 5 = 60 (no bold)</entry>
           </row>
           <row>
             <entry><literal>3 *4* 5 = 60 (4 is bold)</literal></entry><entry>3 <emphasis
@@ -302,8 +302,9 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
       be set in the <link linkend="syntax.document">Document Info</link>section.
     </para>
     <para>
-      To change the source mode, use the <literal>[source-mode]</literal>markup, where
-      <literal>source-mode</literal>is one of the supported modes. For example, this:
+      To change the source mode, use the <literal>[source-mode]</literal>markup,
+      where <literal>source-mode</literal>is one of the supported modes. For example,
+      this:
     </para>
 <programlisting><literal>Python's [python] `import` is rather like C++'s [c++] `#include`. A
 C++ comment `// looks like this` whereas a Python comment [python]
@@ -383,10 +384,10 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <programlisting><literal>[#named_anchor]
 </literal></programlisting>
     <para>
-      A named anchor is a hook that can be referenced by a link elsewhere in the document.
-      You can then reference an anchor with <literal>[link named_anchor Some link
-      text]</literal>. More on anchors <link linkend="syntax.anchor_links">here</link>
-      , <link linkend="syntax.section">here</link>and <link linkend="syntax.headings">
+      A named anchor is a hook that can be referenced by a link elsewhere in the
+      document. You can then reference an anchor with <literal>[link named_anchor
+      Some link text]</literal>. More on anchors <link linkend="syntax.anchor_links">
+      here</link>, <link linkend="syntax.section">here</link>and <link linkend="syntax.headings">
       here</link>.
     </para><anchor id="syntax.links" /><bridgehead renderas="sect3">Links</bridgehead>
 <programlisting><literal>[@http://www.boost.org this is [*boost's] website....]
@@ -432,8 +433,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <programlisting><literal>[link xml.refentry The link text]
 </literal></programlisting>
     <para>
-      This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;&gt;The
-      link text&lt;/link&gt;</literal>.
+      This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;
+      &gt;The link text&lt;/link&gt;</literal>.
     </para>
     <para>
       Like URLs, the link text is optional. If this is not present, the link text
@@ -442,8 +443,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <programlisting><literal>[link xml.refentry]
 </literal></programlisting>
     <para>
-      This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;&gt;xml.refentry&lt;/link&gt;
-      </literal>.
+      This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;
+      &gt;xml.refentry&lt;/link&gt;</literal>.
     </para><anchor id="syntax.function__class__member__enum_or_header_links" /><bridgehead
     renderas="sect3">function, class, member, enum or header links</bridgehead>
     <para>
@@ -522,8 +523,8 @@ escape (no processing/formatting)
         <phrase role="special">[</phrase><phrase role="identifier">br</phrase><phrase
         role="special">]</phrase>
       </code>.
-    </para><anchor id="syntax.images__terminal_" /><bridgehead renderas="sect3">Images
-    (terminal)</bridgehead>
+    </para><anchor id="syntax.images__terminal_" /><bridgehead renderas="sect3">
+    Images (terminal)</bridgehead>
 <programlisting><literal>[$image.jpg]
 </literal></programlisting>
     <anchor id="syntax.block_level_elements" /><bridgehead renderas="sect2">Block
@@ -589,7 +590,8 @@ escape (no processing/formatting)
       and become the id. Valid characters are <literal>a-Z</literal>, <literal>A-Z
       </literal>, <literal>0-9</literal>and <literal>_</literal>. All non-valid characters
       are converted to underscore and all upper-case are converted to lower case.
-      Thus: &quot;The Section Title&quot; will be normalized to &quot;the_section_title&quot;.
+      Thus: &quot;The Section Title&quot; will be normalized to &quot;the_section_title
+      &quot;.
     </para>
     <para>
       End a section with:
@@ -892,7 +894,8 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 <literal>
 <phrase role="identifier">using</phrase>&nbsp;<ulink url="index.html">quickbook</ulink><phrase role="special">::</phrase><ulink url="quickbook/highlight.html">syntax_highlight</ulink><phrase role="special">;</phrase></literal>
 </programlisting>
-    <anchor id="syntax.preformatted" /><bridgehead renderas="sect3">Preformatted</bridgehead>
+    <anchor id="syntax.preformatted" /><bridgehead renderas="sect3">Preformatted
+    </bridgehead>
     <para>
       Sometimes, you don't want some preformatted text to be parsed as C++. In such
       cases, use the <literal>[pre ... ]</literal>markup block.
@@ -909,8 +912,8 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 </literal></programlisting>
     <para>
       Spaces, tabs and newlines are rendered as-is. Unlike all quickbook block level
-      markup, pre (and Code) are the only ones that allow multiple newlines. The markup
-      above will generate:
+      markup, pre (and Code) are the only ones that allow multiple newlines. The
+      markup above will generate:
     </para>
 <programlisting><literal>Some <emphasis role="bold">preformatted</emphasis> text                    Some <emphasis role="bold">preformatted</emphasis> text
 
@@ -948,7 +951,7 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
     <para>
       Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
       names with <literal>name=&quot;section_id.normalized_header_text&quot;</literal>
-      (i.e. valid characters are <literal>a-z</literal>, <literal>A-Z</literal>, 
+      (i.e. valid characters are <literal>a-z</literal>, <literal>A-Z</literal>,
       <literal>0-9</literal>and <literal>_</literal>. All non-valid characters are
       converted to underscore and all upper-case are converted to lower-case. For
       example: Heading 1 in section Section 2 will be normalized to <literal>section_2.heading_1
@@ -964,7 +967,7 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 </literal></programlisting>
     <para>
       When a macro is defined, the identifier replaces the text anywhere in the file,
-      in paragraphs, in markups, etc. macro_identifier is a string of non- white space
+      in paragraphs, in markups, etc. macro_identifier is a string of non-white space
       characters except ']' while the replacement text can be any phrase (even marked
       up). Example:
     </para>
@@ -1023,8 +1026,8 @@ sf_logo
       Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink><inlinemediaobject>
       <imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject>
       </inlinemediaobject>
-    </para><anchor id="syntax.predefined_macros" /><bridgehead renderas="sect3">Predefined
-    Macros</bridgehead>
+    </para><anchor id="syntax.predefined_macros" /><bridgehead renderas="sect3">
+    Predefined Macros</bridgehead>
     <para>
       Quickbook has some predefined macros that you can already use.
     </para>
@@ -1039,10 +1042,11 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-03</entry>
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-03
+            </entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>12:54:10
+            <entry>__TIME__</entry><entry>The current time</entry><entry>10:31:09
             PM</entry>
           </row>
           <row>
@@ -1069,12 +1073,13 @@ sf_logo
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/smiley.png">
-            </imagedata></imageobject></inlinemediaobject><emphasis role="bold">An
-            eye catching advertisement or note...</emphasis><sbr/><sbr/><ulink url="http://spirit.sourceforge.net">
-            Spirit</ulink>is an object- oriented recursive-descent parser generator
-            framework implemented using template meta-programming techniques. Expression
-            templates allow us to approximate the syntax of Extended Backus- Normal
-            Form (EBNF) completely in C++. </entry>
+            </imagedata></imageobject></inlinemediaobject><emphasis role="bold">
+            An eye catching advertisement or note...</emphasis><sbr/><sbr/><ulink
+            url="http://spirit.sourceforge.net">Spirit</ulink>is an object-oriented
+            recursive-descent parser generator framework implemented using template
+            meta-programming techniques. Expression templates allow us to approximate
+            the syntax of Extended Backus-Normal Form (EBNF) completely in C++. 
+            </entry>
           </row>
         </tbody>
       </tgroup>
@@ -1149,10 +1154,10 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>Row 0, Col 0: a small cell</entry><entry>Row 0, Col 1: A very big
-            cell...A very big cell...A very big cell... A very big cell...A very big
-            cell...A very big cell... A very big cell...A very big cell...A very big
-            cell... </entry>
+            <entry>Row 0, Col 0: a small cell</entry><entry>Row 0, Col 1: A very
+            big cell...A very big cell...A very big cell... A very big cell...A very
+            big cell...A very big cell... A very big cell...A very big cell...A very
+            big cell... </entry>
           </row>
           <row>
             <entry>Row 1, Col 0: a small cell</entry><entry>Row 1, Col 1: a small
@@ -1220,9 +1225,9 @@ sf_logo
     <para>
       When using this form, all auto-generated anchors will use &quot;someid&quot;
       as a unique prefix. So for instance, if there is a section in someother.qbk
-      named &quot;Intro&quot;, the named anchor for that section will be &quot;someid.intro&quot;,
-      and you can link to it with <literal>[link someid.intro The Intro]</literal>
-      .
+      named &quot;Intro&quot;, the named anchor for that section will be &quot;someid.intro
+      &quot;, and you can link to it with <literal>[link someid.intro The Intro]
+      </literal>.
     </para>
   </section>
   <section id="quickbook.ref">
@@ -1245,8 +1250,8 @@ sf_logo
             or /italics/</literal></entry>
           </row>
           <row>
-            <entry><emphasis role="bold">bold</emphasis></entry><entry><literal>[*bold]
-            or *bold*</literal></entry>
+            <entry><emphasis role="bold">bold</emphasis></entry><entry><literal>
+            [*bold] or *bold*</literal></entry>
           </row>
           <row>
             <entry><emphasis role="underline">underline</emphasis></entry><entry>
@@ -1331,12 +1336,12 @@ sf_logo
             <sbr/></literal></entry>
           </row>
           <row>
-            <entry>unordered list</entry><entry><literal>* one<sbr/>* two<sbr/>* three
-            <sbr/></literal></entry>
+            <entry>unordered list</entry><entry><literal>* one<sbr/>* two<sbr/>*
+            three<sbr/></literal></entry>
           </row>
           <row>
-            <entry>code</entry><entry>No markup. Preformatted code starts with a space
-            or a tab.</entry>
+            <entry>code</entry><entry>No markup. Preformatted code starts with a
+            space or a tab.</entry>
           </row>
           <row>
             <entry>preformatted</entry><entry><literal>[pre preformatted]</literal>
@@ -1364,20 +1369,20 @@ sf_logo
             <entry>heading 6</entry><entry><literal>[h6 Heading 6]</literal></entry>
           </row>
           <row>
-            <entry>macro</entry><entry><literal>[def macro_identifier some text]</literal>
-            </entry>
+            <entry>macro</entry><entry><literal>[def macro_identifier some text]
+            </literal></entry>
           </row>
           <row>
-            <entry>blurb</entry><entry><literal>[blurb advertisement or note...]</literal>
-            </entry>
+            <entry>blurb</entry><entry><literal>[blurb advertisement or note...]
+            </literal></entry>
           </row>
           <row>
             <entry>table</entry><entry><literal>[table Title<sbr/>[[a][b][c]]<sbr/>
             [[a][b][c]]<sbr/>]</literal></entry>
           </row>
           <row>
-            <entry>variablelist</entry><entry><literal>[variablelist Title<sbr/>[[a][b]]
-            <sbr/>[[a][b]]<sbr/>]</literal></entry>
+            <entry>variablelist</entry><entry><literal>[variablelist Title<sbr/>
+            [[a][b]]<sbr/>[[a][b]]<sbr/>]</literal></entry>
           </row>
           <row>
             <entry>include</entry><entry><literal>[include someother.qbk]</literal>
