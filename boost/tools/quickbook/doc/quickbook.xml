@@ -22,9 +22,6 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     <partpurpose>
       WikiWiki style documentation tool 
     </partpurpose>
-    <partcategory name="category:">
-      
-    </partcategory>
   </partinfo><title>quickbook 1.1</title>
   <section id="quickbook.intro">
     <title>Introduction</title>
@@ -1045,7 +1042,7 @@ sf_logo
             <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-03</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>09:21:06
+            <entry>__TIME__</entry><entry>The current time</entry><entry>09:45:20
             AM</entry>
           </row>
           <row>

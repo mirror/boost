@@ -1112,7 +1112,7 @@ namespace quickbook
             ;
         }
 
-        if (!actions.doc_purpose.empty())
+        if (!actions.doc_category.empty())
         {
             out << "    <" << actions.doc_type << "category name=\"category:"
                 << actions.doc_category
