@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "../quickbook.hpp"
 #include "../doc_info.hpp"
+#include "./post_process.hpp"
 #include "utils.hpp"
 #include "actions.hpp"
 #include <boost/spirit/iterator/position_iterator.hpp>
@@ -336,8 +337,14 @@ namespace quickbook
     static int
     parse(char const* filein_, char const* fileout_, bool ignore_docinfo = false)
     {
-        std::ofstream fileout(fileout_);
-        return parse(filein_, fileout);
+        std::stringstream buffer;
+        int result = parse(filein_, buffer);
+        if (result == 0)
+        {
+            std::ofstream fileout(fileout_);
+            post_process(buffer.str(), fileout);
+        }
+        return result;
     }
 }
 
