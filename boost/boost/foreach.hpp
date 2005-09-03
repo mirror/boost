@@ -26,6 +26,7 @@
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                                       \
  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                      \
  || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                    \
+ || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))                                       \
  || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
 # define BOOST_FOREACH_NO_RVALUE_DETECTION
 #endif
@@ -40,9 +41,7 @@
  || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 2))                                 \
  || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 3) && defined(__APPLE_CC__))        \
  || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))                                          \
- || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))                                       \
- || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))                                       \
- || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
+ || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
 # define BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
 #endif
 
@@ -369,7 +368,7 @@ template<typename T>
 inline auto_any<T *> contain(T &t, boost::mpl::false_ *, boost::mpl::false_ *) // l-value
 {
     // Cannot seem to get sunpro to handle addressof() with array types.
-    #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+    #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
     return &t;
     #else
     return boost::addressof(t);
