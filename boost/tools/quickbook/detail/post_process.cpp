@@ -18,17 +18,16 @@ namespace quickbook
     using namespace boost::spirit;
     using boost::bind;
     typedef std::string::const_iterator iter_type;
-    int const tab = 2; // hard coded for now
-    int const right_margin = 80; // hard coded for now
     
     struct printer
     {
-        printer(std::ostream& out, int& indent)
-            : out(out), indent_(indent)
+        printer(std::ostream& out, int& indent, int linewidth)
+            : out(out), indent_(indent), linewidth(linewidth)
             , column(0), prev(0), in_string(false) {}
                 
         void indent()
         {
+            assert(indent_ > 0); // this should not happen
             for (int i = 0; i < indent_; ++i)
                 out << ' ';
             column = indent_;
@@ -49,14 +48,14 @@ namespace quickbook
 
         void print(char ch)
         {
-            if (ch == '"')
-                in_string = !in_string; // don't cut strings! $$$ Fix Me $$$
+            if (ch == '"' && prev != '\\')
+                in_string = !in_string; // don't cut strings! $$$ Fix Me. Do the right thing! $$$
 
             if (!in_string && std::isspace(ch))
             {
                 if (!std::isspace(prev))
                 {
-                    if (column > right_margin)
+                    if (column > linewidth)
                     {
                         cr();
                     }
@@ -69,9 +68,9 @@ namespace quickbook
             }
             else
             {
-                if (ch == '<' && column > right_margin)
+                if (ch == '<' && column > linewidth)
                     cr();
-                else if (prev == '>' && column > right_margin)
+                else if (prev == '>' && column > linewidth)
                     cr();
                 out << ch;
                 ++column;
@@ -92,12 +91,13 @@ namespace quickbook
         int& indent_;
         int column;
         bool in_string;
+        int linewidth;
     };    
     
     struct tidy_compiler
     {
-        tidy_compiler(std::ostream& out)
-            : out(out), indent(0), printer_(out, indent)
+        tidy_compiler(std::ostream& out, int linewidth)
+            : out(out), indent(0), printer_(out, indent, linewidth)
         {
             flow_tags.insert("anchor");
             flow_tags.insert("phrase");
@@ -141,8 +141,8 @@ namespace quickbook
     
     struct tidy_grammar : grammar<tidy_grammar>
     {
-        tidy_grammar(tidy_compiler& state)
-            : state(state) {}
+        tidy_grammar(tidy_compiler& state, int tab)
+            : state(state), tab(tab) {}
 
         template <typename Scanner>
         struct definition
@@ -157,8 +157,7 @@ namespace quickbook
                     >>  "</programlisting>"
                     ;
 
-                start_tag_common = '<' >> tag >> *(anychar_p - '>');
-                start_tag = start_tag_common >> '>';
+                start_tag = '<' >> tag >> *(anychar_p - '>') >> '>';
                 start_end_tag = 
                         '<' >> tag >> *(anychar_p - ('/' | ch_p('>'))) >> "/>"
                     |   "<?" >> tag >> *(anychar_p - '?') >> "?>"
@@ -181,8 +180,8 @@ namespace quickbook
             rule<Scanner> const&
             start() { return tidy; }
 
-            rule<Scanner>   tidy, tag, start_tag_common, start_tag,
-                            start_end_tag, content, end_tag, markup, code;
+            rule<Scanner>   tidy, tag, start_tag, start_end_tag,
+                            content, end_tag, markup, code;
         };
 
         void do_code(iter_type f, iter_type l) const
@@ -240,12 +239,22 @@ namespace quickbook
         }
         
         tidy_compiler& state;
+        int tab;
     };
 
-    void post_process(std::string const& in, std::ostream& out)
+    void post_process(
+        std::string const& in
+      , std::ostream& out
+      , int indent
+      , int linewidth)
     {
-        tidy_compiler state(out);
-        tidy_grammar g(state);
+        if (indent == -1)
+            indent = 2;         // set default to 2
+        if (linewidth == -1)
+            linewidth = 80;     // set default to 80
+
+        tidy_compiler state(out, linewidth);
+        tidy_grammar g(state, indent);
         parse(in.begin(), in.end(), g, space_p);
     }
 }

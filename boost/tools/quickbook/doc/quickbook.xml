@@ -1042,8 +1042,8 @@ sf_logo
             <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-03</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>09:45:20
-            AM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>12:54:10
+            PM</entry>
           </row>
           <row>
             <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>

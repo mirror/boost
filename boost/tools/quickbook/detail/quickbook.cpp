@@ -335,14 +335,18 @@ namespace quickbook
     }
 
     static int
-    parse(char const* filein_, char const* fileout_, bool ignore_docinfo = false)
+    parse(
+        char const* filein_
+      , char const* fileout_
+      , int indent
+      , int linewidth)
     {
         std::stringstream buffer;
         int result = parse(filein_, buffer);
         if (result == 0)
         {
             std::ofstream fileout(fileout_);
-            post_process(buffer.str(), fileout);
+            post_process(buffer.str(), fileout, indent, linewidth);
         }
         return result;
     }
@@ -362,16 +366,28 @@ main(int argc, char* argv[])
         using boost::program_options::variables_map;
         using boost::program_options::store;
         using boost::program_options::parse_command_line;
+        using boost::program_options::command_line_parser;
         using boost::program_options::notify;
+        using boost::program_options::value;
+        using boost::program_options::positional_options_description;
 
         options_description desc("Allowed options");
         desc.add_options()
             ("help", "produce help message")
-            ("version,v", "print version string")
+            ("version", "print version string")
+            ("indent", value<int>(), "indent spaces")
+            ("linewidth", value<int>(), "line width")
+            ("input-file", value<std::string>(), "input file")
+            ("output-file", value<std::string>(), "output file")
         ;
+        
+        positional_options_description p;
+        p.add("input-file", -1);
     
         variables_map vm;
-        store(parse_command_line(argc, argv, desc), vm);
+        int indent = -1;
+        int linewidth = -1;
+        store(command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
         notify(vm);    
     
         if (vm.count("help")) 
@@ -386,24 +402,31 @@ main(int argc, char* argv[])
             return 0;
         }
 
-        if (argc > 1)
+        if (vm.count("indent"))
+            indent = vm["indent"].as<int>();
+        if (vm.count("linewidth"))
+            linewidth = vm["linewidth"].as<int>();
+
+        if (vm.count("input-file"))
         {
+            std::string filein = vm["input-file"].as<std::string>();
             std::string fileout;
-            if (argc == 2)
+
+            if (vm.count("output-file"))
             {
-                fileout = quickbook::detail::remove_extension(argv[1]);
-                fileout += ".xml";
+                fileout = vm["output-file"].as<std::string>();
             }
             else
             {
-                fileout = argv[2];
+                fileout = quickbook::detail::remove_extension(filein.c_str());
+                fileout += ".xml";
             }
 
             std::cout << "Generating Output File: "
                 << fileout
                 << std::endl;
     
-            return quickbook::parse(argv[1], fileout.c_str());
+            return quickbook::parse(filein.c_str(), fileout.c_str(), indent, linewidth);
         }
         else
         {

@@ -14,7 +14,11 @@
 
 namespace quickbook
 {
-    void post_process(std::string const& in, std::ostream& out);
+    void post_process(
+        std::string const& in
+      , std::ostream& out
+      , int indent
+      , int linewidth);
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_POST_PROCESS_HPP
