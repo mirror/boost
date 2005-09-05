@@ -154,6 +154,12 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    [ run local_time/testlocal_time.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testlocal_time_iterator.cpp
+     <lib>../build/boost_date_time
+    : : :  $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testlocal_time_period.cpp
+     <lib>../build/boost_date_time
+    : : :  $(DATE_TIME_PROPERTIES) ]
 ### streaming
    [ run local_time/testlocal_time_facet.cpp
      <lib>../build/boost_date_time
@@ -220,6 +226,7 @@ import ../../../libs/serialization/build/serialization ;
 # Subject to the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE-1.0 or 
 # http://www.boost.org/LICENSE-1.0)
+
 
 
 
