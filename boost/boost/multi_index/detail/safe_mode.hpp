@@ -62,10 +62,6 @@ template<typename Iterator>
 inline void detach_equivalent_iterators(Iterator& it)
 {
   if(it.valid()){
-#if defined(BOOST_HAS_THREADS)
-    boost::detail::lightweight_mutex::scoped_lock lock(it.cont->mutex);
-#endif
-
     Iterator *prev_,*next_;
     for(
       prev_=static_cast<Iterator*>(&it.cont->header);
@@ -160,10 +156,6 @@ public:
 
   void detach_all_iterators()
   {
-#if defined(BOOST_HAS_THREADS)
-    boost::detail::lightweight_mutex::scoped_lock lock(mutex);
-#endif
-
     for(safe_iterator_base* it=header.next;it;it=it->next)it->cont=0;
   }
 
