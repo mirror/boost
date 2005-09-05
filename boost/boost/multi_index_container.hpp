@@ -574,7 +574,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
       if(!p.second)throw_exception(
         archive::archive_exception(
           archive::archive_exception::other_exception));
-      ar.reset_object_address(&(*p.first),&value.get());
+      ar.reset_object_address(&p.first->value,&value.get());
       lm.add(p.first,ar,version);
     }
     lm.add_track(header(),ar,version);
