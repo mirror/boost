@@ -21,16 +21,16 @@ namespace quickbook
     
     struct printer
     {
-        printer(std::ostream& out, int& indent, int linewidth)
-            : prev(0), out(out), indent_(indent) , column(0)
+        printer(std::ostream& out, int& current_indent, int linewidth)
+            : prev(0), out(out), current_indent(current_indent) , column(0)
             , in_string(false), linewidth(linewidth) {}
                 
         void indent()
         {
-            assert(indent_ >= 0); // this should not happen!
-            for (int i = 0; i < indent_; ++i)
+            assert(current_indent >= 0); // this should not happen!
+            for (int i = 0; i < current_indent; ++i)
                 out << ' ';
-            column = indent_;
+            column = current_indent;
         }
         
         void cr()
@@ -42,7 +42,7 @@ namespace quickbook
         void align_indent()
         {
             // make sure we are at the proper indent position
-            if (column != indent_)
+            if (column != current_indent)
                 cr();
         }
 
@@ -124,7 +124,7 @@ namespace quickbook
         
         char prev;
         std::ostream& out;
-        int& indent_;
+        int& current_indent;
         int column;
         bool in_string;
         int linewidth;
@@ -133,7 +133,7 @@ namespace quickbook
     struct tidy_compiler
     {
         tidy_compiler(std::ostream& out, int linewidth)
-            : out(out), indent(0), printer_(out, indent, linewidth)
+            : out(out), current_indent(0), printer_(out, current_indent, linewidth)
         {
             flow_tags.insert("anchor");
             flow_tags.insert("phrase");
@@ -170,15 +170,15 @@ namespace quickbook
         std::set<std::string> flow_tags;
         std::stack<std::string> tags;
         std::ostream& out;
-        int indent;
+        int current_indent;
         printer printer_;
         std::string current_tag;
     };    
     
     struct tidy_grammar : grammar<tidy_grammar>
     {
-        tidy_grammar(tidy_compiler& state, int tab)
-            : state(state), tab(tab) {}
+        tidy_grammar(tidy_compiler& state, int indent)
+            : state(state), indent(indent) {}
 
         template <typename Scanner>
         struct definition
@@ -252,7 +252,7 @@ namespace quickbook
             state.printer_.print(f, l);
             if (!is_flow_tag)
             {
-                state.indent += tab;
+                state.current_indent += indent;
                 state.printer_.cr();
             }
         }
@@ -267,7 +267,7 @@ namespace quickbook
             bool is_flow_tag = state.is_flow_tag(state.tags.top());
             if (!is_flow_tag)
             {
-                state.indent -= tab;
+                state.current_indent -= indent;
                 state.printer_.cr();
             }
             state.printer_.print(f, l);
@@ -275,7 +275,7 @@ namespace quickbook
         }
         
         tidy_compiler& state;
-        int tab;
+        int indent;
     };
 
     void post_process(
