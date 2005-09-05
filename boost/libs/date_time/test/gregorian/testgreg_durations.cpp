@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -29,6 +29,37 @@ int main(){
     check("months & months subtractable", months(-5) == m2 - m1);
     m2 -= m1;
     check("months & months subtractable", months(-5) == m2);
+    {
+      // adding and subtracting negative values
+      date d1(2005, Jan, 1);
+      date d2(2005, Feb, 1);
+      check("add neg months (year wrap under)",
+          d1 + months(-1) == date(2004,Dec,1));
+      check("add neg months (no year wrap under)",
+          d2 + months(-1) == date(2005,Jan,1));
+      check("add neg months (year wrap under)",
+          d2 + months(-2) == date(2004,Dec,1));
+      check("add neg months (year wrap under)",
+          d2 + months(-12) == date(2004,Feb,1));
+      check("add neg months (year wrap under)",
+          d2 + months(-13) == date(2004,Jan,1));
+      check("add neg months (year wrap under)",
+          d2 + months(-14) == date(2003,Dec,1));
+      date d3(2005, Dec, 1);
+      date d4(2005, Nov, 1);
+      check("subtract neg months (year wrap over)",
+          d3 - months(-1) == date(2006,Jan,1));
+      check("subtract neg months (no year wrap over)",
+          d4 - months(-1) == date(2005,Dec,1));
+      check("subtract neg months (year wrap over)",
+          d4 - months(-2) == date(2006,Jan,1));
+      check("subtract neg months (year wrap over)",
+          d4 - months(-12) == date(2006,Nov,1));
+      check("subtract neg months (year wrap over)",
+          d4 - months(-13) == date(2006,Dec,1));
+      check("subtract neg months (year wrap over)",
+          d4 - months(-14) == date(2007,Jan,1));
+    }
     {
       months m1(5), m2(3), m3(10);
       check("months & int multipliable", months(15) == m1 * 3);

@@ -1,8 +1,8 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst 
  */
 
 #include "boost/date_time/wrapping_int.hpp"
@@ -20,7 +20,7 @@ main()
 {
   using namespace boost::date_time;
   
-  wrapping_int<unsigned int, 3600> wi(3599);
+  wrapping_int<int, 3600> wi(3599);
   check("construction/conversion", wi == 3599);
   check("add with wrap",    wi.add(1) == 1);
   check("added value ok",   wi == 0);
@@ -40,7 +40,7 @@ main()
   check("subtract again",   (wi.subtract(1) == 0) && (wi == 1));
   std::cout << wi << std::endl;
 
-  wrapping_int<unsigned short, 60> wi2(0);
+  wrapping_int<short, 60> wi2(0);
   check("add with wrap - return",  wi2.add(121) == 2);
   check("add with wrap - value",   wi2 == 1);
 
@@ -48,6 +48,14 @@ main()
   check("signed int - add return",  wi3.add(5) == 0);
   check("signed int - value",   wi3 == 0);
 
+  { // subtracting negative values
+    wrapping_int<short, 10> wi3(5);
+    check("subtract negative value to cause wrap",
+          (wi3.subtract(-8) == -1 && wi3 == 3));
+    check("reset", wi3.add(2) == 0 && wi3 ==5);
+    check("add negative value to cause wrap",
+          (wi3.add(-8) == -1 && wi3 == 7));
+  }
 
   wrapping_int2<short, 1, 5> wi4(1);
   check("construct",  wi4 == 1);
@@ -75,6 +83,34 @@ main()
   check("sub under the wrap value X 2", wi6.subtract(11) == -2 && wi6 == 5);
   //std::cout << wi6 << std::endl;
 
+  // adding & subtracting negative values
+  wrapping_int2<short, 1, 12> wi7(6);
+  wrapping_int2<short, -5, 5> wi8(0);
+  check("add negative value", (wi7.add(-2) == 0 && wi7 == 4));
+  check("add negative value", (wi8.add(-2) == 0 && wi8 == -2));
+  check("add negative value to cause single wrap", 
+        (wi7.add(-6) == -1 && wi7 == 10));
+  check("add negative value to cause single wrap", 
+        (wi8.add(-5) == -1 && wi8 == 4));
+  check("add negative value to cause multiple wrap", 
+        (wi7.add(-22) == -2 && wi7 == 12));
+  check("add negative value to cause multiple wrap", 
+        (wi8.add(-22) == -2 && wi8 == 4));
+  // reset values to mid range
+  wi7.subtract(6);
+  check("reset", wi7 == 6);
+  wi8.subtract(4);
+  check("reset", wi8 == 0);
+  check("subtract negative value", (wi7.subtract(-2) == 0 && wi7 == 8));
+  check("subtract negative value", (wi8.subtract(-2) == 0 && wi8 == 2));
+  check("subtract negative value to cause single wrap", 
+        (wi7.subtract(-6) == 1 && wi7 == 2));
+  check("subtract negative value to cause single wrap", 
+        (wi8.subtract(-5) == 1 && wi8 == -4));
+  check("subtract negative value to cause multiple wrap", 
+        (wi7.subtract(-23) == 2 && wi7 == 1));
+  check("subtract negative value to cause multiple wrap", 
+        (wi8.subtract(-22) == 2 && wi8 == -4));
 
 // #ifdef BOOST_HAS_LONG_LONG
 //   wrapping_int<boost::int64_t, 86400*100000LL> wi4(0);
@@ -91,7 +127,7 @@ main()
 //   //  check("construction/conversion", wi4 == 0);
 // #endif
 
-//   wrapping_int<unsigned int, 60> wi(121);
+//   wrapping_int<int, 60> wi(121);
 //   check("construction/conversion", wi == 121);
 //   check("add with wrap",    wi.add(1) == 1);
 
