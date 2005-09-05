@@ -254,13 +254,13 @@ type to <code>Type</code>.<br>
 <b>Returns:</b> a reference to the object chained-pointed to by <code>x</code>.
 </blockquote>
 
-<code>const Type&amp; operator()(const Type&amp;x)const;</code>
+<code>const Type&amp; operator()(const Type&amp; x)const;</code>
 
 <blockquote>
 <b>Returns:</b> <code>x</code>.
 </blockquote>
 
-<code>Type&amp; operator()(Type &amp;x)const;</code>
+<code>Type&amp; operator()(Type&amp; x)const;</code>
 
 <blockquote>
 <b>Returns:</b> <code>x</code>.
@@ -356,13 +356,13 @@ type to <code>Type</code>.<br>
 <b>Returns:</b> a reference to the object chained-pointed to by <code>x</code>.
 </blockquote>
 
-<code>const Type&amp; operator()(const Class&amp;x)const;</code>
+<code>const Type&amp; operator()(const Class&amp; x)const;</code>
 
 <blockquote>
 <b>Returns:</b> <code>x.*PtrToMember</code>.
 </blockquote>
 
-<code>Type&amp; operator()(const Class&amp;x);</code>
+<code>Type&amp; operator()(Class&amp; x)const;</code>
 
 <blockquote>
 <b>Returns:</b> <code>x.*PtrToMember</code>.
@@ -1013,8 +1013,8 @@ as <i>temporary</i>, i.e. they should not be stored or copied.
 <code>Default Constructible</code></a> or
 <a href="http://www.sgi.com/tech/stl/Assignable.html"><code>Assignable</code></a>.
 Every object of type <code>composite_key_result&lt;CompositeKey></code> is
-internally asociated to the <code>CompositeKey</code> from which it is returned
-and the object of type <code>CompositeKey::result_type</code> to which the
+internally associated to the <code>CompositeKey</code> from which it is returned
+and the object of type <code>CompositeKey::value_type</code> to which the
 composite key was applied.
 </p>
 
@@ -2012,7 +2012,7 @@ Compiler specifics
 
 <br>
 
-<p>Revised May 30th 2005</p>
+<p>Revised September 5th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
