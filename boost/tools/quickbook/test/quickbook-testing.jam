@@ -1,0 +1,35 @@
+#
+#   Copyright (c) 2005 João Abecasis
+#
+#   Distributed under the Boost Software License, Version 1.0. (See
+#   accompanying file LICENSE_1_0.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt)
+#
+
+import testing ;
+import project ;
+
+#
+#   quickbook-test - generates a test for quickbook itself. A quickbook-test is
+#   actually made up of two tests:
+#           $(target-name) : generate boostbook from $(source) or $(target-name).qbk
+#           $(target-name).diff : compare generated boostbook to $(target-name).gold
+#
+#   Known Issues:
+#       * FIXME: quickbook gets generated for each test
+#       * FIXME: text_diff gets generated for each test
+#       * FIXME: text_diff will fail on dates, and other variable output
+#
+rule quickbook-test ( target-name : source ? : requirements * )
+{
+    local project = [ project.current ] ;
+    source ?= $(target-name).qbk ;
+
+    return
+        [ testing.make-test boostbook : $(source) : $(requirements)
+            : $(target-name) ]
+
+        [ run text_diff.cpp : : $(target-name) $(target-name).gold
+            : $(requirements) : $(target-name).diff : $(default-build) ]
+        ;
+}
