@@ -52,10 +52,18 @@ namespace date_time {
     bool is_neg = (s.at(0) == '-');
     boost::int64_t fs=0;
     int pos = 0;
+      
+    typedef boost::char_separator<char, std::char_traits<char> > char_separator_type;
+    typedef boost::tokenizer<char_separator_type,
+                             std::basic_string<char>::const_iterator,
+                             std::basic_string<char> > tokenizer;
+    typedef boost::tokenizer<char_separator_type,
+                             std::basic_string<char>::const_iterator,
+                             std::basic_string<char> >::iterator tokenizer_iterator;
     
-    char_separator<char> sep("-:,.");
-    tokenizer<char_separator<char> > tok(s,sep);
-    for(tokenizer<char_separator<char> >::iterator beg=tok.begin(); beg!=tok.end();++beg){
+    char_separator_type sep("-:,.");
+    tokenizer tok(s,sep);
+    for(tokenizer_iterator beg=tok.begin(); beg!=tok.end();++beg){
       switch(pos) {
       case 0: {
         hour = boost::lexical_cast<int>(*beg);
@@ -188,8 +196,14 @@ namespace date_time {
     bool wrap_off = false;
     bool ret_part = true;
     boost::offset_separator osf(offsets, offsets+4, wrap_off, ret_part); 
-    boost::tokenizer<boost::offset_separator> tok(remain, osf);
-    for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti){
+    typedef boost::tokenizer<boost::offset_separator,
+                             std::basic_string<char>::const_iterator,
+                             std::basic_string<char> > tokenizer;
+    typedef boost::tokenizer<boost::offset_separator,
+                             std::basic_string<char>::const_iterator,
+                             std::basic_string<char> >::iterator tokenizer_iterator;
+    tokenizer tok(remain, osf);
+    for(tokenizer_iterator ti=tok.begin(); ti!=tok.end();++ti){
       switch(pos) {
         case 0: 
           {

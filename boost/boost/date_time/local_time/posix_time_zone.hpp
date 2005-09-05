@@ -63,10 +63,17 @@ namespace local_time{
   class posix_time_zone : public time_zone  {
   public:
     typedef boost::posix_time::time_duration time_duration_type;
-    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
     typedef time_zone base_type;
     typedef base_type::string_type string_type;
+    typedef base_type::char_type char_type;
     typedef base_type::stringstream_type stringstream_type;
+    typedef boost::char_separator<char_type, std::char_traits<char_type> > char_separator_type;
+    typedef boost::tokenizer<char_separator_type,
+                             std::basic_string<char_type>::const_iterator,
+                             std::basic_string<char_type> > tokenizer_type;
+    typedef boost::tokenizer<char_separator_type,
+                             std::basic_string<char_type>::const_iterator,
+                             std::basic_string<char_type> >::iterator tokenizer_iterator_type;
 
     //! Construct from a POSIX time zone string
     posix_time_zone(const std::string& s) : 
@@ -76,9 +83,9 @@ namespace local_time{
       dst_offsets_(posix_time::hours(0),posix_time::hours(0),posix_time::hours(0)),
       dst_calc_rules_()
     {
-      boost::char_separator<char> sep(",");
-      tokenizer tokens(s, sep);
-      tokenizer::iterator it = tokens.begin();
+      char_separator_type sep(",");
+      tokenizer_type tokens(s, sep);
+      tokenizer_iterator_type it = tokens.begin();
       calc_zone(*it++);
       if(has_dst_){
         std::string tmp_str = *it++;
@@ -214,19 +221,19 @@ namespace local_time{
     boost::shared_ptr<dst_calc_rule> dst_calc_rules_;
 
     /*! Extract time zone abbreviations for STD & DST as well
-     * as the offsets for the time the shift occurs and how
+     * as the offsets for the time shift that occurs and how
      * much of a shift. At this time full time zone names are
      * NOT extracted so the abbreviations are used in their place */
     void calc_zone(const std::string& obj){
       std::stringstream ss("");
       std::string::const_iterator sit = obj.begin();
-      std::string std_zone_abbrev("std_abbrev"), dst_zone_abbrev("");
+      std::string l_std_zone_abbrev("std_abbrev"), l_dst_zone_abbrev("");
 
       // get 'std' name/abbrev
       while(std::isalpha(*sit)){
         ss << *sit++;
       }
-      std_zone_abbrev = ss.str(); 
+      l_std_zone_abbrev = ss.str(); 
       ss.str("");
 
       // get UTC offset
@@ -254,7 +261,7 @@ namespace local_time{
         while(sit != obj.end() && std::isalpha(*sit)){
           ss << *sit++;
         }
-        dst_zone_abbrev = ss.str(); 
+        l_dst_zone_abbrev = ss.str(); 
         ss.str("");
 
         // get DST offset if given
@@ -279,15 +286,15 @@ namespace local_time{
         }
       }
       // full names not extracted so abbrevs used in their place
-      zone_names_ = time_zone_names(std_zone_abbrev, std_zone_abbrev, dst_zone_abbrev, dst_zone_abbrev);
+      zone_names_ = time_zone_names(l_std_zone_abbrev, l_std_zone_abbrev, l_dst_zone_abbrev, l_dst_zone_abbrev);
     }
 
     void calc_rules(const std::string& start, const std::string& end){
-      boost::char_separator<char> sep("/");
-      tokenizer st_tok(start, sep);
-      tokenizer et_tok(end, sep);
-      tokenizer::iterator sit = st_tok.begin();
-      tokenizer::iterator eit = et_tok.begin();
+      char_separator_type sep("/");
+      tokenizer_type st_tok(start, sep);
+      tokenizer_type et_tok(end, sep);
+      tokenizer_iterator_type sit = st_tok.begin();
+      tokenizer_iterator_type eit = et_tok.begin();
 
       // generate date spec
       char x = std::string(*sit).at(0);
@@ -342,10 +349,10 @@ namespace local_time{
     void M_func(const std::string& s, const std::string& e){
       typedef gregorian::nth_kday_of_month nkday;
       unsigned short sm=0,sw=0,sd=0,em=0,ew=0,ed=0; // start/end month,week,day
-      char_separator<char> sep("M.");
-      tokenizer stok(s, sep), etok(e, sep);
+      char_separator_type sep("M.");
+      tokenizer_type stok(s, sep), etok(e, sep);
       
-      tokenizer::iterator it = stok.begin();
+      tokenizer_iterator_type it = stok.begin();
       sm = lexical_cast<unsigned short>(*it++);
       sw = lexical_cast<unsigned short>(*it++);
       sd = lexical_cast<unsigned short>(*it);

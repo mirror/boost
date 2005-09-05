@@ -32,6 +32,7 @@ namespace date_time {
   template<typename time_type, typename CharT = char>
   class time_zone_base  {
   public:
+    typedef CharT char_type;
     typedef std::basic_string<CharT> string_type;
     typedef std::basic_stringstream<CharT> stringstream_type;
     typedef typename time_type::date_type::year_type year_type;

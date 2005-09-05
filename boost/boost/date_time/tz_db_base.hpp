@@ -1,7 +1,7 @@
 #ifndef DATE_TIME_TZ_DB_BASE_HPP__
 #define DATE_TIME_TZ_DB_BASE_HPP__
 
-/* Copyright (c) 2003-2004 CrystalClear Software, Inc.
+/* Copyright (c) 2003-2005 CrystalClear Software, Inc.
  * Subject to the Boost Software License, Version 1.0. 
  * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
@@ -271,14 +271,19 @@ namespace boost {
       //! splits the [start|end]_date_rule string into 3 ints
       void split_rule_spec(int& nth, int& d, int& m, string_type rule) const
       {
-        typedef boost::tokenizer<boost::char_separator<charT>,
-          string_type::const_iterator,
-          string_type > tokenizer;
+        typedef boost::char_separator<charT, std::char_traits<charT> > char_separator_type;
+        typedef boost::tokenizer<char_separator_type,
+                                 std::basic_string<charT>::const_iterator,
+                                 std::basic_string<charT> > tokenizer;
+        typedef boost::tokenizer<char_separator_type,
+                                 std::basic_string<charT>::const_iterator,
+                                 std::basic_string<charT> >::iterator tokenizer_iterator;
+        
         const charT sep_char[] = { ';', '\0'};
-        boost::char_separator<charT> sep(sep_char);
+        char_separator_type sep(sep_char);
         tokenizer tokens(rule, sep); // 3 fields
         
-        typename tokenizer::iterator tok_iter = tokens.begin(); 
+        tokenizer_iterator tok_iter = tokens.begin(); 
         nth = std::atoi(tok_iter->c_str()); ++tok_iter;
         d   = std::atoi(tok_iter->c_str()); ++tok_iter;
         m   = std::atoi(tok_iter->c_str());
