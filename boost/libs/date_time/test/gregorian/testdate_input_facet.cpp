@@ -161,6 +161,14 @@ int main(){
   iss >> gy;
   check("2 digit format year", gy == greg_year(2002));
 
+  date_input_facet* f1 = new date_input_facet();
+  date_input_facet* f2 = new date_input_facet();
+  f1->set_iso_format();
+  f2->set_iso_format();
+  check("Missing digit(s) in ISO string", failure_test(d,"2005071", f1));
+  check("Missing digit(s) in ISO string", 
+        failure_test(d,"2005071", e_bad_day_of_month, f2));
+
   { // literal % in format tests
     date d(not_a_date_time);
     greg_month m(1);
