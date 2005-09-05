@@ -22,12 +22,12 @@ namespace quickbook
     struct printer
     {
         printer(std::ostream& out, int& indent, int linewidth)
-            : out(out), indent_(indent), linewidth(linewidth)
-            , column(0), prev(0), in_string(false) {}
+            : prev(0), out(out), indent_(indent) , column(0)
+            , in_string(false), linewidth(linewidth) {}
                 
         void indent()
         {
-            assert(indent_ > 0); // this should not happen!
+            assert(indent_ >= 0); // this should not happen!
             for (int i = 0; i < indent_; ++i)
                 out << ' ';
             column = indent_;
