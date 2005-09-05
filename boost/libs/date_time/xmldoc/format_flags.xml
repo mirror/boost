@@ -95,7 +95,7 @@
           </row>
           
           <row>
-            <entry valign="top" morerows="1"><screen>%e !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%e</screen></entry>
             <entry>Like %d, the day of the month as a decimal number, but a leading zero is replaced by a space</entry>
           </row>
           <row>

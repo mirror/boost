@@ -1028,16 +1028,31 @@ m = parser.parse_month(itr,
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>day_type parse_day_of_the_month(...)
+            <entry valign="top" morerows="1"><screen>day_type parse_day_of_month(...)
   Parameters:
     istreambuf_iterator input
     istreambuf_iterator str_end</screen></entry>
-            <entry>Parses a day from stream. The day must appear as a number (1-31) or a bad_day_of_month will be thrown.</entry>
+            <entry>Parses a day_of_month from stream. The day must appear as a two digit number (01-31), or a bad_day_of_month will be thrown.</entry>
           </row>
           <row>
             <entry><screen>// stream holds "01"
 greg_day d;
 d = parser.parse_day_of_month(itr, 
+                       str_end);
+// d == 1st</screen></entry>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>day_type parse_var_day_of_month(...)
+  Parameters:
+    istreambuf_iterator input
+    istreambuf_iterator str_end</screen></entry>
+            <entry>Parses a day_of_month from stream. The day must appear as a one or two digit number (1-31), or a bad_day_of_month will be thrown.</entry>
+          </row>
+          <row>
+            <entry><screen>// stream holds "1"
+greg_day d;
+d = parser.parse_var_day_of_month(itr, 
                        str_end);
 // d == 1st</screen></entry>
           </row>
