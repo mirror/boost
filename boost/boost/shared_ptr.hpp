@@ -114,7 +114,7 @@ public:
     typedef T element_type;
     typedef T value_type;
     typedef T * pointer;
-    typedef typename detail::shared_ptr_traits<T>::reference reference;
+    typedef typename boost::detail::shared_ptr_traits<T>::reference reference;
 
     shared_ptr(): px(0), pn() // never throws in 1.30+
     {
@@ -123,7 +123,7 @@ public:
     template<class Y>
     explicit shared_ptr( Y * p ): px( p ), pn( p ) // Y must be complete
     {
-        detail::sp_enable_shared_from_this( pn, p, p );
+        boost::detail::sp_enable_shared_from_this( pn, p, p );
     }
 
     //
@@ -134,7 +134,7 @@ public:
 
     template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
     {
-        detail::sp_enable_shared_from_this( pn, p, p );
+        boost::detail::sp_enable_shared_from_this( pn, p, p );
     }
 
 //  generated copy constructor, assignment, destructor are fine...
@@ -164,26 +164,26 @@ public:
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::static_cast_tag): px(static_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, boost::detail::static_cast_tag): px(static_cast<element_type *>(r.px)), pn(r.pn)
     {
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::const_cast_tag): px(const_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, boost::detail::const_cast_tag): px(const_cast<element_type *>(r.px)), pn(r.pn)
     {
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, boost::detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if(px == 0) // need to allocate new counter -- the cast failed
         {
-            pn = detail::shared_count();
+            pn = boost::detail::shared_count();
         }
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, boost::detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if(px == 0)
         {
@@ -197,8 +197,8 @@ public:
     explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
     {
         Y * tmp = r.get();
-        pn = detail::shared_count(r);
-        detail::sp_enable_shared_from_this( pn, tmp, tmp );
+        pn = boost::detail::shared_count(r);
+        boost::detail::sp_enable_shared_from_this( pn, tmp, tmp );
     }
 
 #endif
@@ -337,7 +337,7 @@ private:
 #endif
 
     T * px;                     // contained pointer
-    detail::shared_count pn;    // reference counter
+    boost::detail::shared_count pn;    // reference counter
 
 };  // shared_ptr
 
@@ -374,34 +374,34 @@ template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 
 template<class T, class U> shared_ptr<T> static_pointer_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::static_cast_tag());
+    return shared_ptr<T>(r, boost::detail::static_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> const_pointer_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::const_cast_tag());
+    return shared_ptr<T>(r, boost::detail::const_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> dynamic_pointer_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::dynamic_cast_tag());
+    return shared_ptr<T>(r, boost::detail::dynamic_cast_tag());
 }
 
 // shared_*_cast names are deprecated. Use *_pointer_cast instead.
 
 template<class T, class U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::static_cast_tag());
+    return shared_ptr<T>(r, boost::detail::static_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::dynamic_cast_tag());
+    return shared_ptr<T>(r, boost::detail::dynamic_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> shared_polymorphic_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::polymorphic_cast_tag());
+    return shared_ptr<T>(r, boost::detail::polymorphic_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<U> const & r)
