@@ -24,7 +24,10 @@ CHANGELOG
 
 - Fixed bug reported as Sourceforge bug 1274584.
 - Switched to Re2C V0.9.9.
-
+- Fixed a bug where the 'parameters' and 'definition' parameters to the 
+  defined_macro callback of the preprocessing hooks were always empty (thanks
+  to Stefan Seefeld for reporting).
+  
 Boost V1.33.0
 Version 1.2
 - Fixed name clash wrt T_DIVIDE on FreeBSD.
