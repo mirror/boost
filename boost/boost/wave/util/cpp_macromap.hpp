@@ -279,8 +279,8 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
     std::swap((*p.first).second->macrodefinition, definition);
     
 // call the context supplied preprocessing hook
-    ctx.defined_macro(name, has_parameters, parameters, definition, 
-        is_predefined);
+    ctx.defined_macro(name, has_parameters, (*p.first).second->macroparameters, 
+        (*p.first).second->macrodefinition, is_predefined);
     return true;
 }
 
