@@ -23,23 +23,27 @@
 
 # include <windows.h>
 
-# define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
+# define BOOST_INTERLOCKED_INCREMENT ::InterlockedIncrement
+# define BOOST_INTERLOCKED_DECREMENT ::InterlockedDecrement
+# define BOOST_INTERLOCKED_COMPARE_EXCHANGE ::InterlockedCompareExchange
+# define BOOST_INTERLOCKED_EXCHANGE ::InterlockedExchange
 
 #elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN )
 
 extern "C" long __cdecl _InterlockedIncrement( long volatile * );
 extern "C" long __cdecl _InterlockedDecrement( long volatile * );
 extern "C" long __cdecl _InterlockedCompareExchange( long volatile *, long, long );
+extern "C" long __cdecl _InterlockedExchange( long volatile *, long);
 
 # pragma intrinsic( _InterlockedIncrement )
 # pragma intrinsic( _InterlockedDecrement )
 # pragma intrinsic( _InterlockedCompareExchange )
+# pragma intrinsic( _InterlockedExchange )
 
-# define BOOST_INTERLOCKED_INCREMENT _InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT _InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE _InterlockedCompareExchange
+# define BOOST_INTERLOCKED_INCREMENT ::_InterlockedIncrement
+# define BOOST_INTERLOCKED_DECREMENT ::_InterlockedDecrement
+# define BOOST_INTERLOCKED_COMPARE_EXCHANGE ::_InterlockedCompareExchange
+# define BOOST_INTERLOCKED_EXCHANGE ::_InterlockedExchange
 
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
 
@@ -52,14 +56,16 @@ namespace detail
 extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement( long volatile * );
 extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement( long volatile * );
 extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long volatile *, long, long );
+extern "C" __declspec(dllimport) long __stdcall InterlockedExchange( long volatile *, long );
 
 } // namespace detail
 
 } // namespace boost
 
-# define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
+# define BOOST_INTERLOCKED_INCREMENT ::boost::detail::InterlockedIncrement
+# define BOOST_INTERLOCKED_DECREMENT ::boost::detail::InterlockedDecrement
+# define BOOST_INTERLOCKED_COMPARE_EXCHANGE ::boost::detail::InterlockedCompareExchange
+# define BOOST_INTERLOCKED_EXCHANGE ::boost::detail::InterlockedExchange
 
 #else
 
