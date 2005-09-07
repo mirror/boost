@@ -11,10 +11,12 @@
 exe quickbook
     :
     detail/quickbook.cpp
+    detail/actions.cpp
+    detail/utils.cpp
     detail/post_process.cpp
     /boost/program_options//boost_program_options
     /boost/filesystem//boost_filesystem
-    :
+    : #<define>QUICKBOOK_NO_DATES
     ;
 
 install dist-bin

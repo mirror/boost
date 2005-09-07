@@ -25,494 +25,19 @@
 namespace quickbook
 {
     namespace fs = boost::filesystem;
-
+    typedef std::vector<char> file_storage;
+    typedef position_iterator<file_storage::const_iterator> iterator;
+    typedef std::string::const_iterator string_iterator;
+    struct actions;
+    
     // forward declarations
     struct actions;
     int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
 
-    struct error_action
-    {
-        // Prints an error message to std::cerr
-
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& /*last*/) const
-        {
-            boost::spirit::file_position const pos = first.get_position();
-            std::cerr
-                << "Syntax Error at \"" << pos.file
-                << "\" line " << pos.line
-                << ", column " << pos.column << ".\n";
-        }
-    };
-
-    struct phrase_action
-    {
-        //  Handles paragraph, h1, h2, h3, h4, h5, h6,
-        //  blurb, blockquote, preformatted, list_item,
-        //  unordered_list, ordered_list
-
-        phrase_action(
-            std::ostream&       out,
-            std::stringstream&  phrase,
-            std::string&        section_id,
-            std::string const&  pre,
-            std::string const&  post,
-            bool                anchor = false)
-        : out(out)
-        , phrase(phrase)
-        , section_id(section_id)
-        , pre(pre)
-        , post(post)
-        , anchor(anchor) {}
-
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& last) const
-        {
-            if (out)
-            {
-                std::string  str = phrase.str();
-                if (anchor)
-                    out << "<anchor id=\""
-                        << section_id << '.'
-                        << detail::make_identifier(str.begin(), str.end())
-                        << "\" />";
-                phrase.str(std::string());
-                out << pre << str << post;
-            }
-        }
-
-        std::ostream&       out;
-        std::stringstream&  phrase;
-        std::string&        section_id;
-        std::string         pre;
-        std::string         post;
-        bool                anchor;
-    };
-
-    struct simple_phrase_action
-    {
-        //  Handles simple text formats
-
-        simple_phrase_action(
-            std::ostream&       out,
-            std::string const&  pre,
-            std::string const&  post)
-        : out(out)
-        , pre(pre)
-        , post(post) {}
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator const& last) const
-        {
-            if (out)
-            {
-                out << pre;
-                while (first != last)
-                    detail::print_char(*first++, out);
-                out << post;
-            }
-        }
-
-        std::ostream&   out;
-        std::string     pre;
-        std::string     post;
-    };
-
-    struct list_action
-    {
-        //  Handles lists
-
-        typedef std::pair<char, int> mark_type;
-        list_action(
-            std::ostream& out
-          , std::stringstream& list_buffer
-          , int& indent
-          , std::stack<mark_type>& list_marks)
-        : out(out)
-        , list_buffer(list_buffer)
-        , indent(indent)
-        , list_marks(list_marks) {}
-
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& last) const
-        {
-            assert(!list_marks.empty()); // there must be at least one item in the stack
-            std::string  str = list_buffer.str();
-            list_buffer.str(std::string());
-            out << str;
-
-            while (!list_marks.empty())
-            {
-                char mark = list_marks.top().first;
-                list_marks.pop();
-                out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
-                if (list_marks.size() >= 1)
-                    out << std::string("\n</listitem>");
-            }
-
-            indent = -1; // reset
-        }
-
-        std::ostream& out;
-        std::stringstream& list_buffer;
-        int& indent;
-        std::stack<mark_type>& list_marks;
-    };
-
-    struct list_format_action
-    {
-        //  Handles list formatting and hierarchy
-
-        typedef std::pair<char, int> mark_type;
-        list_format_action(
-            std::stringstream& out
-          , int& indent
-          , std::stack<mark_type>& list_marks)
-        : out(out)
-        , indent(indent)
-        , list_marks(list_marks) {}
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator const& last) const
-        {
-            int new_indent = 0;
-            while (first != last && (*first == ' ' || *first == '\t'))
-            {
-                char mark = *first++;
-                if (mark == ' ')
-                {
-                    ++new_indent;
-                }
-                else // must be a tab
-                {
-                    assert(mark == '\t');
-                    // hardcoded tab to 4 for now
-                    new_indent = ((new_indent + 4) / 4) * 4;
-                }
-            }
-
-            char mark = *first;
-            assert(mark == '#' || mark == '*'); // expecting a mark
-
-            if (indent == -1) // the very start
-            {
-                assert(new_indent == 0);
-            }
-
-            if (new_indent > indent)
-            {
-                //~ char parent_mark = 0;
-                //~ if (list_marks.size() >= 1)
-                    //~ parent_mark = list_marks.top().first;
-                indent = new_indent;
-                list_marks.push(mark_type(mark, indent));
-                if (list_marks.size() > 1)
-                {
-                    // Make this new list a child of the previous list.
-                    // The previous listelem has already ended so we erase
-                    // </listitem> to accomodate this sub-list. We'll close
-                    // the listelem later.
-
-                    std::string str = out.str();
-                    std::string::size_type pos = str.rfind("\n</listitem>");
-                    assert(pos <= str.size());
-                    str.erase(str.begin()+pos, str.end());
-                    out.str(std::string());
-                    out << str;
-                    //~ out << std::string((parent_mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
-                }
-                //~ else
-                //~ {
-                    out << std::string((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
-                //~ }
-            }
-
-            else if (new_indent < indent)
-            {
-                assert(!list_marks.empty());
-                indent = new_indent;
-                //~ list_marks.pop();
-                //~ out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
-                //~ if (list_marks.size() >= 1)
-                    //~ out << std::string("\n</listitem>");
-
-                while (!list_marks.empty() && (indent < list_marks.top().second))
-                {
-                    char mark = list_marks.top().first;
-                    list_marks.pop();
-                    out << std::string((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
-                    if (list_marks.size() >= 1)
-                        out << std::string("\n</listitem>");
-                }
-            }
-
-            if (mark != list_marks.top().first) // new_indent == indent
-            {
-                boost::spirit::file_position const pos = first.get_position();
-                std::cerr
-                    << "Illegal change of list style at \"" << pos.file
-                    << "\" line " << pos.line
-                    << ", column " << pos.column << ".\n";
-                std::cerr << "Ignoring change of list style" << std::endl;
-            }
-        }
-
-        std::stringstream& out;
-        int& indent;
-        std::stack<mark_type>& list_marks;
-    };
-
-    struct span
-    {
-        // Decorates c++ code fragments
-
-        span(char const* name, std::ostream& out)
-        : name(name), out(out) {}
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                out << "<phrase role=\"" << name << "\">";
-                while (first != last)
-                    detail::print_char(*first++, out);
-                out << "</phrase>";
-            }
-        }
-
-        char const* name;
-        std::ostream& out;
-    };
-
-    struct unexpected_char
-    {
-        // Handles unexpected chars in c++ syntax
-
-        unexpected_char(std::ostream& out)
-        : out(out) {}
-
-        template <typename Char>
-        void operator()(Char) const
-        {
-            if (out)
-                out << '#'; // print out an unexpected character
-        }
-
-        std::ostream& out;
-    };
-
-    struct anchor_action
-    {
-        // Handles anchors
-
-        anchor_action(std::ostream& out)
-            : out(out) {}
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                out << "<anchor id=\"";
-                while (first != last)
-                    detail::print_char(*first++, out);
-                out << "\" />\n";
-            }
-        }
-
-        std::ostream& out;
-    };
-
-    char const* quickbook_get_date = "__quickbook_get_date__";
-    char const* quickbook_get_time = "__quickbook_get_time__";
-
-    struct do_macro_action
-    {
-        // Handles macro substitutions
-
-        do_macro_action(std::ostream& phrase)
-        : phrase(phrase) {}
-
-        void operator()(std::string const& str) const
-        {
-            if (str == quickbook_get_date)
-            {
-                char strdate[ 64 ];
-                time_t t = time(0);
-                strftime( strdate, sizeof(strdate), "%Y-%b-%d", localtime(&t) );
-                phrase << strdate;
-            }
-            else if (str == quickbook_get_time)
-            {
-                char strdate[ 64 ];
-                time_t t = time(0);
-                strftime( strdate, sizeof(strdate), "%I:%M:%S %p", localtime(&t) );
-                phrase << strdate;
-            }
-            else
-            {
-                phrase << str;
-            }
-        }
-
-        std::ostream& phrase;
-    };
-
-    struct space
-    {
-        // Prints a space
-
-        space(std::ostream& out)
-        : out(out) {}
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                while (first != last)
-                    detail::print_space(*first++, out);
-            }
-        }
-
-        template <typename Char>
-        void operator()(Char ch) const
-        {
-            if (out)
-            {
-                detail::print_space(ch, out);
-            }
-        }
-
-        std::ostream& out;
-    };
-
-    typedef symbols<std::string> macros_type;
-
-    struct code_action
-    {
-        // Does the actual syntax highlighing of code
-
-        code_action(std::ostream& out,
-                    std::string const & source_mode,
-                    macros_type const& macro)
-        : out(out)
-        , source_mode(source_mode)
-        , cpp_p(out, macro, do_macro_action(out))
-        , python_p(out, macro, do_macro_action(out))
-        {
-        }
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                // preprocess the code section to remove the initial indentation
-                std::string program(first, last);
-                detail::unindent(program);
-                
-                out << "<programlisting>\n"
-                    << "<literal>\n";
-
-                // print the code with syntax coloring
-                if (source_mode == "c++")
-                {
-                    parse(program.begin(), program.end(), cpp_p);
-                }
-                else if (source_mode == "python")
-                {
-                    parse(program.begin(), program.end(), python_p);
-                }
-                
-                out << "</literal>\n"
-                    << "</programlisting>\n";
-            }
-        }
-
-        std::ostream& out;
-        std::string const& source_mode;
-        
-        cpp_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , unexpected_char
-          , std::ostream>
-        cpp_p;
-        
-        python_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , unexpected_char
-          , std::ostream>
-        python_p;
-    };
-
-    struct inline_code_action
-    {
-        // Does the actual syntax highlighing of code inlined in text
-
-        inline_code_action(std::ostream& out,
-                           std::string const& source_mode,
-                           macros_type const& macro)
-        : out(out)
-        , source_mode(source_mode)
-        , cpp_p(out, macro, do_macro_action(out))
-        , python_p(out, macro, do_macro_action(out))
-        {}
-
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                out << "<code>";
-
-                // print the code with syntax coloring
-                if (source_mode == "c++")
-                {
-                    parse(first, last, cpp_p);
-                }
-                else if (source_mode == "python")
-                {
-                    parse(first, last, python_p);
-                }
-                
-                out << "</code>";
-            }
-        }
-
-        std::ostream& out;
-        std::string const& source_mode;
-        
-        cpp_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , unexpected_char
-          , std::ostream>
-        cpp_p;
-        
-        python_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , unexpected_char
-          , std::ostream>
-        python_p;
-    };
-
     namespace
     {
         // Some markups
-
+    
         const char* paragraph_pre   = "<para>\n";
         const char* paragraph_post  = "</para>\n";
         const char* h1_pre          = "<bridgehead renderas=\"sect1\">";
@@ -528,7 +53,7 @@ namespace quickbook
         const char* h6_pre          = "<bridgehead renderas=\"sect6\">";
         const char* h6_post         = "</bridgehead>";
         const char* hr_             = "<para/>";
-
+    
         const char* blurb_pre =
             "<informaltable frame=\"all\">\n"
             "<?dbhtml table-width=\"74%\" ?>\n"
@@ -537,7 +62,7 @@ namespace quickbook
             "<row>\n"
             "<entry role=\"blurb\">\n"
             ;
-
+    
         const char* blurb_post =
             "</entry>\n"
             "</row>\n"
@@ -545,7 +70,7 @@ namespace quickbook
             "</tgroup>\n"
             "</informaltable>\n"
             ;
-
+    
         const char* blockquote_pre      = "<blockquote><para>";
         const char* blockquote_post     = "</para></blockquote>";
         const char* preformatted_pre    = "<programlisting><literal>";
@@ -590,6 +115,268 @@ namespace quickbook
         const char* headerref_pre_      = "<headername alt=\"";
         const char* headerref_post_     = "</headername>";
     }
+    
+    struct error_action
+    {
+        // Prints an error message to std::cerr
+
+        void operator()(iterator const& first, iterator const& /*last*/) const;
+    };
+
+    struct phrase_action
+    {
+        //  Handles paragraph, h1, h2, h3, h4, h5, h6,
+        //  blurb, blockquote, preformatted, list_item,
+        //  unordered_list, ordered_list
+
+        phrase_action(
+            std::ostream&       out,
+            std::stringstream&  phrase,
+            std::string&        section_id,
+            std::string const&  pre,
+            std::string const&  post,
+            bool                anchor = false)
+        : out(out)
+        , phrase(phrase)
+        , section_id(section_id)
+        , pre(pre)
+        , post(post)
+        , anchor(anchor) {}
+
+        void operator()(iterator const& first, iterator const& last) const;
+
+        std::ostream&       out;
+        std::stringstream&  phrase;
+        std::string&        section_id;
+        std::string         pre;
+        std::string         post;
+        bool                anchor;
+    };
+
+    struct simple_phrase_action
+    {
+        //  Handles simple text formats
+
+        simple_phrase_action(
+            std::ostream&       out,
+            std::string const&  pre,
+            std::string const&  post)
+        : out(out)
+        , pre(pre)
+        , post(post) {}
+
+        void operator()(iterator first, iterator const& last) const;
+
+        std::ostream&   out;
+        std::string     pre;
+        std::string     post;
+    };
+
+    struct list_action
+    {
+        //  Handles lists
+
+        typedef std::pair<char, int> mark_type;
+        list_action(
+            std::ostream& out
+          , std::stringstream& list_buffer
+          , int& indent
+          , std::stack<mark_type>& list_marks)
+        : out(out)
+        , list_buffer(list_buffer)
+        , indent(indent)
+        , list_marks(list_marks) {}
+
+        void operator()(iterator const& first, iterator const& last) const;
+
+        std::ostream& out;
+        std::stringstream& list_buffer;
+        int& indent;
+        std::stack<mark_type>& list_marks;
+    };
+
+    struct list_format_action
+    {
+        //  Handles list formatting and hierarchy
+
+        typedef std::pair<char, int> mark_type;
+        list_format_action(
+            std::stringstream& out
+          , int& indent
+          , std::stack<mark_type>& list_marks)
+        : out(out)
+        , indent(indent)
+        , list_marks(list_marks) {}
+
+        void operator()(iterator first, iterator const& last) const;
+
+        std::stringstream& out;
+        int& indent;
+        std::stack<mark_type>& list_marks;
+    };
+
+    struct span
+    {
+        // Decorates c++ code fragments
+
+        span(char const* name, std::ostream& out)
+        : name(name), out(out) {}
+
+        template <typename Iterator>
+        void operator()(Iterator first, Iterator last) const
+        {
+            if (out)
+            {
+                out << "<phrase role=\"" << name << "\">";
+                while (first != last)
+                    detail::print_char(*first++, out);
+                out << "</phrase>";
+            }
+        }
+
+        char const* name;
+        std::ostream& out;
+    };
+
+    struct unexpected_char
+    {
+        // Handles unexpected chars in c++ syntax
+
+        unexpected_char(std::ostream& out)
+        : out(out) {}
+
+        void operator()(char) const;
+
+        std::ostream& out;
+    };
+
+    struct anchor_action
+    {
+        // Handles anchors
+
+        anchor_action(std::ostream& out)
+            : out(out) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        std::ostream& out;
+    };
+
+    namespace
+    {
+        char const* quickbook_get_date = "__quickbook_get_date__";
+        char const* quickbook_get_time = "__quickbook_get_time__";
+    }
+
+    struct do_macro_action
+    {
+        // Handles macro substitutions
+
+        do_macro_action(std::ostream& phrase)
+        : phrase(phrase) {}
+
+        void operator()(std::string const& str) const;
+        std::ostream& phrase;
+    };
+
+    struct space
+    {
+        // Prints a space
+
+        space(std::ostream& out)
+        : out(out) {}
+
+        template <typename Iterator>
+        void operator()(Iterator first, Iterator last) const
+        {
+            if (out)
+            {
+                while (first != last)
+                    detail::print_space(*first++, out);
+            }
+        }
+
+        void operator()(char ch) const;
+
+        std::ostream& out;
+    };
+
+    typedef symbols<std::string> macros_type;
+
+    struct code_action
+    {
+        // Does the actual syntax highlighing of code
+
+        code_action(std::ostream& out,
+                    std::string const & source_mode,
+                    macros_type const& macro)
+        : out(out)
+        , source_mode(source_mode)
+        , cpp_p(out, macro, do_macro_action(out))
+        , python_p(out, macro, do_macro_action(out))
+        {
+        }
+
+        void operator()(iterator first, iterator last) const;
+
+        std::ostream& out;
+        std::string const& source_mode;
+        
+        cpp_highlight<
+            span
+          , space
+          , macros_type
+          , do_macro_action
+          , unexpected_char
+          , std::ostream>
+        cpp_p;
+        
+        python_highlight<
+            span
+          , space
+          , macros_type
+          , do_macro_action
+          , unexpected_char
+          , std::ostream>
+        python_p;
+    };
+
+    struct inline_code_action
+    {
+        // Does the actual syntax highlighing of code inlined in text
+
+        inline_code_action(std::ostream& out,
+                           std::string const& source_mode,
+                           macros_type const& macro)
+        : out(out)
+        , source_mode(source_mode)
+        , cpp_p(out, macro, do_macro_action(out))
+        , python_p(out, macro, do_macro_action(out))
+        {}
+
+        void operator()(iterator first, iterator last) const;
+
+        std::ostream& out;
+        std::string const& source_mode;
+        
+        cpp_highlight<
+            span
+          , space
+          , macros_type
+          , do_macro_action
+          , unexpected_char
+          , std::ostream>
+        cpp_p;
+        
+        python_highlight<
+            span
+          , space
+          , macros_type
+          , do_macro_action
+          , unexpected_char
+          , std::ostream>
+        python_p;
+    };
 
     struct raw_char_action
     {
@@ -599,17 +386,8 @@ namespace quickbook
         raw_char_action(std::ostream& phrase)
         : phrase(phrase) {}
 
-        template <typename Char>
-        void operator()(Char const& ch) const
-        {
-            phrase << ch;
-        }
-
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& /*last*/) const
-        {
-            phrase << *first;
-        }
+        void operator()(char ch) const;
+        void operator()(iterator const& first, iterator const& /*last*/) const;
 
         std::ostream& phrase;
     };
@@ -622,17 +400,8 @@ namespace quickbook
         plain_char_action(std::ostream& phrase)
         : phrase(phrase) {}
 
-        template <typename Char>
-        void operator()(Char const& ch) const
-        {
-            detail::print_char(ch, phrase);
-        }
-
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& /*last*/) const
-        {
-            detail::print_char(*first, phrase);
-        }
+        void operator()(char ch) const;
+        void operator()(iterator const& first, iterator const& /*last*/) const;
 
         std::ostream& phrase;
     };
@@ -644,14 +413,7 @@ namespace quickbook
         image_action(std::ostream& phrase)
         : phrase(phrase) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            phrase << "<inlinemediaobject><imageobject><imagedata fileref=\"";
-            while (first != last)
-                detail::print_char(*first++, phrase);
-            phrase << "\"></imagedata></imageobject></inlinemediaobject>";
-        }
+        void operator()(iterator first, iterator last) const;
 
         std::ostream& phrase;
     };
@@ -679,44 +441,28 @@ namespace quickbook
         std::string str;
     };
 
-    template <typename Actions>
     struct indentifier_action
     {
         // Handles macro identifiers
 
-        indentifier_action(Actions& actions)
+        indentifier_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& last) const
-        {
-            actions.macro_id.assign(first, last);
-            actions.phrase_save = actions.phrase.str();
-            actions.phrase.str(std::string());
-        }
+        void operator()(iterator const& first, iterator const& last) const;
 
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
-    template <typename Actions>
     struct macro_def_action
     {
         // Handles macro definitions
 
-        macro_def_action(Actions& actions)
+        macro_def_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        template <typename Iterator>
-        void operator()(Iterator const& first, Iterator const& last) const
-        {
-            actions.macro.add(
-                actions.macro_id.begin()
-              , actions.macro_id.end()
-              , actions.phrase.str());
-            actions.phrase.str(actions.phrase_save);
-        }
+        void operator()(iterator const& first, iterator const& last) const;
 
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
     struct link_action
@@ -726,115 +472,34 @@ namespace quickbook
         link_action(std::ostream& phrase, char const* tag)
         : phrase(phrase), tag(tag) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            Iterator save = first;
-            phrase << tag;
-            while (first != last)
-                detail::print_char(*first++, phrase);
-            phrase << "\">";
-
-            // Yes, it is safe to dereference last here. When we
-            // reach here, *last is certainly valid. We test if
-            // *last == ']'. In which case, the url is the text.
-            // Example: [@http://spirit.sourceforge.net/]
-
-            if (*last == ']')
-            {
-                first = save;
-                while (first != last)
-                    detail::print_char(*first++, phrase);
-            }
-        }
+        void operator()(iterator first, iterator last) const;
 
         std::ostream& phrase;
         char const* tag;
     };
 
-    template <typename Actions>
     struct variablelist_action
     {
         // Handles variable lists
 
-        variablelist_action(Actions& actions)
+        variablelist_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        template <typename Iterator>
-        void operator()(Iterator, Iterator) const
-        {
-            if (!!actions.out)
-            {
-                actions.out << "<variablelist>\n";
+        void operator()(iterator, iterator) const;
 
-                actions.out << "<title>";
-                std::string::iterator first = actions.table_title.begin();
-                std::string::iterator last = actions.table_title.end();
-                while (first != last)
-                    detail::print_char(*first++, actions.out);
-                actions.out << "</title>\n";
-
-                std::string str = actions.phrase.str();
-                actions.phrase.str(std::string());
-                actions.out << str;
-
-                actions.out << "</variablelist>\n";
-                actions.table_span = 0;
-                actions.table_header.clear();
-                actions.table_title.clear();
-            }
-        }
-
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
-    template <typename Actions>
     struct table_action
     {
         // Handles tables
 
-        table_action(Actions& actions)
+        table_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        template <typename Iterator>
-        void operator()(Iterator, Iterator) const
-        {
-            if (!!actions.out)
-            {
-                actions.out << "<informaltable frame=\"all\">\n"
-                             << "<bridgehead renderas=\"sect4\">";
+        void operator()(iterator, iterator) const;
 
-                actions.out << "<phrase role=\"table-title\">";
-                std::string::iterator first = actions.table_title.begin();
-                std::string::iterator last = actions.table_title.end();
-                while (first != last)
-                    detail::print_char(*first++, actions.out);
-                actions.out << "</phrase>";
-
-                actions.out << "</bridgehead>\n"
-                             << "<tgroup cols=\"" << actions.table_span << "\">\n";
-
-                if(!actions.table_header.empty())
-                {
-                    actions.out << "<thead>" << actions.table_header << "</thead>\n";
-                }
-
-                actions.out << "<tbody>\n";
-
-                std::string str = actions.phrase.str();
-                actions.phrase.str(std::string());
-                actions.out << str;
-
-                actions.out << "</tbody>\n"
-                             << "</tgroup>\n"
-                             << "</informaltable>\n";
-                actions.table_span = 0;
-                actions.table_header.clear();
-                actions.table_title.clear();
-            }
-        }
-
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
     struct start_row_action
@@ -844,25 +509,8 @@ namespace quickbook
         start_row_action(std::stringstream& phrase, unsigned& span, std::string& header)
             : phrase(phrase), span(span), header(header) {}
 
-        template <typename T>
-        void operator()(T const&) const
-        {
-            // the first row is the header
-            if(header.empty() && !phrase.str().empty())
-            {
-                header = phrase.str();
-                phrase.str(std::string());
-            }
-
-            phrase << start_row_;
-            span = 0;
-        }
-
-        template <typename T>
-        void operator()(T const& t,T const&) const
-        {
-            (*this)(t);
-        }
+        void operator()(char) const;
+        void operator()(iterator f, iterator) const;
 
         std::stringstream& phrase;
         unsigned& span;
@@ -876,11 +524,7 @@ namespace quickbook
         start_col_action(std::ostream& phrase, unsigned& span)
         : phrase(phrase), span(span) {}
 
-        template <typename T>
-        void operator()(T const&) const
-        {
-            phrase << start_cell_; ++span;
-        }
+        void operator()(char) const;
 
         std::ostream& phrase;
         unsigned& span;
@@ -898,17 +542,7 @@ namespace quickbook
         , library_id(library_id)
         , section_id(section_id) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (section_id.empty())
-                section_id = detail::make_identifier(first, last);
-            phrase << "\n<section id=\"" << library_id << "." << section_id << "\">\n";
-            phrase << "<title>";
-            while (first != last)
-                detail::print_char(*first++, phrase);
-            phrase << "</title>\n";
-        }
+        void operator()(iterator first, iterator last) const;
 
         std::ostream& phrase;
         std::string& library_id;
@@ -922,76 +556,21 @@ namespace quickbook
         xinclude_action(std::ostream& out_)
             : out(out_) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            out << "\n<xi:include href=\"";
-            detail::print_string(detail::escape_uri(std::string(first, last)), out);
-            out << "\" />\n";
-        }
+        void operator()(iterator first, iterator last) const;
 
         std::ostream& out;
     };
 
-    template<typename Actions>
     struct include_action
     {
         // Handles QBK includes
 
-        include_action(Actions& actions_)
+        include_action(quickbook::actions& actions_)
             : actions(actions_) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            fs::path filein(std::string(first, last), fs::native);
-            std::string doc_type, doc_id, doc_dirname, doc_last_revision;
+        void operator()(iterator first, iterator last) const;
 
-            // check to see if the path is complete and if not, make it relative to the current path
-            if(!filein.is_complete())
-            {
-                filein = actions.filename.branch_path() / filein;
-                filein.normalize();
-            }
-
-            // swap the filenames
-            std::swap(actions.filename, filein);
-
-            // save the doc info strings
-            actions.doc_type.swap(doc_type);
-            actions.doc_id.swap(doc_id);
-            actions.doc_dirname.swap(doc_dirname);
-            actions.doc_last_revision.swap(doc_last_revision);
-
-            // scope the macros
-            macros_type macro = actions.macro;
-
-            // if an id is specified in this include (in in [include:id foo.qbk]
-            // then use it as the doc_id.
-            if(!actions.include_doc_id.empty())
-            {
-                actions.doc_id = actions.include_doc_id;
-                actions.include_doc_id.clear();
-            }
-
-            // update the __FILENAME__ macro
-            *boost::spirit::find(actions.macro, "__FILENAME__") = actions.filename.native_file_string();
-
-            // parse the file
-            quickbook::parse(actions.filename.native_file_string().c_str(), actions, true);
-
-            // restore the values
-            std::swap(actions.filename, filein);
-
-            actions.doc_type.swap(doc_type);
-            actions.doc_id.swap(doc_id);
-            actions.doc_dirname.swap(doc_dirname);
-            actions.doc_last_revision.swap(doc_last_revision);
-
-            actions.macro = macro;
-        }
-
-        Actions& actions;
+        quickbook::actions& actions;
     };
 
     struct xml_author
@@ -1001,13 +580,7 @@ namespace quickbook
         xml_author(std::ostream& out)
         : out(out) {}
 
-        void operator()(std::pair<std::string, std::string> const& author) const
-        {
-            out << "    <author>\n"
-                << "      <firstname>" << author.first << "</firstname>\n"
-                << "      <surname>" << author.second << "</surname>\n"
-                << "    </author>\n";
-        }
+        void operator()(std::pair<std::string, std::string> const& author) const;
 
         std::ostream& out;
     };
@@ -1019,134 +592,129 @@ namespace quickbook
         xml_year(std::ostream& out)
             : out(out) {}
 
-        void operator()(std::string const &year) const
-        {
-            out << "      <year>" << year << "</year>\n";
-        }
+        void operator()(std::string const &year) const;
 
         std::ostream& out;
     };
 
-    template <typename Actions>
-    void pre(std::ostream& out, Actions& actions, bool ignore_docinfo = false)
+    void pre(std::ostream& out, quickbook::actions& actions, bool ignore_docinfo = false);
+    void post(std::ostream& out, quickbook::actions& actions, bool ignore_docinfo = false);
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  Our actions
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    struct actions
     {
-        // The quickbook file has been parsed. Now, it's time to
-        // generate the output. Here's what we'll do *before* anything else.
+        actions(char const* filein_, std::ostream &out_);
 
-        if (actions.doc_id.empty())
-            actions.doc_id = detail::make_identifier(
-                actions.doc_title.begin(),actions.doc_title.end());
+        fs::path                filename;
+        std::string             macro_id;
+        std::string             phrase_save;
+        std::string             table_title;
+        std::ostream&           out;
+        error_action            error;
 
-        if (actions.doc_dirname.empty())
-            actions.doc_dirname = actions.doc_id;
+        typedef std::vector<std::string> copyright_list;
+        typedef std::vector<std::pair<std::string, std::string> > author_list;
 
-        if (actions.doc_last_revision.empty())
-        {
-            // default value for last-revision is now
+        std::string             doc_type;
+        std::string             doc_title;
+        std::string             doc_version;
+        std::string             doc_id;
+        std::string             doc_dirname;
+        copyright_list          doc_copyright_years;
+        std::string             doc_copyright_holder;
+        std::string             doc_purpose;
+        std::string             doc_category;
+        author_list             doc_authors;
+        std::string             doc_license;
+        std::string             doc_last_revision;
+        std::string             include_doc_id;
 
-            char strdate[ 30 ];
-            time_t t = time(0);
-            strftime(
-                strdate, sizeof(strdate),
-                "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $",
-                gmtime(&t)
-            );
+        std::string             page_title;
+        std::string             section_id;
+        std::string             previous;
+        std::stringstream       phrase;
+        unsigned                table_span;
+        std::string             table_header;
 
-            actions.doc_last_revision = strdate;
-        }
+        macros_type             macro;
+        std::string             source_mode;
+        code_action             code;
+        inline_code_action      inline_code;
+        phrase_action           paragraph, h1, h2, h3, h4, h5, h6;
+        markup_action           hr;
+        phrase_action           blurb, blockquote, preformatted;
+        plain_char_action       plain_char;
+        raw_char_action         raw_char;
+        image_action            image;
 
-        // if we're ignoring the document info, we're done.
-        if (ignore_docinfo)
-        {
-            return;
-        }
+        typedef std::pair<char, int> mark_type;
+        std::stringstream       list_buffer;
+        std::stack<mark_type>   list_marks;
+        int                     indent;
+        list_action             list;
+        list_format_action      list_format;
+        phrase_action           list_item;
 
-        out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            << "<!DOCTYPE library PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
-            << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
-            << '<' << actions.doc_type << "\n"
-            << "    id=\"" << actions.doc_id << "\"\n"
-            << "    name=\"" << actions.doc_title << "\"\n"
-            << "    dirname=\"" << actions.doc_dirname << "\"\n"
-            << "    last-revision=\"" << actions.doc_last_revision << "\" \n"
-            << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
-            << "  <" << actions.doc_type << "info>\n";
+        link_action             funcref_pre;
+        markup_action           funcref_post;
+        link_action             classref_pre;
+        markup_action           classref_post;
+        link_action             memberref_pre;
+        markup_action           memberref_post;
+        link_action             enumref_pre;
+        markup_action           enumref_post;
+        link_action             headerref_pre;
+        markup_action           headerref_post;
 
-        for_each(
-            actions.doc_authors.begin()
-          , actions.doc_authors.end()
-          , xml_author(out));
+        markup_action           bold_pre;
+        markup_action           bold_post;
+        markup_action           italic_pre;
+        markup_action           italic_post;
+        markup_action           underline_pre;
+        markup_action           underline_post;
+        markup_action           teletype_pre;
+        markup_action           teletype_post;
+        markup_action           strikethrough_pre;
+        markup_action           strikethrough_post;
 
-        if (!actions.doc_copyright_holder.empty())
-        {
-            out << "\n" << "    <copyright>\n";
+        simple_phrase_action    simple_bold;
+        simple_phrase_action    simple_italic;
+        simple_phrase_action    simple_underline;
+        simple_phrase_action    simple_teletype;
+        simple_phrase_action    simple_strikethrough;
 
-            for_each(
-                actions.doc_copyright_years.begin()
-              , actions.doc_copyright_years.end()
-              , xml_year(out));
+        variablelist_action     variablelist;
+        markup_action           start_varlistentry;
+        markup_action           end_varlistentry;
+        markup_action           start_varlistterm;
+        markup_action           end_varlistterm;
+        markup_action           start_varlistitem;
+        markup_action           end_varlistitem;
 
-            out << "      <holder>" << actions.doc_copyright_holder << "</holder>\n"
-                << "    </copyright>\n"
-                << "\n"
-            ;
-        }
+        markup_action           break_;
+        indentifier_action      identifier;
+        macro_def_action        macro_def;
+        do_macro_action         do_macro;
+        link_action             url_pre;
+        markup_action           url_post;
+        link_action             link_pre;
+        markup_action           link_post;
+        table_action            table;
+        start_row_action        start_row;
+        markup_action           end_row;
+        start_col_action        start_cell;
+        markup_action           end_cell;
+        anchor_action           anchor;
 
-        if (!actions.doc_license.empty())
-        {
-            out << "    <legalnotice>\n"
-                << "      <para>\n"
-                << "        " << actions.doc_license << "\n"
-                << "      </para>\n"
-                << "    </legalnotice>\n"
-                << "\n"
-            ;
-        }
-
-        if (!actions.doc_purpose.empty())
-        {
-            out << "    <" << actions.doc_type << "purpose>\n"
-                << "      " << actions.doc_purpose
-                << "    </" << actions.doc_type << "purpose>\n"
-                << "\n"
-            ;
-        }
-
-        if (!actions.doc_category.empty())
-        {
-            out << "    <" << actions.doc_type << "category name=\"category:"
-                << actions.doc_category
-                << "\"></" << actions.doc_type << "category>\n"
-                << "\n"
-            ;
-        }
-
-        out << "  </" << actions.doc_type << "info>\n"
-            << "\n"
-        ;
-
-        if (!actions.doc_title.empty())
-        {
-            out << "  <title>" << actions.doc_title;
-            if (!actions.doc_version.empty())
-                out << ' ' << actions.doc_version;
-            out << "</title>\n\n\n";
-        }
-    }
-
-    template <typename Actions>
-    void post(std::ostream& out, Actions& actions, bool ignore_docinfo = false)
-    {
-        // if we're ignoring the document info, do nothing.
-        if (ignore_docinfo)
-        {
-            return;
-        }
-
-        // We've finished generating our output. Here's what we'll do
-        // *after* everything else.
-        out << "\n</" << actions.doc_type << ">\n\n";
-    }
+        begin_section_action    begin_section;
+        markup_action           end_section;
+        xinclude_action         xinclude;
+        include_action          include;
+    };
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_UTILS_HPP

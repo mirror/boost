@@ -1042,12 +1042,12 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-03
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-08
             </entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>10:31:09
-            PM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>01:37:40
+            AM</entry>
           </row>
           <row>
             <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>
