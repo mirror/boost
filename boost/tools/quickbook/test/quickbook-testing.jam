@@ -7,13 +7,16 @@
 #
 
 import testing ;
-import project ;
+import quickbook ;
 
 #
 #   quickbook-test - generates a test for quickbook itself. A quickbook-test is
 #   actually made up of two tests:
-#           $(target-name) : generate boostbook from $(source) or $(target-name).qbk
-#           $(target-name).diff : compare generated boostbook to $(target-name).gold
+#           $(target-name) :
+#               generate boostbook from $(source) or $(target-name).qbk
+#
+#           $(target-name).diff :
+#               compare generated boostbook to $(target-name).gold
 #
 #   Known Issues:
 #       * FIXME: quickbook gets generated for each test
@@ -22,7 +25,6 @@ import project ;
 #
 rule quickbook-test ( target-name : source ? : requirements * )
 {
-    local project = [ project.current ] ;
     source ?= $(target-name).qbk ;
 
     return
@@ -30,6 +32,6 @@ rule quickbook-test ( target-name : source ? : requirements * )
             : $(target-name) ]
 
         [ run text_diff.cpp : : $(target-name) $(target-name).gold
-            : $(requirements) : $(target-name).diff : $(default-build) ]
+            : $(requirements) : $(target-name).diff ]
         ;
 }
