@@ -161,6 +161,10 @@ non_pointer_test<std::ostream_iterator<int>,int,
 non_pointer_test<std::ostream_iterator<int>,
     int, void, int*, int&, std::output_iterator_tag>
         ostream_iterator_test;
+#elif BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(70190006))
+non_pointer_test<std::ostream_iterator<int>,
+    int, long, int*, int&, std::output_iterator_tag>
+        ostream_iterator_test;
 #else
 non_pointer_test<std::ostream_iterator<int>,
     void, void, void, void, std::output_iterator_tag>
