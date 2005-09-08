@@ -595,6 +595,12 @@ namespace quickbook
         out << "\n</" << actions.doc_type << ">\n\n";
     }
 
+    void phrase_to_string_action::operator()(iterator const& first, iterator const& last) const
+    {
+        out = phrase.str();
+        phrase.str(std::string());
+    }
+
     actions::actions(char const* filein_, std::ostream &out_)
         : filename(fs::complete(fs::path(filein_, fs::native)))
         , out(out_)
@@ -673,6 +679,8 @@ namespace quickbook
         , end_section(out, "</section>")
         , xinclude(out)
         , include(*this)
+        , extract_doc_license(doc_license, phrase)
+        , extract_doc_purpose(doc_purpose, phrase)
     {
         // add the predefined macros
         macro.add

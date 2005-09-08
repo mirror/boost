@@ -10,6 +10,7 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP
 
+#include "./phrase.hpp"
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/actor.hpp>
 #include <boost/spirit/utility/loops.hpp>
@@ -23,12 +24,13 @@ namespace quickbook
     : public grammar<doc_info_grammar<Actions> >
     {
         doc_info_grammar(Actions& actions)
-        : actions(actions) {}
+            : actions(actions) {}
 
         template <typename Scanner>
         struct definition
         {
             definition(doc_info_grammar const& self)
+                : unused(false), common(self.actions, unused)
             {
                 doc_info =
                         space
@@ -48,10 +50,10 @@ namespace quickbook
                         | doc_id
                         | doc_dirname
                         | doc_copyright
-                        | doc_purpose
+                        | doc_purpose               [self.actions.extract_doc_purpose]
                         | doc_category
                         | doc_authors
-                        | doc_license
+                        | doc_license               [self.actions.extract_doc_license]
                         | doc_last_revision
                         | doc_source_mode
                         )
@@ -93,7 +95,7 @@ namespace quickbook
                 doc_purpose =
                         space
                     >> "[purpose" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_purpose)]
+                    >> phrase
                     >> ']' >> +eol_p
                     ;
 
@@ -126,7 +128,7 @@ namespace quickbook
                 doc_license =
                         space
                     >> "[license" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_license)]
+                    >> phrase
                     >> ']' >> +eol_p
                     ;
 
@@ -158,13 +160,22 @@ namespace quickbook
                 hard_space =
                     (eps_p - (alnum_p | '_')) >> space  // must not be followed by
                     ;                                   // alpha-numeric or underscore
+
+                phrase =
+                   *(   common
+                    |   comment
+                    |   (anychar_p - ']')               [self.actions.plain_char]
+                    )
+                    ;
             }
 
+            bool unused;
             std::pair<std::string, std::string> name;
             rule<Scanner>   doc_info, doc_title, doc_version, doc_id, doc_dirname,
                             doc_copyright, doc_purpose,doc_category, doc_authors,
                             doc_author, comment, space, hard_space, doc_license,
-                            doc_last_revision, doc_source_mode;
+                            doc_last_revision, doc_source_mode, phrase;
+            phrase_grammar<Actions> common;
 
             rule<Scanner> const&
             start() const { return doc_info; }

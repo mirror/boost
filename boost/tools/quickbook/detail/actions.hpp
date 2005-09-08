@@ -600,6 +600,17 @@ namespace quickbook
     void pre(std::ostream& out, quickbook::actions& actions, bool ignore_docinfo = false);
     void post(std::ostream& out, quickbook::actions& actions, bool ignore_docinfo = false);
 
+    struct phrase_to_string_action
+    {
+        phrase_to_string_action(std::string& out, std::stringstream& phrase)
+            : out(out) , phrase(phrase) {}
+
+        void operator()(iterator const& first, iterator const& last) const;
+
+        std::string&        out;
+        std::stringstream&  phrase;
+    };
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  Our actions
@@ -632,6 +643,8 @@ namespace quickbook
         std::string             doc_license;
         std::string             doc_last_revision;
         std::string             include_doc_id;
+        phrase_to_string_action extract_doc_license;
+        phrase_to_string_action extract_doc_purpose;
 
         std::string             page_title;
         std::string             section_id;

@@ -7,8 +7,8 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#if !defined(BOOST_SPIRIT_BLOCK_HPP)
-#define BOOST_SPIRIT_BLOCK_HPP
+#if !defined(BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP)
+#define BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
 
 #include "./detail/utils.hpp"
 #include "./phrase.hpp"
@@ -335,5 +335,5 @@ namespace quickbook
     };
 }
 
-#endif // BOOST_SPIRIT_BLOCK_HPP
+#endif // BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
 

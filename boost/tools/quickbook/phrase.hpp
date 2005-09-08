@@ -7,8 +7,8 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#if !defined(BOOST_SPIRIT_PHRASE_HPP)
-#define BOOST_SPIRIT_PHRASE_HPP
+#if !defined(BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP)
+#define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
 #include "detail/utils.hpp"
 #include <boost/spirit/core.hpp>
@@ -25,7 +25,7 @@ namespace quickbook
     struct phrase_grammar : grammar<phrase_grammar<Actions> >
     {
         phrase_grammar(Actions& actions, bool& is_not_preformatted)
-        : actions(actions), is_not_preformatted(is_not_preformatted) {}
+            : actions(actions), is_not_preformatted(is_not_preformatted) {}
 
         template <typename Scanner>
         struct definition
@@ -362,5 +362,5 @@ namespace quickbook
     };
 }
 
-#endif // BOOST_SPIRIT_PHRASE_HPP
+#endif // BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 

@@ -16,11 +16,11 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
       <para>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-        http://www.boost.org/LICENSE_1_0.txt </ulink>) 
+        http://www.boost.org/LICENSE_1_0.txt</ulink>) 
       </para>
     </legalnotice>
     <partpurpose>
-      WikiWiki style documentation tool 
+      <emphasis>WikiWiki</emphasis>style documentation tool 
     </partpurpose>
   </partinfo><title>quickbook 1.1</title>
   <section id="quickbook.intro">
@@ -1046,7 +1046,7 @@ sf_logo
             </entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>10:18:23
+            <entry>__TIME__</entry><entry>The current time</entry><entry>11:15:59
             AM</entry>
           </row>
           <row>
