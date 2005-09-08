@@ -6,8 +6,20 @@
 #   http://www.boost.org/LICENSE_1_0.txt)
 #
 
+import feature ;
+import generators ;
 import testing ;
-import quickbook ;
+import type ;
+import toolset ;
+
+feature.feature quickbook-testing.quickbook-command : : free dependency ;
+
+type.register BOOSTBOOK : boostbook ;
+type.register QUICKBOOK : quickbook ;
+
+generators.register-standard quickbook-testing.quickbook-to-boostbook : QUICKBOOK : BOOSTBOOK ;
+
+exe line-compare-tool : text_diff.cpp ;
 
 #
 #   quickbook-test - generates a test for quickbook itself. A quickbook-test is
@@ -18,20 +30,36 @@ import quickbook ;
 #           $(target-name).diff :
 #               compare generated boostbook to $(target-name).gold
 #
-#   Known Issues:
-#       * FIXME: quickbook gets generated for each test
-#       * FIXME: text_diff gets generated for each test
-#       * FIXME: text_diff will fail on dates, and other variable output
-#
 rule quickbook-test ( target-name : source ? : requirements * )
 {
-    source ?= $(target-name).qbk ;
+    source ?= $(target-name).quickbook ;
+    local gold-output = $(source:S=.gold) ;
 
     return
-        [ testing.make-test boostbook : $(source) : $(requirements)
-            : $(target-name) ]
+        [ testing.make-test boostbook
+            : $(source)
+            : $(requirements)
+                <quickbook-testing.quickbook-command>..//quickbook
+            : $(target-name).boostbook
+        ]
 
-        [ run text_diff.cpp : : $(target-name) $(target-name).gold
-            : $(requirements) : $(target-name).diff ]
+        [ testing.make-test run-output
+            : line-compare-tool
+            : $(requirements)
+                <testing.input-file>$(target-name).boostbook
+                <testing.input-file>$(gold-output)
+            : $(target-name).diff
+        ]
         ;
+}
+
+toolset.flags quickbook-testing.quickbook-to-boostbook quickbook-command <quickbook-testing.quickbook-command> ;
+rule quickbook-to-boostbook ( target : source : properties * )
+{
+    DEPENDS $(target) : [ on $(target) return $(quickbook-command) ] ;
+}
+
+actions quickbook-to-boostbook bind quickbook-command
+{
+    $(quickbook-command) $(>) --output-file=$(<)
 }

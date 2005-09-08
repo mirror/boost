@@ -10,7 +10,7 @@
             http://www.boost.org/LICENSE_1_0.txt
         </ulink>)
     ]
-    [last-revision $Date$]
+    [last-revision $Date: 2005/09/08 14:09:23 $]
 ]
 
 [/ QuickBook Document version 1.1 ]
@@ -364,7 +364,7 @@ like this:
     [category The document's category]
     [authors [Blow, Joe], [Doe, Jane]]
     [license The document's license]
-    [last-revision $Date$]
+    [last-revision $Date: 2005/09/08 14:09:23 $]
     [source-mode source-type]
 ]
 ''']
