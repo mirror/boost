@@ -7,7 +7,7 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
-#include "../quickbook.hpp"
+#include "../block.hpp"
 #include "../doc_info.hpp"
 #include "./post_process.hpp"
 #include "utils.hpp"
@@ -97,7 +97,7 @@ namespace quickbook
         {
             pre(actor.out, actor, ignore_docinfo);
 
-            quickbook_grammar<actions> g(actor);
+            block_grammar<actions> g(actor);
             info = parse(info.hit ? info.stop : first, last, g);
             if (info.full)
             {
