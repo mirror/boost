@@ -9,4 +9,13 @@ test-suite "typeof"
 	:  
 	[ compile type.cpp : <define>BOOST_TYPEOF_NATIVE : type_native ]
 	[ compile type.cpp : <define>BOOST_TYPEOF_COMPLIANT : type_emulation ]
+
+	[ compile template_type.cpp : <define>BOOST_TYPEOF_NATIVE : template_type_native ]
+	[ compile template_type.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_type_emulation ]
+
+	[ compile template_int.cpp : <define>BOOST_TYPEOF_NATIVE : template_int_native ]
+	[ compile template_int.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_int_emulation ]
+
+	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_NATIVE : template_tpl_native ]
+	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_tpl_emulation ]
 	;
