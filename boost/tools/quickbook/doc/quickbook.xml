@@ -543,7 +543,6 @@ escape (no processing/formatting)
     [category The document's category]
     [authors [Blow, Joe], [Doe, Jane]]
     [license The document's license]
-    [last-revision $Date$]
     [source-mode source-type]
 ]
 </literal></programlisting>
@@ -1042,12 +1041,12 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-08
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2000-Dec-20
             </entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>11:15:59
-            AM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>12:00:00
+            PM</entry>
           </row>
           <row>
             <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>

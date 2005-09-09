@@ -31,6 +31,8 @@ namespace quickbook
 {
     using namespace boost::spirit;
     namespace fs = boost::filesystem;
+    tm* current_time; // the current time
+    tm* current_gm_time; // the current UTC time
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -170,6 +172,7 @@ main(int argc, char* argv[])
             ("linewidth", value<int>(), "line width")
             ("input-file", value<std::string>(), "input file")
             ("output-file", value<std::string>(), "output file")
+            ("debug", "debug mode (for developers)")
         ;
         
         positional_options_description p;
@@ -195,8 +198,31 @@ main(int argc, char* argv[])
 
         if (vm.count("indent"))
             indent = vm["indent"].as<int>();
+
         if (vm.count("linewidth"))
             linewidth = vm["linewidth"].as<int>();
+        
+        if (vm.count("debug"))
+        {
+            static tm timeinfo;
+            timeinfo.tm_year = 2000 - 1900;
+            timeinfo.tm_mon = 12 - 1;
+            timeinfo.tm_mday = 20;
+            timeinfo.tm_hour = 12;
+            timeinfo.tm_min = 0;
+            timeinfo.tm_sec = 0;
+            timeinfo.tm_isdst = -1;
+            mktime(&timeinfo);
+            quickbook::current_time = &timeinfo;
+            quickbook::current_gm_time = &timeinfo;
+        }
+        else
+        {
+            time_t t = std::time(0);
+            quickbook::current_time = localtime(&t);
+            quickbook::current_gm_time = gmtime(&t);
+
+        }
 
         if (vm.count("input-file"))
         {

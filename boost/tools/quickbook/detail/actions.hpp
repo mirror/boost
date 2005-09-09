@@ -29,6 +29,8 @@ namespace quickbook
     typedef position_iterator<file_storage::const_iterator> iterator;
     typedef std::string::const_iterator string_iterator;
     struct actions;
+    extern tm* current_time; // the current time
+    extern tm* current_gm_time; // the current UTC time
     
     // forward declarations
     struct actions;

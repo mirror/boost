@@ -78,5 +78,5 @@ rule process-quickbook ( target : source : properties * )
 
 actions process-quickbook bind quickbook-command
 {
-    $(quickbook-command) $(>) --output-file=$(<)
+    $(quickbook-command) $(>) --output-file=$(<) --debug
 }

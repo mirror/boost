@@ -2,15 +2,12 @@
     [version 1.1]
     [authors [de Guzman, Joel], [Niebler, Eric]]
     [copyright 2002 2004 Joel de Guzman, Eric Niebler]
-    [purpose WikiWiki style documentation tool]
+    [purpose /WikiWiki/ style documentation tool]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
-        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-            http://www.boost.org/LICENSE_1_0.txt
-        </ulink>)
+        [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [last-revision $Date: 2005/09/08 14:09:23 $]
 ]
 
 [/ QuickBook Document version 1.1 ]
@@ -364,7 +361,6 @@ like this:
     [category The document's category]
     [authors [Blow, Joe], [Doe, Jane]]
     [license The document's license]
-    [last-revision $Date: 2005/09/08 14:09:23 $]
     [source-mode source-type]
 ]
 ''']

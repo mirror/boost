@@ -163,25 +163,15 @@ namespace quickbook
     {
         if (str == quickbook_get_date)
         {
-#ifndef QUICKBOOK_NO_DATES
             char strdate[64];
-            time_t t = time(0);
-            strftime(strdate, sizeof(strdate), "%Y-%b-%d", localtime(&t));
+            strftime(strdate, sizeof(strdate), "%Y-%b-%d", current_time);
             phrase << strdate;
-#else
-            phrase << "2000-Dec-20";
-#endif
         }
         else if (str == quickbook_get_time)
         {
-#ifndef QUICKBOOK_NO_DATES
             char strdate[64];
-            time_t t = time(0);
-            strftime(strdate, sizeof(strdate), "%I:%M:%S %p", localtime(&t));
+            strftime(strdate, sizeof(strdate), "%I:%M:%S %p", current_time);
             phrase << strdate;
-#else
-            phrase << "12:00:00";
-#endif
         }
         else
         {
@@ -487,19 +477,14 @@ namespace quickbook
 
         if (actions.doc_last_revision.empty())
         {
-#ifndef QUICKBOOK_NO_DATES
             // default value for last-revision is now
 
             char strdate[ 30 ];
-            time_t t = time(0);
             strftime(
                 strdate, sizeof(strdate),
                 "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $",
-                gmtime(&t)
+                current_gm_time
             );
-#else
-            std::string strdate = "$" /* prevent CVS substitution */ "Date: 2000/12/29 12:00:00";
-#endif
             actions.doc_last_revision = strdate;
         }
 
