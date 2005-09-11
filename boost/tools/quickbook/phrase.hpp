@@ -21,6 +21,32 @@ namespace quickbook
 {
     using namespace boost::spirit;
 
+    template <typename Scanner, typename Action>
+    inline void
+    simple_markup(rule<Scanner>& simple, char mark, Action const& action, rule<Scanner> const& eol)
+    {
+        simple =
+            mark >>
+            (
+                (   graph_p >>                  // graph_p must follow mark
+                    *(anychar_p -
+                        (   eol                 // Make sure that we don't go
+                        |   (graph_p >> mark)    // past a single line
+                        )
+                    ) >> graph_p                // graph_p must precede mark
+                    >> eps_p(mark
+                        >> (space_p | punct_p)) // space_p or punct_p must
+                )                               // follow mark
+            |   (
+                    graph_p                     // A single char. e.g. *c*
+                    >> eps_p(mark
+                        >> (space_p | punct_p))
+                )
+            )                                   [action]
+            >> mark
+            ;
+    }
+    
     template <typename Actions>
     struct phrase_grammar : grammar<phrase_grammar<Actions> >
     {
@@ -33,6 +59,7 @@ namespace quickbook
             definition(phrase_grammar const& self)
             {
                 using detail::var;
+                Actions& actions = self.actions;
 
                 space =
                     *(space_p | comment)
@@ -62,7 +89,7 @@ namespace quickbook
                     ;
 
                 common =
-                        self.actions.macro              [self.actions.do_macro]
+                        actions.macro                   [actions.do_macro]
                     |   phrase_markup
                     |   inline_code
                     |   simple_format
@@ -78,7 +105,7 @@ namespace quickbook
                             |   (eol >> eol)            // Make sure that we don't go
                             )                           // past a single block
                         ) >> eps_p('`')
-                    )                                   [self.actions.inline_code]
+                    )                                   [actions.inline_code]
                     >>  '`'
                     ;
 
@@ -90,116 +117,17 @@ namespace quickbook
                     |   simple_strikethrough
                     ;
 
-                simple_bold =
-                    '*' >>
-                    (
-                        (   graph_p >>                  // graph_p must follow '*'
-                            *(anychar_p -
-                                (   eol                 // Make sure that we don't go
-                                |   (graph_p >> '*')    // past a single line
-                                )
-                            ) >> graph_p                // graph_p must precede '*'
-                            >> eps_p('*'
-                                >> (space_p | punct_p)) // space_p or punct_p must
-                        )                               // follow '*'
-                    |   (
-                            graph_p                     // A single char. e.g. *c*
-                            >> eps_p('*'
-                                >> (space_p | punct_p))
-                        )
-                    )                                   [self.actions.simple_bold]
-                    >> '*'
-                    ;
-
-                simple_italic =
-                    '/' >>
-                    (
-                        (   graph_p >>                  // graph_p must follow '/'
-                            *(anychar_p -
-                                (   eol                 // Make sure that we don't go
-                                |   (graph_p >> '/')    // past a single line
-                                )
-                            ) >> graph_p                // graph_p must precede '/'
-                            >> eps_p('/'
-                                >> (space_p | punct_p)) // space_p or punct_p must
-                        )                               // follow '/'
-                    |   (
-                            graph_p                     // A single char. e.g. /c/
-                            >> eps_p('/'
-                                >> (space_p | punct_p))
-                        )
-                    )                                   [self.actions.simple_italic]
-                    >> '/'
-                    ;
-
-                simple_underline =
-                    '_' >>
-                    (
-                        (   graph_p >>                  // graph_p must follow '_'
-                            *(anychar_p -
-                                (   eol                 // Make sure that we don't go
-                                |   (graph_p >> '_')    // past a single line
-                                )
-                            ) >> graph_p                // graph_p must precede '_'
-                            >> eps_p('_'
-                                >> (space_p | punct_p)) // space_p or punct_p must
-                        )                               // follow '_'
-                    |   (
-                            graph_p                     // A single char. e.g. _c_
-                            >> eps_p('_'
-                                >> (space_p | punct_p))
-                        )
-                    )                                   [self.actions.simple_underline]
-                    >> '_'
-                    ;
-
-                simple_teletype =
-                    '=' >>
-                    (
-                        (   graph_p >>                  // graph_p must follow '='
-                            *(anychar_p -
-                                (   eol                 // Make sure that we don't go
-                                |   (graph_p >> '=')    // past a single line
-                                )
-                            ) >> graph_p                // graph_p must precede '='
-                            >> eps_p('='
-                                >> (space_p | punct_p)) // space_p or punct_p must
-                        )                               // follow '='
-                    |   (
-                            graph_p                     // A single char. e.g. =c=
-                            >> eps_p('='
-                                >> (space_p | punct_p))
-                        )
-                    )                                   [self.actions.simple_teletype]
-                    >> '='
-                    ;
-
-                simple_strikethrough =
-                    '-' >>
-                    (
-                        (   graph_p >>                  // graph_p must follow '-'
-                            *(anychar_p -
-                                (   eol                 // Make sure that we don't go
-                                |   (graph_p >> '-')    // past a single line
-                                )
-                            ) >> graph_p                // graph_p must precede '-'
-                            >> eps_p('-'
-                                >> (space_p | punct_p)) // space_p or punct_p must
-                        )                               // follow '-'
-                    |   (
-                            graph_p                     // A single char. e.g. =c=
-                            >> eps_p('-'
-                                >> (space_p | punct_p))
-                        )
-                    )                                   [self.actions.simple_strikethrough]
-                    >> '-'
-                    ;
+                simple_markup(simple_bold, '*', actions.simple_bold, eol);
+                simple_markup(simple_italic, '/', actions.simple_italic, eol);
+                simple_markup(simple_underline, '_', actions.simple_underline, eol);
+                simple_markup(simple_teletype, '=', actions.simple_teletype, eol);
+                simple_markup(simple_strikethrough, '-', actions.simple_strikethrough, eol);
 
                 phrase =
                    *(   common
                     |   comment
                     |   (anychar_p -
-                            close_bracket)              [self.actions.plain_char]
+                            close_bracket)              [actions.plain_char]
                     )
                     ;
 
@@ -220,17 +148,17 @@ namespace quickbook
                         |   underline
                         |   teletype
                         |   strikethrough
-                        |   str_p("br")                 [self.actions.break_]
+                        |   str_p("br")                 [actions.break_]
                         )
                     >>  ']'
                     ;
 
                 escape =
-                        str_p("\\n")                    [self.actions.break_]
-                    |   '\\' >> punct_p                 [self.actions.raw_char]
+                        str_p("\\n")                    [actions.break_]
+                    |   '\\' >> punct_p                 [actions.raw_char]
                     |   (
                             "'''" >> !eol
-                        >>  *(anychar_p - "'''")        [self.actions.raw_char]
+                        >>  *(anychar_p - "'''")        [actions.raw_char]
                         >>  "'''"
                         )
                     ;
@@ -238,25 +166,25 @@ namespace quickbook
                 image =
                         '$' >> blank
                     >> (*(anychar_p -
-                            close_bracket))             [self.actions.image]
+                            close_bracket))             [actions.image]
                     ;
 
                 url =
                         '@'
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.url_pre]
+                            (']' | hard_space)))        [actions.url_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.url_post]
+                        )                               [actions.url_post]
                     ;
 
                 link =
                         "link" >> hard_space
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.link_pre]
+                            (']' | hard_space)))        [actions.link_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.link_post]
+                        )                               [actions.link_post]
                     ;
 
                 anchor =
@@ -264,84 +192,84 @@ namespace quickbook
                     >>  blank
                     >>  (   *(anychar_p -
                                 close_bracket)
-                        )                               [self.actions.anchor]
+                        )                               [actions.anchor]
                     ;
 
                 funcref =
                     "funcref" >> hard_space
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.funcref_pre]
+                            (']' | hard_space)))        [actions.funcref_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.funcref_post]
+                        )                               [actions.funcref_post]
                     ;
 
                 classref =
                     "classref" >> hard_space
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.classref_pre]
+                            (']' | hard_space)))        [actions.classref_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.classref_post]
+                        )                               [actions.classref_post]
                     ;
 
                 memberref =
                     "memberref" >> hard_space
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.memberref_pre]
+                            (']' | hard_space)))        [actions.memberref_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.memberref_post]
+                        )                               [actions.memberref_post]
                     ;
 
                 enumref =
                     "enumref" >> hard_space
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.enumref_pre]
+                            (']' | hard_space)))        [actions.enumref_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.enumref_post]
+                        )                               [actions.enumref_post]
                     ;
 
                 headerref =
                     "headerref" >> hard_space
                     >>  (*(anychar_p -
-                            (']' | hard_space)))        [self.actions.headerref_pre]
+                            (']' | hard_space)))        [actions.headerref_pre]
                     >>  (   eps_p(']')
                         |   (hard_space >> phrase)
-                        )                               [self.actions.headerref_post]
+                        )                               [actions.headerref_post]
                     ;
 
                 bold =
-                        ch_p('*')                       [self.actions.bold_pre]
-                    >>  blank >> phrase                 [self.actions.bold_post]
+                        ch_p('*')                       [actions.bold_pre]
+                    >>  blank >> phrase                 [actions.bold_post]
                     ;
 
                 italic =
-                        ch_p('\'')                      [self.actions.italic_pre]
-                    >>  blank >> phrase                 [self.actions.italic_post]
+                        ch_p('\'')                      [actions.italic_pre]
+                    >>  blank >> phrase                 [actions.italic_post]
                     ;
 
                 underline =
-                        ch_p('_')                       [self.actions.underline_pre]
-                    >>  blank >> phrase                 [self.actions.underline_post]
+                        ch_p('_')                       [actions.underline_pre]
+                    >>  blank >> phrase                 [actions.underline_post]
                     ;
 
                 teletype =
-                        ch_p('^')                       [self.actions.teletype_pre]
-                    >>  blank >> phrase                 [self.actions.teletype_post]
+                        ch_p('^')                       [actions.teletype_pre]
+                    >>  blank >> phrase                 [actions.teletype_post]
                     ;
 
                 strikethrough =
-                        ch_p('-')                       [self.actions.strikethrough_pre]
-                    >>  blank >> phrase                 [self.actions.strikethrough_post]
+                        ch_p('-')                       [actions.strikethrough_pre]
+                    >>  blank >> phrase                 [actions.strikethrough_post]
                     ;
 
                 source_mode =
                     (
                         str_p("c++")
                     |   "python"
-                    )                                   [assign_a(self.actions.source_mode)]
+                    )                                   [assign_a(actions.source_mode)]
                     ;
             }
             

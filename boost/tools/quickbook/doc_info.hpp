@@ -34,6 +34,8 @@ namespace quickbook
             definition(doc_info_grammar const& self)
                 : unused(false), common(self.actions, unused)
             {
+                Actions& actions = self.actions;
+
                 doc_info =
                         space
                     >>  '['
@@ -42,12 +44,12 @@ namespace quickbook
                         |   "library"
                         |   "chapter"
                         |   "part"
-                        )                           [assign_a(self.actions.doc_type)]
+                        )                           [assign_a(actions.doc_type)]
                     >> hard_space
                     >>  (  *(anychar_p -
                             (ch_p('[') | ']' | eol_p)
                             )
-                        )                           [assign_a(self.actions.doc_title)]
+                        )                           [assign_a(actions.doc_title)]
                     >> 
                         *(
                             space >> '[' >>
@@ -56,10 +58,10 @@ namespace quickbook
                             | doc_id
                             | doc_dirname
                             | doc_copyright
-                            | doc_purpose           [self.actions.extract_doc_purpose]
+                            | doc_purpose           [actions.extract_doc_purpose]
                             | doc_category
                             | doc_authors
-                            | doc_license           [self.actions.extract_doc_license]
+                            | doc_license           [actions.extract_doc_license]
                             | doc_last_revision
                             | doc_source_mode
                             )
@@ -70,39 +72,39 @@ namespace quickbook
 
                 doc_version =
                         "version" >> hard_space
-                    >>  (   uint_p                  [assign_a(self.actions.doc_major_version)]
+                    >>  (   uint_p                  [assign_a(actions.doc_major_version)]
                             >> '.' 
-                            >>  uint2_t()           [assign_a(self.actions.doc_minor_version)]
-                        )                           [assign_a(self.actions.doc_version)]
+                            >>  uint2_t()           [assign_a(actions.doc_minor_version)]
+                        )                           [assign_a(actions.doc_version)]
                     ;
 
                 doc_id =
                         "id" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_id)]
+                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_id)]
                     ;
 
                 doc_dirname =
                         "dirname" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_dirname)]
+                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_dirname)]
                     ;
 
                 doc_copyright =
                         "copyright" >> hard_space
-                    >> +( repeat_p(4)[digit_p]      [push_back_a(self.actions.doc_copyright_years)]
+                    >> +( repeat_p(4)[digit_p]      [push_back_a(actions.doc_copyright_years)]
                           >> space
                         )
                     >> space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_copyright_holder)]
+                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_copyright_holder)]
                     ;
 
                 doc_purpose =
                         "purpose" >> hard_space
-                    >> phrase                       [assign_a(self.actions.doc_purpose_1_1)]
+                    >> phrase                       [assign_a(actions.doc_purpose_1_1)]
                     ;
 
                 doc_category =
                         "category" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_category)]
+                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_category)]
                     ;
 
                 doc_author =
@@ -116,20 +118,20 @@ namespace quickbook
 
                 doc_authors =
                         "authors" >> hard_space
-                    >> doc_author                   [push_back_a(self.actions.doc_authors, name)]
+                    >> doc_author                   [push_back_a(actions.doc_authors, name)]
                     >> *(   ','
-                            >>  doc_author          [push_back_a(self.actions.doc_authors, name)]
+                            >>  doc_author          [push_back_a(actions.doc_authors, name)]
                         )
                     ;
 
                 doc_license =
                         "license" >> hard_space
-                    >> phrase                       [assign_a(self.actions.doc_license_1_1)]
+                    >> phrase                       [assign_a(actions.doc_license_1_1)]
                     ;
 
                 doc_last_revision =
                         "last-revision" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_last_revision)]
+                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_last_revision)]
                     ;
 
                 doc_source_mode =
@@ -137,7 +139,7 @@ namespace quickbook
                     >>  (
                            str_p("c++") 
                         |  "python"
-                        )                           [assign_a(self.actions.source_mode)]
+                        )                           [assign_a(actions.source_mode)]
                     ;
 
                 comment =
@@ -155,7 +157,7 @@ namespace quickbook
                 phrase =
                    *(   common
                     |   comment
-                    |   (anychar_p - ']')               [self.actions.plain_char]
+                    |   (anychar_p - ']')           [actions.plain_char]
                     )
                     ;
             }

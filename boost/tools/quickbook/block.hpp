@@ -36,6 +36,7 @@ namespace quickbook
                 , common(self.actions, is_not_preformatted)
             {
                 using detail::var;
+                Actions& actions = self.actions;
 
                 start_ =
                     *(space_p | comment) >> blocks >> blank
@@ -44,10 +45,10 @@ namespace quickbook
                 blocks =
                    +(   block_markup
                     |   code
-                    |   list                            [self.actions.list]
-                    |   hr                              [self.actions.hr]
+                    |   list                            [actions.list]
+                    |   hr                              [actions.hr]
                     |   comment >> *eol
-                    |   paragraph                       [self.actions.paragraph]
+                    |   paragraph                       [actions.paragraph]
                     |   eol
                     )
                     ;
@@ -100,141 +101,141 @@ namespace quickbook
                         |   include
                         )
                     >>  (   (']' >> +eol)
-                        |   eps_p                       [self.actions.error]
+                        |   eps_p                       [actions.error]
                         )
                     ;
 
                 begin_section =
                        "section"
                     >> hard_space
-                    >>  (':' >> (*(alnum_p | '_'))      [assign_a(self.actions.section_id)]
-                        | eps_p                         [assign_a(self.actions.section_id)]
+                    >>  (':' >> (*(alnum_p | '_'))      [assign_a(actions.section_id)]
+                        | eps_p                         [assign_a(actions.section_id)]
                         )
                     >> (*(anychar_p -
-                            close_bracket))             [self.actions.begin_section]
+                            close_bracket))             [actions.begin_section]
                     ;
 
                 end_section =
-                    str_p("endsect")                    [self.actions.end_section]
+                    str_p("endsect")                    [actions.end_section]
                     ;
 
                 headings =
                     h1 | h2 | h3 | h4 | h5 | h6
                     ;
 
-                h1 = "h1" >> hard_space >> phrase       [self.actions.h1];
-                h2 = "h2" >> hard_space >> phrase       [self.actions.h2];
-                h3 = "h3" >> hard_space >> phrase       [self.actions.h3];
-                h4 = "h4" >> hard_space >> phrase       [self.actions.h4];
-                h5 = "h5" >> hard_space >> phrase       [self.actions.h5];
-                h6 = "h6" >> hard_space >> phrase       [self.actions.h6];
+                h1 = "h1" >> hard_space >> phrase       [actions.h1];
+                h2 = "h2" >> hard_space >> phrase       [actions.h2];
+                h3 = "h3" >> hard_space >> phrase       [actions.h3];
+                h4 = "h4" >> hard_space >> phrase       [actions.h4];
+                h5 = "h5" >> hard_space >> phrase       [actions.h5];
+                h6 = "h6" >> hard_space >> phrase       [actions.h6];
 
                 blurb =
                     "blurb" >> hard_space
-                    >> phrase                           [self.actions.blurb]
+                    >> phrase                           [actions.blurb]
                     ;
 
                 blockquote =
                     ':' >> blank >>
-                    phrase                              [self.actions.blockquote]
+                    phrase                              [actions.blockquote]
                     ;
 
                 preformatted =
                     "pre" >> hard_space                 [assign_a(is_not_preformatted, false)]
-                    >> !eol >> phrase                   [self.actions.preformatted]
+                    >> !eol >> phrase                   [actions.preformatted]
                     >> eps_p                            [assign_a(is_not_preformatted, true)]
                     ;
 
                 def_macro =
                     "def" >> hard_space
-                    >> identifier                       [self.actions.identifier]
-                    >> blank >> phrase                  [self.actions.macro_def]
+                    >> identifier                       [actions.identifier]
+                    >> blank >> phrase                  [actions.macro_def]
                     ;
 
                 variablelist =
                     "variablelist" >> hard_space
-                    >>  (*(anychar_p - eol))            [assign_a(self.actions.table_title)]
+                    >>  (*(anychar_p - eol))            [assign_a(actions.table_title)]
                     >>  +eol
                     >>  *varlistentry
-                    >>  eps_p                           [self.actions.variablelist]
+                    >>  eps_p                           [actions.variablelist]
                     ;
 
                 varlistentry =
                     space
-                    >>  ch_p('[')                       [self.actions.start_varlistentry]
+                    >>  ch_p('[')                       [actions.start_varlistentry]
                     >>
                     (
                         (
                             varlistterm
                             >> +varlistitem
-                            >>  ch_p(']')               [self.actions.end_varlistentry]
+                            >>  ch_p(']')               [actions.end_varlistentry]
                             >>  space
                         )
-                        | eps_p                         [self.actions.error]
+                        | eps_p                         [actions.error]
                     )
                     ;
 
                 varlistterm =
                     space
-                    >>  ch_p('[')                       [self.actions.start_varlistterm]
+                    >>  ch_p('[')                       [actions.start_varlistterm]
                     >>
                     (
                         (
                             phrase
-                            >>  ch_p(']')               [self.actions.end_varlistterm]
+                            >>  ch_p(']')               [actions.end_varlistterm]
                             >>  space
                         )
-                        | eps_p                         [self.actions.error]
+                        | eps_p                         [actions.error]
                     )
                     ;
 
                 varlistitem =
                     space
-                    >>  ch_p('[')                       [self.actions.start_varlistitem]
+                    >>  ch_p('[')                       [actions.start_varlistitem]
                     >>
                     (
                         (
-                            phrase                      [self.actions.end_varlistitem]
+                            phrase                      [actions.end_varlistitem]
                             >>  ch_p(']')
                             >>  space
                         )
-                        | eps_p                         [self.actions.error]
+                        | eps_p                         [actions.error]
                     )
                     ;
 
                 table =
                     "table" >> hard_space
-                    >>  (*(anychar_p - eol))            [assign_a(self.actions.table_title)]
+                    >>  (*(anychar_p - eol))            [assign_a(actions.table_title)]
                     >>  +eol
                     >>  *table_row
-                    >>  eps_p                           [self.actions.table]
+                    >>  eps_p                           [actions.table]
                     ;
 
                 table_row =
                     space
-                    >>  ch_p('[')                       [self.actions.start_row]
+                    >>  ch_p('[')                       [actions.start_row]
                     >>
                     (
                         (
                             *table_cell
-                            >>  ch_p(']')               [self.actions.end_row]
+                            >>  ch_p(']')               [actions.end_row]
                             >>  space
                         )
-                        | eps_p                         [self.actions.error]
+                        | eps_p                         [actions.error]
                     )
                     ;
 
                 table_cell =
                     space
-                    >>  ch_p('[')                       [self.actions.start_cell]
+                    >>  ch_p('[')                       [actions.start_cell]
                     >>
                     (
                         (
                             phrase
-                            >>  ch_p(']')               [self.actions.end_cell]
+                            >>  ch_p(']')               [actions.end_cell]
                             >>  space
                         )
-                        | eps_p                         [self.actions.error]
+                        | eps_p                         [actions.error]
                     )
                     ;
 
@@ -242,7 +243,7 @@ namespace quickbook
                        "xinclude"
                     >> hard_space
                     >> (*(anychar_p -
-                            close_bracket))             [self.actions.xinclude]
+                            close_bracket))             [actions.xinclude]
                     ;
 
                 include =
@@ -251,11 +252,11 @@ namespace quickbook
                     >> 
                    !(
                         ':'
-                        >> (*((alnum_p | '_') - space_p))[assign_a(self.actions.include_doc_id)]
+                        >> (*((alnum_p | '_') - space_p))[assign_a(actions.include_doc_id)]
                         >> space
                     )
                     >> (*(anychar_p -
-                            close_bracket))             [self.actions.include]
+                            close_bracket))             [actions.include]
                     ;
 
                 identifier =
@@ -266,7 +267,7 @@ namespace quickbook
                     (
                         code_line
                         >> *(*eol >> code_line)
-                    )                                   [self.actions.code]
+                    )                                   [actions.code]
                     >> +eol
                     ;
 
@@ -279,10 +280,10 @@ namespace quickbook
                     eps_p(ch_p('*') | '#') >>
                    +(
                         (*blank_p
-                        >> (ch_p('*') | '#'))           [self.actions.list_format]
+                        >> (ch_p('*') | '#'))           [actions.list_format]
                         >> *blank_p
                         >> list_item
-                    )                                   [self.actions.list_item]
+                    )                                   [actions.list_item]
                     ;
 
                 list_item =
@@ -291,7 +292,7 @@ namespace quickbook
                             (   eol_p >> *blank_p >> eps_p(ch_p('*') | '#')
                             |   (eol >> eol)
                             )
-                        )                               [self.actions.plain_char]
+                        )                               [actions.plain_char]
                     )
                     >> +eol
                     ;
@@ -300,7 +301,7 @@ namespace quickbook
                    *(   common
                     |   (anychar_p -                    // Make sure we don't go past
                             (eol >> eol)                // a single block.
-                        )                               [self.actions.plain_char]
+                        )                               [actions.plain_char]
                     )
                     >> +eol
                     ;
@@ -309,7 +310,7 @@ namespace quickbook
                    *(   common
                     |   comment
                     |   (anychar_p -
-                            close_bracket)              [self.actions.plain_char]
+                            close_bracket)              [actions.plain_char]
                     )
                     ;
             }
