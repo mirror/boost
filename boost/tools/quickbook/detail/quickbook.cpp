@@ -33,7 +33,8 @@ namespace quickbook
     namespace fs = boost::filesystem;
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
-
+    bool debug_mode; // for quickbook developers only
+    
     ///////////////////////////////////////////////////////////////////////////
     //
     //  Load a file
@@ -215,13 +216,14 @@ main(int argc, char* argv[])
             mktime(&timeinfo);
             quickbook::current_time = &timeinfo;
             quickbook::current_gm_time = &timeinfo;
+            quickbook::debug_mode = true;
         }
         else
         {
             time_t t = std::time(0);
             quickbook::current_time = localtime(&t);
             quickbook::current_gm_time = gmtime(&t);
-
+            quickbook::debug_mode = false;
         }
 
         if (vm.count("input-file"))

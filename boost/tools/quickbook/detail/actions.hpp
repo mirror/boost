@@ -31,7 +31,8 @@ namespace quickbook
     struct actions;
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
-    
+    extern bool debug_mode; 
+
     // forward declarations
     struct actions;
     int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
@@ -635,6 +636,9 @@ namespace quickbook
         std::string             doc_type;
         std::string             doc_title;
         std::string             doc_version;
+        unsigned                doc_major_version;
+        unsigned                doc_minor_version;
+        unsigned                doc_version_n; // doc_major_version * 100 + doc_minor_version
         std::string             doc_id;
         std::string             doc_dirname;
         copyright_list          doc_copyright_years;

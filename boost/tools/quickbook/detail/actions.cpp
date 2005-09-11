@@ -558,6 +558,15 @@ namespace quickbook
             << "\n"
         ;
 
+        if (actions.doc_version.empty())
+        {
+            // hard code version to v1.1
+            actions.doc_major_version = 1;
+            actions.doc_minor_version = 1;
+            actions.doc_version_n = 101;
+            std::cerr << "Error: Document version undefined." << std::endl;
+        }
+
         if (!actions.doc_title.empty())
         {
             out << "  <title>" << actions.doc_title;
@@ -666,12 +675,19 @@ namespace quickbook
         , include(*this)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
+        , doc_major_version(0)
+        , doc_minor_version(0)
+        , doc_version_n(0)
     {
+        std::string filename_str = debug_mode ? 
+            std::string("__FILENAME__") : // turn off __FILENAME__ macro on debug mode = true
+            filename.native_file_string();
+
         // add the predefined macros
         macro.add
             ("__DATE__", std::string(quickbook_get_date))
             ("__TIME__", std::string(quickbook_get_time))
-            ("__FILENAME__", filename.native_file_string())
+            ("__FILENAME__", filename_str)
         ;
     }
 }

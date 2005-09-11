@@ -29,6 +29,8 @@ namespace quickbook
         template <typename Scanner>
         struct definition
         {
+            typedef uint_parser<int, 10, 1, 2>  uint2_t;
+
             definition(doc_info_grammar const& self)
                 : unused(false), common(self.actions, unused)
             {
@@ -46,64 +48,61 @@ namespace quickbook
                             (ch_p('[') | ']' | eol_p)
                             )
                         )                           [assign_a(self.actions.doc_title)]
-                    >> *( doc_version
-                        | doc_id
-                        | doc_dirname
-                        | doc_copyright
-                        | doc_purpose               [self.actions.extract_doc_purpose]
-                        | doc_category
-                        | doc_authors
-                        | doc_license               [self.actions.extract_doc_license]
-                        | doc_last_revision
-                        | doc_source_mode
+                    >> 
+                        *(
+                            space >> '[' >>
+                            (
+                              doc_version
+                            | doc_id
+                            | doc_dirname
+                            | doc_copyright
+                            | doc_purpose           [self.actions.extract_doc_purpose]
+                            | doc_category
+                            | doc_authors
+                            | doc_license           [self.actions.extract_doc_license]
+                            | doc_last_revision
+                            | doc_source_mode
+                            )
+                            >> space >> ']' >> +eol_p
                         )
                     >> ']' >> +eol_p
                     ;
 
                 doc_version =
-                        space
-                    >> "[version" >> hard_space
-                    >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_version)]
-                    >> ']' >> +eol_p
+                        "version" >> hard_space
+                    >>  (   uint_p                  [assign_a(self.actions.doc_major_version)]
+                            >> '.' 
+                            >>  uint2_t()           [assign_a(self.actions.doc_minor_version)]
+                        )                           [assign_a(self.actions.doc_version)]
                     ;
 
                 doc_id =
-                        space
-                    >> "[id" >> hard_space
+                        "id" >> hard_space
                     >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_id)]
-                    >> ']' >> +eol_p
                     ;
 
                 doc_dirname =
-                        space
-                    >> "[dirname" >> hard_space
+                        "dirname" >> hard_space
                     >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_dirname)]
-                    >> ']' >> +eol_p
                     ;
 
                 doc_copyright =
-                        space
-                    >> "[copyright" >> hard_space
+                        "copyright" >> hard_space
                     >> +( repeat_p(4)[digit_p]      [push_back_a(self.actions.doc_copyright_years)]
                           >> space
                         )
                     >> space
                     >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_copyright_holder)]
-                    >> ']' >> +eol_p
                     ;
 
                 doc_purpose =
-                        space
-                    >> "[purpose" >> hard_space
+                        "purpose" >> hard_space
                     >> phrase
-                    >> ']' >> +eol_p
                     ;
 
                 doc_category =
-                        space
-                    >> "[category" >> hard_space
+                        "category" >> hard_space
                     >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_category)]
-                    >> ']' >> +eol_p
                     ;
 
                 doc_author =
@@ -116,37 +115,29 @@ namespace quickbook
                     ;
 
                 doc_authors =
-                        space
-                    >> "[authors" >> hard_space
+                        "authors" >> hard_space
                     >> doc_author                   [push_back_a(self.actions.doc_authors, name)]
                     >> *(   ','
                             >>  doc_author          [push_back_a(self.actions.doc_authors, name)]
                         )
-                    >> ']' >> +eol_p
                     ;
 
                 doc_license =
-                        space
-                    >> "[license" >> hard_space
+                        "license" >> hard_space
                     >> phrase
-                    >> ']' >> +eol_p
                     ;
 
                 doc_last_revision =
-                        space
-                    >> "[last-revision" >> hard_space
+                        "last-revision" >> hard_space
                     >> (*(anychar_p - ']'))         [assign_a(self.actions.doc_last_revision)]
-                    >> ']' >> +eol_p
                     ;
 
                 doc_source_mode =
-                        space
-                    >> "[source-mode" >> hard_space
-                    >> (
+                        "source-mode" >> hard_space
+                    >>  (
                            str_p("c++") 
                         |  "python"
                         )                           [assign_a(self.actions.source_mode)]
-                    >> space >> ']' >> +eol_p
                     ;
 
                 comment =
