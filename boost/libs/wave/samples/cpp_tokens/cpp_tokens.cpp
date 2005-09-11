@@ -70,7 +70,7 @@ main(int argc, char *argv[])
 //  The following typedef does the trick. It defines the context type to use, 
 //  which depends on the lexer type (provided by the second template 
 //  parameter). Our lexer type 'slex_iterator<>' depends on a custom token type
-//  'slex_token<>'. Our custom token type differs from the original one povided 
+//  'slex_token<>'. Our custom token type differs from the original one provided 
 //  by the Wave library only by defining an additional operator<<(), which is 
 //  used to dump the token information carried by a given token (see loop 
 //  below).
@@ -86,6 +86,10 @@ main(int argc, char *argv[])
 // The preprocessing of the input stream is done on the fly behind the scenes
 // during iteration over the context_type::iterator_type stream.
     context_type ctx (teststr.begin(), teststr.end(), argv[1]);
+
+    ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
+    ctx.set_language(boost::wave::enable_preserve_comments(ctx.get_language()));
+
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
     context_type::token_type current_token;
