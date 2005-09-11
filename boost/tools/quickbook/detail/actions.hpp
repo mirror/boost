@@ -651,6 +651,8 @@ namespace quickbook
         std::string             include_doc_id;
         phrase_to_string_action extract_doc_license;
         phrase_to_string_action extract_doc_purpose;
+        std::string             doc_license_1_1;
+        std::string             doc_purpose_1_1;
 
         std::string             page_title;
         std::string             section_id;

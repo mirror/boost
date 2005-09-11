@@ -97,7 +97,7 @@ namespace quickbook
 
                 doc_purpose =
                         "purpose" >> hard_space
-                    >> phrase
+                    >> phrase                       [assign_a(self.actions.doc_purpose_1_1)]
                     ;
 
                 doc_category =
@@ -124,7 +124,7 @@ namespace quickbook
 
                 doc_license =
                         "license" >> hard_space
-                    >> phrase
+                    >> phrase                       [assign_a(self.actions.doc_license_1_1)]
                     ;
 
                 doc_last_revision =

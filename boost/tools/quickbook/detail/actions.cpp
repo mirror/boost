@@ -465,8 +465,8 @@ namespace quickbook
 
     void pre(std::ostream& out, quickbook::actions& actions, bool ignore_docinfo)
     {
-        // The quickbook file has been parsed. Now, it's time to
-        // generate the output. Here's what we'll do *before* anything else.
+        // The doc_info in the file has been parsed. Here's what we'll do 
+        // *before* anything else.
 
         if (actions.doc_id.empty())
             actions.doc_id = detail::make_identifier(
@@ -482,7 +482,9 @@ namespace quickbook
             char strdate[ 30 ];
             strftime(
                 strdate, sizeof(strdate),
-                "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $",
+                (debug_mode ? 
+                    "DEBUG MODE Date: %Y/%m/%d %H:%M:%S $" :
+                    "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $"),
                 current_gm_time
             );
             actions.doc_last_revision = strdate;
@@ -492,6 +494,19 @@ namespace quickbook
         if (ignore_docinfo)
         {
             return;
+        }
+
+        if (actions.doc_version.empty())
+        {
+            // hard code version to v1.1
+            actions.doc_major_version = 1;
+            actions.doc_minor_version = 1;
+            actions.doc_version_n = 101;
+            std::cerr << "Error: Document version undefined." << std::endl;
+        }
+        else
+        {
+            actions.doc_version_n = (actions.doc_major_version * 100) + actions.doc_minor_version; 
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -523,6 +538,13 @@ namespace quickbook
                 << "    </copyright>\n"
                 << "\n"
             ;
+        }
+
+        if (actions.doc_version_n < 103)
+        {
+            // version < 1.3 compatibility
+            actions.doc_license = actions.doc_license_1_1;
+            actions.doc_purpose = actions.doc_purpose_1_1;
         }
 
         if (!actions.doc_license.empty())
@@ -557,15 +579,6 @@ namespace quickbook
         out << "  </" << actions.doc_type << "info>\n"
             << "\n"
         ;
-
-        if (actions.doc_version.empty())
-        {
-            // hard code version to v1.1
-            actions.doc_major_version = 1;
-            actions.doc_minor_version = 1;
-            actions.doc_version_n = 101;
-            std::cerr << "Error: Document version undefined." << std::endl;
-        }
 
         if (!actions.doc_title.empty())
         {
@@ -679,8 +692,9 @@ namespace quickbook
         , doc_minor_version(0)
         , doc_version_n(0)
     {
+        // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ? 
-            std::string("__FILENAME__") : // turn off __FILENAME__ macro on debug mode = true
+            std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") : 
             filename.native_file_string();
 
         // add the predefined macros
