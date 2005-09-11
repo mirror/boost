@@ -21,9 +21,9 @@ namespace quickbook
 {
     using namespace boost::spirit;
 
-    template <typename Scanner, typename Action>
+    template <typename Rule, typename Action>
     inline void
-    simple_markup(rule<Scanner>& simple, char mark, Action const& action, rule<Scanner> const& eol)
+    simple_markup(Rule& simple, char mark, Action const& action, Rule const& eol)
     {
         simple =
             mark >>
@@ -31,7 +31,7 @@ namespace quickbook
                 (   graph_p >>                  // graph_p must follow mark
                     *(anychar_p -
                         (   eol                 // Make sure that we don't go
-                        |   (graph_p >> mark)    // past a single line
+                        |   (graph_p >> mark)   // past a single line
                         )
                     ) >> graph_p                // graph_p must precede mark
                     >> eps_p(mark
@@ -117,11 +117,16 @@ namespace quickbook
                     |   simple_strikethrough
                     ;
 
-                simple_markup(simple_bold, '*', actions.simple_bold, eol);
-                simple_markup(simple_italic, '/', actions.simple_italic, eol);
-                simple_markup(simple_underline, '_', actions.simple_underline, eol);
-                simple_markup(simple_teletype, '=', actions.simple_teletype, eol);
-                simple_markup(simple_strikethrough, '-', actions.simple_strikethrough, eol);
+                simple_markup(simple_bold, 
+                    '*', actions.simple_bold, eol);
+                simple_markup(simple_italic, 
+                    '/', actions.simple_italic, eol);
+                simple_markup(simple_underline, 
+                    '_', actions.simple_underline, eol);
+                simple_markup(simple_teletype, 
+                    '=', actions.simple_teletype, eol);
+                simple_markup(simple_strikethrough, 
+                    '-', actions.simple_strikethrough, eol);
 
                 phrase =
                    *(   common
@@ -148,6 +153,7 @@ namespace quickbook
                         |   underline
                         |   teletype
                         |   strikethrough
+                        |   quote
                         |   str_p("br")                 [actions.break_]
                         )
                     >>  ']'
@@ -264,6 +270,11 @@ namespace quickbook
                         ch_p('-')                       [actions.strikethrough_pre]
                     >>  blank >> phrase                 [actions.strikethrough_post]
                     ;
+                
+                quote =
+                        ch_p('"')                       [actions.quote_pre]
+                    >>  blank >> phrase                 [actions.quote_post]
+                    ;
 
                 source_mode =
                     (
@@ -279,7 +290,8 @@ namespace quickbook
                             classref, memberref, enumref, headerref, anchor, 
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
-                            simple_teletype, simple_strikethrough, source_mode;
+                            simple_teletype, simple_strikethrough, source_mode,
+                            quote;
 
             rule<Scanner> const&
             start() const { return common; }

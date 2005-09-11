@@ -27,8 +27,8 @@
 
 [section:intro Introduction]
 
-[:[*['"Why program by hand in five days what you can spend five years of your
-life automating?"]]\n\n-- Terrence Parr, author ANTLR/PCCTS]
+[:[*['["Why program by hand in five days what you can spend five years of your
+life automating?]]]\n\n-- Terrence Parr, author ANTLR/PCCTS]
 
 Well, QuickBook started as a weekend hack. It was originally intended to be a
 sample application using __spirit__. What is it? What you are viewing now, this
@@ -106,6 +106,32 @@ Like all non-terminal phrase level elements, this can of course be nested:
 will generate:
 
 [*['bold-italic]]
+
+[h3 Quotes]
+
+[pre'''
+["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
+''']
+
+will generate:
+
+["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
+
+Note the proper left and right quote marks. Also, while you can simply use 
+ordinary quotes like "quoted", our quote, above, will generate correct DocBook 
+quotes (e.g. <quote>quoted</quote>).
+
+Like all phrase elements, quotes may be nested. Example:
+
+[pre'''
+["Here's the rule for bargains: ["Do other men, for they would do you.] That's 
+the true business precept.]
+''']
+
+will generate:
+
+["Here's the rule for bargains: ["Do other men, for they would do you.] 
+That's the true business precept.]
 
 [h3 Simple formatting]
 

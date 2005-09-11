@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <part id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date$"
-xmlns:xi="http://www.w3.org/2001/XInclude">
+ xmlns:xi="http://www.w3.org/2001/XInclude">
   <partinfo>
     <author>
       <firstname>Joel</firstname><surname>de Guzman</surname>
@@ -16,19 +16,19 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
       <para>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-        http://www.boost.org/LICENSE_1_0.txt</ulink>) 
+        http://www.boost.org/LICENSE_1_0.txt</ulink>)
       </para>
     </legalnotice>
     <partpurpose>
-      <emphasis>WikiWiki</emphasis>style documentation tool 
+      <emphasis>WikiWiki</emphasis> style documentation tool
     </partpurpose>
   </partinfo><title>quickbook 1.3</title>
   <section id="quickbook.intro">
-    <title>Introduction</title>
+    <title> Introduction</title>
     <blockquote>
       <para>
-        <emphasis role="bold"><emphasis>&quot;Why program by hand in five days what
-        you can spend five years of your life automating?&quot;</emphasis></emphasis>
+        <emphasis role="bold"><emphasis><quote>Why program by hand in five days what
+        you can spend five years of your life automating?</quote></emphasis></emphasis>
         <sbr/><sbr/>-- Terrence Parr, author ANTLR/PCCTS
       </para>
     </blockquote>
@@ -48,7 +48,7 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
       tool thanks to Eric Niebler who resurrected the project making it generate
       <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>
       instead of HTML. The <ulink url="http://www.boost.org/doc/html/boostbook.html">
-      BoostBook</ulink>documentation format is an extension of <ulink url="http://www.docbook.org/">
+      BoostBook</ulink> documentation format is an extension of <ulink url="http://www.docbook.org/">
       DocBook</ulink>, an SGML or XML based format for describing documentation.
     </para>
     <para>
@@ -65,28 +65,28 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     <itemizedlist>
       <listitem>
         generate <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook
-        </ulink>xml, to generate HTML, PostScript and PDF 
+        </ulink> xml, to generate HTML, PostScript and PDF
       </listitem>
       <listitem>
-        simple markup to link to Doxygen-generated entities 
+        simple markup to link to Doxygen-generated entities
       </listitem>
       <listitem>
-        macro system for simple text substitution 
+        macro system for simple text substitution
       </listitem>
       <listitem>
         simple markup for italics, bold, preformatted, blurbs, code samples, tables,
-        URLs, anchors, images, etc. 
+        URLs, anchors, images, etc.
       </listitem>
       <listitem>
-        automatic syntax coloring of code samples 
+        automatic syntax coloring of code samples
       </listitem>
       <listitem>
-        CSS support 
+        CSS support
       </listitem>
     </itemizedlist>
   </section>
   <section id="quickbook.syntax">
-    <title>Syntax Summary</title>
+    <title> Syntax Summary</title>
     <para>
       A QuickBook document is composed of one or more blocks. An example of a block
       is the paragraph or a C++ code snippet. Some blocks have special mark-ups.
@@ -101,15 +101,22 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
       Phrases in each block cannot contain a block terminator. This way, syntax errors
       such as un-matched closing brackets do not go haywire and corrupt anything
       past a single block.
-    </para><anchor id="syntax.comments" /><bridgehead renderas="sect2">Comments</bridgehead>
+    </para><anchor id="syntax.comments" />
+    <bridgehead renderas="sect2">
+      Comments
+    </bridgehead>
     <para>
       Can be placed anywhere.
     </para>
 <programlisting><literal>[/ comment (no output generated) ]
 </literal></programlisting>
-    <anchor id="syntax.phrase_level_elements" /><bridgehead renderas="sect2">Phrase
-    Level Elements</bridgehead><anchor id="syntax.font_styles" /><bridgehead renderas="sect3">
-    Font Styles</bridgehead>
+    <anchor id="syntax.phrase_level_elements" />
+    <bridgehead renderas="sect2">
+      Phrase Level Elements
+    </bridgehead><anchor id="syntax.font_styles" />
+    <bridgehead renderas="sect3">
+      Font Styles
+    </bridgehead>
 <programlisting><literal>['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 </literal></programlisting>
     <para>
@@ -130,8 +137,40 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     </para>
     <para>
       <emphasis role="bold"><emphasis>bold-italic</emphasis></emphasis>
-    </para><anchor id="syntax.simple_formatting" /><bridgehead renderas="sect3">
-    Simple formatting</bridgehead>
+    </para><anchor id="syntax.quotes" />
+    <bridgehead renderas="sect3">
+      Quotes
+    </bridgehead>
+<programlisting><literal>["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
+</literal></programlisting>
+    <para>
+      will generate:
+    </para>
+    <para>
+      <quote>A question that sometimes drives me hazy: am I or are the others crazy?
+      </quote>--Einstein
+    </para>
+    <para>
+      Note the proper left and right quote marks. Also, while you can simply use
+      ordinary quotes like &quot;quoted&quot;, our quote, above, will generate correct
+      DocBook quotes (e.g. &lt;quote&gt;quoted&lt;/quote&gt;).
+    </para>
+    <para>
+      Like all phrase elements, quotes may be nested. Example:
+    </para>
+<programlisting><literal>["Here's the rule for bargains: ["Do other men, for they would do you.] That's 
+the true business precept.]
+</literal></programlisting>
+    <para>
+      will generate:
+    </para>
+    <para>
+      <quote>Here's the rule for bargains: <quote>Do other men, for they would do
+      you.</quote> That's the true business precept.</quote>
+    </para><anchor id="syntax.simple_formatting" />
+    <bridgehead renderas="sect3">
+      Simple formatting
+    </bridgehead>
     <para>
       Simple markup for formatting text, common in many applications, is now supported:
     </para>
@@ -152,32 +191,33 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
     <itemizedlist>
       <listitem>
         Simple markups cannot nest. You can combine a simple markup with a nestable
-        markup. 
+        markup.
       </listitem>
       <listitem>
-        A non-space character must follow the leading markup 
+        A non-space character must follow the leading markup
       </listitem>
       <listitem>
-        A non-space character must precede the trailing markup 
+        A non-space character must precede the trailing markup
       </listitem>
       <listitem>
-        A space or a punctuation must follow the trailing markup 
+        A space or a punctuation must follow the trailing markup
       </listitem>
       <listitem>
         If the matching markup cannot be found within a line, the formatting will
         not be applied. This is to ensure that un-matched formatting markups, which
         can be a common mistake, does not corrupt anything past a single line. We
         do not want the rest of the document to be rendered bold just because we
-        forgot a trailing '*'. 
+        forgot a trailing '*'.
       </listitem>
       <listitem>
         A line starting with the star will be interpreted as an unordered list. See
-        <link linkend="syntax.unordered_lists">Unordered lists</link>. 
+        <link linkend="syntax.unordered_lists">Unordered lists</link>.
       </listitem>
     </itemizedlist>
     <informaltable frame="all">
-      <bridgehead renderas="sect4"><phrase role="table-title">More Formatting Samples
-      </phrase></bridgehead>
+      <bridgehead renderas="sect4">
+        <phrase role="table-title">More Formatting Samples</phrase>
+      </bridgehead>
       <tgroup cols="2">
         <thead>
           <row>
@@ -208,7 +248,7 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
           </row>
           <row>
             <entry><literal>*(Bold Outside)* (parenthesis bold)</literal></entry>
-            <entry><emphasis role="bold">(Bold Outside)</emphasis>(parenthesis bold)
+            <entry><emphasis role="bold">(Bold Outside)</emphasis> (parenthesis bold)
             </entry>
           </row>
           <row>
@@ -221,11 +261,11 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
           </row>
           <row>
             <entry><literal>3 *4* 5 = 60 (4 is bold)</literal></entry><entry>3 <emphasis
-            role="bold">4</emphasis>5 = 60 (4 is bold)</entry>
+            role="bold">4</emphasis> 5 = 60 (4 is bold)</entry>
           </row>
           <row>
             <entry><literal>*This is bold* this is not *but this is*</literal></entry>
-            <entry><emphasis role="bold">This is bold</emphasis>this is not <emphasis
+            <entry><emphasis role="bold">This is bold</emphasis> this is not <emphasis
             role="bold">but this is</emphasis></entry>
           </row>
           <row>
@@ -249,7 +289,7 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/note.png">
-            </imagedata></imageobject></inlinemediaobject>Thanks to David Barrett,
+            </imagedata></imageobject></inlinemediaobject> Thanks to David Barrett,
             author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">
             Qwiki</ulink>, for sharing these samples and teaching me these obscure
             formatting rules. I wasn't sure at all if <ulink url="http://spirit.sourceforge.net">
@@ -258,8 +298,10 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.inline_code" /><bridgehead renderas="sect3">
-    Inline code</bridgehead>
+    </informaltable><anchor id="syntax.inline_code" />
+    <bridgehead renderas="sect3">
+      Inline code
+    </bridgehead>
     <para>
       Inlining code in paragraphs is quite common when writing C++ documentation.
       We provide a very simple markup for this. For example, this:
@@ -270,12 +312,12 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
       will generate:
     </para>
     <para>
-      This text has inlined code 
+      This text has inlined code
       <code>
-        <phrase role="keyword">int</phrase><phrase role="identifier">main</phrase>
-        <phrase role="special">()</phrase><phrase role="special">{</phrase><phrase
-        role="keyword">return</phrase><phrase role="number">0</phrase><phrase role="special">
-        ;</phrase><phrase role="special">}</phrase>
+        <phrase role="keyword">int</phrase><phrase role="identifier"> main</phrase>
+        <phrase role="special">()</phrase><phrase role="special"> {</phrase><phrase
+        role="keyword"> return</phrase><phrase role="number"> 0</phrase><phrase role="special">
+        ;</phrase><phrase role="special"> }</phrase>
       </code>in it. The code will be syntax highlighted.
     </para>
     <informaltable frame="all">
@@ -288,22 +330,24 @@ xmlns:xi="http://www.w3.org/2001/XInclude">
             the code with the tick: <literal>"`"</literal>, not the single quote:
             <code>
               <phrase role="string">&quot;'&quot;</phrase>
-            </code>. Note too that <literal>`some code`</literal>is prefered over
+            </code>. Note too that <literal>`some code`</literal> is prefered over
             <literal>[^some code]</literal>. </entry>
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.source_mode" /><bridgehead renderas="sect3">
-    Source Mode</bridgehead>
+    </informaltable><anchor id="syntax.source_mode" />
+    <bridgehead renderas="sect3">
+      Source Mode
+    </bridgehead>
     <para>
       If a document contains more than one type of source code then the source mode
       may be changed dynamically as the document is processed. All QuickBook documents
       are initially in C++ mode by default, though an alternative initial value may
-      be set in the <link linkend="syntax.document">Document Info</link>section.
+      be set in the <link linkend="syntax.document">Document Info</link> section.
     </para>
     <para>
-      To change the source mode, use the <literal>[source-mode]</literal>markup,
-      where <literal>source-mode</literal>is one of the supported modes. For example,
+      To change the source mode, use the <literal>[source-mode]</literal> markup,
+      where <literal>source-mode</literal> is one of the supported modes. For example,
       this:
     </para>
 <programlisting><literal>Python's [python] `import` is rather like C++'s [c++] `#include`. A
@@ -314,23 +358,24 @@ C++ comment `// looks like this` whereas a Python comment [python]
       will generate:
     </para>
     <para>
-      Python's 
+      Python's
       <code>
         <phrase role="keyword">import</phrase>
-      </code>is rather like C++'s 
+      </code>is rather like C++'s
       <code>
         <phrase role="preprocessor">#include</phrase>
-      </code>. A C++ comment 
+      </code>. A C++ comment
       <code>
         <phrase role="comment">// looks like this</phrase>
-      </code>whereas a Python comment 
+      </code>whereas a Python comment
       <code>
         <phrase role="comment">#looks like this</phrase>
       </code>.
     </para>
     <informaltable frame="all">
-      <bridgehead renderas="sect4"><phrase role="table-title">Supported Source Modes
-      </phrase></bridgehead>
+      <bridgehead renderas="sect4">
+        <phrase role="table-title">Supported Source Modes</phrase>
+      </bridgehead>
       <tgroup cols="2">
         <thead>
           <row>
@@ -353,13 +398,15 @@ C++ comment `// looks like this` whereas a Python comment [python]
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/note.png">
-            </imagedata></imageobject></inlinemediaobject>The source mode strings
+            </imagedata></imageobject></inlinemediaobject> The source mode strings
             are lowercase.</entry>
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.line_break" /><bridgehead renderas="sect3">
-    line-break</bridgehead>
+    </informaltable><anchor id="syntax.line_break" />
+    <bridgehead renderas="sect3">
+      line-break
+    </bridgehead>
 <programlisting><literal>[br]
 </literal></programlisting>
     <informaltable frame="all">
@@ -368,10 +415,10 @@ C++ comment `// looks like this` whereas a Python comment [python]
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/note.png">
-            </imagedata></imageobject></inlinemediaobject>Note that 
+            </imagedata></imageobject></inlinemediaobject> Note that
             <code>
               <phrase role="special">\</phrase><phrase role="identifier">n</phrase>
-            </code>is now preferred over 
+            </code>is now preferred over
             <code>
               <phrase role="special">[</phrase><phrase role="identifier">br</phrase>
               <phrase role="special">]</phrase>
@@ -379,7 +426,9 @@ C++ comment `// looks like this` whereas a Python comment [python]
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.anchors" /><bridgehead renderas="sect3">Anchors
+    </informaltable><anchor id="syntax.anchors" />
+    <bridgehead renderas="sect3">
+      Anchors
     </bridgehead>
 <programlisting><literal>[#named_anchor]
 </literal></programlisting>
@@ -387,9 +436,12 @@ C++ comment `// looks like this` whereas a Python comment [python]
       A named anchor is a hook that can be referenced by a link elsewhere in the
       document. You can then reference an anchor with <literal>[link named_anchor
       Some link text]</literal>. More on anchors <link linkend="syntax.anchor_links">
-      here</link>, <link linkend="syntax.section">here</link>and <link linkend="syntax.headings">
+      here</link>, <link linkend="syntax.section">here</link> and <link linkend="syntax.headings">
       here</link>.
-    </para><anchor id="syntax.links" /><bridgehead renderas="sect3">Links</bridgehead>
+    </para><anchor id="syntax.links" />
+    <bridgehead renderas="sect3">
+      Links
+    </bridgehead>
 <programlisting><literal>[@http://www.boost.org this is [*boost's] website....]
 </literal></programlisting>
     <para>
@@ -415,18 +467,22 @@ C++ comment `// looks like this` whereas a Python comment [python]
     <para>
       see <ulink url="http://spirit.sourceforge.net/">http://spirit.sourceforge.net/
       </ulink>
-    </para><anchor id="syntax.anchor_links" /><bridgehead renderas="sect3">Anchor
-    links</bridgehead>
+    </para><anchor id="syntax.anchor_links" />
+    <bridgehead renderas="sect3">
+      Anchor links
+    </bridgehead>
     <para>
       You can link within a document using:
     </para>
 <programlisting><literal>[link section_id.normalized_header_text The link text]
 </literal></programlisting>
     <para>
-      See sections <link linkend="syntax.section">Section</link>and <link linkend="syntax.headings">
+      See sections <link linkend="syntax.section">Section</link> and <link linkend="syntax.headings">
       Headings</link>for more info.
-    </para><anchor id="syntax.refentry_links" /><bridgehead renderas="sect3">refentry
-    links</bridgehead>
+    </para><anchor id="syntax.refentry_links" />
+    <bridgehead renderas="sect3">
+      refentry links
+    </bridgehead>
     <para>
       In addition, you can link internally to an XML refentry like:
     </para>
@@ -445,8 +501,10 @@ C++ comment `// looks like this` whereas a Python comment [python]
     <para>
       This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;
       &gt;xml.refentry&lt;/link&gt;</literal>.
-    </para><anchor id="syntax.function__class__member__enum_or_header_links" /><bridgehead
-    renderas="sect3">function, class, member, enum or header links</bridgehead>
+    </para><anchor id="syntax.function__class__member__enum_or_header_links" />
+    <bridgehead renderas="sect3">
+      function, class, member, enum or header links
+    </bridgehead>
     <para>
       If you want to link to a function, class, member, enum or header in the reference
       section, you can use:
@@ -465,7 +523,10 @@ C++ comment `// looks like this` whereas a Python comment [python]
 </literal></programlisting>
     <para>
       would have &quot;boost::bar::baz&quot; as the link text.
-    </para><anchor id="syntax.escape" /><bridgehead renderas="sect3">Escape</bridgehead>
+    </para><anchor id="syntax.escape" />
+    <bridgehead renderas="sect3">
+      Escape
+    </bridgehead>
     <para>
       The escape mark-up is used when we don't want to do any processing.
     </para>
@@ -475,8 +536,8 @@ escape (no processing/formatting)
 </literal></programlisting>
     <para>
       Escaping allows us to pass XML markup to <ulink url="http://www.boost.org/doc/html/boostbook.html">
-      BoostBook</ulink>or <ulink url="http://www.docbook.org/">DocBook</ulink>. For
-      example:
+      BoostBook</ulink> or <ulink url="http://www.docbook.org/">DocBook</ulink>.
+      For example:
     </para>
 <programlisting><literal>'''
 &lt;emphasis role=&quot;bold&quot;&gt;This is direct XML markup&lt;/emphasis&gt;
@@ -491,22 +552,24 @@ escape (no processing/formatting)
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/alert.png">
-            </imagedata></imageobject></inlinemediaobject>Be careful when using the
-            escape. The text must conform to <ulink url="http://www.boost.org/doc/html/boostbook.html">
+            </imagedata></imageobject></inlinemediaobject> Be careful when using
+            the escape. The text must conform to <ulink url="http://www.boost.org/doc/html/boostbook.html">
             BoostBook</ulink>/<ulink url="http://www.docbook.org/">DocBook</ulink>
             syntax.</entry>
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.single_char_escape" /><bridgehead renderas="sect3">
-    Single char escape</bridgehead>
+    </informaltable><anchor id="syntax.single_char_escape" />
+    <bridgehead renderas="sect3">
+      Single char escape
+    </bridgehead>
     <para>
       The backslash may be used to escape a single punctuation character. The punctuation
       immediately after the backslash is passed without any processing. This is useful
-      when we need to escape QuickBook punctuations such as 
+      when we need to escape QuickBook punctuations such as
       <code>
         <phrase role="special">[</phrase>
-      </code>and 
+      </code>and
       <code>
         <phrase role="special">]</phrase>
       </code>. For example, how do you escape the triple quote? Simple: <literal>
@@ -518,18 +581,24 @@ escape (no processing/formatting)
       </code>has a special meaning. It is used to generate line breaks. Note that
       <code>
         <phrase role="special">\</phrase><phrase role="identifier">n</phrase>
-      </code>is now preferred over 
+      </code>is now preferred over
       <code>
         <phrase role="special">[</phrase><phrase role="identifier">br</phrase><phrase
         role="special">]</phrase>
       </code>.
-    </para><anchor id="syntax.images__terminal_" /><bridgehead renderas="sect3">
-    Images (terminal)</bridgehead>
+    </para><anchor id="syntax.images__terminal_" />
+    <bridgehead renderas="sect3">
+      Images (terminal)
+    </bridgehead>
 <programlisting><literal>[$image.jpg]
 </literal></programlisting>
-    <anchor id="syntax.block_level_elements" /><bridgehead renderas="sect2">Block
-    Level Elements</bridgehead><anchor id="syntax.document" /><bridgehead renderas="sect3">
-    Document</bridgehead>
+    <anchor id="syntax.block_level_elements" />
+    <bridgehead renderas="sect2">
+      Block Level Elements
+    </bridgehead><anchor id="syntax.document" />
+    <bridgehead renderas="sect3">
+      Document
+    </bridgehead>
     <para>
       Every document must begin with a Document Info section, which should look like
       this:
@@ -551,46 +620,49 @@ escape (no processing/formatting)
     </para>
     <itemizedlist>
       <listitem>
-        book 
+        book
       </listitem>
       <listitem>
-        library 
+        library
       </listitem>
       <listitem>
-        part 
+        part
       </listitem>
       <listitem>
-        article 
+        article
       </listitem>
       <listitem>
-        chapter 
+        chapter
       </listitem>
     </itemizedlist>
     <para>
       and <literal>version</literal>, <literal>id</literal>, <literal>dirname</literal>
       , <literal>copyright</literal>, <literal>purpose</literal>, <literal>category
       </literal>, <literal>authors</literal>, <literal>license</literal>, <literal>
-      last-revision</literal>and <literal>source-mode</literal>are optional information.
+      last-revision</literal> and <literal>source-mode</literal> are optional information.
     </para>
     <para>
-      Here <literal>source-type</literal>is a lowercase string setting the initial
+      Here <literal>source-type</literal> is a lowercase string setting the initial
       <link linkend="syntax.source_mode">source mode</link>. If the <literal>source-mode
-      </literal>field is omitted, a default value of <literal>c++</literal>will be
-      used.
-    </para><anchor id="syntax.section" /><bridgehead renderas="sect3">Section</bridgehead>
+      </literal> field is omitted, a default value of <literal>c++</literal> will
+      be used.
+    </para><anchor id="syntax.section" />
+    <bridgehead renderas="sect3">
+      Section
+    </bridgehead>
     <para>
       Starting a new section is accomplished with:
     </para>
 <programlisting><literal>[section:id The Section Title]
 </literal></programlisting>
     <para>
-      where <emphasis>id</emphasis>is optional. id will be the filename of the generated
+      where <emphasis>id</emphasis> is optional. id will be the filename of the generated
       section. If it is not present, &quot;The Section Title&quot; will be normalized
       and become the id. Valid characters are <literal>a-Z</literal>, <literal>A-Z
-      </literal>, <literal>0-9</literal>and <literal>_</literal>. All non-valid characters
-      are converted to underscore and all upper-case are converted to lower case.
-      Thus: &quot;The Section Title&quot; will be normalized to &quot;the_section_title
-      &quot;.
+      </literal>, <literal>0-9</literal> and <literal>_</literal>. All non-valid
+      characters are converted to underscore and all upper-case are converted to
+      lower case. Thus: &quot;The Section Title&quot; will be normalized to &quot;
+      the_section_title&quot;.
     </para>
     <para>
       End a section with:
@@ -599,7 +671,10 @@ escape (no processing/formatting)
 </literal></programlisting>
     <para>
       Sections can nest, and that results in a hierarchy in the table of contents.
-    </para><anchor id="syntax.xinclude" /><bridgehead renderas="sect3">xinclude</bridgehead>
+    </para><anchor id="syntax.xinclude" />
+    <bridgehead renderas="sect3">
+      xinclude
+    </bridgehead>
     <para>
       You can include another XML file with:
     </para>
@@ -608,14 +683,18 @@ escape (no processing/formatting)
     <para>
       This is useful when file.xml has been generated by Doxygen and contains your
       reference section.
-    </para><anchor id="syntax.paragraphs" /><bridgehead renderas="sect3">Paragraphs
+    </para><anchor id="syntax.paragraphs" />
+    <bridgehead renderas="sect3">
+      Paragraphs
     </bridgehead>
     <para>
       Paragraphs start left-flushed and are terminated by two or more newlines. No
       markup is needed for paragraphs. QuickBook automatically detects paragraphs
       from the context.
-    </para><anchor id="syntax.ordered_lists" /><bridgehead renderas="sect3">Ordered
-    lists</bridgehead>
+    </para><anchor id="syntax.ordered_lists" />
+    <bridgehead renderas="sect3">
+      Ordered lists
+    </bridgehead>
 <programlisting><literal># One
 # Two
 # Three
@@ -625,16 +704,18 @@ escape (no processing/formatting)
     </para>
     <orderedlist>
       <listitem>
-        One 
+        One
       </listitem>
       <listitem>
-        Two 
+        Two
       </listitem>
       <listitem>
-        Three 
+        Three
       </listitem>
-    </orderedlist><anchor id="syntax.list_hierarchies" /><bridgehead renderas="sect3">
-    List Hierarchies</bridgehead>
+    </orderedlist><anchor id="syntax.list_hierarchies" />
+    <bridgehead renderas="sect3">
+      List Hierarchies
+    </bridgehead>
     <para>
       List hierarchies are supported. Example:
     </para>
@@ -655,22 +736,22 @@ escape (no processing/formatting)
     </para>
     <orderedlist>
       <listitem>
-        One 
+        One
       </listitem>
       <listitem>
-        Two 
+        Two
       </listitem>
       <listitem>
         Three
         <orderedlist>
           <listitem>
-            Three.a 
+            Three.a
           </listitem>
           <listitem>
-            Three.b 
+            Three.b
           </listitem>
           <listitem>
-            Three.c 
+            Three.c
           </listitem>
         </orderedlist>
       </listitem>
@@ -681,20 +762,22 @@ escape (no processing/formatting)
             Four.a
             <orderedlist>
               <listitem>
-                Four.a.i 
+                Four.a.i
               </listitem>
               <listitem>
-                Four.a.ii 
+                Four.a.ii
               </listitem>
             </orderedlist>
           </listitem>
         </orderedlist>
       </listitem>
       <listitem>
-        Five 
+        Five
       </listitem>
-    </orderedlist><anchor id="syntax.long_list_lines" /><bridgehead renderas="sect3">
-    Long List Lines</bridgehead>
+    </orderedlist><anchor id="syntax.long_list_lines" />
+    <bridgehead renderas="sect3">
+      Long List Lines
+    </bridgehead>
     <para>
       Long lines will be wrapped appropriately. Example:
     </para>
@@ -708,19 +791,21 @@ escape (no processing/formatting)
 </literal></programlisting>
     <orderedlist>
       <listitem>
-        A short item. 
+        A short item.
       </listitem>
       <listitem>
         A very long item. A very long item. A very long item. A very long item. A
         very long item. A very long item. A very long item. A very long item. A very
         long item. A very long item. A very long item. A very long item. A very long
-        item. A very long item. A very long item. 
+        item. A very long item. A very long item.
       </listitem>
       <listitem>
-        A short item. 
+        A short item.
       </listitem>
-    </orderedlist><anchor id="syntax.unordered_lists" /><bridgehead renderas="sect3">
-    Unordered lists</bridgehead>
+    </orderedlist><anchor id="syntax.unordered_lists" />
+    <bridgehead renderas="sect3">
+      Unordered lists
+    </bridgehead>
 <programlisting><literal>* First
 * Second
 * Third
@@ -730,16 +815,18 @@ escape (no processing/formatting)
     </para>
     <itemizedlist>
       <listitem>
-        First 
+        First
       </listitem>
       <listitem>
-        Second 
+        Second
       </listitem>
       <listitem>
-        Third 
+        Third
       </listitem>
-    </itemizedlist><anchor id="syntax.mixed_lists" /><bridgehead renderas="sect3">
-    Mixed lists</bridgehead>
+    </itemizedlist><anchor id="syntax.mixed_lists" />
+    <bridgehead renderas="sect3">
+      Mixed lists
+    </bridgehead>
     <para>
       Mixed lists (ordered and unordered) are supported. Example:
     </para>
@@ -756,27 +843,27 @@ escape (no processing/formatting)
     </para>
     <orderedlist>
       <listitem>
-        One 
+        One
       </listitem>
       <listitem>
-        Two 
+        Two
       </listitem>
       <listitem>
         Three
         <itemizedlist>
           <listitem>
-            Three.a 
+            Three.a
           </listitem>
           <listitem>
-            Three.b 
+            Three.b
           </listitem>
           <listitem>
-            Three.c 
+            Three.c
           </listitem>
         </itemizedlist>
       </listitem>
       <listitem>
-        Four 
+        Four
       </listitem>
     </orderedlist>
     <para>
@@ -806,15 +893,15 @@ escape (no processing/formatting)
             1.a
             <orderedlist>
               <listitem>
-                1.a.1 
+                1.a.1
               </listitem>
               <listitem>
-                1.a.2 
+                1.a.2
               </listitem>
             </orderedlist>
           </listitem>
           <listitem>
-            1.b 
+            1.b
           </listitem>
         </itemizedlist>
       </listitem>
@@ -822,22 +909,22 @@ escape (no processing/formatting)
         2
         <itemizedlist>
           <listitem>
-            2.a 
+            2.a
           </listitem>
           <listitem>
             2.b
             <orderedlist>
               <listitem>
-                2.b.1 
+                2.b.1
               </listitem>
               <listitem>
                 2.b.2
                 <itemizedlist>
                   <listitem>
-                    2.b.2.a 
+                    2.b.2.a
                   </listitem>
                   <listitem>
-                    2.b.2.b 
+                    2.b.2.b
                   </listitem>
                 </itemizedlist>
               </listitem>
@@ -845,14 +932,16 @@ escape (no processing/formatting)
           </listitem>
         </itemizedlist>
       </listitem>
-    </orderedlist><anchor id="syntax.code" /><bridgehead renderas="sect3">Code</bridgehead>
+    </orderedlist><anchor id="syntax.code" />
+    <bridgehead renderas="sect3">
+      Code
+    </bridgehead>
     <para>
       Preformatted code starts with a space or a tab. The code will be syntax highlighted
       according to the current <link linkend="syntax.source_mode">source mode</link>
       :
     </para>
     <para>
-      
     </para>
 <programlisting>
 <literal>
@@ -867,7 +956,6 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
 </literal>
 </programlisting>
     <para>
-      
     </para>
 <programlisting>
 <literal>
@@ -893,11 +981,13 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 <literal>
 <phrase role="identifier">using</phrase>&nbsp;<ulink url="index.html">quickbook</ulink><phrase role="special">::</phrase><ulink url="quickbook/highlight.html">syntax_highlight</ulink><phrase role="special">;</phrase></literal>
 </programlisting>
-    <anchor id="syntax.preformatted" /><bridgehead renderas="sect3">Preformatted
+    <anchor id="syntax.preformatted" />
+    <bridgehead renderas="sect3">
+      Preformatted
     </bridgehead>
     <para>
       Sometimes, you don't want some preformatted text to be parsed as C++. In such
-      cases, use the <literal>[pre ... ]</literal>markup block.
+      cases, use the <literal>[pre ... ]</literal> markup block.
     </para>
 <programlisting><literal>[pre
 
@@ -923,8 +1013,10 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 </literal></programlisting>
     <para>
       Notice that unlike Code, phrase markup such as font style is still permitted
-      inside <literal>pre</literal>blocks.
-    </para><anchor id="syntax.blockquote" /><bridgehead renderas="sect3">Blockquote
+      inside <literal>pre</literal> blocks.
+    </para><anchor id="syntax.blockquote" />
+    <bridgehead renderas="sect3">
+      Blockquote
     </bridgehead>
 <programlisting><literal>[:sometext...]
 </literal></programlisting>
@@ -932,7 +1024,9 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
       <para>
         Indents the paragraph. This applies to one paragraph only.
       </para>
-    </blockquote><anchor id="syntax.headings" /><bridgehead renderas="sect3">Headings
+    </blockquote><anchor id="syntax.headings" />
+    <bridgehead renderas="sect3">
+      Headings
     </bridgehead>
 <programlisting><literal>[h1 Heading 1]
 [h2 Heading 2]
@@ -941,17 +1035,30 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 [h5 Heading 5]
 [h6 Heading 6]
 </literal></programlisting>
-    <anchor id="syntax.heading_1" /><bridgehead renderas="sect1">Heading 1</bridgehead>
-    <anchor id="syntax.heading_2" /><bridgehead renderas="sect2">Heading 2</bridgehead>
-    <anchor id="syntax.heading_3" /><bridgehead renderas="sect3">Heading 3</bridgehead>
-    <anchor id="syntax.heading_4" /><bridgehead renderas="sect4">Heading 4</bridgehead>
-    <anchor id="syntax.heading_5" /><bridgehead renderas="sect5">Heading 5</bridgehead>
-    <anchor id="syntax.heading_6" /><bridgehead renderas="sect6">Heading 6</bridgehead>
+    <anchor id="syntax.heading_1" />
+    <bridgehead renderas="sect1">
+      Heading 1
+    </bridgehead><anchor id="syntax.heading_2" />
+    <bridgehead renderas="sect2">
+      Heading 2
+    </bridgehead><anchor id="syntax.heading_3" />
+    <bridgehead renderas="sect3">
+      Heading 3
+    </bridgehead><anchor id="syntax.heading_4" />
+    <bridgehead renderas="sect4">
+      Heading 4
+    </bridgehead><anchor id="syntax.heading_5" />
+    <bridgehead renderas="sect5">
+      Heading 5
+    </bridgehead><anchor id="syntax.heading_6" />
+    <bridgehead renderas="sect6">
+      Heading 6
+    </bridgehead>
     <para>
       Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
       names with <literal>name=&quot;section_id.normalized_header_text&quot;</literal>
       (i.e. valid characters are <literal>a-z</literal>, <literal>A-Z</literal>,
-      <literal>0-9</literal>and <literal>_</literal>. All non-valid characters are
+      <literal>0-9</literal> and <literal>_</literal>. All non-valid characters are
       converted to underscore and all upper-case are converted to lower-case. For
       example: Heading 1 in section Section 2 will be normalized to <literal>section_2.heading_1
       </literal>). You can use:
@@ -960,8 +1067,11 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 </literal></programlisting>
     <para>
       to link to them. See <link linkend="syntax.anchor_links">Anchor links</link>
-      and <link linkend="syntax.section">Section</link>for more info.
-    </para><anchor id="syntax.macros" /><bridgehead renderas="sect3">Macros</bridgehead>
+      and <link linkend="syntax.section">Section</link> for more info.
+    </para><anchor id="syntax.macros" />
+    <bridgehead renderas="sect3">
+      Macros
+    </bridgehead>
 <programlisting><literal>[def macro_identifier some text]
 </literal></programlisting>
     <para>
@@ -986,7 +1096,7 @@ sf_logo
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/tip.png">
-            </imagedata></imageobject></inlinemediaobject>It's a good idea to use
+            </imagedata></imageobject></inlinemediaobject> It's a good idea to use
             macro identifiers that are distinguishable. For instance, in this document,
             macro identifiers have two leading and trailing underscores (e.g. <literal>
             __spirit__</literal>). The reason is to avoid unwanted macro replacement.
@@ -1000,7 +1110,7 @@ sf_logo
       1</emphasis>) They tend to change a lot. It is a good idea to place all links
       and images in one place near the top to make it easy to make changes. <emphasis
       role="bold">2</emphasis>) The syntax is not pretty. It's easier to read and
-      write, e.g. <literal>__spirit__</literal>than <literal>[@http://spirit.sourceforge.net
+      write, e.g. <literal>__spirit__</literal> than <literal>[@http://spirit.sourceforge.net
       Spirit]</literal>.
     </para>
     <para>
@@ -1022,16 +1132,19 @@ sf_logo
       will generate this:
     </para>
     <para>
-      Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink><inlinemediaobject>
+      Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink> <inlinemediaobject>
       <imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject>
       </inlinemediaobject>
-    </para><anchor id="syntax.predefined_macros" /><bridgehead renderas="sect3">
-    Predefined Macros</bridgehead>
+    </para><anchor id="syntax.predefined_macros" />
+    <bridgehead renderas="sect3">
+      Predefined Macros
+    </bridgehead>
     <para>
       Quickbook has some predefined macros that you can already use.
     </para>
     <informaltable frame="all">
-      <bridgehead renderas="sect4"><phrase role="table-title">Predefined Macros</phrase>
+      <bridgehead renderas="sect4">
+        <phrase role="table-title">Predefined Macros</phrase>
       </bridgehead>
       <tgroup cols="3">
         <thead>
@@ -1045,8 +1158,8 @@ sf_logo
             </entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>05:21:08
-            AM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>04:55:00
+            PM</entry>
           </row>
           <row>
             <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>
@@ -1054,7 +1167,9 @@ sf_logo
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.blurbs" /><bridgehead renderas="sect3">Blurbs
+    </informaltable><anchor id="syntax.blurbs" />
+    <bridgehead renderas="sect3">
+      Blurbs
     </bridgehead>
 <programlisting><literal>[blurb :-) [*An eye catching advertisement or note...]\n\n
     __spirit__ is an object-oriented recursive-descent parser generator framework
@@ -1072,17 +1187,19 @@ sf_logo
         <tbody>
           <row>
             <entry role="blurb"><inlinemediaobject><imageobject><imagedata fileref="images/smiley.png">
-            </imagedata></imageobject></inlinemediaobject><emphasis role="bold">
+            </imagedata></imageobject></inlinemediaobject> <emphasis role="bold">
             An eye catching advertisement or note...</emphasis><sbr/><sbr/><ulink
-            url="http://spirit.sourceforge.net">Spirit</ulink>is an object-oriented
+            url="http://spirit.sourceforge.net">Spirit</ulink> is an object-oriented
             recursive-descent parser generator framework implemented using template
             meta-programming techniques. Expression templates allow us to approximate
-            the syntax of Extended Backus-Normal Form (EBNF) completely in C++. 
+            the syntax of Extended Backus-Normal Form (EBNF) completely in C++.
             </entry>
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.tables" /><bridgehead renderas="sect3">Tables
+    </informaltable><anchor id="syntax.tables" />
+    <bridgehead renderas="sect3">
+      Tables
     </bridgehead>
 <programlisting><literal>[table A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
@@ -1095,7 +1212,8 @@ sf_logo
       will generate:
     </para>
     <informaltable frame="all">
-      <bridgehead renderas="sect4"><phrase role="table-title">A Simple Table</phrase>
+      <bridgehead renderas="sect4">
+        <phrase role="table-title">A Simple Table</phrase>
       </bridgehead>
       <tgroup cols="3">
         <thead>
@@ -1118,8 +1236,8 @@ sf_logo
     </informaltable>
     <para>
       The first row of the table is automatically treated as the table header; that
-      is, it is wrapped in <literal>&lt;thead&gt;...&lt;/thead&gt;</literal>XML tags.
-      Note that unlike the original QuickDoc, the columns are nested in [ cells...
+      is, it is wrapped in <literal>&lt;thead&gt;...&lt;/thead&gt;</literal> XML
+      tags. Note that unlike the original QuickDoc, the columns are nested in [ cells...
       ]. The syntax is free-format and allows big cells to be formatted nicely. Example:
     </para>
 <programlisting><literal>[table Table with fat cells
@@ -1143,8 +1261,9 @@ sf_logo
       and thus:
     </para>
     <informaltable frame="all">
-      <bridgehead renderas="sect4"><phrase role="table-title">Table with fat cells
-      </phrase></bridgehead>
+      <bridgehead renderas="sect4">
+        <phrase role="table-title">Table with fat cells</phrase>
+      </bridgehead>
       <tgroup cols="2">
         <thead>
           <row>
@@ -1164,8 +1283,10 @@ sf_logo
           </row>
         </tbody>
       </tgroup>
-    </informaltable><anchor id="syntax.variable_lists" /><bridgehead renderas="sect3">
-    Variable Lists</bridgehead>
+    </informaltable><anchor id="syntax.variable_lists" />
+    <bridgehead renderas="sect3">
+      Variable Lists
+    </bridgehead>
 <programlisting><literal>[variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
@@ -1192,7 +1313,10 @@ sf_logo
       &quot;columns&quot; are allowed. The first column contains the terms, and the
       second column contains the definitions. Those familiar with HTML will recognize
       this as a &quot;definition list&quot;.
-    </para><anchor id="syntax.include" /><bridgehead renderas="sect3">Include</bridgehead>
+    </para><anchor id="syntax.include" />
+    <bridgehead renderas="sect3">
+      Include
+    </bridgehead>
     <para>
       You can include one QuickBook file from another. The syntax is simply:
     </para>
@@ -1205,10 +1329,10 @@ sf_logo
     <itemizedlist>
       <listitem>
         The __FILENAME__ predefined macro will reflect the name of the file currently
-        being processed. 
+        being processed.
       </listitem>
       <listitem>
-        Any macros defined in the included file are scoped to that file. 
+        Any macros defined in the included file are scoped to that file.
       </listitem>
     </itemizedlist>
     <para>
@@ -1216,7 +1340,7 @@ sf_logo
       of two sections having the same name. Since QuickBook generates an anchor for
       each section based on the section name, it is possible to end up with two identically
       named anchors, leading to link ambiguities. To resolve these ambiguities, the
-      <literal>[include]</literal>directive lets you specify a document id to use
+      <literal>[include]</literal> directive lets you specify a document id to use
       for the included file. You can use it like this:
     </para>
 <programlisting><literal>[include:someid someother.qbk]
@@ -1230,9 +1354,10 @@ sf_logo
     </para>
   </section>
   <section id="quickbook.ref">
-    <title>Quick Reference</title>
+    <title> Quick Reference</title>
     <informaltable frame="all">
-      <bridgehead renderas="sect4"><phrase role="table-title">Syntax Compendium</phrase>
+      <bridgehead renderas="sect4">
+        <phrase role="table-title">Syntax Compendium</phrase>
       </bridgehead>
       <tgroup cols="2">
         <thead>
@@ -1265,7 +1390,7 @@ sf_logo
             <entry><literal>[-strikethrough] or -strikethrough-</literal></entry>
           </row>
           <row>
-            <entry>source mode</entry><entry><literal>[c++]</literal>or <literal>
+            <entry>source mode</entry><entry><literal>[c++]</literal> or <literal>
             [python]</literal></entry>
           </row>
           <row>
@@ -1392,9 +1517,8 @@ sf_logo
     </informaltable>
   </section>
   <section id="quickbook.docinfo">
-    <title>Library Document Grammar</title>
+    <title> Library Document Grammar</title>
     <para>
-      
     </para>
 <programlisting>
 <literal>
@@ -1527,10 +1651,9 @@ hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
 </phrase><phrase role="special">    ;</phrase><phrase role="comment">                                   // alpha-numeric or underscore
 </phrase></literal>
 </programlisting>
-    
   </section>
   <section id="quickbook.quickbook">
-    <title>QuickBook Grammar</title>
+    <title> QuickBook Grammar</title>
 <programlisting>
 <literal>
 <phrase role="identifier">library</phrase><phrase role="special"> =</phrase><phrase role="special">
@@ -2085,10 +2208,9 @@ strikethrough</phrase><phrase role="special"> =</phrase><phrase role="identifier
     ;</phrase>
 </literal>
 </programlisting>
-    
   </section>
   <section id="quickbook.highlight">
-    <title>C++ Syntax Highlighting Grammar</title>
+    <title> C++ Syntax Highlighting Grammar</title>
 <programlisting>
 <literal>
 <phrase role="identifier">program</phrase><phrase role="special">
@@ -2166,12 +2288,10 @@ identifier</phrase><phrase role="special">
     ;</phrase>
 </literal>
 </programlisting>
-    
   </section>
   <section id="quickbook.pyhighlight">
-    <title>Python Syntax Highlighting Grammar</title>
+    <title> Python Syntax Highlighting Grammar</title>
     <para>
-      
     </para>
 <programlisting>
 <literal>
@@ -2254,6 +2374,5 @@ identifier</phrase><phrase role="special">
     ;</phrase>
 </literal>
 </programlisting>
-    
   </section>
 </part>

@@ -90,6 +90,8 @@ namespace quickbook
         const char* teletype_post_      = "</literal>";
         const char* strikethrough_pre_  = "<emphasis role=\"strikethrough\">";
         const char* strikethrough_post_ = "</emphasis>";
+        const char* quote_pre_          = "<quote>";
+        const char* quote_post_         = "</quote>";
         const char* break_mark          = "<sbr/>\n";
         const char* url_pre_            = "<ulink url=\"";
         const char* url_post_           = "</ulink>";
@@ -420,7 +422,7 @@ namespace quickbook
 
         std::ostream& phrase;
     };
-
+    
     struct markup_action
     {
         // A generic markup action
@@ -701,6 +703,8 @@ namespace quickbook
         markup_action           teletype_post;
         markup_action           strikethrough_pre;
         markup_action           strikethrough_post;
+        markup_action           quote_pre;
+        markup_action           quote_post;
 
         simple_phrase_action    simple_bold;
         simple_phrase_action    simple_italic;

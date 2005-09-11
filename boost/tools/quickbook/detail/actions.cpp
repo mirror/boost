@@ -502,7 +502,8 @@ namespace quickbook
             actions.doc_major_version = 1;
             actions.doc_minor_version = 1;
             actions.doc_version_n = 101;
-            std::cerr << "Error: Document version undefined." << std::endl;
+            std::cerr << "Warning: Document version undefined. "
+                "Version 1.1 is assumed" << std::endl;
         }
         else
         {
@@ -656,6 +657,8 @@ namespace quickbook
         , teletype_post(phrase, teletype_post_)
         , strikethrough_pre(phrase, strikethrough_pre_)
         , strikethrough_post(phrase, strikethrough_post_)
+        , quote_pre(phrase, quote_pre_)
+        , quote_post(phrase, quote_post_)
         , simple_bold(phrase, bold_pre_, bold_post_)
         , simple_italic(phrase, italic_pre_, italic_post_)
         , simple_underline(phrase, underline_pre_, underline_post_)
