@@ -11,18 +11,18 @@
 
 namespace boost { namespace type_of {
 
-    template<class T> 
+    template<class T, class U> 
     struct test_wrapper{};
 
     template<class T> 
-    test_wrapper<T> test_helper(test_wrapper<T>*);
+    test_wrapper<T, T> test_helper(test_wrapper<T, T>*);
 
     template<class T> 
     struct test
     {
         enum {value = boost::is_same<
-            BOOST_TYPEOF_TPL(test_helper(reinterpret_cast<test_wrapper<T>*>(0))),
-            test_wrapper<T>
+            BOOST_TYPEOF_TPL(test_helper(reinterpret_cast<test_wrapper<T, T>*>(0))),
+            test_wrapper<T, T>
             >::value
         };
     };
@@ -30,6 +30,6 @@ namespace boost { namespace type_of {
 }}
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::type_of::test_wrapper, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::type_of::test_wrapper, 2)
 
 #endif//BOOST_TYPEOF_TEST_HPP_INCLUDED

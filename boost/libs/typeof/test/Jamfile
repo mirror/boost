@@ -18,4 +18,25 @@ test-suite "typeof"
 
 	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_NATIVE : template_tpl_native ]
 	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_tpl_emulation ]
+
+	[ compile modifiers.cpp : <define>BOOST_TYPEOF_NATIVE : modifiers_native ]
+	[ compile modifiers.cpp : <define>BOOST_TYPEOF_COMPLIANT : modifiers_emulation ]
+
+	[ compile function.cpp : <define>BOOST_TYPEOF_NATIVE : function_native ]
+	[ compile function.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_emulation ]
+
+	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_NATIVE : function_ptr_native ]
+	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_ptr_emulation ]
+
+	[ compile function_ref.cpp : <define>BOOST_TYPEOF_NATIVE : function_ref_native ]
+	[ compile function_ref.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_ref_emulation ]
+
+	[ compile member_function.cpp : <define>BOOST_TYPEOF_NATIVE : member_function_native ]
+	[ compile member_function.cpp : <define>BOOST_TYPEOF_COMPLIANT : member_function_emulation ]
+
+	[ compile data_member.cpp : <define>BOOST_TYPEOF_NATIVE : data_member_native ]
+	[ compile data_member.cpp : <define>BOOST_TYPEOF_COMPLIANT : data_member_emulation ]
+
+	[ compile lvalue.cpp : <define>BOOST_TYPEOF_NATIVE : lvalue_native ]
+	[ compile lvalue.cpp : <define>BOOST_TYPEOF_COMPLIANT : lvalue_emulation ]
 	;
