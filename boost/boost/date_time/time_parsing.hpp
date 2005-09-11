@@ -53,7 +53,8 @@ namespace date_time {
     boost::int64_t fs=0;
     int pos = 0;
       
-    typedef boost::char_separator<char, std::char_traits<char> > char_separator_type;
+    typedef typename std::basic_string<char>::traits_type traits_type;
+    typedef boost::char_separator<char, traits_type> char_separator_type;
     typedef boost::tokenizer<char_separator_type,
                              std::basic_string<char>::const_iterator,
                              std::basic_string<char> > tokenizer;

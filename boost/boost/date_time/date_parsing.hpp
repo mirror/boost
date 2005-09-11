@@ -116,7 +116,8 @@ namespace date_time {
       typedef typename date_type::month_type month_type;
       unsigned pos = 0;
       unsigned short year(0), month(0), day(0);
-      typedef boost::char_separator<char, std::char_traits<char> > char_separator_type;
+      typedef typename std::basic_string<char>::traits_type traits_type;
+      typedef boost::char_separator<char, traits_type> char_separator_type;
       typedef boost::tokenizer<char_separator_type,
                                std::basic_string<char>::const_iterator,
                                std::basic_string<char> > tokenizer;
@@ -267,7 +268,8 @@ namespace date_time {
     template<class date_type, class charT>
     period<date_type, typename date_type::duration_type> 
     from_simple_string_type(const std::basic_string<charT>& s){
-      typedef typename boost::char_separator<charT, std::char_traits<charT> > char_separator;
+      typedef typename std::basic_string<charT>::traits_type traits_type;
+      typedef typename boost::char_separator<charT, traits_type> char_separator;
       typedef typename boost::tokenizer<char_separator, 
                                         typename std::basic_string<charT>::const_iterator, 
                                         std::basic_string<charT> > tokenizer;
