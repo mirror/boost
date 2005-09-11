@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<part id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date: 2005/09/11 04:22:15 $"
+<part id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date: 2005/09/11 04:27:57 $"
 xmlns:xi="http://www.w3.org/2001/XInclude">
   <partinfo>
     <author>
