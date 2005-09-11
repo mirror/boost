@@ -4,6 +4,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/parameter.hpp>
+#include <boost/parameter/match.hpp>
 #include <cassert>
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
@@ -39,15 +40,15 @@ namespace test
   }
   
   template<class A0>
-  int g(A0 const& a0)
+  int g(A0 const& a0, BOOST_PARAMETER_MATCH(g_parameters, (A0), args))
   {
-      return g_(g_parameters()(a0));
+      return g_(args(a0));
   }
   
   template<class A0, class A1>
-  int g(A0 const& a0, A1 const& a1)
+  int g(A0 const& a0, A1 const& a1, BOOST_PARAMETER_MATCH(g_parameters, (A0)(A1), args))
   {
-      return g_(g_parameters()(a0, a1));
+      return g_(args(a0, a1));
   }
 
 }
@@ -68,7 +69,6 @@ int main()
    g(name = "foo", 3.14f);
    g(3.14f, name = "foo");
    g(name = "foo", value = 3.14f);
-//   g((void*)0, (void*)0);
    
    return 0;
 }

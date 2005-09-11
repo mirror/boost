@@ -15,6 +15,7 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/pair.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -86,11 +87,10 @@ struct unnamed
     typedef Predicate predicate;
 };
 
-namespace aux {
-
-  // Defines metafunctions, is_required, is_optional and is_unnamed, 
-  // that identify required<...>, optional<...> and unnamed<> 
-  // specializations.
+namespace aux
+{
+  // Defines metafunctions, is_required and is_optional, that
+  // identify required<...> and optional<...> specializations.
   BOOST_PYTHON_IS_XXX_DEF(required, required, 2)
   BOOST_PYTHON_IS_XXX_DEF(optional, optional, 2)
   BOOST_PYTHON_IS_XXX_DEF(unnamed, unnamed, 2)
@@ -106,16 +106,11 @@ namespace aux {
   // a ParameterSpec is a specialization of either keyword<...>,
   // required<...> or optional<...>.
   //
-
+  
   // helper for key_type<...>, below.
   template <class T>
   struct get_key_type
-    : mpl::if_<
-          is_unnamed<typename T::key_type>
-        , get_key_type<typename T::key_type>
-        , mpl::identity<typename T::key_type>
-      >::type
-  {};
+  { typedef typename T::key_type type; };
 
   template <class T>
   struct key_type
@@ -133,9 +128,8 @@ namespace aux {
 
   template <class T>
   struct has_default
-    : mpl::not_<typename is_required<T>::type>
-  {
-  };
+    : mpl::not_<is_required<T> >
+  {};
 
   // helper for get_predicate<...>, below
   template <class T>
@@ -153,12 +147,11 @@ namespace aux {
   // helper for predicate<...>, below
   template <class T>
   struct get_predicate
-    : mpl::if_<
-          is_unnamed<typename T::key_type>
-        , get_predicate<typename T::key_type>
-        , get_predicate_or_default<typename T::predicate>
-      >::type
-  {};
+  {
+      typedef typename
+          get_predicate_or_default<typename T::predicate>::type
+      type;
+  };
 
   template <class T>
   struct predicate
@@ -166,7 +159,6 @@ namespace aux {
          mpl::or_<
               is_optional<T>
             , is_required<T>
-            , is_unnamed<T>
           >
         , get_predicate<T>
         , mpl::identity<mpl::always<mpl::true_> >
@@ -189,17 +181,19 @@ namespace aux {
       > type;
   };
 
-  // Labels Arg with default keyword tag from ParameterSpec 
-  // if it is not already a tagged_argument
-  template <class ParameterSpec, class Arg, class Unnamed>
+  // Labels Arg with default keyword tag DefaultTag if it is not
+  // already a tagged_argument. If an unnamed spec that matches
+  // Arg exists in UnnamedList, labels Arg with that spec's
+  // keyword tag.
+  template <class DefaultTag, class Arg, class UnnamedList>
   struct as_tagged_argument
     : mpl::eval_if<
           is_tagged_argument<Arg>
-        , mpl::identity<Arg>
-        , mpl::apply_wrap2<Unnamed, Arg, typename key_type<ParameterSpec>::type>
+        , mpl::identity<mpl::pair<Arg, UnnamedList> >
+        , mpl::apply_wrap2<UnnamedList, Arg, DefaultTag>
       >
   {};
-
+  
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)  // ETI workaround
   template <>
   struct as_tagged_argument<int,int,int>
@@ -258,13 +252,23 @@ namespace aux {
   // Helper for make_partial_arg_list, below.  Produce an arg_list
   // node for the given ParameterSpec and ArgumentType, whose tail is
   // determined by invoking the nullary metafunction TailFn.
-  template <class ParameterSpec, class ArgumentType, class Unnamed, class TailFn>
+  template <class ParameterSpec, class ArgumentType, class TailFn>
   struct make_arg_list
   {
-      typedef arg_list<
-          typename as_tagged_argument<ParameterSpec,ArgumentType,Unnamed>::type
-        , typename TailFn::type
-      > type;
+      template <class UnnamedList>
+      struct apply
+      {
+          typedef typename as_tagged_argument<
+              typename key_type<ParameterSpec>::type,ArgumentType,UnnamedList
+          >::type tagged_result;
+
+          typedef arg_list<
+              typename mpl::first<tagged_result>::type
+            , typename mpl::apply_wrap1<
+                  TailFn, typename mpl::second<tagged_result>::type
+              >::type 
+          > type;
+      };
   };
 
   // Just like make_arg_list, except if ArgumentType is void_, the
@@ -274,16 +278,22 @@ namespace aux {
   template <
       class ParameterSpec
     , class ArgumentType
-    , class Unnamed
     , class TailFn
   >
   struct make_partial_arg_list
-    : mpl::eval_if<
-          is_same<ArgumentType,void_>
-        , mpl::identity<empty_arg_list>
-        , make_arg_list<ParameterSpec, ArgumentType, Unnamed, TailFn>
-      >
-  {};
+  {
+      template <class UnnamedList>
+      struct apply
+        : mpl::eval_if<
+              is_same<ArgumentType, void_>
+            , mpl::identity<empty_arg_list>
+            , mpl::apply_wrap1<
+                  make_arg_list<ParameterSpec, ArgumentType, TailFn>
+                , UnnamedList
+              >
+          >
+      {};
+  };
 
   // Generates:
   //
@@ -297,123 +307,109 @@ namespace aux {
 #define BOOST_PARAMETER_make_arg_list(z, n, names)      \
       BOOST_PP_SEQ_ELEM(0,names)<                       \
           BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(1,names), n),  \
-          BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(2,names), n),  \
-          BOOST_PP_SEQ_ELEM(3,names),
-  
-#define BOOST_PARAMETER_right_angle(z, n, text)    >
+          BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(2,names), n),
 
-#define BOOST_PARAMETER_build_arg_list(n, make, parameter_spec, argument_type, unnamed) \
-  BOOST_PP_REPEAT(                                                                      \
-      n, BOOST_PARAMETER_make_arg_list, (make)(parameter_spec)(argument_type)(unnamed)) \
-  mpl::identity<aux::empty_arg_list>                                                    \
+#define BOOST_PARAMETER_right_angle(z, n, text)    >
+    
+#define BOOST_PARAMETER_build_arg_list(n, make, parameter_spec, argument_type)      \
+  BOOST_PP_REPEAT(                                                                  \
+      n, BOOST_PARAMETER_make_arg_list, (make)(parameter_spec)(argument_type))      \
+  mpl::always<aux::empty_arg_list>                                                  \
   BOOST_PP_REPEAT(n, BOOST_PARAMETER_right_angle, _)
 
-  // Metafunctions used to determine if a ParameterSpec is
-  // either unnamed<something, something> or
-  // [required/optional]<unnamed<something, something> >
-
-  template <class T>
-  struct is_nested_unnamed_aux
-    : is_unnamed<typename T::key_type>
-  {};
-
-  template <class T>
-  struct is_nested_unnamed
-    : mpl::if_<
-          mpl::or_<
-              is_optional<T>
-            , is_required<T>
-          >
-        , is_nested_unnamed_aux<T>
-        , mpl::false_
-      >::type
-  {};
-
-  template <class T>
-  struct is_unnamed_spec
-    : mpl::or_<
-          is_unnamed<T>
-        , is_nested_unnamed<T>
-      >
-  {};
-
-  // List of unnamed keywords with the associated predicate.
-  template <class Keyword, class Predicate, class Tail>
-  struct unnamed_list
-  {
-      // If the Predicate applies; tag the argument with
-      // Keyword. Otherwise, try the tail.
-      template <class Arg, class DefaultTag>
-      struct apply
-      {
-          typedef typename mpl::eval_if<
-              typename mpl::apply1<Predicate, Arg>::type
-            , mpl::identity<tagged_argument<
-                  Keyword
-                , typename unwrap_cv_reference<Arg const>::type
-              > >
-            , mpl::apply_wrap2<Tail, Arg, DefaultTag>
-          >::type type;
-      };
-  };
-
-  // Terminates an unnamed_list<>.
+  // Terminates an unnamed_list (below).
   struct empty_unnamed_list
   {
-      // Default case. No unnamed predicates matched the Arg.
-      // Tag argument with the DefaultTag.
       template <class Arg, class DefaultTag>
       struct apply
       {
-          typedef tagged_argument<
-              DefaultTag
-            , typename unwrap_cv_reference<Arg const>::type
+          // No unnamed predicate matched Arg, so we tag Arg with
+          // the DefaultTag.
+
+          // TODO: If we come here we should assert that the current
+          // ParameterSpec isn't an unnamed<> spec.
+          typedef mpl::pair<
+              typename tag<DefaultTag, Arg const>::type
+            , empty_unnamed_list
           > type;
       };
   };
 
-  template <class ParameterSpec, class TailFn>
-  struct make_unnamed_list_aux
+  // Used by as_tagged_argument to match a given 
+  // argument with a list of unnamed specs.
+  //
+  // ParameterSpec is an unnamed spec.
+  // Tail is either another unnamed_list specialization,
+  // or empty_unnamed_list.
+  template <class ParameterSpec, class Tail>
+  struct unnamed_list
   {
-      typedef typename mpl::if_<
-          is_unnamed_spec<ParameterSpec>
-        , unnamed_list<
-              typename key_type<ParameterSpec>::type
-            , typename predicate<ParameterSpec>::type
-            , typename TailFn::type
-          >
-        , typename TailFn::type
-      >::type type;
+      // Helper metafunction for apply below. Computes the result
+      // of Tail::apply. Returns a pair consisting of:
+      //
+      //  * the tagged argument
+      //  * the unnamed_list that is left after the tagging. Possibly
+      //    with one element removed.
+      template <class Arg, class DefaultTag>
+      struct eval_tail
+      {
+          typedef typename mpl::apply_wrap2<
+              Tail, Arg, DefaultTag
+          >::type result;
+
+          typedef mpl::pair<
+              typename mpl::first<result>::type
+            , unnamed_list<ParameterSpec, typename mpl::second<result>::type>
+          > type;
+      };
+
+      // If this keyword's predicate returns true for
+      // the given argument type, tag the argument with
+      // ParameterSpec::key_type. Otherwise try the tail.
+      template <class Arg, class DefaultTag>
+      struct apply
+      {
+          typedef typename mpl::eval_if<
+              typename mpl::apply1<typename ParameterSpec::predicate, Arg>::type
+            , mpl::pair<
+                  typename tag<typename ParameterSpec::key_type, Arg const>::type
+                , Tail
+              >
+            , eval_tail<Arg, DefaultTag>
+          >::type type;
+      };
   };
+
+  // We need to build a list of all ParameterSpec's that specify an 
+  // unnamed argument. This list is used when trying to match an
+  // argument to an unnamed keyword.
 
   template <class ParameterSpec, class TailFn>
   struct make_unnamed_list
   {
-      typedef typename mpl::eval_if<
-          is_same<ParameterSpec, void_>
-        , mpl::identity<empty_unnamed_list>
-        , make_unnamed_list_aux<ParameterSpec, TailFn>
-      >::type type;
+      typedef unnamed_list<
+          ParameterSpec
+        , typename TailFn::type
+      > type;
   };
 
-  // Generates:
-  //
-  //   make<
-  //       parameter_spec#0
-  //     , make<
-  //           parameter_spec#1
-  //         , make<
-  //               parameter_spec#2
-  //             , mpl::identity<mpl::vector0<> >
-  //           >
-  //       >
-  //   >
-  //
-  
+  template <class ParameterSpec, class TailFn>
+  struct make_partial_unnamed_list
+    : mpl::eval_if<
+          is_same<ParameterSpec, void_>
+        , mpl::identity<empty_unnamed_list>
+        , mpl::eval_if<
+              is_unnamed<ParameterSpec>
+            , make_unnamed_list<ParameterSpec, TailFn>
+            , TailFn
+          >
+      >
+  {};
+
 #define BOOST_PARAMETER_make_unnamed_list(z, n, names)  \
       BOOST_PP_SEQ_ELEM(0,names)<                       \
           BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(1,names), n),
-
+   
 #define BOOST_PARAMETER_build_unnamed_list(n, make, parameter_spec)                 \
   BOOST_PP_REPEAT(                                                                  \
       n, BOOST_PARAMETER_make_unnamed_list, (make)(parameter_spec))                 \
@@ -433,10 +429,8 @@ struct parameters
 #undef BOOST_PARAMETER_TEMPLATE_ARGS
 
     typedef typename BOOST_PARAMETER_build_unnamed_list(
-        BOOST_PARAMETER_MAX_ARITY
-      , aux::make_unnamed_list
-      , PS
-    )::type unnamed_specs;
+        BOOST_PARAMETER_MAX_ARITY, aux::make_partial_unnamed_list, PS
+    )::type unnamed_list;
 
     // if the elements of NamedList match the criteria of overload
     // resolution, returns a type which can be constructed from
@@ -468,9 +462,7 @@ struct parameters
 
 # undef BOOST_PARAMETER_satisfies
 
-          , mpl::identity<
-                parameters<BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, PS)>
-            >
+          , mpl::identity<parameters>
           , aux::void_
         >
     {};
@@ -493,9 +485,9 @@ struct parameters
     struct match
 # ifndef BOOST_NO_SFINAE
       : match_base<
-            typename BOOST_PARAMETER_build_arg_list(
-                BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A, unnamed_specs
-            )::type
+           typename mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
+                BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
+            ), unnamed_list>::type
         >::type
     {};
 # else
@@ -517,14 +509,16 @@ struct parameters
     }
 
     template<class A0>
-    typename
-      aux::make_arg_list<PS0,A0,unnamed_specs, mpl::identity<aux::empty_arg_list> >
-    ::type
+    typename mpl::apply_wrap1<
+        aux::make_arg_list<PS0,A0, mpl::always<aux::empty_arg_list> >
+      , unnamed_list      
+    >::type
     operator()( A0 const& a0) const
     {
-        typedef typename
-          aux::make_arg_list<PS0, A0, unnamed_specs, mpl::identity<aux::empty_arg_list> >
-        ::type result_type;
+        typedef typename mpl::apply_wrap1<
+            aux::make_arg_list<PS0,A0, mpl::always<aux::empty_arg_list> >
+          , unnamed_list
+        >::type result_type;
 
         return result_type(
             a0
@@ -536,27 +530,28 @@ struct parameters
     }
 
     template<class A0, class A1>
-    typename
-      aux::make_arg_list<
-          PS0,A0,unnamed_specs
-        , aux::make_arg_list<
-              PS1,A1,unnamed_specs
-            , mpl::identity<aux::empty_arg_list>
-          >
-      >
-    ::type
+    typename mpl::apply_wrap1<
+        aux::make_arg_list<
+            PS0,A0
+          , aux::make_arg_list<
+                PS1,A1
+              , mpl::always<aux::empty_arg_list>
+            >
+        >
+      , unnamed_list
+    >::type
     operator()(A0 const& a0, A1 const& a1) const
     {
-        typedef typename
-          aux::make_arg_list<
-              PS0,A0,unnamed_specs
-            , aux::make_arg_list<
-                  PS1,A1,unnamed_specs 
-                , mpl::identity<aux::empty_arg_list>
-              >
-          >
-        ::type result_type;
-
+        typedef typename mpl::apply_wrap1<
+            aux::make_arg_list<
+                PS0,A0
+              , aux::make_arg_list<
+                    PS1,A1
+                  , mpl::always<aux::empty_arg_list>
+                >
+            >
+          , unnamed_list
+        >::type result_type;
 
         return result_type(
             a0, a1
@@ -586,5 +581,4 @@ struct parameters
 #include <boost/iterator/detail/config_undef.hpp>
  
 #endif // BOOST_PARAMETERS_031014_HPP
-
 

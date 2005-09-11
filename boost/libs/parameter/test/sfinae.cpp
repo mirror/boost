@@ -4,6 +4,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/parameter.hpp>
+#include <boost/parameter/match.hpp>
 #include <cassert>
 #include <string>
 #include <boost/type_traits/is_convertible.hpp>
