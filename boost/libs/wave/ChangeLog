@@ -27,6 +27,8 @@ CHANGELOG
 - Fixed a bug where the 'parameters' and 'definition' parameters to the 
   defined_macro callback of the preprocessing hooks were always empty (thanks
   to Stefan Seefeld for reporting).
+- Fixed missing namespace specifiers in token definition macros (thanks to 
+  Jozsef Mihalicza for reporting).
   
 Boost V1.33.0
 Version 1.2
