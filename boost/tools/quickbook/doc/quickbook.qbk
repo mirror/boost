@@ -206,15 +206,15 @@ single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over
 [h3 Code blocks]
 
 Preformatted code simply starts with a space or a tab (See [link syntax.code 
-Code]). However, such a simple syntax cannot be used as phrase elements in list
+Code]). However, such a simple syntax cannot be used as phrase elements in lists
 (See [link syntax.ordered_lists Ordered lists] and [link syntax.unordered_lists 
-Unordered lists]), tables [link syntax.tables Tables], etc. Inline code (see 
+Unordered lists]), tables (See [link syntax.tables Tables]), etc. Inline code (see 
 above) can. The problem is, inline code does not allow formatting with newlines,
 spaces, and tabs. These are lost. 
 
 We provide a phrase level markup that is a mix between the two. By using the 
 double-tick, instead of the single-tick, we are telling QuickBook to use 
-reformatted blocks of code. Example:
+preformatted blocks of code. Example:
 
 [pre
 \`\`
