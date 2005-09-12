@@ -195,8 +195,8 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(XORASSIGN_TRIGRAPH, TRI("'=")),
     TOKEN_DATA(COMMA, ","),
     TOKEN_DATA(COLON, ":"),
-    TOKEN_DATA(DIVIDE, Q("/")),
     TOKEN_DATA(DIVIDEASSIGN, Q("/=")),
+    TOKEN_DATA(DIVIDE, Q("/")),
     TOKEN_DATA(DOT, Q(".")),
     TOKEN_DATA(ELLIPSIS, Q(".") Q(".") Q(".")),
     TOKEN_DATA(EQUAL, "=="),
@@ -640,7 +640,11 @@ public:
         return token;       // return T_EOI
     }
     void set_position(PositionT const &pos) 
-    { first.set_position(pos); }
+    { 
+        // set position has to change the file name and line number only
+        first.get_position().set_file(pos.get_file()); 
+        first.get_position().set_line(pos.get_line()); 
+    }
     
 private:
     iterator_type first;

@@ -125,7 +125,6 @@ class slex_iterator
         boost::spirit::multi_pass<input_policy_type, 
                 boost::wave::util::functor_input>
         base_type;
-    typedef slex_iterator<TokenT>                    self_type;
     
 public:
     typedef TokenT token_type;
@@ -139,6 +138,27 @@ public:
             boost::wave::language_support language)
     :   base_type(input_policy_type(first, last, pos, language))
     {}
+
+    void set_position(typename TokenT::position_type const &pos)
+    {
+        typedef typename token_type::position_type position_type;
+        
+    // set the new position in the current token
+    token_type const& currtoken = base_type::get_input();
+    position_type currpos = currtoken.get_position();
+    
+        currpos.set_file(pos.get_file());
+        currpos.set_line(pos.get_line());
+        base_type::get_input().set_position(currpos);
+        
+    // set the new position for future tokens as well
+        if (token_type::string_type::npos != 
+            currtoken.get_value().find_first_of('\n'))
+        {
+            currpos.set_line(pos.get_line() + 1);
+        }
+        base_type::get_functor().set_position(currpos);
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

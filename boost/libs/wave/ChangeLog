@@ -22,6 +22,8 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.33.1
+- Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.
 - Switched to Re2C V0.9.9.
 - Fixed a bug where the 'parameters' and 'definition' parameters to the 
@@ -29,7 +31,18 @@ CHANGELOG
   to Stefan Seefeld for reporting).
 - Fixed missing namespace specifiers in token definition macros (thanks to 
   Jozsef Mihalicza for reporting).
-  
+- Enabled --preserved and --long_long modes by default for the cpp_tokens 
+  sample.
+- Newline tokens reported a wrong line number (offset by one) when using the
+  Re2C generated lexer (thanks to Jozsef Mihalicza for pointing this out).
+- Changed file positions to carry 'unsigned int' line and column numbers.
+- Fixed tokens of a generated #line directive to carry the correct column 
+  numbers.
+- Tokens now contain the correct filename, line and column numbers even if
+  a #line directive was encountered.
+- Fixed wrong line numbering in reference comments of the tests t_5_002.cpp and 
+  t_5_035.cpp.
+
 Boost V1.33.0
 Version 1.2
 - Fixed name clash wrt T_DIVIDE on FreeBSD.

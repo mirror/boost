@@ -67,9 +67,10 @@ public:
     lex_token<PositionT> get();
     void set_position(PositionT const &pos)
     {
+        // set position has to change the file name and line number only
         filename = pos.get_file();
         scanner.line = pos.get_line();
-        scanner.column = scanner.curr_column = pos.get_column();
+//        scanner.column = scanner.curr_column = pos.get_column();
         scanner.file_name = filename.c_str();
     }
 
@@ -137,6 +138,7 @@ lexer<IteratorT, PositionT>::get()
     if (at_eof) 
         return lex_token<PositionT>();  // return T_EOI
 
+    unsigned int actline = scanner.line;
     token_id id = token_id(scan(&scanner));
     
     switch (id) {
@@ -145,18 +147,18 @@ lexer<IteratorT, PositionT>::get()
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
         if (!(language & support_option_no_character_validation))
-            impl::validate_identifier_name(value, scanner.line, scanner.column, filename); 
+            impl::validate_identifier_name(value, actline, scanner.column, filename); 
         break;
-    
+ 
     case T_STRINGLIT:
     case T_CHARLIT:
     // test literal characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
         if (language & support_option_convert_trigraphs)
-            value = impl::convert_trigraphs(value, scanner.line, scanner.column, filename); 
+            value = impl::convert_trigraphs(value, actline, scanner.column, filename); 
         if (!(language & support_option_no_character_validation))
-            impl::validate_literal(value, scanner.line, scanner.column, filename); 
+            impl::validate_literal(value, actline, scanner.column, filename); 
         break;
 
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
@@ -182,7 +184,7 @@ lexer<IteratorT, PositionT>::get()
         if (!boost::wave::need_long_long(language)) {
         // syntax error: not allowed in C++ mode
             BOOST_WAVE_LEXER_THROW(lexing_exception, invalid_long_long_literal, 
-                value.c_str(), scanner.line, scanner.column, filename.c_str());
+                value.c_str(), actline, scanner.column, filename.c_str());
         }
         break;
 
@@ -230,7 +232,7 @@ lexer<IteratorT, PositionT>::get()
             value = impl::convert_trigraph(
                 string_type((char const *)scanner.tok, 
                     scanner.cur-scanner.tok), 
-                scanner.line, scanner.column, filename); 
+                actline, scanner.column, filename); 
         }
         else {
             value = string_type((char const *)scanner.tok, 
@@ -251,8 +253,9 @@ lexer<IteratorT, PositionT>::get()
         break;
     }
     
+    // the re2c lexer reports the new line number for newline tokens
     return lex_token<PositionT>(id, value, 
-        PositionT(filename, scanner.line, scanner.column));
+        PositionT(filename, actline, scanner.column));
 }
 
 template <typename IteratorT, typename PositionT>

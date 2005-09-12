@@ -33,18 +33,18 @@ FUNC(ab, cd, ef)        //R abcdef
 FUNC(ab, cd, ef)        //R abcdef 
 
 // 2.3: In a string literal.
-//R #line 38 "t_5_002.cpp"
+//R #line 37 "t_5_002.cpp"
 "abc\
 de"                     //R "abcde" 
 
 // 2.4: <backslash><newline> in midst of an identifier.
-//R #line 44 "t_5_002.cpp"
+//R #line 43 "t_5_002.cpp"
 #define ABCDE 5
 ABC\
 DE                      //R 5 
 
 // 2.5: <backslash><newline> by trigraph. 
-//R #line 49 "t_5_002.cpp"
+//R #line 48 "t_5_002.cpp"
 ABC??/
 DE                      //R 5 
 

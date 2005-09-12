@@ -71,6 +71,7 @@ public:
     boost::wave::cpplexer::lex_token<PositionT> get();
     void set_position(PositionT const &pos)
     {
+        // set position has to change the file name and line number only
         filename = pos.get_file();
         scanner.line = pos.get_line();
         scanner.file_name = filename.c_str();
