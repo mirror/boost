@@ -1,0 +1,40 @@
+# Copyright David Abrahams 2005. Distributed under the Boost
+# Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+----------------- Test #1 ----------------
+Testers: 
+  Matthias Troyer, Michael Gauckler, David Abrahams
+
+Date:
+  2005-09-09
+
+Compiler: 
+  Cygwin g++-4.0.0
+
+Command lines:
+  g++ -c -o efficiency.o -ftemplate-depth-100 -funroll-loops \
+      -O3 -finline-functions -Wno-inline -DNDEBUG  efficiency.cpp
+
+  g++ -o efficiency.exe efficiency.o -Wl,--strip-all  
+
+  efficiency && efficiency && efficiency
+
+Machine:
+  Dell Inspiron 9300
+  Intel(R) Pentium(R) M processor 2.00GHz
+  Running on 230 volts AC power
+
+Timings:
+  Run #1 results discarded per standard practice
+
+  Run #2
+  plain time: 0.75
+  named parameter time: 0.734
+
+  Run #3
+  plain time: 0.781
+  named parameter time: 0.766
+
+-----------------------------------------
+
